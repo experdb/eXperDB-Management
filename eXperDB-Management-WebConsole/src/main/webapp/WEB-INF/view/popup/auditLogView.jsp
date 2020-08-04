@@ -95,7 +95,7 @@
 	}
 </script>
 
-<div class="modal fade" id="pop_layer_audit_info" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="pop_layer_audit_info" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 20px 250px;">
 		<div class="modal-content" style="width:1200px;">		 
 			<div class="modal-body" style="margin-bottom:-10px;">

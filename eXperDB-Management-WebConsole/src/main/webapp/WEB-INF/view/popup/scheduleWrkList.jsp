@@ -117,7 +117,7 @@
 
 <%@include file="./../cmmn/workScriptInfoPop.jsp"%>
 
-<div class="modal fade" id="pop_layer_info_schedule" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:1060;">
+<div class="modal fade" id="pop_layer_info_schedule" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="z-index:1060;">
 
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
 		<div class="modal-content" style="width:1000px;">		 

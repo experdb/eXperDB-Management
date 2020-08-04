@@ -214,7 +214,7 @@
 							</div>
 							
 							<div class="card-body">
-								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px; -20px;" >
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value='<spring:message code="common.registory" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
 								</div>
