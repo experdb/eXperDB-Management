@@ -137,6 +137,7 @@
 		fn_occur_init();
 	}
 
+	
 	/* ********************************************************
 	 * Tab Click
 	 ******************************************************** */
@@ -169,6 +170,7 @@
 		}
 	}
 
+	
 	/* ********************************************************
 	 * 작업기간 calender 셋팅
 	 ******************************************************** */
@@ -334,9 +336,9 @@
 								if(full.wrk_id == "1"){
 									html = '<div class="loader-scale-box"><div class="dot-opacity-loader"><span></span><span></span><span></span><span></span></div><span class="text-warning"><spring:message code="restore.progress" /></span></div>';
 								}else{
-									html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;'>";
-									html += '<i class="fa fa-check" style="color: #6600CC;"></i>';
-									html += '<spring:message code="eXperDB_scale.complete" />';
+									html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += '<i class="fa fa-check-circle" style="color: #6600CC;"></i>';
+									html += '&nbsp;<spring:message code="eXperDB_scale.complete" />';
 									html += "</div>";
 								}
 								return html;
@@ -351,13 +353,13 @@
 	 						var html = '';
 					
 	 						if (full.exe_rslt_cd == 'TC001701' && full.wrk_id == '2') {
-								html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;'>";
-								html += '<i class="fa fa-check text-primary"></i>';
-								html += '<spring:message code="common.success" />';
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += '<i class="fa fa-check-circle text-primary"></i>';
+								html += '&nbsp;<spring:message code="common.success" />';
 								html += "</div>";
 	 						} else if(full.exe_rslt_cd == 'TC001702' && full.wrk_id == '2') {
 								html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_scaleFailLog('+full.scale_wrk_sn+')">';
-								html += '<i class="fa fa-check"></i>';
+								html += '<i class="fa fa-times"></i>';
 								html += '<spring:message code="common.failed" />';
 								html += "</button>";
 	 						} else {
@@ -900,7 +902,7 @@
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-pills-setting" id="server-tab" role="tablist">
+					<ul class="nav nav-pills nav-pills-setting" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item tab-two-style">
 							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('executeHist');" >
 								<spring:message code="menu.scale_execute_hist" />
@@ -918,7 +920,7 @@
 						<div class="card-body">
 
 							<form class="form-inline">
-								<div class="row">
+								<div class="row" style="margin:-10px 0px -15px 0px;">
 									<div class="input-group mb-2 mr-sm-2">
 <%-- 										<div class="input-group-prepend"> 
 											<div class="input-group-text search_execute" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="common.work_term" /></div> <!-- 실행이력 -->

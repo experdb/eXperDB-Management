@@ -22,6 +22,9 @@
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/bootstrap4-toggle/bootstrap4-toggle.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/select2/select2.min.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/fullcalendar/fullcalendar.min.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/bars-1to10.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/examples.css">
 
 <!-- End plugin css for this page -->
 
@@ -30,6 +33,8 @@
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/style_layout.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/bstreeview.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/myTooltip.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/style_calender.css">
+
 
 <!-- endinject -->
 <link rel="shortcut icon" href="../../../../images/favicon.png" />
@@ -43,14 +48,17 @@
 <script src="/vertical-dark-sidebar/js/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/jquery-bar-rating/jquery.barrating.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/sweetalert/sweetalert.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/select2/select2.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/jquery-validation/jquery.validate.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/bootstrap-datepicker/bootstrap-datepicker.kr.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/bootstrap-datepicker/moment.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/x-editable/bootstrap-editable.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/bootstrap4-toggle/bootstrap4-toggle.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/inputmask/jquery.inputmask.bundle.min.js"></script>
-<script src="/vertical-dark-sidebar/js/vendors/select2/select2.min.js"></script>
+
+<!-- <script src="/vertical-dark-sidebar/js/vendors/moment/moment.min.js"></script> -->
 
 <script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
@@ -65,15 +73,24 @@
 
 <!-- Custom js for this page-->
 <script src="/vertical-dark-sidebar/js/desktop-notification.js"></script>
-<script src="/vertical-dark-sidebar/js/common.js"></script>
 <script src="/vertical-dark-sidebar/js/bstreeview.js"></script>
 <script src="/vertical-dark-sidebar/js/bscalendar.js"></script>
 <script src="/vertical-dark-sidebar/js/jquery.mask.min.js"></script>
 <script src="/vertical-dark-sidebar/js/jquery.tablednd.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/fullcalendar/fullcalendar.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/calender/ko.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/bootstrap-datepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/calender/addEvent.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/calender/editEvent.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/calender/etcSetting.js"></script>
+<script src="/vertical-dark-sidebar/js/form-addons.js"></script>
+
 
 <!-- End custom js for this page-->
 
 <!-- endinject -->
 <!-- Custom js for this page-->
 <script src="/vertical-dark-sidebar/js/data-table.js"></script>
+<script src="/vertical-dark-sidebar/js/common.js"></script>
+<script src="/vertical-dark-sidebar/js/hummingbird-treeview.js"></script>
 <!-- End custom js for this page-->

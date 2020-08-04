@@ -1239,6 +1239,8 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
      */
     text-align: right;
 }
+
+
 .onoffswitch-pop-switch {
     display: block; width: 18px; margin: 6px;
     background: #FFFFFF;
@@ -1252,6 +1254,37 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 }
 .onoffswitch-pop-checkbox:checked + .onoffswitch-pop-label .onoffswitch-pop-switch {
     right: 0px; 
+}
+
+.onoffswitch-pop-inner_YN {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-pop-inner_YN:before, .onoffswitch-pop-inner_YN:after {
+    display: block; float: left; width: 50%; height: 2.000rem; padding: 0; line-height: 2.000rem;
+    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-pop-inner_YN:before {
+    content: "YES";
+    padding-left: 20px;
+	background-color:#68afff;
+    color: #FFFFFF;
+}
+.onoffswitch-pop-inner_YN:after {
+    content: "NO";
+    padding-right: 20px;
+    background-color: #EEEEEE; color: #999999;
+/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
+     */
+    text-align: right;
+}
+
+.onoffswitch-pop-checkbox:checked + .onoffswitch-pop-label .onoffswitch-pop-inner_YN {
+    margin-left: 0;
 }
 
 
@@ -1428,4 +1461,99 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 
 /* 감사 이력 상세화면 */
 .overflow_area3{height:500px;overflow-y:auto;border:1px solid #b8c3c6;}
+
+.tree_ul{list-style:none;}
+/* 
+.form-check-input-new {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 0;
+  margin-top: 0;
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+ */
+.form-check-input-new[checked] ~ .form-check-label,
+.form-check-input-new:checked ~ .form-check-label {
+  color: #248afd;
+}
+
+.form-check-input-new {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  border: solid #248afd;
+  border-width: 2px;
+  -webkit-transition: all;
+  -moz-transition: all;
+  -ms-transition: all;
+  -o-transition: all;
+  transition: all;
+  transition-duration: 0s;
+  -webkit-transition-duration: 250ms;
+  transition-duration: 250ms;
+}
+
+/* tree */
+.tree_container { margin:150px auto; min-height:100vh;}
+.stylish-input-group .input-group-addon{
+    background: white !important;
+}
+.stylish-input-group .form-control{
+    //border-right:0;
+    box-shadow:0 0 0;
+    border-color:#ccc;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+
+.h-scroll {
+    background-color: #fcfdfd;
+    height: 260px;
+    overflow-y: scroll;
+}
+.hummingbird-treeview,
+.hummingbird-treeview *
+{
+    list-style: none;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.hummingbird-treeview label {
+    font-weight: normal;
+}
+
+
+.hummingbird-treeview input[type=checkbox] {
+    width : 16px;
+    height :16px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.hummingbird-treeview ul:not(.hummingbird-base) {
+    display: none;
+}
+
+.hummingbird-treeview .fa {
+    font-style: normal;
+    cursor: pointer;
+}
+
+.hummingbird-treeview .fas {
+    font-style: normal;
+    cursor: pointer;
+}
+
+.hummingbird-base {
+    white-space:nowrap;
+}
 

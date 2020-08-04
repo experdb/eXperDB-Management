@@ -1,9 +1,11 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -261,34 +264,48 @@ public class CmmnController {
 			System.out.println("백업관리 : " + bak_state+"%");
 
 			//scale 현상태 체크(당일자료)
-			List<Map<String, Object>> resultScale = new ArrayList<Map<String, Object>>();
-			try{
-				List<Map<String, Object>> searchScale = (List<Map<String, Object>>) dashboardService.selectDashboardScaleInfo();
-				int scale_cnt = 0;
-				if (searchScale != null) {
-					if(searchScale.size()>0){
-						for(int i=0; i<searchScale.size(); i++){
-							Map<String, Object> mapScale = (HashMap<String, Object>)searchScale.get(i);
-							String str_db_svr_id = String.valueOf(mapScale.get("db_svr_id"));
-							
-							int db_svr_id = Integer.parseInt(str_db_svr_id);
-							scale_cnt = instanceScaleService.dashboardInstanceScale(db_svr_id);//instance_cnt
-							
-System.out.println("===scale_cnt===" + scale_cnt);
-							
-							mapScale.put("instance_cnt", scale_cnt);
-							
-							//instance 가 있는 경우만
-							if (scale_cnt > 0) {
-								resultScale.add(mapScale);
-							}
-
-						}
-					}
-
+			//scale_yn확인
+			Properties props = new Properties();
+			String strScaleYn = "";
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+			if (props.get("scale") != null) {
+				strScaleYn = props.get("scale").toString();
+				if (!"Y".equals(strScaleYn)) {
+					strScaleYn = "N";
 				}
-			}catch(Exception e){
-				e.printStackTrace();
+			} else {
+				strScaleYn = "N";
+			}
+			
+			List<Map<String, Object>> resultScale = new ArrayList<Map<String, Object>>();
+
+			if ("Y".equals(strScaleYn)) {
+				try{
+					List<Map<String, Object>> searchScale = (List<Map<String, Object>>) dashboardService.selectDashboardScaleInfo();
+					int scale_cnt = 0;
+					if (searchScale != null) {
+						if(searchScale.size()>0){
+							for(int i=0; i<searchScale.size(); i++){
+								Map<String, Object> mapScale = (HashMap<String, Object>)searchScale.get(i);
+								String str_db_svr_id = String.valueOf(mapScale.get("db_svr_id"));
+								
+								int db_svr_id = Integer.parseInt(str_db_svr_id);
+								scale_cnt = instanceScaleService.dashboardInstanceScale(db_svr_id);//instance_cnt
+
+								mapScale.put("instance_cnt", scale_cnt);
+								
+								//instance 가 있는 경우만
+								if (scale_cnt > 0) {
+									resultScale.add(mapScale);
+								}
+
+							}
+						}
+
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 			}
 
 			mv.addObject("scheduleInfo", scheduleInfoVO);

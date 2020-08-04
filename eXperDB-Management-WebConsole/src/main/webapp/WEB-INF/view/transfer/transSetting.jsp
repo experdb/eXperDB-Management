@@ -131,7 +131,7 @@ a:hover.tip span {
 								if (compression_type_info != "") {
 									if (compression_type_info == 'TC003701') {
 										html += "<div class='badge badge-light'>";
-										html += "	<i class='ti-close text-danger mr-2'></i>";
+										html += "	<i class='fa fa-times text-danger mr-2'></i>";
 										html += nvlPrmSet(full.compression_nm, "");
 										html += "</div>";
 									} else {

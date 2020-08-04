@@ -68,11 +68,11 @@
 						  return '<span onClick=javascript:fn_scriptLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 					}
 				},
-				{data : "wrk_id", className : "dt-center", defaultContent : ""
+/* 				{data : "wrk_id", className : "dt-center", defaultContent : ""
 					,"render": function (data, type, full) {				
 						  return '<button class="btn btn-outline-primary" onClick=javascript:fn_schduleList("'+full.wrk_id+'");>View</button>';
 					}
-				},
+				}, */
 				{ data : "wrk_exp",
 					render : function(data, type, full, meta) {	 	
 						var html = '';					
@@ -93,22 +93,28 @@
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '300px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '110px');  
+/* 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); */
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '110px');  
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
 
 		$(window).trigger('resize'); 
-	
+/* 	
 		//더블 클릭시
 		$('#scriptTable tbody').on('dblclick','tr',function() {
 			var wrk_id_up = table.row(this).data().wrk_id;
 			
 			fn_dblclick_updateform(wrk_id_up);
+		});
+		 */
+		$('#scriptTable tbody').on('click','tr',function() {
+			var wrk_id_up = table.row(this).data().wrk_id;
+			
+			fn_schduleList(wrk_id_up);
 		});
 	}
 
@@ -789,7 +795,7 @@
 										<th width="10"></th>
 										<th width="30"><spring:message code="common.no" /></th>
 										<th width="100"><spring:message code="common.work_name" /></th>
-										<th width="100"><spring:message code="menu.schedule_information" /></th>
+<%-- 										<th width="100"><spring:message code="menu.schedule_information" /></th> --%>
 										<th width="300"><spring:message code="common.work_description" /></th>
 										<th width="100"><spring:message code="common.register" /></th>
 										<th width="110"><spring:message code="common.regist_datetime" /></th>

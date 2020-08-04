@@ -139,6 +139,13 @@ public class LoginController {
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String id = userVo.getUsr_id();
+			
+			if (userVo.getUsr_id() == null || userVo.getPwd() == null) {
+				mv.addObject("error", "msg03");
+				mv.setViewName("login");
+				return mv;
+			}
+
 			String pw = aes.aesEncode(userVo.getPwd());
 			
 			String login_chk = userVo.getLoginChkYn();

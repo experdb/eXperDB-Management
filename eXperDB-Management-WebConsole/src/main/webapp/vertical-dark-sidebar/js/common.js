@@ -120,6 +120,8 @@
 				location.reload();
 			}else if (rstGbn == "securityKeySet") {
 				location.href = "/securityKeySet.do";
+			} else if (rstGbn == "backup") {
+				fn_backupHistory_move();
 			}
         });
 	}
@@ -160,7 +162,7 @@
 })(jQuery);
 
 $(window).ready(function(){
-	var htmlLoad = '<div id="loading"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:999;"></div></div>';
+	var htmlLoad = '<div id="loading"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
 	
 	$("#contentsDiv").append(htmlLoad);
 	$('#loading').hide();
@@ -254,56 +256,7 @@ function chk_Number(object){
 	});   
 }
 
-/* ********************************************************
- * 작업 로그정보 출력
- ******************************************************** */
-function fn_fixLog(exe_sn){
-	$.ajax({
-		url : "/selectFixRsltMsg.do",
-		data : {
-			exe_sn : exe_sn
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-			}
-		},
-		success : function(result) {
-			$("#exe_sn").val(result[0].exe_sn);
-			
-			var fix_rsltcd_val = "";
-			
-			if (result[0].fix_rsltcd != null) {
-				fix_rsltcd_val = result[0].fix_rsltcd;
-			} else {
-				fix_rsltcd_val = "TC002001";
-			}
-			
-			$('input:radio[name=rdo]:input[value=' + fix_rsltcd_val + ']').attr("checked", true);
 
-			
-			if (result[0].fix_rslt_msg != null) {
-				$("#fix_rslt_msg").html(result[0].fix_rslt_msg);
-			} else {
-				$("#fix_rslt_msg").html("");
-			}
-
-			$("#lst_mdfr_id").val(result[0].lst_mdfr_id);
-			$("#lst_mdf_dtm").val(result[0].lst_mdf_dtm);
-				
-			$("#pop_layer_fix_rslt_msg").modal("show");					
-		}
-	});	
-}
 
 /* ********************************************************
  * ERROR 로그 정보 출력
@@ -375,6 +328,10 @@ function fn_scriptLayer(wrk_id){
  * WORK정보
  ******************************************************** */
 function fn_workLayer(wrk_id){
+	var rman_bck_opt_cd_nm = "", rman_cps_yn = "", rman_log_file_bck_yn = "", rman_log_file_mtn_ecn = "", rman_log_file_stg_dcnt = "";
+	var rman_acv_file_mtncnt = "", rman_bck_mtn_ecnt = "", rman_acv_file_stgdt = "", rman_file_stg_dcnt = "";
+	var dump_file_fmt_cd_nm = "", dump_cprt = "", dump_file_stg_dcnt ="", dump_bck_mtn_ecnt = "";
+	
 	$.ajax({
 		url : "/selectWrkInfo.do",
 		data : {
@@ -401,46 +358,111 @@ function fn_workLayer(wrk_id){
 				if(result[0].bsn_dscd == "TC001901"){
 					// RMAN
 					if(result[0].bck_bsn_dscd == "TC000201"){
-						$("#r_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
-						$("#bck_opt_cd_nm").html(result[0].bck_opt_cd_nm);
-						$("#r_wrk_nm").html(result[0].wrk_nm);
-						$("#r_wrk_exp").html(result[0].wrk_exp);
-						if(result[0].cps_yn == "N"){
-							$("#cps_yn").html(agent_monitoring_no);
-						}else{
-							$("#cps_yn").html(agent_monitoring_yes);
+						$("#r_bck_bsn_dscd_nm").html(nvlPrmSet(result[0].bck_bsn_dscd_nm, "-"));
+
+						if (result[0].bck_opt_cd == 'TC000301') {
+							rman_bck_opt_cd_nm += "<div class='badge badge-pill badge-success'>";
+							rman_bck_opt_cd_nm += "	<i class='fa fa-paste mr-2'></i>";
+							rman_bck_opt_cd_nm += backup_management_full_backup;
+							rman_bck_opt_cd_nm += '(' + result[0].bck_opt_cd_nm + ')';
+							rman_bck_opt_cd_nm += "</div>";									
+						} else if(result[0].bck_opt_cd == 'TC000302'){
+							rman_bck_opt_cd_nm += "<div class='badge badge-pill badge-warning'>";
+							rman_bck_opt_cd_nm += "	<i class='fa fa-comments-o mr-2'></i>";
+							rman_bck_opt_cd_nm += backup_management_incremental_backup;
+							rman_bck_opt_cd_nm += '(' + result[0].bck_opt_cd_nm + ')';
+							rman_bck_opt_cd_nm += "</button>";
+						} else {
+							rman_bck_opt_cd_nm += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+							rman_bck_opt_cd_nm += "	<i class='fa fa-exchange mr-2' ></i>";
+							rman_bck_opt_cd_nm += backup_management_change_log_backup;
+							rman_bck_opt_cd_nm += '(' + result[0].bck_opt_cd_nm + ')';
+							rman_bck_opt_cd_nm += "</div>";
 						}
-						//$("#cps_yn").html(result[0].cps_yn);
-						$("#log_file_pth").html(result[0].log_file_pth);
-						$("#data_pth").html(result[0].data_pth);
-						$("#bck_pth").html(result[0].bck_pth);
-						$("#r_file_stg_dcnt").html(result[0].file_stg_dcnt);
-						$("#r_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
-						$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
-						$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
-						if(result[0].log_file_bck_yn == "N"){
-							$("#log_file_bck_yn").html(agent_monitoring_no);
+						$("#r_bck_opt_cd_nm").html(rman_bck_opt_cd_nm);
+						
+						$("#r_wrk_nm").html(nvlPrmSet(result[0].wrk_nm, "-"));
+						$("#r_wrk_exp").html(nvlPrmSet(result[0].wrk_exp, "-"));
+
+						if(nvlPrmSet(result[0].cps_yn, "") != "Y"){
+	    					rman_cps_yn += "<div class='badge badge-pill badge-danger' >";
+	    					rman_cps_yn += "	<i class='fa fa-file-zip-o mr-2'></i>";
+	    					rman_cps_yn += agent_monitoring_no;
+	    					rman_cps_yn += "</div>";
 						}else{
-							$("#log_file_bck_yn").html(agent_monitoring_yes);
+							rman_cps_yn += "<div class='badge badge-pill badge-info text-white'>";
+							rman_cps_yn += "	<i class='fa fa-file-zip-o mr-2'></i>";
+							rman_cps_yn += agent_monitoring_yes;
+							rman_cps_yn += "</div>";
 						}
-						//$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
-						$("#r_log_file_stg_dcnt").html(result[0].log_file_stg_dcnt);
-						$("#r_log_file_mtn_ecnt").html(result[0].log_file_mtn_ecnt);
+						$("#r_cps_yn").html(rman_cps_yn);
+
+						$("#r_log_file_pth").html(nvlPrmSet(result[0].log_file_pth, "-"));
+						$("#r_data_pth").html(nvlPrmSet(result[0].data_pth, "-"));
+						$("#r_bck_pth").html(nvlPrmSet(result[0].bck_pth, "-"));
+						
+						//백업파일옵션
+						$("#r_file_stg_dcnt").html(nvlPrmSet(result[0].file_stg_dcnt, "0"));
+
+						$("#r_bck_mtn_ecnt").html(nvlPrmSet(result[0].bck_mtn_ecnt, "0"));
+
+						$("#r_acv_file_stgdt").html(nvlPrmSet(result[0].acv_file_stgdt, "0"));
+
+						$("#r_acv_file_mtncnt").html(nvlPrmSet(result[0].acv_file_mtncnt, "0"));
+
+						//로그파일 옵션
+						if(nvlPrmSet(result[0].log_file_bck_yn, "") != "Y"){
+							rman_log_file_bck_yn += "<div class='badge badge-pill badge-danger' >";
+							rman_log_file_bck_yn += "	<i class='fa fa-file-zip-o mr-2'></i>";
+							rman_log_file_bck_yn += agent_monitoring_no;
+							rman_log_file_bck_yn += "</div>";
+						}else{
+							rman_log_file_bck_yn += "<div class='badge badge-pill badge-info text-white'>";
+							rman_log_file_bck_yn += "	<i class='fa fa-file-zip-o mr-2'></i>";
+							rman_log_file_bck_yn += agent_monitoring_yes;
+							rman_log_file_bck_yn += "</div>";
+						}
+						$("#r_log_file_bck_yn").html(rman_log_file_bck_yn);
+
+						$("#r_log_file_stg_dcnt").html(nvlPrmSet(result[0].log_file_stg_dcnt, "0"));
+						$("#r_log_file_mtn_ecnt").html(nvlPrmSet(result[0].log_file_mtn_ecnt, "0"));
 
 						$("#pop_layer_rman").modal("show");
 					// DUMP
 					}else{
-						$("#d_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
-						$("#d_wrk_nm").html(result[0].wrk_nm);
-						$("#d_wrk_exp").html(result[0].wrk_exp);
-						$("#db_nm").html(result[0].db_nm);
-						$("#save_pth").html(result[0].save_pth);
-						$("#file_fmt_cd_nm").html(result[0].file_fmt_cd_nm);
-						$("#cprt").html(result[0].cprt);
-						$("#encd_mth_nm").html(result[0].encd_mth_nm);
-						$("#usr_role_nm").html(result[0].usr_role_nm);
+						$("#d_bck_bsn_dscd_nm").html(nvlPrmSet(result[0].bck_bsn_dscd_nm, "-"));
+						$("#d_wrk_nm").html(nvlPrmSet(result[0].wrk_nm, "-"));
+						$("#d_wrk_exp").html(nvlPrmSet(result[0].wrk_exp, "-"));
+						$("#d_db_nm").html(nvlPrmSet(result[0].db_nm, "-"));
+						$("#d_save_pth").html(nvlPrmSet(result[0].save_pth, "-"));
+						
+						if (result[0].file_fmt_cd_nm != null) {
+							dump_file_fmt_cd_nm += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+							dump_file_fmt_cd_nm += "	<i class='fa fa-file-o mr-2' ></i>";
+							dump_file_fmt_cd_nm += result[0].file_fmt_cd_nm;
+							dump_file_fmt_cd_nm += "</div>";
+						}
+						$("#d_file_fmt_cd_nm").html(dump_file_fmt_cd_nm);
+						
+						var dump_cprt_val = nvlPrmSet(result[0].cprt, "0");
+						dump_cprt += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+						dump_cprt += "	<i class='ti-angle-double-right mr-2' ></i>";
+						
+						if (dump_cprt_val == "" || dump_cprt_val == "0") {
+							dump_cprt += backup_management_uncompressed;
+						} else {
+							dump_cprt += dump_cprt_val + " Level";
+						}
+
+						dump_cprt += "</div>";
+						$("#d_cprt").html(dump_cprt);
+
+						$("#d_encd_mth_nm").html(nvlPrmSet(result[0].encd_mth_nm, "-"));
+						$("#d_usr_role_nm").html(nvlPrmSet(result[0].usr_role_nm, "-"));
+
 						$("#d_file_stg_dcnt").html(result[0].file_stg_dcnt);
-						$("#d_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
+
+						$("#d_bck_mtn_ecnt").html(nvlPrmSet(result[0].bck_mtn_ecnt, "0"));
 						
 						fn_workOptionLayer(result[0].bck_wrk_id, result[0].db_svr_id, result[0].db_nm);
 	
@@ -837,11 +859,11 @@ function fn_workOptionLayer(bck_wrk_id, db_svr_id, db_nm){
 				}
 			}
 			
-			$("#sections").html(sections);
-			$("#objectType").html(objectType);
-			$("#save_yn").html(save_yn);
-			$("#query").html(query);
-			$("#etc").html(etc);			
+			$("#d_sections").html(nvlPrmSet(sections, "-"));
+			$("#d_objectType").html(nvlPrmSet(objectType, "-"));
+			$("#d_save_yn").html(nvlPrmSet(save_yn, "-"));
+			$("#d_query").html(nvlPrmSet(query, "-"));
+			$("#d_etc").html(nvlPrmSet(etc, "-"));			
 	
 			fn_workObjectListTreeLayer(bck_wrk_id, db_svr_id, db_nm);
 		}		
@@ -911,9 +933,10 @@ function fn_workObjectTreeLayer(db_svr_id, db_nm, workObj){
  * Make Object Tree
  ******************************************************** */
 function fn_make_object_list(data, workObj){
-	var html = "<ul>";
+	var html = " <form class='form-inline'><ul class='d-flex flex-column-reverse todo-list todo-list-custom tree_ul'>";
 	var schema = "";
 	var schemaCnt = 0;
+
 	$(data.data).each(function (index, item) {
 		var inSchema = item.schema;
 		
@@ -925,20 +948,24 @@ function fn_make_object_list(data, workObj){
 			$(workObj).each(function(i,v){
 				if(v.scm_nm == item.schema && v.obj_nm == "") checkStr = " checked disabled";
 			});
-			html += "<li class='active'><a href='#'>"+item.schema+"</a>";
-			html += "<div class='inp_chk chk3'>";
-			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/><label for='schema"+schemaCnt+"'></label>";
-			html += "</div>";
-			html += "<ul>\n";
+			html += "<li>";
+			html += "	<div class='form-check form-check-info'>";
+			html += "		<input type='checkbox' class='form-check-input form-check-input-new form-check-info' style='padding-right:-100px;' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/>";
+			html += "		<label class='form-check-label' for='schema"+schemaCnt+"' style='margin-left:7px;padding-top:3px;'>"+item.schema+"</label>";
+			html += "	</div>";
+			html += "<ul class='tree_ul'>\n";
 		}
 		
 		var checkStr = "disabled";
 		$(workObj).each(function(i,v){
 			if(v.scm_nm == item.schema && v.obj_nm == item.name) checkStr = " checked disabled";
 		});
-		html += "<li><a href='#'>"+item.name+"</a>";
-		html += "<div class='inp_chk chk3'>";
-		html += "<input type='checkbox' id='table"+index+"' name='tree' value='"+item.name+"' otype='table' schema='"+item.schema+"'"+checkStr+"/><label for='table"+index+"'></label>";
+		html += "<li>";
+		html += "	<div class='form-check form-check-info'>";
+		html += "		<input type='checkbox' class='form-check-input form-check-input-new form-check-info' style='padding-right:-100px;' id='table"+index+"' name='tree' value='"+item.name+"' otype='table' schema='"+item.schema+"'"+checkStr+"/>";
+		html += "		<label class='form-check-label' for='table"+index+"' style='margin-left:7px;padding-top:3px;' >"+item.name+"</label>";
+		html += "	</div>";
+
 		html += "</div>";
 		html += "</li>\n";
 
@@ -948,10 +975,10 @@ function fn_make_object_list(data, workObj){
 		}
 	});
 	if(schemaCnt > 0) html += "</ul></li>";
-	html += "</ul>";
+	html += "</ul></form>";
 
-	$(".tNav").html("");
-	$(".tNav").html(html);
+	$(".tNav_new").html("");
+	$(".tNav_new").html(html);
 	//$.getScript( "/js/common.js", function() {});
 	
 	$('#loading').hide();
@@ -1012,3 +1039,215 @@ function ResizingLayer() {
 	}
 }
 window.onresize = ResizingLayer;
+
+/* ********************************************************
+ *  조치입력 화면 생성
+ ******************************************************** */
+function fn_fix_rslt_reg(exe_sn, viewGbn){
+	$('#rst_exe_sn_r', '#rsltMsgInfoForm').val(exe_sn);
+	$('#rst_fix_rslt_msg_r', '#rsltMsgInfoForm').val('');
+	$('#rst_rdo_r_1', '#rsltMsgInfoForm').attr('checked', true);
+	$('#rst_fix_rslt_view_gbn', '#rsltMsgInfoForm').val(viewGbn);
+
+	$('#pop_layer_fix_rslt_reg').modal("show");
+}
+
+/* ********************************************************
+ *  조치입력 저장
+ ******************************************************** */
+function fn_fix_rslt_msg_reg(){
+	var fix_rsltcd = $(":input:radio[name=rst_rdo_r]:checked").val();
+
+	$.ajax({
+		url : "/updateFixRslt.do",
+		data : {
+			exe_sn : $('#rst_exe_sn_r', '#rsltMsgInfoForm').val(),
+			fix_rsltcd : fix_rsltcd,
+			fix_rslt_msg : $('#rst_fix_rslt_msg_r', '#rsltMsgInfoForm').val()
+		},
+//		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			var viewGbn = $('#rst_fix_rslt_view_gbn', '#rsltMsgInfoForm').val();
+			
+			$('#pop_layer_fix_rslt_reg').modal("hide");
+
+			if (viewGbn == "rmanList") {
+				fn_get_rman_list();
+			} else if (viewGbn == "dumpList") {
+				fn_get_dump_list();
+			} else {
+				fn_search();
+			}
+		}
+	});
+}
+
+/* ********************************************************
+ * 작업 로그정보 출력
+ ******************************************************** */
+function fn_fixLog(exe_sn, viewGbn){
+	$.ajax({
+		url : "/selectFixRsltMsg.do",
+		data : {
+			exe_sn : exe_sn
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			$("#exe_sn", "#rsltMsgForm").val(result[0].exe_sn);
+			
+			var fix_rsltcd_val = nvlPrmSet(result[0].fix_rsltcd, "TC002001");
+
+			$('input:radio[name=rdo]:input[value=' + fix_rsltcd_val + ']').attr("checked", true);
+
+			$("#fix_rslt_msg", "#rsltMsgForm").html(nvlPrmSet(result[0].fix_rslt_msg, ""));
+
+			$("#fix_update_view_gbn", '#rsltMsgForm').val(viewGbn);
+
+			$("#lst_mdfr_id", '#rsltMsgForm').val(result[0].lst_mdfr_id);
+			$("#lst_mdf_dtm", '#rsltMsgForm').val(result[0].lst_mdf_dtm);
+				
+			$("#pop_layer_fix_rslt_msg").modal("show");					
+		}
+	});	
+}
+
+/* ********************************************************
+ *  조치입력 수정
+ ******************************************************** */
+function fn_fix_rslt_msg_modify(){
+	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+
+	$.ajax({
+		url : "/updateFixRslt.do",
+		data : {
+			exe_sn : $('#exe_sn', '#rsltMsgForm').val(),
+			fix_rsltcd : fix_rsltcd,
+			fix_rslt_msg : nvlPrmSet($('#fix_rslt_msg', '#rsltMsgForm').val(), "")
+		},
+//		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	    	xhr.setRequestHeader("AJAX", true);
+	    },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			var viewGbn = $('#fix_update_view_gbn', '#rsltMsgForm').val();
+			
+			$('#pop_layer_fix_rslt_msg').modal("hide");
+
+			if (viewGbn == "rmanList") {
+				fn_get_rman_list();
+			} else if (viewGbn == "dumpList") {
+				fn_get_dump_list();
+			} else {
+				fn_search();
+			}
+		}
+	}); 
+}
+
+/* ********************************************************
+ *  rman 백업 상세화면 출력
+ ******************************************************** */
+function fn_rmanShow(bck, db_svr_id){
+	$.ajax({
+		url : "/rmanShowView.do",
+		data : {
+			db_svr_id : db_svr_id,
+			bck : bck
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			$("#rmanInfo_bck", "#rmanshowForm").val(bck);
+			$("#rmanInfo_db_svr_id", "#rmanshowForm").val(db_svr_id);
+
+			$("#pop_layer_rman_show").modal("show");
+			$('#pop_layer_rman_show_view').css("width", "1250px");
+			
+			fn_rmanshow_pop_search();
+		}
+	});
+}
+
+/* ********************************************************
+ *  rman 백업 상세화면 출력
+ ******************************************************** */
+function fn_dumpShow(bck, db_svr_id){
+
+	$.ajax({
+		url : "/dumpShowView.do",
+		data : {
+			db_svr_id : db_svr_id,
+			bck : bck
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			$("#dumpInfo_bck", "#dumpshowForm").val(bck);
+			$("#dumpInfo_db_svr_id", "#dumpshowForm").val(db_svr_id);
+
+			$("#pop_layer_dump_show").modal("show");
+
+			fn_dumpshow_pop_search();
+		}
+	});
+}

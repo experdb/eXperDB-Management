@@ -49,9 +49,9 @@
 			}
 
 			if(selectChkTab == "rman"){
-				fn_get_execute_list();
+				fn_get_rman_list();
 			}else{
-				fn_get_occur_list();
+				fn_get_dump_list();
 			}
 		});
 	});
@@ -154,7 +154,13 @@
 			}).datepicker('setDate', day_end)
 			.on('hide', function(e) {
 				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
-		    }); //값 셋팅
+		    })
+		    .on('changeDate', function(selected){
+		    	day_end = new Date(selected.date.valueOf());
+		    	day_end.setDate(day_end.getDate(new Date(selected.date.valueOf())));
+		        $('#wrk_strt_dtm_div').datepicker('setEndDate', day_end);
+		        $('#wrk_strt_dtm').datepicker('setEndDate', day_end);
+			}); //값 셋팅
 		}
 		
 		$("#wrk_strt_dtm").datepicker('setDate', day_start);
@@ -188,7 +194,32 @@
 							},
 							defaultContent : ""
 						},
-						{data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""},
+						{data: "bck_opt_cd_nm", className: "dt-center", defaultContent: "",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.bck_opt_cd == 'TC000301') {
+									html += "<div class='badge badge-pill badge-success'>";
+									html += "	<i class='fa fa-paste mr-2'></i>";
+									html += '<spring:message code="backup_management.full_backup" />';
+									html += "</div>";									
+								} else if(full.bck_opt_cd == 'TC000302'){
+									html += "<div class='badge badge-pill badge-warning'>";
+									html += "	<i class='fa fa-comments-o mr-2'></i>";
+									html += '<spring:message code="backup_management.incremental_backup" />';
+									html += "</button>";
+								} else {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+									html += "	<i class='fa fa-exchange mr-2' ></i>";
+									html += '<spring:message code="backup_management.change_log_backup" />';
+									html += "</div>";
+								}
+/* 								
+								html += "<div class='row' style='width:150px;'><div class='col-8'>";
+ */
+								return html;
+							},
+
+						},
 						{data : "bck_file_pth", className : "dt-left", defaultContent : ""
 							,"render": function (data, type, full) {
 								return '<span onClick=javascript:fn_rmanShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); data-toggle="modal" title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
@@ -196,17 +227,37 @@
 						},
 						{data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
 						{data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
-						{data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
+						{data: "wrk_dtm", 
+							render : function(data, type, full, meta) {
+								var html = "<div class='badge badge-pill badge-primary'>";
+								html += "	<i class='mdi mdi-timer mr-2'></i>";
+								html += full.wrk_dtm;
+								html += "</div>";	
+
+								return html;
+							},
+							className: "dt-center", defaultContent: ""}, 
 						{data : "exe_rslt_cd_nm",
 							render : function(data, type, full, meta) {
 								var html = '';
 								if (full.exe_rslt_cd == 'TC001701') {
-									html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-check-circle text-primary' >";
+									html += '&nbsp;<spring:message code="common.success" /></i>';
+									html += "</div>";
+									
 								} else if(full.exe_rslt_cd == 'TC001702'){
-									html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+ 									html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
+									html += '<i class="fa fa-times"></i>';
+									html += '<spring:message code="common.failed" />';
+									html += "</button>";
 								} else {
-									html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+									html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+									html += '&nbsp;<spring:message code="etc.etc28" />';
+									html += "</div>";
 								}
+
 								return html;
 							},
 							className : "dt-center",
@@ -217,16 +268,26 @@
 							render : function(data, type, full, meta) {
 								var html = '';
 								if (full.fix_rsltcd == 'TC002001') {
-									html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
+	 								html += '<button type="button" class="btn btn-primary btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'rmanList\');">';
+	 								html += '<i class="fa fa-lightbulb-o btn-icon-prepend"></i>';
+	 								html += '<spring:message code="etc.etc29"/>';
+	 								html += "</button>";
 								} else if(full.fix_rsltcd == 'TC002002'){
-									html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
+	 								html += '<button type="button" class="btn btn-danger btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'rmanList\');">';
+	 								html += '<i class="fa fa-times btn-icon-prepend"></i>';
+	 								html += '<spring:message code="etc.etc30"/>';
+	 								html += "</button>";
 								} else {
 									if(full.exe_rslt_cd == 'TC001701'){
 										html += ' - ';
 									}else{
-										html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
+		 								html += '<button type="button" class="btn btn-success btn-icon-text" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'rmanList\');">';
+		 								html += '<i class="ti-pencil-alt btn-icon-prepend"></i>';
+		 								html += '<spring:message code="backup_management.Enter_Action"/>';
+		 								html += "</button>";
 									}
 								}
+
 								return html;
 							},
 							defaultContent : ""
@@ -280,13 +341,21 @@
 						{data: "db_nm", defaultContent: ""}, 
 						{data : "file_sz", defaultContent : ""
 							,"render": function (data, type, full) {
+								var html = "";
+								
 								if(full.file_sz != 0){
 									var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
 									var e = Math.floor(Math.log(full.file_sz) / Math.log(1024));
-									return (full.file_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e];
+
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='ti-files text-primary' >";
+									html += '&nbsp;' + (full.file_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e] + '</i>';
+									html += "</div>";
 								}else{
-									return full.file_sz;
+									html += full.file_sz;
 								}
+								
+								return html;
 							}
 						},
 						{data : "bck_file_pth", defaultContent : ""
@@ -297,16 +366,35 @@
 						{data: "bck_filenm", defaultContent: ""},
 						{data: "wrk_strt_dtm", defaultContent: ""}, 
 						{data: "wrk_end_dtm", defaultContent: ""},
-						{data: "wrk_dtm", defaultContent: ""},
+						{data: "wrk_dtm", 
+							render : function(data, type, full, meta) {
+								var html = "<div class='badge badge-pill badge-primary'>";
+								html += "	<i class='mdi mdi-timer mr-2'></i>";
+								html += full.wrk_dtm;
+								html += "</div>";	
+
+								return html;
+							},
+							defaultContent: ""},
 						{data : "exe_rslt_cd",
 							render : function(data, type, full, meta) {
 								var html = '';
 								if (full.exe_rslt_cd == 'TC001701') {
-									html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-check-circle text-primary' >";
+									html += '&nbsp;<spring:message code="common.success" /></i>';
+									html += "</div>";
+									
 								} else if(full.exe_rslt_cd == 'TC001702'){
-									html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+ 									html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
+									html += '<i class="fa fa-times"></i>';
+									html += '<spring:message code="common.failed" />';
+									html += "</button>";
 								} else {
-									html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+									html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+									html += '&nbsp;<spring:message code="etc.etc28" />';
+									html += "</div>";
 								}
 								return html;
 							},
@@ -317,21 +405,30 @@
 							render : function(data, type, full, meta) {
 								var html = '';
 								if (full.fix_rsltcd == 'TC002001') {
-									html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
+	 								html += '<button type="button" class="btn btn-primary btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'dumpList\');">';
+	 								html += '<i class="fa fa-lightbulb-o btn-icon-prepend"></i>';
+	 								html += '<spring:message code="etc.etc29"/>';
+	 								html += "</button>";
 								} else if(full.fix_rsltcd == 'TC002002'){
-									html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
+	 								html += '<button type="button" class="btn btn-danger btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'dumpList\');">';
+	 								html += '<i class="fa fa-times btn-icon-prepend"></i>';
+	 								html += '<spring:message code="etc.etc30"/>';
+	 								html += "</button>";
 								} else {
 									if(full.exe_rslt_cd == 'TC001701'){
 										html += ' - ';
 									}else{
-										html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
+		 								html += '<button type="button" class="btn btn-success btn-icon-text" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'dumpList\');">';
+		 								html += '<i class="ti-pencil-alt btn-icon-prepend"></i>';
+		 								html += '<spring:message code="backup_management.Enter_Action"/>';
+		 								html += "</button>";
 									}
 								}
 								return html;
 							},
 							defaultContent : ""
 						}
-			],'select': {'style': 'multi'} 
+			]
 		});
 
 		tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
@@ -375,10 +472,112 @@
 			fn_get_dump_list();
 		}
 	}
+
+	/* ********************************************************
+	 * Get Rman Log List
+	 ******************************************************** */
+	function fn_get_rman_list(){
+		if(!calenderValid()) {
+			return;
+		}
+		
+ 		$.ajax({
+ 			url : "/backup/selectWorkLogList.do",
+ 			data : {
+				hist_gbn : "rman_hist",
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				bck_bsn_dscd : "TC000201",
+				bck_opt_cd : $("#bck_opt_cd").val(),
+		  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
+		  		wrk_end_dtm : $("#wrk_end_dtm").val(),
+				exe_rslt_cd : $("#exe_rslt_cd").val(),
+				wrk_nm : nvlPrmSet($('#wrk_nm').val(), ""),
+				fix_rsltcd : $("#fix_rsltcd").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				tableRman.rows({selected: true}).deselect();
+				tableRman.clear().draw();
+
+				if (nvlPrmSet(result, "") != '') {
+					tableRman.rows.add(result).draw();
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * Get Dump Log List
+	 ******************************************************** */
+	function fn_get_dump_list(){
+		if(!calenderValid()) {
+			return;
+		}
+		
+		var db_id = $("#db_id").val();
+		if(db_id == "") db_id = 0;
+		
+		$.ajax({
+			url : "/backup/selectWorkLogList.do",
+			data : {
+				hist_gbn : "dump_hist",
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				bck_bsn_dscd : "TC000202",
+				db_id : db_id,
+		  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
+		  		wrk_end_dtm : $("#wrk_end_dtm").val(),
+		  		exe_rslt_cd : $("#exe_rslt_cd").val(),
+				wrk_nm : nvlPrmSet($('#wrk_nm').val(), ""),
+				fix_rsltcd : $("#fix_rsltcd").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		    },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				tableDump.rows({selected: true}).deselect();
+				tableDump.clear().draw();
+
+				if (nvlPrmSet(result, "") != '') {
+					tableDump.rows.add(result).draw();
+				}
+			}
+		});
+	}
 </script>
 
+<%@include file="../cmmn/fixRsltMsgInfo.jsp"%>
+<%@include file="../cmmn/fixRsltMsg.jsp"%>
+<%@include file="../popup/rmanShow.jsp"%>
+<%@include file="../popup/dumpShow.jsp"%>
+<%@include file="../cmmn/workRmanInfo.jsp"%>
+<%@include file="../cmmn/workDumpInfo.jsp"%>
+<%@include file="../cmmn/wrkLog.jsp"%>
+
 <form name="findList" id="findList" method="post">
-	<input type="hidden" name="bck"  id="bck">
 	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
 </form>
 
@@ -434,7 +633,7 @@
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-pills-setting" id="server-tab" role="tablist">
+					<ul class="nav nav-pills nav-pills-setting" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item tab-two-style">
 							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
 								Online <spring:message code="menu.backup_history" />
@@ -449,7 +648,7 @@
 
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
+						<div class="card-body" style="margin:-10px 0px -15px 0px;">
 
 							<form class="form-inline">
 								<div class="row">
@@ -476,13 +675,14 @@
 									<div class="input-group mb-2 mr-sm-2" style="padding:0 10px 0 10px;">
 										<select class="form-control" style="width:200px;" name="exe_rslt_cd" id="exe_rslt_cd">
 											<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
-											<option value="1"><spring:message code="common.success" /></option>
-											<option value="2"><spring:message code="common.failed" /></option>
+											<option value="TC001701"><spring:message code="common.success" /></option>
+											<option value="TC001702"><spring:message code="common.failed" /></option>
 										</select>
 									</div>
 										
 									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
 										<select class="form-control" style="width:200px;" name="bck_opt_cd" id="bck_opt_cd">
+											<option value=""><spring:message code="backup_management.backup_option" />&nbsp;<spring:message code="schedule.total" /></option>
 											<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
 											<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
 											<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>

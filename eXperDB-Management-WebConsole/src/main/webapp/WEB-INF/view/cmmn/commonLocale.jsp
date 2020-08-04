@@ -62,6 +62,14 @@ var user_management_msg11 = "<spring:message code='user_management.msg11' />";
 
 var migration_msg21 = "<spring:message code='migration.msg21' />";
 
+var backup_management_full_backup = "<spring:message code='backup_management.full_backup' />";
+var backup_management_incremental_backup = "<spring:message code='backup_management.incremental_backup' />";
+var backup_management_change_log_backup = "<spring:message code='backup_management.change_log_backup' />";
+var backup_management_uncompressed = "<spring:message code='backup_management.uncompressed' />";
+
+var common_volume = "<spring:message code='common.volume' />";
+var common_choice = "<spring:message code='common.choice' />";
+
 </script>
 <body>
 
