@@ -130,12 +130,12 @@ a:hover.tip span {
 			    				//메타데이타 설정
 								if (compression_type_info != "") {
 									if (compression_type_info == 'TC003701') {
-										html += "<div class='badge badge-light'>";
+										html += "<div class='badge badge-light' style='background-color: transparent !important;'>";
 										html += "	<i class='fa fa-times text-danger mr-2'></i>";
 										html += nvlPrmSet(full.compression_nm, "");
 										html += "</div>";
 									} else {
-										html += "<div class='badge badge-light'>";
+										html += "<div class='badge badge-light' style='background-color: transparent !important;'>";
 										html += "	<i class='fa fa-file-zip-o text-success mr-2'></i>";
 										html += nvlPrmSet(full.compression_nm, "");
 										html += "</div>";
@@ -754,12 +754,12 @@ a:hover.tip span {
 		//압축모드
 		if (compression_type_info != "") {
 			if (compression_type_info == 'TC003701') {
-				compression_type_info_val += "<div class='badge badge-light'>";
+				compression_type_info_val += "<div class='badge badge-light' style='background-color: transparent !important;'>";
 				compression_type_info_val += "	<i class='ti-close text-danger mr-2'></i>";
 				compression_type_info_val += nvlPrmSet(result.compression_nm, "");
 				compression_type_info_val += "</div>";
 			} else {
-				compression_type_info_val += "<div class='badge badge-light'>";
+				compression_type_info_val += "<div class='badge badge-light' style='background-color: transparent !important;'>";
 				compression_type_info_val += "	<i class='fa fa-file-zip-o text-success mr-2'></i>";
 				compression_type_info_val += nvlPrmSet(result.compression_nm, "");
 				compression_type_info_val += "</div>";
