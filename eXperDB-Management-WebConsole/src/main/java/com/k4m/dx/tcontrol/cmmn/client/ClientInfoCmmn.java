@@ -1393,7 +1393,8 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			String RESTORE_FLAG = restoreRmanVO.getRestore_flag();
 			jObj.put(ClientProtocolID.RESTORE_FLAG, RESTORE_FLAG);
 			//TIMELINE
-			String TIMELINE = "";
+			String TIMELINE = restoreRmanVO.getTimeline_dt()+" "+restoreRmanVO.getTimeline_h()+":"+restoreRmanVO.getTimeline_m()+":"+restoreRmanVO.getTimeline_s();
+			System.out.println("TIMELINE ==========="+ TIMELINE);
 			jObj.put(ClientProtocolID.TIMELINE, TIMELINE);
 			//PGDATA
 			String PGDATA = restoreRmanVO.getDtb_pth();
@@ -1417,7 +1418,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			System.out.println("=========== RMAN Restore 정보 ============");
 			System.out.println("RESTORE_SN = "+RESTORE_SN);
 			System.out.println("RESTORE_FLAG = "+RESTORE_FLAG);
-			System.out.println("TIMELINE = "+"");
+			System.out.println("TIMELINE = "+TIMELINE);
 			System.out.println("PGDATA = "+PGDATA);
 			System.out.println("PGALOG = "+PGALOG);
 			System.out.println("SRVLOG = "+SRVLOG);

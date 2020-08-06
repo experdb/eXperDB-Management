@@ -290,7 +290,7 @@
 	 * RMAN Restore 정보 저장
 	 ******************************************************** */
 	function fn_execute() {
-		var timeline_dt = $("#datepicker1").val().replace(/-/gi, '').trim();
+		var timeline_dt = $("#datepicker1").val();
 		var asis_flag = $(":input:radio[name=asis_flag]:checked").val();
 
 		$.ajax({
@@ -333,6 +333,7 @@
 			},
 			success : function(result) {
 				alert('<spring:message code="restore.msg223" />');
+				fn_restoreLogCall();
 			}
 		});
 	}
@@ -361,6 +362,37 @@
 					alert('<spring:message code="restore.msg222" />');
 					document.getElementById("restore_nm").focus();
 				}
+			},
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if (xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if (xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : " + xhr.status + "\n\n"
+							+ "ERROR Message : " + error + "\n\n"
+							+ "Error Detail : "
+							+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			}
+		});
+	}
+	
+	
+	function fn_restoreLogCall() {
+		$.ajax({
+			url : '/restoreLogCall.do',
+			type : 'post',
+			data : {
+				db_svr_id : db_svr_id
+			},
+			success : function(result) {
+				$("#exelog").append(result.strResultData);
 			},
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader("AJAX", true);

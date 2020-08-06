@@ -56,6 +56,7 @@ public class DxT005 extends SocketCtl {
 	private static String TC001901 = "TC001901"; // 백업
 	private static String TC001902 = "TC001902"; // 스크립트실행
 	
+	private static String TC000201 = "TC000201"; // rman
 	private static String TC000202 = "TC000202"; // dump
 	
 	
@@ -92,10 +93,6 @@ public class DxT005 extends SocketCtl {
 			int intGrpSeq = service.selectQ_WRKEXE_G_02_SEQ();
 
 			for (int i = 0; i < arrCmd.size(); i++) {
-				
-				socketLogger.info("[ 0. 총 WORK 갯수 ]   " + arrCmd.size() + "개" );	
-				
-				// System.out.println("Start : "+ (i+1));
 
 				JSONObject objJob = (JSONObject) arrCmd.get(i);
 
@@ -108,16 +105,14 @@ public class DxT005 extends SocketCtl {
 				String strDB_ID = objJob.get(ProtocolID.DB_ID).toString();
 				if(strDB_ID == null || strDB_ID.equals("")) {
 					strDB_ID = "1";
-				}
-				
+				}				
 				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
 				String strLOG_YN = objJob.get(ProtocolID.LOG_YN).toString();
 				String strBCK_FILENM = objJob.get(ProtocolID.BCK_FILENM).toString();
 				String strDB_SVR_IPADR_ID = objJob.get(ProtocolID.DB_SVR_IPADR_ID).toString();
 				if(strDB_SVR_IPADR_ID == null || strDB_SVR_IPADR_ID.equals("")) {
 					strDB_SVR_IPADR_ID = "1";
-				}
-				
+				}				
 				String strBSN_DSCD = objJob.get(ProtocolID.BSN_DSCD).toString();
 
 				int intSeq = service.selectQ_WRKEXE_G_01_SEQ();
@@ -134,26 +129,29 @@ public class DxT005 extends SocketCtl {
 				vo.setSCD_CNDT(TC001802); // 실행중
 				vo.setDB_SVR_IPADR_ID(Integer.parseInt(strDB_SVR_IPADR_ID));
 
-				
-				
 				// RMAN 백업일경우, Validation 은 스케줄 수행 정보나 이력을 업데이트 하지 않음
 				if (strLOG_YN.equals("Y")) {
 					// 스케줄 상태변경
-					socketLogger.info("[ 1. 스케줄 시작 스케줄 상태 변경 ]   " + vo.getSCD_CNDT() + " 실행중" );	
+					socketLogger.info("[ 스케줄 상태 변경 ]   " + vo.getSCD_CNDT() + " 실행중" );	
 					service.updateSCD_CNDT(vo);
 
 					// 스케줄 이력등록
-					socketLogger.info("[ 2. 스케줄 수행이력 등록 ]  " );	
+					socketLogger.info("[ 스케줄 수행이력 등록 ]  " );	
 					service.insertT_WRKEXE_G(vo);
+				}else{
+					socketLogger.info("[ 백업 Validate 실행 ]  " );	
 				}
 
 				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
 
-				socketLogger.info("[ 3. COMMAND ] " + strCommand);
+				socketLogger.info("[ 명령어 ] " + strCommand);
 
 				RunCommandExec r = new RunCommandExec(strCommand);
+				
+				socketLogger.info("[ 백업시작 ]  " );			
+				
 				r.start();
-				try {
+				try {							
 					r.join();
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
@@ -161,8 +159,9 @@ public class DxT005 extends SocketCtl {
 				String retVal = r.call();
 				String strResultMessge = r.getMessage();
 
-				socketLogger.info("[ 4. RESULT ] " + retVal);
+				socketLogger.info("[ 결과 ] " + retVal);
 
+				
 				// socketLogger.info("##### 결과 : " + retVal + " message : " +
 				// strResultMessge);
 				// 다음실행여부가 Y 이면 에러나도 다음 시행함.
@@ -170,14 +169,37 @@ public class DxT005 extends SocketCtl {
 					String strFileName = strBCK_FILENM;
 					String strFileSize = "0";
 
-					//socketLogger.info("[BCK_BSN_DSCD] " + strBCK_BSN_DSCD);
-
+					
 					//TC001901 : 백업 업무구분코드
 					if(strBSN_DSCD.equals(TC001901)) {
-						// dump 일경우만 실행
-						if (strBCK_BSN_DSCD.equals(TC000202)) {
+						//RMAN 백업
+						if(strBCK_BSN_DSCD.equals(TC000201)){
+							strFileSize = "0";
+							strFileName = "";
 							
-							socketLogger.info("[  덤프일 경우, 유지갯수 및 보관일수 처리 ] " );
+							WrkExeVO endVO = new WrkExeVO();
+							endVO.setEXE_RSLT_CD(strResultCode);
+							endVO.setEXE_SN(intSeq);
+							endVO.setFILE_SZ(Long.parseLong(strFileSize));
+							endVO.setBCK_FILENM(strFileName);
+							endVO.setRSLT_MSG(retVal + " " + strResultMessge);				
+							endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
+							endVO.setSCD_CNDT(TC001801); // 대기중
+							
+							
+							if (strLOG_YN.equals("Y")) {
+								// 스케줄 상태변경 - console에서 변경 처리하는 것으로 변경
+								socketLogger.info("[ 스케줄 상태 변경 ]   " + endVO.getSCD_CNDT() + " 대기중" );	
+								service.updateSCD_CNDT(endVO);
+								
+								socketLogger.info("[ 스케줄 수행이력 업데이트 ]   " + endVO.getEXE_RSLT_CD() + " 성공" );	
+								service.updateT_WRKEXE_G(endVO);
+								
+								socketLogger.info("[SUCCESS] DxT005 SCD_ID[" + strSCD_ID + "] " + retVal + " " + strResultMessge);
+
+							}
+						}else if (strBCK_BSN_DSCD.equals(TC000202)) {					
+							socketLogger.info("[  덤프백업,  유지갯수 및 보관일수 처리 ] " );
 	
 							// 백업파일관리
 							// BCK_MTN_ECNT(백업유지개수) FILE_STG_DCNT(파일보관일수)
@@ -235,10 +257,12 @@ public class DxT005 extends SocketCtl {
 								endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
 								endVO.setSCD_CNDT(TC001801); // 대기중
 	
-								// 스케줄 상태변경
+								
+								socketLogger.info("[ 스케줄 상태 변경 ]   " + endVO.getSCD_CNDT() + " 대기중" );	
 								service.updateSCD_CNDT(endVO);
 	
 								// 스캐줄 이력 update
+								socketLogger.info("[ 스케줄 수행이력 업데이트 ]   " + endVO.getEXE_RSLT_CD() + " 실패" );	
 								service.updateT_WRKEXE_G(endVO);
 	
 								if (strNXT_EXD_YN.toLowerCase().equals("y")) {
@@ -246,44 +270,62 @@ public class DxT005 extends SocketCtl {
 								} else {
 									break;
 								}
+							}else{
+								WrkExeVO endVO = new WrkExeVO();
+								endVO.setEXE_RSLT_CD(strResultCode);
+								endVO.setEXE_SN(intSeq);
+								endVO.setRSLT_MSG(retVal + " " + strResultMessge);
+								endVO.setFILE_SZ(Long.parseLong(strFileSize));
+								endVO.setBCK_FILENM(strFileName);
+								endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
+								endVO.setSCD_CNDT(TC001801); // 대기중
 	
+								
+								socketLogger.info("[ 스케줄 상태 변경 ]   " + endVO.getSCD_CNDT() + " 대기중" );	
+								service.updateSCD_CNDT(endVO);
+	
+								// 스캐줄 이력 update
+								socketLogger.info("[ 스케줄 수행이력 업데이트 ]   " + endVO.getEXE_RSLT_CD() + " 성공" );	
+								service.updateT_WRKEXE_G(endVO);
+								
+								socketLogger.info("[SUCCESS] DxT005 SCD_ID[" + strSCD_ID + "] " + retVal + " " + strResultMessge);
+			
 							}
-						} else {
-							strFileSize = "0";
-							strFileName = "";
 						}
-					}
-					
-					
-					WrkExeVO endVO = new WrkExeVO();
-					endVO.setEXE_RSLT_CD(strResultCode);
-					endVO.setEXE_SN(intSeq);
-					//  socketLogger.info("FileSize="+strFileSize);
-					endVO.setFILE_SZ(Long.parseLong(strFileSize));
-					endVO.setBCK_FILENM(strFileName);
-					endVO.setRSLT_MSG(retVal + " " + strResultMessge);				
-					endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
-					endVO.setSCD_CNDT(TC001801); // 대기중
-
-					// 스케줄 상태변경 - console에서 변경 처리하는 것으로 변경
-					// service.updateSCD_CNDT(endVO);
-
-					if (strLOG_YN.equals("Y")) {
+					}else{
 						
-						socketLogger.info("[ 5. 스케줄 수행이력 업데이트 ]   " + endVO.getEXE_RSLT_CD() + " 성공" );	
-											
+						socketLogger.info(" [ SCRIPT / DB2PG 수행 후, 프로세스 ] ");
+						
+						strFileSize = "0";
+						strFileName = "";
+						
+						WrkExeVO endVO = new WrkExeVO();
+						endVO.setEXE_RSLT_CD(strResultCode);
+						endVO.setEXE_SN(intSeq);
+						endVO.setFILE_SZ(Long.parseLong(strFileSize));
+						endVO.setBCK_FILENM(strFileName);
+						endVO.setRSLT_MSG(retVal + " " + strResultMessge);				
+						endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
+						endVO.setSCD_CNDT(TC001801); // 대기중
+
+						// 스케줄 상태변경 - console에서 변경 처리하는 것으로 변경
+						socketLogger.info("[ 스케줄 상태 변경 ]   " + endVO.getSCD_CNDT() + " 대기중" );	
+						service.updateSCD_CNDT(endVO);
+
+						socketLogger.info("[ 스케줄 수행이력 업데이트 ]   " + endVO.getEXE_RSLT_CD() + " 성공" );	
+						service.updateT_WRKEXE_G(endVO);				
+						
 						socketLogger.info("[SUCCESS] DxT005 SCD_ID[" + strSCD_ID + "] " + retVal + " " + strResultMessge);
-
-						service.updateT_WRKEXE_G(endVO);
+	
 					}
-
+				
 					continue;
+					
 				} else {
+					
 					//실패했을  경우
 					strResultCode = TC001702;
-					
-					socketLogger.info("[ 5. 스케줄 수행이력 업데이트 ]   " +  strResultCode + " 실패" );	
-					
+
 					errLogger.error("[ERROR] DxT005 SCD_ID[" + strSCD_ID + "] {} ", retVal + " " + strResultMessge);
 
 					WrkExeVO endVO = new WrkExeVO();
@@ -295,8 +337,10 @@ public class DxT005 extends SocketCtl {
 					endVO.setSCD_CNDT(TC001801); // 대기중
 
 					// 스케줄 상태변경
+					socketLogger.info("[ 스케줄 상태 변경 ]   " + endVO.getSCD_CNDT() + " 대기중" );	
 					service.updateSCD_CNDT(endVO);
-
+									
+					socketLogger.info("[  스케줄 수행이력 업데이트 ]   " +  strResultCode + " 실패" );	
 					service.updateT_WRKEXE_G(endVO);
 
 					if (strNXT_EXD_YN.toLowerCase().equals("y")) {
@@ -305,11 +349,8 @@ public class DxT005 extends SocketCtl {
 						break;
 					}
 				}
-
-				// 완료 건 update
-
-				// System.out.println("retVal "+(i+1)+" : "+ retVal);
 			}
+			
 			// socketLogger.info("send start");
 			outputObj = DxT005ResultJSON(strDxExCode, strSuccessCode, strErrCode, strErrMsg);
 			sendBuff = outputObj.toString().getBytes();
@@ -317,8 +358,7 @@ public class DxT005 extends SocketCtl {
 			send(TotalLengthBit, sendBuff);
 			
 			sendBuff = null;
-			// socketLogger.info("send end");
-
+			
 		} catch (Exception e) {
 			errLogger.error("[ERROR] DxT005 {} ", e.toString());
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT005);
