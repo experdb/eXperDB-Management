@@ -74,7 +74,7 @@ public class DumpRestoreController {
 	/**
 	 * [Restore] 덤프복구 화면을 보여준다.
 	 * 
-	 * @param historyVO
+	 * @param historyVO, request, workVO
 	 * @param request
 	 * @return ModelAndView mv
 	 * @throws Exception
@@ -126,7 +126,6 @@ public class DumpRestoreController {
 		
 		return mv;
 	}
-
 	
 	/**
 	 * Dump restore Log List
@@ -137,38 +136,37 @@ public class DumpRestoreController {
 	@RequestMapping(value="/selectDumpRestoreLogList.do")
 	@ResponseBody
 	public List<WorkLogVO> selectDumpRestoreLogList(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
-		
+		List<WorkLogVO> resultSet = null;
+
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0131");
 			accessHistoryService.insertHistory(historyVO);
+			
+			resultSet = restoreService.selectDumpRestoreLogList(workLogVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-				
-		List<WorkLogVO> resultSet = null;
-		resultSet = restoreService.selectDumpRestoreLogList(workLogVO);
 
 		return resultSet;
 	}
 	
-	
 	/**
 	 * [Restore] 덤프복구 등록 화면을 보여준다.
-	 * 
-	 * @param historyVO
-	 * @param request
+	 * @param historyVO, request, workVO
 	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @throws 
 	 */
 	@RequestMapping(value = "/dumpRestoreRegVeiw.do")
-	public ModelAndView dumpRestoreRegVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,@ModelAttribute("workVo") WorkVO workVO) {
+	public ModelAndView dumpRestoreRegVeiw(@ModelAttribute("workLogVo") WorkLogVO workLogVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,@ModelAttribute("workVo") WorkVO workVO) {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));
 		int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 		
+		String returnYn = request.getParameter("returnYn");
+
 		workVO.setBck_wrk_id(wrk_id);
 		
 		CmmnUtils cu = new CmmnUtils();
@@ -188,6 +186,8 @@ public class DumpRestoreController {
 				mv.addObject("exe_sn", exe_sn);
 				mv.addObject("db_svr_id", db_svr_id);
 				mv.addObject("wrk_id", wrk_id);
+				mv.addObject("returnYn", returnYn);
+				
 				mv.setViewName("restore/dumpRestoreRegVeiw");
 			}
 		} catch (Exception e) {
@@ -213,34 +213,50 @@ public class DumpRestoreController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return mv;
 	}
 	
-	
-	
-	@RequestMapping(value="/selectBckInfo.do")
-	@ResponseBody
-	public List<WorkLogVO> selectBckInfo(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
-		
+	/**
+	 * [Restore] 덤프복구 등록 화면 내역 조회
+	 * @param historyVO, request, workVO, workLogVO
+	 * @return ModelAndView mv
+	 * @throws 
+	 */
+	@SuppressWarnings({ "null", "unchecked" })
+	@RequestMapping(value = "/selectBckInfo.do")
+	public ModelAndView selectBckInfo(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVo") WorkVO workVO) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
 		int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));
 		String db_svr_id = request.getParameter("db_svr_id");
-		
+		int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
+
 		try {		
 			workLogVO.setDb_svr_id(db_svr_id);
 			workLogVO.setExe_sn(exe_sn);
+
+			mv.addObject("workBckInfo", restoreService.selectBckInfo(workLogVO));
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-				
-		List<WorkLogVO> resultSet = null;
-		resultSet = restoreService.selectBckInfo(workLogVO);
 
-		return resultSet;
+		// Work Object List
+		try {
+			workVO.setBck_wrk_id(wrk_id);
+			mv.addObject("workObjList", backupService.selectWorkObj(workVO));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+
+
+		return mv;
 	}	
-	
-	
+
 	/**
 	 *  [Restore] DUMP 복구 정보 등록 한다.
 	 * 

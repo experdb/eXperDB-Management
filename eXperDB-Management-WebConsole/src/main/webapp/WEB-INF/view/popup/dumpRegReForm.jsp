@@ -109,7 +109,7 @@
 		fn_mod_dump_checkFolder_init(2);
 		
 		//트리셋팅
-		setTimeout("fn_mod_get_object_list()", 100); 
+		setTimeout("fn_mod_get_object_list()", 100);
 	}
 
 	/* ********************************************************
@@ -729,7 +729,7 @@
 											</label>
 		
 											<div class="col-sm-10">
-												<textarea class="form-control" id="mod_dump_wrk_exp" name="mod_dump_wrk_exp" rows="2" maxlength="200" onkeyup="fn_checkWord(this,25)" placeholder="200<spring:message code='message.msg188'/>" required tabindex=1></textarea>
+												<textarea class="form-control" id="mod_dump_wrk_exp" name="mod_dump_wrk_exp" rows="2" maxlength="200" onkeyup="fn_checkWord(this,200)" placeholder="200<spring:message code='message.msg188'/>" required tabindex=1></textarea>
 											</div>
 										</div>
 									</div>

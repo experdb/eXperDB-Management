@@ -6,8 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/cs.jsp"%>
-<%@include file="../cmmn/passwordConfirm.jsp"%>
+<%@ include file="../cmmn/cs2.jsp"%>
 
 <%
 	/**
@@ -26,61 +25,58 @@
 %>
 
 <script type="text/javascript">
-	var rman_pth = null;
-	var db_svr_id = "${db_svr_id}";
-	var restore_nmChk ="fail";
+	$(window.document).ready(function() {
+		//초기설정
+		fn_init();
 
-	/* ********************************************************
-	 * 페이지 시작시 함수
-	 ******************************************************** */
-	$(window.document).ready(
-			function() {
-				fn_init();
-
-				fn_makeHour();
-				fn_makeMin();
-				fn_makeSec();
-
-				$.ajax({
-					async : false,
-					url : "/selectPathInfo.do",
-					data : {
-						db_svr_id : db_svr_id
-					},
-					type : "post",
-					beforeSend : function(xhr) {
-						xhr.setRequestHeader("AJAX", true);
-					},
-					error : function(xhr, status, error) {
-						if (xhr.status == 401) {
-							alert('<spring:message code="message.msg02" />');
-							top.location.href = "/";
-						} else if (xhr.status == 403) {
-							alert('<spring:message code="message.msg03" />');
-							top.location.href = "/";
-						} else {
-							alert("ERROR CODE : "
-									+ xhr.status
-									+ "\n\n"
-									+ "ERROR Message : "
-									+ error
-									+ "\n\n"
-									+ "Error Detail : "
-									+ xhr.responseText.replace(/(<([^>]+)>)/gi,
-											""));
-						}
-					},
-					success : function(result) {
-						rman_pth = result[1].PGRBAK;
-					}
-				});
-			});
+		//validate
+ 	    $("#restoreTimeRegForm").validate({
+		        rules: {
+		        	restore_nm: {
+					required: true
+				},
+				restore_exp: {
+					required: true
+				}
+	        },
+	        messages: {
+	        	restore_nm: {
+	        		required: '<spring:message code="restore.msg01" />'
+				},
+				restore_exp: {
+	        		required: '<spring:message code="restore.msg03" />'
+				}
+	        },
+			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
+				fn_restore_validate();
+			},
+	        errorPlacement: function(label, element) {
+	          label.addClass('mt-2 text-danger');
+	          label.insertAfter(element);
+	        },
+	        highlight: function(element, errorClass) {
+	          $(element).parent().addClass('has-danger')
+	          $(element).addClass('form-control-danger')
+	        }
+		});
+	});
 
 	/* ********************************************************
 	 * 초기설정
 	 ******************************************************** */
 	function fn_init() {
-		$("#storage_view").hide();
+		$("#storage_view", "#restoreTimeRegForm").hide();
+
+		//시간 설정
+		fn_makeHour();
+		fn_makeMin();
+		fn_makeSec();
+		
+		//캘린더 셋팅
+		fn_insDateCalenderSetting();
+		
+		//pghbak 조회
+		fn_pgrback_search();
 	}
 
 	/* ********************************************************
@@ -88,9 +84,8 @@
 	 ******************************************************** */
 	function fn_makeHour() {
 		var hour = "";
-		var hourHtml = "";
+		var hourHtml = "<select class='form-control form-control-sm' style='display: inline-block;width:80px;margin-top:4px;' name='timeline_h' id='timeline_h' tabindex=7 >";
 
-		hourHtml += '<select class="select t6" name="timeline_h" id="timeline_h" style="height: 25px;">';
 		for (var i = 0; i <= 23; i++) {
 			if (i >= 0 && i < 10) {
 				hour = "0" + i;
@@ -99,8 +94,8 @@
 			}
 			hourHtml += '<option value="'+hour+'">' + hour + '</option>';
 		}
-		hourHtml += '</select> <spring:message code="schedule.our" />';
-		$("#hour").append(hourHtml);
+		hourHtml += '</select> <font size="2em"><spring:message code="schedule.our" /></font>';
+		$("#hour", "#restoreTimeRegForm").append(hourHtml);
 	}
 
 	/* ********************************************************
@@ -108,9 +103,8 @@
 	 ******************************************************** */
 	function fn_makeMin() {
 		var min = "";
-		var minHtml = "";
+		var minHtml = "<select class='form-control form-control-sm' style='display: inline-block;width:80px;margin-top:4px;' name='timeline_m' id='timeline_m' tabindex=7 >";
 
-		minHtml += '<select class="select t6" name="timeline_m" id="timeline_m" style="height: 25px;">';
 		for (var i = 0; i <= 59; i++) {
 			if (i >= 0 && i < 10) {
 				min = "0" + i;
@@ -119,18 +113,17 @@
 			}
 			minHtml += '<option value="'+min+'">' + min + '</option>';
 		}
-		minHtml += '</select> <spring:message code="schedule.minute" />';
-		$("#min").append(minHtml);
+		minHtml += '</select> <font size="2em"><spring:message code="schedule.minute" /></font>';
+		$("#min", "#restoreTimeRegForm").append(minHtml);
 	}
-
+	
 	/* ********************************************************
 	 * 초
 	 ******************************************************** */
 	function fn_makeSec() {
 		var sec = "";
-		var secHtml = "";
+		var secHtml = "<select class='form-control form-control-sm' style='display: inline-block;width:80px;margin-top:4px;' name='timeline_s' id='timeline_s' tabindex=8 >";
 
-		secHtml += '<select class="select t6" name="timeline_s" id="timeline_s" style="height: 25px;">';
 		for (var i = 0; i <= 59; i++) {
 			if (i >= 0 && i < 10) {
 				sec = "0" + i;
@@ -139,8 +132,68 @@
 			}
 			secHtml += '<option value="'+sec+'">' + sec + '</option>';
 		}
-		secHtml += '</select> <spring:message code="schedule.second" />';
-		$("#sec").append(secHtml);
+		secHtml += '</select> <font size="2em"><spring:message code="schedule.second" /></font>';
+		$("#sec", "#restoreTimeRegForm").append(secHtml);
+	}
+	
+	/* ********************************************************
+	 * PGRBAK 조회
+	 ******************************************************** */
+	function fn_pgrback_search() {
+		$.ajax({
+			async : false,
+			url : "/selectPathInfo.do",
+			data : {
+				db_svr_id : $("#db_svr_id","#findList").val()
+			},
+			type : "post",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					$("#rman_pth", "#restoreTimeRegForm").val(result[1].PGRBAK);
+				} else {
+					$("#rman_pth", "#restoreTimeRegForm").val("");
+				}
+			}
+		});
+	}
+	
+
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function fn_insDateCalenderSetting() {
+		var today = new Date();
+		var startDay = fn_dateParse("20100101");
+		var endDay = fn_dateParse("20991231");
+		
+		var day_today = today.toJSON().slice(0,10);
+		var day_start = startDay.toJSON().slice(0,10);
+		var day_end = endDay.toJSON().slice(0,10);
+
+		if ($("#timeline_dt_div", "#insUserForm").length) {
+			$("#timeline_dt_div", "#insUserForm").datepicker({
+			}).datepicker('setDate', day_today)
+			.datepicker('setStartDate', day_start)
+			.datepicker('setEndDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+			}); //값 셋팅
+		}
+
+		$("#timeline_dt", "#restoreTimeRegForm").datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+		$("#timeline_dt_div", "#restoreTimeRegForm").datepicker('updateDates');
 	}
 
 	/* ********************************************************
@@ -150,11 +203,11 @@
 		var asis_flag = $(":input:radio[name=asis_flag]:checked").val();
 
 		if (asis_flag == "0") {
-			$("#storage_view").hide();
+			$("#storage_view", "#restoreTimeRegForm").hide();
 			fn_clean();
 		} else {
-			$("#storage_view").show();
-			$("#restore_dir").val("");
+			$("#storage_view", "#restoreTimeRegForm").show();
+			$("#restore_dir", "#restoreTimeRegForm").val("");
 		}
 	}
 
@@ -162,41 +215,48 @@
 	 * 신규 Storage 경로 확인
 	 ******************************************************** */
 	function fn_new_storage_check() {
-		var new_storage = $("#restore_dir").val();
-		
+		var new_storage = $("#restore_dir", "#restoreTimeRegForm").val();
+
 		$.ajax({
 			async : false,
 			url : "/existDirCheckMaster.do",
 		  	data : {
-		  		db_svr_id : "${db_svr_id}",
+				db_svr_id : $("#db_svr_id","#findList").val(),
 		  		path : new_storage
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
+				xhr.setRequestHeader("AJAX", true);
+		    },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {
-				if(data.result.ERR_CODE == ""){
-					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
-						alert('<spring:message code="message.msg100" />');
-						$("#dtb_pth").val(new_storage + "${pgdata}");
-						$("#svrlog_pth").val(new_storage + "${srvlog}");
+				if (data != null) {
+					if(data.result.ERR_CODE == ""){
+						if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
+							
+							showSwalIcon('<spring:message code="message.msg100" />', '<spring:message code="common.close" />', '', 'success');
+							/* 
+							$("#dtb_pth").val(new_storage + "${pgdata}");
+							$("#svrlog_pth").val(new_storage + "${srvlog}"); */
+							
+							$("#dtb_pth", "#restoreTimeRegForm").val(new_storage);
+							$("#svrlog_pth", "#restoreTimeRegForm").val(new_storage);
+						}else{
+							showSwalIcon('<spring:message code="backup_management.invalid_path"/>', '<spring:message code="common.close" />', '', 'error');
+						}
 					}else{
-						alert('<spring:message code="backup_management.invalid_path"/>');
+						showSwalIcon('<spring:message code="message.msg76" />', '<spring:message code="common.close" />', '', 'error');
 					}
-				}else{
-					alert('<spring:message code="message.msg76" />');
+				} else {
+					showSwalIcon('<spring:message code="message.msg76" />', '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});
@@ -206,19 +266,104 @@
 	 * 신규 Storage 초기화
 	 ******************************************************** */
 	function fn_clean() {
-		$("#restore_dir").val("");
-		$("#dtb_pth").val("${pgdata}");
-		$("#svrlog_pth").val("${srvlog}");
+		$("#restore_dir", "#restoreTimeRegForm").val("");
+		$("#dtb_pth", "#restoreTimeRegForm").val("${pgdata}");
+		$("#svrlog_pth", "#restoreTimeRegForm").val("${srvlog}");
+	}
+
+	/* ********************************************************
+	 * 복구명 중복체크
+	 ******************************************************** */
+	function fn_restoreNm_check() {
+		if (nvlPrmSet($("#restore_nm", "#restoreTimeRegForm").val(), "") == "") {
+			showSwalIcon('<spring:message code="restore.msg01" />', '<spring:message code="common.close" />', '', 'warning');
+			return;
+		}
+		
+		//msg 초기화restoreTimeRegForm
+		$("#restorenm_check_alert", "#restoreTimeRegForm").html('');
+		$("#restorenm_check_alert", "#restoreTimeRegForm").hide();
+		
+		$.ajax({
+			url : '/restore_nmCheck.do',
+			type : 'post',
+			data : {
+				restore_nm : $("#restore_nm", "#restoreTimeRegForm").val()
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result == "true") {
+					showSwalIcon('<spring:message code="restore.msg221" />', '<spring:message code="common.close" />', '', 'success');
+					$('#restore_nmChk', '#restoreTimeRegForm').val("success");
+				} else {
+					restore_nmChk = "fail";
+					showSwalIcon('<spring:message code="restore.msg222" />', '<spring:message code="common.close" />', '', 'error');
+					$('#restore_nmChk', '#restoreTimeRegForm').val("fail");
+				}
+			},
+
+		});
 	}
 	
 	/* ********************************************************
-	 * RMAN Restore 시작 전 (select pg_switch_wal())
-	 ******************************************************** */	
+	 * work 명 변경시
+	 ******************************************************** */
+	function fn_restoreNm_Chg() {
+		$('#restore_nmChk', '#restoreTimeRegForm').val("fail");
+		
+		$("#restorenm_check_alert", "#restoreTimeRegForm").html('');
+		$("#restorenm_check_alert", "#restoreTimeRegForm").hide();
+	}
+
+	/* ********************************************************
+	 * RMAN Show 정보 확인
+	 ******************************************************** */
+	function fn_rmanShowOpen() {
+		var bck_val = nvlPrmSet($("#rman_pth", "#restoreTimeRegForm").val(), "");
+		
+		fn_rmanShow(bck_val, $("#db_svr_id","#findList").val());
+	}
+
+	/* ********************************************************
+	 * 긴급복원 실행 클릭
+	 ******************************************************** */
+	function fn_restore_start() {
+		$("#restoreTimeRegForm").submit();
+	}
+	
+	/* ********************************************************
+	 * 시점복원 validate 체크
+	 ******************************************************** */
+	function fn_restore_validate() {
+		if(nvlPrmSet($("#restore_nmChk", "#restoreTimeRegForm").val(), "") == "" || nvlPrmSet($("#restore_nmChk", "#restoreTimeRegForm").val(), "") == "fail") {
+			$("#restorenm_check_alert", "#restoreTimeRegForm").html('<spring:message code="restore.msg02"/>');
+			$("#restorenm_check_alert", "#restoreTimeRegForm").show();
+			
+			return;
+		}
+		
+		fn_passwordConfilm('rman');
+	}
+
+	/* ********************************************************
+	 * RMAN Restore 시작 전 (select pg_switch_wal()) -- 패스워드 팝업 실행 result
+	 ******************************************************** */
 	function fn_pgWalFileSwitch(){
 		$.ajax({
 			url : "/pgWalFileSwitch.do",
 			data : {
-				db_svr_id : db_svr_id,
+				db_svr_id : $("#db_svr_id","#findList").val()
 			},
 			dataType : "json",
 			type : "post",
@@ -226,91 +371,55 @@
 				xhr.setRequestHeader("AJAX", true);
 			},
 			error : function(xhr, status, error) {
-				if (xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
-				} else if (xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : " + xhr.status + "\n\n"
-							+ "ERROR Message : " + error + "\n\n"
-							+ "Error Detail : "
-							+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
+				//정상완료 시
 				if(result.RESULT_CODE ==0){
 					fn_execute();
-				} 
+				} else {
+					showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');
+					return;
+				}
 			}
 		});		
 	}
-	
-	/* ********************************************************
-	 * RMAN Show 정보 확인
-	 ******************************************************** */
-	function fn_rmanShow() {
-
-		var frmPop = document.frmPopup;
-		var url = '/rmanShowView.do';
-		window.open('', 'popupView', 'width=1500, height=800');
-
-		frmPop.action = url;
-		frmPop.target = 'popupView';
-		frmPop.bck.value = rman_pth;
-		frmPop.db_svr_id.value = db_svr_id;
-		frmPop.submit();
-	}
-
-	/* ********************************************************
-	 * Validation
-	 ******************************************************** */
-	function fn_Validation() {
-		var restore_nm = document.getElementById('restore_nm');
-		var restore_exp = document.getElementById('restore_exp');
-		
-		if (restore_nm.value == "" || restore_nm.value == "undefind" || restore_nm.value == null) {
-			alert("<spring:message code='restore.msg01' />");
-			restore_nm.focus();
-			return false;
-		}else if(restore_nmChk =="fail"){
-			alert('<spring:message code="restore.msg02" />');
-			return false;
-		}else if (restore_exp.value == "" || restore_exp.value == "undefind" || restore_exp.value == null) {
-			alert("<spring:message code='restore.msg03' />");
-			restore_exp.focus();
-			return false;
-		}
-		
-		fn_passwordConfilm('rman');
-	}	 
 	 
 	/* ********************************************************
 	 * RMAN Restore 정보 저장
 	 ******************************************************** */
 	function fn_execute() {
-		var timeline_dt = $("#datepicker1").val();
+		var timeline_dt = $("#timeline_dt", "#restoreTimeRegForm").val();
 		var asis_flag = $(":input:radio[name=asis_flag]:checked").val();
+
+		if (timeline_dt != null && timeline_dt != "") {
+			timeline_dt = timeline_dt.split("-").join("");
+		}
 
 		$.ajax({
 			url : "/insertRmanRestore.do",
 			data : {
-				db_svr_id : db_svr_id,
+ 				db_svr_id : $("#db_svr_id","#findList").val(),
 				asis_flag : asis_flag,
-				restore_dir : $("#restore_dir").val(),
-				dtb_pth : $('#dtb_pth').val(),
-				pgalog_pth : $('#pgalog_pth').val(),
-				svrlog_pth : $('#svrlog_pth').val(),
-				bck_pth : $('#bck_pth').val(),
+				restore_dir : $("#restore_dir", "#restoreTimeRegForm").val(),
+				dtb_pth : $("#dtb_pth", "#restoreTimeRegForm").val(),
+				pgalog_pth : $("#pgalog_pth", "#restoreTimeRegForm").val(),
+				svrlog_pth : $("#svrlog_pth", "#restoreTimeRegForm").val(),
+				bck_pth : $("#bck_pth", "#restoreTimeRegForm").val(),
 				restore_cndt : 1,
 				restore_flag : 1,
 				timeline_dt : timeline_dt,
-				timeline_h : $("#timeline_h").val(),
-				timeline_m : $("#timeline_m").val(),
-				timeline_s : $("#timeline_s").val(),
-				restore_nm : $('#restore_nm').val(),
-				restore_exp : $('#restore_exp').val()
+				restore_nm : $("#restore_nm", "#restoreTimeRegForm").val(),
+				restore_exp : $("#restore_exp", "#restoreTimeRegForm").val(),
+				timeline_h : $("#timeline_h", "#restoreTimeRegForm").val(),
+				timeline_m : $("#timeline_m", "#restoreTimeRegForm").val(),
+				timeline_s : $("#timeline_s", "#restoreTimeRegForm").val()
 			},
 			dataType : "json",
 			type : "post",
@@ -318,276 +427,339 @@
 				xhr.setRequestHeader("AJAX", true);
 			},
 			error : function(xhr, status, error) {
-				if (xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
-				} else if (xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : " + xhr.status + "\n\n"
-							+ "ERROR Message : " + error + "\n\n"
-							+ "Error Detail : "
-							+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
-				alert('<spring:message code="restore.msg223" />');
-				fn_restoreLogCall();
+				if (result != null) {
+					if (result == "S") {
+						showSwalIconRst('<spring:message code="restore.msg223" />', '<spring:message code="common.close" />', '', 'warning', 'rman_restore');
+					} else {
+						showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');
+						return;
+					}
+				} else {
+					showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');
+					return;
+				}
 			}
 		});
 	}
 
-	//복구명 중복체크
-	function fn_check() {
-		var restore_nm = document.getElementById("restore_nm");
-		if (restore_nm.value == "") {
-			alert('<spring:message code="message.msg107" />');
-			document.getElementById('restore_nm').focus();
-			return;
-		}
-		$.ajax({
-			url : '/restore_nmCheck.do',
-			type : 'post',
-			data : {
-				restore_nm : $("#restore_nm").val()
-			},
-			success : function(result) {
-				if (result == "true") {
-					alert('<spring:message code="restore.msg221" />');
-					document.getElementById("restore_nm").focus();
-					restore_nmChk = "success";
-				} else {
-					restore_nmChk = "fail";
-					alert('<spring:message code="restore.msg222" />');
-					document.getElementById("restore_nm").focus();
-				}
-			},
-			beforeSend : function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if (xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
-				} else if (xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : " + xhr.status + "\n\n"
-							+ "ERROR Message : " + error + "\n\n"
-							+ "Error Detail : "
-							+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			}
-		});
-	}
-	
-	
+	/* ********************************************************
+	 * 로그조회
+	 ******************************************************** */
 	function fn_restoreLogCall() {
 		$.ajax({
 			url : '/restoreLogCall.do',
 			type : 'post',
 			data : {
-				db_svr_id : db_svr_id
+				db_svr_id : $("#db_svr_id","#findList").val()
 			},
 			success : function(result) {
-				$("#exelog").append(result.strResultData);
+				$("#exelog", "#restoreTimeRegForm").append(result.strResultData);
 			},
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
 			},
 			error : function(xhr, status, error) {
-				if (xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
-				} else if (xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : " + xhr.status + "\n\n"
-							+ "ERROR Message : " + error + "\n\n"
-							+ "Error Detail : "
-							+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});
 	}
 </script>
 
-<form name="frmPopup">
-	<input type="hidden" name="bck" id="bck"> <input type="hidden" name="db_svr_id" id="db_svr_id">
+<%@include file="../popup/rmanShow.jsp"%>
+<%@include file="../cmmn/passwordConfirm.jsp"%>
+
+<form name="findList" id="findList" method="post">
+	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 </form>
 
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4>
-				<spring:message code="restore.Point-in-Time_Recovery" />
-				<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
-			<div class="infobox">
-				<ul>
-					<li><spring:message code="help.Point-in-Time_Recovery" /></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li class="bold">${db_svr_nm}</li>
-					<li>Restore</li>
-					<li class="on"><spring:message code="restore.Point-in-Time_Recovery" /></li>
-				</ul>
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="restore.Point-in-Time_Recovery"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" > 
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Restore</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="restore.Point-in-Time_Recovery" /></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.Point-in-Time_Recovery" /></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- title end -->
+				</div>
 			</div>
 		</div>
-		<div class="contents">
-			<div class="btn_type_01">
-				<span class="btn"><button type="button" id="btnSelect" onClick="fn_Validation();"><spring:message code="schedule.run" /></button></span>
-			</div>
-			<div class="sch_form">
-				<table class="write">
-					<colgroup>
-						<col style="width: 140px;" />
-						<col />
-						<col style="width: 140px;" />
-						<col />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="restore.Recovery_name" /></th>
-							<td><input type="text" class="txt t2" name="restore_nm" id="restore_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" style="width:250px;"/> <span class="btn btnF_04 btnC_01">
-								<button type="button" class="btn_type_02" onclick="fn_check()" style="width: 100px; margin-right: -60px; margin-top: 0;"> <spring:message code="common.overlap_check" /></button></span></td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="restore.Recovery_Description" /></th>
-							<td colspan="3">
-								<div class="textarea_grp">
-									<textarea name="restore_exp" id="restore_exp" maxlength="150" onkeyup="fn_checkWord(this,150)" placeholder="150<spring:message code='message.msg188'/>"></textarea>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="data_transfer.server_name" /></th>
-							<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" readonly="readonly" value="${db_svr_nm}" style="width:250px;">
-							</td>		
-							<th scope="row" class="ico_t1"><spring:message code="restore.Server_IP" /></th>
-							<td><input type="text" class="txt" name="ipadr" id="ipadr" readonly="readonly" value="${ipadr}" style="width:250px;"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+		
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body" style="min-height:698px; max-height:750px;">
+					<div class="row" style="margin-top:-20px;">
+						<div class="col-12">
+							<div class="template-demo">																				
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScheduleRun" onClick="fn_restore_start();">
+									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="schedule.run" />
+								</button>
 
-			<div class="restore_grp">
-				<div class="restore_lt">
-					<table class="write">
-						<colgroup>
-							<col style="width: 120px;" />
-							<col style="width: 65px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1">Storage <spring:message code="common.path" /></th>
-								<td><input type="radio" name="asis_flag" id="storage_path_org" value="0" onClick="fn_storage_path_set();" checked> <spring:message code="restore.existing" /></td>
-								<td><input type="radio" name="asis_flag" id="storage_path_new" value="1" onClick="fn_storage_path_set();"> <spring:message code="restore.new" /></td>
-							</tr>
-						</tbody>
-					</table>
+							</div>
+						</div>
+					</div>
 
-					<table class="write" id="storage_view">
-						<colgroup>
-							<col style="width: 100px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1"><spring:message code="restore.Recovery_Path" /></th>
-								<td><input type="text" class="txt" name="restore_dir" id="restore_dir" style="width: 50%" /> <span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_new_storage_check()" style="width: 100px; margin-top: 0;"> <spring:message code="common.dir_check" />
-								</button></span> <span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_clean()" style="width: 50px; margin-top: 0;"><spring:message code="restore.reset" /></button></span></td>
-							</tr>
-						</tbody>
-					</table>
-
-
-					<table class="write" style="border: 1px solid #b8c3c6; margin-top: 20px; border-collapse: separate;">
-						<colgroup>
-							<col style="width: 150px;" />
-							<col />
-							<col style="width: 70px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1"><spring:message code="restore.Select_viewpoint" /></th>
-								<td><button type="button" class="btn_type_02" onclick="fn_rmanShow();" style="width: 150px; height: 25px; margin-right: -60px; margin-top: 0;">
-									<spring:message code="restore.Recovery_Information" /></button></td>
-							</tr>
-							<tr>
-								<td style="padding-left: 10px;">
-									<span id="calendar">
-										<div class="calendar_area">
-											<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker1" name="timeline_dt" title="스케줄시간설정" readonly />
+					<form class="cmxform" id="restoreTimeRegForm">
+						<input type="hidden" name="restore_nmChk" id="restore_nmChk" value="fail" />
+						<input type="hidden" name="rman_pth" id="rman_pth" value="" />
+												
+						<fieldset>
+							<div class="row" style="margin-top:10px;">
+								<div class="col-md-12 system-tlb-scroll" style="height: 185px; overflow-x: hidden;  overflow-y: auto; ">
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+											<label for="restore_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="restore.Recovery_name" />
+											</label>
+		
+											<div class="col-sm-8">
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="restore_nm" name="restore_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onchange="fn_restoreNm_Chg();" onblur="this.value=this.value.trim()" tabindex=1 required />
+											</div>
+		
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-inverse-danger btn-fw" style="width: 115px;" id="btnRestoreCheck" onclick="fn_restoreNm_check()"><spring:message code="common.overlap_check" /></button>
+											</div>
 										</div>
-									</span>
-								</td>
-								<td style="display: inline-block; white-space: nowrap;"><span id="hour"></span> <span id="min"></span> <span id="sec"></span></td>
-							</tr>
-						</tbody>
-					</table>
+		
+										<div class="form-group row div-form-margin-z">
+											<div class="col-sm-2">
+											</div>
+		
+											<div class="col-sm-9">
+												<div class="alert alert-danger form-control-sm" style="margin-top:5px;display:none;" id="restorenm_check_alert"></div>
+											</div>
+											
+											<div class="col-sm-1">
+											</div>
+										</div>
+		
+										<div class="form-group row div-form-margin-z" style="margin-bottom:10px;">
+											<label for="restore_exp" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="restore.Recovery_Description" />
+											</label>
+		
+											<div class="col-sm-10">
+												<textarea class="form-control form-control-xsm" id="restore_exp" name="restore_exp" rows="2" maxlength="150" onkeyup="fn_checkWord(this,150)" placeholder="150<spring:message code='message.msg188'/>" required tabindex=2></textarea>
+											</div>
+										</div>
+		
+										<div class="form-group row div-form-margin-z" style="margin-bottom:-30px;">
+											<label for="db_svr_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.server_name" />
+											</label>
 
-					<table class="write" style="margin-top: 20px;">
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1">Database Storage</th>
-							</tr>
-							<tr>
-								<td><input type="text" class="txt t4" name="dtb_pth" id="dtb_pth" readonly="readonly" value="${pgdata}" />
-							</tr>
-						</tbody>
-					</table>
+											<div class="col-sm-4">
+												<input type="text" class="form-control form-control-xsm" id="db_svr_nm" name="db_svr_nm" value="${db_svr_nm}" onblur="this.value=this.value.trim()" readonly />
+											</div>
 
-					<table class="write" style="margin-top: 20px;">
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1">Archive WAL Storage</th>
-							</tr>
-							<tr>
-								<td><input type="text" class="txt t4" name="pgalog_pth" id="pgalog_pth" readonly="readonly" value="${pgalog}" />
-							</tr>
-						</tbody>
-					</table>
+											<label for="ipadr" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="restore.Server_IP" />
+											</label>
+		
+											<div class="col-sm-4">
+												<input type="text" class="form-control form-control-xsm" id="ipadr" name="ipadr" value="${ipadr}" onblur="this.value=this.value.trim()" readonly />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 
-					<table class="write" style="margin-top: 20px;">
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1">Server Log Storage</th>
-							</tr>
-							<tr>
-								<td><input type="text" class="txt t4" name="svrlog_pth" id="svrlog_pth" readonly="readonly" value="${srvlog}" />
-							</tr>
-						</tbody>
-					</table>
+							<div class="row" style="margin-top:10px;">
+								<div class="col-md-6 system-tlb-scroll" style="border:0px;max-height: 460px; overflow-x: hidden;  overflow-y: auto; ">
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+											<label for="wrk_nm" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Storage <spring:message code="common.path" />
+											</label>
+											
+											<div class="col-sm-3" >
+												<div class="form-check">
+													<label class="form-check-label" for="storage_path_org">
+														<input type="radio" class="form-check-input" name="asis_flag" id="storage_path_org" onClick="fn_storage_path_set();" value="0" checked tabindex=3 />
+		                          						<spring:message code="restore.existing" />
+		                          					</label>
+		                          				</div>
+		                          			</div>
+		                          			<div class="col-sm-3">
+		                          				<div class="form-check">
+		                          					<label class="form-check-label" for="storage_path_new">
+		                          						<input type="radio" class="form-check-input" name="asis_flag" id="storage_path_new" value="1" onClick="fn_storage_path_set();" tabindex=4 />
+		                          						<spring:message code="restore.new" />
+		                          					</label>
+		                          				</div>
+		                          			</div>
+		                          			<div class="col-sm-3">
+		                          				&nbsp;
+		                          			</div>
+		                          		</div>
 
-					<table class="write" style="margin-top: 20px;">
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1">Backup Storage</th>
-							</tr>
-							<tr>
-								<td><input type="text" class="txt t4" name="bck_pth" id="bck_pth" readonly="readonly" value="${pgrbak}" />
-							</tr>
-						</tbody>
-					</table>		
-				</div>
+										<div class="form-group row div-form-margin-z" style="margin-top:-5px;" id="storage_view">
+											<label for="ipadr" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="restore.Recovery_Path" />
+											</label>
+											
+											<div class="col-sm-5">
+												<input type="text" class="form-control form-control-sm" id="restore_dir" name="restore_dir" value="" onblur="this.value=this.value.trim()" tabindex=5 />
+											</div>
+											
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_new_storage_check()"><spring:message code="common.dir_check" /></button>
+											</div>
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px;" onclick="fn_clean()"><spring:message code="restore.reset" /></button>
+											</div>
+										</div>
 
-				<div class="restore_rt">
-					<p class="ly_tit">
-						<h8>Restore <spring:message code="restore.Execution_log" /></h8>
-					</p>
-					<div class="overflow_area4" name="exelog" id="exelog"></div>
+										<div class="form-group row div-form-margin-z" style="margin-top:-5px;" >
+											<div class="col-sm-12" style="border: 1px solid #adb5bd;">
+												<div class="row" style="margin-top:10px;">
+													<label class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="restore.Recovery_Information" />
+													</label>
+													
+													<div class="col-sm-9">
+														<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_rmanShowOpen();"><spring:message code="restore.Recovery_Information" /></button>
+													</div>
+												</div>
+
+												<div class="row" style="margin-bottom:10px;">
+													<div class="col-sm-4">
+														<div id="timeline_dt_div" class="input-group align-items-center date datepicker totDatepicker">
+															<input type="text" class="form-control totDatepicker" style="width:100px;height:44px;" id="timeline_dt" name="timeline_dt" readonly tabindex=10 />
+															<span class="input-group-addon input-group-append border-left">
+																<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+															</span>
+														</div>
+													</div>
+													
+													<div class="col-sm-8">
+														<span id="hour" style="margin-right: 1rem;"></span>
+														<span id="min" style="margin-right: 1rem;"></span>
+														<span id="sec"></span>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group row div-form-margin-z" style="margin-top:5px;">
+											<label for="ipadr" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Database Storage
+											</label>
+											
+											<div class="col-sm-9">
+												<input type="text" class="form-control form-control-sm" id="dtb_pth" name="dtb_pth" value="${pgdata}" onblur="this.value=this.value.trim()" readonly />
+											</div>
+										</div>
+
+										<div class="form-group row div-form-margin-z">
+											<label for="ipadr" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Archive WAL Storage
+											</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control form-control-sm" id="pgalog_pth" name="pgalog_pth" value="${pgalog}" onblur="this.value=this.value.trim()" readonly />
+											</div>
+										</div> 
+
+										<div class="form-group row div-form-margin-z" >
+											<label for="ipadr" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Server Log Storage
+											</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control form-control-sm" id="svrlog_pth" name="svrlog_pth" value="${srvlog}" onblur="this.value=this.value.trim()" readonly />
+											</div>
+										</div>
+
+										<div class="form-group row div-form-margin-z">
+											<label for="ipadr" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Backup Storage
+											</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control form-control-sm" id="bck_pth" name="bck_pth" value="${pgrbak}" onblur="this.value=this.value.trim()" readonly />
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6 system-tlb-scroll" style="border:0px;height: 460px;">
+									<div class="card-body-modal" style="border: 1px solid #adb5bd;">
+										<!-- title -->
+										<h3 class="card-title fa fa-toggle-right">
+											Restore <spring:message code="restore.Execution_log" />
+										</h3>
+
+										<div class="row" >
+											<div class="col-md-12" >
+												<textarea class="form-control system-tlb-scroll" id="exelog" name="exelog" style="height:395px;" readonly></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- // contents -->

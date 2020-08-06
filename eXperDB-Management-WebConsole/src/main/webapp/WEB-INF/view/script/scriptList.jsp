@@ -738,8 +738,7 @@
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 
 							<form class="form-inline" onsubmit="return false">
-								<div class="input-group mb-2 mr-sm-2">
-											
+								<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
 									<input type="text" class="form-control" style="width:400px;" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' maxlength="25" />
 								</div>
 

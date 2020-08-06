@@ -32,7 +32,7 @@
 			</div>
 
 			<div class="top-modal-footer" style="text-align: center !important;">
-				<button type="button" class="btn btn-info" onclick="fnc_menuMove()"><spring:message code="menu.scale_manual"/><spring:message code="eXperDB_scale.move_menu"/></button>
+				<button type="button" class="btn btn-primary" onclick="fnc_menuMove()"><spring:message code="menu.scale_manual"/><spring:message code="eXperDB_scale.move_menu"/></button>
 				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 			</div>
 		</div>

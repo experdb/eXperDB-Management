@@ -166,201 +166,214 @@
 			T_DUMP_RESTORE
 		</select>	
 		
-	 	<select id="dumpRestoreHistory" parameterType="restoreDumpVO" resultType="restoreDumpVO">
-			/**
-			* Query ID : dumpRestoreHistory
-			* Description : DUMP Restore 이력 조회
-			* Author : 변승우
-			**/
-			SELECT
-			       (ROW_NUMBER() OVER()) AS ROWNUM,
-				   (ROW_NUMBER() OVER()) AS IDX,
-		      		AA.RESTORE_SN,
-		      		AA.DB_SVR_ID,
-					AA.RESTORE_NM,
-					AA.RESTORE_EXP,
-					AA.DB_NM,
-					AA.FILE_SZ,
-					AA.BCK_FILENM,
-					AA.WRK_ID,
-					AA.WRKEXE_SN,
-					AA.RESTORE_STRTDTM,
-					AA.RESTORE_ENDDTM,
-					AA.RESTORE_CNDT,
-					AA.EXELOG,
-					AA.REGR_ID
-			  FROM(	
-		      SELECT 
-		      		A.RESTORE_SN,
-		      		A.DB_SVR_ID,
-					A.RESTORE_NM,
-					A.RESTORE_EXP,
-					A.DB_NM,
-					B.FILE_SZ,
-					B.BCK_FILENM,
-					A.WRK_ID,
-					A.WRKEXE_SN,
-					TO_CHAR(A.RESTORE_STRTDTM,'YYYY-MM-DD HH24:MI:SS') AS RESTORE_STRTDTM,
-					TO_CHAR(A.RESTORE_ENDDTM,'YYYY-MM-DD HH24:MI:SS') AS RESTORE_ENDDTM,
-					A.RESTORE_CNDT,
-					A.EXELOG,
-					A.REGR_ID
-		      FROM T_DUMP_RESTORE A, T_WRKEXE_G B
-		      WHERE 1=1	
-		      AND A.WRKEXE_SN = B.EXE_SN
-		      AND A.DB_SVR_ID=#{db_svr_id}::numeric
-		      <if test="restore_strtdtm != null and restore_strtdtm != '' ">
-	      		<if test="restore_enddtm != null and restore_enddtm != '' ">
-	      			AND (
-	      				TO_DATE(to_char(A.RESTORE_STRTDTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{restore_strtdtm},'YYYY-MM-DD') AND TO_DATE(#{restore_enddtm},'YYYY-MM-DD')
-	      				OR
-	      				TO_DATE(to_char(A.RESTORE_STRTDTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{restore_strtdtm},'YYYY-MM-DD') AND TO_DATE(#{restore_enddtm},'YYYY-MM-DD')
-	      				)
-	      		</if>
-	      	</if>
-	      	<if test="restore_cndt != null and restore_cndt != '' ">
-		      AND A.RESTORE_CNDT=#{restore_cndt}
-		      </if>
-		      <if test="restore_nm != null and restore_nm != '' ">
-		      AND A.RESTORE_NM=#{restore_nm}
-		      </if>		   
-		      <if test="db_nm != null and db_nm != '' ">
-		      AND A.DB_NM=#{db_nm}
-		     </if>	 
-		      AND B.EXE_RSLT_CD = 'TC001701'
-		       ORDER BY A.RESTORE_SN DESC
-		      )AA				
+	<select id="dumpRestoreHistory" parameterType="restoreDumpVO" resultType="restoreDumpVO">
+        /**
+        * Query ID : dumpRestoreHistory
+        * Description : DUMP Restore 이력 조회
+        * Author : 변승우
+        **/
+        SELECT
+               (ROW_NUMBER() OVER()) AS ROWNUM,
+               (ROW_NUMBER() OVER()) AS IDX,
+               AA.RESTORE_SN,
+               AA.DB_SVR_ID,
+               AA.RESTORE_NM,
+               AA.RESTORE_EXP,
+               AA.DB_NM,
+               AA.FILE_SZ,
+               AA.BCK_FILENM,
+               AA.WRK_ID,
+               AA.WRKEXE_SN,
+               AA.RESTORE_STRTDTM,
+               AA.RESTORE_ENDDTM,
+               AA.RESTORE_CNDT,
+               AA.EXELOG,
+               AA.REGR_ID
+         FROM (
+               SELECT 
+                      A.RESTORE_SN,
+                      A.DB_SVR_ID,
+                      A.RESTORE_NM,
+                      A.RESTORE_EXP,
+                      A.DB_NM,
+                      B.FILE_SZ,
+                      B.BCK_FILENM,
+                      A.WRK_ID,
+                      A.WRKEXE_SN,
+                      TO_CHAR(A.RESTORE_STRTDTM,'YYYY-MM-DD HH24:MI:SS') AS RESTORE_STRTDTM,
+                      TO_CHAR(A.RESTORE_ENDDTM,'YYYY-MM-DD HH24:MI:SS') AS RESTORE_ENDDTM,
+                      A.RESTORE_CNDT,
+                      A.EXELOG,
+                      A.REGR_ID
+                 FROM T_DUMP_RESTORE A, T_WRKEXE_G B
+                WHERE 1=1
+                  AND A.WRKEXE_SN = B.EXE_SN
+                  AND A.DB_SVR_ID=#{db_svr_id}::numeric
+
+              <if test="restore_strtdtm != null and restore_strtdtm != '' ">
+                  <if test="restore_enddtm != null and restore_enddtm != '' ">
+                      AND (
+                           TO_DATE(to_char(A.RESTORE_STRTDTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{restore_strtdtm},'YYYY-MM-DD') AND TO_DATE(#{restore_enddtm},'YYYY-MM-DD')
+                           OR
+                           TO_DATE(to_char(A.RESTORE_STRTDTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{restore_strtdtm},'YYYY-MM-DD') AND TO_DATE(#{restore_enddtm},'YYYY-MM-DD')
+                      )
+                  </if>
+              </if>
+
+              <if test="restore_cndt != null and restore_cndt != '' ">
+                  AND A.RESTORE_CNDT=#{restore_cndt}
+              </if>
+
+              <if test="restore_nm != null and restore_nm != '' ">
+                  AND A.RESTORE_NM=#{restore_nm}
+              </if>
+
+              <if test="db_nm != null and db_nm != '' ">
+                  AND A.DB_NM=#{db_nm}
+              </if>
+                  AND B.EXE_RSLT_CD = 'TC001701'
+                ORDER BY A.RESTORE_SN DESC
+         )AA
 	</select>
 
+	<select id="selectDumpRestoreLogList" parameterType="workLogVO" resultType="workLogVO">
+        /**
+        * Query ID : selectDumpRestoreLogList
+        * Description : dump 로그 리스트
+        * Author : Yoon jh
+        **/
+        SELECT
+               (ROW_NUMBER() OVER()) AS ROWNUM,
+               AA.DB_SVR_ID,
+               AA.IPADR,
+               AA.EXE_SN,
+               AA.SCD_ID,
+               AA.SCD_NM,
+               AA.WRK_ID,
+               AA.WRK_NM,
+               AA.WRK_EXP,
+               AA.WRK_STRT_DTM,
+               AA.WRK_END_DTM,
+               AA.WRK_DTM,
+               AA.EXE_RSLT_CD,
+               AA.EXE_RSLT_CD_NM,
+               AA.BCK_OPT_CD,
+               AA.BCK_OPT_CD_NM,
+               AA.TLI,
+               AA.FILE_SZ,
+               AA.DB_ID,
+               AA.DB_NM,
+               AA.BCK_FILE_PTH,
+               AA.BCK_FILENM,
+               AA.FRST_REGR_ID,
+               AA.RSLT_MSG,
+               AA.FIX_RSLTCD,
+               AA.FIX_RSLT_MSG,
+               AA.FRST_REG_DTM,
+               AA.LST_MDFR_ID,
+               AA.LST_MDF_DTM
+          FROM 
+               (SELECT
+                       B.DB_SVR_ID,
+                       B.IPADR,
+                       TWG.EXE_SN AS EXE_SN,
+                       TWG.SCD_ID AS SCD_ID,
+                       (SELECT SCD_NM FROM T_SCD_M WHERE TWG.SCD_ID = SCD_ID ) AS SCD_NM,
+                       TWG.WRK_ID AS WRK_ID,
+                       (SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_NM,
+                       (SELECT WRK_EXP FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_EXP,
+                       to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
+                       to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
+                       to_char(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI')::timestamp - to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI')::timestamp, 'HH24:MI') AS WRK_DTM,
+                       TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
+                       (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.EXE_RSLT_CD = SYS_CD ) AS EXE_RSLT_CD_NM,
+                       TWG.BCK_OPT_CD AS BCK_OPT_CD,
+                       (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM,
+                       TWG.TLI AS TLI,
+                       TWG.FILE_SZ AS FILE_SZ,
+                       TWG.DB_ID AS DB_ID,
+                       (SELECT DB_NM FROM T_DB_I WHERE TWG.DB_ID=DB_ID AND USEYN = 'Y') AS DB_NM,
+                       TWG.BCK_FILE_PTH AS BCK_FILE_PTH,
+                       TWG.BCK_FILENM AS BCK_FILENM,
+                       TWG.FRST_REGR_ID AS FRST_REGR_ID,
+                       TWG.RSLT_MSG AS RSLT_MSG,
+                       TWG.FIX_RSLTCD,
+                       TWG.FIX_RSLT_MSG,
+                       to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
+                       TWG.LST_MDFR_ID AS LST_MDFR_ID,
+                       to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM	 		
+                  FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DBSVRIPADR_I B, T_WRKCNG_I C
+                 WHERE 1=1
+                   AND TWG.WRK_ID = TWI.WRK_ID
+                   AND TWG.WRK_ID = C.WRK_ID 
+                   AND B.DB_SVR_ID=#{db_svr_id}::numeric 
+                   AND TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+                   AND TWI.FILE_FMT_CD NOT IN('TC000402')
+                   AND TWG.EXE_RSLT_CD='TC001701'
 
-		<select id="selectDumpRestoreLogList" parameterType="workLogVO" resultType="workLogVO">
-		    	/**
-			 	* Query ID : selectWorkLogList
-			 	* Description : 백업로그 List 조회
-			 	* Author : Yoon jh
-			 	**/
-			 	SELECT
-			 		(ROW_NUMBER() OVER()) AS ROWNUM,
-			 		AA.DB_SVR_ID,
-		            AA.IPADR,
-			 		AA.EXE_SN,
-			 		AA.SCD_ID,
-			 		AA.SCD_NM,
-			 		AA.WRK_ID,
-			 		AA.WRK_NM,
-			 		AA.WRK_EXP,
-			 		AA.WRK_STRT_DTM,
-			 		AA.WRK_END_DTM,
-			 		AA.WRK_DTM,
-			 		AA.EXE_RSLT_CD,
-			 		AA.EXE_RSLT_CD_NM,
-			 		AA.BCK_OPT_CD,
-			 		AA.BCK_OPT_CD_NM,
-			 		AA.TLI,
-			 		AA.FILE_SZ,
-			 		AA.DB_ID,
-			 		AA.DB_NM,
-			 		AA.BCK_FILE_PTH,
-			 		AA.BCK_FILENM,
-			 		AA.FRST_REGR_ID,
-			 		AA.RSLT_MSG,
-			 		AA.FIX_RSLTCD,
-			 		AA.FIX_RSLT_MSG,
-			 		AA.FRST_REG_DTM,
-			 		AA.LST_MDFR_ID,
-			 		AA.LST_MDF_DTM
-		        FROM
-		        (SELECT
-		        	B.DB_SVR_ID,
-			 		B.IPADR,
-			 		TWG.EXE_SN AS EXE_SN,
-			 		TWG.SCD_ID AS SCD_ID,
-			 		(SELECT SCD_NM FROM T_SCD_M WHERE TWG.SCD_ID = SCD_ID ) AS SCD_NM,
-			 		TWG.WRK_ID AS WRK_ID,
-			 		(SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_NM,
-			 		(SELECT WRK_EXP FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_EXP,
-			 		to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
-			 		to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
-			 		to_char(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI')::timestamp - to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI')::timestamp, 'HH24:MI') AS WRK_DTM,
-			 		TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
-			 		(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.EXE_RSLT_CD = SYS_CD ) AS EXE_RSLT_CD_NM,
-			 		TWG.BCK_OPT_CD AS BCK_OPT_CD,
-			 		(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM,
-			 		TWG.TLI AS TLI,
-			 		TWG.FILE_SZ AS FILE_SZ,
-			 		TWG.DB_ID AS DB_ID,
-			 		(SELECT DB_NM FROM T_DB_I WHERE TWG.DB_ID=DB_ID AND USEYN = 'Y') AS DB_NM,
-			 		TWG.BCK_FILE_PTH AS BCK_FILE_PTH,
-			 		TWG.BCK_FILENM AS BCK_FILENM,
-			 		TWG.FRST_REGR_ID AS FRST_REGR_ID,
-			 		TWG.RSLT_MSG AS RSLT_MSG,
-			 		TWG.FIX_RSLTCD,
-			 		TWG.FIX_RSLT_MSG,
-			 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
-			 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
-			 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM	 		
-			 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DBSVRIPADR_I B, T_WRKCNG_I C
-		 	 	WHERE 1=1
-			 		AND TWG.WRK_ID = TWI.WRK_ID
-			 		AND TWG.WRK_ID = C.WRK_ID 
-		            AND B.DB_SVR_ID=#{db_svr_id}::numeric 
-		            AND TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
-		            AND TWI.FILE_FMT_CD NOT IN('TC000402')
-		            AND TWG.EXE_RSLT_CD='TC001701'
-			 	<if test="wrk_id != null and wrk_id != '' ">
-		      		<if test='wrk_id != "0"'>
-			      		AND TWG.WRK_ID=#{wrk_id}
-			      	</if>
-		      	</if>
-		      	<if test="scd_id != null and scd_id != '' ">
-		      		<if test='scd_id != "0"'>
-			      		AND TWG.SCD_ID=#{scd_id}
-			      	</if>
-		      	</if>
-		      	<if test="exe_sn != null and exe_sn != '' ">
-		      		<if test='exe_sn != "0"'>      	
-			      		AND TWG.EXE_SN=#{exe_sn}
-			      	</if>
-		      	</if>
-		      	<if test="db_id != null and db_id != '' ">
-		      		<if test='db_id != "0"'>     
-			      		AND TWG.DB_ID=#{db_id}
-			      	</if>
-		      	</if>
-		      	<if test="bck_bsn_dscd != null and bck_bsn_dscd != '' ">
-		      		AND TWI.BCK_BSN_DSCD = #{bck_bsn_dscd}
-		      	</if>
-		      	<if test="bck_opt_cd != null and bck_opt_cd != '' ">
-		      		AND TWG.BCK_OPT_CD = #{bck_opt_cd}
-		      	</if>
-		      	<if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
-		      		<if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
-		      			AND (
-		      				TO_DATE(to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
-		      				OR
-		      				TO_DATE(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
-		      				)
-		      		</if>
-		      	</if>
-		      	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
-		      		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
-		      	</if>  
-		      	<if test="wrk_nm != null and wrk_nm != '' ">
-		      		AND C.WRK_NM=#{wrk_nm}
-		      	</if>   	
-		      	<if test="fix_rsltcd == null and fix_rsltcd == '' ">
-					AND TWG.FIX_RSLTCD LIKE '%'
-				</if>
-				<if test="fix_rsltcd == 'TC002003' ">
-					AND (TWG.FIX_RSLTCD IS NULL  AND TWG.EXE_RSLT_CD = 'TC001702')
-				</if>
-				<if test="fix_rsltcd == 'TC002001' ">
-					AND TWG.FIX_RSLTCD = 'TC002001'
-				</if>
-				<if test="fix_rsltcd == 'TC002002' ">
-					AND TWG.FIX_RSLTCD = 'TC002002'
-				</if>
-		      		ORDER BY LST_MDF_DTM DESC
-		      	)AA
-		    </select>					
+               <if test="wrk_id != null and wrk_id != '' ">
+                   <if test='wrk_id != "0"'>
+                       AND TWG.WRK_ID=#{wrk_id}
+                   </if>
+               </if>
+
+               <if test="scd_id != null and scd_id != '' ">
+                   <if test='scd_id != "0"'>
+                       AND TWG.SCD_ID=#{scd_id}
+                   </if>
+               </if>
+
+               <if test="exe_sn != null and exe_sn != '' ">
+                   <if test='exe_sn != "0"'>
+                       AND TWG.EXE_SN=#{exe_sn}
+                   </if>
+               </if>
+
+               <if test="db_id != null and db_id != '' ">
+                   <if test='db_id != "0"'>
+                       AND TWG.DB_ID=#{db_id}
+                   </if>
+               </if>
+
+               <if test="bck_bsn_dscd != null and bck_bsn_dscd != '' ">
+                   AND TWI.BCK_BSN_DSCD = #{bck_bsn_dscd}
+               </if>
+
+               <if test="bck_opt_cd != null and bck_opt_cd != '' ">
+                   AND TWG.BCK_OPT_CD = #{bck_opt_cd}
+               </if>
+
+               <if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
+                   <if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
+                       AND (
+                            TO_DATE(to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
+                                OR
+                            TO_DATE(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
+                       )
+                   </if>
+               </if>
+
+               <if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
+                   AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
+               </if>
+
+               <if test="wrk_nm != null and wrk_nm != '' ">
+                   AND C.WRK_NM=#{wrk_nm}
+               </if>
+
+               <if test="fix_rsltcd == null and fix_rsltcd == '' ">
+                   AND TWG.FIX_RSLTCD LIKE '%'
+               </if>
+               <if test="fix_rsltcd == 'TC002003' ">
+                   AND (TWG.FIX_RSLTCD IS NULL  AND TWG.EXE_RSLT_CD = 'TC001702')
+               </if>
+               <if test="fix_rsltcd == 'TC002001' ">
+                   AND TWG.FIX_RSLTCD = 'TC002001'
+               </if>
+               <if test="fix_rsltcd == 'TC002002' ">
+                   AND TWG.FIX_RSLTCD = 'TC002002'
+               </if>
+               ORDER BY LST_MDF_DTM DESC
+         )AA
+	</select>
 </mapper>

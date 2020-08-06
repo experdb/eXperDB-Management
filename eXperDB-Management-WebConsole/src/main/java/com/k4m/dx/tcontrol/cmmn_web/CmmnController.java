@@ -494,7 +494,7 @@ public class CmmnController {
 
 	/**
 	 * 디렉토리 존재유무 체크(master만 체크)
-	 * @param WorkVO
+	 * @param WorkVO, request, dbServerVO
 	 * @return resultSet
 	 * @throws Exception
 	 */

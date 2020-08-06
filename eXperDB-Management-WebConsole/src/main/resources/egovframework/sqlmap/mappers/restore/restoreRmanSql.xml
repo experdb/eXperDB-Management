@@ -55,21 +55,21 @@
 	</insert>
 	
 	<select id="restore_nmCheck" resultType="int">
-		/**
-		* Query ID : restore_nmCheck
-		* Description : 복구명 중복 체크
-		* Author : 변승우
-		**/
-		SELECT 
-				COUNT(A.RESTORE_NM)
-		FROM(
-				SELECT RESTORE_NM 
-				FROM T_RMAN_RESTORE		
-				UNION ALL
-				SELECT RESTORE_NM 
-				FROM T_DUMP_RESTORE
-		)A
-		WHERE RESTORE_NM = #{restore_nm}
+        /**
+        * Query ID : restore_nmCheck
+        * Description : 복구명 중복 체크
+        * Author : 변승우
+        **/
+        SELECT 
+               COUNT(A.RESTORE_NM)
+         FROM (
+               SELECT RESTORE_NM
+                 FROM T_RMAN_RESTORE		
+                UNION ALL
+               SELECT RESTORE_NM 
+                 FROM T_DUMP_RESTORE
+         )A
+        WHERE RESTORE_NM = #{restore_nm}
 	</select>
 	
 	<select id="latestRestoreSN"  resultType="restoreRmanVO">

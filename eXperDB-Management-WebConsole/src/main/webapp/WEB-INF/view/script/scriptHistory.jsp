@@ -122,8 +122,8 @@
 	 						var html = '';
 	 						if (full.exe_rslt_cd == 'TC001701') {
 								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-								html += '<i class="fa fa-check text-primary"></i>';
-								html += '<spring:message code="common.success" />';
+								html += '<i class="fa fa-check text-primary">';
+								html += '&nbsp;<spring:message code="common.success" /></i>';
 								html += "</div>";
 	 						} else if(full.exe_rslt_cd == 'TC001702'){
 								html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
@@ -136,6 +136,7 @@
 								html += '&nbsp;<spring:message code="etc.etc28" />';
 								html += "</div>";
 	 						}
+
 	 						return html;
 	 					},
 	 					className : "dt-center",
@@ -234,7 +235,7 @@
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 </form>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -288,11 +289,11 @@
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
+						<div class="card-body" style="margin:-10px -10px -15px 0px;">
 
 							<form class="form-inline" onsubmit="return false;">
 								<div class="row">
-									<div class="input-group mb-2 mr-sm-2">
+									<div class="input-group mb-2 mr-sm-2" >
 <%-- 										<div class="input-group-prepend"> 
 											<div class="input-group-text" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="common.work_term" /></div>
 										</div> --%>
@@ -308,7 +309,7 @@
 											<span style="border:none; padding: 0px 10px;"> ~ </span>
 										</div>
 		
-										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker" >
 											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_end_dtm" name="wrk_end_dtm" readonly>
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
@@ -316,11 +317,7 @@
 										</div>
 									</div>
 	
-									<div class="input-group mb-2 mr-sm-2">
-<%-- 										<div class="input-group-prepend">
-											<div class="input-group-text" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="common.status" /></div>
-										</div>
-											 --%>
+									<div class="input-group mb-2 mr-sm-2" style="padding:0 10px 0 10px;">
 										<select class="form-control" style="width:200px;" name="exe_rslt_cd" id="exe_rslt_cd">
 											<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
 											<option value="1"><spring:message code="common.success" /></option>
@@ -328,11 +325,7 @@
 										</select>
 									</div>
 									
-									<div class="input-group mb-2 mr-sm-2">
-<%-- 										<div class="input-group-prepend">
-											<div class="input-group-text" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="common.work_name" /></div>
-										</div> --%>
-											
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
 										<input type="text" class="form-control" style="width:400px;" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' maxlength="25" />
 									</div>
 

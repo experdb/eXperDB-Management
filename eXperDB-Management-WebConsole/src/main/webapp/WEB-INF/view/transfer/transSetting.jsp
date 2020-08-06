@@ -1089,7 +1089,7 @@ a:hover.tip span {
 					<div class="card">
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<form class="form-inline" onsubmit="return false">
-								<div class="input-group mb-2 mr-sm-2">
+								<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
 									<input type="text" class="form-control" style="width:400px;" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name_set" />'/>					
 								</div>
 

@@ -346,7 +346,7 @@
 	/* ********************************************************
 	 * work 명 변경시
 	 ******************************************************** */
-	function fn_ins_wrk_nmChk() {
+	function fn_ins_dump_wrk_nmChk() {
 		$('#ins_dump_wrk_nmChk', '#workDumpRegForm').val("fail");
 		
 		$("#ins_dump_worknm_check_alert", "#workDumpRegForm").html('');
@@ -733,7 +733,7 @@
 											</label>
 		
 											<div class="col-sm-10">
-												<textarea class="form-control" id="ins_dump_wrk_exp" name="ins_dump_wrk_exp" rows="2" maxlength="200" onkeyup="fn_checkWord(this,25)" placeholder="200<spring:message code='message.msg188'/>" required tabindex=2></textarea>
+												<textarea class="form-control" id="ins_dump_wrk_exp" name="ins_dump_wrk_exp" rows="2" maxlength="200" onkeyup="fn_checkWord(this,200)" placeholder="200<spring:message code='message.msg188'/>" required tabindex=2></textarea>
 											</div>
 										</div>
 									</div>

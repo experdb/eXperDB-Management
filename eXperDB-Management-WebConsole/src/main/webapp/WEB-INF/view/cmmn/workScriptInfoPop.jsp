@@ -33,7 +33,7 @@
 	}
 </script>
 
-<div class="modal fade" id="pop_layer_script_work" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="z-index:9999;">
+<div class="modal fade" id="pop_layer_script_work" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 120px 350px;">
 		<div class="modal-content" style="width:900px;">
 			<div class="modal-body" style="margin-bottom:-30px;">

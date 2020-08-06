@@ -122,6 +122,8 @@
 				location.href = "/securityKeySet.do";
 			} else if (rstGbn == "backup") {
 				fn_backupHistory_move();
+			} else if (rstGbn == "rman_restore") {
+				fn_restoreLogCall();
 			}
         });
 	}
@@ -361,24 +363,25 @@ function fn_workLayer(wrk_id){
 						$("#r_bck_bsn_dscd_nm").html(nvlPrmSet(result[0].bck_bsn_dscd_nm, "-"));
 
 						if (result[0].bck_opt_cd == 'TC000301') {
-							rman_bck_opt_cd_nm += "<div class='badge badge-pill badge-success'>";
-							rman_bck_opt_cd_nm += "	<i class='fa fa-paste mr-2'></i>";
+							rman_bck_opt_cd_nm += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+							rman_bck_opt_cd_nm += "	<i class='fa fa-paste mr-2 text-success'></i>";
 							rman_bck_opt_cd_nm += backup_management_full_backup;
 							rman_bck_opt_cd_nm += '(' + result[0].bck_opt_cd_nm + ')';
 							rman_bck_opt_cd_nm += "</div>";									
 						} else if(result[0].bck_opt_cd == 'TC000302'){
-							rman_bck_opt_cd_nm += "<div class='badge badge-pill badge-warning'>";
-							rman_bck_opt_cd_nm += "	<i class='fa fa-comments-o mr-2'></i>";
+							rman_bck_opt_cd_nm += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+							rman_bck_opt_cd_nm += "	<i class='fa fa-comments-o text-warning'></i>";
 							rman_bck_opt_cd_nm += backup_management_incremental_backup;
 							rman_bck_opt_cd_nm += '(' + result[0].bck_opt_cd_nm + ')';
 							rman_bck_opt_cd_nm += "</button>";
 						} else {
-							rman_bck_opt_cd_nm += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
-							rman_bck_opt_cd_nm += "	<i class='fa fa-exchange mr-2' ></i>";
+							rman_bck_opt_cd_nm += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+							rman_bck_opt_cd_nm += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
 							rman_bck_opt_cd_nm += backup_management_change_log_backup;
 							rman_bck_opt_cd_nm += '(' + result[0].bck_opt_cd_nm + ')';
 							rman_bck_opt_cd_nm += "</div>";
 						}
+
 						$("#r_bck_opt_cd_nm").html(rman_bck_opt_cd_nm);
 						
 						$("#r_wrk_nm").html(nvlPrmSet(result[0].wrk_nm, "-"));
@@ -988,8 +991,8 @@ function fn_make_object_list(data, workObj){
  * 패스워드 확인
  ******************************************************** */
 function fn_passwordConfilm(flag){
-	$("#password").val("");
-	$("#flag").val(flag);
+	$("#exec_password").val("");
+	$("#exec_flag").val(flag);
 	
 	$("#pop_layer_pwConfilm").modal("show");
 }

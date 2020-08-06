@@ -61,18 +61,18 @@
 							var html = '';
 
 							if (full.MODE == 'FULL') {
-								html += "<div class='badge badge-pill badge-success'>";
-								html += "	<i class='fa fa-paste mr-2'></i>";
-								html += '<spring:message code="backup_management.full_backup" /></i>';
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='fa fa-paste mr-2 text-success'></i>";
+								html += '<spring:message code="backup_management.full_backup" />';
 								html += "</div>";									
 							} else if(full.MODE == 'ARCH'){
-								html += "<div class='badge badge-pill badge-warning'>";
-								html += "	<i class='fa fa-comments-o mr-2'></i>";
-								html += '<spring:message code="backup_management.incremental_backup" />';
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='fa fa-comments-o text-warning'></i>";
+								html += '&nbsp;<spring:message code="backup_management.incremental_backup" />';
 								html += "</button>";
 							} else {
-								html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
-								html += "	<i class='fa fa-exchange mr-2' ></i>";
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
 								html += '<spring:message code="backup_management.change_log_backup" />';
 								html += "</div>";
 							}
@@ -154,7 +154,7 @@
 		    					html += '<spring:message code="agent_monitoring.yes"/>';
 		    					html += "</div>";
 		    				} else {
-		    					html += "<div class='badge badge-pill badge-light' style='background-color: #EEEEEE;'>";
+		    					html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;'>";
 		    					html += "	<i class='fa fa-file-zip-o mr-2'></i>";
 		    					html +='<spring:message code="agent_monitoring.no"/>';
 		    					html += "</div>";
@@ -221,19 +221,18 @@
 				}
 			},
 			success : function(result) {	
-				alert(result);
 				rmanshow_table.clear().draw();
 
 				if (result.data != null) {
 					rmanshow_table.rows.add(result.data).draw();
 
-					if (result.data.length > 0) {
+/*  					if (result.data.length > 0) {
 						$('#pop_layer_rman_show_view').css("width", "1340px");
 					} else {
 						$('#pop_layer_rman_show_view').css("width", "1250px");
-					}
+					} */
 				} else {
-					$('#pop_layer_rman_show_view').css("width", "1250px");
+/* 				 	$('#pop_layer_rman_show_view').css("width", "1250px"); */
 				}
 			}
 		}); 

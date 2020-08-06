@@ -75,19 +75,20 @@
 						{data: "bck_opt_cd_nm", className: "dt-center", defaultContent: "",
 							render : function(data, type, full, meta) {
 								var html = '';
+
 								if (full.bck_opt_cd == 'TC000301') {
-									html += "<div class='badge badge-pill badge-success'>";
-									html += "	<i class='fa fa-paste mr-2'></i>";
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-paste mr-2 text-success'></i>";
 									html += '<spring:message code="backup_management.full_backup" />';
 									html += "</div>";									
 								} else if(full.bck_opt_cd == 'TC000302'){
-									html += "<div class='badge badge-pill badge-warning'>";
-									html += "	<i class='fa fa-comments-o mr-2'></i>";
-									html += '<spring:message code="backup_management.incremental_backup" />';
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-comments-o text-warning'></i>";
+									html += '&nbsp;<spring:message code="backup_management.incremental_backup" />';
 									html += "</button>";
 								} else {
-									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
-									html += "	<i class='fa fa-exchange mr-2' ></i>";
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
 									html += '<spring:message code="backup_management.change_log_backup" />';
 									html += "</div>";
 								}
