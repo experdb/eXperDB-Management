@@ -88,12 +88,12 @@ $(window.document).ready(function() {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
-			success : function(result) {				
-				$("#db_svr_nm").children().remove();
-				$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
+			success : function(result) {		
+				$("#database_svr_nm").children().remove();
+				$("#database_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
-						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
+						$("#database_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
 					}									
 				}
 			}
@@ -153,7 +153,7 @@ function fn_search(){
   	$.ajax({
 		url : "/selectDatabaseRepoDBList.do",
 		data : {
-			db_svr_nm : $("#db_svr_nm").val().trim(),
+			db_svr_nm : $("#database_svr_nm").val().trim(),
 			ipadr : $("#ipadr").val().trim(),
 			dft_db_nm : $("#dft_db_nm").val().trim()
 		},
@@ -164,11 +164,9 @@ function fn_search(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -192,7 +190,7 @@ function fn_reg_popup(){
 
 </script>
 <%@include file="./../../popup/dbRegForm.jsp"%>
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -247,7 +245,7 @@ function fn_reg_popup(){
 						<div class="card-body">
 							<div class="form-inline">
 								<div class="input-group mb-2 mr-sm-2">
-	 								<select class="form-control" style="width:250px; margin-right: 1rem;" id="db_svr_nm" name="db_svr_nm">
+	 								<select class="form-control" style="width:250px; margin-right: 1rem;" id="database_svr_nm" name="database_svr_nm">
 										<option value="%"><spring:message code="common.total" /> </option>
 	 								</select>
 								</div>
@@ -264,16 +262,6 @@ function fn_reg_popup(){
 							</div>
 						</div>
 					</div>
-
-					<div class="row">
-						<div class="col-12">
-							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_reg_popup();" id="int_button" data-toggle="modal">
-									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.management" />
-								</button>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -281,8 +269,18 @@ function fn_reg_popup(){
 		<div class="col-lg-12 grid-margin stretch-card">
 		  <div class="card">
 		    <div class="card-body">
+		    	<div class="row" style="margin-top:-20px;">
+					<div class="col-12">
+						<div class="template-demo">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_reg_popup();" id="int_button" data-toggle="modal">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.management" />
+								</button>
+						</div>
+					</div>
+				</div>
+				
 		      <div class="table-responsive">
-			      <table id="repoDBList" class="table table-hover table-striped cellspacing="0" width="100%">
+			      <table id="repoDBList" class="table table-hover table-striped" cellspacing="0" width="100%">
 					<thead>
 						<tr class="bg-primary text-white">
 							<th width="30"><spring:message code="common.no" /></th>

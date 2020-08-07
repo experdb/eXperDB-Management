@@ -163,11 +163,9 @@ function fn_search(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -186,15 +184,6 @@ function fn_search(){
  ******************************************************** */
 function fn_reg_popup(){
 	$('#pop_layer_dbserver_reg').modal("show");
-	
-// 	var popUrl = "/popup/dbServerRegForm.do?flag=server"; // 서버 url 팝업경로
-// 	var width = 1000;
-// 	var height = 630;
-// 	var left = (window.screen.width / 2) - (width / 2);
-// 	var top = (window.screen.height /2) - (height / 2);
-// 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-// 	window.open(popUrl,"",popOption);	
-// 	window.open("/popup/dbServerRegForm.do?flag=server","dbServerRegPop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=613,top=0,left=0");
 }
 
 
@@ -204,6 +193,71 @@ function fn_reg_popup(){
 function fn_regRe_popup(){
 	var datas = table.rows('.selected').data();
 	if (datas.length == 1) {
+		fn_init3();
+	    $.ajax({
+			url : "/selectIpadrList.do",
+			data : {
+				db_svr_id : table.row('.selected').data().db_svr_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					top.location.href = "/";
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				dbServerRegTable.clear().draw();
+				dbServerRegTable.rows.add(result).draw();
+			    $.ajax({
+					url : "/selectDbServerList.do",
+					data : {
+						db_svr_id : table.row('.selected').data().db_svr_id
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							top.location.href = "/";
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {
+						document.getElementById('md_db_svr_id').value= result[0].db_svr_id;
+						document.getElementById('md_db_svr_nm').value= result[0].db_svr_nm;
+						document.getElementById('md_dft_db_nm').value= result[0].dft_db_nm;
+						document.getElementById('md_svr_spr_usr_id').value= result[0].svr_spr_usr_id;
+						document.getElementById('md_svr_spr_scm_pwd').value= result[0].svr_spr_scm_pwd;
+						document.getElementById('md_pghome_pth').value= result[0].pghome_pth;
+						document.getElementById('md_pgdata_pth').value= result[0].pgdata_pth;
+						if(result[0].useyn == 'Y'){
+							$("#useyn_Y").prop("checked", true);
+						}else{
+							$("#useyn_N").prop("checked", true);
+						}
+						
+					}
+			    });
+			}
+		});  
+  
 		$('#pop_layer_dbserver_mod').modal("show");
 		
 // 		var db_svr_id = table.row('.selected').data().db_svr_id;
@@ -225,7 +279,7 @@ function fn_regRe_popup(){
 <%@include file="./../../popup/dbServerRegForm.jsp"%>
 <%@include file="./../../popup/dbServerRegReForm.jsp"%>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -301,19 +355,6 @@ function fn_regRe_popup(){
 							</div>
 						</div>
 					</div>
-
-					<div class="row">
-						<div class="col-12">
-							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_regRe_popup();" id="mdf_button" data-toggle="modal">
-									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
-								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_reg_popup();" id="int_button" data-toggle="modal">
-									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
-								</button>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -321,6 +362,19 @@ function fn_regRe_popup(){
 		<div class="col-lg-12 grid-margin stretch-card">
 		  <div class="card">
 		    <div class="card-body">
+		    	<div class="row" style="margin-top:-20px;">
+					<div class="col-12">
+						<div class="template-demo">	
+							<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_regRe_popup();" id="mdf_button" data-toggle="modal">
+								<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+							</button>
+							<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_reg_popup();" id="int_button" data-toggle="modal">
+								<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
+							</button>
+						</div>
+					</div>
+				</div>
+					
 		      <div class="table-responsive">
 				<table id="serverList" class="table table-hover table-striped" cellspacing="0" width="100%">
 					<thead>

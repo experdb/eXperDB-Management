@@ -33,7 +33,7 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "270px",
+		scrollY : "300px",
 		scrollX: true,	
 		searching : false,
 		paging : false,
@@ -93,7 +93,7 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "270px",
+		scrollY : "300px",
 		scrollX: true,	
 		searching : false,
 		paging : false,		
@@ -164,10 +164,8 @@ function fn_selectTreeDbServerList(){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -224,10 +222,8 @@ $(function() {
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
     				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-    				top.location.href = "/";
     			} else if(xhr.status == 403) {
     				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-    				top.location.href = "/";
     			} else {
     				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
     			}
@@ -253,17 +249,6 @@ $(function() {
  ******************************************************** */
 function fn_reg_popup(){
 	$('#pop_layer_dbserver_reg').modal("show");
-	
-// 	var popUrl = "/popup/dbServerRegForm.do?flag=tree"; // 서버 url 팝업경로
-// 	var width = 1000;
-// 	var height = 630;
-// 	var left = (window.screen.width / 2) - (width / 2);
-// 	var top = (window.screen.height /2) - (height / 2);
-// 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-// 	window.open(popUrl,"",popOption);	
-	
-// 	window.open("/popup/dbServerRegForm.do?flag=tree","dbServerRegPop","location=no,menubar=no,scrollbars=yes,status=no,width=1050,height=638");
 }
 
 
@@ -273,18 +258,74 @@ function fn_reg_popup(){
 function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
-		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		var popUrl = "/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree"; // 서버 url 팝업경로
-		var width = 1000;
-		var height = 660;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-		window.open(popUrl,"",popOption);
-// 		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1050,height=638");
+		fn_init3();
+	    $.ajax({
+			url : "/selectIpadrList.do",
+			data : {
+				db_svr_id : table.row('.selected').data().db_svr_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					top.location.href = "/";
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				dbServerRegTable.clear().draw();
+				dbServerRegTable.rows.add(result).draw();
+			    $.ajax({
+					url : "/selectDbServerList.do",
+					data : {
+						db_svr_id : table.row('.selected').data().db_svr_id
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							top.location.href = "/";
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {
+						document.getElementById('md_db_svr_id').value= result[0].db_svr_id;
+						document.getElementById('md_db_svr_nm').value= result[0].db_svr_nm;
+						document.getElementById('md_dft_db_nm').value= result[0].dft_db_nm;
+						document.getElementById('md_svr_spr_usr_id').value= result[0].svr_spr_usr_id;
+						document.getElementById('md_svr_spr_scm_pwd').value= result[0].svr_spr_scm_pwd;
+						document.getElementById('md_pghome_pth').value= result[0].pghome_pth;
+						document.getElementById('md_pgdata_pth').value= result[0].pgdata_pth;
+						if(result[0].useyn == 'Y'){
+							$("#useyn_Y").prop("checked", true);
+						}else{
+							$("#useyn_N").prop("checked", true);
+						}
+						
+					}
+			    });
+			}
+		});  
+  
+		$('#pop_layer_dbserver_mod').modal("show");
 	} else {
-		alert("<spring:message code='message.msg04' />");
+		showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 	}	
 }
 
@@ -378,10 +419,8 @@ function fn_insertDB(){
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
 						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						top.location.href = "/";
 					} else if(xhr.status == 403) {
 						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						top.location.href = "/";
 					} else {
 						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
@@ -414,10 +453,8 @@ function fn_dataCompareChcek(svrDbList){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -513,10 +550,8 @@ function fn_dataCompareChcek(svrDbList){
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -553,10 +588,8 @@ function fn_dataCompareChcek(svrDbList){
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -590,10 +623,8 @@ function fn_dbSync(){
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
 						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						top.location.href = "/";
 					} else if(xhr.status == 403) {
 						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						top.location.href = "/";
 					} else {
 						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
@@ -636,23 +667,21 @@ function fn_syncUpdate(db_id){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
-			alert('<spring:message code="message.msg212"/>');
+			showSwalIcon('<spring:message code="message.msg212"/>', '<spring:message code="common.close" />', '', 'success');
 		}
 	});
 }
 </script>
 <%@include file="./../../popup/dbServerRegForm.jsp"%>
 <%@include file="./../../popup/dbServerRegReForm.jsp"%>
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -751,15 +780,15 @@ function fn_syncUpdate(db_id){
 						<i class="ti-reload btn-icon-prepend "></i><spring:message code="dbms_information.Synchronization" />
 					</button>
 				</div>
-					<table id="dbList" class="table table-hover table-striped" cellspacing="0" align="left">
-						<thead>
-								<tr class="bg-primary text-white">
-									<th width="10"><input name="select" value="1" type="checkbox"></th>
-									<th width="110"><spring:message code="common.database" /></th>
-									<th width="360"><spring:message code="common.desc" /></th>										
-								</tr>
-						</thead>
-					</table>
+				<table id="dbList" class="table table-hover table-striped" cellspacing="0" align="left">
+					<thead>
+							<tr class="bg-primary text-white">
+								<th width="10"><input name="select" value="1" type="checkbox"></th>
+								<th width="110"><spring:message code="common.database" /></th>
+								<th width="360"><spring:message code="common.desc" /></th>										
+							</tr>
+					</thead>
+				</table>
 		      </div>
 		    </div>
 		  </div>
