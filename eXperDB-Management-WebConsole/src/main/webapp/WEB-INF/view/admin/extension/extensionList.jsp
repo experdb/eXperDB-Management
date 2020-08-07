@@ -94,11 +94,9 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -158,7 +156,7 @@ $(function() {
     		success : function(result) {
     			table_db.clear().draw();
     			if(result == null){
-    				alert("<spring:message code='message.msg05' />");
+    				showSwalIcon('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error');
     			}else{
 	    			table_db.rows.add(result).draw();
 	    			//fn_dataCompareChcek(result);
@@ -175,7 +173,7 @@ $(function() {
 </script>
 
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">

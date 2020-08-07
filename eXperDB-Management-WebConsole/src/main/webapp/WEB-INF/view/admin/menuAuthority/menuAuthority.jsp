@@ -65,13 +65,11 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
@@ -93,13 +91,11 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
@@ -120,13 +116,11 @@ $(window.document).ready(function() {
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert("<spring:message code='message.msg02' />");
-    				top.location.href = "/";
+    				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
     			} else if(xhr.status == 403) {
-    				alert("<spring:message code='message.msg03' />");
-    				top.location.href = "/";
+    				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
     			} else {
-    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+    				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
     			}
     		},
     		success : function(result) {
@@ -184,13 +178,11 @@ $(function() {
 	    	     },
 	    		error : function(xhr, status, error) {
 	    			if(xhr.status == 401) {
-	    				alert("<spring:message code='message.msg02' />");
-	    				top.location.href = "/";
+	    				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 	    			} else if(xhr.status == 403) {
-	    				alert("<spring:message code='message.msg03' />");
-	    				top.location.href = "/";
+	    				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 	    			} else {
-	    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+	    				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 	    			}
 	    		},
 	    		success : function(result) {
@@ -221,7 +213,7 @@ $(function() {
 		$("#read").click(function() { 
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#read").prop("checked")) {
@@ -236,7 +228,7 @@ $(function() {
 		$("#write").click(function() { 
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#write").prop("checked")) {
@@ -251,7 +243,7 @@ $(function() {
 			var array = new Array("MN000101","MN000102","MN000103","MN000201","MN000202");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#functions").prop("checked")) {
@@ -276,7 +268,7 @@ $(function() {
 			var array = new Array("MN000301","MN000302","MN000303","MN0004","MN000501","MN000502","MN000503","MN000601","MN000701","MN000702","MN0008");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#admin").prop("checked")) {
@@ -301,7 +293,7 @@ $(function() {
 			var array = new Array("MN000101","MN000102","MN000103");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#schinfo").prop("checked")) {
@@ -322,7 +314,7 @@ $(function() {
 			var array = new Array("MN000201","MN000202");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#transferinfo").prop("checked")) {
@@ -343,7 +335,7 @@ $(function() {
 			var array = new Array("MN000301","MN000302","MN000303");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#dbmsinfo").prop("checked")) {
@@ -364,7 +356,7 @@ $(function() {
 			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001301","MN0001302","MN0001303","MN0001304","MN0001401");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#encrypt").prop("checked")) {
@@ -391,7 +383,7 @@ $(function() {
 			var array = new Array("MN0001101","MN0001102");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#securitykey").prop("checked")) {
@@ -412,7 +404,7 @@ $(function() {
 			var array = new Array("MN0001201","MN0001202","MN0001203");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#auditlog").prop("checked")) {
@@ -434,7 +426,7 @@ $(function() {
 			var array = new Array("MN0001301","MN0001302","MN0001303","MN0001304");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#setting").prop("checked")) {
@@ -455,7 +447,7 @@ $(function() {
 			var array = new Array("MN000501","MN000502","MN000503");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#authmanage").prop("checked")) {
@@ -476,7 +468,7 @@ $(function() {
 			var array = new Array("MN00015","MN00016","MN00017");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 			if ($("#migration").prop("checked")) {
@@ -497,7 +489,7 @@ $(function() {
 		$(".inp_chk").click(function() { 
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert("<spring:message code='message.msg165'/>");
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
 				 return false;
 			 }
 		});
@@ -544,6 +536,7 @@ function fn_save(){
 	        datasArr.push(datas);
 	    }	    
 	    
+	    
 		if (confirm('<spring:message code="message.msg148"/>')){
 			$.ajax({
 				url : "/updateUsrMnuAut.do",
@@ -557,13 +550,11 @@ function fn_save(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("<spring:message code='message.msg02' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert("<spring:message code='message.msg03' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {
@@ -591,13 +582,11 @@ function fn_search(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
@@ -609,7 +598,7 @@ function fn_search(){
 }
 </script>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
