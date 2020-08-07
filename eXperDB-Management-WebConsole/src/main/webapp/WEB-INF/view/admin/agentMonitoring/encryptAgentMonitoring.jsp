@@ -38,7 +38,7 @@ function fn_init(){
 			{ data : "status", defaultContent : "", className : "dt-center", render: function (data, type, full){
 				if(full.status == "start"){
 					var html = "<div class='badge badge-pill badge-primary' ><i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i></div>";
-						return html;
+					return html;
 				}else{
 					var html = "<div class='badge badge-pill badge-danger' ><i class='fa fa-times-circle mr-2' style='margin-right: 0px !important;'></i></div>";
 					return html;
@@ -170,7 +170,7 @@ function fn_delete(){
 }
 </script>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -214,30 +214,25 @@ function fn_delete(){
 				</div>
 			</div>
 		</div>
-		<div class="col-12 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-12">
-							<div class="template-demo">		
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_delete()" id="btndelete" data-toggle="modal">
-									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
-								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_refresh()" data-toggle="modal">
-									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
+
 		<div class="col-12 stretch-card div-form-margin-table">
 			<div class="card">
 				<div class="card-body">
 					<div class="card my-sm-2" >
 						<div class="card-body" >
+							<div class="row" style="margin-top:-20px;">
+								<div class="col-12">
+									<div class="template-demo">	
+										<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_delete()" id="btndelete" data-toggle="modal">
+											<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+										</button>
+										<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_refresh()" data-toggle="modal">
+											<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+										</button>
+									</div>
+								</div>
+							</div>
+				
 							<div class="row">
 								<div class="col-12">
  									<div class="table-responsive">

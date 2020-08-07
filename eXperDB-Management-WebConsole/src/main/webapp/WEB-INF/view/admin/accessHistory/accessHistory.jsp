@@ -24,21 +24,55 @@
 		
 		fn_buttonAut();
 		
+		//작업기간 calender setting
+		dateCalenderSetting();
+		
 		var lgi_dtm_start = "${lgi_dtm_start}";
 		var lgi_dtm_end = "${lgi_dtm_end}";
-
-		var today = new Date();
-		var day = today.toJSON().slice(0,10);
 
 		if (lgi_dtm_start != "" && lgi_dtm_end != "") {
 			$('#from').val(lgi_dtm_start);
 			$('#to').val(lgi_dtm_end);
-		} else {
-			$('#from').val(day);
-			$('#to').val(day);
 		}
+		
 	});
+	
+	
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function dateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
 
+		today.setDate(today.getDate());
+		var day_start = today.toJSON().slice(0,10); 
+
+		$("#from").val(day_start);
+		$("#to").val(day_end);
+
+		if ($("#wrk_strt_dtm_div").length) {
+			$('#wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+
+		if ($("#wrk_end_dtm_div").length) {
+			$('#wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+		
+		$("#from").datepicker('setDate', day_start);
+	    $("#to").datepicker('setDate', day_end);
+	    $('#wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#wrk_end_dtm_div').datepicker('updateDates');
+	}
+	
 	function fn_buttonAut(){
 		var excel_button = document.getElementById("btnExcel"); 
 		var select_button = document.getElementById("btnSelect"); 
@@ -58,7 +92,7 @@
 		var dataCnt = table.rows.length;
 
 		if (dataCnt ==1) {
-			alert("<spring:message code='message.msg01'/>")
+			showSwalIcon('<spring:message code="message.msg01" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		} else {
 			var lgi_dtm_start = $("#from").val();
@@ -110,7 +144,7 @@
 		<input type="hidden" name="excel_sys_cd" id="excel_sys_cd">
 	</form>
 	
-	<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -208,21 +242,10 @@
 											<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}><spring:message code="history_management.ascending_order" /> </option>		
 										</select>
 									</div>
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onclick="fn_select()" >
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>
 								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-12">
-							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnExcel" onclick="fn_ExportExcel()" data-toggle="modal">
-									<i class="fa fa-file-excel-o btn-icon-prepend "></i><spring:message code="history_management.excel_save" />
-								</button>
-													
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSelect" onclick="fn_select()" data-toggle="modal">
-									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-								</button>
 							</div>
 						</div>
 					</div>
@@ -233,6 +256,16 @@
 		<div class="col-12 div-form-margin-table stretch-card">
 			<div class="card">
 				<div class="card-body">
+					<div class="row" style="margin-top:-20px;">
+						<div class="col-12">
+							<div class="template-demo">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnExcel" onclick="fn_ExportExcel()" data-toggle="modal">
+									<i class="fa fa-file-excel-o btn-icon-prepend "></i><spring:message code="history_management.excel_save" />
+								</button>
+							</div>
+						</div>
+					</div>
+							
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">
@@ -304,137 +337,11 @@
 							</div>
 						</div>
 					</div>
-							
-						</div>
+					</div>
 				</div>
 				<!-- content-wrapper ends -->
 			</div>
 		</div>
 		</form:form>
-		
 	</div>
 </div>
-
-<!-- 	<div id="contents"> -->
-<!-- 		<div class="contents_wrap"> -->
-<!-- 			<div class="contents"> -->
-<!-- 				<div class="cmm_grp"> -->
-<!-- 					<div class="btn_type_float"> -->
-<%-- 						<span class="btn btnC_01 btn_fl"><button type="button" id="btnExcel" onclick="fn_ExportExcel()"><spring:message code="history_management.excel_save" /></button></span>  --%>
-<%-- 								<span class="btn btn_fr"><button type="button" id="btnSelect"onclick="fn_select()"><spring:message code="common.search" /></button></span>															 --%>
-<!-- 					</div> -->
-
-<%-- 					<form:form commandName="pagingVO" name="selectList" id="selectList" method="post"> --%>
-<!-- 						<div class="sch_form"> -->
-<!-- 							<table class="write"> -->
-<%-- 								<caption>검색 조회</caption> --%>
-<%-- 								<colgroup> --%>
-<%-- 									<col style="width: 100px;" /> --%>
-<%-- 									<col style="width: 350px;" /> --%>
-<%-- 									<col style="width: 80px;" /> --%>
-<%-- 									<col style="width: 400px;" /> --%>
-<%-- 									<col /> --%>
-<%-- 								</colgroup> --%>
-<!-- 								<tbody> -->
-<!-- 									<tr> -->
-<%-- 										<th scope="row" class="t10"><spring:message code="history_management.access_date" /></th> --%>
-<!-- 										<td> -->
-<!-- 											<div class="calendar_area"> -->
-<!-- 												<a href="#n" class="calendar_btn">달력열기</a>  -->
-<!-- 												<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" readonly="readonly" /> <span class="wave">~</span> -->
-<!-- 												<a href="#n" class="calendar_btn">달력열기</a>  -->
-<!-- 												<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" readonly="readonly" /> -->
-<!-- 											</div> -->
-<!-- 										</td> -->
-<%-- 										<th scope="row" class="t9"><spring:message code="history_management.user" /></th> --%>
-<!-- 											<td> -->
-<!-- 												<select class="select t8" id="type" name="type"> -->
-<%-- 													<option value="usr_nm" ${type == 'usr_nm' ? 'selected="selected"' : ''}><spring:message code="history_management.user_name" /></option> --%>
-<%-- 													<option value="usr_id" ${type == 'usr_id' ? 'selected="selected"' : ''}><spring:message code="history_management.id" /> </option> --%>
-<!-- 												</select> -->
-<%-- 												<input type="text" class="txt t2" id="search" name="search" value="${search}" maxlength="15"/> --%>
-<!-- 											</td>				 -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<%-- 										<th scope="row" class="t9"><spring:message code="history_management.screen_choice" /></th> --%>
-<!-- 										<td> -->
-<!-- 											<select class="select t5" id="sys_cd" name="sys_cd"> -->
-<%-- 												<option value="" ${sys_cd == '' ? 'selected="selected"' : ''}><spring:message code="common.total" /></option>	 --%>
-<%-- 												<c:forEach var="ScreenNames" items="${ScreenNames}"> --%>
-<%-- 													<option value="${ScreenNames.sys_cd}" ${ScreenNames.sys_cd == sys_cd ? 'selected="selected"' : ''}>${ScreenNames.sys_cd_nm}</option>							 --%>
-<%-- 												</c:forEach> --%>
-<!-- 											</select> -->
-<!-- 										</td> -->
-<%-- 										<th scope="row" class="t9"><spring:message code="history_management.sort" /></th> --%>
-<!-- 										<td> -->
-<!-- 											<select class="select t8" id="order_type" name="order_type"> -->
-<%-- 												<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}><spring:message code="history_management.bydate" /></option> --%>
-<%-- 												<option value="usr_id" ${order_type == 'usr_id' ? 'selected="selected"' : ''}><spring:message code="history_management.id" /></option> --%>
-<!-- 											</select>							 -->
-<!-- 											<select class="select t5" id="order" name="order"> -->
-<%-- 												<option value="desc" ${order == 'desc' ? 'selected="selected"' : ''}><spring:message code="history_management.descending_order" /></option> --%>
-<%-- 												<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}><spring:message code="history_management.ascending_order" /> </option>		 --%>
-<!-- 											</select> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 								</tbody> -->
-<!-- 							</table> -->
-<!-- 						</div> -->
-
-<!-- 						<div class="overflow_area" style="height: 370px;"> -->
-<!-- 							<table class="list" id="accessHistoryTable"> -->
-<%-- 								<caption>사용자 접근내역화면</caption> --%>
-<%-- 								<colgroup> --%>
-<%-- 									<col style="width: 5%;" /> --%>
-<%-- 									<col style="width: 10%;" /> --%>
-<%-- 									<col style="width: 10%;" /> --%>
-<%-- 									<col style="width: 15%;" /> --%>
-<%-- 									<col style="width: 10%;" /> --%>
-<%-- 									<col style="width: 10%;" /> --%>
-<%-- 									<col style="width: 10%;" /> --%>
-<%-- 									<col style="width: 10%;" /> --%>
-<%-- 									<col style="width: 10%;" /> --%>
-<%-- 								</colgroup> --%>
-<!-- 								<thead> -->
-<!-- 									<tr style="border-bottom: 1px solid #b8c3c6;"> -->
-<%-- 										<th scope="col"><spring:message code="common.no" /></th> --%>
-<%-- 										<th scope="col"><spring:message code="history_management.date" /></th> --%>
-<%-- 										<th scope="col"><spring:message code="history_management.time" /></th> --%>
-<%-- 										<th scope="col"><spring:message code="history_management.screen" /></th> --%>
-<%-- 										<th scope="col"><spring:message code="history_management.id" /></th> --%>
-<%-- 										<th scope="col"><spring:message code="history_management.user_name" /></th> --%>
-<%-- 										<th scope="col"><spring:message code="history_management.department" /></th> --%>
-<%-- 										<th scope="col"><spring:message code="history_management.position" /></th> --%>
-<%-- 										<th scope="col"><spring:message code="history_management.ip" /></th> --%>
-<!-- 									</tr> -->
-<!-- 								</thead> -->
-<!-- 								<tbody> -->
-<%-- 									<c:forEach var="result" items="${result}" varStatus="status"> --%>
-<!-- 										<tr> -->
-<%-- 											<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td> --%>
-<%-- 											<td style="text-align: left;"><c:out value="${result.exedtm_date}" /></td> --%>
-<%-- 											<td style="text-align: left;"><c:out value="${result.exedtm_hour}" /></td> --%>
-<%-- 											<td style="text-align: left;"><c:out value="${result.sys_cd_nm}" /></td> --%>
-<%-- 											<td style="text-align: left;"><c:out value="${result.usr_id}" /></td> --%>
-<%-- 											<td style="text-align: left;"><c:out value="${result.usr_nm}" /></td> --%>
-<%-- 											<td style="text-align: left;"><c:out value="${result.dept_nm}" /></td> --%>
-<%-- 											<td style="text-align: left;"><c:out value="${result.pst_nm}" /></td> --%>
-<%-- 											<td style="text-align: left;"><c:out value="${result.lgi_ipadr}" /></td> --%>
-<!-- 										</tr> -->
-<%-- 									</c:forEach> --%>
-<!-- 								</tbody> -->
-<!-- 							</table> -->
-<!-- 						</div> -->
-
-<!-- 						<Br><BR> -->
-<!-- 						<div id="paging" class="paging"> -->
-<!-- 							<ul id='pagininfo'> -->
-<%-- 								<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" /> --%>
-<%-- 								<form:hidden path="pageIndex" /> --%>
-<!-- 							</ul> -->
-<!-- 						</div> -->
-<%-- 					</form:form> --%>
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
