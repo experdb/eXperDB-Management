@@ -19,31 +19,6 @@
 	*
 	*/
 %>   
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/jquery.dataTables.min.css"/>
-<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/dataTables.jqueryui.min.css"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
-
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/js/common.js"></script>
-<style>
-#serverIpadr_wrapper{
-	width:725px;
-}
-</style>
 <script type="text/javascript">
 
 //연결테스트 확인여부
@@ -63,7 +38,7 @@ $(window.document).ready(function() {
   function fn_validation(){
 
 		if(connection != "success"){
-			alert('<spring:message code="message.msg89" />');
+			showSwalIcon('<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 		
@@ -91,13 +66,11 @@ $(window.document).ready(function() {
  	     },
  		error : function(xhr, status, error) {
  			if(xhr.status == 401) {
- 				alert('<spring:message code="message.msg02" />');
- 				top.location.href = "/";
+ 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
  			} else if(xhr.status == 403) {
- 				alert('<spring:message code="message.msg03" />');
- 				top.location.href = "/";
+ 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
  			} else {
- 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+ 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
  			}
  		},
  		success : function(result) {
@@ -141,13 +114,11 @@ $(window.document).ready(function() {
   	     },
   		error : function(xhr, status, error) {
   			if(xhr.status == 401) {
-  				alert('<spring:message code="message.msg02" />');
-  				top.location.href = "/";
+  				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
   			} else if(xhr.status == 403) {
-  				alert('<spring:message code="message.msg03" />');
-  				top.location.href = "/";
+  				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
   			} else {
-  				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+  				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
   			}
   		},
   		success : function(result) {
@@ -159,83 +130,125 @@ $(window.document).ready(function() {
 	}
  
 </script>
-
-</head>
-<body>
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit"><spring:message code="migration.source/target_dbms_modify"/></p>
-		<form name="dbserverInsert" id="dbserverInsert" method="post">
-		<table class="write">
-			<caption>소스/타겟 DBMS 수정</caption>
-			<colgroup>
-				<col style="width:130px;" />
-				<col style="width:330px;" />
-				<col style="width:100px;" />
-				<col />
-				
-			</colgroup>
-			<tbody>
-				<tr>
-					<th scope="row" class="ico_t1" ><spring:message code="migration.system_name"/>(*)</th>
-					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" value="${resultInfo[0].db2pg_sys_nm}" readonly/></td>
-				</tr>
-							
-				<tr>
-					<th scope="row" class="ico_t1" >DBMS<spring:message code="properties.division"/>(*)</th>
-						<td><select name="dbms_dscd" id="dbms_dscd" class="select"  style="width:205px;" onFocus='this.initialSelect = this.selectedIndex;' onChange='this.selectedIndex = this.initialSelect;'>
-										<option value=""><spring:message code="common.choice" /></option>				
+<div class="modal fade" id="pop_layer_db2pg_dbms_reg_re" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">
+		<div class="modal-content" style="width:1040px;">		 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="migration.source/target_dbms_modify"/>
+				</h4>
+				<div class="card" style="margin-top:10px;border:0px;">
+					<form class="cmxform" name="dbserverInsert" id="dbserverInsert" method="post">
+						<fieldset>
+							<div class="card-body" style="border: 1px solid #adb5bd;">
+								<div class="form-group row">
+									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="migration.system_name" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input style="display:none" aria-hidden="true">
+										<input type="text" class="form-control" style="width: 100%;" autocomplete="off" maxlength="20" id="db2pg_sys_nm_reg_re" name="db2pg_sys_nm_reg_re" onkeyup="fn_checkWord(this,20)" value="${resultInfo[0].db2pg_sys_nm}" readonly />
+									</div>
+									<div class="col-sm-1_5">
+										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" type="button" onclick="fn_sysnmCheck();" value='<spring:message code="common.overlap_check" />' />
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="ins_usr_nm" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										DBMS<spring:message code="properties.division"/>(*)
+									</label>
+									<div class="col-sm-4">
+										<select name="dbms_dscd" id="dbms_dscd" class="form-control"  style="margin-right: 1rem;width: 100% !important;" onFocus='this.initialSelect = this.selectedIndex;' onChange='this.selectedIndex = this.initialSelect;'>
+											<option value=""><spring:message code="common.choice" /></option>				
 											<c:forEach var="result" items="${result}" varStatus="status">				
 											<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${resultInfo[0].dbms_dscd_nm eq result.sys_cd_nm}"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>								 
  												<%-- <option value="<c:out value="${result.sys_cd}"/><c:if test="${resultInfo[0].dbms_dscd eq result.sys_cd_nm}"> selected</c:if>" ><c:out value="${result.sys_cd_nm}"/></option> --%>
  											</c:forEach>
-									</select>
-						<%-- <span class="btn btnC_01" id="pgbtn"><button type="button" class= "btn_type_02" onclick="fn_pgdbmsCall()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="migration.loading"/></button></span></td> --%>
-				</tr>
-				
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="data_transfer.ip"/>(*)</th>
-					<td><input type="text" class="txt" name="ipadr" id="ipadr"  value="${resultInfo[0].ipadr}"/></td>
-					<th scope="row" class="ico_t1"><spring:message code="data_transfer.port"/>(*)</th>
-					<td><input type="text" class="txt" name="portno" id="portno" value="${resultInfo[0].portno}"/></td>
-				</tr>	
-				
-				<tr>
-					<th scope="row" class="ico_t1">Database(*)</th>
-					<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" value="${resultInfo[0].dtb_nm}"/></td>
-					<th scope="row" class="ico_t1">Schema(*)</th>
-					<td><input type="text" class="txt" name="scm_nm" id="scm_nm" value="${resultInfo[0].scm_nm}"/></td>	
-				</tr>	
-				
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="dbms_information.account"/>(*)</th>
-					<td><input type="text" class="txt" name="spr_usr_id" id="spr_usr_id" value="${resultInfo[0].spr_usr_id}"/></td>
-					<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
-					<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" /></td>
-				</tr>	
+										</select>
+									</div>
+<!-- 									<div class="col-sm-1_5"> -->
+<%-- 										<input class="btn btn-inverse-primary btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" id="pgbtn" type="button" onclick="fn_pgdbmsCall();" value='<spring:message code="migration.loading" />' /> --%>
+<!-- 									</div> -->
+								</div>
+								<div class="form-group row">
+									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="data_transfer.ip" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input style="display:none" aria-hidden="true">
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="ipadr_reg" name="ipadr_reg" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" value="${resultInfo[0].ipadr}" />
+									</div>
+									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="data_transfer.port" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input style="display:none" aria-hidden="true">
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="portno_reg" name="portno_reg" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" value="${resultInfo[0].portno}" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Database(*)
+									</label>
+									<div class="col-sm-4">
+										<input style="display:none" aria-hidden="true">
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="dtb_nm_reg" name="dtb_nm_reg" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" value="${resultInfo[0].dtb_nm}" />
+									</div>
+									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;" >
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Schema(*)
+									</label>
+									<div class="col-sm-4">
+										<input style="display:none" aria-hidden="true">
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="schema_any_reg" name="scm_nm_reg" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" value="${resultInfo[0].scm_nm}"/>
+										<select name="scm_nm" id="schema_pg_reg" class="form-control"></select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.account"/>(*)
+									</label>
+									<div class="col-sm-4">
+										<input style="display:none" aria-hidden="true">
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="spr_usr_id_reg" name="spr_usr_id_reg" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" />
+									</div>
+									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.password" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input style="display:none" aria-hidden="true">
+										<input type="password" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="pwd_reg" name="pwd_reg" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="ins_usr_nm" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="migration.character_set"/>(*)
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control" style="margin-right: 1rem;width: 100% !important;" name="crts_nm_reg" id="crts_nm_reg" onChange ="fn_charChange()"></select>
+									</div>
+								</div>
+							</div>
+
+							<br/>
 							
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="migration.character_set"/>(*)</th>
-						<td><select name="crts_nm" id="crts_nm" class="select t9">			
-										<c:forEach var="dbmsChar" items="${dbmsChar}" varStatus="status">				
-											<option value="<c:out value="${dbmsChar.sys_cd}"/>"<c:if test="${resultInfo[0].crts eq dbmsChar.sys_cd}"> selected</c:if>><c:out value="${dbmsChar.sys_cd_nm}"/></option>								 
- 												<%-- <option value="<c:out value="${result.sys_cd}"/><c:if test="${resultInfo[0].dbms_dscd eq result.sys_cd_nm}"> selected</c:if>" ><c:out value="${result.sys_cd_nm}"/></option> --%>
- 										</c:forEach>
-								</select>
-								<input type="hidden" name="db2pg_sys_id" id="db2pg_sys_id" value="${resultInfo[0].db2pg_sys_id}"/>
-						</td>				
-				</tr>			
-					
-			</tbody>
-		</table>
-		</form>
-		<div class="btn_type_02">
-			<span class="btn"><button type="button" onClick="fn_updateDBMS();"><spring:message code="common.modify" /></button></span>
-			<span class="btn btnF_01 btnC_01"><button type="button" onClick="fn_connTest();"><spring:message code="dbms_information.conn_Test"/></button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /> </span></a>
+							<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_insertDBMS();" value='<spring:message code="common.registory" />' />
+								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_connTest();" value='<spring:message code="dbms_information.conn_Test" />' />
+								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-
-</body>
-</html>

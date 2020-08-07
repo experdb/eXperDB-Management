@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<%@include file="../../cmmn/cs.jsp"%>
+<%@include file="../../cmmn/cs2.jsp"%>
 <%
 	/**
 	* @Class Name : sourceDBMS.jsp
@@ -115,13 +115,11 @@ $(window.document).ready(function() {
 	  	     },
 	  		error : function(xhr, status, error) {
 	  			if(xhr.status == 401) {
-	  				alert('<spring:message code="message.msg02" />');
-	  				top.location.href = "/";
+	  				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 	  			} else if(xhr.status == 403) {
-	  				alert('<spring:message code="message.msg03" />');
-	  				top.location.href = "/";
+	  				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 	  			} else {
-	  				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+	  				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 	  			}
 	  		},
 	  		success : function(result) {
@@ -135,14 +133,7 @@ $(window.document).ready(function() {
  * DBMS 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	var popUrl = "/db2pg/popup/dbmsRegForm.do"; // 서버 url 팝업경로
-	var width = 1000;
-	var height = 520;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-	window.open(popUrl,"",popOption);	
+	$('#pop_layer_db2pg_dbms_reg').modal("show");
 }
 
 
@@ -154,24 +145,26 @@ function fn_regRe_popup(){
 	var datas = table.rows('.selected').data();
 	
 	if (datas.length <= 0) {
-		alert('<spring:message code="message.msg35" />');
+		showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else if (datas.length >1){
-		alert('<spring:message code="message.msg38" />');
+		showSwalIcon('<spring:message code="message.msg38" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	
-	var db2pg_sys_id = table.row('.selected').data().db2pg_sys_id;
+	$('#pop_layer_db2pg_dbms_reg_re').modal("hide");
 	
-	var popUrl = "/db2pg/popup/dbmsRegReForm.do?db2pg_sys_id="+db2pg_sys_id;
-	var width = 1000;
-	var height = 520;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+// 	var db2pg_sys_id = table.row('.selected').data().db2pg_sys_id;
 	
-	var winPop = window.open(popUrl,"ddlRegRePop",popOption);
-	winPop.focus();
+// 	var popUrl = "/db2pg/popup/dbmsRegReForm.do?db2pg_sys_id="+db2pg_sys_id;
+// 	var width = 1000;
+// 	var height = 520;
+// 	var left = (window.screen.width / 2) - (width / 2);
+// 	var top = (window.screen.height /2) - (height / 2);
+// 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	
+// 	var winPop = window.open(popUrl,"ddlRegRePop",popOption);
+// 	winPop.focus();
 }
 
 /* ********************************************************
@@ -180,7 +173,7 @@ function fn_regRe_popup(){
 function fn_delete(){
 	var datas = table.rows('.selected').data();
 	if(datas.length != 1){
-		alert("<spring:message code='message.msg16' />");
+		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
 		if(confirm('<spring:message code="message.msg162"/>')){
@@ -202,18 +195,16 @@ function fn_delete(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("<spring:message code='message.msg02' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert("<spring:message code='message.msg03' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {
 					if(result>0){
-						alert('해당 DBMS가 등록된 설정들이 존재합니다.');
+						showSwalIcon('해당 DBMS가 등록된 설정들이 존재합니다.', '<spring:message code="common.close" />', '', 'error');
 					}else{
 							$.ajax({
 								url : "/db2pg/deleteDBMS.do",
@@ -226,21 +217,19 @@ function fn_delete(){
 							     },
 								error : function(xhr, status, error) {
 									if(xhr.status == 401) {
-										alert('<spring:message code="message.msg02" />');
-										top.location.href = "/";
+										showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 									} else if(xhr.status == 403) {
-										alert('<spring:message code="message.msg03" />');
-										top.location.href = "/";
+										showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 									} else {
-										alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+										showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 									}
 								},
 								success : function(result) {
 									if(result == true){
-										alert("<spring:message code='message.msg37' />");
+										showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
 										fn_search();
 									}else{
-										alert('<spring:message code="migration.msg09"/>');
+										showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
 									}	
 								}
 							});	
@@ -252,62 +241,74 @@ function fn_delete(){
 }
 
 </script>
+<%@include file="./../popup/dbmsRegForm.jsp"%>
+<%@include file="./../popup/dbmsRegReForm.jsp"%>
+<%@include file="./../popup/pgDbmsRegForm.jsp"%>
 
-
-
-
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="migration.source/target_dbms_management"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="help.source/target_dbms_management_01"/></li>			
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Migration</li> 
-					<li class="on"><spring:message code="migration.source/target_dbms_management"/></li>
-				</ul>
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="migration.source/target_dbms_management"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Migration</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="migration.source/target_dbms_management"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.source/target_dbms_management_01"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- title end -->
+				</div>
 			</div>
 		</div>
+		
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 
-
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-						<span class="btn" onClick="fn_search()" id="read_button"><button type="button"><spring:message code="common.search" /></button></span>
-						<span class="btn" onclick="fn_reg_popup();" id="int_button"><button type="button"><spring:message code="common.registory" /></button></span>
-						<span class="btn" onclick="fn_regRe_popup();" id="mdf_button"><button type="button"><spring:message code="common.modify" /></button></span>
-						<span class="btn" onclick="fn_delete();" id="del_button"><button type="button"><spring:message code="common.delete" /></button></span>
-				</div>
-				<div class="sch_form">
-					<table class="write">
-						<caption>Source DBMS 조회</caption>
-						<colgroup>
-							<col style="width:10%;" />
-							<col style="width:20%;" />
-							<col style="width:10%;" />
-							<col style="width:20%;" />
-							<col style="width:10%;" />
-							<col style="width:20%;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="migration.system_name"/></th>
-								<td><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>
-								<th scope="row" class="t9"><spring:message code="history_management.ip"/></th>
-								<td><input type="text" class="txt t3" name="ipadr" id="ipadr" /></td>
-								<th scope="row" class="t9"><spring:message code="common.database" /></th>
-								<td><input type="text" class="txt t3" name="dtb_nm" id="dtb_nm" /></td>
-							</tr>
-							<tr>
-								<th scope="row" class="t9">DBMS<spring:message code="common.division" /></th>
-								<td>
-									<select name="dbms_dscd" id="dbms_dscd" class="select t5" >
-										<option value=""><spring:message code="common.total" /></option>				
+							<form class="form-inline">
+								<div class="input-group mb-2 mr-sm-2">
+									<input type="text" class="form-control" style="width:180px; margin-right: 2rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.system_name" />'/>		
+								</div>
+								<div class="input-group mb-2 mr-sm-2">
+									<input type="text" class="form-control" style="width:180px; margin-right: 2rem;" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="history_management.ip" />'/>		
+								</div>
+								<div class="input-group mb-2 mr-sm-2">
+									<input type="text" class="form-control" style="width:180px; margin-right: 2rem;" id="dtb_nm" name="dtb_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.database" />'/>		
+								</div>
+								<div class="input-group mb-2 mr-sm-2">
+									<select class="form-control" style="width:200px; margin-right: 1rem;" name="dbms_dscd" id="dbms_dscd">
+										<option value="">DBMS&nbsp;<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
 											<c:forEach var="result" items="${result}" varStatus="status">												 
  												<option value="<c:out value="${result.dbms_dscd}"/>" >
 	 												<c:if test="${result.dbms_dscd == 'TC002201'}"> 	<c:out value="Oracle"/> </c:if>
@@ -320,38 +321,86 @@ function fn_delete(){
 													<c:if test="${result.dbms_dscd == 'TC002208'}"> 	<c:out value="Tibero"/> </c:if>
  												</option>
  											</c:forEach>
-									</select>								
-								</td>
-								<th scope="row" class="t9"><spring:message code="dbms_information.account" /></th>
-								<td><input type="text" class="txt t3" name="spr_usr_id" id="spr_usr_id" /></td>
-								<th scope="row" class="t9">Schema</th>
-								<td><input type="text" class="txt t3" name="scm_nm" id="scm_nm" /></td>
-							</tr>
-						</tbody>
-					</table>
+									</select>
+								</div>
+								<div class="input-group mb-2 mr-sm-2">
+									<input type="text" class="form-control" style="width:180px; margin-right: 2rem;" id="spr_usr_id" name="spr_usr_id" onblur="this.value=this.value.trim()" placeholder='<spring:message code="dbms_information.account" />'/>		
+								</div>
+								<div class="input-group mb-2 mr-sm-2">
+									<input type="text" class="form-control" style="width:180px; margin-right: 2rem;" id="scm_nm" name="scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema'/>		
+								</div>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="read_button" onClick="fn_search();" >
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
+
+							</form>
+						</div>
+					</div>
 				</div>
-				<div class="overflow_area">
-					<table id="dbms" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="30"><spring:message code="common.no" /></th>
-								<th width="130"><spring:message code="migration.system_name"/></th>
-								<th width="100">DBMS<spring:message code="common.division" /></th>
-								<th width="130"><spring:message code="data_transfer.ip" /></th>
-								<th width="100">Database</th>
-								<th width="150">Schema</th>
-								<th width="80"><spring:message code="data_transfer.port" /></th>
-								<th width="100"><spring:message code="dbms_information.account" /></th>
-								<th width="130"><spring:message code="migration.character_set"/></th>
-								<th width="100"><spring:message code="common.register" /></th>
-								<th width="120"><spring:message code="common.regist_datetime" /></th>
-								<th width="100"><spring:message code="common.modifier" /></th>
-								<th width="120"><spring:message code="common.modify_datetime" /></th>
-								<th width="0"><spring:message code="common.modify_datetime" /></th>
-							</tr>
-						</thead>
-					</table>
+			</div>
+		</div>
+
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<div class="row" style="margin-top:-20px;">
+						<div class="col-12">
+							<div class="template-demo">			
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="del_button" onClick="fn_delete();" >
+									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="mdf_button" onClick="fn_regRe_popup();" data-toggle="modal">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="int_button" onClick="fn_reg_popup();" data-toggle="modal">
+									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
+								</button>
+							</div>
+						</div>
+					</div>
+				
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<table id="dbms" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="30"><spring:message code="common.no" /></th>
+												<th width="130"><spring:message code="migration.system_name"/></th>
+												<th width="100">DBMS<spring:message code="common.division" /></th>
+												<th width="130"><spring:message code="data_transfer.ip" /></th>
+												<th width="100">Database</th>
+												<th width="150">Schema</th>
+												<th width="80"><spring:message code="data_transfer.port" /></th>
+												<th width="100"><spring:message code="dbms_information.account" /></th>
+												<th width="130"><spring:message code="migration.character_set"/></th>
+												<th width="100"><spring:message code="common.register" /></th>
+												<th width="120"><spring:message code="common.regist_datetime" /></th>
+												<th width="100"><spring:message code="common.modifier" /></th>
+												<th width="120"><spring:message code="common.modify_datetime" /></th>
+												<th width="0"><spring:message code="common.modify_datetime" /></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
 				</div>
+				<!-- content-wrapper ends -->
 			</div>
 		</div>
 	</div>
