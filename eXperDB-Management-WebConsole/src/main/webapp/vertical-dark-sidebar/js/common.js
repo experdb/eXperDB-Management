@@ -124,6 +124,8 @@
 				fn_backupHistory_move();
 			} else if (rstGbn == "rman_restore") {
 				fn_restoreLogCall();
+			}else if(rstGbn =="insertScd"){
+				location.href = "/selectScheduleListView.do";
 			}
         });
 	}
