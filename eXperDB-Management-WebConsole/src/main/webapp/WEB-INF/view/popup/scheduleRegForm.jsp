@@ -1,41 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/commonLocale.jsp"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
 
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/js/common.js"></script>
-
+<%@include file="../cmmn/commonLocale.jsp"%>  
+<%@include file="../cmmn/workRmanInfo.jsp"%>
+<%@include file="../cmmn/workDumpInfo.jsp"%>
 
 <script>
-var table = null;
-function fn_init() {
+var work_table = null;
+function fn_init2() {
 		/* ********************************************************
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
-		table = $('#workList').DataTable({
+		work_table = $('#workList2').DataTable({
 		scrollY : "245px",
 		scrollX: true,	
 		bSort: false,
@@ -87,35 +67,35 @@ function fn_init() {
 	});
 		
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '35px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');  
-		table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');  
-		table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(17)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(18)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(19)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(20)').css('min-width', '0px');  
-		table.tables().header().to$().find('th:eq(21)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(22)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(23)').css('min-width', '0px');  
-		table.tables().header().to$().find('th:eq(24)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(25)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(26)').css('min-width', '0px');  
-		table.tables().header().to$().find('th:eq(27)').css('min-width', '0px');
-		table.tables().header().to$().find('th:eq(28)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		work_table.tables().header().to$().find('th:eq(1)').css('min-width', '35px');
+		work_table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+		work_table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
+		work_table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+		work_table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
+		work_table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
+		work_table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
+		work_table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
+		work_table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');  
+		work_table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');  
+		work_table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(17)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(18)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(19)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(20)').css('min-width', '0px');  
+		work_table.tables().header().to$().find('th:eq(21)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(22)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(23)').css('min-width', '0px');  
+		work_table.tables().header().to$().find('th:eq(24)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(25)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(26)').css('min-width', '0px');  
+		work_table.tables().header().to$().find('th:eq(27)').css('min-width', '0px');
+		work_table.tables().header().to$().find('th:eq(28)').css('min-width', '0px');
 		
 		$(window).trigger('resize'); 
 }
@@ -125,7 +105,7 @@ function fn_init() {
  ******************************************************** */
 $(window.document).ready(function() {
 	
-	fn_init();
+	fn_init2();
 	
 	 /* ********************************************************
 	  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
@@ -140,13 +120,11 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {		
@@ -174,13 +152,11 @@ $(window.document).ready(function() {
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {		
@@ -200,7 +176,7 @@ $(window.document).ready(function() {
  ******************************************************** */
 function fn_search(){
 	if($("#db_svr_nm").val() == "%"){
-		alert('<spring:message code="message.msg152"/>');
+		showSwalIcon('<spring:message code="message.msg152" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 
@@ -218,19 +194,17 @@ function fn_search(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
-			table.rows({selected: true}).deselect();
-			table.clear().draw();
-			table.rows.add(result).draw();
+			work_table.rows({selected: true}).deselect();
+			work_table.clear().draw();
+			work_table.rows.add(result).draw();
 		}
 	});
 }
@@ -239,24 +213,24 @@ function fn_search(){
 /* ********************************************************
  * work 등록
  ******************************************************** */
-function fn_workAdd(){
-	var datas = table.rows('.selected').data();
+function fn_workAdd2(){
+	var datas = work_table.rows('.selected').data();
 	if (datas.length <= 0) {
-		alert('<spring:message code="message.msg35" />');
+		showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	} 
 	
 	var rowList = [];
     for (var i = 0; i < datas.length; i++) {
-        rowList.push( table.rows('.selected').data()[i].wrk_id);   
+        rowList.push( work_table.rows('.selected').data()[i].wrk_id);   
 	   //rowList.push( table.rows('.selected').data()[i]);     
   }	
-	opener.fn_workAddCallback(JSON.stringify(rowList));
-	self.close();
+	fn_workAddCallback(JSON.stringify(rowList));
+	
+	$('#pop_layer_scd_reg').modal("hide");
 }
 </script>
 
-</head>
 <style>
 #scdinfo{
 	width: 35% !important;
@@ -275,94 +249,81 @@ function fn_workAdd(){
 	margin-top: 0px !important;
 }
 </style>
-<body>
-<%@include file="../cmmn/commonLocale.jsp"%>  
-<%@include file="../cmmn/workRmanInfo.jsp"%>
-<%@include file="../cmmn/workDumpInfo.jsp"%>
-
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit"><spring:message code="schedule.workReg"/></p>
-			<div class="btn_type_01">
-				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
+<div class="modal fade" id="pop_layer_scd_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 180px;">
+		<div class="modal-content" style="width:1300px;">		 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="schedule.workReg"/>
+				</h4>
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card-body" style="border: 1px solid #adb5bd;">
+						<div class="form-inline">
+							<div class="input-group mb-2 mr-sm-2">
+								<select class="form-control" style="width:200px; margin-right: 1rem;" name="db_svr_nm" id="db_svr_nm">
+									<option value="%"><spring:message code="common.dbms_name" />&nbsp;<spring:message code="schedule.total" /></option>
+								</select>
+							</div>
+							<div class="input-group mb-2 mr-sm-2">
+								<select class="form-control" style="width:150px; margin-right: 2rem;" name="work" id="work">
+									<option value="%"><spring:message code="common.choice" />&nbsp;<spring:message code="common.division" /></option>
+								</select>
+							</div>
+							<div class="input-group mb-2 mr-sm-2">
+								<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" />
+							</div>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search();" >
+								<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+							</button>
+						</div>
+					</div>
+					<br>
+					
+					<div class="card-body" style="border: 1px solid #adb5bd;">
+						<p class="card-description"><spring:message code="schedule.workList"/></p>
+						<table id="workList2" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="10"></th>
+									<th width="35"><spring:message code="common.no" /></th>
+									<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
+									<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>
+									<th width="70"><spring:message code="common.division" /></th>
+									<th width="100"><spring:message code="backup_management.detail_div"/></th>
+									<th width="150"><spring:message code="common.dbms_name" /></th>
+									<th width="100"><spring:message code="common.register" /></th>
+									<th width="100"><spring:message code="common.regist_datetime" /></th>						
+									<th width="0"></th>
+									<th width="0"></th>						
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					<br>
+					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+						<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onclick="fn_workAdd2()" value='<spring:message code="common.add" />' />
+						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+					</div>
+				</div>
 			</div>
-		<div class="pop_cmm">							
-			<table class="write bdtype1">
-				<caption><spring:message code="menu.schedule_registration" /></caption>				
-				<colgroup>
-					<col style="width:30px;" />
-					<col style="width:50px;" />
-					<col style="width:30px;" />
-					<col style="width:50px;" />
-					<col style="width:30px;" />
-					<col style="width:100px;" />			
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" /></th>
-						<td>
-						<select class="select t8" name="db_svr_nm" id="db_svr_nm" style="width: 170px;">
-								<option value="%"><spring:message code="schedule.total" /></option>
-						</select>	
-						<th scope="row" class="ico_t1"><spring:message code="common.division" /></th>
-						<td>
-						<select class="select t8" name="work" id="work">
-								<option value="%"><spring:message code="common.choice" /></option>
-						</select>						
-						</td>									
-						<th scope="row" class="ico_t1" style="magin-left:50px;" ><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>				
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<div class="pop_cmm3">
-			<p class="pop_s_tit"><spring:message code="schedule.workList"/></p>
-			<div class="overflow_area">
-				<table id="workList" class="display" cellspacing="0" width="100%">
-				<thead>
-					<tr>
-						<th width="10"></th>
-						<th width="35"><spring:message code="common.no" /></th>
-						<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
-						<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>
-						<th width="70"><spring:message code="common.division" /></th>
-						<th width="100"><spring:message code="backup_management.detail_div"/></th>
-						<th width="150"><spring:message code="common.dbms_name" /></th>
-						<th width="100"><spring:message code="common.register" /></th>
-						<th width="100"><spring:message code="common.regist_datetime" /></th>						
-						<th width="0"></th>
-						<th width="0"></th>						
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-						<th width="0"></th>
-					</tr>
-				</thead>
-			</table>		
-			</div>
-		</div>
-		
-		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onClick="fn_workAdd();" type="button"><spring:message code="common.add" /></button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>
-</body>
-</html>

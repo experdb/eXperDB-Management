@@ -4,7 +4,7 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<%@include file="../../cmmn/cs.jsp"%>
+<%@include file="../../cmmn/cs2.jsp"%>
     <script>
     function fn_validation(){
     	var arySrtDt = $('#from').val(); // ex) 시작일자(2007-10-09)
@@ -21,14 +21,15 @@
     
 	$(window.document).ready(function() {
 		fn_buttonAut();		
+		
+		//작업기간 calender setting
+		dateCalenderSetting();
+		
 		var lgi_dtm_start = "${lgi_dtm_start}";
 		var lgi_dtm_end = "${lgi_dtm_end}";
 		if (lgi_dtm_start != "" && lgi_dtm_end != "") {
 			$('#from').val(lgi_dtm_start);
 			$('#to').val(lgi_dtm_end);
-		} else {
-			$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-			$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 		}
 		
 		var exe_result = "${exe_result}";
@@ -46,33 +47,40 @@
 	
 	});
 	
-	$(function() {		
-		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#to").datepicker("option", "minDate", selectedDate);
-			}
-		})
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function dateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
 
-		to = $("#to").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#from").datepicker("option", "maxDate", selectedDate);
-			}
-		})
+		today.setDate(today.getDate());
+		var day_start = today.toJSON().slice(0,10); 
 
-		function getDate(element) {
-			var date;
-			try {
-				date = $.datepicker.parseDate(dateFormat, element.value);
-			} catch (error) {
-				date = null;
-			}
-			return date;
+		$("#from").val(day_start);
+		$("#to").val(day_end);
+
+		if ($("#wrk_strt_dtm_div").length) {
+			$('#wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
 		}
-	});
+
+		if ($("#wrk_end_dtm_div").length) {
+			$('#wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+		
+		$("#from").datepicker('setDate', day_start);
+	    $("#to").datepicker('setDate', day_end);
+	    $('#wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#wrk_end_dtm_div').datepicker('updateDates');
+	}
 	
 	function fn_buttonAut(){
 		var read_button = document.getElementById("read_button"); 
@@ -286,194 +294,202 @@
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
 <%@include file="../../cmmn/wrkLog.jsp"%>
 
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="menu.shedule_execution_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="help.shedule_execution_history" /></li>
-				</ul>
-			</div>					
-			<div class="location">
-				<ul>
-					<li>Function</li>
-					<li><spring:message code="menu.schedule_information" /></li>
-					<li class="on"><spring:message code="menu.shedule_execution_history" /></li>
-				</ul>
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+<!-- 												<i class="fa fa-check-square"></i> -->
+												<span class="menu-title"><spring:message code="menu.shedule_execution_history" /></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Function</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule_information" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.shedule_execution_history"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.shedule_execution_history" /></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- title end -->
+				</div>
 			</div>
 		</div>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<span class="btn" id="read_button"><button type="button" onClick="fn_selectScheduleHistory();"><spring:message code="common.search" /></button></span>
-				</div>
-				<form:form commandName="pagingVO" name="selectScheduleHistory" id="selectScheduleHistory" method="post">
-				<div class="sch_form">
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width: 60px;" />
-							<col style="width: 180px;" />
-							<col style="width: 50px;" />
-							<col style="width: 300px;" />
-							</col>
-						</colgroup>
-						<tbody>
-								<tr>
-									<th scope="row" class="t10" ><spring:message code="schedule.work_day" /></th>
-									<td>
-										<div class="calendar_area">
-											<a href="#n" class="calendar_btn">달력열기</a> 
-											<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" /> <span class="wave">~</span>
-											<a href="#n" class="calendar_btn">달력열기</a> 
-											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" />
-										</div>							
-									</td>
-									<th colspan="2">
-										<ul class="searchDate">
-											<li>
-												<span class="chkbox2">
-													<input type="radio" name="dateType" id="dateType1" onclick="setSearchDate('0d')"/>
-													<label for="dateType1"><spring:message code="schedule.today" /></label>
-												</span>
-											</li>
-											<li>
-												<span class="chkbox2">
-													<input type="radio" name="dateType" id="dateType2" onclick="setSearchDate('3d')"/>
-													<label for="dateType2"><spring:message code="schedule.three_day" /></label>
-												</span>
-											</li>
-											<li>
-												<span class="chkbox2">
-													<input type="radio" name="dateType" id="dateType3" onclick="setSearchDate('1w')"/>
-													<label for="dateType3"><spring:message code="schedule.one_week" /></label>
-												</span>
-											</li>
-											<li>
-												<span class="chkbox2">
-													<input type="radio" name="dateType" id="dateType4" onclick="setSearchDate('2w')"/>
-													<label for="dateType4"><spring:message code="schedule.two_weeks" /></label>
-												</span>
-											</li>
-											<li>
-												<span class="chkbox2">
-													<input type="radio" name="dateType" id="dateType5" onclick="setSearchDate('1m')"/>
-													<label for="dateType5"><spring:message code="schedule.one_month" /> </label>
-												</span>
-											</li>
-											<li>
-												<span class="chkbox2">
-													<input type="radio" name="dateType" id="dateType6" onclick="setSearchDate('3m')"/>
-													<label for="dateType6"><spring:message code="schedule.three_month" /></label>
-												</span>
-											</li>
-											<li>
-												<span class="chkbox2">
-													<input type="radio" name="dateType" id="dateType7" onclick="setSearchDate('6m')"/>
-													<label for="dateType7"><spring:message code="schedule.six_month" /></label>
-												</span>
-											</li>
-										</ul>
-									</th>
-								</tr>
-								<tr>
-									<th scope="row" class="t9" ><spring:message code="schedule.schedule_name" /> </th>
-									<td>
-										<input type="text" class="txt t2" id="scd_nm" name="scd_nm" value="${scd_nm}">
-									</td>
-									<th scope="row" class="t9"><spring:message code="common.dbms_name" /></th>
-									<td>
-										<input type="text" class="txt t2" id="db_svr_nm" name="db_svr_nm" value="${svr_nm}">
-									</td>									
-								</tr>	
-								<tr>
-									<th scope="row" class="t9"><spring:message code="schedule.result" /></th>
-									<td>
-										<select class="select t5" name="exe_result" id="exe_result">
-											<option value="%"><spring:message code="schedule.total" /></option>
+		
+		<form:form commandName="pagingVO" name="selectScheduleHistory" id="selectScheduleHistory" method="post" class="form-inline">
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body">
+							<div class="form-inline">
+								<div class="row">
+									<div class="input-group mb-2 mr-sm-2">
+										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="from" name="lgi_dtm_start" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+										<div class="input-group align-items-center">
+											<span style="border:none; padding: 0px 10px;"> ~ </span>
+										</div>
+										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="to" name="lgi_dtm_end" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div> 
+									<div class="input-group mb-2 mr-sm-2">
+										<input type="text" class="form-control" style="width:200px;margin-right: 2rem;" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />' value="${scd_nm}"/>		
+									</div>
+									<div class="input-group mb-2 mr-sm-2">
+										<input type="text" class="form-control" style="width:200px;margin-right: 2rem;" id="db_svr_nm" name="db_svr_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.dbms_name" />' value="${svr_nm}"/>		
+									</div>
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:150px; margin-right: 1rem;" name="exe_result" id="exe_result">
+											<option value="%"><spring:message code="schedule.result" />&nbsp;<spring:message code="schedule.total" /></option>
 											<option value="TC001701"><spring:message code="common.success" /></option>
 											<option value="TC001702"><spring:message code="common.failed" /></option>
-										</select>	
-									</td>
-									<th scope="row" class="t9"><spring:message code="history_management.sort" /></th>
-									<td>
-										<select class="select t5" id="order_type" name="order_type">
+										</select>
+									</div>
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:150px; margin-right: 1rem;" name="order_type" id="order_type">
 											<option value="wrk_strt_dtm" ${order_type == 'wrk_strt_dtm' ? 'selected="selected"' : ''}><spring:message code="schedule.work_start_datetime" /></option>
 											<option value="wrk_end_dtm" ${order_type == 'wrk_end_dtm' ? 'selected="selected"' : ''}><spring:message code="schedule.work_end_datetime" /></option>
-										</select>							
-										<select class="select t5" id="order" name="order">
+										</select>
+									</div>
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:150px; margin-right: 1rem;" name="order" id="order">
 											<option value="desc" ${order == 'desc' ? 'selected="selected"' : ''}><spring:message code="history_management.descending_order" /></option>
 											<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}><spring:message code="history_management.ascending_order" /> </option>		
 										</select>
-									</td>
-								</tr>	
-						</tbody>
-					</table>
+									</div>
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="read_button"onclick="fn_selectScheduleHistory()" >
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				
-				<div class="overflow_area" style="height: 365px;">
-					<table class="list" id="scheduleHistoryTable">
-						<caption>MY스케줄 화면</caption>
-						<colgroup>
-							<col style="width: 5%;" />
-							<col style="width: 30%;" />
-							<col style="width: 15%;" />
-							<col style="width: 15%;" />
-							<col style="width: 20%;" />
-							<col style="width: 20%;" />
-							<col style="width: 15%;" />
-							<col style="width: 10%;" />
-							<col style="width: 15%;" />
-						</colgroup>
-						<thead>
-							<tr style="border-bottom: 1px solid #b8c3c6;">
-								<th scope="col"><spring:message code="common.no" /></th>
-								<th scope="col"><spring:message code="schedule.schedule_name" /></th>
-								<th scope="col"><spring:message code="common.dbms_name" /></th>
-								<th scope="col"><spring:message code="dbms_information.dbms_ip" /></th>							
-								<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
-								<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
-								<th scope="col"><spring:message code="schedule.jobTime"/></th>
-								<th scope="col"><spring:message code="schedule.result" /></th>
-								<th scope="col"><spring:message code="schedule.detail_view" /></th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="result" items="${result}" varStatus="status">
-								<tr>
-									<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td>
-									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold" title="${result.scd_nm}"><c:out value="${result.scd_nm}" /></span></td>
-									<td style="text-align: left;"><c:out value="${result.db_svr_nm}" /></td>		
-									<td style="text-align: left;"><c:out value="${result.ipadr}" /></td>				
-									<td style="text-align: left;"><c:out value="${result.wrk_strt_dtm}" /></td>
-									<td style="text-align: left;"><c:out value="${result.wrk_end_dtm}" /></td>
-									<td style="text-align: left;"><c:out value="${result.wrk_dtm}" /></td>
-									<td>
-										<c:choose>
-											<c:when test="${result.exe_rslt_cd eq 'TC001701'}"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</c:when>
-									    	<c:when test="${result.exe_rslt_cd eq 'TC001702'}"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</c:when>
-									    	<c:otherwise>
-									    		<img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/>
-									    	</c:otherwise>
-										</c:choose>
-									</td>
-									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="<spring:message code="schedule.detail_view" />"></span></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>		
-				<Br><BR>
-						<div id="paging" class="paging">
-							<ul id='pagininfo'>
-								<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-								<form:hidden path="pageIndex" />
-							</ul>
-						</div>	
-				</form:form>
 			</div>
 		</div>
+
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+										<table class="table table-hover table-striped" id="accessHistoryTable">
+											<colgroup>
+												<col style="width: 5%;" />
+												<col style="width: 10%;" />
+												<col style="width: 10%;" />
+												<col style="width: 15%;" />
+												<col style="width: 10%;" />
+												<col style="width: 10%;" />
+												<col style="width: 10%;" />
+												<col style="width: 10%;" />
+												<col style="width: 10%;" />
+											</colgroup>
+											<thead>
+												<tr class="bg-primary text-white" style="border-bottom: 1px solid #b8c3c6;">
+													<th scope="col"><spring:message code="common.no" /></th>
+													<th scope="col"><spring:message code="schedule.schedule_name" /></th>
+													<th scope="col"><spring:message code="common.dbms_name" /></th>
+													<th scope="col"><spring:message code="dbms_information.dbms_ip" /></th>							
+													<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
+													<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
+													<th scope="col"><spring:message code="schedule.jobTime"/></th>
+													<th scope="col"><spring:message code="schedule.result" /></th>
+													<th scope="col"><spring:message code="schedule.detail_view" /></th>
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="result" items="${result}" varStatus="status">
+													<tr>
+														<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td>
+														<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold" title="${result.scd_nm}"><c:out value="${result.scd_nm}" /></span></td>
+														<td style="text-align: left;"><c:out value="${result.db_svr_nm}" /></td>		
+														<td style="text-align: left;"><c:out value="${result.ipadr}" /></td>				
+														<td style="text-align: left;"><c:out value="${result.wrk_strt_dtm}" /></td>
+														<td style="text-align: left;"><c:out value="${result.wrk_end_dtm}" /></td>
+														<td style="text-align: left;"><c:out value="${result.wrk_dtm}" /></td>
+														<td>
+															<c:choose>
+																<c:when test="${result.exe_rslt_cd eq 'TC001701'}">
+																	<div class='badge badge-pill badge-success'><i class='ti-face-smile  mr-2'></i>Success</div>
+																</c:when>
+														    	<c:when test="${result.exe_rslt_cd eq 'TC001702'}">
+														    		<div class='badge badge-pill badge-danger'><i class='ti-face-sad  mr-2'></i>Fail</div>
+														    	</c:when>
+														    	<c:otherwise>
+														    		<div class='badge badge-pill badge-warning'><i class='fa fa-spin fa-spinner mr-2'></i><spring:message code="etc.etc28"/></div>
+														    	</c:otherwise>
+															</c:choose>
+														</td>
+														<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="<spring:message code="schedule.detail_view" />"></span></td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+							 	</div>
+						 	</div>
+					</div>
+					<div class="card-body" >
+						 <div class="row">
+							<div class="col-sm-12 col-md-12">
+								 <ul id='pagininfo' class='pagination justify-content-center'> 
+							 		<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" /> 
+							 		<form:hidden path="pageIndex" /> 
+							 	</ul>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
+		</form:form>
 	</div>
-</div><!-- // contents -->
+</div>

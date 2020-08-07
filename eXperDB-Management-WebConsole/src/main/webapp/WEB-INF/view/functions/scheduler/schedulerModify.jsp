@@ -1,8 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<%@include file="../../cmmn/cs.jsp"%>
+<%@include file="../../cmmn/cs2.jsp"%>
 
 <script>
 var scd_id = ${scd_id};
@@ -39,8 +38,8 @@ function fn_init(){
 			render: function (data, type, full, meta,row) {
 				if (type === 'display') {
 					var $exe_order = $('<div class="order_exc">');
-					$('<a class="dtMoveUp"><img src="../images/ico_order_up.png" alt="" /></a>').appendTo($exe_order);					
-					$('<a class="dtMoveDown"><img src="../images/ico_order_down.png" alt="" /></a>').appendTo($exe_order);																												
+					$('<a class="dtMoveUp"><div class="badge badge-pill badge-success"><i class="fa fa-angle-double-up" style="font-size: 18px;cursor:pointer;"></i></div></a>').appendTo($exe_order);					
+					$('<a class="dtMoveDown"><div class="badge badge-pill badge-warning"><i class="fa fa-angle-double-down" style="font-size: 18px;cursor:pointer;"></i></div></a></a>').appendTo($exe_order);																										
 					$('</div>').appendTo($exe_order);
 					return $exe_order.html();
 				}
@@ -136,7 +135,7 @@ function fn_makeMonth(){
 	var month = "";
 	var monthHtml ="";
 	
-	monthHtml += '<select class="select t7" name="exe_month" id="exe_month">';	
+	monthHtml += '<select class="form-control" name="exe_month" id="exe_month">';	
 	for(var i=1; i<=12; i++){
 		if(i >= 0 && i<10){
 			month = "0" + i;
@@ -145,7 +144,7 @@ function fn_makeMonth(){
 		}
 		monthHtml += '<option value="'+month+'">'+month+'</option>';
 	}
-	monthHtml += '</select> <spring:message code="schedule.month" />';	
+	monthHtml += '</select> <spring:message code="schedule.month" />&emsp;';	
 	$( "#month" ).append(monthHtml);
 }
 
@@ -157,7 +156,7 @@ function fn_makeDay(){
 	var day = "";
 	var dayHtml ="";
 	
-	dayHtml += '<select class="select t7" name="exe_day" id="exe_day">';	
+	dayHtml += '<select class="form-control" name="exe_day" id="exe_day">';	
 	for(var i=1; i<=31; i++){
 		if(i >= 0 && i<10){
 			day = "0" + i;
@@ -166,9 +165,10 @@ function fn_makeDay(){
 		}
 		dayHtml += '<option value="'+day+'">'+day+'</option>';
 	}
-		dayHtml += '</select> <spring:message code="schedule.day" />';	
+		dayHtml += '</select> <spring:message code="schedule.day" />&emsp;';	
 	$( "#day" ).append(dayHtml);
 }
+
 
 
 /* ********************************************************
@@ -178,7 +178,7 @@ function fn_makeHour(){
 	var hour = "";
 	var hourHtml ="";
 	
-	hourHtml += '<select class="select t7" name="exe_h" id="exe_h">';	
+	hourHtml += '<select class="form-control" name="exe_h" id="exe_h">';	
 	for(var i=0; i<=23; i++){
 		if(i >= 0 && i<10){
 			hour = "0" + i;
@@ -187,7 +187,7 @@ function fn_makeHour(){
 		}
 		hourHtml += '<option value="'+hour+'">'+hour+'</option>';
 	}
-	hourHtml += '</select> <spring:message code="schedule.our" />';	
+	hourHtml += '</select> <spring:message code="schedule.our" />&emsp;';	
 	$( "#hour" ).append(hourHtml);
 }
 
@@ -199,7 +199,7 @@ function fn_makeMin(){
 	var min = "";
 	var minHtml ="";
 	
-	minHtml += '<select class="select t7" name="exe_m" id="exe_m">';	
+	minHtml += '<select class="form-control" name="exe_m" id="exe_m">';	
 	for(var i=0; i<=59; i++){
 		if(i >= 0 && i<10){
 			min = "0" + i;
@@ -208,7 +208,7 @@ function fn_makeMin(){
 		}
 		minHtml += '<option value="'+min+'">'+min+'</option>';
 	}
-	minHtml += '</select> <spring:message code="schedule.minute" />';	
+	minHtml += '</select> <spring:message code="schedule.minute" />&emsp;';	
 	$( "#min" ).append(minHtml);
 }
 
@@ -219,7 +219,7 @@ function fn_makeMin(){
 	var sec = "";
 	var secHtml ="";
 	
-	secHtml += '<select class="select t7" name="exe_s" id="exe_s">';	
+	secHtml += '<select class="form-control" name="exe_s" id="exe_s">';	
 	for(var i=0; i<=59; i++){
 		if(i >= 0 && i<10){
 			sec = "0" + i;
@@ -228,10 +228,9 @@ function fn_makeMin(){
 		}
 		secHtml += '<option value="'+sec+'">'+sec+'</option>';
 	}
-	secHtml += '</select> <spring:message code="schedule.second" />';	
+	secHtml += '</select> <spring:message code="schedule.second" />&emsp;';	
 	$( "#sec" ).append(secHtml);
-} 
-
+}
 
 /* ********************************************************
  * 페이지 시작시 함수
@@ -263,13 +262,11 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
@@ -331,13 +328,11 @@ function fn_db2pgWorkAddCallback(rowList){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {	
@@ -362,20 +357,12 @@ function fn_db2pgAdd(){
 	  	}
 		
 		if(cnt >0){
-			alert("스케줄에 백업 및 스크립트가 포함되어 있습니다.");
+			showSwalIcon('스케줄에 백업 및 스크립트가 포함되어 있습니다.', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 	}
 	
-	var popUrl = "/popup/db2pgWorkRegForm.do";
-	
-	var width = 1250;
-	var height = 685;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	window.open(popUrl,"",popOption);
+	$('#pop_layer_db2pg_reg').modal("show");
 }	
 	
 
@@ -398,24 +385,14 @@ function fn_workAdd(){
 	  	}
 		
 		if(cnt >0){
-			alert("스케줄에 MIGRATION이 포함되어 있습니다.");
+			showSwalIcon('스케줄에 MIGRATION이 포함되어 있습니다.', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 		
-		var popUrl = "/popup/scheduleRegForm.do?wrk_id_list="+wrk_id_list; 
+		$('#pop_layer_scd_reg').modal("show");
 	}else{
-		var popUrl = "/popup/scheduleRegForm.do";
+		$('#pop_layer_scd_reg').modal("show");
 	}
-	
-	var popUrl = "/popup/scheduleRegForm.do"; 
-	var width = 1220;
-	var height = 800;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	window.open(popUrl,"",popOption);
-
 }
 
 
@@ -477,13 +454,11 @@ function fn_workAddCallback(rowList){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {		
@@ -510,13 +485,11 @@ function fn_scheduleStop(){
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert('<spring:message code="message.msg02" />');
-    				top.location.href = "/";
+    				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
     			} else if(xhr.status == 403) {
-    				alert('<spring:message code="message.msg03" />');
-    				top.location.href = "/";
+    				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
     			} else {
-    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+    				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
     			}
     		},
     		success : function(result) {
@@ -550,7 +523,7 @@ function fn_updateSchedule(){
 	var datas = table.rows().data();
 
 	if(datas.length < 1){
-		alert('<spring:message code="message.msg39" />');
+		showSwalIcon('<spring:message code="message.msg39" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	
@@ -587,13 +560,11 @@ function fn_updateSchedule(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
@@ -645,13 +616,11 @@ function fn_scheduleReStart(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
@@ -677,143 +646,224 @@ function fn_dateValidation(exe_dt){
 	var today = yyyy +"" + mm + "" + dd;
 	
 	 if(today > exe_dt){
-		alert('<spring:message code="message.msg213"/>');
+		 showSwalIcon('<spring:message code="message.msg213" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	} 
 	 return true;
 } 
 </script>
+<%@include file="./../../popup/scheduleRegForm.jsp"%>
+<%@include file="./../../popup/db2pgWorkRegForm.jsp"%>
 
-			<div id="contents">
-				<div class="contents_wrap">
-					<div class="contents_tit">
-						<h4><spring:message code="schedule.scheduleMod"/> <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-						<div class="infobox"> 
-							<ul>
-								<li><spring:message code="message.msg172"/></li>
-							</ul>
-						</div>
-						<div class="location">
-							<ul>
-								<li>Function</li>
-								<li>Scheduler</li>
-								<li class="on"><spring:message code="schedule.scheduleMod"/></li>
-							</ul>
-						</div>
-					</div>
-					<div class="contents">
-						<div class="cmm_grp">
-							<div class="btn_type_01">
-								<span class="btn"><button type="button" onClick="fn_scheduleStop();"><spring:message code="button.modify" /></button></span>
-							</div>
-							<div class="sch_form">
-								<table class="write">
-									<caption>검색 조회</caption>
-									<colgroup>
-										<col style="width:160px;" />
-										<col />
-									</colgroup>
-									<tbody>
-										<tr>
-											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" />(*)</th>
-											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20" readonly="readonly" style="width:270px;"/></td>
-										</tr>
-										<tr>
-											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/>(*)</th>
-											<td>
-												<textarea class="tbd1" name="scd_exp" id="scd_exp" onkeyup="fn_checkWord(this,150)" maxlength="150" placeholder="150<spring:message code='message.msg188'/>"></textarea>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<div class="sch_form">
-								<table class="write">
-									<caption>스케줄 등록</caption>
-									<colgroup>
-										<col style="width:160px;" />
-										<col />
-									</colgroup>
-									<tbody>
-										<tr>
-											<th scope="row" class="ico_t4"><spring:message code="schedule.schedule_time_settings" /></th>
-											<td>
-												<div class="schedule_wrap">
-													<span>
-														<select class="select t5" name="exe_perd_cd" id="exe_perd_cd" onChange="fn_exe_pred();">
-															<option value="TC001601"><spring:message code="schedule.everyday" /></option>
-															<option value="TC001602"><spring:message code="schedule.everyweek" /></option>
-															<option value="TC001603"><spring:message code="schedule.everymonth" /></option>
-															<option value="TC001604"><spring:message code="schedule.everyyear" /></option>
-															<option value="TC001605"><spring:message code="schedule.one_time_run" /></option>
-														</select>
-													</span>
-													<span id="weekDay" >
-							                            <input type="checkbox" id="chk0" name="chk" value="0"><spring:message code="schedule.sunday" />
-							                            <input type="checkbox" id="chk1" name="chk" value="0"><spring:message code="schedule.monday" />
-							                            <input type="checkbox" id="chk2" name="chk" value="0"><spring:message code="schedule.thuesday" />
-							                            <input type="checkbox" id="chk3" name="chk" value="0"><spring:message code="schedule.wednesday" />
-							                            <input type="checkbox" id="chk4" name="chk" value="0"><spring:message code="schedule.thursday" />
-							                            <input type="checkbox" id="chk5" name="chk" value="0"><spring:message code="schedule.friday" />
-							                            <input type="checkbox" id="chk6" name="chk" value="0"><spring:message code="schedule.saturday" />
-                        							</span>
-													<span id="calendar">
-														<div class="calendar_area">
-															<a href="#n" class="calendar_btn">달력열기</a>
-															<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정"readonly />
-														</div>
-													</span>
-													<span>
-															<div id="month"></div>
-													</span>
-													<span>
-															<div id="day"></div>
-													</span>
-													<span>
-															<div id="hour"></div>
-													</span>
-													<span>
-															<div id="min"></div>
-													</span>
-													<span>
-															<div id="sec"></div>
-													</span>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-
-							<div class="cmm_bd">
-								<div class="sub_tit">
-									<p>Work <span id="add_button"></p>
-									<div class="sub_btn">
-										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_db2pgAdd();"><span id="db2pg_button">MIGRATION</span></a>
-										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();"><span><spring:message code="common.add" /></span></a>
-										<a href="#n" class="btn btnF_04" onclick="fn_workDel();"><span><spring:message code="button.delete" /></span></a>
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="schedule.scheduleMod"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Function</li>
+											<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Scheduler</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="schedule.scheduleMod"/></li>
+										</ol>
 									</div>
 								</div>
-								<div class="overflow_area">							
-									<table id="workList" class="display" cellspacing="0" width="100%">
-										<thead>
-											<tr>
-												<th width="10"></th>
-												<th width="30"><spring:message code="common.no" /></th>
-												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
-												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>											
-												<th width="100"><spring:message code="common.dbms_name" /></th>
-												<th width="100"><spring:message code="common.division" /></th>
-												<th width="130"><spring:message code="backup_management.detail_div" /></th>																								
-												<th width="80"><spring:message code="data_transfer.run_order" /></th>
-												<th width="80">OnError</th>
-												<th width="0"></th>
-											</tr>
-										</thead>
-									</table>											
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="message.msg172"/></p>
+										</div>
+									</div>
 								</div>
-							</div>		
+							</div>
 						</div>
 					</div>
+					<!-- title end -->
 				</div>
 			</div>
+		</div>
+
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="row" style="margin-top:-20px;">
+						<div class="col-12">
+							<div class="template-demo">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onClick="fn_scheduleStop();" data-toggle="modal">
+									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="button.modify" />
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="card my-sm-2">
+						<div class="card-body">
+							<div class="form-group row" style="margin-bottom:-10px;">
+								<label for="ins_dept_nm" class="col-sm-1_5 col-form-label pop-label-index">
+									<i class="item-icon fa fa-dot-circle-o"></i>
+									<spring:message code="schedule.schedule_name" />
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" maxlength="20" id="scd_nm" name="scd_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="20<spring:message code='message.msg188'/>"/>
+								</div>
+								<div class="col-sm-1_5">
+									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" type="button" onclick="fn_check();" value='<spring:message code="common.overlap_check" />' />
+								</div>
+							</div>
+							<div class="form-group row" style="margin-bottom:-10px;">
+								<label for="ins_pst_nm" class="col-sm-1_5 col-form-label pop-label-index">
+									<i class="item-icon fa fa-dot-circle-o"></i>
+									<spring:message code="schedule.scheduleExp" />
+								</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" maxlength="150" id="scd_exp" name="scd_exp" onkeyup="fn_checkWord(this,150)" onblur="this.value=this.value.trim()" placeholder="150<spring:message code='message.msg188'/>"/>
+								</div>
+							</div>
+							<div class="form-group row" style="margin-bottom:-10px;">
+								<label for="ins_pst_nm" class="col-sm-1_5 col-form-label pop-label-index">
+									<i class="item-icon fa fa-dot-circle-o"></i>
+									<spring:message code="schedule.schedule_time_settings" />
+								</label>
+								<div class="col-sm-2">
+									<select class="form-control" name="exe_perd_cd" id="exe_perd_cd" onChange="fn_exe_pred();">
+										<option value="TC001601"><spring:message code="schedule.everyday" /></option>
+										<option value="TC001602"><spring:message code="schedule.everyweek" /></option>
+										<option value="TC001603"><spring:message code="schedule.everymonth" /></option>
+										<option value="TC001604"><spring:message code="schedule.everyyear" /></option>
+										<option value="TC001605"><spring:message code="schedule.one_time_run" /></option>
+									</select>
+								</div>		
+								
+								<div class="col-sm-8 form-inline">	
+									<div id="weekDay" class="form-inline">
+										<div class="form-check form-check-primary">
+				                            <label class="form-check-label">
+				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.sunday" />&emsp;
+				                            </label>
+		                          		</div>
+		                          		<div class="form-check form-check-primary">
+				                            <label class="form-check-label">
+				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.monday" />&emsp;
+				                            </label>
+		                          		</div>
+		                          		<div class="form-check form-check-primary">
+				                            <label class="form-check-label">
+				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.thuesday" />&emsp;
+				                            </label>
+		                          		</div>
+		                          		<div class="form-check form-check-primary">
+				                            <label class="form-check-label">
+				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.wednesday" />&emsp;
+				                            </label>
+		                          		</div>
+		                          		<div class="form-check form-check-primary">
+				                            <label class="form-check-label">
+				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.thursday" />&emsp;
+				                            </label>
+		                          		</div>
+		                          		<div class="form-check form-check-primary">
+				                            <label class="form-check-label">
+				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.friday" />&emsp;
+				                            </label>
+		                          		</div>
+		                          		<div class="form-check form-check-primary">
+				                            <label class="form-check-label">
+				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.saturday" />&emsp;
+				                            </label>
+		                          		</div>
+		                          	</div>
+									<div class="col-sm-3"  id="calendar">
+										<div id="ins_usr_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" id="datepicker1" name="exe_dt" readonly tabindex=10 />
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>
+									<div id="month"></div>
+									<div id="day"></div>
+									<div id="hour"></div>
+									<div id="min"></div>
+									<div id="sec"></div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-12">
+									<div class="template-demo">			
+										<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="del_button" onClick="fn_workDel();" >
+											<i class="ti-minus btn-icon-prepend "></i><spring:message code="common.delete" />
+										</button>
+										<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="add_button" onClick="fn_workAdd();" data-toggle="modal">
+											<i class="ti-plus btn-icon-prepend "></i><spring:message code="common.add" />
+										</button>
+										<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="db2pg_button" onClick="fn_db2pgAdd();" data-toggle="modal">
+											<i class="ti-server btn-icon-prepend "></i>MIGRATION
+										</button>
+									</div>
+								</div>
+							</div>
+						
+							<div class="card my-sm-2" >
+								<div class="card-body" >
+									<div class="row">
+										<div class="col-12">
+		 									<div class="table-responsive">
+												<div id="order-listing_wrapper"
+													class="dataTables_wrapper dt-bootstrap4 no-footer">
+													<div class="row">
+														<div class="col-sm-12 col-md-6">
+															<div class="dataTables_length" id="order-listing_length">
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+		
+			 								<table id="workList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+												<thead>
+		 											<tr class="bg-info text-white">
+														<th width="10"></th>
+														<th width="30"><spring:message code="common.no" /></th>			
+														<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
+														<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>																							
+														<th width="130"><spring:message code="common.dbms_name" /></th>
+														<th width="70"><spring:message code="common.division" /></th>
+														<th width="130"><spring:message code="backup_management.detail_div" /></th>										
+														<th width="80"><spring:message code="data_transfer.run_order" /></th>
+														<th width="80">OnError</th>
+														<th width="0"></th>
+													</tr>
+												</thead>
+											</table>
+									 	</div>
+								 	</div>
+								</div>
+							</div>
+						</div>
+					<!-- content-wrapper ends -->
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
+	</div>
+</div>

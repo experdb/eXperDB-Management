@@ -11,10 +11,6 @@ var agentPort = null;
 var ipadr = null;
 var port = null;
 
-/* var pghomeCheck="fail";
-var pgdataCheck ="fail"; */
-
-
 function fn_init2() {
 	
 	/* ********************************************************
@@ -64,7 +60,6 @@ $(window.document).ready(function() {
 });
 
 $(function() {		
-	
 	/* ********************************************************
 	 * 서버 테이블 (선택영역 표시)
 	 ******************************************************** */
@@ -247,13 +242,13 @@ function fu_extensionCreate(arrmaps){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
@@ -267,7 +262,6 @@ function fu_extensionCreate(arrmaps){
 
 //DBserver 연결테스트
 function fn_dbServerConnTest(){
-	
 	if (!fn_dbServerValidation()) return false;
 	var datasArr = new Array();
 	var ipadrCnt = dbServerTable.column(0).data().length;
@@ -286,7 +280,6 @@ function fn_dbServerConnTest(){
 	     datasArr.push(datas);
 	 }
 
-	
 	$.ajax({
 		url : "/dbServerConnTest.do",
 		data : {
@@ -299,13 +292,13 @@ function fn_dbServerConnTest(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
@@ -320,18 +313,18 @@ function fn_dbServerConnTest(){
 					}				
 					 if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
 							connCheck = "fail"
-							alert('<spring:message code="message.msg92" />');
+							showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
 							return false;
 					}
 				 }
 				 
 				connCheck = "success";
-				alert('<spring:message code="message.msg93" />');
+				showSwalIcon('<spring:message code="message.msg93"/>', '<spring:message code="common.close" />', '', 'success');
 				fn_pathCall(ipadr, datasArr);
 				
 			}else{
 			connCheck = "fail"
-			alert('<spring:message code="message.msg92" />');
+			showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 			}		
 		}
@@ -448,7 +441,7 @@ function fn_getHostNm(ipadr) {
 function fn_svrnmCheck() {
 	var db_svr_nm = document.getElementById("db_svr_nm");
 	if (db_svr_nm.value == "") {
-		alert('<spring:message code="message.msg85" />');
+		showSwalIcon('<spring:message code="message.msg85" />', '<spring:message code="common.close" />', '', 'error');
 		document.getElementById('db_svr_nm').focus();
 		return;
 	}
@@ -460,7 +453,7 @@ function fn_svrnmCheck() {
 		},
 		success : function(result) {
 			if (result == "true") {
-				alert('<spring:message code="message.msg96" />');
+				showSwalIcon('<spring:message code="message.msg96"/>', '<spring:message code="common.close" />', '', 'success');
 				document.getElementById("db_svr_nm").focus();
 				db_svr_nmChk = "success";
 			} else {
@@ -502,13 +495,13 @@ function checkPghome(){
 		}
 	}
 	if(ipadr == null){
-		alert('<spring:message code="message.msg98" />');
+		showSwalIcon('<spring:message code="message.msg98" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	
 	var save_pth = $("#pghome_pth").val();
 	if(save_pth == ""){
-		alert('<spring:message code="message.msg99" /> ');
+		showSwalIcon('<spring:message code="message.msg99" />', '<spring:message code="common.close" />', '', 'error');
 		$("#pghome_pth").focus();
 	}else{
 		$.ajax({
@@ -544,12 +537,12 @@ function checkPghome(){
 					if(data.result.RESULT_DATA.IS_DIRECTORY== 0){
 						$("#check_path").val("Y");
 						pghomeCheck = "success";
-						alert('<spring:message code="message.msg100" />');
+						showSwalIcon('<spring:message code="message.msg100"/>', '<spring:message code="common.close" />', '', 'success');
 					}else{
-						alert('<spring:message code="message.msg101" />');
+						showSwalIcon('<spring:message code="message.msg101" />', '<spring:message code="common.close" />', '', 'error');
 					}
 				}else{
-					alert('<spring:message code="message.msg76" />')
+					showSwalIcon('<spring:message code="message.msg76" />', '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});
@@ -617,7 +610,7 @@ function checkPghome(){
 							pgdataCheck = "success";
 							alert('<spring:message code="message.msg104" />');
 						}else{
-							alert('<spring:message code="backup_management.invalid_path"/>');
+							showSwalIcon('<spring:message code="backup_management.invalid_path" />', '<spring:message code="common.close" />', '', 'error');
 						}
 					}else{
 						showSwalIcon('<spring:message code="message.msg76" />', '<spring:message code="common.close" />', '', 'error');
@@ -639,10 +632,8 @@ function fn_ipadrAddForm(){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -669,7 +660,7 @@ function fn_ipadrAdd(){
 	
 	for(var i=0; i<dataCnt; i++){
 		if(dbServerTable.rows().data()[i].ipadr == $("#ipadr").val()){
-			alert('<spring:message code="message.msg170"/>');
+			showSwalIcon('<spring:message code="message.msg170" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 	}
@@ -817,7 +808,7 @@ function fn_ipadrDelForm(){
 									</div>
 								</div>
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button"  onClick="fn_insertDbServer();" value='<spring:message code="common.registory" />' />
+									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button"  onClick="fn_insertDbServer();" value='<spring:message code="common.save" />' />
 									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button" onClick="fn_dbServerConnTest();" value='<spring:message code="dbms_information.conn_Test" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 								</div>
