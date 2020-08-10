@@ -21,6 +21,7 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
   - Real-time data transfer from PostgreSQL to HDFS
 * Data Encryption
   - Data Encryption for Information Protection
+  - Encryption key automatic management function according to Auto Scale-Out/In
 * Multiple Languages Support
   - Korean, English
   
@@ -28,6 +29,11 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 
 
 ## TODO
+* Data Encryption
+  - Encryption key automatic management function according to Auto Scale-Out/In
+* Auto Scaling(On AWS
+  - Auto Scale-Out/In function according to threshold setting On public cloud(AWS)
+  - Automatic and manual management
 * Supports PostgreSQL Version 12
 
 ## License
