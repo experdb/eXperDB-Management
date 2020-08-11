@@ -126,6 +126,10 @@
 				fn_restoreLogCall();
 			}else if(rstGbn =="insertScd"){
 				location.href = "/selectScheduleListView.do";
+			} else if (rstGbn == "dump_restore") {
+				fn_dumpRestoreLogCall();
+			} else if (rstGbn == "logout") {
+				fn_logout_result();
 			}
         });
 	}
@@ -850,18 +854,53 @@ function fn_workOptionLayer(bck_wrk_id, db_svr_id, db_nm){
 			var query = "";
 			var etc = "";
 
+			var queryCnt = 0;
+			var etcCnt = 0;
+
 			for(var i=0; i<result.length; i++){
 				if(result[i].grp_cd == "TC0006"){
-					sections += result[i].opt_cd_nm + "  /  ";
+					sections += "<font color='#68afff'>" + result[i].opt_cd_nm + "</font>  /  ";
 				}else if (result[i].grp_cd == "TC0007"){
-					objectType += result[i].opt_cd_nm + "  /  ";
+					objectType += "<font color='#68afff'>" + result[i].opt_cd_nm + "</font>  /  ";
 				}else if (result[i].grp_cd == "TC0008"){
-					save_yn += result[i].opt_cd_nm + "  /  ";
+					save_yn += "<font color='#68afff'>" + result[i].opt_cd_nm + "</font>  /  ";
 				}else if (result[i].grp_cd == "TC0009"){
-					query += result[i].opt_cd_nm + "  /  ";
+					if (queryCnt % 2==0 && queryCnt != 0) {
+						query += "<br/><font color='#68afff'>" + result[i].opt_cd_nm + "</font>  /  ";
+					} else {
+						query += "<font color='#68afff'>" + result[i].opt_cd_nm + "</font>  /  ";
+					}
+
+					queryCnt = queryCnt + 1;
 				}else{
-					etc += result[i].opt_cd_nm + "  /  ";
+					if (etcCnt % 2==0 && etc != 0) {
+						etc += "<br/><font color='#68afff'>" + result[i].opt_cd_nm + "</font>  /  ";
+					} else {
+						etc += "<font color='#68afff'>" + result[i].opt_cd_nm + "</font>  /  ";
+					}
+
+					etcCnt = etcCnt + 1;
 				}
+			}
+			
+			if (nvlPrmSet(sections, "") != "") {
+				sections = sections.substr(0, sections.length -3);
+			}
+			
+			if (nvlPrmSet(objectType, "") != "") {
+				objectType = objectType.substr(0, objectType.length -3);
+			}
+			
+			if (nvlPrmSet(save_yn, "") != "") {
+				save_yn = save_yn.substr(0, save_yn.length -3);
+			}
+			
+			if (nvlPrmSet(query, "") != "") {
+				query = query.substr(0, query.length -3);
+			}
+			
+			if (nvlPrmSet(etc, "") != "") {
+				etc = etc.substr(0, etc.length -3);
 			}
 			
 			$("#d_sections").html(nvlPrmSet(sections, "-"));

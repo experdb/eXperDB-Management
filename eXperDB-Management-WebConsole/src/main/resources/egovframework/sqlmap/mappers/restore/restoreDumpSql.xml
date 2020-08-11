@@ -119,6 +119,12 @@
 		 		, EXIT_ON_ERROR_YN
 		 		, REGR_ID
 		 		, DB_NM
+		 		, BLOBS_ONLY_YN
+		 		, NO_UNLOGGED_TABLE_DATA_YN
+		 		, USE_COLUMN_INSERTS_YN
+		 		, USE_COLUMN_COMMANDS_YN
+		 		, OIDS_YN
+		 		, IDENTIFIER_QUOTES_APPLY_YN
 		 		)
 		 		VALUES
 		 		(
@@ -151,6 +157,12 @@
 		 		, #{exit_on_error_yn}	
 		 		, #{regr_id}
 		 		, #{db_nm}
+		 		, #{blobs_only_yn}
+				, #{no_unlogged_table_data_yn}
+		 		, #{use_column_inserts_yn}
+		 		, #{use_column_commands_yn}	
+		 		, #{oids_yn}
+		 		, #{identifier_quotes_apply_yn}
 		 		)
 		</insert>	    
 		
