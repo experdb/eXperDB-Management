@@ -145,6 +145,27 @@ public class DxT030 extends SocketCtl {
 		
 		String R_EXIT_ON_ERROR = (String) objDumpOption.get(ProtocolID.EXIT_ON_ERROR);
 		String EXIT_ON_ERROR = "--exit-on-error";
+		
+		//추가 2020/08/07
+		String R_BLOBS_ONLY = (String) objDumpOption.get(ProtocolID.BLOBS_ONLY_YN);
+		String BLOBS_ONLY = "--blobs";
+		
+		String R_NO_UNLOGGED_TABLE_DATA = (String) objDumpOption.get(ProtocolID.NO_UNLOGGED_TABLE_DATA_YN);
+		String NO_UNLOGGED_TABLE_DATA = "--no-unlogged-table-data";
+		
+		String R_USE_COLUMN_INSERTS = (String) objDumpOption.get(ProtocolID.USE_COLUMN_INSERTS_YN);
+		String USE_COLUMN_INSERTS = "--column-insert";
+		
+		String R_USE_COLUMN_COMMANDS = (String) objDumpOption.get(ProtocolID.USE_COLUMN_COMMANDS_YN);
+		String USE_COLUMN_COMMANDS = "--attribute-inserts";
+		
+		String R_OIDS = (String) objDumpOption.get(ProtocolID.OIDS_YN);
+		String OIDS = "--oids";
+		
+		String R_IDENTIFIER_QUOTES_APPLY = (String) objDumpOption.get(ProtocolID.IDENTIFIER_QUOTES_APPLY_YN);
+		String IDENTIFIER_QUOTES_APPLY = "--quote-all-identifiers";
+		
+		String R_OBJ_CMD = (String) objDumpOption.get(ProtocolID.OBJ_CMD);
 
 		String SPACE = " ";
 
@@ -184,6 +205,15 @@ public class DxT030 extends SocketCtl {
         if(R_USE_SET_SESSON_AUTH.equals("Y")) sbRestoreCmd.append(SPACE).append(USE_SET_SESSON_AUTH);
         if(R_EXIT_ON_ERROR.equals("Y")) sbRestoreCmd.append(SPACE).append(EXIT_ON_ERROR);
         
+        //추가 2020.08.07
+        if(R_BLOBS_ONLY.equals("Y")) sbRestoreCmd.append(SPACE).append(BLOBS_ONLY);
+        if(R_NO_UNLOGGED_TABLE_DATA.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_UNLOGGED_TABLE_DATA);
+        if(R_USE_COLUMN_INSERTS.equals("Y")) sbRestoreCmd.append(SPACE).append(USE_COLUMN_INSERTS);
+        if(R_USE_COLUMN_COMMANDS.equals("Y")) sbRestoreCmd.append(SPACE).append(USE_COLUMN_COMMANDS);
+        if(R_OIDS.equals("Y")) sbRestoreCmd.append(SPACE).append(OIDS);
+        if(R_IDENTIFIER_QUOTES_APPLY.equals("Y")) sbRestoreCmd.append(SPACE).append(IDENTIFIER_QUOTES_APPLY);
+        if(!R_OBJ_CMD.equals("")) sbRestoreCmd.append(SPACE).append(R_OBJ_CMD);
+
         if(!R_FILENAME.equals("")) sbRestoreCmd.append(SPACE).append(FILENAME);
         
 		sbRestoreCmd.append(SPACE).append(">>");
@@ -195,7 +225,6 @@ public class DxT030 extends SocketCtl {
 		JSONObject outputObj = new JSONObject();
 		
 		SystemServiceImpl service = (SystemServiceImpl) DaemonStart.getContext().getBean("SystemService");
-
 
 		try {
 			
