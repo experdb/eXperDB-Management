@@ -223,8 +223,9 @@ public class DbSvrAuthorityController {
 	 */
 	@RequestMapping(value = "/updateUsrDBSrvAutInfo.do")
 	@ResponseBody
-	public void updateUsrDBSrvAutInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-		
+	public String updateUsrDBSrvAutInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		String result = "F";
+
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
@@ -268,13 +269,15 @@ public class DbSvrAuthorityController {
 						dbAuthorityService.updateUsrDBSrvAutInfo(jval);
 					}			
 				}
+				
+				result = "S";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return result;
 	}
-
-	
 
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectTreeDBSvrList.do")

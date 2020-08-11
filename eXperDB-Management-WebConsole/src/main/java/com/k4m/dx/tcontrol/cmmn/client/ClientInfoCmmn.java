@@ -1492,7 +1492,16 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 					dumpOptionObj.put(ClientProtocolID.VERBOSE, restoreDumpVO.getVerbose_yn());
 					dumpOptionObj.put(ClientProtocolID.USE_SET_SESSON_AUTH, restoreDumpVO.getUse_set_sesson_auth_yn());
 					dumpOptionObj.put(ClientProtocolID.EXIT_ON_ERROR, restoreDumpVO.getExit_on_error_yn());
-		
+					
+					//컬럼추가 2020.08.07
+					dumpOptionObj.put(ClientProtocolID.BLOBS_ONLY_YN, restoreDumpVO.getBlobs_only_yn());
+					dumpOptionObj.put(ClientProtocolID.NO_UNLOGGED_TABLE_DATA_YN, restoreDumpVO.getNo_unlogged_table_data_yn());
+					dumpOptionObj.put(ClientProtocolID.USE_COLUMN_INSERTS_YN, restoreDumpVO.getUse_column_inserts_yn());
+					dumpOptionObj.put(ClientProtocolID.USE_COLUMN_COMMANDS_YN, restoreDumpVO.getUse_column_commands_yn());
+					dumpOptionObj.put(ClientProtocolID.OIDS_YN, restoreDumpVO.getOids_yn());
+					dumpOptionObj.put(ClientProtocolID.IDENTIFIER_QUOTES_APPLY_YN, restoreDumpVO.getIdentifier_quotes_apply_yn());
+					dumpOptionObj.put(ClientProtocolID.OBJ_CMD, restoreDumpVO.getObj_cmd());
+
 					jObj.put(ClientProtocolID.DUMP_OPTION, dumpOptionObj);
 					
 					
