@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
     <div id="pop_layer_dump" class="pop-layer">
 		<div class="pop-container">
-			<div class="pop_cts" style="width: 30%; height: 550px; overflow: auto;">
+			<div class="pop_cts" style="width: 30%; height: 570px; overflow: auto;">
 				<p class="tit" style="margin-bottom: 15px;"><spring:message code="backup_management.work_info"/>
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');"><img src="/images/ico_state_01.png"  style="margin-left: 245px;"/></a>
 				</p>
@@ -58,7 +58,7 @@
 					</tbody>
 				</table>
 				
-				<p><h3 style="height: 20px; margin-top: 25px;""><spring:message code="backup_management.add_option" />1</h3></p>
+				<p><h3 style="height: 20px; margin-top: 25px;"><spring:message code="backup_management.add_option" />1</h3></p>
 				<table border="1" class="list">
 					<caption><spring:message code="backup_management.add_option" />1</caption>
 					<tbody>
@@ -77,7 +77,7 @@
 					</tbody>
 				</table>
 				
-				<p><h3 style="height: 20px; margin-top: 25px;""><spring:message code="backup_management.add_option" />2</h3></p>
+				<p><h3 style="height: 20px; margin-top: 25px;"><spring:message code="backup_management.add_option" />2</h3></p>
 				<table border="1" class="list">
 					<caption><spring:message code="backup_management.add_option" />2</caption>
 					<tbody>
@@ -92,15 +92,17 @@
 					</tbody>
 				</table>
 				
-				<p><h3 style="height: 20px; margin-top: 25px;""><spring:message code="backup_management.add_option" />3</h3></p>
+				<p><h3 style="height: 20px; margin-top: 25px;"><spring:message code="backup_management.add_option" />3</h3></p>
 				<table border="1" class="list">
 					<caption><spring:message code="backup_management.add_option" />3</caption>
 					<tbody>
 						<tr>
-							<div class="view">
-								<div class="tNav" >								
+							<td>
+								<div class="view">
+									<div class="tNav" >								
+									</div>
 								</div>
-							</div>
+							</td>
 						</tr>									
 					</tbody>
 				</table>

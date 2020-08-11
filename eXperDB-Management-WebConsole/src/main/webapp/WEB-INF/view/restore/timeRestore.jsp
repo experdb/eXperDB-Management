@@ -307,7 +307,6 @@
 					showSwalIcon('<spring:message code="restore.msg221" />', '<spring:message code="common.close" />', '', 'success');
 					$('#restore_nmChk', '#restoreTimeRegForm').val("success");
 				} else {
-					restore_nmChk = "fail";
 					showSwalIcon('<spring:message code="restore.msg222" />', '<spring:message code="common.close" />', '', 'error');
 					$('#restore_nmChk', '#restoreTimeRegForm').val("fail");
 				}
@@ -552,7 +551,7 @@
 					<form class="cmxform" id="restoreTimeRegForm">
 						<input type="hidden" name="restore_nmChk" id="restore_nmChk" value="fail" />
 						<input type="hidden" name="rman_pth" id="rman_pth" value="" />
-												
+
 						<fieldset>
 							<div class="row" style="margin-top:10px;">
 								<div class="col-md-12 system-tlb-scroll" style="height: 185px; overflow-x: hidden;  overflow-y: auto; ">
@@ -666,7 +665,7 @@
 											</div>
 										</div>
 
-										<div class="form-group row div-form-margin-z" style="margin-top:-5px;" >
+										<div class="form-group row div-form-margin-z" style="margin-top:-5px;margin-right:0px;" >
 											<div class="col-sm-12" style="border: 1px solid #adb5bd;">
 												<div class="row" style="margin-top:10px;">
 													<label class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">

@@ -10,8 +10,8 @@
 
 <%
 	/**
-	* @Class Name : restoreHistory.jsp
-	* @Description : restoreHistory 화면
+	* @Class Name : dumpRestoreRegVeiw.jsp
+	* @Description : 덤프복원 등록화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -24,11 +24,7 @@
 	*/
 %>
 
-<script type="text/javascript">
-	var mode_workObj = null;
-	var flag = "dump";
-	var restore_nmChk ="fail";
-
+<script>
 	/* ********************************************************
 	 * Data initialization
 	 ******************************************************** */
@@ -37,9 +33,46 @@
 		if(returnYn == "" || returnYn != "Y") {
 			$("#btnGoList").hide();
 		}
-
+	
 		//내역조회
 		fn_mainSearch();
+
+		//validate
+ 	    $("#restoreDumpRegForm").validate({
+		        rules: {
+		        	restore_nm: {
+					required: true
+				},
+				restore_exp: {
+					required: true
+				},
+				db_nm: {
+					required: true
+				}
+	        },
+	        messages: {
+	        	restore_nm: {
+	        		required: '<spring:message code="restore.msg01" />'
+				},
+				restore_exp: {
+	        		required: '<spring:message code="restore.msg03" />'
+				},
+				db_nm: {
+					required: '<spring:message code="backup_management.bck_database_choice" />'
+				}
+	        },
+			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
+				fn_restore_validate();
+			},
+	        errorPlacement: function(label, element) {
+	          label.addClass('mt-2 text-danger');
+	          label.insertAfter(element);
+	        },
+	        highlight: function(element, errorClass) {
+	          $(element).parent().addClass('has-danger')
+	          $(element).addClass('form-control-danger')
+	        }
+		});
 	});
 	
 	/* ********************************************************
@@ -88,7 +121,7 @@
 		$("#findList").attr("action", "/dumpRestore.do");
 		$("#findList").submit();
 	}
-	
+
 	/* ********************************************************
 	 * 데이터 셋팅
 	 ******************************************************** */
@@ -144,7 +177,7 @@
 		fn_dump_checkSection();
 
 		//트리셋팅
-		fn_get_object_list();
+		setTimeout("fn_get_object_list()", 100);
 	}
 
 	/* ********************************************************
@@ -191,7 +224,7 @@
 			}
 		});
 	}
-	
+
 	/* ********************************************************
 	 * Get Selected Database`s Object List
 	 ******************************************************** */
@@ -274,7 +307,7 @@
 			html += "<li style='padding-left:20px;'>";
 			html += "<label for='table"+index+"'> <input id='table"+index+"' name='tree' value='"+item.name+"' otype='table' schema='"+item.schema+"' data-id='custom-1' type='checkbox' "+checkStr+">  "+item.name+"</label></li>\n";
 
-			if(schema != inSchema){ 
+			if(schema != inSchema){
 				schema = inSchema;
 				schemaCnt++;
 			}
@@ -287,7 +320,239 @@
 
 		$("#treeview", "#restoreDumpRegForm").hummingbird();
 	}
+
+	/* ********************************************************
+	 * 쿼리에서 Use Column Inserts, Use Insert Commands선택시 "OIDS포함" disabled
+	 ******************************************************** */
+	function fn_dump_checkOid(){
+		var check = false;
+		$("input[name=dump_opt]").each(function(){
+			if( ($(this).attr("opt_cd") == "TC000901" || $(this).attr("opt_cd") == "TC000902") && $(this).is(":checked")){
+				check = true;
+			}
+		});
+		
+		$("input[name=dump_opt]").each(function(){
+			if( $(this).attr("opt_cd") == "TC001001" ){
+				if(check){
+					$(this).attr("disabled",true);
+				}else{
+					$(this).removeAttr("disabled");
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * 복구명 중복체크
+	 ******************************************************** */
+	function fn_restoreNm_check() {
+		if (nvlPrmSet($("#restore_nm", "#restoreDumpRegForm").val(), "") == "") {
+			showSwalIcon('<spring:message code="restore.msg01" />', '<spring:message code="common.close" />', '', 'warning');
+			return;
+		}
+		
+		//msg 초기화restoreTimeRegForm
+		$("#restorenm_check_alert", "#restoreDumpRegForm").html('');
+		$("#restorenm_check_alert", "#restoreDumpRegForm").hide();
+		
+		$.ajax({
+			url : '/restore_nmCheck.do',
+			type : 'post',
+			data : {
+				restore_nm : $("#restore_nm", "#restoreDumpRegForm").val()
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result == "true") {
+					showSwalIcon('<spring:message code="restore.msg221" />', '<spring:message code="common.close" />', '', 'success');
+					$('#restore_nmChk', '#restoreDumpRegForm').val("success");
+				} else {
+					showSwalIcon('<spring:message code="restore.msg222" />', '<spring:message code="common.close" />', '', 'error');
+					$('#restore_nmChk', '#restoreDumpRegForm').val("fail");
+				}
+			}
+		});
+	}
+	
+	/* ********************************************************
+	 * work 명 변경시
+	 ******************************************************** */
+	function fn_restoreNm_Chg() {
+		$('#restore_nmChk', '#restoreDumpRegForm').val("fail");
+		
+		$("#restorenm_check_alert", "#restoreDumpRegForm").html('');
+		$("#restorenm_check_alert", "#restoreDumpRegForm").hide();
+	}
+
+	/* ********************************************************
+	 * 덤프복원 실행 클릭
+	 ******************************************************** */
+	function fn_restore_start() {
+		$("#restoreDumpRegForm").submit();
+	}
+	
+	/* ********************************************************
+	 * 덤프복원 validate 체크
+	 ******************************************************** */
+	function fn_restore_validate() {
+		if(nvlPrmSet($("#restore_nmChk", "#restoreDumpRegForm").val(), "") == "" || nvlPrmSet($("#restore_nmChk", "#restoreDumpRegForm").val(), "") == "fail") {
+			$("#restorenm_check_alert", "#restoreDumpRegForm").html('<spring:message code="restore.msg02"/>');
+			$("#restorenm_check_alert", "#restoreDumpRegForm").show();
+			
+			return;
+		}
+		
+		fn_passwordConfilm('dump');
+	}
+	 
+	/* ********************************************************
+	 * DUMP Restore 정보 저장
+	 ******************************************************** */
+	function fn_execute() {
+		$("input[name=dump_opt]").each(function(){
+			if( $(this).is(":checked")){
+				$(this).val("Y");
+			}
+		});
+
+		var scm_nm_List = [];
+		var obj_nm_List = [];
+		$("input[name=tree]").each(function(){
+			if( $(this).is(":checked")){
+				scm_nm_List.push($(this).attr("schema"));
+				
+				if ($(this).attr("otype") != null && $(this).attr("otype") != "table") {
+					obj_nm_List.push("");
+				} else {
+					obj_nm_List.push($(this).val());
+				}
+			}
+		});
+
+		$.ajax({
+			url : "/insertDumpRestore.do",
+			data : {
+				db_svr_id : $("#db_svr_id","#findList").val(),
+				bck_file_pth : $("#bck_file_pth", "#restoreDumpRegForm").val(),
+				restore_nm : nvlPrmSet($("#restore_nm", "#restoreDumpRegForm").val(), ""),
+				restore_exp : $("#restore_exp", "#restoreDumpRegForm").val(),
+				wrk_id : $("#wrk_id", "#findList").val(),
+				wrkexe_sn : $("#exe_sn", "#findList").val(),
+				restore_cndt : 1,
+				format : $("#file_fmt_cd_nm", "#restoreDumpRegForm").val(),
+				filename : $("#bck_filenm", "#restoreDumpRegForm").val(),
+				jobs : $("#jobs", "#restoreDumpRegForm").val(),
+				role : $("#usr_role_nm", "#restoreDumpRegForm").val(),
+				pre_data_yn : $("#dump_option_1_1", "#restoreDumpRegForm").val(),
+				data_yn : $("#dump_option_1_2", "#restoreDumpRegForm").val(),
+				post_data_yn : $("#dump_option_1_3", "#restoreDumpRegForm").val(),
+
+				data_only_yn : $("#dump_option_2_1", "#restoreDumpRegForm").val(),
+				schema_only_yn : $("#dump_option_2_2", "#restoreDumpRegForm").val(),
+				blobs_only_yn : $("#dump_option_2_3", "#restoreDumpRegForm").val(), //추가
+				
+				no_owner_yn : $("#dump_option_3_1", "#restoreDumpRegForm").val(),
+				no_privileges_yn : $("#dump_option_3_2", "#restoreDumpRegForm").val(),
+				no_tablespaces_yn : $("#dump_option_3_3", "#restoreDumpRegForm").val(),
+				no_unlogged_table_data_yn : $("#dump_option_3_4", "#restoreDumpRegForm").val(), //추가
+
+				use_column_inserts_yn : $("#dump_option_4_1", "#restoreDumpRegForm").val(),  //추가
+				use_column_commands_yn : $("#dump_option_4_2", "#restoreDumpRegForm").val(), //추가
+				create_yn : $("#dump_option_4_3", "#restoreDumpRegForm").val(),
+				//drop_database_include_yn : $("#dump_option_4_4", "#restoreDumpRegForm").val(), //추가
+				clean_yn : $("#dump_option_4_5", "#restoreDumpRegForm").val(),
+				single_transaction_yn : $("#dump_option_4_6", "#restoreDumpRegForm").val(),
+
+				disable_triggers_yn : $("#dump_option_5_1", "#restoreDumpRegForm").val(),
+				no_data_for_failed_tables_yn : $("#dump_option_5_2", "#restoreDumpRegForm").val(),
+
+				oids_yn : $("#dump_option_6_1", "#restoreDumpRegForm").val(), //추가
+				verbose_yn : $("#dump_option_6_2", "#restoreDumpRegForm").val(),
+				//quote_yn : $("#dump_option_6_2", "#restoreDumpRegForm").val(), //추가
+				identifier_quotes_apply_yn : $("#dump_option_6_3", "#restoreDumpRegForm").val(), //추가
+				use_set_sesson_auth_yn : $("#dump_option_6_5", "#restoreDumpRegForm").val(),
+				//detail_message_yn : $("#dump_option_6_6", "#restoreDumpRegForm").val(), //추가
+				exit_on_error_yn : $("#dump_option_6_7", "#restoreDumpRegForm").val(),
+				db_nm : $("#db_nm", "#restoreDumpRegForm").val(),
+				
+				obj_nm_List : JSON.stringify(obj_nm_List),
+				scm_nm_List : JSON.stringify(scm_nm_List)
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					if (result == "S") {
+						showSwalIconRst('<spring:message code="restore.msg223" />', '<spring:message code="common.close" />', '', 'warning', 'dump_restore');
+					} else {
+						showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');
+						return;
+					}
+				} else {
+					showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');
+					return;
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * 로그조회
+	 ******************************************************** */
+	function fn_restoreLogCall() {
+		$.ajax({
+			url : '/restoreLogCall.do',
+			type : 'post',
+			data : {
+				db_svr_id : $("#db_svr_id","#findList").val()
+			},
+			success : function(result) {
+				$("#restoreDumpExeclog").html("");
+				fn_addLogView(result.strResultData);
+				$("#pop_layer_restore_exec_log").modal("show");
+			},
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+	}
 </script>
+
+<%@include file="../cmmn/passwordConfirm.jsp"%>
+<%@include file="../popup/restoreLogDumpView.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
@@ -346,11 +611,11 @@
 
 		<div class="col-12 stretch-card div-form-margin-table">
 			<div class="card">
-				<div class="card-body" style="min-height:698px; max-height:715px;">
+				<div class="card-body" style="min-height:698px; max-height:780px;">
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">																				
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScheduleRun" onClick="fn_validation();">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScheduleRun" onClick="fn_restore_start();">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="schedule.run" />
 								</button>
 								
@@ -362,11 +627,12 @@
 					</div>
 
 					<form class="cmxform" id="restoreDumpRegForm">
+						<input type="hidden" name="restore_nmChk" id="restore_nmChk" value="fail" />
 						<input type="hidden" name="file_fmt_cd" id="file_fmt_cd" value="" />
-						
+
 						<fieldset>
 							<div class="row" style="margin-top:10px;">
-								<div class="col-md-12" >
+								<div class="col-md-12">
 									<div class="card-body" style="border: 1px solid #adb5bd;">
 										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
 											<label for="restore_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
@@ -375,7 +641,7 @@
 											</label>
 		
 											<div class="col-sm-8">
-												<input type="text" class="form-control form-control-sm" maxlength="20" id="restore_nm" name="restore_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()" tabindex=1 required />
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="restore_nm" name="restore_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onchange="fn_restoreNm_Chg();" onblur="this.value=this.value.trim()" tabindex=1 required />
 											</div>
 		
 											<div class="col-sm-2">
@@ -388,12 +654,13 @@
 											</div>
 		
 											<div class="col-sm-9">
-												<div class="alert alert-danger form-control-sm" style="margin-top:5px;display:none;" id="dump_restorenm_check_alert"></div>
+												<div class="alert alert-danger form-control-sm" style="margin-top:5px;display:none;" id="restorenm_check_alert"></div>
 											</div>
 											
 											<div class="col-sm-1">
 											</div>
 										</div>
+										
 		
 										<div class="form-group row div-form-margin-z" style="margin-bottom:-10px;">
 											<label for="restore_exp" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
@@ -410,18 +677,18 @@
 							</div>
 
 							<div class="row" style="margin-top:10px;">
-								<div class="col-md-8" >
+								<div class="col-md-8 system-tlb-scroll" style="border:0px;max-height: 530px; overflow-x: hidden;  overflow-y: auto; ">
 									<div class="card-body" style="border: 1px solid #adb5bd;">
 										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
 											<label for="wrk_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="common.work_name" />
 											</label>
-		
+											
 											<div class="col-sm-4">
 												<input type="text" class="form-control form-control-xsm" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" disabled />
 											</div>
-											
+
 											<label for="exe_rslt_cd_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="common.status" />
@@ -448,7 +715,7 @@
 											</label>
 		
 											<div class="col-sm-4">
-												<select class="form-control form-control-xsm" style="margin-right: 1rem;width:100%;" name="db_nm" id="db_nm" onChange="fn_get_object_list();" tabindex=3>
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;width:100%;" name="db_nm" id="db_nm" tabindex=3>
 													<option value=""><spring:message code="common.choice" /></option>
 													<c:forEach var="result" items="${dbList}" varStatus="status">
 														<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
@@ -462,7 +729,7 @@
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="etc.etc08" />
 											</label>
-		
+
 											<div class="col-sm-4">
 												<input type="text" class="form-control form-control-xsm" id="bck_file_pth" name="bck_file_pth" onblur="this.value=this.value.trim()" disabled />
 											</div>
@@ -512,7 +779,7 @@
 												<input type="text" class="form-control form-control-xsm" id="file_fmt_cd_nm" name="file_fmt_cd_nm" onblur="this.value=this.value.trim()" disabled />
 											</div>
 
-											<label for="wrk_end_dtm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+											<label for="usr_role_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="backup_management.rolename" />
 											</label>
@@ -523,13 +790,13 @@
 										</div>
 
 										<div class="form-group row div-form-margin-z row" style="margin-top:-10px;">
-											<label for="file_fmt_cd_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+											<label for="jobs" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												Number of Jobs
 											</label>
 		
 											<div class="col-sm-4">
-												<input type="text" class="form-control form-control-xsm" maxlength="3" id="jobs" name="jobs" onblur="this.value=this.value.trim()" placeholder='3<spring:message code='message.msg188'/>' tabindex=3/>
+												<input type="text" class="form-control form-control-xsm" maxlength="3" id="jobs" name="jobs" onblur="this.value=this.value.trim()" placeholder='3<spring:message code='message.msg188'/>' tabindex=4/>
 											</div>
 
 											<div class="col-sm-6">
@@ -566,11 +833,12 @@
 														<i class="item-icon fa fa-angle-double-right"></i>
 														<spring:message code="backup_management.sections" />
 													</label>
+
 													<div class="col-sm-10">
 														<div class="input-group input-daterange d-flex" >
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_1_1" class="form-check-label" style="width:100px;">
-																	<input type="checkbox" id="dump_option_1_1" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0006" opt_cd="TC000601" onClick="fn_dump_checkSection();"
+																	<input type="checkbox" id="dump_option_1_1" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0006" opt_cd="TC000601" onClick="fn_dump_checkSection();"
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0006' && optVal.opt_cd eq 'TC000601'}">checked</c:if>
 																		</c:forEach>
@@ -581,7 +849,7 @@
 															
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_1_2" class="form-check-label" style="width:100px;">
-																	<input type="checkbox" id="dump_option_1_2" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0006" opt_cd="TC000602" onClick="fn_dump_checkSection();" 
+																	<input type="checkbox" id="dump_option_1_2" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0006" opt_cd="TC000602" onClick="fn_dump_checkSection();" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0006' && optVal.opt_cd eq 'TC000602'}">checked</c:if>
 																		</c:forEach>
@@ -613,7 +881,7 @@
 														<div class="input-group input-daterange d-flex" >
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_2_1" class="form-check-label" style="width:100px;">
-																	<input type="checkbox" id="dump_option_2_1" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0007" opt_cd="TC000701" onClick="fn_dump_checkObject('TC000701');" 
+																	<input type="checkbox" id="dump_option_2_1" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0007" opt_cd="TC000701" onClick="fn_dump_checkObject('TC000701');" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0007' && optVal.opt_cd eq 'TC000701'}">checked</c:if>
 																		</c:forEach>
@@ -632,7 +900,7 @@
 																	<spring:message code="backup_management.only_schema" />
 																</label>
 															</div>
-															
+															<!--  원래없던것임 -->
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_2_3" class="form-check-label" style="width:100px;">
 																	<input type="checkbox" id="dump_option_2_3" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0007" opt_cd="TC000703" 
@@ -646,7 +914,7 @@
 														</div>
 													</div>
 												</div>
-
+ 
 												<div class="form-group row div-form-margin-z" style="margin-top:-15px;margin-bottom:-35px;">
 													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 														<i class="item-icon fa fa-angle-double-right"></i>
@@ -656,7 +924,7 @@
 														<div class="input-group input-daterange d-flex" >
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_3_1" class="form-check-label" style="width:100px;">
-																	<input type="checkbox" id="dump_option_3_1" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0008" opt_cd="TC000801" disabled 
+																	<input type="checkbox" id="dump_option_3_1" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0008" opt_cd="TC000801" disabled 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000801'}">checked</c:if>
 																		</c:forEach>
@@ -667,7 +935,7 @@
 															
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_3_2" class="form-check-label" style="width:100px;">
-																	<input type="checkbox" id="dump_option_3_2" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0008" opt_cd="TC000802" 
+																	<input type="checkbox" id="dump_option_3_2" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0008" opt_cd="TC000802" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000802'}">checked</c:if>
 																		</c:forEach>
@@ -678,7 +946,7 @@
 															
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_3_3" class="form-check-label" style="width:100px;">
-																	<input type="checkbox" id="dump_option_3_3" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0008" opt_cd="TC000803" 
+																	<input type="checkbox" id="dump_option_3_3" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0008" opt_cd="TC000803" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000803'}">checked</c:if>
 																		</c:forEach>
@@ -687,9 +955,10 @@
 																</label>
 															</div>
 															
+															<!--  원래없던것임 -->
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_3_4" class="form-check-label" style="width:150px;">
-																	<input type="checkbox" id="dump_option_3_4" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0008" opt_cd="TC000804" 
+																	<input type="checkbox" id="dump_option_3_4" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0008" opt_cd="TC000804" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000804'}">checked</c:if>
 																		</c:forEach>
@@ -701,7 +970,7 @@
 													</div>
 												</div>
 											</div>
-
+		
 											<div class="tab-pane fade" role="tabpanel" id="dumpOptionTab2">
 												<div class="form-group row div-form-margin-z" style="margin-top:-30px;">
 													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
@@ -710,9 +979,10 @@
 													</label>
 													<div class="col-sm-10">
 														<div class="input-group input-daterange d-flex" >
+															<!--  원래없던것임 -->
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_4_1" class="form-check-label" style="width:190px;">
-																	<input type="checkbox" id="dump_option_4_1" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000901" onClick="fn_dump_checkOid();" 
+																	<input type="checkbox" id="dump_option_4_1" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0009" opt_cd="TC000901" onClick="fn_dump_checkOid();" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000901'}">checked</c:if>
 																		</c:forEach>
@@ -720,10 +990,10 @@
 																	<spring:message code="backup_management.use_column_inserts" />
 																</label>
 															</div>
-															
+															<!--  원래없던것임 -->
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_4_2" class="form-check-label" style="width:180px;">
-																	<input type="checkbox" id="dump_option_4_2" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000902" onClick="fn_dump_checkOid();" 
+																	<input type="checkbox" id="dump_option_4_2" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0009" opt_cd="TC000902" onClick="fn_dump_checkOid();" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000902'}">checked</c:if>
 																		</c:forEach>
@@ -731,17 +1001,9 @@
 																	<spring:message code="backup_management.use_column_commands" />
 																</label>
 															</div>
-														</div>
-													</div>
-												</div>
-
-												<div class="form-group row div-form-margin-z" style="margin-top:-25px;">
-													<div class="col-sm-2"></div>
-													<div class="col-sm-10">
-														<div class="input-group input-daterange d-flex" >
 															<div class="form-check input-group-addon mx-4">
-																<label for="dump_option_4_3" class="form-check-label" style="width:190px;">
-																	<input type="checkbox" id="dump_option_4_3" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000903" disabled 
+																<label for="dump_option_4_3" class="form-check-label" style="width:170px;">
+																	<input type="checkbox" id="dump_option_4_3" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0009" opt_cd="TC000903" disabled 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000903'}">checked</c:if>
 																		</c:forEach>
@@ -749,31 +1011,95 @@
 																	<spring:message code="backup_management.create_database_include" />
 																</label>
 															</div>
-															
-															<div class="form-check input-group-addon mx-4">
-																<label for="dump_option_4_4" class="form-check-label" style="width:180px;">
-																	<input type="checkbox" id="dump_option_4_4" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000904" disabled 
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row div-form-margin-z" style="margin-top:-25px;">
+													<div class="col-sm-2"></div>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<!-- 원래없던것임 -->
+<%-- 															<div class="form-check input-group-addon mx-4">
+																<label for="dump_option_4_4" class="form-check-label" style="width:190px;">
+																	<input type="checkbox" id="dump_option_4_4" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0009" opt_cd="TC000904" disabled 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000904'}">checked</c:if>
 																		</c:forEach>
 																	/>
 																	<spring:message code="backup_management.drop_database_include" />
 																</label>
+															</div> --%>
+															<div class="form-check input-group-addon mx-4">
+																<label for="dump_option_4_5" class="form-check-label" style="width:190px;">
+																	<input type="checkbox" id="dump_option_4_5" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0009" opt_cd="TC000905"  
+																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
+																			<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000905'}">checked</c:if>
+																		</c:forEach>
+																	/>
+																	Clean before restore
+																</label>
+															</div>
+															<div class="form-check input-group-addon mx-4">
+																<label for="dump_option_4_6" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="dump_option_4_6" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0009" opt_cd="TC000906" 
+																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
+																			<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000906'}">checked</c:if>
+																		</c:forEach>
+																	/>
+																	Single transaction
+																</label>
+															</div>
+															<div class="form-check input-group-addon mx-4">
+																<label class="form-check-label" style="width:170px;">
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row div-form-margin-z" style="margin-top:-15px;">
+													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-angle-double-right"></i>
+														Disable
+													</label>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<div class="form-check input-group-addon mx-4">
+																<label for="dump_option_5_1" class="form-check-label" style="width:190px;">
+																	<input type="checkbox" id="dump_option_5_1" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0021" opt_cd="TC002101" 
+																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
+																			<c:if test="${optVal.grp_cd eq 'TC0021' && optVal.opt_cd eq 'TC002101'}">checked</c:if>
+																		</c:forEach>
+																	/>
+																	Trigger
+																</label>
+															</div>
+															<div class="form-check input-group-addon mx-4">
+																<label for="dump_option_5_2" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="dump_option_5_2" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0021" opt_cd="TC002102" 
+																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
+																			<c:if test="${optVal.grp_cd eq 'TC0021' && optVal.opt_cd eq 'TC002102'}">checked</c:if>
+																		</c:forEach>
+																	/>
+																	NoData for Failed Table
+																</label>
 															</div>
 														</div>
 													</div>
 												</div>
 												
-												<div class="form-group row div-form-margin-z" style="margin-top:-5px;">
+												<div class="form-group row div-form-margin-z" style="margin-top:-15px;">
 													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 														<i class="item-icon fa fa-angle-double-right"></i>
 														<spring:message code="common.etc" />
 													</label>
 													<div class="col-sm-10">
 														<div class="input-group input-daterange d-flex" >
+															<!-- 원래없던것임 -->
 															<div class="form-check input-group-addon mx-4">
-																<label for="dump_option_5_1" class="form-check-label" style="width:190px;">
-																	<input type="checkbox" id="dump_option_5_1" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001001" 
+																<label for="dump_option_6_1" class="form-check-label" style="width:190px;">
+																	<input type="checkbox" id="dump_option_6_1" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0010" opt_cd="TC001001" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001001'}">checked</c:if>
 																		</c:forEach>
@@ -781,21 +1107,18 @@
 																	<spring:message code="backup_management.oids_include" />
 																</label>
 															</div>
-															
+
 															<div class="form-check input-group-addon mx-4">
-																<label for="dump_option_5_2" class="form-check-label" style="width:180px;">
-																	<input type="checkbox" id="dump_option_5_2" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001002" 
-																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-																			<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001002'}">checked</c:if>
-																		</c:forEach>
-																	/>
+																<label for="dump_option_6_2" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="dump_option_6_2" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0010" opt_cd="TC001002" checked disabled/>
 																	<spring:message code="backup_management.quote_include" />
 																</label>
 															</div>
-															
+
+															<!-- 원래없던것임 -->
 															<div class="form-check input-group-addon mx-4">
-																<label for="dump_option_5_3" class="form-check-label" style="width:180px;">
-																	<input type="checkbox" id="dump_option_5_3" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001003" 
+																<label for="dump_option_6_3" class="form-check-label" style="width:170px;">
+																	<input type="checkbox" id="dump_option_6_3" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0010" opt_cd="TC001003" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001003'}">checked</c:if>
 																		</c:forEach>
@@ -806,14 +1129,20 @@
 														</div>
 													</div>
 												</div>
-
+												
 												<div class="form-group row div-form-margin-z" style="margin-top:-25px;margin-bottom:-40px;">
 													<div class="col-sm-2"></div>
 													<div class="col-sm-10">
 														<div class="input-group input-daterange d-flex" >
+<!-- 															<div class="form-check input-group-addon mx-4">
+																<label for="dump_option_6_4" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="dump_option_6_4" name="dump_opt" class="form-check-input" value="Y" checked />
+																	Verbose Message
+																</label>
+															</div> -->
 															<div class="form-check input-group-addon mx-4">
-																<label for="dump_option_5_4" class="form-check-label" style="width:190px;">
-																	<input type="checkbox" id="dump_option_5_4" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001004" 
+																<label for="dump_option_6_5" class="form-check-label" style="width:190px;">
+																	<input type="checkbox" id="dump_option_6_5" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0010" opt_cd="TC001004"  
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001004'}">checked</c:if>
 																		</c:forEach>
@@ -821,20 +1150,32 @@
 																	<spring:message code="backup_management.set_session_auth_use" />
 																</label>
 															</div>
-															
-															<div class="form-check input-group-addon mx-4">
-																<label for="dump_option_5_5" class="form-check-label" style="width:180px;">
-																	<input type="checkbox" id="dump_option_5_5" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001005" 
+															<!-- 원래없던것임 -->
+<%-- 															<div class="form-check input-group-addon mx-4">
+																<label for="dump_option_6_6" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="dump_option_6_6" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001006" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-																			<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001005'}">checked</c:if>
+																			<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001006'}">checked</c:if>
 																		</c:forEach>
 																	/>
 																	<spring:message code="backup_management.detail_message_include" />
 																</label>
+															</div> --%>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="dump_option_6_7" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="dump_option_6_7" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0010" opt_cd="TC001005"  
+																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
+																			<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001005'}">checked</c:if>
+																		</c:forEach>
+																	/>
+																	Exit on Error
+																</label>
 															</div>
 															
 															<div class="form-check input-group-addon mx-4">
-																<label class="form-check-label" style="width:180px;">
+																<label class="form-check-label" style="width:170px;">
+																	
 																</label>
 															</div>
 														</div>
@@ -845,14 +1186,14 @@
 									</div>
 								</div>
 
-								<div class="col-md-4 system-tlb-scroll" style="border:0px;height: 450px;">
+								<div class="col-md-4 system-tlb-scroll" style="border:0px;height: 530px;">
 									<div class="card-body-modal" style="border: 1px solid #adb5bd;">
 										<!-- title -->
 										<h3 class="card-title fa fa-dot-circle-o">
 											<spring:message code="backup_management.object_choice" />
 										</h3>
 				
-										<div class="table-responsive system-tlb-scroll" style="border:0px;height: 410px; overflow-x: hidden;  overflow-y: auto; ">
+										<div class="table-responsive system-tlb-scroll" style="border:0px;height: 460px; overflow-x: hidden;  overflow-y: auto; ">
 											<table class="table">
 												<tbody>
 													<tr>
@@ -869,7 +1210,7 @@
 											</table>
 										</div>
 									</div>
-								</div>							
+								</div>				
 							</div>
 						</fieldset>
 					</form>

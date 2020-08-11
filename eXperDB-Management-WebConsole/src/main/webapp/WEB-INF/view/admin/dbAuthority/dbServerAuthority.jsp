@@ -22,6 +22,8 @@
 	var userTable = null;
 	var dbServerTable = null;
 	var svr_server = null;
+	var confile_title = "";
+	var datasArr = new Array();
 	
 	var scale_yn_chk = "${scale_yn_chk}";
 
@@ -73,15 +75,15 @@
 			},
 			success : function(result) {
 				svr_server = result;
-				var parseData = $.parseJSON(result);
-			 	var html1 = "";
-			 	html1+='<table class="table">';
+			//	var parseData = $.parseJSON(result);
+			 	var html1 = "";	
+			 	html1+='<table  class="table table-hover" style="width:100%;">';
 				html1+='<colgroup>';
 				html1+=	'<col style="width:85%" />';
 				html1+=	'<col style="width:15%" />';
 				html1+='</colgroup>';
 				html1+='<thead>';
-				html1+=	'<tr>';
+				html1+=	'<tr class="bg-info text-white ">';
 				html1+=		'<th scope="col"><spring:message code="auth_management.db_server_menu" /></th>';
 				html1+=		'<th scope="col"><spring:message code="auth_management.auth" /></th>';
 				html1+=	'</tr>';
@@ -96,10 +98,9 @@
 					html1+='	</tr>';
 					
 					if (scale_yn_chk == "Y") {
-
 						/* 2020.04.09 scale_cng 추가 start */
 						html1+='	<tr>';
-						html1+='		<td><spring:message code="menu.eXperDB_scale_settings" /></td>';
+						html1+='		<td class="pl-4"><spring:message code="menu.eXperDB_scale_settings" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale_cng" name="eXperDB_scale_cng" onClick="fn_userCheck();"/>';
@@ -108,10 +109,10 @@
 						html1+='		</td>';
 						html1+='	</tr>';
 						/* 2020.04.09 scale_cng 추가 end */
-						
+
 						/* 2020.03.03 scale 추가 start */
 						html1+='	<tr>';
-						html1+='		<td><spring:message code="menu.scale_manual" /></td>';
+						html1+='		<td class="pl-4"><spring:message code="menu.scale_manual" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale" name="eXperDB_scale" onClick="fn_userCheck();"/>';
@@ -123,7 +124,7 @@
 						
 						/* 2020.04.03 scale_hist 추가 start */
 						html1+='	<tr>';
-						html1+='		<td><spring:message code="menu.eXperDB_scale_history" /></td>';
+						html1+='		<td class="pl-4"><spring:message code="menu.eXperDB_scale_history" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale_hist" name="eXperDB_scale_hist" onClick="fn_userCheck();"/>';
@@ -135,7 +136,7 @@
 					}
 
 					html1+='	<tr>';
-					html1+='		<td><spring:message code="menu.backup_settings" /></td>';
+					html1+='		<td class="pl-4"><spring:message code="menu.backup_settings" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_bck_cng" name="bck_cng_aut" onClick="fn_userCheck();"/>';
@@ -143,118 +144,118 @@
 					html1+='			</div>';
 					html1+='		</td>';
 					html1+='	</tr>';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="menu.backup_history" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_bck_hist" name="bck_hist_aut" onClick="fn_userCheck();" />';
-					html1+=			'<label for="'+item.db_svr_id+'_bck_hist"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="menu.backup_scheduler" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_bck_scdr" name="bck_scdr_aut" onClick="fn_userCheck();" />';
-					html1+=			'<label for="'+item.db_svr_id+'_bck_scdr"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="restore.Emergency_Recovery" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_emergency_restore" name="emergency_restore_aut" onClick="fn_userCheck();" />';
-					html1+=			'<label for="'+item.db_svr_id+'_emergency_restore"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="restore.Point-in-Time_Recovery" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_point_restore" name="point_restore_aut" onClick="fn_userCheck();" />';
-					html1+=			'<label for="'+item.db_svr_id+'_point_restore"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="restore.Dump_Recovery" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_dump_restore" name="dump_restore_aut" onClick="fn_userCheck();" />';
-					html1+=			'<label for="'+item.db_svr_id+'_dump_restore"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="restore.Recovery_history" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_restore_hist" name="restore_hist_aut" onClick="fn_userCheck();" />';
-					html1+=			'<label for="'+item.db_svr_id+'_restore_hist"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="menu.access_control" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_acs_cntr" name="acs_cntr_aut" onClick="fn_userCheck();" />';
-					html1+=			'<label for="'+item.db_svr_id+'_acs_cntr"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="menu.policy_changes_history" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_policy_change_his" name="policy_change_his_aut" onClick="fn_userCheck();" />';
-					html1+=			'<label for="'+item.db_svr_id+'_policy_change_his"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="menu.backup_history" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_bck_hist" name="bck_hist_aut" onClick="fn_userCheck();" />';
+					html1+='				<label for="'+item.db_svr_id+'_bck_hist"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="menu.backup_scheduler" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_bck_scdr" name="bck_scdr_aut" onClick="fn_userCheck();" />';
+					html1+='				<label for="'+item.db_svr_id+'_bck_scdr"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="restore.Emergency_Recovery" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_emergency_restore" name="emergency_restore_aut" onClick="fn_userCheck();" />';
+					html1+='				<label for="'+item.db_svr_id+'_emergency_restore"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="restore.Point-in-Time_Recovery" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_point_restore" name="point_restore_aut" onClick="fn_userCheck();" />';
+					html1+='				<label for="'+item.db_svr_id+'_point_restore"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="restore.Dump_Recovery" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_dump_restore" name="dump_restore_aut" onClick="fn_userCheck();" />';
+					html1+='				<label for="'+item.db_svr_id+'_dump_restore"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="restore.Recovery_history" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_restore_hist" name="restore_hist_aut" onClick="fn_userCheck();" />';
+					html1+='				<label for="'+item.db_svr_id+'_restore_hist"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="menu.access_control" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_acs_cntr" name="acs_cntr_aut" onClick="fn_userCheck();" />';
+					html1+='				<label for="'+item.db_svr_id+'_acs_cntr"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="menu.policy_changes_history" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_policy_change_his" name="policy_change_his_aut" onClick="fn_userCheck();" />';
+					html1+='				<label for="'+item.db_svr_id+'_policy_change_his"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>';
 					
 					if("${sessionScope.session.pg_audit}"== "Y"){
 						html1+='<tr>';
-						html1+=	'<td><spring:message code="menu.audit_settings" /></td>';
-						html1+=	'<td>';
-						html1+=		'<div class="inp_chk">';
-						html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_adt_cng" name="adt_cng_aut" onClick="fn_userCheck();"/>';
-						html1+=			'<label for="'+item.db_svr_id+'_adt_cng"></label>';
-						html1+=		'</div>';
-						html1+=	'</td>';
+						html1+='	<td class="pl-4"><spring:message code="menu.audit_settings" /></td>';
+						html1+='	<td>';
+						html1+='		<div class="inp_chk">';
+						html1+='			<input type="checkbox" id="'+item.db_svr_id+'_adt_cng" name="adt_cng_aut" onClick="fn_userCheck();"/>';
+						html1+='			<label for="'+item.db_svr_id+'_adt_cng"></label>';
+						html1+='		</div>';
+						html1+='	</td>';
 						html1+='</tr>';
 						html1+='<tr>';
-						html1+=	'<td><spring:message code="menu.audit_history" /></td>';
-						html1+=	'<td>';
-						html1+=		'<div class="inp_chk">';
-						html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_adt_hist" name="adt_hist_aut"  onClick="fn_userCheck();"/>';
-						html1+=			'<label for="'+item.db_svr_id+'_adt_hist"></label>';
-						html1+=		'</div>';
-						html1+=	'</td>';
+						html1+='	<td class="pl-4"><spring:message code="menu.audit_history" /></td>';
+						html1+='	<td>';
+						html1+='		<div class="inp_chk">';
+						html1+='			<input type="checkbox" id="'+item.db_svr_id+'_adt_hist" name="adt_hist_aut"  onClick="fn_userCheck();"/>';
+						html1+='			<label for="'+item.db_svr_id+'_adt_hist"></label>';
+						html1+='		</div>';
+						html1+='	</td>';
 						html1+='</tr>	';			
 					}
 					
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="menu.script_settings" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_script_cng" name="script_cng_aut"  onClick="fn_userCheck();"/>';
-					html1+=			'<label for="'+item.db_svr_id+'_script_cng"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>	';
-					html1+='<tr>';
-					html1+=	'<td><spring:message code="menu.script_history" /></td>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_script_his" name="script_his_aut"  onClick="fn_userCheck();"/>';
-					html1+=			'<label for="'+item.db_svr_id+'_script_his"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>	';	
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="menu.script_settings" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_script_cng" name="script_cng_aut"  onClick="fn_userCheck();"/>';
+					html1+='				<label for="'+item.db_svr_id+'_script_cng"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>	';
+					html1+='	<tr>';
+					html1+='		<td class="pl-4"><spring:message code="menu.script_history" /></td>';
+					html1+='		<td>';
+					html1+='			<div class="inp_chk">';
+					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_script_his" name="script_his_aut"  onClick="fn_userCheck();"/>';
+					html1+='				<label for="'+item.db_svr_id+'_script_his"></label>';
+					html1+='			</div>';
+					html1+='		</td>';
+					html1+='	</tr>	';	
 					
 					html1+='</tbody>';
 					html1+='<input type="hidden"  name="db_svr_id" value="'+item.db_svr_id+'">';
@@ -274,8 +275,8 @@
 			var usr_id = userTable.row('.selected').data().usr_id;
 
 			if (svr_server.length == 0){
-				alert("<spring:message code='message.msg214'/>");
-				return false;
+				showSwalIcon('<spring:message code="message.msg214" />', '<spring:message code="common.close" />', '', 'warning');
+				return;
 			}
 
 			/* ********************************************************
@@ -533,7 +534,7 @@
 
 	/* 저장 */
 	function fn_svr_save(){
-		var datasArr = new Array();
+		datasArr = new Array();
 		var datas = userTable.row('.selected').length;
 
 		if(datas != 1){
@@ -704,7 +705,7 @@
 							db_svr_id : rows.db_svr_id,
 							usr_id : rows.usr_id
 						},
-						dataType : "json",
+					//	dataType : "json",
 						type : "post",
 						beforeSend: function(xhr) {
 							xhr.setRequestHeader("AJAX", true);
@@ -727,35 +728,52 @@
 			}
 		}
 
-		if (confirm('<spring:message code="message.msg166"/>')){
-			$.ajax({
-				url : "/updateUsrDBSrvAutInfo.do",
-				data : {
-					datasArr : JSON.stringify(datasArr)
-				},
-				dataType : "json",
-				type : "post",
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader("AJAX", true);
-				},
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
-					} else if(xhr.status == 403) {
-						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
-					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-					}
-				},
-				success : function(result) {
-					showSwalIcon('<spring:message code="message.msg07"/>', '<spring:message code="common.close" />', '', 'success');
+		confile_title = '<spring:message code="common.dbServer" />' + '<spring:message code="auth_management.auth" />' + " " + '<spring:message code="encrypt_policyOption.Settings" />' + " " + '<spring:message code="common.request" />';
+		$('#confirm_tlt').html(confile_title);
+		$('#confirm_msg').html('<spring:message code="message.msg166" />');
+		$('#pop_confirm_md').modal("show");
+	}
+
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmRst(){
+		fn_UsrDBSrvAutInfo();
+	}
+
+	/* ********************************************************
+	 * db서버권한 등록
+	 ******************************************************** */
+	function fn_UsrDBSrvAutInfo() {
+		$.ajax({
+			url : "/updateUsrDBSrvAutInfo.do",
+			data : {
+				datasArr : JSON.stringify(datasArr)
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+					top.location.href = "/";
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
-			});
-		}else{
-			return false;
-		}
+			},
+			success : function(result) {
+				if (result == "S") {
+					showSwalIcon('<spring:message code="message.msg07"/>', '<spring:message code="common.close" />', '', 'success');
+				} else {
+					showSwalIcon('<spring:message code="migration.msg06"/>', '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
 	}
 
 	/* 유저조회버튼 클릭시 */
@@ -791,8 +809,9 @@
 	}
 </script>
 
-<body>
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<%@include file="./../../popup/confirmForm.jsp"%>
+
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -805,7 +824,7 @@
 									<div class="col-5">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-<!-- 												<i class="fa fa-check-square"></i> -->
+ 											<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.server_auth_management" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -837,48 +856,57 @@
 		</div>
 
 		<div class="col-lg-6 grid-margin stretch-card">
-		  <div class="card">
-		    <div class="card-body">
-		      <h4 class="card-title"><spring:message code="auth_management.user_choice" /></h4>
-		      <div class="table-responsive">
-				<form class="form-inline" style="float: right;">
-					<div class="input-group mb-2 mr-sm-2">
-						<input type="text" class="form-control" style="width:250px;" id="search">					
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="auth_management.user_choice" />
+					</h5>
+					<div class="table-responsive" style="overflow:hidden;min-height:650px;">
+						<form class="form-inline" style="float: right;">
+							<div class="input-group mb-2 mr-sm-2">
+								<input type="text" class="form-control" style="width:250px;" id="search">
+							</div>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">
+								<i class="ti-search btn-icon-prepend "></i><spring:message code="button.search" />
+							</button>
+						</form>
+						<table id="user" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="20"><spring:message code="common.no"/></th>
+									<th width="90"><spring:message code="user_management.id" /></th>
+									<th width="90"><spring:message code="user_management.user_name" /></th>
+								</tr>
+							</thead>
+						</table>
 					</div>
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">
-						<i class="ti-search btn-icon-prepend "></i><spring:message code="button.search" />
-					</button>
-				</form>
-				<table id="user" class="table table-hover table-striped" style="width:100%;">
-					<thead>
-						<tr class="bg-primary text-white">
-							<th width="20"><spring:message code="common.no"/></th>
-							<th width="90"><spring:message code="user_management.id" /></th>
-							<th width="90"><spring:message code="user_management.user_name" /></th>
-						</tr>
-					</thead>
-				</table>      
-		      </div>
-		    </div>
-		  </div>
+				</div>
+			</div>
 		</div>
             
 		<div class="col-lg-6 grid-margin stretch-card">
-		  <div class="card">
-		    <div class="card-body">
-		      <h4 class="card-title"><spring:message code="auth_management.db_server_menu_auth_mng" /></h4>
-		      <div class="table-responsive">
-			  	<form class="form-inline" style="float: right;">
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="server_button" onClick="fn_svr_save()">
-						<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
-					</button>
-				</form>
-		        <div id="svrAutList" style="height: 630px;"></div>
-		      </div>
-		    </div>
-		  </div>
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="auth_management.db_server_menu_auth_mng" />
+					</h5>
+	
+					<div class="row" style="margin-top:-10px;">
+						<div class="col-12">
+							<div class="template-demo">	
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable float-right" id="server_button" onClick="fn_svr_save()">
+									<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div id="svrAutList" class="col-12 system-tlb-scroll" style="height:560px;overflow-y:auto;"></div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
 		</div>
-		
 	</div>
 </div>
-
