@@ -20,8 +20,8 @@
 %>
 
 <div class="modal fade" id="pop_layer_script" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 120px 350px;">
-		<div class="modal-content" style="width:900px;">
+	<div class="modal-dialog  modal-xl" role="document">
+		<div class="modal-content">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;cursor:pointer;" data-dismiss="modal">
 					<spring:message code="menu.script_execution_command"/>
@@ -29,7 +29,7 @@
 
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
-						<form class="cmxform" id="rsltMsgForm">
+						<form class="cmxform" id="rsltMsgScriptInfoForm">
 							<fieldset>
 								<div class="form-group row">
 									<div class="col-sm-12">

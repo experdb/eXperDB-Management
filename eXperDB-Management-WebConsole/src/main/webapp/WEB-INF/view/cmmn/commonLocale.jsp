@@ -69,6 +69,7 @@ var backup_management_uncompressed = "<spring:message code='backup_management.un
 
 var common_volume = "<spring:message code='common.volume' />";
 var common_choice = "<spring:message code='common.choice' />";
+var message_msg151 = "<spring:message code='message.msg151' />";
 
 </script>
 <body>

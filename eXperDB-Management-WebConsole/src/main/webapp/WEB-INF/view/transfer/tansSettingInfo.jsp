@@ -31,7 +31,7 @@
 	 ******************************************************** */
 	function fn_info_init(){
 		info_connector_tableList = $('#info_connector_tableList').DataTable({
-			scrollY : "280px",
+			scrollY : "200px",
 			scrollX: true,	
 			processing : true,
 			searching : false,
@@ -167,7 +167,7 @@
 
 							<div class="tab-pane fade" role="tabpanel" id="infoTableTab">	
 								<div class="row">		
-									<div class="col-12 stretch-card div-form-margin-table" style="margin-top:5px;">
+									<div class="col-12 stretch-card div-form-margin-table" style="margin-top:-25px;">
  										<div class="card" style="border:0px;">
 											<div class="card-body">
 												<h4 class="card-title">

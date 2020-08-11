@@ -1187,6 +1187,11 @@ function fn_fixLog(exe_sn, viewGbn){
 function fn_fix_rslt_msg_modify(){
 	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
 
+	if (nvlPrmSet($('#exe_sn', '#rsltMsgForm').val(), "") == "") {
+		showSwalIcon(message_msg151, closeBtn, '', 'error');
+		return;
+	}
+
 	$.ajax({
 		url : "/updateFixRslt.do",
 		data : {

@@ -438,6 +438,7 @@
 				
 				if ($("#left_list").hasClass("col-12")) {
 					$("#left_list").attr('class', 'col-4 stretch-card div-form-margin-table');
+					$("#left_list").attr('style', 'max-width: 33%;');
 				}
 				$('#right_list').show();
 				$('#center_div').show();
@@ -582,6 +583,7 @@
 	 ******************************************************** */
 	function fn_leftListSize() {
 		$("#left_list").attr('class', 'col-12 stretch-card div-form-margin-table');
+		$("#left_list").attr('style', '');
 		$('#right_list').hide();
 		$('#center_div').hide();
 	}
@@ -695,7 +697,7 @@
 									<div class="col-5">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="fa fa-cog"></i>
 												<span class="menu-title"><spring:message code="menu.script_settings"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>

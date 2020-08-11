@@ -29,7 +29,7 @@
 
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
-						<form class="cmxform" id="rsltMsgForm">
+						<form class="cmxform" id="rsltMsgInfoForm">
 							<fieldset>
 								<div class="form-group row div-form-margin-z">
 									<label for="rdo_2_3" class="col-sm-3 col-form-label">

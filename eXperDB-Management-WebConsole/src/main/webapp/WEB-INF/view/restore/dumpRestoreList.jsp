@@ -302,7 +302,7 @@
 									<div class="col-5">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="fa fa-window-restore"></i>
 												<span class="menu-title"><spring:message code="restore.Dump_Recovery"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>

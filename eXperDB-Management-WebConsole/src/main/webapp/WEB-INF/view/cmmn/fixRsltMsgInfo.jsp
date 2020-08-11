@@ -20,8 +20,8 @@
 %>
 
 <div class="modal fade" id="pop_layer_fix_rslt_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 190px 350px;">
-		<div class="modal-content" style="width:1000px;">
+	<div class="modal-dialog  modal-xl" role="document">
+		<div class="modal-content">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="etc.etc33"/>

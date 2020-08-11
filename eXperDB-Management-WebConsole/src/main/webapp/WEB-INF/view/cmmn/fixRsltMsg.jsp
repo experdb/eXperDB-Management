@@ -19,8 +19,8 @@
 	*/
 %>
 <div class="modal fade" id="pop_layer_fix_rslt_msg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 110px 350px;">
-		<div class="modal-content" style="width:1000px;">
+	<div class="modal-dialog  modal-xl" role="document">
+		<div class="modal-content">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="etc.etc32"/>
@@ -29,7 +29,7 @@
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
 						<form class="cmxform" id="rsltMsgForm">
-							<input type="text" name="fix_update_view_gbn" id="fix_update_view_gbn" value=""/>
+							<input type="hidden" name="fix_update_view_gbn" id="fix_update_view_gbn" value=""/>
 
 							<fieldset>
 								<div class="form-group row div-form-margin-z">
@@ -98,7 +98,7 @@
 								</div>
 
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-									<button type="button" class="btn btn-light" onclick="fn_fix_rslt_msg_modify();"><spring:message code="common.modify"/></button>
+									<button type="button" class="btn btn-primary" onclick="fn_fix_rslt_msg_modify();"><spring:message code="common.modify"/></button>
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 								</div>
 							</fieldset>

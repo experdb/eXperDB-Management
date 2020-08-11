@@ -34,8 +34,8 @@
 </script>
 
 <div class="modal fade" id="pop_layer_script_work" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 120px 350px;">
-		<div class="modal-content" style="width:900px;">
+	<div class="modal-dialog  modal-xl" role="document">
+		<div class="modal-content">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="menu.script_execution_command"/>
