@@ -395,13 +395,13 @@
 					<div class="card-body" style="padding: 0px 0px 0px 0px;">
 						<div class="form-group row div-form-margin-z">
 							<div class="col-12" >
-								<ul class="nav nav-pills nav-pills-setting" style="border-bottom:0px;" id="server-tab" role="tablist">
-									<li class="nav-item tab-pop-two-style">
+								<ul class="nav nav-pills nav-pills-setting nav-justified" style="border-bottom:0px;" id="server-tab" role="tablist">
+									<li class="nav-item">
 										<a class="nav-link active" id="mod-tab-1" data-toggle="pill" href="#modSettingTab" role="tab" aria-controls="modSettingTab" aria-selected="true" >
 											<spring:message code="data_transfer.connect_set" />
 										</a>
 									</li>
-									<li class="nav-item tab-pop-two-style">
+									<li class="nav-item">
 										<a class="nav-link" id="mod-tab-2" data-toggle="pill" href="#modTableTab" role="tab" aria-controls="modTableTab" aria-selected="false">
 											<spring:message code="data_transfer.table_mapping" />
 										</a>

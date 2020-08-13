@@ -388,10 +388,10 @@
 					<div class="horizontal-menu">
 						<nav class="bottom-navbar">
 							<div class="container">
-								<ul class="nav page-navigation">
+								<ul class="nav page-navigation nav-justified">
 
 									<!-- SCHEDULE -->
-									<li class="nav-item width-div-a" id="scheduleMenu" style="margin-top:15px;">
+									<li class="nav-item width-div-a" id="scheduleMenu" style="margin-top:7px;">
  										<a href="#" class="nav-link">
 											<i class="ti-calendar menu-icon"></i>
 											<span class="menu-title">SCHEDULE</span>
@@ -453,7 +453,7 @@
 									 --%>
 									
 									<!-- ADMIN -->
-									<li class="nav-item mega-menu width-div-a" id="adminMenu" style="margin-top:15px;">
+									<li class="nav-item mega-menu width-div-a" id="adminMenu" style="margin-top:7px;">
 										<a href="#" class="nav-link">
 											<i class="ti-desktop menu-icon"></i>
 											<span class="menu-title">ADMIN</span>
@@ -569,7 +569,7 @@
 
 									
 									<!-- ENCRYPT -->
-									<li class="nav-item mega-menu width-div-a" id="encryptMenu" style="margin-top:15px;">	
+									<li class="nav-item mega-menu width-div-a" id="encryptMenu" style="margin-top:7px;">	
 										<a href="#" class="nav-link">
 											<i class="ti-lock menu-icon"></i>
 											<span class="menu-title">ENCRYPT</span>
@@ -666,7 +666,7 @@
 
 									
 									<!-- MIGRATION -->
-									<li class="nav-item width-div-a"  id="migrationMenu" style="margin-top:15px;">
+									<li class="nav-item width-div-a"  id="migrationMenu" style="margin-top:7px;">
 										<a href="#" class="nav-link">
 											<i class="ti-server menu-icon"></i>
 											<span class="menu-title">MIGRATION</span>
@@ -699,7 +699,7 @@
 									</li>
 									
  									
-									<li class="nav-item width-div-a"  id="myPageMenu" style="margin-top:15px;">
+									<li class="nav-item width-div-a"  id="myPageMenu" style="margin-top:7px;">
 										<a href="#" class="nav-link">
 											<i class="ti-user menu-icon"></i>
 											<span class="menu-title">MY PAGE</span>

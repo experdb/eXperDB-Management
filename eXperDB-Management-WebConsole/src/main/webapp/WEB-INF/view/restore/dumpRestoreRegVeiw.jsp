@@ -810,13 +810,13 @@
 
 										<div class="form-group row div-form-margin-z" style="margin-bottom:-10px;">
 											<div class="col-12" >
-												<ul class="nav nav-pills nav-pills-setting" style="border-bottom:0px;" id="server-tab" role="tablist">
-													<li class="nav-item tab-pop-two-style">
+												<ul class="nav nav-pills nav-pills-setting nav-justified" style="border-bottom:0px;" id="server-tab" role="tablist">
+													<li class="nav-item ">
 														<a class="nav-link active" id="dump-tab-1" data-toggle="pill" href="#dumpOptionTab1" role="tab" aria-controls="dumpOptionTab1" aria-selected="true" >
 															<spring:message code="backup_management.add_option" /> #1
 														</a>
 													</li>
-													<li class="nav-item tab-pop-two-style">
+													<li class="nav-item">
 														<a class="nav-link" id="dump-tab-2" data-toggle="pill" href="#dumpOptionTab2" role="tab" aria-controls="dumpOptionTab2" aria-selected="false">
 															<spring:message code="backup_management.add_option" /> #2
 														</a>

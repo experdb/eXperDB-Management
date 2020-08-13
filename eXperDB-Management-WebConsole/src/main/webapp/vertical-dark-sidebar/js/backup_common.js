@@ -360,8 +360,8 @@ function fn_insert_chogihwa(gbn, result) {
 		//rollname selectbox 셋팅
 		$("#ins_dump_usr_role_nm", "#workDumpRegForm").find('option').remove();
 		$("#ins_dump_usr_role_nm", "#workDumpRegForm").append('<option value="0000">'+ common_choice +'</option>');
-		
-		if (result.roleList.data.length > 0) {
+
+		if (nvlPrmSet(result.roleList.data,"") != "") {
 			for (var idx=0; idx < result.roleList.data.length; idx++) {
 				$("#ins_dump_usr_role_nm", "#workDumpRegForm").append("<option value='"+ result.roleList.data[idx].rolname + "'>" + result.roleList.data[idx].rolname + "</option>");
 			}
@@ -456,7 +456,7 @@ function fn_update_chogihwa(gbn, result) {
 		$("#mod_dump_usr_role_nm", "#workDumpModForm").find('option').remove();
 		$("#mod_dump_usr_role_nm", "#workDumpModForm").append('<option value="0000">'+ common_choice + '</option>');
 		
-		if (result.roleList.data.length > 0) {
+		if (nvlPrmSet(result.roleList.data,"") != "") {
 			for (var idx=0; idx < result.roleList.data.length; idx++) {
 				$("#mod_dump_usr_role_nm", "#workDumpModForm").append("<option value='"+ result.roleList.data[idx].rolname + "'>" + result.roleList.data[idx].rolname + "</option>");
 			}

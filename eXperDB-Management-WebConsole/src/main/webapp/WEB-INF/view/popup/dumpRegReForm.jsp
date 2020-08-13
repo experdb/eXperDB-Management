@@ -195,34 +195,44 @@
 				}
 			},
 			success : function(data) {
+
 				if (data != null) {
-					if(data.result.ERR_CODE == ""){
-						if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
-							var volume = data.result.RESULT_DATA.CAPACITY;
+					if (data.result != null) {
+						if(data.result.ERR_CODE == ""){
+							if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
+								var volume = data.result.RESULT_DATA.CAPACITY;
 
-							if(keyType == 2){
-								$("#mod_dump_check_path2", "#workDumpModForm").val("Y");
+								if(keyType == 2){
+									$("#mod_dump_check_path2", "#workDumpModForm").val("Y");
 
-								$("#mod_dump_backupVolume", "#workDumpModForm").html("<spring:message code='common.volume' /> : "+volume);
+									$("#mod_dump_backupVolume", "#workDumpModForm").html("<spring:message code='common.volume' /> : "+volume);
+									$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+								}
+							}else{
+								if(haCnt > 1){
+									$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
+								}else{
+									$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="backup_management.invalid_path"/>');
+								}
+								
+								$("#mod_dump_save_pth_alert", "#workDumpModForm").show();
+								
+								$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+								$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
 								$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
 							}
 						}else{
-							if(haCnt > 1){
-								$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
-							}else{
-								$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="backup_management.invalid_path"/>');
-							}
-							
+							$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="message.msg76" />');
 							$("#mod_dump_save_pth_alert", "#workDumpModForm").show();
 							
 							$("#mod_dump_check_path2", "#workDumpModForm").val("N");
 							$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
 							$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
 						}
-					}else{
-						$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="message.msg76" />');
+					} else {
+	/* 					$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="message.msg76" />');
 						$("#mod_dump_save_pth_alert", "#workDumpModForm").show();
-						
+						 */
 						$("#mod_dump_check_path2", "#workDumpModForm").val("N");
 						$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
 						$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
@@ -894,13 +904,13 @@
 									<div class="card-body" style="border: 1px solid #adb5bd;">
 										<div class="form-group row div-form-margin-z" style="margin-top:-10px;margin-bottom:-10px;">
 											<div class="col-12" >
-												<ul class="nav nav-pills nav-pills-setting" style="border-bottom:0px;" id="server-tab" role="tablist">
-													<li class="nav-item tab-pop-two-style">
+												<ul class="nav nav-pills nav-pills-setting nav-justified" style="border-bottom:0px;" id="server-tab" role="tablist">
+													<li class="nav-item">
 														<a class="nav-link active" id="mod-dump-tab-1" data-toggle="pill" href="#modDumpOptionTab1" role="tab" aria-controls="modDumpOptionTab1" aria-selected="true" >
 															<spring:message code="backup_management.add_option" /> #1
 														</a>
 													</li>
-													<li class="nav-item tab-pop-two-style">
+													<li class="nav-item">
 														<a class="nav-link" id="mod-dump-tab-2" data-toggle="pill" href="#modDumpOptionTab2" role="tab" aria-controls="modDumpOptionTab2" aria-selected="false">
 															<spring:message code="backup_management.add_option" /> #2
 														</a>

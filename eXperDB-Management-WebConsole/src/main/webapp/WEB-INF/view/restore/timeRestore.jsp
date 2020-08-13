@@ -160,7 +160,7 @@
 				}
 			},
 			success : function(result) {
-				if (result != null) {
+				if (result != null && result !=",") {
 					$("#rman_pth", "#restoreTimeRegForm").val(result[1].PGRBAK);
 				} else {
 					$("#rman_pth", "#restoreTimeRegForm").val("");

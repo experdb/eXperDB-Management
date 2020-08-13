@@ -631,13 +631,13 @@
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-pills-setting" id="server-tab" role="tablist" style="border:none;">
-						<li class="nav-item tab-two-style">
+					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
+						<li class="nav-item">
 							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
 								<spring:message code="restore.Emergency_Point-in-Time" /> <spring:message code="restore.Recovery_history" />
 							</a>
 						</li>
-						<li class="nav-item tab-two-style">
+						<li class="nav-item">
 							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('dump');">
 								Dump <spring:message code="restore.Recovery_history" />
 							</a>
