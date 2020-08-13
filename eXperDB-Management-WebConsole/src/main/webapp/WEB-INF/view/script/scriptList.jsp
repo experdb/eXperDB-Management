@@ -114,7 +114,7 @@
 		$('#scriptTable tbody').on('click','tr',function() {
 			var wrk_id_up = table.row(this).data().wrk_id;
 			
-			fn_schduleList(wrk_id_up);
+			fn_schdule_pop_List(wrk_id_up);
 		});
 	}
 
@@ -122,7 +122,7 @@
 	 * script setting Data Fetch List
 	 ******************************************************** */	
 	function fn_mainsearch(){
-		fn_leftListSize();
+		fn_schedule_leftListSize();
 
 		$.ajax({
 			url : "/selectScriptList.do", 
@@ -160,7 +160,7 @@
 	 * script reg Btn click
 	 ******************************************************** */
 	function fn_reg_popup(){
-		fn_leftListSize();
+		fn_schedule_leftListSize();
 
 		$('#pop_layer_ins_script').modal("hide");
 
@@ -197,7 +197,7 @@
 	 * script rereg Btn click
 	 ******************************************************** */
 	 function fn_dblclick_updateform(wrk_id_up) {
-		fn_leftListSize();
+		 fn_schedule_leftListSize();
 
 		$('#wrk_id', '#findList').val(wrk_id_up);
 
@@ -245,7 +245,7 @@
 	 * script rereg Btn click
 	 ******************************************************** */
 	 function fn_rereg_popup(){
-		fn_leftListSize();
+		 fn_schedule_leftListSize();
 
 		var datas = table.rows('.selected').data();
 			
@@ -303,7 +303,7 @@
 	 * 스케줄 활용여부 체크
 	 ******************************************************** */
 	 function fn_scheduleCheck(){
-		fn_leftListSize();
+		 fn_schedule_leftListSize();
 
 		bck_wrk_id_List = [];
 		wrk_id_List = [];
@@ -403,47 +403,6 @@
 				}
 			}
 		});
-	}
-
-	/* ********************************************************
-	 * 스케줄리스트 조회
-	 ******************************************************** */
-	function fn_schduleList (wrk_id) {
-		var db_svr_id_val = '<c:out value="${db_svr_id}"/>';
-
-	 	$.ajax({
-			url : "/selectScriptScheduleList.do",
-			data : {
-				db_svr_id : db_svr_id_val,
-				wrk_id : wrk_id
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				scheduleTable.rows({selected: true}).deselect();
-				scheduleTable.clear().draw();
-				scheduleTable.rows.add(result).draw();
-				
-				if ($("#left_list").hasClass("col-12")) {
-					$("#left_list").attr('class', 'col-4 stretch-card div-form-margin-table');
-					$("#left_list").attr('style', 'max-width: 33%;');
-				}
-				$('#right_list').show();
-				$('#center_div').show();
-			}
-		}); 
 	}
 
 	//스케줄 테이블
@@ -546,7 +505,7 @@
 				{
 					data : "",
 					render: function (data, type, full) {				
-						  return '<button id="detail" class="btn btn-outline-primary" onClick=javascript:fn_dblclick_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
+						  return '<button id="detail" class="btn btn-outline-primary" onClick=javascript:fn_dblclick_pop_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
 					},
 					className : "dt-center",
 					defaultContent : "",
@@ -561,7 +520,7 @@
 		$('#scheduleList tbody').on('dblclick','tr',function() {
 			var scd_id_up = scheduleTable.row(this).data().scd_id;
 
-			fn_dblclick_scheduleInfo(scd_id_up);
+			fn_dblclick_pop_scheduleInfo(scd_id_up);
 		});
 		
 		scheduleTable.tables().header().to$().find('th:eq(1)').css('min-width', '30px');	  
@@ -576,49 +535,6 @@
 		scheduleTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
 		scheduleTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
 	    $(window).trigger('resize'); 
-	}
-	
-	/* ********************************************************
-	 * 스크립트 리스트 100%
-	 ******************************************************** */
-	function fn_leftListSize() {
-		$("#left_list").attr('class', 'col-12 stretch-card div-form-margin-table');
-		$("#left_list").attr('style', '');
-		$('#right_list').hide();
-		$('#center_div').hide();
-	}
-
-	/* ********************************************************
-	 * script rereg Btn click
-	 ******************************************************** */
-	 function fn_dblclick_scheduleInfo(scd_id_up) {
-		$('#scd_id', '#findList').val(scd_id_up);
-
-	 	$.ajax({
-			url : "scriptScheduleWrkListVeiw.do",
-			data : {},
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-		    error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				//테이블 세팅
-				fn_workpop_init();
-				
-				fn_workpop_search();
-				
-				$('#pop_layer_info_schedule').modal("show");
-			}
-		});
 	}
 
 	/* ********************************************************
@@ -754,7 +670,7 @@
 			</div>
 		</div>
 
-		<div class="col-12 stretch-card div-form-margin-table" id="left_list">
+		<div class="col-sm-12 stretch-card div-form-margin-table" id="left_list">
 			<div class="card">
 				<div class="card-body">	
 					<div class="row" style="margin-top:-20px;">
@@ -813,19 +729,15 @@
 			</div>
 		</div>
 
-		<div class="col-1 stretch-card div-form-margin-table" style="display:none;max-width: 5.33333%;margin-right: -20px;margin-left: -20px;" id="center_div" >
-			<div class="card" style="background-color: transparent !important;border:0px;">
-				<div class="card-body">	
-					<div class="card my-sm-2" style="border:0px;background-color: transparent !important;">
-						<div class="card-body" style="margin-left: -25px;" onclick="fn_leftListSize();">
-							<i class='fa fa-angle-double-right text-info' style="font-size: 35px;cursor:pointer;"></i>
-						</div>
-					</div>
+		<div class="col-sm-0_5" style="display:none;" id="center_div" >
+			<div class="card" style="background-color: transparent !important;border:0px;top:30%;position: inline-block;">
+				<div class="card-body" style="" onclick="fn_schedule_leftListSize();">	
+					<i class='fa fa-angle-double-right text-info' style="font-size: 35px;cursor:pointer;"></i>
 				</div>
 			</div>
 		</div>
 
-		<div class="col-7 stretch-card div-form-margin-table" id="right_list" style="display:none;max-width:63.8%;" >
+		<div class="col-sm-6_3 stretch-card div-form-margin-table" id="right_list" style="display:none;" >
 			<div class="card">
 				<div class="card-body">	
 					<div class="card my-sm-2">
@@ -835,35 +747,34 @@
 									<div class="row">
 										<div class="col-sm-12 col-md-6">
 											<div class="dataTables_length" id="order-listing_length">
-												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+							</div>
 	
-								<table id="scheduleList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-									<thead>
-										<tr class="bg-info text-white">
-											<th width="30"><spring:message code="common.no" /></th>							
-											<th width="120"><spring:message code="schedule.schedule_name" /></th>
-											<th width="200"><spring:message code="schedule.scheduleExp"/></th>
-											<th width="50"><spring:message code="schedule.work_count" /></th>
-											<th width="100"><spring:message code="schedule.pre_run_time" /></th>
-											<th width="100"><spring:message code="schedule.next_run_time" /></th>
-											<th width="80"><spring:message code="common.run_status" /></th>
-											<th width="100"><spring:message code="etc.etc26"/></th>
-											<th width="100"><spring:message code="data_transfer.detail_search" /></th>
-											<th width="0"></th>
-											<th width="0"></th>
-										</tr>
-									</thead>
-								</table>
-						 	</div>	
-					 	</div>
-					</div>
+							<table id="scheduleList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+								<thead>
+									<tr class="bg-info text-white">
+										<th width="30"><spring:message code="common.no" /></th>							
+										<th width="120"><spring:message code="schedule.schedule_name" /></th>
+										<th width="200"><spring:message code="schedule.scheduleExp"/></th>
+										<th width="50"><spring:message code="schedule.work_count" /></th>
+										<th width="100"><spring:message code="schedule.pre_run_time" /></th>
+										<th width="100"><spring:message code="schedule.next_run_time" /></th>
+										<th width="80"><spring:message code="common.run_status" /></th>
+										<th width="100"><spring:message code="etc.etc26"/></th>
+										<th width="100"><spring:message code="data_transfer.detail_search" /></th>
+										<th width="0"></th>
+										<th width="0"></th>
+									</tr>
+								</thead>
+							</table>
+					 	</div>	
+				 	</div>
 				</div>
 			</div>
 		</div>
-		<!-- content-wrapper ends -->
 	</div>
+	<!-- content-wrapper ends -->
 </div>

@@ -1,9 +1,34 @@
 $(window).ready(function(){
+	//검색조건 초기화
+	selectInitTab(selectChkTab);
 	
+	//스케줄 테이즐 setting
+	fn_init_schedule();
+
+		//조회
+	if(tabGbn != ""){
+		selectTab(tabGbn);
+	}else{
+		selectTab("rman");
+	}
+		
+	$('#rmanDataTable tbody').on('click','tr',function() {
+		var wrk_id_up = tableRman.row(this).data().wrk_id;
+		
+		fn_schdule_pop_List(wrk_id_up);
+	});
+	
+	$('#dumpDataTable tbody').on('click','tr',function() {
+		var wrk_id_up = tableDump.row(this).data().wrk_id;
+		
+		fn_schdule_pop_List(wrk_id_up);
+	});
+
 	/* ********************************************************
 	 * Click Search Button
 	 ******************************************************** */
 	$("#btnSelect").click(function() {
+		fn_schedule_leftListSize();
 		if(selectChkTab == "rman"){
 			fn_get_rman_list();
 		}else{
@@ -15,6 +40,7 @@ $(window).ready(function(){
 	 * insert Button
 	 ******************************************************** */
 	$("#btnInsert").click(function() {
+		fn_schedule_leftListSize();
 		fn_reg_popup();
 	});
 
@@ -22,6 +48,7 @@ $(window).ready(function(){
 	 * modify Button
 	 ******************************************************** */
 	$("#btnModify").click(function() {
+		fn_schedule_leftListSize();
 		fn_rereg_popup();
 	});
 
@@ -29,6 +56,7 @@ $(window).ready(function(){
 	 * delete Button
 	 ******************************************************** */
 	$("#btnDelete").click(function() {
+		fn_schedule_leftListSize();
 		fn_work_delete_confirm();
 	});
 	
@@ -36,6 +64,7 @@ $(window).ready(function(){
 	 * 즉시실행 Button
 	 ******************************************************** */
 	$("#btnImmediately").click(function() {
+		fn_schedule_leftListSize();
 		fn_ImmediateStartConfirm();
 	});
 });
@@ -89,6 +118,7 @@ function seachParamInit(tabGbn) {
  * Tab Click
  ******************************************************** */
 function selectTab(intab){
+	fn_schedule_leftListSize();
 	selectChkTab = intab;
 
 	if(intab == "rman"){			
@@ -605,4 +635,277 @@ function fn_update_chogihwa(gbn, result) {
 
 		fn_modDumpWorkPopStart(workList);
 	}
+}
+
+//////////////////dumpRegReForm.jsp///////////////////////////////////////////////
+/* ********************************************************
+ * 팝업시작 스크립트
+ ******************************************************** */
+function fn_modDumpWorkPopStart(workJsonData) {
+	//HA구성확인
+	$.ajax({
+		async : false,
+		url : "/selectHaCnt.do",
+		data : {
+			db_svr_id : $("#db_svr_id","#findList").val()
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			haCnt = result[0].hacnt;
+		}
+	});
+	
+	//트리메뉴데이터
+	mode_workObj = workJsonData;
+
+	fn_mod_dump_checkSection();
+	
+	fn_mod_changeFileFmtCd();
+	
+	//용량체크
+	fn_mod_dump_checkFolder_init(2);
+	
+	//트리셋팅
+	setTimeout("fn_mod_get_object_list()", 100);
+}
+
+/* ********************************************************
+ * Sections에 체크시 Object형태중 Only data, Only Schema를 비활성화 시킨다.
+ ******************************************************** */
+function fn_mod_dump_checkSection(){
+	var check = false;
+	$("input[name=mod_dump_opt]").each(function(){
+		if( ($(this).attr("opt_cd") == "TC000601" || $(this).attr("opt_cd") == "TC000602" || $(this).attr("opt_cd") == "TC000603") && $(this).is(":checked")){
+			check = true;
+		}
+	});
+	$("input[name=mod_dump_opt]").each(function(){
+		if( $(this).attr("opt_cd") == "TC000701" || $(this).attr("opt_cd") == "TC000702" ){
+			if(check){
+				$(this).attr("disabled",true);
+			}else{
+				$(this).removeAttr("disabled");
+			}
+		}
+	});
+}
+
+
+/* ********************************************************
+ * File Format에 따른 Checkbox disabled Check
+ ******************************************************** */
+function fn_mod_changeFileFmtCd(){
+	if($("#mod_dump_file_fmt_cd", "#workDumpModForm").val() == "TC000401"){
+		$("#mod_dump_cprt", "#workDumpModForm").removeAttr("disabled");
+	}else{
+		$("#mod_dump_cprt", "#workDumpModForm").attr("disabled",true);
+		$("#mod_dump_cprt", "#workDumpModForm").val("0");
+	}
+
+	if($("#mod_dump_file_fmt_cd", "#workDumpModForm").val() == "TC000402"){
+		$("input[name=mod_dump_opt]").each(function(){
+			if( $(this).attr("opt_cd") == "TC000801" || $(this).attr("opt_cd") == "TC000903" || $(this).attr("opt_cd") == "TC000904" ){
+				$(this).removeAttr("disabled");
+			}
+		});
+	}else{
+		$("input[name=mod_dump_opt]").each(function(){
+			if( $(this).attr("opt_cd") == "TC000801" || $(this).attr("opt_cd") == "TC000903" || $(this).attr("opt_cd") == "TC000904" ){
+				$(this).attr("disabled",true);
+			}
+		});
+	}
+}
+
+/* ********************************************************
+ * Get Selected Database`s Object List
+ ******************************************************** */
+function fn_mod_get_object_list(){
+		var db_nm = nvlPrmSet($("#mod_dump_db_id option:selected", "#workDumpModForm").text(), "");
+	var db_id = nvlPrmSet($("#mod_dump_db_id option:selected", "#workDumpModForm").val(), "");
+	
+	if (db_nm == "" || db_id == "") {
+		$("#mod_treeview").html("");
+		return;
+	}
+
+	$.ajax({
+		async : false,
+		url : "/getObjectList.do",
+	  	data : {
+		  	db_svr_id : $("#db_svr_id","#findList").val(),
+			db_nm : db_nm
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(data) {
+			if (data != null) {
+				fn_mod_make_object_list(data);
+			} else {
+				$("#mod_treeview").html("");
+			}
+		}
+	});
+}
+
+/* ********************************************************
+ * Make Object Tree
+ ******************************************************** */
+function fn_mod_make_object_list(data){
+	var html = "<ul id='mod_treeview' class='hummingbird-base'>";
+	var schema = "";
+	var schemaCnt = 0;
+	var mod_checkStr = "";
+
+	$(data.data).each(function (index, item) {
+		var inSchema = item.schema;
+
+		if(schemaCnt > 0 && schema != inSchema){
+			html += "</ul></li>\n";
+		}
+
+		if(schema != inSchema){
+			if (mode_workObj.length > 0) {
+				for(var i=0;i<mode_workObj.length;i++){
+					if(mode_workObj[i].scm_nm == item.schema && mode_workObj[i].obj_nm == "") mod_checkStr = " checked";
+				}
+			}
+
+			html += "<li>\n";
+			html += "<i class='fa fa-minus'></i>\n";
+			html += "<label for='mod_schema"+schemaCnt+"'> <input id='mod_schema"+schemaCnt+"' name='mod_tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"' data-id='custom-0' type='checkbox' "+ mod_checkStr +"> "+item.schema+"</label>\n";
+			html += '<ul style="display: block;">\n';
+		}
+
+		mod_checkStr = "";
+
+		if (mode_workObj.length > 0) {
+			for(var i=0;i<mode_workObj.length;i++){
+				if(mode_workObj[i].scm_nm == item.schema && mode_workObj[i].obj_nm == item.name) mod_checkStr = " checked";
+			}
+		}
+
+		html += "<li style='padding-left:20px;'>";
+		html += "<label for='mod_table"+index+"'> <input id='mod_table"+index+"' name='mod_tree' value='"+item.name+"' otype='table' schema='"+item.schema+"' data-id='custom-1' type='checkbox' "+mod_checkStr+">  "+item.name+"</label></li>\n";
+
+		if(schema != inSchema){ 
+			schema = inSchema;
+			schemaCnt++;
+		}
+	});
+	if(schemaCnt > 0) html += "</ul></li>";
+	html += "</ul>";
+
+	$("#treeview_container", "#workDumpModForm").html("");
+	$("#treeview_container", "#workDumpModForm").html(html);
+
+	$("#mod_treeview", "#workDumpModForm").hummingbird();
+}
+
+/* ********************************************************
+ * 쿼리에서 Use Column Inserts, Use Insert Commands선택시 "OIDS포함" disabled
+ ******************************************************** */
+function fn_mod_dump_checkOid(){
+	var check = false;
+	$("input[name=mod_dump_opt]").each(function(){
+		if( ($(this).attr("opt_cd") == "TC000901" || $(this).attr("opt_cd") == "TC000902") && $(this).is(":checked")){
+			check = true;
+		}
+	});
+	
+	$("input[name=mod_dump_opt]").each(function(){
+		if( $(this).attr("opt_cd") == "TC001001" ){
+			if(check){
+				$(this).attr("disabled",true);
+			}else{
+				$(this).removeAttr("disabled");
+			}
+		}
+	});
+}
+
+/* ********************************************************
+ * 전체선택
+ ******************************************************** */
+function fn_mod_checkAll(schema_id, schema_name) {
+	var schemaChkBox = document.getElementById("schema"+schema_id);
+
+	if(schemaChkBox.checked) { 
+		$("input[name=mod_tree]").each(function(){
+			if($(this).attr("schema") == schema_name) {
+				this.checked = true;
+			}
+		});
+	} else { 
+		$("input[name=mod_tree]").each(function(){
+			if($(this).attr("schema") == schema_name) {
+				this.checked = false;
+			}
+		});
+	}
+}
+
+/* ********************************************************
+ * 옵션 숫자 입력 blur
+ ******************************************************** */
+function fn_mod_dumpAlertChk(obj) {
+	$("#" + obj.id + "_alert", "#workDumpModForm").html("");
+	$("#" + obj.id + "_alert", "#workDumpModForm").hide();
+}
+
+/* ********************************************************
+ * Object형태 중 Only data, Only Schema 중 1개만 체크가능
+ ******************************************************** */
+function fn_mod_dump_checkObject(code){
+	var check1 = false;
+	var check2 = false;
+
+	$("input[name=mod_dump_opt]").each(function(){
+		if(code == "TC000701" && $(this).attr("opt_cd") == "TC000701" && $(this).is(":checked") ){
+			check1 = true;
+		}else if(code == "TC000702" && $(this).attr("opt_cd") == "TC000702" && $(this).is(":checked") ){
+			check2 = true;
+		}
+	});
+
+	$("input[name=mod_dump_opt]").each(function(){
+		if(check1 && code == "TC000701" && $(this).attr("opt_cd") == "TC000702"){
+			$(this).prop("checked", false); 
+		}else if(check2 && code == "TC000702" && $(this).attr("opt_cd") == "TC000701"){
+			$(this).prop("checked", false); 
+		}
+	});
+}
+
+/* ********************************************************
+ * 백업경로변경시
+ ******************************************************** */
+function fn_mod_check_pathChk(val) {
+	$('#mod_dump_check_path2', '#workDumpModForm').val(val);
+	
+	$("#mod_dump_save_pth_alert", "#workDumpModForm").html('');
+	$("#mod_dump_save_pth_alert", "#workDumpModForm").hide();
 }

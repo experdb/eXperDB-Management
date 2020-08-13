@@ -1300,3 +1300,86 @@ function fn_dumpShow(bck, db_svr_id){
 		}
 	});
 }
+
+/* ********************************************************
+ * script rereg Btn click
+ ******************************************************** */
+ function fn_dblclick_pop_scheduleInfo(scd_id_up) {
+	$('#scd_id', '#findList').val(scd_id_up);
+
+ 	$.ajax({
+		url : "/scriptScheduleWrkListVeiw.do",
+		data : {},
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	    },
+	    error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			//테이블 세팅
+			fn_workpop_init();
+			
+			fn_workpop_search();
+			
+			$('#pop_layer_info_schedule').modal("show");
+		}
+	});
+}
+
+/* ********************************************************
+ * 스크립트 리스트 100%
+ ******************************************************** */
+function fn_schedule_leftListSize() {
+	$("#left_list").attr('class', 'col-sm-12 stretch-card div-form-margin-table');
+	$("#left_list").attr('style', '');
+	$('#right_list').hide();
+	$('#center_div').hide();
+}
+
+/* ********************************************************
+ * 스케줄리스트 조회
+ ******************************************************** */
+function fn_schdule_pop_List (wrk_id) {
+	var db_svr_id_val = $("#db_svr_id", "#findList").val();
+
+ 	$.ajax({
+		url : "/selectScriptScheduleList.do",
+		data : {
+			db_svr_id : db_svr_id_val,
+			wrk_id : wrk_id
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	    },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			scheduleTable.rows({selected: true}).deselect();
+			scheduleTable.clear().draw();
+			scheduleTable.rows.add(result).draw();
+			
+			if ($("#left_list").hasClass("col-sm-12")) {
+				$("#left_list").attr('class', 'col-sm-5 stretch-card div-form-margin-table');
+			}
+			$('#right_list').show();
+			$('#center_div').show();
+		}
+	}); 
+}

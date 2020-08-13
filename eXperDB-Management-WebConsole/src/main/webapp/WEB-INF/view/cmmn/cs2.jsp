@@ -94,3 +94,5 @@
 <script src="/vertical-dark-sidebar/js/common.js"></script>
 <script src="/vertical-dark-sidebar/js/hummingbird-treeview.js"></script>
 <!-- End custom js for this page-->
+
+<script src="/vertical-dark-sidebar/js/backup_common.js"></script>

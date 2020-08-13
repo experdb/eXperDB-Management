@@ -21,8 +21,6 @@
 	*/
 %>
 
-<script src="/vertical-dark-sidebar/js/backup_common.js"></script>
-
 <script type="text/javascript">
 	var tableRman = null;
 	var tableDump = null;
@@ -34,18 +32,139 @@
 	var confile_title = "";
 	var immediate_data = null;
 	var workJsonData = null;
+	var scheduleTable = null;
 
-	$(window.document).ready(function() {
-		//검색조건 초기화
-		selectInitTab(selectChkTab);
+	//스케줄 테이블
+	function fn_init_schedule(){
+		/* ********************************************************
+		* work리스트
+		******************************************************** */
+		scheduleTable = $('#scheduleList').DataTable({
+			scrollY : "305px",
+			scrollX: true,	
+			bDestroy: true,
+			paging : true,
+			processing : true,
+			searching : false,	
+			deferRender : true,
+			bSort: false,
+			columns : [
+				{data : "rownum",  className : "dt-center", defaultContent : ""}, 		
+				{data : "scd_nm", className : "dt-left", defaultContent : ""
+					,render: function (data, type, full) {
+						  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold" title="'+full.scd_nm+'">' + full.scd_nm + '</span>';
+					}
+				},
+				{ data : "scd_exp",
+						render : function(data, type, full, meta) {	 	
+							var html = '';					
+							html += '<span title="'+full.scd_exp+'">' + full.scd_exp + '</span>';
+							return html;
+						},
+						defaultContent : ""
+					},
+				{data : "wrk_cnt",  className : "dt-right", defaultContent : ""}, //work갯수
+				{data : "prev_exe_dtm",  defaultContent : ""
+					,render: function (data, type, full) {
+					if(full.prev_exe_dtm == null){
+						var html = '-';
+						return html;
+					}
+				  return data;
+				}}, 
+				{data : "nxt_exe_dtm",  defaultContent : ""
+					,render: function (data, type, full) {
+						if(full.nxt_exe_dtm == null){
+							var html = '-';
+							return html;
+						}
+					  return data;
+				}}, 
+				{data : "status", 
+					render: function (data, type, full){
+						var html = "";
+						if(full.scd_cndt == "TC001801"){
+							html += "<div class='badge badge-pill badge-success'>";
+							html += "	<i class='fa fa-minus-circle mr-2'></i>";
+							html += "<spring:message code='common.waiting' />";
+							html += "</div>";
+						}else if(full.scd_cndt == "TC001802"){
+							html += "<div class='badge badge-pill badge-warning'>";
+							html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+							html += "<spring:message code='dashboard.running' />";
+							html += "</div>";
+						}else{
+							html += "<div class='badge badge-pill badge-danger'>";
+							html += "	<i class='ti-close mr-2'></i>";
+							html += "<spring:message code='schedule.stop' />";
+							html += "</div>";
+						}
 
- 		//조회
-		if(tabGbn != ""){
-			selectTab(tabGbn);
-		}else{
-			selectTab("rman");
-		}
-	});
+						return html;
+					},
+					className : "dt-center",
+					 defaultContent : "" 	
+				},
+
+				{data : "status", 
+					render: function (data, type, full){	
+						var html = "";
+						if(full.scd_cndt == "TC001801"){
+							html += "<div class='badge badge-pill badge-success'>";
+							html += "	<i class='fa fa-minus-circle mr-2'></i>";
+							html += "<spring:message code='access_control_management.activation' />";
+							html += "</div>";
+						}else if(full.scd_cndt == "TC001802"){
+							html += "<div class='badge badge-pill badge-warning'>";
+							html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+							html += "<spring:message code='dashboard.running' />";
+							html += "</div>";
+						}else{
+							html += "<div class='badge badge-pill badge-danger'>";
+							html += "	<i class='ti-close mr-2'></i>";
+							html += "<spring:message code='etc.etc41' />";
+							html += "</div>";
+						}		
+
+						return html;
+					},
+					className : "dt-center",
+					defaultContent : "" 	
+				},
+				{
+					data : "",
+					render: function (data, type, full) {				
+						  return '<button id="detail" class="btn btn-outline-primary" onClick=javascript:fn_dblclick_pop_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
+					},
+					className : "dt-center",
+					defaultContent : "",
+					orderable : false
+				},
+				{data : "scd_id",  defaultContent : "", visible: false },
+				{data : "exe_dt",  defaultContent : "", visible: false },
+			]
+		});
+
+		//더블 클릭시
+		$('#scheduleList tbody').on('dblclick','tr',function() {
+			var scd_id_up = scheduleTable.row(this).data().scd_id;
+
+			fn_dblclick_pop_scheduleInfo(scd_id_up);
+		});
+		
+		scheduleTable.tables().header().to$().find('th:eq(1)').css('min-width', '30px');	  
+		scheduleTable.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
+		scheduleTable.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+		scheduleTable.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
+		scheduleTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		scheduleTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		scheduleTable.tables().header().to$().find('th:eq(7)').css('min-width', '80px');  
+		scheduleTable.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		scheduleTable.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		scheduleTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
+		scheduleTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+	    $(window).trigger('resize'); 
+	}
 
 	/* ********************************************************
 	 * Rman Data Table initialization
@@ -139,7 +258,7 @@
 	 ******************************************************** */
 	function fn_dump_init(){
 		tableDump = $('#dumpDataTable').DataTable({
-			scrollY: "300px",	
+			scrollY: "280px",	
 			scrollX: true,	
 			bDestroy: true,
 			paging : true,
@@ -509,9 +628,6 @@
 			}
 		});
 	}
-
-
-
 </script>
 
 <%@include file="../cmmn/workRmanInfo.jsp"%>
@@ -523,11 +639,13 @@
 <%@include file="../popup/rmanRegReForm.jsp"%>
 <%@include file="../popup/dumpRegReForm.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
-
+<%@include file="./../popup/scheduleWrkList.jsp"%>
+<%@include file="../cmmn/scheduleInfo.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="bck"  id="bck">
 	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
+	<input type="hidden" name="scd_id"  id="scd_id">
 </form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -634,7 +752,7 @@
 			</div>
 		</div>
 
-		<div class="col-12 stretch-card div-form-margin-table">
+		<div class="col-sm-12 stretch-card div-form-margin-table" id="left_list">
 			<div class="card">
 				<div class="card-body">
 					<div class="row" style="margin-top:-20px;">
@@ -730,13 +848,58 @@
 										</thead>
 									</table>
 							 	</div>
-							 	
-
 						 	</div>
 						</div>
 					</div>
 				</div>
 				<!-- content-wrapper ends -->
+			</div>
+		</div>
+
+		<div class="col-sm-0_5" style="display:none;" id="center_div" >
+			<div class="card" style="background-color: transparent !important;border:0px;top:30%;position: inline-block;">
+				<div class="card-body" style="" onclick="fn_schedule_leftListSize();">	
+					<i class='fa fa-angle-double-right text-info' style="font-size: 35px;cursor:pointer;"></i>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-6_3 stretch-card div-form-margin-table" id="right_list" style="display:none;" >
+			<div class="card">
+				<div class="card-body">	
+					<div class="card my-sm-2">
+						<div class="card-body" >
+							<div class="table-responsive">
+								<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+									<div class="row">
+										<div class="col-sm-12 col-md-6">
+											<div class="dataTables_length" id="order-listing_length">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+	
+							<table id="scheduleList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+								<thead>
+									<tr class="bg-info text-white">
+										<th width="30"><spring:message code="common.no" /></th>							
+										<th width="120"><spring:message code="schedule.schedule_name" /></th>
+										<th width="200"><spring:message code="schedule.scheduleExp"/></th>
+										<th width="50"><spring:message code="schedule.work_count" /></th>
+										<th width="100"><spring:message code="schedule.pre_run_time" /></th>
+										<th width="100"><spring:message code="schedule.next_run_time" /></th>
+										<th width="80"><spring:message code="common.run_status" /></th>
+										<th width="100"><spring:message code="etc.etc26"/></th>
+										<th width="100"><spring:message code="data_transfer.detail_search" /></th>
+										<th width="0"></th>
+										<th width="0"></th>
+									</tr>
+								</thead>
+							</table>
+					 	</div>	
+				 	</div>
+				</div>
 			</div>
 		</div>
 	</div>
