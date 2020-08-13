@@ -20,6 +20,8 @@
 	*/
 %>
 
+<script src="/vertical-dark-sidebar/js/backup_common.js"></script>
+
 <script type="text/javascript">
 	var haCnt = 0;
 	var mode_workObj = null;

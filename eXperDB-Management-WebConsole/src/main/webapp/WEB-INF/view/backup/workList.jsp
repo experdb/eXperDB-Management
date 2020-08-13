@@ -20,6 +20,7 @@
 	*
 	*/
 %>
+<script src="/vertical-dark-sidebar/js/backup_common.js"></script>
 
 <script type="text/javascript">
 	var tableRman = null;
@@ -33,6 +34,32 @@
 	var immediate_data = null;
 	var workJsonData = null;
 	var scheduleTable = null;
+	$(window).ready(function(){
+		//검색조건 초기화
+		selectInitTab(selectChkTab);
+		
+		//스케줄 테이즐 setting
+		fn_init_schedule();
+
+			//조회
+		if(tabGbn != ""){
+			selectTab(tabGbn);
+		}else{
+			selectTab("rman");
+		}
+			
+		$('#rmanDataTable tbody').on('click','tr',function() {
+			var wrk_id_up = tableRman.row(this).data().wrk_id;
+			
+			fn_schdule_pop_List(wrk_id_up);
+		});
+		
+		$('#dumpDataTable tbody').on('click','tr',function() {
+			var wrk_id_up = tableDump.row(this).data().wrk_id;
+			
+			fn_schdule_pop_List(wrk_id_up);
+		});
+	});
 
 	//스케줄 테이블
 	function fn_init_schedule(){
@@ -522,7 +549,7 @@
 	 * 즉시실행 DDL
 	 ******************************************************** */
 	function fn_ImmediateStart() {
-		$.ajax({
+/* 		$.ajax({
 			url : "/backupImmediateExe.do",
 			data : {
 				wrk_id:immediate_data[0].wrk_id,
@@ -550,7 +577,7 @@
 			},
 			success : function(result) {
 			}
-		});
+		}); */
 		
 		showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
 	}

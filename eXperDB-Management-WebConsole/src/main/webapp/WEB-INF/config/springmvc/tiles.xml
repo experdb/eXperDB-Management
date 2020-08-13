@@ -7,6 +7,7 @@
 	<definition name="default" template="/WEB-INF/view/layout/layout.jsp">
 		<put-attribute name="topMenu" value="/WEB-INF/view/layout/topMenu.jsp" />
 		<put-attribute name="treeMenu" value="/WEB-INF/view/layout/treeMenu.jsp" />
+		<put-attribute name="script" value="/WEB-INF/view/layout/mainScript.jsp" />
 		<put-attribute name="contents" value="" />
 	</definition>
 

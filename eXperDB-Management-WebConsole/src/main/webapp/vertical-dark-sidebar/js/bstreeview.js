@@ -121,6 +121,8 @@
 	                var treeItem = $(templates.treeviewItemServer)
 	                	.attr('aria-controls',  _this.itemIdPrefix + node.nodeId)
 /*                    	.attr('style', 'padding-left:' + leftPadding)*/
+	                	.attr('name', _this.itemIdPrefix)
+	                	.attr('id', _this.itemIdPrefix + node.nodeId)
 	                    .attr('href', "#" + _this.itemIdPrefix + node.nodeId);
 	                
 	                //span?쒓렇 - Set node Text.
@@ -154,12 +156,13 @@
 	                if (node.nodes) {
 	                    // Node group item.
 	                    var treeGroup = $(templates.treeviewGroupItem).attr('id', _this.itemIdPrefix + node.nodeId);
+	                    
 	                    treeviewNew.append(treeGroup);
 	                    parentElement.append(treeviewNew);
 	                    _this.build(treeGroup, node.nodes, depth);
 	                }
-
-	               jQuery("a[aria-controls='" + _this.itemIdPrefix + node.nodeId + "']").click();
+        			
+	               jQuery("a[aria-controls='" + _this.itemIdPrefix + "0" + "']").click();
             	} else {
         			// Main node element.
         			var treeviewSubGroupItem = $(templates.treeviewSubGroupItem);
@@ -215,7 +218,7 @@
             			treeviewNew.attr('id', node.id);
             			treeviewNew.attr('style', "height:23px;");
         			}
-        			
+
         			treeviewSubGroupItem.append(treeviewNew);
 
         			// Attach node to parent.

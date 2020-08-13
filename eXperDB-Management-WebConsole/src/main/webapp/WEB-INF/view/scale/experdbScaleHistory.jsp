@@ -818,7 +818,7 @@
 					}
  					
  					if (result.rslt_msg != "") {
- 						result.rslt_msg = fn_strBrReplcae(result);
+ 						result.rslt_msg = fn_strBrReplcae(result.rslt_msg);
  					}
 
 					$("#d_scaleWrkLogInfo").html(result.rslt_msg);
@@ -838,8 +838,11 @@
 	 ******************************************************** */
 	function fnc_menuMove() {
 		$('#pop_layer_err_msg').modal("hide");
+		var moveId = "scaleList" + $("#db_svr_id", "#findList").val();
 
-		location.href='/scale/scaleList.do?db_svr_id=' + $("#db_svr_id", "#findList").val();
+		parent.fn_treeMenu_move(moveId);
+		
+		//location.href='/scale/scaleList.do?db_svr_id=' + $("#db_svr_id", "#findList").val();
 	}
 </script>
 

@@ -617,8 +617,10 @@ function fn_scdLayer(scd_id){
  * br 변환
  ******************************************************** */
 function fn_strBrReplcae(msg) {
-	msg = msg.replace("<br/>", "\n");
-	
+	if (nvlPrmSet(msg, "") != "") {
+		msg = msg.replace("<br/>", "\n");
+	}
+
 	return msg;
 }
 

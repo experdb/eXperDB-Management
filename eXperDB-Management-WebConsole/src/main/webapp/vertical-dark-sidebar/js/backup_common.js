@@ -1,29 +1,4 @@
 $(window).ready(function(){
-	//검색조건 초기화
-	selectInitTab(selectChkTab);
-	
-	//스케줄 테이즐 setting
-	fn_init_schedule();
-
-		//조회
-	if(tabGbn != ""){
-		selectTab(tabGbn);
-	}else{
-		selectTab("rman");
-	}
-		
-	$('#rmanDataTable tbody').on('click','tr',function() {
-		var wrk_id_up = tableRman.row(this).data().wrk_id;
-		
-		fn_schdule_pop_List(wrk_id_up);
-	});
-	
-	$('#dumpDataTable tbody').on('click','tr',function() {
-		var wrk_id_up = tableDump.row(this).data().wrk_id;
-		
-		fn_schdule_pop_List(wrk_id_up);
-	});
-
 	/* ********************************************************
 	 * Click Search Button
 	 ******************************************************** */
