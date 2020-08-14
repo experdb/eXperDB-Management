@@ -459,7 +459,7 @@
 											<span class="menu-title">ADMIN</span>
 											<i class="menu-arrow"></i>
 										</a>
-										<div class="submenu" style="margin-top:15px;">
+										<div class="submenu" style="margin-top:7px;">
 											<div class="col-group-wrapper row" >
 												<div class="col-group col-md-3" id="MN0003_DIV">
 													<p class="category-heading" id="MN0003">
@@ -575,7 +575,7 @@
 											<span class="menu-title">ENCRYPT</span>
 											<i class="menu-arrow"></i>
 										</a>
-										<div class="submenu" style="margin-top:15px;">
+										<div class="submenu" style="margin-top:7px;">
 											<div class="col-group-wrapper row">
 												<div class="col-group col-md-3" id="MN00011">
 													<p class="category-heading">

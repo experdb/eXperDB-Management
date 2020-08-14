@@ -217,6 +217,8 @@ function fn_cookie(url) {
 	} */
 
 	sessionStorage.setItem('cssId',url);
+	
+	parent.fn_topMenuChk();
 }
 
 /* ********************************************************

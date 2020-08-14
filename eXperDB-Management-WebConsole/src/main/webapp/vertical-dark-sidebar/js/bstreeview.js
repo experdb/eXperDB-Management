@@ -26,8 +26,8 @@
         treeview: '<div class="bstreeview"></div>',
     	treeviewNew : '<li class="nav-item"></li>',
     	treeviewItemLst: '<a class="nav-link" href="#itemid" ></a>',
-    	treeviewItem: '<a class="nav-link" data-toggle="collapse" class="list-group-item" href="#itemid" aria-expanded="false" aria-controls="ui-basic"></a>',
-    	treeviewItemServer: '<a class="nav-link" data-toggle="collapse" class="list-group-item" href="#itemid" aria-expanded="false" aria-controls="ui-basic"></a>',
+    	treeviewItem: '<a class="nav-link mainMenu" data-toggle="collapse" class="list-group-item" href="#itemid" aria-expanded="false" aria-controls="ui-basic"></a>',
+    	treeviewItemServer: '<a class="nav-link mainMenu" data-toggle="collapse" class="list-group-item" href="#itemid" aria-expanded="false" aria-controls="ui-basic"></a>',
         treeviewGroupItem: '<div class="list-group collapse" id="itemid"></div>',
         treeviewGroupItemLst: '<div id="itemid"></div>',
         treeviewItemStateIcon: '<i class="state-icon menu-icon"></i>',
@@ -105,6 +105,7 @@
             var _this = this;
             // Calculate item padding.
             var leftPadding = "1.25rem;";
+            var iCnt = 1;
             if (depth >= 1) {
             	leftPadding = (depth * _this.settings.indent).toString() + "rem;";
             }
@@ -118,12 +119,25 @@
             	
             	if (depth == 0 || depth == 1) {
 	            	//a?쒓렇
-	                var treeItem = $(templates.treeviewItemServer)
-	                	.attr('aria-controls',  _this.itemIdPrefix + node.nodeId)
-/*                    	.attr('style', 'padding-left:' + leftPadding)*/
-	                	.attr('name', _this.itemIdPrefix)
-	                	.attr('id', _this.itemIdPrefix + node.nodeId)
-	                    .attr('href', "#" + _this.itemIdPrefix + node.nodeId);
+	                var treeItem = null;
+
+	                if (iCnt == 1) {
+		                treeItem = $(templates.treeviewItemServer)
+		                	.attr('aria-controls',  _this.itemIdPrefix+"main-" + iCnt)
+	/*                    	.attr('style', 'padding-left:' + leftPadding)*/
+		                	.attr('aria-expanded',  "true")
+		                	.attr('id',  _this.itemIdPrefix + iCnt)
+	            			.attr('onclick', "fn_server_treeMenu_click('"+ _this.itemIdPrefix + "', '"+ _this.itemIdPrefix+"main-" + iCnt + "')")
+		                    .attr('href', "#" + _this.itemIdPrefix+"main-" + iCnt);
+	                } else {
+		                treeItem = $(templates.treeviewItemServer)
+		                	.attr('aria-controls',  _this.itemIdPrefix+"main-" + iCnt)
+	/*                    	.attr('style', 'padding-left:' + leftPadding)*/
+		                	.attr('aria-expanded',  "false")
+		                	.attr('id',  _this.itemIdPrefix + iCnt)
+	            			.attr('onclick', "fn_server_treeMenu_click('"+ _this.itemIdPrefix + "', '"+ _this.itemIdPrefix+"main-" + iCnt + "')")
+		                    .attr('href', "#" + _this.itemIdPrefix+"main-" + iCnt);
+	                }
 	                
 	                //span?쒓렇 - Set node Text.
 	                var treeviewItemSertverTooltip = $(templates.treeviewItemSertverTooltip).attr('title', node.tooltiptext);
@@ -154,15 +168,24 @@
 
 	                // Build child nodes.
 	                if (node.nodes) {
+	                	var treeGroup = null;
 	                    // Node group item.
-	                    var treeGroup = $(templates.treeviewGroupItem).attr('id', _this.itemIdPrefix + node.nodeId);
-	                    
+		                if (iCnt == 1) {
+		                	treeGroup = $(templates.treeviewGroupItem)
+		                					.attr('id', _this.itemIdPrefix+"main-" + iCnt)
+		                					.addClass('show')
+		                					;
+		                } else {
+		                	treeGroup = $(templates.treeviewGroupItem).attr('id', _this.itemIdPrefix+"main-" + iCnt);
+		                }
+
 	                    treeviewNew.append(treeGroup);
 	                    parentElement.append(treeviewNew);
 	                    _this.build(treeGroup, node.nodes, depth);
 	                }
-        			
-	               jQuery("a[aria-controls='" + _this.itemIdPrefix + "0" + "']").click();
+	               // jQuery("a[aria-controls='" + _this.itemIdPrefix + "0" + "']").click();
+
+	                iCnt = iCnt + 1;
             	} else {
         			// Main node element.
         			var treeviewSubGroupItem = $(templates.treeviewSubGroupItem);
@@ -218,7 +241,7 @@
             			treeviewNew.attr('id', node.id);
             			treeviewNew.attr('style', "height:23px;");
         			}
-
+        			
         			treeviewSubGroupItem.append(treeviewNew);
 
         			// Attach node to parent.
