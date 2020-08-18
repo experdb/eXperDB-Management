@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="../../cmmn/cs2.jsp"%>
+
 <%
 	/**
 	* @Class Name : securityPolicy.jsp
@@ -13,6 +16,7 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2018.01.04     최초 생성
+	*  2020.08.03   변승우 과장		UI 디자인 변경
 	*
 	* author 김주영 사원
 	* since 2018.01.04 
@@ -63,6 +67,7 @@ var table = null;
 	
 	    $(window).trigger('resize');
 	    
+	     
 		//더블 클릭시
 		if("${wrt_aut_yn}" == "Y"){
 			$('#policyTable tbody').on('dblclick', 'tr', function() {
@@ -82,12 +87,16 @@ var table = null;
 		}
 
 	}
+	
+	
+	
 	$(window.document).ready(function() {
 		fn_buttonAut();
 		fn_init();
 		fn_select();
 	});
 
+	
 	function fn_buttonAut(){
 		var btnInsert = document.getElementById("btnInsert"); 
 		var btnUpdate = document.getElementById("btnUpdate"); 
@@ -117,13 +126,11 @@ var table = null;
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {
@@ -131,17 +138,26 @@ var table = null;
 					table.clear().draw();
 					table.rows.add(data.list).draw();
 				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href="/securityKeySet.do";
+					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");	
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});
 	}
+	
+	
+	/* 등록 버튼 클릭시*/
+	function fn_insert() {
+			var form = document.insertForm;
+			form.action = "/securityPolicyInsert.do";
+			form.submit();
+			return;
+	}
+	
+	
 
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
@@ -161,12 +177,18 @@ var table = null;
 	
 	/* 삭제 버튼 클릭시*/
 	function fn_delete() {
+		
 		var datas = table.rows('.selected').data();
-		var profileUid = table.row('.selected').data().profileUid;
+
 		if (datas.length <= 0) {
- 			alert('<spring:message code="message.msg35" />');
+			showSwalIcon('<spring:message code="message.msg35"/>', '<spring:message code="common.close" />', '', 'error');
  			return false;
  		}else{
+ 			var profileUid = table.row('.selected').data().profileUid;
+ 			
+ 			fn_multiConfirmModal("del");
+ 			
+ 			
  			if (!confirm('<spring:message code="message.msg162"/>'))return false;
  			
  			var rowList = [];
@@ -186,11 +208,9 @@ var table = null;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("<spring:message code='message.msg02' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert("<spring:message code='message.msg03' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 					}
@@ -212,77 +232,145 @@ var table = null;
 			});
  		}	
 	}
-</script>
-<form name="modifyForm" method="post">
-</form>
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="encrypt_policy_management.Security_Policy_Management"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
-			<div class="infobox">
-				<ul>
-					<li><spring:message code="encrypt_help.Security_Policy_Management" /></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Encrypt</li>
-					<li><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
-					<li class="on"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></li>
-				</ul>
-			</div>
-		</div>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-<!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
-					<span class="btn"><a href="/securityPolicyInsert.do"><button type="button" id="btnInsert"><spring:message code="common.registory" /></button></a></span>
-					<span class="btn" onclick="fn_update();"><button type="button" id="btnUpdate"><spring:message code="common.modify" /></button></span>
-					<span class="btn" onclick="fn_delete();"><button type="button" id="btnDelete"><spring:message code="common.delete" /></button></span>
-				</div>
-<!-- 				<div class="sch_form"> -->
-<!-- 					<table class="write"> -->
-<%-- 						<caption>검색 조회</caption> --%>
-<%-- 						<colgroup> --%>
-<%-- 							<col style="width: 100px;" /> --%>
-<%-- 							<col /> --%>
-<%-- 							<col style="width: 100px;" /> --%>
-<%-- 							<col /> --%>
-<%-- 						</colgroup> --%>
-<!-- 						<tbody> -->
-<!-- 							<tr> -->
-<!-- 								<th scope="row" class="t9">정책이름</th> -->
-<!-- 								<td><input type="text" class="txt t2" id="policyName" /></td> -->
-<!-- 								<th scope="row" class="t9">정책상태</th> -->
-<!-- 								<td><select class="select t5" id="policyStatus"> -->
-<!-- 										<option value="Active">Active</option> -->
-<!-- 								</select></td> -->
-<!-- 							</tr>						 -->
-<!-- 						</tbody> -->
-<!-- 					</table> -->
-<!-- 				</div> -->
+	
+	
+	/* ********************************************************
+	 * confirm modal open
+	 ******************************************************** */
+	function fn_multiConfirmModal(gbn) {
+		
+		if (gbn == "ins") {
+			confirm_title = '<spring:message code="menu.user_management" />' + " " + '<spring:message code="common.registory" />';
+			$('#confirm_multi_msg').html('<spring:message code="message.msg143" />');
+		} else if (gbn == "ins_menu") {
+			confirm_title = '<spring:message code="menu.user_management" />' + " " + '<spring:message code="user_management.msg14" />';
+			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="user_management.msg13" />'));
+		} else if (gbn == "del") {
+			confirm_title = '<spring:message code="menu.user_management" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+		} else 	if (gbn == "mod") {
+			confirm_title = '<spring:message code="menu.user_management" />' + " " + '<spring:message code="common.registory" />';
+			$('#confirm_multi_msg').html('<spring:message code="message.msg147" />');
+		}
 
-				<div class="overflow_area">
-					<table id="policyTable" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="40"></th>
-								<th width="40"><spring:message code="common.no" /></th>
-								<th width="130"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
-								<th width="200"><spring:message code="encrypt_policy_management.Description"/></th>
-								<th width="60"><spring:message code="encrypt_policy_management.Status"/></th>
-								<th width="70"><spring:message code="common.register" /></th>
-								<th width="90"><spring:message code="common.regist_datetime" /></th>
-								<th width="70"><spring:message code="common.modifier" /></th>
-								<th width="90"><spring:message code="common.modify_datetime" /></th>
-								<th width="0"></th>
-							</tr>
-						</thead>
-					</table>
+		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
+		$('#confirm_multi_tlt').html(confirm_title);
+		$('#pop_confirm_multi_md').modal("show");
+	}	
+</script>
+
+<form name="insertForm" method="post">
+</form>
+
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							Encrypt
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="encrypt_help.Security_Policy_Management" /></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+		
+		
+		
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<div class="row" style="margin-top:-20px;">
+						<div class="col-12">
+							<div class="template-demo">			
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_delete();" >
+									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnUpdate" onClick="fn_update();" data-toggle="modal">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_insert();" >
+									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
+								</button>
+							</div>
+						</div>
+					</div>
+				
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="policyTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+ 											<tr class="bg-info text-white">
+												<th width="40"></th>
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="130"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
+												<th width="200"><spring:message code="encrypt_policy_management.Description"/></th>
+												<th width="60"><spring:message code="encrypt_policy_management.Status"/></th>
+												<th width="70"><spring:message code="common.register" /></th>
+												<th width="90"><spring:message code="common.regist_datetime" /></th>
+												<th width="70"><spring:message code="common.modifier" /></th>
+												<th width="90"><spring:message code="common.modify_datetime" /></th>
+												<th width="0"></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>		
+		
 	</div>
 </div>
-<!-- // contents -->

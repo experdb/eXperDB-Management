@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="../../cmmn/cs2.jsp"%>
+
 <%
 	/**
 	* @Class Name : encodeDecodeKeyAuditLog.jsp
@@ -12,13 +15,14 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2018.01.09     최초 생성
+	*  2020.07.28    변승우 과장		UI 변경
 	*
 	* author 김주영 사원
 	* since 2018.01.09
 	*
 	*/
 %>
+
 <script>
 	var table = null;
 
@@ -41,16 +45,15 @@
  					},
  					defaultContent : ""
  				},
-				/* { data : "requestPath", className : "dt-center", defaultContent : ""},  */
 				{ data : "resultCode",  defaultContent : ""}, 
 				{
 					data : "",
 					render : function(data, type, full, meta) {
-						var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='schedule.detail_view' /></button></span>";
+						var html = "<button teype='button' class='btn btn-outline-primary btn-icon-text'><i class='ti-file btn-icon-prepend' id='detail'> <spring:message code='schedule.detail_view' /> </i></button>";
 						return html;
 					},
-					defaultContent : "",
 					className : "dt-center",
+					defaultContent : "",
 					orderable : false
 				},
 				{data : "parameter", defaultContent : "", visible: false },
@@ -103,30 +106,11 @@
 		});	
 	}
 	
-	$(window.document).ready(function() {
-		
-		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#to").datepicker("option", "minDate", selectedDate);
-			}
-		})
 
-		to = $("#to").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#from").datepicker("option", "maxDate", selectedDate);
-			}
-		})
-		
-		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-		
+	$(window.document).ready(function() {	
+		dateCalenderSetting();
 		fn_init();
 		fn_select();
-
 	});
 	
 
@@ -135,8 +119,8 @@
 		$.ajax({
 			url : "/selectEncodeDecodeKeyAuditLog.do",
 			data : {
-				from : $('#from').val(),
-				to : 	$('#to').val(),
+				from : $('#wrk_strt_dtm').val(),
+				to : 	$('#wrk_end_dtm').val(),
 				resultcode : $('#resultcode').val(),
 				entityuid : $('#entityuid').val()
 			},
@@ -147,120 +131,209 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
+					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
 					top.location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
+					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
 					top.location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {		
 				if(data.resultCode == "0000000000"){
 					table.clear().draw();
-					if(data.list != null){
+					if(data.list!=null){
 						table.rows.add(data.list).draw();
 					}
 				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href="/";
+					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');	
 				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					top.location.href="/securityKeySet.do";
+					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error','securityKeySet');
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");	
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 				}
-			}
-			
+			}			
 		});
 	}
 	
+	
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function dateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+
+		today.setDate(today.getDate());
+		var day_start = today.toJSON().slice(0,10); 
+
+		$("#wrk_strt_dtm").val(day_start);
+		$("#wrk_end_dtm").val(day_end);
+
+		if ($("#wrk_strt_dtm_div").length) {
+			$('#wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+
+		if ($("#wrk_end_dtm_div").length) {
+			$('#wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+		
+		$("#wrk_strt_dtm").datepicker('setDate', day_start);
+	    $("#wrk_end_dtm").datepicker('setDate', day_end);
+	    $('#wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#wrk_end_dtm_div').datepicker('updateDates');
+	}	
+	
 </script>
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="encrypt_policy_management.Encryption_Key"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
-			<div class="infobox">
-				<ul>
-					<li><spring:message code="encrypt_help.Encryption_Key"/></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Encrypt</li>
-					<li><spring:message code="encrypt_log.Audit_Log"/></li>
-					<li class="on"><spring:message code="encrypt_policy_management.Encryption_Key"/></li>
-				</ul>
-			</div>
-		</div>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button type="button"><spring:message code="common.search" /></button></span>
-				</div>
-				<div class="sch_form">
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width: 100px;" />
-							<col style="width: 300px;" />
-							<col style="width: 120px;" />
-							</col>
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t10"><spring:message code="encrypt_log_decode.Log_Period"/></th>
-								<td>
-									<div class="calendar_area">
-										<a href="#n" class="calendar_btn">달력열기</a> 
-										<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" readonly="readonly" /> <span class="wave">~</span>
-										<a href="#n" class="calendar_btn">달력열기</a> 
-										<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" readonly="readonly" />
+
+
+
+
+
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="encrypt_policy_management.Encryption_Key"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
 									</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="encrypt_log_key.Access_User"/></th>
-								<td>
-									<select class="select t5" id="entityuid">
-										<option value=""><spring:message code="common.total" /></option>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							Encrypt
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_log.Audit_Log"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policy_management.Encryption_Key"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="encrypt_help.Encryption_Key"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body">
+							<form class="form-inline" onsubmit="return false;">
+								<div class="row">								
+									<div class="input-group mb-2 mr-sm-2">								
+										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+										<div class="input-group align-items-center">
+											<span style="border:none; padding: 0px 10px;"> ~ </span>
+										</div>
+										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>									
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:250px;" name="entityuid" id="entityuid">
+											<option value=""><spring:message code="encrypt_log_key.Access_User"/>&nbsp;<spring:message code="common.total" /></option>
 											<c:forEach var="entityuid" items="${entityuid}">
 												<option value="${entityuid.getEntityUid}">${entityuid.getEntityName}</option>							
 											</c:forEach>
-									</select>
-								</td>
-								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Success_Failure"/></th>
-								<td>
-									<select class="select t8" id="resultcode">
-										<option value=""><spring:message code="common.total" /></option>
-										<option value="0000000000"><spring:message code="common.success" /></option>
-										<option value="9999999999"><spring:message code="common.failed" /> </option>
-									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+										</select>
+									</div>									
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:150px;" name="resultcode" id="resultcode">
+											<option value=""><spring:message code="encrypt_log_decode.Success_Failure"/>&nbsp;<spring:message code="common.total" /></option>
+											<option value="0000000000"><spring:message code="common.success" /></option>
+											<option value="9999999999"><spring:message code="common.failed" /></option>
+										</select>
+									</div>									
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="fn_select();">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>								
+								</div>
+							</form>	
+						</div>
+					</div>
 				</div>
-
-				<div class="overflow_area">
-					<table id="table" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="30"><spring:message code="common.no" /></th>
-								<th width="150"><spring:message code="encrypt_log_key.Access_Date"/></th>
-								<th width="100"><spring:message code="encrypt_log_key.Access_User"/></th>
-								<th width="100"><spring:message code="encrypt_log_key.Access_Address"/></th>
-								<th width="100"><spring:message code="encrypt_log_key.Access_Path"/></th>
-								<th width="100"><spring:message code="encrypt_log_key.Result_Code"/></th>
-								<th width="100"><spring:message code="schedule.detail_view" /></th>
-							</tr>
-						</thead>
-					</table>
+			</div>
+		</div>	
+		
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+	 								<table id="table" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="30"><spring:message code="common.no" /></th>
+												<th width="150"><spring:message code="encrypt_log_key.Access_Date"/></th>
+												<th width="100"><spring:message code="encrypt_log_key.Access_User"/></th>
+												<th width="100"><spring:message code="encrypt_log_key.Access_Address"/></th>
+												<th width="100"><spring:message code="encrypt_log_key.Access_Path"/></th>
+												<th width="100"><spring:message code="encrypt_log_key.Result_Code"/></th>
+												<th width="100"><spring:message code="schedule.detail_view" /></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+					<!-- content-wrapper ends -->
 				</div>
 			</div>
 		</div>
+		
 	</div>
 </div>
-<!-- // contents -->

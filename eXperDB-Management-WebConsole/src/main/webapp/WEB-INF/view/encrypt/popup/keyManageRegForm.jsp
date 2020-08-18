@@ -4,6 +4,7 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@include file="../../cmmn/commonLocale.jsp"%>
+
 <%
 	/**
 	* @Class Name : keyManageRegForm.jsp
@@ -13,33 +14,22 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2018.01.08     최초 생성
-	*
+	*  2020.08.04   변승우 과장		UI 디자인 변경
+	
+	
 	* author 변승우 대리
 	* since 2018.01.08
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>암복호화 키 등록</title>
-<link rel="stylesheet" type="text/css" href="../css/common.css">
-<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="../js/common.js"></script>
 
-<!-- 달력을 사용 script -->
-<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/js/calendar.js"></script>
-</head>
+
 <script>
 $(window.document).ready(function() {
-	$.datepicker.setDefaults({		
-		dateFormat : 'yy-mm-dd',
-		 minDate: "+730d",
-		changeYear: true,
-	});
-	$("#datepicker3").datepicker();
+	
+	//캘린더 셋팅
+	fn_insDateCalenderSetting();
+	
 });
 
 //한글 입력 방지
@@ -48,7 +38,7 @@ function fn_checkResourceName(e) {
 	if(objTarget.type == 'text') {
 	var value = objTarget.value;
 	if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
-		alert('<spring:message code="encrypt_msg.msg22"/>');
+		 showSwalIcon('<spring:message code="encrypt_msg.msg22"/>', '<spring:message code="common.close" />', '', 'error');
    		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
   		}
 	 }
@@ -58,34 +48,37 @@ function fn_checkResourceName(e) {
 function fn_validation(){
 	var resourcename = document.getElementById('ResourceName');
 	var CipherAlgorithmCode = document.getElementById('CipherAlgorithmCode');
-	var datepicker3 = document.getElementById('datepicker3');
+	var ins_expr_dt = document.getElementById('ins_expr_dt');
 	
 	if (resourcename.value == "" || resourcename.value == "undefind" || resourcename.value == null) {
-		alert('<spring:message code="encrypt_msg.msg17"/>');
+		 showSwalIcon('<spring:message code="encrypt_msg.msg17"/>', '<spring:message code="common.close" />', '', 'error');
 		resourcename.focus();
 		return false;
 	}
 	if (CipherAlgorithmCode.value == "" || CipherAlgorithmCode.value == "undefind" || CipherAlgorithmCode.value == null) {
-		alert('<spring:message code="encrypt_msg.msg23"/>');
+		 showSwalIcon('<spring:message code="encrypt_msg.msg23"/>', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
-	if (datepicker3.value == "" || datepicker3.value == "undefind" || datepicker3.value == null) {
-		alert('<spring:message code="encrypt_msg.msg24"/>');
+	if (ins_expr_dt.value == "" || ins_expr_dt.value == "undefind" || ins_expr_dt.value == null) {
+		 showSwalIcon('<spring:message code="encrypt_msg.msg24"/>', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	return true;
 }
 
 
-function fu_insertCryptoKeySymmetric(){
-	if (!fn_validation()) return false;
+
+
+
+function fn_insertCryptoKeySymmetric(){
+	
 	$.ajax({
 		url : "/insertCryptoKeySymmetric.do", 
 	  	data : {
 	  		resourceName: $('#ResourceName').val(),
 	  		cipherAlgorithmCode : $('#CipherAlgorithmCode').val(),
 	  		resourceNote : $('#ResourceNote').val(),
-	  		validEndDateTime : $('#datepicker3').val().substring(0,10)
+	  		validEndDateTime : $('#ins_expr_dt').val().substring(0,10)
 	  	},
 		dataType : "json",
 		type : "post",
@@ -94,79 +87,148 @@ function fu_insertCryptoKeySymmetric(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
+				showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
+				showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert('<spring:message code="message.msg07" />')
-				opener.location.reload();
-				window.close();
+				showSwalIcon('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+				$('#pop_layer_keyManageRegForm').modal("hide");
+				fn_select();
 			}else if(data.resultCode == "8000000002"){
-				alert("<spring:message code='message.msg05' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			}else if(data.resultCode == "8000000003"){
-				alert(data.resultMessage);
-				location.href = "/securityKeySet.do";
+				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");	
+				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}			
 		}
 	});
+	
 }
 
+
+/* ********************************************************
+ * 작업기간 calender 셋팅
+ ******************************************************** */
+function fn_insDateCalenderSetting() {
+	var today = new Date();
+	var startDay = fn_dateParse("20180101");
+	var endDay = fn_dateParse("20991231");
+	
+	var day_today = today.toJSON().slice(0,10);
+	var day_start = startDay.toJSON().slice(0,10);
+	var day_end = endDay.toJSON().slice(0,10);
+
+	if ($("#ins_expr_dt_div", "#baseForm").length) {
+		$("#ins_expr_dt_div", "#baseForm").datepicker({
+		}).datepicker('setDate', day_today)
+		.datepicker('setStartDate', day_start)
+		.datepicker('setEndDate', day_end)
+		.on('hide', function(e) {
+			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		}); //값 셋팅
+	}
+
+	$("#ins_expr_dt", "#baseForm").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+	$("#ins_expr_dt_div", "#baseForm").datepicker('updateDates');
+}
+
+
 </script>
-<body>
-	<div class="pop_container">
-		<div class="pop_cts">
-			<p class="tit"><spring:message code="encrypt_policy_management.Encryption_Key"/> <spring:message code="common.registory" /></p>
-				<table class="write">
-					<caption><spring:message code="encrypt_policy_management.Encryption_Key"/> <spring:message code="common.registory" /></caption>
-					<colgroup>
-						<col style="width: 150px;" />
-						<col />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Key_Name"/></th>
-							<td><input type="text" class="txt" name="ResourceName" id="ResourceName" maxlength="20" onkeyup='fn_checkResourceName(event)' style='ime-mode:disabled;' onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Encryption_Algorithm"/></th>
-							<td>
-								<select class="select t5" id="CipherAlgorithmCode" name="CipherAlgorithmCode">
-										<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
-										<c:forEach var="result" items="${result}" varStatus="status">
-											<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
-										</c:forEach>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Description"/></th>
-							<td><input type="text" class="txt" name="ResourceNote" id="ResourceNote" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/></td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
-							<td>
-								<div class="calendar_area big">
-									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3"  readonly="readonly">
+
+
+
+<div class="modal fade" id="pop_layer_keyManageRegForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
+		<div class="modal-content" style="width:1000px;">		 
+			<div class="modal-body" >
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="encrypt_policy_management.Encryption_Key"/> <spring:message code="common.registory" />
+				</h4>
+				
+				<div class="card" style="margin-top:10px;border:0px;">
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:290px;">			
+									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+										<form class="cmxform" id="baseForm">
+											<fieldset>	
+																		
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_key_management.Key_Name"/>
+													</label>
+													<div class="col-sm-4">
+														<input type="text" class="form-control form-control-xsm" id="ResourceName" name="ResourceName"  maxlength="20" onkeyup='fn_checkResourceName(event)' style='ime-mode:disabled;' onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
+													</div>
+												</div>		
+												
+												
+												<div class="form-group row" style="margin-bottom:10px;">
+												<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													<spring:message code="encrypt_key_management.Encryption_Algorithm"/>
+												</label>
+												<div class="col-sm-4">
+													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="CipherAlgorithmCode" id="CipherAlgorithmCode" >
+														<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
+															 <c:forEach var="result" items="${result}"  varStatus="status">
+																<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
+															</c:forEach> 
+														</select>
+												</div>											
+											</div>			
+																								
+																	
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_key_management.Description"/>
+													</label>
+													<div class="col-sm-4">
+														<input type="text" class="form-control form-control-xsm" id="ResourceNote" name="ResourceNote"   maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/>
+													</div>
+												</div>							
+																					
+											
+											
+											<div class="form-group row" style="margin-bottom:10px;">
+												<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													<spring:message code="encrypt_key_management.Expiration_Date"/>
+												</label>
+												<div class="col-sm-4">
+													<div id="ins_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
+														<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ins_expr_dt" name="ins_expr_dt" readonly tabindex=10 />
+														<span class="input-group-addon input-group-append border-left">
+															<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+														</span>
+													</div>
+												</div>										
+											</div>	
+											
+																		
+										</fieldset>
+									</form>	
 								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="fu_insertCryptoKeySymmetric();"><span><spring:message code="common.save"/></span></a> 
-				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
+							</div>						
+						</div>		
+				
+				
 			</div>
+			<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >			
+					<button type="button" class="btn btn-primary" onclick="fn_confirm('ins');"><spring:message code="common.save"/></button>
+					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+			</div>
+			
 		</div>
 	</div>
-</body>
-</html>
+</div>	
+
+

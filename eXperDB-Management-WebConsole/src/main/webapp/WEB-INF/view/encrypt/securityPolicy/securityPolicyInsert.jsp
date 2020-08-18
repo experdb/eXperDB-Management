@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="../../cmmn/cs2.jsp"%>
+
 <%
 	/**
 	* @Class Name : securityPolicyInsert.jsp
@@ -11,42 +14,17 @@
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
-	*  ------------    -----------    ---------------------------
+	*  ------------    -----------    ---------------------------	
 	*  2018.01.04     최초 생성
-	*
+	*  2020.08.03   변승우 과장		UI 디자인 변경
+	
 	* author 김주영 사원
 	* since 2018.01.04 
 	*
 	*/
 %>
-<style>
-.contents .cmm_tab li {
-	width: 33.33%;
-}
 
-.contents {
-    min-height: 600px;
- }
- 
-.cmm_bd .sub_tit > p{
-	padding:0 8px 0 33px;
-	line-height:24px;
-	background:url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
-}
 
-.inp_chk > span{
-	margin-right: 10%;
-}
-
-.contents .cmm_tab {
-    position: inherit ;
-}
-.contents .cmm_tab li.atv > a {
-    border-top: 1px solid rgba(0, 0, 0, 0.3);
-    border-left: 1px solid rgba(0, 0, 0, 0.3);
-    border-right: 1px solid rgba(0, 0, 0, 0.3);
-}
-</style>
 <script>
 	var table = null;
 	var table2 = null;
@@ -148,45 +126,25 @@
 	}
 	
 	$(window.document).ready(function() {
+
 		fn_init();
-
-		$("#tab1").show();
-		$("#tab2").hide();
-		$("#tab3").hide();
-
-		$("#info").show();
-		$("#option").hide();
-		$("#accessControl").hide();
+	
+		$("#insOptionTab").hide();
+		$("#insAccess_Control_PolicTab").hide();
+		
+		//table 탭 이동시
+		$('a[href="#insOptionTab"]').on('shown.bs.tab', function (e) {
+			$("#insOptionTab").show();
+		}); 
+		
+		//table 탭 이동시
+		$('a[href="#insAccess_Control_PolicTab"]').on('shown.bs.tab', function (e) {
+			$("#insAccess_Control_PolicTab").show();
+		});
+		
 	});
 
-	function selectTab(tab) {
-		if (tab == "info") {
-			$("#tab1").show();
-			$("#tab2").hide();
-			$("#tab3").hide();
 
-			$("#info").show();
-			$("#option").hide();
-			$("#accessControl").hide();
-		} else if (tab == "option") {
-			$("#tab1").hide();
-			$("#tab2").show();
-			$("#tab3").hide();
-
-			$("#info").hide();
-			$("#option").show();
-			$("#accessControl").hide();
-		} else {
-			$("#tab1").hide();
-			$("#tab2").hide();
-			$("#tab3").show();
-
-			$("#info").hide();
-			$("#option").hide();
-			$("#accessControl").show();
-		}
-
-	}
 	
 	/*대체 문자열 제어*/
 	function fn_changeDenyResult(){
@@ -200,17 +158,127 @@
 		}
 	}
 	
-	/*암보호화 정책 등록 팝업*/
+	
+	/*암보호화 정책 등록화면 팝업*/
 	function fn_SecurityRegForm(){
-		var popUrl = "/popup/securityPolicyRegForm.do?act=i"; // 서버 url 팝업경로
-		var width = 1000;
-		var height = 530;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-		window.open(popUrl,"",popOption);		
+ 		$.ajax({
+			url : "/popup/securityPolicyRegForm.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+		     error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+			success : function(result) {			
+				fn_securityPolicyRegFormInit(result);			
+				$('#pop_layer_securityPolicyRegForm').modal("show");
+			}
+		});
 	}
+	
+	
+	function fn_securityPolicyRegFormInit(result){	
+
+		$("#pop_offset", "#baseForm").val(""); //시작위치
+		$("#pop_length", "#baseForm").val(""); //길이
+		$("#pop_last").prop('checked', false) ;		
+		$("#pop_cipherAlgorithmCode").val("SEED-128");
+		$("#pop_initialVectorTypeCode").val("FIXED");
+		$("#pop_operationModeCode").val("CBC");
+		
+		 var pop_cipherAlgorithmCode = document.getElementById("pop_cipherAlgorithmCode");
+		 fn_changeBinUid(pop_cipherAlgorithmCode);				
+		 
+	}
+	
+	
+	
+	/*암보호화 정책 수정화면 팝업*/
+	function fn_SecurityRegReForm(){
+
+		var rowCnt = table.rows('.selected').data().length;
+		if (rowCnt == 1) {
+			
+			var rnum = table.row('.selected').index();
+			var offset = table.row('.selected').data().offset;
+			var length = table.row('.selected').data().length;
+			var cipherAlgorithmCode = table.row('.selected').data().cipherAlgorithmCode;
+			var binUid = table.row('.selected').data().binUid;
+			var initialVectorTypeCode = table.row('.selected').data().initialVectorTypeCode;
+			var operationModeCode = table.row('.selected').data().operationModeCode;
+			
+	 		$.ajax({
+				url : "/popup/securityPolicyRegReForm.do",
+				data : {	
+					rnum : rnum,
+					offset : offset,
+					length : length,
+					cipherAlgorithmCode : cipherAlgorithmCode,
+					binUid : binUid,
+					initialVectorTypeCode : initialVectorTypeCode,
+					operationModeCode : operationModeCode
+				},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+			     error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+				success : function(result) {			
+					fn_securityPolicyRegReFormInit(result);	
+					$('#pop_layer_securityPolicyRegReForm').modal("show");
+				}
+			});
+					
+		}else{
+			alert("<spring:message code='message.msg04' />");
+			return false;
+		}		
+	}
+	
+
+	
+	function fn_securityPolicyRegReFormInit(result){	
+
+		$("#mod_rnum", "#modForm").val(nvlPrmSet(result.mod_rnum, ""));
+		$("#mod_offset", "#modForm").val(nvlPrmSet(result.mod_offset, ""));
+		$("#mod_length", "#modForm").val(nvlPrmSet(result.mod_length, ""));
+		$("#mod_last").prop('checked', false) ;
+		$("#mod_cipherAlgorithmCode", "#modForm").val(nvlPrmSet(result.mod_cipherAlgorithmCodeValue, ""));
+		$("#mod_binUidValue", "#modForm").val(nvlPrmSet(result.mod_binUidValue, ""));
+		$("#mod_initialVectorTypeCodeValue", "#modForm").val(nvlPrmSet(result.mod_initialVectorTypeCodeValue, ""));
+		$("#mod_operationModeCodeValue", "#modForm").val(nvlPrmSet(result.mod_operationModeCodeValue, ""));
+
+		
+		 var mod_cipherAlgorithmCode = document.getElementById("mod_cipherAlgorithmCode");
+		 fn_mod_changeBinUid(mod_cipherAlgorithmCode);		
+		 
+	    if(result.mod_length == '<spring:message code="encrypt_policy_management.End"/>'){
+	    	$("#mod_last").prop('checked', true) ;
+			$('#mod_length').attr('disabled', true);
+			$("#mod_binUid").val(result.mod_binUidValue).attr("selected", "selected");
+	    }
+ 
+	}
+	
+	
 	
 	/*암보호화 정책 등록*/
 	function fn_SecurityAdd(result){
@@ -229,7 +297,6 @@
 		
 		var resourceName="";
 		
-		
 		table.row.add({
 			"offset":result.offset,
 			"length":result.length,
@@ -243,50 +310,28 @@
 		return true;
 	}
 	
-	/*암보호화 정책 수정 팝업*/
-	function fn_SecurityRegReForm(){
-		var rowCnt = table.rows('.selected').data().length;
-		if (rowCnt == 1) {
-			var rnum = table.row('.selected').index();
-			var offset = table.row('.selected').data().offset;
-			var length = table.row('.selected').data().length;
-			var cipherAlgorithmCode = table.row('.selected').data().cipherAlgorithmCode;
-			var binUid = table.row('.selected').data().binUid;
-			var initialVectorTypeCode = table.row('.selected').data().initialVectorTypeCode;
-			var operationModeCode = table.row('.selected').data().operationModeCode;
-			
-			var popUrl = "/popup/securityPolicyRegForm.do?act=u&&offset="+offset+"&&length="+encodeURI(length)+"&&cipherAlgorithmCode="+cipherAlgorithmCode+"&&binUid="+binUid+"&&initialVectorTypeCode="+initialVectorTypeCode+"&&operationModeCode="+operationModeCode+"&&rnum="+rnum; // 서버 url 팝업경로
-			var width = 1000;
-			var height = 530;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-			window.open(popUrl,"",popOption);
-		}else{
-			alert("<spring:message code='message.msg04' />");
-			return false;
-		}			
-	}
-	
+
 	/*암보호화 정책 수정 */
 	function fn_SecurityUpdate(result){
 		table.cell(result.rnum, 2).data(result.offset).draw();
 		table.cell(result.rnum, 3).data(result.length).draw();
 		table.cell(result.rnum, 4).data(result.cipherAlgorithmCode).draw();
-		table.cell(result.rnum, 5).data(result.binUid).draw();
+		table.cell(result.rnum, 5).data(result.resourceName).draw();
 		table.cell(result.rnum, 6).data(result.initialVectorTypeCode).draw();
 		table.cell(result.rnum, 7).data(result.operationModeCode).draw();
+		table.cell(result.rnum, 8).data(result.binUid).draw();
 		
 		table.rows({selected: true}).deselect();
 		return true;
 	}
 	
+	
+	
 	/*암보호화 정책 삭제*/
 	function fn_SecurityDel(){
 		var datas = table.rows('.selected').data();
 		if (datas.length <= 0) {
-			alert("<spring:message code='message.msg04' />");
+			showSwalIcon('<spring:message code='message.msg04' />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		} else {
 			var rows = table.rows( '.selected' ).remove().draw();
@@ -294,17 +339,68 @@
 		}
 	}
 	
+	
+	
 	/*접근제어 정책 등록 팝업*/
-	function fn_AccessRegForm(){
-		var popUrl = "/popup/accessPolicyRegForm.do?act=i"; // 서버 url 팝업경로
-		var width = 1000;
-		var height = 755;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-		window.open(popUrl,"",popOption);	
+	function fn_AccessRegForm(){	
+		$.ajax({
+			url : "/popup/accessPolicyRegForm.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+		     error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+			success : function(result) {			
+				fn_accessPolicyRegFormInit();	
+				$('#pop_layer_accessPolicyRegForm').modal("show");
+			}
+		});
 	}
+	
+	
+	function fn_accessPolicyRegFormInit(){
+		$("#specName", "#accbaseForm").val("");
+		$("#serverInstanceId", "#accbaseForm").val("");
+		$("#serverLoginId", "#accbaseForm").val("");
+		$("#adminLoginId", "#accbaseForm").val("");
+		$("#osLoginId", "#accbaseForm").val("");
+		$("#applicationName", "#accbaseForm").val("");
+		$("#accessAddress", "#accbaseForm").val("");
+		$("#accessAddressMask", "#accbaseForm").val("");
+		$("#accessMacAddress", "#accbaseForm").val("");
+		
+		dateCalenderSetting();
+
+		fn_makeFromHour();
+		fn_makeFromMin();
+		fn_makeToHour();
+		fn_makeToMin();
+	
+		$("#SUNDAY").prop('checked', false);
+		$("#MONDAY").prop('checked', false);
+		$("#TUESDAY").prop('checked', false);
+		$("#WEDNESDAY").prop('checked', false);
+		$("#THURSDAY").prop('checked', false);
+		$("#FRIDAY").prop('checked', false);
+		$("#SATURDAY").prop('checked', false);	
+		
+		$("#to_exe_h").val(23);
+		$("#to_exe_m").val(59);
+
+		$("#whitelistYes").prop('checked', true);		
+	}
+	
+	
 	
 	/*접근제어 정책 등록*/
 	function fn_AccessAdd(result){
@@ -334,7 +430,9 @@
 	
 	/*접근제어 정책 수정 팝업*/
 	function fn_AccessRegReForm(){
+		
 		var rowCnt = table2.rows('.selected').data().length;
+		
 		if (rowCnt == 1) {
 			var rnum = table2.row('.selected').index();
 			var specName = table2.row('.selected').data().specName;					
@@ -356,26 +454,91 @@
 			var extraName = table2.row('.selected').data().extraName;
 			var hostName = table2.row('.selected').data().hostName;
 			var whitelistYesNo = table2.row('.selected').data().whitelistYesNo;
+						
+			$.ajax({
+				url : "/popup/accessPolicyRegReForm.do",
+				data : {
+					rnum : rnum,
+					specName : specName,
+					serverInstanceId : serverInstanceId,
+					serverLoginId : serverLoginId,
+					adminLoginId : adminLoginId,
+					osLoginId : osLoginId,
+					applicationName : applicationName,
+					accessAddress : accessAddress,
+					accessAddressMask : accessAddressMask,
+					accessMacAddress : accessMacAddress,
+					startDateTime : startDateTime,
+					endDateTime : endDateTime,
+					startTime : startTime,
+					endTime : endTime,
+					workDay : workDay,
+					massiveThreshold : massiveThreshold,
+					massiveTimeInterval : massiveTimeInterval,
+					extraName : extraName,
+					hostName : hostName,
+					whitelistYesNo : whitelistYesNo			
+				},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+			     error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+				success : function(result) {			
+					fn_accessPolicyRegReFormInit(result);	
+					$('#pop_layer_accessPolicyRegReForm').modal("show");
+				}
+			});
 			
-			var popUrl = "/popup/accessPolicyRegForm.do?act=u&&specName="+specName
-					+"&&serverInstanceId="+serverInstanceId+"&&serverLoginId="+encodeURI(serverLoginId)+"&&adminLoginId="+encodeURI(adminLoginId)
-					+"&&osLoginId="+encodeURI(osLoginId)+"&&applicationName="+encodeURI(applicationName)+"&&accessAddress="+accessAddress
-					+"&&accessAddressMask="+accessAddressMask+"&&accessMacAddress="+accessMacAddress+"&&startDateTime="+startDateTime
-					+"&&endDateTime="+endDateTime+"&&startTime="+startTime+"&&endTime="+endTime
-					+"&&workDay="+encodeURI(workDay)+"&&massiveThreshold="+massiveThreshold+"&&massiveTimeInterval="+massiveTimeInterval
-					+"&&extraName="+encodeURI(extraName)+"&&hostName="+encodeURI(hostName)+"&&whitelistYesNo="+whitelistYesNo+"&&rnum="+rnum; // 서버 url 팝업경로
-			var width = 1000;
-			var height = 755;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-			window.open(popUrl,"",popOption);
 		}else{
-			alert("<spring:message code='message.msg04' />");
+			showSwalIcon('<spring:message code='message.msg04' />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}	
 	}
+
+	
+	function fn_accessPolicyRegReFormInit(result){
+		
+		$("#rnum", "#accModForm").val(nvlPrmSet(result.rnum, ""));
+		$("#specName", "#accModForm").val(nvlPrmSet(result.specName, ""));
+		$("#serverInstanceId", "#accModForm").val(nvlPrmSet(result.serverInstanceId, ""));
+		$("#serverLoginId", "#accModForm").val(nvlPrmSet(result.serverLoginId, ""));
+		$("#adminLoginId", "#accModForm").val(nvlPrmSet(result.adminLoginId, ""));
+		$("#osLoginId", "#accModForm").val(nvlPrmSet(result.osLoginId, ""));
+		$("#applicationName", "#accModForm").val(nvlPrmSet(result.applicationName, ""));
+		$("#accessAddress", "#accModForm").val(nvlPrmSet(result.accessAddress, ""));
+		$("#accessAddressMask", "#accModForm").val(nvlPrmSet(result.accessAddressMask, ""));
+		$("#accessMacAddress", "#accModForm").val(nvlPrmSet(result.accessMacAddress, ""));
+		$("#startDateTime", "#accModForm").val(nvlPrmSet(result.startDateTime, ""));
+		$("#endDateTime", "#accModForm").val(nvlPrmSet(result.endDateTime, ""));
+		$("#startTime", "#accModForm").val(nvlPrmSet(result.startTime, ""));
+		$("#endTime", "#accModForm").val(nvlPrmSet(result.endTime, ""));
+		$("#workDay", "#accModForm").val(nvlPrmSet(result.workDay, ""));
+		$("#massiveThreshold", "#accModForm").val(nvlPrmSet(result.massiveThreshold, ""));
+		$("#massiveTimeInterval", "#accModForm").val(nvlPrmSet(result.massiveTimeInterval, ""));
+		$("#extraName", "#accModForm").val(nvlPrmSet(result.extraName, ""));
+		$("#hostName", "#accModForm").val(nvlPrmSet(result.hostName, ""));
+		$("#whitelistYesNo", "#accModForm").val(nvlPrmSet(result.whitelistYesNo, ""));
+
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/*접근제어 정책 수정*/
 	function fn_AccessUpdate(result){
@@ -406,7 +569,7 @@
 	function fn_AccessDel(){
 		var datas = table2.rows('.selected').data();
 		if (datas.length <= 0) {
-			alert("<spring:message code='message.msg04' />");
+			showSwalIcon('<spring:message code='message.msg04' />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		} else {
 			var rows = table2.rows( '.selected' ).remove().draw();
@@ -553,11 +716,9 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -566,227 +727,369 @@
 		
 	}
 </script>
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="etc.etc01"/><a href="#n"><img src="/images/ico_tit.png" class="btn_info" /></a></h4>
-			<div class="infobox">
-				<ul>
-					<li><spring:message code="encrypt_help.Security_Policy_Insert"/></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Encrypt</li>
-					<li><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
-					<li><spring:message code="encrypt_policy_management.Security_Policy_Management"/></li>
-					<li class="on"><spring:message code="etc.etc01"/></li>
-				</ul>
-			</div>
-		</div>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<a href="#n" class="btn"><span onclick="fn_save()"><spring:message code="common.save"/></span></a> 
-				</div>
-			</div>
-			<div class="cmm_tab">
-				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('info')"><spring:message code="encrypt_policy_management.General_Information"/></a></li>
-					<li><a href="javascript:selectTab('option')"><spring:message code="encrypt_policy_management.Option"/></a></li>
-					<li><a href="javascript:selectTab('accessControl')"><spring:message code="encrypt_policy_management.Access_Control_Policy"/></a></li>
-				</ul>
-				<ul id="tab2" style="display: none;">
-					<li><a href="javascript:selectTab('info')"><spring:message code="encrypt_policy_management.General_Information"/></a></li>
-					<li class="atv"><a href="javascript:selectTab('option')"><spring:message code="encrypt_policy_management.Option"/></a></li>
-					<li><a href="javascript:selectTab('accessControl')"><spring:message code="encrypt_policy_management.Access_Control_Policy"/></a></li>
-				</ul>
-				<ul id="tab3" style="display: none;">
-					<li><a href="javascript:selectTab('info')"><spring:message code="encrypt_policy_management.General_Information"/></a></li>
-					<li><a href="javascript:selectTab('option')"><spring:message code="encrypt_policy_management.Option"/></a></li>
-					<li class="atv"><a href="javascript:selectTab('accessControl')"><spring:message code="encrypt_policy_management.Access_Control_Policy"/></a></li>
-				</ul>
-			</div>
 
-			<div id="info">
-				<div class="sch_form">
-					<table class="write">
-						<colgroup>
-							<col style="width:160px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Security_Policy_Name"/>(*)</th>
-								<td><input type="text" class="txt t2" name="profileName" id="profileName" maxlength="20" onkeyup='fn_checkProfileName(event)' style='ime-mode:disabled;' placeholder="20<spring:message code='message.msg188'/>"/></td>
-							</tr>
-							<tr>
-								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Description"/> </th>
-								<td><textarea class="tbd1" name="profileNote" id="profileNote" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"></textarea></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="cmm_bd">
-					<div class="sub_tit">
-						<p><spring:message code="encrypt_log_decode.Securiy_Policy"/></p>
-						<div class="sub_btn">
-							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_SecurityRegForm();">
-							<span id="add_button"><spring:message code="common.add" /></span></a> 
-							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_SecurityRegReForm()">
-							<span id="add_button"><spring:message code="common.modify" /></span></a> 
-							<a href="#n" class="btn btnF_04" onclick="fn_SecurityDel();"> 
-							<span id="del_button"><spring:message code="button.delete" /></span></a>
+
+<%@include file="../popup/securityPolicyRegForm.jsp"%>
+<%@include file="../popup/securityPolicyRegReForm.jsp"%>
+<%@include file="../popup/accessPolicyRegForm.jsp"%>
+<%@include file="../popup/accessPolicyRegReForm.jsp"%>
+
+		<div class="content-wrapper main_scroll" id="contentsDiv">
+			<div class="row">
+				<div class="col-12 div-form-margin-srn stretch-card">
+					<div class="card">
+						<div class="card-body">
+							<!-- title start -->
+							<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+								<div class="card" style="margin-bottom:0px;">
+									<div class="card-header" role="tab" id="page_header_div">
+										<div class="row">
+											<div class="col-5">
+												<h6 class="mb-0">
+													<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+														<i class="fa fa-check-square"></i>
+														<span class="menu-title"><spring:message code="etc.etc01"/></span>
+														<i class="menu-arrow_user" id="titleText" ></i>
+													</a>
+												</h6>
+											</div>
+											<div class="col-7">
+							 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+							 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+							 							Encrypt
+							 						</li>
+							 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
+													<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></li>
+													<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="etc.etc01"/></li>
+												</ol>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="overflow_area">
-						<table id="encryptPolicyTable" class="display" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-									<th width="40"></th>
-									<th width="60"><spring:message code="common.no" /></th>
-									<th width="120"><spring:message code="encrypt_policy_management.Starting_Position"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Length"/></th>
-									<th width="200"><spring:message code="encrypt_policy_management.Encryption_Algorithm"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Encryption_Key"/></th>
-									<th width="80"><spring:message code="encrypt_policy_management.Initial_Vector"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Modes"/></th>
-									<th width="0"></th>
-								</tr>
-							</thead>
-						</table>
+				</div>
+				
+				
+				
+				<div class="col-12 div-form-margin-table stretch-card">
+					<div class="card">
+						<div class="card-body">
+							<div class="row" style="margin-top:-20px;">
+								<div class="col-12">
+									<div class="template-demo">			
+										<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_save();" >
+											<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.save"/>
+										</button>
+									</div>
+								</div>
+							</div>
+						
+							<div class="card my-sm-2" >
+								<div class="card-body" >
+									<div class="form-group row div-form-margin-z">
+									<div class="col-12" >
+										<ul class="nav nav-pills nav-pills-setting" style="border-bottom:0px;" id="server-tab" role="tablist">
+											<li class="nav-item tab-pop-two-style"  style="width:31.5%">										
+												<a class="nav-link active" id="ins-tab-1" data-toggle="pill" href="#insGeneral_InformationTab" role="tab" aria-controls="insGeneral_InformationTab" aria-selected="true" >
+													<spring:message code="encrypt_policy_management.General_Information"/>
+												</a>
+											</li>
+											<li class="nav-item tab-pop-two-style" style="width:31.5%">
+												<a class="nav-link" id="ins-tab-2" data-toggle="pill" href="#insOptionTab" role="tab" aria-controls="insOptionTab" aria-selected="false">
+													<spring:message code="encrypt_policy_management.Option"/>
+												</a>
+											</li>
+											<li class="nav-item tab-pop-two-style" style="width:31.5%">									
+												<a class="nav-link" id="ins-tab-3" data-toggle="pill" href="#insAccess_Control_PolicTab" role="tab" aria-controls="insAccess_Control_PolicTab" aria-selected="false">
+													<spring:message code="encrypt_policy_management.Access_Control_Policy"/>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+						
+						
+							
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #c9ccd7;">		
+							<!-- 기본정보 탭 -->
+								<div class="tab-pane fade show active" role="tabpanel" id="insGeneral_InformationTab">													
+									<div class="card-body" style="margin-top:-35px;">
+										<div class="card my-sm-2" >
+											<div class="card-body" >
+												<div class="row">									
+													<div class="col-12">														
+													<form class="cmxform" id="insRegForm">
+														<fieldset>								
+															<div class="form-group row" style="margin-bottom:10px;">
+																<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<spring:message code="encrypt_policy_management.Security_Policy_Name"/>(*)
+																</label>
+																<div class="col-sm-4">
+																	<input type="text" class="form-control form-control-xsm" id="profileName" name="profileName" maxlength="20" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()" tabindex=3 />
+																</div>
+															</div>
+															<div class="form-group row" style="margin-bottom:10px;">
+																<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<spring:message code="encrypt_policy_management.Description"/>
+																</label>
+																<div class="col-sm-4">
+																	<input type="text" class="form-control form-control-xsm" id="profileNote" name="profileNote" maxlength="100" placeholder='100<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()" tabindex=3 />
+																</div>
+															</div>
+														</fieldset>
+													</form>												
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>	
+							
+						<!-- 버튼& 테이블 -->		
+						<div class="col-12 div-form-margin-table stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<div class="row" style="margin-top:-20px;">
+										<div class="col-12">
+											<div class="template-demo" style="">         
+					                              <button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="del_button" onClick="fn_SecurityDel();" >
+					                                 <i class="ti-minus btn-icon-prepend "></i><spring:message code="common.delete" />
+					                              </button>                              
+					                              <button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnUpdate" onClick="fn_SecurityRegReForm();" data-toggle="modal">
+														<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+													</button>                              
+					                              <button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="add_button" onClick="fn_SecurityRegForm();" data-toggle="modal">
+					                                 <i class="ti-plus btn-icon-prepend "></i><spring:message code="common.add" />
+					                              </button>
+					                           </div>
+										</div>
+									</div>		
+									<div class="card my-sm-2" >
+										<div class="card-body" >
+											<div class="row">
+												<div class="col-12">
+				 									<div class="table-responsive">
+														<div id="order-listing_wrapper"
+															class="dataTables_wrapper dt-bootstrap4 no-footer">
+															<div class="row">
+																<div class="col-sm-12 col-md-6">
+																	<div class="dataTables_length" id="order-listing_length">
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+					 								<table id="encryptPolicyTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+														<thead>
+				 											<tr class="bg-info text-white">
+																<th width="40"></th>
+																<th width="60"><spring:message code="common.no" /></th>
+																<th width="120"><spring:message code="encrypt_policy_management.Starting_Position"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Length"/></th>
+																<th width="200"><spring:message code="encrypt_policy_management.Encryption_Algorithm"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Encryption_Key"/></th>
+																<th width="80"><spring:message code="encrypt_policy_management.Initial_Vector"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Modes"/></th>
+																<th width="0"></th>	
+															</tr>
+														</thead>
+													</table>
+											 	</div>
+										 	</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+						<!-- 버튼& 테이블 끝 -->		
 					</div>
+					
+					<!-- 옵션 탭 -->
+					<div class="tab-pane fade show active" role="tabpanel" id="insOptionTab">													
+							<div class="card-body" style="margin-top:-35px;">
+								<div class="card my-sm-2" >
+									<div class="card-body" >
+										<div class="row">									
+											<div class="col-12">														
+											<form class="cmxform" id="insRegForm">
+												<fieldset>	
+																			
+													<div class="form-group row" style="margin-bottom:10px;">												
+														<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+															<i class="item-icon fa fa-dot-circle-o"></i>
+															<spring:message code="encrypt_policy_management.Grant_Access"/>
+														</label>
+														
+														<div class="col-sm-1">
+															<div class="form-check">
+																<label class="form-check-label">
+																<input type="radio" class="form-check-input" name="defaultAccessAllowTrueFalse" id="rdo_2_1" value="Y" checked="checked"> 예
+																
+																</label>
+															</div>												
+														</div>											
+														<div class="col-sm-1">
+															<div class="form-check">
+																<label class="form-check-label">
+																<input type="radio" class="form-check-input" name="defaultAccessAllowTrueFalse" id="rdo_2_2" value="N" > 아니오														
+																</label>
+															</div>												
+														</div>											
+													</div>
+													
+													<div class="form-group row" style="margin-bottom:10px;">
+														<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+															<i class="item-icon fa fa-dot-circle-o"></i>
+															<spring:message code="encrypt_policy_management.Action_when_Access_Denied"/>
+														</label>
+														<div class="col-sm-2">
+														<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="denyResultTypeCode" id="denyResultTypeCode" >
+															<c:forEach var="denyResultTypeCode" items="${denyResultTypeCode}">
+																<option value="<c:out value="${denyResultTypeCode.sysCode}"/>"><c:out value="${denyResultTypeCode.sysCodeName}"/></option>
+															</c:forEach>
+														</select>
+													</div>
+													</div>
+													
+													<div class="form-group row" style="margin-bottom:10px;">
+									                          <span class="form-check"  style="margin-left: 15px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="log_on_fail" name="log_on_fail" value="Y">
+									                              <spring:message code="encrypt_policy_management.Failure_Logging"/>
+									                            <i class="input-helper"></i></label>
+									                          </span>
+									                          
+									                          <span class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="compress_audit_log" name="compress_audit_log" value="Y">
+									                              <spring:message code="encrypt_policy_management.Log_Compression"/>
+									                            <i class="input-helper"></i></label>
+									                          </span>
+									                          						                          
+									                          <span class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="preventDoubleYesNo" name="preventDoubleYesNo" value="Y">
+									                              <spring:message code="encrypt_policy_management.Prevent_Double_Encryption"/>
+									                            <i class="input-helper"></i></label>
+									                          </span>
+									                          							                          
+									                          <span class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="log_on_success" name="log_on_success" value="Y">
+									                              <spring:message code="encrypt_policy_management.Success_Logging"/>
+									                            <i class="input-helper"></i></label>
+									                          </span>
+						                          
+									                          <span class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="nullEncryptYesNo" name="nullEncryptYesNo" value="Y">
+									                              <spring:message code="encrypt_policy_management.NULL_Encryption"/>
+									                            <i class="input-helper"></i></label>
+									                          </span>
+													</div>
+													
+												</fieldset>
+											</form>												
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>		
+					<!--  옵션 탭 끝 -->		
+					
+					
+					<!-- 접근제어정책 탭 -->
+					<div class="tab-pane fade show active" role="tabpanel" id="insAccess_Control_PolicTab">													
+					
+						<div class="col-12 div-form-margin-table stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<div class="row" style="margin-top:-20px;">
+										<div class="col-12">
+											<div class="template-demo" style="">         
+					                              <button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="del_button" onClick="fn_AccessDel();" >
+					                                 <i class="ti-minus btn-icon-prepend "></i><spring:message code="common.delete" />
+					                              </button>                              
+					                              <button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnUpdate" onClick="fn_AccessRegReForm();" data-toggle="modal">
+														<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+													</button>                              
+					                              <button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="add_button" onClick="fn_AccessRegForm();" data-toggle="modal">
+					                                 <i class="ti-plus btn-icon-prepend "></i><spring:message code="common.add" />
+					                              </button>
+					                           </div>
+										</div>
+									</div>		
+									<div class="card my-sm-2" >
+										<div class="card-body" >
+											<div class="row">
+												<div class="col-12">
+				 									<div class="table-responsive">
+														<div id="order-listing_wrapper"
+															class="dataTables_wrapper dt-bootstrap4 no-footer">
+															<div class="row">
+																<div class="col-sm-12 col-md-6">
+																	<div class="dataTables_length" id="order-listing_length">
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+					 								<table id="accessControlTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+														<thead>
+				 											<tr class="bg-info text-white">
+																<th width="10"></th>
+																<th width="20"><spring:message code="common.no" /></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Server_Instance"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Database_User"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.eXperDB_User"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.OS_User"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Application_Name"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.IP_Address"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.IP_Mask"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.MAC_Address"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Policy_Period"/> FROM</th>
+																<th width="100"><spring:message code="encrypt_policy_management.Policy_Period"/> TO</th>
+																<th width="100"><spring:message code="encrypt_policy_management.Policy_Time"/> FROM</th>
+																<th width="100"><spring:message code="encrypt_policy_management.Policy_Time"/> TO</th>
+																<th width="100"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Threshold"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.sec"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Additional_Fields"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Host_Name"/></th>
+																<th width="100"><spring:message code="encrypt_policy_management.Whether_Allowing_Access"/></th>
+															</tr>
+														</thead>
+													</table>
+											 	</div>
+										 	</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+						<!-- 버튼& 테이블 끝 -->		
+					</div>							
+				</div>
+				</div>
 				</div>
 			</div>
-
-			<div id="option">
-				<div class="sch_form">
-					<table class="write">
-						<colgroup>
-							<col style="width: 180px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Grant_Access"/></th>
-								<td>
-									<div class="inp_rdo">
-										<input name="defaultAccessAllowTrueFalse" id="rdo_2_1" type="radio" checked="checked" value="Y">
-										<label for="rdo_2_1" style="margin-right: 15%;"><spring:message code="agent_monitoring.yes" /></label> 
-										<input name="defaultAccessAllowTrueFalse" id="rdo_2_2" type="radio" value="N"> 
-										<label for="rdo_2_2"><spring:message code="agent_monitoring.no" /></label>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Action_when_Access_Denied"/> </th>
-								<td>
-									<select class="select t3" id="denyResultTypeCode" name="denyResultTypeCode" onchange="fn_changeDenyResult()">
-										<c:forEach var="denyResultTypeCode" items="${denyResultTypeCode}">
-											<option value="<c:out value="${denyResultTypeCode.sysCode}"/>"><c:out value="${denyResultTypeCode.sysCodeName}"/></option>
-										</c:forEach> 
-									</select>
-								</td>
-								<th scope="row" class="ico_t1" id="masking" style="display: none;"><spring:message code="encrypt_policy_management.Replace_String"/></th>
-								<td>
-									<input type="text" class="txt t2" name="maskingValue" id="maskingValue" style="display: none;"/>
-								</td>
-							</tr>
-							<tr style="display: none;">
-								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Data_Type"/></th>
-								<td>
-									<select class="select t3" id="dataTypeCode" name="dataTypeCode">
-										<c:forEach var="dataTypeCode" items="${dataTypeCode}">
-											<option value="<c:out value="${dataTypeCode.sysCode}"/>"><c:out value="${dataTypeCode.sysCodeName}"/></option>
-										</c:forEach> 
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<div class="inp_chk">
-										<span>
-											<input type="checkbox" id="log_on_fail" name="log_on_fail" value="Y"/> 
-											<label for="log_on_fail"><spring:message code="encrypt_policy_management.Failure_Logging"/></label>
-										</span>
-										<span>
-											<input type="checkbox" id="compress_audit_log" name="compress_audit_log" value="Y"/> 
-											<label for="compress_audit_log"><spring:message code="encrypt_policy_management.Log_Compression"/></label>
-										</span>
-										<span>
-											<input type="checkbox" id="preventDoubleYesNo" name="preventDoubleYesNo" value="Y"/>
-											<label for="preventDoubleYesNo"><spring:message code="encrypt_policy_management.Prevent_Double_Encryption"/></label>
-										</span>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<div class="inp_chk">
-										<span> 
-											<input type="checkbox" id="log_on_success" name="log_on_success" value="Y"/> 
-											<label for="log_on_success"><spring:message code="encrypt_policy_management.Success_Logging"/></label>
-										</span>
-										<span>
-											<input type="checkbox" id="nullEncryptYesNo" name="nullEncryptYesNo" value="Y"/>
-											<label for="nullEncryptYesNo"><spring:message code="encrypt_policy_management.NULL_Encryption"/></label>
-										</span>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-
-			<div id="accessControl">
-				<div class="cmm_bd">
-					<div class="sub_tit">
-						<p><spring:message code="encrypt_policy_management.Access_Control_Policy"/></p>
-						<div class="sub_btn">
-							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_AccessRegForm();">
-							<span id="add_button"><spring:message code="common.add" /></span></a> 
-							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_AccessRegReForm()">
-							<span id="add_button"><spring:message code="common.modify" /></span></a> 
-							<a href="#n" class="btn btnF_04" onclick="fn_AccessDel();"> 
-							<span id="del_button"><spring:message code="button.delete" /></span></a>
-						</div>
-					</div>
-					<div class="overflow_area">
-						<table id="accessControlTable" class="display" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-									<th width="10"></th>
-									<th width="20"><spring:message code="common.no" /></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Server_Instance"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Database_User"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.eXperDB_User"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.OS_User"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Application_Name"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.IP_Address"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.IP_Mask"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.MAC_Address"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Policy_Period"/> FROM</th>
-									<th width="100"><spring:message code="encrypt_policy_management.Policy_Period"/> TO</th>
-									<th width="100"><spring:message code="encrypt_policy_management.Policy_Time"/> FROM</th>
-									<th width="100"><spring:message code="encrypt_policy_management.Policy_Time"/> TO</th>
-									<th width="100"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Threshold"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.sec"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Additional_Fields"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Host_Name"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Whether_Allowing_Access"/></th>
-								</tr>
-							</thead>
-						</table>
-					</div>
-				</div>
 			</div>
 		</div>
-	</div>
+	</div>	
 </div>
+
+
+
+
+
+
+
+
+
+
+

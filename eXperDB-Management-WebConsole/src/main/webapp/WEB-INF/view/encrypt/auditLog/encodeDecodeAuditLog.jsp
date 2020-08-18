@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="../../cmmn/cs2.jsp"%>
+
 <%
 	/**
 	* @Class Name : encodeDecodeAuditLog.jsp
@@ -12,7 +15,7 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2018.01.09     최초 생성
+	*  2020.07.22    변승우 과장		UI 변경
 	*
 	* author 김주영 사원
 	* since 2018.01.09
@@ -138,25 +141,9 @@
 	}
 	
 	$(window.document).ready(function() {
-		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#to").datepicker("option", "minDate", selectedDate);
-			}
-		})
-
-		to = $("#to").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#from").datepicker("option", "maxDate", selectedDate);
-			}
-		})
 		
-		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-		
+		//작업기간 calender setting
+		dateCalenderSetting();
 		fn_init();
 		fn_select();	
 	});
@@ -164,11 +151,12 @@
 
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
+		
 		$.ajax({
 			url : "/selectEncodeDecodeAuditLog.do",
 			data : {
-				from : $('#from').val(),
-				to : 	$('#to').val(),
+				from : $('#lgi_dtm_start').val(),
+				to : 	$('#lgi_dtm_end').val(),
 				resultcode : $('#resultcode').val(),
 				agentUid : $('#agentUid').val(),
 				successTrueFalse : $('#successTrueFalse').val(),
@@ -183,13 +171,13 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
+					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
 					top.location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
+					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
 					top.location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {
@@ -199,145 +187,244 @@
 						table.rows.add(data.list).draw();
 					}
 				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href="/";
+					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');	
 				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					top.location.href="/securityKeySet.do";
+					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error','securityKeySet');
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");	
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});
 	}
 	
-</script>
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="encrypt_log_decode.Encryption_Decryption"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
-			<div class="infobox">
-				<ul>
-					<li><spring:message code="encrypt_help.Encryption_Decryption"/></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Encrypt</li>
-					<li><spring:message code="encrypt_log.Audit_Log"/></li>
-					<li class="on"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></li>
-				</ul>
-			</div>
-		</div>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button type="button"><spring:message code="common.search" /></button></span>
-				</div>
-				<div class="sch_form">
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width: 170px;" />
-							<col style="width: 500px;" />
-							<col style="width: 120px;" />
-							</col>
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t10"><spring:message code="encrypt_log_decode.Log_Period"/></th>
-								<td>
-									<div class="calendar_area">
-										<a href="#n" class="calendar_btn">달력열기</a> 
-										<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" readonly="readonly" /> <span class="wave">~</span>
-										<a href="#n" class="calendar_btn">달력열기</a> 
-										<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" readonly="readonly" />
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Agent"/></th>
-								<td>
-									<select class="select t3" id="agentUid" name="agentUid">
-										<option value="" ><spring:message code="common.total" /> </option>
-										<c:forEach var="result" items="${result}" varStatus="status">
-											<option value="<c:out value="${result.entityUid}"/>" ><c:out value="${result.entityName}"/></option>
-										</c:forEach> 
-									</select>
-								</td>
-								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Success_Failure"/></th>
-								<td>
-									<select class="select t8" id="successTrueFalse" name="successTrueFalse">
-										<option value=""><spring:message code="common.total" /> </option>
-										<option value="true"><spring:message code="common.success" /></option>
-										<option value="false"><spring:message code="common.failed" /></option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Additional_Search_Condition"/></th>
-								<td>
-									<select class="select t5" id="searchFieldName" name="searchFieldName">
-										<option value=""><spring:message code="encrypt_log_decode.Not_Select"/></option>
-										<option value="PROFILE_NM"><spring:message code="encrypt_policy_management.Policy_Name"/></option>
-										<option value="SITE_ACCESS_ADDRESS"><spring:message code="encrypt_log_decode.Client_Address"/></option>
-										<option value="HOST_NM"><spring:message code="encrypt_policy_management.Host_Name"/></option>
-										<option value="EXTRA_NM"><spring:message code="encrypt_policy_management.Additional_Fields"/></option>
-										<option value="MODULE_INFO"><spring:message code="encrypt_log_decode.Module_Information"/></option>
-										<option value="LOCATION_INFO"><spring:message code="encrypt_log_decode.Column_Name"/></option>
-										<option value="SERVER_LOGIN_ID"><spring:message code="encrypt_policy_management.Database_User"/></option>
-										<option value="ADMIN_LOGIN_ID"><spring:message code="encrypt_policy_management.eXperDB_User"/></option>
-										<option value="OS_LOGIN_ID"><spring:message code="user_management.user_id" /></option>
-										<option value="APPLICATION_NM"><spring:message code="encrypt_policy_management.Application_Name"/></option>
-										<option value="INSTANCE_ID"><spring:message code="encrypt_policy_management.Server_Instance"/></option>										
-									</select>
-									<select class="select t8" id="searchOperator" name="searchOperator">
-										<option value="LIKE">Like</option>
-										<option value="=">=</option>
-										<option value="<">&lt;</option>
-										<option value=">">&gt;</option>
-									</select>
-									<input type="text" class="txt t3" id="searchFieldValueString" name="searchFieldValueString"/>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+	
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function dateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
 
-				<div class="overflow_area">
-					<table id="encodeDecodeTable" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="40"><spring:message code="common.no" /></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Agent_Log_Date"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Agent_Address"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Securiy_Policy"/></th>
-								<th width="100"><spring:message code="encrypt_policy_management.Server_Instance"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Client_Address"/> </th>
-								<th width="100"><spring:message code="encrypt_log_decode.MAC_Address"/></th>
-								<th width="100"><spring:message code="encrypt_policy_management.OS_User"/></th>
-								<th width="100"><spring:message code="encrypt_policy_management.Database_User"/></th>
-								<th width="100"><spring:message code="encrypt_policy_management.eXperDB_User"/></th>
-								<th width="100"><spring:message code="encrypt_policy_management.Application_Name"/></th>
-								<th width="100">Extra Name</th>
-								<th width="100"><spring:message code="encrypt_policy_management.Host_Name"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Column_Name"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Module_Information"/></th>
-								<th width="100"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Action"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Result"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Count"/></th>
-								<th width="100"><spring:message code="encrypt_log_decode.Site_Integrity"/></th>
-								<th width="120"><spring:message code="encrypt_log_decode.ServerIntegrity"/></th>
-								<th width="150"><spring:message code="encrypt_log_decode.Log_Create_Time"/></th>
-								<th width="150"><spring:message code="encrypt_log_sever.Log_Update_Time"/></th>
-							</tr>
-						</thead>
-					</table>
+		today.setDate(today.getDate());
+		var day_start = today.toJSON().slice(0,10); 
+
+		$("#wrk_strt_dtm").val(day_start);
+		$("#wrk_end_dtm").val(day_end);
+
+		if ($("#wrk_strt_dtm_div").length) {
+			$('#wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+
+		if ($("#wrk_end_dtm_div").length) {
+			$('#wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+		
+		$("#wrk_strt_dtm").datepicker('setDate', day_start);
+	    $("#wrk_end_dtm").datepicker('setDate', day_end);
+	    $('#wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#wrk_end_dtm_div').datepicker('updateDates');
+	}
+	
+</script>
+
+
+
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							Encrypt
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_log.Audit_Log"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="encrypt_help.Encryption_Decryption"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+		
+<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body">
+							<form class="form-inline" onsubmit="return false;">
+								<div class="row">
+									<div class="input-group mb-2 mr-sm-2">								
+										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+										<div class="input-group align-items-center">
+											<span style="border:none; padding: 0px 10px;"> ~ </span>
+										</div>
+										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</form>
+							<form class="form-inline" onsubmit="return false;">
+								<div class="row">
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:300px;" name="agentUid" id="agentUid">
+											<option value=""><spring:message code="encrypt_log_decode.Agent"/>&nbsp;<spring:message code="schedule.total" /></option>
+											<c:forEach var="result" items="${result}" varStatus="status">
+											<option value="<c:out value="${result.entityUid}"/>" ><c:out value="${result.entityName}"/></option>
+										</c:forEach>
+										</select>
+									</div>
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:200px;" name="successTrueFalse" id="successTrueFalse">
+											<option value=""><spring:message code="encrypt_log_decode.Success_Failure"/>&nbsp;<spring:message code="schedule.total" /></option>
+											<option value="true"><spring:message code="common.success" /></option>
+											<option value="false"><spring:message code="common.failed" /></option>
+										</select>
+									</div>
+								</div>
+							</form>
+							<form class="form-inline" onsubmit="return false;">
+								<div class="row">					
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:200px;" name="searchFieldName" id="searchFieldName">
+											<option value=""><spring:message code="encrypt_log_decode.Additional_Search_Condition"/>&nbsp;<spring:message code="schedule.total" /></option>
+											<option value="PROFILE_NM"><spring:message code="encrypt_policy_management.Policy_Name"/></option>
+											<option value="SITE_ACCESS_ADDRESS"><spring:message code="encrypt_log_decode.Client_Address"/></option>
+											<option value="HOST_NM"><spring:message code="encrypt_policy_management.Host_Name"/></option>
+											<option value="EXTRA_NM"><spring:message code="encrypt_policy_management.Additional_Fields"/></option>
+											<option value="MODULE_INFO"><spring:message code="encrypt_log_decode.Module_Information"/></option>
+											<option value="LOCATION_INFO"><spring:message code="encrypt_log_decode.Column_Name"/></option>
+											<option value="SERVER_LOGIN_ID"><spring:message code="encrypt_policy_management.Database_User"/></option>
+											<option value="ADMIN_LOGIN_ID"><spring:message code="encrypt_policy_management.eXperDB_User"/></option>
+											<option value="OS_LOGIN_ID"><spring:message code="user_management.user_id" /></option>
+											<option value="APPLICATION_NM"><spring:message code="encrypt_policy_management.Application_Name"/></option>
+											<option value="INSTANCE_ID"><spring:message code="encrypt_policy_management.Server_Instance"/></option>
+										</select>
+									</div>																		
+									<div class="input-group mb-2 mr-sm-2">
+										<select class="form-control" style="width:200px;" name="searchOperator" id="searchOperator">
+											<option value="LIKE">Like</option>
+											<option value="=">=</option>
+											<option value="<">&lt;</option>
+											<option value=">">&gt;</option>
+										</select>
+									</div>													
+									<div class="input-group mb-2 mr-sm-2">
+										<input type="text" class="form-control" style="width:400px;" id="searchFieldValueString" name="searchFieldValueString" onblur="this.value=this.value.trim()" maxlength="25" />
+									</div>						
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="fn_select();">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>									
+								</div>
+							</form>	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+	 								<table id="encodeDecodeTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Agent_Log_Date"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Agent_Address"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Securiy_Policy"/></th>
+												<th width="100"><spring:message code="encrypt_policy_management.Server_Instance"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Client_Address"/> </th>
+												<th width="100"><spring:message code="encrypt_log_decode.MAC_Address"/></th>
+												<th width="100"><spring:message code="encrypt_policy_management.OS_User"/></th>
+												<th width="100"><spring:message code="encrypt_policy_management.Database_User"/></th>
+												<th width="100"><spring:message code="encrypt_policy_management.eXperDB_User"/></th>
+												<th width="100"><spring:message code="encrypt_policy_management.Application_Name"/></th>
+												<th width="100">Extra Name</th>
+												<th width="100"><spring:message code="encrypt_policy_management.Host_Name"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Column_Name"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Module_Information"/></th>
+												<th width="100"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Action"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Result"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Count"/></th>
+												<th width="100"><spring:message code="encrypt_log_decode.Site_Integrity"/></th>
+												<th width="120"><spring:message code="encrypt_log_decode.ServerIntegrity"/></th>
+												<th width="150"><spring:message code="encrypt_log_decode.Log_Create_Time"/></th>
+												<th width="150"><spring:message code="encrypt_log_sever.Log_Update_Time"/></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+					<!-- content-wrapper ends -->
+				</div>
+			</div>
+		</div>				
 	</div>
-</div>
-<!-- // contents -->
+</div>	
+
+
+
+
