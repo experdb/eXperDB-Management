@@ -130,6 +130,8 @@
 				fn_dumpRestoreLogCall();
 			} else if (rstGbn == "logout") {
 				fn_logout_result();
+			}else if (rstGbn == "securityPolicy") {
+				location.href = "/securityPolicy.do";
 			}
         });
 	}
