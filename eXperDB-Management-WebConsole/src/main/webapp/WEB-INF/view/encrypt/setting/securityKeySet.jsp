@@ -44,8 +44,7 @@ var initKey="";
  ******************************************************** */
 $(window.document).ready(function() {
 	if(resultCode=="8000000002"){
-		alert("<spring:message code='message.msg05' />");
-		top.location.href = "/";
+		showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 	}
 	
 	fn_buttonAut();
@@ -173,9 +172,9 @@ function fn_validation(){
 }
 
 function fn_save(){	
-	
+
 	if (!fn_validation()) return false;
-	
+
 	mstKeyRenewChk =  $("#mstKeyRenew").prop("checked");
 	mstKeyUseChk = $("#mstKeyUse").prop("checked");
 
@@ -385,7 +384,7 @@ function fn_mstKeyDownload(){
 						<div class="col-12">
 							<div class="template-demo">	
 								<%-- <button type="button" onClick="fn_agentMonitoringModifyForm();" id="btnUpdate"><spring:message code="common.modify" /></button> --%>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSave" onClick="fn_confirm();">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSave" onClick="fn_save();">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.save" />
 								</button>		
 							</div>
@@ -445,7 +444,7 @@ function fn_mstKeyDownload(){
 				</div>
 				
 				
-				<div class="card-body">
+				<div class="card-body"  id="pnlChangePassword">
 						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:100px;">			
 								<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
 									<form class="cmxform" id="baseForm">
