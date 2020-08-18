@@ -461,7 +461,7 @@ function fn_charSet(){
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
 										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="schema_any_reg" name="scm_nm_reg" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" />
-										<select name="scm_nm" id="schema_pg_reg" class="form-control"></select>
+										<select name="scm_nm" id="schema_pg_reg" class="form-control" style="margin-right: 1rem;width: 100% !important;"></select>
 									</div>
 								</div>
 								<div class="form-group row">

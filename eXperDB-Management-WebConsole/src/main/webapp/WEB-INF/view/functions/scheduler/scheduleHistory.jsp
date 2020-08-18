@@ -13,7 +13,7 @@
     	var endDt	= new Date(aryEndDt);
     	resultDt	= Math.round((endDt.valueOf() - startDt.valueOf())/(1000*60*60*24*365/12));
     	if(resultDt>6){
-    		alert("<spring:message code='message.msg34' />");
+    		showSwalIcon('<spring:message code="message.msg34" />', '<spring:message code="common.close" />', '', 'error');
     		return false; 
     	}
     	return true;
@@ -44,6 +44,8 @@
 		}
 // 		fn_SelectDBMS(svr_nm);
 // 		fn_ScheduleNmList(scd_nm);
+
+		fn_init_scdH();
 	
 	});
 	
@@ -280,19 +282,76 @@
 // 	}
 
 	function fn_detail(exe_sn){
-		var popUrl = "/popup/scheduleHistoryDetail.do?exe_sn="+exe_sn; // 서버 url 팝업경로
-		var width = 950;
-		var height = 690;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-		window.open(popUrl,"",popOption);
+		$.ajax({
+			url : "/selectScheduleHistoryWorkDetail.do",
+			data : {
+				exe_sn : exe_sn
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				workTable_history.clear().draw();
+				workTable_history.rows.add(result).draw();
+				fn_scd_deatil(exe_sn);
+				$('#pop_layer_scd_history').modal("show");
+			}
+		});
+		
+	}
+	
+	function fn_scd_deatil(exe_sn){
+		$.ajax({
+			url : "/popup/scheduleHistoryDetail.do",
+			data : {
+				exe_sn : exe_sn,
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				var results= result.result[0];
+				$("#scd_history_info").empty();
+				var html ='<table class="table table-striped system-tlb-scroll" style="border:1px solid #99abb0;">';
+				html +='<colgroup><col style="width:15%;" /><col style="width:85%;" /></colgroup>';
+				html +='<tbody>';
+				html +='<tr><td><spring:message code="schedule.schedule_name" /></td><td style="text-align: left"><span onClick="javascript:fn_scdLayer('+results.scd_id+');" class="bold">'+results.scd_nm+'</span></td></tr>'
+				html +='<tr><td><spring:message code="schedule.work_start_datetime" /></td><td style="text-align: left">'+results.wrk_strt_dtm+'</td></tr>';
+				html +='<tr><td><spring:message code="schedule.work_end_datetime" /></td><td style="text-align: left">'+results.wrk_end_dtm+'</td></tr>';
+				html +='<tr><td><spring:message code="schedule.jobTime"/></td><td style="text-align: left">'+results.wrk_dtm+'</td></tr>';
+				html +='<tr><td><spring:message code="schedule.scheduleExp"/></td><td style="text-align: left">'+results.scd_exp+'</td></tr>';
+				html  +='</tbody></table>';
+				$("#scd_history_info").append(html);
+			}
+		});	
 	}
     </script>
     
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
 <%@include file="../../cmmn/wrkLog.jsp"%>
+<%@include file="../../popup/scheduleHistoryDetail.jsp"%>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -307,7 +366,7 @@
 									<div class="col-5">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-<!-- 												<i class="fa fa-check-square"></i> -->
+												<i class="ti-calendar menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.shedule_execution_history" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -467,7 +526,9 @@
 														    	</c:otherwise>
 															</c:choose>
 														</td>
-														<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="<spring:message code="schedule.detail_view" />"></span></td>
+														<td>
+															<button type="button" id="detail" class="btn btn-outline-primary btn-sm" onclick="fn_detail(${result.exe_sn})"><spring:message code="schedule.detail_view" /> </button>
+														</td>
 													</tr>
 												</c:forEach>
 											</tbody>

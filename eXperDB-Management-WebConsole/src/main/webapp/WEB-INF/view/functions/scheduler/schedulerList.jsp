@@ -96,9 +96,7 @@ function fn_init(){
 		{
 			data : "",
 			render : function(data, type, full, meta) {
-				/* var html = "<span><button class='btnDtail' id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>"; */
-				var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
-				return html;
+				 return '<button id="detail" class="btn btn-outline-primary" onClick=javascript:fn_dblclick_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
 			},
 			className : "dt-center",
 			defaultContent : "",
@@ -204,15 +202,7 @@ function fn_init(){
 	if("${wrt_aut_yn}" == "Y"){
 		 $('#scheduleList tbody').on('dblclick','tr',function() {
 			var scd_id = table.row(this).data().scd_id;
-			
-			var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
-			var width = 1100;
-			var height = 560;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-					
-			window.open(popUrl,"",popOption);
+			fn_dblclick_scheduleInfo(scd_id);
 		});		
 	}
  
@@ -259,6 +249,37 @@ function fn_init(){
 }
 
 
+/* ********************************************************
+ * deatil rereg Btn click
+ ******************************************************** */
+ function fn_dblclick_scheduleInfo(scd_id_up) {
+	$('#scd_id', '#findList').val(scd_id_up);
+ 	$.ajax({
+		url : "selectWrkScheduleList.do",
+		data : {
+			scd_id : $("#scd_id", "#findList").val()	
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	    },
+	    error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			//테이블 세팅
+			fn_workpop_init();
+			fn_workpop_search();
+			$('#pop_layer_info_schedule').modal("show");
+		}
+	});
+}
 
 
 $(function() {
@@ -594,11 +615,19 @@ function fn_dateValidation(exe_dt){
 </script>
 
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
+<%@include file="../../popup/scheduleWrkList.jsp"%>
+<%@include file="../../cmmn/workRmanInfo.jsp"%>
+<%@include file="../../cmmn/workDumpInfo.jsp"%>
 
 <form name="modifyForm" method="post">
 </form>
 
 
+<form name="findList" id="findList" method="post">
+	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+	<input type="hidden" name="wrk_id" id="wrk_id" value=""/>
+	<input type="hidden" name="scd_id" id="scd_id" value=""/>
+</form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -613,7 +642,7 @@ function fn_dateValidation(exe_dt){
 									<div class="col-5">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-calendar menu-icon"></i>
 												<span class="menu-title"><spring:message code="etc.etc27"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>

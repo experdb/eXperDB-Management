@@ -150,9 +150,6 @@ $(window.document).ready(function() {
 										<input style="display:none" aria-hidden="true">
 										<input type="text" class="form-control" style="width: 100%;" autocomplete="off" maxlength="20" id="db2pg_sys_nm_reg_re" name="db2pg_sys_nm_reg_re" onkeyup="fn_checkWord(this,20)" value="${resultInfo[0].db2pg_sys_nm}" readonly />
 									</div>
-									<div class="col-sm-1_5">
-										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" type="button" onclick="fn_sysnmCheck();" value='<spring:message code="common.overlap_check" />' />
-									</div>
 								</div>
 								<div class="form-group row">
 									<label for="ins_usr_nm" class="col-sm-2 col-form-label pop-label-index">
@@ -241,7 +238,7 @@ $(window.document).ready(function() {
 							<br/>
 							
 							<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_insertDBMS();" value='<spring:message code="common.registory" />' />
+								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_updateDBMS();" value='<spring:message code="common.modify" />' />
 								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_connTest();" value='<spring:message code="dbms_information.conn_Test" />' />
 								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 							</div>
