@@ -411,33 +411,6 @@
 
 		$('#lft_tree').bstreeview({ data: menuJson });
 	}
-
-	/* link move */
-	function fn_GoLink(url) {
-		$('.fa-spin').toggleClass('fa-spin');
-		//선택 spin
-		$("#i"+url).toggleClass('fa-spin');
-
-		$('.text-tree-click').toggleClass('text-tree-click');
-		$("#"+url + "c").toggleClass('text-tree-click');
-	/* 	
-		toggleClass('sidebar-icon-only'); */
-	/* 	var cssID = sessionStorage.getItem('cssId');
-
-		$("#"+cssID).css("background-color","");
-		$("#"+cssID+"c").css("color","");
-		$("#"+cssID).css("border","");	
-
-		if(url != null){
-			$("#"+url).css("background-color","#f58220");
-			$("#"+url+"c").css("color","white");
-			$("#"+url).css("border","2px solid #f58220");	
-		}
- */
-
-		sessionStorage.setItem('cssId',url);
-	}
-		
 </script>
 
 <form name="dbServerView" id="dbServerView">

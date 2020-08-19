@@ -549,7 +549,7 @@
 	 * 즉시실행 DDL
 	 ******************************************************** */
 	function fn_ImmediateStart() {
-/* 		$.ajax({
+ 		$.ajax({
 			url : "/backupImmediateExe.do",
 			data : {
 				wrk_id:immediate_data[0].wrk_id,
@@ -576,10 +576,18 @@
 				}
 			},
 			success : function(result) {
+				showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
 			}
-		}); */
-		
-		showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
+		});
+	}
+
+	/* ********************************************************
+	 * backup history 이동
+	 ******************************************************** */
+	function fn_backupHistory_move() {
+		var id = "workLogList" + $("#db_svr_id", "#findList").val();
+		location.href='/backup/workLogList.do?db_svr_id='+$("#db_svr_id", "#findList").val()+'&tabGbn='+selectChkTab;
+		parent.fn_GoLink(id);
 	}
 
 	/* ********************************************************

@@ -28,18 +28,26 @@
 
 	$(window.document).ready(function() {
 		//검색조건 초기화
+		if (tabGbn != null) {
+			selectChkTab = tabGbn;
+		}
+
 		selectInitTab(selectChkTab);
 
 		//작업기간 calender setting
 		dateCalenderSetting();
 
 		//조회
-		if(tabGbn != ""){
-			selectTab(tabGbn);
+ 		if(tabGbn != ""){
+ 			if (tabGbn == "rman") {
+ 	 			$('#server-tab-1').click();
+ 			} else {
+ 	 			$('#server-tab-2').click();
+ 			}
 		}else{
-			selectTab("rman");
+			$('#server-tab-1').click();
 		}
-		
+
 		/* ********************************************************
 		 * Click Search Button
 		 ******************************************************** */
@@ -81,6 +89,7 @@
 	 ******************************************************** */
 	function selectInitTab(intab){
 		selectChkTab = intab;
+
 		if(intab == "rman"){			
 			$(".search_rman").show();
 			$(".search_dump").hide();
@@ -88,7 +97,7 @@
 			$("#logDumpListDiv").hide();
 
 			seachParamInit(intab);
-		}else{				
+		}else{
 			$(".search_rman").hide();
 			$(".search_dump").show();
 			$("#logRmanListDiv").hide();

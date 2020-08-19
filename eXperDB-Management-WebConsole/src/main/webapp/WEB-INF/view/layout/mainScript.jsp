@@ -14,7 +14,7 @@
  		$('.text-tree-click').toggleClass('text-tree-click');
 	}
 
-	//서버메뉴 클ㄹ힉 이벤트
+	//서버메뉴 클릭한 이벤트
 	function fn_server_treeMenu_click(id, ingId) {
  		
 		var iCnt = 1;
@@ -34,5 +34,17 @@
 				iCnt = iCnt + 1;
 		    });
 		}
+	}
+	
+	/* link move */
+	function fn_GoLink(url) {
+		$('.fa-spin').toggleClass('fa-spin');
+		//선택 spin
+		$("#i"+url).toggleClass('fa-spin');
+
+		$('.text-tree-click').toggleClass('text-tree-click');
+		$("#"+url + "c").toggleClass('text-tree-click');
+
+		sessionStorage.setItem('cssId',url);
 	}
 </script>

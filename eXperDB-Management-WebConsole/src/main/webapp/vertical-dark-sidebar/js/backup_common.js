@@ -207,13 +207,6 @@ function fnc_confirmMultiRst(gbn){
 }
 
 /* ********************************************************
- * backup history 이동
- ******************************************************** */
-function fn_backupHistory_move() {
-	location.href='/backup/workLogList.do?db_svr_id='+$("#db_svr_id", "#findList").val()+'&&tabgbn='+selectChkTab;
-}
-
-/* ********************************************************
  * 등록버튼 클릭시 
  ******************************************************** */
 function fn_reg_popup(){
