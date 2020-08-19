@@ -281,7 +281,7 @@ function fn_charSet(){
 /* ********************************************************
  * Source DBMS 연결테스트
  ******************************************************** */
- function fn_connTest(){
+ function fn_connTest2(){
      $.ajax({
  		url : "/dbmsConnTest.do",
  		data : {
@@ -394,7 +394,7 @@ function fn_charSet(){
 					<spring:message code="migration.source/target_dbms_register"/>
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
-					<form class="cmxform" name="dbserverInsert" id="dbserverInsert" method="post">
+					<form class="cmxform" name="dbmsInsert" id="dbmsInsert" method="post">
 						<fieldset>
 							<div class="card-body" style="border: 1px solid #adb5bd;">
 								<div class="form-group row">
@@ -418,8 +418,8 @@ function fn_charSet(){
 									<div class="col-sm-4">
 										<select class="form-control" style="margin-right: 1rem;width: 100% !important;" name="dbms_dscd_reg" id="dbms_dscd_reg" onChange ="fn_charSet()">
 											<option value=""><spring:message code="common.choice" /></option>				
-											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
-					 							<option value="<c:out value="${dbmsGrb.sys_cd}"/>" ><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
+											<c:forEach var="dbmsGrb_reg" items="${dbmsGrb_reg}" varStatus="status">												 
+					 							<option value="<c:out value="${dbmsGrb_reg.sys_cd}"/>" ><c:out value="${dbmsGrb_reg.sys_cd_nm}"/></option>
 					 						</c:forEach>
 										</select>
 									</div>
@@ -492,12 +492,10 @@ function fn_charSet(){
 									</div>
 								</div>
 							</div>
-
 							<br/>
-							
 							<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
 								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_insertDBMS();" value='<spring:message code="common.registory" />' />
-								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_connTest();" value='<spring:message code="dbms_information.conn_Test" />' />
+								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_connTest2();" value='<spring:message code="dbms_information.conn_Test" />' />
 								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 							</div>
 						</fieldset>

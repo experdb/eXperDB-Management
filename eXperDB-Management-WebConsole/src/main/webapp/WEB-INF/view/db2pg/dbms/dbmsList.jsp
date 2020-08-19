@@ -77,10 +77,8 @@ function fn_init() {
  * 페이지 시작시, 서버 리스트 조회
  ******************************************************** */
 $(window.document).ready(function() {
-	
 	fn_init();
 	fn_search();
-	
   	$(function() {	
   		$('#dbms tbody').on( 'click', 'tr', function () {
   			 if ( $(this).hasClass('selected') ) {
@@ -97,7 +95,6 @@ $(window.document).ready(function() {
  * DBMS 조회
  ******************************************************** */
  function fn_search(){
-	
 	 	$.ajax({
 	  		url : "/selectDb2pgDBMS.do",
 	  		data : {
@@ -133,6 +130,18 @@ $(window.document).ready(function() {
  * DBMS 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
+	$("#db2pg_sys_nm_reg", "#dbmsInsert").val("");
+	$("#ipadr_reg", "#dbmsInsert").val(""); 
+	$("#portno_reg", "#dbmsInsert").val(""); 
+	$("#dtb_nm_reg", "#dbmsInsert").val(""); 
+	$("#spr_usr_id_reg", "#dbmsInsert").val(""); 
+	$("#pwd_reg", "#dbmsInsert").val(""); 
+	$("#dbms_dscd_reg", "#dbmsInsert").val(""); 
+	$("#crts_nm_reg", "#dbmsInsert").val(""); 
+
+	$("#pgbtn").hide();
+	$("#schema_any_reg").show();
+	$("#schema_pg_reg").hide();
 	$('#pop_layer_db2pg_dbms_reg').modal("show");
 }
 
@@ -152,19 +161,46 @@ function fn_regRe_popup(){
 		return false;
 	}
 	
-	$('#pop_layer_db2pg_dbms_reg_re').modal("hide");
+	var db2pg_sys_id = table.row('.selected').data().db2pg_sys_id;
+
+	$.ajax({
+		url : "/db2pg/popup/dbmsRegReForm.do",
+		data : {
+			db2pg_sys_id : db2pg_sys_id
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			$("#db2pg_sys_id_reg_re").val(nvlPrmSet(result.resultInfo[0].db2pg_sys_id, ""));
+			$("#db2pg_sys_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].db2pg_sys_nm, ""));
+			$("#ipadr_reg_re").val(nvlPrmSet(result.resultInfo[0].ipadr, ""));
+			$("#portno_reg_re").val(nvlPrmSet(result.resultInfo[0].portno, ""));
+			$("#dtb_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].dtb_nm, ""));
+			$("#scm_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].scm_nm, ""));
+			$("#spr_usr_id_reg_re").val(nvlPrmSet(result.resultInfo[0].spr_usr_id, ""));
+			$("#pwd_reg_re").val(nvlPrmSet(result.pwd, ""));
+			
+			$("#crts_nm_reg_re").val(result.resultInfo[0].crts).prop("selected", true);
+			$("#dbms_dscd_reg_re").val(result.resultInfo[0].dbms_dscd).prop("selected", true);
+			
+			$('#pop_layer_db2pg_dbms_reg_re').modal("show");
+		}
+	});	
 	
-// 	var db2pg_sys_id = table.row('.selected').data().db2pg_sys_id;
 	
-// 	var popUrl = "/db2pg/popup/dbmsRegReForm.do?db2pg_sys_id="+db2pg_sys_id;
-// 	var width = 1000;
-// 	var height = 520;
-// 	var left = (window.screen.width / 2) - (width / 2);
-// 	var top = (window.screen.height /2) - (height / 2);
-// 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
-// 	var winPop = window.open(popUrl,"ddlRegRePop",popOption);
-// 	winPop.focus();
 }
 
 /* ********************************************************
@@ -177,11 +213,9 @@ function fn_delete(){
 		return false;
 	}else{
 		if(confirm('<spring:message code="message.msg162"/>')){
-			
 			var db2pg_sys_id =  table.row('.selected').data().db2pg_sys_id;
 			var db2pg_trg_sys_id =  table.row('.selected').data().db2pg_trg_sys_id;
 
-			
 			//ddl, mig work가 등록되어 있는지 확인
 			$.ajax({
 				url : "/db2pg/exeMigCheck.do",
