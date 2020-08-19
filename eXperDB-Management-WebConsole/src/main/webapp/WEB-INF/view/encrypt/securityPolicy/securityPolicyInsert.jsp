@@ -133,13 +133,24 @@
 		$("#insAccess_Control_PolicTab").hide();
 		
 		//table 탭 이동시
+		$('a[href="#insGeneral_InformationTab"]').on('shown.bs.tab', function (e) {
+			$("#insGeneral_InformationTab").show();
+			$("#insOptionTab").hide();
+			$("#insAccess_Control_PolicTab").hide();
+		}); 
+		
+		//table 탭 이동시
 		$('a[href="#insOptionTab"]').on('shown.bs.tab', function (e) {
 			$("#insOptionTab").show();
+			$("#insGeneral_InformationTab").hide();
+			$("#insAccess_Control_PolicTab").hide();
 		}); 
 		
 		//table 탭 이동시
 		$('a[href="#insAccess_Control_PolicTab"]').on('shown.bs.tab', function (e) {
 			$("#insAccess_Control_PolicTab").show();
+			$("#insOptionTab").hide();
+			$("#insGeneral_InformationTab").hide();
 		});
 		
 	});
@@ -186,6 +197,7 @@
 	}
 	
 	
+	/*암보호화 정책 등록화면 초기세팅*/
 	function fn_securityPolicyRegFormInit(result){	
 
 		$("#pop_offset", "#baseForm").val(""); //시작위치
@@ -248,13 +260,13 @@
 			});
 					
 		}else{
-			alert("<spring:message code='message.msg04' />");
+			showSwalIcon('<spring:message code='message.msg04' />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}		
 	}
 	
 
-	
+	/*암보호화 정책 수정화면 초기세팅*/
 	function fn_securityPolicyRegReFormInit(result){	
 
 		$("#mod_rnum", "#modForm").val(nvlPrmSet(result.mod_rnum, ""));
@@ -263,8 +275,8 @@
 		$("#mod_last").prop('checked', false) ;
 		$("#mod_cipherAlgorithmCode", "#modForm").val(nvlPrmSet(result.mod_cipherAlgorithmCodeValue, ""));
 		$("#mod_binUidValue", "#modForm").val(nvlPrmSet(result.mod_binUidValue, ""));
-		$("#mod_initialVectorTypeCodeValue", "#modForm").val(nvlPrmSet(result.mod_initialVectorTypeCodeValue, ""));
-		$("#mod_operationModeCodeValue", "#modForm").val(nvlPrmSet(result.mod_operationModeCodeValue, ""));
+		$("#mod_initialVectorTypeCode", "#modForm").val(nvlPrmSet(result.mod_initialVectorTypeCodeValue, ""));
+		$("#mod_operationModeCode", "#modForm").val(nvlPrmSet(result.mod_operationModeCodeValue, ""));
 
 		
 		 var mod_cipherAlgorithmCode = document.getElementById("mod_cipherAlgorithmCode");
@@ -368,6 +380,7 @@
 	}
 	
 	
+	/*접근제어 정책 등록 초기세팅*/
 	function fn_accessPolicyRegFormInit(){
 		$("#specName", "#accbaseForm").val("");
 		$("#serverInstanceId", "#accbaseForm").val("");
@@ -378,6 +391,11 @@
 		$("#accessAddress", "#accbaseForm").val("");
 		$("#accessAddressMask", "#accbaseForm").val("");
 		$("#accessMacAddress", "#accbaseForm").val("");
+		$("#massiveThreshold", "#accbaseForm").val("");
+		$("#massiveTimeInterval", "#accbaseForm").val("");
+		$("#extraName", "#accbaseForm").val("");
+		$("#hostName", "#accbaseForm").val("");
+		
 		
 		dateCalenderSetting();
 
@@ -396,6 +414,8 @@
 		
 		$("#to_exe_h").val(23);
 		$("#to_exe_m").val(59);
+		$('#endDateTime').val('9997-12-31');
+		
 
 		$("#whitelistYes").prop('checked', true);		
 	}
@@ -506,42 +526,67 @@
 	}
 
 	
+	/*접근제어 정책 수정 초기세팅*/
 	function fn_accessPolicyRegReFormInit(result){
 		
-		$("#rnum", "#accModForm").val(nvlPrmSet(result.rnum, ""));
-		$("#specName", "#accModForm").val(nvlPrmSet(result.specName, ""));
-		$("#serverInstanceId", "#accModForm").val(nvlPrmSet(result.serverInstanceId, ""));
-		$("#serverLoginId", "#accModForm").val(nvlPrmSet(result.serverLoginId, ""));
-		$("#adminLoginId", "#accModForm").val(nvlPrmSet(result.adminLoginId, ""));
-		$("#osLoginId", "#accModForm").val(nvlPrmSet(result.osLoginId, ""));
-		$("#applicationName", "#accModForm").val(nvlPrmSet(result.applicationName, ""));
-		$("#accessAddress", "#accModForm").val(nvlPrmSet(result.accessAddress, ""));
-		$("#accessAddressMask", "#accModForm").val(nvlPrmSet(result.accessAddressMask, ""));
-		$("#accessMacAddress", "#accModForm").val(nvlPrmSet(result.accessMacAddress, ""));
-		$("#startDateTime", "#accModForm").val(nvlPrmSet(result.startDateTime, ""));
-		$("#endDateTime", "#accModForm").val(nvlPrmSet(result.endDateTime, ""));
-		$("#startTime", "#accModForm").val(nvlPrmSet(result.startTime, ""));
-		$("#endTime", "#accModForm").val(nvlPrmSet(result.endTime, ""));
-		$("#workDay", "#accModForm").val(nvlPrmSet(result.workDay, ""));
-		$("#massiveThreshold", "#accModForm").val(nvlPrmSet(result.massiveThreshold, ""));
-		$("#massiveTimeInterval", "#accModForm").val(nvlPrmSet(result.massiveTimeInterval, ""));
-		$("#extraName", "#accModForm").val(nvlPrmSet(result.extraName, ""));
-		$("#hostName", "#accModForm").val(nvlPrmSet(result.hostName, ""));
-		$("#whitelistYesNo", "#accModForm").val(nvlPrmSet(result.whitelistYesNo, ""));
+		fn_mod_makeFromHour();
+		fn_mod_makeFromMin();
+		fn_mod_makeToHour();
+		fn_mod_makeToMin();
 
+		$("#rnum", "#accModForm").val(nvlPrmSet(result.rnum, ""));
+		$("#mod_specName", "#accModForm").val(nvlPrmSet(result.specName, ""));
+		$("#mod_serverInstanceId", "#accModForm").val(nvlPrmSet(result.serverInstanceId, ""));
+		$("#mod_serverLoginId", "#accModForm").val(nvlPrmSet(result.serverLoginId, ""));
+		$("#mod_adminLoginId", "#accModForm").val(nvlPrmSet(result.adminLoginId, ""));
+		$("#mod_osLoginId", "#accModForm").val(nvlPrmSet(result.osLoginId, ""));
+		$("#mod_applicationName", "#accModForm").val(nvlPrmSet(result.applicationName, ""));
+		$("#mod_accessAddress", "#accModForm").val(nvlPrmSet(result.accessAddress, ""));
+		$("#mod_accessAddressMask", "#accModForm").val(nvlPrmSet(result.accessAddressMask, ""));
+		$("#mod_accessMacAddress", "#accModForm").val(nvlPrmSet(result.accessMacAddress, ""));
+		$("#mod_startDateTime", "#accModForm").val(nvlPrmSet(result.startDateTime, ""));
+		$("#mod_endDateTime", "#accModForm").val(nvlPrmSet(result.endDateTime, ""));
+		
+		var startTime = result.startTime;
+		var endTime = result.endTime;
+		var from_exe= startTime.split(':');
+		var to_exe= endTime.split(':');
+		$("#mod_from_exe_h").val(from_exe[0]);
+		$("#mod_from_exe_m").val(from_exe[1]);
+		$("#mod_to_exe_h").val(to_exe[0]);
+		$("#mod_to_exe_m").val(to_exe[1]);
+			
+		var workday = result.workDay;
+		var day = workday.split(",");
+
+		 $('input:checkbox[name="mod_workDay"]').each(function() {
+			 for(var i=0; i<day.length; i++){
+				if(this.value == day[i]){
+					this.checked = true;
+				 }
+			}
+		 });
+		 
+		$("#mod_massiveThreshold", "#accModForm").val(nvlPrmSet(result.massiveThreshold, ""));
+		$("#mod_massiveTimeInterval", "#accModForm").val(nvlPrmSet(result.massiveTimeInterval, ""));
+		$("#mod_extraName", "#accModForm").val(nvlPrmSet(result.extraName, ""));
+		$("#mod_hostName", "#accModForm").val(nvlPrmSet(result.hostName, ""));
+
+		if(result.whitelistYesNo == 'Y'){
+			$("#mod_whitelistYes").prop('checked', true);	
+			$("#mod_whitelistNo").prop('checked', false);	
+		}else{
+			$("#mod_whitelistYes").prop('checked', false);	
+			$("#mod_whitelistNo").prop('checked', true);	
+		}
 		
 	}
 	
 	
 	
-	
-	
-	
-	
-	
-	
 	/*접근제어 정책 수정*/
 	function fn_AccessUpdate(result){
+
 		table2.cell(result.rnum, 2).data(result.specName).draw();
 		table2.cell(result.rnum, 3).data(result.serverInstanceId).draw();
 		table2.cell(result.rnum, 4).data(result.serverLoginId).draw();
@@ -561,7 +606,7 @@
 		table2.cell(result.rnum, 18).data(result.extraName).draw();
 		table2.cell(result.rnum, 19).data(result.hostName).draw();
 		table2.cell(result.rnum, 20).data(result.whitelistYesNo).draw();
-		
+
 		table2.rows({selected: true}).deselect();
 	}
 	
@@ -584,44 +629,49 @@
     	if(objTarget.type == 'text') {
     	var value = objTarget.value;
     		if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
-    			alert('<spring:message code="encrypt_msg.msg22"/>');
+    			showSwalIcon('<spring:message code='message.msg22' />', '<spring:message code="common.close" />', '', 'error');
     	   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
     	  	}
     	 }
     }
 	
+	
+	
+	
+	
 	/*정책저장 Validation*/
 	function fn_validation(){
 		var profileName = document.getElementById("profileName");
 		if (profileName.value == "") {
-			alert('<spring:message code="encrypt_msg.msg06"/>');
+			showSwalIcon('<spring:message code='encrypt_msg.msg06' />', '<spring:message code="common.close" />', '', 'error');
 			profileName.focus();
 			return false;
 		}
-		
+
 		var datas = table.rows().data();
 		if(datas.length<=0){
-			alert('<spring:message code="encrypt_msg.msg07"/>');
+			showSwalIcon('<spring:message code='encrypt_msg.msg07' />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
+
 		
 		var denyResultTypeCode = $("#denyResultTypeCode").val();
 		if(denyResultTypeCode == "DRMS" || denyResultTypeCode == "DRRP"){
 			var maskingValue = $("#maskingValue").val();
 			if(maskingValue==""){
-				alert('<spring:message code="encrypt_msg.msg08"/>');
+				showSwalIcon('<spring:message code='encrypt_msg.msg08' />', '<spring:message code="common.close" />', '', 'error');
 				return false;
 			}
 		}
+
 		return true;
 	}
 	
 	
+	
 	/*정책저장*/
 	function fn_save(){
-		
-		if (!fn_validation()) return false;
-		
+
 		/*보안정책*/
 		var datas = table.rows().data();
 		var securityPolicy = [];
@@ -699,16 +749,13 @@
 			},
 			success : function(data) {
 				if(data.resultCode == "0000000000"){
-					alert('<spring:message code="message.msg07" />');
-					location.href='/securityPolicy.do' ;
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', 'securityPolicy');
 				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href="/securityKeySet.do";
+					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");	
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			beforeSend: function(xhr) {
@@ -720,19 +767,48 @@
 				} else if(xhr.status == 403) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});
 		
 	}
+	
+	
+	
+	function fn_confirm(){
+		
+		if (!fn_validation()) return false;
+		fn_ConfirmModal();
+	}
+
+
+	/* ********************************************************
+	 * confirm modal open
+	 ******************************************************** */
+	function fn_ConfirmModal() {
+		confirm_title = '<spring:message code="etc.etc01"/>' ;
+		 $('#confirm_msg').html('<spring:message code="message.msg148" />');
+
+		$('#confirm_tlt').html(confirm_title);
+		$('#pop_confirm_md').modal("show");
+	}
+
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmRst(){
+		fn_save();
+	}
+
 </script>
 
 
 <%@include file="../popup/securityPolicyRegForm.jsp"%>
 <%@include file="../popup/securityPolicyRegReForm.jsp"%>
 <%@include file="../popup/accessPolicyRegForm.jsp"%>
-<%@include file="../popup/accessPolicyRegReForm.jsp"%>
+<%@include file="../popup/accessPolicyRegReForm.jsp"%> 
+<%@include file="./../../popup/confirmForm.jsp"%>
 
 		<div class="content-wrapper main_scroll" id="contentsDiv">
 			<div class="row">
@@ -779,7 +855,7 @@
 							<div class="row" style="margin-top:-20px;">
 								<div class="col-12">
 									<div class="template-demo">			
-										<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_save();" >
+										<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_confirm();" >
 											<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.save"/>
 										</button>
 									</div>

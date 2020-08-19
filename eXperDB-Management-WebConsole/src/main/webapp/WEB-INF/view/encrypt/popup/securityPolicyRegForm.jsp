@@ -35,7 +35,7 @@ function NumObj(obj) {
 
 
 /*validation 체크*/
-function fn_validation(){
+function fn_sec_validation(){
 	var offset = document.getElementById('pop_offset');
 	var length = document.getElementById('pop_length');
 	var cipherAlgorithmCode = document.getElementById('pop_cipherAlgorithmCode');
@@ -69,8 +69,8 @@ function fn_validation(){
 
 
 /*저장버튼 클릭시*/
-function fn_save(){
-	if (!fn_validation()) return false;
+function fn_sec_save(){
+	if (!fn_sec_validation()) return false;
 	
 	Result = new Object();
 	
@@ -222,7 +222,7 @@ function fn_changeBinUid(selectObj){
 				
 			</div>
 			<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >			
-					<button type="button" class="btn btn-primary" onclick="fn_save();"><spring:message code="common.save"/></button>
+					<button type="button" class="btn btn-primary" onclick="fn_sec_save();"><spring:message code="common.save"/></button>
 					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 			</div>
 			

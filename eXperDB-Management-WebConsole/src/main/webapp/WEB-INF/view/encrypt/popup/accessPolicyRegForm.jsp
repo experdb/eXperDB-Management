@@ -27,25 +27,6 @@
 
 <script>
 
-
-/* $(window.document).ready(function() {
-	
-	dateCalenderSetting();
-	
-
-	fn_makeFromHour();
-	fn_makeFromMin();
-	fn_makeToHour();
-	fn_makeToMin();
-	
-	$("#to_exe_h").val(23);
-	$("#to_exe_m").val(59);
-	$('#startDateTime').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-	$('#endDateTime').val('9997-12-31');
-	
-}); */
-	
-
 /*시간*/
 function fn_makeFromHour(){
 	$("#b_hour").empty();
@@ -135,35 +116,35 @@ function fn_makeToMin(){
 function fn_acc_ins_validation(){
 	var specName = document.getElementById('specName');
 	if (specName.value == "" || specName.value == "undefind" || specName.value == null) {
-		alert('<spring:message code="encrypt_msg.msg18"/>');
+		showSwalIcon('<spring:message code='encrypt_msg.msg18' />', '<spring:message code="common.close" />', '', 'error');
 		specName.focus();
 		return false;
 	}
 	
 	var startDateTime = document.getElementById('startDateTime');
 	if (startDateTime.value == "" || startDateTime.value == "undefind" || startDateTime.value == null) {
-		alert('<spring:message code="encrypt_msg.msg13"/>');
+		showSwalIcon('<spring:message code='encrypt_msg.msg13' />', '<spring:message code="common.close" />', '', 'error');;
 		startDateTime.focus();
 		return false;
 	}
 	
 	var endDateTime = document.getElementById('endDateTime');
 	if (endDateTime.value == "" || endDateTime.value == "undefind" || endDateTime.value == null) {
-		alert('<spring:message code="encrypt_msg.msg14"/>');
+		showSwalIcon('<spring:message code='encrypt_msg.msg14' />', '<spring:message code="common.close" />', '', 'error');
 		endDateTime.focus();
 		return false;
 	}
 	
 	var massiveThreshold = document.getElementById('massiveThreshold');
 	if (massiveThreshold.value == "" || massiveThreshold.value == "undefind" || massiveThreshold.value == null) {
-		alert('<spring:message code="encrypt_msg.msg15"/>');
+		showSwalIcon('<spring:message code='encrypt_msg.msg15' />', '<spring:message code="common.close" />', '', 'error');
 		massiveThreshold.focus();
 		return false;
 	}
 	
 	var massiveTimeInterval = document.getElementById('massiveTimeInterval');
 	if (massiveTimeInterval.value == "" || massiveTimeInterval.value == "undefind" || massiveTimeInterval.value == null) {
-		alert('<spring:message code="encrypt_msg.msg16"/>');
+		showSwalIcon('<spring:message code='encrypt_msg.msg16' />', '<spring:message code="common.close" />', '', 'error');
 		massiveTimeInterval.focus();
 		return false;
 	}
@@ -176,6 +157,7 @@ function fn_acc_save(){
 	if (!fn_acc_ins_validation()) return false;
  	
 	var total = $('input[name=workDay]:checked').length;
+	
 	var workDayValue = "";
 	$("input[name=workDay]:checked").each(function(index) {
 		  workDayValue += $(this).val(); 	  
@@ -419,43 +401,43 @@ function dateCalenderSetting() {
 													</label>
 													<div class="form-check"  style="margin-left: 20px;">
 									                            <label class="form-check-label" for="sun" style="color: red;">
-									                              <input type="checkbox" class="form-check-input" id="SUNDAY" name=workDay />
+									                              <input type="checkbox" class="form-check-input" id="SUNDAY" name="workDay"  value="<spring:message code="common.sun" />"  />
 									                             <spring:message code="common.sun" />
 									                            <i class="input-helper"></i></label>
 									                 </div>											                 
 									                 <div class="form-check"  style="margin-left: 20px;">
 									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="MONDAY" name="workDay"  />
+									                              <input type="checkbox" class="form-check-input" id="MONDAY" name="workDay"  value="<spring:message code="common.mon" />"/>
+									                             <spring:message code="common.mon" />
+									                            <i class="input-helper"></i></label>
+									                 </div>									                 
+									                 <div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="TUESDAY" name="workDay"  value="<spring:message code="common.tue" />"/>
 									                             <spring:message code="common.tue" />
 									                            <i class="input-helper"></i></label>
 									                 </div>									                 
 									                 <div class="form-check"  style="margin-left: 20px;">
 									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="TUESDAY" name="workDay"  />
-									                             <spring:message code="common.tue" />
-									                            <i class="input-helper"></i></label>
-									                 </div>									                 
-									                 <div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="WEDNESDAY" name="workDay" />
+									                              <input type="checkbox" class="form-check-input" id="WEDNESDAY" name="workDay"  value="<spring:message code="common.wed" />"/>
 									                            <spring:message code="common.wed" />
 									                            <i class="input-helper"></i></label>
 									                 </div>									                 
 									                 <div class="form-check"  style="margin-left: 20px;">
 									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="THURSDAY" name="workDay"  />
+									                              <input type="checkbox" class="form-check-input" id="THURSDAY" name="workDay"  value="<spring:message code="common.thu" />"/>
 									                             <spring:message code="common.thu" />
 									                            <i class="input-helper"></i></label>
 									                 </div>									                 
 									                 <div class="form-check"  style="margin-left: 20px;">
 									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="FRIDAY" name="workDay"  />
+									                              <input type="checkbox" class="form-check-input" id="FRIDAY" name="workDay"  value="<spring:message code="common.fri" />"/>
 									                             <spring:message code="common.fri" />
 									                            <i class="input-helper"></i></label>
 									                 </div>									                 
 									                 <div class="form-check"  style="margin-left: 20px;">
 									                            <label class="form-check-label" for="sat" style="color: blue;">
-									                              <input type="checkbox" class="form-check-input" id="SATURDAY" name="workDay"  />
+									                              <input type="checkbox" class="form-check-input" id="SATURDAY" name="workDay"  value="<spring:message code="common.sat" />"/>
 									                             <spring:message code="common.sat" />
 									                            <i class="input-helper"></i></label>
 									                 </div> 

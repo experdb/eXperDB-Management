@@ -238,6 +238,29 @@ public class SecurityPolicyController {
 			String profileUid = request.getParameter("profileUid");
 			String lang = locale.toString();
 			result = sic.selectProfileProtectionContents(lang, restIp, restPort, strTocken, loginId, entityId, profileUid);
+				
+			JSONArray cipherAlgorithmCode = new JSONArray();
+			JSONArray initialVectorTypeCode = new JSONArray();
+			JSONArray operationModeCode = new JSONArray();
+			JSONArray binUid = new JSONArray();
+			
+			/*암호화 키*/
+			binUid = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_binUid",binUid);
+			mv.addObject("mod_binUid",binUid);
+			/*암호화알고리즘*/
+			cipherAlgorithmCode = sic.selectSysCodeList(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_cipherAlgorithmCode",cipherAlgorithmCode);
+			mv.addObject("mod_cipherAlgorithmCode",cipherAlgorithmCode);
+			/*초기벡터*/
+			initialVectorTypeCode = sic.selectParamSysCodeListVector(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_initialVectorTypeCode",initialVectorTypeCode);
+			mv.addObject("mod_initialVectorTypeCode",initialVectorTypeCode);
+			/*운영모드*/
+			operationModeCode = sic.selectParamSysCodeListOperation(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_operationModeCode",operationModeCode);
+			mv.addObject("mod_operationModeCode",operationModeCode);
+			
 			
 			mv.addObject("profileUid",request.getParameter("profileUid"));
 			mv.addObject("result",result);

@@ -71,32 +71,68 @@ var table = null;
 	    
 	  //더블 클릭시
 		if("${wrt_aut_yn}" == "Y"){
+			
 			$('#keyManageTable tbody').on('dblclick', 'tr', function() {
+				
 				var data = table.row(this).data();
 				
-	 			var frmPop= document.frmPopup;
-	 			
-				var popUrl = "/popup/keyManageRegReForm.do"; // 서버 url 팝업경로
-				var width = 1300;
-				var height = 735;
-				var left = (window.screen.width / 2) - (width / 2);
-				var top = (window.screen.height /2) - (height / 2);
-				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-							
-				frmPop.action = popUrl;
-			    frmPop.target = 'popupView';
-			    frmPop.method = "post";
-			    
-			    window.open(popUrl,"popupView",popOption);	
-			    
-			    frmPop.resourceName.value = data.resourceName;
-			    frmPop.resourceNote.value = data.resourceNote;  
-			    frmPop.keyUid.value = data.keyUid;
-			    frmPop.keyStatusCode.value = data.keyStatusCode; 
-			    frmPop.keyStatusName.value = data.keyStatusName;
-			    frmPop.cipherAlgorithmName.value = data.cipherAlgorithmName; 
-			    frmPop.cipherAlgorithmCode.value = data.cipherAlgorithmCode;
-			    frmPop.submit();   
+				$.ajax({
+					url : "/popup/keyManageRegReForm.do", 
+				  	data : { 		
+				  		resourceName : data.resourceName,
+				  		resourceNote : data.resourceNote,
+				  		keyUid : data.keyUid,
+				  		keyStatusCode : data.keyStatusCode,
+				  		keyStatusName : data.keyStatusName,
+				  		cipherAlgorithmName : data.cipherAlgorithmName,
+				  		cipherAlgorithmCode : data.cipherAlgorithmCode
+				  	},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {		
+			
+						$("#mod_resourceName", "#modForm").val(nvlPrmSet(result.mod_resourceName, ""));
+						$("#mod_resourceNote", "#modForm").val(nvlPrmSet(result.mod_resourceNote, ""));
+						$("#mod_keyUid", "#modForm").val(nvlPrmSet(result.mod_keyUid, ""));
+						$("#mod_resourceUid", "#modForm").val(nvlPrmSet(result.mod_keyUid, ""));
+						$("#mod_keyStatusCode", "#modForm").val(nvlPrmSet(result.mod_keyStatusCode, ""));
+						$("#mod_keyStatusName", "#modForm").val(nvlPrmSet(result.mod_keyStatusName, ""));
+						$("#mod_cipherAlgorithmName", "#modForm").val(nvlPrmSet(result.mod_cipherAlgorithmName, ""));
+						$("#mod_cipherAlgorithmCode", "#modForm").val(nvlPrmSet(result.mod_cipherAlgorithmCode, ""));
+						$("#mod_updateDateTime", "#modForm").val(nvlPrmSet(result.mod_updateDateTime, ""));
+
+						
+						
+						//초기세팅
+						 $("#copyBin").prop('checked', false);
+						$("#renew").prop('checked', false);
+						
+						$("#renewInsert").css("display", "none"); 
+
+						//캘린더 셋팅
+						fn_modDateCalenderSetting();
+
+						$("#mod_cipherAlgorithmCode").prop("disabled", "disabled");
+						//초기세팅 끝
+						
+						$('#pop_layer_keyManageRegReForm').modal("show");
+						
+						fn_historyCryptoKeySymmetric();
+					}
+				});
+				
 			});
 		}
 
@@ -141,11 +177,9 @@ var table = null;
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -188,11 +222,9 @@ var table = null;
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -240,11 +272,9 @@ var table = null;
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -262,15 +292,17 @@ var table = null;
 				$("#mod_updateDateTime", "#modForm").val(nvlPrmSet(result.mod_updateDateTime, ""));
 
 				
+				
 				//초기세팅
-				 $("#copyBin").attr('value', 'false');
-				$("#renew").attr('value', 'false'); 
+				 $("#copyBin").prop('checked', false);
+				$("#renew").prop('checked', false);
+				
 				$("#renewInsert").css("display", "none"); 
 
 				//캘린더 셋팅
 				fn_modDateCalenderSetting();
 
-				$("#mod_cipherAlgorithmCode").attr("disabled", "disabled");
+				$("#mod_cipherAlgorithmCode").prop("disabled", "disabled");
 				//초기세팅 끝
 				
 				$('#pop_layer_keyManageRegReForm').modal("show");
@@ -322,11 +354,9 @@ var table = null;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
 						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}

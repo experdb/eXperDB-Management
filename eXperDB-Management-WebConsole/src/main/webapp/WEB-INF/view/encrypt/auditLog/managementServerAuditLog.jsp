@@ -62,7 +62,7 @@
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '250px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		//table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '0px');
 	    $(window).trigger('resize');
@@ -111,12 +111,10 @@
 				        xhr.setRequestHeader("AJAX", true);
 				     },
 				     error : function(xhr, status, error) {
-							if(xhr.status == 401) {
-								showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-								top.location.href = "/";
+				    	 if(xhr.status == 401) {
+								showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 							} else if(xhr.status == 403) {
-								showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-								top.location.href = "/";
+								showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 							} else {
 								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 							}
@@ -147,7 +145,7 @@
 			    	$("#remoteAddress")[0].innerText = row.remoteAddress;
 			    	$("#requestPath")[0].innerText = row.requestPath;
 			    	$("#resultCode")[0].innerText = row.resultCode;
-			    	//$("#parameter")[0].innerText = row.parameter;
+			    	$("#parameter")[0].innerText = row.parameter;
 			    	$("#resultMessage")[0].innerText = row.resultMessage;
 			    	
 			    	
@@ -213,11 +211,9 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -349,7 +345,7 @@
 								<div class="row">								
 									<div class="input-group mb-2 mr-sm-2">								
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" readonly>
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" >
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 											</span>
@@ -358,7 +354,7 @@
 											<span style="border:none; padding: 0px 10px;"> ~ </span>
 										</div>
 										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" readonly>
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" >
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 											</span>
@@ -485,12 +481,12 @@
 											</tr>
 											<tr>
 												<td class="table-text-align-c"> <spring:message code="encrypt_log_key.Access_Path"/></td>
-												<td id="requestPath" ></td>
+												<td><textarea id="requestPath" name="requestPath" style="width:100%; height: 40px;  border: 0;" ></textarea></td> 
 											</tr>
 											<tr>
 												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Main_Text"/></td>
-												<td><div id ="parameter"></div>
-												<input type="text" id="parameter" name="parameter"></td>
+												<!-- <td style="text-align: left; height: 60px; word-break:break-all;" id ="parameter"></td> -->
+												<td><textarea id="parameter" name="parameter" style="width:100%; height: 240px;  border: 0;" ></textarea></td> 
 											</tr>
 											<tr>
 												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Result_Code"/></td>

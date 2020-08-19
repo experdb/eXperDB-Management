@@ -414,7 +414,8 @@ public class AuditLogController {
 	 */
 	@RequestMapping(value = "/popup/encodeDecodeKeyAuditLogDetail.do")
 	public ModelAndView encodeDecodeKeyAuditLogDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		
+		ModelAndView mv = new ModelAndView("jsonView");
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -436,7 +437,7 @@ public class AuditLogController {
 			mv.addObject("resultCode", resultCode);
 			mv.addObject("parameter", parameter);
 			mv.addObject("resultMessage", resultMessage);
-			mv.setViewName("encrypt/popup/encodeDecodeKeyAuditLogDetail");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
