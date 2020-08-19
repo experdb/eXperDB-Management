@@ -633,6 +633,7 @@
 										<option value="usr_nm"><spring:message code="user_management.user_name" /></option>
 										<option value="usr_id"><spring:message code="user_management.id" /></option>
 									</select>
+									<input hidden="hidden" />
 									<input type="text" class="form-control" style="width:400px;margin-right: 2rem;" maxlength="15" id="sch_search" name="sch_search" onblur="this.value=this.value.trim()" />		
 								</div>
 

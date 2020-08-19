@@ -755,6 +755,7 @@
 							<form class="form-inline" id="findSearch">
 								<div class="row">
 									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input hidden="hidden" />
 										<input type="text" class="form-control" style="width:250px;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
 									</div>
 		
