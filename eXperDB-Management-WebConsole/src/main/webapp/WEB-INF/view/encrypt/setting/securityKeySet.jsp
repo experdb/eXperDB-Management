@@ -133,8 +133,7 @@ function fn_validation(){
 				   return false;
 			}			
 			if (mstKeyPassword.value.length < 8 ) {
-					showSwalIcon('<spring:message code="message.msg112"/>', '<spring:message code="common.close" />', '', 'error');
-				alert('<spring:message code="encrypt_msg.msg05" />');
+					showSwalIcon('<spring:message code="encrypt_msg.msg05"/>', '<spring:message code="common.close" />', '', 'error');
 				   mstKeyPassword.focus();
 				   return false;
 			}

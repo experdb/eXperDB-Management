@@ -78,14 +78,12 @@ $(window.document).ready(function() {
 						$( "#col" ).html(html);			
 					} 
 				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href="/";
+					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href="/securityKeySet.do";
+					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");
-				}
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');	
+				}	
 			}
 		});		
 	}

@@ -24,7 +24,7 @@
 <script>
 
 /*validation 체크*/
-function fn_mod_validation(){
+function fn_sec_mod_validation(){
 	var offset = document.getElementById('mod_offset');
 	var length = document.getElementById('mod_length');
 	var cipherAlgorithmCode = document.getElementById('mod_cipherAlgorithmCode');
@@ -55,7 +55,7 @@ function fn_mod_validation(){
 
 /*수정버튼 클릭시*/
 function fn_update(){
-	if (!fn_mod_validation()) return false;
+	if (!fn_sec_mod_validation()) return false;
 	
 	Result = new Object();
 	

@@ -73,9 +73,10 @@ var table = null;
 			$('#policyTable tbody').on('dblclick', 'tr', function() {
 				var datas = table.row(this).data();
 				if (datas.length <= 0) {
+					showSwalIcon('<spring:message code="message.msg35"/>', '<spring:message code="common.close" />', '', 'error');
 					alert('<spring:message code="message.msg35" />');
 				}else if (datas.length >1){
-					alert('<spring:message code="message.msg38" />');			
+					showSwalIcon('<spring:message code="message.msg38"/>', '<spring:message code="common.close" />', '', 'error');	
 				}else{
 					var profileUid = datas.profileUid;
 					var form = document.modifyForm;
@@ -163,9 +164,9 @@ var table = null;
 	function fn_update() {
 		var datas = table.rows('.selected').data();
 		if (datas.length <= 0) {
-			alert('<spring:message code="message.msg35" />');
+			showSwalIcon('<spring:message code="message.msg35"/>', '<spring:message code="common.close" />', '', 'error');
 		}else if (datas.length >1){
-			alert('<spring:message code="message.msg38" />');			
+			showSwalIcon('<spring:message code="message.msg38"/>', '<spring:message code="common.close" />', '', 'error');	
 		}else{
 			var profileUid = table.row('.selected').data().profileUid;
 			var form = document.modifyForm;
@@ -179,18 +180,8 @@ var table = null;
 	function fn_delete() {
 		
 		var datas = table.rows('.selected').data();
+ 		var profileUid = table.row('.selected').data().profileUid;
 
-		if (datas.length <= 0) {
-			showSwalIcon('<spring:message code="message.msg35"/>', '<spring:message code="common.close" />', '', 'error');
- 			return false;
- 		}else{
- 			var profileUid = table.row('.selected').data().profileUid;
- 			
- 			fn_multiConfirmModal("del");
- 			
- 			
- 			if (!confirm('<spring:message code="message.msg162"/>'))return false;
- 			
  			var rowList = [];
  			for (var i = 0; i < datas.length; i++) {
  				rowList += datas[i].profileUid + ',';				
@@ -217,49 +208,59 @@ var table = null;
 				},
 				success : function(data) {		
 					if(data.resultCode == "0000000000"){
-						alert("<spring:message code='message.msg37' />");
-						location.reload();
+						showSwalIconRst('<spring:message code="message.msg37" />', '<spring:message code="common.close" />', '', 'success', 'reload');
 					}else if(data.resultCode == "8000000002"){
-						alert("<spring:message code='message.msg05' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					}else if(data.resultCode == "8000000003"){
-						alert(data.resultMessage);
-						location.href="/securityKeySet.do";
+						showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 					}else{
-						alert(data.resultMessage +"("+data.resultCode+")");	
+						showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 					}
 				}
 			});
- 		}	
 	}
 	
 	
+	
+	
+	function fn_delete_confirm(){
+		
+		var datas = table.rows('.selected').data();
+
+		if (datas.length <= 0) {
+			showSwalIcon('<spring:message code="message.msg35"/>', '<spring:message code="common.close" />', '', 'error');
+ 			return false;
+ 		}
+		
+		fn_ConfirmModal();
+	}
+
+
 	/* ********************************************************
 	 * confirm modal open
 	 ******************************************************** */
-	function fn_multiConfirmModal(gbn) {
-		
-		if (gbn == "ins") {
-			confirm_title = '<spring:message code="menu.user_management" />' + " " + '<spring:message code="common.registory" />';
-			$('#confirm_multi_msg').html('<spring:message code="message.msg143" />');
-		} else if (gbn == "ins_menu") {
-			confirm_title = '<spring:message code="menu.user_management" />' + " " + '<spring:message code="user_management.msg14" />';
-			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="user_management.msg13" />'));
-		} else if (gbn == "del") {
-			confirm_title = '<spring:message code="menu.user_management" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
-			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
-		} else 	if (gbn == "mod") {
-			confirm_title = '<spring:message code="menu.user_management" />' + " " + '<spring:message code="common.registory" />';
-			$('#confirm_multi_msg').html('<spring:message code="message.msg147" />');
-		}
+	function fn_ConfirmModal() {
+		confirm_title = '<spring:message code="encrypt_policy_management.Security_Policy_Management"/>' ;
+		 $('#confirm_msg').html('<spring:message code="message.msg17" />');
 
-		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
-		$('#confirm_multi_tlt').html(confirm_title);
-		$('#pop_confirm_multi_md').modal("show");
-	}	
+		$('#confirm_tlt').html(confirm_title);
+		$('#pop_confirm_md').modal("show");
+	}
+
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmRst(){
+		fn_delete();
+	}
+	
 </script>
 
+<%@include file="./../../popup/confirmForm.jsp"%>
+
 <form name="insertForm" method="post">
+</form>
+<form name="modifyForm" method="post">
 </form>
 
 <div class="content-wrapper main_scroll" id="contentsDiv">
@@ -318,7 +319,7 @@ var table = null;
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">			
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_delete();" >
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_delete_confirm();" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnUpdate" onClick="fn_update();" data-toggle="modal">
