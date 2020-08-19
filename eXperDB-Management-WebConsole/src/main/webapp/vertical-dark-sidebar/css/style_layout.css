@@ -1551,3 +1551,5 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 .hummingbird-base {
     white-space:nowrap;
 }
+
+.news_text:hover { background:#f8f9fa; opacity: .7; } 

@@ -113,11 +113,18 @@ public class CmmnController {
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
-			// 스케줄 정보
-			DashboardVO scheduleInfoVO = (DashboardVO) dashboardService.selectDashboardScheduleInfo();
-
 			// 백업정보
 			DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
+			
+			// 스케줄 정보
+			DashboardVO scheduleInfoVO = (DashboardVO) dashboardService.selectDashboardScheduleInfo();
+			
+			
+			
+			
+
+
+
 
 			DashboardVO dashVo = new DashboardVO();
 			
