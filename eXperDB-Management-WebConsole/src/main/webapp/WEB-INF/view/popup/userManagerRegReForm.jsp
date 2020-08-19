@@ -371,14 +371,14 @@
 					fn_select();
 				} else if(data.resultCode == "8000000002") { //암호화 저장 실패
 					showSwalIcon('<spring:message code="message.msg05"/>', '<spring:message code="common.close" />', '', 'error');
-					$('#pop_layer_user_reg').modal('show');
+					$('#pop_layer_user_mod').modal('show');
 					return;
 				} else if(data.resultCode == "8000000003") {
 					showSwalIcon(data.resultMessage, '<spring:message code="common.close" />', '', 'warning');
-					$('#pop_layer_user_reg').modal('hide');
+					$('#pop_layer_user_mod').modal('hide');
 				} else {
 					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
-					$('#pop_layer_user_reg').modal('show');
+					$('#pop_layer_user_mod').modal('show');
 					return;
 				}
 			}
