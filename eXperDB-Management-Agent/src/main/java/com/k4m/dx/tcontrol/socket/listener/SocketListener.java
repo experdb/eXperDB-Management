@@ -110,12 +110,12 @@ public class SocketListener implements Runnable {
 					
 					thread.start();
 					//socketLogger.info("Thread가 종료될때까지 기다립니다.");
-		            try {
-		                // 해당 쓰레드가 멈출때까지 멈춤
-		                thread.join();
-		            } catch (InterruptedException e) {
-		                e.printStackTrace();
-		            }
+//		            try {
+//		                // 해당 쓰레드가 멈출때까지 멈춤
+//		                thread.join();
+//		            } catch (InterruptedException e) {
+//		                e.printStackTrace();
+//		            }
 		           // socketLogger.info("Thread가 종료되었습니다."); 
 		            //if(client != null) client.close();
 				}
