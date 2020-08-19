@@ -46,7 +46,7 @@
  					defaultContent : ""
  				},
 				{ data : "resultCode",  defaultContent : ""}, 
-				{
+				/* {
 					data : "",
 					render : function(data, type, full, meta) {
 						var html = "<button teype='button' class='btn btn-outline-primary btn-icon-text'><i class='ti-file btn-icon-prepend' id='detail'> <spring:message code='schedule.detail_view' /> </i></button>";
@@ -55,7 +55,7 @@
 					className : "dt-center",
 					defaultContent : "",
 					orderable : false
-				},
+				}, */
 				{data : "parameter", defaultContent : "", visible: false },
 				{data : "resultMessage", defaultContent : "", visible: false }
 	
@@ -76,6 +76,7 @@
 	   
 		//상세보기 클릭시
 		$('table tbody').on('click','#detail',function() {
+			
 		 	var $this = $(this);
 		    var $row = $this.parent().parent().parent();
 		    $row.addClass('detail');
@@ -90,20 +91,81 @@
 		 		var resultCode  = row.resultCode;
 		 		var parameter  = row.parameter;
 		 		var resultMessage  = row.resultMessage;
-		 		var popUrl = "/popup/encodeDecodeKeyAuditLogDetail.do?entityName="+encodeURI(entityName)
-		 				+"&&logDateTime="+encodeURI(logDateTime) +"&&remoteAddress="+encodeURI(remoteAddress)
-		 				+"&&requestPath="+encodeURI(requestPath) +"&&resultCode="+encodeURI(resultCode)
-		 				+"&&parameter="+encodeURI(parameter) +"&&resultMessage="+encodeURI(resultMessage)// 서버 url 팝업경로
-		 		var width = 930;
-		 		var height = 500;
-		 		var left = (window.screen.width / 2) - (width / 2);
-		 		var top = (window.screen.height /2) - (height / 2);
-		 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		 			
-		 		window.open(popUrl,"",popOption);
-		 			
+			
+		 		$.ajax({
+					url : "/popup/encodeDecodeKeyAuditLogDetail.do",
+					data : {	
+						entityName : encodeURI(entityName),
+						logDateTime : encodeURI(logDateTime),
+						remoteAddress : encodeURI(remoteAddress),
+						requestPath : encodeURI(requestPath),
+						resultCode : encodeURI(resultCode),
+						parameter : encodeURI(parameter),
+						resultMessage : encodeURI(resultMessage)
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+				     error : function(xhr, status, error) {
+				    	 if(xhr.status == 401) {
+								showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							} else if(xhr.status == 403) {
+								showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+							}
+						},
+					success : function(result) {
+						$('#pop_encodeDecodeKeyAuditLogDetail').modal("show");
+					}
+				});
 		    }
 		});	
+		
+		
+		   $('#table tbody').on('click', 'tr', function() {
+
+				table.$('tr.selected').removeClass('selected');
+	            $(this).addClass('selected');	
+	            	
+			    var datas = table.rows('.selected').data();
+
+			    if(datas.length==1) {
+			    	
+			    	var row = datas[0];
+			    	
+
+			    	$("#logDateTime")[0].innerHTML = row.logDateTime;
+			    	$("#entityName")[0].innerHTML = row.entityName;
+			    	$("#remoteAddress")[0].innerHTML = row.remoteAddress;
+			    	$("#requestPath")[0].innerHTML = row.requestPath;
+			    	$("#resultCode")[0].innerHTML = row.resultCode;
+			    	$("#parameter")[0].innerHTML = row.parameter;
+			    	$("#resultMessage")[0].innerHTML = row.resultMessage;
+			    	
+			    	
+			    	//$("#parameter").val(row.parameter);
+			    	
+			    	
+			 		/* var logDateTime  = row.logDateTime;
+			 		var entityName  = row.entityName;
+			 		var remoteAddress  = row.remoteAddress;
+			 		var requestPath  = row.requestPath;
+			 		var resultCode  = row.resultCode;
+			 		var parameter  = row.parameter;
+			 		var resultMessage  = row.resultMessage; */
+
+					 if ($("#left_list").hasClass("col-12")) {
+						$("#left_list").attr('class', 'col-13 stretch-card div-form-margin-table');
+					} 
+					
+					$('#right_list').show();
+					$('#center_div').show();			
+			    } 
+
+		    });   
 	}
 	
 
@@ -113,7 +175,17 @@
 		fn_select();
 	});
 	
-
+	
+	/* ********************************************************
+	 * 스크립트 리스트 100%
+	 ******************************************************** */
+	function fn_leftListSize() {
+		$("#left_list").attr('class', 'col-12 stretch-card div-form-margin-table');
+		$('#right_list').hide();
+		$('#center_div').hide();
+	}
+	
+	
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
 		$.ajax({
@@ -131,11 +203,9 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -196,7 +266,7 @@
 </script>
 
 
-
+ <%@include file="../popup/encodeDecodeKeyAuditLogDetail.jsp"%> 
 
 
 <div class="content-wrapper main_scroll" id="contentsDiv">
@@ -254,7 +324,7 @@
 								<div class="row">								
 									<div class="input-group mb-2 mr-sm-2">								
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" readonly>
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" >
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 											</span>
@@ -263,7 +333,7 @@
 											<span style="border:none; padding: 0px 10px;"> ~ </span>
 										</div>
 										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" readonly>
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_end_dtm" name="wrk_end_dtm" >
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 											</span>
@@ -295,7 +365,7 @@
 			</div>
 		</div>	
 		
-		<div class="col-12 stretch-card div-form-margin-table">
+		<div class="col-12 stretch-card div-form-margin-table" id="left_list" >
 			<div class="card">
 				<div class="card-body">
 					<div class="card my-sm-2" >
@@ -334,6 +404,86 @@
 				</div>
 			</div>
 		</div>
+		
+		
+		
+				<div class="col-1 stretch-card div-form-margin-table" style="display:none;max-width: 5.33333%;margin-right: -20px;margin-left: -20px;" id="center_div" >
+			<div class="card" style="background-color: transparent !important;border:0px;">
+				<div class="card-body">	
+					<div class="card my-sm-2" style="border:0px;background-color: transparent !important;">
+						<div class="card-body" style="margin-left: -25px;" onclick="fn_leftListSize();">
+							<i class='fa fa-angle-double-right text-info' style="font-size: 35px;cursor:pointer;"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+		<div class="col-7 stretch-card div-form-margin-table" id="right_list" style="display:none; max-width:35%;" >
+			<div class="card">
+				<div class="card-body">	
+					<div class="card my-sm-2">
+						<div class="card-body" >
+							<div class="table-responsive">
+								<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+									<div class="row">
+										<div class="col-sm-12 col-md-6">
+											<div class="dataTables_length" id="order-listing_length">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+									<table class="table system-tlb-scroll"  style="border: 1px solid #99abb0; table-layout: fixed;">
+										<colgroup>
+											<col style="width: 25%;" />
+											<col style="width: 75%; " />
+										</colgroup>										
+										<thead>
+											<tr class="bg-info text-white">
+												<th class="table-text-align-c">속성</th>
+												<th class="table-text-align-c" >값</th>
+											</tr>
+										</thead>												
+										<tbody >														
+											<tr>
+												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_Date"/></td>
+												<td style="text-align: left" id="logDateTime" ></td>
+											</tr>
+											<tr>
+												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_User"/></td>
+												<td style="text-align: left"  id="entityName" ></td>
+											</tr>
+											<tr>
+												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_Address"/></td>
+												<td style="text-align: left" id="remoteAddress" ></td>
+											</tr>
+											<tr>
+												<td class="table-text-align-c"> <spring:message code="encrypt_log_key.Access_Path"/></td>
+												<td><textarea id="requestPath" name="requestPath" style="width:100%; height: 40px;  border: 0;" ></textarea></td> 
+											</tr>
+											<tr>
+												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Main_Text"/></td>
+												<!-- <td style="text-align: left; height: 60px; word-break:break-all;" id ="parameter"></td> -->
+												<td><textarea id="parameter" name="parameter" style="width:100%; height: 240px;  border: 0;" ></textarea></td> 
+											</tr>
+											<tr>
+												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Result_Code"/></td>
+												<td id="resultCode" ></td>
+											</tr>											
+											<tr>
+												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Result_Message"/></td>
+												<td  id="resultMessage" ></td>
+											</tr>										
+										</tbody> 									
+									</table>		
+												
+						 	</div>	
+					 	</div>
+					</div>
+				</div>
+			</div>
 		
 	</div>
 </div>
