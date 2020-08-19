@@ -292,6 +292,8 @@
 			$("#ins_encp_use_yn", "#insUserForm").val("N");
 		}
 
+		$('#pop_layer_user_reg').modal('hide');
+
 		$.ajax({
 			url : '/insertUserManager.do',
 			data : {

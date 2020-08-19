@@ -11,7 +11,7 @@
 	
 	//cancel
 	function fnc_confirmCancel() {
-		if ($('#con_multi_gbn').val() == "con_start" || $('#con_multi_gbn').val() == "con_end" || $('#con_multi_gbn').val() == "ins_menu") {
+		if ($('#con_multi_gbn').val() == "con_start" || $('#con_multi_gbn').val() == "con_end" || $('#con_multi_gbn').val() == "ins_menu" || $('#con_multi_gbn').val() == "ins_menu") {
 			fnc_confirmCancelRst ($('#con_multi_gbn').val());
 		}
 		

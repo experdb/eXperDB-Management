@@ -139,8 +139,6 @@ function fn_search(){
   			}
   		},
   		success : function(result) {
-  			alert(result);
-  			
   			if(result.length > 0){
   				table.clear().draw();
   				table.rows.add(result).draw();

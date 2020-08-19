@@ -429,9 +429,24 @@
 			$('#confirm_multi_msg').html('<spring:message code="message.msg147" />');
 		}
 
-		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
-		$('#confirm_multi_tlt').html(confirm_title);
-		$('#pop_confirm_multi_md').modal("show");
+		if (gbn == "ins_menu") {
+			$('#con_only_gbn', '#findConfirmOnly').val(gbn);
+			$('#confirm_tlt').html(confirm_title);
+
+			$('#confirm_msg').html('<spring:message code="user_management.msg13" />');
+			$('#pop_confirm_md').modal("show");
+		} else {
+			$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
+			$('#confirm_multi_tlt').html(confirm_title);
+ 			$('#pop_confirm_multi_md').modal("show");
+		}
+	}
+
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+ 	function fnc_confirmRst(){
+		fn_insPop_menu();
 	}
 
 	/* ********************************************************
@@ -454,7 +469,7 @@
 	 ******************************************************** */
 	function fnc_confirmCancelRst(gbn){
 		if (gbn == "ins_menu") {
-			$('#pop_layer_user_reg').modal('hide');
+			//$('#pop_layer_user_reg').modal('hide');
 
 			//조회
 			fn_select();
@@ -535,7 +550,6 @@
 					return;
 				}else if(data.resultCode == "8000000003"){
 					showSwalIcon(data.resultMessage, '<spring:message code="common.close" />', '', 'error');
-					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
 				}else{
 					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
@@ -549,6 +563,7 @@
 <%@include file="./../../popup/userManagerRegForm.jsp"%>
 <%@include file="./../../popup/userManagerRegReForm.jsp"%>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
+<%@include file="./../../popup/confirmForm.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
