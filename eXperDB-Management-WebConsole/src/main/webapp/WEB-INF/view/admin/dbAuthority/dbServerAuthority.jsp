@@ -408,14 +408,14 @@
 								}
 							}
 
-							//스크립트설정 권한
+							//배치설정 권한
 							if(result.length != 0 && result[i].script_cng_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_script_cng").checked = true;
 							}else{
 								document.getElementById(result[i].db_svr_id+"_script_cng").checked = false;
 							}
 
-							//스크립트설정 권한
+							//배치설정 권한
 							if(result.length != 0 && result[i].script_his_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_script_his").checked = true;
 							}else{

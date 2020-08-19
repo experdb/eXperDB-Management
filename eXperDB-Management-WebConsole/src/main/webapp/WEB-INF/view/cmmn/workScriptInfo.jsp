@@ -6,7 +6,7 @@
 <%
 	/**
 	* @Class Name : workScriptInfo.jsp
-	* @Description : 스크립트 상세 화면
+	* @Description : 배치 상세 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용

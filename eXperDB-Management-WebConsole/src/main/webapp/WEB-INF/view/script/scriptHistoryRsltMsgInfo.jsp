@@ -6,7 +6,7 @@
 <%
 	/**
 	* @Class Name : scriptHistoryRsltMsgInfo.jsp
-	* @Description : 스크립트 이력 조치입력 화면
+	* @Description : 배치 이력 조치입력 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용

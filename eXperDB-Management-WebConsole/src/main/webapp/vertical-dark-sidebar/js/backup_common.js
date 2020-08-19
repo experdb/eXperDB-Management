@@ -614,7 +614,7 @@ function fn_update_chogihwa(gbn, result) {
 
 //////////////////dumpRegReForm.jsp///////////////////////////////////////////////
 /* ********************************************************
- * 팝업시작 스크립트
+ * 팝업시작 dump work
  ******************************************************** */
 function fn_modDumpWorkPopStart(workJsonData) {
 	//HA구성확인

@@ -6,7 +6,7 @@
 <%
 	/**
 	* @Class Name : scriptRegForm.jsp
-	* @Description : 스크립트등록 화면
+	* @Description : 배치등록 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -104,7 +104,7 @@
 	}
 		
 	/* ********************************************************
-	 * 스크립트 등록
+	 * 배치 등록
 	 ******************************************************** */
 	function fn_insert_work(){
 		if (!valCheck()) return false;
