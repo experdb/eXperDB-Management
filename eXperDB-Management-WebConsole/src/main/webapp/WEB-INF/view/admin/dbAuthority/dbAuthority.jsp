@@ -338,7 +338,6 @@
 					data : {
 						datasArr : JSON.stringify(datasArr)
 					},
-					dataType : "json",
 					type : "post",
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader("AJAX", true);

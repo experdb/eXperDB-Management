@@ -163,6 +163,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 		success : function(result) {
 			//DB목록 그리드의 설명 부분을 리스트로 가지고옴
 			var list = $("input[name='db_exp']");
+			if(svrDbList.data.length >= result.length){
 			//서버디비 갯수
 			for(var i = 0; i<svrDbList.data.length; i++){
 				//repo디비 갯수
@@ -176,6 +177,23 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 					}
 				}
 			}	 
+		}else{
+			for(var i = 0; i<result.length; i++){				
+				for(var j = 0; j<svrDbList.data.length; j++){
+					if(result[i].db_nm == svrDbList.data[j].dft_db_nm){
+						list[j].value = result[i].db_exp;
+					}
+					if(result[i].useyn == "Y"){
+						//alert("["+i+"]"+result[i].db_nm+ "==["+j+"]"+ svrDbList.data[j].dft_db_nm);
+						 if(db_svr_id == result[i].db_svr_id && result[i].db_nm == svrDbList.data[j].dft_db_nm){		
+							 $('input', table_db.rows(i).nodes()).prop('checked', true); 
+							 table_db.rows(i).nodes().to$().addClass('selected');	
+						}
+					}
+				}
+			}
+		}
+			
 /* 			if(svrDbList.data.length>0){
  				for(var i = 0; i<svrDbList.data.length; i++){
 					for(var j = 0; j<result.length; j++){						

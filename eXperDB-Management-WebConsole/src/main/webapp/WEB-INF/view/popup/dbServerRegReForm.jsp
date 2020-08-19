@@ -64,7 +64,8 @@ function fn_init3() {
 	      }}, 		
 		{data : "master_gbn",  defaultContent : ""},
 		{data : "connYn",  defaultContent : ""},
-		{data : "svr_host_nm",  defaultContent : "", visible: false}
+		{data : "svr_host_nm",  defaultContent : "", visible: false},
+		{data : "db_svr_ipadr_id",  defaultContent : "", visible: false}
 		]
 	});
 	
@@ -159,6 +160,7 @@ function fn_dbServerConnTest2(){
 	     datas.USER_PWD = $("#md_svr_spr_scm_pwd").val();	
 	     datasArr.push(datas);
 	 }
+	
 	$.ajax({
 		url : "/dbServerConnTest.do",
 		data : {
@@ -256,8 +258,12 @@ function fn_updateDbServer(){
         tmpmap["portno"] = list[i].value;	  
         tmpmap["master_gbn"] = dbServerRegTable.rows().data()[i].master_gbn;
         tmpmap["svr_host_nm"] = dbServerRegTable.rows().data()[i].svr_host_nm;
+        tmpmap["db_svr_ipadr_id"] = dbServerRegTable.rows().data()[i].db_svr_ipadr_id;
 		arrmaps.push(tmpmap);	
+		alert(dbServerRegTable.rows().data()[i].db_svr_ipadr_id);
 		}
+	
+	return false;
 	
 	if (confirm('<spring:message code="etc.etc13"/>')){	
 	$.ajax({

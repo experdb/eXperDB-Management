@@ -86,7 +86,7 @@
 					}
 
 					//adminMenu
-					if (result[i].mnu_cd == "MN000301" || result[i].mnu_cd == "MN000302" || result[i].mnu_cd == "MN000302") {
+					if (result[i].mnu_cd == "MN000301" || result[i].mnu_cd == "MN000302" || result[i].mnu_cd == "MN000303") {
 						
 						if((result[i].mnu_cd == "MN000301" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN000302" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN000303" && result[i].read_aut_yn == "N")) {
 							$('#MN0003_DIV').hide();
