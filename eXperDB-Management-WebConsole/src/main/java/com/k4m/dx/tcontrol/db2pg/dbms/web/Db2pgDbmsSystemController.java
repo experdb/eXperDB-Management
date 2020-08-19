@@ -72,9 +72,11 @@ public class Db2pgDbmsSystemController {
 			historyVO.setMnu_id(40);
 			accessHistoryService.insertHistory(historyVO);
 			
-			dbmsGrb = dbmsService.dbmsListDbmsGrb();		
-			
+			dbmsGrb = dbmsService.dbmsListDbmsGrb();
 			mv.addObject("result", dbmsGrb);
+			dbmsGrb = dbmsService.dbmsGrb();
+			mv.addObject("dbmsGrb", dbmsGrb);
+			
 			mv.setViewName("db2pg/dbms/dbmsList");
 		} catch (Exception e) {
 			e.printStackTrace();

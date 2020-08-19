@@ -88,8 +88,7 @@ function fn_init(){
 		{
 			data : "",
 			render : function(data, type, full, meta) {
-				var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
-				return html;
+				 return '<button id="detail" class="btn btn-outline-primary" onClick=javascript:fn_dblclick_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
 			},
 			
 			defaultContent : "",
@@ -205,42 +204,44 @@ function fn_init(){
 	//더블 클릭시
 	 $('#scheduleList tbody').on('dblclick','tr',function() {
 		var scd_id = table.row(this).data().scd_id;
-		
-		var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
-		var width = 1100;
-		var height = 550;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-		window.open(popUrl,"",popOption);
+		fn_dblclick_scheduleInfo(scd_id);
 	});		 
-	
-	//상세조회 클릭시
-	$('#scheduleList tbody').on('click','#detail',function() {
-		var $this = $(this);
-	   	var $row = $this.parent().parent().parent();
-	   	$row.addClass('detail');
-	   	var datas = table.rows('.detail').data();
-	   	if(datas.length==1) {
-	   		var row = datas[0];
-	    	$row.removeClass('detail');
-	 		var scd_id  = row.scd_id;
-	 		var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
-	 		var width = 1100;
-	 		var height = 550;
-	 		var left = (window.screen.width / 2) - (width / 2);
-	 		var top = (window.screen.height /2) - (height / 2);
-	 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	 		window.open(popUrl,"",popOption);
-	   	}
-	});	
 	
 }
 
 
 
-
+/* ********************************************************
+ * deatil rereg Btn click
+ ******************************************************** */
+ function fn_dblclick_scheduleInfo(scd_id_up) {
+	$('#scd_id', '#findList').val(scd_id_up);
+ 	$.ajax({
+		url : "selectWrkScheduleList.do",
+		data : {
+			scd_id : $("#scd_id", "#findList").val()	
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	    },
+	    error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			//테이블 세팅
+			fn_workpop_init();
+			fn_workpop_search();
+			$('#pop_layer_info_schedule').modal("show");
+		}
+	});
+}
 
 		
 /* ********************************************************
@@ -365,6 +366,15 @@ function fn_modifyScheduleListView(){
 </script>
 
 <%@include file="../cmmn/scheduleInfo.jsp"%>
+<%@include file="../popup/scheduleWrkList.jsp"%>
+<%@include file="../cmmn/workRmanInfo.jsp"%>
+<%@include file="../cmmn/workDumpInfo.jsp"%>
+
+<form name="findList" id="findList" method="post">
+	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+	<input type="hidden" name="wrk_id" id="wrk_id" value=""/>
+	<input type="hidden" name="scd_id" id="scd_id" value=""/>
+</form>
 
 <form name="modifyForm" method="post">
 </form>

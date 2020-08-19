@@ -118,7 +118,6 @@ $(function() {
 	 ******************************************************** */
     $('#dbServerList tbody').on( 'click', 'tr', function () {
     	var check = table_dbServer.row( this ).index()+1
-    	$(":radio[name=input:radio][value="+check+"]").attr("checked", true);
          if ( $(this).hasClass('selected') ) {
         }
         else {

@@ -138,7 +138,7 @@ public class ScheduleController {
 	@RequestMapping(value = "/popup/scheduleRegForm.do")
 	public ModelAndView scheduleRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 	
 		try {
 			//해당메뉴 권한 조회 (공통메소드호출)
@@ -158,8 +158,6 @@ public class ScheduleController {
 				historyVO.setExe_dtl_cd("DX-T0043");
 				historyVO.setMnu_id(2);
 				accessHistoryService.insertHistory(historyVO);
-				
-				mv.setViewName("popup/scheduleRegForm");	
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1532,7 +1530,7 @@ public class ScheduleController {
 	@RequestMapping(value = "/popup/db2pgWorkRegForm.do")
 	public ModelAndView db2pgWorkRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 	
 		try {
 			//해당메뉴 권한 조회 (공통메소드호출)
@@ -1553,7 +1551,6 @@ public class ScheduleController {
 				historyVO.setMnu_id(2);
 				accessHistoryService.insertHistory(historyVO);
 				
-				mv.setViewName("popup/db2pgWorkRegForm");	
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();

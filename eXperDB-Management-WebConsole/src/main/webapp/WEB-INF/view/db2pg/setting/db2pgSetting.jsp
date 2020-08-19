@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ include file="../../cmmn/cs.jsp"%>
+<%@ include file="../../cmmn/cs2.jsp"%>
 <%
 	/**
 	* @Class Name : db2pgSetting.jsp
@@ -714,237 +714,233 @@ function fn_ImmediateStart(gbn){
 					}
 				});	
 		} else {
-			alert("<spring:message code='message.msg04' />");
+			showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}	
 	}
 }
 
 </script>
-<%@include file="../popup/db2pgConfigInfo.jsp"%>
-<%@include file="../popup/db2pgDDLResult.jsp"%>
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="migration.setting_information_management"/><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="help.setting_information_management_01"/></li>
-					<li><spring:message code="help.setting_information_management_02"/></li>	
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>MIGRATION</li>
-					<li class="on"><spring:message code="migration.setting_information_management"/></li>
-				</ul>
-			</div>
-		</div>	
-		<div class="contents">
-			<div class="cmm_tab">
-				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
-				</ul>
-				<ul id="tab2" style="display:none;">
-					<li><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li class="atv"><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
-				</ul>
-			</div>
-			<div class="cmm_grp">
-				<div class="btn_type_float">													
-					<div class="btn_type_01" id="btnDDL">
-						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('ddl')"><spring:message code="migration.run_immediately"/></button></span> 	
-						<a class="btn" onClick="getddlDataList();"><button type="button"><spring:message code="common.search" /></button></a>
-						<span class="btn" onclick="fn_ddl_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
-						<span class="btn" onClick="fn_ddl_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
-						<span class="btn" onClick="fn_ddl_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
-						<span class="btn"><button type="button" onclick="fn_copy()"><spring:message code="migration.create_replica"/></button></span> 	
+<%-- <%@include file="../popup/db2pgConfigInfo.jsp"%> --%>
+<%-- <%@include file="../popup/db2pgDDLResult.jsp"%> --%>
+
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="ti-server menu-icon"></i>
+												<span class="menu-title"><spring:message code="migration.setting_information_management"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">MIGRATION</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="migration.setting_information_management"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.setting_information_management_01"/></p>
+											<p class="mb-0"><spring:message code="help.setting_information_management_02"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="btn_type_01" id="btnData" style="display:none;">
-						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('trans')"><spring:message code="migration.run_immediately"/></button></span> 	
-						<span class="btn" onclick="getdataDataList()"><button type="button"><spring:message code="common.search" /></button></span>
-						<span class="btn" onclick="fn_data_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
-						<span class="btn" onclick="fn_data_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
-						<span class="btn" onclick="fn_data_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
-						<span class="btn"><button type="button" onclick="fn_copy()"><spring:message code="migration.create_replica"/></button></span> 	
+					<!-- title end -->
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
+						<li class="nav-item">
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('ddlWork');" >
+								DDL
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('dataWork');">
+								MIGRATION
+							</a>
+						</li>
+					</ul>
+
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body" style="margin:-10px 0px -15px 0px;">
+
+							<form class="form-inline" id="findSearch">
+								<div class="row">
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
+										<input type="text" class="form-control" style="width:250px;" maxlength="25" id="ddl_wrk_nm" name="ddl_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
+									</div>
+									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
+										<select class="form-control" style="width:200px;"name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
+											<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
+											<option value="TC002201">Oracle</option>
+											<option value="TC002202">MS-SQL</option>
+											<option value="TC002203">MySQL</option>
+										</select>
+									</div>
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:250px;" id="ddl_ipadr" name="ddl_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
+									</div>
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:250px;" id="ddl_dtb_nm" name="ddl_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
+									</div>
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:250px;" id="ddl_scm_nm" name="ddl_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
+									</div>
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getddlDataList()">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
-				<div class="sch_form">
-					<table class="write" id="searchDDL">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width:10%;" />
-							<col style="width:25%;" />
-							<col style="width:10%;" />
-							<col style="width:25%;" />
-							<col style="width:8%;" />
-							<col style="width:22%;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
-								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="ddl_wrk_nm" id="ddl_wrk_nm" class="txt t3" maxlength="25"/></td>
-								<th scope="row" class="t9">DBMS<spring:message code="common.division" /></th>
-								<td>
-									<select name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
-										<option value=""><spring:message code="common.total" /></option>				
-										<option value="TC002201">Oracle</option>
-										<option value="TC002202">MS-SQL</option>
-										<option value="TC002203">MySQL</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="data_transfer.ip" /></th>
-								<td><input type="text" name="ddl_ipadr" id="ddl_ipadr" class="txt t3"/></td>
-								<th scope="row" class="t9">Database</th>
-								<td><input type="text" name="ddl_dtb_nm" id="ddl_dtb_nm" class="txt t3"/></td>
-								<th scope="row" class="t9">Schema</th>
-								<td><input type="text" name="ddl_scm_nm" id="ddl_scm_nm" class="txt t3"/></td>
-							</tr>
-						</tbody>
-					</table>
-					<table class="write" id="searchData" style="display:none;">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width:10%;" />
-							<col style="width:25%;" />
-							<col style="width:10%;" />
-							<col style="width:25%;" />
-							<col style="width:8%;" />
-							<col style="width:22%;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="data_wrk_nm" id="data_wrk_nm" class="txt t3" maxlength="25"/></td>
-								<th scope="row" class="t9"><spring:message code="common.division" /></th>
-								<td>		
-									<select name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
-										<option value="source_system"><spring:message code="migration.source_system"/></option>	
-										<option value="target_system"><spring:message code="migration.target_system"/></option>				
-									</select>	
-								</td>
-								<th scope="row" class="t9">DBMS<spring:message code="common.division" /></th>
-								<td>
-									<select name="dbms_dscd" id="dbms_dscd" class="select t5" >
-										<option value=""><spring:message code="common.total" /></option>				
-											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
- 												<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
- 											</c:forEach>
-									</select>	
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="data_transfer.ip" /></th>
-								<td><input type="text" name="data_ipadr" id="data_ipadr" class="txt t3"/></td>
-								<th scope="row" class="t9">Database</th>
-								<td><input type="text" name="data_dtb_nm" id="data_dtb_nm" class="txt t3"/></td>
-								<th scope="row" class="t9">Schema</th>
-								<td><input type="text" name="data_scm_nm" id="data_scm_nm" class="txt t3"/></td>
-							</tr>
-						</tbody>
-					</table>
+			</div>
+		</div>
+
+		<div class="col-sm-12 stretch-card div-form-margin-table" id="left_list">
+			<div class="card">
+				<div class="card-body">
+					<div class="row" style="margin-top:-20px;">
+						<div class="col-12">
+							<div class="template-demo">					
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete">
+									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" data-toggle="modal">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" data-toggle="modal">
+									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnImmediately">
+									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12" id="rmanDataTableDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="ddlDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="10"></th>
+												<th width="30"><spring:message code="common.no" /></th>
+												<th width="100"><spring:message code="common.work_name" /></th>
+												<th width="200"><spring:message code="common.work_description" /></th>
+												<th width="100">DBMS <spring:message code="common.division" /></th>
+												<th width="100"><spring:message code="history_management.ip" /></th>
+												<th width="100">Database</th>
+												<th width="150">Schema</th>
+												<th width="100"><spring:message code="common.register" /></th>
+												<th width="120"><spring:message code="common.regist_datetime" /></th>
+												<th width="100"><spring:message code="common.modifier" /></th>
+												<th width="120"><spring:message code="common.modify_datetime" /></th>
+												<th width="0">db2pg_ddl_wrk_id</th>
+												<th width="0">wrk_id</th>
+												<th width="0">ddl_save_pth</th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+							 	
+								<div class="col-12" id="dumpDataTableDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="10" rowspan="2"></th>
+												<th width="30" rowspan="2"><spring:message code="common.no" /></th>
+												<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
+												<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
+												<th width="600" colspan="4"><spring:message code="migration.source_system"/></th>
+												<th width="600" colspan="4"><spring:message code="migration.target_system"/></th>
+												<th width="100" rowspan="2"><spring:message code="common.register" /></th>
+												<th width="120" rowspan="2"><spring:message code="common.regist_datetime" /></th>
+												<th width="100" rowspan="2"><spring:message code="common.modifier" /></th>
+												<th width="120" rowspan="2"><spring:message code="common.modify_datetime" /></th>
+											</tr>
+											<tr class="bg-info text-white">
+												<th width="100">DBMS <spring:message code="common.division" /></th>
+												<th width="100"><spring:message code="data_transfer.ip" /></th>
+												<th width="100">Database</th>
+												<th width="100">Schema</th>
+												<th width="100">DBMS <spring:message code="common.division" /></th>
+												<th width="100"><spring:message code="data_transfer.ip" /></th>
+												<th width="100">Database</th>
+												<th width="100">Schema</th>
+												<th width="0">db2pg_trsf_wrk_id</th>
+												<th width="0">wrk_id</th>
+												<th width="0">trans_save_pth</th>
+												<th width="0">src_cnd_qry</th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
 				</div>
-				
-				<div class="overflow_area">
-					<table id="ddlDataTable" class="display" cellspacing="0" width="100%">
-						<caption></caption>
-							<thead>
-								<tr>
-									<th width="10"></th>
-									<th width="30"><spring:message code="common.no" /></th>
-									<th width="100"><spring:message code="common.work_name" /></th>
-									<th width="200"><spring:message code="common.work_description" /></th>
-									<th width="100">DBMS <spring:message code="common.division" /></th>
-									<th width="100"><spring:message code="history_management.ip" /></th>
-									<th width="100">Database</th>
-									<th width="150">Schema</th>
-									<th width="100"><spring:message code="common.register" /></th>
-									<th width="120"><spring:message code="common.regist_datetime" /></th>
-									<th width="100"><spring:message code="common.modifier" /></th>
-									<th width="120"><spring:message code="common.modify_datetime" /></th>
-									<th width="0">db2pg_ddl_wrk_id</th>
-									<th width="0">wrk_id</th>
-									<th width="0">ddl_save_pth</th>
-								</tr>
-							</thead>
-						</table>	
-					<table id="dataDataTable" class="display" cellspacing="0" width="100%">
-						<caption></caption>
-							<thead>
-								<tr>
-									<th width="10" rowspan="2"></th>
-									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
-									<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
-									<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
-									<th width="600" colspan="4"><spring:message code="migration.source_system"/></th>
-									<th width="600" colspan="4"><spring:message code="migration.target_system"/></th>
-									<th width="100" rowspan="2"><spring:message code="common.register" /></th>
-									<th width="120" rowspan="2"><spring:message code="common.regist_datetime" /></th>
-									<th width="100" rowspan="2"><spring:message code="common.modifier" /></th>
-									<th width="120" rowspan="2"><spring:message code="common.modify_datetime" /></th>
-								</tr>
-								<tr>
-									<th width="100">DBMS <spring:message code="common.division" /></th>
-									<th width="100"><spring:message code="data_transfer.ip" /></th>
-									<th width="100">Database</th>
-									<th width="100">Schema</th>
-									<th width="100">DBMS <spring:message code="common.division" /></th>
-									<th width="100"><spring:message code="data_transfer.ip" /></th>
-									<th width="100">Database</th>
-									<th width="100">Schema</th>
-									<th width="0">db2pg_trsf_wrk_id</th>
-									<th width="0">wrk_id</th>
-									<th width="0">trans_save_pth</th>
-									<th width="0">src_cnd_qry</th>
-								</tr>
-							</thead>
-					</table>
-				</div>		
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
+
+		<div class="col-sm-0_5" style="display:none;" id="center_div" >
+			<div class="card" style="background-color: transparent !important;border:0px;top:30%;position: inline-block;">
+				<div class="card-body" style="" onclick="fn_schedule_leftListSize();">	
+					<i class='fa fa-angle-double-right text-info' style="font-size: 35px;cursor:pointer;"></i>
+				</div>
 			</div>
 		</div>
 	</div>
-</div><!-- // contents -->
-
-
-<div id="pop_layer_copy" class="pop-layer">
-	<div class="pop-container" style="padding: 0px;">
-		<div class="pop_cts" style="width: 50%; height: 350px; overflow: auto; padding: 40px; margin: 0 auto; min-height:0; min-width:0;">
-			<p class="tit" style="margin-bottom: 15px;"><spring:message code="migration.create_replica"/>
-				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
-			</p>
-			<table class="write">
-				<colgroup>
-					<col style="width:105px;" />
-					<col />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
-						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
-						<td>
-							<div class="textarea_grp">
-								<textarea name="wrk_exp" id="wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="fn_copy_save()"><span><spring:message code="common.save"/></span></a>
-				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span><spring:message code="common.close"/></span></a>
-			</div>		
-		</div>
-	</div><!-- //pop-container -->
 </div>

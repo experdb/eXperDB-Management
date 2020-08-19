@@ -225,7 +225,7 @@ public class ScheduleHistoryController {
 	@RequestMapping(value = "/popup/scheduleHistoryDetail.do")
 	public ModelAndView transferTargetDetail(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		List<Map<String, Object>> result = null;
 		try {
 			// 화면접근이력 이력 남기기
@@ -239,7 +239,6 @@ public class ScheduleHistoryController {
 			
 			mv.addObject("exe_sn",exe_sn);
 			mv.addObject("result",result);
-			mv.setViewName("popup/scheduleHistoryDetail");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

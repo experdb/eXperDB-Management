@@ -93,7 +93,7 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/popup/dbServerRegForm.do")
 	public ModelAndView dbServerRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -115,7 +115,6 @@ public class DbServerManagerController {
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
-				mv.setViewName("popup/dbServerRegForm");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -381,7 +380,7 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/popup/dbServerRegReForm.do")
 	public ModelAndView dbServerRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -406,7 +405,6 @@ public class DbServerManagerController {
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.addObject("db_svr_id", db_svr_id);
-				mv.setViewName("popup/dbServerRegReForm");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
