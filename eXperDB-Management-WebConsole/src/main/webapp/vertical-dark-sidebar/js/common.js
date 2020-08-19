@@ -228,7 +228,7 @@ function fn_cookie(url) {
  ******************************************************** */
 function nvlPrmSet(val, subVal) {
 	var strValue = val;
-	if( strValue == null || strValue == '') {
+	if( strValue == null || strValue == ''  || strValue == undefined  || strValue == 'undefined') {
 		strValue = subVal;
 	}
 	

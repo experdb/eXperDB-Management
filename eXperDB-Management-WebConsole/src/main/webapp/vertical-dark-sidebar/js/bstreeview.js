@@ -109,6 +109,8 @@
             if (depth >= 1) {
             	leftPadding = (depth * _this.settings.indent).toString() + "rem;";
             }
+            
+            var node_tot_url = "";
 
             depth += 1;
             
@@ -198,20 +200,29 @@
             			treeviewNew.attr('style', "height:3px;");
             			treeviewNew.attr('line-height', "0px");
         			} else {
+        				node_tot_url = "";
             			if (node.nodes) {
             				treeItem = $(templates.treeviewItemLst)
             					.attr('style', 'padding-left:' + leftPadding)
             					.attr('id', node.id + "c")
             					.attr('href', "#" + _this.itemIdPrefix + node.nodeId);
             			} else {
+            				
+            				if (nvlPrmSet(node.url, '') == "" ) {
+            					node_tot_url = "javascript:void(0)";
+            				} else {
+            					node_tot_url = node.url;
+            				}
+
             				treeItem = $(templates.treeviewItemLst)
             					.attr('style', 'padding-left:' + leftPadding)
             					.attr('id', node.id + "c")
-            					.attr('href', node.url)
+            					.attr('href', node_tot_url)
             					.attr('onclick', "fn_GoLink('"+ node.id + "')")
             					treeItem.attr('target', "main");
             			}
 
+            			console.log("===_node.icon" + node.icon);
             			// set node icon if exist.
             			if (node.icon) {
             				var treeItemIcon = $(templates.treeviewItemIcon).addClass(node.icon);
@@ -246,7 +257,7 @@
 
         			// Attach node to parent.
         			parentElement.append(treeviewSubGroupItem);
-
+        			console.log(parentElement.html());
         			// Build child nodes.
         			if (node.nodes) {
         				// Node group item.
