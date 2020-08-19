@@ -197,7 +197,6 @@ $(function() {
 	 ******************************************************** */
     $('#dbServerList tbody').on( 'click', 'tr', function () {
     	var check = table_dbServer.row( this ).index()+1
-    	$(":radio[name=input:radio][value="+check+"]").attr("checked", true);
          if ( $(this).hasClass('selected') ) {
         }
         else {
@@ -262,7 +261,7 @@ function fn_regRe_popup(){
 	    $.ajax({
 			url : "/selectIpadrList.do",
 			data : {
-				db_svr_id : table.row('.selected').data().db_svr_id
+				db_svr_id : table_dbServer.row('.selected').data().db_svr_id
 			},
 			dataType : "json",
 			type : "post",
@@ -286,7 +285,7 @@ function fn_regRe_popup(){
 			    $.ajax({
 					url : "/selectDbServerList.do",
 					data : {
-						db_svr_id : table.row('.selected').data().db_svr_id
+						db_svr_id : table_dbServer.row('.selected').data().db_svr_id
 					},
 					dataType : "json",
 					type : "post",
@@ -296,10 +295,8 @@ function fn_regRe_popup(){
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
 							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-							top.location.href = "/";
 						} else if(xhr.status == 403) {
 							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-							top.location.href = "/";
 						} else {
 							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 						}
