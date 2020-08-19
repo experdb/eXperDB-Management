@@ -8,37 +8,86 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@include file="./cmmn/cs2.jsp"%> 
 
-<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/ti-icons/css/themify-icons.css">
-<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/css/vendor.bundle.base.css">
-<!-- endinject -->
-<!-- plugin css for this page -->
-<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
-<!-- End plugin css for this page -->
-<!-- inject:css -->
-<link rel="stylesheet" href="/vertical-dark-sidebar/css/style.css">
-<!-- endinject -->
-<link rel="shortcut icon" href="../../../../images/favicon.png" />
-<!-- plugins:js -->
-<script src="/vertical-dark-sidebar/js/vendors/js/vendor.bundle.base.js"></script>
-<!-- endinject -->
-<!-- Plugin js for this page-->
-<script src="/vertical-dark-sidebar/js/vendors/datatables.net/jquery.dataTables.js"></script>
-<script src="/vertical-dark-sidebar/js/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-<!-- End plugin js for this page-->
-<!-- inject:js -->
-<script src="/vertical-dark-sidebar/js/off-canvas.js"></script>
-<script src="/vertical-dark-sidebar/js/hoverable-collapse.js"></script>
-<script src="/vertical-dark-sidebar/js/template.js"></script>
-<script src="/vertical-dark-sidebar/js/settings.js"></script>
-<script src="/vertical-dark-sidebar/js/todolist.js"></script>
-<!-- endinject -->
-<!-- Custom js for this page-->
-<script src="/vertical-dark-sidebar/js/data-table.js"></script>
-<!-- End custom js for this page-->
-      <!-- partial -->
-        <div class="content-wrapper main_scroll">
-          <div class="row">
-            <div class="col-md-12 grid-margin">
+<script type="text/javascript">
+	var today = "";
+	var scale_yn_chk = "";
+
+	$(window.document).ready(function() { 
+		//오늘날짜 setting
+		fn_todaySetting();
+		
+		//통합 스케줄 setting
+		fn_totScdSetting();
+	});
+
+	/* ********************************************************
+	 * 금일 날짜 셋팅
+	 ******************************************************** */
+	function fn_todaySetting() {
+		today = new Date();
+
+		var html = "<i class='fa fa-calendar menu-icon'></i> "+today.toJSON().slice(0,10).replace(/-/g,'-');
+
+		$( "#tot_sdt_today" ).append(html);
+		$( "#tot_scd_ing_msg" ).append(html);
+	}
+
+	/* ********************************************************
+	 * 통합 스케줄 셋팅
+	 ******************************************************** */
+	function fn_totScdSetting() {
+		var tot_start = "";
+		var tot_end = "";
+		var tot_run = "";
+		var scheduleCnt = "";
+
+		if (nvlPrmSet("${backupInfo}", '') != "") {
+			scheduleCnt = nvlPrmSet("${backupInfo.schedule_cnt}", '0');
+			
+			if (scheduleCnt != 0) {
+				//시작
+				if (nvlPrmSet("${scheduleInfo.start_cnt}", '') != "") {
+					tot_start = nvlPrmSet("${scheduleInfo.start_cnt}", '0') / scheduleCnt * 100;
+					tot_start = tot_start.toFixed(2);
+				} else {
+					tot_start = "0.00";
+				}
+				
+				if (nvlPrmSet("${scheduleInfo.stop_cnt}", '') != "") {
+					tot_end = nvlPrmSet("${scheduleInfo.stop_cnt}", '0') / scheduleCnt * 100;
+					tot_end = tot_end.toFixed(2);
+				} else {
+					tot_end = "0.00";
+				}
+				
+				if (nvlPrmSet("${scheduleInfo.run_cnt}", '') != "") {
+					tot_run = nvlPrmSet("${scheduleInfo.run_cnt}", '0') / scheduleCnt * 100;
+					tot_run = tot_run.toFixed(2);
+				} else {
+					tot_run = "0.00";
+				}
+			} else {
+				tot_start = "0.00";
+				tot_end = "0.00";
+				tot_run = "0.00";
+			}
+		} else {
+			tot_start = "0.00";
+			tot_end = "0.00";
+			tot_run = "0.00";
+		}
+
+		$("#tot_scd_start_msg").append(tot_start);	//시작
+		$("#tot_scd_stop_msg").append(tot_end);		//중지
+		$("#tot_scd_run_msg").append(tot_run);		//실행중
+		
+	}
+</script>
+
+<!-- partial -->
+<div class="content-wrapper main_scroll">
+<!-- 	<div class="row">
+		<div class="col-md-12 grid-margin">
               <div class="row">
                 <div class="col-12 col-xl-5 mb-4 mb-xl-0">
                   <h4 class="font-weight-bold">Hi, Welcomeback!</h4>
@@ -69,57 +118,269 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-3 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title text-md-center text-xl-left">Number of Meetings</p>
-                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                    <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">34040</h3>
-                    <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                  </div>  
-                  <p class="mb-0 mt-2 text-warning">2.00% <span class="text-black ml-1"><small>(30 days)</small></span></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title text-md-center text-xl-left">Number of Clients</p>
-                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                    <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">47033</h3>
-                    <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                  </div>  
-                  <p class="mb-0 mt-2 text-danger">0.22% <span class="text-black ml-1"><small>(30 days)</small></span></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title text-md-center text-xl-left">Today’s Bookings</p>
-                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                    <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">40016</h3>
-                    <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                  </div>  
-                  <p class="mb-0 mt-2 text-success">10.00%<span class="text-black ml-1"><small>(30 days)</small></span></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title text-md-center text-xl-left">Total Items Bookings</p>
-                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                    <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">61344</h3>
-                    <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                  </div>  
-                  <p class="mb-0 mt-2 text-success">22.00%<span class="text-black ml-1"><small>(30 days)</small></span></p>
-                </div>
-              </div>
-            </div>
-          </div>
+          </div> -->
+	<div class="row" style="margin-top:-20px;margin-bottom:5px;">
+		<!-- title start -->
+		<div class="accordion_main accordion-multi-colored col-12" sid="accordion" role="tablist">
+			<div class="card" style="margin-bottom:0px;">
+				<div class="card-header" role="tab" id="page_header_div" >
+					<div class="row" style="height: 15px;">
+						<div class="col-5">
+							<h6 class="mb-0">
+								<i class="ti-calendar menu-icon"></i>
+								<span class="menu-title"><spring:message code="etc.etc44"/></span>
+							</h6>
+						</div>
+						<div class="col-7">
+		 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+								<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_sdt_today"></li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 통합스케줄 -->
+	<div class="row">
+		<!-- 스케줄등록 -->
+		<div class="col-md-2 grid-margin stretch-card">
+ 			<div class="card news_text">
+				<div class="card-body" onClick="location.href ='/selectScheduleListView.do'" style="cursor:pointer;">
+					<p class="card-title text-md-center text-xl-left">Schedule(<spring:message code="dashboard.Register_schedule" />)</p>
+					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+						<c:choose>
+							<c:when test="${not empty backupInfo}">
+								<c:choose>
+									<c:when test="${not empty backupInfo.schedule_cnt}">
+										<c:choose>
+											<c:when test="${fn:length(fn:escapeXml(backupInfo.schedule_cnt))>2}">
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"><c:out value="${backupInfo.schedule_cnt}"/></h3>
+											</c:when>
+											<c:otherwise>
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"><c:out value="${backupInfo.schedule_cnt}"/></h3>
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+									<c:otherwise>
+										<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+									</c:otherwise>
+								</c:choose>
+							</c:when>
+							<c:otherwise>
+								<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+							</c:otherwise>
+						</c:choose>
+						<i class="ti-calendar icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
+					</div>
+					<p class="mb-0 mt-2 text-warning">30 days <span class="text-black ml-1"><small>(<spring:message code="dashboard.standard_msg" />)</small></span></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- 금일예정-->
+ 		<div class="col-md-2 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body" >
+					<p class="card-title text-md-center text-xl-left">Today(<spring:message code="dashboard.scheduled_today" />)</p>
+					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+						<c:choose>
+							<c:when test="${not empty scheduleInfo}">
+								<c:choose>
+									<c:when test="${not empty scheduleInfo.today_cnt}">
+										<c:choose>
+											<c:when test="${fn:length(fn:escapeXml(scheduleInfo.today_cnt))>2}">
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"><c:out value="${scheduleInfo.today_cnt}"/></h3>
+											</c:when>
+											<c:otherwise>
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"><c:out value="${scheduleInfo.today_cnt}"/></h3>
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+									<c:otherwise>
+										<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+									</c:otherwise>
+								</c:choose>
+							</c:when>
+							<c:otherwise>
+								<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+							</c:otherwise>
+						</c:choose>
+						<i class="fa fa-calendar icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
+					</div>
+					<p class="mb-0 mt-2 text-success"><span id="tot_scd_ing_msg"></span> <span class="text-black ml-1"><small>(<spring:message code="dashboard.standard_msg" />)</small></span></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- 시작-->		
+		<div class="col-md-2 grid-margin stretch-card">
+ 			<div class="card news_text">
+				<div class="card-body " onClick="location.href ='/selectScheduleListView.do?scd_cndt=TC001801'" style="cursor:pointer;">
+					<p class="card-title text-md-center text-xl-left">Start(<spring:message code="etc.etc37"/>)</p>
+					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+						<c:choose>
+							<c:when test="${not empty scheduleInfo}">
+								<c:choose>
+									<c:when test="${not empty scheduleInfo.start_cnt}">
+										<c:choose>
+											<c:when test="${fn:length(fn:escapeXml(scheduleInfo.start_cnt))>2}">
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"><c:out value="${scheduleInfo.start_cnt}"/></h3>
+											</c:when>
+											<c:otherwise>
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"><c:out value="${scheduleInfo.start_cnt}"/></h3>
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+									<c:otherwise>
+										<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+									</c:otherwise>
+								</c:choose>
+							</c:when>
+							<c:otherwise>
+								<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+							</c:otherwise>
+						</c:choose>
+						<i class="fa fa-play icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
+					</div>
+					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_start_msg"></span> <span class="text-black ml-1"><small>(<spring:message code="dashboard.msg01" />)</small></span></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- 중지 -->
+ 		<div class="col-md-2 grid-margin stretch-card">
+			<div class="card news_text">
+				<div class="card-body" onClick="location.href ='/selectScheduleListView.do?scd_cndt=TC001803'" style="cursor:pointer;">
+					<p class="card-title text-md-center text-xl-left">Stop(<spring:message code="schedule.stop" />)</p>
+					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+						<c:choose>
+							<c:when test="${not empty scheduleInfo}">
+								<c:choose>
+									<c:when test="${not empty scheduleInfo.stop_cnt}">
+										<c:choose>
+											<c:when test="${fn:length(fn:escapeXml(scheduleInfo.stop_cnt))>2}">
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"><c:out value="${scheduleInfo.stop_cnt}"/></h3>
+											</c:when>
+											<c:otherwise>
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-danger"><c:out value="${scheduleInfo.stop_cnt}"/></h3>
+											</c:otherwise> 
+										</c:choose>
+									</c:when>
+									<c:otherwise>
+										<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+									</c:otherwise>
+								</c:choose>
+							</c:when>
+							<c:otherwise>
+								<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+							</c:otherwise>
+						</c:choose>
+						<i class="fa fa-pause icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
+					</div>  
+					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_stop_msg"></span> <span class="text-black ml-1"><small>(<spring:message code="dashboard.msg01" />)</small></span></p>
+				</div>
+			</div>
+		</div>         
+
+		<!-- 실행중 -->
+		<div class="col-md-2 grid-margin stretch-card">
+			<div class="card news_text">
+				<div class="card-body" onClick="location.href ='/selectScheduleListView.do?scd_cndt=TC001802'" style="cursor:pointer;">
+					<p class="card-title text-md-center text-xl-left">Running(<spring:message code="dashboard.running" />)</p>
+					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+						<c:choose>
+							<c:when test="${not empty scheduleInfo}">
+								<c:choose>
+									<c:when test="${not empty scheduleInfo.run_cnt}">
+										<c:choose>
+											<c:when test="${fn:length(fn:escapeXml(scheduleInfo.run_cnt))>2}">
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"><c:out value="${scheduleInfo.run_cnt}"/></h3>
+											</c:when>
+											<c:otherwise>
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"><c:out value="${scheduleInfo.run_cnt}"/></h3>
+											</c:otherwise> 
+										</c:choose>
+									</c:when>
+									<c:otherwise>
+										<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+									</c:otherwise>
+								</c:choose>
+							</c:when>
+							<c:otherwise>
+								<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+							</c:otherwise>
+						</c:choose>
+						<i class="fa fa-refresh fa-spin icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
+					</div>  
+					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_run_msg"></span> <span class="text-black ml-1"><small>(<spring:message code="dashboard.msg01" />)</small></span></p>
+				</div>
+			</div>
+		</div>
+
+		<!--  오휴 -->
+ 		<div class="col-md-2 grid-margin stretch-card">
+			<div class="card news_text">
+				<div class="card-body" onClick="location.href ='/selectScheduleHistoryFail.do'" style="cursor:pointer;">
+					<p class="card-title text-md-center text-xl-left">Fail(<spring:message code="dashboard.failed" />)</p>
+					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+						<c:choose>
+							<c:when test="${not empty scheduleInfo}">
+								<c:choose>
+									<c:when test="${not empty scheduleInfo.fail_cnt}">
+										<c:choose>
+											<c:when test="${fn:length(fn:escapeXml(scheduleInfo.fail_cnt))>2}">
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"><c:out value="${scheduleInfo.fail_cnt}"/></h3>
+											</c:when>
+											<c:otherwise>
+												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-danger"><c:out value="${scheduleInfo.fail_cnt}"/></h3>
+											</c:otherwise> 
+										</c:choose>
+									</c:when>
+									<c:otherwise>
+										<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+									</c:otherwise>
+								</c:choose>
+							</c:when>
+							<c:otherwise>
+								<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+							</c:otherwise>
+						</c:choose>
+						<i class="fa fa-times-circle icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
+  					</div>  
+					<p class="mb-0 mt-2 text-warning">30 days <span class="text-black ml-1"><small>(<spring:message code="dashboard.standard_msg" />)</small></span></p>
+				</div>
+			</div>
+		</div>
+
+	
+			
+
+
+
+
+
+                    
+                    
+                  
+                
+              
+		
+
+
+                    
+                   
+                  
+                
+              
+		
+
+
+
+
+	</div>
+	
           <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
               <div class="card">
