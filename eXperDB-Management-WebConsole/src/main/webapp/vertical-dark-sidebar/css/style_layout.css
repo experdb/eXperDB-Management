@@ -1553,3 +1553,7 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 }
 
 .news_text:hover { background:#f8f9fa; opacity: .7; } 
+
+.search_input_box {
+	width:400px;
+}

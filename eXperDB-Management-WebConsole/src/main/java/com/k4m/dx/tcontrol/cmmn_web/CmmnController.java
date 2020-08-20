@@ -119,16 +119,45 @@ public class CmmnController {
 			// 스케줄 정보
 			DashboardVO scheduleInfoVO = (DashboardVO) dashboardService.selectDashboardScheduleInfo();
 			
-			
-			
-			
-
-
-
-
 			DashboardVO dashVo = new DashboardVO();
 			
-			// DBMS정보(DB전체 개수 조회, audit 설정 조회)
+			//서버정보
+			List<DashboardVO> serverInfoVOSelectTot = (List<DashboardVO>) dashboardService.selectDashboardServerInfoNew(dashVo);
+			List<DashboardVO> serverInfoTotVO = new ArrayList<DashboardVO>();
+
+			try{
+				if(serverInfoVOSelectTot.size()>0){
+					for(int i=0; i<serverInfoVOSelectTot.size(); i++){
+						dashVo = new DashboardVO();
+						dashVo.setDb_svr_nm(serverInfoVOSelectTot.get(i).getDb_svr_nm());
+						dashVo.setIpadr(serverInfoVOSelectTot.get(i).getIpadr());
+						dashVo.setDb_svr_id(serverInfoVOSelectTot.get(i).getDb_svr_id());
+						
+						dashVo.setDb_cnt(serverInfoVOSelectTot.get(i).getDb_cnt());
+						dashVo.setUndb_cnt(0);
+						dashVo.setConnect_cnt(serverInfoVOSelectTot.get(i).getConnect_cnt());
+						dashVo.setExecute_cnt(serverInfoVOSelectTot.get(i).getExecute_cnt());
+						dashVo.setLst_mdf_dtm(serverInfoVOSelectTot.get(i).getLst_mdf_dtm());
+						dashVo.setAgt_cndt_cd(serverInfoVOSelectTot.get(i).getAgt_cndt_cd());
+						dashVo.setAudit_state("-");
+						dashVo.setMaster_gbn(serverInfoVOSelectTot.get(i).getMaster_gbn());
+						dashVo.setSvr_host_nm(serverInfoVOSelectTot.get(i).getSvr_host_nm());
+
+						System.out.println("==getAgt_cndt_cd==" + serverInfoVOSelectTot.get(i).getAgt_cndt_cd());
+						System.out.println("==getMaster_gbn==" + serverInfoVOSelectTot.get(i).getMaster_gbn());
+						
+						serverInfoTotVO.add(dashVo);
+					}
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+
+
+
+			
+/*			// DBMS정보(DB전체 개수 조회, audit 설정 조회)
 			List<DashboardVO> serverInfoVOSelect = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(dashVo);
 			List<DashboardVO> serverInfoVO = new ArrayList<DashboardVO>();
 			try{
@@ -148,7 +177,7 @@ public class CmmnController {
 							serverInfoVO.add(dashVo);
 						}else{
 							String db_svr_nm = serverInfoVOSelect.get(i).getDb_svr_nm();
-							List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
+							List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm); //db서버 목록
 							AgentInfoVO vo = new AgentInfoVO();
 							vo.setIPADR(resultSet.get(0).getIpadr());
 							AgentInfoVO agentInfo = (AgentInfoVO)cmmnServerInfoService.selectAgentInfo(vo);
@@ -314,10 +343,13 @@ public class CmmnController {
 					e.printStackTrace();
 				}
 			}
-
-			mv.addObject("scheduleInfo", scheduleInfoVO);
-			mv.addObject("backupInfo", backupInfoVO);
-			mv.addObject("serverInfo", serverInfoVO);
+*/
+			mv.addObject("scheduleInfo", scheduleInfoVO);	//스케줄 정보
+			mv.addObject("backupInfo", backupInfoVO);		//백업 정보
+			mv.addObject("serverTotInfo", serverInfoTotVO);	//서버 정보
+			
+			
+/*			mv.addObject("serverInfo", serverInfoVO);
 			mv.addObject("backupDumpInfo", backupDumpInfoVO);
 			mv.addObject("backupRmanInfo", backupRmanInfoVO);
 			mv.addObject("wrk_state", wrk_state);
@@ -325,7 +357,7 @@ public class CmmnController {
 			mv.addObject("bak_state", bak_state);
 			
 			//scale 내역조회
-			mv.addObject("scaleIngInfo", resultScale);
+			mv.addObject("scaleIngInfo", resultScale);*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

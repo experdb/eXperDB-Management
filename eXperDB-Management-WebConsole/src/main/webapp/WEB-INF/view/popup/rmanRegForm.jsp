@@ -128,7 +128,7 @@
 				}
 			},
 			success : function(result) {
-				if (result != null) {
+				if (result != null && result != ",") {
 					if (result[0].DATA_PATH != null) {
 						$('#ins_data_pth', '#workRegForm').val(nvlPrmSet(result[0].DATA_PATH, ""));
 					}

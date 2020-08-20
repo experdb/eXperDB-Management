@@ -152,37 +152,44 @@
 			},
 			success : function(data) {
 				if (data != null) {
-					if(data.result.ERR_CODE == ""){
-						if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
-							var volume = data.result.RESULT_DATA.CAPACITY;
+					if (data.result != null && data.result != undefined) {
+						if(data.result.ERR_CODE == ""){
+							if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
+								var volume = data.result.RESULT_DATA.CAPACITY;
 
-							if(keyType == 2){
-								$("#mod_check_path2", "#workModForm").val("Y");
+								if(keyType == 2){
+									$("#mod_check_path2", "#workModForm").val("Y");
+									
+									$("#mod_backupVolume", "#workModForm").html('<spring:message code="common.volume" /> : '+volume);
+									$("#mod_backupVolume_div", "#workModForm").show();
+								}
+							}else{
+								if(haCnt > 1){
+									$("#mod_bck_pth_check_alert", "#workModForm").html('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
+								}else{
+									$("#mod_bck_pth_check_alert", "#workModForm").html('<spring:message code="backup_management.invalid_path"/>');
+								}	
 								
-								$("#mod_backupVolume", "#workModForm").html('<spring:message code="common.volume" /> : '+volume);
+								$("#mod_bck_pth_check_alert", "#workModForm").show();
+
+								$("#mod_check_path2", "#workModForm").val("N");
+								$("#mod_backupVolume", "#workModForm").html('<spring:message code="common.volume" /> : 0');
 								$("#mod_backupVolume_div", "#workModForm").show();
 							}
 						}else{
-							if(haCnt > 1){
-								$("#mod_bck_pth_check_alert", "#workModForm").html('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
-							}else{
-								$("#mod_bck_pth_check_alert", "#workModForm").html('<spring:message code="backup_management.invalid_path"/>');
-							}	
-							
+							$("#mod_bck_pth_check_alert", "#workModForm").html('<spring:message code="message.msg76" />');
 							$("#mod_bck_pth_check_alert", "#workModForm").show();
 
 							$("#mod_check_path2", "#workModForm").val("N");
 							$("#mod_backupVolume", "#workModForm").html('<spring:message code="common.volume" /> : 0');
 							$("#mod_backupVolume_div", "#workModForm").show();
 						}
-					}else{
-						$("#mod_bck_pth_check_alert", "#workModForm").html('<spring:message code="message.msg76" />');
-						$("#mod_bck_pth_check_alert", "#workModForm").show();
-
-						$("#mod_check_path2", "#workModForm").val("N");
+					} else {
+						$("#mod_check_path2", "#workModForm").val("Y");
 						$("#mod_backupVolume", "#workModForm").html('<spring:message code="common.volume" /> : 0');
 						$("#mod_backupVolume_div", "#workModForm").show();
 					}
+
 				} else {
 					$("#mod_bck_pth_check_alert", "#workModForm").html('<spring:message code="message.msg76" />');
 					$("#mod_bck_pth_check_alert", "#workModForm").show();

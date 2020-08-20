@@ -185,6 +185,8 @@
 	                    parentElement.append(treeviewNew);
 	                    _this.build(treeGroup, node.nodes, depth);
 	                }
+	                
+	                console.log(parentElement.html());
 	               // jQuery("a[aria-controls='" + _this.itemIdPrefix + "0" + "']").click();
 
 	                iCnt = iCnt + 1;
@@ -222,7 +224,6 @@
             					treeItem.attr('target', "main");
             			}
 
-            			console.log("===_node.icon" + node.icon);
             			// set node icon if exist.
             			if (node.icon) {
             				var treeItemIcon = $(templates.treeviewItemIcon).addClass(node.icon);
@@ -257,7 +258,7 @@
 
         			// Attach node to parent.
         			parentElement.append(treeviewSubGroupItem);
-        			console.log(parentElement.html());
+  
         			// Build child nodes.
         			if (node.nodes) {
         				// Node group item.

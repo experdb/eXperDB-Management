@@ -18,6 +18,9 @@
 		
 		//통합 스케줄 setting
 		fn_totScdSetting();
+		
+		//서버정보 리스트 setting
+		fn_serverListSetting();
 	});
 
 	/* ********************************************************
@@ -82,43 +85,115 @@
 		$("#tot_scd_run_msg").append(tot_run);		//실행중
 		
 	}
+
+	/* ********************************************************
+	 * 서버리스트 설정
+	 ******************************************************** */
+	function fn_serverListSetting() {
+		var rowCount = 0;
+		var html = "";
+		var master_gbn = "";
+		var db_svr_id = "";
+		var listCnt = 0;
+
+		<c:choose>
+			<c:when test="${fn:length(serverTotInfo) == 0}">
+				html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+				html += "	<div class='card'>\n";
+				html += '		<div class="card-body">\n';
+ 				html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+ 				html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+ 				html += '				<spring:message code="message.msg01" /></h5>\n';
+				html += '			</div>\n';
+				html += "		</div>\n";
+				html += "	</div>\n";
+				html += '</div>\n';
+			</c:when>
+			<c:otherwise>
+				<c:forEach items="${serverTotInfo}" var="serverinfo" varStatus="status">
+					master_gbn = nvlPrmSet("${serverinfo.master_gbn}", '') ;
+					rowCount = rowCount + 1;
+					listCnt = parseInt("${fn:length(serverTotInfo)}");
+					
+		 			if (db_svr_id == "") {				
+						html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+						html += "	<div class='card news_text'>\n";
+						html += '		<div class="card-body row" onClick="fn_serverSebuInfo("'+nvlPrmSet("${serverinfo.db_svr_id}", '')+'")" style="cursor:pointer;">\n';
+					} else if (db_svr_id != nvlPrmSet("${serverinfo.db_svr_id}", '')  && master_gbn == "M") {
+						html += '				</div>\n';
+						html += '			</div>\n';
+						html += '			<div class="col-sm-3" style="margin:auto;">\n';
+						html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+						html += '			</div>\n';
+						html += "		</div>\n";
+						html += "	</div>\n";
+						html += '</div>\n';
+						
+						html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+						html += "	<div class='card news_text'>\n";
+						html += '		<div class="card-body row" onClick="fn_serverSebuInfo("'+nvlPrmSet("${serverinfo.db_svr_id}", '')+'")" style="cursor:pointer;">\n';
+					}
+		
+		 			if (master_gbn == "M") {
+		 				html += '			<div class="col-sm-9">';
+		 				html += '				<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+		 				html += '					<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+		 				
+	 					if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == '') {
+		 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 					} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001101') {
+		 	 				html += '					<div class="badge badge-pill badge-success" title="">M</div>\n';
+		 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001102') {
+		 	 				html += '					<div class="badge badge-pill badge-danger">M</div>\n';
+		 				} else {
+		 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+		 				}
+		 				html += '					<c:out value="${serverinfo.db_svr_nm}"/><br/></h5>\n';
+		 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+		 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>\n';
+		 			}
+		 			
+		 			if (master_gbn == "S") {
+		 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
+		 				
+	 					if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == '') {
+		 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+		 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001101') {
+		 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
+		 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001102') {
+		 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
+
+		 				} else {
+		 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+		 				}
+		 				html += '					<c:out value="${serverinfo.svr_host_nm}"/><br/></h6>';
+		 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">';
+		 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>';
+		 			}
+		
+					if (rowCount == listCnt) {
+						html += '				</div>\n';
+						html += '			</div>\n';
+						html += '			<div class="col-sm-3" style="margin:auto;">\n';
+						html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+						html += '			</div>\n';
+						html += "		</div>\n";
+						html += "	</div>\n";
+						html += '</div>\n';
+						
+					}
+					db_svr_id = nvlPrmSet("${serverinfo.db_svr_id}", '') ;
+		
+				</c:forEach>
+			</c:otherwise>
+		</c:choose>
+
+		$("#serverTabList").html(html);
+	}
 </script>
 
 <!-- partial -->
 <div class="content-wrapper main_scroll">
-<!-- 	<div class="row">
-		<div class="col-md-12 grid-margin">
-              <div class="row">
-                <div class="col-12 col-xl-5 mb-4 mb-xl-0">
-                  <h4 class="font-weight-bold">Hi, Welcomeback!</h4>
-                  <h4 class="font-weight-normal mb-0">JustDo Dashboard,</h4>
-                </div>
-                <div class="col-12 col-xl-7">
-                  <div class="d-flex align-items-center justify-content-between flex-wrap">
-                    <div class="border-right pr-4 mb-3 mb-xl-0">
-                      <p class="text-muted">Balance</p>
-                      <h4 class="mb-0 font-weight-bold">$40079.60 M</h4>
-                    </div>
-                    <div class="border-right pr-4 mb-3 mb-xl-0">
-                      <p class="text-muted">Today’s profit</p>
-                      <h4 class="mb-0 font-weight-bold">$175.00 M</h4>
-                    </div>
-                    <div class="border-right pr-4 mb-3 mb-xl-0">
-                      <p class="text-muted">Purchases</p>
-                      <h4 class="mb-0 font-weight-bold">4006</h4>
-                    </div>
-                    <div class="pr-3 mb-3 mb-xl-0">
-                      <p class="text-muted">Downloads</p>
-                      <h4 class="mb-0 font-weight-bold">4006</h4>
-                    </div>
-                    <div class="mb-3 mb-xl-0">
-                      <button class="btn btn-warning rounded-0 text-white">Downloads</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
 	<div class="row" style="margin-top:-20px;margin-bottom:5px;">
 		<!-- title start -->
 		<div class="accordion_main accordion-multi-colored col-12" sid="accordion" role="tablist">
@@ -353,6 +428,371 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card position-relative">
+				<div class="card-body">
+					<div class="row">
+	                    <div class="col-3">
+	                    	<div class="row">
+								<!-- title start -->
+								<div class="accordion_main accordion-multi-colored col-12" sid="accordion" role="tablist" style="margin-bottom:10px;">
+									<div class="card" style="margin-bottom:0px;">
+										<div class="card-header" role="tab" id="page_header_div" >
+											<div class="row" style="height: 15px;">
+												<div class="col-12">
+													<h6 class="mb-0">
+														<i class="ti-calendar menu-icon"></i>
+														<span class="menu-title"><spring:message code="dashboard.server_information"/></span>
+													</h6>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+
+							
+							
+	                    	<div class="row" id="serverTabList" >
+
+
+	                    	
+	                    		<!-- <div class="col-12">
+	                    		
+	                    		
+	                    		
+	                    		
+	                    			<ul class="nav nav-pills nav-pills-vertical nav-pills-warning" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+										<li class="nav-item">
+
+			 								<a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home_test1" role="tab" aria-controls="v-pills-home_test1" aria-selected="true">
+												<i class="ti-home"></i>
+
+
+
+				                          </a>   
+                            
+				                        </li>
+				                        
+
+	                    		
+	                    		
+	                    
+	                      
+
+	                        <li class="nav-item">
+	                          <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-home_test2" role="tab" aria-controls="v-pills-home_test2" aria-selected="false">
+	                            <i class="ti-user"></i>
+	                            Profile
+	                          </a>                          
+	                        </li>
+	                        <li class="nav-item">
+	                          <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+	                            <i class="ti-email"></i>
+	                            Reach
+	                          </a>                          
+	                        </li>
+	                      </ul>
+	                    </div> -->
+	                    </div>
+					</div>
+	                    
+	                    
+	                    <div class="col-9">
+			                  <div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
+			                    <div class="carousel-inner">
+			                      <div class="carousel-item active" id="v-pills-home_test1">
+			                        <div class="row">
+			                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
+			                            <div class="ml-xl-4">
+			                              <h1>$34040</h1>
+			                              <h3 class="font-weight-light mb-xl-4">North America</h3>
+			                              <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+			                            </div>  
+			                            </div>
+			                          <div class="col-md-12 col-xl-9">
+			                            <div class="row">
+			                              <div class="col-md-6">
+			                                <div class="table-responsive mb-3 mb-md-0">
+			                                  <table class="table table-borderless report-table">
+			                                    <tr>
+			                                      <td class="text-muted">Illinois</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">713</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Washington</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">583</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Mississippi</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">924</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">California</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">664</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Maryland</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">560</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Alaska</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">793</h5></td>
+			                                    </tr>
+			                                  </table>
+			                                </div>
+			                              </div>
+			                              <div class="col-md-6 mt-3">
+			                                <canvas id="north-america-chart"></canvas>
+			                                <div id="north-america-legend"></div>
+			                              </div>
+			                            </div>
+			                          </div>
+			                        </div>
+			                      </div>
+			                      <div class="carousel-item" id="v-pills-home_test2">
+			                        <div class="row">
+			                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
+			                            <div class="ml-xl-4">
+			                              <h1>$61321</h1>
+			                              <h3 class="font-weight-light mb-xl-4">South America</h3>
+			                              <p class="text-muted mb-2 mb-xl-0">It is the period time a user is actively engaged with your website, page or app, etc. The total number of sessions within the date range. </p>
+			                            </div>
+			                          </div>
+			                          <div class="col-md-12 col-xl-9">
+			                            <div class="row">
+			                              <div class="col-md-6">
+			                                <div class="table-responsive mb-3 mb-md-0">
+			                                  <table class="table table-borderless report-table">
+			                                    <tr>
+			                                      <td class="text-muted">Brazil</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">613</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Argentina</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">483</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Peru</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">824</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Chile</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">564</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Colombia</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">460</h5></td>
+			                                    </tr>
+			                                    <tr>
+			                                      <td class="text-muted">Uruguay</td>
+			                                      <td class="w-100 px-0">
+			                                        <div class="progress progress-md mx-4">
+			                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+			                                        </div>
+			                                      </td>
+			                                      <td><h5 class="font-weight-bold mb-0">693</h5></td>
+			                                    </tr>
+			                                  </table>
+			                                </div>
+			                              </div>
+			                              <div class="col-md-6 mt-3">
+			                                <canvas id="south-america-chart"></canvas>
+			                                <div id="south-america-legend"></div>
+			                              </div>
+			                            </div>
+			                          </div>
+			                        </div>
+			                      </div>
+			                    </div>
+			                    <a class="carousel-control-prev" href="#detailedReports" role="button" data-slide="prev">
+			                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			                      <span class="sr-only">Previous</span>
+			                    </a>
+			                    <a class="carousel-control-next" href="#detailedReports" role="button" data-slide="next">
+			                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+			                      <span class="sr-only">Next</span>
+			                    </a>
+			                  </div>
+			                 </div>
+			                 </div>
+                </div>
+              
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          
+          
+          
+          
+          
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+ <div class="col-md-12 col-xl-12 grid-margin stretch-card d-none d-md-flex">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Vertical Pills</h4>
+                  <p class="card-description">Add class <code>.nav-pills-vertical</code> to <code>.nav</code> and 
+                    <code>.tab-content-vertical</code> to <code>.tab-content</code>
+                  </p>
+                  <div class="row">
+                    <div class="col-4">
+                      <ul class="nav nav-pills nav-pills-vertical nav-pills-info" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <li class="nav-item">
+                          <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                            <i class="ti-home"></i>
+                            Home
+                          </a>                          
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+                            <i class="ti-user"></i>
+                            Profile
+                          </a>                          
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+                            <i class="ti-email"></i>
+                            Reach
+                          </a>                          
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-8">
+                      <div class="tab-content tab-content-vertical" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                          <div class="media">
+                            <img class="mr-3 w-25 rounded" src="https://via.placeholder.com/115x115" alt="sample image">
+                            <div class="media-body">
+                              <h5 class="mt-0">I'm doing mental jumping jacks.</h5>
+                              <p>
+                                Only you could make those words cute. Oh I beg to differ, I think we have a lot to discuss. After all, 
+                                you are a client. I am not a killer. 
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                          <div class="media">
+                            <img class="mr-3 w-25 rounded" src="https://via.placeholder.com/115x115" alt="sample image">
+                            <div class="media-body">
+                              <p>I'm thinking two circus clowns dancing. You? Finding a needle in a haystack isn't hard when every straw is computerized. Tell him time is of the essence. 
+                                Somehow, I doubt that. You have a good heart, Dexter.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                          <div class="media">
+                            <img class="mr-3 w-25 rounded" src="https://via.placeholder.com/115x115" alt="sample image">
+                            <div class="media-body">
+                              <p>
+                                  I'm really more an apartment person. This man is a knight in shining armor. Oh I beg to differ, I think we have a lot to discuss. After all, you are a client. You all right, Dexter?
+                              </p>
+                              <p>
+                                  I'm generally confused most of the time. Cops, another community I'm not part of. You're a killer. I catch killers. Hello, Dexter Morgan.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
 	
 			
@@ -379,7 +819,6 @@
 
 
 
-	</div>
 	
           <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
@@ -788,7 +1227,7 @@
               <div class="card position-relative">
                 <div class="card-body">
                   <p class="card-title">Detailed Reports</p>
-                  <div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
+                  <div id="" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
                     <div class="carousel-inner">
                       <div class="carousel-item active">
                         <div class="row">

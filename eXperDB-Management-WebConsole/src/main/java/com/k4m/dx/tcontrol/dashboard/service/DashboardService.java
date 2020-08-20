@@ -27,6 +27,18 @@ public interface DashboardService {
 	public DashboardVO selectDashboardBackupInfo() throws SQLException;
 
 	/**
+	 * 서버 정보 전체 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardServerInfoNew(DashboardVO vo) throws SQLException;
+
+	
+	
+
+	/**
 	 * 서버 정보 조회
 	 * 
 	 * @param vo

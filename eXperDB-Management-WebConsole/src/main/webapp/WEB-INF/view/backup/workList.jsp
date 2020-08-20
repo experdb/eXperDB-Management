@@ -752,15 +752,14 @@
 					<div class="card">
 						<div class="card-body" style="margin:-10px 0px -15px 0px;">
 
-							<form class="form-inline" id="findSearch">
-								<div class="row">
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+							<form class="form-inline row" id="findSearch">
+									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:-10px;">
 										<input hidden="hidden" />
-										<input type="text" class="form-control" style="width:250px;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
+										<input type="text" class="form-control" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
 									</div>
 		
-									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
-										<select class="form-control" style="width:200px;" name="bck_opt_cd" id="bck_opt_cd">
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_rman" style="padding-right:10px;">
+										<select class="form-control" name="bck_opt_cd" id="bck_opt_cd">
 											<option value=""><spring:message code="backup_management.backup_option" />&nbsp;<spring:message code="schedule.total" /></option>
 											<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
 											<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
@@ -768,8 +767,8 @@
 										</select>
 									</div>
 		
-									<div class="input-group mb-2 mr-sm-2 search_dump" style="padding-right:10px;">
-										<select class="form-control" style="width:200px;" name="db_id" id="db_id">
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_dump" style="padding-right:10px;display:none;">
+										<select class="form-control" name="db_id" id="db_id">
 											<option value=""><spring:message code="common.database" />&nbsp;<spring:message code="schedule.total" /></option>
 											<c:forEach var="result" items="${dbList}" varStatus="status">
 													<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
@@ -780,7 +779,6 @@
 									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 									</button>
-								</div>
 							</form>
 						</div>
 					</div>
@@ -848,7 +846,7 @@
 									</table>
 							 	</div>
 							 	
-								<div class="col-12" id="dumpDataTableDiv">
+								<div class="col-12" id="dumpDataTableDiv" style="diplay:none;">
  									<div class="table-responsive">
 										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 											<div class="row">

@@ -25,6 +25,7 @@ public class DashboardVO {
 	private String audit_state;
 	private String agt_cndt_cd;
 	private String lst_mdf_dtm;
+	private String svr_host_nm;
 	
 	private int connect_cnt;
 	private int execute_cnt;
@@ -33,6 +34,12 @@ public class DashboardVO {
 	private String bck_opt_cd;
 	
 	
+	public String getSvr_host_nm() {
+		return svr_host_nm;
+	}
+	public void setSvr_host_nm(String svr_host_nm) {
+		this.svr_host_nm = svr_host_nm;
+	}
 	public String getBck_opt_cd() {
 		return bck_opt_cd;
 	}

@@ -297,7 +297,7 @@
 		
 		//three state logic
 		//$.fn.hummingbird.ThreeStateLogic($(this),doubleMode,allVariables,options.checkDoubles,options.checkDisabled);		
-		$.fn.hummingbird.ThreeStateLogic($(this),doubleMode,allVariables,options.checkDoubles,checkDisabled,);
+		$.fn.hummingbird.ThreeStateLogic($(this),doubleMode,allVariables,options.checkDoubles,checkDisabled);
 		
 		//expandSingle and check if options.singleGroupOpen is set
 		var tmp_tree=$(this);

@@ -97,8 +97,8 @@ function selectTab(intab){
 	selectChkTab = intab;
 
 	if(intab == "rman"){			
-		$(".searchRman").show();
-		$(".searchDump").hide();
+		$(".search_rman").show();
+		$(".search_dump").hide();
 		$("#rmanDataTableDiv").show();
 		$("#dumpDataTableDiv").hide();
 
@@ -106,8 +106,8 @@ function selectTab(intab){
 
 		fn_get_rman_list();
 	}else{				
-		$(".searchRman").hide();
-		$(".searchDump").show();
+		$(".search_rman").hide();
+		$(".search_dump").show();
 		$("#rmanDataTableDiv").hide();
 		$("#dumpDataTableDiv").show();
 

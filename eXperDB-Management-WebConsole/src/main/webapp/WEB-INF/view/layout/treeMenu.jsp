@@ -442,8 +442,8 @@
 </div>
 
 <!-- partial -->
-<nav class="sidebar sidebar-offcanvas" id="sidebar">
-	<ul class="nav">
+<nav class="sidebar sidebar-offcanvas" id="sidebar" style="max-height: calc(100vh - 0px);position:relative;">
+	<ul class="nav" style="">
 <!-- 		<li class="nav-item">
 			<a class="nav-link" href="/db2pgSetting2.do" target="main">
 				<i class="mdi mdi-amazon-clouddrive"></i>
@@ -463,8 +463,7 @@
 			</a>
 		</li>
 	</ul>
-
-	<ul class="nav left_scroll" id="lft_tree" style="margin-top:-60px;width:223px;min-height: calc(100vh - 170px);max-height: calc(100vh - 170px);overflow-y:auto;overflow-x:hidden;position: fixed;">	
-	</ul>
 	
+	<ul class="nav left_scroll" id="lft_tree" style="margin-top:-60px;width:223px;min-height: calc(100vh - 180px);max-height: calc(100vh - 180px);overflow-y:auto;overflow-x:hidden;">
+	</ul>
 </nav>

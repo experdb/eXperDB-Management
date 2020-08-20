@@ -30,6 +30,14 @@ public class DashboardDAO extends EgovAbstractMapper{
 	}
 	
 	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DashboardVO> selectDashboardServerInfoNew(DashboardVO vo) throws SQLException{
+		return (List<DashboardVO>) list("dashboardSql.selectDashboardServerInfoNew", vo);
+	}
+	
+	
+	
+	
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<DashboardVO> selectDashboardServerInfo(DashboardVO vo) throws SQLException{
 		return (List<DashboardVO>) list("dashboardSql.selectDashboardServerInfo", vo);
 	}
