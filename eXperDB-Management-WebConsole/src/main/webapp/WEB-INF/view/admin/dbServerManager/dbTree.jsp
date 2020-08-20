@@ -149,6 +149,10 @@ $(window.document).ready(function() {
 	fn_init();
 	
 	fn_selectTreeDbServerList();
+	
+	fn_init2();
+	fn_init3();
+	
 });
 
 
@@ -257,7 +261,6 @@ function fn_reg_popup(){
 function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
-		fn_init3();
 	    $.ajax({
 			url : "/selectIpadrList.do",
 			data : {
