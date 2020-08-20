@@ -95,6 +95,12 @@ public class Db2pgSettingController {
 			
 			List<Map<String, Object>> dbmsGrb = dbmsService.dbmsGrb();
 			mv.addObject("dbmsGrb", dbmsGrb);
+			
+			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
+			mv.addObject("codeLetter", codeLetter);
+			List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029");
+			mv.addObject("codeTF", codeTF);
+			
 			mv.setViewName("db2pg/setting/db2pgSetting");
 		} catch (Exception e) {
 			e.printStackTrace();

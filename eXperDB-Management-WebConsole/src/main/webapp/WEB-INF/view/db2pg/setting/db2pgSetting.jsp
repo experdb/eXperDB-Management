@@ -19,7 +19,6 @@
 	*/
 %>
 
-
 <script type="text/javascript">
 
 var tableDDL = null;
@@ -37,8 +36,6 @@ function selectTab(tab){
 		$("#dataDataTable_wrapper").show();
 		$("#ddlDataTable").hide();
 		$("#ddlDataTable_wrapper").hide();
-		$("#tab1").hide();
-		$("#tab2").show();
 		$("#searchDDL").hide();
 		$("#searchData").show();
 		$("#btnDDL").hide();
@@ -49,8 +46,6 @@ function selectTab(tab){
 		$("#ddlDataTable_wrapper").show();
 		$("#dataDataTable").hide();
 		$("#dataDataTable_wrapper").hide();
-		$("#tab1").show();
-		$("#tab2").hide();
 		$("#searchDDL").show();
 		$("#searchData").hide();
 		$("#btnDDL").show();
@@ -173,10 +168,10 @@ function fn_init(){
  * Data initialization
  ******************************************************** */
 $(window.document).ready(
-	function() {	
-		fn_init();		
+	function() {
+		fn_init();	
 		getddlDataList();
-		getdataDataList();			
+		getdataDataList();		
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
 		$("#dataDataTable").hide();
@@ -203,13 +198,11 @@ function getddlDataList(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
@@ -246,13 +239,11 @@ function getdataDataList(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
@@ -272,15 +263,14 @@ function getdataDataList(){
  * DDL추출 등록 팝업
  ******************************************************** */
 function fn_ddl_reg_popup(){
-	var popUrl = "/db2pg/popup/ddlRegForm.do";
-	var width = 965;
-	var height = 705;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	$("#db2pg_ddl_wrk_nm", "#ddlRegForm").val("");
+	$("#db2pg_ddl_wrk_exp", "#ddlRegForm").val("");
+	$("#db2pg_sys_nm", "#ddlRegForm").val("");
+	$("#src_include_tables", "#ddlRegForm").val("");
+	$("#src_exclude_tables", "#ddlRegForm").val("");
 	
-	var winPop = window.open(popUrl,"ddlRegPop",popOption);
-	winPop.focus();
+	
+	$('#pop_layer_ddl_reg').modal("show");
 }
 
 /* ********************************************************
@@ -300,7 +290,7 @@ function fn_ddl_regre_popup(){
 		var winPop = window.open(popUrl,"ddlRegRePop",popOption);
 		winPop.focus();
 	} else {
-		alert("<spring:message code='message.msg04' />");
+		showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 }
@@ -337,7 +327,7 @@ function fn_data_regre_popup(){
 		var winPop = window.open(popUrl,"dataRegRePop",popOption);
 		winPop.focus();
 	} else {
-		alert("<spring:message code='message.msg04' />");
+		showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 }
@@ -348,7 +338,7 @@ function fn_data_regre_popup(){
 function fn_ddl_work_delete(){
 	var datas = tableDDL.rows('.selected').data();
 	if(datas.length < 1){
-		alert("<spring:message code='message.msg16' />");
+		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
 		var wrkList = [];
@@ -377,21 +367,19 @@ function fn_ddl_work_delete(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {
 					if(result.resultCode == "0000000000"){
-						alert("<spring:message code='message.msg37' />");
+						showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
 						getddlDataList();
 					}else{
-						alert('<spring:message code="migration.msg09"/>');
+						showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
 					}	
 				}
 			});	
@@ -405,7 +393,7 @@ function fn_ddl_work_delete(){
  function fn_data_work_delete(){
 	 var datas = tableData.rows('.selected').data();
 		if(datas.length < 1){
-			alert("<spring:message code='message.msg16' />");
+			showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
 			var wrkList = [];
@@ -434,21 +422,19 @@ function fn_ddl_work_delete(){
 				     },
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
-							alert('<spring:message code="message.msg02" />');
-							top.location.href = "/";
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 						} else if(xhr.status == 403) {
-							alert('<spring:message code="message.msg03" />');
-							top.location.href = "/";
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 						} else {
-							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 						}
 					},
 					success : function(result) {
 						if(result.resultCode == "0000000000"){
-							alert("<spring:message code='message.msg37' />");
+							showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
 							getdataDataList();	
 						}else{
-							alert('<spring:message code="migration.msg09"/>');
+							showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
 						}	
 					}
 				});	
@@ -463,11 +449,15 @@ function fn_copy(){
 	var ddlRowCnt = tableDDL.rows('.selected').data().length;
 	var dataRowCnt = tableData.rows('.selected').data().length;
 	if(ddlRowCnt==1){
-		toggleLayer($('#pop_layer_copy'), 'on');
+		$("#wrk_nm", "#copyRegForm").val("");
+		$("#wrk_exp", "#copyRegForm").val("");
+		$('#pop_layer_copy').modal("show");
 	}else if(dataRowCnt==1){
-		toggleLayer($('#pop_layer_copy'), 'on');
+		$("#wrk_nm", "#copyRegForm").val("");
+		$("#wrk_exp", "#copyRegForm").val("");
+		$('#pop_layer_copy').modal("show");
 	}else{
-		alert('<spring:message code="migration.msg10"/>');
+		showSwalIcon('<spring:message code="migration.msg10" />', '<spring:message code="common.close" />', '', 'error');
 	}
 }
 
@@ -477,7 +467,7 @@ function fn_copy(){
 function fn_check() {
 	var wrk_nm = document.getElementById("wrk_nm");
 	if (wrk_nm.value == "") {
-		alert('<spring:message code="message.msg107" />');
+		showSwalIcon('<spring:message code="message.msg107" />', '<spring:message code="common.close" />', '', 'error');
 		document.getElementById('wrk_nm').focus();
 		return;
 	}
@@ -489,11 +479,11 @@ function fn_check() {
 		},
 		success : function(result) {
 			if (result == "true") {
-				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
+				showSwalIcon('<spring:message code="backup_management.reg_possible_work_nm"/>', '<spring:message code="common.close" />', '', 'success');
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";		
 			} else {
-				alert('<spring:message code="backup_management.effective_work_nm"/>');
+				showSwalIcon('<spring:message code="backup_management.effective_work_nm" />', '<spring:message code="common.close" />', '', 'error');
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "fail";	
 			}
@@ -503,13 +493,11 @@ function fn_check() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	});
@@ -520,14 +508,14 @@ function fn_check() {
  ******************************************************** */
 function fn_copy_save(){
 	if($("#wrk_nm").val() == ""){
-		alert('<spring:message code="message.msg107" />');
+		showSwalIcon('<spring:message code="message.msg107" />', '<spring:message code="common.close" />', '', 'error');
 		$("#wrk_nm").focus();
 		return false;
 	}else if(wrk_nmChk =="fail"){
-		alert('<spring:message code="backup_management.work_overlap_check"/>');
+		showSwalIcon('<spring:message code="backup_management.work_overlap_check" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else if($("#db2pg_ddl_wrk_exp").val() == ""){
-		alert('<spring:message code="message.msg108" />');
+		showSwalIcon('<spring:message code="message.msg108" />', '<spring:message code="common.close" />', '', 'error');
 		$("#db2pg_ddl_wrk_exp").focus();
 		return false;
 	}else{
@@ -547,13 +535,11 @@ function fn_copy_save(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {
@@ -561,10 +547,10 @@ function fn_copy_save(){
 						$("#wrk_nm").val("");
 						$("#wrk_exp").val("");
 						alert('<spring:message code="message.msg07" /> ');
-						toggleLayer($('#pop_layer_copy'), 'off');
+						$('#pop_layer_copy').modal("hide");
 						getddlDataList();
 					}else{
-						alert('<spring:message code="migration.msg06"/>');
+						showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 					}	
 				}
 			});	
@@ -585,13 +571,11 @@ function fn_copy_save(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {
@@ -599,10 +583,10 @@ function fn_copy_save(){
 						$("#wrk_nm").val("");
 						$("#wrk_exp").val("");
 						alert('<spring:message code="message.msg07" /> ');
-						toggleLayer($('#pop_layer_copy'), 'off');
+						$('#pop_layer_copy').modal("hide");
 						getdataDataList();
 					}else{
-						alert('<spring:message code="migration.msg06"/>');
+						showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 					}	
 				}
 			});
@@ -644,13 +628,11 @@ function fn_ImmediateStart(gbn){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {
@@ -660,7 +642,7 @@ function fn_ImmediateStart(gbn){
 				}
 			});			
 		}else {
-			alert("<spring:message code='message.msg35' />");
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}	
 	}else{		
@@ -698,13 +680,11 @@ function fn_ImmediateStart(gbn){
 				     },
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
-							alert('<spring:message code="message.msg02" />');
-							top.location.href = "/";
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 						} else if(xhr.status == 403) {
-							alert('<spring:message code="message.msg03" />');
-							top.location.href = "/";
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 						} else {
-							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 						}
 					},
 					success : function(result) {
@@ -721,8 +701,8 @@ function fn_ImmediateStart(gbn){
 }
 
 </script>
-<%-- <%@include file="../popup/db2pgConfigInfo.jsp"%> --%>
-<%-- <%@include file="../popup/db2pgDDLResult.jsp"%> --%>
+<%@include file="../popup/db2pgConfigInfo.jsp"%>
+<%@include file="../popup/ddlRegForm.jsp"%>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -774,12 +754,12 @@ function fn_ImmediateStart(gbn){
 				<div class="card-body">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('ddlWork');" >
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectTab('ddlWork');" >
 								DDL
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('dataWork');">
+							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="javascript:selectTab('dataWork');">
 								MIGRATION
 							</a>
 						</li>
@@ -788,8 +768,7 @@ function fn_ImmediateStart(gbn){
 					<!-- search param start -->
 					<div class="card">
 						<div class="card-body" style="margin:-10px 0px -15px 0px;">
-
-							<form class="form-inline" id="findSearch">
+							<form class="form-inline" id="searchDDL">
 								<div class="row">
 									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
 										<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
@@ -817,6 +796,41 @@ function fn_ImmediateStart(gbn){
 									</button>
 								</div>
 							</form>
+							
+							<form class="form-inline" id="searchData" style="display:none;">
+								<div class="row">
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
+										<input type="text" class="form-control" style="width:200px;" maxlength="25" id="data_wrk_nm" name="data_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
+									</div>
+									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
+										<select class="form-control" style="width:200px;"name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
+											<option value="source_system"><spring:message code="migration.source_system"/></option>	
+											<option value="target_system"><spring:message code="migration.target_system"/></option>
+										</select>
+									</div>
+									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
+										<select class="form-control" style="width:200px;" name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
+											<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
+											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
+ 												<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
+ 											</c:forEach>
+										</select>
+									</div>
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:200px;" id="data_ipadr" name="data_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
+									</div>
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:200px;" id="data_dtb_nm" name="data_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
+									</div>
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:200px;" id="data_scm_nm" name="data_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
+									</div>
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -828,18 +842,41 @@ function fn_ImmediateStart(gbn){
 				<div class="card-body">
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
-							<div class="template-demo">					
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete">
+							<div class="template-demo" id="btnDDL">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateStart('ddl')" data-toggle="modal">
+									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately"/>
+								</button>
+								
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_copy()" id="btnImmediately">
+									<i class="ti-layers btn-icon-prepend "></i><spring:message code="migration.create_replica" />
+								</button>				
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onclick="fn_ddl_work_delete()">
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onclick="fn_ddl_regre_popup()" data-toggle="modal">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onclick="fn_ddl_reg_popup()" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnImmediately">
-									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
+							</div>
+							
+							<div class="template-demo" id="btnData" style="display:none;">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateStart('trans')" data-toggle="modal">
+									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately"/>
+								</button>
+								
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_copy()" id="btnImmediately">
+									<i class="ti-layers btn-icon-prepend "></i><spring:message code="migration.create_replica" />
+								</button>				
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onclick="fn_data_work_delete()">
+									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onclick="fn_ddl_regre_popup()" data-toggle="modal">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onclick="fn_data_reg_popup()" data-toggle="modal">
+									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
 								</button>
 							</div>
 						</div>
@@ -939,6 +976,58 @@ function fn_ImmediateStart(gbn){
 			<div class="card" style="background-color: transparent !important;border:0px;top:30%;position: inline-block;">
 				<div class="card-body" style="" onclick="fn_schedule_leftListSize();">	
 					<i class='fa fa-angle-double-right text-info' style="font-size: 35px;cursor:pointer;"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<!-- 복제 등록  -->
+<div class="modal fade" id="pop_layer_copy" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 200px 300px;">
+		<div class="modal-content" style="width:1000px; ">		 	 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="migration.create_replica"/>
+				</h4>
+				<div class="card system-tlb-scroll" style="margin-top:10px;border:0px;height:250px;overflow-y:auto;">
+					<form class="cmxform" id="copyRegForm">
+						<fieldset>
+							<div class="card-body" style="border: 1px solid #adb5bd;">
+								<div class="form-group row div-form-margin-z">
+									<label for="ins_wrk_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="common.work_name" />
+									</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control form-control-sm" maxlength="20" id="wrk_nm" name="wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()"/>
+									</div>
+									<div class="col-sm-2">
+										<button type="button" class="btn btn-inverse-danger btn-fw" style="width: 115px;" onclick="fn_check()"><spring:message code="common.overlap_check" /></button>
+									</div>
+								</div>
+								<div class="form-group row div-form-margin-z">
+									<label for="ins_wrk_exp" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="common.work_description" />
+									</label>
+									<div class="col-sm-10">
+										<textarea class="form-control" id="wrk_exp" name="wrk_exp" rows="2" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>" required tabindex=2></textarea>
+									</div>
+								</div>
+							</div>
+							
+							<div class="card-body">
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px; -20px;" >
+									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="button"  onclick="fn_copy_save()" value='<spring:message code="common.registory" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
+								</div>
+							</div>
+						</fieldset>
+					</form>
 				</div>
 			</div>
 		</div>
