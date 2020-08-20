@@ -28,10 +28,10 @@
 		<tiles:insertAttribute name="topMenu" />
 		
 		<!-- container -->
-		<div class="container-fluid page-body-wrapper">
+		<div class="container-fluid page-body-wrapper"  style="overflow:hidden;">
 			<tiles:insertAttribute name="treeMenu" />
 			
- 			<div class="main-panel" style="float:left;">
+  			<div class="main-panel" style="float:left;">
  				<tiles:insertAttribute name="contents" />
 			</div>
 

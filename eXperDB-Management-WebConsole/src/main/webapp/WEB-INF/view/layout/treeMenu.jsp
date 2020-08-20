@@ -442,7 +442,7 @@
 </div>
 
 <!-- partial -->
-<nav class="sidebar sidebar-offcanvas" id="sidebar" style="max-height: calc(100vh - 0px);position:relative;">
+<nav class="sidebar sidebar-offcanvas" id="sidebar" style="max-height: calc(100vh - 0px);">
 	<ul class="nav" style="">
 <!-- 		<li class="nav-item">
 			<a class="nav-link" href="/db2pgSetting2.do" target="main">

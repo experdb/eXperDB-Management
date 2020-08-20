@@ -84,14 +84,15 @@
       	  body.toggleClass('sidebar-icon-only');
 
 	      	if($("#lft_tree").hasClass("left_scroll") === true) {
-	      		$("#lft_tree").attr('class', 'nav');
+	      		$("#lft_tree").toggleClass('left_scroll');
 	      		
 	      		$("#lft_tree").removeAttr("style");
 	      		$("#lft_tree").css("margin-top","-60px");
 	      		$("#lft_tree").css("max-height","calc(100vh - 180px)");
 	      		$("#lft_tree").css("line-height","0");
 	      	} else {
-	      		$("#lft_tree").attr('class', 'nav left_scroll');
+	      		$("#lft_tree").toggleClass('left_scroll');
+	      		
 	      		$("#lft_tree").css("min-height","calc(100vh - 180px)");
 
 	      		$("#lft_tree").css("overflow-y","auto");

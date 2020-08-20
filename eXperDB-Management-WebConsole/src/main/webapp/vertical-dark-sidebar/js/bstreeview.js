@@ -185,8 +185,6 @@
 	                    parentElement.append(treeviewNew);
 	                    _this.build(treeGroup, node.nodes, depth);
 	                }
-	                
-	                console.log(parentElement.html());
 	               // jQuery("a[aria-controls='" + _this.itemIdPrefix + "0" + "']").click();
 
 	                iCnt = iCnt + 1;
