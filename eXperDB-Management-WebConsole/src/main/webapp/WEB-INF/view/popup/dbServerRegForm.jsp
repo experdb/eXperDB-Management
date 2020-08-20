@@ -52,20 +52,14 @@ function fn_init2() {
     $(window).trigger('resize'); 
 }
 
-/* ********************************************************
- * 페이지 시작시(서버 조회)
- ******************************************************** */
-$(window.document).ready(function() {
-	fn_init2();
-});
 
 $(function() {		
 	/* ********************************************************
 	 * 서버 테이블 (선택영역 표시)
 	 ******************************************************** */
     $('#serverIpadr tbody').on( 'click', 'tr', function () {
-    	var check = dbServerTable.row( this ).index()+1
-    	$(":radio[name=input:radio][value="+check+"]").prop("checked", true);
+//     	var check = dbServerTable.row( this ).index()+1
+//     	$(":radio[name=input:radio][value="+check+"]").prop("checked", true);
          if ( $(this).hasClass('selected') ) {
         }
         else {    	

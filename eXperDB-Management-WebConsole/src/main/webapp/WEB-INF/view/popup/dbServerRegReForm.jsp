@@ -27,6 +27,7 @@ var dbServerRegTable = null;
 var pgdataCheck ="fail"; */
 // var db_svr_id = ${db_svr_id};
 
+
 function fn_init3() {
 	
 	/* ********************************************************
@@ -133,8 +134,8 @@ $(function() {
 	 * 서버 테이블 (선택영역 표시)
 	 ******************************************************** */
     $('#serverIpadrReg tbody').on( 'click', 'tr', function () {
-    	var check = dbServerRegTable.row( this ).index()+1
-    	$(":radio[name=input:radio][value="+check+"]").prop("checked", true);
+//     	var check = dbServerRegTable.row( this ).index()+1
+//     	$(":radio[name=input:radio][value="+check+"]").prop("checked", true);
          if ( $(this).hasClass('selected') ) {
         }
         else {    	
