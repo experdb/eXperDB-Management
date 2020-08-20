@@ -377,392 +377,385 @@
 		<a class="navbar-brand brand-logo-mini" href="/experdb.do" onClick="fn_cookie(null);"><img src="/images/logo_new.png" alt="eXperDB" /></a>
 	</div>
 
-	<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-		<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-			<span class="ti-layout-grid2"></span>
-		</button>
+	<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end row">
+		<div class="col-1">
+			<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+				<span class="ti-layout-grid2"></span>
+			</button>
+		</div>
 
-		<ul class="navbar-nav mr-lg-2">
-			<li class="nav-item nav-search d-none d-lg-block">
-				<div class="input-group">
-					<div class="horizontal-menu">
-						<nav class="bottom-navbar">
-							<div class="container">
-								<ul class="nav page-navigation nav-justified">
+		<div class="col-8">
+			<div class="horizontal-menu">
+				<nav class="bottom-navbar">
+					<div class="container">
+						<ul class="nav page-navigation nav-justified">
 
-									<!-- SCHEDULE -->
-									<li class="nav-item width-div-a" id="scheduleMenu" style="margin-top:7px;">
- 										<a href="#" class="nav-link">
-											<i class="ti-calendar menu-icon"></i>
-											<span class="menu-title">SCHEDULE</span>
-											<i class="menu-arrow"></i>
-										</a>
-										<div class="submenu" id="MN0001">
+							<!-- SCHEDULE -->
+							<li class="nav-item width-div-a" id="scheduleMenu" >
+ 								<a href="#" class="nav-link">
+									<i class="ti-calendar menu-icon"></i>
+									<span class="menu-title">SCHEDULE</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu" id="MN0001">
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.schedule_information" /></b>
+											</span>
+										</li>
+										<li class="nav-item" id="MN000101">
+											<a class="nav-link" href="/insertScheduleView.do" onClick="fn_cookie('insertScheduleView')" target="main">
+												<spring:message code="menu.schedule_registration" />
+											</a>
+										</li>
+										<li class="nav-item" id="MN000102">
+											<a class="nav-link" href="/selectScheduleListView.do" onClick="fn_cookie('selectScheduleListView')" target="main">
+												<spring:message code="etc.etc27"/>
+											</a>
+										</li>
+										<li class="nav-item" id="MN000103" >
+											<a class="nav-link" href="/selectScheduleHistoryView.do" onClick="fn_cookie('selectScheduleHistoryView')" target="main">
+												<spring:message code="menu.shedule_execution_history" />
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+									
+							<!-- DATA TRANSFER -->
+<%-- 						<li class="nav-item width-div-a" id="trnasferMenu" >
+								<a href="#" class="nav-link">
+									<i class="ti-layers-alt menu-icon"></i>
+									<span class="menu-title">DATA TRANSFER</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu" id="MN0002">
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.data_transfer_information" /></b>
+											</span>
+										</li>
+										<li class="nav-item" id="MN000201">
+											<a class="nav-link" href="/transferSetting.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.transfer_server_settings" />
+											</a>
+										</li>
+										<li class="nav-item" id="MN000202">
+											<a class="nav-link" href="/connectorRegister.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.connector_management" />
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+--%>
+							<!-- ADMIN -->
+							<li class="nav-item mega-menu width-div-a" id="adminMenu">
+								<a href="#" class="nav-link">
+									<i class="ti-desktop menu-icon"></i>
+									<span class="menu-title">ADMIN</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu">
+									<div class="col-group-wrapper row" >
+										<div class="col-group col-md-3" id="MN0003_DIV">
+											<p class="category-heading" id="MN0003">
+												<b><spring:message code="menu.dbms_information" /></b>
+											</p>
 											<ul class="submenu-item">
-												<li class="nav-item">
-													<span class="nav-heading-title">
-														<b><spring:message code="menu.schedule_information" /></b>
-													</span>
-												</li>
-												<li class="nav-item" id="MN000101">
-													<a class="nav-link" href="/insertScheduleView.do" onClick="fn_cookie('insertScheduleView')" target="main">
-														<spring:message code="menu.schedule_registration" />
+												<li class="nav-item" id="MN000301" >
+													<a class="nav-link" href="/dbTree.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.dbms_registration" />
 													</a>
 												</li>
-												<li class="nav-item" id="MN000102">
-													<a class="nav-link" href="/selectScheduleListView.do" onClick="fn_cookie('selectScheduleListView')" target="main">
-														<spring:message code="etc.etc27"/>
+												<li class="nav-item" id="MN000302">
+													<a class="nav-link" href="/dbServer.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.dbms_management" />
 													</a>
 												</li>
-												<li class="nav-item" id="MN000103" >
-													<a class="nav-link" href="/selectScheduleHistoryView.do" onClick="fn_cookie('selectScheduleHistoryView')" target="main">
-														<spring:message code="menu.shedule_execution_history" />
+												<li class="nav-item" id="MN000303">
+													<a class="nav-link" href="/database.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.database_management" />
 													</a>
 												</li>
 											</ul>
 										</div>
-									</li>
-									
-									<!-- DATA TRANSFER -->
-<%-- 									<li class="nav-item width-div-a" id="trnasferMenu" >
-										<a href="#" class="nav-link">
-											<i class="ti-layers-alt menu-icon"></i>
-											<span class="menu-title">DATA TRANSFER</span>
-											<i class="menu-arrow"></i>
-										</a>
-										<div class="submenu" id="MN0002">
+												
+										<div class="col-group col-md-3" id="MN0004_DIV">
+											<p class="category-heading">
+												<b><spring:message code="menu.user_management" /></b>
+											</p>
 											<ul class="submenu-item">
-												<li class="nav-item">
-													<span class="nav-heading-title">
-														<b><spring:message code="menu.data_transfer_information" /></b>
-													</span>
-												</li>
-												<li class="nav-item" id="MN000201">
-													<a class="nav-link" href="/transferSetting.do" onClick="fn_cookie(null)" target="main">
-														<spring:message code="menu.transfer_server_settings" />
+												<li class="nav-item" id="MN0004">
+													<a class="nav-link" href="/userManager.do"  onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.user_management" />
 													</a>
 												</li>
-												<li class="nav-item" id="MN000202">
-													<a class="nav-link" href="/connectorRegister.do" onClick="fn_cookie(null)" target="main">
-														<spring:message code="menu.connector_management" />
+											</ul>
+										</div>	
+												
+										<div class="col-group col-md-3" id="MN0005_DIV">
+											<p class="category-heading" id="MN0005">
+												<b><spring:message code="menu.auth_management" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN000501">
+													<a class="nav-link" href="/menuAuthority.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.menu_auth_management" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN000502">
+													<a class="nav-link" href="/dbServerAuthority.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.server_auth_management" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN000503" >
+													<a class="nav-link" href="/dbAuthority.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.database_auth_management" />
 													</a>
 												</li>
 											</ul>
 										</div>
-									</li>
-									 --%>
-									
-									<!-- ADMIN -->
-									<li class="nav-item mega-menu width-div-a" id="adminMenu" style="margin-top:7px;">
-										<a href="#" class="nav-link">
-											<i class="ti-desktop menu-icon"></i>
-											<span class="menu-title">ADMIN</span>
-											<i class="menu-arrow"></i>
-										</a>
-										<div class="submenu" style="margin-top:7px;">
-											<div class="col-group-wrapper row" >
-												<div class="col-group col-md-3" id="MN0003_DIV">
-													<p class="category-heading" id="MN0003">
-														<b><spring:message code="menu.dbms_information" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN000301" >
-															<a class="nav-link" href="/dbTree.do" onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.dbms_registration" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN000302">
-															<a class="nav-link" href="/dbServer.do" onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.dbms_management" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN000303">
-															<a class="nav-link" href="/database.do" onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.database_management" />
-															</a>
-														</li>
-													</ul>
-												</div>
 												
-												<div class="col-group col-md-3" id="MN0004_DIV">
-													<p class="category-heading">
-														<b><spring:message code="menu.user_management" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN0004">
-															<a class="nav-link" href="/userManager.do"  onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.user_management" />
-															</a>
-														</li>
-													</ul>
-												</div>	
-												
-												<div class="col-group col-md-3" id="MN0005_DIV">
-													<p class="category-heading" id="MN0005">
-														<b><spring:message code="menu.auth_management" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN000501">
-															<a class="nav-link" href="/menuAuthority.do" onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.menu_auth_management" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN000502">
-															<a class="nav-link" href="/dbServerAuthority.do" onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.server_auth_management" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN000503" >
-															<a class="nav-link" href="/dbAuthority.do" onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.database_auth_management" />
-															</a>
-														</li>
-													</ul>
-												</div>
-												
-												<div class="col-group col-md-3" id="MN0006_DIV">
-													<p class="category-heading" id="MN0006">
-														<b><spring:message code="menu.history_management" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN000601">
-															<a class="nav-link" href="/accessHistory.do"  onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.screen_access_history" />
-															</a>
-														</li>
-													</ul>
-												</div>
+										<div class="col-group col-md-3" id="MN0006_DIV">
+											<p class="category-heading" id="MN0006">
+												<b><spring:message code="menu.history_management" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN000601">
+													<a class="nav-link" href="/accessHistory.do"  onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.screen_access_history" />
+													</a>
+												</li>
+											</ul>
+										</div>
 	
-												<div class="col-group col-md-3" id="MN0007">
-													<p class="category-heading">
-														<b><spring:message code="menu.agent_monitoring" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN000701">
-															<a class="nav-link" href="/agentMonitoring.do" onClick="fn_cookie(null)" target="main">
-																<spring:message code="agent_monitoring.Management_agent" />
-															</a>
-														</li>
-														<li class="nav-item" id="encryptAgentMenu" id="MN000702">
-															<a class="nav-link" href="/encryptAgentMonitoring.do" id="MN000702" onClick="fn_cookie(null)" target="main">
-																<spring:message code="agent_monitoring.Encrypt_agent" />
-															</a>
-														</li>
-													</ul>
-												</div>
-												
-												<div class="col-group col-md-3" id="MN0008_DIV">
-													<p class="category-heading">
-														<b><spring:message code="menu.extension_pack_installation_information" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN0008">
-															<a class="nav-link" href="/extensionList.do"  onClick="fn_cookie(null)" target="main">
-																<spring:message code="menu.extension_pack_installation_information" />
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</li>
-
-									
-									<!-- ENCRYPT -->
-									<li class="nav-item mega-menu width-div-a" id="encryptMenu" style="margin-top:7px;">	
-										<a href="#" class="nav-link">
-											<i class="ti-lock menu-icon"></i>
-											<span class="menu-title">ENCRYPT</span>
-											<i class="menu-arrow"></i>
-										</a>
-										<div class="submenu" style="margin-top:7px;">
-											<div class="col-group-wrapper row">
-												<div class="col-group col-md-3" id="MN00011">
-													<p class="category-heading">
-														<b><spring:message code="encrypt_policy_management.Policy_Key_Management" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN0001101">
-															<a class="nav-link" href="/securityPolicy.do" onClick="fn_cookie('securityPolicy')" target="main">
-																<spring:message code="encrypt_policy_management.Security_Policy_Management" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN0001102">
-															<a class="nav-link" href="/keyManage.do" onClick="fn_cookie('keyManage')" target="main">
-																<spring:message code="encrypt_key_management.Encryption_Key_Management" />
-															</a>
-														</li>
-													</ul>
-												</div>
-												<div class="col-group col-md-3" id="MN00012" >
-													<p class="category-heading">
-														<b><spring:message code="encrypt_log.Audit_Log" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN0001201">
-															<a class="nav-link" href="/encodeDecodeAuditLog.do"onClick="fn_cookie('encodeDecodeAuditLog')" target="main">
-																<spring:message code="encrypt_log_decode.Encryption_Decryption" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN0001202">
-															<a class="nav-link" href="/managementServerAuditLog.do" onClick="fn_cookie('managementServerAuditLog')" target="main">
-																<spring:message code="encrypt_log_sever.Management_Server" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN0001203">
-															<a class="nav-link" href="/encodeDecodeKeyAuditLog.do" onClick="fn_cookie('encodeDecodeKeyAuditLog')" target="main">
-																<spring:message code="encrypt_policy_management.Encryption_Key" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN0001204">
-															<a class="nav-link" href="/resourcesUseAuditLog.do" onClick="fn_cookie('resourcesUseAuditLog')" target="main">
-																자원사용
-															</a>
-														</li>
-													</ul>
-												</div>
-												<div class="col-group col-md-3" id="MN00013">
-													<p class="category-heading">
-														<b><spring:message code="encrypt_policyOption.Settings" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN0001301">
-															<a class="nav-link" href="/securityPolicyOptionSet.do" onClick="fn_cookie('securityPolicyOptionSet')" target="main">
-																<spring:message code="encrypt_policyOption.Security_Policy_Option_Setting" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN0001302">
-															<a class="nav-link" href="/securitySet.do" onClick="fn_cookie('securitySet')" target="main">
-																<spring:message code="encrypt_encryptSet.Encryption_Settings" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN0001303">
-															<a class="nav-link" href="/securityKeySet.do" onClick="fn_cookie('securityKeySet')" target="main">
-																<spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password" />
-															</a>
-														</li>
-														<li class="nav-item" id="MN0001304" >
-															<a class="nav-link" href="/securityAgentMonitoring.do" onClick="fn_cookie('securityAgentMonitoring')" target="main">
-																<spring:message code="encrypt_agent.Encryption_agent_setting"/>
-															</a>
-														</li>
-													</ul>
-												</div>
-												<div class="col-group col-md-3" id="MN00014">
-													<p class="category-heading">
-														<b><spring:message code="encrypt_Statistics.Statistics" /></b>
-													</p>
-													<ul class="submenu-item">
-														<li class="nav-item" id="MN0001401">
-															<a class="nav-link" href="/securityStatistics.do" onClick="fn_cookie('securityStatistics')" target="main">
-																<spring:message code="encrypt_Statistics.Encrypt_Statistics" />
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</li>
-
-									
-									<!-- MIGRATION -->
-									<li class="nav-item width-div-a"  id="migrationMenu" style="margin-top:7px;">
-										<a href="#" class="nav-link">
-											<i class="ti-server menu-icon"></i>
-											<span class="menu-title">MIGRATION</span>
-											<i class="menu-arrow"></i>
-										</a>
-										<div class="submenu">											
+										<div class="col-group col-md-3" id="MN0007">
+											<p class="category-heading">
+												<b><spring:message code="menu.agent_monitoring" /></b>
+											</p>
 											<ul class="submenu-item">
-												<li class="nav-item">
-													<span class="nav-heading-title">
-														<b><spring:message code="menu.data_migration" /></b>
-													</span>
-												</li>
-												<li class="nav-item" id="MN00015">
-													<a class="nav-link" href="/db2pgDBMS.do" onClick="fn_cookie(null)" target="main">
-														<spring:message code="migration.source/target_dbms_management"/>
+												<li class="nav-item" id="MN000701">
+													<a class="nav-link" href="/agentMonitoring.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="agent_monitoring.Management_agent" />
 													</a>
 												</li>
-												<li class="nav-item" id="MN00016">
-													<a class="nav-link" href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">
-														<spring:message code="migration.setting_information_management" />
-													</a>
-												</li>
-												<li class="nav-item" id="MN00017">
-													<a class="nav-link" href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">
-														<spring:message code="migration.performance_history" />
+												<li class="nav-item" id="encryptAgentMenu" id="MN000702">
+													<a class="nav-link" href="/encryptAgentMonitoring.do" id="MN000702" onClick="fn_cookie(null)" target="main">
+														<spring:message code="agent_monitoring.Encrypt_agent" />
 													</a>
 												</li>
 											</ul>
 										</div>
-									</li>
-									
- 									
-									<li class="nav-item width-div-a"  id="myPageMenu" style="margin-top:7px;">
-										<a href="#" class="nav-link">
-											<i class="ti-user menu-icon"></i>
-											<span class="menu-title">MY PAGE</span>
-											<i class="menu-arrow"></i>
-										</a>
-										<div class="submenu">											
+												
+										<div class="col-group col-md-3" id="MN0008_DIV">
+											<p class="category-heading">
+												<b><spring:message code="menu.extension_pack_installation_information" /></b>
+											</p>
 											<ul class="submenu-item">
-												<li class="nav-item">
-													<span class="nav-heading-title">
-														<b>Language</b>
-													</span>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="#n" onClick="fn_localeSet('ko')">
-														Korean
-													</a>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="#n"  onClick="fn_localeSet('en')">
-														English
-													</a>
-												</li>
-												
-												<li class="nav-item">
-													<span class="nav-heading-title">
-														<b><spring:message code="menu.user_information_management"/></b>
-													</span>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="/myPage.do" onClick="fn_cookie(null)" target="main">
-														<spring:message code="menu.user_information_management"/>
-													</a>
-												</li>
-												
-												<li class="nav-item">
-													<span class="nav-heading-title">
-														<b><spring:message code="menu.my_schedule_management"/></b>
-													</span>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="/myScheduleListView.do" onClick="fn_cookie(null)" target="main">
-														<spring:message code="menu.my_schedule_management"/>
+												<li class="nav-item" id="MN0008">
+													<a class="nav-link" href="/extensionList.do"  onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.extension_pack_installation_information" />
 													</a>
 												</li>
 											</ul>
 										</div>
-									</li>
+									</div>
+								</div>
+							</li>
 
-									<li class="nav-item" id="li_blnck" style="width:0px">
-										&nbsp;
-									</li>
+							<!-- ENCRYPT -->
+							<li class="nav-item mega-menu width-div-a" id="encryptMenu">	
+								<a href="#" class="nav-link">
+									<i class="ti-lock menu-icon"></i>
+									<span class="menu-title">ENCRYPT</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu">
+									<div class="col-group-wrapper row">
+										<div class="col-group col-md-3" id="MN00011">
+											<p class="category-heading">
+												<b><spring:message code="encrypt_policy_management.Policy_Key_Management" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0001101">
+													<a class="nav-link" href="/securityPolicy.do" onClick="fn_cookie('securityPolicy')" target="main">
+														<spring:message code="encrypt_policy_management.Security_Policy_Management" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001102">
+													<a class="nav-link" href="/keyManage.do" onClick="fn_cookie('keyManage')" target="main">
+														<spring:message code="encrypt_key_management.Encryption_Key_Management" />
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="col-group col-md-3" id="MN00012" >
+											<p class="category-heading">
+												<b><spring:message code="encrypt_log.Audit_Log" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0001201">
+													<a class="nav-link" href="/encodeDecodeAuditLog.do"onClick="fn_cookie('encodeDecodeAuditLog')" target="main">
+														<spring:message code="encrypt_log_decode.Encryption_Decryption" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001202">
+													<a class="nav-link" href="/managementServerAuditLog.do" onClick="fn_cookie('managementServerAuditLog')" target="main">
+														<spring:message code="encrypt_log_sever.Management_Server" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001203">
+													<a class="nav-link" href="/encodeDecodeKeyAuditLog.do" onClick="fn_cookie('encodeDecodeKeyAuditLog')" target="main">
+														<spring:message code="encrypt_policy_management.Encryption_Key" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001204">
+													<a class="nav-link" href="/resourcesUseAuditLog.do" onClick="fn_cookie('resourcesUseAuditLog')" target="main">
+														자원사용
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="col-group col-md-3" id="MN00013">
+											<p class="category-heading">
+												<b><spring:message code="encrypt_policyOption.Settings" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0001301">
+													<a class="nav-link" href="/securityPolicyOptionSet.do" onClick="fn_cookie('securityPolicyOptionSet')" target="main">
+														<spring:message code="encrypt_policyOption.Security_Policy_Option_Setting" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001302">
+													<a class="nav-link" href="/securitySet.do" onClick="fn_cookie('securitySet')" target="main">
+														<spring:message code="encrypt_encryptSet.Encryption_Settings" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001303">
+													<a class="nav-link" href="/securityKeySet.do" onClick="fn_cookie('securityKeySet')" target="main">
+														<spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001304" >
+													<a class="nav-link" href="/securityAgentMonitoring.do" onClick="fn_cookie('securityAgentMonitoring')" target="main">
+														<spring:message code="encrypt_agent.Encryption_agent_setting"/>
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="col-group col-md-3" id="MN00014">
+											<p class="category-heading">
+												<b><spring:message code="encrypt_Statistics.Statistics" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0001401">
+													<a class="nav-link" href="/securityStatistics.do" onClick="fn_cookie('securityStatistics')" target="main">
+														<spring:message code="encrypt_Statistics.Encrypt_Statistics" />
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</li>
 
-								</ul>
-							</div>
-						</nav>
+							<!-- MIGRATION -->
+							<li class="nav-item width-div-a"  id="migrationMenu">
+								<a href="#" class="nav-link">
+									<i class="ti-server menu-icon"></i>
+									<span class="menu-title">MIGRATION</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu">
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.data_migration" /></b>
+											</span>
+										</li>
+										<li class="nav-item" id="MN00015">
+											<a class="nav-link" href="/db2pgDBMS.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="migration.source/target_dbms_management"/>
+											</a>
+										</li>
+										<li class="nav-item" id="MN00016">
+											<a class="nav-link" href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="migration.setting_information_management" />
+											</a>
+										</li>
+										<li class="nav-item" id="MN00017">
+											<a class="nav-link" href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="migration.performance_history" />
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+
+							<li class="nav-item width-div-a"  id="myPageMenu">
+								<a href="#" class="nav-link">
+									<i class="ti-user menu-icon"></i>
+									<span class="menu-title">MY PAGE</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu">											
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b>Language</b>
+											</span>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#n" onClick="fn_localeSet('ko')">
+												Korean
+											</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#n"  onClick="fn_localeSet('en')">
+												English
+											</a>
+										</li>
+										
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.user_information_management"/></b>
+											</span>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="/myPage.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.user_information_management"/>
+											</a>
+										</li>
+										
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.my_schedule_management"/></b>
+											</span>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="/myScheduleListView.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.my_schedule_management"/>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							
+							<li class="nav-item" id="li_blnck" style="width:0px">
+								&nbsp;
+							</li>
+						</ul>
 					</div>
-				</div>
-			</li>
-		</ul>
+				</nav>
+			</div>
+		</div>
 
-		<ul class="navbar-nav mr-lg-2 navbar-nav-right">
-			<li class="nav-item nav-search d-none d-lg-block">
-				<div class="input-group">
+		<div class="col-3">
+        	<ul class="navbar-nav navbar-nav-right">
+				<li class="nav-item dropdown mr-1">
 					<div class="horizontal-menu">
 						<nav class="bottom-navbar">
 							<div class="container">
@@ -800,33 +793,36 @@
 							</div>
 						</nav>
 					</div>
-				</div>
-			</li>
-			
-			<li class="nav-item nav-profile dropdown">
-				<a class="nav-link dropdown-toggle align-bottom" href="#" data-toggle="dropdown" id="profileDropdown" onclick="fn_profileChk('profileArrowUser');">
-					<img src="/images/icons8-admin-settings-male-100.png" alt="profile"/>
-					<span class="menu-title">${sessionScope.session.usr_nm} <spring:message code="common.login_user"/></span>
-					<i id="profileArrowUser" class="menu-arrow_user"></i>
-				</a>
-				<div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-					<a class="dropdown-item " onClick="fn_profileView('${sessionScope.session.usr_id}')" data-toggle="modal" id="profile_link" >
-						<i class="mdi mdi-face-profile text-primary"></i>
-						<spring:message code="common.profile"/>
-					</a>
-					<a class="dropdown-item" onClick="fn_logout();">
-						<i class="ti-power-off text-primary"></i>
-						<spring:message code="common.logout"/>
-					</a>
-				</div>
-			</li>
-		</ul>
+				</li>
 
-		<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-			<span class="ti-layout-grid2"></span>
-		</button>
-        <button class="horizontal-menu_navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="horizontal-menu-toggle">
-            <span class="ti-menu"></span>
-        </button>
-	</div>
-</nav>
+				<li class="nav-item nav-profile dropdown" style="padding-right:10px;">
+					<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+						<span class="ti-layout-grid2"></span>
+					</button>
+				</li>
+
+				<li class="nav-item nav-profile dropdown">
+					<a class="nav-link dropdown-toggle align-bottom" href="#" data-toggle="dropdown" id="profileDropdown" onclick="fn_profileChk('profileArrowUser');">
+						<img src="/images/icons8-admin-settings-male-100.png" alt="profile"/>
+						<span class="menu-title">${sessionScope.session.usr_nm} <spring:message code="common.login_user"/></span>
+						<i id="profileArrowUser" class="menu-arrow_user"></i>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+						<a class="dropdown-item " onClick="fn_profileView('${sessionScope.session.usr_id}')" data-toggle="modal" id="profile_link" >
+							<i class="mdi mdi-face-profile text-primary"></i>
+							<spring:message code="common.profile"/>
+						</a>
+						<a class="dropdown-item" onClick="fn_logout();">
+							<i class="ti-power-off text-primary"></i>
+							<spring:message code="common.logout"/>
+						</a>
+					</div>
+				</li>
+			</ul>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- partial:partials/_horizontal-navbar.html -->
+    
