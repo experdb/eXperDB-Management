@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.socket.listener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 import org.json.simple.JSONArray;
@@ -388,6 +389,12 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 			
 		} catch(Exception e) {
 			errLogger.error("{} {}", "experDB Socket Execute Error : ", e.toString());
+		}finally{
+			try{
+				client.close();
+			}catch(IOException e){
+				errLogger.error("{} {}", "experDB Socket Close Error : ", e.toString());
+			}
 		}
 		
 	}
