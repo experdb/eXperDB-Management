@@ -80,13 +80,13 @@ function valid_numeric(objValue)
 
 
 function fn_dbServerValidation(){
-	
-	if(dbServerTable.rows().data().length < 1){
-		showSwalIcon('<spring:message code="message.msg184" />', '<spring:message code="common.close" />', '', 'error');
-		return false;
-	}
-	
-	var db_svr_nm = document.getElementById("db_svr_nm");
+	if (dbServerTable != null) {
+		if(dbServerTable.rows().data().length < 1){
+			showSwalIcon('<spring:message code="message.msg184" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}
+		
+		var db_svr_nm = document.getElementById("db_svr_nm");
 		if (db_svr_nm.value == "") {
 			showSwalIcon('<spring:message code="message.msg85" />', '<spring:message code="common.close" />', '', 'error');
 			db_svr_nm.focus();
@@ -110,8 +110,12 @@ function fn_dbServerValidation(){
  			showSwalIcon('<spring:message code="message.msg88" />', '<spring:message code="common.close" />', '', 'error');
   			svr_spr_scm_pwd.focus();
   			return false;
-  		}		
- 		return true;
+  		}
+	} else {
+		showSwalIcon('<spring:message code="dbms_information.msg01" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}
+	return true;
 }
 
 function fn_ipadrValidation(){
@@ -550,7 +554,7 @@ function checkPghome(){
  function checkPgdata(){
 	 var ipadr = null;
 	var portno = null;
-		
+
 		var dataCnt = dbServerTable.column(0).data().length;
 		
 		for(var i=0; i<dataCnt; i++){
@@ -612,7 +616,9 @@ function checkPghome(){
 				}
 			});
 		}
-	}	
+
+}
+
 function fn_ipadrAddForm(){
 	
   	$.ajax({
@@ -727,17 +733,19 @@ function fn_ipadrDelForm(){
 					<div class="card-body">
 						<form class="cmxform" name="dbserverInsert" id="dbserverInsert" method="post">
 							<fieldset>
-								<div class="form-group row border-bottom">
-									<label for="com_db_svr_nm" class="col-sm-3 col-form-label">
+								<div class="form-group row">
+									<label for="com_db_svr_nm" class="col-sm-12 col-form-label" style="margin-bottom:-50px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="dbms_information.dbms_ip" />
 									</label>
-									<div class="col-sm-9">
+								</div>
+								<div class="form-group row border-bottom">
+									<div class="col-sm-12" style="margin-bottom:10px;">
 										<a data-toggle="modal" href="#pop_layer_ip_reg"><span onclick="fn_ipadrAddForm();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span></a>
 										<span onclick="fn_ipadrDelForm();" style="cursor:pointer"><img src="../images/popup/minus.png" alt=""  /></span>
-										<table id="serverIpadr" class="table table-hover table-striped" cellspacing="0" align="left">
+										<table id="serverIpadr" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
-												<tr class="bg-primary text-white">
+												<tr class="bg-info text-white">
 													<th width="10"></th>
 													<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
 													<th width="120"><spring:message code="data_transfer.port" /></th>
@@ -757,7 +765,8 @@ function fn_ipadrDelForm(){
 									</label>
 									<div class="col-sm-4 form-inline">
 										<input type="text" class="form-control" id="db_svr_nm" name="db_svr_nm"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" style="width: 55%;">
-										<button type="button" class= "btn btn-outline-primary form-control" onclick="fn_svrnmCheck()"><i class="ti-check-box  btn-icon-prepend "></i><spring:message code="common.overlap_check" /></button>
+										&nbsp;<button type="button" class= "btn btn-inverse-danger form-control" onclick="fn_svrnmCheck()"><i class="ti-check-box  btn-icon-prepend "></i><spring:message code="common.overlap_check" /></button>
+										
 									</div>
 									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>

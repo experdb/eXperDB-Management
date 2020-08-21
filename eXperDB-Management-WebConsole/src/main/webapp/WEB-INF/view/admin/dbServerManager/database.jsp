@@ -8,14 +8,14 @@
 <%
 	/**
 	* @Class Name : database.jsp
-	* @Description : database 화면
+	* @Description : database íë©´
 	* @Modification Information
 	*
-	*   수정일         수정자                   수정내용
+	*   ìì ì¼         ìì ì                   ìì ë´ì©
 	*  ------------    -----------    ---------------------------
-	*  2017.06.23     최초 생성
+	*  2017.06.23     ìµì´ ìì±
 	*
-	* author 변승우 대리
+	* author ë³ì¹ì° ëë¦¬
 	* since 2017.06.23
 	*
 	*/
@@ -27,10 +27,10 @@ var table = null;
 function fn_init() {
 	
 		/* ********************************************************
-		 * Repository 디비 리스트 (데이터테이블)
+		 * Repository database (데이터테이블)
 		 ******************************************************** */
 		table = $('#repoDBList').DataTable({
-		scrollY : "245px",
+		scrollY : "310px",
 		searching : false,
 		deferRender : true,
 		scrollX: true,
@@ -65,10 +65,7 @@ function fn_init() {
 $(window.document).ready(function() {
 	fn_buttonAut();
 	fn_init();
-	
-	 /* ********************************************************
-	  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
-	  ******************************************************** */
+
 	  	$.ajax({
 			url : "/selectDatabaseSvrList.do",
 			data : {},
@@ -114,11 +111,8 @@ function fn_buttonAut(){
 	}else{
 		read_button.style.display = 'none';
 	}
-}	 
-	 
- /* ********************************************************
-  * Repository 디비 리스트 조회
-  ******************************************************** */
+} 
+
   	$.ajax({
 		url : "/selectDatabaseRepoDBList.do",
 		data : {},
@@ -147,7 +141,7 @@ function fn_buttonAut(){
 
 
 /* ********************************************************
- * Repository 디비 리스트 조회 (검색조건 입력)
+ * Repository 조회
  ******************************************************** */
 function fn_search(){
   	$.ajax({
@@ -180,7 +174,7 @@ function fn_search(){
 
 
 /* ********************************************************
- * 디비 등록 팝업 호출
+ * 등록 팝업
  ******************************************************** */
 function fn_reg_popup(){
 	$('#pop_layer_dbRegForm').modal("show");
@@ -200,10 +194,10 @@ function fn_reg_popup(){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-<!-- 												<i class="fa fa-check-square"></i> -->
+												<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.database_management" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -211,7 +205,7 @@ function fn_reg_popup(){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Admin</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ADMIN</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.dbms_information" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.database_management"/></li>
 										</ol>
@@ -235,24 +229,22 @@ function fn_reg_popup(){
 			</div>
 		</div>
 
-
-		
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
-							<div class="form-inline">
-								<div class="input-group mb-2 mr-sm-2">
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
+							<div class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2"">
 	 								<select class="form-control" style="width:250px; margin-right: 1rem;" id="database_svr_nm" name="database_svr_nm">
 										<option value="%"><spring:message code="common.total" /> </option>
 	 								</select>
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6"">
 									<input type="text" class="form-control" style="width:300px;" name="ipadr" id="ipadr"  placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6"">
 									<input type="text" class="form-control" style="width:300px;" name="dft_db_nm" id="dft_db_nm" placeholder='<spring:message code="common.database" />'/>
 								</div>
 								
@@ -280,9 +272,19 @@ function fn_reg_popup(){
 				</div>
 				
 		      <div class="table-responsive">
-			      <table id="repoDBList" class="table table-hover table-striped" cellspacing="0" width="100%">
+					<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+						<div class="row">
+							<div class="col-sm-12 col-md-6">
+								<div class="dataTables_length" id="order-listing_length">
+								</div>
+								</div>
+						</div>
+					</div>
+			 </div>
+				
+		      	<table id="repoDBList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 					<thead>
-						<tr class="bg-primary text-white">
+						<tr class="bg-info text-white">
 							<th width="30"><spring:message code="common.no" /></th>
 							<th width="130"><spring:message code="common.dbms_name" /></th>
 							<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>

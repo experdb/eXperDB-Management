@@ -27,7 +27,9 @@ var dbServerRegTable = null;
 var pgdataCheck ="fail"; */
 // var db_svr_id = ${db_svr_id};
 
-
+	$(window.document).ready(function() {
+		fn_init3();
+	});
 function fn_init3() {
 	
 	/* ********************************************************
@@ -71,11 +73,12 @@ function fn_init3() {
 	});
 	
 	dbServerRegTable.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	dbServerRegTable.tables().header().to$().find('th:eq(1)').css('min-width', '177px');
-	dbServerRegTable.tables().header().to$().find('th:eq(2)').css('min-width', '117px');
-	dbServerRegTable.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
-	dbServerRegTable.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
-	dbServerRegTable.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
+	dbServerRegTable.tables().header().to$().find('th:eq(1)').css('min-width', '260px');
+	dbServerRegTable.tables().header().to$().find('th:eq(2)').css('min-width', '170px');
+	dbServerRegTable.tables().header().to$().find('th:eq(3)').css('min-width', '190px');
+	dbServerRegTable.tables().header().to$().find('th:eq(4)').css('min-width', '190px');
+	dbServerRegTable.tables().header().to$().find('th:eq(5)').css('min-width', '10px');
+
     $(window).trigger('resize'); 
 }
 
@@ -148,70 +151,75 @@ $(function() {
 //DBserver 연결테스트
 function fn_dbServerConnTest2(){
 	var datasArr = new Array();
-	var ipadrCnt = dbServerRegTable.column(0).data().length;
-	var list = $("input[name='port']");
-	
-	for(var i = 0; i < ipadrCnt; i++){
-		 var datas = new Object();
-		 datas.SERVER_NAME = $("#md_db_svr_nm").val();
-	     datas.SERVER_IP = dbServerRegTable.rows().data()[i].ipadr;
-	     datas.SERVER_PORT = list[i].value;	  
-	     datas.DATABASE_NAME = $("#md_dft_db_nm").val();	
-	     datas.USER_ID = $("#md_svr_spr_usr_id").val();	
-	     datas.USER_PWD = $("#md_svr_spr_scm_pwd").val();	
-	     datasArr.push(datas);
-	 }
-	
-	$.ajax({
-		url : "/dbServerConnTest.do",
-		data : {
-			ipadr : dbServerRegTable.rows().data()[0].ipadr,
-			datasArr : JSON.stringify(datasArr)
-		},
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		},
-		success : function(result) {
-			if(result.legnth != 0 ){
-				for(var i=0; i<result.length; i++){
-					if(result[i].result_code == 0){				
-						if(dbServerRegTable.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
-							dbServerRegTable.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
-							dbServerRegTable.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();
-							if(result[i].result_data[0].CMD_HOSTNAME != undefined){
-								dbServerRegTable.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();
+
+	if (dbServerRegTable.column(0).data().length > 0) {
+		var ipadrCnt = dbServerRegTable.column(0).data().length;
+		var list = $("input[name='port']");
+		
+		for(var i = 0; i < ipadrCnt; i++){
+			 var datas = new Object();
+			 datas.SERVER_NAME = $("#md_db_svr_nm").val();
+		     datas.SERVER_IP = dbServerRegTable.rows().data()[i].ipadr;
+		     datas.SERVER_PORT = list[i].value;	  
+		     datas.DATABASE_NAME = $("#md_dft_db_nm").val();	
+		     datas.USER_ID = $("#md_svr_spr_usr_id").val();	
+		     datas.USER_PWD = $("#md_svr_spr_scm_pwd").val();	
+		     datasArr.push(datas);
+		 }
+		
+		$.ajax({
+			url : "/dbServerConnTest.do",
+			data : {
+				ipadr : dbServerRegTable.rows().data()[0].ipadr,
+				datasArr : JSON.stringify(datasArr)
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					top.location.href = "/";
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result.legnth != 0 ){
+					for(var i=0; i<result.length; i++){
+						if(result[i].result_code == 0){				
+							if(dbServerRegTable.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
+								dbServerRegTable.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
+								dbServerRegTable.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();
+								if(result[i].result_data[0].CMD_HOSTNAME != undefined){
+									dbServerRegTable.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();
+								}
 							}
-						}
-						if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
+							if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
+								connCheckReg = "fail"
+								showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
+								return false;
+							}
+						}else{
 							connCheckReg = "fail"
 							showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
 							return false;
-						}
-					}else{
-						connCheckReg = "fail"
-						showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
-						return false;
-					}		
+						}		
+					}
+					connCheckReg = "success";
+					showSwalIcon('<spring:message code="message.msg93"/>', '<spring:message code="common.close" />', '', 'success');
+					fn_pathCall2(dbServerRegTable.rows().data()[0].ipadr, datasArr);
 				}
-				connCheckReg = "success";
-				showSwalIcon('<spring:message code="message.msg93"/>', '<spring:message code="common.close" />', '', 'success');
-				fn_pathCall2(dbServerRegTable.rows().data()[0].ipadr, datasArr);
 			}
-		}
-	}); 
-
+		}); 
+	} else {
+		showSwalIcon('<spring:message code="dbms_information.msg01" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}
 }
 
 
@@ -556,7 +564,7 @@ function checkPghome(){
 </div>
 
 <div class="modal fade" id="pop_layer_dbserver_mod" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 250px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 250px;">
 		<div class="modal-content" style="width:1100px;">			 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
@@ -566,27 +574,28 @@ function checkPghome(){
 					<div class="card-body">
 						<form class="cmxform" name="dbserverInsert" id="dbserverInsert" method="post">
 							<fieldset>
-								<div class="form-group row border-bottom">
-									<label for="com_db_svr_nm" class="col-sm-3 col-form-label">
+								<div class="form-group row">
+									<label for="com_db_svr_nm" class="col-sm-12 col-form-label" style="margin-bottom:-50px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="dbms_information.dbms_ip" />
 									</label>
-									<div class="col-sm-9">
+								</div>
+								<div class="form-group row border-bottom">
+									<div class="col-sm-12" style="margin-bottom:10px;">
 										<a data-toggle="modal" href="#pop_layer_ip_reg_re"><span onclick="fn_ipadrAddForm2();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span></a>
 										<span onclick="fn_ipadrDelForm2();" style="cursor:pointer"><img src="../images/popup/minus.png" alt=""  /></span>
-										<table id="serverIpadrReg" class="table table-hover table-striped" cellspacing="0" align="left">
+										<table id="serverIpadrReg" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
-												<tr class="bg-primary text-white">
+												<tr class="bg-info text-white">
 													<th width="10"></th>
-													<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
-													<th width="120"><spring:message code="data_transfer.port" /></th>
-													<th width="130"><spring:message code="common.division" /></th>
-													<th width="130"><spring:message code="dbms_information.conn_YN"/></th>	
-													<th width="0"></th>								
+													<th width="260"><spring:message code="dbms_information.dbms_ip" /></th>
+													<th width="170"><spring:message code="data_transfer.port" /></th>
+													<th width="190"><spring:message code="common.division" /></th>
+													<th width="190"><spring:message code="dbms_information.conn_YN"/></th>	
+													<th width="10"></th>								
 												</tr>
 											</thead>
 										</table>
-									
 									</div>
 								</div>
 								<div class="form-group row">

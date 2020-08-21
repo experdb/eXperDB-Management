@@ -27,7 +27,7 @@ function fn_init() {
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
 		table = $('#serverList').DataTable({	
-		scrollY : "245px",
+		scrollY : "310px",
 		searching : false,
 		deferRender : true,
 		scrollX: true,
@@ -193,7 +193,6 @@ function fn_reg_popup(){
 function fn_regRe_popup(){
 	var datas = table.rows('.selected').data();
 	if (datas.length == 1) {
-		fn_init3();
 	    $.ajax({
 			url : "/selectIpadrList.do",
 			data : {
@@ -289,10 +288,10 @@ function fn_regRe_popup(){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-<!-- 												<i class="fa fa-check-square"></i> -->
+												<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.dbms_management" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -300,7 +299,7 @@ function fn_regRe_popup(){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Admin</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ADMIN</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.dbms_information" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.dbms_management"/></li>
 										</ol>
@@ -324,26 +323,24 @@ function fn_regRe_popup(){
 			</div>
 		</div>
 
-
-		
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
-							<div class="form-inline">
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:300px;" maxlength="100" name="db_svr_nm" id="db_svr_nm"  placeholder='<spring:message code="common.dbms_name" />'/>
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
+							<div class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control" maxlength="100" name="db_svr_nm" id="db_svr_nm"  placeholder='<spring:message code="common.dbms_name" />'/>
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:300px;" maxlength="100" name="ipadr" id="ipadr" placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control" maxlength="100" name="ipadr" id="ipadr" placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:300px;" maxlength="100" name="dft_db_nm" id="dft_db_nm" placeholder='<spring:message code="common.database" />'/>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control" maxlength="100" name="dft_db_nm" id="dft_db_nm" placeholder='<spring:message code="common.database" />'/>
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
-	 								<select class="form-control" style="width:250px; margin-right: 1rem;" id="useyn" >
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+	 								<select class="form-control" id="useyn" >
 										<option value="%"><spring:message code="common.total" /></option>
 										<option value="Y"><spring:message code="dbms_information.use" /></option>
 										<option value="N"><spring:message code="dbms_information.unuse" /> </option>
@@ -374,11 +371,21 @@ function fn_regRe_popup(){
 						</div>
 					</div>
 				</div>
-					
-		      <div class="table-responsive">
-				<table id="serverList" class="table table-hover table-striped" cellspacing="0" width="100%">
+				
+				<div class="table-responsive">
+					<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+						<div class="row">
+							<div class="col-sm-12 col-md-6">
+								<div class="dataTables_length" id="order-listing_length">
+								</div>
+								</div>
+						</div>
+					</div>
+				</div>
+
+		      	<table id="serverList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 					<thead>
-						<tr class="bg-primary text-white">
+						<tr class="bg-info text-white">
 							<th width="30"><spring:message code="common.no" /></th>
 							<th width="130"><spring:message code="common.dbms_name" /></th>
 							<th width="100"><spring:message code="dbms_information.dbms_ip"/></th>
@@ -393,7 +400,7 @@ function fn_regRe_popup(){
 						</tr>
 					</thead>
 				</table>
-		      </div>
+
 		    </div>
 		  </div>
 		</div>		

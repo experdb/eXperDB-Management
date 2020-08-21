@@ -207,19 +207,19 @@
 													<div class="col-sm-9">
 														<div class="form-group">
 															<div class="form-check">
-																<label for="chkRead" class="form-check-label" style="width:150px;">
+																<label for="chkRead" class="form-check-label" style="width:130px;">
 																	<input type="checkbox" id="chkRead" name="chkRead" class="form-check-input" <c:if test="${fn:contains(fn:toUpperCase(audit.log), 'READ')}"> checked="checked"</c:if>>
 																	read
 																</label>
 															</div>
 															<div class="form-check">
-																<label for="chkWrite" class="form-check-label" style="width:150px;">
+																<label for="chkWrite" class="form-check-label" style="width:130px;">
 																	<input type="checkbox" id="chkWrite" name="chkWrite" class="form-check-input" <c:if test="${fn:contains(fn:toUpperCase(audit.log), 'WRITE')}"> checked="checked"</c:if>>
 																	write
 																</label>
 															</div>
 															<div class="form-check">
-																<label for="chkFunction" class="form-check-label" style="width:150px;">
+																<label for="chkFunction" class="form-check-label" style="width:130px;">
 																	<input type="checkbox" id="chkFunction" name="chkFunction" class="form-check-input" <c:if test="${fn:contains(fn:toUpperCase(audit.log), 'FUNCTION')}"> checked="checked"</c:if>>
 																	function
 																</label>
@@ -228,19 +228,19 @@
 														
 														<div class="form-group">
 															<div class="form-check">
-																<label for="chkRole" class="form-check-label" style="width:150px;">
+																<label for="chkRole" class="form-check-label" style="width:130px;">
 																	<input type="checkbox" id="chkRole" name="chkRole" class="form-check-input" <c:if test="${fn:contains(fn:toUpperCase(audit.log), 'ROLE')}"> checked="checked"</c:if>>
 																	role
 																</label>
 															</div>
 															<div class="form-check">
-																<label for="chkDdl" class="form-check-label" style="width:150px;">
+																<label for="chkDdl" class="form-check-label" style="width:130px;">
 																	<input type="checkbox" id="chkDdl" name="chkDdl" class="form-check-input" <c:if test="${fn:contains(fn:toUpperCase(audit.log), 'DDL')}"> checked="checked"</c:if>>
 																	ddl
 																</label>
 															</div>
 															<div class="form-check">
-																<label for="chkMisc" class="form-check-label" style="width:150px;">
+																<label for="chkMisc" class="form-check-label" style="width:130px;">
 																	<input type="checkbox" id="chkMisc" name="chkMisc" class="form-check-input" <c:if test="${fn:contains(fn:toUpperCase(audit.log), 'MISC')}"> checked="checked"</c:if>>
 																	misc
 																</label>
@@ -251,7 +251,7 @@
 										
 												<div class="form-group row border-bottom" style="margin-top:10px;">
 													<label for="ins_db_svr_nm" class="col-sm-3 col-form-label" style="margin-top:5px;">
-														<i class="item-icon fa fa-dot-circle-o"></i>
+														<i class="item-icon fa fa-dot-circle-o" style="padding-right:5px;"></i>
 														<spring:message code="access_control_management.log_catalog" />
 													</label>
 													<div class="col-sm-3">
@@ -265,7 +265,7 @@
 														</div>
 													</div>
 													<label for="ins_db_svr_nm" class="col-sm-3 col-form-label" style="margin-top:5px;">
-														<i class="item-icon fa fa-dot-circle-o"></i>
+														<i class="item-icon fa fa-dot-circle-o" style="padding-right:5px;"></i>
 														<spring:message code="access_control_management.log_parameter" />
 													</label>
 													<div class="col-sm-3">
@@ -282,7 +282,7 @@
 
 												<div class="form-group row border-bottom" style="margin-top:10px;">
 													<label for="ins_db_svr_nm" class="col-sm-3 col-form-label" style="margin-top:5px;">
-														<i class="item-icon fa fa-dot-circle-o"></i>
+														<i class="item-icon fa fa-dot-circle-o" style="padding-right:5px;"></i>
 														<spring:message code="access_control_management.log_relation" />
 													</label>
 													<div class="col-sm-3">
@@ -296,8 +296,7 @@
 														</div>
 													</div>
 													<label for="ins_db_svr_nm" class="col-sm-3 col-form-label" style="margin-top:5px;">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="access_control_management.log_statement" />
+														<i class="item-icon fa fa-dot-circle-o" style="padding-right:5px;"></i> <spring:message code="access_control_management.log_statement" />
 													</label>
 													<div class="col-sm-3">
 														<div class="form-group">
@@ -317,10 +316,9 @@
 									<div class="col-6">
 										<div class="card">
 											<div class="card-body">
-												<div class="form-group">
+												<div class="form-group" style="margin-bottom:-20px;">
 													<label for="ins_db_svr_nm" class="col-form-label" style="margin-top:5px;">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														Role
+														<i class="item-icon fa fa-dot-circle-o" style="padding-right:5px;"></i> Role
 													</label>
 												</div>
 
@@ -371,7 +369,7 @@
 															
 																<c:if test="${fn:length(roleList) == 0}">
 																	<tr>
-																		<td class="py-1" colspan="3" width="100%">
+																		<td class="py-1 text-sm-center" colspan="3" width="100%;" height="20px;">
 																			No data available in table
 																		</td>
 																	</tr>

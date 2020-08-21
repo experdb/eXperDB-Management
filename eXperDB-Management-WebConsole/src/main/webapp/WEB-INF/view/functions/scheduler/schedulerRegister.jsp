@@ -653,6 +653,7 @@ function fn_db2pgAdd(){
 	});
 }
 </script>
+
 <%@include file="./../../popup/scheduleRegForm.jsp"%>
 <%@include file="./../../popup/db2pgWorkRegForm.jsp"%>
 
@@ -666,7 +667,7 @@ function fn_db2pgAdd(){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-calendar menu-icon"></i>
@@ -677,6 +678,7 @@ function fn_db2pgAdd(){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">SCHEDULE</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule_information" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule_registration"/></li>
 										</ol>

@@ -365,9 +365,9 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 								</form>
 								<div class="form-group row">
 									<div class="col-sm-12">
-										<table id="dbList" class="table table-hover table-striped" cellspacing="0" align="left"  width="100%">
+										<table id="dbList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
-												<tr class="bg-primary text-white">
+												<tr class="bg-info text-white">
 													<th width="30"><spring:message code="dbms_information.regChoice"/></th>
 													<th width="300"><spring:message code="common.database" /></th>
 													<th width="550"><spring:message code="common.desc" /> </th>								

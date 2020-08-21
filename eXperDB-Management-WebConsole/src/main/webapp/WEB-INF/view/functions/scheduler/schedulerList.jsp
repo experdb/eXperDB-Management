@@ -622,7 +622,6 @@ function fn_dateValidation(exe_dt){
 <form name="modifyForm" method="post">
 </form>
 
-
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 	<input type="hidden" name="wrk_id" id="wrk_id" value=""/>
@@ -639,7 +638,7 @@ function fn_dateValidation(exe_dt){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-calendar menu-icon"></i>
@@ -650,7 +649,7 @@ function fn_dateValidation(exe_dt){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Function</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">SCHEDULE</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule_information" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="etc.etc27"/></li>
 										</ol>
@@ -681,18 +680,18 @@ function fn_dateValidation(exe_dt){
 					<!-- search param start -->
 					<div class="card">
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
-							<div class="form-inline">
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:200px; margin-right: 2rem;" maxlength="20" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />'/>		
+							<div class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control"  maxlength="20" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />'/>		
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:300px; margin-right: 2rem;" maxlength="150" id="scd_exp" name="scd_exp" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.scheduleExp" />'/>		
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control"  maxlength="150" id="scd_exp" name="scd_exp" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.scheduleExp" />'/>		
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:200px; margin-right: 2rem;" id="frst_regr_id" name="frst_regr_id" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.register" />'/>		
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control" id="frst_regr_id" name="frst_regr_id" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.register" />'/>		
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control" style="width:200px; margin-right: 1rem;" name="scd_cndt" id="scd_cndt">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" name="scd_cndt" id="scd_cndt">
 										<option value="%"><spring:message code="schedule.total" /></option>
 										<option value="TC001801"><spring:message code="etc.etc37"/></option>
 										<option value="TC001802"><spring:message code="schedule.run" /></option>

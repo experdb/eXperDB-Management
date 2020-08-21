@@ -33,7 +33,7 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "300px",
+		scrollY : "470px",
 		scrollX: true,	
 		searching : false,
 		paging : false,
@@ -93,7 +93,7 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "300px",
+		scrollY : "470px",
 		scrollX: true,	
 		searching : false,
 		paging : false,		
@@ -691,10 +691,11 @@ function fn_syncUpdate(db_id){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5"  style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 <!-- 												<i class="fa fa-check-square"></i> -->
+												<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.dbms_registration" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -702,6 +703,7 @@ function fn_syncUpdate(db_id){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ADMIN</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.dbms_information" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.dbms_registration"/></li>
 										</ol>
@@ -725,76 +727,78 @@ function fn_syncUpdate(db_id){
 			</div>
 		</div>
 		
+		<div class="col-lg-6 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="dbms_information.dbms_list" />
+					</h4>
+					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
+						<div id="wrt_button" style="float: right;">
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_reg_popup();">
+								<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
+							</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_regRe_popup();">
+								<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+							</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_exeCheck()">
+								<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+							</button>
+						</div>
+
+						<table id="dbServerList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;align:left;">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="10"><spring:message code="common.choice" /></th>									
+									<th width="200"><spring:message code="dbms_information.dbms_ip" /></th>
+									<th width="130"><spring:message code="common.dbms_name" /></th>
+									<th width="50"><spring:message code="dbms_information.agent_status" /></th>
+									<th width="50"><spring:message code="dbms_information.use_yn" /></th>
+									<!-- <th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th> -->
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 		<div class="col-lg-6 grid-margin stretch-card">
-		  <div class="card">
-		    <div class="card-body">
-		      <h4 class="card-title"><spring:message code="dbms_information.dbms_list" /></h4>
-		      <div class="table-responsive">
-				<div id="wrt_button" style="float: right;">
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_reg_popup();">
-						<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
-					</button>
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_regRe_popup();">
-						<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
-					</button>
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_exeCheck()">
-						<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
-					</button>
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="dbms_information.databaseList"/>
+					</h4>
+					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
+						<div id="save_button" style="float: right;">
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_insertDB()">
+								<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save" />
+							</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_dbSync()">
+								<i class="ti-reload btn-icon-prepend "></i><spring:message code="dbms_information.Synchronization" />
+							</button>
+						</div>
+
+						<table id="dbList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;align:left;">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="10"><input name="select" value="1" type="checkbox"></th>
+									<th width="110"><spring:message code="common.database" /></th>
+									<th width="360"><spring:message code="common.desc" /></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
 				</div>
-				<table id="dbServerList" class="table table-hover table-striped" cellspacing="0" align="left">
-					<thead>
-						<tr class="bg-primary text-white">
-							<th width="10"><spring:message code="common.choice" /></th>									
-							<th width="200"><spring:message code="dbms_information.dbms_ip" /></th>
-							<th width="130"><spring:message code="common.dbms_name" /></th>
-							<th width="50"><spring:message code="dbms_information.agent_status" /></th>
-							<th width="50"><spring:message code="dbms_information.use_yn" /></th>
-							<!-- <th width="0"></th>
-							<th width="0"></th>
-							<th width="0"></th>
-							<th width="0"></th>
-							<th width="0"></th>
-							<th width="0"></th>
-							<th width="0"></th>
-							<th width="0"></th>
-							<th width="0"></th> -->
-						</tr>
-					</thead>
-				</table>
-		      </div>
-		    </div>
-		  </div>
-		</div>		
-		
-		<div class="col-lg-6 grid-margin stretch-card">
-		  <div class="card">
-		    <div class="card-body">
-		      <h4 class="card-title"><spring:message code="dbms_information.databaseList"/></h4>
-		      <div class="table-responsive">
-				<div id="save_button" style="float: right;">
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_insertDB()">
-						<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save" />
-					</button>
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_dbSync()">
-						<i class="ti-reload btn-icon-prepend "></i><spring:message code="dbms_information.Synchronization" />
-					</button>
-				</div>
-				<table id="dbList" class="table table-hover table-striped" cellspacing="0" align="left">
-					<thead>
-							<tr class="bg-primary text-white">
-								<th width="10"><input name="select" value="1" type="checkbox"></th>
-								<th width="110"><spring:message code="common.database" /></th>
-								<th width="360"><spring:message code="common.desc" /></th>										
-							</tr>
-					</thead>
-				</table>
-		      </div>
-		    </div>
-		  </div>
-		</div>	
-		
-		
+			</div>
+		</div>
 	</div>
 </div>
-		

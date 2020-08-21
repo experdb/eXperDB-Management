@@ -626,7 +626,6 @@
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/accessControlRegForm.jsp"%>
 
-
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 	<input type="hidden" name="act" id="act" value=""/>
