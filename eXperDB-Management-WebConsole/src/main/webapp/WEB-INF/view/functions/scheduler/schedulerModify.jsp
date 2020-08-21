@@ -248,6 +248,7 @@ $(window.document).ready(function() {
 	fn_makeHour();
 	fn_makeMin();
 	fn_makeSec();
+	fn_insDateCalenderSetting();
 
 	
  	$.ajax({
@@ -313,7 +314,31 @@ $(window.document).ready(function() {
 	
 });
 
+/* ********************************************************
+ * 작업기간 calender 셋팅
+ ******************************************************** */
+function fn_insDateCalenderSetting() {
+	var today = new Date();
+	var startDay = fn_dateParse("20180101");
+	var endDay = fn_dateParse("20991231");
+	
+	var day_today = today.toJSON().slice(0,10);
+	var day_start = startDay.toJSON().slice(0,10);
+	var day_end = endDay.toJSON().slice(0,10);
 
+	if ($("#ins_expr_dt_div").length) {
+		$("#ins_expr_dt_div").datepicker({
+		}).datepicker('setDate', day_today)
+		.datepicker('setStartDate', day_start)
+		.datepicker('setEndDate', day_end)
+		.on('hide', function(e) {
+			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		}); //값 셋팅
+	}
+
+	$("#datepicker1").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+	$("#ins_expr_dt_div").datepicker('updateDates');
+}
 
 function fn_db2pgWorkAddCallback(rowList){
 	$.ajax({
