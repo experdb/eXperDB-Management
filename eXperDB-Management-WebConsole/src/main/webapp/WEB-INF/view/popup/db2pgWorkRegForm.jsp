@@ -155,18 +155,18 @@ $(window.document).ready(function() {
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<div class="form-inline">
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" id="data_wrk_nm" name="data_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />'/>
+						<div class="form-inline row">
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+								<input type="text" class="form-control" id="data_wrk_nm" name="data_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />'/>
 							</div>
-							<div class="input-group mb-2 mr-sm-2">
-								<select class="form-control" style="width:200px; margin-right: 1rem;" name="data_dbms_dscd" id="data_dbms_dscd">
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+								<select class="form-control" name="data_dbms_dscd" id="data_dbms_dscd">
 									<option value="source_system"><spring:message code="migration.source_system" /></option>	
 									<option value="target_system"><spring:message code="migration.target_system" /></option>
 								</select>
 							</div>
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" id="dbms_dscd" name="dbms_dscd" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.dbms_classification" />'/>
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+								<input type="text" class="form-control" id="dbms_dscd" name="dbms_dscd" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.dbms_classification" />'/>
 							</div>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search3();" >
 								<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
@@ -177,7 +177,8 @@ $(window.document).ready(function() {
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<p class="card-description"><spring:message code="schedule.workList"/></p>
-						<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
+						
+						<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="10" rowspan="2"></th>

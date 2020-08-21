@@ -15,7 +15,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#scheduleList').DataTable({
-	scrollY : "425px",
+	scrollY : "365px",
 	bDestroy: true,
 	processing : true,
 	searching : false,	
@@ -389,10 +389,10 @@ function fn_modifyScheduleListView(){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-user menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.my_schedule_management"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -400,9 +400,8 @@ function fn_modifyScheduleListView(){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							My PAGE
-					 						</li>
+ 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">My PAGE</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.my_schedule_management" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.my_schedule_management"/></li>
 										</ol>
 									</div>
@@ -432,12 +431,12 @@ function fn_modifyScheduleListView(){
 					<!-- search param start -->
 					<div class="card">
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
-							<div class="form-inline">
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" maxlength="20" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />'/>		
+							<div class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control" maxlength="20" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />'/>		
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:500px;margin-right: 2rem;" maxlength="150" id="scd_exp" name="scd_exp" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.scheduleExp" />'/>		
+								<div class="input-group mb-2 mr-sm-2 col-sm-4">
+									<input type="text" class="form-control" maxlength="150" id="scd_exp" name="scd_exp" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.scheduleExp" />'/>		
 								</div>
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="read_button" onClick="fn_selectScheduleList();" >
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />

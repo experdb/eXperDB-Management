@@ -258,19 +258,19 @@ function fn_workAdd2(){
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<div class="form-inline">
-							<div class="input-group mb-2 mr-sm-2">
-								<select class="form-control" style="width:200px; margin-right: 1rem;" name="db_svr_nm" id="db_svr_nm">
+						<div class="form-inline row">
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+								<select class="form-control" name="db_svr_nm" id="db_svr_nm">
 									<option value="%"><spring:message code="common.dbms_name" />&nbsp;<spring:message code="schedule.total" /></option>
 								</select>
 							</div>
-							<div class="input-group mb-2 mr-sm-2">
-								<select class="form-control" style="width:150px; margin-right: 2rem;" name="work" id="work">
+							<div class="input-group mb-2 mr-sm-2 col-sm-2">
+								<select class="form-control" name="work" id="work">
 									<option value="%"><spring:message code="common.choice" />&nbsp;<spring:message code="common.division" /></option>
 								</select>
 							</div>
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" />
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+								<input type="text" class="form-control" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" />
 							</div>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search();" >
 								<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
@@ -281,7 +281,8 @@ function fn_workAdd2(){
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<p class="card-description"><spring:message code="schedule.workList"/></p>
-						<table id="workList2" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
+						
+						<table id="workList2" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="10"></th>
