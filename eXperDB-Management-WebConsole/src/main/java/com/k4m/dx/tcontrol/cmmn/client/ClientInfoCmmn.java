@@ -1723,7 +1723,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			
 			jObj.put(ClientProtocolID.WORK_ID, resultWork.get(0).get("wrk_id").toString()); 
 			jObj.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(0).get("bck_bsn_dscd").toString());
-			jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, resultWork.get(0).get("db_svr_id").toString());
+			jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, resultWork.get(0).get("db_svr_ipadr_id").toString());
 			jObj.put(ClientProtocolID.DB_ID, resultWork.get(0).get("db_id").toString());
 			jObj.put(ClientProtocolID.BCK_FILENM, bck_fileNm.toString());
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT034);

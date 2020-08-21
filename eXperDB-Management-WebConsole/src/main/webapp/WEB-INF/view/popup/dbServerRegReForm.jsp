@@ -66,7 +66,7 @@ function fn_init3() {
 		{data : "master_gbn",  defaultContent : ""},
 		{data : "connYn",  defaultContent : ""},
 		{data : "svr_host_nm",  defaultContent : "", visible: false},
-		{data : "db_svr_ipadr_id",  defaultContent : "", visible: false}
+		{data : "db_svr_ipadr_id",  defaultContent : "", visible: false},
 		]
 	});
 	
@@ -253,20 +253,30 @@ function fn_updateDbServer(){
 	var datas = dbServerRegTable.rows().data();
 	
 	var arrmaps = [];
+	var ipmaps = [];
+	
 	for (var i = 0; i < datas.length; i++){
 		var tmpmap = new Object();
+		var ipmap = new Object();
 		tmpmap["ipadr"] = dbServerRegTable.rows().data()[i].ipadr;
         tmpmap["portno"] = list[i].value;	  
         tmpmap["master_gbn"] = dbServerRegTable.rows().data()[i].master_gbn;
         tmpmap["svr_host_nm"] = dbServerRegTable.rows().data()[i].svr_host_nm;
-        tmpmap["db_svr_ipadr_id"] = dbServerRegTable.rows().data()[i].db_svr_ipadr_id;
-		arrmaps.push(tmpmap);	
-		alert(dbServerRegTable.rows().data()[i].db_svr_ipadr_id);
+        
+        if(dbServerRegTable.rows().data()[i].db_svr_ipadr_id == undefined){
+        	tmpmap["db_svr_ipadr_id"] = "-1";
+        }else{
+        	tmpmap["db_svr_ipadr_id"] = dbServerRegTable.rows().data()[i].db_svr_ipadr_id;
+        }
+        arrmaps.push(tmpmap);	
+    
+
+        ipmaps.push(dbServerRegTable.rows().data()[i].db_svr_ipadr_id);
 		}
-	
-	return false;
+
 	
 	if (confirm('<spring:message code="etc.etc13"/>')){	
+		
 	$.ajax({
 		url : "/updateDbServer.do",
 		data : {
@@ -278,6 +288,7 @@ function fn_updateDbServer(){
 			pghome_pth : $("#md_pghome_pth").val(),
 			pgdata_pth : $("#md_pgdata_pth").val(),
 			useyn : useyn,
+			ipmaps : JSON.stringify(ipmaps),
 			ipadrArr : JSON.stringify(arrmaps)
 		},
 		type : "post",

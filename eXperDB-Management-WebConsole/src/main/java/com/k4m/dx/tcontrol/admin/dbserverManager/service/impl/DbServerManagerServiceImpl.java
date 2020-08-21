@@ -173,4 +173,21 @@ public class DbServerManagerServiceImpl extends EgovAbstractServiceImpl implemen
 		return dbServerManagerDAO.selectPgDbmsList();
 	}
 
+	@Override
+	public void updateIpadr(IpadrVO ipadrVO) throws Exception {
+		dbServerManagerDAO.updateIpadr(ipadrVO);		
+	}
+
+	@Override
+	public void deleteIpadr(HashMap<String, Object> paramvalue) throws Exception {
+		dbServerManagerDAO.deleteIpadr(paramvalue);			
+	}
+
+	@Override
+	public int selectIpadrCnt() throws Exception {
+		return dbServerManagerDAO.selectIpadrCnt();
+	}
+
+
+
 }

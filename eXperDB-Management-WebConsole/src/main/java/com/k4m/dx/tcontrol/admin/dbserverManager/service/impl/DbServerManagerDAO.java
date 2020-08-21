@@ -54,9 +54,7 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	 * @throws Exception
 	 */	
 	public void updateDbServer(DbServerVO dbServerVO) throws SQLException {
-		System.out.println(dbServerVO.getPortno());
 		update("dbserverManagerSql.updateDbServer", dbServerVO);	
-		update("dbserverManagerSql.updateDbServerPort", dbServerVO);	
 	}
 
 
@@ -350,6 +348,23 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		List<DbServerVO>  sl = null;
 		sl = (List<DbServerVO>) list("dbserverManagerSql.selectPgDbmsList", null);
 		return sl;
+	}
+
+
+	public void updateIpadr(IpadrVO ipadrVO) {
+		update("dbserverManagerSql.updateIpadr",ipadrVO );		
+	}
+
+
+	public void deleteIpadr(HashMap<String, Object> paramvalue) {
+		delete("dbserverManagerSql.deleteIpadr",paramvalue );		
+	}
+
+
+	public int selectIpadrCnt() {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbserverManagerSql.selectIpadrCnt", null);
+		return resultSet;
 	}
 
 
