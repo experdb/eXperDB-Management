@@ -714,7 +714,7 @@ function fn_ImmediateStart(gbn){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-server menu-icon"></i>
@@ -726,6 +726,7 @@ function fn_ImmediateStart(gbn){
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">MIGRATION</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_migration" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="migration.setting_information_management"/></li>
 										</ol>
 									</div>
@@ -768,68 +769,64 @@ function fn_ImmediateStart(gbn){
 					<!-- search param start -->
 					<div class="card">
 						<div class="card-body" style="margin:-10px 0px -15px 0px;">
-							<form class="form-inline" id="searchDDL">
-								<div class="row">
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
-										<input type="text" class="form-control" style="width:250px;" maxlength="25" id="ddl_wrk_nm" name="ddl_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
-									</div>
-									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
-										<select class="form-control" style="width:200px;"name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
+							<form class="form-inline row" id="searchDDL">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
+									<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
+									<input type="text" class="form-control" maxlength="25" id="ddl_wrk_nm" name="ddl_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
+								</div>
+									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" style="padding-right:10px;">
+										<select class="form-control" name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
 											<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
 											<option value="TC002201">Oracle</option>
 											<option value="TC002202">MS-SQL</option>
 											<option value="TC002203">MySQL</option>
 										</select>
 									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:250px;" id="ddl_ipadr" name="ddl_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
+									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" id="ddl_ipadr" name="ddl_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
 									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:250px;" id="ddl_dtb_nm" name="ddl_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
+									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" id="ddl_dtb_nm" name="ddl_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
 									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:250px;" id="ddl_scm_nm" name="ddl_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
+									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" id="ddl_scm_nm" name="ddl_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
 									</div>
 									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getddlDataList()">
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 									</button>
-								</div>
 							</form>
 							
-							<form class="form-inline" id="searchData" style="display:none;">
-								<div class="row">
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+							<form class="form-inline row" id="searchData" style="display:none;">
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7" style="padding-right:10px;">
 										<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
-										<input type="text" class="form-control" style="width:200px;" maxlength="25" id="data_wrk_nm" name="data_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
+										<input type="text" class="form-control" maxlength="25" id="data_wrk_nm" name="data_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
 									</div>
-									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
-										<select class="form-control" style="width:200px;"name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
+									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
+										<select class="form-control" name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
 											<option value="source_system"><spring:message code="migration.source_system"/></option>	
 											<option value="target_system"><spring:message code="migration.target_system"/></option>
 										</select>
 									</div>
-									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
-										<select class="form-control" style="width:200px;" name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
+									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
+										<select class="form-control" name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
 											<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
 											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
  												<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
  											</c:forEach>
 										</select>
 									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:200px;" id="data_ipadr" name="data_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7" style="padding-right:10px;">
+										<input type="text" class="form-control" id="data_ipadr" name="data_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
 									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:200px;" id="data_dtb_nm" name="data_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7" style="padding-right:10px;">
+										<input type="text" class="form-control" id="data_dtb_nm" name="data_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
 									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:200px;" id="data_scm_nm" name="data_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7" style="padding-right:10px;">
+										<input type="text" class="form-control" id="data_scm_nm" name="data_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
 									</div>
 									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 									</button>
-								</div>
 							</form>
 						</div>
 					</div>
