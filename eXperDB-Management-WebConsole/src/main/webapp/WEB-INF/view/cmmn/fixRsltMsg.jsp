@@ -25,7 +25,7 @@
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="etc.etc32"/>
 				</h4>
-	
+
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
 						<form class="cmxform" id="rsltMsgForm">

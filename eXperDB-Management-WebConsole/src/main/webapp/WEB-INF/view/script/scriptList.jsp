@@ -678,7 +678,7 @@
 <%-- 								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnImmediately" onClick="fn_ImmediateStart();" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
 								</button> --%>
-													
+
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_scheduleCheck();" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>

@@ -129,7 +129,7 @@
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
 						<div class="form-group row">
-							<div class="card my-sm-2">
+							<div class="card my-sm-2 col-12">
 								<div class="card-body" >
 									<div class="table-responsive">
 										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">

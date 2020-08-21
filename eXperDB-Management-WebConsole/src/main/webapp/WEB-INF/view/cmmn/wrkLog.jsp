@@ -18,7 +18,6 @@
 	*
 	*/
 %>
-
 <div class="modal fade" id="pop_layer_wrkLog" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
 	<div class="modal-dialog  modal-xl" role="document">
 		<div class="modal-content">

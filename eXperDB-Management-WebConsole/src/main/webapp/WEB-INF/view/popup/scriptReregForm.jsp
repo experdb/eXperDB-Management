@@ -97,7 +97,7 @@
 		});
 	}
 </script>
-	
+
 <div class="modal fade" id="pop_layer_mod_script" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl" role="document">
 		<div class="modal-content">

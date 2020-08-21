@@ -15,7 +15,7 @@
 						<h3 class="card-title fa fa-dot-circle-o">
 							<spring:message code="schedule.detail_view" />
 						</h3>
-								
+
 						<div class="table-responsive" style="overflow:auto;">
 							<table class="table table-striped">
 								<tbody>
