@@ -194,7 +194,7 @@ public class DxT020 extends SocketCtl{
 	private boolean connection_test(JSONObject serverInfoObj) throws Exception {
 		
 		Connection con = null;
-		
+		boolean retVal = true;
 		try{
 
 			String driver = "org.postgresql.Driver";
@@ -210,9 +210,10 @@ public class DxT020 extends SocketCtl{
 				
 		}catch(Exception e){
 			errLogger.error(" [Database 연결 실패] "+ e.toString());
+			retVal = false;
 			throw e;
 		}
-		return true;
+		return retVal;
 	}
 
 
