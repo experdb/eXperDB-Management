@@ -578,7 +578,6 @@ function fn_updateSchedule(){
 				 exe_hms : $("#exe_s").val()+$("#exe_m").val()+$("#exe_h").val(),
 				 sWork : JSON.stringify(arrmaps)
 			},
-			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -815,7 +814,7 @@ function fn_dateValidation(exe_dt){
 		                          	</div>
 									<div class="col-sm-3"  id="calendar">
 										<div id="ins_usr_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" id="datepicker1" name="exe_dt" readonly tabindex=10 />
+											<input type="text" class="form-control totDatepicker" id="datepicker1" name="exe_dt"  tabindex=10 />
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 											</span>
