@@ -191,7 +191,9 @@ $(window).ready(function(){
 	});
 	
 	$('.modal').on('hidden.bs.modal', function (e) {
-	    $(this).find('form')[0].reset()
+		if ($(this).find('form')[0] != null && $(this).find('form')[0] != undefined) {
+		    $(this).find('form')[0].reset();
+		}
 	});	
 });
 

@@ -433,7 +433,7 @@ function fn_modifyScheduleListView(){
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<div class="form-inline row">
 								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
-									<input type="text" class="form-control" maxlength="20" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />'/>		
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="20" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />'/>		
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-4">
 									<input type="text" class="form-control" maxlength="150" id="scd_exp" name="scd_exp" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.scheduleExp" />'/>		

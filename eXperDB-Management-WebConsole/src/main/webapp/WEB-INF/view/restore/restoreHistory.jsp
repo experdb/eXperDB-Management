@@ -591,7 +591,7 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-history"></i>
@@ -648,64 +648,62 @@
 					<div class="card">
 						<div class="card-body" style="margin:-10px 0px -15px 0px;">
 
-							<form class="form-inline">
-								<div class="row">
-									<div class="input-group mb-2 mr-sm-2">
-										<div id="restore_strtdtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="restore_strtdtm" name="restore_strtdtm" readonly>
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
+							<form class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row">
+									<div id="restore_strtdtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="height:44px;" id="restore_strtdtm" name="restore_strtdtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
+									</div>
 												
-										<div class="input-group align-items-center">
-											<span style="border:none; padding: 0px 10px;"> ~ </span>
-										</div>
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none;"> ~ </span>
+									</div>
 		
-										<div id="restore_enddtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="restore_enddtm" name="restore_enddtm" readonly>
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
+									<div id="restore_enddtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="height:44px;" id="restore_enddtm" name="restore_enddtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
 									</div>
-										
-									<div class="input-group mb-2 mr-sm-2" style="padding:0 10px 0 10px;">
-										<select class="form-control" style="width:200px;" name="restore_cndt" id="restore_cndt">
-											<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
-											<option value="0"><spring:message code="common.success" /></option>
-											<option value="1"><spring:message code="etc.etc37" /></option>
-											<option value="2"><spring:message code="restore.progress" /></option>
-											<option value="3"><spring:message code="common.failed" /></option>
-										</select>
-									</div>
-										
-									<div class="input-group mb-2 mr-sm-2 search_rman" style="padding-right:10px;">
-										<select class="form-control" style="width:200px;" name="restore_flag" id="restore_flag">
-											<option value=""><spring:message code="restore.Recovery_Category" />&nbsp;<spring:message code="schedule.total" /></option>
-											<option value=""><spring:message code="schedule.total" /></option>
-											<option value="0"><spring:message code="restore.Emergency_Recovery" /></option>
-											<option value="1"><spring:message code="restore.Point-in-Time_Recovery" /></option>
-										</select>
-									</div>
-									
-									<div class="input-group mb-2 mr-sm-2 search_dump" style="padding-right:10px;">
-										<select class="form-control" style="width:200px;" name="db_nm" id="db_nm">
-											<option value=""><spring:message code="common.database" />&nbsp;<spring:message code="schedule.total" /></option>
-											<c:forEach var="result" items="${dbList}" varStatus="status">
-												<option value="<c:out value="${result.db_nm}"/>"><c:out value="${result.db_nm}"/></option>
-											</c:forEach>
-										</select>
-									</div>
-									
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:250px;" maxlength="25" id="restore_nm" name="restore_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
-									</div>
-									
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>
 								</div>
+										
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
+									<select class="form-control"  style="margin-left: -0.7rem;margin-right: -0.7rem;" name="restore_cndt" id="restore_cndt">
+										<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
+										<option value="0"><spring:message code="common.success" /></option>
+										<option value="1"><spring:message code="etc.etc37" /></option>
+										<option value="2"><spring:message code="restore.progress" /></option>
+										<option value="3"><spring:message code="common.failed" /></option>
+									</select>
+								</div>
+										
+								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_5">
+									<select class="form-control" style="margin-right: -0.7rem;" name="restore_flag" id="restore_flag">
+										<option value=""><spring:message code="restore.Recovery_Category" />&nbsp;<spring:message code="schedule.total" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
+										<option value="0"><spring:message code="restore.Emergency_Recovery" /></option>
+										<option value="1"><spring:message code="restore.Point-in-Time_Recovery" /></option>
+									</select>
+								</div>
+									
+								<div class="input-group mb-2 mr-sm-2 search_dump col-sm-1_7">
+									<select class="form-control" style="margin-right: -0.7rem;" name="db_nm" id="db_nm">
+										<option value=""><spring:message code="common.database" />&nbsp;<spring:message code="schedule.total" /></option>
+										<c:forEach var="result" items="${dbList}" varStatus="status">
+											<option value="<c:out value="${result.db_nm}"/>"><c:out value="${result.db_nm}"/></option>
+										</c:forEach>
+									</select>
+								</div>
+									
+								<div class="input-group mb-2 mr-sm-2 col-sm-3" >
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="restore_nm" name="restore_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
+								</div>
+									
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>
 						</div>
 					</div>

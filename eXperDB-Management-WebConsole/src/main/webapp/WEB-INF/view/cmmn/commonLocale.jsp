@@ -71,6 +71,12 @@ var common_volume = "<spring:message code='common.volume' />";
 var common_choice = "<spring:message code='common.choice' />";
 var message_msg151 = "<spring:message code='message.msg151' />";
 
+var schedule_one_time_run = "<spring:message code='schedule.one_time_run' />";
+var schedule_everyday = "<spring:message code='schedule.everyday' />";
+var schedule_everyweek = "<spring:message code='schedule.everyweek' />";
+var schedule_everymonth = "<spring:message code='schedule.everymonth' />";
+var schedule_everyyear = "<spring:message code='schedule.everyyear' />";
+
 </script>
 <body>
 
