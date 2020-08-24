@@ -189,6 +189,10 @@ $(window).ready(function(){
 	$( document ).ajaxStop(function() {
 		$('#loading').hide();
 	});
+	
+	$('.modal').on('hidden.bs.modal', function (e) {
+	    $(this).find('form')[0].reset()
+	});	
 });
 
 /* ********************************************************
