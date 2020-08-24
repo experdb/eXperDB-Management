@@ -235,14 +235,7 @@ function fn_insert_work(){
  * DBMS 시스템 등록 버튼 클릭시
  ******************************************************** */
 function fn_dbmsInfo(){
-	var popUrl = "/db2pg/popup/dbmsDDLInfo.do";
-	var width = 965;
-	var height = 680;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	var winPop = window.open(popUrl,"dbmsInfoPop",popOption);
+	$('#pop_layer_dbmsInfo_reg').modal("show");
 }
 
 /* ********************************************************
@@ -253,21 +246,50 @@ function fn_tableList(gbn){
 		showSwalIcon('<spring:message code="migration.msg03" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
-	
-	var frmPop= document.frmPopup;
-	var url = '/db2pg/popup/tableInfo.do';
-	window.open('','popupView','width=930, height=850');  
-	     
-	frmPop.action = url;
-	frmPop.target = 'popupView';
-	frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
-	frmPop.tableGbn.value = gbn;
 	if(gbn == 'include'){
-		frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
+		var src_include_table_nm = $('#src_include_table_nm').val();  
 	}else{
-		frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
+		var src_exclude_table_nm = $('#src_exclude_table_nm').val();  
 	}
-	frmPop.submit();   
+	$.ajax({
+		url : "/db2pg/popup/tableInfo.do",
+		data : {
+			src_include_table_nm : src_include_table_nm,
+			src_exclude_table_nm : src_exclude_table_nm,
+			db2pg_sys_id : $('#db2pg_sys_id').val(),
+			tableGbn : gbn
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			tableList = result.tableList;
+			tableGbn = result.tableGbn;
+			$("#db2pg_sys_nm_table").val(nvlPrmSet(result.dbmsInfo[0].db2pg_sys_nm, ""));
+			$("#ipadr_table").val(nvlPrmSet(result.dbmsInfo[0].ipadr, ""));
+			$("#scm_nm_table").val(nvlPrmSet(result.dbmsInfo[0].scm_nm, ""));
+			$("#dbms_dscd_table").val(nvlPrmSet(result.dbmsInfo[0].dbms_dscd, ""));
+			$("#dtb_nm_table").val(nvlPrmSet(result.dbmsInfo[0].dtb_nm, ""));
+			$("#spr_usr_id_table").val(nvlPrmSet(result.dbmsInfo[0].spr_usr_id, ""));
+			$("#pwd_table").val(nvlPrmSet(result.dbmsInfo[0].pwd, ""));
+			$("#portno_table").val(nvlPrmSet(result.dbmsInfo[0].portno, ""));
+			
+			fn_search_tableInfo();
+			
+			$('#pop_layer_tableInfo_reg').modal("show");
+		}
+	});
 }
 
 /* ********************************************************

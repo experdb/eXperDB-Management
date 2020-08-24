@@ -176,6 +176,7 @@ $(window.document).ready(
 		$("#ddlDataTable_wrapper").show();
 		$("#dataDataTable").hide();
 		$("#dataDataTable_wrapper").hide();		
+		
 });
 
 /* ********************************************************
@@ -269,7 +270,6 @@ function fn_ddl_reg_popup(){
 	$("#src_include_tables", "#ddlRegForm").val("");
 	$("#src_exclude_tables", "#ddlRegForm").val("");
 	
-	
 	$('#pop_layer_ddl_reg').modal("show");
 }
 
@@ -280,15 +280,41 @@ function fn_ddl_regre_popup(){
 	var rowCnt = tableDDL.rows('.selected').data().length;
 	if (rowCnt == 1) {
 		var db2pg_ddl_wrk_id = tableDDL.row('.selected').data().db2pg_ddl_wrk_id;
-		var popUrl = "/db2pg/popup/ddlRegReForm.do?db2pg_ddl_wrk_id=" +  db2pg_ddl_wrk_id;
-		var width = 965;
-		var height = 705;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-		var winPop = window.open(popUrl,"ddlRegRePop",popOption);
-		winPop.focus();
+		$.ajax({
+			url : "/db2pg/popup/ddlRegReForm.do",
+			data : {
+				db2pg_ddl_wrk_id : db2pg_ddl_wrk_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+// 				$("#db2pg_sys_id_reg_re").val(nvlPrmSet(result.resultInfo[0].db2pg_sys_id, ""));
+// 				$("#db2pg_sys_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].db2pg_sys_nm, ""));
+// 				$("#ipadr_reg_re").val(nvlPrmSet(result.resultInfo[0].ipadr, ""));
+// 				$("#portno_reg_re").val(nvlPrmSet(result.resultInfo[0].portno, ""));
+// 				$("#dtb_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].dtb_nm, ""));
+// 				$("#scm_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].scm_nm, ""));
+// 				$("#spr_usr_id_reg_re").val(nvlPrmSet(result.resultInfo[0].spr_usr_id, ""));
+// 				$("#pwd_reg_re").val(nvlPrmSet(result.pwd, ""));
+				
+// 				$("#crts_nm_reg_re").val(result.resultInfo[0].crts).prop("selected", true);
+// 				$("#dbms_dscd_reg_re").val(result.resultInfo[0].dbms_dscd).prop("selected", true);
+				
+				$('#pop_layer_ddl_reg_re').modal("show");
+			}
+		});	
 	} else {
 		showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
@@ -703,6 +729,9 @@ function fn_ImmediateStart(gbn){
 </script>
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
 <%@include file="../popup/ddlRegForm.jsp"%>
+<%@include file="../popup/ddlRegReForm.jsp"%>
+<%@include file="../popup/dbmsDDLInfo.jsp"%>
+<%@include file="../popup/tableInfo.jsp"%>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -770,10 +799,10 @@ function fn_ImmediateStart(gbn){
 					<div class="card">
 						<div class="card-body" style="margin:-10px 0px -15px 0px;">
 							<form class="form-inline row" id="searchDDL">
-								<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
-									<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
-									<input type="text" class="form-control" maxlength="25" id="ddl_wrk_nm" name="ddl_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
-								</div>
+									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
+										<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
+										<input type="text" class="form-control" style="width:250px;" maxlength="25" id="ddl_wrk_nm" name="ddl_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
+									</div>
 									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" style="padding-right:10px;">
 										<select class="form-control" name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
 											<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
@@ -815,14 +844,14 @@ function fn_ImmediateStart(gbn){
  											</c:forEach>
 										</select>
 									</div>
-									<div class="input-group mb-2 mr-sm-2 col-sm-1_7" style="padding-right:10px;">
-										<input type="text" class="form-control" id="data_ipadr" name="data_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:200px;" id="data_ipadr" name="data_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
 									</div>
-									<div class="input-group mb-2 mr-sm-2 col-sm-1_7" style="padding-right:10px;">
-										<input type="text" class="form-control" id="data_dtb_nm" name="data_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:200px;" id="data_dtb_nm" name="data_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
 									</div>
-									<div class="input-group mb-2 mr-sm-2 col-sm-1_7" style="padding-right:10px;">
-										<input type="text" class="form-control" id="data_scm_nm" name="data_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:200px;" id="data_scm_nm" name="data_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
 									</div>
 									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />

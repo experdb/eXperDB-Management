@@ -399,7 +399,7 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/ddlRegReForm.do")
 	public ModelAndView ddlRegReForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -432,7 +432,6 @@ public class Db2pgSettingController {
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		mv.setViewName("db2pg/popup/ddlRegReForm");
 		return mv;
 	}
 
@@ -1190,7 +1189,7 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/tableInfo.do")
 	public ModelAndView tableInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		List<Db2pgSysInfVO> resultSet = null;
 		JSONArray jsonArray = new JSONArray();
 		//테이블구분 (추출테이블 = include , 제외테이블 = exclude)
@@ -1223,7 +1222,6 @@ public class Db2pgSettingController {
 		mv.addObject("tableGbn", tableGbn);
 		mv.addObject("tableList", jsonArray);
 		mv.addObject("dbmsInfo", resultSet);
-		mv.setViewName("db2pg/popup/tableInfo");
 		return mv;
 	}
 	

@@ -454,7 +454,6 @@ function fn_deleteScheduleList(){
 			data : {
 				rowList : JSON.stringify(rowList)
 			},
-			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
