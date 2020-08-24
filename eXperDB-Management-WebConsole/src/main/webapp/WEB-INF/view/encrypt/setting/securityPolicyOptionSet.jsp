@@ -594,7 +594,7 @@ function fnc_confirmRst(){
 									                 <div class="form-check"  style="margin-left: 20px;">
 									                            <label class="form-check-label">
 									                              <input type="checkbox" class="form-check-input" id="mon" name="mon"  />
-									                             <spring:message code="common.tue" />
+									                             <spring:message code="common.mon" />
 									                            <i class="input-helper"></i></label>
 									                 </div>									                 
 									                 <div class="form-check"  style="margin-left: 20px;">
