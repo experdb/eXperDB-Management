@@ -864,7 +864,7 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-history"></i>
@@ -920,90 +920,82 @@
 
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
-
-							<form class="form-inline">
-								<div class="row" style="margin:-10px 0px -15px 0px;">
-									<div class="input-group mb-2 mr-sm-2">
-<%-- 										<div class="input-group-prepend"> 
-											<div class="input-group-text search_execute" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="common.work_term" /></div> <!-- 실행이력 -->
-											<div class="input-group-text search_occur" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="eXperDB_scale.occur_term" /></div> <!-- 발생이력 -->
-										</div> --%>
-		
-										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
+						<div class="card-body" style="margin:-10px 0px -15px 0px;">
+							<form class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row">
+									<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
+									</div>
 												
-										<div class="input-group align-items-center">
-											<span style="border:none; padding: 0px 10px;"> ~ </span>
-										</div>
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none;"> ~ </span>
+									</div>
 		
-										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_end_dtm" name="wrk_end_dtm" readonly>
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
+									<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="height:44px;" id="wrk_end_dtm" name="wrk_end_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
 									</div>
+								</div>
 										
-									<div class="input-group mb-2 mr-sm-2 search_execute">
-										<select class="form-control" style="width:200px;" name="exe_rslt_cd" id="exe_rslt_cd">
-											<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
-											<option value="1"><spring:message code="common.success" /></option>
-											<option value="2"><spring:message code="common.failed" /></option>
-										</select>
-									</div>
+								<div class="input-group mb-2 mr-sm-2 search_execute col-sm-1_5">
+									<select class="form-control" name="exe_rslt_cd" id="exe_rslt_cd" style="margin-left: -0.7rem;margin-right: -0.7rem;">
+										<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
+										<option value="1"><spring:message code="common.success" /></option>
+										<option value="2"><spring:message code="common.failed" /></option>
+									</select>
+								</div>
 										
-									<div class="input-group mb-2 mr-sm-2">
-										<select class="form-control" style="width:200px;" name="scale_type_cd" id="scale_type_cd">
-											<option value=""><spring:message code="eXperDB_scale.scale_type" />&nbsp;<spring:message code="schedule.total" /></option>
-											<option value="1"><spring:message code="eXperDB_scale.scale_in" /></option>
-											<option value="2"><spring:message code="eXperDB_scale.scale_out" /></option>
-										</select>
-									</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+									<select class="form-control" name="scale_type_cd" id="scale_type_cd" style="margin-right: -0.7rem;">
+										<option value=""><spring:message code="eXperDB_scale.scale_type" />&nbsp;<spring:message code="schedule.total" /></option>
+										<option value="1"><spring:message code="eXperDB_scale.scale_in" /></option>
+										<option value="2"><spring:message code="eXperDB_scale.scale_out" /></option>
+									</select>
+								</div>
 									
-									<div class="input-group mb-2 mr-sm-2 search_occur">
-										<select class="form-control" style="width:200px;" name="policy_type_cd" id="policy_type_cd">
-											<option value=""><spring:message code="eXperDB_scale.policy_type" />&nbsp;<spring:message code="schedule.total" /></option>
-											<c:forEach var="result" items="${policyTypeList}" varStatus="status">
-												<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
-											</c:forEach>
-										</select>
-									</div>
+								<div class="input-group mb-2 mr-sm-2 search_occur col-sm-1_5">
+									<select class="form-control" name="policy_type_cd" id="policy_type_cd" style="margin-right: -0.7rem;">
+										<option value=""><spring:message code="eXperDB_scale.policy_type" />&nbsp;<spring:message code="schedule.total" /></option>
+										<c:forEach var="result" items="${policyTypeList}" varStatus="status">
+											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+										</c:forEach>
+									</select>
+								</div>
 
-									<div class="input-group mb-2 mr-sm-2 search_occur">
-										<select class="form-control" style="width:200px;" name="execute_type_cd" id="execute_type_cd">
-											<option value=""><spring:message code="eXperDB_scale.execute_type" />&nbsp;<spring:message code="schedule.total" /></option>
-											<c:forEach var="result" items="${executeTypeList}" varStatus="status">
-												<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
-											</c:forEach>
-										</select>
-									</div>
+								<div class="input-group mb-2 mr-sm-2 search_occur col-sm-1_7">
+									<select class="form-control" name="execute_type_cd" id="execute_type_cd" style="margin-right: -0.7rem;">
+										<option value=""><spring:message code="eXperDB_scale.execute_type" />&nbsp;<spring:message code="schedule.total" /></option>
+										<c:forEach var="result" items="${executeTypeList}" varStatus="status">
+											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+										</c:forEach>
+									</select>
+								</div>
 									
-									<div class="input-group mb-2 mr-sm-2 search_execute">
-										<input type="text" class="form-control" style="width:250px;" id="process_id_set" name="process_id_set" onblur="this.value=this.value.trim()" placeholder='<spring:message code="eXperDB_scale.process_id" />' maxlength="20" />
-									</div>
+								<div class="input-group mb-2 mr-sm-2 search_execute col-sm-2_5" >
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="process_id_set" name="process_id_set" onblur="this.value=this.value.trim()" placeholder='<spring:message code="eXperDB_scale.process_id" />' maxlength="20" />
+								</div>
 									
-									<div class="input-group mb-2 mr-sm-2 search_execute">
+								<div class="input-group mb-2 mr-sm-2 search_execute col-sm-1_5">
 <%-- 										<div class="input-group-prepend">
 											<div class="input-group-text" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="eXperDB_scale.wrk_type" /></div>
 										</div>
 										 --%>	
-										<select class="form-control" style="width:200px;" name="wrk_type_Cd" id="wrk_type_Cd">
-											<option value=""><spring:message code="eXperDB_scale.wrk_type" />&nbsp;<spring:message code="schedule.total" /></option>
-											<c:forEach var="result" items="${wrkTypeList}" varStatus="status">
-												<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
-											</c:forEach>
-										</select>
-									</div>
-									
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>
+									<select class="form-control" style="width:200px;" name="wrk_type_Cd" id="wrk_type_Cd">
+										<option value=""><spring:message code="eXperDB_scale.wrk_type" />&nbsp;<spring:message code="schedule.total" /></option>
+										<c:forEach var="result" items="${wrkTypeList}" varStatus="status">
+											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+										</c:forEach>
+									</select>
 								</div>
+									
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>
 						</div>
 					</div>

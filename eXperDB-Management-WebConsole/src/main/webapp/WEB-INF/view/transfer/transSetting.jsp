@@ -404,20 +404,12 @@ a:hover.tip span {
 	 ******************************************************** */
 	function fn_insert_chogihwa(gbn) {
 		if (gbn == "reg") {
-			$("#ins_db_id", "#insRegForm").val("");
-			$("#ins_table_nm").val("");
-
 			//스냅샷 모드 추가
 			$("#ins_snapshot_mode", "#insRegForm").val('TC003603').prop("selected", true); //값이 1인 option 선택
 
 			//압축형태 추가
 			$("#ins_compression_type", "#insRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
-			
-			//입력관련 초기화
-			$("#ins_kc_ip", "#searchRegForm").val("");
-			$("#ins_kc_port", "#searchRegForm").val("");
 
-			$("#ins_connect_nm", "#insRegForm").val("");
 			$("#ins_snapshotModeDetail", "#insRegForm").html('<spring:message code="data_transfer.msg1" />');
 
 			//메타데이타 설정
@@ -432,11 +424,6 @@ a:hover.tip span {
 			
 			$('a[href="#insSettingTab"]').tab('show');
 		} else {
-			$("#mod_db_id", "#modRegForm").val("");
-			$("#mod_db_id_set", "#modRegForm").val("");
-			$("#mod_table_nm").val("");
-			$("#mod_trans_id", "#modRegForm").val("");
-			$("#mod_trans_exrt_trg_tb_id","#modRegForm").val("");
 			
 			//스냅샷 모드 추가
 			$("#mod_snapshot_mode", "#modRegForm").val('TC003603').prop("selected", true); //값이 1인 option 선택
@@ -445,10 +432,6 @@ a:hover.tip span {
 			$("#mod_compression_type", "#modRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 			
 			//입력관련 초기화
-			$("#mod_kc_ip", "#searchRegForm").val("");
-			$("#mod_kc_port", "#searchRegForm").val("");
-
-			$("#mod_connect_nm", "#modRegForm").val("");
 			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />');
 
 			//메타데이타 설정
@@ -1044,7 +1027,7 @@ a:hover.tip span {
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5"  style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-send"></i>
@@ -1088,9 +1071,9 @@ a:hover.tip span {
 					<!-- search param start -->
 					<div class="card">
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
-							<form class="form-inline" onsubmit="return false">
-								<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-									<input type="text" class="form-control" style="width:400px;" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name_set" />'/>					
+							<form class="form-inline row" onsubmit="return false">
+								<div class="input-group mb-2 mr-sm-2 col-sm-4" style="padding-right:10px;">
+									<input type="text" class="form-control" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name_set" />'/>					
 								</div>
 
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_select();" >

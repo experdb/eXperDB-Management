@@ -246,7 +246,7 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-history"></i>
@@ -310,8 +310,8 @@
 		
 										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
 											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_end_dtm" name="wrk_end_dtm" readonly>
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											<span class="input-group-addon input-group-append border-left" >
+												<span class="ti-calendar input-group-text" style="cursor:pointer;"></span>
 											</span>
 										</div>
 									</div>
@@ -324,7 +324,7 @@
 										</select>
 									</div>
 									
-									<div class="input-group mb-2 mr-sm-2 col-sm-3" style="padding-right:10px;">
+									<div class="input-group mb-2 mr-sm-2 col-sm-3">
 										<input type="text" class="form-control" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' maxlength="25" />
 									</div>
 

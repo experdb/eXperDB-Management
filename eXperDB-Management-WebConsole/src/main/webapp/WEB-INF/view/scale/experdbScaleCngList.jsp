@@ -877,7 +877,7 @@ a:hover.tip span {
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-cog"></i>
@@ -921,17 +921,17 @@ a:hover.tip span {
 					<div class="card">
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 
-							<form class="form-inline">
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control" style="width:200px; margin-right: 1rem;" name="scale_type_cd" id="scale_type_cd">
+							<form class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" style="margin-right: -0.7rem;" name="scale_type_cd" id="scale_type_cd">
 										<option value=""><spring:message code="eXperDB_scale.scale_type" />&nbsp;<spring:message code="schedule.total" /></option>
 										<option value="1"><spring:message code="eXperDB_scale.scale_in" /></option>
 										<option value="2"><spring:message code="eXperDB_scale.scale_out" /></option>
 									</select>
 								</div> 
 
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control" style="width:200px; margin-right: 1rem;" name="policy_type_cd" id="policy_type_cd">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" style="margin-right: -0.7rem;" name="policy_type_cd" id="policy_type_cd">
 										<option value=""><spring:message code="eXperDB_scale.policy_type" />&nbsp;<spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${policyTypeList}" varStatus="status">
 											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
@@ -939,8 +939,8 @@ a:hover.tip span {
 									</select>
 								</div>
 
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control" style="width:200px; margin-right: 1rem;" name="execute_type_cd" id="execute_type_cd">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" name="execute_type_cd" id="execute_type_cd">
 										<option value=""><spring:message code="eXperDB_scale.execute_type" />&nbsp;<spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${executeTypeList}" varStatus="status">
 											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>

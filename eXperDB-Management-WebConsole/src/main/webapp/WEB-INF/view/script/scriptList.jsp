@@ -184,10 +184,6 @@
 				}
 			},
 			success : function(result) {
-				$("#ins_wrk_nm", "#insRegForm").val("");
-				$("#ins_wrk_exp", "#insRegForm").val("");
-				$("#ins_exe_cmd", "#insRegForm").val("");
-
 				$('#pop_layer_ins_script').modal("show");
 			}
 		});
@@ -222,10 +218,6 @@
 				}
 			},
 			success : function(result) {
-				$("#mod_wrk_nm", "#modRegForm").val("");
-				$("#mod_wrk_exp", "#modRegForm").val("");
-				$("#mod_exe_cmd", "#modRegForm").val("");
-
 				//초기화
 				if (result.length > 0) {
 					$("#mod_wrk_nm", "#modRegForm").val(nvlPrmSet(result[0].wrk_nm, ""));
@@ -280,10 +272,6 @@
 				}
 			},
 			success : function(result) {
-				$("#mod_wrk_nm", "#modRegForm").val("");
-				$("#mod_wrk_exp", "#modRegForm").val("");
-				$("#mod_exe_cmd", "#modRegForm").val("");
-
 				//초기화
 				if (result.length > 0) {
 					$("#mod_wrk_nm", "#modRegForm").val(nvlPrmSet(result[0].wrk_nm, ""));
@@ -610,7 +598,7 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-cog"></i>

@@ -495,10 +495,10 @@
 
 							<div class="tab-pane fade" role="tabpanel" id="modTableTab">
 								<div class="card">
-									<div class="card-body">
-										<form class="form-inline" onsubmit="return false">
-											<div class="input-group mb-2 mr-sm-2">
-												<input type="text" class="form-control form-control-xsm" style="width:400px;" maxlength="25" id="mod_table_nm" name="mod_table_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.table_name" />'/>				
+									<div class="card-body" style="margin:-10px -10px -15px -10px;">
+										<form class="form-inline row" onsubmit="return false">
+											<div class="input-group mb-2 mr-sm-2 col-sm-6">
+												<input type="text" class="form-control form-control-xsm" maxlength="25" id="mod_table_nm" name="mod_table_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.table_name" />'/>				
 											</div>
 				
 											<button type="button" class="btn btn-inverse-primary btn-sm btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_table_search_mod();" >
@@ -532,20 +532,24 @@
 									<div class="col-1 stretch-card div-form-margin-table" style="max-width: 6%;" id="center_div">
 										<div class="card" style="background-color: transparent !important;border:0px;">
 											<div class="card-body">	
-												<div class="card my-sm-2" style="border:0px;background-color: transparent !important;">
+												<div class="card my-sm-2 row" style="border:0px;background-color: transparent !important;">
 													<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-top:100px;margin-bottom:-15px;">
 														<a href="#" class="tip" onclick="fn_mod_t_allRightMove();">
 															<i class="fa fa-angle-double-right" style="font-size: 35px;cursor:pointer;"></i>
 															<span style="width: 200px;"><spring:message code="data_transfer.move_right_line" /></span>
 														</a>
 													</label>
-														
+												
+													<br/>
+
 													<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
 														<a href="#" class="tip" onclick="fn_mod_t_rightMove();">
 															<i class="fa fa-angle-right" style="font-size: 35px;cursor:pointer;"></i>
 															<span style="width: 200px;"><spring:message code="data_transfer.move_right_line" /></span>
 														</a>
 													</label>
+													
+													<br/>
 	
 													<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
 														<a href="#" class="tip" onclick="fn_mod_t_leftMove();">
@@ -553,6 +557,8 @@
 															<span style="width: 200px;"><spring:message code="data_transfer.move_left_line" /></span>
 														</a>
 													</label>
+													
+													<br/>
 	
 													<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
 														<a href="#" class="tip" onclick="fn_mod_t_allLeftMove();">
