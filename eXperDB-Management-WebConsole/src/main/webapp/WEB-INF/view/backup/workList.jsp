@@ -694,7 +694,7 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-cog"></i>
@@ -753,12 +753,12 @@
 						<div class="card-body" style="margin:-10px 0px -15px 0px;">
 
 							<form class="form-inline row" id="findSearch">
-									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:-10px;">
+									<div class="input-group mb-2 mr-sm-2 col-sm-2">
 										<input hidden="hidden" />
-										<input type="text" class="form-control" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
+										<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
 									</div>
 		
-									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_rman" style="padding-right:10px;">
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_rman">
 										<select class="form-control" name="bck_opt_cd" id="bck_opt_cd">
 											<option value=""><spring:message code="backup_management.backup_option" />&nbsp;<spring:message code="schedule.total" /></option>
 											<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
@@ -767,7 +767,7 @@
 										</select>
 									</div>
 		
-									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_dump" style="padding-right:10px;display:none;">
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_dump" style="display:none;">
 										<select class="form-control" name="db_id" id="db_id">
 											<option value=""><spring:message code="common.database" />&nbsp;<spring:message code="schedule.total" /></option>
 											<c:forEach var="result" items="${dbList}" varStatus="status">
