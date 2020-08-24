@@ -176,7 +176,7 @@ $(function() {
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
-				<div class="card-body">
+				<div class="card-body" >
 					<!-- title start -->
 					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
 						<div class="card" style="margin-bottom:0px;">
@@ -218,12 +218,12 @@ $(function() {
 
 		<div class="col-lg-6 grid-margin stretch-card">
 		  <div class="card">
-		    <div class="card-body">
+		    <div class="card-body" style=" height: 100%;">
 		      <h4 class="card-title"><spring:message code="extension_pack_installation_information.dbms_list"/></h4>
-		      <div class="table-responsive">
+		      <div class="table-responsive" style=" height: 100%;">
 			      <table id="dbServerList" class="table table-hover table-striped" cellspacing="0" width="100%" align="right">
 					<thead>
-						<tr class="bg-primary text-white">
+						<tr class="bg-info text-white">
 							<th><spring:message code="common.no" /></th>
 							<th></th>
 							<th></th>
@@ -247,12 +247,12 @@ $(function() {
 		
 		<div class="col-lg-6 grid-margin stretch-card">
 		  <div class="card">
-		    <div class="card-body">
+		    <div class="card-body" style=" height: 100%;">
 		      <h4 class="card-title"><spring:message code="extension_pack_installation_information.exp_module_list"/></h4>
-		      <div class="table-responsive">
+		      <div class="table-responsive"  style=" height: 100%;">
 			  	<table id="dbList" class="table table-hover table-striped" cellspacing="0" width="100%" align="left">
 					<thead>
-						<tr class="bg-primary text-white">
+						<tr class="bg-info text-white">
 							<th><spring:message code="extension_pack_installation_information.extension_name" /></th>
 							<th><spring:message code="properties.version" /></th>
 							<th><spring:message code="extension_pack_installation_information.install_yn" /> </th>

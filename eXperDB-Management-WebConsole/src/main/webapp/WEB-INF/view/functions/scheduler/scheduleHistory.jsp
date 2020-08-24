@@ -491,7 +491,7 @@
 												<col style="width: 10%;" />
 											</colgroup>
 											<thead>
-												<tr class="bg-primary text-white" style="border-bottom: 1px solid #b8c3c6;">
+												<tr class="bg-info text-white" style="border-bottom: 1px solid #b8c3c6;">
 													<th scope="col"><spring:message code="common.no" /></th>
 													<th scope="col"><spring:message code="schedule.schedule_name" /></th>
 													<th scope="col"><spring:message code="common.dbms_name" /></th>

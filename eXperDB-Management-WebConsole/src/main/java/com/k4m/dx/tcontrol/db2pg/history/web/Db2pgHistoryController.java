@@ -121,14 +121,14 @@ public class Db2pgHistoryController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/db2pgDdlErrHistoryDetail.do")
 	public ModelAndView db2pgDdlErrHistoryDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		Db2pgHistoryVO result = null;
 		try {
 			int mig_exe_sn=Integer.parseInt(request.getParameter("mig_exe_sn"));
 
 			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgDdlHistoryDetail(mig_exe_sn);
 			mv.addObject("result",result);
-			mv.setViewName("db2pg/popup/db2pgHistoryDetail");
+			//mv.setViewName("db2pg/popup/db2pgHistoryDetail");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -146,14 +146,14 @@ public class Db2pgHistoryController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/db2pgMigErrHistoryDetail.do")
 	public ModelAndView db2pgMigErrHistoryDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		Db2pgHistoryVO result = null;
 		try {
 			int mig_exe_sn=Integer.parseInt(request.getParameter("mig_exe_sn"));
 
 			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgMigHistoryDetail(mig_exe_sn);
 			mv.addObject("result",result);
-			mv.setViewName("db2pg/popup/db2pgHistoryDetail");
+			//mv.setViewName("db2pg/popup/db2pgHistoryDetail");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -171,7 +171,7 @@ public class Db2pgHistoryController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/db2pgResult.do")
 	public ModelAndView db2pgResult(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		Map<String, Object> db2pgResult = null;
 		Db2pgHistoryVO result = null;
 		try {
@@ -183,7 +183,7 @@ public class Db2pgHistoryController {
 			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgMigHistoryDetail(mig_exe_sn);
 			mv.addObject("result",result);
 			mv.addObject("db2pgResult",db2pgResult);
-			mv.setViewName("db2pg/popup/db2pgResult");
+			//mv.setViewName("db2pg/popup/db2pgResult");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -199,7 +199,7 @@ public class Db2pgHistoryController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/db2pgResultDDL.do")
 	public ModelAndView db2pgResultDDL(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		Db2pgHistoryVO result = null;
 		try {
 			// 화면접근이력 이력 남기기
@@ -214,7 +214,7 @@ public class Db2pgHistoryController {
 			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgDdlHistoryDetail(mig_exe_sn);
 			mv.addObject("result",result);
 			mv.addObject("ddl_save_pth",ddl_save_pth);
-			mv.setViewName("db2pg/popup/db2pgResultDDL");
+			//mv.setViewName("db2pg/popup/db2pgResultDDL");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -27,7 +27,7 @@
 
 	function fn_init() {
 		userTable = $('#user').DataTable({
-			scrollY : "370px",
+			scrollY : "500px",
 			scrollX: true,	
 			searching : false,
 			paging : false,
@@ -169,7 +169,7 @@
 				}
 				
 				html2+='<tbody>';
-				html2+='<tr class="bg-primary text-white">';
+				html2+='<tr class="bg-info text-white">';
 				html2+='		<td>'+item.db_svr_nm+'</td>';
 				html2+='		<td><div class="inp_chk"><input type="checkbox" id="'+item.db_svr_id+'" onClick="fn_allCheck(\''+item.db_svr_id+'\', \''+ array+'\');">';
 				html2+='		<label for="'+item.db_svr_id+'"></lavel></div></td>';
@@ -443,11 +443,12 @@
 
 		<div class="col-lg-6 grid-margin stretch-card">
 		  <div class="card">
-		    <div class="card-body">
+		    <div class="card-body" style=" height: 100%;">
 		      <h4 class="card-title"><spring:message code="auth_management.user_choice" /></h4>
-		      <div class="table-responsive">
+		      <div class="table-responsive" style=" height: 100%;">
 				<form class="form-inline" style="float: right;">
 					<div class="input-group mb-2 mr-sm-2">
+						<input hidden="hidden" />
 						<input type="text" class="form-control" style="width:250px;" id="search">					
 					</div>
 					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">
@@ -456,7 +457,7 @@
 				</form>
 				<table id="user" class="table table-hover table-striped" style="width:100%;">
 					<thead>
-						<tr class="bg-primary text-white">
+						<tr class="bg-info text-white">
 							<th width="20"><spring:message code="common.no"/></th>
 							<th width="90"><spring:message code="user_management.id" /></th>
 							<th width="90"><spring:message code="user_management.user_name" /></th>

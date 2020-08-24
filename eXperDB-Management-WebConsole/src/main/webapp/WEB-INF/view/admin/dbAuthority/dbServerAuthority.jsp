@@ -91,7 +91,7 @@
 	 			$(result).each(function (index, item) {
 					//var html = "";
  					html1+='<tbody>';
-					html1+='<tr class="bg-primary text-white">';
+					html1+='<tr class="bg-info text-white">';
 					html1+='		<td>'+item.db_svr_nm+'</td>';
 					html1+='		<td><div class="inp_chk"><input type="checkbox" id="'+item.db_svr_id+'" onClick="fn_allCheck(\''+item.db_svr_id+'\');">';
 					html1+='		<label for="'+item.db_svr_id+'"></lavel></div></td>';
@@ -857,13 +857,14 @@
 
 		<div class="col-lg-6 grid-margin stretch-card">
 			<div class="card">
-				<div class="card-body">
+				<div class="card-body" style=" height: 100%;">
 					<h5 class="card-title">
 						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="auth_management.user_choice" />
 					</h5>
-					<div class="table-responsive" style="overflow:hidden;min-height:650px;">
+					<div class="table-responsive" style=" height: 100%;">
 						<form class="form-inline" style="float: right;">
 							<div class="input-group mb-2 mr-sm-2">
+							<input hidden="hidden" />
 								<input type="text" class="form-control" style="width:250px;" id="search">
 							</div>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">

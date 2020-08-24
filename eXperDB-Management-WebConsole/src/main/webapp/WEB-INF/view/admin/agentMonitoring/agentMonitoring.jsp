@@ -129,7 +129,7 @@
 										<col style="width:15%;" />
 									</colgroup>
 									<thead>
-										<tr class="bg-primary text-white">
+										<tr class="bg-info text-white">
 											<th scope="col"><spring:message code="common.no" /></th>
 											<th scope="col"><spring:message code="common.dbms_name" /></th>
 											<th scope="col"><spring:message code="dbms_information.dbms_ip" /> </th>

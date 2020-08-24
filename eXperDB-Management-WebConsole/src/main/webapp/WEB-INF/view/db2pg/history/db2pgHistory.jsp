@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ include file="../../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="../../cmmn/cs2.jsp"%>
+
 <%
 	/**
 	* @Class Name : db2pgHistory.jsp
@@ -12,7 +15,8 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  2019.09.17     최초 생성
-    *	
+	*  2020.08.21   변승우 과장		UI 디자인 변경
+	*	
 	* author 변승우
 	* since 2019.09.17
 	*
@@ -22,42 +26,10 @@
 
 <script type="text/javascript">
 
-var gbn ="${gbn}";
-var table = null;
+//var gbn ="${gbn}";
+
 var tableDDL = null;
 var tableData = null;
-
-
-/* ********************************************************
- * Tab Click
- ******************************************************** */
-function selectTab(tab){	
-	if(tab == "dataWork"){
-		getdataDataList();
-		$("#dataDataTable").show();
-		$("#dataDataTable_wrapper").show();
-		$("#ddlDataTable").hide();
-		$("#ddlDataTable_wrapper").hide();
-		$("#tab1").hide();
-		$("#tab2").show();
-		$("#searchDDL").hide();
-		$("#searchData").show();
-		$("#btnDDL").hide();
-		$("#btnData").show();
-	}else{
-		getddlDataList();
-		$("#ddlDataTable").show();
-		$("#ddlDataTable_wrapper").show();
-		$("#dataDataTable").hide();
-		$("#dataDataTable_wrapper").hide();
-		$("#tab1").show();
-		$("#tab2").hide();
-		$("#searchDDL").show();
-		$("#searchData").hide();
-		$("#btnDDL").show();
-		$("#btnData").hide();
-	}
-}
 
 function fn_init(){
 	tableDDL = $('#ddlDataTable').DataTable({
@@ -81,11 +53,20 @@ function fn_init(){
 					render : function(data, type, full, meta) {	 						
 						var html = '';
 						if (full.exe_rslt_cd == 'TC001701') {
-							html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Complete</button></span>";	
+							html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_ddlResult(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
+							html += "	<i class='fa fa-check-circle text-primary' >";
+							html += '&nbsp;<spring:message code="common.success" /></i>';
+							html += "</button>";					
 						} else if(full.exe_rslt_cd == 'TC001702'){
-							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_ddlFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+							html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_ddlFailLog('+full.mig_exe_sn+')">';
+							html += '<i class="fa fa-times"></i>';
+							html += '<spring:message code="common.failed" />';
+							html += "</button>";		
 						} else {
-							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+							html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+							html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+							html += '&nbsp;<spring:message code="etc.etc28" />';
+							html += "</div>";
 						}
 						return html;
 					},
@@ -127,11 +108,21 @@ function fn_init(){
 				render : function(data, type, full, meta) {	 						
 					var html = '';
 					if (full.exe_rslt_cd == 'TC001701') {
-						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Complete</button></span>";	
+						html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_result(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
+						html += "	<i class='fa fa-check-circle text-primary' >";
+						html += '&nbsp;<spring:message code="common.success" /></i>';
+						html += "</button>";
+						
 					} else if(full.exe_rslt_cd == 'TC001702'){
-						html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_migFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+						html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_migFailLog('+full.mig_exe_sn+')">';
+						html += '<i class="fa fa-times"></i>';
+						html += '<spring:message code="common.failed" />';
+						html += "</button>";
 					} else {
-						html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+						html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+						html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+						html += '&nbsp;<spring:message code="etc.etc28" />';
+						html += "</div>";
 					}
 					return html;
 				},
@@ -189,39 +180,31 @@ function fn_init(){
  * Data initialization
  ******************************************************** */
 $(window.document).ready(
-
+		
 	function() {	
-		var today = new Date();
-		var day_end = today.toJSON().slice(0,10);
-		
-		today.setDate(today.getDate() - 7);
-		var day_start = today.toJSON().slice(0,10); 
-
-		$("#mig_wrk_strt_dtm").val(day_start);
-		$("#mig_wrk_end_dtm").val(day_end);
-		$("#ddl_wrk_strt_dtm").val(day_start);
-		$("#ddl_wrk_end_dtm").val(day_end);
-		
+	
 		fn_init();
+		
+		$("#migrationTab").hide();	
+		
+		//table 탭 이동시
+		$('a[href="#ddlTab"]').on('shown.bs.tab', function (e) {
+			$("#ddlTab").show();
+			$("#migrationTab").hide();
+		}); 
+		
+		//table 탭 이동시
+		$('a[href="#migrationTab"]').on('shown.bs.tab', function (e) {
+			$("#migrationTab").show();
+			$("#ddlTab").hide();
+		}); 
+				
+		ddlDateCalenderSetting();
+		migDateCalenderSetting();
+		
 		getddlDataList();
 		getdataDataList();			
-	
-		$("#ddlDataTable").show();
-		$("#ddlDataTable_wrapper").show();
-		$("#dataDataTable").hide();
-		$("#dataDataTable_wrapper").hide();
 
-		if(gbn=="ddl"){
-			selectTab('ddlWork');
-		}else if (gbn=="mig"){
-			selectTab('dataWork');
-		}
-		
-		$( ".calendar" ).datepicker({
-			dateFormat: 'yy-mm-dd',
-			changeMonth : true,
-			changeYear : true
-	 	});
 	}
 );
 
@@ -244,13 +227,11 @@ function getddlDataList(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
@@ -284,13 +265,11 @@ function getdataDataList(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
@@ -307,47 +286,122 @@ function getdataDataList(){
 
 
 
+
  /* ********************************************************
   * DDL 에러 로그 팝업
-  ******************************************************** */
- function fn_ddlFailLog(mig_exe_sn){
-	  var frmPop= document.frmPopup;
+  *********************************************************/
+  function fn_ddlFailLog(mig_exe_sn){
 	  
-		var width = 950;
-		var height = 690;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-	    var url = '/db2pg/popup/db2pgDdlErrHistoryDetail.do';
-	    window.open('','popupView',popOption);  
-	     
-	    frmPop.action = url;
-	    frmPop.target = 'popupView';
-	    frmPop.mig_exe_sn.value = mig_exe_sn;  
-	    frmPop.submit();   
+		$.ajax({
+			url : "/db2pg/popup/db2pgDdlErrHistoryDetail.do", 
+		  	data : {
+		  		mig_exe_sn:mig_exe_sn
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {	
+				$('#pop_wrk_nm').html(result.result.wrk_nm);
+				$('#pop_wrk_exp').html(result.result.wrk_exp);
+				$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+				$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
+				$('#pop_wrk_dtm').html(result.result.wrk_dtm);
+				$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;<spring:message code="common.failed" /></i>');
+				$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
+				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
+			}
+		});
+
 }
+
+ 
+ 
+
+  /* ********************************************************
+   * DDL추출 로그 팝업
+   ******************************************************** */
+  function fn_ddlResult(mig_exe_sn, ddl_save_pth){
+ 	 
+ 		$.ajax({
+ 			url : "/db2pg/popup/db2pgResultDDL.do", 
+ 		  	data : {
+ 		  		mig_exe_sn : mig_exe_sn,
+ 		  		ddl_save_pth :ddl_save_pth
+ 		  	},
+ 			dataType : "json",
+ 			type : "post",
+ 			beforeSend: function(xhr) {
+ 		        xhr.setRequestHeader("AJAX", true);
+ 		     },
+ 			error : function(xhr, status, error) {
+ 				if(xhr.status == 401) {
+ 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+ 				} else if(xhr.status == 403) {
+ 					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+ 				} else {
+ 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+ 				}
+ 			},
+ 			success : function(result) {		
+ 				$('#ddl_result_wrk_nm').html(result.result.wrk_nm);
+ 				$('#ddl_result_wrk_exp').html(result.result.wrk_exp);				
+ 				$('#ddl_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;<spring:message code="common.success" /></i>');				
+ 				fn_ddlResultInit();
+ 				getDataResultList(result.ddl_save_pth);			
+ 				$('#pop_layer_db2pgResultDDL').modal("show");
+ 			}
+ 		});
+  }
+  
+ 
  
  
  /* ********************************************************
   * MIGRATION 에러 로그 팝업
   ******************************************************** */
  function fn_migFailLog(mig_exe_sn){
-	  var frmPop= document.frmPopup;
-	  
-		var width = 950;
-		var height = 690;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-	    var url = '/db2pg/popup/db2pgMigErrHistoryDetail.do';
-	    window.open('','popupView',popOption);  
-	     
-	    frmPop.action = url;
-	    frmPop.target = 'popupView';
-	    frmPop.mig_exe_sn.value = mig_exe_sn;  
-	    frmPop.submit();   
+	 
+		$.ajax({
+			url : "/db2pg/popup/db2pgMigErrHistoryDetail.do", 
+		  	data : {
+		  		mig_exe_sn:mig_exe_sn
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {		
+				$('#pop_wrk_nm').html(result.result.wrk_nm);
+				$('#pop_wrk_exp').html(result.result.wrk_exp);
+				$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+				$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
+				$('#pop_wrk_dtm').html(result.result.wrk_dtm);
+				$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;<spring:message code="common.failed" /></i>');
+				$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
+				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
+			}
+		});
 }
 
 
@@ -357,216 +411,381 @@ function getdataDataList(){
   * MIGRATION 로그 팝업
   ******************************************************** */
  function fn_result(mig_exe_sn, trans_save_pth){
-	  var frmPop= document.frmPopup;
-	  
-		var width = 950;
-		var height = 690;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-	    var url = '/db2pg/popup/db2pgResult.do';
-	    window.open('','popupView',popOption);  
-	     
-	    frmPop.action = url;
-	    frmPop.target = 'popupView';
-	    frmPop.trans_save_pth.value = trans_save_pth;
-	    frmPop.mig_exe_sn.value = mig_exe_sn;  
-	    frmPop.submit();   
+		$.ajax({
+			url : "/db2pg/popup/db2pgResult.do", 
+		  	data : {
+		  		mig_exe_sn : mig_exe_sn,
+		  		trans_save_pth :trans_save_pth
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {		
+
+				$('#mig_result_wrk_nm').html(result.result.wrk_nm);
+				$('#mig_result_wrk_exp').html(result.result.wrk_exp);
+				$('#mig_result_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+				$('#mig_result_wrk_end_dtm').html(result.result.wrk_end_dtm);
+				$('#mig_result_wrk_dtm').html(result.result.wrk_dtm);				
+ 				$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;<spring:message code="common.success" /></i>');
+
+ 				 if(result.db2pgResult.RESULT == null){
+ 					$('#mig_result_msg').html("파일이 삭제되어 작업로그정보를 출력할 수 없습니다.");	
+ 				}else{
+ 					$('#mig_result_msg').html(result.db2pgResult.RESULT);	
+ 				} 
+ 				
+				$('#pop_layer_db2pgResult').modal("show"); 
+			}
+		});
 }
  
  
- /* ********************************************************
-  * DDL추출 로그 팝업
-  ******************************************************** */
- function fn_ddlResult(mig_exe_sn, ddl_save_pth){
-
-	  var frmPop= document.frmPopup;
-	  
-		var width = 950;
-		var height = 690;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-	    var url = '/db2pg/popup/db2pgResultDDL.do';
-	    window.open('','popupView',popOption);  
-	     
-	    frmPop.action = url;
-	    frmPop.target = 'popupView';
-	    frmPop.ddl_save_pth.value = ddl_save_pth;
-	    frmPop.mig_exe_sn.value = mig_exe_sn;  
-	    frmPop.submit();  
- }
  
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function ddlDateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+
+		today.setDate(today.getDate() - 7);
+		var day_start = today.toJSON().slice(0,10); 
+
+		$("#ddl_wrk_strt_dtm").val(day_start);
+		$("#ddl_wrk_end_dtm").val(day_end);
+
+		if ($("#ddl_wrk_strt_dtm_div").length) {
+			$('#ddl_wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+
+		if ($("#wrk_end_dtm_div").length) {
+			$('#wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+		
+		$("#ddl_wrk_strt_dtm").datepicker('setDate', day_start);
+	    $("#ddl_wrk_end_dtm").datepicker('setDate', day_end);
+	    $('#ddl_wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#ddl_wrk_end_dtm_div').datepicker('updateDates');
+	}	
+	
+	
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function migDateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+
+		today.setDate(today.getDate() - 7);
+		var day_start = today.toJSON().slice(0,10); 
+
+		$("#mig_wrk_strt_dtm").val(day_start);
+		$("#mig_wrk_end_dtm").val(day_end);
+
+		if ($("#mig_wrk_strt_dtm_div").length) {
+			$('#mig_wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+
+		if ($("#mig_wrk_end_dtm_div").length) {
+			$('#mig_wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+		
+		$("#mig_wrk_strt_dtm").datepicker('setDate', day_start);
+	    $("#mig_wrk_end_dtm").datepicker('setDate', day_end);
+	    $('#mig_wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#mig_wrk_end_dtm_div').datepicker('updateDates');
+	}	
  
  
 </script>
-<%@include file="../popup/db2pgConfigInfo.jsp"%>
+
+<%-- <%@include file="../popup/db2pgConfigInfo.jsp"%> --%>
+<%@include file="../popup/db2pgHistoryDetail.jsp"%>
+<%@include file="../popup/db2pgResultDDL.jsp"%> 
+<%@include file="../popup/db2pgResult.jsp"%> 
+
+
 <form name="frmPopup">
 	<input type="hidden" name="mig_exe_sn"  id="mig_exe_sn">
 	<input type="hidden" name="trans_save_pth"  id="trans_save_pth">
 	<input type="hidden" name="ddl_save_pth"  id="ddl_save_pth">
 </form>
 
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="migration.performance_history"/><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="help.shedule_execution_history" /></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>MIGRATION</li>
-					<li class="on"><spring:message code="migration.performance_history"/></li>
-				</ul>
-			</div>
-		</div>	
-		<div class="contents">
-			<div class="cmm_tab">
-				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
-				</ul>
-				<ul id="tab2" style="display:none;">
-					<li><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li class="atv"><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
-				</ul>
-			</div>
-			<div class="cmm_grp">
-				<div class="btn_type_float">													
-					<div class="btn_type_01" id="btnDDL">
-						<span class="btn"><button type="button" id="btnSelect" onclick="getddlDataList();"><spring:message code="common.search" /></button></span>			
-					</div>
-					<div class="btn_type_01" id="btnData" style="display:none;">
-						<span class="btn"><button type="button" id="btnSelect" onclick="getdataDataList();"><spring:message code="common.search" /></button></span>		
-					</div>
-				</div>
-				<div class="sch_form">
-					<table class="write" id="searchDDL">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width:110px;" />
-							<col style="width:230px;" />
-							<col style="width:110px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t10"><spring:message code="common.work_term" /></th>
-								<td colspan="3">
-									<div class="calendar_area">
-										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="ddl_wrk_strt_dtm" id="ddl_wrk_strt_dtm" class="calendar" readonly/>
-										<span class="wave">~</span>
-										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="ddl_wrk_end_dtm" id="ddl_wrk_end_dtm" class="calendar" readonly/>
+
+		<div class="content-wrapper main_scroll" id="contentsDiv">
+			<div class="row">
+				<div class="col-12 div-form-margin-srn stretch-card">
+					<div class="card">
+						<div class="card-body">
+							<!-- title start -->
+							<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+								<div class="card" style="margin-bottom:0px;">
+									<div class="card-header" role="tab" id="page_header_div">
+										<div class="row">
+											<div class="col-5">
+												<h6 class="mb-0">
+													<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+														<i class="fa fa-check-square"></i>
+														<span class="menu-title"><spring:message code="migration.performance_history"/></span>
+														<i class="menu-arrow_user" id="titleText" ></i>
+													</a>
+												</h6>
+											</div>
+											<div class="col-7">
+							 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+							 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+							 							MIGRATION
+							 						</li>
+							 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="migration.performance_history"/></li>
+												</ol>
+											</div>
+										</div>
 									</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="ddl_wrk_nm" id="ddl_wrk_nm" class="txt t5" maxlength="25"  /></td>
-								<th scope="row" class="t9"><spring:message code="common.status" /></th>
-								<td>
-									<select name="ddl_exe_rslt_cd" id="ddl_exe_rslt_cd" class="select t5">
-										<option value="%"><spring:message code="schedule.total" /></option>
-										<option value="TC001701"><spring:message code="common.success" /></option>
-										<option value="TC001702"><spring:message code="common.failed" /></option>
-									</select>
-								</td>														
-							</tr>
-						</tbody>
-					</table>
-					<table class="write" id="searchData" style="display:none;">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width:110px;" />
-							<col style="width:230px;" />
-							<col style="width:110px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t10"><spring:message code="common.work_term" /></th>
-								<td colspan="3">
-									<div class="calendar_area">
-										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="mig_wrk_strt_dtm" id="mig_wrk_strt_dtm" class="calendar" readonly/>
-										<span class="wave">~</span>
-										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="mig_wrk_end_dtm" id="mig_wrk_end_dtm" class="calendar" readonly/>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="mig_wrk_nm" id="mig_wrk_nm" class="txt t5" maxlength="25"  /></td>
-								<th scope="row" class="t9"><spring:message code="common.status" /></th>
-								<td>
-									<select name="mig_exe_rslt_cd" id="mig_exe_rslt_cd" class="select t5">
-										<option value="%"><spring:message code="schedule.total" /></option>
-										<option value="TC001701"><spring:message code="common.success" /></option>
-										<option value="TC001702"><spring:message code="common.failed" /></option>
-									</select>
-								</td>														
-							</tr>
-						</tbody>
-					</table>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				
-				<div class="overflow_area">
-					<table id="ddlDataTable" class="display" cellspacing="0" width="100%">
-						<caption></caption>
-							<thead>
-								<tr>
-									<th width="30">NO</th>
-									<th width="100"><spring:message code="common.work_name" /></th>
-									<th width="200"><spring:message code="common.work_description" /></th>
-									<th width="100"><spring:message code="data_transfer.ip" /> </th>
-									<th width="100">DBMS <spring:message code="common.division" /></th>
-									<th width="100">Database</th>
-									<th width="100"><spring:message code="backup_management.work_start_time" /></th>
-									<th width="100"><spring:message code="backup_management.work_end_time" /></th>
-									<th width="100"><spring:message code="schedule.jobTime"/></th>
-									<th width="100"><spring:message code="properties.status" /></th>
-									<th width="100"><spring:message code="migration.performer"/></th>
-									<th width="0"></th>
-									<th width="0"></th>
-									<th width="0"></th>
-								</tr>
-							</thead>
-						</table>	
-					<table id="dataDataTable" class="display" cellspacing="0" width="100%">
-						<caption></caption>
-							<thead>
-								<tr>
-									<th width="30" rowspan="2">NO</th>
-									<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
-									<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
-									<th width="400" colspan="3"><spring:message code="migration.source_system"/></th>
-									<th width="400" colspan="2"><spring:message code="migration.target_system"/></th>
-									<th width="130" rowspan="2"><spring:message code="backup_management.work_start_time"/></th>
-									<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
-									<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
-									<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
-									<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
-								</tr>
-								<tr>
-									<th width="100">DBMS<spring:message code="common.division" /></th>
-									<th width="100"><spring:message code="data_transfer.ip" /></th>
-									<th width="100">Database</th>
-									<th width="100"><spring:message code="data_transfer.ip" /></th>
-									<th width="100">Database</th>
-								</tr>
-							</thead>
-					</table>
-				</div>		
-			</div>
-		</div>
+				
+				<div class="col-12 div-form-margin-table stretch-card">
+					<div class="card">
+						<div class="card-body">
+
+						
+							<div class="card my-sm-2" >
+								<div class="card-body" >
+									<div class="form-group row div-form-margin-z">
+									<div class="col-12" >
+										<ul class="nav nav-pills nav-pills-setting" style="border-bottom:0px;" id="server-tab" role="tablist">
+											<li class="nav-item tab-pop-two-style"  style="width:31.5%">										
+												<a class="nav-link active" id="ins-tab-1" data-toggle="pill" href="#ddlTab" role="tab" aria-controls="ddlTab" aria-selected="true" >
+													DDL
+												</a>
+											</li>
+											<li class="nav-item tab-pop-two-style" style="width:31.5%">
+												<a class="nav-link" id="ins-tab-2" data-toggle="pill" href="#migrationTab" role="tab" aria-controls="migrationTab" aria-selected="false">
+													MIGRATION
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+						
+						
+							
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #c9ccd7;">		
+							<!-- DDL 탭 -->
+								<div class="tab-pane fade show active" role="tabpanel" id="ddlTab">			
+																		
+						
+								<div class="card-body">	
+									<div class="card my-sm-2" >
+										<div class="card-body" >
+													<form class="form-inline" onsubmit="return false;">
+														<div class="row">								
+															<div class="input-group mb-2 mr-sm-2">								
+																<div id="ddl_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+																	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_strt_dtm" name="ddl_wrk_strt_dtm" >
+																	<span class="input-group-addon input-group-append border-left">
+																		<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+																	</span>
+																</div>
+																<div class="input-group align-items-center">
+																	<span style="border:none; padding: 0px 10px;"> ~ </span>
+																</div>
+																<div id="ddl_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+																	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_end_dtm" name="ddl_wrk_end_dtm" >
+																	<span class="input-group-addon input-group-append border-left">
+																		<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+																	</span>
+																</div>
+															</div>									
+															<div class="input-group mb-2 mr-sm-2">
+																<input type="text" class="form-control" style="width:300px;" maxlength="25" name="ddl_wrk_nm" id="ddl_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
+															</div>							
+															<div class="input-group mb-2 mr-sm-2">
+																<select class="form-control" style="width:150px;" name="ddl_exe_rslt_cd" id="ddl_exe_rslt_cd">
+																	<option value="%"><spring:message code="schedule.total" /></option>
+																	<option value="TC001701"><spring:message code="common.success" /></option>
+																	<option value="TC001702"><spring:message code="common.failed" /></option>
+																</select>
+															</div>									
+															<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="getddlDataList();">
+																<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+															</button>								
+														</div>
+													</form>	
+												</div>
+											</div>
+										</div>
+		
+								<div class="card-body">	
+									<div class="card my-sm-2" >
+										<div class="card-body" >			
+											<div class="row">
+												<div class="col-12">
+				 									<div class="table-responsive">
+														<div id="order-listing_wrapper"
+															class="dataTables_wrapper dt-bootstrap4 no-footer">
+															<div class="row">
+																<div class="col-sm-12 col-md-6">
+																	<div class="dataTables_length" id="order-listing_length">
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+					 								<table id="ddlDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+														<thead>
+				 											<tr class="bg-info text-white">
+																	<th width="30">NO</th>
+																	<th width="100"><spring:message code="common.work_name" /></th>
+																	<th width="200"><spring:message code="common.work_description" /></th>
+																	<th width="100"><spring:message code="data_transfer.ip" /> </th>
+																	<th width="100">DBMS <spring:message code="common.division" /></th>
+																	<th width="100">Database</th>
+																	<th width="100"><spring:message code="backup_management.work_start_time" /></th>
+																	<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+																	<th width="100"><spring:message code="schedule.jobTime"/></th>
+																	<th width="100"><spring:message code="properties.status" /></th>
+																	<th width="100"><spring:message code="migration.performer"/></th>
+																	<th width="0"></th>
+																	<th width="0"></th>
+																	<th width="0"></th>
+															</tr>
+														</thead>
+													</table>
+											 	</div>
+										 	</div>
+										</div>
+									</div>
+								</div>
+							</div>
+		
+						
+				<!-- MIGRATION 탭 -->
+								<div class="tab-pane fade show active" role="tabpanel" id="migrationTab">			
+								<div class="card-body">	
+									<div class="card my-sm-2" >
+										<div class="card-body" >
+													<form class="form-inline">
+														<div class="row">								
+															<div class="input-group mb-2 mr-sm-2">								
+																<div id="mig_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+																	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_strt_dtm" name="mig_wrk_strt_dtm" >
+																	<span class="input-group-addon input-group-append border-left">
+																		<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+																	</span>
+																</div>
+																<div class="input-group align-items-center">
+																	<span style="border:none; padding: 0px 10px;"> ~ </span>
+																</div>
+																<div id="mig_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+																	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_end_dtm" name="mig_wrk_end_dtm" >
+																	<span class="input-group-addon input-group-append border-left">
+																		<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+																	</span>
+																</div>
+															</div>									
+															<div class="input-group mb-2 mr-sm-2">
+																<input type="text" class="form-control" style="width:300px;" maxlength="25" name="mig_wrk_nm" id="mig_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
+															</div>							
+															<div class="input-group mb-2 mr-sm-2">
+																<select class="form-control" style="width:150px;" name="mig_exe_rslt_cd" id="mig_exe_rslt_cd">
+																	<option value="%"><spring:message code="schedule.total" /></option>
+																	<option value="TC001701"><spring:message code="common.success" /></option>
+																	<option value="TC001702"><spring:message code="common.failed" /></option>
+																</select>
+															</div>									
+															<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="getdataDataList();">
+																<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+															</button>								
+														</div>
+													</form>	
+												</div>
+											</div>
+										</div>		
+									<div class="card-body">	
+										<div class="card my-sm-2" >
+											<div class="card-body" >			
+												<div class="row">
+													<div class="col-12">
+					 									<div class="table-responsive">
+															<div id="order-listing_wrapper"
+																class="dataTables_wrapper dt-bootstrap4 no-footer">
+																<div class="row">
+																	<div class="col-sm-12 col-md-6">
+																		<div class="dataTables_length" id="order-listing_length">
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+						 								<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+															<thead>
+					 											<tr class="bg-info text-white">
+																		<th width="30" rowspan="2">NO</th>
+																		<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
+																		<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
+																		<th width="400" colspan="3"><spring:message code="migration.source_system"/></th>
+																		<th width="400" colspan="2"><spring:message code="migration.target_system"/></th>
+																		<th width="130" rowspan="2"><spring:message code="backup_management.work_start_time"/></th>
+																		<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
+																		<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
+																		<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
+																		<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
+																</tr>
+																<tr class="bg-info text-white">
+																		<th width="100">DBMS<spring:message code="common.division" /></th>
+																		<th width="100"><spring:message code="data_transfer.ip" /></th>
+																		<th width="100">Database</th>
+																		<th width="100"><spring:message code="data_transfer.ip" /></th>
+																		<th width="100">Database</th>
+																</tr>
+															</thead>
+														</table>
+												 	</div>
+											 	</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>					
+		</div>	
 	</div>
-</div><!-- // contents -->
+
+

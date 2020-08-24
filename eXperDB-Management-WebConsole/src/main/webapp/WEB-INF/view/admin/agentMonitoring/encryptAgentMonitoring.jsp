@@ -105,13 +105,15 @@ function fn_refresh(){
 						table.rows.add(data.list).draw();
 					}
 				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href = "/securityKeySet.do";
+					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");
+					if(data.resultCode == undefined){
+						showSwalIcon("암호화 사용 권한이 존재하지 않습니다.", '<spring:message code="common.close" />', '', 'error');
+					}else{
+						showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
+					}
 				}
 		}
 	});	
@@ -155,13 +157,11 @@ function fn_delete(){
 					showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
 					fn_refresh();
 				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href = "/securityKeySet.do";
+					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});	
@@ -247,7 +247,9 @@ function fn_delete(){
 										</div>
 									</div>
 
-									<table id="monitoring" class="table table-hover table-striped" cellspacing="0" width="100%">
+
+									<table id="monitoring" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+									<!-- <table id="monitoring" class="table table-hover table-striped" cellspacing="0" width="100%"> -->
 										<colgroup>
 											<col style="width:3%;" />
 											<col style="width:5%;" />
@@ -255,7 +257,7 @@ function fn_delete(){
 											<col style="width:15%;" />
 										</colgroup>
 										<thead>
-											<tr class="bg-primary text-white">
+											<tr class="bg-info text-white" >
 												<th scope="col"></th>
 												<th scope="col"><spring:message code="common.no" /></th>
 												<th scope="col">Agent IP</th>
