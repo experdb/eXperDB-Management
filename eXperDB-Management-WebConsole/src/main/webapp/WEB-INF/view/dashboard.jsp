@@ -8,6 +8,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@include file="./cmmn/cs2.jsp"%> 
 
+<script src="/vertical-dark-sidebar/js/dashboard_common.js"></script>
+
 <script type="text/javascript">
 	var today = "";
 	var scale_yn_chk = "";
@@ -21,6 +23,9 @@
 		
 		//서버정보 리스트 setting
 		fn_serverListSetting();
+		
+		//개별 서버 리스트 setting
+		fn_dbSvrIdSearch();
 	});
 
 	/* ********************************************************
@@ -190,7 +195,101 @@
 
 		$("#serverTabList").html(html);
 	}
+
+	/* ********************************************************
+	 * 서버리스트 설정
+	 ******************************************************** */
+	function fn_dbSvrIdSearch() {
+
+ 		$.ajax({
+			url : "/dashboarod_main_search.do",
+			data : {
+				db_svr_id : "1"
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		    	xhr.setRequestHeader("AJAX", true);
+		    },
+		     error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				//update setting
+				fn_main_tab_setting(result);
+			}
+		});
+	}
+	
+	/* ********************************************************
+	 * 메인 대시보드 셋팅
+	 ******************************************************** */
+	function fn_main_tab_setting(result) {
+		
+		//백업일정, 배치일정, 데이터이행 일정 setting
+		fn_schedule_cnt_set(result);
+
+/* 		$("#mod_kc_ip", "#searchModForm").val(nvlPrmSet(result.kc_ip, ""));
+		$("#mod_kc_port", "#searchModForm").val(nvlPrmSet(result.kc_port, ""));
+		
+		$("#mod_connect_nm", "#modRegForm").val(nvlPrmSet(result.connect_nm, ""));
+		$("#mod_db_id", "#modRegForm").val(nvlPrmSet(result.db_nm, ""));
+		$("#mod_db_id_set", "#modRegForm").val(nvlPrmSet(result.db_id, ""));
+		$("#mod_trans_id", "#modRegForm").val(nvlPrmSet(result.trans_id, ""));
+		$("#mod_trans_exrt_trg_tb_id","#modRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
+
+		//스냅샷 모드 추가
+		var snapshot_mode_re = nvlPrmSet(result.snapshot_mode, "");
+		$("#mod_snapshot_mode", "#modRegForm").val(snapshot_mode_re).prop("selected", true);
+
+		//압축형태 추가
+		$("#mod_compression_type", "#modRegForm").val(nvlPrmSet(result.compression_type, "TC003701")).prop("selected", true);
+		
+		//메타데이타 설정
+		$("#mod_meta_data", "#modRegForm").val(nvlPrmSet(result.meta_data, ""));
+		
+		if (nvlPrmSet(result.meta_data, "") == "ON") {
+			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", true);
+		} else {
+			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", false); 
+		}
+	
+		//스냅샷 모드 change
+		if(snapshot_mode_re == "TC003601"){
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg2" />'); //(초기스냅샷 1회만 수행)
+		}else if(snapshot_mode_re == "TC003602"){
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg3" />'); //(스냅샷 항상 수행)
+		}else if (snapshot_mode_re == "TC003603"){
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />'); //(스냅샷 수행하지 않음)
+		}else if (snapshot_mode_re == "TC003604"){
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg4" />'); //(스냅샷만 수행하고 종료)
+		}else if (snapshot_mode_re == "TC003605"){
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg5" />'); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법)
+		}
+		
+		
+		
+		mod_connector_tableList.rows({selected: true}).deselect();
+		mod_connector_tableList.clear().draw();
+		
+		if (result.tables.data != null) {
+			mod_connector_tableList.rows.add(result.tables.data).draw();	
+		} */
+	}
+	
+
+	
 </script>
+
+<form name="dashboardViewForm" id="dashboardViewForm">
+	<input type="hidden" name="scd_nm"  id="scd_nm" />
+</form>
 
 <!-- partial -->
 <div class="content-wrapper main_scroll">
@@ -453,61 +552,176 @@
 									</div>
 								</div>
 							</div>
-							
+							<div class="row" id="serverTabList" >
+							</div>
+						</div>
+						
+						<div class="col-9">
+							<div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
+								<div class="carousel-inner">
+									<div class="carousel-item active" id="v-pills-home_test1">
+										<div class="row">
+											<!-- title start -->
+											<div class="accordion_main accordion-multi-colored col-6" sid="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_header_div" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="ti-calendar menu-icon"></i>
+																	<span class="menu-title"><spring:message code="dashboard.backup_schedule"/></span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<!-- title start -->
+											<div class="accordion_main accordion-multi-colored col-6" sid="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_header_div" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="ti-calendar menu-icon"></i>
+																	<span class="menu-title"><spring:message code="dashboard.script_schedule"/></span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="row">
+											<!-- title start -->
+											<div class="accordion_main accordion-multi-colored col-6" sid="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;border:none;">
+													<table id="bakupScheduleCntList" class="table table-hover system-tlb-scroll" style="width:100%;border:none;">
+													</table>
+												</div>
+											</div>
+											
+											<!-- title start -->
+											<div class="accordion_main accordion-multi-colored col-6" sid="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;border:none;">
+													<table id="scriptScheduleCntList" class="table table-hover system-tlb-scroll" style="width:100%;border:none;">
+													</table>
+												</div>
+											</div>
+										</div>
 
-							
-							
-	                    	<div class="row" id="serverTabList" >
+										<div class="row">
+											<!-- title start -->
+											<div class="accordion_main accordion-multi-colored col-12" sid="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_header_div" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="ti-calendar menu-icon"></i>
+																	<span class="menu-title">스케줄 이력</span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="row">
+											<div class="card col-md-7" style="margin:0px;">
+												<div class="card-body">
+													<table id="scheduleList" class="table table-striped table-borderless" style="width:100%;">
+														<thead>
+															<tr class="bg-info text-white">
+																<th scope="col"><spring:message code="schedule.schedule_name" /></th>					
+																<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
+																<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
+																<th scope="col"><spring:message code="schedule.jobTime"/></th>
+																<th scope="col"><spring:message code="schedule.result" /></th>
+															</tr>
+														</thead>
+														<tbody id="scheduleListT">
+														</tbody>
+													</table>
+												</div>
+											</div>
+											
+											
+											
+            
+            <div class="col-md-5 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">To Do Lists</h4>
+									<div class="list-wrapper pt-2">
+										<ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+											<li>
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox">
+														Meeting with Urban Team
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+											<li class="completed">
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox" checked>
+														Duplicate a project for new customer
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+											<li>
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox">
+														Project meeting with CEO
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+											<li class="completed">
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox" checked>
+														Follow up of team zilla
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+											<li>
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox">
+														Level up for Antony
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+										</ul>
+                  </div>
+                  <div class="add-items d-flex mb-0 mt-2">
+										<input type="text" class="form-control todo-list-input"  placeholder="Add new task">
+										<button class="add btn btn-icon text-primary todo-list-add-btn bg-transparent"><i class="ti-location-arrow"></i></button>
+									</div>
+								</div>
+							</div>
+            </div>
+          </div>
+										
+										
+										
+										
 
-
-	                    	
-	                    		<!-- <div class="col-12">
-	                    		
-	                    		
-	                    		
-	                    		
-	                    			<ul class="nav nav-pills nav-pills-vertical nav-pills-warning" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-										<li class="nav-item">
-
-			 								<a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home_test1" role="tab" aria-controls="v-pills-home_test1" aria-selected="true">
-												<i class="ti-home"></i>
-
-
-
-				                          </a>   
-                            
-				                        </li>
-				                        
-
-	                    		
-	                    		
-	                    
-	                      
-
-	                        <li class="nav-item">
-	                          <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-home_test2" role="tab" aria-controls="v-pills-home_test2" aria-selected="false">
-	                            <i class="ti-user"></i>
-	                            Profile
-	                          </a>                          
-	                        </li>
-	                        <li class="nav-item">
-	                          <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
-	                            <i class="ti-email"></i>
-	                            Reach
-	                          </a>                          
-	                        </li>
-	                      </ul>
-	                    </div> -->
-	                    </div>
-					</div>
-	                    
-	                    
-	                    <div class="col-9">
-			                  <div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
-			                    <div class="carousel-inner">
-			                      <div class="carousel-item active" id="v-pills-home_test1">
+			                    
+			                      
 			                        <div class="row">
-			                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
+			                          <div class="col-md-3 col-xl-3 d-flex flex-column justify-content-center">
 			                            <div class="ml-xl-4">
 			                              <h1>$34040</h1>
 			                              <h3 class="font-weight-light mb-xl-4">North America</h3>
@@ -1097,131 +1311,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-7 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title mb-0">Top Products</p>
-                  <div class="table-responsive">
-                    <table class="table table-striped table-borderless">
-                      <thead>
-                        <tr>
-                          <th>Product</th>
-                          <th>Price</th>
-                          <th>Date</th>
-                          <th>Status</th>
-                        </tr>  
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Search Engine Marketing</td>
-                          <td class="font-weight-bold">$362</td>
-                          <td>21 Sep 2018</td>
-                          <td class="font-weight-medium text-success">Completed</td>
-                        </tr>
-                        <tr>
-                          <td>Search Engine Optimization</td>
-                          <td class="font-weight-bold">$116</td>
-                          <td>13 Jun 2018</td>
-                          <td class="font-weight-medium text-success">Completed</td>
-                        </tr>
-                        <tr>
-                          <td>Display Advertising</td>
-                          <td class="font-weight-bold">$551</td>
-                          <td>28 Sep 2018</td>
-                          <td class="font-weight-medium text-warning">Pending</td>
-                        </tr>
-                        <tr>
-                          <td>Pay Per Click Advertising</td>
-                          <td class="font-weight-bold">$523</td>
-                          <td>30 Jun 2018</td>
-                          <td class="font-weight-medium text-warning">Pending</td>
-                        </tr>
-                        <tr>
-                          <td>E-Mail Marketing</td>
-                          <td class="font-weight-bold">$781</td>
-                          <td>01 Nov 2018</td>
-                          <td class="font-weight-medium text-danger">Cancelled</td>
-                        </tr>
-                        <tr>
-                          <td>Referral Marketing</td>
-                          <td class="font-weight-bold">$283</td>
-                          <td>20 Mar 2018</td>
-                          <td class="font-weight-medium text-warning">Pending</td>
-                        </tr>
-                        <tr>
-                          <td>Social media marketing</td>
-                          <td class="font-weight-bold">$897</td>
-                          <td>26 Oct 2018</td>
-                          <td class="font-weight-medium text-success">Completed</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-5 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">To Do Lists</h4>
-									<div class="list-wrapper pt-2">
-										<ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-											<li>
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														Meeting with Urban Team
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li class="completed">
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox" checked>
-														Duplicate a project for new customer
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li>
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														Project meeting with CEO
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li class="completed">
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox" checked>
-														Follow up of team zilla
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li>
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														Level up for Antony
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-										</ul>
-                  </div>
-                  <div class="add-items d-flex mb-0 mt-2">
-										<input type="text" class="form-control todo-list-input"  placeholder="Add new task">
-										<button class="add btn btn-icon text-primary todo-list-add-btn bg-transparent"><i class="ti-location-arrow"></i></button>
-									</div>
-								</div>
-							</div>
-            </div>
-          </div>
+          
           <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card position-relative">
