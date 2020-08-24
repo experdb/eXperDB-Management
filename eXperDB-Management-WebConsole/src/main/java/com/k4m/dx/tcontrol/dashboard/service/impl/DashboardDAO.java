@@ -93,4 +93,15 @@ public class DashboardDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectDashboardScaleInfo() throws SQLException{
 		return (List<Map<String, Object>>) list("dashboardSql.selectDashboardScaleInfo", null);
 	}
+
+	/**
+	 * 백업, 배치 스케줄 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>>  selectDashboardScdList(DashboardVO vo) throws SQLException{
+		return (List<Map<String, Object>> ) list("dashboardSql.selectDashboardScdList", vo);
+	}
 }

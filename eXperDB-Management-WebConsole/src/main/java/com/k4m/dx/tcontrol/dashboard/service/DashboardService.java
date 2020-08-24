@@ -35,9 +35,6 @@ public interface DashboardService {
 	 */
 	public List<DashboardVO> selectDashboardServerInfoNew(DashboardVO vo) throws SQLException;
 
-	
-	
-
 	/**
 	 * 서버 정보 조회
 	 * 
@@ -143,4 +140,14 @@ public interface DashboardService {
 	 * @throws SQLException
 	 */
 	public List<Map<String, Object>> selectDashboardScaleInfo() throws SQLException;
+
+
+	/**
+	 * 백업, 배치 스케줄 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardScdList(DashboardVO vo) throws SQLException;
 }

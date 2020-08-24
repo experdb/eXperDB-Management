@@ -612,6 +612,7 @@ public class ScheduleController {
 		try {
 			
 			String scd_cndt = request.getParameter("scd_cndt");
+			String scd_nm = request.getParameter("scd_nm");
 
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
@@ -628,6 +629,11 @@ public class ScheduleController {
 				if(scd_cndt != null){
 					mv.addObject("scd_cndt", scd_cndt);
 				}
+
+				if(scd_nm != null){
+					mv.addObject("scd_nm", scd_nm);
+				}
+				
 				mv.setViewName("functions/scheduler/schedulerList");
 			}	
 		} catch (Exception e) {

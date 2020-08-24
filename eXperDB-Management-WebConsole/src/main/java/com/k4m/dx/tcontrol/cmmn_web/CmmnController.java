@@ -366,6 +366,61 @@ public class CmmnController {
 	}
 	
 	/**
+	 * 대쉬보드 서버별 화면 관련 내역 조회
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/dashboarod_main_search.do")
+	public ModelAndView connectRegForm2(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		
+
+		List<Map<String, Object>> backupScdresult = null; //백업일정 조회
+		List<Map<String, Object>> scriptScdresult = null; //배치일정 조회
+
+		int backupScdCnt = 0;
+		int scriptScdCnt = 0;
+
+		DashboardVO dashVo = new DashboardVO();
+		
+		try {
+			//백업 스케줄 목록
+			dashVo.setDb_svr_id(db_svr_id);
+			dashVo.setBsn_dscd("TC001901");
+			backupScdresult = dashboardService.selectDashboardScdList(dashVo);
+			if (backupScdresult != null) {
+				backupScdCnt = backupScdresult.size();
+			}
+			
+			//배치 스케줄 목록
+			dashVo.setBsn_dscd("TC001902");
+			scriptScdresult = dashboardService.selectDashboardScdList(dashVo);
+			if (scriptScdresult != null) {
+				scriptScdCnt = scriptScdresult.size();
+			}
+			
+			
+			
+
+			mv.addObject("backupScdresult", backupScdresult);		//백업일정 목록
+			mv.addObject("backupScdCnt", backupScdCnt);				//백업일정 cnt
+
+			mv.addObject("scriptScdresult", scriptScdresult);		//배치일정 목록
+			mv.addObject("scriptScdCnt", scriptScdCnt);				//배치일정 cnt
+			
+			
+			mv.addObject("db_svr_id", db_svr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+
+	/**
 	 *  권한 에러 화면을 보여준다.
 	 * 
 	 * @param 

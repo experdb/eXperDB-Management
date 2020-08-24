@@ -96,6 +96,16 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 	public List<Map<String, Object>> selectDashboardScaleInfo() throws SQLException {
 		return (List<Map<String, Object>>) dashboardDAO.selectDashboardScaleInfo();
 	}
-
+	
+	/**
+	 * 백업, 배치 스케줄 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectDashboardScdList(DashboardVO vo) throws SQLException {
+		return (List<Map<String, Object>>) dashboardDAO.selectDashboardScdList(vo);
+	}
 
 }

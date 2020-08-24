@@ -367,4 +367,37 @@
                  WHERE A.MASTER_GBN = 'M'
                  GROUP BY A.SVR_HOST_NM, A.IPADR, A.DB_SVR_ID
 	</select>
+
+	<select id="selectDashboardScdList" resultType="hashMap">
+		/**
+	 	* Query ID : selectDashboardScdList
+	 	* Description : 백업, 배치 스케줄 조회
+	 	* Author : 
+	 	**/
+        SELECT
+               A.SCD_ID
+              ,A.SCD_NM
+              ,A.SCD_EXP
+              ,A.SCD_CNDT
+              ,A.EXE_PERD_CD
+              ,A.EXE_DT
+              ,A.EXE_MONTH
+              ,A.EXE_DAY
+              ,substring(A.EXE_HMS from 5 for 2) as EXE_HH
+              ,substring(A.EXE_HMS from 3 for 2) as EXE_MM
+              , '[' || substring(A.EXE_HMS from 5 for 2) || ':' || substring(A.EXE_HMS from 3 for 2) || ']' AS EXE_HMS
+              , ARRAY_TO_STRING(ARRAY_AGG(C.BCK_BSN_DSCD),',') AS BCK_BSN_DSCD
+              , ARRAY_TO_STRING(ARRAY_AGG(C.BCK_OPT_CD),',') AS BCK_OPT_CD
+              , TO_CHAR(a.frst_reg_dtm::TIMESTAMP,'yyyyMMdd')as frst_reg_dtm
+              , E.BSN_DSCD
+           FROM T_SCD_M A, T_SCD_D B, T_BCK_WRKCNG_I C, T_WRKCNG_I E
+          WHERE A.SCD_ID = B.SCD_ID
+            AND C.DB_SVR_ID = #{db_svr_id}::numeric
+            AND B.WRK_ID = C.WRK_ID
+            AND E.WRK_ID = C.WRK_ID
+            AND A.SCD_CNDT != 'TC001803'
+            AND E.BSN_DSCD = #{bsn_dscd}
+          GROUP BY A.SCD_ID, A.SCD_NM , A.SCD_EXP, E.BSN_DSCD
+          ORDER BY ARRAY_TO_STRING(ARRAY_AGG(C.BCK_BSN_DSCD),','), ARRAY_TO_STRING(ARRAY_AGG(C.BCK_OPT_CD),','), EXE_HMS
+	</select>
 </mapper>

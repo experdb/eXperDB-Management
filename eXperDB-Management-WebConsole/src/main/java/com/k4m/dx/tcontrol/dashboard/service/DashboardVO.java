@@ -32,8 +32,14 @@ public class DashboardVO {
 	
 	private String db_nm;
 	private String bck_opt_cd;
+	private String bsn_dscd;
 	
-	
+	public String getBsn_dscd() {
+		return bsn_dscd;
+	}
+	public void setBsn_dscd(String bsn_dscd) {
+		this.bsn_dscd = bsn_dscd;
+	}
 	public String getSvr_host_nm() {
 		return svr_host_nm;
 	}
