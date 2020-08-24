@@ -300,17 +300,30 @@ function fn_ddl_regre_popup(){
 				}
 			},
 			success : function(result) {
-// 				$("#db2pg_sys_id_reg_re").val(nvlPrmSet(result.resultInfo[0].db2pg_sys_id, ""));
-// 				$("#db2pg_sys_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].db2pg_sys_nm, ""));
-// 				$("#ipadr_reg_re").val(nvlPrmSet(result.resultInfo[0].ipadr, ""));
-// 				$("#portno_reg_re").val(nvlPrmSet(result.resultInfo[0].portno, ""));
-// 				$("#dtb_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].dtb_nm, ""));
-// 				$("#scm_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].scm_nm, ""));
-// 				$("#spr_usr_id_reg_re").val(nvlPrmSet(result.resultInfo[0].spr_usr_id, ""));
-// 				$("#pwd_reg_re").val(nvlPrmSet(result.pwd, ""));
+				$("#db2pg_sys_id_reg_re").val(nvlPrmSet(result.db2pg_sys_id, ""));
+				$("#src_include_table_nm_reg_re").val(nvlPrmSet(result.exrt_trg_tb_nm, ""));
+				$("#src_exclude_table_nm_reg_re").val(nvlPrmSet(result.exrt_exct_tb_nm, ""));
+				 if(result.exrt_trg_tb_cnt>0){
+					 $("#src_tables_reg_re option:eq(0)").attr("selected", "selected");
+					 $("#src_include_tables_reg_re").val("<spring:message code='migration.total_table'/>: "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
+					 $("#src_table_total_cnt_reg_re").val(result.exrt_trg_tb_total_cnt);
+					 $("#include_reg_re").show();
+					 $("#exclude_reg_re").hide();
+				 }else if(result.exrt_trg_tb_cnt>0){
+					 $("#src_tables_reg_re option:eq(1)").attr("selected", "selected");
+					 $("#src_exclude_tables_reg_re").val("<spring:message code='migration.total_table'/> : "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
+					 $("#src_table_total_cnt_reg_re").val(result.exrt_exct_tb_total_cnt)
+					 $("#exclude_reg_re").show();
+					 $("#include_reg_re").hide(); 
+				 }	 
 				
-// 				$("#crts_nm_reg_re").val(result.resultInfo[0].crts).prop("selected", true);
-// 				$("#dbms_dscd_reg_re").val(result.resultInfo[0].dbms_dscd).prop("selected", true);
+				$("#db2pg_sys_nm_reg_re").val(nvlPrmSet(result.db2pg_sys_nm, ""));
+				$("#db2pg_ddl_wrk_nm_reg_re").val(nvlPrmSet(result.db2pg_ddl_wrk_nm, ""));
+				$("#wrk_id_reg_re").val(nvlPrmSet(result.wrk_id, ""));
+				$("#db2pg_ddl_wrk_id_reg_re").val(nvlPrmSet(result.db2pg_ddl_wrk_id, ""));
+				$("#db2pg_ddl_wrk_exp_reg_re").val(nvlPrmSet(result.db2pg_ddl_wrk_exp, ""));
+				$("#db2pg_uchr_lchr_val_reg_re").val(result.db2pg_uchr_lchr_val).prop("selected", true);
+				$("#src_tb_ddl_exrt_tf_reg_re").val(result.src_tb_ddl_exrt_tf).prop("selected", true);
 				
 				$('#pop_layer_ddl_reg_re').modal("show");
 			}
@@ -325,15 +338,13 @@ function fn_ddl_regre_popup(){
  * 데이터이행 등록 팝업
  ******************************************************** */
 function fn_data_reg_popup(){
-	var popUrl = "/db2pg/popup/dataRegForm.do";
-	var width = 965;
-	var height = 800;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	$("#db2pg_trsf_wrk_nm", "#dataRegForm").val("");
+	$("#db2pg_trsf_wrk_exp", "#dataRegForm").val("");
+	$("#db2pg_source_system_nm", "#dataRegForm").val("");
+	$("#db2pg_trg_sys_nm", "#dataRegForm").val("");
 	
-	var winPop = window.open(popUrl,"dataRegPop",popOption);
-	winPop.focus();
+	
+	$('#pop_layer_data_reg').modal("show");
 }
 
 /* ********************************************************
@@ -730,8 +741,11 @@ function fn_ImmediateStart(gbn){
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
 <%@include file="../popup/ddlRegForm.jsp"%>
 <%@include file="../popup/ddlRegReForm.jsp"%>
+<%@include file="../popup/dataRegForm.jsp"%>
 <%@include file="../popup/dbmsDDLInfo.jsp"%>
 <%@include file="../popup/tableInfo.jsp"%>
+<%@include file="../popup/dbmsInfo.jsp"%>
+<%@include file="../popup/dbmsPgInfo.jsp"%>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -898,7 +912,7 @@ function fn_ImmediateStart(gbn){
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onclick="fn_data_work_delete()">
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onclick="fn_ddl_regre_popup()" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onclick="fn_data_regre_popup()" data-toggle="modal">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onclick="fn_data_reg_popup()" data-toggle="modal">

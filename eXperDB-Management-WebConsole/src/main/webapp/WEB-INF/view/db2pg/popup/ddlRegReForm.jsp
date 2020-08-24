@@ -23,19 +23,8 @@
 <script type="text/javascript">
 var output_path ="fail";
 $(window.document).ready(function() {
-	 if("${exrt_trg_tb_cnt_reg_re}">0){
-		 $("#src_tables_reg_re option:eq(0)").attr("selected", "selected");
-		 $("#src_include_tables_reg_re").val("<spring:message code='migration.total_table'/>: ${exrt_trg_tb_total_cnt} <spring:message code='migration.selected_out_of'/>   /   ${exrt_trg_tb_cnt}<spring:message code='migration.items'/>");
-		 $("#src_table_total_cnt_reg_re").val("${exrt_trg_tb_total_cnt}");
-		 $("#include_reg_re").show();
-		 $("#exclude_reg_re").hide();
-	 }else if("${exrt_exct_tb_cnt_reg_re}">0){
-		 $("#src_tables_reg_re option:eq(1)").attr("selected", "selected");
-		 $("#src_exclude_tables_reg_re").val("<spring:message code='migration.total_table'/> : ${exrt_exct_tb_total_cnt} <spring:message code='migration.selected_out_of'/>   /   ${exrt_exct_tb_cnt}<spring:message code='migration.items'/>");
-		 $("#src_table_total_cnt_reg_re").val("${exrt_exct_tb_total_cnt}")
-		 $("#exclude_reg_re").show();
-		 $("#include_reg_re").hide(); 
-	 }	 
+	fn_search_dbmsInfo();
+
 });
 
 /* ********************************************************
@@ -43,11 +32,11 @@ $(window.document).ready(function() {
  ******************************************************** */
 function valCheck(){
 	if($("#db2pg_ddl_wrk_exp_reg_re").val() == ""){
-		alert('<spring:message code="message.msg108" />');
+		showSwalIcon('<spring:message code="message.msg108" />', '<spring:message code="common.close" />', '', 'error');
 		$("#db2pg_ddl_wrk_exp_reg_re").focus();
 		return false;
 	}else if($("#db2pg_sys_id_reg_re").val() == ""){
-		alert('<spring:message code="migration.msg07"/>');
+		showSwalIcon('<spring:message code="migration.msg07" />', '<spring:message code="common.close" />', '', 'error');
 		$("#db2pg_sys_id_reg_re").focus();
 		return false;
 	}else{
@@ -107,11 +96,11 @@ function fn_update_work(){
 		}else{
 			var src_table_total_cnt_reg_re = $("#src_table_total_cnt_reg_re").val()
 		}
-		
+
 		$.ajax({
 			url : "/db2pg/updateDDLWork.do",
 		  	data : {
-		  		db2pg_ddl_wrk_id : "${db2pg_ddl_wrk_id_reg_re}",
+		  		db2pg_ddl_wrk_id : $("#db2pg_ddl_wrk_id_reg_re").val(),
 		  		db2pg_ddl_wrk_nm : $("#db2pg_ddl_wrk_nm_reg_re").val().trim(),
 		  		db2pg_ddl_wrk_exp : $("#db2pg_ddl_wrk_exp_reg_re").val(),
 		  		db2pg_sys_id : $("#db2pg_sys_id_reg_re").val(),
@@ -120,7 +109,7 @@ function fn_update_work(){
 		  		src_include_tables : $("#src_include_table_nm_reg_re").val(),
 		  		src_exclude_tables : $("#src_exclude_table_nm_reg_re").val(),
 		  		src_table_total_cnt : src_table_total_cnt_reg_re,
-		  		wrk_id : $("#wrk_id").val()
+		  		wrk_id : $("#wrk_id_reg_re").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -128,22 +117,18 @@ function fn_update_work(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
 				if(result.resultCode == "0000000000"){
-					alert('<spring:message code="message.msg07" /> ');
-					opener.location.reload();
-					self.close();
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
 				}else{
-					alert('<spring:message code="migration.msg06"/>');
+					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 				}	
 			}
 		});
@@ -153,7 +138,7 @@ function fn_update_work(){
 /* ********************************************************
  * DBMS 서버 호출하여 입력
  ******************************************************** */
- function fn_dbmsAddCallback_reg_re(db2pg_sys_id,db2pg_sys_nm){
+ function fn_dbmsAddCallback2(db2pg_sys_id,db2pg_sys_nm){
 	 $('#db2pg_sys_id_reg_re').val(db2pg_sys_id);
 	 $('#db2pg_sys_nm_reg_re').val(db2pg_sys_nm);
 }
@@ -162,14 +147,9 @@ function fn_update_work(){
  * DBMS 시스템 등록 버튼 클릭시
  ******************************************************** */
 function fn_dbmsInfo_reg_re(){
-	var popUrl = "/db2pg/popup/dbmsDDLInfo.do";
-	var width = 965;
-	var height = 680;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	var winPop = window.open(popUrl,"dbmsInfoPop",popOption);
+	document.getElementById("sourceSystem_add").style.display ='none';
+	document.getElementById("sourceSystem_mod").style.display ='block';
+	$('#pop_layer_dbmsInfo_reg').modal("show");
 }
 
 /* ********************************************************
@@ -180,21 +160,50 @@ function fn_tableList_reg_re(gbn){
 		alert('<spring:message code="migration.msg03"/>');
 		return false;
 	}
-	
-	var frmPop= document.frmPopup_reg_re;
-	var url = '/db2pg/popup/tableInfo.do';
-	window.open('','popupView','width=930, height=850');
-	     
-	frmPop.action = url;
-	frmPop.target = 'popupView';
-	frmPop.db2pg_sys_id.value = $('#db2pg_sys_id_reg_re').val();
-	frmPop.tableGbn.value = gbn;
 	if(gbn == 'include'){
-		frmPop.src_include_table_nm.value = $('#src_include_table_nm_reg_re').val();  
+		var src_include_table_nm_reg_re = $('#src_include_table_nm_reg_re').val();  
 	}else{
-		frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm_reg_re').val();  
+		var src_exclude_table_nm_reg_re = $('#src_exclude_table_nm_reg_re').val();  
 	}
-	frmPop.submit();   
+	$.ajax({
+		url : "/db2pg/popup/tableInfo.do",
+		data : {
+			src_include_table_nm : src_include_table_nm_reg_re,
+			src_exclude_table_nm : src_exclude_table_nm_reg_re,
+			db2pg_sys_id : $('#db2pg_sys_id_reg_re').val(),
+			tableGbn : gbn
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			tableList = result.tableList;
+			tableGbn = result.tableGbn;
+			$("#db2pg_sys_nm_table").val(nvlPrmSet(result.dbmsInfo[0].db2pg_sys_nm, ""));
+			$("#ipadr_table").val(nvlPrmSet(result.dbmsInfo[0].ipadr, ""));
+			$("#scm_nm_table").val(nvlPrmSet(result.dbmsInfo[0].scm_nm, ""));
+			$("#dbms_dscd_table").val(nvlPrmSet(result.dbmsInfo[0].dbms_dscd, ""));
+			$("#dtb_nm_table").val(nvlPrmSet(result.dbmsInfo[0].dtb_nm, ""));
+			$("#spr_usr_id_table").val(nvlPrmSet(result.dbmsInfo[0].spr_usr_id, ""));
+			$("#pwd_table").val(nvlPrmSet(result.dbmsInfo[0].pwd, ""));
+			$("#portno_table").val(nvlPrmSet(result.dbmsInfo[0].portno, ""));
+			fn_search_tableInfo();
+			document.getElementById("add").style.display ='none';
+			document.getElementById("mod").style.display ='block';
+			$('#pop_layer_tableInfo_reg').modal("show");
+		}
+	});  
 }
 
 /* ********************************************************
@@ -216,7 +225,7 @@ function fn_tableList_reg_re(gbn){
 		});
  });
  
-function fn_tableAddCallback(rowList, tableGbn, totalCnt){
+function fn_tableAddCallback2(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
 		$('#src_include_tables_reg_re').val("<spring:message code='migration.total_table'/>"+totalCnt+ "<spring:message code='migration.selected_out_of'/>"+rowList.length+"<spring:message code='migration.items'/>");
 		$('#src_include_table_nm_reg_re').val(rowList);
@@ -229,9 +238,9 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 }
 </script>
 <form name="frmPopup_reg_re">
-	<input type="hidden" name="db2pg_sys_id_reg_re"  id="db2pg_sys_id_reg_re" value="${db2pg_sys_id}">
-	<input type="hidden" name="src_include_table_nm_reg_re"  id="src_include_table_nm_reg_re" value="${exrt_trg_tb_nm}">
-	<input type="hidden" name="src_exclude_table_nm_reg_re"  id="src_exclude_table_nm_reg_re" value="${exrt_exct_tb_nm}" >
+	<input type="hidden" name="db2pg_sys_id_reg_re"  id="db2pg_sys_id_reg_re" >
+	<input type="hidden" name="src_include_table_nm_reg_re"  id="src_include_table_nm_reg_re" >
+	<input type="hidden" name="src_exclude_table_nm_reg_re"  id="src_exclude_table_nm_reg_re"  >
 	<input type="hidden" name="src_table_total_cnt_reg_re" id="src_table_total_cnt_reg_re">
 	<input type="hidden" name="tableGbn_reg_re"  id="tableGbn_reg_re" >
 </form>
@@ -254,8 +263,9 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 												<spring:message code="common.work_name" />
 											</label>
 											<div class="col-sm-10">
-												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_ddl_wrk_nm_reg_re" name="db2pg_ddl_wrk_nm_reg_re" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()" readonly="readonly"/>
-												<input type="hidden" name="wrk_id_reg_re" id="wrk_id_reg_re" value="${wrk_id}">
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_ddl_wrk_nm_reg_re" name="db2pg_ddl_wrk_nm_reg_re" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" readonly="readonly"/>
+												<input type="hidden" name="wrk_id_reg_re" id="wrk_id_reg_re">
+												<input type="hidden" name="db2pg_ddl_wrk_id_reg_re" id="db2pg_ddl_wrk_id_reg_re">
 											</div>
 										</div>
 		

@@ -20,42 +20,30 @@
 	*
 	*/
 %>
-<!doctype html>
-<html lang="ko">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 var db2pg_trsf_wrk_nmChk ="fail";
-$(window.document).ready(function() {
-
-});
 
 /* ********************************************************
  * Validation Check
  ******************************************************** */
-function valCheck(){
+function valCheck_trsf(){
 	if($("#db2pg_trsf_wrk_nm").val() == ""){
-		alert('<spring:message code="message.msg107" />');
+		showSwalIcon('<spring:message code="message.msg107" />', '<spring:message code="common.close" />', '', 'error');
 		$("#db2pg_trsf_wrk_nm").focus();
 		return false;
 	}else if(db2pg_trsf_wrk_nmChk =="fail"){
-		alert('<spring:message code="backup_management.work_overlap_check"/>');
+		showSwalIcon('<spring:message code="backup_management.work_overlap_check" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else if($("#db2pg_trsf_wrk_exp").val() == ""){
-		alert('<spring:message code="message.msg108" />');
+		showSwalIcon('<spring:message code="message.msg108" />', '<spring:message code="common.close" />', '', 'error');
 		$("#db2pg_trsf_wrk_exp").focus();
 		return false;
 	}else if($("#db2pg_source_system_id").val() == ""){
-		alert('<spring:message code="migration.msg07"/>');
+		showSwalIcon('<spring:message code="migration.msg07" />', '<spring:message code="common.close" />', '', 'error');
 		$("#db2pg_source_system_id").focus();
 		return false;
 	}else if($("#db2pg_trg_sys_id").val() == ""){
-		alert('<spring:message code="migration.msg08"/>');
+		showSwalIcon('<spring:message code="migration.msg08" />', '<spring:message code="common.close" />', '', 'error');
 		$("#db2pg_trg_sys_id").focus();
 		return false;
 	}else{
@@ -78,10 +66,10 @@ function fn_checkBox(result){
 /* ********************************************************
  * WORK NM 중복 체크
  ******************************************************** */
-function fn_check() {
+function fn_check_ddl_reg() {
 	var db2pg_trsf_wrk_nm = document.getElementById("db2pg_trsf_wrk_nm");
 	if (db2pg_trsf_wrk_nm.value == "") {
-		alert('<spring:message code="message.msg107" /> ');
+		showSwalIcon('<spring:message code="message.msg107" />', '<spring:message code="common.close" />', '', 'error');
 		document.getElementById('db2pg_trsf_wrk_nm').focus();
 		return;
 	}
@@ -95,11 +83,11 @@ function fn_check() {
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
+					showSwalIcon('<spring:message code="backup_management.reg_possible_work_nm"/>', '<spring:message code="common.close" />', '', 'success');
 					document.getElementById("db2pg_trsf_wrk_nm").focus();
 					db2pg_trsf_wrk_nmChk = "success";
 				} else {
-					alert('<spring:message code="backup_management.effective_work_nm"/>');
+					showSwalIcon('<spring:message code="backup_management.effective_work_nm" />', '<spring:message code="common.close" />', '', 'error');
 					document.getElementById("db2pg_trsf_wrk_nm").focus();
 				}
 			},
@@ -108,13 +96,11 @@ function fn_check() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});
@@ -129,7 +115,7 @@ function fnCheckNotKorean(koreanStr){
         var koreanChar = koreanStr.charCodeAt(i);
         if( !( 0xAC00 <= koreanChar && koreanChar <= 0xD7A3 ) && !( 0x3131 <= koreanChar && koreanChar <= 0x318E ) ) {
         }else{
-            alert("한글은 사용할수 없습니다.");
+        	showSwalIcon('한글은 사용할수 없습니다.', '<spring:message code="common.close" />', '', 'error');
             return false;
         }
     }
@@ -141,8 +127,8 @@ function fnCheckNotKorean(koreanStr){
 /* ********************************************************
  * 등록 버튼 클릭시
  ******************************************************** */
-function fn_insert_work(){
-	if(valCheck()){
+function fn_insert_trsf_work(){
+	if(valCheck_trsf()){
 		
 		if($("#src_table_total_cnt").val() == ""){
 			var src_table_total_cnt = 0
@@ -188,27 +174,23 @@ function fn_insert_work(){
 						     },
 							error : function(xhr, status, error) {
 								if(xhr.status == 401) {
-									alert('<spring:message code="message.msg02" />');
-									top.location.href = "/";
+									showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 								} else if(xhr.status == 403) {
-									alert('<spring:message code="message.msg03" />');
-									top.location.href = "/";
+									showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 								} else {
-									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 								}
 							},
 							success : function(result) {
 								if(result.resultCode == "0000000000"){
-									alert('<spring:message code="message.msg07" /> ');
-									opener.getdataDataList();
-									self.close();
+									showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
 								}else{
-									alert('<spring:message code="migration.msg06" /> ');
+									showSwalIcon('<spring:message code="message.msg06" />', '<spring:message code="common.close" />', '', 'error');
 								}		
 							}
 						});
 				} else {
-					alert('<spring:message code="backup_management.effective_work_nm"/>');
+					showSwalIcon('<spring:message code="backup_management.effective_work_nm" />', '<spring:message code="common.close" />', '', 'error');
 					document.getElementById("db2pg_trsf_wrk_nm").focus();
 				}
 			},
@@ -217,13 +199,11 @@ function fn_insert_work(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			}
 		});
@@ -233,7 +213,7 @@ function fn_insert_work(){
 /* ********************************************************
  * DBMS 서버 호출하여 입력
  ******************************************************** */
- function fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm){
+ function fn_dbmsAddCallback_source_trsf(db2pg_sys_id,db2pg_sys_nm){
 	 $('#db2pg_sys_id').val(db2pg_sys_id);
 	 $('#db2pg_source_system_nm').val(db2pg_sys_nm);
 }
@@ -249,37 +229,25 @@ function fn_insert_work(){
 /* ********************************************************
  * 소스시스템 등록 버튼 클릭시
  ******************************************************** */
-function fn_dbmsInfo(){
-	var popUrl = "/db2pg/popup/dbmsInfo.do";
-	var width = 965;
-	var height = 680;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	var winPop = window.open(popUrl,"dbmsInfoPop",popOption);
+function fn_dbmsInfo_trsf(){
+	document.getElementById("sourceSystem_trsf_add").style.display ='block';
+	document.getElementById("sourceSystem_trsf_mod").style.display ='none';
+	$('#pop_layer_dbmsInfo_trsf_reg').modal("show");
 }
 
 /* ********************************************************
  * 타겟시스템(PG) 등록 버튼 클릭시
  ******************************************************** */
 function fn_dbmsPgInfo(){
-	var popUrl = "/db2pg/popup/dbmsPgInfo.do";
-	var width = 965;
-	var height = 680;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	var winPop = window.open(popUrl,"dbmsPgInfo",popOption);
+	$('#pop_layer_dbmsInfo_trsf_pg_reg').modal("show");
 }
 
 /* ********************************************************
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
-function fn_tableList(gbn){
+function fn_tableList_trsf(gbn){
 	if($('#db2pg_source_system_nm').val() == ""){
-		alert('<spring:message code="migration.msg03" />');
+		showSwalIcon('<spring:message code="migration.msg03" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	
@@ -303,242 +271,294 @@ function fn_tableList(gbn){
  * select box control
  ******************************************************** */
  $(function() {
-	 $("#src_tables").change(function(){
-		 $("#src_include_tables").val("");
-		 $("#src_exclude_tables").val("");
+	 $("#src_tables_trsf").change(function(){
+		 $("#src_include_tables_trsf").val("");
+		 $("#src_exclude_tables_trsf").val("");
 		 $("#src_include_table_nm").val("");
 		 $("#src_exclude_table_nm").val("");
 		    if(this.value=="include"){
-		        $("#include").show();
-			    $("#exclude").hide(); 
+		        $("#include_trsf").show();
+			    $("#exclude_trsf").hide(); 
 		    }else{
-		        $("#exclude").show();
-			    $("#include").hide(); 
+		        $("#exclude_trsf").show();
+			    $("#include_trsf").hide(); 
 		    }
 		});
  });
 
 function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
-		 $('#src_include_tables').val("<spring:message code='migration.total_table'/>"+totalCnt+ "<spring:message code='migration.selected_out_of'/>"+rowList.length+"<spring:message code='migration.items'/>");
-		$('#src_include_table_nm').val(rowList);
-		$('#src_table_total_cnt').val(totalCnt);
+		 $('#src_include_tables_trsf').val("<spring:message code='migration.total_table'/>"+totalCnt+ "<spring:message code='migration.selected_out_of'/>"+rowList.length+"<spring:message code='migration.items'/>");
+		$('#src_include_table_nm_trsf').val(rowList);
+		$('#src_table_total_cnt_trsf').val(totalCnt);
 	}else{
-		$('#src_exclude_tables').val("<spring:message code='migration.total_table'/>"+totalCnt+ "<spring:message code='migration.selected_out_of'/>"+rowList.length+"<spring:message code='migration.items'/>");
-		$('#src_exclude_table_nm').val(rowList);
-		$('#src_table_total_cnt').val(totalCnt);
+		$('#src_exclude_tables_trsf').val("<spring:message code='migration.total_table'/>"+totalCnt+ "<spring:message code='migration.selected_out_of'/>"+rowList.length+"<spring:message code='migration.items'/>");
+		$('#src_exclude_table_nm_trsf').val(rowList);
+		$('#src_table_total_cnt_trsf').val(totalCnt);
 	}
 }
 </script>
-</head>
-<body>
 <form name="frmPopup">
-	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id">
-	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" >
-	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" >
-	<input type="hidden" name="tableGbn"  id="tableGbn" >
+	<input type="hidden" name="db2pg_sys_id_trsf"  id="db2pg_sys_id_trsf">
+	<input type="hidden" name="src_include_table_nm_trsf"  id="src_include_table_nm_trsf" >
+	<input type="hidden" name="src_exclude_table_nm_trsf"  id="src_exclude_table_nm_trsf" >
+	<input type="hidden" name="tableGbn_trsf"  id="tableGbn_trsf" >
+	<input type="hidden" name="src_table_total_cnt_trsf" id="src_table_total_cnt_trsf">
 </form>
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit">Migration <spring:message code="common.registory" /></p>
-		<div class="pop_cmm">
-			<table class="write">
-				<caption>Migration <spring:message code="common.registory" /></caption>
-				<colgroup>
-					<col style="width:105px;" />
-					<col />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="db2pg_trsf_wrk_nm" id="db2pg_trsf_wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
-						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
-						<td>
-							<div class="textarea_grp">
-								<textarea name="db2pg_trsf_wrk_exp" id="db2pg_trsf_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="pop_cmm mt25">
-			<table class="write">
-				<colgroup>
-					<col style="width:120px;" />
-					<col />
-					<col style="width:120px;" />
-					<col />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="migration.source_system"/></th>
-						<td><input type="text" class="txt t3" name="db2pg_source_system_nm" id="db2pg_source_system_nm" placeholder="<spring:message code="migration.msg02"/>" readonly="readonly"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>							
-						</td>
-					</tr>
-					<tr>
-					<th scope="row" class="ico_t1"><spring:message code="migration.target_system"/></th>
-						<td><input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
-							<input type="text" class="txt t3" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" placeholder="<spring:message code="migration.msg02"/>" readonly="readonly"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsPgInfo()" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>							
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<div class="pop_cmm c2 mt25">
-			<div class="addOption_grp">
-				<ul class="tab">
-					<li class="on"><a href="#n"><spring:message code="migration.source_option"/> #1</a></li>
-					<li><a href="#n"><spring:message code="migration.source_option"/> #2</a></li>
-					<li style="display: none;"><a href="#n"><spring:message code="migration.source_option"/> #3</a></li>
-				</ul>
-				<div class="tab_view">
-					<div class="view on addOption_inr">	
-						<table class="write">
-							<colgroup>
-								<col style="width:40%" />
-								<col style="width:15%" />
-								<col style="width:30%" />
-								</col>
-							</colgroup>
-							<tbody>
-								<tr>
-									<th scope="row" class="ico_t2">
-										<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
-											<option value="include"><spring:message code="migration.inclusion_table"/></option>
-											<option value="exclude"><spring:message code="migration.exclusion_table"/></option>
-										</select>
-									</th>
-									<td colspan="2">
-										<div id="include">
-											<input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
-											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>		
+<div class="modal fade" id="pop_layer_data_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 40px 180px;">
+		<div class="modal-content" style="width:1300px; ">		 	 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;margin-bottom:10px;">
+					Migration <spring:message code="common.registory" />
+				</h4>
+				<div class="card" style="border:0px;max-height:698px;">
+					<form class="cmxform" id="dataRegForm">
+						<fieldset>
+							<div class="row">
+								<div class="col-md-12 system-tlb-scroll" style="border:0px;height: 620px; overflow-x: hidden;  overflow-y: auto; ">
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+											<label for="ins_dump_wrk_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="common.work_name" />
+											</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_trsf_wrk_nm" name="db2pg_trsf_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()"/>
+											</div>
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-inverse-danger btn-fw" style="width: 115px;" onclick="fn_check_ddl_reg()"><spring:message code="common.overlap_check" /></button>
+											</div>
 										</div>
-										<div id="exclude" style="display: none;">
-											<input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
-											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>												
+		
+										<div class="form-group row div-form-margin-z" style="margin-bottom:-10px;">
+											<label for="ins_dump_wrk_exp" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="common.work_description" />
+											</label>
+											<div class="col-sm-10">
+												<textarea class="form-control" id="db2pg_trsf_wrk_exp" name="db2pg_trsf_wrk_exp" rows="2" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
+											</div>
 										</div>
-										<input type="hidden" name="src_table_total_cnt" id="src_table_total_cnt">
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="migration.data_fetch_size"/></th>
-									<td><input type="number" class="txt t8" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="3000"/></td>
-									<th scope="row" class="ico_t2"><spring:message code="migration.data_fetch_buffer_size"/><spring:message code="migration.unit_mib"/></th>
-									<td><input type="number" class="txt t8" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="10"/></td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="migration.number_of_parallel_worker"/></th>
-									<td><input type="number" class="txt t8" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="1"/></td>
-									<th scope="row" class="ico_t2"><spring:message code="migration.lob_buffer_size"/><spring:message code="migration.unit_mib"/></th>
-									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/></td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="migration.number_of_rows_extracted"/></th>
-									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/></td>
-									<th scope="row" class="ico_t2"><spring:message code="migration.specify_case"/></th>
-									<td>
-										<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t4">
-											<c:forEach var="codeLetter" items="${codeLetter}">
-												<option value="${codeLetter.sys_cd_nm}">${codeLetter.sys_cd_nm}</option>
-											</c:forEach>
-										</select>
-									</td>
-								</tr>	
-							</tbody>
-						</table>
-					</div>
-					<div class="view addOption_inr">
-						<ul>
-							<li style="border-bottom: none;">
-								<p class="op_tit" style="width: 200PX;"><spring:message code="migration.conditional_statement"/></p>
-								<span>
-									<div class="textarea_grp">
-										<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 700px;"></textarea>
 									</div>
-								</span>
-							</li>
-						</ul>
-					</div>
-					<div class="view addOption_inr" style="display: none">
-						<ul>
-							<li style="border-bottom: none;">
-								<p class="op_tit" style="width: 70px;"><spring:message code="user_management.use_yn" /></p>
-								<div class="inp_rdo">
-									<input name="usr_qry_use_tf" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
-										<label for="rdo_r_1"><spring:message code="dbms_information.use" /></label> 
-									<input name="usr_qry_use_tf" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
-										<label for="rdo_r_2"><spring:message code="dbms_information.unuse" /></label>
+									<br/>
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+											<label for="ins_dump_save_pth" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<spring:message code="migration.source_system" />
+											</label>
+											<div class="col-sm-6">
+												<input type="text" class="form-control form-control-sm" id="db2pg_source_system_nm" name="db2pg_source_system_nm" readonly="readonly" />
+											</div>
+											<div class="col-sm-4">
+												<div class="input-group input-daterange d-flex align-items-center" >
+													<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_dbmsInfo_trsf()"><spring:message code="button.create" /></button>
+												</div>
+											</div>
+											
+											
+											<label for="ins_dump_save_pth" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<spring:message code="migration.target_system" />
+											</label>
+											<div class="col-sm-6">
+											<input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
+												<input type="text" class="form-control form-control-sm" id="db2pg_trg_sys_nm" name="db2pg_trg_sys_nm" readonly="readonly" />
+											</div>
+											<div class="col-sm-4">
+												<div class="input-group input-daterange d-flex align-items-center" >
+													<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_dbmsPgInfo()"><spring:message code="button.create" /></button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<br/>
+									
+									
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;margin-bottom:-10px;">
+											<div class="col-12" >
+												<ul class="nav nav-pills nav-pills-setting nav-justified" style="border-bottom:0px;" id="server-tab" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active" id="ins-dump-tab-1" data-toggle="pill" href="#insDumpOptionTab1" role="tab" aria-controls="insDumpOptionTab1" aria-selected="true" >
+															<spring:message code="migration.source_option"/> #1
+														</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="ins-dump-tab-2" data-toggle="pill" href="#insDumpOptionTab2" role="tab" aria-controls="insDumpOptionTab2" aria-selected="false">
+															<spring:message code="migration.source_option"/> #2
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+						
+										<!-- tab화면 -->
+										<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #c9ccd7;margin-bottom:-10px;">
+											<div class="tab-pane fade show active" role="tabpanel" id="insDumpOptionTab1">
+												<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+														<select name="src_tables_trsf" id="src_tables_trsf"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
+															<option value="include_trsf"><spring:message code="migration.inclusion_table"/></option>
+															<option value="exclude_trsf"><spring:message code="migration.exclusion_table"/></option>
+														</select>
+													</label>
+													<div id="include_trsf" class="form-inline">
+														<div class="col-sm-8">
+															<input type="text" class="form-control form-control-sm" style="width: 300px;" name="src_include_tables_trsf" id="src_include_tables_trsf" readonly="readonly" />
+														</div>
+														<div class="col-sm-2">
+															<button type="button" class="btn btn-inverse-primary btn-fw" style="width: 115px;" onclick="fn_tableList_trsf('include')" ><spring:message code="button.create" /></button>
+														</div>
+													</div>
+													<div id="exclude_trsf" style="display: none;" class="form-inline">
+														<div class="col-sm-8">
+															<input type="text" class="form-control form-control-sm" style="width: 300px;" name="src_exclude_tables_trsf" id="src_exclude_tables_trsf" readonly="readonly" />
+														</div>
+														<div class="col-sm-2">
+															<button type="button" class="btn btn-inverse-primary btn-fw" style="width: 115px;" onclick="fn_tableList_trsf('exclude')" ><spring:message code="button.create" /></button>
+														</div>
+													</div>	
+												</div>
+										
+												<br>
+												<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+														<spring:message code="migration.data_fetch_size" />
+													</label>
+													<div class="col-sm-4">
+														<input type="number" style="width: 150px;" class="form-control form-control-sm" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="3000"/>
+													</div>
+													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+														<spring:message code="migration.data_fetch_buffer_size" />
+													</label>
+													<div class="col-sm-4">
+														<input type="number" style="width: 150px;" class="form-control form-control-sm" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="10"/>
+													</div>
+												</div>
+												
+												<br>
+												<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+														<spring:message code="migration.number_of_parallel_worker" />
+													</label>
+													<div class="col-sm-4">
+														<input type="number" style="width: 150px;" class="form-control form-control-sm" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="1"/>
+													</div>
+													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+														<spring:message code="migration.lob_buffer_size" />
+													</label>
+													<div class="col-sm-4">
+														<input type="number" style="width: 150px;" class="form-control form-control-sm" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/>
+													</div>
+												</div>
+												
+												<br>
+												<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+														<spring:message code="migration.number_of_rows_extracted" />
+													</label>
+													<div class="col-sm-4">
+														<input type="number" style="width: 150px;" class="form-control form-control-sm" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/>
+													</div>
+													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+														<spring:message code="migration.specify_case" />
+													</label>
+													<div class="col-sm-4">
+														<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
+															<c:forEach var="codeLetter" items="${codeLetter}">
+																<option value="${codeLetter.sys_cd_nm}">${codeLetter.sys_cd_nm}</option>
+															</c:forEach>
+														</select>
+													</div>
+												</div>
+											</div>
+											
+											<div class="tab-pane fade" role="tabpanel" id="insDumpOptionTab2">
+												<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+														<spring:message code="migration.conditional_statement" />
+													</label>
+													<div id="include_trsf" class="form-inline">
+														<div class="col-sm-10">
+															<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 900px;" class="form-control"></textarea>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									
+									<!-- 추후 -->
+									<div class="view addOption_inr" style="display: none">
+										<ul>
+											<li style="border-bottom: none;">
+												<p class="op_tit" style="width: 70px;"><spring:message code="user_management.use_yn" /></p>
+												<div class="inp_rdo">
+													<input name="usr_qry_use_tf" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
+														<label for="rdo_r_1"><spring:message code="dbms_information.use" /></label> 
+													<input name="usr_qry_use_tf" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
+														<label for="rdo_r_2"><spring:message code="dbms_information.unuse" /></label>
+												</div>
+											</li>
+											<li style="border-bottom: none;">
+												<p class="op_tit">사용자 쿼리</p>
+												<span>
+													<div class="textarea_grp">
+														<textarea name="db2pg_usr_qry" id="db2pg_usr_qry" style="height: 250px; width: 700px;" readonly="readonly"></textarea>
+													</div>
+												</span>
+											</li>
+										</ul>
+									</div>				
+									
+									<br/>
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<spring:message code="migration.table_rebuild" />
+											</label>
+											<div class="col-sm-2">
+												<select name="tb_rbl_tf" id="tb_rbl_tf"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
+													<c:forEach var="codeTF" items="${codeTF}">
+														<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
+													</c:forEach>
+												</select>
+											</div>
+											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<spring:message code="migration.input_mode" />
+											</label>
+											<div class="col-sm-2">
+												<select name="ins_opt_cd" id="ins_opt_cd"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
+													<c:forEach var="codeInputMode" items="${codeInputMode}">
+														<option value="${codeInputMode.sys_cd_nm}">${codeInputMode.sys_cd_nm}</option>
+													</c:forEach>
+												</select>
+											</div>
+											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<spring:message code="migration.contraint_extraction" />
+											</label>
+											<div class="col-sm-2">
+												<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
+													<c:forEach var="codeTF" items="${codeTF}">
+														<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</div>
 								</div>
-							</li>
-							<li style="border-bottom: none;">
-								<p class="op_tit">사용자 쿼리</p>
-								<span>
-									<div class="textarea_grp">
-										<textarea name="db2pg_usr_qry" id="db2pg_usr_qry" style="height: 250px; width: 700px;" readonly="readonly"></textarea>
-									</div>
-								</span>
-							</li>
-						</ul>
-					</div>
+							</div>
+							<div class="card-body">
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
+									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="button" onclick="fn_insert_trsf_work()" value='<spring:message code="common.registory" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
+								</div>
+							</div>
+						</fieldset>
+					</form>
 				</div>
 			</div>
 		</div>
-		<div class="pop_cmm mt25">
-			<table class="write">
-				<caption><spring:message code="dashboard.Register_backup" /></caption>
-				<colgroup>
-					<col style="width:17%;" />
-					<col style="width:16%;" />
-					<col style="width:12%;" />
-					<col style="width:15%;" />
-					<col style="width:18%;" />
-					<col style="width:17%;" />
-					</col>
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t2"><spring:message code="migration.table_rebuild" /></th>
-						<td>
-							<select name="tb_rbl_tf" id="tb_rbl_tf" class="select t4">
-								<c:forEach var="codeTF" items="${codeTF}">
-									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
-								</c:forEach>
-							</select>
-						</td>
-						<th scope="row" class="ico_t2"><spring:message code="migration.input_mode" /></th>
-						<td>
-							<select name="ins_opt_cd" id="ins_opt_cd" class="select t4">
-								<c:forEach var="codeInputMode" items="${codeInputMode}">
-									<option value="${codeInputMode.sys_cd_nm}">${codeInputMode.sys_cd_nm}</option>
-								</c:forEach>
-							</select>
-						</td>
-						<th scope="row" class="ico_t2"><spring:message code="migration.contraint_extraction" /></th>
-						<td>
-							<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf" class="select t4">
-								<c:forEach var="codeTF" items="${codeTF}">
-									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
-								</c:forEach>
-							</select>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_insert_work();"><button type="button"><spring:message code="common.registory" /></button></span>
-			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>
-		</div>
 	</div>
 </div>
-</body>
-</html>
- 

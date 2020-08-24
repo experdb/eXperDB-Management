@@ -27,7 +27,7 @@ var output_path ="fail";
 /* ********************************************************
  * Validation Check
  ******************************************************** */
-function valCheck(){
+function valCheck_reg(){
 	if($("#db2pg_ddl_wrk_nm").val() == ""){
 		showSwalIcon('<spring:message code="message.msg107" />', '<spring:message code="common.close" />', '', 'error');
 		$("#db2pg_ddl_wrk_nm").focus();
@@ -152,7 +152,7 @@ function fn_pathCheck() {
  * 등록 버튼 클릭시
  ******************************************************** */
 function fn_insert_work(){
-	if(valCheck()){
+	if(valCheck_reg()){
 		
 		if($("#src_table_total_cnt").val() == ""){
 			var src_table_total_cnt = 0
@@ -235,6 +235,8 @@ function fn_insert_work(){
  * DBMS 시스템 등록 버튼 클릭시
  ******************************************************** */
 function fn_dbmsInfo(){
+	document.getElementById("sourceSystem_add").style.display ='block';
+	document.getElementById("sourceSystem_mod").style.display ='none';
 	$('#pop_layer_dbmsInfo_reg').modal("show");
 }
 
@@ -286,7 +288,8 @@ function fn_tableList(gbn){
 			$("#portno_table").val(nvlPrmSet(result.dbmsInfo[0].portno, ""));
 			
 			fn_search_tableInfo();
-			
+			document.getElementById("add").style.display ='block';
+			document.getElementById("mod").style.display ='none';
 			$('#pop_layer_tableInfo_reg').modal("show");
 		}
 	});

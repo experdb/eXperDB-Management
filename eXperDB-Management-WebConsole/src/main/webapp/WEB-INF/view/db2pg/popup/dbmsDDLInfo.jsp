@@ -63,14 +63,7 @@ function fn_init_dbmsInfo() {
 		table_dbmsInfo.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
 
 		$(window).trigger('resize'); 
-		
-		$('#dbmsList tbody').on('dblclick','tr',function() {
-			var datas = table_dbmsInfo.row(this).data();
-			var db2pg_sys_id = datas.db2pg_sys_id;		
-			var db2pg_sys_nm = datas.db2pg_sys_nm;		
-			fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm);
-			$('#pop_layer_dbmsInfo_reg').modal("hide");
-		});	
+			
 }
 
 /* ********************************************************
@@ -127,7 +120,7 @@ function fn_search_dbmsInfo(){
 
 	
 /* ********************************************************
- * 등록
+ * ddl 등록시 등록
  ******************************************************** */
 function fn_Add(){
 	var datas = table_dbmsInfo.rows('.selected').data();
@@ -141,6 +134,21 @@ function fn_Add(){
 	$('#pop_layer_dbmsInfo_reg').modal("hide");
 }
 
+
+/* ********************************************************
+ * ddl 수정시 등록
+ ******************************************************** */
+function fn_Mod(){
+	var datas = table_dbmsInfo.rows('.selected').data();
+	if (datas.length <= 0) {
+		showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	} 
+	var db2pg_sys_id = datas[0].db2pg_sys_id;		
+	var db2pg_sys_nm = datas[0].db2pg_sys_nm;	
+	fn_dbmsAddCallback2(db2pg_sys_id,db2pg_sys_nm);
+	$('#pop_layer_dbmsInfo_reg').modal("hide");
+}
 </script>
 <div class="modal fade" id="pop_layer_dbmsInfo_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 50px 350px;">
@@ -189,7 +197,8 @@ function fn_Add(){
 					</div>
 					<br>
 					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-						<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onclick="fn_Add()" value='<spring:message code="common.add" />' />
+						<input class="btn btn-primary" width="200px"style="vertical-align:middle;display: none;" type="button" id="sourceSystem_add" onclick="fn_Add()" value='<spring:message code="common.add" />' />
+						<input class="btn btn-primary" width="200px"style="vertical-align:middle;display: none;" type="button" id="sourceSystem_mod" onclick="fn_Mod()" value='<spring:message code="common.add" />' />
 						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 					</div>
 				</div>
