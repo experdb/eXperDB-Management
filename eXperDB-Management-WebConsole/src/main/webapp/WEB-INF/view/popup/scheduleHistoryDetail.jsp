@@ -54,7 +54,10 @@ function fn_init_scdH() {
 						var html = "<div class='badge badge-pill badge-success'><i class='ti-face-smile  mr-2'></i>Success</div>";
 						return html;
 				}else if(full.exe_rslt_cd == 'TC001702'){
-					var html = '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+					var html = '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
+					html += '<i class="fa fa-times"></i>';
+					html += '<spring:message code="common.failed" />';
+					html += "</button>";
 					return html;
 				}else{
 					var html = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
@@ -67,14 +70,23 @@ function fn_init_scdH() {
 				render : function(data, type, full, meta) {	 						
 					var html = '';
 					if (full.fix_rsltcd == 'TC002001') {
-						html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
+						html += '<button type="button" class="btn btn-inverse-success btn-fw" onclick="javascript:fn_fixLog('+full.exe_sn+', \'scdList\');">';
+						html += '<i class="fa fa-times"></i>';
+						html += '<spring:message code="etc.etc29"/>';
+						html += "</button>";
 					} else if(full.fix_rsltcd == 'TC002002'){
-						html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
+							html += '<button type="button" class="btn btn-inverse-success btn-fw" onclick="javascript:fn_fixLog('+full.exe_sn+', \'scdList\');">';
+							html += '<i class="fa fa-times"></i>';
+							html += '<spring:message code="etc.etc30"/>';
+							html += "</button>";
 					} else {
 						if(full.exe_rslt_cd == 'TC001701'){
 							html += ' - ';
 						}else{
-							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
+							html += '<button type="button" class="btn btn-inverse-warning btn-fw" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'scdList\');">';
+	 						html += '<i class="fa fa-times"></i>';
+	 						html += '<spring:message code="backup_management.Enter_Action"/>';
+	 						html += "</button>";
 						}
 					}
 					return html;
@@ -100,75 +112,9 @@ function fn_init_scdH() {
 }
 
 
-function fn_fix_rslt_reg(exe_sn){
-	document.getElementById("exe_sn_r").value = exe_sn;
-	$('#fix_rslt_msg_r').val('');
-	$("#rdo_r_1").attr('checked', true);
-	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
-}
-
-function fn_fix_rslt_msg_reg(){
-	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
-	
-	$.ajax({
-			url : "/updateFixRslt.do",
-			data : {
-				exe_sn : $('#exe_sn_r').val(),
-				fix_rsltcd : fix_rsltcd,
-				fix_rslt_msg : $('#fix_rslt_msg_r').val()
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
-				location.reload();
-			}
-		}); 
-}
 
 
-function fn_fix_rslt_msg_modify(){
-	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
 
-	$.ajax({
-			url : "/updateFixRslt.do",
-			data : {
-				exe_sn : $('#exe_sn').val(),
-				fix_rsltcd : fix_rsltcd,
-				fix_rslt_msg : $('#fix_rslt_msg').val()
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
-				location.reload();
-			}
-		}); 
-}
 </script>
 <body>
 <%@include file="../cmmn/commonLocale.jsp"%>  
@@ -177,6 +123,8 @@ function fn_fix_rslt_msg_modify(){
 <%@include file="../cmmn/workScriptInfo.jsp"%>
 <%@include file="../cmmn/scheduleInfo.jsp"%>
 <%@include file="../cmmn/wrkLog.jsp"%>
+
+<%@include file="../cmmn/fixRsltMsgInfo.jsp"%>
 <%@include file="../cmmn/fixRsltMsg.jsp"%>
 
 <div class="modal fade" id="pop_layer_scd_history" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">

@@ -38,7 +38,7 @@
 					render : function(data, type, full, meta) {	 	
 						var html = '';
  						if(full.fix_rsltcd == 'TC002002'){
- 							html += '<button type="button" class="btn btn-inverse-success btn-fw" onclick="javascript:fn_fixLog('+full.exe_sn+')">';
+ 							html += '<button type="button" class="btn btn-inverse-success btn-fw" onclick="javascript:fn_fixLog('+full.exe_sn+', \'scdListFail\');">';
  							html += '<i class="fa fa-times"></i>';
  							html += '<spring:message code="etc.etc30"/>';
  							html += "</button>";
@@ -46,7 +46,7 @@
  							if(full.exe_rslt_cd == 'TC001701'){
  								html += ' - ';
  							}else{
- 								html += '<button type="button" class="btn btn-inverse-warning btn-fw" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+')">';
+ 								html += '<button type="button" class="btn btn-inverse-warning btn-fw" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'scdListFail\');">';
  	 							html += '<i class="fa fa-times"></i>';
  	 							html += '<spring:message code="backup_management.Enter_Action"/>';
  	 							html += "</button>";	
@@ -104,13 +104,11 @@
    		     },
    			error : function(xhr, status, error) {
    				if(xhr.status == 401) {
-   					alert('<spring:message code="message.msg02" />');
-   					top.location.href = "/";
+   					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
    				} else if(xhr.status == 403) {
-   					alert('<spring:message code="message.msg03" />');
-   					top.location.href = "/";
+   					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
    				} else {
-   					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+   					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
    				}
    			},
    			success : function(result) {
@@ -121,79 +119,7 @@
    		}); 
   	});
 
-    function fn_fix_rslt_reg(exe_sn){
-    	document.getElementById("exe_sn").value = exe_sn;
-    	$('#fix_rslt_msg_r').val('');
-    	$("#rdo_r_1").attr('checked', true);
-    	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
-    }
-    
-    function fn_fix_rslt_msg_reg(){
-    	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
-    	
-    	$.ajax({
-   			url : "/updateFixRslt.do",
-   			data : {
-   				exe_sn : $('#exe_sn').val(),
-   				fix_rsltcd : fix_rsltcd,
-   				fix_rslt_msg : $('#fix_rslt_msg_r').val()
-   			},
-   			dataType : "json",
-   			type : "post",
-   			beforeSend: function(xhr) {
-   		        xhr.setRequestHeader("AJAX", true);
-   		     },
-   			error : function(xhr, status, error) {
-   				if(xhr.status == 401) {
-   					alert('<spring:message code="message.msg02" />');
-   					top.location.href = "/";
-   				} else if(xhr.status == 403) {
-   					alert('<spring:message code="message.msg03" />');
-   					top.location.href = "/";
-   				} else {
-   					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-   				}
-   			},
-   			success : function(result) {
-   				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
-   				fn_scheduleFail_list();
-   			}
-   		}); 
-    }
 
-    
-    function fn_fix_rslt_msg_modify(){
-    	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
-
-    	$.ajax({
-    			url : "/updateFixRslt.do",
-    			data : {
-    				exe_sn : $('#exe_sn').val(),
-    				fix_rsltcd : fix_rsltcd,
-    				fix_rslt_msg : $('#fix_rslt_msg').val()
-    			},
-    			dataType : "json",
-    			type : "post",
-    			beforeSend: function(xhr) {
-    		        xhr.setRequestHeader("AJAX", true);
-    		     },
-    			error : function(xhr, status, error) {
-    				if(xhr.status == 401) {
-    					alert('<spring:message code="message.msg02" />');
-    					top.location.href = "/";
-    				} else if(xhr.status == 403) {
-    					alert('<spring:message code="message.msg03" />');
-    					top.location.href = "/";
-    				} else {
-    					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-    				}
-    			},
-    			success : function(result) {
-    				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
-    				fn_scheduleFail_list();
-    			}
-    		}); 
-    }
 
     
    function fn_scheduleFail_list(){
@@ -211,13 +137,11 @@
   		     },
   			error : function(xhr, status, error) {
   				if(xhr.status == 401) {
-  					alert('<spring:message code="message.msg02" />');
-  					top.location.href = "/";
+  					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
   				} else if(xhr.status == 403) {
-  					alert('<spring:message code="message.msg03" />');
-  					top.location.href = "/";
+  					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
   				} else {
-  					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+  					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
   				}
   			},
   			success : function(result) {
@@ -235,6 +159,7 @@
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
 <%@include file="../../cmmn/workScriptInfo.jsp"%>
 <%@include file="../../cmmn/wrkLog.jsp"%>
+<%@include file="../../cmmn/fixRsltMsgInfo.jsp"%>
 <%@include file="../../cmmn/fixRsltMsg.jsp"%>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">

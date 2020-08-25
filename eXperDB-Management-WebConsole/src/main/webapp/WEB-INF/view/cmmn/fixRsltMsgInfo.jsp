@@ -18,7 +18,7 @@
 	*
 	*/
 %>
-<div class="modal fade" id="pop_layer_fix_rslt_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="pop_layer_fix_rslt_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:1060;">
 	<div class="modal-dialog  modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-body" style="margin-bottom:-30px;">

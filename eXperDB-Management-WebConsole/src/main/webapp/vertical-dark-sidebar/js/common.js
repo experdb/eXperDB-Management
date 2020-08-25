@@ -1144,7 +1144,11 @@ function fn_fix_rslt_msg_reg(){
 				fn_get_rman_list();
 			} else if (viewGbn == "dumpList") {
 				fn_get_dump_list();
-			} else {
+			} else if(viewGbn == "scdList"){
+				$('#pop_layer_scd_history').modal("hide");
+			}else if(viewGbn=="scdListFail"){
+				fn_scheduleFail_list();
+			}else{
 				fn_search();
 			}
 		}
@@ -1234,7 +1238,11 @@ function fn_fix_rslt_msg_modify(){
 				fn_get_rman_list();
 			} else if (viewGbn == "dumpList") {
 				fn_get_dump_list();
-			} else {
+			} else if(viewGbn == "scdList"){
+				$('#pop_layer_scd_history').modal("hide");
+			}else if(viewGbn=="scdListFail"){
+				fn_scheduleFail_list();
+			}else{
 				fn_search();
 			}
 		}
