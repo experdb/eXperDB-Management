@@ -132,6 +132,43 @@ function fn_Mod_Table(){
 	$('#pop_layer_tableInfo_reg').modal("hide");
 }
 
+
+/* ********************************************************
+ * DATA 등록시 테이블 추가
+ ******************************************************** */
+function fn_Add_Table_Data(){
+	
+	var totalCnt = table_tableInfo.rows().data().length;
+	var datas = table_tableInfo.rows('.selected').data();
+	
+	var rowList = [];
+    for (var i = 0; i < datas.length; i++) {
+        rowList.push( table_tableInfo.rows('.selected').data()[i].table_name);   
+	   //rowList.push( table.rows('.selected').data()[i]);     
+  }	
+ 
+	fn_tableAddCallback3(rowList, tableGbn, totalCnt);
+	$('#pop_layer_tableInfo_reg').modal("hide");
+}
+
+/* ********************************************************
+ * DATA 수정시 테이블 추가
+ ******************************************************** */
+function fn_Mod_Table_Data(){
+	
+	var totalCnt = table_tableInfo.rows().data().length;
+	var datas = table_tableInfo.rows('.selected').data();
+	
+	var rowList = [];
+    for (var i = 0; i < datas.length; i++) {
+        rowList.push( table_tableInfo.rows('.selected').data()[i].table_name);   
+	   //rowList.push( table.rows('.selected').data()[i]);     
+  }	
+ 
+	fn_tableAddCallback4(rowList, tableGbn, totalCnt);
+	$('#pop_layer_tableInfo_reg').modal("hide");
+}
+
 function fn_tableCheckSelect(tableList){
 	var datas = table_tableInfo.rows().data();
 	
@@ -199,6 +236,8 @@ function fn_tableCheckSelect(tableList){
 					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
 						<input class="btn btn-primary" width="200px" style="vertical-align:middle; display: none;" type="button" id="add" onclick="fn_Add_Table()" value='<spring:message code="common.add" />' />
 						<input class="btn btn-primary" width="200px" style="vertical-align:middle; display: none;" type="button" id="mod" onclick="fn_Mod_Table()" value='<spring:message code="common.add" />' />
+						<input class="btn btn-primary" width="200px" style="vertical-align:middle; display: none;" type="button" id="add_data" onclick="fn_Add_Table_Data()" value='<spring:message code="common.add" />' />
+						<input class="btn btn-primary" width="200px" style="vertical-align:middle; display: none;" type="button" id="mod_data" onclick="fn_Mod_Table_Data()" value='<spring:message code="common.add" />' />
 						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 					</div>
 				</div>

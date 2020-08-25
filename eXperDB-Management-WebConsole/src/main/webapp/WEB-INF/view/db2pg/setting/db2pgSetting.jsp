@@ -338,12 +338,19 @@ function fn_ddl_regre_popup(){
  * 데이터이행 등록 팝업
  ******************************************************** */
 function fn_data_reg_popup(){
-	$("#db2pg_trsf_wrk_nm", "#dataRegForm").val("");
-	$("#db2pg_trsf_wrk_exp", "#dataRegForm").val("");
-	$("#db2pg_source_system_nm", "#dataRegForm").val("");
-	$("#db2pg_trg_sys_nm", "#dataRegForm").val("");
-	
-	
+// 	초기화 확인필요
+// 	$("#db2pg_trsf_wrk_nm", "#dataRegForm").val("");
+// 	$("#db2pg_trsf_wrk_exp", "#dataRegForm").val("");
+// 	$("#db2pg_source_system_nm", "#dataRegForm").val("");
+// 	$("#db2pg_trg_sys_nm", "#dataRegForm").val("");
+
+	$('#db2pg_trsf_wrk_nm').prop('readonly', false);
+	$("#mod_button_data_work").hide();
+	$("#inset_button_data_work").show();
+	$("#inset_button_data_work2").show();
+	$("#inset_title").show();
+	$("#mod_title").hide();
+				
 	$('#pop_layer_data_reg').modal("show");
 }
 
@@ -354,15 +361,76 @@ function fn_data_regre_popup(){
 	var rowCnt = tableData.rows('.selected').data().length;
 	if (rowCnt == 1) {
 		var db2pg_trsf_wrk_id = tableData.row('.selected').data().db2pg_trsf_wrk_id;
-		var popUrl = "/db2pg/popup/dataRegReForm.do?db2pg_trsf_wrk_id=" +  db2pg_trsf_wrk_id;
-		var width = 965;
-		var height = 800;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 		
-		var winPop = window.open(popUrl,"dataRegRePop",popOption);
-		winPop.focus();
+		$.ajax({
+			url : "/db2pg/popup/dataRegReForm.do",
+			data : {
+				db2pg_trsf_wrk_id : db2pg_trsf_wrk_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				 if(result.exrt_trg_tb_cnt>0){
+					 $("#src_tables_trsf option:eq(0)").attr("selected", "selected");
+					 $("#src_include_tables_trsf").val("<spring:message code='migration.total_table'/>: "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
+					 $("#src_table_total_cnt_trsf").val(result.exrt_trg_tb_total_cnt);
+					 $("#include_trsf").show();
+					 $("#exclude_trsf").hide();
+				 }else if(result.exrt_exct_tb_cnt>0){
+					 $("#src_tables option:eq(1)").attr("selected", "selected");
+					 $("#src_exclude_tables_trsf").val("<spring:message code='migration.total_table'/> : "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
+					 $("#src_table_total_cnt_trsf").val(result.exrt_exct_tb_total_cnt)
+					 $("#exclude_trsf").show();
+					 $("#include_trsf").hide(); 
+				 }	
+			
+				$("#db2pg_sys_id_trsf").val(nvlPrmSet(result.db2pg_sys_id, ""));
+				$("#db2pg_trg_sys_id").val(nvlPrmSet(result.db2pg_trg_sys_id, ""));
+				$("#src_include_table_nm_trsf").val(nvlPrmSet(result.exrt_trg_tb_nm, ""));
+				$("#src_exclude_table_nm_trsf").val(nvlPrmSet(result.exrt_exct_tb_nm, ""));
+				
+				$("#db2pg_trsf_wrk_nm").val(nvlPrmSet(result.db2pg_trsf_wrk_nm, ""));
+				$("#db2pg_trsf_wrk_exp").val(nvlPrmSet(result.db2pg_trsf_wrk_exp, ""));
+				$("#db2pg_source_system_nm").val(nvlPrmSet(result.db2pg_source_system_nm, ""));
+				$("#db2pg_trg_sys_nm").val(nvlPrmSet(result.db2pg_trg_sys_nm, ""));
+				$("#exrt_dat_ftch_sz").val(nvlPrmSet(result.exrt_dat_ftch_sz, ""));
+				$("#dat_ftch_bff_sz").val(nvlPrmSet(result.dat_ftch_bff_sz, ""));
+				$("#exrt_prl_prcs_ecnt").val(nvlPrmSet(result.exrt_prl_prcs_ecnt, ""));
+				$("#lob_dat_bff_sz").val(nvlPrmSet(result.lob_dat_bff_sz, ""));
+				$("#exrt_dat_cnt").val(nvlPrmSet(result.exrt_dat_cnt, ""));
+				$("#db2pg_uchr_lchr_val").val(result.db2pg_uchr_lchr_val).prop("selected", true);
+				$("#tb_rbl_tf").val(result.tb_rbl_tf).prop("selected", true);
+				$("#ins_opt_cd").val(result.ins_opt_cd).prop("selected", true);
+				$("#cnst_cnd_exrt_tf").val(result.cnst_cnd_exrt_tf).prop("selected", true);
+				$('#db2pg_trsf_wrk_nm').prop('readonly', true);
+				$("#wrk_id").val(nvlPrmSet(result.wrk_id, ""));
+				$("#db2pg_trsf_wrk_id").val(nvlPrmSet(result.db2pg_trsf_wrk_id, ""));
+				$("#db2pg_trg_sys_id").val(nvlPrmSet(result.db2pg_trg_sys_id, ""));
+				
+				$("#mod_button_data_work").show();
+				$("#inset_button_data_work").hide();
+				$("#inset_button_data_work2").hide();
+				$("#inset_title").hide();
+				$("#mod_title").show();
+				
+				 $("textarea[name=src_cnd_qry]").html(result.src_cnd_qry);
+				 
+				$('#pop_layer_data_reg').modal("show");
+			}
+		});	
+		
 	} else {
 		showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
@@ -551,9 +619,9 @@ function fn_copy_save(){
 	}else if(wrk_nmChk =="fail"){
 		showSwalIcon('<spring:message code="backup_management.work_overlap_check" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
-	}else if($("#db2pg_ddl_wrk_exp").val() == ""){
+	}else if($("#wrk_exp").val() == ""){
 		showSwalIcon('<spring:message code="message.msg108" />', '<spring:message code="common.close" />', '', 'error');
-		$("#db2pg_ddl_wrk_exp").focus();
+		$("#wrk_exp").focus();
 		return false;
 	}else{
 		var rowCnt = tableDDL.rows('.selected').data().length;
@@ -583,7 +651,7 @@ function fn_copy_save(){
 					if(result.resultCode == "0000000000"){
 						$("#wrk_nm").val("");
 						$("#wrk_exp").val("");
-						alert('<spring:message code="message.msg07" /> ');
+						showSwalIcon('<spring:message code="message.msg07"/>', '<spring:message code="common.close" />', '', 'success');
 						$('#pop_layer_copy').modal("hide");
 						getddlDataList();
 					}else{
@@ -619,7 +687,7 @@ function fn_copy_save(){
 					if(result.resultCode == "0000000000"){
 						$("#wrk_nm").val("");
 						$("#wrk_exp").val("");
-						alert('<spring:message code="message.msg07" /> ');
+						showSwalIcon('<spring:message code="message.msg07"/>', '<spring:message code="common.close" />', '', 'success');
 						$('#pop_layer_copy').modal("hide");
 						getdataDataList();
 					}else{
@@ -644,7 +712,8 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {
-			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
+			showSwalIcon(rowCnt+' 개의 Work를 실행하였습니다.', '<spring:message code="common.close" />', '', 'success');
+			
 			for (var i = 0; i < datas.length; i++) {
 				 var row = new Object()
 				 row.wrk_id = datas[i].wrk_id;
@@ -692,7 +761,7 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {				
-			alert(rowCnt+" <spring:message code='migration.msg11' />");		
+			showSwalIcon(rowCnt+' <spring:message code="migration.msg11"/>', '<spring:message code="common.close" />', '', 'success');
 			/* ********************************************************
 			 * 실행조건 필요(여러개의 WORK중 동일한 테이블 있을시, Alert알림 실행X)
 			 * 경우의 수가 너무 많음 추후 고려
@@ -845,13 +914,13 @@ function fn_ImmediateStart(gbn){
 										<input type="text" class="form-control" maxlength="25" id="data_wrk_nm" name="data_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
 									</div>
 									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
-										<select class="form-control" name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
+										<select class="form-control" name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
 											<option value="source_system"><spring:message code="migration.source_system"/></option>	
 											<option value="target_system"><spring:message code="migration.target_system"/></option>
 										</select>
 									</div>
 									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
-										<select class="form-control" name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
+										<select class="form-control" name="dbms_dscd" id="dbms_dscd" class="select t5" >
 											<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
 											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
  												<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>

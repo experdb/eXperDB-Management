@@ -288,8 +288,10 @@ function fn_tableList(gbn){
 			$("#portno_table").val(nvlPrmSet(result.dbmsInfo[0].portno, ""));
 			
 			fn_search_tableInfo();
-			document.getElementById("add").style.display ='block';
-			document.getElementById("mod").style.display ='none';
+ 			document.getElementById("add").style.display ='none';
+ 			document.getElementById("mod").style.display ='none';
+ 			document.getElementById("add_data").style.display ='block';
+ 			document.getElementById("mod_data").style.display ='none';
 			$('#pop_layer_tableInfo_reg').modal("show");
 		}
 	});

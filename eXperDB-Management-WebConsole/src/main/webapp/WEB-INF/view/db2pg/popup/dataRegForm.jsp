@@ -52,6 +52,27 @@ function valCheck_trsf(){
 }
 
 /* ********************************************************
+ * Validation Check
+ ******************************************************** */
+function valCheck_trsf2(){
+	if($("#db2pg_trsf_wrk_exp").val() == ""){
+		showSwalIcon('<spring:message code="message.msg108" />', '<spring:message code="common.close" />', '', 'error');
+		$("#db2pg_trsf_wrk_exp").focus();
+		return false;
+	}else if($("#db2pg_source_system_id").val() == ""){
+		showSwalIcon('<spring:message code="migration.msg07" />', '<spring:message code="common.close" />', '', 'error');
+		$("#db2pg_source_system_id").focus();
+		return false;
+	}else if($("#db2pg_trg_sys_id").val() == ""){
+		showSwalIcon('<spring:message code="migration.msg08" />', '<spring:message code="common.close" />', '', 'error');
+		$("#db2pg_trg_sys_id").focus();
+		return false;
+	}else{
+		return true;
+	}
+}
+
+/* ********************************************************
  * 사용자쿼리 체크박스 제어
  ******************************************************** */
 function fn_checkBox(result){
@@ -130,12 +151,13 @@ function fnCheckNotKorean(koreanStr){
 function fn_insert_trsf_work(){
 	if(valCheck_trsf()){
 		
-		if($("#src_table_total_cnt").val() == ""){
-			var src_table_total_cnt = 0
+		if($("#src_table_total_cnt_trsf").val() == ""){
+			var src_table_total_cnt_trsf = 0
 		}else{
-			var src_table_total_cnt = $("#src_table_total_cnt").val()
+			var src_table_total_cnt_trsf = $("#src_table_total_cnt_trsf").val()
 		}
 		
+		alert(src_table_total_cnt_trsf);
 		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
 			url : '/wrk_nmCheck.do',
@@ -150,11 +172,11 @@ function fn_insert_trsf_work(){
 						  	data : {  
 						  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
 						  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
-						  		db2pg_src_sys_id : $("#db2pg_sys_id").val(),
+						  		db2pg_src_sys_id : $("#db2pg_sys_id_trsf").val(),
 						  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
 						  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
-						  		src_include_tables : $("#src_include_table_nm").val(),
-						  		src_exclude_tables : $("#src_exclude_table_nm").val(),
+						  		src_include_tables : $("#src_include_table_nm_trsf").val(),
+						  		src_exclude_tables : $("#src_exclude_table_nm_trsf").val(),
 						  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
 						  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
 						  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
@@ -165,7 +187,7 @@ function fn_insert_trsf_work(){
 						  		src_cnd_qry : $("#src_cnd_qry").val(),
 						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
 						  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
-						  		src_table_total_cnt : src_table_total_cnt,
+						  		src_table_total_cnt : src_table_total_cnt_trsf,
 						  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
 						  	},
 							type : "post",
@@ -210,11 +232,72 @@ function fn_insert_trsf_work(){
 	}
 }
 
+
+/* ********************************************************
+ * 수정 버튼 클릭시
+ ******************************************************** */
+function fn_update_trsf_work(){
+	if(valCheck_trsf2()){
+		if($("#src_table_total_cnt_trsf").val() == ""){
+			var src_table_total_cnt_trsf = 0
+		}else{
+			var src_table_total_cnt_trsf = $("#src_table_total_cnt_trsf").val()
+		}
+		
+		$.ajax({
+			url : "/db2pg/updateDataWork.do",
+		  	data : {
+		  		db2pg_trsf_wrk_id : $("#db2pg_trsf_wrk_id").val(),
+		  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
+		  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
+		  		db2pg_src_sys_id : $("#db2pg_sys_id_trsf").val(),
+		  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
+		  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
+		  		src_include_tables : $("#src_include_table_nm_trsf").val(),
+		  		src_exclude_tables : $("#src_exclude_table_nm_trsf").val(),
+		  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
+		  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
+		  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
+		  		lob_dat_bff_sz : $("#lob_dat_bff_sz").val(),
+		  		tb_rbl_tf : $("#tb_rbl_tf").val(),
+		  		ins_opt_cd : $("#ins_opt_cd").val(),
+		  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
+		  		src_cnd_qry : $("#src_cnd_qry").val(),
+		  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
+		  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
+		  		src_table_total_cnt : src_table_total_cnt_trsf,
+		  		wrk_id : $("#wrk_id").val(),
+		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val()
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result.resultCode == "0000000000"){
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
+				}else{
+					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
+				}		
+			}
+		});
+	}
+}
+
 /* ********************************************************
  * DBMS 서버 호출하여 입력
  ******************************************************** */
  function fn_dbmsAddCallback_source_trsf(db2pg_sys_id,db2pg_sys_nm){
-	 $('#db2pg_sys_id').val(db2pg_sys_id);
+	 $('#db2pg_sys_id_trsf').val(db2pg_sys_id);
 	 $('#db2pg_source_system_nm').val(db2pg_sys_nm);
 }
 
@@ -250,21 +333,54 @@ function fn_tableList_trsf(gbn){
 		showSwalIcon('<spring:message code="migration.msg03" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
-	
-	var frmPop= document.frmPopup;
-	var url = '/db2pg/popup/tableInfo.do';
-	window.open('','popupView','width=930, height=850');
-	     
-	frmPop.action = url;
-	frmPop.target = 'popupView';
-	frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
-	frmPop.tableGbn.value = gbn;
 	if(gbn == 'include'){
-		frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
+		var src_include_table_nm_trsf = $('#src_include_table_nm_trsf').val();  
 	}else{
-		frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
+		var src_exclude_table_nm_trsf = $('#src_exclude_table_nm_trsf').val();  
 	}
-	frmPop.submit();   
+	
+	$.ajax({
+		url : "/db2pg/popup/tableInfo.do",
+		data : {
+			src_include_table_nm : src_include_table_nm_trsf,
+			src_exclude_table_nm : src_exclude_table_nm_trsf,
+			db2pg_sys_id : $('#db2pg_sys_id_trsf').val(),
+			tableGbn : gbn
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+ 			tableList = result.tableList;
+ 			tableGbn = result.tableGbn;
+ 			$("#db2pg_sys_nm_table").val(nvlPrmSet(result.dbmsInfo[0].db2pg_sys_nm, ""));
+ 			$("#ipadr_table").val(nvlPrmSet(result.dbmsInfo[0].ipadr, ""));
+ 			$("#scm_nm_table").val(nvlPrmSet(result.dbmsInfo[0].scm_nm, ""));
+ 			$("#dbms_dscd_table").val(nvlPrmSet(result.dbmsInfo[0].dbms_dscd, ""));
+ 			$("#dtb_nm_table").val(nvlPrmSet(result.dbmsInfo[0].dtb_nm, ""));
+ 			$("#spr_usr_id_table").val(nvlPrmSet(result.dbmsInfo[0].spr_usr_id, ""));
+ 			$("#pwd_table").val(nvlPrmSet(result.dbmsInfo[0].pwd, ""));
+ 			$("#portno_table").val(nvlPrmSet(result.dbmsInfo[0].portno, ""));
+		
+			fn_search_tableInfo();
+ 			document.getElementById("add").style.display ='none';
+ 			document.getElementById("mod").style.display ='none';
+ 			document.getElementById("add_data").style.display ='block';
+ 			document.getElementById("mod_data").style.display ='none';
+			$('#pop_layer_tableInfo_reg').modal("show");
+		}
+	});
 }
 
 /* ********************************************************
@@ -286,7 +402,7 @@ function fn_tableList_trsf(gbn){
 		});
  });
 
-function fn_tableAddCallback(rowList, tableGbn, totalCnt){
+function fn_tableAddCallback3(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
 		 $('#src_include_tables_trsf').val("<spring:message code='migration.total_table'/>"+totalCnt+ "<spring:message code='migration.selected_out_of'/>"+rowList.length+"<spring:message code='migration.items'/>");
 		$('#src_include_table_nm_trsf').val(rowList);
@@ -305,12 +421,19 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 	<input type="hidden" name="tableGbn_trsf"  id="tableGbn_trsf" >
 	<input type="hidden" name="src_table_total_cnt_trsf" id="src_table_total_cnt_trsf">
 </form>
+
+<input type="hidden" name="wrk_id" id="wrk_id">
+<input type="hidden" name="db2pg_trsf_wrk_id" id="db2pg_trsf_wrk_id">
+
 <div class="modal fade" id="pop_layer_data_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 40px 180px;">
 		<div class="modal-content" style="width:1300px; ">		 	 
 			<div class="modal-body" style="margin-bottom:-30px;">
-				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;margin-bottom:10px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="inset_title" style="padding-left:5px;margin-bottom:10px;">
 					Migration <spring:message code="common.registory" />
+				</h4>
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="mod_title" style="padding-left:5px;margin-bottom:10px;">
+					Migration <spring:message code="common.modify" />
 				</h4>
 				<div class="card" style="border:0px;max-height:698px;">
 					<form class="cmxform" id="dataRegForm">
@@ -327,7 +450,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_trsf_wrk_nm" name="db2pg_trsf_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()"/>
 											</div>
 											<div class="col-sm-2">
-												<button type="button" class="btn btn-inverse-danger btn-fw" style="width: 115px;" onclick="fn_check_ddl_reg()"><spring:message code="common.overlap_check" /></button>
+												<button type="button" id="inset_button_data_work" class="btn btn-inverse-danger btn-fw" style="width: 115px;" onclick="fn_check_ddl_reg()"><spring:message code="common.overlap_check" /></button>
 											</div>
 										</div>
 		
@@ -551,7 +674,8 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 							</div>
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
-									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="button" onclick="fn_insert_trsf_work()" value='<spring:message code="common.registory" />' />
+									<input class="btn btn-primary" width="200px;" id="inset_button_data_work2" style="vertical-align:middle;" type="button" onclick="fn_insert_trsf_work()" value='<spring:message code="common.registory" />' />
+									<input class="btn btn-primary" width="200px;" id="mod_button_data_work" style="vertical-align:middle;" type="button" onclick="fn_update_trsf_work()" value='<spring:message code="common.modify" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
 								</div>
 							</div>

@@ -865,7 +865,7 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/dataRegReForm.do")
 	public ModelAndView dataRegReForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -895,8 +895,8 @@ public class Db2pgSettingController {
 			mv.addObject("usr_qry_use_tf",result.getUsr_qry_use_tf());
 			mv.addObject("db2pg_usr_qry_id",result.getDb2pg_usr_qry_id());
 			mv.addObject("ins_opt_cd",result.getIns_opt_cd());
-			mv.addObject("tb_rbl_tf",result.getTb_rbl_tf());
-			mv.addObject("cnst_cnd_exrt_tf",result.getCnst_cnd_exrt_tf());
+			mv.addObject("tb_rbl_tf",String.valueOf(result.getTb_rbl_tf()).toUpperCase());
+			mv.addObject("cnst_cnd_exrt_tf",String.valueOf(result.getCnst_cnd_exrt_tf()).toUpperCase());
 			mv.addObject("trans_save_pth",result.getTrans_save_pth());
 			mv.addObject("src_cnd_qry",result.getSrc_cnd_qry());
 			mv.addObject("wrk_id",result.getWrk_id());
@@ -913,7 +913,6 @@ public class Db2pgSettingController {
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		mv.setViewName("db2pg/popup/dataRegReForm");
 		return mv;
 	}
 	
