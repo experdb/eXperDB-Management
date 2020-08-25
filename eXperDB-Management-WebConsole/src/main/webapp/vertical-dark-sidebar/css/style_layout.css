@@ -747,7 +747,7 @@ table.table tr th.t2{
 
 .main_scroll {
 	position: fixed;
-	line-height:0;
+/* 	line-height:0; */
 	max-height: 100vh;
 	overflow-y:auto;
 }

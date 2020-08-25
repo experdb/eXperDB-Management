@@ -43,14 +43,6 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 		return (List<DashboardVO>) dashboardDAO.selectDashboardServerInfo(vo);
 	}
 
-	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException {
-		return (List<DashboardVO>) dashboardDAO.selectDashboardBackupDumpInfo(vo);
-	}
-
-	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException {
-		return (List<DashboardVO>) dashboardDAO.selectDashboardBackupRmanInfo(vo);
-	}
-
 	public int selectDashboardScheduleTotal() throws SQLException {
 		return (int) dashboardDAO.selectDashboardScheduleTotal();
 	}
@@ -134,7 +126,35 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 	public Map<String, Object> selectDashboardScheduleHistoryChart(DashboardVO vo) throws SQLException {
 		return (Map<String, Object>) dashboardDAO.selectDashboardScheduleHistoryChart(vo);
 	}
-	
-	
-	
+
+	/**
+	 * 백업이력목록 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectDashboardBackupHistory(DashboardVO vo) throws SQLException {
+		return (List<Map<String, Object>>) dashboardDAO.selectDashboardBackupHistory(vo);
+	}
+
+	/**
+	 * dump 백업 목록 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException {
+		return (List<DashboardVO>) dashboardDAO.selectDashboardBackupDumpInfo(vo);
+	}
+
+	/**
+	 * Dashboard 백업정보 ONLINE 조회
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException {
+		return (List<DashboardVO>) dashboardDAO.selectDashboardBackupRmanInfo(vo);
+	}
 }

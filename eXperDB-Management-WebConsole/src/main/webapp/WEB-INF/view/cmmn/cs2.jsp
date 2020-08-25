@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/fullcalendar/fullcalendar.min.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/bars-1to10.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/examples.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/morris.js/morris.css">
 
 <!-- End plugin css for this page -->
 
@@ -87,6 +88,8 @@
 
 <script src="/vertical-dark-sidebar/js/vendors/justgage/raphael-2.1.4.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/justgage/justgage.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/raphael/raphael.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/morris.js/morris.min.js"></script>
 
 
 <!-- End custom js for this page-->

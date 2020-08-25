@@ -43,16 +43,6 @@ public class DashboardDAO extends EgovAbstractMapper{
 		return (List<DashboardVO>) list("dashboardSql.selectDashboardServerInfo", vo);
 	}
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException{
-		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupDumpInfo",vo);
-	}
-
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException{
-		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupRmanInfo",vo);
-	}
-
 	public int selectDashboardScheduleTotal() throws SQLException{
 		return (int) selectOne("dashboardSql.selectDashboardScheduleTotal");
 	}
@@ -127,6 +117,39 @@ public class DashboardDAO extends EgovAbstractMapper{
 	public Map<String, Object> selectDashboardScheduleHistoryChart(DashboardVO vo) {
 		return (Map<String, Object>) selectOne("dashboardSql.selectDashboardScheduleHistoryChart", vo);
 	}
-	
-	
+
+	/**
+	 * 백업 이력 목록 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>>  selectDashboardBackupHistory(DashboardVO vo) throws SQLException{
+		return (List<Map<String, Object>> ) list("dashboardSql.selectDashboardBackupHistory", vo);
+	}
+
+	/**
+	 * Dashboard 백업정보 DUMP 조회
+	 * 
+	 * @param DashboardVO
+	 * @return List<DashboardVO>
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException{
+		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupDumpInfo",vo);
+	}
+
+	/**
+	 * Dashboard 백업정보 RMAN 조회
+	 * 
+	 * @param DashboardVO
+	 * @return List<DashboardVO>
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException{
+		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupRmanInfo",vo);
+	}
 }

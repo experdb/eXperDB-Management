@@ -77,6 +77,10 @@ var schedule_everyweek = "<spring:message code='schedule.everyweek' />";
 var schedule_everymonth = "<spring:message code='schedule.everymonth' />";
 var schedule_everyyear = "<spring:message code='schedule.everyyear' />";
 
+var common_registory = "<spring:message code='common.registory' />";
+var common_apply = "<spring:message code='common.apply' />";
+var common_success = "<spring:message code='common.success' />";
+var common_failed = "<spring:message code='common.failed' />";
 </script>
 <body>
 

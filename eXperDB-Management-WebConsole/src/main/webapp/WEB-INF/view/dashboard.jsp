@@ -89,98 +89,97 @@
 		var master_gbn = "";
 		var db_svr_id = "";
 		var listCnt = 0;
-
-		<c:choose>
-			<c:when test="${fn:length(serverTotInfo) == 0}">
-				html += "<div class='col-md-12 grid-margin stretch-card'>\n";
-				html += "	<div class='card'>\n";
-				html += '		<div class="card-body">\n';
- 				html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
- 				html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
- 				html += '				<spring:message code="message.msg01" /></h5>\n';
-				html += '			</div>\n';
-				html += "		</div>\n";
-				html += "	</div>\n";
-				html += '</div>\n';
-			</c:when>
-			<c:otherwise>
-				<c:forEach items="${serverTotInfo}" var="serverinfo" varStatus="status">
-					master_gbn = nvlPrmSet("${serverinfo.master_gbn}", '') ;
-					rowCount = rowCount + 1;
-					listCnt = parseInt("${fn:length(serverTotInfo)}");
+		
+		var serverTotInfo_cnt = "${fn:length(serverTotInfo)}";
+		
+		if (serverTotInfo_cnt == 0) {
+			html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+			html += "	<div class='card'>\n";
+			html += '		<div class="card-body">\n';
+				html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+				html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+				html += '				<spring:message code="message.msg01" /></h5>\n';
+			html += '			</div>\n';
+			html += "		</div>\n";
+			html += "	</div>\n";
+			html += '</div>\n';
+		} else {
+			<c:forEach items="${serverTotInfo}" var="serverinfo" varStatus="status">
+				master_gbn = nvlPrmSet("${serverinfo.master_gbn}", '') ;
+				rowCount = rowCount + 1;
+				listCnt = parseInt("${fn:length(serverTotInfo)}");
+				
+	 			if (db_svr_id == "") {				
+					html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+					html += "	<div class='card news_text'>\n";
+					html += '		<div class="card-body row" onClick="fn_serverSebuInfo("'+nvlPrmSet("${serverinfo.db_svr_id}", '')+'")" style="cursor:pointer;">\n';
+				} else if (db_svr_id != nvlPrmSet("${serverinfo.db_svr_id}", '')  && master_gbn == "M") {
+					html += '				</div>\n';
+					html += '			</div>\n';
+					html += '			<div class="col-sm-3" style="margin:auto;">\n';
+					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+					html += '			</div>\n';
+					html += "		</div>\n";
+					html += "	</div>\n";
+					html += '</div>\n';
 					
-		 			if (db_svr_id == "") {				
-						html += "<div class='col-md-12 grid-margin stretch-card'>\n";
-						html += "	<div class='card news_text'>\n";
-						html += '		<div class="card-body row" onClick="fn_serverSebuInfo("'+nvlPrmSet("${serverinfo.db_svr_id}", '')+'")" style="cursor:pointer;">\n';
-					} else if (db_svr_id != nvlPrmSet("${serverinfo.db_svr_id}", '')  && master_gbn == "M") {
-						html += '				</div>\n';
-						html += '			</div>\n';
-						html += '			<div class="col-sm-3" style="margin:auto;">\n';
-						html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
-						html += '			</div>\n';
-						html += "		</div>\n";
-						html += "	</div>\n";
-						html += '</div>\n';
-						
-						html += "<div class='col-md-12 grid-margin stretch-card'>\n";
-						html += "	<div class='card news_text'>\n";
-						html += '		<div class="card-body row" onClick="fn_serverSebuInfo("'+nvlPrmSet("${serverinfo.db_svr_id}", '')+'")" style="cursor:pointer;">\n';
-					}
-		
-		 			if (master_gbn == "M") {
-		 				html += '			<div class="col-sm-9">';
-		 				html += '				<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-		 				html += '					<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-		 				
-	 					if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == '') {
-		 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
-	 					} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001101') {
-		 	 				html += '					<div class="badge badge-pill badge-success" title="">M</div>\n';
-		 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001102') {
-		 	 				html += '					<div class="badge badge-pill badge-danger">M</div>\n';
-		 				} else {
-		 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
-		 				}
-		 				html += '					<c:out value="${serverinfo.db_svr_nm}"/><br/></h5>\n';
-		 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
-		 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>\n';
-		 			}
-		 			
-		 			if (master_gbn == "S") {
-		 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
-		 				
-	 					if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == '') {
-		 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
-		 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001101') {
-		 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
-		 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001102') {
-		 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
-
-		 				} else {
-		 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
-		 				}
-		 				html += '					<c:out value="${serverinfo.svr_host_nm}"/><br/></h6>';
-		 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">';
-		 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>';
-		 			}
-		
-					if (rowCount == listCnt) {
-						html += '				</div>\n';
-						html += '			</div>\n';
-						html += '			<div class="col-sm-3" style="margin:auto;">\n';
-						html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
-						html += '			</div>\n';
-						html += "		</div>\n";
-						html += "	</div>\n";
-						html += '</div>\n';
-						
-					}
-					db_svr_id = nvlPrmSet("${serverinfo.db_svr_id}", '') ;
-		
-				</c:forEach>
-			</c:otherwise>
-		</c:choose>
+					html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+					html += "	<div class='card news_text'>\n";
+					html += '		<div class="card-body row" onClick="fn_serverSebuInfo("'+nvlPrmSet("${serverinfo.db_svr_id}", '')+'")" style="cursor:pointer;">\n';
+				}
+	
+	 			if (master_gbn == "M") {
+	 				html += '			<div class="col-sm-9">';
+	 				html += '				<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+	 				html += '					<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+	 				
+						if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == '') {
+	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+						} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001101') {
+	 	 				html += '					<div class="badge badge-pill badge-success" title="">M</div>\n';
+	 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001102') {
+	 	 				html += '					<div class="badge badge-pill badge-danger">M</div>\n';
+	 				} else {
+	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 				}
+	 				html += '					<c:out value="${serverinfo.db_svr_nm}"/><br/></h5>\n';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+	 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>\n';
+	 			}
+	 			
+	 			if (master_gbn == "S") {
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
+	 				
+						if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == '') {
+	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001101') {
+	 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
+	 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001102') {
+	 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
+	
+	 				} else {
+	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 				}
+	 				html += '					<c:out value="${serverinfo.svr_host_nm}"/><br/></h6>';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">';
+	 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>';
+	 			}
+	
+				if (rowCount == listCnt) {
+					html += '				</div>\n';
+					html += '			</div>\n';
+					html += '			<div class="col-sm-3" style="margin:auto;">\n';
+					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+					html += '			</div>\n';
+					html += "		</div>\n";
+					html += "	</div>\n";
+					html += '</div>\n';
+					
+				}
+				db_svr_id = nvlPrmSet("${serverinfo.db_svr_id}", '') ;
+	
+			</c:forEach>
+		}
 
 		$("#serverTabList").html(html);
 	}
@@ -189,7 +188,6 @@
 	 * 서버리스트 설정
 	 ******************************************************** */
 	function fn_dbSvrIdSearch() {
-
  		$.ajax({
 			url : "/dashboarod_main_search.do",
 			data : {
@@ -226,6 +224,9 @@
 
 		//스케줄 이력 목록 setting
 		fn_schedule_History_set(result);
+
+		//백업 이력 목록 setting
+		fn_backup_History_set(result);
 	}
 	
 
@@ -567,10 +568,10 @@
 														<div class="row" style="height: 15px;">
 															<div class="col-5">
 																<h6 class="mb-0">
-																	<a data-toggle="collapse" href="#scd_hist_header_sub" aria-expanded="true" aria-controls="scd_hist_header_sub" onclick="fn_profileChk('titleText')">
+																	<a data-toggle="collapse" href="#scd_hist_header_sub" aria-expanded="true" aria-controls="scd_hist_header_sub" onclick="fn_profileChk('scd_titleText')">
 																		<i class="ti-calendar menu-icon"></i>
 																		<span class="menu-title"><spring:message code="dashboard.schedule_history" /></span>
-																		<i class="menu-arrow_user_af" id="titleText" ></i>
+																		<i class="menu-arrow_user_af" id="scd_titleText" ></i>
 																	</a>
 																</h6>
 															</div>
@@ -615,7 +616,7 @@
 
 										<div class="row">
 											<div class="col-md-12">
-												<div class="card" style="border:none;margin-bottom:10px;">
+												<div class="card" style="border:none;">
 													&nbsp;
 												</div>
 											</div>
@@ -628,16 +629,16 @@
 														<div class="row" style="height: 15px;">
 															<div class="col-5">
 																<h6 class="mb-0">
-																	<a data-toggle="collapse" href="#back_hist_header_sub" aria-expanded="true" aria-controls="back_hist_header_sub" onclick="fn_profileChk('titleText')">
+																	<a id="a_back_hist" data-toggle="collapse" href="#back_hist_header_sub" aria-expanded="true" aria-controls="back_hist_header_sub" onclick="fn_profileChk('back_titleText')">
 																		<i class="ti-calendar menu-icon"></i>
-																		<span class="menu-title"><spring:message code="dashboard.schedule_history" /></span>
-																		<i class="menu-arrow_user_af" id="titleText" ></i>
+																		<span class="menu-title"><spring:message code="dashboard.backup_history" /></span>
+																		<i class="menu-arrow_user_af" id="back_titleText" ></i>
 																	</a>
 																</h6>
 															</div>
 															<div class="col-7">
 											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_sdt_his_today"></li>
+																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_back_his_today"></li>
 																</ol>
 															</div>
 														</div>
@@ -647,85 +648,87 @@
 										</div>
 
 										<div id="back_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="back_hist_header_div" data-parent="#accordion_back_his">
-											<div class="col-md-8 col-xl-8 d-flex flex-column justify-content-center">
+											<div class="col-md-12 col-xl-12 d-flex flex-column justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
 														<table id="backupLogList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
 															<thead>
 																<tr>
-																	<th width="150" scope="col" class="text-center"><spring:message code="common.work_name" /></th>					
-																	<th scope="col" class="text-center"><spring:message code="schedule.work_start_datetime" /></th>
-																	<th scope="col" class="text-center"><spring:message code="schedule.work_end_datetime" /></th>
-																	<th scope="col" class="text-center"><spring:message code="schedule.jobTime"/></th>
-																	<th scope="col" class="text-center"><spring:message code="schedule.result" /></th>
+																	<th width="150" scope="col" class="text-center"><spring:message code="common.work_name" /></th>		
+																	<th width="90" scope="col" class="text-center"><spring:message code="backup_management.backup_option" /></th>
+																	<th width="100" scope="col" class="text-center"><spring:message code="backup_management.work_start_time" /> </th>
+																	<th width="100" scope="col" class="text-center"><spring:message code="backup_management.work_end_time" /></th>
+																	<th width="100" scope="col" class="text-center"><spring:message code="common.status" /></th>
 																</tr>
 															</thead>
-															<tbody id="scheduleListT">
+															<tbody id="backupHistListT">
 															</tbody>
 														</table>
 													</div>
 												</div>
 											</div>
 											
-											<div class="col-md-4 col-xl-4 d-flex flex-column justify-content-center">
-												<div class="table-responsive mb-3 mb-md-0">
-													<table id="scheduleHistChart" class="table table-borderless"></table>
+											<div class="col-md-5 col-xl-5 d-flex flex-column justify-content-center">
+												 <h4 class="card-title"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="backup_management.rman_backup" /></h4>
+										 		<div id="backupRmanHistChart"></div>
+											</div>
+											
+											<div class="col-md-7 col-xl-7 d-flex flex-column justify-content-center">
+												 <h4 class="card-title"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="backup_management.dumpBck" /></h4>
+										 		<div id="backupDumpHistChart"></div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-12">
+												<div class="card" style="border:none;">
+													&nbsp;
 												</div>
 											</div>
 										</div>
-										
-									</div>
-											
-											
-					
-<%-- 												<th width="150"><spring:message code="common.work_name" /></th>
-												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-												<th width="150"><spring:message code="common.work_description" /></th>
-												<th width="90"><spring:message code="backup_management.backup_option" /></th>
-												<th width="230"><spring:message code="etc.etc08"/></th>
-												<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
-												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
-												<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
-												<th width="100"><spring:message code="common.status" /></th>
-												<th width="100"><spring:message code="etc.etc31"/></th>
-											</tr>
-										</thead>
-									</table> --%>
-		<%-- 					 	</div>
-							 	
-								<div class="col-12" id="logDumpListDiv">
- 									<div class="table-responsive">
-										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-											<div class="row">
-												<div class="col-sm-12 col-md-6">
-													<div class="dataTables_length" id="order-listing_length">
+
+										<div class="row">
+											<div class="accordion_main accordion-multi-colored col-12" id="accordion_script_his" role="tablist">
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="script_hist_header_div">
+														<div class="row" style="height: 15px;">
+															<div class="col-5">
+																<h6 class="mb-0">
+																	<a data-toggle="collapse" href="#script_hist_header_sub" aria-expanded="true" aria-controls="script_hist_header_sub" onclick="fn_profileChk('script_titleText')">
+																		<i class="ti-calendar menu-icon"></i>
+																		<span class="menu-title"><spring:message code="dashboard.script_history" /></span>
+																		<i class="menu-arrow_user" id="script_titleText" ></i>
+																	</a>
+																</h6>
+															</div>
+															<div class="col-7">
+											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_script_his_today"></li>
+																</ol>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
+										
+										
+										
+										
+										
+										
+										
 									</div>
 
-	 								<table id="logDumpList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-										<thead>
-											<tr class="bg-info text-white">
-												<th width="40"><spring:message code="common.no" /></th>
-												<th width="150"><spring:message code="common.work_name" /></th>
-												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-												<th width="150"><spring:message code="common.work_description" /></th>
-												<th width="100"><spring:message code="common.database" /></th>
-												<th width="100"><spring:message code="backup_management.size" /></th>
-												<th width="170"><spring:message code="etc.etc08"/></th>			
-												<th width="170"><spring:message code="backup_management.fileName"/></th>
-												<th width="100"><spring:message code="backup_management.work_start_time" /></th>
-												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
-												<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
-												<th width="100"><spring:message code="common.status" /></th>
-												<th width="100"><spring:message code="etc.etc31"/></th>
-											</tr>
-										</thead>
-        --%>
-			                      
-			                         
+
+        
+											
+											
+											
+											
+											
+											
+                  
 			                        
 			                        
 			                        

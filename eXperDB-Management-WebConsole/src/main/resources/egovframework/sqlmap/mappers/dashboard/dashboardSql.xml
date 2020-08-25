@@ -163,108 +163,9 @@
     
 
     
-    <select id="selectDashboardBackupDumpInfo" parameterType="dashboardVO" resultType="dashboardVO">
-    	/**
-	 	* Query ID : "selectDashboardBackupDumpInfo"
-	 	* Description : Dashboard 백업정보 DUMP 조회
-	 	* Author : 김주영
-	 	**/
-		SELECT 
-			 AA.db_id
-			,(SELECT DB_SVR_NM FROM T_DBSVR_I A,T_DB_I B  WHERE A.DB_SVR_ID=B.DB_SVR_ID AND DB_ID = AA.DB_ID) AS db_svr_nm
-			,(SELECT DB_NM FROM T_DBSVR_I A,T_DB_I B  WHERE A.DB_SVR_ID=B.DB_SVR_ID AND DB_ID = AA.DB_ID) AS db_nm
-			, (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE DB_ID = AA.DB_ID) wrk_cnt
-			, (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.DB_ID = AA.DB_ID AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
-			, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
-			, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
-		FROM(
-				SELECT DB_ID FROM T_DB_I WHERE USEYN='Y'
-		)AA
-		GROUP BY AA.DB_ID
-    </select>
+
     
-    <select id="selectDashboardBackupRmanInfo" parameterType="dashboardVO" resultType="dashboardVO">
-    	/**
-	 	* Query ID : "selectDashboardBackupRmanInfo"
-	 	* Description : Dashboard 백업정보 ONLINE 조회
-	 	* Author : 김주영
-	 	**/
-      	SELECT
-        	  AAA.DB_SVR_ID
-      		, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS DB_SVR_NM
-      		, AAA.BCK_OPT_CD
-      		, SUM(AAA.WRK_CNT) AS WRK_CNT
-      		, SUM(AAA.SCHEDULE_CNT) AS SCHEDULE_CNT
-      		, SUM(AAA.SUCCESS_CNT) AS SUCCESS_CNT
-      		, SUM(AAA.FAIL_CNT) AS FAIL_CNT
-      	FROM(
-	         SELECT 
-	              AA.DB_SVR_ID
-	            , AA.BCK_OPT_CD
-	            , (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE WRK_ID = AA.WRK_ID) AS WRK_CNT
-	            , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.WRK_ID = AA.WRK_ID AND A.WRK_ID = B.WRK_ID) AS SCHEDULE_CNT
-	            , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001701') SUCCESS_CNT
-	            , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001702') FAIL_CNT
-	            FROM
-	            (
-	               SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
-	               FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
-	               WHERE A.BCK_BSN_DSCD = 'TC000201'
-	               AND B.DB_SVR_ID = A.DB_SVR_ID
-	            )AA
-	            UNION ALL
-	            (
-	               SELECT 
-	                 AA.DB_SVR_ID
-	               , 'TC000303'
-	               , 0 AS WRK_CNT
-	               , 0 AS SCHEDULE_CNT
-	               , 0 AS SUCCESS_CNT
-	               , 0 AS FAIL_CNT
-	               FROM
-	               (
-	                  SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
-	                  FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
-	                  WHERE A.BCK_BSN_DSCD = 'TC000201'
-	                  AND B.DB_SVR_ID = A.DB_SVR_ID
-	               )AA
-	            )
-	         UNION ALL
-	         SELECT 
-	              AA.DB_SVR_ID
-	            , 'TC000302'
-	            , 0 AS WRK_CNT
-	            , 0 AS SCHEDULE_CNT
-	            , 0 AS SUCCESS_CNT
-	            , 0 AS FAIL_CNT
-	            FROM
-	            (
-	               SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
-	               FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
-	               WHERE A.BCK_BSN_DSCD = 'TC000201'
-	               AND B.DB_SVR_ID = A.DB_SVR_ID
-	            )AA
-	         UNION ALL
-	         (
-	         SELECT 
-	              AA.DB_SVR_ID
-	            , 'TC000301'
-	            , 0 AS WRK_CNT
-	            , 0 AS SCHEDULE_CNT
-	            , 0 AS SUCCESS_CNT
-	            , 0 AS FAIL_CNT
-	            FROM
-	            (
-	               SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
-	               FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
-	               WHERE A.BCK_BSN_DSCD = 'TC000201'
-	               AND B.DB_SVR_ID = A.DB_SVR_ID
-	            )AA
-	          )
-      )AAA
-      GROUP BY AAA.DB_SVR_ID, AAA.BCK_OPT_CD    
-      ORDER BY AAA.DB_SVR_ID, AAA.BCK_OPT_CD
-    </select>
+ 
     
     <select id="selectDashboardScheduleTotal" resultType="int">
     	SELECT COUNT(*) AS SCD_TOTAL FROM T_WRKEXE_G WRK, T_SCD_M SCD WHERE WRK.SCD_ID = SCD.SCD_ID 
@@ -465,11 +366,14 @@
                       LEFT OUTER JOIN T_BCK_WRKCNG_I D on A.WRK_ID = D.WRK_ID
                       LEFT OUTER JOIN T_WRKCNG_I E on E.WRK_ID = D.WRK_ID
                 WHERE 1 = 1
-                  AND C.MASTER_GBN = 'M'
                   AND C.DB_SVR_ID = #{db_svr_id}::numeric
-                  AND TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                  AND (
+                       TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                       OR
+                       TO_DATE(to_char(A.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                       )
                 GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_SVR_IPADR_ID,A.SCD_ID,C.IPADR, E.BSN_DSCD
-                ORDER BY MAX(A.WRK_END_DTM) desc, MAX(A.WRK_END_DTM) desc
+                ORDER BY MAX(A.WRK_END_DTM) desc, MAX(A.WRK_STRT_DTM) desc
                 fetch first 5 rows only
          )AA
 	</select>
@@ -494,9 +398,159 @@
                       LEFT OUTER JOIN T_BCK_WRKCNG_I D on A.WRK_ID = D.WRK_ID
                       LEFT OUTER JOIN T_WRKCNG_I E on E.WRK_ID = D.WRK_ID
                 WHERE 1 = 1
-                  AND C.MASTER_GBN = 'M'
                   AND C.DB_SVR_ID = #{db_svr_id}::numeric
                   AND TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
          ) AA
 	</select>
+	
+	<select id="selectDashboardBackupHistory" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectDashboardBackupHistory
+		* Description : 백업이력 조회
+		* Author :
+		**/
+        SELECT
+               TWG.WRK_ID,
+               G.SCD_NM,
+               C.WRK_NM,
+               TO_CHAR(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
+               TO_CHAR(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
+               TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
+               TWG.BCK_OPT_CD AS BCK_OPT_CD,
+               TWG.FIX_RSLTCD,
+               TWG.FIX_RSLT_MSG,
+               TWI.BCK_BSN_DSCD,
+               TWG.EXE_SN AS EXE_SN
+          FROM T_WRKEXE_G TWG
+               JOIN T_BCK_WRKCNG_I TWI on TWG.WRK_ID = TWI.WRK_ID
+               JOIN T_WRKCNG_I C on TWG.WRK_ID = C.WRK_ID
+               JOIN T_DBSVRIPADR_I B on TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+               LEFT OUTER JOIN T_SCD_M G on TWG.SCD_ID = G.SCD_ID
+         WHERE 1=1
+           AND TWG.WRK_ID = C.WRK_ID 
+           AND B.DB_SVR_ID= #{db_svr_id}::numeric
+           AND C.BSN_DSCD = #{bsn_dscd}
+           AND (
+                  TO_DATE(to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                  OR
+                  TO_DATE(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                )
+         ORDER BY TWG.WRK_END_DTM DESC, TWG.WRK_STRT_DTM DESC
+        FETCH FIRST 3 ROWS ONLY
+	</select>
+	
+    <select id="selectDashboardBackupDumpInfo" parameterType="dashboardVO" resultType="dashboardVO">
+    	/**
+	 	* Query ID : "selectDashboardBackupDumpInfo"
+	 	* Description : Dashboard 백업정보 DUMP 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT 
+		       D.db_nm,
+		       D.wrk_cnt,
+		       D.schedule_cnt,
+		       D.success_cnt,
+		       D.fail_cnt
+		  from (
+				SELECT 
+					(SELECT DB_NM FROM T_DBSVR_I A,T_DB_I B  WHERE A.DB_SVR_ID=B.DB_SVR_ID AND DB_ID = AA.DB_ID) AS db_nm
+					, (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE DB_ID = AA.DB_ID) wrk_cnt
+					, (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.DB_ID = AA.DB_ID AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
+					, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
+					, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
+				FROM(
+						SELECT DB_ID 
+						  FROM T_DB_I 
+						 WHERE USEYN='Y'
+						   AND DB_SVR_ID = #{db_svr_id}::numeric
+				)AA
+				GROUP BY AA.DB_ID
+		) D
+		order by (D.wrk_cnt + D.schedule_cnt + D.success_cnt, D.fail_cnt) desc
+        FETCH FIRST 5 ROWS ONLY
+    </select>
+    
+   <select id="selectDashboardBackupRmanInfo" parameterType="dashboardVO" resultType="dashboardVO">
+    	/**
+	 	* Query ID : "selectDashboardBackupRmanInfo"
+	 	* Description : Dashboard 백업정보 ONLINE 조회
+	 	* Author : 김주영
+	 	**/
+        SELECT
+               AAA.BCK_OPT_CD
+             , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE AAA.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM
+             , SUM(AAA.WRK_CNT) AS WRK_CNT
+             , SUM(AAA.SCHEDULE_CNT) AS SCHEDULE_CNT
+             , SUM(AAA.SUCCESS_CNT) AS SUCCESS_CNT
+             , SUM(AAA.FAIL_CNT) AS FAIL_CNT
+          FROM (
+               SELECT 
+                      AA.DB_SVR_ID
+                    , AA.BCK_OPT_CD
+                    , (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE WRK_ID = AA.WRK_ID) AS WRK_CNT
+                    , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.WRK_ID = AA.WRK_ID AND A.WRK_ID = B.WRK_ID) AS SCHEDULE_CNT
+                    , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001701') SUCCESS_CNT
+                    , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001702') FAIL_CNT
+                 FROM (
+                      SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
+                        FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+                       WHERE A.BCK_BSN_DSCD = 'TC000201'
+                         AND A.DB_SVR_ID = #{db_svr_id}::numeric
+                         AND B.DB_SVR_ID = A.DB_SVR_ID
+                )AA
+                UNION ALL
+                (
+                 SELECT
+                        AA.DB_SVR_ID
+                      , 'TC000303'
+                      , 0 AS WRK_CNT
+                      , 0 AS SCHEDULE_CNT
+                      , 0 AS SUCCESS_CNT
+                      , 0 AS FAIL_CNT
+                   FROM (
+                        SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
+                          FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+                         WHERE A.BCK_BSN_DSCD = 'TC000201'
+                           AND B.DB_SVR_ID = A.DB_SVR_ID
+                         LIMIT 1
+                  )AA
+                )
+                UNION ALL
+                (
+                SELECT 
+                        AA.DB_SVR_ID
+                      , 'TC000302'
+                      , 0 AS WRK_CNT
+                      , 0 AS SCHEDULE_CNT
+                      , 0 AS SUCCESS_CNT
+                      , 0 AS FAIL_CNT
+                   FROM (
+                        SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
+                          FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+                         WHERE A.BCK_BSN_DSCD = 'TC000201'
+                           AND B.DB_SVR_ID = A.DB_SVR_ID
+                         LIMIT 1
+                  )AA
+                )
+                UNION ALL
+                (
+                SELECT 
+                        AA.DB_SVR_ID
+                      , 'TC000301'
+                      , 0 AS WRK_CNT
+                      , 0 AS SCHEDULE_CNT
+                      , 0 AS SUCCESS_CNT
+                      , 0 AS FAIL_CNT
+                   FROM (
+                        SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
+                          FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+                         WHERE A.BCK_BSN_DSCD = 'TC000201'
+                           AND B.DB_SVR_ID = A.DB_SVR_ID
+                         LIMIT 1
+                  )AA
+                )
+         )AAA
+         GROUP BY AAA.BCK_OPT_CD    
+         ORDER BY AAA.BCK_OPT_CD
+    </select>
 </mapper>

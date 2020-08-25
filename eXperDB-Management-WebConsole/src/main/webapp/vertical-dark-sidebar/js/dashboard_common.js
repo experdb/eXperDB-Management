@@ -29,6 +29,8 @@ function fn_todaySetting() {
 	$( "#tot_scd_ing_msg" ).append(html);					//금일예정
 
 	$( "#tot_sdt_his_today" ).append(sdtHisTimehtml);		//스케줄 이력
+	$( "#tot_back_his_today" ).append(sdtHisTimehtml);		//백업 이력
+	$( "#tot_script_his_today" ).append(sdtHisTimehtml);	//배치 이력
 	
 }
 
@@ -185,7 +187,7 @@ function fn_schedule_cnt_set(result) {
 		backHtml += "</tr>";
 	} else {
 		backHtml += "<tr>";
-		backHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
+		backHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
 		backHtml += dashboard_msg02
 		backHtml += '</td>';
 		backHtml += "</tr>";
@@ -345,8 +347,8 @@ function fn_schedule_History_set(result) {
 
 	} else {
 		scdHisHtml += "<tr>";
-		scdHisHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
-		scdHisHtml += dashboard_msg03
+		scdHisHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
+		scdHisHtml += dashboard_msg04
 		scdHisHtml += '</td>';
 		scdHisHtml += "</tr>";
 	}
@@ -454,6 +456,155 @@ function fn_schedule_History_progres(result) {
 	}
 }
 
+
+/* ********************************************************
+ * 백업 이력 설정
+ ******************************************************** */
+function fn_backup_History_set(result) {
+	var backHisHtml = "";
+/*	var scdHisChartHtml = "";
+	var chartText = "";
+	var chartColor = "";
+	var chartCnt = 0;
+	var chartMaxCnt = "";
+	var chartWidth = "";*/
+	var chartListCnt = 0;
+	
+	///////////////////////////백업 list start ////////////////////////
+	//데이터가 있는 경우
+	if (result.backupHistoryresult != null && result.backupHistoryresult.length > 0) {
+		$(result.backupHistoryresult).each(function (index, item) {
+			backHisHtml +='	<tr>';
+			
+			backHisHtml +='		<td><span onClick=javascript:fn_workLayer("'+item.wrk_id+'"); class="bold" data-toggle="modal" title="'+item.wrk_nm+'">' + item.wrk_nm + '</span></td>';
+			
+			backHisHtml +='		<td class="text-center">';
+
+			if (item.bck_bsn_dscd == 'TC000201') {
+				if (item.bck_opt_cd == 'TC000301') {
+					backHisHtml += '<i class="fa fa-paste mr-2 text-success"></i>';
+					backHisHtml += backup_management_full_backup;
+				} else if(item.bck_opt_cd == 'TC000302'){
+					backHisHtml += '<i class="fa fa-paste mr-2 text-warning"></i>';
+					backHisHtml += backup_management_incremental_backup;
+				} else {
+					backHisHtml += '<i class="fa fa-paste mr-2 text-info"></i>';
+					backHisHtml += backup_management_change_log_backup;
+				}
+			} else {
+				backHisHtml += '<i class="fa fa-file-code-o mr-2 text-danger"></i>';
+				backHisHtml += dashboard_dump_backup;
+			}
+			backHisHtml +='	</td>';
+			
+			backHisHtml +='		<td class="text-center">'+item.wrk_strt_dtm+'</td>';
+			backHisHtml +='		<td class="text-center">'+item.wrk_end_dtm+'</td>';
+			
+			backHisHtml +='		<td class="text-center">';
+			if (item.exe_rslt_cd == "TC001701") {
+				backHisHtml += '<i class="fa fa-check text-primary">';
+				backHisHtml += '&nbsp;' + common_success + '</i>';
+			} else if (item.exe_rslt_cd == "TC001702") {
+				backHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_failLog('+item.exe_sn+')">';
+				backHisHtml += '<i class="fa fa-times"></i>';
+				backHisHtml += common_failed;
+				backHisHtml += "</div>";
+
+			} else {
+				backHisHtml += "<div class='badge badge-pill badge-warning' style='color: #fff;'>";
+				backHisHtml += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+				backHisHtml += '&nbsp;' + etc_etc28;
+				backHisHtml += "</div>";
+			}
+			backHisHtml +='	</td>';
+			
+			backHisHtml +='	</tr>';
+		});
+
+	} else {
+		backHisHtml += "<tr>";
+		backHisHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
+		backHisHtml += dashboard_msg05
+		backHisHtml += '</td>';
+		backHisHtml += "</tr>";
+	}
+
+	$("#backupHistListT").html(backHisHtml);
+	///////////////////////////백업 list end ////////////////////////
+
+	///////////////////////////백업 chart start ////////////////////////
+	if ($("#backupRmanHistChart").length) {
+		var rmanchart = Morris.Bar({
+						element: 'backupRmanHistChart',
+						barColors: ['#76C1FA', '#FABA66', '#63CF72', '#F36368'],
+						data: [{
+							bck_opt_cd_nm: backup_management_full_backup,
+							wrk_cnt: 0,
+							schedule_cnt: 0,
+							success_cnt: 0,
+							fail_cnt: 0
+							},
+							{
+								bck_opt_cd_nm: backup_management_incremental_backup,
+								wrk_cnt: 0,
+								schedule_cnt: 0,
+								success_cnt: 0,
+								fail_cnt: 0
+							},
+							{
+								bck_opt_cd_nm: backup_management_change_log_backup,
+								wrk_cnt: 0,
+								schedule_cnt: 0,
+								success_cnt: 0,
+								fail_cnt: 0
+							}
+						],
+						xkey: 'bck_opt_cd_nm',
+						ykeys: ['wrk_cnt', 'schedule_cnt', 'success_cnt', 'fail_cnt'],
+						labels: [common_registory, common_apply, common_success, common_failed]
+		});
+
+		if (result.backupRmanInfo != null) {
+			var backupRmanChart = [];
+			for(var i = 0; i<result.backupRmanInfo.length; i++){
+				console.log(result.backupRmanInfo[i].bck_opt_cd);
+				
+				if (result.backupRmanInfo[i].bck_opt_cd == "TC000301") {
+					result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_full_backup;
+				} else if (result.backupRmanInfo[i].bck_opt_cd == "TC000302") {
+					result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_incremental_backup;
+				} else {
+					result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_change_log_backup;
+				}
+				
+				backupRmanChart.push(result.backupRmanInfo[i]);
+			}	
+	
+			rmanchart.setData(backupRmanChart);
+		}
+	}
+	
+	if ($("#backupDumpHistChart").length) {
+		var dumpchart = Morris.Bar({
+						element: 'backupDumpHistChart',
+						barColors: ['#76C1FA', '#FABA66', '#63CF72', '#F36368'],
+						data: [
+						],
+						xkey: 'db_nm',
+						ykeys: ['wrk_cnt', 'schedule_cnt', 'success_cnt', 'fail_cnt'],
+						labels: [common_registory, common_apply, common_success, common_failed]
+		});
+
+		if (result.backupDumpInfo != null) {
+			dumpchart.setData(result.backupDumpInfo);
+		}
+	}
+	///////////////////////////백업 chart end ////////////////////////
+	setTimeout(function()
+		{
+			$("#a_back_hist").click()
+		},500);
+}
 
 /* ********************************************************
  * 스케줄관리 화면이동

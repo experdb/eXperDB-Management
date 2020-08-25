@@ -45,23 +45,6 @@ public interface DashboardService {
 	public List<DashboardVO> selectDashboardServerInfo(DashboardVO vo) throws SQLException;
 
 	/**
-	 * Dashboard 백업정보 DUMP 조회
-	 * 
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException;
-
-	/**
-	 * Dashboard 백업정보 ONLINE 조회
-	 * 
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException;
-
-	
-	/**
 	 * 관리상태_작업관리(전체스케줄수행건수)
 	 * 
 	 * @return
@@ -169,6 +152,30 @@ public interface DashboardService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> selectDashboardScheduleHistoryChart(DashboardVO vo) throws SQLException;
-	
-	
+
+	/**
+	 * 백업 이력 목록 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardBackupHistory(DashboardVO vo) throws SQLException;
+
+	/**
+	 * Dashboard 백업정보 DUMP 조회
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException;
+
+	/**
+	 * Dashboard 백업정보 ONLINE 조회
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException;
+
 }

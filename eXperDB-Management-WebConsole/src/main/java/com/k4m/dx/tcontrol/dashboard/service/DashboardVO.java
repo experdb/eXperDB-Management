@@ -35,7 +35,14 @@ public class DashboardVO {
 	private String bsn_dscd;
 	private String lgi_dtm_start;
 	private String lgi_dtm_end;
-	
+	private String bck_opt_cd_nm;
+
+	public String getBck_opt_cd_nm() {
+		return bck_opt_cd_nm;
+	}
+	public void setBck_opt_cd_nm(String bck_opt_cd_nm) {
+		this.bck_opt_cd_nm = bck_opt_cd_nm;
+	}
 	public String getLgi_dtm_start() {
 		return lgi_dtm_start;
 	}

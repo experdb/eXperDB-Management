@@ -227,11 +227,6 @@ public class CmmnController {
 			}catch(Exception e){
 			}
 			
-			// 백업정보(DUMP)
-			List<DashboardVO> backupDumpInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupDumpInfo(dashVo);
-
-			// 백업정보(RMAN)
-			List<DashboardVO> backupRmanInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupRmanInfo(dashVo);
 
 			// 관리상태_작업관리(전체스케줄수행건수)
 			int scd_total = dashboardService.selectDashboardScheduleTotal();
@@ -351,8 +346,6 @@ public class CmmnController {
 			
 			
 /*			mv.addObject("serverInfo", serverInfoVO);
-			mv.addObject("backupDumpInfo", backupDumpInfoVO);
-			mv.addObject("backupRmanInfo", backupRmanInfoVO);
 			mv.addObject("wrk_state", wrk_state);
 			mv.addObject("svr_state", svr_state);
 			mv.addObject("bak_state", bak_state);
@@ -380,10 +373,14 @@ public class CmmnController {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		
 
-		List<Map<String, Object>> backupScdresult = null; //백업일정 조회
-		List<Map<String, Object>> scriptScdresult = null; //배치일정 조회
-		List<Map<String, Object>> scheduleHistoryresult = null; //스케줄이력 조회
+		List<Map<String, Object>> backupScdresult = null; 			//백업일정 조회
+		List<Map<String, Object>> scriptScdresult = null; 			//배치일정 조회
+		List<Map<String, Object>> scheduleHistoryresult = null; 	//스케줄이력 조회
 		Map<String, Object> scheduleHistoryChart = null;			//스케줄이력 chart 조회
+		List<Map<String, Object>> backupHistoryresult = null; 		//백업이력 조회
+		List<DashboardVO> backupDumpInfoVO = null;					//백업정보(DUMP)
+		List<DashboardVO> backupRmanInfoVO = null;					//백업정보(RMAN)
+		
 
 		int backupScdCnt = 0;
 		int scriptScdCnt = 0;
@@ -406,11 +403,20 @@ public class CmmnController {
 				scriptScdCnt = scriptScdresult.size();
 			}
 
-			
 			//스케줄 이력 목록
 			scheduleHistoryresult = dashboardService.selectDashboardScheduleHistory(dashVo);
 			//스케줄 이력 chart 조회
 			scheduleHistoryChart = dashboardService.selectDashboardScheduleHistoryChart(dashVo);
+			
+			//백업 이력 목록
+			dashVo.setBsn_dscd("TC001901");
+			backupHistoryresult = dashboardService.selectDashboardBackupHistory(dashVo);
+
+			// 백업정보(DUMP)
+			backupDumpInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupDumpInfo(dashVo);
+
+			// 백업정보(RMAN)
+			backupRmanInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupRmanInfo(dashVo);
 
 
 			mv.addObject("backupScdresult", backupScdresult);				//백업일정 목록
@@ -421,6 +427,10 @@ public class CmmnController {
 
 			mv.addObject("scheduleHistoryresult", scheduleHistoryresult);	//스케줄 이력 목록
 			mv.addObject("scheduleHistoryChart", scheduleHistoryChart);		//스케줄 이력 chart 조회
+
+			mv.addObject("backupHistoryresult", backupHistoryresult);		//백업 이력 목록
+			mv.addObject("backupDumpInfo", backupDumpInfoVO);				//dump백업
+			mv.addObject("backupRmanInfo", backupRmanInfoVO);				//rman백업
 			
 			mv.addObject("db_svr_id", db_svr_id);
 		} catch (Exception e) {
