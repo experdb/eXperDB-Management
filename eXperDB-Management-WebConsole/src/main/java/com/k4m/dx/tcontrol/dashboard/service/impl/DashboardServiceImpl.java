@@ -1,16 +1,19 @@
 package com.k4m.dx.tcontrol.dashboard.service.impl;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardService;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
+import com.k4m.dx.tcontrol.scale.service.InstanceScaleVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -97,6 +100,8 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 		return (List<Map<String, Object>>) dashboardDAO.selectDashboardScaleInfo();
 	}
 	
+	
+	////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * 백업, 배치 스케줄 조회
 	 * 
@@ -108,4 +113,28 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 		return (List<Map<String, Object>>) dashboardDAO.selectDashboardScdList(vo);
 	}
 
+	/**
+	 * 스케줄이력목록 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectDashboardScheduleHistory(DashboardVO vo) throws SQLException {
+		return (List<Map<String, Object>>) dashboardDAO.selectDashboardScheduleHistory(vo);
+	}
+	
+	/**
+	 * 스케줄이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> selectDashboardScheduleHistoryChart(DashboardVO vo) throws SQLException {
+		return (Map<String, Object>) dashboardDAO.selectDashboardScheduleHistoryChart(vo);
+	}
+	
+	
+	
 }

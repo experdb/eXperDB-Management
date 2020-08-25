@@ -142,12 +142,33 @@ public interface DashboardService {
 	public List<Map<String, Object>> selectDashboardScaleInfo() throws SQLException;
 
 
+	
+	/////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * 백업, 배치 스케줄 조회
+	 * 
+	 * @param vo
+	 * @return List<Map<String, Object>>
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardScdList(DashboardVO vo) throws SQLException;
+
+	/**
+	 * 스케줄 이력 목록 조회
 	 * 
 	 * @param vo
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Map<String, Object>> selectDashboardScdList(DashboardVO vo) throws SQLException;
+	public List<Map<String, Object>> selectDashboardScheduleHistory(DashboardVO vo) throws SQLException;
+	
+	/**
+	 * 스케줄이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectDashboardScheduleHistoryChart(DashboardVO vo) throws SQLException;
+	
+	
 }

@@ -33,7 +33,21 @@ public class DashboardVO {
 	private String db_nm;
 	private String bck_opt_cd;
 	private String bsn_dscd;
+	private String lgi_dtm_start;
+	private String lgi_dtm_end;
 	
+	public String getLgi_dtm_start() {
+		return lgi_dtm_start;
+	}
+	public void setLgi_dtm_start(String lgi_dtm_start) {
+		this.lgi_dtm_start = lgi_dtm_start;
+	}
+	public String getLgi_dtm_end() {
+		return lgi_dtm_end;
+	}
+	public void setLgi_dtm_end(String lgi_dtm_end) {
+		this.lgi_dtm_end = lgi_dtm_end;
+	}
 	public String getBsn_dscd() {
 		return bsn_dscd;
 	}

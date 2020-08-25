@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
+import com.k4m.dx.tcontrol.scale.service.InstanceScaleVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -104,4 +105,28 @@ public class DashboardDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>>  selectDashboardScdList(DashboardVO vo) throws SQLException{
 		return (List<Map<String, Object>> ) list("dashboardSql.selectDashboardScdList", vo);
 	}
+
+	/**
+	 * 스케줄 이력 목록 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>>  selectDashboardScheduleHistory(DashboardVO vo) throws SQLException{
+		return (List<Map<String, Object>> ) list("dashboardSql.selectDashboardScheduleHistory", vo);
+	}
+
+	/**
+	 * 스케줄 이력 chart 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public Map<String, Object> selectDashboardScheduleHistoryChart(DashboardVO vo) {
+		return (Map<String, Object>) selectOne("dashboardSql.selectDashboardScheduleHistoryChart", vo);
+	}
+	
+	
 }

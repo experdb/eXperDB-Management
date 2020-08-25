@@ -89,6 +89,21 @@
          GROUP BY AAA.DB_SVR_ID, AAA.IPADR , AAA.MASTER_GBN
          ORDER BY AAA.DB_SVR_ID, AAA.MASTER_GBN, AAA.IPADR
 	</select>
+	
+	
+
+	
+	
+	
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -367,8 +382,25 @@
                  WHERE A.MASTER_GBN = 'M'
                  GROUP BY A.SVR_HOST_NM, A.IPADR, A.DB_SVR_ID
 	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-	<select id="selectDashboardScdList" resultType="hashMap">
+	<select id="selectDashboardScdList" resultType="hashMap" parameterType="hashmap">
 		/**
 	 	* Query ID : selectDashboardScdList
 	 	* Description : 백업, 배치 스케줄 조회
@@ -399,5 +431,72 @@
             AND E.BSN_DSCD = #{bsn_dscd}
           GROUP BY A.SCD_ID, A.SCD_NM , A.SCD_EXP, E.BSN_DSCD
           ORDER BY ARRAY_TO_STRING(ARRAY_AGG(C.BCK_BSN_DSCD),','), ARRAY_TO_STRING(ARRAY_AGG(C.BCK_OPT_CD),','), EXE_HMS
+	</select>
+
+	<select id="selectDashboardScheduleHistory" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectDashboardScheduleHistory
+		* Description : 스케줄이력 조회
+		* Author :
+		**/
+        SELECT
+               AA.SCD_ID
+             , AA.EXE_GRP_SN
+             , AA.SCD_NM
+             , AA.EXE_SN
+             , AA.EXE_RSLT_CD
+             , TO_CHAR(AA.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
+             , TO_CHAR(AA.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
+             , AA.WRK_DTM
+             , AA.BSN_DSCD
+         FROM (
+               SELECT
+                      A.SCD_ID
+                    , A.EXE_GRP_SN 
+                    , A.SCD_NM
+                    , MIN(A.EXE_SN) AS EXE_SN
+                    , MAX(A.EXE_RSLT_CD) AS EXE_RSLT_CD
+                    , MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
+                    , MAX(A.WRK_END_DTM) AS WRK_END_DTM
+                    , TO_CHAR(TO_CHAR(MAX(A.WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(A.WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
+                    , E.BSN_DSCD
+                 FROM T_WRKEXE_G A
+                      LEFT OUTER JOIN T_DBSVRIPADR_I C ON A.DB_SVR_IPADR_ID= C.DB_SVR_IPADR_ID or A.DB_SVR_IPADR_ID=0
+                      LEFT OUTER JOIN T_BCK_WRKCNG_I D on A.WRK_ID = D.WRK_ID
+                      LEFT OUTER JOIN T_WRKCNG_I E on E.WRK_ID = D.WRK_ID
+                WHERE 1 = 1
+                  AND C.MASTER_GBN = 'M'
+                  AND C.DB_SVR_ID = #{db_svr_id}::numeric
+                  AND TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_SVR_IPADR_ID,A.SCD_ID,C.IPADR, E.BSN_DSCD
+                ORDER BY MAX(A.WRK_END_DTM) desc, MAX(A.WRK_END_DTM) desc
+                fetch first 5 rows only
+         )AA
+	</select>
+
+	<select id="selectDashboardScheduleHistoryChart" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectDashboardScheduleHistoryChart
+		* Description : 스케줄이력 chart data 조회
+		* Author :
+		**/
+        SELECT COALESCE(COUNT(AA.BSN_DSCD), 0) AS TOT_CNT, 
+               COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001901' THEN 1 ELSE 0 END),0) AS BACK_TOT_CNT,
+               COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001902' THEN 1 ELSE 0 END),0) AS SCRIPT_TOT_CNT,
+               COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001901' and aa.exe_rslt_cd = 'TC001701' THEN 1 ELSE 0 END),0) AS BACK_SUC_CNT,
+               COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001901' and aa.exe_rslt_cd = 'TC001702' THEN 1 ELSE 0 END),0) AS BACK_FAL_CNT,
+               COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001902' and aa.exe_rslt_cd = 'TC001701' THEN 1 ELSE 0 END),0) AS SCRIPT_SUC_CNT,
+               COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001902' and aa.exe_rslt_cd = 'TC001702' THEN 1 ELSE 0 END),0) AS SCRIPT_FAL_CNT
+          FROM (
+               SELECT E.BSN_DSCD, A.exe_rslt_cd
+                 FROM T_WRKEXE_G A
+                      LEFT OUTER JOIN T_DBSVRIPADR_I C ON A.DB_SVR_IPADR_ID= C.DB_SVR_IPADR_ID or A.DB_SVR_IPADR_ID=0
+                      LEFT OUTER JOIN T_BCK_WRKCNG_I D on A.WRK_ID = D.WRK_ID
+                      LEFT OUTER JOIN T_WRKCNG_I E on E.WRK_ID = D.WRK_ID
+                WHERE 1 = 1
+                  AND C.MASTER_GBN = 'M'
+                  AND C.DB_SVR_ID = #{db_svr_id}::numeric
+                  AND TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+         ) AA
 	</select>
 </mapper>

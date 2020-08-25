@@ -20161,8 +20161,23 @@ code {
   top: 15%;
 }
 
+.detailed-report-carousel .report-table_dash::after {
+  content: '';
+  width: 1px;
+  height: 230px;
+  background: #b5bccb;
+  position: absolute;
+  right: -1rem;
+  top: 15%;
+}
+
+
 @media (max-width: 767px) {
   .detailed-report-carousel .report-table::after {
+    display: none;
+  }
+  
+  .detailed-report-carousel .report-table_dash::after {
     display: none;
   }
 }

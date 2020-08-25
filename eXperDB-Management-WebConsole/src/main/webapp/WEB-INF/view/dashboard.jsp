@@ -7,6 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@include file="./cmmn/cs2.jsp"%> 
+<%@include file="./cmmn/commonLocaleDashboard.jsp" %>  
 
 <script src="/vertical-dark-sidebar/js/dashboard_common.js"></script>
 
@@ -27,18 +28,6 @@
 		//개별 서버 리스트 setting
 		fn_dbSvrIdSearch();
 	});
-
-	/* ********************************************************
-	 * 금일 날짜 셋팅
-	 ******************************************************** */
-	function fn_todaySetting() {
-		today = new Date();
-
-		var html = "<i class='fa fa-calendar menu-icon'></i> "+today.toJSON().slice(0,10).replace(/-/g,'-');
-
-		$( "#tot_sdt_today" ).append(html);
-		$( "#tot_scd_ing_msg" ).append(html);
-	}
 
 	/* ********************************************************
 	 * 통합 스케줄 셋팅
@@ -235,57 +224,16 @@
 		//백업일정, 배치일정, 데이터이행 일정 setting
 		fn_schedule_cnt_set(result);
 
-/* 		$("#mod_kc_ip", "#searchModForm").val(nvlPrmSet(result.kc_ip, ""));
-		$("#mod_kc_port", "#searchModForm").val(nvlPrmSet(result.kc_port, ""));
-		
-		$("#mod_connect_nm", "#modRegForm").val(nvlPrmSet(result.connect_nm, ""));
-		$("#mod_db_id", "#modRegForm").val(nvlPrmSet(result.db_nm, ""));
-		$("#mod_db_id_set", "#modRegForm").val(nvlPrmSet(result.db_id, ""));
-		$("#mod_trans_id", "#modRegForm").val(nvlPrmSet(result.trans_id, ""));
-		$("#mod_trans_exrt_trg_tb_id","#modRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
-
-		//스냅샷 모드 추가
-		var snapshot_mode_re = nvlPrmSet(result.snapshot_mode, "");
-		$("#mod_snapshot_mode", "#modRegForm").val(snapshot_mode_re).prop("selected", true);
-
-		//압축형태 추가
-		$("#mod_compression_type", "#modRegForm").val(nvlPrmSet(result.compression_type, "TC003701")).prop("selected", true);
-		
-		//메타데이타 설정
-		$("#mod_meta_data", "#modRegForm").val(nvlPrmSet(result.meta_data, ""));
-		
-		if (nvlPrmSet(result.meta_data, "") == "ON") {
-			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", true);
-		} else {
-			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", false); 
-		}
-	
-		//스냅샷 모드 change
-		if(snapshot_mode_re == "TC003601"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg2" />'); //(초기스냅샷 1회만 수행)
-		}else if(snapshot_mode_re == "TC003602"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg3" />'); //(스냅샷 항상 수행)
-		}else if (snapshot_mode_re == "TC003603"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />'); //(스냅샷 수행하지 않음)
-		}else if (snapshot_mode_re == "TC003604"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg4" />'); //(스냅샷만 수행하고 종료)
-		}else if (snapshot_mode_re == "TC003605"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg5" />'); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법)
-		}
-		
-		
-		
-		mod_connector_tableList.rows({selected: true}).deselect();
-		mod_connector_tableList.clear().draw();
-		
-		if (result.tables.data != null) {
-			mod_connector_tableList.rows.add(result.tables.data).draw();	
-		} */
+		//스케줄 이력 목록 setting
+		fn_schedule_History_set(result);
 	}
 	
 
 	
 </script>
+
+<%@include file="./cmmn/wrkLog.jsp"%>
+<%@include file="./popup/scheduleHistoryDetail.jsp"%>
 
 <form name="dashboardViewForm" id="dashboardViewForm">
 	<input type="hidden" name="scd_nm"  id="scd_nm" />
@@ -295,7 +243,7 @@
 <div class="content-wrapper main_scroll">
 	<div class="row" style="margin-top:-20px;margin-bottom:5px;">
 		<!-- title start -->
-		<div class="accordion_main accordion-multi-colored col-12" sid="accordion" role="tablist">
+		<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist">
 			<div class="card" style="margin-bottom:0px;">
 				<div class="card-header" role="tab" id="page_header_div" >
 					<div class="row" style="height: 15px;">
@@ -537,7 +485,7 @@
 	                    <div class="col-3">
 	                    	<div class="row">
 								<!-- title start -->
-								<div class="accordion_main accordion-multi-colored col-12" sid="accordion" role="tablist" style="margin-bottom:10px;">
+								<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist" style="margin-bottom:10px;">
 									<div class="card" style="margin-bottom:0px;">
 										<div class="card-header" role="tab" id="page_header_div" >
 											<div class="row" style="height: 15px;">
@@ -562,7 +510,7 @@
 									<div class="carousel-item active" id="v-pills-home_test1">
 										<div class="row">
 											<!-- title start -->
-											<div class="accordion_main accordion-multi-colored col-6" sid="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-6" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_header_div" >
 														<div class="row" style="height: 15px;">
@@ -578,7 +526,7 @@
 											</div>
 											
 											<!-- title start -->
-											<div class="accordion_main accordion-multi-colored col-6" sid="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-6" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_header_div" >
 														<div class="row" style="height: 15px;">
@@ -596,16 +544,16 @@
 										
 										<div class="row">
 											<!-- title start -->
-											<div class="accordion_main accordion-multi-colored col-6" sid="accordion" role="tablist" >
-												<div class="card" style="margin-bottom:0px;border:none;">
+											<div class="accordion_main accordion-multi-colored col-6" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:10px;border:none;">
 													<table id="bakupScheduleCntList" class="table table-hover system-tlb-scroll" style="width:100%;border:none;">
 													</table>
 												</div>
 											</div>
 											
 											<!-- title start -->
-											<div class="accordion_main accordion-multi-colored col-6" sid="accordion" role="tablist" >
-												<div class="card" style="margin-bottom:0px;border:none;">
+											<div class="accordion_main accordion-multi-colored col-6" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:10px;border:none;">
 													<table id="scriptScheduleCntList" class="table table-hover system-tlb-scroll" style="width:100%;border:none;">
 													</table>
 												</div>
@@ -613,191 +561,175 @@
 										</div>
 
 										<div class="row">
-											<!-- title start -->
-											<div class="accordion_main accordion-multi-colored col-12" sid="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-12" id="accordion_sch_his" role="tablist">
 												<div class="card" style="margin-bottom:0px;">
-													<div class="card-header" role="tab" id="page_header_div" >
+													<div class="card-header" role="tab" id="scd_hist_header_div">
 														<div class="row" style="height: 15px;">
-															<div class="col-12">
+															<div class="col-5">
 																<h6 class="mb-0">
-																	<i class="ti-calendar menu-icon"></i>
-																	<span class="menu-title">스케줄 이력</span>
+																	<a data-toggle="collapse" href="#scd_hist_header_sub" aria-expanded="true" aria-controls="scd_hist_header_sub" onclick="fn_profileChk('titleText')">
+																		<i class="ti-calendar menu-icon"></i>
+																		<span class="menu-title"><spring:message code="dashboard.schedule_history" /></span>
+																		<i class="menu-arrow_user_af" id="titleText" ></i>
+																	</a>
 																</h6>
+															</div>
+															<div class="col-7">
+											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_sdt_his_today"></li>
+																</ol>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										
-										<div class="row">
-											<div class="card col-md-7" style="margin:0px;">
-												<div class="card-body">
-													<table id="scheduleList" class="table table-striped table-borderless" style="width:100%;">
-														<thead>
-															<tr class="bg-info text-white">
-																<th scope="col"><spring:message code="schedule.schedule_name" /></th>					
-																<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
-																<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
-																<th scope="col"><spring:message code="schedule.jobTime"/></th>
-																<th scope="col"><spring:message code="schedule.result" /></th>
-															</tr>
-														</thead>
-														<tbody id="scheduleListT">
-														</tbody>
-													</table>
+
+										<div id="scd_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="scd_hist_header_div" data-parent="#accordion_sch_his">
+											<div class="col-md-8 col-xl-8 d-flex flex-column justify-content-center">
+												<div class="card" style="margin-left:-10px;border:none;">
+													<div class="card-body" style="border:none;">
+														<table id="scheduleList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
+															<thead>
+																<tr>
+																	<th scope="col" class="text-center"><spring:message code="schedule.schedule_name" /></th>					
+																	<th scope="col" class="text-center"><spring:message code="schedule.work_start_datetime" /></th>
+																	<th scope="col" class="text-center"><spring:message code="schedule.work_end_datetime" /></th>
+																	<th scope="col" class="text-center"><spring:message code="schedule.jobTime"/></th>
+																	<th scope="col" class="text-center"><spring:message code="schedule.result" /></th>
+																</tr>
+															</thead>
+															<tbody id="scheduleListT">
+															</tbody>
+														</table>
+													</div>
 												</div>
 											</div>
 											
-											
-											
-            
-            <div class="col-md-5 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">To Do Lists</h4>
-									<div class="list-wrapper pt-2">
-										<ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-											<li>
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														Meeting with Urban Team
-													</label>
+											<div class="col-md-4 col-xl-4 d-flex flex-column justify-content-center">
+												<div class="table-responsive mb-3 mb-md-0">
+													<table id="scheduleHistChart" class="table table-borderless"></table>
 												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li class="completed">
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox" checked>
-														Duplicate a project for new customer
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li>
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														Project meeting with CEO
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li class="completed">
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox" checked>
-														Follow up of team zilla
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li>
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														Level up for Antony
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-										</ul>
-                  </div>
-                  <div class="add-items d-flex mb-0 mt-2">
-										<input type="text" class="form-control todo-list-input"  placeholder="Add new task">
-										<button class="add btn btn-icon text-primary todo-list-add-btn bg-transparent"><i class="ti-location-arrow"></i></button>
-									</div>
-								</div>
-							</div>
-            </div>
-          </div>
-										
-										
-										
-										
+											</div>
+										</div>
 
-			                    
+										<div class="row">
+											<div class="col-md-12">
+												<div class="card" style="border:none;margin-bottom:10px;">
+													&nbsp;
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="accordion_main accordion-multi-colored col-12" id="accordion_back_his" role="tablist">
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="back_hist_header_div">
+														<div class="row" style="height: 15px;">
+															<div class="col-5">
+																<h6 class="mb-0">
+																	<a data-toggle="collapse" href="#back_hist_header_sub" aria-expanded="true" aria-controls="back_hist_header_sub" onclick="fn_profileChk('titleText')">
+																		<i class="ti-calendar menu-icon"></i>
+																		<span class="menu-title"><spring:message code="dashboard.schedule_history" /></span>
+																		<i class="menu-arrow_user_af" id="titleText" ></i>
+																	</a>
+																</h6>
+															</div>
+															<div class="col-7">
+											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_sdt_his_today"></li>
+																</ol>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div id="back_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="back_hist_header_div" data-parent="#accordion_back_his">
+											<div class="col-md-8 col-xl-8 d-flex flex-column justify-content-center">
+												<div class="card" style="margin-left:-10px;border:none;">
+													<div class="card-body" style="border:none;">
+														<table id="backupLogList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
+															<thead>
+																<tr>
+																	<th width="150" scope="col" class="text-center"><spring:message code="common.work_name" /></th>					
+																	<th scope="col" class="text-center"><spring:message code="schedule.work_start_datetime" /></th>
+																	<th scope="col" class="text-center"><spring:message code="schedule.work_end_datetime" /></th>
+																	<th scope="col" class="text-center"><spring:message code="schedule.jobTime"/></th>
+																	<th scope="col" class="text-center"><spring:message code="schedule.result" /></th>
+																</tr>
+															</thead>
+															<tbody id="scheduleListT">
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-4 col-xl-4 d-flex flex-column justify-content-center">
+												<div class="table-responsive mb-3 mb-md-0">
+													<table id="scheduleHistChart" class="table table-borderless"></table>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+											
+											
+					
+<%-- 												<th width="150"><spring:message code="common.work_name" /></th>
+												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
+												<th width="150"><spring:message code="common.work_description" /></th>
+												<th width="90"><spring:message code="backup_management.backup_option" /></th>
+												<th width="230"><spring:message code="etc.etc08"/></th>
+												<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
+												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+												<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
+												<th width="100"><spring:message code="common.status" /></th>
+												<th width="100"><spring:message code="etc.etc31"/></th>
+											</tr>
+										</thead>
+									</table> --%>
+		<%-- 					 	</div>
+							 	
+								<div class="col-12" id="logDumpListDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="logDumpList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="150"><spring:message code="common.work_name" /></th>
+												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
+												<th width="150"><spring:message code="common.work_description" /></th>
+												<th width="100"><spring:message code="common.database" /></th>
+												<th width="100"><spring:message code="backup_management.size" /></th>
+												<th width="170"><spring:message code="etc.etc08"/></th>			
+												<th width="170"><spring:message code="backup_management.fileName"/></th>
+												<th width="100"><spring:message code="backup_management.work_start_time" /></th>
+												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+												<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
+												<th width="100"><spring:message code="common.status" /></th>
+												<th width="100"><spring:message code="etc.etc31"/></th>
+											</tr>
+										</thead>
+        --%>
 			                      
-			                        <div class="row">
-			                          <div class="col-md-3 col-xl-3 d-flex flex-column justify-content-center">
-			                            <div class="ml-xl-4">
-			                              <h1>$34040</h1>
-			                              <h3 class="font-weight-light mb-xl-4">North America</h3>
-			                              <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-			                            </div>  
-			                            </div>
-			                          <div class="col-md-12 col-xl-9">
-			                            <div class="row">
-			                              <div class="col-md-6">
-			                                <div class="table-responsive mb-3 mb-md-0">
-			                                  <table class="table table-borderless report-table">
-			                                    <tr>
-			                                      <td class="text-muted">Illinois</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">713</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Washington</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">583</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Mississippi</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">924</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">California</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">664</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Maryland</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">560</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Alaska</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">793</h5></td>
-			                                    </tr>
-			                                  </table>
-			                                </div>
-			                              </div>
-			                              <div class="col-md-6 mt-3">
-			                                <canvas id="north-america-chart"></canvas>
-			                                <div id="north-america-legend"></div>
-			                              </div>
-			                            </div>
-			                          </div>
-			                        </div>
-			                      </div>
+			                         
+			                        
+			                        
+			                        
+			                     
 			                      <div class="carousel-item" id="v-pills-home_test2">
 			                        <div class="row">
 			                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
@@ -934,7 +866,7 @@
 		
 		
 		
- <div class="col-md-12 col-xl-12 grid-margin stretch-card d-none d-md-flex">
+ <%-- <div class="col-md-12 col-xl-12 grid-margin stretch-card d-none d-md-flex">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Vertical Pills</h4>
@@ -1006,7 +938,7 @@
                 </div>
               </div>
             </div>
-
+ --%>
 
 	
 			

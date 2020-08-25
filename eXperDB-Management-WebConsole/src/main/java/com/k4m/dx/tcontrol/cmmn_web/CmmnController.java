@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
 import java.io.FileInputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -381,6 +382,8 @@ public class CmmnController {
 
 		List<Map<String, Object>> backupScdresult = null; //백업일정 조회
 		List<Map<String, Object>> scriptScdresult = null; //배치일정 조회
+		List<Map<String, Object>> scheduleHistoryresult = null; //스케줄이력 조회
+		Map<String, Object> scheduleHistoryChart = null;			//스케줄이력 chart 조회
 
 		int backupScdCnt = 0;
 		int scriptScdCnt = 0;
@@ -402,16 +405,22 @@ public class CmmnController {
 			if (scriptScdresult != null) {
 				scriptScdCnt = scriptScdresult.size();
 			}
-			
-			
-			
 
-			mv.addObject("backupScdresult", backupScdresult);		//백업일정 목록
-			mv.addObject("backupScdCnt", backupScdCnt);				//백업일정 cnt
-
-			mv.addObject("scriptScdresult", scriptScdresult);		//배치일정 목록
-			mv.addObject("scriptScdCnt", scriptScdCnt);				//배치일정 cnt
 			
+			//스케줄 이력 목록
+			scheduleHistoryresult = dashboardService.selectDashboardScheduleHistory(dashVo);
+			//스케줄 이력 chart 조회
+			scheduleHistoryChart = dashboardService.selectDashboardScheduleHistoryChart(dashVo);
+
+
+			mv.addObject("backupScdresult", backupScdresult);				//백업일정 목록
+			mv.addObject("backupScdCnt", backupScdCnt);						//백업일정 cnt
+
+			mv.addObject("scriptScdresult", scriptScdresult);				//배치일정 목록
+			mv.addObject("scriptScdCnt", scriptScdCnt);						//배치일정 cnt
+
+			mv.addObject("scheduleHistoryresult", scheduleHistoryresult);	//스케줄 이력 목록
+			mv.addObject("scheduleHistoryChart", scheduleHistoryChart);		//스케줄 이력 chart 조회
 			
 			mv.addObject("db_svr_id", db_svr_id);
 		} catch (Exception e) {
@@ -419,6 +428,21 @@ public class CmmnController {
 		}
 		return mv;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 *  권한 에러 화면을 보여준다.
