@@ -174,19 +174,24 @@ public class Db2pgHistoryController {
 		ModelAndView mv = new ModelAndView("jsonView");
 		Map<String, Object> db2pgResult = null;
 		Db2pgHistoryVO result = null;
+
 		try {
-			int mig_exe_sn=Integer.parseInt(request.getParameter("mig_exe_sn"));
 			String trans_save_pth = request.getParameter("trans_save_pth");
-			
 			db2pgResult  = DB2PG_LOG.db2pgFile(trans_save_pth);
-			
-			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgMigHistoryDetail(mig_exe_sn);
-			mv.addObject("result",result);
-			mv.addObject("db2pgResult",db2pgResult);
-			//mv.setViewName("db2pg/popup/db2pgResult");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			int mig_exe_sn=Integer.parseInt(request.getParameter("mig_exe_sn"));
+			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgMigHistoryDetail(mig_exe_sn);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		mv.addObject("result",result);
+		mv.addObject("db2pgResult",db2pgResult);
+		
 		return mv;
 	}	
 	

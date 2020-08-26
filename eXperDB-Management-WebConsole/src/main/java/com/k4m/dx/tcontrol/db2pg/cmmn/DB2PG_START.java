@@ -146,13 +146,21 @@ public class DB2PG_START {
 	
 	        } catch (IOException e) {
 	            e.printStackTrace();
+
+            	result.put("RESULT_MSG", "system error");
+                result.put("RESULT_CODE", 1);
+                result.put("RESULT", "FAIL");
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
+
+            	result.put("RESULT_MSG", "system error");
+                result.put("RESULT_CODE", 1);
+                result.put("RESULT", "FAIL");
 	        } finally {      	
 	        	result.put("RESULT_startTime", startTime);
 	        	result.put("RESULT_endTime", endTime);
 	        	result.put("new_save_pth", new_save_pth);
-	        	
+
 	        	System.out.println(" [ 6. 기존 저장 경로 ] " +old_save_pth);
 	        	System.out.println(" [ 7. 새로운 저장 경로 ] " +new_save_pth);
 	        	System.out.println(" [ 8. 시작시간 ] " +result.get("RESULT_startTime"));
@@ -166,12 +174,18 @@ public class DB2PG_START {
 	    		
 	    		System.out.println( " [ 11. 데이터 이행  ]  END");
 	    		
-	    		updateSavePth(wrk_id, new_save_pth);
+	    		if (new_save_pth != null) {
+		    		updateSavePth(wrk_id, new_save_pth);
+	    		}
+
 	    		//System.out.println( "/*****DB2PG  END ************************************************************/");
 	    		
 	    		
 	            try {
-	                process.destroy();
+	            	if (process != null) {
+		                process.destroy();
+	            	}
+
 	                if (successBufferReader != null) successBufferReader.close();
 	                if (errorBufferReader != null) errorBufferReader.close();
 	            } catch (IOException e1) {
