@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
 import java.io.FileInputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +28,8 @@ import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -106,6 +103,9 @@ public class CmmnController {
 		try {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));	
 			
 			// 메인 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -340,9 +340,19 @@ public class CmmnController {
 				}
 			}
 */
+			
+		    String db2pg_yn = "N";
+		    if (props.get("db2pg") != null) {
+		    	db2pg_yn = props.get("db2pg").toString();
+		    }
+
+			mv.addObject("db2pg_yn", db2pg_yn);				//DB2_PG 사용여부
 			mv.addObject("scheduleInfo", scheduleInfoVO);	//스케줄 정보
 			mv.addObject("backupInfo", backupInfoVO);		//백업 정보
 			mv.addObject("serverTotInfo", serverInfoTotVO);	//서버 정보
+			
+
+		    		
 			
 			
 /*			mv.addObject("serverInfo", serverInfoVO);
@@ -380,11 +390,16 @@ public class CmmnController {
 		List<Map<String, Object>> backupHistoryresult = null; 		//백업이력 조회
 		List<DashboardVO> backupDumpInfoVO = null;					//백업정보(DUMP)
 		List<DashboardVO> backupRmanInfoVO = null;					//백업정보(RMAN)
+		List<Map<String, Object>> scriptHistoryresult = null; 		//배치이력 조회
+		Map<String, Object> scriptHistoryChart = null;				//배치이력 chart 조회
 		
-
 		int backupScdCnt = 0;
 		int scriptScdCnt = 0;
-
+		int migtScdCnt = 0;
+		
+		List<Map<String, Object>> migtScdresult = null; 			//MIGRATION 일정 조회
+		List<Map<String, Object>> migtHistoryresult = null; 		//MIGRATION 이력 조회
+		
 		DashboardVO dashVo = new DashboardVO();
 		
 		try {
@@ -417,8 +432,23 @@ public class CmmnController {
 
 			// 백업정보(RMAN)
 			backupRmanInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupRmanInfo(dashVo);
+			
+			//배치 이력 목록
+			dashVo.setBsn_dscd("TC001902");
+			scriptHistoryresult = dashboardService.selectDashboardBackupHistory(dashVo);
+			//배치 이력 chart 조회
+			scriptHistoryChart = dashboardService.selectDashboardScriptHistoryChart(dashVo);
 
-
+			//MIGRATION 스케줄 목록
+			migtScdresult = dashboardService.selectDashboardMigtList(dashVo);
+			if (migtScdresult != null) {
+				migtScdCnt = migtScdresult.size();
+			}
+			
+			//MIGRATION 이력 목록
+			migtHistoryresult = dashboardService.selectDashboardMigtHistory(dashVo);
+			
+			
 			mv.addObject("backupScdresult", backupScdresult);				//백업일정 목록
 			mv.addObject("backupScdCnt", backupScdCnt);						//백업일정 cnt
 
@@ -431,6 +461,14 @@ public class CmmnController {
 			mv.addObject("backupHistoryresult", backupHistoryresult);		//백업 이력 목록
 			mv.addObject("backupDumpInfo", backupDumpInfoVO);				//dump백업
 			mv.addObject("backupRmanInfo", backupRmanInfoVO);				//rman백업
+
+			mv.addObject("scriptHistoryresult", scriptHistoryresult);		//배치 이력 목록
+			mv.addObject("scriptHistoryChart", scriptHistoryChart);			//배치 이력 chart 조회
+			
+			mv.addObject("migtScdresult", migtScdresult);					//migration 일정 목록
+			mv.addObject("migtScdCnt", migtScdCnt);							//migration 일정 cnt
+			mv.addObject("migtHistoryresult", migtHistoryresult);			//migration 이력 목록
+			
 			
 			mv.addObject("db_svr_id", db_svr_id);
 		} catch (Exception e) {

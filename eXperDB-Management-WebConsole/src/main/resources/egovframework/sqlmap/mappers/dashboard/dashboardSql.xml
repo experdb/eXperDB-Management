@@ -345,7 +345,7 @@
              , AA.EXE_GRP_SN
              , AA.SCD_NM
              , AA.EXE_SN
-             , AA.EXE_RSLT_CD
+             , COALESCE(AA.EXE_RSLT_CD, CASE WHEN AA.DB_SVR_IPADR_ID IS NULL OR AA.DB_SVR_IPADR_ID = 0 THEN 'TC001702' ELSE '' END) AS EXE_RSLT_CD
              , TO_CHAR(AA.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
              , TO_CHAR(AA.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
              , AA.WRK_DTM
@@ -355,6 +355,7 @@
                       A.SCD_ID
                     , A.EXE_GRP_SN 
                     , A.SCD_NM
+                    , A.DB_SVR_IPADR_ID
                     , MIN(A.EXE_SN) AS EXE_SN
                     , MAX(A.EXE_RSLT_CD) AS EXE_RSLT_CD
                     , MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
@@ -366,7 +367,8 @@
                       LEFT OUTER JOIN T_BCK_WRKCNG_I D on A.WRK_ID = D.WRK_ID
                       LEFT OUTER JOIN T_WRKCNG_I E on E.WRK_ID = D.WRK_ID
                 WHERE 1 = 1
-                  AND C.DB_SVR_ID = #{db_svr_id}::numeric
+                  AND (C.DB_SVR_ID = #{db_svr_id}::numeric::numeric or C.DB_SVR_ID is null)
+                  AND C.MASTER_GBN = 'M'
                   AND (
                        TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
                        OR
@@ -384,21 +386,25 @@
 		* Description : 스케줄이력 chart data 조회
 		* Author :
 		**/
-        SELECT COALESCE(COUNT(AA.BSN_DSCD), 0) AS TOT_CNT, 
+        SELECT COALESCE(SUM(AA.ROW_CNT), 0) AS TOT_CNT, 
                COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001901' THEN 1 ELSE 0 END),0) AS BACK_TOT_CNT,
                COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001902' THEN 1 ELSE 0 END),0) AS SCRIPT_TOT_CNT,
+               COALESCE(SUM(CASE WHEN AA.BSN_DSCD IS NULL OR AA.BSN_DSCD = '' THEN 1 ELSE 0 END),0) AS DB2_PG_TOT_CNT,
                COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001901' and aa.exe_rslt_cd = 'TC001701' THEN 1 ELSE 0 END),0) AS BACK_SUC_CNT,
                COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001901' and aa.exe_rslt_cd = 'TC001702' THEN 1 ELSE 0 END),0) AS BACK_FAL_CNT,
                COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001902' and aa.exe_rslt_cd = 'TC001701' THEN 1 ELSE 0 END),0) AS SCRIPT_SUC_CNT,
-               COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001902' and aa.exe_rslt_cd = 'TC001702' THEN 1 ELSE 0 END),0) AS SCRIPT_FAL_CNT
+               COALESCE(SUM(CASE WHEN AA.BSN_DSCD = 'TC001902' and aa.exe_rslt_cd = 'TC001702' THEN 1 ELSE 0 END),0) AS SCRIPT_FAL_CNT,
+               COALESCE(SUM(CASE WHEN (AA.BSN_DSCD IS NULL OR AA.BSN_DSCD = '') and aa.exe_rslt_cd = 'TC001701' THEN 1 ELSE 0 END),0) AS DB2_PG_SUC_CNT,
+               COALESCE(SUM(CASE WHEN (AA.BSN_DSCD IS NULL OR AA.BSN_DSCD = '') and (aa.exe_rslt_cd = 'TC001702' OR aa.exe_rslt_cd = '' OR aa.exe_rslt_cd IS NULL) THEN 1 ELSE 0 END),0) AS DB2_PG_FAL_CNT
           FROM (
-               SELECT E.BSN_DSCD, A.exe_rslt_cd
+               SELECT E.BSN_DSCD, A.exe_rslt_cd, 1 AS ROW_CNT
                  FROM T_WRKEXE_G A
                       LEFT OUTER JOIN T_DBSVRIPADR_I C ON A.DB_SVR_IPADR_ID= C.DB_SVR_IPADR_ID or A.DB_SVR_IPADR_ID=0
                       LEFT OUTER JOIN T_BCK_WRKCNG_I D on A.WRK_ID = D.WRK_ID
                       LEFT OUTER JOIN T_WRKCNG_I E on E.WRK_ID = D.WRK_ID
                 WHERE 1 = 1
-                  AND C.DB_SVR_ID = #{db_svr_id}::numeric
+                  AND (C.DB_SVR_ID = #{db_svr_id}::numeric::numeric or C.DB_SVR_ID is null)
+                  AND C.MASTER_GBN = 'M'
                   AND TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
          ) AA
 	</select>
@@ -415,6 +421,7 @@
                C.WRK_NM,
                TO_CHAR(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
                TO_CHAR(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
+               to_char(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI')::timestamp - to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI')::timestamp, 'HH24:MI') AS WRK_DTM,
                TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
                TWG.BCK_OPT_CD AS BCK_OPT_CD,
                TWG.FIX_RSLTCD,
@@ -436,7 +443,7 @@
                   TO_DATE(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
                 )
          ORDER BY TWG.WRK_END_DTM DESC, TWG.WRK_STRT_DTM DESC
-        FETCH FIRST 3 ROWS ONLY
+        FETCH FIRST 5 ROWS ONLY
 	</select>
 	
     <select id="selectDashboardBackupDumpInfo" parameterType="dashboardVO" resultType="dashboardVO">
@@ -452,7 +459,7 @@
 		       D.success_cnt,
 		       D.fail_cnt
 		  from (
-				SELECT 
+				SELECT  
 					(SELECT DB_NM FROM T_DBSVR_I A,T_DB_I B  WHERE A.DB_SVR_ID=B.DB_SVR_ID AND DB_ID = AA.DB_ID) AS db_nm
 					, (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE DB_ID = AA.DB_ID) wrk_cnt
 					, (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.DB_ID = AA.DB_ID AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
@@ -553,4 +560,139 @@
          GROUP BY AAA.BCK_OPT_CD    
          ORDER BY AAA.BCK_OPT_CD
     </select>
+
+	<select id="selectDashboardScriptHistoryChart" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectDashboardScriptHistoryChart
+		* Description : 스케줄이력 chart data 조회
+		* Author :
+		**/
+        SELECT COALESCE(SUM(AA.ROW_CNT), 0) AS TOT_CNT,
+               COALESCE(SUM(CASE WHEN aa.exe_rslt_cd = 'TC001701' THEN 1 ELSE 0 END),0) AS SUC_CNT,
+               COALESCE(SUM(CASE WHEN aa.exe_rslt_cd = 'TC001702' THEN 1 ELSE 0 END),0) AS FAL_CNT,
+               (SELECT COUNT(*)
+                 FROM T_WRKCNG_I
+                WHERE BSN_DSCD = 'TC001902'
+                  AND TO_DATE(to_char(frst_reg_dtm,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+               )  AS INS_CNT
+          FROM (
+               SELECT
+                      TWG.WRK_ID,
+                      TWG.EXE_SN AS EXE_SN,
+                      TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
+                      1 as ROW_CNT
+                 FROM T_WRKEXE_G TWG
+                      JOIN T_BCK_WRKCNG_I TWI on TWG.WRK_ID = TWI.WRK_ID
+                      JOIN T_WRKCNG_I C on TWG.WRK_ID = C.WRK_ID
+                      JOIN T_DBSVRIPADR_I B on TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+                WHERE 1=1
+                  AND TWG.WRK_ID = C.WRK_ID 
+                  AND B.DB_SVR_ID= #{db_svr_id}::numeric
+                  AND C.BSN_DSCD = 'TC001902'
+                  AND (
+                      TO_DATE(to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                      OR
+                      TO_DATE(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                      )
+          ) AA
+    </select>
+
+	<select id="selectDashboardMigtList" resultType="hashMap" parameterType="hashmap">
+		/**
+	 	* Query ID : selectDashboardMigtList
+	 	* Description : migration 스케줄 리스트 조회
+	 	* Author : 
+	 	**/
+        SELECT
+               A.SCD_ID
+              ,A.SCD_NM
+              ,A.SCD_EXP
+              ,A.SCD_CNDT
+              ,A.EXE_PERD_CD
+              ,A.EXE_DT
+              ,A.EXE_MONTH
+              ,A.EXE_DAY
+              ,substring(A.EXE_HMS from 5 for 2) as EXE_HH
+              ,substring(A.EXE_HMS from 3 for 2) as EXE_MM
+              , '[' || substring(A.EXE_HMS from 5 for 2) || ':' || substring(A.EXE_HMS from 3 for 2) || ']' AS EXE_HMS
+              , TO_CHAR(a.frst_reg_dtm::TIMESTAMP,'yyyyMMdd')as frst_reg_dtm
+           FROM T_SCD_M A
+                JOIN T_SCD_D B ON A.SCD_ID = B.SCD_ID
+                LEFT OUTER JOIN T_BCK_WRKCNG_I D ON D.WRK_ID= B.WRK_ID 
+                LEFT OUTER JOIN T_DB2PG_TRSF_WRK_INF E ON E.WRK_ID = B.WRK_ID
+          WHERE 1=1 
+            AND A.SCD_CNDT != 'TC001803'
+            AND D.DB_SVR_ID IS NULL
+         GROUP BY A.SCD_ID, A.SCD_NM , A.SCD_EXP
+         ORDER BY EXE_HMS
+	</select>
+	
+	<select id="selectDashboardMigtHistory" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectDashboardMigtHistory
+		* Description : migration 이력 조회
+		* Author :
+		**/
+        SELECT
+               AA.DB2PG_WRK_ID
+             , AA.MIG_EXE_SN
+             , AA.WRK_ID
+             , AA.WRK_NM
+             , AA.WRK_STRT_DTM
+             , AA.WRK_END_DTM
+             , AA.WRK_DTM
+             , AA.EXE_RSLT_CD
+             , AA.EXE_RSLT_C
+             , AA.MIGT_GBN
+             , AA.SAVE_PTH
+         FROM (
+               SELECT
+                      DDL_WRK_INF.DB2PG_DDL_WRK_ID AS DB2PG_WRK_ID
+                    , IMDEXE.MIG_EXE_SN AS MIG_EXE_SN
+                    , IMDEXE.WRK_ID
+                    , WRKCNG.WRK_NM
+                    , TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
+                    , TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
+                    , TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS')-TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS WRK_DTM
+                    , IMDEXE.EXE_RSLT_CD
+                    , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=IMDEXE.EXE_RSLT_CD) AS EXE_RSLT_C
+                    , 'DDL' AS MIGT_GBN
+                    , IMDEXE.SAVE_PTH
+                 FROM T_DB2PG_DDL_WRK_INF DDL_WRK_INF
+                      LEFT OUTER JOIN T_WRKCNG_I WRKCNG ON DDL_WRK_INF.WRK_ID = WRKCNG.WRK_ID
+                      JOIN T_MIGEXE_G IMDEXE ON DDL_WRK_INF.WRK_ID = IMDEXE.WRK_ID
+                WHERE 1 = 1
+                  AND (
+                      TO_DATE(TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                       OR
+                      TO_DATE(TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                      )
+                UNION ALL
+               SELECT
+                      TRSF_WRK_INF.DB2PG_TRSF_WRK_ID AS DB2PG_WRK_ID
+                    , IMDEXE.MIG_EXE_SN AS MIG_EXE_SN
+                    , IMDEXE.WRK_ID
+                    , WRKCNG.WRK_NM
+                    , TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
+                    , TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
+                    , TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS')-TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS WRK_DTM
+                    , IMDEXE.EXE_RSLT_CD
+                    , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=IMDEXE.EXE_RSLT_CD) AS EXE_RSLT_C
+                    , 'MIGRATION' AS MIGT_GBN
+                    , IMDEXE.SAVE_PTH
+                 FROM T_DB2PG_TRSF_WRK_INF TRSF_WRK_INF
+                      LEFT OUTER JOIN T_WRKCNG_I WRKCNG ON TRSF_WRK_INF.WRK_ID = WRKCNG.WRK_ID
+                      LEFT OUTER JOIN T_MIGEXE_G IMDEXE ON TRSF_WRK_INF.WRK_ID = IMDEXE.WRK_ID
+                      LEFT OUTER JOIN T_DB2PG_SYS_INF SOURCE_SYS_INF ON TRSF_WRK_INF.DB2PG_SRC_SYS_ID = SOURCE_SYS_INF.DB2PG_SYS_ID
+                      LEFT OUTER JOIN T_DB2PG_SYS_INF TARGET_SYS_INF ON TRSF_WRK_INF.DB2PG_TRG_SYS_ID = TARGET_SYS_INF.DB2PG_SYS_ID
+                WHERE 1 = 1
+                  AND (
+                      TO_DATE(TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                       OR
+                      TO_DATE(TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                      )
+       )AA
+       ORDER BY AA.WRK_END_DTM DESC, AA.WRK_STRT_DTM DESC
+       FETCH FIRST 5 ROWS ONLY
+	</select>
 </mapper>

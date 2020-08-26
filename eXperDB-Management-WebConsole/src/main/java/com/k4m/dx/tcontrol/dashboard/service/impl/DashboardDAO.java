@@ -152,4 +152,38 @@ public class DashboardDAO extends EgovAbstractMapper{
 	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException{
 		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupRmanInfo",vo);
 	}
+
+	/**
+	 * 배치 이력 chart 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public Map<String, Object> selectDashboardScriptHistoryChart(DashboardVO vo) {
+		return (Map<String, Object>) selectOne("dashboardSql.selectDashboardScriptHistoryChart", vo);
+	}
+
+	/**
+	 * MIGRATION 스케줄 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>>  selectDashboardMigtList(DashboardVO vo) throws SQLException{
+		return (List<Map<String, Object>> ) list("dashboardSql.selectDashboardMigtList", vo);
+	}
+
+	/**
+	 * MIGRATION 이력 목록 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>>  selectDashboardMigtHistory(DashboardVO vo) throws SQLException{
+		return (List<Map<String, Object>> ) list("dashboardSql.selectDashboardMigtHistory", vo);
+	}
+
 }

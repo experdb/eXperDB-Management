@@ -15,70 +15,6 @@
 	var today = "";
 	var scale_yn_chk = "";
 
-	$(window.document).ready(function() { 
-		//오늘날짜 setting
-		fn_todaySetting();
-		
-		//통합 스케줄 setting
-		fn_totScdSetting();
-		
-		//서버정보 리스트 setting
-		fn_serverListSetting();
-		
-		//개별 서버 리스트 setting
-		fn_dbSvrIdSearch();
-	});
-
-	/* ********************************************************
-	 * 통합 스케줄 셋팅
-	 ******************************************************** */
-	function fn_totScdSetting() {
-		var tot_start = "";
-		var tot_end = "";
-		var tot_run = "";
-		var scheduleCnt = "";
-
-		if (nvlPrmSet("${backupInfo}", '') != "") {
-			scheduleCnt = nvlPrmSet("${backupInfo.schedule_cnt}", '0');
-			
-			if (scheduleCnt != 0) {
-				//시작
-				if (nvlPrmSet("${scheduleInfo.start_cnt}", '') != "") {
-					tot_start = nvlPrmSet("${scheduleInfo.start_cnt}", '0') / scheduleCnt * 100;
-					tot_start = tot_start.toFixed(2);
-				} else {
-					tot_start = "0.00";
-				}
-				
-				if (nvlPrmSet("${scheduleInfo.stop_cnt}", '') != "") {
-					tot_end = nvlPrmSet("${scheduleInfo.stop_cnt}", '0') / scheduleCnt * 100;
-					tot_end = tot_end.toFixed(2);
-				} else {
-					tot_end = "0.00";
-				}
-				
-				if (nvlPrmSet("${scheduleInfo.run_cnt}", '') != "") {
-					tot_run = nvlPrmSet("${scheduleInfo.run_cnt}", '0') / scheduleCnt * 100;
-					tot_run = tot_run.toFixed(2);
-				} else {
-					tot_run = "0.00";
-				}
-			} else {
-				tot_start = "0.00";
-				tot_end = "0.00";
-				tot_run = "0.00";
-			}
-		} else {
-			tot_start = "0.00";
-			tot_end = "0.00";
-			tot_run = "0.00";
-		}
-
-		$("#tot_scd_start_msg").append(tot_start);	//시작
-		$("#tot_scd_stop_msg").append(tot_end);		//중지
-		$("#tot_scd_run_msg").append(tot_run);		//실행중
-		
-	}
 
 	/* ********************************************************
 	 * 서버리스트 설정
@@ -183,61 +119,18 @@
 
 		$("#serverTabList").html(html);
 	}
-
-	/* ********************************************************
-	 * 서버리스트 설정
-	 ******************************************************** */
-	function fn_dbSvrIdSearch() {
- 		$.ajax({
-			url : "/dashboarod_main_search.do",
-			data : {
-				db_svr_id : "1"
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		    	xhr.setRequestHeader("AJAX", true);
-		    },
-		     error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				//update setting
-				fn_main_tab_setting(result);
-			}
-		});
-	}
-	
-	/* ********************************************************
-	 * 메인 대시보드 셋팅
-	 ******************************************************** */
-	function fn_main_tab_setting(result) {
-		
-		//백업일정, 배치일정, 데이터이행 일정 setting
-		fn_schedule_cnt_set(result);
-
-		//스케줄 이력 목록 setting
-		fn_schedule_History_set(result);
-
-		//백업 이력 목록 setting
-		fn_backup_History_set(result);
-	}
-	
-
-	
 </script>
 
+<%@include file="./cmmn/workScriptInfo.jsp"%>
 <%@include file="./cmmn/wrkLog.jsp"%>
 <%@include file="./popup/scheduleHistoryDetail.jsp"%>
+<%@include file="./db2pg/popup/db2pgHistoryDetail.jsp"%>
+<%@include file="./db2pg/popup/db2pgResultDDL.jsp"%> 
+<%@include file="./db2pg/popup/db2pgResult.jsp"%> 
 
 <form name="dashboardViewForm" id="dashboardViewForm">
 	<input type="hidden" name="scd_nm"  id="scd_nm" />
+	<input type="hidden" name="db2pg_yn"  id="db2pg_yn" value="${db2pg_yn}"/>
 </form>
 
 <!-- partial -->
@@ -478,14 +371,95 @@
 		</div>
 	</div>
 	
+	<!-- 데이터이행 -->
 	<div class="row">
 		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+	                   <!-- 데이터이행 title -->
+						<div class="accordion_main accordion-multi-colored col-12" id="accordion_migt_his" role="tablist">
+							<div class="card" style="margin-bottom:0px;">
+								<div class="card-header" role="tab" id="migt_hist_header_div">
+									<div class="row" style="height: 15px;">
+										<div class="col-5">
+											<h6 class="mb-0">
+												<a data-toggle="collapse" href="#migt_hist_header_sub" aria-expanded="true" aria-controls="migt_hist_header_sub" onclick="fn_profileChk('migt_titleText')">
+													<i class="fa fa-database menu-icon"></i>
+													<span class="menu-title"><spring:message code="dashboard.migration"/></span>
+													<i class="menu-arrow_user_af" id="scd_titleText" ></i>
+												</a>
+											</h6>
+										</div>
+										<div class="col-7">
+											<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+												<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_migration_his_today"></li>
+											</ol>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="migt_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="migt_hist_header_div" data-parent="#accordion_migt_his">
+						<!-- 데이터이행 일정 -->
+						<div class="col-md-3 col-xl-3 d-flex flex-column justify-content-center">
+							<div class="card topcorner" style="margin-left:-10px;border:none;">
+								<div class="card-body" style="border:none;">
+									<p class="card-title" style="margin-bottom:-5px">Charts</p>
+									<table id="migtHistCntList" class="table table-hover system-tlb-scroll report-table_dash" style="width:100%;"></table>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-6 col-xl-6 d-flex flex-column justify-content-center">
+							<!-- <div class="card topcorner" style="margin-left:-10px;border:none;"> -->
+							<div class="card" style="margin-left:-10px;border:none;">
+								<div class="card-body" style="border:none;">
+									<p class="card-title" style="margin-bottom:0px">Table</p>
+									<table id="migtHistList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
+										<thead>
+											<tr>
+												<th width="200" scope="col"><spring:message code="common.work_name" /></th>	
+												<th width="100" scope="col"><spring:message code="dashboard.migration_division"/></th>		
+												<th width="130" scope="col" class="text-center"><spring:message code="backup_management.work_start_time"/></th>
+												<th width="130" scope="col" class="text-center"><spring:message code="backup_management.work_end_time"/></th>
+												<th width="95" scope="col" class="text-center"><spring:message code="schedule.jobTime"/></th>
+												<th width="95" scope="col" class="text-center"><spring:message code="schedule.result"/></th>
+											</tr>
+										</thead>
+										<tbody id="migrationListT">
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-3 col-xl-3 d-flex flex-column justify-content-center">
+							<div class="card" style="margin-left:-10px;border:none;">
+								<div class="card-body" style="border:none;">
+									<p class="card-title" style="margin-bottom:0px">chart</p>
+									<table id="migtHistChart" class="table table-borderless">
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--  서버별 정보 -->
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card" style="margin-top:-10px;">
 			<div class="card position-relative">
 				<div class="card-body">
 					<div class="row">
 	                    <div class="col-3">
+	                    	<!-- 서버정보 title -->
 	                    	<div class="row">
-								<!-- title start -->
 								<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist" style="margin-bottom:10px;">
 									<div class="card" style="margin-bottom:0px;">
 										<div class="card-header" role="tab" id="page_header_div" >
@@ -501,6 +475,7 @@
 									</div>
 								</div>
 							</div>
+							<!-- 서버목록 -->
 							<div class="row" id="serverTabList" >
 							</div>
 						</div>
@@ -510,7 +485,7 @@
 								<div class="carousel-inner">
 									<div class="carousel-item active" id="v-pills-home_test1">
 										<div class="row">
-											<!-- title start -->
+											<!-- 백업일정 title -->
 											<div class="accordion_main accordion-multi-colored col-6" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_header_div" >
@@ -526,7 +501,7 @@
 												</div>
 											</div>
 											
-											<!-- title start -->
+											<!-- 배치일정 title -->
 											<div class="accordion_main accordion-multi-colored col-6" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_header_div" >
@@ -544,7 +519,7 @@
 										</div>
 										
 										<div class="row">
-											<!-- title start -->
+											<!-- 백업일정 내역 출력 -->
 											<div class="accordion_main accordion-multi-colored col-6" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;">
 													<table id="bakupScheduleCntList" class="table table-hover system-tlb-scroll" style="width:100%;border:none;">
@@ -552,7 +527,7 @@
 												</div>
 											</div>
 											
-											<!-- title start -->
+											<!-- 배치일정 내역 출력 -->
 											<div class="accordion_main accordion-multi-colored col-6" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;">
 													<table id="scriptScheduleCntList" class="table table-hover system-tlb-scroll" style="width:100%;border:none;">
@@ -562,6 +537,7 @@
 										</div>
 
 										<div class="row">
+											<!-- 스케줄이력 title -->
 											<div class="accordion_main accordion-multi-colored col-12" id="accordion_sch_his" role="tablist">
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="scd_hist_header_div">
@@ -587,16 +563,17 @@
 										</div>
 
 										<div id="scd_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="scd_hist_header_div" data-parent="#accordion_sch_his">
-											<div class="col-md-8 col-xl-8 d-flex flex-column justify-content-center">
+											<!-- 스케줄이력 List -->
+											<div class="col-md-7 col-xl-7 d-flex flex-column justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
 														<table id="scheduleList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
 															<thead>
 																<tr>
-																	<th scope="col" class="text-center"><spring:message code="schedule.schedule_name" /></th>					
+																	<th scope="col" class="text-center"><spring:message code="schedule.schedule_name" /></th>	
+																	<th scope="col" class="text-center"><spring:message code="dashboard.schedule_division"/></th>		
 																	<th scope="col" class="text-center"><spring:message code="schedule.work_start_datetime" /></th>
 																	<th scope="col" class="text-center"><spring:message code="schedule.work_end_datetime" /></th>
-																	<th scope="col" class="text-center"><spring:message code="schedule.jobTime"/></th>
 																	<th scope="col" class="text-center"><spring:message code="schedule.result" /></th>
 																</tr>
 															</thead>
@@ -607,7 +584,8 @@
 												</div>
 											</div>
 											
-											<div class="col-md-4 col-xl-4 d-flex flex-column justify-content-center">
+											<div class="col-md-5 col-xl-5 d-flex flex-column justify-content-center">
+												<!-- 스케줄이력 List -->
 												<div class="table-responsive mb-3 mb-md-0">
 													<table id="scheduleHistChart" class="table table-borderless"></table>
 												</div>
@@ -623,6 +601,7 @@
 										</div>
 
 										<div class="row">
+											<!-- 백업이력 title -->
 											<div class="accordion_main accordion-multi-colored col-12" id="accordion_back_his" role="tablist">
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="back_hist_header_div">
@@ -651,7 +630,7 @@
 											<div class="col-md-12 col-xl-12 d-flex flex-column justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
-														<table id="backupLogList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
+														<table id="backupLogList" class="table table-striped table-borderless" style="width:100%;">
 															<thead>
 																<tr>
 																	<th width="150" scope="col" class="text-center"><spring:message code="common.work_name" /></th>		
@@ -694,7 +673,7 @@
 														<div class="row" style="height: 15px;">
 															<div class="col-5">
 																<h6 class="mb-0">
-																	<a data-toggle="collapse" href="#script_hist_header_sub" aria-expanded="true" aria-controls="script_hist_header_sub" onclick="fn_profileChk('script_titleText')">
+																	<a id="a_script_hist" data-toggle="collapse" href="#script_hist_header_sub" aria-expanded="true" aria-controls="script_hist_header_sub" onclick="fn_profileChk('script_titleText')">
 																		<i class="ti-calendar menu-icon"></i>
 																		<span class="menu-title"><spring:message code="dashboard.script_history" /></span>
 																		<i class="menu-arrow_user" id="script_titleText" ></i>
@@ -712,10 +691,50 @@
 											</div>
 										</div>
 										
+										<div id="script_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="script_hist_header_div" data-parent="#accordion_script_his">
+											<div class="col-md-8 col-xl-8 d-flex flex-column justify-content-center">
+												<div class="card" style="margin-left:-10px;border:none;">
+													<div class="card-body" style="border:none;">
+														<table id="scriptList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
+															<thead>
+																<tr>
+																	<th width="150" scope="col" class="text-center"><spring:message code="common.work_name" /></th>		
+																	<th width="100" scope="col" class="text-center"><spring:message code="backup_management.work_start_time" /> </th>
+																	<th width="100" scope="col" class="text-center"><spring:message code="backup_management.work_end_time" /></th>
+																	<th width="100" scope="col" class="text-center"><spring:message code="backup_management.elapsed_time" /></th>
+																	<th width="100" scope="col" class="text-center"><spring:message code="common.status" /></th>
+																</tr>
+															</thead>
+															<tbody id="scriptHistListT">
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-4 col-xl-4 d-flex flex-column justify-content-center">
+ 												<div class="card" style="margin-left:-10px;border:none;">
+													<div class="card-body" style="border:none;">
+														<canvas id="scriptHistChart"></canvas>
+													</div>
+												</div>
+											</div>
+										</div>
+
+                        
+                        
+                          
+                          
+                            
+                              
+                            
+       
+ 													
+												
+											
 										
 										
-										
-										
+
 										
 										
 									</div>
@@ -969,61 +988,7 @@
 
 
 	
-          <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title">Order and Downloads</p>
-                  <p class="text-muted font-weight-light">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                  <div class="d-flex flex-wrap mb-5">
-                    <div class="mr-5 mt-3">
-                      <p class="text-muted">Order value</p>
-                      <h3>12.3k</h3>
-                    </div>
-                    <div class="mr-5 mt-3">
-                      <p class="text-muted">Orders</p>
-                      <h3>14k</h3>
-                    </div>
-                    <div class="mr-5 mt-3">
-                      <p class="text-muted">Users</p>
-                      <h3>71.56%</h3>
-                    </div>
-                    <div class="mt-3">
-                      <p class="text-muted">Downloads</p>
-                      <h3>34040</h3>
-                    </div> 
-                  </div>
-                  <canvas id="order-chart"></canvas>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title">Sales Report</p>
-                  <p class="text-muted font-weight-light">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                  <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
-                  <canvas id="sales-chart"></canvas>
-                </div>
-                <div class="card border-right-0 border-left-0 border-bottom-0">
-                  <div class="d-flex justify-content-center justify-content-md-end">
-                    <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
-                      <button class="btn btn-lg btn-outline-light dropdown-toggle rounded-0 border-top-0 border-bottom-0" type="button" id="dropdownMenuDate2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Today
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
-                        <a class="dropdown-item" href="#">January - March</a>
-                        <a class="dropdown-item" href="#">March - June</a>
-                        <a class="dropdown-item" href="#">June - August</a>
-                        <a class="dropdown-item" href="#">August - November</a>
-                      </div>
-                    </div>
-                    <button class="btn btn-lg btn-outline-light text-primary rounded-0 border-0 d-none d-md-block" type="button"> View all </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          
           <div class="row">
             <div class="col-md-12 grid-margin">
               <div class="card bg-primary border-0 position-relative">

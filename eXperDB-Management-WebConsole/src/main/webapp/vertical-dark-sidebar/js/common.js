@@ -300,7 +300,9 @@ function fn_failLog(exe_sn){
 			}
 		},
 		success : function(result) {
-			$("#wrkLogInfo").html(result[0].rslt_msg);
+			if (result[0] != null) {
+				$("#wrkLogInfo").html(result[0].rslt_msg);
+			}
 
 			$("#pop_layer_wrkLog").modal("show");						
 		}

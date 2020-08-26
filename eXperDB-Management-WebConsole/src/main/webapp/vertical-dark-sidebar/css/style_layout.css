@@ -1557,3 +1557,8 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 .search_input_box {
 	width:400px;
 }
+
+.topcorner{
+   position:absolute;
+   top:0;
+}

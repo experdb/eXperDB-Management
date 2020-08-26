@@ -21,6 +21,12 @@ var dashboard_schedule_history_cht_msg7 = "<spring:message code='dashboard.sched
 
 var dashboard_dump_backup = "<spring:message code='dashboard.dump_backup' />";
 
+var dashboard_backup = "<spring:message code='dashboard.backup' />";
+var dashboard_script = "<spring:message code='dashboard.script' />";
+var dashboard_migration = "<spring:message code='dashboard.migration' />";
+
+var dashboard_progress_end = "<spring:message code='dashboard.progress_end' />";
+
 
 </script>
 <body>

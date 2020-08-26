@@ -90,7 +90,7 @@
 <script src="/vertical-dark-sidebar/js/vendors/justgage/justgage.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/raphael/raphael.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/morris.js/morris.min.js"></script>
-
+<script src="/vertical-dark-sidebar/js/vendors/chart.js/Chart.min.js"></script>
 
 <!-- End custom js for this page-->
 

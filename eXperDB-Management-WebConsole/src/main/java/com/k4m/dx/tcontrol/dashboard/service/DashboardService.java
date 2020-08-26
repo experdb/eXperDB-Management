@@ -177,5 +177,30 @@ public interface DashboardService {
 	 * @throws SQLException
 	 */
 	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException;
+	
+	/**
+	 * 배치이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectDashboardScriptHistoryChart(DashboardVO vo) throws SQLException;
 
+	/**
+	 * MIGRATION 스케줄 조회
+	 * 
+	 * @param vo
+	 * @return List<Map<String, Object>>
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardMigtList(DashboardVO vo) throws SQLException;
+
+	/**
+	 * MIGRATION 이력 목록 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardMigtHistory(DashboardVO vo) throws SQLException;
 }
