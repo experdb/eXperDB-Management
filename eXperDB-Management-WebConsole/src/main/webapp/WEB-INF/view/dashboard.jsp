@@ -387,7 +387,7 @@
 												<a data-toggle="collapse" href="#migt_hist_header_sub" aria-expanded="true" aria-controls="migt_hist_header_sub" onclick="fn_profileChk('migt_titleText')">
 													<i class="fa fa-database menu-icon"></i>
 													<span class="menu-title"><spring:message code="dashboard.migration"/></span>
-													<i class="menu-arrow_user_af" id="scd_titleText" ></i>
+													<i class="menu-arrow_user_af" id="migt_titleText" ></i>
 												</a>
 											</h6>
 										</div>
@@ -676,7 +676,7 @@
 																	<a id="a_script_hist" data-toggle="collapse" href="#script_hist_header_sub" aria-expanded="true" aria-controls="script_hist_header_sub" onclick="fn_profileChk('script_titleText')">
 																		<i class="ti-calendar menu-icon"></i>
 																		<span class="menu-title"><spring:message code="dashboard.script_history" /></span>
-																		<i class="menu-arrow_user" id="script_titleText" ></i>
+																		<i class="menu-arrow_user_of" id="script_titleText" ></i>
 																	</a>
 																</h6>
 															</div>
