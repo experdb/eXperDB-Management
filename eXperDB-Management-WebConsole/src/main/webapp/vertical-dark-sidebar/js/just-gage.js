@@ -1,4 +1,4 @@
-var g1, g2, gg1, g7, g8, g9, g10;
+var g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, pg_wal, pg_arc, pg_rman, pg_dump;
 
 window.onload = function() {
   var g1 = new JustGage({
@@ -11,9 +11,9 @@ window.onload = function() {
   });
 
 
-  setInterval(function() {
+/*  setInterval(function() {
     g1.refresh(getRandomInt(50, 100));
-  }, 2500);
+  }, 2500);*/
 };
 
 
@@ -31,9 +31,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     hideInnerShadow: true
   });
 
-  document.getElementById('g2_refresh').addEventListener('click', function() {
+/*  document.getElementById('g2_refresh').addEventListener('click', function() {
     g2.refresh(getRandomInt(0, 100));
-  });
+  });*/
 
   var g3 = new JustGage({
     id: 'g3',
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     max: 100,
     symbol: '%',
     pointer: true,
-    gaugeWidthScale: 0.6,
+    gaugeWidthScale: 1.0,
     customSectors: [{
       color: '#ff0000',
       lo: 50,
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   var g8 = new JustGage({
     id: 'g8',
-    value: 45,
+    value: 507916,
     min: 0,
     max: 500,
     reverse: true,
@@ -179,7 +179,101 @@ document.addEventListener("DOMContentLoaded", function(event) {
     counter: true
   });
 
-  document.getElementById('gauge_refresh').addEventListener('click', function() {
+  
+  
+  
+  var pg_wal = new JustGage({
+	    id: 'pg_wal',
+	    value: 468000,
+	 
+	    //value: 5079160000,
+	    min: 0,
+	    //max: 10000000000,
+	    max: 1000000000000,
+	    humanFriendly: true,
+	    reverse: true,
+	    gaugeWidthScale: 1.0,
+	    customSectors: [{
+	      color: "#00ff00",
+	      lo: 0,
+	      hi: 50000000
+	    },{
+		      color: "#ff6b00",
+		      lo: 5000000,
+		      hi: 8000000000
+		    },{
+			      color: "#ff0000",
+			      lo: 8000000000,
+			      hi: 1000000000000
+			    }],
+	    counter: true
+	  });
+  
+  
+  
+/*  var pg_arc = new JustGage({
+	  id: 'pg_arc',
+	    value: 25000,
+	    min: 0,
+	    max: 100000,
+	    humanFriendly: true,
+	    reverse: true,
+	    gaugeWidthScale: 1.0,
+	    customSectors: [{
+	      color: "#ff0000",
+	      lo: 50000,
+	      hi: 100000
+	    }, {
+	      color: "#00ff00",
+	      lo: 0,
+	      hi: 50000
+	    }],
+	    counter: true
+	  });*/
+  
+  
+  
+  var pg_rman = new JustGage({
+	    id: 'pg_rman',
+	    value: 25000,
+	    min: 0,
+	    max: 100000,
+	    humanFriendly: true,
+	    reverse: true,
+	    gaugeWidthScale: 1.0,
+	    customSectors: [{
+	      color: "#ff0000",
+	      lo: 50000,
+	      hi: 100000
+	    }, {
+	      color: "#00ff00",
+	      lo: 0,
+	      hi: 50000
+	    }],
+	    counter: true
+	  });
+  
+  
+  var pg_dump = new JustGage({
+	    id: 'pg_dump',
+	    value: 25000,
+	    min: 0,
+	    max: 100000,
+	    humanFriendly: true,
+	    reverse: true,
+	    gaugeWidthScale: 1.0,
+	    customSectors: [{
+	      color: "#ff0000",
+	      lo: 50000,
+	      hi: 100000
+	    }, {
+	      color: "#00ff00",
+	      lo: 0,
+	      hi: 50000
+	    }],
+	    counter: true
+	  });
+/*  document.getElementById('gauge_refresh').addEventListener('click', function() {
     g3.refresh(getRandomInt(0, 100));
     g4.refresh(getRandomInt(0, 100));
     g5.refresh(getRandomInt(0, 100));
@@ -188,6 +282,152 @@ document.addEventListener("DOMContentLoaded", function(event) {
     g8.refresh(getRandomInt(0, 100));
     g9.refresh(getRandomInt(0, 100));
     g10.refresh(getRandomInt(0, 100));
-  });
+  });*/
 
 });
+
+
+/* ********************************************************
+ * 서버 전체 용량
+ ******************************************************** */
+function fn_gTotal(v) {
+
+	var arc = {
+			  id: 'pg_arc',
+			    value: v,
+			    min: 0,
+			    max: 100000,
+			    humanFriendly: true,
+			    reverse: true,
+			    gaugeWidthScale: 1.0,
+			    customSectors: [{
+			      color: "#ff0000",
+			      lo: 50000,
+			      hi: 100000
+			    }, {
+			      color: "#00ff00",
+			      lo: 0,
+			      hi: 50000
+			    }],
+			    counter: true
+			  };
+	
+	var pg_arc = new JustGage(arc);
+
+}
+
+/* ********************************************************
+ * pg_wal 로그 용량
+ ******************************************************** */
+function fn_gWal(v) {
+
+	var wal = {
+			  id: 'pg_wal',
+			    value: v,
+			    min: 0,
+			    max: 100000,
+			    humanFriendly: true,
+			    reverse: true,
+			    gaugeWidthScale: 1.0,
+			    customSectors: [{
+			      color: "#ff0000",
+			      lo: 50000,
+			      hi: 100000
+			    }, {
+			      color: "#00ff00",
+			      lo: 0,
+			      hi: 50000
+			    }],
+			    counter: true
+			  };
+	
+	var pg_wal = new JustGage(wal);
+
+}
+
+/* ********************************************************
+ * 아카이브로그 
+ ******************************************************** */
+function fn_gArc(v) {
+	alert(v);
+	var arc = {
+			  id: 'pg_arc',
+			    value: v,
+			    min: 0,
+			    max: 100000,
+			    humanFriendly: true,
+			    reverse: true,
+			    gaugeWidthScale: 1.0,
+			    customSectors: [{
+			      color: "#ff0000",
+			      lo: 50000,
+			      hi: 100000
+			    }, {
+			      color: "#00ff00",
+			      lo: 0,
+			      hi: 50000
+			    }],
+			    counter: true
+			  };
+	
+	var pg_arc = new JustGage(arc);
+
+}
+
+/* ********************************************************
+ * PG_RMAN 백업 용량 
+ ******************************************************** */
+function fn_gArc(v) {
+	alert(v);
+	var arc = {
+			  id: 'pg_arc',
+			    value: v,
+			    min: 0,
+			    max: 100000,
+			    humanFriendly: true,
+			    reverse: true,
+			    gaugeWidthScale: 1.0,
+			    customSectors: [{
+			      color: "#ff0000",
+			      lo: 50000,
+			      hi: 100000
+			    }, {
+			      color: "#00ff00",
+			      lo: 0,
+			      hi: 50000
+			    }],
+			    counter: true
+			  };
+	
+	var pg_arc = new JustGage(arc);
+
+}
+
+/* ********************************************************
+ * PG_DUMP 백업 용량
+ ******************************************************** */
+function fn_gArc(v) {
+	alert(v);
+	var arc = {
+			  id: 'pg_arc',
+			    value: v,
+			    min: 0,
+			    max: 100000,
+			    humanFriendly: true,
+			    reverse: true,
+			    gaugeWidthScale: 1.0,
+			    customSectors: [{
+			      color: "#ff0000",
+			      lo: 50000,
+			      hi: 100000
+			    }, {
+			      color: "#00ff00",
+			      lo: 0,
+			      hi: 50000
+			    }],
+			    counter: true
+			  };
+	
+	var pg_arc = new JustGage(arc);
+
+}

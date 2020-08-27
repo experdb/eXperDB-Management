@@ -612,11 +612,11 @@
 														<spring:message code="encrypt_policy_management.Encryption_Key" />
 													</a>
 												</li>
-												<li class="nav-item" id="MN0001204">
+												<!-- <li class="nav-item" id="MN0001204">
 													<a class="nav-link" href="/resourcesUseAuditLog.do" onClick="fn_cookie('resourcesUseAuditLog')" target="main">
 														자원사용
 													</a>
-												</li>
+												</li> -->
 											</ul>
 										</div>
 										<div class="col-group col-md-3" id="MN00013">
@@ -738,6 +738,11 @@
 										<li class="nav-item">
 											<a class="nav-link" href="/myScheduleListView.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="menu.my_schedule_management"/>
+											</a>
+										</li>
+										<li class="nav-item" >
+											<a class="nav-link" href="/test.do" onClick="fn_cookie(null)" target="main">
+												test
 											</a>
 										</li>
 									</ul>

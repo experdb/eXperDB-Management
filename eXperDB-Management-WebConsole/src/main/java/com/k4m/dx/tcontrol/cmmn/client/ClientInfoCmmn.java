@@ -1995,6 +1995,31 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		
 		return result;
 	}
+
+	public JSONObject serverSpace(String IP, int PORT, JSONObject serverObj) {
+		JSONObject resultHp = null;
+		try {
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT040);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			JSONObject objList;
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			objList = CA.dxT040(jObj);
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			resultHp = (JSONObject) objList.get(ClientProtocolID.RESULT_DATA);
+	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return resultHp;
+	}
 	
 	
 }

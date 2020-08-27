@@ -185,4 +185,67 @@ public class TreeInfoController {
 		}
 		return mv;
 	}
+	
+	
+	
+	
+	/**
+	 * 속성 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/test.do")
+	public ModelAndView test(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+
+		ModelAndView mv = new ModelAndView();
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject serverObj = new JSONObject();
+		
+		try {
+		AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+		
+		
+		//int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		int db_svr_id = 2;
+
+		DbServerVO schDbServerVO = new DbServerVO();
+		schDbServerVO.setDb_svr_id(db_svr_id);
+		DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO); //서버정보조회
+		
+		//String strIpAdr = dbServerVO.getIpadr();
+		String strIpAdr = "192.168.56.130";
+		AgentInfoVO vo = new AgentInfoVO();
+		vo.setIPADR(strIpAdr);
+		AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo); //agent 정보조회
+	
+		
+		//String IP = dbServerVO.getIpadr();
+		String IP = "192.168.56.130";
+		//int PORT = agentInfo.getSOCKET_PORT();
+		int PORT = 9001;
+
+		serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+		serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+		serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+		serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+		serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+		serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+
+		JSONObject result = cic.serverSpace(IP, PORT, serverObj);   //대시보드 서버용량
+		
+		System.out.println(result.get("PGDBAK_PATH"));
+		
+		
+		mv.addObject("result", result);
+		
+		}catch(Exception e){
+			e.printStackTrace();
+			
+		}			
+			mv.setViewName("test");
+
+		return mv;
+	}
 }

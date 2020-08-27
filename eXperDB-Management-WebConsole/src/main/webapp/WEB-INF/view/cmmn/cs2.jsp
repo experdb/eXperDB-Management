@@ -86,10 +86,12 @@
 <script src="/vertical-dark-sidebar/js/vendors/calender/etcSetting.js"></script>
 <script src="/vertical-dark-sidebar/js/form-addons.js"></script>
 
-<script src="/vertical-dark-sidebar/js/vendors/justgage/raphael-2.1.4.min.js"></script>
-<script src="/vertical-dark-sidebar/js/vendors/justgage/justgage.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/raphael/raphael.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/morris.js/morris.min.js"></script>
+<!-- <script src="/vertical-dark-sidebar/js/vendors/chart.js/Chart.min.js"></script> -->
+
+<script src="/vertical-dark-sidebar/js/vendors/justgage/raphael-2.1.4.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/justgage/justgage.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/chart.js/Chart.min.js"></script>
 
 <!-- End custom js for this page-->
@@ -99,6 +101,7 @@
 <script src="/vertical-dark-sidebar/js/data-table.js"></script>
 <script src="/vertical-dark-sidebar/js/common.js"></script>
 <script src="/vertical-dark-sidebar/js/hummingbird-treeview.js"></script>
-<!-- <script src="/vertical-dark-sidebar/js/just-gage.js"></script>
- -->
+<script src="/vertical-dark-sidebar/js/dashboard_serverSpace.js"></script>
+<!-- <script src="/vertical-dark-sidebar/js/just-gage.js"></script> -->
+
 <!-- End custom js for this page-->
