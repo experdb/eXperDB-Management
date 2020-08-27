@@ -211,5 +211,31 @@ public interface DashboardService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> selectDashboardMigtHistoryChart(DashboardVO vo) throws SQLException;
+	
+	/**
+	 * scale 이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectDashboardScaleHistoryChart(DashboardVO vo) throws SQLException;
+
+	/**
+	 * scale 이력 목록 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardScaleHistory (DashboardVO vo) throws SQLException;
+
+	/**
+	 * scale 설정 chart 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectDashboardScaleSetChart(DashboardVO vo) throws SQLException;
 
 }

@@ -127,10 +127,14 @@
 <%@include file="./db2pg/popup/db2pgHistoryDetail.jsp"%>
 <%@include file="./db2pg/popup/db2pgResultDDL.jsp"%> 
 <%@include file="./db2pg/popup/db2pgResult.jsp"%> 
+<%@include file="./scale/scaleWrkLog.jsp"%>
 
 <form name="dashboardViewForm" id="dashboardViewForm">
 	<input type="hidden" name="scd_nm"  id="scd_nm" />
 	<input type="hidden" name="db2pg_yn"  id="db2pg_yn" value="${db2pg_yn}"/>
+	<input type="hidden" name="scale_yn"  id="scale_yn" value="${scale_yn}"/>
+	<input type="hidden" name="dvb_svr_id_chk"  id="dvb_svr_id_chk" value= "4"/>
+	<input type="hidden" name="encp_use_yn_chk"  id="encp_use_yn_chk" value="${sessionScope.session.encp_use_yn}"/>
 </form>
 
 <!-- partial -->
@@ -671,12 +675,12 @@
 											
 											<div class="col-md-5 col-xl-5 d-flex flex-column justify-content-center">
 												 <h4 class="card-title"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="backup_management.rman_backup" /></h4>
-										 		<div id="backupRmanHistChart"></div>
+										 		<div id="backupRmanHistChart" style="height:250px;"></div>
 											</div>
 											
 											<div class="col-md-7 col-xl-7 d-flex flex-column justify-content-center">
 												 <h4 class="card-title"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="backup_management.dumpBck" /></h4>
-										 		<div id="backupDumpHistChart"></div>
+										 		<div id="backupDumpHistChart" style="height:250px;"></div>
 											</div>
 										</div>
 
@@ -737,7 +741,7 @@
 											<div class="col-md-4 col-xl-4 justify-content-center">
  												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
-														<canvas id="scriptHistChart"></canvas>
+														<canvas id="scriptHistChart" style="height:27vh; width:15vw;"></canvas>
 													</div>
 												</div>
 											</div>
@@ -751,17 +755,184 @@
 											</div>
 										</div>
 
+										<div class="row">
+											<div class="accordion_main accordion-multi-colored col-12" id="accordion_scale_his" role="tablist">
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="scale_hist_header_div">
+														<div class="row" style="height: 15px;">
+															<div class="col-7">
+																<h6 class="mb-0">
+																	<a id="a_scale_hist" data-toggle="collapse" href="#scale_hist_header_sub" aria-expanded="true" aria-controls="scale_hist_header_sub" onclick="fn_profileChk('scale_titleText')">
+																		<i class="ti-calendar menu-icon"></i>
+																		<span class="menu-title"><spring:message code="dashboard.eXperDB_scale_Information"/></span>
+																		<i class="menu-arrow_user_of" id="scale_titleText" ></i>
+																	</a>
+																</h6>
+															</div>
+															<div class="col-5">
+											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_scale_his_today"></li>
+																</ol>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
                         
-                        
-                          
-                          
-                            
-                              
-                            
-       
- 													
-												
+										<div id="scale_hist_header_sub" class="collapse show" role="tabpanel" aria-labelledby="scale_hist_header_div" data-parent="#accordion_scale_his">
+											<c:choose>
+												<c:when test="${scale_yn eq 'Y'}">
+													<div class="row" id="scale_div_set">
+														<div class="col-md-12 col-xl-12 justify-content-center">
+															<div class="card" style="margin-left:-10px;border:none;">
+																<div class="card-body" style="border:none;">
+																	<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="menu.eXperDB_scale_settings" /></p>
+
+																	<table id="scaleList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
+																		<thead>
+																			<tr>
+																				<th width="100" scope="col" class="text-center"><spring:message code="eXperDB_scale.process_id" /></th>
+																				<th width="100" scope="col" class="text-center"><spring:message code="eXperDB_scale.scale_type" /></th>
+																				<th width="80" scope="col" class="text-center"><spring:message code="eXperDB_scale.wrk_type" /></th>
+																				<th width="220" scope="col" class="text-center"><spring:message code="eXperDB_scale.auto_policy_nm" /></th>
+																				<th width="90" scope="col" class="text-center"><spring:message code="eXperDB_scale.work_start_time" /></th>
+																				<th width="90" scope="col" class="text-center"><spring:message code="eXperDB_scale.work_end_time" /></th>
+																				<th width="100" scope="col" class="text-center"><spring:message code="common.status" /></th>
+																			</tr>
+																		</thead>
+																		<tbody id="scaleHistListT">
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-md-9 col-xl-9 justify-content-center">
+			 												<div class="card" style="margin-left:-10px;margin-top:-10px;border:none;">
+																<div class="card-body" style="border:none;">
+																	<h4 class="card-title"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.execute_statistics" /></h4>
+										 							<div id="scaleHistChart" style="height:250px;"></div>
+																</div>
+															</div>
+														</div>
+														
+														<div class="col-md-3 col-xl-3 justify-content-center">
+			 												<div class="card" style="margin-left:-40px;border:none;">
+																<div class="card-body" style="border:none;">
+																	<h4 class="card-title"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.occur_hist_statistics" /></h4>
+																	<canvas id="scaleSetChart" style="height:27vh; width:15vw;"></canvas>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row" id="scale_div_none" style="display:none;">
+														<div class="col-md-12 col-xl-12 justify-content-center">
+															<div class="card card-inverse-info">
+																<div class="card-body">
+																	<p class="card-text">
+																		<i class="fa fa-times-circle menu-icon"></i>
+																		<spring:message code="eXperDB_scale.msg10" />
+					                       							</p>
+					                    						</div>
+					                 						</div>
+														</div>
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="row">
+														<div class="col-md-12 col-xl-12 justify-content-center">
+															<div class="card card-inverse-danger">
+																<div class="card-body">
+																	<p class="card-text">
+																		<i class="fa fa-times-circle menu-icon"></i>
+																		<spring:message code="dashboard.msg09" />
+					                       							</p>
+					                    						</div>
+					                 						</div>
+														</div>
+													</div>
+												</c:otherwise>
+											</c:choose>
+										</div>
+
+										<div class="row">
+											<div class="col-md-12">
+												<div class="card" style="border:none;">
+													&nbsp;
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="accordion_main accordion-multi-colored col-12" id="accordion_encrypt_his" role="tablist">
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="encrypt_hist_header_div">
+														<div class="row" style="height: 15px;">
+															<div class="col-7">
+																<h6 class="mb-0">
+																	<a id="a_encrypt_hist" data-toggle="collapse" href="#encrypt_hist_header_sub" aria-expanded="true" aria-controls="encrypt_hist_header_sub" onclick="fn_profileChk('encrypt_titleText')">
+																		<i class="ti-calendar menu-icon"></i>
+																		<span class="menu-title"><spring:message code="dashboard.Encryption_Information"/></span>
+																		<i class="menu-arrow_user_of" id="encrypt_titleText" ></i>
+																	</a>
+																</h6>
+															</div>
+															<div class="col-5">
+											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_encrypt_his_today"></li>
+																</ol>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>		
+
+										<div id="encrypt_hist_header_sub" class="collapse show" role="tabpanel" aria-labelledby="encrypt_hist_header_div" data-parent="#accordion_encrypt_his">
+											<div class="row"  id="encrypt_div_set">
+												<div class="col-md-3 col-xl-3 justify-content-center">
+	 												<div class="card" style="margin-left:-10px;border:none;">
+														<div class="card-body" style="border:none;">
+															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.encrypt_key_management_server" /></p>
+													
+														</div>
+													</div>
+												</div>
 											
+												<div class="col-md-3 col-xl-3 justify-content-center">
+	 												<div class="card" style="margin-left:-10px;border:none;">
+														<div class="card-body" style="border:none;">
+															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.encrypt_key_agent" /></p>
+													
+														</div>
+													</div>
+												</div>
+
+												<div class="col-md-6 col-xl-6 justify-content-center">
+	 												<div class="card" style="margin-left:-10px;border:none;">
+														<div class="card-body" style="border:none;">
+															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.encrypt_statistics" /></p>
+													
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="row" id="encrypt_div_none" style="display:none;">
+												<div class="col-md-12 col-xl-12 justify-content-center">
+													<div class="card card-inverse-danger">
+														<div class="card-body">
+															<p class="card-text">
+																<i class="fa fa-times-circle menu-icon"></i>
+																<spring:message code="dashboard.msg11" />
+					                       					</p>
+					                    				</div>
+					                 				</div>
+												</div>
+											</div>
+
+										</div>
 										
 										
 
@@ -908,497 +1079,6 @@
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
- <%-- <div class="col-md-12 col-xl-12 grid-margin stretch-card d-none d-md-flex">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Vertical Pills</h4>
-                  <p class="card-description">Add class <code>.nav-pills-vertical</code> to <code>.nav</code> and 
-                    <code>.tab-content-vertical</code> to <code>.tab-content</code>
-                  </p>
-                  <div class="row">
-                    <div class="col-4">
-                      <ul class="nav nav-pills nav-pills-vertical nav-pills-info" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <li class="nav-item">
-                          <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
-                            <i class="ti-home"></i>
-                            Home
-                          </a>                          
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
-                            <i class="ti-user"></i>
-                            Profile
-                          </a>                          
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
-                            <i class="ti-email"></i>
-                            Reach
-                          </a>                          
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-8">
-                      <div class="tab-content tab-content-vertical" id="v-pills-tabContent">
-                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                          <div class="media">
-                            <img class="mr-3 w-25 rounded" src="https://via.placeholder.com/115x115" alt="sample image">
-                            <div class="media-body">
-                              <h5 class="mt-0">I'm doing mental jumping jacks.</h5>
-                              <p>
-                                Only you could make those words cute. Oh I beg to differ, I think we have a lot to discuss. After all, 
-                                you are a client. I am not a killer. 
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                          <div class="media">
-                            <img class="mr-3 w-25 rounded" src="https://via.placeholder.com/115x115" alt="sample image">
-                            <div class="media-body">
-                              <p>I'm thinking two circus clowns dancing. You? Finding a needle in a haystack isn't hard when every straw is computerized. Tell him time is of the essence. 
-                                Somehow, I doubt that. You have a good heart, Dexter.</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                          <div class="media">
-                            <img class="mr-3 w-25 rounded" src="https://via.placeholder.com/115x115" alt="sample image">
-                            <div class="media-body">
-                              <p>
-                                  I'm really more an apartment person. This man is a knight in shining armor. Oh I beg to differ, I think we have a lot to discuss. After all, you are a client. You all right, Dexter?
-                              </p>
-                              <p>
-                                  I'm generally confused most of the time. Cops, another community I'm not part of. You're a killer. I catch killers. Hello, Dexter Morgan.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
- --%>
 
-	
-			
-
-
-
-
-
-                    
-                    
-                  
-                
-              
-		
-
-
-                    
-                   
-                  
-                
-              
-		
-
-
-
-
-	
-          
-          <div class="row">
-            <div class="col-md-12 grid-margin">
-              <div class="card bg-primary border-0 position-relative">
-                <div class="card-body">
-                  <p class="card-title text-white">Performance Overview</p>
-                  <div id="performanceOverview" class="carousel slide performance-overview-carousel position-static pt-2" data-ride="carousel">
-                    <div class="carousel-inner">
-                      <div class="carousel-item active">
-                        <div class="row">
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-4 mt-md-0">
-                              <div class="icon icon-a text-white mr-3">
-                                <i class="ti-cup icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Revenue</h3>
-                                  <h3 class="mb-0">34040</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">+34040</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">0.036%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
-                              <div class="icon icon-b text-white mr-3">
-                                <i class="ti-bar-chart icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Sales</h3>
-                                  <h3 class="mb-0">$9672471</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">-7.34567</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">2.036%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
-                              <div class="icon icon-c text-white mr-3">
-                                <i class="ti-shopping-cart-full icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Purchases</h3>
-                                  <h3 class="mb-0">6358</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">+9082</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">35.54%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="carousel-item">
-                        <div class="row">
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-4 mt-md-0">
-                              <div class="icon icon-a text-white mr-3">
-                                <i class="ti-cup icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Revenue</h3>
-                                  <h3 class="mb-0">34040</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">+34040</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">0.036%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
-                              <div class="icon icon-b text-white mr-3">
-                                <i class="ti-bar-chart icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Sales</h3>
-                                  <h3 class="mb-0">$9672471</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">-7.34567</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">2.036%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
-                              <div class="icon icon-c text-white mr-3">
-                                <i class="ti-shopping-cart-full icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Purchases</h3>
-                                  <h3 class="mb-0">6358</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">+9082</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">35.54%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="carousel-item">
-                        <div class="row">
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-4 mt-md-0">
-                              <div class="icon icon-a text-white mr-3">
-                                <i class="ti-cup icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Revenue</h3>
-                                  <h3 class="mb-0">34040</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">+34040</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">0.036%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
-                              <div class="icon icon-b text-white mr-3">
-                                <i class="ti-bar-chart icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Sales</h3>
-                                  <h3 class="mb-0">$9672471</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">-7.34567</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">2.036%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-4 item">
-                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
-                              <div class="icon icon-c text-white mr-3">
-                                <i class="ti-shopping-cart-full icon-lg ml-3"></i>
-                              </div>
-                              <div class="content text-white">
-                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
-                                  <h3 class="font-weight-light mr-2 mb-1">Purchases</h3>
-                                  <h3 class="mb-0">6358</h3>
-                                </div>
-                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
-                                  <h5 class="mb-0">+9082</h5>
-                                  <div class="d-flex align-items-center">
-                                    <i class="ti-angle-down mr-2"></i>
-                                    <h5 class="mb-0">35.54%</h5>
-                                  </div>  
-                                </div>
-                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#performanceOverview" role="button" data-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#performanceOverview" role="button" data-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Next</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          
-          <div class="row">
-            <div class="col-md-4 stretch-card grid-margin grid-margin-md-0">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title mb-0">Projects</p>
-                  <div class="table-responsive">
-                    <table class="table table-borderless">
-                      <thead>
-                        <tr>
-                          <th class="pl-0 border-bottom">Places</th>
-                          <th class="border-bottom">Orders</th>
-                          <th class="border-bottom">Users</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td class="text-muted pl-0">Kentucky</td>
-                          <td><p class="mb-0"><span class="font-weight-bold mr-2">65</span>(2.15%)</p></td>
-                          <td class="text-muted">65</td>
-                        </tr>
-                        <tr>
-                          <td class="text-muted pl-0">Ohio</td>
-                          <td><p class="mb-0"><span class="font-weight-bold mr-2">54</span>(3.25%)</p></td>
-                          <td class="text-muted">51</td>
-                        </tr>
-                        <tr>
-                          <td class="text-muted pl-0">Nevada</td>
-                          <td><p class="mb-0"><span class="font-weight-bold mr-2">22</span>(2.22%)</p></td>
-                          <td class="text-muted">32</td>
-                        </tr>
-                        <tr>
-                          <td class="text-muted pl-0">North Carolina</td>
-                          <td><p class="mb-0"><span class="font-weight-bold mr-2">46</span>(3.27%)</p></td>
-                          <td class="text-muted">15</td>
-                        </tr>
-                        <tr>
-                          <td class="text-muted pl-0">Montana</td>
-                          <td><p class="mb-0"><span class="font-weight-bold mr-2">17</span>(1.25%)</p></td>
-                          <td class="text-muted">25</td>
-                        </tr>
-                        <tr>
-                          <td class="text-muted pl-0">Nevada</td>
-                          <td><p class="mb-0"><span class="font-weight-bold mr-2">52</span>(3.11%)</p></td>
-                          <td class="text-muted">71</td>
-                        </tr>
-                        <tr>
-                          <td class="text-muted pl-0 pb-0">Louisiana</td>
-                          <td class="pb-0"><p class="mb-0"><span class="font-weight-bold mr-2">25</span>(1.32%)</p></td>
-                          <td class="text-muted pb-0">14</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 stretch-card">
-              <div class="row">
-                <div class="col-md-12 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
-                      <p class="card-title">Charts</p>
-                      <div class="charts-data">
-                        <div class="mt-3">
-                          <p class="text-muted mb-0">Orders</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                            <div class="progress progress-md flex-grow-1 mr-4">
-                              <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="text-muted mb-0">5k</p>
-                          </div>
-                        </div>
-                        <div class="mt-3">
-                          <p class="text-muted mb-0">Users</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                            <div class="progress progress-md flex-grow-1 mr-4">
-                              <div class="progress-bar bg-success" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="text-muted mb-0">3k</p>
-                          </div>
-                        </div>
-                        <div class="mt-3">
-                          <p class="text-muted mb-0">Downloads</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                            <div class="progress progress-md flex-grow-1 mr-4">
-                              <div class="progress-bar bg-success" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="text-muted mb-0">992</p>
-                          </div>
-                        </div>
-                        <div class="mt-3">
-                          <p class="text-muted mb-0">Visitors</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                            <div class="progress progress-md flex-grow-1 mr-4">
-                              <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="text-muted mb-0">687</p>
-                          </div>
-                        </div>
-                      </div>  
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-12 stretch-card grid-margin grid-margin-md-0">
-                  <div class="card data-icon-card-primary">
-                    <div class="card-body">
-                      <p class="card-title text-white">Number of Meetings</p>                      
-                      <div class="row">
-                        <div class="col-8 text-white">
-                          <h3>3404</h3>
-                          <p class="text-white font-weight-light mb-0">The total number of sessions within the date range. It is the period time</p>
-                        </div>
-                        <div class="col-4 background-icon">
-                          <i class="ti-calendar"></i>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title">Notifications</p>
-                  <ul class="icon-data-list">
-                    <li>
-                      <p class="text-primary mb-1">Isabella Becker</p>
-                      <p class="text-muted">Sales dashboard have been created</p>
-                      <small class="text-muted">9:30 am</small>
-                    </li>
-                    <li>
-                      <p class="text-primary mb-1">Adam Warren</p>
-                      <p class="text-muted">You have done a great job #TW11109872</p>
-                      <small class="text-muted">10:30 am</small>
-                    </li>
-                    <li>
-                      <p class="text-primary mb-1">Leonard Thornton</p>
-                      <p class="text-muted">Sales dashboard have been created</p>
-                      <small class="text-muted">11:30 am</small>
-                    </li>
-                    <li>
-                      <p class="text-primary mb-1">George Morrison</p>
-                      <p class="text-muted">Sales dashboard have been created</p>
-                      <small class="text-muted">8:50 am</small>
-                    </li>
-                    <li>
-                      <p class="text-primary mb-1">Ryan Cortez</p>
-                      <p class="text-muted">Herbs are fun and easy to grow.</p>
-                      <small class="text-muted">9:00 am</small>
-                    </li>
-                    
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <!-- content-wrapper ends -->

@@ -91,11 +91,123 @@ function fn_main_tab_setting(result) {
 	
 	//배치 이력 목록 setting
 	fn_script_History_set(result);
-
+	
+	//데이터 이행 setting
 	if (nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N") == "Y") {
-		//데이터 이행 setting
 		fn_migration_history_set(result);
 	}
+	
+	//scale setting
+	if (nvlPrmSet($("#scale_yn", "#dashboardViewForm").val(), "N") == "Y") {
+		fn_scale_history_set(result);
+	}
+
+	//암호화 정보 setting
+	if(nvlPrmSet($("#encp_use_yn_chk", "#dashboardViewForm").val(), "N")  == "Y"){
+		$("#encrypt_div_none").hide();
+		$("#encrypt_div_set").show();
+		fn_encrypt_serverStatus();
+	}else{
+		$("#encrypt_div_none").show();
+		$("#encrypt_div_set").hide();
+	} 
+
+}
+
+/* ********************************************************
+ * 암호화관리 설정
+ ******************************************************** */
+function fn_encrypt_serverStatus() {
+	$.ajax({
+		url : "/serverStatus.do",
+		data : {},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(data) {
+			if(data.resultCode == "0000000000"){
+	/*			var html ='<img src="../images/ico_state_03.png" alt="Running Transfer" /><span> Running</span>';				
+				$("#encryptServer").html(html);*/
+			//	fn_selectSecurityStatistics(today);
+			}else if(data.resultCode == "8000000002"){
+/*				var html ='<img src="../images/ico_state_07.png" alt="Stop" /> STOP';
+				//var html ='<img src="../images/ico_agent_2.png" alt="" />';
+				$("#encryptServer").html(html);*/
+			}
+		}
+	});	
+}
+
+function fn_selectSecurityStatistics(today){
+	$.ajax({
+		url : "/selectDashSecurityStatistics.do",
+		data : {
+			from : today+"00",
+			to : 	today+"24",
+			categoryColumn : "SITE_ACCESS_ADDRESS"
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			alert(data.resultCode);
+				if(data.resultCode == "0000000000"){
+				 	var html ="";
+				 	var success=0;
+				 	var fail=0;
+					for(var i=0; i<data.list.length; i++){
+						html += '<tr>';
+						html += '<td>'+data.list[i].monitoredName+'</td>';
+						html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
+						html += '<td>'+data.list[i].encryptFailCount+'</td>';
+						html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
+						html += '<td>'+data.list[i].decryptFailCount+'</td>';
+						if(data.list[i].status == "start"){
+							html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
+						}else{
+							html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
+						}
+						html += '</tr>';
+						$( "#col" ).html(html);
+					}
+					
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+					location.href="/";
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
+				}else{
+					if(data.list.length != 0){
+						alert(data.resultMessage +"("+data.resultCode+")");
+					}
+				}
+		}
+	});		
 }
 
 /* ********************************************************
@@ -149,6 +261,10 @@ function fn_todaySetting() {
 	$( "#tot_back_his_today" ).append(sdtHisTimehtml);		//백업 이력
 	$( "#tot_script_his_today" ).append(sdtHisTimehtml);	//배치 이력
 	$( "#tot_migration_his_today" ).append(sdtHisTimehtml);	//migration 이력
+	$( "#tot_scale_his_today" ).append(sdtHisTimehtml);	
+
+	$( "#tot_encrypt_his_today" ).append(html);	
+	
 }
 
 /* ********************************************************
@@ -266,7 +382,7 @@ function fn_schedule_cnt_set(result) {
 				if (item.scd_cndt == 'TC001801') { //대기
 					backHtml += "	<i class='fa fa-circle mr-2 text-success' ></i>";
 				} else { //실행중
-					backHtml += '<div class="badge badge-pill badge-warning"><spring:message code="dashboard.running" /></div>';
+					backHtml += '<div class="badge badge-pill badge-warning">' + dashboard_running + '</div>';
 				}
 
 				if(scdHK == 'TC001605') { 				//1회실행
@@ -368,7 +484,7 @@ function fn_schedule_cnt_set(result) {
 				if (item.scd_cndt == 'TC001801') { //대기
 					scriptHtml += "	<i class='fa fa-circle mr-2 text-success' ></i>";
 				} else { //실행중
-					scriptHtml += '<div class="badge badge-pill badge-warning"><spring:message code="dashboard.running" /></div>';
+					scriptHtml += '<div class="badge badge-pill badge-warning">' + dashboard_running + '</div>';
 				}
 
 				if(scdHK == 'TC001605') { 				//1회실행
@@ -846,6 +962,7 @@ function fn_script_History_set(result) {
 		}
 
 		var options = {
+				responsive: false,
 				scales: {
 					yAxes: [{
 						ticks: {
@@ -979,7 +1096,7 @@ function fn_migration_history_set(result) {
 				if (item.scd_cndt == 'TC001801') { //대기
 					migtHtml += "	<i class='fa fa-circle mr-2 text-success' ></i>";
 				} else { //실행중
-					migtHtml += '	<div class="badge badge-pill badge-warning"><spring:message code="dashboard.running" /></div>';
+					migtHtml += '	<div class="badge badge-pill badge-warning">' + dashboard_running + '</div>';
 				}
 				
 				if(scdHK == 'TC001605') { 				//1회실행
@@ -1176,8 +1293,6 @@ function fn_migt_History_progres(result) {
 		} else if (i == 3) { //백업실패건수 / 전체건수
 			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
 			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-			
-			
 		} else if (i == 4) { //배치건수 / 전체건수
 			chartCnt = nvlPrmSet(result.migration_tot_cnt, "0");
 			chartWidth = parseInt(nvlPrmSet(result.migration_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
@@ -1188,14 +1303,307 @@ function fn_migt_History_progres(result) {
 			chartCnt = nvlPrmSet(result.migration_fal_cnt, "0") ;
 			chartWidth = parseInt(nvlPrmSet(result.migration_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
 		}
-		
-		
-		
 		chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
 
 		$("#migt_pro_" + i).css("width", chartWidth + "%"); 
 		$("#migt_pro_text_" + i).html(chartCnt); 
 	}
+}
+
+/* ********************************************************
+ * scale setting
+ ******************************************************** */
+function fn_scale_history_set(result) {
+	if (result.scale_install_yn != null && result.scale_install_yn == "Y") {
+		$("#scale_div_none").hide();
+		$("#scale_div_set").show();
+		
+		var scaleHistHtml = "";
+		var chartListCnt = 0;
+
+		///////////////////////////scale hist list start ////////////////////////
+		//데이터가 있는 경우
+		if (result.scaleHistoryresult != null && result.scaleHistoryresult.length > 0) {
+			$(result.scaleHistoryresult).each(function (index, item) {
+				scaleHistHtml +='	<tr>';
+				scaleHistHtml +='		<td>' + item.process_id + '</td>';
+
+				if (item.scale_type == "1") {
+					scaleHistHtml +='		<td class="text-center">' + etc_etc38 + '</td>';
+				} else {
+					scaleHistHtml +='		<td class="text-center">' + etc_etc39 + '</td>';
+				}
+
+				scaleHistHtml +='		<td class="text-center">';
+				if (item.wrk_type == "TC003301") {
+					scaleHistHtml += "		<div class='badge badge-pill badge-success'>";
+					scaleHistHtml += "			<i class='fa fa-spin fa-spinner mr-2'></i>";
+					scaleHistHtml += item.wrk_type_nm;
+					scaleHistHtml += "		</div>";
+				} else {
+					scaleHistHtml += "<div class='badge badge-pill badge-warning'>";
+					scaleHistHtml += "	<i class='fa fa-user-o mr-2'></i>";
+					scaleHistHtml += item.wrk_type_nm;
+					scaleHistHtml += "</div>";
+				}
+				scaleHistHtml +='	</td>';
+
+				scaleHistHtml +='		<td class="text-center">';
+				if (item.wrk_type == "TC003301") {
+					if (item.policy_type_nm == "CPU") {
+						scaleHistHtml += "<div class='badge badge-pill badge-info'>";
+						scaleHistHtml += '<i class="mdi mdi-vector-square"></i>';
+						scaleHistHtml += item.policy_type_nm;
+						scaleHistHtml += "</div>";
+					} else {
+						scaleHistHtml += "<div class='badge badge-pill' style='color: #fff;background-color: #6600CC;'>";
+						scaleHistHtml += '<i class="mdi mdi-gender-transgender"></i>';
+						scaleHistHtml += item.policy_type_nm;
+						scaleHistHtml += "</div>";
+					}
+
+					scaleHistHtml += " (";
+					if (item.auto_policy_set_div == "1") {
+						scaleHistHtml += eXperDB_scale_policy_time_1;
+					} else {
+						scaleHistHtml += eXperDB_scale_policy_time_2 ;
+					}
+
+					scaleHistHtml += ' ' + item.auto_level;
+						
+					if (item.auto_policy == "TC003501") {
+						scaleHistHtml += '%';
+					}
+						
+					scaleHistHtml += ' ' + item.auto_policy_time + "minutes) ";
+
+					if (item.scale_type == "1") {
+						scaleHistHtml += eXperDB_scale_under;
+					} else {
+						scaleHistHtml += eXperDB_scale_or_more;
+					}
+				}
+				scaleHistHtml +='	</td>';
+	
+				scaleHistHtml +='		<td class="text-center">'+item.wrk_strt_dtm+'</td>';
+
+				scaleHistHtml +='		<td class="text-center">';
+				if(item.wrk_id == "2"){
+					scaleHistHtml += item.wrk_end_dtm;
+				} else {
+					scaleHistHtml += "";
+				}
+				scaleHistHtml +='	</td>';
+				
+				scaleHistHtml +='		<td class="text-center">';
+				if (item.exe_rslt_cd == 'TC001701' && item.wrk_id == '2') {
+					scaleHistHtml += '<i class="fa fa-check text-primary">';
+					scaleHistHtml += '&nbsp;' + common_success + '</i>';
+				} else if(item.exe_rslt_cd == 'TC001702' && item.wrk_id == '2') {
+					scaleHistHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_scaleFailLog('+item.scale_wrk_sn+')">';
+					scaleHistHtml += '<i class="fa fa-times"></i>';
+					scaleHistHtml += common_failed;
+					scaleHistHtml += "</div>";
+				} else {
+					scaleHistHtml += "<div class='badge badge-pill badge-warning' style='color: #fff;'>";
+					scaleHistHtml += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+					scaleHistHtml += '&nbsp;' + etc_etc28;
+					scaleHistHtml += "</div>";
+				}
+
+				scaleHistHtml +='	</td>';
+				
+				scaleHistHtml +='	</tr>';
+			});
+
+		} else {
+			scaleHistHtml += "<tr>";
+			scaleHistHtml += '<td class="text-center" colspan="7" style="width:100%;border:none;height:20px;background-color:#ededed;">';
+			scaleHistHtml += dashboard_msg10
+			scaleHistHtml += '</td>';
+			scaleHistHtml += "</tr>";
+		}
+		
+		console.log(scaleHistHtml);
+
+		$("#scaleHistListT").html(scaleHistHtml);
+		///////////////////////////scale list end ////////////////////////
+		
+		///////////////////////////scale chart start ////////////////////////
+		
+		if ($("#scaleHistChart").length) {
+			var scalechart = Morris.Bar({
+							element: 'scaleHistChart',
+							barColors: ['#76C1FA', '#FABA66', '#63CF72', '#F36368'],
+							data: [{
+									scale_nm: etc_etc38 + "-" + dashboard_auto,
+									suc: 0,
+									fal: 0
+								},
+								{
+									scale_nm: etc_etc39 + "-" + dashboard_auto,
+									suc: 0,
+									fal: 0
+								},
+								{
+									scale_nm: etc_etc38 + "-" + dashboard_manual,
+									suc: 0,
+									fal: 0
+								},
+								{
+									scale_nm: etc_etc39 + "-" + dashboard_manual,
+									wrksuc_cnt: 0,
+									fal: 0
+								}
+							],
+							xkey: 'scale_nm',
+							ykeys: ['suc', 'fal'],
+							labels: [common_success, common_failed]
+			});
+
+			if (result.scaleSettingChartresult != null) {
+				if (result.scaleSettingChartresult.length > 0) {
+					var scaleHitChart = [];
+					for(var i = 0; i<result.scaleSettingChartresult.length; i++){
+						console.log(result.scaleSettingChartresult[i].scale_nm);
+						
+						if (result.scaleSettingChartresult[i].scale_nm == "scale_nm0") {
+							result.scaleSettingChartresult[i].scale_nm = etc_etc38 + "-" + dashboard_auto;
+						} else if (result.scaleSettingChartresult[i].scale_nm == "scale_nm1") {
+							result.scaleSettingChartresult[i].scale_nm = etc_etc39 + "-" + dashboard_auto;
+						} else if (result.scaleSettingChartresult[i].scale_nm == "scale_nm2") {
+							result.scaleSettingChartresult[i].scale_nm = etc_etc38 + "-" + dashboard_manual;
+						} else {
+							result.scaleSettingChartresult[i].scale_nm = etc_etc39 + "-" + dashboard_manual;
+						}
+						
+						scaleHitChart.push(result.scaleSettingChartresult[i]);
+					}	
+			
+					scalechart.setData(scaleHitChart);
+				}
+			}
+		}
+
+		//발생이력
+		if ($("#scaleSetChart").length) {
+			var occur_in_auto = 0; occur_out_auto = 0; occur_in_nct = 0; occur_out_nct = 0;
+
+			if  (result.scaleSettingChart != null) {
+				occur_in_auto = nvlPrmSet(result.scaleSettingChart.occur_in_auto, 0);
+				occur_out_auto = nvlPrmSet(result.scaleSettingChart.occur_out_auto, 0);
+				occur_in_nct = nvlPrmSet(result.scaleSettingChart.occur_in_nct, 0);
+				occur_out_nct = nvlPrmSet(result.scaleSettingChart.occur_out_nct, 0);
+			}
+
+			var options = {
+					responsive: false,
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					},
+					legend: {
+						display: false
+					},
+					elements: {
+						point: {
+							radius: 0
+						}
+					}
+			};
+			
+			var data = {
+					labels: [common_registory, dashboard_progress_end, common_success, common_failed],
+					datasets: [{
+						label: '개수 :',
+						data: [occur_in_auto, occur_out_auto, occur_in_nct, occur_out_nct],
+						backgroundColor: [
+							'rgba(54, 162, 235, 0.2)',
+							'rgba(255, 206, 86, 0.2)',
+							'rgba(75, 192, 192, 0.2)',
+							'rgba(255, 99, 132, 0.2)'
+						],
+						borderColor: [
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 206, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(255,99,132,1)'
+						],
+						borderWidth: 1,
+						fill: false
+					}]
+			};
+
+			var barChartCanvas = $("#scaleSetChart").get(0).getContext("2d");
+			var barChart = new Chart(barChartCanvas, {
+				type: 'bar',
+				data: data,
+				options: options
+			});
+		}
+		///////////////////////////백업 chart end ////////////////////////
+		setTimeout(function()
+			{
+				$("#a_scale_hist").click()
+			},500);
+		
+		
+	} else { //aws 서버가 아닌경우
+		$("#scale_div_none").show();
+		$("#scale_div_set").hide();
+	}
+}
+
+/* ********************************************************
+ * ERROR 로그 정보 출력
+ ******************************************************** */
+function fn_dash_scaleFailLog(scale_wrk_sn){
+	$.ajax({
+		url : "/scale/selectScaleWrkErrorMsg.do",
+		data : {
+			scale_wrk_sn : scale_wrk_sn,
+			db_svr_id : $("#dvb_svr_id_chk", "#dashboardViewForm").val()
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			if (result != null) {
+				if (nvlPrmSet(result.rslt_msg,"") == "Auto scale-in_fail") {
+					result.rslt_msg = eXperDB_scale_msg11;
+				} else if (nvlPrmSet(result.rslt_msg,"") == "Auto scale-out_fail") {
+					result.rslt_msg = eXperDB_scale_msg12;
+				}
+					
+				if (result.rslt_msg != "") {
+					result.rslt_msg = fn_strBrReplcae(result.rslt_msg);
+				}
+
+				$("#d_scaleWrkLogInfo").html(result.rslt_msg);
+				$('#scale_wrk_menu_move').hide();
+				
+				$('#pop_layer_err_msg').modal("show");
+			} else {
+				$("#d_scaleWrkLogInfo").html("");
+
+				$('#pop_layer_err_msg').modal("hide");
+			}
+		}
+	});	
 }
 
 /* ********************************************************
@@ -1337,7 +1745,7 @@ function fn_dash_ddlFailLog(mig_exe_sn){
 					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
 					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
 					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
-					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;<spring:message code="common.failed" /></i>');
+					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
 					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
 				}
 
@@ -1384,7 +1792,7 @@ function fn_dash_migtFailLog(mig_exe_sn){
 					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
 					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
 					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
-					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;<spring:message code="common.failed" /></i>');
+					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
 					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
 				}
 

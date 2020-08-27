@@ -12,6 +12,7 @@ var dashboard_msg03 = "<spring:message code='dashboard.msg03' />";
 var dashboard_msg04 = "<spring:message code='dashboard.msg04' />";
 var dashboard_msg05 = "<spring:message code='dashboard.msg05' />";
 var dashboard_msg07 = "<spring:message code='dashboard.msg07' />";
+var dashboard_msg10 = "<spring:message code='dashboard.msg10' />";
 
 var dashboard_schedule_history_cht_msg1 = "<spring:message code='dashboard.schedule_history_cht_msg1' />";
 var dashboard_schedule_history_cht_msg2 = "<spring:message code='dashboard.schedule_history_cht_msg2' />";
@@ -29,6 +30,16 @@ var dashboard_migration = "<spring:message code='dashboard.migration' />";
 
 var dashboard_progress_end = "<spring:message code='dashboard.progress_end' />";
 
+var etc_etc38 = "<spring:message code='etc.etc38' />";
+var etc_etc39 = "<spring:message code='etc.etc39' />";
+var eXperDB_scale_policy_time_1 = "<spring:message code='eXperDB_scale.policy_time_1' />";
+var eXperDB_scale_policy_time_2 = "<spring:message code='eXperDB_scale.policy_time_2' />";
+var eXperDB_scale_or_more = "<spring:message code='eXperDB_scale.or_more' />";
+var eXperDB_scale_under = "<spring:message code='eXperDB_scale.under' />";
+var eXperDB_scale_msg11 = "<spring:message code='eXperDB_scale.msg11' />";
+var eXperDB_scale_msg12 = "<spring:message code='eXperDB_scale.msg12' />";
+var dashboard_auto = "<spring:message code='dashboard.auto' />";
+var dashboard_manual = "<spring:message code='dashboard.manual' />";
 
 </script>
 <body>

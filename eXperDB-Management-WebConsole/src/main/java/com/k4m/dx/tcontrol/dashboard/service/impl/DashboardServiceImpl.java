@@ -202,4 +202,37 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 		return (Map<String, Object>) dashboardDAO.selectDashboardMigtHistoryChart(vo);
 	}
 
+	/**
+	 * scale 이력목록 조회
+	 * 
+	 * @param DashboardVO
+	 * @throws SQLException
+	 */
+	@Override
+	public List<Map<String, Object>> selectDashboardScaleHistory(DashboardVO vo) throws SQLException {
+		return (List<Map<String, Object>>) dashboardDAO.selectDashboardScaleHistory(vo);
+	}
+
+	/**
+	 * scale 이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> selectDashboardScaleHistoryChart(DashboardVO vo) throws SQLException {
+		return (Map<String, Object>) dashboardDAO.selectDashboardScaleHistoryChart(vo);
+	}
+	
+	/**
+	 * scale 발생이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> selectDashboardScaleSetChart(DashboardVO vo) throws SQLException {
+		return (Map<String, Object>) dashboardDAO.selectDashboardScaleSetChart(vo);
+	}
+
 }

@@ -1265,8 +1265,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				obj.put("scaleChk_sub", "Y");
 				agentSubCmd = scaleCmdSetting(obj);
 			}
-System.out.println("===agentCmd===" + agentCmd);
-System.out.println("===agentSubCmd===" + agentSubCmd);
+
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.scale_exec_call(IP, PORT, agentCmd, agentSubCmd, obj);
 

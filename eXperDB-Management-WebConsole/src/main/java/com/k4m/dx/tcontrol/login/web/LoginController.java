@@ -193,6 +193,9 @@ public class LoginController {
 			    localeResolver.setLocale(request, response, locale);
 				
 				String encp_use_yn = props.get("encrypt.useyn").toString();
+				
+System.out.println("==================================encp_use_yn=============================" + encp_use_yn);
+				
 				loginVo.setEncp_use_yn(encp_use_yn);
 				
 				String version = props.get("version").toString();

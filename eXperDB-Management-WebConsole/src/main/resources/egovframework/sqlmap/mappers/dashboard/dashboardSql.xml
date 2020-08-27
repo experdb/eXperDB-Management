@@ -462,9 +462,28 @@
 				SELECT  
 					(SELECT DB_NM FROM T_DBSVR_I A,T_DB_I B  WHERE A.DB_SVR_ID=B.DB_SVR_ID AND DB_ID = AA.DB_ID) AS db_nm
 					, (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE DB_ID = AA.DB_ID) wrk_cnt
-					, (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.DB_ID = AA.DB_ID AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
-					, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
-					, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
+					, (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B 
+					    WHERE B.DB_ID = AA.DB_ID 
+					      AND A.WRK_ID = B.WRK_ID
+					  ) AS schedule_cnt
+					, (SELECT COUNT(*) FROM T_WRKEXE_G 
+					    WHERE DB_ID = AA.DB_ID 
+					      AND EXE_RSLT_CD = 'TC001701'
+                          AND (
+                               TO_DATE(to_char(WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                                OR
+                               TO_DATE(to_char(WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                          )
+					  ) success_cnt
+					, (SELECT COUNT(*) FROM T_WRKEXE_G 
+					    WHERE DB_ID = AA.DB_ID 
+					      AND EXE_RSLT_CD = 'TC001702'
+                         AND (
+                               TO_DATE(to_char(WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                                OR
+                               TO_DATE(to_char(WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                          )
+					  ) fail_cnt
 				FROM(
 						SELECT DB_ID 
 						  FROM T_DB_I 
@@ -494,10 +513,32 @@
                SELECT 
                       AA.DB_SVR_ID
                     , AA.BCK_OPT_CD
-                    , (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE WRK_ID = AA.WRK_ID) AS WRK_CNT
-                    , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.WRK_ID = AA.WRK_ID AND A.WRK_ID = B.WRK_ID) AS SCHEDULE_CNT
-                    , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001701') SUCCESS_CNT
-                    , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001702') FAIL_CNT
+                    , (SELECT COUNT(*) 
+                        FROM T_BCK_WRKCNG_I 
+                       WHERE WRK_ID = AA.WRK_ID
+                      ) AS WRK_CNT
+                    , (SELECT COUNT(DISTINCT SCD_ID) 
+                         FROM T_SCD_D A, T_BCK_WRKCNG_I B 
+                        WHERE B.WRK_ID = AA.WRK_ID 
+                          AND A.WRK_ID = B.WRK_ID) AS SCHEDULE_CNT
+                    , (SELECT COUNT(*) FROM T_WRKEXE_G 
+                        WHERE WRK_ID = AA.WRK_ID 
+                          AND EXE_RSLT_CD = 'TC001701'
+                          AND (
+                               TO_DATE(to_char(WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                                OR
+                               TO_DATE(to_char(WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                          )
+                      ) SUCCESS_CNT
+                    , (SELECT COUNT(*) FROM T_WRKEXE_G 
+                        WHERE WRK_ID = AA.WRK_ID 
+                          AND EXE_RSLT_CD = 'TC001702'
+                          AND (
+                               TO_DATE(to_char(WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                                OR
+                               TO_DATE(to_char(WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                          )
+                      ) FAIL_CNT
                  FROM (
                       SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
                         FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
@@ -570,17 +611,19 @@
         SELECT COALESCE(SUM(AA.ROW_CNT), 0) AS TOT_CNT,
                COALESCE(SUM(CASE WHEN aa.exe_rslt_cd = 'TC001701' THEN 1 ELSE 0 END),0) AS SUC_CNT,
                COALESCE(SUM(CASE WHEN aa.exe_rslt_cd = 'TC001702' THEN 1 ELSE 0 END),0) AS FAL_CNT,
-               (SELECT COUNT(*)
-                 FROM T_WRKCNG_I
-                WHERE BSN_DSCD = 'TC001902'
-                  AND TO_DATE(to_char(frst_reg_dtm,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
-               )  AS INS_CNT
+               COALESCE(SUM(INS_CNT),0) AS INS_CNT
           FROM (
                SELECT
                       TWG.WRK_ID,
                       TWG.EXE_SN AS EXE_SN,
                       TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
-                      1 as ROW_CNT
+                      1 as ROW_CNT,
+                      COALESCE((SELECT 1
+                         FROM T_WRKCNG_I
+                        WHERE BSN_DSCD = 'TC001902'
+                          AND C.WRK_ID = WRK_ID
+                          AND TO_DATE(to_char(frst_reg_dtm,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                      ),0)  AS INS_CNT
                  FROM T_WRKEXE_G TWG
                       JOIN T_BCK_WRKCNG_I TWI on TWG.WRK_ID = TWI.WRK_ID
                       JOIN T_WRKCNG_I C on TWG.WRK_ID = C.WRK_ID
@@ -736,5 +779,128 @@
                       TO_DATE(TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
                       )
        )AA
+	</select>
+
+	<select id="selectDashboardScaleHistory" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectDashboardScaleHistory
+		* Description : scale 이력 조회
+		* Author :
+		**/
+        SELECT 
+               A.PROCESS_ID AS PROCESS_ID,
+               A.SCALE_WRK_SN AS SCALE_WRK_SN,
+               A.WRK_ID AS WRK_ID,
+               A.SCALE_TYPE AS SCALE_TYPE,
+               (CASE WHEN A.SCALE_TYPE = '1' THEN 'Scale-in' ELSE 'Scale-out' END) AS SCALE_TYPE_NM,
+               A.WRK_TYPE AS WRK_TYPE,
+               (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.WRK_TYPE = SYS_CD ) AS WRK_TYPE_NM,
+               A.AUTO_POLICY AS AUTO_POLICY,
+               (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.AUTO_POLICY = SYS_CD ) AS POLICY_TYPE_NM,
+               A.AUTO_POLICY_SET_DIV,
+               A.AUTO_POLICY_TIME,
+               A.AUTO_LEVEL,
+               A.CLUSTERS AS CLUSTERS,
+               TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
+               TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
+               TO_CHAR(TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI')::timestamp - TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI')::timestamp, 'HH24:MI') AS WRK_DTM,
+               A.EXE_RSLT_CD AS EXE_RSLT_CD,
+               (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXE_RSLT_CD = SYS_CD ) AS EXE_RSLT_CD_NM
+          FROM T_SCALE_G A
+               JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
+         WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
+           AND (
+               TO_DATE(to_char(A.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_date::date - interval '1 week','YYYY-MM-DD'),'YYYY-MM-DD') AND current_date::date
+                OR
+               TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_date::date - interval '1 week','YYYY-MM-DD'),'YYYY-MM-DD') AND current_date::date
+               )
+         ORDER BY A.WRK_END_DTM DESC, A.WRK_STRT_DTM DESC
+         FETCH FIRST 3 ROWS ONLY
+	</select>
+	
+	<select id="selectDashboardScaleHistoryChart" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectDashboardScaleHistoryChart
+		* Description : scale 이력 chart
+		* Author :
+		**/
+	    SELECT A.SVR_HOST_NM, A.IPADR, A.DB_SVR_ID,
+               COALESCE(SUM(B.EXE_IN_AUTO_SUC),0) AS EXE_IN_AUTO_SUC,
+               COALESCE(SUM(B.EXE_IN_AUTO_FAL),0) AS EXE_IN_AUTO_FAL,
+               COALESCE(SUM(B.EXE_OUT_AUTO_SUC),0) AS EXE_OUT_AUTO_SUC,
+               COALESCE(SUM(B.EXE_OUT_AUTO_FAL),0) AS EXE_OUT_AUTO_FAL,
+               COALESCE(SUM(B.EXE_IN_MNL_SUC),0) AS EXE_IN_MNL_SUC,
+               COALESCE(SUM(B.EXE_IN_MNL_FAL),0) AS EXE_IN_MNL_FAL,
+               COALESCE(SUM(B.EXE_OUT_MNL_SUC),0) AS EXE_OUT_MNL_SUC,
+               COALESCE(SUM(B.EXE_OUT_MNL_FAL),0) AS EXE_OUT_MNL_FAL
+          FROM T_DBSVRIPADR_I A
+               LEFT JOIN (
+                          SELECT A.DB_SVR_ID,
+                                 COALESCE(SUM(A.EXE_IN_AUTO_SUC), 0) AS EXE_IN_AUTO_SUC,
+                                 COALESCE(SUM(A.EXE_IN_AUTO_FAL), 0) AS EXE_IN_AUTO_FAL,
+                                 COALESCE(SUM(A.EXE_OUT_AUTO_SUC), 0) AS EXE_OUT_AUTO_SUC,
+                                 COALESCE(SUM(A.EXE_OUT_AUTO_FAL), 0) AS EXE_OUT_AUTO_FAL,
+                                 COALESCE(SUM(A.EXE_IN_MNL_SUC), 0) AS EXE_IN_MNL_SUC,
+                                 COALESCE(SUM(A.EXE_IN_MNL_FAL), 0) AS EXE_IN_MNL_FAL,
+                                 COALESCE(SUM(A.EXE_OUT_MNL_SUC), 0) AS EXE_OUT_MNL_SUC,
+                                 COALESCE(SUM(A.EXE_OUT_MNL_FAL), 0) AS EXE_OUT_MNL_FAL
+                            FROM (
+                                 SELECT DB_SVR_ID,
+                                        CASE WHEN SCALE_TYPE = '1' AND WRK_TYPE = 'TC003301' AND EXE_RSLT_CD = 'TC001701' THEN CLUSTERS ELSE 0 END AS EXE_IN_AUTO_SUC,
+                                        CASE WHEN SCALE_TYPE = '1' AND WRK_TYPE = 'TC003301' AND EXE_RSLT_CD = 'TC001702' THEN CLUSTERS ELSE 0 END AS EXE_IN_AUTO_FAL,
+                                        CASE WHEN SCALE_TYPE = '2' AND WRK_TYPE = 'TC003301' AND EXE_RSLT_CD = 'TC001701' THEN CLUSTERS ELSE 0 END AS EXE_OUT_AUTO_SUC,
+                                        CASE WHEN SCALE_TYPE = '2' AND WRK_TYPE = 'TC003301' AND EXE_RSLT_CD = 'TC001702' THEN CLUSTERS ELSE 0 END AS EXE_OUT_AUTO_FAL,
+                                        CASE WHEN SCALE_TYPE = '1' AND WRK_TYPE = 'TC003302' AND EXE_RSLT_CD = 'TC001701' THEN CLUSTERS ELSE 0 END AS EXE_IN_MNL_SUC,
+                                        CASE WHEN SCALE_TYPE = '1' AND WRK_TYPE = 'TC003302' AND EXE_RSLT_CD = 'TC001702' THEN CLUSTERS ELSE 0 END AS EXE_IN_MNL_FAL,
+                                        CASE WHEN SCALE_TYPE = '2' AND WRK_TYPE = 'TC003302' AND EXE_RSLT_CD = 'TC001701' THEN CLUSTERS ELSE 0 END AS EXE_OUT_MNL_SUC,
+                                        CASE WHEN SCALE_TYPE = '2' AND WRK_TYPE = 'TC003302' AND EXE_RSLT_CD = 'TC001702' THEN CLUSTERS ELSE 0 END AS EXE_OUT_MNL_FAL
+                                   FROM T_SCALE_G
+                                  WHERE DB_SVR_ID = #{db_svr_id}::numeric
+                                    AND (
+                                        TO_DATE(to_char(WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_date::date - interval '1 week','YYYY-MM-DD'),'YYYY-MM-DD') AND current_date::date
+                                          OR
+                                        TO_DATE(to_char(WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_date::date - interval '1 week','YYYY-MM-DD'),'YYYY-MM-DD') AND current_date::date
+                                        )
+                            ) A
+                            GROUP BY A.DB_SVR_ID
+                          ) B ON A.DB_SVR_ID = B.DB_SVR_ID
+          WHERE A.MASTER_GBN = 'M'
+            AND A.DB_SVR_ID = #{db_svr_id}::numeric
+          GROUP BY A.SVR_HOST_NM, A.IPADR, A.DB_SVR_ID                     
+	</select>
+
+	<select id="selectDashboardScaleSetChart" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectDashboardScaleSetChart
+		* Description : scale set chart
+		* Author :
+		**/
+	    SELECT A.SVR_HOST_NM, A.IPADR, A.DB_SVR_ID,
+               COALESCE(SUM(C.OCCUR_IN_AUTO),0) AS OCCUR_IN_AUTO,
+               COALESCE(SUM(C.OCCUR_OUT_AUTO),0) AS OCCUR_OUT_AUTO,
+               COALESCE(SUM(C.OCCUR_IN_NCT),0) AS OCCUR_IN_NCT,
+               COALESCE(SUM(C.OCCUR_OUT_NCT),0) AS OCCUR_OUT_NCT
+          FROM T_DBSVRIPADR_I A
+               LEFT JOIN (
+                          SELECT A.DB_SVR_ID,
+                                 COALESCE(SUM(A.OCCUR_IN_AUTO), 0) AS OCCUR_IN_AUTO,
+                                 COALESCE(SUM(A.OCCUR_OUT_AUTO), 0) AS OCCUR_OUT_AUTO,
+                                 COALESCE(SUM(A.OCCUR_IN_NCT), 0) AS OCCUR_IN_NCT,
+                                 COALESCE(SUM(A.OCCUR_OUT_NCT), 0) AS OCCUR_OUT_NCT
+                            FROM (
+                                 SELECT DB_SVR_ID ,
+                                        CASE WHEN SCALE_TYPE = '1' AND EXECUTE_TYPE = 'TC003401' THEN 1 ELSE 0 END AS OCCUR_IN_NCT,
+                                        CASE WHEN SCALE_TYPE = '2' AND EXECUTE_TYPE = 'TC003401' THEN 1 ELSE 0 END AS OCCUR_OUT_NCT,
+                                        CASE WHEN SCALE_TYPE = '1' AND EXECUTE_TYPE = 'TC003402' THEN 1 ELSE 0 END AS OCCUR_IN_AUTO,
+                                        CASE WHEN SCALE_TYPE = '2' AND EXECUTE_TYPE = 'TC003402' THEN 1 ELSE 0 END AS OCCUR_OUT_AUTO
+                                   FROM T_SCALEOCCUR_G
+                                  WHERE DB_SVR_ID = #{db_svr_id}::numeric
+                                    AND TO_DATE(to_char(event_occur_dtm,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_date::date - interval '1 week','YYYY-MM-DD'),'YYYY-MM-DD') AND current_date::date
+                            ) A
+                            GROUP BY A.DB_SVR_ID
+                          ) C ON A.DB_SVR_ID = C.DB_SVR_ID
+          WHERE A.MASTER_GBN = 'M'
+            AND A.DB_SVR_ID = #{db_svr_id}::numeric
+          GROUP BY A.SVR_HOST_NM, A.IPADR, A.DB_SVR_ID                     
 	</select>
 </mapper>
