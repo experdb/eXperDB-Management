@@ -214,17 +214,14 @@ public class TreeInfoController {
 		schDbServerVO.setDb_svr_id(db_svr_id);
 		DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO); //서버정보조회
 		
-		//String strIpAdr = dbServerVO.getIpadr();
-		String strIpAdr = "192.168.56.130";
+		String strIpAdr = dbServerVO.getIpadr();
 		AgentInfoVO vo = new AgentInfoVO();
 		vo.setIPADR(strIpAdr);
 		AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo); //agent 정보조회
 	
 		
-		//String IP = dbServerVO.getIpadr();
-		String IP = "192.168.56.130";
-		//int PORT = agentInfo.getSOCKET_PORT();
-		int PORT = 9001;
+		String IP = dbServerVO.getIpadr();
+		int PORT = agentInfo.getSOCKET_PORT();
 
 		serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 		serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
@@ -235,9 +232,7 @@ public class TreeInfoController {
 
 		JSONObject result = cic.serverSpace(IP, PORT, serverObj);   //대시보드 서버용량
 		
-		System.out.println(result.get("PGDBAK_PATH"));
-		
-		
+
 		mv.addObject("result", result);
 		
 		}catch(Exception e){
