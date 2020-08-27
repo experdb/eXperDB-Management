@@ -303,7 +303,7 @@ function fn_schedule_cnt_set(result) {
 		backHtml += "</tr>";
 	} else {
 		backHtml += "<tr>";
-		backHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
+		backHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
 		backHtml += dashboard_msg02
 		backHtml += '</td>';
 		backHtml += "</tr>";
@@ -404,11 +404,11 @@ function fn_schedule_cnt_set(result) {
 
 		scriptHtml += "</tr>";
 	} else {
-		backHtml += "<tr>";
-		backHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
-		backHtml += dashboard_msg03
-		backHtml += '</td>';
-		backHtml += "</tr>";
+		scriptHtml += "<tr>";
+		scriptHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
+		scriptHtml += dashboard_msg03
+		scriptHtml += '</td>';
+		scriptHtml += "</tr>";
 	}
 
 	$("#scriptScheduleCntList").html(scriptHtml);
@@ -475,7 +475,7 @@ function fn_schedule_History_set(result) {
 
 	} else {
 		scdHisHtml += "<tr>";
-		scdHisHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
+		scdHisHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#ededed;">';
 		scdHisHtml += dashboard_msg04
 		scdHisHtml += '</td>';
 		scdHisHtml += "</tr>";
@@ -693,7 +693,7 @@ function fn_backup_History_set(result) {
 
 	} else {
 		backHisHtml += "<tr>";
-		backHisHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
+		backHisHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#ededed;">';
 		backHisHtml += dashboard_msg05
 		backHisHtml += '</td>';
 		backHisHtml += "</tr>";
@@ -735,30 +735,38 @@ function fn_backup_History_set(result) {
 		});
 
 		if (result.backupRmanInfo != null) {
-			var backupRmanChart = [];
-			for(var i = 0; i<result.backupRmanInfo.length; i++){
-				console.log(result.backupRmanInfo[i].bck_opt_cd);
-				
-				if (result.backupRmanInfo[i].bck_opt_cd == "TC000301") {
-					result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_full_backup;
-				} else if (result.backupRmanInfo[i].bck_opt_cd == "TC000302") {
-					result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_incremental_backup;
-				} else {
-					result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_change_log_backup;
-				}
-				
-				backupRmanChart.push(result.backupRmanInfo[i]);
-			}	
-	
-			rmanchart.setData(backupRmanChart);
+			if (result.backupRmanInfo.length > 0) {
+				var backupRmanChart = [];
+				for(var i = 0; i<result.backupRmanInfo.length; i++){
+					console.log(result.backupRmanInfo[i].bck_opt_cd);
+					
+					if (result.backupRmanInfo[i].bck_opt_cd == "TC000301") {
+						result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_full_backup;
+					} else if (result.backupRmanInfo[i].bck_opt_cd == "TC000302") {
+						result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_incremental_backup;
+					} else {
+						result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_change_log_backup;
+					}
+					
+					backupRmanChart.push(result.backupRmanInfo[i]);
+				}	
+		
+				rmanchart.setData(backupRmanChart);
+			}
 		}
 	}
-	
+
 	if ($("#backupDumpHistChart").length) {
 		var dumpchart = Morris.Bar({
 						element: 'backupDumpHistChart',
 						barColors: ['#76C1FA', '#FABA66', '#63CF72', '#F36368'],
-						data: [
+						data: [{
+								db_nm: 'server',
+								wrk_cnt: 0,
+								schedule_cnt: 0,
+								success_cnt: 0,
+								fail_cnt: 0
+							}
 						],
 						xkey: 'db_nm',
 						ykeys: ['wrk_cnt', 'schedule_cnt', 'success_cnt', 'fail_cnt'],
@@ -766,7 +774,9 @@ function fn_backup_History_set(result) {
 		});
 
 		if (result.backupDumpInfo != null) {
-			dumpchart.setData(result.backupDumpInfo);
+			if (result.backupDumpInfo.length > 0) {
+				dumpchart.setData(result.backupDumpInfo);
+			}
 		}
 	}
 	///////////////////////////백업 chart end ////////////////////////
@@ -815,7 +825,7 @@ function fn_script_History_set(result) {
 
 	} else {
 		scriptHisHtml += "<tr>";
-		scriptHisHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
+		scriptHisHtml += '<td class="text-center" colspan="5" style="width:100%;border:none;height:20px;background-color:#ededed;">';
 		scriptHisHtml += dashboard_msg05
 		scriptHisHtml += '</td>';
 		scriptHisHtml += "</tr>";
@@ -906,6 +916,12 @@ function fn_migration_history_set(result) {
 	var migtCount=0;
 	
 	var migtHisHtml = "";
+	var migtHisChartHtml = "";
+	var chartMaxCnt = "";
+	var chartCnt = 0;
+	var chartWidth = "";
+	var chartText = "";
+	var chartColor = "";
 
 	/////////////////////migration 일정 start////////////////////////////////////////////////
 	if (result.migtScdCnt != null && result.migtScdCnt > 0) {
@@ -1001,7 +1017,7 @@ function fn_migration_history_set(result) {
 		migtHtml += "</tr>";
 	} else {
 		migtHtml += "<tr>";
-		migtHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
+		migtHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
 		migtHtml += dashboard_msg02
 		migtHtml += '</td>';
 		migtHtml += "</tr>";
@@ -1009,18 +1025,8 @@ function fn_migration_history_set(result) {
 
 	$("#migtHistCntList").html(migtHtml);
 	/////////////////////migration 일정 end////////////////////////////////////////////////
-	
 
-/*	
-	var chartText = "";
-	var chartColor = "";
-	var chartCnt = 0;
-	var chartMaxCnt = "";
-	var chartWidth = "";
-	var chartListCnt = 0;
-	var db2_pgYn = "";*/
-	
-	///////////////////////////migration list start ////////////////////////
+	///////////////////////////migration list start ////////////////////////	
 	if (result.migtHistoryresult != null && result.migtHistoryresult.length > 0) {
 		$(result.migtHistoryresult).each(function (index, item) {
 			migtHisHtml +='	<tr>';
@@ -1073,15 +1079,123 @@ function fn_migration_history_set(result) {
 		});
 
 	} else {
-		scdHisHtml += "<tr>";
-		scdHisHtml += '<td class="text-center" colspan="6" style="width:100%;border:none;height:20px;background-color:#c9ccd7;">';
-		scdHisHtml += dashboard_msg04
-		scdHisHtml += '</td>';
-		scdHisHtml += "</tr>";
+		migtHisHtml += "<tr>";
+		migtHisHtml += '<td class="text-center" colspan="6" style="height:300px;border:none;height:20px;background-color:#ededed;">';
+		migtHisHtml += dashboard_msg07
+		migtHisHtml += '</td>';
+		migtHisHtml += "</tr>";
 	}
 
 	$("#migrationListT").html(migtHisHtml);
 	///////////////////////////migration list end ////////////////////////
+
+	///////////////////////////migration chart start ////////////////////////
+	if ($("#migtHistChart").length) {
+		for (var i = 0; i < 7; i++) {
+			chartMaxCnt = "100";
+			chartCnt = "0";
+			chartWidth = "0";
+
+			if (i == 0) {
+				chartText = dashboard_schedule_history_cht_msg1;
+				chartColor = "bg-success";
+
+			} else if (i == 1) {
+				chartText = dashboard_schedule_history_cht_msg2;
+				chartColor = "bg-warning";
+
+			} else if (i == 2) {
+				chartText = dashboard_schedule_history_cht_msg3;	
+				chartColor = "bg-primary";
+
+			} else if (i == 3) {
+				chartText = dashboard_schedule_history_cht_msg4;
+				chartColor = "bg-danger";
+
+			} else if (i == 4) {
+				chartText = dashboard_schedule_history_cht_msg5;
+				chartColor = "bg-warning";
+
+			} else if (i == 5) {
+				chartText = dashboard_schedule_history_cht_msg6;
+				chartColor = "bg-primary";
+
+			} else if (i == 6) {
+				chartText = dashboard_schedule_history_cht_msg7;
+				chartColor = "bg-danger";
+			}
+			chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
+			
+			migtHisChartHtml += '<tr>';
+
+			migtHisChartHtml += '	<td class="text-muted">' + chartText + '</td>';
+			migtHisChartHtml += '	<td class="w-100 px-0">';
+			migtHisChartHtml += '		<div class="progress progress-md mx-4">';
+			migtHisChartHtml += '			<div id="migt_pro_' + i + '" class="progress-bar ' + chartColor + ' progress-bar-striped progress-bar-animated" role="progressbar" style="width: ' + chartWidth + '%" aria-valuenow="' + chartWidth + '" aria-valuemin="0" aria-valuemax="' + chartMaxCnt + '"></div>';
+			migtHisChartHtml += '		</div>';
+			migtHisChartHtml += '	</td>';
+			migtHisChartHtml += '	<td><h5 class="font-weight-bold mb-0" id="migt_pro_text_' + i + '">' + chartCnt + '</h5></td>';
+			
+			migtHisChartHtml += "</tr>";
+		}
+
+		$("#migtHistChart").html(migtHisChartHtml);
+
+		//프로그레스바 설정
+		if (result.migtHistoryChart != null) {
+			setTimeout(fn_migt_History_progres, 1000, result.migtHistoryChart);
+		}
+		///////////////////////////migration chart end ////////////////////////
+	}
+}
+
+/* ********************************************************
+ * migration history 프로그레스바 loading
+ ******************************************************** */
+function fn_migt_History_progres(result) {
+	var chartCnt = 0;
+	var chartWidth = "";
+
+	for (var i = 0; i < 7; i++) {
+		chartCnt = 0;
+		chartWidth = "";
+		
+		if (i == 0) {
+			chartCnt = nvlPrmSet(result.tot_cnt, "0");
+			if (chartCnt == "0") {
+				chartWidth = "0";
+			} else {
+				chartWidth = "100";
+			}
+		} else if (i == 1) { //백업건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 2) { //백업성공건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 3) { //백업실패건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+			
+			
+		} else if (i == 4) { //배치건수 / 전체건수
+			chartCnt = nvlPrmSet(result.migration_tot_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.migration_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 5) {
+			chartCnt = nvlPrmSet(result.migration_suc_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.migration_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 6) {
+			chartCnt = nvlPrmSet(result.migration_fal_cnt, "0") ;
+			chartWidth = parseInt(nvlPrmSet(result.migration_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		}
+		
+		
+		
+		chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
+
+		$("#migt_pro_" + i).css("width", chartWidth + "%"); 
+		$("#migt_pro_text_" + i).html(chartCnt); 
+	}
 }
 
 /* ********************************************************

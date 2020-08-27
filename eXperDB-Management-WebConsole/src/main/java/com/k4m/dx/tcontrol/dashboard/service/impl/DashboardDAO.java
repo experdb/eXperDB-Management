@@ -186,4 +186,15 @@ public class DashboardDAO extends EgovAbstractMapper{
 		return (List<Map<String, Object>> ) list("dashboardSql.selectDashboardMigtHistory", vo);
 	}
 
+	/**
+	 * MIGRATION 이력 chart 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public Map<String, Object> selectDashboardMigtHistoryChart(DashboardVO vo) {
+		return (Map<String, Object>) selectOne("dashboardSql.selectDashboardMigtHistoryChart", vo);
+	}
+
 }

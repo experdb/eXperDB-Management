@@ -399,6 +399,7 @@ public class CmmnController {
 		
 		List<Map<String, Object>> migtScdresult = null; 			//MIGRATION 일정 조회
 		List<Map<String, Object>> migtHistoryresult = null; 		//MIGRATION 이력 조회
+		Map<String, Object> migtHistoryChart = null;				//MIGRATION chart 조회
 		
 		DashboardVO dashVo = new DashboardVO();
 		
@@ -447,7 +448,8 @@ public class CmmnController {
 			
 			//MIGRATION 이력 목록
 			migtHistoryresult = dashboardService.selectDashboardMigtHistory(dashVo);
-			
+			//MIGRATION 이력 chart 조회
+			migtHistoryChart = dashboardService.selectDashboardMigtHistoryChart(dashVo);
 			
 			mv.addObject("backupScdresult", backupScdresult);				//백업일정 목록
 			mv.addObject("backupScdCnt", backupScdCnt);						//백업일정 cnt
@@ -468,7 +470,7 @@ public class CmmnController {
 			mv.addObject("migtScdresult", migtScdresult);					//migration 일정 목록
 			mv.addObject("migtScdCnt", migtScdCnt);							//migration 일정 cnt
 			mv.addObject("migtHistoryresult", migtHistoryresult);			//migration 이력 목록
-			
+			mv.addObject("migtHistoryChart", migtHistoryChart);				//migration 이력 chart 조회
 			
 			mv.addObject("db_svr_id", db_svr_id);
 		} catch (Exception e) {

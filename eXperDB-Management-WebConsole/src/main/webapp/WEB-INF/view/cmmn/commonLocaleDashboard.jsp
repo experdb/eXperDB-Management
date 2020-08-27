@@ -11,6 +11,8 @@ var dashboard_msg02 = "<spring:message code='dashboard.msg02' />";
 var dashboard_msg03 = "<spring:message code='dashboard.msg03' />";
 var dashboard_msg04 = "<spring:message code='dashboard.msg04' />";
 var dashboard_msg05 = "<spring:message code='dashboard.msg05' />";
+var dashboard_msg07 = "<spring:message code='dashboard.msg07' />";
+
 var dashboard_schedule_history_cht_msg1 = "<spring:message code='dashboard.schedule_history_cht_msg1' />";
 var dashboard_schedule_history_cht_msg2 = "<spring:message code='dashboard.schedule_history_cht_msg2' />";
 var dashboard_schedule_history_cht_msg3 = "<spring:message code='dashboard.schedule_history_cht_msg3' />";

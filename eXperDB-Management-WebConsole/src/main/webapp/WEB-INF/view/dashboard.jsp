@@ -141,13 +141,13 @@
 			<div class="card" style="margin-bottom:0px;">
 				<div class="card-header" role="tab" id="page_header_div" >
 					<div class="row" style="height: 15px;">
-						<div class="col-5">
+						<div class="col-7">
 							<h6 class="mb-0">
 								<i class="ti-calendar menu-icon"></i>
 								<span class="menu-title"><spring:message code="etc.etc44"/></span>
 							</h6>
 						</div>
-						<div class="col-7">
+						<div class="col-5">
 		 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 								<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_sdt_today"></li>
 							</ol>
@@ -373,7 +373,7 @@
 	
 	<!-- 데이터이행 -->
 	<div class="row">
-		<div class="col-md-12 grid-margin stretch-card">
+		<div class="col-md-12 grid-margin stretch-card" style="margin-top:-10px;">
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
@@ -382,7 +382,7 @@
 							<div class="card" style="margin-bottom:0px;">
 								<div class="card-header" role="tab" id="migt_hist_header_div">
 									<div class="row" style="height: 15px;">
-										<div class="col-5">
+										<div class="col-7">
 											<h6 class="mb-0">
 												<a data-toggle="collapse" href="#migt_hist_header_sub" aria-expanded="true" aria-controls="migt_hist_header_sub" onclick="fn_profileChk('migt_titleText')">
 													<i class="fa fa-database menu-icon"></i>
@@ -391,7 +391,7 @@
 												</a>
 											</h6>
 										</div>
-										<div class="col-7">
+										<div class="col-5">
 											<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 												<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_migration_his_today"></li>
 											</ol>
@@ -402,49 +402,71 @@
 						</div>
 					</div>
 
-					<div id="migt_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="migt_hist_header_div" data-parent="#accordion_migt_his">
-						<!-- 데이터이행 일정 -->
-						<div class="col-md-3 col-xl-3 d-flex flex-column justify-content-center">
-							<div class="card topcorner" style="margin-left:-10px;border:none;">
-								<div class="card-body" style="border:none;">
-									<p class="card-title" style="margin-bottom:-5px">Charts</p>
-									<table id="migtHistCntList" class="table table-hover system-tlb-scroll report-table_dash" style="width:100%;"></table>
+					<div id="migt_hist_header_sub" class="collapse show" role="tabpanel" aria-labelledby="migt_hist_header_div" data-parent="#accordion_migt_his">
+						<c:choose>
+							<c:when test="${db2pg_yn eq 'Y'}">
+								<div class="row">
+									<!-- 데이터이행 일정 -->
+									<div class="col-md-3 col-xl-3 justify-content-center">
+										<div class="card" style="margin-left:-10px;border:none;">
+											<div class="card-body" style="border:none;">
+												<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.schedule" /></p>
+												
+												<table id="migtHistCntList" class="table table-hover system-tlb-scroll report-table_dash" style="width:100%;"></table>
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-md-6 col-xl-6 justify-content-center">
+										<div class="card" style="margin-left:-10px;border:none;">
+											<div class="card-body" style="border:none;">
+												<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.history" /></p>
+												
+												<table id="migtHistList" class="table table-striped table-borderless" style="width:100%;">
+													<thead>
+														<tr>
+															<th width="200" scope="col"><spring:message code="common.work_name" /></th>	
+															<th width="100" scope="col" class="text-left"><spring:message code="dashboard.migration_division"/></th>		
+															<th width="130" scope="col" class="text-center"><spring:message code="backup_management.work_start_time"/></th>
+															<th width="130" scope="col" class="text-center"><spring:message code="backup_management.work_end_time"/></th>
+															<th width="95" scope="col" class="text-center"><spring:message code="schedule.jobTime"/></th>
+															<th width="95" scope="col" class="text-center"><spring:message code="schedule.result"/></th>
+														</tr>
+													</thead>
+													<tbody id="migrationListT">
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-md-3 col-xl-3 justify-content-center">
+										<div class="card" style="margin-left:-10px;border:none;">
+											<div class="card-body" style="border:none;">
+												<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.statistics" /></p>
+												<table id="migtHistChart" class="table table-borderless">
+												</table>
+											</div>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-						
-						<div class="col-md-6 col-xl-6 d-flex flex-column justify-content-center">
-							<!-- <div class="card topcorner" style="margin-left:-10px;border:none;"> -->
-							<div class="card" style="margin-left:-10px;border:none;">
-								<div class="card-body" style="border:none;">
-									<p class="card-title" style="margin-bottom:0px">Table</p>
-									<table id="migtHistList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
-										<thead>
-											<tr>
-												<th width="200" scope="col"><spring:message code="common.work_name" /></th>	
-												<th width="100" scope="col"><spring:message code="dashboard.migration_division"/></th>		
-												<th width="130" scope="col" class="text-center"><spring:message code="backup_management.work_start_time"/></th>
-												<th width="130" scope="col" class="text-center"><spring:message code="backup_management.work_end_time"/></th>
-												<th width="95" scope="col" class="text-center"><spring:message code="schedule.jobTime"/></th>
-												<th width="95" scope="col" class="text-center"><spring:message code="schedule.result"/></th>
-											</tr>
-										</thead>
-										<tbody id="migrationListT">
-										</tbody>
-									</table>
+							</c:when>
+							<c:otherwise>
+								<div class="row">
+									<!-- 데이터이행 일정 -->
+									<div class="col-md-12 justify-content-center">
+										<div class="card card-inverse-danger">
+											<div class="card-body">
+												<p class="card-text">
+													<i class="fa fa-times-circle menu-icon"></i>
+													<spring:message code="dashboard.msg08" />
+                       							</p>
+                    						</div>
+                 						</div>
+									</div>
 								</div>
-							</div>
-						</div>
-						
-						<div class="col-md-3 col-xl-3 d-flex flex-column justify-content-center">
-							<div class="card" style="margin-left:-10px;border:none;">
-								<div class="card-body" style="border:none;">
-									<p class="card-title" style="margin-bottom:0px">chart</p>
-									<table id="migtHistChart" class="table table-borderless">
-									</table>
-								</div>
-							</div>
-						</div>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 			</div>
@@ -564,7 +586,7 @@
 
 										<div id="scd_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="scd_hist_header_div" data-parent="#accordion_sch_his">
 											<!-- 스케줄이력 List -->
-											<div class="col-md-7 col-xl-7 d-flex flex-column justify-content-center">
+											<div class="col-md-7 col-xl-7 justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
 														<table id="scheduleList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
@@ -585,7 +607,7 @@
 											</div>
 											
 											<div class="col-md-5 col-xl-5 d-flex flex-column justify-content-center">
-												<!-- 스케줄이력 List -->
+												<!-- 스케줄이력 chart -->
 												<div class="table-responsive mb-3 mb-md-0">
 													<table id="scheduleHistChart" class="table table-borderless"></table>
 												</div>
@@ -606,7 +628,7 @@
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="back_hist_header_div">
 														<div class="row" style="height: 15px;">
-															<div class="col-5">
+															<div class="col-7">
 																<h6 class="mb-0">
 																	<a id="a_back_hist" data-toggle="collapse" href="#back_hist_header_sub" aria-expanded="true" aria-controls="back_hist_header_sub" onclick="fn_profileChk('back_titleText')">
 																		<i class="ti-calendar menu-icon"></i>
@@ -615,7 +637,7 @@
 																	</a>
 																</h6>
 															</div>
-															<div class="col-7">
+															<div class="col-5">
 											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_back_his_today"></li>
 																</ol>
@@ -627,7 +649,7 @@
 										</div>
 
 										<div id="back_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="back_hist_header_div" data-parent="#accordion_back_his">
-											<div class="col-md-12 col-xl-12 d-flex flex-column justify-content-center">
+											<div class="col-md-12 col-xl-12 justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
 														<table id="backupLogList" class="table table-striped table-borderless" style="width:100%;">
@@ -671,7 +693,7 @@
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="script_hist_header_div">
 														<div class="row" style="height: 15px;">
-															<div class="col-5">
+															<div class="col-7">
 																<h6 class="mb-0">
 																	<a id="a_script_hist" data-toggle="collapse" href="#script_hist_header_sub" aria-expanded="true" aria-controls="script_hist_header_sub" onclick="fn_profileChk('script_titleText')">
 																		<i class="ti-calendar menu-icon"></i>
@@ -680,7 +702,7 @@
 																	</a>
 																</h6>
 															</div>
-															<div class="col-7">
+															<div class="col-5">
 											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_script_his_today"></li>
 																</ol>
@@ -692,7 +714,7 @@
 										</div>
 										
 										<div id="script_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="script_hist_header_div" data-parent="#accordion_script_his">
-											<div class="col-md-8 col-xl-8 d-flex flex-column justify-content-center">
+											<div class="col-md-8 col-xl-8 justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
 														<table id="scriptList" class="table table-striped table-borderless report-table_dash" style="width:100%;">
@@ -712,11 +734,19 @@
 												</div>
 											</div>
 											
-											<div class="col-md-4 col-xl-4 d-flex flex-column justify-content-center">
+											<div class="col-md-4 col-xl-4 justify-content-center">
  												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
 														<canvas id="scriptHistChart"></canvas>
 													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-12">
+												<div class="card" style="border:none;">
+													&nbsp;
 												</div>
 											</div>
 										</div>
@@ -1212,185 +1242,7 @@
             </div>
           </div>
           
-          <div class="row">
-            <div class="col-md-12 grid-margin stretch-card">
-              <div class="card position-relative">
-                <div class="card-body">
-                  <p class="card-title">Detailed Reports</p>
-                  <div id="" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
-                    <div class="carousel-inner">
-                      <div class="carousel-item active">
-                        <div class="row">
-                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
-                            <div class="ml-xl-4">
-                              <h1>$34040</h1>
-                              <h3 class="font-weight-light mb-xl-4">North America</h3>
-                              <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
-                            </div>  
-                            </div>
-                          <div class="col-md-12 col-xl-9">
-                            <div class="row">
-                              <div class="col-md-6">
-                                <div class="table-responsive mb-3 mb-md-0">
-                                  <table class="table table-borderless report-table">
-                                    <tr>
-                                      <td class="text-muted">Illinois</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">713</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Washington</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">583</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Mississippi</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">924</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">California</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">664</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Maryland</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">560</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Alaska</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">793</h5></td>
-                                    </tr>
-                                  </table>
-                                </div>
-                              </div>
-                              <div class="col-md-6 mt-3">
-                                <canvas id="north-america-chart"></canvas>
-                                <div id="north-america-legend"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="carousel-item">
-                        <div class="row">
-                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
-                            <div class="ml-xl-4">
-                              <h1>$61321</h1>
-                              <h3 class="font-weight-light mb-xl-4">South America</h3>
-                              <p class="text-muted mb-2 mb-xl-0">It is the period time a user is actively engaged with your website, page or app, etc. The total number of sessions within the date range. </p>
-                            </div>
-                          </div>
-                          <div class="col-md-12 col-xl-9">
-                            <div class="row">
-                              <div class="col-md-6">
-                                <div class="table-responsive mb-3 mb-md-0">
-                                  <table class="table table-borderless report-table">
-                                    <tr>
-                                      <td class="text-muted">Brazil</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">613</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Argentina</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">483</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Peru</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">824</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Chile</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">564</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Colombia</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">460</h5></td>
-                                    </tr>
-                                    <tr>
-                                      <td class="text-muted">Uruguay</td>
-                                      <td class="w-100 px-0">
-                                        <div class="progress progress-md mx-4">
-                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                      </td>
-                                      <td><h5 class="font-weight-bold mb-0">693</h5></td>
-                                    </tr>
-                                  </table>
-                                </div>
-                              </div>
-                              <div class="col-md-6 mt-3">
-                                <canvas id="south-america-chart"></canvas>
-                                <div id="south-america-legend"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#detailedReports" role="button" data-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#detailedReports" role="button" data-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Next</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          
           <div class="row">
             <div class="col-md-4 stretch-card grid-margin grid-margin-md-0">
               <div class="card">

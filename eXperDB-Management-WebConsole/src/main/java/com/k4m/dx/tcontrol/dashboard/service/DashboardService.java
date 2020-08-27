@@ -203,4 +203,13 @@ public interface DashboardService {
 	 * @throws SQLException
 	 */
 	public List<Map<String, Object>> selectDashboardMigtHistory(DashboardVO vo) throws SQLException;
+	
+	/**
+	 * MIGRATION chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectDashboardMigtHistoryChart(DashboardVO vo) throws SQLException;
+
 }
