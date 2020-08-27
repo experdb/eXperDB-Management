@@ -82,21 +82,25 @@ public class Db2pgDbmsSystemController {
 			mv.addObject("dbmsGrb_reg_re", dbmsGrb);
 			
 			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
-			if(resultSet.get(0).getDbms_dscd().equals("TC002201")){
-				paramvalue.put("dbms_dscd", "TC0023");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002208")){
-				paramvalue.put("dbms_dscd", "TC0024");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002205")){
-				paramvalue.put("dbms_dscd", "TC0025");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002203")){
-				paramvalue.put("dbms_dscd", "TC0027");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002206")){
-				paramvalue.put("dbms_dscd", "TC0026");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002204")){
-				paramvalue.put("dbms_dscd", "TC0005");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002202")){
-				paramvalue.put("dbms_dscd", "TC0038");
+			
+			if(resultSet.size()>0){
+				if(resultSet.get(0).getDbms_dscd().equals("TC002201")){
+					paramvalue.put("dbms_dscd", "TC0023");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002208")){
+					paramvalue.put("dbms_dscd", "TC0024");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002205")){
+					paramvalue.put("dbms_dscd", "TC0025");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002203")){
+					paramvalue.put("dbms_dscd", "TC0027");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002206")){
+					paramvalue.put("dbms_dscd", "TC0026");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002204")){
+					paramvalue.put("dbms_dscd", "TC0005");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002202")){
+					paramvalue.put("dbms_dscd", "TC0038");
+				}
 			}
+
 			dbmsChar = dbmsService.selectCharSetList(paramvalue);
 			mv.addObject("dbmsChar_reg_re", dbmsChar);
 			

@@ -23,6 +23,7 @@
 
 <script>
 var table = null;
+var confirm_title = ""; 
 
 function fn_init() {
 		/* ********************************************************
@@ -206,6 +207,15 @@ function fn_regRe_popup(){
 }
 
 /* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmMultiRst(gbn){
+	if (gbn == "del") {
+		fn_delete2();
+	}
+}
+
+/* ********************************************************
  * DBMS 삭제
  ******************************************************** */
 function fn_delete(){
@@ -214,69 +224,78 @@ function fn_delete(){
 		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
-		if(confirm('<spring:message code="message.msg162"/>')){
-			var db2pg_sys_id =  table.row('.selected').data().db2pg_sys_id;
-			var db2pg_trg_sys_id =  table.row('.selected').data().db2pg_trg_sys_id;
-
-			//ddl, mig work가 등록되어 있는지 확인
-			$.ajax({
-				url : "/db2pg/exeMigCheck.do",
-				data : {
-					db2pg_sys_id : db2pg_sys_id,
-					db2pg_trg_sys_id : db2pg_trg_sys_id
-				},
-				type : "post",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					} else if(xhr.status == 403) {
-						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-					}
-				},
-				success : function(result) {
-					if(result>0){
-						showSwalIcon('해당 DBMS가 등록된 설정들이 존재합니다.', '<spring:message code="common.close" />', '', 'error');
-					}else{
-							$.ajax({
-								url : "/db2pg/deleteDBMS.do",
-							  	data : {
-							  		db2pg_sys_id : db2pg_sys_id
-							  	},
-								type : "post",
-								beforeSend: function(xhr) {
-							        xhr.setRequestHeader("AJAX", true);
-							     },
-								error : function(xhr, status, error) {
-									if(xhr.status == 401) {
-										showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-									} else if(xhr.status == 403) {
-										showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-									} else {
-										showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-									}
-								},
-								success : function(result) {
-									if(result == true){
-										showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
-										fn_search();
-									}else{
-										showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
-									}	
-								}
-							});	
-					}
-				}
-			});
-		 };	
+			confile_title = '<spring:message code="migration.source/target_dbms_management" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			$('#con_multi_gbn', '#findConfirmMulti').val("del");
+			$('#confirm_multi_tlt').html(confile_title);
+			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+			$('#pop_confirm_multi_md').modal("show");
 	}
 }
 
+
+function fn_delete2(){
+		var db2pg_sys_id =  table.row('.selected').data().db2pg_sys_id;
+		var db2pg_trg_sys_id =  table.row('.selected').data().db2pg_trg_sys_id;
+
+		//ddl, mig work가 등록되어 있는지 확인
+		$.ajax({
+			url : "/db2pg/exeMigCheck.do",
+			data : {
+				db2pg_sys_id : db2pg_sys_id,
+				db2pg_trg_sys_id : db2pg_trg_sys_id
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result>0){
+					showSwalIcon('해당 DBMS가 등록된 설정들이 존재합니다.', '<spring:message code="common.close" />', '', 'error');
+				}else{
+						$.ajax({
+							url : "/db2pg/deleteDBMS.do",
+						  	data : {
+						  		db2pg_sys_id : db2pg_sys_id
+						  	},
+							type : "post",
+							beforeSend: function(xhr) {
+						        xhr.setRequestHeader("AJAX", true);
+						     },
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+								} else if(xhr.status == 403) {
+									showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+								} else {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+								}
+							},
+							success : function(result) {
+								if(result == true){
+									showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
+									fn_search();
+								}else{
+									showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
+								}	
+							}
+						});	
+				}
+			}
+		});
+	
+}
+
 </script>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/dbmsRegForm.jsp"%>
 <%@include file="./../popup/dbmsRegReForm.jsp"%>
 <%@include file="./../popup/pgDbmsRegForm.jsp"%>

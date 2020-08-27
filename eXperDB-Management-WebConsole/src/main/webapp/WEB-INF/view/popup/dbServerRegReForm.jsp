@@ -253,6 +253,19 @@ function fn_updateDbServer(){
 	if (!fn_dbServerValidation2()) return false;
 	if (!fn_saveValidation2()) return false;
 	
+	confile_title = '<spring:message code="menu.dbms_registration" />' + " " + '<spring:message code="common.request" />';
+	$('#con_multi_gbn', '#findConfirmMulti').val("mod_DBServer");
+	$('#confirm_multi_tlt').html(confile_title);
+	$('#confirm_multi_msg').html('<spring:message code="etc.etc13" />');
+	$('#pop_confirm_multi_md').modal("show");
+	
+}
+
+//DBserver 수정
+function fn_updateDbServer2(){
+	var list = $("input[name='port']");
+	 var useyn = $(":input:radio[name=useyn]:checked").val();
+
 	var datas = dbServerRegTable.rows().data();
 	
 	var arrmaps = [];
@@ -277,8 +290,7 @@ function fn_updateDbServer(){
         ipmaps.push(dbServerRegTable.rows().data()[i].db_svr_ipadr_id);
 		}
 
-	
-	if (confirm('<spring:message code="etc.etc13"/>')){	
+
 		
 	$.ajax({
 		url : "/updateDbServer.do",
@@ -311,11 +323,7 @@ function fn_updateDbServer(){
 			showSwalIconRst('<spring:message code="message.msg84" />', '<spring:message code="common.close" />', '', 'success', "reload");			
 		}
 	}); 
-	}else{
-		return false;
-	}	
 }
-
 
 /* ********************************************************
  * PG_HOME 경로의 존재유무 체크

@@ -586,12 +586,12 @@ function getdataDataList(){
 									<div class="form-group row div-form-margin-z">
 									<div class="col-12" >
 										<ul class="nav nav-pills nav-pills-setting" style="border-bottom:0px;" id="server-tab" role="tablist">
-											<li class="nav-item tab-pop-two-style"  style="width:31.5%">										
+											<li class="nav-item tab-pop-two-style" >										
 												<a class="nav-link active" id="ins-tab-1" data-toggle="pill" href="#ddlTab" role="tab" aria-controls="ddlTab" aria-selected="true" >
 													DDL
 												</a>
 											</li>
-											<li class="nav-item tab-pop-two-style" style="width:31.5%">
+											<li class="nav-item tab-pop-two-style">
 												<a class="nav-link" id="ins-tab-2" data-toggle="pill" href="#migrationTab" role="tab" aria-controls="migrationTab" aria-selected="false">
 													MIGRATION
 												</a>

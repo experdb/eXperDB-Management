@@ -70,10 +70,8 @@ $(window.document).ready(function() {
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -113,10 +111,8 @@ function fn_svr_db(db_svr_nm, db_svr_id){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -152,10 +148,8 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -239,10 +233,8 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
 						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						top.location.href = "/";
 					} else if(xhr.status == 403) {
 						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						top.location.href = "/";
 					} else {
 						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
@@ -260,6 +252,18 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
   * 디비 등록
   ******************************************************** */
  function fn_insertDB(){
+	 confile_title = '<spring:message code="common.database" />' + " " + '<spring:message code="common.registory" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("ins");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg160" />');
+		$('#pop_confirm_multi_md').modal("show");
+	  
+ }
+ 
+ /* ********************************************************
+  * 디비 등록
+  ******************************************************** */
+ function fn_insertDB2(){
 	var list = $("input[name='db_exp']");
 	var datasArr = new Array();
  	var db_svr_id =  $("#db_svr_nm").val();	
@@ -292,7 +296,6 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
      		}   		 
     		datasArr.push(rows);
  		}
-     	if (confirm('<spring:message code="message.msg160"/>')){
  			$.ajax({
  				url : "/insertDB.do",
  				data : {
@@ -309,10 +312,8 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
  				error : function(xhr, status, error) {
  					if(xhr.status == 401) {
  						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
- 						top.location.href = "/";
  					} else if(xhr.status == 403) {
  						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
- 						top.location.href = "/";
  					} else {
  						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
  					}
@@ -321,9 +322,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
  					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
  				}
  			});	
-     	}else{
-     		return false;
-     	}
+
  	}else{
  		showSwalIcon('<spring:message code="message.msg06" />', '<spring:message code="common.close" />', '', 'error');
  	}

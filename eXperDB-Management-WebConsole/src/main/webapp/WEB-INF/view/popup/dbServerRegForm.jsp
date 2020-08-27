@@ -43,11 +43,11 @@ function fn_init2() {
 		]
 	});
 	
-	dbServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	dbServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-	dbServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
-	dbServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
-	dbServerTable.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
+	dbServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
+	dbServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '230px');
+	dbServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+	dbServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+	dbServerTable.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
 	dbServerTable.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
     $(window).trigger('resize'); 
 }
@@ -160,9 +160,17 @@ function fn_saveValidation(){
 
 // DBserver 등록
 function fn_insertDbServer(){
-
 	if (!fn_dbServerValidation()) return false;
 	if (!fn_saveValidation()) return false;
+	confile_title = '<spring:message code="menu.dbms_registration" />' + " " + '<spring:message code="common.request" />';
+	$('#con_multi_gbn', '#findConfirmMulti').val("ins_DBServer");
+	$('#confirm_multi_tlt').html(confile_title);
+	$('#confirm_multi_msg').html('<spring:message code="message.msg169" />');
+	$('#pop_confirm_multi_md').modal("show");
+} 
+
+//DBserver 등록
+function fn_insertDbServer2(){
 	var datas = dbServerTable.rows().data();
 	var arrmaps = [];
 	for (var i = 0; i < datas.length; i++){
@@ -174,7 +182,6 @@ function fn_insertDbServer(){
 		arrmaps.push(tmpmap);	
 		}
 	
-	if (confirm('<spring:message code="message.msg169"/>')){	
   	$.ajax({
 		url : "/insertDbServer.do",
 		data : {
@@ -207,11 +214,7 @@ function fn_insertDbServer(){
 			fu_extensionCreate(arrmaps);
 		}
 	}); 
-	}else{
-		return false;
-	}
-} 
-
+}
 
 //EXTENSION 설치
 function fu_extensionCreate(arrmaps){
@@ -241,17 +244,14 @@ function fu_extensionCreate(arrmaps){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
-			alert('<spring:message code="message.msg144"/>');
-			location.reload();
+			showSwalIconRst('<spring:message code="message.msg144" />', '<spring:message code="common.close" />', '', 'success', "reload");
 			$('#pop_layer_dbserver_reg').modal("hide");	 			
 		}
 	}); 
@@ -291,10 +291,8 @@ function fn_dbServerConnTest(){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -344,10 +342,8 @@ function fn_pathCall(ipadr, datasArr){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				top.location.href = "/";
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
@@ -746,11 +742,11 @@ function fn_ipadrDelForm(){
 										<table id="serverIpadr" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
 												<tr class="bg-info text-white">
-													<th width="10"></th>
-													<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
-													<th width="120"><spring:message code="data_transfer.port" /></th>
-													<th width="130"><spring:message code="common.division" /></th>
-													<th width="130"><spring:message code="dbms_information.conn_YN"/></th>	
+													<th width="50"></th>
+													<th width="230"><spring:message code="dbms_information.dbms_ip" /></th>
+													<th width="150"><spring:message code="data_transfer.port" /></th>
+													<th width="200"><spring:message code="common.division" /></th>
+													<th width="200"><spring:message code="dbms_information.conn_YN"/></th>	
 													<th width="0"></th>								
 												</tr>
 											</thead>

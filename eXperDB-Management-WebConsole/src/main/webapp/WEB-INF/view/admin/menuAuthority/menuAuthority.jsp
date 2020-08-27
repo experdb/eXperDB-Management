@@ -17,6 +17,8 @@
 	*/
 %>
 <script>
+var confirm_title = ""; 
+
 var userTable = null;
 var menuTable = null;
 
@@ -507,6 +509,15 @@ function fn_buttonAut(){
 	}
 }
 
+/* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmMultiRst(gbn){
+	if (gbn == "ins") {
+		fn_save2();
+	}
+}
+
 function fn_save(){
 	 var datasArr = new Array();	
 	 var datas = userTable.row('.selected').length;
@@ -514,6 +525,16 @@ function fn_save(){
 		 showSwalIcon('<spring:message code="message.msg165"/>', '<spring:message code="common.close" />', '', 'warning');
 		 return false;
 	 }else{
+			confile_title = '<spring:message code="auth_management.menu_auth" />' + " " + '<spring:message code="common.save" />' + " " + '<spring:message code="common.request" />';
+			$('#con_multi_gbn', '#findConfirmMulti').val("ins");
+			$('#confirm_multi_tlt').html(confile_title);
+			$('#confirm_multi_msg').html('<spring:message code="message.msg148" />');
+			$('#pop_confirm_multi_md').modal("show");    
+	 }
+}
+
+function fn_save2(){
+		var datasArr = new Array();
 	 	var usr_id = userTable.row('.selected').data().usr_id;
 	 	var read_aut = $("input[name='r_mnu_nm']");
 	    var wrt_aut = $("input[name='w_mnu_nm']");
@@ -536,8 +557,6 @@ function fn_save(){
 	        datasArr.push(datas);
 	    }	    
 	    
-	    
-		if (confirm('<spring:message code="message.msg148"/>')){
 			$.ajax({
 				url : "/updateUsrMnuAut.do",
 				data : {
@@ -560,10 +579,7 @@ function fn_save(){
 					showSwalIcon('<spring:message code="message.msg07"/>', '<spring:message code="common.close" />', '', 'success');
 				}
 			}); 	
-		}else{
-			return false;
-		}
-	 }
+
 }
 
 //유저조회버튼 클릭시
@@ -596,7 +612,7 @@ function fn_search(){
 	$("input[type=checkbox]").prop("checked",false);
 }
 </script>
-
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">

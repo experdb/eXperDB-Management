@@ -19,6 +19,8 @@
 	*/
 %>
 <script>
+var confirm_title = ""; 
+
 	var userTable = null;
 	var dbTable = null;
 	var dbServerTable = null;
@@ -253,10 +255,8 @@
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
 							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-							top.location.href = "/";
 						} else if(xhr.status == 403) {
 							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-							top.location.href = "/";
 						} else {
 							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 						}
@@ -280,6 +280,14 @@
 		    } );   
 	} );
 	
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmMultiRst(gbn){
+		if (gbn == "ins") {
+			fn_db_save2();
+		}
+	}
 	
  	function fn_db_save(){
 		 var datasArr = new Array();	
@@ -288,7 +296,18 @@
 			 showSwalIcon('<spring:message code="message.msg165"/>', '<spring:message code="common.close" />', '', 'warning');
 			 return false;
 		 }else{
-			 var usr_id = userTable.row('.selected').data().usr_id;
+				confile_title = '<spring:message code="menu.database_auth_management" />' + " "+'<spring:message code="common.registory" />' + " " + '<spring:message code="common.request" />';
+				$('#con_multi_gbn', '#findConfirmMulti').val("ins");
+				$('#confirm_multi_tlt').html(confile_title);
+				$('#confirm_multi_msg').html('<spring:message code="message.msg167" />');
+				$('#pop_confirm_multi_md').modal("show");
+		 }
+	}
+ 	
+ 	function fn_db_save2(){
+		 var datasArr = new Array();	
+		 var datas = userTable.row('.selected').length;
+		var usr_id = userTable.row('.selected').data().usr_id;
 
 			 $('input:checkbox[name=aut_yn]').each(function() {
 		         if($(this).is(':checked')){
@@ -312,27 +331,25 @@
 		     });
 
 			 
-// 			 var db_svr_id = $("input[name='db_svr_id']");
-// 			 var db_id = $("input[name='db_id']");
-// 			 var aut_yn = $("input[name='aut_yn']");
-// 			 console.log(aut_yn);
-// 	 		 for(var i = 0; i < aut_yn.length; i++){
-// 	 			 var datas = new Object();
-// 				 datas.usr_id = usr_id;
-// 			     datas.db_svr_id = db_svr_id[i].value;
-// 			     datas.db_id = db_id[i].value;		  
+//			 var db_svr_id = $("input[name='db_svr_id']");
+//			 var db_id = $("input[name='db_id']");
+//			 var aut_yn = $("input[name='aut_yn']");
+//			 console.log(aut_yn);
+//	 		 for(var i = 0; i < aut_yn.length; i++){
+//	 			 var datas = new Object();
+//				 datas.usr_id = usr_id;
+//			     datas.db_svr_id = db_svr_id[i].value;
+//			     datas.db_id = db_id[i].value;		  
 			     
-// 			     if(aut_yn[i].checked){ //선택되어 있으면 배열에 값을 저장함
-// 			        	datas.aut_yn = "Y";   
-// 			        }else{
-// 			        	datas.aut_yn = "N";
-// 			        }		     
-// 			     datasArr.push(datas);
-// 			     console.log(datas);
-// 			 } 
+//			     if(aut_yn[i].checked){ //선택되어 있으면 배열에 값을 저장함
+//			        	datas.aut_yn = "Y";   
+//			        }else{
+//			        	datas.aut_yn = "N";
+//			        }		     
+//			     datasArr.push(datas);
+//			     console.log(datas);
+//			 } 
 
-		 }
-			if (confirm('<spring:message code="message.msg167"/>')){
 				$.ajax({
 					url : "/updateUsrDBAutInfo.do",
 					data : {
@@ -345,10 +362,8 @@
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
 							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-							top.location.href = "/";
 						} else if(xhr.status == 403) {
 							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-							top.location.href = "/";
 						} else {
 							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 						}
@@ -357,11 +372,9 @@
 						showSwalIcon('<spring:message code="message.msg07"/>', '<spring:message code="common.close" />', '', 'success');
 					}
 				}); 	
-			}else{
-				return false;
-			}
+			
 	}
- 	
+	
  	//유저조회버튼 클릭시
  	function fn_search(){
  		$.ajax({
@@ -378,10 +391,8 @@
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -393,10 +404,9 @@
  		});
  	} 	
 </script>
-
-
-
 <body>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
+
 <div class="content-wrapper main_scroll" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">

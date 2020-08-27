@@ -26,6 +26,7 @@ var tableData = null;
 
 var wrk_nmChk = "fail";
 
+var confirm_title = ""; 
 /* ********************************************************
  * Tab Click
  ******************************************************** */
@@ -309,9 +310,9 @@ function fn_ddl_regre_popup(){
 					 $("#src_table_total_cnt_reg_re").val(result.exrt_trg_tb_total_cnt);
 					 $("#include_reg_re").show();
 					 $("#exclude_reg_re").hide();
-				 }else if(result.exrt_trg_tb_cnt>0){
+				 }else if(result.exrt_exct_tb_cnt>0){
 					 $("#src_tables_reg_re option:eq(1)").attr("selected", "selected");
-					 $("#src_exclude_tables_reg_re").val("<spring:message code='migration.total_table'/> : "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
+					 $("#src_exclude_tables_reg_re").val("<spring:message code='migration.total_table'/> : "+result.exrt_exct_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_exct_tb_cnt+"<spring:message code='migration.items'/>");
 					 $("#src_table_total_cnt_reg_re").val(result.exrt_exct_tb_total_cnt)
 					 $("#exclude_reg_re").show();
 					 $("#include_reg_re").hide(); 
@@ -389,8 +390,8 @@ function fn_data_regre_popup(){
 					 $("#include_trsf").show();
 					 $("#exclude_trsf").hide();
 				 }else if(result.exrt_exct_tb_cnt>0){
-					 $("#src_tables option:eq(1)").attr("selected", "selected");
-					 $("#src_exclude_tables_trsf").val("<spring:message code='migration.total_table'/> : "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
+					 $("#src_tables_trsf option:eq(1)").attr("selected", "selected");
+					 $("#src_exclude_tables_trsf").val("<spring:message code='migration.total_table'/> : "+result.exrt_exct_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_exct_tb_cnt+"<spring:message code='migration.items'/>");
 					 $("#src_table_total_cnt_trsf").val(result.exrt_exct_tb_total_cnt)
 					 $("#exclude_trsf").show();
 					 $("#include_trsf").hide(); 
@@ -438,6 +439,21 @@ function fn_data_regre_popup(){
 }
 
 /* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmMultiRst(gbn){
+	if (gbn == "ddl_del") {
+		fn_ddl_work_delete2();
+	}else if(gbn == "data_del"){
+		fn_data_work_delete2();
+	}else if(gbn =="ddl_history"){
+		location.href='/db2pgHistory.do?gbn=ddl' ;
+	}else if(gbn =="data_history"){
+		location.href='/db2pgHistory.do?gbn=mig' ;
+	}
+}
+
+/* ********************************************************
  * DDL추출 Data Delete
  ******************************************************** */
 function fn_ddl_work_delete(){
@@ -446,50 +462,59 @@ function fn_ddl_work_delete(){
 		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
-		var wrkList = [];
-		for (var i = 0; i < datas.length; i++) {
-			wrkList += datas[i].wrk_id + ',';	
-		}
-		var wrkIdList = [];
-		for (var i = 0; i < datas.length; i++) {
-			wrkIdList += datas[i].db2pg_ddl_wrk_id + ',';	
-		}
-		var wrkNmList = [];
-		for (var i = 0; i < datas.length; i++) {
-			wrkNmList += datas[i].db2pg_ddl_wrk_nm + ',';	
-		}
-		if(confirm('<spring:message code="message.msg162"/>')){
-			$.ajax({
-				url : "/db2pg/deleteDDLWork.do",
-			  	data : {
-			  		wrk_id : wrkList,
-			  		db2pg_ddl_wrk_id : wrkIdList,
-			  		db2pg_ddl_wrk_nm : wrkNmList
-			  	},
-				type : "post",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					} else if(xhr.status == 403) {
-						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-					}
-				},
-				success : function(result) {
-					if(result.resultCode == "0000000000"){
-						showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
-						getddlDataList();
-					}else{
-						showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
-					}	
-				}
-			});	
-		 };	
+		confile_title = '<spring:message code="migration.setting_information_management" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("ddl_del");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+		$('#pop_confirm_multi_md').modal("show");
 	}
+}
+
+function fn_ddl_work_delete2(){
+	var datas = tableDDL.rows('.selected').data();
+	
+	var wrkList = [];
+	for (var i = 0; i < datas.length; i++) {
+		wrkList += datas[i].wrk_id + ',';	
+	}
+	var wrkIdList = [];
+	for (var i = 0; i < datas.length; i++) {
+		wrkIdList += datas[i].db2pg_ddl_wrk_id + ',';	
+	}
+	var wrkNmList = [];
+	for (var i = 0; i < datas.length; i++) {
+		wrkNmList += datas[i].db2pg_ddl_wrk_nm + ',';	
+	}
+	
+		$.ajax({
+			url : "/db2pg/deleteDDLWork.do",
+		  	data : {
+		  		wrk_id : wrkList,
+		  		db2pg_ddl_wrk_id : wrkIdList,
+		  		db2pg_ddl_wrk_nm : wrkNmList
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result.resultCode == "0000000000"){
+					showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
+					getddlDataList();
+				}else{
+					showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
+				}	
+			}
+		});	
 }
 
 /* ********************************************************
@@ -501,50 +526,57 @@ function fn_ddl_work_delete(){
 			showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
-			var wrkList = [];
-			for (var i = 0; i < datas.length; i++) {
-				wrkList += datas[i].wrk_id + ',';	
-			}
-			var wrkIdList = [];
-			for (var i = 0; i < datas.length; i++) {
-				wrkIdList += datas[i].db2pg_trsf_wrk_id + ',';	
-			}
-			var wrkNmList = [];
-			for (var i = 0; i < datas.length; i++) {
-				wrkNmList += datas[i].db2pg_trsf_wrk_nm + ',';	
-			}
-			if(confirm('<spring:message code="message.msg162"/>')){
-				$.ajax({
-					url : "/db2pg/deleteDataWork.do",
-				  	data : {
-				  		wrk_id : wrkList,
-				  		db2pg_trsf_wrk_id : wrkIdList,
-				  		db2pg_trsf_wrk_nm : wrkNmList
-				  	},
-					type : "post",
-					beforeSend: function(xhr) {
-				        xhr.setRequestHeader("AJAX", true);
-				     },
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else if(xhr.status == 403) {
-							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else {
-							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-						}
-					},
-					success : function(result) {
-						if(result.resultCode == "0000000000"){
-							showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
-							getdataDataList();	
-						}else{
-							showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
-						}	
-					}
-				});	
-			 };	
+			confile_title = '<spring:message code="migration.setting_information_management" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			$('#con_multi_gbn', '#findConfirmMulti').val("data_del");
+			$('#confirm_multi_tlt').html(confile_title);
+			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+			$('#pop_confirm_multi_md').modal("show");
 		}
+}
+
+function fn_data_work_delete2(){
+	var datas = tableData.rows('.selected').data();
+	var wrkList = [];
+	for (var i = 0; i < datas.length; i++) {
+		wrkList += datas[i].wrk_id + ',';	
+	}
+	var wrkIdList = [];
+	for (var i = 0; i < datas.length; i++) {
+		wrkIdList += datas[i].db2pg_trsf_wrk_id + ',';	
+	}
+	var wrkNmList = [];
+	for (var i = 0; i < datas.length; i++) {
+		wrkNmList += datas[i].db2pg_trsf_wrk_nm + ',';	
+	}
+		$.ajax({
+			url : "/db2pg/deleteDataWork.do",
+		  	data : {
+		  		wrk_id : wrkList,
+		  		db2pg_trsf_wrk_id : wrkIdList,
+		  		db2pg_trsf_wrk_nm : wrkNmList
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result.resultCode == "0000000000"){
+					showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
+					getdataDataList();	
+				}else{
+					showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
+				}	
+			}
+		});	
 }
 
 /* ********************************************************
@@ -712,8 +744,7 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {
-			showSwalIcon(rowCnt+' 개의 Work를 실행하였습니다.', '<spring:message code="common.close" />', '', 'success');
-			
+
 			for (var i = 0; i < datas.length; i++) {
 				 var row = new Object()
 				 row.wrk_id = datas[i].wrk_id;
@@ -742,9 +773,11 @@ function fn_ImmediateStart(gbn){
 					}
 				},
 				success : function(result) {
-					if (confirm('실행결과화면으로 이동하시겠습니까?')){
-						location.href='/db2pgHistory.do?gbn=ddl' ;
-					}
+					confile_title = rowCnt + '개의 Work를 실행하였습니다.';
+					$('#con_multi_gbn', '#findConfirmMulti').val("ddl_history");
+					$('#confirm_multi_tlt').html(confile_title);
+					$('#confirm_multi_msg').html('실행결과화면으로 이동하시겠습니까?');
+					$('#pop_confirm_multi_md').modal("show");
 				}
 			});			
 		}else {
@@ -761,7 +794,6 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {				
-			showSwalIcon(rowCnt+' <spring:message code="migration.msg11"/>', '<spring:message code="common.close" />', '', 'success');
 			/* ********************************************************
 			 * 실행조건 필요(여러개의 WORK중 동일한 테이블 있을시, Alert알림 실행X)
 			 * 경우의 수가 너무 많음 추후 고려
@@ -794,9 +826,11 @@ function fn_ImmediateStart(gbn){
 						}
 					},
 					success : function(result) {
-						if (confirm("<spring:message code='migration.msg12' />")){
-							location.href='/db2pgHistory.do?gbn=mig' ;
-						}
+						confile_title = rowCnt + '<spring:message code="migration.msg11"/>';
+						$('#con_multi_gbn', '#findConfirmMulti').val("data_history");
+						$('#confirm_multi_tlt').html(confile_title);
+						$('#confirm_multi_msg').html("<spring:message code='migration.msg12' />");
+						$('#pop_confirm_multi_md').modal("show");
 					}
 				});	
 		} else {
@@ -807,6 +841,8 @@ function fn_ImmediateStart(gbn){
 }
 
 </script>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
+
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
 <%@include file="../popup/ddlRegForm.jsp"%>
 <%@include file="../popup/ddlRegReForm.jsp"%>

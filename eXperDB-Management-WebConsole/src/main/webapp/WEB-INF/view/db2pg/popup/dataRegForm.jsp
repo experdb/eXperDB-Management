@@ -157,7 +157,6 @@ function fn_insert_trsf_work(){
 			var src_table_total_cnt_trsf = $("#src_table_total_cnt_trsf").val()
 		}
 		
-		alert(src_table_total_cnt_trsf);
 		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
 			url : '/wrk_nmCheck.do',
@@ -390,8 +389,8 @@ function fn_tableList_trsf(gbn){
 	 $("#src_tables_trsf").change(function(){
 		 $("#src_include_tables_trsf").val("");
 		 $("#src_exclude_tables_trsf").val("");
-		 $("#src_include_table_nm").val("");
-		 $("#src_exclude_table_nm").val("");
+		 $("#src_include_table_nm_trsf").val("");
+		 $("#src_exclude_table_nm_trsf").val("");
 		    if(this.value=="include"){
 		        $("#include_trsf").show();
 			    $("#exclude_trsf").hide(); 

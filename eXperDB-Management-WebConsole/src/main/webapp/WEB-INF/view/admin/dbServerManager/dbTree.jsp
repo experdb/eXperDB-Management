@@ -20,6 +20,8 @@
 %>
 
 <script>
+var confirm_title = ""; 
+
 //연결테스트 확인여부
 var connCheck = "fail";
 
@@ -236,6 +238,7 @@ $(function() {
     				showSwalIcon('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error');
     			}else{
     				severdb = result;
+    				table_db.rows({selected: true}).deselect();
     				table_db.clear().draw();
 	    			table_db.rows.add(result.data).draw();
 	    			fn_dataCompareChcek(result);
@@ -334,6 +337,18 @@ function fn_regRe_popup(){
  * 디비 등록
  ******************************************************** */
 function fn_insertDB(){
+	confile_title = '<spring:message code="common.database" />' + " " + '<spring:message code="common.save" />' + " " + '<spring:message code="common.request" />';
+	$('#con_multi_gbn', '#findConfirmMulti').val("ins_DB");
+	$('#confirm_multi_tlt').html(confile_title);
+	$('#confirm_multi_msg').html('<spring:message code="message.msg160" />');
+	$('#pop_confirm_multi_md').modal("show");
+
+}
+
+/* ********************************************************
+ * 디비 등록
+ ******************************************************** */
+function fn_insertDB2(){
 	var list = $("input[name='db_exp']");
 	var datasArr = new Array();	
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
@@ -402,7 +417,6 @@ function fn_insertDB(){
 //     		datasArr.push(rows);
 // 		}
 
-    	if (confirm('<spring:message code="message.msg160"/>')){
 			$.ajax({
 				url : "/insertTreeDB.do",
 				data : {
@@ -429,12 +443,8 @@ function fn_insertDB(){
 					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
 				}
 			});	
-    	}else{
-    		return false;
-    	}
 
 }
-
 
 /* ********************************************************
  * 서버에 등록된 디비,  <=>  Repository에 등록된 디비 비교
@@ -562,12 +572,11 @@ function fn_dataCompareChcek(svrDbList){
 				}else if(result.scheduleChk){
 					showSwalIcon('<spring:message code="message.msg194" />', '<spring:message code="common.close" />', '', 'error');
 				}else{
-					if (confirm('<spring:message code="message.msg206"/>')){
-						//return false;
-						fn_delete(db_svr_id);
-					}else{
-						return false;
-					}				
+					confile_title = '<spring:message code="migration.source/target_dbms_management" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+					$('#con_multi_gbn', '#findConfirmMulti').val("del");
+					$('#confirm_multi_tlt').html(confile_title);
+					$('#confirm_multi_msg').html('<spring:message code="message.msg206" />');
+					$('#pop_confirm_multi_md').modal("show");
 				}
 			}
 		});
@@ -595,7 +604,7 @@ function fn_dataCompareChcek(svrDbList){
 				}
 			},
 			success : function(result) {
-				alert("<spring:message code='message.msg12' />");
+				showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
 				fn_selectTreeDbServerList();
 				table_db.clear().draw();
 			}
@@ -610,7 +619,17 @@ function fn_dbSync(){
 		showSwalIcon('<spring:message code="message.msg207" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
-		if (confirm('<spring:message code="message.msg208"/>')){
+		confile_title = '<spring:message code="dbms_information.Synchronization" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("db_sync");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg208" />');
+		$('#pop_confirm_multi_md').modal("show");
+	}
+}	
+
+function fn_dbSync2(){	
+	var datas = table_dbServer.rows('.selected').data().length;
+	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
 			$.ajax({
 				url : "/selectDBSync.do",
 				data : {db_svr_id : db_svr_id},
@@ -645,12 +664,7 @@ function fn_dbSync(){
 					fn_syncUpdate(JSON.stringify(arr));
 				}
 			})
-		}else{
-			return false;
-		}
-	}
-}	
-
+}
 
 function fn_syncUpdate(db_id){
 	$.ajax({
@@ -678,7 +692,27 @@ function fn_syncUpdate(db_id){
 		}
 	});
 }
+
+
+/* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmMultiRst(gbn){
+	if (gbn == "del") {
+		var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
+		fn_delete(db_svr_id);
+	}else if(gbn =="ins_DB"){
+		fn_insertDB2()
+	}else if(gbn =="db_sync"){
+		fn_dbSync2();
+	}else if(gbn =="ins_DBServer"){
+		fn_insertDbServer2();		
+	}else if(gbn =="mod_DBServer"){
+		fn_updateDbServer2();
+	}
+}
 </script>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 <%@include file="./../../popup/dbServerRegForm.jsp"%>
 <%@include file="./../../popup/dbServerRegReForm.jsp"%>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
