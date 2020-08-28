@@ -499,7 +499,15 @@ function fn_workAddCallback(rowList){
 
 
 function fn_scheduleStop(){
-	if (confirm('<spring:message code="message.msg133"/>')){
+	confile_title = 'SCHEDULE' + " " + '<spring:message code="common.modify" />' + " " + '<spring:message code="common.request" />';
+	$('#con_multi_gbn', '#findConfirmMulti').val("stop");
+	$('#confirm_multi_tlt').html(confile_title);
+	$('#confirm_multi_msg').html('<spring:message code="message.msg133" />');
+	$('#pop_confirm_multi_md').modal("show");
+}
+
+
+function fn_scheduleStop2(){
      	$.ajax({
     		url : "/scheduleStop.do",
     		data : {
@@ -523,7 +531,6 @@ function fn_scheduleStop(){
     			fn_updateSchedule();
     		}
     	});    
-	}
 }
 
 
@@ -594,6 +601,7 @@ function fn_updateSchedule(){
 				}
 			},
 			success : function(result) {
+				alert("1");
 				confile_title = '<spring:message code="menu.schedule" /> <spring:message code="schedule.run" />' + " " + '<spring:message code="common.request" />';
 				$('#con_multi_gbn', '#findConfirmMulti').val("mod");
 				$('#confirm_multi_tlt').html(confile_title);
@@ -610,6 +618,8 @@ function fn_updateSchedule(){
 function fnc_confirmMultiRst(gbn){
 	if (gbn == "mod") {
 		fn_scheduleReStart();
+	}else if(gbn == "stop"){
+		fn_scheduleStop2();
 	}
 }
 
