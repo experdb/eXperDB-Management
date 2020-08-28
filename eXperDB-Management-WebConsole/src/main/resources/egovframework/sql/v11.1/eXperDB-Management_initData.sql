@@ -355,8 +355,8 @@ INSERT INTO T_MNU_I(MNU_ID, MNU_CD, MNU_NM, HGR_MNU_ID, FRST_REGR_ID, FRST_REG_D
 INSERT INTO T_MNU_I(MNU_ID, MNU_CD, MNU_NM, HGR_MNU_ID, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_mnu_i_01'), 'MN0001401', '암호화통계', 		'MN00014','k4m', clock_timestamp(), 'k4m', clock_timestamp());
 INSERT INTO T_MNU_I(MNU_ID, MNU_CD, MNU_NM, HGR_MNU_ID, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_mnu_i_01'), 'MN000702', 	'암호화 에이전트', 			'MN0007','k4m', clock_timestamp(), 'k4m', clock_timestamp());
 
-INSERT INTO T_USR_I( USR_ID, USR_NM, PWD, BLN_NM, DEPT_NM, RSP_BSN_NM, PST_NM, CPN, USR_EXPR_DT, USE_YN, ENCP_USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES('experdb', '슈퍼유저', 'UP7x6XqHQsGUZoa5ZXphGQ==', 'INZENT', 'OSD사업팀', '슈퍼유저', '슈퍼유저', '', '20990101',  'Y', 'N', 'admin', clock_timestamp(), 'admin', clock_timestamp());
-INSERT INTO T_USR_I( USR_ID, USR_NM, PWD, BLN_NM, DEPT_NM, RSP_BSN_NM, PST_NM, CPN, USR_EXPR_DT, USE_YN, ENCP_USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES('admin', '관리자', 'UP7x6XqHQsGUZoa5ZXphGQ==', 'INZENT', 'OSD사업팀', '관리자', '관리자', '', '20990101',  'Y', 'Y', 'admin', clock_timestamp(), 'admin', clock_timestamp());
+INSERT INTO T_USR_I( USR_ID, USR_NM, PWD, BLN_NM, DEPT_NM, RSP_BSN_NM, PST_NM, CPN, USR_EXPR_DT, USE_YN, ENCP_USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES('k4m', '슈퍼유저', 'UP7x6XqHQsGUZoa5ZXphGQ==', 'K4M', 'DA사업부', '슈퍼유저', '슈퍼유저', '', '20990101',  'Y', 'N', 'admin', clock_timestamp(), 'admin', clock_timestamp());
+INSERT INTO T_USR_I( USR_ID, USR_NM, PWD, BLN_NM, DEPT_NM, RSP_BSN_NM, PST_NM, CPN, USR_EXPR_DT, USE_YN, ENCP_USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES('admin', '관리자', 'UP7x6XqHQsGUZoa5ZXphGQ==', 'K4M', 'DA사업부', '관리자', '관리자', '', '20990101',  'Y', 'Y', 'admin', clock_timestamp(), 'admin', clock_timestamp());
 
 
 INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'k4m', 1,'Y', 'Y', 'k4m', clock_timestamp(), 'k4m', clock_timestamp());
