@@ -325,10 +325,6 @@
                             </artifactItems>
                             <!-- other configurations here -->
                         </configuration>
-                        <phase>package</phase>
-                        <goals>
-                          <goal>copy-dependencies</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
