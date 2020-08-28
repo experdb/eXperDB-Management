@@ -56,7 +56,7 @@ $(window.document).ready(function() {
 			
 			pnlNewPasswordView = true;
 			pnlOldPasswordView = false;
-			$("#mstKeyUse").attr('checked', false);
+			$("#mstKeyUse").prop('checked', false);
 			
 		}else if(isServerPasswordEmpty == "false" && isServerKeyEmpty == "true") {
 			initKey = false;
