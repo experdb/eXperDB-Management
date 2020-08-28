@@ -52,9 +52,11 @@ public class DxT040 extends SocketCtl{
 								, "du -s $PGALOG" //아카이브로그 용량															
 								, "echo $PGDATA/backup" //백업경로
 								, "df $PGDATA/backup -h" //백업 마운트 용량
-								, "du -sh $PGDATA/backup" //백업 용량								
+								, "du -sh $PGDATA/backup" //백업 용량					
 								, "echo $PGDATA/log"	//PG_LOG 경로				
 								, "du -s $PGDATA/log" //PG_LOG 용량	
+								, "ls $PGALOG | wc -l"
+								, "ls $PGDATA/log | wc -l"
 							   };
 	
 	public DxT040(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
@@ -76,7 +78,6 @@ public class DxT040 extends SocketCtl{
 	
 		JSONObject outputObj = null;
 	
-		String total_v = "";
 		String pgwal_path = "";
 		String pgwal_v = "";
 		String pgwal_cnt = "";
@@ -84,10 +85,12 @@ public class DxT040 extends SocketCtl{
 		String pgalog_path = "";		
 		String pgarc_v = "";
 		String backup_path = "";
-		String backup_mount = "";
 		String backup_v = "";
 		String log_path = "";
 		String log_v = "";
+		
+		String pgalog_cnt;
+		String log_cnt="";
 		
 
 		byte[] sendBuff = null;
@@ -139,7 +142,11 @@ public class DxT040 extends SocketCtl{
 			String[] arrLog_v = log_v.split("\t");
 			resultHP.put(ProtocolID.LOG_V, arrLog_v[0].toString());	
 			
-
+			pgalog_cnt = util.getPidExec(arrCmd[12]);
+			resultHP.put(ProtocolID.PGALOG_CNT, pgalog_cnt);	
+			
+			log_cnt = util.getPidExec(arrCmd[13]);
+			resultHP.put(ProtocolID.LOG_CNT, log_cnt);	
 			
 			setShowData(serverInfoObj, resultHP);
 			

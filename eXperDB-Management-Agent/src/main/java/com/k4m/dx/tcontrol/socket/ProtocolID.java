@@ -275,6 +275,8 @@ public class ProtocolID {
 	public static final String LOG_PATH = "LOG_PATH";
 	public static final String LOG_V = "LOG_V";
 	public static final String CMD_BACKUPSPACE_INFO = "CMD_BACKUPSPACE_INFO";
+	public static final String PGALOG_CNT = "PGALOG_CNT";
+	public static final String LOG_CNT = "LOG_CNT";
 	
 	
 }

@@ -177,7 +177,7 @@
               <div class="card">
                 <div class="card-body">
                   <div class="table-responsive">
-                     <table class="table table-borderless" style="margin-bottom: 90px">
+                     <table class="table table-borderless" >
                       <thead>
                         <tr>
                           <th class="pl-0 border-bottom">ARCHIVE</th>
@@ -188,6 +188,13 @@
                            <td class="text-muted pl-0"> <i class="fa fa-hdd-o text-primary"> ${result.PGALOG_PATH} </i> </td>
                         </tr>                      
                       </tbody>
+                    </table>
+                    <table class="table table-borderless" style="margin-bottom: 50px">
+                      <thead>
+                         <tr>
+                           <th class="text-muted pl-0"> <i class="ti-files"> ARCHIVE_FILE :  </i>  ${result.PGALOG_CNT} 개</th>
+                        </tr>    
+                      </thead>
                     </table>
                     <p class="mb-0 mt-2 text-warning">디렉토리 용량</p>
                      <div id="pg_arc" class="gauge"  style="margin-top: -40px;"></div>                   
@@ -201,7 +208,7 @@
               <div class="card">
                 <div class="card-body"> 
                   <div class="table-responsive">
-                    <table class="table table-borderless" style="margin-bottom: 90px">
+                    <table class="table table-borderless" >
                       <thead>
                         <tr>
                           <th class="pl-0 border-bottom">LOG</th>
@@ -212,7 +219,14 @@
                           <td class="text-muted pl-0"> <i class="fa fa-hdd-o text-primary"> ${result.LOG_PATH} </i> </td>
                         </tr>                      
                       </tbody>
-                    </table>    
+                    </table>  
+                    <table class="table table-borderless" style="margin-bottom: 50px">
+                      <thead>
+                         <tr>
+                           <th class="text-muted pl-0"> <i class="ti-files"> LOG_FILE :  </i>  ${result.LOG_CNT} 개</th>
+                        </tr>    
+                      </thead>
+                    </table>  
                     <p class="mb-0 mt-2 text-warning">디렉토리 용량</p>
                      <div id="pg_log" class="gauge"  style="margin-top: -40px;"></div>                     
                   </div>
