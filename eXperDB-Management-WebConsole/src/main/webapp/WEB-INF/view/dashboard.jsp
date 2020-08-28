@@ -25,6 +25,7 @@
 		var master_gbn = "";
 		var db_svr_id = "";
 		var listCnt = 0;
+		var db_svr_id_val = "";
 		
 		var serverTotInfo_cnt = "${fn:length(serverTotInfo)}";
 		
@@ -32,9 +33,9 @@
 			html += "<div class='col-md-12 grid-margin stretch-card'>\n";
 			html += "	<div class='card'>\n";
 			html += '		<div class="card-body">\n';
-				html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-				html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-				html += '				<spring:message code="message.msg01" /></h5>\n';
+			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+			html += '				<spring:message code="message.msg01" /></h5>\n';
 			html += '			</div>\n';
 			html += "		</div>\n";
 			html += "	</div>\n";
@@ -45,10 +46,15 @@
 				rowCount = rowCount + 1;
 				listCnt = parseInt("${fn:length(serverTotInfo)}");
 				
-	 			if (db_svr_id == "") {				
+				//setting value
+				db_svr_id_val = nvlPrmSet("${serverinfo.db_svr_id}", '');
+				
+	 			if (db_svr_id == "") {
+
+	 				
 					html += "<div class='col-md-12 grid-margin stretch-card'>\n";
 					html += "	<div class='card news_text'>\n";
-					html += '		<div class="card-body row" onClick="fn_serverSebuInfo("'+nvlPrmSet("${serverinfo.db_svr_id}", '')+'")" style="cursor:pointer;">\n';
+					html += '		<div class="card-body row" id="serverSs'+ rowCount +'" onClick="fn_serverSebuInfo(' + db_svr_id_val + ')" style="cursor:pointer;">\n';
 				} else if (db_svr_id != nvlPrmSet("${serverinfo.db_svr_id}", '')  && master_gbn == "M") {
 					html += '				</div>\n';
 					html += '			</div>\n';
@@ -61,7 +67,7 @@
 					
 					html += "<div class='col-md-12 grid-margin stretch-card'>\n";
 					html += "	<div class='card news_text'>\n";
-					html += '		<div class="card-body row" onClick="fn_serverSebuInfo("'+nvlPrmSet("${serverinfo.db_svr_id}", '')+'")" style="cursor:pointer;">\n';
+					html += '		<div class="card-body row" id="serverSs'+ rowCount +'" onClick="fn_serverSebuInfo('+ db_svr_id_val +')" style="cursor:pointer;">\n';
 				}
 	
 	 			if (master_gbn == "M") {
@@ -118,6 +124,10 @@
 		}
 
 		$("#serverTabList").html(html);
+		
+		if (serverTotInfo_cnt > 0) {
+			$("#serverSs1").click();
+		}
 	}
 
 	/* ********************************************************
@@ -986,13 +996,195 @@
 					                 				</div>
 												</div>
 											</div>
+										</div>
 
+										<div class="row">
+											<div class="col-md-12">
+												<div class="card" style="border:none;">
+													&nbsp;
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="accordion_main accordion-multi-colored col-12" id="accordion_tablespace" role="tablist">
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="tablespace_header_div">
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="ti-calendar menu-icon"></i>
+																	<span class="menu-title"><spring:message code="dashboard.tablespace_information"/></span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 										
-										
-
-										
-										
+										<div class="row">
+											<!-- DATA -->
+												<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
+													<div class="card" style="padding-left:10px;padding-right:10px;">
+														<div class="card-body" style="padding-left:0px;padding-right:0px;">
+															<div class="table-responsive system-tlb-scroll">
+																<table class="table table-borderless" style="width:100%;">
+																	<thead>
+																		<tr>
+																			<th class="pl-0 border-bottom">DATA</th>
+ 																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td class="text-muted pl-0" id="filesystemTd"></td>
+																		</tr>
+																	</tbody>
+																</table>
+																<table class="table table-borderless" style="width:100%;">
+																	<thead>
+																		<tr>
+																			<th class="pl-0 border-bottom">Size</th>
+																			<th class="border-bottom">Used</th>
+																			<th class="border-bottom">Avail</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td class="text-muted pl-0" id="tablespaceInfoFsizeTd"></td>
+																			<td class="text-muted pl-0" id="tablespaceInfoUsedTd"></td>
+																			<td class="text-muted" id="tablespaceInfoAvailTd"></td>
+																		</tr>
+																	</tbody>
+																</table>
+																<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.usage"/></p>
+																<div id="pg_data" class="gauge"  style="margin-top: -40px;"></div> 
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<!-- BAUKUP -->
+												<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
+													<div class="card" style="padding-left:10px;padding-right:10px;">
+														<div class="card-body" style="padding-left:0px;padding-right:0px;">
+															<div class="table-responsive system-tlb-scroll">
+																<table class="table table-borderless">
+																	<thead>
+																		<tr>
+																			<th class="pl-0 border-bottom">BAUKUP</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td class="text-muted pl-0" id="backupPathTd"></td>
+																		</tr>
+																	</tbody>
+																</table>
+																<table class="table table-borderless">
+																	<thead>
+																		<tr>
+																			<th class="pl-0 border-bottom">Size</th>
+																			<th class="border-bottom">Used</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td class="text-muted pl-0" id="backupspaceInfoFsizeTd"></td>
+																			<td class="text-muted" id="backupVTd"></td>
+																		</tr>
+																	</tbody>
+																</table>
+																<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.usage"/></p>
+																<div id="pg_backup" class="gauge"  style="margin-top: -40px;"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<!-- WAL  -->
+												<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
+													<div class="card" style="padding-left:10px;padding-right:10px;">
+														<div class="card-body" style="padding-left:0px;padding-right:0px;">
+															<div class="table-responsive system-tlb-scroll">
+																<table class="table table-borderless">
+																	<thead>
+																		<tr>
+																			<th class="pl-0 border-bottom">WAL</th>
+																		</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="text-muted pl-0" id="pgwalPathTd"></td>
+																	</tr>
+																</tbody>
+															</table>
+															<table class="table table-borderless">
+																<thead>
+																	<tr>
+																		<th class="text-muted pl-0" id="walKeepSegmentsTd"></th>
+																	</tr>
+																	<tr>
+																		<th class="text-muted pl-0" id="pgwalCntTd"></th>
+																	</tr>
+																</thead>
+															</table>
+															
+															<p class="mb-0 mt-2 text-warning">WAL<spring:message code="dashboard.file"/></p>
+															<div id="pg_wal" class="gauge"  style="margin-top: -40px;"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<!-- ARCHIVE -->
+											<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
+												<div class="card" style="padding-left:10px;padding-right:10px;">
+													<div class="card-body" style="padding-left:0px;padding-right:0px;">
+														<div class="table-responsive system-tlb-scroll">
+															<table class="table table-borderless" style="margin-bottom: 90px">
+																<thead>
+																	<tr>
+																		<th class="pl-0 border-bottom">ARCHIVE</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="text-muted pl-0" id="pgalogPathTd"></td>
+																	</tr>
+																</tbody>
+															</table>
+															<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.directory_capacity"/></p>
+															<div id="pg_arc" class="gauge"  style="margin-top: -40px;"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<!-- LOG -->
+											<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
+												<div class="card" style="padding-left:10px;padding-right:10px;">
+													<div class="card-body" style="padding-left:0px;padding-right:0px;">
+														<div class="table-responsive system-tlb-scroll">
+															<table class="table table-borderless" style="margin-bottom: 90px">
+																<thead>
+																	<tr>
+																		<th class="pl-0 border-bottom">LOG</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="text-muted pl-0" id="logPathTd"></td>
+																	</tr>
+																</tbody>
+															</table>
+															<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.directory_capacity"/></p>
+															<div id="pg_log" class="gauge"  style="margin-top: -40px;"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 
 

@@ -17,11 +17,54 @@ $(window).ready(function(){
 	fn_totScdSetting();
 	
 	//서버정보 리스트 setting
-	fn_serverListSetting();
-	
-	//개별 서버 리스트 setting
-	fn_dbSvrIdSearch();
+	fn_serverListSetting();	
 });
+
+/* ********************************************************
+ * 서버정보 click
+ ******************************************************** */
+function fn_serverSebuInfo(db_svr_id) {
+	//초기화
+	fn_serverDivClear(db_svr_id);
+}
+
+/* ********************************************************
+ * 초기화
+ ******************************************************** */
+function fn_serverDivClear(db_svr_id) {
+	$("#scheduleHistChart").html("");
+	$("#backupRmanHistChart").html("");	
+	$("#backupDumpHistChart").html("");	
+	
+	var scriptHistChartCanvas = document.getElementById("scriptHistChart");
+	scriptHistChartCanvas.getContext("2d").clearRect(0, 0, scriptHistChartCanvas.width, scriptHistChartCanvas.height);
+
+	if ($("#scaleHistChart") != null) {
+		$("#scaleHistChart").html("");	
+	}
+	
+	if (document.getElementById("scaleSetChart") != null) {
+		var scaleSetChartCanvas = document.getElementById("scaleSetChart");
+		scaleSetChartCanvas.getContext("2d").clearRect(0, 0, scaleSetChartCanvas.width, scaleSetChartCanvas.height);
+	}
+
+	if (document.getElementById("encryptHistChart") != null) {
+		var encryptHistChartCanvas = document.getElementById("encryptHistChart");
+		encryptHistChartCanvas.getContext("2d").clearRect(0, 0, encryptHistChartCanvas.width, encryptHistChartCanvas.height);
+	}
+	
+	
+		
+	//table space
+	$("#pg_data").html("");
+	$("#pg_backup").html("");
+	$("#pg_wal").html("");
+	$("#pg_arc").html("");
+	$("#pg_log").html("");
+	
+
+	fn_dbSvrIdSearch(db_svr_id);
+}
 
 /* ********************************************************
  * 메인 대시보드 셋팅
@@ -59,7 +102,123 @@ function fn_main_tab_setting(result) {
 		$("#encrypt_div_none").show();
 		$("#encrypt_div_set").hide();
 	} 
+	
+	//테이블스페이즈 정보 setting
+	fn_tablescpace_setting(result);
 
+}
+
+/* ********************************************************
+ * 테이블스페이즈 정보 setting
+ ******************************************************** */
+function fn_tablescpace_setting(result) {
+	var textHtml= "";
+
+	if (result.tablespaceObj != null) {
+		//data
+		if (result.tablespaceObj.CMD_TABLESPACE_INFO != null && result.tablespaceObj.CMD_TABLESPACE_INFO != undefined) {
+			$("#filesystemTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.CMD_TABLESPACE_INFO[0].filesystem, "") + '</i>');
+			$("#tablespaceInfoFsizeTd").html(nvlPrmSet(result.tablespaceObj.CMD_TABLESPACE_INFO[0].fsize, "0"));
+			$("#tablespaceInfoUsedTd").html(nvlPrmSet(result.tablespaceObj.CMD_TABLESPACE_INFO[0].used, "0"));
+			$("#tablespaceInfoAvailTd").html(nvlPrmSet(result.tablespaceObj.CMD_TABLESPACE_INFO[0].avail, "0"));
+			fn_gData(result.tablespaceObj.CMD_TABLESPACE_INFO[0].use);
+		} else {
+			$("#filesystemTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+			$("#tablespaceInfoFsizeTd").html("0");
+			$("#tablespaceInfoUsedTd").html("0");
+			$("#tablespaceInfoAvailTd").html("0");
+			fn_gData("0%");
+		}
+		
+		//backup
+		if (result.tablespaceObj.BACKUP_PATH != null && result.tablespaceObj.BACKUP_PATH != undefined) {
+			$("#backupPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.BACKUP_PATH, "") + '</i>');
+		} else {
+			$("#backupPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+			$("#backupspaceInfoFsizeTd").html("0");
+		}
+		
+		if (result.tablespaceObj.CMD_BACKUPSPACE_INFO != null && result.tablespaceObj.CMD_BACKUPSPACE_INFO != undefined) {
+			$("#backupspaceInfoFsizeTd").html(nvlPrmSet(result.tablespaceObj.CMD_BACKUPSPACE_INFO[0].fsize, "0"));
+			$("#backupVTd").html(nvlPrmSet(result.tablespaceObj.BACKUP_V, "0"));
+			fn_gBackup(result.tablespaceObj.CMD_BACKUPSPACE_INFO[0].fsize, result.tablespaceObj.BACKUP_V);
+		} else {
+			$("#backupspaceInfoFsizeTd").html("0");
+			$("#backupVTd").html("0");
+			
+			fn_gBackup("0M", "0M");
+		}
+
+		//WAL
+		if (result.tablespaceObj.PGWAL_PATH != null && result.tablespaceObj.PGWAL_PATH != undefined) {
+			$("#pgwalPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.PGWAL_PATH, "") + '</i>');
+		} else {
+			$("#pgwalPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		}
+
+		if (result.tablespaceObj.WAL_KEEP_SEGMENTS != null && result.tablespaceObj.WAL_KEEP_SEGMENTS != undefined) {
+			$("#walKeepSegmentsTd").html('<i class="ti-files"> WAL_KEEP_SEGMENTS : </i>'+ nvlPrmSet(result.tablespaceObj.WAL_KEEP_SEGMENTS, "") + dashboard_count);
+		} else {
+			$("#walKeepSegmentsTd").html('<i class="ti-files"> WAL_KEEP_SEGMENTS : </i>0' + dashboard_count);
+		}
+
+		if (result.tablespaceObj.PGWAL_CNT != null && result.tablespaceObj.PGWAL_CNT != undefined) {
+			$("#pgwalCntTd").html('<i class="ti-files"> WAL_FILE : </i>'+ nvlPrmSet(result.tablespaceObj.PGWAL_CNT, "") + dashboard_count);
+			
+			fn_gWal(result.tablespaceObj.PGWAL_CNT, result.tablespaceObj.WAL_KEEP_SEGMENTS);
+		} else {
+			$("#pgwalCntTd").html('<i class="ti-files"> WAL_FILE : </i>0' + dashboard_count);
+			
+			fn_gWal("0", "0");
+		}
+		
+		//ARCHIVE
+		if (result.tablespaceObj.PGALOG_PATH != null && result.tablespaceObj.PGALOG_PATH != undefined) {
+			$("#pgalogPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.PGALOG_PATH, "") + '</i>');
+		} else {
+			$("#pgalogPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		}
+
+		if (result.tablespaceObj.PGALOG_V != null && result.tablespaceObj.PGALOG_V != undefined) {
+			fn_gArc(result.tablespaceObj.PGALOG_V);
+		} else {
+			fn_gArc("0");
+		}
+		
+		//LOG
+		if (result.tablespaceObj.LOG_PATH != null && result.tablespaceObj.LOG_PATH != undefined) {
+			$("#logPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.LOG_PATH, "") + '</i>');
+		} else {
+			$("#logPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		}
+
+		if (result.tablespaceObj.LOG_V != null && result.tablespaceObj.LOG_V != undefined) {
+			fn_gLog(result.tablespaceObj.LOG_V);
+		} else {
+			fn_gLog("0");
+		}
+	} else {
+		$("#filesystemTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		$("#tablespaceInfoFsizeTd").html("0");
+		$("#tablespaceInfoUsedTd").html("0");
+		$("#tablespaceInfoAvailTd").html("0");
+		fn_gData("0%");
+		
+		$("#backupPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		$("#backupspaceInfoFsizeTd").html("0");
+		fn_gBackup("0M", "0M");
+		
+		$("#pgwalPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		$("#walKeepSegmentsTd").html('<i class="ti-files"> WAL_KEEP_SEGMENTS : </i>0' + dashboard_count);
+		$("#pgwalCntTd").html('<i class="ti-files"> WAL_FILE : </i>0' + dashboard_count);
+		fn_gWal("0", "0");
+		
+		$("#pgalogPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		fn_gArc("0");
+
+		$("#logPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		fn_gLog("0");
+	}
 }
 
 /* ********************************************************
@@ -251,11 +410,11 @@ function fn_selectSecurityChart(encryptSuccessCount, encryptFailCount, decryptSu
 /* ********************************************************
  * 서버리스트 설정
  ******************************************************** */
-function fn_dbSvrIdSearch() {
+function fn_dbSvrIdSearch(db_svr_id_val) {
 	$.ajax({
 		url : "/dashboarod_main_search.do",
 		data : {
-			db_svr_id : "1"
+			db_svr_id : db_svr_id_val
 		},
 		dataType : "json",
 		type : "post",

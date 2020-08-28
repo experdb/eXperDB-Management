@@ -53,6 +53,11 @@ var dashboard_ddl_all = "<spring:message code='dashboard.ddl_all' />";
 var dashboard_ddl_success = "<spring:message code='dashboard.ddl_success' />";
 var dashboard_ddl_failed = "<spring:message code='dashboard.ddl_failed' />";
 
+var dashboard_usage = "<spring:message code='dashboard.usage' />";
+var dashboard_count = "<spring:message code='dashboard.count' />";
+var dashboard_file = "<spring:message code='dashboard.file' />";
+
+
 </script>
 <body>
 

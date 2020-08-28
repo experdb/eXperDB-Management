@@ -241,6 +241,8 @@ public class CmmnController {
 		DashboardVO dashVo = new DashboardVO();
 		InstanceScaleVO instanceScaleVO = new InstanceScaleVO();
 		
+		JSONObject tablespaceObj = new JSONObject();
+		
 		try {
 			//백업 스케줄 목록
 			dashVo.setDb_svr_id(db_svr_id);
@@ -341,6 +343,8 @@ public class CmmnController {
 					}
 				}
 			}
+			
+			tablespaceObj = tablespaceSelect(db_svr_id);
 
 
 			mv.addObject("backupScdresult", backupScdresult);				//백업일정 목록
@@ -370,6 +374,8 @@ public class CmmnController {
 			mv.addObject("scaleSettingChart", scaleSettingChart);			//scale 발생이력 chart 조회
 			
 			mv.addObject("db_svr_id", db_svr_id);
+System.out.println("==tablespaceObj===" + tablespaceObj);
+			mv.addObject("tablespaceObj", tablespaceObj);					//테이블 space 조회
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -377,20 +383,50 @@ public class CmmnController {
 		return mv;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 속성 화면 조회.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	public JSONObject tablespaceSelect(int db_svr_id) {
+
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject serverObj = new JSONObject();
+		JSONObject result = new JSONObject();
+
+		try {
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO); //서버정보조회
+		
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo); //agent 정보조회
+
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+
+			result = cic.serverSpace(IP, PORT, serverObj);   //대시보드 서버용량
+
+		}catch(Exception e){
+			e.printStackTrace();
+			
+		}			
+
+		return result;
+	}
 
 	/**
 	 *  권한 에러 화면을 보여준다.
