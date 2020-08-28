@@ -601,13 +601,11 @@ function fn_updateSchedule(){
 				}
 			},
 			success : function(result) {
-				alert("1");
 				confile_title = '<spring:message code="menu.schedule" /> <spring:message code="schedule.run" />' + " " + '<spring:message code="common.request" />';
 				$('#con_multi_gbn', '#findConfirmMulti').val("mod");
-				$('#confirm_multi_tlt').html(confile_title);
-				$('#confirm_multi_msg').html('<spring:message code="message.msg135" />');
-				$('#pop_confirm_multi_md').modal("show");
-			
+				$('#confirm_multi_tlt_01').html(confile_title);
+				$('#confirm_multi_msg_01').html('<spring:message code="message.msg135" />');
+				$('#pop_confirm_multi_md_01').modal("show");
 			}
 		}); 	
 }

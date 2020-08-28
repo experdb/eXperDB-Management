@@ -4,6 +4,8 @@
 <%@include file="../../cmmn/cs2.jsp"%>
 
 <script>
+var confirm_title = ""; 
+
 var table = null;
 var scd_nmChk = "fail";
 
@@ -500,7 +502,73 @@ function fn_insertSchedule(){
 		arrmaps.push(tmpmap);	
 		}
 
-	if (confirm('<spring:message code="message.msg132"/>')){
+	confile_title = '<spring:message code="menu.schedule" /> <spring:message code="schedule.run" />' + " " + '<spring:message code="common.request" />';
+	$('#con_multi_gbn', '#findConfirmMulti').val("ins");
+	$('#confirm_multi_tlt').html(confile_title);
+	$('#confirm_multi_msg').html('<spring:message code="message.msg132" />');
+	$('#pop_confirm_multi_md').modal("show");
+	
+}
+
+/* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmMultiRst(gbn){
+	if (gbn == "ins") {
+		fn_insertSchedule2();
+	}
+}
+
+
+function fn_insertSchedule2(){
+	var exe_perd_cd = $("#exe_perd_cd").val(); 
+		
+	if(exe_perd_cd == "TC001602"){
+	    var dayWeek = new Array();
+	    var list = $("input[name='chk']");
+	    for(var i = 0; i < list.length; i++){
+	        if(list[i].checked){ //선택되어 있으면 배열에 값을 저장함
+	        	dayWeek.push(1);
+	        }else{
+	        	dayWeek.push(list[i].value);
+	        }
+	    }	    
+		var exe_dt = dayWeek.toString().replace(/,/gi,'').trim();
+	}else if(exe_perd_cd == "TC001605"){
+		var exe_dt = $("#datepicker1").val().replace(/-/gi,'').trim();
+	}	
+
+// 	if (!fn_validation()) return false;
+	
+	var datas = table.rows().data();
+	
+	
+	if(datas.length < 1){
+		showSwalIcon('<spring:message code="message.msg39" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}else{
+		//다른 서버가 포함되어있는지 확인
+		for (var i = 0; i < datas.length; i++){ 
+			if(table.rows().data()[i].bsn_dscd == "TC001901"){
+				if(table.rows().data()[0].db_svr_nm != table.rows().data()[i].db_svr_nm){
+					showSwalIcon('<spring:message code="message.msg205" />', '<spring:message code="common.close" />', '', 'error');
+					return false;
+				}
+			}
+		}		
+	}
+	
+	var arrmaps = [];
+	for (var i = 0; i < datas.length; i++){
+		var tmpmap = new Object();
+		tmpmap["index"] = i+1;
+		tmpmap["wrk_nm"] = table.rows().data()[i].wrk_nm;
+        tmpmap["wrk_id"] = table.rows().data()[i].wrk_id;      
+        tmpmap["nxt_exe_yn"] = table.$('select option:selected', i).val();
+		arrmaps.push(tmpmap);	
+		}
+
+
 		$.ajax({
 			url : "/insertSchedule.do",
 			data : {
@@ -539,11 +607,7 @@ function fn_insertSchedule(){
 				}
 			}
 		}); 	
-	}else{
-		return false;
-	}
 }
-
 
 //스케줄명 중복체크
 function fn_check() {
@@ -653,6 +717,7 @@ function fn_db2pgAdd(){
 	});
 }
 </script>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 
 <%@include file="./../../popup/scheduleRegForm.jsp"%>
 <%@include file="./../../popup/db2pgWorkRegForm.jsp"%>
