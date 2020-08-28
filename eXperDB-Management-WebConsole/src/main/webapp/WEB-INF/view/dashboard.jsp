@@ -119,6 +119,58 @@
 
 		$("#serverTabList").html(html);
 	}
+
+	/* ********************************************************
+	 * 통합 스케줄 셋팅
+	 ******************************************************** */
+	function fn_totScdSetting() {
+		var tot_start = "";
+		var tot_end = "";
+		var tot_run = "";
+		var scheduleCnt = "";
+
+		if (nvlPrmSet("${backupInfo}", '') != "") {
+			scheduleCnt = parseInt((nvlPrmSet("${backupInfo.schedule_cnt}", '0')));
+			
+			if (scheduleCnt != 0) {
+				//시작
+				if (nvlPrmSet("${scheduleInfo.start_cnt}", '') != "") {
+					tot_start = parseInt(nvlPrmSet("${scheduleInfo.start_cnt}", '0')) / scheduleCnt * 100;
+					tot_start = tot_start.toFixed(2);
+				} else {
+					tot_start = "0.00";
+				}
+				
+				if (nvlPrmSet("${scheduleInfo.stop_cnt}", '') != "") {
+					tot_end = parseInt(nvlPrmSet("${scheduleInfo.stop_cnt}", '0')) / scheduleCnt * 100;
+					tot_end = tot_end.toFixed(2);
+				} else {
+					tot_end = "0.00";
+				}
+				
+				if (nvlPrmSet("${scheduleInfo.run_cnt}", '') != "") {
+					tot_run = parseInt(nvlPrmSet("${scheduleInfo.run_cnt}", '0')) / scheduleCnt * 100;
+					tot_run = tot_run.toFixed(2);
+				} else {
+					tot_run = "0.00";
+				}
+			} else {
+				tot_start = "0.00";
+				tot_end = "0.00";
+				tot_run = "0.00";
+			}
+		} else {
+			tot_start = "0.00";
+			tot_end = "0.00";
+			tot_run = "0.00";
+		}
+
+		$("#tot_scd_start_msg").append(tot_start);	//시작
+		$("#tot_scd_stop_msg").append(tot_end);		//중지
+		$("#tot_scd_run_msg").append(tot_run);		//실행중
+		
+	}
+
 </script>
 
 <%@include file="./cmmn/workScriptInfo.jsp"%>
@@ -308,7 +360,7 @@
 		<div class="col-md-2 grid-margin stretch-card">
 			<div class="card news_text">
 				<div class="card-body" onClick="location.href ='/selectScheduleListView.do?scd_cndt=TC001802'" style="cursor:pointer;">
-					<p class="card-title text-md-center text-xl-left">Running(<spring:message code="dashboard.running" />)</p>
+					<p class="card-title text-md-center text-xl-left"><spring:message code="dashboard.running" /></p>
 					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
 						<c:choose>
 							<c:when test="${not empty scheduleInfo}">
@@ -343,7 +395,7 @@
  		<div class="col-md-2 grid-margin stretch-card">
 			<div class="card news_text">
 				<div class="card-body" onClick="location.href ='/selectScheduleHistoryFail.do'" style="cursor:pointer;">
-					<p class="card-title text-md-center text-xl-left">Fail(<spring:message code="dashboard.failed" />)</p>
+					<p class="card-title text-md-center text-xl-left"><spring:message code="dashboard.failed" /></p>
 					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
 						<c:choose>
 							<c:when test="${not empty scheduleInfo}">

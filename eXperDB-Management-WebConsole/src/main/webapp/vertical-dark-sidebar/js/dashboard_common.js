@@ -23,58 +23,6 @@ $(window).ready(function(){
 	fn_dbSvrIdSearch();
 });
 
-
-/* ********************************************************
- * 통합 스케줄 셋팅
- ******************************************************** */
-function fn_totScdSetting() {
-	var tot_start = "";
-	var tot_end = "";
-	var tot_run = "";
-	var scheduleCnt = "";
-
-	if (nvlPrmSet("${backupInfo}", '') != "") {
-		scheduleCnt = nvlPrmSet("${backupInfo.schedule_cnt}", '0');
-		
-		if (scheduleCnt != 0) {
-			//시작
-			if (nvlPrmSet("${scheduleInfo.start_cnt}", '') != "") {
-				tot_start = nvlPrmSet("${scheduleInfo.start_cnt}", '0') / scheduleCnt * 100;
-				tot_start = tot_start.toFixed(2);
-			} else {
-				tot_start = "0.00";
-			}
-			
-			if (nvlPrmSet("${scheduleInfo.stop_cnt}", '') != "") {
-				tot_end = nvlPrmSet("${scheduleInfo.stop_cnt}", '0') / scheduleCnt * 100;
-				tot_end = tot_end.toFixed(2);
-			} else {
-				tot_end = "0.00";
-			}
-			
-			if (nvlPrmSet("${scheduleInfo.run_cnt}", '') != "") {
-				tot_run = nvlPrmSet("${scheduleInfo.run_cnt}", '0') / scheduleCnt * 100;
-				tot_run = tot_run.toFixed(2);
-			} else {
-				tot_run = "0.00";
-			}
-		} else {
-			tot_start = "0.00";
-			tot_end = "0.00";
-			tot_run = "0.00";
-		}
-	} else {
-		tot_start = "0.00";
-		tot_end = "0.00";
-		tot_run = "0.00";
-	}
-
-	$("#tot_scd_start_msg").append(tot_start);	//시작
-	$("#tot_scd_stop_msg").append(tot_end);		//중지
-	$("#tot_scd_run_msg").append(tot_run);		//실행중
-	
-}
-
 /* ********************************************************
  * 메인 대시보드 셋팅
  ******************************************************** */
@@ -136,20 +84,45 @@ function fn_encrypt_serverStatus() {
 			}
 		},
 		success : function(data) {
-			if(data.resultCode == "0000000000"){
-	/*			var html ='<img src="../images/ico_state_03.png" alt="Running Transfer" /><span> Running</span>';				
-				$("#encryptServer").html(html);*/
-			//	fn_selectSecurityStatistics(today);
-			}else if(data.resultCode == "8000000002"){
-/*				var html ='<img src="../images/ico_state_07.png" alt="Stop" /> STOP';
-				//var html ='<img src="../images/ico_agent_2.png" alt="" />';
-				$("#encryptServer").html(html);*/
-			}
+			fn_encrypt_setting(data);
 		}
 	});	
 }
 
+/* ********************************************************
+ * 암호화 setting
+ ******************************************************** */
+function fn_encrypt_setting(data) {
+	var keyServerHtml = "";
+	
+	keyServerHtml += "<tr>";
+	keyServerHtml += '<td style="width:50%;line-height:150%;border:none;">';
+	
+	if(data.resultCode == "0000000000"){
+		keyServerHtml += '<div class="badge badge-pill badge-success"><i class="fa fa-spin fa-spinner"></i></div>';
+		keyServerHtml += '&nbsp;' + dashboard_running;
+	}else if(data.resultCode == "8000000002"){
+		keyServerHtml += '<div class="badge badge-pill badge-danger"><i class="fa fa-minus"></i></div>';
+		keyServerHtml += '&nbsp;' + schedule_stop;
+	}
+	keyServerHtml += '</td>';
+	keyServerHtml += "</tr>";
+
+	$("#keyServerState").html(keyServerHtml);
+
+	//암호화키 agent 조회
+	fn_selectSecurityStatistics(today);
+}
+
+/* ********************************************************
+ * 암호화키 agent 조회
+ ******************************************************** */
 function fn_selectSecurityStatistics(today){
+ 	var encryptSuccessCount = 0;
+ 	var encryptFailCount = 0;
+ 	var decryptSuccessCount = 0;
+ 	var decryptFailCount = 0;
+ 
 	$.ajax({
 		url : "/selectDashSecurityStatistics.do",
 		data : {
@@ -161,53 +134,118 @@ function fn_selectSecurityStatistics(today){
 		type : "post",
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader("AJAX", true);
-	     },
+	    },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 			}
 		},
 		success : function(data) {
-			alert(data.resultCode);
-				if(data.resultCode == "0000000000"){
-				 	var html ="";
-				 	var success=0;
-				 	var fail=0;
-					for(var i=0; i<data.list.length; i++){
-						html += '<tr>';
-						html += '<td>'+data.list[i].monitoredName+'</td>';
-						html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
-						html += '<td>'+data.list[i].encryptFailCount+'</td>';
-						html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
-						html += '<td>'+data.list[i].decryptFailCount+'</td>';
-						if(data.list[i].status == "start"){
-							html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
-						}else{
-							html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
-						}
-						html += '</tr>';
-						$( "#col" ).html(html);
-					}
-					
-				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					location.href="/";
-				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href="/securityKeySet.do";
-				}else{
-					if(data.list.length != 0){
-						alert(data.resultMessage +"("+data.resultCode+")");
-					}
+			if(data.resultCode == "0000000000"){
+			 	var html ="";
+
+			 	if (data.list.length > 0) {
+			 		for(var i=0; i<data.list.length; i++){
+			 			html += '<tr>';
+			 			html += '<td style="width:100%;line-height:150%;border:none;">';
+	
+			 			if(data.list[i].status == "start"){
+			 				html += '<div class="badge badge-pill badge-success"><i class="fa fa-spin fa-spinner"></i></div>';
+			 			} else {
+			 				html += '<div class="badge badge-pill badge-danger"><i class="fa fa-minus"></i></div>';
+			 			}
+						html += "&nbsp;" + data.list[i].monitoredName;
+			 			
+						html += '</td>';
+						html += "</tr>";
+						console.log("==data.list[i].encryptSuccessCount===" + data.list[i].encryptSuccessCount);
+						encryptSuccessCount += encryptSuccessCount + parseInt(nvlPrmSet(data.list[i].encryptSuccessCount, 0));
+						encryptFailCount += encryptFailCount + parseInt(nvlPrmSet(data.list[i].encryptFailCount, 0));
+						decryptSuccessCount += decryptSuccessCount + parseInt(nvlPrmSet(data.list[i].decryptSuccessCount, 0));
+						decryptFailCount += decryptFailCount + parseInt(nvlPrmSet(data.list[i].decryptFailCount, 0));
+			 		}
+			 		
+			 		$( "#agentKeyServerState" ).html(html);
+			 	}
+			}else if(data.resultCode == "8000000002"){
+				showSwalIcon(message_msg05, closeBtn, '', 'error');
+			}else if(data.resultCode == "8000000003"){
+				showSwalIconRst(data.resultMessage, closeBtn, '', 'warning', 'securityKeySet');
+			}else{
+				if(data.list.length != 0){
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", closeBtn, '', 'error');
 				}
+			}
 		}
 	});		
+	
+	fn_selectSecurityChart(encryptSuccessCount, encryptFailCount, decryptSuccessCount, decryptFailCount);
+}
+
+/* ********************************************************
+ * 암호화 chart setting
+ ******************************************************** */
+function fn_selectSecurityChart(encryptSuccessCount, encryptFailCount, decryptSuccessCount, decryptFailCount){
+	///////////////////////////암호화 chart start ////////////////////////
+	if ($("#encryptHistChart").length) {
+		var encryptSucCnt = nvlPrmSet(encryptSuccessCount, 0);
+		var encryptFailCnt = nvlPrmSet(encryptFailCount, 0);
+		var decryptSucCnt = nvlPrmSet(decryptSuccessCount, 0);
+		var decryptFailCnt = nvlPrmSet(decryptFailCount, 0);
+
+		var options = {
+/*				responsive: false,*/
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				},
+				legend: {
+					display: false
+				},
+				elements: {
+					point: {
+						radius: 0
+					}
+				}
+		};
+
+		var data = {
+				labels: [dashboard_encrypt_success, dashboard_encrypt_failed, dashboard_decrypt_success, dashboard_decrypt_failed],
+				datasets: [{
+					label: 'count :',
+					data: [encryptSucCnt, encryptFailCnt, decryptSucCnt, decryptFailCnt],
+					backgroundColor: [
+						'rgba(54, 162, 235, 0.2)',
+						'rgba(255, 206, 86, 0.2)',
+						'rgba(75, 192, 192, 0.2)',
+						'rgba(255, 99, 132, 0.2)'
+					],
+					borderColor: [
+						'rgba(54, 162, 235, 1)',
+						'rgba(255, 206, 86, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(255,99,132,1)'
+					],
+					borderWidth: 1,
+					fill: false
+				}]
+		};
+		
+		var barChartCanvas = $("#encryptHistChart").get(0).getContext("2d");
+		var barChart = new Chart(barChartCanvas, {
+			type: 'bar',
+			data: data,
+			options: options
+		});
+	}
+	///////////////////////////암호화 chart end ////////////////////////
 }
 
 /* ********************************************************
@@ -983,7 +1021,7 @@ function fn_script_History_set(result) {
 		var data = {
 				labels: [common_registory, dashboard_progress_end, common_success, common_failed],
 				datasets: [{
-					label: '개수 :',
+					label: 'count :',
 					data: [tot_cnt, ins_cnt, suc_cnt, fal_cnt],
 					backgroundColor: [
 						'rgba(54, 162, 235, 0.2)',
@@ -1218,27 +1256,27 @@ function fn_migration_history_set(result) {
 				chartColor = "bg-success";
 
 			} else if (i == 1) {
-				chartText = dashboard_schedule_history_cht_msg2;
+				chartText = dashboard_migration_all;
 				chartColor = "bg-warning";
 
 			} else if (i == 2) {
-				chartText = dashboard_schedule_history_cht_msg3;	
+				chartText = dashboard_migration_success;	
 				chartColor = "bg-primary";
 
 			} else if (i == 3) {
-				chartText = dashboard_schedule_history_cht_msg4;
+				chartText = dashboard_migration_failed;
 				chartColor = "bg-danger";
 
 			} else if (i == 4) {
-				chartText = dashboard_schedule_history_cht_msg5;
+				chartText = dashboard_ddl_all;
 				chartColor = "bg-warning";
 
 			} else if (i == 5) {
-				chartText = dashboard_schedule_history_cht_msg6;
+				chartText = dashboard_ddl_success;
 				chartColor = "bg-primary";
 
 			} else if (i == 6) {
-				chartText = dashboard_schedule_history_cht_msg7;
+				chartText = dashboard_ddl_failed;
 				chartColor = "bg-danger";
 			}
 			chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
@@ -1518,7 +1556,7 @@ function fn_scale_history_set(result) {
 			var data = {
 					labels: [common_registory, dashboard_progress_end, common_success, common_failed],
 					datasets: [{
-						label: '개수 :',
+						label: 'count :',
 						data: [occur_in_auto, occur_out_auto, occur_in_nct, occur_out_nct],
 						backgroundColor: [
 							'rgba(54, 162, 235, 0.2)',
