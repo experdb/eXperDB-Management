@@ -81,6 +81,9 @@ var common_registory = "<spring:message code='common.registory' />";
 var common_apply = "<spring:message code='common.apply' />";
 var common_success = "<spring:message code='common.success' />";
 var common_failed = "<spring:message code='common.failed' />";
+
+var message_msg05 = "<spring:message code='message.msg05' />";
+
 </script>
 <body>
 

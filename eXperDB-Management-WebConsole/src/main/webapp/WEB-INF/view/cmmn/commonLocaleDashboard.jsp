@@ -41,6 +41,18 @@ var eXperDB_scale_msg12 = "<spring:message code='eXperDB_scale.msg12' />";
 var dashboard_auto = "<spring:message code='dashboard.auto' />";
 var dashboard_manual = "<spring:message code='dashboard.manual' />";
 
+var dashboard_encrypt_success = "<spring:message code='dashboard.encrypt_success' />";
+var dashboard_encrypt_failed = "<spring:message code='dashboard.encrypt_failed' />";
+var dashboard_decrypt_success = "<spring:message code='dashboard.decrypt_success' />";
+var dashboard_decrypt_failed = "<spring:message code='dashboard.decrypt_failed' />";
+
+var dashboard_migration_all = "<spring:message code='dashboard.migration_all' />";
+var dashboard_migration_success = "<spring:message code='dashboard.migration_success' />";
+var dashboard_migration_failed = "<spring:message code='dashboard.migration_failed' />";
+var dashboard_ddl_all = "<spring:message code='dashboard.ddl_all' />";
+var dashboard_ddl_success = "<spring:message code='dashboard.ddl_success' />";
+var dashboard_ddl_failed = "<spring:message code='dashboard.ddl_failed' />";
+
 </script>
 <body>
 

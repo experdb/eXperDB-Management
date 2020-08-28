@@ -895,7 +895,8 @@
 	 												<div class="card" style="margin-left:-10px;border:none;">
 														<div class="card-body" style="border:none;">
 															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.encrypt_key_management_server" /></p>
-													
+															<table id="keyServerState" class="table table-hover system-tlb-scroll" style="width:100%;border:none;">
+															</table>
 														</div>
 													</div>
 												</div>
@@ -904,7 +905,8 @@
 	 												<div class="card" style="margin-left:-10px;border:none;">
 														<div class="card-body" style="border:none;">
 															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.encrypt_key_agent" /></p>
-													
+															<table id="agentKeyServerState" class="table table-hover system-tlb-scroll" style="width:100%;border:none;">
+															</table>
 														</div>
 													</div>
 												</div>
@@ -913,7 +915,8 @@
 	 												<div class="card" style="margin-left:-10px;border:none;">
 														<div class="card-body" style="border:none;">
 															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.encrypt_statistics" /></p>
-													
+															<%-- <canvas id="encryptHistChart" style="height:27vh; width:15vw;"></canvas> --%>
+															<canvas id="encryptHistChart"></canvas>
 														</div>
 													</div>
 												</div>
