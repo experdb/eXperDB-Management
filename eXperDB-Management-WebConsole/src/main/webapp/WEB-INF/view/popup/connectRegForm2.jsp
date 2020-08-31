@@ -448,8 +448,7 @@
 					}
 				},
 				success : function(result) {
-					
-					if(result == true){
+					if(result == "success"){
 						showSwalIcon('<spring:message code="message.msg144"/>', '<spring:message code="common.close" />', '', 'success');
 						$('#pop_layer_con_reg_two').modal('hide');
 						fn_select();
