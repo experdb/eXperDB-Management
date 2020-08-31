@@ -351,8 +351,10 @@ function fn_selectSecurityStatistics(today){
 			}else if(data.resultCode == "8000000003"){
 				showSwalIconRst(data.resultMessage, closeBtn, '', 'warning', 'securityKeySet');
 			}else{
-				if(data.list.length != 0){
-					showSwalIcon(data.resultMessage +"("+data.resultCode+")", closeBtn, '', 'error');
+				if (data.list != null) {
+					if(data.list.length != 0){
+						showSwalIcon(data.resultMessage +"("+data.resultCode+")", closeBtn, '', 'error');
+					}
 				}
 			}
 		}

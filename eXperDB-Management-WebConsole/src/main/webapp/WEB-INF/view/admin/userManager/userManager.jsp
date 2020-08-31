@@ -350,6 +350,9 @@
 			$("#mod_usr_id", "#modUserForm").val(nvlPrmSet(result.get_usr_id, "")); //아이디
 			$("#mod_usr_nm", "#modUserForm").val(nvlPrmSet(result.get_usr_nm, "")); //이름
 
+			$("#mod_pwd", "#modUserForm").val(nvlPrmSet(result.pwd, ""));
+			$("#mod_pwdCheck", "#modUserForm").val(nvlPrmSet(result.pwd, ""));
+			
 			//password 안전성 확인
 			$("#mod_pwd_chk_msg_div", "#modUserForm").show();
 			$("#mod_pwd_chk_div", "#modUserForm").hide();

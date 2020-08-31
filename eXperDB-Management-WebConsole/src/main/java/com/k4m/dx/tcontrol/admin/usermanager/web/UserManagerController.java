@@ -508,14 +508,24 @@ public class UserManagerController {
 			userVo.setLst_mdfr_id(usr_id);
 			UserVO userInfo = (UserVO) userManagerService.selectDetailUserManager(userVo.getUsr_id());
 
-			//패스워드가 null이 아닌경우만
+
+			if (userInfo.getPwd().equals(userVo.getPwd())) {
+				userVo.setPwd(userVo.getPwd());
+			} else {
+				// 패스워드 암호화
+				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
+			}
+			
+			
+/*			//패스워드가 null이 아닌경우만
 			if (userVo.getPwd() != null && !"".equals(userVo.getPwd())) {
 				// 패스워드 암호화
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
 			} else {
 				userVo.setPwd("");
-			}
+			}*/
 
 			String strTocken = loginVo.getTockenValue();
 			String loginId = loginVo.getUsr_id();

@@ -135,7 +135,7 @@
 				$("#mod_pwd_chk_msg_div", "#modUserForm").hide();
 				$("#mod_pwd_chk_div", "#modUserForm").show();
 			}
-		});  
+		});
 
 		$("#modUserForm").validate({
 			rules: {
@@ -146,6 +146,12 @@
 						required: true
 					},
 					mod_pwd: {
+						required: true
+					},
+					mod_pwdCheck: {
+						required: true
+					}
+/* 					mod_pwd: {
 		        		required: function(){
 		        			if (nvlPrmSet($("#mod_pwdCheck", "#modUserForm").val(),"") != "" ) {
 		        				if(nvlPrmSet($("#mod_pwd", "#modUserForm").val(),"") == "") {
@@ -164,7 +170,7 @@
 		        			}
 		        			return false;
 		        		}
-					}
+					} */
 			},
 			messages: {
 					mod_usr_id: {
@@ -426,7 +432,7 @@
 									</label>
 									<div class="col-sm-4">
 										<input type="password" style="display:none" aria-hidden="true">
-										<input type="password" class="form-control mod_pwd_chk" autocomplete="new-password" maxlength="20" id="mod_pwd" name="mod_pwd" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="<spring:message code='message.msg109'/>" tabindex=2 />
+										<input type="password" class="form-control mod_pwd_chk" autocomplete="new-password" maxlength="100" id="mod_pwd" name="mod_pwd" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="<spring:message code='message.msg109'/>" tabindex=2 />
 									</div>
 
 									<label for="mod_pwdCheck" class="col-sm-2 col-form-label pop-label-index">
@@ -434,7 +440,7 @@
 										<spring:message code="user_management.confirm_password" />(*)
 									</label>
 									<div class="col-sm-4">
-										<input type="password" class="form-control mod_pwd_chk" maxlength="20" id="mod_pwdCheck" name="mod_pwdCheck" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="<spring:message code='message.msg109'/>" tabindex=3 />
+										<input type="password" class="form-control mod_pwd_chk" maxlength="100" id="mod_pwdCheck" name="mod_pwdCheck" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="<spring:message code='message.msg109'/>" tabindex=3 />
 									</div>
 								</div>
 								
