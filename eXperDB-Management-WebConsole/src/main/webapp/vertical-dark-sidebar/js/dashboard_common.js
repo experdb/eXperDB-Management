@@ -32,6 +32,24 @@ function fn_serverSebuInfo(db_svr_id) {
  * 초기화
  ******************************************************** */
 function fn_serverDivClear(db_svr_id) {
+	//백업정보
+	if ($('#a_back_hist').attr('aria-expanded') == "false") {
+		$('#a_back_hist').click();
+	}
+	
+	//배치정보
+	if ($('#a_script_hist').attr('aria-expanded') == "false") {
+		$('#a_script_hist').click();
+	}
+
+	if ($('#a_scale_hist').attr('aria-expanded') == "false") {
+		$('#a_scale_hist').click();
+	}
+
+	if ($('#a_encrypt_hist').attr('aria-expanded') == "false") {
+		$('#a_encrypt_hist').click();
+	}
+	
 	$("#scheduleHistChart").html("");
 	$("#backupRmanHistChart").html("");	
 	$("#backupDumpHistChart").html("");	
@@ -52,9 +70,7 @@ function fn_serverDivClear(db_svr_id) {
 		var encryptHistChartCanvas = document.getElementById("encryptHistChart");
 		encryptHistChartCanvas.getContext("2d").clearRect(0, 0, encryptHistChartCanvas.width, encryptHistChartCanvas.height);
 	}
-	
-	
-		
+
 	//table space
 	$("#pg_data").html("");
 	$("#pg_backup").html("");
