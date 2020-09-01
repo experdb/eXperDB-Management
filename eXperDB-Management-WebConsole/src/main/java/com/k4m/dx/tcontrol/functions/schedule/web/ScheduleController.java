@@ -801,25 +801,25 @@ public class ScheduleController {
 				historyVO.setMnu_id(23);
 				accessHistoryService.insertHistory(historyVO);
 				
-				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
-				JSONObject rows = (JSONObject) new JSONParser().parse(strRows);
+//				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
+//				JSONObject rows = (JSONObject) new JSONParser().parse(strRows);
 				
-				scheduleVO.setScd_id(Integer.parseInt(rows.get("scd_id").toString()));
+				scheduleVO.setScd_id(Integer.parseInt(request.getParameter("scd_id").toString()));
 				scheduleVO.setScd_cndt("TC001801");
 	
 				scheduleService.updateScheduleStatus(scheduleVO);
 				
-				scheduleVO.setExe_perd_cd(rows.get("exe_perd_cd").toString());
-				if(rows.get("exe_dt") != null){
-					scheduleVO.setExe_dt(rows.get("exe_dt").toString());
+				scheduleVO.setExe_perd_cd(request.getParameter("exe_perd_cd"));
+				if(request.getParameter("exe_dt") != null){
+					scheduleVO.setExe_dt(request.getParameter("exe_dt"));
 				}
-				if(rows.get("exe_month") != null){
-					scheduleVO.setExe_month(rows.get("exe_month").toString());
+				if(request.getParameter("exe_month") != null){
+					scheduleVO.setExe_month(request.getParameter("exe_month"));
 				}
-				if(rows.get("exe_day") != null){
-					scheduleVO.setExe_day(rows.get("exe_day").toString());
+				if(request.getParameter("exe_day") != null){
+					scheduleVO.setExe_day(request.getParameter("exe_day"));
 				}
-				scheduleVO.setExe_hms(rows.get("exe_hms").toString());
+				scheduleVO.setExe_hms(request.getParameter("exe_hms"));
 			
 				scheduleUtl.insertSchdul(scheduleVO);		
 			}
