@@ -681,8 +681,8 @@
 <%@include file="../popup/dumpRegReForm.jsp"%>
 	
 <form name="backupScdInfoForm" id="backupScdInfoForm">
-	<input type="text" name="scdInfo_db_svr_id"  id="scdInfo_db_svr_id" value="" />
-	<input type="text" name="scdInfo_scd_id"  id="scdInfo_scd_id" value="" />
+	<input type="hidden" name="scdInfo_db_svr_id"  id="scdInfo_db_svr_id" value="" />
+	<input type="hidden" name="scdInfo_scd_id"  id="scdInfo_scd_id" value="" />
 </form>
 
 <div class="modal fade" id="pop_layer_backup_scd_dtl" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">

@@ -1187,20 +1187,7 @@
 										</div>
 									</div>
 
-
-        
-											
-											
-											
-											
-											
-											
-                  
-			                        
-			                        
-			                        
-			                     
-			                      <div class="carousel-item" id="v-pills-home_test2">
+			                      <%-- <div class="carousel-item" id="v-pills-home_test2">
 			                        <div class="row">
 			                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
 			                            <div class="ml-xl-4">
@@ -1278,7 +1265,7 @@
 			                            </div>
 			                          </div>
 			                        </div>
-			                      </div>
+			                      </div> --%>
 			                    </div>
 			                    <a class="carousel-control-prev" href="#detailedReports" role="button" data-slide="prev">
 			                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>

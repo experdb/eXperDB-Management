@@ -1132,16 +1132,16 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/bckScheduleDtlVeiw.do")
 	public ModelAndView bckScheduleDtlVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-	
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		
 		try {
 				String scd_id = request.getParameter("scd_id");
-				mv.setViewName("popup/bakupScheduleDtl");
+				//mv.setViewName("popup/bakupScheduleDtl");
 				mv.addObject("scd_id", scd_id);				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return mv;
 	}
 	
