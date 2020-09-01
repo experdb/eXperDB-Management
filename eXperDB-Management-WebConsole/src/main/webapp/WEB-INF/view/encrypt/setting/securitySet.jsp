@@ -296,7 +296,7 @@ function fn_buttonAut(){
 			<div class="card">
 				<div class="card-body">
 					<div class="card card-inverse-info"  style="height:25px;">
-						<i class="mdi mdi-blur" style="margin-left: 10px;margin-top: 11px;">	<spring:message code="encrypt_encryptSet.Encryption_Settings"/> </i>
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_encryptSet.Encryption_Settings"/> </i>
 						</div>
 							<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:340px;">			
 									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">

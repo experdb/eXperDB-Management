@@ -1,0 +1,1 @@
+ALTER TABLE T_USRDBSVRAUT_I ADD COLUMN transSetting_aut_yn varchar(1) ;

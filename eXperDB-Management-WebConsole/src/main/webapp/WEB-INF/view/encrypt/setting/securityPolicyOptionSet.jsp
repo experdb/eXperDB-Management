@@ -442,7 +442,7 @@ function fnc_confirmRst(){
 			<div class="card">
 				<div class="card-body">
 					<div class="card card-inverse-info"  style="height:25px;">
-						<i class="mdi mdi-blur" style="margin-left: 10px;margin-top: 11px;">	<spring:message code="encrypt_policyOption.Default_Option"/> </i>
+						<i class="mdi mdi-blur" style="margin-left: 10px;;">	<spring:message code="encrypt_policyOption.Default_Option"/> </i>
 					</div>
 						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:160px;">			
 								<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
@@ -478,7 +478,7 @@ function fnc_confirmRst(){
 			<div class="card">
 				<div class="card-body">
 					<div class="card card-inverse-info"  style="height:25px;">
-						<i class="mdi mdi-blur" style="margin-left: 10px;margin-top: 11px;">	<spring:message code="encrypt_policy_management.Log_Compression"/> </i>
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policy_management.Log_Compression"/> </i>
 					</div>
 						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:220px;">			
 									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
@@ -566,7 +566,7 @@ function fnc_confirmRst(){
 			<div class="card">
 				<div class="card-body">
 					<div class="card card-inverse-info"  style="height:25px;">
-						<i class="mdi mdi-blur" style="margin-left: 10px;margin-top: 11px;">	<spring:message code="encrypt_policyOption.Log_Batch_Transmission"/> </i>
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policyOption.Log_Batch_Transmission"/> </i>
 					</div>
 						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:240px;">			
 									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">

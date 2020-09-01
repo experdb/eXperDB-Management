@@ -343,10 +343,14 @@ function fn_insDateCalenderSetting() {
 }
 
 function fn_db2pgWorkAddCallback(rowList){
+	
+	var tCnt = table.rows().data().length;
+	
 	$.ajax({
 		url : "/selectDb2pgScheduleWorkList.do",
 		data : {
 			work_id : rowList,
+			tCnt : tCnt
 		},
 		dataType : "json",
 		type : "post",
@@ -469,10 +473,14 @@ function fn_workDel(){
  * 실행주기 변경시 이벤트 호출
  ******************************************************** */
 function fn_workAddCallback(rowList){
+	
+	var tCnt = table.rows().data().length;
+	
 	$.ajax({
 		url : "/selectScheduleWorkList.do",
 		data : {
 			work_id : rowList,
+			tCnt : tCnt
 		},
 		dataType : "json",
 		type : "post",

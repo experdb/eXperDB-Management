@@ -254,24 +254,28 @@
 											}
 											menuJson += '}';
 											////////////////////////////////////////////////////////////////////////////
-
+											
 											//데이터전송 //////////////////////////////////////////////////////////////////
+											if('${sessionScope.session.transfer}' == 'Y'){
 											menuJson +=	', {' +
 															 '"text": "<spring:message code="menu.data_transfer"/>",' +
 															 '"icon": "fa fa-inbox",' + 
 															 '"id": "trans'+item.db_svr_id+'",' +
 															 '"nodes": [';
 															
+											if(aut.length != 0 && aut[index].transsetting_aut_yn == "Y"){				 
 											menuJson +=	'{' +
 															'"icon": "fa fa-send",' +
 															'"text": "<spring:message code="menu.trans_management"/>",' +
 															'"url": "/transSetting.do?db_svr_id='+item.db_svr_id+'",' +
 															'"id": "transSetting'+item.db_svr_id+'"' +
 														'}';
+											}			
 											menuJson +=		']' +
 														'}';
+											}
 											////////////////////////////////////////////////////////////////////////////
-
+											
 											//서버접근설정 관리 //////////////////////////////////////////////////////////////////
 											menuJson +=	',{' +
 														  	 '"text": "<spring:message code="menu.access_control_management"/>",' + 

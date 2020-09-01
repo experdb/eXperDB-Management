@@ -339,6 +339,7 @@ function fn_workAdd(){
 			if(table.rows().data()[i].bsn_dscd_nm=="MIGRATION"){
 				cnt ++;
 			}	
+			
 			wrk_id_list.push( table.rows().data()[i].wrk_id);   
 	  	}
 		
@@ -397,10 +398,14 @@ function fn_exe_pred(){
 }
 
 function fn_workAddCallback(rowList){
+	
+	var tCnt = table.rows().data().length;
+
 	$.ajax({
 		url : "/selectScheduleWorkList.do",
 		data : {
 			work_id : rowList,
+			tCnt : tCnt
 		},
 		dataType : "json",
 		type : "post",
@@ -426,10 +431,14 @@ function fn_workAddCallback(rowList){
 
 
 function fn_db2pgWorkAddCallback(rowList){
+	
+	var tCnt = table.rows().data().length;
+	
 	$.ajax({
 		url : "/selectDb2pgScheduleWorkList.do",
 		data : {
 			work_id : rowList,
+			tCnt : tCnt
 		},
 		dataType : "json",
 		type : "post",

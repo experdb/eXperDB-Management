@@ -5,7 +5,7 @@
 	<div class="modal-dialog  modal-xl-top" role="document">
 		<div class="modal-content">
 			<div class="top-modal-header">
-				<img src="../../images/popup/ico_logo.png" alt="eXperDB" style="margin: 0 0px 0 auto; display: block; "> 
+				<img src="../../images/login_logo_new.png" alt="eXperDB" style="margin: 0 0px 0 auto; display: block; "> 
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>

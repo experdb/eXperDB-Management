@@ -247,7 +247,11 @@ public class DbSvrAuthorityController {
 				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
 
 				String scale_yn_chk = "";
+				String trans_yn_chk ="";
 				
+				if (props.get("transfer") != null) {
+					trans_yn_chk = props.get("transfer").toString();
+				}
 				if (props.get("scale") != null) {
 					scale_yn_chk = props.get("scale").toString();
 				}
@@ -262,10 +266,17 @@ public class DbSvrAuthorityController {
 					
 					jval = (JSONObject) rows.get(i);
 					jval.put("scale_yn_chk", scale_yn_chk);
+					jval.put("trans_yn_chk", trans_yn_chk);
+					
+					System.out.println("trans_yn_chk = " + jval.get("trans_yn_chk"));
 					
 					if(cnt==0){
+						System.out.println("인서트");
+						System.out.println(jval.get("transSetting_aut_yn"));
 						dbAuthorityService.insertUsrDBSrvAutInfo(jval);
 					}else{
+						System.out.println("업데이트");
+						System.out.println(jval.get("transSetting_aut_yn"));
 						dbAuthorityService.updateUsrDBSrvAutInfo(jval);
 					}			
 				}

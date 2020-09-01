@@ -230,6 +230,8 @@ public class ScheduleController {
 			e.printStackTrace();
 		}
 		
+		int cnt = Integer.parseInt(request.getParameter("tCnt"));
+		
 		List<Map<String, Object>> result = null;
 		
 		try {					
@@ -248,8 +250,10 @@ public class ScheduleController {
 					ids.add(Param[i].toString()); 
 				}
 				paramvalue.put("work_id", ids);
+				paramvalue.put("cnt", cnt);
 				
 				result = scheduleService.selectScheduleWorkList(paramvalue);
+
 				return result;
 			}
 		} catch (Exception e) {
@@ -279,6 +283,8 @@ public class ScheduleController {
 		
 		List<Map<String, Object>> result = null;
 		
+		int cnt = Integer.parseInt(request.getParameter("tCnt"));
+		
 		try {					
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
@@ -294,7 +300,9 @@ public class ScheduleController {
 				for(int i=0; i<Param.length; i++){
 					ids.add(Param[i].toString()); 
 				}
+				
 				paramvalue.put("work_id", ids);
+				paramvalue.put("cnt", cnt);
 				
 				result = scheduleService.selectDb2pgScheduleWorkList(paramvalue);
 				return result;
