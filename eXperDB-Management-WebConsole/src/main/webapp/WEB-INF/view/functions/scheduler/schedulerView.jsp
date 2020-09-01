@@ -9,7 +9,8 @@
 	var table = null;
 	var scd_nmChk = "fail";
 	var db_svr_id = ${db_svr_id};
-	var selectChkTab = "week";
+	var selectSdtChkTab = "week";
+	var searchInit = "";
 
 	/* ********************************************************
 	 * 페이지 시작시 함수
@@ -20,7 +21,7 @@
 		fn_todaySetting();
 		
 		//검색조건 초기화
-		selectInitTab(selectChkTab);
+		selectSdtInitTab(selectSdtChkTab);
 
 		$("#btnSearchData").click(function() {
 			//조회조건 setting
@@ -90,15 +91,15 @@
 
 							switch (i) {
 				            case 0:
-				            	appendnew += "<div class='cell' style='height:"+height+";'>";
+				            	appendnew += "<div class='cell row' style='height:"+height+";'>";
 				            	appendnew += "<font color=red>" + showdt + "</font>";    // 좌상단 날짜 
 				           		break;
 				            case 6:
-				            	appendnew += "<div class='cell' style='height:"+height+";'>";
+				            	appendnew += "<div class='cell row' style='height:"+height+";'>";
 				            	appendnew += "<font color=blue>" + showdt + "</font>";
 				      		    break;
 				            default:
-				            	appendnew += "<div class='cell' style='height:"+height+";'>";
+				            	appendnew += "<div class='cell row' style='height:"+height+";'>";
 				            	appendnew += showdt;
 				        	}
  
@@ -122,13 +123,12 @@
 				                if(exe_perd_cd == 'TC001604') {
 				                	if(frst_reg_dtm<=checkYear){
 					                	if(resultYearCheckDt == checkDt) {
-					                		appendnew += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;'>";
+					                		appendnew += "<div class='col-md-12 badge badge-pill badge-light' style='text-align: left; background-color: transparent !important;font-weight:bold;'>";
 					                		if(scd_cndt == 'TC001801') {
-					                			appendnew = "<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+					                			appendnew += "<i class='fa fa-spin fa-refresh mr-2 text-success'></i>";
 					                		} else {
-					                			appendnew = "ico_agent_2.png";
+					                			appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                		}
-					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
 					                		appendnew += "[<spring:message code="schedule.everyyear" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 					                	} 
 				                	}
@@ -136,13 +136,12 @@
 				                } else if(exe_perd_cd == 'TC001603') {
 				                	if(frst_reg_dtm<=checkYear){
 					                	if(exe_day == checkDay) {
-					                		appendnew += "<div class='cellDate'>";
+					                		appendnew += "<div class='col-md-12 badge badge-pill badge-light' style='text-align: left; background-color: transparent !important;font-weight:bold;'>";
 					                		if(scd_cndt == 'TC001801') {
-					                			imgName = "ico_agent_1.png";
+					                			appendnew += "<i class='fa fa-spin fa-refresh mr-2 text-success'></i>";
 					                		} else {
-					                			imgName = "ico_agent_2.png";
+					                			appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                		}
-					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
 					                		appendnew += "[<spring:message code="schedule.everymonth" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 					                	} 
 				                	}
@@ -150,36 +149,34 @@
 				                } else if(exe_perd_cd == 'TC001602') {
 				           			if(frst_reg_dtm<=checkYear){
 					                	if(exe_dt.substr(i,1) == '1') {
-					                		appendnew += "<div class='cellDate'>";
+					                		appendnew += "<div class='col-md-12 badge badge-pill badge-light' style='text-align: left; background-color: transparent !important;font-weight:bold;'>";
 					                		if(scd_cndt == 'TC001801') {
-					                			imgName = "ico_agent_1.png";
+					                			appendnew += "<i class='fa fa-spin fa-refresh mr-2 text-success'></i>";
 					                		} else {
-					                			imgName = "ico_agent_2.png";
+					                			appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                		}
-					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
 					                		appendnew += "[<spring:message code="schedule.everyweek" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 					                	} 
 				           			}
 				                //매일
 				                } else if(exe_perd_cd == 'TC001601') {
 				                	if(frst_reg_dtm<=checkYear){
-				                		appendnew += "<div class='cellDate'>";
+				                		appendnew += "<div class='col-md-12 badge badge-pill badge-light' style='text-align: left; background-color: transparent !important;font-weight:bold;'>";
 				                		if(scd_cndt == 'TC001801') {
-				                			imgName = "ico_agent_1.png";
+				                			appendnew += "<i class='fa fa-spin fa-refresh mr-2 text-success'></i>";
 				                		} else {
-				                			imgName = "ico_agent_2.png";
+				                			appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 				                		}
-				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
 				                		appendnew += "[<spring:message code="schedule.everyday" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 				                	}
 								//1회실행
 				                } else if(exe_perd_cd == 'TC001605') {
-					                if(exe_dt == checkYear) {   
-					                	appendnew += "<div class='cellDate'>";
+					                if(exe_dt == checkYear) {
+					                	appendnew += "<div class='col-md-12 badge badge-pill badge-light' style='text-align: left; background-color: transparent !important;font-weight:bold;'>";
 					                	if(scd_cndt == 'TC001801') {
-					                		imgName = "ico_agent_1.png";
+					                		appendnew += "<i class='fa fa-spin fa-refresh mr-2 text-success'></i>";
 					                	} else {
-					                		imgName = "ico_agent_2.png";
+					                		appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                	}
 					                	appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
 					                	appendnew += "[<spring:message code="schedule.one_time_run" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
@@ -193,94 +190,12 @@
 							
 							appendnew += "</td>";
 						}
-						
 
-console.log("===appendnew123==" + appendnew);
 						appendnew += "</tr>";
 						
 						$("#calendarbody").append(appendnew);
 					}
 				}
-				
-				/* {
-					$("#calendarbody").empty(); //초기화
-					
-					for(var irow=0;irow<5;irow++){
-						var tmparr = new Object();
-						tmparr[0] = [];
-						tmparr[1] = [];
-						tmparr[2] = [];
-						tmparr[3] = [];
-						tmparr[4] = [];
-						tmparr[5] = [];
-						tmparr[6] = [];
-						
-						var appendnew = "<td class='py-1' style='width: 130px; word-break:break-all;'>";
-						// data
-						var maxcnt = 0;
-						for(var i=0;i<7;i++){
-							maxcnt = (maxcnt>tmparr[i].length)?maxcnt:tmparr[i].length;
-						}
-						
-						var height = "160px";
-
-						if (result.length > 4) {
-							height = String(17 * result.length) + "px"
-						}
-
-						for(var i=0;i<7;i++){
-							var showdt = stdt.format("MM/dd");
-							var checkDt = stdt.format("MMdd");
-							var checkDay = stdt.format("dd");
-							var checkYear = stdt.format("yyyyMMdd");
-							
-							appendnew += "<div class='cell' style='height:"+height+";'>";
-							
-							switch (i) {
-								case 0:
-									appendnew += "<i class='mr-2 text-danger' >" + showdt + "</i>";    // 좌상단 날짜 
-									break;
-								case 6:
-									appendnew += "<i class='mr-2 text-primary' >" + showdt + "</i>";    // 좌상단 날짜 
-									break;
-								default:
-									appendnew += showdt;
-							}
-							
-							for(var j=0;j<result.length;j++){
-							
-								var scd_id = result[j].scd_id;
-								var scd_nm = result[j].scd_nm;
-								var scd_exp = result[j].scd_exp;
-								var scd_cndt = result[j].scd_cndt;
-								var exe_perd_cd = result[j].exe_perd_cd;
-								var exe_month = result[j].exe_month;
-								var exe_day = result[j].exe_day;
-								var exe_hms = result[j].exe_hms;
-								var exe_dt = result[j].exe_dt;
-								var frst_reg_dtm = result[j].frst_reg_dtm;
-								var imgName = "";
-								
-								var resultYearCheckDt = exe_month + "" + exe_day;
-							}
-
-										
-	
-						
-						
-						
-						
-						
-							stdt = addDays(stdt, 1);
-						}
-						
-						
-						appendnew += "</td>";
-						$("#calendarbody").append(appendnew);
-					}
-					
-					
-				} */
 			});	
 		});
 	});
@@ -322,8 +237,8 @@ console.log("===appendnew123==" + appendnew);
 	/* ********************************************************
 	 * Tab Click
 	 ******************************************************** */
-	function selectInitTab(intab){
-		selectChkTab = intab;
+	function selectSdtInitTab(intab){
+		selectSdtChkTab = intab;
  		if(intab == "week"){			
 			$("#find_month").hide();
 			$("#week_button").show();//주별 등록버튼
@@ -879,8 +794,8 @@ console.log("===appendnew123==" + appendnew);
 	/* ********************************************************
 	 * Tab Click
 	 ******************************************************** */
-	function selectTab(intab){
-		selectChkTab = intab;
+	function selectSdtTab(intab){
+		selectSdtChkTab = intab;
 
 		if(intab == "week"){			
 			$("#find_month").hide();
@@ -895,170 +810,142 @@ console.log("===appendnew123==" + appendnew);
 			$("#btnSearchData").click();
 		}
 	}
-
 	
-
+	function fn_popup(scd_id){
+		var popUrl = "/bckScheduleDtlVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
+		var width = 1320;
+		var height = 735;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+				
+		window.open(popUrl,"",popOption);
+	}
 	
-	
-	
-function fn_validation(){
-	var scd_nm = document.getElementById("scd_nm");
-		if (scd_nm.value == "") {
-			   alert('<spring:message code="message.msg40" /> ');
-			   scd_nm.focus();
-			   return false;
-		}
-		if(scd_nmChk == "fail"){
-  			aler('<spring:message code="message.msg42" /> ');
-  		}
- 		return true;
-}
+	/* ********************************************************
+	 * 팝업호출
+	 ******************************************************** */
+	 function fn_popup(scd_id){
+		$.ajax({
+			url : "/bckScheduleDtlVeiw.do",
+			data : {
+				scd_id : scd_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+			       xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				$("#scdInfo_scd_id", "#backupScdInfoForm").val(result.scd_id);
+				$("#scdInfo_db_svr_id", "#backupScdInfoForm").val($("#db_svr_id", "#findList").val());
 
-
-
-function fn_popup(scd_id){
-	var popUrl = "/bckScheduleDtlVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
-	var width = 1320;
-	var height = 735;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-	window.open(popUrl,"",popOption);
-}
-
-
-
-
-
-
-
-function fn_insertSchedule(){
-	var popUrl = "/bckScheduleInsertVeiw.do?db_svr_id="+db_svr_id; // 서버 url 팝업경로
-	var width = 1120;
-	var height = 425;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-	window.open(popUrl,"",popOption);
-}
-
-
-$(function(){
-	
-/* 	$('div').each(function(){
-		
-		var length =7;
-		
-		$(this).each(function(){
-			if($(this).text().length >= length){
-				$(this).text($(this).text().substr(0,length)+'...');
+				//POP START
+				fn_sdtDtlPopStart();
+				
+				$("#pop_layer_backup_scd_dtl").modal("show");
 			}
-		})
-	}); */
-	
+		});
+	}
 
-	
+	Date.prototype.format = function(f) {
+	    if (!this.valueOf()) return " ";
 
+	    var weekName = ["<spring:message code="schedule.sunday" /> ", "<spring:message code="schedule.monday" />", "<spring:message code="schedule.thuesday" />", "<spring:message code="schedule.wednesday" />", "<spring:message code="schedule.thursday" />", "<spring:message code="schedule.friday" />", "<spring:message code="schedule.saturday" /> "];
+	    var d = this;
 
-})
-
-
-
-Date.prototype.format = function(f) {
-    if (!this.valueOf()) return " ";
+	    return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1) {
+	        switch ($1) {
+	            case "yyyy": return d.getFullYear();
+	            case "yy": return (d.getFullYear() % 1000).zf(2);
+	            case "MM": return (d.getMonth() + 1).zf(2);
+	            case "dd": return d.getDate().zf(2);
+	            case "E": return weekName[d.getDay()];
+	            case "HH": return d.getHours().zf(2);
+	            case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2);
+	            case "mm": return d.getMinutes().zf(2);
+	            case "ss": return d.getSeconds().zf(2);
+	            case "a/p": return d.getHours() < 12 ? "오전" : "오후";
+	            default: return $1;
+	        }
+	    });
+	};
  
-    var weekName = ["<spring:message code="schedule.sunday" /> ", "<spring:message code="schedule.monday" />", "<spring:message code="schedule.thuesday" />", "<spring:message code="schedule.wednesday" />", "<spring:message code="schedule.thursday" />", "<spring:message code="schedule.friday" />", "<spring:message code="schedule.saturday" /> "];
-    var d = this;
-     
-    return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1) {
-        switch ($1) {
-            case "yyyy": return d.getFullYear();
-            case "yy": return (d.getFullYear() % 1000).zf(2);
-            case "MM": return (d.getMonth() + 1).zf(2);
-            case "dd": return d.getDate().zf(2);
-            case "E": return weekName[d.getDay()];
-            case "HH": return d.getHours().zf(2);
-            case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2);
-            case "mm": return d.getMinutes().zf(2);
-            case "ss": return d.getSeconds().zf(2);
-            case "a/p": return d.getHours() < 12 ? "오전" : "오후";
-            default: return $1;
-        }
-    });
-};
- 
-String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
-String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
-Number.prototype.zf = function(len){return this.toString().zf(len);};
+	String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
+	String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
+	Number.prototype.zf = function(len){return this.toString().zf(len);};
 
+	/**
+	 * Day of Year  
+	 * @returns
+	 */
+	Date.prototype.DayOfYear = function(){
+		var onejan = new Date(this.getFullYear(),0,1);
+		return Math.ceil((this - onejan) / 86400000); 
+	};
 
+	/**
+	 * Convert String Format to Date Object 
+	 * @param _format   "yyyy-mm-dd"    
+	 * @param _delimeter  "-"
+	 * @returns {Date}
+	 */
+	function StringToDate(_date , _format , _delimiter){
+	    var formatLowerCase=_format.toLowerCase();
+	    var formatItems=formatLowerCase.split(_delimiter);
+	    var dateItems=_date.split(_delimiter);
+	    var monthIndex=formatItems.indexOf("mm");
+	    var dayIndex=formatItems.indexOf("dd");
+	    var yearIndex=formatItems.indexOf("yyyy");
+	    var month=parseInt(dateItems[monthIndex]);
+	    month-=1;
+	    var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+	    return formatedDate;
+	}
 
-/**
- * Day of Year  
- * @returns
- */
-Date.prototype.DayOfYear = function(){
-	var onejan = new Date(this.getFullYear(),0,1);
-	return Math.ceil((this - onejan) / 86400000); 
-};
- 
-
-/**
- * Convert String Format to Date Object 
- * @param _format   "yyyy-mm-dd"    
- * @param _delimeter  "-"
- * @returns {Date}
- */
-function StringToDate(_date , _format , _delimiter){
-    var formatLowerCase=_format.toLowerCase();
-    var formatItems=formatLowerCase.split(_delimiter);
-    var dateItems=_date.split(_delimiter);
-    var monthIndex=formatItems.indexOf("mm");
-    var dayIndex=formatItems.indexOf("dd");
-    var yearIndex=formatItems.indexOf("yyyy");
-    var month=parseInt(dateItems[monthIndex]);
-    month-=1;
-    var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
-    return formatedDate;
-}
-
-
-
-
-var DateDiff =  {
-	    inDays: function(d1, d2) {
-	        var t2 = d2.getTime();
-	        var t1 = d1.getTime();
-	 
-	        return parseInt((t2-t1)/(24*3600*1000));
-	    },
-	 
-	    inWeeks: function(d1, d2) {
-	        var t2 = d2.getTime();
-	        var t1 = d1.getTime();
-	 
-	        return parseInt((t2-t1)/(24*3600*1000*7));
-	    },
-	 
-	    inMonths: function(d1, d2) {
-	        var d1Y = d1.getFullYear();
-	        var d2Y = d2.getFullYear();
-	        var d1M = d1.getMonth();
-	        var d2M = d2.getMonth();
-	 
-	        return (d2M+12*d2Y)-(d1M+12*d1Y);
-	    },
-	 
-	    inYears: function(d1, d2) {
-	        return d2.getFullYear()-d1.getFullYear();
-	    }
-};
+	var DateDiff =  {
+		    inDays: function(d1, d2) {
+		        var t2 = d2.getTime();
+		        var t1 = d1.getTime();
+		 
+		        return parseInt((t2-t1)/(24*3600*1000));
+		    },
+		 
+		    inWeeks: function(d1, d2) {
+		        var t2 = d2.getTime();
+		        var t1 = d1.getTime();
+		 
+		        return parseInt((t2-t1)/(24*3600*1000*7));
+		    },
+		 
+		    inMonths: function(d1, d2) {
+		        var d1Y = d1.getFullYear();
+		        var d2Y = d2.getFullYear();
+		        var d1M = d1.getMonth();
+		        var d2M = d2.getMonth();
+		 
+		        return (d2M+12*d2Y)-(d1M+12*d1Y);
+		    },
+		 
+		    inYears: function(d1, d2) {
+		        return d2.getFullYear()-d1.getFullYear();
+		    }
+	};
 </script>
 
+<%@include file="../../popup/bakupScheduleDtl.jsp"%>
+
 <form name="findList" id="findList" method="post">
-	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
+	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}" />
 </form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -1115,12 +1002,12 @@ var DateDiff =  {
 				<div class="card-body">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('week');" >
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectSdtTab('week');" >
 								<spring:message code="backup_management.weekly_schedule_status" />
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('month');">
+							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectSdtTab('month');">
 								<spring:message code="backup_management.monthly_schedule_status" />
 							</a>
 						</li>

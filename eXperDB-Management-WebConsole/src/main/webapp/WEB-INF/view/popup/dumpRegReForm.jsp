@@ -109,7 +109,7 @@
 			success : function(data) {
 
 				if (data != null) {
-					if (data.result != null) {
+					if (data.result != null && data.result != undefined) {
 						if(data.result.ERR_CODE == ""){
 							if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 								var volume = data.result.RESULT_DATA.CAPACITY;
@@ -198,7 +198,7 @@
 				}
 			},
 			success : function(data) {
-				if (data != null) {
+				if (data.result != null && data.result != undefined) {
 					if(data.result.ERR_CODE == ""){
 						if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 							var volume = data.result.RESULT_DATA.CAPACITY;
@@ -392,7 +392,13 @@
 			}
 		});
 
-		fn_get_dump_list();
+		if ($("#dump_call_gbn", "#search_dumpReForm").val() == "backup_sdt") {
+			selectSdtTab("week");
+			fn_selectBckSchedule();
+		} else {
+			fn_get_dump_list();
+		}
+		
 		showSwalIcon('<spring:message code="message.msg84" />', '<spring:message code="common.close" />', '', 'success');
 		$('#pop_layer_mod_dump').modal('hide');
 	}
@@ -433,7 +439,11 @@
 	}
 </script>
 
-<div class="modal fade" id="pop_layer_mod_dump" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<form name="search_dumpReForm" id="search_dumpReForm" method="post">
+	<input type="hidden" name="dump_call_gbn"  id="dump_call_gbn" value="" />
+</form>
+
+<div class="modal fade" id="pop_layer_mod_dump" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:1060;">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 40px 110px;">
 		<div class="modal-content" style="width:1500px; ">		 	 
 			<div class="modal-body" style="margin-bottom:-30px;">

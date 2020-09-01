@@ -650,10 +650,14 @@
 				
 				if (result.workInfo != null) {
 					fn_update_chogihwa(selectChkTab, result);
-					
+
 					if (selectChkTab == "rman") {
+						$('#rman_call_gbn', '#search_rmanReForm').val("");
+
 						$('#pop_layer_mod_rman').modal("show");
 					} else {
+						$('#dump_call_gbn', '#search_dumpReForm').val("");
+						
 						$('#pop_layer_mod_dump').modal("show");
 					}
 				} else {

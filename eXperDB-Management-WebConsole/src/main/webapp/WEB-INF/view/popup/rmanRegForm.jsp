@@ -221,7 +221,7 @@
 				}
 			},
 			success : function(data) {
-				if (data != null) {
+				if (data.result != null && data.result != undefined) {
 					if(data.result.ERR_CODE == ""){
 						if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 							var volume = data.result.RESULT_DATA.CAPACITY;
