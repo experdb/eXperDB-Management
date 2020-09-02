@@ -63,6 +63,19 @@ public class AccessHistoryDAO extends EgovAbstractMapper {
 		result = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistory", params);
 		return result;
 	}
+	
+	/**
+	 * 화면접근 내역 조회
+	 * 
+	 * @param userVO
+	 * @return List
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectAccessHistoryNew(Map<String, Object> param) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistoryNew", param);		
+		return sl;
+	}
 
 	/**
 	 * 화면접근 내역 총 갯수

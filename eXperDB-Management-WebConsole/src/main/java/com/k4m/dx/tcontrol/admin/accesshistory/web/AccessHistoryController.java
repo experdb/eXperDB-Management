@@ -195,6 +195,58 @@ public class AccessHistoryController {
 	 * @return resultSet
 	 * @throws Exception
 	 */
+	@RequestMapping(value = "/selectSearchAccessHistoryNew.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectSearchAccessHistoryNew(@ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model,
+			@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+
+		CmmnUtils cu = new CmmnUtils();
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0039_02");
+			historyVO.setMnu_id(18);
+			accessHistoryService.insertHistory(historyVO);
+
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
+			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
+			String type = request.getParameter("type");
+			String search = request.getParameter("search");
+			String order_type = request.getParameter("order_type");
+			String order = request.getParameter("order");
+			String sys_cd = request.getParameter("sys_cd");		
+			
+			if (search != null) {
+				model.addAttribute("search", search);
+				search = "%" + search + "%";
+			}
+
+			param.put("lgi_dtm_start", lgi_dtm_start);
+			param.put("lgi_dtm_end", lgi_dtm_end);
+			param.put("type", type);
+			param.put("search", search);
+			param.put("order_type", order_type);
+			param.put("order", order);
+			param.put("sys_cd", sys_cd);
+
+			result = accessHistoryService.selectAccessHistoryNew(param);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * 접근이력을 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/selectSearchAccessHistory.do")
 	@ResponseBody
 	public ModelAndView selectSearchAccessHistory(@ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model,

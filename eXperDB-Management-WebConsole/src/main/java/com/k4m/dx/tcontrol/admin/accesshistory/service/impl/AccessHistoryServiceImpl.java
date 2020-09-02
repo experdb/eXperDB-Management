@@ -32,6 +32,11 @@ public class AccessHistoryServiceImpl extends EgovAbstractServiceImpl implements
 		return accessHistoryDAO.selectAccessHistory(searchVO, param);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectAccessHistoryNew(Map<String, Object> param) throws Exception {
+		return accessHistoryDAO.selectAccessHistoryNew(param);
+	}
+
 	public int selectAccessHistoryTotCnt(Map<String, Object> param) throws Exception {
 		return accessHistoryDAO.selectAccessHistoryTotCnt(param);
 	}
