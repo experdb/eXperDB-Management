@@ -26,10 +26,38 @@
 
 <script type="text/javascript">
 
-//var gbn ="${gbn}";
-
 var tableDDL = null;
 var tableData = null;
+
+
+/* ********************************************************
+ * Tab Click
+ ******************************************************** */
+function selectTab(tab){	
+	if(tab == "dataWork"){
+		getdataDataList();
+		$("#dataDataTable").show();
+		$("#dataDataTable_wrapper").show();
+		$("#ddlDataTable").hide();
+		$("#ddlDataTable_wrapper").hide();
+		$("#searchDDL").hide();
+		$("#searchData").show();
+		$("#btnDDL").hide();
+		$("#btnData").show();
+	}else{
+		getddlDataList();
+		$("#ddlDataTable").show();
+		$("#ddlDataTable_wrapper").show();
+		$("#dataDataTable").hide();
+		$("#dataDataTable_wrapper").hide();
+		$("#searchDDL").show();
+		$("#searchData").hide();
+		$("#btnDDL").show();
+		$("#btnData").hide();
+	}
+}
+
+
 
 function fn_init(){
 	tableDDL = $('#ddlDataTable').DataTable({
@@ -184,27 +212,17 @@ $(window.document).ready(
 	function() {	
 	
 		fn_init();
-		
-		$("#migrationTab").hide();	
-		
-		//table 탭 이동시
-		$('a[href="#ddlTab"]').on('shown.bs.tab', function (e) {
-			$("#ddlTab").show();
-			$("#migrationTab").hide();
-		}); 
-		
-		//table 탭 이동시
-		$('a[href="#migrationTab"]').on('shown.bs.tab', function (e) {
-			$("#migrationTab").show();
-			$("#ddlTab").hide();
-		}); 
-				
+	
 		ddlDateCalenderSetting();
 		migDateCalenderSetting();
 		
 		getddlDataList();
 		getdataDataList();			
-
+		
+		$("#ddlDataTable").show();
+		$("#ddlDataTable_wrapper").show();
+		$("#dataDataTable").hide();
+		$("#dataDataTable_wrapper").hide();		
 	}
 );
 
@@ -539,253 +557,230 @@ function getdataDataList(){
 	<input type="hidden" name="ddl_save_pth"  id="ddl_save_pth">
 </form>
 
-
-		<div class="content-wrapper main_scroll" id="contentsDiv">
-			<div class="row">
-				<div class="col-12 div-form-margin-srn stretch-card">
-					<div class="card">
-						<div class="card-body">
-							<!-- title start -->
-							<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
-								<div class="card" style="margin-bottom:0px;">
-									<div class="card-header" role="tab" id="page_header_div">
-										<div class="row">
-											<div class="col-5">
-												<h6 class="mb-0">
-													<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-														<i class="fa fa-check-square"></i>
-														<span class="menu-title"><spring:message code="migration.performance_history"/></span>
-														<i class="menu-arrow_user" id="titleText" ></i>
-													</a>
-												</h6>
-											</div>
-											<div class="col-7">
-							 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-							 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-							 							MIGRATION
-							 						</li>
-							 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="migration.performance_history"/></li>
-												</ol>
-											</div>
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5" style="padding-top:3px;">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="ti-server menu-icon"></i>
+												<span class="menu-title"><spring:message code="migration.performance_history"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">MIGRATION</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_migration" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="migration.performance_history"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.shedule_execution_history" /></p>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					<!-- title end -->
 				</div>
-				
-				
-				<div class="col-12 div-form-margin-table stretch-card">
-					<div class="card">
-						<div class="card-body">
+			</div>
+		</div>
 
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
+						<li class="nav-item">
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectTab('ddlWork');" >
+								DDL
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="javascript:selectTab('dataWork');">
+								MIGRATION
+							</a>
+						</li>
+					</ul>
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body" style="margin:-10px 0px -15px 0px;">
 						
-							<div class="card my-sm-2" >
-								<div class="card-body" >
-									<div class="form-group row div-form-margin-z">
-									<div class="col-12" >
-										<ul class="nav nav-pills nav-pills-setting" style="border-bottom:0px;" id="server-tab" role="tablist">
-											<li class="nav-item tab-pop-two-style" >										
-												<a class="nav-link active" id="ins-tab-1" data-toggle="pill" href="#ddlTab" role="tab" aria-controls="ddlTab" aria-selected="true" >
-													DDL
-												</a>
-											</li>
-											<li class="nav-item tab-pop-two-style">
-												<a class="nav-link" id="ins-tab-2" data-toggle="pill" href="#migrationTab" role="tab" aria-controls="migrationTab" aria-selected="false">
-													MIGRATION
-												</a>
-											</li>
-										</ul>
+							<!-- DDL 수행이력 조회조건 -->
+							<form class="form-inline row" id="searchDDL">
+									<div class="input-group mb-2 mr-sm-2">		
+										<div id="ddl_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_strt_dtm" name="ddl_wrk_strt_dtm" >
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+										<div class="input-group align-items-center">
+											<span style="border:none; padding: 0px 10px;"> ~ </span>
+										</div>
+										<div id="ddl_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_end_dtm" name="ddl_wrk_end_dtm" >
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
 									</div>
-								</div>
-						
-						
+									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:300px;" maxlength="25" name="ddl_wrk_nm" id="ddl_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
+									</div>									
+									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
+										<select class="form-control" style="width:150px;" name="ddl_exe_rslt_cd" id="ddl_exe_rslt_cd">
+											<option value="%"><spring:message code="schedule.total" /></option>
+											<option value="TC001701"><spring:message code="common.success" /></option>
+											<option value="TC001702"><spring:message code="common.failed" /></option>
+										</select>
+									</div>
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getddlDataList()">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>
+							</form>		
 							
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #c9ccd7;">		
-							<!-- DDL 탭 -->
-								<div class="tab-pane fade show active" role="tabpanel" id="ddlTab">			
-																		
-						
-								<div class="card-body">	
-									<div class="card my-sm-2" >
-										<div class="card-body" >
-													<form class="form-inline" onsubmit="return false;">
-														<div class="row">								
-															<div class="input-group mb-2 mr-sm-2">								
-																<div id="ddl_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-																	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_strt_dtm" name="ddl_wrk_strt_dtm" >
-																	<span class="input-group-addon input-group-append border-left">
-																		<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-																	</span>
-																</div>
-																<div class="input-group align-items-center">
-																	<span style="border:none; padding: 0px 10px;"> ~ </span>
-																</div>
-																<div id="ddl_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-																	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_end_dtm" name="ddl_wrk_end_dtm" >
-																	<span class="input-group-addon input-group-append border-left">
-																		<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-																	</span>
-																</div>
-															</div>									
-															<div class="input-group mb-2 mr-sm-2">
-																<input type="text" class="form-control" style="width:300px;" maxlength="25" name="ddl_wrk_nm" id="ddl_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
-															</div>							
-															<div class="input-group mb-2 mr-sm-2">
-																<select class="form-control" style="width:150px;" name="ddl_exe_rslt_cd" id="ddl_exe_rslt_cd">
-																	<option value="%"><spring:message code="schedule.total" /></option>
-																	<option value="TC001701"><spring:message code="common.success" /></option>
-																	<option value="TC001702"><spring:message code="common.failed" /></option>
-																</select>
-															</div>									
-															<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="getddlDataList();">
-																<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-															</button>								
-														</div>
-													</form>	
-												</div>
-											</div>
+							<!-- MIGRATION 수행이력 조회조건 -->
+							<form class="form-inline row" id="searchData" style="display:none;">
+									<div class="input-group mb-2 mr-sm-2">		
+										<div id="mig_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_strt_dtm" name="mig_wrk_strt_dtm" >
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
 										</div>
-		
-								<div class="card-body">	
-									<div class="card my-sm-2" >
-										<div class="card-body" >			
-											<div class="row">
-												<div class="col-12">
-				 									<div class="table-responsive">
-														<div id="order-listing_wrapper"
-															class="dataTables_wrapper dt-bootstrap4 no-footer">
-															<div class="row">
-																<div class="col-sm-12 col-md-6">
-																	<div class="dataTables_length" id="order-listing_length">
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-					 								<table id="ddlDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-														<thead>
-				 											<tr class="bg-info text-white">
-																	<th width="30">NO</th>
-																	<th width="100"><spring:message code="common.work_name" /></th>
-																	<th width="200"><spring:message code="common.work_description" /></th>
-																	<th width="100"><spring:message code="data_transfer.ip" /> </th>
-																	<th width="100">DBMS <spring:message code="common.division" /></th>
-																	<th width="100">Database</th>
-																	<th width="100"><spring:message code="backup_management.work_start_time" /></th>
-																	<th width="100"><spring:message code="backup_management.work_end_time" /></th>
-																	<th width="100"><spring:message code="schedule.jobTime"/></th>
-																	<th width="100"><spring:message code="properties.status" /></th>
-																	<th width="100"><spring:message code="migration.performer"/></th>
-																	<th width="0"></th>
-																	<th width="0"></th>
-																	<th width="0"></th>
-															</tr>
-														</thead>
-													</table>
-											 	</div>
-										 	</div>
+										<div class="input-group align-items-center">
+											<span style="border:none; padding: 0px 10px;"> ~ </span>
 										</div>
+										<div id="mig_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_end_dtm" name="mig_wrk_end_dtm" >
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>									
+									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:300px;" maxlength="25" name="mig_wrk_nm" id="mig_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
+									</div>									
+									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
+										<select class="form-control" style="width:150px;" name="mig_exe_rslt_cd" id="mig_exe_rslt_cd">
+											<option value="%"><spring:message code="schedule.total" /></option>
+											<option value="TC001701"><spring:message code="common.success" /></option>
+											<option value="TC001702"><spring:message code="common.failed" /></option>
+										</select>
 									</div>
-								</div>
-							</div>
-		
-						
-				<!-- MIGRATION 탭 -->
-								<div class="tab-pane fade show active" role="tabpanel" id="migrationTab">			
-								<div class="card-body">	
-									<div class="card my-sm-2" >
-										<div class="card-body" >
-													<form class="form-inline">
-														<div class="row">								
-															<div class="input-group mb-2 mr-sm-2">								
-																<div id="mig_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-																	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_strt_dtm" name="mig_wrk_strt_dtm" >
-																	<span class="input-group-addon input-group-append border-left">
-																		<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-																	</span>
-																</div>
-																<div class="input-group align-items-center">
-																	<span style="border:none; padding: 0px 10px;"> ~ </span>
-																</div>
-																<div id="mig_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-																	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_end_dtm" name="mig_wrk_end_dtm" >
-																	<span class="input-group-addon input-group-append border-left">
-																		<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-																	</span>
-																</div>
-															</div>									
-															<div class="input-group mb-2 mr-sm-2">
-																<input type="text" class="form-control" style="width:300px;" maxlength="25" name="mig_wrk_nm" id="mig_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
-															</div>							
-															<div class="input-group mb-2 mr-sm-2">
-																<select class="form-control" style="width:150px;" name="mig_exe_rslt_cd" id="mig_exe_rslt_cd">
-																	<option value="%"><spring:message code="schedule.total" /></option>
-																	<option value="TC001701"><spring:message code="common.success" /></option>
-																	<option value="TC001702"><spring:message code="common.failed" /></option>
-																</select>
-															</div>									
-															<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="getdataDataList();">
-																<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-															</button>								
-														</div>
-													</form>	
-												</div>
-											</div>
-										</div>		
-									<div class="card-body">	
-										<div class="card my-sm-2" >
-											<div class="card-body" >			
-												<div class="row">
-													<div class="col-12">
-					 									<div class="table-responsive">
-															<div id="order-listing_wrapper"
-																class="dataTables_wrapper dt-bootstrap4 no-footer">
-																<div class="row">
-																	<div class="col-sm-12 col-md-6">
-																		<div class="dataTables_length" id="order-listing_length">
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-						 								<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-															<thead>
-					 											<tr class="bg-info text-white">
-																		<th width="30" rowspan="2">NO</th>
-																		<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
-																		<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
-																		<th width="400" colspan="3"><spring:message code="migration.source_system"/></th>
-																		<th width="400" colspan="2"><spring:message code="migration.target_system"/></th>
-																		<th width="130" rowspan="2"><spring:message code="backup_management.work_start_time"/></th>
-																		<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
-																		<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
-																		<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
-																		<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
-																</tr>
-																<tr class="bg-info text-white">
-																		<th width="100">DBMS<spring:message code="common.division" /></th>
-																		<th width="100"><spring:message code="data_transfer.ip" /></th>
-																		<th width="100">Database</th>
-																		<th width="100"><spring:message code="data_transfer.ip" /></th>
-																		<th width="100">Database</th>
-																</tr>
-															</thead>
-														</table>
-												 	</div>
-											 	</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>
+							</form>
 						</div>
 					</div>
 				</div>
-				</div>
-			</div>					
-		</div>	
-	</div>
+			</div>
+		</div>
 
+		<div class="col-sm-12 stretch-card div-form-margin-table" id="left_list">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12" id="rmanDataTableDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+	 								<table id="ddlDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+ 											<tr class="bg-info text-white">
+													<th width="30">NO</th>
+													<th width="100"><spring:message code="common.work_name" /></th>
+													<th width="200"><spring:message code="common.work_description" /></th>
+													<th width="100"><spring:message code="data_transfer.ip" /> </th>
+													<th width="100">DBMS <spring:message code="common.division" /></th>
+													<th width="100">Database</th>
+													<th width="100"><spring:message code="backup_management.work_start_time" /></th>
+													<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+													<th width="100"><spring:message code="schedule.jobTime"/></th>
+													<th width="100"><spring:message code="properties.status" /></th>
+													<th width="100"><spring:message code="migration.performer"/></th>
+													<th width="0"></th>
+													<th width="0"></th>
+													<th width="0"></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>					 	
+								<div class="col-12" id="dumpDataTableDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+	 								<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+											<thead>
+											<tr class="bg-info text-white">
+												<th width="30" rowspan="2">NO</th>
+												<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
+												<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
+												<th width="400" colspan="3"><spring:message code="migration.source_system"/></th>
+												<th width="400" colspan="2"><spring:message code="migration.target_system"/></th>
+												<th width="130" rowspan="2"><spring:message code="backup_management.work_start_time"/></th>
+												<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
+												<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
+												<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
+												<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
+										</tr>
+										<tr class="bg-info text-white">
+												<th width="100">DBMS<spring:message code="common.division" /></th>
+												<th width="100"><spring:message code="data_transfer.ip" /></th>
+												<th width="100">Database</th>
+												<th width="100"><spring:message code="data_transfer.ip" /></th>
+												<th width="100">Database</th>
+										</tr>
+									</thead>
+								</table>	
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
+		<div class="col-sm-0_5" style="display:none;" id="center_div" >
+			<div class="card" style="background-color: transparent !important;border:0px;top:30%;position: inline-block;">
+				<div class="card-body" style="" onclick="fn_schedule_leftListSize();">	
+					<i class='fa fa-angle-double-right text-info' style="font-size: 35px;cursor:pointer;"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 

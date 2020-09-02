@@ -854,7 +854,8 @@
 				DELETE
 				FROM
 				T_DBSVRIPADR_I
-				WHERE  DB_SVR_IPADR_ID NOT IN
+				WHERE DB_SVR_ID=#{db_svr_id}::numeric
+				AND DB_SVR_IPADR_ID NOT IN
 		      <foreach item="item" index="index" collection="db_svr_ipadr_id" open="(" separator="," close=")"> 
 						 #{item}::numeric
 			   </foreach>
