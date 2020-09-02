@@ -50,24 +50,25 @@
 				db_svr_id_val = nvlPrmSet("${serverinfo.db_svr_id}", '');
 				
 	 			if (db_svr_id == "") {
-
-	 				
 					html += "<div class='col-md-12 grid-margin stretch-card'>\n";
 					html += "	<div class='card news_text'>\n";
-					html += '		<div class="card-body row" id="serverSs'+ rowCount +'" onClick="fn_serverSebuInfo(' + db_svr_id_val + ')" style="cursor:pointer;">\n';
+					html += '		<div class="card-body" id="serverSs'+ rowCount +'" onClick="fn_serverSebuInfo(' + db_svr_id_val + ', '+ rowCount +')" style="cursor:pointer;">\n';
+					html += '			<div class="row">\n';
 				} else if (db_svr_id != nvlPrmSet("${serverinfo.db_svr_id}", '')  && master_gbn == "M") {
 					html += '				</div>\n';
 					html += '			</div>\n';
 					html += '			<div class="col-sm-3" style="margin:auto;">\n';
-					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iDatabase' + db_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
 					html += '			</div>\n';
+					html += "		</div>\n";
 					html += "		</div>\n";
 					html += "	</div>\n";
 					html += '</div>\n';
 					
 					html += "<div class='col-md-12 grid-margin stretch-card'>\n";
 					html += "	<div class='card news_text'>\n";
-					html += '		<div class="card-body row" id="serverSs'+ rowCount +'" onClick="fn_serverSebuInfo('+ db_svr_id_val +')" style="cursor:pointer;">\n';
+					html += '		<div class="card-body" id="serverSs'+ rowCount +'" onClick="fn_serverSebuInfo('+ db_svr_id_val +', '+ rowCount +')" style="cursor:pointer;">\n';
+					html += '			<div class="row">\n';
 				}
 	
 	 			if (master_gbn == "M") {
@@ -114,6 +115,7 @@
 					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
 					html += '			</div>\n';
 					html += "		</div>\n";
+					html += "		</div>\n";
 					html += "	</div>\n";
 					html += '</div>\n';
 					
@@ -123,6 +125,7 @@
 			</c:forEach>
 		}
 
+		$("#serverSsCnt", "#dashboardViewForm").val(serverTotInfo_cnt);
 		$("#serverTabList").html(html);
 		
 		if (serverTotInfo_cnt > 0) {
@@ -197,6 +200,8 @@
 	<input type="hidden" name="scale_yn"  id="scale_yn" value="${scale_yn}"/>
 	<input type="hidden" name="dvb_svr_id_chk"  id="dvb_svr_id_chk" value= "4"/>
 	<input type="hidden" name="encp_use_yn_chk"  id="encp_use_yn_chk" value="${sessionScope.session.encp_use_yn}"/>
+	
+	<input type="hidden" name="serverSsCnt"  id="serverSsCnt" />
 </form>
 
 <!-- partial -->
@@ -1186,133 +1191,13 @@
 											</div>
 										</div>
 									</div>
-
-			                      <%-- <div class="carousel-item" id="v-pills-home_test2">
-			                        <div class="row">
-			                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
-			                            <div class="ml-xl-4">
-			                              <h1>$61321</h1>
-			                              <h3 class="font-weight-light mb-xl-4">South America</h3>
-			                              <p class="text-muted mb-2 mb-xl-0">It is the period time a user is actively engaged with your website, page or app, etc. The total number of sessions within the date range. </p>
-			                            </div>
-			                          </div>
-			                          <div class="col-md-12 col-xl-9">
-			                            <div class="row">
-			                              <div class="col-md-6">
-			                                <div class="table-responsive mb-3 mb-md-0">
-			                                  <table class="table table-borderless report-table">
-			                                    <tr>
-			                                      <td class="text-muted">Brazil</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">613</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Argentina</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">483</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Peru</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">824</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Chile</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">564</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Colombia</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">460</h5></td>
-			                                    </tr>
-			                                    <tr>
-			                                      <td class="text-muted">Uruguay</td>
-			                                      <td class="w-100 px-0">
-			                                        <div class="progress progress-md mx-4">
-			                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-			                                        </div>
-			                                      </td>
-			                                      <td><h5 class="font-weight-bold mb-0">693</h5></td>
-			                                    </tr>
-			                                  </table>
-			                                </div>
-			                              </div>
-			                              <div class="col-md-6 mt-3">
-			                                <canvas id="south-america-chart"></canvas>
-			                                <div id="south-america-legend"></div>
-			                              </div>
-			                            </div>
-			                          </div>
-			                        </div>
-			                      </div> --%>
 			                    </div>
-			                    <a class="carousel-control-prev" href="#detailedReports" role="button" data-slide="prev">
-			                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-			                      <span class="sr-only">Previous</span>
-			                    </a>
-			                    <a class="carousel-control-next" href="#detailedReports" role="button" data-slide="next">
-			                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-			                      <span class="sr-only">Next</span>
-			                    </a>
-			                  </div>
-			                 </div>
-			                 </div>
-                </div>
-              
-              </div>
-            </div>
-          </div>
-          
-          
-          
-          
-          
-          
-          
-          
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
-        </div>
-        <!-- content-wrapper ends -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- content-wrapper ends -->

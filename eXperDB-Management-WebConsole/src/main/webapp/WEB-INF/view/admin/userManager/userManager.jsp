@@ -18,6 +18,7 @@
 	*
 	*/
 %>
+
 <script type="text/javascript">
 	var table = null; 
 	var confirm_title = "";
@@ -122,7 +123,7 @@
 						],'select': {'style': 'multi'}
 		});
 
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+		table.tables().header().to$().find('th:eq(0)').css('width', '40px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
@@ -584,10 +585,10 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.user_management"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -596,7 +597,7 @@
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							Admin
+					 							ADMIN
 					 						</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.user_management" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.user_management"/></li>
@@ -629,27 +630,29 @@
 					<!-- search param start -->
 					<div class="card">
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
-
-							<form class="form-inline">
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control" style="width:100px; margin-right: 1rem;" name="sch_type" id="sch_type">
+							<form class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
+									<select class="form-control" style="margin-right: -1.8rem;" name="sch_type" id="sch_type">
 										<option value="usr_nm"><spring:message code="user_management.user_name" /></option>
 										<option value="usr_id"><spring:message code="user_management.id" /></option>
 									</select>
-									<input hidden="hidden" />
-									<input type="text" class="form-control" style="width:400px;margin-right: 2rem;" maxlength="15" id="sch_search" name="sch_search" onblur="this.value=this.value.trim()" />		
 								</div>
 
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control" style="width:200px; margin-right: 2rem;" name="sch_use_yn" id="sch_use_yn">
+								<div class="input-group mb-2 mr-sm-2 col-sm-3">
+									<input hidden="hidden" />
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="15" id="sch_search" name="sch_search" onblur="this.value=this.value.trim()" />
+								</div>
+
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" style="margin-right: -0.7rem;" name="sch_use_yn" id="sch_use_yn">
 										<option value="%"><spring:message code="user_management.use_yn" />&nbsp;<spring:message code="common.total" /></option>
 										<option value="Y"><spring:message code="dbms_information.use" /></option>
 										<option value="N"><spring:message code="dbms_information.unuse" /></option>
 									</select>
 								</div>
 
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control" style="width:200px; margin-right: 1rem;" name="sch_encp_use_yn" id="sch_encp_use_yn">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" name="sch_encp_use_yn" id="sch_encp_use_yn">
 										<option value="%">Encrypt&nbsp;<spring:message code="user_management.use_yn" />&nbsp;<spring:message code="common.total" /></option>
 										<option value="Y"><spring:message code="dbms_information.use" /></option>
 										<option value="N"><spring:message code="dbms_information.unuse" /></option>
@@ -659,7 +662,6 @@
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_select();" >
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 								</button>
-
 							</form>
 						</div>
 					</div>

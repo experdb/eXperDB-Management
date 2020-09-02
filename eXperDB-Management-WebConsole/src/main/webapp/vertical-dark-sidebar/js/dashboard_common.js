@@ -23,15 +23,15 @@ $(window).ready(function(){
 /* ********************************************************
  * 서버정보 click
  ******************************************************** */
-function fn_serverSebuInfo(db_svr_id) {
+function fn_serverSebuInfo(db_svr_id, rowChkCnt) {
 	//초기화
-	fn_serverDivClear(db_svr_id);
+	fn_serverDivClear(db_svr_id, rowChkCnt);
 }
 
 /* ********************************************************
  * 초기화
  ******************************************************** */
-function fn_serverDivClear(db_svr_id) {
+function fn_serverDivClear(db_svr_id, rowChkCnt) {
 	//백업정보
 	if ($('#a_back_hist').attr('aria-expanded') == "false") {
 		$('#a_back_hist').click();
@@ -77,7 +77,17 @@ function fn_serverDivClear(db_svr_id) {
 	$("#pg_wal").html("");
 	$("#pg_arc").html("");
 	$("#pg_log").html("");
+
+	//클릭시 css
+	var serverSsCnt_chk = parseInt(nvlPrmSet($("#serverSsCnt", "#dashboardViewForm").val(),0));
 	
+	if (serverSsCnt_chk > 0) {
+		for (var i = 1; i <= serverSsCnt_chk; i++) {
+			$("#serverSs" + i).css('background-color','#fff');
+		}
+	}
+	
+	$("#serverSs" + rowChkCnt).css('background-color','#c2defe');
 
 	fn_dbSvrIdSearch(db_svr_id);
 }
@@ -1379,7 +1389,8 @@ function fn_migration_history_set(result) {
 			
 			migtHisHtml +='		<td class="text-center">';
 			if (item.exe_rslt_cd == "TC001701") {
-				if (item.migt_gbn == "DDL") {
+/*				if (item.migt_gbn == "DDL") {
+
 					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
 				} else {
 					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
@@ -1387,6 +1398,13 @@ function fn_migration_history_set(result) {
 				migtHisHtml += '<i class="fa fa-check"></i>';
 				migtHisHtml += common_success;
 				migtHisHtml += "</div>";
+				*/
+				migtHisHtml += '<i class="fa fa-check text-primary">';
+				migtHisHtml += '&nbsp;' + common_success + '</i>';
+/*				
+				migtHisHtml += '<input class="btn btn-primary btn-sm" width="200px;" style="vertical-align:middle;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')" type="button" value="'+common_success+ '" />';
+				
+					*/
 			} else if(item.exe_rslt_cd == 'TC001702'){
 				if (item.migt_gbn == "DDL") {
 					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlFailLog('+item.mig_exe_sn+')">';
