@@ -776,9 +776,9 @@ function fn_dateValidation(exe_dt){
 								<div class="col-sm-4">
 									<input type="text" class="form-control" maxlength="20" id="scd_nm" name="scd_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="20<spring:message code='message.msg188'/>"/>
 								</div>
-								<div class="col-sm-1_5">
-									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" type="button" onclick="fn_check();" value='<spring:message code="common.overlap_check" />' />
-								</div>
+<!-- 								<div class="col-sm-1_5"> -->
+<%-- 									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" type="button" onclick="fn_check();" value='<spring:message code="common.overlap_check" />' /> --%>
+<!-- 								</div> -->
 							</div>
 							<div class="form-group row" style="margin-bottom:-10px;">
 								<label for="ins_pst_nm" class="col-sm-1_5 col-form-label pop-label-index">

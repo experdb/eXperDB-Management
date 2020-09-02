@@ -478,6 +478,8 @@ public class DbServerManagerController {
 
 		try {
 			
+			String db_svr_id = request.getParameter("db_svr_id");
+			
 			int ipadrCnt = dbServerManagerService.selectIpadrCnt();
 
 			String strRows = request.getParameter("ipmaps").toString().replaceAll("&quot;", "\"");
@@ -491,6 +493,7 @@ public class DbServerManagerController {
 					ids.add(rows.get(i).toString()); 
 				}
 				paramvalue.put("db_svr_ipadr_id", ids);
+				paramvalue.put("db_svr_id", db_svr_id);
 				
 				System.out.println(paramvalue.get("db_svr_ipadr_id"));
 				

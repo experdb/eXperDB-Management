@@ -580,7 +580,7 @@
 												<input type="text" class="form-control form-control-xsm" id="ins_connect_nm" name="ins_connect_nm" maxlength="50" placeholder='<spring:message code='data_transfer.msg18'/>' onblur="this.value=this.value.trim()" tabindex=3 />
 											</div>
 											<div class="col-sm-2">
-												<button type="button" class="btn btn-inverse-info btn-sm btn-icon-text" onclick="fn_insConNmCheck();"><i class="mdi mdi-lan-connect btn-icon-prepend"></i><spring:message code="common.overlap_check" /></button>
+												<button type="button" class="btn btn-inverse-danger btn-sm btn-icon-text" onclick="fn_insConNmCheck();"><spring:message code="common.overlap_check" /></button>
 											</div>
 										</div>
 	

@@ -27,16 +27,16 @@
 
 <script>
 
-var ddlResultTable = null;
+var tableDdlResult = null;
 
 function fn_ddlResultInit() {
-	ddlResultTable = $('#fileList').DataTable({
+	tableDdlResult = $('#ddlResult').DataTable({
 		scrollY : "245px",
-		scrollX: true,	
-		bSort: false,
+		scrollX : true,
+		bDestroy: true,
 		processing : true,
-		searching : false,
-		paging : true,	
+		searching : false,	
+		bSort: false,
 		columns : [
 		{data : "idx",  className : "dt-center", defaultContent : ""}, 
 		{data : "name", className : "dt-center", defaultContent : ""},
@@ -59,12 +59,12 @@ function fn_ddlResultInit() {
 		]
 	});
 		
-		ddlResultTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-		ddlResultTable.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
-		ddlResultTable.tables().header().to$().find('th:eq(2)').css('min-width', '300px');
-		ddlResultTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		ddlResultTable.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
-		ddlResultTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+	tableDdlResult.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+	tableDdlResult.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+	tableDdlResult.tables().header().to$().find('th:eq(2)').css('min-width', '300px');
+	tableDdlResult.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+	tableDdlResult.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
+	tableDdlResult.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		
 		$(window).trigger('resize'); 
 }
@@ -96,10 +96,10 @@ function getDataResultList(ddl_save_pth){
 		},
 		success : function(data) {
 			if(data.length > 0){
-				ddlResultTable.clear().draw();
-				ddlResultTable.rows.add(data).draw();
+				tableDdlResult.clear().draw();
+				tableDdlResult.rows.add(data).draw();
 			}else{
-				ddlResultTable.clear().draw();
+				tableDdlResult.clear().draw();
 			}
 		}
 	});
@@ -166,7 +166,7 @@ function fn_download(name,path){
 									<i class="mdi mdi-blur" style="margin-left: 10px;"><spring:message code="migration.file_information"/> </i>
 								</div>
 								 <div class="tab-content" id="pills-tabContent" style="border: 1px solid #adb5bd; height:435px;">
-										<table id="fileList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<table id="ddlResult" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
 												<tr class="bg-info text-white">
 													<th width="30"><spring:message code="common.no" /></th>
