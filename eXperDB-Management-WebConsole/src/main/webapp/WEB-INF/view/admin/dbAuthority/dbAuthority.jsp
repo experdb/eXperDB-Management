@@ -157,7 +157,7 @@ var confirm_title = "";
 			html2+=	'<col style="width:30%" />';
 			html2+='</colgroup>';
 			html2+='<thead>';
-			html2+=	'<tr>';
+			html2+=	'<tr class="bg-info text-white">';
 			html2+=		'<th scope="col"><spring:message code="auth_management.db_auth" /> </th>';
 			html2+=		'<th scope="col"><spring:message code="auth_management.auth" /></th>';
 			html2+=	'</tr>';
@@ -171,7 +171,7 @@ var confirm_title = "";
 				}
 				
 				html2+='<tbody>';
-				html2+='<tr class="bg-info text-white">';
+				html2+='<tr class="bg-primary text-white">';
 				html2+='		<td>'+item.db_svr_nm+'</td>';
 				html2+='		<td><div class="inp_chk"><input type="checkbox" id="'+item.db_svr_id+'" onClick="fn_allCheck(\''+item.db_svr_id+'\', \''+ array+'\');">';
 				html2+='		<label for="'+item.db_svr_id+'"></lavel></div></td>';
@@ -180,7 +180,7 @@ var confirm_title = "";
 				for(var i = 0; i<result.length; i++){
 					if(item.db_svr_nm == result[i].db_svr_nm){
 						html2+='	<tr>';
-						html2+='		<td>'+result[i].db_nm+'</td>';
+						html2+='		<td class="pl-4">'+result[i].db_nm+'</td>';
 						html2+='		<td>';
 						html2+='			<div class="inp_chk">';
 						html2+='				<input type="checkbox" id="'+result[i].db_svr_id+'_'+result[i].db_id+'" value="'+result[i].db_svr_id+'_'+result[i].db_id+'" name="aut_yn" onClick="fn_userCheck();" />';
@@ -417,10 +417,10 @@ var confirm_title = "";
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-<!-- 												<i class="fa fa-check-square"></i> -->
+												<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.database_auth_management" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -428,7 +428,7 @@ var confirm_title = "";
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Admin</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ADMIN</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.auth_management" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.database_auth_management"/></li>
 										</ol>
@@ -452,48 +452,65 @@ var confirm_title = "";
 		</div>
 
 		<div class="col-lg-6 grid-margin stretch-card">
-		  <div class="card">
-		    <div class="card-body" style=" height: 100%;">
-		      <h4 class="card-title"><spring:message code="auth_management.user_choice" /></h4>
-		      <div class="table-responsive" style=" height: 100%;">
-				<form class="form-inline" style="float: right;">
-					<div class="input-group mb-2 mr-sm-2">
-						<input hidden="hidden" />
-						<input type="text" class="form-control" style="width:250px;" id="search">					
+			<div class="card">
+				<div class="card-body" style=" height: 100%;">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i>
+						<spring:message code="auth_management.user_choice" />
+					</h4>
+					
+					<div class="row" >
+						<div class="col-3"></div>
+						<div class="col-6">
+							<div class="template-demo">	
+								<form class="form-inline" style="float: right;margin-right:-5rem;">
+									<input hidden="hidden" />
+									<input type="text" class="form-control" style="width:250px;" id="search">
+								</form>
+							</div>
+						</div>
+						<div class="col-3">
+							<div class="template-demo">	
+								<form class="form-inline" style="float: right;">
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="button.search" />
+									</button>
+								</form>
+							</div>
+						</div>
 					</div>
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">
-						<i class="ti-search btn-icon-prepend "></i><spring:message code="button.search" />
-					</button>
-				</form>
-				<table id="user" class="table table-hover table-striped" style="width:100%;">
-					<thead>
-						<tr class="bg-info text-white">
-							<th width="20"><spring:message code="common.no"/></th>
-							<th width="90"><spring:message code="user_management.id" /></th>
-							<th width="90"><spring:message code="user_management.user_name" /></th>
-						</tr>
-					</thead>
-				</table>      
-		      </div>
-		    </div>
-		  </div>
+
+					<table id="user" class="table table-hover table-striped" style="width:100%;">
+						<thead>
+							<tr class="bg-info text-white">
+								<th width="20"><spring:message code="common.no"/></th>
+								<th width="90"><spring:message code="user_management.id" /></th>
+								<th width="90"><spring:message code="user_management.user_name" /></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
 		</div>
             
 		<div class="col-lg-6 grid-margin stretch-card">
-		  <div class="card">
-		    <div class="card-body">
-		      <h4 class="card-title"><spring:message code="auth_management.db_auth" /></h4>
-		      <div class="table-responsive">
-			  	<form class="form-inline" style="float: right;">
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="db_button" onClick="fn_db_save()">
-						<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
-					</button>
-				</form>
-		        <div id="dbAutList" style="height: 630px;"></div>
-		      </div>
-		    </div>
-		  </div>
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i>
+						<spring:message code="auth_management.db_auth" />
+					</h4>
+					<div class="table-responsive">
+						<form class="form-inline" style="float: right;">
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="db_button" onClick="fn_db_save()">
+								<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
+							</button>
+						</form>
+						
+						<div id="dbAutList system-tlb-scroll" style="height: 580px;overflow-y:auto;"></div>
+					</div>
+				</div>
+			</div>
 		</div>
-		
 	</div>
 </div>

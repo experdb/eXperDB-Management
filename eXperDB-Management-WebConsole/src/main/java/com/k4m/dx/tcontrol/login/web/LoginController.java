@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,6 +33,7 @@ import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.EgovHttpSessionBindingListener;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
+import com.k4m.dx.tcontrol.functions.schedule.EgovBatchListnerUtl;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
@@ -58,7 +61,8 @@ public class LoginController {
 
 	@Autowired
 	private AccessHistoryService accessHistoryService;
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(EgovBatchListnerUtl.class);
 
 	@RequestMapping(value = "/")
 	public ModelAndView loginCheck(HttpServletRequest request, HttpServletResponse response) {
@@ -181,7 +185,8 @@ public class LoginController {
 				loginVo.setUsr_nm(userList.get(0).getUsr_nm());
 		
 				InetAddress local = InetAddress.getLocalHost();
-				String ip = request.getRemoteAddr();
+				String ip = getClientIP(request);
+System.out.println("==================================ip=============================" + ip);
 				loginVo.setIp(ip);
 
 				Properties props = new Properties();
@@ -306,5 +311,33 @@ System.out.println("==================================encp_use_yn===============
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getClientIP(HttpServletRequest request) {
+	    String ip = request.getHeader("X-Forwarded-For");
+
+	    if (ip == null) {
+	        ip = request.getHeader("Proxy-Client-IP");
+	        logger.info("> Proxy-Client-IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("WL-Proxy-Client-IP");
+	        logger.info(">  WL-Proxy-Client-IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("HTTP_CLIENT_IP");
+	        logger.info("> HTTP_CLIENT_IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+	        logger.info("> HTTP_X_FORWARDED_FOR : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getRemoteAddr();
+	        logger.info("> getRemoteAddr : "+ip);
+	    }
+	    logger.info("> Result : IP Address : "+ip);
+
+	    return ip;
 	}
 }

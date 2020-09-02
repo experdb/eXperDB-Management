@@ -337,7 +337,7 @@ function fn_selectSecurityStatistics(today){
 			 			
 						html += '</td>';
 						html += "</tr>";
-						console.log("==data.list[i].encryptSuccessCount===" + data.list[i].encryptSuccessCount);
+
 						encryptSuccessCount += encryptSuccessCount + parseInt(nvlPrmSet(data.list[i].encryptSuccessCount, 0));
 						encryptFailCount += encryptFailCount + parseInt(nvlPrmSet(data.list[i].encryptFailCount, 0));
 						decryptSuccessCount += decryptSuccessCount + parseInt(nvlPrmSet(data.list[i].decryptSuccessCount, 0));
@@ -1069,8 +1069,6 @@ function fn_backup_History_set(result) {
 			if (result.backupRmanInfo.length > 0) {
 				var backupRmanChart = [];
 				for(var i = 0; i<result.backupRmanInfo.length; i++){
-					console.log(result.backupRmanInfo[i].bck_opt_cd);
-					
 					if (result.backupRmanInfo[i].bck_opt_cd == "TC000301") {
 						result.backupRmanInfo[i].bck_opt_cd_nm = backup_management_full_backup;
 					} else if (result.backupRmanInfo[i].bck_opt_cd == "TC000302") {
@@ -1638,8 +1636,6 @@ function fn_scale_history_set(result) {
 			scaleHistHtml += '</td>';
 			scaleHistHtml += "</tr>";
 		}
-		
-		console.log(scaleHistHtml);
 
 		$("#scaleHistListT").html(scaleHistHtml);
 		///////////////////////////scale list end ////////////////////////
@@ -1680,8 +1676,6 @@ function fn_scale_history_set(result) {
 				if (result.scaleSettingChartresult.length > 0) {
 					var scaleHitChart = [];
 					for(var i = 0; i<result.scaleSettingChartresult.length; i++){
-						console.log(result.scaleSettingChartresult[i].scale_nm);
-						
 						if (result.scaleSettingChartresult[i].scale_nm == "scale_nm0") {
 							result.scaleSettingChartresult[i].scale_nm = etc_etc38 + "-" + dashboard_auto;
 						} else if (result.scaleSettingChartresult[i].scale_nm == "scale_nm1") {

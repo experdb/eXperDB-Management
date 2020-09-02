@@ -623,10 +623,10 @@ function fn_search(){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-<!-- 												<i class="fa fa-check-square"></i> -->
+												<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.menu_auth_management" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -634,7 +634,7 @@ function fn_search(){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Admin</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ADMIN</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.auth_management" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.menu_auth_management"/></li>
 										</ol>
@@ -659,598 +659,623 @@ function fn_search(){
 		</div>
 
 		<div class="col-lg-6 grid-margin stretch-card">
-		  <div class="card">
-		    <div class="card-body" style=" height: 100%;">
-		      <h4 class="card-title"><spring:message code="auth_management.user_choice" /></h4>
-		      <div class="table-responsive" style=" height: 100%;">
-				<form class="form-inline" style="float: right;">
-					<div class="input-group mb-2 mr-sm-2">
-						<input hidden="hidden" />
-						<input type="text" class="form-control" style="width:250px;" id="search">					
+			<div class="card">
+				<div class="card-body" style="height: 100%;">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i>
+						<spring:message code="auth_management.user_choice" />
+					</h4>
+
+					<div class="row" >
+						<div class="col-3"></div>
+						<div class="col-6">
+							<div class="template-demo">	
+								<form class="form-inline" style="float: right;margin-right:-5rem;">
+									<input hidden="hidden" />
+									<input type="text" class="form-control" style="width:250px;" id="search">
+								</form>
+							</div>
+						</div>
+						<div class="col-3">
+							<div class="template-demo">	
+								<form class="form-inline" style="float: right;">
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="button.search" />
+									</button>
+								</form>
+							</div>
+						</div>
 					</div>
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">
-						<i class="ti-search btn-icon-prepend "></i><spring:message code="button.search" />
-					</button>
-				</form>
-				<table id="user" class="table table-hover table-striped" style="width:100%;">
-					<thead>
-						<tr class="bg-info text-white">
-							<th width="20"><spring:message code="common.no"/></th>
-							<th width="90"><spring:message code="user_management.id" /></th>
-							<th width="90"><spring:message code="user_management.user_name" /></th>
-						</tr>
-					</thead>
-				</table>    
-		      </div>
-		    </div>
-		  </div>
+
+					<table id="user" class="table table-hover table-striped" style="width:100%;">
+						<thead>
+							<tr class="bg-info text-white">
+								<th width="20"><spring:message code="common.no"/></th>
+								<th width="90"><spring:message code="user_management.id" /></th>
+								<th width="90"><spring:message code="user_management.user_name" /></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
 		</div>
-		
-		
-		
+
 		<div class="col-lg-6 grid-margin stretch-card">
-		  <div class="card">
-		    <div class="card-body">
-		      <h4 class="card-title"><spring:message code="auth_management.menu_auth" /></h4>
-		      <div class="table-responsive" style="height: 630px;">
-			  	<form class="form-inline" style="float: right;">
-					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="save_button" onClick="fn_save()">
-						<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
-					</button>
-				</form>
-				<table class="table"> 
-					<colgroup>
-						<col />
-						<col style="width:30%" />
-						<col style="width:30%" />
-						<col style="width:10%" />
-						<col style="width:10%" />
-					</colgroup>
-					<thead>
-						<tr>
-							<td scope="col" colspan="3"><spring:message code="common.menu"/></td>
-							<th scope="col"><spring:message code="common.read"/>
-								<div class="inp_chk" style="margin-top: 5px;">
-									<input type="checkbox" id="read" name="read" />
-									<label for="read"></label>
-								</div>
-							</th>
-							<th scope="col"><spring:message code="common.write"/>
-								<div class="inp_chk" style="margin-top: 5px;">
-									<input type="checkbox" id="write" name="write" />
-									<label for="write"></label>
-								</div>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th scope="row" rowspan="5">
-								<div class="inp_chk">
-									<input type="checkbox" id="functions" name="functions"/>
-									<label for="functions">Functions</label>
-								</div>
-							</th>
-							<td scope="row" rowspan="3">
-								<div class="inp_chk">
-									<input type="checkbox" id="schinfo" name="schinfo"/>
-									<label for="schinfo"><spring:message code="menu.schedule_information" /></label>
-								</div>
-							</td>
-							<td><spring:message code="menu.schedule_registration" /> </td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000101" name="r_mnu_nm" value="MN000101"/>
-									<label for="r_MN000101"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000101" name="w_mnu_nm"/>
-									<label for="w_MN000101"></label>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td><spring:message code="etc.etc27" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000102" name="r_mnu_nm" value="MN000102"/>
-									<label for="r_MN000102"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000102" name="w_mnu_nm"/>
-									<label for="w_MN000102"></label>
-								</div>
-							</td>													
-						</tr>
-						<tr>
-							<td><spring:message code="menu.shedule_execution_history" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000103" name="r_mnu_nm"  value="MN000103"/>
-									<label for="r_MN000103"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000103" name="w_mnu_nm"  />
-									<label for="w_MN000103"></label>
-								</div>
-							</td>										
-						</tr>
-						<tr>
-							<td scope="row" rowspan="2">
-								<div class="inp_chk">
-									<input type="checkbox" id="transferinfo" name="transferinfo"/>
-									<label for="transferinfo"><spring:message code="menu.data_transfer_information" /></label>
-								</div>
-							</td>
-							<td><spring:message code="menu.transfer_server_settings" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000201" name="r_mnu_nm" value="MN000201"/>
-									<label for="r_MN000201"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000201" name="w_mnu_nm"  />
-									<label for="w_MN000201"></label>
-								</div>
-							</td>										
-						</tr>
-						<tr>
-							<td><spring:message code="menu.connector_management" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000202" name="r_mnu_nm" value="MN000202"/>
-									<label for="r_MN000202"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000202" name="w_mnu_nm"  />
-									<label for="w_MN000202"></label>
-								</div>
-							</td>											
-						</tr>
-						<tr>
-							<th scope="row" rowspan="11">
-								<div class="inp_chk">
-									<input type="checkbox" id="admin" name="admin"/>
-									<label for="admin">Admin</label>
-								</div>
-							</th>
-							<td scope="row" rowspan="3">
-								<div class="inp_chk">
-									<input type="checkbox" id="dbmsinfo" name="dbmsinfo"/>
-									<label for="dbmsinfo"><spring:message code="menu.dbms_information" /></label>
-								</div>
-							</td>
-							<td><spring:message code="menu.dbms_registration" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000301" name="r_mnu_nm" value="MN000301"/>
-									<label for="r_MN000301"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000301" name="w_mnu_nm" />
-									<label for="w_MN000301"></label>
-								</div>
-							</td>										
-						</tr>
-						<tr>
-							<td><spring:message code="menu.dbms_management" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000302" name="r_mnu_nm" value="MN000302"/>
-									<label for="r_MN000302"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000302" name="w_mnu_nm"  />
-									<label for="w_MN000302"></label>
-								</div>
-							</td>										
-						</tr>
-						<tr>
-							<td><spring:message code="menu.database_management" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000303" name="r_mnu_nm" value="MN000303"/>
-									<label for="r_MN000303"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000303" name="w_mnu_nm" />
-									<label for="w_MN000303"></label>
-								</div>
-							</td>											
-						</tr>
-						<tr>
-							<td colspan="2"><spring:message code="menu.user_management" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0004" name="r_mnu_nm" value="MN0004"/>
-									<label for="r_MN0004"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0004" name="w_mnu_nm"  />
-									<label for="w_MN0004"></label>
-								</div>
-							</td>								
-						</tr>
-						
-						
-						<tr>
-							<td scope="row" rowspan="3">
-								<div class="inp_chk">
-									<input type="checkbox" id="authmanage" name="authmanage"/>
-									<label for="authmanage"><spring:message code="menu.auth_management" /></label>
-								</div>
-							</td>
-							<td><spring:message code="menu.menu_auth_management" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000501" name="r_mnu_nm" value="MN000501"/>
-									<label for="r_MN000501"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000501" name="w_mnu_nm" />
-									<label for="w_MN000501"></label>
-								</div>
-							</td>										
-						</tr>
-						<tr>
-							<td><spring:message code="menu.server_auth_management" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000502" name="r_mnu_nm" value="MN000502"/>
-									<label for="r_MN000502"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000502" name="w_mnu_nm"  />
-									<label for="w_MN000502"></label>
-								</div>
-							</td>										
-						</tr>
-						<tr>
-							<td><spring:message code="menu.database_auth_management" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000503" name="r_mnu_nm" value="MN000503"/>
-									<label for="r_MN000503"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000503" name="w_mnu_nm" />
-									<label for="w_MN000503"></label>
-								</div>
-							</td>											
-						</tr>
-						<tr>
-							<td scope="row" rowspan="1"><spring:message code="menu.history_management" /></td>
-							<td><spring:message code="menu.screen_access_history" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000601" name="r_mnu_nm" value="MN000601"/>
-									<label for="r_MN000601"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000601" name="w_mnu_nm" />
-									<label for="w_MN000601"></label>
-								</div>
-							</td>										
-						</tr>						
-						<tr>
-							<td scope="row" rowspan="2"><spring:message code="menu.agent_monitoring" /></td>
-							<td><spring:message code="agent_monitoring.Management_agent" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000701" name="r_mnu_nm" value="MN000701"/>
-									<label for="r_MN000701"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000701" name="w_mnu_nm" />
-									<label for="w_MN000701"></label>
-								</div>
-							</td>										
-						</tr>
-						<tr>
-							<td><spring:message code="agent_monitoring.Encrypt_agent" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN000702" name="r_mnu_nm" value="MN000702"/>
-									<label for="r_MN000702"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN000702" name="w_mnu_nm" />
-									<label for="w_MN000702"></label>
-								</div>
-							</td>											
-						</tr>
-						<tr>
-							<td colspan="2"><spring:message code="menu.extension_pack_installation_information" /></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0008" name="r_mnu_nm" value="MN0008"/>
-									<label for="r_MN0008"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0008" name="w_mnu_nm"  />
-									<label for="w_MN0008"></label>
-								</div>
-							</td>											
-						</tr>	
-						<tr class="encrypt">
-							<th scope="row" rowspan="10">
-								<div class="inp_chk">
-									<input type="checkbox" id="encrypt" name="encrypt"/>
-									<label for="encrypt">Encrypt</label>
-								</div>
-							</th>
-							<td scope="row" rowspan="2">
-								<div class="inp_chk">
-									<input type="checkbox" id="securitykey" name="securitykey"/>
-									<label for="securitykey"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></label>
-								</div>
-								</td>
-							<td><spring:message code="encrypt_policy_management.Security_Policy_Management"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001101" name="r_mnu_nm" value="MN0001101"/>
-									<label for="r_MN0001101"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001101" name="w_mnu_nm" />
-									<label for="w_MN0001101"></label>
-								</div>
-							</td>																																				
-						</tr>
-						<tr class="encrypt">
-							<td><spring:message code="encrypt_key_management.Encryption_Key_Management"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001102" name="r_mnu_nm" value="MN0001102"/>
-									<label for="r_MN0001102"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001102" name="w_mnu_nm" />
-									<label for="w_MN0001102"></label>
-								</div>
-							</td>	
-						</tr>
-						<tr class="encrypt">
-							<td scope="row" rowspan="3">
-								<div class="inp_chk">
-									<input type="checkbox" id="auditlog" name="auditlog"/>
-									<label for="auditlog"><spring:message code="encrypt_log.Audit_Log"/></label>
-								</div></td>
-							<td><spring:message code="encrypt_log_decode.Encryption_Decryption"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001201" name="r_mnu_nm" value="MN0001201"/>
-									<label for="r_MN0001201"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001201" name="w_mnu_nm" />
-									<label for="w_MN0001201"></label>
-								</div>
-							</td>	
-						</tr>
-						<tr class="encrypt">
-							<td><spring:message code="encrypt_log_sever.Management_Server"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001202" name="r_mnu_nm" value="MN0001202"/>
-									<label for="r_MN0001202"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001202" name="w_mnu_nm" />
-									<label for="w_MN0001202"></label>
-								</div>
-							</td>	
-						</tr>
-						<tr class="encrypt">
-							<td><spring:message code="encrypt_policy_management.Encryption_Key"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001203" name="r_mnu_nm" value="MN0001203"/>
-									<label for="r_MN0001203"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001203" name="w_mnu_nm" />
-									<label for="w_MN0001203"></label>
-								</div>
-							</td>	
-						</tr>
-						<tr class="encrypt" style="display: none;">
-							<td>자원사용</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001204" name="r_mnu_nm" value="MN0001204"/>
-									<label for="r_MN0001204"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001204" name="w_mnu_nm" />
-									<label for="w_MN0001204"></label>
-								</div>
-							</td>	
-						</tr>	
-						<tr class="encrypt">
-							<td scope="row" rowspan="4">
-								<div class="inp_chk">
-									<input type="checkbox" id="setting" name="setting"/>
-									<label for="setting"><spring:message code="encrypt_policyOption.Settings"/></label>
-								</div>
-							</td>
-							<td><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001301" name="r_mnu_nm" value="MN0001301"/>
-									<label for="r_MN0001301"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001301" name="w_mnu_nm" />
-									<label for="w_MN0001301"></label>
-								</div>
-							</td>	
-						</tr>
-						<tr class="encrypt">
-							<td><spring:message code="encrypt_encryptSet.Encryption_Settings"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001302" name="r_mnu_nm" value="MN0001302"/>
-									<label for="r_MN0001302"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001302" name="w_mnu_nm" />
-									<label for="w_MN0001302"></label>
-								</div>
-							</td>	
-						</tr>	
-						<tr class="encrypt">
-							<td><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001303" name="r_mnu_nm" value="MN0001303"/>
-									<label for="r_MN0001303"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001303" name="w_mnu_nm" />
-									<label for="w_MN0001303"></label>
-								</div>
-							</td>	
-						</tr>
-						<tr class="encrypt">
-							<td><spring:message code="encrypt_agent.Encryption_agent_setting"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001304" name="r_mnu_nm" value="MN0001304"/>
-									<label for="r_MN0001304"></label>
-								</div>
-							</td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001304" name="w_mnu_nm" />
-									<label for="w_MN0001304"></label>
-								</div>
-							</td>	
-						</tr>	
-						<tr class="encrypt">
-							<td scope="row"><spring:message code="encrypt_Statistics.Statistics"/></td>
-							<td><spring:message code="encrypt_Statistics.Encrypt_Statistics"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN0001401" name="r_mnu_nm" value="MN0001401"/>
-									<label for="r_MN0001401"></label>
-								</div>
-							</td>	
-								<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN0001401" name="w_mnu_nm" />
-									<label for="w_MN0001401"></label>
-								</div>
-							</td>
-						</tr>	
-						<tr>
-							<th scope="row" rowspan="3">
-								<div class="inp_chk">
-									<input type="checkbox" id="migration" name="migration"/>
-									<label for="migration">MIGRATION</label>
-								</div>
-							</th>
-							<td colspan="2"><spring:message code="migration.source/target_dbms_management"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN00015" name="r_mnu_nm" value="MN00015"/>
-									<label for="r_MN00015"></label>
-								</div>
-							</td>	
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN00015" name="w_mnu_nm" />
-									<label for="w_MN00015"></label>
-								</div>
-							</td>
-						</tr>										
-						<tr>
-							<td colspan="2"><spring:message code="migration.setting_information_management"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN00016" name="r_mnu_nm" value="MN00016"/>
-									<label for="r_MN00016"></label>
-								</div>
-							</td>	
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN00016" name="w_mnu_nm" />
-									<label for="w_MN00016"></label>
-								</div>
-							</td>
-						</tr>	
-						<tr>
-							<td colspan="2"><spring:message code="migration.performance_history"/></td>
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="r_MN00017" name="r_mnu_nm" value="MN00017"/>
-									<label for="r_MN00017"></label>
-								</div>
-							</td>	
-							<td>
-								<div class="inp_chk">
-									<input type="checkbox" id="w_MN00017" name="w_mnu_nm" />
-									<label for="w_MN00017"></label>
-								</div>
-							</td>
-						</tr>					
-					</tbody>
-				</table>
-		      </div>
-		    </div>
-		  </div>
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i>
+						<spring:message code="auth_management.menu_auth" />
+					</h4>
+
+					<div class="row" >
+						<div class="col-9"></div>
+						<div class="col-3">
+							<div class="template-demo">	
+								<form class="form-inline" style="float: right;">
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="save_button" onClick="fn_save()">
+										<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+					
+					<div class="table-responsive system-tlb-scroll" style="height: 560px;overflow-y:auto;">
+
+						<table id="menuAuthTable" class="table text-center" style="width:100%;">
+							<colgroup>
+								<col />
+								<col style="width:30%" />
+								<col style="width:30%" />
+								<col style="width:10%" />
+								<col style="width:10%" />
+							</colgroup>
+							<thead>
+								<tr class="bg-info text-white">
+									<td scope="col" colspan="3"><spring:message code="common.menu"/></td>
+									<th scope="col">
+										<spring:message code="common.read"/>
+										<div class="inp_chk" style="margin-top: 5px;">
+											<input type="checkbox" id="read" name="read" />
+											<label for="read"></label>
+										</div>
+									</th>
+									<th scope="col">
+										<spring:message code="common.write"/>
+										<div class="inp_chk" style="margin-top: 5px;">
+											<input type="checkbox" id="write" name="write" />
+											<label for="write"></label>
+										</div>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row" rowspan="5">
+										<div class="inp_chk">
+											<input type="checkbox" id="functions" name="functions"/>
+											<label for="functions">Functions</label>
+										</div>
+									</th>
+									<td scope="row" rowspan="3">
+										<div class="inp_chk">
+											<input type="checkbox" id="schinfo" name="schinfo"/>
+											<label for="schinfo"><spring:message code="menu.schedule_information" /></label>
+										</div>
+									</td>
+									<td><spring:message code="menu.schedule_registration" /> </td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000101" name="r_mnu_nm" value="MN000101"/>
+											<label for="r_MN000101"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000101" name="w_mnu_nm"/>
+											<label for="w_MN000101"></label>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><spring:message code="etc.etc27" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000102" name="r_mnu_nm" value="MN000102"/>
+											<label for="r_MN000102"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000102" name="w_mnu_nm"/>
+											<label for="w_MN000102"></label>
+										</div>
+									</td>													
+								</tr>
+								<tr>
+									<td><spring:message code="menu.shedule_execution_history" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000103" name="r_mnu_nm"  value="MN000103"/>
+											<label for="r_MN000103"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000103" name="w_mnu_nm"  />
+											<label for="w_MN000103"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr>
+									<td scope="row" rowspan="2">
+										<div class="inp_chk">
+											<input type="checkbox" id="transferinfo" name="transferinfo"/>
+											<label for="transferinfo"><spring:message code="menu.data_transfer_information" /></label>
+										</div>
+									</td>
+									<td><spring:message code="menu.transfer_server_settings" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000201" name="r_mnu_nm" value="MN000201"/>
+											<label for="r_MN000201"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000201" name="w_mnu_nm"  />
+											<label for="w_MN000201"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr>
+									<td><spring:message code="menu.connector_management" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000202" name="r_mnu_nm" value="MN000202"/>
+											<label for="r_MN000202"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000202" name="w_mnu_nm"  />
+											<label for="w_MN000202"></label>
+										</div>
+									</td>											
+								</tr>
+								<tr>
+									<th scope="row" rowspan="11">
+										<div class="inp_chk">
+											<input type="checkbox" id="admin" name="admin"/>
+											<label for="admin">Admin</label>
+										</div>
+									</th>
+									<td scope="row" rowspan="3">
+										<div class="inp_chk">
+											<input type="checkbox" id="dbmsinfo" name="dbmsinfo"/>
+											<label for="dbmsinfo"><spring:message code="menu.dbms_information" /></label>
+										</div>
+									</td>
+									<td><spring:message code="menu.dbms_registration" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000301" name="r_mnu_nm" value="MN000301"/>
+											<label for="r_MN000301"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000301" name="w_mnu_nm" />
+											<label for="w_MN000301"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr>
+									<td><spring:message code="menu.dbms_management" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000302" name="r_mnu_nm" value="MN000302"/>
+											<label for="r_MN000302"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000302" name="w_mnu_nm"  />
+											<label for="w_MN000302"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr>
+									<td><spring:message code="menu.database_management" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000303" name="r_mnu_nm" value="MN000303"/>
+											<label for="r_MN000303"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000303" name="w_mnu_nm" />
+											<label for="w_MN000303"></label>
+										</div>
+									</td>											
+								</tr>
+								<tr>
+									<td colspan="2"><spring:message code="menu.user_management" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0004" name="r_mnu_nm" value="MN0004"/>
+											<label for="r_MN0004"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0004" name="w_mnu_nm"  />
+											<label for="w_MN0004"></label>
+										</div>
+									</td>								
+								</tr>
+								
+								
+								<tr>
+									<td scope="row" rowspan="3">
+										<div class="inp_chk">
+											<input type="checkbox" id="authmanage" name="authmanage"/>
+											<label for="authmanage"><spring:message code="menu.auth_management" /></label>
+										</div>
+									</td>
+									<td><spring:message code="menu.menu_auth_management" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000501" name="r_mnu_nm" value="MN000501"/>
+											<label for="r_MN000501"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000501" name="w_mnu_nm" />
+											<label for="w_MN000501"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr>
+									<td><spring:message code="menu.server_auth_management" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000502" name="r_mnu_nm" value="MN000502"/>
+											<label for="r_MN000502"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000502" name="w_mnu_nm"  />
+											<label for="w_MN000502"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr>
+									<td><spring:message code="menu.database_auth_management" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000503" name="r_mnu_nm" value="MN000503"/>
+											<label for="r_MN000503"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000503" name="w_mnu_nm" />
+											<label for="w_MN000503"></label>
+										</div>
+									</td>											
+								</tr>
+								<tr>
+									<td scope="row" rowspan="1"><spring:message code="menu.history_management" /></td>
+									<td><spring:message code="menu.screen_access_history" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000601" name="r_mnu_nm" value="MN000601"/>
+											<label for="r_MN000601"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000601" name="w_mnu_nm" />
+											<label for="w_MN000601"></label>
+										</div>
+									</td>										
+								</tr>						
+								<tr>
+									<td scope="row" rowspan="2"><spring:message code="menu.agent_monitoring" /></td>
+									<td><spring:message code="agent_monitoring.Management_agent" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000701" name="r_mnu_nm" value="MN000701"/>
+											<label for="r_MN000701"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000701" name="w_mnu_nm" />
+											<label for="w_MN000701"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr>
+									<td><spring:message code="agent_monitoring.Encrypt_agent" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN000702" name="r_mnu_nm" value="MN000702"/>
+											<label for="r_MN000702"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN000702" name="w_mnu_nm" />
+											<label for="w_MN000702"></label>
+										</div>
+									</td>											
+								</tr>
+								<tr>
+									<td colspan="2"><spring:message code="menu.extension_pack_installation_information" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0008" name="r_mnu_nm" value="MN0008"/>
+											<label for="r_MN0008"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0008" name="w_mnu_nm"  />
+											<label for="w_MN0008"></label>
+										</div>
+									</td>											
+								</tr>	
+								<tr class="encrypt">
+									<th scope="row" rowspan="10">
+										<div class="inp_chk">
+											<input type="checkbox" id="encrypt" name="encrypt"/>
+											<label for="encrypt">Encrypt</label>
+										</div>
+									</th>
+									<td scope="row" rowspan="2">
+										<div class="inp_chk">
+											<input type="checkbox" id="securitykey" name="securitykey"/>
+											<label for="securitykey"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></label>
+										</div>
+										</td>
+									<td><spring:message code="encrypt_policy_management.Security_Policy_Management"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001101" name="r_mnu_nm" value="MN0001101"/>
+											<label for="r_MN0001101"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001101" name="w_mnu_nm" />
+											<label for="w_MN0001101"></label>
+										</div>
+									</td>																																				
+								</tr>
+								<tr class="encrypt">
+									<td><spring:message code="encrypt_key_management.Encryption_Key_Management"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001102" name="r_mnu_nm" value="MN0001102"/>
+											<label for="r_MN0001102"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001102" name="w_mnu_nm" />
+											<label for="w_MN0001102"></label>
+										</div>
+									</td>	
+								</tr>
+								<tr class="encrypt">
+									<td scope="row" rowspan="3">
+										<div class="inp_chk">
+											<input type="checkbox" id="auditlog" name="auditlog"/>
+											<label for="auditlog"><spring:message code="encrypt_log.Audit_Log"/></label>
+										</div></td>
+									<td><spring:message code="encrypt_log_decode.Encryption_Decryption"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001201" name="r_mnu_nm" value="MN0001201"/>
+											<label for="r_MN0001201"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001201" name="w_mnu_nm" />
+											<label for="w_MN0001201"></label>
+										</div>
+									</td>	
+								</tr>
+								<tr class="encrypt">
+									<td><spring:message code="encrypt_log_sever.Management_Server"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001202" name="r_mnu_nm" value="MN0001202"/>
+											<label for="r_MN0001202"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001202" name="w_mnu_nm" />
+											<label for="w_MN0001202"></label>
+										</div>
+									</td>	
+								</tr>
+								<tr class="encrypt">
+									<td><spring:message code="encrypt_policy_management.Encryption_Key"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001203" name="r_mnu_nm" value="MN0001203"/>
+											<label for="r_MN0001203"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001203" name="w_mnu_nm" />
+											<label for="w_MN0001203"></label>
+										</div>
+									</td>	
+								</tr>
+								<tr class="encrypt" style="display: none;">
+									<td>자원사용</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001204" name="r_mnu_nm" value="MN0001204"/>
+											<label for="r_MN0001204"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001204" name="w_mnu_nm" />
+											<label for="w_MN0001204"></label>
+										</div>
+									</td>	
+								</tr>	
+								<tr class="encrypt">
+									<td scope="row" rowspan="4">
+										<div class="inp_chk">
+											<input type="checkbox" id="setting" name="setting"/>
+											<label for="setting"><spring:message code="encrypt_policyOption.Settings"/></label>
+										</div>
+									</td>
+									<td><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001301" name="r_mnu_nm" value="MN0001301"/>
+											<label for="r_MN0001301"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001301" name="w_mnu_nm" />
+											<label for="w_MN0001301"></label>
+										</div>
+									</td>	
+								</tr>
+								<tr class="encrypt">
+									<td><spring:message code="encrypt_encryptSet.Encryption_Settings"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001302" name="r_mnu_nm" value="MN0001302"/>
+											<label for="r_MN0001302"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001302" name="w_mnu_nm" />
+											<label for="w_MN0001302"></label>
+										</div>
+									</td>	
+								</tr>	
+								<tr class="encrypt">
+									<td><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001303" name="r_mnu_nm" value="MN0001303"/>
+											<label for="r_MN0001303"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001303" name="w_mnu_nm" />
+											<label for="w_MN0001303"></label>
+										</div>
+									</td>	
+								</tr>
+								<tr class="encrypt">
+									<td><spring:message code="encrypt_agent.Encryption_agent_setting"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001304" name="r_mnu_nm" value="MN0001304"/>
+											<label for="r_MN0001304"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001304" name="w_mnu_nm" />
+											<label for="w_MN0001304"></label>
+										</div>
+									</td>	
+								</tr>	
+								<tr class="encrypt">
+									<td scope="row"><spring:message code="encrypt_Statistics.Statistics"/></td>
+									<td><spring:message code="encrypt_Statistics.Encrypt_Statistics"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001401" name="r_mnu_nm" value="MN0001401"/>
+											<label for="r_MN0001401"></label>
+										</div>
+									</td>	
+										<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001401" name="w_mnu_nm" />
+											<label for="w_MN0001401"></label>
+										</div>
+									</td>
+								</tr>	
+								<tr>
+									<th scope="row" rowspan="3">
+										<div class="inp_chk">
+											<input type="checkbox" id="migration" name="migration"/>
+											<label for="migration">MIGRATION</label>
+										</div>
+									</th>
+									<td colspan="2"><spring:message code="migration.source/target_dbms_management"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN00015" name="r_mnu_nm" value="MN00015"/>
+											<label for="r_MN00015"></label>
+										</div>
+									</td>	
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN00015" name="w_mnu_nm" />
+											<label for="w_MN00015"></label>
+										</div>
+									</td>
+								</tr>										
+								<tr>
+									<td colspan="2"><spring:message code="migration.setting_information_management"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN00016" name="r_mnu_nm" value="MN00016"/>
+											<label for="r_MN00016"></label>
+										</div>
+									</td>	
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN00016" name="w_mnu_nm" />
+											<label for="w_MN00016"></label>
+										</div>
+									</td>
+								</tr>	
+								<tr>
+									<td colspan="2"><spring:message code="migration.performance_history"/></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN00017" name="r_mnu_nm" value="MN00017"/>
+											<label for="r_MN00017"></label>
+										</div>
+									</td>	
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN00017" name="w_mnu_nm" />
+											<label for="w_MN00017"></label>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
-		
-		
 	</div>
 </div>
