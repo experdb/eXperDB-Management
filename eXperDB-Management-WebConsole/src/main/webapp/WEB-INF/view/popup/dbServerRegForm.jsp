@@ -761,7 +761,7 @@ function fn_ipadrDelForm(){
 									</label>
 									<div class="col-sm-4 form-inline">
 										<input type="text" class="form-control" id="db_svr_nm" name="db_svr_nm"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" style="width: 55%;">
-										&nbsp;<button type="button" class= "btn btn-inverse-danger form-control" onclick="fn_svrnmCheck()"><i class="ti-check-box  btn-icon-prepend "></i><spring:message code="common.overlap_check" /></button>
+										&nbsp;<button type="button" class= "btn btn-inverse-danger btn-fw" onclick="fn_svrnmCheck()"><spring:message code="common.overlap_check" /></button>
 										
 									</div>
 									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
