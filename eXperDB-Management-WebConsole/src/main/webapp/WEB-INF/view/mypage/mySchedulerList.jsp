@@ -51,13 +51,13 @@ function fn_init(){
 		{data : "status", 
 			render: function (data, type, full){
 				if(full.scd_cndt == "TC001801"){
-					var html = "<div class='badge badge-pill badge-success' ><i class='fa fa-dot-circle-o mr-2' style='margin-right: 0px !important;'></i></div>";
+					var html = "<i class='fa fa-circle mr-2 text-success' style='margin-right: 0px !important;'></i>";
 					return html;
 				}else if(full.scd_cndt == "TC001802"){
-					var html = "<div class='badge badge-pill badge-primary' ><i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i></div>";
+					var html = "<i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i>";
 					return html;
 				}else{
-					var html = "<div class='badge badge-pill badge-danger' ><i class='fa fa-times-circle mr-2' style='margin-right: 0px !important;'></i></div>";
+					var html = "<i class='fa fa-circle mr-2 text-danger' style='margin-right: 0px !important;'></i>";
 					return html;
 				}
 				return data;
@@ -68,18 +68,33 @@ function fn_init(){
 		{data : "status", 
 			render: function (data, type, full){
 				if(full.scd_cndt == "TC001801"){
-					var html = "<div class='badge badge-pill badge-primary' id='scheduleStop'>";
-    					html += "<i class='ti-control-pause'  mr-2' style='margin-right: 0px !important;'></i>";
-    					html += "</div>";
-						return html;
+					var html = "";
+					html += '<div class="onoffswitch">';
+					html += '<input type="checkbox" name="transActivation" class="onoffswitch-checkbox" id="scheduleStop'+ full.scd_id +'" onclick="fn_scheduleStop('+ full.scd_id +')" checked>';
+					html += '<label class="onoffswitch-label" for="scheduleStop'+ full.scd_id +'">';
+					html += '<span class="onoffswitch-inner"></span>';
+					html += '<span class="onoffswitch-switch"></span></label>';
+					html += '</div>';
+					return html;
 				}else if(full.scd_cndt == "TC001802"){
 					var html = "<div class='badge badge-pill badge-primary' id='scheduleRunning'><i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i></div>";
 					return html;
 				}else{
-					var html = "<div class='badge badge-pill badge-primary' id='scheduleStart'>";
-	    					html += "<i class='ti-control-play'  mr-2' style='margin-right: 0px !important;'></i>";
-	    					html += "</div>";
-					return html;
+					var html = "";
+					html += '<div class="onoffswitch">';
+					html += '<input type="checkbox" name="transActivation" class="onoffswitch-checkbox" id="scheduleStart'+ full.scd_id +'" onclick="fn_scheduleStart('+ full.scd_id +')">';
+					html += '<label class="onoffswitch-label" for="scheduleStart'+ full.scd_id +'">';
+					html += '<span class="onoffswitch-inner"></span>';
+					html += '<span class="onoffswitch-switch"></span></label>';
+					
+					html += '<input type="hidden" name="exe_perd_cd" id="exe_perd_cd" value="'+ full.exe_perd_cd +'"/>';
+					html += '<input type="hidden" name="exe_dt" id="exe_dt" value="'+ full.exe_dt +'"/>';
+					html += '<input type="hidden" name="exe_month" id="exe_month" value="'+ full.exe_month +'"/>';
+					html += '<input type="hidden" name="exe_day" id="exe_day" value="'+ full.exe_day +'"/>';
+					html += '<input type="hidden" name="exe_hms" id="exe_hms" value="'+ full.exe_hms +'"/>';
+
+					html += '</div>';
+				return html;
 				}	
 				return data;
 			},
@@ -121,82 +136,7 @@ function fn_init(){
     $(window).trigger('resize'); 
     
     
- 	$('#scheduleList tbody').on('click','#scheduleStop', function () {
- 	    var $this = $(this);
-	    var $row = $this.parent().parent();
-	    $row.addClass('select-detail');
-	    var datas = table.rows('.select-detail').data();
 
-	    if(datas.length==1) {
-	       var row = datas[0];
-	       $row.removeClass('select-detail');
-	       
-	       if(confirm('<spring:message code="message.msg131"/>')){
-		     	$.ajax({
-		    		url : "/scheduleStop.do",
-		    		data : {
-		    			scd_id : row.scd_id
-		    		},
-		    		dataType : "json",
-		    		type : "post",
-		    		beforeSend: function(xhr) {
-		    	        xhr.setRequestHeader("AJAX", true);
-		    	     },
-		    		error : function(xhr, status, error) {
-		    			if(xhr.status == 401) {
-		    				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-		    			} else if(xhr.status == 403) {
-		    				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-		    			} else {
-		    				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-		    			}
-		    		},
-		    		success : function(result) {
-		    			location.reload();
-		    		}
-		    	});    
-	       }
-	    } 
-	}); 
- 	
- 	$('#scheduleList tbody').on('click','#scheduleStart', function () {
- 	    var $this = $(this);
-	    var $row = $this.parent().parent();
-	    $row.addClass('select-detail');
-	    var datas = table.rows('.select-detail').data();
-
-	    if(datas.length==1) {
-	       var row = datas[0];
-	       $row.removeClass('select-detail');
-	       
-	       if(confirm('<spring:message code="message.msg130"/>')){
-		     	$.ajax({
-		    		url : "/scheduleReStart.do",
-		    		data : {
-		    			sWork : JSON.stringify(row)
-		    		},
-		    		dataType : "json",
-		    		type : "post",
-		    		beforeSend: function(xhr) {
-		    	        xhr.setRequestHeader("AJAX", true);
-		    	     },
-		    		error : function(xhr, status, error) {
-		    			if(xhr.status == 401) {
-		    				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-		    			} else if(xhr.status == 403) {
-		    				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-		    			} else {
-		    				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-		    			}
-		    		},
-		    		success : function(result) {
-		    			location.reload();
-		    		}
-		    	});    
-	       }
-	    } 
-	}); 
- 	
  	$('#scheduleList tbody').on('click','#scheduleRunning', function () {
  		showSwalIcon('<spring:message code="message.msg189" />', '<spring:message code="common.close" />', '', 'error');
  	    return false;
@@ -245,6 +185,96 @@ function fn_init(){
 }
 
 		
+ function fn_scheduleStop(scd_id){
+		confile_title = '<spring:message code="menu.schedule_run_stop" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("stop");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg131" />');
+		$('#scd_id', '#findList').val(scd_id);
+		
+		$('#pop_confirm_multi_md').modal("show");
+	}
+
+	function fn_scheduleStop2(){
+		var scd_id = $('#scd_id', '#findList').val();
+		$.ajax({
+			url : "/scheduleStop.do",
+			data : {
+				scd_id : scd_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				location.reload();
+			}
+		});  
+	}
+
+	function fn_scheduleStart(scd_id){
+		confile_title = '<spring:message code="menu.schedule_run_stop" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("start");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg130" />');
+		$('#scd_id', '#findList').val(scd_id);
+		$('#pop_confirm_multi_md').modal("show");
+	}
+
+	function fn_scheduleStart2(){
+		var scd_id = $('#scd_id', '#findList').val();
+		var exe_perd_cd = $('#exe_perd_cd').val();
+		var exe_dt = $('#exe_dt').val()=='undefined'?'':$('#exe_dt').val();
+		var exe_month = $('#exe_month').val()=='undefined'?'':$('#exe_month').val();
+		var exe_day = $('#exe_day').val()=='undefined'?'':$('#exe_day').val();
+		var exe_hms = $('#exe_hms').val();
+		
+		 if(exe_perd_cd == "TC001605"){
+	    	 if (!fn_dateValidation(exe_dt)) return false;
+		}	
+
+	 	$.ajax({
+			url : "/scheduleReStart.do",
+			data : {
+				scd_id : scd_id,
+				exe_perd_cd : exe_perd_cd,
+				exe_dt : exe_dt,
+				exe_month : exe_month,
+				exe_day : exe_day,
+				exe_hms : exe_hms
+					
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				location.reload();
+			}
+		});  
+	}
+	
+	
 /* ********************************************************
  * 페이지 시작시 함수
  ******************************************************** */
@@ -379,6 +409,23 @@ function fn_modifyScheduleListView(){
 function fnc_confirmMultiRst(gbn){
 	if (gbn == "del") {
 		fn_deleteScheduleList2();
+	}else if(gbn == "stop"){
+		fn_scheduleStop2();
+	}else if(gbn == "start"){
+		fn_scheduleStart2();
+	}
+}
+/* ********************************************************
+ * confirm cancel result
+ ******************************************************** */
+function fn_confirmCancelRst(gbn){
+	if ($('#scd_id', '#findList') != null) {
+		var scd_id = $('#scd_id', '#findList').val();
+		if(gbn=="start"){
+			$("input:checkbox[id=scheduleStart" + scd_id + "]").prop("checked", false);
+		}else if("stop"){
+			$("input:checkbox[id=scheduleStop" + scd_id + "]").prop("checked", true);
+		}
 	}
 }
 </script>

@@ -192,7 +192,6 @@ function fn_scheduleStop(scd_id){
 	$('#scd_id', '#findList').val(scd_id);
 	
 	$('#pop_confirm_multi_md').modal("show");
-	
 }
 
 function fn_scheduleStop2(){
@@ -443,7 +442,6 @@ function fn_selectScheduleList(){
 			}
 		},
 		success : function(result) {
-			console.log(result);
 			table.rows({selected: true}).deselect();
 			table.clear().draw();
 			table.rows.add(result).draw();
@@ -658,7 +656,19 @@ function fnc_confirmMultiRst(gbn){
 		fn_scheduleStart2();
 	}
 }
-
+/* ********************************************************
+ * confirm cancel result
+ ******************************************************** */
+function fn_confirmCancelRst(gbn){
+	if ($('#scd_id', '#findList') != null) {
+		var scd_id = $('#scd_id', '#findList').val();
+		if(gbn=="start"){
+			$("input:checkbox[id=scheduleStart" + scd_id + "]").prop("checked", false);
+		}else if("stop"){
+			$("input:checkbox[id=scheduleStop" + scd_id + "]").prop("checked", true);
+		}
+	}
+}
 </script>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
