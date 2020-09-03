@@ -113,7 +113,7 @@ function fn_init(){
 		{
 			data : "",
 			render : function(data, type, full, meta) {
-				 return '<button id="detail" class="btn btn-outline-primary" onClick=javascript:fn_dblclick_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
+				return '<button id="detail" class="btn btn-inverse-primary btn-fw" onClick=javascript:fn_dblclick_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
 			},
 			className : "dt-center",
 			defaultContent : "",
