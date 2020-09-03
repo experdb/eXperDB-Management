@@ -11,29 +11,6 @@
   }
 }
 
-/* login page 배경 css start                                                 */
-.documentation .content-wrapper-login {
-  padding-top: 0;
-  min-height: calc(100vh - 75px);
-}
-
-.content-wrapper-login {
-  background: #fff url(../../images/login_bg.png) center center no-repeat;
-  padding: 2.68rem 2.5rem;
-  width: 100%;
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
-}
-
-@media (max-width: 767px) {
-  .content-wrapper-login {
-    padding: 1.5rem 1.5rem;
-  }
-}
-/* login page 배경 css end                                                     */
-
-
-
 /* top 메뉴 css start                                                 */
 @media (max-width: 991px) {
   .horizontal-menu {

@@ -28318,15 +28318,16 @@ div.tagsinput span.tag a {
   }
 }
 
-
+/* login page 배경 css start                                                 */
 .documentation .content-wrapper-login {
   padding-top: 0;
   min-height: calc(100vh - 75px);
+    line-height: calc(100vh - 75px);
 }
 
 .content-wrapper-login {
   background: #fff url(../../images/login_bg.png) center center no-repeat;
-  padding: 2.68rem 2.5rem;
+  padding: 11rem 2.5rem;
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1;
@@ -28337,6 +28338,7 @@ div.tagsinput span.tag a {
     padding: 1.5rem 1.5rem;
   }
 }
+/* login page 배경 css end                                                     */
 
 /* Sidebar */
 .sidebar {
