@@ -73,4 +73,11 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 		return cmmnServerInfoDAO.selectHaCnt(db_svr_id);
 	}
 
+	/**
+	 * 서버정보 리스트 레이아웃
+	 */
+	public List<Map<String, Object>> selectDashboardServerInfoImg(DbServerVO dbServerVO) throws Exception {
+		return cmmnServerInfoDAO.selectDashboardServerInfoImg(dbServerVO);
+	}
+
 }

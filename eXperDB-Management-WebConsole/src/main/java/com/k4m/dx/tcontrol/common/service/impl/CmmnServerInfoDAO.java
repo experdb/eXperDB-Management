@@ -107,4 +107,16 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper {
 		return sl;
 	}
 
+	/**
+	 * DB Server 정보 리스트 레이아웃
+	 * 
+	 * @param DbServerVO
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectDashboardServerInfoImg(DbServerVO dbServerVO) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("cmmnSql.selectDashboardServerInfoImg", dbServerVO);
+		return sl;
+	}
 }

@@ -89,28 +89,6 @@
          GROUP BY AAA.DB_SVR_ID, AAA.IPADR , AAA.MASTER_GBN
          ORDER BY AAA.DB_SVR_ID, AAA.MASTER_GBN, AAA.IPADR
 	</select>
-	
-	
-
-	
-	
-	
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 	<select id="selectDashboardServerInfo" parameterType="dashboardVO" resultType="dashboardVO">
 		/**

@@ -98,10 +98,13 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				
 				if (!agentList.isEmpty()) {
 					String resultCode = (String)agentList.get(ClientProtocolID.RESULT_CODE);
-
-					if (resultCode.equals("0")) {
-						scalejsonChk = (String)agentList.get(ClientProtocolID.RESULT_SUB_DATA);
+					
+					if (resultCode != null){
+						if (resultCode.equals("0")) {
+							scalejsonChk = (String)agentList.get(ClientProtocolID.RESULT_SUB_DATA);
+						}
 					}
+
 				}
 				
 				if (!scalejsonChk.isEmpty()) {
@@ -1217,13 +1220,35 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				iScale_count = Integer.parseInt(scale_count);
 			}
 		}
+		
+		String login_id_prm = "";
+		String instance_id_prm = "";
+		String search_gbn_prm = "";
+		String process_id_prm ="";
 
 		try {
+			
+			if (param.get("login_id") != null) {
+				login_id_prm = param.get("login_id").toString();
+			}
+			
+			if (param.get("instance_id") != null) {
+				instance_id_prm = param.get("instance_id").toString();
+			}
+			
+			if (param.get("search_gbn") != null) {
+				search_gbn_prm = param.get("search_gbn").toString();
+			}
+			
+			if (param.get("process_id") != null) {
+				process_id_prm = param.get("process_id").toString();
+			}
+
 			obj.put("scale_set", scale_set);
-			obj.put("login_id", param.get("login_id").toString());
-			obj.put("instance_id", param.get("instance_id").toString());  //확인완료
-			obj.put("search_gbn", param.get("search_gbn").toString());
-			obj.put("process_id", param.get("process_id").toString());
+			obj.put("login_id", login_id_prm);
+			obj.put("instance_id", instance_id_prm);  //확인완료
+			obj.put("search_gbn", search_gbn_prm);
+			obj.put("process_id", process_id_prm);
 			obj.put("db_svr_id", db_svr_id);
 			obj.put("monitering", "");
 			obj.put("scaleChk_sub", "");
