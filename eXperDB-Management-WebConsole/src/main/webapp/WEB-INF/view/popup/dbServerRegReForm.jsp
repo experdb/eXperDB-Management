@@ -655,11 +655,29 @@ function checkPghome(){
 								<div class="form-group row">
 									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="dbms_information.use_yn" />
+										<spring:message code="user_management.use_yn" />
 									</label>
 									<div class="col-sm-4">
-										<spring:message code="dbms_information.use" /><input type="radio" name="useyn" id="useyn_Y" value="Y"> 
-										<spring:message code="dbms_information.unuse" /><input type="radio" name="useyn"  id="useyn_N" value="N">
+										<div class="form-group row" style="margin-top:5px;">
+											<div class="col-sm-6">
+												<div class="form-check">
+													<label class="form-check-label" for="useyn_Y">
+														<input type="radio" class="form-check-input" name="useyn" id="useyn_Y" value="Y" checked/>
+                          								<spring:message code="dbms_information.use"/>
+                          							</label>
+                          						</div>
+                          					</div>
+                          					<div class="col-sm-6">
+                          						<div class="form-check">
+                          							<label class="form-check-label" for="useyn_N">
+                          								<input type="radio" class="form-check-input" name="useyn" id="useyn_N" value="N" />
+                          								<spring:message code="dbms_information.unuse"/>
+                          							</label>
+                          						</div>
+                          					</div>
+                          				</div>				
+									</div>
+									<div class="col-sm-6">			
 									</div>
 								</div>
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >

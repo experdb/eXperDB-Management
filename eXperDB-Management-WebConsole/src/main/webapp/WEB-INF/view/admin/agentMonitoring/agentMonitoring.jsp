@@ -42,10 +42,10 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-<!-- 												<i class="fa fa-check-square"></i> -->
+												<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="agent_monitoring.Management_agent" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -53,7 +53,7 @@
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Admin</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ADMIN</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.agent_monitoring" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="agent_monitoring.Management_agent"/></li>
 										</ol>
@@ -81,14 +81,17 @@
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
-							<div class="form-inline">
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:300px;" maxlength="100" id="DB_SVR_NM" name="DB_SVR_NM" value="${db_svr_nm}" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.dbms_name" />'/>
+						<div class="card-body" style="margin:-10px -10px -15px 0px;">
+							<div class="form-inline row" onsubmit="return false;">
+
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_5">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="100" id="DB_SVR_NM" name="DB_SVR_NM" value="${db_svr_nm}" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.dbms_name" />'/>	
 								</div>
-								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:300px;" maxlength="100" id="IPADR" name="IPADR" value="${ipadr}" onblur="this.value=this.value.trim()" placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
+
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_5">
+									<input type="text" class="form-control" maxlength="100" id="IPADR" name="IPADR" value="${ipadr}" onblur="this.value=this.value.trim()" placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
 								</div>
+
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search();" >
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 								</button>
