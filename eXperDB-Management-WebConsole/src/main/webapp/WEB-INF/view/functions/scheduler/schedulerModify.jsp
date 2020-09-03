@@ -727,7 +727,7 @@ function fn_dateValidation(exe_dt){
 									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-calendar menu-icon"></i>
 												<span class="menu-title"><spring:message code="schedule.scheduleMod"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -847,7 +847,7 @@ function fn_dateValidation(exe_dt){
 				                            </label>
 		                          		</div>
 		                          	</div>
-									<div class="col-sm-3"  id="calendar">
+									<div class="col-sm-3"  id="calendar" style="margin-top:-15px;">
 										<div id="ins_usr_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
 											<input type="text" class="form-control totDatepicker" id="datepicker1" name="exe_dt"  tabindex=10 />
 											<span class="input-group-addon input-group-append border-left">
@@ -855,11 +855,11 @@ function fn_dateValidation(exe_dt){
 											</span>
 										</div>
 									</div>
-									<div id="month"></div>
-									<div id="day"></div>
-									<div id="hour"></div>
-									<div id="min"></div>
-									<div id="sec"></div>
+									<div id="month" style="margin-top:-15px;"></div>
+									<div id="day" style="margin-top:-15px;"></div>
+									<div id="hour" style="margin-top:-15px;"></div>
+									<div id="min" style="margin-top:-15px;"></div>
+									<div id="sec" style="margin-top:-15px;"></div>
 								</div>
 							</div>
 							
