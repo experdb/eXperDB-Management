@@ -25,99 +25,98 @@
 %>
 <script>
 
-/* ********************************************************
- * 페이지 시작시 함수
- ******************************************************** */
-$(window.document).ready(function() {
-	fn_buttonAut();
-	fn_makeSelect01();
-	fn_makeSelect02();
-	fn_makeSelect03();
-	
-	fn_selectEncriptSet();
-});
+	/* ********************************************************
+	 * 페이지 시작시 함수
+	 ******************************************************** */
+	$(window.document).ready(function() {
+		fn_buttonAut();
+		fn_makeSelect01();
+		fn_makeSelect02();
+		fn_makeSelect03();
+		
+		fn_selectEncriptSet();
+	});
 
-function fn_buttonAut(){
-	var btnSave = document.getElementById("btnSave"); 
-	
-	if("${wrt_aut_yn}" == "Y"){
-		btnSave.style.display = '';
-	}else{
-		btnSave.style.display = 'none';
-	}
-}
+	function fn_buttonAut(){
+		var btnSave = document.getElementById("btnSave"); 
 
-/* ********************************************************
- * 관리서버 모니터링 주기
- ******************************************************** */
- function fn_makeSelect01(){
-	var sec = "";
-	var secHtml ="";
-	
-	secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_POLLING_SERVER" id="MONITOR_POLLING_SERVER">';	
-	for(var i=10; i<=599; i++){
-		if(i >= 0 && i<10){
-			sec = i;
+		if("${wrt_aut_yn}" == "Y"){
+			btnSave.style.display = '';
 		}else{
-			sec = i;
+			btnSave.style.display = 'none';
 		}
-		secHtml += '<option value="'+sec+'">'+sec+'</option>';
 	}
-	secHtml += '</select>';	
-	$( "#period01" ).append(secHtml);
-} 
 
- /* ********************************************************
-  * 에이전트와 관리서버 통신 주기
-  ******************************************************** */
-  function fn_makeSelect02(){
- 	var sec = "";
- 	var secHtml ="";
- 	
- 	secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_POLLING_AGENT" id="MONITOR_POLLING_AGENT">';	
- 	for(var i=5; i<=399; i++){
- 		if(i >= 0 && i<10){
- 			sec = i;
- 		}else{
- 			sec = i;
- 		}
- 		secHtml += '<option value="'+sec+'">'+sec+'</option>';
- 	}
- 	secHtml += '</select> ';	
- 	$( "#period02" ).append(secHtml);
- } 
- 
-  /* ********************************************************
-   * 암호화 키의 유효기간이 다음 날짜 이하로 남으면 경고
-   ******************************************************** */
-   function fn_makeSelect03(){
-  	var sec = "";
-  	var secHtml ="";
-  	
-  	secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_EXPIRE_CRYPTO_KEY" id="MONITOR_EXPIRE_CRYPTO_KEY">';	
-  	for(var i=10; i<=599; i++){
-  		if(i >= 0 && i<10){
-  			sec = i;
-  		}else{
-  			sec = i;
-  		}
-  		secHtml += '<option value="'+sec+'">'+sec+'</option>';
-  	}
-  	secHtml += '</select>';	
-  	$( "#period03" ).append(secHtml);
-  } 
+	/* ********************************************************
+	 * 관리서버 모니터링 주기
+	 ******************************************************** */
+	 function fn_makeSelect01(){
+		var sec = "";
+		var secHtml ="";
 
-  
-  function fn_selectEncriptSet(){
-	  $.ajax({
+		secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_POLLING_SERVER" id="MONITOR_POLLING_SERVER">';	
+		for(var i=10; i<=599; i++){
+			if(i >= 0 && i<10){
+				sec = i;
+			}else{
+				sec = i;
+			}
+			secHtml += '<option value="'+sec+'">'+sec+'</option>';
+		}
+		secHtml += '</select>';	
+		$( "#period01" ).append(secHtml);
+	}
+
+	 /* ********************************************************
+	  * 에이전트와 관리서버 통신 주기
+	  ******************************************************** */
+	  function fn_makeSelect02(){
+		var sec = "";
+		var secHtml ="";
+		
+		secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_POLLING_AGENT" id="MONITOR_POLLING_AGENT">';	
+		for(var i=5; i<=399; i++){
+			if(i >= 0 && i<10){
+				sec = i;
+			}else{
+				sec = i;
+			}
+			secHtml += '<option value="'+sec+'">'+sec+'</option>';
+		}
+		secHtml += '</select> ';	
+		$( "#period02" ).append(secHtml);
+	 }
+
+	/* ********************************************************
+	 * 암호화 키의 유효기간이 다음 날짜 이하로 남으면 경고
+	******************************************************** */
+	function fn_makeSelect03(){
+		var sec = "";
+		var secHtml ="";
+
+		secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_EXPIRE_CRYPTO_KEY" id="MONITOR_EXPIRE_CRYPTO_KEY">';	
+		for(var i=10; i<=599; i++){
+			if(i >= 0 && i<10){
+				sec = i;
+			}else{
+				sec = i;
+			}
+			secHtml += '<option value="'+sec+'">'+sec+'</option>';
+		}
+		secHtml += '</select>';	
+		$( "#period03" ).append(secHtml);
+	}
+
+	function fn_selectEncriptSet(){
+		$.ajax({
 			url : "/selectEncryptSet.do", 
-		  	data : {
-		  	},
+			data : {
+			},
 			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
+				xhr.setRequestHeader("AJAX", true);
+			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
@@ -150,30 +149,30 @@ function fn_buttonAut(){
 					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');	
 				}	
 			}
-		});	
-  }
-  
-  function fn_save(){
-	  var arrmaps = [];
-	  var tmpmap = new Object();
-	  
-	  tmpmap["ValueTrueFalse"] =$(ValueTrueFalse).prop("checked");
-	  tmpmap["MONITOR_AGENT_AUDIT_LOG_HMAC"] = $(MONITOR_AGENT_AUDIT_LOG_HMAC).prop("checked");
-	  tmpmap["MONITOR_POLLING_AGENT"] = $("#MONITOR_POLLING_AGENT").val();
-	  tmpmap["MONITOR_EXPIRE_CRYPTO_KEY"] = $("#MONITOR_EXPIRE_CRYPTO_KEY").val();
-	  tmpmap["MONITOR_POLLING_SERVER"] = $("#MONITOR_POLLING_SERVER").val();
-	  arrmaps.push(tmpmap);	
-		
+		});
+	}
+
+	function fn_save(){
+		var arrmaps = [];
+		var tmpmap = new Object();
+
+		tmpmap["ValueTrueFalse"] =$("#ValueTrueFalse").prop("checked");
+		tmpmap["MONITOR_AGENT_AUDIT_LOG_HMAC"] = $("#MONITOR_AGENT_AUDIT_LOG_HMAC").prop("checked");
+		tmpmap["MONITOR_POLLING_AGENT"] = $("#MONITOR_POLLING_AGENT").val();
+		tmpmap["MONITOR_EXPIRE_CRYPTO_KEY"] = $("#MONITOR_EXPIRE_CRYPTO_KEY").val();
+		tmpmap["MONITOR_POLLING_SERVER"] = $("#MONITOR_POLLING_SERVER").val();
+		arrmaps.push(tmpmap);
+
 		$.ajax({
 			url : "/saveEncryptSet.do", 
-		  	data : {
-		  		arrmaps : JSON.stringify(arrmaps),
-		  	},
+			data : {
+				arrmaps : JSON.stringify(arrmaps),
+			},
 			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
+				xhr.setRequestHeader("AJAX", true);
+			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
@@ -192,16 +191,14 @@ function fn_buttonAut(){
 					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 				}else{
 					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');	
-				}	
+				}
 			}
-		});	
-  }
-  
-  
-  function fn_confirm(){
-		fn_ConfirmModal();
+		});
 	}
 
+	function fn_confirm(){
+		fn_ConfirmModal();
+	}
 
 	/* ********************************************************
 	 * confirm modal open
@@ -220,28 +217,25 @@ function fn_buttonAut(){
 	function fnc_confirmRst(){
 		fn_save();
 	}
-	
 </script>
 
 
 <%@include file="./../../popup/confirmForm.jsp"%>
 
-
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
 				<div class="card-body">
-
 					<!-- title start -->
 					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-lock menu-icon"></i>
 												<span class="menu-title"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -249,15 +243,13 @@ function fn_buttonAut(){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							Encrypt
-					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ENCRYPT</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policyOption.Settings"/></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></li>
 										</ol>
 									</div>
 								</div>
-							</div>					
+							</div>
 							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
 								<div class="card-body">
 									<div class="row">
@@ -269,38 +261,33 @@ function fn_buttonAut(){
 							</div>
 						</div>
 					</div>
+					<!-- title end -->
 				</div>
 			</div>
 		</div>
-		
-		
-		<div class="col-12 div-form-margin-cts stretch-card">
+
+		<div class="col-12 div-form-margin-table stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<div class="row">
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">	
-								<%-- <button type="button" onClick="fn_agentMonitoringModifyForm();" id="btnUpdate"><spring:message code="common.modify" /></button> --%>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSave" onClick="fn_confirm();">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.save" />
-								</button>		
+								</button>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-		
-		
-		<div class="col-12 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<div class="card card-inverse-info"  style="height:25px;">
-						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_encryptSet.Encryption_Settings"/> </i>
+
+					<div class="card my-sm-2" >
+						<div class="card card-inverse-info"  style="height:25px;">
+							<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_encryptSet.Encryption_Settings"/> </i>
 						</div>
-							<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:340px;">			
-									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
-										<form class="cmxform" id="optionForm">
+
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<form class="cmxform" id="optionForm">
 											<fieldset>		
 																						
 												<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">					
@@ -356,32 +343,14 @@ function fn_buttonAut(){
 												
 										</fieldset>
 									</form>	
-								</div>
-							</div>		
+							 	</div>
+						 	</div>
+						</div>
 					</div>
+
+					
 				</div>
 			</div>
-		
-		
-		
+		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

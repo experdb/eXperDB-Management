@@ -422,8 +422,5 @@ var table = null;
 				</div>
 			</div>
 		</div>
-
-
 	</div>
 </div>
-
