@@ -1493,14 +1493,14 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 .onoffswitch-use-inner:before {
 /* 	position:absolute;  */
     content: "ON";
-    padding-top: 20px;
+/*     padding-top: 20px; */
     padding-left: 20px;
 	background-color:#68afff;
     color: #FFFFFF;
 }
 .onoffswitch-use-inner:after {
     content: "OFF";
-    padding-top: 20px;
+/*     padding-top: 20px; */
     padding-right: 20px;
     background-color: #EEEEEE; color: #999999;
 /*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0

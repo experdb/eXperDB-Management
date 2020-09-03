@@ -9297,6 +9297,7 @@ pre code {
 .col-auto, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm,
 .col-sm-2_1, .col-sm-2_2, .col-sm-2_3,
 .col-sm-2_5, .col-sm-1_3, .col-sm-1_4, .col-sm-1_5, .col-sm-1_7, .col-sm-1_9, .col-sm-2_6, .col-sm-0_5, .col-sm-6_3, .col-sm-3_0, .col-sm-2_27, .col-sm-5_5, .col-md-2_2, .col-sm-2_8,
+.col-md-2_5, .col-md-3_5,
 .col-sm-auto, .col-md-1, .col-md-2, .col-md-2_1, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md,
 .col-md-auto, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg,
 .col-lg-auto, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl,
@@ -9800,11 +9801,22 @@ pre code {
     flex: 0 0 21.3%;
     max-width: 21.3%;
   }
+ 
+  .col-md-2_5 {
+    flex: 0 0 20.66667%;
+    max-width: 20.66667%;
+  }
   
   .col-md-3, .lightGallery .image-tile {
     flex: 0 0 25%;
     max-width: 25%;
   }
+
+  .col-md-3_5 {
+    flex: 0 0 29.33333%;
+    max-width: 29.33333%;
+  }
+  
   .col-md-4, .lightGallery .image-tile {
     flex: 0 0 33.33333%;
     max-width: 33.33333%;

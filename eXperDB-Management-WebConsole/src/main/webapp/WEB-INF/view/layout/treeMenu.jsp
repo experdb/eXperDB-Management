@@ -99,7 +99,7 @@
 											//서버 속성
 											menuJson +=	'{' +
 																'"text": "<spring:message code="menu.server_property"/>",' +
-																'"icon": "fa fa-spinner",' +
+																'"icon": "mdi mdi-server",' +
 																'"id": "scale'+item.db_svr_id+'",' +
 																'"url": "/property.do?db_svr_id='+item.db_svr_id+'",' +
 																'"menu_gbn": "server"' +
@@ -423,7 +423,7 @@
 </form>
 
 <!-- partial:partials/_settings-panel.html -->
-<div class="theme-setting-wrapper">
+<!-- <div class="theme-setting-wrapper">
 	<div id="settings-trigger">
 		<i class="ti-settings"></i>
 	</div>
@@ -444,7 +444,7 @@
 		</div>
 	</div>
 </div>
-
+ -->
 <!-- partial -->
 <nav class="sidebar sidebar-offcanvas" id="sidebar" style="max-height: calc(100vh - 0px);">
 	<ul class="nav" style="">

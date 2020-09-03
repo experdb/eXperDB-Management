@@ -3,6 +3,7 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="../cmmn/cs2.jsp"%>
 
 <%
@@ -23,7 +24,8 @@
 
 <script type="text/javascript">
 	var extName = "${extName}";
-
+	var shown = true;
+	
 	/* ********************************************************
 	 * Data initialization
 	 ******************************************************** */
@@ -35,6 +37,8 @@
 
 		//시스템 정보
 		fn_systemInfoAdd();
+		
+		fn_serverListSetting();
 		
  		$('a[href="#dbmisinfoDiv"]').on('shown.bs.tab', function (e) {
 			//사이즈 ui변경
@@ -333,6 +337,144 @@
 			}
 		}
 	}
+
+	/* ********************************************************
+	 * 서버 setting
+	 ******************************************************** */
+	function fn_serverListSetting() {
+		var html = "";
+ 		var rowCount = 0;
+		var master_gbn = "";
+		var db_svr_id = "";
+		var listCnt = 0;
+		var db_svr_id_val = "";
+		var master_state="";
+		
+		var serverTotInfo_cnt = "${fn:length(serverInfoVOSelectTot)}";
+		
+		if (serverTotInfo_cnt > 0) {
+			<c:forEach items="${serverInfoVOSelectTot}" var="serverinfo" varStatus="status">
+				master_gbn = nvlPrmSet("${serverinfo.master_gbn}", '') ;
+				rowCount = rowCount + 1;
+				listCnt = parseInt("${fn:length(serverInfoVOSelectTot)}");
+
+				//setting value
+				db_svr_id_val = nvlPrmSet("${serverinfo.db_svr_id}", '');
+				
+	 			if (db_svr_id == "") {
+					html += "<div class='col-md-12 grid-margin stretch-card' style='height:370px;overflow-y:auto;'>\n";
+					html += "	<div class='card' style='border:0px;'>\n";
+					html += '		<div class="card-body" id="serverSs'+ rowCount +'">\n';
+					html += '			<div class="row">\n';
+				} else if (db_svr_id != nvlPrmSet("${serverinfo.db_svr_id}", '')  && master_gbn == "M") {
+					html += '				</div>\n';
+					html += '			</div>\n';
+					html += '			<div class="col-sm-3" style="margin:auto;">\n';
+					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iDatabase' + db_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
+					html += '			</div>\n';
+					html += "		</div>\n";
+					html += "		</div>\n";
+					html += "	</div>\n";
+					html += '</div>\n';
+					
+					html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+					html += "	<div class='card'>\n";
+					html += '		<div class="card-body" id="serverSs'+ rowCount +'" >\n';
+					html += '			<div class="row">\n';
+				}
+
+ 			if (master_gbn == "M") {
+ 				html += '			<div class="col-sm-9">';
+ 				html += '				<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+ 				html += '					<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+ 				
+				if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == '') {
+ 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001101') {
+ 	 				html += '					<div class="badge badge-pill badge-success" title="">M</div>\n';
+ 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001102') {
+ 	 				html += '					<div class="badge badge-pill badge-danger">M</div>\n';
+ 				} else {
+ 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+ 				}
+				
+				master_state = nvlPrmSet("${serverinfo.agt_cndt_cd}", '');
+				
+ 				html += '					<span class="text-info"><c:out value="${serverinfo.db_svr_nm}"/></span><br/></h5>\n';
+ 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+ 				html += '					IP : <c:out value="${serverinfo.ipadr}"/>&nbsp;&nbsp;&nbsp;POPT : <c:out value="${serverinfo.portno}"/></h6>\n';
+ 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+				html += '					<spring:message code="dbms_information.account" /> : <c:out value="${serverinfo.dft_db_nm}"/>\n';
+ 				html += '					</h6>\n';
+ 				
+ 				
+ 			}
+ 			
+ 			if (master_gbn == "S") {
+ 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
+ 				
+					if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == '') {
+ 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+ 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001101') {
+ 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
+ 				} else if (nvlPrmSet("${serverinfo.agt_cndt_cd}", '') == 'TC001102') {
+ 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
+
+ 				} else {
+ 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+ 				}
+ 				html += '					<span class="text-info"><c:out value="${serverinfo.svr_host_nm}"/></span><br/></h6>';
+ 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">\n';
+ 				html += '					IP : <c:out value="${serverinfo.ipadr}"/>&nbsp;&nbsp;&nbsp;POPT : <c:out value="${serverinfo.portno}"/></h6>\n';
+ 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">\n';
+				html += '					<spring:message code="dbms_information.account" /> : <c:out value="${serverinfo.dft_db_nm}"/>\n';
+ 				html += '					</h6>\n';
+ 				
+ 			}
+
+			if (rowCount == listCnt) {
+				html += '				</div>\n';
+				html += '			</div>\n';
+				html += '			<div class="col-sm-3" style="margin:auto;">\n';
+				
+				if (master_state == '') {
+					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-warning blink_db" style="font-size: 3.0em;"></i>\n';
+				} else if (master_state == 'TC001101') {
+					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db" style="font-size: 3.0em;"></i>\n';
+ 				} else if (master_state == 'TC001102') {
+					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db" style="font-size: 3.0em;"></i>\n';
+ 				} else {
+					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-warning blink_db" style="font-size: 3.0em;"></i>\n';
+ 				}
+
+				html += '			</div>\n';
+				html += "		</div>\n";
+				html += "		</div>\n";
+				html += "	</div>\n";
+				html += '</div>\n';
+				
+			}
+			db_svr_id = nvlPrmSet("${serverinfo.db_svr_id}", '') ;
+
+		</c:forEach> 
+		}
+
+		$("#dbServerImg").html(html);
+
+		if (master_state == 'TC001101') {
+			setInterval(iDatabase_toggle, 300);
+		}
+	}
+	
+	function iDatabase_toggle() {
+		if(shown) {
+			$(".blink_db").hide();
+			shown = false;
+		} else {
+			$(".blink_db").show();
+			shown = true;
+		}
+	}
 </script>
 
 <form name="findList" id="findList" method="post">
@@ -350,10 +492,10 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="mdi mdi-server"></i>
 												<span class="menu-title"><spring:message code="menu.server_property"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -425,7 +567,8 @@
 											</h5>
 										</div>
 
-										<div class="col-md-4" style="border:0px;">
+										<div class="col-md-4" style="border:0px;" id="dbServerImg">
+
 										</div>
 										<div class="col-md-8 table-responsive" style="border:0px;">
 											<table id="systemInfoList" class="table table-bordered system-tlb-scroll" style="width:100%;">
@@ -473,6 +616,88 @@
 														<td class="table-text-align-c bg-info text-white" colspan="5"><spring:message code="properties.memory" /></td>
 														<td colspan="3" id="cmdMemoryTd"></td>
 													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+									<div class="form-group row div-form-margin-z" style="margin-top:-10px;">		
+										<div class="col-md-12" style="border:0px;margin-top:25px;margin-bottom:-15px;">
+											<h5 class="card-title">
+												<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="properties.ha_config" />
+											</h5>
+										</div>
+ 
+										<div class="col-md-12 table-responsive" style="border:0px;">
+											<table id="haConfigList" class="table table-bordered system-tlb-scroll" style="width:100%;">
+												<colgroup>
+													<col style="width: 25%;">
+													<col style="width: 25%;">
+													<col style="width: 25%;">
+													<col style="width: 25%;">
+												</colgroup>
+												<thead>
+													<tr class="bg-info text-white">
+														<th class="table-text-align-c" ><spring:message code="properties.ip" /></th>
+														<th class="table-text-align-c" ><spring:message code="properties.server_type" /></th>
+														<th class="table-text-align-c" ><spring:message code="properties.host" /></th>
+														<th class="table-text-align-c" ><spring:message code="properties.status" /></th>	
+													</tr>
+												</thead>
+												<tbody>
+													<c:choose>
+														<c:when test="${empty resultIpadr}">
+															<tr>
+																<td class="table-text-align-c" colspan="4">
+																	<spring:message code="properties.msg01" />
+																</td>
+															</tr>
+														</c:when>
+														<c:otherwise>
+															<c:forEach var="hainfo" items="${resultIpadr}">
+																<tr>
+																	<td class="table-text-align-c">
+																		<c:if test="${not empty hainfo.ipadr}">
+																			<i class="mdi mdi-account-network text-info" ></i>
+							 											</c:if>	
+																		${hainfo.ipadr}
+																	</td>
+																	<td class="table-text-align-c">
+																		<c:choose>
+																			<c:when test="${hainfo.master_gbn eq 'M'}">
+																				<i class="ti-server text-success" >
+																					master
+																				</i>
+																			</c:when>
+																			<c:when test="${hainfo.master_gbn eq 'S'}">
+																				<i class="mdi mdi-server-network text-warning" >
+																					slave
+																				</i>
+																			</c:when>
+																			<c:otherwise></c:otherwise>
+																		</c:choose>
+																	</td>
+																	<td class="table-text-align-c">${hainfo.svr_host_nm}</td>
+																	<td class="table-text-align-c">
+																		<c:choose>
+																			<c:when test="${hainfo.db_cndt eq 'Y'}">
+																				<div class='badge badge-pill badge-success'>
+																					<i class='fa fa-spin fa-spinner mr-2'></i>
+																					<spring:message code='dashboard.running' />
+																				</div>
+																			</c:when>
+																			<c:when test="${hainfo.db_cndt eq 'N'}">
+																				<div class='badge badge-pill badge-danger'>
+																					<i class='fa fa-minus-circle mr-2'></i>
+																					<spring:message code='schedule.stop' />
+																				</div>
+																			</c:when>
+																		</c:choose>
+																	</td>
+																</tr>
+															</c:forEach>
+														</c:otherwise>
+													</c:choose>	
 												</tbody>
 											</table>
 										</div>
@@ -531,7 +756,7 @@
 
 										<div class="col-md-12" style="border:0px;margin-top:25px;margin-bottom:-15px;">
 											<h5 class="card-title">
-												<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="properties.database_info" />
+												<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="properties.db_information" />
 											</h5>
 										</div>
 
@@ -627,86 +852,6 @@
 															</td>
 														</tr>
 													</c:if>
-												</tbody>
-											</table>
-										</div>
-
-										<div class="col-md-12" style="border:0px;margin-top:25px;margin-bottom:-15px;">
-											<h5 class="card-title">
-												<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="properties.ha_config" />
-											</h5>
-										</div>
-
-										<div class="col-md-12 table-responsive" style="border:0px;">
-											<table id="haConfigList" class="table table-bordered system-tlb-scroll" style="width:100%;">
-												<colgroup>
-													<col style="width: 25%;">
-													<col style="width: 25%;">
-													<col style="width: 25%;">
-													<col style="width: 25%;">
-												</colgroup>
-												<thead>
-													<tr class="bg-info text-white">
-														<th class="table-text-align-c" ><spring:message code="properties.ip" /></th>
-														<th class="table-text-align-c" ><spring:message code="properties.server_type" /></th>
-														<th class="table-text-align-c" ><spring:message code="properties.host" /></th>
-														<th class="table-text-align-c" ><spring:message code="properties.status" /></th>	
-													</tr>
-												</thead>
-												<tbody>
-													<c:choose>
-														<c:when test="${empty resultIpadr}">
-															<tr>
-																<td class="table-text-align-c" colspan="4">
-																	<spring:message code="properties.msg01" />
-																</td>
-															</tr>
-														</c:when>
-														<c:otherwise>
-															<c:forEach var="hainfo" items="${resultIpadr}">
-																<tr>
-																	<td class="table-text-align-c">
-																		<c:if test="${not empty hainfo.ipadr}">
-																			<i class="mdi mdi-account-network text-info" ></i>
-							 											</c:if>	
-																		${hainfo.ipadr}
-																	</td>
-																	<td class="table-text-align-c">
-																		<c:choose>
-																			<c:when test="${hainfo.master_gbn eq 'M'}">
-																				<i class="ti-server text-success" >
-																					master
-																				</i>
-																			</c:when>
-																			<c:when test="${hainfo.master_gbn eq 'S'}">
-																				<i class="mdi mdi-server-network text-warning" >
-																					slave
-																				</i>
-																			</c:when>
-																			<c:otherwise></c:otherwise>
-																		</c:choose>
-																	</td>
-																	<td class="table-text-align-c">${hainfo.svr_host_nm}</td>
-																	<td class="table-text-align-c">
-																		<c:choose>
-																			<c:when test="${hainfo.db_cndt eq 'Y'}">
-																				<div class='badge badge-pill badge-success'>
-																					<i class='fa fa-spin fa-spinner mr-2'></i>
-																					<spring:message code='dashboard.running' />
-																				</div>
-																			</c:when>
-																			<c:when test="${hainfo.db_cndt eq 'N'}">
-																				<div class='badge badge-pill badge-danger'>
-																					<i class='fa fa-minus-circle mr-2'></i>
-																					<spring:message code='schedule.stop' />
-																				</div>
-																			</c:when>
-																		</c:choose>
-																	</td>
-																</tr>
-															</c:forEach>
-														</c:otherwise>
-													</c:choose>	
 												</tbody>
 											</table>
 										</div>

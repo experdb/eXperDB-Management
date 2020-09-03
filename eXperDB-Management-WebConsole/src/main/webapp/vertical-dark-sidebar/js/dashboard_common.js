@@ -18,12 +18,27 @@ $(window).ready(function(){
 	
 	//서버정보 리스트 setting
 	fn_serverListSetting();	
+
 });
 
 /* ********************************************************
  * 서버정보 click
  ******************************************************** */
 function fn_serverSebuInfo(db_svr_id, rowChkCnt) {
+	//load bar 추가
+	
+	var obj = $('#loading_dash');
+	var iHeight = (($(window).height() - obj.outerHeight()) / 2) + $("#contentsDivDash").scrollTop();
+	var iWidth = (($(window).width() - obj.outerWidth()) / 2) + $("#contentsDivDash").scrollLeft();
+	obj.css({
+        position: 'absolute',
+        display:'block',
+        top: iHeight,
+        left: iWidth
+    });
+
+    $('#loading_dash').show();
+
 	//초기화
 	fn_serverDivClear(db_svr_id, rowChkCnt);
 }
@@ -245,6 +260,8 @@ function fn_tablescpace_setting(result) {
 		$("#logPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		fn_gLog("0");
 	}
+	
+    $('#loading_dash').hide();	
 }
 
 /* ********************************************************

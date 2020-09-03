@@ -105,12 +105,10 @@
 <body class="sidebar-dark">
 	<div class="container-scroller">
 		<div class="container-fluid page-body-wrapper full-page-wrapper">
-
 			<div class="content-wrapper-login d-flex align-items-center auth px-0">
 				<div class="row w-100 mx-0">
-					<div class="col-lg-4 mx-auto">
+					<div class="col-lg-4 mx-auto my-auto">
 						<div class="auth-form-light text-left py-5 px-4 px-sm-5">
-			
 							<!-- title -->
 							<div class="brand-logo">
 								<img src="../images/login_logo_new.png" alt="eXperDB">
@@ -160,7 +158,7 @@
 										</label>
 									</div>
 								</div>
-							</form>	
+							</form>
 						</div>
 					</div>
 				</div>

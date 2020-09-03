@@ -15,7 +15,6 @@
 	var today = "";
 	var scale_yn_chk = "";
 
-
 	/* ********************************************************
 	 * 서버리스트 설정
 	 ******************************************************** */
@@ -205,7 +204,7 @@
 </form>
 
 <!-- partial -->
-<div class="content-wrapper main_scroll">
+<div class="content-wrapper main_scroll" id="contentsDivDash">
 	<div class="row" style="margin-top:-20px;margin-bottom:5px;">
 		<!-- title start -->
 		<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist">
@@ -230,9 +229,9 @@
 	</div>
 	
 	<!-- 통합스케줄 -->
-	<div class="row">
+	<div class="row" style="justify-content: space-between;">
 		<!-- 스케줄등록 -->
-		<div class="col-md-2 grid-margin stretch-card">
+		<div class="col-md-2 grid-margin stretch-card" style="flex:1 0 16.66667%; min-width:250px; max-width: none;"> <!--  class 신규 생성 시 max-width는 불필요한 요소이나, col-md-2  클래스 스타일이 들어가 추가했습니다.  -->
  			<div class="card news_text">
 				<div class="card-body" onClick="location.href ='/selectScheduleListView.do'" style="cursor:pointer;">
 					<p class="card-title text-md-center text-xl-left">Schedule(<spring:message code="dashboard.Register_schedule" />)</p>
@@ -267,7 +266,7 @@
 		</div>
 
 		<!-- 금일예정-->
- 		<div class="col-md-2 grid-margin stretch-card">
+ 		<div class="col-md-2 grid-margin stretch-card" style="flex:1 0 16.66667%; min-width:250px; max-width: none;">
 			<div class="card">
 				<div class="card-body" >
 					<p class="card-title text-md-center text-xl-left">Today(<spring:message code="dashboard.scheduled_today" />)</p>
@@ -302,7 +301,7 @@
 		</div>
 
 		<!-- 시작-->		
-		<div class="col-md-2 grid-margin stretch-card">
+		<div class="col-md-2 grid-margin stretch-card" style="flex:1 0 16.66667%; min-width:250px; max-width: none;">
  			<div class="card news_text">
 				<div class="card-body " onClick="location.href ='/selectScheduleListView.do?scd_cndt=TC001801'" style="cursor:pointer;">
 					<p class="card-title text-md-center text-xl-left">Start(<spring:message code="etc.etc37"/>)</p>
@@ -337,7 +336,7 @@
 		</div>
 
 		<!-- 중지 -->
- 		<div class="col-md-2 grid-margin stretch-card">
+ 		<div class="col-md-2 grid-margin stretch-card" style="flex:1 0 16.66667%; min-width:250px; max-width: none;">
 			<div class="card news_text">
 				<div class="card-body" onClick="location.href ='/selectScheduleListView.do?scd_cndt=TC001803'" style="cursor:pointer;">
 					<p class="card-title text-md-center text-xl-left">Stop(<spring:message code="schedule.stop" />)</p>
@@ -372,42 +371,44 @@
 		</div>         
 
 		<!-- 실행중 -->
-		<div class="col-md-2 grid-margin stretch-card">
+		<div class="col-md-2 grid-margin stretch-card" style="flex:1 0 16.66667%; min-width:250px; max-width: none;">
 			<div class="card news_text">
 				<div class="card-body" onClick="location.href ='/selectScheduleListView.do?scd_cndt=TC001802'" style="cursor:pointer;">
 					<p class="card-title text-md-center text-xl-left"><spring:message code="dashboard.running" /></p>
+
 					<div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-						<c:choose>
-							<c:when test="${not empty scheduleInfo}">
-								<c:choose>
-									<c:when test="${not empty scheduleInfo.run_cnt}">
-										<c:choose>
-											<c:when test="${fn:length(fn:escapeXml(scheduleInfo.run_cnt))>2}">
-												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"><c:out value="${scheduleInfo.run_cnt}"/></h3>
-											</c:when>
-											<c:otherwise>
-												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"><c:out value="${scheduleInfo.run_cnt}"/></h3>
-											</c:otherwise> 
-										</c:choose>
-									</c:when>
-									<c:otherwise>
-										<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
-									</c:otherwise>
-								</c:choose>
-							</c:when>
-							<c:otherwise>
-								<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
-							</c:otherwise>
-						</c:choose>
-						<i class="fa fa-refresh fa-spin icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
+							<c:choose>
+								<c:when test="${not empty scheduleInfo}">
+									<c:choose>
+										<c:when test="${not empty scheduleInfo.run_cnt}">
+											<c:choose>
+												<c:when test="${fn:length(fn:escapeXml(scheduleInfo.run_cnt))>2}">
+													<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"><c:out value="${scheduleInfo.run_cnt}"/></h3>
+												</c:when>
+												<c:otherwise>
+													<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"><c:out value="${scheduleInfo.run_cnt}"/></h3>
+												</c:otherwise> 
+											</c:choose>
+										</c:when>
+										<c:otherwise>
+											<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+								<c:otherwise>
+									<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">0</h3>
+								</c:otherwise>
+							</c:choose>
+							&nbsp;
+							<i class="fa fa-refresh fa-spin icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
 					</div>  
 					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_run_msg"></span> <span class="text-black ml-1"><small>(<spring:message code="dashboard.msg01" />)</small></span></p>
 				</div>
 			</div>
 		</div>
 
-		<!--  오휴 -->
- 		<div class="col-md-2 grid-margin stretch-card">
+		<!--  오류 -->
+ 		<div class="col-md-2 grid-margin stretch-card" style="flex:1 0 16.66667%; min-width:250px; max-width: none;">
 			<div class="card news_text">
 				<div class="card-body" onClick="location.href ='/selectScheduleHistoryFail.do'" style="cursor:pointer;">
 					<p class="card-title text-md-center text-xl-left"><spring:message code="dashboard.failed" /></p>
@@ -958,7 +959,7 @@
 
 										<div id="encrypt_hist_header_sub" class="collapse show" role="tabpanel" aria-labelledby="encrypt_hist_header_div" data-parent="#accordion_encrypt_his">
 											<div class="row"  id="encrypt_div_set">
-												<div class="col-md-3 col-xl-3 justify-content-center">
+												<div class="col-md-2_5 justify-content-center">
 	 												<div class="card" style="margin-left:-10px;border:none;">
 														<div class="card-body" style="border:none;">
 															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.encrypt_key_management_server" /></p>
@@ -968,7 +969,7 @@
 													</div>
 												</div>
 											
-												<div class="col-md-3 col-xl-3 justify-content-center">
+												<div class="col-md-3_5 justify-content-center">
 	 												<div class="card" style="margin-left:-10px;border:none;">
 														<div class="card-body" style="border:none;">
 															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="dashboard.encrypt_key_agent" /></p>
