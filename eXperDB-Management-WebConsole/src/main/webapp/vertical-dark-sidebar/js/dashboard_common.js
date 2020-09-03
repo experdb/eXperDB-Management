@@ -307,7 +307,7 @@ function fn_selectSecurityStatistics(today){
  	var encryptFailCount = 0;
  	var decryptSuccessCount = 0;
  	var decryptFailCount = 0;
- 
+
 	$.ajax({
 		url : "/selectDashSecurityStatistics.do",
 		data : {
@@ -330,6 +330,7 @@ function fn_selectSecurityStatistics(today){
 			}
 		},
 		success : function(data) {
+			alert(data.resultCode);
 			if(data.resultCode == "0000000000"){
 			 	var html ="";
 
@@ -864,13 +865,14 @@ function fn_schedule_History_set(result) {
 							tot_cnt: script_tot_cnt,
 							suc_cnt: script_suc_cnt,
 							fal_cnt: script_fal_cnt
-						},
+						}
+						/*,
 						{
 							scheduleGbn: dashboard_migration,
 							tot_cnt: db2_pg_tot_cnt,
 							suc_cnt: db2_pg_suc_cnt,
 							fal_cnt: db2_pg_fal_cnt
-						}
+						}*/
 				],
 				xkey: 'scheduleGbn',
 				ykeys: ['tot_cnt', 'suc_cnt', 'fal_cnt'],

@@ -836,7 +836,7 @@ System.out.println("==tablespaceObj===" + tablespaceObj);
 			
 			CommonServiceCall csc = new CommonServiceCall();			
 			AgentMonitoringServiceCall amsc = new AgentMonitoringServiceCall();		
-			
+
 			agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);			
 			agentStatusList = amsc.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);
 				
@@ -965,7 +965,6 @@ System.out.println("==tablespaceObj===" + tablespaceObj);
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/serverStatus.do")	
 	public @ResponseBody JSONObject serverStatus(HttpServletRequest request) {
-	System.out.println("123123==============================");
 				JSONObject result = new JSONObject();
 
 				HttpSession session = request.getSession();

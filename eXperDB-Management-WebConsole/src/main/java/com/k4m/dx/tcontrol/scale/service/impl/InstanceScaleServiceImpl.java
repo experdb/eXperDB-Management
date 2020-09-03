@@ -1203,7 +1203,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	 * @throws Exception 
 	 */
 	public Map<String, Object> scaleInAgent(Map<String, Object> param) throws Exception {
-		Map<String, Object> result = null;
+		Map<String, Object> result = new HashMap<String, Object>();
 		List<Map<String, Object>> dbResult = null;
 		JSONObject obj = new JSONObject();
 		
