@@ -259,17 +259,17 @@ function fn_save(){
 	var tmpmap02 = new Object();
 	
 	 var dayWeek = new Array();
-	 dayWeek.push($(mon).prop("checked"));
-	 dayWeek.push($(tue).prop("checked"));
-	 dayWeek.push($(wed).prop("checked"));
-	 dayWeek.push($(thu).prop("checked"));
-	 dayWeek.push($(fri).prop("checked"));
-	 dayWeek.push($(sat).prop("checked"));
-	 dayWeek.push($(sun).prop("checked"));
+	 dayWeek.push($("#mon").prop("checked"));
+	 dayWeek.push($("#tue").prop("checked"));
+	 dayWeek.push($("#wed").prop("checked"));
+	 dayWeek.push($("#thu").prop("checked"));
+	 dayWeek.push($("#fri").prop("checked"));
+	 dayWeek.push($("#sat").prop("checked"));
+	 dayWeek.push($("#sun").prop("checked"));
 	 
-	tmpmap01["global_policy_default_access_allow_tf"] =$(GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF).prop("checked");
-	tmpmap01["global_policy_forced_logging_off_tf"] = $(GLOBAL_POLICY_FORCED_LOGGING_OFF_TF).prop("checked");
-	tmpmap01["global_policy_boost_tf"] = $(GLOBAL_POLICY_BOOST_TF).prop("checked");
+	tmpmap01["global_policy_default_access_allow_tf"] =$("#GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF").prop("checked");
+	tmpmap01["global_policy_forced_logging_off_tf"] = $("#GLOBAL_POLICY_FORCED_LOGGING_OFF_TF").prop("checked");
+	tmpmap01["global_policy_boost_tf"] = $("#GLOBAL_POLICY_BOOST_TF").prop("checked");
 	tmpmap01["global_policy_crypt_log_tm_resolution"] = $("#GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION").val();
 	tmpmap01["global_policy_crypt_log_compress_flush_timeout"] = $("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT").val();
 	tmpmap01["global_policy_crypt_log_compress_limit"] = $("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT").val();
@@ -277,7 +277,7 @@ function fn_save(){
 	tmpmap01["global_policy_crypt_log_compress_initial"] = $("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL").val();
 	arrmaps01.push(tmpmap01);	
 	
-	tmpmap02["blnIsvalueTrueFalse"] = $(blnIsvalueTrueFalse).prop("checked");
+	tmpmap02["blnIsvalueTrueFalse"] = $("#blnIsvalueTrueFalse").prop("checked");
 	tmpmap02["start_exe_h"] = $("#start_exe_h").val();
 	tmpmap02["stop_exe_h"] = $("#stop_exe_h").val();
 	tmpmap02["logTransferWaitTime"] = $("#logTransferWaitTime").val();
@@ -373,22 +373,20 @@ function fnc_confirmRst(){
 
 <form name='isServerKeyEmpty' method='post' target='main' action='/securityKeySet.do'></form>
 
-
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
 				<div class="card-body">
-
 					<!-- title start -->
 					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-lock menu-icon"></i>
 												<span class="menu-title"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -396,15 +394,13 @@ function fnc_confirmRst(){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							Encrypt
-					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ENCRYPT</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policyOption.Settings"/></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></li>
 										</ol>
 									</div>
 								</div>
-							</div>					
+							</div>
 							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
 								<div class="card-body">
 									<div class="row">
@@ -416,37 +412,33 @@ function fnc_confirmRst(){
 							</div>
 						</div>
 					</div>
+					<!-- title end -->
 				</div>
 			</div>
 		</div>
-		
-		<div class="col-12 div-form-margin-cts stretch-card">
+
+		<div class="col-12 div-form-margin-table stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<div class="row">
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">	
-								<%-- <button type="button" onClick="fn_agentMonitoringModifyForm();" id="btnUpdate"><spring:message code="common.modify" /></button> --%>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSave" onClick="fn_confirm();">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.save" />
-								</button>		
+								</button>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-		
-	
-		<div class="col-12 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<div class="card card-inverse-info"  style="height:25px;">
-						<i class="mdi mdi-blur" style="margin-left: 10px;;">	<spring:message code="encrypt_policyOption.Default_Option"/> </i>
-					</div>
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:160px;">			
-								<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
-									<form class="cmxform" id="optionForm">
+
+					<div class="card my-sm-2" >
+						<div class="card card-inverse-info"  style="height:25px;">
+							<i class="mdi mdi-blur" style="margin-left: 10px;;">	<spring:message code="encrypt_policyOption.Default_Option"/> </i>
+						</div>
+						
+						<div class="card-body">
+							<div class="row">
+								<div class="col-12">
+ 									<form class="cmxform" id="optionForm">
 										<fieldset>													
 											<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">					
 												<div class="form-check"  style="margin-left: 20px;">
@@ -465,24 +457,21 @@ function fnc_confirmRst(){
 								                 </div>					
 											</div>		
 									</fieldset>
-								</form>	
-							</div>
-						</div>		
-				</div>
-			</div>
-		</div>
-		
-		
-		
-	<div class="col-12 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<div class="card card-inverse-info"  style="height:25px;">
-						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policy_management.Log_Compression"/> </i>
+								</form>		
+							 	</div>
+						 	</div>
+						</div>
 					</div>
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:220px;">			
-									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
-										<form class="cmxform" id="compressForm">
+					
+					<div class="card my-sm-2" >
+						<div class="card card-inverse-info"  style="height:25px;">
+							<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policy_management.Log_Compression"/> </i>
+						</div>
+						
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+<form class="cmxform" id="compressForm">
 											<fieldset>												
 												<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">														
 													<div class="form-check"  style="margin-left: 20px;">
@@ -554,23 +543,21 @@ function fnc_confirmRst(){
 												</div>		
 	
 										</fieldset>
-									</form>	
-								</div>
-							</div>		
-				</div>
-			</div>
-		</div>
-		
-		
-		<div class="col-12 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<div class="card card-inverse-info"  style="height:25px;">
-						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policyOption.Log_Batch_Transmission"/> </i>
+									</form>		
+							 	</div>
+						 	</div>
+						</div>
 					</div>
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:240px;">			
-									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
-										<form class="cmxform" id="transForm">
+
+					<div class="card my-sm-2" >
+						<div class="card card-inverse-info"  style="height:25px;">
+							<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policyOption.Log_Batch_Transmission"/> </i>
+						</div>
+						
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+<form class="cmxform" id="transForm">
 											<fieldset>																
 												<div class="form-group row" style="margin-bottom:10px;margin-left: 55px;">					
 													<div class="form-check"  style="margin-left: 20px;">
@@ -641,12 +628,16 @@ function fnc_confirmRst(){
 												 <div style="margin-top:15px;"><spring:message code="encrypt_policyOption.End_Transfer"/> </div>
 											</div>		
 										</fieldset>
-									</form>	
-								</div>
-							</div>		
+									</form>		
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
-		</div>	
+		</div>
+
 		
 		
 	</div>
