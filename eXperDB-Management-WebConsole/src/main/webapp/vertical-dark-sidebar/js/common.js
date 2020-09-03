@@ -778,7 +778,7 @@ function fn_db2pgConfigLayer(config_nm){
 		data : {
 			config_nm : config_nm
 		},
-		dataType : "json",
+//		dataType : "json",
 		type : "post",
 		beforeSend: function(xhr) {
 			xhr.setRequestHeader("AJAX", true);
@@ -793,7 +793,7 @@ function fn_db2pgConfigLayer(config_nm){
 			}
 		},
 		success : function(result) {
-			if(result==null){
+			if(result==null || result==""){
 				showSwalIcon(migration_msg21, closeBtn, '', 'error');
 			}else{
 				$("#config").html(result);

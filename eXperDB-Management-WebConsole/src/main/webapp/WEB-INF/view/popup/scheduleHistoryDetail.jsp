@@ -51,7 +51,11 @@ function fn_init_scdH() {
 		{data : "exe_rslt_cd",  defaultContent : "",className : "dt-center"
 			,"render": function (data, type, full) {
 				if(full.exe_rslt_cd=="TC001701"){
-						var html = "<div class='badge badge-pill badge-success'><i class='ti-face-smile  mr-2'></i>Success</div>";
+						var html = "";
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-check-circle text-primary' >";
+						html += '&nbsp;<spring:message code="common.success" /></i>';
+						html += "</div>";
 						return html;
 				}else if(full.exe_rslt_cd == 'TC001702'){
 					var html = '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
