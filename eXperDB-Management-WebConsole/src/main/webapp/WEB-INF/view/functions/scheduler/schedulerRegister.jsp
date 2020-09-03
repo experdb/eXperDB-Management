@@ -161,7 +161,7 @@ function fn_makeMonth(){
 	var month = "";
 	var monthHtml ="";
 	
-	monthHtml += '<select class="form-control" name="exe_month" id="exe_month">';	
+	monthHtml += '<select class="form-control" name="exe_month" id="exe_month" >';	
 	for(var i=1; i<=12; i++){
 		if(i >= 0 && i<10){
 			month = "0" + i;
@@ -182,7 +182,7 @@ function fn_makeDay(){
 	var day = "";
 	var dayHtml ="";
 	
-	dayHtml += '<select class="form-control" name="exe_day" id="exe_day">';	
+	dayHtml += '<select class="form-control" name="exe_day" id="exe_day" >';	
 	for(var i=1; i<=31; i++){
 		if(i >= 0 && i<10){
 			day = "0" + i;
@@ -191,7 +191,7 @@ function fn_makeDay(){
 		}
 		dayHtml += '<option value="'+day+'">'+day+'</option>';
 	}
-		dayHtml += '</select> <spring:message code="schedule.day" />&emsp;';	
+		dayHtml += '</select> <spring:message code="schedule.day" />';	
 	$( "#day" ).append(dayHtml);
 }
 
@@ -204,7 +204,7 @@ function fn_makeHour(){
 	var hour = "";
 	var hourHtml ="";
 	
-	hourHtml += '<select class="form-control" name="exe_h" id="exe_h">';	
+	hourHtml += '<select class="form-control" name="exe_h" id="exe_h" >';	
 	for(var i=0; i<=23; i++){
 		if(i >= 0 && i<10){
 			hour = "0" + i;
@@ -829,7 +829,7 @@ function fn_db2pgAdd(){
 								</div>		
 								
 								<div class="col-sm-8 form-inline">	
-									<div id="weekDay" class="form-inline">
+									<div id="weekDay" class="form-inline" style="margin-top:-2px;">
 										<div class="form-check form-check-primary">
 				                            <label class="form-check-label">
 				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.sunday" />&emsp;
@@ -866,19 +866,19 @@ function fn_db2pgAdd(){
 				                            </label>
 		                          		</div>
 		                          	</div>
-										<div class="col-sm-3"  id="calendar">
+										<div class="col-sm-3"  id="calendar" style="margin-top:-15px;">
 											<div id="ins_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
 												<input type="text" class="form-control totDatepicker" id="datepicker1" name="exe_dt" readonly tabindex=10 />
 												<span class="input-group-addon input-group-append border-left">
 													<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 												</span>
 											</div>
-										</div>
-										<div id="month"></div>
-										<div id="day"></div>
-										<div id="hour"></div>
-										<div id="min"></div>
-										<div id="sec"></div>
+										</div>&nbsp;
+										<div id="month" style="margin-top:-15px;"></div>
+										<div id="day" style="margin-top:-15px;"></div>
+										<div id="hour" style="margin-top:-15px;"></div>
+										<div id="min" style="margin-top:-15px;"></div>
+										<div id="sec" style="margin-top:-15px;"></div>
 								</div>
 							</div>
 							
