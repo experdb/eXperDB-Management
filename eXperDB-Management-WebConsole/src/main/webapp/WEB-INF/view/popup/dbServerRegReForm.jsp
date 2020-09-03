@@ -134,12 +134,17 @@ $(function() {
 	 * 서버 테이블 (선택영역 표시)
 	 ******************************************************** */
     $('#serverIpadrReg tbody').on( 'click', 'tr', function () {
+    	
+    	var vCheck =  dbServerRegTable.row(this).data().rownum;
+    	
 //     	var check = dbServerRegTable.row( this ).index()+1
 //     	$(":radio[name=input:radio][value="+check+"]").prop("checked", true);
          if ( $(this).hasClass('selected') ) {
+        	 //$("input:radio[name='radio']:radio[value="+vCheck+"]").prop('checked', false);
         }
         else {    	
         	dbServerRegTable.$('tr.selected').removeClass('selected');
+        	 $("input:radio[name='radio']:radio[value="+vCheck+"]").prop('checked', true);
             $(this).addClass('selected');       
         } 
     });
