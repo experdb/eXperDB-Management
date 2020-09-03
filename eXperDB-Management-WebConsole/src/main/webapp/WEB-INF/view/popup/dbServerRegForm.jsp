@@ -58,11 +58,13 @@ $(function() {
 	 * 서버 테이블 (선택영역 표시)
 	 ******************************************************** */
     $('#serverIpadr tbody').on( 'click', 'tr', function () {
+    	var vCheck =  dbServerTable.row(this).data().rownum;
 //     	var check = dbServerTable.row( this ).index()+1
 //     	$(":radio[name=input:radio][value="+check+"]").prop("checked", true);
          if ( $(this).hasClass('selected') ) {
         }
         else {    	
+        	$("input:radio[name='radio']:radio[value="+vCheck+"]").prop('checked', true);
         	dbServerTable.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');       
         } 
