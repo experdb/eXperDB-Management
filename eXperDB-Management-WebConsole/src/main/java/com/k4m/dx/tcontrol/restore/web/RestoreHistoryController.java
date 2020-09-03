@@ -20,7 +20,6 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
-import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
@@ -70,9 +69,7 @@ public class RestoreHistoryController {
 	
 	/**
 	 * [Restore] 복구이력 화면을 보여준다.
-	 * 
-	 * @param historyVO
-	 * @param request
+	 * @param historyVO, workVO, request
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
@@ -91,12 +88,13 @@ public class RestoreHistoryController {
 			}else{
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0009");
-				historyVO.setMnu_id(11);
+				historyVO.setExe_dtl_cd("DX-T0133");
 				accessHistoryService.insertHistory(historyVO);
+				
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+
 				mv.setViewName("restore/restoreHistory");
 			}
 		} catch (Exception e) {
@@ -124,11 +122,39 @@ public class RestoreHistoryController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		if(request.getParameter("tabGbn") != null){
+			mv.addObject("tabGbn",request.getParameter("tabGbn"));
+		}
 		
 		return mv;
 	}
 	
-	
+	/**
+	 * Rman restore Log List
+	 * @param restoreRmanVO, historyVO, request
+	 * @return List<WorkLogVO>
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/rmanRestoreHistory.do")
+	@ResponseBody
+	public List<RestoreRmanVO> rmanRestoreHistory(@ModelAttribute("restoreRmanVO") RestoreRmanVO restoreRmanVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
+		List<RestoreRmanVO> resultSet = null;
+
+		// 화면접근이력 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0133_02");
+			accessHistoryService.insertHistory(historyVO);
+			
+			resultSet = restoreService.rmanRestoreHistory(restoreRmanVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		return resultSet;
+	}
 	
 	/**
 	 * Rman restore Log List
@@ -136,30 +162,26 @@ public class RestoreHistoryController {
 	 * @return List<WorkLogVO>
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/rmanRestoreHistory.do")
+	@RequestMapping(value="/dumpRestoreHistory.do")
 	@ResponseBody
-	public List<RestoreRmanVO> rmanRestoreHistory(@ModelAttribute("restoreRmanVO") RestoreRmanVO restoreRmanVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
-		
+	public List<RestoreDumpVO> dumpRestoreHistory(@ModelAttribute("restoreDumpVO") RestoreDumpVO restoreDumpVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
+		List<RestoreDumpVO> resultSet = null;
+
 		// 화면접근이력 이력 남기기
 		try {
-		/*	CmmnUtils.saveHistory(request, historyVO);
-			if(RestoreRmanVO.getBck_bsn_dscd().equals("TC000201")){
-				historyVO.setExe_dtl_cd("DX-T0026_01");
-			}else{
-				historyVO.setExe_dtl_cd("DX-T0026_02");
-			}
-			accessHistoryService.insertHistory(historyVO);*/
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0133_03");
+			accessHistoryService.insertHistory(historyVO);
+			
+			resultSet = restoreService.dumpRestoreHistory(restoreDumpVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-				
-		List<RestoreRmanVO> resultSet = null;
-		resultSet = restoreService.rmanRestoreHistory(restoreRmanVO);
 
 		return resultSet;
 	}
-	
+
 	/**
 	 * RMAN 복구이력에서 특정 이력 선택시, 로그정보 호출
 	 * 
@@ -201,10 +223,9 @@ public class RestoreHistoryController {
 		}
 		return result;
 	}	
-	
 
 	/**
-	 * [Restore] RMAN 복구이력 화면을 보여준다.
+	 * DUMP 복구이력에서 특정 이력 선택시, 로그정보 호출
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -213,12 +234,17 @@ public class RestoreHistoryController {
 	 */
 	@RequestMapping(value = "/restoreLogView.do")
 	public ModelAndView restoreLogView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
-		ModelAndView mv = new ModelAndView();		
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		String restore_sn = request.getParameter("restore_sn");
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		String flag = request.getParameter("flag");
+
 		try {
-			String restore_sn = request.getParameter("restore_sn");
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-			String flag = request.getParameter("flag");
-			
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0133_04");
+			accessHistoryService.insertHistory(historyVO);
+
 			mv.addObject("restore_sn", restore_sn);
 			mv.addObject("db_svr_id", db_svr_id);
 			mv.addObject("flag", flag);
@@ -227,41 +253,7 @@ public class RestoreHistoryController {
 			e.printStackTrace();
 		} finally {
 		}
-		mv.setViewName("popup/restoreLogView");
+
 		return mv;
 	}
-	
-	
-	
-	/**
-	 * Rman restore Log List
-	 * @param WorkLogVO
-	 * @return List<WorkLogVO>
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/dumpRestoreHistory.do")
-	@ResponseBody
-	public List<RestoreDumpVO> dumpRestoreHistory(@ModelAttribute("restoreDumpVO") RestoreDumpVO restoreDumpVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
-		
-		// 화면접근이력 이력 남기기
-		try {
-		/*	CmmnUtils.saveHistory(request, historyVO);
-			if(RestoreRmanVO.getBck_bsn_dscd().equals("TC000201")){
-				historyVO.setExe_dtl_cd("DX-T0026_01");
-			}else{
-				historyVO.setExe_dtl_cd("DX-T0026_02");
-			}
-			accessHistoryService.insertHistory(historyVO);*/
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-				
-		List<RestoreDumpVO> resultSet = null;
-		resultSet = restoreService.dumpRestoreHistory(restoreDumpVO);
-
-		return resultSet;
-	}
-	
-
 }

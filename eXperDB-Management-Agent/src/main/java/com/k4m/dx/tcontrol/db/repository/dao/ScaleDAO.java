@@ -118,6 +118,17 @@ public class ScaleDAO {
 	}
 
 	/**
+	 * scale 공통셋팅 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectAutoScaleComCngInfo(Map<String, Object> param) throws SQLException {
+		return (Map<String, Object>) session.selectOne("scale.selectAutoScaleComCngInfo", param);
+	}
+	
+
+	/**
 	 * scale Auto 발생이력 등록
 	 * 
 	 * @param param
@@ -146,5 +157,17 @@ public class ScaleDAO {
 	public Map<String, Object> selectMonitorInfo(Map<String, Object> param) throws SQLException {
 		return (Map<String, Object>) session.selectOne("scale.selectMonitorInfo", param);
 	}
+	
+
+	/**
+	 * scale log insert
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public void insertScaleServer(Map<String, Object> param) throws Exception  {
+		 session.insert("scale.insertScaleServer", param);
+	}
+
 
 }

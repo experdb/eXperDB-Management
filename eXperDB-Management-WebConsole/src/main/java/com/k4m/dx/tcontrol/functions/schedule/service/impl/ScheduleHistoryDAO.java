@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.sample.service.PagingVO;
+import com.k4m.dx.tcontrol.script.service.ScriptVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -32,6 +33,12 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 		result = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleHistory",params);
 
 		return result;
+	}
+	
+	public List<Map<String, Object>> selectScheduleHistoryNew(Map<String, Object> param) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleHistoryNew", param);		
+		return sl;
 	}
 
 	

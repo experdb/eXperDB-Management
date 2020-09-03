@@ -15,7 +15,7 @@ public class WebConsoleSetting {
 	
 	public static void main(String[] args) throws Exception {
 		String strLanguage ="";
-		String strVersion ="eXperDB-Management-WebConsole-11.1.1";
+		String strVersion ="eXperDB-Management-WebConsole-11.2.0";
 		
 		String strDatabaseIp = "";
 		String strDatabasePort = "";
@@ -182,10 +182,10 @@ public class WebConsoleSetting {
 				if(strScaleOutMultiCmd.equals("")) {
 					strScaleOutMultiCmd = "./experscale multi-scale-out --scale-out-count %s";
 				}	
-			System.out.println("eXperDB-Scale scale_json_view (aws ec2 describe-instances %s --filters \"Name=tag:Name,Values=EA-ISJEONG-*\"):");
+			System.out.println("eXperDB-Scale scale_json_view (aws ec2 describe-instances %s --filters ):");
 			strScaleJsonView = scan.nextLine();
 				if(strScaleJsonView.equals("")) {
-					strScaleJsonView = "aws ec2 describe-instances %s --filters \"Name=tag:Name,Values=EA-ISJEONG-*\"";
+					strScaleJsonView = "aws ec2 describe-instances %s --filters ";
 				}	
 			System.out.println("eXperDB-Scale scale_chk_prgress (ps -ef | grep -v grep | grep %s | wc -l):");
 			strScaleChkPrgress = scan.nextLine();

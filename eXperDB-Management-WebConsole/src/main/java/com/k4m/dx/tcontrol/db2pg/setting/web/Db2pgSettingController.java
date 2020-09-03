@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.util.StringParser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -73,6 +74,8 @@ public class Db2pgSettingController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	
+	
 	/**
 	 * DB2PG 설정 화면을 보여준다.
 	 * 
@@ -93,6 +96,14 @@ public class Db2pgSettingController {
 			
 			List<Map<String, Object>> dbmsGrb = dbmsService.dbmsGrb();
 			mv.addObject("dbmsGrb", dbmsGrb);
+			
+			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
+			mv.addObject("codeLetter", codeLetter);
+			List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029");
+			mv.addObject("codeTF", codeTF);
+			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
+			mv.addObject("codeInputMode", codeInputMode);
+			
 			mv.setViewName("db2pg/setting/db2pgSetting");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -391,7 +402,7 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/ddlRegReForm.do")
 	public ModelAndView ddlRegReForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -405,8 +416,9 @@ public class Db2pgSettingController {
 			mv.addObject("wrk_id", result.getWrk_id());
 			mv.addObject("db2pg_ddl_wrk_nm", result.getDb2pg_ddl_wrk_nm());
 			mv.addObject("db2pg_ddl_wrk_exp", result.getDb2pg_ddl_wrk_exp());
-			mv.addObject("db2pg_uchr_lchr_val", result.getDb2pg_uchr_lchr_val());
-			mv.addObject("src_tb_ddl_exrt_tf", result.getSrc_tb_ddl_exrt_tf());
+			mv.addObject("db2pg_uchr_lchr_val", result.getDb2pg_uchr_lchr_val()); 
+			String src_tb_ddl_exrt_tf = String.valueOf(result.getSrc_tb_ddl_exrt_tf()).toUpperCase();
+			mv.addObject("src_tb_ddl_exrt_tf",  src_tb_ddl_exrt_tf);
 			mv.addObject("ddl_save_pth", result.getDdl_save_pth());
 			mv.addObject("db2pg_sys_id", result.getDb2pg_sys_id());
 			mv.addObject("db2pg_sys_nm", result.getDb2pg_sys_nm());
@@ -424,7 +436,6 @@ public class Db2pgSettingController {
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		mv.setViewName("db2pg/popup/ddlRegReForm");
 		return mv;
 	}
 
@@ -854,7 +865,7 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/dataRegReForm.do")
 	public ModelAndView dataRegReForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -884,8 +895,8 @@ public class Db2pgSettingController {
 			mv.addObject("usr_qry_use_tf",result.getUsr_qry_use_tf());
 			mv.addObject("db2pg_usr_qry_id",result.getDb2pg_usr_qry_id());
 			mv.addObject("ins_opt_cd",result.getIns_opt_cd());
-			mv.addObject("tb_rbl_tf",result.getTb_rbl_tf());
-			mv.addObject("cnst_cnd_exrt_tf",result.getCnst_cnd_exrt_tf());
+			mv.addObject("tb_rbl_tf",String.valueOf(result.getTb_rbl_tf()).toUpperCase());
+			mv.addObject("cnst_cnd_exrt_tf",String.valueOf(result.getCnst_cnd_exrt_tf()).toUpperCase());
 			mv.addObject("trans_save_pth",result.getTrans_save_pth());
 			mv.addObject("src_cnd_qry",result.getSrc_cnd_qry());
 			mv.addObject("wrk_id",result.getWrk_id());
@@ -902,7 +913,6 @@ public class Db2pgSettingController {
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		mv.setViewName("db2pg/popup/dataRegReForm");
 		return mv;
 	}
 	
@@ -1182,7 +1192,7 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/tableInfo.do")
 	public ModelAndView tableInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		List<Db2pgSysInfVO> resultSet = null;
 		JSONArray jsonArray = new JSONArray();
 		//테이블구분 (추출테이블 = include , 제외테이블 = exclude)
@@ -1215,9 +1225,9 @@ public class Db2pgSettingController {
 		mv.addObject("tableGbn", tableGbn);
 		mv.addObject("tableList", jsonArray);
 		mv.addObject("dbmsInfo", resultSet);
-		mv.setViewName("db2pg/popup/tableInfo");
 		return mv;
 	}
+
 	
 	/**
 	 * 경로가 유효한지 체크한다.(사용안함)

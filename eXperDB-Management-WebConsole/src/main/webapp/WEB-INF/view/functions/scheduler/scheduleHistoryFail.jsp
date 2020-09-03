@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="../../cmmn/cs2.jsp"%>
 
-<%@include file="../../cmmn/cs.jsp"%>
     <script>
     var table = null;
     
@@ -25,7 +24,10 @@
 				data : "exe_result",
 				render : function(data, type, full, meta) {
 					var html = '';
-					html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+					html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
+					html += '<i class="fa fa-times"></i>';
+					html += '<spring:message code="common.failed" />';
+					html += "</button>";
 					return html;
 				},
 				
@@ -33,15 +35,21 @@
 			},
 			{
 					data : "fix_rsltcd",
-					render : function(data, type, full, meta) {	 						
+					render : function(data, type, full, meta) {	 	
 						var html = '';
  						if(full.fix_rsltcd == 'TC002002'){
- 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
+ 							html += '<button type="button" class="btn btn-inverse-success btn-fw" onclick="javascript:fn_fixLog('+full.exe_sn+', \'scdListFail\');">';
+ 							html += '<i class="fa fa-times"></i>';
+ 							html += '<spring:message code="etc.etc30"/>';
+ 							html += "</button>";
  						} else {
  							if(full.exe_rslt_cd == 'TC001701'){
  								html += ' - ';
  							}else{
- 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
+ 								html += '<button type="button" class="btn btn-inverse-warning btn-fw" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'scdListFail\');">';
+ 	 							html += '<i class="fa fa-times"></i>';
+ 	 							html += '<spring:message code="backup_management.Enter_Action"/>';
+ 	 							html += "</button>";	
  							}	 
  						}
  						return html;
@@ -96,13 +104,11 @@
    		     },
    			error : function(xhr, status, error) {
    				if(xhr.status == 401) {
-   					alert('<spring:message code="message.msg02" />');
-   					top.location.href = "/";
+   					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
    				} else if(xhr.status == 403) {
-   					alert('<spring:message code="message.msg03" />');
-   					top.location.href = "/";
+   					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
    				} else {
-   					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+   					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
    				}
    			},
    			success : function(result) {
@@ -113,79 +119,7 @@
    		}); 
   	});
 
-    function fn_fix_rslt_reg(exe_sn){
-    	document.getElementById("exe_sn").value = exe_sn;
-    	$('#fix_rslt_msg_r').val('');
-    	$("#rdo_r_1").attr('checked', true);
-    	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
-    }
-    
-    function fn_fix_rslt_msg_reg(){
-    	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
-    	
-    	$.ajax({
-   			url : "/updateFixRslt.do",
-   			data : {
-   				exe_sn : $('#exe_sn').val(),
-   				fix_rsltcd : fix_rsltcd,
-   				fix_rslt_msg : $('#fix_rslt_msg_r').val()
-   			},
-   			dataType : "json",
-   			type : "post",
-   			beforeSend: function(xhr) {
-   		        xhr.setRequestHeader("AJAX", true);
-   		     },
-   			error : function(xhr, status, error) {
-   				if(xhr.status == 401) {
-   					alert('<spring:message code="message.msg02" />');
-   					top.location.href = "/";
-   				} else if(xhr.status == 403) {
-   					alert('<spring:message code="message.msg03" />');
-   					top.location.href = "/";
-   				} else {
-   					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-   				}
-   			},
-   			success : function(result) {
-   				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
-   				fn_scheduleFail_list();
-   			}
-   		}); 
-    }
 
-    
-    function fn_fix_rslt_msg_modify(){
-    	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
-
-    	$.ajax({
-    			url : "/updateFixRslt.do",
-    			data : {
-    				exe_sn : $('#exe_sn').val(),
-    				fix_rsltcd : fix_rsltcd,
-    				fix_rslt_msg : $('#fix_rslt_msg').val()
-    			},
-    			dataType : "json",
-    			type : "post",
-    			beforeSend: function(xhr) {
-    		        xhr.setRequestHeader("AJAX", true);
-    		     },
-    			error : function(xhr, status, error) {
-    				if(xhr.status == 401) {
-    					alert('<spring:message code="message.msg02" />');
-    					top.location.href = "/";
-    				} else if(xhr.status == 403) {
-    					alert('<spring:message code="message.msg03" />');
-    					top.location.href = "/";
-    				} else {
-    					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-    				}
-    			},
-    			success : function(result) {
-    				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
-    				fn_scheduleFail_list();
-    			}
-    		}); 
-    }
 
     
    function fn_scheduleFail_list(){
@@ -203,13 +137,11 @@
   		     },
   			error : function(xhr, status, error) {
   				if(xhr.status == 401) {
-  					alert('<spring:message code="message.msg02" />');
-  					top.location.href = "/";
+  					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
   				} else if(xhr.status == 403) {
-  					alert('<spring:message code="message.msg03" />');
-  					top.location.href = "/";
+  					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
   				} else {
-  					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+  					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
   				}
   			},
   			success : function(result) {
@@ -227,117 +159,131 @@
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
 <%@include file="../../cmmn/workScriptInfo.jsp"%>
 <%@include file="../../cmmn/wrkLog.jsp"%>
+<%@include file="../../cmmn/fixRsltMsgInfo.jsp"%>
 <%@include file="../../cmmn/fixRsltMsg.jsp"%>
 
-
-	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
-		<div class="pop-container">
-			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
-				<p class="tit" style="margin-bottom: 15px;"><spring:message code="etc.etc33"/></p>
-				<table class="write" border="0">
-					<caption><spring:message code="etc.etc33"/></caption>
-					<tbody>
-						<tr>
-							<td>
-								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001"  checked="checked">
-										<label for="rdo_r_1" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
-									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002"> 
-										<label for="rdo_r_2"><spring:message code="etc.etc30"/></label>
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="schedule.scheduleFailHistory"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							Function
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="schedule.scheduleFailHistory"/></li>
+										</ol>
+									</div>
 								</div>
-							</td>
-						</tr>
-						<tr>
-							<td><textarea name="fix_rslt_msg_r" id="fix_rslt_msg_r" style="height: 250px;"> </textarea>
-									<input type="hidden" name="exe_sn_r" id="exe_sn_r">
-							</td>
-							<!-- <td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
-									<input type="hidden" name="exe_sn" id="exe_sn">
-							</td> -->
-						</tr>
-					</tbody>
-				</table>
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="fn_fix_rslt_msg_reg();"><span><spring:message code="common.save"/></span></a>
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');"><span><spring:message code="common.close"/></span></a>
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="message.msg171"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- title end -->
 				</div>
-			</div>
-		</div><!-- //pop-container -->
-	</div>
-
-
-
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="schedule.scheduleFailHistory"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="message.msg171"/></li>	
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Function</li>
-					<li><spring:message code="menu.schedule" /></li>
-					<li class="on"><spring:message code="schedule.scheduleFailHistory"/></li>
-				</ul>
 			</div>
 		</div>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01" id="btnRman">
-						<a class="btn" onClick="fn_scheduleFail_list();"><button type="button"><spring:message code="common.search" /></button></a>
-				</div>
-			<div class="sch_form">
-					<table class="write" id="searchRman">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width:100px;" />
-							<col style="width:230px;" />
-							<col style="width:115px;" />
-							<col style="width:230px;" />
-							<col style="width:115px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="schedule.schedule_name" /></th>
-								<td><input type="text" class="txt t3" name="scd_nm" id="scd_nm" maxlength="25"/></td>
-								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3" maxlength="25"/></td>
-								<th scope="row" class="t9" ><spring:message code="etc.etc31"/></th>
-								<td><select name="fix_rsltcd" id="fix_rsltcd" class="txt t3" style="width:150px;">
+		
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
+
+							<form class="form-inline">
+							
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control"  style="margin-right: -0.7rem;" maxlength="25" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />'/>		
+								</div>
+
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control"  style="margin-right: -0.7rem;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />'/>		
+								</div>
+	
+								<div class="input-group mb-2 mr-sm-2">
+									<select class="form-control" style="width:200px; margin-right: 2rem;" name="fix_rsltcd" id="fix_rsltcd">
 										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="TC002003"><spring:message code="etc.etc34"/></option>
 										<option value="TC002002"><spring:message code="etc.etc30"/></option>
 									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				
-				<div class="overflow_area">
-				
-				<table id="scheduleFailList" class="display" cellspacing="0" width="100%">
-				<caption>스케줄 실패 리스트</caption>
-					<thead>
-						<tr>
-							<th width="30"><spring:message code="common.no"/></th>							
-							<th width="100"><spring:message code="schedule.result"/></th>
-							<th width="100"><spring:message code="etc.etc31"/></th>
-							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name"/></th>
-							<th width="100"><spring:message code="common.dbms_name"/></th>
-							<th width="200"class="dt-center"><spring:message code="common.work_name"/></th>
-							<th width="150"><spring:message code="schedule.work_start_datetime"/></th>
-							<th width="150"><spring:message code="schedule.work_end_datetime"/></th>						
-						</tr>
-					</thead>
-				</table>						
+								</div>
+
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_scheduleFail_list();" >
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
+
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="scheduleFailList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+ 											<tr class="bg-info text-white">
+												<th width="30"><spring:message code="common.no"/></th>							
+												<th width="100"><spring:message code="schedule.result"/></th>
+												<th width="100"><spring:message code="etc.etc31"/></th>
+												<th width="200" class="dt-center"><spring:message code="schedule.schedule_name"/></th>
+												<th width="100"><spring:message code="common.dbms_name"/></th>
+												<th width="200"class="dt-center"><spring:message code="common.work_name"/></th>
+												<th width="150"><spring:message code="schedule.work_start_datetime"/></th>
+												<th width="150"><spring:message code="schedule.work_end_datetime"/></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
 	</div>
-</div><!-- // contents -->
+</div>

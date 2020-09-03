@@ -721,21 +721,19 @@ function fn_db2pgConfigLayer(config_nm){
 	     },
 	     error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert(message_msg02);
-					top.location.href = "/";
+					showSwalIconRst(message_msg02, '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert(message_msg03);
-					top.location.href = "/";
+					showSwalIconRst(message_msg03, '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 		success : function(result) {
 			if(result==null){
-				alert("서버에서 config 정보가 삭제 되어 config 정보를 확인할 수 없습니다.");
+				showSwalIcon('서버에서 config 정보가 삭제 되어 config 정보를 확인할 수 없습니다.', '<spring:message code="common.close" />', '', 'error');
 			}else{
 				$("#config").html(result);
-				toggleLayer($('#pop_layer_db2pgConfig'), 'on');	
+				$('#pop_layer_db2pgConfig').modal("show");
 			}
 	
 		}

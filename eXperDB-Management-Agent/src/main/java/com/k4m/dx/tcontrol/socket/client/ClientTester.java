@@ -66,6 +66,10 @@ import org.json.simple.parser.JSONParser;
  * 33.schema 리스트 조회
  * 34.백업즉시실행
  * 
+ * 
+ * 
+ * 40. 테이블스페이스 정보
+ * 
  * @author thpark
  *
  */
@@ -141,7 +145,8 @@ public class ClientTester {
 			
 			//clientTester.dxT037(Ip, port);
 			//clientTester.dxT038(Ip, port);
-			clientTester.dxT039(Ip, port);
+			//clientTester.dxT039(Ip, port);
+			clientTester.dxT040(Ip, port);
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -2981,6 +2986,58 @@ public class ClientTester {
 			result.put("RESULT_DATA", strErrMsg);
 				
 			//CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	private void dxT040(String Ip, int port) {
+		try {
+
+			JSONObject serverObj = new JSONObject();
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.130");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.130");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+		
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT040);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT040(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			HashMap resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			
+			Iterator<String> keys = resultHp.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = keys.next();
+	            System.out.println( String.format("키 : %s, 값 : %s", key, resultHp.get(key)) );
+	        }
+	
+				
+			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

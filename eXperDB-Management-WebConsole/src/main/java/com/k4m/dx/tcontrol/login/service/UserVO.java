@@ -19,7 +19,8 @@ public class UserVO {
 	private String frst_reg_dtm;//최초_등록_일시
 	private String lst_mdfr_id;//최종_수정자_ID
 	private String lst_mdf_dtm;//최종_수정_일시
-	
+	private String loginChkYn;//로그인 유지체크
+
 	private int mnu_id;
 
 	//로그인 이력
@@ -183,15 +184,18 @@ public class UserVO {
 		this.log_out_dtm_hour = log_out_dtm_hour;
 	}
 	
-	
 	public int getMnu_id() {
 		return mnu_id;
 	}
 	public void setMnu_id(int mnu_id) {
 		this.mnu_id = mnu_id;
 	}
+	public String getLoginChkYn() {
+		return loginChkYn;
+	}
+	public void setLoginChkYn(String loginChkYn) {
+		this.loginChkYn = loginChkYn;
+	}
 
-	
-	
 	
 }

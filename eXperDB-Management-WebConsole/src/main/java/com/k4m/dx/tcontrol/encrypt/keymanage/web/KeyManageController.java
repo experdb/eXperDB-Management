@@ -112,7 +112,7 @@ public class KeyManageController {
 	 */
 	@RequestMapping(value = "/popup/keyManageRegForm.do")
 	public ModelAndView keyManageRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		 ModelAndView mv = new ModelAndView("jsonView");
 		CommonServiceCall csc= new CommonServiceCall();
 		JSONArray result = new JSONArray();
 		try {
@@ -132,7 +132,7 @@ public class KeyManageController {
 			historyVO.setMnu_id(26);
 			accessHistoryService.insertHistory(historyVO);
 
-			mv.setViewName("encrypt/popup/keyManageRegForm");
+			//mv.setViewName("encrypt/popup/keyManageRegForm");
 			mv.addObject("result",result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,7 +150,9 @@ public class KeyManageController {
 	 */
 	@RequestMapping(value = "/popup/keyManageRegReForm.do")
 	public ModelAndView keyManageRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		
+		 ModelAndView mv = new ModelAndView("jsonView");
+		
 		CommonServiceCall csc= new CommonServiceCall();
 		JSONArray result = new JSONArray();
 		try {
@@ -179,16 +181,16 @@ public class KeyManageController {
 			historyVO.setMnu_id(26);
 			accessHistoryService.insertHistory(historyVO);
 
-			mv.setViewName("encrypt/popup/keyManageRegReForm");
-			mv.addObject("result",result);
-			mv.addObject("resourceName",resourceName);
-			mv.addObject("resourceNote",resourceNote);
-			mv.addObject("keyUid",keyUid);
-			mv.addObject("keyStatusCode",keyStatusCode);
-			mv.addObject("keyStatusName",keyStatusName);
-			mv.addObject("cipherAlgorithmName",cipherAlgorithmName);
-			mv.addObject("cipherAlgorithmCode",cipherAlgorithmCode);
-			mv.addObject("updateDateTime",updateDateTime);
+			//mv.setViewName("encrypt/popup/keyManageRegReForm");
+			mv.addObject("mod_result",result);
+			mv.addObject("mod_resourceName",resourceName);
+			mv.addObject("mod_resourceNote",resourceNote);
+			mv.addObject("mod_keyUid",keyUid);
+			mv.addObject("mod_keyStatusCode",keyStatusCode);
+			mv.addObject("mod_keyStatusName",keyStatusName);
+			mv.addObject("mod_cipherAlgorithmName",cipherAlgorithmName);
+			mv.addObject("mod_cipherAlgorithmCode",cipherAlgorithmCode);
+			mv.addObject("mod_updateDateTime",updateDateTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -250,6 +252,9 @@ public class KeyManageController {
 		String resourceNote = request.getParameter("resourceNote");
 		String validEndDateTime = request.getParameter("validEndDateTime") + " 23:59:59.999";
 			
+		
+		System.out.println(validEndDateTime);
+		
 		CryptoKeySymmetric param = new CryptoKeySymmetric();
 		param.setResourceName(resourceName);
 		param.setCipherAlgorithmCode(cipherAlgorithmCode);

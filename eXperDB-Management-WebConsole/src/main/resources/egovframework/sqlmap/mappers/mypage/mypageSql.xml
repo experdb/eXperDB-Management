@@ -21,6 +21,7 @@
 		, CPN
 		, USR_EXPR_DT
 		, USE_YN
+		, ENCP_USE_YN
 		, FRST_REG_DTM
 		, LST_MDF_DTM
 		FROM T_USR_I

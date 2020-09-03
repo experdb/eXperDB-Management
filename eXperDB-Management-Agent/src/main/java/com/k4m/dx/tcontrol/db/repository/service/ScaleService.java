@@ -72,4 +72,20 @@ public interface ScaleService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> selectMonitorInfo(Map<String, Object> param)  throws Exception;
+
+	/**
+	 * auto scale load log insert
+	 * @param  param
+	 * @return 
+	 * @throws Exception
+	 */
+	public void insertScaleServer() throws Exception ;
+
+	/**
+	 * scale 기본사항 조회
+	 * @param  param
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectAutoScaleComCngInfo(Map<String, Object> param)  throws Exception;
 }

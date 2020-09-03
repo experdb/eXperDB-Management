@@ -1393,7 +1393,8 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			String RESTORE_FLAG = restoreRmanVO.getRestore_flag();
 			jObj.put(ClientProtocolID.RESTORE_FLAG, RESTORE_FLAG);
 			//TIMELINE
-			String TIMELINE = "";
+			String TIMELINE = restoreRmanVO.getTimeline_dt()+" "+restoreRmanVO.getTimeline_h()+":"+restoreRmanVO.getTimeline_m()+":"+restoreRmanVO.getTimeline_s();
+			System.out.println("TIMELINE ==========="+ TIMELINE);
 			jObj.put(ClientProtocolID.TIMELINE, TIMELINE);
 			//PGDATA
 			String PGDATA = restoreRmanVO.getDtb_pth();
@@ -1417,7 +1418,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			System.out.println("=========== RMAN Restore 정보 ============");
 			System.out.println("RESTORE_SN = "+RESTORE_SN);
 			System.out.println("RESTORE_FLAG = "+RESTORE_FLAG);
-			System.out.println("TIMELINE = "+"");
+			System.out.println("TIMELINE = "+TIMELINE);
 			System.out.println("PGDATA = "+PGDATA);
 			System.out.println("PGALOG = "+PGALOG);
 			System.out.println("SRVLOG = "+SRVLOG);
@@ -1491,7 +1492,16 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 					dumpOptionObj.put(ClientProtocolID.VERBOSE, restoreDumpVO.getVerbose_yn());
 					dumpOptionObj.put(ClientProtocolID.USE_SET_SESSON_AUTH, restoreDumpVO.getUse_set_sesson_auth_yn());
 					dumpOptionObj.put(ClientProtocolID.EXIT_ON_ERROR, restoreDumpVO.getExit_on_error_yn());
-		
+					
+					//컬럼추가 2020.08.07
+					dumpOptionObj.put(ClientProtocolID.BLOBS_ONLY_YN, restoreDumpVO.getBlobs_only_yn());
+					dumpOptionObj.put(ClientProtocolID.NO_UNLOGGED_TABLE_DATA_YN, restoreDumpVO.getNo_unlogged_table_data_yn());
+					dumpOptionObj.put(ClientProtocolID.USE_COLUMN_INSERTS_YN, restoreDumpVO.getUse_column_inserts_yn());
+					dumpOptionObj.put(ClientProtocolID.USE_COLUMN_COMMANDS_YN, restoreDumpVO.getUse_column_commands_yn());
+					dumpOptionObj.put(ClientProtocolID.OIDS_YN, restoreDumpVO.getOids_yn());
+					dumpOptionObj.put(ClientProtocolID.IDENTIFIER_QUOTES_APPLY_YN, restoreDumpVO.getIdentifier_quotes_apply_yn());
+					dumpOptionObj.put(ClientProtocolID.OBJ_CMD, restoreDumpVO.getObj_cmd());
+
 					jObj.put(ClientProtocolID.DUMP_OPTION, dumpOptionObj);
 					
 					
@@ -1713,7 +1723,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			
 			jObj.put(ClientProtocolID.WORK_ID, resultWork.get(0).get("wrk_id").toString()); 
 			jObj.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(0).get("bck_bsn_dscd").toString());
-			jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, resultWork.get(0).get("db_svr_id").toString());
+			jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, resultWork.get(0).get("db_svr_ipadr_id").toString());
 			jObj.put(ClientProtocolID.DB_ID, resultWork.get(0).get("db_id").toString());
 			jObj.put(ClientProtocolID.BCK_FILENM, bck_fileNm.toString());
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT034);
@@ -1886,9 +1896,11 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
 			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));
 			transObj.put(ClientProtocolID.SNAPSHOT_MODE, transInfo.get(0).get("snapshot_nm"));
+			transObj.put(ClientProtocolID.COMPRESSION_TYPE, transInfo.get(0).get("compression_nm"));
 			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
 			transObj.put(ClientProtocolID.TRANS_ID, transInfo.get(0).get("trans_id").toString());
 			transObj.put(ClientProtocolID.DB_NM, transInfo.get(0).get("db_nm"));
+			transObj.put(ClientProtocolID.META_DATA, transInfo.get(0).get("meta_data"));
 			
 
 			JSONObject mappObj = new JSONObject();
@@ -1982,6 +1994,31 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		}
 		
 		return result;
+	}
+
+	public JSONObject serverSpace(String IP, int PORT, JSONObject serverObj) {
+		JSONObject resultHp = null;
+		try {
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT040);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			JSONObject objList;
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			objList = CA.dxT040(jObj);
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			resultHp = (JSONObject) objList.get(ClientProtocolID.RESULT_DATA);
+	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return resultHp;
 	}
 	
 	

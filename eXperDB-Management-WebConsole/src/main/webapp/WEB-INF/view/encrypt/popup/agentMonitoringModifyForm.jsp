@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%
 	/**
 	* @Class Name : agentMonitoringModifyForm.jsp
@@ -11,72 +10,29 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2018.01.04     최초 생성
+	*  2020.07.16   변승우 과장   UI 디자인 변경
 	*
 	* author 변승우 대리
 	* since 2018.01.04
 	*
 	*/
 %>
-<!doctype html>
-<html lang="ko">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
-</head>
-<style>
-.cmm_bd .sub_tit>p {
-	padding: 0 8px 0 33px;
-	line-height: 24px;
-	background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
-}
-</style>
 
 <script>
-var table = null;
-
-//var key = "${resultKey}";
-//var keyValue = "${resultValue}";
-var extendedField = ${extendedField};
-
-	$(window.document).ready(function() {	
-		fn_buttonAut();
-		var html = ""; 
-	
-		for(key in extendedField) {		
-			html += ' <tr>';
-			html += ' <td>';
-			html +=	key;
-			html += ' </td>';
-			html += ' <td>';
-			html +=	extendedField[key];
-			html += ' </td>';
-			html += ' </tr>';
-		}
-		$( "#extendedField" ).append(html);
-	});
-	
-	function fn_buttonAut(){
-		var btnSave = document.getElementById("btnSave"); 
-		
-		if("${wrt_aut_yn}" == "Y"){
-			btnSave.style.display = '';
-		}else{
-			btnSave.style.display = 'none';
-		}
-	}
-	
 	function fn_agentStatusSave(){
+		
+		if($("#mod_entityStatusCode_chk").is(":checked") == true){
+			$("#mod_entityStatusCode").val("ES50");
+		} else {
+			$("#mod_entityStatusCode").val("ES55");
+		}
+		
 		$.ajax({
 			url : "/agentStatusSave.do", 
 		  	data : {		  		
-		  		entityName : $('#entityName').val(),
-		  		entityUid : $('#entityUid').val(),
-		  		entityStatusCode : $('#entityStatusCode').val(),
+		  		entityName : $('#mod_entityName').val(),
+		  		entityUid : $('#mod_entityUid').val(),
+		  		entityStatusCode : $('#mod_entityStatusCode').val(),
 		  	},
 			dataType : "json",
 			type : "post",
@@ -85,122 +41,144 @@ var extendedField = ${extendedField};
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {
 				if(data.resultCode == "0000000000"){
-					alert('<spring:message code="encrypt_msg.msg21"/>');
-					opener.location.reload();
-					window.close();
+					showSwalIcon('<spring:message code="encrypt_msg.msg21"/>', '<spring:message code="common.close" />', '', 'success');
+					$('#pop_layer_agentMonitoringModifyForm').modal('hide');
+					fn_select();
 				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					$('#pop_layer_agentMonitoringModifyForm').modal('hide');				
 				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href = "/securityKeySet.do";
+					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error','securityKeySet');
+					$('#pop_layer_agentMonitoringModifyForm').modal('hide');
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");		
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_agentMonitoringModifyForm').modal('hide');	
+					return false;
 				}
 			}
 		});
 	}
 </script>
 
-<body>
-	<div class="pop_container">
-		<div class="pop_cts">
-			<p class="tit"><spring:message code="encrypt_agent.Modify_Agent_Monitoring"/></p>
-				<div class="btn_type_01">
-					<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button type="button" id="btnSave"><spring:message code="common.save"/></button></span> 
-				</div>
-			<div class="cmm_bd">
-				<div class="sub_tit">
-					<p><spring:message code="encrypt_agent.Default_Default"/></p>
-				</div>
-				<div class="overflows_areas">
-					<table class="write">
-						<colgroup>
-							<col style="width: 100px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t2"><spring:message code="encrypt_agent.Agent_Name"/></th>
-								<td><input type="text" class="txt" name="entityName" id="entityName" value="${entityName}"  readonly="readonly" >
-										<input type="hidden" name="entityUid" id="entityUid" value="${entityUid}" >
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ico_t2">Agent <spring:message code="access_control_management.activation" /></th>
-								<td>
-									<select class="select t5" id="entityStatusCode" name="entityStatusCode" >
-											<c:forEach var="result" items="${result}" varStatus="status">
-												<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == entityStatusCode}">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option>
-											</c:forEach> 
-									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
+<div class="modal fade" id="pop_layer_agentMonitoringModifyForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
+		<div class="modal-content" style="width:1000px;">		 
+			<div class="modal-body" >
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="menu.mod_transfer_set"/>
+				</h4>
+								
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card card-inverse-info" >
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	기본정보 </i>
+					</div>
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:160px;">			
+									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+										<form class="cmxform" id="baseForm">
+											<input type="hidden" name="mod_entityUid" id="mod_entityUid" >
+											<input type="hidden" name="mod_entityStatusCode" id="mod_entityStatusCode"/>
+											<fieldset>								
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_agent.Agent_Name"/>
+													</label>
+													<div class="col-sm-4">
+														<input type="text" class="form-control form-control-xsm" id="mod_entityName" name="mod_entityName"  onblur="this.value=this.value.trim()"  readonly="readonly"/>
+													</div>
+												</div>											
+											<div class="form-group row" style="margin-bottom:10px;">
+												<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													Agent <spring:message code="access_control_management.activation" />
+												</label>
+												<div class="col-sm-4">
+													<div class="activeswitch-pop">
+														<input type="checkbox" name="mod_entityStatusCode_chk" class="activeswitch-pop-checkbox" id="mod_entityStatusCode_chk" />
+														<label class="activeswitch-pop-label" for="mod_entityStatusCode_chk">
+															<span class="activeswitch-pop-inner"></span>
+															<span class="activeswitch-pop-switch"></span>
+														</label>
+													</div>
+												</div>											
+											</div>	
+										</fieldset>
+									</form>	
+								</div>
+							</div>						
+						</div>				
 
-			<br><br>
+					
+				<div class="card" style="margin-top:10px;border:0px;">		
+					<div class="card card-inverse-info">
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	부가정보 </i>
+					</div>
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:160px;">
+									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+										<form class="cmxform" id="subForm">
+											<fieldset>								
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_agent.Recently_accessed_address"/>
+													</label>
+													<div class="col-sm-4">
+														<input type="text" class="form-control form-control-xsm" id="mod_latestAddress" name="mod_latestAddress"  onblur="this.value=this.value.trim()"  readonly="readonly"/>
+													</div>
+												</div>												
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_agent.Recently_Accessed_Time"/>
+													</label>
+													<div class="col-sm-4">
+														<input type="text" class="form-control form-control-xsm" id="mod_latestDateTime" name="mod_latestDateTime"  onblur="this.value=this.value.trim()"  readonly="readonly"/>
+													</div>											
+												</div>	
+											</fieldset>
+										</form>	
+									</div>
+								</div>						
+							</div>	
+							
+							<form class="cmxform" id="searchModForm">
+								<fieldset>
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="table-responsive">
+											<table id="connectModPopList" class="table system-tlb-scroll" style="width:100%;">
+												<colgroup>
+													<col style="width: 35%;" />
+													<col style="width: 65%;" />
+												</colgroup>
+												<thead>
+													<tr class="bg-info text-white">
+														<th class="table-text-align-c"><spring:message code="encrypt_agent.System_Key"/></th>
+														<th class="table-text-align-c"><spring:message code="encrypt_agent.System_Value"/></th>
+													</tr>
+												</thead>
+												<tbody id="mod_extendedField">				
+												</tbody> 
+											</table>
+										</div>
+									</div>
+								</fieldset>
+							</form>				
+				</div>
+				
+			<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >
+					<button type="button" class="btn btn-primary" onclick="fn_agentStatusSave();"><spring:message code="common.modify"/></button>
+					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+			</div>
 			
-			<div class="cmm_bd">
-				<div class="sub_tit">
-					<p><spring:message code="encrypt_agent.Additional_Information"/></p>
-				</div>
-				<div class="overflows_areas">
-					<table class="write">
-						<colgroup>
-							<col style="width: 170px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ico_t2"><spring:message code="encrypt_agent.Recently_accessed_address"/></th>
-								<td><input type="text" class="txt" name="latestAddress" id="latestAddress" value="${latestAddress}"  readonly="readonly" ></td>
-							</tr>
-							<tr>
-								<th scope="row" class="ico_t2"><spring:message code="encrypt_agent.Recently_Accessed_Time"/></th>
-								<td><input type="text" class="txt" name="latestDateTime" id="latestDateTime" value="${latestDateTime}"  readonly="readonly" ></td>
-
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			
-			<br><br>
-
-			<div class="overflow_area">
-				<table class="list">
-					<caption>리스트</caption>
-					<colgroup>
-						<col style="width: 15%;" />
-						<col style="width: 35%;" />
-					</colgroup>
-					<thead>
-						<tr>
-							<th scope="col"><spring:message code="encrypt_agent.System_Key"/></th>
-							<th scope="col"><spring:message code="encrypt_agent.System_Value"/></th>
-						</tr>
-					</thead>
-					<tbody id="extendedField">		
-
-					</tbody>
-				</table>
-			</div>
 		</div>
-		<!-- //pop-container -->
 	</div>
-</body>
-</html>
+</div>

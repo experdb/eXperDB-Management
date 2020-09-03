@@ -25,14 +25,48 @@ public class DashboardVO {
 	private String audit_state;
 	private String agt_cndt_cd;
 	private String lst_mdf_dtm;
+	private String svr_host_nm;
 	
 	private int connect_cnt;
 	private int execute_cnt;
 	
 	private String db_nm;
 	private String bck_opt_cd;
-	
-	
+	private String bsn_dscd;
+	private String lgi_dtm_start;
+	private String lgi_dtm_end;
+	private String bck_opt_cd_nm;
+
+	public String getBck_opt_cd_nm() {
+		return bck_opt_cd_nm;
+	}
+	public void setBck_opt_cd_nm(String bck_opt_cd_nm) {
+		this.bck_opt_cd_nm = bck_opt_cd_nm;
+	}
+	public String getLgi_dtm_start() {
+		return lgi_dtm_start;
+	}
+	public void setLgi_dtm_start(String lgi_dtm_start) {
+		this.lgi_dtm_start = lgi_dtm_start;
+	}
+	public String getLgi_dtm_end() {
+		return lgi_dtm_end;
+	}
+	public void setLgi_dtm_end(String lgi_dtm_end) {
+		this.lgi_dtm_end = lgi_dtm_end;
+	}
+	public String getBsn_dscd() {
+		return bsn_dscd;
+	}
+	public void setBsn_dscd(String bsn_dscd) {
+		this.bsn_dscd = bsn_dscd;
+	}
+	public String getSvr_host_nm() {
+		return svr_host_nm;
+	}
+	public void setSvr_host_nm(String svr_host_nm) {
+		this.svr_host_nm = svr_host_nm;
+	}
 	public String getBck_opt_cd() {
 		return bck_opt_cd;
 	}

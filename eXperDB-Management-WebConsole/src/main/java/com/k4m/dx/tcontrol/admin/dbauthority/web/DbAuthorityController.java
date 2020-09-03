@@ -260,13 +260,15 @@ public class DbAuthorityController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateServerDBAutInfo.do")
-	@ResponseBody public void updateServerDBAutInfo(HttpServletRequest request, HttpServletResponse response) {
-			try {
-				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-				String usr_id = request.getParameter("usr_id");
-				List<Map<String, Object>> resultSet = null;	
-				resultSet = dbAuthorityService.selectDatabase(db_svr_id);
-				
+	@ResponseBody 
+	public void updateServerDBAutInfo(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			String usr_id = request.getParameter("usr_id");
+			
+			List<Map<String, Object>> resultSet = dbAuthorityService.selectDatabase(db_svr_id);
+			
+			if (resultSet != null) {
 				for(int i=0; i<resultSet.size(); i++){	
 					Map<String, Object> param = new HashMap<String, Object>();
 					param.put("db_id", resultSet.get(i));
@@ -279,10 +281,10 @@ public class DbAuthorityController {
 					}else{
 						dbAuthorityService.updateUsrDBAutInfo(param);
 					}	
-				}			
-			} catch (Exception e) {
+				}
+			}
+		} catch (Exception e) {
 				e.printStackTrace();
-		}				
-	}	
-	
+		}
+	}
 }

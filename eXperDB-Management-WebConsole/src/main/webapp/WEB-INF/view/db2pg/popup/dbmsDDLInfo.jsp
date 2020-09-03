@@ -5,31 +5,10 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@include file="../../cmmn/commonLocale.jsp"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
-
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/js/common.js"></script>
 <script>
-var table = null;
-function fn_init() {
-		table = $('#dbmsList').DataTable({
+var table_dbmsInfo = null;
+function fn_init_dbmsInfo() {
+		table_dbmsInfo = $('#dbmsList').DataTable({
 		scrollY : "150px",
 		scrollX: true,	
 		bSort: false,
@@ -74,38 +53,30 @@ function fn_init() {
 		]
 	});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
+		table_dbmsInfo.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
+		table_dbmsInfo.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+		table_dbmsInfo.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		table_dbmsInfo.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		table_dbmsInfo.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table_dbmsInfo.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		table_dbmsInfo.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		table_dbmsInfo.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
 
 		$(window).trigger('resize'); 
-		
-		$('#dbmsList tbody').on('dblclick','tr',function() {
-			var datas = table.row(this).data();
-			var db2pg_sys_id = datas.db2pg_sys_id;		
-			var db2pg_sys_nm = datas.db2pg_sys_nm;		
-			opener.fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm);
-			self.close();
-		});	
+			
 }
 
 /* ********************************************************
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
-	fn_init();
-	fn_search();
-	
+	fn_init_dbmsInfo();
+	fn_search_dbmsInfo();
   	$(function() {	
   		$('#dbmsList tbody').on( 'click', 'tr', function () {
   			 if ( $(this).hasClass('selected') ) {
   	     	}else {	        	
-  	     	table.$('tr.selected').removeClass('selected');
+  	     	table_dbmsInfo.$('tr.selected').removeClass('selected');
   	         $(this).addClass('selected');	            
   	     } 
   		})     
@@ -115,7 +86,7 @@ $(window.document).ready(function() {
 /* ********************************************************
  * 조회
  ******************************************************** */
-function fn_search(){
+function fn_search_dbmsInfo(){
  	$.ajax({
   		url : "/selectDDLDb2pgDBMS.do",
   		data : {
@@ -129,21 +100,19 @@ function fn_search(){
   	     },
   		error : function(xhr, status, error) {
   			if(xhr.status == 401) {
-  				alert('<spring:message code="message.msg02" />');
-  				top.location.href = "/";
+  				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
   			} else if(xhr.status == 403) {
-  				alert('<spring:message code="message.msg03" />');
-  				top.location.href = "/";
+  				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
   			} else {
-  				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+  				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
   			}
   		},
   		success : function(result) {
   			if(result.length > 0){
-  				table.clear().draw();
-  				table.rows.add(result).draw();
+  				table_dbmsInfo.clear().draw();
+  				table_dbmsInfo.rows.add(result).draw();
   			}else{
-  				table.clear().draw();
+  				table_dbmsInfo.clear().draw();
   			}
   		}
   	});  
@@ -151,85 +120,89 @@ function fn_search(){
 
 	
 /* ********************************************************
- * 등록
+ * ddl 등록시 등록
  ******************************************************** */
 function fn_Add(){
-	var datas = table.rows('.selected').data();
+	var datas = table_dbmsInfo.rows('.selected').data();
 	if (datas.length <= 0) {
-		alert('<spring:message code="message.msg35" />');
+		showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	} 
 	var db2pg_sys_id = datas[0].db2pg_sys_id;		
 	var db2pg_sys_nm = datas[0].db2pg_sys_nm;	
-	opener.fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm);
-	self.close();
+	fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm);
+	$('#pop_layer_dbmsInfo_reg').modal("hide");
 }
 
+
+/* ********************************************************
+ * ddl 수정시 등록
+ ******************************************************** */
+function fn_Mod(){
+	var datas = table_dbmsInfo.rows('.selected').data();
+	if (datas.length <= 0) {
+		showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	} 
+	var db2pg_sys_id = datas[0].db2pg_sys_id;		
+	var db2pg_sys_nm = datas[0].db2pg_sys_nm;	
+	fn_dbmsAddCallback2(db2pg_sys_id,db2pg_sys_nm);
+	$('#pop_layer_dbmsInfo_reg').modal("hide");
+}
 </script>
-</head>
-<body>
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit"><spring:message code="migration.dbms_system_information"/></p>
-			<div class="btn_type_01">
-				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
-			</div>
-		<div class="pop_cmm">							
-			<table class="write bdtype1">
-				<caption><spring:message code="menu.schedule_registration" /></caption>				
-				<colgroup>
-					<col style="width:8%;" />
-					<col style="width:17%;" />
-					<col style="width:8%;" />
-					<col style="width:12%;" />
-					<col style="width:8%;" />
-					<col style="width:17%;" />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="migration.system_name"/></th>
-						<td><input type="text" class="txt t4" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>		
-						<th scope="row" class="ico_t1">DBMS<spring:message code="common.division" /></th>
-						<td>
-							<select name="dbms_dscd" id="dbms_dscd" class="select t4" >
-									<option value=""><spring:message code="common.total" /></option>
+<div class="modal fade" id="pop_layer_dbmsInfo_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 50px 350px;">
+		<div class="modal-content" style="width:1000px;">		 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;margin-bottom:10px;">
+					<spring:message code="migration.dbms_system_information"/>
+				</h4>
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card-body" style="border: 1px solid #adb5bd;">
+						<div class="form-inline">
+							<div class="input-group mb-2 mr-sm-2">
+								<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
+							</div>
+							<div class="input-group mb-2 mr-sm-2">
+								<select class="form-control" style="width:300px; margin-right: 2rem;" name="work" id="work">
+									<option value="%"><spring:message code="common.total" />&nbsp;DBMS<spring:message code="common.division" /></option>
 									<option value="TC002201">Oracle</option>
 									<option value="TC002202">MS-SQL</option>
-									<option value="TC002203">MySQL</option>				
-								</select>						
-						</td>									
-						<th scope="row" class="ico_t1" ><spring:message code="data_transfer.ip" /></th>
-						<td><input type="text" class="txt t4" name="ipadr" id="ipadr" /></td>				
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<div class="pop_cmm3">
-			<p class="pop_s_tit"><spring:message code="migration.dbms_system_list" /></p>
-			<div class="overflow_area">
-				<table id="dbmsList" class="display" cellspacing="0" width="100%">
-				<thead>
-					<tr>
-						<th width="50"><spring:message code="common.no" /></th>
-						<th width="100"><spring:message code="migration.system_name"/></th>
-						<th width="100">DBMS<spring:message code="common.division" /></th>
-						<th width="100"><spring:message code="data_transfer.ip" /></th>
-						<th width="100">Database</th>
-						<th width="100">Schema</th>
-						<th width="100"><spring:message code="data_transfer.port" /></th>
-						<th width="100">User</th>
-					</tr>
-				</thead>
-			</table>		
+									<option value="TC002203">MySQL</option>	
+								</select>
+							</div>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search_dbmsInfo();" >
+								<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+							</button>
+						</div>
+					</div>
+					<br>
+					
+					<div class="card-body" style="border: 1px solid #adb5bd;">
+						<p class="card-description"><spring:message code="schedule.workList"/></p>
+						<table id="dbmsList" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="50"><spring:message code="common.no" /></th>
+									<th width="100"><spring:message code="migration.system_name"/></th>
+									<th width="100">DBMS<spring:message code="common.division" /></th>
+									<th width="100"><spring:message code="data_transfer.ip" /></th>
+									<th width="100">Database</th>
+									<th width="100">Schema</th>
+									<th width="100"><spring:message code="data_transfer.port" /></th>
+									<th width="100">User</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					<br>
+					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+						<input class="btn btn-primary" width="200px"style="vertical-align:middle;display: none;" type="button" id="sourceSystem_add" onclick="fn_Add()" value='<spring:message code="common.add" />' />
+						<input class="btn btn-primary" width="200px"style="vertical-align:middle;display: none;" type="button" id="sourceSystem_mod" onclick="fn_Mod()" value='<spring:message code="common.add" />' />
+						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+					</div>
+				</div>
 			</div>
-		</div>
-		
-		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onClick="fn_Add();" type="button"><spring:message code="common.choice" /></button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.close"/></span></a>
 		</div>
 	</div>
 </div>
-</body>
-</html>

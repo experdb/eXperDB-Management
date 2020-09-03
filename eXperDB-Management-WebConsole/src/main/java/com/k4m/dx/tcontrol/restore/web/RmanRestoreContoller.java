@@ -12,7 +12,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,8 +75,7 @@ public class RmanRestoreContoller {
 	/**
 	 * [Restore] 긴급복구 화면을 보여준다.
 	 * 
-	 * @param historyVO
-	 * @param request
+	 * @param historyVO, workVO, request
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
@@ -87,6 +85,7 @@ public class RmanRestoreContoller {
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
+
 		try {
 			if (dbSvrAut.get(0).get("emergency_restore_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
@@ -104,18 +103,23 @@ public class RmanRestoreContoller {
 		
 		// Get DBServer Name
 		try {
-			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
-			mv.addObject("ipadr", backupService.selectDbSvrNm(workVO).getIpadr());
+			DbServerVO dbServerVO = new DbServerVO();
+			dbServerVO = backupService.selectDbSvrNm(workVO);
+			
+			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
+			mv.addObject("ipadr", dbServerVO.getIpadr());
 			mv.addObject("dbList",backupService.selectDbList(workVO));
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
 			
 			db_svr_id = workVO.getDb_svr_id();
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
+
 			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			String strIpAdr = DbServerVO.getIpadr();
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
+
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String IP = DbServerVO.getIpadr();
@@ -135,8 +139,7 @@ public class RmanRestoreContoller {
 		}
 		return mv;
 	}
-	
-	
+
 	/**
 	 * [Restore] 시점복구 화면을 보여준다.
 	 * 
@@ -255,18 +258,16 @@ public class RmanRestoreContoller {
 		}
 		return result;
 	}
-	
-	
+
 	/**
 	 *  [Restore] RMAN 복구 정보 등록 한다.
 	 * 
-	 * @param restoreRmanVO
-	 * @param request
-	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @param accessControlHistoryVO, accessControlVO, restoreRmanVO, historyVO, request, response
+	 * @return 
+	 * @throws ParseException
 	 */
 	@RequestMapping(value = "/insertRmanRestore.do")
-	public @ResponseBody void insertRmanRestore(
+	public @ResponseBody String insertRmanRestore(
 			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
 			@ModelAttribute("accessControlVO") AccessControlVO accessControlVO, @ModelAttribute("restoreRmanVO") RestoreRmanVO restoreRmanVO, @ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request, HttpServletResponse response) throws ParseException {
@@ -274,36 +275,34 @@ public class RmanRestoreContoller {
 		int db_svr_id = restoreRmanVO.getDb_svr_id();
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
-		
-		String insertResult = "S";
+
 		String snResult = "S";
+
 		RestoreRmanVO latestRestoreSN= null;
 		
-			try {
-				if (dbSvrAut.get(0).get("emergency_restore_aut_yn").equals("N")) {
-					response.sendRedirect("/autError.do");
-				} else {
-					// 화면접근이력 이력 남기기
-					CmmnUtils.saveHistory(request, historyVO);
-					historyVO.setExe_dtl_cd("DX-T0129_01");
-					accessHistoryService.insertHistory(historyVO);
+		try {
+			if (dbSvrAut.get(0).get("emergency_restore_aut_yn").equals("N")) {
+				response.sendRedirect("/autError.do");
+			} else {
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0129_01");
+				accessHistoryService.insertHistory(historyVO);
 	
-					HttpSession session = request.getSession();
-					LoginVO loginVo = (LoginVO) session.getAttribute("session");
-					String id = loginVo.getUsr_id();
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String id = loginVo.getUsr_id();
+				restoreRmanVO.setRegr_id(id);
 	
-					restoreRmanVO.setRegr_id(id);
-	
-					restoreService.insertRmanRestore(restoreRmanVO);		
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				insertResult = "F";
+				restoreService.insertRmanRestore(restoreRmanVO);		
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			snResult = "D";
+		}
 
-			
 		// Get Latest Restore SN
-		if(insertResult.equals("S")){
+		if(snResult.equals("S")){
 			try {
 				latestRestoreSN = restoreService.latestRestoreSN();
 				restoreRmanVO.setRestore_sn(latestRestoreSN.getRestore_sn());
@@ -351,20 +350,20 @@ public class RmanRestoreContoller {
 				ClientInfoCmmn cic = new ClientInfoCmmn();
 				cic.rmanRestoreStart(serverObj, IP, PORT, restoreRmanVO);
 			} catch (Exception e) {
+				snResult = "F";
 				e.printStackTrace();
 			}
 		}
 		
-					
+		return snResult;
 	}	
-	
-	
+
 	/**
 	 * 복구명을 중복 체크한다.
 	 * 
-	 * @param scd_nm
-	 * @return
-	 * @throws Exception
+	 * @param restore_nm
+	 * @return String
+	 * @throws
 	 */
 	@RequestMapping(value = "/restore_nmCheck.do")
 	public @ResponseBody String restore_nmCheck(@RequestParam("restore_nm") String restore_nm) {
@@ -380,11 +379,10 @@ public class RmanRestoreContoller {
 		return "true";
 	}
 
-
 	/**
 	 * RMAN 복구 실행시, 로그정보 호출
 	 * 
-	 * @param scd_nm
+	 * @param request, response
 	 * @return
 	 * @throws Exception
 	 */
@@ -403,6 +401,7 @@ public class RmanRestoreContoller {
 			String strIpAdr = DbServerVO.getIpadr();
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
+
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String IP = DbServerVO.getIpadr();

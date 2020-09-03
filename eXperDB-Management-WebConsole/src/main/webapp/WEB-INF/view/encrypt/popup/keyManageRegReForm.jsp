@@ -4,6 +4,8 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@include file="../../cmmn/commonLocale.jsp"%>
+
+
 <%
 	/**
 	* @Class Name : keyManageRegReForm.jsp
@@ -13,72 +15,25 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2018.01.08     최초 생성
-	*
+	*  2020.08.04   변승우 과장		UI 디자인 변경
+	
+	
 	* author 변승우 대리
 	* since 2018.01.08
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>암복호화 키 수정</title>
 
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
-
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/js/common.js"></script>
-
-<!-- 달력을 사용 script -->
-<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/js/calendar.js"></script>
-</head>
-<style>
-.cmm_bd .sub_tit > p{
-	padding:0 8px 0 33px;
-	line-height:24px;
-	background:url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
-}
-</style>
 <script>
 $(window.document).ready(function() {
-	fn_init();
-	
-	$("#copyBin").attr('value', 'false');
-	$("#renew").attr('value', 'false');
-	
-	$("#renewInsert").css("display", "none");
-	 
-	$.datepicker.setDefaults({
-		dateFormat : 'yy-mm-dd',
-		minDate: "+730d",
-		changeYear: true,
-	});
-	$("#datepicker3").datepicker();
-
-	$("#cipherAlgorithmCode").attr("disabled", "disabled");
-	
-	fn_historyCryptoKeySymmetric();
-
+	fn_mod_init();
 });
 
 var renewalhistoryTable = null;
 
-function fn_init(){
+ function fn_mod_init(){
 	renewalhistoryTable = $('#renewalhistoryTable').DataTable({
-		scrollY : "85px",
+		scrollY : "135px",
 		searching : false,
 		paging: false,
 		scrollX: true,
@@ -108,7 +63,7 @@ function fn_init(){
 	renewalhistoryTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
     $(window).trigger('resize');
-}
+} 
 
 
 $(function() {
@@ -152,16 +107,15 @@ function fn_keyManagementModify(){
 		datasArr.push(rows);
 	}
 
-	
  $.ajax({
 		url : "/updateCryptoKeySymmetric.do", 
 	  	data : {
-	  		keyUid : $('#keyUid').val(),
-	  		resourceUid : $('#resourceUid').val(),
-	  		resourceName: $('#resourceName').val(),
-	  		cipherAlgorithmCode : $('#cipherAlgorithmCode').val(),
-	  		resourceNote : $('#resourceNote').val(),
-	  		validEndDateTime : $('#datepicker3').val().substring(0,10),
+	  		keyUid : $('#mod_keyUid').val(),
+	  		resourceUid : $('#mod_resourceUid').val(),
+	  		resourceName: $('#mod_resourceName').val(),
+	  		cipherAlgorithmCode : $('#mod_cipherAlgorithmCode').val(),
+	  		resourceNote : $('#mod_resourceNote').val(),
+	  		validEndDateTime : $('#mod_expr_dt').val().substring(0,10),
 	  		renew : $("#renew").val(),
 	  		copyBin : $("#copyBin").val(),
 	  		historyCryptoKeySymmetric : JSON.stringify(datasArr),
@@ -173,37 +127,34 @@ function fn_keyManagementModify(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert('<spring:message code="message.msg84" />')
+				showSwalIcon('<spring:message code="message.msg84" />', '<spring:message code="common.close" />', '', 'success');
 				fn_historyCryptoKeySymmetric();
 			}else if(data.resultCode == "8000000002"){
-				alert("<spring:message code='message.msg05' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			}else if(data.resultCode == "8000000003"){
-				alert(data.resultMessage);
-				location.href = "/securityKeySet.do";
+				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");	
+				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}	
 		}
 	});	
 }
 
 function fn_historyCryptoKeySymmetric(){
+
 	$.ajax({
 		url : "/historyCryptoKeySymmetric.do", 
 	  	data : {
-	  		keyUid : $('#keyUid').val(),
+	  		keyUid : $('#mod_keyUid').val(),
 	  	},
 		dataType : "json",
 		type : "post",
@@ -212,13 +163,11 @@ function fn_historyCryptoKeySymmetric(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
@@ -226,94 +175,177 @@ function fn_historyCryptoKeySymmetric(){
 				renewalhistoryTable.clear().draw();
 				renewalhistoryTable.rows.add(data.list).draw();
 			}else if(data.resultCode == "8000000002"){
-				alert("<spring:message code='message.msg05' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			}else if(data.resultCode == "8000000003"){
-				alert(data.resultMessage);
-				location.href = "/securityKeySet.do";
+				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");		
+				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');	
 			}				
 		}
 	});
 }
+
+/* ********************************************************
+ * 작업기간 calender 셋팅
+ ******************************************************** */
+function fn_modDateCalenderSetting() {
+	
+	var today = new Date();
+	var startDay = fn_dateParse("20180101");
+	var endDay = fn_dateParse("20991231");
+
+	var day_today = today.toJSON().slice(0,10);
+	var day_start = startDay.toJSON().slice(0,10);
+	var day_end = endDay.toJSON().slice(0,10);
+
+	if ($("#mod_expr_dt_div", "#modForm").length) {
+		$("#mod_expr_dt_div", "#modForm").datepicker({
+		}).datepicker('setDate', day_today)
+		.datepicker('setStartDate', day_start)
+		.datepicker('setEndDate', day_end)
+		.on('hide', function(e) {
+			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		}); //값 셋팅
+	}
+
+	$("#mod_expr_dt", "#modForm").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+	$("#mod_expr_dt_div", "#modForm").datepicker('updateDates');
+}
+
 </script>
-<body>
-	<div class="pop_container">
-		<div class="pop_cts">
-			<p class="tit"><spring:message code="encrypt_key_management.Encryption_Key_Modify"/></p>
-				<table class="write">
-					<caption><spring:message code="encrypt_key_management.Encryption_Key_Modify"/></caption>
-					<colgroup>
-						<col style="width: 150px;" />
-						<col />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Key_Name"/></th>
-							<td><input type="text" class="txt" name="resourceName" id="resourceName" readonly="readonly" value="${resourceName}" /></td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Encryption_Algorithm"/></th>
-							<td>
-								<select class="select t5" id="cipherAlgorithmCode" name="cipherAlgorithmCode" >
-										<c:forEach var="result" items="${result}" varStatus="status">
-											<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option>
-										</c:forEach> 
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Description"/></th>
-							<td><input type="text" class="txt" name="resourceNote" id="resourceNote"  value="${resourceNote}" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/></td>
-						</tr>
+
+
+<div class="modal fade" id="pop_layer_keyManageRegReForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
+		<div class="modal-content" style="width:1000px;">		 
+			<div class="modal-body" >
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="encrypt_key_management.Encryption_Key_Modify"/>
+				</h4>
+				
+				<div class="card" style="margin-top:10px;border:0px;">
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:340px;">			
+									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+										<form class="cmxform" id="modForm">
+											<input type="hidden" id="mod_keyUid" name="mod_keyUid" >
+											<input type="hidden" id="mod_resourceUid" name="mod_resourceUid" >
 						
-						<tr>
-							<td></td>
-							<td><div class="inp_chk"><input type="checkbox" id="renew" name="renew" >
-								<label for="renew"></label><spring:message code="encrypt_key_management.Update_Add_Binaries"/></div></td>								
-						</tr>
-						
-						<tr id="renewInsert">
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
-							<td>
-								<div class="calendar_area big">
-									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" >
+											<fieldset>	
+																		
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_key_management.Key_Name"/>
+													</label>
+													<div class="col-sm-4">
+														<input type="text" class="form-control form-control-xsm" id="mod_resourceName" name="mod_resourceName"  readonly="readonly" value="${resourceName}" />
+													</div>
+												</div>		
+												
+												
+												<div class="form-group row" style="margin-bottom:10px;">
+												<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													<spring:message code="encrypt_key_management.Encryption_Algorithm"/>
+												</label>
+												<div class="col-sm-4">
+													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_cipherAlgorithmCode" id="mod_cipherAlgorithmCode" >
+														<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
+															 <c:forEach var="mod_result" items="${result}"  varStatus="status">
+																<option value="<c:out value="${mod_result.sysCode}"/>" <c:if test="${mod_result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${mod_result.sysCodeName}"/></option>
+															</c:forEach> 
+														</select>
+												</div>											
+											</div>			
+																																									
+											<div class="form-group row" style="margin-bottom:10px;">
+												<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													<spring:message code="encrypt_key_management.Description"/>
+												</label>
+												<div class="col-sm-4">
+													<input type="text" class="form-control form-control-xsm" id="mod_resourceNote" name="mod_resourceNote"   value="${resourceNote}" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/>
+												</div>
+											</div>							
+															
+								              <div class="form-group row" style="margin-bottom:10px;">
+												<div class="form-check"  style="margin-left: 20px;">
+								                            <label class="form-check-label">
+								                              <input type="checkbox" class="form-check-input" id="renew" name="renew" >
+								                             <spring:message code="encrypt_key_management.Update_Add_Binaries"/>
+								                            <i class="input-helper"></i></label>
+								                 </div>
+											</div>	
+											
+											<div  id="renewInsert">
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_key_management.Expiration_Date"/>
+													</label>
+													<div class="col-sm-4">
+														<div id="mod_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
+															<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mod_expr_dt" name="mod_expr_dt" readonly tabindex=10 />
+															<span class="input-group-addon input-group-append border-left">
+																<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+															</span>
+														</div>
+													</div>		
+													<div class="form-check"  style="margin-left: 20px;">
+								                            <label class="form-check-label">
+								                              <input type="checkbox" class="form-check-input" id="copyBin" name="copyBin" >
+								                             <spring:message code="encrypt_key_management.Copy_Binary"/>
+								                            <i class="input-helper"></i></label>
+								                	</div>								
+												</div>	
+											</div>
+																		
+										</fieldset>
+									</form>	
 								</div>
-							</td>
-							<td><div class="inp_chk"><input type="checkbox" id="copyBin" name="copyBin">
-								<label for="copyBin"></label><spring:message code="encrypt_key_management.Copy_Binary"/></div></td>
-						</tr>	
-						<input type="hidden" id="keyUid" name="keyUid" value="${keyUid}">
-						<input type="hidden" id="resourceUid" name="resourceUid" value="${keyUid}">
-					</tbody>
-				</table>
-				<div class="cmm_bd">
-					<div class="sub_tit">
-						<p><spring:message code="encrypt_key_management.Update_History"/></p>
-					</div>
-					<table id="renewalhistoryTable" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="25"><spring:message code="common.no" /></th>										
-								<th width="50"><spring:message code="encrypt_key_management.Version"/></th>
-								<th width="80"><spring:message code="encrypt_key_management.Status"/></th>
-								<th width="130"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
-								<th width="80"><spring:message code="common.register" /></th>
-								<th width="130"><spring:message code="common.regist_datetime" /></th>
-								<th width="80"><spring:message code="common.modifier" /></th>
-								<th width="130"><spring:message code="common.modify_datetime" /></th>
-								<th width="0"></th>
-								<th width="0"></th>
-							</tr>
-						</thead>
-					</table>											
-				</div>	
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="fn_keyManagementModify();"><span><spring:message code="common.save"/></span></a>
-					<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
-				</div>
+							</div>		
+							
+								<table id="renewalhistoryTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+											<thead>
+	 											<tr class="bg-info text-white">
+													<th width="25"><spring:message code="common.no" /></th>										
+													<th width="50"><spring:message code="encrypt_key_management.Version"/></th>
+													<th width="80"><spring:message code="encrypt_key_management.Status"/></th>
+													<th width="130"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
+													<th width="80"><spring:message code="common.register" /></th>
+													<th width="130"><spring:message code="common.regist_datetime" /></th>
+													<th width="80"><spring:message code="common.modifier" /></th>
+													<th width="130"><spring:message code="common.modify_datetime" /></th>
+													<th width="0"></th>
+													<th width="0"></th>
+												</tr>
+											</thead>
+										</table>
+														
+						</div>	
+				
+				
+				
+				
+				
+				
+			</div>
+			<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >			
+					<button type="button" class="btn btn-primary" onclick="fn_confirm('mod');"><spring:message code="common.save"/></button>
+					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+			</div>
+			
 		</div>
 	</div>
-</body>
-</html>
+</div>	
+
+
+
+
+
+
+
+
+
+
+

@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -74,7 +76,7 @@ public class DumpRestoreController {
 	/**
 	 * [Restore] 덤프복구 화면을 보여준다.
 	 * 
-	 * @param historyVO
+	 * @param historyVO, request, workVO
 	 * @param request
 	 * @return ModelAndView mv
 	 * @throws Exception
@@ -126,7 +128,6 @@ public class DumpRestoreController {
 		
 		return mv;
 	}
-
 	
 	/**
 	 * Dump restore Log List
@@ -137,38 +138,37 @@ public class DumpRestoreController {
 	@RequestMapping(value="/selectDumpRestoreLogList.do")
 	@ResponseBody
 	public List<WorkLogVO> selectDumpRestoreLogList(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
-		
+		List<WorkLogVO> resultSet = null;
+
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0131");
 			accessHistoryService.insertHistory(historyVO);
+			
+			resultSet = restoreService.selectDumpRestoreLogList(workLogVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-				
-		List<WorkLogVO> resultSet = null;
-		resultSet = restoreService.selectDumpRestoreLogList(workLogVO);
 
 		return resultSet;
 	}
 	
-	
 	/**
 	 * [Restore] 덤프복구 등록 화면을 보여준다.
-	 * 
-	 * @param historyVO
-	 * @param request
+	 * @param historyVO, request, workVO
 	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @throws 
 	 */
 	@RequestMapping(value = "/dumpRestoreRegVeiw.do")
-	public ModelAndView dumpRestoreRegVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,@ModelAttribute("workVo") WorkVO workVO) {
+	public ModelAndView dumpRestoreRegVeiw(@ModelAttribute("workLogVo") WorkLogVO workLogVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,@ModelAttribute("workVo") WorkVO workVO) {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));
 		int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 		
+		String returnYn = request.getParameter("returnYn");
+
 		workVO.setBck_wrk_id(wrk_id);
 		
 		CmmnUtils cu = new CmmnUtils();
@@ -187,7 +187,10 @@ public class DumpRestoreController {
 
 				mv.addObject("exe_sn", exe_sn);
 				mv.addObject("db_svr_id", db_svr_id);
+				mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
 				mv.addObject("wrk_id", wrk_id);
+				mv.addObject("returnYn", returnYn);
+				
 				mv.setViewName("restore/dumpRestoreRegVeiw");
 			}
 		} catch (Exception e) {
@@ -213,34 +216,47 @@ public class DumpRestoreController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return mv;
 	}
 	
-	
-	
-	@RequestMapping(value="/selectBckInfo.do")
-	@ResponseBody
-	public List<WorkLogVO> selectBckInfo(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
-		
+	/**
+	 * [Restore] 덤프복구 등록 화면 내역 조회
+	 * @param historyVO, request, workVO, workLogVO
+	 * @return ModelAndView mv
+	 * @throws 
+	 */
+	@SuppressWarnings({ "null", "unchecked" })
+	@RequestMapping(value = "/selectBckInfo.do")
+	public ModelAndView selectBckInfo(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVo") WorkVO workVO) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
 		int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));
 		String db_svr_id = request.getParameter("db_svr_id");
-		
+		int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
+
 		try {		
 			workLogVO.setDb_svr_id(db_svr_id);
 			workLogVO.setExe_sn(exe_sn);
+
+			mv.addObject("workBckInfo", restoreService.selectBckInfo(workLogVO));
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-				
-		List<WorkLogVO> resultSet = null;
-		resultSet = restoreService.selectBckInfo(workLogVO);
 
-		return resultSet;
+		// Work Object List
+		try {
+			workVO.setBck_wrk_id(wrk_id);
+			mv.addObject("workObjList", backupService.selectWorkObj(workVO));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return mv;
 	}	
-	
-	
+
 	/**
 	 *  [Restore] DUMP 복구 정보 등록 한다.
 	 * 
@@ -250,7 +266,7 @@ public class DumpRestoreController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertDumpRestore.do")
-	public @ResponseBody void insertDumpRestore(
+	public @ResponseBody String insertDumpRestore(
 			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
 			@ModelAttribute("accessControlVO") AccessControlVO accessControlVO, @ModelAttribute("restoreRmanVO") RestoreDumpVO restoreDumpVO, @ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request, HttpServletResponse response) throws ParseException {
@@ -263,29 +279,56 @@ public class DumpRestoreController {
 		String snResult = "S";
 		RestoreDumpVO latestRestoreSN= null;
 		
+		try {
+			if (dbSvrAut.get(0).get("dump_restore_aut_yn").equals("N")) {
+				response.sendRedirect("/autError.do");
+			} else {
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0132_01");
+				accessHistoryService.insertHistory(historyVO);
+	
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String id = loginVo.getUsr_id();
+	
+				restoreDumpVO.setRegr_id(id);
+	
+				//컬럼추가로 인한 수정 2020.08.07
+				restoreService.insertDumpRestore(restoreDumpVO);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			insertResult = "F";
+		}
+
+		//obj 등록 -- 2020.08.10 추가
+		if(insertResult.equals("S")){
 			try {
-				if (dbSvrAut.get(0).get("dump_restore_aut_yn").equals("N")) {
-					response.sendRedirect("/autError.do");
-				} else {
-					// 화면접근이력 이력 남기기
-					CmmnUtils.saveHistory(request, historyVO);
-					historyVO.setExe_dtl_cd("DX-T0132_01");
-					accessHistoryService.insertHistory(historyVO);
+				String obj_nm_Rows = "";
+				String scm_nm_Rows = "";
 	
-					HttpSession session = request.getSession();
-					LoginVO loginVo = (LoginVO) session.getAttribute("session");
-					String id = loginVo.getUsr_id();
-	
-					restoreDumpVO.setRegr_id(id);
-	
-					restoreService.insertDumpRestore(restoreDumpVO);		
+				if (request.getParameter("obj_nm_List") != null) {
+					obj_nm_Rows = request.getParameter("obj_nm_List").toString().replaceAll("&quot;", "\"");
 				}
+				
+				if (request.getParameter("scm_nm_List") != null) {
+					scm_nm_Rows = request.getParameter("scm_nm_List").toString().replaceAll("&quot;", "\"");
+				}
+
+				String obj_cmd ="";
+
+				if (!"".equals(obj_nm_Rows) && !"".equals(scm_nm_Rows)) {
+					obj_cmd = fn_objOption(obj_nm_Rows, scm_nm_Rows);
+				}
+
+				restoreDumpVO.setObj_cmd(obj_cmd);
 			} catch (Exception e) {
 				e.printStackTrace();
-				insertResult = "F";
+				snResult = "F";
 			}
-
-			
+		}
+		System.out.println("====obj_cmd===" + restoreDumpVO.getObj_cmd());
 		// Get Latest Restore SN
 		if(insertResult.equals("S")){
 			try {
@@ -298,7 +341,7 @@ public class DumpRestoreController {
 		}
 		
 		// Start Dump Restore
-			if(snResult.equals("S")){
+		if(snResult.equals("S")){
 			try{
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				
@@ -339,7 +382,9 @@ public class DumpRestoreController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}				
+		}	
+		
+		return insertResult;
 	}		
 	
 	
@@ -382,4 +427,26 @@ public class DumpRestoreController {
 		}
 		return result;
 	}	
+	
+	//object 셋팅
+	private String fn_objOption(String obj_nm_Rows, String scm_nm_Rows) throws ParseException {
+		String strObj = "";
+
+		JSONArray obj_nms = (JSONArray) new JSONParser().parse(obj_nm_Rows);
+		JSONArray scm_nms = (JSONArray) new JSONParser().parse(scm_nm_Rows);
+		
+		try {
+			for(int i=0; i<obj_nms.size(); i++){
+				if(obj_nms.get(i) == null || "".equals(obj_nms.get(i).toString())) {
+					strObj+=" -n "+ scm_nms.get(i).toString().toLowerCase();	
+				} else {
+					strObj+=" -t "+ scm_nms.get(i).toString().toLowerCase()+"."+ obj_nms.get(i).toString().toLowerCase();
+				} 
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return strObj;
+	}
 }

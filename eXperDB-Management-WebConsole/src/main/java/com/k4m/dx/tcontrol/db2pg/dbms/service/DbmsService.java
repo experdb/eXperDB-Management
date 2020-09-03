@@ -57,5 +57,11 @@ public interface DbmsService {
 	 * DB2PG 스케줄 체크
 	 */
 	int exeMigCheck() throws Exception;
+	
+
+	int db2pg_ddl_check(Map<String, Object> param);
+	
+
+	int db2pg_mig_check(Map<String, Object> param);
 
 }

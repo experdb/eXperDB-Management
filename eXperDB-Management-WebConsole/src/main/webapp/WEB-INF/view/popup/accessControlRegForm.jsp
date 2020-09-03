@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/commonLocale.jsp"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	/**
 	* @Class Name : accessControlRegForm.jsp
@@ -19,309 +16,363 @@
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title><spring:message code="etc.etc11"/></title>
-<link rel="stylesheet" type="text/css" href="../css/common.css">
-<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="../js/common.js"></script>
-</head>
 <script>
-	//숫자체크
-	function valid_numeric(objValue) {
-		if (objValue.match(/^[0-9]+$/) == null) {
-			return false;
-		} else {
-			return true;
-		}
-	}
 
-	/* Validation */
-	function fn_accessControl() {
-		/*Type=local -> ip입력 안함*/
-		if ($("#ctf_tp_nm option:selected").val() != "local") {
-			var ip = document.getElementById("ip");
-			if (ip.value == "") {
-				alert('<spring:message code="message.msg62" /> ');
-				ip.focus();
-				return false;
-			}
-			if (prefix.value !="" &&!valid_numeric(prefix.value)) {
-				alert('<spring:message code="message.msg63" />');
-				prefix.focus();
-				return false;
-			}
-			if(prefix.value !="" && prefix.value>32){
-				alert('<spring:message code="message.msg64" />');
-				prefix.focus();
-				return false;
-			}
-		}
-		return true;
-	}
+	/* ********************************************************
+	 * 초기 실행
+	 ******************************************************** */
+	$(window.document).ready(function() {	
+		/* ********************************************************
+		 * 데이터베이스 셋팅
+		 ******************************************************** */
+	    $("#ins_ctf_tp_nm", "#accessRegForm").change( function(){
+			if (this.value == "local") {
+				$("#ins_ip", "#accessRegForm").attr("disabled", "true");
+				$("#ins_prefix", "#accessRegForm").attr("disabled", "true");
+				$("#ins_ipmaskadr", "#accessRegForm").attr("disabled", "true");
+				$("#ins_ip", "#accessRegForm").val("");
+				$("#ins_prefix", "#accessRegForm").val("");
+				$("#ins_ipmaskadr", "#accessRegForm").val("");
+			} else {
+				$("#ins_ip", "#accessRegForm").removeAttr("disabled");
+				$("#ins_prefix", "#accessRegForm").removeAttr("disabled");
+				$("#ins_ipmaskadr", "#accessRegForm").removeAttr("disabled");
+				
+				var prefix = $("#ins_prefix", "#accessRegForm").val();
+				if(prefix !=""){
+					$("#ins_ipmaskadr", "#accessRegForm").attr('disabled', 'true');
+					$("#ins_ipmaskadr", "#accessRegForm").val("");
+				}
 
-	/* 등록 버튼 클릭시*/
-	function fn_insert() {
-		if (!fn_accessControl())return false;
-		var type = $("#ctf_tp_nm").val();
-		var prms_ipadr = "";
-		if(type!="local"){
-			var ip = document.getElementById("ip").value;
-			var prefix = document.getElementById("prefix").value;
-			if(prefix!=""){
-				prms_ipadr = ip + "/" + prefix;	
+				var prms_ipmaskadr = $("#ins_ipmaskadr", "#accessRegForm").val();
+				if(prms_ipmaskadr !=""){
+					$("#ins_prefix", "#accessRegForm").attr("disabled", "true");
+					$("#ins_prefix", "#accessRegForm").val("");
+				}
+			}
+	    });
+		
+		/* ********************************************************
+		 * Prefix 변경
+		 ******************************************************** */
+		$("#ins_prefix", "#accessRegForm").keyup(function() { 
+			if(this.value==""){
+				$('#ins_ipmaskadr', "#accessRegForm").removeAttr("disabled");
 			}else{
-				prms_ipadr = ip;
-			}	
-		}
-		
-		accessResult = new Object();
-        
-		accessResult.prms_ipmaskadr = $("#prms_ipmaskadr").val();
-		accessResult.prms_ipadr = prms_ipadr;
-		accessResult.dtb = $("#dtb").val();
-		accessResult.prms_usr_id = $("#prms_usr_id").val();
-		accessResult.ctf_mth_nm = $("#ctf_mth_nm").val();
-		accessResult.ctf_tp_nm = $("#ctf_tp_nm").val();
-		accessResult.opt_nm = $("#opt_nm").val();
-
-		var returnCheck= opener.fn_isnertSave(accessResult);   
-		if(returnCheck==false){
-			alert("<spring:message code='message.msg28' />");
-		}else{
-			window.close();
-		}	
-	}
-	
-	/* 수정 버튼 클릭시*/
-	function fn_update() {
-		if (!fn_accessControl())return false;
-		var type = $("#ctf_tp_nm").val();
-		var prms_ipadr = "";
-		if(type!="local"){
-			var ip = document.getElementById("ip").value;
-			var prefix = document.getElementById("prefix").value;
-			if(prefix!=""){
-				prms_ipadr = ip + "/" + prefix;	
-			}else{
-				prms_ipadr = ip;
-			}	
-		}
-		
-		accessResult = new Object();
-        
-		accessResult.idx = "${idx}";
-		accessResult.prms_ipmaskadr = $("#prms_ipmaskadr").val();
-		accessResult.prms_ipadr = prms_ipadr;
-		accessResult.dtb = $("#dtb").val();
-		accessResult.prms_usr_id = $("#prms_usr_id").val();
-		accessResult.ctf_mth_nm = $("#ctf_mth_nm").val();
-		accessResult.ctf_tp_nm = $("#ctf_tp_nm").val();
-		accessResult.opt_nm = $("#opt_nm").val();
-
-		var returnCheck=opener.fn_updateSave(accessResult);   
-		if(returnCheck==false){
-			alert("<spring:message code='message.msg136'/>");
-		}else{
-			window.close();
-		}
-	}
-
-	$(window.document).ready(function() {
-		var ctf_tp_nm = $("#ctf_tp_nm option:selected").val();
-		if (ctf_tp_nm == "local") {
-			$('#ip').attr('disabled', 'true');
-			$('#prefix').attr('disabled', 'true');
-			$('#prms_ipmaskadr').attr('disabled', 'true');
-		}
-		
-		var ctf_mth_nm = $("#ctf_mth_nm").val();
-		if(ctf_mth_nm=="ident" || ctf_mth_nm=="pam" || ctf_mth_nm=="ldap" || ctf_mth_nm=="gss" || ctf_mth_nm=="sspi" 
-				|| ctf_mth_nm=="cert" || ctf_mth_nm=="crypt"){
-			$('#opt_nm').removeAttr('disabled');
-		}else{
-			$('#opt_nm').attr('disabled', 'true');
-		}
-		
-		if ("${act}" == "u") {
-			var prms_ipadr = "${prms_ipadr}";
-			var str = prms_ipadr.split("/");
-			$('#ip').val(str[0]);
-			$('#prefix').val(str[1]);
-			if(str[1]==null){
-				$('#prefix').attr('disabled', 'true');
-			}else{
-				$('#prms_ipmaskadr').attr('disabled', 'true');
+				$('#ins_ipmaskadr', "#accessRegForm").attr("disabled", "true");
 			}
-		}
+		});
+		
+		/* ********************************************************
+		 * Ipmaskadr 변경
+		 ******************************************************** */
+		$("#ins_ipmaskadr", "#accessRegForm").keyup(function() { 
+			if(this.value==""){
+				$("#ins_prefix", "#accessRegForm").removeAttr("disabled");
+			}else{
+				$("#ins_prefix", "#accessRegForm").attr("disabled", "true");
+			}
+		});
+		
+		/* ********************************************************
+		 * 메소드 변경
+		 ******************************************************** */
+	    $("#ins_ctf_mth_nm", "#accessRegForm").change( function(){
+	    	var ctf_mth_nm = this.value;
+
+			if(ctf_mth_nm=="ident" || ctf_mth_nm=="pam" || ctf_mth_nm=="ldap" || ctf_mth_nm=="gss" || ctf_mth_nm=="sspi" ||
+				ctf_mth_nm=="cert" || ctf_mth_nm=="crypt"){
+				$("#ins_opt_nm", "#accessRegForm").removeAttr("disabled");
+			}else{
+				$("#ins_opt_nm", "#accessRegForm").attr("disabled", "true");
+			}
+	    });
+
+		/* ********************************************************
+		 * validate
+		 ******************************************************** */
+	    $("#accessRegForm").validate({
+	        rules: {
+	        	ins_ip: {
+	        		required: function(){
+	        			if ($("#ins_ctf_tp_nm option:selected", "#accessRegForm").val() != "local") {
+	        				if(nvlPrmSet($("#ins_ip", "#accessRegForm").val(),"") == "") {
+	        					 return true;
+	        				}
+	        			}
+	        			return false;
+	        		}
+				},
+				ins_prefix: {
+					max:32,
+					number: true
+				}
+	        },
+	        messages: {
+	        	ins_ip: {
+					required: '<spring:message code="message.msg62" />',
+				},
+				ins_prefix: {
+					max: '<spring:message code="message.msg64" />',
+					number: '<spring:message code="message.msg63" />'
+				}
+	        },
+			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
+				if ($("#act", "#findList").val() == "i") {
+					fn_accessPopInsert();
+				} else {
+					fn_accessPopUpdate();
+				}
+			},
+	        errorPlacement: function(label, element) {
+				label.addClass('mt-2 text-danger');
+				label.insertAfter(element);
+	        },
+	        highlight: function(element, errorClass) {
+				$(element).parent().addClass('has-danger')
+				$(element).addClass('form-control-danger')
+	        }
+		});
 	});
 
-	function changeType(selectObj) {
-		if (selectObj.value == "local") {
-			$('#ip').attr('disabled', 'true');
-			$('#prefix').attr('disabled', 'true');
-			$('#prms_ipmaskadr').attr('disabled', 'true');
-			$('#ip').val("");
-			$('#prefix').val("");
-			$('#prms_ipmaskadr').val("");
-			
-		} else {
-			$('#ip').removeAttr('disabled');
-			$('#prefix').removeAttr('disabled');
-			$('#prms_ipmaskadr').removeAttr('disabled');
-			
-			var prefix = document.getElementById("prefix").value;
-			if(prefix !=""){
-				$('#prms_ipmaskadr').attr('disabled', 'true');
-				$('#prms_ipmaskadr').val("");
-			}
-			var prms_ipmaskadr = document.getElementById("prms_ipmaskadr").value;
-			if(prms_ipmaskadr !=""){
-				$('#prefix').attr('disabled', 'true');
-				$('#prefix').val("");
-			}
+	/* ********************************************************
+	 * input 박스 초기 셋팅
+	 ******************************************************** */
+	function fn_initInputSet() {
+		var ctf_tp_nm = $("#ins_ctf_tp_nm option:selected", "#accessRegForm").val();
+		if (ctf_tp_nm == "local") {
+			$("#ins_ip", "#accessRegForm").attr("disabled", "true");
+			$("#ins_prefix", "#accessRegForm").attr('disabled', "true");
+			$("#ins_ipmaskadr", "#accessRegForm").attr("disabled", "true");
+		}
+		
+		var ctf_mth_nm = $("#ins_ctf_mth_nm option:selected", "#accessRegForm").val();
+		if(ctf_mth_nm=="ident" || ctf_mth_nm=="pam" || ctf_mth_nm=="ldap" || ctf_mth_nm=="gss" || ctf_mth_nm=="sspi" 
+			|| ctf_mth_nm=="cert" || ctf_mth_nm=="crypt"){
+			$("#ins_opt_nm", "#accessRegForm").removeAttr("disabled");
+		}else{
+			$("#ins_opt_nm", "#accessRegForm").attr("disabled", "true");
 		}
 	}
-	
-	function changePrefix() {
-		var prefix = $("#prefix").val();
-		if(prefix==""){
-			$('#prms_ipmaskadr').removeAttr('disabled');
+
+	/* ********************************************************
+	 * 추가 실행
+	 ******************************************************** */
+	function fn_accessPopInsert() {
+		var type = $("#ins_ctf_tp_nm", "#accessRegForm").val();
+		var prms_ipadr = "";
+
+		if(type != "local") {
+			var ins_ip = nvlPrmSet($("#ins_ip", "#accessRegForm").val(), "");
+			var ins_prefix = nvlPrmSet($("#ins_prefix", "#accessRegForm").val(), "");
+
+			if(ins_prefix!=""){
+				prms_ipadr = ins_ip + "/" + ins_prefix;	
+			}else{
+				prms_ipadr = ins_ip;
+			}	
+		}
+
+		accessResult = new Object();
+
+		accessResult.prms_ipmaskadr = nvlPrmSet($("#ins_ipmaskadr", "#accessRegForm").val(), "");
+		accessResult.prms_ipadr = prms_ipadr;
+		accessResult.dtb = $("#ins_dtb", "#accessRegForm").val();
+		accessResult.prms_usr_id = $("#ins_usr_id", "#accessRegForm").val();
+		accessResult.ctf_mth_nm = $("#ins_ctf_mth_nm", "#accessRegForm").val();
+		accessResult.ctf_tp_nm = $("#ins_ctf_tp_nm", "#accessRegForm").val();
+		accessResult.opt_nm = nvlPrmSet($("#ins_opt_nm", "#accessRegForm").val(), "");
+		
+		var returnCheck= fn_isnertSave(accessResult);
+		
+		if(returnCheck==false){
+			showSwalIcon('<spring:message code="message.msg28" />', '<spring:message code="common.close" />', '', 'error');
+			$('#pop_layer_access_reg').modal("show");
 		}else{
-			$('#prms_ipmaskadr').attr('disabled', 'true');
-		}		
+			$('#pop_layer_access_reg').modal("hide");
+
+			$('#nowpwd_alert-danger').show();
+			
+			showDangerToast('top-right', '<spring:message code="access_control_management.msg2" />', '<spring:message code="access_control_management.msg3" />');
+		}
 	}
 
-	function changeIpmaskadr() {
-		var ipmaskadr = $("#prms_ipmaskadr").val();
-		if(ipmaskadr==""){
-			$('#prefix').removeAttr('disabled');
+	/* ********************************************************
+	 * 수정 실행
+	 ******************************************************** */
+	function fn_accessPopUpdate() {
+		var type = $("#ins_ctf_tp_nm", "#accessRegForm").val();
+		var prms_ipadr = "";
+
+		if(type != "local") {
+			var ins_ip = nvlPrmSet($("#ins_ip", "#accessRegForm").val(), "");
+			var ins_prefix = nvlPrmSet($("#ins_prefix", "#accessRegForm").val(), "");
+
+			if(ins_prefix!=""){
+				prms_ipadr = ins_ip + "/" + ins_prefix;	
+			}else{
+				prms_ipadr = ins_ip;
+			}
+		}
+		
+		accessResult = new Object();
+        
+		accessResult.idx = $("#idx", "#findList").val();
+		accessResult.prms_ipmaskadr = nvlPrmSet($("#ins_ipmaskadr", "#accessRegForm").val(), "");
+		accessResult.prms_ipadr = prms_ipadr;
+		accessResult.dtb = $("#ins_dtb", "#accessRegForm").val();
+		accessResult.prms_usr_id = $("#ins_usr_id", "#accessRegForm").val();
+		accessResult.ctf_mth_nm = $("#ins_ctf_mth_nm", "#accessRegForm").val();
+		accessResult.ctf_tp_nm = $("#ins_ctf_tp_nm", "#accessRegForm").val();
+		accessResult.opt_nm = nvlPrmSet($("#ins_opt_nm", "#accessRegForm").val(), "");
+
+		var returnCheck = fn_updateSave(accessResult);
+		if( returnCheck == false){
+			showSwalIcon('<spring:message code="message.msg136" />', '<spring:message code="common.close" />', '', 'error');
+			$('#pop_layer_access_reg').modal("show");
 		}else{
-			$('#prefix').attr('disabled', 'true');
-		}		
-	}
-	
-	function changeMethod() {
-		var ctf_mth_nm = $("#ctf_mth_nm").val();
-		if(ctf_mth_nm=="ident" || ctf_mth_nm=="pam" || ctf_mth_nm=="ldap" || ctf_mth_nm=="gss" || ctf_mth_nm=="sspi" ||
-			ctf_mth_nm=="cert" || ctf_mth_nm=="crypt"){
-			$('#opt_nm').removeAttr('disabled');
-		}else{
-			$('#opt_nm').attr('disabled', 'true');
+			$('#pop_layer_access_reg').modal("hide");
+
+			$('#nowpwd_alert-danger').show();
+			
+			showDangerToast('top-right', '<spring:message code="access_control_management.msg2" />', '<spring:message code="access_control_management.msg3" />');
 		}
 	}
 </script>
-<body>
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit">
-			<c:if test="${act == 'i'}"><spring:message code="menu.access_control" /> <spring:message code="common.registory" /></c:if>
-			<c:if test="${act == 'u'}"><spring:message code="menu.access_control" />  <spring:message code="common.modify" /></c:if>
-		</p>
-		<div class="pop_cmm">
-			<table class="write">
-				<caption>
-					<c:if test="${act == 'i'}"><spring:message code="menu.access_control" />  <spring:message code="common.registory" /></c:if>
-					<c:if test="${act == 'u'}"><spring:message code="menu.access_control" />  <spring:message code="common.modify" /></c:if>
-				</caption>
-				<colgroup>
-					<col style="width:100px;" />
-					<col />
-					<col style="width:100px;" />
-					<col />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" /></th>
-						<td><input type="text" class="txt bg1" value="${db_svr_nm}" readonly="readonly"/></td>
-						<th scope="row" class="ico_t1">Database</th>
-						<td>
-							<select id="dtb" name="dtb" class="select">
-							<option value="all" ${dtb == 'all' ? 'selected="selected"' : ''}>all</option>
-							<option value="replication" ${dtb == 'replication' ? 'selected="selected"' : ''}>replication</option>
-								<c:forEach var="resultSet" items="${resultSet}">
-									<option value="${resultSet.db_nm}" ${dtb eq resultSet.db_nm ? "selected='selected'" : ""}>${resultSet.db_nm}
-										<c:if test="${!empty resultSet.db_exp}">(${resultSet.db_exp})</c:if>
-									</option>
-								</c:forEach>
-							</select>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="pop_cmm mt25">
-			<table class="write">
-				<caption>
-					<c:if test="${act == 'i'}"><spring:message code="menu.access_control" /> <spring:message code="common.registory" /></c:if>
-					<c:if test="${act == 'u'}"><spring:message code="menu.access_control" />  <spring:message code="common.modify" /></c:if>
-				</caption>
-				<colgroup>
-					<col style="width:100px;" />
-					<col />
-					<col style="width:110px;" />
-					<col />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1">Type</th>
-						<td>					
-							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select" onChange="changeType(this)">
-								<c:forEach var="resultType" items="${resultType}">
-									<option value="${resultType.ctf_tp_nm}" ${ctf_tp_nm eq resultType.ctf_tp_nm ? "selected='selected'" : ""}>${resultType.ctf_tp_nm}</option>
-								</c:forEach>
-							</select>
-						</td>
-						
-						<th scope="row" class="ico_t1">IP<br>(127.0.0.1/32)</th>
-						<td>
-							<input type="text" class="txt" name="ip" id="ip" style="width: 130px;"/> /
-							<input type="text" class="txt" name="prefix" id="prefix" style="width: 100px;" onchange="changePrefix()" />
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1">User</th>
-						<td>									
-							<select id="prms_usr_id" name="prms_usr_id" class="select">
-								<option value="all" ${prms_usr_id == 'all' ? 'selected="selected"' : ''}>all</option>
-								<c:forEach var="result" items="${result.data}">
-									<option value="${result.rolname}" ${prms_usr_id eq result.rolname ? "selected='selected'" : ""}>${result.rolname}</option>
-								</c:forEach>
-							</select>
-						</td>
-						<th scope="row" class="ico_t1">Ipmask</th>
-						<td><input type="text" class="txt" name="prms_ipmaskadr" id="prms_ipmaskadr" onchange="changeIpmaskadr()" value="${ipmask}"/></td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1">Method</th>
-						<td>
-							<select id="ctf_mth_nm" name="ctf_mth_nm" id="ctf_mth_nm" class="select" onchange="changeMethod()">
-								<c:forEach var="resultMethod" items="${resultMethod}">
-									<option value="${resultMethod.ctf_mth_nm}" ${ctf_mth_nm eq resultMethod.ctf_mth_nm ? "selected='selected'" : ""}>${resultMethod.ctf_mth_nm}</option>
-								</c:forEach>							
-							</select>
-						</td>
-						<th scope="row" class="ico_t1">Option</th>
-						<td><input type="text" class="txt t4" name="opt_nm" id="opt_nm" value="${opt_nm}"/></td>		
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="btn_type_02">
-			<span class="btn btnC_01">					
-				<c:if test="${act == 'i'}">
-					<button type="button" onclick="fn_insert()" ><spring:message code="common.save"/></button>
-				</c:if>
-				<c:if test="${act == 'u'}">
-					<button type="button" onclick="fn_update()"><spring:message code="common.save"/></button>
-				</c:if>
-			</span>
-			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
+
+
+<div class="modal fade" id="pop_layer_access_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl" role="document">
+		<div class="modal-content" >		 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_ins" style="padding-left:5px;">
+					<spring:message code="menu.access_control" /> <spring:message code="common.registory" />
+				</h4>
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_udt" style="padding-left:5px;">
+					<spring:message code="menu.access_control" />  <spring:message code="common.modify" />
+				</h4>
+				
+				<form class="cmxform" id="accessRegForm" name="accessRegForm" >
+					<fieldset>
+						<div class="card" style="margin-top:10px;border:0px;">
+							<div class="card-body">
+								<div class="form-group row border-bottom">
+									<label for="ins_db_svr_nm" class="col-sm-2 col-form-label" style="margin-top:-5px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="common.dbms_name" />
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="ins_db_svr_nm" name="ins_db_svr_nm" readonly />
+									</div>
+									
+									<label for="ins_dtb" class="col-sm-2 col-form-label" style="margin-top:-5px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Database
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control selectSearch w-100" style="margin-right: 1rem;width: 100% !important;" name="ins_dtb" id="ins_dtb" tabindex=1 >
+											<option value="all">all</option>
+											<option value="replication">replication</option>
+											
+											<c:forEach var="resultSet" items="${resultSet}" varStatus="status">
+												<option value="<c:out value="${resultSet.db_nm}"/>" >
+													<c:out value="${resultSet.db_nm}"/>
+													<c:if test="${!empty resultSet.db_exp}">(${resultSet.db_exp})</c:if>
+												</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label for="ins_ctf_tp_nm" class="col-sm-2 col-form-label" style="margin-top:-5px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Type
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control selectSearch w-100" style="margin-right: 1rem;width: 100% !important;" name="ins_ctf_tp_nm" id="ins_ctf_tp_nm" tabindex=2 >
+											<c:forEach var="resultType" items="${resultType}" varStatus="status">
+												<option value="<c:out value="${resultType.ctf_tp_nm}"/>" >
+													<c:out value="${resultType.ctf_tp_nm}"/>
+												</option>
+											</c:forEach>
+										</select>
+									</div>
+									
+									<label for="ins_ip" class="col-sm-2 col-form-label" style="margin-top:-5px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										IP (127.0.0.1/32)
+									</label>
+									<div class="col-sm-2">
+										<input type="text" class="form-control" maxlength="30" id="ins_ip" name="ins_ip" onblur="this.value=this.value.trim()" tabindex=3 />
+									</div>
+									<label for="ins_prefix" class="col-sm-1 col-form-label" style="margin-top:-5px; max-width: 2%;">
+										/
+									</label>
+									<div class="col-sm-2" style="max-width: 13.8%">
+										<input type="text" class="form-control" maxlength="20" style="width:100%" id="ins_prefix" name="ins_prefix" onKeyUp="chk_Number(this);" onblur="this.value=this.value.trim()" tabindex=4 />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label for="ins_usr_id" class="col-sm-2 col-form-label" style="margin-top:-5px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										User
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control selectSearch w-100" style="margin-right: 1rem;width: 100% !important;height: 2.000rem;" name="ins_usr_id" id="ins_usr_id" tabindex=5 >
+											<option value="all">all</option>
+											
+											<c:forEach var="resultUser" items="${resultUser.data}" varStatus="status">
+												<option value="<c:out value="${resultUser.rolname}"/>" >
+													<c:out value="${resultUser.rolname}"/>
+												</option>
+											</c:forEach>
+										</select>
+									</div>
+									
+									<label for="ins_ipmaskadr" class="col-sm-2 col-form-label" style="margin-top:-5px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Ipmask
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="ins_ipmaskadr" name="ins_ipmaskadr" onblur="this.value=this.value.trim()" tabindex=6 />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label for="ins_ctf_mth_nm" class="col-sm-2 col-form-label" style="margin-top:-5px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Method
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control form-control-xsm selectSearch w-100" style="margin-right: 1rem;width: 100% !important;" name="ins_ctf_mth_nm" id="ins_ctf_mth_nm" tabindex=7 >
+											<c:forEach var="resultMethod" items="${resultMethod}" varStatus="status">
+												<option value="<c:out value="${resultMethod.ctf_mth_nm}"/>" >
+													<c:out value="${resultMethod.ctf_mth_nm}"/>
+												</option>
+											</c:forEach>
+										</select>
+									</div>
+									
+									<label for="ins_opt_nm" class="col-sm-2 col-form-label" style="margin-top:-5px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Option
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="ins_opt_nm" name="ins_opt_nm" onblur="this.value=this.value.trim()" tabindex=8 />
+									</div>
+								</div>
+								
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value='<spring:message code="common.save" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
-
-</body>
-</html>

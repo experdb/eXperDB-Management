@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="../../cmmn/cs2.jsp"%>
+
 <%
 	/**
 	* @Class Name : keyManage.jsp
@@ -13,6 +16,7 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2018.01.08     최초 생성
+	*  2020.08.04   변승우 과장		UI 디자인 변경
 	*
 	* author 변승우 대리
 	* since 2018.01.09 
@@ -57,7 +61,6 @@ var table = null;
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '150px');
-	
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
@@ -68,44 +71,82 @@ var table = null;
 	    
 	  //더블 클릭시
 		if("${wrt_aut_yn}" == "Y"){
+			
 			$('#keyManageTable tbody').on('dblclick', 'tr', function() {
+				
 				var data = table.row(this).data();
 				
-	 			var frmPop= document.frmPopup;
-	 			
-				var popUrl = "/popup/keyManageRegReForm.do"; // 서버 url 팝업경로
-				var width = 1300;
-				var height = 735;
-				var left = (window.screen.width / 2) - (width / 2);
-				var top = (window.screen.height /2) - (height / 2);
-				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-							
-				frmPop.action = popUrl;
-			    frmPop.target = 'popupView';
-			    frmPop.method = "post";
-			    
-			    window.open(popUrl,"popupView",popOption);	
-			    
-			    frmPop.resourceName.value = data.resourceName;
-			    frmPop.resourceNote.value = data.resourceNote;  
-			    frmPop.keyUid.value = data.keyUid;
-			    frmPop.keyStatusCode.value = data.keyStatusCode; 
-			    frmPop.keyStatusName.value = data.keyStatusName;
-			    frmPop.cipherAlgorithmName.value = data.cipherAlgorithmName; 
-			    frmPop.cipherAlgorithmCode.value = data.cipherAlgorithmCode;
-			    frmPop.submit();   
+				$.ajax({
+					url : "/popup/keyManageRegReForm.do", 
+				  	data : { 		
+				  		resourceName : data.resourceName,
+				  		resourceNote : data.resourceNote,
+				  		keyUid : data.keyUid,
+				  		keyStatusCode : data.keyStatusCode,
+				  		keyStatusName : data.keyStatusName,
+				  		cipherAlgorithmName : data.cipherAlgorithmName,
+				  		cipherAlgorithmCode : data.cipherAlgorithmCode
+				  	},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {		
+			
+						$("#mod_resourceName", "#modForm").val(nvlPrmSet(result.mod_resourceName, ""));
+						$("#mod_resourceNote", "#modForm").val(nvlPrmSet(result.mod_resourceNote, ""));
+						$("#mod_keyUid", "#modForm").val(nvlPrmSet(result.mod_keyUid, ""));
+						$("#mod_resourceUid", "#modForm").val(nvlPrmSet(result.mod_keyUid, ""));
+						$("#mod_keyStatusCode", "#modForm").val(nvlPrmSet(result.mod_keyStatusCode, ""));
+						$("#mod_keyStatusName", "#modForm").val(nvlPrmSet(result.mod_keyStatusName, ""));
+						$("#mod_cipherAlgorithmName", "#modForm").val(nvlPrmSet(result.mod_cipherAlgorithmName, ""));
+						$("#mod_cipherAlgorithmCode", "#modForm").val(nvlPrmSet(result.mod_cipherAlgorithmCode, ""));
+						$("#mod_updateDateTime", "#modForm").val(nvlPrmSet(result.mod_updateDateTime, ""));
+
+						
+						
+						//초기세팅
+						 $("#copyBin").prop('checked', false);
+						$("#renew").prop('checked', false);
+						
+						$("#renewInsert").css("display", "none"); 
+
+						//캘린더 셋팅
+						fn_modDateCalenderSetting();
+
+						$("#mod_cipherAlgorithmCode").prop("disabled", "disabled");
+						//초기세팅 끝
+						
+						$('#pop_layer_keyManageRegReForm').modal("show");
+						
+						fn_historyCryptoKeySymmetric();
+					}
+				});
+				
 			});
 		}
 
 	}
 	
 	$(window.document).ready(function() {
+		
 		fn_buttonAut();
 		fn_init();
 		fn_select();
 	});
 
 	function fn_buttonAut(){
+		
 		var btnInsert = document.getElementById("btnInsert"); 
 		var btnUpdate = document.getElementById("btnUpdate"); 
 		var btnDelete = document.getElementById("btnDelete"); 
@@ -136,16 +177,11 @@ var table = null;
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href = "/";
-				}else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {
@@ -155,79 +191,151 @@ var table = null;
 							table.rows.add(data.list).draw();
 						}
 					}else if(data.resultCode == "8000000002"){
-						alert("<spring:message code='message.msg05' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					}else if(data.resultCode == "8000000003"){
-						alert( data.resultMessage);
-						location.href = "/securityKeySet.do";
+						showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 					}else{
-						alert(data.resultMessage +"("+data.resultCode+")");		
+						showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 					}
 				}	
 		});
 	}
 
+	
+	
+	
 	/* 등록 버튼 클릭시*/
 	function fn_insert(){
-		var popUrl = "/popup/keyManageRegForm.do"; // 서버 url 팝업경로
-		var width = 1000;
-		var height = 410;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-		window.open(popUrl,"",popOption);	
+		
+		$("#ResourceName", "#baseForm").val(""); //암호화키이름
+		$("#CipherAlgorithmCode", "#baseForm").val(""); //적용알고리즘
+		$("#ResourceNote", "#baseForm").val(""); //암호화키설명
+		$("#ins_usr_expr_dt", "#baseForm").val(""); //유효기간만료일자만료일
+		
+		$.ajax({
+			url : "/popup/keyManageRegForm.do", 
+		  	data : {},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {		
+				$('#pop_layer_keyManageRegForm').modal("show");
+			}
+		});
 	}
+	
+	
+	
+	
+	
 	
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
- 		var datas = table.rows('.selected').data();
+
+		var datas = table.rows('.selected').data();
  		var data =  table.row('.selected').data();
+ 		
 
  		if (datas.length <= 0) {
- 			alert('<spring:message code="message.msg35" />');
+ 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
  			return false;
  		}else if (datas.length >1){
-			alert('<spring:message code="message.msg38" />');
+ 			showSwalIcon('<spring:message code="message.msg38" />', '<spring:message code="common.close" />', '', 'error');
  		}else{
- 			var frmPop= document.frmPopup;
- 			
-			var popUrl = "/popup/keyManageRegReForm.do"; // 서버 url 팝업경로
-			var width = 1300;
-			var height = 735;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-						
-			frmPop.action = popUrl;
-		    frmPop.target = 'popupView';
-		    frmPop.method = "post";
-		    
-		    window.open(popUrl,"popupView",popOption);	
-		    
-		    frmPop.resourceName.value = data.resourceName;
-		    frmPop.resourceNote.value = data.resourceNote;  
-		    frmPop.keyUid.value = data.keyUid;
-		    frmPop.keyStatusCode.value = data.keyStatusCode; 
-		    frmPop.keyStatusName.value = data.keyStatusName;
-		    frmPop.cipherAlgorithmName.value = data.cipherAlgorithmName; 
-		    frmPop.cipherAlgorithmCode.value = data.cipherAlgorithmCode;
-		    frmPop.submit();   
-		    
- 		}
+		
+		$.ajax({
+			url : "/popup/keyManageRegReForm.do", 
+		  	data : { 		
+		  		resourceName : data.resourceName,
+		  		resourceNote : data.resourceNote,
+		  		keyUid : data.keyUid,
+		  		keyStatusCode : data.keyStatusCode,
+		  		keyStatusName : data.keyStatusName,
+		  		cipherAlgorithmName : data.cipherAlgorithmName,
+		  		cipherAlgorithmCode : data.cipherAlgorithmCode
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {		
+	
+				$("#mod_resourceName", "#modForm").val(nvlPrmSet(result.mod_resourceName, ""));
+				$("#mod_resourceNote", "#modForm").val(nvlPrmSet(result.mod_resourceNote, ""));
+				$("#mod_keyUid", "#modForm").val(nvlPrmSet(result.mod_keyUid, ""));
+				$("#mod_resourceUid", "#modForm").val(nvlPrmSet(result.mod_keyUid, ""));
+				$("#mod_keyStatusCode", "#modForm").val(nvlPrmSet(result.mod_keyStatusCode, ""));
+				$("#mod_keyStatusName", "#modForm").val(nvlPrmSet(result.mod_keyStatusName, ""));
+				$("#mod_cipherAlgorithmName", "#modForm").val(nvlPrmSet(result.mod_cipherAlgorithmName, ""));
+				$("#mod_cipherAlgorithmCode", "#modForm").val(nvlPrmSet(result.mod_cipherAlgorithmCode, ""));
+				$("#mod_updateDateTime", "#modForm").val(nvlPrmSet(result.mod_updateDateTime, ""));
+
+				
+				
+				//초기세팅
+				 $("#copyBin").prop('checked', false);
+				$("#renew").prop('checked', false);
+				
+				$("#renewInsert").css("display", "none"); 
+
+				//캘린더 셋팅
+				fn_modDateCalenderSetting();
+
+				$("#mod_cipherAlgorithmCode").prop("disabled", "disabled");
+				//초기세팅 끝
+				
+				$('#pop_layer_keyManageRegReForm').modal("show");
+				
+				fn_historyCryptoKeySymmetric();
+			}
+		});
+ 	}
+}
+	
+	function fn_confirm(grn){
+		
+		if(grn == "del"){
+			var datas = table.rows('.selected').data();
+			if (datas.length <= 0) {
+				showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+	 			return false;
+	 		}else if (datas.length >1){
+	 			showSwalIcon('<spring:message code="message.msg38" />', '<spring:message code="common.close" />', '', 'error');
+	 		}
+		}else if (grn == "ins"){
+			if (!fn_validation()) return false;
+		}else if (grn == "mod"){
+			
+		}
+		
+		fn_multiConfirmModal(grn);
 	}
+	
 	
 	/* 삭제 버튼 클릭시*/
 	function fn_delete() {
-		var datas = table.rows('.selected').data();
-		if (datas.length <= 0) {
- 			alert('<spring:message code="message.msg35" />');
- 			return false;
- 		}else if (datas.length >1){
-			alert('<spring:message code="message.msg38" />');
- 		}else{
- 			if (!confirm('<spring:message code="message.msg162"/>'))return false;
- 			
+
  			var keyUid = table.row('.selected').data().keyUid;
  			var resourceName = table.row('.selected').data().resourceName;
  			var resourceTypeCode = table.row('.selected').data().resourceTypeCode;
@@ -246,124 +354,195 @@ var table = null;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("<spring:message code='message.msg02' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert("<spring:message code='message.msg03' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(data) {
 					if(data.resultCode == "0000000000"){
-						alert("<spring:message code='message.msg37' />");
-						location.reload();
+						showSwalIcon('<spring:message code="message.msg37" />', '<spring:message code="common.close" />', '', 'success');
+						fn_select();
 					}else if(data.resultCode == "8000000002"){
-						alert("<spring:message code='message.msg05' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					}else if(data.resultCode == "8000000003"){
-						alert(data.resultMessage);
-						location.href = "/securityKeySet.do";
+						showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 					}else{
-						alert(data.resultMessage +"("+data.resultCode+")");		
+						showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 					}				
 				}
 			});
- 		}	
+ 
+	}
+	
+	
+	
+	/* ********************************************************
+	 * confirm modal open
+	 ******************************************************** */
+	function fn_multiConfirmModal(gbn) {
+		if (gbn == "ins") {
+			confirm_title = '<spring:message code="encrypt_policy_management.Encryption_Key" />' + " " + '<spring:message code="common.registory" />';
+			$('#confirm_multi_msg').html('<spring:message code="message.msg143" />');
+		} else if (gbn == "del") {
+			confirm_title = '<spring:message code="encrypt_policy_management.Encryption_Key" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+		} else 	if (gbn == "mod") {
+			confirm_title = '<spring:message code="encrypt_policy_management.Encryption_Key" />' + " " + '<spring:message code="common.modify" />';
+			$('#confirm_multi_msg').html('<spring:message code="message.msg147" />');
+		}
+
+		
+		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
+		$('#confirm_multi_tlt').html(confirm_title);
+		$('#pop_confirm_multi_md').modal("show");
+	}
+	
+	
+	/* ********************************************************
+	 * confirm cancel result
+	 ******************************************************** */
+	function fnc_confirmCancelRst(gbn){
+		
+	}
+	
+	
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmMultiRst(gbn){
+		if (gbn == "del") {
+			fn_delete();
+		} else if (gbn == "ins") {
+			fn_insertCryptoKeySymmetric();
+		} else if (gbn == "mod") {
+			fn_keyManagementModify();
+		}
 	}
 </script>
 
-<form name="frmPopup" id="frmPopup">
-	<input type="hidden" name="resourceName"  id="resourceName">
-	<input type="hidden" name="resourceNote"  id="resourceNote">
-	<input type="hidden" name="keyUid"  id="keyUid">
-	<input type="hidden" name="keyStatusCode"  id="keyStatusCode">
-	<input type="hidden" name="keyStatusName"  id="keyStatusName">
-	<input type="hidden" name="cipherAlgorithmName"  id="cipherAlgorithmName">
-	<input type="hidden" name="cipherAlgorithmCode"  id="cipherAlgorithmCode">
-</form>
+<%@include file="../popup/keyManageRegForm.jsp"%>
+<%@include file="../popup/keyManageRegReForm.jsp"%>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 
 
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="encrypt_key_management.Encryption_Key_Management"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
-			<div class="infobox">
-				<ul>
-					<li><spring:message code="encrypt_help.Encryption_Key_Management_01"/></li>
-					<li><spring:message code="encrypt_help.Encryption_Key_Management_02"/></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Encrypt</li>
-					<li><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
-					<li class="on"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></li>
-				</ul>
-			</div>
-		</div>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-<!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
-					<span class="btn" onclick="fn_insert();"><button type="button" id="btnInsert"><spring:message code="common.registory" /></button></span>
-					<span class="btn" onclick="fn_update();"><button type="button" id="btnUpdate"><spring:message code="common.modify" /></button></span>
-					<span class="btn" onclick="fn_delete();"><button type="button" id="btnDelete"><spring:message code="common.delete" /></button></span>
-				</div>
-<!-- 				<div class="sch_form"> -->
-<!-- 					<table class="write"> -->
-<%-- 						<caption>검색 조회</caption> --%>
-<%-- 						<colgroup> --%>
-<%-- 							<col style="width: 100px;" /> --%>
-<%-- 							<col /> --%>
-<%-- 							<col style="width: 100px;" /> --%>
-<%-- 							<col /> --%>
-<%-- 						</colgroup> --%>
-<!-- 						<tbody> -->
-<!-- 							<tr> -->
-<!-- 								<th scope="row" class="t9">키이름</th> -->
-<!-- 								<td><input type="text" class="txt t2" id="resourceName" name="resourceName"/></td> -->
-<!-- 								<th scope="row" class="ico_t1">적용 알고리즘</th> -->
-<!-- 								<td> -->
-<!-- 									<select class="select t5" id="cipherAlgorithmCode" name="cipherAlgorithmCode" > -->
-<%-- 												<option value="<c:out value=""/>" ><c:out value="전체"/></option> --%>
-<%-- 											<c:forEach var="result" items="${result}" varStatus="status">												 --%>
-<%-- 												<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option> --%>
-<%-- 											</c:forEach>  --%>
-<!-- 									</select> -->
-<!-- 								</td> -->
-<!-- 							</tr> -->
-<!-- 						</tbody> -->
-<!-- 					</table> -->
-<!-- 				</div> -->
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
 
-				<div class="overflow_area">
-					<table id="keyManageTable" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="20"></th>
-								<th width="40"><spring:message code="common.no" /></th>
-								<th width="200"><spring:message code="encrypt_key_management.Key_Name"/></th>
-								<th width="80"><spring:message code="encrypt_key_management.Key_Type"/></th>
-								<th width="130"><spring:message code="encrypt_key_management.Encryption_Algorithm"/></th>
-								<th width="80"><spring:message code="common.register" /></th>
-								<th width="150"><spring:message code="common.regist_datetime" /></th>
-								<th width="80"><spring:message code="common.modifier" /></th>
-								<th width="150"><spring:message code="common.modify_datetime" /></th>
-								<th width="0"></th>
-								<th width="0"></th>
-								<th width="0"></th>
-								<th width="0"></th>
-								<th width="0"></th>		
-								<th width="0"></th>							
-							</tr>
-						</thead>
-					</table>
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							Encrypt
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="encrypt_help.Encryption_Key_Management_01"/></p>
+											<p class="mb-0"><spring:message code="encrypt_help.Encryption_Key_Management_02"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+		
+		
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<div class="row" style="margin-top:-20px;">
+						<div class="col-12">
+							<div class="template-demo">			
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_confirm('del');" >
+									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnUpdate" onClick="fn_update();" data-toggle="modal">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_insert();" data-toggle="modal">
+									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
+								</button>
+							</div>
+						</div>
+					</div>
+				
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="keyManageTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+ 											<tr class="bg-info text-white">
+												<th width="20"></th>
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="200"><spring:message code="encrypt_key_management.Key_Name"/></th>
+												<th width="80"><spring:message code="encrypt_key_management.Key_Type"/></th>
+												<th width="130"><spring:message code="encrypt_key_management.Encryption_Algorithm"/></th>
+												<th width="80"><spring:message code="common.register" /></th>
+												<th width="150"><spring:message code="common.regist_datetime" /></th>
+												<th width="80"><spring:message code="common.modifier" /></th>
+												<th width="150"><spring:message code="common.modify_datetime" /></th>
+												<th width="0"></th>
+												<th width="0"></th>
+												<th width="0"></th>
+												<th width="0"></th>
+												<th width="0"></th>		
+												<th width="0"></th>	
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>	
+		
+		
 	</div>
-</div>
-<!-- // contents -->
+</div>		

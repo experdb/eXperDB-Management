@@ -227,6 +227,15 @@ public class ProtocolID {
 	public static final String EXIT_ON_ERROR = "EXIT_ON_ERROR";
 	public static final String DUMP_OPTION = "DUMP_OPTION";
 	public static final String DB_NM = "DB_NM";
+	
+	//복원관련 추가
+	public static final String BLOBS_ONLY_YN = "BLOBS_ONLY_YN";
+	public static final String NO_UNLOGGED_TABLE_DATA_YN = "NO_UNLOGGED_TABLE_DATA_YN";
+	public static final String USE_COLUMN_INSERTS_YN = "USE_COLUMN_INSERTS_YN";
+	public static final String USE_COLUMN_COMMANDS_YN = "USE_COLUMN_COMMANDS_YN";
+	public static final String OIDS_YN = "OIDS_YN";
+	public static final String IDENTIFIER_QUOTES_APPLY_YN = "IDENTIFIER_QUOTES_APPLY_YN";
+	public static final String OBJ_CMD = "OBJ_CMD";
 
 	/* scale 관련 */
 	public static final String SCALE_SET = "SCALE_SET";
@@ -247,5 +256,27 @@ public class ProtocolID {
 	public static final String CONNECT_INFO = "CONNECT_INFO";
 	public static final String MAPP_INFO = "MAPP_INFO";
 	public static final String TRANS_ID = "TRANS_ID";
+	
+	
+	public static final String PGTOTAL = "PGTOTAL";
+	public static final String PGWAL_V = "PGWAL_V";
+	public static final String PGWAL_CNT = "PGWAL_CNT";
+	public static final String PGALOG_V = "PGALOG_V";
+	public static final String PGRBAK_V = "PGRBAK_V";
+	public static final String PGDBAK_V = "PGDBAK_V";
+	public static final String PGALOG_PATH = "PGALOG_PATH";
+	public static final String PGRBAK_PATH = "PGRBAK_PATH";
+	public static final String PGDBAK_PATH = "PGDBAK_PATH";
+	public static final String PGWAL_PATH = "PGWAL_PATH";
+	public static final String WAL_KEEP_SEGMENTS = "WAL_KEEP_SEGMENTS";
+	public static final String BACKUP_PATH = "BACKUP_PATH";
+	public static final String BACKUP_MOUNT = "BACKUP_MOUNT";
+	public static final String BACKUP_V = "BACKUP_V";
+	public static final String LOG_PATH = "LOG_PATH";
+	public static final String LOG_V = "LOG_V";
+	public static final String CMD_BACKUPSPACE_INFO = "CMD_BACKUPSPACE_INFO";
+	public static final String PGALOG_CNT = "PGALOG_CNT";
+	public static final String LOG_CNT = "LOG_CNT";
+	
 	
 }

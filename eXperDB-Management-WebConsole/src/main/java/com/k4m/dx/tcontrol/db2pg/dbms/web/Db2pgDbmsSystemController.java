@@ -63,8 +63,10 @@ public class Db2pgDbmsSystemController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pgDBMS.do")
-	public ModelAndView db2pgDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView db2pgDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		List<Db2pgSysInfVO> resultSet = null;
+		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -72,9 +74,36 @@ public class Db2pgDbmsSystemController {
 			historyVO.setMnu_id(40);
 			accessHistoryService.insertHistory(historyVO);
 			
-			dbmsGrb = dbmsService.dbmsListDbmsGrb();		
-			
+			dbmsGrb = dbmsService.dbmsListDbmsGrb();
 			mv.addObject("result", dbmsGrb);
+			dbmsGrb = dbmsService.dbmsGrb();
+			mv.addObject("dbmsGrb_reg", dbmsGrb);
+			dbmsGrb = dbmsService.dbmsGrb();
+			mv.addObject("dbmsGrb_reg_re", dbmsGrb);
+			
+			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
+			
+			if(resultSet.size()>0){
+				if(resultSet.get(0).getDbms_dscd().equals("TC002201")){
+					paramvalue.put("dbms_dscd", "TC0023");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002208")){
+					paramvalue.put("dbms_dscd", "TC0024");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002205")){
+					paramvalue.put("dbms_dscd", "TC0025");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002203")){
+					paramvalue.put("dbms_dscd", "TC0027");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002206")){
+					paramvalue.put("dbms_dscd", "TC0026");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002204")){
+					paramvalue.put("dbms_dscd", "TC0005");
+				}else if(resultSet.get(0).getDbms_dscd().equals("TC002202")){
+					paramvalue.put("dbms_dscd", "TC0038");
+				}
+			}
+
+			dbmsChar = dbmsService.selectCharSetList(paramvalue);
+			mv.addObject("dbmsChar_reg_re", dbmsChar);
+			
 			mv.setViewName("db2pg/dbms/dbmsList");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,11 +122,8 @@ public class Db2pgDbmsSystemController {
 	 */
 	@RequestMapping(value = "/db2pg/popup/dbmsRegReForm.do")
 	public ModelAndView dbmsRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		
+		ModelAndView mv = new ModelAndView("jsonView");
 		List<Db2pgSysInfVO> resultSet = null;
-		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
-		
 		try {				
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -107,31 +133,12 @@ public class Db2pgDbmsSystemController {
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			
-			dbmsGrb = dbmsService.dbmsGrb();
 			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
-			String pwd = dec.aesDecode(resultSet.get(0).getPwd()).toString();
 			
-			if(resultSet.get(0).getDbms_dscd().equals("TC002201")){
-				paramvalue.put("dbms_dscd", "TC0023");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002208")){
-				paramvalue.put("dbms_dscd", "TC0024");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002205")){
-				paramvalue.put("dbms_dscd", "TC0025");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002203")){
-				paramvalue.put("dbms_dscd", "TC0027");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002206")){
-				paramvalue.put("dbms_dscd", "TC0026");
-			}else if(resultSet.get(0).getDbms_dscd().equals("TC002204")){
-				paramvalue.put("dbms_dscd", "TC0005");
-			}
-
-			dbmsChar = dbmsService.selectCharSetList(paramvalue);
-
+			String pwd = dec.aesDecode(resultSet.get(0).getPwd()).toString();
 			mv.addObject("pwd", pwd);
-			mv.addObject("result", dbmsGrb);
-			mv.addObject("dbmsChar", dbmsChar);
+			
 			mv.addObject("resultInfo", resultSet);
-			mv.setViewName("db2pg/popup/dbmsRegReForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -326,6 +333,8 @@ public class Db2pgDbmsSystemController {
 				paramvalue.put("dbms_dscd", "TC0005");
 			}else if(dbms_dscd.equals("TC002207")){
 				paramvalue.put("dbms_dscd", "TC0031");
+			}else if(dbms_dscd.equals("TC002202")){
+				paramvalue.put("dbms_dscd", "TC0038");
 			}
 				
 			 result = dbmsService.selectCharSetList(paramvalue);
@@ -438,6 +447,8 @@ public class Db2pgDbmsSystemController {
 			if(db2pgSysInfVO.getDbms_dscd().equals("TC002201")){
 				db2pgSysInfVO.setScm_nm(db2pgSysInfVO.getScm_nm().toUpperCase());
 				db2pgSysInfVO.setDtb_nm(db2pgSysInfVO.getDtb_nm().toUpperCase());
+			}else if (db2pgSysInfVO.getDbms_dscd().equals("TC002208")){
+				db2pgSysInfVO.setScm_nm(db2pgSysInfVO.getScm_nm().toUpperCase());
 			}
 			
 			dbmsService.insertDb2pgDBMS(db2pgSysInfVO);	
@@ -499,4 +510,75 @@ public class Db2pgDbmsSystemController {
 		}
 		return true;
 	}
+	
+	
+	
+	
+	/**
+	 * 해당 시스템이 등록된 WORK 있는지 확인
+	 * 
+	 * @param db2pg_sys_id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/exeMigCheck.do")
+	public @ResponseBody int exeMigCheck(HttpServletRequest request, HttpServletResponse response) {
+		
+		int result = 0;
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		try {				
+			
+			String db2pg_sys_id =  request.getParameter("db2pg_sys_id");
+			String db2pg_trg_sys_id = request.getParameter("db2pg_trg_sys_id");
+
+			param.put("db2pg_sys_id", db2pg_sys_id);
+			param.put("db2pg_trg_sys_id", db2pg_trg_sys_id);
+			
+			int ddl_result = dbmsService.db2pg_ddl_check(param);				
+			int mig_result = dbmsService.db2pg_mig_check(param);		
+			
+			result = ddl_result+mig_result;		
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	
+	/**
+	 * DB2PG DBMS 시스템을 삭제한다.
+	 * 
+	 * @param db2pgSysInfVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/deleteDBMS.do")
+	public @ResponseBody boolean deleteDBMS(
+			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
+			@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
+			@ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request, HttpServletResponse response) throws ParseException {
+
+		// 해당메뉴 권한 조회 (공통메소드호출)
+		
+		try {
+			
+			int db2pg_sys_id =  Integer.parseInt(request.getParameter("db2pg_sys_id"));
+			
+			dbmsService.deleteDBMS(db2pg_sys_id);	
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+		
+	
 }

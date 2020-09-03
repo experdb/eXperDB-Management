@@ -93,7 +93,7 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/popup/dbServerRegForm.do")
 	public ModelAndView dbServerRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -115,7 +115,6 @@ public class DbServerManagerController {
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
-				mv.setViewName("popup/dbServerRegForm");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,6 +195,12 @@ public class DbServerManagerController {
 				serverObj.put(ClientProtocolID.DATABASE_NAME, jsonObject.get("DATABASE_NAME").toString());
 				serverObj.put(ClientProtocolID.USER_ID, jsonObject.get("USER_ID").toString());
 				serverObj.put(ClientProtocolID.USER_PWD, jsonObject.get("USER_PWD").toString());
+				
+				
+				
+				System.out.println("DATABASE_NAME"+jsonObject.get("DATABASE_NAME").toString());
+				System.out.println("USER_ID"+jsonObject.get("USER_ID").toString());
+				System.out.println("USER_PWD"+ jsonObject.get("USER_PWD").toString());
 				
 				ClientInfoCmmn conn  = new ClientInfoCmmn();
 				result = conn.DbserverConnTest(serverObj, IP, PORT);
@@ -381,7 +386,7 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/popup/dbServerRegReForm.do")
 	public ModelAndView dbServerRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -406,7 +411,6 @@ public class DbServerManagerController {
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.addObject("db_svr_id", db_svr_id);
-				mv.setViewName("popup/dbServerRegReForm");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -461,7 +465,7 @@ public class DbServerManagerController {
 		}
 				
 		//IP정보 삭제
-		if(updateResult.equals("S")){
+		/*if(updateResult.equals("S")){
 			try {			
 				System.out.println(dbServerVO.getDb_svr_id());
 				cmmnServerInfoService.deleteIpadr(dbServerVO);
@@ -470,15 +474,44 @@ public class DbServerManagerController {
 				e.printStackTrace();
 				deleteResult = "F";
 			}
-		}
+		}*/
+
+		try {
+			
+			String db_svr_id = request.getParameter("db_svr_id");
+			
+			int ipadrCnt = dbServerManagerService.selectIpadrCnt();
+
+			String strRows = request.getParameter("ipmaps").toString().replaceAll("&quot;", "\"");
+			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+
+			List<String> ids = new ArrayList<String>(); 
+			HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+			
+			if(ipadrCnt >= rows.size()){
+				for(int i=0; i<rows.size(); i++){
+					ids.add(rows.get(i).toString()); 
+				}
+				paramvalue.put("db_svr_ipadr_id", ids);
+				paramvalue.put("db_svr_id", db_svr_id);
 				
+				System.out.println(paramvalue.get("db_svr_ipadr_id"));
+				
+				dbServerManagerService.deleteIpadr(paramvalue);
+				System.out.println("IP정보 삭제 완료");
+			}
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}			
+		
 		//아이피  등록
 		if(deleteResult.equals("S")){
 			try {
 				String strRows = request.getParameter("ipadrArr").toString().replaceAll("&quot;", "\"");
 				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 
-				for (int i = 0; i < rows.size(); i++) {
+				for (int i = 0; i < rows.size(); i++) {	
 					JSONObject jsrow = (JSONObject) rows.get(i);
 					ipadrVO.setDb_svr_id(ipadrVO.getDb_svr_id());
 					ipadrVO.setIPadr(jsrow.get("ipadr").toString());
@@ -486,9 +519,16 @@ public class DbServerManagerController {
 					ipadrVO.setMaster_gbn(jsrow.get("master_gbn").toString());
 					ipadrVO.setSvr_host_nm(jsrow.get("svr_host_nm").toString());
 					ipadrVO.setFrst_regr_id(id);
-					ipadrVO.setLst_mdfr_id(id);
-					dbServerManagerService.insertIpadr(ipadrVO);		
-					System.out.println("IP정보 등록 완료");
+					ipadrVO.setLst_mdfr_id(id);					
+					ipadrVO.setDb_svr_ipadr_id(Integer.parseInt(jsrow.get("db_svr_ipadr_id").toString()));
+
+					if(Integer.parseInt(jsrow.get("db_svr_ipadr_id").toString()) < 0){
+						dbServerManagerService.insertIpadr(ipadrVO);		
+						System.out.println("IP정보 등록 완료");
+					}else{
+						dbServerManagerService.updateIpadr(ipadrVO);
+						System.out.println("IP정보 업데이트 완료");
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

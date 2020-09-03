@@ -49,4 +49,10 @@ public class ScriptDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectScriptScheduleList(ScriptVO scriptVO) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scriptSql.selectScriptScheduleList", scriptVO);		
+		return sl;
+	}
 }

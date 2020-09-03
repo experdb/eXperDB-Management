@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="../../cmmn/cs2.jsp"%>
+
 
 <%
 	/**
@@ -14,6 +17,7 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2018.01.04     최초 생성
+	*  2020.08.06   변승우 과장		UI 디자인 변경	
 	*
 	* author 변승우 대리
 	* since 2018.01.04
@@ -21,14 +25,6 @@
 	*/
 %>
 
-<style>
-#ifram_hidden
-{
-width:1px;
-height:1px;
-border:0;
-}
-</style>
 
 <script>
 var isServerKeyEmpty  = "${isServerKeyEmpty}";
@@ -40,13 +36,15 @@ var pnlNewPasswordView ="";
 var mstKeyUseChk ="";
 var mstKeyRenewChk ="";
 var initKey="";
+
+
+
 /* ********************************************************
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
 	if(resultCode=="8000000002"){
-		alert("<spring:message code='message.msg05' />");
-		top.location.href = "/";
+		showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 	}
 	
 	fn_buttonAut();
@@ -58,7 +56,7 @@ $(window.document).ready(function() {
 			
 			pnlNewPasswordView = true;
 			pnlOldPasswordView = false;
-			$("#mstKeyUse").attr('checked', false);
+			$("#mstKeyUse").prop('checked', false);
 			
 		}else if(isServerPasswordEmpty == "false" && isServerKeyEmpty == "true") {
 			initKey = false;
@@ -123,19 +121,19 @@ function fn_validation(){
 		if(mstKeyUseChk == true){
 			var mstKeyPth = document.getElementById("mstKeyPth");
 			if (mstKeyPth.value == "") {
-				   alert('<spring:message code="encrypt_msg.msg04"/>');
+				   showSwalIcon('<spring:message code="encrypt_msg.msg04"/>', '<spring:message code="common.close" />', '', 'error');
 				   mstKeyPth.focus();
 				   return false;
 			}			
 		}		
 			var mstKeyPassword = document.getElementById("mstKeyPassword");
 			if (mstKeyPassword.value == "") {
-				   alert('<spring:message code="message.msg129" />');
+					showSwalIcon('<spring:message code="message.msg129" />', '<spring:message code="common.close" />', '', 'error');
 				   mstKeyPassword.focus();
 				   return false;
 			}			
 			if (mstKeyPassword.value.length < 8 ) {
-				   alert('<spring:message code="encrypt_msg.msg05" />');
+					showSwalIcon('<spring:message code="encrypt_msg.msg05"/>', '<spring:message code="common.close" />', '', 'error');
 				   mstKeyPassword.focus();
 				   return false;
 			}
@@ -146,25 +144,25 @@ function fn_validation(){
 	if(pnlNewPasswordView == true){
 		var mstKeyRenewPassword = document.getElementById("mstKeyRenewPassword");
 		if (mstKeyRenewPassword.value == "") {
-			   alert('<spring:message code="message.msg111" />');
+				showSwalIcon('<spring:message code="message.msg111" />', '<spring:message code="common.close" />', '', 'error');
 			   mstKeyRenewPassword.focus();
 			   return false;
 		}
 		var mstKeyRenewPasswordconfirm = document.getElementById("mstKeyRenewPasswordconfirm");
 		if (mstKeyRenewPasswordconfirm.value == "") {
-			   alert('<spring:message code="message.msg111" />');
+				showSwalIcon('<spring:message code="message.msg111" />', '<spring:message code="common.close" />', '', 'error');
 			   mstKeyRenewPasswordconfirm.focus();
 			   return false;
 		}
 		
 		if (mstKeyRenewPassword.value.length < 8 ) {
-			   alert('<spring:message code="encrypt_msg.msg05" />');
+			showSwalIcon('<spring:message code="encrypt_msg.msg05" />', '<spring:message code="common.close" />', '', 'error');
 			   mstKeyRenewPassword.focus();
 			   return false;
 		}
 		
 		if($("#mstKeyRenewPassword").val() != $("#mstKeyRenewPasswordconfirm").val()){
-			alert('<spring:message code="message.msg112" />');
+			showSwalIcon('<spring:message code="message.msg112"/>', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 		
@@ -173,9 +171,9 @@ function fn_validation(){
 }
 
 function fn_save(){	
-	
+
 	if (!fn_validation()) return false;
-	
+
 	mstKeyRenewChk =  $("#mstKeyRenew").prop("checked");
 	mstKeyUseChk = $("#mstKeyUse").prop("checked");
 
@@ -225,20 +223,18 @@ function fn_keyFileLoadServerKey(){
 		type : "post",
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert('<spring:message code="encrypt_msg.msg01"/>');
+				showSwalIcon('<spring:message code="encrypt_msg.msg01"/>', '<spring:message code="common.close" />', '', 'success');
 			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");
+				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	});
@@ -259,20 +255,18 @@ function fn_noKeyFileLoadServerKey(keyPassword){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert('<spring:message code="encrypt_msg.msg01"/>');
+				showSwalIcon('<spring:message code="encrypt_msg.msg01"/>', '<spring:message code="common.close" />', '', 'success');
 			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");
+				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	});
@@ -303,13 +297,11 @@ function fn_newMasterKey(useYN,chk,initKey){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
@@ -319,12 +311,12 @@ function fn_newMasterKey(useYN,chk,initKey){
 					fn_mstKeyDownload();	
 				}
 				if(initKey == true){
-					alert('<spring:message code="encrypt_msg.msg01"/>');
+					showSwalIcon('<spring:message code="encrypt_msg.msg01"/>', '<spring:message code="common.close" />', '', 'success');	
 				}else{
-					alert('<spring:message code="encrypt_msg.msg02"/>');
+					showSwalIcon('<spring:message code="encrypt_msg.msg02"/>', '<spring:message code="common.close" />', '', 'success');
 				}
 			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");
+				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	});	
@@ -337,134 +329,214 @@ function fn_mstKeyDownload(){
 }
 </script>
 
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="encrypt_help.Setting_the_server_master_key_password"/></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Encrypt</li>
-					<li><spring:message code="encrypt_policyOption.Settings"/></li>
-					<li class="on"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></li>
-				</ul>
-			</div>
-		</div>
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
 
-		<div class="contents">
-		<form id="masterKey" method="post" enctype="multipart/form-data" action="">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><span id="btnSave"><spring:message code="common.save"/></span></a> 
-				</div>
-			<%-- <form class="securityKeySet" method="post" enctype="multipart/form-data"> --%>
-				<div class="cmm_bd" id="pnlOldPassword">
-					<div class="overflows_areas">
-						<table class="write">
-							<colgroup>
-								<col style="width: 15%" />
-								<col style="width: 60%" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<td colspan="2">
-										<div class="inp_chk">
-											<span> <input type="checkbox" id="mstKeyUse" name="mstKeyUse" onClick="fn_mstKeyUse();" /> 
-												<label for="mstKeyUse"><spring:message code="encrypt_serverMasterKey.Using_the_Master_Key_File"/></label>
-											</span>
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							Encrypt
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policyOption.Settings"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>					
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="encrypt_help.Setting_the_server_master_key_password"/></p>
 										</div>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Master_Key_Path"/></th>
-									<td>
-										<input type="text" name="mstKeyPth" id="mstKeyPth" class="txt t9" />
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02"  style="width: 60px; margin-right: -60px; margin-top: 0;" onClick="document.getElementById('keyFile').click();"><spring:message code="encrypt_serverMasterKey.Browse"/></button></span>
-										<input type="file" size="30" id="keyFile" name="keyFile" style="display:none;" onchange="document.getElementById('mstKeyPth').value=this.value;" />
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Password"/></th>
-									<td>
-										<input type="password" name="mstKeyPassword" id="mstKeyPassword" class="txt t2"  placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
-									</td>
-								</tr>
-							</tbody>
-						</table>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				
-				
-				<div class="cmm_bd" style="margin-top: 20px;" id="pnlChangePassword">
-					<div class="overflows_areas">
-						<table class="write">
-							<colgroup>
-								<col style="width: 100%;" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<td colspan="2">
-										<div class="inp_chk">
-											<span> <input type="checkbox" id="mstKeyRenew" name="mstKeyRenew"  onClick="fn_mstKeyRenew();"/> 
-												<label for="mstKeyRenew"><spring:message code="encrypt_serverMasterKey.Server_master_key_update"/></label>
-											</span>
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				
-				
-				<div class="cmm_bd" style="margin-top: 5px;" id="pnlNewPassword">
-					<div class="overflows_areas">
-						<table class="write">
-							<colgroup>
-								<col style="width: 15%" />
-								<col style="width: 85%;" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Master_key_file_mode"/></th>
-									<td>
-										<select name="mstKeyMode" id="mstKeyMode"  class="select t5">
-											<option value="0000"><spring:message code="encrypt_serverMasterKey.New_master_key_file"/> </option>
-											<option value="1111"><spring:message code="encrypt_serverMasterKey.Not_using_the_master_key_file"/> </option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Password"/></th>
-									<td>
-										<input type="password" name="mstKeyRenewPassword" id="mstKeyRenewPassword" class="txt t2" placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Confirm_Password"/></th>
-									<td>
-										<input type="password" name="mstKeyRenewPasswordconfirm" id="mstKeyRenewPasswordconfirm" class="txt t2"  placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<%-- </form>	 --%>
 			</div>
-			</form>
-			
-			<iframe id="ifram_hidden" name="mskKeyForm"></iframe>
-			<form name="keyDownload" method="post" target="mskKeyForm" action="/keyDownload.do">
-				<input type="hidden" name="mstKey"  id="mstKey" >
-			</form>
 		</div>
+		
+		
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12">
+							<div class="template-demo">	
+								<%-- <button type="button" onClick="fn_agentMonitoringModifyForm();" id="btnUpdate"><spring:message code="common.modify" /></button> --%>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSave" onClick="fn_save();">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.save" />
+								</button>		
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:235px;">			
+								<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+									<form class="cmxform" id="baseForm">
+										<fieldset>																		
+											<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">					
+												<div class="form-check"  style="margin-left: 20px;">
+								                            <label class="form-check-label">
+								                              <input type="checkbox" class="form-check-input" id="mstKeyUse" name="mstKeyUse"   onClick="fn_mstKeyUse();" />
+								                             <spring:message code="encrypt_serverMasterKey.Using_the_Master_Key_File"/>	
+								                            <i class="input-helper"></i></label>
+								                 </div>					
+											</div>	
+											
+											<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-1_5 col-form-label-sm pop-label-index" style="margin-left: 75px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_serverMasterKey.Master_Key_Path"/>
+													</label>
+													
+													<div class="col-sm-3">
+														<input type="text" class="form-control"   id="mstKeyPth" name="mstKeyPth" />
+													</div>			
+													<div class="col-sm-1_5">
+														<input class="btn btn-inverse-secondary btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" type="button" onClick="document.getElementById('keyFile').click();" value='<spring:message code="encrypt_serverMasterKey.Browse"/>' />
+														<input type="file"  class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect"  size="30" id="keyFile" name="keyFile" style="display:none;" onchange="document.getElementById('mstKeyPth').value=this.value;" />
+													</div>																				
+											</div>							
+																	
+																	
+											<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-1_5 col-form-label-sm pop-label-index" style="margin-left: 75px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_serverMasterKey.Password"/>
+													</label>
+													<div class="col-sm-3">
+													<input type="password" class="form-control " id="mstKeyPassword" name="mstKeyPassword"  placeholder="<spring:message code="encrypt_msg.msg05"/>"/>
+												</div>										
+											</div>							
+																	
+									</fieldset>
+								</form>	
+							</div>
+						</div>		
+				</div>
+				
+				
+				<div class="card-body"  id="pnlChangePassword">
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:100px;">			
+								<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+									<form class="cmxform" id="baseForm">
+										<fieldset>																		
+											<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">					
+												<div class="form-check"  style="margin-left: 20px;">
+								                            <label class="form-check-label">
+								                              <input type="checkbox" class="form-check-input" id="mstKeyRenew" name="mstKeyRenew"   onClick="fn_mstKeyRenew();" />
+								                             <spring:message code="encrypt_serverMasterKey.Server_master_key_update"/>
+								                            <i class="input-helper"></i></label>
+								                 </div>					
+											</div>	
+							
+									</fieldset>
+								</form>	
+							</div>
+						</div>		
+				</div>
+				
+				
+				<div class="card-body" id="pnlNewPassword">
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:225px;">			
+								<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+									<form class="cmxform" id="baseForm">
+										<fieldset>																		
+											
+											<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-1_5 col-form-label-sm pop-label-index" style="margin-left: 75px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_serverMasterKey.Master_key_file_mode"/>
+													</label>
+													<div class="col-sm-3">
+													<select class="form-control " style="margin-right: 1rem;" name="mstKeyMode" id="mstKeyMode" >
+															<option value="0000"><spring:message code="encrypt_serverMasterKey.New_master_key_file"/> </option>
+															<option value="1111"><spring:message code="encrypt_serverMasterKey.Not_using_the_master_key_file"/> </option>
+													</select>
+												</div>									
+											</div>	
+											
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-1_5 col-form-label-sm pop-label-index" style="margin-left: 75px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_serverMasterKey.Password"/>
+													</label>
+													<div class="col-sm-3">
+													<input type="password" class="form-control " id="mstKeyRenewPassword" name="mstKeyRenewPassword"    placeholder="<spring:message code="encrypt_msg.msg05"/>"/>
+												</div>										
+											</div>	
+											
+												<div class="form-group row" style="margin-bottom:10px;">
+													<label for="ins_connect_nm" class="col-sm-1_5 col-form-label-sm pop-label-index" style="margin-left: 75px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_serverMasterKey.Confirm_Password"/>
+													</label>
+													<div class="col-sm-3">
+													<input type="password" class="form-control " id="mstKeyRenewPasswordconfirm" name="mstKeyRenewPasswordconfirm"  placeholder="<spring:message code="encrypt_msg.msg05"/>"/>
+												</div>										
+											</div>	
+							
+									</fieldset>
+								</form>	
+							</div>
+						</div>		
+				</div>
+				
+				
+			</div>
+		</div>
+		
+		
+
+		
+		
 	</div>
-</div>
+</div>		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

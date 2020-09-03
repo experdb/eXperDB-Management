@@ -40,6 +40,71 @@ public class RestoreDumpVO {
 	private String db_nm;
 	private String file_sz;
 	private String bck_filenm;
+	
+	//2020.08.07 추가
+	private String blobs_only_yn;
+	private String no_unlogged_table_data_yn;
+	private String use_column_inserts_yn;
+	private String use_column_commands_yn;
+	private String oids_yn;
+	private String identifier_quotes_apply_yn;
+	private String obj_cmd;
+
+	public String getObj_cmd() {
+		return obj_cmd;
+	}
+
+	public void setObj_cmd(String obj_cmd) {
+		this.obj_cmd = obj_cmd;
+	}
+
+	public String getIdentifier_quotes_apply_yn() {
+		return identifier_quotes_apply_yn;
+	}
+
+	public void setIdentifier_quotes_apply_yn(String identifier_quotes_apply_yn) {
+		this.identifier_quotes_apply_yn = identifier_quotes_apply_yn;
+	}
+
+	public String getBlobs_only_yn() {
+		return blobs_only_yn;
+	}
+
+	public void setBlobs_only_yn(String blobs_only_yn) {
+		this.blobs_only_yn = blobs_only_yn;
+	}
+
+	public String getNo_unlogged_table_data_yn() {
+		return no_unlogged_table_data_yn;
+	}
+
+	public void setNo_unlogged_table_data_yn(String no_unlogged_table_data_yn) {
+		this.no_unlogged_table_data_yn = no_unlogged_table_data_yn;
+	}
+
+	public String getUse_column_inserts_yn() {
+		return use_column_inserts_yn;
+	}
+
+	public void setUse_column_inserts_yn(String use_column_inserts_yn) {
+		this.use_column_inserts_yn = use_column_inserts_yn;
+	}
+
+	public String getUse_column_commands_yn() {
+		return use_column_commands_yn;
+	}
+
+	public void setUse_column_commands_yn(String use_column_commands_yn) {
+		this.use_column_commands_yn = use_column_commands_yn;
+	}
+
+	public String getOids_yn() {
+		return oids_yn;
+	}
+
+	public void setOids_yn(String oids_yn) {
+		this.oids_yn = oids_yn;
+	}
 
 	public int getRownum() {
 		return rownum;

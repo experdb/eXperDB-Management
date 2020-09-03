@@ -121,5 +121,14 @@ public interface DbServerManagerService {
 
 
 	List<DbServerVO> selectPgDbmsList()  throws Exception;
+
+
+	void updateIpadr(IpadrVO ipadrVO) throws Exception;
+
+
+	void deleteIpadr(HashMap<String, Object> paramvalue) throws Exception;
+
+
+	int selectIpadrCnt() throws Exception;
 	
 }

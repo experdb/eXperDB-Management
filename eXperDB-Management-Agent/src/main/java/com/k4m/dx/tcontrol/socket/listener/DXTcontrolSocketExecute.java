@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.socket.listener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 import org.json.simple.JSONArray;
@@ -46,6 +47,7 @@ import com.k4m.dx.tcontrol.server.DxT036;
 import com.k4m.dx.tcontrol.server.DxT037;
 import com.k4m.dx.tcontrol.server.DxT038;
 import com.k4m.dx.tcontrol.server.DxT039;
+import com.k4m.dx.tcontrol.server.DxT040;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -381,6 +383,14 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					dxT039.execute(strDX_EX_CODE, jObj);
 		
 					break;
+					
+				case TranCodeType.DxT040 :
+						
+					
+					DxT040 dxT040 = new DxT040(client, is, os);
+					dxT040.execute(strDX_EX_CODE, jObj);
+
+					break;
 				}
 				objSERVER_INFO = null;
 
@@ -388,6 +398,12 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 			
 		} catch(Exception e) {
 			errLogger.error("{} {}", "experDB Socket Execute Error : ", e.toString());
+		}finally{
+			try{
+				client.close();
+			}catch(IOException e){
+				errLogger.error("{} {}", "experDB Socket Close Error : ", e.toString());
+			}
 		}
 		
 	}

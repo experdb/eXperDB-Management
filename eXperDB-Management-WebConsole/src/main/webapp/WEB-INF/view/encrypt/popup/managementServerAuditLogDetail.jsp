@@ -1,9 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%
 	/**
 	* @Class Name : managementServerAuditLogDetail.jsp
@@ -12,14 +10,51 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2018.03.19     최초 생성
+	*  2020.07.24    변승우 과장		UI 변경
 	*
 	* author 김주영 사원
 	* since 2018.03.19
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+<div class="modal fade" id="pop_managementServerAuditLogDetail" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
+		<div class="modal-content" style="width:1000px;">		 
+			<div class="modal-body" >
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="encrypt_log_sever.Management_Server_Detail"/> 
+				</h4>
+	
+				<div class="card-body">
+					<h4 class="card-title"> <spring:message code="encrypt_log_sever.Management_Server_Detail"/> </h4>
+						<div class="d-flex align-items-center pb-3 border-bottom">
+						
+						</div>	
+				</div>
+			</div>
+					
+			<div class="top-modal-footer" style="text-align: center !important;" >
+					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<%-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -79,4 +114,4 @@
 		</div>
 	</div>
 </body>
-</html>
+</html> --%>

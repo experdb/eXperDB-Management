@@ -52,12 +52,12 @@ public class EgovImgPaginationRenderer extends AbstractPaginationRenderer implem
 	*/
 	public void initVariables() {
 
-		firstPageLabel = "<li><a href=\"#\" onclick=\"{0}({1}); return false;\"><<</a><li>&#160;";
-		previousPageLabel = "<li><a href=\"#\" onclick=\"{0}({1}); return false;\"><<li></a>&#160;";
-		currentPageLabel = "<li><span class='curr'>{0}</span><li>&#160;";
-		otherPageLabel = "<li><a href=\"#\" onclick=\"{0}({1}); return false;\">{2}</a><li>&#160;";
-		nextPageLabel = "<li><a href=\"#\" onclick=\"{0}({1}); return false;\">></a><li>&#160;";
-		lastPageLabel = "<li><a href=\"#\" onclick=\"{0}({1}); return false;\">>></a><li>&#160;";
+		firstPageLabel = "<li class='page-item'><a href=\"#\" class='page-link' onclick=\"{0}({1}); return false;\"><<</a><li>&#160;";
+		previousPageLabel = "<li class='page-item'><a href=\"#\" class='page-link' onclick=\"{0}({1}); return false;\"><<li></a>&#160;";
+		currentPageLabel = "<li class='page-item-active'><a href=\"#\" class='page-link'>{0}</a><li>&#160;";
+		otherPageLabel = "<li class='page-item'><a href=\"#\" class='page-link' onclick=\"{0}({1}); return false;\">{2}</a><li>&#160;";
+		nextPageLabel = "<li class='page-item'><a href=\"#\" class='page-link' onclick=\"{0}({1}); return false;\">></a><li>&#160;";
+		lastPageLabel = "<li class='page-item'><a href=\"#\" class='page-link' onclick=\"{0}({1}); return false;\">>></a><li>&#160;";
 	}
 
 	@Override

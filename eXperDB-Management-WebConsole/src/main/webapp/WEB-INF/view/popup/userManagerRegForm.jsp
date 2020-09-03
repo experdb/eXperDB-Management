@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/commonLocale.jsp"%>
+
 <%
 	/**
 	* @Class Name : userManagerForm.jsp
@@ -19,329 +19,522 @@
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>사용자 정보 등록</title>
-<link rel="stylesheet" type="text/css" href="../css/common.css">
-<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="../js/common.js"></script>
 
-<!-- 달력을 사용 script -->
-<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/js/calendar.js"></script>
-</head>
-<script>
-	var idCheck = 0;
-	
-	/* PW Validation*/
-	function fn_pwValidation(str){
-		 var reg_pwd = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}/;
-		 if(!reg_pwd.test(str)){
-		 	alert("<spring:message code='message.msg109' />");
-		 	return false;
-		 }
-		 	return true;
+<script type="text/javascript">
+	$(window.document).ready(function() {
+		$("#ins_cpn", "#insUserForm").mask("999-9999-9999");
+
+		//캘린더 셋팅
+		fn_insDateCalenderSetting();
+
+		$(".ins_pwd_chk").keyup(function(){
+			var ins_pwd_val = $("#ins_pwd", "#insUserForm").val(); 
+			var ins_pwdCheck_val = $("#ins_pwdCheck", "#insUserForm").val(); 
+
+			if(ins_pwd_val != "" && ins_pwdCheck_val != ""){
+				if(ins_pwd_val == ins_pwdCheck_val){
+					$("#pwdCheck_alert-danger", "#insUserForm").hide();
+ 					$("#ins_save_submit", "#insUserForm").removeAttr("disabled");
+					$("#ins_save_submit", "#insUserForm").removeAttr("readonly");
+
+					$("#ins_passCheck_hid", "#insUserForm").val("1");
+				}else{ 
+					$("#pwdCheck_alert-danger", "#insUserForm").show(); 
+					$("#ins_save_submit", "#insUserForm").attr("disabled", "disabled"); 
+					$("#ins_save_submit", "#insUserForm").attr("readonly", "readonly"); 
+
+					$("#ins_passCheck_hid", "#insUserForm").val("0");
+				}
+			} else {
+				$("#pwdCheck_alert-danger", "#insUserForm").hide();
+				$("#ins_save_submit", "#insUserForm").removeAttr("disabled");
+				$("#ins_save_submit", "#insUserForm").removeAttr("readonly");
+
+				$("#ins_passCheck_hid", "#insUserForm").val("0");
+			}
+		});
+
+		$("#ins_pwd", "#insUserForm").blur(function(){
+			var ins_pwd_val = $("#ins_pwd", "#insUserForm").val(); 
+			
+			if (ins_pwd_val != "") {
+				var passed = pwdValidate(ins_pwd_val);
+
+				if (passed != "") {
+	 				$("#ins_pwd_alert-danger", "#insUserForm").html(passed);
+					$("#ins_pwd_alert-danger", "#insUserForm").show();
+					
+					$("#ins_pwd_alert-light", "#insUserForm").html("");
+					$("#ins_pwd_alert-light", "#insUserForm").hide();
+
+					$("#ins_save_submit", "#insUserForm").attr("disabled", "disabled"); 
+					$("#ins_save_submit", "#insUserForm").attr("readonly", "readonly"); 
+				} else {
+	 				$("#ins_pwd_alert-danger", "#insUserForm").html("");
+					$("#ins_pwd_alert-danger", "#insUserForm").hide();
+					$("#ins_save_submit", "#insUserForm").removeAttr("disabled");
+					$("#ins_save_submit", "#insUserForm").removeAttr("readonly");
+
+					var newpwdVal = pwdSafety($("#ins_pwd", "#insUserForm").val());
+					
+					if (newpwdVal != "") {
+		 				$("#ins_pwd_alert-light", "#insUserForm").html(newpwdVal);
+						$("#ins_pwd_alert-light", "#insUserForm").show();
+					} else {
+						$("#ins_pwd_alert-light", "#insUserForm").html("");
+						$("#ins_pwd_alert-light", "#insUserForm").hide();
+					}
+				}
+			} else {
+ 				$("#ins_pwd_alert-danger", "#insUserForm").html("");
+				$("#ins_pwd_alert-danger", "#insUserForm").hide();
+				$("#ins_pwd_alert-light", "#insUserForm").html("");
+				$("#ins_pwd_alert-light", "#insUserForm").hide();
+				$("#ins_save_submit", "#insUserForm").removeAttr("disabled");
+				$("#ins_save_submit", "#insUserForm").removeAttr("readonly");
+			}
+		});  
+
+		$("#insUserForm").validate({
+			rules: {
+		        	ins_usr_id: {
+						required: true
+					},
+					ins_usr_nm: {
+						required: true
+					},
+					ins_pwd: {
+						required: true
+					},
+					ins_pwdCheck: {
+						required: true
+					}
+			},
+			messages: {
+					ins_usr_id: {
+						required: "<spring:message code='message.msg121' />"
+					},
+					ins_usr_nm: {
+						required: "<spring:message code='message.msg58' />"
+					},
+					ins_pwd: {
+						required: "<spring:message code='message.msg140' />"
+					},
+					ins_pwdCheck: {
+						required: "<spring:message code='message.msg141' />"
+					}
+			},
+			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
+				fn_insPop_insert_confirm();
+			},
+			errorPlacement: function(label, element) {
+				label.addClass('mt-2 text-danger');
+				label.insertAfter(element);
+		    },
+		    highlight: function(element, errorClass) {
+		        $(element).parent().addClass('has-danger')
+		        $(element).addClass('form-control-danger')
+		    }
+		}); 
+	});
+
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function fn_insDateCalenderSetting() {
+		var today = new Date();
+		var startDay = fn_dateParse("20180101");
+		var endDay = fn_dateParse("20991231");
+		
+		var day_today = today.toJSON().slice(0,10);
+		var day_start = startDay.toJSON().slice(0,10);
+		var day_end = endDay.toJSON().slice(0,10);
+
+		if ($("#ins_usr_expr_dt_div", "#insUserForm").length) {
+			$("#ins_usr_expr_dt_div", "#insUserForm").datepicker({
+			}).datepicker('setDate', day_today)
+			.datepicker('setStartDate', day_start)
+			.datepicker('setEndDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+			}); //값 셋팅
+		}
+
+		$("#ins_usr_expr_dt", "#insUserForm").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+		$("#ins_usr_expr_dt_div", "#insUserForm").datepicker('updateDates');
 	}
-	
-	/* Validation */
-	function fn_userManagerValidation(formName) {
-		var id = document.getElementById('usr_id');
-		var nm = document.getElementById('usr_nm');
-		var pwd = document.getElementById('pwd');
-		var pwdCheck = document.getElementById('pwdCheck');
-		
-		if (id.value == "" || id.value == "undefind" || id.value == null) {
-			alert("<spring:message code='message.msg121' />");
-			id.focus();
+
+	/* ********************************************************
+	 * id 중복체크
+	 ******************************************************** */
+	function fn_insIdCheck() {
+		var usr_id_val = $("#ins_usr_id", "#insUserForm").val();
+
+		if (usr_id_val == "") {
+			showSwalIcon('<spring:message code="message.msg121" />', '<spring:message code="common.close" />', '', 'warning');
+			$("#ins_idCheck", "#insUserForm").val("0");
+			
+			$("#idCheck_alert-danger", "#insUserForm").hide();
+			return;
+		}
+
+		$.ajax({
+			url : '/userManagerIdCheck.do',
+			type : 'post',
+			data : {
+				usr_id : usr_id_val
+			},
+			success : function(result) {
+				if (result == "true") {
+					$("#ins_idCheck", "#insUserForm").val("1");
+					
+					$("#idCheck_alert-danger", "#insUserForm").show();
+				} else {
+					showSwalIcon('<spring:message code="message.msg123" />', '<spring:message code="common.close" />', '', 'error');
+					$("#ins_idCheck", "#insUserForm").val("0");
+					
+					$("#idCheck_alert-danger", "#insUserForm").hide();
+				}
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				$("#ins_idCheck", "#insUserForm").val("0");
+				
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * 등록 confirm
+	 ******************************************************** */
+	function fn_insPop_insert_confirm() {
+		if (!fn_ins_Validation())return false;
+
+		fn_multiConfirmModal("ins");
+	}
+
+	/* ********************************************************
+	 * 등록 validate
+	 ******************************************************** */
+	function fn_ins_Validation() {
+		var ins_idCheck_val = $("#ins_idCheck", "#insUserForm").val();
+		var ins_pwd_val = $("#ins_pwd", "#insUserForm").val(); 
+		var ins_pwdCheck_val = $("#ins_pwdCheck", "#insUserForm").val(); 
+
+		//중복체크 확인
+		if (ins_idCheck_val != 1) {
+			showSwalIcon('<spring:message code="message.msg142" />', '<spring:message code="common.close" />', '', 'warning');
+			$("#ins_idCheck", "#insUserForm").val("0");
+			
+			$("#idCheck_alert-danger", "#insUserForm").hide();
 			return false;
 		}
 		
-		if (idCheck != 1) {
-			alert("<spring:message code='message.msg142'/>");
+		//패스워드 검증
+		if(ins_pwd_val != ins_pwdCheck_val){
+			$("#pwdCheck_alert-danger", "#insUserForm").show(); 
+			$("#ins_save_submit", "#insUserForm").attr("disabled", "disabled"); 
+			$("#ins_save_submit", "#insUserForm").attr("readonly", "readonly"); 
+
+			$("#ins_passCheck_hid", "#insUserForm").val("0");
 			return false;
 		}
-		
-		if (nm.value == "" || nm.value == "undefind" || nm.value == null) {
-			alert("<spring:message code='message.msg58' />");
-			nm.focus();
-			return false;
-		}
-		
-		if (pwd.value == "" || pwd.value == "undefind" || pwd.value == null) {
-			alert("<spring:message code='message.msg140'/>");
-			pwd.focus();
-			return false;
-		}
-		
-		if (!fn_pwValidation(pwd.value))return false;
-		
-		if (pwdCheck.value == "" || pwdCheck.value == "undefind" || pwdCheck.value == null) {
-			alert('<spring:message code="message.msg141"/>');
-			pwd.focus();
-			return false;
-		}
-		
-		if (!fn_pwValidation(pwdCheck.value))return false;
-		
-		if (pwd.value != pwdCheck.value) {
-			alert("<spring:message code='etc.etc14'/>");
+
+		var passed = pwdValidate(ins_pwd_val);
+
+		if (passed != "") {
+ 			$("#ins_pwd_alert-danger", "#insUserForm").html(passed);
+			$("#ins_pwd_alert-danger", "#insUserForm").show();
+				
+			$("#ins_pwd_alert-light", "#insUserForm").html("");
+			$("#ins_pwd_alert-light", "#insUserForm").hide();
+
+			$("#ins_save_submit", "#insUserForm").attr("disabled", "disabled"); 
+			$("#ins_save_submit", "#insUserForm").attr("readonly", "readonly"); 
+			
 			return false;
 		}
 		
 		return true;
 	}
 
-	
-	//아이디 중복체크
-	function fn_idCheck() {
-		var usr_id = document.getElementById("usr_id");
-		
-		if (usr_id.value == "") {
-			alert("<spring:message code='message.msg121' />");
-			document.getElementById('usr_id').focus();
-			idCheck = 0;
-			return;
-		}
-
-		$.ajax({
-			url : '/UserManagerIdCheck.do',
-			type : 'post',
-			data : {
-				usr_id : $("#usr_id").val()
-			},
-			success : function(result) {
-				if (result == "true") {
-					alert("<spring:message code='message.msg122' />");
-					document.getElementById("usr_nm").focus();
-					idCheck = 1;
-				} else {
-					alert("<spring:message code='message.msg123' />");
-					document.getElementById("usr_id").focus();
-					idCheck = 0;
-				}
-			},
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			}
-		});
-	}
-	
-	//등록버튼 클릭시
-	function fn_insert() {
-		if (!fn_userManagerValidation())return false;
-		if (!confirm("<spring:message code='message.msg143'/>")) return false;
-
-		$.ajax({
-			url : '/UserManagerIdCheck.do',
-			type : 'post',
-			data : {
-				usr_id : $("#usr_id").val()
-			},
-			success : function(result) {
-				if (result == "true") {
-					$.ajax({
-						url : '/insertUserManager.do',
-						type : 'post',
-						data : {
-							usr_id : $("#usr_id").val(),
-							usr_nm : $("#usr_nm").val(),
-							pwd : $("#pwd").val(),
-							bln_nm : $("#bln_nm").val(),
-							dept_nm : $("#dept_nm").val(),
-							pst_nm : $("#pst_nm").val(),
-							rsp_bsn_nm : $("#rsp_bsn_nm").val(),
-							cpn : $("#cpn").val(),
-							// 				aut_id : $("#aut_id").val(),
-							usr_expr_dt : $("#datepicker3").val(),
-							use_yn : $("#use_yn").val(),
-							encp_use_yn : $("#encp_use_yn").val()
-						},
-						success : function(data) {				
-							if(data.resultCode == "0000000000"){
-								alert('<spring:message code="message.msg144"/>');
-								if (confirm('<spring:message code="message.msg145"/>')) {
-									window.close();
-									opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
-								} else {
-									window.close();
-									opener.fn_select();
-								}
-							}else if(data.resultCode == "8000000002"){
-								alert("<spring:message code='message.msg05' />");
-							}else if(data.resultCode == "8000000003"){
-								alert(data.resultMessage);
-								window.close();
-							}else{
-								alert(data.resultMessage +"("+data.resultCode+")");
-							}
-						},
-						beforeSend: function(xhr) {
-					        xhr.setRequestHeader("AJAX", true);
-					     },
-						error : function(xhr, status, error) {
-							if(xhr.status == 401) {
-								alert('<spring:message code="message.msg02" />');
-								top.location.href = "/";
-							} else if(xhr.status == 403) {
-								alert('<spring:message code="message.msg03" />');
-								top.location.href = "/";
-							} else {
-								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-							}
-						}
-					});
-				} else {
-					alert("<spring:message code='message.msg123' />");
-					document.getElementById("usr_id").focus();
-					idCheck = 0;
-				}
-			},
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			}
-		});
-		
+	/* ********************************************************
+	 * id 변경시
+	 ******************************************************** */
+	function fn_ins_id_chg(obj) {
+		$("#ins_idCheck", "#insUserForm").val("0");
+		$("#idCheck_alert-danger", "#insUserForm").hide();
 	}
 
+	/* ********************************************************
+	 * 등록 실행
+	 ******************************************************** */
+	function fn_insPop_insert() {
 
-	$(window.document).ready(function() {
-		$.datepicker.setDefaults({
-			dateFormat : 'yy-mm-dd',
-// 			changeMonth: true, 
-			changeYear: true,
-			yearRange: '2018:2099',
-		});
-		$("#datepicker3").datepicker();
-		
-	})
-	
-	function NumObj(obj) {
-		if (event.keyCode >= 48 && event.keyCode <= 57) { //숫자키만 입력
-			return true;
+		if($("#ins_use_yn_chk", "#insUserForm").is(":checked") == true){
+			$("#ins_use_yn", "#insUserForm").val("Y");
 		} else {
-			(event.preventDefault) ? event.preventDefault() : event.returnValue = false;
+			$("#ins_use_yn", "#insUserForm").val("N");
 		}
+
+		if($("#ins_encp_use_yn_chk", "#insUserForm").is(":checked") == true){
+			$("#ins_encp_use_yn", "#insUserForm").val("Y");
+		} else {
+			$("#ins_encp_use_yn", "#insUserForm").val("N");
+		}
+
+		$('#pop_layer_user_reg').modal('hide');
+
+		$.ajax({
+			url : '/insertUserManager.do',
+			data : {
+				usr_id : nvlPrmSet($("#ins_usr_id", "#insUserForm").val(), ''),
+				usr_nm : nvlPrmSet($("#ins_usr_nm", "#insUserForm").val(), ''),
+				pwd : nvlPrmSet($("#ins_pwd", "#insUserForm").val(), ''),
+				bln_nm : nvlPrmSet($("#ins_bln_nm", "#insUserForm").val(), ''),
+				dept_nm : nvlPrmSet($("#ins_dept_nm", "#insUserForm").val(), ''),
+				pst_nm : nvlPrmSet($("#ins_pst_nm", "#insUserForm").val(), ''),
+				rsp_bsn_nm : nvlPrmSet($("#ins_rsp_bsn_nm", "#insUserForm").val(), ''),
+				cpn : nvlPrmSet($("#ins_cpn", "#insUserForm").val(), ''),
+				usr_expr_dt : nvlPrmSet($("#ins_usr_expr_dt", "#insUserForm").val(), ''),
+				use_yn : nvlPrmSet($("#ins_use_yn", "#insUserForm").val(), ''),
+				encp_use_yn : nvlPrmSet($("#ins_encp_use_yn", "#insUserForm").val(), '')
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {
+				if(data.resultCode == "0000000000"){
+					fn_multiConfirmModal("ins_menu");
+				} else if(data.resultCode == "8000000002") { //암호화 저장 실패
+					showSwalIcon('<spring:message code="message.msg05"/>', '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_user_reg').modal('show');
+					return;
+				} else if(data.resultCode == "8000000003") {
+					showSwalIcon(data.resultMessage, '<spring:message code="common.close" />', '', 'warning');
+					$('#pop_layer_user_reg').modal('hide');
+				} else {
+					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_user_reg').modal('show');
+					return;
+				}
+			}
+		});
 	}
 
+	/* ********************************************************
+	 * 메뉴권한 환면 이동
+	******************************************************** */
+	function fn_insPop_menu() {
+ 		var usr_id = nvlPrmSet($("#ins_usr_id", "#insUserForm").val(), '');
+		$('#pop_layer_user_reg').modal("hide");
+		
+		location.href='/menuAuthority.do?usr_id=' + nvlPrmSet($("#ins_usr_id", "#insUserForm").val(), '');
+	}
 </script>
-<body>
-	<div class="pop_container">
-		<div class="pop_cts">
-			<p class="tit">
-				<spring:message code="user_management.userReg"/>
-			</p>
-			<table class="write">
-				<caption>
+<div class="modal fade" id="pop_layer_user_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">
+		<div class="modal-content" style="width:1040px;">		 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="user_management.userReg"/>
-				</caption>
-				<colgroup>
-					<col style="width: 110px;" />
-					<col />
-					<col style="width: 140px;" />
-					<col />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="user_management.id" />(*)</th>
-						<td>
-							<input type="text" class="txt" name="usr_id" id="usr_id" onkeyup="fn_checkWord(this,15)" maxlength="15" style="width: 205px;" placeholder="15<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
-							<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; height: 38px; margin-right: -60px; margin-top: 0;">
-							<spring:message code="common.overlap_check" /></button></span>
-						</td>
-						<th scope="row" class="ico_t1"><spring:message code="user_management.user_name" />(*)</th>
-						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" onkeyup="fn_checkWord(this,9)" maxlength="9" placeholder="9<spring:message code='message.msg188'/>"/></td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
-						<td><input type="password" class="txt" name="pwd" id="pwd" onkeyup="fn_checkWord(this,20)" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
-						<th scope="row" class="ico_t1"><spring:message code="user_management.confirm_password" />(*)</th>
-						<td><input type="password" class="txt" name="pwdCheck" onkeyup="fn_checkWord(this,20)" id="pwdCheck" maxlength="20" placeholder="<spring:message code='message.msg109'/>" /></td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="pop_cmm2">
-				<table class="write">
-					<caption><spring:message code="user_management.userReg"/></caption>
-					<colgroup>
-						<col style="width: 110px;" />
-						<col />
-						<col style="width: 140px;" />
-						<col />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="user_management.company" /></th>
-							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" onkeyup="fn_checkWord(this,25)" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
-							<th scope="row" class="ico_t1"><spring:message code="user_management.department" /></th>
-							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" onkeyup="fn_checkWord(this,25)" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="user_management.position" /></th>
-							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" onkeyup="fn_checkWord(this,25)" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
-							<th scope="row" class="ico_t1"><spring:message code="user_management.Responsibilities" /></th>
-							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" onkeyup="fn_checkWord(this,25)" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="user_management.mobile_phone_number" /></th>
-							<td><input type="text" class="txt" name="cpn" id="cpn" onkeyup="fn_checkWord(this,20)" maxlength="20"  onKeyPress="NumObj(this);" placeholder="20<spring:message code='message.msg188'/>"/></td>
-							<th scope="row" class="ico_t1"><spring:message code="dbms_information.use_yn" /></th>
-							<td>
-								<select class="select" id="use_yn" name="use_yn">
-									<option value="Y"><spring:message code="dbms_information.use" /></option>
-									<option value="N"><spring:message code="dbms_information.unuse" /></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="user_management.expiration_date" /></th>
-							<td>
-								<div class="calendar_area big">
-									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" readonly />
+				</h4>
+				
+				<div class="card" style="margin-top:10px;border:0px;">
+					<form class="cmxform" id="insUserForm">
+						<input type="hidden" name="ins_use_yn" id="ins_use_yn" />
+						<input type="hidden" name="ins_encp_use_yn" id="ins_encp_use_yn" />
+						<input type="hidden" name="ins_idCheck" id="ins_idCheck" value="0" />
+						<input type="hidden" name="ins_passCheck_hid" id="ins_passCheck_hid" value="0" />
+						
+						<input type="hidden" name="ins_idCheck_set" id="ins_idCheck_set" />
+
+						<fieldset>
+							<div class="card-body" style="border: 1px solid #adb5bd;">
+								<div class="form-group row" style="margin-bottom:-10px;">
+									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.id" />(*)
+									</label>
+
+									<div class="col-sm-2_5">
+										<input style="display:none" aria-hidden="true">
+										<input type="text" class="form-control" style="width: 180px;" autocomplete="off" maxlength="15" id="ins_usr_id" name="ins_usr_id" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()" onChange="fn_ins_id_chg(this);" placeholder="15<spring:message code='message.msg188'/>" tabindex=1 />
+									</div>
+
+									<div class="col-sm-1_5">
+										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" type="button" onclick="fn_insIdCheck();" value='<spring:message code="common.overlap_check" />' />
+									</div>
+									
+									<label for="ins_usr_nm" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.user_name" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" maxlength="9" id="ins_usr_nm" name="ins_usr_nm" onkeyup="fn_checkWord(this,9)" onblur="this.value=this.value.trim()" placeholder="9<spring:message code='message.msg188'/>" tabindex=2 />
+									</div>
 								</div>
-							</td>
-							<c:if test = "${encp_yn eq 'Y'}">
-								<th scope="row" class="ico_t1">Encrypt <spring:message code="user_management.use_yn" /></th>
-								<td>
-									<select class="select" id="encp_use_yn" name="encp_use_yn">
-										<option value="Y"><spring:message code="dbms_information.use" /></option>
-										<option value="N"><spring:message code="dbms_information.unuse" /></option>
-									</select>
-								</td>
-							</c:if>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="btn_type_02">
-				<span class="btn btnC_01"> 
-				<button type="button" onclick="fn_insert()"><spring:message code="button.create" /></button>
-				</span> <a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>			
+
+								<div class="form-group row">
+									<div class="col-sm-6">
+										<div class="alert alert-info" style="margin-top:5px;display:none;" id="idCheck_alert-danger"><spring:message code="message.msg122" /></div>
+									</div>
+									<div class="col-sm-6">
+									</div>
+								</div>
+								
+								<div class="form-group row" style="margin-bottom:-10px;">
+									<label for="ins_pwd" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.password" />(*)
+									</label>
+
+									<div class="col-sm-4">
+										<input type="password" style="display:none" aria-hidden="true">
+										<input type="password" class="form-control ins_pwd_chk" autocomplete="new-password" maxlength="20" id="ins_pwd" name="ins_pwd" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="<spring:message code='message.msg109'/>" tabindex=3 />
+									</div>
+
+									<label for="ins_pwdCheck" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.confirm_password" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="password" class="form-control ins_pwd_chk" maxlength="20" id="ins_pwdCheck" name="ins_pwdCheck" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="<spring:message code='message.msg109'/>" tabindex=4 />
+									</div>
+								</div>
+								
+								<div class="form-group row" style="margin-bottom:-10px;">
+									<div class="col-sm-6">
+										<div class="alert alert-light" style="margin-top:5px;display:none;" id="ins_pwd_alert-light"></div>
+										<div class="alert alert-danger" style="margin-top:5px;display:none;" id="ins_pwd_alert-danger"></div>
+									</div>
+									<div class="col-sm-6">
+										<div class="alert alert-danger" style="margin-top:5px;display:none;" id="pwdCheck_alert-danger"><spring:message code="etc.etc14" /></div>
+									</div>
+								</div>
+							</div>
+
+							<br/>
+	
+							<div class="card-body" style="border: 1px solid #adb5bd;">
+								<div class="form-group row">
+									<label for="ins_bln_nm" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.company" />
+									</label>
+
+									<div class="col-sm-4">
+										<input type="text" class="form-control" maxlength="25" id="ins_bln_nm" name="ins_bln_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=5 />
+									</div>
+
+									<label for="ins_dept_nm" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.department" />
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" maxlength="25" id="ins_dept_nm" name="ins_dept_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=6 />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label for="ins_pst_nm" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.position" />
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" maxlength="25" id="ins_pst_nm" name="ins_pst_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=7 />
+									</div>
+									
+									<label for="ins_rsp_bsn_nm" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.Responsibilities" />
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" maxlength="25" id="ins_rsp_bsn_nm" name="ins_rsp_bsn_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=8 />
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label for="ins_cpn" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.mobile_phone_number" />
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" maxlength="20" id="ins_cpn" name="ins_cpn" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="20<spring:message code='message.msg188'/>" tabindex=9 />
+									</div>
+									<label for="ins_use_yn_chk" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.use_yn" />
+									</label>
+									<div class="col-sm-4">
+										<div class="onoffswitch-use" style="margin-top:0.250rem;">
+											<input type="checkbox" name="ins_use_yn_chk" class="onoffswitch-use-checkbox" id="ins_use_yn_chk" />
+											<label class="onoffswitch-use-label" for="ins_use_yn_chk">
+												<span class="onoffswitch-use-inner"></span>
+												<span class="onoffswitch-use-switch"></span>
+											</label>
+										</div>	
+									</div>
+								</div>
+								
+								<div class="form-group row" style="margin-bottom:-10px;">
+									<label for="ins_usr_expr_dt" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.expiration_date" />
+									</label>
+									<div class="col-sm-4">
+										<div id="ins_usr_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ins_usr_expr_dt" name="ins_usr_expr_dt" readonly tabindex=10 />
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>
+									<label for="ins_encp_use_yn_chk" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Encrypt <spring:message code="user_management.use_yn" />
+									</label>
+									<div class="col-sm-4">
+										<div class="onoffswitch-use" style="margin-top:0.250rem;">
+											<input type="checkbox" name="ins_encp_use_yn_chk" class="onoffswitch-use-checkbox" id="ins_encp_use_yn_chk" />
+											<label class="onoffswitch-use-label" for="ins_encp_use_yn_chk">
+												<span class="onoffswitch-use-inner"></span>
+												<span class="onoffswitch-use-switch"></span>
+											</label>
+										</div>	
+									</div>
+								</div>
+							</div>
+							
+							<br/>
+							
+							<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" id="ins_save_submit" value='<spring:message code="common.save" />' />
+								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
-</body>
-</html>
+</div>

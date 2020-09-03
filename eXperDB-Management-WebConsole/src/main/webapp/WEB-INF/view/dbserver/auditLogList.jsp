@@ -1,13 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="../cmmn/cs2.jsp"%>
+
 <%
 	/**
 	* @Class Name : auditLogList.jsp
@@ -23,318 +23,396 @@
 	*
 	*/
 %>
-<script language="javascript">
-var table = null;
+<script type="text/javascript">
+	var table = null;
 
-function fn_init() {
-	table = $('#auditLogTable').DataTable({
-		scrollY : "400px",
-		bSort: false,
-		paging: false,
-		scrollX: true,
-		columns : [
-		{ data : "", className : "dt-center", defaultContent : ""}, 
-		{data : "file_name", defaultContent : ""
-			,"render": function (data, type, full) {				
-				  return "<a href='#' class='bold' id='openLogView'>"+data+"</a>";
+	/* ********************************************************
+	 * setting 초기 실행
+	 ******************************************************** */
+	$(window.document).ready(function() {
+		//테이블 셋팅
+		fn_init();
+
+		//agent 확인
+		var extName = "${extName}";
+		
+		if (!fn_chkExtName(extName)) {
+			$("#btnSelect").prop("disabled", "disabled");
+			return;
+		}
+		
+		//작업기간 calender setting
+		dateCalenderSetting();
+		
+		$('.dataTables_filter').hide();
+		
+		//조회
+		fn_search();
+
+		/* ********************************************************
+		 * Click Search Button
+		 ******************************************************** */
+		$("#btnSelect").click(function() {
+			var start_dtm = $("#start_dtm").val();
+			var end_dtm = $("#end_dtm").val();
+
+			if (start_dtm != "" && end_dtm == "") {
+				showSwalIcon('<spring:message code="message.msg14" />', '<spring:message code="common.close" />', '', 'error');
+				return false;
 			}
-		}, 
-		{ data : "file_size", defaultContent : ""}, 
-		{ data : "file_lastmodified", defaultContent : ""}
-		 ]
+
+			if (end_dtm != "" && start_dtm == "") {
+				showSwalIcon('<spring:message code="message.msg15" />', '<spring:message code="common.close" />', '', 'error');
+				return false;
+			}
+
+			fn_search();
+		}); 
+
+		/* ********************************************************
+		 * Ajax 파일 다운로드
+		 ******************************************************** */
+		jQuery.download = function(url, data, method){
+		    // url과 data를 입력받음
+		    if( url && data ){ 
+		        // data 는  string 또는 array/object 를 파라미터로 받는다.
+		        data = typeof data == 'string' ? data : jQuery.param(data);
+		        // 파라미터를 form의  input으로 만든다.
+		        var inputs = '';
+		        jQuery.each(data.split('&'), function(){ 
+		            var pair = this.split('=');
+		            inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />'; 
+		        });
+		        // request를 보낸다.
+		        jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
+		        .appendTo('body').submit().remove();
+		    };
+		};
 	});
-	
-	table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
-	table.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
-	table.tables().header().to$().find('th:eq(2)').css('min-width', '80px');
-	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 
-    $(window).trigger('resize');
-    
-	table.on( 'order.dt search.dt', function () {
-		table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = i+1;
-        } );
-    } ).draw();
+	/* ********************************************************
+	 * agent 상태 확인
+	 ******************************************************** */
+	function fn_chkExtName(extName) {
+		var title = '<spring:message code="menu.audit_history"/>' + ' ' + '<spring:message code="access_control_management.msg6" />';
+
+ 		if(extName == "") {
+			showDangerToast('top-right', '<spring:message code="message.msg26" />', title);
+			return false;
+ 		} else if(extName == "agent") {
+			showDangerToast('top-right', '<spring:message code="message.msg25" />', title);
+			return false;
+		}else if(extName == "agentfail"){
+			showDangerToast('top-right', '<spring:message code="message.msg27" />', title);
+			return false;
+		}
+ 		
+ 		return true;
+	}
+	
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function dateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+		var day_start = today.toJSON().slice(0,10);
+
+		$("#start_dtm").val(day_start);
+		$("#end_dtm").val(day_end);
+
+		if ($("#start_dtm_div").length) {
+			$('#start_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    })
+		    .on('changeDate', function(selected){
+		    	day_start = new Date(selected.date.valueOf());
+		    	day_start.setDate(day_start.getDate(new Date(selected.date.valueOf())));
+		        $("#end_dtm_div").datepicker('setStartDate', day_start);
+		        $("#end_dtm").datepicker('setStartDate', day_start);
+			}); //값 셋팅
+		}
+
+		if ($("#end_dtm_div").length) {
+			$('#end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    })
+		    .on('changeDate', function(selected){
+		    	day_end = new Date(selected.date.valueOf());
+		    	day_end.setDate(day_end.getDate(new Date(selected.date.valueOf())));
+		        $('#start_dtm_div').datepicker('setEndDate', day_end);
+		        $('#start_dtm').datepicker('setEndDate', day_end);
+			}); //값 셋팅
+		}
+		
+		$("#start_dtm").datepicker('setDate', day_start);
+	    $("#end_dtm").datepicker('setDate', day_end);
+	    $('#start_dtm_div').datepicker('updateDates');
+	    $('#end_dtm_div').datepicker('updateDates');
+	}
 	
 
-	 $('#auditLogTable tbody').on('click','#openLogView', function () {
-	 		var $this = $(this);
+	/* ********************************************************
+	 * 테이블 setting
+	 ******************************************************** */
+	function fn_init(){
+		table = $('#auditLogTable').DataTable({
+			scrollY : "400px",
+			bSort: false,
+			paging: false,
+			scrollX: true,
+		//	searching : false,
+			columns : [
+		         	{data : "", className : "dt-center", defaultContent : ""},
+		    		{data : "file_name", defaultContent : ""
+		    			,"render": function (data, type, full) {				
+		    				  return "<a href='#' class='bold' id='openLogView'>"+data+"</a>";
+		    			}
+		    		},
+		    		{ data : "file_size", defaultContent : ""}, 
+		    		{ data : "file_lastmodified", defaultContent : ""}
+		    ]
+		});
+
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '80px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+
+    	$(window).trigger('resize'); 
+
+     	table.on( 'order.dt search.dt', function () {
+			table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+    			cell.innerHTML = i+1;
+    		});
+    	}).draw();
+   	
+    	$('#auditLogTable tbody').on('click','#openLogView', function () {
+    		var $this = $(this);
 	    	var $row = $this.parent().parent();
+	    	
 	    	$row.addClass('select-detail');
 	    	var datas = table.rows('.select-detail').data();
 	    	var row = datas[0];
-		    $row.removeClass('select-detail');		
-		    var file_name = row.file_name;
-		    var file_size= row.file_size;
-		    	
-		    var db_svr_id = $("#db_svr_id").val();
-			var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name + "&dwLen=1";
-			var v_size = file_size.replace("Mb", "");
-
-			window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
-	    	
+		    $row.removeClass('select-detail');
+		    
+		    //상세팝업 호출
+		    fn_logFileView(row);
 		});
-}
-
-$(window.document).ready(function() {
-	fn_init();
-	$('.dataTables_filter').hide();
-	var lgi_dtm_start = "${start_date}";
-	var lgi_dtm_end = "${end_date}";
-	if (lgi_dtm_start != "" && lgi_dtm_end != "") {
-		$('#from').val(lgi_dtm_start);
-		$('#to').val(lgi_dtm_end);
-	} else {
-		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 	}
 	
-	$.ajax({
-		url : "/selectAuditManagement.do",
-		data : {
-			lgi_dtm_start : $("#from").val(),
-			lgi_dtm_end : $("#to").val(),
-			db_svr_id : $("#db_svr_id").val()
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(result) {
-			table.clear().draw();
-			table.rows.add(result).draw();
-		}
-	});
-	
-	
-	
-	// Ajax 파일 다운로드
-	jQuery.download = function(url, data, method){
-	    // url과 data를 입력받음
-	    if( url && data ){ 
-	        // data 는  string 또는 array/object 를 파라미터로 받는다.
-	        data = typeof data == 'string' ? data : jQuery.param(data);
-	        // 파라미터를 form의  input으로 만든다.
-	        var inputs = '';
-	        jQuery.each(data.split('&'), function(){ 
-	            var pair = this.split('=');
-	            inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />'; 
-	        });
-	        // request를 보낸다.
-	        jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
-	        .appendTo('body').submit().remove();
-	    };
-	};
-	
-});
-
-$(function() {
-	var extName = "${extName}";
-	
-	fn_chkExtName(extName)
-	
-	var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
-		changeMonth : false,
-		changeYear : false,
-		onClose : function(selectedDate) {
-			$("#to").datepicker("option", "minDate", selectedDate);
-		}
-	})
-
-	to = $("#to").datepicker({
-		changeMonth : false,
-		changeYear : false,
-		onClose : function(selectedDate) {
-			$("#from").datepicker("option", "maxDate", selectedDate);
-		}
-	})
-
-	function getDate(element) {
-		var date;
-		try {
-			date = $.datepicker.parseDate(dateFormat, element.value);
-		} catch (error) {
-			date = null;
-		}
-		return date;
-	}
-});
-
-	function fn_chkExtName(extName) {
-		if(extName == "") {
-			alert("<spring:message code='message.msg26' />");
-			history.go(-1);
-		} else if(extName == "agent") {
-			alert("<spring:message code='message.msg27' />");
-			history.go(-1);
-		}
-		
-	}
-
+	/* ********************************************************
+	 * 조회 실행
+	 ******************************************************** */
 	function fn_search() {
 		$.ajax({
 			url : "/selectAuditManagement.do",
 			data : {
-				lgi_dtm_start : $("#from").val(),
-				lgi_dtm_end : $("#to").val(),
-				db_svr_id : $("#db_svr_id").val()
+				lgi_dtm_start : $("#start_dtm").val(),
+				lgi_dtm_end : $("#end_dtm").val(),
+				db_svr_id : $("#db_svr_id", "#findList").val()
 			},
 			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
+				xhr.setRequestHeader("AJAX", true);
+			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
 				table.clear().draw();
-				table.rows.add(result).draw();
+
+				if (nvlPrmSet(result, '') != '') {
+					table.rows.add(result).draw();
+				}
 			}
 		});
-		
 	}
-	
-	
-	/*사용 안함*/
-	function fn_openLogView(file_name, file_size) {
-		var db_svr_id = $("#db_svr_id").val();
-		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name + "&dwLen=1";
-		
-		var v_size = file_size.replace("Mb", "");
-		
-/* 		if(v_size >60) {
-			if(confirm("다운로드 후 확인가능합니다. 다운로드하시겠습니까?")) {
-				fn_download(file_name, file_size);
+
+	/* ********************************************************
+	 * 전송관리 상세
+	 ******************************************************** */
+	function fn_logFileView(row){
+	    var file_name_param = row.file_name;
+	    var file_size_param = row.file_size;
+	    var v_size = file_size_param.replace("Mb", "");
+
+		$.ajax({
+			url : "/audit/auditLogView.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				file_name : file_name_param,
+				dwLen : 1
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+		    error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				
+				if (result != null) {
+					$("#view_file_name", "#auditViewForm").html("<b>" + file_name_param + "</b>");
+					$("#view_file_size", "#auditViewForm").html("<b>" + file_size_param + "</b>");
+				} else {
+					$("#view_file_name", "#auditViewForm").html("");
+					$("#view_file_size", "#auditViewForm").html("");
+				}
+
+				$("#log_line", "#auditViewForm").val("1000");
+				$("#auditlog", "#auditViewForm").html("");
+				
+				$("#seek", "#auditViewForm").val("0");
+				$("#info_file_name", "#auditViewForm").val(file_name_param.trim());
+				$("#endFlag", "#auditViewForm").val("0");
+				$("#dwLen", "#auditViewForm").val("0");
+				$("#fSize", "#auditViewForm").val("");
+
+				//내역 조회
+				fn_addView();
+				
+				$('#pop_layer_audit_info').modal('show');
 			}
-		} else {
-			window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=915,height=800,top=0,left=0");
-		} */
-		window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
-	}
-	
-	function fn_download(file_name, file_size) {
-		var db_svr_id = $("#db_svr_id").val();
-		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name;
-
-		var v_size = file_size.replace("Mb", "");
-		var v_time = 100 * v_size;
-		
-		fn_buttonState(true);
-		//$("#btnDownload").prop("disabled", true);
-
-		//$.download('/audit/auditLogDownload.do', param,'post' );
-		setTimeout("fn_progressClose()", v_time);
-		
-
-		var form = document.auditForm;
-		//form.target = "frmDownload";
-		form.action = "/audit/auditLogDownload.do?" + param ;
-		form.submit();
-		return;
-
-	}
-	
-	function fn_buttonState(blnState) {
-		var btnLength = document.all("btnDownload").length;
-		for(i=0; i<btnLength; i++) {
-			document.all("btnDownload")[i].disabled = blnState;
-		}
-		
-	}
-	
-	function fn_progressClose() {
-		fn_buttonState(false);
-		//$("#btnDownload").prop("disabled", false);
+		});	
 	}
 </script>
 
-<iframe id="frmDownload" name="frmDownload" width="0px" height="0px"></iframe>
-<input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4>
-				<spring:message code="menu.audit_history" />
-				<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
-			<div class="infobox">
-				<ul><li><spring:message code="help.audit_history" /></li></ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li class="bold">${serverName}</li>
-					<li><spring:message code="menu.access_control_management" /></li>
-					<li class="on"><spring:message code="menu.audit_history" /></li>
-				</ul>
+<%@include file="./../popup/auditLogView.jsp"%>
+
+<form name="findList" id="findList" method="post">
+	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+</form>
+
+<div class="content-wrapper main_scroll"  style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-history"></i>
+												<span class="menu-title"><spring:message code="menu.audit_history"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${serverName}</a>
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.audit_management"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.audit_history"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.audit_history"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- title end -->
+				</div>
 			</div>
 		</div>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<span class="btn"><button type="button" onClick="javascript:fn_search();"><spring:message code="common.search" /></button></span>
-				</div>
-				<div class="sch_form">
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width: 100px;" />
-							<col style="width: 200px;" />
-							<col style="width: 80px;" />
-							<col style="width: 200px;" />
-							<col style="width: 80px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t10"><spring:message code="access_control_management.log_term" /></th>
-								<td colspan="4">
-									<div class="calendar_area">
-										<a href="#n" class="calendar_btn">달력열기</a> 
-										<input type="text" class="calendar" id="from" name="start_date" title="기간검색 시작날짜" readonly="readonly" /> 
-										<span class="wave">~</span>
-										<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="to" name="end_date" title="기간검색 종료날짜" readonly="readonly" />
+
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body">
+
+							<form class="form-inline" onsubmit="return false;">
+								<div class="row">
+									<div class="input-group mb-2 mr-sm-2">
+										<div id="start_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="start_dtm" name="start_dtm" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+
+										<div class="input-group align-items-center">
+											<span style="border:none; padding: 0px 10px;"> ~ </span>
+										</div>
+		
+										<div id="end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="end_dtm" name="end_dtm" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
 									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
-				<div class="overflow_area">
-					<table id="auditLogTable" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="20"><spring:message code="common.no" /></th>
-								<th width="200"><spring:message code="access_control_management.log_file_name" /></th>
-								<th width="80"><spring:message code="common.size" /></th>
-								<th width="100"><spring:message code="common.modify_datetime" /></th>
-							</tr>
-						</thead>
-					</table>
+			</div>
+		</div>
+
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+	 						<table id="auditLogTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+								<thead>
+									<tr class="bg-info text-white">
+										<th width="20"><spring:message code="common.no" /></th>
+										<th width="200"><spring:message code="access_control_management.log_file_name" /></th>
+										<th width="80"><spring:message code="common.size" /></th>
+										<th width="100"><spring:message code="common.modify_datetime" /></th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<!-- content-wrapper ends -->
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
+<iframe id="frmDownload" name="frmDownload" width="0px" height="0px"></iframe>

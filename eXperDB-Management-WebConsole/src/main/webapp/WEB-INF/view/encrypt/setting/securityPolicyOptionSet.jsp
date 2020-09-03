@@ -3,7 +3,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="../../cmmn/cs2.jsp"%>
 
 <%
 	/**
@@ -13,25 +15,27 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2018.01.04     최초 생성
+	*  2020.07.17   변승우 과장		UI 디자인 변경
 	*
 	* author 변승우 대리
 	* since 2018.01.04
+	
 	*
 	*/
 %>
+
 <script>
 
 /* ********************************************************
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
-	fn_buttonAut();
+ 	fn_buttonAut();
 	fn_makeStartHour();
 	fn_makeEndHour();
 	
 	fn_securityPolicyOptionSelect01();
-	fn_securityPolicyOptionSelect02();
+	fn_securityPolicyOptionSelect02(); 
 	
 });
 
@@ -53,7 +57,7 @@ function fn_makeStartHour(){
 	var hour = "";
 	var hourHtml ="";
 	
-	hourHtml += '<select class="select t6" name="start_exe_h" id="start_exe_h">';	
+	hourHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;"  name="start_exe_h" id="start_exe_h">';	
 	for(var i=0; i<=23; i++){
 		if(i >= 0 && i<10){
 			hour =  i;
@@ -70,7 +74,7 @@ function fn_makeEndHour(){
 	var hour = "";
 	var hourHtml ="";
 	
-	hourHtml += '<select class="select t6" name="stop_exe_h" id="stop_exe_h">';	
+	hourHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;"  name="stop_exe_h" id="stop_exe_h">';	
 	for(var i=0; i<=24; i++){
 		if(i >= 0 && i<10){
 			hour =  i;
@@ -103,13 +107,11 @@ function fn_securityPolicyOptionSelect01(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
@@ -154,13 +156,11 @@ function fn_securityPolicyOptionSelect01(){
 					}
 				}
 			}else if(data.resultCode == "8000000002"){
-				alert("<spring:message code='message.msg05' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			}else if(data.resultCode == "8000000003"){
-				alert(data.resultMessage);
-				location.href = "/securityKeySet.do";
+				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");
+				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	});	
@@ -179,17 +179,16 @@ function fn_securityPolicyOptionSelect02(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
+				
 				if(data.list[1].logTransferWaitTime == null || data.list[1].logTransferWaitTime == "" || data.list[1].logTransferWaitTime == "null" || data.list[1].logTransferWaitTime == "0"){
 					$("#logTransferWaitTime").val("1");
 				}else{
@@ -241,18 +240,17 @@ function fn_validation(){
 	var GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT = document.getElementById("GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT");
 	
 	if (GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION.value < GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD.value) {
-		alert('[암복호화 로그 서버에서 압축 시간 단위(초)]값은 [암복호화 로그 압축 출력 시간 단위(초)]보다 크거나 같아야 합니다.');
+		showSwalIcon('[암복호화 로그 서버에서 압축 시간 단위(초)]값은 [암복호화 로그 압축 출력 시간 단위(초)]보다 크거나 같아야 합니다.', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	if (GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT.value <= GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD.value) {
-		alert('[암복호화 로그 압축 중단 시간(초)]값은 [암복호화 로그 압축 출력 시간 단위(초)]보다 커야 합니다.');
+		showSwalIcon('[암복호화 로그 압축 중단 시간(초)]값은 [암복호화 로그 압축 출력 시간 단위(초)]보다 커야 합니다.', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	return true;
 }
 
 function fn_save(){
-	if (!fn_validation()) return false;
 	
 	var arrmaps01 = [];
 	var tmpmap01 = new Object();
@@ -299,24 +297,20 @@ function fn_save(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert('<spring:message code="message.msg07" />');
-				//location.reload();
+				showSwalIcon('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');		
 			}else if(data.resultCode == "8000000003"){
-				alert(data.resultMessage);
-				location.href = "/securityKeySet.do";
+				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
 			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");
+				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}	
 		}
 	});	
@@ -346,210 +340,316 @@ function fn_change(){
 
 	}
 }
+
+
+function fn_confirm(){
+	
+	if (!fn_validation()) return false;
+	fn_ConfirmModal();
+}
+
+
+/* ********************************************************
+ * confirm modal open
+ ******************************************************** */
+function fn_ConfirmModal() {
+	confirm_title = '<spring:message code="encrypt_policyOption.Security_Policy_Option_Setting" />' + " " + '<spring:message code="common.save" />';
+	 $('#confirm_msg').html('<spring:message code="message.msg148" />');
+
+	$('#confirm_tlt').html(confirm_title);
+	$('#pop_confirm_md').modal("show");
+}
+
+/* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmRst(){
+	fn_save();
+}
+
 </script>
 
-<style>
-.cmm_bd .sub_tit>p {
-	padding: 0 8px 0 33px;
-	line-height: 24px;
-	background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
-}
-
-.inp_chk >span{
-margin-right: 10px;
-}
-</style>
+<%@include file="./../../popup/confirmForm.jsp"%>
 
 <form name='isServerKeyEmpty' method='post' target='main' action='/securityKeySet.do'></form>
 
 
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
-			<div class="infobox">
-				<ul>
-					<li><spring:message code="encrypt_help.Security_Policy_Option_Setting"/></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Encrypt</li>
-					<li><spring:message code="encrypt_policyOption.Settings"/></li>
-					<li class="on"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></li>
-				</ul>
-			</div>
-		</div>
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
 
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><button type="button" id="btnSave"><spring:message code="common.save"/></button></a> 
-				</div>
-						
-				<div class="cmm_bd">
-					<div class="sub_tit">
-						<p><spring:message code="encrypt_policyOption.Default_Option"/></p>
-					</div>
-					<div class="overflows_areas">
-						<table class="write">
-							<colgroup>
-								<col style="width: 120px;" />
-								<col />
-								<col style="width: 100px;" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<td colspan="2">
-										<div class="inp_chk">
-											<div class="inp_chk">
-												<span style="margin-right: 10%;"> 
-												<input type="checkbox" id="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" name="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" /> 
-												<label for="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF"><spring:message code="encrypt_policyOption.Grant_Access"/></label>
-												</span>
-											</div>
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							Encrypt
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policyOption.Settings"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>					
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="encrypt_help.Security_Policy_Option_Setting"/></p>
 										</div>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="2">
-										<div class="inp_chk">
-											<div class="inp_chk">
-												<span style="margin-right: 10%;"> 
-												<input type="checkbox" id="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" name="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" /> 
-												<label for="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF"><spring:message code="encrypt_policyOption.Stop_Logging"/></label>
-												</span>
-											</div>
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<br><br>
-
-				<div class="cmm_bd">
-					<div class="sub_tit">
-						<p><spring:message code="encrypt_policy_management.Log_Compression"/></p>
-					</div>
-					<div class="overflows_areas">
-						<table class="write">
-							<colgroup>
-								<col style="width: 370px;" />
-								<col />
-								<col style="width: 320px;" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<td colspan="2">
-										<div class="inp_chk">
-											<span style="margin-right: 10%;"> <input type="checkbox" id="GLOBAL_POLICY_BOOST_TF" name="GLOBAL_POLICY_BOOST_TF" /> 
-												<label for="GLOBAL_POLICY_BOOST_TF"><spring:message code="encrypt_policyOption.Boost"/></label>
-											</span>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Compression_time_in_the_log_server"/></th>
-									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION" id="GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION" maxlength="3" min="0" value="0">(<spring:message code="schedule.second" />)</td>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Stop_time_of_log_compression"/></th>
-									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT" maxlength="3" min="0" value="0">(<spring:message code="schedule.second" />)</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Maximum_Compression_value_in_the_log_AP"/></th>
-									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT" maxlength="3" min="0" value="0"></td>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Display_time_of_log_compression"/></th>
-									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD" maxlength="3" min="0" value="0">(<spring:message code="schedule.second" />)</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Start_value_of_log_compression"/></th>
-									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL" maxlength="3" min="0" value="0"></td>
-									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Wait_time_of_log_transmission"/></th>
-									<td><input type="number" class="txt t6" name="logTransferWaitTime" id="logTransferWaitTime" maxlength="3" min="0" value="0">(<spring:message code="schedule.second" />)</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<br><br>
-
-				<div class="cmm_bd">
-					<div class="sub_tit">
-						<p><spring:message code="encrypt_policyOption.Log_Batch_Transmission"/></p>
-					</div>
-					<div class="overflows_areas">
-						<table class="write">
-							<colgroup>
-								<col style="width: 60px;" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<td colspan="2">
-										<div class="inp_chk">
-											<span style="margin-right: 10%;"> 
-											<input type="checkbox" id="blnIsvalueTrueFalse" name="blnIsvalueTrueFalse" onchange="fn_change()"/> 
-												<label for="blnIsvalueTrueFalse"><spring:message code="encrypt_policyOption.Collect_logs_only_at_specified_times"/></label>
-											</span>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2" colspan="2"><spring:message code="encrypt_policyOption.Transfer_Day"/></th>
-								</tr>
-								<tr>
-									<td colspan="2">
-										<div class="inp_chk">
-											<span>
-												<input type="checkbox" id="sun" name="sun" />
-												<label for="sun" style="color: red;"><spring:message code="common.sun" /></label>
-											</span>
-											<span>
-												<input type="checkbox" id="mon" name="mon" />
-												<label for="mon"><spring:message code="common.mon" /></label>
-											</span>
-											<span>
-												<input type="checkbox" id="tue" name="tue" />
-												<label for="tue"><spring:message code="common.tue" /></label>
-											</span>
-											<span>
-												<input type="checkbox" id="wed" name="wed" />
-												<label for="wed"><spring:message code="common.wed" /></label>
-											</span>
-											<span>
-												<input type="checkbox" id="thu" name="thu" />
-												<label for="thu"><spring:message code="common.thu" /></label>
-											</span>
-											<span>
-												<input type="checkbox" id="fri" name="fri" />
-												<label for="fri"><spring:message code="common.fri" /></label>
-											</span>
-											<span>
-												<input type="checkbox" id="sat" name="sat" />
-												<label for="sat" style="color: blue;"><spring:message code="common.sat" /></label>
-											</span>
-										</div>
-									</td>
-								</tr>
-								<tr> 
-									<td><div id="startHour"></div></td> 
-									<td><spring:message code="encrypt_policyOption.Start_Transfer"/></td> 
-								</tr> 
-								<tr>
-									<td><div id="endHour"></div></td> 
-									<td><spring:message code="encrypt_policyOption.End_Transfer"/></td> 
-								</tr>
-							</tbody>
-						</table>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12">
+							<div class="template-demo">	
+								<%-- <button type="button" onClick="fn_agentMonitoringModifyForm();" id="btnUpdate"><spring:message code="common.modify" /></button> --%>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSave" onClick="fn_confirm();">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.save" />
+								</button>		
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="card card-inverse-info"  style="height:25px;">
+						<i class="mdi mdi-blur" style="margin-left: 10px;;">	<spring:message code="encrypt_policyOption.Default_Option"/> </i>
+					</div>
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:160px;">			
+								<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+									<form class="cmxform" id="optionForm">
+										<fieldset>													
+											<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">					
+												<div class="form-check"  style="margin-left: 20px;">
+								                            <label class="form-check-label">
+								                              <input type="checkbox" class="form-check-input" id="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" name="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" >
+								                             <spring:message code="encrypt_policyOption.Grant_Access"/>	
+								                            <i class="input-helper"></i></label>
+								                 </div>					
+											</div>																	
+											<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">					
+												<div class="form-check"  style="margin-left: 20px;">
+								                            <label class="form-check-label">
+								                              <input type="checkbox" class="form-check-input" id="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" name="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" >
+								                             <spring:message code="encrypt_policyOption.Stop_Logging"/>
+								                            <i class="input-helper"></i></label>
+								                 </div>					
+											</div>		
+									</fieldset>
+								</form>	
+							</div>
+						</div>		
+				</div>
+			</div>
+		</div>
+		
+		
+		
+	<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="card card-inverse-info"  style="height:25px;">
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policy_management.Log_Compression"/> </i>
+					</div>
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:220px;">			
+									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+										<form class="cmxform" id="compressForm">
+											<fieldset>												
+												<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">														
+													<div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="GLOBAL_POLICY_BOOST_TF" name="GLOBAL_POLICY_BOOST_TF" >
+									                             <spring:message code="encrypt_policyOption.Boost"/>
+									                            <i class="input-helper"></i></label>
+									                 </div>
+												</div>																							
+												<div class="form-group row" style="margin-bottom:10px;">
+													<!-- 암복호화 로그 서버에서 압축시간 -->
+													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index" style="margin-left: 89px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_policyOption.Compression_time_in_the_log_server"/>
+													</label>
+													<div class="col-sm-1">
+														<input type="number" class="form-control form-control-xsm" id="GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION" name="GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION"   maxlength="3" min="0" value="0"/>														
+													</div>
+													<%-- <span>(<spring:message code="schedule.second" />)</span> --%>
+
+													<!-- 암복호화 로그 AP에서 최대 압축값 -->
+													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index" style="margin-left: 32px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_policyOption.Maximum_Compression_value_in_the_log_AP"/> 
+													</label>
+													<div class="col-sm-1">
+														<input type="number" class="form-control form-control-xsm" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT"   maxlength="3" min="0" value="0"/>														
+													</div>
+													
+													<!-- 암복호화 로그 압축 시작값 -->
+													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index" style="margin-left: 32px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_policyOption.Start_value_of_log_compression"/>
+													</label>
+													<div class="col-sm-1">
+														<input type="number" class="form-control form-control-xsm" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL"   maxlength="3" min="0" value="0"/>														
+													</div>
+												</div>	
+												
+																	
+												<div class="form-group row" style="margin-bottom:10px;">
+													<!-- 암복호화 로그 압축 출력시간 -->
+													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index" style="margin-left: 89px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_policyOption.Display_time_of_log_compression"/>
+													</label>
+													<div class="col-sm-1">
+														<input type="number" class="form-control form-control-xsm" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD"   maxlength="3" min="0" value="0"/>														
+													</div>
+												
+													<!-- 암복호화 로그 압축 중단 시간 -->
+													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index" style="margin-left: 32px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_policyOption.Stop_time_of_log_compression"/>
+													</label>
+													<div class="col-sm-1">
+														<input type="number" class="form-control form-control-xsm" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT"   maxlength="3" min="0" value="0"/>														
+													</div>
+													<%-- <span>(<spring:message code="schedule.second" />)</span> --%>
+													
+													<!-- 암복호화 로그 전송 대기시간 -->
+													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index" style="margin-left: 32px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_policyOption.Wait_time_of_log_transmission"/>
+													</label>
+													<div class="col-sm-1">
+														<input type="number" class="form-control form-control-xsm" id="logTransferWaitTime" name="logTransferWaitTime"   maxlength="3" min="0" value="0"/>														
+													</div>										
+												</div>		
+	
+										</fieldset>
+									</form>	
+								</div>
+							</div>		
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="card card-inverse-info"  style="height:25px;">
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policyOption.Log_Batch_Transmission"/> </i>
+					</div>
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:240px;">			
+									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
+										<form class="cmxform" id="transForm">
+											<fieldset>																
+												<div class="form-group row" style="margin-bottom:10px;margin-left: 55px;">					
+													<div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="blnIsvalueTrueFalse" name="blnIsvalueTrueFalse"  onchange="fn_change()"/>
+									                             <spring:message code="encrypt_policyOption.Collect_logs_only_at_specified_times"/>
+									                            <i class="input-helper"></i></label>
+									                 </div>					
+												</div>																							
+												<div class="form-group row" style="margin-bottom:10px;margin-left: 48px;">		
+													<label for="ins_connect_nm" class="col-sm-13 col-form-label-sm pop-label-index" style="margin-left: 32px;">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="encrypt_policyOption.Transfer_Day"/>
+													</label>													
+													<div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label" for="sun" style="color: red;">
+									                              <input type="checkbox" class="form-check-input" id="sun" name="sun" />
+									                             <spring:message code="common.sun" />
+									                            <i class="input-helper"></i></label>
+									                 </div>											                 
+									                 <div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="mon" name="mon"  />
+									                             <spring:message code="common.mon" />
+									                            <i class="input-helper"></i></label>
+									                 </div>									                 
+									                 <div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="tue" name="tue"  />
+									                             <spring:message code="common.tue" />
+									                            <i class="input-helper"></i></label>
+									                 </div>									                 
+									                 <div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="wed" name="wed" />
+									                            <spring:message code="common.wed" />
+									                            <i class="input-helper"></i></label>
+									                 </div>									                 
+									                 <div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="thu" name="thu"  />
+									                             <spring:message code="common.thu" />
+									                            <i class="input-helper"></i></label>
+									                 </div>									                 
+									                 <div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label">
+									                              <input type="checkbox" class="form-check-input" id="fri" name="fri"  />
+									                             <spring:message code="common.fri" />
+									                            <i class="input-helper"></i></label>
+									                 </div>									                 
+									                 <div class="form-check"  style="margin-left: 20px;">
+									                            <label class="form-check-label" for="sat" style="color: blue;">
+									                              <input type="checkbox" class="form-check-input" id="sat" name="sat"  />
+									                             <spring:message code="common.sat" />
+									                            <i class="input-helper"></i></label>
+									                 </div>     		
+												</div>
+																			
+											<div class="form-group row" style="margin-bottom:10px; margin-left: 60px;">
+												<div class="col-sm-1">
+														<div id = "startHour"></div>													
+												</div>		
+												<div style="margin-top:15px;"><spring:message code="encrypt_policyOption.Start_Transfer"/></div>
+												
+												<div class="col-sm-1" style=" margin-left: 70px;">
+														<div id = "endHour"></div>
+												</div>											
+												 <div style="margin-top:15px;"><spring:message code="encrypt_policyOption.End_Transfer"/> </div>
+											</div>		
+										</fieldset>
+									</form>	
+								</div>
+							</div>		
+				</div>
+			</div>
+		</div>	
+		
+		
 	</div>
-</div>
+</div>	
+	
+

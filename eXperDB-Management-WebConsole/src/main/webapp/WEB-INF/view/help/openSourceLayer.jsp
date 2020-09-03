@@ -1,42 +1,44 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<style>
-p{
-	padding: 0 8px 0 33px; 
-	line-height: 24px;"
-}
-.pop_cts{
-	min-width: 750px;
-}
-</style>
-<div id="pop_layer_openSource" class="pop-layer">
-	<div class="pop-container">
-		<div class="pop_cts" style="width: 20%; padding: 10px; margin: 0 auto;">
-			<p class="tit" style="margin-bottom: 30px;">
-				Open Source License
-				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_openSource'), 'off');" style="float: right;"><img src="/images/ico_state_01.png"/></a>
-			</p>
-				<p>This eXperDB is Copyright eXperDB-Management Development Team. All rights reserved.<br>
-				This eXperDB use Open Source Software (OSS). You can find the source code of these open source projects,<br>
-				along with applicable license information, below.<br>
-				We are deeply grateful to these developers for their work and contributions.<p>
-				<div class="pop_cmm2">
-					<p style="background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat; font-weight: bold;">Egovframe License</p>
-					<p>	Version 2.0, January 2004<br> 
-					http://www.apache.org/licenses/<br> 
-					Apache License</p>
-				</div>
-				<div class="pop_cmm2">
-					<p style="background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat; font-weight: bold;">Datatables</p>
-					<p>https://datatables.net<br> 
-					Copyright (C) 2008-2018, SpryMedia Ltd.<br> 
-					MIT license</p>
-				</div>
-			<div class="btn_type_02">
-				<a href="#n" class="btn"
-					onclick="toggleLayer($('#pop_layer_openSource'), 'off');"><span><spring:message code="common.close"/></span></a>
+
+<div class="modal fade" id="pop_layer_openSource" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+	<div class="modal-dialog  modal-xl-top" role="document">
+		<div class="modal-content">
+			<div class="top-modal-header">
+				<img src="../../images/login_logo_new.png" alt="eXperDB" style="margin: 0 0px 0 auto; display: block; "> 
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<h3 class="modal-title" id="ModalLabel" style="padding-left:25px;background:url(../../images/popup/ico_p_1.png) 4px 50% no-repeat;">Open Source License</h3>
+				<form>
+					<div class="top-form-group">
+						<p>This eXperDB is Copyright eXperDB-Management Development Team. All rights reserved.<br>
+						This eXperDB use Open Source Software (OSS). You can find the source code of these open source projects,<br>
+						along with applicable license information, below.<br>
+						We are deeply grateful to these developers for their work and contributions.<p>
+					</div>
+					<div class="top-deadLine"></div>
+					<div class="form-group">
+						<p class="col-form-label" style="background: url(../../images/popup/ico_p_2.png) 8px 48% no-repeat; font-weight: bold;padding-left:25px;">Egovframe License</p>
+						<p style="padding-left:25px;">	Version 2.0, January 2004 <br />
+						http://www.apache.org/licenses/<br /> 
+						Apache License</p>
+	                </div>
+					<div class="top-deadLine"></div>
+					<div class="form-group">
+						<p class="col-form-label" style="background: url(../../images/popup/ico_p_2.png) 8px 48% no-repeat; font-weight: bold;padding-left:25px;">Datatables</p>
+						<p style="padding-left:25px;">	https://datatables.net <br />
+						Copyright (C) 2008-2018, SpryMedia Ltd.<br /> 
+						MIT license</p>
+	                </div>
+				</form>
+			</div>
+			
+			<div class="top-modal-footer" style="text-align: center !important;">
+				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 			</div>
 		</div>
 	</div>
-	<!-- //pop-container -->
 </div>

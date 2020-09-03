@@ -223,8 +223,9 @@ public class DbSvrAuthorityController {
 	 */
 	@RequestMapping(value = "/updateUsrDBSrvAutInfo.do")
 	@ResponseBody
-	public void updateUsrDBSrvAutInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-		
+	public String updateUsrDBSrvAutInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		String result = "F";
+
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
@@ -246,7 +247,11 @@ public class DbSvrAuthorityController {
 				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
 
 				String scale_yn_chk = "";
+				String trans_yn_chk ="";
 				
+				if (props.get("transfer") != null) {
+					trans_yn_chk = props.get("transfer").toString();
+				}
 				if (props.get("scale") != null) {
 					scale_yn_chk = props.get("scale").toString();
 				}
@@ -261,20 +266,29 @@ public class DbSvrAuthorityController {
 					
 					jval = (JSONObject) rows.get(i);
 					jval.put("scale_yn_chk", scale_yn_chk);
+					jval.put("trans_yn_chk", trans_yn_chk);
+					
+					System.out.println("trans_yn_chk = " + jval.get("trans_yn_chk"));
 					
 					if(cnt==0){
+						System.out.println("인서트");
+						System.out.println(jval.get("transSetting_aut_yn"));
 						dbAuthorityService.insertUsrDBSrvAutInfo(jval);
 					}else{
+						System.out.println("업데이트");
+						System.out.println(jval.get("transSetting_aut_yn"));
 						dbAuthorityService.updateUsrDBSrvAutInfo(jval);
 					}			
 				}
+				
+				result = "S";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return result;
 	}
-
-	
 
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectTreeDBSvrList.do")

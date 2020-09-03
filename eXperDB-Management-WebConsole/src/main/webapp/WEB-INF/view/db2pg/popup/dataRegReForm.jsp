@@ -259,7 +259,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 </form>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Migration <spring:message code="common.registory" /></p>
+		<p class="tit">Migration <spring:message code="common.modify" /></p>
 		<div class="pop_cmm">
 			<table class="write">
 				<caption>Migration <spring:message code="common.registory" /></caption>

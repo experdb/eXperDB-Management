@@ -1,9 +1,13 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,6 +17,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,10 +30,8 @@ import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -40,6 +43,7 @@ import com.k4m.dx.tcontrol.encrypt.service.call.StatisticsServiceCall;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.scale.service.InstanceScaleService;
+import com.k4m.dx.tcontrol.scale.service.InstanceScaleVO;
 import com.k4m.dx.tcontrol.script.service.ScriptService;
 
 /**
@@ -103,6 +107,9 @@ public class CmmnController {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));	
+			
 			// 메인 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0004");
@@ -110,198 +117,66 @@ public class CmmnController {
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
-			// 스케줄 정보
-			DashboardVO scheduleInfoVO = (DashboardVO) dashboardService.selectDashboardScheduleInfo();
-
 			// 백업정보
 			DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
-
+			
+			// 스케줄 정보
+			DashboardVO scheduleInfoVO = (DashboardVO) dashboardService.selectDashboardScheduleInfo();
+			
 			DashboardVO dashVo = new DashboardVO();
 			
-			// DBMS정보(DB전체 개수 조회, audit 설정 조회)
-			List<DashboardVO> serverInfoVOSelect = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(dashVo);
-			List<DashboardVO> serverInfoVO = new ArrayList<DashboardVO>();
+			//서버정보
+			List<DashboardVO> serverInfoVOSelectTot = (List<DashboardVO>) dashboardService.selectDashboardServerInfoNew(dashVo);
+			List<DashboardVO> serverInfoTotVO = new ArrayList<DashboardVO>();
+
 			try{
-				if(serverInfoVOSelect.size()>0){
-					for(int i=0; i<serverInfoVOSelect.size(); i++){
+				if(serverInfoVOSelectTot.size()>0){
+					for(int i=0; i<serverInfoVOSelectTot.size(); i++){
 						dashVo = new DashboardVO();
-						if(serverInfoVOSelect.get(i).getAgt_cndt_cd().equals("TC001102")){
-							dashVo.setDb_svr_nm(serverInfoVOSelect.get(i).getDb_svr_nm());
-							dashVo.setIpadr(serverInfoVOSelect.get(i).getIpadr());
-							dashVo.setDb_cnt(serverInfoVOSelect.get(i).getDb_cnt());
-							dashVo.setUndb_cnt(0);
-							dashVo.setConnect_cnt(serverInfoVOSelect.get(i).getConnect_cnt());
-							dashVo.setExecute_cnt(serverInfoVOSelect.get(i).getExecute_cnt());
-							dashVo.setLst_mdf_dtm(serverInfoVOSelect.get(i).getLst_mdf_dtm());
-							dashVo.setAgt_cndt_cd(serverInfoVOSelect.get(i).getAgt_cndt_cd());
-							dashVo.setAudit_state("-");
-							serverInfoVO.add(dashVo);
-						}else{
-							String db_svr_nm = serverInfoVOSelect.get(i).getDb_svr_nm();
-							List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
-							AgentInfoVO vo = new AgentInfoVO();
-							vo.setIPADR(resultSet.get(0).getIpadr());
-							AgentInfoVO agentInfo = (AgentInfoVO)cmmnServerInfoService.selectAgentInfo(vo);
-							String IP = resultSet.get(0).getIpadr();
-							int PORT = agentInfo.getSOCKET_PORT();
-							JSONObject serverObj = new JSONObject();
-							serverObj.put(ClientProtocolID.SERVER_NAME,resultSet.get(0).getDb_svr_nm());
-							serverObj.put(ClientProtocolID.SERVER_IP,resultSet.get(0).getIpadr());
-							serverObj.put(ClientProtocolID.SERVER_PORT,resultSet.get(0).getPortno());
-							serverObj.put(ClientProtocolID.DATABASE_NAME,resultSet.get(0).getDft_db_nm());
-							serverObj.put(ClientProtocolID.USER_ID,resultSet.get(0).getSvr_spr_usr_id());
-							serverObj.put(ClientProtocolID.USER_PWD,dec.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
-							ClientInfoCmmn cic = new ClientInfoCmmn();
-							Map<String, Object> result = new HashMap<String, Object>();
-							result = cic.db_List(serverObj, IP, PORT);
-							JSONArray data = (JSONArray) result.get("data");
-							
-							if(loginVo.getPg_audit().equals("Y")){
-								ClientAdapter CA = new ClientAdapter(IP, PORT);
-								JSONObject objList;
-								CA.open();
-								objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
-								CA.close();
-								String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-								//strResultCode=0 이면 감사 Enabled 아니면 - 표시
-								if(strResultCode.equals("0")){
-									dashVo.setAudit_state("Enabled");
-								}else{
-									dashVo.setAudit_state("-");
-								}
-							}else{
-								dashVo.setAudit_state("-");
-							}			
-							dashVo.setDb_svr_nm(serverInfoVOSelect.get(i).getDb_svr_nm());
-							dashVo.setIpadr(serverInfoVOSelect.get(i).getIpadr());
-							dashVo.setDb_cnt(serverInfoVOSelect.get(i).getDb_cnt());
-							dashVo.setUndb_cnt(data.size()-serverInfoVOSelect.get(i).getDb_cnt());
-							dashVo.setConnect_cnt(serverInfoVOSelect.get(i).getConnect_cnt());
-							dashVo.setExecute_cnt(serverInfoVOSelect.get(i).getExecute_cnt());
-							dashVo.setLst_mdf_dtm(serverInfoVOSelect.get(i).getLst_mdf_dtm());
-							dashVo.setAgt_cndt_cd(serverInfoVOSelect.get(i).getAgt_cndt_cd());
-							serverInfoVO.add(dashVo);
-						}		
-					}
-				}
-			}catch(Exception e){
-			}
-			
-			// 백업정보(DUMP)
-			List<DashboardVO> backupDumpInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupDumpInfo(dashVo);
-
-			// 백업정보(RMAN)
-			List<DashboardVO> backupRmanInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupRmanInfo(dashVo);
-
-			// 관리상태_작업관리(전체스케줄수행건수)
-			int scd_total = dashboardService.selectDashboardScheduleTotal();
-			// 관리상태_작업관리(스케줄실패건수)
-			int scd_fail = dashboardService.selectDashboardScheduleFail();
-			// 작업관리 식 : 100-((실패건수/전체수행건수)*100)
-			int wrk_state = (int) (100 - ((double) scd_fail / (double) scd_total * 100));
-			System.out.println("작업관리 : " + wrk_state+"%");
-
-			// 관리상태_서버관리(전체서버건수)
-			int svr_total = dashboardService.selectDashboardServerTotal();
-			// 관리상태_서버관리(사용서버건수)
-			int svr_use = dashboardService.selectDashboardServerUse();
-			// 관리상태_서버관리(중지되어있는 서버수)
-			int svr_death = dashboardService.selectDashboardServerDeath();
-			int svr_state = 0;
-			if (svr_death == 0) {
-				Boolean auditCheck = true;
-				if(loginVo.getPg_audit().equals("Y")){
-					List<DbServerVO> dbServerVO = (List<DbServerVO>) dashboardService.selectDashboardServer();
-					for (int i = 0; i < dbServerVO.size(); i++) {
-						String Ip = dbServerVO.get(i).getIpadr();
-						int port = dbServerVO.get(i).getSocket_port();
-						JSONObject serverObj = new JSONObject();
-						JSONObject objSettingInfo = new JSONObject();
-						serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.get(i).getDb_svr_nm());
-						serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.get(i).getIpadr());
-						serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.get(i).getPortno());
-						serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.get(i).getDft_db_nm());
-						serverObj.put(ClientProtocolID.USER_ID, dbServerVO.get(i).getSvr_spr_usr_id());
-						serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.get(i).getSvr_spr_scm_pwd()));
-						JSONObject objList;
-						ClientAdapter CA = new ClientAdapter(Ip, port);
-						CA.open();
-						objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj,objSettingInfo);
-						String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-						System.out.println("RESULT_CODE : " + strResultCode);
+						dashVo.setDb_svr_nm(serverInfoVOSelectTot.get(i).getDb_svr_nm());
+						dashVo.setIpadr(serverInfoVOSelectTot.get(i).getIpadr());
+						dashVo.setDb_svr_id(serverInfoVOSelectTot.get(i).getDb_svr_id());
 						
-						CA.close();
-	
-						if (!strResultCode.equals("0")) {
-							auditCheck = false;
-						}
+						dashVo.setDb_cnt(serverInfoVOSelectTot.get(i).getDb_cnt());
+						dashVo.setUndb_cnt(0);
+
+						dashVo.setConnect_cnt(serverInfoVOSelectTot.get(i).getConnect_cnt());
+						dashVo.setExecute_cnt(serverInfoVOSelectTot.get(i).getExecute_cnt());
+						dashVo.setLst_mdf_dtm(serverInfoVOSelectTot.get(i).getLst_mdf_dtm());
+						dashVo.setAgt_cndt_cd(serverInfoVOSelectTot.get(i).getAgt_cndt_cd());
+						dashVo.setAudit_state("-");
+						dashVo.setMaster_gbn(serverInfoVOSelectTot.get(i).getMaster_gbn());
+						dashVo.setSvr_host_nm(serverInfoVOSelectTot.get(i).getSvr_host_nm());
+
+						serverInfoTotVO.add(dashVo);
 					}
-				}else{
-					auditCheck = false;
-				}
-				// audit 설치 되어 있을 시 -> 서버관리 식: (관리건수/총건수)*100
-				if (auditCheck == true) {
-					 svr_state = (int) ((double)((double)svr_use/(double)svr_total)*100);
-				} else {
-					// audit 설치 안되어 있을 시 -> 감시로 표시(09.05 기능보류)
-					// svr_state = 35;
-					svr_state = (int) ((double)((double)svr_use/(double)svr_total)*100);
-				}
-			}
-			System.out.println("서버관리 : " + svr_state+"%");
-			
-			// 관리상태_백업관리(전체등록건수)
-			int bak_total = dashboardService.selectDashboardBackupTotal();
-			// 관리상태_백업관리(실패건수)
-			int bak_fail = dashboardService.selectDashboardBackupFail();
-			// 관리상태_백업관리(사용하지않는건수)
-			int bak_nouse = dashboardService.selectDashboardBackupNouse();
-			//백업관리 식 : (미등록건수/등록건수*100)-(실패건수*5)
-			int bak_state = (int) ((double) bak_nouse / (double) bak_total * 100) - (bak_fail * 5);
-			System.out.println("백업관리 : " + bak_state+"%");
-
-			//scale 현상태 체크(당일자료)
-			List<Map<String, Object>> resultScale = new ArrayList<Map<String, Object>>();
-			try{
-				List<Map<String, Object>> searchScale = (List<Map<String, Object>>) dashboardService.selectDashboardScaleInfo();
-				int scale_cnt = 0;
-				if (searchScale != null) {
-					if(searchScale.size()>0){
-						for(int i=0; i<searchScale.size(); i++){
-							Map<String, Object> mapScale = (HashMap<String, Object>)searchScale.get(i);
-							String str_db_svr_id = String.valueOf(mapScale.get("db_svr_id"));
-							
-							int db_svr_id = Integer.parseInt(str_db_svr_id);
-							scale_cnt = instanceScaleService.dashboardInstanceScale(db_svr_id);//instance_cnt
-							
-System.out.println("===scale_cnt===" + scale_cnt);
-							
-							mapScale.put("instance_cnt", scale_cnt);
-							
-							//instance 가 있는 경우만
-							if (scale_cnt > 0) {
-								resultScale.add(mapScale);
-							}
-
-						}
-					}
-
 				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 
-			mv.addObject("scheduleInfo", scheduleInfoVO);
-			mv.addObject("backupInfo", backupInfoVO);
-			mv.addObject("serverInfo", serverInfoVO);
-			mv.addObject("backupDumpInfo", backupDumpInfoVO);
-			mv.addObject("backupRmanInfo", backupRmanInfoVO);
-			mv.addObject("wrk_state", wrk_state);
-			mv.addObject("svr_state", svr_state);
-			mv.addObject("bak_state", bak_state);
-			
-			//scale 내역조회
-			mv.addObject("scaleIngInfo", resultScale);
+		    String db2pg_yn = "N";
+		    if (props.get("db2pg") != null) {
+		    	db2pg_yn = props.get("db2pg").toString();
+				if (!"Y".equals(db2pg_yn)) {
+					db2pg_yn = "N";
+				}
+		    }
+		    
+			//scale_yn확인
+			String strScaleYn = "N";
+			if (props.get("scale") != null) {
+				strScaleYn = props.get("scale").toString();
+				if (!"Y".equals(strScaleYn)) {
+					strScaleYn = "N";
+				}
+			}
+
+			mv.addObject("db2pg_yn", db2pg_yn);				//DB2_PG 사용여부
+			mv.addObject("scale_yn", strScaleYn);			//scale 사용여부
+			mv.addObject("scheduleInfo", scheduleInfoVO);	//스케줄 정보
+			mv.addObject("backupInfo", backupInfoVO);		//백업 정보
+			mv.addObject("serverTotInfo", serverInfoTotVO);	//서버 정보
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -309,6 +184,249 @@ System.out.println("===scale_cnt===" + scale_cnt);
 		return mv;
 	}
 	
+	/**
+	 * 대쉬보드 서버별 화면 관련 내역 조회
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/dashboarod_main_search.do")
+	public ModelAndView connectRegForm2(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) throws FileNotFoundException, IOException {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		Properties props = new Properties();
+		props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));	
+		
+		String strScaleYn = "N";
+		if (props.get("scale") != null) {
+			strScaleYn = props.get("scale").toString();
+			if (!"Y".equals(strScaleYn)) {
+				strScaleYn = "N";
+			}
+		}
+
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		
+
+		List<Map<String, Object>> backupScdresult = null; 			//백업일정 조회
+		List<Map<String, Object>> scriptScdresult = null; 			//배치일정 조회
+		List<Map<String, Object>> scheduleHistoryresult = null; 	//스케줄이력 조회
+		Map<String, Object> scheduleHistoryChart = null;			//스케줄이력 chart 조회
+		List<Map<String, Object>> backupHistoryresult = null; 		//백업이력 조회
+		List<DashboardVO> backupDumpInfoVO = null;					//백업정보(DUMP)
+		List<DashboardVO> backupRmanInfoVO = null;					//백업정보(RMAN)
+		List<Map<String, Object>> scriptHistoryresult = null; 		//배치이력 조회
+		Map<String, Object> scriptHistoryChart = null;				//배치이력 chart 조회
+		
+		int backupScdCnt = 0;
+		int scriptScdCnt = 0;
+		int migtScdCnt = 0;
+		
+		List<Map<String, Object>> migtScdresult = null; 			//MIGRATION 일정 조회
+		List<Map<String, Object>> migtHistoryresult = null; 		//MIGRATION 이력 조회
+		Map<String, Object> migtHistoryChart = null;				//MIGRATION chart 조회
+		
+		Map<String, Object> scaleChkresult = new JSONObject();
+		String scale_install_yn = "";								//스케일 가능여부
+		List<Map<String, Object>> scaleHistoryresult = null; 		//scale 이력 조회
+		List<Map<String, Object>> scaleSettingChartresult = new ArrayList<Map<String, Object>>(); 	//scale chart list 조회
+
+		Map<String, Object> scaleHistoryChart = null;				//scale chart 조회
+		Map<String, Object> scaleSettingChart = null;				//scale 발생이력 chart 조회
+
+		DashboardVO dashVo = new DashboardVO();
+		InstanceScaleVO instanceScaleVO = new InstanceScaleVO();
+		
+		JSONObject tablespaceObj = new JSONObject();
+		
+		try {
+			//백업 스케줄 목록
+			dashVo.setDb_svr_id(db_svr_id);
+			instanceScaleVO.setDb_svr_id(db_svr_id);
+			
+			dashVo.setBsn_dscd("TC001901");
+			backupScdresult = dashboardService.selectDashboardScdList(dashVo);
+			if (backupScdresult != null) {
+				backupScdCnt = backupScdresult.size();
+			}
+			
+			//배치 스케줄 목록
+			dashVo.setBsn_dscd("TC001902");
+			scriptScdresult = dashboardService.selectDashboardScdList(dashVo);
+			if (scriptScdresult != null) {
+				scriptScdCnt = scriptScdresult.size();
+			}
+
+			//스케줄 이력 목록
+			scheduleHistoryresult = dashboardService.selectDashboardScheduleHistory(dashVo);
+			//스케줄 이력 chart 조회
+			scheduleHistoryChart = dashboardService.selectDashboardScheduleHistoryChart(dashVo);
+			
+			//백업 이력 목록
+			dashVo.setBsn_dscd("TC001901");
+			backupHistoryresult = dashboardService.selectDashboardBackupHistory(dashVo);
+
+			// 백업정보(DUMP)
+			backupDumpInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupDumpInfo(dashVo);
+
+			// 백업정보(RMAN)
+			backupRmanInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupRmanInfo(dashVo);
+			
+			//배치 이력 목록
+			dashVo.setBsn_dscd("TC001902");
+			scriptHistoryresult = dashboardService.selectDashboardBackupHistory(dashVo);
+			//배치 이력 chart 조회
+			scriptHistoryChart = dashboardService.selectDashboardScriptHistoryChart(dashVo);
+
+			//MIGRATION 스케줄 목록
+			migtScdresult = dashboardService.selectDashboardMigtList(dashVo);
+			if (migtScdresult != null) {
+				migtScdCnt = migtScdresult.size();
+			}
+			
+			//MIGRATION 이력 목록
+			migtHistoryresult = dashboardService.selectDashboardMigtHistory(dashVo);
+			//MIGRATION 이력 chart 조회
+			migtHistoryChart = dashboardService.selectDashboardMigtHistoryChart(dashVo);
+
+			if (strScaleYn.equals("Y")) {
+				try {
+
+					//scale log 확인
+					scaleChkresult = (Map<String, Object>)instanceScaleService.scaleInstallChk(instanceScaleVO);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				if (scaleChkresult != null) {
+					scale_install_yn = (String)scaleChkresult.get("install_yn");
+					if (scale_install_yn != null && "Y".equals(scale_install_yn)) {
+						//scale 이력 목록
+						scaleHistoryresult = dashboardService.selectDashboardScaleHistory(dashVo);
+						
+						//scale 이력 chart 조회
+						scaleHistoryChart = dashboardService.selectDashboardScaleHistoryChart(dashVo);
+						
+						if (scaleHistoryChart != null) {
+							if (scaleHistoryChart.get("db_svr_id") != null) {
+								for (int i = 0; i < 4; i++) {
+									Map<String, Object> chart = new HashMap<String, Object>();
+									String scale_nm_val = "scale_nm" +  Integer.toString(i);
+
+									chart.put("scale_nm", scale_nm_val);
+									if (i== 0) {
+										chart.put("suc", scaleHistoryChart.get("exe_in_auto_suc"));
+										chart.put("fal", scaleHistoryChart.get("exe_in_auto_fal"));
+									} else if (i== 1) {
+										chart.put("suc", scaleHistoryChart.get("exe_out_auto_suc"));
+										chart.put("fal", scaleHistoryChart.get("exe_out_auto_fal"));
+									} else if (i== 2) {
+										chart.put("suc", scaleHistoryChart.get("exe_in_mnl_suc"));
+										chart.put("fal", scaleHistoryChart.get("exe_in_mnl_fal"));
+									} else if (i== 3) {
+										chart.put("suc", scaleHistoryChart.get("exe_out_mnl_suc"));
+										chart.put("fal", scaleHistoryChart.get("exe_out_mnl_fal"));
+									}
+		
+									scaleSettingChartresult.add(chart);
+								}
+							}
+						}
+
+						//scale 발생이력 chart 조회
+						scaleSettingChart = dashboardService.selectDashboardScaleSetChart(dashVo);
+					}
+				}
+			}
+			
+			tablespaceObj = tablespaceSelect(db_svr_id);
+
+
+			mv.addObject("backupScdresult", backupScdresult);				//백업일정 목록
+			mv.addObject("backupScdCnt", backupScdCnt);						//백업일정 cnt
+
+			mv.addObject("scriptScdresult", scriptScdresult);				//배치일정 목록
+			mv.addObject("scriptScdCnt", scriptScdCnt);						//배치일정 cnt
+
+			mv.addObject("scheduleHistoryresult", scheduleHistoryresult);	//스케줄 이력 목록
+			mv.addObject("scheduleHistoryChart", scheduleHistoryChart);		//스케줄 이력 chart 조회
+
+			mv.addObject("backupHistoryresult", backupHistoryresult);		//백업 이력 목록
+			mv.addObject("backupDumpInfo", backupDumpInfoVO);				//dump백업
+			mv.addObject("backupRmanInfo", backupRmanInfoVO);				//rman백업
+
+			mv.addObject("scriptHistoryresult", scriptHistoryresult);		//배치 이력 목록
+			mv.addObject("scriptHistoryChart", scriptHistoryChart);			//배치 이력 chart 조회
+			
+			mv.addObject("migtScdresult", migtScdresult);					//migration 일정 목록
+			mv.addObject("migtScdCnt", migtScdCnt);							//migration 일정 cnt
+			mv.addObject("migtHistoryresult", migtHistoryresult);			//migration 이력 목록
+			mv.addObject("migtHistoryChart", migtHistoryChart);				//migration 이력 chart 조회
+			
+			mv.addObject("scale_install_yn", scale_install_yn);				//scale 가능여부
+			mv.addObject("scaleHistoryresult", scaleHistoryresult);			//scale 이력 목록 조회
+			mv.addObject("scaleSettingChartresult", scaleSettingChartresult);//scale 이력 chart 조회
+			mv.addObject("scaleSettingChart", scaleSettingChart);			//scale 발생이력 chart 조회
+			
+			mv.addObject("db_svr_id", db_svr_id);
+System.out.println("==tablespaceObj===" + tablespaceObj);
+			mv.addObject("tablespaceObj", tablespaceObj);					//테이블 space 조회
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	/**
+	 * 속성 화면 조회.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	public JSONObject tablespaceSelect(int db_svr_id) {
+
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject serverObj = new JSONObject();
+		JSONObject result = new JSONObject();
+
+		try {
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO); //서버정보조회
+		
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo); //agent 정보조회
+
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+
+			result = cic.serverSpace(IP, PORT, serverObj);   //대시보드 서버용량
+
+		}catch(Exception e){
+			e.printStackTrace();
+			
+		}			
+
+		return result;
+	}
+
 	/**
 	 *  권한 에러 화면을 보여준다.
 	 * 
@@ -477,7 +595,7 @@ System.out.println("===scale_cnt===" + scale_cnt);
 
 	/**
 	 * 디렉토리 존재유무 체크(master만 체크)
-	 * @param WorkVO
+	 * @param WorkVO, request, dbServerVO
 	 * @return resultSet
 	 * @throws Exception
 	 */
@@ -847,7 +965,7 @@ System.out.println("===scale_cnt===" + scale_cnt);
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/serverStatus.do")	
 	public @ResponseBody JSONObject serverStatus(HttpServletRequest request) {
-	
+	System.out.println("123123==============================");
 				JSONObject result = new JSONObject();
 
 				HttpSession session = request.getSession();
@@ -857,7 +975,11 @@ System.out.println("===scale_cnt===" + scale_cnt);
 				String strTocken = loginVo.getTockenValue();
 				String loginId = loginVo.getUsr_id();
 				String entityId = loginVo.getEctityUid();
-
+				System.out.println("restIp==============================" + restIp);
+				System.out.println("restIp==============================" + restPort);
+				System.out.println("restIp==============================" + strTocken);
+				System.out.println("restIp==============================" + loginId);
+				System.out.println("restIp==============================" + entityId);
 				try{
 					CommonServiceCall csc = new CommonServiceCall();					
 					result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);

@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/commonLocale.jsp"%>
+
 <%
 	/**
 	* @Class Name : dumpRegReForm.jsp
@@ -19,916 +19,897 @@
 	*
 	*/
 %>
-<!doctype html>
-<html lang="ko">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
+
+<script src="/vertical-dark-sidebar/js/backup_common.js"></script>
+
 <script type="text/javascript">
-// 저장후 작업ID
-var wrk_id = null;
-var haCnt =0;
-var wrk_id = "${wrk_id}";
+	var haCnt = 0;
+	var mode_workObj = null;
 
-/* ********************************************************
- * DB Object initialization
- ******************************************************** */
-var workObj = {"obj":[
-	<c:forEach var="result" items="${workObjList}" varStatus="status">
-	{"scm_nm":"${result.scm_nm}","obj_nm":"${result.obj_nm}"},
-	</c:forEach>
-	{"scm_nm":"","obj_nm":""}
-]};
-
-/* ********************************************************
- * Checkbox, Object List initialization
- ******************************************************** */
-$(window.document).ready(
-	function() {
-		
-		 $.ajax({
-				async : false,
-				url : "/selectHaCnt.do",
-			  	data : {
-			  		db_svr_id : $("#db_svr_id").val()
-			  	},
-				type : "post",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						top.location.href = "/";
-					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-						top.location.href = "/";
-					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-					}
+	$(window.document).ready(function() {
+		//validate
+		$("#workDumpModForm").validate({
+			rules: {
+				mod_dump_wrk_nm: {
+					required: true
 				},
-				success : function(result) {
-					haCnt = result[0].hacnt;			
-				}
-			}); 
-		 
-		//fn_get_object_list("${workInfo[0].db_id}","${workInfo[0].db_nm}");
-		checkSection();
-		changeFileFmtCd();
-		checkOid();
-
-		setTimeout("fn_get_object_list('','')", 100); 
-		
-		//fn_checkFolderVol(1);
-		//fn_checkFolderVol(2);
-
-		 /* $.ajax({
-			async : false,
-			url : "/selectPathInfo.do",
-		  	data : {
-		  		db_svr_id : db_svr_id
-		  	},
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				mod_dump_wrk_exp: {
+					required: true
+				},
+				mod_dump_db_id: {
+					required: true
+				},
+				mod_dump_save_pth: {
+					required: true
 				}
 			},
-			success : function(result) {
-				document.getElementById("log_file_pth").value=result[1].PGDLOG;
-				document.getElementById("save_pth").value=result[1].PGDBAK;		
+			messages: {
+				mod_dump_wrk_nm: {
+					required: '<spring:message code="message.msg107" />'
+				},
+				mod_dump_wrk_exp: {
+					required: '<spring:message code="message.msg108" />'
+				},
+				mod_dump_db_id: {
+					required: '<spring:message code="backup_management.bck_database_choice" />'
+				},
+				mod_dump_save_pth: {
+					required: '<spring:message code="message.msg79" />'
+				}
+			},
+			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
+				fn_dump_update_work();
+			},
+			errorPlacement: function(label, element) {
+				label.addClass('mt-2 text-danger');
+				label.insertAfter(element);
+			},
+			highlight: function(element, errorClass) {
+				$(element).parent().addClass('has-danger')
+				$(element).addClass('form-control-danger')
 			}
-		});  */
+		});
+	});
 
-});
+	/* ********************************************************
+	 * 시작시 폴더 용량 가져오기
+	 ******************************************************** */
+	function fn_mod_dump_checkFolder_init(keyType){
+		var save_path = nvlPrmSet($("#mod_dump_save_pth", "#workDumpModForm").val(), "");
 
-/* ********************************************************
- * Dump Backup Update
- ******************************************************** */
-function fn_update_work(){
-	if(valCheck()){
+		if(save_path == "" && keyType == 2){
+			$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+			$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
+			$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+
+			return;
+		}
+
+		$.ajax({
+			async : false,
+			/* url : "/existDirCheck.do", */
+			url : "/existDirCheckMaster.do",   //2019-09-26 변승우 대리, 수정(경로체크 시 MASTER만)
+			data : {
+				db_svr_id : $("#db_svr_id","#findList").val(),
+				path : save_path
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {
+
+				if (data != null) {
+					if (data.result != null && data.result != undefined) {
+						if(data.result.ERR_CODE == ""){
+							if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
+								var volume = data.result.RESULT_DATA.CAPACITY;
+
+								if(keyType == 2){
+									$("#mod_dump_check_path2", "#workDumpModForm").val("Y");
+
+									$("#mod_dump_backupVolume", "#workDumpModForm").html("<spring:message code='common.volume' /> : "+volume);
+									$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+								}
+							}else{
+								if(haCnt > 1){
+									$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
+								}else{
+									$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="backup_management.invalid_path"/>');
+								}
+								
+								$("#mod_dump_save_pth_alert", "#workDumpModForm").show();
+								
+								$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+								$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
+								$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+							}
+						}else{
+							$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="message.msg76" />');
+							$("#mod_dump_save_pth_alert", "#workDumpModForm").show();
+							
+							$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+							$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
+							$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+						}
+					} else {
+	/* 					$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="message.msg76" />');
+						$("#mod_dump_save_pth_alert", "#workDumpModForm").show();
+						 */
+						$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+						$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
+						$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+					}
+				} else {
+					$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="message.msg76" />');
+					$("#mod_dump_save_pth_alert", "#workDumpModForm").show();
+					
+					$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+					$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
+					$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * 저장경로의 존재유무 체크
+	 ******************************************************** */
+	function fn_mod_dump_checkFolder(keyType){
+		var save_path = nvlPrmSet($("#mod_dump_save_pth", "#workDumpModForm").val(), "");
+
+		if(save_path == "" && keyType == 2){
+			showSwalIcon('<spring:message code="backup_management.bckPath_input_please" />', '<spring:message code="common.close" />', '', 'warning');
+			return;
+		}
+		
+		//초기화
+		$("#mod_dump_save_pth_alert", "#workDumpModForm").html('');
+		$("#mod_dump_save_pth_alert", "#workDumpModForm").hide();
+
+		$.ajax({
+			async : false,
+			/* url : "/existDirCheck.do", */
+			url : "/existDirCheckMaster.do",   //2019-09-26 변승우 대리, 수정(경로체크 시 MASTER만)
+			data : {
+				db_svr_id : $("#db_svr_id","#findList").val(),
+				path : save_path
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {
+				if (data.result != null && data.result != undefined) {
+					if(data.result.ERR_CODE == ""){
+						if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
+							var volume = data.result.RESULT_DATA.CAPACITY;
+							
+							showSwalIcon('<spring:message code="message.msg100" />', '<spring:message code="common.close" />', '', 'success');
+							
+							if(keyType == 2){
+								$("#mod_dump_check_path2", "#workDumpModForm").val("Y");
+
+								$("#mod_dump_backupVolume", "#workDumpModForm").html("<spring:message code='common.volume' /> : "+volume);
+								$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+							}
+						}else{
+							if(haCnt > 1){
+								showSwalIcon('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>', '<spring:message code="common.close" />', '', 'error');
+							}else{
+								showSwalIcon('<spring:message code="backup_management.invalid_path"/>', '<spring:message code="common.close" />', '', 'error');
+							}
+
+							$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+							$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
+							$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+						}
+					}else{
+						showSwalIcon('<spring:message code="message.msg76" />', '<spring:message code="common.close" />', '', 'error');
+
+						$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+						$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
+						$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+					}
+				} else {
+					showSwalIcon('<spring:message code="message.msg76" />', '<spring:message code="common.close" />', '', 'error');
+
+					$("#mod_dump_check_path2", "#workDumpModForm").val("N");
+					$("#mod_dump_backupVolume", "#workDumpModForm").html('<spring:message code="common.volume" /> : 0');
+					$("#mod_dump_backupVolume_div", "#workDumpModForm").show();
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * Dump Backup Update
+	 ******************************************************** */
+	function fn_dump_update_work(){
+		if (!mod_dump_valCheck()) return false;
+
 		$.ajax({
 			async : false,
 			url : "/popup/workDumpReWrite.do",
-		  	data : {
-		  		bck_wrk_id : $("#bck_wrk_id").val(),
-		  		wrk_id : $("#wrk_id").val(),
-		  		wrk_nm : $("#wrk_nm").val().trim(),
-		  		wrk_exp : $("#wrk_exp").val(),
-		  		db_id : $("#db_id").val(),
+			data : {
+				db_svr_id : $("#db_svr_id","#findList").val(),
+				wrk_nm : nvlPrmSet($('#mod_dump_wrk_nm', '#workDumpModForm').val(), "").trim(),
+				wrk_id : nvlPrmSet($('#mod_dump_wrk_id', '#workDumpModForm').val(), ""),
+				bck_wrk_id : nvlPrmSet($("#mod_dump_bck_wrk_id", '#workDumpModForm').val(), ""),
+				wrk_exp : nvlPrmSet($('#mod_dump_wrk_exp', '#workDumpModForm').val(), ""),
+				db_id : $("#mod_dump_db_id", '#workDumpModForm').val(),
 		  		bck_bsn_dscd : "TC000202",
-		  		save_pth : $("#save_pth").val(),
-		  		file_fmt_cd : $("#file_fmt_cd").val(),
-		  		cprt : $("#cprt").val(),
-		  		encd_mth_nm : $("#encd_mth_nm").val(),
-		  		usr_role_nm : $("#usr_role_nm").val(),
-		  		file_stg_dcnt : $("#file_stg_dcnt").val(),
-		  		bck_mtn_ecnt : $("#bck_mtn_ecnt").val(),
-		  		bck_filenm : $("#bck_filenm").val(),
-		  		log_file_pth : $("#log_file_pth").val()
-		  	},
+		  		save_pth : $("#mod_dump_save_pth", "#workDumpModForm").val(),
+		  		file_fmt_cd : $("#mod_dump_file_fmt_cd", "#workDumpModForm").val(),
+		  		cprt : $("#mod_dump_cprt", "#workDumpModForm").val(),
+		  		encd_mth_nm : $("#mod_dump_encd_mth_nm", "#workDumpModForm").val(),
+		  		usr_role_nm : $("#mod_dump_usr_role_nm", "#workDumpModForm").val(),
+		  		file_stg_dcnt : $("#mod_dump_file_stg_dcnt", "#workDumpModForm").val(),
+				bck_mtn_ecnt : $("#mod_dump_bck_mtn_ecnt", '#workDumpModForm').val(),
+		  		bck_filenm : "",
+		  		log_file_pth : ""
+			},
 			type : "post",
 			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
+				xhr.setRequestHeader("AJAX", true);
+			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {
-					fn_insert_opt();
+				if(data == "F"){
+					showSwalIcon('<spring:message code="eXperDB_scale.msg22" />', '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_mod_dump').modal('show');
+					return;
+				}else{
+					fn_dump_update_opt();
+				}
 			}
-		});  
+			
+		});
 	}
-}
 
-/* ********************************************************
- * Dump Backup Option Insert
- ******************************************************** */
-function fn_insert_opt(){
-	var sn = 1;
-	$("input[name=opt]").each(function(){
-		if( $(this).not(":disabled") && $(this).is(":checked")){
-			fn_insert_opt_val($("#bck_wrk_id").val(),$("#wrk_id").val(),sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),"Y");
+	/* ********************************************************
+	 * Validation Check
+	 ******************************************************** */
+	function mod_dump_valCheck(){
+		var iChkCnt = 0;
+
+		if(nvlPrmSet($("#mod_dump_check_path2", "#workDumpModForm").val(), "") != "Y") {
+			$("#mod_dump_save_pth_alert", "#workDumpModForm").html('<spring:message code="backup_management.bckPath_effective_check"/>');
+			$("#mod_dump_save_pth_alert", "#workDumpModForm").show();
+			
+			iChkCnt = iChkCnt + 1;
 		}
-		sn++;
-	});
-
-	fn_insert_object();
-}
-
-/* ********************************************************
- * Dump Backup Each Option Insert
- ******************************************************** */
-function fn_insert_opt_val(bck_wrk_id, wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
-	$.ajax({
-		async : false,
-		url : "/popup/workOptWrite.do",
-	  	data : {
-	  		bck_wrk_id: bck_wrk_id,
-	  		wrk_id : wrk_id,
-	  		opt_sn : opt_sn,
-	  		grp_cd : grp_cd,
-	  		opt_cd : opt_cd,
-	  		bck_opt_val : bck_opt_val
-	  	},
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function() {}
-	});
-}
-
-/* ********************************************************
- * Dump Backup Object Insert
- ******************************************************** */
-function fn_insert_object(){
-	$("input[name=tree]").each(function(){
-		if( $(this).is(":checked")){
-			fn_insert_object_val($("#bck_wrk_id").val(),$("#wrk_id").val(),$(this).attr("otype"),$(this).attr("schema"),$(this).val());
+		
+		if (nvlPrmSet($("#mod_dump_file_fmt_cd", "#workDumpModForm").val(),"") == "0000" || nvlPrmSet($("#mod_dump_file_fmt_cd", "#workDumpModForm").val(),"") == "") {
+			$("#mod_dump_file_fmt_cd_alert", "#workDumpModForm").html('<spring:message code="message.msg217"/>');
+			$("#mod_dump_file_fmt_cd_alert", "#workDumpModForm").show();
+			
+			iChkCnt = iChkCnt + 1;
 		}
-	});
+		
+		if (nvlPrmSet($("#mod_dump_encd_mth_nm", "#workDumpModForm").val(),"") == "0000" || nvlPrmSet($("#mod_dump_encd_mth_nm", "#workDumpModForm").val(),"") == "") {
+			$("#mod_dump_encd_mth_nm_alert", "#workDumpModForm").html('<spring:message code="message.msg218"/>');
+			$("#mod_dump_encd_mth_nm_alert", "#workDumpModForm").show();
+			
+			iChkCnt = iChkCnt + 1;
+		}
+		
+		if (nvlPrmSet($("#mod_dump_usr_role_nm", "#workDumpModForm").val(),"") == "0000" || nvlPrmSet($("#mod_dump_usr_role_nm", "#workDumpModForm").val(),"") == "") {
+			$("#mod_dump_usr_role_nm_alert", "#workDumpModForm").html('<spring:message code="message.msg219"/>');
+			$("#mod_dump_usr_role_nm_alert", "#workDumpModForm").show();
+			
+			iChkCnt = iChkCnt + 1;
+		}
+		
+		if (iChkCnt > 0) {
+			return false;
+		}
 
-	opener.fn_dump_find_list();
-	alert('<spring:message code="message.msg84" />');
-	self.close();
-}
-
-/* ********************************************************
- * Dump Backup Each Object Insert
- ******************************************************** */
-function fn_insert_object_val(bck_wrk_id, wrk_id,otype,scm_nm,obj_nm){
-	var db_id = $("#db_id").val();
-
-	if(otype != "table") obj_nm = "";
-	$.ajax({
-		async : false,
-		url : "/popup/workObjWrite.do",
-	  	data : {
-	  		bck_wrk_id : bck_wrk_id,
-	  		wrk_id : wrk_id,
-	  		db_id : db_id,
-	  		scm_nm : scm_nm,
-	  		obj_nm : obj_nm
-	  	},
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function() {}
-	});
-}
-
-/* ********************************************************
- * Validation Check
- ******************************************************** */
-function valCheck(){
-	if($("#db_id option:selected" ).val() == ""){
-		alert('<spring:message code="backup_management.bck_database_choice"/>');
-		return false;
-	}else if($("#wrk_nm").val() == ""){
-		alert('<spring:message code="message.msg107" />');
-		$("#wrk_nm").focus();
-		return false;
-	}else if($("#wrk_exp").val() == ""){
-		alert('<spring:message code="message.msg108" />');
-		$("#wrk_exp").focus();
-		return false;
-	}/* else if($("#log_file_pth").val() == ""){
-		alert('<spring:message code="message.msg78" />');
-		$("#log_file_pth").focus();
-		return false;
-	} */else if($("#save_pth").val() == ""){
-		alert('<spring:message code="message.msg79" />');
-		$("#save_pth").focus();
-		return false;
-	}/* else if($("#check_path1").val() != "Y"){
-		alert('<spring:message code="message.msg72" />');
-		$("#log_file_pth").focus();
-		return false;
-	} */else if($("#check_path2").val() != "Y"){
-		alert('<spring:message code="backup_management.bckPath_effective_check"/>');		
-		$("#save_pth").focus();
-		return false;
-	}else if($("#file_fmt_cd").val() == "0000"){
-		alert('<spring:message code="message.msg217" />');
-		$("#file_fmt_cd").focus();
-		return false;
-	}else if($("#encd_mth_nm").val() == "0000"){
-		alert('<spring:message code="message.msg218" />');
-		$("#encd_mth_nm").focus();
-		return false;
-	}else if($("#usr_role_nm").val() == "0000"){
-		alert('<spring:message code="message.msg219" />');
-		$("#usr_role_nm").focus();
-		return false;
-	}else{
 		return true;
 	}
-}
 
-/* ********************************************************
- * Get Selected Database`s Object List
- ******************************************************** */
-function fn_get_object_list(in_db_id,in_db_nm){
-	var db_nm = in_db_nm;
-	var db_id = in_db_id;
-	
-	if(in_db_id == "" || in_db_nm == ""){
-		db_nm = $( "#db_id option:selected" ).text();
-		db_id = $( "#db_id option:selected" ).val();
+	/* ********************************************************
+	 * Dump Backup Option Insert
+	 ******************************************************** */
+	function fn_dump_update_opt(){
+		var sn = 1;
+
+		$("input[name=mod_dump_opt]").each(function(){
+			if( $(this).not(":disabled") && $(this).is(":checked")){
+				fn_dump_update_opt_val($("#mod_dump_bck_wrk_id", '#workDumpModForm').val(),nvlPrmSet($('#mod_dump_wrk_id', '#workDumpModForm').val(), ""),sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),"Y");
+			}
+			sn++;
+		});
+
+		fn_dump_update_object();
 	}
 
-	if(db_nm != "" && db_id != ""){
+	/* ********************************************************
+	 * Dump Backup Each Option Insert
+	 ******************************************************** */
+	function fn_dump_update_opt_val(bck_wrk_id, wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 		$.ajax({
 			async : false,
-			url : "/getObjectList.do",
+			url : "/popup/workOptWrite.do",
 		  	data : {
-		  		db_svr_id : $("#db_svr_id").val(),
-		  		db_nm : db_nm
+		  		bck_wrk_id: bck_wrk_id,
+		  		wrk_id : wrk_id,
+		  		opt_sn : opt_sn,
+		  		grp_cd : grp_cd,
+		  		opt_cd : opt_cd,
+		  		bck_opt_val : bck_opt_val
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
-		     },
+		    },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
-			success : function(data) {
-				fn_make_object_list1(data);
+			success : function() {}
+		});
+	}
+
+	/* ********************************************************
+	 * Dump Backup Object Insert
+	 ******************************************************** */
+	function fn_dump_update_object(){
+		$("input[name=mod_tree]").each(function(){
+			if( $(this).is(":checked")){
+				fn_dump_update_object_val($("#mod_dump_bck_wrk_id", '#workDumpModForm').val(),nvlPrmSet($('#mod_dump_wrk_id', '#workDumpModForm').val(), ""),$(this).attr("otype"),$(this).attr("schema"),$(this).val());
 			}
 		});
-	}else{
-		$(".tNav").html("");
-	}
-}
 
-function fn_checkAll(schema_id, schema_name) {
-    var schemaChkBox = document.getElementById("schema"+schema_id);
-
-    if(schemaChkBox.checked) { 
-    	$("input[name=tree]").each(function(){
-    		if($(this).attr("schema") == schema_name) {
-    			this.checked = true;
-    		}
-    	});
-    } else { 
-    	$("input[name=tree]").each(function(){
-    		if($(this).attr("schema") == schema_name) {
-    			this.checked = false;
-    		}
-    	});
-    }
-}
-
-/* ********************************************************
- * Make Object Tree
- ******************************************************** */
-function fn_make_object_list1(data){
-	var html = "<ul>";
-	var schema = "";
-	var schemaCnt = 0;
-	$(data.data).each(function (index, item) {
-		var inSchema = item.schema;
-		
-		if(schemaCnt > 0 && schema != inSchema){
-			html += "</ul></li>\n";
-		}
-		if(schema != inSchema){
-			var checkStr = "";
-			$(workObj.obj).each(function(i,v){
-				if(v.scm_nm == item.schema && v.obj_nm == "") checkStr = " checked";
-			});
-			html += "<li class='active'><a href='#'>"+item.schema+"</a>";
-			html += "<div class='inp_chk'>";
-			html += "<input type='checkbox' onClick=fn_checkAll('" + schemaCnt + "','"+item.schema+"') id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/><label for='schema"+schemaCnt+"'></label>";
-			html += "</div>";
-			html += "<ul>\n";
+		if ($("#dump_call_gbn", "#search_dumpReForm").val() == "backup_sdt") {
+			selectSdtTab("week");
+			fn_selectBckSchedule();
+		} else {
+			fn_get_dump_list();
 		}
 		
-		var checkStr = "";
-		$(workObj.obj).each(function(i,v){
-			if(v.scm_nm == item.schema && v.obj_nm == item.name) checkStr = " checked";
-		});
-		html += "<li><a href='#'>"+item.name+"</a>";
-		html += "<div class='inp_chk'>";
-		html += "<input type='checkbox' id='table"+index+"' name='tree' value='"+item.name+"' otype='table' schema='"+item.schema+"'"+checkStr+"/><label for='table"+index+"'></label>";
-		html += "</div>";
-		html += "</li>\n";
-
-		if(schema != inSchema){
-			schema = inSchema;
-			schemaCnt++;
-		}
-	});
-	if(schemaCnt > 0) html += "</ul></li>";
-	html += "</ul>";
-
-	$(".tNav").html("");
-	$(".tNav").html(html);
-	$.getScript( "/js/common.js", function() {});
-}
-
-/* ********************************************************
- * File Format에 따른 Checkbox disabled Check
- ******************************************************** */
-function changeFileFmtCd(){
-	if($("#file_fmt_cd").val() == "TC000401"){
-		$("#cprt").removeAttr("disabled");
-	}else{
-		$("#cprt").attr("disabled",true);
+		showSwalIcon('<spring:message code="message.msg84" />', '<spring:message code="common.close" />', '', 'success');
+		$('#pop_layer_mod_dump').modal('hide');
 	}
-	
-	if($("#file_fmt_cd").val() == "TC000402"){
-		$("input[name=opt]").each(function(){
-			if( $(this).attr("opt_cd") == "TC000801" || $(this).attr("opt_cd") == "TC000903" || $(this).attr("opt_cd") == "TC000904" ){
-				$(this).removeAttr("disabled");
-			}
-		});
-	}else{
-		$("input[name=opt]").each(function(){
-			if( $(this).attr("opt_cd") == "TC000801" || $(this).attr("opt_cd") == "TC000903" || $(this).attr("opt_cd") == "TC000904" ){
-				$(this).attr("disabled",true);
-			}
-		});
-	}
-}
 
-/* ********************************************************
- * Sections에 체크시 Object형태중 Only data, Only Schema를 비활성화 시킨다.
- ******************************************************** */
-function checkSection(){
-	var check = false;
-	$("input[name=opt]").each(function(){
-		if( ($(this).attr("opt_cd") == "TC000601" || $(this).attr("opt_cd") == "TC000602" || $(this).attr("opt_cd") == "TC000603") && $(this).is(":checked")){
-			check = true;
-		}
-	});
-	
-	$("input[name=opt]").each(function(){
-		if( $(this).attr("opt_cd") == "TC000701" || $(this).attr("opt_cd") == "TC000702" ){
-			if(check){
-				$(this).attr("disabled",true);
-			}else{
-				$(this).removeAttr("disabled");
-			}
-		}
-	});
-}
+	/* ********************************************************
+	 * Dump Backup Each Object Insert
+	 ******************************************************** */
+	function fn_dump_update_object_val(bck_wrk_id, wrk_id,otype,scm_nm,obj_nm){
+		var db_id = $("#mod_dump_db_id", "#workDumpModForm").val();
 
-/* ********************************************************
- * Object형태 중 Only data, Only Schema 중 1개만 체크가능
- ******************************************************** */
-function checkObject(code){
-	var check1 = false;
-	var check2 = false;
+		if(otype != "table") obj_nm = "";
 
-	$("input[name=opt]").each(function(){
-		if(code == "TC000701" && $(this).attr("opt_cd") == "TC000701" && $(this).is(":checked") ){
-			check1 = true;
-		}else if(code == "TC000702" && $(this).attr("opt_cd") == "TC000702" && $(this).is(":checked") ){
-			check2 = true;
-		}
-	});
-	
-	$("input[name=opt]").each(function(){
-		if(check1 && code == "TC000701" && $(this).attr("opt_cd") == "TC000702"){
-			$(this).attr('checked', false);
-		}else if(check2 && code == "TC000702" && $(this).attr("opt_cd") == "TC000701"){
-			$(this).attr('checked', false);
-		}
-	});
-}
-
-/* ********************************************************
- * 쿼리에서 Use Column Inserts, Use Insert Commands선택시 "OIDS포함" disabled
- ******************************************************** */
-function checkOid(){
-	var check = false;
-	$("input[name=opt]").each(function(){
-		if( ($(this).attr("opt_cd") == "TC000901" || $(this).attr("opt_cd") == "TC000902") && $(this).is(":checked")){
-			check = true;
-		}
-	});
-	
-	$("input[name=opt]").each(function(){
-		if( $(this).attr("opt_cd") == "TC001001" ){
-			if(check){
-				$(this).attr("disabled",true);
-			}else{
-				$(this).removeAttr("disabled");
-			}
-		}
-	});
-}
-
-/* ********************************************************
- * 저장경로의 존재유무 체크
- ******************************************************** */
-function checkFolder(keyType){
-	var save_path = "";
-	
-	if(keyType == 2){
-		/* save_path = $("#log_file_pth").val();
-	}else{ */
-		save_path = $("#save_pth").val();
-	}
-	/* if(save_path == "" && keyType == 1){
-		alert('<spring:message code="message.msg78" />');
-		$("#log_file_pth").focus();
-	}else  */if(save_path == "" && keyType == 2){
-		alert('<spring:message code="backup_management.bckPath_input_please"/>');
-		$("#save_pth").focus();
-	}else{
 		$.ajax({
 			async : false,
-			url : "/existDirCheck.do",
+			url : "/popup/workObjWrite.do",
 		  	data : {
-		  		db_svr_id : $("#db_svr_id").val(),
-		  		path : save_path
+		  		bck_wrk_id : bck_wrk_id,
+		  		wrk_id : wrk_id,
+		  		db_id : db_id,
+		  		scm_nm : scm_nm,
+		  		obj_nm : obj_nm
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
-		     },
+		    },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
-			success : function(data) {
-				if(data.result.ERR_CODE == ""){
-					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
-						if(keyType == 2){
-							/* $("#check_path1").val("Y");
-						}else{ */
-							$("#check_path2").val("Y");
-						}
-						alert('<spring:message code="message.msg100" />');
-							var volume = data.result.RESULT_DATA.CAPACITY;
-						/* if(keyType == 1){
-							$("#logVolume").empty();
-							$( "#logVolume" ).append("<spring:message code="common.volume" /> : "+volume);
-						}else */ if(keyType == 2) {
-							$("#backupVolume").empty();
-							$( "#backupVolume" ).append("<spring:message code="common.volume" /> : "+volume);
-						}
-					}else{
-						if(haCnt > 1){
-							alert('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
-						}else{
-							alert('<spring:message code="backup_management.invalid_path"/>');
-						}	
-					}
-				}else{
-					alert('<spring:message code="message.msg76" />');
-				}
-			}
+			success : function() {}
 		});
 	}
-}
 </script>
-</head>
-<body>
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit"><spring:message code="backup_management.dump_bck_mod"/></p>
-		<div class="pop_cmm">
-			<form name="workRegForm">
-			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
-			<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
-			<input type="hidden" name="bck_wrk_id" id="bck_wrk_id" value="${bck_wrk_id}"/>
-			<!-- <input type="hidden" name="check_path1" id="check_path1" value="N"/> -->
-			<input type="hidden" name="check_path2" id="check_path2" value="N"/>
-			<table class="write">
-				<caption><spring:message code="backup_management.dump_bck_mod"/></caption>
-				<colgroup>
-					<col style="width:95px;" />
-					<col />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=25 value="<c:out value="${workInfo[0].wrk_nm}"/>"   readonly="readonly"/></td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
-						<td>
-							<div class="textarea_grp">
-								<textarea name="wrk_exp" id="wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"><c:out value="${workInfo[0].wrk_exp}"/></textarea>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="pop_cmm mt25">
-			<table class="write">
-				<colgroup>
-					<col style="width:95px;" />
-					<col />
-					<col style="width:95px;" />
-					<col />
-				</colgroup>
-				<tbody>
-					<tr>
-						<th scope="row" class="ico_t1">Database</th>
-						<td>
-							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list('','');">
-								<option value=""><spring:message code="common.choice" /></option>
-								<c:forEach var="result" items="${dbList}" varStatus="status">
-								<option value="<c:out value="${result.db_id}"/>" <c:if test="${result.db_id eq workInfo[0].db_id}"> selected</c:if>><c:out value="${result.db_nm}"/></option>
-								</c:forEach>
-							</select>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="pop_cmm mt25">
-			<table class="write">
-				<caption><spring:message code="dashboard.Register_backup" /></caption>
-				<colgroup>
-					<col style="width:128px;" />
-					<col style="width:155px;" />
-					<col style="width:100px;" />
-					<col style="width:178px;" />
-					<col style="width:110px;" />
-					<col style="width:140px;" />
-				</colgroup>
-				<tbody>
-					<%-- <tr>
-						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_log_dir" /></th>
-						<td colspan="5"><input type="text" class="txt" name="log_file_pth" id="log_file_pth" value="<c:out value="${workInfo[0].log_file_pth}"/>" onKeydown="$('#check_path1').val('N')"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>							
-							<span id="logVolume" style="margin:63px;"></span>
-						</td>
-					</tr> --%>
-					<tr>
-						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_dir" /></th>
-						<td colspan="5"><input type="text" class="txt" name="save_pth" id="save_pth" value="<c:out value="${workInfo[0].save_pth}"/>" onKeydown="$('#check_path2').val('N')"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
-							<span id="backupVolume" style="margin:63px;"></span>
-						</td>
-					</tr>					
-					<tr>
-						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_format" /></th>
-						<td>
-							<select name="file_fmt_cd" id="file_fmt_cd" onChange="changeFileFmtCd();" class="select t5">
-								<option value="0000"><spring:message code="schedule.total" /></option>
-								<option value="TC000401"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000401' }"> selected</c:if>>tar</option>
-								<option value="TC000402"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000402' }"> selected</c:if>>plain</option>
-								<option value="TC000403"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000403' }"> selected</c:if>>directory</option>
-								<option value="TC000404"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000404' }"> selected</c:if>>custom</option>
-							</select>
-						</td>
-						<th scope="row" class="ico_t2"><spring:message code="backup_management.incording_method" /></th>
-						<td>
-							<select name="encd_mth_nm" id="encd_mth_nm" class="select t5">
-								<option value="0000"><spring:message code="schedule.total" /></option>
-								<c:forEach var="result" items="${incodeList}" varStatus="status">
-									<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${workInfo[0].encd_mth_cd eq result.sys_cd }"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
-								</c:forEach>
-							</select>
-						</td>
-						<th scope="row" class="ico_t2"><spring:message code="backup_management.rolename" /></th>
-						<td>
-							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
-								<option value="0000"><spring:message code="schedule.total" /></option>
-								<c:forEach var="result" items="${roleList.data}" varStatus="status">
-								<option value="<c:out value="${result.rolname}"/>"<c:if test="${workInfo[0].usr_role_nm eq result.rolname}"> selected</c:if>><c:out value="${result.rolname}"/></option>
-								</c:forEach>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t2"><spring:message code="backup_management.compressibility" /></th>
-						<td>
-							<select name="cprt" id="cprt" class="select t4" style="width:80px;">
-								<option value="0"><spring:message code="backup_management.uncompressed" /></option>
-								<option value="1">1Level</option>
-								<option value="2">2Level</option>
-								<option value="3">3Level</option>
-								<option value="4">4Level</option>
-								<option value="5">5Level</option>
-								<option value="6">6Level</option>
-								<option value="7">7Level</option>
-								<option value="8">8Level</option>
-								<option value="9">9Level</option>
-							</select> %</td>
-						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_keep_day" /></th>
-						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].file_stg_dcnt}"/>"/> <spring:message code="schedule.day" /></td>
-						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_maintenance_count" /></th>
-						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>"/> <spring:message code="backup_management.count"/></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="pop_cmm c2 mt25">
-			<div class="addOption_grp">
-				<ul class="tab">
-					<li class="on"><a href="#n"><spring:message code="backup_management.add_option" /> #1</a></li>
-					<li><a href="#n"><spring:message code="backup_management.add_option" /> #2</a></li>
-					<li><a href="#n"><spring:message code="backup_management.object_choice" /></a></li>
-				</ul>
-				<div class="tab_view">
-					<div class="view on addOption_inr">
-						<ul>
-							<li>
-								<p class="op_tit"><spring:message code="backup_management.sections" /></p>
-								<div class="inp_chk">
-									<span>
-										<input type="checkbox" id="option_1_1" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000601" onClick="checkSection();"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0006' && optVal.opt_cd eq 'TC000601'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_1_1"><spring:message code="backup_management.pre-data" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_1_2" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000602" onClick="checkSection();"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0006' && optVal.opt_cd eq 'TC000602'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_1_2"><spring:message code="backup_management.data" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_1_3" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000603" onClick="checkSection();"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0006' && optVal.opt_cd eq 'TC000603'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_1_3"><spring:message code="backup_management.post-data" /></label>
-									</span>
-								</div>
-							</li>
-							<li>
-								<p class="op_tit"><spring:message code="backup_management.object_type" /></p>
-								<div class="inp_chk">
-									<span>
-										<input type="checkbox" id="option_2_1" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000701" onClick="checkObject('TC000701');"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0007' && optVal.opt_cd eq 'TC000701'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_2_1"><spring:message code="backup_management.only_data" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_2_2" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000702" onClick="checkObject('TC000702');"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0007' && optVal.opt_cd eq 'TC000702'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_2_2"><spring:message code="backup_management.only_schema" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_2_3" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000703"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0007' && optVal.opt_cd eq 'TC000703'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_2_3"><spring:message code="backup_management.blobs" /></label>
-									</span>
-								</div>
-							</li>
-							<li>
-								<p class="op_tit"><spring:message code="backup_management.save_yn_choice" /></p>
-								<div class="inp_chk">
-									<span>
-										<input type="checkbox" id="option_3_1" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000801"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000801'}">checked</c:if>
-										</c:forEach>
-										 disabled/>
-										<label for="option_3_1"><spring:message code="backup_management.owner" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_3_2" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000802"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000802'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_3_2"><spring:message code="backup_management.privilege" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_3_3" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000803"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000803'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_3_3"><spring:message code="backup_management.tablespace" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_3_4" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000804"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000804'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_3_4"><spring:message code="backup_management.unlogged_table_data" /></label>
-									</span>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<div class="view addOption_inr">
-						<ul>
-							<li>
-								<p class="op_tit"><spring:message code="backup_management.query" /></p>
-								<div class="inp_chk double">
-									<span>
-										<input type="checkbox" id="option_4_1" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000901" onClick="checkOid();"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000901'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_4_1"><spring:message code="backup_management.use_column_inserts" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_4_2" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000902" onClick="checkOid();"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000902'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_4_2"><spring:message code="backup_management.use_column_commands" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_4_3" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000903" disabled
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000903'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_4_3"><spring:message code="backup_management.create_database_include" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_4_4" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000904" disabled
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0009' && optVal.opt_cd eq 'TC000904'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_4_4"><spring:message code="backup_management.drop_database_include" /></label>
-									</span>
-								</div>
-							</li>
-							<li>
-								<p class="op_tit"><spring:message code="common.etc" /></p>
-								<div class="inp_chk third">
-									<span>
-										<input type="checkbox" id="option_5_1" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001001"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001001'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_5_1"><spring:message code="backup_management.oids_include" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_5_2" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001002"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001002'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_5_2"><spring:message code="backup_management.quote_include" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_5_3" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001003"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001003'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_5_3"><spring:message code="backup_management.Identifier_quotes_apply" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_5_4" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001004"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001004'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_5_4"><spring:message code="backup_management.set_session_auth_use" /></label>
-									</span>
-									<span>
-										<input type="checkbox" id="option_5_5" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001005"
-										<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
-											<c:if test="${optVal.grp_cd eq 'TC0010' && optVal.opt_cd eq 'TC001005'}">checked</c:if>
-										</c:forEach>
-										/>
-										<label for="option_5_5"><spring:message code="backup_management.detail_message_include" /></label>
-									</span>
-								</div>
-							</li>
-						</ul>
-					</div>
-					
-					<div class="view">
-						<div class="tNav" >
+
+<form name="search_dumpReForm" id="search_dumpReForm" method="post">
+	<input type="hidden" name="dump_call_gbn"  id="dump_call_gbn" value="" />
+</form>
+
+<div class="modal fade" id="pop_layer_mod_dump" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:1060;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 40px 110px;">
+		<div class="modal-content" style="width:1500px; ">		 	 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;margin-bottom:10px;">
+					<spring:message code="backup_management.dump_bck_mod"/>
+				</h4>
+
+				<div class="card" style="border:0px;max-height:698px;">
+					<form class="cmxform" id="workDumpModForm">
+						<input type="hidden" name="mod_dump_check_path2" id="mod_dump_check_path2" value="Y"/>
+						<input type="hidden" name="mod_dump_wrk_id" id="mod_dump_wrk_id" value="" />
+						<input type="hidden" name="mod_dump_bck_wrk_id" id="mod_dump_bck_wrk_id" value="" />
+
+						<fieldset>
+
+							<div class="row">
+								<div class="col-md-9 system-tlb-scroll" style="border:0px;height: 620px; overflow-x: hidden;  overflow-y: auto; ">
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+											<label for="mod_dump_wrk_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="common.work_name" />
+											</label>
+		
+											<div class="col-sm-10">
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="mod_dump_wrk_nm" name="mod_dump_wrk_nm" required readonly />
+											</div>
+										</div>
+		
+										<div class="form-group row div-form-margin-z" style="margin-bottom:-10px;">
+											<label for="mod_dump_wrk_exp" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="common.work_description" />
+											</label>
+		
+											<div class="col-sm-10">
+												<textarea class="form-control" id="mod_dump_wrk_exp" name="mod_dump_wrk_exp" rows="2" maxlength="200" onkeyup="fn_checkWord(this,200)" placeholder="200<spring:message code='message.msg188'/>" required tabindex=1></textarea>
+											</div>
+										</div>
+									</div>
+									
+									<br/>
+									
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-bottom:-30px;margin-top:-10px;">
+											<label for="mod_dump_db_id" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="common.database" />
+											</label>
+		
+											<div class="col-sm-10">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;width:300px;" name="mod_dump_db_id" id="mod_dump_db_id" onChange="fn_mod_get_object_list('','');" tabindex=2>
+													<option value=""><spring:message code="common.choice" /></option>
+													<c:forEach var="result" items="${dbList}" varStatus="status">
+														<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</div>
+									
+									<br/>
+
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+											<label for="mod_dump_save_pth" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-angle-double-right"></i>
+												<spring:message code="backup_management.backup_dir" />
+											</label>
+		
+											<div class="col-sm-6">
+												<input type="text" class="form-control form-control-sm" maxlength="200" id="mod_dump_save_pth" name="mod_dump_save_pth" onkeyup="fn_checkWord(this,200)" onKeydown="fn_mod_dump_check_pathChk('N');" onblur="this.value=this.value.trim()" tabindex=3 />
+											</div>
+		
+											<div class="col-sm-4">
+												<div class="input-group input-daterange d-flex align-items-center" >
+													<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_mod_dump_checkFolder(2)"><spring:message code="common.dir_check" /></button>
+													<div class="input-group-addon mx-4">
+														<div class="card card-inverse-primary" id="mod_dump_backupVolume_div" style="display:none;border:none;">
+															<div class="card-body" style="padding-top:10px;padding-bottom:10px;">
+																<p class="card-text" id="mod_dump_backupVolume"></p>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group row div-form-margin-z">
+											<div class="col-sm-2"></div>
+		
+											<div class="col-sm-10">
+												<div class="alert alert-danger" style="margin-top:5px;display:none;" id="mod_dump_save_pth_alert"></div>
+											</div>
+										</div>
+										
+										<div class="form-group row div-form-margin-z">
+											<label for="mod_dump_file_fmt_cd" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-angle-double-right"></i>
+												<spring:message code="backup_management.file_format" />
+											</label>
+		
+											<div class="col-sm-2">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;" name="mod_dump_file_fmt_cd" onChange="fn_mod_changeFileFmtCd();fn_mod_dumpAlertChk(this);" id="mod_dump_file_fmt_cd" tabindex=4>
+													<option value="0000"><spring:message code="common.choice" /></option>
+													<option value="TC000401">tar</option>
+													<option value="TC000402">plain</option>
+													<option value="TC000403">directory</option>
+													<option value="TC000404">custom</option>
+												</select>
+											</div>
+											
+											<label for="mod_dump_encd_mth_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-angle-double-right"></i>
+												<spring:message code="backup_management.incording_method" />
+											</label>
+		
+											<div class="col-sm-2">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;width:150px;" name="mod_dump_encd_mth_nm" id="mod_dump_encd_mth_nm" onChange="fn_mod_dumpAlertChk(this);" tabindex=5 >
+													<option value="0000"><spring:message code="common.choice" /></option>
+													<c:forEach var="result" items="${incodeList}" varStatus="status">
+														<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+													</c:forEach>
+												</select>
+											</div>
+
+											<label for="mod_dump_usr_role_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-angle-double-right"></i>
+												<spring:message code="backup_management.rolename" />
+											</label>
+		
+											<div class="col-sm-2">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;width:150px;" name="mod_dump_usr_role_nm" id="mod_dump_usr_role_nm" onChange="fn_mod_dumpAlertChk(this);" tabindex=6 >
+													<option value="0000"><spring:message code="common.choice" /></option>
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group row div-form-margin-z">
+											<div class="col-sm-4">
+												<div class="alert alert-danger" style="margin-top:5px;display:none;" id="mod_dump_file_fmt_cd_alert"></div>
+											</div>
+		
+											<div class="col-sm-4">
+												<div class="alert alert-danger" style="margin-top:5px;display:none;" id="mod_dump_encd_mth_nm_alert"></div>
+											</div>
+		
+											<div class="col-sm-4">
+												<div class="alert alert-danger" style="margin-top:5px;display:none;" id="mod_dump_usr_role_nm_alert"></div>
+											</div>
+										</div>
+										
+										<div class="form-group row div-form-margin-z" style="margin-bottom:-20px;">
+											<label for="mod_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-angle-double-right"></i>
+												<spring:message code="backup_management.compressibility" />
+											</label>
+											<div class="col-sm-2">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;" name="mod_dump_cprt" id="mod_dump_cprt" tabindex=7 >
+													<option value="0"><spring:message code="backup_management.uncompressed" /></option>
+													<option value="1">1Level</option>
+													<option value="2">2Level</option>
+													<option value="3">3Level</option>
+													<option value="4">4Level</option>
+													<option value="5">5Level</option>
+													<option value="6">6Level</option>
+													<option value="7">7Level</option>
+													<option value="8">8Level</option>
+													<option value="9">9Level</option>
+												</select>
+											</div>
+											
+											<label for="mod_dump_file_stg_dcnt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-angle-double-right"></i>
+												<spring:message code="backup_management.file_keep_day" />
+											</label>
+											<div class="col-sm-2">
+												<div class="input-group input-daterange d-flex align-items-center" >
+													<input type="number" class="form-control form-control-sm"  style="width:50px;margin-right:-17px;" maxlength="3" id="mod_dump_file_stg_dcnt" name="mod_dump_file_stg_dcnt" min=1 tabindex=8  />
+													<div class="input-group-addon mx-4" style="font-size: 12px;"><spring:message code="common.day" /></div>
+												</div>
+											</div>
+											
+											<label for="mod_dump_bck_mtn_ecnt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-angle-double-right"></i>
+												<spring:message code="backup_management.backup_maintenance_count" />
+											</label>
+											<div class="col-sm-2">
+												<div class="input-group input-daterange d-flex align-items-center" >
+													<input type="number" class="form-control form-control-sm"  style="width:50px;margin-right:-17px;" maxlength="3" id="mod_dump_bck_mtn_ecnt" name="mod_dump_bck_mtn_ecnt" min=1 tabindex=9 />
+													<div class="input-group-addon mx-4" style="font-size: 12px;"><spring:message code="backup_management.count" /></div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<br/>
+
+									<div class="card-body" style="border: 1px solid #adb5bd;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;margin-bottom:-10px;">
+											<div class="col-12" >
+												<ul class="nav nav-pills nav-pills-setting nav-justified" style="border-bottom:0px;" id="server-tab" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active" id="mod-dump-tab-1" data-toggle="pill" href="#modDumpOptionTab1" role="tab" aria-controls="modDumpOptionTab1" aria-selected="true" >
+															<spring:message code="backup_management.add_option" /> #1
+														</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="mod-dump-tab-2" data-toggle="pill" href="#modDumpOptionTab2" role="tab" aria-controls="modDumpOptionTab2" aria-selected="false">
+															<spring:message code="backup_management.add_option" /> #2
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+
+										<!-- tab화면 -->
+										<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #c9ccd7;margin-bottom:-10px;">
+											<div class="tab-pane fade show active" role="tabpanel" id="modDumpOptionTab1">
 							
-						</div>
-					</div>
+												<div class="form-group row div-form-margin-z" style="margin-top:-30px;">
+													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-angle-double-right"></i>
+														<spring:message code="backup_management.sections" />
+													</label>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_1_1" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_1_1" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0006" opt_cd="TC000601" onClick="fn_mod_dump_checkSection();" />
+																	<spring:message code="backup_management.pre-data" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_1_2" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_1_2" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0006" opt_cd="TC000602" onClick="fn_mod_dump_checkSection();" />
+																	<spring:message code="backup_management.data" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_1_3" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_1_3" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0006" opt_cd="TC000603" onClick="fn_mod_dump_checkSection();" />
+																	<spring:message code="backup_management.post-data" />
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row div-form-margin-z" style="margin-top:-15px;">
+													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-angle-double-right"></i>
+														<spring:message code="backup_management.object_type" />
+													</label>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_2_1" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_2_1" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0007" opt_cd="TC000701" onClick="fn_mod_dump_checkObject('TC000701');" />
+																	<spring:message code="backup_management.only_data" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_2_2" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_2_2" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0007" opt_cd="TC000702" onClick="fn_mod_dump_checkObject('TC000702');" />
+																	<spring:message code="backup_management.only_schema" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_2_3" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_2_3" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0007" opt_cd="TC000703" />
+																	<spring:message code="backup_management.blobs" />
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group row div-form-margin-z" style="margin-top:-15px;margin-bottom:-35px;">
+													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-angle-double-right"></i>
+														<spring:message code="backup_management.save_yn_choice" />
+													</label>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_3_1" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_3_1" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0008" opt_cd="TC000801" disabled />
+																	<spring:message code="backup_management.owner" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_3_2" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_3_2" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0008" opt_cd="TC000802" />
+																	<spring:message code="backup_management.privilege" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_3_3" class="form-check-label" style="width:100px;">
+																	<input type="checkbox" id="mod_dump_option_3_3" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0008" opt_cd="TC000803" />
+																	<spring:message code="backup_management.tablespace" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_3_4" class="form-check-label" style="width:150px;">
+																	<input type="checkbox" id="mod_dump_option_3_4" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0008" opt_cd="TC000804" />
+																	<spring:message code="backup_management.unlogged_table_data" />
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="tab-pane fade" role="tabpanel" id="modDumpOptionTab2">
+							
+												<div class="form-group row div-form-margin-z" style="margin-top:-30px;">
+													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-angle-double-right"></i>
+														<spring:message code="backup_management.query" />
+													</label>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_4_1" class="form-check-label" style="width:200px;">
+																	<input type="checkbox" id="mod_dump_option_4_1" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000901" onClick="fn_mod_dump_checkOid();" />
+																	<spring:message code="backup_management.use_column_inserts" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_4_2" class="form-check-label" style="width:200px;">
+																	<input type="checkbox" id="mod_dump_option_4_2" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000902" onClick="fn_mod_dump_checkOid();" />
+																	<spring:message code="backup_management.use_column_commands" />
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+													
+												<div class="form-group row div-form-margin-z" style="margin-top:-25px;">
+													<div class="col-sm-2"></div>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_4_3" class="form-check-label" style="width:200px;">
+																	<input type="checkbox" id="mod_dump_option_4_3" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000903" disabled />
+																	<spring:message code="backup_management.create_database_include" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_4_4" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="mod_dump_option_4_4" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000904" disabled />
+																	<spring:message code="backup_management.drop_database_include" />
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row div-form-margin-z" style="margin-top:-5px;">
+													<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+														<i class="item-icon fa fa-angle-double-right"></i>
+														<spring:message code="common.etc" />
+													</label>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_5_1" class="form-check-label" style="width:200px;">
+																	<input type="checkbox" id="mod_dump_option_5_1" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001001" />
+																	<spring:message code="backup_management.oids_include" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_5_2" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="mod_dump_option_5_2" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001002" />
+																	<spring:message code="backup_management.quote_include" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_5_3" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="mod_dump_option_5_3" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001003" />
+																	<spring:message code="backup_management.Identifier_quotes_apply" />
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group row div-form-margin-z" style="margin-top:-25px;margin-bottom:-40px;">
+													<div class="col-sm-2"></div>
+													<div class="col-sm-10">
+														<div class="input-group input-daterange d-flex" >
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_5_4" class="form-check-label" style="width:200px;">
+																	<input type="checkbox" id="mod_dump_option_5_4" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001004" />
+																	<spring:message code="backup_management.set_session_auth_use" />
+																</label>
+															</div>
+															
+															<div class="form-check input-group-addon mx-4">
+																<label for="mod_dump_option_5_5" class="form-check-label" style="width:180px;">
+																	<input type="checkbox" id="mod_dump_option_5_5" name="mod_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001005" />
+																	<spring:message code="backup_management.detail_message_include" />
+																</label>
+															</div>
+
+															<div class="form-check input-group-addon mx-4">
+																<label class="form-check-label" style="width:180px;">
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-3 system-tlb-scroll" style="border:0px;height: 620px; overflow-x: hidden;  overflow-y: auto; ">
+									<div class="card-body-modal" style="border: 1px solid #adb5bd;">
+										<!-- title -->
+										<h3 class="card-title fa fa-dot-circle-o">
+											<spring:message code="backup_management.object_choice" />
+										</h3>
+				
+										<div class="table-responsive system-tlb-scroll">
+											<table class="table">
+												<tbody>
+													<tr>
+														<td class="py-1" style="width: 100%; word-break:break-all;">
+															<div class="row">
+																<div class="col-md-12">
+	 																<div id="treeview_container" class="hummingbird-treeview well h-scroll-large">
+																	</div>																	
+																</div>
+															</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="card-body">
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
+									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value='<spring:message code="common.modify" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
+								</div>
+							</div>
+						</fieldset>
+					</form>
 				</div>
 			</div>
-			</form>
-		</div>
-		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_update_work();return false;"><button type="button"><spring:message code="button.modify" /></button></span>
-			<a href="#n" class="btn" onclick="self.close();return false;"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>
-</body>
-</html>

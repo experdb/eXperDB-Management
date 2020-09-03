@@ -138,7 +138,7 @@ public class ScheduleController {
 	@RequestMapping(value = "/popup/scheduleRegForm.do")
 	public ModelAndView scheduleRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 	
 		try {
 			//해당메뉴 권한 조회 (공통메소드호출)
@@ -158,8 +158,6 @@ public class ScheduleController {
 				historyVO.setExe_dtl_cd("DX-T0043");
 				historyVO.setMnu_id(2);
 				accessHistoryService.insertHistory(historyVO);
-				
-				mv.setViewName("popup/scheduleRegForm");	
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -232,6 +230,8 @@ public class ScheduleController {
 			e.printStackTrace();
 		}
 		
+		int cnt = Integer.parseInt(request.getParameter("tCnt"));
+		
 		List<Map<String, Object>> result = null;
 		
 		try {					
@@ -250,8 +250,10 @@ public class ScheduleController {
 					ids.add(Param[i].toString()); 
 				}
 				paramvalue.put("work_id", ids);
+				paramvalue.put("cnt", cnt);
 				
 				result = scheduleService.selectScheduleWorkList(paramvalue);
+
 				return result;
 			}
 		} catch (Exception e) {
@@ -281,6 +283,8 @@ public class ScheduleController {
 		
 		List<Map<String, Object>> result = null;
 		
+		int cnt = Integer.parseInt(request.getParameter("tCnt"));
+		
 		try {					
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
@@ -296,7 +300,9 @@ public class ScheduleController {
 				for(int i=0; i<Param.length; i++){
 					ids.add(Param[i].toString()); 
 				}
+				
 				paramvalue.put("work_id", ids);
+				paramvalue.put("cnt", cnt);
 				
 				result = scheduleService.selectDb2pgScheduleWorkList(paramvalue);
 				return result;
@@ -614,6 +620,7 @@ public class ScheduleController {
 		try {
 			
 			String scd_cndt = request.getParameter("scd_cndt");
+			String scd_nm = request.getParameter("scd_nm");
 
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
@@ -630,6 +637,11 @@ public class ScheduleController {
 				if(scd_cndt != null){
 					mv.addObject("scd_cndt", scd_cndt);
 				}
+
+				if(scd_nm != null){
+					mv.addObject("scd_nm", scd_nm);
+				}
+				
 				mv.setViewName("functions/scheduler/schedulerList");
 			}	
 		} catch (Exception e) {
@@ -789,25 +801,25 @@ public class ScheduleController {
 				historyVO.setMnu_id(23);
 				accessHistoryService.insertHistory(historyVO);
 				
-				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
-				JSONObject rows = (JSONObject) new JSONParser().parse(strRows);
+//				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
+//				JSONObject rows = (JSONObject) new JSONParser().parse(strRows);
 				
-				scheduleVO.setScd_id(Integer.parseInt(rows.get("scd_id").toString()));
+				scheduleVO.setScd_id(Integer.parseInt(request.getParameter("scd_id").toString()));
 				scheduleVO.setScd_cndt("TC001801");
 	
 				scheduleService.updateScheduleStatus(scheduleVO);
 				
-				scheduleVO.setExe_perd_cd(rows.get("exe_perd_cd").toString());
-				if(rows.get("exe_dt") != null){
-					scheduleVO.setExe_dt(rows.get("exe_dt").toString());
+				scheduleVO.setExe_perd_cd(request.getParameter("exe_perd_cd"));
+				if(request.getParameter("exe_dt") != null){
+					scheduleVO.setExe_dt(request.getParameter("exe_dt"));
 				}
-				if(rows.get("exe_month") != null){
-					scheduleVO.setExe_month(rows.get("exe_month").toString());
+				if(request.getParameter("exe_month") != null){
+					scheduleVO.setExe_month(request.getParameter("exe_month"));
 				}
-				if(rows.get("exe_day") != null){
-					scheduleVO.setExe_day(rows.get("exe_day").toString());
+				if(request.getParameter("exe_day") != null){
+					scheduleVO.setExe_day(request.getParameter("exe_day"));
 				}
-				scheduleVO.setExe_hms(rows.get("exe_hms").toString());
+				scheduleVO.setExe_hms(request.getParameter("exe_hms"));
 			
 				scheduleUtl.insertSchdul(scheduleVO);		
 			}
@@ -1532,7 +1544,7 @@ public class ScheduleController {
 	@RequestMapping(value = "/popup/db2pgWorkRegForm.do")
 	public ModelAndView db2pgWorkRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 	
 		try {
 			//해당메뉴 권한 조회 (공통메소드호출)
@@ -1553,7 +1565,6 @@ public class ScheduleController {
 				historyVO.setMnu_id(2);
 				accessHistoryService.insertHistory(historyVO);
 				
-				mv.setViewName("popup/db2pgWorkRegForm");	
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();

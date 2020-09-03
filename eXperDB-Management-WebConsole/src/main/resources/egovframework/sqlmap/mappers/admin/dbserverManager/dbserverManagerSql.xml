@@ -829,5 +829,43 @@
 	            ORDER BY A.LST_MDF_DTM DESC
             )AA	 	
 	 	</select>
+	 	
+	 	
+	 		<update id="updateIpadr" parameterType="ipadrVO">
+		   	    /**
+			 	* Query ID : updateIpadr
+			 	* Description : DB서버 포트 수정
+			 	* Author : 변승우
+			 	**/
+			 	
+				UPDATE T_DBSVRIPADR_I
+				SET 
+				       PORTNO=#{portno}
+				WHERE DB_SVR_IPADR_ID=#{db_svr_ipadr_id}
+			</update> 
+			
+			
+		  <delete id="deleteIpadr" >
+				/**
+				* Query ID : deleteIpadr
+				* Description : DB서버 삭제
+				* Author : 변승우
+				**/
+				DELETE
+				FROM
+				T_DBSVRIPADR_I
+				WHERE DB_SVR_ID=#{db_svr_id}::numeric
+				AND DB_SVR_IPADR_ID NOT IN
+		      <foreach item="item" index="index" collection="db_svr_ipadr_id" open="(" separator="," close=")"> 
+						 #{item}::numeric
+			   </foreach>
+		  	</delete>
+		  	
+		  	<select id="selectIpadrCnt"  resultType="int">
+				SELECT
+					COUNT(*)
+				FROM
+				T_DBSVRIPADR_I
+			</select>
   	
 </mapper>

@@ -27,6 +27,15 @@ public interface DashboardService {
 	public DashboardVO selectDashboardBackupInfo() throws SQLException;
 
 	/**
+	 * 서버 정보 전체 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardServerInfoNew(DashboardVO vo) throws SQLException;
+
+	/**
 	 * 서버 정보 조회
 	 * 
 	 * @param vo
@@ -35,23 +44,6 @@ public interface DashboardService {
 	 */
 	public List<DashboardVO> selectDashboardServerInfo(DashboardVO vo) throws SQLException;
 
-	/**
-	 * Dashboard 백업정보 DUMP 조회
-	 * 
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException;
-
-	/**
-	 * Dashboard 백업정보 ONLINE 조회
-	 * 
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException;
-
-	
 	/**
 	 * 관리상태_작업관리(전체스케줄수행건수)
 	 * 
@@ -131,4 +123,119 @@ public interface DashboardService {
 	 * @throws SQLException
 	 */
 	public List<Map<String, Object>> selectDashboardScaleInfo() throws SQLException;
+
+
+	
+	/////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * 백업, 배치 스케줄 조회
+	 * 
+	 * @param vo
+	 * @return List<Map<String, Object>>
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardScdList(DashboardVO vo) throws SQLException;
+
+	/**
+	 * 스케줄 이력 목록 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardScheduleHistory(DashboardVO vo) throws SQLException;
+	
+	/**
+	 * 스케줄이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectDashboardScheduleHistoryChart(DashboardVO vo) throws SQLException;
+
+	/**
+	 * 백업 이력 목록 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardBackupHistory(DashboardVO vo) throws SQLException;
+
+	/**
+	 * Dashboard 백업정보 DUMP 조회
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException;
+
+	/**
+	 * Dashboard 백업정보 ONLINE 조회
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException;
+	
+	/**
+	 * 배치이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectDashboardScriptHistoryChart(DashboardVO vo) throws SQLException;
+
+	/**
+	 * MIGRATION 스케줄 조회
+	 * 
+	 * @param vo
+	 * @return List<Map<String, Object>>
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardMigtList(DashboardVO vo) throws SQLException;
+
+	/**
+	 * MIGRATION 이력 목록 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardMigtHistory(DashboardVO vo) throws SQLException;
+	
+	/**
+	 * MIGRATION chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectDashboardMigtHistoryChart(DashboardVO vo) throws SQLException;
+	
+	/**
+	 * scale 이력 chart 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectDashboardScaleHistoryChart(DashboardVO vo) throws SQLException;
+
+	/**
+	 * scale 이력 목록 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardScaleHistory (DashboardVO vo) throws SQLException;
+
+	/**
+	 * scale 설정 chart 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Object> selectDashboardScaleSetChart(DashboardVO vo) throws SQLException;
+
 }

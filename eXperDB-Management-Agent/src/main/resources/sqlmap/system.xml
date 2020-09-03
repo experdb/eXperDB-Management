@@ -409,6 +409,7 @@
 	 	**/
 			SELECT 
 				A.IPADR
+				, A.DB_SVR_ID
 				, A.PORTNO
 				, B.DB_SVR_NM
 				, B.DFT_DB_NM

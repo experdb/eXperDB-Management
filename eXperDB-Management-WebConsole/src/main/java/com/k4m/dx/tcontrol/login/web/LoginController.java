@@ -2,6 +2,8 @@ package com.k4m.dx.tcontrol.login.web;
 
 import java.io.FileInputStream;
 import java.net.InetAddress;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -11,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,6 +33,7 @@ import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.EgovHttpSessionBindingListener;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
+import com.k4m.dx.tcontrol.functions.schedule.EgovBatchListnerUtl;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
@@ -56,7 +61,8 @@ public class LoginController {
 
 	@Autowired
 	private AccessHistoryService accessHistoryService;
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(EgovBatchListnerUtl.class);
 
 	@RequestMapping(value = "/")
 	public ModelAndView loginCheck(HttpServletRequest request, HttpServletResponse response) {
@@ -137,7 +143,16 @@ public class LoginController {
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String id = userVo.getUsr_id();
+			
+			if (userVo.getUsr_id() == null || userVo.getPwd() == null) {
+				mv.addObject("error", "msg03");
+				mv.setViewName("login");
+				return mv;
+			}
+
 			String pw = aes.aesEncode(userVo.getPwd());
+			
+			String login_chk = userVo.getLoginChkYn();
 			
 			int masterCheck = loginService.selectMasterCheck();
 			if(masterCheck>0){
@@ -170,7 +185,8 @@ public class LoginController {
 				loginVo.setUsr_nm(userList.get(0).getUsr_nm());
 		
 				InetAddress local = InetAddress.getLocalHost();
-				String ip = request.getRemoteAddr();
+				String ip = getClientIP(request);
+System.out.println("==================================ip=============================" + ip);
 				loginVo.setIp(ip);
 
 				Properties props = new Properties();
@@ -182,6 +198,9 @@ public class LoginController {
 			    localeResolver.setLocale(request, response, locale);
 				
 				String encp_use_yn = props.get("encrypt.useyn").toString();
+				
+System.out.println("==================================encp_use_yn=============================" + encp_use_yn);
+				
 				loginVo.setEncp_use_yn(encp_use_yn);
 				
 				String version = props.get("version").toString();
@@ -212,8 +231,20 @@ public class LoginController {
 					}
 				}
 				
+				//로그인 시간 추가
+				SimpleDateFormat loginSf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date loginTime = new Date();
+				loginVo.setLoginChkTime(loginSf.format(loginTime));
+
 				session.setAttribute("session", loginVo);
-				
+
+				// 사용자의 로그인 유지 여부를 null 체크로 확인 
+				if (login_chk != null) { // 체크한 경우
+					if ("Y".equals(login_chk)) {
+						session.setAttribute("loginChkId", id);
+					}
+				}
+
 				/*중복로그인방지*/
 				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
 				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
@@ -260,7 +291,16 @@ public class LoginController {
 		}
 		return "redirect:/";
 	}
-	
+
+	/**
+	 * locale 실행
+	 * 
+	 * @param userVo
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/setChangeLocale.do")
 	public @ResponseBody void setChangeLocale(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -271,5 +311,33 @@ public class LoginController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getClientIP(HttpServletRequest request) {
+	    String ip = request.getHeader("X-Forwarded-For");
+
+	    if (ip == null) {
+	        ip = request.getHeader("Proxy-Client-IP");
+	        logger.info("> Proxy-Client-IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("WL-Proxy-Client-IP");
+	        logger.info(">  WL-Proxy-Client-IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("HTTP_CLIENT_IP");
+	        logger.info("> HTTP_CLIENT_IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+	        logger.info("> HTTP_X_FORWARDED_FOR : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getRemoteAddr();
+	        logger.info("> getRemoteAddr : "+ip);
+	    }
+	    logger.info("> Result : IP Address : "+ip);
+
+	    return ip;
 	}
 }

@@ -231,15 +231,7 @@ public class ScheduleDAO extends EgovAbstractMapper{
 
 
 	public String selectOldSavePath(int wrk_id) {
-		
-		System.out.println("@@@@@@@@@@@@@@");
-		
-		System.out.println(wrk_id );
-		
 		String oldSavePath = getSqlSession().selectOne("scheduleSql.selectOldSavePath",wrk_id);
-
-		System.out.println(oldSavePath);
-		
 		return oldSavePath;
 	}
 

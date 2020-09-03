@@ -3,7 +3,7 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/cs.jsp"%>
+<%@ include file="../cmmn/cs2.jsp"%>
 <%
 	/**
 	* @Class Name : workLogList.jsp
@@ -20,711 +20,791 @@
 	*/
 %>
 <script type="text/javascript">
-var tableRman = null;
-var tableDump = null;
-var tab = "rman";
-var gbn = "${gbn}";
+	var selectChkTab = "rman";
+	var searchInit = "";
+	var tableRman = null;
+	var tableDump = null;
+	var tabGbn = "${tabGbn}";
 
-/* ********************************************************
- * Data initialization
- ******************************************************** */
-$(window.document).ready(function() {
-	
-	fn_rman_init();
-	fn_dump_init();
-	
-	var today = new Date();
-	var day_end = today.toJSON().slice(0,10);
-	
-	today.setDate(today.getDate() - 7);
-	var day_start = today.toJSON().slice(0,10); 
-
-	$("#wrk_strt_dtm").val(day_start);
-	$("#wrk_end_dtm").val(day_end);
-	
-
-	
-	$( ".calendar" ).datepicker({
-		dateFormat: 'yy-mm-dd',
-		changeMonth : true,
-		changeYear : true
- 	});
-	
-	//fn_get_rman_list();
-	//fn_get_dump_list();
-	//$("#logDumpListDiv").hide();
-	//$("#logRmanListDiv").show();
-	
-	if(gbn!=""){
-		selectTab(gbn);
-	}else{
-		selectTab("rman");
-	}
-});
-
-/* ********************************************************
- * Rman Data Table initialization
- ******************************************************** */
-function fn_rman_init(){
-   	tableRman = $('#logRmanList').DataTable({	
-		scrollY: "405px",
-		scrollX : true,
-		searching : false,	
-		deferRender : true,
-		bSort: false,
-	    columns : [
-		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{data : "wrk_nm", className : "dt-left", defaultContent : ""
-		    			,"render": function (data, type, full) {				
-		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
-		    			}
-		    		},
-		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
-		    		{ data : "wrk_exp",
-		    			render : function(data, type, full, meta) {	 	
-		    				var html = '';					
-		    				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
-		    				return html;
-		    			},
-		    			defaultContent : ""
-		    		}, 		         	
- 		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
- 		         	{data : "bck_file_pth", className : "dt-left", defaultContent : ""
-	 		   			,"render": function (data, type, full) {
-	 		   				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
-	 		   			}
-	 		   		 },
- 		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
-	 		   		{
-	 					data : "exe_rslt_cd_nm",
-	 					render : function(data, type, full, meta) {	 						
-	 						var html = '';
-	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
-	 						} else if(full.exe_rslt_cd == 'TC001702'){
-	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
-	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
-	 						}
-	 						return html;
-	 					},
-	 					className : "dt-center",
-	 					defaultContent : ""
-	 				},
-	 				{
-	 					data : "fix_rsltcd",
-	 					render : function(data, type, full, meta) {	 						
-	 						var html = '';
-	 						if (full.fix_rsltcd == 'TC002001') {
-	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
-	 						} else if(full.fix_rsltcd == 'TC002002'){
-	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
-	 						} else {
-	 							if(full.exe_rslt_cd == 'TC001701'){
-	 								html += ' - ';
-	 							}else{
-	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
-	 							}	 
-	 						}
-	 						return html;
-	 					},
-	 					defaultContent : ""
-	 				}
- 		        ]
-	});
-   	
-   	tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-   	tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-   	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
-   	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '90px');
-   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '230px');
-   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
-   	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-    $(window).trigger('resize'); 
-}
-
-/* ********************************************************
- * Dump Data Table initialization
- ******************************************************** */
-function fn_dump_init(){
-   	tableDump = $('#logDumpList').DataTable({	
-		scrollY: "405px",	
-		scrollX: true,	
-		bDestroy: true,
-		paging : true,
-		processing : true,
-		searching : false,	
-		deferRender : true,
-		bSort: false,
-	    columns : [
-		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{data : "wrk_nm", defaultContent : ""
-		    			,"render": function (data, type, full) {				
-		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
-		    			}
-		    		}, 
-		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
-		    		{ data : "wrk_exp",
-		    			render : function(data, type, full, meta) {	 	
-		    				var html = '';					
-		    				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
-		    				return html;
-		    			},
-		    			defaultContent : ""
-		    		},  
- 		         	{ data: "db_nm", defaultContent: ""}, 
- 		         	//{ data: "file_sz", className: "dt-center", defaultContent: ""},
- 		         	
- 		         	 {data : "file_sz", defaultContent : ""
-	 		   			,"render": function (data, type, full) {
-	 		   				if(full.file_sz != 0){
-				 		   		  var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
-				 		   		  var e = Math.floor(Math.log(full.file_sz) / Math.log(1024));
-				 		   		  return (full.file_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e];
-	 		   				}else{
-	 		   					return full.file_sz;
-	 		   				}
-	 		   			}
-	 		   		 },
-	 		   		  
- 		         	
- 		         	{data : "bck_file_pth", defaultContent : ""
-	 		   			,"render": function (data, type, full) {
-	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
-	 		   			}
-	 		   		 },
- 		         	{ data: "bck_filenm", defaultContent: ""},
- 		         	{ data: "wrk_strt_dtm", defaultContent: ""}, 
- 		         	{ data: "wrk_end_dtm", defaultContent: ""},  		         			         	
- 		         	{ data: "wrk_dtm", defaultContent: ""},
-	 		   		{
-	 					data : "exe_rslt_cd",
-	 					render : function(data, type, full, meta) {
-	 						var html = '';
-	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
-	 						} else if(full.exe_rslt_cd == 'TC001702'){
-	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
-	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
-	 						}
-	 						return html;
-	 					},
-	 					className : "dt-center",
-	 					defaultContent : ""
-	 				},
-	 				{
-	 					data : "fix_rsltcd",
-	 					render : function(data, type, full, meta) {	 						
-	 						var html = '';
-	 						if (full.fix_rsltcd == 'TC002001') {
-	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
-	 						} else if(full.fix_rsltcd == 'TC002002'){
-	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
-	 						} else {
-	 							if(full.exe_rslt_cd == 'TC001701'){
-	 								html += ' - ';
-	 							}else{
-	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
-	 							}
-	 						}
-	 						return html;
-	 					},
-	 					defaultContent : ""
-	 				}
- 		        ],'select': {'style': 'multi'} 
-	});
-
-   	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-   	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
-   	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '170px');
-   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '170px');
-   	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
-    $(window).trigger('resize');
-}
-
-
-function fn_rmanShow(bck, db_svr_id){
-	  var frmPop= document.frmPopup;
-	    var url = '/rmanShowView.do';
-	    window.open('','popupView','width=1000, height=800');  
-	     
-	    frmPop.action = url;
-	    frmPop.target = 'popupView';
-	    frmPop.bck.value = bck;
-	    frmPop.db_svr_id.value = db_svr_id;  
-	    frmPop.submit();   
-}
-
-
-
-function fn_dumpShow(bck, db_svr_id){	
-	  var frmPop= document.frmPopup;
-	    var url = '/dumpShowView.do';
-	    window.open('','popupView','width=1000, height=800');  
-	     
-	    frmPop.action = url;
-	    frmPop.target = 'popupView';
-	    frmPop.bck.value = bck;
-	    frmPop.db_svr_id.value = db_svr_id;  
-	    frmPop.submit();   
-}
-
-
-/* ********************************************************
- * Get Rman Log List
- ******************************************************** */
-function fn_get_rman_list(){
-	$.ajax({
-		url : "/backup/selectWorkLogList.do",
-	  	data : {
-	  		db_svr_id : $("#db_svr_id").val(),
-	  		bck_bsn_dscd : "TC000201",
-	  		bck_opt_cd : $("#bck_opt_cd").val(),
-	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
-	  		wrk_end_dtm : $("#wrk_end_dtm").val(),
-	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
-	  		wrk_nm : $('#wrk_nm').val(),
-  			fix_rsltcd : $("#fix_rsltcd").val()
-	  	},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(result) {
-			tableRman.rows({selected: true}).deselect();
-			tableRman.clear().draw();
-			tableRman.rows.add(result).draw();
+	$(window.document).ready(function() {
+		//검색조건 초기화
+		if (tabGbn != null) {
+			selectChkTab = tabGbn;
 		}
-	});
-}
 
-/* ********************************************************
- * Get Dump Log List
- ******************************************************** */
-function fn_get_dump_list(){
-	var db_id = $("#db_id").val();
-	if(db_id == "") db_id = 0;
+		selectInitTab(selectChkTab);
 
-	$.ajax({
-		url : "/backup/selectWorkLogList.do",
-	  	data : {
-	  		db_svr_id : $("#db_svr_id").val(),
-	  		bck_bsn_dscd : "TC000202",
-	  		db_id : db_id,
-	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
-	  		wrk_end_dtm : $("#wrk_end_dtm").val(),
-	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
-	  		wrk_nm : $('#wrk_nm').val(),
-  			fix_rsltcd : $("#fix_rsltcd").val()
-	  	},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(result) {	
-			tableDump.rows({selected: true}).deselect();
-			tableDump.clear().draw();
-			tableDump.rows.add(result).draw();
+		//작업기간 calender setting
+		dateCalenderSetting();
+
+		//조회
+ 		if(tabGbn != ""){
+ 			if (tabGbn == "rman") {
+ 	 			$('#server-tab-1').click();
+ 			} else {
+ 	 			$('#server-tab-2').click();
+ 			}
+		}else{
+			$('#server-tab-1').click();
 		}
-	});
-}
 
-/* ********************************************************
- * Click Search Button
- ******************************************************** */
-$(function() {
+		/* ********************************************************
+		 * Click Search Button
+		 ******************************************************** */
+		$("#btnSelect").click(function() {
+			if(!calenderValid()) {
+				return;
+			}
+
+			if(selectChkTab == "rman"){
+				fn_get_rman_list();
+			}else{
+				fn_get_dump_list();
+			}
+		});
+	});
 	
-	$(function() {	
-  		$('#logRmanList tbody').on( 'click', 'tr', function () {
-  			 if ( $(this).hasClass('selected') ) {
-  	     	}else {	        	
-  	     		tableRman.$('tr.selected').removeClass('selected');
-  	         $(this).addClass('selected');	            
-  	     } 
-  		})     
-  	});
-	
-	$(function() {	
-  		$('#logDumpList tbody').on( 'click', 'tr', function () {
-  			 if ( $(this).hasClass('selected') ) {
-  	     	}else {	        	
-  	     	tableDump.$('tr.selected').removeClass('selected');
-  	         $(this).addClass('selected');	            
-  	     } 
-  		})     
-  	});
-	
-	$("#btnSelect").click(function() {
+	/* ********************************************************
+	 * calender valid 체크
+	 ******************************************************** */
+	function calenderValid() {
 		var wrk_strt_dtm = $("#wrk_strt_dtm").val();
 		var wrk_end_dtm = $("#wrk_end_dtm").val();
 
 		if (wrk_strt_dtm != "" && wrk_end_dtm == "") {
-			alert("<spring:message code='message.msg14' />");
+			showSwalIcon('<spring:message code="message.msg14" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}
 
 		if (wrk_end_dtm != "" && wrk_strt_dtm == "") {
-			alert("<spring:message code='message.msg15' />");
+			showSwalIcon('<spring:message code="message.msg15" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}
+		
+		return true;
+	}
+	
+	/* ********************************************************
+	 * Tab Click
+	 ******************************************************** */
+	function selectInitTab(intab){
+		selectChkTab = intab;
 
-		if(tab == "rman"){
-			fn_get_rman_list();
+		if(intab == "rman"){			
+			$(".search_rman").show();
+			$(".search_dump").hide();
+			$("#logRmanListDiv").show();
+			$("#logDumpListDiv").hide();
+
+			seachParamInit(intab);
 		}else{
-			fn_get_dump_list();
-		}
-	});
-});
+			$(".search_rman").hide();
+			$(".search_dump").show();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").show();
 
-/* ********************************************************
- * Tab Click
- ******************************************************** */
-var clickDump = false;
-var clickRman = false;
-function selectTab(intab){
-	tab = intab;
-	if(intab == "dump"){
-		$("#wrk_nm").val("");
-		$("#tab_rman").hide();
-		$("#tab_dump").show();
-		$(".search_rman").hide();
-		$(".search_dump").show();
-		$("#logRmanListDiv").hide();
-		$("#logDumpListDiv").show();
-		if(clickDump == false){
-			fn_get_dump_list();
-			clickDump = true;
+			seachParamInit(intab);
 		}
-	}else{	
+
+		//테이블 setting
+		fn_rman_init();
+		fn_dump_init();
+	}
+	/* ********************************************************
+	 * 조회조건 초기화
+	 ******************************************************** */
+	function seachParamInit(tabGbn) {
+		if (searchInit == tabGbn) {
+			return;
+		}
+		
 		$("#wrk_nm").val("");
-		$("#tab_rman").show();
-		$("#tab_dump").hide();
-		$(".search_rman").show();
-		$(".search_dump").hide();
-		$("#logDumpListDiv").hide();
-		$("#logRmanListDiv").show();
-		if(clickRman == false){
+		$("#exe_rslt_cd option:eq(0)").attr("selected","selected");
+		$("#fix_rsltcd option:eq(0)").attr("selected","selected");
+
+		if (tabGbn == "rman") {
+			$("#bck_opt_cd option:eq(0)").attr("selected","selected");
+		} else {
+			$("#db_id option:eq(0)").attr("selected","selected");
+		}
+
+		searchInit = tabGbn;
+	}
+
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function dateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+
+		today.setDate(today.getDate() - 7);
+		var day_start = today.toJSON().slice(0,10);
+
+		$("#wrk_strt_dtm").val(day_start);
+		$("#wrk_end_dtm").val(day_end);
+
+		if ($("#wrk_strt_dtm_div").length) {
+			$('#wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    })
+		    .on('changeDate', function(selected){
+		    	day_start = new Date(selected.date.valueOf());
+		    	day_start.setDate(day_start.getDate(new Date(selected.date.valueOf())));
+		        $("#wrk_end_dtm_div").datepicker('setStartDate', day_start);
+		        $("#wrk_end_dtm").datepicker('setStartDate', day_start);
+			}); //값 셋팅
+		}
+
+		if ($("#wrk_end_dtm_div").length) {
+			$('#wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    })
+		    .on('changeDate', function(selected){
+		    	day_end = new Date(selected.date.valueOf());
+		    	day_end.setDate(day_end.getDate(new Date(selected.date.valueOf())));
+		        $('#wrk_strt_dtm_div').datepicker('setEndDate', day_end);
+		        $('#wrk_strt_dtm').datepicker('setEndDate', day_end);
+			}); //값 셋팅
+		}
+		
+		$("#wrk_strt_dtm").datepicker('setDate', day_start);
+	    $("#wrk_end_dtm").datepicker('setDate', day_end);
+	    $('#wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#wrk_end_dtm_div').datepicker('updateDates');
+	}	
+
+	/* ********************************************************
+	 * Rman Data Table initialization
+	 ******************************************************** */
+	function fn_rman_init(){
+		tableRman = $('#logRmanList').DataTable({
+			scrollY: "300px",
+			scrollX : true,
+			searching : false,
+			deferRender : true,
+			bSort: false,
+			columns : [
+						{data: "rownum", className: "dt-center", defaultContent: ""}, 
+						{data : "wrk_nm", className : "dt-left", defaultContent : ""
+							,"render": function (data, type, full) {				
+								return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+							}
+						},
+						{data: "ipadr", className: "dt-center", defaultContent: ""},
+						{data : "wrk_exp",
+							render : function(data, type, full, meta) {
+								var html = '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+								return html;
+							},
+							defaultContent : ""
+						},
+						{data: "bck_opt_cd_nm", className: "dt-center", defaultContent: "",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.bck_opt_cd == 'TC000301') {
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-paste mr-2 text-success'></i>";
+									html += '<spring:message code="backup_management.full_backup" />';
+									html += "</div>";									
+								} else if(full.bck_opt_cd == 'TC000302'){
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-comments-o text-warning'></i>";
+									html += '&nbsp;<spring:message code="backup_management.incremental_backup" />';
+									html += "</button>";
+								} else {
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
+									html += '<spring:message code="backup_management.change_log_backup" />';
+									html += "</div>";
+								}
+/* 								
+								html += "<div class='row' style='width:150px;'><div class='col-8'>";
+ */
+								return html;
+							},
+
+						},
+						{data : "bck_file_pth", className : "dt-left", defaultContent : ""
+							,"render": function (data, type, full) {
+								return '<span onClick=javascript:fn_rmanShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); data-toggle="modal" title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
+							}
+						},
+						{data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
+						{data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
+						{data: "wrk_dtm", 
+							render : function(data, type, full, meta) {
+								var html = "<div class='badge badge-pill badge-primary'>";
+								html += "	<i class='mdi mdi-timer mr-2'></i>";
+								html += full.wrk_dtm;
+								html += "</div>";	
+
+								return html;
+							},
+							className: "dt-center", defaultContent: ""}, 
+						{data : "exe_rslt_cd_nm",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.exe_rslt_cd == 'TC001701') {
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-check-circle text-primary' >";
+									html += '&nbsp;<spring:message code="common.success" /></i>';
+									html += "</div>";
+									
+								} else if(full.exe_rslt_cd == 'TC001702'){
+ 									html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
+									html += '<i class="fa fa-times"></i>';
+									html += '<spring:message code="common.failed" />';
+									html += "</button>";
+								} else {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+									html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+									html += '&nbsp;<spring:message code="etc.etc28" />';
+									html += "</div>";
+								}
+
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},
+						{
+							data : "fix_rsltcd",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.fix_rsltcd == 'TC002001') {
+	 								html += '<button type="button" class="btn btn-primary btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'rmanList\');">';
+	 								html += '<i class="fa fa-lightbulb-o btn-icon-prepend"></i>';
+	 								html += '<spring:message code="etc.etc29"/>';
+	 								html += "</button>";
+								} else if(full.fix_rsltcd == 'TC002002'){
+	 								html += '<button type="button" class="btn btn-danger btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'rmanList\');">';
+	 								html += '<i class="fa fa-times btn-icon-prepend"></i>';
+	 								html += '<spring:message code="etc.etc30"/>';
+	 								html += "</button>";
+								} else {
+									if(full.exe_rslt_cd == 'TC001701'){
+										html += ' - ';
+									}else{
+		 								html += '<button type="button" class="btn btn-success btn-icon-text" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'rmanList\');">';
+		 								html += '<i class="ti-pencil-alt btn-icon-prepend"></i>';
+		 								html += '<spring:message code="backup_management.Enter_Action"/>';
+		 								html += "</button>";
+									}
+								}
+
+								return html;
+							},
+							defaultContent : ""
+						}
+			]
+		});
+
+		tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+		tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+		tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+		tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '90px');
+		tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '230px');
+		tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
+		tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+
+		$(window).trigger('resize'); 
+	}
+
+	/* ********************************************************
+	 * Dump Data Table initialization
+	 ******************************************************** */
+	function fn_dump_init(){
+		tableDump = $('#logDumpList').DataTable({
+			scrollY: "300px",	
+			scrollX: true,
+			bDestroy: true,
+			paging : true,
+			processing : true,
+			searching : false,	
+			deferRender : true,
+			bSort: false,
+			columns : [
+						{data: "rownum", className: "dt-center", defaultContent: ""},
+						{data : "wrk_nm", defaultContent : ""
+							,"render": function (data, type, full) {				
+								return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+							}
+						}, 
+						{data: "ipadr", className: "dt-center", defaultContent: ""},
+						{data : "wrk_exp",
+							render : function(data, type, full, meta) {
+							var html = '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+							return html;
+							},
+							defaultContent : ""
+						},
+						{data: "db_nm", defaultContent: ""}, 
+						{data : "file_sz", defaultContent : ""
+							,"render": function (data, type, full) {
+								var html = "";
+								
+								if(full.file_sz != 0){
+									var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+									var e = Math.floor(Math.log(full.file_sz) / Math.log(1024));
+
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='ti-files text-primary' >";
+									html += '&nbsp;' + (full.file_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e] + '</i>';
+									html += "</div>";
+								}else{
+									html += full.file_sz;
+								}
+								
+								return html;
+							}
+						},
+						{data : "bck_file_pth", defaultContent : ""
+							,"render": function (data, type, full) {
+								return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); data-toggle="modal" title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
+							}
+						},
+						{data: "bck_filenm", defaultContent: ""},
+						{data: "wrk_strt_dtm", defaultContent: ""}, 
+						{data: "wrk_end_dtm", defaultContent: ""},
+						{data: "wrk_dtm", 
+							render : function(data, type, full, meta) {
+								var html = "<div class='badge badge-pill badge-primary'>";
+								html += "	<i class='mdi mdi-timer mr-2'></i>";
+								html += full.wrk_dtm;
+								html += "</div>";	
+
+								return html;
+							},
+							defaultContent: ""},
+						{data : "exe_rslt_cd",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.exe_rslt_cd == 'TC001701') {
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-check-circle text-primary' >";
+									html += '&nbsp;<spring:message code="common.success" /></i>';
+									html += "</div>";
+									
+								} else if(full.exe_rslt_cd == 'TC001702'){
+ 									html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
+									html += '<i class="fa fa-times"></i>';
+									html += '<spring:message code="common.failed" />';
+									html += "</button>";
+								} else {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+									html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+									html += '&nbsp;<spring:message code="etc.etc28" />';
+									html += "</div>";
+								}
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},
+						{data : "fix_rsltcd",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.fix_rsltcd == 'TC002001') {
+	 								html += '<button type="button" class="btn btn-primary btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'dumpList\');">';
+	 								html += '<i class="fa fa-lightbulb-o btn-icon-prepend"></i>';
+	 								html += '<spring:message code="etc.etc29"/>';
+	 								html += "</button>";
+								} else if(full.fix_rsltcd == 'TC002002'){
+	 								html += '<button type="button" class="btn btn-danger btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'dumpList\');">';
+	 								html += '<i class="fa fa-times btn-icon-prepend"></i>';
+	 								html += '<spring:message code="etc.etc30"/>';
+	 								html += "</button>";
+								} else {
+									if(full.exe_rslt_cd == 'TC001701'){
+										html += ' - ';
+									}else{
+		 								html += '<button type="button" class="btn btn-success btn-icon-text" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'dumpList\');">';
+		 								html += '<i class="ti-pencil-alt btn-icon-prepend"></i>';
+		 								html += '<spring:message code="backup_management.Enter_Action"/>';
+		 								html += "</button>";
+									}
+								}
+								return html;
+							},
+							defaultContent : ""
+						}
+			]
+		});
+
+		tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+		tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+		tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+		tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '170px');
+		tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '170px');
+		tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+
+	   	$(window).trigger('resize');
+	}
+
+	/* ********************************************************
+	 * Tab Click
+	 ******************************************************** */
+	function selectTab(intab){
+		selectChkTab = intab;
+		if(intab == "rman"){			
+			$(".search_rman").show();
+			$(".search_dump").hide();
+			$("#logRmanListDiv").show();
+			$("#logDumpListDiv").hide();
+
+			seachParamInit(intab);
+
 			fn_get_rman_list();
-			clickRman = true;
+		}else{				
+			$(".search_rman").hide();
+			$(".search_dump").show();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").show();
+
+			seachParamInit(intab);
+			fn_get_dump_list();
 		}
 	}
-}
 
+	/* ********************************************************
+	 * Get Rman Log List
+	 ******************************************************** */
+	function fn_get_rman_list(){
+		if(!calenderValid()) {
+			return;
+		}
+		
+ 		$.ajax({
+ 			url : "/backup/selectWorkLogList.do",
+ 			data : {
+				hist_gbn : "rman_hist",
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				bck_bsn_dscd : "TC000201",
+				bck_opt_cd : $("#bck_opt_cd").val(),
+		  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
+		  		wrk_end_dtm : $("#wrk_end_dtm").val(),
+				exe_rslt_cd : $("#exe_rslt_cd").val(),
+				wrk_nm : nvlPrmSet($('#wrk_nm').val(), ""),
+				fix_rsltcd : $("#fix_rsltcd").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				tableRman.rows({selected: true}).deselect();
+				tableRman.clear().draw();
 
-function fn_fix_rslt_reg(exe_sn){
-	document.getElementById("exe_sn_r").value = exe_sn;
-	$('#fix_rslt_msg_r').val('');
-	$("#rdo_r_1").attr('checked', true);
-	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
-}
+				if (nvlPrmSet(result, "") != '') {
+					tableRman.rows.add(result).draw();
+				}
+			}
+		});
+	}
 
-function fn_fix_rslt_msg_reg(){
-	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
-
-	$.ajax({
-			url : "/updateFixRslt.do",
+	/* ********************************************************
+	 * Get Dump Log List
+	 ******************************************************** */
+	function fn_get_dump_list(){
+		if(!calenderValid()) {
+			return;
+		}
+		
+		var db_id = $("#db_id").val();
+		if(db_id == "") db_id = 0;
+		
+		$.ajax({
+			url : "/backup/selectWorkLogList.do",
 			data : {
-				exe_sn : $('#exe_sn_r').val(),
-				fix_rsltcd : fix_rsltcd,
-				fix_rslt_msg : $('#fix_rslt_msg_r').val()
+				hist_gbn : "dump_hist",
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				bck_bsn_dscd : "TC000202",
+				db_id : db_id,
+		  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
+		  		wrk_end_dtm : $("#wrk_end_dtm").val(),
+		  		exe_rslt_cd : $("#exe_rslt_cd").val(),
+				wrk_nm : nvlPrmSet($('#wrk_nm').val(), ""),
+				fix_rsltcd : $("#fix_rsltcd").val()
 			},
 			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
-		     },
+		    },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
-				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
-				fn_get_rman_list();
-				fn_get_dump_list();
-				//location.reload();
-			}
-		}); 
-}
+				tableDump.rows({selected: true}).deselect();
+				tableDump.clear().draw();
 
-
-function fn_fix_rslt_msg_modify(){
-	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
-
-	$.ajax({
-			url : "/updateFixRslt.do",
-			data : {
-				exe_sn : $('#exe_sn').val(),
-				fix_rsltcd : fix_rsltcd,
-				fix_rslt_msg : $('#fix_rslt_msg').val()
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				if (nvlPrmSet(result, "") != '') {
+					tableDump.rows.add(result).draw();
 				}
-			},
-			success : function(result) {
-				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
-				fn_get_rman_list();
-				fn_get_dump_list();
-				//location.reload();
 			}
-		}); 
-}
-
-
-
+		});
+	}
 </script>
-<%@include file="../cmmn/wrkLog.jsp"%>
+
+<%@include file="../cmmn/fixRsltMsgInfo.jsp"%>
+<%@include file="../cmmn/fixRsltMsg.jsp"%>
+<%@include file="../popup/rmanShow.jsp"%>
+<%@include file="../popup/dumpShow.jsp"%>
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
-<%@include file="../cmmn/fixRsltMsg.jsp"%>
+<%@include file="../cmmn/wrkLog.jsp"%>
 
-<form name="frmPopup">
-	<input type="hidden" name="bck"  id="bck">
+<form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
 </form>
 
-	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
-		<div class="pop-container">
-			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
-				<p class="tit" style="margin-bottom: 15px;"><spring:message code="etc.etc33"/></p>
-				<table class="write" border="0">
-					<caption><spring:message code="etc.etc33"/></caption>
-					<tbody>
-						<tr>
-							<td>
-								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001" checked="checked">
-										<label for="rdo_r_1" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
-									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002"> 
-										<label for="rdo_r_2"><spring:message code="etc.etc30"/></label>
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5" style="padding-top:3px;">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-history"></i>
+												<span class="menu-title"><spring:message code="menu.backup_history"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.backup_management"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.backup_history"/></li>
+										</ol>
+									</div>
 								</div>
-							</td>
-						</tr>						
-						<tr>
-							<td><textarea name="fix_rslt_msg_r" id="fix_rslt_msg_r" style="height: 250px;"> </textarea>
-									<input type="hidden" name="exe_sn_r" id="exe_sn_r">
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="fn_fix_rslt_msg_reg();"><span><spring:message code="common.save"/></span></a>
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');"><span><spring:message code="common.close"/></span></a>
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.backup_history_01"/></p>
+											<p class="mb-0"><spring:message code="help.backup_history_02"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- title end -->
 				</div>
-			</div>
-		</div><!-- //pop-container -->
-	</div>
-	
-	
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="menu.backup_history" /><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="help.backup_history_01" /></li>
-					<li><spring:message code="help.backup_history_02" /></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li class="bold">${db_svr_nm}</li>
-					<li><spring:message code="menu.backup_management" /></li>
-					<li class="on"><spring:message code="menu.backup_history" /></li>
-				</ul>
 			</div>
 		</div>
-	
-		<div class="contents">
-			<div class="cmm_tab">
-				<ul id="tab_rman">
-					<li class="atv"><a href="javascript:selectTab('rman');">Online <spring:message code="menu.backup_history" /></a></li>
-					<li><a href="javascript:selectTab('dump');">Dump <spring:message code="menu.backup_history" /></a></li>
-				</ul>
-				<ul id="tab_dump" style="display:none">
-					<li><a href="javascript:selectTab('rman');">Online <spring:message code="menu.backup_history" /></a></li>
-					<li class="atv"><a href="javascript:selectTab('dump');">Dump <spring:message code="menu.backup_history" /></a></li>
-				</ul>
-			</div>
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<span class="btn"><button type="button" id="btnSelect"><spring:message code="common.search" /></button></span>
-				</div>
-				<div class="sch_form">
-				<form name="findList" id="findList" method="post">
-				<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/> 
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width:110px;" />
-							<col style="width:230px;" />
-							<col style="width:110px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t10"><spring:message code="common.work_term" /></th>
-								<td colspan="3">
-									<div class="calendar_area">
-										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="wrk_strt_dtm" id="wrk_strt_dtm" class="calendar" readonly/>
-										<span class="wave">~</span>
-										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="wrk_end_dtm" id="wrk_end_dtm" class="calendar" readonly/>
+
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
+						<li class="nav-item">
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
+								Online <spring:message code="menu.backup_history" />
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('dump');">
+								Dump <spring:message code="menu.backup_history" />
+							</a>
+						</li>
+					</ul>
+
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body" style="margin:-10px 0px -15px 0px;">
+
+							<form class="form-inline row">
+								<div class="input-group mb-2 mr-sm-2  col-sm-3_0 row">
+									<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
 									</div>
-								</td>
-							</tr>
-							<tr style="height:35px;">
-								<th scope="row" class="t9"><spring:message code="common.status" /></th>
-								<td>
-									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+												
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none;"> ~ </span>
+									</div>
+		
+									<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_end_dtm" name="wrk_end_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
+									</div>
+								</div>
+										
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
+									<select class="form-control" style="margin-left: -0.7rem;margin-right: -0.7rem;" name="exe_rslt_cd" id="exe_rslt_cd">
+										<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
 										<option value="TC001701"><spring:message code="common.success" /></option>
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
-								</td>
-								<th scope="row" class="t9 search_rman"><spring:message code="backup_management.backup_option" /></th>
-								<td class="search_rman">
-									<select name="bck_opt_cd" id="bck_opt_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+								</div>
+										
+								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_5">
+									<select class="form-control" style="margin-right: -0.7rem;" name="bck_opt_cd" id="bck_opt_cd">
+										<option value=""><spring:message code="backup_management.backup_option" />&nbsp;<spring:message code="schedule.total" /></option>
 										<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
 										<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
 										<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
 									</select>
-								</td>
-								<th scope="row" class="t9 search_dump" style="display:none;"><spring:message code="common.database" /></th>
-								<td class="search_dump" style="display:none;">
-									<select name="db_id" id="db_id" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+								</div>
+									
+								<div class="input-group mb-2 mr-sm-2 search_dump col-sm-1_5">
+									<select class="form-control" style="margin-right: -0.7rem;" name="db_id" id="db_id">
+										<option value=""><spring:message code="common.database" />&nbsp;<spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
-										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
+												<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 										</c:forEach>
-									</select>	
-								</td>							
-							</tr>
-							<tr>
-								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25"  /></td>
-								<th scope="row" class="t9" ><spring:message code="etc.etc31"/></th>
-								<td><select name="fix_rsltcd" id="fix_rsltcd" class="select t5" >
-										<option value=""><spring:message code="schedule.total" /></option>
+									</select>
+								</div>
+									
+								<div class="input-group mb-2 mr-sm-2 col-sm-3">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
+								</div>
+
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
+									<select class="form-control" name="fix_rsltcd" id="fix_rsltcd">
+										<option value=""><spring:message code="etc.etc31" />&nbsp;<spring:message code="schedule.total" /></option>
 										<option value="TC002003"><spring:message code="etc.etc34"/></option>
 										<option value="TC002001"><spring:message code="etc.etc29"/></option>
 										<option value="TC002002"><spring:message code="etc.etc30"/></option>
 									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					</form>
-				</div>
-				<div class="overflow_area" id="logRmanListDiv">
-					<table class="display" id="logRmanList" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="40"><spring:message code="common.no" /></th>
-								<th width="150"><spring:message code="common.work_name" /></th>
-								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-								<th width="150"><spring:message code="common.work_description" /></th>
-								<th width="90"><spring:message code="backup_management.backup_option" /></th>
-								<th width="230"><spring:message code="etc.etc08"/></th>
-								<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
-								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
-								<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
-								<th width="100"><spring:message code="common.status" /></th>
-								<th width="100"><spring:message code="etc.etc31"/></th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-				<div class="overflow_area" id="logDumpListDiv">
-					<table class="display" id="logDumpList" cellspacing="0" width="100%">
-						<caption>Dump 백업관리 이력화면 리스트</caption>
-						<thead>
-							<tr>
-								<th width="40"><spring:message code="common.no" /></th>
-								<th width="150"><spring:message code="common.work_name" /></th>
-								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-								<th width="150"><spring:message code="common.work_description" /></th>
-								<th width="100"><spring:message code="common.database" /></th>
-								<th width="100"><spring:message code="backup_management.size" /></th>
-								<th width="170"><spring:message code="etc.etc08"/></th>			
-								<th width="170"><spring:message code="backup_management.fileName"/></th>						
-								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
-								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
-								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
-								<th width="100"><spring:message code="common.status" /></th>
-								<th width="100"><spring:message code="etc.etc31"/></th>
-							</tr>
-						</thead>
-					</table>
+								</div>
+									
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div><!-- // contents -->
 
-		
-		</div><!-- // container -->
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12" id="logRmanListDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="logRmanList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="150"><spring:message code="common.work_name" /></th>
+												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
+												<th width="150"><spring:message code="common.work_description" /></th>
+												<th width="90"><spring:message code="backup_management.backup_option" /></th>
+												<th width="230"><spring:message code="etc.etc08"/></th>
+												<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
+												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+												<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
+												<th width="100"><spring:message code="common.status" /></th>
+												<th width="100"><spring:message code="etc.etc31"/></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+							 	
+								<div class="col-12" id="logDumpListDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="logDumpList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="150"><spring:message code="common.work_name" /></th>
+												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
+												<th width="150"><spring:message code="common.work_description" /></th>
+												<th width="100"><spring:message code="common.database" /></th>
+												<th width="100"><spring:message code="backup_management.size" /></th>
+												<th width="170"><spring:message code="etc.etc08"/></th>			
+												<th width="170"><spring:message code="backup_management.fileName"/></th>
+												<th width="100"><spring:message code="backup_management.work_start_time" /></th>
+												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+												<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
+												<th width="100"><spring:message code="common.status" /></th>
+												<th width="100"><spring:message code="etc.etc31"/></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
 	</div>
-</body>
-</html>
+</div>

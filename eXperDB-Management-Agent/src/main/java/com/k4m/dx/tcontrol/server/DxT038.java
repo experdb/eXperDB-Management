@@ -83,6 +83,8 @@ public class DxT038 extends SocketCtl{
 			config.put("snapshot.mode", objCONNECT_INFO.get("SNAPSHOT_MODE"));
 			config.put("schema.whitelist", objMAPP_INFO.get("EXRT_TRG_SCM_NM"));
 			config.put("table.whitelist", objMAPP_INFO.get("EXRT_TRG_TB_NM"));
+			config.put("compression.type", objCONNECT_INFO.get("COMPRESSION_TYPE").toString().toLowerCase());
+			config.put("slot.drop.on.stop", "true");
 			
 			JSONObject parameters = new JSONObject();
 			parameters.put("name", objCONNECT_INFO.get("CONNECT_NM"));

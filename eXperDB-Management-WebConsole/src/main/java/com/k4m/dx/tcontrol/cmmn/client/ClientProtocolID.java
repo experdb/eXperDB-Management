@@ -229,6 +229,15 @@ public class ClientProtocolID {
 	public static final String DB_NM = "DB_NM";
 	public static final String DB_TYPE = "DB_TYPE";
 	public static final String TABLE_NM = "TABLE_NM";
+	
+	//복원관련 추가
+	public static final String BLOBS_ONLY_YN = "BLOBS_ONLY_YN";
+	public static final String NO_UNLOGGED_TABLE_DATA_YN = "NO_UNLOGGED_TABLE_DATA_YN";
+	public static final String USE_COLUMN_INSERTS_YN = "USE_COLUMN_INSERTS_YN";
+	public static final String USE_COLUMN_COMMANDS_YN = "USE_COLUMN_COMMANDS_YN";
+	public static final String OIDS_YN = "OIDS_YN";
+	public static final String IDENTIFIER_QUOTES_APPLY_YN = "IDENTIFIER_QUOTES_APPLY_YN";
+	public static final String OBJ_CMD = "OBJ_CMD";
 
 	/* scale 관련 */
 	public static final String SCALE_SET = "SCALE_SET";
@@ -255,4 +264,6 @@ public class ClientProtocolID {
 	public static final String EXRT_TRG_TB_NM = "EXRT_TRG_TB_NM";
 	public static final String CONNECT_INFO = "CONNECT_INFO";
 	public static final String MAPP_INFO = "MAPP_INFO";
+	public static final String COMPRESSION_TYPE = "COMPRESSION_TYPE";
+	public static final String META_DATA = "META_DATA";
 }

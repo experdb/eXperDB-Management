@@ -23,116 +23,76 @@
 	*/
 %>
 
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="../../css/common.css">
-<script type="text/javascript" src="../../js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="../../js/common.js"></script>
-</head>
-<body>
-<script language="javascript">
-
-var restore_sn = "${restore_sn}";
-var db_svr_id = "${db_svr_id}";
-var flag = "${flag}";
-
-$(window.document).ready(function() {
-	fn_addView();
-});
-
-
+<script type="text/javascript">
+	var popFlag = "";
+	var popRestore_sn = "";
 	
-	//로그 더보기
-function fn_addView() {
+	/* ********************************************************
+	 * 로그 더보기
+	 ******************************************************** */
+	function fn_addView() {
+		popFlag = $("#pop_flag", "#findList").val();
+		popRestore_sn = $("#pop_restore_sn", "#findList").val();
+
 		$.ajax({
 			url : "/restoreLogInfo.do",
 			dataType : "json",
 			type : "post",
 			async : false,
  			data : {
- 				db_svr_id : db_svr_id,
- 				restore_sn : restore_sn,
- 				flag : flag
+ 				db_svr_id : $("#db_svr_id", "#findList").val(),
+ 				restore_sn : popRestore_sn,
+ 				flag : popFlag
  			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
-		     },
+		    },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href="/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href="/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
-				$("#restoreHistorylog").append(result.strResultData); 
+				if (popFlag == "rman") {
+					$("#restoreRmanHistorylog").append(result.strResultData); 
+				} else {
+					$("#restoreDumpHistorylog").append(result.strResultData); 
+				}
 
-/* 				var v_fileSize = Number($("#fSize").val()) + result.fSize;
-
-				$("#fSize").val(v_fileSize);
-				$("#seek").val(result.seek);
-				$("#endFlag").val(result.endFlag);
-				$("#dwLen").val(result.dwLen);
-				
-				
-				v_fileSize = byteConvertor(v_fileSize);
-				document.getElementById("fSizeDev").innerHTML = v_fileSize; */
-				
-
-				//fn_Show();
 			}
 		});
 	}
 </script>
-<input type="hidden" id="restoreLog" name="restoreLog" value="${result}">
 
-<div id="pop_container">
-	<div class="pop_cts">
-		<p class="tit">복구 로그</p>
-		<div>
-			<table  class="log_table">
-				<tr>
-					<td>
-						<div class="btn_type_01">
-							<span class="btn btnC_01"><button type="button" onClick="fn_addView();"><spring:message code="auth_management.viewMore"/></button></span>
-							<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
+<div class="modal fade" id="pop_layer_restore_log" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+	<div class="modal-dialog  modal-xl" role="document" style="margin-top: 50px;">
+		<div class="modal-content" style="height: 700px; ">
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="restore.Recovery_history"/> <spring:message code="restore.log"/>
+				</h4>
+
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card-body">
+						<div class="form-group row">
+							<div class="col-sm-12">
+								<textarea class="form-control" id="restoreRmanHistorylog" name="restoreRmanHistorylog" style="height:500px;"></textarea>
+								
+								<textarea class="form-control" id="restoreDumpHistorylog" name="restoreDumpHistorylog" style="height:500px;" readonly></textarea>
+							</div>
 						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
 
-		<div class="pop_cmm">
-			<table class="write">
-				<caption>복구 로그</caption>
-				<tbody>
-					<tr>
-						<td>								
-						 <c:forEach var="restore" items="${flag}" varStatus="status">
-										<c:if test="${flag eq 'rman'}">
-											<div class="overflow_area4" name="exelog_view"  id="exelog_view">
-												<textarea name="restoreHistorylog"  id="restoreHistorylog" style="height:100%"></textarea>	
-											</div>	
-										</c:if>
-										<c:if test="${flag eq 'dump'}">
-											<div class="overflow_area4" name="restoreHistorylog" id="restoreHistorylog"></div>
-										</c:if>
-							</c:forEach>	
-						</td>
-					</tr>
-				</tbody>
-			</table>
+						<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+							<button type="button" class="btn btn-info btn-icon-text" onClick="fn_addView();"><spring:message code="auth_management.viewMore"/></button>
+							<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-
-</body>
-</html>

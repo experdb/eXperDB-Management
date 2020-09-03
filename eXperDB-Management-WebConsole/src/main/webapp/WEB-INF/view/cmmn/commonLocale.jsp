@@ -3,7 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="shortcut icon" type="image/x-icon" href="../images/logo.ico" />
+<link rel="shortcut icon" href="../images/logo_new.png" />
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>eXperDB for Management</title>
 </head>
@@ -20,6 +21,7 @@ var	schedule_wednesday="<spring:message code='schedule.wednesday' />";
 var	schedule_thursday="<spring:message code='schedule.thursday' />";
 var	schedule_friday="<spring:message code='schedule.friday' />";
 var schedule_saturday="<spring:message code='schedule.saturday' />";
+var message_msg209="<spring:message code='message.msg209' />";
 var agent_monitoring_yes="<spring:message code='agent_monitoring.yes' />";
 var agent_monitoring_no="<spring:message code='agent_monitoring.no' />";
 var message_msg211="<spring:message code='message.msg211'/>";
@@ -42,6 +44,46 @@ var common_December="<spring:message code='common.December'/>";
 var common_next_month ="<spring:message code='common.next_month'/>";
 var common_previous_month ="<spring:message code='common.previous_month'/>";
 var etc_etc09="<spring:message code='etc.etc09'/>";
+var message_msg109="<spring:message code='message.msg109'/>";
+
+var closeBtn = "<spring:message code='common.close' />";
+var wrk_chk_del_msg = "<spring:message code='message.msg210' />";
+var common_waiting = "<spring:message code='common.waiting' />";
+var dashboard_running = "<spring:message code='dashboard.running' />";
+var schedule_stop = "<spring:message code='schedule.stop' />";
+
+var user_management_msg5 = "<spring:message code='user_management.msg5' />";
+var user_management_msg6 = "<spring:message code='user_management.msg6' />";
+var user_management_msg7 = "<spring:message code='user_management.msg7' />";
+var user_management_msg8 = "<spring:message code='user_management.msg8' />";
+var user_management_msg9 = "<spring:message code='user_management.msg9' />";
+var user_management_msg10 = "<spring:message code='user_management.msg10' />";
+var user_management_msg11 = "<spring:message code='user_management.msg11' />";
+
+var migration_msg21 = "<spring:message code='migration.msg21' />";
+
+var backup_management_full_backup = "<spring:message code='backup_management.full_backup' />";
+var backup_management_incremental_backup = "<spring:message code='backup_management.incremental_backup' />";
+var backup_management_change_log_backup = "<spring:message code='backup_management.change_log_backup' />";
+var backup_management_uncompressed = "<spring:message code='backup_management.uncompressed' />";
+
+var common_volume = "<spring:message code='common.volume' />";
+var common_choice = "<spring:message code='common.choice' />";
+var message_msg151 = "<spring:message code='message.msg151' />";
+
+var schedule_one_time_run = "<spring:message code='schedule.one_time_run' />";
+var schedule_everyday = "<spring:message code='schedule.everyday' />";
+var schedule_everyweek = "<spring:message code='schedule.everyweek' />";
+var schedule_everymonth = "<spring:message code='schedule.everymonth' />";
+var schedule_everyyear = "<spring:message code='schedule.everyyear' />";
+
+var common_registory = "<spring:message code='common.registory' />";
+var common_apply = "<spring:message code='common.apply' />";
+var common_success = "<spring:message code='common.success' />";
+var common_failed = "<spring:message code='common.failed' />";
+
+var message_msg05 = "<spring:message code='message.msg05' />";
+
 </script>
 <body>
 

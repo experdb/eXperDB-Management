@@ -36,6 +36,16 @@ public interface AccessHistoryService {
 	List<Map<String, Object>> selectAccessHistory(PagingVO searchVO, Map<String, Object> param) throws Exception;
 
 	/**
+	 * 화면접근 이력 조회
+	 * 
+	 * @param param
+	 * @param userVo
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectAccessHistoryNew(Map<String, Object> param) throws Exception;
+
+	/**
 	 * 화면접근 이력 총 갯수
 	 * 
 	 * @param param

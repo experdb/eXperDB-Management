@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -141,13 +142,14 @@ public class DxT020 extends SocketCtl{
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) 
+		String poolName = null;
+		
+		poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) 
 		+ "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
 		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
 		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
-		socketLogger.info("@@@@ poolName : " + poolName);
-		
+	
 		Connection connDB = null;
 		SqlSession sessDB = null;
 		
@@ -155,23 +157,28 @@ public class DxT020 extends SocketCtl{
 		
 		try {
 			
-			SocketExt.setupDriverPool(serverInfoObj, poolName);
-
-			//DB 컨넥션을 가져온다.
-			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-
-			sessDB = sqlSessionFactory.openSession(connDB);
+			boolean conn = connection_test(serverInfoObj);
 			
-			HashMap hp = (HashMap) sessDB.selectOne("app.selectMasterGbm");
+			if(conn == true){
+				socketLogger.info(" [Database 연결 성공] ");
 				
-			strMasterGbn = (String) hp.get("master_gbn");
-						
-			hp = null;
-			sessDB.close();
-			connDB.close();
+				SocketExt.setupDriverPool(serverInfoObj, poolName);
+				//DB 컨넥션을 가져온다.
+				connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
+				
+				sessDB = sqlSessionFactory.openSession(connDB);
+				HashMap hp = (HashMap) sessDB.selectOne("app.selectMasterGbm");
+				strMasterGbn = (String) hp.get("master_gbn");
+
+				hp = null;
+				sessDB.close();
+				connDB.close();
+			}
 
 		} catch(Exception e) {
-			errLogger.error("selectConnectInfo {} ", e.toString());
+			//POOL해제
+			
+			errLogger.error("selectConnectInfo {} ", e.toString());				
 			throw e;
 		} finally {
 
@@ -182,7 +189,34 @@ public class DxT020 extends SocketCtl{
 		return strMasterGbn;
 		
 	}
-	
+
+
+	private boolean connection_test(JSONObject serverInfoObj) throws Exception {
+		
+		Connection con = null;
+		boolean retVal = true;
+		try{
+
+			String driver = "org.postgresql.Driver";
+			String url ="jdbc:postgresql://"+ serverInfoObj.get(ProtocolID.SERVER_IP) +":"+ serverInfoObj.get(ProtocolID.SERVER_PORT) +"/"+ serverInfoObj.get(ProtocolID.DATABASE_NAME);
+			String user =(String)serverInfoObj.get(ProtocolID.USER_ID);
+			String pw = (String)serverInfoObj.get(ProtocolID.USER_PWD);
+
+			//1. JDBC 드라이버 로딩 
+			Class.forName(driver); 
+			
+			// 2. Connection 생성 
+			con = DriverManager.getConnection(url, user, pw); 
+				
+		}catch(Exception e){
+			errLogger.error(" [Database 연결 실패] "+ e.toString());
+			retVal = false;
+			throw e;
+		}
+		return retVal;
+	}
+
+
 	
 
 }

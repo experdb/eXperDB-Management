@@ -10,6 +10,10 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,11 +53,16 @@ public class MypageController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
-	
+	/**
+	 * Mybatis Transaction 
+	 */
+	@Autowired
+	private PlatformTransactionManager txManager;
+
 	/**
 	 * 개인정보수정 화면을 보여준다.
 	 * 
-	 * @param historyVO
+	 * @param historyVO, userVo
 	 * @param request
 	 * @return ModelAndView mv
 	 * @throws Exception
@@ -62,6 +71,7 @@ public class MypageController {
 	public ModelAndView myPage(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		List<UserVO> result = null;
+
 		try {
 			
 			HttpSession session = request.getSession();
@@ -73,28 +83,31 @@ public class MypageController {
 			historyVO.setExe_dtl_cd("DX-T0048");
 			historyVO.setMnu_id(22);
 			accessHistoryService.insertHistory(historyVO);
-			
-			
+
 			result = myPageService.selectDetailMyPage(usr_id);
-			mv.addObject("usr_id", usr_id);
-			mv.addObject("usr_nm", result.get(0).getUsr_nm());
-			mv.addObject("aut_id", result.get(0).getAut_id());
-			mv.addObject("bln_nm", result.get(0).getBln_nm());
-			mv.addObject("dept_nm", result.get(0).getDept_nm());
-			mv.addObject("pst_nm", result.get(0).getPst_nm());
-			mv.addObject("cpn", result.get(0).getCpn());
-			mv.addObject("rsp_bsn_nm", result.get(0).getRsp_bsn_nm());
-			mv.addObject("usr_expr_dt", result.get(0).getUsr_expr_dt());
-			
+
+			if (result != null) {
+				mv.addObject("usr_id", usr_id);
+				mv.addObject("usr_nm", result.get(0).getUsr_nm());
+				mv.addObject("aut_id", result.get(0).getAut_id());
+				mv.addObject("bln_nm", result.get(0).getBln_nm());
+				mv.addObject("dept_nm", result.get(0).getDept_nm());
+				mv.addObject("pst_nm", result.get(0).getPst_nm());
+				mv.addObject("cpn", result.get(0).getCpn());
+				mv.addObject("rsp_bsn_nm", result.get(0).getRsp_bsn_nm());
+				mv.addObject("usr_expr_dt", result.get(0).getUsr_expr_dt());
+				
+				mv.addObject("encp_use_yn", result.get(0).getEncp_use_yn());
+				mv.addObject("use_yn", result.get(0).getUse_yn());
+			}
+
 			mv.setViewName("mypage/myPage");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
-
 	}
 	
-
 	/**
 	 * 개인정보수정
 	 * 
@@ -106,6 +119,12 @@ public class MypageController {
 	 */
 	@RequestMapping(value = "/updateMypage.do")
 	public @ResponseBody void updateMypage(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+		
 		try {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -121,35 +140,36 @@ public class MypageController {
 			accessHistoryService.insertHistory(historyVO);
 			
 		} catch (Exception e) {
+			txManager.rollback(status);
 			e.printStackTrace();
+			return;
+		}finally{
+			txManager.commit(status);
 		}
 	}
-	
-	
+
 	/**
 	 * 패스워드변경 팝업을 보여준다.
 	 * 
 	 * @param request
 	 * @param historyVO
-	 * @throws Exception
+	 * @throws 
 	 */
 	@RequestMapping(value = "/popup/pwdRegForm.do")
 	public ModelAndView connectorReg(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
+
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0049");
 			historyVO.setMnu_id(22);
 			accessHistoryService.insertHistory(historyVO);
-					
-			mv.setViewName("popup/pwdRegForm");	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
 	}
-	
 	
 	/**
 	 * 패스워드를 체크한다.
@@ -179,8 +199,7 @@ public class MypageController {
 		}
 		return false;
 	}
-	
-	
+
 	/**
 	 * 패스워드를 변경한다.
 	 * 
@@ -206,6 +225,7 @@ public class MypageController {
 			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
 				String restIp = loginVo.getRestIp();
 				int restPort = loginVo.getRestPort();
+
 				try{
 					result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, password);
 				}catch(Exception e){

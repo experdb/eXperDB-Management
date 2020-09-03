@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<%@include file="../../cmmn/cs.jsp"%>
+<%@include file="../../cmmn/cs2.jsp"%>
 
 <%
 	/**
@@ -20,6 +20,8 @@
 %>
 
 <script>
+var confirm_title = ""; 
+
 //연결테스트 확인여부
 var connCheck = "fail";
 
@@ -33,7 +35,7 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "270px",
+		scrollY : "470px",
 		scrollX: true,	
 		searching : false,
 		paging : false,
@@ -59,9 +61,9 @@ function fn_init() {
 	        className : "dt-center",
 	        render: function(data, type, full, meta){
 	           if(full.agt_cndt_cd == 'TC001101'){
-	              data = '<img src="../images/ico_agent_1.png" alt="" />';      
+	              data = "<div class='badge badge-pill badge-primary' ><i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i></div>";    
 	           }else{
-	        	  data = '<img src="../images/ico_agent_2.png" alt="" />';    
+	        	  data = "<div class='badge badge-pill badge-danger' ><i class='fa fa-times-circle mr-2' style='margin-right: 0px !important;'></i></div>";    
 	           }
 	           return data;
 	        }}, 
@@ -93,7 +95,7 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "270px",
+		scrollY : "470px",
 		scrollX: true,	
 		searching : false,
 		paging : false,		
@@ -149,6 +151,10 @@ $(window.document).ready(function() {
 	fn_init();
 	
 	fn_selectTreeDbServerList();
+	
+	fn_init2();
+	fn_init3();
+	
 });
 
 
@@ -163,13 +169,11 @@ function fn_selectTreeDbServerList(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
@@ -198,11 +202,14 @@ $(function() {
 	 * 서버 테이블 (선택영역 표시)
 	 ******************************************************** */
     $('#dbServerList tbody').on( 'click', 'tr', function () {
+
+    	var vCheck =  table_dbServer.row(this).data().rownum;
+    	
     	var check = table_dbServer.row( this ).index()+1
-    	$(":radio[name=input:radio][value="+check+"]").attr("checked", true);
          if ( $(this).hasClass('selected') ) {
         }
         else {
+        	$("input:radio[name='radio']:radio[value="+vCheck+"]").prop('checked', true); 
         	table_dbServer.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
         } 
@@ -223,28 +230,19 @@ $(function() {
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert("<spring:message code='message.msg02' />");
-    				top.location.href = "/";
+    				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
     			} else if(xhr.status == 403) {
-    				alert("<spring:message code='message.msg03' />");
-    				top.location.href = "/";
+    				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
     			} else {
-    				alert("ERROR CODE : "
-    						+ xhr.status
-    						+ "\n\n"
-    						+ "ERROR Message : "
-    						+ error
-    						+ "\n\n"
-    						+ "Error Detail : "
-    						+ xhr.responseText.replace(
-    								/(<([^>]+)>)/gi, ""));
+    				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
     			}
     		},
     		success : function(result) {    	
     			if(result.data == null){
-    				alert("<spring:message code='message.msg05' />");
+    				showSwalIcon('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error');
     			}else{
     				severdb = result;
+    				table_db.rows({selected: true}).deselect();
     				table_db.clear().draw();
 	    			table_db.rows.add(result.data).draw();
 	    			fn_dataCompareChcek(result);
@@ -260,16 +258,7 @@ $(function() {
  * 서버 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	var popUrl = "/popup/dbServerRegForm.do?flag=tree"; // 서버 url 팝업경로
-	var width = 1000;
-	var height = 630;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-	window.open(popUrl,"",popOption);	
-	
-// 	window.open("/popup/dbServerRegForm.do?flag=tree","dbServerRegPop","location=no,menubar=no,scrollbars=yes,status=no,width=1050,height=638");
+	$('#pop_layer_dbserver_reg').modal("show");
 }
 
 
@@ -279,18 +268,71 @@ function fn_reg_popup(){
 function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
-		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		var popUrl = "/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree"; // 서버 url 팝업경로
-		var width = 1000;
-		var height = 660;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-		window.open(popUrl,"",popOption);
-// 		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1050,height=638");
+	    $.ajax({
+			url : "/selectIpadrList.do",
+			data : {
+				db_svr_id : table_dbServer.row('.selected').data().db_svr_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					top.location.href = "/";
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				dbServerRegTable.clear().draw();
+				dbServerRegTable.rows.add(result).draw();
+			    $.ajax({
+					url : "/selectDbServerList.do",
+					data : {
+						db_svr_id : table_dbServer.row('.selected').data().db_svr_id
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {
+						document.getElementById('md_db_svr_id').value= result[0].db_svr_id;
+						document.getElementById('md_db_svr_nm').value= result[0].db_svr_nm;
+						document.getElementById('md_dft_db_nm').value= result[0].dft_db_nm;
+						document.getElementById('md_svr_spr_usr_id').value= result[0].svr_spr_usr_id;
+						document.getElementById('md_svr_spr_scm_pwd').value= result[0].svr_spr_scm_pwd;
+						document.getElementById('md_pghome_pth').value= result[0].pghome_pth;
+						document.getElementById('md_pgdata_pth').value= result[0].pgdata_pth;
+						if(result[0].useyn == 'Y'){
+							$("#useyn_Y").prop("checked", true);
+						}else{
+							$("#useyn_N").prop("checked", true);
+						}
+						
+					}
+			    });
+			}
+		});  
+  
+		$('#pop_layer_dbserver_mod').modal("show");
 	} else {
-		alert("<spring:message code='message.msg04' />");
+		showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 	}	
 }
 
@@ -299,6 +341,18 @@ function fn_regRe_popup(){
  * 디비 등록
  ******************************************************** */
 function fn_insertDB(){
+	confile_title = '<spring:message code="common.database" />' + " " + '<spring:message code="common.save" />' + " " + '<spring:message code="common.request" />';
+	$('#con_multi_gbn', '#findConfirmMulti').val("ins_DB");
+	$('#confirm_multi_tlt').html(confile_title);
+	$('#confirm_multi_msg').html('<spring:message code="message.msg160" />');
+	$('#pop_confirm_multi_md').modal("show");
+
+}
+
+/* ********************************************************
+ * 디비 등록
+ ******************************************************** */
+function fn_insertDB2(){
 	var list = $("input[name='db_exp']");
 	var datasArr = new Array();	
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
@@ -367,7 +421,6 @@ function fn_insertDB(){
 //     		datasArr.push(rows);
 // 		}
 
-    	if (confirm('<spring:message code="message.msg160"/>')){
 			$.ajax({
 				url : "/insertTreeDB.do",
 				data : {
@@ -383,26 +436,19 @@ function fn_insertDB(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("<spring:message code='message.msg02' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert("<spring:message code='message.msg03' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {
-					alert("<spring:message code='message.msg07' />");
-					location.reload();
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
 				}
 			});	
-    	}else{
-    		return false;
-    	}
 
 }
-
 
 /* ********************************************************
  * 서버에 등록된 디비,  <=>  Repository에 등록된 디비 비교
@@ -420,13 +466,11 @@ function fn_dataCompareChcek(svrDbList){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
@@ -519,27 +563,24 @@ function fn_dataCompareChcek(svrDbList){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
 				if(result.connChk >0){
-					alert('<spring:message code="message.msg193"/>');
+					showSwalIcon('<spring:message code="message.msg193" />', '<spring:message code="common.close" />', '', 'error');
 				}else if(result.scheduleChk){
-					alert('<spring:message code="message.msg194"/>');
+					showSwalIcon('<spring:message code="message.msg194" />', '<spring:message code="common.close" />', '', 'error');
 				}else{
-					if (confirm('<spring:message code="message.msg206"/>')){
-						//return false;
-						fn_delete(db_svr_id);
-					}else{
-						return false;
-					}				
+					confile_title = '<spring:message code="migration.source/target_dbms_management" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+					$('#con_multi_gbn', '#findConfirmMulti').val("del");
+					$('#confirm_multi_tlt').html(confile_title);
+					$('#confirm_multi_msg').html('<spring:message code="message.msg206" />');
+					$('#pop_confirm_multi_md').modal("show");
 				}
 			}
 		});
@@ -559,17 +600,15 @@ function fn_dataCompareChcek(svrDbList){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
-				alert("<spring:message code='message.msg12' />");
+				showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
 				fn_selectTreeDbServerList();
 				table_db.clear().draw();
 			}
@@ -581,10 +620,20 @@ function fn_dbSync(){
 	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
 
 	if(datas == 0){
-		alert('<spring:message code="message.msg207"/>')
+		showSwalIcon('<spring:message code="message.msg207" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
-		if (confirm('<spring:message code="message.msg208"/>')){
+		confile_title = '<spring:message code="dbms_information.Synchronization" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("db_sync");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg208" />');
+		$('#pop_confirm_multi_md').modal("show");
+	}
+}	
+
+function fn_dbSync2(){	
+	var datas = table_dbServer.rows('.selected').data().length;
+	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
 			$.ajax({
 				url : "/selectDBSync.do",
 				data : {db_svr_id : db_svr_id},
@@ -596,13 +645,11 @@ function fn_dbSync(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("<spring:message code='message.msg02' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						alert("<spring:message code='message.msg03' />");
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {
@@ -621,12 +668,7 @@ function fn_dbSync(){
 					fn_syncUpdate(JSON.stringify(arr));
 				}
 			})
-		}else{
-			return false;
-		}
-	}
-}	
-
+}
 
 function fn_syncUpdate(db_id){
 	$.ajax({
@@ -642,99 +684,159 @@ function fn_syncUpdate(db_id){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
-			alert('<spring:message code="message.msg212"/>');
+			showSwalIcon('<spring:message code="message.msg212"/>', '<spring:message code="common.close" />', '', 'success');
 		}
 	});
 }
+
+
+/* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmMultiRst(gbn){
+	if (gbn == "del") {
+		var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
+		fn_delete(db_svr_id);
+	}else if(gbn =="ins_DB"){
+		fn_insertDB2()
+	}else if(gbn =="db_sync"){
+		fn_dbSync2();
+	}else if(gbn =="ins_DBServer"){
+		fn_insertDbServer2();		
+	}else if(gbn =="mod_DBServer"){
+		fn_updateDbServer2();
+	}
+}
 </script>
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="menu.dbms_registration" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="help.dbms_registration_01" /></li>
-					<li><spring:message code="help.dbms_registration_02" /></li>						
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li>Admin</li>
-					<li><spring:message code="menu.dbms_information" /></li>
-					<li class="on"><spring:message code="menu.dbms_registration" /></li>
-				</ul>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
+<%@include file="./../../popup/dbServerRegForm.jsp"%>
+<%@include file="./../../popup/dbServerRegReForm.jsp"%>
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5"  style="padding-top:3px;">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+<!-- 												<i class="fa fa-check-square"></i> -->
+												<i class="ti-desktop menu-icon"></i>
+												<span class="menu-title"><spring:message code="menu.dbms_registration" /></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">ADMIN</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.dbms_information" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.dbms_registration"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.dbms_registration_01" /></p>
+											<p class="mb-0"><spring:message code="help.dbms_registration_02" /></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- title end -->
+				</div>
 			</div>
 		</div>
-		<div class="contents">
-			<div class="tree_grp">
-				<div class="tree_lt">
-					<div class="btn_type_01">
-					<div id="wrt_button">
-						<span class="btn"><button type="button" onclick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
-						<span class="btn"><button type="button" onClick="fn_regRe_popup();"><spring:message code="common.modify" /></button></span>		
-						<span class="btn" onClick="fn_exeCheck()"><button type="button"><spring:message code="common.delete" /></button></span>
-					</div>
-					</div>
-					<div class="inner">
-						<p class="tit"><spring:message code="dbms_information.dbms_list" /></p>
-						<div class="tree_server">
-							<table id="dbServerList" class="cell-border display" cellspacing="0" align="left">
-								<thead>
-									<tr>
-										<th width="10"><spring:message code="common.choice" /></th>									
-										<th width="200"><spring:message code="dbms_information.dbms_ip" /></th>
-										<th width="130"><spring:message code="common.dbms_name" /></th>
-										<th width="50"><spring:message code="dbms_information.agent_status" /></th>
-										<th width="50"><spring:message code="dbms_information.use_yn" /></th>
-										<!-- <th width="0"></th>
-										<th width="0"></th>
-										<th width="0"></th>
-										<th width="0"></th>
-										<th width="0"></th>
-										<th width="0"></th>
-										<th width="0"></th>
-										<th width="0"></th>
-										<th width="0"></th> -->
-									</tr>
-								</thead>
-							</table>
+		
+		<div class="col-lg-6 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="dbms_information.dbms_list" />
+					</h4>
+					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
+						<div id="wrt_button" style="float: right;">
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_reg_popup();">
+								<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
+							</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_regRe_popup();">
+								<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+							</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_exeCheck()">
+								<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+							</button>
 						</div>
+
+						<table id="dbServerList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;align:left;">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="10"><spring:message code="common.choice" /></th>									
+									<th width="200"><spring:message code="dbms_information.dbms_ip" /></th>
+									<th width="130"><spring:message code="common.dbms_name" /></th>
+									<th width="50"><spring:message code="dbms_information.agent_status" /></th>
+									<th width="50"><spring:message code="dbms_information.use_yn" /></th>
+									<!-- <th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th> -->
+								</tr>
+							</thead>
+						</table>
 					</div>
 				</div>
-				<div class="tree_rt"  style="width: 44%; margin-left: 2%;">
-					<div class="btn_type_01">
-						<div id="save_button">
-						<span class="btn"><button type="button" onClick="fn_insertDB()"><spring:message code="common.save"/></button></span>
-						<span class="btn"><button type="button" onClick="fn_dbSync()"><spring:message code="dbms_information.Synchronization"/></button></span>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="dbms_information.databaseList"/>
+					</h4>
+					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
+						<div id="save_button" style="float: right;">
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_insertDB()">
+								<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save" />
+							</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_dbSync()">
+								<i class="ti-reload btn-icon-prepend "></i><spring:message code="dbms_information.Synchronization" />
+							</button>
 						</div>
-					</div>
-					<div class="inner">
-						<p class="tit"><spring:message code="dbms_information.databaseList"/></p>
-						<div class="tree_list">
-							<table id="dbList" class="cell-border display" cellspacing="0" align="left">
-								<thead>
-									<tr>
-										<th width="10"><input name="select" value="1" type="checkbox"></th>
-										<th width="110"><spring:message code="common.database" /></th>
-										<th width="360"><spring:message code="common.desc" /></th>										
-									</tr>
-								</thead>
-							</table>
-						</div>
+
+						<table id="dbList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;align:left;">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="10"><input name="select" value="1" type="checkbox"></th>
+									<th width="110"><spring:message code="common.database" /></th>
+									<th width="360"><spring:message code="common.desc" /></th>
+								</tr>
+							</thead>
+						</table>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-

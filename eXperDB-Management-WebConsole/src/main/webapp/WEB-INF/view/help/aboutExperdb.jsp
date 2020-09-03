@@ -40,7 +40,7 @@
 				</tbody>
 			</table>
 			<div class="pop_logo">
-				<img src="../../images/popup/ico_logo.png" alt="eXperDB" style="position: absolute; bottom: 130px;left: 50%; margin-left: -113px;"/>
+				<img src="../../images/login_logo_new.png" alt="eXperDB" style="position: absolute; bottom: 130px;left: 50%; margin-left: -113px;"/>
 			</div>
 		</div>
 	</div>

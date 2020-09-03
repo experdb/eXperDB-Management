@@ -161,6 +161,30 @@ public class SecurityPolicyController {
 			denyResultTypeCode = sic.selectParamSysCodeListDenyresult(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("denyResultTypeCode",denyResultTypeCode);
 			
+			
+			
+			JSONArray cipherAlgorithmCode = new JSONArray();
+			JSONArray initialVectorTypeCode = new JSONArray();
+			JSONArray operationModeCode = new JSONArray();
+			JSONArray binUid = new JSONArray();
+			
+			/*암호화 키*/
+			binUid = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_binUid",binUid);
+			mv.addObject("mod_binUid",binUid);
+			/*암호화알고리즘*/
+			cipherAlgorithmCode = sic.selectSysCodeList(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_cipherAlgorithmCode",cipherAlgorithmCode);
+			mv.addObject("mod_cipherAlgorithmCode",cipherAlgorithmCode);
+			/*초기벡터*/
+			initialVectorTypeCode = sic.selectParamSysCodeListVector(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_initialVectorTypeCode",initialVectorTypeCode);
+			mv.addObject("mod_initialVectorTypeCode",initialVectorTypeCode);
+			/*운영모드*/
+			operationModeCode = sic.selectParamSysCodeListOperation(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_operationModeCode",operationModeCode);
+			mv.addObject("mod_operationModeCode",operationModeCode);
+			
 			mv.setViewName("encrypt/securityPolicy/securityPolicyInsert");
 
 		} catch (Exception e) {
@@ -214,8 +238,29 @@ public class SecurityPolicyController {
 			String profileUid = request.getParameter("profileUid");
 			String lang = locale.toString();
 			result = sic.selectProfileProtectionContents(lang, restIp, restPort, strTocken, loginId, entityId, profileUid);
+				
+			JSONArray cipherAlgorithmCode = new JSONArray();
+			JSONArray initialVectorTypeCode = new JSONArray();
+			JSONArray operationModeCode = new JSONArray();
+			JSONArray binUid = new JSONArray();
 			
-			System.out.println(result);
+			/*암호화 키*/
+			binUid = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_binUid",binUid);
+			mv.addObject("mod_binUid",binUid);
+			/*암호화알고리즘*/
+			cipherAlgorithmCode = sic.selectSysCodeList(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_cipherAlgorithmCode",cipherAlgorithmCode);
+			mv.addObject("mod_cipherAlgorithmCode",cipherAlgorithmCode);
+			/*초기벡터*/
+			initialVectorTypeCode = sic.selectParamSysCodeListVector(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_initialVectorTypeCode",initialVectorTypeCode);
+			mv.addObject("mod_initialVectorTypeCode",initialVectorTypeCode);
+			/*운영모드*/
+			operationModeCode = sic.selectParamSysCodeListOperation(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_operationModeCode",operationModeCode);
+			mv.addObject("mod_operationModeCode",operationModeCode);
+			
 			
 			mv.addObject("profileUid",request.getParameter("profileUid"));
 			mv.addObject("result",result);
@@ -237,13 +282,15 @@ public class SecurityPolicyController {
 	 */
 	@RequestMapping(value = "/popup/securityPolicyRegForm.do")
 	public ModelAndView securityPolicyRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		
+		ModelAndView mv = new ModelAndView("jsonView");
+		
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONArray cipherAlgorithmCode = new JSONArray();
 		JSONArray initialVectorTypeCode = new JSONArray();
 		JSONArray operationModeCode = new JSONArray();
-		JSONObject binUid = new JSONObject();
+		JSONArray binUid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -251,7 +298,8 @@ public class SecurityPolicyController {
 			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 			
-			String act = request.getParameter("act");
+			String act = request.getParameter("pop_act");
+
 			
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -262,37 +310,65 @@ public class SecurityPolicyController {
 			String entityId = loginVo.getEctityUid();	
 			
 			/*암호화 키*/
-			binUid = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
-			mv.addObject("binUid",binUid);
+			binUid = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken,loginId,entityId);
+			mv.addObject("pop_binUid",binUid);
 			/*암호화알고리즘*/
 			cipherAlgorithmCode = sic.selectSysCodeList(restIp, restPort, strTocken,loginId,entityId);
-			mv.addObject("cipherAlgorithmCode",cipherAlgorithmCode);
+			mv.addObject("pop_cipherAlgorithmCode",cipherAlgorithmCode);
 			/*초기벡터*/
 			initialVectorTypeCode = sic.selectParamSysCodeListVector(restIp, restPort, strTocken,loginId,entityId);
-			mv.addObject("initialVectorTypeCode",initialVectorTypeCode);
+			mv.addObject("pop_initialVectorTypeCode",initialVectorTypeCode);
 			/*운영모드*/
 			operationModeCode = sic.selectParamSysCodeListOperation(restIp, restPort, strTocken,loginId,entityId);
-			mv.addObject("operationModeCode",operationModeCode);
+			mv.addObject("pop_operationModeCode",operationModeCode);
 			
-			if (act.equals("u")) {
-				mv.addObject("rnum",request.getParameter("rnum").equals("undefined") ? "" : request.getParameter("rnum"));
-				mv.addObject("offset",request.getParameter("offset").equals("undefined") ? "" : request.getParameter("offset"));
-				mv.addObject("length",request.getParameter("length").equals("undefined") ? "" : request.getParameter("length"));
-				mv.addObject("cipherAlgorithmCodeValue",request.getParameter("cipherAlgorithmCode").equals("undefined") ? "" : request.getParameter("cipherAlgorithmCode"));
-				mv.addObject("binUidValue",request.getParameter("binUid").equals("undefined") ? "" : request.getParameter("binUid"));
-				mv.addObject("initialVectorTypeCodeValue",request.getParameter("initialVectorTypeCode").equals("undefined") ? "" : request.getParameter("initialVectorTypeCode"));
-				mv.addObject("operationModeCodeValue",request.getParameter("operationModeCode").equals("undefined") ? "" : request.getParameter("operationModeCode"));
-			}
-			mv.addObject("act", act);
-			mv.setViewName("encrypt/popup/securityPolicyRegForm");
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
 	}
 	
+	
+	
+	
 	/**
-	 * 접근제어 정책 등록/수정 팝업을 보여준다.
+	 * 암복호화 정책 등록/수정 팝업을 보여준다.
+	 * 
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/securityPolicyRegReForm.do")
+	public ModelAndView securityPolicyRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0103");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+
+			mv.addObject("mod_rnum",request.getParameter("rnum").equals("undefined") ? "" : request.getParameter("rnum"));
+			mv.addObject("mod_offset",request.getParameter("offset").equals("undefined") ? "" : request.getParameter("offset"));
+			mv.addObject("mod_length",request.getParameter("length").equals("undefined") ? "" : request.getParameter("length"));
+			mv.addObject("mod_cipherAlgorithmCodeValue",request.getParameter("cipherAlgorithmCode").equals("undefined") ? "" : request.getParameter("cipherAlgorithmCode"));
+			mv.addObject("mod_binUidValue",request.getParameter("binUid").equals("undefined") ? "" : request.getParameter("binUid"));
+			mv.addObject("mod_initialVectorTypeCodeValue",request.getParameter("initialVectorTypeCode").equals("undefined") ? "" : request.getParameter("initialVectorTypeCode"));
+			mv.addObject("mod_operationModeCodeValue",request.getParameter("operationModeCode").equals("undefined") ? "" : request.getParameter("operationModeCode"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
+	
+	/**
+	 * 접근제어 정책 등록 팝업을 보여준다.
 	 * 
 	 * @param request
 	 * @return ModelAndView mv
@@ -300,7 +376,9 @@ public class SecurityPolicyController {
 	 */
 	@RequestMapping(value = "/popup/accessPolicyRegForm.do")
 	public ModelAndView accessPolicyRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		
+		ModelAndView mv = new ModelAndView("jsonView");
+
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -308,33 +386,52 @@ public class SecurityPolicyController {
 			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 			
-			String act = request.getParameter("act");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
+	/**
+	 * 접근제어 정책 수정 팝업을 보여준다.
+	 * 
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/accessPolicyRegReForm.do")
+	public ModelAndView accessPolicyRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0104");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
 			
-			if (act.equals("u")) {
-				mv.addObject("rnum",request.getParameter("rnum").equals("undefined") ? "" : request.getParameter("rnum"));
-				mv.addObject("specName",request.getParameter("specName").equals("undefined") ? "" : request.getParameter("specName"));
-				mv.addObject("serverInstanceId",request.getParameter("serverInstanceId").equals("undefined") ? "" : request.getParameter("serverInstanceId"));
-				mv.addObject("serverLoginId",request.getParameter("serverLoginId").equals("undefined") ? "" : request.getParameter("serverLoginId"));
-				mv.addObject("adminLoginId",request.getParameter("adminLoginId").equals("undefined") ? "" : request.getParameter("adminLoginId"));
-				mv.addObject("osLoginId",request.getParameter("osLoginId").equals("undefined") ? "" : request.getParameter("osLoginId"));
-				mv.addObject("applicationName",request.getParameter("applicationName").equals("undefined") ? "" : request.getParameter("applicationName"));
-				mv.addObject("accessAddress",request.getParameter("accessAddress").equals("undefined") ? "" : request.getParameter("accessAddress"));
-				mv.addObject("accessAddressMask",request.getParameter("accessAddressMask").equals("undefined") ? "" : request.getParameter("accessAddressMask"));
-				mv.addObject("accessMacAddress",request.getParameter("accessMacAddress").equals("undefined") ? "" : request.getParameter("accessMacAddress"));
-				mv.addObject("startDateTime",request.getParameter("startDateTime").equals("undefined") ? "" : request.getParameter("startDateTime"));
-				mv.addObject("endDateTime",request.getParameter("endDateTime").equals("undefined") ? "" : request.getParameter("endDateTime"));
-				mv.addObject("startTime",request.getParameter("startTime").equals("undefined") ? "" : request.getParameter("startTime"));
-				mv.addObject("endTime",request.getParameter("endTime").equals("undefined") ? "" : request.getParameter("endTime"));
-				mv.addObject("workDay",request.getParameter("workDay").equals("undefined") ? "" : request.getParameter("workDay"));
-				mv.addObject("massiveThreshold",request.getParameter("massiveThreshold").equals("undefined") ? "" : request.getParameter("massiveThreshold"));
-				mv.addObject("massiveTimeInterval",request.getParameter("massiveTimeInterval").equals("undefined") ? "" : request.getParameter("massiveTimeInterval"));
-				mv.addObject("extraName",request.getParameter("extraName").equals("undefined") ? "" : request.getParameter("extraName"));
-				mv.addObject("hostName",request.getParameter("hostName").equals("undefined") ? "" : request.getParameter("hostName"));
-				mv.addObject("whitelistYesNo",request.getParameter("whitelistYesNo").equals("undefined") ? "" : request.getParameter("whitelistYesNo"));
-			}
-			
-			mv.addObject("act", act);
-			mv.setViewName("encrypt/popup/accessPolicyRegForm");
+			mv.addObject("rnum",request.getParameter("rnum").equals("undefined") ? "" : request.getParameter("rnum"));
+			mv.addObject("specName",request.getParameter("specName").equals("undefined") ? "" : request.getParameter("specName"));
+			mv.addObject("serverInstanceId",request.getParameter("serverInstanceId").equals("undefined") ? "" : request.getParameter("serverInstanceId"));
+			mv.addObject("serverLoginId",request.getParameter("serverLoginId").equals("undefined") ? "" : request.getParameter("serverLoginId"));
+			mv.addObject("adminLoginId",request.getParameter("adminLoginId").equals("undefined") ? "" : request.getParameter("adminLoginId"));
+			mv.addObject("osLoginId",request.getParameter("osLoginId").equals("undefined") ? "" : request.getParameter("osLoginId"));
+			mv.addObject("applicationName",request.getParameter("applicationName").equals("undefined") ? "" : request.getParameter("applicationName"));
+			mv.addObject("accessAddress",request.getParameter("accessAddress").equals("undefined") ? "" : request.getParameter("accessAddress"));
+			mv.addObject("accessAddressMask",request.getParameter("accessAddressMask").equals("undefined") ? "" : request.getParameter("accessAddressMask"));
+			mv.addObject("accessMacAddress",request.getParameter("accessMacAddress").equals("undefined") ? "" : request.getParameter("accessMacAddress"));
+			mv.addObject("startDateTime",request.getParameter("startDateTime").equals("undefined") ? "" : request.getParameter("startDateTime"));
+			mv.addObject("endDateTime",request.getParameter("endDateTime").equals("undefined") ? "" : request.getParameter("endDateTime"));
+			mv.addObject("startTime",request.getParameter("startTime").equals("undefined") ? "" : request.getParameter("startTime"));
+			mv.addObject("endTime",request.getParameter("endTime").equals("undefined") ? "" : request.getParameter("endTime"));
+			mv.addObject("workDay",request.getParameter("workDay").equals("undefined") ? "" : request.getParameter("workDay"));
+			mv.addObject("massiveThreshold",request.getParameter("massiveThreshold").equals("undefined") ? "" : request.getParameter("massiveThreshold"));
+			mv.addObject("massiveTimeInterval",request.getParameter("massiveTimeInterval").equals("undefined") ? "" : request.getParameter("massiveTimeInterval"));
+			mv.addObject("extraName",request.getParameter("extraName").equals("undefined") ? "" : request.getParameter("extraName"));
+			mv.addObject("hostName",request.getParameter("hostName").equals("undefined") ? "" : request.getParameter("hostName"));
+			mv.addObject("whitelistYesNo",request.getParameter("whitelistYesNo").equals("undefined") ? "" : request.getParameter("whitelistYesNo"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -473,27 +570,11 @@ public class SecurityPolicyController {
 					p.setLength(Integer.parseInt(jsrow.get("length").toString())); //길이
 				}
 				
-				HttpSession session = request.getSession();
-				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-				String restIp = loginVo.getRestIp();
-				int restPort = loginVo.getRestPort();
-				String strTocken = loginVo.getTockenValue();
-				String loginId = loginVo.getUsr_id();
-				String entityId = loginVo.getEctityUid();
-				
-				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
-
+				//binuid
 				if(jsrow.get("binUid")!=null){
-					String getbinuid = jsrow.get("binUid").toString(); //키이름
-					String binuid = "";
-					for(int j=0; j<cryptoKey.size(); j++){
-						JSONObject data = (JSONObject) cryptoKey.get(j);
-						if(getbinuid.equals(data.get("resourceName"))){
-							binuid=(String) data.get("getBinUid");
-						}
-					}
-					p.setBinUid(binuid);
+					p.setBinUid(jsrow.get("binUid").toString());
 				}
+				
 				
 				param2.add(p.toJSONString());
 			}
@@ -722,26 +803,9 @@ public class SecurityPolicyController {
 					p.setLength(Integer.parseInt(jsrow.get("length").toString())); //길이
 				}
 				
-				HttpSession session = request.getSession();
-				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-				String restIp = loginVo.getRestIp();
-				int restPort = loginVo.getRestPort();
-				String strTocken = loginVo.getTockenValue();
-				String loginId = loginVo.getUsr_id();
-				String entityId = loginVo.getEctityUid();
-				
-				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
-				
+				//binuid
 				if(jsrow.get("binUid")!=null){
-					String getbinuid = jsrow.get("binUid").toString(); //키이름
-					String binuid = "";
-					for(int j=0; j<cryptoKey.size(); j++){
-						JSONObject data = (JSONObject) cryptoKey.get(j);
-						if(getbinuid.equals(data.get("resourceName"))){
-							binuid=(String) data.get("getBinUid");
-						}
-					}
-					p.setBinUid(binuid);
+					p.setBinUid(jsrow.get("binUid").toString());
 				}
 				
 				param2.add(p.toJSONString());

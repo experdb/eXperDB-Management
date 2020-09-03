@@ -452,23 +452,23 @@
     </select>
     
     <select id="selectDbSvrNm" parameterType="workVO" resultType="dbServerVO">
-		/**
-	 	* Query ID : selectDbSvrNm
-	 	* Description : DB Server Name 조회
-	 	* Author : Yoon jh
-	 	**/
-	 	SELECT
-			A.DB_SVR_NM,
-			B.IPADR,
-			B.PORTNO,
-			A.DFT_DB_NM,
-			A.SVR_SPR_USR_ID,
-			A.SVR_SPR_SCM_PWD
-		FROM T_DBSVR_I A, T_DBSVRIPADR_I B	
-		WHERE 1=1
-		AND A.DB_SVR_ID = B.DB_SVR_ID
-		AND B.MASTER_GBN = 'M'
-		AND A.DB_SVR_ID = #{db_svr_id}
+        /**
+        * Query ID : selectDbSvrNm
+        * Description : DB Server Name 조회
+        * Author : Yoon jh
+        **/
+        SELECT
+               A.DB_SVR_NM,
+               B.IPADR,
+               B.PORTNO,
+               A.DFT_DB_NM,
+               A.SVR_SPR_USR_ID,
+               A.SVR_SPR_SCM_PWD
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         WHERE 1=1
+           AND A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.MASTER_GBN = 'M'
+           AND A.DB_SVR_ID = #{db_svr_id}
     </select>
     
     <select id="selectWorkLogList" parameterType="workLogVO" resultType="workLogVO">
@@ -868,6 +868,7 @@
 					, A.LOG_FILE_PTH
 					, A.EXE_CMD
 					, B.BSN_DSCD
+					, (SELECT DB_SVR_IPADR_ID FROM T_DBSVRIPADR_I WHERE A.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_IPADR_ID
 		FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
 		WHERE A.WRK_ID = B.WRK_ID
 	 	AND A.WRK_ID = #{wrk_id}

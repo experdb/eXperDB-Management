@@ -35,9 +35,9 @@ table.dataTable{
 	table.dataTable thead .sorting_desc{background-image:url("../images/sort_desc.png")}
 	table.dataTable thead .sorting_asc_disabled{background-image:url("../images/sort_asc_disabled.png")}
 	table.dataTable thead .sorting_desc_disabled{background-image:url("../images/sort_desc_disabled.png")}
-	table.dataTable tbody tr{background-color:#ffffff}table.dataTable tbody tr.selected{background-color:#B0BED9}
+	table.dataTable tbody tr{background-color:#ffffff}table.dataTable tbody tr.selected{background-color: #cae3ff;color: white;}
 	table.dataTable tbody th,
-	table.dataTable tbody td{padding:8px 10px}
+/* 	table.dataTable tbody td{padding:8px 10px} */
 	table.dataTable.row-border tbody th,
 	table.dataTable.row-border tbody td,
 	table.dataTable.display tbody th,

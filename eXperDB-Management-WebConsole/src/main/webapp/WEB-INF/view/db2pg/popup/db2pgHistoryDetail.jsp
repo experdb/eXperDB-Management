@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/commonLocale.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <%
 	/**
 	* @Class Name : db2pgHistory.jsp
@@ -13,91 +16,87 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2019.11.06     최초 생성
+	*  2020.08.24   변승우 과장		UI 디자인 변경
 	*
 	* author 김주영 사원
 	* since 2019.11.06
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DB2PG수행이력 상세보기</title>
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel="stylesheet" type="text/css" media="screen" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<link rel="stylesheet" type="text/css" media="screen" href="<c:url value='/css/dt/dataTables.jqueryui.min.css'/>" />
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>" />
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>" />
-<script src="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>
-<script type="text/javascript" src="/js/common.js"></script>
-</head>
-<body>
-<%@include file="../../cmmn/commonLocale.jsp"%>
-	<div class="pop_container">
-		<div class="pop_cts">
-			<p class="tit"><spring:message code="migration.msg13"/></p>
-			<div class="pop_cmm3">
-				<p class="pop_s_tit"><spring:message code="migration.job_information"/></p>
-				<table class="list" style="border: 1px solid #99abb0;">
-					<colgroup>
-						<col style="width: 15%;" />
-						<col style="width: 85%;" />
-					</colgroup>
-					<tbody>
-							<tr>
-								<td><spring:message code="common.work_name" /></td>
-								<td style="text-align: left">${result.wrk_nm}</td>
-							</tr>
-							<tr>
-								<td><spring:message code="common.work_description" /></td>
-								<td style="text-align: left">${result.wrk_exp}</td>
-							</tr>
-							<tr>
-								<td><spring:message code="schedule.work_start_datetime" /></td>
-								<td style="text-align: left">${result.wrk_strt_dtm}</td>
-							</tr>
-							<tr>
-								<td><spring:message code="schedule.work_end_datetime" /></td>
-								<td style="text-align: left">${result.wrk_end_dtm}</td>
-							</tr>
-							<tr>
-								<td><spring:message code="schedule.jobTime" /></td>
-								<td style="text-align: left">${result.wrk_dtm}</td>
-							</tr>
-							<tr>
-								<td><spring:message code="schedule.result" /></td>
-								<td style="text-align: left">
-									<c:if test="${result.exe_rslt_cd eq 'TC001701'}"><img src='../../images/ico_state_02.png' style='margin-right:3px;'>Success</c:if>
-									<c:if test="${result.exe_rslt_cd eq 'TC001702'}"><img src='../../images/ico_state_01.png' style='margin-right:3px;'>Fail</c:if>
-								</td>
-							</tr>
-					</tbody>
-				</table>
-				<br><br>
-				<p class="pop_s_tit"><spring:message code="backup_management.job_log_info"/></p>
-				<table class="write" border="0">
-					<caption>
-						<spring:message code="backup_management.job_log_info" />
-					</caption>
-					<tbody>
-						<tr>
-							<td><textarea name="wrkLogInfo" id="wrkLogInfo" style="height: 180px;" readonly="readonly">${result.rslt_msg}</textarea></td>
-						</tr>
-					</tbody>
-				</table>
+
+<div class="modal fade" id="pop_layer_db2pgDdlErrHistoryDetail" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
+		<div class="modal-content" style="width:1000px;">		 
+			<div class="modal-body" >
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="migration.msg13"/>				
+				</h4>													
+						<div class="tab-content" id="pills-tabContent" style="border:0; height:550px;">			
+							<div class="card card-inverse-info" >
+								<i class="mdi mdi-blur" style="margin-left: 10px;"><spring:message code="migration.job_information"/> </i>
+							</div>
+									<div class="tab-pane fade show active" role="tabpanel" >
+										<form class="cmxform" id="baseForm">											
+											<fieldset>
+												<div class="card-body" style="border: 1px solid #adb5bd;">
+													<div class="table-responsive">
+														<table id="connectModPopList" class="table system-tlb-scroll" style=" border: 1px solid #adb5bd; width:100%;">
+															<colgroup>
+																<col style="width: 15%;" />
+																<col style="width: 85%;" />
+															</colgroup>
+															<tbody>
+																<tr>
+																	<td class="bg-info text-white"><spring:message code="common.work_name" /></td>
+																	<td style="text-align: left"><div id="pop_wrk_nm" ></div></td>
+																</tr>
+																<tr>
+																	<td class="bg-info text-white"><spring:message code="common.work_description" /></td>
+																	<td style="text-align: left"><div id="pop_wrk_exp" ></div></td>
+																</tr>
+																<tr>
+																	<td class="bg-info text-white"><spring:message code="schedule.work_start_datetime" /></td>
+																	<td style="text-align: left"><div id="pop_wrk_strt_dtm" ></div></td>
+																</tr>
+																<tr>
+																	<td class="bg-info text-white"><spring:message code="schedule.work_end_datetime" /></td>
+																	<td style="text-align: left"><div id="pop_wrk_end_dtm" ></div></td>
+																</tr>
+																<tr>
+																	<td class="bg-info text-white"><spring:message code="schedule.jobTime" /></td>
+																	<td style="text-align: left"><div id="pop_wrk_dtm" ></div></td>
+																</tr>
+																<tr>
+																	<td class="bg-info text-white"><spring:message code="schedule.result" /></td>
+																	<td style="text-align: left"><div id="pop_exe_rslt_cd" ></div>																
+																	</td>
+																</tr> 
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</fieldset>
+									</form>	
+								</div>
+								<br><br>
+								<div class="card card-inverse-info" >
+									<i class="mdi mdi-blur" style="margin-left: 10px;"><spring:message code="backup_management.job_log_info"/> </i>
+								</div>
+								 <div class="tab-content" id="pills-tabContent" style="border: 1px solid #adb5bd; height:190px;">
+									<div class="tab-pane fade show active" role="tabpanel" >
+										<form class="cmxform" id="subForm">
+											<fieldset>																			
+												<textarea name="pop_rslt_msg" id="pop_rslt_msg" style="height: 130px; width: 100%;" readonly="readonly" ></textarea>
+											</fieldset>
+										</form>	
+									</div>
+								</div>		
+															
+						</div>				
+					</div>				
+						<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >
+								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+						</div>				
+				</div>
 			</div>
-			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.close" /></span></a>
-			</div>
-		</div>
-	</div>
-</body>
-</html>
+		</div> 

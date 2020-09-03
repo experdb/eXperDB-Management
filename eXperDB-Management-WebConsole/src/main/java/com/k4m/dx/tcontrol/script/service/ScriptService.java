@@ -13,7 +13,6 @@ public interface ScriptService {
 	 */
 	public List<Map<String, Object>> selectScriptList(ScriptVO scriptVO) throws Exception;
 
-	
 	/**
 	 * 스크립트 Work Insert
 	 * @param ScriptVO
@@ -21,7 +20,6 @@ public interface ScriptService {
 	 * @throws Exception
 	 */
 	public void insertScriptWork(ScriptVO scriptVO) throws Exception;
-
 
 	/**
 	 * 스크립트실행 명령문 Insert
@@ -31,7 +29,6 @@ public interface ScriptService {
 	 */
 	public void insertScript(ScriptVO scriptVO) throws Exception;
 
-
 	/**
 	 * 스크립트실행 수정 조회
 	 * @param wrk_id
@@ -39,7 +36,6 @@ public interface ScriptService {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectSciptExeInfo(int wrk_id) throws Exception;
-
 
 	/**
 	 * 스크립트실행 명령문 update
@@ -49,7 +45,6 @@ public interface ScriptService {
 	 */
 	public void updateScriptWork(ScriptVO scriptVO) throws Exception;
 
-
 	/**
 	 * 스크립트실행 명령문 delete
 	 * @param ScriptVO
@@ -58,7 +53,15 @@ public interface ScriptService {
 	 */
 	public void deleteScriptWork(int wrk_id) throws Exception;
 
+	/**
+	 * 스크립트 스케줄 리스트 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectScriptScheduleList(ScriptVO scriptVO) throws Exception;
 
+	
+	
 	public List<Map<String, Object>> selectScriptHistoryList(ScriptVO scriptVO) throws Exception;
 
 }

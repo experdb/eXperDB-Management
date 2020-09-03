@@ -72,19 +72,20 @@ public class AccessControlController {
 	/**
 	 * 서버접근제어 화면을 보여준다.
 	 * 
-	 * @param
+	 * @param historyVO, request
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/accessControl.do")
-	public ModelAndView serverAccessControl(@ModelAttribute("historyVO") HistoryVO historyVO,
-			HttpServletRequest request) {
+	public ModelAndView serverAccessControl(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
+		Map<String, Object> resultJson = new HashMap<String, Object>();
+
 		try {
 			if (dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
@@ -99,6 +100,7 @@ public class AccessControlController {
 				DbServerVO schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
 				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+
 				String strIpAdr = dbServerVO.getIpadr();
 				AgentInfoVO vo = new AgentInfoVO();
 				vo.setIPADR(strIpAdr);
@@ -121,9 +123,30 @@ public class AccessControlController {
 					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
 					List<Object> result = cic.extension_select(serverObj, IP, PORT, strExtname);
+
 					if (result == null || result.size() == 0) {
 						mv.addObject("extName", strExtname);
 					} else {
+						resultJson = cic.role_List(serverObj,IP,PORT);
+						mv.addObject("resultUser", resultJson);
+						
+						HttpSession session = request.getSession();
+						LoginVO loginVo = (LoginVO) session.getAttribute("session");
+						String usr_id = loginVo.getUsr_id();
+
+						DbAutVO dbAutVO = new DbAutVO();
+						dbAutVO.setDb_svr_id(db_svr_id);
+						dbAutVO.setUsr_id(usr_id);
+
+						List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(dbAutVO);
+						mv.addObject("resultSet", resultSet);
+						
+						List<AccessControlVO> resultType = accessControlService.selectCodeType("TC0011");
+						mv.addObject("resultType", resultType);
+
+						List<AccessControlVO> resultMethod = accessControlService.selectCodeMethod("TC0012");
+						mv.addObject("resultMethod", resultMethod);
+						
 						mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
 						mv.addObject("db_svr_id", db_svr_id);
 					}
@@ -138,7 +161,7 @@ public class AccessControlController {
 
 	/**
 	 * 접근제어 리스트를 조회한다.
-	 * 
+	 * @param request
 	 * @return resultSet
 	 * @throws Exception
 	 */
@@ -171,6 +194,7 @@ public class AccessControlController {
 			int PORT = agentInfo.getSOCKET_PORT();
 
 			result = cic.dbAccess_select(serverObj, IP, PORT);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -187,51 +211,19 @@ public class AccessControlController {
 	@RequestMapping(value = "/popup/accessControlRegForm.do")
 	public ModelAndView connectorReg(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		ModelAndView mv = new ModelAndView();
-		Map<String, Object> result = new HashMap<String, Object>();
-		JSONObject serverObj = new JSONObject();
+		
+		ModelAndView mv = new ModelAndView("jsonView");
+
 		try {
-			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			String act = request.getParameter("act");
 			CmmnUtils.saveHistory(request, historyVO);
 
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
+
 			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String strIpAdr = dbServerVO.getIpadr();
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
-			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 
-			String IP = dbServerVO.getIpadr();
-			int PORT = agentInfo.getSOCKET_PORT();
-
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-
-			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.role_List(serverObj,IP,PORT);
-			mv.addObject("result", result);
-
-			DbAutVO dbAutVO = new DbAutVO();
-			dbAutVO.setDb_svr_id(db_svr_id);
-			HttpSession session = request.getSession();
-			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String usr_id = loginVo.getUsr_id();
-			
-			dbAutVO.setUsr_id(usr_id);
-			List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(dbAutVO);
-			mv.addObject("resultSet", resultSet);
-			List<AccessControlVO> resultType = accessControlService.selectCodeType("TC0011");
-			mv.addObject("resultType", resultType);
-			List<AccessControlVO> resultMethod = accessControlService.selectCodeMethod("TC0012");
-			mv.addObject("resultMethod", resultMethod);
-			
 			if (act.equals("i")) {
 				// 화면접근이력 이력 남기기
 				historyVO.setExe_dtl_cd("DX-T0028");
@@ -242,21 +234,12 @@ public class AccessControlController {
 				// 화면접근이력 이력 남기기
 				historyVO.setExe_dtl_cd("DX-T0029");
 				accessHistoryService.insertHistory(historyVO);
-
-				mv.addObject("prms_seq",request.getParameter("Seq").equals("undefined") ? "" : request.getParameter("Seq"));
-				mv.addObject("prms_ipadr",request.getParameter("Ipadr").equals("undefined") ? "" : request.getParameter("Ipadr"));
-				mv.addObject("prms_usr_id",request.getParameter("User").equals("undefined") ? "" : request.getParameter("User"));
-				mv.addObject("ctf_mth_nm",request.getParameter("Method").equals("undefined") ? "" : request.getParameter("Method"));
-				mv.addObject("ctf_tp_nm",request.getParameter("Type").equals("undefined") ? "" : request.getParameter("Type"));
-				mv.addObject("dtb",request.getParameter("Database").equals("undefined") ? "" : request.getParameter("Database"));
-				mv.addObject("ipmask",request.getParameter("Ipmask").equals("undefined") ? "" : request.getParameter("Ipmask"));
-				mv.addObject("idx",request.getParameter("idx").equals("undefined") ? "" : request.getParameter("idx"));
 			}
 
 			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", dbServerVO.getDb_svr_id());
+
 			mv.addObject("act", act);
-			mv.setViewName("popup/accessControlRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -266,7 +249,7 @@ public class AccessControlController {
 	/**
 	 * 접근제어를 적용한다.
 	 * 
-	 * @param accessControlVO
+	 * @param accessControlVO, accessControlHistoryVO, historyVO
 	 * @param request
 	 * @return
 	 * @throws Exception
@@ -275,10 +258,12 @@ public class AccessControlController {
 	public @ResponseBody boolean applyAccessControl(
 			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
 			HttpServletRequest request, @ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("historyVO") HistoryVO historyVO) {
+
 		JSONObject serverObj = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		AgentInfoVO vo = new AgentInfoVO();
 		JSONParser jParser = new JSONParser();
+
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
