@@ -29,8 +29,6 @@ function fn_gData(v) {
 
 }
 
-
-
 /* ********************************************************
  * 백업 용량
  ******************************************************** */
@@ -57,7 +55,10 @@ function fn_gBackup(fullSize, backupSize) {
 		}
 		
 		var bak_v = bSize/fSize*100;
-		
+		if (isNaN(bak_v) ) {
+			bak_v = 0;
+		}
+
 	var backup = {
 		    id: 'pg_backup',
 		    value: bak_v,
@@ -77,18 +78,18 @@ function fn_gBackup(fullSize, backupSize) {
 		    }],
 		    counter: true
 			  };
-	
+
 	var pg_backup = new JustGage(backup);
-
 }
-
 
 /* ********************************************************
  * pg_wal 로그 용량
  ******************************************************** */
 function fn_gWal(walCnt, segmentCnt) {
-	
 	var cnt = walCnt/segmentCnt*100;
+	if (isNaN(cnt) ) {
+		cnt = 0;
+	}
 
 	var wal = {
 			
