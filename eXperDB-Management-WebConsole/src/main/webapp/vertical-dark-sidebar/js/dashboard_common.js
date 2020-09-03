@@ -330,7 +330,6 @@ function fn_selectSecurityStatistics(today){
 			}
 		},
 		success : function(data) {
-			alert(data.resultCode);
 			if(data.resultCode == "0000000000"){
 			 	var html ="";
 
