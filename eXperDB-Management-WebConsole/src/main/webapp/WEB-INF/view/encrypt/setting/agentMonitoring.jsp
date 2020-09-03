@@ -202,7 +202,7 @@ var table = null;
 				}
 			},
 			success : function(data) {
-				if(data.resultCode == "0000000000"){
+ 				if(data.resultCode == "0000000000"){
 					table.clear().draw();
 					table.rows.add(data.list).draw();
 				}else if(data.resultCode == "8000000002"){
@@ -314,22 +314,20 @@ var table = null;
 
 <%@include file="../popup/agentMonitoringModifyForm.jsp"%>
 
-
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
 				<div class="card-body">
-
 					<!-- title start -->
 					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-lock menu-icon"></i>
 												<span class="menu-title"><spring:message code="encrypt_agent.Encryption_agent_setting"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -338,7 +336,7 @@ var table = null;
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							Encrypt
+					 							ENCRYPT
 					 						</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policyOption.Settings"/></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_agent.Encryption_agent_setting"/></li>
@@ -363,28 +361,19 @@ var table = null;
 			</div>
 		</div>
 
-
-		<div class="col-12 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-12">
-							<div class="template-demo">	
-								<%-- <button type="button" onClick="fn_agentMonitoringModifyForm();" id="btnUpdate"><spring:message code="common.modify" /></button> --%>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onClick="fn_newUpdate();" data-toggle="modal">
-									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
-								</button>		
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
 		<div class="col-12 div-form-margin-table stretch-card">
 			<div class="card">
 				<div class="card-body">
+					<div class="row" style="margin-top:-20px;">
+						<div class="col-12">
+							<div class="template-demo">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onClick="fn_newUpdate();" data-toggle="modal">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+								</button>
+							</div>
+						</div>
+					</div>
+
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">
