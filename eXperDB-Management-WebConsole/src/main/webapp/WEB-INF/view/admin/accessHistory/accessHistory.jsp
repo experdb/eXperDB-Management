@@ -234,7 +234,7 @@
 									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="ti-desktop menu-icon"></i>
+												<i class="ti-lock menu-icon"></i>
 												<span class="menu-title"><spring:message code="menu.screen_access_history" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>

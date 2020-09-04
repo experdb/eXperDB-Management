@@ -124,8 +124,8 @@ function fn_insDateCalenderSetting() {
 	var day_start = startDay.toJSON().slice(0,10);
 	var day_end = endDay.toJSON().slice(0,10);
 
-	if ($("#ins_expr_dt_div", "#baseForm").length) {
-		$("#ins_expr_dt_div", "#baseForm").datepicker({
+	if ($("#ins_expr_dt_div", "#keyInsForm").length) {
+		$("#ins_expr_dt_div", "#keyInsForm").datepicker({
 		}).datepicker('setDate', day_today)
 		.datepicker('setStartDate', day_start)
 		.datepicker('setEndDate', day_end)
@@ -134,99 +134,87 @@ function fn_insDateCalenderSetting() {
 		}); //값 셋팅
 	}
 
-	$("#ins_expr_dt", "#baseForm").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
-	$("#ins_expr_dt_div", "#baseForm").datepicker('updateDates');
+	$("#ins_expr_dt", "#keyInsForm").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+	$("#ins_expr_dt_div", "#keyInsForm").datepicker('updateDates');
 }
 
 
 </script>
 
-
-
 <div class="modal fade" id="pop_layer_keyManageRegForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
 		<div class="modal-content" style="width:1000px;">		 
-			<div class="modal-body" >
+			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="encrypt_policy_management.Encryption_Key"/> <spring:message code="common.registory" />
 				</h4>
-				
+
 				<div class="card" style="margin-top:10px;border:0px;">
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:290px;">			
-									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
-										<form class="cmxform" id="baseForm">
-											<fieldset>	
-																		
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_key_management.Key_Name"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="ResourceName" name="ResourceName"  maxlength="20" onkeyup='fn_checkResourceName(event)' style='ime-mode:disabled;' onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
-													</div>
-												</div>		
-												
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="encrypt_key_management.Encryption_Algorithm"/>
-												</label>
-												<div class="col-sm-4">
-													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="CipherAlgorithmCode" id="CipherAlgorithmCode" >
-														<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
-															 <c:forEach var="result" items="${result}"  varStatus="status">
-																<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
-															</c:forEach> 
-														</select>
-												</div>											
-											</div>			
-																								
-																	
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_key_management.Description"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="ResourceNote" name="ResourceNote"   maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/>
-													</div>
-												</div>							
-																					
-											
-											
-											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="encrypt_key_management.Expiration_Date"/>
-												</label>
-												<div class="col-sm-4">
-													<div id="ins_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
-														<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ins_expr_dt" name="ins_expr_dt" readonly tabindex=10 />
-														<span class="input-group-addon input-group-append border-left">
-															<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-														</span>
-													</div>
-												</div>										
-											</div>	
-											
-																		
-										</fieldset>
-									</form>	
-								</div>
-							</div>						
-						</div>		
-				
-				
+					<form class="cmxform" id="keyInsForm">
+
+						<fieldset>
+							<div class="card-body" style="border: 1px solid #adb5bd;">
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_key_management.Key_Name"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="ResourceName" name="ResourceName"  maxlength="20" onkeyup='fn_checkResourceName(event)' style='ime-mode:disabled;' onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
+									</div>
+								</div>		
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_key_management.Encryption_Algorithm"/>
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="CipherAlgorithmCode" id="CipherAlgorithmCode" >
+											<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
+												 <c:forEach var="result" items="${result}"  varStatus="status">
+													<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
+												</c:forEach> 
+											</select>
+									</div>											
+								</div>			
+					
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_key_management.Description"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="ResourceNote" name="ResourceNote"   maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/>
+									</div>
+								</div>							
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_key_management.Expiration_Date"/>
+									</label>
+									<div class="col-sm-4">
+										<div id="ins_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ins_expr_dt" name="ins_expr_dt" readonly tabindex=10 />
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>										
+								</div>	
+							</div>					
+						</fieldset>
+					</form>
+				</div>
+							
+				<div class="card-body">
+					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
+						<button type="button" class="btn btn-primary" onclick="fn_confirm('ins');"><spring:message code="common.save"/></button>
+						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+					</div>
+				</div>			
 			</div>
-			<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >			
-					<button type="button" class="btn btn-primary" onclick="fn_confirm('ins');"><spring:message code="common.save"/></button>
-					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
-			</div>
-			
 		</div>
 	</div>
-</div>	
-
-
+</div>

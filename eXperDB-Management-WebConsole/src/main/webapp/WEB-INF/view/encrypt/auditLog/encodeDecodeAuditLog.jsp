@@ -233,9 +233,7 @@
 	
 </script>
 
-
-
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -245,10 +243,10 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-lock menu-icon"></i>
 												<span class="menu-title"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -257,14 +255,14 @@
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							Encrypt
+					 							ENCRYPT
 					 						</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_log.Audit_Log"/></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></li>
 										</ol>
 									</div>
 								</div>
-							</div>							
+							</div>
 							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
 								<div class="card-body">
 									<div class="row">
@@ -279,92 +277,93 @@
 				</div>
 			</div>
 		</div>
-		
-<div class="col-12 div-form-margin-cts stretch-card">
+
+		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
-							<form class="form-inline" onsubmit="return false;">
-								<div class="row">
-									<div class="input-group mb-2 mr-sm-2">								
-										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" >
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
-										<div class="input-group align-items-center">
-											<span style="border:none; padding: 0px 10px;"> ~ </span>
-										</div>
-										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" >
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
+						<div class="card-body" style="margin:-10px -10px -15px 0px;">
+							<form class="form-inline row" onsubmit="return false;">
+								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row" >
+									<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
 									</div>
-								</div>
-							</form>
-							<form class="form-inline" onsubmit="return false;">
-								<div class="row">
-									<div class="input-group mb-2 mr-sm-2">
-										<select class="form-control" style="width:300px;" name="agentUid" id="agentUid">
-											<option value=""><spring:message code="encrypt_log_decode.Agent"/>&nbsp;<spring:message code="schedule.total" /></option>
-											<c:forEach var="result" items="${result}" varStatus="status">
+									
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none;"> ~ </span>
+									</div>
+
+									<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" readonly>
+										<span class="input-group-addon input-group-append border-left" >
+											<span class="ti-calendar input-group-text" style="cursor:pointer;"></span>
+										</span>
+									</div>
+								</div>	
+	
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" style="margin-left: -1rem;margin-right: -0.7rem;" name="agentUid" id="agentUid">
+										<option value=""><spring:message code="encrypt_log_decode.Agent"/>&nbsp;<spring:message code="schedule.total" /></option>
+										<c:forEach var="result" items="${result}" varStatus="status">
 											<option value="<c:out value="${result.entityUid}"/>" ><c:out value="${result.entityName}"/></option>
 										</c:forEach>
-										</select>
-									</div>
-									<div class="input-group mb-2 mr-sm-2">
-										<select class="form-control" style="width:200px;" name="successTrueFalse" id="successTrueFalse">
-											<option value=""><spring:message code="encrypt_log_decode.Success_Failure"/>&nbsp;<spring:message code="schedule.total" /></option>
-											<option value="true"><spring:message code="common.success" /></option>
-											<option value="false"><spring:message code="common.failed" /></option>
-										</select>
-									</div>
+									</select>
+								</div>
+	
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
+									<select class="form-control" style="margin-right: -0.7rem;" name="successTrueFalse" id="successTrueFalse">
+										<option value=""><spring:message code="encrypt_log_decode.Success_Failure"/>&nbsp;<spring:message code="schedule.total" /></option>
+										<option value="true"><spring:message code="common.success" /></option>
+										<option value="false"><spring:message code="common.failed" /></option>
+									</select>
+								</div>
+	
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" style="margin-right: -0.7rem;" name="searchFieldName" id="searchFieldName">
+										<option value=""><spring:message code="encrypt_log_decode.Additional_Search_Condition"/>&nbsp;<spring:message code="schedule.total" /></option>
+										<option value="PROFILE_NM"><spring:message code="encrypt_policy_management.Policy_Name"/></option>
+										<option value="SITE_ACCESS_ADDRESS"><spring:message code="encrypt_log_decode.Client_Address"/></option>
+										<option value="HOST_NM"><spring:message code="encrypt_policy_management.Host_Name"/></option>
+										<option value="EXTRA_NM"><spring:message code="encrypt_policy_management.Additional_Fields"/></option>
+										<option value="MODULE_INFO"><spring:message code="encrypt_log_decode.Module_Information"/></option>
+										<option value="LOCATION_INFO"><spring:message code="encrypt_log_decode.Column_Name"/></option>
+										<option value="SERVER_LOGIN_ID"><spring:message code="encrypt_policy_management.Database_User"/></option>
+										<option value="ADMIN_LOGIN_ID"><spring:message code="encrypt_policy_management.eXperDB_User"/></option>
+										<option value="OS_LOGIN_ID"><spring:message code="user_management.user_id" /></option>
+										<option value="APPLICATION_NM"><spring:message code="encrypt_policy_management.Application_Name"/></option>
+										<option value="INSTANCE_ID"><spring:message code="encrypt_policy_management.Server_Instance"/></option>
+									</select>
+								</div>
+								
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" style="margin-right: -0.7rem;" name="searchOperator" id="searchOperator">
+										<option value="LIKE">Like</option>
+										<option value="=">=</option>
+										<option value="<">&lt;</option>
+										<option value=">">&gt;</option>
+									</select>
 								</div>
 							</form>
-							<form class="form-inline" onsubmit="return false;">
-								<div class="row">					
-									<div class="input-group mb-2 mr-sm-2">
-										<select class="form-control" style="width:200px;" name="searchFieldName" id="searchFieldName">
-											<option value=""><spring:message code="encrypt_log_decode.Additional_Search_Condition"/>&nbsp;<spring:message code="schedule.total" /></option>
-											<option value="PROFILE_NM"><spring:message code="encrypt_policy_management.Policy_Name"/></option>
-											<option value="SITE_ACCESS_ADDRESS"><spring:message code="encrypt_log_decode.Client_Address"/></option>
-											<option value="HOST_NM"><spring:message code="encrypt_policy_management.Host_Name"/></option>
-											<option value="EXTRA_NM"><spring:message code="encrypt_policy_management.Additional_Fields"/></option>
-											<option value="MODULE_INFO"><spring:message code="encrypt_log_decode.Module_Information"/></option>
-											<option value="LOCATION_INFO"><spring:message code="encrypt_log_decode.Column_Name"/></option>
-											<option value="SERVER_LOGIN_ID"><spring:message code="encrypt_policy_management.Database_User"/></option>
-											<option value="ADMIN_LOGIN_ID"><spring:message code="encrypt_policy_management.eXperDB_User"/></option>
-											<option value="OS_LOGIN_ID"><spring:message code="user_management.user_id" /></option>
-											<option value="APPLICATION_NM"><spring:message code="encrypt_policy_management.Application_Name"/></option>
-											<option value="INSTANCE_ID"><spring:message code="encrypt_policy_management.Server_Instance"/></option>
-										</select>
-									</div>																		
-									<div class="input-group mb-2 mr-sm-2">
-										<select class="form-control" style="width:200px;" name="searchOperator" id="searchOperator">
-											<option value="LIKE">Like</option>
-											<option value="=">=</option>
-											<option value="<">&lt;</option>
-											<option value=">">&gt;</option>
-										</select>
-									</div>													
-									<div class="input-group mb-2 mr-sm-2">
-										<input type="text" class="form-control" style="width:400px;" id="searchFieldValueString" name="searchFieldValueString" onblur="this.value=this.value.trim()" maxlength="25" />
-									</div>						
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="fn_select();">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>									
+
+							<form class="form-inline row" onsubmit="return false;">
+								<div class="input-group mb-2 mr-sm-2 col-sm-3">
+									<input type="text" class="form-control" style="margin-left: -0.9rem;" id="searchFieldValueString" name="searchFieldValueString" onblur="this.value=this.value.trim()" maxlength="25" />
 								</div>
+					
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="fn_select();">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>	
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
 		<div class="col-12 stretch-card div-form-margin-table">
 			<div class="card">
 				<div class="card-body">
