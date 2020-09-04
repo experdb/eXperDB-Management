@@ -28701,7 +28701,7 @@ div.tagsinput span.tag a {
 .navbar .navbar-brand-wrapper .navbar-brand img {
   width: calc(237px - 130px);
   max-width: 100%;
-  height: 34px;
+/*   height: 34px; */
   margin: auto;
   vertical-align: middle;
 }
