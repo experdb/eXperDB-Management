@@ -373,8 +373,8 @@
 
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 	<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-		<a class="navbar-brand brand-logo mr-5" href="/experdb.do" onClick="fn_cookie(null);"><img src="/images/main_logo.png" class="mr-2" alt="eXperDB" /></a>
-		<a class="navbar-brand brand-logo-mini" href="/experdb.do" onClick="fn_cookie(null);"><img src="/images/logo_new.png" alt="eXperDB" /></a>
+		<a class="navbar-brand brand-logo" href="/experdb.do" onClick="fn_cookie(null);"><img src="/login/img/logo_top.png" class="mr-2" alt="eXperDB"  style="width:190px;"/></a>
+		<a class="navbar-brand brand-logo-mini" href="/experdb.do" onClick="fn_cookie(null);"><img src="/login/img/logo_mini.png" alt="eXperDB" style="width:190px;"/></a>
 	</div>
 
 	<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end row">
