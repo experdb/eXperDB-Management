@@ -459,6 +459,7 @@
 			url : "/selectScheduleWorkList.do",
 			data : {
 				work_id : rowList,
+				tCnt : 1
 			},
 			dataType : "json",
 			type : "post",

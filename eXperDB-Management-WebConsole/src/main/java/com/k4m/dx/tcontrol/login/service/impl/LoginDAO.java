@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.login.service.impl;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -30,4 +31,13 @@ public class LoginDAO extends EgovAbstractMapper{
 		return (int) getSqlSession().selectOne("cmmnSql.selectMasterCheck");
 	}
 
+
+	public void insertKeepLogin(UserVO userVo) {
+		insert("cmmnSql.insertKeepLogin",userVo);
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public UserVO checkUserWithSessionKey(UserVO userVO) throws SQLException {
+		return (UserVO) selectOne("cmmnSql.checkUserWithSessionKey", userVO);
+	}
 }

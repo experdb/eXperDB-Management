@@ -306,4 +306,27 @@
     	FROM T_DBSVRIPADR_I
     	WHERE DB_SVR_ID = #{db_svr_id}
     </select>
+
+	<update id="insertKeepLogin" parameterType="userVO">
+    	/**
+	 	* Query ID : selectHaCnt
+	 	* Description :  로그인된 경우 해당 세션id와 유효시간을 사용자 테이블에 세팅한다.
+	 	* Author : 변승우
+	 	**/
+        UPDATE T_USR_I
+           SET sessionKey = #{prmId}, 
+               sessionLimit = #{sessionDate}
+         where usr_id=#{usr_id}
+    </update>
+    
+    <select id="checkUserWithSessionKey" resultType="UserVO">
+    	/**
+	 	* Query ID : checkUserWithSessionKey
+	 	* Description :  로그인 체크
+	 	* Author : 변승우
+	 	**/
+        select * from T_USR_I
+         WHERE sessionKey = #{prmId} 
+           AND sessionLimit > now()
+    </select>
 </mapper>

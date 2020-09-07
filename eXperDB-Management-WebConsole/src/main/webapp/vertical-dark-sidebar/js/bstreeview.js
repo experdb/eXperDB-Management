@@ -138,7 +138,7 @@
 		                	.attr('aria-expanded',  "false")
 		                	.attr('id',  _this.itemIdPrefix + iCnt)
 	            			.attr('onclick', "fn_server_treeMenu_click('"+ _this.itemIdPrefix + "', '"+ _this.itemIdPrefix+"main-" + iCnt + "')")
-		                //    .attr('href', "#" + _this.itemIdPrefix+"main-" + iCnt);
+		                    .attr('href', "#" + _this.itemIdPrefix+"main-" + iCnt);
 	                }
 	                
 	                //span?쒓렇 - Set node Text.

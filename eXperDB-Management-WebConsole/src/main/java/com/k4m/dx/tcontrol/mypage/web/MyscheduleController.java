@@ -103,8 +103,7 @@ public class MyscheduleController {
 			
 			//현재 서비스 올라간 스케줄 그룹 정보
 			Scheduler scheduler = new StdSchedulerFactory().getScheduler();   
-			System.out.println(scheduler.getJobGroupNames());
-			
+
 			List<Map<String, Object>> result = mySscheduleService.selectMyScheduleList(scheduleVO);
 				
 			for(int i=0; i<result.size(); i++){				

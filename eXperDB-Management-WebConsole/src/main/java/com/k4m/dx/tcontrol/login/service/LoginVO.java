@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.login.service;
 
+import java.util.Date;
+
 public class LoginVO {
 	private String usr_id;
 	private String usr_nm;

@@ -11,6 +11,7 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.util.WebUtils;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
@@ -72,7 +74,86 @@ public class LoginController {
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			
 			if(loginVo==null){
-				mv.setViewName("login");
+            	//생성한 쿠키 조회
+            	Cookie loginCookie = WebUtils.getCookie(request,"loginCookie");
+
+            	if ( loginCookie !=null ){// 쿠키 존재시
+            		String cookitId = loginCookie.getValue(); //sessionId 확인
+            		String sessionId = cookitId.substring(0, cookitId.indexOf("_"));
+            		String sessionPwd = cookitId.substring(cookitId.indexOf("_")+1, cookitId.length());
+
+            		UserVO userVO = new UserVO();
+            		userVO.setPrmId(sessionId);
+            		
+            		UserVO userVORe = loginService.checkUserWithSessionKey(userVO);
+
+                    if ( userVORe !=null ){// 사용자 존재시
+                    	List<UserVO> userList = loginService.selectUserList(userVORe);
+                    
+        				LoginVO loginVoSs = new LoginVO();
+        				loginVoSs.setUsr_id(userList.get(0).getUsr_id());
+        				loginVoSs.setUsr_nm(userList.get(0).getUsr_nm());
+
+        				InetAddress local = InetAddress.getLocalHost();
+        				String ip = getClientIP(request);
+
+        				loginVoSs.setIp(ip);
+
+        				Properties props = new Properties();
+        				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+        				
+        				String lang = props.get("lang").toString();				
+        			    Locale locale = new Locale(lang);
+        			    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+        			    localeResolver.setLocale(request, response, locale);
+        				
+        				String encp_use_yn = props.get("encrypt.useyn").toString();
+        				
+        				loginVoSs.setEncp_use_yn(encp_use_yn);
+        				
+        				String version = props.get("version").toString();
+        				loginVoSs.setVersion(version);
+        				
+        				String pg_audit = props.get("pg_audit").toString();
+        				loginVoSs.setPg_audit(pg_audit);
+        				
+        				String transfer = props.get("transfer").toString();
+        				loginVoSs.setTransfer(transfer);
+        				
+        				if(encp_use_yn.equals("Y")){
+        					String restIp = props.get("encrypt.server.url").toString();
+        					int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
+        					try{
+        						CommonServiceCall cic = new CommonServiceCall();
+        						JSONObject result = cic.login(restIp,restPort, userVORe.getUsr_id(), sessionPwd);
+        						loginVoSs.setRestIp(restIp);
+        						loginVoSs.setRestPort(restPort);
+        						loginVoSs.setTockenValue((String) (result.get("tockenValue")==null?"":result.get("tockenValue")));
+        						loginVoSs.setEctityUid((String) (result.get("ectityUid")==null?"":result.get("ectityUid")));
+
+        					}catch(Exception e){
+        						loginVoSs.setRestIp(restIp);
+        						loginVoSs.setRestPort(restPort);
+        						loginVoSs.setTockenValue("");
+        						loginVoSs.setEctityUid("");
+        					}
+        				}
+        				
+        				//로그인 시간 추가
+        				SimpleDateFormat loginSf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        				Date loginTime = new Date();
+        				loginVoSs.setLoginChkTime(loginSf.format(loginTime));
+
+                        // 세션을 생성시켜 준다.
+        				session.setAttribute("session", loginVoSs);
+        				
+        				mv.setViewName("redirect:/experdb.do");
+                    } else {
+                    	mv.setViewName("login");
+                    }
+            	} else {
+            		mv.setViewName("login");
+            	}
 			}else{
 				mv.setViewName("redirect:/experdb.do");
 			}		
@@ -94,9 +175,43 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/sessionOut.do")
-	public ModelAndView sessionOut() {
+	public ModelAndView sessionOut(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView();
 		try {
+
+            //쿠키를 가져와보고
+            Cookie loginCookie = WebUtils.getCookie(request,"loginCookie");
+            if ( loginCookie !=null ){
+        		String cookitId = loginCookie.getValue(); //sessionId 확인
+        		String sessionId = cookitId.substring(0, cookitId.indexOf("_"));
+
+        		
+        		UserVO userVO = new UserVO();
+        		userVO.setPrmId(sessionId);
+        		
+        		UserVO userVORe = loginService.checkUserWithSessionKey(userVO);
+
+                // null이 아니면 존재하면!
+                loginCookie.setPath("/");
+                // 쿠키는 없앨 때 유효시간을 0으로 설정하는 것 !!! invalidate같은거 없음.
+                loginCookie.setMaxAge(0);
+                // 쿠키 설정을 적용한다.
+                response.addCookie(loginCookie);
+                 
+                // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
+/*                Date date =new Date(System.currentTimeMillis());
+                */
+                if ( userVORe !=null ){// 사용자 존재시
+	    			try{
+	    				userVORe.setPrmId("none");
+	    				userVORe.setSessionDate(null);
+	    				loginService.insertKeepLogin(userVORe);
+	    			} catch (Exception e) {
+	    				e.printStackTrace();
+	    			}
+                }
+            }
+
 			mv.setViewName("logout");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,10 +298,16 @@ public class LoginController {
 				LoginVO loginVo = new LoginVO();
 				loginVo.setUsr_id(userList.get(0).getUsr_id());
 				loginVo.setUsr_nm(userList.get(0).getUsr_nm());
-		
+
+				//session 제거
+		        if ( session.getAttribute("session") !=null ){
+		            // 기존에 login이란 세션 값이 존재한다면
+		            session.removeAttribute("session");// 기존값을 제거해 준다.
+		        }
+
 				InetAddress local = InetAddress.getLocalHost();
 				String ip = getClientIP(request);
-System.out.println("==================================ip=============================" + ip);
+
 				loginVo.setIp(ip);
 
 				Properties props = new Properties();
@@ -198,8 +319,6 @@ System.out.println("==================================ip========================
 			    localeResolver.setLocale(request, response, locale);
 				
 				String encp_use_yn = props.get("encrypt.useyn").toString();
-				
-System.out.println("==================================encp_use_yn=============================" + encp_use_yn);
 				
 				loginVo.setEncp_use_yn(encp_use_yn);
 				
@@ -244,7 +363,41 @@ System.out.println("==================================encp_use_yn===============
 						session.setAttribute("loginChkId", id);
 					}
 				}
+				
+				//로그인 성공시 
+				if (loginVo != null) {
+		            /*
+		             *  [   세션 추가되는 부분      ]
+		             */
+					if (login_chk != null) { // 체크한 경우
+						if ("Y".equals(login_chk)) { // dto 클래스 안에 useCookie 항목에 폼에서 넘어온 쿠키사용 여부(true/false)가 들어있을 것임
+			                // 쿠키 사용한다는게 체크되어 있으면...
+			                // 쿠키를 생성하고 현재 로그인되어 있을 때 생성되었던 세션의 id를 쿠키에 저장한다.
 
+							Cookie cookie =new Cookie("loginCookie", session.getId().toString() + "_" + userVo.getPwd());
+			                // 쿠키를 찾을 경로를 컨텍스트 경로로 변경해 주고...
+			                cookie.setPath("/");
+
+			                int amount =60 *60 *24;
+			                cookie.setMaxAge(amount);// 단위는 (초)임으로 1일정도로 유효시간을 설정해 준다.
+			                // 쿠키를 적용해 준다.
+			                response.addCookie(cookie);
+
+			                Date sessionLimit =new Date(System.currentTimeMillis() + (1000*amount));
+			                
+			                // 현재 세션 id와 유효시간을 사용자 테이블에 저장한다.
+			    			try{
+			    				userVo.setPrmId(session.getId());
+			    				userVo.setSessionDate(sessionLimit);
+
+			    				loginService.insertKeepLogin(userVo);
+			    			} catch (Exception e) {
+			    				e.printStackTrace();
+			    			}
+
+						}
+					}
+				}
 				/*중복로그인방지*/
 				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
 				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
@@ -278,14 +431,49 @@ System.out.println("==================================encp_use_yn===============
 		try {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-		
+
 			if(loginVo !=null){
 				// 로그아웃 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0003_01");
-				accessHistoryService.insertHistory(historyVO);			
-			}						
-			request.getSession().invalidate();
+				accessHistoryService.insertHistory(historyVO);	
+				
+				session.removeAttribute("session");
+				request.getSession().invalidate();
+				
+	            Cookie loginCookie = WebUtils.getCookie(request,"loginCookie");
+
+	            if ( loginCookie !=null ){
+	        		String cookitId = loginCookie.getValue(); //sessionId 확인
+	        		String sessionId = cookitId.substring(0, cookitId.indexOf("_"));
+
+	        		UserVO userVO = new UserVO();
+	        		userVO.setPrmId(sessionId);
+
+	                // null이 아니면 존재하면!
+	                loginCookie.setPath("/");
+	                // 쿠키는 없앨 때 유효시간을 0으로 설정하는 것 !!! invalidate같은거 없음.
+	                loginCookie.setMaxAge(0);
+	                // 쿠키 설정을 적용한다.
+	                response.addCookie(loginCookie);
+	                 
+	                // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
+	/*                Date date =new Date(System.currentTimeMillis());
+	                */
+	        		UserVO userVORe = loginService.checkUserWithSessionKey(userVO);
+	        		
+	        		System.out.println("===userVORe==" + userVORe);
+	                if ( userVORe !=null ){// 사용자 존재시
+		    			try{
+		    				userVORe.setPrmId("none");
+		    				userVORe.setSessionDate(null);
+		    				loginService.insertKeepLogin(userVORe);
+		    			} catch (Exception e) {
+		    				e.printStackTrace();
+		    			}
+	                }
+	            }
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

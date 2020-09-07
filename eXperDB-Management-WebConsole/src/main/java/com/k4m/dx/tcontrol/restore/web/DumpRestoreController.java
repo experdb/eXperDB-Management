@@ -328,7 +328,7 @@ public class DumpRestoreController {
 				snResult = "F";
 			}
 		}
-		System.out.println("====obj_cmd===" + restoreDumpVO.getObj_cmd());
+
 		// Get Latest Restore SN
 		if(insertResult.equals("S")){
 			try {

@@ -178,7 +178,7 @@
 					                	} else {
 					                		appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                	}
-					                	appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
+/* 					                	appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />'; */
 					                	appendnew += "[<spring:message code="schedule.one_time_run" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 					                }
 			                	}

@@ -221,7 +221,6 @@ public class ScheduleController {
 	@RequestMapping(value = "/selectScheduleWorkList.do")
 	@ResponseBody
 	public List<Map<String, Object>> selectScheduleWorkList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-	
 		try {
 			//해당메뉴 권한 조회 (공통메소드호출)
 			CmmnUtils cu = new CmmnUtils();
@@ -229,9 +228,9 @@ public class ScheduleController {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		int cnt = Integer.parseInt(request.getParameter("tCnt"));
-		
+
 		List<Map<String, Object>> result = null;
 		
 		try {					
@@ -241,11 +240,11 @@ public class ScheduleController {
 				return result;
 			}else{		
 				String work_id = request.getParameter("work_id");
-				
+
 				String[] Param = work_id.toString().substring(1, work_id.length()-1 ).split(",");
 				HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 				List<String> ids = new ArrayList<String>(); 
-				
+
 				for(int i=0; i<Param.length; i++){
 					ids.add(Param[i].toString()); 
 				}
@@ -941,7 +940,7 @@ public class ScheduleController {
 				response.sendRedirect("/autError.do");
 			}else{				
 				int scd_id  = Integer.parseInt(request.getParameter("scd_id").toString());
-				System.out.println(scd_id);
+
 				result = scheduleService.selectModifyScheduleList(scd_id);
 			}
 
