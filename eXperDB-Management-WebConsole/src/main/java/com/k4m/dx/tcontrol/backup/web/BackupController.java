@@ -716,7 +716,6 @@ public class BackupController {
 			ipResult = (List<DbServerVO>) cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 
 			for(int i=0; i<ipResult.size(); i++){
-				System.out.println(ipResult.get(i).getIpadr());
 				vo.setIPADR(ipResult.get(i).getIpadr());		
 				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 				String IP = ipResult.get(i).getIpadr();
@@ -725,9 +724,6 @@ public class BackupController {
 				ClientInfoCmmn cic = new ClientInfoCmmn();
 				initResult = cic.setInit(IP, PORT, bck_pth);
 			}
-			
-			System.out.println("===initResult==" + initResult);
-			
 		}catch(Exception e){
 			result = "I";
 			e.printStackTrace();

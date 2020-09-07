@@ -463,8 +463,7 @@ public class CmmnController {
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String db_svr_nm = request.getParameter("db_svr_nm");
-			System.out.println(db_svr_nm);
-			
+
 			List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
 			
 			JSONObject serverObj = new JSONObject();
@@ -679,7 +678,7 @@ public class CmmnController {
 			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 			
 			result = scheduleService.selectWrkInfo(wrk_id);	
-			System.out.println(result.size());
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -974,11 +973,7 @@ public class CmmnController {
 				String strTocken = loginVo.getTockenValue();
 				String loginId = loginVo.getUsr_id();
 				String entityId = loginVo.getEctityUid();
-				System.out.println("restIp==============================" + restIp);
-				System.out.println("restIp==============================" + restPort);
-				System.out.println("restIp==============================" + strTocken);
-				System.out.println("restIp==============================" + loginId);
-				System.out.println("restIp==============================" + entityId);
+
 				try{
 					CommonServiceCall csc = new CommonServiceCall();					
 					result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
@@ -1005,13 +1000,10 @@ public class CmmnController {
 			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 			
 			result = scriptService.selectSciptExeInfo(wrk_id);	
-			System.out.println(result.size());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}	
-	
-	
-	
 }

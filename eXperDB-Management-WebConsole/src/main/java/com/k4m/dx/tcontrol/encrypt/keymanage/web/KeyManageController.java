@@ -251,10 +251,7 @@ public class KeyManageController {
 		String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
 		String resourceNote = request.getParameter("resourceNote");
 		String validEndDateTime = request.getParameter("validEndDateTime") + " 23:59:59.999";
-			
-		
-		System.out.println(validEndDateTime);
-		
+
 		CryptoKeySymmetric param = new CryptoKeySymmetric();
 		param.setResourceName(resourceName);
 		param.setCipherAlgorithmCode(cipherAlgorithmCode);
@@ -354,7 +351,6 @@ public class KeyManageController {
 			ArrayList param2 = new ArrayList();
 			
 			String strRows01 = request.getParameter("historyCryptoKeySymmetric").toString().replaceAll("&quot;", "\"");
-			System.out.println(strRows01);
 			JSONArray rows01 = (JSONArray) new JSONParser().parse(strRows01);
 			
 			for (int i = 0; i < rows01.size(); i++) {
