@@ -237,318 +237,288 @@ function fn_acc_update(){
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" >
+				
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="encrypt_policy_management.Register_Policy"/>
 				</h4>
 				
 				<div class="card" style="margin-top:10px;border:0px;">
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:690px;">			
-									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
-										<form class="cmxform" id="accModForm">
-										<input type="hidden" name="whitelist" id="whitelist" />
-										<input type="hidden" name="rnum" id="rnum" />
-											<fieldset>	
-																		
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Policy_Name"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_specName" name="mod_specName"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
-													</div>													
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Server_Instance"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_serverInstanceId" name="mod_serverInstanceId"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
-													</div>
-												</div>		
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Database_User"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_serverLoginId" name="mod_serverLoginId"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
-													</div>													
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.eXperDB_User"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_adminLoginId" name="mod_adminLoginId"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
-													</div>
-												</div>	
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.OS_User"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_osLoginId" name="mod_osLoginId"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
-													</div>													
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Application_Name"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_applicationName" name="mod_applicationName"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
-													</div>
-												</div>	
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.IP_Address"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_accessAddress" name="mod_accessAddress"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
-													</div>
-													
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.IP_Mask"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_accessAddressMask" name="mod_accessAddressMask"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
-													</div>
-												</div>	
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.MAC_Address"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_accessMacAddress" name="mod_accessMacAddress"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
-													</div>
-												</div>	
-								
-								
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Policy_Period"/>
-													</label>
-													<div class="col-sm-3">							
-														<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-															<input type="text" class="form-control totDatepicker" style="width:70px;height:44px;" id="mod_startDateTime" name="dt" >
-															<span class="input-group-addon input-group-append border-left">
-																<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-															</span>
-														</div>
-													</div>													
-													<div class="col-sm-0" style="margin-top:12px;">		
-														<div class="input-group align-items-center">
-															<span style="border:none; padding: 0px 10px;"> ~ </span>
-														</div>
-													</div>				
-													<div class="col-sm-3">		
-														<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-															<input type="text" class="form-control totDatepicker" style="width:70px;height:44px;" id="mod_endDateTime" name="dt" >
-															<span class="input-group-addon input-group-append border-left">
-																<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-															</span>
-														</div>
-													</div>
-												</div>	
+					<form class="cmxform" id="accModForm">
+						<input type="hidden" name="whitelist" id="whitelist" />
+						<input type="hidden" name="rnum" id="rnum" />
 
-
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Policy_Time"/>
-													</label>
-													<div class="col-sm-1_5">
-														<div id = "mod_b_hour"></div>
-													</div>
-													<div class="col-sm-0" style="margin-top:5px; margin-left:-5px;" >
-														<spring:message code="schedule.our" />
-													</div>
-													<div class="col-sm-1_5">
-														<div id = "mod_b_min"></div>	
-													</div>
-													<div class="col-sm-0" style="margin-top:5px; margin-left:-5px;">
-														<spring:message code="schedule.minute" />
-													</div>													
-													<div class="col-sm-0" style="margin-top:7px; margin-left:20px;">		
-														<div class="input-group align-items-center">
-															<span style="border:none; padding: 0px 10px;"> ~ </span>
-														</div>
-													</div>														
-													<div class="col-sm-1_5">
-														<div id = "mod_a_hour"></div>
-													</div>
-													<div class="col-sm-0" style="margin-top:5px; margin-left:-5px;">
-														<spring:message code="schedule.our" />
-													</div>
-													<div class="col-sm-1_5">
-														<div id = "mod_a_min"></div>
-													</div>
-													<div class="col-sm-0" style="margin-top:5px; margin-left:-5px;">
-														<spring:message code="schedule.minute" />
-													</div>													
-												</div>	
-											
-										
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Day_of_Week"/>
-													</label>
-													<div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label" for="sun" style="color: red;">
-									                              <input type="checkbox" class="form-check-input" id="SUNDAY" name="mod_workDay"  value="<spring:message code="common.sun" />"  />
-									                             <spring:message code="common.sun" />
-									                            <i class="input-helper"></i></label>
-									                 </div>											                 
-									                 <div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="MONDAY" name="mod_workDay"  value="<spring:message code="common.mon" />"/>
-									                             <spring:message code="common.mon" />
-									                            <i class="input-helper"></i></label>
-									                 </div>									                 
-									                 <div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="TUESDAY" name="mod_workDay"  value="<spring:message code="common.tue" />"/>
-									                             <spring:message code="common.tue" />
-									                            <i class="input-helper"></i></label>
-									                 </div>									                 
-									                 <div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="WEDNESDAY" name="mod_workDay" value="<spring:message code="common.wed" />"/>
-									                            <spring:message code="common.wed" />
-									                            <i class="input-helper"></i></label>
-									                 </div>									                 
-									                 <div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="THURSDAY" name="mod_workDay"  value="<spring:message code="common.thu" />"/>
-									                             <spring:message code="common.thu" />
-									                            <i class="input-helper"></i></label>
-									                 </div>									                 
-									                 <div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="FRIDAY" name="mod_workDay"  value="<spring:message code="common.fri" />"/>
-									                             <spring:message code="common.fri" />
-									                            <i class="input-helper"></i></label>
-									                 </div>									                 
-									                 <div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label" for="sat" style="color: blue;">
-									                              <input type="checkbox" class="form-check-input" id="SATURDAY" name="mod_workDay"  value="<spring:message code="common.sat" />"/>
-									                             <spring:message code="common.sat" />
-									                            <i class="input-helper"></i></label>
-									                 </div> 
-												</div>	
-												
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.MAC_Address"/>
-													</label>
-													<div class="col-sm-1_5">
-														<input type="number" class="form-control form-control-xsm" id="mod_massiveThreshold" name="mod_massiveThreshold"   min="0" onKeyPress="NumObj(this);" />														
-													</div>	
-													<div class="col-sm-2_5" style="margin-top:3px; margin-left:-20px;">																							
-														<spring:message code="encrypt_policy_management.Threshold"/>
-													</div>	
-													<div class="col-sm-1_5">
-														<input type="number" class="form-control form-control-xsm" id="mod_massiveTimeInterval" name="mod_massiveTimeInterval" min="0" onKeyPress="NumObj(this);"/>												
-													</div>	
-													<div class="col-sm-1" style="margin-top:3px; margin-left:-20px;">												
-														<spring:message code='encrypt_policy_management.sec'/>
-													</div>	
-												</div>	
-												
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Additional_Fields"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_extraName" name="mod_extraName"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
-													</div>
-													
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Host_Name"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_hostName" name="mod_hostName"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
-													</div>
-												</div>	
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.MAC_Address"/>
-													</label>
-														<div class="col-sm-2">
-															<div class="form-check">
-																<label class="form-check-label">
-																<input type="radio" class="form-check-input" name="mod_whitelistYesNo" id="mod_whitelistYes" value="Y" checked="checked"> 
-																<spring:message code="encrypt_policy_management.Access_Allow"/>																
-																</label>
-															</div>												
-														</div>											
-														<div class="col-sm-2">
-															<div class="form-check">
-																<label class="form-check-label">
-																<input type="radio" class="form-check-input" name="mod_whitelistYesNo" id="mod_whitelistNo" value="N" > 
-																<spring:message code="encrypt_policy_management.Access_Deny"/>														
-																</label>
-															</div>												
-														</div>	
-												</div>	
-																						
-										</fieldset>
-									</form>	
+						<fieldset>
+							<div class="card-body" style="border: 1px solid #adb5bd;">
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Policy_Name"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_specName" name="mod_specName"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
+									</div>
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Server_Instance"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_serverInstanceId" name="mod_serverInstanceId"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
+									</div>
 								</div>
-							</div>						
-						</div>		
-				
-				
+								
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Database_User"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_serverLoginId" name="mod_serverLoginId"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
+									</div>
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.eXperDB_User"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_adminLoginId" name="mod_adminLoginId"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
+									</div>				
+								</div>
+													
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.OS_User"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_osLoginId" name="mod_osLoginId"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
+									</div>
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Application_Name"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_applicationName" name="mod_applicationName"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
+									</div>	
+								</div>
+									
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.IP_Address"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_accessAddress" name="mod_accessAddress"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
+									</div>
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.IP_Mask"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_accessAddressMask" name="mod_accessAddressMask"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
+									</div>	
+								</div>
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.MAC_Address"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_accessMacAddress" name="mod_accessMacAddress"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
+									</div>	
+								</div>
+								
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Policy_Period"/>
+									</label>
+									<div class="col-sm-3">
+										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:70px;height:44px;" id="mod_startDateTime" name="dt" >
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>
+									<div class="col-sm-0" style="margin-top:12px;">	
+										<div class="input-group align-items-center">
+											<span style="border:none; padding: 0px 10px;"> ~ </span>
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:70px;height:44px;" id="mod_endDateTime" name="dt" >
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>	
+								</div>
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Policy_Time"/>
+									</label>
+									<div class="col-sm-1_5">
+										<div id = "mod_b_hour"></div>
+									</div>
+									<div class="col-sm-0" style="margin-top:5px; margin-left:-5px;" >
+										<spring:message code="schedule.our" />
+									</div>
+									<div class="col-sm-1_5">
+										<div id = "mod_b_min"></div>
+									</div>
+									<div class="col-sm-0" style="margin-top:5px; margin-left:-5px;">
+										<spring:message code="schedule.minute" />
+									</div>													
+									<div class="col-sm-0" style="margin-top:7px; margin-left:20px;">		
+										<div class="input-group align-items-center">
+											<span style="border:none; padding: 0px 10px;"> ~ </span>
+										</div>
+									</div>	
+									<div class="col-sm-1_5">
+										<div id = "mod_a_hour"></div>
+									</div>
+									<div class="col-sm-0" style="margin-top:5px; margin-left:-5px;">
+										<spring:message code="schedule.our" />
+									</div>
+									<div class="col-sm-1_5">
+										<div id = "mod_a_min"></div>
+									</div>
+									<div class="col-sm-0" style="margin-top:5px; margin-left:-5px;">
+										<spring:message code="schedule.minute" />
+									</div>													
+								</div>	
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Day_of_Week"/>
+									</label>
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label" for="sun" style="color: red;">
+											<input type="checkbox" class="form-check-input" id="SUNDAY" name="mod_workDay"  value="<spring:message code="common.sun" />"  />
+											<spring:message code="common.sun" />
+											<i class="input-helper"></i>
+										</label>
+									</div>
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label">
+											<input type="checkbox" class="form-check-input" id="MONDAY" name="mod_workDay"  value="<spring:message code="common.mon" />"/>
+											<spring:message code="common.mon" />
+											<i class="input-helper"></i>
+										</label>
+									</div>
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label">
+											<input type="checkbox" class="form-check-input" id="TUESDAY" name="mod_workDay"  value="<spring:message code="common.tue" />"/>
+											<spring:message code="common.tue" />
+											<i class="input-helper"></i>
+										</label>
+									</div>
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label">
+											<input type="checkbox" class="form-check-input" id="WEDNESDAY" name="mod_workDay" value="<spring:message code="common.wed" />"/>
+											<spring:message code="common.wed" />
+											<i class="input-helper"></i>
+										</label>
+									</div>
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label">
+											<input type="checkbox" class="form-check-input" id="THURSDAY" name="mod_workDay"  value="<spring:message code="common.thu" />"/>
+											<spring:message code="common.thu" />
+											<i class="input-helper"></i>
+										</label>
+									</div>
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label">
+											<input type="checkbox" class="form-check-input" id="FRIDAY" name="mod_workDay"  value="<spring:message code="common.fri" />"/>
+											<spring:message code="common.fri" />
+											<i class="input-helper"></i>
+										</label>
+									</div>
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label" for="sat" style="color: blue;">
+											<input type="checkbox" class="form-check-input" id="SATURDAY" name="mod_workDay"  value="<spring:message code="common.sat" />"/>
+									        <spring:message code="common.sat" />
+											<i class="input-helper"></i>
+										</label>
+									</div>
+								</div>
+								
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.MAC_Address"/>
+									</label>			
+									<div class="col-sm-1_5">
+										<input type="number" class="form-control form-control-xsm" id="mod_massiveThreshold" name="mod_massiveThreshold"   min="0" onKeyPress="NumObj(this);" />														
+									</div>
+									<div class="col-sm-2_5" style="margin-top:3px; margin-left:-20px;">
+										<spring:message code="encrypt_policy_management.Threshold"/>
+									</div>		
+									<div class="col-sm-1_5">
+										<input type="number" class="form-control form-control-xsm" id="mod_massiveTimeInterval" name="mod_massiveTimeInterval" min="0" onKeyPress="NumObj(this);"/>												
+									</div>
+									<div class="col-sm-1" style="margin-top:3px; margin-left:-20px;">
+										<spring:message code='encrypt_policy_management.sec'/>
+									</div>
+								</div>
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Additional_Fields"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_extraName" name="mod_extraName"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
+									</div>
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Host_Name"/>
+									</label>
+									
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_hostName" name="mod_hostName"  maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/>
+									</div>
+								</div>
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.MAC_Address"/>
+									</label>
+									<div class="col-sm-2">
+										<div class="form-check">
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mod_whitelistYesNo" id="mod_whitelistYes" value="Y" checked="checked"> 
+												<spring:message code="encrypt_policy_management.Access_Allow"/>	
+											</label>
+										</div>
+									</div>
+									
+									<div class="col-sm-2">
+										<div class="form-check">
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mod_whitelistYesNo" id="mod_whitelistNo" value="N" > 
+												<spring:message code="encrypt_policy_management.Access_Deny"/>		
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>					
+						</fieldset>
+					</form>
+				</div>
+
+				<div class="card-body">
+					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
+						<button type="button" class="btn btn-primary" onclick="fn_acc_update();"><spring:message code="common.modify"/></button>
+						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+					</div>
+				</div>
 			</div>
-			<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >			
-					<button type="button" class="btn btn-primary" onclick="fn_acc_update();"><spring:message code="common.modify"/></button>
-					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
-			</div>
-			
 		</div>
 	</div>
-</div>	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div>

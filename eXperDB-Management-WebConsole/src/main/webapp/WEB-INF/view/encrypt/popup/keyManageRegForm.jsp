@@ -172,10 +172,10 @@ function fn_insDateCalenderSetting() {
 									<div class="col-sm-4">
 										<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="CipherAlgorithmCode" id="CipherAlgorithmCode" >
 											<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
-												 <c:forEach var="result" items="${result}"  varStatus="status">
-													<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
-												</c:forEach> 
-											</select>
+											<c:forEach var="result" items="${result}"  varStatus="status">
+												<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
+											</c:forEach> 
+										</select>
 									</div>											
 								</div>			
 					
