@@ -219,6 +219,12 @@ function fn_tablescpace_setting(result) {
 		} else {
 			$("#pgalogPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		}
+		
+		if (result.tablespaceObj.PGALOG_CNT != null && result.tablespaceObj.PGALOG_CNT != undefined) {
+			$("#pgalogCntTd").html('<i class="ti-files"> ARCHIVE_FILE :  </i>'+ nvlPrmSet(result.tablespaceObj.PGALOG_CNT, "") + " " + dashboard_count +'</i>');
+		} else {
+			$("#pgalogCntTd").html('<i class="ti-files"> ARCHIVE_FILE :  </i>');
+		}
 
 		if (result.tablespaceObj.PGALOG_V != null && result.tablespaceObj.PGALOG_V != undefined) {
 			fn_gArc(result.tablespaceObj.PGALOG_V);
@@ -231,6 +237,12 @@ function fn_tablescpace_setting(result) {
 			$("#logPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.LOG_PATH, "") + '</i>');
 		} else {
 			$("#logPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		}
+		
+		if (result.tablespaceObj.LOG_CNT != null && result.tablespaceObj.LOG_CNT != undefined) {
+			$("#logFileCntTd").html('<i class="ti-files"> LOG_FILE :  </i>'+ nvlPrmSet(result.tablespaceObj.LOG_CNT, "") + " " + dashboard_count +'</i>');
+		} else {
+			$("#logFileCntTd").html('<i class="ti-files"> LOG_FILE :  </i>');
 		}
 
 		if (result.tablespaceObj.LOG_V != null && result.tablespaceObj.LOG_V != undefined) {
@@ -258,6 +270,7 @@ function fn_tablescpace_setting(result) {
 		fn_gArc("0");
 
 		$("#logPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		$("#logFileCntTd").html('<i class="ti-files"> LOG_FILE :  </i>');
 		fn_gLog("0");
 	}
 	

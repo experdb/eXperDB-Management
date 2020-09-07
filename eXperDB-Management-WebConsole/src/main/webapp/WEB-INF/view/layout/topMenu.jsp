@@ -740,11 +740,11 @@
 												<spring:message code="menu.my_schedule_management"/>
 											</a>
 										</li>
-										<li class="nav-item" >
+<!-- 										<li class="nav-item" >
 											<a class="nav-link" href="/test.do" onClick="fn_cookie(null)" target="main">
 												test
 											</a>
-										</li>
+										</li> -->
 									</ul>
 								</div>
 							</li>
@@ -825,9 +825,6 @@
 				</li>
 			</ul>
         </div>
-
-      </div>
-    </nav>
-
-    <!-- partial:partials/_horizontal-navbar.html -->
-    
+	</div>
+</nav>
+<!-- partial:partials/_horizontal-navbar.html -->

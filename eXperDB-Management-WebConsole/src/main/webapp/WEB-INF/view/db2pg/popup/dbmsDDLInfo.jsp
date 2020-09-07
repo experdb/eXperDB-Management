@@ -159,12 +159,12 @@ function fn_Mod(){
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<div class="form-inline">
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
+						<div class="form-inline row">
+							<div class="input-group mb-2 mr-sm-2 col-sm-4">
+								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
 							</div>
-							<div class="input-group mb-2 mr-sm-2">
-								<select class="form-control" style="width:300px; margin-right: 2rem;" name="work" id="work">
+							<div class="input-group mb-2 mr-sm-2 col-sm-3">
+								<select class="form-control" name="work" id="work">
 									<option value="%"><spring:message code="common.total" />&nbsp;DBMS<spring:message code="common.division" /></option>
 									<option value="TC002201">Oracle</option>
 									<option value="TC002202">MS-SQL</option>

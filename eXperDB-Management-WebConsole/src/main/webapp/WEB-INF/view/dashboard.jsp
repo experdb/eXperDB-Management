@@ -1031,92 +1031,92 @@
 										
 										<div class="row">
 											<!-- DATA -->
-												<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
-													<div class="card" style="padding-left:10px;padding-right:10px;">
-														<div class="card-body" style="padding-left:0px;padding-right:0px;">
-															<div class="table-responsive system-tlb-scroll">
-																<table class="table table-borderless" style="width:100%;">
-																	<thead>
-																		<tr>
-																			<th class="pl-0 border-bottom">DATA</th>
- 																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr>
-																			<td class="text-muted pl-0" id="filesystemTd"></td>
-																		</tr>
-																	</tbody>
-																</table>
-																<table class="table table-borderless" style="width:100%;">
-																	<thead>
-																		<tr>
-																			<th class="pl-0 border-bottom">Size</th>
-																			<th class="border-bottom">Used</th>
-																			<th class="border-bottom">Avail</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr>
-																			<td class="text-muted pl-0" id="tablespaceInfoFsizeTd"></td>
-																			<td class="text-muted pl-0" id="tablespaceInfoUsedTd"></td>
-																			<td class="text-muted" id="tablespaceInfoAvailTd"></td>
-																		</tr>
-																	</tbody>
-																</table>
-																<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.usage"/></p>
-																<div id="pg_data" class="gauge"  style="margin-top: -40px;"></div> 
-															</div>
+											<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
+												<div class="card" style="padding-left:10px;padding-right:10px;">
+													<div class="card-body" style="padding-left:0px;padding-right:0px;">
+														<div class="table-responsive system-tlb-scroll">
+															<table class="table table-borderless" style="width:100%;">
+																<thead>
+																	<tr>
+																		<th class="pl-0 border-bottom">DATA</th>
+ 																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="text-muted pl-0" id="filesystemTd"></td>
+																	</tr>
+																</tbody>
+															</table>
+															<table class="table table-borderless" style="width:100%;">
+																<thead>
+																	<tr>
+																		<th class="pl-0 border-bottom">Size</th>
+																		<th class="border-bottom">Used</th>
+																		<th class="border-bottom">Avail</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="text-muted pl-0" id="tablespaceInfoFsizeTd"></td>
+																		<td class="text-muted pl-0" id="tablespaceInfoUsedTd"></td>
+																		<td class="text-muted" id="tablespaceInfoAvailTd"></td>
+																	</tr>
+																</tbody>
+															</table>
+															<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.usage"/></p>
+															<div id="pg_data" class="gauge"  style="margin-top: -40px;"></div> 
 														</div>
 													</div>
 												</div>
+											</div>
 												
-												<!-- BAUKUP -->
-												<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
-													<div class="card" style="padding-left:10px;padding-right:10px;">
-														<div class="card-body" style="padding-left:0px;padding-right:0px;">
-															<div class="table-responsive system-tlb-scroll">
-																<table class="table table-borderless">
-																	<thead>
-																		<tr>
-																			<th class="pl-0 border-bottom">BAUKUP</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr>
-																			<td class="text-muted pl-0" id="backupPathTd"></td>
-																		</tr>
-																	</tbody>
-																</table>
-																<table class="table table-borderless">
-																	<thead>
-																		<tr>
-																			<th class="pl-0 border-bottom">Size</th>
-																			<th class="border-bottom">Used</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr>
-																			<td class="text-muted pl-0" id="backupspaceInfoFsizeTd"></td>
-																			<td class="text-muted" id="backupVTd"></td>
-																		</tr>
-																	</tbody>
-																</table>
-																<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.usage"/></p>
-																<div id="pg_backup" class="gauge"  style="margin-top: -40px;"></div>
-															</div>
+											<!-- BAUKUP -->
+											<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
+												<div class="card" style="padding-left:10px;padding-right:10px;">
+													<div class="card-body" style="padding-left:0px;padding-right:0px;">
+														<div class="table-responsive system-tlb-scroll">
+															<table class="table table-borderless">
+																<thead>
+																	<tr>
+																		<th class="pl-0 border-bottom">BAUKUP</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="text-muted pl-0" id="backupPathTd"></td>
+																	</tr>
+																</tbody>
+															</table>
+															<table class="table table-borderless">
+																<thead>
+																	<tr>
+																		<th class="pl-0 border-bottom">Size</th>
+																		<th class="border-bottom">Used</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="text-muted pl-0" id="backupspaceInfoFsizeTd"></td>
+																		<td class="text-muted" id="backupVTd"></td>
+																	</tr>
+																</tbody>
+															</table>
+															<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.usage"/></p>
+															<div id="pg_backup" class="gauge"  style="margin-top: -40px;"></div>
 														</div>
 													</div>
 												</div>
+											</div>
 												
-												<!-- WAL  -->
-												<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
-													<div class="card" style="padding-left:10px;padding-right:10px;">
-														<div class="card-body" style="padding-left:0px;padding-right:0px;">
-															<div class="table-responsive system-tlb-scroll">
-																<table class="table table-borderless">
-																	<thead>
-																		<tr>
-																			<th class="pl-0 border-bottom">WAL</th>
+											<!-- WAL  -->
+											<div class="col-md-2_2 stretch-card grid-margin grid-margin-md-0" style="margin-right:-20px;">
+												<div class="card" style="padding-left:10px;padding-right:10px;">
+													<div class="card-body" style="padding-left:0px;padding-right:0px;">
+														<div class="table-responsive system-tlb-scroll">
+															<table class="table table-borderless">
+																<thead>
+																	<tr>
+																		<th class="pl-0 border-bottom">WAL</th>
 																		</tr>
 																</thead>
 																<tbody>
@@ -1135,7 +1135,7 @@
 																	</tr>
 																</thead>
 															</table>
-															
+														
 															<p class="mb-0 mt-2 text-warning">WAL<spring:message code="dashboard.file"/></p>
 															<div id="pg_wal" class="gauge"  style="margin-top: -40px;"></div>
 														</div>
@@ -1148,7 +1148,7 @@
 												<div class="card" style="padding-left:10px;padding-right:10px;">
 													<div class="card-body" style="padding-left:0px;padding-right:0px;">
 														<div class="table-responsive system-tlb-scroll">
-															<table class="table table-borderless" style="margin-bottom: 90px">
+															<table class="table table-borderless">
 																<thead>
 																	<tr>
 																		<th class="pl-0 border-bottom">ARCHIVE</th>
@@ -1159,6 +1159,13 @@
 																		<td class="text-muted pl-0" id="pgalogPathTd"></td>
 																	</tr>
 																</tbody>
+															</table>
+															<table class="table table-borderless" style="margin-bottom: 50px">
+																<thead>
+																	<tr>
+																		<th class="text-muted pl-0" id="pgalogCntTd"></th>
+																	</tr>    
+																</thead>
 															</table>
 															<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.directory_capacity"/></p>
 															<div id="pg_arc" class="gauge"  style="margin-top: -40px;"></div>
@@ -1172,7 +1179,7 @@
 												<div class="card" style="padding-left:10px;padding-right:10px;">
 													<div class="card-body" style="padding-left:0px;padding-right:0px;">
 														<div class="table-responsive system-tlb-scroll">
-															<table class="table table-borderless" style="margin-bottom: 90px">
+															<table class="table table-borderless">
 																<thead>
 																	<tr>
 																		<th class="pl-0 border-bottom">LOG</th>
@@ -1184,6 +1191,14 @@
 																	</tr>
 																</tbody>
 															</table>
+															<table class="table table-borderless" style="margin-bottom: 50px">
+																<thead>
+																	<tr>
+																		<th class="text-muted pl-0" id="logFileCntTd"></th>
+																	</tr>
+																</thead>
+															</table>
+															
 															<p class="mb-0 mt-2 text-warning"><spring:message code="dashboard.directory_capacity"/></p>
 															<div id="pg_log" class="gauge"  style="margin-top: -40px;"></div>
 														</div>

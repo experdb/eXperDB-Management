@@ -86,14 +86,17 @@ function fn_search_tableInfo(){
 		success : function(result) {
 			table_tableInfo.rows({selected: true}).deselect();
 			table_tableInfo.clear().draw();
-			table_tableInfo.rows.add(result.RESULT_DATA).draw();
+
+			if (result.RESULT_DATA != null) {
+				table_tableInfo.rows.add(result.RESULT_DATA).draw();
+			}
+
 			if(tableList != ""){
 				fn_tableCheckSelect(tableList);
 			}
 		}
 	});
 }
-
 
 /* ********************************************************
  * DDL 등록시 테이블 추가
@@ -192,37 +195,35 @@ function fn_tableCheckSelect(tableList){
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<div class="form-inline">
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:150px;margin-right: 2rem;" id="db2pg_sys_nm_table" name="db2pg_sys_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
+						<div class="form-inline row">
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="db2pg_sys_nm_table" name="db2pg_sys_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
 							</div>
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:150px;margin-right: 2rem;" id="ipadr_table" name="ipadr_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>'  />
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+								<input type="text" class="form-control" style="margin-right: -0.7rem;"  id="ipadr_table" name="ipadr_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>'  />
 							</div>
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:150px;margin-right: 2rem;" id="scm_nm_table" name="scm_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>'  />
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+								<input type="text" class="form-control" style="margin-right: -0.7rem;"  id="scm_nm_table" name="scm_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>'  />
 							</div>
-							<%-- <th scope="row" class="ico_t1">권한스키마명</th>
-						<td><select class="select t8" name="scm_nm" id="scm_nm" value=""/>
-								<option value="%"><spring:message code="common.choice" /></option>
-						</select></td>	 --%>
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:150px;margin-right: 2rem;" id="table_nm_table" name="table_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.table_name'/>'  />
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+								<input type="text" class="form-control" id="table_nm_table" name="table_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.table_name'/>'  />
 							</div>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search_tableInfo();" >
 								<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 							</button>
 						</div>
 					</div>
-						<input type="hidden" class="txt t4" name="dbms_dscd_table" id="dbms_dscd_table"  />
-						<input type="hidden" class="txt t4" name="dtb_nm_table" id="dtb_nm_table" />
-						<input type="hidden" class="txt t4" name="spr_usr_id_table" id="spr_usr_id_table" />
-						<input type="hidden" class="txt t4" name="pwd_table" id="pwd_table" />
-						<input type="hidden" class="txt t4" name="portno_table" id="portno_table" />	
+					<input type="hidden" class="txt t4" name="dbms_dscd_table" id="dbms_dscd_table"  />
+					<input type="hidden" class="txt t4" name="dtb_nm_table" id="dtb_nm_table" />
+					<input type="hidden" class="txt t4" name="spr_usr_id_table" id="spr_usr_id_table" />
+					<input type="hidden" class="txt t4" name="pwd_table" id="pwd_table" />
+					<input type="hidden" class="txt t4" name="portno_table" id="portno_table" />	
+					
 					<br>
+					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<p class="card-description"><spring:message code="data_transfer.tableList"/></p>
-						<table id="tableList" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
+						<table id="tableList" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" style="width:100px;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="200"></th>
@@ -232,7 +233,9 @@ function fn_tableCheckSelect(tableList){
 							</thead>
 						</table>
 					</div>
+					
 					<br>
+					
 					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
 						<input class="btn btn-primary" width="200px" style="vertical-align:middle; display: none;" type="button" id="add" onclick="fn_Add_Table()" value='<spring:message code="common.add" />' />
 						<input class="btn btn-primary" width="200px" style="vertical-align:middle; display: none;" type="button" id="mod" onclick="fn_Mod_Table()" value='<spring:message code="common.add" />' />

@@ -257,7 +257,7 @@ function fn_tableAddCallback2(rowList, tableGbn, totalCnt){
 					<form class="cmxform" id="ddlRegReForm">
 						<fieldset>
 							<div class="row">
-								<div class="col-md-12 system-tlb-scroll" style="border:0px;height: 500px; overflow-x: hidden;  overflow-y: auto; ">
+								<div class="col-md-12 system-tlb-scroll" style="border:0px;height: 570px; overflow-x: hidden;  overflow-y: auto; ">
 									<div class="card-body" style="border: 1px solid #adb5bd;">
 										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
 											<label for="ins_dump_wrk_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
@@ -283,7 +283,7 @@ function fn_tableAddCallback2(rowList, tableGbn, totalCnt){
 									</div>
 									<br/>
 									<div class="card-body" style="border: 1px solid #adb5bd;">
-										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;margin-bottom:-15px;">
 											<label for="ins_dump_save_pth" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 												<spring:message code="migration.source_system" />
 											</label>
@@ -297,9 +297,11 @@ function fn_tableAddCallback2(rowList, tableGbn, totalCnt){
 											</div>
 										</div>
 									</div>
+									
 									<br/>
+									
 									<div class="card-body" style="border: 1px solid #adb5bd;">
-									<h4 class="card-title"><spring:message code="migration.option_information"/></h4>
+										<h4 class="card-title"><spring:message code="migration.option_information"/></h4>
 										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
 											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 												<spring:message code="migration.specify_case" />
@@ -324,45 +326,42 @@ function fn_tableAddCallback2(rowList, tableGbn, totalCnt){
 												</select>
 											</div>
 										</div>
-										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-10px;margin-bottom:-15px;">
 											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 												<select name="src_tables_reg_re" id="src_tables_reg_re"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
 													<option value="include"><spring:message code="migration.inclusion_table"/></option>
 													<option value="exclude"><spring:message code="migration.exclusion_table"/></option>
 												</select>
 											</label>
-											
-											<div id="include_reg_re" class="form-inline">
-												<div class="col-sm-8">
-													<input type="text" class="form-control form-control-sm" style="width: 300px;" name="src_include_tables_reg_re" id="src_include_tables_reg_re" readonly="readonly" />
+
+											<div id="include_reg_re" class="form-inline col-sm-10 row">
+												<div class="col-sm-5">
+													<input type="text" class="form-control form-control-sm" style="width:100%;margin-top:-10px;" name="src_include_tables_reg_re" id="src_include_tables_reg_re" readonly="readonly" />
 												</div>
-												<div class="col-sm-2">
-													<button type="button" class="btn btn-inverse-primary btn-fw" style="width: 115px;" onclick="fn_tableList_reg_re('include')" ><spring:message code="button.create" /></button>
+												<div class="col-sm-3">
+													<button type="button" class="btn btn-inverse-primary btn-fw" style="margin-top:-10px;" onclick="fn_tableList_reg_re('include')" ><spring:message code="button.create" /></button>
 												</div>
 											</div>
 											
-											<div id="exclude_reg_re" style="display: none;" class="form-inline">
-												<div class="col-sm-8">
-													<input type="text" class="form-control form-control-sm" style="width: 300px;" name="src_exclude_tables_reg_re" id="src_exclude_tables_reg_re" readonly="readonly" />
+											<div id="exclude_reg_re" style="display: none;" class="form-inline col-sm-10 row">
+												<div class="col-sm-5">
+													<input type="text" class="form-control form-control-sm" style="width:100%;margin-top:-10px;" name="src_exclude_tables_reg_re" id="src_exclude_tables_reg_re" readonly="readonly" />
 												</div>
-												<div class="col-sm-2">
-													<button type="button" class="btn btn-inverse-primary btn-fw" style="width: 115px;" onclick="fn_tableList_reg_re('exclude')" ><spring:message code="button.create" /></button>
+												<div class="col-sm-3">
+													<button type="button" class="btn btn-inverse-primary btn-fw" style="margin-top:-10px;" onclick="fn_tableList_reg_re('exclude')" ><spring:message code="button.create" /></button>
 												</div>
 											</div>	
 										</div>
-										<!-- 					<tr>
-						<th scope="row" class="ico_t2">DDL 저장경로</th>
-						<td><textarea rows="3" cols="60" id="ddl_save_pth" name="ddl_save_pth" style="width: 80%"></textarea>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_pathCheck()" style="width: 60px; margin-right: -60px; margin-top: 0; height: 58px;">경로체크</button></span>							
-						</td>
-					</tr> -->
 									</div>
-								</div>
-							</div>
-							<div class="card-body">
-								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
-									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="button" onclick="fn_update_work()" value='<spring:message code="common.modify" />' />
-									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
+									
+									<br/>
+									
+									<div class="card-body">
+										<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0px -20px 0px;" >
+											<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="button" onclick="fn_update_work()" value='<spring:message code="common.modify" />' />
+											<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
+										</div>
+									</div>
 								</div>
 							</div>
 						</fieldset>

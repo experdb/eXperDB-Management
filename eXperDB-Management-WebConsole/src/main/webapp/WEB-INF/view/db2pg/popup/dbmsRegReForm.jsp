@@ -208,7 +208,7 @@ var connection = "fail";
 										<input type="password" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="pwd_reg_re" name="pwd_reg_re" />
 									</div>
 								</div>
-								<div class="form-group row">
+								<div class="form-group row" style="margin-bottom:-15px;">
 									<label for="ins_usr_nm" class="col-sm-2 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="migration.character_set"/>(*)
