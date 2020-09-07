@@ -314,7 +314,7 @@
 								</div>
 
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
-									<select class="form-control" style="margin-right: -1.8rem;" name="order_type" id="order_type">
+									<select class="form-control" style="margin-right: -0.7rem;" name="order_type" id="order_type">
 										<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}><spring:message code="history_management.bydate" /></option>
 										<option value="usr_id" ${order_type == 'usr_id' ? 'selected="selected"' : ''}><spring:message code="history_management.id" /></option>
 									</select>

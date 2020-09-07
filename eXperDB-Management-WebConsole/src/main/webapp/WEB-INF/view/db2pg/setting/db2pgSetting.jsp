@@ -351,6 +351,9 @@ function fn_data_reg_popup(){
 	$("#inset_button_data_work2").show();
 	$("#inset_title").show();
 	$("#mod_title").hide();
+	
+	//tab 선택
+	$('a[href="#insDumpOptionTab1"]').tab('show');
 				
 	$('#pop_layer_data_reg').modal("show");
 }
@@ -427,6 +430,9 @@ function fn_data_regre_popup(){
 				$("#mod_title").show();
 				
 				 $("textarea[name=src_cnd_qry]").html(result.src_cnd_qry);
+				 
+				//tab 선택
+				$('a[href="#insDumpOptionTab1"]').tab('show');
 				 
 				$('#pop_layer_data_reg').modal("show");
 			}

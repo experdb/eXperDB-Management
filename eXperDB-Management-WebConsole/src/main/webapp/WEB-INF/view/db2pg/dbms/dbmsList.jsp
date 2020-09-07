@@ -197,13 +197,10 @@ function fn_regRe_popup(){
 			
 			$("#crts_nm_reg_re").val(result.resultInfo[0].crts).prop("selected", true);
 			$("#dbms_dscd_reg_re").val(result.resultInfo[0].dbms_dscd).prop("selected", true);
-			
+
 			$('#pop_layer_db2pg_dbms_reg_re').modal("show");
 		}
 	});	
-	
-	
-	
 }
 
 /* ********************************************************
