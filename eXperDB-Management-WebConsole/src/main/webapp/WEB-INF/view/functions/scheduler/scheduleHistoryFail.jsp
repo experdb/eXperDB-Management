@@ -12,7 +12,7 @@
     	 * work리스트
     	 ******************************************************** */
     	table = $('#scheduleFailList').DataTable({
-    	scrollY : "245px",
+    	scrollY : "360px",
     	scrollX : true,
     	bDestroy: true,
     	processing : true,
@@ -171,7 +171,7 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-check-square"></i>
@@ -182,10 +182,8 @@
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							Function
-					 						</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule" /></li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">SHEDULE</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule_information" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="schedule.scheduleFailHistory"/></li>
 										</ol>
 									</div>
@@ -215,7 +213,7 @@
 					<div class="card">
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 
-							<form class="form-inline">
+							<form class="form-inline row">
 							
 								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
 									<input type="text" class="form-control"  style="margin-right: -0.7rem;" maxlength="25" id="scd_nm" name="scd_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="schedule.schedule_name" />'/>		
@@ -225,8 +223,8 @@
 									<input type="text" class="form-control"  style="margin-right: -0.7rem;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />'/>		
 								</div>
 	
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control" style="width:200px; margin-right: 2rem;" name="fix_rsltcd" id="fix_rsltcd">
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+									<select class="form-control" name="fix_rsltcd" id="fix_rsltcd">
 										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="TC002003"><spring:message code="etc.etc34"/></option>
 										<option value="TC002002"><spring:message code="etc.etc30"/></option>

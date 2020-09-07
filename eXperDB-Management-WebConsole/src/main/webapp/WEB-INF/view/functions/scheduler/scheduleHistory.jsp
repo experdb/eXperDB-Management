@@ -394,7 +394,7 @@
 								</div>
 
 								<div class="input-group mb-2 mr-sm-2 col-sm-2">
-									<select class="form-control" style="margin-right: -0.7rem;" name="order_type" id="order_type">
+									<select class="form-control" style="margin-left:-0.7rem;margin-right: -0.7rem;" name="order_type" id="order_type">
 										<option value="wrk_strt_dtm" ${order_type == 'wrk_strt_dtm' ? 'selected="selected"' : ''}><spring:message code="schedule.work_start_datetime" /></option>
 										<option value="wrk_end_dtm" ${order_type == 'wrk_end_dtm' ? 'selected="selected"' : ''}><spring:message code="schedule.work_end_datetime" /></option>
 									</select>

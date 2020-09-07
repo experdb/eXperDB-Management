@@ -292,45 +292,41 @@
 						<div class="card-body" style="margin:-10px -10px -15px 0px;">
 
 							<form class="form-inline row" onsubmit="return false;">
-									<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row" >
-<%-- 										<div class="input-group-prepend"> 
-											<div class="input-group-text" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="common.work_term" /></div>
-										</div> --%>
+								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row" >
+									<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
+									</div>
 
-										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
-
-										<div class="input-group align-items-center col-sm-1">
-											<span style="border:none;"> ~ </span>
-										</div>
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none;"> ~ </span>
+									</div>
 		
-										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_end_dtm" name="wrk_end_dtm" readonly>
-											<span class="input-group-addon input-group-append border-left" >
-												<span class="ti-calendar input-group-text" style="cursor:pointer;"></span>
-											</span>
-										</div>
+									<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="wrk_end_dtm" name="wrk_end_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left" >
+											<span class="ti-calendar input-group-text" style="cursor:pointer;"></span>
+										</span>
 									</div>
+								</div>
 	
-									<div class="input-group mb-2 mr-sm-2 col-sm-2">
-										<select class="form-control" name="exe_rslt_cd" id="exe_rslt_cd">
-											<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
-											<option value="1"><spring:message code="common.success" /></option>
-											<option value="2"><spring:message code="common.failed" /></option>
-										</select>
-									</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" style="margin-left: -1rem;margin-right: -0.7rem;" name="exe_rslt_cd" id="exe_rslt_cd">
+										<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
+										<option value="1"><spring:message code="common.success" /></option>
+										<option value="2"><spring:message code="common.failed" /></option>
+									</select>
+								</div>
 									
-									<div class="input-group mb-2 mr-sm-2 col-sm-3">
-										<input type="text" class="form-control" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' maxlength="25" />
-									</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-3">
+									<input type="text" class="form-control" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' maxlength="25" />
+								</div>
 
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>
 						</div>
 					</div>
