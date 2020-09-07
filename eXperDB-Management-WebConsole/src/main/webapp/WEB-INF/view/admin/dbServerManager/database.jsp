@@ -252,7 +252,7 @@ function fnc_confirmMultiRst(gbn){
 									<input type="text" class="form-control" style="margin-right: -0.7rem;"  name="ipadr" id="ipadr"  placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
-									<input type="text" class="form-control" style="margin-right: -0.7rem;"  name="dft_db_nm" id="dft_db_nm" placeholder='<spring:message code="common.database" />'/>
+									<input type="text" class="form-control" name="dft_db_nm" id="dft_db_nm" placeholder='<spring:message code="common.database" />'/>
 								</div>
 								
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search();" id="read_button">
