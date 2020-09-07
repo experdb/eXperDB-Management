@@ -373,7 +373,7 @@ public class CmmnController {
 			mv.addObject("scaleSettingChart", scaleSettingChart);			//scale 발생이력 chart 조회
 			
 			mv.addObject("db_svr_id", db_svr_id);
-System.out.println("==tablespaceObj===" + tablespaceObj);
+
 			mv.addObject("tablespaceObj", tablespaceObj);					//테이블 space 조회
 
 		} catch (Exception e) {

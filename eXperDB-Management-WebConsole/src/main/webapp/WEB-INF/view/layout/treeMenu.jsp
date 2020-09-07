@@ -256,7 +256,9 @@
 											////////////////////////////////////////////////////////////////////////////
 											
 											//데이터전송 //////////////////////////////////////////////////////////////////
-											if('${sessionScope.session.transfer}' == 'Y'){
+											var transferChk = String('${sessionScope.session.transfer}').trim();
+
+											if(transferChk == 'Y'){
 											menuJson +=	', {' +
 															 '"text": "<spring:message code="menu.data_transfer"/>",' +
 															 '"icon": "fa fa-inbox",' + 
@@ -275,7 +277,7 @@
 														'}';
 											}
 											////////////////////////////////////////////////////////////////////////////
-											
+
 											//서버접근설정 관리 //////////////////////////////////////////////////////////////////
 											menuJson +=	',{' +
 														  	 '"text": "<spring:message code="menu.access_control_management"/>",' + 
