@@ -74,7 +74,6 @@ var table = null;
 				var datas = table.row(this).data();
 				if (datas.length <= 0) {
 					showSwalIcon('<spring:message code="message.msg35"/>', '<spring:message code="common.close" />', '', 'error');
-					alert('<spring:message code="message.msg35" />');
 				}else if (datas.length >1){
 					showSwalIcon('<spring:message code="message.msg38"/>', '<spring:message code="common.close" />', '', 'error');	
 				}else{
@@ -203,7 +202,7 @@ var table = null;
 					} else if(xhr.status == 403) {
 						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(data) {		
