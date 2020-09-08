@@ -86,7 +86,7 @@ function fn_init(){
 	    					html += '</div>';
 	    					return html;
 					}else if(full.scd_cndt == "TC001802"){
-						var html = "<div class='badge badge-pill badge-primary' ><i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i></div>";
+						var html = "<div class='badge badge-pill badge-success' ><i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i></div>";
 						return html;
 					}else{
 	    					var html = "";

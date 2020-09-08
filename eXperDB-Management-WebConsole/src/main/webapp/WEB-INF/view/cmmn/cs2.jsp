@@ -38,7 +38,7 @@
 
 
 <!-- endinject -->
-<link rel="shortcut icon" href="../../../../images/favicon.png" />
+<link rel="shortcut icon" href="../../../../../login/img/logo_mini.png" />
 
 <!-- plugins:js -->
 <script src="/vertical-dark-sidebar/js/vendors/js/vendor.bundle.base.js"></script>

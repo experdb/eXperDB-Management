@@ -39,7 +39,7 @@
 <script type="text/javascript">
 	$(window.document).ready(function() {
 		//error 체크
-		//fn_errorChk('${error}');
+		fn_errorChk('${error}');
 		
 		$('#usr_id').focus();
 
@@ -52,7 +52,7 @@
 	});
 	
 	//error 체크
-	/* function fn_errorChk(errorCode) {
+	function fn_errorChk(errorCode) {
 		var errorMsg = "";
 		var titleMsg = "";
 
@@ -70,9 +70,12 @@
 			}
 			
 			titleMsg = '<spring:message code="common.login" />' + ' ' +'<spring:message code="common.failed" />';
-			showToastPosition('mid-center', errorMsg, titleMsg);
+			$("#alert").html("")
+			$("#alert").attr('class','alert alert-danger');
+			$("#alert").append(titleMsg+"<br>");
+			$("#alert").append(errorMsg);
 		}
-	} */
+	}
 
 	//valid 체크
 	function fn_validation(){
@@ -110,8 +113,6 @@
 	}
 </script>
 </head>
-
-
 <div id="wrap" class="login">
 	<!-- header -->
 	<header id="hd">
@@ -141,6 +142,7 @@
 			<!-- <div class="alert alert-danger">
 				계정 정보가 맞는지 확인해 주세요.
 			</div> -->
+			<div id="alert" ></div>
 			<div class="mt-3">
 				<a class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="javascript:void(0)" onclick="javascript:fn_login();">LOGIN</a>
 			</div>
