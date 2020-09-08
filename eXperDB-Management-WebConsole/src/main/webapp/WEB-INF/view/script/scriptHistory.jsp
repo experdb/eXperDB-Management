@@ -147,23 +147,23 @@
 	 					render : function(data, type, full, meta) {	 						
 	 						var html = '';
  	 						if (full.fix_rsltcd == 'TC002001') {
- 								html += '<button type="button" class="btn btn-primary btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'script\');">';
- 								html += '<i class="fa fa-lightbulb-o btn-icon-prepend"></i>';
+ 								html += '<button type="button" class="btn btn-inverse-success btn-fw" onclick="javascript:fn_fixLog('+full.exe_sn+', \'script\');">';
+ 								html += '<i class="fa fa-times"></i>';
  								html += '<spring:message code="etc.etc29"/>';
  								html += "</button>";
  	 						} else if(full.fix_rsltcd == 'TC002002'){
- 								html += '<button type="button" class="btn btn-danger btn-icon-text" onclick="javascript:fn_fixLog('+full.exe_sn+', \'script\');">';
- 								html += '<i class="fa fa-times btn-icon-prepend"></i>';
+ 	 							html += '<button type="button" class="btn btn-inverse-success btn-fw" onclick="javascript:fn_fixLog('+full.exe_sn+', \'script\');">';
+ 								html += '<i class="fa fa-times"></i>';
  								html += '<spring:message code="etc.etc30"/>';
  								html += "</button>";
  	 						} else {
 	 							if(full.exe_rslt_cd == 'TC001701'){
 	 								html += ' - ';
 	 							}else{
-	 								html += '<button type="button" class="btn btn-success btn-icon-text" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'script\');">';
-	 								html += '<i class="ti-pencil-alt btn-icon-prepend"></i>';
-	 								html += '<spring:message code="backup_management.Enter_Action"/>';
-	 								html += "</button>";
+	 								html += '<button type="button" class="btn btn-inverse-warning btn-fw" onclick="javascript:fn_fix_rslt_reg('+full.exe_sn+', \'script\');">';
+	 		 						html += '<i class="fa fa-times"></i>';
+	 		 						html += '<spring:message code="backup_management.Enter_Action"/>';
+	 		 						html += "</button>";
 	 							}	 
 	 						}
 
