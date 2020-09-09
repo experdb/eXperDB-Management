@@ -749,7 +749,7 @@ function fn_confirmCancelRst(gbn){
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-2">
 									<select class="form-control" name="scd_cndt" id="scd_cndt">
-										<option value="%"><spring:message code="schedule.total" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="TC001801"><spring:message code="etc.etc37"/></option>
 										<option value="TC001802"><spring:message code="schedule.run" /></option>
 										<option value="TC001803"><spring:message code="schedule.stop" /></option>

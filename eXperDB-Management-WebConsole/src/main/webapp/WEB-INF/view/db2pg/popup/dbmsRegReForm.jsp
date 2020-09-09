@@ -214,11 +214,7 @@ var connection = "fail";
 										<spring:message code="migration.character_set"/>(*)
 									</label>
 									<div class="col-sm-4">
-										<select name="crts_nm_reg_re" id="crts_nm_reg_re" class="form-control" style="margin-right: 1rem;width: 100% !important;">			
-										<c:forEach var="dbmsChar_reg_re" items="${dbmsChar_reg_re}" varStatus="status">				
-											<option value="<c:out value="${dbmsChar_reg_re.sys_cd}"/>"<c:if test="${resultInfo[0].crts eq dbmsChar_reg_re.sys_cd}"> selected</c:if>><c:out value="${dbmsChar_reg_re.sys_cd_nm}"/></option>								 
- 										</c:forEach>
-								</select>
+										<select name="crts_nm_reg_re" id="crts_nm_reg_re" class="form-control" style="margin-right: 1rem;width: 100% !important;"></select>
 									</div>
 								</div>
 							</div>

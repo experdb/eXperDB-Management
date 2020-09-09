@@ -194,7 +194,10 @@ function fn_regRe_popup(){
 			$("#scm_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].scm_nm, ""));
 			$("#spr_usr_id_reg_re").val(nvlPrmSet(result.resultInfo[0].spr_usr_id, ""));
 			$("#pwd_reg_re").val(nvlPrmSet(result.pwd, ""));
-			
+			$("#crts_nm_reg_re option").remove();
+			for(var i=0; i<result.dbmsChar.length; i++){
+				$("#crts_nm_reg_re").append('<option value="'+result.dbmsChar[i].sys_cd+'">'+result.dbmsChar[i].sys_cd_nm+'</option>');
+			}
 			$("#crts_nm_reg_re").val(result.resultInfo[0].crts).prop("selected", true);
 			$("#dbms_dscd_reg_re").val(result.resultInfo[0].dbms_dscd).prop("selected", true);
 
