@@ -315,8 +315,8 @@
 								<div class="input-group mb-2 mr-sm-2 col-sm-2">
 									<select class="form-control" style="margin-left: -1rem;margin-right: -0.7rem;" name="exe_rslt_cd" id="exe_rslt_cd">
 										<option value=""><spring:message code="common.status" />&nbsp;<spring:message code="schedule.total" /></option>
-										<option value="1"><spring:message code="common.success" /></option>
-										<option value="2"><spring:message code="common.failed" /></option>
+										<option value="TC001701"><spring:message code="common.success" /></option>
+										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
 								</div>
 									
