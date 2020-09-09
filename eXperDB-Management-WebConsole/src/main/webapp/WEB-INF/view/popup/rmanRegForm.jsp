@@ -280,7 +280,7 @@
 		} else {
 			$("#ins_cps_yn", "#workRegForm").val("N");
 		}
-		
+
 		$.ajax({
 			async : false,
 			url : "/popup/workRmanWrite.do",

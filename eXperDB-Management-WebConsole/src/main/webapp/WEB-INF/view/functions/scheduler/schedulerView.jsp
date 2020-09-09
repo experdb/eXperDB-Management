@@ -23,6 +23,13 @@
 		//검색조건 초기화
 		selectSdtInitTab(selectSdtChkTab);
 
+		/* ********************************************************
+		 * insert Button
+		 ******************************************************** */
+		$("#btnScdViewInsert").click(function() {
+			fn_insertSchedule();
+		});
+
 		$("#btnSearchData").click(function() {
 			//조회조건 setting
 			var stmondt = new Date($("#cmbyear").val(),parseInt($("#cmbmonth").val())-1,1,0,0,0,0);
@@ -856,7 +863,41 @@
 			}
 		});
 	}
+		
+	/* ********************************************************
+	 * 주별스케줄 등록
+	 ******************************************************** */
+	 function fn_insertSchedule(){
+		 $.ajax({
+			url : "/bckScheduleInsertVeiw.do",
+			data : {
+				"db_svr_id" : db_svr_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+			       xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				fn_ins_view_chogihwa(result);
 
+				//POP START
+				fn_insertScdViewPopStart();
+
+				$("#pop_layer_backup_week_scd_ins").modal("show");
+			}
+		});
+	}
+	 
 	Date.prototype.format = function(f) {
 	    if (!this.valueOf()) return " ";
 
@@ -943,6 +984,7 @@
 </script>
 
 <%@include file="../../popup/bakupScheduleDtl.jsp"%>
+<%@include file="../../popup/bckScheduleInsertVeiw.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}" />
@@ -1045,7 +1087,7 @@
 					<div class="row" style="margin-top:-20px;"  id="week_button">
 						<div class="col-12">
 							<div class="template-demo">
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScdViewInsert" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="backup_management.weekly_schedule_registory" />
 								</button>
 							</div>

@@ -353,7 +353,7 @@ function fn_workLayer(wrk_id){
 	var rman_bck_opt_cd_nm = "", rman_cps_yn = "", rman_log_file_bck_yn = "", rman_log_file_mtn_ecn = "", rman_log_file_stg_dcnt = "";
 	var rman_acv_file_mtncnt = "", rman_bck_mtn_ecnt = "", rman_acv_file_stgdt = "", rman_file_stg_dcnt = "";
 	var dump_file_fmt_cd_nm = "", dump_cprt = "", dump_file_stg_dcnt ="", dump_bck_mtn_ecnt = "";
-	
+
 	$.ajax({
 		url : "/selectWrkInfo.do",
 		data : {
@@ -376,7 +376,7 @@ function fn_workLayer(wrk_id){
 		success : function(result) {
 			if(result.length==0){
 				showSwalIcon(wrk_chk_del_msg, closeBtn, '', 'error');
-			}else{				
+			}else{
 				if(result[0].bsn_dscd == "TC001901"){
 					// RMAN
 					if(result[0].bck_bsn_dscd == "TC000201"){
