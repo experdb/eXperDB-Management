@@ -185,9 +185,9 @@
 
 </script>
 
+<%@include file="./popup/scheduleHistoryDetail.jsp"%>
 <%@include file="./cmmn/workScriptInfo.jsp"%>
 <%@include file="./cmmn/wrkLog.jsp"%>
-<%@include file="./popup/scheduleHistoryDetail.jsp"%>
 <%@include file="./db2pg/popup/db2pgHistoryDetail.jsp"%>
 <%@include file="./db2pg/popup/db2pgResultDDL.jsp"%> 
 <%@include file="./db2pg/popup/db2pgResult.jsp"%> 

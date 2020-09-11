@@ -316,10 +316,14 @@
 						},
 						{data : "file_fmt_cd_nm", 
 							render : function(data, type, full, meta) {
-								var html = "<div class='badge badge-pill badge-info' style='color: #fff;'>";
-								html += "	<i class='fa fa-file-o mr-2' ></i>";
-								html += full.file_fmt_cd_nm;
-								html += "</div>";
+								var html = "";
+								
+								if (nvlPrmSet(full.file_fmt_cd_nm, "") != "") {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+									html += "	<i class='fa fa-file-o mr-2' ></i>";
+									html += full.file_fmt_cd_nm;
+									html += "</div>";
+								}
 
 								return html;
 							},
