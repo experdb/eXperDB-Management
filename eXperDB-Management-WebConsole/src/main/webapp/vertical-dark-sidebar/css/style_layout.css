@@ -1318,6 +1318,66 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
     right: 0px; 
 }
 
+/* scale 사용/미사용 팝업 버튼*/
+/* on/off 버튼 */
+.onoffswitch-scale {
+    position: relative; width: 80px; max-height:25px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-scale-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.onoffswitch-scale-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 1px solid #999999; border-radius: 5px;
+}
+.onoffswitch-scale-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-scale-inner:before, .onoffswitch-scale-inner:after {
+    display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
+    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-scale-inner:before {
+    content: "ON";
+    padding-left: -1px;
+    padding-right: 10px;
+    background-color: #68afff; color: #ffffff;
+/*     background: -webkit-linear-gradient(45deg, #009966, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(45deg, #009966, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(45deg, #009966, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #009966, #befae6); Standard syntax */
+}
+.onoffswitch-scale-inner:after {
+    content: "OFF";
+    padding-right: 15px;
+    background-color: #ff4747; color: #ffffff;
+/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
+     */
+    text-align: right;
+}
+.onoffswitch-scale-switch {
+    display: block; width: 18px; margin: 6px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 50px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-scale-checkbox:checked + .onoffswitch-scale-label .onoffswitch-scale-inner {
+    margin-left: 0;
+}
+.onoffswitch-scale-checkbox:checked + .onoffswitch-scale-label .onoffswitch-scale-switch {
+    right: 0px; 
+}
+
 /* 사용/미사용 팝업 버튼 */
 .onoffswitch-use {
     position: relative; width: 100px; max-height:40px;

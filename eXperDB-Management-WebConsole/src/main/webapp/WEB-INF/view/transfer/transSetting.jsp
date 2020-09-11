@@ -820,7 +820,6 @@ a:hover.tip span {
 			}
 		} else {
 			for (var i = 0; i < datas.length; i++) {
-				console.log("===datas[i].exe_status==" + datas[i].exe_status);
  	 			if(datas[i].exe_status == "TC001501"){
 	 				i_exe_status = i_exe_status + 1;
 	 				

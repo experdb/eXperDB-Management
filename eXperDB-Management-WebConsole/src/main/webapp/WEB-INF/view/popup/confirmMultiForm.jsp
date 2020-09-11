@@ -18,6 +18,13 @@
 		if($('#con_multi_gbn').val()=="start" || $('#con_multi_gbn').val()=="stop"){
 			fn_confirmCancelRst($('#con_multi_gbn').val());
 		}
+		
+		//scale
+		if ($('#con_multi_gbn').val() == "use_start" || $('#con_multi_gbn').val() == "use_end") {
+			fnc_confirmCancelRst ($('#con_multi_gbn').val());
+		}
+		
+		
 		$('#pop_confirm_multi_md').modal('hide');
 	}
 	
