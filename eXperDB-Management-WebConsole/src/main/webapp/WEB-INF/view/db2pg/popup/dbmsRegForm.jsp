@@ -288,7 +288,7 @@ function fn_charSet(){
 		return;
 	}
 
-	if ($("#portno_reg").val() == null || $("#portno_reg").val() != "") {
+	if ($("#portno_reg").val()==null || $("#portno_reg").val() == "") {
 		showSwalIcon('<spring:message code="migration.msg18" />', '<spring:message code="common.close" />', '', 'error');
 		return;
 	}
