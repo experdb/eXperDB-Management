@@ -1361,4 +1361,26 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 
 		return iNumCnt;
 	}
+	
+	/**
+	 * scale Auto 사용여부 setting 수정
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public String updateAutoScaleUseSetting(InstanceScaleVO instanceScaleVO) throws Exception {
+		String result = "fail";
+
+		try{
+			instanceScaleDAO.updateAutoScaleUseSetting(instanceScaleVO);
+			
+			result = "success";
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
 }

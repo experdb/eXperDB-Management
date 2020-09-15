@@ -240,6 +240,8 @@ public class InstanceScaleController {
 				//scale log 확인
 				result = (Map<String, Object>)instanceScaleService.scaleSetResult(instanceScaleVO);
 			} catch (Exception e1) {
+				System.out.println("================123123===========");
+				
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -806,6 +808,31 @@ public class InstanceScaleController {
 			e.printStackTrace();
 		}
 
+		return result;
+	}
+	
+	/**
+	 * 사용여부 수정
+	 * @param response, request
+	 * @return result
+	 * @throws
+	 */
+	@RequestMapping(value = "/scaleCngUseUpdate.do")
+	@ResponseBody
+	public String scaleCngUseUpdate(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletResponse response, HttpServletRequest request) {
+		String result = "fail";
+
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
+
+		try {					
+			//저장 process
+			result = instanceScaleService.updateAutoScaleUseSetting(instanceScaleVO);
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+		}
 		return result;
 	}
 }
