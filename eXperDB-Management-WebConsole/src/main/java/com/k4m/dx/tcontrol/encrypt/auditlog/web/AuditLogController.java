@@ -277,6 +277,7 @@ public class AuditLogController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0112");
+			historyVO.setMnu_id(29);
 			accessHistoryService.insertHistory(historyVO);
 
 			String entityName = request.getParameter("entityName").equals("undefined")?"":request.getParameter("entityName");
@@ -324,7 +325,7 @@ public class AuditLogController {
 				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0112");
+				historyVO.setExe_dtl_cd("DX-T0113");
 				historyVO.setMnu_id(30);
 				accessHistoryService.insertHistory(historyVO);
 				
@@ -366,7 +367,7 @@ public class AuditLogController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0112_01");
+			historyVO.setExe_dtl_cd("DX-T0113_01");
 			historyVO.setMnu_id(30);
 			accessHistoryService.insertHistory(historyVO);
 			
@@ -420,6 +421,7 @@ public class AuditLogController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0114");
+			historyVO.setMnu_id(30);
 			accessHistoryService.insertHistory(historyVO);
 
 			String entityName = request.getParameter("entityName").equals("undefined")?"":request.getParameter("entityName");
