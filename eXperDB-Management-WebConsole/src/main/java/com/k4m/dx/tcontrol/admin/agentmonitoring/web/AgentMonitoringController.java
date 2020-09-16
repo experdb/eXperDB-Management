@@ -265,7 +265,7 @@ public class AgentMonitoringController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0123_02");
-			historyVO.setMnu_id(12);
+			historyVO.setMnu_id(20);
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();

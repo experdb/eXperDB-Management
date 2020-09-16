@@ -1088,10 +1088,9 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/bckScheduleInsertVeiw.do")
 	public ModelAndView bckScheduleInsertVeiw(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-	
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		List<DbVO> resultSet = null;
-		
+
 		try {
 			//화면접근이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -1108,9 +1107,9 @@ public class BackupController {
 			
 			resultSet=backupService.selectDbList(workVO);
 			
-			mv.addObject("dbList",resultSet);		
+			mv.addObject("view_dbList",resultSet);		
 			mv.addObject("db_svr_id",db_svr_id);
-			mv.setViewName("popup/bckScheduleInsertVeiw");	
+	/*		mv.setViewName("popup/bckScheduleInsertVeiw");*/	
 			
 		} catch (Exception e) {
 			e.printStackTrace();
