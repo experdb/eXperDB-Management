@@ -275,7 +275,7 @@ a:hover.tip span {
 			$('#confirm_multi_msg').html('<spring:message code="eXperDB_scale.msg21" />');
 		} else {
 			$('#con_multi_gbn', '#findConfirmMulti').val("use_end");
-			$('#confirm_multi_msg').html('<spring:message code="eXperDB_scale.msg22" />');
+			$('#confirm_multi_msg').html('<spring:message code="eXperDB_scale.msg25" />');
 		}
 		
 		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="data_transfer.transfer_activity" />';
