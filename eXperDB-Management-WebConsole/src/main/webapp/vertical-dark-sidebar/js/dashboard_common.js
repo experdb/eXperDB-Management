@@ -1546,25 +1546,27 @@ function fn_migt_History_progres(result) {
 			} else {
 				chartWidth = "100";
 			}
-		} else if (i == 1) { //백업건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 2) { //백업성공건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 3) { //백업실패건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 4) { //배치건수 / 전체건수
+		} else if (i == 1) { //배치건수 / 전체건수
 			chartCnt = nvlPrmSet(result.migration_tot_cnt, "0");
 			chartWidth = parseInt(nvlPrmSet(result.migration_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 5) {
+		} else if (i == 2) {
 			chartCnt = nvlPrmSet(result.migration_suc_cnt, "0");
 			chartWidth = parseInt(nvlPrmSet(result.migration_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 6) {
+		} else if (i == 3) {
 			chartCnt = nvlPrmSet(result.migration_fal_cnt, "0") ;
 			chartWidth = parseInt(nvlPrmSet(result.migration_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 4) { //백업건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 5) { //백업성공건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 6) { //백업실패건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
 		}
+		
+		
 		chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
 
 		$("#migt_pro_" + i).css("width", chartWidth + "%"); 
