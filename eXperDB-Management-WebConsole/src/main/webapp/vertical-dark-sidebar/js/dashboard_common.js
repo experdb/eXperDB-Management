@@ -1389,7 +1389,7 @@ function fn_migration_history_set(result) {
 	} else {
 		migtHtml += "<tr>";
 		migtHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
-		migtHtml += dashboard_msg02
+		migtHtml += dashboard_msg06
 		migtHtml += '</td>';
 		migtHtml += "</tr>";
 	}
