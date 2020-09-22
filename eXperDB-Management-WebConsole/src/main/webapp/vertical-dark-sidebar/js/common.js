@@ -193,9 +193,15 @@ $(window).ready(function(){
 	});
 	
 	$('.modal').on('hidden.bs.modal', function (e) {
-		if ($(this).find('form')[0] != null && $(this).find('form')[0] != undefined) {
-		    $(this).find('form')[0].reset();
+		if ($(this).find('form').length > 0) {
+			for(var i=0; i<$(this).find('form').length; i++){
+				if ($(this).find('form')[i] != null && $(this).find('form')[i] != undefined) {
+				    $(this).find('form')[i].reset();
+				}
+			}
 		}
+		
+
 	});	
 });
 
