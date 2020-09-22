@@ -15,7 +15,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#scheduleList').DataTable({
-	scrollY : "425px",
+	scrollY : "380px",
 	scrollX: true,	
 	bDestroy: true,
 	paging : true,
@@ -86,7 +86,7 @@ function fn_init(){
 	    					html += '</div>';
 	    					return html;
 					}else if(full.scd_cndt == "TC001802"){
-						var html = "<div class='badge badge-pill badge-primary' ><i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i></div>";
+						var html = "<div class='onoffswitch'><i class='fa fa-spin fa-spinner mr-2'></i><spring:message code='dashboard.running' /></div>";
 						return html;
 					}else{
 	    					var html = "";
@@ -113,7 +113,7 @@ function fn_init(){
 		{
 			data : "",
 			render : function(data, type, full, meta) {
-				 return '<button id="detail" class="btn btn-outline-primary" onClick=javascript:fn_dblclick_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
+				return '<button id="detail" class="btn btn-inverse-primary btn-fw" onClick=javascript:fn_dblclick_scheduleInfo("'+full.scd_id+'");><spring:message code="data_transfer.detail_search" /> </button>';
 			},
 			className : "dt-center",
 			defaultContent : "",
@@ -749,7 +749,7 @@ function fn_confirmCancelRst(gbn){
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-2">
 									<select class="form-control" name="scd_cndt" id="scd_cndt">
-										<option value="%"><spring:message code="schedule.total" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="TC001801"><spring:message code="etc.etc37"/></option>
 										<option value="TC001802"><spring:message code="schedule.run" /></option>
 										<option value="TC001803"><spring:message code="schedule.stop" /></option>

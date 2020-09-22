@@ -22,11 +22,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+ -->
+
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
 
 <title>eXperDB for Management</title>
+
+<link rel="stylesheet" href="../login/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../login/css/common.css">
 
 <script type="text/javascript">
 	$(window.document).ready(function() {
@@ -62,7 +70,10 @@
 			}
 			
 			titleMsg = '<spring:message code="common.login" />' + ' ' +'<spring:message code="common.failed" />';
-			showToastPosition('mid-center', errorMsg, titleMsg);
+			$("#alert").html("")
+			$("#alert").attr('class','alert alert-danger');
+			$("#alert").append(titleMsg+"<br>");
+			$("#alert").append(errorMsg);
 		}
 	}
 
@@ -102,15 +113,58 @@
 	}
 </script>
 </head>
-<body class="sidebar-dark">
+<div id="wrap" class="login">
+	<!-- header -->
+	<header id="hd">
+		<h1 class="logo text-hide"><a href=""><img src="../login/img/logo_wh.png" alt="INZENT">INZENT</a></h1>
+	</header>
+	<!-- //header -->
+	<div id="ct">
+		<form class="form-login" name="loginForm" id="loginForm" method="post">
+			<input type="hidden" id="loginChkYn" name="loginChkYn" value="" />
+			<img src="../login/img/product-name.png" alt="eXperDB">
+			<div class="form-group">
+				<i class="icon-user"></i>
+				<input type="text" class="form-control form-control-lg" id="usr_id" name="usr_id"  maxlength="30" placeholder="<spring:message code="message.msg128" />">
+			</div>
+			<div class="form-group">
+				<i class="icon-lock"></i>
+				<input type="password" class="form-control form-control-lg" id="pwd" name="pwd" maxlength="20"  placeholder="<spring:message code="message.msg129" />">
+			</div>
+			<label class="custom-control custom-checkbox">
+				<!-- <input type="checkbox" class="custom-control-input">
+				<span class="custom-control-label">아이디 저장</span> -->
+				
+				<input type="checkbox" id="login_chk" name ="login_chk" class="custom-control-input" />
+				<span class="custom-control-label"><spring:message code="login.title.signed" /></span>
+	
+			</label>
+			<!-- <div class="alert alert-danger">
+				계정 정보가 맞는지 확인해 주세요.
+			</div> -->
+			<div id="alert" ></div>
+			<div class="mt-3">
+				<a class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="javascript:void(0)" onclick="javascript:fn_login();">LOGIN</a>
+			</div>
+			
+			<!-- <button type="submit" class="btn btn-block btn-primary btn-lg" onclick="javascript:fn_login();">로그인</button> -->
+		</form>
+		<p class="copy">&copy; 2020 IZENT. All rights reserved</p>
+	</div>
+</div>
+
+<!-- js -->
+<script src="../login/vendor/jquery/jquery-3.3.1.min.js"></script>
+<script src="../login/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../login/js/common.js"></script>
+
+<%-- <body class="sidebar-dark">
 	<div class="container-scroller">
 		<div class="container-fluid page-body-wrapper full-page-wrapper">
-
 			<div class="content-wrapper-login d-flex align-items-center auth px-0">
 				<div class="row w-100 mx-0">
-					<div class="col-lg-4 mx-auto">
+					<div class="col-lg-4 mx-auto my-auto">
 						<div class="auth-form-light text-left py-5 px-4 px-sm-5">
-			
 							<!-- title -->
 							<div class="brand-logo">
 								<img src="../images/login_logo_new.png" alt="eXperDB">
@@ -160,7 +214,7 @@
 										</label>
 									</div>
 								</div>
-							</form>	
+							</form>
 						</div>
 					</div>
 				</div>
@@ -170,5 +224,5 @@
 		<!-- page-body-wrapper ends -->
 	</div>
 	<!-- container-scroller -->
-</body>
+</body> --%>
 </html>

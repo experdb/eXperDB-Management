@@ -226,7 +226,6 @@ var confirm_title = "";
 	}
 	
 	$(function() {
-
 		   $('#user tbody').on( 'click', 'tr', function () {
 		         if ( $(this).hasClass('selected') ) {
 		        	}
@@ -237,7 +236,6 @@ var confirm_title = "";
 
 		         var usr_id = userTable.row('.selected').data().usr_id;
 		         
-		 
 		        
 		        /* ********************************************************
 		         * 선택된 유저 대한 디비권한 조회
@@ -506,9 +504,10 @@ var confirm_title = "";
 								<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
 							</button>
 						</form>
-						
-						<div id="dbAutList system-tlb-scroll" style="height: 580px;overflow-y:auto;"></div>
-					</div>
+					</div>	
+					
+					<div id="dbAutList" style="height: 580px;overflow-y:auto;"></div>
+					
 				</div>
 			</div>
 		</div>

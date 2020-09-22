@@ -231,9 +231,6 @@ public class TransController {
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.kafkaConnectionTest(IP, PORT, cmd);
-					
-			System.out.println(result);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -866,11 +863,7 @@ public class TransController {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		String db_nm = request.getParameter("db_nm");
 		String schema_nm = request.getParameter("schema_nm");
-		
-		System.out.println("db_svr_id= "+db_svr_id);
-		System.out.println("db_nm= "+db_nm);
-		System.out.println("schema_nm= "+schema_nm);
-		
+
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			
@@ -902,9 +895,6 @@ public class TransController {
 			
 			//result = cic.schemaList(serverObj, IP, PORT);
 			result =  TransferSchemaInfo.getSchemaList(serverObj);
-			
-			System.out.println(result);
-			
 	}catch (Exception e) {
 		e.printStackTrace();
 	}

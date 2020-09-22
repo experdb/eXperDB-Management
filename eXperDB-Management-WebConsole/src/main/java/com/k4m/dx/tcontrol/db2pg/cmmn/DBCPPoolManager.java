@@ -50,9 +50,14 @@ public class DBCPPoolManager {
 				} catch (Exception e) {
 					System.out.println( "Database Connection fail!");
 					//shutdownDriver(poolName);
-					System.out.println( e.toString() );
+
+					if (e.toString() != null) {
+						result.put("ERR_MSG", e.toString() );
+					} else {
+						result.put("ERR_MSG", "Database Connection fail!");
+					}
+					
 					result.put("RESULT_CODE", 1);
-					result.put("ERR_MSG", e.toString() );
 					return result;	
 	
 				}

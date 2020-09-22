@@ -183,17 +183,17 @@ a:hover.tip span {
 					render : function(data, type, full, meta) {
 						var html = '';
 
-						if (full.useyn == 'Y') {
-							html += "<div class='badge badge-pill badge-primary' >";
-							html += "	<i class='fa fa-spin fa-refresh mr-2'></i>";
-							html += '<spring:message code="dbms_information.use" />';
-							html += "</div>";
-						} else {
-							html += "<div class='badge badge-pill badge-danger'>";
-							html += "	<i class='fa fa-times-circle mr-2'></i>";
-							html += '<spring:message code="dbms_information.unuse" />';
-							html += "</div>";
+						html += '<div class="onoffswitch-scale">';
+						if(full.useyn == "Y"){
+							html += '<input type="checkbox" name="useyn" class="onoffswitch-scale-checkbox" id="useyn'+ full.rownum +'" onclick="fn_use_scaleChk('+ full.rownum +')" checked>';
+						}else {
+							html += '<input type="checkbox" name="useyn" class="onoffswitch-scale-checkbox" id="useyn'+ full.rownum +'" onclick="fn_use_scaleChk('+ full.rownum +')" >';
 						}
+						html += '<label class="onoffswitch-scale-label" for="useyn'+ full.rownum +'">';
+						html += '<span class="onoffswitch-scale-inner"></span>';
+						html += '<span class="onoffswitch-scale-switch"></span></label>';
+						 
+						html += '<input type="hidden" name="chk_wrk_id" id="chk_wrk_id'+ full.rownum +'" value="'+ full.wrk_id +'"/>';
 
 						return html;
 					},
@@ -265,6 +265,26 @@ a:hover.tip span {
 
 		$(window).trigger('resize'); 
 	}
+	
+	/* ********************************************************
+	 * 활성화 클릭
+	 ******************************************************** */
+	function fn_autoScaleUse_click(row){
+		if($("#useyn"+row).is(":checked") == true){
+			$('#con_multi_gbn', '#findConfirmMulti').val("use_start");
+			$('#confirm_multi_msg').html('<spring:message code="eXperDB_scale.msg21" />');
+		} else {
+			$('#con_multi_gbn', '#findConfirmMulti').val("use_end");
+			$('#confirm_multi_msg').html('<spring:message code="eXperDB_scale.msg25" />');
+		}
+		
+		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="data_transfer.transfer_activity" />';
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#chk_use_row', '#findList').val(row);
+		
+		$('#pop_confirm_multi_md').modal("show");
+	}
+
 
 	/* ********************************************************
 	 * aws 서버 확인
@@ -302,7 +322,8 @@ a:hover.tip span {
 					$("#btnModify").prop("disabled", "disabled");
 					$("#btnDelete").prop("disabled", "disabled");
 					$("#btnCommonInsert ").prop("disabled", "disabled");
-					
+/* 					$("#btnChoUse").prop("disabled", "disabled");
+					$("#btnChoUnused").prop("disabled", "disabled"); */
 					$("#btnCngSearch").prop("disabled", "disabled");
 
 					$("#scale_type_cd").prop("disabled", "disabled");
@@ -561,6 +582,7 @@ a:hover.tip span {
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val()
 			},
+			timeout: 8000,
 			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
@@ -571,6 +593,8 @@ a:hover.tip span {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
 					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else  if(status == "timeout") {
+					showSwalIcon('<spring:message code="eXperDB_scale.msg23" />', '<spring:message code="common.close" />', '', 'error');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -591,6 +615,8 @@ a:hover.tip span {
 						} else {
 							fn_del_confirm();
 						}
+						
+						
 					}
 				}
 			}
@@ -718,21 +744,14 @@ a:hover.tip span {
 			showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}
-		
+
 		confile_title = '<spring:message code="menu.eXperDB_scale_settings" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
-		
-		$('#confirm_tlt').html(confile_title);
-		
-		$('#confirm_msg').html('<spring:message code="message.msg17" />');
 
-		$('#pop_confirm_md').modal("show");
-	}
-
-	/* ********************************************************
-	 * confirm result
-	 ******************************************************** */
-	function fnc_confirmRst(){
-		fn_del_data();
+		$('#con_multi_gbn', '#findConfirmMulti').val("del");
+		
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg17" />');
+		$('#pop_confirm_multi_md').modal("show");
 	}
 
 	/* ********************************************************
@@ -849,12 +868,142 @@ a:hover.tip span {
 			}
 		});
 	}
+	
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmCancelRst(gbn){
+		if ($('#chk_use_row', '#findList') != null) {
+			var canCheckId = 'useyn' + $('#chk_use_row', '#findList').val();
+			
+			if (gbn == "use_start") {
+				$("input:checkbox[id='" + canCheckId + "']").prop("checked", false); 
+			} else if (gbn == "use_end") {
+				$("input:checkbox[id='" + canCheckId + "']").prop("checked", true); 
+			}
+		}
+	}
+	
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmMultiRst(gbn){
+		if (gbn == "del") {
+			fn_del_data();
+		} else if (gbn == "use_start" || gbn == "use_end") {
+			fn_use_execute(gbn);
+		} else if (gbn == "active" || gbn == "disabled") {
+			fn_tot_use_execute(gbn);
+		}
+	}
+
+	/* ********************************************************
+	 * 사용여부 단건실행
+	 ******************************************************** */
+	function fn_use_execute(use_gbn) {
+		var ascRow =  $('#chk_use_row', '#findList').val();
+		var useVal = "";
+		var validateMsg ="";
+		var checkId = "";
+
+		if (use_gbn == "use_start") {
+			useVal = "Y";
+		} else {
+			useVal = "N";
+		}
+
+		$.ajax({
+			url : "/scale/scaleCngUseUpdate.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				wrk_id : $('#chk_wrk_id' + ascRow).val(),
+				useyn : useVal
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				checkId = 'transActivation' + ascRow;
+
+				if (result == null) {
+					validateMsg = '<spring:message code="eXperDB_scale.msg24"/>';
+					showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+						
+					$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
+					return;
+				} else {
+					if (result == "success") {
+						fn_search_list();
+					} else {
+						validateMsg = '<spring:message code="eXperDB_scale.msg24"/>';
+						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+						
+						$("input:checkbox[id='" + checkId + "']").prop("checked", false);
+						return;
+					}
+				}
+			}
+		});
+	}
+	
+	/* ********************************************************
+	* scale 사용여부관련 scale 체크
+	******************************************************** */
+	function fn_use_scaleChk(row) {
+		//scale 이 실행되고 있는 지 체크
+		$.ajax({
+			url : "/scale/selectScaleLChk.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			timeout: 8000,
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else  if(status == "timeout") {
+					showSwalIcon('<spring:message code="eXperDB_scale.msg23" />', '<spring:message code="common.close" />', '', 'error');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					wrk_id = result.wrk_id;
+
+					if (wrk_id == "1") {
+						showSwalIcon('<spring:message code="eXperDB_scale.msg4" />', '<spring:message code="common.close" />', '', 'error');
+						return;
+					} else {
+						fn_autoScaleUse_click(row);
+					}
+				}
+			}
+		});
+	}
 </script>
 
 <%@include file="./../popup/scaleAutoRegForm.jsp"%>
 <%@include file="./../popup/scaleAutoComRegForm.jsp"%>
 <%@include file="./../popup/scaleAutoReregForm.jsp"%>
-<%@include file="./../popup/confirmForm.jsp"%>
+<%@include file="./../popup/confirmMultiForm.jsp"%>
 
 <%@include file="./experdbScaleCngInfo.jsp"%>
 
@@ -864,6 +1013,7 @@ a:hover.tip span {
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+		<input type="hidden" name="chk_use_row" id="chk_use_row" value=""/>
 </form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -966,7 +1116,13 @@ a:hover.tip span {
 								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnCommonInsert" onClick="fn_scaleChk('comIns');" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
 								</button>
-													
+	<%-- 							<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoUse" onClick="fn_autoScaleUseTot_click('y');" data-toggle="modal">
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_scale.save_select_use" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoUnused" onClick="fn_autoScaleUseTot_click('n');" data-toggle="modal">
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_scale.save_select_unused" />
+								</button>
+			 --%>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_scaleChk('del');" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>

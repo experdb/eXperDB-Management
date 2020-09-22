@@ -291,6 +291,7 @@ $(window.document).ready(function() {
 				$("#calendar").show();
 			}
 			
+			document.getElementById('scd_id').value= result[0].scd_id;
 			document.getElementById('scd_nm').value= result[0].scd_nm;
 			document.getElementById('scd_exp').value= result[0].scd_exp;				
 			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
@@ -647,19 +648,21 @@ function fn_scheduleReStart(){
 		var exe_dt = $("#datepicker1").val().replace(/-/gi,'').trim();
 	}	
 	
-	var row = new Object();
-	
-    row.scd_id= scd_id;
-    row.exe_perd_cd =  $("#exe_perd_cd").val();
-    row.exe_dt = exe_dt;
-    row.exe_month =  $("#exe_month").val();
-    row.exe_day =  $("#exe_day").val();
-    row.exe_hms = $("#exe_s").val()+$("#exe_m").val()+$("#exe_h").val();
-  
+	var scd_id= $("#scd_id").val();
+	var exe_perd_cd =  $("#exe_perd_cd").val();
+	var exe_month =  $("#exe_month").val()=='undefined'?'':$('#exe_month').val();
+	var exe_day =  $("#exe_day").val()=='undefined'?'':$('#exe_day').val();
+	var exe_hms = $("#exe_s").val()+$("#exe_m").val()+$("#exe_h").val();
+
  	$.ajax({
 		url : "/scheduleReStart.do",
 		data : {
-			sWork : JSON.stringify(row)
+			scd_id : scd_id,
+			exe_perd_cd : exe_perd_cd,
+			exe_dt : exe_dt,
+			exe_month : exe_month,
+			exe_day : exe_day,
+			exe_hms : exe_hms
 		},
 		dataType : "json",
 		type : "post",
@@ -709,6 +712,8 @@ function fn_dateValidation(exe_dt){
 <%@include file="./../../popup/scheduleRegForm.jsp"%>
 <%@include file="./../../popup/db2pgWorkRegForm.jsp"%>
 
+<input type="hidden" id="scd_id" name="scd_id">
+
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
@@ -722,7 +727,7 @@ function fn_dateValidation(exe_dt){
 									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-calendar menu-icon"></i>
 												<span class="menu-title"><spring:message code="schedule.scheduleMod"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -808,41 +813,41 @@ function fn_dateValidation(exe_dt){
 									<div id="weekDay" class="form-inline">
 										<div class="form-check form-check-primary">
 				                            <label class="form-check-label">
-				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.sunday" />&emsp;
+				                              <input type="checkbox" class="form-check-input" id="chk0" name="chk" value="0"><spring:message code="schedule.sunday" />&emsp;
 				                            </label>
 		                          		</div>
 		                          		<div class="form-check form-check-primary">
 				                            <label class="form-check-label">
-				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.monday" />&emsp;
+				                              <input type="checkbox" class="form-check-input" id="chk1" name="chk" value="0"><spring:message code="schedule.monday" />&emsp;
 				                            </label>
 		                          		</div>
 		                          		<div class="form-check form-check-primary">
 				                            <label class="form-check-label">
-				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.thuesday" />&emsp;
+				                              <input type="checkbox" class="form-check-input" id="chk2" name="chk" value="0"><spring:message code="schedule.thuesday" />&emsp;
 				                            </label>
 		                          		</div>
 		                          		<div class="form-check form-check-primary">
 				                            <label class="form-check-label">
-				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.wednesday" />&emsp;
+				                              <input type="checkbox" class="form-check-input" id="chk3" name="chk" value="0"><spring:message code="schedule.wednesday" />&emsp;
 				                            </label>
 		                          		</div>
 		                          		<div class="form-check form-check-primary">
 				                            <label class="form-check-label">
-				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.thursday" />&emsp;
+				                              <input type="checkbox" class="form-check-input" id="chk4" name="chk" value="0"><spring:message code="schedule.thursday" />&emsp;
 				                            </label>
 		                          		</div>
 		                          		<div class="form-check form-check-primary">
 				                            <label class="form-check-label">
-				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.friday" />&emsp;
+				                              <input type="checkbox" class="form-check-input" id="chk5" name="chk" value="0"><spring:message code="schedule.friday" />&emsp;
 				                            </label>
 		                          		</div>
 		                          		<div class="form-check form-check-primary">
 				                            <label class="form-check-label">
-				                              <input type="checkbox" class="form-check-input" id="chk" name="chk" value="0"><spring:message code="schedule.saturday" />&emsp;
+				                              <input type="checkbox" class="form-check-input" id="chk6" name="chk" value="0"><spring:message code="schedule.saturday" />&emsp;
 				                            </label>
 		                          		</div>
 		                          	</div>
-									<div class="col-sm-3"  id="calendar">
+									<div class="col-sm-3"  id="calendar" style="margin-top:-15px;">
 										<div id="ins_usr_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
 											<input type="text" class="form-control totDatepicker" id="datepicker1" name="exe_dt"  tabindex=10 />
 											<span class="input-group-addon input-group-append border-left">
@@ -850,11 +855,11 @@ function fn_dateValidation(exe_dt){
 											</span>
 										</div>
 									</div>
-									<div id="month"></div>
-									<div id="day"></div>
-									<div id="hour"></div>
-									<div id="min"></div>
-									<div id="sec"></div>
+									<div id="month" style="margin-top:-15px;"></div>
+									<div id="day" style="margin-top:-15px;"></div>
+									<div id="hour" style="margin-top:-15px;"></div>
+									<div id="min" style="margin-top:-15px;"></div>
+									<div id="sec" style="margin-top:-15px;"></div>
 								</div>
 							</div>
 							

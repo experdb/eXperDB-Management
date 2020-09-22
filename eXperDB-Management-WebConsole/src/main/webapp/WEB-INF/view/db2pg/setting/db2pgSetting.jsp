@@ -57,7 +57,7 @@ function selectTab(tab){
 
 function fn_init(){
 	tableDDL = $('#ddlDataTable').DataTable({
-	scrollY : "330px",
+	scrollY : "310px",
 	scrollX : true,
 	searching : false,	
 	deferRender : true,
@@ -86,7 +86,7 @@ function fn_init(){
 	});
 	
 	tableData = $('#dataDataTable').DataTable({
-		scrollY : "330px",
+		scrollY : "300px",
 		scrollX: true,	
 		bDestroy: true,
 		paging : true,
@@ -351,6 +351,9 @@ function fn_data_reg_popup(){
 	$("#inset_button_data_work2").show();
 	$("#inset_title").show();
 	$("#mod_title").hide();
+	
+	//tab 선택
+	$('a[href="#insDumpOptionTab1"]').tab('show');
 				
 	$('#pop_layer_data_reg').modal("show");
 }
@@ -427,6 +430,9 @@ function fn_data_regre_popup(){
 				$("#mod_title").show();
 				
 				 $("textarea[name=src_cnd_qry]").html(result.src_cnd_qry);
+				 
+				//tab 선택
+				$('a[href="#insDumpOptionTab1"]').tab('show');
 				 
 				$('#pop_layer_data_reg').modal("show");
 			}
@@ -918,63 +924,63 @@ function fn_ImmediateStart(gbn){
 					<div class="card">
 						<div class="card-body" style="margin:-10px 0px -15px 0px;">
 							<form class="form-inline row" id="searchDDL">
-									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
-										<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
-										<input type="text" class="form-control" style="width:250px;" maxlength="25" id="ddl_wrk_nm" name="ddl_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
-									</div>
-									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" style="padding-right:10px;">
-										<select class="form-control" name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
-											<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
-											<option value="TC002201">Oracle</option>
-											<option value="TC002202">MS-SQL</option>
-											<option value="TC002203">MySQL</option>
-										</select>
-									</div>
-									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" id="ddl_ipadr" name="ddl_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
-									</div>
-									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" id="ddl_dtb_nm" name="ddl_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
-									</div>
-									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" id="ddl_scm_nm" name="ddl_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
-									</div>
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getddlDataList()">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="ddl_wrk_nm" name="ddl_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
+								</div>
+								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" >
+									<select class="form-control" name="ddl_dbms_dscd" id="ddl_dbms_dscd" style="margin-right: -0.7rem;">
+										<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
+										<option value="TC002201">Oracle</option>
+										<option value="TC002202">MS-SQL</option>
+										<option value="TC002203">MySQL</option>
+									</select>
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="ddl_ipadr" name="ddl_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="ddl_dtb_nm" name="ddl_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<input type="text" class="form-control" id="ddl_scm_nm" name="ddl_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
+								</div>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getddlDataList()">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>
 							
 							<form class="form-inline row" id="searchData" style="display:none;">
-									<div class="input-group mb-2 mr-sm-2 col-sm-1_7" style="padding-right:10px;">
-										<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
-										<input type="text" class="form-control" maxlength="25" id="data_wrk_nm" name="data_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
-									</div>
-									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
-										<select class="form-control" name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
-											<option value="source_system"><spring:message code="migration.source_system"/></option>	
-											<option value="target_system"><spring:message code="migration.target_system"/></option>
-										</select>
-									</div>
-									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
-										<select class="form-control" name="dbms_dscd" id="dbms_dscd" class="select t5" >
-											<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
-											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
- 												<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
- 											</c:forEach>
-										</select>
-									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:200px;" id="data_ipadr" name="data_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
-									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:200px;" id="data_dtb_nm" name="data_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
-									</div>
-									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:200px;" id="data_scm_nm" name="data_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
-									</div>
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+									<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="data_wrk_nm" name="data_wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.work_name" />' />
+								</div>
+								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" >
+									<select class="form-control" name="data_dbms_dscd" id="data_dbms_dscd" style="margin-right: -0.7rem;" >
+										<option value="source_system"><spring:message code="migration.source_system"/></option>	
+										<option value="target_system"><spring:message code="migration.target_system"/></option>
+									</select>
+								</div>
+								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" >
+									<select class="form-control" name="dbms_dscd" id="dbms_dscd" style="margin-right: -0.7rem;" >
+										<option value="">DBMS<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
+										<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
+ 											<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
+ 										</c:forEach>
+									</select>
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_7" >
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="data_ipadr" name="data_ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.ip" />' />
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_7" >
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="data_dtb_nm" name="data_dtb_nm" onblur="this.value=this.value.trim()" placeholder='Database' />
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_7" >
+									<input type="text" class="form-control" id="data_scm_nm" name="data_scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema' />
+								</div>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>
 						</div>
 					</div>

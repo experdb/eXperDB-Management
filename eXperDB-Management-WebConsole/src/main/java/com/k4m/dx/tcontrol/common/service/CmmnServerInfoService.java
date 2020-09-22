@@ -90,4 +90,13 @@ public interface CmmnServerInfoService {
 
 	List<Map<String, Object>> selectHaCnt(int db_svr_id) throws Exception;
 
+	/**
+	 * DBMS 서버 리스트 조회 레이아웃
+	 * 
+	 * @param db_svr_nm
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectDashboardServerInfoImg(DbServerVO dbServerVO) throws Exception;
+
 }

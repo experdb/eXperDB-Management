@@ -282,6 +282,17 @@ function fn_charSet(){
  * Source DBMS 연결테스트
  ******************************************************** */
  function fn_connTest2(){
+
+	if ($("#ipadr_reg").val() == null || $("#ipadr_reg").val() == "") {
+		showSwalIcon('<spring:message code="migration.msg15" />', '<spring:message code="common.close" />', '', 'error');
+		return;
+	}
+
+	if ($("#portno_reg").val()==null || $("#portno_reg").val() == "") {
+		showSwalIcon('<spring:message code="migration.msg18" />', '<spring:message code="common.close" />', '', 'error');
+		return;
+	}
+
      $.ajax({
  		url : "/dbmsConnTest.do",
  		data : {
@@ -482,7 +493,7 @@ function fn_charSet(){
 										<input type="password" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="pwd_reg" name="pwd_reg" />
 									</div>
 								</div>
-								<div class="form-group row">
+								<div class="form-group row" style="margin-bottom:-15px;">
 									<label for="ins_usr_nm" class="col-sm-2 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="migration.character_set"/>(*)

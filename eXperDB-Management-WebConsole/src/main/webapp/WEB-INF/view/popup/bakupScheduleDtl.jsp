@@ -459,6 +459,7 @@
 			url : "/selectScheduleWorkList.do",
 			data : {
 				work_id : rowList,
+				tCnt : 1
 			},
 			dataType : "json",
 			type : "post",
@@ -679,7 +680,8 @@
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 <%@include file="../popup/rmanRegReForm.jsp"%>
 <%@include file="../popup/dumpRegReForm.jsp"%>
-	
+<%@include file="../cmmn/workScriptInfoPop.jsp"%>
+
 <form name="backupScdInfoForm" id="backupScdInfoForm">
 	<input type="hidden" name="scdInfo_db_svr_id"  id="scdInfo_db_svr_id" value="" />
 	<input type="hidden" name="scdInfo_scd_id"  id="scdInfo_scd_id" value="" />

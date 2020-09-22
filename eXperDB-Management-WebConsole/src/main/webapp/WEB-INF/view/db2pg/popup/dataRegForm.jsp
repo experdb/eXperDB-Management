@@ -524,20 +524,20 @@ function fn_tableAddCallback3(rowList, tableGbn, totalCnt){
 															<option value="exclude_trsf"><spring:message code="migration.exclusion_table"/></option>
 														</select>
 													</label>
-													<div id="include_trsf" class="form-inline">
-														<div class="col-sm-8">
-															<input type="text" class="form-control form-control-sm" style="width: 300px;" name="src_include_tables_trsf" id="src_include_tables_trsf" readonly="readonly" />
+													<div id="include_trsf" class="form-inline col-sm-10 row">
+														<div class="col-sm-5">
+															<input type="text" class="form-control form-control-sm" style="width: 100%;" name="src_include_tables_trsf" id="src_include_tables_trsf" readonly="readonly" />
 														</div>
-														<div class="col-sm-2">
-															<button type="button" class="btn btn-inverse-primary btn-fw" style="width: 115px;" onclick="fn_tableList_trsf('include')" ><spring:message code="button.create" /></button>
+														<div class="col-sm-3">
+															<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_tableList_trsf('include')" ><spring:message code="button.create" /></button>
 														</div>
 													</div>
-													<div id="exclude_trsf" style="display: none;" class="form-inline">
-														<div class="col-sm-8">
-															<input type="text" class="form-control form-control-sm" style="width: 300px;" name="src_exclude_tables_trsf" id="src_exclude_tables_trsf" readonly="readonly" />
+													<div id="exclude_trsf" style="display: none;" class="form-inline col-sm-10 row">
+														<div class="col-sm-5">
+															<input type="text" class="form-control form-control-sm" style="width: 100%;" name="src_exclude_tables_trsf" id="src_exclude_tables_trsf" readonly="readonly" />
 														</div>
-														<div class="col-sm-2">
-															<button type="button" class="btn btn-inverse-primary btn-fw" style="width: 115px;" onclick="fn_tableList_trsf('exclude')" ><spring:message code="button.create" /></button>
+														<div class="col-sm-3">
+															<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_tableList_trsf('exclude')" ><spring:message code="button.create" /></button>
 														</div>
 													</div>	
 												</div>
@@ -559,6 +559,7 @@ function fn_tableAddCallback3(rowList, tableGbn, totalCnt){
 												</div>
 												
 												<br>
+
 												<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
 													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 														<spring:message code="migration.number_of_parallel_worker" />
@@ -575,7 +576,7 @@ function fn_tableAddCallback3(rowList, tableGbn, totalCnt){
 												</div>
 												
 												<br>
-												<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+												<div class="form-group row div-form-margin-z" style="margin-top:-10px;margin-bottom:-30px;">
 													<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
 														<spring:message code="migration.number_of_rows_extracted" />
 													</label>
@@ -636,8 +637,8 @@ function fn_tableAddCallback3(rowList, tableGbn, totalCnt){
 									
 									<br/>
 									<div class="card-body" style="border: 1px solid #adb5bd;">
-										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
-											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+										<div class="form-group row div-form-margin-z" style="margin-top:-5px;margin-bottom:-25px;">
+											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:5px;">
 												<spring:message code="migration.table_rebuild" />
 											</label>
 											<div class="col-sm-2">
@@ -647,7 +648,7 @@ function fn_tableAddCallback3(rowList, tableGbn, totalCnt){
 													</c:forEach>
 												</select>
 											</div>
-											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:5px;">
 												<spring:message code="migration.input_mode" />
 											</label>
 											<div class="col-sm-2">
@@ -657,7 +658,7 @@ function fn_tableAddCallback3(rowList, tableGbn, totalCnt){
 													</c:forEach>
 												</select>
 											</div>
-											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
+											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index" style="padding-top:5px;">
 												<spring:message code="migration.contraint_extraction" />
 											</label>
 											<div class="col-sm-2">

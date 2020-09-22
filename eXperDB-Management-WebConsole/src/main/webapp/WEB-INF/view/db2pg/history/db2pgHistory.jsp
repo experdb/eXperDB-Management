@@ -619,73 +619,72 @@ function getdataDataList(){
 					<!-- search param start -->
 					<div class="card">
 						<div class="card-body" style="margin:-10px 0px -15px 0px;">
-						
 							<!-- DDL 수행이력 조회조건 -->
 							<form class="form-inline row" id="searchDDL">
-									<div class="input-group mb-2 mr-sm-2">		
-										<div id="ddl_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_strt_dtm" name="ddl_wrk_strt_dtm" >
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
-										<div class="input-group align-items-center">
-											<span style="border:none; padding: 0px 10px;"> ~ </span>
-										</div>
-										<div id="ddl_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_end_dtm" name="ddl_wrk_end_dtm" >
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row">		
+									<div id="ddl_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_strt_dtm" name="ddl_wrk_strt_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
 									</div>
-									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:300px;" maxlength="25" name="ddl_wrk_nm" id="ddl_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
-									</div>									
-									<div class="input-group mb-2 mr-sm-2 col-sm-2" style="padding-right:10px;">
-										<select class="form-control" style="width:150px;" name="ddl_exe_rslt_cd" id="ddl_exe_rslt_cd">
-											<option value="%"><spring:message code="schedule.total" /></option>
-											<option value="TC001701"><spring:message code="common.success" /></option>
-											<option value="TC001702"><spring:message code="common.failed" /></option>
-										</select>
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none; padding: 0px 10px;"> ~ </span>
 									</div>
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getddlDataList()">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>
+									<div id="ddl_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_end_dtm" name="ddl_wrk_end_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
+									</div>
+								</div>
+								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-3">
+									<input type="text" class="form-control" style="margin-left: -1rem;margin-right: -0.7rem;" maxlength="25" name="ddl_wrk_nm" id="ddl_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
+								</div>									
+								<div class="input-group mb-2 mr-sm-2 col-sm-2" >
+									<select class="form-control" name="ddl_exe_rslt_cd" id="ddl_exe_rslt_cd">
+										<option value="%"><spring:message code="schedule.total" /></option>
+										<option value="TC001701"><spring:message code="common.success" /></option>
+										<option value="TC001702"><spring:message code="common.failed" /></option>
+									</select>
+								</div>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getddlDataList()">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>		
 							
 							<!-- MIGRATION 수행이력 조회조건 -->
 							<form class="form-inline row" id="searchData" style="display:none;">
-									<div class="input-group mb-2 mr-sm-2">		
-										<div id="mig_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_strt_dtm" name="mig_wrk_strt_dtm" >
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
-										<div class="input-group align-items-center">
-											<span style="border:none; padding: 0px 10px;"> ~ </span>
-										</div>
-										<div id="mig_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_end_dtm" name="mig_wrk_end_dtm" >
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
-									</div>									
-									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
-										<input type="text" class="form-control" style="width:300px;" maxlength="25" name="mig_wrk_nm" id="mig_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
-									</div>									
-									<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_7" style="padding-right:10px;">
-										<select class="form-control" style="width:150px;" name="mig_exe_rslt_cd" id="mig_exe_rslt_cd">
-											<option value="%"><spring:message code="schedule.total" /></option>
-											<option value="TC001701"><spring:message code="common.success" /></option>
-											<option value="TC001702"><spring:message code="common.failed" /></option>
-										</select>
+								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row">		
+									<div id="mig_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_strt_dtm" name="mig_wrk_strt_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
 									</div>
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none; padding: 0px 10px;"> ~ </span>
+									</div>
+									<div id="mig_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_end_dtm" name="mig_wrk_end_dtm" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
+									</div>
+								</div>									
+								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-3">
+									<input type="text" class="form-control" style="margin-left: -1rem;margin-right: -0.7rem;" maxlength="25" name="mig_wrk_nm" id="mig_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
+								</div>									
+								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" >
+									<select class="form-control" style="width:150px;" name="mig_exe_rslt_cd" id="mig_exe_rslt_cd">
+										<option value="%"><spring:message code="schedule.total" /></option>
+										<option value="TC001701"><spring:message code="common.success" /></option>
+										<option value="TC001702"><spring:message code="common.failed" /></option>
+									</select>
+								</div>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>
 						</div>
 					</div>

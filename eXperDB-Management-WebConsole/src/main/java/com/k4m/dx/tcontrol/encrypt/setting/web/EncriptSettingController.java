@@ -199,7 +199,7 @@ public class EncriptSettingController {
 			
 			//옵션설정저장1
 			String strRows01 = request.getParameter("arrmaps01").toString().replaceAll("&quot;", "\"");
-			System.out.println(strRows01);
+
 			JSONArray rows01 = (JSONArray) new JSONParser().parse(strRows01);
 			for (int i = 0; i < rows01.size(); i++) {
 				obj01 = (JSONObject) rows01.get(i);		
@@ -210,8 +210,8 @@ public class EncriptSettingController {
 			if(result01.get("resultCode").equals("0000000000")){
 				//옵션설정저장2
 				String strRows02 = request.getParameter("arrmaps02").toString().replaceAll("&quot;", "\"");
-				System.out.println(strRows02);
 				JSONArray rows02 = (JSONArray) new JSONParser().parse(strRows02);
+
 				for (int i = 0; i < rows02.size(); i++) {
 					obj02 = (JSONObject) rows02.get(i);		
 				}	

@@ -152,12 +152,12 @@ function fn_Add_Pg_Trsf(){
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<div class="form-inline">
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
+						<div class="form-inline row">
+							<div class="input-group mb-2 mr-sm-2 col-sm-4">
+								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
 							</div>
-							<div class="input-group mb-2 mr-sm-2">
-								<input type="text" class="form-control" style="width:300px;margin-right: 2rem;" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>'  />
+							<div class="input-group mb-2 mr-sm-2 col-sm-4">
+								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>'  />
 							</div>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search_dbmsInfo_trsf_pg();" >
 								<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
@@ -168,7 +168,7 @@ function fn_Add_Pg_Trsf(){
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<p class="card-description"><spring:message code="schedule.workList"/></p>
-						<table id="dbmsList_trsf_pg" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
+						<table id="dbmsList_trsf_pg" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="50"><spring:message code="common.no" /></th>

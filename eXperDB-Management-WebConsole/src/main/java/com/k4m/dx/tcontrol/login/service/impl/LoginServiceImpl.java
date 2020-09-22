@@ -28,4 +28,15 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		return loginDAO.selectMasterCheck();
 	}
 
+	@Override
+	public void insertKeepLogin(UserVO userVo) throws Exception {
+		loginDAO.insertKeepLogin(userVo);		
+	}
+
+
+	@Override
+	public UserVO checkUserWithSessionKey(UserVO userVo) throws Exception {	
+		return loginDAO.checkUserWithSessionKey(userVo);
+	}
+
 }

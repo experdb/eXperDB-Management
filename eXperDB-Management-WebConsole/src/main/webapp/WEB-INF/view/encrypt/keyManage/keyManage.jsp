@@ -52,7 +52,7 @@ var table = null;
 			 ],'select': {'style': 'multi'}
 		});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(0)').css('width', '20px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '80px');
@@ -201,16 +201,13 @@ var table = null;
 		});
 	}
 
-	
-	
-	
 	/* 등록 버튼 클릭시*/
 	function fn_insert(){
 		
-		$("#ResourceName", "#baseForm").val(""); //암호화키이름
-		$("#CipherAlgorithmCode", "#baseForm").val(""); //적용알고리즘
-		$("#ResourceNote", "#baseForm").val(""); //암호화키설명
-		$("#ins_usr_expr_dt", "#baseForm").val(""); //유효기간만료일자만료일
+		$("#ResourceName", "#keyInsForm").val(""); //암호화키이름
+		$("#CipherAlgorithmCode", "#keyInsForm").val(""); //적용알고리즘
+		$("#ResourceNote", "#keyInsForm").val(""); //암호화키설명
+		$("#ins_usr_expr_dt", "#keyInsForm").val(""); //유효기간만료일자만료일
 		
 		$.ajax({
 			url : "/popup/keyManageRegForm.do", 
@@ -427,22 +424,20 @@ var table = null;
 <%@include file="../popup/keyManageRegReForm.jsp"%>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
 
-
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
 				<div class="card-body">
-
 					<!-- title start -->
 					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-desktop menu-icon"></i>
 												<span class="menu-title"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -451,7 +446,7 @@ var table = null;
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							Encrypt
+					 							ENCRYPT
 					 						</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></li>
@@ -459,7 +454,6 @@ var table = null;
 									</div>
 								</div>
 							</div>
-							
 							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
 								<div class="card-body">
 									<div class="row">
@@ -472,18 +466,17 @@ var table = null;
 							</div>
 						</div>
 					</div>
+					<!-- title end -->
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<div class="col-12 div-form-margin-table stretch-card">
 			<div class="card">
 				<div class="card-body">
-
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
-							<div class="template-demo">			
+							<div class="template-demo">	
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_confirm('del');" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
@@ -496,7 +489,7 @@ var table = null;
 							</div>
 						</div>
 					</div>
-				
+
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">
@@ -541,8 +534,6 @@ var table = null;
 				</div>
 				<!-- content-wrapper ends -->
 			</div>
-		</div>	
-		
-		
+		</div>
 	</div>
-</div>		
+</div>

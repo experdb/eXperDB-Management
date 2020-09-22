@@ -212,4 +212,16 @@ public class InstanceScaleDAO extends EgovAbstractMapper{
 	public void insertScaleAwsserver(InstanceScaleVO instanceScaleVO) {
 		insert("instanceScaleSql.insertScaleAwsserver", instanceScaleVO);	
 	}
+
+	/**
+	 * scale Auto 사용여부 설정 수정
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public void updateAutoScaleUseSetting(InstanceScaleVO instanceScaleVO) {
+		insert("instanceScaleSql.updateAutoScaleUseSetting", instanceScaleVO);	
+	}
+
 }

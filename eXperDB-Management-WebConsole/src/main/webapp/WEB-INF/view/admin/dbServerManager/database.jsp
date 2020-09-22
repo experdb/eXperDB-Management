@@ -243,16 +243,16 @@ function fnc_confirmMultiRst(gbn){
 					<div class="card">
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<div class="form-inline row">
-								<div class="input-group mb-2 mr-sm-2 col-sm-2"">
-	 								<select class="form-control" style="width:250px; margin-right: 1rem;" id="database_svr_nm" name="database_svr_nm">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+	 								<select class="form-control" style="margin-right: -0.7rem;"  id="database_svr_nm" name="database_svr_nm">
 										<option value="%"><spring:message code="common.total" /> </option>
 	 								</select>
 								</div>
-								<div class="input-group mb-2 mr-sm-2 col-sm-2_6"">
-									<input type="text" class="form-control" style="width:300px;" name="ipadr" id="ipadr"  placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;"  name="ipadr" id="ipadr"  placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
 								</div>
-								<div class="input-group mb-2 mr-sm-2 col-sm-2_6"">
-									<input type="text" class="form-control" style="width:300px;" name="dft_db_nm" id="dft_db_nm" placeholder='<spring:message code="common.database" />'/>
+								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
+									<input type="text" class="form-control" name="dft_db_nm" id="dft_db_nm" placeholder='<spring:message code="common.database" />'/>
 								</div>
 								
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search();" id="read_button">

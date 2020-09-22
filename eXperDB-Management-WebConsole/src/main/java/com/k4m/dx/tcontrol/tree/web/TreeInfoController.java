@@ -26,6 +26,7 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.tree.service.TreeInfoService;
@@ -126,6 +127,8 @@ public class TreeInfoController {
 			vo.setIPADR(strIpAdr);
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo); //agent 정보조회
 
+			List<Map<String, Object>> serverInfoVOSelectTot = (List<Map<String, Object>>) cmmnServerInfoService.selectDashboardServerInfoImg(schDbServerVO);
+
 			if (agentInfo == null) {
 				mv.addObject("extName", "agent");
 			} else if (agentInfo.getAGT_CNDT_CD().equals("TC001102")) {
@@ -174,7 +177,9 @@ public class TreeInfoController {
 					mv.addObject("resultRepoDB", resultRepoDB);
 					mv.addObject("deleteDB", deleteDB);
 					mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
-					mv.addObject("db_svr_id", db_svr_id);			
+					mv.addObject("db_svr_id", db_svr_id);	
+					
+					mv.addObject("serverInfoVOSelectTot", serverInfoVOSelectTot);
 				}catch(Exception e){
 					mv.addObject("extName", "agentfail");
 				}

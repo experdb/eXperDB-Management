@@ -18,9 +18,20 @@
 		if($('#con_multi_gbn').val()=="start" || $('#con_multi_gbn').val()=="stop"){
 			fn_confirmCancelRst($('#con_multi_gbn').val());
 		}
+		
+		//scale
+		if ($('#con_multi_gbn').val() == "use_start" || $('#con_multi_gbn').val() == "use_end") {
+			fnc_confirmCancelRst ($('#con_multi_gbn').val());
+		}
+		
+		
 		$('#pop_confirm_multi_md').modal('hide');
 	}
 	
+	//cancel
+	function fnc_confirmCancel_01() {
+		$('#pop_confirm_multi_md_01').modal('hide');
+	}
 </script>
 
 <form name="findConfirmMulti" id="findConfirmMulti" method="post">
@@ -70,7 +81,7 @@
 
 				<div class="modal-footer_con">
 					<button type="button" class="btn btn-primary" onclick="fnc_confirmSuccess();"><spring:message code="common.confirm" /></button>
-					<button type="button" class="btn btn-light" onclick="fnc_confirmCancel();"><spring:message code="common.cancel" /></button>
+					<button type="button" class="btn btn-light" onclick="fnc_confirmCancel_01();"><spring:message code="common.cancel" /></button>
 				</div>
 			</div>
 		</div>

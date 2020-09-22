@@ -127,15 +127,15 @@
 	 					render : function(data, type, full, meta) {	 						
 	 						var html = '';
 	 						if (full.exe_rslt_cd == 'TC001701') {
-								html += "<div class='badge badge-pill badge-success'>";
-								html += '<i class="ti-face-smile  mr-2"></i>';
-								html += '<spring:message code="common.success" />';
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='fa fa-check-circle text-primary' >";
+								html += '&nbsp;<spring:message code="common.success" /></i>';
 								html += "</div>";
 
 	 						} else if(full.exe_rslt_cd == 'TC001702'){
-								html += "<div class='badge badge-pill badge-danger'>";
-								html += '<i class="ti-face-sad  mr-2"></i>';
-								html += '<spring:message code="common.failed" />';
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='fa fa-times text-danger' >";
+								html += '&nbsp;<spring:message code="common.failed" /></i>';
 								html += "</div>";
 	 						} else {
 								html += "<div class='badge badge-pill badge-warning' style='color: #fff;'>";
@@ -153,9 +153,7 @@
 	 					data : "exe_sn",
 	 					render : function(data, type, full, meta) {	 						
 	 						var html = '';
-
-	 						html += '<button type="button" id="detail" class="btn btn-outline-primary btn-sm" onclick="fn_detail('+full.exe_sn+')"><spring:message code="schedule.detail_view" /> </button>';
-
+	 						html += '<button type="button" id="detail" class="btn btn-inverse-primary btn-fw" onclick="fn_detail('+full.exe_sn+')"><spring:message code="schedule.detail_view" /> </button>';
 	 						return html;
 	 					},
 	 					className : "dt-center",
@@ -396,7 +394,7 @@
 								</div>
 
 								<div class="input-group mb-2 mr-sm-2 col-sm-2">
-									<select class="form-control" style="margin-right: -0.7rem;" name="order_type" id="order_type">
+									<select class="form-control" style="margin-left:-0.7rem;margin-right: -0.7rem;" name="order_type" id="order_type">
 										<option value="wrk_strt_dtm" ${order_type == 'wrk_strt_dtm' ? 'selected="selected"' : ''}><spring:message code="schedule.work_start_datetime" /></option>
 										<option value="wrk_end_dtm" ${order_type == 'wrk_end_dtm' ? 'selected="selected"' : ''}><spring:message code="schedule.work_end_datetime" /></option>
 									</select>

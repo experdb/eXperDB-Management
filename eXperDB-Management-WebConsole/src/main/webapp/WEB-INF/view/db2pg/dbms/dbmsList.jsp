@@ -194,16 +194,16 @@ function fn_regRe_popup(){
 			$("#scm_nm_reg_re").val(nvlPrmSet(result.resultInfo[0].scm_nm, ""));
 			$("#spr_usr_id_reg_re").val(nvlPrmSet(result.resultInfo[0].spr_usr_id, ""));
 			$("#pwd_reg_re").val(nvlPrmSet(result.pwd, ""));
-			
+			$("#crts_nm_reg_re option").remove();
+			for(var i=0; i<result.dbmsChar.length; i++){
+				$("#crts_nm_reg_re").append('<option value="'+result.dbmsChar[i].sys_cd+'">'+result.dbmsChar[i].sys_cd_nm+'</option>');
+			}
 			$("#crts_nm_reg_re").val(result.resultInfo[0].crts).prop("selected", true);
 			$("#dbms_dscd_reg_re").val(result.resultInfo[0].dbms_dscd).prop("selected", true);
-			
+
 			$('#pop_layer_db2pg_dbms_reg_re').modal("show");
 		}
 	});	
-	
-	
-	
 }
 
 /* ********************************************************
@@ -310,10 +310,10 @@ function fn_delete2(){
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-server menu-icon"></i>
 												<span class="menu-title"><spring:message code="migration.source/target_dbms_management"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -321,7 +321,7 @@ function fn_delete2(){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Migration</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">MIGRATION</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_migration" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="migration.source/target_dbms_management"/></li>
 										</ol>
@@ -353,17 +353,17 @@ function fn_delete2(){
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 
 							<form class="form-inline row">
-								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
-									<input type="text" class="form-control" style="width:180px; margin-right: 2rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.system_name" />'/>		
+								<div class="input-group mb-2 mr-sm-2  col-sm-2">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.system_name" />'/>		
+								</div>
+								<div class="input-group mb-2 mr-sm-2  col-sm-2">
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="history_management.ip" />'/>		
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
-									<input type="text" class="form-control" style="width:180px; margin-right: 2rem;" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="history_management.ip" />'/>		
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="dtb_nm" name="dtb_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.database" />'/>		
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
-									<input type="text" class="form-control" style="width:180px; margin-right: 2rem;" id="dtb_nm" name="dtb_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.database" />'/>		
-								</div>
-								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
-									<select class="form-control" style="margin-right: -2rem;" name="dbms_dscd" id="dbms_dscd">
+									<select class="form-control" style="margin-right: -0.7rem;" name="dbms_dscd" id="dbms_dscd">
 										<option value="">DBMS&nbsp;<spring:message code="common.division" />&nbsp;<spring:message code="common.total" /></option>
 											<c:forEach var="result" items="${result}" varStatus="status">												 
  												<option value="<c:out value="${result.dbms_dscd}"/>" >
@@ -380,7 +380,7 @@ function fn_delete2(){
 									</select>
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-									<input type="text" class="form-control" style="margin-right: 2rem;" id="spr_usr_id" name="spr_usr_id" onblur="this.value=this.value.trim()" placeholder='<spring:message code="dbms_information.account" />'/>		
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="spr_usr_id" name="spr_usr_id" onblur="this.value=this.value.trim()" placeholder='<spring:message code="dbms_information.account" />'/>		
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
 									<input type="text" class="form-control" id="scm_nm" name="scm_nm" onblur="this.value=this.value.trim()" placeholder='Schema'/>		

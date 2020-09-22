@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>나와라! 백업DB설정</h1>
-<h3>${serverNm}</h3>
+<h1>나와라! 백업DB설정 </h1>
+<h3>${serverNm}</h3> 
 </body>
 </html>

@@ -208,17 +208,13 @@ var connection = "fail";
 										<input type="password" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="pwd_reg_re" name="pwd_reg_re" />
 									</div>
 								</div>
-								<div class="form-group row">
+								<div class="form-group row" style="margin-bottom:-15px;">
 									<label for="ins_usr_nm" class="col-sm-2 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="migration.character_set"/>(*)
 									</label>
 									<div class="col-sm-4">
-										<select name="crts_nm_reg_re" id="crts_nm_reg_re" class="form-control" style="margin-right: 1rem;width: 100% !important;">			
-										<c:forEach var="dbmsChar_reg_re" items="${dbmsChar_reg_re}" varStatus="status">				
-											<option value="<c:out value="${dbmsChar_reg_re.sys_cd}"/>"<c:if test="${resultInfo[0].crts eq dbmsChar_reg_re.sys_cd}"> selected</c:if>><c:out value="${dbmsChar_reg_re.sys_cd_nm}"/></option>								 
- 										</c:forEach>
-								</select>
+										<select name="crts_nm_reg_re" id="crts_nm_reg_re" class="form-control" style="margin-right: 1rem;width: 100% !important;"></select>
 									</div>
 								</div>
 							</div>

@@ -89,28 +89,6 @@
          GROUP BY AAA.DB_SVR_ID, AAA.IPADR , AAA.MASTER_GBN
          ORDER BY AAA.DB_SVR_ID, AAA.MASTER_GBN, AAA.IPADR
 	</select>
-	
-	
-
-	
-	
-	
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 	<select id="selectDashboardServerInfo" parameterType="dashboardVO" resultType="dashboardVO">
 		/**
@@ -374,6 +352,7 @@
                        OR
                        TO_DATE(to_char(A.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
                        )
+                  AND E.BSN_DSCD IS NOT NULL
                 GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_SVR_IPADR_ID,A.SCD_ID,C.IPADR, E.BSN_DSCD
                 ORDER BY MAX(A.WRK_END_DTM) desc, MAX(A.WRK_STRT_DTM) desc
                 fetch first 5 rows only
@@ -605,7 +584,7 @@
 	<select id="selectDashboardScriptHistoryChart" resultType="hashmap" parameterType="hashmap" >
 		/**
 		* Query ID : selectDashboardScriptHistoryChart
-		* Description : 스케줄이력 chart data 조회
+		* Description : 배치이력 chart data 조회
 		* Author :
 		**/
         SELECT COALESCE(SUM(AA.ROW_CNT), 0) AS TOT_CNT,
@@ -643,7 +622,7 @@
 	<select id="selectDashboardMigtList" resultType="hashMap" parameterType="hashmap">
 		/**
 	 	* Query ID : selectDashboardMigtList
-	 	* Description : migration 스케줄 리스트 조회
+	 	* Description : migration 이력 리스트 조회
 	 	* Author : 
 	 	**/
         SELECT

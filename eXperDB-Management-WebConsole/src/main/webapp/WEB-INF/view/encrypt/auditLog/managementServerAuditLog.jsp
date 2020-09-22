@@ -287,10 +287,9 @@
 	
 </script>
 
- <%@include file="../popup/managementServerAuditLogDetail.jsp"%> 
+<%@include file="../popup/managementServerAuditLogDetail.jsp"%> 
 
-
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -300,10 +299,10 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-check-square"></i>
+												<i class="ti-lock menu-icon"></i>
 												<span class="menu-title"><spring:message code="encrypt_log_sever.Management_Server"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -312,14 +311,15 @@
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							Encrypt
+					 							ENCRYPT
 					 						</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_log.Audit_Log"/></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_log_sever.Management_Server"/></li>
 										</ol>
 									</div>
 								</div>
-							</div>							
+							</div>
+							
 							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
 								<div class="card-body">
 									<div class="row">
@@ -333,61 +333,63 @@
 					</div>
 				</div>
 			</div>
-		</div>	
-		
-<div class="col-12 div-form-margin-cts stretch-card">
+		</div>
+
+		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
-							<form class="form-inline" onsubmit="return false;">
-								<div class="row">								
-									<div class="input-group mb-2 mr-sm-2">								
-										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" >
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
-										<div class="input-group align-items-center">
-											<span style="border:none; padding: 0px 10px;"> ~ </span>
-										</div>
-										<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" >
-											<span class="input-group-addon input-group-append border-left">
-												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-											</span>
-										</div>
-									</div>									
-									<div class="input-group mb-2 mr-sm-2">
-										<select class="form-control" style="width:250px;" name="entityuid" id="entityuid">
-											<option value=""><spring:message code="encrypt_log_key.Access_User"/>&nbsp;<spring:message code="common.total" /></option>
-											<c:forEach var="entityuid" items="${entityuid}">
-												<option value="${entityuid.getEntityUid}">${entityuid.getEntityName}</option>							
-											</c:forEach>
-										</select>
-									</div>									
-									<div class="input-group mb-2 mr-sm-2">
-										<select class="form-control" style="width:150px;" name="resultcode" id="resultcode">
-											<option value=""><spring:message code="encrypt_log_decode.Success_Failure"/>&nbsp;<spring:message code="common.total" /></option>
-											<option value="0000000000"><spring:message code="common.success" /></option>
-											<option value="9999999999"><spring:message code="common.failed" /></option>
-										</select>
-									</div>									
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="fn_select();">
-										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>								
+						<div class="card-body" style="margin:-10px -10px -15px 0px;">
+							<form class="form-inline row" onsubmit="return false;">
+								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row" >
+									<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_start" name="lgi_dtm_start" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
+									</div>
+									
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none;"> ~ </span>
+									</div>
+
+									<div id="wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="lgi_dtm_end" name="lgi_dtm_end" readonly>
+										<span class="input-group-addon input-group-append border-left" >
+											<span class="ti-calendar input-group-text" style="cursor:pointer;"></span>
+										</span>
+									</div>
 								</div>
+	
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" style="margin-left: -1rem;margin-right: -0.7rem;" name="entityuid" id="entityuid">
+										<option value=""><spring:message code="encrypt_log_key.Access_User"/>&nbsp;<spring:message code="common.total" /></option>
+										<c:forEach var="entityuid" items="${entityuid}">
+											<option value="${entityuid.getEntityUid}">${entityuid.getEntityName}</option>							
+										</c:forEach>
+									</select>
+								</div>
+	
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
+									<select class="form-control" name="resultcode" id="resultcode">
+										<option value=""><spring:message code="encrypt_log_decode.Success_Failure"/>&nbsp;<spring:message code="common.total" /></option>
+										<option value="0000000000"><spring:message code="common.success" /></option>
+										<option value="9999999999"><spring:message code="common.failed" /></option>
+									</select>
+								</div>
+								
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" onClick="fn_select();">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</form>	
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>		
-		
-		
-		<div class="col-12 stretch-card div-form-margin-table" id="left_list" >
+
+		<div class="col-12 stretch-card div-form-margin-table" id="left_list">
 			<div class="card">
 				<div class="card-body">
 					<div class="card my-sm-2" >
@@ -405,6 +407,7 @@
 											</div>
 										</div>
 									</div>
+
 	 								<table id="table" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 										<thead>
 											<tr class="bg-info text-white">
@@ -449,62 +452,59 @@
 									<div class="row">
 										<div class="col-sm-12 col-md-6">
 											<div class="dataTables_length" id="order-listing_length">
-												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+							</div>
 
-									<table class="table system-tlb-scroll"  style="border: 1px solid #99abb0; table-layout: fixed;">
-										<colgroup>
-											<col style="width: 25%;" />
-											<col style="width: 75%; " />
-										</colgroup>										
-										<thead>
-											<tr class="bg-info text-white">
-												<th class="table-text-align-c">속성</th>
-												<th class="table-text-align-c" style="word-break:break-all;">값</th>
-											</tr>
-										</thead>												
-										<tbody >														
-											<tr>
-												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_Date"/></td>
-												<td id="logDateTime" ></td>
-											</tr>
-											<tr>
-												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_User"/></td>
-												<td  id="entityName" ></td>
-											</tr>
-											<tr>
-												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_Address"/></td>
-												<td id="remoteAddress" ></td>
-											</tr>
-											<tr>
-												<td class="table-text-align-c"> <spring:message code="encrypt_log_key.Access_Path"/></td>
-												<td><textarea id="requestPath" name="requestPath" style="width:100%; height: 40px;  border: 0;" ></textarea></td> 
-											</tr>
-											<tr>
-												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Main_Text"/></td>
-												<!-- <td style="text-align: left; height: 60px; word-break:break-all;" id ="parameter"></td> -->
-												<td><textarea id="parameter" name="parameter" style="width:100%; height: 240px;  border: 0;" ></textarea></td> 
-											</tr>
-											<tr>
-												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Result_Code"/></td>
-												<td id="resultCode" ></td>
-											</tr>											
-											<tr>
-												<td class="table-text-align-c"><spring:message code="encrypt_log_key.Result_Message"/></td>
-												<td  id="resultMessage" ></td>
-											</tr>										
-										</tbody> 									
-									</table>		
-												
-						 	</div>	
-					 	</div>
+							<table class="table system-tlb-scroll"  style="border: 1px solid #99abb0; table-layout: fixed;">
+								<colgroup>
+									<col style="width: 25%;" />
+									<col style="width: 75%; " />
+								</colgroup>										
+								<thead>
+									<tr class="bg-info text-white">
+										<th class="table-text-align-c"><spring:message code="common.property"/></th>
+										<th class="table-text-align-c" ><spring:message code="data_transfer.value"/></th>
+									</tr>
+								</thead>												
+								<tbody >														
+									<tr>
+										<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_Date"/></td>
+										<td id="logDateTime" ></td>
+									</tr>
+									<tr>
+										<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_User"/></td>
+										<td  id="entityName" ></td>
+									</tr>
+									<tr>
+										<td class="table-text-align-c"><spring:message code="encrypt_log_key.Access_Address"/></td>
+										<td id="remoteAddress" ></td>
+									</tr>
+									<tr>
+										<td class="table-text-align-c"> <spring:message code="encrypt_log_key.Access_Path"/></td>
+										<td><textarea id="requestPath" name="requestPath" style="width:100%; height: 40px;  border: 0;" ></textarea></td> 
+									</tr>
+									<tr>
+										<td class="table-text-align-c"><spring:message code="encrypt_log_key.Main_Text"/></td>
+										<!-- <td style="text-align: left; height: 60px; word-break:break-all;" id ="parameter"></td> -->
+										<td><textarea id="parameter" name="parameter" style="width:100%; height: 240px;  border: 0;" ></textarea></td> 
+									</tr>
+									<tr>
+										<td class="table-text-align-c"><spring:message code="encrypt_log_key.Result_Code"/></td>
+										<td id="resultCode" ></td>
+									</tr>											
+									<tr>
+										<td class="table-text-align-c"><spring:message code="encrypt_log_key.Result_Message"/></td>
+										<td  id="resultMessage" ></td>
+									</tr>										
+								</tbody> 									
+							</table>				
+						</div>	
 					</div>
 				</div>
 			</div>
-			
+		</div>
 	</div>
-</div>		
-
+</div>

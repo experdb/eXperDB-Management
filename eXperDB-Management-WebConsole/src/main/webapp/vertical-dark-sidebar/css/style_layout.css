@@ -11,29 +11,6 @@
   }
 }
 
-/* login page 배경 css start                                                 */
-.documentation .content-wrapper-login {
-  padding-top: 0;
-  min-height: calc(100vh - 75px);
-}
-
-.content-wrapper-login {
-  background: #fff url(../../images/login_bg.png) center center no-repeat;
-  padding: 2.68rem 2.5rem;
-  width: 100%;
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
-}
-
-@media (max-width: 767px) {
-  .content-wrapper-login {
-    padding: 1.5rem 1.5rem;
-  }
-}
-/* login page 배경 css end                                                     */
-
-
-
 /* top 메뉴 css start                                                 */
 @media (max-width: 991px) {
   .horizontal-menu {
@@ -1196,7 +1173,7 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 
 /* on/off 팝업 버튼 */
 .onoffswitch-pop {
-    position: relative; width: 80px; max-height:2.000rem;
+    position: relative; width: 80px; max-height:30px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 .onoffswitch-pop-checkbox {
@@ -1213,7 +1190,7 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
     transition: margin 0.3s ease-in 0s;
 }
 .onoffswitch-pop-inner:before, .onoffswitch-pop-inner:after {
-    display: block; float: left; width: 50%; height: 2.000rem; padding: 0; line-height: 2.000rem;
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
     font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
     box-sizing: border-box;
 }
@@ -1280,65 +1257,6 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 
 .onoffswitch-pop-checkbox:checked + .onoffswitch-pop-label .onoffswitch-pop-inner_YN {
     margin-left: 0;
-}
-
-
-/* 사용/미사용 팝업 버튼 */
-.onoffswitch-use {
-    position: relative; width: 100px; max-height:2.500rem;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
-}
-.onoffswitch-use-checkbox {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
-.onoffswitch-use-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 1px solid #999999; border-radius: 5px;
-}
-.onoffswitch-use-inner {
-    display: block; width: 200%; margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
-}
-.onoffswitch-use-inner:before, .onoffswitch-use-inner:after {
-    display: block; float: left; width: 50%; height: 2.500rem; padding: 0; line-height: 2.500rem;
-    font-size: 15px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
-    box-sizing: border-box;
-}
-.onoffswitch-use-inner:before {
-/* 	position:absolute;  */
-    content: "ON";
-    padding-top: 20px;
-    padding-left: 20px;
-	background-color:#68afff;
-    color: #FFFFFF;
-}
-.onoffswitch-use-inner:after {
-    content: "OFF";
-    padding-top: 20px;
-    padding-right: 20px;
-    background-color: #EEEEEE; color: #999999;
-/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
-    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
-    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
-    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
-     */
-    text-align: right;
-}
-.onoffswitch-use-switch {
-    display: block; width: 22px; margin: 6px;
-    background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
-    right: 65px;
-    border: 2px solid #999999; border-radius: 30px;
-    transition: all 0.3s ease-in 0s;
-}
-.onoffswitch-use-checkbox:checked + .onoffswitch-use-label .onoffswitch-use-inner {
-    margin-left: 0;
-}
-.onoffswitch-use-checkbox:checked + .onoffswitch-use-label .onoffswitch-use-switch {
-    right: 0px; 
 }
 
 /* on/off 버튼 */
@@ -1400,40 +1318,44 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
     right: 0px; 
 }
 
-
-/* on/off 팝업 버튼 */
-.onoffswitch-pop {
-    position: relative; width: 80px; max-height:2.000rem;
+/* scale 사용/미사용 팝업 버튼*/
+/* on/off 버튼 */
+.onoffswitch-scale {
+    position: relative; width: 80px; max-height:25px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
-.onoffswitch-pop-checkbox {
+.onoffswitch-scale-checkbox {
     position: absolute;
     opacity: 0;
     pointer-events: none;
 }
-.onoffswitch-pop-label {
+.onoffswitch-scale-label {
     display: block; overflow: hidden; cursor: pointer;
     border: 1px solid #999999; border-radius: 5px;
 }
-.onoffswitch-pop-inner {
+.onoffswitch-scale-inner {
     display: block; width: 200%; margin-left: -100%;
     transition: margin 0.3s ease-in 0s;
 }
-.onoffswitch-pop-inner:before, .onoffswitch-pop-inner:after {
-    display: block; float: left; width: 50%; height: 2.000rem; padding: 0; line-height: 2.000rem;
+.onoffswitch-scale-inner:before, .onoffswitch-scale-inner:after {
+    display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
     font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
     box-sizing: border-box;
 }
-.onoffswitch-pop-inner:before {
+.onoffswitch-scale-inner:before {
     content: "ON";
-    padding-left: 20px;
-	background-color:#68afff;
-    color: #FFFFFF;
+    padding-left: -1px;
+    padding-right: 10px;
+    background-color: #68afff; color: #ffffff;
+/*     background: -webkit-linear-gradient(45deg, #009966, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(45deg, #009966, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(45deg, #009966, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #009966, #befae6); Standard syntax */
 }
-.onoffswitch-pop-inner:after {
+.onoffswitch-scale-inner:after {
     content: "OFF";
-    padding-right: 20px;
-    background-color: #EEEEEE; color: #999999;
+    padding-right: 15px;
+    background-color: #ff4747; color: #ffffff;
 /*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
     background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
     background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
@@ -1441,9 +1363,7 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
      */
     text-align: right;
 }
-
-
-.onoffswitch-pop-switch {
+.onoffswitch-scale-switch {
     display: block; width: 18px; margin: 6px;
     background: #FFFFFF;
     position: absolute; top: 0; bottom: 0;
@@ -1451,48 +1371,16 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
     border: 2px solid #999999; border-radius: 20px;
     transition: all 0.3s ease-in 0s;
 }
-.onoffswitch-pop-checkbox:checked + .onoffswitch-pop-label .onoffswitch-pop-inner {
+.onoffswitch-scale-checkbox:checked + .onoffswitch-scale-label .onoffswitch-scale-inner {
     margin-left: 0;
 }
-.onoffswitch-pop-checkbox:checked + .onoffswitch-pop-label .onoffswitch-pop-switch {
+.onoffswitch-scale-checkbox:checked + .onoffswitch-scale-label .onoffswitch-scale-switch {
     right: 0px; 
 }
 
-.onoffswitch-pop-inner_YN {
-    display: block; width: 200%; margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
-}
-.onoffswitch-pop-inner_YN:before, .onoffswitch-pop-inner_YN:after {
-    display: block; float: left; width: 50%; height: 2.000rem; padding: 0; line-height: 2.000rem;
-    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
-    box-sizing: border-box;
-}
-.onoffswitch-pop-inner_YN:before {
-    content: "YES";
-    padding-left: 20px;
-	background-color:#68afff;
-    color: #FFFFFF;
-}
-.onoffswitch-pop-inner_YN:after {
-    content: "NO";
-    padding-right: 20px;
-    background-color: #EEEEEE; color: #999999;
-/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
-    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
-    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
-    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
-     */
-    text-align: right;
-}
-
-.onoffswitch-pop-checkbox:checked + .onoffswitch-pop-label .onoffswitch-pop-inner_YN {
-    margin-left: 0;
-}
-
-
 /* 사용/미사용 팝업 버튼 */
 .onoffswitch-use {
-    position: relative; width: 100px; max-height:2.500rem;
+    position: relative; width: 100px; max-height:40px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 .onoffswitch-use-checkbox {
@@ -1509,21 +1397,20 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
     transition: margin 0.3s ease-in 0s;
 }
 .onoffswitch-use-inner:before, .onoffswitch-use-inner:after {
-    display: block; float: left; width: 50%; height: 2.500rem; padding: 0; line-height: 2.500rem;
+    display: block; float: left; width: 50%; height: 40px; padding: 0; line-height: 40px;
     font-size: 15px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
     box-sizing: border-box;
 }
 .onoffswitch-use-inner:before {
-/* 	position:absolute;  */
     content: "ON";
-    padding-top: 20px;
+/*     padding-top: 20px; */
     padding-left: 20px;
 	background-color:#68afff;
     color: #FFFFFF;
 }
 .onoffswitch-use-inner:after {
     content: "OFF";
-    padding-top: 20px;
+/*     padding-top: 20px; */
     padding-right: 20px;
     background-color: #EEEEEE; color: #999999;
 /*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
@@ -1547,7 +1434,6 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 .onoffswitch-use-checkbox:checked + .onoffswitch-use-label .onoffswitch-use-switch {
     right: 0px; 
 }
-
 
 /* 활성화/비활성화 팝업 버튼 */
 .activeswitch-pop {

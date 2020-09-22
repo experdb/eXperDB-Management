@@ -176,4 +176,12 @@ public interface InstanceScaleService {
 	 * @throws Exception
 	 */
 	int dashboardInstanceScale(int db_svr_id) throws Exception;
+
+	/**
+	 * scale Auto 사용여부 setting 수정
+	 * @param instanceScaleVO
+	 * @return String
+	 * @throws Exception
+	 */
+	String updateAutoScaleUseSetting(InstanceScaleVO instanceScaleVO) throws Exception;
 }

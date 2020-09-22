@@ -373,7 +373,7 @@ public class CmmnController {
 			mv.addObject("scaleSettingChart", scaleSettingChart);			//scale 발생이력 chart 조회
 			
 			mv.addObject("db_svr_id", db_svr_id);
-System.out.println("==tablespaceObj===" + tablespaceObj);
+
 			mv.addObject("tablespaceObj", tablespaceObj);					//테이블 space 조회
 
 		} catch (Exception e) {
@@ -463,8 +463,7 @@ System.out.println("==tablespaceObj===" + tablespaceObj);
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String db_svr_nm = request.getParameter("db_svr_nm");
-			System.out.println(db_svr_nm);
-			
+
 			List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
 			
 			JSONObject serverObj = new JSONObject();
@@ -679,7 +678,7 @@ System.out.println("==tablespaceObj===" + tablespaceObj);
 			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 			
 			result = scheduleService.selectWrkInfo(wrk_id);	
-			System.out.println(result.size());
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -836,7 +835,7 @@ System.out.println("==tablespaceObj===" + tablespaceObj);
 			
 			CommonServiceCall csc = new CommonServiceCall();			
 			AgentMonitoringServiceCall amsc = new AgentMonitoringServiceCall();		
-			
+
 			agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);			
 			agentStatusList = amsc.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);
 				
@@ -965,7 +964,6 @@ System.out.println("==tablespaceObj===" + tablespaceObj);
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/serverStatus.do")	
 	public @ResponseBody JSONObject serverStatus(HttpServletRequest request) {
-	System.out.println("123123==============================");
 				JSONObject result = new JSONObject();
 
 				HttpSession session = request.getSession();
@@ -975,11 +973,7 @@ System.out.println("==tablespaceObj===" + tablespaceObj);
 				String strTocken = loginVo.getTockenValue();
 				String loginId = loginVo.getUsr_id();
 				String entityId = loginVo.getEctityUid();
-				System.out.println("restIp==============================" + restIp);
-				System.out.println("restIp==============================" + restPort);
-				System.out.println("restIp==============================" + strTocken);
-				System.out.println("restIp==============================" + loginId);
-				System.out.println("restIp==============================" + entityId);
+
 				try{
 					CommonServiceCall csc = new CommonServiceCall();					
 					result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
@@ -1006,13 +1000,10 @@ System.out.println("==tablespaceObj===" + tablespaceObj);
 			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 			
 			result = scriptService.selectSciptExeInfo(wrk_id);	
-			System.out.println(result.size());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}	
-	
-	
-	
 }

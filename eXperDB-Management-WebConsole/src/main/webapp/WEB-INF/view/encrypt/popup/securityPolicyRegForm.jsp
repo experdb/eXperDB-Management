@@ -119,115 +119,110 @@ function fn_changeBinUid(selectObj){
 
 </script>
 
-
 <div class="modal fade" id="pop_layer_securityPolicyRegForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
 		<div class="modal-content" style="width:1000px;">		 
-			<div class="modal-body" >
+			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="etc.etc01"/>
 				</h4>
-				
+
 				<div class="card" style="margin-top:10px;border:0px;">
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:390px;">			
-									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
-										<form class="cmxform" id="baseForm">
-											<fieldset>	
-																		
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Starting_Position"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="pop_offset" name="pop_offset"  maxlength="4" onKeyPress="NumObj(this);" />
-													</div>
-												</div>		
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_policy_management.Length"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="pop_length" name="pop_length"  maxlength="4" onKeyPress="NumObj(this); "  />
-													</div>
-													<div class="form-check"  style="margin-left: 20px;">
-									                            <label class="form-check-label">
-									                              <input type="checkbox" class="form-check-input" id="pop_last" name="pop_last" onchange="fn_lastCheck()">
-									                              <spring:message code="encrypt_policy_management.End"/>
-									                            <i class="input-helper"></i></label>
-									                 </div>
-												</div>		
-																								
-																					
-											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="encrypt_policy_management.Encryption_Algorithm"/>
-												</label>
-												<div class="col-sm-4">
-													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="pop_cipherAlgorithmCode" id="pop_cipherAlgorithmCode"  onChange="fn_changeBinUid(this)">
-															<c:forEach var="pop_cipherAlgorithmCode" items="${pop_cipherAlgorithmCode}"  varStatus="status">
-																<option value="<c:out value="${pop_cipherAlgorithmCode.sysCodeName}"/>" ${pop_cipherAlgorithmCodeValue eq pop_cipherAlgorithmCode.sysCodeName ? "selected='selected'" : ""}><c:out value="${pop_cipherAlgorithmCode.sysCodeName}"/></option>
-															</c:forEach> 
-														</select>
-												</div>											
-											</div>	
-											
-											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="encrypt_policy_management.Encryption_Key"/>
-												</label>
-												<div class="col-sm-4">
-													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="pop_binUid" id="pop_binUid" >
-													</select>
-												</div>											
-											</div>	
-											
-											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="encrypt_policy_management.Initial_Vector"/>
-												</label>
-												<div class="col-sm-4">
-													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="pop_initialVectorTypeCode" id="pop_initialVectorTypeCode" >
-															<c:forEach var="pop_initialVectorTypeCode" items="${pop_initialVectorTypeCode}"  >
-																<option value="${pop_initialVectorTypeCode.sysCodeName}" ${pop_initialVectorTypeCodeValue eq pop_initialVectorTypeCode.sysCodeName ? "selected='selected'" : ""}><c:out value="${pop_initialVectorTypeCode.sysCodeName}"/></option>
-															</c:forEach>
-														</select> 
-												</div>											
-											</div>	
-											
-											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="encrypt_policy_management.Modes"/>
-												</label>
-												<div class="col-sm-4">
-													 <select class="form-control form-control-xsm" style="margin-right: 1rem;" name="pop_operationModeCode" id="pop_operationModeCode" >
-															<c:forEach var="pop_operationModeCode" items="${pop_operationModeCode}"  >
-																<option value="${pop_operationModeCode.sysCodeName}" ${pop_operationModeCodeValue eq pop_operationModeCode.sysCodeName ? "selected='selected'" : ""}><c:out value="${pop_operationModeCode.sysCodeName}"/></option>
-															</c:forEach>
-														</select>
-												</div>											
-											</div>												
-										</fieldset>
-									</form>	
+					<form class="cmxform" id="baseForm">
+
+						<fieldset>
+							<div class="card-body" style="border: 1px solid #adb5bd;">
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Starting_Position"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="pop_offset" name="pop_offset"  maxlength="4" onKeyPress="NumObj(this);" />
+									</div>
 								</div>
-							</div>						
-						</div>		
-				
-				
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Length"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="pop_length" name="pop_length"  maxlength="4" onKeyPress="NumObj(this); "  />
+									</div>
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label">
+											<input type="checkbox" class="form-check-input" id="pop_last" name="pop_last" onchange="fn_lastCheck()">
+											<spring:message code="encrypt_policy_management.End"/>
+											<i class="input-helper"></i>
+										</label>
+									</div>						
+								</div>	
+					
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Encryption_Algorithm"/>
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="pop_cipherAlgorithmCode" id="pop_cipherAlgorithmCode"  onChange="fn_changeBinUid(this)">
+											<c:forEach var="pop_cipherAlgorithmCode" items="${pop_cipherAlgorithmCode}"  varStatus="status">
+												<option value="<c:out value="${pop_cipherAlgorithmCode.sysCodeName}"/>" ${pop_cipherAlgorithmCodeValue eq pop_cipherAlgorithmCode.sysCodeName ? "selected='selected'" : ""}><c:out value="${pop_cipherAlgorithmCode.sysCodeName}"/></option>
+											</c:forEach> 
+										</select>
+									</div>
+								</div>	
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Encryption_Key"/>
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="pop_binUid" id="pop_binUid" >
+										</select>
+									</div>										
+								</div>
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Initial_Vector"/>
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="pop_initialVectorTypeCode" id="pop_initialVectorTypeCode" >
+											<c:forEach var="pop_initialVectorTypeCode" items="${pop_initialVectorTypeCode}"  >
+												<option value="${pop_initialVectorTypeCode.sysCodeName}" ${pop_initialVectorTypeCodeValue eq pop_initialVectorTypeCode.sysCodeName ? "selected='selected'" : ""}><c:out value="${pop_initialVectorTypeCode.sysCodeName}"/></option>
+											</c:forEach>
+										</select> 
+									</div>										
+								</div>									
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_policy_management.Modes"/>
+									</label>
+									<div class="col-sm-4">
+										 <select class="form-control form-control-xsm" style="margin-right: 1rem;" name="pop_operationModeCode" id="pop_operationModeCode" >
+											<c:forEach var="pop_operationModeCode" items="${pop_operationModeCode}"  >
+												<option value="${pop_operationModeCode.sysCodeName}" ${pop_operationModeCodeValue eq pop_operationModeCode.sysCodeName ? "selected='selected'" : ""}><c:out value="${pop_operationModeCode.sysCodeName}"/></option>
+											</c:forEach>
+										</select> 
+									</div>										
+								</div>
+							</div>					
+						</fieldset>
+					</form>
+				</div>
+
+				<div class="card-body">
+					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
+						<button type="button" class="btn btn-primary" onclick="fn_sec_save();"><spring:message code="common.save"/></button>
+						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+					</div>
+				</div>							
 			</div>
-			<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >			
-					<button type="button" class="btn btn-primary" onclick="fn_sec_save();"><spring:message code="common.save"/></button>
-					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
-			</div>
-			
 		</div>
 	</div>
-</div>	
-
-
+</div>

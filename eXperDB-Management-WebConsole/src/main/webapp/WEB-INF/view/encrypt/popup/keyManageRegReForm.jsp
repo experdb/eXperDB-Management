@@ -214,138 +214,118 @@ function fn_modDateCalenderSetting() {
 
 </script>
 
-
 <div class="modal fade" id="pop_layer_keyManageRegReForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
 		<div class="modal-content" style="width:1000px;">		 
-			<div class="modal-body" >
+			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="encrypt_key_management.Encryption_Key_Modify"/>
 				</h4>
-				
+
 				<div class="card" style="margin-top:10px;border:0px;">
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:340px;">			
-									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
-										<form class="cmxform" id="modForm">
-											<input type="hidden" id="mod_keyUid" name="mod_keyUid" >
-											<input type="hidden" id="mod_resourceUid" name="mod_resourceUid" >
-						
-											<fieldset>	
-																		
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_key_management.Key_Name"/>
-													</label>
-													<div class="col-sm-4">
-														<input type="text" class="form-control form-control-xsm" id="mod_resourceName" name="mod_resourceName"  readonly="readonly" value="${resourceName}" />
-													</div>
-												</div>		
-												
-												
-												<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="encrypt_key_management.Encryption_Algorithm"/>
-												</label>
-												<div class="col-sm-4">
-													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_cipherAlgorithmCode" id="mod_cipherAlgorithmCode" >
-														<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
-															 <c:forEach var="mod_result" items="${result}"  varStatus="status">
-																<option value="<c:out value="${mod_result.sysCode}"/>" <c:if test="${mod_result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${mod_result.sysCodeName}"/></option>
-															</c:forEach> 
-														</select>
-												</div>											
-											</div>			
+					<form class="cmxform" id="modForm">
+						<input type="hidden" id="mod_keyUid" name="mod_keyUid" />
+						<input type="hidden" id="mod_resourceUid" name="mod_resourceUid" />
+
+						<fieldset>
+							<div class="card-body" style="border: 1px solid #adb5bd;">
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_key_management.Key_Name"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_resourceName" name="mod_resourceName"  readonly="readonly" value="${resourceName}" />
+									</div>
+								</div>		
+
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_key_management.Encryption_Algorithm"/>
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_cipherAlgorithmCode" id="mod_cipherAlgorithmCode" >
+											<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
+												 <c:forEach var="mod_result" items="${result}"  varStatus="status">
+													<option value="<c:out value="${mod_result.sysCode}"/>" <c:if test="${mod_result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${mod_result.sysCodeName}"/></option>
+												</c:forEach> 
+											</select>
+									</div>											
+								</div>			
 																																									
-											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="encrypt_key_management.Description"/>
-												</label>
-												<div class="col-sm-4">
-													<input type="text" class="form-control form-control-xsm" id="mod_resourceNote" name="mod_resourceNote"   value="${resourceNote}" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/>
-												</div>
-											</div>							
+								<div class="form-group row" style="margin-bottom:10px;">
+									<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_key_management.Description"/>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" id="mod_resourceNote" name="mod_resourceNote"   value="${resourceNote}" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/>
+									</div>
+								</div>							
 															
-								              <div class="form-group row" style="margin-bottom:10px;">
-												<div class="form-check"  style="margin-left: 20px;">
-								                            <label class="form-check-label">
-								                              <input type="checkbox" class="form-check-input" id="renew" name="renew" >
-								                             <spring:message code="encrypt_key_management.Update_Add_Binaries"/>
-								                            <i class="input-helper"></i></label>
-								                 </div>
-											</div>	
-											
-											<div  id="renewInsert">
-												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														<spring:message code="encrypt_key_management.Expiration_Date"/>
-													</label>
-													<div class="col-sm-4">
-														<div id="mod_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
-															<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mod_expr_dt" name="mod_expr_dt" readonly tabindex=10 />
-															<span class="input-group-addon input-group-append border-left">
-																<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-															</span>
-														</div>
-													</div>		
-													<div class="form-check"  style="margin-left: 20px;">
-								                            <label class="form-check-label">
-								                              <input type="checkbox" class="form-check-input" id="copyBin" name="copyBin" >
-								                             <spring:message code="encrypt_key_management.Copy_Binary"/>
-								                            <i class="input-helper"></i></label>
-								                	</div>								
-												</div>	
-											</div>
-																		
-										</fieldset>
-									</form>	
-								</div>
-							</div>		
+								<div class="form-group row" style="margin-bottom:10px;">
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label">
+											<input type="checkbox" class="form-check-input" id="renew" name="renew" >
+											<spring:message code="encrypt_key_management.Update_Add_Binaries"/>
+											<i class="input-helper"></i>
+										</label>
+									</div>
+								</div>	
+
+								<div class="form-group row" style="margin-bottom:10px;" id="renewInsert">
+									<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="encrypt_key_management.Expiration_Date"/>
+									</label>
+									<div class="col-sm-4">
+										<div id="mod_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mod_expr_dt" name="mod_expr_dt" readonly tabindex=10 />
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
+									</div>		
+									<div class="form-check"  style="margin-left: 20px;">
+										<label class="form-check-label">
+											<input type="checkbox" class="form-check-input" id="copyBin" name="copyBin" />
+											<spring:message code="encrypt_key_management.Copy_Binary"/>
+											<i class="input-helper"></i>
+										</label>
+									</div>								
+								</div>	
+							</div>									
+						</fieldset>
+					</form>	
+				</div>
+
+				<div class="card" style="margin-top:10px;border:0px;">		
+					<table id="renewalhistoryTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+						<thead>
+	 						<tr class="bg-info text-white">
+								<th width="25"><spring:message code="common.no" /></th>										
+								<th width="50"><spring:message code="encrypt_key_management.Version"/></th>
+								<th width="80"><spring:message code="encrypt_key_management.Status"/></th>
+								<th width="130"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
+								<th width="80"><spring:message code="common.register" /></th>
+								<th width="130"><spring:message code="common.regist_datetime" /></th>
+								<th width="80"><spring:message code="common.modifier" /></th>
+								<th width="130"><spring:message code="common.modify_datetime" /></th>
+								<th width="0"></th>
+								<th width="0"></th>
+							</tr>
+						</thead>
+					</table>							
+				</div>	
 							
-								<table id="renewalhistoryTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-											<thead>
-	 											<tr class="bg-info text-white">
-													<th width="25"><spring:message code="common.no" /></th>										
-													<th width="50"><spring:message code="encrypt_key_management.Version"/></th>
-													<th width="80"><spring:message code="encrypt_key_management.Status"/></th>
-													<th width="130"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
-													<th width="80"><spring:message code="common.register" /></th>
-													<th width="130"><spring:message code="common.regist_datetime" /></th>
-													<th width="80"><spring:message code="common.modifier" /></th>
-													<th width="130"><spring:message code="common.modify_datetime" /></th>
-													<th width="0"></th>
-													<th width="0"></th>
-												</tr>
-											</thead>
-										</table>
-														
-						</div>	
-				
-				
-				
-				
-				
-				
+				<div class="card-body">
+					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
+						<button type="button" class="btn btn-primary" onclick="fn_confirm('mod');"><spring:message code="common.save"/></button>
+						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+					</div>
+				</div>
 			</div>
-			<div class="top-modal-footer" style="text-align: center !important; margin: -15px 0 0 -20px;" >			
-					<button type="button" class="btn btn-primary" onclick="fn_confirm('mod');"><spring:message code="common.save"/></button>
-					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
-			</div>
-			
 		</div>
 	</div>
-</div>	
-
-
-
-
-
-
-
-
-
-
-
+</div>

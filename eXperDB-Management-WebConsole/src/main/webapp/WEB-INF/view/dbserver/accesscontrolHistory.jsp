@@ -240,7 +240,7 @@
 						<div class="card" style="margin-bottom:0px;">
 							<div class="card-header" role="tab" id="page_header_div">
 								<div class="row">
-									<div class="col-5">
+									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-history"></i>
@@ -283,9 +283,9 @@
 					<!-- search param start -->
 					<div class="card">
 						<div class="card-body">
-							<form class="form-inline" onsubmit="return false">
-								<div class="input-group mb-2 mr-sm-2">
-									<select class="form-control selectSearch w-100" style="width:200px; margin-right: 1rem;" name="lst_mdf_dtm" id="lst_mdf_dtm" title="수정일자" onchange="fn_select();" >
+							<form class="form-inline row" onsubmit="return false">
+								<div class="input-group mb-2 mr-sm-2 ">
+									<select class="form-control selectSearch w-100" style="width:200px; margin-right: 2rem;" name="lst_mdf_dtm" id="lst_mdf_dtm" title="수정일자" onchange="fn_select();" >
 										<c:forEach var="result" items="${lst_mdf_dtm}">
 											<option value="${result.svr_acs_cntr_his_id}">${result.lst_mdf_dtm}</option>
 										</c:forEach>

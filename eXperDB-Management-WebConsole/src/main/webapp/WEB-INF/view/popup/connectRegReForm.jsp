@@ -146,7 +146,9 @@
 				mod_tableList.clear().draw();
 
 				//조회 후, connector_tableList과 비교 후 같으면 리스트에서 제외
-				fn_trableListModRemove(result.RESULT_DATA);
+				if (result.RESULT_DATA != null) {
+					fn_trableListModRemove(result.RESULT_DATA);
+				}
 			}
 		});
 	}

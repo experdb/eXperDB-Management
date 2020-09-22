@@ -84,6 +84,8 @@ $(window.document).ready(function() {
 	fn_buttonAut();
 	fn_init();
 	
+	fn_init3();
+	
   	$.ajax({
 		url : "/selectDbServerServerList.do",
 		data : {},
@@ -216,7 +218,9 @@ function fn_regRe_popup(){
 			},
 			success : function(result) {
 				dbServerRegTable.clear().draw();
+
 				dbServerRegTable.rows.add(result).draw();
+
 			    $.ajax({
 					url : "/selectDbServerList.do",
 					data : {
@@ -331,13 +335,13 @@ function fn_regRe_popup(){
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<div class="form-inline row">
 								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
-									<input type="text" class="form-control" maxlength="100" name="init_db_svr_nm" id="init_db_svr_nm"  placeholder='<spring:message code="common.dbms_name" />'/>
+									<input type="text" class="form-control" maxlength="100" style="margin-right: -0.7rem;" name="init_db_svr_nm" id="init_db_svr_nm"  placeholder='<spring:message code="common.dbms_name" />'/>
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
-									<input type="text" class="form-control" maxlength="100" name="init_ipadr" id="init_ipadr" placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
+									<input type="text" class="form-control" maxlength="100" style="margin-right: -0.7rem;" name="init_ipadr" id="init_ipadr" placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-2_6">
-									<input type="text" class="form-control" maxlength="100" name="init_dft_db_nm" id="init_dft_db_nm" placeholder='<spring:message code="common.database" />'/>
+									<input type="text" class="form-control" maxlength="100" style="margin-right: -0.7rem;" name="init_dft_db_nm" id="init_dft_db_nm" placeholder='<spring:message code="common.database" />'/>
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-2">
 	 								<select class="form-control" id="useyn" >

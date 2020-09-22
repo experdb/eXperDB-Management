@@ -18,12 +18,27 @@ $(window).ready(function(){
 	
 	//서버정보 리스트 setting
 	fn_serverListSetting();	
+
 });
 
 /* ********************************************************
  * 서버정보 click
  ******************************************************** */
 function fn_serverSebuInfo(db_svr_id, rowChkCnt) {
+	//load bar 추가
+	
+	var obj = $('#loading_dash');
+	var iHeight = (($(window).height() - obj.outerHeight()) / 2) + $("#contentsDivDash").scrollTop();
+	var iWidth = (($(window).width() - obj.outerWidth()) / 2) + $("#contentsDivDash").scrollLeft();
+	obj.css({
+        position: 'absolute',
+        display:'block',
+        top: iHeight,
+        left: iWidth
+    });
+
+    $('#loading_dash').show();
+
 	//초기화
 	fn_serverDivClear(db_svr_id, rowChkCnt);
 }
@@ -204,6 +219,12 @@ function fn_tablescpace_setting(result) {
 		} else {
 			$("#pgalogPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		}
+		
+		if (result.tablespaceObj.PGALOG_CNT != null && result.tablespaceObj.PGALOG_CNT != undefined) {
+			$("#pgalogCntTd").html('<i class="ti-files"> ARCHIVE_FILE :  </i>'+ nvlPrmSet(result.tablespaceObj.PGALOG_CNT, "") + " " + dashboard_count +'</i>');
+		} else {
+			$("#pgalogCntTd").html('<i class="ti-files"> ARCHIVE_FILE :  </i>');
+		}
 
 		if (result.tablespaceObj.PGALOG_V != null && result.tablespaceObj.PGALOG_V != undefined) {
 			fn_gArc(result.tablespaceObj.PGALOG_V);
@@ -216,6 +237,12 @@ function fn_tablescpace_setting(result) {
 			$("#logPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.LOG_PATH, "") + '</i>');
 		} else {
 			$("#logPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		}
+		
+		if (result.tablespaceObj.LOG_CNT != null && result.tablespaceObj.LOG_CNT != undefined) {
+			$("#logFileCntTd").html('<i class="ti-files"> LOG_FILE :  </i>'+ nvlPrmSet(result.tablespaceObj.LOG_CNT, "") + " " + dashboard_count +'</i>');
+		} else {
+			$("#logFileCntTd").html('<i class="ti-files"> LOG_FILE :  </i>');
 		}
 
 		if (result.tablespaceObj.LOG_V != null && result.tablespaceObj.LOG_V != undefined) {
@@ -243,8 +270,11 @@ function fn_tablescpace_setting(result) {
 		fn_gArc("0");
 
 		$("#logPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
+		$("#logFileCntTd").html('<i class="ti-files"> LOG_FILE :  </i>');
 		fn_gLog("0");
 	}
+	
+    $('#loading_dash').hide();	
 }
 
 /* ********************************************************
@@ -307,7 +337,7 @@ function fn_selectSecurityStatistics(today){
  	var encryptFailCount = 0;
  	var decryptSuccessCount = 0;
  	var decryptFailCount = 0;
- 
+
 	$.ajax({
 		url : "/selectDashSecurityStatistics.do",
 		data : {
@@ -864,13 +894,14 @@ function fn_schedule_History_set(result) {
 							tot_cnt: script_tot_cnt,
 							suc_cnt: script_suc_cnt,
 							fal_cnt: script_fal_cnt
-						},
+						}
+						/*,
 						{
 							scheduleGbn: dashboard_migration,
 							tot_cnt: db2_pg_tot_cnt,
 							suc_cnt: db2_pg_suc_cnt,
 							fal_cnt: db2_pg_fal_cnt
-						}
+						}*/
 				],
 				xkey: 'scheduleGbn',
 				ykeys: ['tot_cnt', 'suc_cnt', 'fal_cnt'],
@@ -1358,7 +1389,7 @@ function fn_migration_history_set(result) {
 	} else {
 		migtHtml += "<tr>";
 		migtHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
-		migtHtml += dashboard_msg02
+		migtHtml += dashboard_msg06
 		migtHtml += '</td>';
 		migtHtml += "</tr>";
 	}
@@ -1515,25 +1546,27 @@ function fn_migt_History_progres(result) {
 			} else {
 				chartWidth = "100";
 			}
-		} else if (i == 1) { //백업건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 2) { //백업성공건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 3) { //백업실패건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 4) { //배치건수 / 전체건수
+		} else if (i == 1) { //배치건수 / 전체건수
 			chartCnt = nvlPrmSet(result.migration_tot_cnt, "0");
 			chartWidth = parseInt(nvlPrmSet(result.migration_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 5) {
+		} else if (i == 2) {
 			chartCnt = nvlPrmSet(result.migration_suc_cnt, "0");
 			chartWidth = parseInt(nvlPrmSet(result.migration_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 6) {
+		} else if (i == 3) {
 			chartCnt = nvlPrmSet(result.migration_fal_cnt, "0") ;
 			chartWidth = parseInt(nvlPrmSet(result.migration_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 4) { //백업건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 5) { //백업성공건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+		} else if (i == 6) { //백업실패건수 / 전체건수
+			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
+			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
 		}
+		
+		
 		chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
 
 		$("#migt_pro_" + i).css("width", chartWidth + "%"); 
