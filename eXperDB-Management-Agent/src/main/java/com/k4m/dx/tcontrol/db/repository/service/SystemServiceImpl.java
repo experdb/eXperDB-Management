@@ -167,6 +167,9 @@ public class SystemServiceImpl implements SystemService{
 	
 	public void updateTransExe(TransVO transVO) throws Exception{
 		systemDAO.updateTransExe(transVO);
-		
+	}
+	
+	public void updateTransTargetExe(TransVO transVO) throws Exception{
+		systemDAO.updateTransTargetExe(transVO);
 	}
 }

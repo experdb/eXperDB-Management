@@ -121,6 +121,9 @@ public class SystemDAO {
 	
 	public void updateTransExe(TransVO transVO) throws Exception{
 		session.update("system.updateTransExe", transVO);
-		
+	}
+	
+	public void updateTransTargetExe(TransVO transVO) throws Exception{
+		session.update("system.updateTransTargetExe", transVO);
 	}
 }

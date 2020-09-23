@@ -46,7 +46,6 @@ public class DxT038 extends SocketCtl{
 	}
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
-		
 		socketLogger.info("DxT038.execute : " + strDxExCode);
 		byte[] sendBuff = null;
 		String strErrCode = "";
@@ -59,82 +58,103 @@ public class DxT038 extends SocketCtl{
 		JSONObject objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		JSONObject objCONNECT_INFO = (JSONObject) jObj.get(ProtocolID.CONNECT_INFO);
 		JSONObject objMAPP_INFO = (JSONObject) jObj.get(ProtocolID.MAPP_INFO);
-		
-		
+
 		int trans_id = Integer.parseInt((String) objCONNECT_INFO.get("TRANS_ID"));
 		String cmd = (String) jObj.get(ProtocolID.REQ_CMD);
-
 		
+		//구분
+		String con_start_gbn = (String)objCONNECT_INFO.get("CON_START_GBN");
+
 		JSONObject outputObj = new JSONObject();
 		
 		try {
-		
 			JSONObject config = new JSONObject();
-
-			config.put("connector.class", "io.debezium.connector.postgresql.PostgresConnector");
-			config.put("plugin.name", "wal2json");
-			config.put("slot.name", objCONNECT_INFO.get("CONNECT_NM"));
-			config.put("database.hostname", objSERVER_INFO.get("SERVER_IP"));
-			config.put("database.port", objSERVER_INFO.get("SERVER_PORT"));
-			config.put("database.user", objSERVER_INFO.get("USER_ID"));
-			config.put("database.password", objSERVER_INFO.get("USER_PWD"));
-			config.put("database.dbname", objCONNECT_INFO.get("DB_NM"));
-			config.put("database.server.name", objCONNECT_INFO.get("CONNECT_NM"));
-			config.put("snapshot.mode", objCONNECT_INFO.get("SNAPSHOT_MODE"));
-			config.put("schema.whitelist", objMAPP_INFO.get("EXRT_TRG_SCM_NM"));
-			config.put("table.whitelist", objMAPP_INFO.get("EXRT_TRG_TB_NM"));
-			config.put("compression.type", objCONNECT_INFO.get("COMPRESSION_TYPE").toString().toLowerCase());
-			config.put("slot.drop.on.stop", "true");
 			
+			if ("source".equals(con_start_gbn)) {
+				config.put("connector.class", "io.debezium.connector.postgresql.PostgresConnector");
+				config.put("tasks.max", "1");
+				config.put("database.hostname", objSERVER_INFO.get("SERVER_IP"));
+				config.put("database.port", objSERVER_INFO.get("SERVER_PORT"));
+				config.put("database.user", objSERVER_INFO.get("USER_ID"));
+				config.put("database.password", objSERVER_INFO.get("USER_PWD"));
+				config.put("database.server.name", objCONNECT_INFO.get("CONNECT_NM"));
+				config.put("database.dbname", objCONNECT_INFO.get("DB_NM"));
+				config.put("table.whitelist", objMAPP_INFO.get("EXRT_TRG_TB_NM"));
+				config.put("slot.drop.on.stop", "true");
+				config.put("plugin.name", "wal2json");
+				config.put("snapshot.mode", objCONNECT_INFO.get("SNAPSHOT_MODE"));
+				config.put("slot.name", objCONNECT_INFO.get("CONNECT_NM"));
+				config.put("schema.whitelist", objMAPP_INFO.get("EXRT_TRG_SCM_NM"));
+				config.put("compression.type", objCONNECT_INFO.get("COMPRESSION_TYPE").toString().toLowerCase());
+			} else {
+				config.put("connector.class", "io.confluent.connect.jdbc.JdbcSinkConnector");
+				config.put("tasks.max", "1");
+				config.put("pk.mode", "record_key");
+				config.put("pk.fields", "id");
+				config.put("delete.enabled", "true");
+				config.put("insert.mode", "upsert");
+				config.put("auto.create", "true");
+				config.put("transforms.unwrap.drop.tombstones", "false");
+				config.put("transforms.unwrap.type", "io.debezium.transforms.ExtractNewRecordState");
+				config.put("transforms", "unwrap");
+				config.put("connection.password", objCONNECT_INFO.get("CONNECTION_PWD"));
+				config.put("connection.user", objCONNECT_INFO.get("SPR_USR_ID"));
+				config.put("connection.url", objCONNECT_INFO.get("CONNECTION_URL"));
+				config.put("topics", objMAPP_INFO.get("EXRT_TRG_TB_NM"));
+			}
+
 			JSONObject parameters = new JSONObject();
 			parameters.put("name", objCONNECT_INFO.get("CONNECT_NM"));
 			parameters.put("config", config);
 			
 			HttpEntity<?> requestEntity = apiClientHttpEntity("json", parameters.toString());
-					
-			 String strCmd = cmd + requestEntity.getBody()+"'";
-			 
-			 socketLogger.info("[Connect실행 명령어] =" + strCmd);
-			 
-			 
-			 RunCommandExec r = new RunCommandExec(strCmd);
-				
-				//명령어 실행
-				r.start();
-				try {
-					r.join();
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			 
-			 
-				String retVal = r.call();
-				String strResultMessge = r.getMessage();
+			
+			String strCmd = cmd + requestEntity.getBody()+"'";
+			socketLogger.info("[Connect실행 명령어12] =" + strCmd);
+			
+			RunCommandExec r = new RunCommandExec(strCmd);
+			
+			//명령어 실행
+			r.start();
+			try {
+				r.join();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+			
+			String retVal = r.call();
+			String strResultMessge = r.getMessage();
 
-				socketLogger.info("[RESULT] " + retVal);
-				socketLogger.info("[MSG] " + strResultMessge);
-					
-				socketLogger.info("##### 결과 : " + retVal + " message : " +strResultMessge);	
+			socketLogger.info("[RESULT] " + retVal);
+			socketLogger.info("[MSG] " + strResultMessge);
+			socketLogger.info("##### 결과 : " + retVal + " message : " +strResultMessge);	
+			
+			//정상시 update
+			if (retVal.equals("success")) {
+				TransVO transVO = new TransVO();
+				transVO.setTrans_id(trans_id);
+				transVO.setExe_status("TC001501");
 				
-				if (retVal.equals("success")) {
-					TransVO transVO = new TransVO();
-					transVO.setTrans_id(trans_id);
-					transVO.setExe_status("TC001501");
+				if ("source".equals(con_start_gbn)) {
 					service.updateTransExe(transVO);
+				} else {
+					service.updateTransTargetExe(transVO);
 				}
-						
-				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-				outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
-				outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-				outputObj.put(ProtocolID.RESULT_DATA, retVal);
 				
-			sendBuff = outputObj.toString().getBytes();
-			send(4, sendBuff);
+			}
 
+			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			outputObj.put(ProtocolID.RESULT_DATA, retVal);
+			
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);		
+			 
 		} catch (Exception e) {
 			errLogger.error("DxT038 {} ", e.toString());
-			
+
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT038);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT038);
@@ -149,8 +169,7 @@ public class DxT038 extends SocketCtl{
 		}	    
 
 	}
-	
-	
+
 	/**
 	 * Secret키와 Content-type을 설정
 	 * 
@@ -168,6 +187,4 @@ public class DxT038 extends SocketCtl{
 		else
 			return new HttpEntity<Object>(params, requestHeaders);
 	}
-	
-	
 }
