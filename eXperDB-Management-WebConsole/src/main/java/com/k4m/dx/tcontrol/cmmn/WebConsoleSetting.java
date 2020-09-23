@@ -24,6 +24,10 @@ public class WebConsoleSetting {
 		String strDatabaseUrl = "";
 		
 		String strTransferYN ="";
+		
+		//2020.09.23 trans 컨슈머 전송 추가
+		String strTransferOraYN ="";
+		
 		String strAuditYN="";
 		
 		String strScaleYN="";
@@ -120,6 +124,21 @@ public class WebConsoleSetting {
 				break;
 			}
 		}	
+		
+		/* 전송설정-컨슈머전송 사용여부 */
+		System.out.println("Whether data consumer transfer is enabled? (y, n)");
+		strTransferOraYN = scan.nextLine();
+		strTransferOraYN = strTransferOraYN.toUpperCase();
+		while (true) {
+			if(strTransferOraYN.equals("")) {
+				System.out.println("Please enter your consumer transfer setting yn. ");
+				System.out.println("Whether data consumer transfer is enabled? (y, n) :");
+				strTransferOraYN = scan.nextLine();
+				strTransferOraYN = strTransferOraYN.toUpperCase();
+			} else {
+				break;
+			}
+		}
 
 		/* DB2PG 설치 경로 */
 		System.out.println("eXperDB-DB2PG installation path : ");
