@@ -82,7 +82,14 @@ var common_apply = "<spring:message code='common.apply' />";
 var common_success = "<spring:message code='common.success' />";
 var common_failed = "<spring:message code='common.failed' />";
 
+var message_msg04 = "<spring:message code='message.msg04' />";
 var message_msg05 = "<spring:message code='message.msg05' />";
+var message_msg35 = "<spring:message code='message.msg35' />";
+var message_msg162 = "<spring:message code='message.msg162' />";
+
+var button_delete = "<spring:message code='button.delete' />";
+var common_request = "<spring:message code='common.request' />";
+var restore_progress = "<spring:message code='restore.progress' />";
 
 </script>
 <body>
