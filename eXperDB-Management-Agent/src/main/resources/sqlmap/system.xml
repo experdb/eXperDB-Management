@@ -619,4 +619,17 @@
          WHERE 1 = 1
            AND TRANS_ID = #{trans_id}
     	</update>
+    	
+     <update id="updateTransTargetExe" parameterType="TransVO">
+   		/**
+	 	* Query ID : updateTransTargetExe
+	 	* Description : 데이터전송 결과 수정
+	 	* Author :
+	 	**/         
+        UPDATE T_TRANSCNG_TARGET_I
+           SET EXE_STATUS = #{exe_status},
+           	   LST_MDF_DTM = clock_timestamp()
+         WHERE 1 = 1
+           AND TRANS_ID = #{trans_id}
+    	</update>
 </mapper>
