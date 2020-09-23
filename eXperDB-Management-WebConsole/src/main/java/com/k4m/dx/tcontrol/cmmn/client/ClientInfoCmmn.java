@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.cmmn.client;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,6 +11,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 
@@ -1870,16 +1873,12 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		
 		return result;
 	}
-
 	
-	
-	public  Map<String, Object> connectStart(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo,
-			List<Map<String, Object>> mappInfo) {
-		
+	// 38. trans connect start
+	public Map<String, Object> connectStart(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo, List<Map<String, Object>> mappInfo) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		try{
-			
 			String cmd = "curl -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
 			
 			JSONObject serverObj = new JSONObject();
@@ -1890,7 +1889,6 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
-			
 
 			JSONObject transObj = new JSONObject();
 			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
@@ -1902,12 +1900,12 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			transObj.put(ClientProtocolID.DB_NM, transInfo.get(0).get("db_nm"));
 			transObj.put(ClientProtocolID.META_DATA, transInfo.get(0).get("meta_data"));
 			
+			transObj.put(ClientProtocolID.CON_START_GBN, "source");
 
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_SCM_NM, mappInfo.get(0).get("exrt_trg_scm_nm"));
 			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));			
-			
-			
+
 			JSONObject jObj = new JSONObject();
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
@@ -1916,7 +1914,6 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
 			jObj.put(ClientProtocolID.REQ_CMD, cmd);
 			
-
 			JSONObject objList;
 
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
@@ -1935,8 +1932,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
 			System.out.println("RESULT_DATA : " +  strResultData);
-			
-			
+
 			result.put("RESULT_CODE", strResultCode);
 			result.put("ERR_CODE", strErrCode);
 			result.put("ERR_MSG", strErrMsg);
@@ -1949,20 +1945,101 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		return result;
 	}
 
+	// 38. trans connect start - target
+	public Map<String, Object> connectTargetStart(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo, List<Map<String, Object>> mappInfo) throws UnsupportedEncodingException {
+		Map<String, Object> result = new HashMap<String, Object>();
+		AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+		
+		try{
+			String cmd = "curl -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
+System.out.println("=====cmd" + cmd);
+			String con_ipadr = (String)transInfo.get(0).get("ipadr");
+			String con_portno = transInfo.get(0).get("portno").toString();
+			String con_dtb_nm = (String)transInfo.get(0).get("dtb_nm");
+			
+			String strConUrl = "jdbc:oracle:thin:@" + con_ipadr + ":" + con_portno + ":" + con_dtb_nm.toLowerCase();
+			
+			String con_pwd = (String)transInfo.get(0).get("pwd");
+			
+			if (con_pwd != null && !"".equals(con_pwd)) {
+				con_pwd = dec.aesDecode(con_pwd);
+			}
+
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+
+			JSONObject transObj = new JSONObject();
+			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
+			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
+			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));
+			transObj.put(ClientProtocolID.TRANS_ID, transInfo.get(0).get("trans_id").toString());
+			transObj.put(ClientProtocolID.CONNECTION_URL, strConUrl); 							//con_url
+			transObj.put(ClientProtocolID.SPR_USR_ID, transInfo.get(0).get("spr_usr_id"));		//spr_usr_id
+			transObj.put(ClientProtocolID.CONNECTION_PWD, con_pwd);								//pwd
+			
+			transObj.put(ClientProtocolID.CON_START_GBN, "target");
+
+			JSONObject mappObj = new JSONObject();
+			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));
+
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
+			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
+			jObj.put(ClientProtocolID.REQ_CMD, cmd);
+			
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 	
-	public Map<String, Object> connectStop(String IP, int PORT, String strCmd, String trans_id) {
+			CA.open(); 
+			objList = CA.dxT038(jObj);
+			CA.close();
+
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("RESULT_DATA : " +  strResultData);
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strErrMsg);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	// 39. trans connect stop
+	public Map<String, Object> connectStop(String IP, int PORT, String strCmd, String trans_id, String trans_active_gbn) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		try {
-
 			JSONObject jObj = new JSONObject();
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT039);
-			
 			jObj.put(ClientProtocolID.REQ_CMD, strCmd);
 			jObj.put(ClientProtocolID.TRANS_ID, trans_id);
-			
+			jObj.put(ClientProtocolID.CON_START_GBN, trans_active_gbn);
+
 			JSONObject objList;
 			
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
@@ -2019,6 +2096,46 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			e.printStackTrace();
 		}
 		return resultHp;
+	}
+	
+	// 41. trans topic list 조호
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT) {
+
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+		JSONObject result = new JSONObject();
+
+		try {
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open();
+
+			objList = CA.dxT041(ClientTranCodeType.DxT041, serverObj);
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			
+			String strStrReult_data = (String) objList.get(ClientProtocolID.RESULT_DATA);
+
+			if (strStrReult_data != null && !"".equals(strStrReult_data)) {
+				String[] splitStrResultMessge = strStrReult_data.split(",");
+
+				for(int i=0; i<splitStrResultMessge.length; i++){
+					JSONObject jsonObj = new JSONObject();
+					String topicName = splitStrResultMessge[i];
+
+					jsonObj.put("topic_name", topicName);
+
+					jsonObj.put("rownum_chk", i);
+					jsonArray.add(jsonObj);
+				}
+				result.put("data", jsonArray);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	
