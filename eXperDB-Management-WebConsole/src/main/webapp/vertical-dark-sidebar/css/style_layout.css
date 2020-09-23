@@ -1259,6 +1259,96 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
     margin-left: 0;
 }
 
+
+
+/* on/off 팝업 버튼 */
+.onoffswitch-pop-play {
+    position: relative; width: 80px; max-height:30px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-pop-play-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.onoffswitch-pop-play-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 1px solid #999999; border-radius: 5px;
+}
+.onoffswitch-pop-play-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-pop-play-inner:before, .onoffswitch-pop-play-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-pop-play-inner:before {
+    content: "PLAY";
+    padding-left: 20px;
+	background-color: #71c016; color: #ffffff;
+}
+.onoffswitch-pop-play-inner:after {
+    content: "STOP";
+    padding-right: 20px;
+    background-color: #ff4747; color: #ffffff;
+/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
+     */
+    text-align: right;
+}
+
+
+.onoffswitch-pop-play-switch {
+    display: block; width: 18px; margin: 6px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 50px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-pop-play-checkbox:checked + .onoffswitch-pop-play-label .onoffswitch-pop-play-inner {
+    margin-left: 0;
+}
+.onoffswitch-pop-play-checkbox:checked + .onoffswitch-pop-play-label .onoffswitch-pop-play-switch {
+    right: 0px; 
+}
+
+.onoffswitch-pop-play-inner_YN {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-pop-play-inner_YN:before, .onoffswitch-pop-play-inner_YN:after {
+    display: block; float: left; width: 50%; height: 2.000rem; padding: 0; line-height: 2.000rem;
+    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-pop-play-inner_YN:before {
+    content: "YES";
+    padding-left: 20px;
+	background-color:#68afff;
+    color: #FFFFFF;
+}
+.onoffswitch-pop-play-inner_YN:after {
+    content: "NO";
+    padding-right: 20px;
+    background-color: #EEEEEE; color: #999999;
+/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
+     */
+    text-align: right;
+}
+
+.onoffswitch-pop-play-checkbox:checked + .onoffswitch-pop-play-label .onoffswitch-pop-play-inner_YN {
+    margin-left: 0;
+}
+
+
 /* on/off 버튼 */
 .onoffswitch {
     position: relative; width: 80px; max-height:25px;
