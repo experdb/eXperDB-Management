@@ -33,11 +33,46 @@ public class TransVO {
 	private String compression_nm;
 	
 	private String meta_data;
-	
 	private String kc_port_test;
+	private String trans_id_Rows;
+	private String trans_exrt_trg_tb_id_Rows;
+	private String trans_active_gbn;
+	private String trans_trg_sys_id;
+	
+	public String getTrans_trg_sys_id() {
+		return trans_trg_sys_id;
+	}
+
+	public void setTrans_trg_sys_id(String trans_trg_sys_id) {
+		this.trans_trg_sys_id = trans_trg_sys_id;
+	}
+
+	public String getTrans_active_gbn() {
+		return trans_active_gbn;
+	}
+
+	public void setTrans_active_gbn(String trans_active_gbn) {
+		this.trans_active_gbn = trans_active_gbn;
+	}
 
 	public String getKc_port_test() {
 		return kc_port_test;
+	}
+
+	public String getTrans_exrt_trg_tb_id_Rows() {
+		return trans_exrt_trg_tb_id_Rows;
+	}
+
+	public void setTrans_exrt_trg_tb_id_Rows(String trans_exrt_trg_tb_id_Rows) {
+		this.trans_exrt_trg_tb_id_Rows = trans_exrt_trg_tb_id_Rows;
+	}
+
+	public String getTrans_id_Rows() {
+		return trans_id_Rows;
+	}
+
+	public void setTrans_id_Rows(String trans_id_Rows) {
+		this.trans_id_Rows = trans_id_Rows;
 	}
 
 	public void setKc_port_test(String kc_port_test) {
