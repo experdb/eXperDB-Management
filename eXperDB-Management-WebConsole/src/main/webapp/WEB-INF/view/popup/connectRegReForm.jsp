@@ -269,10 +269,27 @@
 	}
 
 	/* ********************************************************
+	 * Validation Check
+	 ******************************************************** */
+	function mod_source_valCheck(){
+		//전성대상테이블 length 체크
+		if (mod_connector_tableList.rows().data().length <= 0) {
+			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}
+
+		return true;
+	}
+	
+	/* ********************************************************
 	 * 커넥터 설정 수정
 	 ******************************************************** */
 	function fn_mod_update() {
 		var table_mapp = [];
+
+		if(!mod_source_valCheck()) {
+			return;
+		}
 
 		var tableDatas = mod_connector_tableList.rows().data();
 			
@@ -327,7 +344,13 @@
 				if(result == true){
 					showSwalIcon('<spring:message code="message.msg84" />', '<spring:message code="common.close" />', '', 'success');
 					$('#pop_layer_con_re_reg_two').modal('hide');
-					fn_select();
+
+					//자동활성화 등록
+					if($("#mod_source_transActive_act", "#modRegForm").is(":checked") == true){
+						fn_auto_trans_active_start("mod_source", $("#mod_trans_exrt_trg_tb_id","#modRegForm").val(), $("#mod_trans_id","#modRegForm").val());
+					} else {
+						fn_tot_select();
+					}
 				}else{
 					showSwalIcon('<spring:message code="eXperDB_scale.msg22"/>', '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_con_re_reg_two').modal('show');
@@ -345,12 +368,11 @@
 	<input type="hidden" name="mod_db_nm"  id="mod_db_nm" >
 	<input type="hidden" name="mod_tableGbn"  id="mod_tableGbn" >
 	<input type="hidden" name="mod_table_total_cnt" id="mod_table_total_cnt">
-	<input type="hidden" name="mod_table_mapp_nm" id="mod_table_mapp_nm">
 	<input type="hidden" name="mod_act" id="mod_act">
 </form>
 
 <div class="modal fade" id="pop_layer_con_re_reg_two" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 350px;">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
@@ -440,11 +462,21 @@
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.database" />
 											</label>
-											<div class="col-sm-8">
+											<div class="col-sm-4">
 												<input type="text" class="form-control form-control-xsm" id="mod_db_id" name="mod_db_id" readonly />
 											</div>
-											<div class="col-sm-2">
-												&nbsp;
+											<label for="mod_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.metadata" />
+											</label>
+											<div class="col-sm-4">
+												<div class="onoffswitch-pop">
+													<input type="checkbox" name="mod_meta_data_chk" class="onoffswitch-pop-checkbox" id="mod_meta_data_chk" />
+													<label class="onoffswitch-pop-label" for="mod_meta_data_chk">
+														<span class="onoffswitch-pop-inner"></span>
+														<span class="onoffswitch-pop-switch"></span>
+													</label>
+												</div>
 											</div>
 										</div>
 
@@ -465,7 +497,7 @@
 											</div>
 										</div>
 
-										<div class="form-group row" style="margin-bottom:10px;">
+										<div class="form-group row" style="margin-bottom:1px;">
 											<label for="mod_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.compression_type" />
@@ -479,15 +511,23 @@
 											</div>
 											<label for="mod_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.metadata" />
+												<spring:message code="access_control_management.activation" />
 											</label>
 											<div class="col-sm-4">
-												<div class="onoffswitch-pop">
-													<input type="checkbox" name="mod_meta_data_chk" class="onoffswitch-pop-checkbox" id="mod_meta_data_chk" />
-													<label class="onoffswitch-pop-label" for="mod_meta_data_chk">
-														<span class="onoffswitch-pop-inner"></span>
-														<span class="onoffswitch-pop-switch"></span>
+												<div class="onoffswitch-pop-play">
+													<input type="checkbox" name="mod_source_transActive_act" class="onoffswitch-pop-play-checkbox" id="mod_source_transActive_act" onclick="fn_transActivation_msg_set('mod_source')" >
+													<label class="onoffswitch-pop-play-label" for="mod_source_transActive_act">
+														<span class="onoffswitch-pop-play-inner"></span>
+														<span class="onoffswitch-pop-play-switch"></span>
 													</label>
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-group row div-form-margin-z" id="mod_source_trans_active_div" style="display:none;">
+											<div class="col-sm-12">
+												<div class="alert alert-info" style="margin-top:5px;margin-bottom:-15px;" >
+													<spring:message code="data_transfer.msg27" />
 												</div>
 											</div>
 										</div>
@@ -503,7 +543,7 @@
 												<input type="text" class="form-control form-control-xsm" maxlength="25" id="mod_table_nm" name="mod_table_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.table_name" />'/>				
 											</div>
 				
-											<button type="button" class="btn btn-inverse-primary btn-sm btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_table_search_mod();" >
+											<button type="button" class="btn btn-inverse-primary btn-sm btn-icon-text mb-2 btn-search-disable" id="btnConModSearch" onClick="fn_table_search_mod();" >
 												<i class="ti-search btn-icon-prepend "></i><spring:message code="data_transfer.tableList" />
 											</button>
 										</form>
