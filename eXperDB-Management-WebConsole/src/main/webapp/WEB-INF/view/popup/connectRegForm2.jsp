@@ -30,6 +30,7 @@
 	var ins_databaseMsg = '<spring:message code="data_transfer.database" />';
 	var ins_connectNmMsg = '<spring:message code="data_transfer.connect_name_set" />';
 	var ins_conn_Test_msg = '<spring:message code="dbms_information.conn_Test" />';
+	var ins_kafka_server_nm = '<spring:message code="data_transfer.server_name" />';
 
 	$(window.document).ready(function() {
 		//테이블셋팅
@@ -426,6 +427,7 @@
 				url : "/insertConnectInfoNew.do",
 			  	data : {
 			  		db_svr_id : $("#db_svr_id","#findList").val(),
+			  		kc_id : nvlPrmSet($("#ins_source_kc_nm", "#searchRegForm").val(), ''),
 			  		kc_ip : nvlPrmSet($("#ins_kc_ip", "#searchRegForm").val(), ''),
 			  		connect_nm : nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), ''),
 			  		snapshot_mode : $("#ins_snapshot_mode", "#insRegForm").val(),
@@ -476,23 +478,28 @@
 	 ******************************************************** */
 	function ins_valCheck(){
 		var valideMsg = "";
-		if(nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_connectNmMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
+		
+		if(nvlPrmSet($("#ins_source_kc_nm", "#searchRegForm").val(), '') == "") {
+			valideMsg = "Kafka-Connect " + ins_kafka_server_nm;
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
-		} else if(nvlPrmSet($("#ins_db_id", "#insRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_databaseMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
-			return false;
-			
 		} else if(nvlPrmSet($("#ins_kc_ip", "#searchRegForm").val(), '') == "") {
-			valideMsg = ins_conn_Test_msg + " " + ins_kc_ip_msg;
+			valideMsg = "Kafka-Connect " + " " + ins_kc_ip_msg;
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		} else if(nvlPrmSet($("#ins_kc_port", "#searchRegForm").val(), '') == "") {
-			valideMsg = ins_conn_Test_msg + " " + ins_kc_port_msg;
+			valideMsg = "Kafka-Connect " + " " + ins_kc_port_msg;
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else if(ins_connect_status_Chk == "fail"){
 			showSwalIcon('Kafka-Connect ' + '<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		
+		} else if(nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), '') == "") {
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_connectNmMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		} else if(nvlPrmSet($("#ins_db_id", "#insRegForm").val(), '') == "") {
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_databaseMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else if(ins_connect_nm_Chk == "fail"){
 			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
@@ -531,23 +538,31 @@
 										</colgroup>
 										<thead>
 											<tr class="bg-info text-white">
-												<th class="table-text-align-c"><spring:message code="data_transfer.server_name" /></th>
+												<th class="table-text-align-c">Kafka-Connect <spring:message code="data_transfer.server_name" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
-												<th class="table-text-align-c"><spring:message code="data_transfer.test_connection" /></th>
+												<th class="table-text-align-c"><spring:message code="data_transfer.connection_status" /></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr style="border-bottom: 1px solid #adb5bd;">
-												<td class="table-text-align-c">Kafka-Connect</td>				
 												<td class="table-text-align-c">
-													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_kc_ip" name="ins_kc_ip" onblur="this.value=this.value.trim()" tabindex=1 />
+													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_source_kc_nm" id="ins_source_kc_nm" onChange="fn_kc_nm_chg('source_ins');" tabindex=1>
+														<option value=""><spring:message code="common.choice" /></option>
+														<c:forEach var="result" items="${kafkaConnectList}" varStatus="status">
+															<option value="<c:out value="${result.kc_id}"/>"><c:out value="${result.kc_nm}"/></option>
+														</c:forEach>
+													</select>
+												</td>				
+												<td class="table-text-align-c">
+													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_kc_ip" name="ins_kc_ip" onblur="this.value=this.value.trim()" disabled tabindex=1 />
 												</td>												
 												<td class="table-text-align-c">
-													<input type="text" class="form-control form-control-xsm" maxlength="5" id="ins_kc_port" name="ins_kc_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" placeholder='<spring:message code="eXperDB_scale.msg15" />' tabindex=2 />						
+													<input type="text" class="form-control form-control-xsm" maxlength="5" id="ins_kc_port" name="ins_kc_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" disabled tabindex=2 />						
 												</td>
-												<td class="table-text-align-c">
-													<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="data_transfer.test_connection" />' />
+												<td class="table-text-align-c" id="ins_kc_connect_td" >
+													<%-- <input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="data_transfer.test_connection" />' />
+												 --%>
 												</td>											
 											</tr>					
 										</tbody>

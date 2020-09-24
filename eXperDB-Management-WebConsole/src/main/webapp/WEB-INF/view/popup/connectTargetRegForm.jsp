@@ -29,6 +29,7 @@
 	var ins_tg_kc_port_msg = '<spring:message code="data_transfer.port" />';
 	var ins_tg_connectNmMsg = '<spring:message code="data_transfer.connect_name_set" />';
 	var ins_tg_conn_Test_msg = '<spring:message code="dbms_information.conn_Test" />';
+	var ins_tg_kafka_server_nm = '<spring:message code="data_transfer.server_name" />';
 	
 	$(window.document).ready(function() {
 		fn_tg_ins_init();
@@ -72,8 +73,12 @@
 	 ******************************************************** */
 	function trans_target_ins_valCheck(){
 		var valideMsg = "";
-
-		if(nvlPrmSet($("#ins_tg_kc_ip", "#searchTargetRegForm").val(), '') == "") {
+		
+		if(nvlPrmSet($("#ins_target_kc_nm", "#searchTargetRegForm").val(), '') == "") {
+			valideMsg = "Kafka-Connect " + ins_tg_kafka_server_nm;
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		} else if(nvlPrmSet($("#ins_tg_kc_ip", "#searchTargetRegForm").val(), '') == "") {
 			valideMsg = ins_tg_conn_Test_msg + " " + ins_tg_kc_ip_msg;
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
@@ -130,20 +135,28 @@
 												<th class="table-text-align-c"><spring:message code="data_transfer.server_name" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
-												<th class="table-text-align-c"><spring:message code="data_transfer.test_connection" /></th>
+												<th class="table-text-align-c"><spring:message code="data_transfer.connection_status" /></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr style="border-bottom: 0px solid #adb5bd;">
-												<td class="table-text-align-c">Kafka-Connect</td>				
 												<td class="table-text-align-c">
-													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_tg_kc_ip" name="ins_tg_kc_ip" onblur="this.value=this.value.trim()" tabindex=1 />
+													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_target_kc_nm" id="ins_target_kc_nm" onChange="fn_kc_nm_chg('target_ins');" tabindex=1>
+														<option value=""><spring:message code="common.choice" /></option>
+														<c:forEach var="result" items="${kafkaConnectList}" varStatus="status">
+															<option value="<c:out value="${result.kc_id}"/>"><c:out value="${result.kc_nm}"/></option>
+														</c:forEach>
+													</select>
+												</td>			
+												<td class="table-text-align-c">
+													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_tg_kc_ip" name="ins_tg_kc_ip" onblur="this.value=this.value.trim()" disabled  />
 												</td>												
 												<td class="table-text-align-c">
-													<input type="text" class="form-control form-control-xsm" maxlength="5" id="ins_tg_kc_port" name="ins_tg_kc_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" placeholder='<spring:message code="eXperDB_scale.msg15" />' tabindex=2 />						
+													<input type="text" class="form-control form-control-xsm" maxlength="5" id="ins_tg_kc_port" name="ins_tg_kc_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" disabled tabindex=2 />						
 												</td>
-												<td class="table-text-align-c">
-													<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="data_transfer.test_connection" />' />
+												<td class="table-text-align-c" id="ins_tg_kc_connect_td">
+													<%-- <input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="data_transfer.test_connection" />' />
+												 --%>
 												</td>											
 											</tr>					
 										</tbody>

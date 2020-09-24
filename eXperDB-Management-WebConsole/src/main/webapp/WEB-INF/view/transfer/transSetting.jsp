@@ -452,6 +452,8 @@ a:hover.tip span {
 	 * 수정 팝업셋팅
 	 ******************************************************** */
 	function fn_update_setting(result) {
+		$("#mod_source_kc_nm", "#searchModForm").val(nvlPrmSet(result.kc_id, ""));
+		
 		$("#mod_kc_ip", "#searchModForm").val(nvlPrmSet(result.kc_ip, ""));
 		$("#mod_kc_port", "#searchModForm").val(nvlPrmSet(result.kc_port, ""));
 		
@@ -1205,6 +1207,78 @@ a:hover.tip span {
 				$('#pop_layer_trans_con_list').modal("show");
 			}
 		});
+	}
+	
+
+	/* ********************************************************
+	 * 기본설정 등록
+	 ******************************************************** */
+	function fn_kc_nm_chg(hw_gbn) {
+		var prm_kafka_id = "";
+		var connectTd = "";
+
+		prm_kafka_id = nvlPrmSet($("#ins_source_kc_nm","#searchRegForm").val(), "");
+
+		if (prm_kafka_id == "") {
+			$("#ins_kc_ip","#searchRegForm").val("");
+			$("#ins_kc_port","#searchRegForm").val("");
+				
+			ins_connect_status_Chk = "fail";
+			
+			$("#ins_kc_connect_td","#searchRegForm").html("");
+		} else {
+			$.ajax({
+				url : "/selectTransKafkaConList.do",
+				data : {
+					kc_id : prm_kafka_id
+				},
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+					}
+				},
+				success : function(result) {
+					if (nvlPrmSet(result, '') != '') {
+						connectTd = "<div class='badge badge-pill badge-success'>";
+						connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+						connectTd += "	<spring:message code='data_transfer.connecting' />";
+						connectTd += "</div>";
+
+						if (result[0].kc_ip != "") {
+							$("#ins_kc_ip","#searchRegForm").val(nvlPrmSet(result[0].kc_ip, ''));
+							$("#ins_kc_port","#searchRegForm").val(nvlPrmSet(result[0].kc_port, ''));
+								
+							ins_connect_status_Chk = "success";
+
+							$("#ins_kc_connect_td","#searchRegForm").html(connectTd);
+						} else {
+							$("#ins_kc_ip","#searchRegForm").val("");
+							$("#ins_kc_port","#searchRegForm").val("");
+								
+							ins_connect_status_Chk = "fail";
+
+							$("#ins_kc_connect_td","#searchRegForm").html("");
+						}
+
+					} else {
+						$("#ins_kc_ip","#searchRegForm").val("");
+						$("#ins_kc_port","#searchRegForm").val("");
+							
+						ins_connect_status_Chk = "fail";
+
+						$("#ins_kc_connect_td","#searchRegForm").html("");
+					}
+				}
+			});
+		}
 	}
 </script>
 

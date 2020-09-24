@@ -75,7 +75,14 @@
 										</thead>
 										<tbody>
 											<tr style="border-bottom: 0px solid #adb5bd;">
-												<td class="table-text-align-c">Kafka-Connect</td>				
+												<td class="table-text-align-c">
+													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_target_kc_nm" id="mod_target_kc_nm" disabled>
+														<option value=""><spring:message code="common.choice" /></option>
+														<c:forEach var="result" items="${kafkaConnectList}" varStatus="status">
+															<option value="<c:out value="${result.kc_id}"/>"><c:out value="${result.kc_nm}"/></option>
+														</c:forEach>
+													</select>
+												</td>				
 												<td class="table-text-align-c">
 													<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_tg_kc_ip" name="mod_tg_kc_ip" onblur="this.value=this.value.trim()" readonly />
 												</td>												
