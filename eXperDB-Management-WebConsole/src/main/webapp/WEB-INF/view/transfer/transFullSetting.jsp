@@ -61,6 +61,7 @@ a:hover.tip span {
 	var kc_ip_List = [];
 	var kc_port_List = [];
 	var connect_nm_List = [];
+	var connect_yn = "";
 
 	/* ********************************************************
 	 * scale setting 초기 실행
@@ -70,9 +71,9 @@ a:hover.tip span {
 		fn_source_init();
 		fn_target_init();
 
-		//화면 조회
-		fn_tot_select();
-		
+		//aws 서버 확인
+		fn_selectKafkaConnectChk();
+
 	  	$(function() {	
 			$('#transSourceSettingTable tbody').on( 'click', 'tr', function () {
 				fn_another_checkAll("transSourceSettingTable");
@@ -83,6 +84,58 @@ a:hover.tip span {
 			});
 	  	});
 	});
+	
+	/* ********************************************************
+	 * kafka 체크
+	 ******************************************************** */
+	function fn_selectKafkaConnectChk() {
+		var errorMsg = "";
+		var titleMsg = "";
+
+		$.ajax({
+			url : "/selectTransKafkaConList.do",
+			data : {
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				console.log("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
+			success : function(result) {
+				if (result != null) {
+					connect_yn = "Y";
+				} else {
+					connect_yn = "N";
+				}
+
+				//AWS 서버인경우
+				if (connect_yn == "Y") {
+					//화면 조회
+					fn_tot_select();
+					
+				} else {
+					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="data_transfer.msg30" />');
+					
+					//설치안된경우 버튼 막아야함
+					$("#btnChoActive").prop("disabled", "disabled");
+					$("#btnChoDisabled").prop("disabled", "disabled");
+
+					$("#btnScDelete").prop("disabled", "disabled");
+					$("#btnTgDelete").prop("disabled", "disabled");
+					$("#btnScModify").prop("disabled", "disabled");
+					$("#btnTgModify").prop("disabled", "disabled");
+					$("#btnScInsert").prop("disabled", "disabled");
+					$("#btnTgInsert").prop("disabled", "disabled");
+					$("#btnSearch").prop("disabled", "disabled");
+					$("#btnCommonInsert").prop("disabled", "disabled");
+					$("#btnKafkaInsert").prop("disabled", "disabled");
+				}
+			}
+		});
+	}
 
 	/* ********************************************************
 	 * table 초기화 및 설정
@@ -394,15 +447,15 @@ a:hover.tip span {
 </script>
 
 <%@include file="./tansSettingInfo.jsp"%>
-<%@include file="./../popup/transTargetDbmsForm.jsp"%>
+<%@include file="./transTargetSettingInfo.jsp"%>
 <%@include file="./../popup/connectRegReForm.jsp"%>
 <%@include file="./../popup/connectRegForm2.jsp"%>
 <%@include file="./../popup/connectTargetRegForm.jsp"%>
-<%@include file="./../popup/confirmMultiForm.jsp"%>
-<%@include file="./transTargetSettingInfo.jsp"%>
-<%@include file="./../popup/transTargetDbmsInfoForm.jsp"%>
 <%@include file="./../popup/connectTargetRegReForm.jsp"%>
+<%@include file="./../popup/confirmMultiForm.jsp"%>
+<%@include file="./../popup/transTargetDbmsInfoForm.jsp"%>
 <%@include file="./../popup/transConnectListForm.jsp"%>
+<%@include file="./../popup/transComConSetRegForm.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
@@ -480,13 +533,13 @@ a:hover.tip span {
 					<div class="row">
 						<div class="col-12" style="margin-top:-10px;margin-bottom:-10px;">
 							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonInsert" onClick="fn_common_dmbs_ins();" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title01" />
-								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnKafkaInsert" onClick="fn_common_kafka_ins();" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" />
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" /> <spring:message code="common.search" />
 								</button>
-													
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_ins();" data-toggle="modal">
+									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
+								</button>
+												
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
 									<i class="fa fa-stop btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
 								</button>

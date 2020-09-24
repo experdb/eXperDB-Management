@@ -56,6 +56,7 @@ a:hover.tip span {
 	var kc_ip_List = [];
 	var kc_port_List = [];
 	var connect_nm_List = [];
+	var connect_yn = "";
 
 	/* ********************************************************
 	 * scale setting 초기 실행
@@ -64,9 +65,103 @@ a:hover.tip span {
 		//테이블 셋팅
 		fn_init();
 
-		//화면 조회
-		fn_tot_select();
+		//aws 서버 확인
+		fn_selectKafkaConnectChk();
 	});
+	
+
+	/* ********************************************************
+	 * 기본설정 등록
+	 ******************************************************** */
+	function fn_common_con_set_ins() {
+		$.ajax({
+			url : "/selectTransComSettingCngInfo.do",
+			data : {
+				trans_com_id : "1"
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+
+				if(result != null){
+					$("#com_trans_com_id","#comConRegForm").val(nvlPrmSet(result.trans_com_id, "1"));
+					$("#com_plugin_name","#comConRegForm").val(nvlPrmSet(result.plugin_name, ""));
+					$("#com_heartbeat_interval_ms","#comConRegForm").val(nvlPrmSet(result.heartbeat_interval_ms, ""));
+					$("#com_heartbeat_action_query","#comConRegForm").val(nvlPrmSet(result.heartbeat_action_query, ""));
+					$("#com_max_batch_size","#comConRegForm").val(nvlPrmSet(result.max_batch_size, ""));
+					$("#com_max_queue_size","#comConRegForm").val(nvlPrmSet(result.max_queue_size, ""));
+					$("#com_offset_flush_interval_ms","#comConRegForm").val(nvlPrmSet(result.offset_flush_interval_ms, ""));
+					$("#com_offset_flush_timeout_ms","#comConRegForm").val(nvlPrmSet(result.offset_flush_timeout_ms, ""));
+					$(':radio[name="com_auto_create_chk"]:checked').val(nvlPrmSet(result.auto_create, "true"));
+					
+					if (nvlPrmSet(result.transforms_yn, "") == "Y") {
+						$("input:checkbox[id='com_transforms_yn_chk']").prop("checked", true);
+					} else {
+						$("input:checkbox[id='com_transforms_yn_chk']").prop("checked", false); 
+					}
+				}
+				$('#pop_layer_con_com_ins_cng').modal('show');
+			}
+		});	
+	}
+
+	/* ********************************************************
+	 * kafka 체크
+	 ******************************************************** */
+	function fn_selectKafkaConnectChk() {
+		var errorMsg = "";
+		var titleMsg = "";
+
+		$.ajax({
+			url : "/selectTransKafkaConList.do",
+			data : {
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				console.log("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
+			success : function(result) {
+				if (result != null) {
+					connect_yn = "Y";
+				} else {
+					connect_yn = "N";
+				}
+
+				if (connect_yn == "Y") {
+					//화면 조회
+					fn_tot_select();
+					
+				} else {
+					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="data_transfer.msg30" />');
+					
+					$("#btnChoActive").prop("disabled", "disabled");
+					$("#btnChoDisabled").prop("disabled", "disabled");
+
+					$("#btnDelete").prop("disabled", "disabled");
+					$("#btnModify").prop("disabled", "disabled");
+					$("#btnInsert").prop("disabled", "disabled");
+					$("#btnSearch").prop("disabled", "disabled");
+ 
+				}
+			}
+		});
+	}
 
 	/* ********************************************************
 	 * table 초기화 및 설정
@@ -1072,11 +1167,44 @@ a:hover.tip span {
 		});
 	}
 
+	/* ********************************************************
+	 * target kafka 설정 버튼 클릭
+	 ******************************************************** */
+	function fn_common_kafka_ins(){
+		$.ajax({
+			url : "/popup/transConSettingForm.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {
+				fn_transKafkaConPopStart();
+
+				$('#pop_layer_trans_con_list').modal("show");
+			}
+		});
+	}
 </script>
+
+<%@include file="./../popup/transComConSetRegForm.jsp"%>
 
 <%@include file="./../popup/connectRegReForm.jsp"%>
 <%@include file="./../popup/connectRegForm2.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
+<%@include file="./../popup/transConnectListForm.jsp"%>
 <%@include file="./tansSettingInfo.jsp"%>
 
 <form name="findList" id="findList" method="post">
@@ -1152,6 +1280,26 @@ a:hover.tip span {
 							</form>
 						</div>
 					</div>
+
+					<div class="row">
+						<div class="col-12" style="margin-top:-10px;margin-bottom:-10px;">
+							<div class="template-demo">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnKafkaInsert" onClick="fn_common_kafka_ins();" data-toggle="modal">
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" /> <spring:message code="common.search" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_ins();" data-toggle="modal">
+									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
+								</button>
+
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_active" />
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1161,14 +1309,7 @@ a:hover.tip span {
 				<div class="card-body">
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
-							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_active" />
-								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
-								</button>
-													
+							<div class="template-demo">				
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_del_confirm();" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
