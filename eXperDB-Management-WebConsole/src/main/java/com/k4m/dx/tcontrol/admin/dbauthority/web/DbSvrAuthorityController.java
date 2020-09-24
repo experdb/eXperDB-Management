@@ -321,12 +321,18 @@ public class DbSvrAuthorityController {
 			Properties props = new Properties();
 			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
 			String scale_yn_chk = "";
+			String transfer_ora_chk = "";
 			
 			if (props.get("scale") != null) {
 				scale_yn_chk = props.get("scale").toString();
 			}
+			
+			if (props.get("transfer_ora") != null) {
+				transfer_ora_chk = props.get("transfer_ora").toString();
+			}
 
 			result.put("scale_yn_chk", scale_yn_chk);
+			result.put("transfer_ora_chk", transfer_ora_chk);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

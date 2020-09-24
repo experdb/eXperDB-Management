@@ -22,11 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
-import com.k4m.dx.tcontrol.backup.service.BackupService;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
@@ -49,9 +51,6 @@ import com.k4m.dx.tcontrol.transfer.service.TransService;
  */
 @Controller
 public class TransDbmsController {
-	
-	@Autowired
-	private BackupService backupService;
 
 	@Autowired
 	private TransService transService;
@@ -61,12 +60,64 @@ public class TransDbmsController {
 
 	@Autowired
 	private DbmsService dbmsService;
+
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
 	
+	@Autowired
+	private CmmnServerInfoService cmmnServerInfoService;
+
 	/**
 	 * Mybatis Transaction 
 	 */
 	@Autowired
 	private PlatformTransactionManager txManager;
+
+	private List<Map<String, Object>> menuAut;
+	
+	/**
+	 * 타켓 DBMS 설정 화면 출력
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/transDbmsSetting.do")
+	public ModelAndView transDbmsSetting(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		int db_svr_id=Integer.parseInt(request.getParameter("db_svr_id"));
+
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
+
+		try {
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			} else {
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0148");
+				accessHistoryService.insertHistory(historyVO);
+				
+				//db서버명 조회
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+
+				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm()); //db서버명
+				mv.addObject("db_svr_id", db_svr_id);
+
+				mv.setViewName("transfer/transDbmsSetting");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 
 	/**
 	 * 타켓 DBMS 설정 팝업 화면을 보여준다.
@@ -208,17 +259,23 @@ public class TransDbmsController {
 	 * @param response, request , transDbmsVO
 	 * @return String
 	 */
-	@RequestMapping("/popup/selectTransDmbsIngChk.do")
+	@RequestMapping("/selectTransDmbsIngChk.do")
 	public @ResponseBody String selectTransDmbsIngChk(@ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletRequest request, HttpServletResponse response) {	
 		String result = "S";
 
+		String trans_dbms_id_Rows = request.getParameter("trans_dbms_id_List").toString().replaceAll("&quot;", "\"");
+
 		try {
-			//scale log 확인
-			result = transService.selectTransDbmsIngChk(transDbmsVO);
+			if (!"".equals(trans_dbms_id_Rows)) {
+				transDbmsVO.setTrans_dbms_id_Rows(trans_dbms_id_Rows);
+				
+				//scale log 확인
+				result = transService.selectTransDbmsIngChk(transDbmsVO);
+			} else {
+				result = "F";
+			}
 		} catch (Exception e1) {
 			result = "F";
-			
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -305,7 +362,7 @@ public class TransDbmsController {
 	 * @throws IOException 
 	 * @throws ParseException 
 	 */
-	@RequestMapping(value = "/popup/deleteTransDBMS.do")
+	@RequestMapping(value = "/deleteTransDBMS.do")
 	@ResponseBody
 	public boolean deleteTransDBMS(@ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
 		boolean result = false;
@@ -315,28 +372,75 @@ public class TransDbmsController {
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = txManager.getTransaction(def);
 
-		// 화면접근이력 이력 남기기
-		try {
-
-		} catch (Exception e2) {
-			e2.printStackTrace();
-		}
+		String trans_dbms_id_Rows = request.getParameter("trans_dbms_id_List").toString().replaceAll("&quot;", "\"");
 
 		try{
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0147_02");
 			accessHistoryService.insertHistory(historyVO);
 			
-			transService.deleteTransDBMS(transDbmsVO);	
-
-			result = true;
+			if (!"".equals(trans_dbms_id_Rows)) {
+				transDbmsVO.setTrans_dbms_id_Rows(trans_dbms_id_Rows);
+				
+				//scale log 확인
+				transService.deleteTransDBMS(transDbmsVO);	
+				
+				result = true;
+			} else {
+				result = false;
+			}
 		}catch(Exception e){
+			result = false;
 			e.printStackTrace();
 			txManager.rollback(status);
 		}finally{
 			txManager.commit(status);
 		}
 		return result;
+	}
+	
+	/**
+	 * 타켓 DBMS 설정 화면 출력
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/transConnectSetting.do")
+	public ModelAndView transConnectSetting(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		int db_svr_id=Integer.parseInt(request.getParameter("db_svr_id"));
+
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
+
+		try {
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			} else {
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0153");
+				accessHistoryService.insertHistory(historyVO);
+				
+				//db서버명 조회
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+
+				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm()); //db서버명
+				mv.addObject("db_svr_id", db_svr_id);
+
+				mv.setViewName("transfer/transKafkaConSetting");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
 	}
 
 	/**
@@ -457,7 +561,7 @@ public class TransDbmsController {
 	 * @throws IOException 
 	 * @throws ParseException 
 	 */
-	@RequestMapping(value = "/popup/deleteTransKafkaConnect.do")
+	@RequestMapping(value = "/deleteTransKafkaConnect.do")
 	@ResponseBody
 	public boolean deleteTransKafkaConnect(@ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
 		boolean result = false;
@@ -467,15 +571,24 @@ public class TransDbmsController {
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = txManager.getTransaction(def);
 
+		String trans_connect_id_Rows = request.getParameter("trans_connect_id_List").toString().replaceAll("&quot;", "\"");
+		
 		try{
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0151_02");
 			accessHistoryService.insertHistory(historyVO);
 
-			transService.deleteTransKafkaConnect(transDbmsVO);	
-
-			result = true;
+			if (!"".equals(trans_connect_id_Rows)) {
+				transDbmsVO.setTrans_connect_id_Rows(trans_connect_id_Rows);
+				
+				transService.deleteTransKafkaConnect(transDbmsVO);	
+				
+				result = true;
+			} else {
+				result = false;
+			}
 		}catch(Exception e){
+			result = false;
 			e.printStackTrace();
 			txManager.rollback(status);
 		}finally{
@@ -483,7 +596,6 @@ public class TransDbmsController {
 		}
 		return result;
 	}
-	
 	
 	/**
 	 * Rman Backup Reregistration View page

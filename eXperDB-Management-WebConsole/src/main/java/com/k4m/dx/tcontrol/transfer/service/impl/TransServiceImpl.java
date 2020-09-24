@@ -147,25 +147,33 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 		String result = "";
 		
 		Map<String, Object> resultChk = null;
+		int rstCnt = 0;
 
 		try {
-			resultChk = (Map<String, Object>) transDAO.selectTransDbmsIngChk(transDbmsVO);
+			JSONArray trans_dbms_ids = (JSONArray) new JSONParser().parse(transDbmsVO.getTrans_dbms_id_Rows());
+			if (trans_dbms_ids != null && trans_dbms_ids.size() > 0) {
+				for(int i=0; i<trans_dbms_ids.size(); i++){
+					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
+					transDbmsPrmVO.setTrans_trg_sys_id(trans_dbms_ids.get(i).toString());
 
-			if (resultChk != null) {
-				String exeGbn = (String)transDbmsVO.getExeGbn();
-				int ingCnt = 0;
-				
-				if ("update".equals(exeGbn)) {
-					ingCnt = Integer.parseInt(resultChk.get("ing_cnt").toString());
-				} else {
-					ingCnt = Integer.parseInt(resultChk.get("tot_cnt").toString());
+					resultChk = (Map<String, Object>) transDAO.selectTransDbmsIngChk(transDbmsPrmVO);
+					if (resultChk != null) {
+						String exeGbn = (String)transDbmsVO.getExeGbn();
+						int ingCnt = 0;
+	
+						if ("update".equals(exeGbn)) {
+							ingCnt = Integer.parseInt(resultChk.get("ing_cnt").toString());
+						} else {
+							ingCnt = Integer.parseInt(resultChk.get("tot_cnt").toString());
+						}
+						
+						rstCnt = rstCnt + ingCnt;
+					}
 				}
-				
-				if (ingCnt > 0) {
-					result = "O";
-				} else {
-					result = "S";
-				}
+			}
+
+			if (rstCnt > 0) {
+				result = "O";
 			} else {
 				result = "S";
 			}
@@ -216,7 +224,20 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 	 */
 	@Override
 	public void deleteTransDBMS(TransDbmsVO transDbmsVO) throws Exception {
-		transDAO.deleteTransDBMS(transDbmsVO);
+		try{
+			JSONArray trans_dbms_ids = (JSONArray) new JSONParser().parse(transDbmsVO.getTrans_dbms_id_Rows());
+
+			if (trans_dbms_ids != null && trans_dbms_ids.size() > 0) {
+				for(int i=0; i<trans_dbms_ids.size(); i++){
+					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
+					transDbmsPrmVO.setTrans_sys_id(Integer.parseInt(trans_dbms_ids.get(i).toString()));
+					
+					transDAO.deleteTransDBMS(transDbmsPrmVO);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -706,10 +727,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			if (!"true".equals(resultMsg)) {
 				result = "O";
 			}
-System.out.println("===transDbmsVO====1===" + transDbmsVO.getKc_id());
-System.out.println("===transDbmsVO====2===" + transDbmsVO.getKc_nm());
-System.out.println("===transDbmsVO====3===" + transDbmsVO.getKc_port());
-System.out.println("===transDbmsVO====4===" + transDbmsVO.getKc_ip());
+
 			if ("S".equals(result) ) {
 				transDAO.insertTransKafkaConnect(transDbmsVO);
 			}
@@ -737,7 +755,7 @@ System.out.println("===transDbmsVO====4===" + transDbmsVO.getKc_ip());
 		String resultStr = "true";
 
 		try {
-			resultCnt = transDAO.trans_sys_nmCheck(kc_nm);
+			resultCnt = transDAO.trans_connect_nmCheck(kc_nm);
 			
 			if (resultCnt > 0) {
 				// 중복값이 존재함.
@@ -762,9 +780,22 @@ System.out.println("===transDbmsVO====4===" + transDbmsVO.getKc_ip());
 	 */
 	@Override
 	public void deleteTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception {
-		transDAO.deleteTransKafkaConnect(transDbmsVO);
+		try{
+			JSONArray trans_connect_ids = (JSONArray) new JSONParser().parse(transDbmsVO.getTrans_connect_id_Rows());
+
+			if (trans_connect_ids != null && trans_connect_ids.size() > 0) {
+				for(int i=0; i<trans_connect_ids.size(); i++){
+					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
+					transDbmsPrmVO.setKc_id(trans_connect_ids.get(i).toString());
+					
+					transDAO.deleteTransKafkaConnect(transDbmsPrmVO);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
-	
+
 	/**
 	 * trans connect 수정
 	 * 
@@ -775,7 +806,7 @@ System.out.println("===transDbmsVO====4===" + transDbmsVO.getKc_ip());
 	@Override
 	public String updateTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception {
 		String result = "S";
-System.out.println("===");
+
 		try {
 			transDAO.updateTransKafkaConnect(transDbmsVO);
 		} catch (Exception e) {
@@ -785,4 +816,49 @@ System.out.println("===");
 		
 		return result;
 	}
+	
+	/**
+	 * 기본설정 등록 조회
+	 * @param transVO, request, historyVO
+	 * @return Map<String, Object>
+	 */
+	@Override
+	public Map<String, Object> selectTransComSettingCngInfo(TransVO transVO) throws Exception {
+		return transDAO.selectTransComSettingCngInfo(transVO);
+	}
+	
+	/**
+	 * 기본설정 등록
+	 * 
+	 * @param transVO
+	 * @throws Exception 
+	 */
+	@Override
+	public String updateTransCommonSetting(TransVO transVO) throws Exception {
+		String result = "S";
+		Map<String, Object> recultChk = null;
+		
+		try{
+			//데이터 있는지 확인
+			recultChk = (Map<String, Object>) transDAO.selectTransComSettingCngInfo(transVO);
+
+			if (recultChk == null) {
+				result = "O";
+			}
+			
+			if ("O".equals(result)) {
+				transDAO.insertTransCommonSetting(transVO);
+			} else {
+				transDAO.updateTransCommonSetting(transVO);
+			}
+			
+			result = "S";
+		}catch(Exception e){
+			result = "F";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 }

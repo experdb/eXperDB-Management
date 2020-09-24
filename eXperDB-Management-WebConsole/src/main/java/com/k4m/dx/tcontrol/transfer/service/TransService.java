@@ -298,5 +298,19 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public String updateTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception;
-	
+
+	/**
+	 * 기본설정 등록 조회
+	 * @param transVO, request, historyVO
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> selectTransComSettingCngInfo(TransVO transVO) throws Exception;
+
+	/**
+	 * 기본설정 등록
+	 * @param transVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public String updateTransCommonSetting(TransVO transVO) throws Exception;
 }

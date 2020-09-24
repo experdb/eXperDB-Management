@@ -28,7 +28,21 @@ public class TransDbmsVO {
 	private String kc_ip;
 	private String kc_port;
 	private String exe_status;
+	private String trans_dbms_id_Rows;
+	private String trans_connect_id_Rows;
 
+	public String getTrans_connect_id_Rows() {
+		return trans_connect_id_Rows;
+	}
+	public void setTrans_connect_id_Rows(String trans_connect_id_Rows) {
+		this.trans_connect_id_Rows = trans_connect_id_Rows;
+	}
+	public String getTrans_dbms_id_Rows() {
+		return trans_dbms_id_Rows;
+	}
+	public void setTrans_dbms_id_Rows(String trans_dbms_id_Rows) {
+		this.trans_dbms_id_Rows = trans_dbms_id_Rows;
+	}
 	public String getKc_id() {
 		return kc_id;
 	}

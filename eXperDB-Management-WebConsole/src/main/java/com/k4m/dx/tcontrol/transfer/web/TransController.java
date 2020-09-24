@@ -665,6 +665,7 @@ public class TransController {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
 			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0151");
 			accessHistoryService.insertHistory(historyVO);
 
@@ -981,6 +982,7 @@ public class TransController {
 			String usr_id = loginVo.getUsr_id();
 			
 			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0151_01");
 			accessHistoryService.insertHistory(historyVO);
 
@@ -1053,6 +1055,7 @@ public class TransController {
 			String usr_id = loginVo.getUsr_id();
 			
 			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0151_01");
 			accessHistoryService.insertHistory(historyVO);
 
@@ -1169,6 +1172,7 @@ public class TransController {
 			String usr_id = loginVo.getUsr_id();
 			
 			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0152_01");
 			accessHistoryService.insertHistory(historyVO);
 
@@ -1231,6 +1235,7 @@ public class TransController {
 			String usr_id = loginVo.getUsr_id();
 			
 			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0152_01");
 			accessHistoryService.insertHistory(historyVO);
 
@@ -1572,6 +1577,65 @@ public class TransController {
 			result = "fail";
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+	/**
+	 * 기본설정 등록 조회
+	 * @param transVO, request, historyVO
+	 * @return Map<String, Object>
+	 */
+	@RequestMapping("/selectTransComSettingCngInfo.do")
+	@ResponseBody
+	public Map<String, Object> selectTransComSettingCngInfo(@ModelAttribute("transVO") TransVO transVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0156");
+			accessHistoryService.insertHistory(historyVO);
+			
+			result = transService.selectTransComSettingCngInfo(transVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;	
+	}
+	
+
+	/**
+	 * 기본설정 등록
+	 * @param 
+	 * @return
+	 */
+	@RequestMapping("/transComConCngWrite.do")
+	@ResponseBody
+	public String transComConCngWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transVO") TransVO transVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+		//중복체크 flag 값
+		String result = "S";
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0156_1");
+			accessHistoryService.insertHistory(historyVO);
+			
+			transVO.setFrst_regr_id((String)loginVo.getUsr_id());
+			transVO.setLst_mdfr_id((String)loginVo.getUsr_id());
+			
+			//저장 process
+			result = transService.updateTransCommonSetting(transVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return result;
 	}
 }
