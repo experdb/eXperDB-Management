@@ -71,7 +71,7 @@ a:hover.tip span {
 		fn_source_init();
 		fn_target_init();
 
-		//aws 서버 확인
+		//kafka connect 확인
 		fn_selectKafkaConnectChk();
 
 	  	$(function() {	
@@ -106,7 +106,11 @@ a:hover.tip span {
 			},
 			success : function(result) {
 				if (result != null) {
-					connect_yn = "Y";
+					if (result.length > 0) {
+						connect_yn = "Y";
+					} else {
+						connect_yn = "N";
+					}
 				} else {
 					connect_yn = "N";
 				}
@@ -130,8 +134,7 @@ a:hover.tip span {
 					$("#btnScInsert").prop("disabled", "disabled");
 					$("#btnTgInsert").prop("disabled", "disabled");
 					$("#btnSearch").prop("disabled", "disabled");
-					$("#btnCommonInsert").prop("disabled", "disabled");
-					$("#btnKafkaInsert").prop("disabled", "disabled");
+					$("#btnCommonConSetInsert").prop("disabled", "disabled");
 				}
 			}
 		});

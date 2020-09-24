@@ -138,7 +138,11 @@ a:hover.tip span {
 			},
 			success : function(result) {
 				if (result != null) {
-					connect_yn = "Y";
+					if (result.length > 0) {
+						connect_yn = "Y";
+					} else {
+						connect_yn = "N";
+					}
 				} else {
 					connect_yn = "N";
 				}
@@ -157,7 +161,7 @@ a:hover.tip span {
 					$("#btnModify").prop("disabled", "disabled");
 					$("#btnInsert").prop("disabled", "disabled");
 					$("#btnSearch").prop("disabled", "disabled");
- 
+					$("#btnCommonConSetInsert").prop("disabled", "disabled");
 				}
 			}
 		});
@@ -1087,6 +1091,9 @@ a:hover.tip span {
 			$("#btnModify").prop("disabled", "disabled");
 			$("#btnInsert").prop("disabled", "disabled");
 			$("#btnSearch").prop("disabled", "disabled");
+			
+			$("#btnKafkaInsert").prop("disabled", "disabled");
+			$("#btnCommonConSetInsert").prop("disabled", "disabled");
 		}else{
 			strMsg = '<i class="fa fa-spin fa-cog btn-icon-prepend"></i>';
 			$("#btnChoActive").html(strMsg + '<spring:message code="data_transfer.save_select_active" />');
@@ -1099,6 +1106,9 @@ a:hover.tip span {
 			$("#btnModify").prop("disabled", "");
 			$("#btnInsert").prop("disabled", "");
 			$("#btnSearch").prop("disabled", "");
+			
+			$("#btnKafkaInsert").prop("disabled", "");
+			$("#btnCommonConSetInsert").prop("disabled", "");
 		} 
 	}
 
@@ -1120,7 +1130,6 @@ a:hover.tip span {
 			}
 		}
 	}
-
 
 	/* ********************************************************
 	 * modal popup 활성화 클릭

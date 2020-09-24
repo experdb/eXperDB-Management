@@ -618,8 +618,9 @@ function fn_buttonExecuteAut(autIngGbn, exeIngGbn){
 		$("#btnScInsert").prop("disabled", "disabled");
 		$("#btnTgInsert").prop("disabled", "disabled");
 		$("#btnSearch").prop("disabled", "disabled");
-		$("#btnCommonInsert").prop("disabled", "disabled");
+		
 		$("#btnKafkaInsert").prop("disabled", "disabled");
+		$("#btnCommonConSetInsert").prop("disabled", "disabled");
 	}else{
 		strMsg = '<i class="fa fa-spin fa-cog btn-icon-prepend"></i>';
 		$("#btnChoActive").html(strMsg + data_transfer_save_select_active);
@@ -635,8 +636,9 @@ function fn_buttonExecuteAut(autIngGbn, exeIngGbn){
 		$("#btnScInsert").prop("disabled", "");
 		$("#btnTgInsert").prop("disabled", "");
 		$("#btnSearch").prop("disabled", "");
-		$("#btnCommonInsert").prop("disabled", "");
+
 		$("#btnKafkaInsert").prop("disabled", "");
+		$("#btnCommonConSetInsert").prop("disabled", "");
 	} 
 }
 
