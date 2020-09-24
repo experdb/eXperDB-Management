@@ -210,6 +210,26 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
+						
+						//2020.09.23
+						html1+='	<tr>';
+						html1+='		<td class="pl-4"><spring:message code="data_transfer.btn_title01" /></td>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_dbms_aut" name="trans_dbms_aut" onClick="fn_userCheck();" />';
+						html1+='				<label for="'+item.db_svr_id+'_trans_dbms_aut"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
+						html1+='	<tr>';
+						html1+='		<td class="pl-4"><spring:message code="data_transfer.btn_title02" /></td>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_con_aut" name="trans_con_aut" onClick="fn_userCheck();" />';
+						html1+='				<label for="'+item.db_svr_id+'_trans_con_aut"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
 					}
 					
 					html1+='	<tr>';
@@ -399,6 +419,20 @@
 								}else{
 									document.getElementById(result[i].db_svr_id+"_transSetting").checked = false;
 								}
+								
+								//전송설정(2020-09-23)
+								if(result.length != 0 && result[i].trans_dbms_cng_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_trans_dbms_aut").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_trans_dbms_aut").checked = false;
+								}
+								
+								//전송설정(2020-08-31)
+								if(result.length != 0 && result[i].trans_con_cng_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = false;
+								}
 							}
 
 							//서버접근제어 권한
@@ -470,6 +504,8 @@
 						
 						if("${sessionScope.session.transfer}"== "Y"){
 							document.getElementById(svr_server[0].db_svr_id+"_transSetting").checked = false;
+							document.getElementById(svr_server[0].db_svr_id+"_trans_dbms_aut").checked = false;
+							document.getElementById(svr_server[0].db_svr_id+"_trans_con_aut").checked = false;
 						}
 					}
 				}
@@ -585,7 +621,11 @@
 			return false;
 		}else{
 			var usr_id = userTable.row('.selected').data().usr_id;
-
+			
+			var transSetting_aut = null;
+			var trans_dbms_aut = null;
+			var trans_con_aut = null;
+			
 			/* 2020.03.03 scale 추가 */
 			var db_svr_id = $("input[name='db_svr_id']");
 			var bck_cng_aut = $("input[name='bck_cng_aut']");
@@ -598,7 +638,9 @@
 					
 			/* 2020-08-31 전송관리 추가 */
 			if("${sessionScope.session.transfer}"== "Y"){
-				var transSetting_aut = $("input[name='transSetting_aut']");
+				transSetting_aut = $("input[name='transSetting_aut']");
+				trans_dbms_aut = $("input[name='trans_dbms_aut']");
+				trans_con_aut = $("input[name='trans_con_aut']");
 			}
 			
 			var acs_cntr_aut = $("input[name='acs_cntr_aut']");
@@ -708,7 +750,21 @@
 						autCheck++;
 					}else{				
 						rows.transSetting_aut_yn = "N";
-				}
+					}
+					
+					if(trans_dbms_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함			
+						rows.trans_dbms_cng_aut_yn = "Y"; 
+						autCheck++;
+					}else{				
+						rows.trans_dbms_cng_aut_yn = "N";
+					}
+					
+					if(trans_con_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함			
+						rows.trans_con_cng_aut_yn = "Y"; 
+						autCheck++;
+					}else{				
+						rows.trans_con_cng_aut_yn = "N";
+					}
 				}
 					
 				if(acs_cntr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함

@@ -109,6 +109,59 @@
 		});
 		$('#loading').hide();
 	}
+
+	/* ********************************************************
+	 * 팝업시작
+	 ******************************************************** */
+	function fn_tansKafkaConModPopStart(result) {
+		$("#mod_trans_kafka_con_nm", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_nm, ""));
+		$("#mod_trans_kafka_con_ip", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_ip, "")); 
+		$("#mod_trans_kafka_con_port", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_port, "")); 
+		$("#mod_trans_kafka_con_id", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_id, ""));
+		$("#mod_trans_kafka_con_Chk", "#modTransKfkConRegForm").val("success"); 
+	}
+
+	/* ********************************************************
+	 * update 실행
+	 ******************************************************** */
+	function fnc_mod_trans_kafka_con_wrk() {
+		if (!mod_trans_kafka_ins_valCheck()) return false;
+
+		$.ajax({
+			async : false,
+			url : "/popup/updateTransKafkaConnect.do",
+		  	data : {
+		  		kc_id : nvlPrmSet($("#mod_trans_kafka_con_id","#modTransKfkConRegForm").val(),''),
+		  		kc_nm : nvlPrmSet($("#mod_trans_kafka_con_nm","#modTransKfkConRegForm").val(),''),
+		  		kc_ip : nvlPrmSet($("#mod_trans_kafka_con_ip","#modTransKfkConRegForm").val(),''),
+		  		kc_port : nvlPrmSet($("#mod_trans_kafka_con_port","#modTransKfkConRegForm").val(),'')
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result == "S"){
+					showSwalIcon('<spring:message code="message.msg106" />', '<spring:message code="common.close" />', '', 'success');
+					$('#pop_layer_trans_kfk_con_reg_re').modal('hide');
+					fn_connect_select();
+				}else{
+					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_trans_kfk_con_reg_re').modal('show');
+					return;
+				}
+			}
+		});
+	}
 </script>
 
 <div class="modal fade" id="pop_layer_trans_kfk_con_reg_re" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:1060;">
@@ -157,7 +210,7 @@
 								</div>																	
 
 								<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
-									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" value='<spring:message code="common.registory" />' />
+									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" value='<spring:message code="common.modify" />' />
 									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" type="button" onclick="fn_mod_trans_kcConnectTest();" value='<spring:message code="data_transfer.test_connection" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 								</div>

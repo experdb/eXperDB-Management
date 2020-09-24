@@ -187,6 +187,160 @@
 
 		return true;
 	}
+	
+	/* ********************************************************
+	 * 팝업시작
+	 ******************************************************** */
+	function fn_transDbmsRegPopStart(result) {
+		$("#reg_trans_sys_nm_check_alert", "#trasnDbmsInsertPop").html("");
+		$("#reg_trans_sys_nm_check_alert", "#trasnDbmsInsertPop").hide();		
+
+		$("#reg_trans_connectTest_check_alert", "#trasnDbmsInsertPop").html("");
+		$("#reg_trans_connectTest_check_alert", "#trasnDbmsInsertPop").hide();
+
+		$("#reg_trans_sys_nm", "#trasnDbmsInsertPop").val("");
+		$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val(""); 
+		$("#reg_trans_ipadr", "#trasnDbmsInsertPop").val(""); 
+		$("#reg_trans_portno", "#trasnDbmsInsertPop").val(""); 
+		$("#reg_trans_dtb_nm", "#trasnDbmsInsertPop").val(""); 
+		$("#reg_trans_schema_nm", "#trasnDbmsInsertPop").val(""); 
+		$("#reg_trans_spr_usr_id", "#trasnDbmsInsertPop").val(""); 
+		$("#reg_trans_pwd", "#trasnDbmsInsertPop").val(""); 
+		
+		$('#reg_trans_sys_nmChk', '#trasnDbmsInsertPop').val("fail");
+		$('#reg_trans_sys_connection', '#trasnDbmsInsertPop').val("");
+		
+		$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").find('option').remove();
+		$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").append('<option value="">' + common_choice + '</option>');
+
+		if (result.dbmsGrb_reg != null) {
+			for (var idx=0; idx < result.dbmsGrb_reg.length; idx++) {
+				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201") {
+					$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").append("<option value='"+ result.dbmsGrb_reg[idx].sys_cd + "'>" + result.dbmsGrb_reg[idx].sys_cd_nm + "</option>");
+				}
+			}
+		}
+	}
+
+	/* ********************************************************
+	 * 시스템명 중복체크
+	 ******************************************************** */
+	function fn_transDbmsInsSysnmCheck() {
+		if ($('#reg_trans_sys_nm', '#trasnDbmsInsertPop').val() == "") {
+			showSwalIcon('<spring:message code="migration.msg01" />', '<spring:message code="common.close" />', '', 'warning');
+			return;
+		}
+		
+		//msg 초기화
+		$("#reg_trans_sys_nm_check_alert", "#trasnDbmsInsertPop").html('');
+		$("#reg_trans_sys_nm_check_alert", "#trasnDbmsInsertPop").hide();
+		
+		$.ajax({
+			url : '/trans_sys_nmCheck.do',
+			type : 'post',
+			data : {
+				trans_sys_nm : $('#reg_trans_sys_nm', '#trasnDbmsInsertPop').val()
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+	 			if(xhr.status == 401) {
+	 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+	 			} else if(xhr.status == 403) {
+	 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+	 			} else {
+	 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+	 			}
+			},
+			success : function(result) {
+				if (result == "true") {
+					showSwalIcon('<spring:message code="migration.msg04" />', '<spring:message code="common.close" />', '', 'success');
+					$('#reg_trans_sys_nmChk', '#trasnDbmsInsertPop').val("success");
+				} else {
+					showSwalIcon('<spring:message code="migration.msg05" />', '<spring:message code="common.close" />', '', 'error');
+					$('#reg_trans_sys_nmChk', '#trasnDbmsInsertPop').val("fail");
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * 시스템 명 변경시
+	 ******************************************************** */
+	function fn_reg_trans_dbms_connect_Cho() {
+		$('#reg_trans_sys_connection', '#trasnDbmsInsertPop').val("");
+		
+		$("#reg_trans_connectTest_check_alert", "#trasnDbmsInsertPop").html('');
+		$("#reg_trans_connectTest_check_alert", "#trasnDbmsInsertPop").hide();
+	}
+
+	/* ********************************************************
+	 * 시스템 명 변경시
+	 ******************************************************** */
+	function fn_reg_trans_sys_nmCho() {
+		$('#reg_trans_sys_nmChk', '#trasnDbmsInsertPop').val("fail");
+		
+		$("#reg_trans_sys_nm_check_alert", "#trasnDbmsInsertPop").html('');
+		$("#reg_trans_sys_nm_check_alert", "#trasnDbmsInsertPop").hide();
+	}
+	
+
+	/* ********************************************************
+	 * DBMS 등록
+	 ******************************************************** */
+	function fn_trans_insertDBMS(){
+		$('#trasnDbmsInsertPop').submit();
+	}
+
+	/* ********************************************************
+	 * DBMS 등록 로직 실행
+	 ******************************************************** */
+	function fn_trans_dbms_insert_proc(){
+		if (!ins_trans_dbms_valCheck()) return false;
+
+		$.ajax({
+			async : false,
+	  		url : "/popup/insertTransDBMS.do",
+			data : {
+	  		 	trans_sys_nm : nvlPrmSet($("#reg_trans_sys_nm", "#trasnDbmsInsertPop").val(), ''),
+	  			ipadr : nvlPrmSet($("#reg_trans_ipadr", "#trasnDbmsInsertPop").val(), ''),
+	  		 	portno : nvlPrmSet($("#reg_trans_portno", "#trasnDbmsInsertPop").val(), ''),
+	  		  	dtb_nm : nvlPrmSet($("#reg_trans_dtb_nm", "#trasnDbmsInsertPop").val(), ''),
+	  		  	scm_nm : nvlPrmSet($("#reg_trans_schema_nm", "#trasnDbmsInsertPop").val(), ''),
+	  		   	spr_usr_id : nvlPrmSet($("#reg_trans_spr_usr_id", "#trasnDbmsInsertPop").val(), ''),
+	  		   	pwd : nvlPrmSet($("#reg_trans_pwd", "#trasnDbmsInsertPop").val(), ''),
+	  		  	dbms_dscd : nvlPrmSet($("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val(), '')
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+	 			if(xhr.status == 401) {
+	 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+	 			} else if(xhr.status == 403) {
+	 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+	 			} else {
+	 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+	 			}
+			},
+			success : function(data) {
+				if(data == "O"){ //중복 work명 일경우
+					showSwalIcon('<spring:message code="migration.msg05" />', '<spring:message code="common.close" />', '', 'error');
+					return;
+				} else if(data == "S"){
+					showSwalIcon('<spring:message code="message.msg106" />', '<spring:message code="common.close" />', '', 'success');
+					$('#pop_layer_trans_dbms_reg').modal('hide');
+					fn_dbms_select();
+				}else{
+					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_trans_dbms_reg').modal('show');
+					return;
+				}
+			}
+		});
+	}
 </script>
 <div class="modal fade" id="pop_layer_trans_dbms_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:1060;">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">

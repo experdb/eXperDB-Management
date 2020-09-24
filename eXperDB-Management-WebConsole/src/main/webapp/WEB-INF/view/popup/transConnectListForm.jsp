@@ -22,34 +22,77 @@
 	  		})		
 	  	});
 	});
+	
 
 	/* ********************************************************
-	 * 삭제 로직 처리
+	 * 테이블 셋팅
 	 ******************************************************** */
-	function fn_trans_kafka_con_delete(){
-		var datas = null;
-		datas = trans_kafka_con_pop_table.row('.selected').data();
-		if (datas == null) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return;
-		} else {
-			if (datas.length <= 0) {
-				showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-				return;
-			}else if(datas.length > 1){
-				showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
-				return;
-			}
-		}
+	function fn_trans_kafka_con_pop_init() {
+		/* ********************************************************
+		 * 리스트
+		 ******************************************************** */
+		trans_kafka_con_pop_table = $('#transKfkConPopList').DataTable({
+			scrollY : "260px",
+			searching : false,
+			deferRender : true,
+			scrollX: true,
+			bSort: false,
+			paging: false,
+			columns : [
+				{data : "rownum",  className : "dt-center", defaultContent : ""},
+				{data : "kc_nm", className : "dt-left", defaultContent : ""},
+				{data : "kc_ip", className : "dt-center", defaultContent : ""},
+				{data : "kc_port", className : "dt-center", defaultContent : ""},
 
-		var kc_id = trans_kafka_con_pop_table.row('.selected').data().kc_id;
+				{data : "exe_status", 
+					render: function (data, type, full){
+						var html = "";
+						if(full.exe_status == "TC001501"){
+							html += "<div class='badge badge-pill badge-success'>";
+							html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+							html += "	<spring:message code='data_transfer.connecting' />";
+						} else {
+							html += "<div class='badge badge-pill badge-danger'>";
+							html += "	<i class='ti-close mr-2'></i>";
+							html += "	<spring:message code='schedule.stop' />";
+						}
+
+						html += "</div>";
+
+						return html;
+					},
+					className : "dt-left",
+					defaultContent : "" 	
+				},
+				
+				{data : "dtb_nm", className : "dt-center", defaultContent : ""},
+				{data : "kc_id",  defaultContent : "", visible: false }
+			]
+		});
+		 
+
+		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(2)').css('min-width', '123px');
+		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
+		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
+
+		$(window).trigger('resize');
+	}
+
+
+	/* ********************************************************
+	 * kafka connect 조회
+	 ******************************************************** */
+	function fn_trans_kafka_con_pop_search(){
 
 		$.ajax({
-			url : "/popup/deleteTransKafkaConnect.do",
-		  	data : {
-		  		kc_id : kc_id
-		  	},
-			dataType : "json",
+			url : "/selectTransKafkaConList.do",
+			data : {
+				kc_nm : nvlPrmSet($("#pop_trans_kafka_con_nm").val(), '')
+			},
 			type : "post",
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -63,77 +106,34 @@
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
-			success : function(result) {						
-				if(result == true){
-					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
-					fn_trans_kafka_con_pop_search();
-				}else{
-					msgVale = "<spring:message code='data_transfer.btn_title01' />";
-					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
-					return;
+			success : function(result) {
+				trans_kafka_con_pop_table.rows({selected: true}).deselect();
+				trans_kafka_con_pop_table.clear().draw();
+				if (nvlPrmSet(result, '') != '') {
+					trans_kafka_con_pop_table.rows.add(result).draw();
 				}
 			}
 		});
 	}
-	
 
 	/* ********************************************************
-	 * kafka 수정 팝업페이지 호출
+	 * 팝업시작
 	 ******************************************************** */
-	function fn_trans_kfk_con_upd_pop(){
-		var datas = null;
-		datas = trans_kafka_con_pop_table.row('.selected').data();
-		if (datas == null) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return;
-		} else {
-			if (datas.length <= 0) {
-				showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-				return;
-			}else if(datas.length > 1){
-				showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
-				return;
-			}
-		}
-		
-		var kc_id = trans_kafka_con_pop_table.row('.selected').data().kc_id;
+	function fn_transKafkaConPopStart() {
+		//조회
+		fn_trans_kafka_con_pop_search();
 
-		$.ajax({
-			url : "/popup/transTargetKfkConUdt.do",
-			data : {
-				kc_id : kc_id
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+	  	$(function() {	
+			$('#transKfkConPopList tbody').on( 'click', 'tr', function () {
+				if ( $(this).hasClass('selected') ) {
+				}else {
+					tans_dbms_pop_table.$('tr.selected').removeClass('selected');
+					$(this).addClass('selected');
 				}
-			},
-			success : function(result) {
-				if (result.resultInfo != null) {
-					fn_tansKafkaConModPopStart(result);
-					
-					$('#pop_layer_trans_kfk_con_reg_re').modal("show");
-				} else {
-					showSwalIcon(message_msg01, closeBtn, '', 'error');
-					$('#pop_layer_trans_kfk_con_reg_re').modal("hide");
-					return;
-				}
-			}
+			})
 		});
 	}
 </script>
-
-<%@include file="../popup/transKafkaConRegForm.jsp"%>
-<%@include file="../popup/transKafkaConRegReForm.jsp"%>
 
 <div class="modal fade" id="pop_layer_trans_con_list" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 60px 300px;">
@@ -155,24 +155,8 @@
 						</div>
 					</div>
 					
-					<div class="card-body">
-						<div class="row" style="margin-top:-20px;margin-right:-30px;">
-							<div class="col-12">
-								<div class="template-demo">	
-									<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnTransDmbsDelete" onClick="fn_trans_kafka_con_delete();" >
-										<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
-									</button>
-									<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnTransDmbsModify" onClick="fn_trans_kfk_con_upd_pop();" data-toggle="modal">
-										<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
-									</button>
-									<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnTransDmbsInsert" onClick="fn_trans_kfk_con_Ins_pop();" data-toggle="modal">
-										<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					
+					<br />
+
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i> kafka Connect LIST</p>
 						

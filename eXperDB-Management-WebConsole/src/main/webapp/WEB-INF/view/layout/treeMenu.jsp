@@ -5,6 +5,7 @@
 <script type="text/javascript">
 	var before = null;
 	var scale_yn_chk = "";
+	var transfer_ora_chk = "";
 
 	$(window.document).ready(function() {
 		$.ajax({
@@ -53,6 +54,7 @@
 			},
 			success : function(result) {
 				scale_yn_chk = result.scale_yn_chk;
+				transfer_ora_chk = result.transfer_ora_chk;
 			}
 		});
 
@@ -259,22 +261,50 @@
 											var transferChk = String('${sessionScope.session.transfer}').trim();
 
 											if(transferChk == 'Y'){
-											menuJson +=	', {' +
+												menuJson +=	', {' +
 															 '"text": "<spring:message code="menu.data_transfer"/>",' +
 															 '"icon": "fa fa-inbox",' + 
 															 '"id": "trans'+item.db_svr_id+'",' +
 															 '"nodes": [';
-															
-											if(aut.length != 0 && aut[index].transsetting_aut_yn == "Y"){				 
-											menuJson +=	'{' +
-															'"icon": "fa fa-send",' +
-															'"text": "<spring:message code="menu.trans_management"/>",' +
-															'"url": "/transSetting.do?db_svr_id='+item.db_svr_id+'",' +
-															'"id": "transSetting'+item.db_svr_id+'"' +
-														'}';
-											}			
-											menuJson +=		']' +
-														'}';
+
+												if (transfer_ora_chk == "Y") {
+													if(aut.length != 0 && aut[index].trans_dbms_cng_aut_yn == "Y"){
+														menuJson +=	'{' +
+																		'"icon": "fa fa-database",' +
+																		'"text": "<spring:message code="data_transfer.btn_title01"/>",' +
+																		'"url": "/transDbmsSetting.do?db_svr_id='+item.db_svr_id+'",' +
+																		'"id": "transDbmsSetting'+item.db_svr_id+'"' +
+																	'},';
+													}
+												}
+
+												if(aut.length != 0 && aut[index].trans_con_cng_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-history",' +
+																	'"text": "<spring:message code="data_transfer.btn_title02"/>",' +
+																	'"url": "/transConnectSetting.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "transConnectSetting'+item.db_svr_id+'"' +
+																'},';
+												}
+	
+												if(aut.length != 0 && aut[index].transsetting_aut_yn == "Y"){				 
+													menuJson +=	'{' +
+																'"icon": "fa fa-send",' +
+																'"text": "<spring:message code="menu.trans_management"/>",' +
+																'"url": "/transSetting.do?db_svr_id='+item.db_svr_id+'",' +
+																'"id": "transSetting'+item.db_svr_id+'"' +
+															'}';
+												}
+												
+												//마지막 콤마 제거
+												if (menuJson.charAt(menuJson.length-1) == ",") {
+													menuJson = menuJson.substr(0, menuJson.length -1);
+												}
+
+												
+												
+												menuJson +=		']' +
+															'}';
 											}
 											////////////////////////////////////////////////////////////////////////////
 

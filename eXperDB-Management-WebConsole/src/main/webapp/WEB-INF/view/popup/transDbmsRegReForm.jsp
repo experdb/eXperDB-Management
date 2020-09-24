@@ -237,7 +237,7 @@
 				if(data == "S"){
 					showSwalIcon('<spring:message code="message.msg84" />', '<spring:message code="common.close" />', '', 'success');
 					$('#pop_layer_trans_dbms_reg_re').modal('hide');
-					fn_trans_dbms_pop_search();
+					fn_dbms_select();
 				}else{
 					showSwalIcon('<spring:message code="eXperDB_scale.msg22" />', '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_trans_dbms_reg_re').modal('show');

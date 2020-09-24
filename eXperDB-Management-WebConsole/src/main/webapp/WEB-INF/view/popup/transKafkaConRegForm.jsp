@@ -48,6 +48,60 @@
 		    }
 		}); 
 	});
+	
+	/* ********************************************************
+	 * insert 실행
+	 ******************************************************** */
+	function fnc_ins_trans_kafka_con_wrk() {
+		if (!ins_trans_kafka_ins_valCheck()) return false;
+
+		$.ajax({
+			async : false,
+			url : "/popup/insertTransKafkaConnect.do",
+		  	data : {
+		  		kc_nm : nvlPrmSet($("#ins_trans_kafka_con_nm","#insTransKfkConRegForm").val(),''),
+		  		kc_ip : nvlPrmSet($("#ins_trans_kafka_con_ip","#insTransKfkConRegForm").val(),''),
+		  		kc_port : nvlPrmSet($("#ins_trans_kafka_con_port","#insTransKfkConRegForm").val(),'')
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result == "O"){ //중복 work명 일경우
+					showSwalIcon('<spring:message code="data_transfer.msg28" />', '<spring:message code="common.close" />', '', 'error');
+					return;
+				} else if(result == "S"){
+					showSwalIcon('<spring:message code="message.msg106" />', '<spring:message code="common.close" />', '', 'success');
+					$('#pop_layer_trans_kfk_con_reg').modal('hide');
+					fn_connect_select();
+				}else{
+					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_trans_kfk_con_reg').modal('show');
+					return;
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * 팝업시작
+	 ******************************************************** */
+	function fn_tansKfkConRegPopStart(result) {
+		$("#ins_trans_kafka_con_nm", "#insTransKfkConRegForm").val("");
+		$("#ins_trans_kafka_con_ip", "#insTransKfkConRegForm").val(""); 
+		$("#ins_trans_kafka_con_port", "#insTransKfkConRegForm").val(""); 
+		$("#ins_trans_kafka_con_Chk", "#insTransKfkConRegForm").val("fail"); 
+	}
 
 	/* ********************************************************
 	 * Validation Check
@@ -109,6 +163,7 @@
 		});
 		$('#loading').hide();
 	}
+
 </script>
 
 <div class="modal fade" id="pop_layer_trans_kfk_con_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:1060;">
