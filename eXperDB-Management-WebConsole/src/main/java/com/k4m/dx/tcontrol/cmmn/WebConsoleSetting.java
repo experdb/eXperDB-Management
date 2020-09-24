@@ -316,6 +316,7 @@ public class WebConsoleSetting {
 		    prop.setProperty("database.password", "ENC(" + password + ")");
 		    prop.setProperty("pg_audit", strAuditYN);
 		    prop.setProperty("transfer", strTransferYN);	
+		    prop.setProperty("transfer_ora", strTransferOraYN);
 		    
 		    if(strScaleYN.equals("Y")){
 		    	 prop.setProperty("scale", strScaleYN);	
