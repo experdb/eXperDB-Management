@@ -172,7 +172,7 @@ a:hover.tip span {
 	 ******************************************************** */
 	function fn_init(){
 		table = $('#transSettingTable').DataTable({
-			scrollY : "330px",
+			scrollY : "280px",
 			deferRender : true,
 			scrollX: true,
 			searching : false,
