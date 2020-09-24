@@ -856,4 +856,16 @@
              , LST_MDF_DTM = clock_timestamp()
          WHERE TRANS_COM_ID = #{trans_com_id}::numeric
 	</update>
+	
+	<select id="selectTransKafkaConIngChk" parameterType="transDbmsVO" resultType="hashMap">
+		/**
+		*  Query ID : selectTransKafkaConIngChk
+		* Description : trans connect 사용여부 체크
+		* Author :
+		**/
+        SELECT
+               COUNT(*) AS TOT_CNT
+          FROM T_TRANSCNG_TARGET_I
+         WHERE KC_ID = #{kc_id}::numeric
+	</select>
 </mapper>

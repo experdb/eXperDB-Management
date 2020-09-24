@@ -861,4 +861,52 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 		return result;
 	}
 
+	/**
+	 * trans kafka 사용여부 확인
+	 * 
+	 * @param param
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String selectTransKafkaConIngChk(TransDbmsVO transDbmsVO) throws Exception {
+		String result = "";
+		
+		Map<String, Object> resultChk = null;
+		int rstCnt = 0;
+
+		try {
+			JSONArray trans_connect_ids = (JSONArray) new JSONParser().parse(transDbmsVO.getTrans_connect_id_Rows());
+			if (trans_connect_ids != null && trans_connect_ids.size() > 0) {
+				for(int i=0; i<trans_connect_ids.size(); i++){
+					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
+					transDbmsPrmVO.setKc_id(trans_connect_ids.get(i).toString());
+
+					resultChk = (Map<String, Object>) transDAO.selectTransKafkaConIngChk(transDbmsPrmVO);
+					if (resultChk != null) {
+						int ingCnt = 0;
+	
+						ingCnt = Integer.parseInt(resultChk.get("tot_cnt").toString());
+						
+						rstCnt = rstCnt + ingCnt;
+					}
+				}
+			}
+
+			if (rstCnt > 0) {
+				result = "O";
+			} else {
+				result = "S";
+			}
+		} catch (SQLException e) {
+			result = "F";
+			e.printStackTrace();
+		} catch (Exception e) {
+			result = "F";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 }

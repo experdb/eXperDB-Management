@@ -406,5 +406,17 @@ public class TransDAO extends EgovAbstractMapper{
 	public void updateTransCommonSetting(TransVO transVO) {
 		update("transSQL.updateTransCommonSetting", transVO);	
 	}
+	
+	/**
+	 * trans KAFKA CONNECT 사용여부 확인
+	 * 
+	 * @param transDbmsVO
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectTransKafkaConIngChk(TransDbmsVO transDbmsVO) throws SQLException {
+		return (Map<String, Object>) selectOne("transSQL.selectTransKafkaConIngChk", transDbmsVO);
+	}
+
 
 }

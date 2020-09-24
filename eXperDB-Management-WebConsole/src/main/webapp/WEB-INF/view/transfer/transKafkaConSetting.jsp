@@ -160,7 +160,7 @@
 	 * trans connect 삭제버튼 클릭시
 	 ******************************************************** */
 	function fn_kafka_con_delete(){
-		var datas = trans_connect_table.rows('.selected').data();
+/* 		var datas = trans_connect_table.rows('.selected').data();
 		
 		if (datas.length <= 0) {
 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
@@ -171,7 +171,7 @@
 
 		for (var i = 0; i < datas.length; i++) {
 			trans_connect_id_List.push(datas[i].kc_id);   
-		}
+		} */
 
 		confile_title = '<spring:message code="data_transfer.btn_title02" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 		$('#con_multi_gbn', '#findConfirmMulti').val("trans_connect_del");
@@ -228,8 +228,8 @@
 	/* ********************************************************
 	 * kafka 수정 팝업페이지 호출
 	 ******************************************************** */
-	function fn_kafka_con_update (){
-
+	function fn_kafka_con_update(){
+/* 
 		var datas = trans_connect_table.rows('.selected').data();
 		
 		if (datas.length <= 0) {
@@ -240,7 +240,7 @@
 		if(datas.length > 1){
 			showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 			return;
-		}
+		} */
 
 		var kc_id = trans_connect_table.row('.selected').data().kc_id;
 		
@@ -271,6 +271,80 @@
 				} else {
 					showSwalIcon(message_msg01, closeBtn, '', 'error');
 					$('#pop_layer_trans_kfk_con_reg_re').modal("hide");
+					return;
+				}
+			}
+		});
+	}
+	
+	
+	/* ********************************************************
+	 * kafka 사용여부 체크
+	 ******************************************************** */
+	function fn_kafkaConChk(selGbn) {
+		var datas = trans_connect_table.rows('.selected').data();
+		
+		if (datas.length <= 0) {
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			return;
+		}
+		
+		if (selGbn == "update") {
+			if(datas.length > 1){
+				showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
+				return;
+			}
+		}
+		
+		trans_connect_id_List = [];
+
+		for (var i = 0; i < datas.length; i++) {
+			trans_connect_id_List.push(datas[i].kc_id);   
+		}
+
+		//사용중이거나 활성활 일경우
+		$.ajax({
+			url : "/selectTransKafkaConIngChk.do",
+			data : {
+				trans_connect_id_List : JSON.stringify(trans_connect_id_List),
+				exeGbn : selGbn
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+ 				var msgResult = "";
+
+				if (result != null) {
+					if (result == "S") {
+ 						if (selGbn =="update") {
+ 							fn_kafka_con_update();
+						} else {
+							fn_kafka_con_delete();
+						}
+					} else if (result == "O") {
+						msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg31" />');
+						showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
+						return;
+					} else {
+						msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
+						showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
+						return;
+					}
+				} else {
+					msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
+					showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
 			}
@@ -361,10 +435,10 @@
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDmbsDelete" onClick="fn_kafka_con_delete();" >
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDmbsDelete" onClick="fn_kafkaConChk('delete');" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDmbsModify" onClick="fn_kafka_con_update();" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDmbsModify" onClick="fn_kafkaConChk('update');" data-toggle="modal">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDmbsInsert" onClick="fn_kafka_con_insert();" data-toggle="modal">

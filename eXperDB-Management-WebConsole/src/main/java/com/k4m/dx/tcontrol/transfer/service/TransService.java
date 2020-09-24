@@ -313,4 +313,13 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public String updateTransCommonSetting(TransVO transVO) throws Exception;
+	
+	/**
+	 * trans kafka connect 사용여부 확인
+	 * 
+	 * @param transDbmsVO
+	 * @throws Exception
+	 */
+	public String selectTransKafkaConIngChk(TransDbmsVO transDbmsVO) throws Exception;
+
 }

@@ -660,4 +660,31 @@ public class TransDbmsController {
 		return result;
 	}
 	
+	/**
+	 * kafka connect 사용중 또는 등록 되있는 경우 확인
+	 * @param response, request , transDbmsVO
+	 * @return String
+	 */
+	@RequestMapping("/selectTransKafkaConIngChk.do")
+	public @ResponseBody String selectTransKafkaConIngChk(@ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletRequest request, HttpServletResponse response) {	
+		String result = "S";
+
+		String trans_connect_id_Rows = request.getParameter("trans_connect_id_List").toString().replaceAll("&quot;", "\"");
+
+		try {
+			if (!"".equals(trans_connect_id_Rows)) {
+				transDbmsVO.setTrans_connect_id_Rows(trans_connect_id_Rows);
+
+				result = transService.selectTransKafkaConIngChk(transDbmsVO);
+			} else {
+				result = "F";
+			}
+		} catch (Exception e1) {
+			result = "F";
+			e1.printStackTrace();
+		}
+
+		return result;
+	}
+	
 }
