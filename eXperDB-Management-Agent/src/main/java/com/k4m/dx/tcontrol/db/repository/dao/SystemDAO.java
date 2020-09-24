@@ -126,4 +126,11 @@ public class SystemDAO {
 	public void updateTransTargetExe(TransVO transVO) throws Exception{
 		session.update("system.updateTransTargetExe", transVO);
 	}
+
+	//trans 기본사항 조회
+	public TransVO selectTransComSettingInfo(TransVO vo) throws Exception  {
+		return (TransVO) session.selectOne("system.selectTransComSettingInfo", vo);
+	}
+
+	
 }

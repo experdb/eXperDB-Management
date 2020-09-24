@@ -632,4 +632,25 @@
          WHERE 1 = 1
            AND TRANS_ID = #{trans_id}
     	</update>
+
+	<select id="selectTransComSettingInfo" parameterType="TransVO" resultType="TransVO">
+   		/**
+	 	* Query ID : selectTransComSettingInfo
+	 	* Description : TRANS 공통 설정
+	 	* Author : 
+	 	**/
+       SELECT A.TRANS_COM_ID,
+              A.PLUGIN_NAME,
+              A.HEARTBEAT_INTERVAL_MS,
+              A.HEARTBEAT_ACTION_QUERY,
+              A.MAX_BATCH_SIZE,
+              A.MAX_QUEUE_SIZE,
+              A.OFFSET_FLUSH_INTERVAL_MS,
+              A.OFFSET_FLUSH_TIMEOUT_MS,
+              A.AUTO_CREATE,
+              A.TRANSFORMS_YN
+         FROM T_TRANSCOMCNG_I A
+        WHERE A.TRANS_COM_ID = #{trans_com_id}::numeric
+        LIMIT 1
+	</select>
 </mapper>

@@ -6,6 +6,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
+import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
@@ -177,4 +178,13 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateDUMP_RESTORE_EXELOG(DumpRestoreVO vo) throws Exception;
+
+	/**
+	 * trans 기본사항 조회
+	 * @param 
+	 * @return
+	 * @throws Exception
+	 */
+	public TransVO selectTransComSettingInfo(TransVO vo) throws Exception;
+	
 }

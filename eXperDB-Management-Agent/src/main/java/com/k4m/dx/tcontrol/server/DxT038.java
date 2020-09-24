@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
@@ -67,7 +68,13 @@ public class DxT038 extends SocketCtl{
 
 		JSONObject outputObj = new JSONObject();
 		
+	   	TransVO commonInfo = null;
+	   	TransVO searchTransVO = new TransVO();
+		
 		try {
+			searchTransVO.setTrans_com_id("1");
+			commonInfo = service.selectTransComSettingInfo(searchTransVO);
+			
 			JSONObject config = new JSONObject();
 			
 			if ("source".equals(con_start_gbn)) {
@@ -81,11 +88,36 @@ public class DxT038 extends SocketCtl{
 				config.put("database.dbname", objCONNECT_INFO.get("DB_NM"));
 				config.put("table.whitelist", objMAPP_INFO.get("EXRT_TRG_TB_NM"));
 				config.put("slot.drop.on.stop", "true");
-				config.put("plugin.name", "wal2json");
 				config.put("snapshot.mode", objCONNECT_INFO.get("SNAPSHOT_MODE"));
 				config.put("slot.name", objCONNECT_INFO.get("CONNECT_NM"));
 				config.put("schema.whitelist", objMAPP_INFO.get("EXRT_TRG_SCM_NM"));
 				config.put("compression.type", objCONNECT_INFO.get("COMPRESSION_TYPE").toString().toLowerCase());
+				
+				if (commonInfo != null) {
+					config.put("plugin.name", commonInfo.getPlugin_name());
+					config.put("heartbeat.interval.ms", commonInfo.getHeartbeat_interval_ms());
+					config.put("heartbeat.action.query", commonInfo.getHeartbeat_action_query());
+					config.put("max.batch.size", commonInfo.getMax_batch_size());
+					config.put("max.queue.size", commonInfo.getMax_queue_size());
+					config.put("offset.flush.interval.ms", commonInfo.getOffset_flush_interval_ms());
+					config.put("offset.flush.timeout.ms", commonInfo.getOffset_flush_timeout_ms());
+					
+					String transforms_yn = commonInfo.getTransforms_yn();
+					if (transforms_yn != null && "Y".equals(transforms_yn)) {
+						config.put("transforms", "route");
+						config.put("transforms.route.type", "org.apache.kafka.connect.transforms.RegexRouter");
+						config.put("transforms.route.regex", "([^.]+)\\.([^.]+)\\.([^.]+)");
+						config.put("transforms.route.replacement", "$3");
+					}
+				} else {
+					config.put("plugin.name", "decoderbufs");
+					config.put("heartbeat.interval.ms", "10000");
+					config.put("heartbeat.action.query", "");
+					config.put("max.batch.size", "16384");
+					config.put("max.queue.size", "65536");
+					config.put("offset.flush.interval.ms", "1000");
+					config.put("offset.flush.timeout.ms", "10000");
+				}
 			} else {
 				config.put("connector.class", "io.confluent.connect.jdbc.JdbcSinkConnector");
 				config.put("tasks.max", "1");
@@ -93,7 +125,13 @@ public class DxT038 extends SocketCtl{
 				config.put("pk.fields", "id");
 				config.put("delete.enabled", "true");
 				config.put("insert.mode", "upsert");
-				config.put("auto.create", "true");
+				
+				if (commonInfo != null) {
+					config.put("auto.create", commonInfo.getAuto_create());
+				} else {
+					config.put("auto.create", "true");	
+				}
+
 				config.put("transforms.unwrap.drop.tombstones", "false");
 				config.put("transforms.unwrap.type", "io.debezium.transforms.ExtractNewRecordState");
 				config.put("transforms", "unwrap");

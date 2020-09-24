@@ -172,4 +172,9 @@ public class SystemServiceImpl implements SystemService{
 	public void updateTransTargetExe(TransVO transVO) throws Exception{
 		systemDAO.updateTransTargetExe(transVO);
 	}
+	
+	//trans 기본사항 조회
+	public TransVO selectTransComSettingInfo(TransVO vo)  throws Exception {
+		return (TransVO) systemDAO.selectTransComSettingInfo(vo);
+	}
 }
