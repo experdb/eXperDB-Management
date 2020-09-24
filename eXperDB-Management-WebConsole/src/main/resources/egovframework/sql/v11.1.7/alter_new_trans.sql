@@ -116,6 +116,9 @@ INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0155', 'kafka conecnt 수정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0155_01', 'kafka conecnt 수정', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0156', '전송관리 기본 설정 등록 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0156_01', '전송관리 기본 설정 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
 
 CREATE TABLE experdb_management.t_trans_con_inf (
 	kc_id numeric(18) NOT NULL, -- kafka_connect_id
@@ -149,3 +152,66 @@ ALTER TABLE experdb_management.t_trans_con_inf OWNER TO experdb;
 GRANT ALL ON TABLE experdb_management.t_trans_con_inf TO experdb;
 
 create sequence q_trans_con_inf_01;
+
+
+ALTER TABLE experdb_management.T_USRDBSVRAUT_I ADD trans_dbms_cng_aut_yn bpchar(1) NULL;
+COMMENT ON COLUMN experdb_management.T_USRDBSVRAUT_I.trans_dbms_cng_aut_yn IS '타겟DBMS_설정_권한_여부';
+
+ALTER TABLE experdb_management.T_USRDBSVRAUT_I ADD trans_con_cng_aut_yn bpchar(1) NULL;
+COMMENT ON COLUMN experdb_management.T_USRDBSVRAUT_I.trans_con_cng_aut_yn IS 'connecter_설정_권한_여부';
+
+
+CREATE TABLE experdb_management.t_transcomcng_i (
+	trans_com_id numeric(18) NOT NULL, -- trans_공통_아이디
+	plugin_name varchar(100) NULL,
+	heartbeat_interval_ms varchar(10) NULL,
+	heartbeat_action_query varchar NULL,
+	max_batch_size varchar(10) NULL,
+	max_queue_size varchar(10) NULL,
+	offset_flush_interval_ms varchar(10) NULL,
+	offset_flush_timeout_ms varchar(10) NULL,
+	auto_create varchar(10) NULL,
+	transforms_yn varchar(1) DEFAULT 'N',
+	frst_regr_id varchar(30) NULL, -- 최초_등록자_id
+	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
+	lst_mdfr_id varchar(30) NULL, -- 최종_수정자_id
+	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최종_수정_일시
+	CONSTRAINT pk_t_transcomcng_i PRIMARY KEY (trans_com_id)
+);
+COMMENT ON TABLE experdb_management.t_transcomcng_i IS 'tran_공통_설정_정보';
+
+ALTER TABLE experdb_management.t_transcomcng_i OWNER TO experdb;
+GRANT ALL ON TABLE experdb_management.t_transcomcng_i TO experdb;
+
+INSERT INTO experdb_management.t_transcomcng_i
+            (
+              trans_com_id, 
+              plugin_name, 
+              heartbeat_interval_ms, 
+              heartbeat_action_query, 
+              max_batch_size, 
+              max_queue_size, 
+              offset_flush_interval_ms, 
+              offset_flush_timeout_ms, 
+              auto_create, 
+              transforms_yn,
+              frst_regr_id, 
+              frst_reg_dtm, 
+              lst_mdfr_id, 
+              lst_mdf_dtm)
+      VALUES( 1, 
+              'wal2json', 
+              '10000', 
+              'insert into dmsadb.dmsadb.dmsa_link_mntn_log (select 1,1); delete from dmsadb.dmsadb.dmsa_link_mntn_log;', 
+              '16384', 
+              '65536', 
+              '1000',
+              '10000', 
+              'true',
+              'N', 
+              'system', 
+              clock_timestamp(), 
+              'system', 
+              clock_timestamp());
+
+

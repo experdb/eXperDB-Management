@@ -171,7 +171,7 @@
                        TRANS_ID,
                        CASE WHEN EXE_STATUS = 'TC001501' THEN 1 ELSE 0 END AS ING_CNT
                   FROM T_TRANSCNG_TARGET_I
-                 WHERE TRANS_TRG_SYS_ID = #{trans_trg_sys_id}
+                 WHERE TRANS_TRG_SYS_ID = #{trans_trg_sys_id}::numeric
           ) A
 	</select>
 
@@ -713,7 +713,7 @@
 	<insert id="insertTransKafkaConnect"  parameterType="transDbmsVO">
 		/**
 		* Query ID : insertTransKafkaConnect
-		* Description : TRANS kafka connect 등록------123
+		* Description : TRANS kafka connect 등록
 		* Author : 
 		**/
         INSERT INTO T_TRANS_CON_INF
@@ -754,7 +754,7 @@
 
 	<update id="updateTransKafkaConnect"  parameterType="transDbmsVO">
 		/**
-	 	* Query ID : updateTransKafkaConnect--
+	 	* Query ID : updateTransKafkaConnect
 	 	* Description : TRANS connect 수정
 	 	* Author : 
 	 	**/
@@ -765,5 +765,85 @@
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE KC_ID=#{kc_id}::numeric
+	</update>
+	
+	<select id="selectTransComSettingCngInfo" resultType="hashMap" parameterType="hashMap">
+   		/**
+	 	* Query ID : selectTransComSettingCngInfo
+	 	* Description : TRANS 공통 설정
+	 	* Author : 
+	 	**/
+       SELECT A.TRANS_COM_ID,
+              A.PLUGIN_NAME,
+              A.HEARTBEAT_INTERVAL_MS,
+              A.HEARTBEAT_ACTION_QUERY,
+              A.MAX_BATCH_SIZE,
+              A.MAX_QUEUE_SIZE,
+              A.OFFSET_FLUSH_INTERVAL_MS,
+              A.OFFSET_FLUSH_TIMEOUT_MS,
+              A.AUTO_CREATE,
+              A.TRANSFORMS_YN
+         FROM T_TRANSCOMCNG_I A
+        WHERE A.TRANS_COM_ID = #{trans_com_id}::numeric
+        LIMIT 1
+	</select>
+	
+	<insert id="insertTransCommonSetting" parameterType="transVO">
+        /**
+        * Query ID : "insertTransCommonSetting"
+        * Description : 기본설정 등록
+        * Author : 
+        **/
+       INSERT INTO experdb_management.t_transcomcng_i
+                   (
+                   trans_com_id, 
+                   plugin_name, 
+                   heartbeat_interval_ms, 
+                   heartbeat_action_query, 
+                   max_batch_size, 
+                   max_queue_size, 
+                   offset_flush_interval_ms, 
+                   offset_flush_timeout_ms, 
+                   auto_create, 
+                   transforms_yn,
+                   frst_regr_id, 
+                   frst_reg_dtm, 
+                   lst_mdfr_id, 
+                   lst_mdf_dtm)
+           VALUES( #{trans_com_id}::numeric 
+                  #{plugin_name}, 
+                  #{heartbeat_interval_ms}, 
+                  #{heartbeat_action_query}, 
+                  #{max_batch_size}, 
+                  #{max_queue_size}, 
+                  #{offset_flush_interval_ms},
+                  #{offset_flush_timeout_ms}, 
+                  #{auto_create}, 
+                  #{transforms_yn},
+                  #{frst_regr_id}, 
+                  clock_timestamp(), 
+                  #{lst_mdfr_id}, 
+                  clock_timestamp());
+	</insert>
+	
+	<update id="updateTransCommonSetting" parameterType="transVO">
+        /**
+        * Query ID : "updateTransCommonSetting"
+        * Description : 기본설정 수정
+        * Author : 
+        **/
+        UPDATE T_TRANSCOMCNG_I
+           SET PLUGIN_NAME = #{plugin_name}
+             , HEARTBEAT_INTERVAL_MS = #{heartbeat_interval_ms}
+             , HEARTBEAT_ACTION_QUERY = #{heartbeat_action_query}
+             , MAX_BATCH_SIZE = #{max_batch_size}
+             , MAX_QUEUE_SIZE = #{max_queue_size}
+             , OFFSET_FLUSH_INTERVAL_MS = #{offset_flush_interval_ms}
+             , OFFSET_FLUSH_TIMEOUT_MS = #{offset_flush_timeout_ms}
+             , AUTO_CREATE = #{auto_create}
+             , TRANSFORMS_YN = #{transforms_yn}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE TRANS_COM_ID = #{trans_com_id}::numeric
 	</update>
 </mapper>
