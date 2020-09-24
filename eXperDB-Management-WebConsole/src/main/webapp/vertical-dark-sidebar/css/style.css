@@ -9295,7 +9295,7 @@ pre code {
 
 .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .lightGallery .image-tile, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col,  .col-13,
 .col-auto, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm,
-.col-sm-2_1, .col-sm-2_2, .col-sm-2_3,
+.col-sm-2_1, .col-sm-2_2, .col-sm-2_3, .col-sm-8_5,
 .col-sm-2_5, .col-sm-1_3, .col-sm-1_4, .col-sm-1_5, .col-sm-1_7, .col-sm-1_9, .col-sm-2_6, .col-sm-0_5, .col-sm-6_3, .col-sm-3_0, .col-sm-2_27, .col-sm-5_5, .col-md-2_2, .col-sm-2_8,
 .col-md-2_5, .col-md-3_5,
 .col-sm-auto, .col-md-1, .col-md-2, .col-md-2_1, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md,
@@ -9650,6 +9650,10 @@ pre code {
   .col-sm-8 {
     flex: 0 0 66.66667%;
     max-width: 66.66667%;
+  }
+  .col-sm-8_5 {
+    flex: 0 0 70%;
+    max-width: 70%;
   }
   .col-sm-9 {
     flex: 0 0 75%;
