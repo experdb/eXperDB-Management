@@ -44,6 +44,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.TransferSchemaInfo;
 import com.k4m.dx.tcontrol.transfer.TransferTableInfo;
+import com.k4m.dx.tcontrol.transfer.service.TransDbmsVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMappVO;
 import com.k4m.dx.tcontrol.transfer.service.TransService;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
@@ -106,6 +107,8 @@ public class TransController {
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
+		
+		TransDbmsVO transDbmsVO = new TransDbmsVO();
 
 		try {
 			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
@@ -149,6 +152,14 @@ public class TransController {
 				// 압축형식  (use)
 				try {
 					mv.addObject("compressionTypeList", transService.selectCompressionTypeList());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				//kafka 조회
+				try {
+					mv.addObject("kafkaConnectList", transService.selectTransKafkaConList(transDbmsVO));
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -582,8 +593,9 @@ public class TransController {
 					tableResult.put("data", tableArray);
 				}
 			}
-			
+
 			if (transInfo != null) {
+				mv.addObject("kc_id", transInfo.get(0).get("kc_id"));				//use
 				mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));				//use
 				mv.addObject("kc_port", transInfo.get(0).get("kc_port"));			//use
 				mv.addObject("connect_nm", transInfo.get(0).get("connect_nm"));		//use
@@ -609,6 +621,7 @@ public class TransController {
 					mv.addObject("scm_nm", transInfo.get(0).get("scm_nm"));						//use
 				}
 			} else {
+				mv.addObject("kc_id", "");				//use
 				mv.addObject("kc_ip", "");											//use
 				mv.addObject("kc_port", "");										//use
 				mv.addObject("connect_nm", "");										//use
@@ -732,6 +745,7 @@ public class TransController {
 				
 			
 			if (transInfo != null) {
+				mv.addObject("kc_id", transInfo.get(0).get("kc_id"));				//use
 				mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));				//use
 				mv.addObject("kc_port", transInfo.get(0).get("kc_port"));			//use
 				mv.addObject("connect_nm", transInfo.get(0).get("connect_nm"));		//use
@@ -747,6 +761,7 @@ public class TransController {
 				mv.addObject("pwd", transInfo.get(0).get("pwd"));							//use
 				mv.addObject("scm_nm", transInfo.get(0).get("scm_nm"));						//use
 			} else {
+				mv.addObject("kc_id", "");				//use
 				mv.addObject("kc_ip", "");											//use
 				mv.addObject("kc_port", "");										//use
 				mv.addObject("connect_nm", "");										//use
@@ -831,6 +846,7 @@ public class TransController {
 			}
 				
 			if (transInfo != null) {
+				mv.addObject("kc_id", transInfo.get(0).get("kc_id"));				//use
 				mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));				//use
 				mv.addObject("kc_port", transInfo.get(0).get("kc_port"));			//use
 				mv.addObject("connect_nm", transInfo.get(0).get("connect_nm"));		//use
@@ -842,6 +858,7 @@ public class TransController {
 				mv.addObject("compression_nm", transInfo.get(0).get("compression_nm"));		//use
 				mv.addObject("meta_data", transInfo.get(0).get("meta_data"));				//use
 			} else {
+				mv.addObject("kc_id", "");				//use
 				mv.addObject("kc_ip", "");											//use
 				mv.addObject("kc_port", "");										//use
 				mv.addObject("connect_nm", "");										//use

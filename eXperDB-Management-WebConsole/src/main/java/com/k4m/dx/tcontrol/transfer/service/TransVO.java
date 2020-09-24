@@ -49,6 +49,15 @@ public class TransVO {
 	private String offset_flush_timeout_ms;
 	private String auto_create;
 	private String transforms_yn;
+	private String kc_id;
+
+	public String getKc_id() {
+		return kc_id;
+	}
+
+	public void setKc_id(String kc_id) {
+		this.kc_id = kc_id;
+	}
 
 	public String getTransforms_yn() {
 		return transforms_yn;

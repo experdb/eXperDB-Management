@@ -55,6 +55,7 @@ CREATE TABLE experdb_management.t_transcng_target_i (
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL, -- 최종_수정자_ID
 	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최종_수정_일시
+    kc_id numeric(18) NULL,
 	CONSTRAINT pk_t_transcng_target_i PRIMARY KEY (trans_id, trans_trg_sys_id),
 	CONSTRAINT fk_t_transcng_target_i_01 FOREIGN KEY (trans_exrt_trg_tb_id) REFERENCES t_trans_exrttrg_mapp(trans_exrt_trg_tb_id),
 	CONSTRAINT fk_t_transcng_target_i_02 FOREIGN KEY (trans_exrt_exct_tb_id) REFERENCES t_trans_exrtexct_mapp(trans_exrt_exct_tb_id)
@@ -214,4 +215,5 @@ INSERT INTO experdb_management.t_transcomcng_i
               'system', 
               clock_timestamp());
 
-
+ALTER TABLE experdb_management.T_TRANSCNG_I ADD kc_id numeric(18) NULL;
+COMMENT ON COLUMN experdb_management.T_TRANSCNG_I.kc_id IS 'kafka connect id';
