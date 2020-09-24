@@ -257,9 +257,10 @@
              , A.KC_IP
              , A.KC_PORT
              , A.KC_ID
+             , A.KC_ID
              , A.CONNECT_NM
              , A.SNAPSHOT_MODE
-             , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = A.SNAPSHOT_MODE ) AS SNAPSHOT_NM
+             , (SELECT KC_NM FROM T_TRANS_CON_INF WHERE KC_ID = A.KC_ID ) AS KC_NM
              , A.DB_ID
              , (SELECT DB_NM FROM T_DB_I WHERE DB_ID =  A.DB_ID) AS DB_NM
              , A.DB_SVR_ID
@@ -314,6 +315,7 @@
              , A.KC_IP
              , A.KC_PORT
              , A.KC_ID
+             , (SELECT KC_NM FROM T_TRANS_CON_INF WHERE KC_ID = A.KC_ID ) AS KC_NM
              , A.CONNECT_NM
              , A.DB_SVR_ID
              , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = A.DB_SVR_ID) AS DB_SVR_NM

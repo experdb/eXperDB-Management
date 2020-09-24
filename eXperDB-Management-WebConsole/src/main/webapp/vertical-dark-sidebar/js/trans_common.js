@@ -656,6 +656,7 @@ function fn_info_setting(result, active_gbn) {
 		var compression_type_info_val = "";
 		var compression_type_info = nvlPrmSet(result.compression_type, "");
 
+		$("#d_kc_id_nm", "#searchInfoForm").html(nvlPrmSet(result.kc_nm, ""));
 		$("#d_kc_ip", "#searchInfoForm").html(nvlPrmSet(result.kc_ip, ""));
 		$("#d_kc_port", "#searchInfoForm").html(nvlPrmSet(result.kc_port, ""));
 
@@ -716,6 +717,7 @@ function fn_info_setting(result, active_gbn) {
 
 		$('a[href="#infoSettingTab"]').tab('show');
 	} else {
+		$("#d_tg_kc_id_nm", "#searchTargetInfoForm").html(nvlPrmSet(result.kc_nm, ""));
 		$("#d_tg_kc_ip", "#searchTargetInfoForm").html(nvlPrmSet(result.kc_ip, ""));
 		$("#d_tg_kc_port", "#searchTargetInfoForm").html(nvlPrmSet(result.kc_port, ""));
 

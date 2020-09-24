@@ -72,14 +72,14 @@
 										</colgroup>
 										<thead>
 											<tr class="bg-info text-white">
-												<th class="table-text-align-c"><spring:message code="data_transfer.server_name" /></th>
+												<th class="table-text-align-c">Kafka-Connect <spring:message code="data_transfer.server_name" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr style="border-bottom: 1px solid #adb5bd;">
-												<td class="table-text-align-c">Kafka-Connect</td>				
+												<td class="table-text-align-c" id="d_kc_id_nm"></td>				
 												<td class="table-text-align-c" id="d_kc_ip"></td>												
 												<td class="table-text-align-c" id="d_kc_port"></td>								
 											</tr>					

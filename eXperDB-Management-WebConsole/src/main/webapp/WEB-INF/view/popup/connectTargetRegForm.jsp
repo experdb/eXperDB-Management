@@ -132,7 +132,7 @@
 										</colgroup>
 										<thead>
 											<tr class="bg-info text-white">
-												<th class="table-text-align-c"><spring:message code="data_transfer.server_name" /></th>
+												<th class="table-text-align-c">Kafka-Connect <spring:message code="data_transfer.server_name" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.connection_status" /></th>

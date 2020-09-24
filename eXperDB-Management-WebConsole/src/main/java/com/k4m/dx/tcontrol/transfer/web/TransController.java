@@ -595,6 +595,7 @@ public class TransController {
 			}
 
 			if (transInfo != null) {
+				mv.addObject("kc_nm", transInfo.get(0).get("kc_nm"));				//use
 				mv.addObject("kc_id", transInfo.get(0).get("kc_id"));				//use
 				mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));				//use
 				mv.addObject("kc_port", transInfo.get(0).get("kc_port"));			//use
@@ -621,6 +622,7 @@ public class TransController {
 					mv.addObject("scm_nm", transInfo.get(0).get("scm_nm"));						//use
 				}
 			} else {
+				mv.addObject("kc_nm", "");				//use
 				mv.addObject("kc_id", "");				//use
 				mv.addObject("kc_ip", "");											//use
 				mv.addObject("kc_port", "");										//use
