@@ -65,7 +65,7 @@
 					defaultContent : "" 	
 				},
 				
-				{data : "dtb_nm", className : "dt-center", defaultContent : ""},
+				{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
 				{data : "kc_id",  defaultContent : "", visible: false }
 			]
 		});
