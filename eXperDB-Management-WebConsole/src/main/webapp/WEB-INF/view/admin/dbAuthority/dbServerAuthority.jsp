@@ -201,6 +201,7 @@
 					
 					/* 전송관리 */
 					if("${sessionScope.session.transfer}" == "Y"){
+						
 						//2020.09.23
 						html1+='	<tr>';
 						html1+='		<td class="pl-4"><spring:message code="data_transfer.btn_title01" /></td>';
@@ -211,7 +212,6 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
-						
 						html1+='	<tr>';
 						html1+='		<td class="pl-4"><spring:message code="data_transfer.btn_title02" /></td>';
 						html1+='		<td>';
@@ -221,7 +221,7 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
-						
+
 						html1+='	<tr>';
 						html1+='		<td class="pl-4"><spring:message code="menu.trans_management" /></td>';
 						html1+='		<td>';
@@ -414,6 +414,13 @@
 							}
 							
 							if("${sessionScope.session.transfer}"== "Y"){
+								//전송설정(2020-08-31)
+								if(result.length != 0 && result[i].transsetting_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_transSetting").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_transSetting").checked = false;
+								}
+								
 								//전송설정(2020-09-23)
 								if(result.length != 0 && result[i].trans_dbms_cng_aut_yn == "Y"){
 									document.getElementById(result[i].db_svr_id+"_trans_dbms_aut").checked = true;
@@ -426,13 +433,6 @@
 									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = true;
 								}else{
 									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = false;
-								}
-								
-								//전송설정(2020-08-31)
-								if(result.length != 0 && result[i].transsetting_aut_yn == "Y"){
-									document.getElementById(result[i].db_svr_id+"_transSetting").checked = true;
-								}else{
-									document.getElementById(result[i].db_svr_id+"_transSetting").checked = false;
 								}
 							}
 
@@ -566,13 +566,13 @@
 		if("${sessionScope.session.pg_audit}"== "Y"){
 			if (scale_yn_chk == "Y") {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}else{
 					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}		
 			} else {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}else{
 					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}
@@ -580,23 +580,22 @@
 		}else{
 			if (scale_yn_chk == "Y") {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}else{
 					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}	
 			} else {				
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}else{
 					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}	
 			}
 		}
-		
+
 		for(var i=0; i<array.length; i++){
 			if ($("#"+db_svr_id).prop("checked")) {
-
-				document.getElementById().checked = true;
+				document.getElementById(db_svr_id+array[i]).checked = true;
 			}else{
 				document.getElementById(db_svr_id+array[i]).checked = false;
 			}
