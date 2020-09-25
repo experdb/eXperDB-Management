@@ -156,7 +156,7 @@ function fn_insert_trsf_work(){
 		}else{
 			var src_table_total_cnt_trsf = $("#src_table_total_cnt_trsf").val()
 		}
-		
+
 		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
 			url : '/wrk_nmCheck.do',
@@ -187,7 +187,7 @@ function fn_insert_trsf_work(){
 						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
 						  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
 						  		src_table_total_cnt : src_table_total_cnt_trsf,
-						  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
+						  		db2pg_uchr_lchr_val : $("#dat_db2pg_uchr_lchr_val").val(),
 						  	},
 							type : "post",
 							beforeSend: function(xhr) {
@@ -266,7 +266,7 @@ function fn_update_trsf_work(){
 		  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
 		  		src_table_total_cnt : src_table_total_cnt_trsf,
 		  		wrk_id : $("#wrk_id").val(),
-		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val()
+		  		db2pg_uchr_lchr_val : $("#dat_db2pg_uchr_lchr_val").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -587,7 +587,7 @@ function fn_tableAddCallback3(rowList, tableGbn, totalCnt){
 														<spring:message code="migration.specify_case" />
 													</label>
 													<div class="col-sm-4">
-														<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
+														<select name="dat_db2pg_uchr_lchr_val" id="dat_db2pg_uchr_lchr_val"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
 															<c:forEach var="codeLetter" items="${codeLetter}">
 																<option value="${codeLetter.sys_cd_nm}">${codeLetter.sys_cd_nm}</option>
 															</c:forEach>
