@@ -327,7 +327,7 @@
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">SHEDULE</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">SCHEDULE</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule_information" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.shedule_execution_history"/></li>
 										</ol>
