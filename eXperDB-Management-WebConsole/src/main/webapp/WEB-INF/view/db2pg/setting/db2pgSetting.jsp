@@ -414,7 +414,7 @@ function fn_data_regre_popup(){
 				$("#exrt_prl_prcs_ecnt").val(nvlPrmSet(result.exrt_prl_prcs_ecnt, ""));
 				$("#lob_dat_bff_sz").val(nvlPrmSet(result.lob_dat_bff_sz, ""));
 				$("#exrt_dat_cnt").val(nvlPrmSet(result.exrt_dat_cnt, ""));
-				$("#db2pg_uchr_lchr_val").val(result.db2pg_uchr_lchr_val).prop("selected", true);
+				$("#dat_db2pg_uchr_lchr_val").val(result.db2pg_uchr_lchr_val).prop("selected", true);
 				$("#tb_rbl_tf").val(result.tb_rbl_tf).prop("selected", true);
 				$("#ins_opt_cd").val(result.ins_opt_cd).prop("selected", true);
 				$("#cnst_cnd_exrt_tf").val(result.cnst_cnd_exrt_tf).prop("selected", true);
