@@ -1019,7 +1019,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 			param.put("instance_id", "");         //확인완료
 			param.put("process_id", timeId);
 			param.put("monitering", "monitering");
-			
+
 			agentList = scaleInAgent(param);
 			
 			if (agentList == null) {
@@ -1074,7 +1074,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		if (!moniteringGbn.equals("")) {
 			scaleSet = moniteringGbn;
 		}
-
+System.out.println("scaleSet======================" + scaleSet);
 		//scale 실행
 		if (!scaleSet.isEmpty()) {
 			if ("scaleIn".equals(scaleSet)) {
@@ -1284,6 +1284,8 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 			//cmd 값 셋팅
 			String agentCmd = scaleCmdSetting(obj);
 
+System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
+			
 			String agentSubCmd = "";
 			if (param.get("monitering") != null || param.get("search_gbn").toString().equals("scaleChk")) {
 				obj.put("monitering", param.get("monitering").toString());

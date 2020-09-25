@@ -602,7 +602,7 @@ public class TransController {
 				mv.addObject("connect_nm", transInfo.get(0).get("connect_nm"));		//use
 				mv.addObject("trans_id", transInfo.get(0).get("trans_id"));			//use
 				mv.addObject("exe_status", transInfo.get(0).get("exe_status"));		//use
-				
+
 				if ("source".equals(trans_active_gbn)) {
 					mv.addObject("db_id", transInfo.get(0).get("db_id"));			//use
 					mv.addObject("db_nm", transInfo.get(0).get("db_nm"));			//use

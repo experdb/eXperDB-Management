@@ -217,3 +217,9 @@ INSERT INTO experdb_management.t_transcomcng_i
 
 ALTER TABLE experdb_management.T_TRANSCNG_I ADD kc_id numeric(18) NULL;
 COMMENT ON COLUMN experdb_management.T_TRANSCNG_I.kc_id IS 'kafka connect id';
+
+ALTER TABLE t_scale_g ADD CONSTRAINT pk_t_scale_g PRIMARY KEY(scale_wrk_sn, wrk_id, db_svr_id, scale_type, process_id);
+ALTER TABLE t_scale_i ADD CONSTRAINT pk_t_scale_i PRIMARY KEY(wrk_id, db_svr_id, scale_type, policy_type, execute_type);
+ALTER TABLE t_scaleawssvr_i ADD CONSTRAINT pk_t_scaleawssvr_i PRIMARY KEY(db_svr_id, db_svr_ipadr_id);
+ALTER TABLE t_scaleloadlog_g ADD CONSTRAINT pk_t_scaleloadlog_g PRIMARY KEY(wrk_sn, db_svr_id);
+ALTER TABLE t_scaleoccur_g ADD CONSTRAINT pk_t_scaleoccur_g PRIMARY KEY(wrk_sn, db_svr_id, scale_type, policy_type, execute_type);
