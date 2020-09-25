@@ -201,16 +201,6 @@
 					
 					/* 전송관리 */
 					if("${sessionScope.session.transfer}" == "Y"){
-						html1+='	<tr>';
-						html1+='		<td class="pl-4"><spring:message code="menu.trans_management" /></td>';
-						html1+='		<td>';
-						html1+='			<div class="inp_chk">';
-						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_transSetting" name="transSetting_aut" onClick="fn_userCheck();" />';
-						html1+='				<label for="'+item.db_svr_id+'_transSetting"></label>';
-						html1+='			</div>';
-						html1+='		</td>';
-						html1+='	</tr>';
-						
 						//2020.09.23
 						html1+='	<tr>';
 						html1+='		<td class="pl-4"><spring:message code="data_transfer.btn_title01" /></td>';
@@ -221,12 +211,23 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
+						
 						html1+='	<tr>';
 						html1+='		<td class="pl-4"><spring:message code="data_transfer.btn_title02" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_con_aut" name="trans_con_aut" onClick="fn_userCheck();" />';
 						html1+='				<label for="'+item.db_svr_id+'_trans_con_aut"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
+						
+						html1+='	<tr>';
+						html1+='		<td class="pl-4"><spring:message code="menu.trans_management" /></td>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_transSetting" name="transSetting_aut" onClick="fn_userCheck();" />';
+						html1+='				<label for="'+item.db_svr_id+'_transSetting"></label>';
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
@@ -413,13 +414,6 @@
 							}
 							
 							if("${sessionScope.session.transfer}"== "Y"){
-								//전송설정(2020-08-31)
-								if(result.length != 0 && result[i].transsetting_aut_yn == "Y"){
-									document.getElementById(result[i].db_svr_id+"_transSetting").checked = true;
-								}else{
-									document.getElementById(result[i].db_svr_id+"_transSetting").checked = false;
-								}
-								
 								//전송설정(2020-09-23)
 								if(result.length != 0 && result[i].trans_dbms_cng_aut_yn == "Y"){
 									document.getElementById(result[i].db_svr_id+"_trans_dbms_aut").checked = true;
@@ -432,6 +426,13 @@
 									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = true;
 								}else{
 									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = false;
+								}
+								
+								//전송설정(2020-08-31)
+								if(result.length != 0 && result[i].transsetting_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_transSetting").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_transSetting").checked = false;
 								}
 							}
 
@@ -594,7 +595,8 @@
 		
 		for(var i=0; i<array.length; i++){
 			if ($("#"+db_svr_id).prop("checked")) {
-				document.getElementById(db_svr_id+array[i]).checked = true;
+
+				document.getElementById().checked = true;
 			}else{
 				document.getElementById(db_svr_id+array[i]).checked = false;
 			}
