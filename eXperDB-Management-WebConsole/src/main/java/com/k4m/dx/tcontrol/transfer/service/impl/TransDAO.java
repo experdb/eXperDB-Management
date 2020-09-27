@@ -417,6 +417,4 @@ public class TransDAO extends EgovAbstractMapper{
 	public Map<String, Object> selectTransKafkaConIngChk(TransDbmsVO transDbmsVO) throws SQLException {
 		return (Map<String, Object>) selectOne("transSQL.selectTransKafkaConIngChk", transDbmsVO);
 	}
-
-
 }

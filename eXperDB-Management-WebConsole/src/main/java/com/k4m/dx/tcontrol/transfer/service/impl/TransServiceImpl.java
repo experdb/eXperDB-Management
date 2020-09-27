@@ -306,7 +306,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			int db_svr_id = transVO.getDb_svr_id();
 			int trans_exrt_trg_tb_id = transVO.getTrans_exrt_trg_tb_id();
 			int trans_id = transVO.getTrans_id();
-			
+
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			
 			//db 서버 조회
@@ -332,7 +332,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			//매핑정보 조회
 			mappInfo = transDAO.selectMappInfo(trans_exrt_trg_tb_id);
 			System.out.println("매핑정보 : "+mappInfo.get(0));
-
+			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
 			

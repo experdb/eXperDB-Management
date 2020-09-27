@@ -182,6 +182,4 @@ public class TransferDAO extends EgovAbstractMapper {
 		return result;
 	}
 
-
-
 }
