@@ -177,4 +177,9 @@ public class SystemServiceImpl implements SystemService{
 	public TransVO selectTransComSettingInfo(TransVO vo)  throws Exception {
 		return (TransVO) systemDAO.selectTransComSettingInfo(vo);
 	}
+	
+	public List<TransVO> selectTablePkInfo(TransVO vo) throws Exception {
+		return systemDAO.selectTablePkInfo(vo);
+	}
+	
 }

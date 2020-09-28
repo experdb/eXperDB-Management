@@ -187,4 +187,6 @@ public interface SystemService {
 	 */
 	public TransVO selectTransComSettingInfo(TransVO vo) throws Exception;
 	
+	public List<TransVO> selectTablePkInfo(TransVO vo) throws Exception;
+	
 }

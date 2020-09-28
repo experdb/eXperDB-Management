@@ -653,4 +653,23 @@
         WHERE A.TRANS_COM_ID = #{trans_com_id}::numeric
         LIMIT 1
 	</select>
+	
+	<select id="selectTablePkInfo" parameterType="TransVO" resultType="TransVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectTablePkInfo
+	 	* Description : Database pk 조회
+	 	* Author : 박태혁
+	 	**/
+       SELECT CC.COLUMN_NAME AS COLUMN_NAME
+         FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS       TC
+             ,INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CC
+        WHERE TC.TABLE_NAME      = #{table_name}
+          AND TC.CONSTRAINT_TYPE = 'PRIMARY KEY'
+          AND TC.TABLE_CATALOG   = CC.TABLE_CATALOG
+          AND TC.TABLE_SCHEMA    = CC.TABLE_SCHEMA
+          AND TC.TABLE_NAME      = CC.TABLE_NAME
+          AND TC.CONSTRAINT_NAME = CC.CONSTRAINT_NAME
+		]]>
+	</select>
 </mapper>

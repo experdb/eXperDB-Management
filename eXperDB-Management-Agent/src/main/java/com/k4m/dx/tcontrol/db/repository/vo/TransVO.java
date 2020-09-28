@@ -15,6 +15,34 @@ public class TransVO {
 	private String offset_flush_timeout_ms;
 	private String auto_create;
 	private String transforms_yn;
+	
+	private String column_name;
+	private String table_name;
+	private String db_name;
+
+	public String getColumn_name() {
+		return column_name;
+	}
+
+	public void setColumn_name(String column_name) {
+		this.column_name = column_name;
+	}
+
+	public String getTable_name() {
+		return table_name;
+	}
+
+	public void setTable_name(String table_name) {
+		this.table_name = table_name;
+	}
+
+	public String getDb_name() {
+		return db_name;
+	}
+
+	public void setDb_name(String db_name) {
+		this.db_name = db_name;
+	}
 
 	public String getTransforms_yn() {
 		return transforms_yn;

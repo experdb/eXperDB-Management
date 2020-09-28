@@ -132,5 +132,7 @@ public class SystemDAO {
 		return (TransVO) session.selectOne("system.selectTransComSettingInfo", vo);
 	}
 
-	
+	public List<TransVO> selectTablePkInfo(TransVO vo) throws Exception {
+		return (List) session.selectList("system.selectTablePkInfo", vo);
+	}
 }

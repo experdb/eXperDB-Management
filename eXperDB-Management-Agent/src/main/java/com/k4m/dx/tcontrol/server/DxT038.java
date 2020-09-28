@@ -3,6 +3,7 @@ package com.k4m.dx.tcontrol.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
-import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
@@ -62,6 +62,10 @@ public class DxT038 extends SocketCtl{
 
 		int trans_id = Integer.parseInt((String) objCONNECT_INFO.get("TRANS_ID"));
 		String cmd = (String) jObj.get(ProtocolID.REQ_CMD);
+		String pk_value = "";
+		String table_param = "";
+		String[] pk_list = null;
+		String pk_tot_value = "";
 		
 		//구분
 		String con_start_gbn = (String)objCONNECT_INFO.get("CON_START_GBN");
@@ -70,7 +74,7 @@ public class DxT038 extends SocketCtl{
 		
 	   	TransVO commonInfo = null;
 	   	TransVO searchTransVO = new TransVO();
-		
+
 		try {
 			searchTransVO.setTrans_com_id("1");
 			commonInfo = service.selectTransComSettingInfo(searchTransVO);
@@ -119,10 +123,53 @@ public class DxT038 extends SocketCtl{
 					config.put("offset.flush.timeout.ms", "10000");
 				}
 			} else {
+				if (objMAPP_INFO.get("EXRT_TRG_TB_NM") != null) {
+					pk_value = objMAPP_INFO.get("EXRT_TRG_TB_NM").toString();
+					pk_list = pk_value.split(",");
+				}
+				
+				if (pk_list != null) {
+					for(int i=0; i<pk_list.length; i++){
+						socketLogger.info("DxT038.execute123123 : " + pk_list[i]);
+						table_param = pk_list[i].toString();
+						int indexOf = table_param.lastIndexOf(".");
+						if (indexOf > 0) {
+							indexOf = indexOf + 1;
+						} else {
+							indexOf = 0;
+						}
+						
+socketLogger.info("DxT038.indexOf" + indexOf);
+socketLogger.info("DxT038.indexOf : " + table_param.substring(indexOf, table_param.length()));
+						searchTransVO.setTable_name(table_param.substring(indexOf, table_param.length()));
+						
+						List<TransVO> tableList = service.selectTablePkInfo(searchTransVO);
+						
+						int ichkCnt = 0;
+
+						if (tableList != null) {
+							for(int j=0; j<tableList.size(); j++){
+								ichkCnt = ichkCnt + 1;
+								pk_tot_value = tableList.get(j).getColumn_name();
+								
+								if (ichkCnt != tableList.size()) {
+									pk_tot_value = pk_tot_value + ",";
+								}
+							}
+						}
+					}
+				}
+
+				socketLogger.info("DxT038.pk_tot_valuepk_tot_valuepk_tot_valuepk_tot_value : " + pk_tot_value);
+				
+				if (pk_tot_value == null || "".equals(pk_tot_value)) {
+					pk_tot_value = "id";
+				}
+
 				config.put("connector.class", "io.confluent.connect.jdbc.JdbcSinkConnector");
 				config.put("tasks.max", "1");
 				config.put("pk.mode", "record_key");
-				config.put("pk.fields", "id");
+				config.put("pk.fields", pk_tot_value);
 				config.put("delete.enabled", "true");
 				config.put("insert.mode", "upsert");
 				
