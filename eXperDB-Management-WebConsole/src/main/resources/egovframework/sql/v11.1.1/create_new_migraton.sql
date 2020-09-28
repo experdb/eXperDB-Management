@@ -171,7 +171,7 @@ comment on table t_db2pg_sys_inf is 'db2pg_시스템_정보';
 alter table t_db2pg_trsf_wrk_inf add constraint pk_t_db2pg_trsf_wrk_inf 
 primary key (db2pg_trsf_wrk_id);
 
-comment on table t_db2pg_trsf_wrk_inf is 'db2pg_이행_작업_정보';
+comment on table t_db2pg_trsf_wrk_inf is 'db2pg_이관_작업_정보';
 
  comment on column t_db2pg_trsf_wrk_inf.db2pg_trsf_wrk_id is 'db2pg_이행_작업_id';
  comment on column t_db2pg_trsf_wrk_inf.wrk_id is '작업_id';
