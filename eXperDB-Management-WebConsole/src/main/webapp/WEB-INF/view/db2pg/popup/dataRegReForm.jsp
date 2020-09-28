@@ -8,7 +8,7 @@
 <%
 	/**
 	* @Class Name : dataRegForm.jsp
-	* @Description : 데이터 이행 등록 화면
+	* @Description : 데이터 이관 등록 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
