@@ -190,7 +190,7 @@ public interface Db2pgSettingService {
 	
 	
 	/**
-	 * 이행 저장경로 수정
+	 * 이관 저장경로 수정
 	 * 
 	 * @return int
 	 * @throws Exception

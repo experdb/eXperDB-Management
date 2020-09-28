@@ -3,13 +3,11 @@ package com.k4m.dx.tcontrol.db2pg.history.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
-
 
 public interface Db2pgHistoryService {
 
 	/**
-	 *  이행로그 등록
+	 *  이관로그 등록
 	 * 
 	 * @param Map<String, Object>
 	 * @throws Exception
@@ -27,7 +25,7 @@ public interface Db2pgHistoryService {
 	
 	
 	/**
-	 *  이행로그 수정
+	 *  이관로그 수정
 	 * 
 	 * @param Map<String, Object>
 	 * @throws Exception

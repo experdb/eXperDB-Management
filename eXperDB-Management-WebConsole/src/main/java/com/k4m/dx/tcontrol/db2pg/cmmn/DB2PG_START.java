@@ -53,7 +53,7 @@ public class DB2PG_START {
         JSONObject result = new JSONObject();
         
         
-		System.out.println( " [ 0. 데이터 이행  ]  START ");
+		System.out.println( " [ 0. 데이터 이관  ]  START ");
 		
 		
 		
@@ -172,7 +172,7 @@ public class DB2PG_START {
 	    		System.out.println("4. 에러 메세지 = "+result.get("RESULT_MSG"));*/
 	
 	    		
-	    		System.out.println( " [ 11. 데이터 이행  ]  END");
+	    		System.out.println( " [ 11. 데이터 이관  ]  END");
 	    		
 	    		if (new_save_pth != null) {
 		    		updateSavePth(wrk_id, new_save_pth);
