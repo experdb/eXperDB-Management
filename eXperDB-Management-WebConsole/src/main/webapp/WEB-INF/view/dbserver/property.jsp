@@ -1048,12 +1048,12 @@
 														<th class="table-text-align-c" colspan="6"><spring:message code="properties.tablespace" /></th>
 													</tr>
 													<tr class="bg-info text-white">
+														<td class="table-text-align-c">Mounted on</td>
 														<td class="table-text-align-c">Filesystem</td>
 														<td class="table-text-align-c">Size</td>
 														<td class="table-text-align-c">Used</td>
 														<td class="table-text-align-c">Avail</td>
 														<td class="table-text-align-c">Use%</td>
-														<td class="table-text-align-c">Mounted on</td>
 														
 														<td class="table-text-align-c">Name</td>
 														<td class="table-text-align-c">Owner</td>
@@ -1076,6 +1076,7 @@
 														<c:otherwise>
 															<c:forEach var="tablespaceinfo" items="${result.CMD_TABLESPACE_INFO}">
 																<tr>
+																	<td>${tablespaceinfo.mounton}</td>
 																	<td>${tablespaceinfo.filesystem}</td>
 																	<td id="tablespaceinfoFSizeTd_${iTable}"></td>
 																	<td id="tablespaceinfoUsedTd_${iTable}"></td>
@@ -1107,7 +1108,7 @@
 																		</div>
 																		<input type='hidden' name='autoLevel' value='' />
 																	</td>
-																	<td>${tablespaceinfo.mounton}</td>
+
 																	<td>${tablespaceinfo.name}</td>
 																	<td>${tablespaceinfo.owner}</td>
 																	<td>${tablespaceinfo.location}</td>
