@@ -1712,7 +1712,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 							
 			arrCmd.add(0, bckCmd);
 
-			if(resultWork.get(0).get("bck_opt_cd") != null && resultWork.get(0).get("bck_opt_cd").equals("TC000301")){
+			if(resultWork.get(0).get("bck_opt_cd") != null && resultWork.get(0).get("bck_bsn_dscd").equals("TC000201")){
 				String validateCmd = "pg_rman validate -B "+resultWork.get(0).get("bck_pth").toString(); 
 				arrCmd.add(1, validateCmd);
 			}
