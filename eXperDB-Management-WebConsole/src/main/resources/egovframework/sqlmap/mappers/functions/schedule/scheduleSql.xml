@@ -138,7 +138,7 @@
 	            , (select DTB_NM from t_db2pg_sys_inf where db2pg_sys_id = B.db2pg_src_sys_id) || '  →  '  ||(select DTB_NM from t_db2pg_sys_inf where db2pg_sys_id = B.db2pg_trg_sys_id ) AS DB_SVR_NM
 				, A.BSN_DSCD
 				, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.bsn_dscd = SYS_CD ) AS BSN_DSCD_NM
-				, '데이터이행' as BCK_BSN_DSCD_NM
+				, '데이터이관' as BCK_BSN_DSCD_NM
 				, 'N' AS NXT_EXE_YN			
 	      FROM t_wrkcng_i A, t_db2pg_trsf_wrk_inf B
 	      WHERE 1=1	
@@ -573,7 +573,7 @@
 						, E.EXE_DT
 						, E.EXE_HMS      
 						, COALESCE((SELECT DB_SVR_NM FROM T_DBSVR_I WHERE B.DB_SVR_ID = DB_SVR_ID ), (SELECT DTB_NM FROM T_DB2PG_SYS_INF WHERE DB2PG_SYS_ID = F.DB2PG_SRC_SYS_ID) || '  →  '  ||(SELECT DTB_NM FROM T_DB2PG_SYS_INF WHERE DB2PG_SYS_ID = F.DB2PG_TRG_SYS_ID )) AS DB_SVR_NM						
-						, COALESCE((SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.BCK_BSN_DSCD = SYS_CD ),'데이터이행') AS BCK_BSN_DSCD_NM
+						, COALESCE((SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.BCK_BSN_DSCD = SYS_CD ),'데이터이관') AS BCK_BSN_DSCD_NM
 						, TO_CHAR(E.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
 						, TO_CHAR(E.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DT				
 						, A.WRK_ID

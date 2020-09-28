@@ -7,7 +7,7 @@
 	<insert id="insertMigExe" parameterType="hashmap">
 		/**
 		* Query ID : insertImdExe
-		* Description : 이행로그 등록
+		* Description : 이관로그 등록
 		* Author : 변승우
 		**/	
 		INSERT INTO T_MIGEXE_G
@@ -46,7 +46,7 @@
 		<update id="updateMigExe" parameterType="hashmap">
 		/**
 		* Query ID : updateMigExe
-		* Description : 이행로그 수정
+		* Description : 이관로그 수정
 		* Author : 변승우
 		**/
 			UPDATE T_MIGEXE_G SET
