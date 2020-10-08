@@ -434,8 +434,8 @@ a:hover.tip span {
 					$("#btnModify").prop("disabled", "disabled");
 					$("#btnDelete").prop("disabled", "disabled");
 					$("#btnCommonInsert ").prop("disabled", "disabled");
-/* 					$("#btnChoUse").prop("disabled", "disabled");
-					$("#btnChoUnused").prop("disabled", "disabled"); */
+ 					$("#btnChoUse").prop("disabled", "disabled");
+					$("#btnChoUnused").prop("disabled", "disabled");
 					$("#btnCngSearch").prop("disabled", "disabled");
 
 					$("#scale_type_cd").prop("disabled", "disabled");
