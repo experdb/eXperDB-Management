@@ -559,14 +559,15 @@
                    , USEYN
                     )
               SELECT A.DB_SVR_ID,
-                     A.DB_SVR_IPADR_ID,
+                     B.DB_SVR_IPADR_ID,
                      B.IPADR,
                      #{login_id},
                      clock_timestamp(),
                      #{login_id},
-                     clock_timestamp()
-                FROM T_SCALEAWSSVR_I A
-                     JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
+                     clock_timestamp(),
+                     'Y'
+                FROM T_DBSVR_I A
+                     JOIN T_DBSVRIPADR_I B ON A.DB_SVR_ID = B.DB_SVR_ID AND B.MASTER_GBN = 'M'
                WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
                LIMIT 1
 	</insert>
