@@ -1,5 +1,5 @@
-ALTER TABLE experdb_management.t_scale_i ADD useyn1 bpchar(1) NOT NULL DEFAULT 'Y'::bpchar;
-COMMENT ON COLUMN experdb_management.t_scale_i.useyn1 IS '사용여부';
+ALTER TABLE experdb_management.t_scale_i ADD useyn bpchar(1) NOT NULL DEFAULT 'Y'::bpchar;
+COMMENT ON COLUMN experdb_management.t_scale_i.useyn IS '사용여부';
 
 
 
