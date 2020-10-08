@@ -74,6 +74,7 @@ public class DxT036 extends SocketCtl{
 
 			//scale 실행일 경우
 			if ("scaleIn".equals(scaleSet) || "scaleOut".equals(scaleSet)) {
+socketLogger.info("DxT036.scaleCmd============================= : " + scaleCmd);
 				ScaleRunCommandExec scaleExec = new ScaleRunCommandExec(scaleCmd, jObj, 0);
 				scaleExec.start();
 

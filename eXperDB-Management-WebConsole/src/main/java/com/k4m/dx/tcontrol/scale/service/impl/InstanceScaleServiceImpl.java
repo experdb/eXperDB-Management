@@ -108,7 +108,11 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				}
 				
 				if (!scalejsonChk.isEmpty()) {
-					if (scalejsonChk.contains("no aws")) {
+					System.out.println("===scalejsonChk==" + scalejsonChk);
+					
+					scalejsonChk = scalejsonChk.trim();
+					
+					if (scalejsonChk.contains("aws:")) {
 						result.put("install_yn", "N");
 					} else {
 
@@ -1127,7 +1131,8 @@ System.out.println("scaleSet======================" + scaleSet);
 				strCmd = String.format(strSubCmd, "scale-");
 				
 			} else if (searchGbn.equals("scaleAwsChk")) { //설치여부 체크
-				strCmd = "which aws";
+				//strCmd = "which aws";
+				strCmd = "whereis -b aws";
 			} else {
 				if (props.get("scale_json_view") != null) {
 					strCmd = props.get("scale_json_view").toString();

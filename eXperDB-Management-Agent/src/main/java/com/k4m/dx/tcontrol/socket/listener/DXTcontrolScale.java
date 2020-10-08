@@ -67,7 +67,11 @@ public class DXTcontrolScale extends SocketCtl {
 			}
 			
 			if (scalejsonChk != null) {
-				if (scalejsonChk.contains("no aws")) {
+socketLogger.info("DXTcontrolScaleAwsExecute.scalejsonChk : " + scalejsonChk);
+				
+				scalejsonChk = scalejsonChk.trim();
+
+				if (scalejsonChk.contains("aws:")) {
 					awsServerChk = "N";
 				} else {
 					awsServerChk = "Y";
@@ -79,7 +83,7 @@ public class DXTcontrolScale extends SocketCtl {
 			//auto setting count
 			iSetCount = scaleAwsAutoSetChk();
 			String strAutoScaleTime = "";
-socketLogger.info("DXTcontrolScaleAwsExecute.iSetCount : " + iSetCount);
+
 			//* AWS 서버 확인 - AWS 서버일경우만 스케줄러 실행
         	if ("Y".equals(awsServerChk)) {
         		

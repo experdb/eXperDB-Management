@@ -211,7 +211,8 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 					strCmd = FileUtil.getPropertyValue("context.properties", "agent.scale_chk_prgress");
 					strCmd = String.format(strCmd, "scale-");
 				} else if (searchGbn.equals("scaleAwsChk")) { //설치여부 체크
-					strCmd = "which aws";
+					//strCmd = "which aws";
+					strCmd = "whereis -b aws";
 				} else {
 					strCmd = FileUtil.getPropertyValue("context.properties", "agent.scale_json_view");
 
