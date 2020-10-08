@@ -4,7 +4,7 @@
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="../../cmmn/cs2.jsp"%>
-<%
+<% 
 	/**
 	* @Class Name : accessHistory.jsp
 	* @Description : AccessHistory 화면
