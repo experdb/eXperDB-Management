@@ -247,10 +247,8 @@ values ('TC0035', 'TC003501', 'CPU', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', c
 
 INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 values ('TC0035', 'TC003502', 'TPS', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
-ALTER TABLE experdb_management.t_scale_i ADD useyn1 bpchar(1) NOT NULL DEFAULT 'Y'::bpchar;
-COMMENT ON COLUMN experdb_management.t_scale_i.useyn1 IS '사용여부';
-
-
+ALTER TABLE experdb_management.t_scale_i ADD useyn bpchar(1) NOT NULL DEFAULT 'Y'::bpchar;
+COMMENT ON COLUMN experdb_management.t_scale_i.useyn IS '사용여부';
 
 -- 테이블 추가(AWS 서버 내역)
 CREATE TABLE experdb_management.t_scaleAwssvr_i (
@@ -311,3 +309,5 @@ values ('TC0001', 'DX-T0061_01', '노드 자동확장 기본 설정 등록', 'Y'
 
 DELETE FROM T_SYSDTL_C WHERE grp_cd = 'TC0035' AND sys_cd = 'TC003502';
 
+ALTER TABLE experdb_management.t_scaleAwssvr_i ADD useyn bpchar(1) NOT NULL DEFAULT 'Y'::bpchar;
+COMMENT ON COLUMN experdb_management.t_scaleAwssvr_i.useyn IS '사용여부';

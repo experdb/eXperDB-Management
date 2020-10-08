@@ -1,5 +1,5 @@
-ALTER TABLE experdb_management.t_scale_i ADD useyn1 bpchar(1) NOT NULL DEFAULT 'Y'::bpchar;
-COMMENT ON COLUMN experdb_management.t_scale_i.useyn1 IS '사용여부';
+ALTER TABLE experdb_management.t_scale_i ADD useyn bpchar(1) NOT NULL DEFAULT 'Y'::bpchar;
+COMMENT ON COLUMN experdb_management.t_scale_i.useyn IS '사용여부';
 
 
 
@@ -62,4 +62,6 @@ values ('TC0001', 'DX-T0061_01', '노드 자동확장 기본 설정 등록', 'Y'
 
 DELETE FROM T_SYSDTL_C WHERE grp_cd = 'TC0035' AND sys_cd = 'TC003502';
 
+ALTER TABLE experdb_management.t_scaleAwssvr_i ADD useyn bpchar(1) NOT NULL DEFAULT 'Y'::bpchar;
+COMMENT ON COLUMN experdb_management.t_scaleAwssvr_i.useyn IS '사용여부';
 
