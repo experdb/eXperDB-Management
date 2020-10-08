@@ -79,7 +79,7 @@
                    , SCALE_AUT_YN
                    , SCALE_HIST_AUT_YN
                    , TRANSSETTING_AUT_YN
-                   , TRANS_CON_CNG_AUT_YN
+                   , TRANS_DBMS_CNG_AUT_YN
                    , TRANS_CON_CNG_AUT_YN
                    )
               VALUES
