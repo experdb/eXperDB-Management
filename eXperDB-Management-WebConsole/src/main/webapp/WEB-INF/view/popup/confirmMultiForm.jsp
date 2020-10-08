@@ -11,7 +11,9 @@
 	
 	//cancel
 	function fnc_confirmCancel() {
-		if ($('#con_multi_gbn').val() == "con_start" || $('#con_multi_gbn').val() == "con_end" || $('#con_multi_gbn').val() == "ins_menu" || $('#con_multi_gbn').val() == "ins_menu") {
+		if ($('#con_multi_gbn').val() == "con_start" || $('#con_multi_gbn').val() == "con_end" 
+			|| $('#con_multi_gbn').val() == "target_con_start" || $('#con_multi_gbn').val() == "target_con_end"
+			|| $('#con_multi_gbn').val() == "ins_menu" || $('#con_multi_gbn').val() == "ins_menu") {
 			fnc_confirmCancelRst ($('#con_multi_gbn').val());
 		}
 		//스케줄 실행/중지 활성화 버튼
@@ -23,8 +25,7 @@
 		if ($('#con_multi_gbn').val() == "use_start" || $('#con_multi_gbn').val() == "use_end") {
 			fnc_confirmCancelRst ($('#con_multi_gbn').val());
 		}
-		
-		
+
 		$('#pop_confirm_multi_md').modal('hide');
 	}
 	

@@ -55,8 +55,9 @@
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="menu.mod_transfer_set"/>
+					<spring:message code="menu.trans_management"/> <spring:message code="data_transfer.detail_search"/>
 				</h4>
+				
 
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="searchInfoForm">
@@ -71,14 +72,14 @@
 										</colgroup>
 										<thead>
 											<tr class="bg-info text-white">
-												<th class="table-text-align-c"><spring:message code="data_transfer.server_name" /></th>
+												<th class="table-text-align-c">Kafka-Connect <spring:message code="data_transfer.server_name" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr style="border-bottom: 1px solid #adb5bd;">
-												<td class="table-text-align-c">Kafka-Connect</td>				
+												<td class="table-text-align-c" id="d_kc_id_nm"></td>				
 												<td class="table-text-align-c" id="d_kc_ip"></td>												
 												<td class="table-text-align-c" id="d_kc_port"></td>								
 											</tr>					

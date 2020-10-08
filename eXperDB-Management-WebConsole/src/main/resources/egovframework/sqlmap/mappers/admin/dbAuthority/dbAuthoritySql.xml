@@ -79,6 +79,8 @@
                    , SCALE_AUT_YN
                    , SCALE_HIST_AUT_YN
                    , TRANSSETTING_AUT_YN
+                   , TRANS_DBMS_CNG_AUT_YN
+                   , TRANS_CON_CNG_AUT_YN
                    )
               VALUES
                    (
@@ -96,6 +98,8 @@
                    , clock_timestamp()
                    , #{usr_id}
                    , clock_timestamp()
+                   , 'N'
+                   , 'N'
                    , 'N'
                    , 'N'
                    , 'N'
@@ -207,6 +211,8 @@
              , A.SCALE_AUT_YN
              , A.SCALE_HIST_AUT_YN
              , A.transSetting_aut_yn
+             , A.TRANS_DBMS_CNG_AUT_YN
+             , A.TRANS_CON_CNG_AUT_YN
              , C.IPADR
           FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
          WHERE 1 = 1
@@ -248,6 +254,8 @@
              
              <if test='trans_yn_chk != null and (trans_yn_chk eq "Y".toString())'>      
 	    	   ,transSetting_aut_yn = #{transSetting_aut_yn}
+	    	   ,TRANS_DBMS_CNG_AUT_YN = #{trans_dbms_cng_aut_yn}
+	    	   ,TRANS_CON_CNG_AUT_YN = #{trans_con_cng_aut_yn}
 	    	</if>
 
          WHERE USR_ID=#{usr_id}
@@ -361,6 +369,9 @@
 	    	
 	    	 <if test='trans_yn_chk != null and (trans_yn_chk eq "Y".toString())'>      
 	    	      , transSetting_aut_yn
+	    	      , TRANS_DBMS_CNG_AUT_YN
+	    	      , TRANS_CON_CNG_AUT_YN
+	    	      
 	    	</if>
 
                   )
@@ -395,6 +406,8 @@
 	    	
 			<if test='trans_yn_chk != null and (trans_yn_chk eq "Y".toString())'>      
 	    	      , #{transSetting_aut_yn}
+	    	      , #{trans_dbms_cng_aut_yn}
+	    	      , #{trans_con_cng_aut_yn}
 	    	</if>
                   )
 	</insert>
@@ -476,6 +489,8 @@
 				, SCALE_AUT_YN
 				, SCALE_HIST_AUT_YN
 				, transSetting_aut_yn
+				, TRANS_DBMS_CNG_AUT_YN
+				, TRANS_CON_CNG_AUT_YN
 		        , FRST_REGR_ID
 				, FRST_REG_DTM
 				, LST_MDFR_ID

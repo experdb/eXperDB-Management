@@ -30,6 +30,7 @@
 	var ins_databaseMsg = '<spring:message code="data_transfer.database" />';
 	var ins_connectNmMsg = '<spring:message code="data_transfer.connect_name_set" />';
 	var ins_conn_Test_msg = '<spring:message code="dbms_information.conn_Test" />';
+	var ins_kafka_server_nm = '<spring:message code="data_transfer.server_name" />';
 
 	$(window.document).ready(function() {
 		//테이블셋팅
@@ -426,6 +427,7 @@
 				url : "/insertConnectInfoNew.do",
 			  	data : {
 			  		db_svr_id : $("#db_svr_id","#findList").val(),
+			  		kc_id : nvlPrmSet($("#ins_source_kc_nm", "#searchRegForm").val(), ''),
 			  		kc_ip : nvlPrmSet($("#ins_kc_ip", "#searchRegForm").val(), ''),
 			  		connect_nm : nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), ''),
 			  		snapshot_mode : $("#ins_snapshot_mode", "#insRegForm").val(),
@@ -454,7 +456,13 @@
 					if(result == "success"){
 						showSwalIcon('<spring:message code="message.msg144"/>', '<spring:message code="common.close" />', '', 'success');
 						$('#pop_layer_con_reg_two').modal('hide');
-						fn_select();
+
+						//자동활성화 등록
+						if($("#ins_source_transActive_act", "#insRegForm").is(":checked") == true){
+							fn_auto_trans_active_start("ins_source", "", "");
+						} else {
+							fn_tot_select();
+						}
 					}else{
 						showSwalIcon('<spring:message code="migration.msg06"/>', '<spring:message code="common.close" />', '', 'error');
 						$('#pop_layer_con_reg_two').modal('show');
@@ -470,26 +478,37 @@
 	 ******************************************************** */
 	function ins_valCheck(){
 		var valideMsg = "";
-		if(nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_connectNmMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
+		
+		if(nvlPrmSet($("#ins_source_kc_nm", "#searchRegForm").val(), '') == "") {
+			valideMsg = "Kafka-Connect " + ins_kafka_server_nm;
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
-		} else if(nvlPrmSet($("#ins_db_id", "#insRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_databaseMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
-			return false;
-			
 		} else if(nvlPrmSet($("#ins_kc_ip", "#searchRegForm").val(), '') == "") {
-			valideMsg = ins_conn_Test_msg + " " + ins_kc_ip_msg;
+			valideMsg = "Kafka-Connect " + " " + ins_kc_ip_msg;
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		} else if(nvlPrmSet($("#ins_kc_port", "#searchRegForm").val(), '') == "") {
-			valideMsg = ins_conn_Test_msg + " " + ins_kc_port_msg;
+			valideMsg = "Kafka-Connect " + " " + ins_kc_port_msg;
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else if(ins_connect_status_Chk == "fail"){
 			showSwalIcon('Kafka-Connect ' + '<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
+		
+		} else if(nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), '') == "") {
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_connectNmMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		} else if(nvlPrmSet($("#ins_db_id", "#insRegForm").val(), '') == "") {
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_databaseMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
 		}else if(ins_connect_nm_Chk == "fail"){
 			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		}
+
+		//전성대상테이블 length 체크
+		if (ins_connector_tableList.rows().data().length <= 0) {
+			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 
@@ -498,7 +517,7 @@
 </script>
 
 <div class="modal fade" id="pop_layer_con_reg_two" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 350px;">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
@@ -519,23 +538,31 @@
 										</colgroup>
 										<thead>
 											<tr class="bg-info text-white">
-												<th class="table-text-align-c"><spring:message code="data_transfer.server_name" /></th>
+												<th class="table-text-align-c">Kafka-Connect <spring:message code="data_transfer.server_name" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
-												<th class="table-text-align-c"><spring:message code="data_transfer.test_connection" /></th>
+												<th class="table-text-align-c"><spring:message code="data_transfer.connection_status" /></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr style="border-bottom: 1px solid #adb5bd;">
-												<td class="table-text-align-c">Kafka-Connect</td>				
 												<td class="table-text-align-c">
-													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_kc_ip" name="ins_kc_ip" onblur="this.value=this.value.trim()" tabindex=1 />
+													<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_source_kc_nm" id="ins_source_kc_nm" onChange="fn_kc_nm_chg('source_ins');" tabindex=1>
+														<option value=""><spring:message code="common.choice" /></option>
+														<c:forEach var="result" items="${kafkaConnectList}" varStatus="status">
+															<option value="<c:out value="${result.kc_id}"/>"><c:out value="${result.kc_nm}"/></option>
+														</c:forEach>
+													</select>
+												</td>				
+												<td class="table-text-align-c">
+													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_kc_ip" name="ins_kc_ip" onblur="this.value=this.value.trim()" disabled tabindex=1 />
 												</td>												
 												<td class="table-text-align-c">
-													<input type="text" class="form-control form-control-xsm" maxlength="5" id="ins_kc_port" name="ins_kc_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" placeholder='<spring:message code="eXperDB_scale.msg15" />' tabindex=2 />						
+													<input type="text" class="form-control form-control-xsm" maxlength="5" id="ins_kc_port" name="ins_kc_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" disabled tabindex=2 />						
 												</td>
-												<td class="table-text-align-c">
-													<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="data_transfer.test_connection" />' />
+												<td class="table-text-align-c" id="ins_kc_connect_td" >
+													<%-- <input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="data_transfer.test_connection" />' />
+												 --%>
 												</td>											
 											</tr>					
 										</tbody>
@@ -600,8 +627,18 @@
 													</c:forEach>
 												</select>
 											</div>
-											<div class="col-sm-6">
-												&nbsp;
+											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.metadata" />
+											</label>
+											<div class="col-sm-4">
+												<div class="onoffswitch-pop">
+													<input type="checkbox" name="ins_meta_data_chk" class="onoffswitch-pop-checkbox" id="ins_meta_data_chk" />
+													<label class="onoffswitch-pop-label" for="ins_meta_data_chk">
+														<span class="onoffswitch-pop-inner"></span>
+														<span class="onoffswitch-pop-switch"></span>
+													</label>
+												</div>
 											</div>
 										</div>
 											
@@ -622,7 +659,7 @@
 											</div>
 										</div>
 											
-										<div class="form-group row" style="margin-bottom:10px;">
+										<div class="form-group row" style="margin-bottom:1px;">
 											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.compression_type" />
@@ -636,15 +673,23 @@
 											</div>
 											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.metadata" />
+												<spring:message code="access_control_management.activation" />
 											</label>
 											<div class="col-sm-4">
-												<div class="onoffswitch-pop">
-													<input type="checkbox" name="ins_meta_data_chk" class="onoffswitch-pop-checkbox" id="ins_meta_data_chk" />
-													<label class="onoffswitch-pop-label" for="ins_meta_data_chk">
-														<span class="onoffswitch-pop-inner"></span>
-														<span class="onoffswitch-pop-switch"></span>
+												<div class="onoffswitch-pop-play">
+													<input type="checkbox" name="ins_source_transActive_act" class="onoffswitch-pop-play-checkbox" id="ins_source_transActive_act" onclick="fn_transActivation_msg_set('ins_source')" >
+													<label class="onoffswitch-pop-play-label" for="ins_source_transActive_act">
+														<span class="onoffswitch-pop-play-inner"></span>
+														<span class="onoffswitch-pop-play-switch"></span>
 													</label>
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-group row div-form-margin-z" id="ins_source_trans_active_div" style="display:none;">
+											<div class="col-sm-12">
+												<div class="alert alert-info" style="margin-top:5px;margin-bottom:-15px;" >
+													<spring:message code="data_transfer.msg27" />
 												</div>
 											</div>
 										</div>
@@ -660,7 +705,7 @@
 												<input type="text" class="form-control form-control-xsm" maxlength="25" id="ins_table_nm" name="ins_table_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="migration.table_name" />'/>				
 											</div>
 				
-											<button type="button" class="btn btn-inverse-primary btn-sm btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_table_search_ins();" >
+											<button type="button" class="btn btn-inverse-primary btn-sm btn-icon-text mb-2 btn-search-disable" id="btnConAddSearch" onClick="fn_table_search_ins();" >
 												<i class="ti-search btn-icon-prepend "></i><spring:message code="data_transfer.tableList" />
 											</button>
 										</form>

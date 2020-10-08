@@ -266,4 +266,8 @@ public class ClientProtocolID {
 	public static final String MAPP_INFO = "MAPP_INFO";
 	public static final String COMPRESSION_TYPE = "COMPRESSION_TYPE";
 	public static final String META_DATA = "META_DATA";
+	public static final String CONNECTION_URL = "CONNECTION_URL";
+	public static final String SPR_USR_ID = "SPR_USR_ID";
+	public static final String CONNECTION_PWD = "CONNECTION_PWD";
+	public static final String CON_START_GBN = "CON_START_GBN";
 }

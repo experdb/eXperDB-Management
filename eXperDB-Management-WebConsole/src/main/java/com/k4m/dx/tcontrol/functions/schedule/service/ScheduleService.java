@@ -216,7 +216,7 @@ public interface ScheduleService {
 
 	
 	/**
-	 *  이행로그 등록
+	 *  이관로그 등록
 	 * 
 	 * @param Map<String, Object>
 	 * @throws Exception
@@ -224,7 +224,7 @@ public interface ScheduleService {
 	void insertMigExe(Map<String, Object> param) throws Exception;
 
 	/**
-	 *  이행로그 수정
+	 *  이관로그 수정
 	 * 
 	 * @param Map<String, Object>
 	 * @throws Exception
@@ -233,7 +233,7 @@ public interface ScheduleService {
 
 
 	/**
-	 *  데이터 이행 스케줄 수행전, 기존 저장경로 호출
+	 *  데이터 이관 스케줄 수행전, 기존 저장경로 호출
 	 * 
 	 * @param Map<String, Object>
 	 * @throws Exception

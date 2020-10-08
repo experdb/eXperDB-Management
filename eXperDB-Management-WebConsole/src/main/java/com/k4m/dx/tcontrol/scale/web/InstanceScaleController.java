@@ -389,12 +389,12 @@ public class InstanceScaleController {
 			
 			if (!"".equals(wrk_id_Rows)) {
 				instanceScaleVO.setWrk_id_Rows(wrk_id_Rows);
+
+				result = instanceScaleService.deleteAutoScaleSetting(instanceScaleVO);
 			} else {
 				result = "P";
 			}
 			
-			result = instanceScaleService.deleteAutoScaleSetting(instanceScaleVO);
-
 			//저장 완료시
 			if ("S".equals(result)) {
 				// 화면접근이력 이력 남기기

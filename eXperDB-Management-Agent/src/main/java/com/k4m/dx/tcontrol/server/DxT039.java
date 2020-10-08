@@ -63,6 +63,7 @@ public class DxT039 extends SocketCtl{
 		
 		String strCmd = (String) jObj.get(ProtocolID.REQ_CMD);
 		int trans_id = Integer.parseInt((String) jObj.get(ProtocolID.TRANS_ID));
+		String con_start_gbn = (String) jObj.get(ProtocolID.CON_START_GBN);
 	
 		JSONObject outputObj = new JSONObject();
 		
@@ -92,7 +93,13 @@ public class DxT039 extends SocketCtl{
 				TransVO transVO = new TransVO();
 				transVO.setTrans_id(trans_id);
 				transVO.setExe_status("TC001502");
-				service.updateTransExe(transVO);
+				
+				if ("source".equals(con_start_gbn)) {
+					service.updateTransExe(transVO);
+				} else {
+					service.updateTransTargetExe(transVO);
+				}
+
 			}
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

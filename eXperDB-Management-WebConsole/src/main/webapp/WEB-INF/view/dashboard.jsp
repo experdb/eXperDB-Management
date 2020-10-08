@@ -443,13 +443,13 @@
 		</div>
 	</div>
 	
-	<!-- 데이터이행 -->
+	<!-- 데이터이관 -->
 	<div class="row">
 		<div class="col-md-12 grid-margin stretch-card" style="margin-top:-10px;">
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-	                   <!-- 데이터이행 title -->
+	                   <!-- 데이터이관 title -->
 						<div class="accordion_main accordion-multi-colored col-12" id="accordion_migt_his" role="tablist">
 							<div class="card" style="margin-bottom:0px;">
 								<div class="card-header" role="tab" id="migt_hist_header_div">
@@ -478,7 +478,7 @@
 						<c:choose>
 							<c:when test="${db2pg_yn eq 'Y'}">
 								<div class="row">
-									<!-- 데이터이행 일정 -->
+									<!-- 데이터이관 일정 -->
 									<div class="col-md-3 col-xl-3 justify-content-center">
 										<div class="card" style="margin-left:-10px;border:none;">
 											<div class="card-body" style="border:none;">
@@ -525,7 +525,7 @@
 							</c:when>
 							<c:otherwise>
 								<div class="row">
-									<!-- 데이터이행 일정 -->
+									<!-- 데이터이관 일정 -->
 									<div class="col-md-12 justify-content-center">
 										<div class="card card-inverse-danger">
 											<div class="card-body">

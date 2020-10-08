@@ -98,7 +98,7 @@ public class TransferTableInfo {
 							+ " AND n.nspname LIKE '"+serverObj.get("SCHEMA") + "'"
 							+ " AND n.nspname NOT IN ('pg_catalog','information_schema')"
 							+ " AND c.relname LIKE '%" + serverObj.get("TABLE_NM") + "%'"
-							+ " ORDER BY n.nspname";
+							+ " ORDER BY n.nspname, c.relname";
 
 					ResultSet rs = stmt.executeQuery(sql);				
 					i = 0;

@@ -117,3 +117,141 @@ COMMENT ON COLUMN T_TRANSCNG_I.compression_type IS '압축형태';
 
 ALTER TABLE T_TRANSCNG_I ADD COLUMN meta_data varchar(50);
 COMMENT ON COLUMN T_TRANSCNG_I.meta_data IS '메타데이터 사용유무';
+
+ALTER TABLE T_USRDBSVRAUT_I ADD COLUMN transSetting_aut_yn varchar(1) ;
+
+create sequence q_trans_sys_inf_01;
+create sequence q_transcng_target_i_01;
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0147', '전송관리 타켓DBMS 설정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0147_01', '전송관리 타켓DBMS 설정 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0147_02', '전송관리 타켓DBMS 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0148', '전송관리 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0148_01', '전송관리 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0148_02', '전송관리 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0149', '전송관리 타켓DBMS 등록 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0149_01', '전송관리 타켓DBMS 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0150', '전송관리 타켓DBMS 수정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0150_01', '전송관리 타켓DBMS 수정', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0151', '전송관리 등록 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0151_01', '전송관리 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0151_02', '전송관리 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0152', '전송관리 수정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0152_01', '전송관리 수정', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0153', 'kafka conecnt 설정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0153_01', 'kafka conecnt 설정 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0154', 'kafka conecnt 등록 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0154_01', 'kafka conecnt 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0155', 'kafka conecnt 수정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0155_01', 'kafka conecnt 수정', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0156', '전송관리 기본 설정 등록 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0156_01', '전송관리 기본 설정 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+
+CREATE TABLE experdb_management.t_trans_con_inf (
+	kc_id numeric(18) NOT NULL, -- kafka_connect_id
+	kc_nm varchar(200) NOT NULL, -- kafka_connect_명
+	kc_ip varchar(50) NOT NULL, -- kafka_connect_ip
+	kc_port numeric(5) NOT NULL, -- kafka_connect_port
+	exe_status varchar(20) NOT NULL DEFAULT 'TC001502'::character varying,
+	frst_regr_id varchar(30) NULL, -- 최초_등록자_id
+	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
+	lst_mdfr_id varchar(30) NULL, -- 최종_수정자_id
+	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최종_수정_일시
+	CONSTRAINT pk_t_trans_con_inf PRIMARY KEY (kc_id)
+);
+COMMENT ON TABLE experdb_management.t_trans_con_inf IS 'tran_시스템_정보';
+
+-- Column comments
+
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.kc_id IS 'kafka_connect_id';
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.kc_nm IS 'kafka_connect_명';
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.kc_ip IS 'kafka_connect_ip';
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.kc_port IS 'kafka_connect_port';
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.exe_status IS '실행상태';
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.frst_regr_id IS '최초_등록자_id';
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.frst_reg_dtm IS '최초_등록_일시';
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.lst_mdfr_id IS '최종_수정자_id';
+COMMENT ON COLUMN experdb_management.t_trans_con_inf.lst_mdf_dtm IS '최종_수정_일시';
+
+-- Permissions
+
+ALTER TABLE experdb_management.t_trans_con_inf OWNER TO experdb;
+GRANT ALL ON TABLE experdb_management.t_trans_con_inf TO experdb;
+
+create sequence q_trans_con_inf_01;
+
+
+ALTER TABLE experdb_management.T_USRDBSVRAUT_I ADD trans_dbms_cng_aut_yn bpchar(1) NULL;
+COMMENT ON COLUMN experdb_management.T_USRDBSVRAUT_I.trans_dbms_cng_aut_yn IS '타겟DBMS_설정_권한_여부';
+
+ALTER TABLE experdb_management.T_USRDBSVRAUT_I ADD trans_con_cng_aut_yn bpchar(1) NULL;
+COMMENT ON COLUMN experdb_management.T_USRDBSVRAUT_I.trans_con_cng_aut_yn IS 'connecter_설정_권한_여부';
+
+
+CREATE TABLE experdb_management.t_transcomcng_i (
+	trans_com_id numeric(18) NOT NULL, -- trans_공통_아이디
+	plugin_name varchar(100) NULL,
+	heartbeat_interval_ms varchar(10) NULL,
+	heartbeat_action_query varchar NULL,
+	max_batch_size varchar(10) NULL,
+	max_queue_size varchar(10) NULL,
+	offset_flush_interval_ms varchar(10) NULL,
+	offset_flush_timeout_ms varchar(10) NULL,
+	auto_create varchar(10) NULL,
+	transforms_yn varchar(1) DEFAULT 'N',
+	frst_regr_id varchar(30) NULL, -- 최초_등록자_id
+	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
+	lst_mdfr_id varchar(30) NULL, -- 최종_수정자_id
+	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최종_수정_일시
+	CONSTRAINT pk_t_transcomcng_i PRIMARY KEY (trans_com_id)
+);
+COMMENT ON TABLE experdb_management.t_transcomcng_i IS 'tran_공통_설정_정보';
+
+ALTER TABLE experdb_management.t_transcomcng_i OWNER TO experdb;
+GRANT ALL ON TABLE experdb_management.t_transcomcng_i TO experdb;
+
+INSERT INTO experdb_management.t_transcomcng_i
+            (
+              trans_com_id, 
+              plugin_name, 
+              heartbeat_interval_ms, 
+              heartbeat_action_query, 
+              max_batch_size, 
+              max_queue_size, 
+              offset_flush_interval_ms, 
+              offset_flush_timeout_ms, 
+              auto_create, 
+              transforms_yn,
+              frst_regr_id, 
+              frst_reg_dtm, 
+              lst_mdfr_id, 
+              lst_mdf_dtm)
+      VALUES( 1, 
+              'wal2json', 
+              '10000', 
+              'insert into dmsadb.dmsadb.dmsa_link_mntn_log (select 1,1); delete from dmsadb.dmsadb.dmsa_link_mntn_log;', 
+              '16384', 
+              '65536', 
+              '1000',
+              '10000', 
+              'true',
+              'N', 
+              'system', 
+              clock_timestamp(), 
+              'system', 
+              clock_timestamp());
+
+ALTER TABLE experdb_management.T_TRANSCNG_I ADD kc_id numeric(18) NULL;
+COMMENT ON COLUMN experdb_management.T_TRANSCNG_I.kc_id IS 'kafka connect id';
+
+

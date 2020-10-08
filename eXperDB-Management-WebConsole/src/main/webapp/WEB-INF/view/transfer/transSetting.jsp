@@ -56,6 +56,7 @@ a:hover.tip span {
 	var kc_ip_List = [];
 	var kc_port_List = [];
 	var connect_nm_List = [];
+	var connect_yn = "";
 
 	/* ********************************************************
 	 * scale setting 초기 실행
@@ -64,16 +65,114 @@ a:hover.tip span {
 		//테이블 셋팅
 		fn_init();
 
-		//화면 조회
-		fn_select();
+		//aws 서버 확인
+		fn_selectKafkaConnectChk();
 	});
+	
+
+	/* ********************************************************
+	 * 기본설정 등록
+	 ******************************************************** */
+	function fn_common_con_set_ins() {
+		$.ajax({
+			url : "/selectTransComSettingCngInfo.do",
+			data : {
+				trans_com_id : "1"
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+
+				if(result != null){
+					$("#com_trans_com_id","#comConRegForm").val(nvlPrmSet(result.trans_com_id, "1"));
+					$("#com_plugin_name","#comConRegForm").val(nvlPrmSet(result.plugin_name, ""));
+					$("#com_heartbeat_interval_ms","#comConRegForm").val(nvlPrmSet(result.heartbeat_interval_ms, ""));
+					$("#com_heartbeat_action_query","#comConRegForm").val(nvlPrmSet(result.heartbeat_action_query, ""));
+					$("#com_max_batch_size","#comConRegForm").val(nvlPrmSet(result.max_batch_size, ""));
+					$("#com_max_queue_size","#comConRegForm").val(nvlPrmSet(result.max_queue_size, ""));
+					$("#com_offset_flush_interval_ms","#comConRegForm").val(nvlPrmSet(result.offset_flush_interval_ms, ""));
+					$("#com_offset_flush_timeout_ms","#comConRegForm").val(nvlPrmSet(result.offset_flush_timeout_ms, ""));
+					$(':radio[name="com_auto_create_chk"]:checked').val(nvlPrmSet(result.auto_create, "true"));
+					
+					if (nvlPrmSet(result.transforms_yn, "") == "Y") {
+						$("input:checkbox[id='com_transforms_yn_chk']").prop("checked", true);
+					} else {
+						$("input:checkbox[id='com_transforms_yn_chk']").prop("checked", false); 
+					}
+				}
+				$('#pop_layer_con_com_ins_cng').modal('show');
+			}
+		});	
+	}
+
+	/* ********************************************************
+	 * kafka 체크
+	 ******************************************************** */
+	function fn_selectKafkaConnectChk() {
+		var errorMsg = "";
+		var titleMsg = "";
+
+		$.ajax({
+			url : "/selectTransKafkaConList.do",
+			data : {
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				console.log("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
+			success : function(result) {
+				if (result != null) {
+					if (result.length > 0) {
+						connect_yn = "Y";
+					} else {
+						connect_yn = "N";
+					}
+				} else {
+					connect_yn = "N";
+				}
+
+				if (connect_yn == "Y") {
+					//화면 조회
+					fn_tot_select();
+					
+				} else {
+					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="data_transfer.msg30" />');
+					
+					$("#btnChoActive").prop("disabled", "disabled");
+					$("#btnChoDisabled").prop("disabled", "disabled");
+
+					$("#btnDelete").prop("disabled", "disabled");
+					$("#btnModify").prop("disabled", "disabled");
+					$("#btnInsert").prop("disabled", "disabled");
+					$("#btnSearch").prop("disabled", "disabled");
+					$("#btnCommonConSetInsert").prop("disabled", "disabled");
+				}
+			}
+		});
+	}
 
 	/* ********************************************************
 	 * table 초기화 및 설정
 	 ******************************************************** */
 	function fn_init(){
 		table = $('#transSettingTable').DataTable({
-			scrollY : "330px",
+			scrollY : "280px",
 			deferRender : true,
 			scrollX: true,
 			searching : false,
@@ -224,9 +323,9 @@ a:hover.tip span {
 	/* ********************************************************
 	 * transfer Data Fetch List
 	 ******************************************************** */
-	function fn_select(){
+	function fn_tot_select(){
 		$.ajax({
-			url : "/selectTransSetting.do", 
+			url : "/selectSourceTransSetting.do", 
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val(),
 				connect_nm : $("#connect_nm").val()
@@ -313,8 +412,8 @@ a:hover.tip span {
 		var trans_id_chk = table.row('.selected').data().trans_id;
 		var trans_exrt_trg_tb_id_chk = table.row('.selected').data().trans_exrt_trg_tb_id;
 		
-		$('#mod_trans_id', '#findList').val(trans_id_chk);
-		$('#mod_trans_exrt_trg_tb_id', '#findList').val(trans_exrt_trg_tb_id_chk);
+		$('#mod_prm_trans_id', '#findList').val(trans_id_chk);
+		$('#mod_prm_trans_exrt_trg_tb_id', '#findList').val(trans_exrt_trg_tb_id_chk);
 
  		$.ajax({
 			url : "/popup/connectRegReForm.do",
@@ -353,6 +452,8 @@ a:hover.tip span {
 	 * 수정 팝업셋팅
 	 ******************************************************** */
 	function fn_update_setting(result) {
+		$("#mod_source_kc_nm", "#searchModForm").val(nvlPrmSet(result.kc_id, ""));
+		
 		$("#mod_kc_ip", "#searchModForm").val(nvlPrmSet(result.kc_ip, ""));
 		$("#mod_kc_port", "#searchModForm").val(nvlPrmSet(result.kc_port, ""));
 		
@@ -416,6 +517,8 @@ a:hover.tip span {
 			$("#ins_meta_data", "#insRegForm").val("OFF");
 			$("input:checkbox[id='ins_meta_data_chk']").prop("checked", false); 
 			
+			$("#ins_source_trans_active_div").hide();
+
 			ins_tableList.clear().draw();
 			ins_connector_tableList.clear().draw();
 			
@@ -438,12 +541,11 @@ a:hover.tip span {
 			$("#mod_meta_data", "#modRegForm").val("OFF");
 			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", false); 
 			
+			$("#mod_source_trans_active_div").hide();
+			
 			mod_tableList.clear().draw();
 			mod_connector_tableList.clear().draw();
-			
-			mod_connect_status_Chk = "fail";
-			mod_connect_nm_Chk = "fail";
-			
+
 			$('a[href="#modSettingTab"]').tab('show');
 		}
 
@@ -515,7 +617,7 @@ a:hover.tip span {
 			} else if (gbn == "check_con_end") {
 				$("input:checkbox[id='" + canCheckId + "']").prop("checked", true); 
 			} else if (gbn == "check_con_start") {
-				$("input:checkbox[id='" + canCheckId + "']").prop("checked", true); 
+				$("input:checkbox[id='" + canCheckId + "']").prop("checked", false); 
 			}
 		}
 	}
@@ -528,7 +630,8 @@ a:hover.tip span {
 			url : "/deleteTransSetting.do",
 		  	data : {
 		  		trans_id_List : JSON.stringify(trans_id_List),
-		  		trans_exrt_trg_tb_id_List : JSON.stringify(trans_exrt_trg_tb_id_List)
+		  		trans_exrt_trg_tb_id_List : JSON.stringify(trans_exrt_trg_tb_id_List),
+				trans_active_gbn:"del"
 		  	},
 			dataType : "json",
 			type : "post",
@@ -547,9 +650,9 @@ a:hover.tip span {
 			success : function(result) {						
 				if(result == true){
 					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
-					fn_select();
+					fn_tot_select();
 				}else{
-					msgVale = "<spring:message code='menu.script_settings' />";
+					msgVale = "<spring:message code='menu.trans_management' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -598,7 +701,7 @@ a:hover.tip span {
 						return;
 					} else {
 						if (result == "success") {
-							fn_select();
+							fn_tot_select();
 						} else {
 							validateMsg = '<spring:message code="data_transfer.msg10"/>';
 							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
@@ -617,7 +720,8 @@ a:hover.tip span {
 					trans_id : $('#act_trans_id' + ascRow).val(),
 					kc_ip : $('#act_kc_ip' + ascRow).val(),
 					kc_port : $('#act_kc_port' + ascRow).val(),
-					connect_nm : $('#act_connect_nm' + ascRow).val()
+					connect_nm : $('#act_connect_nm' + ascRow).val(),
+					trans_active_gbn:"source"
 				},
 				dataType : "json",
 				type : "post",
@@ -644,7 +748,7 @@ a:hover.tip span {
 						return;
 					} else {
 						if (result == "success") {
-							fn_select();
+							fn_tot_select();
 						} else {
 							validateMsg = '<spring:message code="data_transfer.msg10"/>';
 							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
@@ -668,7 +772,8 @@ a:hover.tip span {
 				db_svr_id : $("#db_svr_id", "#findList").val(),
 				act : "u",
 				trans_exrt_trg_tb_id : $('#act_trans_exrt_trg_tb_id' + row).val(),
-				trans_id : $('#act_trans_id' + row).val()
+				trans_id : $('#act_trans_id' + row).val(),
+				trans_active_gbn : "source"
 			},
 			dataType : "json",
 			type : "post",
@@ -714,6 +819,7 @@ a:hover.tip span {
 		var compression_type_info_val = "";
 		var compression_type_info = nvlPrmSet(result.compression_type, "");
 
+		$("#d_kc_id_nm", "#searchInfoForm").html(nvlPrmSet(result.kc_nm, ""));
 		$("#d_kc_ip", "#searchInfoForm").html(nvlPrmSet(result.kc_ip, ""));
 		$("#d_kc_port", "#searchInfoForm").html(nvlPrmSet(result.kc_port, ""));
 
@@ -870,7 +976,8 @@ a:hover.tip span {
 			  		execute_gbn : exeGbn,
 					db_svr_id : $("#db_svr_id", "#findList").val(),
 			  		trans_id_List : JSON.stringify(trans_id_List),
-			  		trans_exrt_trg_tb_id_List : JSON.stringify(trans_exrt_trg_tb_id_List)
+			  		trans_exrt_trg_tb_id_List : JSON.stringify(trans_exrt_trg_tb_id_List),
+			  		trans_active_gbn : "source"
 			  	},
 				dataType : "json",
 				type : "post",
@@ -900,7 +1007,7 @@ a:hover.tip span {
 					} else {
 						if (result == "success") {
 							showSwalIcon('<spring:message code="data_transfer.msg16" />', '<spring:message code="common.close" />', '', 'success');
-							fn_select();
+							fn_tot_select();
 						} else {
 							validateMsg = '<spring:message code="data_transfer.msg10"/>';
 							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
@@ -919,7 +1026,8 @@ a:hover.tip span {
 			  		trans_exrt_trg_tb_id_List : JSON.stringify(trans_exrt_trg_tb_id_List),
 			  		kc_ip_List : JSON.stringify(kc_ip_List),
 			  		kc_port_List : JSON.stringify(kc_port_List),
-			  		connect_nm_List : JSON.stringify(connect_nm_List)
+			  		connect_nm_List : JSON.stringify(connect_nm_List),
+			  		trans_active_gbn : "source"
 			  	},
 				dataType : "json",
 				type : "post",
@@ -949,7 +1057,7 @@ a:hover.tip span {
 					} else {
 						if (result == "success") {
 							showSwalIcon('<spring:message code="data_transfer.msg16" />', '<spring:message code="common.close" />', '', 'success');
-							fn_select();
+							fn_tot_select();
 						} else {
 							validateMsg = '<spring:message code="data_transfer.msg10"/>';
 							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
@@ -986,6 +1094,9 @@ a:hover.tip span {
 			$("#btnModify").prop("disabled", "disabled");
 			$("#btnInsert").prop("disabled", "disabled");
 			$("#btnSearch").prop("disabled", "disabled");
+			
+			$("#btnKafkaInsert").prop("disabled", "disabled");
+			$("#btnCommonConSetInsert").prop("disabled", "disabled");
 		}else{
 			strMsg = '<i class="fa fa-spin fa-cog btn-icon-prepend"></i>';
 			$("#btnChoActive").html(strMsg + '<spring:message code="data_transfer.save_select_active" />');
@@ -998,20 +1109,192 @@ a:hover.tip span {
 			$("#btnModify").prop("disabled", "");
 			$("#btnInsert").prop("disabled", "");
 			$("#btnSearch").prop("disabled", "");
+			
+			$("#btnKafkaInsert").prop("disabled", "");
+			$("#btnCommonConSetInsert").prop("disabled", "");
 		} 
 	}
+
+	/* ********************************************************
+	 * modal popup 활성화 클릭
+	 ******************************************************** */
+	function fn_transActivation_msg_set(pop_gbn) {
+		if (pop_gbn == "ins_source") {
+			if($("#ins_source_transActive_act", "#insRegForm").is(":checked") == true){
+				$("#ins_source_trans_active_div").show();
+			} else {
+				$("#ins_source_trans_active_div").hide();
+			}
+		} else if (pop_gbn == "mod_source") {
+			if($("#mod_source_transActive_act", "#modRegForm").is(":checked") == true){
+				$("#mod_source_trans_active_div").show();
+			} else {
+				$("#mod_source_trans_active_div").hide();
+			}
+		}
+	}
+
+	/* ********************************************************
+	 * modal popup 활성화 클릭
+	 ******************************************************** */
+	function fn_auto_trans_active_start(pop_gbn, trans_exrt_trg_tb_id_val, trans_id_val) {
+		$.ajax({
+			url : "/transAutoStart.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				trans_active_gbn : pop_gbn,
+				trans_exrt_trg_tb_id : trans_exrt_trg_tb_id_val,
+				trans_id : trans_id_val
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result == null) {
+					validateMsg = data_transfer_msg10;
+					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+					return;
+				} else {
+					if (result == "success") {
+					} else {
+						validateMsg = data_transfer_msg10;
+						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+						return;
+					}
+				}
+				
+				fn_tot_select();
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * target kafka 설정 버튼 클릭
+	 ******************************************************** */
+	function fn_common_kafka_ins(){
+		$.ajax({
+			url : "/popup/transConSettingForm.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {
+				fn_transKafkaConPopStart();
+
+				$('#pop_layer_trans_con_list').modal("show");
+			}
+		});
+	}
 	
+
+	/* ********************************************************
+	 * 기본설정 등록
+	 ******************************************************** */
+	function fn_kc_nm_chg(hw_gbn) {
+		var prm_kafka_id = "";
+		var connectTd = "";
+
+		prm_kafka_id = nvlPrmSet($("#ins_source_kc_nm","#searchRegForm").val(), "");
+
+		if (prm_kafka_id == "") {
+			$("#ins_kc_ip","#searchRegForm").val("");
+			$("#ins_kc_port","#searchRegForm").val("");
+				
+			ins_connect_status_Chk = "fail";
+			
+			$("#ins_kc_connect_td","#searchRegForm").html("");
+		} else {
+			$.ajax({
+				url : "/selectTransKafkaConList.do",
+				data : {
+					kc_id : prm_kafka_id
+				},
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+					}
+				},
+				success : function(result) {
+					if (nvlPrmSet(result, '') != '') {
+						connectTd = "<div class='badge badge-pill badge-success'>";
+						connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+						connectTd += "	<spring:message code='data_transfer.connecting' />";
+						connectTd += "</div>";
+
+						if (result[0].kc_ip != "") {
+							$("#ins_kc_ip","#searchRegForm").val(nvlPrmSet(result[0].kc_ip, ''));
+							$("#ins_kc_port","#searchRegForm").val(nvlPrmSet(result[0].kc_port, ''));
+								
+							ins_connect_status_Chk = "success";
+
+							$("#ins_kc_connect_td","#searchRegForm").html(connectTd);
+						} else {
+							$("#ins_kc_ip","#searchRegForm").val("");
+							$("#ins_kc_port","#searchRegForm").val("");
+								
+							ins_connect_status_Chk = "fail";
+
+							$("#ins_kc_connect_td","#searchRegForm").html("");
+						}
+
+					} else {
+						$("#ins_kc_ip","#searchRegForm").val("");
+						$("#ins_kc_port","#searchRegForm").val("");
+							
+						ins_connect_status_Chk = "fail";
+
+						$("#ins_kc_connect_td","#searchRegForm").html("");
+					}
+				}
+			});
+		}
+	}
 </script>
+
+<%@include file="./../popup/transComConSetRegForm.jsp"%>
 
 <%@include file="./../popup/connectRegReForm.jsp"%>
 <%@include file="./../popup/connectRegForm2.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
+<%@include file="./../popup/transConnectListForm.jsp"%>
 <%@include file="./tansSettingInfo.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
-	<input type="hidden" name="mod_trans_id" id="mod_trans_id" value=""/>
-	<input type="hidden" name="mod_trans_exrt_trg_tb_id" id="mod_trans_exrt_trg_tb_id" value=""/>
+	<input type="hidden" name="mod_prm_trans_id" id="mod_prm_trans_id" value=""/>
+	<input type="hidden" name="mod_prm_trans_exrt_trg_tb_id" id="mod_prm_trans_exrt_trg_tb_id" value=""/>
 	<input type="hidden" name="chk_act_row" id="chk_act_row" value=""/>
 </form>
 
@@ -1075,10 +1358,30 @@ a:hover.tip span {
 									<input type="text" class="form-control" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name_set" />'/>					
 								</div>
 
-								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_select();" >
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_tot_select();" >
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 								</button>
 							</form>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12" style="margin-top:-10px;margin-bottom:-10px;">
+							<div class="template-demo">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnKafkaInsert" onClick="fn_common_kafka_ins();" data-toggle="modal">
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" /> <spring:message code="common.search" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_ins();" data-toggle="modal">
+									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
+								</button>
+
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_active" />
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1090,14 +1393,7 @@ a:hover.tip span {
 				<div class="card-body">
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
-							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_active" />
-								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
-								</button>
-													
+							<div class="template-demo">				
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_del_confirm();" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>

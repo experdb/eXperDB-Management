@@ -10,10 +10,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.json.simple.JSONObject;
 
-import com.k4m.dx.tcontrol.socket.ProtocolID;
-import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.NetworkUtil;
 
 
@@ -50,7 +47,7 @@ public class AgentSetting {
 		String strAgentIp = "";
 		String strAgentPort = "";
 		
-		
+		String strTransPath = "";
 		
 		Scanner scan = new Scanner(System.in);
 		
@@ -159,7 +156,13 @@ public class AgentSetting {
 				break;
 			}
 		}
-
+		
+		//trans setting 추가
+		System.out.println("trans path :(/home/experdb/programs/kafka)");
+		strTransPath = scan.nextLine();
+		if(strTransPath.equals("")) {
+			strTransPath = "/home/experdb/programs/kafka";
+		} 
 		
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseName;
 		
@@ -169,6 +172,7 @@ public class AgentSetting {
 		System.out.println("database Connection Info :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
+		System.out.println("trans_path :" + strTransPath);
 		System.out.println("#####################################################");
 		
 		
@@ -234,6 +238,8 @@ public class AgentSetting {
 		    
 		    prop.setProperty("socket.server.port", strAgentPort);
 		    prop.setProperty("agent.install.ip", strAgentIp);
+
+		    prop.setProperty("agent.trans_path", strTransPath);
 		    
 		    try {
 		    	prop.store(new FileOutputStream(path + "context.properties"), "");

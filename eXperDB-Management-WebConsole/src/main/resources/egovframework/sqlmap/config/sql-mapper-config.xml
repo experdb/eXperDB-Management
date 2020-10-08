@@ -57,6 +57,7 @@
 		
 		<typeAlias alias="transVO" type="com.k4m.dx.tcontrol.transfer.service.TransVO"/>
 		<typeAlias alias="transMappVO" type="com.k4m.dx.tcontrol.transfer.service.TransMappVO"/>
+		<typeAlias alias="transDbmsVO" type="com.k4m.dx.tcontrol.transfer.service.TransDbmsVO"/>
     </typeAliases>
     
  	<mappers>

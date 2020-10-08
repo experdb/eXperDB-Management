@@ -112,7 +112,7 @@ function fn_serverDivClear(db_svr_id, rowChkCnt) {
  ******************************************************** */
 function fn_main_tab_setting(result) {
 	
-	//백업일정, 배치일정, 데이터이행 일정 setting
+	//백업일정, 배치일정, 데이터이관 일정 setting
 	fn_schedule_cnt_set(result);
 
 	//스케줄 이력 목록 setting
@@ -124,7 +124,7 @@ function fn_main_tab_setting(result) {
 	//배치 이력 목록 setting
 	fn_script_History_set(result);
 	
-	//데이터 이행 setting
+	//데이터 이관 setting
 	if (nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N") == "Y") {
 		fn_migration_history_set(result);
 	}

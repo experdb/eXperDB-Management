@@ -221,7 +221,7 @@ function getddlDataList(){
 }
 
 /* ********************************************************
- * 데이터이행 데이터 가져오기
+ * 데이터이관 데이터 가져오기
  ******************************************************** */
 function getdataDataList(){
 	$.ajax({
@@ -336,7 +336,7 @@ function fn_ddl_regre_popup(){
 }
 
 /* ********************************************************
- * 데이터이행 등록 팝업
+ * 데이터이관 등록 팝업
  ******************************************************** */
 function fn_data_reg_popup(){
 // 	초기화 확인필요
@@ -359,7 +359,7 @@ function fn_data_reg_popup(){
 }
 
 /* ********************************************************
- * 데이터이행 수정 팝업
+ * 데이터이관 수정 팝업
  ******************************************************** */
 function fn_data_regre_popup(){
 	var rowCnt = tableData.rows('.selected').data().length;
@@ -414,7 +414,7 @@ function fn_data_regre_popup(){
 				$("#exrt_prl_prcs_ecnt").val(nvlPrmSet(result.exrt_prl_prcs_ecnt, ""));
 				$("#lob_dat_bff_sz").val(nvlPrmSet(result.lob_dat_bff_sz, ""));
 				$("#exrt_dat_cnt").val(nvlPrmSet(result.exrt_dat_cnt, ""));
-				$("#db2pg_uchr_lchr_val").val(result.db2pg_uchr_lchr_val).prop("selected", true);
+				$("#dat_db2pg_uchr_lchr_val").val(result.db2pg_uchr_lchr_val).prop("selected", true);
 				$("#tb_rbl_tf").val(result.tb_rbl_tf).prop("selected", true);
 				$("#ins_opt_cd").val(result.ins_opt_cd).prop("selected", true);
 				$("#cnst_cnd_exrt_tf").val(result.cnst_cnd_exrt_tf).prop("selected", true);

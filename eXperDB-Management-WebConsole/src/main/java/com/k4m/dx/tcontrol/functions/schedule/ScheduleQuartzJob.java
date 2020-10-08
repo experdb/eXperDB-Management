@@ -210,7 +210,7 @@ public class ScheduleQuartzJob implements Job{
 						String strCmd =resultWork.get(i).get("exe_cmd").toString();						
 						CMD.add(strCmd);
 						BCK_NM.add("SCRIPT");
-					//DSN_DSCD==TC001903 DB2PG 데이터이행	
+					//DSN_DSCD==TC001903 DB2PG 데이터이관	
 					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001903")){
 								
 						int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
@@ -265,7 +265,7 @@ public class ScheduleQuartzJob implements Job{
 						param.put("frst_regr_id", result.get("lst_mdfr_id"));
 						param.put("lst_mdfr_id", result.get("lst_mdfr_id"));
 						
-						//현재 스케줄은 데이터이행만 가능
+						//현재 스케줄은 데이터이관만 가능
 						param.put("mig_dscd", "TC003202");*/
 						
 						if(result.get("RESULT").equals("SUCCESS")){
