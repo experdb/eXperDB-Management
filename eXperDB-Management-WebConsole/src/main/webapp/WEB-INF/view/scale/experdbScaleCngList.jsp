@@ -52,7 +52,8 @@ a:hover.tip span {
 	var msgVale = "";
 	//scale 체크 조회
 	var install_yn = "";
-
+	var wrk_id_List = [];
+	
 	/* ********************************************************
 	 * scale setting 초기 실행
 	 ******************************************************** */
@@ -62,6 +63,117 @@ a:hover.tip span {
 		//aws 서버 확인
 		fn_selectScaleInstallChk();
 	});
+	
+	/* ********************************************************
+	 * 선택 활성화 클릭
+	 ******************************************************** */
+	function fn_autoScaleUseTot_click(tot_con_gbn){
+		//scale 이 실행되고 있는 지 체크
+		$.ajax({
+			url : "/scale/selectScaleLChk.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			timeout: 8000,
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else  if(status == "timeout") {
+					showSwalIcon('<spring:message code="eXperDB_scale.msg23" />', '<spring:message code="common.close" />', '', 'error');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					wrk_id = result.wrk_id;
+
+					if (wrk_id == "1") {
+						showSwalIcon('<spring:message code="eXperDB_scale.msg4" />', '<spring:message code="common.close" />', '', 'error');
+						return;
+					} else {
+						fn_autoScaleUseTot_exec(tot_con_gbn);
+					}
+				}
+			}
+		});
+	}
+	
+	/* ********************************************************
+	 * 선택 활성화 진행
+	 ******************************************************** */
+	function fn_autoScaleUseTot_exec(tot_con_gbn){
+		var validateMsg = "";
+		var datas = table.rows('.selected').data();
+		var i_exe_status = 0;
+		var i_un_exe_status = 0;
+		wrk_id_List = [];
+
+		if (datas.length <= 0) {
+			showSwalIcon('<spring:message code="message.msg35"/>', '<spring:message code="common.close" />', '', 'error');
+			return;
+		}
+
+		if (tot_con_gbn == "active") {
+			for (var i = 0; i < datas.length; i++) {
+	 			if(datas[i].useyn == "Y"){
+					i_exe_status = i_exe_status + 1;
+				} else {
+					i_un_exe_status = i_un_exe_status + 1;
+
+					wrk_id_List.push(datas[i].wrk_id);
+				}
+			}
+			
+			//실행 내역이 없는 경우
+			if (i_un_exe_status <= 0) {
+				showSwalIcon('<spring:message code="eXperDB_scale.msg26" />', '<spring:message code="common.close" />', '', 'error');
+				return;
+			}
+
+			if (i_exe_status > 0) {
+				validateMsg = '<spring:message code="eXperDB_scale.msg27"/>';
+			} else {
+				validateMsg = '<spring:message code="eXperDB_scale.msg28"/>';
+			}
+		} else {
+			for (var i = 0; i < datas.length; i++) {
+ 	 			if(datas[i].useyn == "Y"){
+	 				i_exe_status = i_exe_status + 1;
+	 				
+	 				wrk_id_List.push(datas[i].wrk_id);
+				} else {
+					i_un_exe_status = i_un_exe_status + 1;
+				}
+			}
+			
+			//실행 내역이 없는 경우
+			if (i_exe_status <= 0) {
+				showSwalIcon('<spring:message code="eXperDB_scale.msg26" />', '<spring:message code="common.close" />', '', 'error');
+				return;
+			}
+
+			if (i_un_exe_status > 0) {
+				validateMsg = '<spring:message code="eXperDB_scale.msg29"/>';
+			} else {
+				validateMsg = '<spring:message code="eXperDB_scale.msg30"/>';
+			}
+		}
+
+		confile_title = '<spring:message code="menu.eXperDB_scale_settings" />' + " " + '<spring:message code="dbms_information.use_yn" />';
+
+		$('#con_multi_gbn', '#findConfirmMulti').val(tot_con_gbn);
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html(validateMsg);
+		$('#pop_confirm_multi_md').modal("show");
+	}
 
 	/* ********************************************************
 	 * table 초기화 및 설정
@@ -278,7 +390,7 @@ a:hover.tip span {
 			$('#confirm_multi_msg').html('<spring:message code="eXperDB_scale.msg25" />');
 		}
 		
-		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="data_transfer.transfer_activity" />';
+		confile_title = '<spring:message code="menu.eXperDB_scale_settings" />' + " " + '<spring:message code="dbms_information.use_yn" />';
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#chk_use_row', '#findList').val(row);
 		
@@ -896,6 +1008,58 @@ a:hover.tip span {
 			fn_tot_use_execute(gbn);
 		}
 	}
+	
+	/* ********************************************************
+	 * 사용여부 선택실행
+	 ******************************************************** */
+	function fn_tot_use_execute(use_gbn) {
+		var validateMsg ="";
+
+		$.ajax({
+			url : "/scale/scaleTotCngUseUpdate.do",
+			data : {
+				use_gbn : use_gbn,
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				wrk_id_List : JSON.stringify(wrk_id_List)
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				//버튼제어
+				fn_buttonExecuteAut("end", "");
+				
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				//버튼제어
+				if (result == null) {
+					validateMsg = '<spring:message code="eXperDB_scale.msg24"/>';
+					showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+					return;
+				} else {
+					if (result == "success") {
+						showSwalIcon('<spring:message code="data_transfer.msg16" />', '<spring:message code="common.close" />', '', 'success');
+						fn_search_list();
+					} else {
+						validateMsg = '<spring:message code="eXperDB_scale.msg24"/>';
+						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+						return;
+					}
+				}
+			}
+		});
+	}
+	
+	
 
 	/* ********************************************************
 	 * 사용여부 단건실행
@@ -1116,13 +1280,13 @@ a:hover.tip span {
 								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnCommonInsert" onClick="fn_scaleChk('comIns');" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
 								</button>
-	<%-- 							<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoUse" onClick="fn_autoScaleUseTot_click('y');" data-toggle="modal">
+	 							<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoUse" onClick="fn_autoScaleUseTot_click('active');" data-toggle="modal">
 									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_scale.save_select_use" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoUnused" onClick="fn_autoScaleUseTot_click('n');" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoUnused" onClick="fn_autoScaleUseTot_click('disabled');" data-toggle="modal">
 									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_scale.save_select_unused" />
 								</button>
-			 --%>
+
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_scaleChk('del');" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
