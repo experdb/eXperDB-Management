@@ -118,7 +118,12 @@
 		$("#mod_trans_kafka_con_ip", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_ip, "")); 
 		$("#mod_trans_kafka_con_port", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_port, "")); 
 		$("#mod_trans_kafka_con_id", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_id, ""));
-		$("#mod_trans_kafka_con_Chk", "#modTransKfkConRegForm").val("success"); 
+		
+		if (result.resultInfo[0].exe_status == "TC001501") {
+			$("#mod_trans_kafka_con_Chk", "#modTransKfkConRegForm").val("success"); 
+		} else {
+			$("#mod_trans_kafka_con_Chk", "#modTransKfkConRegForm").val("fail");
+		}
 	}
 
 	/* ********************************************************

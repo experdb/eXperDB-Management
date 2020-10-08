@@ -228,7 +228,7 @@
 	/* ********************************************************
 	 * kafka 수정 팝업페이지 호출
 	 ******************************************************** */
-	function fn_kafka_con_update(){
+	function fn_kafka_con_update(gbn){
 /* 
 		var datas = trans_connect_table.rows('.selected').data();
 		
@@ -267,6 +267,14 @@
 				if (result.resultInfo != null) {
 					fn_tansKafkaConModPopStart(result);
 					
+					if (gbn == "O") {
+						$("#mod_trans_kafka_con_ip", "#modTransKfkConRegForm").prop("disabled", true); 
+						$("#mod_trans_kafka_con_port", "#modTransKfkConRegForm").prop("disabled", true); 
+					} else {
+						$("#mod_trans_kafka_con_ip", "#modTransKfkConRegForm").prop("disabled", false); 
+						$("#mod_trans_kafka_con_port", "#modTransKfkConRegForm").prop("disabled", false); 
+					}
+	
 					$('#pop_layer_trans_kfk_con_reg_re').modal("show");
 				} else {
 					showSwalIcon(message_msg01, closeBtn, '', 'error');
@@ -329,14 +337,26 @@
 				if (result != null) {
 					if (result == "S") {
  						if (selGbn =="update") {
- 							fn_kafka_con_update();
+ 							fn_kafka_con_update("S");
 						} else {
 							fn_kafka_con_delete();
 						}
 					} else if (result == "O") {
-						msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg31" />');
-						showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
-						return;
+						
+						if (selGbn == "update") {
+							if (datas[0].exe_status != "TC001501") {
+								fn_kafka_con_update("O");
+							} else {
+								msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg31" />');
+								showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
+								return;
+							}
+						} else {
+							msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg31" />');
+							showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
+							return;
+						}
+
 					} else {
 						msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
 						showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
