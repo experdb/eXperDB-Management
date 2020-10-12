@@ -909,4 +909,24 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 		return result;
 	}
 
+	/**
+	 * trans connect 수정
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) throws Exception {
+		String result = "S";
+
+		try {
+			transDAO.updateTransKafkaConnectFaild(transDbmsVO);
+		} catch (Exception e) {
+			result = "F";
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }
