@@ -132,7 +132,7 @@
 										<tbody>
 											<tr>
 												<td width="100%" colspan="5">
-											 		<div class="overflow_area3" id="auditlog" >
+											 		<div class="overflow_area3" id="auditlog" style="width:1065px;">
 													</div>
 												</td>
 											</tr>

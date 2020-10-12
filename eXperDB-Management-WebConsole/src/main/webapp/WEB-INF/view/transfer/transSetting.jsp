@@ -172,7 +172,7 @@ a:hover.tip span {
 	 ******************************************************** */
 	function fn_init(){
 		table = $('#transSettingTable').DataTable({
-			scrollY : "280px",
+			scrollY : "220px",
 			deferRender : true,
 			scrollX: true,
 			searching : false,
@@ -1153,11 +1153,11 @@ a:hover.tip span {
 			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
@@ -1195,11 +1195,11 @@ a:hover.tip span {
 			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {
@@ -1211,10 +1211,90 @@ a:hover.tip span {
 	}
 	
 
-	/* ********************************************************
+ 	/* ********************************************************
 	 * 기본설정 등록
 	 ******************************************************** */
 	function fn_kc_nm_chg(hw_gbn) {
+		var prm_kafka_id = "";
+		var prm_kafa_staus = "";
+		var connectTd = "";
+
+		prm_kafka_id = nvlPrmSet($("#ins_source_kc_nm","#searchRegForm").val(), "");
+
+		if (prm_kafka_id == "") {
+			ins_connect_status_Chk = "fail";
+			
+			$("#ins_kc_ip","#searchRegForm").val("");
+			$("#ins_kc_port","#searchRegForm").val("");
+
+			$("#ins_kc_connect_td","#searchRegForm").html("");
+		} else {
+			$.ajax({
+				url : "/kafkaConnectionTestUpdate.do",
+				data : {
+					db_svr_id : $("#db_svr_id", "#findList").val(),
+					kc_id : prm_kafka_id
+				},
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					if (nvlPrmSet(result, '') != '') {
+						//결과 체크
+						if(result.RESULT_DATA =="success"){
+							ins_connect_status_Chk = "success";
+							
+							connectTd = "<div class='badge badge-pill badge-success'>";
+							connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+							connectTd += "	<spring:message code='data_transfer.connecting' />";
+							connectTd += "</div>";
+						} else {
+							ins_connect_status_Chk = "fail";
+							
+							connectTd = "<div class='badge badge-pill badge-danger'>";
+							connectTd += "	<i class='ti-close mr-2'></i>";
+							connectTd += "	<spring:message code='schedule.stop' />";
+							connectTd += "</div>";
+						}
+						
+						$("#ins_kc_ip","#searchRegForm").val(nvlPrmSet(result.ip, ''));
+						$("#ins_kc_port","#searchRegForm").val(nvlPrmSet(result.port, ''));
+						
+						$("#ins_kc_connect_td","#searchRegForm").html(connectTd);
+
+
+					} else {
+						ins_connect_status_Chk = "fail";
+						
+						connectTd = "<div class='badge badge-pill badge-danger'>";
+						connectTd += "	<i class='ti-close mr-2'></i>";
+						connectTd += "	<spring:message code='schedule.stop' />";
+						connectTd += "</div>";
+						
+						$("#ins_kc_ip","#searchRegForm").val("");
+						$("#ins_kc_port","#searchRegForm").val("");
+
+						$("#ins_kc_connect_td","#searchRegForm").html(connectTd);
+					}
+				}
+			});
+		}
+	}
+	
+	/* ********************************************************
+	 * 기본설정 등록
+	 ******************************************************** */
+/* 	function fn_kc_nm_chg(hw_gbn) {
 		var prm_kafka_id = "";
 		var connectTd = "";
 
@@ -1280,7 +1360,7 @@ a:hover.tip span {
 				}
 			});
 		}
-	}
+	} */
 </script>
 
 <%@include file="./../popup/transComConSetRegForm.jsp"%>

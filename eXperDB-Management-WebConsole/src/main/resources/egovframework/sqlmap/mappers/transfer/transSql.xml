@@ -869,4 +869,18 @@
           FROM T_TRANSCNG_TARGET_I
          WHERE KC_ID = #{kc_id}::numeric
 	</select>
+	
+	<update id="updateTransKafkaConnectFaild"  parameterType="transDbmsVO">
+		/**
+	 	* Query ID : updateTransKafkaConnect
+	 	* Description : TRANS connect 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_CON_INF
+           SET
+               EXE_STATUS = #{exe_status}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE KC_ID=#{kc_id}::numeric
+	</update>
 </mapper>
