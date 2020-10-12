@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -833,6 +835,84 @@ public class InstanceScaleController {
 			result = "fail";
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+	
+	/**
+	 * 선택 사용여부 수정
+	 * @param response, request
+	 * @return result
+	 * @throws
+	 */
+	@RequestMapping(value = "/scaleTotCngUseUpdate.do")
+	@ResponseBody
+	public String scaleTotCngUseUpdate(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletResponse response, HttpServletRequest request) {
+		String result = "fail";
+
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+		String use_gbn = request.getParameter("use_gbn").toString();
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		
+		String wrk_id_Rows = "";
+		JSONArray wrk_ids = null;
+		
+		String result_code = "";
+		int sucCnt = 0;
+	
+		Map<String, Object> connStartResult = new  HashMap<String, Object>();
+		
+		try {			
+			if (request.getParameter("wrk_id_List") != null) {
+				wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
+				wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);
+			}
+			
+			if (wrk_ids != null && wrk_ids.size() > 0) {
+				for(int i=0; i<wrk_ids.size(); i++){
+					String resultSs = "fail";
+					InstanceScaleVO instanceScaleVOPrm = new InstanceScaleVO();
+
+					String wrk_id = wrk_ids.get(i).toString();
+					
+					instanceScaleVOPrm.setDb_svr_id(db_svr_id);
+					instanceScaleVOPrm.setWrk_id(wrk_id);
+					instanceScaleVOPrm.setLogin_id((String)loginVo.getUsr_id());
+					
+					if ("active".equals(use_gbn)) {
+						instanceScaleVOPrm.setUseyn("Y");
+					} else {
+						instanceScaleVOPrm.setUseyn("N");
+					}
+
+					resultSs = instanceScaleService.updateAutoScaleUseSetting(instanceScaleVOPrm);
+					
+					if (resultSs != null && "success".equals(resultSs)) {
+						sucCnt = sucCnt + 1;
+					}
+				}
+
+				if (sucCnt == wrk_ids.size() ) {
+					result = "success";
+				} else {
+					result = "fail";
+				}
+			}
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+			txManager.rollback(status);
+		}finally{
+			txManager.commit(status);
+		}
+
 		return result;
 	}
 }
