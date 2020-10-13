@@ -171,9 +171,9 @@ comment on table t_db2pg_sys_inf is 'db2pg_시스템_정보';
 alter table t_db2pg_trsf_wrk_inf add constraint pk_t_db2pg_trsf_wrk_inf 
 primary key (db2pg_trsf_wrk_id);
 
-comment on table t_db2pg_trsf_wrk_inf is 'db2pg_이관_작업_정보';
+comment on table t_db2pg_trsf_wrk_inf is 'db2pg_이행_작업_정보';
 
- comment on column t_db2pg_trsf_wrk_inf.db2pg_trsf_wrk_id is 'db2pg_이관_작업_id';
+ comment on column t_db2pg_trsf_wrk_inf.db2pg_trsf_wrk_id is 'db2pg_이행_작업_id';
  comment on column t_db2pg_trsf_wrk_inf.wrk_id is '작업_id';
  comment on column t_db2pg_trsf_wrk_inf.db2pg_src_sys_id is 'db2pg_소스_시스템_id';
  comment on column t_db2pg_trsf_wrk_inf.db2pg_trg_sys_id is 'db2pg_대상_시스템_id';
@@ -214,7 +214,7 @@ primary key (mig_exe_sn);
 
 comment on table t_migexe_g is '즉시실행로그';
 
- comment on column t_migexe_g.mig_exe_sn is '이관_실행_일련번호';
+ comment on column t_migexe_g.mig_exe_sn is '이행_실행_일련번호';
  comment on column t_migexe_g.mig_dscd is 'migration_구분코드';
  comment on column t_migexe_g.wrk_strt_dtm is '작업_시작_일시';
  comment on column t_migexe_g.wrk_end_dtm is '작업_종료_일시';
