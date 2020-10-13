@@ -36,7 +36,7 @@
 		//agent 확인
 		var extName = "${extName}";
 		
-		if (!fn_chkExtName(extName)) {
+ 		if (!fn_chkExtName(extName)) {
 			$("#btnSelect").prop("disabled", "disabled");
 			return;
 		}

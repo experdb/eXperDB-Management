@@ -322,5 +322,14 @@ public interface TransService {
 	 */
 	public String selectTransKafkaConIngChk(TransDbmsVO transDbmsVO) throws Exception;
 
+	/**
+	 * trans connect faild 수정
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public String updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) throws Exception;
+
 
 }

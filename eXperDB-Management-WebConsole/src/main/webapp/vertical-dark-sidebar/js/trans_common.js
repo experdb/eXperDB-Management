@@ -1300,40 +1300,66 @@ function fn_topic_search_tg_ins(){
 	var db_svr_id = $("#db_svr_id","#findList").val();
 	var kc_ip = $("#ins_tg_kc_ip", "#searchTargetRegForm").val();
 
-	$.ajax({
-		url : "/selectTargetTopicMappList.do",
-		data : {
-			db_svr_id : db_svr_id,
-			kc_ip : kc_ip
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
+
+	if (kc_ip != "") {
+		
+		$("#pop_layer_con_reg_two_target").append(htmlLoadPop);
+		
+		$('#loading_pop').css('position', 'absolute');
+		$('#loading_pop').css('left', '50%');
+		$('#loading_pop').css('top', '50%');
+		$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
+		$('#loading_pop').show();	
+		
+		$.ajax({
+			url : "/selectTargetTopicMappList.do",
+			data : {
+				db_svr_id : db_svr_id,
+				kc_ip : kc_ip
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {	
+				ins_tg_topicList.rows({selected: true}).deselect();
+				ins_tg_topicList.clear().draw();
+				
+				ins_connector_tg_tableList.rows({selected: true}).deselect();
+				ins_connector_tg_tableList.clear().draw();
+
+				//조회 후, connector_tableList과 비교 후 같으면 리스트에서 제외
+				if (result.data != null) {
+					fn_ins_target_trableListRemove(result.data);
+				} 
+
 			}
-		},
-		success : function(result) {	
-			ins_tg_topicList.rows({selected: true}).deselect();
-			ins_tg_topicList.clear().draw();
-			
-			ins_connector_tg_tableList.rows({selected: true}).deselect();
-			ins_connector_tg_tableList.clear().draw();
+		});
+		
+		$('#loading').hide();
+		
+		$( document ).ajaxStop(function() {
+			$('#loading_pop').hide();
+		});
+	} else {
+		ins_tg_topicList.rows({selected: true}).deselect();
+		ins_tg_topicList.clear().draw();
 
-			//조회 후, connector_tableList과 비교 후 같으면 리스트에서 제외
-			if (result.data != null) {
-				fn_ins_target_trableListRemove(result.data);
-			} 
+		ins_connector_tg_tableList.rows({selected: true}).deselect();
+		ins_connector_tg_tableList.clear().draw();
+	}
 
-		}
-	});
 }
 
 /* ********************************************************
@@ -1808,7 +1834,7 @@ function fn_common_con_set_ins() {
 /* ********************************************************
  * 기본설정 등록
  ******************************************************** */
-function fn_kc_nm_chg(hw_gbn) {
+/*function fn_kc_nm_chg(hw_gbn) {
 	var prm_kafka_id = "";
 	var connectTd = "";
 
@@ -1861,6 +1887,7 @@ function fn_kc_nm_chg(hw_gbn) {
 				}
 			},
 			success : function(result) {
+				alert("123");
 				if (nvlPrmSet(result, '') != '') {
 					connectTd = "<div class='badge badge-pill badge-success'>";
 					connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
@@ -1923,6 +1950,128 @@ function fn_kc_nm_chg(hw_gbn) {
 					fn_topic_search_tg_ins();
 				}
 
+			}
+		});
+	}
+}
+*/
+/* ********************************************************
+ * 기본설정 등록
+ ******************************************************** */
+function fn_kc_nm_chg(hw_gbn) {
+	var prm_kafka_id = "";
+	var prm_kafa_staus = "";
+	var connectTd = "";
+
+	if (hw_gbn == "source_ins") {
+		prm_kafka_id = nvlPrmSet($("#ins_source_kc_nm","#searchRegForm").val(), "");
+	} else {
+		prm_kafka_id = nvlPrmSet($("#ins_target_kc_nm","#searchTargetRegForm").val(), "");
+	}
+
+	if (prm_kafka_id == "") {
+		ins_connect_status_Chk = "fail";
+		
+		if (hw_gbn == "source_ins") {
+			$("#ins_kc_ip","#searchRegForm").val("");
+			$("#ins_kc_port","#searchRegForm").val("");
+
+			$("#ins_kc_connect_td","#searchRegForm").html("");
+		} else {
+			$("#ins_tg_kc_ip","#searchTargetRegForm").val("");
+			$("#ins_tg_kc_port","#searchTargetRegForm").val("");
+			
+			$("#ins_tg_kc_connect_td","#searchTargetRegForm").html("");
+			
+			ins_tg_topicList.rows({selected: true}).deselect();
+			ins_tg_topicList.clear().draw();
+
+			ins_connector_tg_tableList.rows({selected: true}).deselect();
+			ins_connector_tg_tableList.clear().draw();
+		}
+	} else {
+		$.ajax({
+			url : "/kafkaConnectionTestUpdate.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				kc_id : prm_kafka_id
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {
+				if (nvlPrmSet(result, '') != '') {
+					//결과 체크
+					if(result.RESULT_DATA =="success"){
+						ins_connect_status_Chk = "success";
+						
+						connectTd = "<div class='badge badge-pill badge-success'>";
+						connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+						connectTd += data_transfer_connecting;
+						connectTd += "</div>";
+					} else {
+						ins_connect_status_Chk = "fail";
+						
+						connectTd = "<div class='badge badge-pill badge-danger'>";
+						connectTd += "	<i class='ti-close mr-2'></i>";
+						connectTd += schedule_stop;
+						connectTd += "</div>";
+					}
+
+					if (hw_gbn == "source_ins") {
+						$("#ins_kc_ip","#searchRegForm").val(nvlPrmSet(result.ip, ''));
+						$("#ins_kc_port","#searchRegForm").val(nvlPrmSet(result.port, ''));
+						
+						$("#ins_kc_connect_td","#searchRegForm").html(connectTd);
+					} else {
+						$("#ins_tg_kc_ip","#searchTargetRegForm").val(nvlPrmSet(result.ip, ''));
+						$("#ins_tg_kc_port","#searchTargetRegForm").val(nvlPrmSet(result.port, ''));
+						
+						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html(connectTd);
+					}
+					
+					
+					//topic list 조회
+					if (hw_gbn == "target_ins") {
+						fn_topic_search_tg_ins();
+					}
+					
+				} else {
+					ins_connect_status_Chk = "fail";
+					
+					connectTd = "<div class='badge badge-pill badge-danger'>";
+					connectTd += "	<i class='ti-close mr-2'></i>";
+					connectTd += schedule_stop;
+					connectTd += "</div>";
+
+					if (hw_gbn == "source_ins") {
+						$("#ins_kc_ip","#searchRegForm").val("");
+						$("#ins_kc_port","#searchRegForm").val("");
+
+						$("#ins_kc_connect_td","#searchRegForm").html(connectTd);
+					} else {
+						$("#ins_tg_kc_ip","#searchTargetRegForm").val("");
+						$("#ins_tg_kc_port","#searchTargetRegForm").val("");
+						
+						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html(connectTd);
+						
+						ins_tg_topicList.rows({selected: true}).deselect();
+						ins_tg_topicList.clear().draw();
+
+						ins_connector_tg_tableList.rows({selected: true}).deselect();
+						ins_connector_tg_tableList.clear().draw();
+					}
+				}
 			}
 		});
 	}

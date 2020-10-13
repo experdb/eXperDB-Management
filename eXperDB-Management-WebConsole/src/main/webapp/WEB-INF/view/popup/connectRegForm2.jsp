@@ -116,7 +116,7 @@
 	 ******************************************************** */
 	function fn_ins_init(){
 		ins_tableList = $('#ins_tableList').DataTable({
-			scrollY : "340px",
+			scrollY : "220px",
 			scrollX: true,	
 			processing : true,
 			searching : false,
@@ -136,7 +136,7 @@
  		ins_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '162px');
  		
  		ins_connector_tableList = $('#ins_connector_tableList').DataTable({
-			scrollY : "340px",
+			scrollY : "220px",
 			scrollX: true,	
 			processing : true,
 			searching : false,
@@ -594,7 +594,7 @@
 							</div>
 						</div>
 						
-						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #c9ccd7;">
+						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #c9ccd7;margin-bottom:-10px;">
 							<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
 								<form class="cmxform" id="insRegForm">
 									<input type="hidden" name="ins_table_mapp_nm" id="ins_table_mapp_nm" />
@@ -698,7 +698,7 @@
 							</div>
 								
 							<div class="tab-pane fade" role="tabpanel" id="insTableTab">
-								<div class="card">
+								<div class="card" style="margin-top:-20px;">
 									<div class="card-body" style="margin:-10px -10px -15px -10px;">
 										<form class="form-inline row" onsubmit="return false">
 											<div class="input-group mb-2 mr-sm-2 col-sm-6">
@@ -737,7 +737,7 @@
 										<div class="card" style="background-color: transparent !important;border:0px;">
 											<div class="card-body">	
 												<div class="card my-sm-2 connectRegForm2" style="border:0px;background-color: transparent !important;">
-													<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-top:100px;margin-bottom:-15px;">
+													<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-top:15px;margin-bottom:-15px;">
 														<a href="#" class="tip" onclick="fn_ins_t_allRightMove();">
 															<i class="fa fa-angle-double-right" style="font-size: 35px;cursor:pointer;"></i>
 															<span style="width: 200px;"><spring:message code="data_transfer.move_right_line" /></span>
