@@ -1,4 +1,4 @@
-﻿CREATE TABLE experdb_management.t_scale_g (
+CREATE TABLE experdb_management.t_scale_g (
 	scale_wrk_sn numeric NOT NULL DEFAULT 1,                    -- 스케일_실행_일련번호
 	wrk_id numeric(18) NOT NULL DEFAULT 1,                      -- 작업_ID
 	scale_type varchar(1) NOT NULL,                             -- 스케일_유형
