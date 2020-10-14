@@ -2,6 +2,7 @@
 echo "****************************************************"
 echo "eXperDB-Management-11.2.0 Repository DB Install"
 echo "****************************************************"
+export LANG="ko_KR.UTF-8"
 
 echo "**CREATE USER experdb**"
 psql -c "CREATE USER experdb PASSWORD 'experdb' SUPERUSER";
@@ -41,6 +42,6 @@ echo "**Trans data start**"
 psql -U experdb -d experdb -f create_new_trans.sql
 echo "**Trans data END**"
 
-echo "**11.2.0**"
+echo "**v 11.2.0**"
 psql -U experdb -d experdb -f eXperDB-Management_11.2.0.sql
-echo "**11.2.0 END**"
+echo "**v 11.2.0 END**"
