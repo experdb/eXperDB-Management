@@ -17,7 +17,7 @@
 	rslt_msg varchar(1000) NULL,                                -- 결과_메시지
 	frst_regr_id varchar(30) NULL,                              -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(),  -- 최초_등록_일시
-	lst_mdfr_id varchar(30) NULL,  -- 최종_수정자_ID
+	lst_mdfr_id varchar(30) NULL,  								-- 최종_수정자_ID
 	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp() -- 최종_수정_일시
 );
 CREATE UNIQUE INDEX uk_t_scale_g_01 ON experdb_management.t_scale_g USING btree (scale_wrk_sn, wrk_id, db_svr_id, scale_type, process_id);
