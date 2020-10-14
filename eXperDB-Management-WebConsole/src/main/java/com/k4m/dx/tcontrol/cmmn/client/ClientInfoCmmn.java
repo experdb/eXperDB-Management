@@ -1902,6 +1902,8 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			
 			transObj.put(ClientProtocolID.CON_START_GBN, "source");
 
+			transObj.put(ClientProtocolID.TRANS_COM_ID, transInfo.get(0).get("trans_com_id"));
+
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_SCM_NM, mappInfo.get(0).get("exrt_trg_scm_nm"));
 			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));			

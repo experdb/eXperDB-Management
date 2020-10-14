@@ -270,4 +270,5 @@ public class ClientProtocolID {
 	public static final String SPR_USR_ID = "SPR_USR_ID";
 	public static final String CONNECTION_PWD = "CONNECTION_PWD";
 	public static final String CON_START_GBN = "CON_START_GBN";
+	public static final String TRANS_COM_ID = "TRANS_COM_ID";
 }

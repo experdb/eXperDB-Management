@@ -427,5 +427,29 @@ public class TransDAO extends EgovAbstractMapper{
 	public void updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) {
 		update("transSQL.updateTransKafkaConnectFaild", transDbmsVO);
 	}
+	
+	/**
+	 * 기본설정 리스트 조회
+	 * 
+	 * @param transVO
+	 * @return List<Map<String, Object>>
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectTransComConPopList(TransVO transVO) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("transSQL.selectTransComConPopList", transVO);
+		return sl;
+	}
+
+	/**
+	 * 기본설정 삭제
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void deleteTransComConSet(TransVO transVO) {
+		delete("transSQL.deleteTransComConSet", transVO);
+	}
 
 }

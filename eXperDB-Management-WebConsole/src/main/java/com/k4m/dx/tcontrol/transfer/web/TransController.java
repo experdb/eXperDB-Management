@@ -611,6 +611,15 @@ public class TransController {
 					mv.addObject("compression_type", transInfo.get(0).get("compression_type"));	//use
 					mv.addObject("compression_nm", transInfo.get(0).get("compression_nm"));		//use
 					mv.addObject("meta_data", transInfo.get(0).get("meta_data"));				//use
+					
+					mv.addObject("trans_com_id", transInfo.get(0).get("trans_com_id"));							//use
+					mv.addObject("trans_com_cng_nm", transInfo.get(0).get("trans_com_cng_nm"));					//use
+					mv.addObject("plugin_name", transInfo.get(0).get("plugin_name"));							//use
+					mv.addObject("heartbeat_interval_ms", transInfo.get(0).get("heartbeat_interval_ms"));		//use
+					mv.addObject("max_batch_size", transInfo.get(0).get("max_batch_size"));						//use
+					mv.addObject("max_queue_size", transInfo.get(0).get("max_queue_size"));						//use
+					mv.addObject("offset_flush_interval_ms", transInfo.get(0).get("offset_flush_interval_ms"));	//use
+					mv.addObject("offset_flush_timeout_ms", transInfo.get(0).get("offset_flush_timeout_ms"));	//use
 				} else {
 					mv.addObject("trans_sys_nm", transInfo.get(0).get("trans_sys_nm"));			//use
 					mv.addObject("trans_trg_sys_id", transInfo.get(0).get("trans_trg_sys_id"));	//use
@@ -638,6 +647,15 @@ public class TransController {
 					mv.addObject("compression_type", "");							//use
 					mv.addObject("compression_nm", "");								//use
 					mv.addObject("meta_data", "");									//use
+					
+					mv.addObject("trans_com_id", "");								//use
+					mv.addObject("trans_com_cng_nm", "");							//use
+					mv.addObject("plugin_name", "");								//use
+					mv.addObject("heartbeat_interval_ms", "");						//use
+					mv.addObject("max_batch_size", "");								//use
+					mv.addObject("max_queue_size", "");								//use
+					mv.addObject("offset_flush_interval_ms", "");					//use
+					mv.addObject("offset_flush_timeout_ms", "");					//use
 				} else {
 					mv.addObject("trans_sys_nm", "");								//use
 					mv.addObject("trans_trg_sys_id", "");							//use
@@ -859,6 +877,9 @@ public class TransController {
 				mv.addObject("compression_type", transInfo.get(0).get("compression_type"));	//use
 				mv.addObject("compression_nm", transInfo.get(0).get("compression_nm"));		//use
 				mv.addObject("meta_data", transInfo.get(0).get("meta_data"));				//use
+				mv.addObject("trans_com_id", transInfo.get(0).get("trans_com_id"));		//use
+				mv.addObject("trans_com_cng_nm", transInfo.get(0).get("trans_com_cng_nm"));				//use
+				
 			} else {
 				mv.addObject("kc_id", "");				//use
 				mv.addObject("kc_ip", "");											//use
@@ -866,6 +887,8 @@ public class TransController {
 				mv.addObject("connect_nm", "");										//use
 				mv.addObject("trans_id", "");										//use
 				mv.addObject("exe_status", "");										//use
+				mv.addObject("trans_com_id", "");										//use
+				mv.addObject("trans_com_cng_nm", "");										//use
 
 				mv.addObject("db_id", "");										//use
 				mv.addObject("db_nm", "");										//use
@@ -1600,7 +1623,81 @@ public class TransController {
 	}
 	
 	/**
+	 * 기본설정 화면 출력
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/transComSettingCngSetting.do")
+	public ModelAndView transDbmsSetting(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+
+			// 화면접근이력 이력 남기기
+			historyVO.setExe_dtl_cd("DX-T0157");
+			accessHistoryService.insertHistory(historyVO);
+
+			mv.addObject("db_svr_id", db_svr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mv;
+	}
+	
+	/**
+	 * 기본설절 목록을 조회한다.
+	 * 
+	 * @param historyVO, transDbmsVO, response, request
+	 * @return List<TransDbmsVO>
+	 */
+	@RequestMapping(value = "/selectTransComConPopList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectTransComConPopList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transVO") TransVO transVO, HttpServletResponse response, HttpServletRequest request) {
+		
+		List<Map<String, Object>> resultSet = null;
+		
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0157_01");
+			accessHistoryService.insertHistory(historyVO);
+			
+			resultSet = transService.selectTransComConPopList(transVO);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	/**
 	 * 기본설정 등록 조회
+	 * @param transVO, request, historyVO
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value = "/transComSettingCngIns.do")
+	public ModelAndView transComSettingCngIns(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+	
+			// 화면접근이력 이력 남기기
+			historyVO.setExe_dtl_cd("DX-T0156");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	/**
+	 * 기본설정 수정 조회
 	 * @param transVO, request, historyVO
 	 * @return Map<String, Object>
 	 */
@@ -1612,7 +1709,7 @@ public class TransController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0156");
+			historyVO.setExe_dtl_cd("DX-T0158");
 			accessHistoryService.insertHistory(historyVO);
 			
 			result = transService.selectTransComSettingCngInfo(transVO);
@@ -1624,15 +1721,14 @@ public class TransController {
 		return result;	
 	}
 	
-
 	/**
 	 * 기본설정 등록
 	 * @param 
 	 * @return
 	 */
-	@RequestMapping("/transComConCngWrite.do")
+	@RequestMapping("/transComConCngInsert.do")
 	@ResponseBody
-	public String transComConCngWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transVO") TransVO transVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
+	public String transComConCngInsert(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transVO") TransVO transVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 
@@ -1648,6 +1744,8 @@ public class TransController {
 			transVO.setFrst_regr_id((String)loginVo.getUsr_id());
 			transVO.setLst_mdfr_id((String)loginVo.getUsr_id());
 			
+			transVO.setTrans_com_cng_gbn("ins");
+
 			//저장 process
 			result = transService.updateTransCommonSetting(transVO);
 		} catch (Exception e) {
@@ -1655,6 +1753,83 @@ public class TransController {
 			e.printStackTrace();
 		}
 
+		return result;
+	}
+
+	/**
+	 * 기본설정 수정
+	 * @param 
+	 * @return
+	 */
+	@RequestMapping("/transComConCngWrite.do")
+	@ResponseBody
+	public String transComConCngWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transVO") TransVO transVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+		//중복체크 flag 값
+		String result = "S";
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0158_1");
+			accessHistoryService.insertHistory(historyVO);
+			
+			transVO.setFrst_regr_id((String)loginVo.getUsr_id());
+			transVO.setLst_mdfr_id((String)loginVo.getUsr_id());
+			
+			transVO.setTrans_com_cng_gbn("mod");
+
+			//저장 process
+			result = transService.updateTransCommonSetting(transVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
+	 * 기본설정 삭제
+	 * @param 
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteTransComConSet.do")
+	@ResponseBody
+	public boolean deleteTransComConSet(@ModelAttribute("transDbmsVO") TransVO transVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
+		boolean result = false;
+
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+
+		String trans_com_id_Rows = request.getParameter("trans_com_id_List").toString().replaceAll("&quot;", "\"");
+
+		try{
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0157_02");
+			accessHistoryService.insertHistory(historyVO);
+			
+			if (!"".equals(trans_com_id_Rows)) {
+				transVO.setTrans_com_id_Rows(trans_com_id_Rows);
+				
+				//scale log 확인
+				transService.deleteTransComConSet(transVO);	
+				
+				result = true;
+			} else {
+				result = false;
+			}
+		}catch(Exception e){
+			result = false;
+			e.printStackTrace();
+			txManager.rollback(status);
+		}finally{
+			txManager.commit(status);
+		}
 		return result;
 	}
 	
