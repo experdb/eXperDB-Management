@@ -21,6 +21,7 @@
 <script type="text/javascript">
 	var mod_tableList = null;
 	var mod_connector_tableList = null;
+	var mod_trans_com_cng_nm_val = '<spring:message code="data_transfer.default_setting" />';
 
 	$(window.document).ready(function() {
 		//테이블셋팅
@@ -273,11 +274,13 @@
 	 ******************************************************** */
 	function mod_source_valCheck(){
 		//전성대상테이블 length 체크
-		if (mod_connector_tableList.rows().data().length <= 0) {
+		if(nvlPrmSet($("#mod_trans_com_id", "#modRegForm").val(), '') == "") {
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ mod_trans_com_cng_nm_val +'" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		} else if (mod_connector_tableList.rows().data().length <= 0) {
 			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
-
 		return true;
 	}
 	
@@ -325,6 +328,7 @@
 				meta_data : nvlPrmSet($("#mod_meta_data", "#modRegForm").val(), 'OFF'),
 				trans_id : $("#mod_trans_id","#modRegForm").val(),
 				trans_exrt_trg_tb_id : $("#mod_trans_exrt_trg_tb_id","#modRegForm").val(),
+				trans_com_id : parseInt($("#mod_trans_com_id", "#modRegForm").val())
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -358,6 +362,30 @@
 				}
 			}
 		});	
+	}
+
+	/* ********************************************************
+	 * DBMS 시스템 등록 버튼 클릭시
+	 ******************************************************** */
+	function fn_mod_sc_comConCho(){
+		$('#cho_trans_com_con_cho_mod').show();
+		$('#cho_trans_com_con_cho_add').hide();
+		
+		$('#cho_trans_com_cng_nm').val("");
+		
+		cho_proc_gbn = "mod";
+
+		fn_cho_trans_search_com_con();
+
+		$('#pop_layer_trans_com_con_cho').modal("show");
+	}
+
+	/* ********************************************************
+	 * DBMS 서버 호출하여 입력
+	 ******************************************************** */
+	function fn_trans_com_conModCallback(trans_com_id, trans_com_cng_nm){
+		 $("#mod_trans_com_id", "#modRegForm").val(nvlPrmSet(trans_com_id, ''));
+		 $("#mod_trans_com_cng_nm", "#modRegForm").val(nvlPrmSet(trans_com_cng_nm, ''));
 	}
 </script>
 
@@ -450,6 +478,7 @@
 									<input type="hidden" name="mod_db_id_set" id="mod_db_id_set" />
 									<input type="hidden" name="mod_trans_id" id="mod_trans_id" />
 									<input type="hidden" name="mod_trans_exrt_trg_tb_id" id="mod_trans_exrt_trg_tb_id" />
+									<input type="hidden" name="mod_trans_com_id" id="mod_trans_com_id" />
 
 									<fieldset>
 										<div class="form-group row" style="margin-bottom:10px;">
@@ -502,6 +531,19 @@
 											</div>
 											<div class="col-sm-6" style="height:30px;display: flex;align-items: center;">
 												<span class="text-sm-left" style="font-size: 0.875rem;" id="mod_snapshotModeDetail"></span>	
+											</div>
+										</div>
+
+										<div class="form-group row" style="margin-bottom:10px;">
+											<label for="mod_trans_com_cng_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.default_setting"/>
+											</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control form-control-xsm" id="mod_trans_com_cng_nm" name="mod_trans_com_cng_nm" readonly="readonly" />
+											</div>
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-inverse-info btn-sm" style="width: 100px;" onclick="fn_mod_sc_comConCho()"><spring:message code="button.create" /></button>
 											</div>
 										</div>
 
