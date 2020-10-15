@@ -74,7 +74,7 @@
                AAA.DB_SVR_ID AS db_svr_id
              , AAA.IPADR as ipadr
              , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
-             , (SELECT SVR_HOST_NM FROM T_DBSVRIPADR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND IPADR = AAA.IPADR) AS svr_host_nm
+             , (SELECT SVR_HOST_NM FROM T_DBSVRIPADR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND IPADR = AAA.IPADR LIMIT 1) AS svr_host_nm
              , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
              , AAA.MASTER_GBN as master_gbn
 		    , (SELECT DISTINCT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE IPADR = AAA.IPADR) AS agt_cndt_cd
