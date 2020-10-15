@@ -441,6 +441,7 @@
 			}
 		});
 
+		
 		$.ajax({
 			url : "/insertDumpRestore.do",
 			data : {
@@ -461,7 +462,10 @@
 
 				data_only_yn : $("#dump_option_2_1", "#restoreDumpRegForm").val(),
 				schema_only_yn : $("#dump_option_2_2", "#restoreDumpRegForm").val(),
-				blobs_only_yn : $("#dump_option_2_3", "#restoreDumpRegForm").val(), //추가
+				/* blobs_only_yn : $("#dump_option_2_3", "#restoreDumpRegForm").val(), //추가 */
+				
+				blobs_only_yn : 'N', //추가
+				
 				
 				no_owner_yn : $("#dump_option_3_1", "#restoreDumpRegForm").val(),
 				no_privileges_yn : $("#dump_option_3_2", "#restoreDumpRegForm").val(),
@@ -718,7 +722,7 @@
 												<select class="form-control form-control-xsm" style="margin-right: 1rem;width:100%;" name="db_nm" id="db_nm" tabindex=3>
 													<option value=""><spring:message code="common.choice" /></option>
 													<c:forEach var="result" items="${dbList}" varStatus="status">
-														<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
+														<option value="<c:out value="${result.db_nm}"/>"><c:out value="${result.db_nm}"/></option>
 													</c:forEach>
 												</select>
 											</div>
@@ -901,7 +905,7 @@
 																</label>
 															</div>
 															<!--  원래없던것임 -->
-															<div class="form-check input-group-addon mx-4">
+															<%-- <div class="form-check input-group-addon mx-4">
 																<label for="dump_option_2_3" class="form-check-label" style="width:100px;">
 																	<input type="checkbox" id="dump_option_2_3" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0007" opt_cd="TC000703" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
@@ -910,7 +914,7 @@
 																	/>
 																	<spring:message code="backup_management.blobs" />
 																</label>
-															</div>
+															</div> --%>
 														</div>
 													</div>
 												</div>

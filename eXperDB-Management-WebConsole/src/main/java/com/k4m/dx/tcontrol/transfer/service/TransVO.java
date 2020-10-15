@@ -50,6 +50,34 @@ public class TransVO {
 	private String auto_create;
 	private String transforms_yn;
 	private String kc_id;
+	
+	private String trans_com_cng_nm;
+	private String trans_com_cng_gbn;
+	private String trans_com_id_Rows;
+
+	public String getTrans_com_id_Rows() {
+		return trans_com_id_Rows;
+	}
+
+	public void setTrans_com_id_Rows(String trans_com_id_Rows) {
+		this.trans_com_id_Rows = trans_com_id_Rows;
+	}
+
+	public String getTrans_com_cng_nm() {
+		return trans_com_cng_nm;
+	}
+
+	public void setTrans_com_cng_nm(String trans_com_cng_nm) {
+		this.trans_com_cng_nm = trans_com_cng_nm;
+	}
+
+	public String getTrans_com_cng_gbn() {
+		return trans_com_cng_gbn;
+	}
+
+	public void setTrans_com_cng_gbn(String trans_com_cng_gbn) {
+		this.trans_com_cng_gbn = trans_com_cng_gbn;
+	}
 
 	public String getKc_id() {
 		return kc_id;

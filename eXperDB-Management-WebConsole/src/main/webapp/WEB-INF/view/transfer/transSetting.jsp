@@ -68,12 +68,11 @@ a:hover.tip span {
 		//aws 서버 확인
 		fn_selectKafkaConnectChk();
 	});
-	
 
 	/* ********************************************************
 	 * 기본설정 등록
 	 ******************************************************** */
-	function fn_common_con_set_ins() {
+/* 	function fn_common_con_set_ins() {
 		$.ajax({
 			url : "/selectTransComSettingCngInfo.do",
 			data : {
@@ -115,6 +114,37 @@ a:hover.tip span {
 				$('#pop_layer_con_com_ins_cng').modal('show');
 			}
 		});	
+	} */
+	
+	/* ********************************************************
+	 * 기본설정 등록 팝업
+	 ******************************************************** */
+	function fn_common_con_set_pop() {
+		$.ajax({
+			url : "/transComSettingCngSetting.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				fn_transCommonConSetPopStart();
+
+				$('#pop_layer_con_com_ins_list').modal("show");
+			}
+		});
 	}
 
 	/* ********************************************************
@@ -462,6 +492,8 @@ a:hover.tip span {
 		$("#mod_db_id_set", "#modRegForm").val(nvlPrmSet(result.db_id, ""));
 		$("#mod_trans_id", "#modRegForm").val(nvlPrmSet(result.trans_id, ""));
 		$("#mod_trans_exrt_trg_tb_id","#modRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
+		$("#mod_trans_com_id", "#modRegForm").val(nvlPrmSet(result.trans_com_id, ""));
+		$("#mod_trans_com_cng_nm", "#modRegForm").val(nvlPrmSet(result.trans_com_cng_nm, ""));
 
 		//스냅샷 모드 추가
 		var snapshot_mode_re = nvlPrmSet(result.snapshot_mode, "");
@@ -600,6 +632,8 @@ a:hover.tip span {
 			fn_act_execute(gbn);
 		} else if (gbn == "active" || gbn == "disabled") {
 			fn_tot_act_execute(gbn);
+		} else if (gbn == "trans_com_con_del") {
+			fn_trans_com_con_delete_logic();
 		}
 	}
 
@@ -877,6 +911,14 @@ a:hover.tip span {
 		if (result.tables.data != null) {
 			info_connector_tableList.rows.add(result.tables.data).draw();
 		}
+
+		$("#d_sc_trans_com_cng_nm", "#infoRegForm").html(nvlPrmSet(result.trans_com_cng_nm, ""));
+		$("#d_sc_plugin_name", "#infoRegForm").html(nvlPrmSet(result.plugin_name, ""));
+		$("#d_sc_heartbeat_interval_ms", "#infoRegForm").html(nvlPrmSet(result.heartbeat_interval_ms, ""));
+		$("#d_sc_max_batch_size", "#infoRegForm").html(nvlPrmSet(result.max_batch_size, ""));
+		$("#d_sc_max_queue_size", "#infoRegForm").html(nvlPrmSet(result.max_queue_size, ""));
+		$("#d_sc_offset_flush_interval_ms", "#infoRegForm").html(nvlPrmSet(result.offset_flush_interval_ms, ""));
+		$("#d_sc_offset_flush_timeout_ms", "#infoRegForm").html(nvlPrmSet(result.offset_flush_timeout_ms, ""));
 
 		$('a[href="#infoSettingTab"]').tab('show');
 	}
@@ -1209,10 +1251,9 @@ a:hover.tip span {
 			}
 		});
 	}
-	
 
  	/* ********************************************************
-	 * 기본설정 등록
+	 * 등록팝업 kafka 변경시
 	 ******************************************************** */
 	function fn_kc_nm_chg(hw_gbn) {
 		var prm_kafka_id = "";
@@ -1363,13 +1404,14 @@ a:hover.tip span {
 	} */
 </script>
 
-<%@include file="./../popup/transComConSetRegForm.jsp"%>
+<%@include file="./../popup/transComConSetForm.jsp"%>
 
 <%@include file="./../popup/connectRegReForm.jsp"%>
 <%@include file="./../popup/connectRegForm2.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/transConnectListForm.jsp"%>
 <%@include file="./tansSettingInfo.jsp"%>
+<%@include file="./../popup/transComConChoForm.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
@@ -1451,7 +1493,7 @@ a:hover.tip span {
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnKafkaInsert" onClick="fn_common_kafka_ins();" data-toggle="modal">
 									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" /> <spring:message code="common.search" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_ins();" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_pop();" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
 								</button>
 

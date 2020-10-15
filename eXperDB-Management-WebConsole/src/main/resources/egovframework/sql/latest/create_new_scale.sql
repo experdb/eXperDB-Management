@@ -309,4 +309,3 @@ INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_re
 values ('TC0001', 'DX-T0061_01', '노드 자동확장 기본 설정 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
 DELETE FROM T_SYSDTL_C WHERE grp_cd = 'TC0035' AND sys_cd = 'TC003502';
-

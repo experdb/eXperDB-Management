@@ -223,3 +223,23 @@ ALTER TABLE t_scale_i ADD CONSTRAINT pk_t_scale_i PRIMARY KEY(wrk_id, db_svr_id,
 ALTER TABLE t_scaleawssvr_i ADD CONSTRAINT pk_t_scaleawssvr_i PRIMARY KEY(db_svr_id, db_svr_ipadr_id);
 ALTER TABLE t_scaleloadlog_g ADD CONSTRAINT pk_t_scaleloadlog_g PRIMARY KEY(wrk_sn, db_svr_id);
 ALTER TABLE t_scaleoccur_g ADD CONSTRAINT pk_t_scaleoccur_g PRIMARY KEY(wrk_sn, db_svr_id, scale_type, policy_type, execute_type);
+
+ALTER TABLE experdb_management.t_transcomcng_i ADD trans_com_cng_nm varchar(50) NULL;
+COMMENT ON COLUMN experdb_management.t_transcomcng_i.trans_com_cng_nm IS '기본설정 명';
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0157', '전송관리 기본사항 설정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0157_01', '전송관리 기본사항 설정 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0157_02', '전송관리 기본사항 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0158', '전송관리 기본사항 수정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0158_01', '전송관리 기본사항 수정', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+update t_transcomcng_i
+  set trans_com_cng_nm = 'default'
+ where trans_com_id = 1
+;
+ 
+CREATE SEQUENCE q_t_transcomcng_i_01 START 2;
+
+ALTER TABLE experdb_management.T_TRANSCNG_I ADD trans_com_id numeric(18) NULL;
+COMMENT ON COLUMN experdb_management.T_TRANSCNG_I.trans_com_id IS '기본설정 id';

@@ -836,17 +836,19 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 	@Override
 	public String updateTransCommonSetting(TransVO transVO) throws Exception {
 		String result = "S";
-		Map<String, Object> recultChk = null;
-		
+
 		try{
-			//데이터 있는지 확인
+/*			//데이터 있는지 확인
 			recultChk = (Map<String, Object>) transDAO.selectTransComSettingCngInfo(transVO);
 
 			if (recultChk == null) {
 				result = "O";
 			}
+			*/
 			
-			if ("O".equals(result)) {
+			String trans_gbn = transVO.getTrans_com_cng_gbn();
+			
+			if ("ins".equals(trans_gbn)) {
 				transDAO.insertTransCommonSetting(transVO);
 			} else {
 				transDAO.updateTransCommonSetting(transVO);
@@ -928,5 +930,41 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 		}
 		
 		return result;
+	}
+
+	/**
+	 * 기본설정 리스트 조회
+	 * 
+	 * @param transVO
+	 * @return List<Map<String, Object>>
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectTransComConPopList(TransVO transVO) throws Exception {
+		return transDAO.selectTransComConPopList(transVO);
+	}
+
+	/**
+	 * 기본설정 삭제
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	@Override
+	public void deleteTransComConSet(TransVO transVO) throws Exception {
+		try{
+			JSONArray trans_com_ids = (JSONArray) new JSONParser().parse(transVO.getTrans_com_id_Rows());
+
+			if (trans_com_ids != null && trans_com_ids.size() > 0) {
+				for(int i=0; i<trans_com_ids.size(); i++){
+					TransVO transPrmVO = new TransVO();	
+					transPrmVO.setTrans_com_id(trans_com_ids.get(i).toString());
+					
+					transDAO.deleteTransComConSet(transPrmVO);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 }

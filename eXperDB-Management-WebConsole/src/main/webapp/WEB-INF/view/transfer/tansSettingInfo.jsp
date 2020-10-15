@@ -51,13 +51,12 @@
 </script>
 
 <div class="modal fade" id="pop_layer_trans_info" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 350px;">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="menu.trans_management"/> <spring:message code="data_transfer.detail_search"/>
 				</h4>
-				
 
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="searchInfoForm">
@@ -114,7 +113,7 @@
 							<div class="tab-pane fade show active" role="tabpanel" id="infoSettingTab">
 								<form class="cmxform" id="infoRegForm">
 									<fieldset>
-										<div class="form-group row" style="margin-bottom:10px;">
+										<div class="form-group row" style="margin-bottom:5px;">
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.connect_name_set" />
@@ -127,7 +126,7 @@
 											</div>
 										</div>
 	
-										<div class="form-group row" style="margin-bottom:10px;">
+										<div class="form-group row" style="margin-bottom:5px;">
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.database" />
@@ -137,29 +136,84 @@
 											</div>
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.snapshot_mode" />
-											</label>
-											<div class="col-sm-4">
-												<span class="form-control-xsm float-left text-muted" id="d_snapshot_mode_nm" ></span>
-											</div>
-										</div>
-
-										<div class="form-group row" style="margin-bottom:10px;">
-											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.compression_type" />
-											</label>
-											<div class="col-sm-4">
-												<span class="form-control-xsm float-left text-muted" id="d_compression_type_nm" ></span>
-											</div>
-											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.metadata" />
 											</label>
 											<div class="col-sm-4">
 												<div class="onoffswitch-pop">
 													<span class="form-control-xsm float-left text-muted" id="d_meta_data_chk" ></span>
 												</div>
+											</div>
+										</div>
+	
+										<div class="form-group row" style="margin-bottom:5px;">
+											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.snapshot_mode" />
+											</label>
+											<div class="col-sm-4">
+												<span class="form-control-xsm float-left text-muted" id="d_snapshot_mode_nm" ></span>
+											</div>
+											<div class="col-sm-6">
+												&nbsp;
+											</div>
+										</div>
+
+										<div class="form-group row" style="margin-bottom:0px;">
+											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.default_setting"/>
+											</label>
+											<div class="col-sm-10">
+											</div>
+										</div>
+										
+										<div class="form-group row" style="margin-bottom:10px;">
+											<div class="col-sm-12">
+												<div class="table-responsive" style="margin-top:-10px;margin-bottom:10px;">
+													<table id="connectInfoPopList" class="table system-tlb-scroll" style="width:100%;">
+														<colgroup>
+															<col style="width: 25%;" />
+															<col style="width: 15%;" />
+															<col style="width: 15%;" />
+															<col style="width: 15%;" />
+															<col style="width: 10%;" />
+															<col style="width: 10%;" />
+															<col style="width: 10%;" />
+														</colgroup>
+														<thead>
+															<tr class="bg-info text-white">
+																<th class="table-text-align-c"><spring:message code="data_transfer.default_setting_name" /></th>
+																<th class="table-text-align-c">plugin.name</th>
+																<th class="table-text-align-c">heartbeat.interval.ms</th>
+																<th class="table-text-align-c">max.batch.size</th>
+																<th class="table-text-align-c">max.queue.size</th>
+																<th class="table-text-align-c">offset.flush.interval.ms</th>
+																<th class="table-text-align-c">offset.flush.timeout.ms</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr style="border-bottom: 0px solid #adb5bd;">			
+																<td class="table-text-align-c" id="d_sc_trans_com_cng_nm"></td>												
+																<td class="table-text-align-c" id="d_sc_plugin_name"></td>
+																<td class="table-text-align-c" id="d_sc_heartbeat_interval_ms"></td>	
+																<td class="table-text-align-c" id="d_sc_max_batch_size"></td>	
+																<td class="table-text-align-c" id="d_sc_max_queue_size"></td>	
+																<td class="table-text-align-c" id="d_sc_offset_flush_interval_ms"></td>	
+																<td class="table-text-align-c" id="d_sc_offset_flush_timeout_ms"></td>							
+															</tr>					
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group row" style="margin-bottom:0px;">
+											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);margin-bottom:0px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.compression_type" />
+											</label>
+											<div class="col-sm-4">
+												<span class="form-control-xsm float-left text-muted" id="d_compression_type_nm" ></span>
 											</div>
 										</div>
 									</fieldset>

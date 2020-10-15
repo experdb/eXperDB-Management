@@ -278,5 +278,6 @@ public class ProtocolID {
 	public static final String PGALOG_CNT = "PGALOG_CNT";
 	public static final String LOG_CNT = "LOG_CNT";
 	public static final String CON_START_GBN = "CON_START_GBN";
+	public static final String TRANS_COM_ID = "TRANS_COM_ID";
 	
 }

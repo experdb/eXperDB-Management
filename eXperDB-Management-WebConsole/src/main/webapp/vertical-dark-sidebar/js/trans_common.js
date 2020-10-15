@@ -128,6 +128,8 @@ function fnc_confirmMultiRst(gbn){
 		fn_act_execute(gbn);
 	} else if (gbn == "active" || gbn == "disabled" || gbn == "target_active" || gbn == "target_disabled") {
 		fn_tot_act_execute(gbn);
+	} else if (gbn == "trans_com_con_del") {
+		fn_trans_com_con_delete_logic();
 	}
 }
 
@@ -715,6 +717,14 @@ function fn_info_setting(result, active_gbn) {
 			info_connector_tableList.rows.add(result.tables.data).draw();
 		}
 
+		$("#d_sc_trans_com_cng_nm", "#infoRegForm").html(nvlPrmSet(result.trans_com_cng_nm, ""));
+		$("#d_sc_plugin_name", "#infoRegForm").html(nvlPrmSet(result.plugin_name, ""));
+		$("#d_sc_heartbeat_interval_ms", "#infoRegForm").html(nvlPrmSet(result.heartbeat_interval_ms, ""));
+		$("#d_sc_max_batch_size", "#infoRegForm").html(nvlPrmSet(result.max_batch_size, ""));
+		$("#d_sc_max_queue_size", "#infoRegForm").html(nvlPrmSet(result.max_queue_size, ""));
+		$("#d_sc_offset_flush_interval_ms", "#infoRegForm").html(nvlPrmSet(result.offset_flush_interval_ms, ""));
+		$("#d_sc_offset_flush_timeout_ms", "#infoRegForm").html(nvlPrmSet(result.offset_flush_timeout_ms, ""));
+
 		$('a[href="#infoSettingTab"]').tab('show');
 	} else {
 		$("#d_tg_kc_id_nm", "#searchTargetInfoForm").html(nvlPrmSet(result.kc_nm, ""));
@@ -824,6 +834,9 @@ function fn_update_setting(result, active_gbn) {
 		$("#mod_db_id_set", "#modRegForm").val(nvlPrmSet(result.db_id, ""));
 		$("#mod_trans_id", "#modRegForm").val(nvlPrmSet(result.trans_id, ""));
 		$("#mod_trans_exrt_trg_tb_id","#modRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
+
+		$("#mod_trans_com_id", "#modRegForm").val(nvlPrmSet(result.trans_com_id, ""));
+		$("#mod_trans_com_cng_nm", "#modRegForm").val(nvlPrmSet(result.trans_com_cng_nm, ""));
 
 		//스냅샷 모드 추가
 		var snapshot_mode_re = nvlPrmSet(result.snapshot_mode, "");
@@ -1203,6 +1216,8 @@ function fn_ins_tg_dbmsInfo(){
 	
 	$('#info_tg_tans_sys_nm').val("");
 	$('#info_tg_dbms_work').val("%");
+
+	cho_dbms_gbn = "ins";
 	
 	fn_info_trans_search_dbmsInfo();
 
@@ -1521,6 +1536,8 @@ function fn_mod_tg_dbmsInfo(){
 	$('#info_tg_tans_sys_nm').val("");
 	$('#info_tg_dbms_work').val("%");
 	
+	cho_dbms_gbn = "upd";
+	
 	fn_info_trans_search_dbmsInfo();
 
 	$('#pop_layer_trans_dbmsInfo_reg').modal("show");
@@ -1614,36 +1631,55 @@ function fn_topic_search_tg_mod(){
 	var db_svr_id = $("#db_svr_id","#findList").val();
 	var kc_ip = $("#mod_tg_kc_ip", "#searchTargetModForm").val();
 
-	$.ajax({
-		url : "/selectTargetTopicMappList.do",
-		data : {
-			db_svr_id : db_svr_id,
-			kc_ip : kc_ip
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-			}
-		},
-		success : function(result) {	
-			mod_tg_topicList.rows({selected: true}).deselect();
-			mod_tg_topicList.clear().draw();
+	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
 
-			//조회 후, connector_tableList과 비교 후 같으면 리스트에서 제외
-			if (result.data != null) {
-				fn_mod_target_trableListRemove(result.data);
-			} 
-		}
-	});
+	if (kc_ip != "") {
+		
+		$("#pop_layer_con_re_reg_two_target").append(htmlLoadPop);
+		
+		$('#loading_pop').css('position', 'absolute');
+		$('#loading_pop').css('left', '50%');
+		$('#loading_pop').css('top', '50%');
+		$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
+		$('#loading_pop').show();	
+		
+		$.ajax({
+			url : "/selectTargetTopicMappList.do",
+			data : {
+				db_svr_id : db_svr_id,
+				kc_ip : kc_ip
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {	
+				mod_tg_topicList.rows({selected: true}).deselect();
+				mod_tg_topicList.clear().draw();
+	
+				//조회 후, connector_tableList과 비교 후 같으면 리스트에서 제외
+				if (result.data != null) {
+					fn_mod_target_trableListRemove(result.data);
+				} 
+			}
+		});
+		
+		$('#loading').hide();
+		
+		$( document ).ajaxStop(function() {
+			$('#loading_pop').hide();
+		});
+	}
 }
 
 /* ********************************************************
@@ -1784,9 +1820,40 @@ function fn_common_kafka_ins(){
 }
 
 /* ********************************************************
+ * 기본설정 등록 팝업
+ ******************************************************** */
+function fn_common_con_set_pop() {
+	$.ajax({
+		url : "/transComSettingCngSetting.do",
+		data : {
+			db_svr_id : $("#db_svr_id", "#findList").val()
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			fn_transCommonConSetPopStart();
+
+			$('#pop_layer_con_com_ins_list').modal("show");
+		}
+	});
+}
+
+/* ********************************************************
  * 기본설정 등록
  ******************************************************** */
-function fn_common_con_set_ins() {
+/*function fn_common_con_set_ins() {
 	$.ajax({
 		url : "/selectTransComSettingCngInfo.do",
 		data : {
@@ -1829,7 +1896,7 @@ function fn_common_con_set_ins() {
 			$('#pop_layer_con_com_ins_cng').modal('show');
 		}
 	});	
-}
+}*/
 
 /* ********************************************************
  * 기본설정 등록
@@ -1970,8 +2037,12 @@ function fn_kc_nm_chg(hw_gbn) {
 	}
 
 	if (prm_kafka_id == "") {
-		ins_connect_status_Chk = "fail";
-		
+		if (hw_gbn == "source_ins") {
+			ins_connect_status_Chk = "fail";
+		} else {
+			ins_tg_connect_status_Chk = "fail";
+		}
+
 		if (hw_gbn == "source_ins") {
 			$("#ins_kc_ip","#searchRegForm").val("");
 			$("#ins_kc_port","#searchRegForm").val("");
@@ -2013,15 +2084,23 @@ function fn_kc_nm_chg(hw_gbn) {
 				if (nvlPrmSet(result, '') != '') {
 					//결과 체크
 					if(result.RESULT_DATA =="success"){
-						ins_connect_status_Chk = "success";
-						
+						if (hw_gbn == "source_ins") {
+							ins_connect_status_Chk = "success";
+						} else {
+							ins_tg_connect_status_Chk = "success";
+						}
+
 						connectTd = "<div class='badge badge-pill badge-success'>";
 						connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
 						connectTd += data_transfer_connecting;
 						connectTd += "</div>";
 					} else {
-						ins_connect_status_Chk = "fail";
-						
+						if (hw_gbn == "source_ins") {
+							ins_connect_status_Chk = "fail";
+						} else {
+							ins_tg_connect_status_Chk = "fail";
+						}
+
 						connectTd = "<div class='badge badge-pill badge-danger'>";
 						connectTd += "	<i class='ti-close mr-2'></i>";
 						connectTd += schedule_stop;
@@ -2047,8 +2126,12 @@ function fn_kc_nm_chg(hw_gbn) {
 					}
 					
 				} else {
-					ins_connect_status_Chk = "fail";
-					
+					if (hw_gbn == "source_ins") {
+						ins_connect_status_Chk = "fail";
+					} else {
+						ins_tg_connect_status_Chk = "fail";
+					}
+
 					connectTd = "<div class='badge badge-pill badge-danger'>";
 					connectTd += "	<i class='ti-close mr-2'></i>";
 					connectTd += schedule_stop;
