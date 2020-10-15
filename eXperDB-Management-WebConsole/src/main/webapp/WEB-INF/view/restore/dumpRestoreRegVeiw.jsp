@@ -441,7 +441,6 @@
 			}
 		});
 
-		
 		$.ajax({
 			url : "/insertDumpRestore.do",
 			data : {
@@ -511,7 +510,7 @@
 			success : function(result) {
 				if (result != null) {
 					if (result == "S") {
-						showSwalIconRst('<spring:message code="restore.msg223" />', '<spring:message code="common.close" />', '', 'warning', 'dump_restore');
+						showSwalIconRst('<spring:message code="restore.msg224" />', '<spring:message code="common.close" />', '', 'warning', 'dump_restore');
 					} else {
 						showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');
 						return;
@@ -864,7 +863,7 @@
 															
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_1_3" class="form-check-label" style="width:100px;">
-																	<input type="checkbox" id="dump_option_1_3" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0006" opt_cd="TC000603" onClick="fn_dump_checkSection();"
+																	<input type="checkbox" id="dump_option_1_3" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0006" opt_cd="TC000603" onClick="fn_dump_checkSection();"
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0006' && optVal.opt_cd eq 'TC000603'}">checked</c:if>
 																		</c:forEach>
@@ -896,7 +895,7 @@
 															
 															<div class="form-check input-group-addon mx-4">
 																<label for="dump_option_2_2" class="form-check-label" style="width:100px;">
-																	<input type="checkbox" id="dump_option_2_2" name="dump_opt" class="form-check-input" value="Y" grp_cd="TC0007" opt_cd="TC000702" onClick="fn_dump_checkObject('TC000702');" 
+																	<input type="checkbox" id="dump_option_2_2" name="dump_opt" class="form-check-input" value="N" grp_cd="TC0007" opt_cd="TC000702" onClick="fn_dump_checkObject('TC000702');" 
 																		<c:forEach var="optVal" items="${workOptInfo}" varStatus="status">
 																			<c:if test="${optVal.grp_cd eq 'TC0007' && optVal.opt_cd eq 'TC000702'}">checked</c:if>
 																		</c:forEach>
