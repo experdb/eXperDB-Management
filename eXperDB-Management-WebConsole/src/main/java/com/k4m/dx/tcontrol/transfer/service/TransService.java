@@ -300,7 +300,7 @@ public interface TransService {
 	public String updateTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception;
 
 	/**
-	 * 기본설정 등록 조회
+	 * 기본설정 등록 상세조회
 	 * @param transVO, request, historyVO
 	 * @return Map<String, Object>
 	 */
@@ -331,5 +331,21 @@ public interface TransService {
 	 */
 	public String updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) throws Exception;
 
+	/**
+	 * 기본설정 리스트 조회
+	 * 
+	 * @param transVO
+	 * @return List<Map<String, Object>>
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectTransComConPopList(TransVO transVO) throws Exception;
+	
+	/**
+	 * 기본설정 삭제
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void deleteTransComConSet(TransVO transVO) throws Exception;
 
 }

@@ -66,9 +66,11 @@ public class DxT038 extends SocketCtl{
 		String table_param = "";
 		String[] pk_list = null;
 		String pk_tot_value = "";
-		
+
 		//구분
 		String con_start_gbn = (String)objCONNECT_INFO.get("CON_START_GBN");
+
+		String trans_com_id = String.valueOf((Long)objCONNECT_INFO.get("TRANS_COM_ID"));
 
 		JSONObject outputObj = new JSONObject();
 		
@@ -76,7 +78,11 @@ public class DxT038 extends SocketCtl{
 	   	TransVO searchTransVO = new TransVO();
 
 		try {
-			searchTransVO.setTrans_com_id("1");
+			if (trans_com_id == null || "".equals(trans_com_id)) {
+				trans_com_id = "1";
+			}
+			
+			searchTransVO.setTrans_com_id(trans_com_id);
 			commonInfo = service.selectTransComSettingInfo(searchTransVO);
 			
 			JSONObject config = new JSONObject();

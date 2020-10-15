@@ -458,7 +458,8 @@ a:hover.tip span {
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/transTargetDbmsInfoForm.jsp"%>
 <%@include file="./../popup/transConnectListForm.jsp"%>
-<%@include file="./../popup/transComConSetRegForm.jsp"%>
+<%@include file="./../popup/transComConSetForm.jsp"%>
+<%@include file="./../popup/transComConChoForm.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
@@ -539,7 +540,7 @@ a:hover.tip span {
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnKafkaInsert" onClick="fn_common_kafka_ins();" data-toggle="modal">
 									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" /> <spring:message code="common.search" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_ins();" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_pop();" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
 								</button>
 												

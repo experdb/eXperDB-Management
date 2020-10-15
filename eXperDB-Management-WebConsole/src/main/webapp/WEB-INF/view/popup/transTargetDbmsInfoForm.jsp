@@ -23,6 +23,7 @@
 
 <script>
 	var info_tg_table_dbmsInfo = null;
+	var cho_dbms_gbn = "";
 
 	/* ********************************************************
 	 * 페이지 시작시 함수
@@ -47,7 +48,12 @@
 				var trans_sys_id = datas.trans_sys_id;		
 				var trans_sys_nm = datas.trans_sys_nm;
 
-				fn_trans_dbmsAddCallback(trans_sys_id,trans_sys_nm);
+				if (cho_dbms_gbn == 'ins') {
+					fn_trans_dbmsAddCallback(trans_sys_id,trans_sys_nm);
+				} else {
+					fn_trans_dbmsModCallback(trans_sys_id,trans_sys_nm);
+				}
+
 				$('#pop_layer_trans_dbmsInfo_reg').modal("hide");
 				
 			});			

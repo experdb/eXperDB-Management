@@ -31,6 +31,7 @@
 	var ins_connectNmMsg = '<spring:message code="data_transfer.connect_name_set" />';
 	var ins_conn_Test_msg = '<spring:message code="dbms_information.conn_Test" />';
 	var ins_kafka_server_nm = '<spring:message code="data_transfer.server_name" />';
+	var ins_trans_com_cng_nm_val = '<spring:message code="data_transfer.default_setting" />';
 
 	$(window.document).ready(function() {
 		//테이블셋팅
@@ -437,7 +438,8 @@
 					compression_type : $("#ins_compression_type", "#insRegForm").val(),
 					meta_data : nvlPrmSet($("#ins_meta_data", "#insRegForm").val(), 'OFF'),
 					kc_port : parseInt($("#ins_kc_port", "#searchRegForm").val()) ,
-					db_id : parseInt($("#ins_db_id", "#insRegForm").val())
+					db_id : parseInt($("#ins_db_id", "#insRegForm").val()),
+					trans_com_id : parseInt($("#ins_trans_com_id", "#insRegForm").val())
 			  	},
 				type : "post",
 				beforeSend: function(xhr) {
@@ -501,8 +503,11 @@
 		} else if(nvlPrmSet($("#ins_db_id", "#insRegForm").val(), '') == "") {
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_databaseMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
-		}else if(ins_connect_nm_Chk == "fail"){
+		} else if(ins_connect_nm_Chk == "fail") {
 			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		} else if(nvlPrmSet($("#ins_trans_com_id", "#insRegForm").val(), '') == "") {
+			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_trans_com_cng_nm_val +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}
 
@@ -514,6 +519,33 @@
 
 		return true;
 	}
+
+	/* ********************************************************
+	 * DBMS 시스템 등록 버튼 클릭시
+	 ******************************************************** */
+	function fn_ins_sc_comConCho(){
+		$('#cho_trans_com_con_cho_mod').hide();
+		$('#cho_trans_com_con_cho_add').show();
+		
+		$('#cho_trans_com_cng_nm').val("");
+		
+		cho_proc_gbn = "ins";
+
+		fn_cho_trans_search_com_con();
+		
+
+		$('#pop_layer_trans_com_con_cho').modal("show");
+	}
+	
+
+	/* ********************************************************
+	 * DBMS 서버 호출하여 입력
+	 ******************************************************** */
+	function fn_trans_com_conAddCallback(trans_com_id, trans_com_cng_nm){
+		 $("#ins_trans_com_id", "#insRegForm").val(nvlPrmSet(trans_com_id, ''));
+		 $("#ins_trans_com_cng_nm", "#insRegForm").val(nvlPrmSet(trans_com_cng_nm, ''));
+	}
+
 </script>
 
 <div class="modal fade" id="pop_layer_con_reg_two" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -599,6 +631,7 @@
 								<form class="cmxform" id="insRegForm">
 									<input type="hidden" name="ins_table_mapp_nm" id="ins_table_mapp_nm" />
 									<input type="hidden" name="ins_meta_data" id="ins_meta_data" />
+									<input type="hidden" name="ins_trans_com_id" id="ins_trans_com_id" />
 
 									<fieldset>
 										<div class="form-group row" style="margin-bottom:10px;">
@@ -658,7 +691,20 @@
 												<span class="text-sm-left" style="font-size: 0.875rem;" id="ins_snapshotModeDetail"></span>	
 											</div>
 										</div>
-											
+
+										<div class="form-group row" style="margin-bottom:10px;">
+											<label for="ins_trans_com_cng_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.default_setting"/>
+											</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control form-control-xsm" id="ins_trans_com_cng_nm" name="ins_trans_com_cng_nm" readonly="readonly" />
+											</div>
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-inverse-info btn-sm" style="width: 100px;" onclick="fn_ins_sc_comConCho()"><spring:message code="button.create" /></button>
+											</div>
+										</div>
+
 										<div class="form-group row" style="margin-bottom:1px;">
 											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
@@ -685,13 +731,13 @@
 												</div>
 											</div>
 										</div>
-										
+
 										<div class="form-group row div-form-margin-z" id="ins_source_trans_active_div" style="display:none;">
 											<div class="col-sm-12">
 												<div class="alert alert-info" style="margin-top:5px;margin-bottom:-15px;" >
 													<spring:message code="data_transfer.msg27" />
 												</div>
-											</div>
+											</div> 
 										</div>
 									</fieldset>
 								</form>	
