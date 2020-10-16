@@ -34,6 +34,15 @@ public class WorkLogVO {
 	private String file_fmt_cd_nm;
 	private String file_fmt_cd;
 	private String usr_role_nm;
+	private String bck_wrk_id;
+
+	public String getBck_wrk_id() {
+		return bck_wrk_id;
+	}
+
+	public void setBck_wrk_id(String bck_wrk_id) {
+		this.bck_wrk_id = bck_wrk_id;
+	}
 
 	public String getFix_rsltcd() {
 		return fix_rsltcd;
