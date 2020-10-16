@@ -136,7 +136,7 @@
 						{data: "restore",
 			    			render : function(data, type, full, meta) {
 			    				var html = "";
- 								html += '<button type="button" class="btn btn-primary btn-icon-text" onclick="fn_dumpRestorReg('+full.exe_sn+', '+full.wrk_id+', '+full.wrk_id+');">';
+ 								html += '<button type="button" class="btn btn-primary btn-icon-text" onclick="fn_dumpRestorReg('+full.exe_sn+', '+full.wrk_id+', '+full.bck_wrk_id+');">';
  								html += '<i class="mdi mdi-file-restore btn-icon-prepend"></i>';
  								html += '<spring:message code="common.restore"/>';
  								html += "</button>";
@@ -195,7 +195,8 @@
 							},
 							defaultContent: ""
 						},
-			    		{ data: "wrk_id", className: "dt-center", defaultContent: "", visible: false}
+			    		{ data: "wrk_id", className: "dt-center", defaultContent: "", visible: false},
+						{ data: "bck_wrk_id", className: "dt-center", defaultContent: "", visible: false}
 			]
 		});
 
@@ -211,6 +212,8 @@
 	   	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	   	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	   	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	   	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+	   	tableDump.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
 
 		$(window).trigger('resize');
 	}
@@ -218,10 +221,11 @@
 	/* ********************************************************
 	 * 덤프 복구 등록 화면 이동
 	 ******************************************************** */
-	function fn_dumpRestorReg(exe_sn, wrk_id){
+	function fn_dumpRestorReg(exe_sn, wrk_id, bck_wrk_id){
 
 		$("#db_svr_id", "#dumpRestoreRegForm").val("${db_svr_id}");
 		$("#wrk_id", "#dumpRestoreRegForm").val(wrk_id);
+		$("#bck_wrk_id", "#dumpRestoreRegForm").val(bck_wrk_id);
 		$("#exe_sn", "#dumpRestoreRegForm").val(exe_sn);
 		$("#returnYn", "#dumpRestoreRegForm").val("Y");
 		
@@ -281,6 +285,7 @@
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value=""/>
 	<input type="hidden" name="exe_sn"  id="exe_sn"  value="">
 	<input type="hidden" name="wrk_id"  id="wrk_id"  value="">
+	<input type="hidden" name="bck_wrk_id"  id="bck_wrk_id"  value="">
 	<input type="hidden" name="returnYn"  id="returnYn"  value="">
 </form>
 
@@ -421,6 +426,8 @@
 												<th width="100"><spring:message code="backup_management.work_start_time" /></th>
 												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 												<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
+												<th width="0"></th>
+												<th width="0"></th>
 											</tr>
 										</thead>
 									</table>
