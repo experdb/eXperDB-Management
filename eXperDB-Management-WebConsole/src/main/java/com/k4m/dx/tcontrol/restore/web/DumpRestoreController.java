@@ -147,6 +147,7 @@ public class DumpRestoreController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			resultSet = restoreService.selectDumpRestoreLogList(workLogVO);
+
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -166,7 +167,8 @@ public class DumpRestoreController {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));
 		int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
-		
+		int bck_wrk_id = Integer.parseInt(request.getParameter("bck_wrk_id"));
+
 		String returnYn = request.getParameter("returnYn");
 
 		workVO.setBck_wrk_id(wrk_id);
@@ -189,6 +191,7 @@ public class DumpRestoreController {
 				mv.addObject("db_svr_id", db_svr_id);
 				mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
 				mv.addObject("wrk_id", wrk_id);
+				mv.addObject("bck_wrk_id", bck_wrk_id);
 				mv.addObject("returnYn", returnYn);
 				
 				mv.setViewName("restore/dumpRestoreRegVeiw");
@@ -234,6 +237,7 @@ public class DumpRestoreController {
 		int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));
 		String db_svr_id = request.getParameter("db_svr_id");
 		int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
+		int bck_wrk_id = Integer.parseInt(request.getParameter("bck_wrk_id"));
 
 		try {		
 			workLogVO.setDb_svr_id(db_svr_id);
@@ -247,7 +251,7 @@ public class DumpRestoreController {
 
 		// Work Object List
 		try {
-			workVO.setBck_wrk_id(wrk_id);
+			workVO.setBck_wrk_id(bck_wrk_id);
 			mv.addObject("workObjList", backupService.selectWorkObj(workVO));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -318,10 +322,10 @@ public class DumpRestoreController {
 
 				String obj_cmd ="";
 
-				if (!"".equals(obj_nm_Rows) && !"".equals(scm_nm_Rows)) {
+/*				if (!"".equals(obj_nm_Rows) && !"".equals(scm_nm_Rows)) {
 					obj_cmd = fn_objOption(obj_nm_Rows, scm_nm_Rows);
-				}
-
+				}*/
+System.out.println("===obj_cmd===" + obj_cmd);
 				restoreDumpVO.setObj_cmd(obj_cmd);
 			} catch (Exception e) {
 				e.printStackTrace();

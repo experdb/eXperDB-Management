@@ -85,6 +85,7 @@
 				db_svr_id : $("#db_svr_id", "#findList").val(),
 				exe_sn : $("#exe_sn", "#findList").val(),
 				wrk_id : $("#wrk_id", "#findList").val(),
+				bck_wrk_id : $("#bck_wrk_id", "#findList").val()
 			},
 			dataType : "json",
 			type : "post",
@@ -137,7 +138,7 @@
 		$("#file_fmt_cd_nm", "#restoreDumpRegForm").val(nvlPrmSet(result.workBckInfo[0].file_fmt_cd_nm, ""));		//파일포맷명
 		$("#usr_role_nm", "#restoreDumpRegForm").val(nvlPrmSet(result.workBckInfo[0].usr_role_nm, ""));				//Rolename
 
-		$("#db_nm", "#restoreDumpRegForm").val(nvlPrmSet(result.workBckInfo[0].db_id, ""));							//Database
+		$("#db_nm", "#restoreDumpRegForm").val(nvlPrmSet(result.workBckInfo[0].db_nm, ""));							//Database
 
 		//트리메뉴 로딩
 		var workList = new Array();
@@ -561,6 +562,7 @@
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 	<input type="hidden" name="exe_sn"  id="exe_sn"  value="${exe_sn}">
 	<input type="hidden" name="wrk_id"  id="wrk_id"  value="${wrk_id}">
+	<input type="hidden" name="bck_wrk_id"  id="bck_wrk_id"  value="${bck_wrk_id}">
 	<input type="hidden" name="returnYn"  id="returnYn"  value="${returnYn}">
 </form>
 
