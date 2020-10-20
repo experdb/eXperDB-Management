@@ -121,12 +121,18 @@ function fn_insDateCalenderSetting() {
 	var endDay = fn_dateParse("20991231");
 	
 	var day_today = today.toJSON().slice(0,10);
-	var day_start = startDay.toJSON().slice(0,10);
+	var day_start = today.toJSON().slice(0,10);
 	var day_end = endDay.toJSON().slice(0,10);
 
+	let date = new Date(today.toJSON());
+	date.setFullYear(date.getFullYear() + 2);
+	var enc_day = date.toJSON().slice(0,10);
+	alert(day_today);
+	alert(enc_day);
+	
 	if ($("#ins_expr_dt_div", "#keyInsForm").length) {
 		$("#ins_expr_dt_div", "#keyInsForm").datepicker({
-		}).datepicker('setDate', day_today)
+		}).datepicker('setDate', enc_day)
 		.datepicker('setStartDate', day_start)
 		.datepicker('setEndDate', day_end)
 		.on('hide', function(e) {
@@ -134,7 +140,7 @@ function fn_insDateCalenderSetting() {
 		}); //값 셋팅
 	}
 
-	$("#ins_expr_dt", "#keyInsForm").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+	$("#ins_expr_dt", "#keyInsForm").datepicker('setDate', enc_day).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
 	$("#ins_expr_dt_div", "#keyInsForm").datepicker('updateDates');
 }
 
