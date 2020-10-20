@@ -984,7 +984,7 @@
 							<div class="template-demo">	
 								<form class="form-inline" style="float: right;margin-right:-5rem;">
 									<input hidden="hidden" />
-									<input type="text" class="form-control" style="width:250px;" id="search">
+									<input type="text" class="form-control" style="width:250px;" id="search">&nbsp;&nbsp;
 								</form>
 							</div>
 						</div>

@@ -435,7 +435,7 @@ function fn_delete2(){
 											<tr class="bg-info text-white">
 												<th width="30"><spring:message code="common.no" /></th>
 												<th width="130"><spring:message code="migration.system_name"/></th>
-												<th width="100">DBMS<spring:message code="common.division" /></th>
+												<th width="100">DBMS <spring:message code="common.division" /></th>
 												<th width="130"><spring:message code="data_transfer.ip" /></th>
 												<th width="100">Database</th>
 												<th width="150">Schema</th>
