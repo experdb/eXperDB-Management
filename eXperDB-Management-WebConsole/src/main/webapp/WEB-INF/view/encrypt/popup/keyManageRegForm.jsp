@@ -116,32 +116,20 @@ function fn_insertCryptoKeySymmetric(){
  * 작업기간 calender 셋팅
  ******************************************************** */
 function fn_insDateCalenderSetting() {
+	
 	var today = new Date();
-	var startDay = fn_dateParse("20180101");
-	var endDay = fn_dateParse("20991231");
-	
-	var day_today = today.toJSON().slice(0,10);
-	var day_start = today.toJSON().slice(0,10);
-	var day_end = endDay.toJSON().slice(0,10);
 
-	let date = new Date(today.toJSON());
-	date.setFullYear(date.getFullYear() + 2);
-	var enc_day = date.toJSON().slice(0,10);
-	alert(day_today);
-	alert(enc_day);
-	
-	if ($("#ins_expr_dt_div", "#keyInsForm").length) {
-		$("#ins_expr_dt_div", "#keyInsForm").datepicker({
-		}).datepicker('setDate', enc_day)
-		.datepicker('setStartDate', day_start)
-		.datepicker('setEndDate', day_end)
-		.on('hide', function(e) {
-			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
-		}); //값 셋팅
-	}
+	today.setFullYear(today.getFullYear() + 2);
+	var startDay = today.toJSON().slice(0,10);
 
-	$("#ins_expr_dt", "#keyInsForm").datepicker('setDate', enc_day).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
-	$("#ins_expr_dt_div", "#keyInsForm").datepicker('updateDates');
+	var endDay = fn_dateParse("20991231").toJSON().slice(0,10);
+
+	$("#ins_expr_dt").val(startDay);
+	
+	$("#ins_expr_dt", "#keyInsForm").datepicker('setStartDate', startDay).datepicker('setEndDate', endDay);
+	$("#ins_expr_dt_div", "#keyInsForm").datepicker('updateDates'); 
+	
+	
 }
 
 
@@ -202,7 +190,7 @@ function fn_insDateCalenderSetting() {
 									</label>
 									<div class="col-sm-4">
 										<div id="ins_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ins_expr_dt" name="ins_expr_dt" readonly tabindex=10 />
+											<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ins_expr_dt" name="ins_expr_dt"  tabindex=10 />
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 											</span>
