@@ -191,7 +191,7 @@ function fn_makeDay(){
 		}
 		dayHtml += '<option value="'+day+'">'+day+'</option>';
 	}
-		dayHtml += '</select> <spring:message code="schedule.day" />';	
+		dayHtml += '</select> <spring:message code="schedule.day" />&emsp;';	
 	$( "#day" ).append(dayHtml);
 }
 
