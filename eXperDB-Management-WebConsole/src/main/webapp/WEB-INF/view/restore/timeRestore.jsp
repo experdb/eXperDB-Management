@@ -674,7 +674,7 @@
 													</label>
 													
 													<div class="col-sm-9">
-														<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_rmanShowOpen();"><spring:message code="restore.Recovery_Information" /></button>
+														<button type="button" class="btn btn-inverse-info btn-fw" style="width: 180px;" onclick="fn_rmanShowOpen();"><spring:message code="restore.Recovery_Information" /></button>
 													</div>
 												</div>
 

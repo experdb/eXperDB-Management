@@ -191,25 +191,18 @@ function fn_historyCryptoKeySymmetric(){
 function fn_modDateCalenderSetting() {
 	
 	var today = new Date();
-	var startDay = fn_dateParse("20180101");
-	var endDay = fn_dateParse("20991231");
 
-	var day_today = today.toJSON().slice(0,10);
-	var day_start = startDay.toJSON().slice(0,10);
-	var day_end = endDay.toJSON().slice(0,10);
+	today.setFullYear(today.getFullYear() + 2);
+	var startDay = today.toJSON().slice(0,10);
 
-	if ($("#mod_expr_dt_div", "#modForm").length) {
-		$("#mod_expr_dt_div", "#modForm").datepicker({
-		}).datepicker('setDate', day_today)
-		.datepicker('setStartDate', day_start)
-		.datepicker('setEndDate', day_end)
-		.on('hide', function(e) {
-			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
-		}); //값 셋팅
-	}
+	var endDay = fn_dateParse("20991231").toJSON().slice(0,10);
 
-	$("#mod_expr_dt", "#modForm").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
-	$("#mod_expr_dt_div", "#modForm").datepicker('updateDates');
+	$("#mod_expr_dt").val(startDay);
+	
+	$("#mod_expr_dt", "#modForm").datepicker('setStartDate', startDay).datepicker('setEndDate', endDay);
+	$("#mod_expr_dt_div", "#modForm").datepicker('updateDates'); 
+
+
 }
 
 </script>

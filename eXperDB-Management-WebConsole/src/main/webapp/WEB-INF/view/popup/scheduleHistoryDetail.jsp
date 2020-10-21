@@ -64,7 +64,11 @@ function fn_init_scdH() {
 					html += "</button>";
 					return html;
 				}else{
-					var html = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+					var html = '';
+					html += "<div class='badge badge-pill badge-warning' style='color: #fff;'>";
+					html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+					html += '&nbsp;<spring:message code="etc.etc28" />';
+					html += "</div>";
 					return html;
 				}
 			}
