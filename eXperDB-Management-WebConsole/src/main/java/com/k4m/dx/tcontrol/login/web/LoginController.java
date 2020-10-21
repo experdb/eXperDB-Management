@@ -68,10 +68,19 @@ public class LoginController {
 
 	@RequestMapping(value = "/")
 	public ModelAndView loginCheck(HttpServletRequest request, HttpServletResponse response) {
+
 		ModelAndView mv = new ModelAndView();
 		try {       
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			
+			String lang = props.get("lang").toString();				
+		    Locale locale = new Locale(lang);
+		    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+		    localeResolver.setLocale(request, response, locale);
 			
 			if(loginVo==null){
             	//생성한 쿠키 조회
@@ -87,6 +96,7 @@ public class LoginController {
             		
             		UserVO userVORe = loginService.checkUserWithSessionKey(userVO);
 
+
                     if ( userVORe !=null ){// 사용자 존재시
                     	List<UserVO> userList = loginService.selectUserList(userVORe);
                     
@@ -98,14 +108,6 @@ public class LoginController {
         				String ip = getClientIP(request);
 
         				loginVoSs.setIp(ip);
-
-        				Properties props = new Properties();
-        				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
-        				
-        				String lang = props.get("lang").toString();				
-        			    Locale locale = new Locale(lang);
-        			    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-        			    localeResolver.setLocale(request, response, locale);
         				
         				String encp_use_yn = props.get("encrypt.useyn").toString();
         				
