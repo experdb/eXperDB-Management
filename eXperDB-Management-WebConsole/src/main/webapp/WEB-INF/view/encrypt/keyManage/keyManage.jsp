@@ -227,6 +227,7 @@ var table = null;
 				}
 			},
 			success : function(result) {		
+				fn_insDateCalenderSetting();
 				$('#pop_layer_keyManageRegForm').modal("show");
 			}
 		});
@@ -278,6 +279,7 @@ var table = null;
 			},
 			success : function(result) {		
 	
+				fn_modDateCalenderSetting();				
 				$("#mod_resourceName", "#modForm").val(nvlPrmSet(result.mod_resourceName, ""));
 				$("#mod_resourceNote", "#modForm").val(nvlPrmSet(result.mod_resourceNote, ""));
 				$("#mod_keyUid", "#modForm").val(nvlPrmSet(result.mod_keyUid, ""));
