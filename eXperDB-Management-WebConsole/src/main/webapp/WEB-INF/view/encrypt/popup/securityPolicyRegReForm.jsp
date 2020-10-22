@@ -115,7 +115,7 @@ function fn_mod_changeBinUid(selectObj){
 						<fieldset>
 							<div class="card-body" style="border: 1px solid #adb5bd;">
 								<div class="form-group row" style="margin-bottom:10px;">
-									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<label for="ins_connect_nm" class="col-sm-2_3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="encrypt_policy_management.Starting_Position"/>
 									</label>
@@ -125,7 +125,7 @@ function fn_mod_changeBinUid(selectObj){
 								</div>	
 
 								<div class="form-group row" style="margin-bottom:10px;">
-									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<label for="ins_connect_nm" class="col-sm-2_3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="encrypt_policy_management.Length"/>
 									</label>
@@ -142,7 +142,7 @@ function fn_mod_changeBinUid(selectObj){
 								</div>	
 					
 								<div class="form-group row" style="margin-bottom:10px;">
-									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<label for="ins_connect_nm" class="col-sm-2_3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="encrypt_policy_management.Encryption_Algorithm"/>
 									</label>
@@ -156,7 +156,7 @@ function fn_mod_changeBinUid(selectObj){
 								</div>	
 
 								<div class="form-group row" style="margin-bottom:10px;">
-									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<label for="ins_connect_nm" class="col-sm-2_3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="encrypt_policy_management.Encryption_Key"/>
 									</label>
@@ -167,7 +167,7 @@ function fn_mod_changeBinUid(selectObj){
 								</div>
 
 								<div class="form-group row" style="margin-bottom:10px;">
-									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<label for="ins_connect_nm" class="col-sm-2_3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="encrypt_policy_management.Initial_Vector"/>
 									</label>
@@ -181,7 +181,7 @@ function fn_mod_changeBinUid(selectObj){
 								</div>
 
 								<div class="form-group row" style="margin-bottom:10px;">
-									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<label for="ins_connect_nm" class="col-sm-2_3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="encrypt_policy_management.Modes"/>
 									</label>

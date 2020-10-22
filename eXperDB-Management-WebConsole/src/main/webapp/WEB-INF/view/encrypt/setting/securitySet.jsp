@@ -329,7 +329,7 @@
 														<div class="col-sm-1" style=" margin-left: 70px;">
 															<div id = "period03"></div>
 														</div>											
-														 <div style="margin-top:15px;"><spring:message code="schedule.day" />(10 ~ 600<spring:message code="schedule.second" />)</div>													
+														 <div style="margin-top:15px;"><spring:message code="schedule.day" />(10 ~ 600<spring:message code="schedule.day" />)</div>													
 												</div>					
 																										
 												<div class="form-group row" style="margin-bottom:10px;margin-left: 50px;">					
