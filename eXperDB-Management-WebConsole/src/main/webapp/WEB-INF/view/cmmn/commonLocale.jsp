@@ -46,6 +46,23 @@ var common_previous_month ="<spring:message code='common.previous_month'/>";
 var etc_etc09="<spring:message code='etc.etc09'/>";
 var message_msg109="<spring:message code='message.msg109'/>";
 
+
+
+var common_Jan="<spring:message code='common.Jan'/>"; 
+var common_Feb="<spring:message code='common.Feb'/>";
+var common_Mar="<spring:message code='common.Mar'/>";
+var common_Apr="<spring:message code='common.Apr'/>";
+var common_May="<spring:message code='common.May'/>";
+var common_Jun="<spring:message code='common.Jun'/>";
+var common_Jul="<spring:message code='common.Jul'/>"; 
+var common_Aug="<spring:message code='common.Aug'/>";
+var common_Sep="<spring:message code='common.Sep'/>";
+var common_Oct="<spring:message code='common.Oct'/>";
+var common_Nov="<spring:message code='common.Nov'/>";
+var common_Dec="<spring:message code='common.Dec'/>";
+
+
+
 var closeBtn = "<spring:message code='common.close' />";
 var wrk_chk_del_msg = "<spring:message code='message.msg210' />";
 var common_waiting = "<spring:message code='common.waiting' />";

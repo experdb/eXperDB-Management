@@ -416,11 +416,11 @@
 										<input type="text" class="form-control" autocomplete="off" id="mod_usr_id" name="mod_usr_id" value="" readonly />
 									</div>
 										
-									<label for="mod_usr_nm" class="col-sm-2 col-form-label pop-label-index">
+									<label for="mod_usr_nm" class="col-sm-2_3 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="user_management.user_name" />(*)
 									</label>
-									<div class="col-sm-4">
+									<div class="col-sm-3_0">
 										<input type="text" class="form-control" maxlength="9" id="mod_usr_nm" name="mod_usr_nm" onkeyup="fn_checkWord(this,9)" onblur="this.value=this.value.trim()" placeholder="9<spring:message code='message.msg188'/>" tabindex=1 />
 									</div>
 								</div>
@@ -435,11 +435,11 @@
 										<input type="password" class="form-control mod_pwd_chk" autocomplete="new-password" maxlength="100" id="mod_pwd" name="mod_pwd" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="<spring:message code='message.msg109'/>" tabindex=2 />
 									</div>
 
-									<label for="mod_pwdCheck" class="col-sm-2 col-form-label pop-label-index">
+									<label for="mod_pwdCheck" class="col-sm-2_3 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="user_management.confirm_password" />(*)
 									</label>
-									<div class="col-sm-4">
+									<div class="col-sm-3_0">
 										<input type="password" class="form-control mod_pwd_chk" maxlength="100" id="mod_pwdCheck" name="mod_pwdCheck" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="<spring:message code='message.msg109'/>" tabindex=3 />
 									</div>
 								</div>

@@ -793,7 +793,7 @@ function fn_db2pgAdd(){
 					<div class="card my-sm-2">
 						<div class="card-body">
 							<div class="form-group row" style="margin-bottom:-10px;">
-								<label for="ins_dept_nm" class="col-sm-1_5 col-form-label pop-label-index">
+								<label for="ins_dept_nm" class="col-sm-1_6 col-form-label pop-label-index">
 									<i class="item-icon fa fa-dot-circle-o"></i>
 									<spring:message code="schedule.schedule_name" />
 								</label>
@@ -805,7 +805,7 @@ function fn_db2pgAdd(){
 								</div>
 							</div>
 							<div class="form-group row" style="margin-bottom:-10px;">
-								<label for="ins_pst_nm" class="col-sm-1_5 col-form-label pop-label-index">
+								<label for="ins_pst_nm" class="col-sm-1_6 col-form-label pop-label-index">
 									<i class="item-icon fa fa-dot-circle-o"></i>
 									<spring:message code="schedule.scheduleExp" />
 								</label>
@@ -814,7 +814,7 @@ function fn_db2pgAdd(){
 								</div>
 							</div>
 							<div class="form-group row" style="margin-bottom:-10px;">
-								<label for="ins_pst_nm" class="col-sm-1_5 col-form-label pop-label-index">
+								<label for="ins_pst_nm" class="col-sm-1_6 col-form-label pop-label-index">
 									<i class="item-icon fa fa-dot-circle-o"></i>
 									<spring:message code="schedule.schedule_time_settings" />
 								</label>
