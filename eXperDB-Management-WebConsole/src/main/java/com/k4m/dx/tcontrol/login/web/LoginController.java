@@ -274,6 +274,7 @@ public class LoginController {
 			int masterCheck = loginService.selectMasterCheck();
 			if(masterCheck>0){
 				mv.addObject("error", "msg176");
+				mv.setViewName("login");
 				return mv;
 			}
 			List<UserVO> userList = loginService.selectUserList(userVo);
