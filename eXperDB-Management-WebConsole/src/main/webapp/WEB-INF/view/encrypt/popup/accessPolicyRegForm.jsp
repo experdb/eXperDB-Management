@@ -453,7 +453,7 @@ function dateCalenderSetting() {
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-xsm" id="massiveThreshold" name="massiveThreshold"   min="0" onKeyPress="NumObj(this);" />
 									</div>
-									<div class="col-sm-2_5" style="margin-top:3px; margin-left:-20px;">
+									<div class="col-sm-3" style="margin-top:3px; margin-left:-20px;">
 										<spring:message code="encrypt_policy_management.Threshold"/>
 									</div>
 									<div class="col-sm-1_5">

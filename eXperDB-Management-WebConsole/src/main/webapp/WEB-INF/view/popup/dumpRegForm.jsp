@@ -1030,14 +1030,14 @@
 													<div class="col-sm-10">
 														<div class="input-group input-daterange d-flex" >
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_4_1" class="form-check-label" style="width:200px;">
+																<label for="ins_dump_option_4_1" class="form-check-label">
 																	<input type="checkbox" id="ins_dump_option_4_1" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000901" onClick="fn_ins_dump_checkOid();" />
 																	<spring:message code="backup_management.use_column_inserts" />
 																</label>
 															</div>
 															
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_4_2" class="form-check-label" style="width:200px;">
+																<label for="ins_dump_option_4_2" class="form-check-label">
 																	<input type="checkbox" id="ins_dump_option_4_2" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000902" onClick="fn_ins_dump_checkOid();" />
 																	<spring:message code="backup_management.use_column_commands" />
 																</label>
@@ -1051,14 +1051,14 @@
 													<div class="col-sm-10">
 														<div class="input-group input-daterange d-flex" >
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_4_3" class="form-check-label" style="width:200px;">
+																<label for="ins_dump_option_4_3" class="form-check-label">
 																	<input type="checkbox" id="ins_dump_option_4_3" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000903" disabled />
 																	<spring:message code="backup_management.create_database_include" />
 																</label>
 															</div>
 															
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_4_4" class="form-check-label" style="width:180px;">
+																<label for="ins_dump_option_4_4" class="form-check-label">
 																	<input type="checkbox" id="ins_dump_option_4_4" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0009" opt_cd="TC000904" disabled />
 																	<spring:message code="backup_management.drop_database_include" />
 																</label>
@@ -1075,21 +1075,21 @@
 													<div class="col-sm-10">
 														<div class="input-group input-daterange d-flex" >
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_5_1" class="form-check-label" style="width:200px;">
+																<label for="ins_dump_option_5_1" class="form-check-label" >
 																	<input type="checkbox" id="ins_dump_option_5_1" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001001" />
 																	<spring:message code="backup_management.oids_include" />
 																</label>
 															</div>
 															
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_5_2" class="form-check-label" style="width:180px;">
+																<label for="ins_dump_option_5_2" class="form-check-label" >
 																	<input type="checkbox" id="ins_dump_option_5_2" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001002" />
 																	<spring:message code="backup_management.quote_include" />
 																</label>
 															</div>
 															
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_5_3" class="form-check-label" style="width:180px;">
+																<label for="ins_dump_option_5_3" class="form-check-label">
 																	<input type="checkbox" id="ins_dump_option_5_3" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001003" />
 																	<spring:message code="backup_management.Identifier_quotes_apply" />
 																</label>
@@ -1104,14 +1104,14 @@
 													<div class="col-sm-10">
 														<div class="input-group input-daterange d-flex" >
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_5_4" class="form-check-label" style="width:200px;">
+																<label for="ins_dump_option_5_4" class="form-check-label">
 																	<input type="checkbox" id="ins_dump_option_5_4" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001004" />
 																	<spring:message code="backup_management.set_session_auth_use" />
 																</label>
 															</div>
 															
 															<div class="form-check input-group-addon mx-4">
-																<label for="ins_dump_option_5_5" class="form-check-label" style="width:180px;">
+																<label for="ins_dump_option_5_5" class="form-check-label">
 																	<input type="checkbox" id="ins_dump_option_5_5" name="ins_dump_opt" class="form-check-input" value="Y" grp_cd="TC0010" opt_cd="TC001005" />
 																	<spring:message code="backup_management.detail_message_include" />
 																</label>
