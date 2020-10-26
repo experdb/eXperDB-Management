@@ -312,14 +312,14 @@
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="ins_auto_policy_set_div_1" class="col-sm-2 col-form-label pop-label-index">
+									<label for="ins_auto_policy_set_div_1" class="col-sm-2_3 col-form-label pop-label-index">
 										<a href="#" class="tip" onclick="return false;">
 											<i class="item-icon fa fa-dot-circle-o"></i>
 											<spring:message code="eXperDB_scale.policy_time_div" />
 											<span style="width: 450px;"><spring:message code="help.eXperDB_scale_set_msg04" /></span>
 										</a>
 									</label>
-									<div class="col-sm-4">
+									<div class="col-sm-3">
 										<div class="form-group row">
 											<div class="col-sm-6">
 												<div class="form-check">
@@ -370,14 +370,14 @@
 										</span>
 									</label>
 									
-									<label for="ins_expansion_clusters" class="col-sm-2 col-form-label pop-label-index">
+									<label for="ins_expansion_clusters" class="col-sm-2_5 col-form-label pop-label-index">
 										<a href="#" class="tip" onclick="return false;">
 											<i class="item-icon fa fa-dot-circle-o"></i>
 											<spring:message code="eXperDB_scale.expansion_clusters" />
 											<span style="width: 450px;"><spring:message code="help.eXperDB_scale_set_msg09" /></span>
 										</a>
 									</label>
-									<div class="col-sm-4">
+									<div class="col-sm-3">
 										<input type="text" class="form-control" maxlength="5" id="ins_expansion_clusters" name="ins_expansion_clusters" onKeyUp="chk_Number(this);" placeholder='<spring:message code="eXperDB_scale.msg15" />'  onblur="this.value=this.value.trim()" tabindex=8 />
 									</div>
 								</div>

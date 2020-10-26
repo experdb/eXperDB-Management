@@ -779,10 +779,10 @@ function fn_ImmediateStart(gbn){
 					}
 				},
 				success : function(result) {
-					confile_title = rowCnt + '개의 Work를 실행하였습니다.';
+					confile_title = rowCnt + '<spring:message code="migration.msg11" />';
 					$('#con_multi_gbn', '#findConfirmMulti').val("ddl_history");
 					$('#confirm_multi_tlt').html(confile_title);
-					$('#confirm_multi_msg').html('실행결과화면으로 이동하시겠습니까?');
+					$('#confirm_multi_msg').html('<spring:message code="migration.msg12" />');
 					$('#pop_confirm_multi_md').modal("show");
 				}
 			});			

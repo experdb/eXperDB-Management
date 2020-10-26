@@ -330,7 +330,7 @@
 						</c:choose>
 						<i class="fa fa-play icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
 					</div>
-					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_start_msg"></span> <span class="text-black ml-1"><small>(<spring:message code="dashboard.msg01" />)</small></span></p>
+					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_start_msg"></span> <span class="text-black ml-1"><small><br>(<spring:message code="dashboard.msg01" />)</small></span></p>
 				</div>
 			</div>
 		</div>
@@ -365,7 +365,7 @@
 						</c:choose>
 						<i class="fa fa-pause icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
 					</div>  
-					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_stop_msg"></span> <span class="text-black ml-1"><small>(<spring:message code="dashboard.msg01" />)</small></span></p>
+					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_stop_msg"></span> <span class="text-black ml-1"><small><br>(<spring:message code="dashboard.msg01" />)</small></span></p>
 				</div>
 			</div>
 		</div>         
@@ -402,7 +402,7 @@
 							&nbsp;
 							<i class="fa fa-refresh fa-spin icon-md mb-0 mb-md-3 mb-xl-0 text-info"></i>
 					</div>  
-					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_run_msg"></span> <span class="text-black ml-1"><small>(<spring:message code="dashboard.msg01" />)</small></span></p>
+					<p class="mb-0 mt-2 text-danger"><span id="tot_scd_run_msg"></span> <span class="text-black ml-1"><small><br>(<spring:message code="dashboard.msg01" />)</small></span></p>
 				</div>
 			</div>
 		</div>

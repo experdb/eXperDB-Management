@@ -71,7 +71,7 @@ function fn_init() {
 		columns : [
 		{data : "extname", defaultContent : ""}, 
 		{data : "extversion", defaultContent : ""},
-		{data : "installYn", defaultContent : "설치"}, 		
+		{data : "installYn", defaultContent : "<spring:message code='extension_pack_installation_information.install_y' />"}, 		
 		]
 	});
 	

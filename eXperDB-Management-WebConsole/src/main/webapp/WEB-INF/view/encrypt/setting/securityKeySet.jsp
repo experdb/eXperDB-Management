@@ -449,7 +449,7 @@
  									<form class="cmxform" id="baseForm">
 										<fieldset>
 											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-1_5 col-form-label-sm pop-label-index" style="margin-left: 75px;">
+												<label for="ins_connect_nm" class="col-sm-1_7 col-form-label-sm pop-label-index" style="margin-left: 75px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													<spring:message code="encrypt_serverMasterKey.Master_key_file_mode"/>
 												</label>
@@ -461,7 +461,7 @@
 												</div>
 											</div>
 											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-1_5 col-form-label-sm pop-label-index" style="margin-left: 75px;">
+												<label for="ins_connect_nm" class="col-sm-1_7 col-form-label-sm pop-label-index" style="margin-left: 75px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													<spring:message code="encrypt_serverMasterKey.Password"/>
 												</label>
@@ -470,7 +470,7 @@
 												</div>
 											</div>
 											<div class="form-group row" style="margin-bottom:10px;">
-												<label for="ins_connect_nm" class="col-sm-1_5 col-form-label-sm pop-label-index" style="margin-left: 75px;">
+												<label for="ins_connect_nm" class="col-sm-1_7 col-form-label-sm pop-label-index" style="margin-left: 75px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													<spring:message code="encrypt_serverMasterKey.Confirm_Password"/>
 												</label>

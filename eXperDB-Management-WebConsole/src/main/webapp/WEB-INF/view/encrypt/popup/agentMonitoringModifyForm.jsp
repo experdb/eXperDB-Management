@@ -79,7 +79,7 @@
 								
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card card-inverse-info" >
-						<i class="mdi mdi-blur" style="margin-left: 10px;">	기본정보 </i>
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_policy_management.General_Information"/> </i>
 					</div>
 						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:160px;">			
 									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
@@ -120,14 +120,14 @@
 					
 				<div class="card" style="margin-top:10px;border:0px;">		
 					<div class="card card-inverse-info">
-						<i class="mdi mdi-blur" style="margin-left: 10px;">	부가정보 </i>
+						<i class="mdi mdi-blur" style="margin-left: 10px;">	<spring:message code="encrypt_agent.Additional_Information"/> </i>
 					</div>
 						<div class="tab-content" id="pills-tabContent" style="border-top: 1px solid #83b0d6e8; height:160px;">
 									<div class="tab-pane fade show active" role="tabpanel" id="insSettingTab">
 										<form class="cmxform" id="subForm">
 											<fieldset>								
 												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 														<i class="item-icon fa fa-dot-circle-o"></i>
 														<spring:message code="encrypt_agent.Recently_accessed_address"/>
 													</label>
@@ -136,7 +136,7 @@
 													</div>
 												</div>												
 												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<label for="ins_connect_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 														<i class="item-icon fa fa-dot-circle-o"></i>
 														<spring:message code="encrypt_agent.Recently_Accessed_Time"/>
 													</label>
