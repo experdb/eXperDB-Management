@@ -108,18 +108,14 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				}
 				
 				if (!scalejsonChk.isEmpty()) {
-					System.out.println("===scalejsonChk==" + scalejsonChk);
-					
 					scalejsonChk = scalejsonChk.trim();
-					
-					if (scalejsonChk.contains("aws:")) {
-						result.put("install_yn", "N");
-					} else {
-
+					if (scalejsonChk.contains("/usr/bin/aws")) {
 						//서버 db 등록
 						instanceScaleDAO.insertScaleAwsserver(instanceScaleVO);
 						
 						result.put("install_yn", "Y");
+					} else {
+						result.put("install_yn", "N");
 					}
 				} else {
 					result.put("install_yn", "N");

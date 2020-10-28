@@ -4,7 +4,7 @@
 
 <%
 	/**
-	* @Class Name : tansSettingInfo.jsp
+	* @Class Name : transTargetSettingInfo.jsp
 	* @Description : 전송관리 상세 조회
 	* @Modification Information
 	*

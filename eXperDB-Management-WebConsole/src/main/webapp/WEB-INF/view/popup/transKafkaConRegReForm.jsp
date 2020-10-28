@@ -174,7 +174,7 @@
 		<div class="modal-content">			 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					Kafka Connect <spring:message code="common.registory"/>
+					Kafka Connect <spring:message code="common.modify"/>
 				</h4>
 
 				<div class="card" style="margin-top:10px;border:0px;">

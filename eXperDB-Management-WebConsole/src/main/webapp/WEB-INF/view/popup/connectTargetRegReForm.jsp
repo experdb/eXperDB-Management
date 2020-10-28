@@ -52,7 +52,7 @@
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="migration.target_system"/> <spring:message code="menu.reg_transfer_set"/>
+					<spring:message code="migration.target_system"/> <spring:message code="menu.mod_transfer_set"/>
 				</h4>
 				
 				<div class="card" style="margin-top:10px;border:0px;">
