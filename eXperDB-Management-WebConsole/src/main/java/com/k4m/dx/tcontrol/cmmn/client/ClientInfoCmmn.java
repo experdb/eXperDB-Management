@@ -1819,6 +1819,12 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			} else {
 				result.put("RESULT_SUB_DATA", null);
 			}
+			
+			if (objList.get(ClientProtocolID.SCALE_LAST_NODE_CNT) != null) {
+				result.put("LAST_NODE_CNT", objList.get(ClientProtocolID.SCALE_LAST_NODE_CNT));
+			} else {
+				result.put("LAST_NODE_CNT", null);
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

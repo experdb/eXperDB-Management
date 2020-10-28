@@ -552,6 +552,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		JSONObject scalejsonObj = new JSONObject();
 		String stateChk = "";
 		String scalejsonChk = "";
+		int iLastNodeCnt = 0;
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		Map<String, Object> agentList = null;
@@ -580,6 +581,14 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 					if (agentList.get(ClientProtocolID.RESULT_SUB_DATA) != null) {
 						scalejsonChk = (String)agentList.get(ClientProtocolID.RESULT_SUB_DATA);
 					}
+					
+					if (agentList.get(ClientProtocolID.LAST_NODE_CNT) != null) {
+						iLastNodeCnt = Integer.parseInt((String)agentList.get(ClientProtocolID.LAST_NODE_CNT));
+					}
+					
+					if (iLastNodeCnt == 0) {
+						iLastNodeCnt = 1;
+					}
 				}
 			}
 
@@ -587,6 +596,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				InstancesArrly = (JSONArray) scalejsonObj.get("Instances");
 	
 				int iNumCnt = 0;
+				int iLastNodeChkCnt = 1;
 				
 				if (InstancesArrly != null) {
 					for (int j = 0; j < InstancesArrly.size(); j++) {
@@ -596,26 +606,42 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						JSONArray securityGroupsArrly = (JSONArray) instancesObj.get("SecurityGroups");     //보안그룹
 
 						String privateIpAddressVal = "";
+						String default_chk ="";
 
 						if (instancesObj.get("PrivateIpAddress") != null) {
 							privateIpAddressVal = (String) instancesObj.get("PrivateIpAddress");
 						}
+						
+						String key_name_val = (String) instancesObj.get("KeyName");
 
-						//재확인 필요 일단 넣어놈
+						//재확인 필요 일단 넣어놈 - staticLastNode 수를 확인함
 						if (scalejsonChk != null && privateIpAddressVal != null) {
 							if (!"".equals(scalejsonChk) && !"".equals(privateIpAddressVal)) {
 								if (Integer.parseInt(privateIpAddressVal.replaceAll("\\.","")) >= Integer.parseInt(scalejsonChk.replaceAll("\\.",""))) {
-									jsonObj.put("default_chk", "N");
+									default_chk = "N";
 								} else {
-									jsonObj.put("default_chk", "Y");
+									//추가
+									String key_name_val_last = key_name_val.substring(key_name_val.length()-1, key_name_val.length());
+									if ("master".contains(key_name_val) || !isInteger(key_name_val_last)) {
+
+										if (iLastNodeCnt >= iLastNodeChkCnt) {
+											default_chk = "Y";
+											iLastNodeChkCnt = iLastNodeChkCnt + 1;
+										} else {
+											default_chk = "N";
+										}
+									} else {
+										default_chk = "N";
+									}
 								}
 							} else {
-								jsonObj.put("default_chk", "N");
+								default_chk = "N";
 							}
 						} else {
-							jsonObj.put("default_chk", "N");
+							default_chk = "N";
 						}
 
+						jsonObj.put("default_chk", default_chk); 
 						jsonObj.put("public_IPv4", (String) instancesObj.get("PublicDnsName"));             //public dns IPv4
 						jsonObj.put("IPv4_public_ip", (String) instancesObj.get("PublicIpAddress"));        //IPv4 IP
 						jsonObj.put("private_ip_address", (String) instancesObj.get("PrivateIpAddress"));   //private_IP
@@ -1385,5 +1411,19 @@ System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
 		}
 
 		return result;
+	}
+	
+	/**
+	 * 숫자인지 확인
+	 */
+	public static boolean isInteger(String s) {
+	    try { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    } catch(NullPointerException e) {
+	        return false;
+	    }
+	    return true;
 	}
 }
