@@ -475,8 +475,8 @@
 					</div>
 
 					<div id="migt_hist_header_sub" class="collapse show" role="tabpanel" aria-labelledby="migt_hist_header_div" data-parent="#accordion_migt_his">
-						<c:choose>
-							<c:when test="${db2pg_yn eq 'Y'}">
+<%-- 						<c:choose>
+							<c:when test="${db2pg_yn eq 'Y'}"> --%>
 								<div class="row">
 									<!-- 데이터이관 일정 -->
 									<div class="col-md-3 col-xl-3 justify-content-center">
@@ -522,7 +522,7 @@
 										</div>
 									</div>
 								</div>
-							</c:when>
+<%-- 							</c:when>
 							<c:otherwise>
 								<div class="row">
 									<!-- 데이터이관 일정 -->
@@ -538,7 +538,7 @@
 									</div>
 								</div>
 							</c:otherwise>
-						</c:choose>
+						</c:choose> --%>
 					</div>
 				</div>
 			</div>
