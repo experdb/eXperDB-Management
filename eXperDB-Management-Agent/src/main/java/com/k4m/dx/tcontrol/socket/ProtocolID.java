@@ -247,6 +247,7 @@ public class ProtocolID {
 	public static final String WRK_TYPE = "WRK_TYPE";
 	public static final String AUTO_POLICY = "AUTO_POLICY";
 	public static final String SCALE_COUNT_SET = "SCALE_COUNT_SET";
+	public static final String SCALE_LAST_NODE_CNT = "SCALE_LAST_NODE_CNT";
 	
 	public static final String AUTO_POLICY_SET_DIV = "AUTO_POLICY_SET_DIV";
 	public static final String AUTO_POLICY_TIME = "AUTO_POLICY_TIME";
