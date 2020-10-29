@@ -21,13 +21,15 @@ function fn_init_tableInfo() {
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "table_name", className : "dt-center", defaultContent : ""},
+		{data : "obj_type", className : "dt-center", defaultContent : ""},
 		{data : "obj_description", className : "dt-center", defaultContent : ""}		
 		],'select': {'style': 'multi'}
 	});
 		
-		table_tableInfo.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
-		table_tableInfo.tables().header().to$().find('th:eq(1)').css('min-width', '500px');
-		table_tableInfo.tables().header().to$().find('th:eq(2)').css('min-width', '500px');
+		table_tableInfo.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		table_tableInfo.tables().header().to$().find('th:eq(1)').css('min-width', '300px');
+		table_tableInfo.tables().header().to$().find('th:eq(2)').css('min-width', '140px');
+		table_tableInfo.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
 
 		
 		$(window).trigger('resize'); 
@@ -226,9 +228,10 @@ function fn_tableCheckSelect(tableList){
 						<table id="tableList" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" style="width:100px;">
 							<thead>
 								<tr class="bg-info text-white">
-									<th width="200"></th>
-									<th width="500" class="dt-center"><spring:message code="migration.table_name"/></th>
-									<th width="500" class="dt-center">COMMENT</th>
+									<th width="10"></th>
+									<th width="300" class="dt-center"><spring:message code="migration.table_name"/></th>
+									<th width="140" class="dt-center">OBJECT_TYPE</th>
+									<th width="300" class="dt-center">COMMENT</th>
 								</tr>
 							</thead>
 						</table>
