@@ -249,10 +249,12 @@ public class ClientProtocolID {
 	public static final String WRK_TYPE = "WRK_TYPE";
 	public static final String AUTO_POLICY = "AUTO_POLICY";
 	public static final String SCALE_COUNT_SET = "SCALE_COUNT_SET";
-	
+	public static final String SCALE_LAST_NODE_CNT = "SCALE_LAST_NODE_CNT";
+
 	public static final String AUTO_POLICY_SET_DIV = "AUTO_POLICY_SET_DIV";
 	public static final String AUTO_POLICY_TIME = "AUTO_POLICY_TIME";
 	public static final String AUTO_LEVEL = "AUTO_LEVEL";
+	public static final String LAST_NODE_CNT = "LAST_NODE_CNT";
 	
 	/* 데이터전송 관련 */
 	public static final String KC_IP = "KC_IP";

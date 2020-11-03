@@ -62,7 +62,7 @@
 								<div class="form-group">
 									<div class= "row div-form-margin-z">
 										<div class="col-sm-12" style="padding-left:0px;">
-											<label for="rst_fix_rslt_msg_r" class="col-sm-2 col-form-label">
+											<label for="rst_fix_rslt_msg_r" class="col-sm-3 col-form-label">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="etc.etc43"/>
 											</label>

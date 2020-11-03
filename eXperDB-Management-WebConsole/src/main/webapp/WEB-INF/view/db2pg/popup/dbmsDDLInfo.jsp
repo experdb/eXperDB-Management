@@ -108,6 +108,7 @@ function fn_search_dbmsInfo(){
   			}
   		},
   		success : function(result) {
+  			console.log(result);
   			if(result.length > 0){
   				table_dbmsInfo.clear().draw();
   				table_dbmsInfo.rows.add(result).draw();
@@ -164,8 +165,8 @@ function fn_Mod(){
 								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="db2pg_sys_nm" name="db2pg_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
 							</div>
 							<div class="input-group mb-2 mr-sm-2 col-sm-3">
-								<select class="form-control" name="work" id="work">
-									<option value="%"><spring:message code="common.total" />&nbsp;DBMS<spring:message code="common.division" /></option>
+								<select class="form-control" name="dbms_dscd" id="dbms_dscd">
+									<option value=""><spring:message code="common.total" />&nbsp;DBMS<spring:message code="common.division" /></option>
 									<option value="TC002201">Oracle</option>
 									<option value="TC002202">MS-SQL</option>
 									<option value="TC002203">MySQL</option>	

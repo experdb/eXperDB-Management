@@ -27,7 +27,7 @@
 							</tr>
  							<tr>
 								<th class="t1">Copyright</th>
-								<td style="border : 0 none;">2019, The eXperDB-Management Development Team</td>
+								<td style="border : 0 none;">2020, The eXperDB-Management Development Team</td>
 							</tr>
  							<tr>
 								<th class="t2" rowspan="3">Community</th>

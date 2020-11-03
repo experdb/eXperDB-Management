@@ -231,22 +231,22 @@
 						<form class="cmxform" id="pwdChgForm">
 							<fieldset>
 								<div class="form-group row border-bottom">
-									<label for="com_db_svr_nm" class="col-sm-3 col-form-label">
+									<label for="com_db_svr_nm" class="col-sm-3_0 col-form-label">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="user_management.nowPw"/>
 									</label>
-									<div class="col-sm-9">
+									<div class="col-sm-8">
 										<input type="password" class="form-control" maxlength="20" id="nowpwd" name="nowpwd" onKeyPress="fn_checkWord(this,20);" placeholder='<spring:message code="message.msg109" />'>
 										<div class="alert alert-danger" style="margin-top:5px;display:none;" id="nowpwd_alert-danger"></div>
 									</div>
 								</div>
 								
 								<div class="form-group row">
-									<label for="com_ipadr" class="col-sm-3 col-form-label">
+									<label for="com_ipadr" class="col-sm-3_0 col-form-label">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="user_management.newPw"/>
 									</label>
-									<div class="col-sm-9">
+									<div class="col-sm-8">
 										<input type="password" class="form-control pwd_chk" maxlength="20" id="newpwd" name="newpwd" onKeyPress="fn_checkWord(this,20);" placeholder='<spring:message code="message.msg109" />'>
 										<div class="alert alert-light" style="margin-top:5px;display:none;" id="newpw_alert-light"></div>
 										<div class="alert alert-danger" style="margin-top:5px;display:none;" id="newpw_alert-danger"></div>
@@ -254,11 +254,11 @@
 								</div>
 							
 								<div class="form-group row">
-									<label for="com_max_clusters" class="col-sm-3 col-form-label pop-label-index">
+									<label for="com_max_clusters" class="col-sm-3_0 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="user_management.newPwConfirm"/>
 									</label>
-									<div class="col-sm-9">
+									<div class="col-sm-8">
 										<input type="password" class="form-control pwd_chk js-mytooltip-pw" maxlength="20" id="pwd" name="pwd" onKeyPress="fn_checkWord(this,20);" placeholder='<spring:message code="message.msg109" />'>
 										<div class="alert alert-danger" style="margin-top:5px;display:none;" id="pw_alert-danger"><spring:message code="message.msg112" /></div>
 									

@@ -692,7 +692,7 @@
 			<br/>
 
 			<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
-				<button type="button" class="btn btn-primary" onclick="fn_mod_update();"><spring:message code="common.registory"/></button>
+				<button type="button" class="btn btn-primary" onclick="fn_mod_update();"><spring:message code="common.modify"/></button>
 				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 			</div>
 		</div>

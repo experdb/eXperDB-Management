@@ -1316,7 +1316,7 @@ function fn_topic_search_tg_ins(){
 	var kc_ip = $("#ins_tg_kc_ip", "#searchTargetRegForm").val();
 
 	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
-
+	$('#loading').hide();
 	if (kc_ip != "") {
 		
 		$("#pop_layer_con_reg_two_target").append(htmlLoadPop);
@@ -1361,9 +1361,8 @@ function fn_topic_search_tg_ins(){
 
 			}
 		});
-		
 		$('#loading').hide();
-		
+
 		$( document ).ajaxStop(function() {
 			$('#loading_pop').hide();
 		});
@@ -1642,6 +1641,7 @@ function fn_topic_search_tg_mod(){
 		$('#loading_pop').css('top', '50%');
 		$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
 		$('#loading_pop').show();	
+		$('#loading').hide();
 		
 		$.ajax({
 			url : "/selectTargetTopicMappList.do",
@@ -1673,7 +1673,6 @@ function fn_topic_search_tg_mod(){
 				} 
 			}
 		});
-		
 		$('#loading').hide();
 		
 		$( document ).ajaxStop(function() {

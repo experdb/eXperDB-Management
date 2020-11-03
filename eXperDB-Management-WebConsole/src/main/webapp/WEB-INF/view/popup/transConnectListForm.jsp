@@ -158,7 +158,7 @@
 					<br />
 
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i> kafka Connect LIST</p>
+						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i> Kafka Connect LIST</p>
 						
 						<table id="transKfkConPopList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 							<thead>

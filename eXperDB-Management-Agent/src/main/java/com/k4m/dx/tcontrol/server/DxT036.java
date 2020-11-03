@@ -64,6 +64,7 @@ public class DxT036 extends SocketCtl{
 			String scaleSet = jObj.get(ProtocolID.SCALE_SET).toString();             //scale 구분
 			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();           //조회구분
 			String strResultSubMessge = "";
+			String scaleLastNodeCnt = "";
 
 			//cmd문
 			arrCmd = (JSONArray) jObj.get(ProtocolID.ARR_CMD);
@@ -92,6 +93,8 @@ socketLogger.info("DxT036.scaleCmd============================= : " + scaleCmd);
 				if ("main".equals(searchGbn) || ("scaleChk".equals(searchGbn) && !"".equals(scaleSubCmd)) || "instanceCnt".equals(searchGbn))  {
 					masterNm = masterIpSearch();
 					scaleCmd = scaleCmd + " \"Name=tag:Name,Values=" + masterNm + "\"";
+					
+					scaleLastNodeCnt = lastNodeCntSearch();
 				}
 
 				//조회 쿼리돌리고 값 리턴함
@@ -148,6 +151,7 @@ socketLogger.info("DxT036.scaleCmd============================= : " + scaleCmd);
 				}
 			}
 
+			outputObj.put(ProtocolID.SCALE_LAST_NODE_CNT, scaleLastNodeCnt);
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
@@ -160,6 +164,7 @@ socketLogger.info("DxT036.scaleCmd============================= : " + scaleCmd);
 		} catch (Exception e) {
 			errLogger.error("DxT036 {} ", e.toString());
 
+			outputObj.put(ProtocolID.SCALE_LAST_NODE_CNT, "");
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT036);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT036);
@@ -215,6 +220,47 @@ socketLogger.info("DxT036.scaleCmd============================= : " + scaleCmd);
 		}
 
 		return scaleMainCmd;
+	}
+	
+	//조회 일 경우 lastLoad값 받기
+	public String lastNodeCntSearch() throws Exception {
+		String scaleMainCmd = "";
+		String scale_path = "";
+		String lastNodeCnt = "0";
+
+		try {
+			scale_path = FileUtil.getPropertyValue("context.properties", "agent.scale_path");
+			
+			//scaleMainCmd = "psql -c \"select conninfo from nodes where type = 'primary' ; \" -t -d repmgr -U repmgr | grep -v conninfo | grep -v row  | sed \"s/host=//\" | awk '{print $1}'";
+			scaleMainCmd = "cat " + scale_path + "/setting.json";
+			RunCommandExec rMain = new RunCommandExec(scaleMainCmd);
+			//명령어 실행
+			rMain.run();
+
+			try {
+				rMain.join();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+
+			String strResultMessgeMain = rMain.getMessage();
+
+			if (!"".equals(strResultMessgeMain)) {
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse( strResultMessgeMain );
+				JSONObject jsonObj = (JSONObject) obj;
+				
+				String lastNodeCntStr = (String) jsonObj.get("staticLastNode");
+
+				if (!"".equals(lastNodeCntStr)) {
+					lastNodeCnt = lastNodeCntStr;
+				}
+			}
+		} catch (Exception ie) {
+			ie.printStackTrace();
+		}
+
+		return lastNodeCnt;
 	}
 	
 	//조회 일경우 조회 목록 받기

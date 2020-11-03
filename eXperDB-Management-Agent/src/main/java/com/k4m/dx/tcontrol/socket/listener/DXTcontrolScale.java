@@ -71,10 +71,10 @@ socketLogger.info("DXTcontrolScaleAwsExecute.scalejsonChk : " + scalejsonChk);
 				
 				scalejsonChk = scalejsonChk.trim();
 
-				if (scalejsonChk.contains("aws:")) {
-					awsServerChk = "N";
-				} else {
+				if (scalejsonChk.contains("/usr/bin/aws")) {
 					awsServerChk = "Y";
+				} else {
+					awsServerChk = "N";
 				}
 			} else {
 				awsServerChk = "N";
