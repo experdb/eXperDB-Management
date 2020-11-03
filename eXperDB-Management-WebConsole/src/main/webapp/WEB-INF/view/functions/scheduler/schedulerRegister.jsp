@@ -342,11 +342,11 @@ function fn_workAdd(){
 			
 			wrk_id_list.push( table.rows().data()[i].wrk_id);   
 	  	}
-		
-		if(cnt >0){
-			showSwalIcon('스케줄에 MIGRATION이 포함되어 있습니다.', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		}
+//  스케줄 등록시 migration, 배치설정  같이 등록 되게끔
+// 		if(cnt >0){
+// 			showSwalIcon('스케줄에 MIGRATION이 포함되어 있습니다.', '<spring:message code="common.close" />', '', 'error');
+// 			return false;
+// 		}
 		
 // 		var popUrl = "/popup/scheduleRegForm.do?wrk_id_list="+wrk_id_list; 
 		$('#pop_layer_scd_reg').modal("show");
