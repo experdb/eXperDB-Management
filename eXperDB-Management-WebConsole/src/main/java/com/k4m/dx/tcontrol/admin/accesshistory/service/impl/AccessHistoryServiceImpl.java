@@ -27,6 +27,10 @@ public class AccessHistoryServiceImpl extends EgovAbstractServiceImpl implements
 	public List<HistoryVO> selectAccessScreenName() throws Exception {
 		return accessHistoryDAO.selectAccessScreenName();
 	}
+	
+	public List<HistoryVO> selectAccessScreenName(String locale_type) throws Exception {
+		return accessHistoryDAO.selectAccessScreenName(locale_type);
+	}
 
 	public List<Map<String, Object>> selectAccessHistory(PagingVO searchVO, Map<String, Object> param) throws Exception {
 		return accessHistoryDAO.selectAccessHistory(searchVO, param);

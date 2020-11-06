@@ -39,6 +39,16 @@
 		AND SYS_CD NOT LIKE '%#_%' ESCAPE '#';
 	</select>
 	
+	<select id="selectAccessScreenNameEn" resultType="historyVO">
+		SELECT 
+		  SYS_CD
+		, SYS_CD_NM_EN AS SYS_CD_NM
+		FROM T_SYSDTL_C 
+		WHERE GRP_CD = 'TC0001'
+		AND SYS_CD NOT LIKE '%#_%' ESCAPE '#'
+		AND SYS_CD_NM_EN IS NOT NULL;
+	</select>
+	
 	<select id="selectAccessHistory" resultType="hashmap" parameterType="hashmap" >
 		/**
 		* Query ID : selectAccessHistory
@@ -83,6 +93,50 @@
 			)A
 	</select>
 	
+	<select id="selectAccessHistoryEn" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectAccessHistory
+		* Description : 접근내역 조회
+		* Author : 김주영
+		**/
+		SELECT
+		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, (ROW_NUMBER() OVER()) AS IDX
+		, A.EXEDTM_DATE
+		, A.EXEDTM_HOUR
+		, A.SYS_CD_NM_EN AS SYS_CD_NM
+		, A.USR_ID
+		, A.USR_NM
+		, A.DEPT_NM
+		, A.PST_NM
+		, A.LGI_IPADR
+		FROM(
+			SELECT 
+				  TO_CHAR(G.EXEDTM,'YYYY-MM-DD')EXEDTM_DATE
+				, TO_CHAR(G.EXEDTM,'HH24:MI')EXEDTM_HOUR
+				, C.SYS_CD_NM_EN
+				, G.USR_ID
+				, I.USR_NM
+				, I.DEPT_NM
+				, I.PST_NM
+				, G.LGI_IPADR
+			FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+			WHERE G.EXE_DTL_CD =C.SYS_CD
+			AND G.USR_ID=I.USR_ID
+			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+			</if>
+			<if test="search != null and search != '' ">
+				AND I.${type} LIKE #{search}
+			</if>
+			<if test="sys_cd != null and sys_cd != '' ">
+				AND  C.SYS_CD = #{sys_cd}
+			</if>	
+			ORDER BY ${order_type} ${order} 
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
+			)A
+	</select>
+	
 	<select id="selectAccessHistoryNew" resultType="hashmap" parameterType="hashmap" >
 		/**
 		* Query ID : selectAccessHistoryNew
@@ -105,6 +159,49 @@
 				  TO_CHAR(G.EXEDTM,'YYYY-MM-DD')EXEDTM_DATE
 				, TO_CHAR(G.EXEDTM,'HH24:MI')EXEDTM_HOUR
 				, C.SYS_CD_NM
+				, G.USR_ID
+				, I.USR_NM
+				, I.DEPT_NM
+				, I.PST_NM
+				, G.LGI_IPADR
+			FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+			WHERE G.EXE_DTL_CD =C.SYS_CD
+			AND G.USR_ID=I.USR_ID
+			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+			</if>
+			<if test="search != null and search != '' ">
+				AND I.${type} LIKE #{search}
+			</if>
+			<if test="sys_cd != null and sys_cd != '' ">
+				AND  C.SYS_CD = #{sys_cd}
+			</if>	
+			ORDER BY ${order_type} ${order} 
+			)A
+	</select>
+
+	<select id="selectAccessHistoryNewEn" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectAccessHistoryNew
+		* Description : 접근내역 조회
+		* Author : 김주영
+		**/
+		SELECT
+		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, (ROW_NUMBER() OVER()) AS IDX
+		, A.EXEDTM_DATE
+		, A.EXEDTM_HOUR
+		, A.SYS_CD_NM_EN AS SYS_CD_NM
+		, A.USR_ID
+		, A.USR_NM
+		, A.DEPT_NM
+		, A.PST_NM
+		, A.LGI_IPADR
+		FROM(
+			SELECT 
+				  TO_CHAR(G.EXEDTM,'YYYY-MM-DD')EXEDTM_DATE
+				, TO_CHAR(G.EXEDTM,'HH24:MI')EXEDTM_HOUR
+				, C.SYS_CD_NM_EN
 				, G.USR_ID
 				, I.USR_NM
 				, I.DEPT_NM
@@ -204,5 +301,47 @@
 			)A	
 	</select>
 	
+	<select id="selectAccessHistoryExcelEn" resultType="historyVO" parameterType="hashmap" >
+		/**
+		* Query ID : selectAccessHistoryExcel
+		* Description : 엑셀 접근내역 조회
+		* Author : 김주영
+		**/
+		SELECT
+		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, (ROW_NUMBER() OVER()) AS IDX
+		, A.EXEDTM_DATE
+		, A.EXEDTM_HOUR
+		, A.SYS_CD_NM_EN AS SYS_CD_NM
+		, A.USR_ID
+		, A.USR_NM
+		, A.DEPT_NM
+		, A.PST_NM
+		, A.LGI_IPADR
+		FROM(
+			SELECT 
+				  TO_CHAR(G.EXEDTM,'YYYY-MM-DD')EXEDTM_DATE
+				, TO_CHAR(G.EXEDTM,'HH24:MI')EXEDTM_HOUR
+				, C.SYS_CD_NM_EN
+				, G.USR_ID
+				, I.USR_NM
+				, I.DEPT_NM
+				, I.PST_NM
+				, G.LGI_IPADR
+			FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+			WHERE G.EXE_DTL_CD =C.SYS_CD
+			AND G.USR_ID=I.USR_ID
+			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+			</if>
+			<if test="search != null and search != '' ">
+				AND ${type} LIKE #{search}
+			</if>
+			<if test="sys_cd != null and sys_cd != '' ">
+				AND  C.SYS_CD = #{sys_cd}
+			</if>	
+			ORDER BY ${order_type} ${order} 
+			)A	
+	</select>
 
 </mapper>
