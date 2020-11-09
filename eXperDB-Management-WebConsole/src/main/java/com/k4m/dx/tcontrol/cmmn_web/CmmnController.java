@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.ResourceUtils;
@@ -654,7 +655,8 @@ public class CmmnController {
 		
 		try {
 			int scd_id = Integer.parseInt(request.getParameter("scd_id"));
-			result = scheduleService.selectScdInfo(scd_id);	
+			String locale_type = LocaleContextHolder.getLocale().getLanguage();
+			result = scheduleService.selectScdInfo(scd_id, locale_type);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

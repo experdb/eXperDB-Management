@@ -170,7 +170,7 @@ public interface ScheduleService {
 	List<Map<String, Object>> selectWorkDivList() throws Exception;
 
 
-	List<Map<String, Object>> selectScdInfo(int scd_id) throws Exception;
+	List<Map<String, Object>> selectScdInfo(int scd_id, String locale_type) throws Exception;
 
 
 	List<Map<String, Object>> selectWrkInfo(int wrk_nm) throws Exception;

@@ -159,15 +159,23 @@ public class ScheduleDAO extends EgovAbstractMapper{
 	}
 
 
-	public List<Map<String, Object>> selectScdInfo(int scd_id) {
+	public List<Map<String, Object>> selectScdInfo(int scd_id, String locale_type) {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("scheduleSql.selectScdInfo", scd_id);		
+		
+		if(locale_type.equals("ko")){
+			sl = (List<Map<String, Object>>) list("scheduleSql.selectScdInfo", scd_id);	
+		}else{
+			sl = (List<Map<String, Object>>) list("scheduleSql.selectScdInfoEn", scd_id);	
+		}
+			
 		return sl;
 	}
 
 
 	public List<Map<String, Object>> selectWrkInfo(int wrk_id) {
 		List<Map<String, Object>> sl = null;
+		
+		
 		sl = (List<Map<String, Object>>) list("scheduleSql.selectWrkInfo", wrk_id);		
 		return sl;
 	}
