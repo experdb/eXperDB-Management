@@ -90,6 +90,94 @@
       ORDER BY A.LST_MDF_DTM DESC
       )AA
     </select>
+    
+    <select id="selectWorkListEN" resultType="workVO">
+		/**
+	 	* Query ID : selectWorkList
+	 	* Description :  스케쥴 work List 조회
+	 	* Author : 변승우
+	 	**/
+	 	SELECT
+	 	      (ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+			, AA.WRK_ID
+			, AA.DB_SVR_ID
+			, AA.DB_SVR_NM
+			, AA.DB_ID
+			, AA.DB_NM
+			, AA.BSN_DSCD
+			, AA.BSN_DSCD_NM
+			, AA.BCK_BSN_DSCD
+			, AA.BCK_BSN_DSCD_NM
+			, AA.WRK_NM
+			, AA.WRK_EXP
+			, AA.BCK_OPT_CD
+			, AA.BCK_OPT_CD_NM
+			, AA.BCK_MTN_ECNT
+			, AA.CPS_YN
+			, AA.LOG_FILE_BCK_YN
+			, AA.LOG_FILE_STG_DCNT
+			, AA.LOG_FILE_MTN_ECNT
+			, AA.CPRT
+			, AA.SAVE_PTH
+			, AA.FILE_FMT_CD
+			, AA.FILE_STG_DCNT
+			, AA.ENCD_MTH_NM
+			, AA.USR_ROLE_NM
+			, AA.FRST_REGR_ID
+			, AA.FRST_REG_DTM
+			, AA.LST_MDFR_ID
+			, AA.LST_MDF_DTM
+			, AA.EXE_CMD
+	 	FROM(
+       SELECT 
+      		  A.WRK_ID
+			, B.DB_SVR_ID
+            , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE B.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+			, B.DB_ID
+			, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE B.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+			, A.BSN_DSCD
+            , (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE A.BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM 
+            , B.BCK_BSN_DSCD
+			, (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE B.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+			, A.WRK_NM
+			, A.WRK_EXP
+			, B.BCK_OPT_CD
+			, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM
+			, B.BCK_MTN_ECNT
+			, B.CPS_YN
+			, B.LOG_FILE_BCK_YN
+			, B.LOG_FILE_STG_DCNT
+			, B.LOG_FILE_MTN_ECNT
+			, B.CPRT
+			, B.SAVE_PTH
+			, B.FILE_FMT_CD
+			, B.FILE_STG_DCNT
+			, B.ENCD_MTH_NM
+			, B.USR_ROLE_NM
+			, A.FRST_REGR_ID
+			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+			, A.LST_MDFR_ID
+			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+			, B.EXE_CMD
+      FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B 
+      WHERE 1=1	
+      AND A.WRK_ID = B.WRK_ID
+      <if test="bsn_dscd != null and bsn_dscd != '' ">
+      AND A.BSN_DSCD LIKE #{bsn_dscd}
+      </if>
+      <if test="db_svr_nm != null and db_svr_nm != '' ">
+      AND DB_SVR_ID IN(SELECT 
+						    			DB_SVR_ID 
+						   	  FROM T_DBSVR_I 
+						      WHERE DB_SVR_NM = #{db_svr_nm}) 
+	  </if>
+      <if test="wrk_nm != null and wrk_nm != '' ">
+      	AND A.WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
+      </if>
+      ORDER BY A.LST_MDF_DTM DESC
+      )AA
+    </select>
   
   
   	<select id="selectScheduleWorkList" resultType="Map" parameterType="HashMap">
@@ -122,6 +210,35 @@
 	   </foreach>
     </select>
     
+    <select id="selectScheduleWorkListEN" resultType="Map" parameterType="HashMap">
+		/**
+	 	* Query ID : selectScheduleWorkList
+	 	* Description :  선택된 work List 조회
+	 	* Author : 변승우
+	 	**/
+       SELECT 
+      		(ROW_NUMBER() OVER()) AS ROWNUM
+      		,(ROW_NUMBER() OVER())+#{cnt} AS IDX
+      		, WRK_ID
+			, DB_SVR_ID
+            , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE A.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+			, DB_ID
+			, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+			, BCK_BSN_DSCD
+			, (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE A.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+			, (SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = A.WRK_ID) WRK_NM
+			, (SELECT WRK_EXP FROM T_WRKCNG_I WHERE WRK_ID = A.WRK_ID) WRK_EXP
+			, 'N' AS NXT_EXE_YN
+			, BCK_WRK_ID
+			, (SELECT BSN_DSCD FROM T_WRKCNG_I WHERE WRK_ID = A.WRK_ID) BSN_DSCD
+			, (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE (SELECT BSN_DSCD FROM T_WRKCNG_I WHERE WRK_ID = A.WRK_ID) = SYS_CD ) AS BSN_DSCD_NM	
+      FROM T_BCK_WRKCNG_I A
+      WHERE 1=1	
+      AND WRK_ID IN
+      <foreach item="item" index="index" collection="work_id" open="(" separator="," close=")"> 
+				 #{item}::numeric
+	   </foreach>
+    </select>
     
       	<select id="selectDb2pgScheduleWorkList" resultType="Map" parameterType="HashMap">
 		/**
@@ -773,6 +890,20 @@
 		SELECT 
 	    	BSN_DSCD
 	        , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM
+	    FROM T_WRKCNG_I
+	    WHERE BSN_DSCD IN ('TC001901', 'TC001902')
+	    GROUP BY BSN_DSCD
+	 </select>
+	 
+	 <select id="selectWorkDivListEN" resultType="Map" parameterType="HashMap">
+		/**
+	 	* Query ID : selectWorkDivList
+	 	* Description :  work List 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+	    	BSN_DSCD
+	        , (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM
 	    FROM T_WRKCNG_I
 	    WHERE BSN_DSCD IN ('TC001901', 'TC001902')
 	    GROUP BY BSN_DSCD

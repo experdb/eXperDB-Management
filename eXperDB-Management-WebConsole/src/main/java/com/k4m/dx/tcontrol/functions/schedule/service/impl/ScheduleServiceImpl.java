@@ -32,8 +32,8 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	 * @throws Exception
 	 */
 	@Override
-	public List<WorkVO> selectWorkList(WorkVO workVO) throws Exception {
-		return scheduleDAO.selectWorkList(workVO);
+	public List<WorkVO> selectWorkList(WorkVO workVO, String locale_type) throws Exception {
+		return scheduleDAO.selectWorkList(workVO, locale_type);
 	}
 	
 	
@@ -230,8 +230,8 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 
 
 	@Override
-	public List<Map<String, Object>> selectWorkDivList() throws Exception {
-		return scheduleDAO.selectWorkDivList();
+	public List<Map<String, Object>> selectWorkDivList(String locale_type) throws Exception {
+		return scheduleDAO.selectWorkDivList(locale_type);
 	}
 
 
