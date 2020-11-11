@@ -67,7 +67,8 @@ public class DatabaseTableInfo {
 				case "TC002202" :
 					sql = " SELECT LOWER(name) as table_name "
 							+ "FROM sys.objects A "
-							+ "WHERE schema_id=(SELECT schema_id FROM sys.schemas WHERE name='"+serverObj.get("SCHEMA") +"') "													
+							+ "WHERE 1=1"
+							/*+ "schema_id=(SELECT schema_id FROM sys.schemas WHERE name='"+serverObj.get("SCHEMA") +"') "*/													
 							+ "AND type in ('U') "
 							+ "AND type in ('U', 'V')"
 							+ "AND LOWER(name) Like '%" + serverObj.get("TABLE_NM") + "%'";
