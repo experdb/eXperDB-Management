@@ -206,7 +206,7 @@ function fn_insert_trsf_work(){
 								if(result.resultCode == "0000000000"){
 									showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
 								}else{
-									showSwalIcon('<spring:message code="message.msg06" />', '<spring:message code="common.close" />', '', 'error');
+									showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 								}		
 							}
 						});
