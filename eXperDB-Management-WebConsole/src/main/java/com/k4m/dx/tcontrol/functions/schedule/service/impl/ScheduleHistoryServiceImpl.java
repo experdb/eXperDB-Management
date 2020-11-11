@@ -45,13 +45,13 @@ public class ScheduleHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	@Override
-	public List<Map<String, Object>> selectScheduleHistoryDetail(int exe_sn) throws Exception {
-		return scheduleHistoryDAO.selectScheduleHistoryDetail(exe_sn);
+	public List<Map<String, Object>> selectScheduleHistoryDetail(int exe_sn, String locale_type) throws Exception {
+		return scheduleHistoryDAO.selectScheduleHistoryDetail(exe_sn, locale_type);
 	}
 
 	@Override
-	public List<Map<String, Object>> selectScheduleHistoryWorkDetail(int exe_sn) throws Exception {
-		return scheduleHistoryDAO.selectScheduleHistoryWorkDetail(exe_sn);
+	public List<Map<String, Object>> selectScheduleHistoryWorkDetail(int exe_sn, String locale_type) throws Exception {
+		return scheduleHistoryDAO.selectScheduleHistoryWorkDetail(exe_sn, locale_type);
 	}
 
 	@Override

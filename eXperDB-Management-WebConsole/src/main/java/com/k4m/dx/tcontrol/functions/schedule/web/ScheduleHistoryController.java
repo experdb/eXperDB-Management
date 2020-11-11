@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -297,7 +298,8 @@ public class ScheduleHistoryController {
 //			accessHistoryService.insertHistory(historyVO);
 			
 			int exe_sn=Integer.parseInt(request.getParameter("exe_sn"));
-			result = scheduleHistoryService.selectScheduleHistoryDetail(exe_sn);
+			String locale_type = LocaleContextHolder.getLocale().getLanguage();
+			result = scheduleHistoryService.selectScheduleHistoryDetail(exe_sn, locale_type);
 			
 			mv.addObject("exe_sn",exe_sn);
 			mv.addObject("result",result);
@@ -320,7 +322,8 @@ public class ScheduleHistoryController {
 		List<Map<String, Object>> result = null;
 		try {
 			int exe_sn = Integer.parseInt(request.getParameter("exe_sn")); 
-			result = scheduleHistoryService.selectScheduleHistoryWorkDetail(exe_sn);
+			String locale_type = LocaleContextHolder.getLocale().getLanguage();
+			result = scheduleHistoryService.selectScheduleHistoryWorkDetail(exe_sn, locale_type);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
