@@ -20,6 +20,7 @@ import org.json.simple.parser.JSONParser;
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -202,8 +203,9 @@ public class ScheduleController {
 				System.out.println("구분 : " + workVO.getBsn_dscd());
 				System.out.println("워크명 : " + workVO.getWrk_nm());
 				System.out.println("=====================");
+				String locale_type = LocaleContextHolder.getLocale().getLanguage();
 				
-				resultSet = scheduleService.selectWorkList(workVO);	
+				resultSet = scheduleService.selectWorkList(workVO, locale_type);	
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -244,12 +246,14 @@ public class ScheduleController {
 				String[] Param = work_id.toString().substring(1, work_id.length()-1 ).split(",");
 				HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 				List<String> ids = new ArrayList<String>(); 
+				String locale_type = LocaleContextHolder.getLocale().getLanguage();
 
 				for(int i=0; i<Param.length; i++){
 					ids.add(Param[i].toString()); 
 				}
 				paramvalue.put("work_id", ids);
 				paramvalue.put("cnt", cnt);
+				paramvalue.put("locale_type", locale_type);
 				
 				result = scheduleService.selectScheduleWorkList(paramvalue);
 
@@ -1312,7 +1316,8 @@ public class ScheduleController {
 	
 		List<Map<String, Object>> resultSet = null;
 		try {			
-			resultSet = scheduleService.selectWorkDivList();	
+			String locale_type = LocaleContextHolder.getLocale().getLanguage();
+			resultSet = scheduleService.selectWorkDivList(locale_type);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

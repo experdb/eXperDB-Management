@@ -20,9 +20,14 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 public class ScheduleDAO extends EgovAbstractMapper{
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<WorkVO> selectWorkList(WorkVO workVO) {
+	public List<WorkVO> selectWorkList(WorkVO workVO, String locale_type) {
 		List<WorkVO> sl = null;
-		sl = (List<WorkVO>) list("scheduleSql.selectWorkList", workVO);
+		if(locale_type.equals("ko")){
+			sl = (List<WorkVO>) list("scheduleSql.selectWorkList", workVO);
+		}else{
+			sl = (List<WorkVO>) list("scheduleSql.selectWorkListEN", workVO);
+		}
+		
 		return sl;
 	}
 
@@ -30,7 +35,12 @@ public class ScheduleDAO extends EgovAbstractMapper{
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectScheduleWorkList(HashMap paramvalue) {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("scheduleSql.selectScheduleWorkList", paramvalue);		
+		if(paramvalue.get("locale_type").equals("ko")){
+			sl = (List<Map<String, Object>>) list("scheduleSql.selectScheduleWorkList", paramvalue);
+		}else{
+			sl = (List<Map<String, Object>>) list("scheduleSql.selectScheduleWorkListEN", paramvalue);	
+		}
+			
 		return sl;
 	}
 
@@ -152,22 +162,35 @@ public class ScheduleDAO extends EgovAbstractMapper{
 	}
 
 
-	public List<Map<String, Object>> selectWorkDivList() {
+	public List<Map<String, Object>> selectWorkDivList(String locale_type) {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("scheduleSql.selectWorkDivList", null);		
+		if(locale_type.equals("ko")){
+			sl = (List<Map<String, Object>>) list("scheduleSql.selectWorkDivList", null);
+		}else{
+			sl = (List<Map<String, Object>>) list("scheduleSql.selectWorkDivListEN", null);	
+		}
+		
 		return sl;
 	}
 
 
-	public List<Map<String, Object>> selectScdInfo(int scd_id) {
+	public List<Map<String, Object>> selectScdInfo(int scd_id, String locale_type) {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("scheduleSql.selectScdInfo", scd_id);		
+		
+		if(locale_type.equals("ko")){
+			sl = (List<Map<String, Object>>) list("scheduleSql.selectScdInfo", scd_id);	
+		}else{
+			sl = (List<Map<String, Object>>) list("scheduleSql.selectScdInfoEn", scd_id);	
+		}
+			
 		return sl;
 	}
 
 
 	public List<Map<String, Object>> selectWrkInfo(int wrk_id) {
 		List<Map<String, Object>> sl = null;
+		
+		
 		sl = (List<Map<String, Object>>) list("scheduleSql.selectWrkInfo", wrk_id);		
 		return sl;
 	}

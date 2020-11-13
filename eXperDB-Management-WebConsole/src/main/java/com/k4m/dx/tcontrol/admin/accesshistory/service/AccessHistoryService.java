@@ -24,7 +24,7 @@ public interface AccessHistoryService {
 	 * @throws Exception
 	 */
 	List<HistoryVO> selectAccessScreenName() throws Exception;
-
+	List<HistoryVO> selectAccessScreenName(String locale_name) throws Exception;
 	/**
 	 * 화면접근 이력 조회
 	 * 
