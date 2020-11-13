@@ -74,6 +74,14 @@ public interface ScaleService {
 	public Map<String, Object> selectMonitorInfo(Map<String, Object> param)  throws Exception;
 
 	/**
+	 * 에이전트 비정상 연결실패 조회
+	 * @param  param
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectConnectionFailure(Map<String, Object> param)  throws Exception;
+	
+	/**
 	 * auto scale load log insert
 	 * @param  param
 	 * @return 
