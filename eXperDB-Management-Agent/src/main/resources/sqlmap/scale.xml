@@ -8,7 +8,7 @@
 	 	* Description : monitoring cpu_mem 사용량 조회
 	 	* Author : 
 	 	**/
-   		SELECT AVG(CPU_MAIN) CPU_UTIL_RATE, AVG(MEM_USED_RATE) MEM_USED_RATE
+        SELECT AVG(CPU_MAIN) CPU_UTIL_RATE, AVG(MEM_USED_RATE) MEM_USED_RATE
           FROM (
 	            WITH HGI AS (
 	        	             SELECT HA_GROUP FROM PGMON.TB_INSTANCE_INFO
@@ -40,6 +40,40 @@
          ) AS GRP
 	</select>
 	
+	<select id="selectConnectionFailure" parameterType="hashmap" resultType="hashMap">
+   		/**
+	 	* Query ID : selectConnectionFailure
+	 	* Description : 에이전트 비정상 연결실패
+	 	* Author : 
+	 	**/
+        WITH TEMP_MAX_SEQ AS (
+             SELECT A.INSTANCE_ID, MAX(A.REPL_REG_SEQ) MAX_REG_SEQ, ha_role
+               FROM TB_REPLICATION_INFO A
+              WHERE A.REG_DATE    = TO_CHAR(NOW(), 'YYYYMMDD')
+                AND REPL_REG_SEQ >= (SELECT (LAST_VALUE - (SELECT COUNT(*) * 3 FROM TB_INSTANCE_INFO)) + 1 AS LAST_VALUE FROM REPL_REG_SEQ)
+              GROUP BY A.INSTANCE_ID, ha_role
+        ),
+        HGI AS (
+            SELECT HA_GROUP FROM PGMON.TB_INSTANCE_INFO
+             WHERE SERVER_IP = #{IPADR}
+        )
+        SELECT SERVER_IP
+          FROM TB_INSTANCE_INFO A, HGI, TB_HCHK_COLLECT_INFO B
+               RIGHT OUTER JOIN TB_HCHK_THRD_LIST  C
+                     ON B.INSTANCE_ID = C.INSTANCE_ID
+                        AND B.HCHK_NAME = C.HCHK_NAME
+                        AND B.REG_DATE = TO_CHAR(NOW(), 'YYYYMMDD')
+                        AND B.HCHK_REG_SEQ = (SELECT MAX(X.HCHK_REG_SEQ) FROM TB_HCHK_COLLECT_INFO X WHERE X.REG_DATE = TO_CHAR(NOW(), 'YYYYMMDD'))
+             , TEMP_MAX_SEQ D
+         WHERE A.COLLECT_YN = 'Y'
+           AND A.DELETE_YN = 'N'
+           AND A.HA_GROUP = HGI.HA_GROUP
+           AND A.INSTANCE_ID = C.INSTANCE_ID
+           AND A.INSTANCE_ID = D.INSTANCE_ID
+           AND C.HCHK_NAME = 'CONNECTIONFAIL'
+           AND B.VALUE >= CRITICAL_THRESHOLD
+	</select>
+
 	<insert id="insertScaleLog_G"  parameterType="hashmap">
    		/**
 	 	* Query ID : insertScaleLog_G

@@ -706,7 +706,7 @@
 										</div>
 
 										<div class="form-group row" style="margin-bottom:1px;">
-											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+											<label for="ins_compression_type" class="col-sm-2_2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.compression_type" />
 											</label>
@@ -721,7 +721,7 @@
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="access_control_management.activation" />
 											</label>
-											<div class="col-sm-4">
+											<div class="col-sm-3">
 												<div class="onoffswitch-pop-play">
 													<input type="checkbox" name="ins_source_transActive_act" class="onoffswitch-pop-play-checkbox" id="ins_source_transActive_act" onclick="fn_transActivation_msg_set('ins_source')" >
 													<label class="onoffswitch-pop-play-label" for="ins_source_transActive_act">

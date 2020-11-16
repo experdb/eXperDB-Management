@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.servlet.view.document.AbstractExcelView;
 
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -35,21 +36,39 @@ public class CategoryExcelView extends AbstractExcelView {
   
         HSSFSheet sheet = wb.createSheet("접근이력");
         sheet.setDefaultColumnWidth((short) 12);  
+        String locale_type = LocaleContextHolder.getLocale().getLanguage();
         
         // put text in first cell
         cell = getCell(sheet, 0, 0);
-        setText(cell, "접근이력");
- 
-        // set header information
-        setText(getCell(sheet, 2, 0), "No");
-        setText(getCell(sheet, 2, 1), "일자");
-        setText(getCell(sheet, 2, 2), "시간");
-        setText(getCell(sheet, 2, 3), "구분");
-        setText(getCell(sheet, 2, 4), "아이디");
-        setText(getCell(sheet, 2, 5), "사용자명");
-        setText(getCell(sheet, 2, 6), "부서");
-        setText(getCell(sheet, 2, 7), "직급");
-        setText(getCell(sheet, 2, 8), "아이피");
+        
+        if(locale_type.equals("en")){
+        	setText(cell, "Access Histories");
+            
+            // set header information
+            setText(getCell(sheet, 2, 0), "No");
+            setText(getCell(sheet, 2, 1), "Date");
+            setText(getCell(sheet, 2, 2), "Time");
+            setText(getCell(sheet, 2, 3), "Page");
+            setText(getCell(sheet, 2, 4), "ID");
+            setText(getCell(sheet, 2, 5), "User Name");
+            setText(getCell(sheet, 2, 6), "Department");
+            setText(getCell(sheet, 2, 7), "Position");
+            setText(getCell(sheet, 2, 8), "IP");
+        }else{
+        	setText(cell, "접근이력");
+            
+            // set header information
+            setText(getCell(sheet, 2, 0), "No");
+            setText(getCell(sheet, 2, 1), "일자");
+            setText(getCell(sheet, 2, 2), "시간");
+            setText(getCell(sheet, 2, 3), "구분");
+            setText(getCell(sheet, 2, 4), "아이디");
+            setText(getCell(sheet, 2, 5), "사용자명");
+            setText(getCell(sheet, 2, 6), "부서");
+            setText(getCell(sheet, 2, 7), "직급");
+            setText(getCell(sheet, 2, 8), "아이피");
+        }
+        
         
         Map<String, Object> map = (Map<String, Object>) model.get("categoryMap");  
         List<Object> categories = (List<Object>) map.get("category");  

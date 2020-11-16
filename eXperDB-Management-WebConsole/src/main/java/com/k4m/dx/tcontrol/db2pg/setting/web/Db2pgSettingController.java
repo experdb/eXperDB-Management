@@ -689,6 +689,7 @@ public class Db2pgSettingController {
 			
 			//src_cnd_qry where문절에 where, ; 문자 제거
 			if(!dataConfigVO.getSrc_cnd_qry().equals("")){
+				dataConfigVO.setSrc_cnd_qry(toString(dataConfigVO.getSrc_cnd_qry()));
 				if(dataConfigVO.getSrc_cnd_qry().contains("WHERE")){
 					dataConfigVO.setSrc_cnd_qry(dataConfigVO.getSrc_cnd_qry().replaceAll("WHERE", ""));
 				}else if(dataConfigVO.getSrc_cnd_qry().contains("where")){
@@ -699,7 +700,7 @@ public class Db2pgSettingController {
 			}
 			db2pgSettingService.insertDataWork(dataConfigVO);
 			
-			//3. config 파일 만들기
+			//5. config 파일 만들기
 			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_src_sys_id());
 			Db2pgSysInfVO targetDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_trg_sys_id());
 			JSONObject configObj = new JSONObject();
@@ -745,6 +746,25 @@ public class Db2pgSettingController {
 		}
 		return result;
 	}
+	
+	
+	public static String toString(String str){
+		if(str == null)
+		return null;
+		
+		String returnStr = str;
+		returnStr = returnStr.replaceAll("<br>", "\n");
+		returnStr = returnStr.replaceAll("&gt;", ">");
+		returnStr = returnStr.replaceAll("&lt;", "<");
+		returnStr = returnStr.replaceAll("&quot;", "\"");
+		returnStr = returnStr.replaceAll("&nbsp;", " ");
+		returnStr = returnStr.replaceAll("&amp;", "&");
+		returnStr = returnStr.replaceAll("\"", "&#34;");
+		returnStr = returnStr.replaceAll("&apos;", "'");	
+		
+		return returnStr;
+	}
+	
 	
 	/**
 	 * MIGRATION WORK 복제 등록한다.
@@ -984,6 +1004,18 @@ public class Db2pgSettingController {
 //				db2pgSettingService.insertUsrQry(queryVO);
 //			}
 			
+			//src_cnd_qry where문절에 where, ; 문자 제거
+			if(!dataConfigVO.getSrc_cnd_qry().equals("")){
+				dataConfigVO.setSrc_cnd_qry(toString(dataConfigVO.getSrc_cnd_qry()));
+				if(dataConfigVO.getSrc_cnd_qry().contains("WHERE")){
+					dataConfigVO.setSrc_cnd_qry(dataConfigVO.getSrc_cnd_qry().replaceAll("WHERE", ""));
+				}else if(dataConfigVO.getSrc_cnd_qry().contains("where")){
+					dataConfigVO.setSrc_cnd_qry(dataConfigVO.getSrc_cnd_qry().replaceAll("where", ""));
+				}else if(dataConfigVO.getSrc_cnd_qry().contains(";")){
+					dataConfigVO.setSrc_cnd_qry(dataConfigVO.getSrc_cnd_qry().replaceAll(";", ""));
+				}
+			}
+			
 			//4.T_DB2PG_Data_작업_정보 insert
 			dataConfigVO.setLst_mdfr_id(id);
 			dataConfigVO.setTrans_save_pth(trans_path);
@@ -992,7 +1024,7 @@ public class Db2pgSettingController {
 			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
 			db2pgSettingService.updateDataWork(dataConfigVO);
 			
-			//3. config 파일 만들기
+			//5. config 파일 만들기
 			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_src_sys_id());
 			Db2pgSysInfVO targetDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_trg_sys_id());
 			JSONObject configObj = new JSONObject();

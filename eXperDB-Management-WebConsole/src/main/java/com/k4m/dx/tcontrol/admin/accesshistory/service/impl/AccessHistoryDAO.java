@@ -38,6 +38,24 @@ public class AccessHistoryDAO extends EgovAbstractMapper {
 		result = (List<HistoryVO>) list("accessHistorySql.selectAccessScreenName", "");
 		return result;
 	}
+	
+	/**
+	 * 화면명 조회
+	 * 
+	 * @return HistoryVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<HistoryVO> selectAccessScreenName(String locale_type) {
+		List<HistoryVO> result = null;
+		if(locale_type.equals("en")){
+			result = (List<HistoryVO>) list("accessHistorySql.selectAccessScreenNameEn", "");
+		}else{
+			result = (List<HistoryVO>) list("accessHistorySql.selectAccessScreenName", "");
+		}
+		
+		return result;
+	}
 
 	/**
 	 * 화면접근 내역 조회
@@ -59,8 +77,13 @@ public class AccessHistoryDAO extends EgovAbstractMapper {
 		params.put("sys_cd", param.get("sys_cd"));
 		params.put("recordCountPerPage", searchVO.getRecordCountPerPage());
 		params.put("firstIndex", searchVO.getFirstIndex());
-
-		result = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistory", params);
+		
+		if(param.get("locale_type").equals("en")){
+			result = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistoryEn", params);
+		} else {
+			result = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistory", params);
+		}
+		
 		return result;
 	}
 	
@@ -73,7 +96,12 @@ public class AccessHistoryDAO extends EgovAbstractMapper {
 	 */
 	public List<Map<String, Object>> selectAccessHistoryNew(Map<String, Object> param) {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistoryNew", param);		
+		if(param.get("locale_type").equals("en")){
+			sl = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistoryNewEn", param);
+		}else {
+			sl = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistoryNew", param);
+		}
+				
 		return sl;
 	}
 
@@ -100,7 +128,12 @@ public class AccessHistoryDAO extends EgovAbstractMapper {
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<UserVO> selectAccessHistoryExcel(Map<String, Object> param) throws SQLException {
 		List<UserVO> result = null;
-		result = (List<UserVO>) list("accessHistorySql.selectAccessHistoryExcel", param);
+		if(param.get("locale_type").equals("en")){
+			result = (List<UserVO>) list("accessHistorySql.selectAccessHistoryExcelEn", param);
+		}else {
+			result = (List<UserVO>) list("accessHistorySql.selectAccessHistoryExcel", param);
+		}
+		
 		return result;
 	}
 

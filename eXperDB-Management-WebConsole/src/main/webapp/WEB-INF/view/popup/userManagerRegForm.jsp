@@ -390,7 +390,7 @@
 										<spring:message code="user_management.user_name" />(*)
 									</label>
 									<div class="col-sm-3_0">
-										<input type="text" class="form-control" maxlength="9" id="ins_usr_nm" name="ins_usr_nm" onkeyup="fn_checkWord(this,9)" onblur="this.value=this.value.trim()" placeholder="9<spring:message code='message.msg188'/>" tabindex=2 />
+										<input type="text" class="form-control" maxlength="25" id="ins_usr_nm" name="ins_usr_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=2 />
 									</div>
 								</div>
 

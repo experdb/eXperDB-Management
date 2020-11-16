@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<div class="modal fade" id="pop_layer_rman" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="z-index:1060;">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 50px 320px;">
+<div class="modal fade" id="pop_layer_rman" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" style="z-index:9999;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 50px 400px;">
 		<div class="modal-content" style="width:1000px; ">		 	 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;cursor:pointer;" data-dismiss="modal">
