@@ -154,8 +154,8 @@ public class ScaleDAO {
 	 * @param param
 	 * @throws Exception
 	 */
-	public Map<String, Object> selectMonitorInfo(Map<String, Object> param) throws SQLException {
-		return (Map<String, Object>) session.selectOne("scale.selectMonitorInfo", param);
+	public Map<String, Object> selectConnectionFailure(Map<String, Object> param) throws SQLException {
+		return (Map<String, Object>) session.selectOne("scale.selectConnectionFailure", param);
 	}
 	
 
@@ -169,5 +169,15 @@ public class ScaleDAO {
 		 session.insert("scale.insertScaleServer", param);
 	}
 
+	/**
+	 * 에이전트 비정상 연결실패 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectMonitorInfo(Map<String, Object> param) throws SQLException {
+		return (Map<String, Object>) session.selectOne("scale.selectMonitorInfo", param);
+	}
+	
 
 }

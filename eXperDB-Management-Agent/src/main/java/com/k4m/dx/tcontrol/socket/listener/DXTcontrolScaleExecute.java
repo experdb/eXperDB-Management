@@ -44,10 +44,12 @@ public class DXTcontrolScaleExecute extends SocketCtl implements Job {
 
     	//scale load중이면 auto-scale 실행x
     	if (iScaleExecute <= 0) {
+			String strIpadr = "";
+
     	   	//1. 모니터링에서 cpu데이터 조회
     		try {
-    			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-
+    			strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
+    
     			//서버정보 조회
     			searchDbServerInfoVO.setIPADR(strIpadr);
     			dbServerInfo = service.selectDbServerInfo(searchDbServerInfoVO);
@@ -84,8 +86,26 @@ public class DXTcontrolScaleExecute extends SocketCtl implements Job {
     			e.printStackTrace();
     			return;
     		}
+    		
+    	   	//2. 에이전트 비정상 종료 조회 및 처리
+    		try {
+    			loadParam.put("IPADR", strIpadr);
+    			usageMap = serviceScale.selectConnectionFailure(loadParam);
 
-    		//2. auto scale 실행
+    			//바정상 종료 조회시
+    			if (usageMap != null) {
+    				if (!"".equals(usageMap.get("mem_used_rate").toString())) {
+    					//스케일 인 넣어주면됨
+    	    			serviceScale.failedScaleExecute(loadParam);
+    				}
+    			}
+    		} catch (Exception e) {
+    			errLogger.error("scale load데이터 저장 중 오류가 발생하였습니다. {}", e.toString());
+    			e.printStackTrace();
+    			return;
+    		}
+
+    		//3. auto scale 실행
     		try {
     			serviceScale.autoScaleExecute(loadParam);
     		} catch (Exception e) {

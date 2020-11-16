@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +27,7 @@ import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.listener.DXTcontrolScaleAwsExecute;
 import com.k4m.dx.tcontrol.util.FileUtil;
+import com.k4m.dx.tcontrol.util.RunCommandExec;
 
 /**
 * @author 박태혁
@@ -97,6 +99,113 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 		return  (Map<String, Object>)scaleDAO.selectMonitorInfo(param);
 	}
 
+	/* 에이전트 비정상 연결실패  */
+	public Map<String, Object> selectConnectionFailure(Map<String, Object> param)  throws Exception{
+		return  (Map<String, Object>)scaleDAO.selectConnectionFailure(param);
+	}
+
+
+	/* lastLoad값 받기  */
+	public String lastNodeCntSearch() throws Exception {
+		String scaleMainCmd = "";
+		String scale_path = "";
+		String lastNodeCnt = "0";
+
+		try {
+			scale_path = FileUtil.getPropertyValue("context.properties", "agent.scale_path");
+			
+			//scaleMainCmd = "psql -c \"select conninfo from nodes where type = 'primary' ; \" -t -d repmgr -U repmgr | grep -v conninfo | grep -v row  | sed \"s/host=//\" | awk '{print $1}'";
+			scaleMainCmd = "cat " + scale_path + "/setting.json";
+			RunCommandExec rMain = new RunCommandExec(scaleMainCmd);
+			//명령어 실행
+			rMain.run();
+
+			try {
+				rMain.join();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+
+			String strResultMessgeMain = rMain.getMessage();
+
+			if (!"".equals(strResultMessgeMain)) {
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse( strResultMessgeMain );
+				JSONObject jsonObj = (JSONObject) obj;
+				
+				String lastNodeCntStr = (String) jsonObj.get("staticLastNode");
+
+				if (!"".equals(lastNodeCntStr)) {
+					lastNodeCnt = lastNodeCntStr;
+				}
+			}
+		} catch (Exception ie) {
+			ie.printStackTrace();
+		}
+
+		return lastNodeCnt;
+	}
+	
+	/* 비정상종료 scale in 실행 */
+	public String failedScaleExecute(Map<String, Object> param) throws Exception {
+		JSONObject jObjResult = null;
+		String result = "failed";
+
+		try {
+			Map<String, Object> scaleparam = new HashMap<String, Object>();
+			Map<String, Object> logParam = new HashMap<String, Object>();
+			
+			SimpleDateFormat formatDate = new SimpleDateFormat ( "yyyMMddHHmmss");
+			Date time = new Date();
+			String timeId = formatDate.format(time);
+			
+	    	String clusterChk = "success";
+	    	int expansion_clusters = 1;
+	    	
+	    	int scaleLastNodeCnt = 0;
+	    	String scaleLastNode = lastNodeCntSearch();
+
+	    	if (scaleLastNode != null && !"".equals(scaleLastNode)) {
+	    		scaleLastNodeCnt = Integer.parseInt(scaleLastNode);
+	    	}
+	    	
+	    	//현재 인스턴스 갯수
+	    	//최종 갯수보다 작거나 같으면 실행 중지
+	    	int jObjCnt = scaleInstanceCnt(client, is, os);
+			if (jObjCnt <= scaleLastNodeCnt) {
+				clusterChk = "scale-in_fail";
+			}
+			
+			//scale 실행
+			if ("success".equals(clusterChk)) {
+				//process_id 셋팅
+				scaleparam.put("process_id", timeId);
+
+				scaleparam.put("auto_policy", "");
+				scaleparam.put("auto_policy_set_div", "");
+				scaleparam.put("auto_policy_time", "");
+				scaleparam.put("auto_level", "");
+	
+				jObjResult = this.scaleAwsConnect(scaleparam, "scaleIn", expansion_clusters, client, is, os);
+				
+				result = "success";
+			} else {
+				//실패시 실행이력 오류 insert만 하고 auto-scale 안함
+				if (!"".equals(clusterChk)) {
+					logParam = logSetting(scaleparam, timeId, "insert", clusterChk, 0);
+					this.insertScaleLog_G(logParam);
+				}
+				result = "failed";
+			}
+		} catch (Exception e) {
+			errLogger.error("비정상종료 scale in 실행중 오류가 발생하였습니다. {}", e.toString());
+			e.printStackTrace();
+		}
+
+		return result;
+		
+	}
+
 	/* auto scale 실행 */
 	public List<Map<String, Object>> autoScaleExecute(Map<String, Object> param) throws Exception {
 		List<Map<String, Object>> setResult = null;
@@ -114,6 +223,13 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 
 			//설정이 있는 경우만 실행
 			if (setResult.size() > 0) {
+		    	int scaleLastNodeCnt = 0;
+		    	String scaleLastNode = lastNodeCntSearch();
+
+		    	if (scaleLastNode != null && !"".equals(scaleLastNode)) {
+		    		scaleLastNodeCnt = Integer.parseInt(scaleLastNode);
+		    	}
+
 				for (int i = 0; i < setResult.size(); i++) {
 					Map<String, Object> scaleChkData = null;
 
@@ -168,7 +284,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 							if ("1".equals(scale_type_cd)) {
 								jObjCnt = scaleInstanceCnt(client, is, os);
 								
-								if (jObjCnt <= 2) {
+								if (jObjCnt <= scaleLastNodeCnt) {
 									logChk = false;
 								}
 							}
@@ -193,7 +309,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 									expansion_clusters = 1;
 
 									//scale-in 일때 현재 instance -1이 min클러스터보다 같거나 작을경우
-									if (min_clusters < 2) {
+									if (min_clusters < scaleLastNodeCnt) {
 										clusterChk = "";
 									} else {
 										if (jObjCnt < min_clusters) {
@@ -250,7 +366,6 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 		}
 
 		return setResult;
-		
 	}
 	
 	/**
