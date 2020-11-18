@@ -165,7 +165,7 @@ public interface ScheduleService {
 	int scd_nmCheck(String scd_nm) throws Exception;
 
 
-	List<Map<String, Object>> selectWrkScheduleList(int scd_id) throws Exception;
+	List<Map<String, Object>> selectWrkScheduleList(int scd_id, String locale_type) throws Exception;
 
 
 	List<Map<String, Object>> selectWorkDivList(String locale_type) throws Exception;

@@ -879,6 +879,40 @@
 				  )A  
 	 	</select>
 	 	
+	 	<select id="selectWrkScheduleListEN" resultType="Map" parameterType="HashMap">
+		/**
+	 	* Query ID : selectWrkScheduleList
+	 	* Description :  work List 조회
+	 	* Author : 변승우
+	 	**/	 	
+			        
+			SELECT 
+	      		(ROW_NUMBER() OVER()) AS ROWNUM
+	      		,(ROW_NUMBER() OVER()) AS IDX
+	      		,A.*
+	      	FROM(
+				     SELECT 
+				      		A.WRK_ID
+				      		, B.DB_SVR_ID
+				      		, C.SCD_ID
+				      		, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE B.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+				      		, B.DB_ID
+				      		, (CASE WHEN B.DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE B.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+				      		, B.BCK_BSN_DSCD
+				      		, (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE B.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+				      		, A.WRK_NM
+							, A.WRK_EXP
+							, C.NXT_EXE_YN
+							, A.BSN_DSCD
+							, (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE A.BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM		
+				      FROM T_WRKCNG_I A
+					  LEFT OUTER JOIN T_BCK_WRKCNG_I B ON B.WRK_ID= A.WRK_ID
+					  LEFT OUTER JOIN T_SCD_D C ON C.WRK_ID= A.WRK_ID
+					  WHERE 1=1
+					  AND C.SCD_ID = #{scd_id}
+				      ORDER BY C.EXE_ORD 
+				  )A  
+	 	</select>
 	 	
 	 	
 	 <select id="selectWorkDivList" resultType="Map" parameterType="HashMap">

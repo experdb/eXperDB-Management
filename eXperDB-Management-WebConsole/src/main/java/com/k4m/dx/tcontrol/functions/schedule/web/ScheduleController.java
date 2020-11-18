@@ -1292,7 +1292,8 @@ public class ScheduleController {
 				response.sendRedirect("/autError.do");
 			}else{
 				int scd_id  = Integer.parseInt(request.getParameter("scd_id").toString());
-				result = scheduleService.selectWrkScheduleList(scd_id);
+				String locale_type = LocaleContextHolder.getLocale().getLanguage();
+				result = scheduleService.selectWrkScheduleList(scd_id, locale_type);
 			}
 
 		} catch (Exception e) {
