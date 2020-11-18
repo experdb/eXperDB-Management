@@ -87,6 +87,20 @@ socketLogger.info("DXTcontrolScaleAwsExecute.scalejsonChk : " + scalejsonChk);
 			//* AWS 서버 확인 - AWS 서버일경우만 스케줄러 실행
         	if ("Y".equals(awsServerChk)) {
         		
+        	   	//에이전트 비정상 종료 조회 및 처리
+        		try {
+        			strAutoScaleTime = "0 0/1 * 1/1 * ? *";
+        			socketLogger.info("strAutoScaleTime1 : " + strAutoScaleTime);
+
+    	        	//스케줄러 실행(load 데이터 등록)
+    	        	JobDetail jobScale = newJob(DXTcontrolScaleFailExecute.class).withIdentity("jobName", "group3").build();
+    	        	CronTrigger triggerFailScale = newTrigger().withIdentity("trggerName", "group3").withSchedule(cronSchedule(strAutoScaleTime)).build(); //1분마다 테스트용 나중에 삭제
+    	        	scheduler.scheduleJob(jobScale, triggerFailScale);
+    	        	scheduler.start();
+        		} catch (Exception e) {
+        			e.printStackTrace();
+        		}        		
+
         		//aws서버일때 데이터 추가해야함
         		service.insertScaleServer();
         		
@@ -100,27 +114,24 @@ socketLogger.info("DXTcontrolScaleAwsExecute.scalejsonChk : " + scalejsonChk);
     	        	scheduler.scheduleJob(jobMons, triggerMons);
     	        	scheduler.start();
     	        	
-    	        	strAutoScaleTime = FileUtil.getPropertyValue("context.properties", "agent.scale_auto_reset_time");
-    	        	socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime : " + strAutoScaleTime);
+/*    	        	strAutoScaleTime = FileUtil.getPropertyValue("context.properties", "agent.scale_auto_reset_time");
+    	        	socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime : " + strAutoScaleTime);*/
 
-/*        			strAutoScaleTime = FileUtil.getPropertyValue("context.properties", "agent.scale_auto_reset_time");
-socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime : " + strAutoScaleTime);
+        			strAutoScaleTime = FileUtil.getPropertyValue("context.properties", "agent.scale_auto_reset_time");
+
         			//scale 기본사항 조회-스케줄러 시간 설정
         			param.put("db_svr_id", service.dbServerInfoSet());
         			scaleCommon = service.selectAutoScaleComCngInfo(param);
-socketLogger.info("DXTcontrolScaleAwsExecute.scaleCommon : " + scaleCommon);
+
         			if (scaleCommon != null) {
-socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime2 : " + strAutoScaleTime);
         				if (scaleCommon.get("auto_run_cycle") != null) {
- socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime3 : " + strAutoScaleTime);
         					int auto_run_cycle_num =Integer.parseInt(scaleCommon.get("auto_run_cycle").toString());
-socketLogger.info("DXTcontrolScaleAwsExecute.auto_run_cycle_num : " + auto_run_cycle_num);
         					if (auto_run_cycle_num > 0) {
                 				strAutoScaleTime = "0 0/" + auto_run_cycle_num + " * 1/1 * ? *";
         					}
         				}
         			}
-        			socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime4 : " + strAutoScaleTime);*/
+        			socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime4 : " + strAutoScaleTime);
 
     	        	//스케줄러 실행(load 데이터 등록)
     	        	JobDetail jobScale = newJob(DXTcontrolScaleExecute.class).withIdentity("jobName", "group2").build();

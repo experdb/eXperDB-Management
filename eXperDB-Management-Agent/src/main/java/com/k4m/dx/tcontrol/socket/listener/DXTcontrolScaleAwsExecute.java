@@ -68,9 +68,10 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 
 			//scale 실행일 경우
 			if ("scaleIn".equals(scaleSet) || "scaleOut".equals(scaleSet)) {
+
 				ScaleRunCommandExec scaleExec = new ScaleRunCommandExec(scaleCmd, jObj, 0);
 				scaleExec.start();
-				
+
 				jObj.put(ProtocolID.SCALE_SET,  jObj.get(ProtocolID.MONITERING).toString());
 				scaleSubCmd = scaleCmdSetting(jObj);
 
@@ -82,9 +83,11 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 				strErrCode = "";
 				strErrMsg = "";
 			} else { //조회인경우
+
 				//조회 쿼리돌리고 값 리턴함
 				//instance ip 찾기
-				String masterNm = "";				
+				String masterNm = "";		
+
 				if ("instanceCnt".equals(searchGbn) || "scaleIngChk".equals(searchGbn))  {
 					masterNm = masterIpSearch();
 					//scaleCmd = scaleCmd + " \"Name=private-ip-address,Values=" + masterIp + "\"";
