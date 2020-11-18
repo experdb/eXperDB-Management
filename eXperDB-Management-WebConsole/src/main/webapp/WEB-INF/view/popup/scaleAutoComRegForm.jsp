@@ -169,7 +169,7 @@
 										</a>
 									</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control" maxlength="2" id="com_auto_run_cycle" name="com_auto_run_cycle" onKeyUp="chk_Number(this);" placeholder='<spring:message code="eXperDB_scale.msg16" />'>
+										<input type="text" class="form-control" maxlength="2" id="com_auto_run_cycle" name="com_auto_run_cycle" onKeyUp="chk_Number(this);" placeholder='<spring:message code="eXperDB_scale.msg16" />' disabled>
 									</div>
 									<label class="col-sm-1 col-form-label"><spring:message code="eXperDB_scale.time_minute"/></label>
 								</div>

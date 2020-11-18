@@ -280,38 +280,46 @@
 						render: function (data, type, full){
 	 						if (full.wrk_type == "TC003301") {
 		 						var html = "";
-								if (full.policy_type_nm == "CPU") {
-									html += "<div class='badge badge-pill badge-info'>";
-									html += '<i class="mdi mdi-vector-square"></i>';
-									html += full.policy_type_nm;
-									html += "</div>";
-								} else {
+								if (typeof full.policy_type_nm == "undefined") {
 									html += "<div class='badge badge-pill' style='color: #fff;background-color: #6600CC;'>";
 									html += '<i class="mdi mdi-gender-transgender"></i>';
-									html += full.policy_type_nm;
+									html += '<spring:message code="eXperDB_scale.msg32" />';
 									html += "</div>";
+								} else {			 						
+									if (full.policy_type_nm == "CPU") {
+										html += "<div class='badge badge-pill badge-info'>";
+										html += '<i class="mdi mdi-vector-square"></i>';
+										html += full.policy_type_nm;
+										html += "</div>";
+									} else {
+										html += "<div class='badge badge-pill' style='color: #fff;background-color: #6600CC;'>";
+										html += '<i class="mdi mdi-gender-transgender"></i>';
+										html += full.policy_type_nm;
+										html += "</div>";
+									}
+
+									html += " (";
+			 						if (full.auto_policy_set_div == "1") {
+		 								html += '<spring:message code="eXperDB_scale.policy_time_1" />';
+			 						} else {
+		 								html += '<spring:message code="eXperDB_scale.policy_time_2" />' ;
+			 						}
+			 						
+			 						html += ' ' + full.auto_level;
+			 						
+			 						if (full.auto_policy == "TC003501") {
+		 								html += '%';
+			 						}
+			 						
+			 						html += ' ' + full.auto_policy_time + "minutes) ";
+			 						
+			 						if (full.scale_type == "1") {
+			 							html += '<spring:message code="eXperDB_scale.under" />';
+			 						} else {
+			 							html += '<spring:message code="eXperDB_scale.or_more" />';
+			 						}
 								}
 
-								html += " (";
-		 						if (full.auto_policy_set_div == "1") {
-	 								html += '<spring:message code="eXperDB_scale.policy_time_1" />';
-		 						} else {
-	 								html += '<spring:message code="eXperDB_scale.policy_time_2" />' ;
-		 						}
-		 						
-		 						html += ' ' + full.auto_level;
-		 						
-		 						if (full.auto_policy == "TC003501") {
-	 								html += '%';
-		 						}
-		 						
-		 						html += ' ' + full.auto_policy_time + "minutes) ";
-		 						
-		 						if (full.scale_type == "1") {
-		 							html += '<spring:message code="eXperDB_scale.under" />';
-		 						} else {
-		 							html += '<spring:message code="eXperDB_scale.or_more" />';
-		 						}
 	 						}
 	 						return html;
 						},
@@ -723,39 +731,46 @@
 					$("#d_wrk_type_nm").html(nvlPrmSet(execute_type_nm, "-"));
 
 					if (result.wrk_type == "TC003301") {
-						if (result.policy_type_nm == "CPU") {
-							auto_policy_nm += "<div class='badge badge-pill badge-info'>";
-							auto_policy_nm += '<i class="mdi mdi-vector-square"></i>';
-							auto_policy_nm += result.policy_type_nm;
-							auto_policy_nm += "</div>";
-						} else {
+						if (typeof result.policy_type_nm == "undefined") {
 							auto_policy_nm += "<div class='badge badge-pill' style='color: #fff;background-color: #6600CC;'>";
 							auto_policy_nm += '<i class="mdi mdi-gender-transgender"></i>';
-							auto_policy_nm += result.policy_type_nm;
+							auto_policy_nm += '<spring:message code="eXperDB_scale.msg32" />';
 							auto_policy_nm += "</div>";
-						}
+						} else {
+							if (result.policy_type_nm == "CPU") {
+								auto_policy_nm += "<div class='badge badge-pill badge-info'>";
+								auto_policy_nm += '<i class="mdi mdi-vector-square"></i>';
+								auto_policy_nm += result.policy_type_nm;
+								auto_policy_nm += "</div>";
+							} else {
+								auto_policy_nm += "<div class='badge badge-pill' style='color: #fff;background-color: #6600CC;'>";
+								auto_policy_nm += '<i class="mdi mdi-gender-transgender"></i>';
+								auto_policy_nm += result.policy_type_nm;
+								auto_policy_nm += "</div>";
+							}
 
-						auto_policy_nm += " (";
-						
-	 					if (result.auto_policy_set_div == "1") {
-	 						auto_policy_nm += '<spring:message code="eXperDB_scale.policy_time_1" />';
-	 					} else {
-	 						auto_policy_nm += '<spring:message code="eXperDB_scale.policy_time_2" />';
-	 					}
-	 					
-	 					auto_policy_nm += ' ' + result.auto_level;
-	 					
- 						if (result.auto_policy == "TC003501") {
- 							auto_policy_nm += '%';
+							auto_policy_nm += " (";
+							
+		 					if (result.auto_policy_set_div == "1") {
+		 						auto_policy_nm += '<spring:message code="eXperDB_scale.policy_time_1" />';
+		 					} else {
+		 						auto_policy_nm += '<spring:message code="eXperDB_scale.policy_time_2" />';
+		 					}
+		 					
+		 					auto_policy_nm += ' ' + result.auto_level;
+		 					
+	 						if (result.auto_policy == "TC003501") {
+	 							auto_policy_nm += '%';
+							}
+	 						
+	 						auto_policy_nm += ' ' + result.auto_policy_time + "minutes) ";
+	 						
+	 						if (result.scale_type == "1") {
+	 							auto_policy_nm += '<spring:message code="eXperDB_scale.under" />';
+	 						} else {
+	 							auto_policy_nm += '<spring:message code="eXperDB_scale.or_more" />';
+	 						}
 						}
- 						
- 						auto_policy_nm += ' ' + result.auto_policy_time + "minutes) ";
- 						
- 						if (result.scale_type == "1") {
- 							auto_policy_nm += '<spring:message code="eXperDB_scale.under" />';
- 						} else {
- 							auto_policy_nm += '<spring:message code="eXperDB_scale.or_more" />';
- 						}
 					}
 					$("#d_auto_policy_nm").html(nvlPrmSet(auto_policy_nm, "-"));
 
