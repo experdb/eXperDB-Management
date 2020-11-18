@@ -86,24 +86,6 @@ public class DXTcontrolScaleExecute extends SocketCtl implements Job {
     			e.printStackTrace();
     			return;
     		}
-    		
-    	   	//2. 에이전트 비정상 종료 조회 및 처리
-    		try {
-    			loadParam.put("IPADR", strIpadr);
-    			usageMap = serviceScale.selectConnectionFailure(loadParam);
-
-    			//바정상 종료 조회시
-    			if (usageMap != null) {
-    				if (!"".equals(usageMap.get("mem_used_rate").toString())) {
-    					//스케일 인 넣어주면됨
-    	    			serviceScale.failedScaleExecute(loadParam);
-    				}
-    			}
-    		} catch (Exception e) {
-    			errLogger.error("scale load데이터 저장 중 오류가 발생하였습니다. {}", e.toString());
-    			e.printStackTrace();
-    			return;
-    		}
 
     		//3. auto scale 실행
     		try {
