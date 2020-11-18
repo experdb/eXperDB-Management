@@ -67,11 +67,15 @@ public class ScaleRunCommandExec extends Thread{
 		this.dbSvrIpadrId = _jObj.get(ProtocolID.DB_SVR_IPADR_ID).toString();     //DB_서버_ID_IP
 		this.dbSvrId = _jObj.get(ProtocolID.DB_SVR_ID).toString();                //DB_서버_ID
 		this.wrkType = _jObj.get(ProtocolID.WRK_TYPE).toString();               //작업유형
-		this.autoPolicy = _jObj.get(ProtocolID.AUTO_POLICY).toString();         //AUTO_정책
+
+		if (_jObj.get(ProtocolID.AUTO_POLICY) != null) {
+			this.autoPolicy = _jObj.get(ProtocolID.AUTO_POLICY).toString();         //AUTO_정책
+			this.autoPolicySetDiv = _jObj.get(ProtocolID.AUTO_POLICY_SET_DIV).toString();  
+			this.autoPolicyTime = _jObj.get(ProtocolID.AUTO_POLICY_TIME).toString(); 
+			this.autoLevel = _jObj.get(ProtocolID.AUTO_LEVEL).toString();  
+		}
+
 		this.scaleCount = _jObj.get(ProtocolID.SCALE_COUNT_SET).toString();     //scale 갯수
-		this.autoPolicySetDiv = _jObj.get(ProtocolID.AUTO_POLICY_SET_DIV).toString();  
-		this.autoPolicyTime = _jObj.get(ProtocolID.AUTO_POLICY_TIME).toString(); 
-		this.autoLevel = _jObj.get(ProtocolID.AUTO_LEVEL).toString();  
 
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 	}
@@ -92,17 +96,17 @@ public class ScaleRunCommandExec extends Thread{
 		
         BufferedReader successBufferReaderRe = null; // 성공 버퍼
         BufferedReader errorBufferReaderRe = null; // 오류 버퍼
-
+        socketLogger.info("ScaleRunCommandExec5 --> ");
         ScaleServiceImpl service = (ScaleServiceImpl) context.getBean("ScaleService");
         Map<String, Object> logParam = new HashMap<String, Object>();	
         ProcessBuilder runBuilder = null;
-
+        socketLogger.info("iMode --> " + iMode);
 		if(iMode == 0) {
-
+	        socketLogger.info("iMode12 --> " + iMode);
 			Process p = null;
 			try {
 				String path = FileUtil.getPropertyValue("context.properties", "agent.scale_path");
-
+				strCmd = strCmd + " >/dev/null 2>1 &";
 				List runCmd = new ArrayList();
 				runCmd.add("/bin/bash");
 				runCmd.add("-c");
@@ -118,10 +122,10 @@ public class ScaleRunCommandExec extends Thread{
 
 //socketLogger.info("strCmdstrCmdstrCmdstrCmdstrCmdstrCmdstrCmd: " + Arrays.toString(cmdPw));
 			//	p = runtime.exec(cmdPw);
-
+				socketLogger.info("out.ready() --> ");
 				logParam = logSetting(timeId, scaleSet, loginId, "insert", strResult, retVal, scaleCount);
 				service.insertScaleLog_G(logParam);
-
+/*
 				p.waitFor();
 
 				if ( p.exitValue() != 0 ) {   
@@ -153,7 +157,9 @@ public class ScaleRunCommandExec extends Thread{
 				}
 
 				this.returnMessage = strResult;
-				this.retVal = strReturnVal;
+				this.retVal = strReturnVal;*/
+				socketLogger.info("out.ready()2 --> ");
+				strReturnVal = "success";	
 				
 				logParam = logSetting(timeId, scaleSet, loginId, "update", strResult, retVal, scaleCount);
 				service.insertScaleLog_G(logParam);
@@ -211,6 +217,7 @@ public class ScaleRunCommandExec extends Thread{
 					String strRstCnt = null;  
 					successBufferReader = new BufferedReader(new InputStreamReader(pw.getInputStream()));
 
+					int iCount = 0;
     				while ((strRstCnt = successBufferReader.readLine()) != null) {
     					socketLogger.info("---------------------------------------------------------------------------------------------------------");
     					socketLogger.info(strRstCnt);
@@ -219,6 +226,14 @@ public class ScaleRunCommandExec extends Thread{
         				strRstCnt = strRstCnt.trim();
         				if(strRstCnt.equals("0") ) //0일 경우 scale process 완료
         				{
+        					retVal = "success";
+        					logParam = logSetting(timeId, scaleSet, loginId, "update", strResult, retVal, scaleCount);
+        					service.insertScaleLog_G(logParam);
+        					
+        					iCount = 1;
+        				}
+        				
+        				if (iCount == 1) {
         					return;
         				}
     	            }
