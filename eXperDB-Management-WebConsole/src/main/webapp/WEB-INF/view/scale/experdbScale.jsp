@@ -216,7 +216,7 @@
 				if (nvlPrmSet(result.data, '') != '') {
 					table.rows.add(result.data).draw();
 				}
-				
+
 				fn_selectScaleChk("first");
 			}
 		});
@@ -230,6 +230,10 @@
 		//scale 체크 조회
 		var wrk_id = "";
 		var scale_set = "";
+		
+		if (typeof gbn == "undefined" || gbn == null || gbn == "") {
+			gbn = "";
+		}
 
 		$.ajax({
 			url : "/scale/selectScaleLChk.do",
@@ -333,12 +337,18 @@
 					}
 				}
 				fn_buttonAut(wrk_id, scale_set);
+				
+				fn_selectScaleMain(gbn);
 			}
 		}); 
 
 		if (gbn == null || gbn == "") {
 			$('#loading').hide();
 		}
+
+	}
+	
+	function fn_selectScaleMain(gbn) {
 		
  		$.ajax({
 			url : "/scale/selectScaleList.do",
@@ -564,19 +574,23 @@
 		var wrk_id_val =  "";
 		var defaultCnt = 0;
 
-		//scale in 일때 default 만 있는 겨우
 		if (gbn == 'scaleIn') {
-			$(".default_hide").each(function(){
-				if ($(this).val() == 'N') {
-					defaultCnt = defaultCnt + 1;
-				}
-			});
-
+			//scale in 일때 default 만 있는 경우
+			if ($(".default_hide").length > 0) {
+				$(".default_hide").each(function(){
+					if ($(this).val() == 'N') {
+						defaultCnt = defaultCnt + 1;
+					}
+				});
+			}
+			
 			if (defaultCnt <= 0) {
 				showSwalIcon('<spring:message code="eXperDB_scale.msg13" />', '<spring:message code="common.close" />', '', 'error');
 				return;
 			}
 		}
+		
+		$("#mainTableRowCnt", "#frmExecutePopup").val(defaultCnt);
 
 		//scale 이 실행되고 있는 지 체크 후 진행
  		$.ajax({
@@ -619,7 +633,6 @@
 	 * scale_in_out count pop
 	 ******************************************************** */
 	function fn_scaleInOut(gbn){
-		
 	    $('#title_gbn', '#frmExecutePopup').val(gbn);
 	    $('#db_svr_id', '#frmExecutePopup').val('${db_svr_id}');
 
@@ -652,6 +665,8 @@
 				}
 				
 				$("#exe_scale_count", "#scaleExecuteForm").val("1");
+				
+				fn_scaleExeSet();
 
 				$('#pop_layer_scale_exe').modal("show");
 			}
@@ -676,6 +691,7 @@
 <form name="frmExecutePopup" id="frmExecutePopup">
 	<input type="hidden" name="title_gbn"  id="title_gbn" />
 	<input type="hidden" name="db_svr_id"  id="db_svr_id" />
+	<input type="hidden" name="mainTableRowCnt"  id="mainTableRowCnt" />
 </form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">

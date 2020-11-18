@@ -330,6 +330,17 @@
 						className : "dt-center", defaultContent : ""
 					},
 					{
+						data : "wrk_dtm", 
+	 					render: function (data, type, full){
+	 						var html = '';
+							if(full.wrk_id == "2"){
+								html = full.wrk_dtm;
+							}
+							return html;
+						},
+						className : "dt-center", defaultContent : ""
+					},
+					{
 						data : "wrk_id", 
 		 				render: function (data, type, full){
  		 						var html = '';
@@ -681,6 +692,7 @@
 					$("#d_auto_policy_nm").html("");
 					$("#d_wrk_strt_dtm").html("");
 					$("#d_wrk_end_dtm").html("");
+					$("#d_wrk_dtm").html("");
 					$("#d_wrk_stat").html("");				
 					$("#d_exe_rslt_cd_nm").html("");
 
@@ -749,6 +761,7 @@
 
 					$("#d_wrk_strt_dtm").html(nvlPrmSet(result.wrk_strt_dtm, "-"));
 					$("#d_wrk_end_dtm").html(nvlPrmSet(result.wrk_end_dtm, "-"));
+					$("#d_wrk_dtm").html(nvlPrmSet(result.wrk_dtm, "-"));
 
 					if (result.wrk_id == "1") {
 						wrk_stat = '<div class="loader-scale-box"><div class="dot-opacity-loader"><span></span><span></span><span></span><span></span></div><span class="text-warning"><spring:message code="restore.progress" /></span></div>';
@@ -1032,6 +1045,7 @@
 												<th width="220"><spring:message code="eXperDB_scale.auto_policy_nm" /></th>
 												<th width="90"><spring:message code="eXperDB_scale.work_start_time" /></th>
 												<th width="90"><spring:message code="eXperDB_scale.work_end_time" /></th>
+												<th width="90"><spring:message code="eXperDB_scale.working_time" /></th>
 												<th width="100"><spring:message code="eXperDB_scale.progress" /></th>
 												<th width="100"><spring:message code="common.status" /></th>
 											</tr>
