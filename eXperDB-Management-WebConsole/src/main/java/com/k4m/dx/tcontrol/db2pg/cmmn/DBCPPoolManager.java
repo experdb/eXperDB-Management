@@ -185,7 +185,15 @@ public class DBCPPoolManager {
 					System.out.println("DB_TYPE =" + DB_TYPE);
 					driver = "com.tmax.tibero.jdbc.TbDriver";
 					connectURI = "jdbc:tibero:thin:@"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+":"+serverObj.get("DATABASE_NAME");
-					break;										
+					break;								
+					
+				//MariaDB
+				case "TC002209" :
+					DBMS_TYPE = "MariaDB";
+					driver ="org.mariadb.jdbc.Driver";
+					connectURI = "jdbc:mariadb://"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+"/"+serverObj.get("DATABASE_NAME");
+					break;		
+					
     			}
 			
 			// 1. JDBC 드라이버 로드
@@ -264,13 +272,13 @@ public class DBCPPoolManager {
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002206");*/
 					
 			//CUBRID
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.200");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "33000");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "demodb");
-			serverObj.put(ClientProtocolID.USER_ID, "db2pg");
-			serverObj.put(ClientProtocolID.USER_PWD, "db2pg");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002207");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.105");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "3306");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002209");
 			
 			//Tibero
 			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");

@@ -39,6 +39,8 @@ function fn_init_dbmsInfo() {
 							html += "CUBRID";
 						}else if(data == "TC002208"){
 							html += "Tibero";
+						}else if(data == "TC002209"){
+							html += "MariaDB";
 						}
 						return html;
 					},
