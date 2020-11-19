@@ -615,7 +615,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 			
 			//서버정보 조회
 			scaleChkData = scaleDAO.selectDbServerIpadrInfo(scaleparam);	
-
+			
 			if (scaleChkData != null) {
 				db_svr_ipadr_id = Integer.parseInt(scaleChkData.get("db_svr_ipadr_id").toString());
 			}

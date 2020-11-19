@@ -67,8 +67,6 @@ public class DXTcontrolScale extends SocketCtl {
 			}
 			
 			if (scalejsonChk != null) {
-socketLogger.info("DXTcontrolScaleAwsExecute.scalejsonChk : " + scalejsonChk);
-				
 				scalejsonChk = scalejsonChk.trim();
 
 				if (scalejsonChk.contains("/usr/bin/aws")) {
@@ -88,7 +86,7 @@ socketLogger.info("DXTcontrolScaleAwsExecute.scalejsonChk : " + scalejsonChk);
         	if ("Y".equals(awsServerChk)) {
         		
         	   	//에이전트 비정상 종료 조회 및 처리
-        		try {
+/*        		try {
         			strAutoScaleTime = "0 0/1 * 1/1 * ? *";
         			socketLogger.info("strAutoScaleTime1 : " + strAutoScaleTime);
 
@@ -99,7 +97,7 @@ socketLogger.info("DXTcontrolScaleAwsExecute.scalejsonChk : " + scalejsonChk);
     	        	scheduler.start();
         		} catch (Exception e) {
         			e.printStackTrace();
-        		}        		
+        		}   */     		
 
         		//aws서버일때 데이터 추가해야함
         		service.insertScaleServer();
