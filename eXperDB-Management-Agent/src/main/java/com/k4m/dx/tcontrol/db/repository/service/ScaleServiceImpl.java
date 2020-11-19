@@ -611,13 +611,13 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 
 		try {
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-			
 			scaleparam.put("IPADR", strIpadr);
 			
 			//서버정보 조회
-			scaleChkData = scaleDAO.selectDbServerIpadrInfo(scaleparam);			
+			scaleChkData = scaleDAO.selectDbServerIpadrInfo(scaleparam);	
+
 			if (scaleChkData != null) {
-				db_svr_ipadr_id = (int)scaleChkData.get("db_svr_ipadr_id");
+				db_svr_ipadr_id = Integer.parseInt(scaleChkData.get("db_svr_ipadr_id").toString());
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

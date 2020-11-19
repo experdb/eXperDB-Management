@@ -223,7 +223,9 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 					if ("{\"Instances\":[]}".equals(scalejsonStr)) {
 						result = new JSONObject();
 					}
-						
+System.out.println("scalejsonStr.contains(pending)=======================" + scalejsonStr.contains("pending"));
+System.out.println("scalejsonStr.contains(shutting-down)=======================" + scalejsonStr.contains("shutting-down"));
+System.out.println("scalejsonChk=======================" + scalejsonChk);
 					if (scalejsonStr.contains("pending")) {
 						result.put("wrk_id", "1");
 						result.put("scale_type", "2");
@@ -612,18 +614,19 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 							privateIpAddressVal = (String) instancesObj.get("PrivateIpAddress");
 						}
 						
-						String key_name_val = (String) instancesObj.get("KeyName");
+						String key_name_val = (String) instancesObj.get("TagsName");
 
 						//재확인 필요 일단 넣어놈 - staticLastNode 수를 확인함
 						if (scalejsonChk != null && privateIpAddressVal != null) {
 							if (!"".equals(scalejsonChk) && !"".equals(privateIpAddressVal)) {
-								if (Integer.parseInt(privateIpAddressVal.replaceAll("\\.","")) >= Integer.parseInt(scalejsonChk.replaceAll("\\.",""))) {
+
+/*								if (Integer.parseInt(privateIpAddressVal.replaceAll("\\.","")) >= Integer.parseInt(scalejsonChk.replaceAll("\\.",""))) {
 									default_chk = "N";
-								} else {
+								} else {*/
 									//추가
 									String key_name_val_last = key_name_val.substring(key_name_val.length()-1, key_name_val.length());
-									if ("master".contains(key_name_val) || !isInteger(key_name_val_last)) {
 
+									if ("master".contains(key_name_val) || !isInteger(key_name_val_last)) {
 										if (iLastNodeCnt >= iLastNodeChkCnt) {
 											default_chk = "Y";
 											iLastNodeChkCnt = iLastNodeChkCnt + 1;
@@ -633,7 +636,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 									} else {
 										default_chk = "N";
 									}
-								}
+/*								}*/
 							} else {
 								default_chk = "N";
 							}
@@ -1100,7 +1103,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		if (!moniteringGbn.equals("")) {
 			scaleSet = moniteringGbn;
 		}
-System.out.println("scaleSet======================" + scaleSet);
+
 		//scale 실행
 		if (!scaleSet.isEmpty()) {
 			if ("scaleIn".equals(scaleSet)) {

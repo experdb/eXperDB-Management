@@ -66,14 +66,18 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 			String strResultSubMessge = "";
 			String scaleSubCmd = "";
 
+socketLogger.info("scaleSet : " + scaleSet);
+socketLogger.info("scaleCmd : " + scaleCmd);
+socketLogger.info("scaleIn_check : " + scaleSet);
 			//scale 실행일 경우
 			if ("scaleIn".equals(scaleSet) || "scaleOut".equals(scaleSet)) {
+socketLogger.info("jObj : " + jObj);
 				ScaleRunCommandExec scaleExec = new ScaleRunCommandExec(scaleCmd, jObj, 0);
 				scaleExec.start();
-				
+socketLogger.info("jObj11 : ");
 				jObj.put(ProtocolID.SCALE_SET,  jObj.get(ProtocolID.MONITERING).toString());
 				scaleSubCmd = scaleCmdSetting(jObj);
-
+socketLogger.info("scaleSubCmd : " + scaleSubCmd);
 				//scale 확인
 				ScaleRunCommandExec scaleExecWatch = new ScaleRunCommandExec(scaleSubCmd, jObj, 1);
 				scaleExecWatch.start();
@@ -82,9 +86,11 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 				strErrCode = "";
 				strErrMsg = "";
 			} else { //조회인경우
+socketLogger.info("jObj123123 : ");
 				//조회 쿼리돌리고 값 리턴함
 				//instance ip 찾기
-				String masterNm = "";				
+				String masterNm = "";		
+socketLogger.info("searchGbn : " + searchGbn);
 				if ("instanceCnt".equals(searchGbn) || "scaleIngChk".equals(searchGbn))  {
 					masterNm = masterIpSearch();
 					//scaleCmd = scaleCmd + " \"Name=private-ip-address,Values=" + masterIp + "\"";

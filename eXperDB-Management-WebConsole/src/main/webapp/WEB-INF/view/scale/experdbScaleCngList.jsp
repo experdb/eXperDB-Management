@@ -355,7 +355,8 @@ a:hover.tip span {
 				{data : "frst_reg_dtm", defaultContent : ""},
 				{data : "lst_mdfr_id", defaultContent : ""},
 				{data : "lst_mdf_dtm", defaultContent : ""},
-				{data : "wrk_id", defaultContent : "", visible: false }
+				{data : "wrk_id", defaultContent : "", visible: false },
+				{data : "useyn", defaultContent : "", visible: false }
 			]
 		});
 
@@ -849,12 +850,25 @@ a:hover.tip span {
 		var wrk_id = "";
 		var scale_set = "";
 		var confile_title = "";
+		var i_exe_status = 0;
 
 		var datas = table.rows('.selected').data();
 
 		if(datas.length < 1){
 			showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
+		}
+		
+		for (var i = 0; i < datas.length; i++) {
+ 			if(datas[i].useyn == "Y"){
+				i_exe_status = i_exe_status + 1;
+			}
+		}
+
+		if (i_exe_status > 0) {
+			validateMsg = '<spring:message code="eXperDB_scale.msg33"/>';
+			showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+			return;
 		}
 
 		confile_title = '<spring:message code="menu.eXperDB_scale_settings" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
@@ -917,12 +931,19 @@ a:hover.tip span {
 	 ******************************************************** */
 	function fn_mod_popup(){
 		var datas = table.rows('.selected').data();
+		var validateMsg = "";
 		
 		if (datas.length <= 0) {
 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
 			return;
 		}else if(datas.length > 1){
 			showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
+			return;
+		}
+
+		if(table.row('.selected').data().useyn == "Y"){
+			validateMsg = '<spring:message code="eXperDB_scale.msg33"/>';
+			showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
 

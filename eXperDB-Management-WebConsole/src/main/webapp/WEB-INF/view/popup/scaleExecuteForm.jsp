@@ -25,16 +25,6 @@
 	 * 초기 실행
 	 ******************************************************** */
 	$(window.document).ready(function() {
-		
-		var title_gbn_param = $("#exe_title_gbn", "#scaleExecuteForm").val();
-		if (title_gbn_param == "scaleIn") {
-			$("#msg_scale_type", "#scaleExecuteForm").html('<spring:message code="etc.etc38"/>');
-			$("#spNodrCnt", "#scaleExecuteForm").html('<spring:message code="eXperDB_scale.reduction_node_cnt"/>');
-		} else {
-			$("#msg_scale_type", "#scaleExecuteForm").html('<spring:message code="etc.etc39"/>');
-			$("#spNodrCnt", "#scaleExecuteForm").html('<spring:message code="eXperDB_scale.expansion_node_cnt"/>');
-		}
-
 	    $("#scaleExecuteForm").validate({
 	        rules: {
 	        	exe_scale_count: {
@@ -61,14 +51,40 @@
 	        }
 		});
 	});
+	
+	/* ********************************************************
+	 * scale 실행팝업 초기화
+	 ******************************************************** */
+	function fn_scaleExeSet() {
+		var title_gbn_param = $("#exe_title_gbn", "#scaleExecuteForm").val();
+		if (title_gbn_param == "scaleIn") {
+			$("#msg_scale_type", "#scaleExecuteForm").html('<spring:message code="etc.etc38"/>');
+			$("#spNodrCnt", "#scaleExecuteForm").html('<spring:message code="eXperDB_scale.reduction_node_cnt"/>');
+		} else {
+			$("#msg_scale_type", "#scaleExecuteForm").html('<spring:message code="etc.etc39"/>');
+			$("#spNodrCnt", "#scaleExecuteForm").html('<spring:message code="eXperDB_scale.expansion_node_cnt"/>');
+		}
+	}
 
 	/* ********************************************************
 	 * scale in Out 실행
 	 ******************************************************** */
 	function fn_scaleInOutExecute() {
 		var scaleMsg = "";
+		var exe_scale_count = "";
+		var main_TableRow_Cnt = "";
 
-		//중복 체크
+		if ($("#exe_title_gbn", "#scaleExecuteForm").val() == "scaleIn") {
+			exe_scale_count = nvlPrmSet($("#exe_scale_count", "#scaleExecuteForm").val(),0);
+			main_TableRow_Cnt = nvlPrmSet($("#mainTableRowCnt", "#frmExecutePopup").val(),0);
+			
+			if (exe_scale_count > main_TableRow_Cnt) {
+				msgResult= '<spring:message code="eXperDB_scale.msg31" />';
+				showSwalIcon(fn_strBrReplcae(msgResult), '<spring:message code="common.close" />', '', 'error');
+				return;
+			}
+		}
+
 		$.ajax({
 			async : false,
 			url : "/scale/scaleInOutSet.do",
@@ -83,11 +99,11 @@
 			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {

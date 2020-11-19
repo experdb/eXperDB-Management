@@ -174,7 +174,7 @@ socketLogger.info("cmd --> " + cmd);
 				while ( out.ready() ) {
 					strResult += out.readLine();
 					
-					socketLogger.info("out.ready() --> " + strResult);
+				/*	socketLogger.info("out.ready() --> " + strResult);*/
 				}
 				out.close();
 				strReturnVal = "success";

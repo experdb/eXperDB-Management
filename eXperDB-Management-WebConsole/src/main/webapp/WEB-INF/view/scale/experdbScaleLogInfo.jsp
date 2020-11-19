@@ -63,6 +63,12 @@
 									</tr>
 									<tr>
 										<td class="py-1" style="word-break:break-all;">
+											<spring:message code="eXperDB_scale.working_time"/>
+										</td>
+										<td style="word-break:break-all;" id="d_wrk_dtm"></td>
+									</tr>
+									<tr>
+										<td class="py-1" style="word-break:break-all;">
 											<spring:message code="eXperDB_scale.progress"/>
 										</td>
 										<td style="word-break:break-all;" id="d_wrk_stat"></td>

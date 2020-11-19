@@ -355,56 +355,59 @@
 	</insert>
 	
 	
-	<select id="selectScheduleList" resultType="hashMap">
+<select id="selectScheduleList" resultType="hashMap">
 		/**
 	 	* Query ID : selectScheduleList
 	 	* Description :  스케줄  List 조회
 	 	* Author : 변승우
 	 	**/
-     	   SELECT 
-	         (ROW_NUMBER() OVER()) AS ROWNUM
-			, (ROW_NUMBER() OVER()) AS IDX
-			, AA.DB_SVR_NM
-			, AA.SCD_ID
-			, AA.SCD_NM
-			, AA.SCD_CNDT
-			, AA.SCD_EXP
-			, AA.EXE_PERD_CD
-			, AA.EXE_DT
-			, AA.EXE_MONTH
-			, AA.EXE_DAY
-			, AA.EXE_HMS
-			, AA.WRK_CNT
-			, AA.PREV_EXE_DTM
-			, AA.NXT_EXE_DTM
-			, AA.FRST_REGR_ID
-			, AA.FRST_REG_DTM
-			, AA.LST_MDFR_ID
-			, AA.LST_MDF_DTM
-	   FROM(		
-		SELECT DISTINCT
-			coalesce((select DB_SVR_NM from t_dbsvr_i where db_svr_id = d.db_svr_id),'MIGRATION') as DB_SVR_NM 
-      		, A.SCD_ID      		
-			, A.SCD_NM
-			, A.SCD_CNDT
-            , A.SCD_EXP
-			, A.EXE_PERD_CD
-			, A.EXE_DT
-			, A.EXE_MONTH
-			, A.EXE_DAY
-			, A.EXE_HMS
-			, (SELECT COUNT(*) FROM T_SCD_D WHERE SCD_ID = A.SCD_ID) AS WRK_CNT
-			, TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
-			, TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
-			, A.FRST_REGR_ID
-			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-			, A.LST_MDFR_ID
-			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-		FROM T_SCD_M A, T_SCD_D B
-		LEFT OUTER JOIN T_BCK_WRKCNG_I D ON D.WRK_ID= B.WRK_ID 
-	    LEFT OUTER JOIN T_DB2PG_TRSF_WRK_INF E ON E.WRK_ID = B.WRK_ID
-		WHERE 1=1	
-      	AND A.SCD_ID = B.SCD_ID
+ 		SELECT
+                      (ROW_NUMBER() OVER()) AS ROWNUM
+                       , (ROW_NUMBER() OVER()) AS IDX
+                       , AA.db_svr_id
+                       , AA.DB_SVR_NM
+                       , AA.SCD_ID
+                       , AA.SCD_NM
+                       , AA.SCD_CNDT
+                       , AA.SCD_EXP
+                       , AA.EXE_PERD_CD
+                       , AA.EXE_DT
+                       , AA.EXE_MONTH
+                       , AA.EXE_DAY
+                       , AA.EXE_HMS
+                       , AA.WRK_CNT
+                       , AA.PREV_EXE_DTM
+                       , AA.NXT_EXE_DTM
+                       , AA.FRST_REGR_ID
+                       , AA.FRST_REG_DTM
+                       , AA.LST_MDFR_ID
+                       , AA.LST_MDF_DTM
+           FROM(              
+               SELECT coalesce((select DB_SVR_NM from t_dbsvr_i where db_svr_id = d.db_svr_id),'MIGRATION') as DB_SVR_NM
+                       , d.db_svr_id
+                       , A.SCD_ID                   
+                       , A.SCD_NM
+                       , A.SCD_CNDT
+                       , A.SCD_EXP
+                       , A.EXE_PERD_CD
+                       , A.EXE_DT
+                       , A.EXE_MONTH
+                       , A.EXE_DAY
+                       , A.EXE_HMS
+                       , (SELECT COUNT(*) FROM T_SCD_D WHERE SCD_ID = A.SCD_ID) AS WRK_CNT
+                       , TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
+                       , TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
+                       , A.FRST_REGR_ID
+                       , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+                       , A.LST_MDFR_ID
+                       , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+               FROM T_SCD_M A
+               left join
+                    (select distinct Sb.SCD_ID, SD.db_svr_id
+                from T_SCD_D SB, T_BCK_WRKCNG_I SD
+               where SD.WRK_ID= SB.WRK_ID ) D
+           on A.SCD_ID = D.SCD_ID
+               where 1=1
       <if test="scd_nm != null and scd_nm != '' ">
       AND A.SCD_NM LIKE  '%' || #{scd_nm} || '%'
 	  </if>
@@ -879,6 +882,40 @@
 				  )A  
 	 	</select>
 	 	
+	 	<select id="selectWrkScheduleListEN" resultType="Map" parameterType="HashMap">
+		/**
+	 	* Query ID : selectWrkScheduleList
+	 	* Description :  work List 조회
+	 	* Author : 변승우
+	 	**/	 	
+			        
+			SELECT 
+	      		(ROW_NUMBER() OVER()) AS ROWNUM
+	      		,(ROW_NUMBER() OVER()) AS IDX
+	      		,A.*
+	      	FROM(
+				     SELECT 
+				      		A.WRK_ID
+				      		, B.DB_SVR_ID
+				      		, C.SCD_ID
+				      		, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE B.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+				      		, B.DB_ID
+				      		, (CASE WHEN B.DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE B.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+				      		, B.BCK_BSN_DSCD
+				      		, (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE B.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+				      		, A.WRK_NM
+							, A.WRK_EXP
+							, C.NXT_EXE_YN
+							, A.BSN_DSCD
+							, (SELECT SYS_CD_NM_EN FROM T_SYSDTL_C WHERE A.BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM		
+				      FROM T_WRKCNG_I A
+					  LEFT OUTER JOIN T_BCK_WRKCNG_I B ON B.WRK_ID= A.WRK_ID
+					  LEFT OUTER JOIN T_SCD_D C ON C.WRK_ID= A.WRK_ID
+					  WHERE 1=1
+					  AND C.SCD_ID = #{scd_id}
+				      ORDER BY C.EXE_ORD 
+				  )A  
+	 	</select>
 	 	
 	 	
 	 <select id="selectWorkDivList" resultType="Map" parameterType="HashMap">

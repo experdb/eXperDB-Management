@@ -557,6 +557,7 @@
 				when dbms_dscd ='TC002206' then 'ASE'
 				when dbms_dscd ='TC002207' then 'CUB'
 				when dbms_dscd ='TC002208' then 'TBR'
+				when dbms_dscd ='TC002209' then 'MYS'
 				end as dbms_dscd
 			, ipadr
 			, dtb_nm
