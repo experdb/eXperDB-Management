@@ -237,7 +237,34 @@ public class DatabaseTableInfo {
 					result.put("RESULT_CODE", 0);
 					result.put("RESULT_DATA", jsonArray);
 					
-					break;										
+					break;		
+					
+					
+				//Maria
+				case "TC002209" :
+
+					sql = " SELECT table_name "
+							+ "FROM information_schema.tables "
+							+ "WHERE table_schema='"+serverObj.get("SCHEMA") +"' "													
+							+ "AND table_type IN ('BASE TABLE') "
+							+ "AND table_type IN ('BASE TABLE','VIEW') "
+							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%'";
+					
+					ResultSet mariaRs = stmt.executeQuery(sql);				
+					i = 0;
+					while (mariaRs.next()) {
+						i++;
+						JSONObject jsonObj = new JSONObject();
+							jsonObj.put("rownum",i);
+							jsonObj.put("table_name", mariaRs.getString("table_name"));
+							jsonObj.put("obj_type", "");
+							jsonObj.put("obj_description","");
+							jsonArray.add(jsonObj);
+					}
+					result.put("RESULT_CODE", 0);
+					result.put("RESULT_DATA", jsonArray);
+					
+					break;			
     			}
 			
 			

@@ -129,7 +129,9 @@ public class Db2pgDbmsSystemController {
 				paramvalue.put("dbms_dscd", "TC0038");
 			} else if(resultSet.get(0).getDbms_dscd().equals("TC002207")){
 				paramvalue.put("dbms_dscd", "TC0031");
-			} 
+			} else if(resultSet.get(0).getDbms_dscd().equals("TC002209")){
+				paramvalue.put("dbms_dscd", "TC0027");
+			}
 
 			dbmsChar = dbmsService.selectCharSetList(paramvalue);
 			
@@ -332,6 +334,8 @@ public class Db2pgDbmsSystemController {
 				paramvalue.put("dbms_dscd", "TC0031");
 			}else if(dbms_dscd.equals("TC002202")){
 				paramvalue.put("dbms_dscd", "TC0038");
+			}else if(dbms_dscd.equals("TC002209")){
+				paramvalue.put("dbms_dscd", "TC0027");
 			}
 				
 			 result = dbmsService.selectCharSetList(paramvalue);
