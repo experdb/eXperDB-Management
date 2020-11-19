@@ -434,6 +434,14 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/resources/jar/cubrid-jdbc-9.3.6.0002.jar</systemPath>
 		</dependency>
+		
+		<!-- MariaDB -->	
+		<dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client-jre7</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
+		
    </dependencies>
    	
    <build>
