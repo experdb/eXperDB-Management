@@ -72,6 +72,7 @@
            AND A.INSTANCE_ID = D.INSTANCE_ID
            AND C.HCHK_NAME = 'CONNECTIONFAIL'
            AND B.VALUE >= CRITICAL_THRESHOLD
+           limit 1
 	</select>
 
 	<insert id="insertScaleLog_G"  parameterType="hashmap">
