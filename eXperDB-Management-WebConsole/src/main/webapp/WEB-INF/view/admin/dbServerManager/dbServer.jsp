@@ -83,7 +83,7 @@ function fn_init() {
 $(window.document).ready(function() {
 	fn_buttonAut();
 	fn_init();
-	
+	fn_init2();
 	fn_init3();
 	
   	$.ajax({
@@ -121,6 +121,8 @@ $(window.document).ready(function() {
   	     } 
   		})     
   	});
+  	
+  	
  
 });
 
@@ -278,9 +280,21 @@ function fn_regRe_popup(){
 		showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
 	}	
 }
+
+/* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmMultiRst(gbn){
+	if(gbn =="ins_DBServer"){
+		fn_insertDbServer2();		
+	}else if(gbn =="mod_DBServer"){
+		fn_updateDbServer2();
+	}
+}
 </script>
 <%@include file="./../../popup/dbServerRegForm.jsp"%>
 <%@include file="./../../popup/dbServerRegReForm.jsp"%>
+<%@include file="./../../popup/confirmMultiForm.jsp" %>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
