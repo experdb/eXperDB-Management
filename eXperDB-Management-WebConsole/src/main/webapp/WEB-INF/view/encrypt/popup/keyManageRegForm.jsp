@@ -126,6 +126,16 @@ function fn_insDateCalenderSetting() {
 
 	$("#ins_expr_dt").val(startDay);
 	
+	if ($("#ins_expr_dt_div", "#keyInsForm").length) {
+		$("#ins_expr_dt_div", "#keyInsForm").datepicker({
+		}).datepicker('setDate', startDay)
+		.datepicker('setStartDate', startDay)
+		.datepicker('setEndDate', endDay)
+		.on('hide', function(e) {
+			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		}); //값 셋팅
+	}
+	
 
 	$("#ins_expr_dt", "#keyInsForm").datepicker('setStartDate', startDay).datepicker('setEndDate', endDay);
 	$("#ins_expr_dt_div", "#keyInsForm").datepicker('updateDates'); 

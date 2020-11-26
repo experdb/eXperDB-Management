@@ -414,7 +414,7 @@
 		
 		$("#to_exe_h").val(23);
 		$("#to_exe_m").val(59);
-		$('#endDateTime').val('9997-12-31');
+		$('#endDateTime').val("");
 		
 
 		$("#whitelistYes").prop('checked', true);		
