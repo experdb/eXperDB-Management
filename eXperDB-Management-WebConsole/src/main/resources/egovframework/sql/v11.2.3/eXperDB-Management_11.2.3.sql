@@ -238,5 +238,3 @@ UPDATE T_SYSDTL_C SET SYS_CD_NM_EN = 'MIGRATION' WHERE SYS_CD = 'TC001903';
 
 
 INSERT INTO t_sysdtl_c (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0022', 'TC002209', 'MariaDB', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
-INSERT INTO t_sysdtl_c (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0002', 'TC000203', '배치작업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
-INSERT INTO t_sysdtl_c (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0002', 'TC000204', '데이터이행', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
