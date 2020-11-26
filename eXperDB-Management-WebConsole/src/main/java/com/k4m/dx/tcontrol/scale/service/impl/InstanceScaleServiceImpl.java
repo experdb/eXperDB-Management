@@ -223,9 +223,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 					if ("{\"Instances\":[]}".equals(scalejsonStr)) {
 						result = new JSONObject();
 					}
-System.out.println("scalejsonStr.contains(pending)=======================" + scalejsonStr.contains("pending"));
-System.out.println("scalejsonStr.contains(shutting-down)=======================" + scalejsonStr.contains("shutting-down"));
-System.out.println("scalejsonChk=======================" + scalejsonChk);
+
 					if (scalejsonStr.contains("pending")) {
 						result.put("wrk_id", "1");
 						result.put("scale_type", "2");
@@ -626,7 +624,7 @@ System.out.println("scalejsonChk=======================" + scalejsonChk);
 									//추가
 									String key_name_val_last = key_name_val.substring(key_name_val.length()-1, key_name_val.length());
 
-									if ("master".contains(key_name_val) || !isInteger(key_name_val_last)) {
+									if (key_name_val.indexOf("master") > 0 || "master".contains(key_name_val) || !isInteger(key_name_val_last)) {
 										if (iLastNodeCnt >= iLastNodeChkCnt) {
 											default_chk = "Y";
 											iLastNodeChkCnt = iLastNodeChkCnt + 1;
@@ -1257,7 +1255,6 @@ System.out.println("scalejsonChk=======================" + scalejsonChk);
 		String process_id_prm ="";
 
 		try {
-			
 			if (param.get("login_id") != null) {
 				login_id_prm = param.get("login_id").toString();
 			}

@@ -666,6 +666,12 @@
 				
 				$("#exe_scale_count", "#scaleExecuteForm").val("1");
 				
+				if (gbn == "scaleOut") {
+					$("#executeTitle").html("<spring:message code='menu.eXperDB_scale_out_execute' />");
+				} else {
+					$("#executeTitle").html("<spring:message code='menu.eXperDB_scale_in_execute' />");
+				}
+
 				fn_scaleExeSet();
 
 				$('#pop_layer_scale_exe').modal("show");
