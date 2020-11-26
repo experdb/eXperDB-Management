@@ -52,7 +52,7 @@ public class DXTcontrolScaleExecute extends SocketCtl implements Job {
     
     			//서버정보 조회
     			searchDbServerInfoVO.setIPADR(strIpadr);
-    			dbServerInfo = service.selectDbServerInfo(searchDbServerInfoVO);
+    			dbServerInfo = service.selectDatabaseConnInfo(searchDbServerInfoVO);
     			
     			if (dbServerInfo != null) {
     				db_svr_id = dbServerInfo.getDB_SVR_ID();
