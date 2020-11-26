@@ -54,9 +54,12 @@ public class PasswordCheck {
 	
 				UserVO result = (UserVO) userManagerService.selectDetailUserManager(usr_id);
 
-				if(!password.equals(aes.aesDecode(result.getPwd()))){
+				/*sha-256 암호화 변경 2020-11-26 */
+				password = SHA256.getSHA256(password);
+
+				if(!password.equals(result.getPwd())){
 					return "false";
-				}			
+				}	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

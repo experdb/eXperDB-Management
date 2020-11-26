@@ -33,6 +33,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.EgovHttpSessionBindingListener;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.functions.schedule.EgovBatchListnerUtl;
@@ -266,9 +267,9 @@ public class LoginController {
 				mv.setViewName("login");
 				return mv;
 			}
+			/*sha-256 암호화 변경 2020-11-26 */
+			String pw = SHA256.getSHA256(userVo.getPwd()); // 패스워드 암호화
 
-			String pw = aes.aesEncode(userVo.getPwd());
-			
 			String login_chk = userVo.getLoginChkYn();
 			
 			int masterCheck = loginService.selectMasterCheck();

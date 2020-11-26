@@ -24,6 +24,7 @@ import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
@@ -173,7 +174,7 @@ public class UserManagerController {
 				String entityId = loginVo.getEctityUid();
 				String encp_use_yn = loginVo.getEncp_use_yn();
 
-				if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
+				if (encp_use_yn.equals("Y") && (strTocken != null && !"".equals(strTocken)) && (entityId !=null && !"".equals(entityId))) {
 					mv.addObject("encp_yn", encp_use_yn);
 				}
 				//mv.setViewName("popup/userManagerRegForm");
@@ -242,6 +243,8 @@ public class UserManagerController {
 			String loginId = loginVo.getUsr_id();
 			String entityId = loginVo.getEctityUid();
 			String encp_use_yn = loginVo.getEncp_use_yn();
+			
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 
 			//암호화 여부 null 경우
 			if (userVo.getEncp_use_yn() == null) {
@@ -275,8 +278,12 @@ public class UserManagerController {
 				}
 			}
 
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+/*			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			userVo.setPwd(aes.aesEncode(password)); // 패스워드 암호화
+*/
+			/*sha-256 암호화 변경 2020-11-26 */
+			userVo.setPwd(SHA256.getSHA256(password)); // 패스워드 암호화
+			userVo.setPwd_edc(aes.aesEncode(password)); // 패스워드 암호화
 
 			String usr_id = loginVo.getUsr_id();
 			userVo.setFrst_regr_id(usr_id);
@@ -290,6 +297,8 @@ public class UserManagerController {
 
 			//사용자 정보등록
 			userManagerService.insertUserManager(userVo);
+			
+			userManagerService.insertUserManagerHd(userVo);
 
 			// 메뉴 권한 초기등록
 			result = menuAuthorityService.selectMnuIdList();
@@ -371,7 +380,7 @@ public class UserManagerController {
 				
 				//암호화 존재경우
 				if (getEncpUseyn.equals("Y")) {
-					if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
+					if (encp_use_yn.equals("Y") && (strTocken != null && !"".equals(strTocken)) && (entityId !=null && !"".equals(entityId))) {
 						String restIp = loginVo.getRestIp();
 						int restPort = loginVo.getRestPort();
 						JSONObject resultEntity = new JSONObject();
@@ -463,7 +472,7 @@ public class UserManagerController {
 				String entityId = loginVo.getEctityUid();
 				String encp_use_yn = loginVo.getEncp_use_yn();
 
-				if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
+				if (encp_use_yn.equals("Y") && (strTocken != null && !"".equals(strTocken)) && (entityId !=null && !"".equals(entityId))) {
 					mv.addObject("encp_yn", encp_use_yn);
 				}
 			//	mv.setViewName("popup/userManagerRegReForm");
@@ -490,6 +499,8 @@ public class UserManagerController {
 		JSONObject result = new JSONObject();
 	
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
 			// 쓰기권한이 없는경우
 			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
@@ -511,10 +522,16 @@ public class UserManagerController {
 
 			if (userInfo.getPwd().equals(userVo.getPwd())) {
 				userVo.setPwd(userVo.getPwd());
+				
+				UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(userVo.getUsr_id());
+				userVo.setPwd_edc(userInfoHd.getPwd_edc());
 			} else {
 				// 패스워드 암호화
-				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
+/*				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+				userVo.setPwd(aes.aesEncode(userVo.getPwd()));*/
+				/*sha-256 암호화 변경 2020-11-26 */
+				userVo.setPwd(SHA256.getSHA256(userVo.getPwd())); // 패스워드 암호화
+				userVo.setPwd_edc(aes.aesEncode(userVo.getPwd()));
 			}
 			
 			
@@ -550,10 +567,10 @@ public class UserManagerController {
 				if (nowEncrypt.equals("Y")) {
 					String strUserId = userVo.getUsr_id();
 					String entityname = userVo.getUsr_nm();
-					AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-					String password = aes.aesDecode(userVo.getPwd());
+					String password_edc = aes.aesDecode(userVo.getPwd_edc());
+
 					try {
-						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
+						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password_edc, entityname);
 					} catch (Exception e) {
 						result.put("resultCode", "8000000002");
 					}

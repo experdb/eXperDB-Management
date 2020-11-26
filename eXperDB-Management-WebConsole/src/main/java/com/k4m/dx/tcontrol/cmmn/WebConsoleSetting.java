@@ -43,12 +43,18 @@ public class WebConsoleSetting {
 		
 		String strEncryptServerUrl = "";
 		String strEncryptServerPort = "";
+
+		//2020.11.26 password salt 값 추가
+		String strPasswordSalt = "";
 		
 		String strPropertiesPath ="egovframework" + File.separator + "tcontrolProps" + File.separator +"globals.properties";
 		String strPropertiesNm ="globals.properties";
 		
 		Scanner scan = new Scanner(System.in);
 		
+		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+
+		/* 사용언어 */
 		System.out.println("Language(ko:Korean), (en:English) :");
 		strLanguage = scan.nextLine();
 		while (true) {
@@ -59,29 +65,29 @@ public class WebConsoleSetting {
 			} else {
 				break;
 			}
-		}	
-		
+		}
+
 		/*Repository Database IP*/
 		System.out.println("Repository database IP (127.0.0.1):");
 		strDatabaseIp = scan.nextLine();
-			if(strDatabaseIp.equals("")) {
-				strDatabaseIp ="127.0.0.1";
-			} 
-			
+		if(strDatabaseIp.equals("")) {
+			strDatabaseIp ="127.0.0.1";
+		}
+
 		/*Repository Database PORT*/
 		System.out.println("Repository database Port (5432) :");
 		strDatabasePort = scan.nextLine();
-				if(strDatabasePort.equals("")) {		
-					strDatabasePort = "5432";
-				} 
-		
+		if(strDatabasePort.equals("")) {
+			strDatabasePort = "5432";
+		}
+
 		/*Repository Database USER*/
 		System.out.println("Repository database.username (experdb) :");
 		strDatabaseUsername = scan.nextLine();
-			if(strDatabaseUsername.equals("")) {
-				strDatabaseUsername = "experdb";
-			}
-		
+		if(strDatabaseUsername.equals("")) {
+			strDatabaseUsername = "experdb";
+		}
+
 		/*Repository Database PASSWORD*/
 		System.out.println("Repository database.password :");
 		strDatabasePassword = scan.nextLine();
@@ -93,7 +99,14 @@ public class WebConsoleSetting {
 			} else {
 				break;
 			}
-		}	
+		}
+
+		/*Password Salt*/
+		System.out.println("Password Salt Value (experdb12#) :");
+		strPasswordSalt = scan.nextLine();
+		if(strPasswordSalt.equals("")) {
+			strPasswordSalt = "experdb12#";
+		}
 
 		/* 감사설정 사용여부 */
 		System.out.println("Whether to enable auditing settings? (y, n)");
@@ -108,8 +121,8 @@ public class WebConsoleSetting {
 			} else {
 				break;
 			}
-		}	
-		
+		}
+
 		/* 전송설정 사용여부 */
 		System.out.println("Whether data transfer is enabled? (y, n)");
 		strTransferYN = scan.nextLine();
@@ -123,8 +136,8 @@ public class WebConsoleSetting {
 			} else {
 				break;
 			}
-		}	
-		
+		}
+
 		/* 전송설정-컨슈머전송 사용여부 */
 		System.out.println("Whether data consumer transfer is enabled? (y, n)");
 		strTransferOraYN = scan.nextLine();
@@ -151,8 +164,8 @@ public class WebConsoleSetting {
 			} else {
 				break;
 			}
-		}	
-		
+		}
+
 		/* Scale in/out 사용여부 */
 		System.out.println("Whether to enable eXperDB-Scale settings? (y, n)");
 		strScaleYN = scan.nextLine();
@@ -167,7 +180,7 @@ public class WebConsoleSetting {
 				break;
 			}
 		}
-		
+
 		if(strScaleYN.equals("Y")){
 			System.out.println("eXperDB-Scale scale_path:");
 			strScalePath = scan.nextLine();
@@ -180,40 +193,39 @@ public class WebConsoleSetting {
 					break;
 				}
 			}
-			
+
 			System.out.println("eXperDB-Scale scale_in_cmd (./experscale scale-in -id %s):");
 			strScaleInCmd = scan.nextLine();
-				if(strScaleInCmd.equals("")) {
-					strScaleInCmd = "./experscale scale-in -id %s";
-				} 
+			if(strScaleInCmd.equals("")) {
+				strScaleInCmd = "./experscale scale-in -id %s";
+			}
 			System.out.println("eXperDB-Scale scale_out_cmd (./experscale scale-out -id %s):");
 			strScaleOutCmd = scan.nextLine();
-				if(strScaleOutCmd.equals("")) {
-					strScaleOutCmd = "./experscale scale-out -id %s";
-				}
+			if(strScaleOutCmd.equals("")) {
+				strScaleOutCmd = "./experscale scale-out -id %s";
+			}
 			System.out.println("eXperDB-Scale scale_in_multi_cmd (./experscale multi-scale-in --scale-in-count %s):");
 			strScaleInMultiCmd = scan.nextLine();
-				if(strScaleInMultiCmd.equals("")) {
-					strScaleInMultiCmd = "./experscale multi-scale-in --scale-in-count %s";
-				}	
+			if(strScaleInMultiCmd.equals("")) {
+				strScaleInMultiCmd = "./experscale multi-scale-in --scale-in-count %s";
+			}
 			System.out.println("eXperDB-Scale scale_out_multi_cmd (./experscale multi-scale-out --scale-out-count %s):");
 			strScaleOutMultiCmd = scan.nextLine();
-				if(strScaleOutMultiCmd.equals("")) {
-					strScaleOutMultiCmd = "./experscale multi-scale-out --scale-out-count %s";
-				}	
+			if(strScaleOutMultiCmd.equals("")) {
+				strScaleOutMultiCmd = "./experscale multi-scale-out --scale-out-count %s";
+			}
 			System.out.println("eXperDB-Scale scale_json_view (aws ec2 describe-instances %s --filters ):");
 			strScaleJsonView = scan.nextLine();
-				if(strScaleJsonView.equals("")) {
-					strScaleJsonView = "aws ec2 describe-instances %s --filters ";
-				}	
+			if(strScaleJsonView.equals("")) {
+				strScaleJsonView = "aws ec2 describe-instances %s --filters ";
+			}
 			System.out.println("eXperDB-Scale scale_chk_prgress (ps -ef | grep -v grep | grep %s | wc -l):");
 			strScaleChkPrgress = scan.nextLine();
-				if(strScaleChkPrgress.equals("")) {
-					strScaleChkPrgress = "ps -ef | grep -v grep | grep %s | wc -l";
-				}		
+			if(strScaleChkPrgress.equals("")) {
+				strScaleChkPrgress = "ps -ef | grep -v grep | grep %s | wc -l";
+			}
 		}
-		
-		
+
 		/* eXperDB-Encrypt 설치 */
 		System.out.println("Whether eXperDB-Encrypt is enabled? (y, n)");
 		String strEnctyptYn = scan.nextLine();
@@ -221,28 +233,30 @@ public class WebConsoleSetting {
 		if(strEnctyptYn.equals("Y")) {
 			System.out.println("eXperDB-Encrypt server.url (127.0.0.1):");
 			strEncryptServerUrl = scan.nextLine();
-				if(strEncryptServerUrl.equals("")) {
-					strEncryptServerUrl = "127.0.0.1";
-				} 
+			if(strEncryptServerUrl.equals("")) {
+				strEncryptServerUrl = "127.0.0.1";
+			}
 			System.out.println("eXperDB-Encrypt server.port (9443) :");
 			strEncryptServerPort = scan.nextLine();
-				if(strEncryptServerPort.equals("")) {
-					strEncryptServerPort = "9443";
-				} 
+			if(strEncryptServerPort.equals("")) {
+				strEncryptServerPort = "9443";
+			}
 		}
-		
+
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
 		System.out.println("################globals.properties##################");
 		System.out.println("Repository database IP address :" + strDatabaseIp);
 		System.out.println("Repository database port :" + strDatabasePort);		
 		System.out.println("Repository database username :" + strDatabaseUsername);
 		System.out.println("Repository database password :" + strDatabasePassword);
+		System.out.println("Password Salt Value :" + strPasswordSalt);
 		System.out.println("Repository database Access information :" + strDatabaseUrl);
 		System.out.println("Whether to enable auditing settings : " + strAuditYN);
 		System.out.println("Whether data transfer is enabled : " + strTransferYN);
 		System.out.println("eXperDB-DB2PG installation path : " + strDb2pgPath);
 		System.out.println("###################eXperDB-Scale##################");
 		System.out.println("Whether scale is enabled : " + strScaleYN);
+
 		if(strScaleYN.equals("Y")){
 			System.out.println("eXperDB-Scale scale_path : " + strScalePath);
 			System.out.println("eXperDB-Scale scale_in_cmd : " + strScaleInCmd);
@@ -252,6 +266,8 @@ public class WebConsoleSetting {
 			System.out.println("eXperDB-Scale scale_json_view : " + strScaleJsonView);
 			System.out.println("eXperDB-Scale scale_chk_prgress : " + strScaleChkPrgress);
 		}
+		System.out.println("##################################################");
+
 		System.out.println("###################eXperDB-Encrypt##################");
 		System.out.println("Whether eXperDB-Encrypt is enabled : " + strEnctyptYn);
 		if(strEnctyptYn.equals("Y")){
@@ -259,11 +275,9 @@ public class WebConsoleSetting {
 			System.out.println("eXperDB-Encrypt server.port :" + strEncryptServerPort);	
 		}
 		System.out.println("##################################################");
-		
-		
+
 		System.out.println("Do you want to apply what you entered? (y, n)");
-		
-		
+
 		String strApply = scan.nextLine();
 		
 		if(strApply.equals("y")) {
@@ -274,9 +288,10 @@ public class WebConsoleSetting {
 		    String url = pbeEnc.encrypt(strDatabaseUrl);
 		    String username = pbeEnc.encrypt(strDatabaseUsername);
 		    String password = pbeEnc.encrypt(strDatabasePassword);
+		    String passwordSolt = aes.aesEncode(strPasswordSalt);
 		    
 		    Properties prop = new Properties();
-		    
+
 		    ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		    File file = new File(loader.getResource(strPropertiesPath).getFile());
 		    
@@ -309,6 +324,8 @@ public class WebConsoleSetting {
 		    	System.out.println("Exit(0) Error : " + e.toString());
 		    	System.exit(0);
 		    }
+	
+		    prop.setProperty("password_solt", passwordSolt);
 		    prop.setProperty("version", strVersion);
 		    prop.setProperty("lang", strLanguage);
 		    prop.setProperty("database.url", "ENC(" + url + ")");

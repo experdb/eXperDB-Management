@@ -23,6 +23,7 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
@@ -183,8 +184,10 @@ public class MypageController {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String usr_id = loginVo.getUsr_id();
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			String nowpwd = aes.aesEncode(request.getParameter("nowpwd"));;
+			/*AES256 aes = new AES256(AES256_KEY.ENC_KEY);*/
+			/*sha-256 암호화 변경 2020-11-26 */
+			String nowpwd = SHA256.getSHA256(request.getParameter("nowpwd"));
+			
 			param.put("usr_id", usr_id);
 			param.put("nowpwd", nowpwd);
 			
@@ -221,8 +224,8 @@ public class MypageController {
 			String entityId = loginVo.getEctityUid();	
 			String encp_use_yn = loginVo.getEncp_use_yn();
 			String password = userVo.getPwd();		
-			
-			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+
+			if(encp_use_yn.equals("Y") && (strTocken != null && !"".equals(strTocken)) && (entityId !=null && !"".equals(entityId))){
 				String restIp = loginVo.getRestIp();
 				int restPort = loginVo.getRestPort();
 
@@ -231,14 +234,17 @@ public class MypageController {
 				}catch(Exception e){
 					result.put("resultCode", "8000000002");
 				}
+			} else {
+				result.put("resultCode", "0000000000");
 			}
 			
 			if(result.get("resultCode").equals("0000000000")){
 				String usr_id = loginVo.getUsr_id();
 				userVo.setUsr_id(usr_id);
 				userVo.setLst_mdfr_id(usr_id);
-				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
+				/*AES256 aes = new AES256(AES256_KEY.ENC_KEY);*/
+				/*sha-256 암호화 변경 2020-11-26 */
+				userVo.setPwd(SHA256.getSHA256(userVo.getPwd()));
 				myPageService.updatePwd(userVo);
 			}
 			
