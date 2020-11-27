@@ -83,7 +83,7 @@ function fn_init(){
 						if (full.exe_rslt_cd == 'TC001701') {
 							html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_ddlResult(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
 							html += "	<i class='fa fa-check-circle text-primary' >";
-							html += '&nbsp;<spring:message code="common.success" /></i>';
+							html += '&nbsp;Complete</i>';
 							html += "</button>";					
 						} else if(full.exe_rslt_cd == 'TC001702'){
 							html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_ddlFailLog('+full.mig_exe_sn+')">';
@@ -138,7 +138,7 @@ function fn_init(){
 					if (full.exe_rslt_cd == 'TC001701') {
 						html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_result(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
 						html += "	<i class='fa fa-check-circle text-primary' >";
-						html += '&nbsp;<spring:message code="common.success" /></i>';
+						html += '&nbsp;Complete</i>';
 						html += "</button>";
 						
 					} else if(full.exe_rslt_cd == 'TC001702'){
@@ -374,7 +374,7 @@ function getdataDataList(){
  			success : function(result) {		
  				$('#ddl_result_wrk_nm').html(result.result.wrk_nm);
  				$('#ddl_result_wrk_exp').html(result.result.wrk_exp);				
- 				$('#ddl_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;<spring:message code="common.success" /></i>');				
+ 				$('#ddl_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;Complete</i>');				
  				fn_ddlResultInit();
  				getDataResultList(result.ddl_save_pth);			
  				$('#pop_layer_db2pgResultDDL').modal("show");
@@ -456,7 +456,7 @@ function getdataDataList(){
 				$('#mig_result_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
 				$('#mig_result_wrk_end_dtm').html(result.result.wrk_end_dtm);
 				$('#mig_result_wrk_dtm').html(result.result.wrk_dtm);				
- 				$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;<spring:message code="common.success" /></i>');
+ 				$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;Complete</i>');
 
  				 if(result.db2pgResult.RESULT == null){
  					$('#mig_result_msg').html("파일이 삭제되어 작업로그정보를 출력할 수 없습니다.");	
@@ -590,6 +590,7 @@ function getdataDataList(){
 									<div class="row">
 										<div class="col-12">
 											<p class="mb-0"><spring:message code="help.shedule_execution_history" /></p>
+											<p class="mb-0">수행 결과에 대해선 수행이 완료 후 상태가 변경되며, 수동으로 조회 하셔야 합니다.</p>
 										</div>
 									</div>
 								</div>

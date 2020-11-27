@@ -445,7 +445,8 @@ function fn_charSet(){
 									</label>
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
-										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="ipadr_reg" name="ipadr_reg" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" />
+										<%-- <input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="ipadr_reg" name="ipadr_reg" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" /> --%>
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" id="ipadr_reg" name="ipadr_reg" onblur="this.value=this.value.trim()"  />
 									</div>
 									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
