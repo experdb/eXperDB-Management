@@ -87,8 +87,8 @@ function fn_init(){
 							html += "</button>";					
 						} else if(full.exe_rslt_cd == 'TC001702'){
 							html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_ddlFailLog('+full.mig_exe_sn+')">';
-							html += '<i class="fa fa-times"></i>';
-							html += '<spring:message code="common.failed" />';
+							html += '<i class="fa fa-times">&nbsp;Fail</i>';
+//							html += '<spring:message code="common.failed" />';
 							html += "</button>";		
 						} else {
 							html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
@@ -143,8 +143,8 @@ function fn_init(){
 						
 					} else if(full.exe_rslt_cd == 'TC001702'){
 						html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_migFailLog('+full.mig_exe_sn+')">';
-						html += '<i class="fa fa-times"></i>';
-						html += '<spring:message code="common.failed" />';
+						html += '<i class="fa fa-times">&nbsp;Fail</i>';
+//						html += '<spring:message code="common.failed" />';
 						html += "</button>";
 					} else {
 						html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
