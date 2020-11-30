@@ -20,27 +20,27 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th class="t1">Company</th>
+								<th class="t1"><spring:message code="help.support.title.company"/></th>
  								<td id="version" style="border : 0 none;"><spring:message code="help.support.company"/></td>
 							</tr>
  							<tr>
-								<th class="t1">Solution</th>
+								<th class="t1"><spring:message code="help.support.title.solution"/></th>
 								<td style="border : 0 none;"><spring:message code="help.support.solution"/></td>
 							</tr>
  							<tr>
-								<th class="t1">Address</th>
+								<th class="t1"><spring:message code="help.support.title.address"/></th>
 								<td style="border : 0 none;"><spring:message code="help.support.address"/></td>
 							</tr>
  							<tr>
-								<th class="t1">TEL</th>
+								<th class="t1"><spring:message code="help.support.title.tel"/></th>
 								<td style="border : 0 none;"><spring:message code="help.support.tel"/></td>
 							</tr>
  							<tr>
-								<th class="t1">FAX</th>
+								<th class="t1"><spring:message code="help.support.title.fax"/></th>
 								<td style="border : 0 none;"><spring:message code="help.support.fax"/></td>
 							</tr>
  							<tr>
-								<th class="t1">HOME PAGE</th>
+								<th class="t1"><spring:message code="help.support.title.homepage"/></th>
 								<td style="border : 0 none;"><spring:message code="help.support.homepage"/></td>
 							</tr>
  							
