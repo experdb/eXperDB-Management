@@ -257,6 +257,11 @@ function fn_openSource(){
 	toggleLayer($('#pop_layer_openSource'), 'on');
 }
 
+// Support
+function fn_support() {
+	toggleLayer($('#pop_layer_support'), 'on');
+}
+
 // 스케줄정보
 function fn_scdLayer(scd_id){
 	$.ajax({
