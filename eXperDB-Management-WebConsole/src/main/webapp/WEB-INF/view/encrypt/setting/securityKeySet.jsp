@@ -41,6 +41,8 @@
 	$(window.document).ready(function() {
 		if(resultCode=="8000000002"){
 			showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		}else if(data.resultCode == "0000000003"){		
+			showSwalIcon('<spring:message code="encrypt_permissio.error" />', '<spring:message code="common.close" />', '', 'error');
 		}
 
 		fn_buttonAut();

@@ -59,6 +59,8 @@
 				}else if(data.resultCode == "8000000003"){
 					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error','securityKeySet');
 					$('#pop_layer_agentMonitoringModifyForm').modal('hide');
+				}else if(data.resultCode == "0000000003"){		
+					showSwalIcon('<spring:message code="encrypt_permissio.error" />', '<spring:message code="common.close" />', '', 'error');
 				}else{
 					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_agentMonitoringModifyForm').modal('hide');	
