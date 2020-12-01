@@ -511,7 +511,7 @@
 									</div>
 									<label for="ins_encp_use_yn_chk" class="col-sm-2 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										암호화 <spring:message code="user_management.use_yn" />
+										<spring:message code="encrypt_log_decode.Encryption" /> <spring:message code="user_management.use_yn" />
 									</label>
 									<div class="col-sm-4">
 										<div class="onoffswitch-use" style="margin-top:0.250rem;">
