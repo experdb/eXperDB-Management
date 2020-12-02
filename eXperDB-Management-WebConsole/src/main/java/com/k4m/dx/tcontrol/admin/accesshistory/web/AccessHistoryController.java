@@ -2,10 +2,10 @@ package com.k4m.dx.tcontrol.admin.accesshistory.web;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -351,6 +351,10 @@ public class AccessHistoryController {
 		List<UserVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 		try {
+            Cookie cookie = new Cookie("fileDownload", "true");
+            cookie.setPath("/");
+            response.addCookie(cookie);
+			
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000601");
 
@@ -388,7 +392,9 @@ public class AccessHistoryController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("category", resultSet);
 
-			return new ModelAndView("categoryExcelView", "categoryMap", map);
+			//return new ModelAndView("categoryExcelView", "categoryMap", map);
+			
+			return new ModelAndView("overallExcelView", "categoryMap", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

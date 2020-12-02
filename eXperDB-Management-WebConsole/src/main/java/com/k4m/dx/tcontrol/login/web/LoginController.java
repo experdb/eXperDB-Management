@@ -273,7 +273,9 @@ public class LoginController {
 			String login_chk = userVo.getLoginChkYn();
 			
 			int masterCheck = loginService.selectMasterCheck();
+
 			if(masterCheck>0){
+				
 				mv.addObject("error", "msg176");
 				mv.setViewName("login");
 				return mv;
@@ -340,7 +342,8 @@ public class LoginController {
 					int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
 					try{
 						CommonServiceCall cic = new CommonServiceCall();
-						JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());
+						JSONObject result = cic.login(restIp,restPort,id,pw);
+						/*JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());*/
 						loginVo.setRestIp(restIp);
 						loginVo.setRestPort(restPort);
 						loginVo.setTockenValue((String) (result.get("tockenValue")==null?"":result.get("tockenValue")));

@@ -245,6 +245,9 @@ public class UserManagerController {
 			String encp_use_yn = loginVo.getEncp_use_yn();
 			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			/*sha-256 암호화 변경 2020-11-26 */
+			userVo.setPwd(SHA256.getSHA256(password)); // 패스워드 암호화
+			userVo.setPwd_edc(aes.aesEncode(password)); // 패스워드 암호화
 
 			//암호화 여부 null 경우
 			if (userVo.getEncp_use_yn() == null) {
@@ -261,7 +264,8 @@ public class UserManagerController {
 						int restPort = loginVo.getRestPort();
 						
 						try{
-							results = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
+							/*results = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);*/
+							results = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, userVo.getPwd(), entityname);
 							if (!results.get("resultCode").equals("0000000000")) {
 								results.put("resultCode", results.get("resultCode"));
 								results.put("resultMessage", results.get("resultMessage"));
@@ -281,9 +285,6 @@ public class UserManagerController {
 /*			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			userVo.setPwd(aes.aesEncode(password)); // 패스워드 암호화
 */
-			/*sha-256 암호화 변경 2020-11-26 */
-			userVo.setPwd(SHA256.getSHA256(password)); // 패스워드 암호화
-			userVo.setPwd_edc(aes.aesEncode(password)); // 패스워드 암호화
 
 			String usr_id = loginVo.getUsr_id();
 			userVo.setFrst_regr_id(usr_id);
@@ -570,7 +571,8 @@ public class UserManagerController {
 					String password_edc = aes.aesDecode(userVo.getPwd_edc());
 
 					try {
-						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password_edc, entityname);
+						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, userVo.getPwd(), entityname);
+						/*result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password_edc, entityname);*/
 					} catch (Exception e) {
 						result.put("resultCode", "8000000002");
 					}
