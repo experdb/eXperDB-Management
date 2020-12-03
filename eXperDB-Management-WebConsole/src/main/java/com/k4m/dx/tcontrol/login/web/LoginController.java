@@ -410,7 +410,7 @@ public class LoginController {
 				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
 				
 				// 로그인 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
+				CmmnUtils.saveHistoryLogin(loginVo, login_chk, id, request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0003");
 				accessHistoryService.insertHistory(historyVO);
 
