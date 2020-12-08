@@ -182,16 +182,10 @@ public class WebConsoleSetting {
 		}
 
 		if(strScaleYN.equals("Y")){
-			System.out.println("eXperDB-Scale scale_path:");
+			System.out.println("eXperDB-Scale scale_path(/home/experdb/.experscale):");
 			strScalePath = scan.nextLine();
-			while(true){
-				if(strScalePath.equals("")){
-					System.out.println("Please enter your eXperDB-Scale path. ");
-					System.out.println("Whether to enable eXperDB-Scale path? :");
-					strScalePath = scan.nextLine();
-				}else{
-					break;
-				}
+			if(strScalePath.equals("")) {
+				strScalePath = "/home/experdb/.experscale";
 			}
 
 			System.out.println("eXperDB-Scale scale_in_cmd (./experscale scale-in -id %s):");
