@@ -1,0 +1,1 @@
+ALTER TABLE t_migexe_g DROP CONSTRAINT fk_t_migexe_g_01;
