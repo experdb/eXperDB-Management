@@ -204,7 +204,10 @@ function fn_insert_trsf_work(){
 							},
 							success : function(result) {
 								if(result.resultCode == "0000000000"){
-									showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
+//									showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
+									showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+									$('#pop_layer_data_reg').modal("hide");
+									selectTab("dataWork");
 								}else{
 									showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 								}		
@@ -283,7 +286,9 @@ function fn_update_trsf_work(){
 			},
 			success : function(result) {
 				if(result.resultCode == "0000000000"){
-					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+					$('#pop_layer_data_reg').modal("hide");
+					selectTab("dataWork");
 				}else{
 					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 				}		

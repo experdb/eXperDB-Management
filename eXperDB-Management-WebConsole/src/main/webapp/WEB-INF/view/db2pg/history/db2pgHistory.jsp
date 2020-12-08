@@ -210,7 +210,7 @@ function fn_init(){
 $(window.document).ready(
 		
 	function() {	
-	
+		
 		fn_init();
 	
 		ddlDateCalenderSetting();
@@ -219,12 +219,40 @@ $(window.document).ready(
 		getddlDataList();
 		getdataDataList();			
 		
-		$("#ddlDataTable").show();
-		$("#ddlDataTable_wrapper").show();
-		$("#dataDataTable").hide();
-		$("#dataDataTable_wrapper").hide();		
+		if(getUrlParam('gbn')=='mig'){
+			$("#ddlDataTable").hide();
+			$("#ddlDataTable_wrapper").hide();
+			$("#dataDataTable").show();
+			$("#dataDataTable_wrapper").show();
+			$('#server-tab-2 aria-selected').val(true);
+			$('#server-tab-1 aria-selected').val(false);
+			$('#server-tab-2').addClass('active');
+			$('#server-tab-1').removeClass('active');
+			selectTab('dataWork');
+		}else {
+			$("#ddlDataTable").show();
+			$("#ddlDataTable_wrapper").show();
+			$("#dataDataTable").hide();
+			$("#dataDataTable_wrapper").hide();		
+		}
 	}
+	
 );
+
+function getUrlParam(paramName){
+	var url = location.href;
+	var result;
+	
+	var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+	for (var i = 0; i < parameters.length; i++) { 
+		var varName = parameters[i].split('=')[0]; 
+		if (varName.toUpperCase() == paramName.toUpperCase()) { 
+			result = parameters[i].split('=')[1]; 
+			return decodeURIComponent(result); 
+		} 
+	}
+
+};
 
 /* ********************************************************
  * DDL 수행이력 데이터 가져오기

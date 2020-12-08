@@ -126,7 +126,9 @@ function fn_update_work(){
 			},
 			success : function(result) {
 				if(result.resultCode == "0000000000"){
-					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+					$('#pop_layer_ddl_reg_re').modal("hide");
+					selectTab("ddlWork");
 				}else{
 					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 				}	
