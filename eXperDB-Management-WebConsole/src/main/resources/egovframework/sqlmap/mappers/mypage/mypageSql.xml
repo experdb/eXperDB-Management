@@ -72,5 +72,19 @@
 		, LST_MDFR_ID=#{lst_mdfr_id}
 		, LST_MDF_DTM= clock_timestamp()
 		WHERE USR_ID = #{usr_id}
-	</update>	
+	</update>
+	
+	<insert id="updateTranPwd" parameterType="userVO">
+        /**
+		* Query ID : updateTranPwd
+		* Description : 수정
+		* Author : 김주영
+		**/
+        UPDATE T_TRANS_ENCRYPT 
+		SET 
+		  TRANS_CHK_KEY=#{pwd}
+		, LST_MDFR_ID=#{lst_mdfr_id}
+		, LST_MDF_DTM= clock_timestamp()
+		WHERE trans_id = #{usr_id}
+	</insert>
 </mapper>

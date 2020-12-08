@@ -223,7 +223,7 @@ public class MypageController {
 			String loginId = loginVo.getUsr_id();
 			String entityId = loginVo.getEctityUid();	
 			String encp_use_yn = loginVo.getEncp_use_yn();
-			String password = SHA256.getSHA256(userVo.getPwd());	
+			String password = userVo.getPwd();
 
 			if(encp_use_yn.equals("Y") && (strTocken != null && !"".equals(strTocken)) && (entityId !=null && !"".equals(entityId))){
 				String restIp = loginVo.getRestIp();
@@ -242,10 +242,13 @@ public class MypageController {
 				String usr_id = loginVo.getUsr_id();
 				userVo.setUsr_id(usr_id);
 				userVo.setLst_mdfr_id(usr_id);
-				/*AES256 aes = new AES256(AES256_KEY.ENC_KEY);*/
+				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				/*sha-256 암호화 변경 2020-11-26 */
-				userVo.setPwd(password);
+				userVo.setPwd(SHA256.getSHA256(userVo.getPwd()));
 				myPageService.updatePwd(userVo);
+
+				userVo.setPwd(aes.aesEncode(password));
+				myPageService.updateTranPwd(userVo);
 			}
 			
 			// 화면접근이력 이력 남기기

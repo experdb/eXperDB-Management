@@ -342,7 +342,7 @@ public class LoginController {
 					int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
 					try{
 						CommonServiceCall cic = new CommonServiceCall();
-						JSONObject result = cic.login(restIp,restPort,id,pw);
+						JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());
 						/*JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());*/
 						loginVo.setRestIp(restIp);
 						loginVo.setRestPort(restPort);
