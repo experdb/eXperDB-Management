@@ -704,7 +704,7 @@
 								</a>
 								<div class="submenu">											
 									<ul class="submenu-item">
-									 
+									 <!--  
 										<li class="nav-item">
 											<span class="nav-heading-title">
 												<b>Language</b>
@@ -720,7 +720,7 @@
 												English
 											</a>
 										</li>
-									 
+									 -->
 										
 										<li class="nav-item">
 											<span class="nav-heading-title">

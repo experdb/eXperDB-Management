@@ -354,6 +354,7 @@ function fn_data_reg_popup(){
 	
 	//tab 선택
 	$('a[href="#insDumpOptionTab1"]').tab('show');
+	$('#con_multi_gbn', '#findConfirmMulti').val("data_reg");
 				
 	$('#pop_layer_data_reg').modal("show");
 }
