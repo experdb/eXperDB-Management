@@ -784,6 +784,11 @@
 													</span>
 												</li>
 												<li class="nav-item">
+													<a class="nav-link" href="/manualDownload.do"  target="main">
+														Manual
+													</a>
+												</li>
+												<li class="nav-item">
 													<a class="nav-link" href="#n" onClick="fn_support()" data-toggle="modal" data-target="#pop_layer_support" >
 														Support
 													</a>

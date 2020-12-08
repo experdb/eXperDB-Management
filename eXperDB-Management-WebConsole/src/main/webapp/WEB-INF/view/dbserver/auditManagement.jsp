@@ -115,10 +115,9 @@
 
 <div class="content-wrapper main_scroll"  style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
-		<div class="col-12 div-form-margin-srn stretch-card">
+	<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
 				<div class="card-body">
-
 					<!-- title start -->
 					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
 						<div class="card" style="margin-bottom:0px;">
@@ -126,8 +125,8 @@
 								<div class="row">
 									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
-											<a data-toggle="collapse" href="#page_heade r_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="fa fa-cog"></i>
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-history"></i>
 												<span class="menu-title"><spring:message code="menu.audit_settings"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
@@ -138,13 +137,12 @@
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
 					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${serverName}</a>
 					 						</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.audit_management" /></li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.audit_management"/></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.audit_settings"/></li>
 										</ol>
 									</div>
 								</div>
 							</div>
-							
 							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
 								<div class="card-body">
 									<div class="row">

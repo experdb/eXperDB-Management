@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="2.5">
 	<display-name>egov.sample</display-name>
     
-    <filter>
+   <filter>
     <filter-name>XSS</filter-name>
     <filter-class>com.k4m.dx.tcontrol.cmmn.CrossScriptingFilter</filter-class>
 	</filter>

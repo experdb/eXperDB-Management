@@ -255,19 +255,25 @@ public class DbSvrAuthorityController {
 				if (props.get("scale") != null) {
 					scale_yn_chk = props.get("scale").toString();
 				}
-				
-
+						
 				String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
+				
+				System.out.println(strRows);
+
 				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 						
 				for(int i=0; i<rows.size(); i++){
 					JSONObject jval = null;
 					cnt = dbAuthorityService.selectUsrDBSrvAutInfoCnt(rows.get(i));
 					
+					System.out.println(rows.get(i));
+					
 					jval = (JSONObject) rows.get(i);
+					
 					jval.put("scale_yn_chk", scale_yn_chk);
 					jval.put("trans_yn_chk", trans_yn_chk);
 					
+
 					System.out.println("trans_yn_chk = " + jval.get("trans_yn_chk"));
 					
 					if(cnt==0){
@@ -276,6 +282,15 @@ public class DbSvrAuthorityController {
 						dbAuthorityService.insertUsrDBSrvAutInfo(jval);
 					}else{
 						System.out.println("업데이트");
+						
+						if(jval.get("script_his_aut_yn") == null){
+							jval.put("script_his_aut_yn", jval.get("_his_aut_yn"));
+						}						
+						
+						if(jval.get("script_cng_aut_yn") == null){
+							jval.put("script_cng_aut_yn", jval.get("_cng_aut_yn"));
+						}
+						
 						System.out.println(jval.get("transSetting_aut_yn"));
 						dbAuthorityService.updateUsrDBSrvAutInfo(jval);
 					}			
