@@ -142,7 +142,7 @@ public class OverallExcelBuilder extends AbstractView {
             String yyyymmdd = sdf.format(c1.getTime());
 
 			response.setContentType("Application/Msexcel");
-			response.setHeader("Content-Disposition", "ATTachment; Filename=accessHistory_" + yyyymmdd + ".xls");
+			response.setHeader("Content-Disposition", "ATTachment; Filename=accessHistory_" + yyyymmdd + ".xlsx");
 			
 			OutputStream fileOut = response.getOutputStream();
 			sxssfWorkbook.write(fileOut);
