@@ -5,4 +5,5 @@ select USR_ID, 'UP7x6XqHQsGUZoa5ZXphGQ==', 'admin', clock_timestamp(), 'admin', 
  from T_USR_I
 ON CONFLICT (trans_id) DO NOTHING;
 
+
 UPDATE T_USR_I SET PWD = 'eb142b0cae0baa72a767ebc0823d1be94e14c5bfc52d8e417fc4302fceb6240c';
