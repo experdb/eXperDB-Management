@@ -8,12 +8,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Cookie;
 
 import org.json.simple.JSONObject;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,11 +185,11 @@ public class LoginController {
 
             //쿠키를 가져와보고
             Cookie loginCookie = WebUtils.getCookie(request,"loginCookie");
+
             if ( loginCookie !=null ){
         		String cookitId = loginCookie.getValue(); //sessionId 확인
         		String sessionId = cookitId.substring(0, cookitId.indexOf("_"));
 
-        		
         		UserVO userVO = new UserVO();
         		userVO.setPrmId(sessionId);
         		
@@ -204,6 +205,7 @@ public class LoginController {
                 // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
 /*                Date date =new Date(System.currentTimeMillis());
                 */
+
                 if ( userVORe !=null ){// 사용자 존재시
 	    			try{
 	    				userVORe.setPrmId("none");
@@ -271,15 +273,23 @@ public class LoginController {
 			String pw = SHA256.getSHA256(userVo.getPwd()); // 패스워드 암호화
 
 			String login_chk = userVo.getLoginChkYn();
-			
-			int masterCheck = loginService.selectMasterCheck();
-
-			if(masterCheck>0){
-				
-				mv.addObject("error", "msg176");
+		
+			try {
+				int masterCheck = loginService.selectMasterCheck();
+	
+				if(masterCheck>0){
+					
+					mv.addObject("error", "msg176");
+					mv.setViewName("login");
+					return mv;
+				}
+			} catch (PSQLException e) {
+				e.printStackTrace();
+	
 				mv.setViewName("login");
 				return mv;
 			}
+
 			List<UserVO> userList = loginService.selectUserList(userVo);
 			int intLoginCnt = userList.size();
 			if (intLoginCnt == 0) {
@@ -468,8 +478,7 @@ public class LoginController {
 	/*                Date date =new Date(System.currentTimeMillis());
 	                */
 	        		UserVO userVORe = loginService.checkUserWithSessionKey(userVO);
-	        		
-	        		System.out.println("===userVORe==" + userVORe);
+
 	                if ( userVORe !=null ){// 사용자 존재시
 		    			try{
 		    				userVORe.setPrmId("none");
