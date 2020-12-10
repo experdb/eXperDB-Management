@@ -385,7 +385,7 @@
                 WHERE 1 = 1
                   AND (C.DB_SVR_ID = #{db_svr_id}::numeric or C.DB_SVR_ID is null)
                   AND C.MASTER_GBN = 'M'
-                  AND TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                  AND A.SCD_NM IS NOT NULL
          ) AA
 	</select>
 	
