@@ -629,10 +629,10 @@
 			processing : true,
 			searching : false,	
 			paging :false,
-			bSort: false,
+			bSort: true,
 			columns : [
-				{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{data : "idx", className : "dt-center", defaultContent : ""},
+				{data : "idx", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+				{data : "rownum", className : "dt-center", defaultContent : ""},
 				{data : "db_svr_nm",  defaultContent : ""}, //서버명
 				{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 				{data : "wrk_nm",  defaultContent : ""
