@@ -629,9 +629,9 @@
 			processing : true,
 			searching : false,	
 			paging :false,
-			bSort: true,
+			bSort: false,
 			columns : [
-				{data : "idx", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+				{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 				{data : "rownum", className : "dt-center", defaultContent : ""},
 				{data : "db_svr_nm",  defaultContent : ""}, //서버명
 				{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
@@ -652,7 +652,7 @@
 				{data : "bck_wrk_id",  defaultContent : "", visible: false },
 				{data : "bck_bsn_dscd",  defaultContent : "", visible: false },
 				{data : "db_svr_id",  defaultContent : "", visible: false }
-			]
+			],'select': {'style': 'multi'}
 		});
 
 		 sdt_dtl_table.on( 'order.dt search.dt', function () {
