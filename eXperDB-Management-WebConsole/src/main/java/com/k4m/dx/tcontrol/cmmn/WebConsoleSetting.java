@@ -44,9 +44,6 @@ public class WebConsoleSetting {
 		String strEncryptServerUrl = "";
 		String strEncryptServerPort = "";
 
-		//2020.11.26 password salt 값 추가
-		String strPasswordSalt = "";
-		
 		String strPropertiesPath ="egovframework" + File.separator + "tcontrolProps" + File.separator +"globals.properties";
 		String strPropertiesNm ="globals.properties";
 		
@@ -99,13 +96,6 @@ public class WebConsoleSetting {
 			} else {
 				break;
 			}
-		}
-
-		/*Password Salt*/
-		System.out.println("Password Salt Value (experdb12#) :");
-		strPasswordSalt = scan.nextLine();
-		if(strPasswordSalt.equals("")) {
-			strPasswordSalt = "experdb12#";
 		}
 
 		/* 감사설정 사용여부 */
@@ -243,7 +233,6 @@ public class WebConsoleSetting {
 		System.out.println("Repository database port :" + strDatabasePort);		
 		System.out.println("Repository database username :" + strDatabaseUsername);
 		System.out.println("Repository database password :" + strDatabasePassword);
-		System.out.println("Password Salt Value :" + strPasswordSalt);
 		System.out.println("Repository database Access information :" + strDatabaseUrl);
 		System.out.println("Whether to enable auditing settings : " + strAuditYN);
 		System.out.println("Whether data transfer is enabled : " + strTransferYN);
@@ -282,7 +271,6 @@ public class WebConsoleSetting {
 		    String url = pbeEnc.encrypt(strDatabaseUrl);
 		    String username = pbeEnc.encrypt(strDatabaseUsername);
 		    String password = pbeEnc.encrypt(strDatabasePassword);
-		    String passwordSolt = aes.aesEncode(strPasswordSalt);
 		    
 		    Properties prop = new Properties();
 
@@ -319,7 +307,6 @@ public class WebConsoleSetting {
 		    	System.exit(0);
 		    }
 	
-		    prop.setProperty("password_solt", passwordSolt);
 		    prop.setProperty("version", strVersion);
 		    prop.setProperty("lang", strLanguage);
 		    prop.setProperty("database.url", "ENC(" + url + ")");
@@ -365,6 +352,4 @@ public class WebConsoleSetting {
 			System.out.println("#### Exit(0) Cancel WebConsole Setting  #####");
 		}
 	}
-
-
 }

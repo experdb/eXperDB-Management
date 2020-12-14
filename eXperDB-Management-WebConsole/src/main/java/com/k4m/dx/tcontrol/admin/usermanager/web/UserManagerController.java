@@ -245,9 +245,15 @@ public class UserManagerController {
 			String encp_use_yn = loginVo.getEncp_use_yn();
 			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			String salt_value = "";
+
+			//salt 값
+			salt_value = SHA256.getSalt();
+
 			/*sha-256 암호화 변경 2020-11-26 */
-			userVo.setPwd(SHA256.getSHA256(password)); // 패스워드 암호화
+			userVo.setPwd(SHA256.setSHA256(password, salt_value)); // 패스워드 암호화
 			userVo.setPwd_edc(aes.aesEncode(password)); // 패스워드 암호화
+			userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
 
 			//암호화 여부 null 경우
 			if (userVo.getEncp_use_yn() == null) {
@@ -264,8 +270,7 @@ public class UserManagerController {
 						int restPort = loginVo.getRestPort();
 						
 						try{
-							/*results = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);*/
-							results = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, userVo.getPwd(), entityname);
+							results = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
 							if (!results.get("resultCode").equals("0000000000")) {
 								results.put("resultCode", results.get("resultCode"));
 								results.put("resultMessage", results.get("resultMessage"));
@@ -298,8 +303,7 @@ public class UserManagerController {
 
 			//사용자 정보등록
 			userManagerService.insertUserManager(userVo);
-			
-			userManagerService.insertUserManagerHd(userVo);
+			userManagerService.insertTransUser(userVo);
 
 			// 메뉴 권한 초기등록
 			result = menuAuthorityService.selectMnuIdList();
@@ -418,6 +422,7 @@ public class UserManagerController {
 				dbAuthorityService.deleteDbSvrAuthority(param[i]);
 				dbAuthorityService.deleteDbAuthority(param[i]);
 				userManagerService.deleteUserManager(param[i]);
+				userManagerService.deleteUserManagerHd(param[i]);
 			}
 
 			result.put("resultCode", "0000000000");
@@ -498,6 +503,8 @@ public class UserManagerController {
 		CmmnUtils cu = new CmmnUtils();
 		UserManagerServiceCall uic = new UserManagerServiceCall();
 		JSONObject result = new JSONObject();
+		String salt_value = "";
+		String pwd_now = "";
 	
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
@@ -519,20 +526,38 @@ public class UserManagerController {
 			String usr_id = loginVo.getUsr_id();
 			userVo.setLst_mdfr_id(usr_id);
 			UserVO userInfo = (UserVO) userManagerService.selectDetailUserManager(userVo.getUsr_id());
+			UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(userVo.getUsr_id());
 
+			pwd_now = userVo.getPwd();
 
 			if (userInfo.getPwd().equals(userVo.getPwd())) {
 				userVo.setPwd(userVo.getPwd());
-				
-				UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(userVo.getUsr_id());
 				userVo.setPwd_edc(userInfoHd.getPwd_edc());
+
+				if (userInfoHd != null){
+					if (!"".equals(userInfoHd.getSalt_value())) {
+						salt_value = userInfoHd.getSalt_value();
+					} 
+				}
+
+				if (salt_value == null || "".equals(salt_value)) {
+					salt_value = SHA256.getSalt();
+				}
+
+				userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
 			} else {
 				// 패스워드 암호화
 /*				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				userVo.setPwd(aes.aesEncode(userVo.getPwd()));*/
 				/*sha-256 암호화 변경 2020-11-26 */
-				userVo.setPwd(SHA256.getSHA256(userVo.getPwd())); // 패스워드 암호화
-				userVo.setPwd_edc(aes.aesEncode(userVo.getPwd()));
+
+				//salt 값
+				salt_value = SHA256.getSalt();
+
+				/*sha-256 암호화 변경 2020-11-26 */
+				userVo.setPwd(SHA256.setSHA256(pwd_now, salt_value)); // 패스워드 암호화
+				userVo.setPwd_edc(aes.aesEncode(pwd_now)); // 패스워드 암호화
+				userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
 			}
 			
 			
@@ -554,6 +579,10 @@ public class UserManagerController {
 			if (encp_use_yn.equals("N") && strTocken == null && entityId == null) {
 				userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
 				userManagerService.updateUserManager(userVo);
+
+				//backup 저장
+				userManagerService.insertTransUser(userVo);
+
 				result.put("resultCode", "0000000000");
 				return result;
 			}
@@ -568,10 +597,10 @@ public class UserManagerController {
 				if (nowEncrypt.equals("Y")) {
 					String strUserId = userVo.getUsr_id();
 					String entityname = userVo.getUsr_nm();
-					String password_edc = aes.aesDecode(userVo.getPwd_edc());
+				/*	String password_edc = aes.aesDecode(userVo.getPwd_edc());*/
 
 					try {
-						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, userVo.getPwd(), entityname);
+						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, pwd_now, entityname);
 						/*result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password_edc, entityname);*/
 					} catch (Exception e) {
 						result.put("resultCode", "8000000002");
@@ -600,6 +629,10 @@ public class UserManagerController {
 				if (result.get("resultCode").equals("0000000000")) {
 					userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
 					userManagerService.updateUserManager(userVo);
+					
+					//backup 저장
+					userManagerService.insertTransUser(userVo);
+					
 					result.put("resultCode", result.get("resultCode"));
 					result.put("resultMessage", result.get("resultMessage"));
 					return result;
@@ -612,6 +645,10 @@ public class UserManagerController {
 				//암호화 사용유무가 Y-> Y, N-> N(management DB 업데이트)
 				userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
 				userManagerService.updateUserManager(userVo);
+				
+				//backup 저장
+				userManagerService.insertTransUser(userVo);
+				
 				result.put("resultCode", "0000000000");
 				return result;
 			}

@@ -54,4 +54,12 @@ public class UserManagerServiceImpl extends EgovAbstractServiceImpl implements U
 		return userManagerDAO.selectDetailUserManagerHd(usr_id);
 	}
 
+	public void insertTransUser(UserVO userVo) throws Exception {
+		userManagerDAO.insertTransUser(userVo);
+	}
+
+	public void deleteUserManagerHd(String string) throws Exception {
+		userManagerDAO.deleteUserManagerHd(string);
+	}
+
 }

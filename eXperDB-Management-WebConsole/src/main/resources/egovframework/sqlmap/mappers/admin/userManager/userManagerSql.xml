@@ -156,7 +156,8 @@
 		* Author : 김주영
 		**/
         SELECT
-               TRANS_CHK_KEY AS PWD_EDC
+               TRANS_CHK_KEY AS PWD_EDC,
+               SALT_KEY AS SALT_VALUE
           FROM T_TRANS_ENCRYPT
          WHERE TRANS_ID = #{usr_id}
 	</select>
@@ -243,4 +244,49 @@
                                       , clock_timestamp()
                              )
 	</insert>
+	
+	<insert id="insertTransUser"  parameterType="userVO">
+        /**
+        * Query ID : insertTransUser
+        * Description :
+        * Author : 
+        **/
+        WITH UPSERT AS(
+               UPDATE T_TRANS_ENCRYPT
+                  SET SALT_KEY = #{salt_value},
+                      TRANS_CHK_KEY = #{pwd_edc},
+                      LST_MDFR_ID = #{lst_mdfr_id},
+                      LST_MDF_DTM = clock_timestamp()
+                WHERE TRANS_ID  = #{usr_id}
+                RETURNING *
+                      )
+        INSERT
+              INTO T_TRANS_ENCRYPT (
+                        TRANS_ID,
+                        TRANS_CHK_KEY,
+                        SALT_KEY,
+                        FRST_REGR_ID,
+                        FRST_REG_DTM,
+                        LST_MDFR_ID,
+                        LST_MDF_DTM
+                       )
+                       SELECT #{usr_id},
+                              #{pwd_edc},
+                              #{salt_value},
+                              #{frst_regr_id},
+                              clock_timestamp(),
+                              #{lst_mdfr_id},
+                              clock_timestamp()
+         WHERE NOT EXISTS ( SELECT * FROM UPSERT )
+	</insert>
+	
+	<delete id="deleteUserManagerHd" parameterType="string">
+		/**
+		* Query ID : deleteUserManagerHd
+		* Description : 사용자 삭제(백업)
+		* Author : 김주영
+		**/
+        DELETE FROM T_TRANS_ENCRYPT
+         WHERE trans_id=#{usr_id}
+	</delete>
 </mapper>

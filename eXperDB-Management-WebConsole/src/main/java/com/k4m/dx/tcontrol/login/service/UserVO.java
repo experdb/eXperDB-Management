@@ -35,10 +35,17 @@ public class UserVO {
 	private String log_out_dtm_hour; //로그아웃 일시(시간)
 	
 	private String pwd_edc;//비밀번호
+	private String salt_value; //salt 값
 
 	private Date sessionDate;
 	private String prmId;
 
+	public String getSalt_value() {
+		return salt_value;
+	}
+	public void setSalt_value(String salt_value) {
+		this.salt_value = salt_value;
+	}
 	public String getPwd_edc() {
 		return pwd_edc;
 	}

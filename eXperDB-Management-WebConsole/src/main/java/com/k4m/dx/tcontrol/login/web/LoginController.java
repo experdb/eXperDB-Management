@@ -30,6 +30,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.util.WebUtils;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -59,6 +60,9 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
 
 @Controller
 public class LoginController {
+
+	@Autowired
+	private UserManagerService userManagerService;
 
 	@Autowired
 	private LoginService loginService;
@@ -263,14 +267,28 @@ public class LoginController {
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String id = userVo.getUsr_id();
+			String salt_value = "";
 			
 			if (userVo.getUsr_id() == null || userVo.getPwd() == null) {
 				mv.addObject("error", "msg03");
 				mv.setViewName("login");
 				return mv;
 			}
+			
+			UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(userVo.getUsr_id());
+			if (userInfoHd != null){
+				if (!"".equals(userInfoHd.getSalt_value())) {
+					salt_value = userInfoHd.getSalt_value();
+				} 
+			}
+
+			if (salt_value == null || "".equals(salt_value)) {
+				salt_value = SHA256.getSalt();
+			}
+			
 			/*sha-256 암호화 변경 2020-11-26 */
-			String pw = SHA256.getSHA256(userVo.getPwd()); // 패스워드 암호화
+			//String pw = SHA256.getSHA256(userVo.getPwd()); // 패스워드 암호화
+			String pw = SHA256.setSHA256(userVo.getPwd(), salt_value);
 
 			String login_chk = userVo.getLoginChkYn();
 		

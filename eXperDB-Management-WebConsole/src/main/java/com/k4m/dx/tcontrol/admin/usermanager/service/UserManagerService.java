@@ -38,6 +38,14 @@ public interface UserManagerService {
 	 */
 	public void deleteUserManager(String string)throws Exception;
 
+
+	/**
+	 * 사용자 삭제(백업)
+	 * @param string
+	 * @throws Exception
+	 */
+	public void deleteUserManagerHd(String string)throws Exception;
+
 	
 	/**
 	 * 사용자 상세정보 조회
@@ -74,6 +82,13 @@ public interface UserManagerService {
 	 * @throws Exception
 	 */
 	public UserVO selectDetailUserManagerHd(String usr_id)throws Exception;
-
+	
+	/**
+	 * 사용자 등록 backup
+	 * @param userVo
+	 * @throws Exception
+	 */
+	public void insertTransUser(UserVO userVo)throws Exception;
+	
 	
 }

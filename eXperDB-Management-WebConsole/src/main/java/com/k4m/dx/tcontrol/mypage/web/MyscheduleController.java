@@ -59,15 +59,14 @@ public class MyscheduleController {
 	public ModelAndView myScheduleListView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0050");
 			historyVO.setMnu_id(23);
 			accessHistoryService.insertHistory(historyVO);
-			
 			mv.setViewName("mypage/mySchedulerList");
 		} catch (Exception e) {
+			request.getRequestDispatcher("/");
 			e.printStackTrace();
 		}
 		return mv;

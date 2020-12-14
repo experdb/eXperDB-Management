@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -53,6 +54,9 @@ public class MypageController {
 	
 	@Autowired
 	private AccessHistoryService accessHistoryService;
+
+	@Autowired
+	private UserManagerService userManagerService;
 	
 	/**
 	 * Mybatis Transaction 
@@ -184,9 +188,22 @@ public class MypageController {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String usr_id = loginVo.getUsr_id();
+			String salt_value = "";
 			/*AES256 aes = new AES256(AES256_KEY.ENC_KEY);*/
 			/*sha-256 암호화 변경 2020-11-26 */
-			String nowpwd = SHA256.getSHA256(request.getParameter("nowpwd"));
+
+			UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(usr_id);
+			if (userInfoHd != null){
+				if (!"".equals(userInfoHd.getSalt_value())) {
+					salt_value = userInfoHd.getSalt_value();
+				} 
+			}
+
+			if (salt_value == null || "".equals(salt_value)) {
+				salt_value = SHA256.getSalt();
+			}
+
+			String nowpwd = SHA256.setSHA256(request.getParameter("nowpwd"), salt_value);
 			
 			param.put("usr_id", usr_id);
 			param.put("nowpwd", nowpwd);
@@ -224,6 +241,7 @@ public class MypageController {
 			String entityId = loginVo.getEctityUid();	
 			String encp_use_yn = loginVo.getEncp_use_yn();
 			String password = userVo.getPwd();
+			String salt_value = "";
 
 			if(encp_use_yn.equals("Y") && (strTocken != null && !"".equals(strTocken)) && (entityId !=null && !"".equals(entityId))){
 				String restIp = loginVo.getRestIp();
@@ -244,10 +262,24 @@ public class MypageController {
 				userVo.setLst_mdfr_id(usr_id);
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				/*sha-256 암호화 변경 2020-11-26 */
-				userVo.setPwd(SHA256.getSHA256(userVo.getPwd()));
+
+				UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(request.getParameter("nowpwd"));
+				if (userInfoHd != null){
+					if (!"".equals(userInfoHd.getSalt_value())) {
+						salt_value = userInfoHd.getSalt_value();
+					} 
+				}
+
+				if (salt_value == null || "".equals(salt_value)) {
+					salt_value = SHA256.getSalt();
+				}
+
+				userVo.setPwd(SHA256.setSHA256(userVo.getPwd(), salt_value));
 				myPageService.updatePwd(userVo);
 
 				userVo.setPwd(aes.aesEncode(password));
+				userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
+
 				myPageService.updateTranPwd(userVo);
 			}
 			
