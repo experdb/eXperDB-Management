@@ -528,11 +528,11 @@ public class UserManagerController {
 			UserVO userInfo = (UserVO) userManagerService.selectDetailUserManager(userVo.getUsr_id());
 			UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(userVo.getUsr_id());
 
-			pwd_now = userVo.getPwd();
-
 			if (userInfo.getPwd().equals(userVo.getPwd())) {
 				userVo.setPwd(userVo.getPwd());
 				userVo.setPwd_edc(userInfoHd.getPwd_edc());
+				
+				pwd_now = userInfoHd.getPwd_edc();
 
 				if (userInfoHd != null){
 					if (!"".equals(userInfoHd.getSalt_value())) {
@@ -551,6 +551,8 @@ public class UserManagerController {
 				userVo.setPwd(aes.aesEncode(userVo.getPwd()));*/
 				/*sha-256 암호화 변경 2020-11-26 */
 
+				pwd_now = userVo.getPwd();
+				
 				//salt 값
 				salt_value = SHA256.getSalt();
 
@@ -597,10 +599,10 @@ public class UserManagerController {
 				if (nowEncrypt.equals("Y")) {
 					String strUserId = userVo.getUsr_id();
 					String entityname = userVo.getUsr_nm();
-				/*	String password_edc = aes.aesDecode(userVo.getPwd_edc());*/
+					String password_edc = aes.aesDecode(pwd_now);
 
 					try {
-						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, pwd_now, entityname);
+						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password_edc, entityname);
 						/*result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password_edc, entityname);*/
 					} catch (Exception e) {
 						result.put("resultCode", "8000000002");
