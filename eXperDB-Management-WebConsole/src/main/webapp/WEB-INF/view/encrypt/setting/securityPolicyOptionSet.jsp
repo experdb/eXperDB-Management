@@ -268,9 +268,7 @@ function fn_save(){
 	 dayWeek.push($("#fri").prop("checked"));
 	 dayWeek.push($("#sat").prop("checked"));
 	 dayWeek.push($("#sun").prop("checked"));
-	 
-	 alert($("#GLOBAL_POLICY_FORCED_LOGGING_OFF_TF").prop("checked"));
-	 
+
 	tmpmap01["global_policy_default_access_allow_tf"] =$("#GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF").prop("checked");
 	tmpmap01["global_policy_forced_logging_off_tf"] = $("#GLOBAL_POLICY_FORCED_LOGGING_OFF_TF").prop("checked");
 	tmpmap01["global_policy_boost_tf"] = $("#GLOBAL_POLICY_BOOST_TF").prop("checked");

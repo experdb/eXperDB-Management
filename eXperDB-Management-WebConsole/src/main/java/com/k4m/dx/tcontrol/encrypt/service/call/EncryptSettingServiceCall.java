@@ -290,6 +290,8 @@ public class EncryptSettingServiceCall {
 		HashMap body = new HashMap();
 		body.put("SysConfig", param);
 
+		body.put(SystemCode.CustomFormParamKey.isPolicyConfig, true);
+		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
 
