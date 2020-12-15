@@ -19,6 +19,7 @@
 	*
 	*/
 %>
+
 <script>
 	var table = null;
 
