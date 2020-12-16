@@ -43,8 +43,9 @@ public class DatabaseTableInfo {
 							+ "AND A.OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE')  "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDRT%' "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDXT%' "		
-							+ "AND A.OBJECT_TYPE LIKE '%"+serverObj.get("OBJECT_TYPE").toString().toUpperCase()+"%'"
-							+ "AND A.OBJECT_NAME Like '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%'";
+							+ "AND A.OBJECT_TYPE LIKE '%"+serverObj.get("OBJECT_TYPE").toString().toUpperCase()+"%' "
+							+ "AND A.OBJECT_NAME Like '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%' "
+							+ "AND A.OBJECT_TYPE IN ('TABLE', 'VIEW') ORDER BY 1 ";
 							/*+ "AND A.OBJECT_TYPE IN ('TABLE') ORDER BY 1 ";*/
 					
 					ResultSet oraRs = stmt.executeQuery(sql);				
@@ -66,13 +67,15 @@ public class DatabaseTableInfo {
 					
 			//MS-SQL
 				case "TC002202" :
-					sql = " SELECT LOWER(name) as table_name "
+					sql = " SELECT LOWER(name) as table_name, table_type"
 							+ "FROM sys.objects A "
 							+ "WHERE 1=1"
 							/*+ "schema_id=(SELECT schema_id FROM sys.schemas WHERE name='"+serverObj.get("SCHEMA") +"') "*/													
-							+ "AND type in ('U') "
-							+ "AND type in ('U', 'V')"
-							+ "AND LOWER(name) Like '%" + serverObj.get("TABLE_NM") + "%'";
+//							+ "AND type in ('U') "
+							+ "AND type in ('U', 'V') "
+							+ "AND table_type Like '%" + serverObj.get("OBJECT_TYPE").toString().toUpperCase() + "%' "
+							+ "AND LOWER(name) Like '%" + serverObj.get("TABLE_NM") + "%' "
+							+ "ORDER BY 1";
 			
 					ResultSet msRs = stmt.executeQuery(sql);				
 					i = 0;
@@ -81,7 +84,7 @@ public class DatabaseTableInfo {
 						JSONObject jsonObj = new JSONObject();
 							jsonObj.put("rownum",i);
 							jsonObj.put("table_name", msRs.getString("table_name"));
-							jsonObj.put("obj_type", "");
+							jsonObj.put("obj_type", msRs.getString("table_type"));
 							jsonObj.put("obj_description","");
 							jsonArray.add(jsonObj);
 					}
@@ -93,12 +96,13 @@ public class DatabaseTableInfo {
 			//MySQL
 				case "TC002203" :
 
-					sql = " SELECT table_name "
+					sql = " SELECT table_name, table_type "
 							+ "FROM information_schema.tables "
 							+ "WHERE table_schema='"+serverObj.get("SCHEMA") +"' "													
-							+ "AND table_type IN ('BASE TABLE') "
+//							+ "AND table_type IN ('BASE TABLE') "
 							+ "AND table_type IN ('BASE TABLE','VIEW') "
-							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%'";
+							+ "AND table_type Like '%" + serverObj.get("OBJECT_TYPE").toString().toUpperCase() + "%' "
+							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%' ORDER BY 1";
 					
 					ResultSet mysRs = stmt.executeQuery(sql);				
 					i = 0;
@@ -107,7 +111,7 @@ public class DatabaseTableInfo {
 						JSONObject jsonObj = new JSONObject();
 							jsonObj.put("rownum",i);
 							jsonObj.put("table_name", mysRs.getString("table_name"));
-							jsonObj.put("obj_type", "");
+							jsonObj.put("obj_type", mysRs.getString("table_type"));
 							jsonObj.put("obj_description","");
 							jsonArray.add(jsonObj);
 					}
@@ -147,7 +151,8 @@ public class DatabaseTableInfo {
 								+ "AND A.TABLE_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%' "
 								+ "AND A.TABLE_TYPE LIKE '%" +serverObj.get("OBJECT_TYPE").toString().toUpperCase() + "%'"
 								/*+ "AND A.TABLE_TYPE IN ('BASE TABLE') "*/
-								+ "AND A.TABLE_TYPE IN ('BASE TABLE','VIEW')";
+								+ "AND A.TABLE_TYPE IN ('BASE TABLE','VIEW')"
+								+ "ORDER BY 1";
 			
 						ResultSet db2Rs = stmt.executeQuery(sql);				
 						i = 0;
@@ -171,7 +176,8 @@ public class DatabaseTableInfo {
 									+ "FROM sysobjects "
 									+ "WHERE user_name(uid)='" +serverObj.get("USER_ID").toString().toUpperCase() + "' "
 									+ "AND type in ('U')"
-									+ "AND name LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' ";
+									+ "AND name LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' "
+									+ "ORDER BY 1";
 						
 						ResultSet syRs = stmt.executeQuery(sql);				
 						i = 0;
@@ -232,9 +238,9 @@ public class DatabaseTableInfo {
 							+ "AND OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE') "
 							+ "AND OBJECT_NAME NOT LIKE 'MDRT%'"
 							+ "AND OBJECT_NAME NOT LIKE 'MDXT%'"
-							+ "AND OBJECT_TYPE LIKE '%"+serverObj.get("OBJECT_TYPE").toString().toUpperCase()+"%'"
+							+ "AND OBJECT_TYPE LIKE '%"+serverObj.get("OBJECT_TYPE").toString().toUpperCase()+"%' "
 							+ "AND OBJECT_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' "
-							+ "AND OBJECT_TYPE IN ('TABLE', 'VIEW')";
+							+ "AND OBJECT_TYPE IN ('TABLE', 'VIEW') ORDER BY 1 ";
 					
 					ResultSet tibRs = stmt.executeQuery(sql);				
 					i = 0;
@@ -260,9 +266,10 @@ public class DatabaseTableInfo {
 					sql = " SELECT table_name "
 							+ "FROM information_schema.tables "
 							+ "WHERE table_schema='"+serverObj.get("SCHEMA") +"' "													
-							+ "AND table_type IN ('BASE TABLE') "
+//							+ "AND table_type IN ('BASE TABLE') "
 							+ "AND table_type IN ('BASE TABLE','VIEW') "
-							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%'";
+							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%' "
+							+ "ORDER BY 1";
 					
 					ResultSet mariaRs = stmt.executeQuery(sql);				
 					i = 0;
