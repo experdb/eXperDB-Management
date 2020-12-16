@@ -43,6 +43,7 @@ public class DatabaseTableInfo {
 							+ "AND A.OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE')  "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDRT%' "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDXT%' "		
+							+ "AND A.OBJECT_TYPE LIKE '%"+serverObj.get("OBJECT_TYPE").toString().toUpperCase()+"%'"
 							+ "AND A.OBJECT_NAME Like '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%'";
 							/*+ "AND A.OBJECT_TYPE IN ('TABLE') ORDER BY 1 ";*/
 					
@@ -144,6 +145,7 @@ public class DatabaseTableInfo {
 								+ "WHERE A.TABLE_SCHEMA = '" +serverObj.get("USER_ID").toString().toUpperCase() + "' "
 								+ "AND A.TABLE_NAME = B.NAME "
 								+ "AND A.TABLE_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%' "
+								+ "AND A.TABLE_TYPE LIKE '%" +serverObj.get("OBJECT_TYPE").toString().toUpperCase() + "%'"
 								/*+ "AND A.TABLE_TYPE IN ('BASE TABLE') "*/
 								+ "AND A.TABLE_TYPE IN ('BASE TABLE','VIEW')";
 			
@@ -189,11 +191,22 @@ public class DatabaseTableInfo {
 					
 				//CUBRID
 				case "TC002207" :
+					String type = serverObj.get("OBJECT-TYPE").toString().toUpperCase();
+					String ObjectSql = null;
+					if(type.equals("TABLE")){
+						ObjectSql = "AND class_type NOT LIKE '%V%' ";
+					}else if(type.equals("VIEW")){
+						ObjectSql = "AND class_type LIKE '%VCLASS% ";
+					}else{
+						ObjectSql = "AND class_type LIKE '%% ";
+					}
+					
 					sql= "SELECT class_name AS table_name, case when class_type='CLASS' then 'TABLE' when class_type='VCLASS' then 'VIEW' end AS class_type "
 						+ "FROM db_class "
 						+ "WHERE owner_name ='" +serverObj.get("USER_ID").toString().toUpperCase() + "'"
 						+ "AND is_system_class='NO' "
 						+ "AND class_name LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' "
+						+ ObjectSql
 						+ "ORDER BY class_name ASC";
 
 					ResultSet cubRs = stmt.executeQuery(sql);				
@@ -219,8 +232,9 @@ public class DatabaseTableInfo {
 							+ "AND OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE') "
 							+ "AND OBJECT_NAME NOT LIKE 'MDRT%'"
 							+ "AND OBJECT_NAME NOT LIKE 'MDXT%'"
-							+ "AND OBJECT_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' ";
-							/*+ "AND OBJECT_TYPE IN ('TABLE')";*/
+							+ "AND OBJECT_TYPE LIKE '%"+serverObj.get("OBJECT_TYPE").toString().toUpperCase()+"%'"
+							+ "AND OBJECT_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' "
+							+ "AND OBJECT_TYPE IN ('TABLE', 'VIEW')";
 					
 					ResultSet tibRs = stmt.executeQuery(sql);				
 					i = 0;

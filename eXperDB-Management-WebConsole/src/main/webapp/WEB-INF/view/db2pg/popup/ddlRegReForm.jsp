@@ -200,6 +200,8 @@ function fn_tableList_reg_re(gbn){
 			$("#spr_usr_id_table").val(nvlPrmSet(result.dbmsInfo[0].spr_usr_id, ""));
 			$("#pwd_table").val(nvlPrmSet(result.dbmsInfo[0].pwd, ""));
 			$("#portno_table").val(nvlPrmSet(result.dbmsInfo[0].portno, ""));
+			$("#object_type_table").val("");
+			
 			fn_search_tableInfo();
  			document.getElementById("add").style.display ='none';
  			document.getElementById("mod").style.display ='block';

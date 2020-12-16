@@ -70,6 +70,7 @@ function fn_search_tableInfo(){
  		  	dbms_dscd : $("#dbms_dscd_table").val(),
  		  	table_nm : table_nm,
  		  	scm_nm : $("#scm_nm_table").val(),
+ 		  	object_type : $("#object_type_table").val()
 		},
 		dataType : "json",
 		type : "post",
@@ -208,6 +209,13 @@ function fn_tableCheckSelect(tableList){
 								<input type="text" class="form-control" style="margin-right: -0.7rem;"  id="scm_nm_table" name="scm_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>'  />
 							</div>
 							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+								<select class="form-control" name="work" id="object_type_table">
+									<option value=""><spring:message code="migration.table_type"/></option>
+									<option value="TABLE">TABLE</option>
+									<option value="VIEW">VIEW</option>
+								</select>
+							</div>
+							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
 								<input type="text" class="form-control" id="table_nm_table" name="table_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.table_name'/>'  />
 							</div>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search_tableInfo();" >
@@ -230,8 +238,8 @@ function fn_tableCheckSelect(tableList){
 								<tr class="bg-info text-white">
 									<th width="10"></th>
 									<th width="300" class="dt-center"><spring:message code="migration.table_name"/></th>
-									<th width="140" class="dt-center">OBJECT_TYPE</th>
-									<th width="300" class="dt-center">COMMENT</th>
+									<th width="140" class="dt-center"><spring:message code="migration.table_type"/></th>
+									<th width="300" class="dt-center"><spring:message code="migration.table_comment"/></th>
 								</tr>
 							</thead>
 						</table>
