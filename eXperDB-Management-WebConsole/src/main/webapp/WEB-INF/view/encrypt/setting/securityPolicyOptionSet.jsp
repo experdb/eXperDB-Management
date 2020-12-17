@@ -159,6 +159,8 @@ function fn_securityPolicyOptionSelect01(){
 				showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			}else if(data.resultCode == "8000000003"){
 				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
+			}else if(data.resultCode == "0000000003"){		
+				showSwalIcon('<spring:message code="encrypt_permissio.error" />', '<spring:message code="common.close" />', '', 'error');
 			}else{
 				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}
@@ -266,7 +268,7 @@ function fn_save(){
 	 dayWeek.push($("#fri").prop("checked"));
 	 dayWeek.push($("#sat").prop("checked"));
 	 dayWeek.push($("#sun").prop("checked"));
-	 
+
 	tmpmap01["global_policy_default_access_allow_tf"] =$("#GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF").prop("checked");
 	tmpmap01["global_policy_forced_logging_off_tf"] = $("#GLOBAL_POLICY_FORCED_LOGGING_OFF_TF").prop("checked");
 	tmpmap01["global_policy_boost_tf"] = $("#GLOBAL_POLICY_BOOST_TF").prop("checked");
@@ -309,6 +311,8 @@ function fn_save(){
 				showSwalIcon('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');		
 			}else if(data.resultCode == "8000000003"){
 				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
+			}else if(data.resultCode == "0000000003"){		
+				showSwalIcon('<spring:message code="encrypt_permissio.error" />', '<spring:message code="common.close" />', '', 'error');
 			}else{
 				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}	

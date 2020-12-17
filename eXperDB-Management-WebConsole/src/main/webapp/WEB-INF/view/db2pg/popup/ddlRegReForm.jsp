@@ -126,7 +126,9 @@ function fn_update_work(){
 			},
 			success : function(result) {
 				if(result.resultCode == "0000000000"){
-					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+					$('#pop_layer_ddl_reg_re').modal("hide");
+					selectTab("ddlWork");
 				}else{
 					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 				}	
@@ -198,6 +200,8 @@ function fn_tableList_reg_re(gbn){
 			$("#spr_usr_id_table").val(nvlPrmSet(result.dbmsInfo[0].spr_usr_id, ""));
 			$("#pwd_table").val(nvlPrmSet(result.dbmsInfo[0].pwd, ""));
 			$("#portno_table").val(nvlPrmSet(result.dbmsInfo[0].portno, ""));
+			$("#object_type_table").val("");
+			
 			fn_search_tableInfo();
  			document.getElementById("add").style.display ='none';
  			document.getElementById("mod").style.display ='block';

@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
@@ -52,6 +54,9 @@ public class MypageController {
 	
 	@Autowired
 	private AccessHistoryService accessHistoryService;
+
+	@Autowired
+	private UserManagerService userManagerService;
 	
 	/**
 	 * Mybatis Transaction 
@@ -183,8 +188,23 @@ public class MypageController {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String usr_id = loginVo.getUsr_id();
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			String nowpwd = aes.aesEncode(request.getParameter("nowpwd"));;
+			String salt_value = "";
+			/*AES256 aes = new AES256(AES256_KEY.ENC_KEY);*/
+			/*sha-256 암호화 변경 2020-11-26 */
+
+			UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(usr_id);
+			if (userInfoHd != null){
+				if (!"".equals(userInfoHd.getSalt_value())) {
+					salt_value = userInfoHd.getSalt_value();
+				} 
+			}
+
+			if (salt_value == null || "".equals(salt_value)) {
+				salt_value = SHA256.getSalt();
+			}
+
+			String nowpwd = SHA256.setSHA256(request.getParameter("nowpwd"), salt_value);
+			
 			param.put("usr_id", usr_id);
 			param.put("nowpwd", nowpwd);
 			
@@ -220,9 +240,10 @@ public class MypageController {
 			String loginId = loginVo.getUsr_id();
 			String entityId = loginVo.getEctityUid();	
 			String encp_use_yn = loginVo.getEncp_use_yn();
-			String password = userVo.getPwd();		
-			
-			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+			String password = userVo.getPwd();
+			String salt_value = "";
+
+			if(encp_use_yn.equals("Y") && (strTocken != null && !"".equals(strTocken)) && (entityId !=null && !"".equals(entityId))){
 				String restIp = loginVo.getRestIp();
 				int restPort = loginVo.getRestPort();
 
@@ -231,6 +252,8 @@ public class MypageController {
 				}catch(Exception e){
 					result.put("resultCode", "8000000002");
 				}
+			} else {
+				result.put("resultCode", "0000000000");
 			}
 			
 			if(result.get("resultCode").equals("0000000000")){
@@ -238,8 +261,26 @@ public class MypageController {
 				userVo.setUsr_id(usr_id);
 				userVo.setLst_mdfr_id(usr_id);
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
+				/*sha-256 암호화 변경 2020-11-26 */
+
+				UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(request.getParameter("nowpwd"));
+				if (userInfoHd != null){
+					if (!"".equals(userInfoHd.getSalt_value())) {
+						salt_value = userInfoHd.getSalt_value();
+					} 
+				}
+
+				if (salt_value == null || "".equals(salt_value)) {
+					salt_value = SHA256.getSalt();
+				}
+
+				userVo.setPwd(SHA256.setSHA256(userVo.getPwd(), salt_value));
 				myPageService.updatePwd(userVo);
+
+				userVo.setPwd(aes.aesEncode(password));
+				userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
+
+				myPageService.updateTranPwd(userVo);
 			}
 			
 			// 화면접근이력 이력 남기기

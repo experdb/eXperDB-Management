@@ -11,6 +11,7 @@
 	
 	//cancel
 	function fnc_confirmCancel() {
+		$('#pop_confirm_multi_md').modal('hide');
 		if ($('#con_multi_gbn').val() == "con_start" || $('#con_multi_gbn').val() == "con_end" 
 			|| $('#con_multi_gbn').val() == "target_con_start" || $('#con_multi_gbn').val() == "target_con_end"
 			|| $('#con_multi_gbn').val() == "ins_menu" || $('#con_multi_gbn').val() == "ins_menu") {
@@ -24,9 +25,9 @@
 		//scale
 		if ($('#con_multi_gbn').val() == "use_start" || $('#con_multi_gbn').val() == "use_end") {
 			fnc_confirmCancelRst ($('#con_multi_gbn').val());
-		}
-
-		$('#pop_confirm_multi_md').modal('hide');
+		}		
+//			$('#pop_confirm_multi_md').modal('hide');
+		
 	}
 	
 	//cancel

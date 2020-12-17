@@ -24,14 +24,14 @@ function fn_init(){
 	deferRender : true,
 	bSort: false,
 	columns : [
-		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "rownum",  className : "dt-center", defaultContent : ""}, 		
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
 				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold" title="'+full.scd_nm+'">' + full.scd_nm + '</span>';
 			}
 		},
-		{ data : "scd_exp",
+		{data : "scd_exp",
 				render : function(data, type, full, meta) {	 	
 					var html = '';					
 					html += '<span title="'+full.scd_exp+'">' + full.scd_exp + '</span>';

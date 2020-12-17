@@ -1304,6 +1304,7 @@ public class Db2pgSettingController {
 		String dbms_cd = request.getParameter("dbms_dscd");
 		String table_nm = request.getParameter("table_nm");
 		String scm_nm = request.getParameter("scm_nm");
+		String object_type = request.getParameter("object_type");
 
 		serverObj.put(ClientProtocolID.SERVER_NAME, ipadr);
 		serverObj.put(ClientProtocolID.SERVER_IP, ipadr);
@@ -1314,6 +1315,7 @@ public class Db2pgSettingController {
 		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
 		serverObj.put(ClientProtocolID.TABLE_NM, table_nm);
 		serverObj.put(ClientProtocolID.SCHEMA, scm_nm);
+		serverObj.put(ClientProtocolID.OBJECT_TYPE, object_type);
 		
 		result =  DatabaseTableInfo.getTblList(serverObj);
 	}catch (Exception e) {

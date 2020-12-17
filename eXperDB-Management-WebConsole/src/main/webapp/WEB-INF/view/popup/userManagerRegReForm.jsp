@@ -74,6 +74,7 @@
 		$("#mod_pwd", "#modUserForm").blur(function(){
 			var mod_pwd_val = $("#mod_pwd", "#modUserForm").val(); 
 			var mod_pwdCheck_val = $("#mod_pwdCheck", "#modUserForm").val(); 
+			var mod_passCheck_cho_val = $("#mod_passCheck_cho", "#modUserForm").val(); 
 			
 			if (mod_pwd_val =="" && mod_pwdCheck_val == "") {
  				$("#mod_pwd_alert-danger", "#modUserForm").html("");
@@ -92,8 +93,8 @@
 
 			if (mod_pwd_val != "") {
 				var passed = pwdValidate(mod_pwd_val);
-
-				if (passed != "") {
+		
+				if ((mod_passCheck_cho_val != mod_pwd_val)&& passed != "") {
 	 				$("#mod_pwd_alert-danger", "#modUserForm").html(passed);
 					$("#mod_pwd_alert-danger", "#modUserForm").show();
 					
@@ -225,6 +226,8 @@
 
 		var mod_pwd_val = $("#mod_pwd", "#modUserForm").val(); 
 		var mod_pwdCheck_val = $("#mod_pwdCheck", "#modUserForm").val(); 
+		var mod_passCheck_cho_val = $("#mod_passCheck_cho", "#modUserForm").val(); 
+		
 
 		if (mod_pwd_val != "" && mod_pwdCheck_val != "") {
 			//패스워드 검증
@@ -239,23 +242,27 @@
 				$("#mod_pwd_chk_div", "#modUserForm").show();
 				return false;
 			}
+
+			var passed = "";
 			
-			var passed = pwdValidate(mod_pwd_val);
-			if (passed != "") {
-	 			$("#mod_pwd_alert-danger", "#modUserForm").html(passed);
-				$("#mod_pwd_alert-danger", "#modUserForm").show();
-					
-				$("#mod_pwd_alert-light", "#modUserForm").html("");
-				$("#mod_pwd_alert-light", "#modUserForm").hide();
+			if (mod_passCheck_cho_val != mod_pwd_val) {
+				passed = pwdValidate(mod_pwd_val);
+				if ( passed != "") {
+		 			$("#mod_pwd_alert-danger", "#modUserForm").html(passed);
+					$("#mod_pwd_alert-danger", "#modUserForm").show();
+						
+					$("#mod_pwd_alert-light", "#modUserForm").html("");
+					$("#mod_pwd_alert-light", "#modUserForm").hide();
 
-				$("#mod_save_submit", "#modUserForm").attr("disabled", "disabled"); 
-				$("#mod_save_submit", "#modUserForm").attr("readonly", "readonly"); 
+					$("#mod_save_submit", "#modUserForm").attr("disabled", "disabled"); 
+					$("#mod_save_submit", "#modUserForm").attr("readonly", "readonly"); 
 
-				$("#mod_pwd_chk_msg_div", "#modUserForm").hide();
-				$("#mod_pwd_chk_div", "#modUserForm").show();
-				return false;
+					$("#mod_pwd_chk_msg_div", "#modUserForm").hide();
+					$("#mod_pwd_chk_div", "#modUserForm").show();
+					return false;
+				}
 			}
-			
+
 			$("#mod_pwd_alert-danger", "#modUserForm").html("");
 			$("#mod_pwd_alert-danger", "#modUserForm").hide();
 			$("#mod_pwd_alert-light", "#modUserForm").html("");
@@ -404,6 +411,7 @@
 						<input type="hidden" name="mod_use_yn" id="mod_use_yn" />
 						<input type="hidden" name="mod_encp_use_yn" id="mod_encp_use_yn" />
 						<input type="hidden" name="mod_passCheck_hid" id="mod_passCheck_hid" value="0" />
+						<input type="hidden" name="mod_passCheck_cho" id="mod_passCheck_cho" value="" />
 
 						<fieldset>
 							<div class="card-body" style="border: 1px solid #adb5bd;">
@@ -541,7 +549,7 @@
 									
 									<label for="mod_encp_use_yn_chk" class="col-sm-2 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										Encrypt <spring:message code="user_management.use_yn" />
+										<spring:message code="encrypt_log_decode.Encryption" /> <spring:message code="user_management.use_yn" />
 									</label>
 									<div class="col-sm-2">
 										<div class="onoffswitch-use" style="margin-top:0.250rem;">

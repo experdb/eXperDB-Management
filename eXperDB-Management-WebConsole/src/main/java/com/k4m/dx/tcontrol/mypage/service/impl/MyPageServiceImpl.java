@@ -38,5 +38,9 @@ public class MyPageServiceImpl extends EgovAbstractServiceImpl implements MyPage
 		myPageDAO.updatePwd(userVo);
 	}
 
+	@Override
+	public void updateTranPwd(UserVO userVo) throws Exception {
+		myPageDAO.updateTranPwd(userVo);
+	}
 
 }

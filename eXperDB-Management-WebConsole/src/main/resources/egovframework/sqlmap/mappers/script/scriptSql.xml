@@ -175,10 +175,11 @@
 	 	* Author : 변승우
 	 	**/
 	 	INSERT INTO T_BCK_WRKCNG_I
-	 		(
+	 		( 
 	 		BCK_WRK_ID
 	 		, WRK_ID
 	 		, DB_SVR_ID
+	 		, BCK_BSN_DSCD
 	 		, EXE_CMD
 	 		, FRST_REGR_ID
 	 		, FRST_REG_DTM
@@ -190,6 +191,7 @@
 	 		nextval('q_bck_wrkcng_i')
 	 		, #{wrk_id}
 	 		, #{db_svr_id}
+	 		, 'TC000203'
 	 		, #{exe_cmd}
 			, #{frst_regr_id}
 			, now()

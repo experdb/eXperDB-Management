@@ -189,7 +189,7 @@ function fn_Add_Trsf(){
 					<br>
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<p class="card-description"><spring:message code="schedule.workList"/></p>
+						<p class="card-description"><spring:message code="extension_pack_installation_information.dbms_list"/></p>
 						<table id="dbmsList_trsf" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
 							<thead>
 								<tr class="bg-info text-white">

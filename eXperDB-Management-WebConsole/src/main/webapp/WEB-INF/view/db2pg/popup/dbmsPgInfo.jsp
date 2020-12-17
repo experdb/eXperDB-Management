@@ -167,7 +167,7 @@ function fn_Add_Pg_Trsf(){
 					<br>
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<p class="card-description"><spring:message code="schedule.workList"/></p>
+						<p class="card-description"><spring:message code="extension_pack_installation_information.dbms_list"/></p>
 						<table id="dbmsList_trsf_pg" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
@@ -185,7 +185,7 @@ function fn_Add_Pg_Trsf(){
 					</div>
 					<br>
 					<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-						<input class="btn btn-primary" width="200px"style="vertical-align:middle;display: none;" type="button" id="sourceSystem_trsf_pg_add" onclick="fn_Add_Pg_Trsf()" value='<spring:message code="common.add" />' />
+						<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" id="sourceSystem_trsf_pg_add" onclick="fn_Add_Pg_Trsf()" value='<spring:message code="common.add" />' />
 						<input class="btn btn-primary" width="200px"style="vertical-align:middle;display: none;" type="button" id="sourceSystem_trsf_pg_mod" onclick="fn_Mod_Pg_Trsf()" value='<spring:message code="common.add" />' />
 						<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 					</div>

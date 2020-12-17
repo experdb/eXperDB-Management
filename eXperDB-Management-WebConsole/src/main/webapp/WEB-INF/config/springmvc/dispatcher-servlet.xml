@@ -116,6 +116,13 @@
 	</bean>
 	<!-- /Excel -->
 	
+	<!-- Excel -->
+	<bean id="overallExcelView" class="com.k4m.dx.tcontrol.cmmn.OverallExcelBuilder" />
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="0" />
+	</bean>
+	<!-- /Excel -->
+	
 	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
 		<property name="contentType" value="text/html;charset=UTF-8"/>
 	</bean>

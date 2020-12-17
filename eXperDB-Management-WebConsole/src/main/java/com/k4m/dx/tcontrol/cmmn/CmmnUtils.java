@@ -55,6 +55,30 @@ public class CmmnUtils {
 		}
 	}
 	
+	public static boolean saveHistoryLogin(LoginVO loginVo, String login_chk, String id, HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
+		HttpSession session = request.getSession(true);
+
+		if(session==null){
+			return false;
+		}else{
+			session.setAttribute("session", loginVo);
+
+			// 사용자의 로그인 유지 여부를 null 체크로 확인 
+			if (login_chk != null) { // 체크한 경우
+				if ("Y".equals(login_chk)) {
+					session.setAttribute("loginChkId", id);
+				}
+			}
+			
+			LoginVO loginVoNew = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVoNew.getUsr_id();
+			String ip = loginVoNew.getIp();
+			historyVO.setUsr_id(usr_id);
+			historyVO.setLgi_ipadr(ip);
+			return true;
+		}
+	}
+	
 	//메뉴권한 조회
 	public List<Map<String, Object>> selectMenuAut(MenuAuthorityService menuAuthorityService, String mnu_cd) {
 		

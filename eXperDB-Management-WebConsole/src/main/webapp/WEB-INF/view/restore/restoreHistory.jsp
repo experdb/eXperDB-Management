@@ -605,7 +605,7 @@
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
 					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
 					 						</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Restore</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="restore.Recovery_Management" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="restore.Recovery_history"/></li>
 										</ol>
 									</div>

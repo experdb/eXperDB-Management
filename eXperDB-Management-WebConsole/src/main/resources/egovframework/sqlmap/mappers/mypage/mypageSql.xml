@@ -72,5 +72,40 @@
 		, LST_MDFR_ID=#{lst_mdfr_id}
 		, LST_MDF_DTM= clock_timestamp()
 		WHERE USR_ID = #{usr_id}
-	</update>	
+	</update>
+	
+	<insert id="updateTranPwd" parameterType="userVO">
+        /**
+		* Query ID : updateTranPwd
+		* Description : 수정
+		* Author : 김주영
+		**/
+        WITH UPSERT AS(
+               UPDATE T_TRANS_ENCRYPT
+                  SET SALT_KEY = #{salt_value},
+                      TRANS_CHK_KEY = #{pwd},
+                      LST_MDFR_ID = #{lst_mdfr_id},
+                      LST_MDF_DTM = clock_timestamp()
+                WHERE TRANS_ID  = #{usr_id}
+                RETURNING *
+                      )
+        INSERT
+              INTO T_TRANS_ENCRYPT (
+                        TRANS_ID,
+                        TRANS_CHK_KEY,
+                        SALT_KEY,
+                        FRST_REGR_ID,
+                        FRST_REG_DTM,
+                        LST_MDFR_ID,
+                        LST_MDF_DTM
+                       )
+                       SELECT #{usr_id},
+                              #{pwd},
+                              #{salt_value},
+                              #{lst_mdfr_id},
+                              clock_timestamp(),
+                              #{lst_mdfr_id},
+                              clock_timestamp()
+         WHERE NOT EXISTS ( SELECT * FROM UPSERT )
+	</insert>
 </mapper>

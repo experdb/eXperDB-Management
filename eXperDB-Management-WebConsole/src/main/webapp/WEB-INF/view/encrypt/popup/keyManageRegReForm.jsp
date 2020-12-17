@@ -142,6 +142,8 @@ function fn_keyManagementModify(){
 				showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			}else if(data.resultCode == "8000000003"){
 				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
+			}else if(data.resultCode == "0000000003"){		
+				showSwalIcon('<spring:message code="encrypt_permissio.error" />', '<spring:message code="common.close" />', '', 'error');
 			}else{
 				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}	
@@ -178,6 +180,8 @@ function fn_historyCryptoKeySymmetric(){
 				showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			}else if(data.resultCode == "8000000003"){
 				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
+			}else if(data.resultCode == "0000000003"){		
+				showSwalIcon('<spring:message code="encrypt_permissio.error" />', '<spring:message code="common.close" />', '', 'error');
 			}else{
 				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');	
 			}				

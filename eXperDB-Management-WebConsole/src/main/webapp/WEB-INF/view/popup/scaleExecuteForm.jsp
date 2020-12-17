@@ -138,8 +138,7 @@
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 250px 600px;">
 		<div class="modal-content" style="width:500px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
-				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="menu.eXperDB_scale_execute" />
+				<h4 id="executeTitle" class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 				</h4>
 
 				<div class="card" style="margin-top:10px;border:0px;">

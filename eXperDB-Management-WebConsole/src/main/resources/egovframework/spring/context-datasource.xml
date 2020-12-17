@@ -68,7 +68,10 @@
         <property name="password" value="${database.password}" />
         <property name="maxActive" value="100" />
         <property name="maxIdle" value="10" />
+        <property name="minIdle" value="10" />
         <property name="maxWait" value="1000" />
+        <property name="validationQuery" value="select 1" />
+        
         <property name="defaultAutoCommit" value="true" />
     </bean>
 

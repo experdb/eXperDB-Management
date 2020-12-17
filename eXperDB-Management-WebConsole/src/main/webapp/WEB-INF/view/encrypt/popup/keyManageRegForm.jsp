@@ -103,6 +103,8 @@ function fn_insertCryptoKeySymmetric(){
 				showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			}else if(data.resultCode == "8000000003"){
 				showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error', 'securityKeySet');
+			}else if(data.resultCode == "0000000003"){		
+				showSwalIcon('<spring:message code="encrypt_permissio.error" />', '<spring:message code="common.close" />', '', 'error');
 			}else{
 				showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 			}			
@@ -125,6 +127,16 @@ function fn_insDateCalenderSetting() {
 	var endDay = fn_dateParse("20991231").toJSON().slice(0,10);
 
 	$("#ins_expr_dt").val(startDay);
+	
+	if ($("#ins_expr_dt_div", "#keyInsForm").length) {
+		$("#ins_expr_dt_div", "#keyInsForm").datepicker({
+		}).datepicker('setDate', startDay)
+		.datepicker('setStartDate', startDay)
+		.datepicker('setEndDate', endDay)
+		.on('hide', function(e) {
+			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		}); //값 셋팅
+	}
 	
 
 	$("#ins_expr_dt", "#keyInsForm").datepicker('setStartDate', startDay).datepicker('setEndDate', endDay);

@@ -61,8 +61,16 @@ function fn_update(){
 	Result.offset = $("#mod_offset").val();
 	Result.length = $("#mod_length").val();
 	Result.cipherAlgorithmCode = $("#mod_cipherAlgorithmCode").val();
-	Result.binUid = $("#mod_binUid > option:selected").val();
-	Result.resourceName=$("#mod_binUid > option:selected").attr("value2");
+	if($("#mod_binUid > option:selected").attr("value2") == undefined){
+		Result.binUid=null;
+	}else{
+		Result.binUid = $("#mod_binUid > option:selected").val();
+	}
+	if($("#mod_binUid > option:selected").attr("value2") == undefined){
+		Result.resourceName=null;
+	}else{
+		Result.resourceName=$("#mod_binUid > option:selected").attr("value2");
+	}
 	Result.initialVectorTypeCode = $("#mod_initialVectorTypeCode").val();
 	Result.operationModeCode = $("#mod_operationModeCode").val();
 

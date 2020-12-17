@@ -43,20 +43,33 @@ public class PasswordCheck {
 		public @ResponseBody String passwordCheck(HttpServletRequest request, HttpServletResponse response) {
 			ModelAndView mv = new ModelAndView();
 			try {       
-				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-				
 				// session 설정
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
+				String salt_value = "";
 				
 				String password = request.getParameter("password");
 	
 				UserVO result = (UserVO) userManagerService.selectDetailUserManager(usr_id);
+				
+				UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(usr_id);
+				if (userInfoHd != null){
+					if (!"".equals(userInfoHd.getSalt_value())) {
+						salt_value = userInfoHd.getSalt_value();
+					} 
+				}
 
-				if(!password.equals(aes.aesDecode(result.getPwd()))){
+				if (salt_value == null || "".equals(salt_value)) {
+					salt_value = SHA256.getSalt();
+				}
+
+				/*sha-256 암호화 변경 2020-11-26 */
+				password = SHA256.setSHA256(password, salt_value);
+
+				if(!password.equals(result.getPwd())){
 					return "false";
-				}			
+				}	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

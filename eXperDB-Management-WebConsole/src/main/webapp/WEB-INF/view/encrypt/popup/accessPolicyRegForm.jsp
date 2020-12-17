@@ -201,6 +201,44 @@ function fn_acc_save(){
  ******************************************************** */
 function dateCalenderSetting() {
 	var today = new Date();
+	var startDay = today.toJSON().slice(0,10);
+	var endDay = fn_dateParse("20991231");
+	
+	var day_today = today.toJSON().slice(0,10);
+	var day_start = startDay;
+	var day_end = endDay.toJSON().slice(0,10);
+	
+	$("#startDateTime").val(day_today);
+	$("#endDateTime").val(day_today);
+	
+	if ($("#wrk_strt_dtm_div", "#accbaseForm").length) {
+		$("#wrk_strt_dtm_div", "#accbaseForm").datepicker({
+		}).datepicker('setDate', day_today)
+		.datepicker('setStartDate', day_start)
+		.datepicker('setEndDate', day_end)
+		.on('hide', function(e) {
+			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+	    }); //값 셋팅
+	}
+	
+	if ($("#wrk_end_dtm_div", "#accbaseForm").length) {
+		$("#wrk_end_dtm_div", "#accbaseForm").datepicker({
+		}).datepicker('setDate', day_today)
+		.datepicker('setStartDate', day_start)
+		.datepicker('setEndDate', day_end)
+		.on('hide', function(e) {
+			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+	    }); //값 셋팅
+	}
+	$("#startDateTime", "#accbaseForm").datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+	$("#endDateTime", "#accbaseForm").datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
+	
+    $("#wrk_strt_dtm_div","#accbaseForm").datepicker('updateDates');
+    $("#wrk_end_dtm_div", "#accbaseForm").datepicker('updateDates');
+	
+	
+	/*
+	var today = new Date();
 	var day_end = today.toJSON().slice(0,10);
 
 	today.setDate(today.getDate());
@@ -229,6 +267,7 @@ function dateCalenderSetting() {
     $("#endDateTime").datepicker('setDate', day_end);
     $('#wrk_strt_dtm_div').datepicker('updateDates');
     $('#wrk_end_dtm_div').datepicker('updateDates');
+    */
 }
 </script>
 

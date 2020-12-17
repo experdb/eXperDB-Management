@@ -381,7 +381,7 @@ function fn_db2pgWorkAddCallback(rowList){
 function fn_db2pgAdd(){
 	var cnt=0;
 	
-	if(table.rows().data().length > 0){
+	/* if(table.rows().data().length > 0){
 		for (var i = 0; i < table.rows().data().length; i++) {		
 			if(table.rows().data()[i].bsn_dscd_nm=="백업" || table.rows().data()[i].bsn_dscd_nm=="스크립트"){
 				cnt ++;
@@ -392,7 +392,7 @@ function fn_db2pgAdd(){
 			showSwalIcon('스케줄에 백업 및 스크립트가 포함되어 있습니다.', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
-	}
+	} */
 	
 	$('#pop_layer_db2pg_reg').modal("show");
 }	
@@ -735,8 +735,8 @@ function fn_dateValidation(exe_dt){
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Function</li>
-											<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Scheduler</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">SCHEDULE</li>
+											<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.schedule_information" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="schedule.scheduleMod"/></li>
 										</ol>
 									</div>

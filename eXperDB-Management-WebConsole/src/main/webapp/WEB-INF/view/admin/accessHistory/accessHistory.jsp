@@ -19,6 +19,7 @@
 	*
 	*/
 %>
+
 <script>
 	var table = null;
 
@@ -152,10 +153,32 @@
 			$("#excel_order").val(order);
 			$("#excel_sys_cd").val(sys_cd);
 			
+			//loading bar 호출
+			setCookie("fileDownload","false"); //호출
+			checkDownloadCheck();
+			
 			form.action = "/accessHistory_Excel.do";
 			form.submit();
+			$('#loading').show();
 			return;
 		}
+	}
+	
+	function setCookie(c_name,value){
+	    var exdate=new Date();
+	    var c_value=escape(value);
+	    document.cookie=c_name + "=" + c_value + "; path=/";
+	}
+	
+	function checkDownloadCheck(){
+	    if (document.cookie.indexOf("fileDownload=true") != -1) {
+			var date = new Date(1000);
+			document.cookie = "fileDownload=; expires=" + date.toUTCString() + "; path=/";
+			//프로그래스바 OFF
+			$('#loading').hide();
+			return;
+		}
+		setTimeout(checkDownloadCheck , 100);
 	}
 	
 	/* ********************************************************

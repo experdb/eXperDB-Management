@@ -342,7 +342,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 								<form name="serverList" id="serverList" class="form-group row border-bottom">
 									<label for="com_db_svr_nm" class="col-sm-2 col-form-label">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="dbms_information.dbms_ip" />
+										<spring:message code="common.dbms_name" />
 									</label>
 									<div class="col-sm-9">
 										<select class="form-control" style="width:250px; margin-right: 1rem;" id="db_svr_nm" name="db_svr_nm" onChange="fn_dbserverChange();"></select>

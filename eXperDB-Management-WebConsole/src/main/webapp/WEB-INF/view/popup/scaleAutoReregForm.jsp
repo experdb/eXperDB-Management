@@ -136,7 +136,7 @@
 					$('input:radio[name=mod_auto_policy_set_div]:input[value=' + mod_auto_policy_set_div + ']').attr("checked", true);
 					
 					var mod_useyn_val = data[0].useyn;
-					$('input:radio[name=mod_useyn]:input[value=' + mod_useyn_val + ']').attr("checked", true);
+					$('input[name="mod_useyn"]').filter("[value=" + mod_useyn_val + "]").prop("checked", true);
 
 				} else {
 					showSwalIcon('<spring:message code="eXperDB_scale.msg7" />', '<spring:message code="common.close" />', '', 'warning');
@@ -199,10 +199,12 @@
  	function fn_update_wrk() {
 		//화면 valid check
 		if (!mod_valCheck()) return false;
-		
+
 		var mod_min_clusters_val = nvlPrmSet($("#mod_min_clusters", "#scaleReregForm").val(), "");
 		var mod_max_clusters_val = nvlPrmSet($("#mod_max_clusters", "#scaleReregForm").val(), "");
 		var mod_expansion_clusters_val = nvlPrmSet($("#mod_expansion_clusters", "#scaleReregForm").val(), "");
+		
+		var mod_chk_use = $(':radio[name="mod_useyn"]:checked').val();
 
 		$.ajax({
 			async : false,
@@ -236,10 +238,14 @@
 			},	
 			success : function(result) {
 				if(result == "O"){//중복
+					$('input[name="mod_useyn"]').filter("[value=" + mod_chk_use + "]").prop("checked", true);
+					
 					showSwalIcon('<spring:message code="eXperDB_scale.msg5"/>', '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_mod_cng').modal('show');
 					return false;
 				}else if(result == "F"){//저장실패
+					$('input[name="mod_useyn"]').filter("[value=" + mod_chk_use + "]").prop("checked", true);
+					
 					showSwalIcon('<spring:message code="eXperDB_scale.msg22"/>', '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_mod_cng').modal('show');
 					return false;

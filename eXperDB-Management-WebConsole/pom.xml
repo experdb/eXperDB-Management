@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-   <groupId>com.k4m</groupId>
+   <groupId>com.k4m</groupId> 
    <artifactId>eXperDB-Management-WebConsole</artifactId>
    <packaging>war</packaging>
    <version>v1.0</version>
@@ -191,12 +191,12 @@
       <dependency>
           <groupId>org.apache.poi</groupId>
           <artifactId>poi-ooxml</artifactId>
-          <version>3.9</version>
+          <version>3.13</version>
       </dependency>
       <dependency>
 		 <groupId>org.apache.poi</groupId>
 		 <artifactId>poi</artifactId>
-		 <version>3.7</version>
+		 <version>3.13</version>
 	</dependency>    
 
 	<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->

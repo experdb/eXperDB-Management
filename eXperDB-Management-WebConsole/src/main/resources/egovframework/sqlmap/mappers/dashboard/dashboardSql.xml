@@ -343,7 +343,7 @@
                  FROM T_WRKEXE_G A
                       LEFT OUTER JOIN T_DBSVRIPADR_I C ON A.DB_SVR_IPADR_ID= C.DB_SVR_IPADR_ID or A.DB_SVR_IPADR_ID=0
                       LEFT OUTER JOIN T_BCK_WRKCNG_I D on A.WRK_ID = D.WRK_ID
-                      LEFT OUTER JOIN T_WRKCNG_I E on E.WRK_ID = D.WRK_ID
+                      LEFT OUTER JOIN T_WRKCNG_I E on E.WRK_ID = A.WRK_ID
                 WHERE 1 = 1
                   AND (C.DB_SVR_ID = #{db_svr_id}::numeric or C.DB_SVR_ID is null)
                   AND C.MASTER_GBN = 'M'
@@ -353,6 +353,7 @@
                        TO_DATE(to_char(A.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
                        )
                   AND E.BSN_DSCD IS NOT NULL
+                  AND A.SCD_NM IS NOT NULL
                 GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_SVR_IPADR_ID,A.SCD_ID,C.IPADR, E.BSN_DSCD
                 ORDER BY MAX(A.WRK_END_DTM) desc, MAX(A.WRK_STRT_DTM) desc
                 fetch first 5 rows only
@@ -384,7 +385,7 @@
                 WHERE 1 = 1
                   AND (C.DB_SVR_ID = #{db_svr_id}::numeric or C.DB_SVR_ID is null)
                   AND C.MASTER_GBN = 'M'
-                  AND TO_DATE(to_char(A.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_timestamp + '-7 days ','YYYY-MM-DD'),'YYYY-MM-DD') AND TO_DATE(to_char(now()::date,'YYYY-MM-DD'),'YYYY-MM-DD')
+                  AND A.SCD_NM IS NOT NULL
          ) AA
 	</select>
 	

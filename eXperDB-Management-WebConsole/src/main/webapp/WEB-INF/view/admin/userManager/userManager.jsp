@@ -339,6 +339,7 @@
 			$("#mod_save_submit", "#modUserForm").removeAttr("disabled");
 			$("#mod_save_submit", "#modUserForm").removeAttr("readonly");
 
+			$("#mod_passCheck_cho", "#modUserForm").val("");
 			$("#mod_passCheck_hid", "#modUserForm").val("0");
 		}
 	}
@@ -353,6 +354,7 @@
 
 			$("#mod_pwd", "#modUserForm").val(nvlPrmSet(result.pwd, ""));
 			$("#mod_pwdCheck", "#modUserForm").val(nvlPrmSet(result.pwd, ""));
+			$("#mod_passCheck_cho", "#modUserForm").val(nvlPrmSet(result.pwd, ""));
 			
 			//password 안전성 확인
 			$("#mod_pwd_chk_msg_div", "#modUserForm").show();

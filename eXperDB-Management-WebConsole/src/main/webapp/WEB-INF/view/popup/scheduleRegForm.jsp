@@ -129,7 +129,7 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {		
 				$("#db_svr_nm").children().remove();
-				$("#db_svr_nm").append("<option value='%'><spring:message code='common.choice' /></option>");
+				$("#db_svr_nm").append("<option value='%'><spring:message code='common.dbms_name' /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
@@ -161,7 +161,7 @@ $(window.document).ready(function() {
 				},
 				success : function(result) {		
 					$("#work").children().remove();
-					$("#work").append("<option value='%'><spring:message code="common.total" /></option>");
+					$("#work").append("<option value='%'><spring:message code="common.division" /></option>");
 					if(result.length > 0){
 						for(var i=0; i<result.length; i++){
 							$("#work").append("<option value='"+result[i].bsn_dscd+"'>"+result[i].bsn_dscd_nm+"</option>");	

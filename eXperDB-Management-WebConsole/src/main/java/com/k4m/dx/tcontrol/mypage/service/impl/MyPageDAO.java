@@ -61,5 +61,16 @@ public class MyPageDAO extends EgovAbstractMapper{
 		update("mypageSql.updatePwd",userVo);
 	}
 
+	/**
+	 * 비밀번호 업데이트
+	 * 
+	 * @param userVo
+	 * @throws SQLException
+	 */
+	public void updateTranPwd(UserVO userVo) throws SQLException{
+		update("mypageSql.updateTranPwd",userVo);
+	}
+	
+	
 
 }

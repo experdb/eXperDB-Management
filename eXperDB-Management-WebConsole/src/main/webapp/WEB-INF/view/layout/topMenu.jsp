@@ -369,6 +369,7 @@
 
 <%@include file="../help/aboutExperdbLayer.jsp"%>
 <%@include file="../help/openSourceLayer.jsp"%>
+<%@include file="../help/support.jsp"%>
 <%@include file="../admin/userManager/profileView.jsp"%>
 
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -703,6 +704,7 @@
 								</a>
 								<div class="submenu">											
 									<ul class="submenu-item">
+
 										<li class="nav-item">
 											<span class="nav-heading-title">
 												<b>Language</b>
@@ -718,6 +720,7 @@
 												English
 											</a>
 										</li>
+
 										
 										<li class="nav-item">
 											<span class="nav-heading-title">
@@ -779,6 +782,16 @@
 													<span class="nav-heading-title">
 														<b>HELP</b>
 													</span>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="/manualDownload.do"  target="main">
+														Manual
+													</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#n" onClick="fn_support()" data-toggle="modal" data-target="#pop_layer_support" >
+														Support
+													</a>
 												</li>
 												<li class="nav-item">
 													<a class="nav-link" href="#n" onClick="fn_aboutExperdb('${sessionScope.session.version}')" data-toggle="modal" data-target="#pop_layer_aboutExperdb" >

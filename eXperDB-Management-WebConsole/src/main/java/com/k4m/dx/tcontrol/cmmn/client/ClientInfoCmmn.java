@@ -172,8 +172,10 @@ public class ClientInfoCmmn implements Runnable{
 					objJob3.put(ClientProtocolID.BCK_BSN_DSCD, "");
 					objJob3.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);
 					objJob3.put(ClientProtocolID.BSN_DSCD, resultWork.get(i).get("bsn_dscd"));
-					arrCmd.add(i, objJob3);
+					arrCmd.add(j, objJob3);
+					j++;
 				}
+				
 			}
 			
 			JSONObject serverObj = new JSONObject();
@@ -198,7 +200,7 @@ public class ClientInfoCmmn implements Runnable{
 
 
 	
-	// 6. DB접근제어 C(dbAccess_create)
+	// 6. DB접근제어 (dbAccess_create)
 	public void dbAccess_create(JSONObject serverObj, JSONObject acObj, String IP, int PORT) {
 		try {
 			JSONObject objList;

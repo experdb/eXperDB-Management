@@ -37,6 +37,12 @@ public interface MyPageService {
 	 * @throws Exception
 	 */
 	void updatePwd(UserVO userVo) throws Exception;
-	
+
+	/**
+	 * 비밀번호 수정
+	 * @param userVo
+	 * @throws Exception
+	 */
+	void updateTranPwd(UserVO userVo) throws Exception;
 
 }

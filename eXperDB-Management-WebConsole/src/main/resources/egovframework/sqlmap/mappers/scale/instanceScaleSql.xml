@@ -216,6 +216,8 @@
             AND EXECUTE_TYPE = #{execute_type_cd}
             AND AUTO_POLICY_SET_DIV = #{auto_policy_set_div}
             AND USEYN = #{useyn}::bpchar
+            AND AUTO_LEVEL = ${auto_level}
+            AND AUTO_POLICY_TIME = ${auto_policy_time}::numeric
 
           <if test="wrk_id != null and wrk_id != '' ">
              AND WRK_ID != #{wrk_id}::numeric

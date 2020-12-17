@@ -249,9 +249,9 @@ public class EncryptSettingServiceCall {
 		SysConfig boost = new SysConfig();
 		boost.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_BOOST_TF);
 		if(obj01.get("global_policy_boost_tf").equals(true)){ 
-			boost.setConfigValue("1"); 
+			boost.setConfigValue("True"); 
 		}else{
-			boost.setConfigValue("0"); 
+			boost.setConfigValue("False"); 
 		}
 		param.add(boost.toJSONString());
 		
@@ -290,6 +290,8 @@ public class EncryptSettingServiceCall {
 		HashMap body = new HashMap();
 		body.put("SysConfig", param);
 
+		body.put(SystemCode.CustomFormParamKey.isPolicyConfig, true);
+		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
 

@@ -95,9 +95,14 @@
 					render : function(data, type, full, meta) {
 						var html = "";
 						if (data == true) {
-							html += '<spring:message code="common.success" />';
+							html += '<class="btn btn-inverse-primary btn-fw">';
+							html += "	<i class='fa fa-check-circle text-primary' >";
+							html += '&nbsp;Complete</i>';
+							/* html += '<spring:message code="common.success" />'; */
 						} else {
-							html += '<spring:message code="common.failed" />';
+							html += '<class="btn btn-inverse-danger btn-fw" onclick="fn_migFailLog('+full.mig_exe_sn+')">';
+							html += '<i class="fa fa-times">&nbsp;Fail</i>';					
+							/* html += '<spring:message code="common.failed" />'; */
 						}
 						return html;
 					},
@@ -188,6 +193,8 @@
 					showSwalIconRst('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error', 'top');	
 				}else if(data.resultCode == "8000000003"){
 					showSwalIconRst(data.resultMessage, '<spring:message code="common.close" />', '', 'error','securityKeySet');
+				}else if(data.resultCode == "0000000003"){		
+					showSwalIcon('<spring:message code="encrypt_permissio.error" />', '<spring:message code="common.close" />', '', 'error');
 				}else{
 					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
 				}
@@ -268,6 +275,7 @@
 									<div class="row">
 										<div class="col-12">
 											<p class="mb-0"><spring:message code="encrypt_help.Encryption_Decryption"/></p>
+											<p class="mb-0">해당 결과는 string또는 잘못된 값의 대한 오류가 아닌 접근권한에 대한 Complete/Fail 입니다.</p>
 										</div>
 									</div>
 								</div>

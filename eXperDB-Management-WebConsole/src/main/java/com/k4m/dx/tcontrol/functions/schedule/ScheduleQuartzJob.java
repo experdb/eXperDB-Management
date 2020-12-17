@@ -203,16 +203,24 @@ public class ScheduleQuartzJob implements Job{
 								}
 								BCK_NM.add("OnlinBackup");
 							}		
+							
+							agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
+							
 					//DSN_DSCD==TC001902 스크립트
 					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001902")){
+						System.out.println("####################배치 실행");
 						resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
 						db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(0).get("db_svr_ipadr_id").toString());
 						String strCmd =resultWork.get(i).get("exe_cmd").toString();						
 						CMD.add(strCmd);
 						BCK_NM.add("SCRIPT");
+						
+						agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
 					//DSN_DSCD==TC001903 DB2PG 데이터이관	
 					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001903")){
 								
+						CMD.add("");
+						
 						int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
 						
 						String oldSavePath = scheduleService.selectOldSavePath(wrk_id);
@@ -279,9 +287,9 @@ public class ScheduleQuartzJob implements Job{
 					}					
 				}		
 							
-				if(!db2pg.equals("TC001903")){
+				/*if(!db2pg.equals("TC001903")){
 					agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
-				}
+				}*/
 				
 		}catch(Exception e){
 			e.printStackTrace();

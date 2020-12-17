@@ -8,12 +8,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Cookie;
 
 import org.json.simple.JSONObject;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,12 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.util.WebUtils;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.EgovHttpSessionBindingListener;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.functions.schedule.EgovBatchListnerUtl;
@@ -57,6 +60,9 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
 
 @Controller
 public class LoginController {
+
+	@Autowired
+	private UserManagerService userManagerService;
 
 	@Autowired
 	private LoginService loginService;
@@ -183,11 +189,11 @@ public class LoginController {
 
             //쿠키를 가져와보고
             Cookie loginCookie = WebUtils.getCookie(request,"loginCookie");
+
             if ( loginCookie !=null ){
         		String cookitId = loginCookie.getValue(); //sessionId 확인
         		String sessionId = cookitId.substring(0, cookitId.indexOf("_"));
 
-        		
         		UserVO userVO = new UserVO();
         		userVO.setPrmId(sessionId);
         		
@@ -203,6 +209,7 @@ public class LoginController {
                 // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
 /*                Date date =new Date(System.currentTimeMillis());
                 */
+
                 if ( userVORe !=null ){// 사용자 존재시
 	    			try{
 	    				userVORe.setPrmId("none");
@@ -260,23 +267,47 @@ public class LoginController {
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String id = userVo.getUsr_id();
+			String salt_value = "";
 			
 			if (userVo.getUsr_id() == null || userVo.getPwd() == null) {
 				mv.addObject("error", "msg03");
 				mv.setViewName("login");
 				return mv;
 			}
+			
+			UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(userVo.getUsr_id());
+			if (userInfoHd != null){
+				if (!"".equals(userInfoHd.getSalt_value())) {
+					salt_value = userInfoHd.getSalt_value();
+				} 
+			}
 
-			String pw = aes.aesEncode(userVo.getPwd());
+			if (salt_value == null || "".equals(salt_value)) {
+				salt_value = SHA256.getSalt();
+			}
 			
+			/*sha-256 암호화 변경 2020-11-26 */
+			//String pw = SHA256.getSHA256(userVo.getPwd()); // 패스워드 암호화
+			String pw = SHA256.setSHA256(userVo.getPwd(), salt_value);
+
 			String login_chk = userVo.getLoginChkYn();
-			
-			int masterCheck = loginService.selectMasterCheck();
-			if(masterCheck>0){
-				mv.addObject("error", "msg176");
+		
+			try {
+				int masterCheck = loginService.selectMasterCheck();
+	
+				if(masterCheck>0){
+					
+					mv.addObject("error", "msg176");
+					mv.setViewName("login");
+					return mv;
+				}
+			} catch (PSQLException e) {
+				e.printStackTrace();
+	
 				mv.setViewName("login");
 				return mv;
 			}
+
 			List<UserVO> userList = loginService.selectUserList(userVo);
 			int intLoginCnt = userList.size();
 			if (intLoginCnt == 0) {
@@ -340,6 +371,7 @@ public class LoginController {
 					try{
 						CommonServiceCall cic = new CommonServiceCall();
 						JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());
+						/*JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());*/
 						loginVo.setRestIp(restIp);
 						loginVo.setRestPort(restPort);
 						loginVo.setTockenValue((String) (result.get("tockenValue")==null?"":result.get("tockenValue")));
@@ -406,7 +438,7 @@ public class LoginController {
 				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
 				
 				// 로그인 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
+				CmmnUtils.saveHistoryLogin(loginVo, login_chk, id, request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0003");
 				accessHistoryService.insertHistory(historyVO);
 
@@ -464,8 +496,7 @@ public class LoginController {
 	/*                Date date =new Date(System.currentTimeMillis());
 	                */
 	        		UserVO userVORe = loginService.checkUserWithSessionKey(userVO);
-	        		
-	        		System.out.println("===userVORe==" + userVORe);
+
 	                if ( userVORe !=null ){// 사용자 존재시
 		    			try{
 		    				userVORe.setPrmId("none");

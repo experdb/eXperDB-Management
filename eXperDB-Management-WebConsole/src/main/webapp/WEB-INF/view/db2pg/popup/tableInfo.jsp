@@ -42,6 +42,7 @@ $(window.document).ready(function() {
 	fn_init_tableInfo();
 });
 
+
 /* ********************************************************
  * 조회
  ******************************************************** */
@@ -70,6 +71,7 @@ function fn_search_tableInfo(){
  		  	dbms_dscd : $("#dbms_dscd_table").val(),
  		  	table_nm : table_nm,
  		  	scm_nm : $("#scm_nm_table").val(),
+ 		  	object_type : $("#object_type_table").val()
 		},
 		dataType : "json",
 		type : "post",
@@ -188,9 +190,9 @@ function fn_tableCheckSelect(tableList){
 	 
 }
 </script>
-<div class="modal fade" id="pop_layer_tableInfo_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 50px 350px;">
-		<div class="modal-content" style="width:1000px;">		 
+<div class="modal fade" id="pop_layer_tableInfo_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 45px 300px;">
+		<div class="modal-content" style="width:1100px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;margin-bottom:10px;">
 					<spring:message code="migration.table_information"/>
@@ -198,16 +200,23 @@ function fn_tableCheckSelect(tableList){
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<div class="form-inline row">
-							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+							<div class="input-group mb-2 mr-sm-2 col-sm-2">
 								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="db2pg_sys_nm_table" name="db2pg_sys_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
 							</div>
-							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+							<div class="input-group mb-2 mr-sm-2 col-sm-2">
 								<input type="text" class="form-control" style="margin-right: -0.7rem;"  id="ipadr_table" name="ipadr_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>'  />
 							</div>
-							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+							<div class="input-group mb-2 mr-sm-2 col-sm-2">
 								<input type="text" class="form-control" style="margin-right: -0.7rem;"  id="scm_nm_table" name="scm_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>'  />
 							</div>
 							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
+								<select class="form-control" name="work" id="object_type_table">
+									<option value=""><spring:message code="migration.table_type"/> 전체</option>
+									<option value="TABLE">TABLE</option>
+									<option value="VIEW">VIEW</option>
+								</select>
+							</div>
+							<div class="input-group mb-2 mr-sm-2 col-sm-2">
 								<input type="text" class="form-control" id="table_nm_table" name="table_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.table_name'/>'  />
 							</div>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search_tableInfo();" >
@@ -225,13 +234,13 @@ function fn_tableCheckSelect(tableList){
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<p class="card-description"><spring:message code="data_transfer.tableList"/></p>
-						<table id="tableList" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" style="width:100px;">
+						<table id="tableList" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
-									<th width="10"></th>
+ 									<th width="10"></th>
 									<th width="300" class="dt-center"><spring:message code="migration.table_name"/></th>
-									<th width="140" class="dt-center">OBJECT_TYPE</th>
-									<th width="300" class="dt-center">COMMENT</th>
+									<th width="140" class="dt-center"><spring:message code="migration.table_type"/></th>
+									<th width="300" class="dt-center"><spring:message code="migration.table_comment"/></th>  
 								</tr>
 							</thead>
 						</table>

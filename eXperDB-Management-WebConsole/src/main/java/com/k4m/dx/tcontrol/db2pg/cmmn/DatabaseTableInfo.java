@@ -43,7 +43,9 @@ public class DatabaseTableInfo {
 							+ "AND A.OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE')  "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDRT%' "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDXT%' "		
-							+ "AND A.OBJECT_NAME Like '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%'";
+							+ "AND A.OBJECT_TYPE LIKE '%"+serverObj.get("OBJECT_TYPE").toString().toUpperCase()+"%' "
+							+ "AND A.OBJECT_NAME Like '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%' "
+							+ "AND A.OBJECT_TYPE IN ('TABLE', 'VIEW') ORDER BY 1 ";
 							/*+ "AND A.OBJECT_TYPE IN ('TABLE') ORDER BY 1 ";*/
 					
 					ResultSet oraRs = stmt.executeQuery(sql);				
@@ -62,16 +64,34 @@ public class DatabaseTableInfo {
 					result.put("RESULT_DATA", jsonArray);
 					
 					break;
-					
+
 			//MS-SQL
 				case "TC002202" :
-					sql = " SELECT LOWER(name) as table_name "
+					
+					String table_type = serverObj.get("OBJECT_TYPE").toString();	
+
+					if(serverObj.get("OBJECT_TYPE").toString().equals("TABLE")){
+						table_type= "U";
+					}else if(serverObj.get("OBJECT_TYPE").toString().equals("VIEW")){
+						table_type= "V";
+					}
+											
+					sql = /*"SELECT "
+							+ "AA.TABLE_NAME, AA.TABLE_TYPE"
+							+ "FROM ("*/
+							 "SELECT LOWER(name) AS TABLE_NAME,"
+							+ "(CASE WHEN TYPE = 'U' THEN 'TABLE' "
+							+ "WHEN TYPE ='V' THEN 'VIEW' "
+							+ "END)AS TABLE_TYPE "
 							+ "FROM sys.objects A "
 							+ "WHERE 1=1"
-							/*+ "schema_id=(SELECT schema_id FROM sys.schemas WHERE name='"+serverObj.get("SCHEMA") +"') "*/													
-							+ "AND type in ('U') "
-							+ "AND type in ('U', 'V')"
-							+ "AND LOWER(name) Like '%" + serverObj.get("TABLE_NM") + "%'";
+							+ "AND schema_id=(SELECT schema_id FROM sys.schemas WHERE name='"+serverObj.get("SCHEMA") +"') "												
+							//+ "AND type in ('U') "
+							+ "AND type in ('U', 'V')"			
+							+ "AND LOWER(name) LIKE '%" + serverObj.get("TABLE_NM") + "%'"
+							+ "AND TYPE LIKE '%" +table_type+ "%'"
+							+ "ORDER BY 1";
+			
 			
 					ResultSet msRs = stmt.executeQuery(sql);				
 					i = 0;
@@ -80,7 +100,7 @@ public class DatabaseTableInfo {
 						JSONObject jsonObj = new JSONObject();
 							jsonObj.put("rownum",i);
 							jsonObj.put("table_name", msRs.getString("table_name"));
-							jsonObj.put("obj_type", "");
+							jsonObj.put("obj_type", msRs.getString("table_type"));
 							jsonObj.put("obj_description","");
 							jsonArray.add(jsonObj);
 					}
@@ -92,12 +112,13 @@ public class DatabaseTableInfo {
 			//MySQL
 				case "TC002203" :
 
-					sql = " SELECT table_name "
+					sql = " SELECT table_name, table_type "
 							+ "FROM information_schema.tables "
 							+ "WHERE table_schema='"+serverObj.get("SCHEMA") +"' "													
-							+ "AND table_type IN ('BASE TABLE') "
+//							+ "AND table_type IN ('BASE TABLE') "
 							+ "AND table_type IN ('BASE TABLE','VIEW') "
-							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%'";
+							+ "AND table_type Like '%" + serverObj.get("OBJECT_TYPE").toString().toUpperCase() + "%' "
+							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%' ORDER BY 1";
 					
 					ResultSet mysRs = stmt.executeQuery(sql);				
 					i = 0;
@@ -106,7 +127,7 @@ public class DatabaseTableInfo {
 						JSONObject jsonObj = new JSONObject();
 							jsonObj.put("rownum",i);
 							jsonObj.put("table_name", mysRs.getString("table_name"));
-							jsonObj.put("obj_type", "");
+							jsonObj.put("obj_type", mysRs.getString("table_type"));
 							jsonObj.put("obj_description","");
 							jsonArray.add(jsonObj);
 					}
@@ -144,8 +165,10 @@ public class DatabaseTableInfo {
 								+ "WHERE A.TABLE_SCHEMA = '" +serverObj.get("USER_ID").toString().toUpperCase() + "' "
 								+ "AND A.TABLE_NAME = B.NAME "
 								+ "AND A.TABLE_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%' "
+								+ "AND A.TABLE_TYPE LIKE '%" +serverObj.get("OBJECT_TYPE").toString().toUpperCase() + "%'"
 								/*+ "AND A.TABLE_TYPE IN ('BASE TABLE') "*/
-								+ "AND A.TABLE_TYPE IN ('BASE TABLE','VIEW')";
+								+ "AND A.TABLE_TYPE IN ('BASE TABLE','VIEW')"
+								+ "ORDER BY 1";
 			
 						ResultSet db2Rs = stmt.executeQuery(sql);				
 						i = 0;
@@ -169,7 +192,8 @@ public class DatabaseTableInfo {
 									+ "FROM sysobjects "
 									+ "WHERE user_name(uid)='" +serverObj.get("USER_ID").toString().toUpperCase() + "' "
 									+ "AND type in ('U')"
-									+ "AND name LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' ";
+									+ "AND name LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' "
+									+ "ORDER BY 1";
 						
 						ResultSet syRs = stmt.executeQuery(sql);				
 						i = 0;
@@ -189,11 +213,22 @@ public class DatabaseTableInfo {
 					
 				//CUBRID
 				case "TC002207" :
+					String type = serverObj.get("OBJECT-TYPE").toString().toUpperCase();
+					String ObjectSql = null;
+					if(type.equals("TABLE")){
+						ObjectSql = "AND class_type NOT LIKE '%V%' ";
+					}else if(type.equals("VIEW")){
+						ObjectSql = "AND class_type LIKE '%VCLASS% ";
+					}else{
+						ObjectSql = "AND class_type LIKE '%% ";
+					}
+					
 					sql= "SELECT class_name AS table_name, case when class_type='CLASS' then 'TABLE' when class_type='VCLASS' then 'VIEW' end AS class_type "
 						+ "FROM db_class "
 						+ "WHERE owner_name ='" +serverObj.get("USER_ID").toString().toUpperCase() + "'"
 						+ "AND is_system_class='NO' "
 						+ "AND class_name LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' "
+						+ ObjectSql
 						+ "ORDER BY class_name ASC";
 
 					ResultSet cubRs = stmt.executeQuery(sql);				
@@ -219,8 +254,9 @@ public class DatabaseTableInfo {
 							+ "AND OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE') "
 							+ "AND OBJECT_NAME NOT LIKE 'MDRT%'"
 							+ "AND OBJECT_NAME NOT LIKE 'MDXT%'"
-							+ "AND OBJECT_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' ";
-							/*+ "AND OBJECT_TYPE IN ('TABLE')";*/
+							+ "AND OBJECT_TYPE LIKE '%"+serverObj.get("OBJECT_TYPE").toString().toUpperCase()+"%' "
+							+ "AND OBJECT_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' "
+							+ "AND OBJECT_TYPE IN ('TABLE', 'VIEW') ORDER BY 1 ";
 					
 					ResultSet tibRs = stmt.executeQuery(sql);				
 					i = 0;
@@ -246,9 +282,10 @@ public class DatabaseTableInfo {
 					sql = " SELECT table_name "
 							+ "FROM information_schema.tables "
 							+ "WHERE table_schema='"+serverObj.get("SCHEMA") +"' "													
-							+ "AND table_type IN ('BASE TABLE') "
+//							+ "AND table_type IN ('BASE TABLE') "
 							+ "AND table_type IN ('BASE TABLE','VIEW') "
-							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%'";
+							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%' "
+							+ "ORDER BY 1";
 					
 					ResultSet mariaRs = stmt.executeQuery(sql);				
 					i = 0;
@@ -291,23 +328,23 @@ public class DatabaseTableInfo {
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002205");*/
 			
 			//MS-SQL
-			/*serverObj.put(ClientProtocolID.SERVER_NAME, "10.1.21.114");
-			serverObj.put(ClientProtocolID.SERVER_IP, "10.1.21.114");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "1433");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "DB2PG");
-			serverObj.put(ClientProtocolID.SCHEMA, "db2pg");
-			serverObj.put(ClientProtocolID.USER_ID, "db2pg");
-			serverObj.put(ClientProtocolID.USER_PWD, "db2pg");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002202");*/
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.216");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.216");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "1434");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "gs");
+			serverObj.put(ClientProtocolID.SCHEMA, "dbo");
+			serverObj.put(ClientProtocolID.USER_ID, "sa");
+			serverObj.put(ClientProtocolID.USER_PWD, "sa0225!!");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002202");
 			
 			//Oracle
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.21.151");
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.21.151");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.21.151");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "1521");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "SUPER");
 			serverObj.put(ClientProtocolID.USER_ID, "ORAFIV");
 			serverObj.put(ClientProtocolID.USER_PWD, "ORAFIV");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002201");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002201");*/
 			
 			//PostgreSQL
 			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.112");
