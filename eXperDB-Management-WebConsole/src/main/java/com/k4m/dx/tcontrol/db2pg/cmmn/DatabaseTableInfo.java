@@ -64,18 +64,34 @@ public class DatabaseTableInfo {
 					result.put("RESULT_DATA", jsonArray);
 					
 					break;
-					
+
 			//MS-SQL
 				case "TC002202" :
-					sql = " SELECT LOWER(name) as table_name, table_type"
+					
+					String table_type = serverObj.get("OBJECT_TYPE").toString();	
+
+					if(serverObj.get("OBJECT_TYPE").toString().equals("TABLE")){
+						table_type= "U";
+					}else if(serverObj.get("OBJECT_TYPE").toString().equals("VIEW")){
+						table_type= "V";
+					}
+											
+					sql = /*"SELECT "
+							+ "AA.TABLE_NAME, AA.TABLE_TYPE"
+							+ "FROM ("*/
+							 "SELECT LOWER(name) AS TABLE_NAME,"
+							+ "(CASE WHEN TYPE = 'U' THEN 'TABLE' "
+							+ "WHEN TYPE ='V' THEN 'VIEW' "
+							+ "END)AS TABLE_TYPE "
 							+ "FROM sys.objects A "
 							+ "WHERE 1=1"
-							/*+ "schema_id=(SELECT schema_id FROM sys.schemas WHERE name='"+serverObj.get("SCHEMA") +"') "*/													
-//							+ "AND type in ('U') "
-							+ "AND type in ('U', 'V') "
-							+ "AND table_type Like '%" + serverObj.get("OBJECT_TYPE").toString().toUpperCase() + "%' "
-							+ "AND LOWER(name) Like '%" + serverObj.get("TABLE_NM") + "%' "
+							+ "AND schema_id=(SELECT schema_id FROM sys.schemas WHERE name='"+serverObj.get("SCHEMA") +"') "												
+							//+ "AND type in ('U') "
+							+ "AND type in ('U', 'V')"			
+							+ "AND LOWER(name) LIKE '%" + serverObj.get("TABLE_NM") + "%'"
+							+ "AND TYPE LIKE '%" +table_type+ "%'"
 							+ "ORDER BY 1";
+			
 			
 					ResultSet msRs = stmt.executeQuery(sql);				
 					i = 0;
@@ -312,23 +328,23 @@ public class DatabaseTableInfo {
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002205");*/
 			
 			//MS-SQL
-			/*serverObj.put(ClientProtocolID.SERVER_NAME, "10.1.21.114");
-			serverObj.put(ClientProtocolID.SERVER_IP, "10.1.21.114");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "1433");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "DB2PG");
-			serverObj.put(ClientProtocolID.SCHEMA, "db2pg");
-			serverObj.put(ClientProtocolID.USER_ID, "db2pg");
-			serverObj.put(ClientProtocolID.USER_PWD, "db2pg");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002202");*/
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.216");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.216");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "1434");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "gs");
+			serverObj.put(ClientProtocolID.SCHEMA, "dbo");
+			serverObj.put(ClientProtocolID.USER_ID, "sa");
+			serverObj.put(ClientProtocolID.USER_PWD, "sa0225!!");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002202");
 			
 			//Oracle
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.21.151");
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.21.151");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.21.151");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "1521");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "SUPER");
 			serverObj.put(ClientProtocolID.USER_ID, "ORAFIV");
 			serverObj.put(ClientProtocolID.USER_PWD, "ORAFIV");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002201");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002201");*/
 			
 			//PostgreSQL
 			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.112");
