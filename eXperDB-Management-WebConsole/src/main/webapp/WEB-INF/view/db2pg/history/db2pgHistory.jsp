@@ -216,29 +216,24 @@ $(window.document).ready(
 		ddlDateCalenderSetting();
 		migDateCalenderSetting();
 		
-		//getddlDataList();
-		//getdataDataList();			
+		getddlDataList();
+		getdataDataList();			
 		
 		if(getUrlParam('gbn')=='mig'){
-			//$("#ddlDataTable").hide();
-			//$("#ddlDataTable_wrapper").hide();
-			//$("#dataDataTable").show();
-			//$("#dataDataTable_wrapper").show();
+			$("#ddlDataTable").hide();
+			$("#ddlDataTable_wrapper").hide();
+			$("#dataDataTable").show();
+			$("#dataDataTable_wrapper").show();
 			$('#server-tab-2 aria-selected').val(true);
 			$('#server-tab-1 aria-selected').val(false);
 			$('#server-tab-2').addClass('active');
 			$('#server-tab-1').removeClass('active');
 			selectTab('dataWork');
 		}else {
-			//$("#ddlDataTable").show();
-			//$("#ddlDataTable_wrapper").show();
-			//$("#dataDataTable").hide();
-			//$("#dataDataTable_wrapper").hide();	
-			$('#server-tab-2 aria-selected').val(false);
-			$('#server-tab-1 aria-selected').val(true);
-			$('#server-tab-1').addClass('active');
-			$('#server-tab-2').removeClass('active');
-			selectTab('ddlWork');
+			$("#ddlDataTable").show();
+			$("#ddlDataTable_wrapper").show();
+			$("#dataDataTable").hide();
+			$("#dataDataTable_wrapper").hide();		
 		}
 	}
 	
@@ -640,7 +635,7 @@ function getdataDataList(){
 				<div class="card-body">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
-							<a class="nav-link" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectTab('ddlWork');" >
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectTab('ddlWork');" >
 								DDL
 							</a>
 						</li>

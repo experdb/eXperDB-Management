@@ -1,3 +1,6 @@
+ALTER TABLE t_migexe_g DROP CONSTRAINT fk_t_migexe_g_01;
+
+
 ALTER TABLE experdb_management.t_trans_encrypt ADD salt_key varchar(100) NULL;
 COMMENT ON COLUMN experdb_management.t_trans_encrypt.salt_key IS 'salt값';
 
