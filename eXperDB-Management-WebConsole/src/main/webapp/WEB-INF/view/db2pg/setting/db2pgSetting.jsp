@@ -268,8 +268,11 @@ function fn_ddl_reg_popup(){
 	$("#db2pg_ddl_wrk_nm", "#ddlRegForm").val("");
 	$("#db2pg_ddl_wrk_exp", "#ddlRegForm").val("");
 	$("#db2pg_sys_nm", "#ddlRegForm").val("");
-	$("#src_include_tables", "#ddlRegForm").val("");
-	$("#src_exclude_tables", "#ddlRegForm").val("");
+	$("#src_include_table_nm", "#ddlRegForm").val("");
+	$("#src_exclude_table_nm", "#ddlRegForm").val("");
+	$("#src_tables", "#ddlRegForm").val("include");
+	
+	fn_table_clear_reg();
 	
 	$('#pop_layer_ddl_reg').modal("show");
 }
@@ -304,21 +307,26 @@ function fn_ddl_regre_popup(){
 				$("#db2pg_sys_id_reg_re").val(nvlPrmSet(result.db2pg_sys_id, ""));
 				$("#src_include_table_nm_reg_re").val(nvlPrmSet(result.exrt_trg_tb_nm, ""));
 				$("#src_exclude_table_nm_reg_re").val(nvlPrmSet(result.exrt_exct_tb_nm, ""));
+				$("#db2pg_sys_nm_reg_re").val(nvlPrmSet(result.db2pg_sys_nm, ""));
 				 if(result.exrt_trg_tb_cnt>0){
 					 $("#src_tables_reg_re option:eq(0)").attr("selected", "selected");
 					 $("#src_include_tables_reg_re").val("<spring:message code='migration.total_table'/>: "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
 					 $("#src_table_total_cnt_reg_re").val(result.exrt_trg_tb_total_cnt);
-					 $("#include_reg_re").show();
-					 $("#exclude_reg_re").hide();
+					 $("#src_tables_re").val("include");
+					 fn_tableList_re('include');
+					 // $("#include_reg_re").show();
+					 // $("#exclude_reg_re").hide();
 				 }else if(result.exrt_exct_tb_cnt>0){
 					 $("#src_tables_reg_re option:eq(1)").attr("selected", "selected");
 					 $("#src_exclude_tables_reg_re").val("<spring:message code='migration.total_table'/> : "+result.exrt_exct_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_exct_tb_cnt+"<spring:message code='migration.items'/>");
-					 $("#src_table_total_cnt_reg_re").val(result.exrt_exct_tb_total_cnt)
-					 $("#exclude_reg_re").show();
-					 $("#include_reg_re").hide(); 
+					 $("#src_table_total_cnt_reg_re").val(result.exrt_exct_tb_total_cnt);
+					 $("#src_tables_re").val("exclude");
+					 fn_tableList_re('exclude');
+					 // $("#exclude_reg_re").show();
+					 // $("#include_reg_re").hide(); 
 				 }	 
 				
-				$("#db2pg_sys_nm_reg_re").val(nvlPrmSet(result.db2pg_sys_nm, ""));
+				
 				$("#db2pg_ddl_wrk_nm_reg_re").val(nvlPrmSet(result.db2pg_ddl_wrk_nm, ""));
 				$("#wrk_id_reg_re").val(nvlPrmSet(result.wrk_id, ""));
 				$("#db2pg_ddl_wrk_id_reg_re").val(nvlPrmSet(result.db2pg_ddl_wrk_id, ""));
@@ -847,15 +855,16 @@ function fn_ImmediateStart(gbn){
 	}
 }
 
+
 </script>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
 
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
-<%@include file="../popup/ddlRegForm.jsp"%>
-<%@include file="../popup/ddlRegReForm.jsp"%>
+<%@include file="../popup/ddlRegForm2.jsp"%>
+<%@include file="../popup/ddlRegReForm2.jsp"%>
 <%@include file="../popup/dataRegForm.jsp"%>
 <%@include file="../popup/dbmsDDLInfo.jsp"%>
-<%@include file="../popup/tableInfo.jsp"%>
+
 <%@include file="../popup/dbmsInfo.jsp"%>
 <%@include file="../popup/dbmsPgInfo.jsp"%>
 
