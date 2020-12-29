@@ -864,7 +864,7 @@ function fn_ImmediateStart(gbn){
 <%@include file="../popup/ddlRegReForm2.jsp"%>
 <%@include file="../popup/dataRegForm.jsp"%>
 <%@include file="../popup/dbmsDDLInfo.jsp"%>
-
+<%@include file="../popup/tableInfo.jsp"%>
 <%@include file="../popup/dbmsInfo.jsp"%>
 <%@include file="../popup/dbmsPgInfo.jsp"%>
 
