@@ -359,6 +359,7 @@ function fn_data_reg_popup(){
 	$("#inset_button_data_work2").show();
 	$("#inset_title").show();
 	$("#mod_title").hide();
+	$("#src_tables_trsf").val("include");
 	
 	//tab 선택
 	$('a[href="#insDumpOptionTab1"]').tab('show');
@@ -399,14 +400,16 @@ function fn_data_regre_popup(){
 					 $("#src_tables_trsf option:eq(0)").attr("selected", "selected");
 					 $("#src_include_tables_trsf").val("<spring:message code='migration.total_table'/>: "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
 					 $("#src_table_total_cnt_trsf").val(result.exrt_trg_tb_total_cnt);
-					 $("#include_trsf").show();
-					 $("#exclude_trsf").hide();
+					 $("#src_tables_trsf").val("include");
+					 // $("#include_trsf").show();
+					 // $("#exclude_trsf").hide();
 				 }else if(result.exrt_exct_tb_cnt>0){
 					 $("#src_tables_trsf option:eq(1)").attr("selected", "selected");
 					 $("#src_exclude_tables_trsf").val("<spring:message code='migration.total_table'/> : "+result.exrt_exct_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_exct_tb_cnt+"<spring:message code='migration.items'/>");
-					 $("#src_table_total_cnt_trsf").val(result.exrt_exct_tb_total_cnt)
-					 $("#exclude_trsf").show();
-					 $("#include_trsf").hide(); 
+					 $("#src_table_total_cnt_trsf").val(result.exrt_exct_tb_total_cnt);
+					 $("#src_tables_trsf").val("exclude");
+					 // $("#exclude_trsf").show();
+					 // $("#include_trsf").hide(); 
 				 }	
 			
 				$("#db2pg_sys_id_trsf").val(nvlPrmSet(result.db2pg_sys_id, ""));
@@ -442,7 +445,7 @@ function fn_data_regre_popup(){
 				 
 				//tab 선택
 				$('a[href="#insDumpOptionTab1"]').tab('show');
-				 
+				fn_dbmsInfo_set();
 				$('#pop_layer_data_reg').modal("show");
 			}
 		});	
@@ -862,9 +865,9 @@ function fn_ImmediateStart(gbn){
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
 <%@include file="../popup/ddlRegForm2.jsp"%>
 <%@include file="../popup/ddlRegReForm2.jsp"%>
-<%@include file="../popup/dataRegForm.jsp"%>
+<%@include file="../popup/dataRegForm2.jsp"%>
 <%@include file="../popup/dbmsDDLInfo.jsp"%>
-<%@include file="../popup/tableInfo.jsp"%>
+
 <%@include file="../popup/dbmsInfo.jsp"%>
 <%@include file="../popup/dbmsPgInfo.jsp"%>
 

@@ -31,7 +31,7 @@ $(window.document).ready(function(){
 	fn_init_tables_re();
 	
 });
-
+// table init
 function fn_init_tables_re() {
 	infoTableRe = $('#info_tableList_re').DataTable({
 		scrollY : "220px",
@@ -103,6 +103,7 @@ function fn_init_tables_re() {
 			}else{
 				var src_table_total_cnt_reg_re = totalCnt;
 			}
+			// 작업 대상 테이블의 이름을 넣어줌
 			for(var i =0; i< extTableLength; i++){				
 				rowList.push(extTableRe.rows().data()[i].table_name);
 			}
@@ -158,10 +159,10 @@ function fn_init_tables_re() {
  function fn_dbmsAddCallback2(db2pg_sys_id,db2pg_sys_nm){
 	 $('#db2pg_sys_id_reg_re').val(db2pg_sys_id);
 	 $('#db2pg_sys_nm_reg_re').val(db2pg_sys_nm);
+	 $('#src_include_table_nm_reg_re').val("");
+	 $('#src_exclude_table_nm_reg_re').val("");
 	  var type = $('#src_tables_re').val();
 	  fn_tableList_re(type);
-	  
-
 }
 
 /* ********************************************************
@@ -231,7 +232,9 @@ function fn_table_clear_reg_re(){
 	infoTableRe.clear().draw();
 }
 
-// dbms 등록 후 정보 불러오기
+/* ********************************************************
+ * 조회버튼 눌렀을 때
+ ******************************************************** */
 function fn_search_tableInfo_re(){
 	var table_nm = null;
 	
@@ -273,16 +276,11 @@ function fn_search_tableInfo_re(){
 			infoTableRe.rows({selected: true}).deselect();
 			infoTableRe.clear().draw();
 			
-			// console.log("result.RESULT_DATA : "+result.RESULT_DATA);
-			// console.log("result.RESULT_DATA.length : "+result.RESULT_DATA.length);
-			// console.log("result.RESULT_DATA[0] : "+result.RESULT_DATA[0]);
-			// console.log("result.RESULT_DATA[0].table_name : "+result.RESULT_DATA[0].table_name);
-			
 			if (result.RESULT_DATA != null) {
 				infoTableRe.rows.add(result.RESULT_DATA).draw();
 				var infoLength = infoTableRe.rows().data().length;
 				var extLength = extTableRe.rows().data().length;
-				if(tableList_reg_re == null){					
+				if(tableList_reg_re == ""){					
 					if(extLength>0){
 						for(var i=0;i<infoLength;i++){
 							for(var j=0;j<extLength;j++){
@@ -304,7 +302,7 @@ function fn_search_tableInfo_re(){
 							}
 						}
 					}
-					tableList_reg_re = [];
+					tableList_reg_re = "";
 					fn_ins_t_rightMove_reg_re();
 				}			
 
@@ -314,7 +312,9 @@ function fn_search_tableInfo_re(){
 		}
 	});
 }
+
 // 옵션 조회 버튼 눌렀을 때
+/*
 function fn_search_tableInfo_re2(){
 	var table_nm = null;
 	
@@ -355,11 +355,6 @@ function fn_search_tableInfo_re2(){
 			infoTableRe.rows({selected: true}).deselect();
 			infoTableRe.clear().draw();
 			
-			// console.log("result.RESULT_DATA : "+result.RESULT_DATA);
-			// console.log("result.RESULT_DATA.length : "+result.RESULT_DATA.length);
-			// console.log("result.RESULT_DATA[0] : "+result.RESULT_DATA[0]);
-			// console.log("result.RESULT_DATA[0].table_name : "+result.RESULT_DATA[0].table_name);
-			
 			if (result.RESULT_DATA != null) {
 				infoTableRe.rows.add(result.RESULT_DATA).draw();
 				var infoLength = infoTableRe.rows().data().length;
@@ -385,7 +380,7 @@ function fn_search_tableInfo_re2(){
 		}
 	});
 }
-
+*/
 
 ///////////////////////////////////////////////////////////////
 /////////////////////// 테이블 리스트 조정 ///////////////////////////
@@ -534,12 +529,11 @@ function fn_search_tableInfo_re2(){
 											</div>
 										</div>
 									</div>
-
+									<!-- work 이름과 설명 End -->
 									<br/>
 									
 									<!-- 옵션 정보 -->
 									<div class="card-body" style="border: 1px solid #adb5bd;">
-										<!-- <h4 class="card-title"><spring:message code="migration.option_information"/></h4>  -->
 										<div class="form-group row" style="margin-bottom:-10px;">
 									
 											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index">
@@ -569,7 +563,7 @@ function fn_search_tableInfo_re2(){
 											</div>
 										</div>
 									</div>
-									
+									<!-- 옵션 정보 End -->
 									<br/>
 									<!-- 소스 시스템 -->
 									<div class="card-body" style="border: 1px solid #adb5bd;">
@@ -587,149 +581,152 @@ function fn_search_tableInfo_re2(){
 											</div>
 										</div>
 									</div>
-									
+									<!-- 소스 시스템 End -->
 									<br/>
 									
-									<!-- 테이블 검색 -->
-									
+									<!-- 테이블  -->
 									<div class="card-body" style="border: 1px solid #adb5bd;">
-									<div class="card-body" style="border: 1px solid #dee1e4;">
-										<h4 class="card-title"><spring:message code="migration.option_information"/></h4>
-										<div class="form-inline row">	
-											<div class="input-group mb-2 mr-sm-2 col-sm-1_9">	
-												<select name="src_tables_re" id="src_tables_re"  class="form-control">
-													<option value="include"><spring:message code="migration.inclusion_table"/></option>
-													<option value="exclude"><spring:message code="migration.exclusion_table"/></option>
-												</select>
-											</div>
-											<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-												<input type="text" class="form-control" id="db2pg_sys_nm_table" name="db2pg_sys_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
-											</div>
-											<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-												<input type="text" class="form-control" id="ipadr_table" name="ipadr_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>'  />
-											</div>
-											<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-												<input type="text" class="form-control" id="scm_nm_table" name="scm_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>'  />
-											</div>
-											<div class="input-group mb-2 mr-sm-2 col-sm-2">
-												<select class="form-control" name="work" id="object_type_table">
-													<option value=""><spring:message code="migration.table_type"/> 전체</option>
-													<option value="TABLE">TABLE</option>
-													<option value="VIEW">VIEW</option>
-												</select>
-											</div>
-											<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-												<input type="text" class="form-control" id="table_nm_table" name="table_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.table_name'/>'  />
-											</div>
-											<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search_tableInfo_re2();" >
-												<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-											</button>
-										</div>
-									</div>
-									<input type="hidden" class="txt t4" name="dbms_dscd_table" id="dbms_dscd_table"  />
-									<input type="hidden" class="txt t4" name="dtb_nm_table" id="dtb_nm_table" />
-									<input type="hidden" class="txt t4" name="spr_usr_id_table" id="spr_usr_id_table" />
-									<input type="hidden" class="txt t4" name="pwd_table" id="pwd_table" />
-									<input type="hidden" class="txt t4" name="portno_table" id="portno_table" />
-									
-									
-									<br/>
-									<!-- 테이블 -->
-									<div class="card-body" style="border: 1px solid #dee1e4;">
-										<div class="row">
-											<div class="col-7 stretch-card div-form-margin-table" style="max-width: 47%;margin-top:5px;" id="left_list">
-												<div class="card" style="border:0px;">
-													<div class="card-body" style="padding-left:0px;padding-right:0px;">
-														<h4 class="card-title">
-															<i class="item-icon fa fa-dot-circle-o"></i>
-															<spring:message code="data_transfer.tableList" />
-														</h4>
-			
-											 			<table id="info_tableList_re" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" style="width:100%;">
-															<thead>
-																<tr class="bg-info text-white">
-																	<th width="150" class="dt-center" ><spring:message code="migration.table_name" /></th>
-																	<th width="150" class="dt-center" ><spring:message code="migration.table_type" /></th>	
-																	<th width="150" class="dt-center"><spring:message code="migration.table_comment"/></th>
-																</tr>
-															</thead>
-														</table>
-													</div>
+										<!-- 테이블 옵션 검색 -->
+										<div class="card-body" style="border: 1px solid #dee1e4;">
+											<h4 class="card-title"><spring:message code="migration.option_information"/></h4>
+											<div class="form-inline row">	
+												<div class="input-group mb-2 mr-sm-2 col-sm-1_9">	
+													<select name="src_tables_re" id="src_tables_re"  class="form-control">
+														<option value="include"><spring:message code="migration.inclusion_table"/></option>
+														<option value="exclude"><spring:message code="migration.exclusion_table"/></option>
+													</select>
 												</div>
+												<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+													<input type="text" class="form-control" id="db2pg_sys_nm_table" name="db2pg_sys_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
+												</div>
+												<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+													<input type="text" class="form-control" id="ipadr_table" name="ipadr_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>'  />
+												</div>
+												<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+													<input type="text" class="form-control" id="scm_nm_table" name="scm_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>'  />
+												</div>
+												<div class="input-group mb-2 mr-sm-2 col-sm-2">
+													<select class="form-control" name="work" id="object_type_table">
+														<option value=""><spring:message code="migration.table_type"/> 전체</option>
+														<option value="TABLE">TABLE</option>
+														<option value="VIEW">VIEW</option>
+													</select>
+												</div>
+												<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+													<input type="text" class="form-control" id="table_nm_table" name="table_nm_table" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.table_name'/>'  />
+												</div>
+												<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search_tableInfo_re();" >
+													<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+												</button>
 											</div>
-			 									
-											<div class="col-1 stretch-card div-form-margin-table" style="max-width: 6%;" id="center_div">
-												<div class="card" style="background-color: transparent !important;border:0px;">
-													<div class="card-body">	
-														<div class="card my-sm-2 connectRegForm2" style="border:0px;background-color: transparent !important;">
-															<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-top:15px;margin-bottom:-15px;">
-																<a href="#" class="tip" onclick="fn_ins_t_allRightMove_reg_re();">
-																	<i class="fa fa-angle-double-right" style="font-size: 35px;cursor:pointer;"></i>
-																	<!-- 
-																	<span style="width: 200px;"><spring:message code="data_transfer.move_right_line" /></span>
-																	 -->
-																</a>
-															</label>
-															
-															<br/>
-																
-															<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
-																<a href="#" class="tip" onclick="fn_ins_t_rightMove_reg_re();">
-																	<i class="fa fa-angle-right" style="font-size: 35px;cursor:pointer;"></i>
-																	<!-- 
-																	<span style="width: 200px;"><spring:message code="data_transfer.move_right_line" /></span>
-																	 -->
-																</a>
-															</label>
-															
-															<br/>
-			
-															<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
-																<a href="#" class="tip" onclick="fn_ins_t_leftMove_reg_re();">
-																	<i class="fa fa-angle-left" style="font-size: 35px;cursor:pointer;"></i>
-																	<!--
-																	<span style="width: 200px;"><spring:message code="data_transfer.move_left_line" /></span>
-																	 -->
-																</a>
-															</label>
-															
-															<br/>
-			
-															<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
-																<a href="#" class="tip" onclick="fn_ins_t_allLeftMove_reg_re();">
-																	<i class="fa fa-angle-double-left" style="font-size: 35px;cursor:pointer;"></i>
-																	<!--
-																	<span style="width: 200px;"><spring:message code="data_transfer.move_all_left" /></span>
-																	-->
-																</a>
-															</label>
+										</div>
+										<input type="hidden" class="txt t4" name="dbms_dscd_table" id="dbms_dscd_table"  />
+										<input type="hidden" class="txt t4" name="dtb_nm_table" id="dtb_nm_table" />
+										<input type="hidden" class="txt t4" name="spr_usr_id_table" id="spr_usr_id_table" />
+										<input type="hidden" class="txt t4" name="pwd_table" id="pwd_table" />
+										<input type="hidden" class="txt t4" name="portno_table" id="portno_table" />
+										<br/>
+										<!-- 테이블 옵션 검색 End -->
+										<!-- 테이블 -->
+										<div class="card-body" style="border: 1px solid #dee1e4;">
+											<!-- 검색한 테이블 (Left Table) -->
+											<div class="row">
+												<div class="col-7 stretch-card div-form-margin-table" style="max-width: 47%;margin-top:5px;" id="left_list">
+													<div class="card" style="border:0px;">
+														<div class="card-body" style="padding-left:0px;padding-right:0px;">
+															<h4 class="card-title">
+																<i class="item-icon fa fa-dot-circle-o"></i>
+																<spring:message code="data_transfer.tableList" />
+															</h4>
+				
+												 			<table id="info_tableList_re" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" style="width:100%;">
+																<thead>
+																	<tr class="bg-info text-white">
+																		<th width="150" class="dt-center" ><spring:message code="migration.table_name" /></th>
+																		<th width="150" class="dt-center" ><spring:message code="migration.table_type" /></th>	
+																		<th width="150" class="dt-center"><spring:message code="migration.table_comment"/></th>
+																	</tr>
+																</thead>
+															</table>
 														</div>
 													</div>
 												</div>
-											</div>
-													
-											<div class="col-5 stretch-card div-form-margin-table" style="max-width: 47%;margin-top:5px;" id="right_list">
-												<div class="card" style="border:0px;">
-													<div class="card-body" style="padding-left:0px;padding-right:0px;">
-														<h4 class="card-title">
-															<i class="item-icon fa fa-dot-circle-o"></i>
-															<spring:message code="migration.ddl_table_list" />
-														</h4>
-			
-										 				<table id="ext_tableList_re" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-															<thead>
-																<tr class="bg-info text-white">
-																	<th width="150" class="dt-center" ><spring:message code="migration.table_name" /></th>
-																	<th width="150" class="dt-center" ><spring:message code="migration.table_type" /></th>	
-																	<th width="150" class="dt-center"><spring:message code="migration.table_comment"/></th>	
-																</tr>
-															</thead>
-														</table>
+				 								<!-- Left Table End -->
+				 								<!-- 화살표 -->
+												<div class="col-1 stretch-card div-form-margin-table" style="max-width: 6%;" id="center_div">
+													<div class="card" style="background-color: transparent !important;border:0px;">
+														<div class="card-body">	
+															<div class="card my-sm-2 connectRegForm2" style="border:0px;background-color: transparent !important;">
+																<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-top:15px;margin-bottom:-15px;">
+																	<a href="#" class="tip" onclick="fn_ins_t_allRightMove_reg_re();">
+																		<i class="fa fa-angle-double-right" style="font-size: 35px;cursor:pointer;"></i>
+																		<!-- 
+																		<span style="width: 200px;"><spring:message code="data_transfer.move_right_line" /></span>
+																		 -->
+																	</a>
+																</label>
+																
+																<br/>
+																	
+																<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
+																	<a href="#" class="tip" onclick="fn_ins_t_rightMove_reg_re();">
+																		<i class="fa fa-angle-right" style="font-size: 35px;cursor:pointer;"></i>
+																		<!-- 
+																		<span style="width: 200px;"><spring:message code="data_transfer.move_right_line" /></span>
+																		 -->
+																	</a>
+																</label>
+																
+																<br/>
+				
+																<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
+																	<a href="#" class="tip" onclick="fn_ins_t_leftMove_reg_re();">
+																		<i class="fa fa-angle-left" style="font-size: 35px;cursor:pointer;"></i>
+																		<!--
+																		<span style="width: 200px;"><spring:message code="data_transfer.move_left_line" /></span>
+																		 -->
+																	</a>
+																</label>
+																
+																<br/>
+				
+																<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-bottom:-15px;">
+																	<a href="#" class="tip" onclick="fn_ins_t_allLeftMove_reg_re();">
+																		<i class="fa fa-angle-double-left" style="font-size: 35px;cursor:pointer;"></i>
+																		<!--
+																		<span style="width: 200px;"><spring:message code="data_transfer.move_all_left" /></span>
+																		-->
+																	</a>
+																</label>
+															</div>
+														</div>
 													</div>
 												</div>
+												<!-- 화살표 End -->
+												<!-- 작업 대상 테이블 (Right Table) -->
+												<div class="col-7 stretch-card div-form-margin-table" style="max-width: 47%;margin-top:5px;" id="right_list">
+													<div class="card" style="border:0px;">
+														<div class="card-body" style="padding-left:0px;padding-right:0px;">
+															<h4 class="card-title">
+																<i class="item-icon fa fa-dot-circle-o"></i>
+																<spring:message code="migration.ddl_table_list" />
+															</h4>
+				
+											 				<table id="ext_tableList_re" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+																<thead>
+																	<tr class="bg-info text-white">
+																		<th width="150" class="dt-center" ><spring:message code="migration.table_name" /></th>
+																		<th width="150" class="dt-center" ><spring:message code="migration.table_type" /></th>	
+																		<th width="150" class="dt-center"><spring:message code="migration.table_comment"/></th>	
+																	</tr>
+																</thead>
+															</table>
+														</div>
+													</div>
+												</div>
+												<!-- 작업 대상 테이블 End -->
 											</div>
 										</div>
-									</div>
 									</div>
 									<br/>
 									
