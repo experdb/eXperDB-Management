@@ -818,11 +818,10 @@ function fn_search_tableInfo_mig(){
 											<!-- 소스옵션 #1 -->
 											<div class="tab-pane fade show active" role="tabpanel" id="insDumpOptionTab1">
 												<!-- 테이블 옵션 검색 -->
-												<div class="card-body" style="border: 1px solid #dee1e4; margin-top: -15px;">
-													<h4 class="card-title" style="margin-bottom: -10px;"><spring:message code="migration.option_information"/></h4><br/>
+												<div class="card-body" style="border: 1px solid #dee1e4;margin-top: -15px;padding-bottom: 10px;padding-top: 10px;">
 													<div class="form-inline row" style="margin-bottom: -10px;">											
-														<div class="input-group mb-2 mr-sm-2 col-sm-1_9">
-															<select name="src_tables_trsf" id="src_tables_trsf"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;">
+														<div class="input-group mb-2 mr-sm-2 col-sm-1_9"style="padding-right: 0px; margin-right: 0px;">
+															<select name="src_tables_trsf" id="src_tables_trsf"  class="form-control form-control-xsm" style="margin-right: 1rem;width:130px;height:41px;">
 																<option value="include"><spring:message code="migration.inclusion_table"/></option>
 																<option value="exclude"><spring:message code="migration.exclusion_table"/></option>
 															</select>
@@ -837,7 +836,7 @@ function fn_search_tableInfo_mig(){
 															<input type="text" class="form-control" id="mig_scm_nm_reg" name="mig_scm_nm_reg" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>'  />
 														</div>
 														<div class="input-group mb-2 mr-sm-2 col-sm-2">
-															<select class="form-control" name="work" id="mig_object_type_reg">
+															<select class="form-control" name="work" id="mig_object_type_reg" style="height:41px;">
 																<option value=""><spring:message code="migration.table_type"/> 전체</option>
 																<option value="TABLE">TABLE</option>
 																<option value="VIEW">VIEW</option>
@@ -940,7 +939,7 @@ function fn_search_tableInfo_mig(){
 																<div class="card-body" style="padding-left:0px;padding-right:0px;padding-top: 0px;">
 																	<h4 class="card-title">
 																		<i class="item-icon fa fa-dot-circle-o"></i>
-																		<spring:message code="migration.ddl_table_list" />
+																		<spring:message code="migration.mig_table_list" />
 																	</h4>
 						
 													 				<table id="ext_tableList_mig" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">

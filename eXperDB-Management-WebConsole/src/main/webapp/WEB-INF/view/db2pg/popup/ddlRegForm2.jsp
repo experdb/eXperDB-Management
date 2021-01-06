@@ -547,11 +547,11 @@ function fn_search_tableInfo(){
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;margin-bottom:10px;">
 					DDL <spring:message code="common.registory" />
 				</h4>
-				<div class="card" style="border:0px;max-height:1000px;">
+				<div class="card" style="border:0px;max-height:720px;">
 					<form class="cmxform" id="ddlRegForm">
 						<fieldset>
 							<div class="row">
-								<div class="col-md-12 system-tlb-scroll" style="border:0px;height: 900px; overflow-x: hidden;  overflow-y: auto; ">
+								<div class="col-md-12 system-tlb-scroll" style="border:0px;height: 700px; overflow-x: hidden;  overflow-y: auto; ">
 									<!-- work 이름과 설명 -->
 									<div class="card-body" style="border: 1px solid #adb5bd;">
 										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
@@ -634,8 +634,7 @@ function fn_search_tableInfo(){
 									
 									<!-- 테이블 옵션 검색 -->
 									<div class="card-body" style="border: 1px solid #adb5bd;">
-										<div class="card-body" style="border: 1px solid #dee1e4;">
-											<h4 class="card-title"><spring:message code="migration.option_information"/></h4>
+										<div class="card-body" style="border: 1px solid #dee1e4; padding-bottom: 10px;padding-top: 15px;">
 											<div class="form-inline row">	
 												<div class="input-group mb-2 mr-sm-2 col-sm-1_9">	
 													<select name="src_tables" id="src_tables"  class="form-control">
@@ -675,7 +674,7 @@ function fn_search_tableInfo(){
 										<br/>
 										<!-- 테이블 옵션 검색 End -->
 										<!-- 테이블 -->
-										<div class="card-body" style="border: 1px solid #dee1e4;">
+										<div class="card-body" style="border: 1px solid #dee1e4;padding-top: 0px;">
 											<!-- 검색한 테이블 (Left Table) -->
 											<div class="row">
 												<div class="col-7 stretch-card div-form-margin-table" style="max-width: 47%;margin-top:5px;" id="left_list">
