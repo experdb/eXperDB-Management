@@ -352,7 +352,7 @@ function fn_data_reg_popup(){
 // 	$("#db2pg_trsf_wrk_exp", "#dataRegForm").val("");
 // 	$("#db2pg_source_system_nm", "#dataRegForm").val("");
 // 	$("#db2pg_trg_sys_nm", "#dataRegForm").val("");
-
+	fn_table_clear_mig();
 	$('#db2pg_trsf_wrk_nm').prop('readonly', false);
 	$("#mod_button_data_work").hide();
 	$("#inset_button_data_work").show();

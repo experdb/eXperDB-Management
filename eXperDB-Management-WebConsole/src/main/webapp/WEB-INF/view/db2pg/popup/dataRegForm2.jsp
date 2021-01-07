@@ -191,7 +191,13 @@ function fnCheckNotKorean(koreanStr){
     return true;
 }
 
-
+/* ********************************************************
+ * table clear
+ ******************************************************** */
+function fn_table_clear_mig(){
+	infoTableMig.clear().draw();
+	extTableMig.clear().draw();
+}
 
 /* ********************************************************
  * 등록 버튼 클릭시
