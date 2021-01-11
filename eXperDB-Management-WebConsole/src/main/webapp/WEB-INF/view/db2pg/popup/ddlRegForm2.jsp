@@ -541,17 +541,16 @@ function fn_search_tableInfo(){
 
 <div class="modal fade" id="pop_layer_ddl_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 20px 150px;"> 
-		<!-- <div class="modal-content" style="width:1400px; height:1000px;"> -->		 	 
 		<div class="modal-content" style="width:1400px;">		 	 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;margin-bottom:10px;">
 					DDL <spring:message code="common.registory" />
 				</h4>
-				<div class="card" style="border:0px;max-height:720px;">
+				<div class="card" style="border:0px;max-height:698px;">
 					<form class="cmxform" id="ddlRegForm">
 						<fieldset>
 							<div class="row">
-								<div class="col-md-12 system-tlb-scroll" style="border:0px;height: 700px; overflow-x: hidden;  overflow-y: auto; ">
+								<div class="col-md-12 system-tlb-scroll" style="border:0px;height: 620px; overflow-x: hidden;  overflow-y: auto; ">
 									<!-- work 이름과 설명 -->
 									<div class="card-body" style="border: 1px solid #adb5bd;">
 										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
@@ -775,13 +774,12 @@ function fn_search_tableInfo(){
 										</div>
 									</div>
 									<br/>
-									
-									<div class="card-body">
-										<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0px -20px 0px;" >
-											<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="button" onclick="fn_insert_work_reg()" value='<spring:message code="common.registory" />' />
-											<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
-										</div>
-									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0px -30px -20px;" >
+									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="button" onclick="fn_insert_work_reg()" value='<spring:message code="common.registory" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
 								</div>
 							</div>
 						</fieldset>
