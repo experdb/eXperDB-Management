@@ -158,8 +158,8 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	 * @param dataConfigVO
 	 * @throws Exception
 	 */
-	public void insertDataWork(DataConfigVO dataConfigVO) throws SQLException {
-		insert("db2pgSettingSql.insertDataWork", dataConfigVO);
+	public int insertDataWork(DataConfigVO dataConfigVO) throws SQLException {
+		return (int) selectOne("db2pgSettingSql.insertDataWork", dataConfigVO);
 	}
 
 	/**
@@ -183,6 +183,10 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 		delete("db2pgSettingSql.deleteDataWork", db2pg_trsf_wrk_id);
 	}
 
+	public void deleteUsrQry(int db2pg_trsf_wrk_id) throws SQLException {
+		delete("db2pgSettingSql.deleteUsrQry", db2pg_trsf_wrk_id);
+	}
+
 	/**
 	 * DDL WORK 상세정보
 	 * 
@@ -201,6 +205,16 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	 */
 	public DataConfigVO selectDetailDataWork(int db2pg_trsf_wrk_id) {
 		return (DataConfigVO) selectOne("db2pgSettingSql.selectDetailDataWork", db2pg_trsf_wrk_id);
+	}
+
+	/**
+	 * Data WORK User Query
+	 * @param int
+	 * @return QueryVO
+	 * @throws Exception
+	 */
+	public List<QueryVO> selectDetailUsrQry(int db2pg_trsf_wrk_id) {
+		return selectList("db2pgSettingSql.selectDetailUsrQry", db2pg_trsf_wrk_id);
 	}
 
 	/**

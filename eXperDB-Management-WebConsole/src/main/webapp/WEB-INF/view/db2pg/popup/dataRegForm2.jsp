@@ -23,9 +23,16 @@
 <script type="text/javascript">
 var db2pg_trsf_wrk_nmChk ="fail";
 
+// 테이블선택 
 var infoTableMig = null;
 var extTableMig = null;
+var sqlTable = null;
 var tableList_mig = [];
+
+// sql 입력
+var sqlCount = 0;
+var sqlContent = [];
+var sqlTable = [];
 
 $(window.document).ready(function(){
 	fn_init_tables_mig();
@@ -66,8 +73,6 @@ function fn_init_tables_mig(){
 	extTableMig.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
 	extTableMig.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
 	
-	$(window).trigger('resize');
-	
 }
 
 
@@ -95,7 +100,7 @@ function valCheck_trsf(){
 		$("#db2pg_trg_sys_id").focus();
 		return false;
 	}else{
-		return true;
+		return valCheck_usrqryReg();
 	}
 }
 
@@ -116,7 +121,7 @@ function valCheck_trsf2(){
 		$("#db2pg_trg_sys_id").focus();
 		return false;
 	}else{
-		return true;
+		return valCheck_usrqryReg();
 	}
 }
 
@@ -184,7 +189,7 @@ function fnCheckNotKorean(koreanStr){
         var koreanChar = koreanStr.charCodeAt(i);
         if( !( 0xAC00 <= koreanChar && koreanChar <= 0xD7A3 ) && !( 0x3131 <= koreanChar && koreanChar <= 0x318E ) ) {
         }else{
-        	showSwalIcon('한글은 사용할수 없습니다.', '<spring:message code="common.close" />', '', 'error');
+        	showSwalIcon('<spring:message code="encrypt_msg.msg22" />', '<spring:message code="common.close" />', '', 'error');
             return false;
         }
     }
@@ -192,11 +197,118 @@ function fnCheckNotKorean(koreanStr){
 }
 
 /* ********************************************************
+ * user query table name validation check
+ ******************************************************** */
+function valCheck_usrqry(){
+	sqlContent = [];
+	sqlTable = [];
+
+	for(var i=1;i <= sqlCount; i++){
+		sqlContent.push($("#user_qry"+i, "#userSqls").val());
+		sqlTable.push($("#sqlTable"+i, "#userSqls").val());
+	}
+
+	if(sqlCount == 0 ){
+		return true;
+	}else if(sqlTable.includes("")){
+		showSwalIcon('<spring:message code="migration.user_query_table" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}else if(duplicate(sqlTable)){
+		showSwalIcon('<spring:message code="migration.user_query_table_dup" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	} else {
+		return true;
+	}
+}
+
+function valCheck_usrqryReg(){
+	sqlContent = [];
+	sqlTable = [];
+
+	for(var i=1;i <= sqlCount; i++){
+		sqlContent.push($("#user_qry"+i, "#userSqls").val());
+		sqlTable.push($("#sqlTable"+i, "#userSqls").val());
+	}
+
+	if(sqlCount == 1 && sqlTable.includes("") && sqlTable.includes("")){
+		return true;
+	}else if (sqlTable.includes("")){
+		showSwalIcon('<spring:message code="migration.user_query_table" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}else if(duplicate(sqlTable)){
+		showSwalIcon('<spring:message code="migration.user_query_table_dup" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	} else {
+		return true;
+	}
+}
+
+// 중복 확인 함수
+// 중복이 존재한다면 true 리턴
+function duplicate(arr){
+	const dup = arr.some(function(x){
+		return arr.indexOf(x) !== arr.lastIndexOf(x);
+	});
+	return dup;
+}
+
+
+/* ********************************************************
  * table clear
  ******************************************************** */
 function fn_table_clear_mig(){
 	infoTableMig.clear().draw();
 	extTableMig.clear().draw();
+}
+
+/* ********************************************************
+ * reset 
+ ******************************************************** */
+function fn_reset_mig() {
+	console.log("fn_reset_mig() called!!!");
+	
+	// user query reset
+	sqlCount = 0;
+	$("#userSqls").empty();
+	fn_addSql();
+	
+	// table selection  reset
+	fn_table_clear_mig();
+	
+	$('#db2pg_trsf_wrk_nm').prop('readonly', false);
+	$("#mod_button_data_work").hide();
+	$("#inset_button_data_work").show();
+	$("#inset_button_data_work2").show();
+	$("#inset_title").show();
+	$("#mod_title").hide();
+	$("#src_tables_trsf").val("include");
+	$("#src_cnd_qry").val("");
+	
+	// tab 선택
+	$('a[href="#insDumpOptionTab1"]').tab('show');
+	$('#con_multi_gbn', '#findConfirmMulti').val("data_reg");
+	
+	//$('.system-tlb-scroll').scrollTop(0);
+	$("#db2pg_trsf_wrk_nm").focus();
+}
+
+function fn_reset_mig_modi(result){
+	sqlContent = [];
+	sqlTable = [];
+	sqlCount = result.length;
+
+	$("#userSqls").empty();
+	
+	if(sqlCount <1){
+		fn_addSql();
+	}else{
+		for(var i=0;i<sqlCount; i++){
+			sqlTable.push(result[i].tar_tb_name);
+			sqlContent.push(result[i].usr_qry_exp);
+		}
+		fn_drawSql();
+	}
+	
 }
 
 /* ********************************************************
@@ -221,7 +333,10 @@ function fn_insert_trsf_work(){
 		}else {
 			$('#src_exclude_table_nm_trsf').val(rowList);
 		}
-		
+		console.log("sqlTable : " + sqlTable);
+		console.log("sqlTable.length : " + sqlTable.length);
+		console.log("sqlContent : " + sqlContent);
+		console.log("sqlContent.length : " + sqlContent.length);
 		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
 			url : '/wrk_nmCheck.do',
@@ -249,12 +364,14 @@ function fn_insert_trsf_work(){
 						  		ins_opt_cd : $("#ins_opt_cd").val(),
 						  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
 						  		src_cnd_qry : $("#src_cnd_qry").val(),
-						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
-						  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
 						  		src_table_total_cnt : src_table_total_cnt_trsf,
+						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
+								db2pg_usrqry_content : sqlContent,
+								db2pg_usrqry_table : sqlTable,  
 						  		db2pg_uchr_lchr_val : $("#dat_db2pg_uchr_lchr_val").val(),
 						  	},
 							type : "post",
+							traditional : true,
 							beforeSend: function(xhr) {
 						        xhr.setRequestHeader("AJAX", true);
 						     },
@@ -345,8 +462,11 @@ function fn_update_trsf_work(){
 		  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
 		  		src_table_total_cnt : src_table_total_cnt_trsf,
 		  		wrk_id : $("#wrk_id").val(),
+				db2pg_usrqry_content : sqlContent,
+				db2pg_usrqry_table : sqlTable,  
 		  		db2pg_uchr_lchr_val : $("#dat_db2pg_uchr_lchr_val").val()
-		  	},
+			  },
+			traditional : true,
 			type : "post",
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -707,8 +827,88 @@ function fn_search_tableInfo_mig(){
 	 $("#src_tables_trsf").change(function(){
 		 $("#src_include_table_nm_trsf").val("");
 		 $("#src_exclude_table_nm_trsf").val("");
-	});
- });
+	});		
+});
+
+ 
+/* ********************************************************
+ * 소스옵션 #4 function
+ ******************************************************** */
+
+ // + 버튼 눌렀을 때 (add Sql)
+ function fn_addSql() {
+	 if(valCheck_usrqry()){
+		 $("button").remove("#addSqlBtn");
+		 sqlCount++;
+		 $("#userSqls").append(
+			 '<div class="form-inline" id="sqlDiv' + sqlCount + '" style="width:1230px; margin-left: 30px; margin-bottom: 10px;">\n' +
+			 '	<label for="ins_dump_cprt" class="col-sm-1_5 col-form-label" style="padding-top:7px;"> SQL ' + sqlCount + ' </label>\n' +
+			'	<div id="userQry' + sqlCount +'" class="col-sm-9">	\n' +
+			'		<input type="text" class="sqlTable form-control form-control-sm" id="sqlTable' + sqlCount +'" name="sqlTable0" style="width:220px;height:30px;margin-bottom: 5px;" placeholder="<spring:message code="migration.user_query_table" />"/> \n' +
+			 '		<textarea name="user_qry' + sqlCount +'" id="user_qry' + sqlCount +'" style="height: 100px;width: 870px;padding-left: 12px;" class="form-control" placeholder="<spring:message code="migration.user_query_sql" />""></textarea>\n' +
+			 '	</div>\n' +
+			'	<button type="button" id="delSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_delSql(' + sqlCount +')"style="margin-right: 10px;margin-top: 8px;font-size: 16px;">\n' +
+			'		<strong>-</strong>\n' +
+			'	</button>\n' +
+			'	<button type="button" id = "addSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_addSql()" style="margin-top: 8px;font-size: 16px;">\n' +
+			'		<strong>+</strong>\n' +
+			'	</button>\n' +
+			 '</div> \n'
+		 );
+		 $("#sqlTable"+sqlCount).focus();
+		 $('.system-tlb-scroll').scrollTop(10000);
+	 }
+ }
+ 
+ // - 버튼 눌렸을 때
+ function fn_delSql(id){
+	sqlContent = [];
+	sqlTable = [];
+	
+	 for(var i=1;i <= sqlCount; i++){
+		 if(i != id){
+			 sqlContent.push($("#user_qry"+i, "#userSqls").val());
+			 sqlTable.push($("#sqlTable"+i, "#userSqls").val());
+		 }
+	}
+	
+	if(sqlCount == 1){ // sql 1개 있을때 누를 경우 (내용만 지워줌)
+		$("#userSqls").empty();
+		// sqlCount=1;
+		sqlCount=0;
+		fn_addSql();
+	}else{
+		fn_drawSql();
+	}
+ }
+ 
+ // sql 입력칸 그려주기
+ function fn_drawSql(){
+	 $("#userSqls").empty();
+	 sqlCount = sqlContent.length;
+	 for(var i=1; i<=sqlCount; i++){
+		$("#userSqls").append(
+			'<div class="form-inline" id="sqlDiv' + i + '" style="width:1230px; margin-left: 30px; margin-bottom: 10px;">\n' +
+			'	<label for="ins_dump_cprt" class="col-sm-1_5 col-form-label" style="padding-top:7px;"> SQL ' + i + ' </label>\n' +
+			'	<div id="userQry' + i +'" class="col-sm-9">	\n' +
+			'		<input type="text" class="sqlTable form-control form-control-sm" id="sqlTable' + i +'" name="sqlTable0" style="width:220px;height:30px;margin-bottom: 5px;" value="' + sqlTable[i-1] + '" placeholder="<spring:message code="migration.user_query_table" />"> \n' +
+			'		<textarea name="user_qry' + i +'" id="user_qry' + i +'" style="height: 100px;width: 870px;padding-left: 12px;" class="form-control" placeholder="<spring:message code="migration.user_query_sql" />">' + sqlContent[i-1] + '</textarea>\n' +
+			'	</div>\n' +
+			'	<button type="button" id="delSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_delSql(' + i +')"style="margin-right: 10px;margin-top: 8px;font-size: 16px;">\n' +
+			'		<strong>-</strong>\n' +
+			'	</button>\n' +
+			'</div> \n'	
+		 );
+	}
+	$("#sqlDiv"+sqlCount).append(
+			'	<button type="button" id = "addSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_addSql()" style="margin-top: 8px;font-size: 16px;">\n' +
+			'		<strong>+</strong>\n' +
+			'	</button>\n' 
+	);
+	// sqlCount++;
+ }
+ 
+ 
 
 </script>
 <form name="frmPopup">
@@ -812,6 +1012,11 @@ function fn_search_tableInfo_mig(){
 													<li class="nav-item">
 														<a class="nav-link" id="ins-dump-tab-3" data-toggle="pill" href="#insDumpOptionTab3" role="tab" aria-controls="insDumpOptionTab3" aria-selected="false">
 															<spring:message code="migration.source_option"/> #3
+														</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link" id="ins-dump-tab-4" data-toggle="pill" href="#insDumpOptionTab4" role="tab" aria-controls="insDumpOptionTab4" aria-selected="false">
+															<spring:message code="migration.source_option"/> #4
 														</a>
 													</li>
 												</ul>
@@ -1069,6 +1274,30 @@ function fn_search_tableInfo_mig(){
 												</div>
 											</div>
 											<!-- 소스옵션 #3 end -->
+											<!-- 소스옵션 #4 -->
+											<div class="tab-pane fade" role="tabpanel" id="insDumpOptionTab4" style="outline:#ffffff">
+												<div class="form-group row div-form-margin-z" id="userSqls" style="margin-top:-10px;">
+													<!-- sql 입력칸 들어가는 곳 -->
+													 <!--
+														 <div class="form-inline" id="sqlDiv0" style="width:1230px; margin-left: 30px; margin-bottom: 10px;">
+															 <label for="ins_dump_cprt" class="col-sm-1_5 col-form-label" style="padding-top:7px;">
+																 sql 0
+															 </label>
+															 <div id="userSql0" class="col-sm-9 row">
+																 <input type="text" class="form-control form-control-sm" id="sqlTable0" name="sqlTable0" style="width:220px;height:30px;margin-bottom: 5px;" placeholder='<spring:message code="migration.user_query_table" />'/>							
+																 <textarea name="user_qry0" id="user_qry0" style="height: 100px;width: 870px;padding-left: 12px;" class="form-control" placeholder='<spring:message code="migration.user_query_sql" />'></textarea>
+															 </div>
+															 <button type="button" id="delSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_delSql(0)"style="margin-right: 10px;margin-top: 8px;font-size: 16px;">
+																 <strong>-</strong>
+															 </button>
+															 <button type="button" id = "addSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_addSql()" style="margin-top: 8px;font-size: 16px;">
+																 <strong>+</strong>
+															 </button>
+														 </div>
+													 -->
+												</div>
+											</div>
+											<!-- 소스옵션 #4 end -->
 										</div>
 										<!-- tab 화면 end -->
 										

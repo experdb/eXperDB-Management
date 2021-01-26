@@ -112,7 +112,7 @@ public interface Db2pgSettingService {
 	 * @param dataConfigVO
 	 * @throws Exception
 	 */
-	void insertDataWork(DataConfigVO dataConfigVO) throws Exception;
+	int insertDataWork(DataConfigVO dataConfigVO) throws Exception;
 
 	/**
 	 * Data WORK 수정
@@ -129,6 +129,13 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	void deleteDataWork(int db2pg_trsf_wrk_id) throws Exception;
+	
+	/**
+	 * Data User Query 삭제
+	 * @param int
+	 * @throws Exception
+	 */
+	void deleteUsrQry(int db2pg_trsf_wrk_id) throws Exception;
 
 	/**
 	 * DDL WORK 상세정보
@@ -145,6 +152,14 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	DataConfigVO selectDetailDataWork(int db2pg_trsf_wrk_id) throws Exception;
+
+	/**
+	 * Data WORK User Query 
+	 * 
+	 * @param queryVO
+	 * @throws Exception
+	 */
+	List<QueryVO> selectDetailUsrQry(int db2pg_trsf_wrk_id) throws Exception;
 
 	/**
 	 * DBMS 접속정보

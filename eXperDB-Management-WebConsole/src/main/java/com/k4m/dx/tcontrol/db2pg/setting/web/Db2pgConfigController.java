@@ -25,7 +25,7 @@ public class Db2pgConfigController {
 		JSONObject result = new JSONObject();
 		String filePath = configObj.get("path").toString()+"/config/"+configObj.get("wrk_nm").toString()+".config";
         String configPath = Db2pgConfigController.class.getResource("").getPath()+"db2pg.config";
-        BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
+		BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
 		try{
 	        String fileContent;
@@ -73,7 +73,9 @@ public class Db2pgConfigController {
 	public static JSONObject createDataConfig(JSONObject configObj) throws IOException {
 		JSONObject result = new JSONObject();
 		String filePath = configObj.get("path").toString()+"/config/"+configObj.get("wrk_nm").toString()+".config";
-        String configPath = Db2pgConfigController.class.getResource("").getPath()+"db2pg.config";
+		String configPath = Db2pgConfigController.class.getResource("").getPath()+"db2pg.config";
+		// String filePath = "C:\\Users\\yeeun\\git\\eXperDB-Management\\eXperDB-Management-WebConsole\\src\\main\\java\\com\\k4m\\dx\\tcontrol\\db2pg\\setting\\web\\"+configObj.get("wrk_nm").toString()+".config";
+        // String configPath = "C:\\Users\\yeeun\\git\\eXperDB-Management\\eXperDB-Management-WebConsole\\src\\main\\java\\com\\k4m\\dx\\tcontrol\\db2pg\\setting\\web\\db2pg.config";
         BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
 		try{
@@ -121,6 +123,9 @@ public class Db2pgConfigController {
 				}
 				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+configObj.get("src_file_output_path").toString());
 				fileContent = fileContent.replaceAll("SRC_CLASSIFY_STRING=original", "SRC_CLASSIFY_STRING="+configObj.get("src_classify_string").toString());	
+				if((boolean) configObj.get("usrqry_tf")){
+					fileContent = fileContent.replaceAll("#SRC_FILE_QUERY_DIR_PATH=./queries.xml", "SRC_FILE_QUERY_DIR_PATH="+configObj.get("path").toString()+"/xml/"+configObj.get("wrk_nm").toString()+".xml");					
+				}
 				
 				bw.write(fileContent + "\r\n");
 				bw.flush();
@@ -147,6 +152,8 @@ public class Db2pgConfigController {
 	public static JSONObject deleteConfig(String db2pg_wrk_nm,String db2pg_path) {
 		JSONObject result = new JSONObject();
 		String filePath = db2pg_path+"/config/"+db2pg_wrk_nm+".config";
+		// String filePath = "C:\\Users\\yeeun\\git\\eXperDB-Management\\eXperDB-Management-WebConsole\\src\\main\\java\\com\\k4m\\dx\\tcontrol\\db2pg\\setting\\web\\"+db2pg_wrk_nm+".config";
+
 		try{
 			File file = new File(filePath);
 			if(file.exists()){
@@ -167,5 +174,59 @@ public class Db2pgConfigController {
 	 * @return JSONObject
 	 * @throws Exception
 	 */
+	public static JSONObject createXml(String [] table, String [] qry, String db2pg_path, String db2pg_wrk_nm) throws IOException {
+		JSONObject result = new JSONObject();
+		String filePath = db2pg_path+"/xml/"+db2pg_wrk_nm+".xml";
+		// String filePath = "C:\\Users\\yeeun\\git\\eXperDB-Management\\eXperDB-Management-WebConsole\\src\\main\\java\\com\\k4m\\dx\\tcontrol\\db2pg\\setting\\web\\"+db2pg_wrk_nm+".xml";
+
+		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
+		System.out.println("xml Create!!!!");
+		try{
+			bw.write("<QUERIES>\n");
+			for(int i=0;i<table.length;i++){				
+				bw.append("	<QUERY>\n");
+				bw.append("		<NAME>"+table[i]+"</NAME>\n");
+				bw.append("		<SELECT>\n");
+				bw.append("		<![CDATA[ \n");
+				bw.append("		"+qry[i]+"\n");
+				bw.append("		]]>\n");
+				bw.append("		</SELECT>\n");
+				bw.append("	</QUERY>\n");
+			}
+			bw.append("</QUERIES>");			
+			bw.close();
+			result.put("resultCode", "0000000000");
+		}catch (Exception e){
+			e.printStackTrace();
+			System.out.println("xml Create ERROR");
+			result.put("resultCode", "8000000003");
+		}
+		
+		return result;
+	}
+
+	/**
+	 * xml 파일 삭제
+	 * 
+	 * @param String
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	public static JSONObject deleteXml(String db2pg_wrk_nm,String db2pg_path) {
+		JSONObject result = new JSONObject();
+		String filePath = db2pg_path+"/xml/"+db2pg_wrk_nm+".xml";
+		// String filePath = "C:\\Users\\yeeun\\git\\eXperDB-Management\\eXperDB-Management-WebConsole\\src\\main\\java\\com\\k4m\\dx\\tcontrol\\db2pg\\setting\\web\\"+db2pg_wrk_nm+".xml";
+		try{
+			File file = new File(filePath);
+			if(file.exists()){
+				file.delete();
+	    	}
+			result.put("resultCode", "0000000000");
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.put("resultCode", "8000000003");
+		}
+		return result;
+	}
 	
 }

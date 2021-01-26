@@ -352,19 +352,7 @@ function fn_data_reg_popup(){
 // 	$("#db2pg_trsf_wrk_exp", "#dataRegForm").val("");
 // 	$("#db2pg_source_system_nm", "#dataRegForm").val("");
 // 	$("#db2pg_trg_sys_nm", "#dataRegForm").val("");
-	fn_table_clear_mig();
-	$('#db2pg_trsf_wrk_nm').prop('readonly', false);
-	$("#mod_button_data_work").hide();
-	$("#inset_button_data_work").show();
-	$("#inset_button_data_work2").show();
-	$("#inset_title").show();
-	$("#mod_title").hide();
-	$("#src_tables_trsf").val("include");
-	
-	//tab 선택
-	$('a[href="#insDumpOptionTab1"]').tab('show');
-	$('#con_multi_gbn', '#findConfirmMulti').val("data_reg");
-				
+	fn_reset_mig();		
 	$('#pop_layer_data_reg').modal("show");
 }
 
@@ -446,6 +434,8 @@ function fn_data_regre_popup(){
 				//tab 선택
 				$('a[href="#insDumpOptionTab1"]').tab('show');
 				fn_dbmsInfo_set();
+
+				fn_reset_mig_modi(result.usr_qry);
 				$('#pop_layer_data_reg').modal("show");
 			}
 		});	
