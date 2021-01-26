@@ -213,6 +213,9 @@ function valCheck_usrqry(){
 	}else if(sqlTable.includes("")){
 		showSwalIcon('<spring:message code="migration.user_query_table" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
+	}else if(sqlContent.includes("")){
+		showSwalIcon('<spring:message code="migration.user_query_content" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
 	}else if(duplicate(sqlTable)){
 		showSwalIcon('<spring:message code="migration.user_query_table_dup" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
@@ -234,6 +237,9 @@ function valCheck_usrqryReg(){
 		return true;
 	}else if (sqlTable.includes("")){
 		showSwalIcon('<spring:message code="migration.user_query_table" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}else if(sqlContent.includes("")){
+		showSwalIcon('<spring:message code="migration.user_query_content" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else if(duplicate(sqlTable)){
 		showSwalIcon('<spring:message code="migration.user_query_table_dup" />', '<spring:message code="common.close" />', '', 'error');

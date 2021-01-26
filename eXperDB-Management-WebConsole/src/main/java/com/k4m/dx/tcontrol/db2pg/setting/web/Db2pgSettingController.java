@@ -258,6 +258,7 @@ public class Db2pgSettingController {
 			ddlConfigVO.setWrk_id(wrk_id);
 			ddlConfigVO.setFrst_regr_id(id);
 			ddlConfigVO.setLst_mdfr_id(id);
+			ddlConfigVO.setDb2pg_ddl_wrk_exp(toString(ddlConfigVO.getDb2pg_ddl_wrk_exp()));
 			//작업 정보등록
 			db2pgSettingService.insertDb2pgWork(ddlConfigVO);
 			
@@ -349,6 +350,7 @@ public class Db2pgSettingController {
 			ddlConfigVO.setWrk_id(wrk_id);
 			ddlConfigVO.setFrst_regr_id(id);
 			ddlConfigVO.setLst_mdfr_id(id);
+			ddlConfigVO.setDb2pg_ddl_wrk_exp(toString(ddlConfigVO.getDb2pg_ddl_wrk_exp()));
 			//작업 정보등록
 			db2pgSettingService.insertDb2pgWork(ddlConfigVO);
 	
@@ -502,6 +504,7 @@ public class Db2pgSettingController {
 			ddlConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			ddlConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			ddlConfigVO.setDdl_save_pth(ddl_path);
+			ddlConfigVO.setDb2pg_ddl_wrk_exp(toString(ddlConfigVO.getDb2pg_ddl_wrk_exp()));
 			db2pgSettingService.updateDDLWork(ddlConfigVO);
 			
 			//5.config 생성
@@ -652,9 +655,11 @@ public class Db2pgSettingController {
 			
 			//시퀀스 조회
 			wrk_id=db2pgSettingService.selectWorkSeq();
+
 			dataConfigVO.setWrk_id(wrk_id);
 			dataConfigVO.setFrst_regr_id(id);
 			dataConfigVO.setLst_mdfr_id(id);
+			dataConfigVO.setDb2pg_trsf_wrk_exp(toString(dataConfigVO.getDb2pg_trsf_wrk_exp()));
 			//작업 정보등록
 			db2pgSettingService.insertDb2pgWorkData(dataConfigVO);
 			
@@ -822,9 +827,11 @@ public class Db2pgSettingController {
 			
 			//시퀀스 조회
 			int wrk_id=db2pgSettingService.selectWorkSeq();
+
 			dataConfigVO.setWrk_id(wrk_id);
 			dataConfigVO.setFrst_regr_id(id);
 			dataConfigVO.setLst_mdfr_id(id);
+			dataConfigVO.setDb2pg_trsf_wrk_exp(toString(dataConfigVO.getDb2pg_trsf_wrk_exp()));
 			//작업 정보등록
 			db2pgSettingService.insertDb2pgWorkData(dataConfigVO);
 			
@@ -1066,7 +1073,7 @@ public class Db2pgSettingController {
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
-			
+			dataConfigVO.setDb2pg_trsf_wrk_exp(toString(dataConfigVO.getDb2pg_trsf_wrk_exp()));
 			
 			db2pgSettingService.updateDataWork(dataConfigVO);
 			
