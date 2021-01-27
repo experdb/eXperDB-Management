@@ -141,14 +141,20 @@ function fn_checkBox(result){
  * WORK NM 중복 체크
  ******************************************************** */
 function fn_check_ddl_reg() {
-	var db2pg_trsf_wrk_nm = document.getElementById("db2pg_trsf_wrk_nm");
+	 var db2pg_trsf_wrk_nm = $("#db2pg_trsf_wrk_nm").val().replace(/ /g, '_');
+	 $("#db2pg_trsf_wrk_nm").val(db2pg_trsf_wrk_nm);
+	console.log("checkcheck : " + $("#db2pg_trsf_wrk_nm").val());
+	// var db2pg_trsf_wrk_nm = document.getElementById("db2pg_trsf_wrk_nm");
 	if (db2pg_trsf_wrk_nm.value == "") {
 		showSwalIcon('<spring:message code="message.msg107" />', '<spring:message code="common.close" />', '', 'error');
 		document.getElementById('db2pg_trsf_wrk_nm').focus();
 		return;
 	}
 	
-	if(fnCheckNotKorean(db2pg_trsf_wrk_nm.value)){
+	
+	
+//	if(fnCheckNotKorean(db2pg_trsf_wrk_nm.value)){
+	if(fnCheckNotKorean(db2pg_trsf_wrk_nm)){
 		$.ajax({
 			url : '/wrk_nmCheck.do',
 			type : 'post',
@@ -180,8 +186,12 @@ function fn_check_ddl_reg() {
 		});
 	}
 }
-
-
+/* ********************************************************
+ * work name change check
+ ******************************************************** */
+function fn_checkWrkNm_change_mig() {
+	db2pg_trsf_wrk_nmChk = "fail";
+}
 
 /* 한글입력 체크 */
 function fnCheckNotKorean(koreanStr){
@@ -197,7 +207,7 @@ function fnCheckNotKorean(koreanStr){
 }
 
 /* ********************************************************
- * user query table name validation check
+ * user query validation check
  ******************************************************** */
 function valCheck_usrqry(){
 	sqlContent = [];
@@ -853,7 +863,7 @@ function fn_search_tableInfo_mig(){
 			'		<input type="text" class="sqlTable form-control form-control-sm" id="sqlTable' + sqlCount +'" name="sqlTable0" style="width:220px;height:30px;margin-bottom: 5px;" placeholder="<spring:message code="migration.user_query_table" />"/> \n' +
 			 '		<textarea name="user_qry' + sqlCount +'" id="user_qry' + sqlCount +'" style="height: 100px;width: 870px;padding-left: 12px;" class="form-control" placeholder="<spring:message code="migration.user_query_sql" />""></textarea>\n' +
 			 '	</div>\n' +
-			'	<button type="button" id="delSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_delSql(' + sqlCount +')"style="margin-right: 10px;margin-top: 8px;font-size: 16px;">\n' +
+			'	<button type="button" id="delSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_delCheck(' + sqlCount +')"style="margin-right: 10px;margin-top: 8px;font-size: 16px;">\n' +
 			'		<strong>-</strong>\n' +
 			'	</button>\n' +
 			'	<button type="button" id = "addSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_addSql()" style="margin-top: 8px;font-size: 16px;">\n' +
@@ -865,12 +875,24 @@ function fn_search_tableInfo_mig(){
 		 $('.system-tlb-scroll').scrollTop(10000);
 	 }
  }
+
+ // - 버튼 눌렀을 때 확인
+ function fn_delCheck(id){
+	$("#usrqry_del_id").val(id);
+	confile_title = '<spring:message code="migration.user_query" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+	$('#con_multi_gbn', '#findConfirmMulti').val("usrqry_del");
+	$('#confirm_multi_tlt').html(confile_title);
+	$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+	$('#pop_confirm_multi_md').modal("show");
+
+ }
  
- // - 버튼 눌렸을 때
- function fn_delSql(id){
+ // sql 삭제
+ function fn_delSql(){
 	sqlContent = [];
 	sqlTable = [];
-	
+	var id = $("#usrqry_del_id").val();
+
 	 for(var i=1;i <= sqlCount; i++){
 		 if(i != id){
 			 sqlContent.push($("#user_qry"+i, "#userSqls").val());
@@ -900,7 +922,7 @@ function fn_search_tableInfo_mig(){
 			'		<input type="text" class="sqlTable form-control form-control-sm" id="sqlTable' + i +'" name="sqlTable0" style="width:220px;height:30px;margin-bottom: 5px;" value="' + sqlTable[i-1] + '" placeholder="<spring:message code="migration.user_query_table" />"> \n' +
 			'		<textarea name="user_qry' + i +'" id="user_qry' + i +'" style="height: 100px;width: 870px;padding-left: 12px;" class="form-control" placeholder="<spring:message code="migration.user_query_sql" />">' + sqlContent[i-1] + '</textarea>\n' +
 			'	</div>\n' +
-			'	<button type="button" id="delSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_delSql(' + i +')"style="margin-right: 10px;margin-top: 8px;font-size: 16px;">\n' +
+			'	<button type="button" id="delSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_delCheck(' + i +')"style="margin-right: 10px;margin-top: 8px;font-size: 16px;">\n' +
 			'		<strong>-</strong>\n' +
 			'	</button>\n' +
 			'</div> \n'	
@@ -950,7 +972,7 @@ function fn_search_tableInfo_mig(){
 												<spring:message code="common.work_name" />
 											</label>
 											<div class="col-sm-8">
-												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_trsf_wrk_nm" name="db2pg_trsf_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()"/>
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_trsf_wrk_nm" name="db2pg_trsf_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onchange="fn_checkWrkNm_change_mig();" onblur="this.value=this.value.trim()"/>
 											</div>
 											<div class="col-sm-2">
 												<button type="button" id="inset_button_data_work" class="btn btn-inverse-danger btn-fw" style="width: 115px;" onclick="fn_check_ddl_reg()"><spring:message code="common.overlap_check" /></button>
@@ -1281,6 +1303,7 @@ function fn_search_tableInfo_mig(){
 											</div>
 											<!-- 소스옵션 #3 end -->
 											<!-- 소스옵션 #4 -->
+											<input type="hidden" class="txt t4" name="usrqry_del_id" id="usrqry_del_id" />
 											<div class="tab-pane fade" role="tabpanel" id="insDumpOptionTab4" style="outline:#ffffff">
 												<div class="form-group row div-form-margin-z" id="userSqls" style="margin-top:-10px;">
 													<!-- sql 입력칸 들어가는 곳 -->

@@ -101,7 +101,9 @@ function valCheck_reg(){
  * WORK NM Validation Check
  ******************************************************** */
 function fn_check_reg() {
-	var db2pg_ddl_wrk_nm = document.getElementById("db2pg_ddl_wrk_nm");
+	var db2pg_ddl_wrk_nm = $("#db2pg_ddl_wrk_nm").val().replace(/ /g, '_');
+	$("#db2pg_ddl_wrk_nm").val(db2pg_ddl_wrk_nm);
+	// var db2pg_ddl_wrk_nm = document.getElementById("db2pg_ddl_wrk_nm");
 	if (db2pg_ddl_wrk_nm.value == "") {
 		showSwalIcon('<spring:message code="message.msg107" />', '<spring:message code="common.close" />', '', 'error');
 		document.getElementById('db2pg_ddl_wrk_nm').focus();
@@ -109,7 +111,7 @@ function fn_check_reg() {
 	}
 	
 	
-	if(fnCheckNotKorean(db2pg_ddl_wrk_nm.value)){	
+	if(fnCheckNotKorean(db2pg_ddl_wrk_nm)){	
 		$.ajax({
 			url : '/wrk_nmCheck.do',
 			type : 'post',
@@ -142,6 +144,12 @@ function fn_check_reg() {
 	}
 }
 
+/* ********************************************************
+ * work name change check
+ ******************************************************** */
+ function fn_checkWrkNm_change_ddl() {
+	db2pg_ddl_wrk_nmChk = "fail";
+}
 
 /* 한글입력 체크 */
 function fnCheckNotKorean(koreanStr){
@@ -559,7 +567,7 @@ function fn_search_tableInfo(){
 												<spring:message code="common.work_name" />
 											</label>
 											<div class="col-sm-8">
-												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_ddl_wrk_nm" name="db2pg_ddl_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()"/>
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_ddl_wrk_nm" name="db2pg_ddl_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onchange="fn_checkWrkNm_change_ddl();" onblur="this.value=this.value.trim()"/>
 											</div>
 											<div class="col-sm-2">
 												<button type="button" class="btn btn-inverse-danger btn-fw" style="width: 115px;" onclick="fn_check_reg()"><spring:message code="common.overlap_check" /></button>

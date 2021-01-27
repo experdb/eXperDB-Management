@@ -458,6 +458,8 @@ function fnc_confirmMultiRst(gbn){
 		location.href='/db2pgHistory.do?gbn=ddl' ;
 	}else if(gbn =="data_history"){
 		location.href='/db2pgHistory.do?gbn=mig' ;
+	}else if(gbn == "usrqry_del"){
+		fn_delSql();
 	}
 }
 
