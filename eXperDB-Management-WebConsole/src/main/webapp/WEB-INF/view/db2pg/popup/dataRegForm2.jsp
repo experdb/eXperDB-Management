@@ -209,7 +209,8 @@ function fnCheckNotKorean(koreanStr){
 /* ********************************************************
  * user query validation check
  ******************************************************** */
-function valCheck_usrqry(){
+// user query add check
+ function valCheck_usrqry(){
 	sqlContent = [];
 	sqlTable = [];
 
@@ -234,6 +235,7 @@ function valCheck_usrqry(){
 	}
 }
 
+// user query save check
 function valCheck_usrqryReg(){
 	sqlContent = [];
 	sqlTable = [];
@@ -281,7 +283,6 @@ function fn_table_clear_mig(){
  * reset 
  ******************************************************** */
 function fn_reset_mig() {
-	console.log("fn_reset_mig() called!!!");
 	
 	// user query reset
 	sqlCount = 0;
@@ -292,6 +293,7 @@ function fn_reset_mig() {
 	fn_table_clear_mig();
 	
 	$('#db2pg_trsf_wrk_nm').prop('readonly', false);
+
 	$("#mod_button_data_work").hide();
 	$("#inset_button_data_work").show();
 	$("#inset_button_data_work2").show();
@@ -972,7 +974,7 @@ function fn_search_tableInfo_mig(){
 												<spring:message code="common.work_name" />
 											</label>
 											<div class="col-sm-8">
-												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_trsf_wrk_nm" name="db2pg_trsf_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onchange="fn_checkWrkNm_change_mig();" onblur="this.value=this.value.trim()"/>
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="db2pg_trsf_wrk_nm" name="db2pg_trsf_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onchange="fn_checkWrkNm_change_mig();" onblur="this.value=this.value.trim()"/>
 											</div>
 											<div class="col-sm-2">
 												<button type="button" id="inset_button_data_work" class="btn btn-inverse-danger btn-fw" style="width: 115px;" onclick="fn_check_ddl_reg()"><spring:message code="common.overlap_check" /></button>
@@ -1307,23 +1309,7 @@ function fn_search_tableInfo_mig(){
 											<div class="tab-pane fade" role="tabpanel" id="insDumpOptionTab4" style="outline:#ffffff">
 												<div class="form-group row div-form-margin-z" id="userSqls" style="margin-top:-10px;">
 													<!-- sql 입력칸 들어가는 곳 -->
-													 <!--
-														 <div class="form-inline" id="sqlDiv0" style="width:1230px; margin-left: 30px; margin-bottom: 10px;">
-															 <label for="ins_dump_cprt" class="col-sm-1_5 col-form-label" style="padding-top:7px;">
-																 sql 0
-															 </label>
-															 <div id="userSql0" class="col-sm-9 row">
-																 <input type="text" class="form-control form-control-sm" id="sqlTable0" name="sqlTable0" style="width:220px;height:30px;margin-bottom: 5px;" placeholder='<spring:message code="migration.user_query_table" />'/>							
-																 <textarea name="user_qry0" id="user_qry0" style="height: 100px;width: 870px;padding-left: 12px;" class="form-control" placeholder='<spring:message code="migration.user_query_sql" />'></textarea>
-															 </div>
-															 <button type="button" id="delSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_delSql(0)"style="margin-right: 10px;margin-top: 8px;font-size: 16px;">
-																 <strong>-</strong>
-															 </button>
-															 <button type="button" id = "addSqlBtn" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_addSql()" style="margin-top: 8px;font-size: 16px;">
-																 <strong>+</strong>
-															 </button>
-														 </div>
-													 -->
+													 
 												</div>
 											</div>
 											<!-- 소스옵션 #4 end -->
