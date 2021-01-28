@@ -391,6 +391,67 @@
 					<div class="container">
 						<ul class="nav page-navigation nav-justified">
 
+
+
+							<!-- BACKUP -->
+							<li class="nav-item mega-menu width-div-a" id="encryptMenu">	
+								<a href="#" class="nav-link">
+									<i class="ti-harddrive menu-icon"></i>
+									<span class="menu-title">BACKUP</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu">
+									<div class="col-group-wrapper row">
+										<div class="col-group col-md-3" id="">
+											<p class="category-heading">
+												<b>백업관리</b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="">
+													<a class="nav-link" href="/arcBackup/backupStorege.do" onClick="fn_cookie('backupStorege')" target="main">
+														백업스토리지
+													</a>
+												</li>
+												<li class="nav-item" id="">
+													<a class="nav-link" href="/arcBackup/arcBackupSetting.do" onClick="fn_cookie('arcBackupSetting')" target="main">
+														백업설정
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001102">
+													<a class="nav-link" href="/keyManage.do" onClick="fn_cookie('keyManage')" target="main">
+														백업이력
+													</a>
+												</li>
+											</ul>
+										</div>
+										<!-- <div class="col-group col-md-3" id="" >
+											<p class="category-heading">
+												<b>복원관리</b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0001201">
+													<a class="nav-link" href="/encodeDecodeAuditLog.do"onClick="fn_cookie('encodeDecodeAuditLog')" target="main">
+														기본복구
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001202">
+													<a class="nav-link" href="/managementServerAuditLog.do" onClick="fn_cookie('managementServerAuditLog')" target="main">
+														시점복구
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001203">
+													<a class="nav-link" href="/encodeDecodeKeyAuditLog.do" onClick="fn_cookie('encodeDecodeKeyAuditLog')" target="main">
+														복구이력
+													</a>
+												</li>			
+											</ul>
+										</div> -->
+									</div>
+								</div>
+							</li>
+
+
+
 							<!-- SCHEDULE -->
 							<li class="nav-item width-div-a" id="scheduleMenu" >
  								<a href="#" class="nav-link">
