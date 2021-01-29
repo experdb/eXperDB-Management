@@ -10,7 +10,7 @@
 <%
 	/**
 	* @Class Name : backupSeetting.jsp
-	* @Description : 아크서브 백업설정 화면
+	* @Description : 백업설정 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -93,7 +93,7 @@ $(window.document).ready(function() {
 		$('#pop_layer_popup_backupPolicy').modal("hide");
 
 		$.ajax({
-			url : "/arcBackup/arcBackupRegForm.do",
+			url : "/experdb/backupRegForm.do",
 			data : {
 			},
 			type : "post",
@@ -118,7 +118,7 @@ $(window.document).ready(function() {
 
 </script>
 
-<%@include file="./popup/arcBackupRegForm.jsp"%>
+<%@include file="./popup/backupRegForm.jsp"%>
 
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">

@@ -1,4 +1,4 @@
-package com.k4m.dx.tcontrol.arcbackup.web;
+package com.experdb.management.backup.web;
 
 import java.util.List;
 import java.util.Map;
@@ -11,13 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.script.service.ScriptVO;
 
 
 @Controller
-public class ArcBackupController {
+public class ExperdbBackupController {
 
 	
 	/**
@@ -26,12 +24,12 @@ public class ArcBackupController {
 	 * @return ModelAndView
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/arcBackup/arcBackupSetting.do")
-	public ModelAndView arcBackupSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	@RequestMapping(value = "/experdb/backupSetting.do")
+	public ModelAndView backupSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("arcBackup/backupSeetting");
+		mv.setViewName("eXperDB_Backup/backupSetting");
 		
 		return mv;
 	}
@@ -43,14 +41,13 @@ public class ArcBackupController {
 	 * @param WorkVO
 	 * @return Map<String, Object>
 	 */
-	@RequestMapping(value = "/arcBackup/arcBackupRegForm.do")
+	@RequestMapping(value = "/experdb/backupRegForm.do")
 	@ResponseBody
-	public List<Map<String, Object>> arcBackupRegForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public List<Map<String, Object>> backupRegForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		List<Map<String, Object>> resultSet = null;
 
 		try {
 
-				System.out.println("@@@@@@@@@@@@@");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

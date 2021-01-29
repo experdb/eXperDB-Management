@@ -394,7 +394,7 @@
 
 
 							<!-- BACKUP -->
-							<li class="nav-item mega-menu width-div-a" id="encryptMenu">	
+							<li class="nav-item mega-menu width-div-a" id="eXperDB_Backup">	
 								<a href="#" class="nav-link">
 									<i class="ti-harddrive menu-icon"></i>
 									<span class="menu-title">BACKUP</span>
@@ -408,17 +408,17 @@
 											</p>
 											<ul class="submenu-item">
 												<li class="nav-item" id="">
-													<a class="nav-link" href="/arcBackup/backupStorege.do" onClick="fn_cookie('backupStorege')" target="main">
+													<a class="nav-link" href="/experdb/backupStorage.do" onClick="fn_cookie('backupStorage')" target="main">
 														백업스토리지
 													</a>
 												</li>
 												<li class="nav-item" id="">
-													<a class="nav-link" href="/arcBackup/arcBackupSetting.do" onClick="fn_cookie('arcBackupSetting')" target="main">
+													<a class="nav-link" href="/experdb/backupSetting.do" onClick="fn_cookie('backupSetting')" target="main">
 														백업설정
 													</a>
 												</li>
 												<li class="nav-item" id="MN0001102">
-													<a class="nav-link" href="/keyManage.do" onClick="fn_cookie('keyManage')" target="main">
+													<a class="nav-link" href="" onClick="fn_cookie('')" target="main">
 														백업이력
 													</a>
 												</li>
