@@ -74,6 +74,8 @@
 		if($("#storageType").val() == 1){
 			$("#userName").prop("disabled", true);
 			$("#passWord").prop("disabled", true);
+			$("#userName").val(null);
+			$("#passWord").val(null);
 		}else{
 			$("#userName").prop("disabled", false);
 			$("#passWord").prop("disabled", false);
@@ -85,6 +87,7 @@
 	 ******************************************************** */
 	function fn_bckJobLimClick() {
 		var mg = $(':input:radio[name=currBckJob]:checked').val();
+		$('#currBckLimNum').val(0);
 		if(mg == 'limit'){
 			$('#currBckLimNum').prop("disabled", false);
 		}else if(mg == 'noLimit'){
@@ -97,14 +100,55 @@
 	 ******************************************************** */
 	// run script check
 	 function fn_runScriptClick() {
+		$("#runScriptNum").val(0);
+
 		if($("#runScript").is(":checked")){
+			$("#runScript").val(1);
+			$("#runScriptUnit").val(1);
 			$("#runScriptNum").prop("disabled", false); 
 			$("#runScriptUnit").prop("disabled", false); 
 		}else{
+			$("#runScript").val(0);
+			$("#runScriptUnit").val(0);
 			$("#runScriptNum").prop("disabled", true); 
 			$("#runScriptUnit").prop("disabled", true); 
 		}
 	}
+	
+	 /* ********************************************************
+	  * registration
+	  ******************************************************** */
+	  function fn_storageReg () {
+		  console.log("storageReg function called!!!");
+		  $.ajax({
+				url : "/experdb/backupStorageReg.do",
+				data : {
+					type : $("#storageType").val(),
+					path : $("#storagePath").val(),
+					passWord : $("#passWord").val(),
+					userName : $("#userName").val(),
+					jobLimit : $("#currBckLimNum").val(),
+					freeSizeAlert : $("#runScriptNum").val(),
+					freeSizeAlertUnit : $("#runScriptUnit").val()
+				},
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if (xhr.status == 403){
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					
+				}
+		  })
+	 }
 
 
 </script>
@@ -162,7 +206,7 @@
 														Password
 													</div>
 													<div class="col-4" style="padding-left: 0px;">
-														<input type="text" id="passWord" name="passWord" class="form-control form-control-sm" style="width: 400px;"/>
+														<input type="password" id="passWord" name="passWord" class="form-control form-control-sm" style="width: 400px;"/>
 													</div>
 												</div>
 												<div class="form-group">
@@ -180,7 +224,7 @@
 															 	Limit to
 															</label>
 															<div class="col-2" style="padding-left: 0px; margin-left: 20px;">
-																<input type="number" id="currBckLimNum" class="form-control form-control-sm" style="height: 30px;"/>
+																<input type="number" id="currBckLimNum" class="form-control form-control-sm" value=0 style="height: 30px;"/>
 															</div>
 														</div>
 													</div>
@@ -188,7 +232,7 @@
 												<div class="form-group row" style="margin-left: 0px;">
 													<div class="form-check" style="margin-left: 20px;">
 														<label class="form-check-label" for="runScript">
-															<input type="checkbox" class="form-check-input" id="runScript" name="runScript" onclick="fn_runScriptClick()"/>
+															<input type="checkbox" class="form-check-input" id="runScript" name="runScript" value=0 onclick="fn_runScriptClick()"/>
 															Run script when free space is less than
 															<i class="input-helper"></i>
 														</label>
@@ -198,8 +242,9 @@
 													</div>
 													<div class="col-2" style="padding-left: 0px; margin-left: 10px;">
 														<select name="runScriptUnit" id="runScriptUnit"  class="form-control form-control-xsm" style="width:100px; height:30px;">
-															<option value="1">MB</option>
-															<option value="2">%</option>
+															<option value="1">%</option>
+															<option value="2">MB</option>
+															<option value="0" hidden></option>
 														</select>
 													</div>
 												</div>
@@ -211,7 +256,7 @@
 						</div>
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
-									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value="<spring:message code='common.registory' />" onclick=""/>
+									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value="<spring:message code='common.registory' />" onclick="fn_storageReg()"/>
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
 								</div>
 							</div>
