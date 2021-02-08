@@ -442,6 +442,19 @@
 		    <version>1.6.1</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>com.jcraft</groupId>
+		    <artifactId>jsch</artifactId>
+		    <version>0.1.55</version>
+		</dependency>
+		
+		<!-- <dependency>
+		    <groupId>ch.ethz.ganymed</groupId>
+		    <artifactId>ganymed-ssh2</artifactId>
+		    <version>262</version>
+		</dependency> -->
+		
+		
    </dependencies>
    	
    <build>
