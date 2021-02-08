@@ -418,7 +418,7 @@
 													</a>
 												</li>
 												<li class="nav-item" id="MN0001102">
-													<a class="nav-link" href="" onClick="fn_cookie('')" target="main">
+													<a class="nav-link" href="/experdb/backupHistory.do" onClick="fn_cookie('')" target="main">
 														백업이력
 													</a>
 												</li>

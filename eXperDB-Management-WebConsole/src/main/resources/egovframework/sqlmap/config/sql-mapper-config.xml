@@ -58,6 +58,8 @@
 		<typeAlias alias="transVO" type="com.k4m.dx.tcontrol.transfer.service.TransVO"/>
 		<typeAlias alias="transMappVO" type="com.k4m.dx.tcontrol.transfer.service.TransMappVO"/>
 		<typeAlias alias="transDbmsVO" type="com.k4m.dx.tcontrol.transfer.service.TransDbmsVO"/>
+		
+		<typeAlias alias="serverInfoVO" type="com.experdb.management.backup.service.ServerInfoVO"/>
     </typeAliases>
     
  	<mappers>
@@ -116,6 +118,9 @@
 		
 		<!-- transfer -->
 		<mapper resource="egovframework/sqlmap/mappers/transfer/transSql.xml" />
+		
+		<!-- experdb backup -->
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
 		
 	</mappers>
 </configuration>

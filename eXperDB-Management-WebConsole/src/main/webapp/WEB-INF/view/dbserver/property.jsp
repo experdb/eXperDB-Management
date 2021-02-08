@@ -402,7 +402,7 @@
 				
  				html += '					<span class="text-info"><c:out value="${serverinfo.db_svr_nm}"/></span><br/></h5>\n';
  				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
- 				html += '					IP : <c:out value="${serverinfo.ipadr}"/>&nbsp;&nbsp;&nbsp;POPT : <c:out value="${serverinfo.portno}"/></h6>\n';
+ 				html += '					IP : <c:out value="${serverinfo.ipadr}"/>&nbsp;&nbsp;&nbsp;PORT : <c:out value="${serverinfo.portno}"/></h6>\n';
  				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
 				html += '					<spring:message code="dbms_information.account" /> : <c:out value="${serverinfo.dft_db_nm}"/>\n';
  				html += '					</h6>\n';
@@ -425,7 +425,7 @@
  				}
  				html += '					<span class="text-info"><c:out value="${serverinfo.svr_host_nm}"/></span><br/></h6>';
  				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">\n';
- 				html += '					IP : <c:out value="${serverinfo.ipadr}"/>&nbsp;&nbsp;&nbsp;POPT : <c:out value="${serverinfo.portno}"/></h6>\n';
+ 				html += '					IP : <c:out value="${serverinfo.ipadr}"/>&nbsp;&nbsp;&nbsp;PORT : <c:out value="${serverinfo.portno}"/></h6>\n';
  				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">\n';
 				html += '					<spring:message code="dbms_information.account" /> : <c:out value="${serverinfo.dft_db_nm}"/>\n';
  				html += '					</h6>\n';
