@@ -2,12 +2,13 @@ package com.experdb.management.backup.service;
 
 public class TargetMachineVO {
 
+	private int rownum;
 	private String name;
 	private String user;
-	private String UUID;
+	private String uuid;
 	private String password;
 	private String description;
-	private boolean isProtected = false;
+	private String isProtected;
 	private String jobName;
 	private String operatingSystem;
 	private int connectionStatus;
@@ -16,6 +17,16 @@ public class TargetMachineVO {
 	private int recoverySetCount;
 	private int backupLocationType;
 	private int machineType;
+	private int licenseStatus;
+	private StringBuffer excludeVolumes;
+
+	public int getRownum() {
+		return rownum;
+	}
+
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
 
 	public String getName() {
 		return name;
@@ -33,12 +44,12 @@ public class TargetMachineVO {
 		this.user = user;
 	}
 
-	public String getUUID() {
-		return UUID;
+	public String getUuid() {
+		return uuid;
 	}
 
-	public void setUUID(String uUID) {
-		UUID = uUID;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public String getPassword() {
@@ -57,11 +68,11 @@ public class TargetMachineVO {
 		this.description = description;
 	}
 
-	public boolean isProtected() {
+	public String getIsProtected() {
 		return isProtected;
 	}
 
-	public void setProtected(boolean isProtected) {
+	public void setIsProtected(String isProtected) {
 		this.isProtected = isProtected;
 	}
 
@@ -127,6 +138,22 @@ public class TargetMachineVO {
 
 	public void setMachineType(int machineType) {
 		this.machineType = machineType;
+	}
+
+	public int getLicenseStatus() {
+		return licenseStatus;
+	}
+
+	public void setLicenseStatus(int licenseStatus) {
+		this.licenseStatus = licenseStatus;
+	}
+
+	public StringBuffer getExcludeVolumes() {
+		return excludeVolumes;
+	}
+
+	public void setExcludeVolumes(StringBuffer excludeVolumes) {
+		this.excludeVolumes = excludeVolumes;
 	}
 
 }
