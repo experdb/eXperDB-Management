@@ -238,6 +238,20 @@ public class BackupLocationInfoVO implements Serializable {
 		this.rpsprotocol = rpsprotocol;
 	}
 
+	@Override
+	public String toString() {
+		return "BackupLocationInfoVO [isArchiveType=" + isArchiveType + ", uuid=" + uuid + ", type=" + type
+				+ ", backupDestLocation=" + backupDestLocation + ", backupDestPasswd=" + backupDestPasswd
+				+ ", backupDestUser=" + backupDestUser + ", freeSize=" + freeSize + ", totalSize=" + totalSize
+				+ ", isRunScript=" + isRunScript + ", script=" + script + ", freeSizeAlert=" + freeSizeAlert
+				+ ", freeSizeAlertUnit=" + freeSizeAlertUnit + ", jobLimit=" + jobLimit + ", currentJobCount="
+				+ currentJobCount + ", waitingJobCount=" + waitingJobCount + ", rpsserver=" + rpsserver
+				+ ", rpspassword=" + rpspassword + ", rpsuuid=" + rpsuuid + ", rpsprotocol=" + rpsprotocol
+				+ ", dataStoreInfo=" + dataStoreInfo + ", enableS3CifsShare=" + enableS3CifsShare + ", s3CifsSharePort="
+				+ s3CifsSharePort + ", s3CifsShareUser=" + s3CifsShareUser + ", serverInfo=" + serverInfo
+				+ ", s3CifsSharePassword=" + s3CifsSharePassword + "]";
+	}
 
+	
 
 }

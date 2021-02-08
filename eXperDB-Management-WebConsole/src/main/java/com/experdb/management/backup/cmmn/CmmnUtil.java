@@ -196,7 +196,7 @@ public class CmmnUtil {
 			 * @param  password
 			 * @return 
 			 */
-			public static String backupLoactionFreeSize(String location) {
+			public static String backupLocationFreeSize(String location) {
 				
 				JSONObject result = new JSONObject();		
 				CmmnUtil cmmUtil = new CmmnUtil();
@@ -219,7 +219,7 @@ public class CmmnUtil {
 			 * @param  password
 			 * @return 
 			 */
-			public static String backupLoactionTotalSize(String location) {
+			public static String backupLocationTotalSize(String location) {
 				
 				JSONObject result = new JSONObject();		
 				CmmnUtil cmmUtil = new CmmnUtil();
@@ -236,26 +236,24 @@ public class CmmnUtil {
 				return totalSize;
 			}
 		 
-		 
-		
 
 			public static void main(String[] args) {
 				
 				//String v = bytes2String(29673590784);
 				//System.out.println(v);
 					
-				String freeSize = backupLoactionFreeSize("/backup");
-				String totalSize = backupLoactionTotalSize("/backup");
-				
+				String freeSize = backupLocationFreeSize("/backup");
+				String totalSize = backupLocationTotalSize("/backup");
 				System.out.println(freeSize);
 				System.out.println(totalSize);
 				
 				
 				//System.out.println("root = 6LXkUDgmZ+e7/PKqfq20Rw==");
 				//System.out.println("root0225!!  = 6jpUshj1Yyyb57HRdjRDXA== ");
-				//encPassword("root0225!!");
+				encPassword("root0225!!");
 			
 			}
+			
 
 
 	
