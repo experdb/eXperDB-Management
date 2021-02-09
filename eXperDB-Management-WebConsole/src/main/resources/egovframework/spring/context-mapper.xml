@@ -16,5 +16,44 @@
 		<property name="mapperLocations" value="classpath:/egovframework/sqlmap/mappers/*.xml" />
 	</bean>
 	
-
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	
+	
+		<!-- Backup -->
+	<bean id="sqlSessionBackup" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceBackup" />
+		<property name="configLocation" value="classpath:/egovframework/sqlmap/config/sql-mapper-config.xml" />
+		<property name="mapperLocations" value="classpath:/egovframework/sqlmap/mappers/*.xml" />
+	</bean>
+	
+	<bean id="backupDB" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionBackup"/>
+	</bean>
+	
+		<!-- Activitylog -->
+	 <bean id="sqlSessionActivitylog" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceActivitylog" />
+		<property name="configLocation" value="classpath:/egovframework/sqlmap/config/sql-mapper-config.xml" />
+		<property name="mapperLocations" value="classpath:/egovframework/sqlmap/mappers/*.xml" />
+	</bean>
+	
+	<bean id="activitylogDB" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionActivitylog"/>
+	</bean>
+	
+	
+		<!-- SqlSession setup for MyBatis Database Layer -->
+	<bean id="sqlSessionJobhistory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceJobhistory" />
+		<property name="configLocation" value="classpath:/egovframework/sqlmap/config/sql-mapper-config.xml" />
+		<property name="mapperLocations" value="classpath:/egovframework/sqlmap/mappers/*.xml" />
+	</bean>
+	
+	<bean id="jobhistoryDB" class="org.mybatis.spring.SqlSessionTemplate">
+			<constructor-arg ref="sqlSessionJobhistory"/>
+	</bean>
+	
 </beans>

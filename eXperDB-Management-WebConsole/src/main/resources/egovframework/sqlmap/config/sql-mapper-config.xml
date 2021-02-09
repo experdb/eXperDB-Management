@@ -60,6 +60,7 @@
 		<typeAlias alias="transDbmsVO" type="com.k4m.dx.tcontrol.transfer.service.TransDbmsVO"/>
 		
 		<typeAlias alias="serverInfoVO" type="com.experdb.management.backup.service.ServerInfoVO"/>
+		<typeAlias alias="targetMachineVO" type="com.experdb.management.backup.node.service.TargetMachineVO" />
     </typeAliases>
     
  	<mappers>
@@ -121,6 +122,7 @@
 		
 		<!-- experdb backup -->
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
+
 		
 	</mappers>
 </configuration>

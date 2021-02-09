@@ -1,4 +1,4 @@
-package com.experdb.management.backup.service;
+package com.experdb.management.backup.node.service;
 
 public class TargetMachineVO {
 

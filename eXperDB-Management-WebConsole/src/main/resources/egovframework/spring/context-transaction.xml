@@ -9,6 +9,19 @@
 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
+	
+	<bean id="txManagerBackup" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceBackup"/>
+	</bean>
+	
+ 	<bean id="txManagerActivitylog" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceActivitylog"/>
+	</bean>
+	
+	<bean id="txManagerJobhistory" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceJobhistory"/>
+	</bean>
+
 
 	<tx:advice id="txAdvice" transaction-manager="txManager">
 		<tx:attributes>
@@ -20,5 +33,38 @@
 		<aop:pointcut id="requiredTx" expression="execution(* com.k4m.tcontrol..impl.*Impl.*(..))"/>
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="requiredTx" />
 	</aop:config> 
+	
+	<tx:advice id="txAdviceBackup" transaction-manager="txManagerBackup">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+ 	<aop:config>
+		<aop:pointcut id="requiredTxBackup" expression="execution(* com.experdb.management.backup..impl.*Impl.*(..))"/>
+		<aop:advisor advice-ref="txAdviceBackup" pointcut-ref="requiredTxBackup" />
+	</aop:config> 
+	
+		<tx:advice id="txAdviceActivitylog" transaction-manager="txManagerActivitylog">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+ 	<aop:config>
+		<aop:pointcut id="requiredTxActivitylog" expression="execution(* com.experdb.management.backup..impl.*Impl.*(..))"/>
+		<aop:advisor advice-ref="txAdviceActivitylog" pointcut-ref="requiredTxActivitylog" />
+	</aop:config> 
+	
+		<tx:advice id="txAdviceJobhistory" transaction-manager="txManagerJobhistory">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+ 	<aop:config>
+		<aop:pointcut id="requiredTxJobhistory" expression="execution(* com.experdb.management.backup..impl.*Impl.*(..))"/>
+		<aop:advisor advice-ref="txAdviceJobhistory" pointcut-ref="requiredTxJobhistory" />
+	</aop:config>
 
 </beans>
