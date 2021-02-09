@@ -30,4 +30,27 @@
 		FROM t_dbsvripadr_i 
 	ORDER BY db_svr_id , master_gbn
 	</select>
+	
+
+	<select id="getNodeList" parameterType="targetMachineVO" resultType="targetMachineVO">
+				SELECT
+						name,
+						user,
+						password,
+						operatingsystem,
+						description,
+						isprotected,
+						jobname,
+						licensestatus,
+						connectionstatus,
+						lastresult,
+						recoverypointcount,
+						recoverysetcount,
+						excludevolumes,
+						backuplocationtype,
+						machinetype,
+						uuid
+				FROM TARGETMACHINE
+				WHERE 1 =1
+		</select>
 </mapper>
