@@ -280,12 +280,12 @@
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
 			return true;
-		}else if(!fn_checkPathInfo()){
+		/* }else if(!fn_checkPathInfo()){
 			$("#storagePath").val("");
 			$("#storagePathAlert").append("유효한 Path를 입력해주세요");
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
-			return true;
+			return true; */
 		}
 		else{
 			// $("#storagePathAlert").append("사용가능한 Path 입니다");
