@@ -61,6 +61,7 @@
 		
 		<typeAlias alias="serverInfoVO" type="com.experdb.management.backup.service.ServerInfoVO"/>
 		<typeAlias alias="targetMachineVO" type="com.experdb.management.backup.node.service.TargetMachineVO" />
+		<typeAlias alias="backupLocationInfoVO" type="com.experdb.management.backup.service.BackupLocationInfoVO"/>
     </typeAliases>
     
  	<mappers>

@@ -32,7 +32,7 @@ var table_policy;
  ******************************************************* */
 $(window.document).ready(function() {
 	fn_init();
-
+	fn_getStorageList();
 });
 
 function fn_init() {
@@ -49,12 +49,12 @@ function fn_init() {
 		deferRender : true,
 		bSort : false,
 		columns : [
-		{data : "bckDestination", className : "dt-center", defaultContent : ""},	
+		{data : "path", className : "dt-center", defaultContent : ""},	
 		{data : "type", className : "dt-center", defaultContent : ""},	
 		{data : "totalSize", className : "dt-center", defaultContent : ""},			
-		{data : "FreeSize", className : "dt-center", defaultContent : ""},
-		{data : "RunJobCount", className : "dt-center", defaultContent : ""},	
-		{data : "WaiJobCount", className : "dt-center", defaultContent : ""}
+		{data : "freeSize", className : "dt-center", defaultContent : ""},
+		{data : "rJobCount", className : "dt-center", defaultContent : ""},	
+		{data : "wJobCount", className : "dt-center", defaultContent : ""}
 
 		], 'select': {'style': 'single'}
 	});
@@ -69,6 +69,30 @@ function fn_init() {
     $(window).trigger('resize'); 
 	
 } // fn_init();
+
+/* ********************************************************
+ * backup storage list
+ ******************************************************** */
+function fn_getStorageList() {
+	$.ajax({
+		url : "/experdb/backupStorageList.do",
+		type : "post",
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(data){
+			bckStorageList.clear().draw();
+			bckStorageList.rows.add(data).draw();
+			fn_getPathList(data);
+		}
+	});
+}
 
 
 /* ********************************************************
@@ -109,9 +133,9 @@ function fn_storage_modi_popup() {
 	$('#pop_layer_popup_backupStorageReg').modal("hide");
 	
 	$.ajax({
-		url : "/experdb/backupModiForm.do",
+		url : "/experdb/backupStorageInfo.do",
 		data : {
-			
+			path : bckStorageList.row('.selected').data().path
 		},
 		type : "post",
 		beforeSend: function(xhr) {
@@ -127,7 +151,7 @@ function fn_storage_modi_popup() {
 			}
 		},
 		success : function(result) {
-			fn_modiReset();
+			fn_modiReset(result);
 			$('#pop_layer_popup_backupStorageReg').modal("show");
 		}
 	})
@@ -135,9 +159,67 @@ function fn_storage_modi_popup() {
 
 }
 
+function fn_delStorage() {
+	// var datas = bckStorageList.rows('.selected').data();
+	// var storageList = [];
+	
+	// for(var i =0; i<datas.length;i++){
+	// 	storageList.push(bckStorageList.rows('.selected').data()[i].path);
+	// }
+	var delStorage = bckStorageList.row('.selected').data().path
+	$.ajax({
+		url : "/experdb/backupStorageDel.do",
+		data : {
+			path : delStorage
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+			},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
+			fn_getStorageList();	
+		}
+
+	})
+
+	
+}
+
+
+function fn_clickDelete() {
+	var delData = bckStorageList.rows('.selected').data();
+	if(delData.length < 1){
+		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	} else {
+		confile_title = ' Storage 삭제'
+		$('#con_multi_gbn', '#findConfirmMulti').val("storage_del");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+		$('#pop_confirm_multi_md').modal("show");
+	}
+}
+
+function fnc_confirmMultiRst(gbn){
+	if (gbn == "storage_del"){
+		fn_delStorage();
+	}
+}
+
 </script>
 
 <%@include file="./popup/bckStorageRegForm.jsp"%>
+<%@include file="./../popup/confirmMultiForm.jsp"%>
 
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -196,10 +278,10 @@ function fn_storage_modi_popup() {
 						<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_storage_modi_popup()">
 							<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
 						</button>
-						<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+						<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_clickDelete()">
 							<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 						</button>
-						<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+						<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_getStorageList()">
 							<i class="ti-search btn-icon-prepend "></i>조회
 						</button>
 					</div>

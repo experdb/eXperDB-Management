@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
-import java.util.Properties;
+import java.util.*;
 
 import org.json.simple.JSONObject;
 import org.springframework.util.ResourceUtils;
@@ -196,7 +196,7 @@ public class CmmnUtil {
 			 * @param  password
 			 * @return 
 			 */
-			public static String backupLocationFreeSize(String location) {
+			public static JSONObject backupLocationFreeSize(String location) {
 				
 				JSONObject result = new JSONObject();		
 				CmmnUtil cmmUtil = new CmmnUtil();
@@ -206,11 +206,11 @@ public class CmmnUtil {
 				try {
 					String strCmd = "df -B1 --output=avail '"+location+"' | tail -n 1";
 					result = cmmUtil.execute(strCmd);			
-					freeSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));				
+					// freeSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));				
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				return freeSize;
+				return result;
 			}
 		 
 		 	
@@ -219,7 +219,7 @@ public class CmmnUtil {
 			 * @param  password
 			 * @return 
 			 */
-			public static String backupLocationTotalSize(String location) {
+			public static JSONObject backupLocationTotalSize(String location) {
 				
 				JSONObject result = new JSONObject();		
 				CmmnUtil cmmUtil = new CmmnUtil();
@@ -229,11 +229,11 @@ public class CmmnUtil {
 				try {
 					String strCmd = "df -B1 --output=size '"+location+"' |tail -n 1";
 					result = cmmUtil.execute(strCmd);									
-					totalSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));					
+					// totalSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				return totalSize;
+				return result;
 			}
 		 
 
@@ -242,15 +242,18 @@ public class CmmnUtil {
 				//String v = bytes2String(29673590784);
 				//System.out.println(v);
 					
-				String freeSize = backupLocationFreeSize("/backup");
-				String totalSize = backupLocationTotalSize("/backup");
-				System.out.println(freeSize);
-				System.out.println(totalSize);
+				// String freeSize = backupLocationFreeSize("/backup");
+				// String totalSize = backupLocationTotalSize("/backup");
+				// System.out.println(freeSize);
+				// System.out.println(totalSize);
 				
+/*				 int i = (int) new Date().getTime();
+				 System.out.println("Integer : " + i);
+				 System.out.println("Long : "+ new Date().getTime());*/
 				
 				//System.out.println("root = 6LXkUDgmZ+e7/PKqfq20Rw==");
 				//System.out.println("root0225!!  = 6jpUshj1Yyyb57HRdjRDXA== ");
-				encPassword("root0225!!");
+				// encPassword("root0225!!");
 			
 			}
 			

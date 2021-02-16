@@ -1,53 +1,64 @@
 package com.experdb.management.backup.storage.web;
 
+import java.util.*;
+
 import javax.servlet.http.*;
 
 import org.json.simple.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.*;
 
 import com.experdb.management.backup.cmmn.*;
 import com.experdb.management.backup.service.*;
+import com.experdb.management.backup.storage.service.*;
 import com.k4m.dx.tcontrol.common.service.*;
 
 @Controller
 public class ExperdbBackupStorageController {
 	
-
+	@Autowired
+	private ExperdbBackupStorageService experdbBackupStorageService;
+	
     @RequestMapping(value = "/experdb/backupStorageReg.do")
-    public @ResponseBody JSONObject backupStorageReg(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-        JSONObject result = new JSONObject();
-        BackupLocationInfoVO locationVO = new BackupLocationInfoVO();
-        System.out.println("////////////// backup storage reg CONTROLLER CALLED!!!! /////////////");
-        
-        locationVO.setType(Integer.parseInt(request.getParameter("type")));
-        System.out.println("///11/// type : " + Integer.parseInt(request.getParameter("type")));
-        locationVO.setBackupDestLocation(request.getParameter("path"));
-        System.out.println("///22/// path : " +request.getParameter("path"));
-        locationVO.setBackupDestPasswd(request.getParameter("passWord"));
-        System.out.println("///33/// passWord : " +request.getParameter("passWord"));
-        locationVO.setBackupDestUser(request.getParameter("userName"));
-        System.out.println("///44/// userName : " +request.getParameter("userName"));
-        locationVO.setJobLimit(Integer.parseInt(request.getParameter("jobLimit")));
-        System.out.println("///55/// jobLimit : " +Integer.parseInt(request.getParameter("jobLimit")));
-        locationVO.setFreeSizeAlert(Long.parseLong(request.getParameter("freeSizeAlert")));
-        System.out.println("///66/// freeSizeAlert : " +Long.parseLong(request.getParameter("freeSizeAlert")));
-        locationVO.setFreeSizeAlertUnit(Integer.parseInt(request.getParameter("freeSizeAlertUnit")));
-        System.out.println("///77/// freeSizeAlertUnit : " +Integer.parseInt(request.getParameter("freeSizeAlertUnit")));
-
-        System.out.println(locationVO.toString());
-
-        String [] pth = locationVO.getBackupDestLocation().split("/", 4);
-        String path = "/"+pth[3];
-        System.out.println("path : " + path);
-        
-        // CmmnUtil.encPassword(request.getParameter("passWord"));
-        CmmnUtil cmmnUtil = new CmmnUtil();
-        
-        cmmnUtil.encPassword("root0225!!");
-        
-        System.out.println("////////////////////////////////");
-        return result;
+    public void backupStorageInsert(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+        // JSONObject result = new JSONObject();
+        experdbBackupStorageService.backupStorageInsert(request);
+        // return result;
     }
+    
+    @RequestMapping (value = "/experdb/backupStorageList.do")
+    public @ResponseBody List<Map<String, Object>> backupStorageList() {
+    	return experdbBackupStorageService.backupStorageList();
+    }
+    
+    @RequestMapping (value = "/experdb/backupStorageInfo.do")
+    public @ResponseBody BackupLocationInfoVO backupStorageInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+    	return experdbBackupStorageService.backupStorageInfo(request);
+    }
+    
+    @RequestMapping (value="/experdb/backupStorageUpdate.do")
+    public @ResponseBody JSONObject backupStoragUpdate(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+    	JSONObject result = new JSONObject();
+    	experdbBackupStorageService.backupStorageUpdate(request);
+    	return result;
+    }
+    
+    @RequestMapping (value="/experdb/backupStorageDel.do")
+    public @ResponseBody JSONObject backupStoragDelete(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+    	JSONObject result = new JSONObject();
+    	experdbBackupStorageService.backupStorageDelete(request);
+    	return result;
+    }
+    
+    @RequestMapping(value="/experdb/checkStoragePath.do")
+    public @ResponseBody boolean checkStoragePath(HttpServletRequest request) {
+    	System.out.println("///////// path check controller!!! //////////");
+    	return experdbBackupStorageService.checkStoragePath(request);
+    }
+   
+    
+    
 
 }

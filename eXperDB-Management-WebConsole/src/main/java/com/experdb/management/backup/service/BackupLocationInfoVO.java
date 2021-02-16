@@ -22,6 +22,7 @@ public class BackupLocationInfoVO implements Serializable {
 	private int jobLimit;	
 	private int currentJobCount = 0;
 	private int waitingJobCount = 0;
+	private long time;
 	
 	private String rpsserver;
 	private String rpspassword;
@@ -237,6 +238,14 @@ public class BackupLocationInfoVO implements Serializable {
 	public void setRpsprotocol(String rpsprotocol) {
 		this.rpsprotocol = rpsprotocol;
 	}
+	
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
 
 	@Override
 	public String toString() {
@@ -245,12 +254,14 @@ public class BackupLocationInfoVO implements Serializable {
 				+ ", backupDestUser=" + backupDestUser + ", freeSize=" + freeSize + ", totalSize=" + totalSize
 				+ ", isRunScript=" + isRunScript + ", script=" + script + ", freeSizeAlert=" + freeSizeAlert
 				+ ", freeSizeAlertUnit=" + freeSizeAlertUnit + ", jobLimit=" + jobLimit + ", currentJobCount="
-				+ currentJobCount + ", waitingJobCount=" + waitingJobCount + ", rpsserver=" + rpsserver
-				+ ", rpspassword=" + rpspassword + ", rpsuuid=" + rpsuuid + ", rpsprotocol=" + rpsprotocol
+				+ currentJobCount + ", waitingJobCount=" + waitingJobCount + ", time=" + time + ", rpsserver="
+				+ rpsserver + ", rpspassword=" + rpspassword + ", rpsuuid=" + rpsuuid + ", rpsprotocol=" + rpsprotocol
 				+ ", dataStoreInfo=" + dataStoreInfo + ", enableS3CifsShare=" + enableS3CifsShare + ", s3CifsSharePort="
 				+ s3CifsSharePort + ", s3CifsShareUser=" + s3CifsShareUser + ", serverInfo=" + serverInfo
 				+ ", s3CifsSharePassword=" + s3CifsSharePassword + "]";
 	}
+	
+	
 
 	
 

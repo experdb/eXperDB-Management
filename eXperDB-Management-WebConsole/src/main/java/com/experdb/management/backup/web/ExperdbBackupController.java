@@ -76,7 +76,7 @@ public class ExperdbBackupController {
 	public @ResponseBody List<ServerInfoVO> getServerInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws Exception {
 		return experdbBackupService.getServerInfo(request);
 	}
-	
+
 	/**
 	 * 백업정책 등록 팝업창 호출
 	 * @param WorkVO
@@ -97,26 +97,6 @@ public class ExperdbBackupController {
 		return resultSet;	
 	}
 	
-	
-	/**
-	 * 백업정책 등록 팝업창 호출
-	 * @param WorkVO
-	 * @return Map<String, Object>
-	 */
-	@RequestMapping(value = "/experdb/backupModiForm.do")
-	@ResponseBody
-	public List<Map<String, Object>> backupModiForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		List<Map<String, Object>> resultSet = null;
-		
-		try {
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return resultSet;	
-	}
 	
 	
 }
