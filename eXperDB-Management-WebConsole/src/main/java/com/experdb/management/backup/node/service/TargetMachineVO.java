@@ -19,6 +19,14 @@ public class TargetMachineVO {
 	private int machineType;
 	private int licenseStatus;
 	private StringBuffer excludeVolumes;
+	private String exclude;
+	private String hypervisor;
+	private int priority;
+	
+	private String  isUser;
+	private String userName;
+	private String userPw;
+	
 
 	public int getRownum() {
 		return rownum;
@@ -156,4 +164,53 @@ public class TargetMachineVO {
 		this.excludeVolumes = excludeVolumes;
 	}
 
+	public String getExclude() {
+		return exclude;
+	}
+
+	public void setExclude(String exclude) {
+		this.exclude = exclude;
+	}
+
+	public String getHypervisor() {
+		return hypervisor;
+	}
+
+	public void setHypervisor(String hypervisor) {
+		this.hypervisor = hypervisor;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
+	public String getIsUser() {
+		return isUser;
+	}
+
+	public void setIsUser(String isUser) {
+		this.isUser = isUser;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUserPw() {
+		return userPw;
+	}
+
+	public void setUserPw(String userPw) {
+		this.userPw = userPw;
+	}
+
+	
 }
