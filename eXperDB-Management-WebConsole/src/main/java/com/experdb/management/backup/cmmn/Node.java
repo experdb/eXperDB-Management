@@ -50,7 +50,7 @@ public class Node {
 
 			System.out.println("노드 등록 명령어 = " + strCmd);
 		
-			//result = cmmUtil.execute(strCmd);
+			result = cmmUtil.execute(strCmd);
 
 		} catch (Exception e) {
 			e.printStackTrace();
