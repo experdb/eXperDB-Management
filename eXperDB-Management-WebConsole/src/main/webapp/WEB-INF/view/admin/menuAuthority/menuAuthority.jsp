@@ -127,7 +127,7 @@ $(window.document).ready(function() {
     		},
     		success : function(result) {
   				for(var i = 0; i<result.length; i++){  
-  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014"){
+  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001803" && result[i].mnu_cd != "MN0001804"){
      					//읽기권한
   						if(result[i].read_aut_yn == "Y"){	  									
   							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -189,7 +189,7 @@ $(function() {
 	    		},
 	    		success : function(result) {
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014"){
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001803" && result[i].mnu_cd != "MN0001804"){
       						//읽기권한
 	  						if(result[i].read_aut_yn == "Y"){	  									
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -486,6 +486,27 @@ $(function() {
 			}
 		});
 		
+		//VirtualIP 선택 전체 체크박스
+		$("#VirtualIP").click(function() { 
+			//var array = new Array("MN0001801","MN0001802","MN0001803","MN0001804");
+			var array = new Array("MN0001801","MN0001802");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
+				 return false;
+			 }
+			if ($("#VirtualIP").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
 		
 		//체크박스 클릭시 사용자 선택 검사
 		$(".inp_chk").click(function() { 
@@ -1271,6 +1292,78 @@ function fn_search(){
 										</div>
 									</td>
 								</tr>
+								<tr>
+									<th scope="row" rowspan="2">
+										<div class="inp_chk">
+											<input type="checkbox" id="VirtualIP" name="VirtualIP"/>
+											<label for="functions">Virtual IP</label>
+										</div>
+									</th>
+									<td colspan="2"><spring:message code="menu.vip_monitoring" /> </td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001801" name="r_mnu_nm" value="MN0001801"/>
+											<label for="r_MN0001801"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001801" name="w_mnu_nm"/>
+											<label for="w_MN0001801"></label>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2"><spring:message code="menu.vip_config" /> </td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001802" name="r_mnu_nm" value="MN0001802"/>
+											<label for="r_MN0001802"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001802" name="w_mnu_nm"/>
+											<label for="w_MN0001802"></label>
+										</div>
+									</td>
+								</tr>
+								<%-- <tr>
+									<td scope="row" rowspan="2">
+										<div class="inp_chk">
+											<input type="checkbox" id="vipHist" name="vipHist"/>
+											<label for="schinfo"><spring:message code="menu.history_management" /></label>
+										</div>
+									</td>
+									<td><spring:message code="menu.vip_status_hist" /> </td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001803" name="r_mnu_nm" value="MN0001803"/>
+											<label for="r_MN0001803"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001803" name="w_mnu_nm"/>
+											<label for="w_MN0001803"></label>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><spring:message code="menu.vip_change_hist" /> </td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001804" name="r_mnu_nm" value="MN0001804"/>
+											<label for="r_MN0001804"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001804" name="w_mnu_nm"/>
+											<label for="w_MN0001804"></label>
+										</div>
+									</td>
+								</tr> --%>
 							</tbody>
 						</table>
 					</div>

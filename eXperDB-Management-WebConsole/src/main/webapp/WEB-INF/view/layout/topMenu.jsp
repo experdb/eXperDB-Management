@@ -250,7 +250,27 @@
 						}
 					}
 					
-					
+					//vipMenu
+					if ((result[i].mnu_cd).indexOf("MN00018")== 0 ) {
+						if(result[i].mnu_cd != "MN0001803" &&  result[i].mnu_cd != "MN0001804"){
+							if(result[i].read_aut_yn == "N"){
+								$('#' + result[i].mnu_cd+'_DIV').hide();
+							}else{
+								$('#' + result[i].mnu_cd+'_DIV').show();
+							}
+						}else{
+							if(result[i].read_aut_yn == "N"){
+								$('#' + result[i].mnu_cd).hide();
+								if($('#MN0001803').css('display') == 'none' && $('#MN0001804').css('display') == 'none'){
+									$('#MN0001803_DIV').hide();
+								}else{
+									$('#MN0001803_DIV').show();
+								}
+							}else{
+								$('#' + result[i].mnu_cd).show();
+							}
+						}
+					}
 					
 				}
 			}
@@ -756,7 +776,62 @@
 									</ul>
 								</div>
 							</li>
-
+							<!-- Virtual IP -->
+							<li class="nav-item mega-menu width-div-a" id="vipMenu">
+								<a href="#" class="nav-link">
+									<i class="mdi mdi-server-network menu-icon"></i>
+									<span class="menu-title"><spring:message code="menu.vip" /></span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu">
+									<!-- VIP Monitoring -->
+									<div class="col-group-wrapper row" >
+										<div class="col-group col-md-3" id="MN0001801_DIV">
+											<p class="category-heading">
+												<b><spring:message code="menu.monitoring" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0001801">
+													<a class="nav-link" href="vipMonitor.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.vip_monitoring"/>
+													</a>
+												</li>
+											</ul>
+										</div>
+									<!-- VIP Setting -->
+										<div class="col-group col-md-3" id="MN0001802_DIV">
+											<p class="category-heading">
+												<b><spring:message code="encrypt_policyOption.Settings" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0001802">
+													<a class="nav-link" href="/vipSetting.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.vip_config"/>
+													</a>
+												</li>
+											</ul>
+										</div>
+									<!-- VIP History -->
+										<%-- <div class="col-group col-md-3" id="MN0001803_DIV">
+											<p class="category-heading">
+												<b><spring:message code="menu.history_management" /></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0001803">
+													<a class="nav-link" href="/vipStatusHistory.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.vip_status_hist"/>
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001804">
+													<a class="nav-link" href="/vipChangeHistory.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="menu.vip_change_hist"/>
+													</a>
+												</li>
+											</ul>
+										</div> --%>
+									</div>
+								</div>
+							</li>
 							<li class="nav-item width-div-a"  id="myPageMenu">
 								<a href="#" class="nav-link">
 									<i class="ti-user menu-icon"></i>
@@ -813,9 +888,9 @@
 								</div>
 							</li>
 							
-							<li class="nav-item" id="li_blnck" style="width:0px">
+							<!-- <li class="nav-item" id="li_blnck" style="width:0px">
 								&nbsp;
-							</li>
+							</li> -->
 						</ul>
 					</div>
 				</nav>
