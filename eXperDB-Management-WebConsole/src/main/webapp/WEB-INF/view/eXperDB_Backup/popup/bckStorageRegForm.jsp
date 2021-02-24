@@ -178,12 +178,15 @@
 					type : "post"
 			  })
 			  .done (function(data){
-				  if(data.RESULT_CODE == "0"){
+				  /* if(data.RESULT_CODE == "0"){
 					  fn_getStorageList();
 					  showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');					  
 				  }else{
 					  showSwalIcon("ERROR Message : "+ data.RESULT_DATA+ "\n\n", '<spring:message code="common.close" />', '', 'error');
-				  }
+				  } */
+					  fn_getStorageList();
+					  showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');					  
+				  
 			  })
 			  .fail (function(xhr, status, error){
 				  console.log("fail");
