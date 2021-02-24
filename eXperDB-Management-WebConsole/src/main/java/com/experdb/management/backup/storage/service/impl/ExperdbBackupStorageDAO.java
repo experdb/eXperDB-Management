@@ -22,7 +22,6 @@ public class ExperdbBackupStorageDAO {
 	private SqlSession sql2;
 
 	public void backupStorageInsert(BackupLocationInfoVO locationVO) {
-		// System.out.println(locationVO.toString());
 		sql2.insert("experdbBackupSql.backupStorageInsert", locationVO);
 	}
 

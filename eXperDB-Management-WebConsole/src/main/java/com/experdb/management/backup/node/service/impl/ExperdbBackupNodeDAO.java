@@ -3,6 +3,7 @@ package com.experdb.management.backup.node.service.impl;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.*;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 	       result =sql2.selectList("experdbBackupSql.getNodeList");
 	      //  result = (List<TargetMachineVO>) list("experdbBackupSql.getNodeList",null);
 	        return result;
+	}
+
+
+	public TargetMachineVO getNodeInfo(String path) {
+		return sql2.selectOne("experdbBackupSql.getNodeInfo", path);
 	}
 
 }

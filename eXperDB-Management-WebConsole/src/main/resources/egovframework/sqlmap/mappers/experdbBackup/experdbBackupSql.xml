@@ -3,7 +3,7 @@
 <!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="experdbBackupSql">
-	<select id="getServerInfo" parameterType="serverInfoVO" resultType="serverInfoVO">
+	<select id="getServerInfo" resultType="serverInfoVO">
 		<!-- select 
 		    db_svr_id as dbSvrId
 		  , master_gbn as masterGbn
@@ -144,4 +144,13 @@
 		<delete id="backupStorageDelete" parameterType="backupLocationInfoVO">
 			 DELETE FROM backuplocation WHERE "location" like #{backupDestLocation}
 		</delete>
+		
+		<select id="getNodeInfo" resultType="targetMachineVO" parameterType="String">
+			SELECT 
+			    "name" AS "name"
+			  , "User" AS "user"
+			  , description
+			  FROM targetmachine
+		     WHERE "name" like #{path}
+		</select>
 </mapper>

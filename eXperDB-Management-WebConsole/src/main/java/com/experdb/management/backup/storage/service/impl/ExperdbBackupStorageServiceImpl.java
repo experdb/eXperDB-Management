@@ -23,13 +23,30 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     private ExperdbBackupStorageDAO experdbBackupStorageDAO;
     
     @Override
-    public void backupStorageInsert(HttpServletRequest request) {
+    public JSONObject backupStorageInsert(HttpServletRequest request) throws Exception{
+    	JSONObject result = new JSONObject();
+    	BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
     	int type = Integer.parseInt(request.getParameter("type"));
     	long time = new Date().getTime();
     	String [] pth = request.getParameter("path").split("/", 4);
     	String path = "/"+pth[3];
     	// System.out.println("path : " + path);
-		BackupLocationInfoVO locationVO = new BackupLocationInfoVO();
+    	BackupLocationInfoVO locationVO = new BackupLocationInfoVO();
+    	
+//    	if(type == 2){        	
+//    		backuplocation.setBackupDestLocation(request.getParameter("path"));
+//    		backuplocation.setBackupDestUser(request.getParameter("userName"));
+//    		backuplocation.setBackupDestPasswd(request.getParameter("passWord"));
+//    		result = Backuploaction.validateCifs(backuplocation);
+//    		if(result.get("RESULT_CODE").toString().equals("1")){
+//    			return result;
+//    		}
+//    		locationVO.setBackupDestPasswd(CmmnUtil.encPassword(request.getParameter("passWord")).get("RESULT_DATA").toString());
+//    	}else{
+//    		locationVO.setBackupDestPasswd(request.getParameter("passWord"));
+//    	}
+    	
+    	
 		
         locationVO.setUuid(UUID.randomUUID().toString());
         locationVO.setType(type);
@@ -43,33 +60,31 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
         locationVO.setFreeSize(Long.parseLong(CmmnUtil.backupLocationFreeSize(path).get("RESULT_DATA").toString()));
         locationVO.setTime(time);
         if(type == 2){        	
-            locationVO.setBackupDestPasswd(CmmnUtil.encPassword(request.getParameter("passWord")).get("RESULT_DATA").toString());
+        	locationVO.setBackupDestPasswd(CmmnUtil.encPassword(request.getParameter("passWord")).get("RESULT_DATA").toString());
         }else{
-            locationVO.setBackupDestPasswd(request.getParameter("passWord"));
+        	locationVO.setBackupDestPasswd(request.getParameter("passWord"));
         }
 
-        // System.out.println(locationVO.toString());
+        System.out.println(locationVO.toString());
+        experdbBackupStorageDAO.backupStorageInsert(locationVO);     
         
-        experdbBackupStorageDAO.backupStorageInsert(locationVO);        
+        
+        return result;
     }
     
     @Override
-    public boolean checkStoragePath(HttpServletRequest request) {
-    	System.out.println("///////// path check controller!!! //////////");
-    	// JSONObject result = new JSONObject();
+    public int checkStoragePath(HttpServletRequest request) throws Exception {
     	String [] pth = request.getParameter("path").split("/", 4);
     	String path = "/"+pth[3];
-    	String check = CmmnUtil.backupLocationTotalSize(path).get("RESULT_DATA").toString();
-    	if(check == null || check.equals("")){
-    		// result.put("result", false);
-    		return false;
-    		
+    	String check = CmmnUtil.backupLocationCheck(path).get("RESULT_DATA").toString();
+    	System.out.println(" check : " + check);
+    	if(!path.equals(check)){
+    		System.out.println("path check << FALSE >>");
+    		return 1;
     	}else{
-    		// result.put("result", true);   
-    		return true;
+    		System.out.println("path check << TRUE >>");
+    		return 0;
     	}
-    	
-    	// return result;
     }
     
     @Override

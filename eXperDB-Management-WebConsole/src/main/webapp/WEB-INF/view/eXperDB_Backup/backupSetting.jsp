@@ -36,8 +36,7 @@ $(window.document).ready(function() {
 	fn_init();
 	
 	fn_getSvrList();
-	
-	fn_getNodeList();
+	// fn_getNodeList();
 	
 });
 
@@ -74,8 +73,7 @@ function fn_init() {
 				return data;
 			}
 		},
-		{data : "ipadr", className : "dt-center", defaultContent : ""},			
-		{data : "dbSvrId", className : "dt-center", defaultContent : ""},
+		{data : "ipadr", className : "dt-center", defaultContent : ""}
 		
 /* 		{data : "dft_db_nm", className : "dt-center", defaultContent : "", visible: false}, */
 		], 'select': {'style': 'single'}
@@ -84,7 +82,6 @@ function fn_init() {
 	 NodeList.tables().header().to$().find('th:eq(1)').css('min-width');
 	 NodeList.tables().header().to$().find('th:eq(2)').css('min-width');
 	 NodeList.tables().header().to$().find('th:eq(3)').css('min-width');
-	 NodeList.tables().header().to$().find('th:eq(4)').css('min-width'); //
     
     $(window).trigger('resize'); 
 	
@@ -95,7 +92,7 @@ function fn_init() {
  ******************************************************** */
 function fn_getSvrList() {
 	$.ajax({
-		url : "/experdb/getServerInfo.do",
+		url : "/experdb/backupNodeList.do",
 		data : {
 			
 		},
@@ -124,13 +121,37 @@ function fn_getSvrList() {
 /* ********************************************************
  * 노드 리스트 가져오기
  ******************************************************** */
-function fn_getNodeList() {
+// function fn_getNodeList() {
+// 	$.ajax({
+// 		url : "/experdb/getNodeList.do",
+// 		data : {		
+// 		},
+// 		type : "post",
+// 		beforeSend: function(xhr) {
+// 			xhr.setRequestHeader("AJAX", true);
+// 		},
+// 		error : function(xhr, status, error) {
+// 			if(xhr.status == 401) {
+// 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+// 			} else if(xhr.status == 403) {
+// 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+// 			} else {
+// 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+// 			}
+// 		},
+// 		success : function(data) {
+// 		}
+// 	});
+// }
+
+/* ********************************************************
+ * node registration popoup
+ ******************************************************** */
+function fn_nodeRegPopup() {
 	$.ajax({
-		url : "/experdb/getNodeList.do",
-		data : {		
-		},
+		url : "/experdb/backupUnregNodeList.do",
 		type : "post",
-		beforeSend: function(xhr) {
+		beforeSend : function(xhr) {
 			xhr.setRequestHeader("AJAX", true);
 		},
 		error : function(xhr, status, error) {
@@ -142,84 +163,106 @@ function fn_getNodeList() {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
-		success : function(data) {
+		success : function(result){
+			fn_nodeRegReset();
+			fn_setIpadrList(result);
+			$("#pop_layer_popup_backupNodeReg").modal("show");
 		}
-	});
+	})
 }
 
-
+/* ********************************************************
+ * node update popup
+ ******************************************************** */
+ function fn_nodeModiPopup() {
+	console.log("fn_nodeModiPopup!!! : " + NodeList.row('.selected').data().ipadr);
+	$.ajax({
+		url : "/experdb/backupNodeInfo.do",
+		type : "post",
+		data : {
+			path : NodeList.row('.selected').data().ipadr
+		}
+	})
+	.done (function(result){
+		fn_nodeModiReset(result);
+		$("#pop_layer_popup_backupNodeReg").modal("show");
+	})
+	.fail (function(xhr, status, error){
+		if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if(xhr.status == 403) {
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	})
+	
+}
+ 
 
 /* ********************************************************
 	* 백업정책 등록 팝업창 호출
 	******************************************************** */
-function fn_policy_reg_popup(){
+// function fn_policy_reg_popup(){
 
-	$('#pop_layer_popup_backupPolicy').modal("hide");
+// 	$('#pop_layer_popup_backupPolicy').modal("hide");
 
-	$.ajax({
-		url : "/experdb/backupRegForm.do",
-		data : {
-		},
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		},
-		success : function(result) {
-			fn_regReset();
-			$('#pop_layer_popup_backupPolicy').modal("show");
-		}
-	});
-}
+// 	$.ajax({
+// 		url : "/experdb/backupRegForm.do",
+// 		data : {
+// 		},
+// 		type : "post",
+// 		beforeSend: function(xhr) {
+// 			xhr.setRequestHeader("AJAX", true);
+// 		},
+// 		error : function(xhr, status, error) {
+// 			if(xhr.status == 401) {
+// 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+// 			} else if(xhr.status == 403) {
+// 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+// 			} else {
+// 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+// 			}
+// 		},
+// 		success : function(result) {
+// 			fn_regReset();
+// 			$('#pop_layer_popup_backupPolicy').modal("show");
+// 		}
+// 	});
+// }
 
 /* ********************************************************
 	* 백업정책 수정 팝업창 호출
 	******************************************************** */
-function fn_policy_modi_popup() {
-	$('#pop_layer_popup_backupPolicy').modal("hide");
+// function fn_policy_modi_popup() {
+// 	$('#pop_layer_popup_backupPolicy').modal("hide");
 	
-	$.ajax({
-		url : "/experdb/backupModiForm.do",
-		data : {
+// 	$.ajax({
+// 		url : "/experdb/backupModiForm.do",
+// 		data : {
 			
-		},
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if (xhr.status == 403){
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		},
-		success : function(result) {
-			fn_modiReset();
-			$('#pop_layer_popup_backupPolicy').modal("show");
-		}
-	})
+// 		},
+// 		type : "post",
+// 		beforeSend: function(xhr) {
+// 			xhr.setRequestHeader("AJAX", true);
+// 		},
+// 		error : function(xhr, status, error) {
+// 			if(xhr.status == 401) {
+// 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+// 			} else if (xhr.status == 403){
+// 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+// 			} else {
+// 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+// 			}
+// 		},
+// 		success : function(result) {
+// 			fn_modiReset();
+// 			$('#pop_layer_popup_backupPolicy').modal("show");
+// 		}
+// 	})
 	
 
-}
-
-/* ********************************************************
-	* node check popup
-	******************************************************** */
-function fn_nodeCheck() {
-	
-}
-
+// }
 
 function fn_runNow() {
 	// pop_runNow
@@ -234,8 +277,9 @@ function fn_cancel() {
 table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 </style>
 
-<%@include file="./popup/backupRegForm.jsp"%>
 <%@include file="./popup/backupRunNow.jsp"%>
+<%-- <%@include file="./popup/bckStorageRegForm.jsp"%> --%>
+<%@include file="./popup/bckNodeRegForm.jsp"%>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -301,8 +345,14 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 				<div class="card-body">
 					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
 						<div id="wrt_button" style="float: right;">
-							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_getSvrList()">
-								노드 확인
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_nodeRegPopup()">
+								등록
+							</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_nodeModiPopup()">
+								수정
+							</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+								삭제
 							</button>
 						</div>
 						<h4 class="card-title">
@@ -314,7 +364,6 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 									<th width="100">서버유형</th>
 									<th width="130">호스트명</th>
 									<th width="150">아이피</th>
-									<th width="50">노드 확인</th>
 								</tr>
 							</thead>
 						</table>

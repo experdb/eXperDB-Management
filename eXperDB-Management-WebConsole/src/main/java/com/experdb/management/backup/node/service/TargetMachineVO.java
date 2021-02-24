@@ -212,5 +212,17 @@ public class TargetMachineVO {
 		this.userPw = userPw;
 	}
 
+	@Override
+	public String toString() {
+		return "TargetMachineVO [rownum=" + rownum + ", name=" + name + ", user=" + user + ", uuid=" + uuid
+				+ ", password=" + password + ", description=" + description + ", isProtected=" + isProtected
+				+ ", jobName=" + jobName + ", operatingSystem=" + operatingSystem + ", connectionStatus="
+				+ connectionStatus + ", lastResult=" + lastResult + ", recoveryPointCount=" + recoveryPointCount
+				+ ", recoverySetCount=" + recoverySetCount + ", backupLocationType=" + backupLocationType
+				+ ", machineType=" + machineType + ", licenseStatus=" + licenseStatus + ", excludeVolumes="
+				+ excludeVolumes + ", exclude=" + exclude + ", hypervisor=" + hypervisor + ", priority=" + priority
+				+ ", isUser=" + isUser + ", userName=" + userName + ", userPw=" + userPw + "]";
+	}
+
 	
 }

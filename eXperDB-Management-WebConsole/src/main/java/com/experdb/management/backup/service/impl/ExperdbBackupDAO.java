@@ -11,11 +11,9 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 @Repository("ExperdbBackupDAO")
 public class ExperdbBackupDAO extends EgovAbstractMapper {
 
-    @SuppressWarnings({ "deprecation", "unchecked" })
-	public List<ServerInfoVO> getServerInfo(ServerInfoVO serverInfoVo){
-        List<ServerInfoVO> result = null;
-        result = (List<ServerInfoVO>) list("experdbBackupSql.getServerInfo", serverInfoVo);
-        return result;
+	public List<ServerInfoVO> getServerInfo(){
+        return selectList("experdbBackupSql.getServerInfo");
+        
     }
 
 }

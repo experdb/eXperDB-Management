@@ -70,7 +70,7 @@
 	function fn_modiReset(result){
 		$("#storageType").val(result.type).prop("disabled", true);
 		$("#userName").val(result.backupDestUser);
-		$("#passWord").val(result.backupDestPasswd);
+		$("#passWord").val("");
 
 		fn_storageTypeSelect();
 		
@@ -175,25 +175,30 @@
 						freeSizeAlert : $("#runScriptNum").val(),
 						freeSizeAlertUnit : $("#runScriptUnit").val()
 					},
-					type : "post",
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else if (xhr.status == 403){
-							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else {
-							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-						}
-					},
-					success : function(result) {
-						// console.log("Reg result : " + result);
-						fn_getStorageList();
-						showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
-						$('#pop_layer_popup_backupStorageReg').modal("hide");
+					type : "post"
+			  })
+			  .done (function(data){
+				  if(data.RESULT_CODE == "0"){
+					  fn_getStorageList();
+					  showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');					  
+				  }else{
+					  showSwalIcon("ERROR Message : "+ data.RESULT_DATA+ "\n\n", '<spring:message code="common.close" />', '', 'error');
+				  }
+			  })
+			  .fail (function(xhr, status, error){
+				  console.log("fail");
+				  if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if (xhr.status == 403){
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 			  })
+			  .always(function(){
+				  $('#pop_layer_popup_backupStorageReg').modal("hide");
+			  }) 
 		  }
-
 	 }
 	 
 	 /* ********************************************************
@@ -242,17 +247,18 @@
 
 		// INSERT CHECK (PATH, USERNAME, PASSWORD)
 		// path insert check
-
 		if($("#storageType").val()==2){
-			var checkVal = fn_valChkPW() + fn_valChkName() + fn_valChkPath();						
+			var checkVal = fn_valChkPW() + fn_valChkName() + fn_valChkPath();
 			if(checkVal){
 				return false;
 			}
 		}else if(fn_valChkPath()){
 			return false;
 		}
+		console.log("여기까지 오려나");
 		return true;
 	 }
+	 
 	// validation check for modification
 	 function fn_validationModi() {
 		if($("#storageType").val()==2){
@@ -266,8 +272,9 @@
 
 	 // path validation check
 	 function fn_valChkPath(){
-		var storagePath = $("#storagePath").val().replace(/ /g, '');
+		 var storagePath = $("#storagePath").val();
 		$("#storagePathAlert").empty();
+		var pathCheck = $("#pathcheck").val();
 		 // path duplication check
 		if(fn_dupCheckPath()){
 			$("#storagePathAlert").append("이미 등록된 Path 입니다");
@@ -280,12 +287,11 @@
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
 			return true;
-		/* }else if(!fn_checkPathInfo()){
-			$("#storagePath").val("");
+		}else if(pathCheck != 0){
 			$("#storagePathAlert").append("유효한 Path를 입력해주세요");
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
-			return true; */
+			return true;
 		}
 		else{
 			// $("#storagePathAlert").append("사용가능한 Path 입니다");
@@ -337,7 +343,8 @@
 	 }
 
 	 // Path check
-	 function fn_checkPathInfo(){
+	function fn_checkPath(){
+		$("#storagePath").val($("#storagePath").val().replace(/ /g, ''));
 		$.ajax({
 			url : "/experdb/checkStoragePath.do",
 			data : {
@@ -353,8 +360,10 @@
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
-			success : function(result) {
-				return result;
+			success : function(result) {				
+					$("#pathcheck").val(result);
+					fn_valChkPath(result);
+					
 			}
 		})
 	 }
@@ -366,17 +375,6 @@
 		 for(var i=0;i<size;i++){
 			 pathList.push(data[i].path);
 		 }
-	 }
-
-	 function fn_aaa() {
-		 console.log("#storageType : " + $("#storageType").val());
-		 console.log("#storagePath : " + $("#storagePath").val());
-		 console.log("#passWord : " + $("#passWord").val());
-		 console.log("#userName : " + $("#userName").val());
-		 console.log("#currBckLimNum : " + $("#currBckLimNum").val());
-		 console.log("#runScript : " + $("#runScript").val());
-		 console.log("#runScriptNum : " + $("#runScriptNum").val());
-		 console.log("#runScriptUnit : " + $("#runScriptUnit").val());
 	 }
 
 
@@ -418,7 +416,8 @@
 														Path
 													</div>
 													<div class="col-4" style="padding-left: 0px;">
-														<input type="text" id="storagePath" name="storagePath" class="form-control form-control-sm" style="width: 400px;" placeholder="//hostname/folder" onchange="fn_valChkPath()"/>
+														<input type="text" id="storagePath" name="storagePath" class="form-control form-control-sm" style="width: 400px;" placeholder="//hostname/folder" onchange="fn_checkPath()"/>
+														<input type="hidden" id="pathcheck" value=1/>
 														<div id="storagePathAlert" name="storagePathAlert" class="text-danger" style="font-size:0.8em;  width: 212px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 1px; padding-bottom: 5px; margin-bottom: 0px; ">
 															
 														</div>
@@ -495,7 +494,7 @@
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<button type="button" class="btn btn-primary" id="regButton" onclick="fn_storageReg()"><spring:message code="common.registory"/></button>
 									<button type="button" class="btn btn-primary" id="modiButton" onclick="fn_storageModi()"><spring:message code="common.modify"/></button>
-									<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_aaa()"><spring:message code="common.cancel"/></button>
+									<button type="button" class="btn btn-light" data-dismiss="modal" onclick=""><spring:message code="common.cancel"/></button>
 								</div>
 							</div>
 						</fieldset>

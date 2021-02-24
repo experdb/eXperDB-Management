@@ -24,14 +24,14 @@ public class ExperdbBackupServiceImpl extends EgovAbstractServiceImpl implements
 
    @Override
    public List<ServerInfoVO> getServerInfo(HttpServletRequest request) throws Exception{
-       HttpSession session = request.getSession();
-       LoginVO loginVo = (LoginVO) session.getAttribute("session");
-       String userId = loginVo.getUsr_id();
+       // HttpSession session = request.getSession();
+       // LoginVO loginVo = (LoginVO) session.getAttribute("session");
+       // String userId = loginVo.getUsr_id();
        
-       ServerInfoVO serverInfoVo = new ServerInfoVO();
-       serverInfoVo.setUserId(userId);
+       // ServerInfoVO serverInfoVo = new ServerInfoVO();
+       // serverInfoVo.setUserId(userId);
        
-      return experdbBackupDAO.getServerInfo(serverInfoVo);
+      return experdbBackupDAO.getServerInfo();
        
    }
 

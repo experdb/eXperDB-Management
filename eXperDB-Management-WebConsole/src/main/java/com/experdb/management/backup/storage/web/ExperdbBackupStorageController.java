@@ -22,10 +22,8 @@ public class ExperdbBackupStorageController {
 	private ExperdbBackupStorageService experdbBackupStorageService;
 	
     @RequestMapping(value = "/experdb/backupStorageReg.do")
-    public void backupStorageInsert(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-        // JSONObject result = new JSONObject();
-        experdbBackupStorageService.backupStorageInsert(request);
-        // return result;
+    public JSONObject backupStorageInsert(HttpServletRequest request) throws Exception {
+		return experdbBackupStorageService.backupStorageInsert(request);
     }
     
     @RequestMapping (value = "/experdb/backupStorageList.do")
@@ -34,28 +32,32 @@ public class ExperdbBackupStorageController {
     }
     
     @RequestMapping (value = "/experdb/backupStorageInfo.do")
-    public @ResponseBody BackupLocationInfoVO backupStorageInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+    public @ResponseBody BackupLocationInfoVO backupStorageInfo(HttpServletRequest request){
     	return experdbBackupStorageService.backupStorageInfo(request);
     }
     
     @RequestMapping (value="/experdb/backupStorageUpdate.do")
-    public @ResponseBody JSONObject backupStoragUpdate(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+    public @ResponseBody JSONObject backupStoragUpdate(HttpServletRequest request){
     	JSONObject result = new JSONObject();
     	experdbBackupStorageService.backupStorageUpdate(request);
     	return result;
     }
     
     @RequestMapping (value="/experdb/backupStorageDel.do")
-    public @ResponseBody JSONObject backupStoragDelete(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+    public @ResponseBody JSONObject backupStoragDelete(HttpServletRequest request) {
     	JSONObject result = new JSONObject();
     	experdbBackupStorageService.backupStorageDelete(request);
     	return result;
     }
     
     @RequestMapping(value="/experdb/checkStoragePath.do")
-    public @ResponseBody boolean checkStoragePath(HttpServletRequest request) {
-    	System.out.println("///////// path check controller!!! //////////");
-    	return experdbBackupStorageService.checkStoragePath(request);
+    public @ResponseBody int checkStoragePath(HttpServletRequest request) {
+    	try {
+			return experdbBackupStorageService.checkStoragePath(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 3;
+		}
     }
    
     

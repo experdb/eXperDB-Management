@@ -79,9 +79,9 @@
 		var startDay = today.toJSON().slice(0,10);
 		var endDay = fn_dateParse("20991231").toJSON().slice(0, 10);
 		
-		console.log("today : " + today);
+		/* console.log("today : " + today);
 		console.log("startDay : " + startDay);
-		console.log("endDay : " + endDay);
+		console.log("endDay : " + endDay); */
 
 		$("#startDate").val(startDay);
 		

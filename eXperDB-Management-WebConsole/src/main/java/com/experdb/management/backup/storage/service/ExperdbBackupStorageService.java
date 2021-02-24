@@ -11,7 +11,7 @@ import com.experdb.management.backup.service.*;
 
 public interface ExperdbBackupStorageService {
 	
-	void backupStorageInsert(HttpServletRequest request);
+	JSONObject backupStorageInsert(HttpServletRequest request) throws Exception;
 	
 	List<Map<String, Object>> backupStorageList();
 
@@ -21,6 +21,6 @@ public interface ExperdbBackupStorageService {
 
 	void backupStorageDelete(HttpServletRequest request);
 
-	boolean checkStoragePath(HttpServletRequest request);
+	int checkStoragePath(HttpServletRequest request) throws Exception;
 	
 }
