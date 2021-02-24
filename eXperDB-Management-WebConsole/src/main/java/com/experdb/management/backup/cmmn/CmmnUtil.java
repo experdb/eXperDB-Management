@@ -81,7 +81,8 @@ public class CmmnUtil {
 
 		JSONObject result = new JSONObject();
 		String output = "";
-
+		String validateCifs = "";
+		
 		try {
 			getChannel();
 
@@ -99,13 +100,16 @@ public class CmmnUtil {
 
 			byte[] buf = new byte[1024];
 			int length;
-
+			
 			while ((length = in.read(buf)) != -1) {
 				output += new String(buf, 0, length);
-				// System.out.println("=== command result : " + new
-				// String(buf,0,length));
+				validateCifs = new String(buf, 0, length);
+		/*		System.out.println(length);
+				 System.out.println("=== command result : " + new
+				 String(buf,0,length));*/
 			}
 
+			
 			// Invalid 형태이면
 			if (output.trim().matches(".*Invalid.*")) {
 				result.put("RESULT_CODE", 1);
@@ -121,7 +125,15 @@ public class CmmnUtil {
 				result.put("RESULT_CODE", 1);
 				result.put("RESULT_DATA", output.trim());
 				System.out.println("※ Failed command : " + output.trim());
-			} else {
+			} else if (validateCifs.trim().matches(".*NT_STATUS_LOGON_FAILURE.*")) {
+				result.put("RESULT_CODE", 1);
+				result.put("RESULT_DATA", output.trim());
+				System.out.println("※ Failed command : " + output.trim());
+			} else if (validateCifs.trim().matches(".*NT_STATUS_BAD_NETWORK_NAME*")) {
+				result.put("RESULT_CODE", 1);
+				result.put("RESULT_DATA", output.trim());
+				System.out.println("※ Failed command : " + output.trim());
+			}else {
 				result.put("RESULT_CODE", 0);
 				result.put("RESULT_DATA", output.trim());
 				System.out.println("※ Result command : " + output.trim());

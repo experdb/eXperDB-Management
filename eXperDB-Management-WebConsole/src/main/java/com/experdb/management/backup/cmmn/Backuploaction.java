@@ -1,5 +1,12 @@
 package com.experdb.management.backup.cmmn;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.sql.PreparedStatement;
 import java.util.Date;
 import java.util.UUID;
@@ -14,6 +21,12 @@ public class Backuploaction{
 	
 	
 	static String sql = "";
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * insertBackuploaction 노드리스트 조회
@@ -64,8 +77,6 @@ public class Backuploaction{
 			   prep.addBatch();
 			   prep.executeBatch();
 			   prep.close();
-			
-
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -74,12 +85,42 @@ public class Backuploaction{
 	
 
 	
-	
+	/**
+	 * BackupLoaction validateCifs
+	 * @param  BackupLocationInfoVO backupLocationInfo
+	 * @return 
+	 */
+	public static JSONObject validateCifs(BackupLocationInfoVO backupLocationInfo) {
+		
+		JSONObject result = new JSONObject();		
+		CmmnUtil cmmUtil = new CmmnUtil();
+		
+	     String smd = "echo -e "+backupLocationInfo.getBackupDestPasswd()+"| smbclient -U " +backupLocationInfo.getBackupDestUser()+" "+backupLocationInfo.getBackupDestLocation().replaceAll("\\\\", "/");
+		
+	     System.out.println(smd);
+		try {
+			result = cmmUtil.execute(smd.toString());												
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	     
+
 	
 
 	public static void main(String[] args) {
 		
-		System.out.println(UUID.randomUUID().toString());
+		BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
+		Backuploaction bl = new Backuploaction();
+		
+		backuplocation.setBackupDestLocation("//192.168.50.1130/backup");
+		backuplocation.setBackupDestUser("root");
+		backuplocation.setBackupDestPasswd("root");
+		
+		validateCifs(backuplocation);
+		
+		//System.out.println(UUID.randomUUID().toString());
 		//UUID.randomUUID().toString();
 /*		BackupLocationInfoVO backupLocInfo = new BackupLocationInfoVO();
 		
