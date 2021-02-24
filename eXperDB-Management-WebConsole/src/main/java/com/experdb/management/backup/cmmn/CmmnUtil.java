@@ -248,7 +248,20 @@ public class CmmnUtil {
 				return result;
 			}
 		 
-
+			public static JSONObject backupLocationCheck(String location) {
+				JSONObject result = new JSONObject();
+				CmmnUtil cmmUtil = new CmmnUtil();
+				
+				try{
+					String strCmd = "find " + location + " -maxdepth 0";
+					result = cmmUtil.execute(strCmd);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				return result;
+			}
+		 
+			
 			public static void main(String[] args) {
 				
 				//String v = bytes2String(29673590784);
