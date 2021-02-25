@@ -35,6 +35,8 @@ $(window.document).ready(function() {
 	// get server information
 	fn_init();
 	
+	selectTab('job');
+	
 	fn_getSvrList();
 	// fn_getNodeList();
 	
@@ -198,72 +200,44 @@ function fn_nodeRegPopup() {
 	})
 	
 }
- 
+/* ********************************************************
+ * 백업정책 등록 팝업창 호출
+ ******************************************************** */
+	
+	function fn_policyRegPopoup() {
+		$.ajax({
+			url : "/experdb/backupStorageList.do",
+			type : "post"
+		})
+		.done (function(result){			
+			fn_policyRegReset(result);
+			$("#pop_layer_popup_backupPolicyReg").modal("show");
+		})
+		.fail (function(xhr, status, error){
+			 console.log("fail");
+			 if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if (xhr.status == 403){
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		 })
+	}
+
 
 /* ********************************************************
-	* 백업정책 등록 팝업창 호출
-	******************************************************** */
-// function fn_policy_reg_popup(){
-
-// 	$('#pop_layer_popup_backupPolicy').modal("hide");
-
-// 	$.ajax({
-// 		url : "/experdb/backupRegForm.do",
-// 		data : {
-// 		},
-// 		type : "post",
-// 		beforeSend: function(xhr) {
-// 			xhr.setRequestHeader("AJAX", true);
-// 		},
-// 		error : function(xhr, status, error) {
-// 			if(xhr.status == 401) {
-// 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-// 			} else if(xhr.status == 403) {
-// 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-// 			} else {
-// 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-// 			}
-// 		},
-// 		success : function(result) {
-// 			fn_regReset();
-// 			$('#pop_layer_popup_backupPolicy').modal("show");
-// 		}
-// 	});
-// }
-
-/* ********************************************************
-	* 백업정책 수정 팝업창 호출
-	******************************************************** */
-// function fn_policy_modi_popup() {
-// 	$('#pop_layer_popup_backupPolicy').modal("hide");
-	
-// 	$.ajax({
-// 		url : "/experdb/backupModiForm.do",
-// 		data : {
-			
-// 		},
-// 		type : "post",
-// 		beforeSend: function(xhr) {
-// 			xhr.setRequestHeader("AJAX", true);
-// 		},
-// 		error : function(xhr, status, error) {
-// 			if(xhr.status == 401) {
-// 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-// 			} else if (xhr.status == 403){
-// 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-// 			} else {
-// 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-// 			}
-// 		},
-// 		success : function(result) {
-// 			fn_modiReset();
-// 			$('#pop_layer_popup_backupPolicy').modal("show");
-// 		}
-// 	})
-	
-
-// }
-
+ * Tab Click
+ ******************************************************** */
+function selectTab(intab){
+	if(intab == "job"){		
+		$("#jobDiv").show();
+		$("#scheduleDiv").hide();
+	}else{				
+		$("#jobDiv").hide();
+		$("#scheduleDiv").show();
+	}
+}
 function fn_runNow() {
 	// pop_runNow
 	$("#pop_runNow").modal("show");
@@ -278,9 +252,16 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 </style>
 
 <%@include file="./popup/backupRunNow.jsp"%>
-<%-- <%@include file="./popup/bckStorageRegForm.jsp"%> --%>
 <%@include file="./popup/bckNodeRegForm.jsp"%>
+<%@include file="./popup/bckPolicyRegForm.jsp"%>
 
+<form name="storeInfo">
+	<input type="hidden" name="bckStorageTypeVal"  id="bckStorageTypeVal">
+	<input type="hidden" name="bckStorageVal"  id="bckStorageVal" >
+	<input type="hidden" name="bckCompressVal"  id="bckCompressVal" >
+	<input type="hidden" name="bckSetNumVal"  id="bckSetNumVal" >
+	<input type="hidden" name="bckSetDateVal" id="bckSetDateVal">
+</form>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
@@ -340,7 +321,7 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 			</div>
 		</div>
 		<!-- node list -->
-		<div class="col-lg-6 grid-margin stretch-card">
+		<div class="col-lg-5 grid-margin stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
@@ -363,7 +344,7 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 								<tr class="bg-info text-white">
 									<th width="100">서버유형</th>
 									<th width="130">호스트명</th>
-									<th width="150">아이피</th>
+									<th width="100">아이피</th>
 								</tr>
 							</thead>
 						</table>
@@ -372,186 +353,142 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 			</div>
 		</div>
 		<!-- node list end-->
-		
-		<div class="col-lg-6 grid-margin stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<div class="table-responsive" style="overflow:hidden;">
-						<div id="wrt_button" style="float: right;">
-							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_policy_reg_popup();">
-								<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
-							</button>
-							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policy_modi_popup();">
-								<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
-							</button>
-							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_exeCheck()">
-								<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
-							</button>
-						</div>
-						<h4 class="card-title">
-							<i class="item-icon fa fa-cog"></i> 백업정책
-						</h4>
-					</div>
-					<div class="card my-sm-2" >
-						<div class="card card-inverse-info"  style="height:25px;">
-							<i class="mdi mdi-blur" style="margin-left: 10px;;">	Recovery Set Settings </i>
-						</div>						
-						<div class="card-body">
-							<div class="row">
-								<div class="col-12">
- 									<form class="cmxform" id="optionForm">
-										<fieldset>	
-											<div class="row">
-												<div class="col-6">
-													<div  class="col-6 col-form-label pop-label-index" style="padding-top:7px;">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														백업 셋 보관 수
-													</div>
-													<div class="col-sm-3" style="margin-left: 10px">
-														<input type="number" style="width:200px; height:40px;" class="form-control form-control-sm" name="backupNum" id="backupNum" readonly/>
-													</div>
-												</div>
-												<div class="col-6" >
-													<div class="col-6 col-form-label pop-label-index" style="padding-top:7px;">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														Merge 주기
-													</div>
-													<div class="col-8 row" style="margin-left: 10px;">
-														<input type="text" style="width:200px; height:40px;" class="form-control form-control-sm" name="backupMerge" id="backupMerge" readonly/>
-													</div>
-												</div>
-											</div>												
-									</fieldset>
-								</form>		
-							 	</div>
-						 	</div>
-						</div>
-					</div>
+		<div class="col-lg-7 grid-margin stretch-card">
+			<div class="card"  style="padding-left: 0px;">
+				<div class="card-body">				
+					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
+						<li class="nav-item">
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('job');" >
+								백업설정
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('schedule');">
+								스케줄
+							</a>
+						</li>
+					</ul>
 					
-					<div class="card my-sm-2" >
-						<div class="card card-inverse-info"  style="height:25px;">
-							<i class="mdi mdi-blur" style="margin-left: 10px;;">	Schedule </i>
-						</div>					
-						<div class="card-body">
-							<div class="row">
-								<div class="col-12">
- 									<form class="cmxform" id="optionForm">
-										<fieldset>													
-											
-												<div class="form-group row">
-													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														Start Date
-													</label>
-													<div class="col-sm-3" style="padding-left: 0px;">
-														<input type="text" style="width:200px; height:40px;" class="form-control form-control-sm" name="startTime" id="startTime" readonly/>
+					 <div class="row" style="margin-top:-20px;"  id="schedule_button">
+						<div class="col-12" style="margin-top: 10px;">
+							<div class="wrt_button" style="float: right">
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policyRegPopoup()">
+								 	등록
+								</button>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+									수정
+								</button>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+									삭제
+								</button>
+							</div>
+						</div>
+					</div>				 	
+					<div class="card my-sm-2" style="height: 452px;" >
+						<div class="card-body" >				
+								<div class="col-12" id="jobDiv" >
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
 													</div>
 												</div>
-												<div class="form-group row">
-													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														Start Time
-													</label>
-													<div class="col-sm-3" style="padding-left: 0px;">
-														<input type="text" style="width:200px; height:40px;" class="form-control form-control-sm" name="startTime" id="startTime" readonly/>
+											</div>
+										</div>
+									</div>
+									
+									<div class="card card-inverse-info"  style="height:25px;">
+										<i class="mdi mdi-blur" style="margin-left: 10px;">	백업 스토리지 설정 </i>
+									</div>	
+										<form class="cmxform" id="backupDestination" style="margin-left: 20px; margin-top: 12px;">
+											<fieldset>	
+												<div>
+													<h5>Specify the storage location for your backup data</h5>
+												</div>		
+												<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
+													<div class="col-2" style="padding-left: 0px;">
+														<input type="text" id="bckStorageType" name = "bckStorageType" class="form-control form-control-sm"  style="height: 40px;" readonly/>
 													</div>
-												
-												</div>
-												<div class="form-group row">
-													<label for="ins_connect_nm row" class="col-sm-2_1 col-form-label-sm pop-label-index">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														Repeat
-													</label>
-													<div class="col-9 form-group" style="border: 1px solid #dee1e4;padding-left: 15px;" id="repeat_set">
-														<div class="row" style="padding-top: 10px; padding-left: 10px;" >
-															<label for="ins_connect_nm" class="col-sm-1_7 col-form-label-sm pop-label-index">
-																Every
-															</label>
-															<div class="col-sm-4" >
-																<input type="text"style="width:150px; height:40px;" class="form-control form-control-sm" name="everyTime" id="everyTime" readonly/>
-															</div>
-															<label for="ins_connect_nm" class="col-sm-2_3 col-form-label-sm pop-label-index">
-																End Time
-															</label>
-															<div class="col-sm-3" >
-																<input type="text" style="width:150px; height:40px;" class="form-control form-control-sm" name="every_min" id="every_min" readonly/>
-															</div>
-														</div>
+													<div class="col-4" style="padding-left: 0px;">
+														<input type="text" id="bckStorage" name = "bckStorage" class="form-control form-control-sm" style="height: 40px;" readonly/>
 													</div>
 												</div>
-												<div class="form-group row">
-													<label for="ins_connect_nm" class="col-sm-2_1 col-form-label-sm pop-label-index">
-														<i class="item-icon fa fa-dot-circle-o"></i>
-														요일 반복
-													</label>
-													<div class="form-check">
-														<label class="form-check-label" for="sun" style="color : red;">
-															<input type="checkbox" class="form-check-input" id="sun" name="sun" disabled/>
-															일
-															<i class="input-helper"></i>
-														</label>
-													</div>
-													<div class="form-check" style="margin-left: 20px;">
-														<label class="form-check-label" for="mon">
-															<input type="checkbox" class="form-check-input" id="mon" name="mon" disabled/>
-															월
-															<i class="input-helper"></i>
-														</label>
-													</div>
-													<div class="form-check" style="margin-left: 20px;">
-														<label class="form-check-label" for="tue">
-															<input type="checkbox" class="form-check-input" id="tue" name="tue" disabled/>
-															화
-															<i class="input-helper"></i>
-														</label>
-													</div>
-													<div class="form-check" style="margin-left: 20px;">
-														<label class="form-check-label" for="wed">
-															<input type="checkbox" class="form-check-input" id="wed" name="wed" disabled/>
-															수
-															<i class="input-helper"></i>
-														</label>
-													</div>
-													<div class="form-check" style="margin-left: 20px;">
-														<label class="form-check-label" for="thu">
-															<input type="checkbox" class="form-check-input" id="thu" name="thu" disabled/>
-															목
-															<i class="input-helper"></i>
-														</label>
-													</div>
-													<div class="form-check" style="margin-left: 20px;">
-														<label class="form-check-label" for="fri">
-															<input type="checkbox" class="form-check-input" id="fri" name="fri" disabled/>
-															금
-															<i class="input-helper"></i>
-														</label>
-													</div>
-													<div class="form-check" style="margin-left: 20px;">
-														<label class="form-check-label" for="sat" style="color : blue;">
-															<input type="checkbox" class="form-check-input" id="sat" name="sat" disabled/>
-															토
-															<i class="input-helper"></i>
-														</label>
-													</div>
-													<div class="form-check" style="margin-left: 20px;">
-														<label class="form-check-label" for="alldays">
-															<input type="checkbox" class="form-check-input" id="alldays" name="alldays" disabled/>
-															all days
-															<i class="input-helper"></i>
-														</label>
-													</div>
-													
+											</fieldset>
+										</form>
+									<div class="card card-inverse-info"  style="height:25px;">
+										<i class="mdi mdi-blur" style="margin-left: 10px;">	백업 압축 정책 </i>
+									</div>
+									<fieldset style="margin-left: 20px; margin-top: 10px;">	
+										<div>
+											<h5>Using compression will reduce the amount of space required on your destination</h5>
+										</div>		
+										<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
+											<div class="col-4" style="padding-left: 0px;">
+												<input type="text" id="bckCompress" name="bckCompress" class="form-control form-control-sm" style="height: 40px;" readonly/>
+											</div>
+										</div>
+									</fieldset>
+									<div class="card card-inverse-info"  style="height:25px;">
+										<i class="mdi mdi-blur" style="margin-left: 10px;">	Full 백업 정책 </i>
+									</div>
+									
+									<fieldset style="margin-left: 20px; margin-top: 10px;">			
+										<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
+											<div class="col-5">
+												<div  class="col-9 col-form-label pop-label-index" style="padding-top:7px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													FULL 백업 보관 셋
 												</div>
-												<div class="form-group row">
-
-												</div>			
-											
-										</fieldset>
-								</form>		
+												<div class="col-sm-4" style="margin-left: 10px">
+													<input type="number" min="1" max="10000" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetNum" id="bckSetNum" readonly/>
+												</div>
+											</div>
+											<div class="col-5">
+												<div  class="col-9 col-form-label pop-label-index" style="padding-top:7px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													FULL 백업 수행일
+												</div>
+												<div class="col-sm-4" style="margin-left: 10px">
+													<input type="text" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetDate" id="bckSetDate" readonly/>
+												</div>
+											</div>
+										</div>
+									</fieldset>
 							 	</div>
-						 	</div>
+							
+								<!-- schedule TAB -->
+								<div class="col-12" id="scheduleDiv" >
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="week_scheduleList" class="table table-hover table-striped" style="width:100%;">
+										<thead>
+											<tr>
+												<th width="130" class="text-center text-danger"><spring:message code="common.sun" /></th>
+												<th width="130" class="text-center"><spring:message code="common.mon" /></th>												
+												<th width="130" class="text-center"><spring:message code="common.tue" /></th>
+												<th width="130" class="text-center"><spring:message code="common.wed" /></th>
+												<th width="130" class="text-center"><spring:message code="common.thu" /></th>
+												<th width="130" class="text-center"><spring:message code="common.fri" /></th>												
+												<th width="130" class="text-center text-primary"><spring:message code="common.sat" /></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+
 						</div>
 					</div>
+						 	
 				</div>
 			</div>
 		</div>
