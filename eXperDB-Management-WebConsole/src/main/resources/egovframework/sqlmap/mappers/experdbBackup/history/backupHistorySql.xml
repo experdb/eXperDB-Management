@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="experdbHistorySql">
+	
+		<select id="selectJobHistoryList" resultType="backupJobHistoryVO" >
+				SELECT 
+						RECORDID
+						, SERVERNAME
+						, TARGETNAME
+						, JOBNAME
+						, JOBUUID
+						, JOBID
+						, JOBTYPE 
+						, (CASE 
+								 when JOBTYPE = 1 then 'Backup'
+								 when JOBTYPE = 2 then 'Restore'
+								 when JOBTYPE = 3 then 'Full Backup'
+							     when JOBTYPE = 4 then 'Incremental Backup'
+					     ELSE 'Verify Backup'
+						  end) AS JOBTYPE_NM
+						, JOBMETHOD
+						, DESTINATIONLOCATION
+						, ENCRYPTIONALGONAME
+						, COMPRESSLEVEL
+						, EXECUTETIME
+						, FINISHTIME
+						, THROUGHPUT
+						, WRITETHROUGHPUT
+						, WRITEDATA
+						, PROCESSEDDATA
+						, PROTECTEDDATA
+						, RPSHOSTNAME
+						, RPSUUID
+						, DATASTORENAME
+						, DATASTOREUUID
+						, SOURCEMACHINENAME
+						, SOURCEMACHINEUUID
+						, STATUS
+						, OPERATIONTYPE
+						, SESSIONGUID
+				FROM JOBHISTORY		
+				ORDER BY JOBID DESC		
+		</select>
+		
+		
+		<select id="selectBackupActivityLogList" resultType="backupActivityLogVO"  parameterType="int">
+				SELECT 
+							RECORDID
+							, SERVERNAME
+							, TARGETNAME
+							, JOBNAME
+							, JOBUUID
+							, JOBID
+							, JOBTYPE
+							, TYPE
+							, TIME
+							, MESSAGE
+							, SOURCEMACHINENAME
+							, SOURCEMACHINEUUID
+							, ERRORCODE
+				FROM ACTIVITYLOG
+				WHERE JOBID = #{jobid}
+		</select>
+</mapper>
