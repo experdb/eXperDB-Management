@@ -376,7 +376,7 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 					 <div class="row" style="margin-top:-20px;"  id="schedule_button">
 							<div class="col-12">
 								<div class="template-demo">
-									<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScdViewInsert" data-toggle="modal">
+									<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScdViewInsert" data-toggle="modal" onclick="fn_policy_reg_popup()">
 										<i class="ti-pencil btn-icon-prepend "></i>스케줄 등록
 									</button>
 								</div>
