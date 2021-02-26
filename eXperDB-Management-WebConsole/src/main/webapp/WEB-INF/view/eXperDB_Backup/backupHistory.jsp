@@ -15,7 +15,7 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2021-02-05	신예은 매니저		최초 생성
-	*
+	*  2021-02-25	변승우 책임		    기능 구현
 	*
 	* author 신예은 매니저
 	* since 2021.02.05
@@ -32,8 +32,15 @@ var bckLogList;
  ******************************************************* */
 $(window.document).ready(function() {
 	fn_init();
+	selectJobHistory();
 
+	$('#bckHistoryList tbody').on('click','tr',function() {
+		var jobid = bckHistoryList.row(this).data().jobid;
+		selectActivityLog(jobid);
+	});
+	
 });
+
 
 function fn_init() {
 	
@@ -41,7 +48,7 @@ function fn_init() {
 	 * backup history list table setting
 	 ******************************************************** */
 	 bckHistoryList = $('#bckHistoryList').DataTable({
-		scrollY : "200px",
+		scrollY : "300px",
 		scrollX: true,	
 		searching : false,
 		processing : true,
@@ -50,26 +57,61 @@ function fn_init() {
 		deferRender : true,
 		bSort : false,
 		columns : [
-		{data : "jobName", className : "dt-center", defaultContent : ""},	
-		{data : "jobID", className : "dt-center", defaultContent : ""},	
-		{data : "jobType", className : "dt-center", defaultContent : ""},			
-		{data : "nodeName", className : "dt-center", defaultContent : ""},
-		{data : "startTime", className : "dt-center", defaultContent : ""},	
-		{data : "finishTime", className : "dt-center", defaultContent : ""},
-		{data : "dataSize", className : "dt-center", defaultContent : ""},
-		{data : "backupDest", className : "dt-center", defaultContent : ""}
+		{
+				data : "status",
+				render : function(data, type, full, meta) {	 						
+					var html = '';
+					//성공
+					if (full.status == 1) {
+					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+					html += "	<i class='fa fa-check-circle text-primary' >";
+					html += '&nbsp;<spring:message code="common.success" /></i>';
+					html += "</div>";
+					//취소
+					}else if(full.status == 2){
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-ban text-danger' >";
+						html += '&nbsp;취소</i>';
+						html += "</div>";
+					//실패
+					}  else if(full.status == 3){
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-times text-danger' >";
+						html += '&nbsp;<spring:message code="common.failed" /></i>';
+						html += "</div>";
+					//incomplete
+					} else if(full.status == 4){
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-exclamation text-primary' >";
+						html += '&nbsp;<spring:message code="common.failed" /></i>';
+						html += "</div>";
+					} 
+
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			},	
+		{data : "targetname", className : "dt-center", defaultContent : ""},
+		{data : "jobtype_nm", className : "dt-center", defaultContent : ""},			
+		{data : "executetime", className : "dt-center", defaultContent : ""},	
+		{data : "finishtime", className : "dt-center", defaultContent : ""},
+		{data : "reducetime", className : "dt-center", defaultContent : ""},
+		{data : "datasize", className : "dt-center", defaultContent : ""},
+		{data : "destinationlocation", className : "dt-center", defaultContent : ""}
 		], 'select': {'style': 'single'}
 	});
 
+	bckHistoryList.tables().header().to$().find('th:eq(0)').css('min-width');
 	bckHistoryList.tables().header().to$().find('th:eq(1)').css('min-width');
 	bckHistoryList.tables().header().to$().find('th:eq(2)').css('min-width');
 	bckHistoryList.tables().header().to$().find('th:eq(3)').css('min-width');
-	bckHistoryList.tables().header().to$().find('th:eq(4)').css('min-width');
-    bckHistoryList.tables().header().to$().find('th:eq(5)').css('min-width');
-	bckHistoryList.tables().header().to$().find('th:eq(6)').css('min-width');
+    bckHistoryList.tables().header().to$().find('th:eq(4)').css('min-width');
+	bckHistoryList.tables().header().to$().find('th:eq(5)').css('min-width');
+	/* bckHistoryList.tables().header().to$().find('th:eq(6)').css('min-width'); */
 
 	bckLogList = $('#bckLogList').DataTable({
-		scrollY : "200px",
+		scrollY : "500px",
 		scrollX: true,	
 		searching : false,
 		processing : true,
@@ -78,17 +120,105 @@ function fn_init() {
 		deferRender : true,
 		bSort : false,
 		columns : [
+		{
+			data : "type",
+			render : function(data, type, full, meta) {	 						
+				var html = '';
+				// TYPE_INFO
+				if (full.type == 1) {
+				html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+				html += "	<i class='fa fa-info-circle text-primary' /> </i>";
+				//html += '&nbsp;<spring:message code="common.success" /></i>';
+				html += "</div>";
+				// TYPE_ERROR
+				}else if(full.type == 2){
+					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+					html += "	<i class='fa fa-times-circle text-danger' /> </i>";
+					//html += '&nbsp;취소</i>';
+					html += "</div>";
+				// TYPE_WARNING
+				}  else if(full.type == 3){
+				html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+				html += "	<i class='fa fa-warning text-warning' /> </i>";
+				//html += '&nbsp;<spring:message code="common.failed" /></i>';
+				html += "</div>";				
+				} 
+
+				return html;
+			},
+			className : "dt-center",
+			defaultContent : ""
+		},	
+		
 		{data : "time", className : "dt-center", defaultContent : ""},	
-		{data : "message", className : "dt-center", defaultContent : ""}
+		{data : "message", className : "dt-left", defaultContent : ""}
 		]
 	});
 	// css('min-width').
+	bckLogList.tables().header().to$().find('th:eq(0)').css('min-width');
 	bckLogList.tables().header().to$().find('th:eq(1)').css('min-width');
 	bckLogList.tables().header().to$().find('th:eq(2)').css('min-width');
 
     $(window).trigger('resize'); 
 	
 } // fn_init();
+
+
+
+
+function selectJobHistory() {
+	$.ajax({
+		url : "/experdb/backupJobHistoryList.do",
+		data : {
+			
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(data) {
+			bckHistoryList.clear().draw();
+			bckHistoryList.rows.add(data).draw();			
+		}
+	});
+}
+
+
+
+function selectActivityLog(jobid) {
+	$.ajax({
+		url : "/experdb/backupActivityLogList.do",
+		data : {
+			jobid : jobid
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(data) {
+			bckLogList.clear().draw();
+			bckLogList.rows.add(data).draw();			
+		}
+	});
+}
 
 </script>
 
@@ -166,12 +296,12 @@ function fn_init() {
 												<table id="bckHistoryList" class="table table-hover table-striped system-tlb-scroll" style="width:100%; align:dt-center;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="200">Job Name</th>
-															<th width="50">Job ID</th>
-															<th width="80">Job Type</th>
-															<th width="80">Node Name</th>
-															<th width="60">Start Time</th>
-															<th width="60">Finish Time</th>
+															<th width="50">Status</th>
+															<th width="80">백업서버</th>
+															<th width="80">백업유형</th>															
+															<th width="60">수행시작일시</th>
+															<th width="60">수행종료일시</th>
+															<th width="60">수행시간</th>
 															<th width="50">Data Size</th>
 															<th width="100">Backup Destination</th>
 														</tr>
@@ -191,6 +321,7 @@ function fn_init() {
 												<table id="bckLogList" class="table table-hover system-tlb-scroll" style="width:100%; align:dt-center; ">
 													<thead>
 														<tr class="bg-info text-white">
+															<th width="70" style="background-color: #7e7e7e;">Status</th>
 															<th width="70" style="background-color: #7e7e7e;">Time</th>
 															<th width="500" style="background-color: #7e7e7e;">Message</th>
 														</tr>
