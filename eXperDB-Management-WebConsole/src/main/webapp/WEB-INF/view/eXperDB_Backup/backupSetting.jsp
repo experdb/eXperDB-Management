@@ -54,6 +54,7 @@ function fn_init() {
 		processing : true,
 		paging : false,
 		deferRender : true,
+		info : false,
 		bSort : false,
 		columns : [
 		{data : "masterGbn", defaultContent : "", className : "dt-center", 
@@ -119,33 +120,6 @@ function fn_getSvrList() {
 	});
 }
 
-
-/* ********************************************************
- * 노드 리스트 가져오기
- ******************************************************** */
-// function fn_getNodeList() {
-// 	$.ajax({
-// 		url : "/experdb/getNodeList.do",
-// 		data : {		
-// 		},
-// 		type : "post",
-// 		beforeSend: function(xhr) {
-// 			xhr.setRequestHeader("AJAX", true);
-// 		},
-// 		error : function(xhr, status, error) {
-// 			if(xhr.status == 401) {
-// 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-// 			} else if(xhr.status == 403) {
-// 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-// 			} else {
-// 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-// 			}
-// 		},
-// 		success : function(data) {
-// 		}
-// 	});
-// }
-
 /* ********************************************************
  * node registration popoup
  ******************************************************** */
@@ -200,6 +174,63 @@ function fn_nodeRegPopup() {
 	})
 	
 }
+
+ /* ********************************************************
+  * node delete popup
+  ******************************************************** */
+  function fn_nodeDelPopup(){
+	 console.log("del popoup")
+	var data = NodeList.row('.selected').data();
+	if(data.length < 1){
+		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}else{
+		confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("node_del");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+		$('#pop_confirm_multi_md').modal("show");
+	}
+  }
+
+
+  function fn_nodeDelete(){
+	  console.log("지우러 간다")
+	$.ajax({
+		url : "/experdb/backupNodeDel.do",
+		type : "post",
+		data : {
+			ipadr : NodeList.row('.selected').data().ipadr
+		}
+	})
+	.done(function(result){
+		if(result.RESULT_CODE == "0"){
+			showSwalIconRst('<spring:message code="message.msg12" />', '<spring:message code="common.close" />', '', 'success');
+		}else {
+			showSwalIcon("ERROR : " + result.RESULT_DATA ,'<spring:message code="common.close" />', '', 'error');
+		}
+	})
+	.fail (function(xhr, status, error){
+		if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if(xhr.status == 403) {
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	})
+	.always(function(){
+		fn_getSvrList();
+	})
+  }
+ 
+  function fnc_confirmMultiRst(gbn){
+	  console.log("확인을 눌렀을 때");
+	  if(gbn == "node_del"){
+		  fn_nodeDelete();
+	  }
+  }
+ 
 /* ********************************************************
  * 백업정책 등록 팝업창 호출
  ******************************************************** */
@@ -250,6 +281,7 @@ function fn_cancel() {
 <style>
 table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 </style>
+<%@include file="./../popup/confirmMultiForm.jsp"%>
 
 <%@include file="./popup/backupRunNow.jsp"%>
 <%@include file="./popup/bckNodeRegForm.jsp"%>
@@ -332,7 +364,7 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_nodeModiPopup()">
 								수정
 							</button>
-							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_nodeDelPopup()">
 								삭제
 							</button>
 						</div>
@@ -436,21 +468,21 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 									<fieldset style="margin-left: 20px; margin-top: 10px;">			
 										<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 											<div class="col-5">
+												<div  class="col-10 col-form-label pop-label-index" style="padding-top:7px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													FULL 백업 수행일
+												</div>
+												<div class="col-sm-4" style="margin-left: 10px">
+													<input type="text" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetDate" id="bckSetDate" readonly/>
+												</div>
+											</div>
+											<div class="col-5">
 												<div  class="col-9 col-form-label pop-label-index" style="padding-top:7px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													FULL 백업 보관 셋
 												</div>
 												<div class="col-sm-4" style="margin-left: 10px">
 													<input type="number" min="1" max="10000" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetNum" id="bckSetNum" readonly/>
-												</div>
-											</div>
-											<div class="col-5">
-												<div  class="col-9 col-form-label pop-label-index" style="padding-top:7px;">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													FULL 백업 수행일
-												</div>
-												<div class="col-sm-4" style="margin-left: 10px">
-													<input type="text" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetDate" id="bckSetDate" readonly/>
 												</div>
 											</div>
 										</div>

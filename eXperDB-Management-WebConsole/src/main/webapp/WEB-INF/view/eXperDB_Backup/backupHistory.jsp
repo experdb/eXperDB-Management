@@ -55,6 +55,7 @@ function fn_init() {
 		paging : true,
 		lengthChange: false,
 		deferRender : true,
+		info : false,
 		bSort : false,
 		columns : [
 		{
@@ -118,6 +119,7 @@ function fn_init() {
 		paging : false,
 		lengthChange: false,
 		deferRender : true,
+		info : false,
 		bSort : false,
 		columns : [
 		{

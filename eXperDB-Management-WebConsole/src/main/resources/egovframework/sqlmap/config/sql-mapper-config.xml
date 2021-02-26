@@ -128,7 +128,9 @@
 
 		<!-- experdb backup history -->
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/history/backupHistorySql.xml" />
-
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/node/backupNodeSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/storage/backupStorageSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
 		
 	</mappers>
 </configuration>

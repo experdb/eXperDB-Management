@@ -84,5 +84,16 @@ public class ExperdbBackupNodeController {
 		result = experdbBackupNodeService.nodeUpdate(request);
 		return result;
 	}
+	
+	@RequestMapping(value="/experdb/backupNodeDel.do")
+	public @ResponseBody JSONObject nodeDelete(HttpServletRequest request){
+		JSONObject result = new JSONObject();
+		try {
+			result = experdbBackupNodeService.nodeDelete(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 }

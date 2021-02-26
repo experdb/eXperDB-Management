@@ -136,6 +136,13 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		return result;
 	}
 	
+	@Override
+	public JSONObject nodeDelete(HttpServletRequest request) throws Exception{
+		JSONObject result = new JSONObject();
+		result = Node.deleteNode(request.getParameter("ipadr"));
+		return result;
+	}
+	
 //	public static void main (String[] args){
 //		String a = "experdb	root";
 //		String [] b = a.split("\t");

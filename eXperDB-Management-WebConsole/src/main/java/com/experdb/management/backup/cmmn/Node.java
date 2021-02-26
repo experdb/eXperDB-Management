@@ -109,7 +109,7 @@ public class Node {
 	 * @param  password
 	 * @return 
 	 */
-	public JSONObject deleteNode(String host) {
+	public static JSONObject deleteNode(String host) {
 		
 		JSONObject result = new JSONObject();	
 		CmmnUtil cmmUtil = new CmmnUtil();

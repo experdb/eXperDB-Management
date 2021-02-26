@@ -27,14 +27,14 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 	
 	public List<TargetMachineVO> getNodeList() {
 	       List<TargetMachineVO> result = null;
-	       result =sql2.selectList("experdbBackupSql.getNodeList");
+	       result =sql2.selectList("backupNodeSql.getNodeList");
 	      //  result = (List<TargetMachineVO>) list("experdbBackupSql.getNodeList",null);
 	        return result;
 	}
 
 
 	public TargetMachineVO getNodeInfo(String path) {
-		return sql2.selectOne("experdbBackupSql.getNodeInfo", path);
+		return sql2.selectOne("backupNodeSql.getNodeInfo", path);
 	}
 
 }

@@ -114,9 +114,13 @@
 		if(mg == 'weekly'){
 			$('#merge_period_week').prop("disabled", false);
 			$('#merge_period_month').prop("disabled", true);
+			$("#setNumTitleWeek").show();
+			$("#setNumTitleMonth").hide();
 		}else if(mg == 'monthly'){
 			$('#merge_period_month').prop("disabled", false);
 			$('#merge_period_week').prop("disabled", true);
+			$("#setNumTitleWeek").hide();
+			$("#setNumTitleMonth").show();
 		}
 	}
 
@@ -298,15 +302,6 @@
 	 									<form class="cmxform" id="optionForm">
 											<fieldset>	
 												<div class="form-group row div-form-margin-z">
-													<div class="col-5">
-														<div  class="col-10 col-form-label pop-label-index" style="padding-top:7px;">
-															<i class="item-icon fa fa-dot-circle-o"></i>
-															백업 셋 보관 수
-														</div>
-														<div class="col-sm-4" style="margin-left: 10px">
-															<input type="number" min="1" max="10000" style="width:150px; height:40px;" class="form-control form-control-sm" name="backupSetNum" id="backupSetNum" onchange="fn_backupSetVal()"/>
-														</div>
-													</div>
 													<div class="col-7" >
 														<div class="col-7 col-form-label pop-label-index" style="padding-top:7px;">
 															<i class="item-icon fa fa-dot-circle-o"></i>
@@ -328,6 +323,19 @@
 															<select name="merge_period_month" id="merge_period_month"  class="form-control form-control-xsm" style="margin-top: 10px; margin-left: 1rem;width:180px; height:40px; color:black;" disabled>
 																
 															</select>
+														</div>
+													</div>
+													<div class="col-5">
+														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleWeek" style="padding-top:7px;">
+															<i class="item-icon fa fa-dot-circle-o"></i>
+															백업 셋 보관 수 (주별)
+														</div>
+														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleMonth"style="padding-top:7px;">
+															<i class="item-icon fa fa-dot-circle-o"></i>
+															백업 셋 보관 수 (월별)
+														</div>
+														<div class="col-sm-4" style="margin-left: 10px">
+															<input type="number" min="1" max="10000" style="width:150px; height:40px;" class="form-control form-control-sm" name="backupSetNum" id="backupSetNum" onchange="fn_backupSetVal()"/>
 														</div>
 													</div>
 												</div>												

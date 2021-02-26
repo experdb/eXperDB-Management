@@ -24,4 +24,6 @@ public interface ExperdbBackupNodeService {
 
 	JSONObject nodeUpdate(HttpServletRequest request);
 
+	JSONObject nodeDelete(HttpServletRequest request) throws Exception;
+
 }
