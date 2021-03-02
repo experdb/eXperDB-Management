@@ -77,7 +77,19 @@ public class ExperdbBackupController {
 		mv.setViewName("eXperDB_Backup/backupHistory");
 		return mv;
 	}
-
+	
+	/**
+	 * 백업모니터링 View page
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/experdb/backupMonitoring.do")
+	public ModelAndView backupMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("eXperDB_Backup/backupMonitoring");
+		return mv;
+	}
 
 	/**
 	 * 백업설정 server 정보 가져오기

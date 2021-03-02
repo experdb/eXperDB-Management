@@ -421,6 +421,11 @@
 											</p>
 											<ul class="submenu-item">
 												<li class="nav-item" id="">
+													<a class="nav-link" href="/experdb/backupMonitoring.do" onClick="fn_cookie('backupMonitoring')" target="main">
+														백업모니터링
+													</a>
+												</li>
+												<li class="nav-item" id="">
 													<a class="nav-link" href="/experdb/backupStorage.do" onClick="fn_cookie('backupStorage')" target="main">
 														백업스토리지
 													</a>
