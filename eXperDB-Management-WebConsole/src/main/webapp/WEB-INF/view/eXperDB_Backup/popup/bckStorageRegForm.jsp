@@ -189,7 +189,6 @@
 				  
 			  })
 			  .fail (function(xhr, status, error){
-				  console.log("fail");
 				  if(xhr.status == 401) {
 						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if (xhr.status == 403){
@@ -258,7 +257,6 @@
 		}else if(fn_valChkPath()){
 			return false;
 		}
-		console.log("여기까지 오려나");
 		return true;
 	 }
 	 
@@ -351,7 +349,8 @@
 		$.ajax({
 			url : "/experdb/checkStoragePath.do",
 			data : {
-				path : $("#storagePath").val()
+				path : $("#storagePath").val(),
+				type : $("#storageType").val()
 			},
 			type : "post",
 			error : function(xhr, status, error) {
@@ -419,7 +418,7 @@
 														Path
 													</div>
 													<div class="col-4" style="padding-left: 0px;">
-														<input type="text" id="storagePath" name="storagePath" class="form-control form-control-sm" style="width: 400px;" placeholder="//hostname/folder" onchange="fn_checkPath()"/>
+														<input type="text" id="storagePath" name="storagePath" class="form-control form-control-sm" style="width: 400px;" onchange="fn_checkPath()"/>
 														<input type="hidden" id="pathcheck" value=1/>
 														<div id="storagePathAlert" name="storagePathAlert" class="text-danger" style="font-size:0.8em;  width: 212px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 1px; padding-bottom: 5px; margin-bottom: 0px; ">
 															

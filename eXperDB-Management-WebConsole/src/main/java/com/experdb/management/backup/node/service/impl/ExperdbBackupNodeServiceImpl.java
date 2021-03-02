@@ -44,7 +44,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		for(ServerInfoVO s : serverList){
 			for(TargetMachineVO n : nodeList){
 				if(s.getIpadr().equals(n.getName())){
-					System.out.println("REG LIST : " + s.getIpadr() + " || " + n.getName());
+//					System.out.println("REG LIST : " + s.getIpadr() + " || " + n.getName());
 					result.add(s);
 				}
 			}
@@ -64,7 +64,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		for(ServerInfoVO s : serverList){
 			for(TargetMachineVO n : nodeList){
 				if(s.getIpadr().equals(n.getName())){
-					System.out.println("UNREG LIST : " + s.getIpadr() + " || " + n.getName());
+//					System.out.println("UNREG LIST : " + s.getIpadr() + " || " + n.getName());
 					result.add(s);
 				}
 			}
@@ -95,14 +95,14 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject getNodeInfo(HttpServletRequest request) throws Exception{
-		System.out.println("GET NODE INFO SERVICE!!!");
-		System.out.println("REQUEST : " + request.getParameter("path"));
+//		System.out.println("GET NODE INFO SERVICE!!!");
+//		System.out.println("REQUEST : " + request.getParameter("path"));
 		TargetMachineVO nodeInfo = new TargetMachineVO();
 		JSONObject result = new JSONObject();
 		String path = request.getParameter("path");
 		nodeInfo = experdbBackupNodeDAO.getNodeInfo(path);
 		
-		System.out.println("nodeInfo to String : " + nodeInfo.toString());
+//		System.out.println("nodeInfo to String : " + nodeInfo.toString());
 		String[] name= nodeInfo.getUser().split("\t");
 		
 		if(name.length >1){			

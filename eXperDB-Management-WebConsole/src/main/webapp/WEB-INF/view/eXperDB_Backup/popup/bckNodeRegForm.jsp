@@ -52,7 +52,6 @@
 	 * registration reset
 	 ******************************************************** */
 	function fn_nodeRegReset() {
-		console.log("nodeRegReset!!!");
 		// $("#loader").hide();
 		
 		$("#ipAddr").prop("disabled", false);
@@ -81,7 +80,6 @@
 	 * modification reset
 	 ******************************************************** */
 	function fn_nodeModiReset(result){
-		console.log("nodeModiReset!!! : " + result.userName);
 		$("#loader").hide();
 		if(result.userName == null || result.userName == ""){
 			$("#userCred").prop('checked', false);
@@ -134,7 +132,6 @@
 			})
 			// , textStatus, xhr
 			.done (function(result){
-				console.log("insert success : " + result.RESULT_CODE);
 				if(result.RESULT_CODE == "0"){
 					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
 					fn_getSvrList();
@@ -143,7 +140,6 @@
 				}
 			 })
 			 .fail (function(xhr, status, error){
-				 console.log("fail");
 				 if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if (xhr.status == 403){
@@ -178,7 +174,6 @@
 				})
 				// , textStatus, xhr
 				.done (function(result){
-					console.log("insert success : " + result.RESULT_CODE);
 					if(result.RESULT_CODE == "0"){
 						showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
 						fn_getSvrList();
@@ -187,7 +182,6 @@
 					}
 				 })
 				 .fail (function(xhr, status, error){
-					 console.log("fail");
 					 if(xhr.status == 401) {
 						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if (xhr.status == 403){

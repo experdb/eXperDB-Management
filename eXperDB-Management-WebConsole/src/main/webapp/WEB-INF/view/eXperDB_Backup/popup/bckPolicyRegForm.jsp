@@ -62,10 +62,7 @@
 	}
 	
 	function fn_setStorageList(data){
-		console.log("setStorageList!!!");
-		console.log("data : " + data);
 		storageList = data;
-		console.log("storageList length : " + storageList.length);
 		for(var i =0; i<storageList.length; i++){
 			if(storageList[i].type == "CIFS Share"){
 				CIFSList.push(storageList[i]);
@@ -76,7 +73,6 @@
 	}
 	
 	function fn_storageTypeClick(){
-		console.log("storageType Click!!!!");
 		var type = $("#storageType").val();
 		var html;
 		$("#storageList").empty();
@@ -143,7 +139,6 @@
 
 	function fn_policyReg() {
 		var bckdate = "";
-		console.log("fn_policyReg click!!!!");
 		if($("#storageType").val() == 1){
 			$("#bckStorageType").val("NFS Share");
 		}else{

@@ -151,7 +151,6 @@ function fn_nodeRegPopup() {
  * node update popup
  ******************************************************** */
  function fn_nodeModiPopup() {
-	console.log("fn_nodeModiPopup!!! : " + NodeList.row('.selected').data().ipadr);
 	$.ajax({
 		url : "/experdb/backupNodeInfo.do",
 		type : "post",
@@ -179,8 +178,7 @@ function fn_nodeRegPopup() {
   * node delete popup
   ******************************************************** */
   function fn_nodeDelPopup(){
-	 console.log("del popoup")
-	var data = NodeList.row('.selected').data();
+	var data = NodeList.rows('.selected').data();
 	if(data.length < 1){
 		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
@@ -195,7 +193,6 @@ function fn_nodeRegPopup() {
 
 
   function fn_nodeDelete(){
-	  console.log("지우러 간다")
 	$.ajax({
 		url : "/experdb/backupNodeDel.do",
 		type : "post",
@@ -225,7 +222,6 @@ function fn_nodeRegPopup() {
   }
  
   function fnc_confirmMultiRst(gbn){
-	  console.log("확인을 눌렀을 때");
 	  if(gbn == "node_del"){
 		  fn_nodeDelete();
 	  }
@@ -245,7 +241,6 @@ function fn_nodeRegPopup() {
 			$("#pop_layer_popup_backupPolicyReg").modal("show");
 		})
 		.fail (function(xhr, status, error){
-			 console.log("fail");
 			 if(xhr.status == 401) {
 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 			} else if (xhr.status == 403){
