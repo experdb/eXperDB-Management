@@ -1292,14 +1292,15 @@ function fn_search(){
 										</div>
 									</td>
 								</tr>
+								<!-- Proxy -->
 								<tr>
 									<th scope="row" rowspan="2">
 										<div class="inp_chk">
 											<input type="checkbox" id="VirtualIP" name="VirtualIP"/>
-											<label for="functions">Virtual IP</label>
+											<label for="functions">Proxy</label>
 										</div>
 									</th>
-									<td colspan="2"><spring:message code="menu.vip_monitoring" /> </td>
+									<td colspan="2"><spring:message code="menu.proxy_monitoring" /> </td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001801" name="r_mnu_nm" value="MN0001801"/>
@@ -1314,7 +1315,7 @@ function fn_search(){
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2"><spring:message code="menu.vip_config" /> </td>
+									<td colspan="2"><spring:message code="menu.proxy_config" /> </td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001802" name="r_mnu_nm" value="MN0001802"/>
@@ -1335,7 +1336,7 @@ function fn_search(){
 											<label for="schinfo"><spring:message code="menu.history_management" /></label>
 										</div>
 									</td>
-									<td><spring:message code="menu.vip_status_hist" /> </td>
+									<td><spring:message code="menu.proxy_status_hist" /> </td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001803" name="r_mnu_nm" value="MN0001803"/>
@@ -1350,7 +1351,7 @@ function fn_search(){
 									</td>
 								</tr>
 								<tr>
-									<td><spring:message code="menu.vip_change_hist" /> </td>
+									<td><spring:message code="menu.proxy_change_hist" /> </td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001804" name="r_mnu_nm" value="MN0001804"/>

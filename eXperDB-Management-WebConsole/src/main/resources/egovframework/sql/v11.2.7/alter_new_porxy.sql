@@ -35,11 +35,11 @@ VALUES(87, 'admin', 45, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(88, 'admin', 46, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(88, 'admin', 46, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(89, 'admin', 47, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(89, 'admin', 47, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
@@ -55,8 +55,28 @@ VALUES(92, 'experdb', 45, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clo
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(93, 'experdb', 46, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(93, 'experdb', 46, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(94, 'experdb', 47, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(94, 'experdb', 47, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+
+
+--접근이력코드 등록
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0001', 'DX-T0159', 'Proxy 설정관리', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Settings');
+
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0001', 'DX-T0159_01', 'Proxy 설정관리 - 서버 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Settings - Server Register');
+
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0001', 'DX-T0159_02', 'Proxy 설정관리 - VIP Instance 관리', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Settings - VIP Instance Management');
+
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0001', 'DX-T0159_03', 'Proxy 설정관리 - Proxy Listen 관리', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Settings - Proxy Listen Management');
+
+
