@@ -13861,6 +13861,22 @@ input[type="button"].btn-block {
   border-bottom-left-radius: 0;
 }
 
+.card-body-xsm > .form-group{
+	margin-bottom: 0.5rem;
+}
+
+.card-body > .row-last{
+	margin-bottom: -7px !important;
+}
+
+.card-body-xsm > .row-last{
+	margin-bottom: -16px !important;
+}
+
+.card-body-border{
+	border: 1px solid #adb5bd;
+}
+
 .card-body {
   flex: 1 1 auto;
   min-height: 1px;
@@ -21520,6 +21536,16 @@ code {
 .btn-outline-light {
   color: #6c7383;
   border-color: #e3e3e3;
+}
+
+/* Icon Button */
+.icon_btn{
+	padding: 0.4rem 0.5rem;
+    background-color: transparent;
+    border: 1px solid #248afd;
+    border-radius: 0.1875rem;
+    margin-top:1rem !important;
+    margin-right:0.5rem !important;
 }
 
 /* Breadcrumbs */
