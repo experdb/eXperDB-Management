@@ -2,77 +2,75 @@ package com.experdb.management.proxy.service;
 
 public class ProxyListenerServerListVO {
 	
-	private int LSN_SVR_ID;
-	private String DB_CON_ADDR;
-	private int PROXY_SVR_ID;
-	private int LSN_ID;
-	private int CHK_PORTNO;
-	private String BACKUP_YN;
-	private String FRST_REGR_ID;
-	private String FRST_REG_DTM;
-	private String LST_MDFR_ID;
-	private String LST_MDF_DTM;
+	private int lsn_svr_id; 
+	private String db_con_addr; 
+	private int pry_svr_id; 
+	private int lsn_id; 
+	private int chk_portno; 
+	private String backup_yn; 
+	private String frst_regr_id; 
+	private String frst_reg_dtm; 
+	private String lst_mdfr_id; 
+	private String lst_mdf_dtm;
 	
-	public int getLSN_SVR_ID() {
-		return LSN_SVR_ID;
+	public int getLsn_svr_id() {
+		return lsn_svr_id;
 	}
-	public void setLSN_SVR_ID(int lSN_SVR_ID) {
-		LSN_SVR_ID = lSN_SVR_ID;
+	public void setLsn_svr_id(int lsn_svr_id) {
+		this.lsn_svr_id = lsn_svr_id;
 	}
-	public String getDB_CON_ADDR() {
-		return DB_CON_ADDR;
+	public String getDb_con_addr() {
+		return db_con_addr;
 	}
-	public void setDB_CON_ADDR(String dB_CON_ADDR) {
-		DB_CON_ADDR = dB_CON_ADDR;
+	public void setDb_con_addr(String db_con_addr) {
+		this.db_con_addr = db_con_addr;
 	}
-	public int getPROXY_SVR_ID() {
-		return PROXY_SVR_ID;
+	public int getPry_svr_id() {
+		return pry_svr_id;
 	}
-	public void setPROXY_SVR_ID(int pROXY_SVR_ID) {
-		PROXY_SVR_ID = pROXY_SVR_ID;
+	public void setPry_svr_id(int pry_svr_id) {
+		this.pry_svr_id = pry_svr_id;
 	}
-	public int getLSN_ID() {
-		return LSN_ID;
+	public int getLsn_id() {
+		return lsn_id;
 	}
-	public void setLSN_ID(int lSN_ID) {
-		LSN_ID = lSN_ID;
+	public void setLsn_id(int lsn_id) {
+		this.lsn_id = lsn_id;
 	}
-	public int getCHK_PORTNO() {
-		return CHK_PORTNO;
+	public int getChk_portno() {
+		return chk_portno;
 	}
-	public void setCHK_PORTNO(int cHK_PORTNO) {
-		CHK_PORTNO = cHK_PORTNO;
+	public void setChk_portno(int chk_portno) {
+		this.chk_portno = chk_portno;
 	}
-	public String getBACKUP_YN() {
-		return BACKUP_YN;
+	public String getBackup_yn() {
+		return backup_yn;
 	}
-	public void setBACKUP_YN(String bACKUP_YN) {
-		BACKUP_YN = bACKUP_YN;
+	public void setBackup_yn(String backup_yn) {
+		this.backup_yn = backup_yn;
 	}
-	public String getFRST_REGR_ID() {
-		return FRST_REGR_ID;
+	public String getFrst_regr_id() {
+		return frst_regr_id;
 	}
-	public void setFRST_REGR_ID(String fRST_REGR_ID) {
-		FRST_REGR_ID = fRST_REGR_ID;
+	public void setFrst_regr_id(String frst_regr_id) {
+		this.frst_regr_id = frst_regr_id;
 	}
-	public String getFRST_REG_DTM() {
-		return FRST_REG_DTM;
+	public String getFrst_reg_dtm() {
+		return frst_reg_dtm;
 	}
-	public void setFRST_REG_DTM(String fRST_REG_DTM) {
-		FRST_REG_DTM = fRST_REG_DTM;
+	public void setFrst_reg_dtm(String frst_reg_dtm) {
+		this.frst_reg_dtm = frst_reg_dtm;
 	}
-	public String getLST_MDFR_ID() {
-		return LST_MDFR_ID;
+	public String getLst_mdfr_id() {
+		return lst_mdfr_id;
 	}
-	public void setLST_MDFR_ID(String lST_MDFR_ID) {
-		LST_MDFR_ID = lST_MDFR_ID;
+	public void setLst_mdfr_id(String lst_mdfr_id) {
+		this.lst_mdfr_id = lst_mdfr_id;
 	}
-	public String getLST_MDF_DTM() {
-		return LST_MDF_DTM;
+	public String getLst_mdf_dtm() {
+		return lst_mdf_dtm;
 	}
-	public void setLST_MDF_DTM(String lST_MDF_DTM) {
-		LST_MDF_DTM = lST_MDF_DTM;
+	public void setLst_mdf_dtm(String lst_mdf_dtm) {
+		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
-	
-	
 }

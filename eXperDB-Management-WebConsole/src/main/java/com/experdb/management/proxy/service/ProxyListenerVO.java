@@ -2,111 +2,111 @@ package com.experdb.management.proxy.service;
 
 public class ProxyListenerVO {
 	
-	private int PRY_SVR_ID;
-	private int LSN_ID;
-	private String LSN_NM;
-	private String CON_BIND_PORT;
-	private String LSN_DESC;
-	private String DB_USR_ID;
-	private String DB_ID;
-	private String DB_NM;
-	private String CON_SIM_QUERY;
-	private String FIELD_NM;
-	private String FIELD_VAL;
-	private String FRST_REGR_ID;
-	private String FRST_REG_DTM;
-	private String LST_MDFR_ID;
-	private String LST_MDF_DTM;
+	private int lsn_id; 
+	private int pry_svr_id; 
+	private String lsn_nm; 
+	private String con_bind_port; 
+	private String lsn_desc; 
+	private String db_usr_id; 
+	private int db_id; 
+	private String db_nm; 
+	private String con_sim_query; 
+	private String field_val; 
+	private String field_nm; 
+	private String frst_regr_id; 
+	private String frst_reg_dtm; 
+	private String lst_mdfr_id; 
+	private String lst_mdf_dtm;
 	
-	public int getPRY_SVR_ID() {
-		return PRY_SVR_ID;
+	public int getLsn_id() {
+		return lsn_id;
 	}
-	public void setPRY_SVR_ID(int pRY_SVR_ID) {
-		PRY_SVR_ID = pRY_SVR_ID;
+	public void setLsn_id(int lsn_id) {
+		this.lsn_id = lsn_id;
 	}
-	public int getLSN_ID() {
-		return LSN_ID;
+	public int getPry_svr_id() {
+		return pry_svr_id;
 	}
-	public void setLSN_ID(int lSN_ID) {
-		LSN_ID = lSN_ID;
+	public void setPry_svr_id(int pry_svr_id) {
+		this.pry_svr_id = pry_svr_id;
 	}
-	public String getLSN_NM() {
-		return LSN_NM;
+	public String getLsn_nm() {
+		return lsn_nm;
 	}
-	public void setLSN_NM(String lSN_NM) {
-		LSN_NM = lSN_NM;
+	public void setLsn_nm(String lsn_nm) {
+		this.lsn_nm = lsn_nm;
 	}
-	public String getCON_BIND_PORT() {
-		return CON_BIND_PORT;
+	public String getCon_bind_port() {
+		return con_bind_port;
 	}
-	public void setCON_BIND_PORT(String cON_BIND_PORT) {
-		CON_BIND_PORT = cON_BIND_PORT;
+	public void setCon_bind_port(String con_bind_port) {
+		this.con_bind_port = con_bind_port;
 	}
-	public String getLSN_DESC() {
-		return LSN_DESC;
+	public String getLsn_desc() {
+		return lsn_desc;
 	}
-	public void setLSN_DESC(String lSN_DESC) {
-		LSN_DESC = lSN_DESC;
+	public void setLsn_desc(String lsn_desc) {
+		this.lsn_desc = lsn_desc;
 	}
-	public String getDB_USR_ID() {
-		return DB_USR_ID;
+	public String getDb_usr_id() {
+		return db_usr_id;
 	}
-	public void setDB_USR_ID(String dB_USR_ID) {
-		DB_USR_ID = dB_USR_ID;
+	public void setDb_usr_id(String db_usr_id) {
+		this.db_usr_id = db_usr_id;
 	}
-	public String getDB_ID() {
-		return DB_ID;
+	public int getDb_id() {
+		return db_id;
 	}
-	public void setDB_ID(String dB_ID) {
-		DB_ID = dB_ID;
+	public void setDb_id(int db_id) {
+		this.db_id = db_id;
 	}
-	public String getDB_NM() {
-		return DB_NM;
+	public String getDb_nm() {
+		return db_nm;
 	}
-	public void setDB_NM(String dB_NM) {
-		DB_NM = dB_NM;
+	public void setDb_nm(String db_nm) {
+		this.db_nm = db_nm;
 	}
-	public String getCON_SIM_QUERY() {
-		return CON_SIM_QUERY;
+	public String getCon_sim_query() {
+		return con_sim_query;
 	}
-	public void setCON_SIM_QUERY(String cON_SIM_QUERY) {
-		CON_SIM_QUERY = cON_SIM_QUERY;
+	public void setCon_sim_query(String con_sim_query) {
+		this.con_sim_query = con_sim_query;
 	}
-	public String getFIELD_NM() {
-		return FIELD_NM;
+	public String getField_val() {
+		return field_val;
 	}
-	public void setFIELD_NM(String fIELD_NM) {
-		FIELD_NM = fIELD_NM;
+	public void setField_val(String field_val) {
+		this.field_val = field_val;
 	}
-	public String getFIELD_VAL() {
-		return FIELD_VAL;
+	public String getField_nm() {
+		return field_nm;
 	}
-	public void setFIELD_VAL(String fIELD_VAL) {
-		FIELD_VAL = fIELD_VAL;
+	public void setField_nm(String field_nm) {
+		this.field_nm = field_nm;
 	}
-	public String getFRST_REGR_ID() {
-		return FRST_REGR_ID;
+	public String getFrst_regr_id() {
+		return frst_regr_id;
 	}
-	public void setFRST_REGR_ID(String fRST_REGR_ID) {
-		FRST_REGR_ID = fRST_REGR_ID;
+	public void setFrst_regr_id(String frst_regr_id) {
+		this.frst_regr_id = frst_regr_id;
 	}
-	public String getFRST_REG_DTM() {
-		return FRST_REG_DTM;
+	public String getFrst_reg_dtm() {
+		return frst_reg_dtm;
 	}
-	public void setFRST_REG_DTM(String fRST_REG_DTM) {
-		FRST_REG_DTM = fRST_REG_DTM;
+	public void setFrst_reg_dtm(String frst_reg_dtm) {
+		this.frst_reg_dtm = frst_reg_dtm;
 	}
-	public String getLST_MDFR_ID() {
-		return LST_MDFR_ID;
+	public String getLst_mdfr_id() {
+		return lst_mdfr_id;
 	}
-	public void setLST_MDFR_ID(String lST_MDFR_ID) {
-		LST_MDFR_ID = lST_MDFR_ID;
+	public void setLst_mdfr_id(String lst_mdfr_id) {
+		this.lst_mdfr_id = lst_mdfr_id;
 	}
-	public String getLST_MDF_DTM() {
-		return LST_MDF_DTM;
+	public String getLst_mdf_dtm() {
+		return lst_mdf_dtm;
 	}
-	public void setLST_MDF_DTM(String lST_MDF_DTM) {
-		LST_MDF_DTM = lST_MDF_DTM;
+	public void setLst_mdf_dtm(String lst_mdf_dtm) {
+		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
 	
 	

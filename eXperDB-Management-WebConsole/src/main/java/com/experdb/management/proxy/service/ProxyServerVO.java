@@ -1,133 +1,158 @@
 package com.experdb.management.proxy.service;
 
+import java.util.List;
+
 public class ProxyServerVO {
 	
-	private int PRY_SVR_ID;
-	private String IPADR;
-	private int AGT_SN;
-	private String PRY_SVR_NM;
-	private String PRY_PTH;
-	private String KAL_PTH;
-	private String ROOT_PWD;
-	private String USE_YN;
-	private String EXE_STATUS;
-	private String MASTER_GBN;
-	private int MASTER_SVR_ID;
-	private int DB_SVR_ID;
-	private int DAY_DATA_DEL_TERM;
-	private int MIN_DATA_DEL_TERM;
-	private String FRST_REGR_ID;
-	private String FRST_REG_DTM;
-	private String LST_MDFR_ID;
-	private String LST_MDF_DTM;
+	private int pry_svr_id;
+	private String ipadr;
+	private int agt_sn;
+	private String pry_svr_nm;
+	private String pry_pth;
+	private String kal_pth;
+	private String root_pwd;
+	private String use_yn;
+	private String exe_status;
+	private String master_gbn;
+	private int master_svr_id;
+	private int db_svr_id; 
+	private int day_data_del_term;
+	private int min_data_del_term;
+	private String frst_regr_id;
+	private String frst_reg_dtm;
+	private String lst_mdfr_id; 
+	private String lst_mdf_dtm;
 	
-	public int getPRY_SVR_ID() {
-		return PRY_SVR_ID;
+	private ProxyGlobalVO pry_global;
+	private List<ProxyVipConfigVO> pry_conf_list; 
+	private List<ProxyListenerVO> pry_lsn_list;
+	
+	public int getPry_svr_id() {
+		return pry_svr_id;
 	}
-	public void setPRY_SVR_ID(int pRY_SVR_ID) {
-		PRY_SVR_ID = pRY_SVR_ID;
+	public void setPry_svr_id(int pry_svr_id) {
+		this.pry_svr_id = pry_svr_id;
 	}
-	public String getIPADR() {
-		return IPADR;
+	public String getIpadr() {
+		return ipadr;
 	}
-	public void setIPADR(String iPADR) {
-		IPADR = iPADR;
+	public void setIpadr(String ipadr) {
+		this.ipadr = ipadr;
 	}
-	public int getAGT_SN() {
-		return AGT_SN;
+	public int getAgt_sn() {
+		return agt_sn;
 	}
-	public void setAGT_SN(int aGT_SN) {
-		AGT_SN = aGT_SN;
+	public void setAgt_sn(int agt_sn) {
+		this.agt_sn = agt_sn;
 	}
-	public String getPRY_SVR_NM() {
-		return PRY_SVR_NM;
+	public String getPry_svr_nm() {
+		return pry_svr_nm;
 	}
-	public void setPRY_SVR_NM(String pRY_SVR_NM) {
-		PRY_SVR_NM = pRY_SVR_NM;
+	public void setPry_svr_nm(String pry_svr_nm) {
+		this.pry_svr_nm = pry_svr_nm;
 	}
-	public String getPRY_PTH() {
-		return PRY_PTH;
+	public String getPry_pth() {
+		return pry_pth;
 	}
-	public void setPRY_PTH(String pRY_PTH) {
-		PRY_PTH = pRY_PTH;
+	public void setPry_pth(String pry_pth) {
+		this.pry_pth = pry_pth;
 	}
-	public String getKAL_PTH() {
-		return KAL_PTH;
+	public String getKal_pth() {
+		return kal_pth;
 	}
-	public void setKAL_PTH(String kAL_PTH) {
-		KAL_PTH = kAL_PTH;
+	public void setKal_pth(String kal_pth) {
+		this.kal_pth = kal_pth;
 	}
-	public String getROOT_PWD() {
-		return ROOT_PWD;
+	public String getRoot_pwd() {
+		return root_pwd;
 	}
-	public void setROOT_PWD(String rOOT_PWD) {
-		ROOT_PWD = rOOT_PWD;
+	public void setRoot_pwd(String root_pwd) {
+		this.root_pwd = root_pwd;
 	}
-	public String getUSE_YN() {
-		return USE_YN;
+	public String getUse_yn() {
+		return use_yn;
 	}
-	public void setUSE_YN(String uSE_YN) {
-		USE_YN = uSE_YN;
+	public void setUse_yn(String use_yn) {
+		this.use_yn = use_yn;
 	}
-	public String getEXE_STATUS() {
-		return EXE_STATUS;
+	public String getExe_status() {
+		return exe_status;
 	}
-	public void setEXE_STATUS(String eXE_STATUS) {
-		EXE_STATUS = eXE_STATUS;
+	public void setExe_status(String exe_status) {
+		this.exe_status = exe_status;
 	}
-	public String getMASTER_GBN() {
-		return MASTER_GBN;
+	public String getMaster_gbn() {
+		return master_gbn;
 	}
-	public void setMASTER_GBN(String mASTER_GBN) {
-		MASTER_GBN = mASTER_GBN;
+	public void setMaster_gbn(String master_gbn) {
+		this.master_gbn = master_gbn;
 	}
-	public int getMASTER_SVR_ID() {
-		return MASTER_SVR_ID;
+	public int getMaster_svr_id() {
+		return master_svr_id;
 	}
-	public void setMASTER_SVR_ID(int mASTER_SVR_ID) {
-		MASTER_SVR_ID = mASTER_SVR_ID;
+	public void setMaster_svr_id(int master_svr_id) {
+		this.master_svr_id = master_svr_id;
 	}
-	public int getDB_SVR_ID() {
-		return DB_SVR_ID;
+	public int getDb_svr_id() {
+		return db_svr_id;
 	}
-	public void setDB_SVR_ID(int dB_SVR_ID) {
-		DB_SVR_ID = dB_SVR_ID;
+	public void setDb_svr_id(int db_svr_id) {
+		this.db_svr_id = db_svr_id;
 	}
-	public int getDAY_DATA_DEL_TERM() {
-		return DAY_DATA_DEL_TERM;
+	public int getDay_data_del_term() {
+		return day_data_del_term;
 	}
-	public void setDAY_DATA_DEL_TERM(int dAY_DATA_DEL_TERM) {
-		DAY_DATA_DEL_TERM = dAY_DATA_DEL_TERM;
+	public void setDay_data_del_term(int day_data_del_term) {
+		this.day_data_del_term = day_data_del_term;
 	}
-	public int getMIN_DATA_DEL_TERM() {
-		return MIN_DATA_DEL_TERM;
+	public int getMin_data_del_term() {
+		return min_data_del_term;
 	}
-	public void setMIN_DATA_DEL_TERM(int mIN_DATA_DEL_TERM) {
-		MIN_DATA_DEL_TERM = mIN_DATA_DEL_TERM;
+	public void setMin_data_del_term(int min_data_del_term) {
+		this.min_data_del_term = min_data_del_term;
 	}
-	public String getFRST_REGR_ID() {
-		return FRST_REGR_ID;
+	public String getFrst_regr_id() {
+		return frst_regr_id;
 	}
-	public void setFRST_REGR_ID(String fRST_REGR_ID) {
-		FRST_REGR_ID = fRST_REGR_ID;
+	public void setFrst_regr_id(String frst_regr_id) {
+		this.frst_regr_id = frst_regr_id;
 	}
-	public String getFRST_REG_DTM() {
-		return FRST_REG_DTM;
+	public String getFrst_reg_dtm() {
+		return frst_reg_dtm;
 	}
-	public void setFRST_REG_DTM(String fRST_REG_DTM) {
-		FRST_REG_DTM = fRST_REG_DTM;
+	public void setFrst_reg_dtm(String frst_reg_dtm) {
+		this.frst_reg_dtm = frst_reg_dtm;
 	}
-	public String getLST_MDFR_ID() {
-		return LST_MDFR_ID;
+	public String getLst_mdfr_id() {
+		return lst_mdfr_id;
 	}
-	public void setLST_MDFR_ID(String lST_MDFR_ID) {
-		LST_MDFR_ID = lST_MDFR_ID;
+	public void setLst_mdfr_id(String lst_mdfr_id) {
+		this.lst_mdfr_id = lst_mdfr_id;
 	}
-	public String getLST_MDF_DTM() {
-		return LST_MDF_DTM;
+	public String getLst_mdf_dtm() {
+		return lst_mdf_dtm;
 	}
-	public void setLST_MDF_DTM(String lST_MDF_DTM) {
-		LST_MDF_DTM = lST_MDF_DTM;
+	public void setLst_mdf_dtm(String lst_mdf_dtm) {
+		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+	public ProxyGlobalVO getPry_global() {
+		return pry_global;
+	}
+	public void setPry_global(ProxyGlobalVO pry_global) {
+		this.pry_global = pry_global;
+	}
+	public List<ProxyVipConfigVO> getPry_conf_list() {
+		return pry_conf_list;
+	}
+	public void setPry_conf_list(List<ProxyVipConfigVO> pry_conf_list) {
+		this.pry_conf_list = pry_conf_list;
+	}
+	public List<ProxyListenerVO> getPry_lsn_list() {
+		return pry_lsn_list;
+	}
+	public void setPry_lsn_list(List<ProxyListenerVO> pry_lsn_list) {
+		this.pry_lsn_list = pry_lsn_list;
+	}
+	
 	
 }

@@ -2,90 +2,93 @@ package com.experdb.management.proxy.service;
 
 public class ProxyVipConfigVO {
 	
-	private int PRY_SVR_ID;
-	private String STATE_NM;
-	private int VIP_CNG_ID;
-	private String V_IP;
-	private String V_ROT_ID;
-	private String V_IF_NM;
-	private int PRIORITY;
-	private int CHK_TM;
-	private String FRST_REGR_ID;
-	private String FRST_REG_DTM;
-	private String LST_MDFR_ID;
-	private String LST_MDF_DTM;
 	
-	public int getPRY_SVR_ID() {
-		return PRY_SVR_ID;
+	private int vip_cng_id; 
+	private String state_nm; 
+	private int pry_svr_id; 
+	private String v_ip; 
+	private String v_rot_id; 
+	private String v_if_nm; 
+	private int priority; 
+	private int chk_tm; 
+	private String frst_regr_id; 
+	private String frst_reg_dtm; 
+	private String lst_mdfr_id; 
+	private String lst_mdf_dtm;
+	
+	public int getVip_cng_id() {
+		return vip_cng_id;
 	}
-	public void setPRY_SVR_ID(int pRY_SVR_ID) {
-		PRY_SVR_ID = pRY_SVR_ID;
+	public void setVip_cng_id(int vip_cng_id) {
+		this.vip_cng_id = vip_cng_id;
 	}
-	public String getSTATE_NM() {
-		return STATE_NM;
+	public String getState_nm() {
+		return state_nm;
 	}
-	public void setSTATE_NM(String sTATE_NM) {
-		STATE_NM = sTATE_NM;
+	public void setState_nm(String state_nm) {
+		this.state_nm = state_nm;
 	}
-	public int getVIP_CNG_ID() {
-		return VIP_CNG_ID;
+	public int getPry_svr_id() {
+		return pry_svr_id;
 	}
-	public void setVIP_CNG_ID(int vIP_CNG_ID) {
-		VIP_CNG_ID = vIP_CNG_ID;
+	public void setPry_svr_id(int pry_svr_id) {
+		this.pry_svr_id = pry_svr_id;
 	}
-	public String getV_IP() {
-		return V_IP;
+	public String getV_ip() {
+		return v_ip;
 	}
-	public void setV_IP(String v_IP) {
-		V_IP = v_IP;
+	public void setV_ip(String v_ip) {
+		this.v_ip = v_ip;
 	}
-	public String getV_ROT_ID() {
-		return V_ROT_ID;
+	public String getV_rot_id() {
+		return v_rot_id;
 	}
-	public void setV_ROT_ID(String v_ROT_ID) {
-		V_ROT_ID = v_ROT_ID;
+	public void setV_rot_id(String v_rot_id) {
+		this.v_rot_id = v_rot_id;
 	}
-	public String getV_IF_NM() {
-		return V_IF_NM;
+	public String getV_if_nm() {
+		return v_if_nm;
 	}
-	public void setV_IF_NM(String v_IF_NM) {
-		V_IF_NM = v_IF_NM;
+	public void setV_if_nm(String v_if_nm) {
+		this.v_if_nm = v_if_nm;
 	}
-	public int getPRIORITY() {
-		return PRIORITY;
+	public int getPriority() {
+		return priority;
 	}
-	public void setPRIORITY(int pRIORITY) {
-		PRIORITY = pRIORITY;
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
-	public int getCHK_TM() {
-		return CHK_TM;
+	public int getChk_tm() {
+		return chk_tm;
 	}
-	public void setCHK_TM(int cHK_TM) {
-		CHK_TM = cHK_TM;
+	public void setChk_tm(int chk_tm) {
+		this.chk_tm = chk_tm;
 	}
-	public String getFRST_REGR_ID() {
-		return FRST_REGR_ID;
+	public String getFrst_regr_id() {
+		return frst_regr_id;
 	}
-	public void setFRST_REGR_ID(String fRST_REGR_ID) {
-		FRST_REGR_ID = fRST_REGR_ID;
+	public void setFrst_regr_id(String frst_regr_id) {
+		this.frst_regr_id = frst_regr_id;
 	}
-	public String getFRST_REG_DTM() {
-		return FRST_REG_DTM;
+	public String getFrst_reg_dtm() {
+		return frst_reg_dtm;
 	}
-	public void setFRST_REG_DTM(String fRST_REG_DTM) {
-		FRST_REG_DTM = fRST_REG_DTM;
+	public void setFrst_reg_dtm(String frst_reg_dtm) {
+		this.frst_reg_dtm = frst_reg_dtm;
 	}
-	public String getLST_MDFR_ID() {
-		return LST_MDFR_ID;
+	public String getLst_mdfr_id() {
+		return lst_mdfr_id;
 	}
-	public void setLST_MDFR_ID(String lST_MDFR_ID) {
-		LST_MDFR_ID = lST_MDFR_ID;
+	public void setLst_mdfr_id(String lst_mdfr_id) {
+		this.lst_mdfr_id = lst_mdfr_id;
 	}
-	public String getLST_MDF_DTM() {
-		return LST_MDF_DTM;
+	public String getLst_mdf_dtm() {
+		return lst_mdf_dtm;
 	}
-	public void setLST_MDF_DTM(String lST_MDF_DTM) {
-		LST_MDF_DTM = lST_MDF_DTM;
+	public void setLst_mdf_dtm(String lst_mdf_dtm) {
+		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+	
+	
 	
 }
