@@ -65,6 +65,14 @@
 		<typeAlias alias="backupJobHistoryVO" type="com.experdb.management.backup.history.service.BackupJobHistoryVO"/>
 		<typeAlias alias="backupActivityLogVO" type="com.experdb.management.backup.history.service.BackupActivityLogVO"/>
 		<typeAlias alias="JobStatusVO" type="com.experdb.management.backup.jobstatus.service.JobStatusVO"/>
+		
+		<!-- proxy -->
+		<typeAlias alias="proxyServerVO" type="com.experdb.management.proxy.service.ProxyServerVO"/>
+		<typeAlias alias="proxyGlobalVO" type="com.experdb.management.proxy.service.ProxyGlobalVO"/> 
+		<typeAlias alias="proxyListenerVO" type="com.experdb.management.proxy.service.ProxyListenerVO"/> 
+		<typeAlias alias="proxyVipConfigVO" type="com.experdb.management.proxy.service.ProxyVipConfigVO"/> 
+		<typeAlias alias="proxyAgentVO" type="com.experdb.management.proxy.service.ProxyAgentVO"/> 
+		 
     </typeAliases>
     
  	<mappers>
@@ -133,6 +141,9 @@
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/node/backupNodeSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/storage/backupStorageSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
+		
+		<!-- experdb proxy -->
+		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyServerSettingSql.xml" />
 		
 	</mappers>
 </configuration>
