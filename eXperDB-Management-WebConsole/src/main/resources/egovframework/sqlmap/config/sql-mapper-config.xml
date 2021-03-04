@@ -64,6 +64,7 @@
 		<typeAlias alias="backupLocationInfoVO" type="com.experdb.management.backup.service.BackupLocationInfoVO"/>
 		<typeAlias alias="backupJobHistoryVO" type="com.experdb.management.backup.history.service.BackupJobHistoryVO"/>
 		<typeAlias alias="backupActivityLogVO" type="com.experdb.management.backup.history.service.BackupActivityLogVO"/>
+		<typeAlias alias="JobStatusVO" type="com.experdb.management.backup.jobstatus.service.JobStatusVO"/>
     </typeAliases>
     
  	<mappers>
@@ -127,6 +128,7 @@
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
 
 		<!-- experdb backup history -->
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/status/jobStatusSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/history/backupHistorySql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/node/backupNodeSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/storage/backupStorageSql.xml" />
