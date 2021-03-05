@@ -794,7 +794,7 @@
 											</span>
 										</li>
 										<li class="nav-item" id="MN0001801">
-											<a class="nav-link" href="/proxyMonitor.do" onClick="fn_cookie(null)" target="main">
+											<a class="nav-link" href="/proxyMonitoring/monitoring.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="menu.proxy_monitoring"/>
 											</a>
 										</li>
