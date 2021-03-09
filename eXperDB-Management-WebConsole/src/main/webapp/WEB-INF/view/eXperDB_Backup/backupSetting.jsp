@@ -26,7 +26,15 @@
 
 <script>
 var NodeList;
-var table_policy;
+var scheduleList;
+var schSun=[];
+var schMon=[];
+var schTue=[];
+var schWed=[];
+var schThu=[];
+var schFri=[];
+var schSat=[];
+var schWeek = [];
 
 /* ********************************************************
  * 페이지 시작시
@@ -34,12 +42,10 @@ var table_policy;
 $(window.document).ready(function() {
 	// get server information
 	fn_init();
-	
-	selectTab('job');
-	
+	dateCalenderSetting();
 	fn_getSvrList();
 	// fn_getNodeList();
-	
+	schWeek = [schSun,schMon,schTue,schWed,schThu,schFri,schSat];
 });
 
 function fn_init() {
@@ -55,6 +61,10 @@ function fn_init() {
 		paging : false,
 		deferRender : true,
 		info : false,
+		select : {
+			'style' : 'single'/* ,
+			items' : 'cell' */
+		},
 		bSort : false,
 		columns : [
 		{data : "masterGbn", defaultContent : "", className : "dt-center", 
@@ -79,16 +89,72 @@ function fn_init() {
 		{data : "ipadr", className : "dt-center", defaultContent : ""}
 		
 /* 		{data : "dft_db_nm", className : "dt-center", defaultContent : "", visible: false}, */
-		], 'select': {'style': 'single'}
+		], /* select: {'style' : 'single'} */
 	});
 
 	 NodeList.tables().header().to$().find('th:eq(1)').css('min-width');
 	 NodeList.tables().header().to$().find('th:eq(2)').css('min-width');
 	 NodeList.tables().header().to$().find('th:eq(3)').css('min-width');
-    
+	 
+	 scheduleList = $('#scheduleList').DataTable({
+		scrollY : "140px",
+		scrollX: true,	
+		searching : false,
+		processing : true,
+		paging : false,
+		deferRender : true,
+		info : false,
+		select : {'items' : 'cell', 'style' : 'single'},
+		bSort : false,
+		"language" : {
+			"emptyTable" : " "
+		} ,
+		columns : [
+			{className : "dt-center", defaultContent : ""},
+			{className : "dt-center", defaultContent : ""},
+			{className : "dt-center", defaultContent : ""},
+			{className : "dt-center", defaultContent : ""},
+			{className : "dt-center", defaultContent : ""},
+			{className : "dt-center", defaultContent : ""},
+			{className : "dt-center", defaultContent : ""}
+		], 
+		
+	});
+	 
     $(window).trigger('resize'); 
 	
 } // fn_init();
+
+function dateCalenderSetting() {
+		
+	var today = new Date();
+	var startDay = today.toJSON().slice(0,10);
+	var endDay = fn_dateParse("20991231").toJSON().slice(0, 10);
+	
+	/* console.log("today : " + today);
+	console.log("startDay : " + startDay);
+	console.log("endDay : " + endDay); */
+
+	$("#startDate").val(startDay);
+	
+	
+	// if ($("#startDate_div", "#scheduleForm").length) {
+	$("#startDate").datepicker({
+		}).datepicker('setDate', startDay)
+		.datepicker('setStartDate', startDay)
+		.datepicker('setEndDate', endDay)
+		.on('hide', function(e) {
+			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		}); //값 셋팅
+	// }
+
+
+
+	
+	$("#startDate").datepicker('setStartDate', startDay).datepicker('setEndDate', endDay);
+	// $("#startDate_div").datepicker('updateDates');
+	
+}
 
 /* ********************************************************
  * 서버 리스트 가져오기
@@ -250,37 +316,119 @@ function fn_nodeRegPopup() {
 			}
 		 })
 	}
-
-
 /* ********************************************************
- * Tab Click
+ * schedule registration
  ******************************************************** */
-function selectTab(intab){
-	if(intab == "job"){		
-		$("#jobDiv").show();
-		$("#scheduleDiv").hide();
-	}else{				
-		$("#jobDiv").hide();
-		$("#scheduleDiv").show();
+
+	function fn_scheduleRegPopoup() {
+		fn_scheduleRegReset();
+		$("#pop_layer_popup_backupSchedule").modal("show");
 	}
-}
-function fn_runNow() {
-	// pop_runNow
-	$("#pop_runNow").modal("show");
-}
-function fn_cancel() {
-	$("#pop_runNow").modal("hide");
-}
+	
+	function fn_scheduleInsert(dayPick, startTime, repCheck, repEndTime, repTime, repTimeUnit) {
+		var schData = new Object();
+		console.log("schedule Insert!!!");
+		console.log(dayPick);
+		console.log(startTime);
+		console.log(repCheck);
+		console.log(repEndTime);
+		console.log(repTime);
+		console.log(repTimeUnit);
+
+		console.log("//////11////////");
+		schData.st = startTime;
+		schData.rc = repCheck;
+		console.log("//////22////////");
+		if(repCheck){
+			console.log("true가 나왔다");
+			schData.rt = repTime;
+			schData.ret = repEndTime;
+			schData.rtu = repTimeUnit;
+			if(repTimeUnit == 0){
+				schData.repeat = "<b>" + startTime + "</b> <br><span class='text-success'>R </span>"+repEndTime+"/" + repTime +"m";
+			}else{
+				schData.repeat = "<b>" + startTime + "</b> <br><span class='text-success'>R </span>"+repEndTime+"/" + repTime +"h";
+			}
+		}else{
+			console.log("false가 나왔다");
+			schData.rt = "";
+			schData.ret = "";
+			schData.rtu = "";
+			schData.repeat = "<b>" + startTime + "</b>";
+		}
+
+		for(var i =0; i<7; i++){
+			if(dayPick[i] == true){
+				schWeek[i].push(schData);
+			}
+			schWeek[i].sort(compareTime);
+		}
+		
+		fn_drawScheduleList();
+	}
+	
+	function compareTime(a, b){
+        if(a.st < b.st){
+                return -1;
+        }else if(a.st > b.st){
+                return 1;
+        }else{
+                return 0;
+        }
+	}
+
+	function fn_drawScheduleList(){
+		var dayLength = [schSun.length, schMon.length, schTue.length, schWed.length, schThu.length, schFri.length, schSat.length];
+		var max = Math.max.apply(null, dayLength);
+		
+		scheduleList.clear().draw();
+		
+		for(var i=0;i<max;i++){
+			var schRow = [schSun[i],schMon[i],schTue[i],schWed[i],schThu[i],schFri[i],schSat[i]];
+			var viewRow = [];
+			for(var j=0;j<7;j++){
+				if(i<dayLength[j]){
+					viewRow[j] = schRow[j].repeat;
+				}else{
+					viewRow[j]="";
+				}
+			}
+			scheduleList.row.add(viewRow).draw();
+		}
+
+	}
+
+
+	function fn_scheduleDel(){
+		console.log("schedule del");
+		var a = scheduleList.cell('.selected').data();
+		var b = scheduleList.cell('.selected').index().row;
+		var c = scheduleList.cell('.selected').index().column;
+		console.log("나와랏 : " + a);
+		console.log("나와랏 : " + b);
+		console.log("나와랏 : " + c);
+	}
+	
+	
 
 </script>
 <style>
 table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
+table.dataTable.ccc tbody td.selected {
+	background-color: #7bb8fd
+}
+table.dataTable.ccc tfoot th{
+	border-top:1px solid rgb(255, 255, 255);
+}
+table.dataTable.ccc thead th{
+	border-bottom : 1px solid rgb(168, 168, 168);
+}
 </style>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 
-<%@include file="./popup/backupRunNow.jsp"%>
 <%@include file="./popup/bckNodeRegForm.jsp"%>
 <%@include file="./popup/bckPolicyRegForm.jsp"%>
+<%@include file="./popup/bckScheduleRegForm.jsp"%>
 
 <form name="storeInfo">
 	<input type="hidden" name="bckStorageTypeVal"  id="bckStorageTypeVal">
@@ -338,11 +486,9 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 				<div class="table-responsive" style="overflow:hidden;">
 					<div id="wrt_button" style="float: right;">
 						<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_runNow()">
-							<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
+							<i class="fa fa-check btn-icon-prepend "></i>적용
 						</button>
-						<button type="button" class="btn btn-danger btn-icon-text mb-2">
-							<i class="mdi mdi-stop "></i> 중지
-						</button>
+						
 					</div>
 				</div>
 			</div>
@@ -382,20 +528,66 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 		<!-- node list end-->
 		<div class="col-lg-7 grid-margin stretch-card">
 			<div class="card"  style="padding-left: 0px;">
-				<div class="card-body">				
-					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
-						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('job');" >
-								백업설정
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('schedule');">
-								스케줄
-							</a>
-						</li>
-					</ul>
-					
+				<div class="card-body" style="padding-bottom: 0px;">
+					<!-- <div class="row" style="margin-top:-20px;"  id="schedule_button">
+						<div class="col-12" style="margin-top: 10px;">
+							<div class="sch_button" style="float: right">
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_scheduleRegPopoup()">
+									등록
+								</button>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+									삭제
+								</button>
+							</div>
+						</div>
+					</div> -->
+					<div class="card my-sm-2" style="" >
+						<div class="card-body" style="height: 240px;padding-top: 5px;">
+							<div class="col-12" id="jobDiv" >
+								<div class="form-group row" style="margin-bottom: 0px; padding-left: 10px;">
+									<div class="col-8 row" style="margin-top: 10px;">
+										<div  class="col-4 col-form-label pop-label-index" style="font-size:1em; padding-top:7px;">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+											Start Date
+										</div>
+										<div class="col-sm-3" style="padding-left: 0px;">
+											<div class="input-group " id="startDate_div" style="width: 120px;">
+												<input type="text" class="form-control" style=" background-color : white; width:70px;height:30px;" id="startDateSch" name="startDateSch" readonly/>
+											</div> 
+										</div>
+									</div>
+									<div class="col-4" style="margin-top: 10px;">
+										<div class="sch_button" style="float: right">
+											<button type="button" class="btn btn-rounded btn-sm btn-inverse-primary" onClick="fn_scheduleRegPopoup()">
+												<i class="ti-plus"></i>
+											</button>
+											<button type="button" class="btn btn-rounded btn-inverse-danger btn-sm" onClick="fn_scheduleDel()">
+												<i class="ti-minus"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 row" id="scheduleDiv" >	
+									<table id="scheduleList" class="table table-hover ccc" style="width:900px;">
+										<thead>
+											<tr>
+												<th width="80px" class="text-center text-danger"><spring:message code="common.sun" /></th>
+												<th width="80px" class="text-center"><spring:message code="common.mon" /></th>												
+												<th width="80px" class="text-center"><spring:message code="common.tue" /></th>
+												<th width="80px" class="text-center"><spring:message code="common.wed" /></th>
+												<th width="80px" class="text-center"><spring:message code="common.thu" /></th>
+												<th width="80px" class="text-center"><spring:message code="common.fri" /></th>												
+												<th width="80px" class="text-center text-primary"><spring:message code="common.sat" /></th>
+											</tr>
+										</thead>
+									</table>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body" style="padding-top: 0px;">	
 					 <div class="row" style="margin-top:-20px;"  id="schedule_button">
 						<div class="col-12" style="margin-top: 10px;">
 							<div class="wrt_button" style="float: right">
@@ -411,111 +603,50 @@ table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
 							</div>
 						</div>
 					</div>				 	
-					<div class="card my-sm-2" style="height: 452px;" >
-						<div class="card-body" >				
-								<div class="col-12" id="jobDiv" >
- 									<div class="table-responsive">
-										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-											<div class="row">
-												<div class="col-sm-12 col-md-6">
-													<div class="dataTables_length" id="order-listing_length">
-													</div>
-												</div>
-											</div>
-										</div>
+					<div class="card my-sm-2" style="" >
+						<div class="card-body" >
+							<div class="col-12" id="jobDiv" >	
+								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
+									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										백업 스토리지
 									</div>
-									
-									<div class="card card-inverse-info"  style="height:25px;">
-										<i class="mdi mdi-blur" style="margin-left: 10px;">	백업 스토리지 설정 </i>
-									</div>	
-										<form class="cmxform" id="backupDestination" style="margin-left: 20px; margin-top: 12px;">
-											<fieldset>	
-												<div>
-													<h5>Specify the storage location for your backup data</h5>
-												</div>		
-												<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
-													<div class="col-2" style="padding-left: 0px;">
-														<input type="text" id="bckStorageType" name = "bckStorageType" class="form-control form-control-sm"  style="height: 40px;" readonly/>
-													</div>
-													<div class="col-4" style="padding-left: 0px;">
-														<input type="text" id="bckStorage" name = "bckStorage" class="form-control form-control-sm" style="height: 40px;" readonly/>
-													</div>
-												</div>
-											</fieldset>
-										</form>
-									<div class="card card-inverse-info"  style="height:25px;">
-										<i class="mdi mdi-blur" style="margin-left: 10px;">	백업 압축 정책 </i>
+									<div class="col-2" style="padding-left: 0px;">
+										<input type="text" id="bckStorageType" name = "bckStorageType" class="form-control form-control-sm"  style="height: 40px;" readonly/>
 									</div>
-									<fieldset style="margin-left: 20px; margin-top: 10px;">	
-										<div>
-											<h5>Using compression will reduce the amount of space required on your destination</h5>
-										</div>		
-										<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
-											<div class="col-4" style="padding-left: 0px;">
-												<input type="text" id="bckCompress" name="bckCompress" class="form-control form-control-sm" style="height: 40px;" readonly/>
-											</div>
-										</div>
-									</fieldset>
-									<div class="card card-inverse-info"  style="height:25px;">
-										<i class="mdi mdi-blur" style="margin-left: 10px;">	Full 백업 정책 </i>
+									<div class="col-4" style="padding-left: 0px;">
+										<input type="text" id="bckStorage" name = "bckStorage" class="form-control form-control-sm" style="height: 40px;" readonly/>
 									</div>
-									
-									<fieldset style="margin-left: 20px; margin-top: 10px;">			
-										<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
-											<div class="col-5">
-												<div  class="col-10 col-form-label pop-label-index" style="padding-top:7px;">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													FULL 백업 수행일
-												</div>
-												<div class="col-sm-4" style="margin-left: 10px">
-													<input type="text" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetDate" id="bckSetDate" readonly/>
-												</div>
-											</div>
-											<div class="col-5">
-												<div  class="col-9 col-form-label pop-label-index" style="padding-top:7px;">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-													FULL 백업 보관 셋
-												</div>
-												<div class="col-sm-4" style="margin-left: 10px">
-													<input type="number" min="1" max="10000" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetNum" id="bckSetNum" readonly/>
-												</div>
-											</div>
-										</div>
-									</fieldset>
-							 	</div>
-							
-								<!-- schedule TAB -->
-								<div class="col-12" id="scheduleDiv" >
- 									<div class="table-responsive">
-										<div id="order-listing_wrapper"
-											class="dataTables_wrapper dt-bootstrap4 no-footer">
-											<div class="row">
-												<div class="col-sm-12 col-md-6">
-													<div class="dataTables_length" id="order-listing_length">
-													</div>
-												</div>
-											</div>
-										</div>
+								</div>
+								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
+									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										압축
 									</div>
-
-	 								<table id="week_scheduleList" class="table table-hover table-striped" style="width:100%;">
-										<thead>
-											<tr>
-												<th width="130" class="text-center text-danger"><spring:message code="common.sun" /></th>
-												<th width="130" class="text-center"><spring:message code="common.mon" /></th>												
-												<th width="130" class="text-center"><spring:message code="common.tue" /></th>
-												<th width="130" class="text-center"><spring:message code="common.wed" /></th>
-												<th width="130" class="text-center"><spring:message code="common.thu" /></th>
-												<th width="130" class="text-center"><spring:message code="common.fri" /></th>												
-												<th width="130" class="text-center text-primary"><spring:message code="common.sat" /></th>
-											</tr>
-										</thead>
-									</table>
-							 	</div>
-
+									<div class="col-4" style="padding-left: 0px;">
+										<input type="text" id="bckCompress" name="bckCompress" class="form-control form-control-sm" style="height: 40px;" readonly/>
+									</div>
+								</div>		
+								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
+									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Full 백업 수행일
+									</div>
+									<div class="col-sm-2_5" style="margin-left: 0px;padding-left: 0px;">
+										<input type="text" style="width:150px; height:40px; background-color:rgba(255, 255, 255, 0.856);" class="form-control form-control-sm" name="bckSetDate" id="bckSetDate" readonly/>
+									</div>
+									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Full 백업 보관 셋
+									</div>
+									<div class="col-sm-2_5" style="margin-left: 0px">
+										<input type="number" min="1" max="10000" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetNum" id="bckSetNum" readonly/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-						 	
+
 				</div>
 			</div>
 		</div>

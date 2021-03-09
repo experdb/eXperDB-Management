@@ -34,7 +34,9 @@
 		
 	});
 	
-
+	function fn_cancel() {
+		$("#pop_runNow").modal("hide");
+	}
 
 
 </script>
