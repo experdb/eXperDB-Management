@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="proxyMonitoringSql">
+
+	<select id="selectProxyServerList" resultType="hashMap">
+		/**
+		* Query ID : selectProxyServerList
+		* Description : proxy server list
+		* Author : 윤정
+		**/
+		SELECT 
+       		(ROW_NUMBER() OVER()) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+       		s.PRY_SVR_ID,
+       		s.IPADR,
+       		s.AGT_SN,
+       		s.PRY_SVR_NM,
+       		s.PRY_PTH,
+       		s.KAL_PTH,
+       		s.USE_YN,
+       		s.EXE_STATUS,
+       		s.MASTER_GBN,
+       		s.MASTER_SVR_ID,
+       		s.DB_SVR_ID,
+       		s.DAY_DATA_DEL_TERM,
+       		s.MIN_DATA_DEL_TERM,
+       		s.FRST_REGR_ID,
+       		s.FRST_REG_DTM,
+       		s.LST_MDFR_ID,
+       		s.LST_MDF_DTM,
+       		a.AGT_CNDT_CD 
+		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
+		<if test="value != null and value != '' ">
+        WHERE PRY_SVR_ID = #{value} 
+        OR MASTER_SVR_ID = #{value}
+        </if>
+		ORDER BY PRY_SVR_ID, LST_MDF_DTM
+
+	</select>
+	
+	<select id="selectProxyServerByMasterId" resultType="hashMap">
+		/**
+		* Query ID : selectProxyServerByMasterId
+		* Description : proxy server cluster 1set 
+		* Author : 윤정
+		**/
+			SELECT 
+       		(ROW_NUMBER() OVER()) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+       		s.PRY_SVR_ID,
+       		s.IPADR,
+       		s.AGT_SN,
+       		s.PRY_SVR_NM,
+       		s.PRY_PTH,
+       		s.KAL_PTH,
+       		s.USE_YN,
+       		s.EXE_STATUS,
+       		s.MASTER_GBN,
+       		s.MASTER_SVR_ID,
+       		s.DB_SVR_ID,
+       		s.DAY_DATA_DEL_TERM,
+       		s.MIN_DATA_DEL_TERM,
+       		s.FRST_REGR_ID,
+       		s.FRST_REG_DTM,
+       		s.LST_MDFR_ID,
+       		s.LST_MDF_DTM,
+       		a.AGT_CNDT_CD,
+       		v.V_IP 
+		FROM T_PRY_SVR_I s 
+		JOIN T_PRY_AGT_I a ON s.AGT_SN = a.AGT_SN 
+		JOIN T_PRY_VIPCNG_I v ON s.PRY_SVR_ID = v.PRY_SVR_ID
+		<if test="value != null and value != '' ">
+        WHERE (s.PRY_SVR_ID = #{value} 
+        OR s.MASTER_SVR_ID = #{value})
+        </if>
+        AND v.STATE_NM = 'MASTER'
+		ORDER BY s.PRY_SVR_ID, LST_MDF_DTM
+
+	</select>
+	
+	<select id="selectDBServerConProxy" resultType="hashMap">
+		/**
+		* Query ID : selectDBServerConProxy
+		* Description : db server connected proxy
+		* Author : 윤정
+		**/
+		
+
+
+	</select>
+	
+	<select id="selectProxyLogList" resultType="hashMap">
+		/**
+		* Query ID : selectProxyLogList
+		* Description : proxy starting state list
+		* Author : 윤정
+		**/
+		SELECT 
+       		(ROW_NUMBER() OVER()) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+       		PRY_ACT_EXE_SN,
+       		PRY_SVR_ID,
+       		SYS_TYPE,
+       		ACT_TYPE,
+       		WRK_DTM,
+       		EXE_RSLT_CD,
+       		RSLT_MSG,
+       		FRST_REGR_ID,
+       		FRST_REG_DTM,
+       		LST_MDFR_ID,
+       		LST_MDF_DTM
+       	FROM T_PRY_ACTSTATE_CNG_G
+       	SELECT
+       		 tpsi.pry_svr_id, 
+       		 tpsi.pry_svr_nm , 
+       		 tpacg.sys_type , 
+       		 tpacg.act_type , 
+       		 tpacg.frst_reg_dtm 
+		FROM t_pry_svr_i tpsi 
+		join t_pry_actstate_cng_g tpacg on tpsi.pry_svr_id = tpacg.pry_svr_id 
+		WHERE tpsi.pry_svr_id = #{value}
+		ORDER BY frst_reg_dtm
+	</select>
+</mapper>

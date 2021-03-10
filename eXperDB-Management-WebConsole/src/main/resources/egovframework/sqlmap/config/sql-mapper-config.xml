@@ -72,7 +72,8 @@
 		<typeAlias alias="proxyListenerVO" type="com.experdb.management.proxy.service.ProxyListenerVO"/> 
 		<typeAlias alias="proxyVipConfigVO" type="com.experdb.management.proxy.service.ProxyVipConfigVO"/> 
 		<typeAlias alias="proxyAgentVO" type="com.experdb.management.proxy.service.ProxyAgentVO"/> 
-		 
+		<typeAlias alias="proxyStatisticVO" type="com.experdb.management.proxy.service.ProxyStatisticVO"/>
+		<typeAlias alias="proxyLogVO" type="com.experdb.management.proxy.service.ProxyLogVO"/>
     </typeAliases>
     
  	<mappers>
@@ -144,6 +145,6 @@
 		
 		<!-- experdb proxy -->
 		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyServerSettingSql.xml" />
-		
+		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyMonitoringSql.xml"/>
 	</mappers>
 </configuration>
