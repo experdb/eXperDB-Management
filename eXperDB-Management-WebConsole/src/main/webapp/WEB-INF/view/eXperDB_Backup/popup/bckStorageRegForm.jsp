@@ -275,7 +275,7 @@
 	 function fn_valChkPath(){
 		 var storagePath = $("#storagePath").val();
 		$("#storagePathAlert").empty();
-		var pathCheck = $("#pathcheck").val();
+		// var pathCheck = $("#pathcheck").val();
 		 // path duplication check
 		if(fn_dupCheckPath()){
 			$("#storagePathAlert").append("이미 등록된 Path 입니다");
@@ -288,12 +288,13 @@
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
 			return true;
-		}else if(pathCheck != 0){
+		}
+		/* else if(pathCheck != 0){
 			$("#storagePathAlert").append("유효한 Path를 입력해주세요");
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
 			return true;
-		}
+		} */
 		else{
 			// $("#storagePathAlert").append("사용가능한 Path 입니다");
 			// $("#storagePathAlert").removeClass("text-danger").addClass("text-success");
@@ -343,6 +344,7 @@
 		return false;
 	 }
 
+	 /* 
 	 // Path check
 	function fn_checkPath(){
 		$("#storagePath").val($("#storagePath").val().replace(/ /g, ''));
@@ -369,7 +371,7 @@
 			}
 		})
 	 }
-
+ */
 	 // path list
 	 function fn_getPathList(data) {
 		 var size = data.length;
@@ -418,8 +420,8 @@
 														Path
 													</div>
 													<div class="col-4" style="padding-left: 0px;">
-														<input type="text" id="storagePath" name="storagePath" class="form-control form-control-sm" style="width: 400px;" onchange="fn_checkPath()"/>
-														<input type="hidden" id="pathcheck" value=1/>
+														<input type="text" id="storagePath" name="storagePath" class="form-control form-control-sm" style="width: 400px;" onchange="fn_valChkPath()"/>
+														<!-- <input type="hidden" id="pathcheck" value=1/> -->
 														<div id="storagePathAlert" name="storagePathAlert" class="text-danger" style="font-size:0.8em;  width: 212px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 1px; padding-bottom: 5px; margin-bottom: 0px; ">
 															
 														</div>
