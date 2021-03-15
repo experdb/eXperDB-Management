@@ -1,12 +1,16 @@
 package com.experdb.management.backup.node.service.impl;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.*;
+import net.sf.json.JSONArray;
 
 import org.json.simple.*;
+import org.json.simple.parser.*;
+import org.springframework.batch.core.scope.context.*;
 import org.springframework.stereotype.Service;
 
 import com.experdb.management.backup.cmmn.*;
@@ -142,13 +146,66 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		result = Node.deleteNode(request.getParameter("ipadr"));
 		return result;
 	}
+
+
+
+	 @Override
+//	public static void scheduleInsert(String exJson){
+	public void scheduleInsert(HttpServletRequest request, Map<Object, String> param) {
+		System.out.println("========= scheduleInsert SERVICE !!! =========");
+		List<Map<String, Object>> aa = new ArrayList<Map<String, Object>>();
+		String mon = param.get("mon").toString();
+		String tue = param.get("tue").toString();
+		String wed = param.get("wed").toString();
+		String thu = param.get("thu").toString();
+		String e = request.getParameter("startDate");
+		System.out.println(mon);
+		System.out.println(tue);
+		System.out.println(wed);
+		System.out.println(thu);
+		System.out.println(e);
+//		try {
+//			JSONParser jsonParser = new JSONParser();
+//			System.out.println("aaaaaaaa");
+//			
+//			// 여기까지
+//			JSONArray jsonArray = (JSONArray) jsonParser.parse(exJson);
+////			JSONObject jsonObject = (JSONObject) jsonParser.parse(exJson);
+//			System.out.println("bbbbbbbbb : " + jsonArray);
+//			
+////			JSONArray jsonArray = (JSONArray) jsonObject.get("mon");
+//			System.out.println("ddddddddd");
+//
+////			for(int i=0; i<jsonArray.size(); i++){
+////				System.out.println("for문");
+////				JSONObject schObj = (JSONObject) jsonArray.get(i);
+////				System.out.println(schObj.get("st"));
+////			}
+//			
+//		} catch (ParseException e1) {
+//			e1.printStackTrace();
+//			System.out.println(e1);
+//		}
+		////////////
+		
+	}
 	
 //	public static void main (String[] args){
-//		String a = "experdb	root";
-//		String [] b = a.split("\t");
-//		for(String c : b){
-//			System.out.println("print!! : " + c);
-//		}
+////		String jsonExample = "{\"mon\":[{\"st\":\"09:45\",\"rc\":false,\"rt\":\"\",\"ret\":\"\",\"rtu\":\"\",\"repeat\":\"<b>09:45</b>\"}, {\"st\":\"09:45\",\"rc\":false,\"rt\":\"\",\"ret\":\"\",\"rtu\":\"\",\"repeat\":\"<b>09:45</b>\"}]}";
+//		String jsonExample = "[{\"st\":\"09:45\",\"rc\":false,\"rt\":\"\",\"ret\":\"\",\"rtu\":\"\",\"repeat\":\"<b>09:45</b>\"}, {\"st\":\"09:45\",\"rc\":false,\"rt\":\"\",\"ret\":\"\",\"rtu\":\"\",\"repeat\":\"<b>09:45</b>\"}]";
+////		String jsonExample1 = "[{'st':'09:45','rc':false,'rt':'','ret':'','rtu':'','repeat':'<b>09:45</b>'}]";
+//		
+//		scheduleInsert(jsonExample);
+//		
+//		
+//	}
+
+
+
+//	@Override
+//	public void scheduleInsert(HttpServletRequest request, Map<Object, String> param) {
+//		// TODO Auto-generated method stub
+//		
 //	}
 
 }

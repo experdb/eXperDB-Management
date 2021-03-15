@@ -152,6 +152,8 @@
 		}
 
 		if($(':input:radio[name=merge_period]:checked').val() == "weekly"){
+			$("#bckSetDateTypeVal").val(true);
+			$("#bckSetDateVal").val($("#merge_period_week").val());
 			bckdate = "매주"
 			switch($("#merge_period_week").val()){
 				case  "0":
@@ -177,6 +179,8 @@
 					break;
 			}
 		}else{
+			$("#bckSetDateTypeVal").val(false);
+			$("#bckSetDateVal").val($("#merge_period_month").val());
 			bckdate = "매월"
 			if($("#merge_period_month").val()>31){
 				switch($("#merge_period_month").val()){
@@ -209,9 +213,11 @@
 				bckdate += " " + $("#merge_period_month").val() + "일";
 			}
 		}
+		
 		$("#bckSetDate").val(bckdate);
 		$("#bckSetNum").val($("#backupSetNum").val());
-
+		
+		
 		$("#bckCompressVal").val($("#compressType").val());
 		$("#bckStorageTypeVal").val($("#storageType").val());	
 		

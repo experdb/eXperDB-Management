@@ -82,11 +82,15 @@
 		// $("#startDate_div").datepicker('updateDates');
 		
 	}
-
+	
+	/* ********************************************************
+	 * timepicker setting
+	 ******************************************************** */
 	function fn_timePickerSetting() {
 		$('#timepicker').datetimepicker({
 			// format: 'LT'
-			format: 'HH:mm'
+			format: 'HH:mm',
+			defaultDate : new Date()
 		});
 		$('#repTimePicker').datetimepicker({
 			format: 'HH:mm'
@@ -94,36 +98,77 @@
 
 	}
 
+	/* ********************************************************
+	 * schedule registration
+	 ******************************************************** */
 	function fn_scheduleReg() {
 		var dayPick = new Array();
-		console.log("///// backup schedule Reg function called!! /////");
-		console.log("Start Date : " + $("#startDate").val());
-		console.log("Start Time : " +$("#startTime").val());
-		console.log("####timepicker : " +$("#timepicker").val());
-		console.log("repeat value : " + $("#repeat").prop("checked"));
-		console.log("Repeat End Time : " +$("#repEndTime").val());
-		console.log("///////////////////////////////////////");
-		
-		dayPick.push($("#sun").prop("checked"));
-		dayPick.push($("#mon").prop("checked"));
-		dayPick.push($("#tue").prop("checked"));
-		dayPick.push($("#wed").prop("checked"));
-		dayPick.push($("#thu").prop("checked"));
-		dayPick.push($("#fri").prop("checked"));
-		dayPick.push($("#sat").prop("checked"));
-		
-		$("#startDateSch").val($("#startDate").val());
-
-		fn_scheduleInsert(
-				dayPick,
-				$("#startTime").val(),
-				$("#repeat").prop("checked"),
-				$("#repEndTime").val(),
-				$("#everyTime").val(),
-				$("#repeatTime").val()
-		)
-		$("#pop_layer_popup_backupSchedule").modal("hide");
-		
+		 if(fn_validationSchReg()){
+			dayPick.push($("#sun").prop("checked"));
+			dayPick.push($("#mon").prop("checked"));
+			dayPick.push($("#tue").prop("checked"));
+			dayPick.push($("#wed").prop("checked"));
+			dayPick.push($("#thu").prop("checked"));
+			dayPick.push($("#fri").prop("checked"));
+			dayPick.push($("#sat").prop("checked"));
+			$("#startDateSch").val($("#startDate").val());
+			fn_scheduleInsert(
+					dayPick,
+					$("#startTime").val(),
+					$("#repeat").prop("checked"),
+					$("#repEndTime").val(),
+					$("#everyTime").val(),
+					$("#repeatTime").val()
+		 )
+			$("#pop_layer_popup_backupSchedule").modal("hide");
+		} 
+	}
+	
+	/* ********************************************************
+	 * validation check
+	 ******************************************************** */
+	 // schedule registration validation
+	 function fn_validationSchReg(){
+		if(fn_valChkSchTime()){
+			return false;
+		}else if(fn_valChkSchDay()){
+			return false;
+		}
+		return true;
+	 }
+	 // time check
+	 function fn_valChkSchTime(){
+		if($("#repeat").prop("checked")){
+			var timeChk = $("#startTime").val()>$("#repEndTime").val();
+			if(!$("#repEndTime").val()){
+				var errStr = "End Time 값을 입력해주세요";
+				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
+				return true;
+			}else if(timeChk){
+				var errStr = "End Time은 Start Time 보다 늦어야합니다";
+				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
+				return true;
+			}
+		}
+		return false;
+	 }
+	
+	function fn_valChkSchDay(){
+		if(
+			$("#sun").is(":checked") ||
+			$("#mon").is(":checked") ||
+			$("#tue").is(":checked") ||
+			$("#wed").is(":checked") ||
+			$("#thu").is(":checked") ||
+			$("#fri").is(":checked") ||
+			$("#sat").is(":checked")
+		){
+			return false;
+		}else{
+			var errStr = "하나 이상의 요일을 선택해주세요";
+			showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
+			return true;
+		}
 	}
 
 	/* ********************************************************
@@ -176,7 +221,6 @@
 			return false;
 		}
 	}
-
 	/* ********************************************************
 	 * repeat select function
 	 ******************************************************** */
@@ -191,6 +235,7 @@
 			// $("#repeatTime").val("");
 			$("#repTimeAlrtM").hide();
 			$("#repTimeAlrtH").hide();
+		
 		}
 	}
 
@@ -213,7 +258,6 @@
 
 	// repeat time number check
 	function fn_repTimeVal() {
-		console.log("fn_repTime validation");
 		var min = Number($("#everyTime").prop("min"));
 		var max = Number($("#everyTime").prop("max"));
 		var errStr = null;
@@ -390,9 +434,7 @@
 																<i class="input-helper"></i>
 															</label>
 														</div>
-														
 													</div>
-																
 												</div>
 											</fieldset>
 										</form>		
@@ -401,7 +443,8 @@
 							</div>
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
-									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value="<spring:message code='common.registory' />" onclick="fn_scheduleReg()"/>
+									<%-- <input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value="<spring:message code='common.registory' />" onclick="fn_scheduleReg()"/> --%>
+									<button type="button" class="btn btn-primary" onclick="fn_scheduleReg()"><spring:message code="common.registory" /></button>
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
 								</div>
 							</div>

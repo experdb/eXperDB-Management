@@ -1,6 +1,6 @@
 package com.experdb.management.backup.node.service;
 
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.*;
 
@@ -25,5 +25,7 @@ public interface ExperdbBackupNodeService {
 	JSONObject nodeUpdate(HttpServletRequest request);
 
 	JSONObject nodeDelete(HttpServletRequest request) throws Exception;
+
+	void scheduleInsert(HttpServletRequest request, Map<Object, String> param);
 
 }

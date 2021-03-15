@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.experdb.management.backup.node.service.*;
 import com.experdb.management.backup.service.*;
@@ -93,6 +92,13 @@ public class ExperdbBackupNodeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+	@RequestMapping(value="/experdb/backupScheduleReg.do")
+	public @ResponseBody JSONObject scheduleInsert(HttpServletRequest request,@RequestParam Map<Object, String> param){
+		JSONObject result = new JSONObject();
+		experdbBackupNodeService.scheduleInsert(request, param);
 		return result;
 	}
 

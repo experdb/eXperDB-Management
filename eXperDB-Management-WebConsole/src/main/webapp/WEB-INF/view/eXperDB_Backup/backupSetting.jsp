@@ -325,32 +325,22 @@ function fn_nodeRegPopup() {
 		$("#pop_layer_popup_backupSchedule").modal("show");
 	}
 	
+	// schedule Insert per day
 	function fn_scheduleInsert(dayPick, startTime, repCheck, repEndTime, repTime, repTimeUnit) {
 		var schData = new Object();
-		console.log("schedule Insert!!!");
-		console.log(dayPick);
-		console.log(startTime);
-		console.log(repCheck);
-		console.log(repEndTime);
-		console.log(repTime);
-		console.log(repTimeUnit);
-
-		console.log("//////11////////");
+		
 		schData.st = startTime;
 		schData.rc = repCheck;
-		console.log("//////22////////");
 		if(repCheck){
-			console.log("true가 나왔다");
 			schData.rt = repTime;
 			schData.ret = repEndTime;
 			schData.rtu = repTimeUnit;
 			if(repTimeUnit == 0){
-				schData.repeat = "<b>" + startTime + "</b> <br><span class='text-success'>R </span>"+repEndTime+"/" + repTime +"m";
+				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"분 간격";
 			}else{
-				schData.repeat = "<b>" + startTime + "</b> <br><span class='text-success'>R </span>"+repEndTime+"/" + repTime +"h";
+				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"시간 간격";
 			}
 		}else{
-			console.log("false가 나왔다");
 			schData.rt = "";
 			schData.ret = "";
 			schData.rtu = "";
@@ -359,7 +349,9 @@ function fn_nodeRegPopup() {
 
 		for(var i =0; i<7; i++){
 			if(dayPick[i] == true){
+				console.log("schData : " + JSON.stringify(schData));
 				schWeek[i].push(schData);
+				console.log("schWeek insert print : " + JSON.stringify(schWeek[i]));
 			}
 			schWeek[i].sort(compareTime);
 		}
@@ -367,6 +359,7 @@ function fn_nodeRegPopup() {
 		fn_drawScheduleList();
 	}
 	
+	// schedule sort by startTime
 	function compareTime(a, b){
         if(a.st < b.st){
                 return -1;
@@ -400,15 +393,56 @@ function fn_nodeRegPopup() {
 
 
 	function fn_scheduleDel(){
-		console.log("schedule del");
-		var a = scheduleList.cell('.selected').data();
-		var b = scheduleList.cell('.selected').index().row;
-		var c = scheduleList.cell('.selected').index().column;
-		console.log("나와랏 : " + a);
-		console.log("나와랏 : " + b);
-		console.log("나와랏 : " + c);
+		var rowIndex = scheduleList.cell('.selected').index().row;
+		var dayIndex = scheduleList.cell('.selected').index().column;
+		schWeek[dayIndex].splice(rowIndex, 1);
+		fn_drawScheduleList();
 	}
 	
+/* ********************************************************
+ * apply
+ ******************************************************** */
+	
+	function fn_apply() {
+		console.log("fn_apply called!!");
+		console.log("scheWeek : " + JSON.stringify(schWeek));
+		$.ajax({
+			url : "/experdb/backupScheduleReg.do",
+			type : "post",
+			dataType : "json",
+			traditional : true,
+			data : {
+				mon : JSON.stringify(schMon),
+				tue : JSON.stringify(schTue),
+				wed : JSON.stringify(schWed),
+				thu : JSON.stringify(schThu),
+				fri : JSON.stringify(schFri),
+				sat : JSON.stringify(schSat),
+				sun : JSON.stringify(schSun),
+				startDate : $("#startDateSch").val(),
+				storageType : $("#bckStorageTypeVal").val(),
+				storage : $("#bckStorage").val(),
+				compress : $("#bckCompressVal").val(),
+				dateType : $("#bckSetDateTypeVal").val(),
+				date : $("#bckSetDateVal").val(),
+				setNum : $("#bckSetNum").val()
+			}
+		})
+		.done (function(result){			
+			showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+			// 모니터링 화면으로 이동 ----->
+		})
+		.fail (function(xhr, status, error){
+			 if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if (xhr.status == 403){
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		 })
+		
+	}
 	
 
 </script>
@@ -434,7 +468,7 @@ table.dataTable.ccc thead th{
 	<input type="hidden" name="bckStorageTypeVal"  id="bckStorageTypeVal">
 	<input type="hidden" name="bckStorageVal"  id="bckStorageVal" >
 	<input type="hidden" name="bckCompressVal"  id="bckCompressVal" >
-	<input type="hidden" name="bckSetNumVal"  id="bckSetNumVal" >
+	<input type="hidden" name="bckSetDateTypeVal"  id="bckSetNumVal" >
 	<input type="hidden" name="bckSetDateVal" id="bckSetDateVal">
 </form>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -485,7 +519,7 @@ table.dataTable.ccc thead th{
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">
 					<div id="wrt_button" style="float: right;">
-						<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_runNow()">
+						<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
 							<i class="fa fa-check btn-icon-prepend "></i>적용
 						</button>
 						
@@ -612,10 +646,10 @@ table.dataTable.ccc thead th{
 										백업 스토리지
 									</div>
 									<div class="col-2" style="padding-left: 0px;">
-										<input type="text" id="bckStorageType" name = "bckStorageType" class="form-control form-control-sm"  style="height: 40px;" readonly/>
+										<input type="text" id="bckStorageType" name = "bckStorageType" class="form-control form-control-sm"  style="height: 40px; background-color:#ffffffdd;" readonly/>
 									</div>
 									<div class="col-4" style="padding-left: 0px;">
-										<input type="text" id="bckStorage" name = "bckStorage" class="form-control form-control-sm" style="height: 40px;" readonly/>
+										<input type="text" id="bckStorage" name = "bckStorage" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
 									</div>
 								</div>
 								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
@@ -624,7 +658,7 @@ table.dataTable.ccc thead th{
 										압축
 									</div>
 									<div class="col-4" style="padding-left: 0px;">
-										<input type="text" id="bckCompress" name="bckCompress" class="form-control form-control-sm" style="height: 40px;" readonly/>
+										<input type="text" id="bckCompress" name="bckCompress" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
 									</div>
 								</div>		
 								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
@@ -633,20 +667,19 @@ table.dataTable.ccc thead th{
 										Full 백업 수행일
 									</div>
 									<div class="col-sm-2_5" style="margin-left: 0px;padding-left: 0px;">
-										<input type="text" style="width:150px; height:40px; background-color:rgba(255, 255, 255, 0.856);" class="form-control form-control-sm" name="bckSetDate" id="bckSetDate" readonly/>
+										<input type="text" style="width:150px; height:40px; background-color:#ffffffdd;" class="form-control form-control-sm" name="bckSetDate" id="bckSetDate" readonly/>
 									</div>
 									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										Full 백업 보관 셋
 									</div>
 									<div class="col-sm-2_5" style="margin-left: 0px">
-										<input type="number" min="1" max="10000" style="width:150px; height:40px;" class="form-control form-control-sm" name="bckSetNum" id="bckSetNum" readonly/>
+										<input type="number" min="1" max="10000" style="width:150px; height:40px; background-color:#ffffffdd;" class="form-control form-control-sm" name="bckSetNum" id="bckSetNum" readonly/>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
