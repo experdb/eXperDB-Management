@@ -12,22 +12,22 @@
 	//cancel
 	function fnc_confirmCancel() {
 		$('#pop_confirm_multi_md').modal('hide');
-		if ($('#con_multi_gbn').val() == "con_start" || $('#con_multi_gbn').val() == "con_end" 
-			|| $('#con_multi_gbn').val() == "target_con_start" || $('#con_multi_gbn').val() == "target_con_end"
-			|| $('#con_multi_gbn').val() == "ins_menu" || $('#con_multi_gbn').val() == "ins_menu") {
-			fnc_confirmCancelRst ($('#con_multi_gbn').val());
+		
+		//scale : use_start, use_end
+		var fncArry = ["con_start","con_end","target_con_start","target_con_end","ins_menu","use_start","use_end"];
+		for(var i =0; i<fncArry.length; i++){
+			if(fncArry[i] == $('#con_multi_gbn').val()){
+				fnc_confirmCancelRst ($('#con_multi_gbn').val());
+			}
 		}
+		
 		//스케줄 실행/중지 활성화 버튼
-		if($('#con_multi_gbn').val()=="start" || $('#con_multi_gbn').val()=="stop"){
-			fn_confirmCancelRst($('#con_multi_gbn').val());
+		var fnArry = ["start","stop"];
+		for(var i =0; i<fnArry.length; i++){
+			if(fnArry[i] == $('#con_multi_gbn').val()){
+				fn_confirmCancelRst ($('#con_multi_gbn').val());
+			}
 		}
-		
-		//scale
-		if ($('#con_multi_gbn').val() == "use_start" || $('#con_multi_gbn').val() == "use_end") {
-			fnc_confirmCancelRst ($('#con_multi_gbn').val());
-		}		
-//			$('#pop_confirm_multi_md').modal('hide');
-		
 	}
 	
 	//cancel

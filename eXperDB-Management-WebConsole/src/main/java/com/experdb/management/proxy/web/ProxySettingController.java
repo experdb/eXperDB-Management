@@ -1,41 +1,43 @@
 package com.experdb.management.proxy.web;
 
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.experdb.management.proxy.cmmn.CommonUtil;
+import com.experdb.management.proxy.service.ProxyAgentVO;
+import com.experdb.management.proxy.service.ProxyGlobalVO;
+import com.experdb.management.proxy.service.ProxyListenerVO;
 import com.experdb.management.proxy.service.ProxyServerVO;
 import com.experdb.management.proxy.service.ProxySettingService;
+import com.experdb.management.proxy.service.ProxyVipConfigVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
-import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityVO;
-import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
-import com.k4m.dx.tcontrol.login.service.UserVO;
+
 
 /**
- *메뉴권한관리 컨트롤러 클래스를 정의한다.
+ *Proxy 설정관리
  *
- * @author 변승우
+ * @author 김민정
  * @see
  * 
  *      <pre>
@@ -43,7 +45,7 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.08.07   변승우 최초 생성
+ *  2021.03.03   김민정 최초 생성
  *      </pre>
  */
 
@@ -61,6 +63,11 @@ public class ProxySettingController {
 	
 	private List<Map<String, Object>> menuAut;
 	
+	/**
+	 * Mybatis Transaction 
+	 */
+	@Autowired
+	private PlatformTransactionManager txManager;
 	/**
 	 * VIP 설정 관리 화면 
 	 * 
@@ -240,7 +247,7 @@ public class ProxySettingController {
 	}
 	
 	/**
-	 * 사용자 리스트를 조회한다.
+	 * Proxy 서버 리스트를 조회한다.
 	 * 
 	 * @param request
 	 * @return resultSet
@@ -248,7 +255,6 @@ public class ProxySettingController {
 	 */
 	@RequestMapping(value = "/selectPoxyServerTable.do")
 	public @ResponseBody List<ProxyServerVO> selectPoxyServerTable(HttpServletRequest request, HttpServletResponse response) {
-		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
@@ -262,15 +268,231 @@ public class ProxySettingController {
 					return resultSet;
 				}else{
 					String search = request.getParameter("search");
-					param.put("search", "%"+search+"%");
+					String svrUseYn = request.getParameter("svr_use_yn");
+					String prySvrId = request.getParameter("pry_svr_id");
 					
-					resultSet = proxySettingService.selectProxyServerList(param);	
+					param.put("search", search);
+					param.put("svr_use_yn", svrUseYn);
+					param.put("pry_svr_id", prySvrId);
+					
+					resultSet = proxySettingService.selectProxyServerList(param);
+					
 				}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return resultSet;
 
+	}
+	
+	/**
+	 * 프록시 서버 정보 
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getPoxyServerConf.do")
+	public @ResponseBody JSONObject getPoxyServerConf(HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+				
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject resultObj = null;
+		try {	
+				//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+				if(menuAut.get(0).get("read_aut_yn").equals("N")){
+					response.sendRedirect("/autError.do");
+					return resultObj;
+				}else{
+					int prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
+					param.put("pry_svr_id", prySvrId);
+										
+					resultObj = new JSONObject();
+					
+					//Global 정보
+					ProxyGlobalVO globalInfo = proxySettingService.selectProxyGlobal(param);
+					System.out.println("global_info");
+					resultObj.put("global_info", globalInfo);
+					//Proxy Listener List 정보
+					List<ProxyListenerVO> listenerList = proxySettingService.selectProxyListenerList(param);	
+					System.out.println(listenerList);
+					resultObj.put("listener_list", listenerList);
+					//VIP List 정보
+					List<ProxyVipConfigVO> vipConfigList = proxySettingService.selectProxyVipConfList(param);	
+					System.out.println(vipConfigList);
+					resultObj.put("vipconfig_list", vipConfigList);
+					
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultObj;
+
+	}
+	
+	
+	/**
+	 * 동적 select 박스 생성
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/createSelPrySvrReg.do")
+public @ResponseBody JSONObject createSelPrySvrReg(HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+				
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject resultObj = null;
+		try {	
+				//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+				if(menuAut.get(0).get("read_aut_yn").equals("N")){
+					response.sendRedirect("/autError.do");
+					return resultObj;
+				}else{
+					int prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
+					param.put("pry_svr_id", prySvrId);
+					
+					System.out.println("param :: "+param.toString());
+					
+					resultObj = new JSONObject();
+					
+					//Master Proxy 정보
+					List<Map<String, Object>> mstSvrSelList = proxySettingService.selectMasterProxyList(param);
+					resultObj.put("mstSvr_sel_list", mstSvrSelList);
+					//연결 DBMS 정보 
+					List<Map<String, Object>> dbmsSelList = proxySettingService.selectDbmsList(param);
+					resultObj.put("dbms_sel_list", dbmsSelList);
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultObj;
+
+	}
+	
+	/**
+	 * Proxy Agent Connect Test
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/prySvrConnTest.do")
+	public @ResponseBody JSONObject prySvrConnTest(HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+				
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject resultObj = null;
+		try {	
+				//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+				if(menuAut.get(0).get("read_aut_yn").equals("N")){
+					response.sendRedirect("/autError.do");
+					return resultObj;
+				}else{
+					int prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
+					param.put("pry_svr_id", prySvrId);
+					
+					resultObj = new JSONObject();
+					
+					//Proxy Agent 연결 
+					
+					//결과 
+					boolean agentConn = true;
+					if(agentConn){
+						resultObj.put("agentConn", true);
+					}else{
+						resultObj.put("agentConn", false);
+					}
+					
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultObj;
+
+	}
+	/**
+	 * Proxy 서버명이 중복되는지 확인 한 후 등록
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/prySvrReg.do")
+	public @ResponseBody Map<String, Object> proxyServerReg(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("/prySvrReg.do");
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+				
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		
+		Map<String, Object> resultObj = null;
+		TransactionStatus status = txManager.getTransaction(def);
+		try {	
+				//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+				if(menuAut.get(0).get("read_aut_yn").equals("N")){
+					response.sendRedirect("/autError.do");
+					return resultObj;
+				}else{
+					resultObj = new HashMap<String, Object>();
+					
+					HttpSession session = request.getSession();
+					LoginVO loginVo = (LoginVO) session.getAttribute("session");
+					String lst_mdfr_id = loginVo.getUsr_id();
+					
+					//서버명이 중복되는지 확인
+					Map<String, Object> param = new HashMap<String, Object>();
+					param.put("pry_svr_nm", request.getParameter("pry_svr_nm"));
+					param.put("not_pry_svr_id", Integer.parseInt(request.getParameter("pry_svr_id")));
+					
+					List<ProxyServerVO> prySvrList = proxySettingService.selectProxyServerList(param);	
+					
+					if(prySvrList.size() == 0){
+						ProxyAgentVO pryAgtVO = new ProxyAgentVO();
+						pryAgtVO.setSvr_use_yn("Y");
+						pryAgtVO.setAgt_sn(Integer.parseInt(request.getParameter("agt_sn")));
+						pryAgtVO.setLst_mdfr_id(lst_mdfr_id);
+						
+						ProxyServerVO prySvrVO = new ProxyServerVO();
+						prySvrVO.setPry_svr_id(Integer.parseInt(request.getParameter("pry_svr_id")));
+						prySvrVO.setPry_svr_nm(request.getParameter("pry_svr_nm"));
+						prySvrVO.setDay_data_del_term(Integer.parseInt(request.getParameter("day_data_del_term")));
+						prySvrVO.setMin_data_del_term(Integer.parseInt(request.getParameter("min_data_del_term")));
+						prySvrVO.setUse_yn(request.getParameter("use_yn"));
+						prySvrVO.setMaster_gbn(request.getParameter("master_gbn"));
+						prySvrVO.setDb_svr_id(Integer.parseInt(request.getParameter("db_svr_id")));
+						prySvrVO.setLst_mdfr_id(lst_mdfr_id);
+						
+						proxySettingService.updateProxyAgentInfo(pryAgtVO);
+						proxySettingService.updateProxyServerInfo(prySvrVO);
+						
+						resultObj.put("result",true);
+						resultObj.put("errMsg","작업이 완료되었습니다.");
+						txManager.commit(status);
+					}else{
+						resultObj.put("result",false);
+						resultObj.put("errMsg","서버명이 다른 서버와 중복되었습니다.");
+					}
+					
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultObj.put("result",false);
+			resultObj.put("errMsg","서버 등록 중 오류가 발생하였습니다.");
+			txManager.rollback(status);
+		}
+		return resultObj;
 	}
 	
 	/*

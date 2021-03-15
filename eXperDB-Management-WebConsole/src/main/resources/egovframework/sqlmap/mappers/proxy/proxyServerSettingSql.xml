@@ -10,307 +10,160 @@
 		* Author : 김민정
 		**/
 		SELECT 
-       		(ROW_NUMBER() OVER()) AS ROWNUM, 
-       		(ROW_NUMBER() OVER()) AS IDX,
-       		PRY_SVR_ID,
-       		IPADR,
-       		AGT_SN,
-       		PRY_SVR_NM,
-       		PRY_PTH,
-       		KAL_PTH,
-       		ROOT_PWD,
-       		USE_YN,
-       		EXE_STATUS,
-       		MASTER_GBN,
-       		MASTER_SVR_ID,
-       		DB_SVR_ID,
-       		DAY_DATA_DEL_TERM,
-       		MIN_DATA_DEL_TERM,
-       		FRST_REGR_ID,
-       		FRST_REG_DTM,
-       		LST_MDFR_ID,
-       		LST_MDF_DTM
-		FROM T_PRY_SVR_I
-		<if test="search != null and search != '' ">
-        WHERE  	IPADR  		LIKE #{search} 
-        OR 		PRY_SVR_NM 	LIKE #{search}
-        </if>
-		ORDER BY LST_MDF_DTM
-
+       			(ROW_NUMBER() OVER()) AS ROWNUM, 
+       			(ROW_NUMBER() OVER()) AS IDX,
+       			A.PRY_SVR_ID,
+       			A.IPADR,
+       			A.AGT_SN,
+       			A.PRY_SVR_NM,
+       			A.PRY_PTH,
+       			A.KAL_PTH,
+       			A.USE_YN,
+       			A.EXE_STATUS,
+       			A.KAL_EXE_STATUS,
+       			A.MASTER_GBN,
+       			A.MASTER_SVR_ID,
+       			A.DB_SVR_ID,
+       			A.DAY_DATA_DEL_TERM,
+       			A.MIN_DATA_DEL_TERM,
+       			A.FRST_REGR_ID,
+       			A.FRST_REG_DTM,
+       			A.LST_MDFR_ID,
+       			A.LST_MDF_DTM
+		FROM 	T_PRY_SVR_I A INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
+		WHERE   1 = 1
+			<if test="svr_use_yn != null and svr_use_yn != '' ">
+				AND B.SVR_USE_YN = #{svr_use_yn}
+			</if>
+			<if test="search != null and search != '' ">
+	        	AND (A.IPADR LIKE #{search}  OR	 A.PRY_SVR_NM LIKE #{search} )
+	        </if>
+	        <if test="pry_svr_nm != null and pry_svr_nm != '' ">
+	        	AND A.PRY_SVR_NM = #{pry_svr_nm}
+	        	<if test="not_pry_svr_id != null and not_pry_svr_id != '' ">
+	        		AND A.PRY_SVR_ID != #{not_pry_svr_id}
+	        	</if>
+	        </if>
+        ORDER BY A.LST_MDF_DTM DESC
 	</select>
-
-<!-- 	<insert id="insertUserManager" parameterType="userVO">
+	<select id="selectProxyGlobal" resultType="proxyGlobalVO">
         /**
-		* Query ID : insertUserManager
-		* Description : 사용자 등록
-		* Author : 김주영
+		* Query ID : selectProxyGlobal
+		* Description : proxy global info 
+		* Author : 김민정
 		**/
-        INSERT INTO T_USR_I (
-                             USR_ID
-                           , USR_NM
-                           , PWD
-                           , BLN_NM
-                           , DEPT_NM
-                           , RSP_BSN_NM
-                           , PST_NM
-                           , AUT_ID
-                           , CPN
-                           , USR_EXPR_DT
-                           , USE_YN
-                           , ENCP_USE_YN
-                           , FRST_REGR_ID
-                           , FRST_REG_DTM
-                           , LST_MDFR_ID
-                           , LST_MDF_DTM
-                             ) VALUES (
-                                        #{usr_id}
-                                      , #{usr_nm}
-                                      , #{pwd}
-                                      , #{bln_nm}
-                                      , #{dept_nm}
-                                      , #{rsp_bsn_nm}
-                                      , #{pst_nm}
-                                      , #{aut_id}
-                                      , #{cpn}
-                                      , #{usr_expr_dt}
-                                      , #{use_yn}
-                                      , #{encp_use_yn}
-                                      , #{frst_regr_id}
-                                      , clock_timestamp()
-                                      , #{lst_mdfr_id}
-                                      , clock_timestamp()
-                             )
-	</insert>
-
-	<select id="selectUserManager" resultType="userVO">
+		SELECT 	PRY_GLB_ID,
+				PRY_SVR_ID, 
+				MAX_CON_CNT, 
+				CL_CON_MAX_TM, 
+				CON_DEL_TM, 
+				SVR_CON_MAX_TM, 
+				CHK_TM, IF_NM, 
+				OBJ_IP, 
+				PEER_SERVER_IP, 
+				FRST_REGR_ID, 
+				FRST_REG_DTM, 
+				LST_MDFR_ID, 
+				LST_MDF_DTM 
+		FROM 	T_PRY_GLB_I
+		WHERE 	PRY_SVR_ID =#{pry_svr_id}
+	</select>
+	<select id="selectProxyListenerList" resultType="proxyListenerVO">
         /**
-        * Query ID : selectUserManager
-        * Description : 사용자 조회
-        * Author : 김주영
+		* Query ID : selectProxyListenerList
+		* Description : proxy Listener info List
+		* Author : 김민정
+		**/
+		SELECT 	LSN_ID, 
+				PRY_SVR_ID, 
+				LSN_NM, 
+				CON_BIND_PORT, 
+				LSN_DESC, 
+				DB_USR_ID, 
+				DB_ID, 
+				DB_NM, 
+				CON_SIM_QUERY, 
+				FIELD_VAL, 
+				FIELD_NM, 
+				FRST_REGR_ID, 
+				FRST_REG_DTM, 
+				LST_MDFR_ID, 
+				LST_MDF_DTM 
+		FROM 	T_PRY_LSN_I
+		WHERE 	PRY_SVR_ID =#{pry_svr_id}
+	</select>
+	<select id="selectProxyVipConfList" resultType="proxyVipConfigVO">
+        /**
+		* Query ID : selectProxyVipConfList
+		* Description : proxy Vip Config info List
+		* Author : 김민정
+		**/
+		SELECT 	VIP_CNG_ID, 
+				STATE_NM, 
+				PRY_SVR_ID, 
+				V_IP, 
+				V_ROT_ID, 
+				V_IF_NM, 
+				PRIORITY, 
+				CHK_TM, 
+				FRST_REGR_ID, 
+				FRST_REG_DTM, 
+				LST_MDFR_ID, 
+				LST_MDF_DTM 
+		FROM 	T_PRY_VIPCNG_I
+		WHERE 	PRY_SVR_ID =#{pry_svr_id}
+	</select> 
+	<select id="selectDbmsList" resultType="hashMap">
+	 	/**
+		* Query ID : selectDbmsList
+		* Description : 연결 DBMS 목록 가져오기
+		* Author : 김민정
+		**/
+    	SELECT 	db_svr_id,
+       			db_svr_nm
+		FROM 	T_DBSVR_I 
+		ORDER 	BY db_svr_nm
+	</select>
+	<select id="selectMasterProxyList" resultType="hashMap">
+	 	/**
+		* Query ID : selectMasterProxyList
+		* Description : Master Proxy select 항목 가져오기
+		* Author : 김민정
+		**/
+    	SELECT 	pry_svr_id,
+       			pry_svr_nm
+		FROM 	T_PRY_SVR_I
+		WHERE 	DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id})
+		AND 	PRY_SVR_ID != #{pry_svr_id}
+		ORDER 	BY pry_svr_nm
+	</select>
+	<update id="updateProxyAgentInfo" parameterType="proxyServerVO">
+        /**
+        * Query ID : updateProxyAgentInfo
+        * Description : Proxy Agent 정보 업데이트
+        * Author : 김민정
         **/
-        SELECT
-               (ROW_NUMBER() OVER()) AS ROWNUM
-             , (ROW_NUMBER() OVER()) AS IDX
-             , A.USR_ID
-             , A.USR_NM
-             , A.PWD
-             , A.BLN_NM
-             , A.DEPT_NM
-             , A.RSP_BSN_NM
-             , A.PST_NM
-             , A.AUT_ID
-             , A.CPN
-             , A.USR_EXPR_DT
-             , A.USE_YN
-             , A.ENCP_USE_YN
-             , A.FRST_REG_DTM
-             , A.LST_MDF_DTM
-          FROM (
-               SELECT
-                      USR_ID
-                    , USR_NM
-                    , PWD
-                    , BLN_NM
-                    , DEPT_NM
-                    , RSP_BSN_NM
-                    , PST_NM
-                    , AUT_ID
-                    , CPN
-                    , TO_CHAR(USR_EXPR_DT::TIMESTAMP,'YYYY-MM-DD') AS USR_EXPR_DT
-                    , USE_YN
-                    , ENCP_USE_YN
-                    , FRST_REG_DTM
-                    , LST_MDF_DTM
-                 FROM T_USR_I
-                WHERE 1=1
-                  AND USR_ID !='k4m'
-
-                  <if test="search != null and search != '' ">
-                      AND ${type} LIKE #{search}
-                  </if>
-
-                  <if test="use_yn != null and use_yn != '' ">
-                      AND use_yn LIKE #{use_yn}
-                  </if>
-                  <if test="encp_use_yn != null and encp_use_yn != '' ">
-                      AND encp_use_yn LIKE #{encp_use_yn}
-                  </if>
-                 ORDER BY LST_MDF_DTM DESC
-         )A
-	</select>
-
-	<select id="userManagerIdCheck" resultType="int">
-		/**
-		* Query ID : userManagerIdCheck
-		* Description : 아이디 중복 체크
-		* Author : 김주영
-		**/
-        SELECT COUNT(*)
-          FROM T_USR_I
-         WHERE usr_id = #{usr_id}
-	</select>
-
-	<delete id="deleteUserManager" parameterType="string">
-		/**
-		* Query ID : deleteUserManager
-		* Description : 사용자 삭제
-		* Author : 김주영
-		**/
-        DELETE FROM T_USR_I
-         WHERE usr_id=#{usr_id}
-	</delete>
-
-	<select id="selectDetailUserManager" resultType="userVO">
-		/**
-		* Query ID : selectDetailUserManager
-		* Description : 사용자 상세정보 조회
-		* Author : 김주영
-		**/
-        SELECT
-               USR_ID
-             , USR_NM
-             , PWD
-             , BLN_NM
-             , DEPT_NM
-             , RSP_BSN_NM
-             , PST_NM
-             , AUT_ID
-             , CPN
-             , TO_CHAR(USR_EXPR_DT::TIMESTAMP,'YYYY-MM-DD') AS USR_EXPR_DT
-             , USE_YN
-             , ENCP_USE_YN
-             , FRST_REG_DTM
-             , LST_MDF_DTM
-          FROM T_USR_I
-         WHERE usr_id = #{usr_id}
-	</select>
-	
-	
-	<update id="updateUserManager" parameterType="userVO">
-		/**
-		* Query ID : updateUserManager
-		* Description : 사용자 정보 업데이트
-		* Author : 김주영
-		**/
-        UPDATE T_USR_I
-           SET USR_NM=#{usr_nm}
-           
-           <if test="pwd != null and pwd != '' ">
-             , PWD=#{pwd}
-           </if>
-
-             , BLN_NM=#{bln_nm}
-             , DEPT_NM=#{dept_nm}
-             
-             , RSP_BSN_NM=#{rsp_bsn_nm}
-             , PST_NM=#{pst_nm}
-             , AUT_ID=#{aut_id}
-             , CPN=#{cpn}
-             , USR_EXPR_DT=#{usr_expr_dt}
-             , USE_YN=#{use_yn}
-             , ENCP_USE_YN=#{encp_use_yn}
-             , LST_MDFR_ID=#{lst_mdfr_id}
-             , LST_MDF_DTM= clock_timestamp()
-		 WHERE USR_ID = #{usr_id}
+        UPDATE T_PRY_AGT_I
+           SET SVR_USE_YN = #{svr_use_yn}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE AGT_SN = #{agt_sn}::numeric
 	</update>
-
-    <select id="selectProfieView" parameterType="HashMap" resultType="HashMap">
+	<update id="updateProxyServerInfo" parameterType="proxyServerVO">
         /**
-        * Query ID : selectProfieView
-        * Description : 사용자 정보 조회
-        * Author : 
+        * Query ID : updateProxyServerInfo"
+        * Description : Proxy 서버 정보 업데이트
+        * Author : 김민정
         **/
-        SELECT 
-               A.USR_ID AS USR_ID
-             , A.USR_NM AS USR_NM
-             , A.PWD AS PWD
-             , A.BLN_NM AS BLN_NM
-             , A.DEPT_NM AS DEPT_NM
-             , A.RSP_BSN_NM AS RSP_BSN_NM
-             , A.PST_NM AS PST_NM
-             , A.AUT_ID AS AUT_ID
-             , A.CPN AS CPN
-             , TO_CHAR(A.USR_EXPR_DT::TIMESTAMP,'YYYY-MM-DD') AS USR_EXPR_DT
-             , A.USE_YN AS USE_YN
-             , A.FRST_REGR_ID AS FRST_REGR_ID
-             , TO_CHAR(A.FRST_REG_DTM::TIMESTAMP,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-             , A.LST_MDFR_ID AS LST_MDFR_ID
-             , TO_CHAR(A.LST_MDF_DTM::TIMESTAMP,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-             , TO_CHAR(B.LGI_DTM::TIMESTAMP,'YYYY-MM-DD HH24:MI:SS') AS LGI_DTM
-             , A.ENCP_USE_YN AS ENCP_USE_YN
-          FROM T_USR_I A
-               LEFT JOIN (SELECT LGI_DTM, USR_ID FROM T_USRLGI_H WHERE LGI_CRRNO = (SELECT MAX(LGI_CRRNO) AS LGI_CRRNO FROM T_USRLGI_H WHERE USR_ID = #{usr_id})) B
-                    ON A.USR_ID = B.USR_ID
-         WHERE 1=1
-           AND A.USR_ID = #{usr_id}
-    </select>
-    
-  
-	<insert id="insertUserManagerHd" parameterType="userVO">
-        /**
-		* Query ID : insertUserManagerHd
-		* Description : 등록
-		* Author : 김주영
-		**/
-        INSERT INTO T_TRANS_ENCRYPT (
-                             TRANS_ID
-                           , TRANS_CHK_KEY
-                           , FRST_REGR_ID
-                           , FRST_REG_DTM
-                           , LST_MDFR_ID
-                           , LST_MDF_DTM
-                             ) VALUES (
-                                        #{usr_id}
-                                      , #{pwd_edc}
-                                      , #{frst_regr_id}
-                                      , clock_timestamp()
-                                      , #{lst_mdfr_id}
-                                      , clock_timestamp()
-                             )
-	</insert>
-	
-	<insert id="insertTransUser"  parameterType="userVO">
-        /**
-        * Query ID : insertTransUser
-        * Description :
-        * Author : 
-        **/
-        WITH UPSERT AS(
-               UPDATE T_TRANS_ENCRYPT
-                  SET SALT_KEY = #{salt_value},
-                      TRANS_CHK_KEY = #{pwd_edc},
-                      LST_MDFR_ID = #{lst_mdfr_id},
-                      LST_MDF_DTM = clock_timestamp()
-                WHERE TRANS_ID  = #{usr_id}
-                RETURNING *
-                      )
-        INSERT
-              INTO T_TRANS_ENCRYPT (
-                        TRANS_ID,
-                        TRANS_CHK_KEY,
-                        SALT_KEY,
-                        FRST_REGR_ID,
-                        FRST_REG_DTM,
-                        LST_MDFR_ID,
-                        LST_MDF_DTM
-                       )
-                       SELECT #{usr_id},
-                              #{pwd_edc},
-                              #{salt_value},
-                              #{frst_regr_id},
-                              clock_timestamp(),
-                              #{lst_mdfr_id},
-                              clock_timestamp()
-         WHERE NOT EXISTS ( SELECT * FROM UPSERT )
-	</insert>
-	
-	<delete id="deleteUserManagerHd" parameterType="string">
-		/**
-		* Query ID : deleteUserManagerHd
-		* Description : 사용자 삭제(백업)
-		* Author : 김주영
-		**/
-        DELETE FROM T_TRANS_ENCRYPT
-         WHERE trans_id=#{usr_id}
-	</delete> -->
+        UPDATE T_PRY_SVR_I
+           SET PRY_SVR_NM = #{pry_svr_nm}
+             , DAY_DATA_DEL_TERM = #{day_data_del_term}::numeric
+             , MIN_DATA_DEL_TERM = #{min_data_del_term}::numeric
+             , DB_SVR_ID = #{db_svr_id}::numeric
+             , MASTER_GBN = #{master_gbn}
+             , USE_YN = #{use_yn}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
+	</update>
 </mapper>

@@ -4,15 +4,17 @@ import java.util.List;
 
 public class ProxyServerVO {
 	
+	private String rownum;
+	
 	private int pry_svr_id;
 	private String ipadr;
 	private int agt_sn;
 	private String pry_svr_nm;
-	private String pry_pth;
+	private String pry_pth; 
 	private String kal_pth;
-	private String root_pwd;
 	private String use_yn;
 	private String exe_status;
+	private String kal_exe_status;
 	private String master_gbn;
 	private int master_svr_id;
 	private int db_svr_id; 
@@ -22,7 +24,7 @@ public class ProxyServerVO {
 	private String frst_reg_dtm;
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
-	
+		
 	private ProxyGlobalVO pry_global;
 	private List<ProxyVipConfigVO> pry_conf_list; 
 	private List<ProxyListenerVO> pry_lsn_list;
@@ -63,12 +65,7 @@ public class ProxyServerVO {
 	public void setKal_pth(String kal_pth) {
 		this.kal_pth = kal_pth;
 	}
-	public String getRoot_pwd() {
-		return root_pwd;
-	}
-	public void setRoot_pwd(String root_pwd) {
-		this.root_pwd = root_pwd;
-	}
+
 	public String getUse_yn() {
 		return use_yn;
 	}
@@ -152,6 +149,18 @@ public class ProxyServerVO {
 	}
 	public void setPry_lsn_list(List<ProxyListenerVO> pry_lsn_list) {
 		this.pry_lsn_list = pry_lsn_list;
+	}
+	public String getKal_exe_status() {
+		return kal_exe_status;
+	}
+	public void setKal_exe_status(String kal_exe_status) {
+		this.kal_exe_status = kal_exe_status;
+	}
+	public String getRownum() {
+		return rownum;
+	}
+	public void setRownum(String rownum) {
+		this.rownum = rownum;
 	}
 	
 	

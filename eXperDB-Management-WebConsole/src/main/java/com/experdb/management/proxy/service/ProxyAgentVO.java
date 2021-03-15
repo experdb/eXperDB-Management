@@ -5,7 +5,6 @@ public class ProxyAgentVO {
 	private int agt_sn; 
 	private String ipadr; 
 	private String domain_nm; 
-	private String root_pwd; 
 	private int socket_port; 
 	private String agt_cndt_cd; 
 	private String svr_use_yn; 
@@ -34,12 +33,6 @@ public class ProxyAgentVO {
 	}
 	public void setDomain_nm(String domain_nm) {
 		this.domain_nm = domain_nm;
-	}
-	public String getRoot_pwd() {
-		return root_pwd;
-	}
-	public void setRoot_pwd(String root_pwd) {
-		this.root_pwd = root_pwd;
 	}
 	public int getSocket_port() {
 		return socket_port;

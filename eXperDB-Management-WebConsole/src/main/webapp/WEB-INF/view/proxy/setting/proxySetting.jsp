@@ -19,15 +19,15 @@
 	*/
 %>
 <script>
-var confirm_title = ""; 
 
-	var proxyServerTable = null;
-	var vipInstTable = null;
-	var proxyListenTable = null;
-	var dbServerTable = null;
-	var svr_server = null;
-	var db = null;
-
+	var proxyServerTable = null; //Proxy Server Table
+	var vipInstTable = null; //VIP Instance Table
+	var proxyListenTable = null; //Proxy Listener Table
+	
+	var selPrySvrId = null; //ProxyServerTable에서 선택된 항목의 pry_svr_id
+	
+	var unregSvrInfo  = null;//미등록된 서버 정보 list
+	
 	function fn_init() {
 		proxyServerTable = $('#proxyServer').DataTable({
 			scrollY : "330px",
@@ -39,7 +39,7 @@ var confirm_title = "";
 			deferRender : true,
 			bSort: false,
 			columns : [ 
-			            {data : "rownum", className : "dt-center", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}},
+			            {data : "rownum", className : "dt-center", defaultContent : "", orderable : false,},
 						{data : "exe_status", 
 			            	render : function(data, type, full, meta) {
 								var html = "";
@@ -92,14 +92,9 @@ var confirm_title = "";
 			            {data : "lst_mdf_dtm", defaultContent : "", visible: false},//최종 수정일
 			            {data : "agt_sn", defaultContent : "", visible: false},//agent 일련번호
 			            {data : "pry_svr_id", defaultContent : "", visible: false}//서버 ID
-			            ],
-			'select': {'style': 'single'}
+			            ]
 		});
-        /* {data : "cl_con_max_tm", defaultContent : "", visible: false},//클라이언트 연결 최대 시간
-        {data : "con_del_tm", defaultContent : "", visible: false},//연결 지연 시간
-        {data : "svr_con_max_tm", defaultContent : "", visible: false},//서버 연결 최대 시간
-        {data : "chk_tm", defaultContent : "", visible: false},//체크 시간 */
-		proxyServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '40px');//checkbox
+        proxyServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '40px');//checkbox
 		proxyServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '60px');//활성화
 		proxyServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px');//서버명
 		proxyServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');//ip
@@ -115,8 +110,20 @@ var confirm_title = "";
 		proxyServerTable.tables().header().to$().find('th:eq(13)').css('min-width', '0px');//agent 일련번호
 		proxyServerTable.tables().header().to$().find('th:eq(14)').css('min-width', '0px');//서버 ID
 			
-		$('#proxyServerTable tbody').on('click','tr',function() {
-			//정보 불러오기
+		$('#proxyServer tbody').on('click','tr',function() {
+			$("input[type=checkbox]").prop("checked",false);
+	        if ( !$(this).hasClass('selected') ){	        	
+	        	 proxyServerTable.$('tr.selected').removeClass('selected');
+	            $(this).addClass('selected');	            
+	        } 
+			var selRowLen = proxyServerTable.rows('.selected').data().length;
+			
+			if(selRowLen != 0){
+				//정보 불러오기
+				var selRow = proxyServerTable.row('.selected').data();
+				selPrySvrId = selRow.pry_svr_id;
+				fn_server_conf_info();	
+			}
 		});
 		
 		
@@ -207,15 +214,10 @@ var confirm_title = "";
 			if(proxyServerTable != null){
 				proxyServerTable.columns.adjust().draw();
 			}
-			if(vipInstTable != null){
-				vipInstTable.columns.adjust().draw();
-			}
-			if(proxyListenTable != null){
-				proxyListenTable.columns.adjust().draw();
-			}
 		},500);  
 	}
-	 /* ********************************************************
+		
+	/* ********************************************************
      * TAB 선택 이벤트 
     ******************************************************** */		
 	function selectTab(tab){	
@@ -237,316 +239,21 @@ var confirm_title = "";
 			},10);  
 		}
 	}
-	
-	 /* ********************************************************
-     * 화면 초기 셋팅 
-    ******************************************************** */		
-	$(window.document).ready(function() {
-		fn_init();
-		
-		$.ajax({
-			url : "/selectPoxyServerTable.do",
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				proxyServerTable.rows({selected: true}).deselect();
-				proxyServerTable.clear().draw();
-				
-				if (result != null) {
-					proxyServerTable.rows.add(result).draw();
-				}
-			}
-		}); 
-		/* 
-		$.ajax({
-			url : "/selectDBSrvAutInfo.do",
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					top.location.href = "/";
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {	
-				svr_server = result;
-				fn_dbAutInfo();
-			}
-		}); */
-		
-		/* 
-		function fn_buttonAut(){
-			var db_button = document.getElementById("db_button"); 
-			
-			if("${wrt_aut_yn}" == "Y"){
-				db_button.style.display = '';
-			}else{
-				db_button.style.display = 'none';
-			}
-		}
-	 */
-
-		function fn_dbAutInfo(){
-			$.ajax({
-				url : "/selectDBAutInfo.do",
-				dataType : "json",
-				type : "post",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						top.location.href = "/";
-					} else if(xhr.status == 403) {
-						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						top.location.href = "/";
-					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-					}
-				},
-				success : function(result) {
-					db=result;
-					fn_dbAut(svr_server, result);
-				}
-			});
-		}
-
-		
- 		function fn_dbAut(svr_server, result){
-		 	var html2 = "";
-		 	html2+='<table class="table">';
-			html2+='<colgroup>';
-			html2+=	'<col style="width:70%" />';
-			html2+=	'<col style="width:30%" />';
-			html2+='</colgroup>';
-			html2+='<thead>';
-			html2+=	'<tr class="bg-info text-white">';
-			html2+=		'<th scope="col"><spring:message code="auth_management.db_auth" /> </th>';
-			html2+=		'<th scope="col"><spring:message code="auth_management.auth" /></th>';
-			html2+=	'</tr>';
-			html2+='</thead>';
- 			$(svr_server).each(function (index, item) {
-				var array = new Array();
-				for(var i = 0; i<result.length; i++){
-					if(item.db_svr_nm == result[i].db_svr_nm){
-						array.push(result[i].db_id);
-					}
-				}
-				
-				html2+='<tbody>';
-				html2+='<tr class="bg-primary text-white">';
-				html2+='		<td>'+item.db_svr_nm+'</td>';
-				html2+='		<td><div class="inp_chk"><input type="checkbox" id="'+item.db_svr_id+'" onClick="fn_allCheck(\''+item.db_svr_id+'\', \''+ array+'\');">';
-				html2+='		<label for="'+item.db_svr_id+'"></lavel></div></td>';
-				html2+='	</tr>';
-				
-				for(var i = 0; i<result.length; i++){
-					if(item.db_svr_nm == result[i].db_svr_nm){
-						html2+='	<tr>';
-						html2+='		<td class="pl-4">'+result[i].db_nm+'</td>';
-						html2+='		<td>';
-						html2+='			<div class="inp_chk">';
-						html2+='				<input type="checkbox" id="'+result[i].db_svr_id+'_'+result[i].db_id+'" value="'+result[i].db_svr_id+'_'+result[i].db_id+'" name="aut_yn" onClick="fn_userCheck();" />';
-						html2+='       		<label for="'+result[i].db_svr_id+'_'+result[i].db_id+'"></label>';
-						html2+='			</div>';
-						html2+='		</td>';
-						html2+='	</tr>';
-						html2+='<tr>';
-					}
-					html2+='<input type="hidden"  name="db_svr_id"  value="'+result[i].db_svr_id+'">';
-					html2+='<input type="hidden"  name="db_id"  value="'+result[i].db_id+'">';
-				}
-				html2+='</tbody>';
-	
-			})		
-			html2+='</table>';
-			$( "#dbAutList" ).append(html2);
-		}	
-	});
-
-	function fn_userCheck(){
-		var datas = proxyServerTable.row('.selected').length;
-		 if(datas != 1){
-			 showSwalIcon('<spring:message code="message.msg165"/>', '<spring:message code="common.close" />', '', 'warning');
-			 $("input[type=checkbox]").prop("checked",false);
-			 return false;
-		 }
-	}
-	
-	function fn_allCheck(db_svr_id,db_id){
-		fn_userCheck();
-		var strArray = db_id.split(',');
-		if ($("#"+db_svr_id).prop("checked")) {
-			for(var i=0; i<strArray.length; i++){
-				document.getElementById(db_svr_id+'_'+strArray[i]).checked = true;
-			}
-		}else{
-			for(var i=0; i<strArray.length; i++){
-				document.getElementById(db_svr_id+'_'+strArray[i]).checked = false;
-			}
-		}
-		
-	}
-	
-	$(function() {
-		   $('#user tbody').on( 'click', 'tr', function () {
-		         if ( $(this).hasClass('selected') ) {
-		        	}
-		        else {	        	
-		        	proxyServerTable.$('tr.selected').removeClass('selected');
-		            $(this).addClass('selected');	            
-		        } 
-
-		         var usr_id = proxyServerTable.row('.selected').data().usr_id;
-		         
-		        
-		        /* ********************************************************
-		         * 선택된 유저 대한 디비권한 조회
-		        ******************************************************** */
- 		     	$.ajax({
-		    		url : "/selectUsrDBAutInfo.do",
-		    		data : {
-		    			usr_id: usr_id,			
-		    		},
-		    		dataType : "json",
-		    		type : "post",
-					beforeSend: function(xhr) {
-				        xhr.setRequestHeader("AJAX", true);
-				     },
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else if(xhr.status == 403) {
-							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else {
-							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-						}
-					},
-		    		success : function(result) {
-		    			if(result.length != 0){
-		       	 		 	for(var i = 0; i<result.length; i++){     	
-			  						if(result[i].aut_yn == "Y"){	  									
-			  							document.getElementById(result[i].db_svr_id+'_'+result[i].db_id).checked = true;
-			  						}else{
-			  							document.getElementById(result[i].db_svr_id+'_'+result[i].db_id).checked = false;
-			  						}		
-		    				}	
-		    			}else{
-		    				for(var j = 0; j<db.length; j++){ 
-		    					document.getElementById(db[j].db_svr_id+'_'+db[j].db_id).checked = false;
-		    				}
-		    			}	
-		    		} 
-		    	});	 	 
-		    } );   
-	} );
-	
+	 
 	/* ********************************************************
-	 * confirm result
-	 ******************************************************** */
-	function fnc_confirmMultiRst(gbn){
-		if (gbn == "ins") {
-			fn_db_save2();
+     * Proxy Server List 검색
+    ******************************************************** */		
+ 	function fn_serverList_search(){
+		
+		var temp_search = $("#serverList_search").val();
+		if(temp_search != ""){
+			temp_search = "%" + temp_search + "%";
 		}
-	}
-	
- 	function fn_db_save(){
-		 var datasArr = new Array();	
-		 var datas = proxyServerTable.row('.selected').length;
-		 if(datas != 1){
-			 showSwalIcon('<spring:message code="message.msg165"/>', '<spring:message code="common.close" />', '', 'warning');
-			 return false;
-		 }else{
-				confile_title = '<spring:message code="menu.database_auth_management" />' + " "+'<spring:message code="common.registory" />' + " " + '<spring:message code="common.request" />';
-				$('#con_multi_gbn', '#findConfirmMulti').val("ins");
-				$('#confirm_multi_tlt').html(confile_title);
-				$('#confirm_multi_msg').html('<spring:message code="message.msg167" />');
-				$('#pop_confirm_multi_md').modal("show");
-		 }
-	}
- 	
- 	function fn_db_save2(){
-		 var datasArr = new Array();	
-		 var datas = proxyServerTable.row('.selected').length;
-		var usr_id = proxyServerTable.row('.selected').data().usr_id;
-
-			 $('input:checkbox[name=aut_yn]').each(function() {
-		         if($(this).is(':checked')){
-		        	var value=$(this).val();
-	 			    var strArray = value.split('_');
-	 			    var datas = new Object();
-	 			    datas.usr_id = usr_id;
-	 			    datas.db_svr_id = strArray[0];
-	 	 			datas.db_id = strArray[1];
-	 	 			datas.aut_yn = "Y";
-		         }else{
-			        var value=$(this).val();
-		 			var strArray = value.split('_');
-		 			var datas = new Object();
-		 			datas.usr_id = usr_id;
-		 			datas.db_svr_id = strArray[0];
-		 	 		datas.db_id = strArray[1];
-		 	 		datas.aut_yn = "N";
-		         }
-		         datasArr.push(datas);
-		     });
-
-
-				$.ajax({
-					url : "/updateUsrDBAutInfo.do",
-					data : {
-						datasArr : JSON.stringify(datasArr)
-					},
-					type : "post",
-					beforeSend: function(xhr) {
-				        xhr.setRequestHeader("AJAX", true);
-				     },
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else if(xhr.status == 403) {
-							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else {
-							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-						}
-					},
-					success : function(result) {
-						showSwalIcon('<spring:message code="message.msg07"/>', '<spring:message code="common.close" />', '', 'success');
-					}
-				}); 	
-			
-	}
-	
- 	//유저조회버튼 클릭시
- 	function fn_search(){
  		$.ajax({
- 			url : "/selectMenuAutUserManager.do",
+ 			url : "/selectPoxyServerTable.do",
  			data : {
- 				type : "usr_id",
- 				search : "%" + $("#search").val() + "%",
+ 				search : temp_search,
+ 				svr_use_yn : "Y"
  			},
  			dataType : "json",
  			type : "post",
@@ -563,13 +270,112 @@ var confirm_title = "";
 				}
 			},
  			success : function(result) {
- 				proxyServerTable.clear().draw();
- 				proxyServerTable.rows.add(result).draw();
+ 				console.log("fn_serverList_search :: "+result);
+ 			
+ 				proxyServerTable.rows({selected: true}).deselect();
+				proxyServerTable.clear().draw();
+				
+				if (result != null) {
+					proxyServerTable.rows.add(result).draw();
+				}
  			}
  		});
  	} 	
- 	
- 	function fn_proxy_insert(){
+	
+	/* ********************************************************
+     * 화면 초기 셋팅 
+    ******************************************************** */		
+	$(window.document).ready(function() {
+		fn_init();
+		
+		fn_serverList_search(); 
+	});
+		
+	/* ********************************************************
+     * Proxy Server List 선택 시 상세 정보 불러오기
+    ******************************************************** */
+    var globalInfo = null; //선택하여 불러온 global 정보
+    var vipInstanceList = null; //선택하여 불러온 vip instance 정보
+    var proxyListenerList = null; // proxy listener 정보
+ 	function fn_server_conf_info(){
+ 		if(selPrySvrId != null){
+			$.ajax({
+	 			url : "/getPoxyServerConf.do",
+	 			data : {
+	 				pry_svr_id : selPrySvrId
+	 			},
+	 			dataType : "json",
+	 			type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+	 			success : function(result) {
+	 				//console.log("fn_server_conf_info result :: "+result);
+	 				if(result != null){
+	 					//전역변수로 저장
+	 					globalInfo = result.global_info;
+	 					vipInstanceList = result.vipconfig_list;
+	 					proxyListenerList = result.listener_list;
+	 					
+	 					//Global 설정 불러오기
+	 					load_global_info(result.global_info);
+	 					
+		 				//vip Instance 관리 Table Data set
+						vipInstTable.rows({selected: true}).deselect();
+						vipInstTable.clear().draw();
+						vipInstTable.rows.add(result.vipconfig_list).draw();
+
+						//Listener 관리 Table Data set
+						proxyListenTable.rows({selected: true}).deselect();
+						proxyListenTable.clear().draw();
+						proxyListenTable.rows.add(result.listener_list).draw();
+						
+	 				}
+	 			}
+	 		});
+ 		}
+ 	} 	
+	
+ 	/* ********************************************************
+     * Global 설정 불러오기
+    ******************************************************** */		
+    function load_global_info(data){
+    	$("#glb_obj_ip", "#globalInfoForm").val(data.obj_ip);
+    	$("#glb_if_nm", "#globalInfoForm").val(data.if_nm);
+    	$("#glb_peer_server_ip", "#globalInfoForm").val(data.peer_server_ip);
+    	$("#glb_max_con_cnt", "#globalInfoForm").val(data.max_con_cnt);
+    	
+    	setTimeOutData("glb_cl_con_max_tm", data.cl_con_max_tm);
+    	setTimeOutData("glb_con_del_tm", data.con_del_tm);
+    	setTimeOutData("glb_svr_con_max_tm", data.svr_con_max_tm);
+    	setTimeOutData("glb_chk_tm", data.chk_tm);
+    	
+ 	}
+	//숫자+[m,s] 형태로 데이터 저장 필요
+ 	function setTimeOutData(id, tVal){
+ 		var len = tVal.length;
+ 	 	
+ 		$("#"+id+"_num", "#globalInfoForm").val(tVal.substr(0, len-1));
+    	$("#"+id+"_tm", "#globalInfoForm").val(tVal.substr(-1, 1));
+ 	}
+ 	function getTimeOutData(id){
+ 		
+ 		return $("#"+id+"_num", "#globalInfoForm").val() + $("#"+id+"_tm", "#globalInfoForm").val();
+ 		
+ 	}
+ 	/* ********************************************************
+     * Proxy Server 등록 버튼 클릭 시 이벤트
+    ******************************************************** */		
+ 	function fn_proxy_update(mode){
  		var selectDbList = "";
 		$.ajax({
 			url : "/popup/proxySvrRegForm.do",
@@ -590,168 +396,268 @@ var confirm_title = "";
 			},
 			success : function(result) {
 				//초기화
-				fn_insert_svr_info("reg");
-
-				if (result != null) {
-					//update setting
-					fn_update_svr_info("reg", result);
-				}
-				
-				$('#pop_layer_svr_reg').modal("show");
+				fn_pop_svr_info(mode);
 			}
 		});
  	}
- 	
  	/* ********************************************************
-	 * 등록 팝업 초기화
+	 * Proxy 서버 등록 팝업 초기화
 	 ******************************************************** */
-	function fn_insert_svr_info(gbn) {
+	function fn_pop_svr_info(gbn) {
 		if (gbn == "reg") {
+			//등록 모드라면 agent 설치 시 테이블에 등록되어있는 서버 정보 불러오기
+			$.ajax({
+				url : "/selectPoxyServerTable.do",
+	 			data : { svr_use_yn : "N"},
+	 			dataType : "json",
+	 			type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+	 			success : function(result) {
+	 				unregSvrInfo = result;
+	 				if(unregSvrInfo.length ==0){
+	 					showSwalIcon("Proxy Agent가 설치된 서버 중 미등록된 서버가 없습니다.", '<spring:message code="common.close" />', '', 'error');
+	 					$('#pop_layer_svr_reg').modal("hide");
+	 				}else{
+	 					//ip select 동적 생성
+	 					fn_create_unregSvr_select(gbn);
+	 					
+	 					$('#pop_layer_svr_reg').modal("show");
+	 					
+	 					setTimeout(function(){
+	 						if(mgmtDbmsTable != null){
+	 							mgmtDbmsTable.columns.adjust().draw();
+	 						}
+	 					},200);  
+	 				}
+	 			}
+	 		});
+		}else{
+			//수정 모드라면 선택되어있는 Grid 항목의 ID값 갖고 오기
+			if(proxyServerTable.rows('.selected').data().length==0){
+				showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+				return;
+			}else{
+				var prySvrID = proxyServerTable.row('.selected').data().pry_svr_id;
+				$("#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val(prySvrID);
+				$.ajax({
+					url : "/selectPoxyServerTable.do",
+		 			data : { svr_use_yn : "Y", 
+		 					pry_svr_id : prySvrID
+		 			},
+		 			dataType : "json",
+		 			type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+		 			success : function(result) {
+		 				console.log(result)
+		 				fn_changeSvrId(gbn);
+	 					
+	 					$('#pop_layer_svr_reg').modal("show");
+	 					
+	 					setTimeout(function(){
+	 						if(mgmtDbmsTable != null){
+	 							mgmtDbmsTable.columns.adjust().draw();
+	 						}
+	 					},200);  
+		 				
+		 			}
+		 		});
+			}
+		}
+		
+		
+	}
+	/* ********************************************************
+	 * Proxy 미등록 서버 select 생성
+	 ******************************************************** */
+	function fn_create_unregSvr_select(mode){
+		var tempUnregSvrList = unregSvrInfo;
+		var unregSvrHtml ="";
+		var unregLen = unregSvrInfo.length;
+		$( "#svrReg_ipadr > option", "#svrRegProxyServerForm" ).remove();
+		
+		for(var i=0; i<unregLen; i++){
+			var id = tempUnregSvrList[i].pry_svr_id;
+			var ip = tempUnregSvrList[i].ipadr;
+			unregSvrHtml += '<option value='+id+'>'+ip+'</option>';
+		}
+		$("#svrReg_ipadr", "#svrRegProxyServerForm" ).append(unregSvrHtml);
+		$("#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val(tempUnregSvrList[0].pry_svr_id);
+		$("#svrReg_ipadr", "#svrRegProxyServerForm").val(tempUnregSvrList[0].pry_svr_id);//ipadr
+		fn_changeSvrId(mode);
+	}
+	/* ********************************************************
+	 * Proxy IP 주소 변경 시 이벤트
+	 ******************************************************** */
+	function fn_changeSvrId(mode){
+		var prySvrID= $( "#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val();
+		if(mode=="reg") $( "#svrReg_ipadr", "#svrRegProxyServerForm" ).val(prySvrID);
+		else $( "#svrMod_ipadr", "#svrRegProxyServerForm" ).val(prySvrID);
+		
+		$.ajax({
+				url : "/createSelPrySvrReg.do",
+	 			data : { pry_svr_id : prySvrID},
+	 			dataType : "json",
+	 			type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+	 			success : function(result) {
+	 				if(mode=="reg"){
+	 					var index = null; 
+		 			
+		 				for(var i=0; i<unregSvrInfo.length; i++){
+		 					if(unregSvrInfo[i].pry_svr_id ==prySvrID) index = i;
+		 				}
+		 				fn_create_mstSvr_select(result.mstSvr_sel_list, unregSvrInfo[index].master_svr_id);
+		 				fn_create_dbms_select(result.dbms_sel_list, unregSvrInfo[index].db_svr_id);
+		 				
+		 				set_svr_info(unregSvrInfo[index], mode);
+	 				}else{
+	 					var selSvrInfo = proxyServerTable.row('.selected').data();
+	 					
+	 					fn_create_mstSvr_select(result.mstSvr_sel_list, selSvrInfo.master_svr_id);
+		 				fn_create_dbms_select(result.dbms_sel_list, selSvrInfo.db_svr_id);
+		 				
+		 				set_svr_info(selSvrInfo, mode);
+	 				}
+	 				
+	 			}
+	 		});
 			
-			$("#ins_ipadr", "#insProxyServerForm").val(""); //ipaddr
-			$("#ins_proxy_svr_nm", "#insProxyServerForm").val(""); //서버명
+	}
+	/* ********************************************************
+	 * Proxy 정보 setting
+	 ******************************************************** */
+	function set_svr_info(listData, mode){
+		var tempSetData = listData;
+		$("#svrReg_mode", "#svrRegProxyServerForm").val(mode);	
+		//hidden 정보
+		$("#svrReg_conn_result", "#svrRegProxyServerForm").val("false");				
+		$("#svrReg_pry_svr_id", "#svrRegProxyServerForm").val(tempSetData.pry_svr_id);
+		$("#svrReg_master_svr_id_val", "#svrRegProxyServerForm").val(tempSetData.master_svr_id);
+		$("#svrReg_db_svr_id_val", "#svrRegProxyServerForm").val(tempSetData.db_svr_id);
+		$("#svrReg_agt_sn", "#svrRegProxyServerForm").val(tempSetData.agt_sn);
+		
+		$("#svrReg_ipadr", "#svrRegProxyServerForm").val(tempSetData.pry_svr_id);//ipadr
+		$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").val(tempSetData.pry_svr_nm); //서버명
+		
+		if(tempSetData.use_yn == "Y"){
+			$("#svrReg_use_yn", "#svrRegProxyServerForm").prop("checked", true); 
+		}else{
+			$("#svrReg_use_yn", "#svrRegProxyServerForm").prop("checked", false); 
+		}
+		
+		if(mode=="reg"){//등록
+			$("#svrReg_ipadr", "#svrRegProxyServerForm").val(tempSetData.pry_svr_id);//ipadr
+			$("#svrReg_ipadr", "#svrRegProxyServerForm").show();
+			$("#svrMod_ipadr", "#svrRegProxyServerForm").hide();//ipadr
+			$("#svrMod_ipadr", "#svrRegProxyServerForm").val(tempSetData.ipadr);//ipadr
 			
-			$("#ins_root_pwd", "#insProxyServerForm").val(""); //패스워드
-			$("#ins_root_pwdChk", "#insProxyServerForm").val(""); //패스워드체크
+			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("disabled");
+			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("readonly");
+			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
+			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
+		}else{//수정
+			$("#svrReg_ipadr", "#svrRegProxyServerForm").val(tempSetData.pry_svr_id);//ipadr
+			$("#svrReg_ipadr", "#svrRegProxyServerForm").hide();//ipadr
+			$("#svrMod_ipadr", "#svrRegProxyServerForm").val(tempSetData.ipadr);//ipadr
+			$("#svrMod_ipadr", "#svrRegProxyServerForm").show();
 			
-			$("#ins_proxy_pth", "#insProxyServerForm").val("/etc/haproxy/haproxy.cfg"); //haproxy.cfg 파일 경올
-			$("#ins_keepalived_pth", "#insProxyServerForm").val("/etc/keepalived/keepalived.conf"); //keepalived.conf 파일 경로
-			
-			$("#ins_day_data_del_term", "#insProxyServerForm").val("90"); //일별 데이터 보관 기간
-			$("#ins_min_data_del_term", "#insProxyServerForm").val("7"); //분별 데이터 보관 기간
-			
-			$("#ins_master_gbn", "#insProxyServerForm").val("TC001502"); //마스터 구분
-			$("#ins_use_yn", "#insProxyServerForm").val("N"); //사용유무
-			$("input:checkbox[id='ins_use_yn_chk']").prop("checked", false); 
-			
-			//$("#pwdCheck_alert-danger", "#insProxyServerForm").hide(); //패스워드 체크
-			//$("#idCheck_alert-danger", "#insProxyServerForm").hide(); //id 체크
-			//$("#ins_pwd_alert-danger", "#insProxyServerForm").html("");
-			//$("#ins_pwd_alert-danger", "#insProxyServerForm").hide();
-			//$("#ins_pwd_alert-light", "#insProxyServerForm").html("");
-			//$("#ins_pwd_alert-light", "#insProxyServerForm").hide();
-						
-			$("#ins_save_submit", "#insProxyServerForm").removeAttr("disabled");
-			$("#ins_save_submit", "#insProxyServerForm").removeAttr("readonly");
-		} else {
-			$("#mod_usr_id", "#modUserForm").val(""); //아이디
-			$("#mod_usr_nm", "#modUserForm").val(""); //이름
-			
-			$("#mod_pwdCheck", "#modUserForm").val(""); //패스워드체크
-			$("#mod_pwd", "#modUserForm").val(""); //패스워드
-			
-			$("#mod_pwdCheck_alert-danger", "#modUserForm").hide(); //패스워드 체크
-			$("#mod_pwd_alert-danger", "#modUserForm").html("");
-			$("#mod_pwd_alert-danger", "#modUserForm").hide();
-			$("#mod_pwd_alert-light", "#modUserForm").html("");
-			$("#mod_pwd_alert-light", "#modUserForm").hide();
-			
-			$("#mod_bln_nm", "#modUserForm").val(""); //소속
-			$("#mod_dept_nm", "#modUserForm").val(""); //부서
-			$("#mod_pst_nm", "#modUserForm").val(""); //직급
-			$("#mod_rsp_bsn_nm", "#modUserForm").val(""); //담당업무
-			$("#mod_cpn", "#modUserForm").val(""); //휴대폰번호
-			
-			$("#mod_use_yn", "#modUserForm").val("Y"); //사용여부
-			$("input:checkbox[id='mod_use_yn_chk']").prop("checked", true); 
-			
-			$("#mod_usr_expr_dt", "#modUserForm").val(""); //사용만료일
-			
-			$("#mod_encp_use_yn", "#modUserForm").val("Y"); //암호화사용여부
-			$("input:checkbox[id='mod_encp_use_yn_chk']").prop("checked", true); 
-			
-			$("#mod_save_submit", "#modUserForm").removeAttr("disabled");
-			$("#mod_save_submit", "#modUserForm").removeAttr("readonly");
-
-			$("#mod_passCheck_cho", "#modUserForm").val("");
-			$("#mod_passCheck_hid", "#modUserForm").val("0");
+			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").attr("disabled",true);
+			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").attr("readonly",true);
+			$("#svrMod_ipadr", "#svrRegProxyServerForm").attr("disabled",true);
+			$("#svrMod_ipadr", "#svrRegProxyServerForm").attr("readonly",true);
+		}
+		
+		$("#svrReg_day_data_del_term", "#svrRegProxyServerForm").val(tempSetData.day_data_del_term); //일별 데이터 보관 기간
+		$("#svrReg_min_data_del_term", "#svrRegProxyServerForm").val(tempSetData.min_data_del_term); //분별 데이터 보관 기간
+		
+		$("#svrReg_master_gbn", "#svrRegProxyServerForm").val(tempSetData.master_gbn); //마스터 구분
+		fn_changeMasterGbn();
+	
+		//list 불러오기
+		fn_svr_dbms_list_search();
+ 	}
+	/* ********************************************************
+	 * confirm modal open
+	 ******************************************************** */
+	function fn_multiConfirmModal(gbn) {
+		if (gbn == "conn_test") {
+			confirm_title = 'Proxy Agent 연결 테스트';
+			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="message.msg89" />'));
+		}else if (gbn == "pry_svr_reg") {
+			confirm_title = 'Proxy Server 등록';
+			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="message.msg143" />'));
+		}else if (gbn == "pry_svr_mod") {
+			confirm_title = 'Proxy Server 수정';
+			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="message.msg147" />'));
+		}
+		
+		
+		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
+		$('#confirm_multi_tlt').html(confirm_title);
+		$('#pop_confirm_multi_md').modal("show");
+	}
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmMultiRst(gbn){
+		if (gbn == "conn_test") {
+			fn_prySvrConnTest();
+		}else if(gbn=="pry_svr_reg" || gbn=="pry_svr_mod"){
+			fn_reg_svr();
 		}
 	}
 	
 	/* ********************************************************
-	 * 수정 팝업셋팅
+	 * confirm cancel result
 	 ******************************************************** */
-	function fn_update_svr_info(gbn, result) {
-		if (gbn == "mod") {
-			$("#mod_usr_id", "#modUserForm").val(nvlPrmSet(result.get_usr_id, "")); //아이디
-			$("#mod_usr_nm", "#modUserForm").val(nvlPrmSet(result.get_usr_nm, "")); //이름
+	function fnc_confirmCancelRst(gbn){
+		/* if (gbn == "ins_menu") {
+			//$('#pop_layer_user_reg').modal('hide');
 
-			$("#mod_pwd", "#modUserForm").val(nvlPrmSet(result.pwd, ""));
-			$("#mod_pwdCheck", "#modUserForm").val(nvlPrmSet(result.pwd, ""));
-			$("#mod_passCheck_cho", "#modUserForm").val(nvlPrmSet(result.pwd, ""));
-			
-			//password 안전성 확인
-			$("#mod_pwd_chk_msg_div", "#modUserForm").show();
-			$("#mod_pwd_chk_div", "#modUserForm").hide();
-			
-			$("#mod_bln_nm", "#modUserForm").val(nvlPrmSet(result.bln_nm, "")); //소속
-			$("#mod_dept_nm", "#modUserForm").val(nvlPrmSet(result.dept_nm, "")); //부서
-			$("#mod_pst_nm", "#modUserForm").val(nvlPrmSet(result.pst_nm, "")); //직급
-			$("#mod_rsp_bsn_nm", "#modUserForm").val(nvlPrmSet(result.rsp_bsn_nm, "")); //담당업무
-			$("#mod_cpn", "#modUserForm").val(nvlPrmSet(result.cpn, "")); //휴대폰번호
-			
-			$("#mod_use_yn", "#modUserForm").val(nvlPrmSet(result.use_yn, "")); //사용여부
-			if (nvlPrmSet(result.use_yn, "") == "Y") {
-				$("input:checkbox[id='mod_use_yn_chk']").prop("checked", true); 
-			} else {
-				$("input:checkbox[id='mod_use_yn_chk']").prop("checked", false); 
-			}
-			
-			$("#mod_usr_expr_dt", "#modUserForm").val(nvlPrmSet(result.usr_expr_dt, "")); //사용만료일
-
-			//datapicker 설정
-			fn_modDateUpdateSetting(nvlPrmSet(result.usr_expr_dt, ""));
-			
-			$("#mod_encp_use_yn", "#modUserForm").val(nvlPrmSet(result.encp_use_yn, "")); //암호화사용여부
-
-			if (nvlPrmSet(result.encp_use_yn, "") == "Y") {
-				$("input:checkbox[id='mod_encp_use_yn_chk']").prop("checked", true); 
-			} else {
-				$("input:checkbox[id='mod_encp_use_yn_chk']").prop("checked", false); 
-			}
-
-			//암호화 여부가 n일때는 check box disabled
-			if (nvlPrmSet(result.encp_yn, "") == "Y") {
-				$("input:checkbox[id='mod_encp_use_yn_chk']").prop("disabled", false); 
-				$("#mod_encp_use_yn_msg", "#modUserForm").html('');
-			} else {
-				$("input:checkbox[id='mod_encp_use_yn_chk']").prop("disabled", true); 
-				$("#mod_encp_use_yn_msg", "#modUserForm").html('<spring:message code="user_management.msg15" />');
-			}
-
-			$("#mod_passCheck_hid", "#modUserForm").val("1");
-		} else {
-			//암호화 여부가 n일때는 check box disabled
-			if (nvlPrmSet(result.encp_yn, "") == "Y") {
-				$("input:checkbox[id='ins_encp_use_yn_chk']").prop("disabled", false);
-				$("#ins_encp_use_yn_msg", "#insProxyServerForm").html('');
-				
-				$("#ins_encp_use_yn", "#insProxyServerForm").val("Y"); //암호화사용여부
-				$("input:checkbox[id='ins_encp_use_yn_chk']").prop("checked", true); 
-			} else {
-				$("input:checkbox[id='ins_encp_use_yn_chk']").prop("disabled", true); 
-				$("#ins_encp_use_yn_msg", "#insProxyServerForm").html('<spring:message code="user_management.msg15" />');
-
-				$("#ins_encp_use_yn", "#insProxyServerForm").val("N"); //암호화사용여부
-				$("input:checkbox[id='ins_encp_use_yn_chk']").prop("checked", false); 
-				
-			}	
-		}
-
+			//조회
+			fn_select();
+		} */
 	}
- 	/* ********************************************************
-	 * 상세설정 접기
-	 ******************************************************** */
-/*	function clickDetailConf(id){
-		if($("#titleDetailConf_div").css('display') == 'none'){
-			$("#titleDetailConf_div").css('display','block');
-			$("#" + id).attr('class', 'menu-arrow_user');
-		}else{
-			$("#titleDetailConf_div").css('display','none');
-			$("#" + id).attr('class', 'menu-arrow_user_af');
-		}
-	}
-	 */
+	
+	
+	
+	
+	
+	
+
 	/* ********************************************************
 	 * Vip Instance 관리 팝업
 	 ******************************************************** */
@@ -959,6 +865,8 @@ var confirm_title = "";
 	
 </script>
 <body>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
+
 <%@include file="./../popup/proxyServerRegForm.jsp"%>
 <%@include file="./../popup/vipInstRegForm.jsp"%>
 <%@include file="./../popup/proxyListenRegForm.jsp"%>
@@ -1021,9 +929,9 @@ var confirm_title = "";
 							<div class="template-demo">	
 								<form class="form-inline" style="float: right;">
 									<input hidden="hidden" />
-									<input type="text" class="form-control" style="width:250px;" id="search">
+									<input type="text" class="form-control" style="width:250px;" id="serverList_search">
 									&nbsp;&nbsp;
-									<button type="button" class="btn btn-inverse-primary btn-icon-text btn-search-disable" onClick="fn_search()">
+									<button type="button" class="btn btn-inverse-primary btn-icon-text btn-search-disable" onClick="fn_serverList_search()">
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="button.search" />
 									</button>
 								</form>
@@ -1036,10 +944,10 @@ var confirm_title = "";
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_proxy_del_confirm();" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnUpdate" onClick="fn_proxy_update();" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnUpdate" onClick="fn_proxy_update('mod');" data-toggle="modal">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_proxy_insert();" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_proxy_update('reg');" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
 								</button>
 							</div>
@@ -1097,108 +1005,110 @@ var confirm_title = "";
 						</li>
 					</ul>
 					<div class="card globalSettingDiv" style="display:block;">
-						<div class="card-body card-body-border">
-							<div class="form-group row">
-								<label for="ins_obj_ip" class="col-sm-2_5 col-form-label pop-label-index">
-									<i class="item-icon fa fa-angle-double-right"></i>	
-									<%-- <spring:message code="user_management.password" /> --%>
-									Server IP
-								</label>
-								<div class="col-sm-2_27">
-									<input type="text" class="form-control form-control-sm ins_obj_ip" maxlength="15" id="ins_obj_ip" name="ins_obj_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+						<form class="cmxform" id="globalInfoForm">
+							<div class="card-body card-body-border">
+								<div class="form-group row">
+									<label for="glb_obj_ip" class="col-sm-2_5 col-form-label pop-label-index">
+										<i class="item-icon fa fa-angle-double-right"></i>	
+										<%-- <spring:message code="user_management.password" /> --%>
+										Server IP
+									</label>
+									<div class="col-sm-2_27">
+										<input type="text" class="form-control form-control-sm glb_obj_ip" maxlength="15" id="glb_obj_ip" name="glb_obj_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+									</div>
+									<label for="glb_if_nm" class="col-sm-2_5 col-form-label pop-label-index">
+										<i class="item-icon fa fa-angle-double-right"></i>	
+										<%-- <spring:message code="user_management.password" /> --%>
+										Interface
+									</label>
+									<div class="col-sm-2_27">
+										<input type="text" class="form-control form-control-sm glb_if_nm" maxlength="20" id="glb_if_nm" name="glb_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+									</div>
 								</div>
-								<label for="ins_if_nm" class="col-sm-2_5 col-form-label pop-label-index">
-									<i class="item-icon fa fa-angle-double-right"></i>	
-									<%-- <spring:message code="user_management.password" /> --%>
-									Interface
-								</label>
-								<div class="col-sm-2_27">
-									<input type="text" class="form-control form-control-sm ins_if_nm" maxlength="20" id="ins_if_nm" name="ins_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+								<div class="form-group row">
+									<label for="glb_peer_server_ip" class="col-sm-2_5 col-form-label pop-label-index">
+										<i class="item-icon fa fa-angle-double-right"></i>	
+										<%-- <spring:message code="user_management.password" /> --%>
+										Peer IP
+									</label>
+									<div class="col-sm-2_27">
+										<input type="text" class="form-control form-control-sm glb_peer_server_ip" maxlength="15" id="glb_peer_server_ip" name="glb_peer_server_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+									</div>
+									<div class="col-sm-6">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="glb_max_con_cnt" class="col-sm-2_5 col-form-label pop-label-index">
+										<i class="item-icon fa fa-angle-double-right"></i>	
+										동시 접속 최대 수
+									</label>
+									<div class="col-sm-2">
+										<input type="text" class="form-control form-control-sm glb_max_con_cnt" maxlength="10" id="glb_max_con_cnt" name="glb_max_con_cnt" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+									</div>
+									<div class="col-sm-auto">
+									</div>
+								</div>
+								<div class="form-group row" style="margin-bottom:-5px;">
+									<label for="glb_cl_con_max_tm_num" class="col-sm-12 col-form-label pop-label-index">
+										<i class="item-icon fa fa-angle-double-right"></i>	
+										<%-- <spring:message code="user_management.password" /> --%>
+										Timeout 설정
+									</label>
+								</div>
+								<div class="form-group row" style="margin-bottom: 0px !important;">
+									<label for="glb_cl_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
+										클라이언트 연결 최대 시간
+									</label>
+									<div class="col-sm-1_5">
+										<input type="text" class="form-control form-control-sm glb_cl_con_max_tm_num" maxlength="5" id="glb_cl_con_max_tm_num" name="glb_cl_con_max_tm_num" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+									</div>
+									<div class="col-sm-1_5">
+										<select class="form-control form-control-sm" name="glb_cl_con_max_tm_tm" id="glb_cl_con_max_tm_tm">
+											<option value="s">초</option>
+											<option value="m">분</option>
+										</select>
+									</div>
+									<label for="glb_con_del_tm_num" class="col-sm-3 col-form-label pop-label-index">
+										연결 지연 최대 시간
+									</label>
+									<div class="col-sm-1_5">
+										<input type="text" class="form-control form-control-sm glb_con_del_tm_num" maxlength="5" id="glb_con_del_tm_num" name="glb_con_del_tm_num" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+									</div>
+									<div class="col-sm-1_5">
+										<select class="form-control form-control-sm" name="glb_con_del_tm_tm" id="glb_con_del_tm_tm">
+											<option value="s">초</option>
+											<option value="m">분</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row" style="margin-bottom:-17px !important;">
+									<label for="glb_svr_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
+										서버 연결 최대 시간
+									</label>
+									<div class="col-sm-1_5">
+										<input type="text" class="form-control form-control-sm glb_svr_con_max_tm_num" maxlength="5" id="glb_svr_con_max_tm_num" name="glb_svr_con_max_tm_num" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+									</div>
+									<div class="col-sm-1_5">
+										<select class="form-control form-control-sm" name="glb_svr_con_max_tm_tm" id="glb_svr_con_max_tm_tm">
+											<option value="s">초</option>
+											<option value="m">분</option>
+										</select>
+									</div>
+									<label for="glb_chk_tm_num" class="col-sm-3 col-form-label pop-label-index">
+										체크 주기
+									</label>
+									<div class="col-sm-1_5">
+										<input type="text" class="form-control form-control-sm glb_chk_tm_num" maxlength="5" id="glb_chk_tm_num" name="glb_chk_tm_num" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
+									</div>
+									<div class="col-sm-1_5">
+										<select class="form-control form-control-sm" name="glb_chk_tm_tm" id="glb_chk_tm_tm">
+											<option value="s">초</option>
+											<option value="m">분</option>
+										</select>
+									</div>
 								</div>
 							</div>
-							<div class="form-group row">
-								<label for="ins_peer_server_ip" class="col-sm-2_5 col-form-label pop-label-index">
-									<i class="item-icon fa fa-angle-double-right"></i>	
-									<%-- <spring:message code="user_management.password" /> --%>
-									Peer IP
-								</label>
-								<div class="col-sm-2_27">
-									<input type="text" class="form-control form-control-sm ins_peer_server_ip" maxlength="15" id="ins_peer_server_ip" name="ins_peer_server_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
-								</div>
-								<div class="col-sm-6">
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="ins_max_con_cnt" class="col-sm-2_5 col-form-label pop-label-index">
-									<i class="item-icon fa fa-angle-double-right"></i>	
-									동시 접속 최대 수
-								</label>
-								<div class="col-sm-2">
-									<input type="text" class="form-control form-control-sm ins_max_con_cnt" maxlength="10" id="ins_max_con_cnt" name="ins_max_con_cnt" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
-								</div>
-								<div class="col-sm-auto">
-								</div>
-							</div>
-							<div class="form-group row" style="margin-bottom:-5px;">
-								<label for="ins_cl_con_max_tm_num" class="col-sm-12 col-form-label pop-label-index">
-									<i class="item-icon fa fa-angle-double-right"></i>	
-									<%-- <spring:message code="user_management.password" /> --%>
-									Timeout 설정
-								</label>
-							</div>
-							<div class="form-group row" style="margin-bottom: 0px !important;">
-								<label for="ins_cl_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
-									클라이언트 연결 최대 시간
-								</label>
-								<div class="col-sm-1_5">
-									<input type="text" class="form-control form-control-sm ins_cl_con_max_tm_num" maxlength="5" id="ins_cl_con_max_tm_num" name="ins_cl_con_max_tm_num" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
-								</div>
-								<div class="col-sm-1_5">
-									<select class="form-control form-control-sm" name="ins_cl_con_max_tm_tm" id="ins_cl_con_max_tm_tm">
-										<option value="s">초</option>
-										<option value="m">분</option>
-									</select>
-								</div>
-								<label for="ins_con_del_tm_num" class="col-sm-3 col-form-label pop-label-index">
-									연결 지연 최대 시간
-								</label>
-								<div class="col-sm-1_5">
-									<input type="text" class="form-control form-control-sm ins_con_del_tm_num" maxlength="5" id="ins_con_del_tm_num" name="ins_con_del_tm_num" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
-								</div>
-								<div class="col-sm-1_5">
-									<select class="form-control form-control-sm" name="ins_con_del_tm_tm" id="ins_con_del_tm_tm">
-										<option value="s">초</option>
-										<option value="m">분</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group row" style="margin-bottom:-17px !important;">
-								<label for="ins_svr_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
-									서버 연결 최대 시간
-								</label>
-								<div class="col-sm-1_5">
-									<input type="text" class="form-control form-control-sm ins_svr_con_max_tm_num" maxlength="5" id="ins_svr_con_max_tm_num" name="ins_svr_con_max_tm_num" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
-								</div>
-								<div class="col-sm-1_5">
-									<select class="form-control form-control-sm" name="ins_svr_con_max_tm_tm" id="ins_svr_con_max_tm_tm">
-										<option value="s">초</option>
-										<option value="m">분</option>
-									</select>
-								</div>
-								<label for="ins_chk_tm_num" class="col-sm-3 col-form-label pop-label-index">
-									체크 주기
-								</label>
-								<div class="col-sm-1_5">
-									<input type="text" class="form-control form-control-sm ins_chk_tm_num" maxlength="5" id="ins_chk_tm_num" name="ins_chk_tm_num" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" />
-								</div>
-								<div class="col-sm-1_5">
-									<select class="form-control form-control-sm" name="ins_chk_tm_tm" id="ins_chk_tm_tm">
-										<option value="s">초</option>
-										<option value="m">분</option>
-									</select>
-								</div>
-							</div>
-						</div>
+						</form>
 					</div>
 					
 					<div class="card detailSettingDiv" style="display:none;">
