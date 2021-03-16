@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/bars-1to10.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/examples.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/morris.js/morris.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/c3/c3.min.css">
 
 <!-- End plugin css for this page -->
 
@@ -96,6 +97,9 @@
 <script src="/vertical-dark-sidebar/js/vendors/justgage/justgage.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/chart.js/Chart.min.js"></script>
 
+<script src="/vertical-dark-sidebar/js/vendors/c3/c3.js"></script>
+
+<script src="/vertical-dark-sidebar/js/vendors/inputmask/jquery.inputmask.bundle.min.js"></script>
 <!-- End custom js for this page-->
 
 <!-- endinject -->
