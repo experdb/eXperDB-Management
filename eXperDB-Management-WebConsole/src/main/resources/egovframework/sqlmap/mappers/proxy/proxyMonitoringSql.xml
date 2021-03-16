@@ -85,9 +85,21 @@
 		* Description : db server connected proxy
 		* Author : 윤정
 		**/
-		
-
-
+		SELECT        		
+       		(ROW_NUMBER() OVER()) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+			tpsi.PRY_SVR_ID , 
+			tdi.MASTER_GBN , 
+			tdi.DB_SVR_ID,
+			tdi.IPADR , 
+			tdi.PORTNO , 
+			tdi.SVR_HOST_NM , 
+			tai.AGT_CNDT_CD 
+		FROM T_PRY_SVR_I tpsi 
+		JOIN T_DBSVRIPADR_I tdi  ON tpsi.DB_SVR_ID = tdi.DB_SVR_ID
+		JOIN T_AGTCNDT_I tai ON tdi.IPADR = tai.IPADR
+		WHERE tpsi.PRY_SVR_ID = #{value}
+		ORDER BY tdi.MASTER_GBN, tdi.DB_SVR_ID
 	</select>
 	
 	<select id="selectProxyLogList" resultType="hashMap">
@@ -96,30 +108,75 @@
 		* Description : proxy starting state list
 		* Author : 윤정
 		**/
+		SELECT
+			tpsi.PRY_SVR_ID, 
+			tpsi.PRY_SVR_NM , 
+			tpacg.SYS_TYPE, 
+			tpacg.ACT_TYPE, 
+			tpacg.WRK_DTM 
+		FROM T_PRY_SVR_I tpsi 
+		JOIN T_PRY_ACTSTATE_CNG_G tpacg on tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID 
+		WHERE tpsi.PRY_SVR_ID = #{value}
+		ORDER BY tpacg.WRK_DTM DESC
+	</select>
+	
+	<select id="selectConfiguration" resultType="hashMap" parameterType="hashMap">
+		/**
+		* Query ID : selectConfiguration
+		* Description : proxy, keepalived config file
+		* Author : 윤정
+		**/
 		SELECT 
-       		(ROW_NUMBER() OVER()) AS ROWNUM, 
-       		(ROW_NUMBER() OVER()) AS IDX,
-       		PRY_ACT_EXE_SN,
-       		PRY_SVR_ID,
-       		SYS_TYPE,
-       		ACT_TYPE,
-       		WRK_DTM,
-       		EXE_RSLT_CD,
-       		RSLT_MSG,
-       		FRST_REGR_ID,
-       		FRST_REG_DTM,
-       		LST_MDFR_ID,
-       		LST_MDF_DTM
-       	FROM T_PRY_ACTSTATE_CNG_G
-       	SELECT
-       		 tpsi.pry_svr_id, 
-       		 tpsi.pry_svr_nm , 
-       		 tpacg.sys_type , 
-       		 tpacg.act_type , 
-       		 tpacg.frst_reg_dtm 
-		FROM t_pry_svr_i tpsi 
-		join t_pry_actstate_cng_g tpacg on tpsi.pry_svr_id = tpacg.pry_svr_id 
-		WHERE tpsi.pry_svr_id = #{value}
-		ORDER BY frst_reg_dtm
+			(ROW_NUMBER() OVER()) AS ROWNUM, 
+			(ROW_NUMBER() OVER()) AS IDX,
+			tpsi.PRY_SVR_ID,
+			tpsi.IPADR,
+		<if test='type == "P"'>
+			tpsi.PRY_PTH AS PATH,
+        </if>
+        <if test='type == "K"'>
+			tpsi.KAL_PTH AS PATH,
+        </if>
+        	tpsi.PRY_SVR_NM,
+        	tpai.SOCKET_PORT
+		FROM T_PRY_SVR_I tpsi
+		JOIN T_PRY_AGT_I tpai ON tpsi.AGT_SN = tpai.AGT_SN
+		WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+	</select>
+	
+	<select id="selectProxyStatisticsInfo" parameterType="int" resultType="proxyStatisticVO">
+		/**
+		* Query ID : selectProxyStatisticsInfo
+		* Description : proxy listener statistics information
+		* Author : 윤정
+		**/
+		<![CDATA[
+			SELECT *
+			FROM (
+				SELECT
+					ROW_NUMBER() OVER (PARTITION BY tpssg.DB_CON_ADDR ORDER BY exe_dtm) AS r, 
+					(ROW_NUMBER() OVER()) AS ROWNUM, 
+					(ROW_NUMBER() OVER()) AS IDX
+					tpsi.PRY_SVR_ID, 
+					tpssg.EXE_DTM, 
+					tpsi.PRY_SVR_NM, 
+					tpli.LSN_NM, 
+					tpssg.DB_CON_ADDR, 
+					tpssg.SVR_STATUS, 
+					tpssg.LST_STATUS_CHK_DESC, 
+					tpssg.FAIL_CHK_CNT, 
+					tpssg.MAX_SESSION, 
+					tpssg.SESSION_LIMIT, 
+					tpssg.CUMT_SSO_CON_CNT, 
+					tpssg.BYTE_RECEIVE, 
+					tpssg.BYTE_TRANSMIT
+				FROM T_PRY_SVR_I tpsi 
+				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
+				JOIN T_PRY_SVR_STATUS_G tpssg ON tpli.LSN_ID = tpssg.LSN_ID
+				WHERE tpsi.PRY_SVR_ID = 1
+				ORDER BY tpssg.EXE_DTM DESC
+			) x
+			WHERE x.r <= 2
+		]]>
 	</select>
 </mapper>

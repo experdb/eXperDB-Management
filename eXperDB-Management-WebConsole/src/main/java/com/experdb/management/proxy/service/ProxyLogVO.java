@@ -3,6 +3,7 @@ package com.experdb.management.proxy.service;
 public class ProxyLogVO {
 	private int pry_act_exe_sn;
 	private int pry_svr_id;
+	private String pry_svr_nm;
 	private String sys_type;
 	private String act_type;
 	private String wrk_dtm;
@@ -25,6 +26,13 @@ public class ProxyLogVO {
 	}
 	public void setPry_svr_id(int pry_svr_id) {
 		this.pry_svr_id = pry_svr_id;
+	}
+	
+	public String getPry_svr_nm() {
+		return pry_svr_nm;
+	}
+	public void setPry_svr_nm(String pry_svr_nm) {
+		this.pry_svr_nm = pry_svr_nm;
 	}
 	
 	public String getSys_type() {
