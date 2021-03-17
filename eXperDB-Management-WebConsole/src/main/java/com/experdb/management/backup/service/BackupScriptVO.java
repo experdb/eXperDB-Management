@@ -14,13 +14,13 @@ public class BackupScriptVO implements Serializable {
 	private int compressLevel;  /*Compression : max : 2, standard : 1*/
 	private String encryptAlgoName ="No Encryption";
 	private int encryptAlgoType = 0;
-	private boolean isExclude;
+	private boolean isExclude = true;
 	private int id = 0;  /*노드별로 생성되는거같음 0 고정값*/
 	private int jobMethod = 0;
 	private String jobName;
-	private String jobType;
-	private String logLevel;
-	private int priority;  /*Priority(0: High, 1: Medium, 2: Low)*/
+	private String jobType = "1";
+	private String logLevel = "0";
+	private int priority = 0;  /*Priority(0: High, 1: Medium, 2: Low)*/
 	private String  isRepeat; /*scheduleType none일 경우 false, schedul일 경우 true*/
 	private String targetServer;
 	private String targetServerPwd;
@@ -219,5 +219,19 @@ public class BackupScriptVO implements Serializable {
 	public void setThrottle(long throttle) {
 		this.throttle = throttle;
 	}
+
+	@Override
+	public String toString() {
+		return "BackupScriptVO [backupLocationInfo=" + backupLocationInfo + ", compressLevel=" + compressLevel
+				+ ", encryptAlgoName=" + encryptAlgoName + ", encryptAlgoType=" + encryptAlgoType + ", isExclude="
+				+ isExclude + ", id=" + id + ", jobMethod=" + jobMethod + ", jobName=" + jobName + ", jobType="
+				+ jobType + ", logLevel=" + logLevel + ", priority=" + priority + ", isRepeat=" + isRepeat
+				+ ", targetServer=" + targetServer + ", targetServerPwd=" + targetServerPwd + ", targetServerUser="
+				+ targetServerUser + ", isTemplate=" + isTemplate + ", templateID=" + templateID + ", isBackupToRps="
+				+ isBackupToRps + ", isDisable=" + isDisable + ", retention=" + retention + ", scheduleType="
+				+ scheduleType + ", sessionType=" + sessionType + ", throttle=" + throttle + "]";
+	}
+	
+	
 
 }

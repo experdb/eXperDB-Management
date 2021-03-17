@@ -75,11 +75,13 @@ public class JobXMLMake{
 		            targetInfoXml(targetMachine, backupConfiguration, backupScript);
 		            
 		            //scheduleInfoXml
-		            scheduleXml(backupConfiguration, backupSchedule);
+		            if(backupSchedule.size()>0){		            	
+		            	scheduleXml(backupConfiguration, backupSchedule);
+		            }
 			            
 	
 			            
-			            xmlFile(doc);
+			        xmlFile(doc, backupScript.getJobName());
 					
 				} catch (ParserConfigurationException e) {
 					// TODO Auto-generated catch block
@@ -383,7 +385,7 @@ public class JobXMLMake{
             
          // repeat 엘리먼트
             Element repeat = doc.createElement("repeat");
-            repeat.appendChild(doc.createTextNode("true"));
+            repeat.appendChild(doc.createTextNode(backupScript.isRepeat()));
             backupConfiguration.appendChild(repeat);
             
          // targetServer 엘리먼트
@@ -425,12 +427,12 @@ public class JobXMLMake{
             
          // disable 엘리먼트
             Element disable = doc.createElement("disable");
-            disable.appendChild(doc.createTextNode("false"));
+            disable.appendChild(doc.createTextNode(backupScript.isRepeat()));
             backupConfiguration.appendChild(disable);
             
          // scheduleType 엘리먼트
             Element scheduleType = doc.createElement("scheduleType");
-            scheduleType.appendChild(doc.createTextNode("5"));
+            scheduleType.appendChild(doc.createTextNode(Integer.toString(backupScript.getScheduleType())));
             backupConfiguration.appendChild(scheduleType);
             
          // sessionType 엘리먼트
@@ -458,15 +460,18 @@ public class JobXMLMake{
 		         // backupDestLocation 엘리먼트
 		            Element backupDestLocation = doc.createElement("backupDestLocation");
 		            backupDestLocation.appendChild(doc.createTextNode(locationInfo.getBackupDestLocation()));
-		            backupLocationInfo.appendChild(backupDestLocation);		            
-		         // backupDestPasswd 엘리먼트
-		            Element backupDestPasswd = doc.createElement("backupDestPasswd");
-		            backupDestPasswd.appendChild(doc.createTextNode(locationInfo.getBackupDestPasswd()));
-		            backupLocationInfo.appendChild(backupDestPasswd);		            
-		         // backupDestUser 엘리먼트
-		            Element backupDestUser = doc.createElement("backupDestUser");
-		            backupDestUser.appendChild(doc.createTextNode(locationInfo.getBackupDestUser()));
-		            backupLocationInfo.appendChild(backupDestUser);	            
+		            backupLocationInfo.appendChild(backupDestLocation);	
+		            if(locationInfo.getBackupDestUser()!=null){		            	
+		            	// backupDestPasswd 엘리먼트
+		            	Element backupDestPasswd = doc.createElement("backupDestPasswd");
+		            	backupDestPasswd.appendChild(doc.createTextNode(locationInfo.getBackupDestPasswd()));
+		            	backupLocationInfo.appendChild(backupDestPasswd);		            
+		            	// backupDestUser 엘리먼트
+		            	Element backupDestUser = doc.createElement("backupDestUser");
+		            	backupDestUser.appendChild(doc.createTextNode(locationInfo.getBackupDestUser()));
+		            	backupLocationInfo.appendChild(backupDestUser);	  
+		            }
+		            
 		         // currentJobCount 엘리먼트
 		            Element currentJobCount = doc.createElement("currentJobCount");
 		            currentJobCount.appendChild(doc.createTextNode(Integer.toString(locationInfo.getCurrentJobCount())));
@@ -480,31 +485,33 @@ public class JobXMLMake{
 						            dataStoreInfo.appendChild(dataStore_compressLevel);		            
 					         // enableDedup 엘리먼트
 						            Element enableDedup = doc.createElement("enableDedup");
-						            enableDedup.appendChild(doc.createTextNode("0"));
+						            enableDedup.appendChild(doc.createTextNode(Integer.toString(locationInfo.getEnablededup())));
 						            dataStoreInfo.appendChild(enableDedup);					            
 					         // sharePath 엘리먼트
 						            Element sharePath = doc.createElement("sharePath");
 						            sharePath.appendChild(doc.createTextNode(locationInfo.getBackupDestLocation()));
-						            dataStoreInfo.appendChild(sharePath);					            
-					         // sharePathPassword 엘리먼트
-						            Element sharePathPassword = doc.createElement("sharePathPassword");
-						            sharePathPassword.appendChild(doc.createTextNode(locationInfo.getBackupDestPasswd()));
-						            dataStoreInfo.appendChild(sharePathPassword);				            
-					         // sharePathUsername 엘리먼트
-						            Element sharePathUsername = doc.createElement("sharePathUsername");
-						            sharePathUsername.appendChild(doc.createTextNode(locationInfo.getBackupDestUser()));
-						            dataStoreInfo.appendChild(sharePathUsername);		            
+						            dataStoreInfo.appendChild(sharePath);	
+						     if(locationInfo.getBackupDestUser()!=null){						    	 
+						    	 // sharePathPassword 엘리먼트
+						    	 Element sharePathPassword = doc.createElement("sharePathPassword");
+						    	 sharePathPassword.appendChild(doc.createTextNode(locationInfo.getBackupDestPasswd()));
+						    	 dataStoreInfo.appendChild(sharePathPassword);				            
+						    	 // sharePathUsername 엘리먼트
+						    	 Element sharePathUsername = doc.createElement("sharePathUsername");
+						    	 sharePathUsername.appendChild(doc.createTextNode(locationInfo.getBackupDestUser()));
+						    	 dataStoreInfo.appendChild(sharePathUsername);	
+						     }
 		         // enableS3CifsShare 엘리먼트
 		            Element enableS3CifsShare = doc.createElement("enableS3CifsShare");
 		            enableS3CifsShare.appendChild(doc.createTextNode("false"));
 		            backupLocationInfo.appendChild(enableS3CifsShare);		            
 		         // freeSize 엘리먼트
 		            Element freeSize = doc.createElement("freeSize");
-		            freeSize.appendChild(doc.createTextNode("29672251392"));
+		            freeSize.appendChild(doc.createTextNode(Long.toString(locationInfo.getFreeSize())));
 		            backupLocationInfo.appendChild(freeSize);		            
 		         // freeSizeAlert 엘리먼트
 		            Element freeSizeAlert = doc.createElement("freeSizeAlert");
-		            freeSizeAlert.appendChild(doc.createTextNode(Integer.toString((int) locationInfo.getFreeSizeAlert())));
+		            freeSizeAlert.appendChild(doc.createTextNode(Long.toString(locationInfo.getFreeSizeAlert())));
 		            backupLocationInfo.appendChild(freeSizeAlert);		            
 		         // freeSizeAlertUnit 엘리먼트
 		            Element freeSizeAlertUnit = doc.createElement("freeSizeAlertUnit");
@@ -558,7 +565,7 @@ public class JobXMLMake{
 					            serverInfo.appendChild(serverType);		            				            
 		         // totalSize 엘리먼트
 		            Element totalSize = doc.createElement("totalSize");
-		            totalSize.appendChild(doc.createTextNode("37558423552"));
+		            totalSize.appendChild(doc.createTextNode(Long.toString(locationInfo.getTotalSize())));
 		            backupLocationInfo.appendChild(totalSize);		            
 		         // type 엘리먼트
 		            Element type = doc.createElement("type");
@@ -576,19 +583,20 @@ public class JobXMLMake{
 
 
 
-		public void xmlFile (Document  doc){
+		public void xmlFile (Document  doc, String jobName){
+			System.out.println("xmlFile");
 	    	  
 	    	  try{
 	    	  TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	    	  
 	            Transformer transformer = transformerFactory.newTransformer();
-	            //transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
+	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
 	            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 	            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //들여쓰기
 	            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes"); //doc.setXmlStandalone(true); 했을때 붙어서 출력되는부분 개행
 	 
 	            DOMSource source = new DOMSource(doc);
-	            StreamResult result = new StreamResult(new FileOutputStream(new File("C://test/backup.xml")));
+	            StreamResult result = new StreamResult(new FileOutputStream(new File("C:\\test\\backupXml\\" + jobName + ".xml")));
 	 
 	            transformer.transform(source, result);
 	            
@@ -627,7 +635,7 @@ public class JobXMLMake{
 	    	  backupScript.setExclude(true);
 	    	  backupScript.setId(0);
 	    	  backupScript.setJobMethod(0);
-	    	  backupScript.setJobName("backup_schedule_20210209");
+	    	  backupScript.setJobName("backup_20210209");
 	    	  backupScript.setJobType("1");
 	    	  backupScript.setLogLevel("0");
 	    	  backupScript.setPriority(0);

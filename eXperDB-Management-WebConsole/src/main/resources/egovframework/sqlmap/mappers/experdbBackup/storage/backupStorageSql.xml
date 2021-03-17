@@ -94,5 +94,26 @@
 	<delete id="backupStorageDelete" parameterType="backupLocationInfoVO">
 		 DELETE FROM backuplocation WHERE "location" like #{backupDestLocation}
 	</delete>
+	
+	<select id="getScheduleLocationInfo" parameterType="String" resultType="backupLocationInfoVO">
+		select 
+		     uuid as uuid 
+		   , "location" as backupDestLocation
+		   , username as backupDestUser
+		   , "password" as backupDestPasswd
+		   , "free" as freeSize
+		   , total as totalSize
+		   , "type" as type
+		   , isrunscript as isRunScript
+		   , freealert as freeSizeAlert
+		   , freealertunit as freeSizeAlertUnit
+		   , joblimit as jobLimit
+		   , currentJobCount as currentJobCount
+		   , waitingJobCount as waitingJobCount
+		   , "time" as time
+		   , enablededup as enablededup
+		  from backuplocation  
+		 WHERE "location" like #{path}
+	</select>
 
 </mapper>

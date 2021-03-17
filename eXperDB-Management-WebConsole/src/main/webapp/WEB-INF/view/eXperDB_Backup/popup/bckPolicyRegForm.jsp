@@ -141,8 +141,10 @@
 		var bckdate = "";
 		if($("#storageType").val() == 1){
 			$("#bckStorageType").val("NFS Share");
+			$("#bckStorageTypeVal").val(1);	
 		}else{
 			$("#bckStorageType").val("CIFS Share");	
+			$("#bckStorageTypeVal").val(2);	
 		}
 		$("#bckStorage").val($("#storageList").val());
 		if($("#compressType").val()==1){		
@@ -153,7 +155,8 @@
 
 		if($(':input:radio[name=merge_period]:checked').val() == "weekly"){
 			$("#bckSetDateTypeVal").val(true);
-			$("#bckSetDateVal").val($("#merge_period_week").val());
+			var setDateVal = $("#merge_period_week").val()
+			$("#bckSetDateVal").val(setDateVal);
 			bckdate = "매주"
 			switch($("#merge_period_week").val()){
 				case  "0":
@@ -180,7 +183,8 @@
 			}
 		}else{
 			$("#bckSetDateTypeVal").val(false);
-			$("#bckSetDateVal").val($("#merge_period_month").val());
+			var setDateVal = $("#merge_period_month").val()
+			$("#bckSetDateVal").val(setDateVal);
 			bckdate = "매월"
 			if($("#merge_period_month").val()>31){
 				switch($("#merge_period_month").val()){
@@ -219,7 +223,7 @@
 		
 		
 		$("#bckCompressVal").val($("#compressType").val());
-		$("#bckStorageTypeVal").val($("#storageType").val());	
+		// $("#bckStorageTypeVal").val($("#storageType").val());	
 		
 		$("#pop_layer_popup_backupPolicyReg").modal("hide");
 	}

@@ -33,4 +33,10 @@
 		  FROM targetmachine
 	     WHERE "name" like #{path}
 	</select>
+	
+	<select id="getScheduleNodeInfo" resultType="targetMachineVO" parameterType="String">
+		SELECT *
+		  FROM targetmachine
+		 WHERE "name" like #{path}
+	</select>
 </mapper>

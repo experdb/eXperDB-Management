@@ -23,6 +23,7 @@ public class BackupLocationInfoVO implements Serializable {
 	private int currentJobCount = 0;
 	private int waitingJobCount = 0;
 	private long time;
+	private int enablededup;
 	
 	private String rpsserver;
 	private String rpspassword;
@@ -30,7 +31,7 @@ public class BackupLocationInfoVO implements Serializable {
 	private String rpsprotocol;
 
 	private DataStoreInfoVO dataStoreInfo;
-	private String enableS3CifsShare; // 아마존 s3 445포트랑 다를 경우(false) 같으면 (true)
+	private String enableS3CifsShare = "false"; // 아마존 s3 445포트랑 다를 경우(false) 같으면 (true)
 	private int s3CifsSharePort = 445; // 아마존 S3공유포트 디폴트 
 	private String s3CifsShareUser = "root"; // 아마존 S3루트계정 디폴트 
 	private BackupServerInfoVO serverInfo;
@@ -246,6 +247,14 @@ public class BackupLocationInfoVO implements Serializable {
 	public void setTime(long time) {
 		this.time = time;
 	}
+	
+	public int getEnablededup() {
+		return enablededup;
+	}
+
+	public void setEnablededup(int enablededup) {
+		this.enablededup = enablededup;
+	}
 
 	@Override
 	public String toString() {
@@ -254,15 +263,11 @@ public class BackupLocationInfoVO implements Serializable {
 				+ ", backupDestUser=" + backupDestUser + ", freeSize=" + freeSize + ", totalSize=" + totalSize
 				+ ", isRunScript=" + isRunScript + ", script=" + script + ", freeSizeAlert=" + freeSizeAlert
 				+ ", freeSizeAlertUnit=" + freeSizeAlertUnit + ", jobLimit=" + jobLimit + ", currentJobCount="
-				+ currentJobCount + ", waitingJobCount=" + waitingJobCount + ", time=" + time + ", rpsserver="
-				+ rpsserver + ", rpspassword=" + rpspassword + ", rpsuuid=" + rpsuuid + ", rpsprotocol=" + rpsprotocol
-				+ ", dataStoreInfo=" + dataStoreInfo + ", enableS3CifsShare=" + enableS3CifsShare + ", s3CifsSharePort="
-				+ s3CifsSharePort + ", s3CifsShareUser=" + s3CifsShareUser + ", serverInfo=" + serverInfo
-				+ ", s3CifsSharePassword=" + s3CifsSharePassword + "]";
+				+ currentJobCount + ", waitingJobCount=" + waitingJobCount + ", time=" + time + ", enablededup="
+				+ enablededup + ", rpsserver=" + rpsserver + ", rpspassword=" + rpspassword + ", rpsuuid=" + rpsuuid
+				+ ", rpsprotocol=" + rpsprotocol + ", dataStoreInfo=" + dataStoreInfo + ", enableS3CifsShare="
+				+ enableS3CifsShare + ", s3CifsSharePort=" + s3CifsSharePort + ", s3CifsShareUser=" + s3CifsShareUser
+				+ ", serverInfo=" + serverInfo + ", s3CifsSharePassword=" + s3CifsSharePassword + "]";
 	}
-	
-	
-
-	
 
 }

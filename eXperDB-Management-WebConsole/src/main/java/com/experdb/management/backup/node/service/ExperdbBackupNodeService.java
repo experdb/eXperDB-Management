@@ -26,6 +26,6 @@ public interface ExperdbBackupNodeService {
 
 	JSONObject nodeDelete(HttpServletRequest request) throws Exception;
 
-	void scheduleInsert(HttpServletRequest request, Map<Object, String> param);
+	void scheduleInsert(HttpServletRequest request, Map<Object, String> param) throws Exception;
 
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.experdb.management.backup.node.service.TargetMachineVO;
+import com.experdb.management.backup.service.*;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -35,6 +36,14 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 
 	public TargetMachineVO getNodeInfo(String path) {
 		return sql2.selectOne("backupNodeSql.getNodeInfo", path);
+	}
+	
+	public TargetMachineVO getScheduleNodeInfo(String path){
+		return sql2.selectOne("backupNodeSql.getScheduleNodeInfo", path);
+	}
+
+	public BackupLocationInfoVO getScheduleLocationInfo(String path) {
+		return sql2.selectOne("backupStorageSql.getScheduleLocationInfo", path);
 	}
 
 }

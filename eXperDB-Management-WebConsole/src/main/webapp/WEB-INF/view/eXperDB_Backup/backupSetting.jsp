@@ -62,8 +62,7 @@ function fn_init() {
 		deferRender : true,
 		info : false,
 		select : {
-			'style' : 'single'/* ,
-			items' : 'cell' */
+			'style' : 'single'
 		},
 		bSort : false,
 		columns : [
@@ -137,8 +136,7 @@ function dateCalenderSetting() {
 
 	$("#startDate").val(startDay);
 	
-	
-	// if ($("#startDate_div", "#scheduleForm").length) {
+
 	$("#startDate").datepicker({
 		}).datepicker('setDate', startDay)
 		.datepicker('setStartDate', startDay)
@@ -146,9 +144,6 @@ function dateCalenderSetting() {
 		.on('hide', function(e) {
 			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
 		}); //값 셋팅
-	// }
-
-
 
 	
 	$("#startDate").datepicker('setStartDate', startDay).datepicker('setEndDate', endDay);
@@ -405,45 +400,70 @@ function fn_nodeRegPopup() {
 	
 	function fn_apply() {
 		console.log("fn_apply called!!");
-		console.log("scheWeek : " + JSON.stringify(schWeek));
-		$.ajax({
-			url : "/experdb/backupScheduleReg.do",
-			type : "post",
-			dataType : "json",
-			traditional : true,
-			data : {
-				mon : JSON.stringify(schMon),
-				tue : JSON.stringify(schTue),
-				wed : JSON.stringify(schWed),
-				thu : JSON.stringify(schThu),
-				fri : JSON.stringify(schFri),
-				sat : JSON.stringify(schSat),
-				sun : JSON.stringify(schSun),
-				startDate : $("#startDateSch").val(),
-				storageType : $("#bckStorageTypeVal").val(),
-				storage : $("#bckStorage").val(),
-				compress : $("#bckCompressVal").val(),
-				dateType : $("#bckSetDateTypeVal").val(),
-				date : $("#bckSetDateVal").val(),
-				setNum : $("#bckSetNum").val()
-			}
-		})
-		.done (function(result){			
-			showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
-			// 모니터링 화면으로 이동 ----->
-		})
-		.fail (function(xhr, status, error){
-			 if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if (xhr.status == 403){
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		 })
+		if(fn_applyValidation()){
+			var weekData = new Object();
+			weekData.mon = schMon;
+			weekData.tue = schTue;
+			weekData.wed = schWed;
+			weekData.thu = schThu;
+			weekData.fri = schFri,
+			weekData.sat = schSat;
+			weekData.sun = schSun;
+			console.log("nodeIpadr : " + NodeList.row('.selected').data().ipadr);
+			console.log("storageType : " + $("#bckStorageTypeVal").val());
+			console.log("compress : " + $("#bckCompressVal").val());
+			console.log("dateType : " + $("#bckSetDateTypeVal").val());
+			console.log("date : " + $("#bckSetDateVal").val());
+
+			$.ajax({
+				url : "/experdb/backupScheduleReg.do",
+				type : "post",
+				dataType : "json",
+				traditional : true,
+				data : {
+					nodeIpadr : NodeList.row('.selected').data().ipadr,
+					weekData : JSON.stringify(weekData),
+					startDate : $("#startDateSch").val(),
+					storageType : $("#bckStorageTypeVal").val(),
+					storage : $("#bckStorage").val(),
+					compress : $("#bckCompressVal").val(),
+					dateType : $("#bckSetDateTypeVal").val(),
+					date : $("#bckSetDateVal").val(),
+					setNum : $("#bckSetNum").val()
+				}
+			})
+			.done (function(result){			
+				showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+				// 모니터링 화면으로 이동 ----->
+			})
+			.fail (function(xhr, status, error){
+				 if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if (xhr.status == 403){
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			 })
+		}
 		
 	}
 	
+/* ********************************************************
+ * apply validation
+ ******************************************************** */
+ 	function fn_applyValidation(){
+ 		var data = NodeList.rows('.selected').data();
+		if(data.length<1){
+			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else if($("#bckStorage").val() == "" || $("#bckStorage").val() == null){
+			showSwalIcon('백업 정책을 등록해주세요', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}
+		return true;
+	}
+ 
 
 </script>
 <style>
@@ -468,7 +488,7 @@ table.dataTable.ccc thead th{
 	<input type="hidden" name="bckStorageTypeVal"  id="bckStorageTypeVal">
 	<input type="hidden" name="bckStorageVal"  id="bckStorageVal" >
 	<input type="hidden" name="bckCompressVal"  id="bckCompressVal" >
-	<input type="hidden" name="bckSetDateTypeVal"  id="bckSetNumVal" >
+	<input type="text" name="bckSetDateTypeVal"  id="bckSetDateTypeVal" hidden>
 	<input type="hidden" name="bckSetDateVal" id="bckSetDateVal">
 </form>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">

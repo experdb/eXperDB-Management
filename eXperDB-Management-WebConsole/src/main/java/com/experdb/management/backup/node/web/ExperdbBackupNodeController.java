@@ -98,7 +98,12 @@ public class ExperdbBackupNodeController {
 	@RequestMapping(value="/experdb/backupScheduleReg.do")
 	public @ResponseBody JSONObject scheduleInsert(HttpServletRequest request,@RequestParam Map<Object, String> param){
 		JSONObject result = new JSONObject();
-		experdbBackupNodeService.scheduleInsert(request, param);
+		try {
+			experdbBackupNodeService.scheduleInsert(request, param);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return result;
 	}
 

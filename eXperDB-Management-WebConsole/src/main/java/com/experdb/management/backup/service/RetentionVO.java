@@ -50,4 +50,12 @@ public class RetentionVO implements Serializable {
 		this.useWeekly = useWeekly;
 	}
 
+	@Override
+	public String toString() {
+		return "RetentionVO [backupSetCount=" + backupSetCount + ", dayOfMonth=" + dayOfMonth + ", dayOfWeek="
+				+ dayOfWeek + ", useWeekly=" + useWeekly + "]";
+	}
+	
+	
+
 }
