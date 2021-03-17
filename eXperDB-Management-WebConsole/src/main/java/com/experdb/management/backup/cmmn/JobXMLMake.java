@@ -2,7 +2,7 @@ package com.experdb.management.backup.cmmn;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.UUID;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,9 +18,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.experdb.management.backup.node.service.TargetMachineVO;
-import com.experdb.management.backup.service.BackupLocationInfoVO;
-import com.experdb.management.backup.service.BackupScriptVO;
-import com.experdb.management.backup.service.RetentionVO;
+import com.experdb.management.backup.service.*;
 
 public class JobXMLMake{
 	
@@ -45,7 +43,7 @@ public class JobXMLMake{
 		Document doc;
 		
 	      
-	      public void xmlMake(BackupLocationInfoVO locationInfo, BackupScriptVO backupScript, TargetMachineVO targetMachine, RetentionVO retentionVO){
+	      public void xmlMake(BackupLocationInfoVO locationInfo, BackupScriptVO backupScript, TargetMachineVO targetMachine, RetentionVO retentionVO, List<BackupScheduleVO> backupSchedule){
 
  	  
 	    	  System.out.println("xmlMake");
@@ -77,7 +75,7 @@ public class JobXMLMake{
 		            targetInfoXml(targetMachine, backupConfiguration, backupScript);
 		            
 		            //scheduleInfoXml
-		            scheduleXml(backupConfiguration);
+		            scheduleXml(backupConfiguration, backupSchedule);
 			            
 	
 			            
@@ -91,20 +89,144 @@ public class JobXMLMake{
 	      
 	 
 	      
-	    private void scheduleXml(Element backupConfiguration) {
+	    private void scheduleXml(Element backupConfiguration, List<BackupScheduleVO> backupSchedule) {
+	    	
 	    	// target 엘리먼트==================================================
             Element weeklySchedule = doc.createElement("weeklySchedule");
             backupConfiguration.appendChild(weeklySchedule);  
-            
-           // for(){
-            	  // backupLocationType 엘리먼트
-	            Element scheduleList = doc.createElement("scheduleList");
-	            	
 
-            	
-            	
-           // }
-			
+            for(BackupScheduleVO bs : backupSchedule){
+        	   Element scheduleList = doc.createElement("scheduleList");
+        	   weeklySchedule.appendChild(scheduleList);
+        	   
+        	   // repeat
+        	   Element ns2_enabled = doc.createElement("ns2:enabled");
+        	   ns2_enabled.appendChild(doc.createTextNode(bs.getRepeat()));
+        	   scheduleList.appendChild(ns2_enabled);
+        	   // interval
+        	   Element ns2_interval = doc.createElement("ns2:interval");
+        	   ns2_interval.appendChild(doc.createTextNode(bs.getInterval()));
+        	   scheduleList.appendChild(ns2_interval);
+        	   // interval unit
+        	   Element ns2_intervalUnit = doc.createElement("ns2:intervalUnit");
+        	   ns2_intervalUnit.appendChild(doc.createTextNode(bs.getIntervalUnit()));
+        	   scheduleList.appendChild(ns2_intervalUnit);
+        	   
+        	   // start time 시작
+        	   Element startTime = doc.createElement("startTime");
+        	   scheduleList.appendChild(startTime);
+        	   		
+        	   		Element start_year = doc.createElement("ns2:year");
+        	   		start_year.appendChild(doc.createTextNode("0"));
+        	   		startTime.appendChild(start_year);
+        	   		Element start_month = doc.createElement("ns2:month");
+        	   		start_month.appendChild(doc.createTextNode("0"));
+        	   		startTime.appendChild(start_month);
+        	   		Element start_day = doc.createElement("ns2:day");
+        	   		start_day.appendChild(doc.createTextNode("0"));
+        	   		startTime.appendChild(start_day);
+        	   		
+        	   		Element start_hour = doc.createElement("ns2:hour");
+        	   		start_hour.appendChild(doc.createTextNode(bs.getStartHour()));
+        	   		startTime.appendChild(start_hour);
+        	   		Element start_minute = doc.createElement("ns2:minute");
+        	   		start_minute.appendChild(doc.createTextNode(bs.getStartMinute()));
+        	   		startTime.appendChild(start_minute);
+        	   		Element start_hourOfday = doc.createElement("ns2:hourOfday");
+        	   		start_hourOfday.appendChild(doc.createTextNode(bs.getStartHourOfDay()));
+        	   		startTime.appendChild(start_hourOfday);
+        	   		Element start_amPM = doc.createElement("ns2:amPM");
+        	   		start_amPM.appendChild(doc.createTextNode(bs.getStartHourType()));
+        	   		startTime.appendChild(start_amPM);
+        	   		
+        	   		Element start_ready = doc.createElement("ready");
+        	   		start_ready.appendChild(doc.createTextNode("false"));
+        	   		startTime.appendChild(start_ready);
+        	   		Element start_runNow = doc.createElement("runNow");
+        	   		start_runNow.appendChild(doc.createTextNode("false"));
+        	   		startTime.appendChild(start_runNow);
+        	   	
+        	   	// end time 시작
+        	   if(bs.getRepeat().equals("true")){
+        		   Element endTime = doc.createElement("endTime");
+        		   scheduleList.appendChild(endTime);
+        		   
+        		   Element end_year = doc.createElement("ns2:year");
+        		   end_year.appendChild(doc.createTextNode("0"));
+        		   endTime.appendChild(end_year);
+       	   		   Element end_month = doc.createElement("ns2:month");
+       	   		   end_month.appendChild(doc.createTextNode("0"));
+       	   		   endTime.appendChild(end_month);
+       	   		   Element end_day = doc.createElement("ns2:day");
+       	   		   end_day.appendChild(doc.createTextNode("0"));
+       	   		   endTime.appendChild(end_day);
+        		   		
+        		   		Element end_hour = doc.createElement("ns2:hour");
+        		   		end_hour.appendChild(doc.createTextNode(bs.getEndHour()));
+        		   		endTime.appendChild(end_hour);
+            	   		Element end_minute = doc.createElement("ns2:minute");
+            	   		end_minute.appendChild(doc.createTextNode(bs.getEndMinute()));
+            	   		endTime.appendChild(end_minute);
+            	   		Element end_hourOfday = doc.createElement("ns2:hourOfday");
+            	   		end_hourOfday.appendChild(doc.createTextNode(bs.getEndHourOfDay()));
+            	   		endTime.appendChild(end_hourOfday);
+            	   		Element end_amPM = doc.createElement("ns2:amPM");
+            	   		end_amPM.appendChild(doc.createTextNode(bs.getEndHourType()));
+            	   		endTime.appendChild(end_amPM);
+        		   		
+            	   		Element end_ready = doc.createElement("ready");
+            	   		end_ready.appendChild(doc.createTextNode("false"));
+        		   		endTime.appendChild(end_ready);
+        		   		Element end_runNow = doc.createElement("runNow");
+        		   		end_runNow.appendChild(doc.createTextNode("false"));
+        		   		endTime.appendChild(end_runNow);
+        	   }
+        	   // day of week
+        	   Element day = doc.createElement("day");
+        	   day.appendChild(doc.createTextNode(bs.getDayType()));
+        	   scheduleList.appendChild(day);
+        	   
+        	   // backup jobType
+        	   Element jobType = doc.createElement("jobType");
+       	       jobType.appendChild(doc.createTextNode("4"));
+        	   scheduleList.appendChild(jobType);
+           }
+            
+            Element startTime = doc.createElement("startTime");
+            weeklySchedule.appendChild(startTime);
+            
+            Element year = doc.createElement("ns2:year");
+            year.appendChild(doc.createTextNode(backupSchedule.get(0).getYear()));
+            startTime.appendChild(year);
+            
+            Element month = doc.createElement("ns2:month");
+            month.appendChild(doc.createTextNode(backupSchedule.get(0).getMonth()));
+            startTime.appendChild(month);
+            
+            Element day = doc.createElement("ns2:day");
+            day.appendChild(doc.createTextNode(backupSchedule.get(0).getDay()));
+            startTime.appendChild(day);
+            
+            Element hour = doc.createElement("ns2:hour");
+            hour.appendChild(doc.createTextNode("0"));
+	   		startTime.appendChild(hour);
+	   		Element minute = doc.createElement("ns2:minute");
+	   		minute.appendChild(doc.createTextNode("0"));
+	   		startTime.appendChild(minute);
+	   		Element hourOfday = doc.createElement("ns2:hourOfday");
+	   		hourOfday.appendChild(doc.createTextNode("0"));
+	   		startTime.appendChild(hourOfday);
+	   		Element amPM = doc.createElement("ns2:amPM");
+	   		amPM.appendChild(doc.createTextNode("0"));
+	   		startTime.appendChild(amPM);
+	   		
+	   		Element ready = doc.createElement("ready");
+	   		ready.appendChild(doc.createTextNode("true"));
+	   		startTime.appendChild(ready);
+	   		Element runNow = doc.createElement("runNow");
+	   		runNow.appendChild(doc.createTextNode("false"));
+	   		startTime.appendChild(runNow);
+            
 		}
 
 
@@ -542,10 +664,53 @@ public class JobXMLMake{
 	    	  targetMachine.setPriority(0);
 	    	  
 	    	  //배열생성
+	    	  List<BackupScheduleVO> backupSchedule = new ArrayList<>();
+	    	  BackupScheduleVO schedule = new BackupScheduleVO();
+//	    	  schedule.setYear(2021);
+//	    	  schedule.setMonth(3);
+//	    	  schedule.setDay(11);
+//	    	  schedule.setRepeat(true);
+//	    	  schedule.setInterval(15);
+//	    	  schedule.setIntervalUnit(0);
+//	    	  schedule.setStartHour(1);
+//	    	  schedule.setStartMinute(30);
+//	    	  schedule.setStartHourType(0);
+//	    	  schedule.setEndHour(11);
+//	    	  schedule.setEndMinute(50);
+//	    	  schedule.setEndHourType(1);
+//	    	  schedule.setDayType(1);
+//	    	  backupSchedule.add(schedule);
+//	    	  
+//	    	  BackupScheduleVO schedule1 = new BackupScheduleVO();
+//	    	  schedule1.setRepeat(true);
+//	    	  schedule1.setInterval(3);
+//	    	  schedule1.setIntervalUnit(1);
+//	    	  schedule1.setStartHour(2);
+//	    	  schedule1.setStartMinute(20);
+//	    	  schedule1.setStartHourType(0);
+//	    	  schedule1.setEndHour(10);
+//	    	  schedule1.setEndMinute(40);
+//	    	  schedule1.setEndHourType(1);
+//	    	  schedule1.setDayType(2);
+//	    	  backupSchedule.add(schedule1);
+//	    	  
+//	    	  BackupScheduleVO schedule2 = new BackupScheduleVO();
+//	    	  schedule2.setRepeat(false);
+//	    	  schedule2.setInterval(0);
+//	    	  schedule2.setIntervalUnit(0);
+//	    	  schedule2.setStartHour(2);
+//	    	  schedule2.setStartMinute(20);
+//	    	  schedule2.setStartHourType(0);
+//	    	  schedule2.setEndHour(10);
+//	    	  schedule2.setEndMinute(40);
+//	    	  schedule2.setEndHourType(1);
+//	    	  schedule2.setDayType(2);
+//	    	  backupSchedule.add(schedule2);
+//	    	  
 	    	  
 	    	  
 	    	  
 	    	  JobXMLMake xml = new JobXMLMake();
-	    	  xml.xmlMake(locationInfo,backupScript,targetMachine,retentionVO);
+	    	  xml.xmlMake(locationInfo,backupScript,targetMachine,retentionVO, backupSchedule);
 		}
 }
