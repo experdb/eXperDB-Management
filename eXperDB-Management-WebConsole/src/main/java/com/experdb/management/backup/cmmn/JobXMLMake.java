@@ -56,27 +56,39 @@ public class JobXMLMake{
 		            doc = docBuilder.newDocument();
 		            doc.setXmlStandalone(true); //standalone="no" 를 없애준다.
 		            
-		            //backupConfiguration========================================================
-		            Element backupConfiguration = doc.createElement("backupConfiguration");
-		            doc.appendChild(backupConfiguration);
-		            backupConfiguration.setAttribute("xmlns:ns2", "http://backup.data.webservice.arcflash.ca.com/xsd");
-		            backupConfiguration.setAttribute("xmlns:ns3", "http://catalog.data.webservice.arcflash.ca.com/xsd");
+		            //exportJob========================================================
+		            Element exportJob = doc.createElement("exportJob");
+		            doc.appendChild(exportJob);
+		            exportJob.setAttribute("xmlns:ns2", "http://backup.data.webservice.arcflash.ca.com/xsd");
+		            exportJob.setAttribute("xmlns:ns3", "http://catalog.data.webservice.arcflash.ca.com/xsd");
+		            
+		            Element buildNumber = doc.createElement("buildNumber");
+		            buildNumber.appendChild(doc.createTextNode("4455392"));
+		            exportJob.appendChild(buildNumber);
+		            
+		            Element jobList = doc.createElement("jobList");
+		            exportJob.appendChild(jobList);
+		            
+		            Element version = doc.createElement("version");
+		            version.appendChild(doc.createTextNode("7.0"));
+		            exportJob.appendChild(version);
+		            
 
 		            // backupLocationInfo
-		            backupLocationInfoXml(locationInfo, backupConfiguration);
+		            backupLocationInfoXml(locationInfo, jobList);
 		            		            
 		            // jonbInfo
-		            jobInfoXml(backupScript, backupConfiguration, targetMachine);
+		            jobInfoXml(backupScript, jobList, targetMachine);
 		            
 		            //fullInfoXml
-		            fullInfoXml(retentionVO, backupConfiguration);
+		            fullInfoXml(retentionVO, jobList);
 		            
 		            //targetInfoXml
-		            targetInfoXml(targetMachine, backupConfiguration, backupScript);
+		            targetInfoXml(targetMachine, jobList, backupScript);
 		            
 		            //scheduleInfoXml
 		            if(backupSchedule.size()>0){		            	
-		            	scheduleXml(backupConfiguration, backupSchedule);
+		            	scheduleXml(jobList, backupSchedule);
 		            }
 			            
 	
@@ -590,7 +602,7 @@ public class JobXMLMake{
 	    	  TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	    	  
 	            Transformer transformer = transformerFactory.newTransformer();
-	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
+//	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
 	            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 	            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //들여쓰기
 	            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes"); //doc.setXmlStandalone(true); 했을때 붙어서 출력되는부분 개행
