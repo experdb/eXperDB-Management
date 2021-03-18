@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+	<!--
+	=====================================================================
+	appender
+	=====================================================================
+	-->
+	<appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss}][%-5p][%c{1}]%m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="sql" class="org.apache.log4j.ConsoleAppender">
+	    <layout class="org.apache.log4j.PatternLayout">
+	      <param name="ConversionPattern" value="%d [%t] %-5p %c{1} - %m%n" />
+	    </layout>
+	        <filter class="org.apache.log4j.varia.StringMatchFilter"> 
+	         <param name="StringToMatch" value="Result" /> 
+	            <param name="AcceptOnMatch" value="false" /> 
+	        </filter> 
+	 </appender>
+
+	
+	<appender name="consoleToFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="INFO" />
+		<param name="File" value="${log.base}/console.log" />
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="Encoding" value="utf-8"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss}][%-5p]%m\n" />
+		</layout>
+	</appender>
+
+	<appender name="errorToFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="ERROR" />
+		<param name="File" value="${log.base}/error.log" />
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="Encoding" value="utf-8"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}|%m\n" />
+		</layout>
+	</appender>
+	
+	<appender name="daemonStartToFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="DEBUG" />
+		<param name="File" value="${log.base}/DaemonStart.log" />
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="Encoding" value="utf-8"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}|%m\n" />
+		</layout>
+	</appender>
+	
+	<appender name="socketToFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="DEBUG" />
+		<param name="File" value="${log.base}/socket.log" />
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="Encoding" value="utf-8"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}|%m\n" />
+		</layout>
+	</appender>
+	
+	<!--
+	=====================================================================
+	category.
+	=====================================================================
+	-->
+  <category name="com.ibatis">
+    <priority value="debug" />
+  </category>
+  <category name="java.sql">
+    <priority value="debug" />
+    <appender-ref ref="sql" />
+  </category>
+
+	<!--
+	=====================================================================
+	logger.
+	=====================================================================
+	-->
+	
+	<logger name="com.experdb.proxy">
+        <level value="DEBUG" />
+    </logger>
+
+	<logger name="DaemonStartLogger">
+        <level value="INFO" />
+        <appender-ref ref="daemonStartToFile" />
+    </logger>
+
+	<logger name="socketLogger">
+        <level value="DEBUG" />
+        <appender-ref ref="socketToFile" />
+    </logger>
+
+
+	<!--
+	=====================================================================
+	root.
+	=====================================================================
+	-->
+	
+	<root>
+		<priority value="error" />
+		<appender-ref ref="consoleToFile" />
+		<appender-ref ref="errorToFile" />
+		
+	</root>
+	
+</log4j:configuration>

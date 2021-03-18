@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app">
+
+	<select id="selectDatabaseList" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : TB_DATABASE_LIST
+	 	* Description : Database List조회
+	 	* Author : 박태혁
+	 	**/
+		SELECT 
+			datname 
+		FROM pg_database
+		WHERE 
+			datistemplate = false
+	</select>
+
+	<select id="selectTableList" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : TB_TABLE_LIST
+	 	* Description : Table List조회
+	 	* Author : 박태혁
+	 	**/
+		SELECT 
+			table_schema
+			, table_name
+		FROM information_schema.tables
+		where 
+			table_schema = #{dbname}
+		ORDER BY table_schema,table_name
+	</select>
+	
+	<select id="selectAllSchemaTableList" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			table_schema
+			, table_name
+		FROM information_schema.tables
+		where table_schema not in ('pg_catalog','information_schema','pgaudit') and table_type='BASE TABLE'
+		order by table_schema
+	</select>
+	
+	<select id="selectAuthentication" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectAuthentication
+	 	* Description : 접근제어 조회
+	 	* Author : 박태혁
+	 	**/
+		SELECT 
+			pg_read_file 
+		FROM pg_catalog.pg_read_file('pg_hba.conf')
+	</select>
+	
+	<select id="selectPgConfUnlink" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPgConfUnlink
+	 	* Description : 접근제어 pg_hba.conf.bak unlink
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_file_unlink('pg_hba.conf.bak')
+	</select>
+	
+	<select id="selectPgConfWrite" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPgConfWrite
+	 	* Description : 접근제어 pg_hba.conf.tmp 생성
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_file_write('pg_hba.conf.tmp',  #{hbadata} , false)
+	</select>
+	
+	<select id="selectPgConfRename" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPgConfRename
+	 	* Description : 접근제어 pg_hba.conf 생성
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_file_rename('pg_hba.conf.tmp', 'pg_hba.conf', 'pg_hba.conf.bak')
+	</select>
+
+	<select id="selectPgConfReload" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPgConfReload
+	 	* Description : 접근제어 pg_hba.conf Reload
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_reload_conf()
+	</select>
+	
+	<select id="selectIsSetupExtension" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPgConfReload
+	 	* Description : Extension 설치 여부
+	 	* Author : 박태혁
+	 	**/
+	    SELECT 1 AS INS FROM PG_AVAILABLE_EXTENSIONS WHERE NAME='adminpack'
+	</select>
+	
+	<select id="selectIsCreateExtension" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectIsCreateExtension
+	 	* Description : Extension 생성 여부
+	 	* Author : 박태혁
+	 	**/
+	    SELECT 1 from pg_extension WHERE extname = 'adminpack'
+	</select>
+
+	<select id="selectPgExtensionList" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPgExtensionList
+	 	* Description : Extension List 조회
+	 	* Author : 박태혁
+	 	**/
+	    SELECT extname, extversion from pg_extension
+	    WHERE
+	    	extname is not null
+	    	<if test="extname != null and extname != '' ">
+	    	AND extname = #{extname}
+	    	</if>
+	    	
+	</select>
+	
+	<select id="selectRoleName" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectRoleName
+	 	* Description : role 조회
+	 	* Author : 박태혁
+	 	**/
+	    SELECT rolname FROM pg_roles
+	</select>
+
+	<select id="selectSettingValue" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectSettingValue
+	 	* Description : postgresql.auto.conf file setting 조회
+	 	* Author : 박태혁
+	 	**/
+	    select current_setting(#{settingId}) as settingValue
+	</select>
+	
+	<insert  id="updatePgAuditLogSetting" parameterType="AuditVO">
+		/**
+	 	* Query ID : updatePgauditLog
+	 	* Description : log Setting - read, write, function, role, ddl, misc
+	 	* Author : 박태혁
+	 	**/
+	 	<choose> 
+		 	<when test="auditLog == ''"> 
+		 	   ALTER SYSTEM SET pgaudit.log = ''
+		 	</when> 
+		 	<otherwise> 
+		 		ALTER SYSTEM SET pgaudit.log = ${auditLog}
+		 	</otherwise> 
+	 	</choose>
+
+		
+	</insert>
+	
+	<insert  id="updatePgAuditLogLevelSetting" parameterType="AuditVO">
+		/**
+	 	* Query ID : updatePgauditLogLevel
+	 	* Description : log_level Setting - debug, info, notice, warning
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_level = ${auditLevel}
+	</insert>
+	
+	<insert  id="updatePgAuditLogCatalogSetting" parameterType="AuditVO">
+		/**
+	 	* Query ID : updatePgauditLogCatalogSetting
+	 	* Description : log_catalog Setting - true, false
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_catalog = ${auditCatalog}
+	</insert>
+	
+	<insert  id="updatePgAuditLogParameterSetting" parameterType="AuditVO">
+		/**
+	 	* Query ID : updatePgauditLogParameterSetting
+	 	* Description : log_parameter Setting - true, false
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_parameter = ${auditParameter}
+	</insert>
+	
+	<insert  id="updatePgAuditLogStatementOnceSetting" parameterType="AuditVO">
+		/**
+	 	* Query ID : updatePgauditLogStatementOnceSetting
+	 	* Description : log_statement_once Setting - true, false
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_statement_once = ${auditStatementOnce}
+	</insert>
+
+	<insert  id="updatePgAuditLogRelationSetting" parameterType="AuditVO">
+		/**
+	 	* Query ID : updatePgauditLogRelation
+	 	* Description : log_relation Setting - true, false
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_relation = ${auditRelation}
+	</insert>
+	
+	<insert  id="updatePgAuditRoleSetting" parameterType="AuditVO">
+		/**
+	 	* Query ID : updatePgauditRole
+	 	* Description : role Setting - postgres, 
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.role = '${auditRole}'
+	</insert>
+	
+	<select id="selectPgAuditLogSetting" resultType="PgAuditSettingVO">
+		/**
+	 	* Query ID : selectPgAuditLogSetting
+	 	* Description : Audit Setting 조회
+	 	* Author : 박태혁
+	 	**/
+		SELECT 
+			current_setting('pgaudit.log') AS log
+			, current_setting('pgaudit.log_level')	AS log_level
+			, current_setting('pgaudit.log_relation')	AS log_relation
+			, current_setting('pgaudit.role')	AS role
+			, current_setting('pgaudit.log_catalog')	AS log_catalog
+			, current_setting('pgaudit.log_parameter')	AS log_parameter
+			, current_setting('pgaudit.log_statement_once')	AS log_statement_once
+	</select>
+
+	<select id="selectPgAuditLogList"  parameterType="PgAuditVO" resultType="PgAuditVO">
+		/**
+	 	* Query ID : selectPgAuditLogList
+	 	* Description : 감사 이력 조회
+	 	* Author : 박태혁
+	 	**/
+		SELECT 
+			session_id
+			, session_line_num
+			, log_time
+			, user_name
+			, statement_id
+			, state as audit_state
+			, error_session_line_num
+			, substatement_id
+			, substatement
+			, audit_type as audit_type
+			, class as audit_class
+			, command as audit_command
+			, object_type
+			, object_name
+		FROM
+			pgaudit.vw_audit_event
+		WHERE session_line_num IS NOT NULL
+		
+		<if test="object_name != null AND object_name != '' ">
+			AND object_name = #{object_name}
+		</if>
+		
+		<if test="user_name != null AND user_name != '' "> 
+			AND user_name = #{user_name}
+		</if>
+		
+		<if test="start_date != null AND start_date != '' ">
+			AND log_time between to_timestamp(#{start_date}, 'YYYY-MM-DD')
+			AND to_timestamp(#{end_date}, 'YYYY-MM-DD')
+		</if>
+		
+	</select>
+	
+	<select id="selectPgResumeIngest">
+		/**
+	 	* Query ID : selectPgResumeIngest
+	 	* Description : bottledWater 프로세스 실행
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_resume_ingest(0)
+	</select>
+
+	<select id="selectPgSuspendIngest">
+		/**
+	 	* Query ID : selectPgSuspendIngest
+	 	* Description : bottledWater 프로세스 종료
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_suspend_ingest()
+
+	</select>
+
+	<select id="selectCreateKafkaConnect" parameterType="hashmap">
+		/**
+	 	* Query ID : selectCreateKafkaConnect
+	 	* Description : kafka Connect 생성
+	 	* Author : 박태혁
+	 	**/
+		select pg_create_kafka_connect(#{connectName})
+	</select>
+
+	<select id="selectDeleteKafkaConnect" parameterType="hashmap">
+		/**
+	 	* Query ID : selectDeleteKafkaConnect
+	 	* Description : kafka Connect 삭제
+	 	* Author : 박태혁
+	 	**/
+		select pg_delete_kafka_connect(#{connectName})
+	</select>
+	
+	<select id="selectTblMapps" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectTblMapps
+	 	* Description : tbl_mapps Table 조회
+	 	* Author : 박태혁
+	 	**/
+	 	SELECT 
+	 		database_name
+	 		, table_schema
+	 		, table_name
+	 		, relnamespace
+	 		, reloid
+	 		, topic_name
+	 		, create_user
+	 		, remark
+	 	FROM
+	 		tbl_mapps
+	 	WHERE
+	 		database_name = #{DATABASE_NAME}
+	 		AND table_schema = #{TABLE_SCHEMA}
+	 		AND table_name = #{TABLE_NAME}
+	</select>
+	
+	<insert  id="insertTblMapps" parameterType="hashMap">
+		/**
+	 	* Query ID : insertTblMapps
+	 	* Description : tbl_mapps Table 등록
+	 	* Author : 박태혁
+	 	**/
+		INSERT INTO tbl_mapps (database_name, table_schema, table_name, relnamespace, reloid, topic_name, create_date, create_user, remark)
+		  SELECT
+		   A.table_catalog
+		   , A.table_schema
+		   , A.table_name
+		   , B.relnamespace
+		   , B.oid
+		   ,  #{TOPIC_NAME}
+		   , now()
+		   , current_user
+		   , #{REMARK}	
+		  FROM information_schema.tables A INNER JOIN pg_class B
+		  ON A.table_name = B.relname
+		  WHERE table_name = #{TABLE_NAME} 
+		  AND A.table_schema = #{TABLE_SCHEMA}
+		  AND B.oid = (SELECT #{REGCLASS}::regclass::oid)
+		  AND not exists (SELECT 1 FROM tbl_mapps C WHERE C.table_name = #{TABLE_NAME}  AND C.table_schema = #{TABLE_SCHEMA})
+  	</insert>
+  	
+  	<delete id="deleteTblMapps" parameterType="hashMap">
+		/**
+	 	* Query ID : deleteTblMapps
+	 	* Description : tbl_mapps Table 삭제
+	 	* Author : 박태혁
+	 	**/
+	 	DELETE FROM tbl_mapps
+	 	WHERE
+	 		database_name = #{DATABASE_NAME}
+	 		AND table_name = #{TABLE_NAME} 
+	 		AND table_schema = #{TABLE_SCHEMA}
+	 		
+	 </delete>
+
+
+	<insert  id="insertColMapps" parameterType="hashMap">
+		/**
+	 	* Query ID : insertColMapps
+	 	* Description : col_mapps Table 등록
+	 	* Author : 박태혁
+	 	**/
+		INSERT INTO col_mapps (reloid, column_name, colseq, create_date, create_user, remark)
+		  SELECT
+		   B.oid
+		   , column_name
+		   , (select count(*)+1 from col_mapps where reloid = C.reloid) ord
+		   , now()
+		   , current_user
+		   , #{REMARK} remark
+		  FROM information_schema.columns A inner join pg_class B
+		  on A.table_name = B.relname
+		  JOIN tbl_mapps C on B.oid = C.reloid
+		  WHERE A.table_schema = #{TABLE_SCHEMA}
+		  AND A.table_name = #{TABLE_NAME}
+  	</insert>
+ 
+  	<delete id="deleteColMapps" parameterType="hashMap">
+		/**
+	 	* Query ID : deleteColMapps
+	 	* Description : col_mapps Table 삭제
+	 	* Author : 박태혁
+	 	**/
+	 	DELETE FROM col_mapps
+	 	WHERE
+	 		table_name = #{TABLE_NAME} 
+	 		AND table_schema = #{TABLE_SCHEMA}
+	 		
+	 </delete>
+	 
+  	<insert  id="insertKafkaConConfig" parameterType="hashMap">
+  		/**
+	 	* Query ID : insertKafkaConConfig
+	 	* Description : kafka_con_config Table 등록
+	 	* Author : 박태혁
+	 	**/
+	 	INSERT INTO kafka_con_config
+	 	(
+	 		DATABASE_NAME
+	 		, CONNECT_NAME
+	 		, CONTENTS
+	 		, CREATE_DATE
+	 		, CREATE_USER
+	 		, REMARK
+	 	)
+	 	VALUES(
+	 		#{DATABASE_NAME}
+	 		, #{CONNECT_NAME}
+	 		, to_json(#{CONTENTS}::json)
+	 		, now()
+	 		, #{USER_ID}
+	 		, #{REMARK}
+	 	)
+  	</insert>
+  	
+  	<delete id="deleteKafkaConConfig" parameterType="hashMap">
+  		/**
+	 	* Query ID : deleteKafkaConConfig
+	 	* Description : kafka_con_config Table 삭제
+	 	* Author : 박태혁
+	 	**/
+	 	DELETE FROM kafka_con_config
+	 	WHERE
+	 		DATABASE_NAME = #{DATABASE_NAME}
+	 		AND CONNECT_NAME = #{CONNECT_NAME}
+  	</delete>
+  	
+  	 <select id="selectDelSlot" parameterType="hashmap" resultType="hashmap">
+  		/**
+	 	* Query ID : selectDelSlot
+	 	* Description : Slot 삭제
+	 	* Author : 박태혁
+	 	**/
+	 	select pg_drop_replication_slot(#{SLOT_NAME});
+  	</select>
+  	
+	<select id="selectMasterGbm"  resultType="hashmap">
+		<![CDATA[
+			/**
+		 	* Query ID : selectMasterGbm
+		 	* Description : Master / Slave 구분
+		 	* Author : 박태혁
+		 	**/
+		
+			SELECT
+			CASE WHEN pg_is_in_recovery() is true THEN 'S' 
+			ELSE 'M' END MASTER_GBN 
+		]]>
+	</select>
+	
+	<update id="createPgExtensionPgAudit" parameterType="hashmap" >
+			/**
+		 	* Query ID : createPgExtensionPgAudit
+		 	* Description : createPgExtensionPgAudit
+		 	* Author : 변승우
+		 	**/
+		
+			CREATE EXTENSION ${extname} 
+	</update>
+	
+	<select id="selectTablespaceLocation"  resultType="hashmap">
+		<![CDATA[
+			/**
+		 	* Query ID : selectTablespaceLocation
+		 	* Description : tablespace location
+		 	* Author : 박태혁
+		 	**/
+		
+			SELECT 
+				spcname
+				, pg_tablespace_location(oid) AS tablespace_location 
+			FROM pg_tablespace
+			WHERE pg_tablespace_location(oid) <> ''
+		]]>
+	</select>
+
+	<select id="selectSwitchWalFile" resultType="hashmap">
+		/**
+	 	* Query ID : selectSwitchWalFile
+	 	* Description : wal파일 Switch archive파일
+	 	* Author : 변승우
+	 	**/
+		SELECT pg_switch_wal()
+	</select>
+	
+	
+	<select id="selectSchemaList" resultType="hashmap">
+	<![CDATA[
+		/**
+	 	* Query ID : selectSchemaList
+	 	* Description : 스키마 리스트 조회
+	 	* Author : 변승우
+	 	**/
+			SELECT
+						 n.nspname AS "name",                                          
+		   				pg_catalog.pg_get_userbyid(n.nspowner) AS "owner",                 
+		   				pg_catalog.array_to_string(n.nspacl, E'\n') AS "access privileges",
+		   				pg_catalog.obj_description(n.oid, 'pg_namespace') AS "description" 
+			 FROM pg_catalog.pg_namespace n                                       
+			 WHERE n.nspname !~ '^pg_' AND n.nspname <> 'information_schema'      
+			 ORDER BY 1
+			 ]]>
+	 </select>
+</mapper>

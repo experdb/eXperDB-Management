@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+    
+    <context:component-scan base-package="com.experdb.proxy.db.repository.dao"/>
+    <context:component-scan base-package="com.experdb.proxy.db.repository.service"/>
+
+    <!-- db 정보 파일을 로드한다. -->
+	<bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">  
+	        <property name="algorithm" value="PBEWithMD5AndDES" />  
+	        <property name="passwordEnvName" value="APP_ENCRYPTION_PASSWORD" />
+	</bean>  
+	       
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">  
+	        <property name="config" ref="environmentVariablesConfiguration" /> 
+	        <property name="password" value="experdba" /> 
+	</bean>  
+	      
+	<bean id="propertyConfigurer" class="org.jasypt.spring3.properties.EncryptablePropertyPlaceholderConfigurer">  
+	        <constructor-arg ref="configurationEncryptor" />  
+	        <property name="locations">  
+	            <list>  
+	                <value>classpath:/context.properties</value>  
+	            </list>  
+	        </property>  
+	</bean> 
+	
+     <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="org.postgresql.Driver"/>
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.username}" />
+        <property name="password" value="${database.password}" />
+    </bean>
+    
+    	<!-- SqlSession setup for MyBatis Database Layer -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:sql-mapper-config.xml" />
+	</bean> 
+	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  <property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager"> 
+		<tx:attributes> 
+			<tx:method name="insert*" rollback-for="RuntimeException" /> 
+			<tx:method name="write*" rollback-for="RuntimeException" /> 
+			<tx:method name="add*" rollback-for="RuntimeException" /> 
+			<tx:method name="create*" rollback-for="RuntimeException" /> 
+			<tx:method name="regist*" rollback-for="RuntimeException" /> 
+			<tx:method name="set*" rollback-for="RuntimeException" /> 
+			<tx:method name="update*" rollback-for="RuntimeException" /> 
+			<tx:method name="modify*" rollback-for="RuntimeException" /> 
+			<tx:method name="edit*" rollback-for="RuntimeException" /> 
+			<tx:method name="change*" rollback-for="RuntimeException" /> 
+			<tx:method name="delete*" rollback-for="RuntimeException"/> 
+			<tx:method name="remove" rollback-for="RuntimeException" /> 
+			<tx:method name="terminate*" rollback-for="RuntimeException" /> 
+			<tx:method name="read*" read-only="true" /> 
+			<tx:method name="select*" read-only="true" /> 
+			<tx:method name="get*" read-only="true" /> 
+		</tx:attributes> 
+	</tx:advice>
+
+	<aop:config> 
+		<aop:pointcut expression="execution(public * com.experdb.proxy.*.*(..))" id="controllerTx" /> 
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="controllerTx" /> 
+	</aop:config>
+
+
+
+</beans>
