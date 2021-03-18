@@ -1,15 +1,25 @@
 package com.experdb.management.backup.cmmn;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.json.simple.JSONObject;
 import org.springframework.util.ResourceUtils;
+import org.w3c.dom.Document;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -20,10 +30,19 @@ import com.jcraft.jsch.Session;
 
 public class CmmnUtil {
 
+	public static String PATH_D2D_SERVER_HOME = "/opt/Arcserve/d2dserver"; 
+	public static final String D2D_SERVER_HOME = "D2DSVR_HOME";
 	private Session session = null;
 	private Channel channel = null;
 	private ChannelExec channelExec = null;
 	private static DecimalFormat format = new DecimalFormat("#.00");
+	
+	
+	static {
+		String homePath = System.getenv("D2DSVR_HOME");
+		 if (homePath != null && !homePath.isEmpty())
+		 PATH_D2D_SERVER_HOME = homePath; 
+	}
 	
 	/**
 	 * * 서버와 연결 * *
@@ -81,8 +100,8 @@ public class CmmnUtil {
 
 		JSONObject result = new JSONObject();
 		String output = "";
-		String validateCifs = "";
-		
+		String validateOutput = "";
+
 		try {
 			getChannel();
 
@@ -100,43 +119,56 @@ public class CmmnUtil {
 
 			byte[] buf = new byte[1024];
 			int length;
-			
+				
 			while ((length = in.read(buf)) != -1) {
 				output += new String(buf, 0, length);
-				validateCifs = new String(buf, 0, length);
-		/*		System.out.println(length);
+				validateOutput = new String(buf, 0, length);
+			
+				/*System.out.println(length);
 				 System.out.println("=== command result : " + new
 				 String(buf,0,length));*/
 			}
 
-			
 			// Invalid 형태이면
 			if (output.trim().matches(".*Invalid.*")) {
 				result.put("RESULT_CODE", 1);
 				result.put("RESULT_DATA", output.trim());
-				System.out.println("※ Invalid command : " + output.trim());
+				System.out.println("Invalid command : " + output.trim());
 				// invalid 형태이면
 			} else if (output.trim().matches(".*invalid.*")) {
 				result.put("RESULT_CODE", 1);
 				result.put("RESULT_DATA", output.trim());
-				System.out.println("※ invalid command : " + output.trim());
+				System.out.println("invalid command : " + output.trim());
 				// Failed 형태이면
 			} else if (output.trim().matches(".*Failed.*")) {
 				result.put("RESULT_CODE", 1);
 				result.put("RESULT_DATA", output.trim());
-				System.out.println("※ Failed command : " + output.trim());
-			} else if (validateCifs.trim().matches(".*NT_STATUS_LOGON_FAILURE.*")) {
+				System.out.println("Failed command : " + output.trim());
+			} else if (validateOutput.trim().matches(".*NT_STATUS_LOGON_FAILURE.*")) {
 				result.put("RESULT_CODE", 1);
 				result.put("RESULT_DATA", output.trim());
-				System.out.println("※ Failed command : " + output.trim());
-			} else if (validateCifs.trim().matches(".*NT_STATUS_BAD_NETWORK_NAME*")) {
+				System.out.println("Failed command : " + output.trim());
+			} else if (validateOutput.trim().matches(".*NT_STATUS_BAD_NETWORK_NAME*")) {
 				result.put("RESULT_CODE", 1);
 				result.put("RESULT_DATA", output.trim());
-				System.out.println("※ Failed command : " + output.trim());
+				System.out.println("Failed command : " + output.trim());
+			}else if (validateOutput.trim().matches(".*32.*")) {
+				result.put("RESULT_CODE", 1);
+				System.out.println("Failed command : " + command);
+			}else if (validateOutput.trim().matches(".*0.*") && command.matches(".*umount.*")) {
+				result.put("RESULT_CODE", 0);
+				result.put("RESULT_DATA", "NFS UNMOUNT SUCCESS");
+				System.out.println(command);
+				System.out.println("Result command : NFS UNMOUNT SUCCESS");
+			}else if (validateOutput.trim().matches(".*0.*") && command.matches(".*mount.*"))  {
+				result.put("RESULT_CODE", 0);
+				result.put("RESULT_DATA", "NFS MOUNT SUCCESS");
+				System.out.println(command);
+				System.out.println("Result command : NFS MOUNT SUCCESS");
 			}else {
 				result.put("RESULT_CODE", 0);
 				result.put("RESULT_DATA", output.trim());
-				System.out.println("※ Result command : " + output.trim());
+				System.out.println("Result command : " + output.trim());
 			}
 
 		} catch (JSchException e) {
@@ -261,11 +293,127 @@ public class CmmnUtil {
 				return result;
 			}
 		 
+
 			
-			public static void main(String[] args) {
+			
+			 /**
+			 * RunNow
+			 * @param  jobname, jobtype
+			 * @return 
+			 */
+			public static JSONObject RunNow(String jobname, int jobtype) {
 				
-				//String v = bytes2String(29673590784);
-				//System.out.println(v);
+				JSONObject result = new JSONObject();		
+				CmmnUtil cmmUtil = new CmmnUtil();
+				
+				String path = "/opt/Arcserve/d2dserver/bin";
+				String cmd =null;
+				
+				try {
+					cmd = "cd " + path + ";"+ "./d2djob --run='"+ jobname +"' --jobtype=" + jobtype;
+					System.out.println(cmd);
+					result = cmmUtil.execute(cmd);			
+					// freeSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));				
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return result;
+			}
+			
+			
+			 /**
+			 * JobScript 디렉토리 및 파일생성
+			 * @param  
+			 * @return 
+			 */
+			public boolean xmlFileCreate (Document  doc, String nodeName){
+				 try{
+					 String path = "/opt/Arcserve/d2dserver/bin/jobList";
+					 
+					 boolean dirStatus	= createDir(path);
+					 
+					 if(dirStatus){
+			    	  TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			    	  
+			            Transformer transformer = transformerFactory.newTransformer();
+			            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //들여쓰기
+			            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes"); //doc.setXmlStandalone(true); 했을때 붙어서 출력되는부분 개행
+			 
+			            DOMSource source = new DOMSource(doc);
+			            StreamResult result = new StreamResult(new FileOutputStream(new File(path+"/"+nodeName.replace(".", "_").trim()+".xml")));
+			            
+			            transformer.transform(source, result);
+					 }
+					 return true;
+					 
+			    	  }catch(Exception e){
+			    		  e.printStackTrace();
+			    		  return false;
+			    	  }
+			}
+			
+			
+			
+			public boolean createDir (String path){
+					
+					File Folder = new File(path);
+		
+					// 해당 디렉토리가 없을경우 디렉토리를 생성합니다.
+					if (!Folder.exists()) {
+						try{
+						    Folder.mkdir(); 
+						    System.out.println("The folder has been created");
+						    return true;
+					        } 
+					        catch(Exception e){
+						    e.getStackTrace();
+						    return false;
+						}        
+				         }else {
+						System.out.println("The folder has already been created.");
+						 return true;
+					}
+			}
+			
+			
+			
+			 /**
+			 * JobScript 적용
+			 * @param  
+			 * @return 
+			 */
+			public static JSONObject JobScriptApply(String jobName, String nodeName) {
+				
+				JSONObject result = new JSONObject();		
+				CmmnUtil cmmUtil = new CmmnUtil();
+				
+				String path = "/opt/Arcserve/d2dserver/bin/jobList";
+				String cmd =null;
+				
+				try {
+					cmd = "cd " + path + ";"+"./d2djob --import="+nodeName.replace(".", "_").trim()+".xml  --job import";
+					System.out.println(cmd);
+					//result = cmmUtil.execute(cmd);		
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return result;
+			}
+			
+			
+	
+			public static void main(String[] args) {
+				//46068
+				//5906844
+				
+				String nodeName =  "192.168.56.130";
+				
+				
+				JobScriptApply("",nodeName);
+				
+	
 					
 				// String freeSize = backupLocationFreeSize("/backup");
 				// String totalSize = backupLocationTotalSize("/backup");
