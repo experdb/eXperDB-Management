@@ -124,7 +124,6 @@ public class CmmnUtil {
 			while ((length = in.read(buf)) != -1) {
 				output += new String(buf, 0, length);
 				validateOutput = new String(buf, 0, length);
-			
 				/*System.out.println(length);
 				 System.out.println("=== command result : " + new
 				 String(buf,0,length));*/
@@ -166,6 +165,21 @@ public class CmmnUtil {
 				result.put("RESULT_DATA", "NFS MOUNT SUCCESS");
 				System.out.println(command);
 				System.out.println("Result command : NFS MOUNT SUCCESS");
+			//JOB등록실패	
+			}else if (output.trim().matches(".*formatisnot.*")) {
+				result.put("RESULT_CODE", 1);
+				result.put("RESULT_DATA", output.trim());
+				System.out.println("invalid command : The file format is not correct.");
+			//JOB등록실패	
+			}else if (output.trim().matches(".*notexis.*")) {
+				result.put("RESULT_CODE", 1);
+				result.put("RESULT_DATA", output.trim());
+				System.out.println("invalid command : File does not exist." );
+			//JOB등록실패	
+			}else if (output.trim().matches(".*unreachable.*")) {
+				result.put("RESULT_CODE", 1);
+				result.put("RESULT_DATA", output.trim());
+				System.out.println("invalid command : Verify that the node is valid and can be reached, and then try again");
 			}else {
 				result.put("RESULT_CODE", 0);
 				result.put("RESULT_DATA", output.trim());
@@ -328,12 +342,16 @@ public class CmmnUtil {
 			 * @return 
 			 */
 			public static void xmlFileCreate (Document  doc, TargetMachineVO targetMachine){
+
+				JSONObject importResult = new JSONObject();
+				
 				 try{
-					 String path = "/opt/Arcserve/d2dserver/bin/jobList";
+					 String path = "/opt/Arcserve/d2dserver/bin/jobs";
 					 
 					 boolean dirStatus	= createDir(path);
 					 
 					 if(dirStatus){
+	
 			    	  TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			    	  
 			            Transformer transformer = transformerFactory.newTransformer();
@@ -343,14 +361,13 @@ public class CmmnUtil {
 			            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes"); //doc.setXmlStandalone(true); 했을때 붙어서 출력되는부분 개행
 			 
 			            DOMSource source = new DOMSource(doc);
-			            StreamResult result = new StreamResult(new FileOutputStream(new File(path+"/"+targetMachine.getName().replace(".", "_").trim()+".xml")));
+			            StreamResult  streamResult = new StreamResult(new FileOutputStream(new File(path+"/"+targetMachine.getName().replace(".", "_").trim()+".xml")));
 			            
-			            transformer.transform(source, result);
+			            transformer.transform(source, streamResult);
 					 }
-
-					 //JobScriptApply(targetMachine);
-					 
-					 
+					 					 
+					 importResult = JobScriptApply(path,targetMachine);
+		 
 			    	  }catch(Exception e){
 			    		  e.printStackTrace();
 			    	  }
@@ -358,55 +375,45 @@ public class CmmnUtil {
 			
 			
 			
-			public static boolean createDir (String path){
-					
-					File Folder = new File(path);
-		
-					// 해당 디렉토리가 없을경우 디렉토리를 생성합니다.
-					if (!Folder.exists()) {
-						try{
-						    Folder.mkdir(); 
-						    System.out.println("The folder has been created");
-						    return true;
-					        } 
-					        catch(Exception e){
-						    e.getStackTrace();
-						    return false;
-						}        
-				         }else {
-						System.out.println("The folder has already been created.");
-						 return true;
-					}
-			}
-			
-			
-			
-			 /**
-			 * JobScript 적용
-			 * @param  
-			 * @return 
-			 */
-			public static JSONObject JobScriptApply(TargetMachineVO targetMachine) {
-				
+			private static JSONObject JobScriptApply(String jobPath, TargetMachineVO targetMachine) {
 				JSONObject result = new JSONObject();		
 				CmmnUtil cmmUtil = new CmmnUtil();
 				
-				String path = "/opt/Arcserve/d2dserver/bin/jobList";
+				String path = "/opt/Arcserve/d2dserver/bin";
 				String cmd =null;
 				
 				try {
-					//cmd = "cd " + path + ";"+"./d2djob --import="+nodeName.replace(".", "_").trim()+".xml  --job import";
+					cmd = "cd " + path + ";"+ "./d2djob --import="+jobPath+"/"+targetMachine.getName().replace(".", "_").trim()+".xml";
 					System.out.println(cmd);
-					//result = cmmUtil.execute(cmd);		
-					
+					result = cmmUtil.execute(cmd);			
+			
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				return result;
+				
+			}
+
+
+			public static boolean createDir (String path){
+				
+				CmmnUtil cmmUtil = new CmmnUtil();
+				String d2dhome = "/opt/Arcserve/d2dserver/bin";
+				
+				try{
+					String cmd = "cd " + d2dhome + "; mkdir jobs ;"+ "chmod 777 -R " +path;
+					System.out.println("Create Dir = "+cmd);
+					cmmUtil.execute(cmd);
+					
+					return true;
+				}catch(Exception e){
+					e.printStackTrace();
+					return false;
+				}
 			}
 			
+		
 			
-	
 			public static void main(String[] args) {
 				//46068
 				//5906844
