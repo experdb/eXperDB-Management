@@ -89,10 +89,8 @@ public class JobXMLMake{
 		            if(backupSchedule.size()>0){		            	
 		            	scheduleXml(jobList, backupSchedule);
 		            }
-			            
-	
-			            
-			        xmlFile(doc, backupScript.getJobName());
+			            		            
+			       CmmnUtil.xmlFileCreate(doc, targetMachine);
 					
 				} catch (ParserConfigurationException e) {
 					// TODO Auto-generated catch block

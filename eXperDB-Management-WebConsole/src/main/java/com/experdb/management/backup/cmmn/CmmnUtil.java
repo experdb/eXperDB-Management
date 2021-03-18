@@ -21,6 +21,7 @@ import org.json.simple.JSONObject;
 import org.springframework.util.ResourceUtils;
 import org.w3c.dom.Document;
 
+import com.experdb.management.backup.node.service.TargetMachineVO;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -326,7 +327,7 @@ public class CmmnUtil {
 			 * @param  
 			 * @return 
 			 */
-			public boolean xmlFileCreate (Document  doc, String nodeName){
+			public static void xmlFileCreate (Document  doc, TargetMachineVO targetMachine){
 				 try{
 					 String path = "/opt/Arcserve/d2dserver/bin/jobList";
 					 
@@ -341,21 +342,22 @@ public class CmmnUtil {
 			            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes"); //doc.setXmlStandalone(true); 했을때 붙어서 출력되는부분 개행
 			 
 			            DOMSource source = new DOMSource(doc);
-			            StreamResult result = new StreamResult(new FileOutputStream(new File(path+"/"+nodeName.replace(".", "_").trim()+".xml")));
+			            StreamResult result = new StreamResult(new FileOutputStream(new File(path+"/"+targetMachine.getName().replace(".", "_").trim()+".xml")));
 			            
 			            transformer.transform(source, result);
 					 }
-					 return true;
+
+					 //JobScriptApply(targetMachine);
+					 
 					 
 			    	  }catch(Exception e){
 			    		  e.printStackTrace();
-			    		  return false;
 			    	  }
 			}
 			
 			
 			
-			public boolean createDir (String path){
+			public static boolean createDir (String path){
 					
 					File Folder = new File(path);
 		
@@ -383,7 +385,7 @@ public class CmmnUtil {
 			 * @param  
 			 * @return 
 			 */
-			public static JSONObject JobScriptApply(String jobName, String nodeName) {
+			public static JSONObject JobScriptApply(TargetMachineVO targetMachine) {
 				
 				JSONObject result = new JSONObject();		
 				CmmnUtil cmmUtil = new CmmnUtil();
@@ -392,7 +394,7 @@ public class CmmnUtil {
 				String cmd =null;
 				
 				try {
-					cmd = "cd " + path + ";"+"./d2djob --import="+nodeName.replace(".", "_").trim()+".xml  --job import";
+					//cmd = "cd " + path + ";"+"./d2djob --import="+nodeName.replace(".", "_").trim()+".xml  --job import";
 					System.out.println(cmd);
 					//result = cmmUtil.execute(cmd);		
 					
@@ -411,7 +413,7 @@ public class CmmnUtil {
 				String nodeName =  "192.168.56.130";
 				
 				
-				JobScriptApply("",nodeName);
+				//JobScriptApply("",nodeName);
 				
 	
 					
