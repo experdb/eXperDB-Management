@@ -1,6 +1,5 @@
 package com.experdb.management.backup.jobstatus.web;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.experdb.management.backup.cmmn.CmmnUtil;
 import com.experdb.management.backup.jobstatus.service.ExperdbBackupJobStatusService;
 import com.experdb.management.backup.jobstatus.service.JobStatusVO;
-import com.experdb.management.backup.monitor.JobStatus;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 @Controller
