@@ -337,6 +337,7 @@ public class CmmnUtil {
 			    	  TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			    	  
 			            Transformer transformer = transformerFactory.newTransformer();
+			            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
 			            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //들여쓰기
 			            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes"); //doc.setXmlStandalone(true); 했을때 붙어서 출력되는부분 개행
