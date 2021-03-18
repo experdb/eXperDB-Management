@@ -54,6 +54,8 @@
 		       		, #{uuid}
 		       		, #{backupLocation}
 		              )
+		), INST2 AS (
+			 UPDATE JOBSCRIPT SET templateid = #{templateID} WHERE NAME = #{jobName}
 		) UPDATE TARGETMACHINE SET ISPROTECTED = 1, JOBNAME = #{jobName} WHERE NAME = #{ipadr}
 	</update>
 	
