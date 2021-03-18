@@ -13,6 +13,7 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 import org.springframework.batch.core.scope.context.*;
 import org.springframework.stereotype.Service;
+import org.xml.sax.*;
 
 import com.experdb.management.backup.cmmn.*;
 import com.experdb.management.backup.node.service.*;
@@ -148,6 +149,19 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		return result;
 	}
 
+	@Override
+	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException {
+		JSONObject result = new JSONObject();
+		
+		String fileName = request.getParameter("ipadr").replace(".", "_").trim()+".xml";
+		String path = "C:\\test\\" + fileName;
+		
+		JobXMLRead xml = new JobXMLRead();
+		xml.xmlRead(path);
+		
+		
+		return null;
+	}
 
 
 	 @Override
@@ -164,7 +178,9 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
         String time = transFormat.format(date);   
         
         String jobName = "backup_"+time;
- 
+        String uuid = UUID.randomUUID().toString();
+        
+        int schExist = 0;
 		
 		
 		String weekData = param.get("weekData").toString();
@@ -178,6 +194,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		String fsetNum = request.getParameter("setNum");
 		
 		System.out.println("=============================");
+		System.out.println("uuid : " + uuid);
 		System.out.println("weekData : " + weekData);
 		System.out.println("ipadr : " + ipadr);
 		System.out.println("startDate : " + startDate);
@@ -202,9 +219,11 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		backupScript.setJobName(jobName);
 		
 		if(backupSchedule.size()>0){
+			schExist = 1;
 			backupScript.setRepeat("true");
 			backupScript.setScheduleType(5);
 		}else{
+			schExist = 0;
 			backupScript.setRepeat("false");			
 			backupScript.setScheduleType(3);
 		}
@@ -215,6 +234,8 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		targetMachine.setJobName(jobName);
 		targetMachine.setExclude("true");
 		targetMachine.setHypervisor("false");
+		targetMachine.setIsProtected("true");
+		targetMachine.setTemplateId(uuid);
 		if(targetMachine.getDescription()==null){
 			targetMachine.setDescription("");
 		}
@@ -234,6 +255,23 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		JobXMLMake xmlMake = new JobXMLMake();
 		xmlMake.xmlMake(backupLocation, backupScript, targetMachine, backupRetention, backupSchedule);
 		
+		
+		Map<String, Object> jobInsert = new HashMap<>();
+		
+		jobInsert.put("jobType", 1);
+		jobInsert.put("templateID", uuid);
+		jobInsert.put("ipadr", ipadr);
+		jobInsert.put("isRepeat", schExist);
+		jobInsert.put("jobStatus", -1);
+		jobInsert.put("lastResult", 0);
+		jobInsert.put("uuid", UUID.randomUUID().toString());
+		jobInsert.put("backupLocation", backupLocation.getUuid());
+		jobInsert.put("jobName", jobName);
+		
+		experdbBackupNodeDAO.scheduleInsert(jobInsert);
+		
+		System.out.println("========= scheduleInsert SERVICE END ==========");
+	
 	}
 	 
 	public List<BackupScheduleVO> scheduleListMake(String weekData, String startDate) throws Exception {
@@ -395,7 +433,6 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 			e.printStackTrace();
 		}
 	}
-
 
 
 }

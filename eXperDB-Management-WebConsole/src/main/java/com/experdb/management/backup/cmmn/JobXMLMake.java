@@ -417,10 +417,9 @@ public class JobXMLMake{
             template.appendChild(doc.createTextNode("true"));
             backupConfiguration.appendChild(template);
             
-            
          // templateID 엘리먼트
             Element templateID = doc.createElement("templateID");
-            templateID.appendChild(doc.createTextNode(UUID.randomUUID().toString()));
+            templateID.appendChild(doc.createTextNode(targetMachine.getTemplateId()));
             backupConfiguration.appendChild(templateID);
             
          // uuid 엘리먼트

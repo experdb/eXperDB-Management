@@ -1,6 +1,6 @@
 package com.experdb.management.backup.node.service.impl;
 
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.*;
@@ -44,6 +44,12 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 
 	public BackupLocationInfoVO getScheduleLocationInfo(String path) {
 		return sql2.selectOne("backupStorageSql.getScheduleLocationInfo", path);
+	}
+
+
+	public void scheduleInsert(Map<String, Object> jobInsert) {
+		sql2.update("backupNodeSql.setScheduleJob", jobInsert);
+		
 	}
 
 }

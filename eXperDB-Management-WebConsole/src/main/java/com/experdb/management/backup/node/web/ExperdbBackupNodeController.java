@@ -106,5 +106,17 @@ public class ExperdbBackupNodeController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value="/experdb/getScheduleInfo.do")
+	public @ResponseBody JSONObject getScheduleInfo(HttpServletRequest request){
+		JSONObject result = new JSONObject();
+		try {
+			result = experdbBackupNodeService.getScheduleInfo(request);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 }
