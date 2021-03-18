@@ -37,6 +37,36 @@
 	function fn_cancel() {
 		$("#pop_runNow").modal("hide");
 	}
+	
+	
+	function fn_runnow() {
+		var jobtype = 	$(":radio[name='backupType']:checked").val();
+		var jobname =  $("#pop_jobname").val();
+		
+		 $.ajax({
+			url : "/experdb/runNow.do",
+			data : {
+				jobname:jobname,
+				jobtype:jobtype		
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {
+				$("#pop_runNow").modal("hide");				
+			}
+		}); 
+	}
 
 
 </script>
@@ -53,30 +83,33 @@
 					<div>
 						<div class="form-check" style="margin-left: 20px;">
 							<label class="form-check-label" for="thu">
-								<input type="radio" class="form-check-input" id="incre" name="backupType" />
+								<input type="radio" class="form-check-input" id="incre" name="backupType"  value="1" />
 								Incremental Backup
 								<i class="input-helper"></i>
 							</label>
 						</div>
 						<div class="form-check" style="margin-left: 20px;">
 							<label class="form-check-label" for="thu">
-								<input type="radio" class="form-check-input" id="verify" name="backupType" />
+								<input type="radio" class="form-check-input" id="verify" name="backupType"  value="2" />
 								Verify Backup
 								<i class="input-helper"></i>
 							</label>
 						</div>
 						<div class="form-check" style="margin-left: 20px;">
 							<label class="form-check-label" for="thu">
-								<input type="radio" class="form-check-input" id="full" name="backupType" />
+								<input type="radio" class="form-check-input" id="full" name="backupType"  value="0"/>
 								Full Backup
 								<i class="input-helper"></i>
 							</label>
 						</div>
+						
+						<input type="hidden" name="pop_jobname" id="pop_jobname">
+						
 					</div>
 				</div>
 
 				<div class="modal-footer_con">
-					<button type="button" class="btn btn-primary" ><spring:message code="common.confirm" /></button>
+					<button type="button" class="btn btn-primary"   onclick="fn_runnow()"><spring:message code="common.confirm" /></button>
 					<button type="button" class="btn btn-light" onclick="fn_cancel()"><spring:message code="common.cancel" /></button>
 				</div>
 			</div>
