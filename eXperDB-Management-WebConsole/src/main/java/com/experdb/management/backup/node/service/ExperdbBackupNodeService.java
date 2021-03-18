@@ -28,4 +28,6 @@ public interface ExperdbBackupNodeService {
 
 	void scheduleInsert(HttpServletRequest request, Map<Object, String> param) throws Exception;
 
+	JSONObject getScheduleInfo(HttpServletRequest request) throws Exception;
+
 }

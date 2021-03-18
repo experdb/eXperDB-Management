@@ -27,6 +27,7 @@ public class TargetMachineVO {
 	private String userName;
 	private String userPw;
 	
+	private String templateId;
 
 	public int getRownum() {
 		return rownum;
@@ -212,6 +213,14 @@ public class TargetMachineVO {
 		this.userPw = userPw;
 	}
 
+	public String getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
+	}
+
 	@Override
 	public String toString() {
 		return "TargetMachineVO [rownum=" + rownum + ", name=" + name + ", user=" + user + ", uuid=" + uuid
@@ -221,8 +230,11 @@ public class TargetMachineVO {
 				+ ", recoverySetCount=" + recoverySetCount + ", backupLocationType=" + backupLocationType
 				+ ", machineType=" + machineType + ", licenseStatus=" + licenseStatus + ", excludeVolumes="
 				+ excludeVolumes + ", exclude=" + exclude + ", hypervisor=" + hypervisor + ", priority=" + priority
-				+ ", isUser=" + isUser + ", userName=" + userName + ", userPw=" + userPw + "]";
+				+ ", isUser=" + isUser + ", userName=" + userName + ", userPw=" + userPw + ", templateId=" + templateId
+				+ "]";
 	}
+
+	
 
 	
 }
