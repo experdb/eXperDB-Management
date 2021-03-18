@@ -15,7 +15,14 @@ public class ProxyGlobalVO {
 	private String frst_reg_dtm; 
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
+	private String max_con_cnt_chk;
 	
+	public String getMax_con_cnt_chk() {
+		return max_con_cnt_chk;
+	}
+	public void setMax_con_cnt_chk(String max_con_cnt_chk) {
+		this.max_con_cnt_chk = max_con_cnt_chk;
+	}
 	public int getPry_glb_id() {
 		return pry_glb_id;
 	}

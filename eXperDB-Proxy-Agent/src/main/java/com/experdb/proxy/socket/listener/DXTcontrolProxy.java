@@ -1,7 +1,6 @@
 package com.experdb.proxy.socket.listener;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jettison.json.JSONObject;
@@ -15,10 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.experdb.proxy.db.repository.service.ProxyServiceImpl;
-import com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO;
-import com.experdb.proxy.db.repository.vo.ProxyListenerVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
-import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.util.FileUtil;
 import com.experdb.proxy.util.StrUtil;
@@ -31,62 +27,59 @@ public class DXTcontrolProxy extends SocketCtl {
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
-    public static void main(String[] args) {   
-    	DXTcontrolProxy dXTcontrolProxy = new DXTcontrolProxy();
-    	dXTcontrolProxy.start();
-    }
-    
-    public DXTcontrolProxy() {
-        try {
-	    	schedulerFactory = new StdSchedulerFactory();
-	    	scheduler = schedulerFactory.getScheduler();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public static void main(String[] args) {   
+		DXTcontrolProxy dXTcontrolProxy = new DXTcontrolProxy();
+		dXTcontrolProxy.start();
+	}
 
-    public void start() {
-    	String proxyServerChk = "";
-    	String returnSetting = "";
+	public DXTcontrolProxy() {
+		try {
+			schedulerFactory = new StdSchedulerFactory();
+			scheduler = schedulerFactory.getScheduler();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void start() {
+		String proxyServerChk = "";
+		String returnSetting = "";
 
 		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 		ProxyServiceImpl service = (ProxyServiceImpl) context.getBean("ProxyService");
 
-    	try {
-        	//선행조건  proxy 설치 확인
-    		proxyServerChk = service.selectProxyServerChk("proxy_conf_which");
+		try {
+			//선행조건  proxy 설치 확인
+			proxyServerChk = service.selectProxyServerChk("proxy_conf_which");
 
-    		String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-    		String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
+			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
+			String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 
-    		//proxy 설치시 테이블 insert 실행
-    		if (proxyServerChk != null) {
-    			if (!"".equals(proxyServerChk)) {
-    				//proxy 서버일때 데이터 추가해야함
-    				//DXTcontrolProxyChogihwaExe proxyChogihwaExe = new DXTcontrolProxyChogihwaExe(client, is, os);
-    				//returnSetting = proxyChogihwaExe.confSetExecute(strIpadr, strPort); 				
-            		//service.proxyServerCfgSettingTest(strIpadr, strPort);
-    				returnSetting= confSetExecute(strIpadr, strPort);
-    			}
-    		}
+			//proxy 설치시 테이블 insert 실행
+			if (proxyServerChk != null) {
+				if (!"".equals(proxyServerChk)) {
+					//proxy 서버일때 데이터 추가해야함
+					returnSetting= confSetExecute(strIpadr, strPort);
+				}
+			}
 
-        } catch(Exception e) {
-            e.printStackTrace();
-        }  
-    }
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * conf 정보 조회
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
-    @Transactional
+	@Transactional
 	public String confSetExecute(String strIpadr, String strPort) throws Exception {
 		socketLogger.info("DXTcontrolProxyChogihwaExe1234.confSetExecute : ");
-		
+
 		ProxyServerVO searchProxyServerVO = new ProxyServerVO();
 		searchProxyServerVO.setIpadr(strIpadr);
-		
+
 		Map<String, Object> param = new HashMap<String, Object>();
 		ProxyServerVO vo = new ProxyServerVO();
 		String returnMsg = "";
@@ -95,42 +88,38 @@ public class DXTcontrolProxy extends SocketCtl {
 
 		Map<String, Object> insertParam = new HashMap<String, Object>();
 		
-    	try {
-    		String proxyPathData = "";
-    		String KeepPathData = "";
-    		int dbSvrIdData = 0;
-    		int peerIdData = 0;
-    		String dbSvrNmData = "";
-    		String peerIpData = "";
-    		String masterGbnData = "";
-    		String proxyExeStaus = "";		//proxy 상태
-    		String keepExeStaus = "";		//keepalived 상태
-    		String prySvrUseYn = "N";		//pry_svr_사용여부
-    		String proxySvrNmData = "";		//pry svr 명
-    		
-    		String insUpNmGbn = "";
-    		
-    		String strMaxConn = "";
-    		String strTimeClient = "";
-    		String strTimeConnect = "";
-    		String strTimeServer = "";
-    		String strTimeCheck = "";
-    		String stateMasterInterface = "";
-    		String strObjIp = "";
-    		String strPeerServerIp = "";
-    		
-    		String strlisnerList="";
-    		String strlisnerSvrList="";
-    		String strVipConfList="";
+		try {
+			String proxyPathData = "";
+			String KeepPathData = "";
+			int dbSvrIdData = 0;
+			int peerIdData = 0;
+			String dbSvrNmData = "";
+			String peerIpData = "";
+			String masterGbnData = "";
+			String proxyExeStaus = "";		//proxy 상태
+			String keepExeStaus = "";		//keepalived 상태
+			String prySvrUseYn = "N";		//pry_svr_사용여부
+			String proxySvrNmData = "";		//pry svr 명
 
-    		JSONObject jObjResult = null;
-    		JSONObject jObjKeepResult = null;
-    		
-    		JSONObject jObjListResult = null;
+			String insUpNmGbn = "";
 
-    		List<ProxyListenerVO> jsonlisnerList = null;
-    		List<ProxyListenerServerListVO> jsonlisnerSebuList = null;
-			List<ProxyVipConfigVO> vipConfList = null;
+			String strMaxConn = "";
+			String strTimeClient = "";
+			String strTimeConnect = "";
+			String strTimeServer = "";
+			String strTimeCheck = "";
+			String stateMasterInterface = "";
+			String strObjIp = "";
+			String strPeerServerIp = "";
+
+			String strlisnerList="";
+			String strlisnerSvrList="";
+			String strVipConfList="";
+
+			JSONObject jObjResult = null;
+			JSONObject jObjKeepResult = null;
+
+			JSONObject jObjListResult = null;
 
 			//proxy 서버 등록 여부 확인
 			ProxyServerVO proxyServerInfo = pryService.selectProxyServerInfo(searchProxyServerVO);
@@ -142,93 +131,104 @@ public class DXTcontrolProxy extends SocketCtl {
 			KeepPathData = pryService.selectProxyServerChk("keep_conf_which"); //param setting
 
 			//3. proxy conf 열기
-			jObjResult = pryService.selectProxyServerList("proxy_conf_read", proxyPathData, ""); //param setting
-			if (jObjResult.length() > 0) {
-				dbSvrIdData = (Integer)jObjResult.get("db_svr_id");
-				dbSvrNmData = (String)jObjResult.get("db_svr_nm");
-				//global
-				strMaxConn = (String)jObjResult.get("max_conn");
-				strTimeClient = (String)jObjResult.get("time_client");
-				strTimeConnect = (String)jObjResult.get("time_connect");
-				strTimeServer = (String)jObjResult.get("time_server");
-				strTimeCheck = (String)jObjResult.get("time_check");
+			if (proxyPathData != null) {
+				jObjResult = pryService.selectProxyServerList("proxy_conf_read", proxyPathData, ""); //param setting
+				if (jObjResult.length() > 0) {
+					dbSvrIdData = ((Integer)jObjResult.get("db_svr_id")).intValue();
+					dbSvrNmData = (String)jObjResult.get("db_svr_nm");
 
-				//list
-				strlisnerList = (String)jObjResult.get("lisner_list");
-				strlisnerSvrList = (String)jObjResult.get("lisner_svr_list");
+					//global
+					strMaxConn = (String)jObjResult.get("max_conn");
+					strTimeClient = (String)jObjResult.get("time_client");
+					strTimeConnect = (String)jObjResult.get("time_connect");
+					strTimeServer = (String)jObjResult.get("time_server");
+					strTimeCheck = (String)jObjResult.get("time_check");
 
-			} else {
-				dbSvrIdData = 0;
-				dbSvrNmData = "";
-				
-				//global
-				strMaxConn = "";
-				strTimeClient = "";
-				strTimeConnect = "";
-				strTimeServer = "";
-				strTimeCheck = "";
-				
-				strlisnerList = "";
-				strlisnerSvrList = "";
+					//list
+					strlisnerList = (String)jObjResult.get("lisner_list");
+					strlisnerSvrList = (String)jObjResult.get("lisner_svr_list");
+
+				} else {
+					dbSvrIdData = 0;
+					dbSvrNmData = "";
+
+					//global
+					strMaxConn = "";
+					strTimeClient = "";
+					strTimeConnect = "";
+					strTimeServer = "";
+					strTimeCheck = "";
+
+					strlisnerList = "";
+					strlisnerSvrList = "";
+				}
 			}
 			/////////////////////////////////////////////////////////////////////
-			socketLogger.info("111111111111111111111111111111111111111111111111 : ");
+
 			//4. keepalived conf 열기
-			jObjKeepResult = pryService.selectProxyServerList("keepalived_conf_read", KeepPathData, strIpadr); //param setting
-			
-			if (jObjKeepResult.length() > 0) {
-				peerIpData = (String)jObjKeepResult.get("peer_id");
-				masterGbnData = (String)jObjKeepResult.get("master_gbn");
-				
-				stateMasterInterface = (String)jObjKeepResult.get("if_nm");
-				strObjIp = (String)jObjKeepResult.get("obj_ip");
-				strPeerServerIp = (String)jObjKeepResult.get("peer_server_ip");
+			if (KeepPathData != null) {
+				jObjKeepResult = pryService.selectProxyServerList("keepalived_conf_read", KeepPathData, strIpadr); //param setting
 
-			//	strVipConfList = (String)jObjResult.get("vip_conf_list");
-			} else {
-				peerIpData = "";
-				masterGbnData = "";
-				
-				stateMasterInterface = "";
-				strObjIp = "";
-				strPeerServerIp = "";
-				
-				strVipConfList = "";
+				if (jObjKeepResult.length() > 0) {
+					peerIpData = (String)jObjKeepResult.get("peer_id");
+					masterGbnData = (String)jObjKeepResult.get("master_gbn");
+
+					stateMasterInterface = (String)jObjKeepResult.get("if_nm");
+					strObjIp = (String)jObjKeepResult.get("obj_ip");
+					strPeerServerIp = (String)jObjKeepResult.get("peer_server_ip");
+
+					strVipConfList = (String)jObjKeepResult.get("vip_conf_list");
+
+					socketLogger.info("strVipConfList.strResultSubMessge : " + strVipConfList);
+				} else {
+					peerIpData = "";
+					masterGbnData = "";
+
+					stateMasterInterface = "";
+					strObjIp = "";
+					strPeerServerIp = "";
+
+					strVipConfList = "";
+				}
 			}
 			/////////////////////////////////////////////////////////////////////
-			socketLogger.info("8888888888888888888888888888888888strVipConfListstrVipConfListstrVipConfList888888888888888888888888888888888 : " + strVipConfList);
+
 			//5. proxy 실행상태
-			proxyExeStaus = pryService.selectProxyServerChk("proxy_exe_status"); //param setting
-			if (proxyExeStaus != null) {
-				proxyExeStaus = proxyExeStaus.trim();
-				if ("active".equals(proxyExeStaus)) {
-					proxyExeStaus = "TC001501";
+			if (proxyPathData != null) {
+				proxyExeStaus = pryService.selectProxyServerChk("proxy_exe_status"); //param setting
+				if (proxyExeStaus != null) {
+					proxyExeStaus = proxyExeStaus.trim();
+					if ("active".equals(proxyExeStaus)) {
+						proxyExeStaus = "TC001501";
+					} else {
+						proxyExeStaus = "TC001502";
+					}
 				} else {
 					proxyExeStaus = "TC001502";
 				}
-			} else {
-				proxyExeStaus = "TC001502";
 			}
 			/////////////////////////////////////////////////////////////////////
 			
 			//6. keepalived 실행상태
-			keepExeStaus = pryService.selectProxyServerChk("keepalived_exe_status"); //param setting
-			if (keepExeStaus != null) {
-				keepExeStaus = keepExeStaus.trim();
-				if ("active".equals(keepExeStaus)) {
-					keepExeStaus = "TC001501";
+			if (KeepPathData != null) {
+				keepExeStaus = pryService.selectProxyServerChk("keepalived_exe_status"); //param setting
+				if (keepExeStaus != null) {
+					keepExeStaus = keepExeStaus.trim();
+					if ("active".equals(keepExeStaus)) {
+						keepExeStaus = "TC001501";
+					} else {
+						keepExeStaus = "TC001502";
+					}
 				} else {
 					keepExeStaus = "TC001502";
 				}
-			} else {
-				keepExeStaus = "TC001502";
-			}
-			
-			//사용여부
-			if ("TC001501".equals(keepExeStaus) && "TC001501".equals(keepExeStaus)) {
-				prySvrUseYn = "Y";
-			} else {
-				prySvrUseYn = "N";
+
+				//사용여부
+				if ("TC001501".equals(keepExeStaus) && "TC001501".equals(keepExeStaus)) {
+					prySvrUseYn = "Y";
+				} else {
+					prySvrUseYn = "N";
+				}
 			}
 			/////////////////////////////////////////////////////////////////////
 
@@ -314,7 +314,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			}
 			//////////////////////////////////////////////////////////////////
 
-			socketLogger.info("getPry_svr_nmgetPry_svr_nmgetPry_svr_nmgetPry_svr_nm.strResultSubMessge : " + vo.getPry_svr_nm());
+			socketLogger.info("strMaxConn.strMaxConn : " + strMaxConn);
 
 			//global setting
 			if (strMaxConn != null) {
@@ -344,18 +344,15 @@ public class DXTcontrolProxy extends SocketCtl {
 				insertParam.put("lisner_svr_list", "");
 				insertParam.put("vip_conf_list", "");
 			}
-			
-			
 
-			socketLogger.info("strTimeClientstrTimeClientstrTimeClientstrTimeClient : " + strTimeClient);
-			socketLogger.info("strTimeServerstrTimeServerstrTimeServer : " + strTimeServer);
-			returnMsg = pryService.proxyConfFisrtIns(vo, insUpNmGbn, insertParam, jObjListResult);
-
+			if (proxyPathData != null) {
+				socketLogger.info("proxyPathData.proxyPathData123 : " + proxyPathData);
+				returnMsg = pryService.proxyConfFisrtIns(vo, insUpNmGbn, insertParam, jObjListResult);
+			}
 		} catch (Exception e) {
 			errLogger.error("DXTcontrolScaleAwsExecute {} ", e.toString());
 			returnMsg = "false";
 		}
-   
 		return returnMsg;
 	}
 }

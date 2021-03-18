@@ -298,7 +298,7 @@
         **/
         WITH UPSERT AS(
                UPDATE T_PRY_GLB_I
-                  SET MAX_CON_CNT = #{max_con_cnt}::numeric,
+                  SET MAX_CON_CNT = #{max_con_cnt_chk}::numeric,
                       CL_CON_MAX_TM = #{cl_con_max_tm},
                       CON_DEL_TM = #{con_del_tm},
                       SVR_CON_MAX_TM = #{svr_con_max_tm},
@@ -328,9 +328,9 @@
                         LST_MDFR_ID,
                         LST_MDF_DTM
                        )
-                       SELECT nextval('q_t_pry_glb_i_01'),
+                       SELECT (SELECT COALESCE(MAX(PRY_GLB_ID+1),1) AS PRY_GLB_ID FROM T_PRY_GLB_I),
                               #{pry_svr_id}::numeric,
-                              #{max_con_cnt}::numeric,
+                              #{max_con_cnt_chk}::numeric,
                               #{cl_con_max_tm},
                               #{con_del_tm},
                               #{svr_con_max_tm},
