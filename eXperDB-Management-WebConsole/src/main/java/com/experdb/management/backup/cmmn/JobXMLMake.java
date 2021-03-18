@@ -1,7 +1,6 @@
 package com.experdb.management.backup.cmmn;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -103,11 +102,11 @@ public class JobXMLMake{
 	      
 	 
 	      
-	    private void scheduleXml(Element backupConfiguration, List<BackupScheduleVO> backupSchedule) {
+	    private void scheduleXml(Element jobList, List<BackupScheduleVO> backupSchedule) {
 	    	
 	    	// target 엘리먼트==================================================
             Element weeklySchedule = doc.createElement("weeklySchedule");
-            backupConfiguration.appendChild(weeklySchedule);  
+            jobList.appendChild(weeklySchedule);  
 
             for(BackupScheduleVO bs : backupSchedule){
         	   Element scheduleList = doc.createElement("scheduleList");
@@ -602,14 +601,14 @@ public class JobXMLMake{
 	    	  TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	    	  
 	            Transformer transformer = transformerFactory.newTransformer();
-//	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
+	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
 	            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 	            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //들여쓰기
 	            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes"); //doc.setXmlStandalone(true); 했을때 붙어서 출력되는부분 개행
-	 
+
 	            DOMSource source = new DOMSource(doc);
 	            StreamResult result = new StreamResult(new FileOutputStream(new File("C:\\test\\backupXml\\" + jobName + ".xml")));
-	 
+	            
 	            transformer.transform(source, result);
 	            
 	            System.out.println("end");
