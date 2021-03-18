@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="callSettersOnNulls" value="true" />
+
+	</settings>
+    
+    <typeAliases>
+    	<typeAlias alias="AgentInfoVO" type="com.experdb.proxy.db.repository.vo.AgentInfoVO" />
+    	<typeAlias alias="ProxyServerVO" type="com.experdb.proxy.db.repository.vo.ProxyServerVO" />
+   		<typeAlias alias="ProxyGlobalVO" type="com.experdb.proxy.db.repository.vo.ProxyGlobalVO" />
+   		<typeAlias alias="ProxyListenerServerListVO" type="com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO" />
+   		<typeAlias alias="ProxyListenerVO" type="com.experdb.proxy.db.repository.vo.ProxyListenerVO" />
+   		<typeAlias alias="ProxyVipConfigVO" type="com.experdb.proxy.db.repository.vo.ProxyVipConfigVO" />
+    
+    
+    
+    	<typeAlias alias="DbServerInfoVO" type="com.experdb.proxy.db.repository.vo.DbServerInfoVO" />
+    	<typeAlias alias="PgAuditVO" type="com.experdb.proxy.db.repository.vo.PgAuditVO" />
+    	<typeAlias alias="PgAuditSettingVO" type="com.experdb.proxy.db.repository.vo.PgAuditSettingVO" />
+    	<typeAlias alias="AuditVO" type="com.experdb.proxy.server.AuditVO" />
+    	<typeAlias alias="WrkExeVO" type="com.experdb.proxy.db.repository.vo.WrkExeVO" />
+    	<typeAlias alias="TrfTrgCngVO" type="com.experdb.proxy.db.repository.vo.TrfTrgCngVO" />
+    	<typeAlias alias="ServerInfoVO" type="com.experdb.proxy.db.repository.vo.ServerInfoVO" />
+    	<typeAlias alias="TablespaceVO" type="com.experdb.proxy.db.repository.vo.TablespaceVO" />
+    </typeAliases>
+    
+ 	<mappers>
+
+		<mapper resource="sqlmap/system.xml" />
+		<mapper resource="sqlmap/app.xml" /> 
+	</mappers>
+</configuration>

@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="system">
+	<select id="selectDbServerInfo" parameterType="DbServerInfoVO" resultType="DbServerInfoVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectDbServerInfo
+	 	* Description : Database Server 조회
+	 	* Author : 박태혁
+	 	**/
+			SELECT
+				DB_SVR_ID
+				, DB_SVR_NM
+				, IPADR
+				, PORTNO
+				, DFT_DB_NM
+				, SVR_SPR_USR_ID
+				, SVR_SPR_SCM_PWD
+				, FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+			FROM  T_DBSVR_I
+			WHERE
+				IPADR = #{IPADR}
+			LIMIT 1
+		]]>
+	</select>
+	
+	<insert id="insertAgentInfo"  parameterType="AgentInfoVO">
+		/**
+	 	* Query ID : insertAgentInfo
+	 	* Description : Agent 설치 등록
+	 	* Author : 박태혁
+	 	**/
+	 	INSERT INTO T_AGTCNDT_I
+	 	(
+			AGT_SN
+			, IPADR
+			, SOCKET_PORT
+			, AGT_CNDT_CD
+			, AGT_VERSION
+			, STRT_DTM
+			, ISTCNF_YN
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+	 	)
+	 	VALUES
+	 	(
+			NEXTVAL('Q_AGTCNDT_I_01')
+			, #{IPADR}
+			, #{SOCKET_PORT}
+			, #{AGT_CNDT_CD}
+			, #{AGT_VERSION}
+			, now()
+			, #{ISTCNF_YN}
+			, #{FRST_REGR_ID}
+			, now()
+			, #{LST_MDFR_ID}
+			, now()
+	 	)
+	</insert>
+	
+	<update id="updateAgentInfo"  parameterType="AgentInfoVO">
+	
+		/**
+	 	* Query ID : updateAgentInfo
+	 	* Description : Agent 설치 정보 수정
+	 	* Author : 박태혁
+	 	**/
+	 	UPDATE T_AGTCNDT_I
+	 	SET 
+	 		AGT_CNDT_CD = #{AGT_CNDT_CD}
+	 		, AGT_VERSION = #{AGT_VERSION}
+	 		, SOCKET_PORT = #{SOCKET_PORT}
+	 		, ISTCNF_YN = #{ISTCNF_YN}
+	 		, LST_MDF_DTM = now()
+	 		, STRT_DTM = now()
+	 	WHERE
+	 		IPADR = #{IPADR}
+	 	
+	</update>
+
+	<select id="selectAgentInfo" parameterType="AgentInfoVO" resultType="AgentInfoVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectAgentInfo
+	 	* Description : Agent 설치정보 조회
+	 	* Author : 박태혁
+	 	**/
+			SELECT
+				AGT_SN
+				, IPADR
+				, SOCKET_PORT
+				, AGT_CNDT_CD
+				, STRT_DTM
+				, ISTCNF_YN
+				, AGT_VERSION
+				, FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+			FROM  T_AGTCNDT_I
+			WHERE
+				IPADR = #{IPADR}
+			LIMIT 1
+		]]>
+	</select>
+	
+	<select id="selectQ_WRKEXE_G_01_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_01_SEQ
+	 	* Description : 작업실행로그 seq 조회
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('q_wrkexe_g_01')
+    </select>
+    
+    <insert id="insertT_WRKEXE_G"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : insertT_WRKEXE_G
+	 	* Description : 작업실행로그 insert
+	 	* Author : 박태혁
+	 	**/
+	 	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, EXE_RSLT_CD
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+			, EXE_GRP_SN
+			, SCD_NM
+			, WRK_NM
+			, DB_SVR_IPADR_ID
+	 	)
+	 	VALUES
+	 	(
+			#{EXE_SN}
+			, #{SCD_ID}
+			, #{WRK_ID}
+			, now()
+			, now()
+			, #{EXE_RSLT_CD}
+			, #{BCK_OPT_CD}
+			, 0
+			, 0
+			, #{DB_ID}
+			, #{BCK_FILE_PTH}
+			, 'system'
+			, 'system'
+			, #{EXE_GRP_SN}
+			, (SELECT SCD_NM FROM T_SCD_M WHERE SCD_ID = #{SCD_ID})
+			, (SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = #{WRK_ID})
+			, #{DB_SVR_IPADR_ID}
+	 	)
+	 	
+    </insert>
+    
+    <update id="updateT_WRKEXE_G"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateT_WRKEXE_G
+	 	* Description : 작업실행로그 update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			WRK_END_DTM = now()
+			, EXE_RSLT_CD = #{EXE_RSLT_CD}
+			, FILE_SZ = #{FILE_SZ}
+			, BCK_FILENM = #{BCK_FILENM}
+			, RSLT_MSG = #{RSLT_MSG}
+		WHERE
+			EXE_SN = #{EXE_SN}
+				
+    </update>
+    
+    <update id="updateT_TRFTRGCNG_I"  parameterType="TrfTrgCngVO">
+   		/**
+	 	* Query ID : updateT_TRFTRGCNG_I
+	 	* Description : BottledWater 실행 PID update
+	 	* Author : 박태혁
+	 	**/
+	 	UPDATE T_TRFTRGCNG_I
+	 	SET
+	 		BW_PID = #{BW_PID}
+	 	WHERE
+	 		TRF_TRG_ID = #{TRF_TRG_ID}
+    </update>
+    
+	<select id="selectQ_WRKEXE_G_02_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_02_SEQ
+	 	* Description : 작업실행로그 실행그룹 seq 조회
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('Q_WRKEXE_G_02')
+    </select>
+    
+    <update id="updateSCD_CNDT"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateSCD_CNDT
+	 	* Description : 작업상태변경
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_SCD_M
+		SET
+			SCD_CNDT = #{SCD_CNDT}
+			, LST_MDF_DTM = now()
+		WHERE
+			SCD_ID = #{SCD_ID}
+				
+    </update>
+    
+    <select id="selectPostgreSqlServerInfo" resultType="ServerInfoVO">
+		<![CDATA[
+	   		/**
+		 	* Query ID : selectPostgreSqlServerInfo
+		 	* Description : PostgreSQL 서버 정보 조회
+		 	* Author : 박태혁
+		 	**/
+			SELECT SKEY, SDATA FROM
+			(
+				SELECT 1 AS SN, 'POSTGRESQL_VERSION' AS SKEY, version() AS  SDATA
+				UNION
+				SELECT  2 AS SN, 'DATA_PATH' AS SKEY, setting AS SDATA FROM pg_settings WHERE name='data_directory'
+				UNION
+				SELECT  3 AS SN, 'LOG_PATH' AS SKEY, setting AS SDATA  FROM pg_settings WHERE name='log_directory'
+				UNION
+				SELECT  4 AS SN, 'ARCHIVE_PATH' AS SKEY, setting AS SDATA from pg_settings where name='archive_command'
+			) A
+			ORDER BY A.SN ASC
+		]]>
+	</select>
+
+    <select id="selectListen_addresses" resultType="String">
+		<![CDATA[
+			show listen_addresses
+		]]>
+	</select>
+	
+    <select id="selectPort" resultType="String">
+		<![CDATA[
+			show port
+		]]>
+	</select>
+	
+    <select id="selectMax_connections" resultType="String">
+		<![CDATA[
+			show max_connections
+		]]>
+	</select>
+	
+    <select id="selectShared_buffers" resultType="String">
+		<![CDATA[
+			show shared_buffers
+		]]>
+	</select>
+
+    <select id="selectEffective_cache_size" resultType="String">
+		<![CDATA[
+			show effective_cache_size
+		]]>
+	</select>
+
+    <select id="selectWork_mem" resultType="String">
+		<![CDATA[
+			show work_mem
+		]]>
+	</select>
+
+    <select id="selectMaintenance_work_mem" resultType="String">
+		<![CDATA[
+			show maintenance_work_mem
+		]]>
+	</select>
+
+    <select id="selectMin_wal_size" resultType="String">
+		<![CDATA[
+			show min_wal_size
+		]]>
+	</select>
+
+    <select id="selectMax_wal_size" resultType="String">
+		<![CDATA[
+			show max_wal_size
+		]]>
+	</select>
+
+    <select id="selectWal_level" resultType="String">
+		<![CDATA[
+			show wal_level
+		]]>
+	</select>
+
+    <select id="selectWal_buffers" resultType="String">
+		<![CDATA[
+			show wal_buffers
+		]]>
+	</select>
+
+    <select id="selectWal_keep_segments" resultType="String">
+		<![CDATA[
+			show wal_keep_segments
+		]]>
+	</select>
+
+    <select id="selectArchive_mode" resultType="String">
+		<![CDATA[
+			show archive_mode
+		]]>
+	</select>
+
+    <select id="selectArchive_command" resultType="String">
+		<![CDATA[
+			show archive_command
+		]]>
+	</select>
+
+    <select id="selectConfig_file" resultType="String">
+		<![CDATA[
+			show config_file
+		]]>
+	</select>
+
+    <select id="selectData_directory" resultType="String">
+		<![CDATA[
+			show data_directory
+		]]>
+	</select>
+
+    <select id="selectHot_standby" resultType="String">
+		<![CDATA[
+			show hot_standby
+		]]>
+	</select>
+
+    <select id="selectTimezone" resultType="String">
+		<![CDATA[
+			show timezone
+		]]>
+	</select>
+
+    <select id="selectShared_preload_libraries" resultType="String">
+		<![CDATA[
+			show shared_preload_libraries
+		]]>
+	</select>
+	
+	<select id="selectDatabaseInfo" resultType="hashmap">
+		<![CDATA[
+	   		/**
+		 	* Query ID : selectDatabaseInfo
+		 	* Description : 데이터베이스 정보 조회
+		 	* Author : 박태혁
+		 	**/
+			SELECT d.datname as name,
+			       pg_catalog.pg_get_userbyid(d.datdba) as owner,
+			       pg_catalog.pg_encoding_to_char(d.encoding) as encoding,
+			       d.datcollate as collate,
+			       d.datctype as ctype,
+			       CASE WHEN pg_catalog.has_database_privilege(d.datname, 'CONNECT')
+			            THEN pg_catalog.pg_size_pretty(pg_catalog.pg_database_size(d.datname))
+			            ELSE 'No Access'
+			       END as size,
+			       t.spcname as tablespace,
+			       pg_catalog.shobj_description(d.oid, 'pg_database') as description
+			FROM pg_catalog.pg_database d
+			  JOIN pg_catalog.pg_tablespace t on d.dattablespace = t.oid
+			ORDER BY 1
+		]]>
+	</select>
+	
+    <select id="selectTablespaceInfo" resultType="hashmap">
+		<![CDATA[
+	   		/**
+		 	* Query ID : selectTablespaceInfo
+		 	* Description : 테이블 스페이스 정보 조회
+		 	* Author : 박태혁
+		 	**/
+			SELECT spcname AS "Name",
+			  pg_catalog.pg_get_userbyid(spcowner) AS "Owner",
+			  pg_catalog.pg_tablespace_location(oid) AS "Location",
+			  spcoptions AS "Options",
+			  pg_catalog.pg_size_pretty(pg_catalog.pg_tablespace_size(oid)) AS "Size",
+			  pg_catalog.shobj_description(oid, 'pg_tablespace') AS "Description"
+			FROM pg_catalog.pg_tablespace
+			ORDER BY 1
+		]]>
+	</select>
+	
+    <select id="selectDatabaseConnInfo" parameterType="DbServerInfoVO" resultType="DbServerInfoVO">
+		<![CDATA[
+   		/**
+	 	* Query ID : selectDatabaseConnInfo
+	 	* Description : Database 접속정보 조회
+	 	* Author : 박태혁
+	 	**/
+			SELECT 
+				A.IPADR
+				, A.DB_SVR_ID
+				, A.PORTNO
+				, B.DB_SVR_NM
+				, B.DFT_DB_NM
+				, B.SVR_SPR_USR_ID
+				, B.SVR_SPR_SCM_PWD
+			FROM T_DBSVRIPADR_I A, T_DBSVR_I B
+			WHERE
+				A.DB_SVR_ID = B.DB_SVR_ID
+				AND A.IPADR = #{IPADR}
+				AND B.USEYN = 'Y'
+		]]>
+	</select>
+	
+	<update id="updateDB_CNDT"  parameterType="DbServerInfoVO">
+   		/**
+	 	* Query ID : updateDB_CNDT
+	 	* Description : Database 상태변경
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_DBSVRIPADR_I
+		SET
+			MASTER_GBN = #{MASTER_GBN}
+			, DB_CNDT = #{DB_CNDT}
+			, LST_MDF_DTM = now()
+		WHERE
+			 IPADR = #{IPADR}
+				
+    </update>
+    
+    <update id="updateDBSlaveAll"  parameterType="DbServerInfoVO">
+   		/**
+	 	* Query ID : updateDBSlaveAll
+	 	* Description : Slave로 상태변경
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_DBSVRIPADR_I
+		SET
+			MASTER_GBN = 'S'
+			, LST_MDF_DTM = now()
+		WHERE
+			 DB_SVR_ID = (SELECT DB_SVR_ID FROM T_DBSVR_I WHERE IPADR = #{IPADR})
+    </update>
+    
+    <select id="selectISMasterGbm"  parameterType="DbServerInfoVO" resultType="DbServerInfoVO">
+		<![CDATA[
+			/**
+		 	* Query ID : selectMasterGbm
+		 	* Description : Master / Slave 구분
+		 	* Author : 박태혁
+		 	**/
+		
+			SELECT 
+				MASTER_GBN
+				, DB_CNDT
+			FROM 
+				T_DBSVRIPADR_I
+			WHERE
+				IPADR = #{IPADR}
+		]]>
+	</select>
+	
+	<select id="selectDbmsInfo" resultType="hashmap">
+		<![CDATA[
+	   		/**
+		 	* Query ID : selectDbmsInfo
+		 	* Description : dbms 정보 조회
+		 	* Author : 박태혁
+		 	**/
+			SELECT 
+				NAME
+				, SETTING
+				, SHORT_DESC
+				, UNIT
+				, CATEGORY
+				, MIN_VAL
+				, MAX_VAL
+                , row_number() over (partition by CATEGORY order by  NAME ASC) AS RNUM
+		    FROM PG_SETTINGS
+            ORDER BY CATEGORY ASC, RNUM DESC
+
+		]]>
+	</select>
+	
+	
+	<update id="updateRMAN_RESTORE_CNDT"  parameterType="RmanRestoreVO">
+   		/**
+	 	* Query ID : updateRMAN_RESTORE_CNDT
+	 	* Description : rman restore stat update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_RMAN_RESTORE
+		SET
+			RESTORE_CNDT = #{RESTORE_CNDT}
+			, RESTORE_ENDDTM = now()
+
+		WHERE
+			 RESTORE_SN = #{RESTORE_SN}
+    </update>
+
+    <update id="updateRMAN_RESTORE_EXELOG"  parameterType="RmanRestoreVO">
+   		/**
+	 	* Query ID : updateRMAN_RESTORE_EXELOG
+	 	* Description : rman restore exelog update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_RMAN_RESTORE
+		SET
+			EXELOG = #{EXELOG}
+		WHERE
+			 RESTORE_SN = #{RESTORE_SN}
+    </update>
+    
+    <update id="updateDUMP_RESTORE_CNDT"  parameterType="DumpRestoreVO">
+   		/**
+	 	* Query ID : updateDUMP_RESTORE_CNDT
+	 	* Description : DUMP restore stat update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_DUMP_RESTORE
+		SET
+			RESTORE_CNDT = #{RESTORE_CNDT}
+			, RESTORE_ENDDTM = now()
+
+		WHERE
+			 RESTORE_SN = #{RESTORE_SN}
+    </update>
+    
+    <update id="updateDUMP_RESTORE_EXELOG"  parameterType="DumpRestoreVO">
+   		/**
+	 	* Query ID : updateDUMP_RESTORE_EXELOG
+	 	* Description : dump restore exelog update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_DUMP_RESTORE
+		SET
+			EXELOG = #{EXELOG}
+		WHERE
+			 RESTORE_SN = #{RESTORE_SN}
+    </update>
+	
+	
+	 <select id="selectScd_id" resultType="int">
+   		/**
+	 	* Query ID : selectScm_id
+	 	* Description : 스케줄 ID 조회
+	 	* Author : 변승우
+	 	**/
+    	SELECT NEXTVAL('q_scd_m_01')
+    </select>
+	
+	
+	<insert id="insertWRKEXE_G"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : insertWRKEXE_G
+	 	* Description : 즉시실행 백업 로그 insert
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, EXE_RSLT_CD
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+			, EXE_GRP_SN
+			, WRK_NM
+			, DB_SVR_IPADR_ID
+	 	)
+	 	VALUES
+	 	(
+			#{EXE_SN}
+			, #{SCD_ID}
+			, #{WRK_ID}
+			, now()
+			, now()
+			, #{EXE_RSLT_CD}
+			, #{BCK_OPT_CD}
+			, 0
+			, 0
+			, #{DB_ID}
+			, #{BCK_FILE_PTH}
+			, 'system'
+			, 'system'
+			, #{EXE_GRP_SN}
+			, (SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = #{WRK_ID})
+			, #{DB_SVR_IPADR_ID}
+	 	)	 	
+    </insert>
+    
+      <update id="updateTransExe" parameterType="TransVO">
+   		/**
+	 	* Query ID : updateTransExe
+	 	* Description : 데이터전송 결과 수정
+	 	* Author :
+	 	**/         
+        UPDATE T_TRANSCNG_I
+           SET EXE_STATUS = #{exe_status},
+           		LST_MDF_DTM = clock_timestamp()
+         WHERE 1 = 1
+           AND TRANS_ID = #{trans_id}
+    	</update>
+    	
+     <update id="updateTransTargetExe" parameterType="TransVO">
+   		/**
+	 	* Query ID : updateTransTargetExe
+	 	* Description : 데이터전송 결과 수정
+	 	* Author :
+	 	**/         
+        UPDATE T_TRANSCNG_TARGET_I
+           SET EXE_STATUS = #{exe_status},
+           	   LST_MDF_DTM = clock_timestamp()
+         WHERE 1 = 1
+           AND TRANS_ID = #{trans_id}
+    	</update>
+
+	<select id="selectTransComSettingInfo" parameterType="TransVO" resultType="TransVO">
+   		/**
+	 	* Query ID : selectTransComSettingInfo
+	 	* Description : TRANS 공통 설정
+	 	* Author : 
+	 	**/
+       SELECT A.TRANS_COM_ID,
+              A.PLUGIN_NAME,
+              A.HEARTBEAT_INTERVAL_MS,
+              A.HEARTBEAT_ACTION_QUERY,
+              A.MAX_BATCH_SIZE,
+              A.MAX_QUEUE_SIZE,
+              A.OFFSET_FLUSH_INTERVAL_MS,
+              A.OFFSET_FLUSH_TIMEOUT_MS,
+              A.AUTO_CREATE,
+              A.TRANSFORMS_YN
+         FROM T_TRANSCOMCNG_I A
+        WHERE A.TRANS_COM_ID = #{trans_com_id}::numeric
+        LIMIT 1
+	</select>
+	
+	<select id="selectTablePkInfo" parameterType="TransVO" resultType="TransVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectTablePkInfo
+	 	* Description : Database pk 조회
+	 	* Author : 박태혁
+	 	**/
+       SELECT CC.COLUMN_NAME AS COLUMN_NAME
+         FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS       TC
+             ,INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CC
+        WHERE TC.TABLE_NAME      = #{table_name}
+          AND TC.CONSTRAINT_TYPE = 'PRIMARY KEY'
+          AND TC.TABLE_CATALOG   = CC.TABLE_CATALOG
+          AND TC.TABLE_SCHEMA    = CC.TABLE_SCHEMA
+          AND TC.TABLE_NAME      = CC.TABLE_NAME
+          AND TC.CONSTRAINT_NAME = CC.CONSTRAINT_NAME
+		]]>
+	</select>
+</mapper>
