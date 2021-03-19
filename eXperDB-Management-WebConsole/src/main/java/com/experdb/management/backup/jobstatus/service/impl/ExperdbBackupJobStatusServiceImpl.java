@@ -26,5 +26,19 @@ public class ExperdbBackupJobStatusServiceImpl extends EgovAbstractServiceImpl i
 	public List<JobStatusVO> selectBackupJobStatusList() throws Exception {
 		return experdbBackupJobStatusDAO.selectJobStatusList();
 	}
+
+
+
+	@Override
+	public int selectJobEnd(int jobid) throws Exception {
+		return experdbBackupJobStatusDAO.selectJobEnd(jobid);
+	}
+
+
+
+	@Override
+	public int selectJobid() throws Exception {
+		return experdbBackupJobStatusDAO.selectJobid();
+	}
 	
 }
