@@ -99,8 +99,7 @@ public class DaemonStart implements DxDaemon{
 				String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 				String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 				String strVersion = FileUtil.getPropertyValue("context.properties", "agent.install.version");
-				String strRootPwd = FileUtil.getPropertyValue("context.properties", "proxy.root.pwd");
-socketLogger.info("daemon.strRootPwd : " + strRootPwd);
+
 				service.agentInfoStartMng(strIpadr, strPort, strVersion);
 				
 				//root properties 삭제
