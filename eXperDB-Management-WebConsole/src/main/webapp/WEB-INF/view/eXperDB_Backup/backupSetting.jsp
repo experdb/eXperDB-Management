@@ -434,7 +434,7 @@ function fn_nodeRegPopup() {
 			})
 			.done (function(result){			
 				showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
-				// 모니터링 화면으로 이동 ----->
+				location.href="/experdb/backupMonitoring.do";
 			})
 			.fail (function(xhr, status, error){
 				 if(xhr.status == 401) {
