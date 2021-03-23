@@ -1,10 +1,13 @@
 package com.experdb.management.backup.node.service;
 
+import java.io.*;
+import java.text.*;
 import java.util.*;
 
 import javax.servlet.http.*;
 
 import org.json.simple.*;
+import org.xml.sax.*;
 
 import com.experdb.management.backup.service.*;
 
@@ -28,6 +31,6 @@ public interface ExperdbBackupNodeService {
 
 	void scheduleInsert(HttpServletRequest request, Map<Object, String> param) throws Exception;
 
-	JSONObject getScheduleInfo(HttpServletRequest request) throws Exception;
+	JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException, ParseException;
 
 }

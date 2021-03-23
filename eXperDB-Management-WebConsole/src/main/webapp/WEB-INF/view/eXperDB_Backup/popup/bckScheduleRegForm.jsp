@@ -120,6 +120,7 @@
 					$("#everyTime").val(),
 					$("#repeatTime").val()
 		 )
+		 fn_drawScheduleList();
 			$("#pop_layer_popup_backupSchedule").modal("hide");
 		} 
 	}

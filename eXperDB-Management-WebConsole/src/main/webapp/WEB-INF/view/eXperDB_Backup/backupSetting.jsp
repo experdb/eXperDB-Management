@@ -95,6 +95,12 @@ function fn_init() {
 	 NodeList.tables().header().to$().find('th:eq(2)').css('min-width');
 	 NodeList.tables().header().to$().find('th:eq(3)').css('min-width');
 	 
+	 NodeList.on('select', function(e, dt, type, indexes){
+		var nodeIpadr = NodeList.row(indexes).data().ipadr
+		NodeList.clear();
+		// fn_scheduleReset(ipadr);
+		fn_getScheduleInfo(nodeIpadr);
+	 });
 	 scheduleList = $('#scheduleList').DataTable({
 		scrollY : "140px",
 		scrollX: true,	
@@ -151,6 +157,19 @@ function dateCalenderSetting() {
 	
 }
 
+function fn_scheduleReset(ipadr){
+	schSun=[];
+	schMon=[];
+	schTue=[];
+	schWed=[];
+	schThu=[];
+	schFri=[];
+	schSat=[];
+
+	// fn_drawScheduleList();
+	// fn_getScheduleInfo(ipadr);
+}
+
 /* ********************************************************
  * 서버 리스트 가져오기
  ******************************************************** */
@@ -180,6 +199,70 @@ function fn_getSvrList() {
 		}
 	});
 }
+
+/* ********************************************************
+ * get schedule data
+ ******************************************************** */
+ function fn_getScheduleInfo(ipadr){
+	console.log("NodeList CLICK	!! : " + ipadr);
+	$.ajax({
+		url : "/experdb/getScheduleInfo.do",
+		data : {
+			ipadr : ipadr
+		},
+		type : "post"
+	})
+	.done(function(result){
+		console.log("get schedule 성공!! " + result);
+		console.log("RESULT_CODE : " + result.RESULT_CODE);
+		if(result.RESULT_CODE == "0"){
+			console.log("성공 : " + result.startDate);
+			fn_setScheduleInfo(result);
+		}else{
+			console.log("실패 : " + result.startDate);
+		}
+	})
+	.fail(function(xhr, status, error){
+
+	})
+	.always(function(){
+
+	})
+}
+
+
+function fn_setScheduleInfo(result){
+	console.log("=========== fn_setScheduleInfo =============");
+
+	var scheduleData = [];
+	console.log("startDate : " + result.startDate);
+	console.log("storageType : " + result.storageType);
+	console.log("storage : " + result.storage);
+	console.log("compress : " + result.compress);
+	console.log("dateType : " + result.dateType);
+	console.log("date : " + result.date);
+	console.log("setNum : " + result.setNum);
+	console.log("weekData : " + result.weekData.length);
+	console.log("==============================================");
+
+	scheduleData = result.weekData;
+	
+	console.log("===============@@@@@@@@@@@@=================");
+	for(var i=0 ; i<scheduleData.length; i++){
+		console.log("#" + i + "# : " + scheduleData[i].startTime);
+		console.log("#" + i + "# : " + scheduleData[i].repeat);
+		console.log("#" + i + "# : " + scheduleData[i].repEndTime);
+		console.log("#" + i + "# : " + scheduleData[i].repTime);
+		console.log("#" + i + "# : " + scheduleData[i].repTimeUnit);
+		console.log("#" + i + "# : " + scheduleData[i].dayPick);
+		console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		fn_scheduleInsert(scheduleData[i].dayPick, scheduleData[i].startTime, scheduleData[i].repeat, scheduleData[i].repEndTime, scheduleData[i].repTime, scheduleData[i].repTimeUnit);
+		
+	}
+	fn_drawScheduleList();
+
+}
+ 
 
 /* ********************************************************
  * node registration popoup
@@ -351,7 +434,7 @@ function fn_nodeRegPopup() {
 			schWeek[i].sort(compareTime);
 		}
 		
-		fn_drawScheduleList();
+		// fn_drawScheduleList();
 	}
 	
 	// schedule sort by startTime
@@ -406,7 +489,7 @@ function fn_nodeRegPopup() {
 			weekData.tue = schTue;
 			weekData.wed = schWed;
 			weekData.thu = schThu;
-			weekData.fri = schFri,
+			weekData.fri = schFri;
 			weekData.sat = schSat;
 			weekData.sun = schSun;
 			console.log("nodeIpadr : " + NodeList.row('.selected').data().ipadr);
