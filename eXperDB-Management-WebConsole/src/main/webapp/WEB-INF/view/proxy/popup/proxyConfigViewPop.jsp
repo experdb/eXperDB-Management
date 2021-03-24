@@ -19,23 +19,23 @@
 	*/
 %>
 <script type="text/javascript">
-
-
+// 	var pry_svr_id = "${pry_svr_id}";
+// 	var type = "${type}";
 	$(window).ready(function(){
 // 		config 파일 불러오기
 // 		console.log('pry_svr_id : ' + pry_svr_id);
 // 		console.log('type : ' + type);
-// 		fn_configView();	
+// 		fn_configViewAjax();	
 	});
 
-	/* ********************************************************
+	/* *******************************************************
  	* config 파일 불러오기
  	******************************************************** */
-	function fn_configView() {
-		var pry_svr_id = $("pry_svr_id", "configForm").val();
-		var type = $("type", "configForm").val();
-// 		console.log('pry_svr_id : ' + pry_svr_id);
-// 		console.log('type : ' + type);
+	function fn_configViewAjax(pry_svr_id, type) {
+		// var pry_svr_id = $("pry_svr_id", "configForm").val();
+		// var type = $("type", "configForm").val();
+		console.log('pry_svr_id : ' + pry_svr_id);
+		console.log('type : ' + type);
 		$.ajax({
 			url : "/proxyMonitoring/configViewAjax.do",
 			dataType : "json",
@@ -106,8 +106,8 @@
 					<div class="card-body">
 						<form class="cmxform" id="configForm">
 							<input type="hidden" name="contents_gbn" id="contents_gbn" value="" />
-							<input type="hidden" name="pry_svr_id" id="pry_svr_id" value="${ pry_svr_id}" />
-							<input type="hidden" name="type" id="type" value="${type }" />
+							<input type="hidden" name="pry_svr_id" id="pry_svr_id" value="${pry_svr_id}" />
+							<input type="hidden" name="type" id="type" value="${type}" />
 							<fieldset>
 								<div class="form-group row">
 									<div class="col-sm-12">

@@ -21,14 +21,15 @@
 
 	var proxyLogTable = "";
 	var proxyStatTable = "";
+	var shown = true;
 	
 	$(window).ready(function(){
 		//서버정보 리스트 setting
 		fn_serverListSetting();	
 		// 프록시 모니터링 setting
-		fn_proxyMonInfo();
+// 		fn_proxyMonInfo();
 		// 프록시 연결 db 모니터링 setting
-		fn_dbMonInfo();
+// 		fn_dbMonInfo();
 		// 프록시 log 테이블
 		fn_proxy_log_init();
 		// 프록시 리스너 통계 테이블
@@ -65,9 +66,9 @@
 				{data : "sys_type", 
 					render : function(data, type, full, meta) {
 						var html = "";
-						if(data.sys_type == "proxy"){
+						if(data == "PROXY"){
 							html += '<spring:message code="menu.proxy"/>';
-						} else if(data.sys_type == "keepalived"){
+						} else if(data == "KEEPALIVED"){
 							html += '<spring:message code="eXperDB_proxy.keepalived"/>';
 						}
 						return html;
@@ -78,17 +79,18 @@
 				{data : "act_type", 
 					render : function(data, type, full, meta){
 						var html = "";
-						if(data.act_type == 'A'){
+						if(data == 'A'){
 							html += '<div class="badge badge-pill badge-success">';
-							html += '	<i class="fa fa-circle-o-notch fa-spin mr-2"></i>';
+							html += '	<i class="fa fa-spinner fa-spin mr-2"></i>';
+// 							html += '	<i class="fa fa-circle-o-notch fa-spin mr-2"></i>';
 							html += '	start';
 							html += '</div>';
-						} else if(data.act_type == 'R') {
-							html += '<div class="badge badge-pill badge-info">';
-							html += '	<i class="fa fa-circle-o-notch fa-spin mr-2"></i>';
+						} else if(data == 'R') {
+							html += '<div class="badge badge-pill badge-success">';
+							html += '	<i class="fa fa-spinner fa-spin mr-2"></i>';
 							html += '	restart';
 							html += '</div>';
-						} else if(data.act_type == 'S'){
+						} else if(data == 'S'){
 							html += '<div class="badge badge-pill badge-danger">';
 							html += '	<i class="fa fa-circle-o-notch mr-2"></i>';
 							html += '	stop';
@@ -99,7 +101,18 @@
 					className : "dt-center", 
 					defaultContent : ""
 				},
-				{data : "wrk_dtm", className : "dt-center", defaultContent : ""}
+				{data : "exe_rslt_cd", 
+					render : function(data, type, full, meta){
+						if(data == 'TC001501'){
+							return '성공';
+						} else if(data == 'TC001502'){
+							return '실패';
+						}
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "wrk_dtm", className : "dt-center", defaultContent : ""},
 			]
 		});
 
@@ -108,15 +121,16 @@
 		proxyLogTable.tables().header().to$().find('th:eq(2)').css('min-width', '50px'); // proxy server name
 		proxyLogTable.tables().header().to$().find('th:eq(3)').css('min-width', '50px'); // proxy or keepavlied
 		proxyLogTable.tables().header().to$().find('th:eq(4)').css('min-width', '50px'); // start or restart or stop
-		proxyLogTable.tables().header().to$().find('th:eq(5)').css('min-width', '50px'); // first reg date
+		proxyLogTable.tables().header().to$().find('th:eq(5)').css('min-width', '50px'); // manual or system
+		proxyLogTable.tables().header().to$().find('th:eq(6)').css('min-width', '50px'); // first reg date
 	}
-
 
 
 	/* ********************************************************
 	 * 서버 리스트 셋팅
 	 ******************************************************** */
 	function fn_serverListSetting(){
+
 		var rowCount = 0;
 		var html = "";
 		var master_gbn = "";
@@ -147,7 +161,7 @@
 	 			if (pry_svr_id == "") {
 					html += '<div class="col-md-12 grid-margin stretch-card">\n';
 					html += '	<div class="card news_text">\n';
-					html += '		<div class="card-body" id="serverSs'+ rowCount +'" onClick="fn_proxyMonInfo(' + pry_svr_id_val + ', '+ rowCount +')" style="cursor:pointer;">\n';
+					html += '		<div class="card-body" id="serverSs'+ rowCount +'" onClick="fn_getProxyInfo(' + pry_svr_id_val + ', '+ rowCount +')" style="cursor:pointer;">\n';
 					html += '			<div class="row">\n';
 				} else if(pry_svr_id != nvlPrmSet("${serverinfo.pry_svr_id}", '')  && master_gbn == "M") {
 					html += '				</div>\n';
@@ -162,7 +176,7 @@
 					
 					html += "<div class='col-md-12 grid-margin stretch-card'>\n";
 					html += "	<div class='card news_text'>\n";
-					html += '		<div class="card-body" id="serverSs'+ rowCount +'" onClick="fn_proxyMonInfo('+ pry_svr_id_val +', '+ rowCount +')" style="cursor:pointer;">\n';
+					html += '		<div class="card-body" id="serverSs'+ rowCount +'" onClick="fn_getProxyInfo('+ pry_svr_id_val +', '+ rowCount +')" style="cursor:pointer;">\n';
 					html += '			<div class="row">\n';
 				}
 	 			
@@ -224,65 +238,71 @@
 		if (proxyServerTotInfo_cnt > 0) {
 			$("#serverSs1").click();
 		}
+		
+		$("#listenerStatChart").html("");
 	}
 
+	function fn_proxyMonitoringInit(pry_svr_id, result) {
+		// 프록시 모니터링 setting
+		fn_proxyMonInfo(result);
+		// 프록시 연결 db 모니터링 setting
+		fn_dbMonInfo(result);
+		// 프록시 log 테이블
+// 		fn_proxy_log_init();
+		
+		proxyLogTable.clear().draw();
+		if (nvlPrmSet(result.proxyLogList, '') != '') {
+			proxyLogTable.rows.add(result.proxyLogList).draw();
+		}
+		console.log(result.proxyLogList[0].wrk_dtm)
+		// 프록시 리스너 통계 테이블
+// 		fn_proxy_stat_init();
+		fn_lsnStat(pry_svr_id);
+	}
+	
 	/* ********************************************************
 	* 프록시 서버 모니터링 셋팅
 	******************************************************** */
-
-	function fn_proxyMonInfo(){
+	function fn_proxyMonInfo(result){
 		var rowCount = 0;
 		var html = "";
 		var master_gbn = "";
-		var pry_svr_id = "";
+ 		var pry_svr_id = "";
 		var listCnt = 0;
 		var pry_svr_id_val = "";
-
 		var proxyServerByMasId_cnt = "${fn:length(proxyServerByMasId)}";
-
-		if (proxyServerByMasId_cnt == 0) {
-			html += "<div class='col-md-12 grid-margin stretch-card'>\n";
-			html += "	<div class='card'>\n";
-			html += '		<div class="card-body">\n';
-			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-			html += '				<spring:message code="message.msg01" /></h5>\n';
-			html += '			</div>\n';
-			html += "		</div>\n";
-			html += "	</div>\n";
-			html += '</div>\n';
-		} else {
-			<c:forEach items="${proxyServerByMasId}" var="proxyinfo" varStatus="status">
-				master_gbn = nvlPrmSet("${proxyinfo.master_gbn}", "");
-				rowCount = rowCount + 1;
-				listCnt = parseInt("${fn:length(proxyServerByMasId)}");
-
-				pry_svr_id_val = nvlPrmSet("${proxyinfo.pry_svr_id}", '');
+		var master_state = "";
+		
+		$("#proxy_master_nm").text("");
+		if (result.proxyServerByMasId != null && result.proxyServerByMasId.length > 0) {
+			$(result.proxyServerByMasId).each(function (index, item) {
 				html += '								<table class="table-borderless">\n';
 				html += '									<tr>\n'
 				html += '										<td colspan="2">\n';
 				html += '											<h6	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">\n';
-				if(master_gbn == "M") {
-					if(nvlPrmSet("${proxyinfo.agt_cndt_cd}", '') == 'TC001101'){
+				if(item.master_gbn == "M") {
+					$("#proxy_master_nm").text(item.pry_svr_nm);
+					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001101'){
 						html += '												<div class="badge badge-pill badge-success" title="">M</div>\n';
 					} else {
 						html += '												<div class="badge badge-pill badge-danger" title="">M</div>\n';
 					}
-				} else if(master_gbn == "B"){
-					if(nvlPrmSet("${proxyinfo.agt_cndt_cd}", '') == 'TC001101'){
+					master_state = nvlPrmSet(item.agt_cndt_cd, '');
+				} else if(item.master_gbn == "B"){
+					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001101'){
 						html += '												<div class="badge badge-pill badge-success">B</div>\n'
 					} else {
 						html += '												<div class="badge badge-pill badge-danger">B</div>\n'
 					}
 				}
-				html += '												${proxyinfo.pry_svr_nm}\n';
+				html += '												'+item.pry_svr_nm+'\n';
 				html += '											</h6>\n';
 				html += '										</td>\n';
 				html += '										<td rowspan="4">\n';
-				if(nvlPrmSet("${proxyinfo.agt_cndt_cd}", '') == 'TC001101'){
-					html += '											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db" style="font-size: 3em;"></i>\n';
-				} else if(nvlPrmSet("${proxyinfo.agt_cndt_cd}", '') == 'TC001102'){
-					html += '											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db" style="font-size: 3em;"></i>\n'
+				if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001101'){
+					html += '											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt" style="font-size: 3em;"></i>\n';
+				} else if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001102'){
+					html += '											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db pry_agt" style="font-size: 3em;"></i>\n'
 				}
 				html += '											<h6 class="text-muted">agent</h6>\n';
 				html += '										</td>\n';
@@ -290,14 +310,14 @@
 				html += '									<tr>\n';
 				html += '										<td>\n';
 				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-				html += '												VIP : ${proxyinfo.v_ip}\n';
+				html += '												VIP : '+item.v_ip+'\n';
 				html += '											</h6>\n';
 				html += '										</td>\n';
 				html += '										<td>\n';
 				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-				if(master_gbn == "M"){
+				if(item.master_gbn == "M"){
 					html += '												PORT : 5430\n';
-				} else if(master_gbn == "B"){
+				} else if(item.master_gbn == "B"){
 					html += '												PORT : 5431\n';
 				}
 				html += '											</h6>\n';
@@ -306,51 +326,152 @@
 				html += '									<tr>\n';
 				html += '										<td>\n';
 				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-				html += '												IP : ${proxyinfo.ipadr}\n';
+				html += '												IP : '+item.ipadr+'\n';
 				html += '											</h6>\n';
 				html += '										</td>\n';
 				html += '									</tr>\n';
 				html += '									<tr>\n';
 				html += '										<td class="text-center">\n';
-				html += '											<i class="fa fa-check-circle icon-md mb-0 mb-md-3 mb-xl-0 text-info blink_db" style="font-size: 2em;"></i>\n';
-				html += '											<h6 class="text-muted"><a href="#" onclick="fn_configView(${proxyinfo.pry_svr_id}, \'P\')">Proxy</a></h6>\n';
+				html += '											<i class="mdi mdi-lan icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 2em;"></i>\n';
+// 				html += '											<i class="mdi mdi-blur icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 2em;"></i>\n';
+				html += '											<h6 class="text-muted"><a href="#" onclick="fn_configView('+item.pry_svr_id+', \'P\')">Proxy</a></h6>\n';
 				html += '										</td>\n';
 				html += '										<td class="text-center">\n';
-				html += '											<i class="fa fa-check-circle icon-md mb-0 mb-md-3 mb-xl-0 text-info blink_db text-center" style="font-size: 2em;"></i>\n';
-				html += '											<h6 class="text-muted"><a href="#" onclick="fn_configView(${proxyinfo.pry_svr_id}, \'K\')">Keepalived</a></h6>\n';
+				html += '											<i class="mdi mdi-checkbox-marked-circle-outline icon-md mb-0 mb-md-3 mb-xl-0 text-info text-center" style="font-size: 2em;"></i>\n';
+// 				html += '											<i class="fa fa-check-circle icon-md mb-0 mb-md-3 mb-xl-0 text-info text-center" style="font-size: 2em;"></i>\n';
+				html += '											<h6 class="text-muted"><a href="#" onclick="fn_configView('+item.pry_svr_id+', \'K\')">Keepalived</a></h6>\n';
 				html += '										</td>\n';
 				html += '									</tr>\n';
 				html += '								</table>\n';
+			});
+		} else {
+			html += "	<div class='card'>\n";
+			html += '		<div class="card-body">\n';
+			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+			html += '				<spring:message code="message.msg01" /></h5>\n';
+			html += '			</div>\n';
+			html += "		</div>\n";
+			html += "	</div>\n";
+		}
+		$("#proxyMonitoringList").html(html);
 		
-				pry_svr_id = nvlPrmSet("${proxyinfo.pry_svr_id}", '') ; 
-			
-			</c:forEach>
+		if (master_state == 'TC001101') {
+// 			setInterval(iDatabase_toggle, 1000);
 		}
 		
-		$("#proxyMonitoringList").html(html);
 	}
+	function iDatabase_toggle() {
+		if(shown) {
+			$(".pry_agt").hide();
+			shown = false;
+		} else {
+			$(".pry_agt").show();
+			shown = true;
+		}
+	}
+	
+	/* ********************************************************
+	* 프록시 서버 정보 가져오기
+	******************************************************** */
+	function fn_getProxyInfo(pry_svr_id) {
+		console.log('pry_svr_id : ' + pry_svr_id)
+		$.ajax({
+			url : '/proxyMonitoring/selectInfoByPrySvrId.do',
+			type : 'post',
+			data : {
+				pry_svr_id : pry_svr_id,
+			},
+			dataType : 'json',
+			success : function(result) {
+				// 프록시 모니터링 초기화
+				fn_proxyMonitoringInit(pry_svr_id, result);
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				$("#ins_idCheck", "#insProxyListenForm").val("0");
+				console.log(error);
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+	}
+
 
 	/* ********************************************************
 	* 디비 서버 모니터링 셋팅
 	******************************************************** */
-	function fn_dbMonInfo(){
+	function fn_dbMonInfo(result){
 		var rowCount = 0;
 		var html = "";
 		var master_gbn = "";
 		var pry_svr_id = "";
 		var listCnt = 0;
 		var pry_svr_id_val = "";
-
 		
-
-		// $("#dbMonitoringList").html(html);
+		if (result.dbServerConProxy != null && result.dbServerConProxy.length > 0) {
+			$(result.dbServerConProxy).each(function (index, item) {
+				html += '								<table class="table-borderless">';
+				html += '									<tr>';
+				html += '										<td colspan="2">';
+				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
+				if(item.agt_cndt_cd == 'TC001101'){
+					html += '												<div class="badge badge-pill badge-success" title="">'+item.master_gbn+'</div>';
+				} else {
+					html += '												<div class="badge badge-pill badge-danger" title="">'+item.master_gbn+'</div>';
+				}
+				if(item.master_gbn == 'M'){
+					html += '													master';
+				} else {
+					html += '													standby';
+				}
+				html += '												</h6>';
+				html += '											</td>';
+				html += '											<td rowspan="2">';
+				if(item.agt_cndt_cd == 'TC001101'){
+					html += '												<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db" style="font-size: 3em;"></i>';
+				} else {
+					html += '												<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db" style="font-size: 3em;"></i>';
+				}
+				html += '											<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>';
+				html += '			</td>';
+				html += '		</tr>';
+				html += '		<tr>';
+				html += '			<td>';
+				html += '				<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">IP : ' + item.ipadr + '</h6>';
+				html += '			</td>'
+				html += '			<td>'
+				html += '				<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">PORT : ' + item.portno + '</h6>';
+				html += '			</td>';
+				html += '		</tr>';
+				html += '	</table>'
+			});
+		} else {
+			html += "	<div class='card'>\n";
+			html += '		<div class="card-body">\n';
+			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+			html += '				<spring:message code="message.msg01" /></h5>\n';
+			html += '			</div>\n';
+			html += "		</div>\n";
+			html += "	</div>\n";
+		}
+		$("#dbMonitoringList").html(html);
 	}
 	
 	/* ********************************************************
 	 * 리스너 통계 테이블 셋팅
 	 ******************************************************** */
 	function fn_proxy_stat_init(){
-		proxyStatTable = $('#proxyStat').DataTable({
+		
+		proxyStatTable = $('#proxyStatTable').DataTable({
 			searching : false,
 			scrollY : true,
 			scrollX: true,	
@@ -362,25 +483,158 @@
 				"emptyTable" : "데이터가 없습니다."
 			},
 			columns : [
-				{data : "rownum", className : "dt-center", visible : false},
-				{data : "pry_svr_id", className : "dt-center", visible : false},
-				{data : "pry_svr_nm", className : "dt-center"},
-				{data : "lsn_nm", className : "dt-center"},
-				{data : "db_con_addr", className : "dt-center"},
-				{data : "svr_status", className : "dt-center"},
-				{data : "lst_status_chk_desc", className : "dt-center"},
-				{data : "fail_chk_cnt", className : "dt-center"},
-				{data : "max_session", className : "dt-center"},
-				{data : "session_limit", className : "dt-center"},
-				{data : "cumt_sso_con_cnt", className : "dt-center"},
-				{data : "byte_receive", className : "dt-center"},
-				{data : "byte_transmit", className : "dt-center"}
+// 				{data : "r", className : "dt-center", visible : false},
+				{data : "rownum", className : "dt-center", visible : false, defaultContent : ""},
+				{data : "idx", className : "dt-center", visible : false, defaultContent : ""},
+				{data : "pry_svr_id", className : "dt-center", visible : false, defaultContent : ""},
+				{data : "pry_svr_nm", className : "dt-center", defaultContent : ""},
+				{data : "lsn_nm", className : "dt-center", defaultContent : ""},
+				{data : "db_con_addr", className : "dt-center", defaultContent : ""},
+				{data : "svr_status", 
+					render : function(data, type, full, meta){
+						var html = "";
+						if(data == 'UP'){
+							html += '<div class="badge badge-pill badge-success">';
+							html += '	<i class="fa fa-spin fa-spinner mr-2" style="font-size:1em;"></i>';
+							html += data;
+							html += '</div>';
+						} else if(data == 'DOWN'){
+							html += '<div class="badge badge-pill badge-danger">';
+							html += '	<i class="fa fa-circle-o-notch mr-2" style="font-size:1em;"></i>';
+							html += data ;
+							html += '</div>';
+						}
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "lst_status_chk_desc", 
+					render : function(data, type, full, meta){
+						var html = "";
+						if(data == 'L7OK'){
+							html += '<div class="badge badge-pill badge-success">';
+							html += '	<i class="fa fa-spin fa-spinner mr-2" style="font-size:1em;"></i>';
+							html += data;
+							html += '</div>';
+						} else if(data == 'L7RSP'){
+							html += '<div class="badge badge-pill badge-danger">';
+							html += '	<i class="fa fa-circle-o-notch mr-2" style="font-size:1em;"></i>';
+							html += data ;
+							html += '</div>';
+						}
+						return html;
+					},
+					className : "dt-center", defaultContent : ""
+				},
+				{data : "fail_chk_cnt", 
+					render : function(data, type, full, meta){
+						var html = "";
+						html += '<div>'+data;
+						if(full['fail_chk_cnt_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['fail_chk_cnt_cng']+')';
+						} else if(full['fail_chk_cnt_cng'] == 0) {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['fail_chk_cnt_cng']+')'
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['fail_chk_cnt_cng']+')'
+						}
+						html +='</div>'
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "max_session", 
+					render : function(data, type, full, meta){
+						var html = "";
+						html += '<div>'+data;
+						if(full['max_session_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['max_session_cng']+')';
+						} else if(full['max_session_cng'] == 0) {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['max_session_cng']+')'
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['max_session_cng']+')'
+						}
+						html +='</div>'
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "session_limit", 
+					render : function(data, type, full, meta){
+						var html = "";
+						html += '<div>'+data;
+						if(full['session_limit_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['session_limit_cng']+')';
+						} else if(full['session_limit_cng'] == 0) {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['session_limit_cng']+')'
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['session_limit_cng']+')'
+						}
+						html +='</div>'
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "cumt_sso_con_cnt", 
+					render : function(data, type, full, meta){
+						var html = "";
+						html += '<div>'+data;
+						if(full['cumt_sso_con_cnt_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['cumt_sso_con_cnt_cng']+')';
+						} else if(full['cumt_sso_con_cnt_cng'] == 0) {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['cumt_sso_con_cnt_cng']+')'
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['cumt_sso_con_cnt_cng']+')'
+						}
+						html +='</div>'
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "byte_receive", 
+					render : function(data, type, full, meta){
+						var html = "";
+						html += '<div>'+data;
+						if(full['byte_receive_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['byte_receive_cng']+')';
+						} else if(full['byte_receive_cng'] == 0) {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['byte_receive_cng']+')'
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['byte_receive_cng']+')'
+						}
+						html +='</div>'
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "byte_transmit", 
+					render : function(data, type, full, meta){
+						var html = "";
+						html += '<div>'+data;
+						if(full['byte_transmit_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['byte_transmit_cng']+')';
+						} else if(full['byte_transmit_cng'] == 0) {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['byte_transmit_cng']+')'
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['byte_transmit_cng']+')'
+						}
+						html +='</div>'
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				}
 			],
 		});
 
 		proxyStatTable.tables().header().to$().find('th:eq(0)').css('min-width','0px');
 		proxyStatTable.tables().header().to$().find('th:eq(1)').css('min-width','0px');
-		proxyStatTable.tables().header().to$().find('th:eq(2)').css('min-width');
+		proxyStatTable.tables().header().to$().find('th:eq(2)').css('min-width','0px');
 		proxyStatTable.tables().header().to$().find('th:eq(3)').css('min-width');
 		proxyStatTable.tables().header().to$().find('th:eq(4)').css('min-width');
 		proxyStatTable.tables().header().to$().find('th:eq(5)').css('min-width');
@@ -391,13 +645,15 @@
 		proxyStatTable.tables().header().to$().find('th:eq(10)').css('min-width');
 		proxyStatTable.tables().header().to$().find('th:eq(11)').css('min-width');
 		proxyStatTable.tables().header().to$().find('th:eq(12)').css('min-width');
+		proxyStatTable.tables().header().to$().find('th:eq(13)').css('min-width');
+// 		proxyStatTable.tables().header().to$().find('th:eq(14)').css('min-width');
 	}
 	
-	function fn_lsnStat(){
+	function fn_lsnStat(pry_svr_id){
 		$.ajax({
-			url : "/listenerstatistics.do", 
+			url : '/proxyMonitoring/listenerstatistics.do', 
 			data : {
-				pry_svr_id : $("#db_svr_id", "#findList").val(),
+				pry_svr_id : pry_svr_id,
 			},
 			dataType : "json",
 			type : "post",
@@ -417,10 +673,24 @@
 				proxyStatTable.rows({selected: true}).deselect();
 				proxyStatTable.clear().draw();
 
-				if (nvlPrmSet(result, '') != '') {
-					proxyStatTable.rows.add(result).draw();
+				if (nvlPrmSet(result.proxyStatisticsInfo, '') != '') {
+					for(var i = 0; i < result.proxyStatisticsInfo.length; i++){
+						console.log(result.proxyStatisticsInfo[i].r)
+						if(result.proxyStatisticsInfo[i].r == 1){
+							if(i != result.proxyStatisticsInfo.length-1 && result.proxyStatisticsInfo[i+1].r == 2){
+								result.proxyStatisticsInfo[i].fail_chk_cnt_cng = result.proxyStatisticsInfo[i].fail_chk_cnt-result.proxyStatisticsInfo[i+1].fail_chk_cnt;
+								result.proxyStatisticsInfo[i].max_session_cng = result.proxyStatisticsInfo[i].max_session-result.proxyStatisticsInfo[i+1].max_session;
+								result.proxyStatisticsInfo[i].session_limit_cng = result.proxyStatisticsInfo[i].session_limit-result.proxyStatisticsInfo[i+1].session_limit;
+								result.proxyStatisticsInfo[i].cumt_sso_con_cnt_cng = result.proxyStatisticsInfo[i].cumt_sso_con_cnt-result.proxyStatisticsInfo[i+1].cumt_sso_con_cnt;
+								result.proxyStatisticsInfo[i].byte_receive_cng = result.proxyStatisticsInfo[i].byte_receive-result.proxyStatisticsInfo[i+1].byte_receive;
+								result.proxyStatisticsInfo[i].byte_transmit_cng = result.proxyStatisticsInfo[i].byte_transmit-result.proxyStatisticsInfo[i+1].byte_transmit;
+							}
+							proxyStatTable.row.add(result.proxyStatisticsInfo[i]).draw();
+						}
+					}
+					
+// 					proxyStatTable.rows.add(result.proxyStatisticsInfo).draw();
 				}
-
 		  		var tableRows = $('#proxyStatTable tbody tr');
 		 		console.log("cells===1111=" + tableRows.length);
 		  		if (tableRows.length > 1) {
@@ -439,16 +709,67 @@ console.log("====value===" + $(value).data());
 				  
 			  });*/
 		  		}
+		  		
+		  		if ($("#listenerStatChart").length) {
+		  			var db_con_addr = nvlPrmSet(result.proxyStatisticsInfo[0].db_con_addr, 0);
+// 		  			var byte_receive = nvlPrmSet(result.proxyStatisticsInfo[0].byte_receive, 0);
+// 		  			var byte_transmit = nvlPrmSet(result.proxyStatisticsInfo[0].byte_transmit, 0);
+// 		  			var fail_chk_cnt = nvlPrmSet(result.proxyStatisticsInfo[0].fail_chk_cnt, 0);	
+// 		  			console.log('db_con_addr : ' + db_con_addr);
+		  			var statchart = Morris.Bar({
+		  							element: 'listenerStatChart',
+		  							barColors: ['#76C1FA', '#FABA66', '#63CF72', '#F36368'],
+		  							data: [{
+		  									db_con_addr: db_con_addr,
+		  									byte_receive: 0,
+		  									byte_transmit: 0,
+		  									cumt_sso_con_cnt: 0,
+		  									fail_chk_cnt: 0,
+		  								}
+		  							],
+		  							xkey: 'db_con_addr',
+		  							ykeys: ['byte_receive', 'byte_transmit', 'cumt_sso_con_cnt', 'fail_chk_cnt'],
+		  							labels: ['byte in', 'byte out', 'session total', 'fail check']
+		  			});
+					
+		  			
+		  			if (result.proxyStatisticsInfo != null) {
+		  				if (result.proxyStatisticsInfo.length > 0) {
+		  					var proxyStatChart = [];
+		  					for(var i = 0; i<result.proxyStatisticsInfo.length; i++){
+// 		  						if (result.proxyStatisticsInfo[i].bck_opt_cd == "TC000301") {
+// 		  							result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_full_backup;
+// 		  						} else if (result.proxyStatisticsInfo[i].bck_opt_cd == "TC000302") {
+// 		  							result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_incremental_backup;
+// 		  						} else {
+// 		  							result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_change_log_backup;
+// 		  						}
+								if(result.proxyStatisticsInfo[i].r == 1) {
+			  						proxyStatChart.push(result.proxyStatisticsInfo[i]);
+								}
+		  					}	
+		  			
+		  					statchart.setData(proxyStatChart);
+		  				}
+		  			}
+		  			
+// 		  			if (result.proxyStatisticsInfo != null) {
+// 		  				if (result.proxyStatisticsInfo.length > 0) {
+// 		  					statchart.setData(result.proxyStatisticsInfo);
+// 		  				}
+// 		  			}
+		  		}
+		  		
 			}
 		});
 	}
-
 
 	/* ********************************************************
 	 * config 파일 view popup
 	 ******************************************************** */
 	function fn_configView(pry_svr_id, type){
-		console.log(pry_svr_id, type);
+		console.log('pry_svr_id : ' + pry_svr_id);
+		console.log('type : ' + type);
 		$.ajax({
 			url : '/proxyMonitoring/configView.do',
 			type : 'post',
@@ -467,7 +788,7 @@ console.log("====value===" + $(value).data());
 					
 				// 	//$("#idCheck_alert-danger", "#insProxyListenForm").hide();
 				// }
-// 				fn_configView(pry_svr_id, type);
+				fn_configViewAjax(pry_svr_id, type);
 				$('#pop_layer_config_view').modal("show");
 			},
 			beforeSend: function(xhr) {
@@ -542,7 +863,7 @@ console.log("====value===" + $(value).data());
 								<div class="row">
 									<div class="col-5" style="padding-top: 3px;">
 										<h6 class="mb-0">
-											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')"> 
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 											<i class="mdi mdi-server"></i> 
 											<span class="menu-title"><spring:message code="menu.proxy_monitoring"/></span> 
 											<i class="menu-arrow_user" id="titleText"></i>
@@ -596,7 +917,6 @@ console.log("====value===" + $(value).data());
 											<div class="col-12">
 												<h6 class="mb-0">
 													<i class="mdi mdi-server menu-icon"></i><span class="menu-title"><spring:message code="eXperDB_proxy.server_information"/></span>
-<!-- 													<i class="mdi mdi-server menu-icon"></i><span class="menu-title">Proxy 서버정보</span> -->
 												</h6>
 											</div>
 										</div>
@@ -633,15 +953,6 @@ console.log("====value===" + $(value).data());
 						</div>
 					</div>
 					
-					<div class="row">
-						<div class="col-md-12" style="margin-top: -2px; min-height: 80px;">
-							<h3 class="card-title" style="margin-bottom: 10px; text-transform: none; font-size:1rem;">
-								<i class="item-icon mdi mdi-server"></i><span class="text-info" id="proxy_master_nm"></span>
-							</h3>
-						</div>
-					</div>
-				
-					
 					<!-- 모니터링 세부 title -->
 					<div class="row" style="margin-left:10px;">
 						<div class="col-md-4" style="margin-top: -2px; min-height: 80px;">
@@ -666,202 +977,13 @@ console.log("====value===" + $(value).data());
 						
 						<!-- Proxy 서버 -->
 						<div class="col-md-4" style="margin-left:10px; margin-top: -50px;">
-							<div class="card" id="proxyMonitoringList">
-<!-- 								<table class="table-borderless">  -->
-<!-- 									<tr> -->
-<!-- 										<td colspan="2"> -->
-<!-- 											<h6	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"> -->
-<!-- 												<div class="badge badge-pill badge-success" title="">M</div> -->
-<!-- 												vip_master -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 										<td rowspan="4"> -->
-<!-- 											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db" style="font-size: 3em;"></i><br> -->
-<!-- 											<h6 class="text-muted">agent</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td> -->
-<!-- 											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted"> -->
-<!-- 												VIP : 192.168.50.115 -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted"> -->
-<!-- 												PORT : 5430 -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td> -->
-<!-- 											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted"> -->
-<!-- 												IP : 192.168.50.110 -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td class="text-center"> -->
-<!-- 											<i class="fa fa-check-circle icon-md mb-0 mb-md-3 mb-xl-0 text-info blink_db" style="font-size: 2em;"></i><br> -->
-<!-- 											<h6 class="text-muted">Proxy</h6> -->
-<!-- 										</td> -->
-<!-- 										<td class="text-center"> -->
-<!-- 											<i class="fa fa-check-circle icon-md mb-0 mb-md-3 mb-xl-0 text-info blink_db text-center" style="font-size: 2em;"></i><br> -->
-<!-- 											<h6 class="text-muted">Keepalived</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 								</table> -->
-<!-- 								<table class="table-borderless" style="margin-left:40px;">  -->
-<!-- 									<tr> -->
-<!-- 										<td colspan="2"> -->
-<!-- 											<h6	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"> -->
-<!-- 												<div class="badge badge-pill badge-success" title="">B</div> -->
-<!-- 												vip_backup -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 										<td rowspan="4"> -->
-<!-- 											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db" style="font-size: 3em;"></i><br> -->
-<!-- 											<h6 class="text-muted">agent</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td> -->
-<!-- 											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted"> -->
-<!-- 												VIP : 192.168.50.116 -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted"> -->
-<!-- 												PORT : 5431 -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td> -->
-<!-- 											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted"> -->
-<!-- 												IP : 192.168.50.111 -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td class="text-center"> -->
-<!-- 											<i class="fa fa-check-circle icon-md mb-0 mb-md-3 mb-xl-0 text-info blink_db" style="font-size: 2em;"></i><br> -->
-<!-- 											<h6 class="text-muted">Proxy</h6> -->
-<!-- 										</td> -->
-<!-- 										<td class="text-center"> -->
-<!-- 											<i class="fa fa-times-circle icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db text-center" style="font-size: 2em;"></i><br> -->
-<!-- 											<h6 class="text-muted">Keepalived</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 								</table> -->
-							</div>
+							<div class="card" id="proxyMonitoringList"></div>
 						</div>
 						<!-- Proxy 서버 end -->
 						
 						<!-- DB 서버 -->
 						<div class="col-md-3" style="margin-left:10px; margin-top: -50px;">
-							<div class="card" id="dbMonitoringList">
-								<c:forEach items="${dbServerConProxy}" var="dbinfo" varStatus="status">
-									<table class="table-borderless">
-										<tr>
-											<td colspan="2">
-												<h6	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">
-													<c:choose>
-														<c:when test="${dbinfo.agt_cndt_cd eq 'TC001101'}">
-															<div class="badge badge-pill badge-success" title="">${dbinfo.master_gbn}</div>
-														</c:when>
-														<c:otherwise>
-															<div class="badge badge-pill badge-danger" title="">${dbinfo.master_gbn}</div>
-														</c:otherwise>
-													</c:choose>
-													<c:choose>
-														<c:when test="${dbinfo.master_gbn eq 'M'}">
-															master
-														</c:when>
-														<c:otherwise>
-															standby
-														</c:otherwise>
-													</c:choose>
-													
-													
-<%-- 													<c:choose> --%>
-<%-- 														<c:when test="${dbinfo.master_gbn} eq 'M'"> --%>
-<%-- 															<c:choose> --%>
-<%-- 																<c:when test="${dbinfo.agt_cndt_cd} eq 'TC001101'"> --%>
-<!-- 																	<div class="badge badge-pill badge-success" title="">M</div> -->
-<%-- 																</c:when> --%>
-<%-- 																<c:otherwise> --%>
-<!-- 																	<div class="badge badge-pill badge-danger" title="">M</div> -->
-<%-- 																</c:otherwise> --%>
-<%-- 															</c:choose> --%>
-<!-- 															master -->
-<%-- 														</c:when> --%>
-<%-- 														<c:otherwise> --%>
-<%-- 															<c:choose> --%>
-<%-- 																<c:when test="${dbinfo.agt_cndt_cd} eq 'TC001101'"> --%>
-<!-- 																	<div class="badge badge-pill badge-success" title="">S</div> -->
-<%-- 																</c:when> --%>
-<%-- 																<c:otherwise> --%>
-<!-- 																	<div class="badge badge-pill badge-danger" title="">S</div> -->
-<%-- 																</c:otherwise> --%>
-<%-- 															</c:choose> --%>
-<!-- 															standby -->
-<%-- 														</c:otherwise> --%>
-<%-- 													</c:choose>  --%>
-												</h6>
-											</td>
-											<td rowspan="2">
-												<c:choose>
-														<c:when test="${dbinfo.agt_cndt_cd eq 'TC001101'}">
-															<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db" style="font-size: 3em;"></i><br>
-														</c:when>
-														<c:otherwise>
-															<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db" style="font-size: 3em;"></i><br>
-														</c:otherwise>
-												</c:choose>
-												<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">
-													IP : ${dbinfo.ipadr} 	
-												</h6>
-											</td>
-											<td>
-												<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">
-													PORT : ${dbinfo.portno}
-												</h6>
-											</td>
-										</tr>
-									</table>
-								</c:forEach>
-<!-- 								<table class="table-borderless" style="margin-left:30px;"> -->
-<!-- 									<tr> -->
-<!-- 										<td colspan="2"> -->
-<!-- 											<h6	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info"> -->
-<!-- 												<div class="badge badge-pill badge-success" title="">S</div> -->
-<!-- 												standby -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 										<td rowspan="2"> -->
-<!-- 											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db" style="font-size: 3em;"></i><br> -->
-<!-- 											<h6 class="text-muted">agent</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td> -->
-<!-- 											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted"> -->
-<!-- 												IP : 192.168.50.114 -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted"> -->
-<!-- 												PORT : 5432 -->
-<!-- 											</h6> -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 								</table> -->
-							</div>
+							<div class="card" id="dbMonitoringList"></div>
 						</div>
 						<!-- DB 서버 end -->
 						
@@ -875,33 +997,10 @@ console.log("====value===" + $(value).data());
 										<th><spring:message code="data_transfer.server_name"/></th>
 										<th>데몬</th>
 										<th><spring:message code="common.status"/></th>
+										<th>실행결과</th>
 										<th><spring:message code="history_management.time"/></th>
 									</tr>
 								</thead>
-<!-- 								<tbody> -->
-<!-- 									<tr> -->
-<!-- 										<td>vip_master</td> -->
-<%-- 										<td><a href="#"><spring:message code="menu.proxy"/></a></td> --%>
-<!-- 										<td> -->
-<!-- 											<div class="badge badge-pill badge-success"> -->
-<!-- 											<i class="fa fa-circle-o-notch fa-spin mr-2"></i> -->
-<!-- 												start -->
-<!-- 											</div> -->
-<!-- 										</td> -->
-<!-- 										<td>2021-02-26 17:15:40</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td>vip_master</td> -->
-<!-- 										<td><a href="#">proxy</a></td> -->
-<!-- 										<td> -->
-<!-- 											<div class="badge badge-pill badge-danger"> -->
-<!-- 											<i class="fa fa-circle-o-notch mr-2"></i> -->
-<!-- 												stop -->
-<!-- 											</div> -->
-<!-- 										</td> -->
-<!-- 										<td>2021-02-26 15:05:59</td> -->
-<!-- 									</tr> -->
-<!-- 								</tbody> -->
 							</table>
 						</div>
 						
@@ -921,22 +1020,48 @@ console.log("====value===" + $(value).data());
 			<div class="card">
 				<div class="card-body">	
 					
-					<!-- 리스너 정보 title -->
-					<div class="row">
-						<div class="accordion_main accordion-multi-colored col-12"	id="accordion" role="tablist" style="margin-bottom: 10px;">
-							<div class="card" style="margin-bottom: 0px;">
-								<div class="card-header" role="tab" id="page_header_div">
-									<div class="row" style="height: 15px;">
-										<div class="col-12">
-											<h6 class="mb-0">
-												<i class="fa fa-bar-chart-o menu-icon"></i> <span class="menu-title">리스너 정보</span>
-											</h6>
-										</div>
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom: 0px;">
+							<div class="card-header" role="tab" id="listener_header_div">
+								<div class="row">
+									<div class="col-12">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#listener_header_sub" aria-expanded="false" aria-controls="listener_header_sub" onclick="fn_profileChk('listenerTitleText')">
+											<i class="fa fa-bar-chart-o menu-icon"></i> 
+											<span class="menu-title">리스너 정보</span> 
+											<i class="menu-arrow_user_af" id="listenerTitleText"></i>
+											</a>
+										</h6>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
+
+							<div id="listener_header_sub" class="collapse show row" role="tabpanel"	aria-labelledby="listener_header_div" data-parent="#accordion">
+								<div class="card-body">
+
+
+
+
+
+
+
+
+					<!-- 리스너 정보 title -->
+<!-- 					<div class="row"> -->
+<!-- 						<div class="accordion_main accordion-multi-colored col-12"	id="accordion" role="tablist" style="margin-bottom: 10px;"> -->
+<!-- 							<div class="card" style="margin-bottom: 0px;"> -->
+<!-- 								<div class="card-header" role="tab" id="page_header_div"> -->
+<!-- 									<div class="row" style="height: 15px;"> -->
+<!-- 										<div class="col-12"> -->
+<!-- 											<h6 class="mb-0"> -->
+<!-- 												<i class="fa fa-bar-chart-o menu-icon"></i> <span class="menu-title">리스너 정보</span> -->
+<!-- 											</h6> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
 					<!-- 리스너 정보 title end-->
 					
 					<!-- 리스너 stat chart -->
@@ -956,57 +1081,7 @@ console.log("====value===" + $(value).data());
 										<div class="col-md-12 col-xl-12 d-flex flex-column justify-content-center">
 												<!-- 스케줄이력 chart -->
 												<div class="table-responsive mb-3 mb-md-0">
-													<table id="scheduleHistChart" class="table table-borderless" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-														<canvas id="scriptHistChart" style="height:27vh; width:15vw;"></canvas>
-<!-- 														<svg height="342" version="1.1" width="462" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="overflow: hidden; position: relative; left: -0.796875px; top: -0.0625px;"> -->
-<!-- 															<desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.4</desc> -->
-<!-- 															<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs> -->
-<!-- 															<text x="35.359375" y="301" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"> -->
-<!-- 																<tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">0</tspan> -->
-<!-- 															</text> -->
-<!-- 															<path fill="none" stroke="#aaaaaa" d="M47.859375,301H437" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> -->
-<!-- 															<text x="35.359375" y="232" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"> -->
-<!-- 																<tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">0.25</tspan> -->
-<!-- 															</text> -->
-<!-- 															<path fill="none" stroke="#aaaaaa" d="M47.859375,232H437" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> -->
-<!-- 															<text x="35.359375" y="163" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"> -->
-<!-- 																<tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">0.5</tspan> -->
-<!-- 															</text> -->
-<!-- 															<path fill="none" stroke="#aaaaaa" d="M47.859375,163H437" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> -->
-<!-- 															<text x="35.359375" y="94" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"> -->
-<!-- 																<tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">0.75</tspan> -->
-<!-- 															</text> -->
-<!-- 															<path fill="none" stroke="#aaaaaa" d="M47.859375,94H437" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> -->
-<!-- 															<text x="35.359375" y="25" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"> -->
-<!-- 																<tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">1</tspan> -->
-<!-- 															</text> -->
-<!-- 															<path fill="none" stroke="#aaaaaa" d="M47.859375,25H437" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> -->
-<!-- 															<text x="339.71484375" y="313.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,8)"> -->
-<!-- 																<tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">배치</tspan> -->
-<!-- 															</text> -->
-<!-- 															<text x="145.14453125" y="313.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,8)"> -->
-<!-- 																<tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">백업</tspan> -->
-<!-- 															</text> -->
-<!-- 															<rect x="72.1806640625" y="301" width="46.642578125" height="0" rx="0" ry="0" fill="#76c1fa" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect> -->
-<!-- 															<rect x="121.8232421875" y="301" width="46.642578125" height="0" rx="0" ry="0" fill="#63cf72" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect> -->
-<!-- 															<rect x="171.4658203125" y="301" width="46.642578125" height="0" rx="0" ry="0" fill="#f36368" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect> -->
-<!-- 															<rect x="266.7509765625" y="301" width="46.642578125" height="0" rx="0" ry="0" fill="#76c1fa" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect> -->
-<!-- 															<rect x="316.3935546875" y="301" width="46.642578125" height="0" rx="0" ry="0" fill="#63cf72" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect> -->
-<!-- 															<rect x="366.0361328125" y="301" width="46.642578125" height="0" rx="0" ry="0" fill="#f36368" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect> -->
-<!-- 														</svg> -->
-<!-- 														<div class="morris-hover morris-default-style" style="left: 118.418px; top: 126px;"> -->
-<!-- 														<div class="morris-hover-row-label">백업</div> -->
-<!-- 														<div class="morris-hover-point" style="color: #76C1FA"> -->
-<!-- 															진행: 0 -->
-<!-- 														</div> -->
-<!-- 														<div class="morris-hover-point" style="color: #63CF72"> -->
-<!-- 															성공: 0 -->
-<!-- 														</div> -->
-<!-- 														<div class="morris-hover-point" style="color: #F36368"> -->
-<!-- 															실패:	0 -->
-<!-- 														</div> -->
-													</div>
-												</table>
+													<div id="listenerStatChart" style="height:250px;"></div>
 											</div>
 										</div>
 									</div>
@@ -1020,19 +1095,24 @@ console.log("====value===" + $(value).data());
 					<!-- 리스너 stat table -->
 					<div class="row">
 						<div class="col-md-12">
-							<table id="proxyStatTable" class="table table-bordered system-tlb-scroll text-center"> 
-								<thead>
-									<tr class="bg-info text-white">
+							<table id="proxyStatTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;"> 
+								<thead class="bg-info text-white">
+									<tr>
+										<th rowspan="2">idx</th>
+										<th rowspan="2">rownum</th>
+<!-- 										<th rowspan="2">r</th> -->
+										<th rowspan="2">pry_svr_id</th>
 										<th rowspan="2"><spring:message code="eXperDB_proxy.server_name"/></th>
 										<th rowspan="2"><spring:message code="eXperDB_proxy.listener_name"/></th>
 										<th rowspan="2"><spring:message code="eXperDB_proxy.ipadr"/></th>
 										<th rowspan="2"><spring:message code="properties.status"/></th>
-										<th rowspan="2"><spring:message code="eXperDB_proxy.health_check_time"/></th>
+<%-- 										<th rowspan="2"><spring:message code="eXperDB_proxy.health_check_time"/></th> --%>
+										<th rowspan="2">desc</th>
 										<th rowspan="2">Chk</th>
-										<th colspan="3"><spring:message code="eXperDB_proxy.session"/></th>
-										<th colspan="2"><spring:message code="eXperDB_proxy.byte"/></th>
+										<th rowspan="1" colspan="3"><spring:message code="eXperDB_proxy.session"/></th>
+										<th rowspan="1" colspan="2"><spring:message code="eXperDB_proxy.byte"/></th>
 									</tr>
-									<tr class="bg-info text-white">
+									<tr>
 										<th>max</th>
 										<th>limit</th>	
 										<th>total</th>
@@ -1041,128 +1121,14 @@ console.log("====value===" + $(value).data());
 									</tr>
 								</thead>
 								
-<!-- 								<tbody> -->
-<!-- 									<tr> -->
-<!-- 										<td rowspan="4">vip_master</td> -->
-<!-- 										<td rowspan="2"><a href="#">pgReadWrite</a></td> -->
-<!-- 										<td> -->
-<!-- 											192.168.50.113 -->
-<!-- 										</td> -->
-<!-- 										<td>											 -->
-<!-- 											<div class="badge badge-pill badge-success"> -->
-<!-- 											<i class="fa fa-circle-o-notch fa-spin mr-2"></i> -->
-<!-- 												L7OK -->
-<!-- 											</div> -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											20ms 전 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											1131(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>25) -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											1 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											- -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											5 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											645 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											1414 -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td> -->
-<!-- 											192.168.50.114 -->
-<!-- 										</td> -->
-<!-- 										<td>											 -->
-<!-- 											<div class="badge badge-pill badge-danger"> -->
-<!-- 											<i class="fa fa-circle-o-notch mr-2"></i> -->
-<!-- 												L7RSP -->
-<!-- 											</div> -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											1 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											0 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											- -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											0 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											0 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											0 -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td rowspan="2"><a href="#">pgReadOnly</a></td> -->
-<!-- 										<td> -->
-<!-- 											192.168.50.113 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											<div class="badge badge-pill badge-info text-white"> -->
-<!-- 											<i class="fa fa-circle-o-notch fa-spin mr-2"></i> -->
-<!-- 												L7OK -->
-<!-- 											</div> -->
-<!-- 										</td> -->
-<!-- 										<td></td> -->
-<!-- 										<td>1139</td> -->
-<!-- 										<td>0</td> -->
-<!-- 										<td>-</td> -->
-<!-- 										<td>0</td> -->
-<!-- 										<td>0</td> -->
-<!-- 										<td>0</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<td> -->
-<!-- 											192.168.50.114 -->
-<!-- 										</td> -->
-<!-- 										<td>											 -->
-<!-- 											<div class="badge badge-pill badge-success"> -->
-<!-- 											<i class="fa fa-circle-o-notch fa-spin mr-2"></i> -->
-<!-- 												L7OK -->
-<!-- 											</div> -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											1129 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											1 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											- -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											2 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											302 -->
-<!-- 										</td> -->
-<!-- 										<td> -->
-<!-- 											904 -->
-<!-- 										</td> -->
-<!-- 									</tr> -->
-<!-- 								</tbody> -->
 							</table>
 						</div>
 					</div>
 					<!-- 리스너 stat table end -->
-					
+													</div>
+							</div>
+						</div>
+					</div>
 					
 				</div>
 			</div>

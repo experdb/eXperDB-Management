@@ -61,7 +61,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy 서버 목록
+	 * Proxy 서버 목록 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -71,7 +71,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy 서버 1set cluster
+	 * Proxy 서버  cluster 조회 by master server id
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -81,7 +81,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy 모니터링 화면 기동 상태 이력
+	 * proxy / keepalived 기동 상태 이력
 	 * @param pry_svr_id
 	 * @return List<ProxyLogVO>
 	 */
@@ -91,7 +91,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy 연결된 db 서버
+	 * Proxy 연결된 db 서버 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -101,7 +101,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy 리스너 통계 정보
+	 * Proxy 리스너 통계 정보 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -111,7 +111,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy, keepalived config 파일
+	 * proxy / keepalived config 파일 정보 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */

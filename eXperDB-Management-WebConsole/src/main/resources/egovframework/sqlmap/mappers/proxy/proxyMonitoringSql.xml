@@ -99,6 +99,7 @@
 		JOIN T_DBSVRIPADR_I tdi  ON tpsi.DB_SVR_ID = tdi.DB_SVR_ID
 		JOIN T_AGTCNDT_I tai ON tdi.IPADR = tai.IPADR
 		WHERE tpsi.PRY_SVR_ID = #{value}
+		OR tpsi.MASTER_SVR_ID = #{value}
 		ORDER BY tdi.MASTER_GBN, tdi.DB_SVR_ID
 	</select>
 	
@@ -112,11 +113,14 @@
 			tpsi.PRY_SVR_ID, 
 			tpsi.PRY_SVR_NM , 
 			tpacg.SYS_TYPE, 
-			tpacg.ACT_TYPE, 
-			tpacg.WRK_DTM 
+			tpacg.ACT_TYPE,
+			tpacg.ACT_EXE_TYPE, 
+			tpacg.EXE_RSLT_CD,
+			TO_CHAR(tpacg.WRK_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_DTM
 		FROM T_PRY_SVR_I tpsi 
 		JOIN T_PRY_ACTSTATE_CNG_G tpacg on tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID 
 		WHERE tpsi.PRY_SVR_ID = #{value}
+		OR tpsi.MASTER_SVR_ID = #{value}
 		ORDER BY tpacg.WRK_DTM DESC
 	</select>
 	
@@ -144,7 +148,7 @@
 		WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
 	</select>
 	
-	<select id="selectProxyStatisticsInfo" parameterType="int" resultType="proxyStatisticVO">
+	<select id="selectProxyStatisticsInfo" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectProxyStatisticsInfo
 		* Description : proxy listener statistics information
@@ -154,9 +158,9 @@
 			SELECT *
 			FROM (
 				SELECT
-					ROW_NUMBER() OVER (PARTITION BY tpssg.DB_CON_ADDR ORDER BY exe_dtm) AS r, 
+					ROW_NUMBER() OVER (PARTITION BY tpssg.DB_CON_ADDR ORDER BY exe_dtm desc) AS r, 
 					(ROW_NUMBER() OVER()) AS ROWNUM, 
-					(ROW_NUMBER() OVER()) AS IDX
+					(ROW_NUMBER() OVER()) AS IDX,
 					tpsi.PRY_SVR_ID, 
 					tpssg.EXE_DTM, 
 					tpsi.PRY_SVR_NM, 
@@ -172,8 +176,9 @@
 					tpssg.BYTE_TRANSMIT
 				FROM T_PRY_SVR_I tpsi 
 				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
-				JOIN T_PRY_SVR_STATUS_G tpssg ON tpli.LSN_ID = tpssg.LSN_ID
-				WHERE tpsi.PRY_SVR_ID = 1
+				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID
+				WHERE tpsi.PRY_SVR_ID = #{value}
+				OR tpsi.MASTER_SVR_ID = #{value}
 				ORDER BY tpssg.EXE_DTM DESC
 			) x
 			WHERE x.r <= 2

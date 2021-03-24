@@ -48,9 +48,8 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * Proxy 모니터링 화면
-	 * @param historyVO
-	 * @param request
-	 * @return
+	 * @param historyVO, request
+	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/monitoring.do")
 	public ModelAndView proxyMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
@@ -70,7 +69,10 @@ public class ProxyMonitoringController {
 				// 화면접근이력 이력 남기기
 				proxyMonitoringService.monitoringSaveHistory(request, historyVO, dtlCd, mnu_id);
 				List<Map<String, Object>> proxyServerTotInfo = proxyMonitoringService.selectProxyServerList();
+				
+				
 				int pry_svr_id = Integer.parseInt(String.valueOf(proxyServerTotInfo.get(0).get("pry_svr_id")));
+				
 				List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
 				List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
 				List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
@@ -88,9 +90,34 @@ public class ProxyMonitoringController {
 	}
 	
 	/**
+	 * proxy server id에 따른 데이터 조회
+	 * @param request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/selectInfoByPrySvrId.do")
+	public ModelAndView proxyMonitoringInfo(HttpServletRequest request){
+		ModelAndView mv = new ModelAndView("jsonView");
+		int pry_svr_id = Integer.parseInt(request.getParameter("pry_svr_id"));
+		
+		try {	
+			List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
+			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
+			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
+			
+			mv.addObject("proxyServerByMasId", proxyServerByMasId);
+			mv.addObject("dbServerConProxy", dbServerConProxy);
+			mv.addObject("proxyLogList",proxyLogList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mv;
+	}
+	
+	/**
 	 * 리스너 통계 정보
 	 * @param request, pry_svr_id
-	 * @return
+	 * @return ModelAndView
 	 */
 	@RequestMapping("/listenerstatistics.do")
 	public ModelAndView selectListenerStatisticsInfo(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request){
@@ -98,8 +125,9 @@ public class ProxyMonitoringController {
 		//권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001801");
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
 		
+		System.out.println("***************listenerstatistics ");
 		System.out.println("pry_svr_id : " + request.getParameter("pry_svr_id"));
 		
 		String dtlCd = "DX-T0160_01";
@@ -115,8 +143,10 @@ public class ProxyMonitoringController {
 			}
 			String strPrySvrId = request.getParameter("pry_svr_id");
 			int pry_svr_id = Integer.parseInt(strPrySvrId); 
-			List<Map<String, Object>> proxyStatisitcInfo = proxyMonitoringService.selectProxyStatisticsInfo(pry_svr_id);
-			mv.addObject("proxyStatisitcInfo",proxyStatisitcInfo); 
+			List<Map<String, Object>> proxyStatisticsInfo = proxyMonitoringService.selectProxyStatisticsInfo(pry_svr_id);
+			System.out.println(proxyStatisticsInfo.size());
+//			System.out.println("pry_svr_nm : " + proxyStatisitcInfo.get(0).get("pry_svr_nm"));
+			mv.addObject("proxyStatisticsInfo",proxyStatisticsInfo); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -125,9 +155,9 @@ public class ProxyMonitoringController {
 	}
 	
 	/**
-	 * proxy / keepalived config 파일
+	 * proxy / keepalived config 파일 popup
 	 * @param request, pry_svr_id
-	 * @return
+	 * @return ModelAndView
 	 */
 	@RequestMapping("/configView.do")
 	public ModelAndView configView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
@@ -153,7 +183,6 @@ public class ProxyMonitoringController {
 				String type = request.getParameter("type");
 				
 				Map<String, Object> selectConfigBySysType = proxyMonitoringService.selectConfiguration(pry_svr_id, type);
-//				System.out.println(selectConfigBySysType.get(0).toString());
 				mv.addObject("selectConfigBySysType",selectConfigBySysType);
 				mv.addObject("pry_svr_id", pry_svr_id);
 				mv.addObject("type", type);
@@ -165,6 +194,11 @@ public class ProxyMonitoringController {
 		return mv;
 	}
 	
+	/**
+	 * config 파일 불러오기
+	 * @param historyVO, request
+	 * @return
+	 */
 	@RequestMapping("/configViewAjax.do")
 	public HashMap configViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		HashMap result = new HashMap<>();
@@ -207,31 +241,31 @@ public class ProxyMonitoringController {
 			int PORT = Integer.parseInt(strPort);
 			System.out.println("IP : " + IP + ": " + PORT);
 			//IP = "127.0.0.1";
-			ClientAdapter CA = new ClientAdapter(IP, PORT);
-//			CA.open(); 
+			ClientAdapter CA = new ClientAdapter(IP, 80);
+			CA.open(); 
 			System.out.println("CA : " + CA.toString());
-			result.put("data", jObj);
-//			JSONObject objList = CA.dxT015_V(jObj);
-//			CA.close();
-//			System.out.println("objList : " + objList.toJSONString());
-//			
-//			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-//			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-//			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-//			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-//			System.out.println("RESULT_CODE : " +  strResultCode);
-//			System.out.println("ERR_CODE : " +  strErrCode);
-//			System.out.println("ERR_MSG : " +  strErrMsg);
-//			
-//			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
-//			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
-//			
-//			int intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
-//			
-//			Long lngSeek= (Long)objList.get(ClientProtocolID.SEEK);
-//			
-//			result.put("data", strBuffer);
-//			result.put("fSize", strBuffer.length());
+//			result.put("data", jObj);
+			JSONObject objList = CA.dxT015_V(jObj);
+			CA.close();
+			System.out.println("objList : " + objList.toJSONString());
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
+			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			int intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
+			
+			Long lngSeek= (Long)objList.get(ClientProtocolID.SEEK);
+			
+			result.put("data", strBuffer);
+			result.put("fSize", strBuffer.length());
 			//hp.put("fChrSize", intLastLength - intFirstLength);
 //			hp.put("seek", lngSeek.toString());
 //			hp.put("dwLen", Integer.toString(intDwlen));
@@ -244,6 +278,12 @@ public class ProxyMonitoringController {
 		return result;
 	}
 	
+	/**
+	 * proxy / keepavlied log popup
+	 * @param request
+	 * @param pry_svr_id
+	 * @return ModelAndView
+	 */
 	@RequestMapping("/log")
 	public ModelAndView selectLogBySysTypeAndDate(HttpServletRequest request, int pry_svr_id){
 		ModelAndView mv = new ModelAndView();
