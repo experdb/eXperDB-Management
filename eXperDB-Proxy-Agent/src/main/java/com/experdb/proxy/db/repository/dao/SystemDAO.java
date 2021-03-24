@@ -68,6 +68,10 @@ public class SystemDAO {
 	public int updateT_PRY_SVR_I(ProxyServerVO vo) throws Exception  {
 		return session.update("system.updateT_PRY_SVR_I", vo);
 	}
+	
+	public int updateMasterSvrIdBack(ProxyServerVO vo) throws Exception  {
+		return session.update("system.updateMasterSvrIdBack", vo);
+	}
 
 	public ProxyServerVO selectMaxAgentInfo(ProxyServerVO vo) throws Exception  {
 		return (ProxyServerVO) session.selectOne("system.selectMaxAgentInfo", vo);
@@ -101,8 +105,8 @@ public class SystemDAO {
 		return (ProxyListenerVO) session.selectOne("system.selectProxyLisnerInfo", vo);
 	}
 
-	public int selectQ_T_PRY_LSN_I_01_SEQ() throws Exception  {
-		return (int) session.selectOne("system.selectQ_T_PRY_LSN_I_01_SEQ");
+	public long selectQ_T_PRY_LSN_I_01_SEQ() throws Exception  {
+		return (long) session.selectOne("system.selectQ_T_PRY_LSN_I_01_SEQ");
 	}
 	
 	public int insertT_PRY_LSN_I(ProxyListenerVO vo) throws Exception  {

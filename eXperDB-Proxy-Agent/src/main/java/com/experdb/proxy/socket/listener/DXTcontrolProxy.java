@@ -95,6 +95,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			int peerIdData = 0;
 			String dbSvrNmData = "";
 			String peerIpData = "";
+			String back_peerIpData = "";
 			String masterGbnData = "";
 			String proxyExeStaus = "";		//proxy 상태
 			String keepExeStaus = "";		//keepalived 상태
@@ -179,7 +180,8 @@ public class DXTcontrolProxy extends SocketCtl {
 
 					strVipConfList = (String)jObjKeepResult.get("vip_conf_list");
 
-					socketLogger.info("strVipConfList.strResultSubMessge : " + strVipConfList);
+					back_peerIpData = (String)jObjKeepResult.get("back_peer_id");
+					
 				} else {
 					peerIpData = "";
 					masterGbnData = "";
@@ -189,6 +191,8 @@ public class DXTcontrolProxy extends SocketCtl {
 					strPeerServerIp = "";
 
 					strVipConfList = "";
+					
+					back_peerIpData = "";
 				}
 			}
 			/////////////////////////////////////////////////////////////////////
@@ -240,24 +244,31 @@ public class DXTcontrolProxy extends SocketCtl {
 					ProxyServerVO proxyServerVOBack = pryService.selectMaxAgentInfo(searchProxyServerVO);
 
 					if (proxyServerVOBack == null) {
-						proxySvrNmData = dbSvrNmData + "_proxy_1";
+						proxySvrNmData = dbSvrNmData + "_proxy_2";
 					} else {
 						String masterSvrNm = "";
 						String masterSvrFirst = "";
 						int iMasterSvrEnd = 0;
-						if (proxyServerVOBack.getPry_svr_nm() != null && !"".equals(proxyServerVOBack.getPry_svr_nm())) {
-							masterSvrNm = proxyServerVOBack.getPry_svr_nm();
+						
+						ProxyServerVO masterProxyServerInfo = pryService.selectProxyServerInfo(searchProxyServerVO);
 
-							masterSvrFirst = masterSvrNm.substring(0 , masterSvrNm.lastIndexOf("_"));
-							iMasterSvrEnd = Integer.parseInt((masterSvrNm.substring(masterSvrNm.lastIndexOf("_") + 1 , masterSvrNm.length()))) + 1;
-							
-							proxySvrNmData = masterSvrFirst + "_proxy_" + Integer.toString(iMasterSvrEnd);
+						if (masterProxyServerInfo != null && masterProxyServerInfo.getPry_svr_nm() != null && !"".equals(masterProxyServerInfo.getPry_svr_nm())) {
+							proxySvrNmData = masterProxyServerInfo.getPry_svr_nm();
+						} else {
+							if (proxyServerVOBack.getPry_svr_nm() != null && !"".equals(proxyServerVOBack.getPry_svr_nm())) {
+								masterSvrNm = proxyServerVOBack.getPry_svr_nm();
+
+								masterSvrFirst = masterSvrNm.substring(0 , masterSvrNm.lastIndexOf("_")+1);
+								iMasterSvrEnd = Integer.parseInt((masterSvrNm.substring(masterSvrNm.lastIndexOf("_") + 1 , masterSvrNm.length()))) + 1;
+								proxySvrNmData = masterSvrFirst + Integer.toString(iMasterSvrEnd);
+							} else {
+								proxySvrNmData = dbSvrNmData + "_proxy_2";
+							}
 						}
 					}
-					
 				}
 			}
-			
+
 			//master svr id
 			if (peerIpData != null) {
 				searchProxyServerVO.setIpadr(peerIpData);
@@ -280,13 +291,15 @@ public class DXTcontrolProxy extends SocketCtl {
 			vo.setExe_status(proxyExeStaus);
 			vo.setKal_exe_status(keepExeStaus);
 			vo.setUse_yn(prySvrUseYn);
+			
+			vo.setBack_peer_id(back_peerIpData);
 
 			if (peerIdData != 0) {
 				vo.setMaster_svr_id_chk(Integer.toString(peerIdData));
 			} else {
 				vo.setMaster_svr_id_chk(null);
 			}
-			
+
 			//null 이면 insert(t_pry_svr_i)
 			if(proxyServerInfo == null) {
 				vo.setDay_data_del_term(30);
@@ -313,8 +326,6 @@ public class DXTcontrolProxy extends SocketCtl {
 				insUpNmGbn = "proxySvrUdt";
 			}
 			//////////////////////////////////////////////////////////////////
-
-			socketLogger.info("strMaxConn.strMaxConn : " + strMaxConn);
 
 			//global setting
 			if (strMaxConn != null) {
@@ -346,7 +357,6 @@ public class DXTcontrolProxy extends SocketCtl {
 			}
 
 			if (proxyPathData != null) {
-				socketLogger.info("proxyPathData.proxyPathData123 : " + proxyPathData);
 				returnMsg = pryService.proxyConfFisrtIns(vo, insUpNmGbn, insertParam, jObjListResult);
 			}
 		} catch (Exception e) {

@@ -403,9 +403,15 @@ public class ProxyServiceImpl implements ProxyService{
 								lisnerVoView.setCon_bind_port(lisnerVo.getCon_bind_port());
 							} else if (lisnerUserCnt == size || lisnerDbNmCnt == size || lisnerSimQueryCnt1 == size || lisnerSimQueryCnt2 == size
 								|| lisnerFieldNmCnt == size || lisnerFieldValCnt == size) {
-								temp = temp.replace(temp.substring(temp.lastIndexOf("#"), temp.length()), "");
+								temp = temp.trim().replace(temp.substring(temp.lastIndexOf("#"), temp.length()), "");
 								temp = StringUtils.removeEnd(temp, " ");
-								temp = getHexToString(temp.substring(temp.lastIndexOf(" ") + 1 , temp.length()));
+								temp = temp.substring(temp.lastIndexOf(" ") + 1 , temp.length());
+								
+								if (!"binary".equals(temp)&& !"send-binary".equals(temp)) {
+									temp = getHexToString(temp);
+								} else {
+									temp = "";
+								}
 
 								if (lisnerUserCnt == size) { //db user nm
 									lisnerVo.setDb_usr_id(temp);
@@ -414,7 +420,9 @@ public class ProxyServiceImpl implements ProxyService{
 								} else if (lisnerSimQueryCnt1 == size) { //SimQuery1
 									lisnerVo.setCon_sim_query(temp);
 								} else if (lisnerSimQueryCnt2 == size) { //SimQuery2
-									lisnerVo.setCon_sim_query(lisnerVo.getCon_sim_query() + " " + temp);
+									if (!temp.equals("")) {
+										lisnerVo.setCon_sim_query(lisnerVo.getCon_sim_query() + " " + temp);
+									}
 								} else if (lisnerFieldNmCnt == size) { //field nm
 									lisnerVo.setField_nm(temp);
 								} else if (lisnerFieldValCnt == size) { //field nm
@@ -428,7 +436,8 @@ public class ProxyServiceImpl implements ProxyService{
 
 							//리스너 서버 setting
 							if(temp.trim().indexOf("server") == 0 && temp.trim().matches(".*server.*")) {
-								strServerBackList = temp.substring(temp.lastIndexOf(" ") + 1 , temp.length());
+								String strBack = temp.trim();
+								strServerBackList = strBack.substring(strBack.lastIndexOf(" ") + 1 , strBack.length());
 								if ("backup".equals(strServerBackList)) { //LISNER SVR BACKUP
 									lisnerSebuVo.setBackup_yn("Y");
 								} else {
@@ -441,18 +450,29 @@ public class ProxyServiceImpl implements ProxyService{
 								String serverPorttemp = temp.substring(temp.lastIndexOf(" ") + 1 , temp.length());
 
 								if (!"".equals(serverPorttemp)) { //port
-									lisnerSebuVo.setChk_portno_val(serverPorttemp);
+									if (!"server".equals(serverPorttemp) && !"primary".equals(serverPorttemp) && !"check".equals(serverPorttemp)
+										&& !"port".equals(serverPorttemp) && !"backup".equals(serverPorttemp)
+										) {
+										lisnerSebuVo.setChk_portno_val(serverPorttemp);
+									} else {
+										lisnerSebuVo.setChk_portno_val("0");
+									}
 								} else {
-									lisnerSebuVo.setChk_portno_val(null);
+									lisnerSebuVo.setChk_portno_val("0");
 								}
 
-								//ip 체크
-								String serverIptemp = temp.substring(temp.indexOf(" check port"), temp.length());
+								if (!"".equals(temp.trim())) {
+									//ip 체크
+									String serverIptemp = temp.substring(temp.indexOf(" check port"), temp.length());
 
-								temp = temp.replace(serverIptemp, "").replace("server ", "").trim();
-								temp = StringUtils.removeEnd(temp, " ");
-								temp = temp.substring(temp.indexOf(" ") + 1 , temp.length());
-								lisnerSebuVo.setDb_con_addr(temp);
+									temp = temp.replace(serverIptemp, "").replace("server ", "").trim();
+									temp = StringUtils.removeEnd(temp, " ");
+									temp = temp.substring(temp.indexOf(" ") + 1 , temp.length());
+
+									lisnerSebuVo.setDb_con_addr(temp);
+								} else {
+									lisnerSebuVo.setDb_con_addr(null);
+								}
 
 								lisnerSebuVo.setLsn_nm(lisnerVoView.getLsn_nm());
 								lisnerSebuVo.setCon_bind_port(lisnerVoView.getCon_bind_port());
@@ -528,15 +548,36 @@ public class ProxyServiceImpl implements ProxyService{
 
 							//vip - 설정////////////////////////////////////////////////////
 							if(temp.trim().matches(".*virtual_router_id.*")) { //v_router_ip
-								 vipConfVo.setV_rot_id(temp.substring(temp.lastIndexOf(" ") + 1 , temp.length()));
+								String strRouter_id = temp.trim();
+								strRouter_id = strRouter_id.substring(strRouter_id.lastIndexOf(" ") + 1 , strRouter_id.length());
+
+								if (!"virtual_router_id".equals(strRouter_id) && !"".equals(strRouter_id)) {
+									vipConfVo.setV_rot_id(strRouter_id.substring(strRouter_id.lastIndexOf(" ") + 1 , strRouter_id.length()));
+								} else {
+									vipConfVo.setV_rot_id("");
+								}
 							}
 
 							if(temp.trim().matches(".*priority.*")) { //priority
-								 vipConfVo.setPriority(Integer.parseInt(temp.substring(temp.lastIndexOf(" ") + 1 , temp.length())));
+								String strPriority = temp.trim();
+								strPriority = strPriority.substring(strPriority.lastIndexOf(" ") + 1 , strPriority.length());
+
+								if (!"priority".equals(strPriority) && !"".equals(strPriority)) {
+									vipConfVo.setPriority(Integer.parseInt(strPriority));
+								} else {
+									vipConfVo.setPriority(0);
+								}
 							}
 
 							if(temp.trim().matches(".*advert_int.*")) { //advert_int
-								vipConfVo.setChk_tm(Integer.parseInt(temp.substring(temp.lastIndexOf(" ") + 1 , temp.length())));
+								String strAdvert_int = temp.trim();
+								strAdvert_int = strAdvert_int.substring(strAdvert_int.lastIndexOf(" ") + 1 , strAdvert_int.length());
+
+								if (!"advert_int".equals(strAdvert_int) && !"".equals(strAdvert_int)) {
+									vipConfVo.setChk_tm(Integer.parseInt(strAdvert_int));
+								} else {
+									vipConfVo.setChk_tm(0);
+								}
 							}
 
 							if(temp.trim().matches(".*virtual_ipaddress.*")) {
@@ -546,11 +587,13 @@ public class ProxyServiceImpl implements ProxyService{
 							if (vipAddCnt == keepsize) {
 								String strVip = temp.trim();
 
-								vipConfVo.setV_if_nm(strVip.trim().substring(strVip.lastIndexOf(" ") + 1 , strVip.length())); //interface -- vip 마지막
-								vipConfVo.setV_ip(strVip.substring(0, strVip.indexOf(" ")).replaceAll("/", "\\/"));
-
-								socketLogger.info("strVipstrVipstrVipstrVipstrVip :" + strVip);
-
+								if (!"".equals(strVip)) {
+									vipConfVo.setV_if_nm(strVip.substring(strVip.lastIndexOf(" ") + 1 , strVip.length())); //interface -- vip 마지막
+									vipConfVo.setV_ip(strVip.substring(0, strVip.indexOf(" ")).replaceAll("/", "\\/"));
+								} else {
+									vipConfVo.setV_if_nm(""); //interface -- vip 마지막
+									vipConfVo.setV_ip("");
+								}
 								vipConfList.add(vipConfVo);
 								vipConfVo = new ProxyVipConfigVO();
 							}
@@ -571,7 +614,16 @@ public class ProxyServiceImpl implements ProxyService{
 			jsonObj.put("db_svr_nm", db_svr_nm);
 			jsonObj.put("db_svr_id", db_svr_id);
 			jsonObj.put("master_gbn", stateGbn);
-			jsonObj.put("peer_id", strPeerId);
+			
+			if ("B".equals(stateGbn)) {
+				jsonObj.put("peer_id", strPeerId);
+				
+				jsonObj.put("back_peer_id", ""); //backup master_ip 체크
+			} else {
+				jsonObj.put("peer_id", "");
+
+				jsonObj.put("back_peer_id", strObjIp); //backup master_ip 체크
+			}
 
 			//global
 			jsonObj.put("max_conn", strMaxConn.trim());
@@ -610,7 +662,6 @@ public class ProxyServiceImpl implements ProxyService{
 
 			//리스너 server list
 			jsonObj.put("lisner_svr_list", jsonLisnerSvrSebuList);
-			socketLogger.info("jsonVipConfList :" + jsonVipConfList);
 
 			//vip list
 			jsonObj.put("vip_conf_list", jsonVipConfList);
@@ -662,178 +713,223 @@ public class ProxyServiceImpl implements ProxyService{
 		long pry_lsn_id_sn = 1L;
 
 		try {
-			try {
-				if ("proxySvrIns".equals(insUpNmGbn)) {
-					pry_svr_id_sn = systemDAO.selectQ_T_PRY_SVR_I_01();
-					insPryVo.setPry_svr_id((int)pry_svr_id_sn);
-	
-					saveChkPrySvrI = systemDAO.insertT_PRY_SVR_I(insPryVo);
-				} else if ("proxySvrUdt".equals(insUpNmGbn)) {
-					saveChkPrySvrI = systemDAO.updateT_PRY_SVR_I(insPryVo);
-				}
-			} catch (Exception e) {
-				errLogger.error("proxySvrIns {} ", e.toString());
-				returnMsg = "false";
-			}
-
-			try {
-				//최종 t_pry_agt_i 설정 update
-				if (saveChkPrySvrI > 0) {
-					agtVo.setSvr_use_yn("Y");
-					agtVo.setIpadr(insPryVo.getIpadr());
-					agtVo.setLst_mdfr_id("system");
-
-					systemDAO.updateT_PRY_AGT_I_Yn(agtVo);
-				}
-			} catch (Exception e) {
-				errLogger.error("saveChkPrySvrI {} ", e.toString());
-				returnMsg = "false";
-			}
-
-			try {
-				//global
-				if (insertParam != null) {
-					ProxyGlobalVO proxyGlobalVO = new ProxyGlobalVO();
-
-					proxyGlobalVO.setPry_svr_id(insPryVo.getPry_svr_id());
-					if (!"".equals(insertParam.get("max_conn").toString())) {
-						proxyGlobalVO.setMax_con_cnt_chk(insertParam.get("max_conn").toString());
-					} else {
-						proxyGlobalVO.setMax_con_cnt_chk(null);
+			if (insPryVo.getDb_svr_id() > 0) {
+				
+				try {
+					if ("proxySvrIns".equals(insUpNmGbn)) {
+						pry_svr_id_sn = systemDAO.selectQ_T_PRY_SVR_I_01();
+						insPryVo.setPry_svr_id((int)pry_svr_id_sn);
+		
+						saveChkPrySvrI = systemDAO.insertT_PRY_SVR_I(insPryVo);
+					} else if ("proxySvrUdt".equals(insUpNmGbn)) {
+						saveChkPrySvrI = systemDAO.updateT_PRY_SVR_I(insPryVo);
 					}
-					proxyGlobalVO.setCl_con_max_tm(insertParam.get("time_client").toString());
-					proxyGlobalVO.setCon_del_tm(insertParam.get("time_connect").toString());
-					proxyGlobalVO.setSvr_con_max_tm(insertParam.get("time_server").toString());
-					proxyGlobalVO.setChk_tm(insertParam.get("time_check").toString());
-					proxyGlobalVO.setIf_nm(insertParam.get("if_nm").toString());
-					proxyGlobalVO.setObj_ip(insertParam.get("obj_ip").toString());
-					proxyGlobalVO.setPeer_server_ip(insertParam.get("peer_server_ip").toString());
-
-					proxyGlobalVO.setLst_mdfr_id("system");
-					proxyGlobalVO.setFrst_regr_id("system");
-
-					systemDAO.insertPryGlbI(proxyGlobalVO);
+				} catch (Exception e) {
+					errLogger.error("proxySvrIns {} ", e.toString());
+					returnMsg = "false";
 				}
-			} catch (Exception e) {
-				errLogger.error("global {} ", e.toString());
-				returnMsg = "false";
-			}
+	
+				try {
+					//최종 t_pry_agt_i 설정 update
+					if (saveChkPrySvrI > 0) {
+						agtVo.setSvr_use_yn("Y");
+						agtVo.setIpadr(insPryVo.getIpadr());
+						agtVo.setLst_mdfr_id("system");
+	
+						systemDAO.updateT_PRY_AGT_I_Yn(agtVo);
+					}
+				} catch (Exception e) {
+					errLogger.error("saveChkPrySvrI {} ", e.toString());
+					returnMsg = "false";
+				}
+	
+				try {
+					//global
+					if (insertParam != null) {
+						ProxyGlobalVO proxyGlobalVO = new ProxyGlobalVO();
+	
+						proxyGlobalVO.setPry_svr_id(insPryVo.getPry_svr_id());
+						if (!"".equals(insertParam.get("max_conn").toString())) {
+							proxyGlobalVO.setMax_con_cnt_chk(insertParam.get("max_conn").toString());
+						} else {
+							proxyGlobalVO.setMax_con_cnt_chk(null);
+						}
+						proxyGlobalVO.setCl_con_max_tm(insertParam.get("time_client").toString());
+						proxyGlobalVO.setCon_del_tm(insertParam.get("time_connect").toString());
+						proxyGlobalVO.setSvr_con_max_tm(insertParam.get("time_server").toString());
+						proxyGlobalVO.setChk_tm(insertParam.get("time_check").toString());
+						proxyGlobalVO.setIf_nm(insertParam.get("if_nm").toString());
+						proxyGlobalVO.setObj_ip(insertParam.get("obj_ip").toString());
+						proxyGlobalVO.setPeer_server_ip(insertParam.get("peer_server_ip").toString());
+	
+						proxyGlobalVO.setLst_mdfr_id("system");
+						proxyGlobalVO.setFrst_regr_id("system");
+	
+						systemDAO.insertPryGlbI(proxyGlobalVO);
+					}
+				} catch (Exception e) {
+					errLogger.error("global {} ", e.toString());
+					returnMsg = "false";
+				}
+	
+				try {
+					//리스너, vip
+					if (insertParam != null) {
+						String strLisner_list = (String)insertParam.get("lisner_list");
+						String strLisner_svr_list = (String)insertParam.get("lisner_svr_list");
+						String strVip_conf_list = (String)insertParam.get("vip_conf_list");
 
-			try {
-				//리스너, vip
-				if (insertParam != null) {
-					String strLisner_list = (String)insertParam.get("lisner_list");
-					String strLisner_svr_list = (String)insertParam.get("lisner_svr_list");
-					String strVip_conf_list = (String)insertParam.get("vip_conf_list");
-					
-					try {
-						JSONArray arrLisner_list = new JSONArray(strLisner_list);
+						try {
+							JSONArray arrLisner_list = new JSONArray(strLisner_list);
+							
+							if (arrLisner_list.length() > 0 ) {
+								for(int i=0 ; i<arrLisner_list.length() ; i++){
+									JSONObject tempObj = (JSONObject) arrLisner_list.get(i);
+									ProxyListenerVO schProxyListnerVO = new ProxyListenerVO();
+	
+									schProxyListnerVO.setPry_svr_id(insPryVo.getPry_svr_id());
+									schProxyListnerVO.setCon_bind_port(tempObj.get("con_bind_port").toString());
+									schProxyListnerVO.setCon_sim_query(tempObj.get("con_sim_query").toString());
+									schProxyListnerVO.setDb_usr_id(tempObj.get("db_usr_id").toString());
+									schProxyListnerVO.setField_val(tempObj.get("field_val").toString());
+									schProxyListnerVO.setField_nm(tempObj.get("field_nm").toString());
+	
+									schProxyListnerVO.setLst_mdfr_id("system");
+									schProxyListnerVO.setFrst_regr_id("system");
+	
+									schProxyListnerVO.setDb_svr_id(insPryVo.getDb_svr_id());
+									schProxyListnerVO.setLsn_nm(tempObj.get("lsn_nm").toString());
+	
+									ProxyListenerVO proxyListenerVO = systemDAO.selectProxyLisnerInfo(schProxyListnerVO);
 
-						if (arrLisner_list.length() > 0 ) {
-							for(int i=0 ; i<arrLisner_list.length() ; i++){
-								JSONObject tempObj = (JSONObject) arrLisner_list.get(i);
-								ProxyListenerVO schProxyListnerVO = new ProxyListenerVO();
-
-								schProxyListnerVO.setPry_svr_id(insPryVo.getPry_svr_id());
-								schProxyListnerVO.setCon_bind_port(tempObj.get("con_bind_port").toString());
-								schProxyListnerVO.setCon_sim_query(tempObj.get("con_sim_query").toString());
-								schProxyListnerVO.setDb_nm(tempObj.get("db_nm").toString());
-								schProxyListnerVO.setDb_usr_id(tempObj.get("db_usr_id").toString());
-								schProxyListnerVO.setField_val(tempObj.get("field_val").toString());
-								schProxyListnerVO.setField_nm(tempObj.get("field_nm").toString());
-
-								schProxyListnerVO.setLst_mdfr_id("system");
-								schProxyListnerVO.setFrst_regr_id("system");
-
-								schProxyListnerVO.setDb_svr_id(insPryVo.getDb_svr_id());
-								schProxyListnerVO.setLsn_nm(tempObj.get("lsn_nm").toString());
-
-								ProxyListenerVO proxyListenerVO = systemDAO.selectProxyLisnerInfo(schProxyListnerVO);
-
-								if (proxyListenerVO != null) {
-									schProxyListnerVO.setLsn_id(proxyListenerVO.getLsn_id());
-									schProxyListnerVO.setDb_id(proxyListenerVO.getDb_id());
-									schProxyListnerVO.setLsn_desc(proxyListenerVO.getLsn_desc());
-
-									socketLogger.info("setLsn_id : " + schProxyListnerVO.getLsn_id());
-									socketLogger.info("setPry_svr_id : " + schProxyListnerVO.getPry_svr_id());
-
-									systemDAO.updateT_PRY_LSN_I(schProxyListnerVO);
-								} else {
-									pry_lsn_id_sn = systemDAO.selectQ_T_PRY_SVR_I_01();
-
-									schProxyListnerVO.setDb_id(Integer.parseInt(tempObj.get("db_id").toString()));
-									schProxyListnerVO.setLsn_id((int)pry_lsn_id_sn);
-									schProxyListnerVO.setLsn_desc("");
-
-									systemDAO.insertT_PRY_LSN_I(schProxyListnerVO);
+									if (!"".equals(tempObj.get("db_nm").toString()) && !"".equals(tempObj.get("lsn_nm").toString())
+											 && !"".equals(tempObj.get("db_usr_id").toString()) && !"".equals(tempObj.get("con_bind_port").toString())
+											 && schProxyListnerVO.getDb_svr_id() > 0
+											) {
+										if (proxyListenerVO != null) {
+											schProxyListnerVO.setLsn_id(proxyListenerVO.getLsn_id());
+											schProxyListnerVO.setDb_id(proxyListenerVO.getDb_id());
+											schProxyListnerVO.setLsn_desc(proxyListenerVO.getLsn_desc());
+											schProxyListnerVO.setDb_nm(proxyListenerVO.getDb_nm());
+	
+											systemDAO.updateT_PRY_LSN_I(schProxyListnerVO);
+	
+										} else {
+											pry_lsn_id_sn = systemDAO.selectQ_T_PRY_LSN_I_01_SEQ();
+											schProxyListnerVO.setDb_id(Integer.parseInt(tempObj.get("db_id").toString()));
+											schProxyListnerVO.setDb_nm(tempObj.get("db_nm").toString());
+											schProxyListnerVO.setLsn_id((int)pry_lsn_id_sn);
+											schProxyListnerVO.setLsn_desc("");
+	
+											systemDAO.insertT_PRY_LSN_I(schProxyListnerVO);
+										}
+									}
+	
 								}
 							}
-						}
+	
+							JSONArray arrLisner_svr_list = new JSONArray(strLisner_svr_list);
 
-						JSONArray arrLisner_svr_list = new JSONArray(strLisner_svr_list);
-						socketLogger.info("tempObj.arrLisner_svr_listarrLisner_svr_listarrLisner_svr_listarrLisner_svr_list : " + arrLisner_svr_list.length());
+							if (arrLisner_svr_list.length() > 0 ) {
+								for(int i=0 ; i<arrLisner_svr_list.length() ; i++){
+									JSONObject tempObj = (JSONObject) arrLisner_svr_list.get(i);
+									
+									ProxyListenerServerListVO schProxyListnerSebuVO = new ProxyListenerServerListVO();
+									
+									schProxyListnerSebuVO.setPry_svr_id(insPryVo.getPry_svr_id());
+									schProxyListnerSebuVO.setDb_con_addr(tempObj.get("db_con_addr").toString());
+									schProxyListnerSebuVO.setLsn_nm(tempObj.get("lsn_nm").toString());
+									
+									systemDAO.deleteProxyLisnerSebuInfo(schProxyListnerSebuVO);
+								}
+								
+								for(int i=0 ; i<arrLisner_svr_list.length() ; i++){
+									JSONObject tempObj = (JSONObject) arrLisner_svr_list.get(i);
+	
+									ProxyListenerServerListVO schProxyListnerSebuVO = new ProxyListenerServerListVO();
+									ProxyListenerVO schProxyListnerVO = new ProxyListenerVO();
+									
+									schProxyListnerSebuVO.setPry_svr_id(insPryVo.getPry_svr_id());
+									schProxyListnerSebuVO.setDb_con_addr(tempObj.get("db_con_addr").toString());
+									schProxyListnerSebuVO.setChk_portno_val(tempObj.get("chk_portno_val").toString());
+									schProxyListnerSebuVO.setBackup_yn(tempObj.get("backup_yn").toString());
+									schProxyListnerSebuVO.setCon_bind_port(tempObj.get("con_bind_port").toString());
+									schProxyListnerSebuVO.setLsn_nm(tempObj.get("lsn_nm").toString());
+	
+									schProxyListnerSebuVO.setLst_mdfr_id("system");
+									schProxyListnerSebuVO.setFrst_regr_id("system");
 
-						if (arrLisner_svr_list.length() > 0 ) {
-							for(int i=0 ; i<arrLisner_svr_list.length() ; i++){
-								JSONObject tempObj = (JSONObject) arrLisner_svr_list.get(i);
+									schProxyListnerVO.setPry_svr_id(insPryVo.getPry_svr_id());
+									schProxyListnerVO.setLsn_nm(tempObj.get("lsn_nm").toString());
+	
+									ProxyListenerVO proxyListenerVO = systemDAO.selectProxyLisnerInfo(schProxyListnerVO);
 
-								ProxyListenerServerListVO schProxyListnerSebuVO = new ProxyListenerServerListVO();
+									if (proxyListenerVO != null) {
+										systemDAO.insertProxyListnerSebu(schProxyListnerSebuVO);
+									}
 
-								schProxyListnerSebuVO.setPry_svr_id(insPryVo.getPry_svr_id());
-								schProxyListnerSebuVO.setDb_con_addr(tempObj.get("db_con_addr").toString());
-								schProxyListnerSebuVO.setChk_portno_val(tempObj.get("chk_portno_val").toString());
-								schProxyListnerSebuVO.setBackup_yn(tempObj.get("backup_yn").toString());
-								schProxyListnerSebuVO.setCon_bind_port(tempObj.get("con_bind_port").toString());
-								schProxyListnerSebuVO.setLsn_nm(tempObj.get("lsn_nm").toString());
-
-								schProxyListnerSebuVO.setLst_mdfr_id("system");
-								schProxyListnerSebuVO.setFrst_regr_id("system");
-
-								systemDAO.deleteProxyLisnerSebuInfo(schProxyListnerSebuVO);
-								systemDAO.insertProxyListnerSebu(schProxyListnerSebuVO);
+								}
 							}
-						}
 
-						socketLogger.info("tempObj.123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123 : " + strVip_conf_list);
+							JSONArray arrVip_conf_list= new JSONArray(strVip_conf_list);
 
-						JSONArray arrVip_conf_list= new JSONArray(strVip_conf_list);
-						socketLogger.info("tempObj.arrVip_conf_listarrVip_conf_listarrVip_conf_listarrVip_conf_list : " + arrVip_conf_list.length());
+							if (arrVip_conf_list.length() > 0 ) {
+								for(int i=0 ; i<arrVip_conf_list.length() ; i++){
+									JSONObject tempObj = (JSONObject) arrVip_conf_list.get(i);
 
-						if (arrVip_conf_list.length() > 0 ) {
-							for(int i=0 ; i<arrVip_conf_list.length() ; i++){
-								JSONObject tempObj = (JSONObject) arrVip_conf_list.get(i);
-
-								socketLogger.info("tempObj.tempObjtempObjtempObjtempObj : " + tempObj.toString());
-
-								ProxyVipConfigVO schProxyVipConfigVO = new ProxyVipConfigVO();
-
-								schProxyVipConfigVO.setPry_svr_id(insPryVo.getPry_svr_id());
-								schProxyVipConfigVO.setState_nm(tempObj.get("state_nm").toString());
-								schProxyVipConfigVO.setV_ip(tempObj.get("v_ip").toString());
-								schProxyVipConfigVO.setV_rot_id(tempObj.get("v_rot_id").toString());
-								schProxyVipConfigVO.setV_if_nm(tempObj.get("v_if_nm").toString());
-								schProxyVipConfigVO.setPriority(Integer.parseInt(tempObj.get("priority").toString()));
-								schProxyVipConfigVO.setChk_tm(Integer.parseInt(tempObj.get("chk_tm").toString()));
-
-								schProxyVipConfigVO.setLst_mdfr_id("system");
-								schProxyVipConfigVO.setFrst_regr_id("system");
-
-								systemDAO.insertPryvVipCngI(schProxyVipConfigVO);
+									ProxyVipConfigVO schProxyVipConfigVO = new ProxyVipConfigVO();
+	
+									schProxyVipConfigVO.setPry_svr_id(insPryVo.getPry_svr_id());
+									schProxyVipConfigVO.setState_nm(tempObj.get("state_nm").toString());
+									schProxyVipConfigVO.setV_ip(tempObj.get("v_ip").toString());
+									schProxyVipConfigVO.setV_rot_id(tempObj.get("v_rot_id").toString());
+									schProxyVipConfigVO.setV_if_nm(tempObj.get("v_if_nm").toString());
+									schProxyVipConfigVO.setPriority(Integer.parseInt(tempObj.get("priority").toString()));
+									schProxyVipConfigVO.setChk_tm(Integer.parseInt(tempObj.get("chk_tm").toString()));
+	
+									schProxyVipConfigVO.setLst_mdfr_id("system");
+									schProxyVipConfigVO.setFrst_regr_id("system");
+	
+									systemDAO.insertPryvVipCngI(schProxyVipConfigVO);
+								}
 							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						} catch (ParseException e) {
+							e.printStackTrace();
 						}
-
-						socketLogger.info("123123123.arrarrarrarrarrarrarrarrarrarrarrarrarr : ");
-					} catch (JSONException e) {
-						e.printStackTrace();
-					} catch (ParseException e) {
-						e.printStackTrace();
 					}
+					returnMsg = "success";
+				} catch (Exception e) {
+					errLogger.error("global {} ", e.toString());
+					returnMsg = "false";
 				}
-				returnMsg = "success";
-			} catch (Exception e) {
-				errLogger.error("global {} ", e.toString());
-				returnMsg = "false";
+				
+				
+				try {
+					socketLogger.info("insPryVoinsPryVoinsPryVoinsPryVoinsPryVo.confReadExecute : " + insPryVo);
+					if (insPryVo != null) {
+						String strPry_svr_nm_mst = (String)insertParam.get("lisner_list");
+						socketLogger.info("insPryVo.getBack_peer_id : " + insPryVo.getBack_peer_id());
+						if (insPryVo.getBack_peer_id() != null && !"".equals(insPryVo.getBack_peer_id())) {
+							strPry_svr_nm_mst = insPryVo.getPry_svr_nm();
+							socketLogger.info("insPryVo.strPry_svr_nm_mst0 : " +strPry_svr_nm_mst);
+							strPry_svr_nm_mst = strPry_svr_nm_mst.substring(0 , strPry_svr_nm_mst.lastIndexOf("_")+1);
+							socketLogger.info("insPryVo.strPry_svr_nm_mst1 : " +strPry_svr_nm_mst);
+							insPryVo.setPry_svr_nm(strPry_svr_nm_mst);
+							
+							socketLogger.info("insPryVo.setPry_svr_nm0 : " +insPryVo.getPry_svr_nm());
+							socketLogger.info("insPryVo.setPry_svr_nm0 : " +insPryVo.getPry_svr_nm());
+							
+							systemDAO.updateMasterSvrIdBack(insPryVo);
+						}
+					}
+					returnMsg = "success";
+				} catch (Exception e) {
+					errLogger.error("backup master_svr_id setting {} ", e.toString());
+					returnMsg = "false";
+				}
+				
 			}
 		} catch (Exception e) {
 			errLogger.error("DXTcontrolScaleAwsExecute {} ", e.toString());

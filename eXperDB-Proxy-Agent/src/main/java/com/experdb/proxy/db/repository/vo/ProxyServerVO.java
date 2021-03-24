@@ -20,6 +20,14 @@ public class ProxyServerVO {
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
 	private String master_svr_id_chk;
+	private String back_peer_id;
+	
+	public String getBack_peer_id() {
+		return back_peer_id;
+	}
+	public void setBack_peer_id(String back_peer_id) {
+		this.back_peer_id = back_peer_id;
+	}
 	public int getPry_svr_id() {
 		return pry_svr_id;
 	}
