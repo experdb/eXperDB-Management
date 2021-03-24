@@ -1,5 +1,6 @@
 package com.experdb.management.backup.node.web;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.json.simple.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.xml.sax.*;
 
 import com.experdb.management.backup.node.service.*;
 import com.experdb.management.backup.service.*;
@@ -112,8 +114,17 @@ public class ExperdbBackupNodeController {
 		JSONObject result = new JSONObject();
 		try {
 			result = experdbBackupNodeService.getScheduleInfo(request);
+			result.put("RESULT_CODE", 0);
+		} catch (IOException e){
+			System.out.println("Controller IOException");
+			result.put("RESULT_CODE", 2);
+		} catch (SAXException e) {
+			System.out.println("Controller SAXException");
+			result.put("RESULT_CODE", 3);
+			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println("Controller Exception");
+			result.put("RESULT_CODE", 1);
 			e.printStackTrace();
 		}
 		return result;

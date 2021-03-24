@@ -150,17 +150,102 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 	}
 
 	@Override
-	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException {
+	@SuppressWarnings({ "unchecked"})
+	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException, ParseException {
+		System.out.println("@@@@@  getScheduleInfo  @@@@@");
 		JSONObject result = new JSONObject();
 		
+		List<BackupScheduleVO> backupSchedule = null;
+		BackupScriptVO backupScript = new BackupScriptVO();
+		BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
+		RetentionVO backupRetention = new RetentionVO();
+		ArrayList<Object> weekData = new ArrayList<>();
+		Map<String, Object> readXml = new HashMap<>();
+		
 		String fileName = request.getParameter("ipadr").replace(".", "_").trim()+".xml";
-		String path = "C:\\test\\" + fileName;
+//		String fileName = string.replace(".", "_").trim()+".xml";
+		
+		String path = "C://test//backupXml//" + fileName;
+//		String path = "/opt/Arcserve/d2dserver/bin/jobs" + fileName;
 		
 		JobXMLRead xml = new JobXMLRead();
-		xml.xmlRead(path);
+		readXml = xml.xmlRead(path);
+		
+//		System.out.println("schedule 정보 불러온 결과!!!!!!");
+		backupSchedule = (List<BackupScheduleVO>) readXml.get("schedule");
+		backupRetention = (RetentionVO) readXml.get("retention");
+		backupLocation = (BackupLocationInfoVO) readXml.get("backupLocation");
+		backupScript = (BackupScriptVO) readXml.get("backupScript");
+//		System.out.println("backupRetention : " + backupRetention.toString());
+//		System.out.println("backupLocation : " + backupLocation.toString());
+//		System.out.println("backupScript : " + backupScript.toString());
+		
+		String startDate = backupSchedule.get(0).getYear() + "-" + backupSchedule.get(0).getMonth() + "-" + backupSchedule.get(0).getDay();
+		
+		backupSchedule.remove(0);
+		
+		// 스케줄 정보를 정리해서 담아줌
+		for(BackupScheduleVO bs : backupSchedule){
+			Map <String, Object> scheduleMap = new HashMap<>();
+			Boolean[] dayPick = new Boolean[7];
+			Arrays.fill(dayPick, Boolean.FALSE);
+			int dayType = Integer.parseInt(bs.getDayType())%7;
+			
+			scheduleMap.put("startTime", timeSplit(bs.getStartHourOfDay() + ":" + bs.getStartMinute()).get("fullHour"));
+			if(Boolean.parseBoolean(bs.getRepeat())){
+				scheduleMap.put("repEndTime", timeSplit(bs.getEndHourOfDay() + ":" + bs.getEndMinute()).get("fullHour"));
+				scheduleMap.put("repTime", bs.getInterval());
+				scheduleMap.put("repTimeUnit", bs.getIntervalUnit());
+				scheduleMap.put("repeat", true);
+			}else{
+				scheduleMap.put("repEndTime", "");
+				scheduleMap.put("repTime", "");
+				scheduleMap.put("repTimeUnit", "");
+				scheduleMap.put("repeat", false);
+			}
+			dayPick[dayType] = true;
+			scheduleMap.put("dayPick", dayPick);
+			
+//			System.out.println("bs : " + bs.toString());
+//			System.out.println(scheduleMap);
+			
+			weekData.add(scheduleMap);
+		}
+		
+		int storageType;
+		String fstorage = backupLocation.getBackupDestLocation();
+		int fcompress = backupScript.getCompressLevel();
+		int fsetNum = backupRetention.getBackupSetCount();
+		String fdateType = backupRetention.getUseWeekly();
+		int fdate = backupRetention.getDayOfMonth();
+		
+		if(backupLocation.getBackupDestUser()==null){
+			storageType = 0;
+		}else{
+			storageType = 1;
+		}
+		
+//		System.out.println("=============================");
+//		System.out.println("startDate : " + startDate);
+//		System.out.println("storageType : " + storageType);
+//		System.out.println("storage : " + fstorage);
+//		System.out.println("compress : " + fcompress);
+//		System.out.println("dateType : " + fdateType);
+//		System.out.println("date : " + fdate);
+//		System.out.println("setNum : " + fsetNum);
+//		System.out.println("=============================");
+		
+		result.put("startDate", startDate);
+		result.put("storageType", storageType);
+		result.put("storage", fstorage);
+		result.put("compress", fcompress);
+		result.put("dateType", fdateType);
+		result.put("date", fdate);
+		result.put("setNum", fsetNum);
+		result.put("weekData", weekData);
 		
 		
-		return null;
+		return result;
 	}
 
 
@@ -186,7 +271,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		String weekData = param.get("weekData").toString();
 		String ipadr = request.getParameter("nodeIpadr");
 		String startDate = request.getParameter("startDate");
-		String storyageType = request.getParameter("storageType");
+		String storageType = request.getParameter("storageType");
 		String fstorage = request.getParameter("storage");
 		String fcompress = request.getParameter("compress");
 		String fdateType = request.getParameter("dateType");
@@ -198,7 +283,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		System.out.println("weekData : " + weekData);
 		System.out.println("ipadr : " + ipadr);
 		System.out.println("startDate : " + startDate);
-		System.out.println("storyageType : " + storyageType);
+		System.out.println("storageType : " + storageType);
 		System.out.println("storage : " + fstorage);
 		System.out.println("compress : " + fcompress);
 		System.out.println("dateType : " + fdateType);
@@ -248,6 +333,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		backupRetention.setUseWeekly(fdateType);
 		System.out.println("backupRetention : "+backupRetention.toString());
 		
+		// schedule 찍어보기
 		for(BackupScheduleVO bs : backupSchedule){
 			System.out.println(bs.toString());
 		}
@@ -414,6 +500,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
        result.put("12hour",Integer.parseInt(_12Hour.format(_24HourDt)));
        result.put("min", Integer.parseInt(_12Min.format(_24HourDt)));
        result.put("24hour", Integer.parseInt(_24Hour.format(_24HourDt)));
+       result.put("fullHour", _24HourSDF.format(_24HourDt));
        if(_12Type.format(_24HourDt).equals("PM")){
     	   result.put("type", "1");
        }else{
@@ -426,13 +513,25 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 	
 	public static void main (String[] args){
 //		dateSplit("2020-03-15");
+		Map<String, Object> result = new HashMap<>();
 		try {
-			timeSplit("00:23");
+			result = timeSplit("3:2");
+			System.out.println("24hour : " + result.get("24hour"));
+			System.out.println("fullHour : " + result.get("fullHour"));
+			System.out.println(timeSplit("3:2").get("fullHour"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+
+
+//	@Override
+//	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 
 }
