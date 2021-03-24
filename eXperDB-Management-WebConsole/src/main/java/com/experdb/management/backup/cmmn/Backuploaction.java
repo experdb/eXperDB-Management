@@ -1,141 +1,198 @@
 package com.experdb.management.backup.cmmn;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.sql.PreparedStatement;
-import java.util.Date;
 import java.util.UUID;
 
 import org.json.simple.JSONObject;
 
 import com.experdb.management.backup.service.BackupLocationInfoVO;
-import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.db2pg.cmmn.DBCPPoolManager;
 
-public class Backuploaction{
-	
-	
-	static String sql = "";
-	
-	
-	
-	
-	
-	
-	
-	/**
-	 * insertBackuploaction 노드리스트 조회
-	 * @param serverObj
-	 */
-	public static void insertBackuploaction(BackupLocationInfoVO backupLocInfo) throws Exception {
-		
-		JSONObject serverObj = new JSONObject();
-		
-		//Arcserve repoDB 정보
-		serverObj.put(ClientProtocolID.SERVER_NAME, "Postgresql");
-		serverObj.put(ClientProtocolID.SERVER_IP, "192.168.20.145");
-		serverObj.put(ClientProtocolID.SERVER_PORT, "5431");
-		serverObj.put(ClientProtocolID.DATABASE_NAME, "ARCserveLinuxD2D");
-		serverObj.put(ClientProtocolID.USER_ID, "d2duser");
-		serverObj.put(ClientProtocolID.USER_PWD, "");
-		serverObj.put(ClientProtocolID.DB_TYPE, "TC002204");
-		
-		java.sql.Connection conn = null;
-	
-		try{
-			
-			conn  = DBCPPoolManager.makeConnection(serverObj);
-			
-			PreparedStatement prep = conn.prepareStatement("insert into BackupLocation ( Location,Username,Password,Free,Total,Type,Time,IsRunScript,Script,FreeAlert,FreeAlertUnit,UUID,JobLimit,rpsServer,rpsUserName,rpsPassword,rpsProtocol,rpsPort,dsUuid,dsName,enableDedup) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-			
-			   prep.setString(1, backupLocInfo.getBackupDestLocation());
-			   prep.setString(2, backupLocInfo.getBackupDestUser());
-			   prep.setString(3, backupLocInfo.getBackupDestPasswd());
-			   prep.setLong(4, backupLocInfo.getFreeSize());
-			   prep.setLong(5, backupLocInfo.getTotalSize());
-			   prep.setInt(6, backupLocInfo.getType());
-			   prep.setLong(7, (new Date()).getTime());
-			   //prep.setInt(8, (backupLocInfo.isRunScript() == true) ? 1 : 0);
-			   prep.setString(9, backupLocInfo.getScript());
-			   prep.setLong(10, backupLocInfo.getFreeSizeAlert());
-			   prep.setInt(11, backupLocInfo.getFreeSizeAlertUnit());
-			   prep.setString(12, UUID.randomUUID().toString());
-			   prep.setInt(13, backupLocInfo.getJobLimit());
-			   prep.setString(14, backupLocInfo.getServerInfo().getName());
-			   prep.setString(15, backupLocInfo.getServerInfo().getUser());
-			   prep.setString(16, backupLocInfo.getServerInfo().getPassword());
-			   prep.setString(17, backupLocInfo.getServerInfo().getProtocol());
-			   prep.setInt(18, backupLocInfo.getServerInfo().getPort());
-			   prep.setString(19, backupLocInfo.getDataStoreInfo().getUuid());
-			   prep.setString(20, backupLocInfo.getDataStoreInfo().getName());
-			   prep.setInt(21, backupLocInfo.getDataStoreInfo().getEnableDedup());
-			   prep.addBatch();
-			   prep.executeBatch();
-			   prep.close();
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
-		}catch(Exception e){
-			e.printStackTrace();
-		}				
-	}
-	
+public class Backuploaction {
 
-	
 	/**
 	 * BackupLoaction validateCifs
-	 * @param  BackupLocationInfoVO backupLocationInfo
-	 * @return 
+	 * 
+	 * @param BackupLocationInfoVO
+	 *            backupLocationInfo
+	 * @return
 	 */
 	public static JSONObject validateCifs(BackupLocationInfoVO backupLocationInfo) {
-		
-		JSONObject result = new JSONObject();		
+
+		JSONObject result = new JSONObject();
 		CmmnUtil cmmUtil = new CmmnUtil();
-		
-	     String smd = "echo -e "+backupLocationInfo.getBackupDestPasswd()+"| smbclient -U " +backupLocationInfo.getBackupDestUser()+" "+backupLocationInfo.getBackupDestLocation().replaceAll("\\\\", "/");
-		
-	     System.out.println(smd);
+
+		String smd = "echo -e " + backupLocationInfo.getBackupDestPasswd() + "| smbclient -U "
+				+ backupLocationInfo.getBackupDestUser() + " "
+				+ backupLocationInfo.getBackupDestLocation().replaceAll("\\\\", "/");
+
 		try {
-			result = cmmUtil.execute(smd.toString());												
+			result = cmmUtil.execute(smd.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	     
 
+	/**
+	 * BackupLoaction validate Nfs
+	 * 
+	 * @param BackupLocationInfoVO
+	 *            backupLocationInfo
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static JSONObject validateNfs(BackupLocationInfoVO backupLocationInfo) {
+
+		JSONObject result = new JSONObject();
+		CmmnUtil cmmUtil = new CmmnUtil();
+
+		String mountPoint = getMountPointPath().replaceAll("\\\\", "/");
 	
 
-	public static void main(String[] args) {
-		
-		BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
-		Backuploaction bl = new Backuploaction();
-		
-		backuplocation.setBackupDestLocation("//192.168.50.1130/backup");
-		backuplocation.setBackupDestUser("root");
-		backuplocation.setBackupDestPasswd("root");
-		
-		validateCifs(backuplocation);
-		
-		//System.out.println(UUID.randomUUID().toString());
-		//UUID.randomUUID().toString();
-/*		BackupLocationInfoVO backupLocInfo = new BackupLocationInfoVO();
-		
-		backupLocInfo.setBackupDestLocation("//192.168.50.130/backup");
-		backupLocInfo.setBackupDestUser("root");
-		backupLocInfo.setBackupDestPasswd(backupDestPasswd);
-		
-		prep.setLong(4, backupLocInfo.getFreeSize());
-	    prep.setLong(5, backupLocInfo.getTotalSize());
+		/*	String mkdir = "$EXPERDB_HOME/ws_" + UUID.randomUUID();
+			
+			 File file = new File(mkdir);
 
-		backupLocInfo.setType(2);  // NFS = 1 , CIFS = 2
-*/		
-		
+			 if (file.mkdirs()) { 
+				 System.out.println("Create Directory Succes");
+				 result.put("RESULT_CODE", 0); 
+				 result.put("RESULT_DATA", "Create Directory Success");
+			 }else{
+			  	 System.out.println("File not Found");
+				 result.put("RESULT_CODE", 1); 
+				 result.put("RESULT_DATA", "File not Found");
+			}*/
+					 
+			 try {
+				cmmUtil.execute("mkdir "+mountPoint);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			 
+			
+		 String cmd = "mount " + backupLocationInfo.getBackupDestLocation() + " "+mountPoint + " -o timeo=50,retry=0; echo $?" ;
+
+		 System.out.println("MOUNT CMD = " +cmd);
+		 
+		try {
+			result = cmmUtil.execute(cmd.toString());
+			
+			//mount 후  ->  umount 명령어 실행
+			if (result.get("RESULT_CODE").equals(0)) {
+				result = unmountNfs(mountPoint);
+			}
+
+			// file.delete();
+			 try {
+					cmmUtil.execute("rm -rf "+mountPoint);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
+	public static int executeCommand(String cmd, boolean block) throws Exception {
+		System.out.println("excute cmd: " + cmd);
+		System.out.println("block: " + block);
+		if (block) {
+			Process proc = Runtime.getRuntime().exec(cmd);
+			int result = proc.waitFor();
+			if (result != 0) {
+				System.out.println("execute  block command " + cmd + ", return : " + result);
+			}
+			return result;
+		}
+		try {
+			Process proc = Runtime.getRuntime().exec(cmd);
+			if (proc == null) {
+				System.out.println("fail to execute unblock command : " + cmd);
+				return -1;
+			}
+			System.out.println("success to execute unblock command : " + cmd);
+			return 0;
+		} catch (IOException e) {
+			System.out.println("fail to execute unblock command " + cmd + " " + e);
+			return -2;
+		}
+	}
 
-	
+	private static String getMountPointPath() {
+		return ServiceContext.getInstance().getTempFolder() + File.separator + "ws_" + UUID.randomUUID();
+	}
+
+	/**
+	 * BackupLoaction unmount Nfs
+	 * @param mountPoint 
+	 * 
+	 * @param BackupLocationInfoVO
+	 *            backupLocationInfo
+	 * @return
+	 */
+	public static JSONObject unmountNfs(String mountPoint) {
+
+		JSONObject result = new JSONObject();
+		CmmnUtil cmmUtil = new CmmnUtil();
+
+		 String smd = "umount -l " +mountPoint+"; echo $?";
+		//String smd = "umount -l /opt/Arcserve/d2dserver/tmp/ws_46595df9-6f7f-472d-80e2-8d883f08bace; echo $?";
+
+		 System.out.println("CMD = "+smd);
+		try {
+			result = cmmUtil.execute(smd.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static void main(String[] args) {
+
+		BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
+		Backuploaction bl = new Backuploaction();
+
+		// backuplocation.setBackupDestLocation("//192.168.50.130/backup");
+		backuplocation.setBackupDestLocation("192.168.50.130:/nfstest");
+		backuplocation.setBackupDestUser("root");
+		backuplocation.setBackupDestPasswd("root");
+
+		// validateCifs(backuplocation);
+		
+		 validateNfs(backuplocation);
+		 
+		// System.out.println(nfs);
+
+		//unmountNfs(backuplocation);
+
+		// System.out.println(UUID.randomUUID().toString());
+		// UUID.randomUUID().toString();
+		/*
+		 * BackupLocationInfoVO backupLocInfo = new BackupLocationInfoVO();
+		 * 
+		 * backupLocInfo.setBackupDestLocation("//192.168.50.130/backup");
+		 * backupLocInfo.setBackupDestUser("root");
+		 * backupLocInfo.setBackupDestPasswd(backupDestPasswd);
+		 * 
+		 * prep.setLong(4, backupLocInfo.getFreeSize()); prep.setLong(5,
+		 * backupLocInfo.getTotalSize());
+		 * 
+		 * backupLocInfo.setType(2); // NFS = 1 , CIFS = 2
+		 */
+
+	}
+
 }

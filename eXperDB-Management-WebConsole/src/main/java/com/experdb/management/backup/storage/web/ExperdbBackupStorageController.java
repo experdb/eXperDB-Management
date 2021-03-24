@@ -61,6 +61,22 @@ public class ExperdbBackupStorageController {
     }
    
     
-    
+    @RequestMapping(value="/experdb/nfsValidation.do")
+    public @ResponseBody JSONObject nfsTest(HttpServletRequest request) {
+    		JSONObject nfsResult =new JSONObject();
+    	try {
+    		BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
+    		backuplocation.setBackupDestLocation(request.getParameter("path"));
+
+    		 nfsResult = Backuploaction.validateNfs(backuplocation);
+
+    		System.out.println("RESULT_CODE = "+nfsResult.get("RESULT_CODE"));
+    		System.out.println("RESULT_DATA = "+nfsResult.get("RESULT_DATA"));
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nfsResult;
+    }
 
 }

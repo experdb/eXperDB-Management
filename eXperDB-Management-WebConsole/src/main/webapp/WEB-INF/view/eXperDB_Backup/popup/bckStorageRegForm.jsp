@@ -115,13 +115,16 @@
 	 ******************************************************** */
 	function fn_storageTypeSelect(){
 		if($("#storageType").val() == 1){
-			$("#userName").prop("disabled", true);
+			$("#isCifs").hide();
+			
+			/* $("#userName").prop("disabled", true);
 			$("#passWord").prop("disabled", true);
 			$("#userName").val(null);
-			$("#passWord").val(null);
+			$("#passWord").val(null); */
 		}else{
-			$("#userName").prop("disabled", false);
-			$("#passWord").prop("disabled", false);
+			$("#isCifs").show();
+			/* $("#userName").prop("disabled", false);
+			$("#passWord").prop("disabled", false); */
 		}
 	}
 	
@@ -163,6 +166,7 @@
 	  ******************************************************** */
 	  function fn_storageReg () {
 		  if(fn_validationReg()){
+		  
 			  $.ajax({
 					url : "/experdb/backupStorageReg.do",
 					data : {
@@ -246,18 +250,56 @@
 	  ******************************************************** */
 	 // validation check for registration
 	 function fn_validationReg() {
+		 
+		 var check;
 
 		// INSERT CHECK (PATH, USERNAME, PASSWORD)
 		// path insert check
+		//$("#storageType").val()==1   -> NFS
+		//$("#storageType").val()==2   -> CIFS
+		
 		if($("#storageType").val()==2){
 			var checkVal = fn_valChkPW() + fn_valChkName() + fn_valChkPath();
 			if(checkVal){
-				return false;
+				check=false;
 			}
 		}else if(fn_valChkPath()){
-			return false;
+			check=false;
+		}else{
+			check=true;
 		}
-		return true;
+		
+		if($("#storageType").val()==1){
+			
+			 $.ajax({
+					url : "/experdb/nfsValidation.do",
+					data : {
+						path : $("#storagePath").val(),
+					},
+					type : "post",
+					async: false, 
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if (xhr.status == 403){
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {		
+						 if(result.RESULT_CODE == "1"){							 
+							 showSwalIcon('NFS 설정을 확인해주세요!', '<spring:message code="common.close" />', '', 'error');
+							 check=false;
+						 }else{
+							 check=true;
+						 }	
+					}
+				});
+		}
+		
+		return check;
+		
 	 }
 	 
 	// validation check for modification
@@ -343,6 +385,8 @@
 		}
 		return false;
 	 }
+	 
+	
 
 	 /* 
 	 // Path check
@@ -427,6 +471,8 @@
 														</div>
 													</div>
 												</div>
+												 
+												<div name="isCifs" id="isCifs">
 												<div class="form-group row" id="userNameDiv" style="margin-bottom:4px">
 													<div  class="col-3" style="padding-top:7px; margin-left: 20px;">
 														User Name
@@ -448,6 +494,7 @@
 															
 														</div>
 													</div>
+												</div>
 												</div>
 												<div class="form-group">
 													<div  class="col-4" style="padding-top:7px; margin-left: 3px;">
