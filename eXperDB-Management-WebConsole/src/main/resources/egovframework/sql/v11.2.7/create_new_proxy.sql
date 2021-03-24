@@ -366,7 +366,7 @@ CREATE TABLE experdb_management.t_pry_svr_status_g (
 	CONSTRAINT pk_t_pry_svr_status_g PRIMARY KEY (pry_exe_status_sn, log_type, pry_svr_id),
 	CONSTRAINT fk_t_pry_svr_status_g_01 FOREIGN KEY (pry_svr_id) REFERENCES t_pry_svr_i(pry_svr_id)
 );
-CREATE UNIQUE INDEX uk_t_pry_svr_status_g_01 ON experdb_management.t_pry_svr_status_g USING btree (pry_svr_id, lsn_id);
+CREATE UNIQUE INDEX uk_t_pry_svr_status_g_01 ON experdb_management.t_pry_svr_status_g USING btree (pry_exe_status_sn,pry_svr_id, lsn_id);
 COMMENT ON TABLE experdb_management.t_pry_svr_status_g IS 'PROXY_서버_실시간_상태_로그';
 
 -- Column comments
