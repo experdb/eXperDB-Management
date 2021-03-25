@@ -158,12 +158,12 @@
 			SELECT *
 			FROM (
 				SELECT
-					ROW_NUMBER() OVER (PARTITION BY tpssg.DB_CON_ADDR ORDER BY exe_dtm desc) AS r, 
+					ROW_NUMBER() OVER (PARTITION BY tpsi.PRY_SVR_ID, tpssg.LSN_ID, tpssg.DB_CON_ADDR ORDER BY exe_dtm desc) AS r, 
 					(ROW_NUMBER() OVER()) AS ROWNUM, 
 					(ROW_NUMBER() OVER()) AS IDX,
 					tpsi.PRY_SVR_ID, 
 					tpssg.EXE_DTM, 
-					tpsi.PRY_SVR_NM, 
+					tpsi.PRY_SVR_NM,
 					tpli.LSN_NM, 
 					tpssg.DB_CON_ADDR, 
 					tpssg.SVR_STATUS, 
@@ -173,13 +173,15 @@
 					tpssg.SESSION_LIMIT, 
 					tpssg.CUMT_SSO_CON_CNT, 
 					tpssg.BYTE_RECEIVE, 
-					tpssg.BYTE_TRANSMIT
+					tpssg.BYTE_TRANSMIT,
+					tpssg.SVR_STOP_TM,
+					tpssg.lsn_svr_id
 				FROM T_PRY_SVR_I tpsi 
 				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
 				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID
 				WHERE tpsi.PRY_SVR_ID = #{value}
 				OR tpsi.MASTER_SVR_ID = #{value}
-				ORDER BY tpssg.EXE_DTM DESC
+				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
 			) x
 			WHERE x.r <= 2
 		]]>

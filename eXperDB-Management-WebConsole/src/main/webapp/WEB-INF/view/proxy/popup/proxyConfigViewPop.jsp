@@ -36,48 +36,48 @@
 		// var type = $("type", "configForm").val();
 		console.log('pry_svr_id : ' + pry_svr_id);
 		console.log('type : ' + type);
-		$.ajax({
-			url : "/proxyMonitoring/configViewAjax.do",
-			dataType : "json",
-			type : "post",
- 			data : {
- 				pry_svr_id : pry_svr_id,
-				type : type
- 			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				if (result != null) {
-					// var v_fileSize = Number($("#fSize", "#configForm").val());
+// 		$.ajax({
+// 			url : "/proxyMonitoring/configViewAjax.do",
+// 			dataType : "json",
+// 			type : "post",
+//  			data : {
+//  				pry_svr_id : pry_svr_id,
+// 				type : type
+//  			},
+// 			beforeSend: function(xhr) {
+// 				xhr.setRequestHeader("AJAX", true);
+// 			},
+// 			error : function(xhr, status, error) {
+// 				if(xhr.status == 401) {
+// 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+// 				} else if(xhr.status == 403) {
+// 					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+// 				} else {
+// 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+// 				}
+// 			},
+// 			success : function(result) {
+// 				if (result != null) {
+// 					// var v_fileSize = Number($("#fSize", "#configForm").val());
 					
-					if (result.data != null) {
-						$("#config", "#configForm").append(result.data);
+// 					if (result.data != null) {
+// 						$("#config", "#configForm").append(result.data);
 						
-						// v_fileSize = Number(v_fileSize) + result.fSize;
-					}
+// 						// v_fileSize = Number(v_fileSize) + result.fSize;
+// 					}
 
-					// $("#fSize", "#configForm").val(v_fileSize);
+// 					// $("#fSize", "#configForm").val(v_fileSize);
 					
-					// $("#seek", "#configForm").val(result.seek);
-					// $("#endFlag", "#configForm").val(result.endFlag);
-					// $("#dwLen", "#configForm").val(result.dwLen);
+// 					// $("#seek", "#configForm").val(result.seek);
+// 					// $("#endFlag", "#configForm").val(result.endFlag);
+// 					// $("#dwLen", "#configForm").val(result.dwLen);
 					
-					// v_fileSize = byteConvertor(v_fileSize);
+// 					// v_fileSize = byteConvertor(v_fileSize);
 					
-					// $("#view_file_size", "#configForm").html(v_fileSize);
-				}
-			}
-		});
+// 					// $("#view_file_size", "#configForm").html(v_fileSize);
+// 				}
+// 			}
+// 		});
 	}
  	
  	

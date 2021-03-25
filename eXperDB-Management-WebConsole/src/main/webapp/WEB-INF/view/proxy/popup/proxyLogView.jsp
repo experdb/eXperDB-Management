@@ -130,15 +130,49 @@
 	    $('#wrk_strt_dtm_div').datepicker('updateDates');
 	    $('#wrk_end_dtm_div').datepicker('updateDates');
 	}
+	
+	/* ********************************************************
+	 * 시스템 기동
+	 ******************************************************** */
+	 function fn_server_start(){
+		
+	}
+	
+	/* ********************************************************
+	 * 시스템 정지
+	 ******************************************************** */ 
+	function fn_server_stop(){
+		
+	}
+	
+	/* ********************************************************
+	 * log download 셋팅
+	 ******************************************************** */
+	function fn_download(){
+		
+	}
+	
+	
+	
 </script>
 
 <div class="modal fade" id="pop_layer_log_view" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 20px 250px;">
 		<div class="modal-content" style="width:1200px;">		 
 			<div class="modal-body" style="margin-bottom:-10px;">
+			<div class="row">
+				<div class="col-sm-9">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					log 파일보기
 				</h4>
+				</div>
+				<div class="col-sm-3">
+				<button type="button" class="btn btn-success btn-sm btn-icon-text" style="margin-left:70px;" onclick="fn_download()">
+				<i class='ti-download btn-icon-prepend' >
+				&nbsp;<spring:message code='migration.download' /></i>
+				</button>
+				</div>
+			</div>
 				
 				<form class="cmxform" id="proxyViewForm" name="proxyViewForm" >
 					<input type="hidden" id="seek" name="seek" value="0">
@@ -163,7 +197,7 @@
 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value='기동' />
 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_stop();" value='정지' />
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-2" style="margin-left:-37px;">
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
 											<input type="text" class="form-control totDatepicker" style="height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
 											<span class="input-group-addon input-group-append border-left">

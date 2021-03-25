@@ -241,28 +241,28 @@ public class ProxyMonitoringController {
 			int PORT = Integer.parseInt(strPort);
 			System.out.println("IP : " + IP + ": " + PORT);
 			//IP = "127.0.0.1";
-			ClientAdapter CA = new ClientAdapter(IP, 80);
-			CA.open(); 
-			System.out.println("CA : " + CA.toString());
-//			result.put("data", jObj);
-			JSONObject objList = CA.dxT015_V(jObj);
-			CA.close();
-			System.out.println("objList : " + objList.toJSONString());
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-			
-			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
-			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
-			
-			int intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
-			
-			Long lngSeek= (Long)objList.get(ClientProtocolID.SEEK);
+//			ClientAdapter CA = new ClientAdapter(IP, PORT);
+//			CA.open(); 
+//			System.out.println("CA : " + CA.toString());
+////			result.put("data", jObj);
+//			JSONObject objList = CA.dxT015_V(jObj);
+//			CA.close();
+//			System.out.println("objList : " + objList.toJSONString());
+//			
+//			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+//			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+//			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+//			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+//			System.out.println("RESULT_CODE : " +  strResultCode);
+//			System.out.println("ERR_CODE : " +  strErrCode);
+//			System.out.println("ERR_MSG : " +  strErrMsg);
+//			
+//			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
+//			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
+//			
+//			int intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
+//			
+//			Long lngSeek= (Long)objList.get(ClientProtocolID.SEEK);
 			
 			result.put("data", strBuffer);
 			result.put("fSize", strBuffer.length());
