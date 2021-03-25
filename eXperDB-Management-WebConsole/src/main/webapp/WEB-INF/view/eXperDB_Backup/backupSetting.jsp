@@ -578,7 +578,43 @@ function fn_nodeRegPopup() {
 	}
  
 function fn_delete() {
-	alert($("#jobNameVal").val());
+
+	 var data = NodeList.rows('.selected').data();
+		if(data.length<1){
+			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else{
+			 var ipadr = NodeList.row('.selected').data().ipadr;
+			 var jobName = $("#jobNameVal").val();
+			 
+				$.ajax({
+					url : "/experdb/jobDelete.do",
+					type : "post",
+					data : {
+						ipadr:ipadr,
+						jobName:jobName
+					},
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result){
+						if(result.RESULT_CODE == "0"){		
+							showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
+							fn_getScheduleInfo(ipadr);
+						}
+					}
+				})
+		}
+	 
 }
 </script>
 <style>
