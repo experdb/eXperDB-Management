@@ -48,6 +48,21 @@ $(window.document).ready(function() {
 	schWeek = [schSun,schMon,schTue,schWed,schThu,schFri,schSat];
 });
 
+$(function() {
+    $('#nodeList tbody').on( 'click', 'tr', function () {
+          if ( $(this).hasClass('selected') ) {
+          }
+         else {              
+            NodeList.$('tr.selected').removeClass('selected');
+             $(this).addClass('selected');      
+             var nodeIpadr = NodeList.row('.selected').data().ipadr;
+		
+     		fn_scheduleReset();
+     		fn_getScheduleInfo(nodeIpadr);
+         } 
+     } );   
+ } );    
+
 function fn_init() {
 	
 	/* ********************************************************
@@ -87,7 +102,6 @@ function fn_init() {
 		},
 		{data : "ipadr", className : "dt-center", defaultContent : ""}
 		
-/* 		{data : "dft_db_nm", className : "dt-center", defaultContent : "", visible: false}, */
 		], /* select: {'style' : 'single'} */
 	});
 
@@ -95,12 +109,6 @@ function fn_init() {
 	 NodeList.tables().header().to$().find('th:eq(2)').css('min-width');
 	 NodeList.tables().header().to$().find('th:eq(3)').css('min-width');
 	 
-	 NodeList.on('select', function(e, dt, type, indexes){
-		var nodeIpadr = NodeList.row(indexes).data().ipadr
-		NodeList.clear();
-		// fn_scheduleReset(ipadr);
-		fn_getScheduleInfo(nodeIpadr);
-	 });
 	 scheduleList = $('#scheduleList').DataTable({
 		scrollY : "140px",
 		scrollX: true,	
@@ -158,15 +166,15 @@ function dateCalenderSetting() {
 }
 
 function fn_scheduleReset(ipadr){
-	schSun=[];
-	schMon=[];
-	schTue=[];
-	schWed=[];
-	schThu=[];
-	schFri=[];
-	schSat=[];
+	schSun.length = 0;
+	schMon.length = 0;
+	schTue.length = 0;
+	schWed.length = 0;
+	schThu.length = 0;
+	schFri.length = 0;
+	schSat.length = 0;
 
-	// fn_drawScheduleList();
+	fn_drawScheduleList();
 	// fn_getScheduleInfo(ipadr);
 }
 
@@ -218,12 +226,13 @@ function fn_getSvrList() {
 		if(result.RESULT_CODE == "0"){
 			console.log("성공 : " + result.startDate);
 			fn_setScheduleInfo(result);
-		}else{
-			console.log("실패 : " + result.startDate);
+		}else if(result.RESULT_CODE == "2"){
+			console.log("실패 : XML 파일을 찾을 수 없음");
+			fn_policyReset();
 		}
 	})
 	.fail(function(xhr, status, error){
-
+		
 	})
 	.always(function(){
 
@@ -259,8 +268,54 @@ function fn_setScheduleInfo(result){
 		fn_scheduleInsert(scheduleData[i].dayPick, scheduleData[i].startTime, scheduleData[i].repeat, scheduleData[i].repEndTime, scheduleData[i].repTime, scheduleData[i].repTimeUnit);
 		
 	}
+	$("#startDateSch").val(result.startDate);
 	fn_drawScheduleList();
+	if(result.dateType == "true"){
+		console.log("fn_setScheduleInfo : true");
+		$(':input:radio[name=merge_period]:checked').val("weekly");
+		document.getElementById("merge_month").checked = false;
+		document.getElementById("merge_week").checked = true;
+		/* $("#merge_month").checked = false;
+		$("#merge_week").checked = true; */
+		$("#merge_period_week").val(result.date);
+		$("#merge_period_month").val(0);
+	}else{
+		console.log("fn_setScheduleInfo : false");
+		$(':input:radio[name=merge_period]:checked').val("monthly");
+		document.getElementById("merge_month").checked = true;
+		document.getElementById("merge_week").checked = false;
+		/* $("#merge_month").checked = true;
+		$("#merge_week").checked = false; */
+		$("#merge_period_week").val(0);
+		$("#merge_period_month").val(result.date);
+	}
+	$("#bckSetDateVal").val(result.date);
+	$("#bckSetDateTypeVal").val(result.dateType);
+	
+	$("#storageType").val(result.storageType);
+	$("#bckStorageTypeVal").val(result.storageType);
+	
+	$("#compressType").val(result.compress);
+	$("#bckCompressVal").val(result.compress);
+	
+	$("#storageList").val(result.storage);
+	
+	$("#backupSetNum").val(result.setNum);
+	$("#bckSetNum").val(result.setNum);
+	/* $("#bckSetNum").val(result.setNum); */
+	fn_policyReg();
+	$("#bckStorage").val(result.storage);
+	
+}
 
+function fn_policyReset(){
+	$("#bckStorage").val("");
+	$("#bckStorageType").val("");
+	$("#bckStorageTypeVal").val("");
+	$("#bckCompress").val("");
+	$("#bckSetDate").val("");
+	$("#bckSetNum").val("");
+	$("#startDateSch").val("");
 }
  
 
@@ -381,7 +436,15 @@ function fn_nodeRegPopup() {
 			type : "post"
 		})
 		.done (function(result){			
-			fn_policyRegReset(result);
+			fn_setStorageList(result);
+			console.log("$('#bckStorage).val() : " + $("#bckStorage").val() == null);
+			if($("#bckStorage").val() != ""){
+				console.log("정책  수정");
+				fn_policyModiReset();
+			}else{
+				console.log("정책 신규 등록");
+				fn_policyRegReset();
+			}
 			$("#pop_layer_popup_backupPolicyReg").modal("show");
 		})
 		.fail (function(xhr, status, error){
@@ -466,7 +529,6 @@ function fn_nodeRegPopup() {
 			}
 			scheduleList.row.add(viewRow).draw();
 		}
-
 	}
 
 
@@ -515,9 +577,13 @@ function fn_nodeRegPopup() {
 					setNum : $("#bckSetNum").val()
 				}
 			})
-			.done (function(result){			
-				showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
-				location.href="/experdb/backupMonitoring.do";
+			.done (function(result){
+				if(result.RESULT_CODE == "0"){					
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+					location.href="/experdb/backupMonitoring.do";
+				}else {
+					showSwalIcon('적용에 실패했습니다', '<spring:message code="common.close" />', '', 'error');
+				}
 			})
 			.fail (function(xhr, status, error){
 				 if(xhr.status == 401) {
@@ -527,9 +593,8 @@ function fn_nodeRegPopup() {
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
-			 })
+			})
 		}
-		
 	}
 	
 /* ********************************************************
@@ -569,9 +634,8 @@ table.dataTable.ccc thead th{
 
 <form name="storeInfo">
 	<input type="hidden" name="bckStorageTypeVal"  id="bckStorageTypeVal">
-	<input type="hidden" name="bckStorageVal"  id="bckStorageVal" >
 	<input type="hidden" name="bckCompressVal"  id="bckCompressVal" >
-	<input type="text" name="bckSetDateTypeVal"  id="bckSetDateTypeVal" hidden>
+	<input type="hidden" name="bckSetDateTypeVal"  id="bckSetDateTypeVal" >
 	<input type="hidden" name="bckSetDateVal" id="bckSetDateVal">
 </form>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -665,83 +729,22 @@ table.dataTable.ccc thead th{
 		<!-- node list end-->
 		<div class="col-lg-7 grid-margin stretch-card">
 			<div class="card"  style="padding-left: 0px;">
-				<div class="card-body" style="padding-bottom: 0px;">
-					<!-- <div class="row" style="margin-top:-20px;"  id="schedule_button">
-						<div class="col-12" style="margin-top: 10px;">
-							<div class="sch_button" style="float: right">
-								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_scheduleRegPopoup()">
-									등록
-								</button>
-								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
-									삭제
-								</button>
-							</div>
-						</div>
-					</div> -->
-					<div class="card my-sm-2" style="" >
-						<div class="card-body" style="height: 240px;padding-top: 5px;">
-							<div class="col-12" id="jobDiv" >
-								<div class="form-group row" style="margin-bottom: 0px; padding-left: 10px;">
-									<div class="col-8 row" style="margin-top: 10px;">
-										<div  class="col-4 col-form-label pop-label-index" style="font-size:1em; padding-top:7px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											Start Date
-										</div>
-										<div class="col-sm-3" style="padding-left: 0px;">
-											<div class="input-group " id="startDate_div" style="width: 120px;">
-												<input type="text" class="form-control" style=" background-color : white; width:70px;height:30px;" id="startDateSch" name="startDateSch" readonly/>
-											</div> 
-										</div>
-									</div>
-									<div class="col-4" style="margin-top: 10px;">
-										<div class="sch_button" style="float: right">
-											<button type="button" class="btn btn-rounded btn-sm btn-inverse-primary" onClick="fn_scheduleRegPopoup()">
-												<i class="ti-plus"></i>
-											</button>
-											<button type="button" class="btn btn-rounded btn-inverse-danger btn-sm" onClick="fn_scheduleDel()">
-												<i class="ti-minus"></i>
-											</button>
-										</div>
-									</div>
-								</div>
-								<div class="col-12 row" id="scheduleDiv" >	
-									<table id="scheduleList" class="table table-hover ccc" style="width:900px;">
-										<thead>
-											<tr>
-												<th width="80px" class="text-center text-danger"><spring:message code="common.sun" /></th>
-												<th width="80px" class="text-center"><spring:message code="common.mon" /></th>												
-												<th width="80px" class="text-center"><spring:message code="common.tue" /></th>
-												<th width="80px" class="text-center"><spring:message code="common.wed" /></th>
-												<th width="80px" class="text-center"><spring:message code="common.thu" /></th>
-												<th width="80px" class="text-center"><spring:message code="common.fri" /></th>												
-												<th width="80px" class="text-center text-primary"><spring:message code="common.sat" /></th>
-											</tr>
-										</thead>
-									</table>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card-body" style="padding-top: 0px;">	
-					 <div class="row" style="margin-top:-20px;"  id="schedule_button">
-						<div class="col-12" style="margin-top: 10px;">
-							<div class="wrt_button" style="float: right">
-								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policyRegPopoup()">
-								 	등록
-								</button>
-								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
-									수정
-								</button>
-								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
-									삭제
-								</button>
-							</div>
-						</div>
-					</div>				 	
-					<div class="card my-sm-2" style="" >
+				<!-- full backup setting start -->
+				<div class="card-body" style="padding-top: 20px;height: 280px;">	
+					<div class="card my-sm-2" style="height: 262px;" >
 						<div class="card-body" >
+							 <div class="row" style="margin-top:-20px;"  id="schedule_button">
+								<div class="col-12" style="margin-top: 10px;">
+									<div class="wrt_button" style="float: right">
+										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policyRegPopoup()">
+										 	설정
+										</button>
+										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+											삭제
+										</button>
+									</div>
+								</div>
+							</div>				 	
 							<div class="col-12" id="jobDiv" >	
 								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
@@ -783,7 +786,62 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
+					<h4 class="card-title" style="position: absolute;top:22px; right:770px;background-color: white;font-size: 1em; color:black;">
+						<i class="item-icon fa fa-desktop"></i>  풀 백업 세팅
+					</h4>
 				</div>
+				<!-- full backup setting end -->
+			
+				<div class="card-body" style="padding-bottom: 0px;">
+					<div class="card my-sm-2" style="" >
+						<div class="card-body" style="height: 280px;padding-top: 5px;padding-bottom: 5px;">
+							<div class="col-12" id="jobDiv" style="padding-top: 20px;">
+								<div class="form-group row" style="margin-bottom: 0px; padding-left: 10px;">
+									<div class="col-8 row" style="margin-top: 10px;">
+										<div  class="col-4 col-form-label pop-label-index" style="font-size:1em; padding-top:7px;">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+											Start Date
+										</div>
+										<div class="col-sm-3" style="padding-left: 0px;">
+											<div class="input-group " id="startDate_div" style="width: 120px;">
+												<input type="text" class="form-control" style=" background-color : white; width:70px;height:30px;" id="startDateSch" name="startDateSch" readonly/>
+											</div> 
+										</div>
+									</div>
+									<div class="col-4" style="margin-top: 10px;">
+										<div class="sch_button" style="float: right">
+											<button type="button" class="btn btn-rounded btn-sm btn-inverse-primary" onClick="fn_scheduleRegPopoup()">
+												<i class="ti-plus"></i>
+											</button>
+											<button type="button" class="btn btn-rounded btn-inverse-danger btn-sm" onClick="fn_scheduleDel()">
+												<i class="ti-minus"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 row" id="scheduleDiv" >	
+									<table id="scheduleList" class="table table-hover ccc" style="width:900px;">
+										<thead>
+											<tr>
+												<th width="80px" class="text-center text-danger"><spring:message code="common.sun" /></th>
+												<th width="80px" class="text-center"><spring:message code="common.mon" /></th>												
+												<th width="80px" class="text-center"><spring:message code="common.tue" /></th>
+												<th width="80px" class="text-center"><spring:message code="common.wed" /></th>
+												<th width="80px" class="text-center"><spring:message code="common.thu" /></th>
+												<th width="80px" class="text-center"><spring:message code="common.fri" /></th>												
+												<th width="80px" class="text-center text-primary"><spring:message code="common.sat" /></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<h4 class="card-title" style="position: absolute;top:320px; right:780px;background-color: white;font-size: 1em; color: #000000; ">
+						<i class="item-icon fa fa-desktop"></i>  백업 배치
+					</h4>
+				</div>
+				<!-- backup schedule end -->
 			</div>
 		</div>
 	</div>

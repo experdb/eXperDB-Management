@@ -38,17 +38,24 @@
 		
 	});
 	
-	function fn_policyRegReset(result) {
-		storageList = [];
-		CIFSList = [];
-		NFSList = [];
-		fn_setStorageList(result);
-		$("#policyRegTitle").show();
-		$("#policyModiTitle").hide();
-
+	/* ********************************************************
+	 * reset
+	 ******************************************************** */
+	function fn_policyRegReset() {
+		/* storageList.length=0;
+		CIFSList.length=0;
+		NFSList.length=0; */
+		// fn_setStorageList(result);
+		console.log("fn_policyRegReset");
 		$("#backupSetNum").val(1);
 		
+		$("#compressType").val(1);
+		
 		$(':input:radio[name=merge_period]:checked').val("weekly");
+		document.getElementById("merge_month").checked = false;
+		document.getElementById("merge_week").checked = true;
+		// $("#merge_month").checked = false;
+		// $("#merge_week").checked = true;
 		fn_mergeClick();
 		
 		$("#storageType").val("2");
@@ -57,11 +64,46 @@
 	}
 
 	function fn_policyModiReset(){
-		$("#regTitle").hide();
-		$("#modiTitle").show();
+		console.log("=========== fn_policyModiReset ===========");
+		console.log("storageType val : " + $("#storageType").val());
+		console.log("bck storageType val : " + $("#bckStorageTypeVal").val());
+		console.log("bckStorage : "+$("#bckStorage").val());
+		console.log("compress : " + $("#compressType").val());
+		console.log("backupSetNum : " + $("#bckSetNum").val());
+		console.log("bckSetDateVal : " +$("#bckSetDateVal").val());
+		console.log("bckSetDateTypeVal : " +$("#bckSetDateTypeVal").val());
+		console.log("bckSetDateTypeValTF : " +$("#bckSetDateTypeVal").val() == "true");
+		console.log("merge_period check : " + $(':input:radio[name=merge_period]:checked').val());
+		
+		$("#storageList").val($("#bckStorage").val());
+		$("#storageType").val($("#bckStorageTypeVal").val());
+		
+		$("#backupSetNum").val($("#bckSetNum").val());
+		$("#compressType").val($("#bckCompressVal").val());
+		
+		if($("#bckSetDateTypeVal").val() == "true"){
+			console.log("***** modi reset true");
+			$("#merge_period_week").val($("#bckSetDateVal").val());
+			$("#merge_period_month").val(1);
+			document.getElementById("merge_month").checked = false;
+			document.getElementById("merge_week").checked = true;
+		}else if($("#bckSetDateTypeVal").val() == "false"){
+			console.log("***** modi reset false");
+			$("#merge_period_month").val($("#bckSetDateVal").val());
+			$("#merge_period_week").val(1);
+			document.getElementById("merge_month").checked = true;
+			document.getElementById("merge_week").checked = false;
+		}
+		
+		fn_mergeClick();
+		fn_storageTypeClick();
+		console.log("=====================================");
 	}
 	
 	function fn_setStorageList(data){
+		storageList.length=0;
+		CIFSList.length=0;
+		NFSList.length=0;
 		storageList = data;
 		for(var i =0; i<storageList.length; i++){
 			if(storageList[i].type == "CIFS Share"){
@@ -71,7 +113,9 @@
 			}
 		}
 	}
-	
+	/* ********************************************************
+	 * click event
+	 ******************************************************** */
 	function fn_storageTypeClick(){
 		var type = $("#storageType").val();
 		var html;
@@ -106,13 +150,19 @@
 	
 	// merge radio check
 	function fn_mergeClick() {
+		console.log("mergeClick!!!");
 		var mg = $(':input:radio[name=merge_period]:checked').val();
-		if(mg == 'weekly'){
+		/* console.log("merge???? : " + $("#merge_week").checked == "true");
+		console.log("merge???? : " + $("#merge_week").checked == "false"); */
+		if(mg == "weekly"){
+		//if($("#merge_week").checked == true){
+			console.log("weekly~~");
 			$('#merge_period_week').prop("disabled", false);
 			$('#merge_period_month').prop("disabled", true);
 			$("#setNumTitleWeek").show();
 			$("#setNumTitleMonth").hide();
-		}else if(mg == 'monthly'){
+		}else if(mg == "monthly"){
+			console.log("monthly~~");
 			$('#merge_period_month').prop("disabled", false);
 			$('#merge_period_week').prop("disabled", true);
 			$("#setNumTitleWeek").hide();
@@ -122,7 +172,7 @@
 
 	function fn_makeMonthDay() {
 		var dayHtml = "";
-
+		$('#merge_period_month').children().remove();
 		for(var i = 1; i<=31; i++){
 			dayHtml += '<option value="'+i+'">'+i+'</option>';
 		}
@@ -137,6 +187,10 @@
 		$('#merge_period_month').append(dayHtml);
 	}
 
+	
+	/* ********************************************************
+	 * registration
+	 ******************************************************** */
 	function fn_policyReg() {
 		var bckdate = "";
 		if($("#storageType").val() == 1){
@@ -154,6 +208,7 @@
 		}
 
 		if($(':input:radio[name=merge_period]:checked').val() == "weekly"){
+		// if($("#merge_week").checked){
 			$("#bckSetDateTypeVal").val(true);
 			var setDateVal = $("#merge_period_week").val()
 			$("#bckSetDateVal").val(setDateVal);
@@ -183,7 +238,7 @@
 			}
 		}else{
 			$("#bckSetDateTypeVal").val(false);
-			var setDateVal = $("#merge_period_month").val()
+			var setDateVal = $("#merge_period_month").val();
 			$("#bckSetDateVal").val(setDateVal);
 			bckdate = "매월"
 			if($("#merge_period_month").val()>31){
@@ -235,10 +290,7 @@
 		<div class="modal-content" >
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="policyRegTitle" style="padding-left:5px;">
-					백업정책 등록
-				</h5>
-				<h5 class="modal-title mdi mdi-alert-circle text-info" id="policyModiTitle" style="padding-left:5px;">
-					백업정책 수정
+					백업정책 설정
 				</h5>
 
 				<div class="card" style="margin-top:10px;border:0px;">
@@ -313,7 +365,7 @@
 															Full 백업 수행일
 														</div>
 														<div class="col-11 row" style="margin-left: 10px;">
-															<label style="padding-top: 5px">매 주 <input type="radio" id="merge_week" name="merge_period" style="margin-right: 10px; margin-left: 10px;" checked="checked" value="weekly" onchange="fn_mergeClick()"/></label>
+															<label style="padding-top: 5px">매 주 <input type="radio" id="merge_week" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="weekly" onchange="fn_mergeClick()"/></label>
 															<select name="merge_period_week" id="merge_period_week" class="form-control form-control-xsm" style="margin-left: 1rem;width:180px; height:40px; color:black;">
 																<option value="0">Sunday</option>
 																<option value="1">Monday</option>
@@ -350,8 +402,6 @@
 							 	</div>
 							</div>
 						</div>
-						
-							
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<button type="button" class="btn btn-primary" id="regButton" onclick="fn_policyReg()"><spring:message code="common.registory"/></button>
