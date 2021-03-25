@@ -76,9 +76,6 @@ function fn_init() {
 		paging : false,
 		deferRender : true,
 		info : false,
-		select : {
-			'style' : 'single'
-		},
 		bSort : false,
 		columns : [
 		{data : "masterGbn", defaultContent : "", className : "dt-center", 
@@ -102,7 +99,7 @@ function fn_init() {
 		},
 		{data : "ipadr", className : "dt-center", defaultContent : ""}
 		
-		], /* select: {'style' : 'single'} */
+		]
 	});
 
 	 NodeList.tables().header().to$().find('th:eq(1)').css('min-width');
