@@ -15,8 +15,8 @@ import com.experdb.management.backup.cmmn.Job;
 public class ExperdbBackupJobController {
 	
 	
-    @RequestMapping(value="/experdb/nfsValidation.do")
-    public @ResponseBody JSONObject nfsTest(HttpServletRequest request) {
+    @RequestMapping(value="/experdb/jobDelete.do")
+    public @ResponseBody JSONObject jobDelete(HttpServletRequest request) {
     		JSONObject result =new JSONObject();
     	try {
 
