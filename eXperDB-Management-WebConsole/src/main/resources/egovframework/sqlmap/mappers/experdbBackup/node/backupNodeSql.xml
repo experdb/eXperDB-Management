@@ -80,4 +80,8 @@
 		) UPDATE TARGETMACHINE SET ISPROTECTED = 1, JOBNAME = #{jobName} WHERE NAME = #{ipadr}
 	</update>
 	
+	<select id="checkJobExist" parameterType="String" resultType="Integer">
+		SELECT count(*) FROM JOBQUEUE J WHERE TARGETNAME LIKE #{ipadr}
+	</select>
+	
 </mapper>

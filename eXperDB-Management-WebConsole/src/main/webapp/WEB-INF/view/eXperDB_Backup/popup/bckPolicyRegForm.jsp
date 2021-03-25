@@ -42,10 +42,6 @@
 	 * reset
 	 ******************************************************** */
 	function fn_policyRegReset() {
-		/* storageList.length=0;
-		CIFSList.length=0;
-		NFSList.length=0; */
-		// fn_setStorageList(result);
 		console.log("fn_policyRegReset");
 		$("#backupSetNum").val(1);
 		
@@ -85,15 +81,17 @@
 			console.log("***** modi reset true");
 			$("#merge_period_week").val($("#bckSetDateVal").val());
 			$("#merge_period_month").val(1);
-			document.getElementById("merge_month").checked = false;
-			document.getElementById("merge_week").checked = true;
+			$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true);
+			// document.getElementById("merge_month").checked = false;
+			// document.getElementById("merge_week").checked = true;
 		}else if($("#bckSetDateTypeVal").val() == "false"){
 			console.log("***** modi reset false");
 			$("#merge_period_month").val($("#bckSetDateVal").val());
 			$("#merge_period_week").val(1);
-			document.getElementById("merge_month").checked = true;
-			document.getElementById("merge_week").checked = false;
-		}
+			$("input:radio[name='merge_period']:radio[value='monthly']").prop('checked', true);
+			// document.getElementById("merge_month").checked = true;
+			// document.getElementById("merge_week").checked = false;
+		} 
 		
 		fn_mergeClick();
 		fn_storageTypeClick();
