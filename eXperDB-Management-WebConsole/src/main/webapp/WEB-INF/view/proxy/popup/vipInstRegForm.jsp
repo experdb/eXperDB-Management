@@ -141,7 +141,7 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 	});
 	function instReg_add_vip_instance(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
-		showSwalIcon('상단의 [설정 적용]을 실행해야 변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
 		vipInstTable.row.add({
 			"state_nm" : $("#instReg_state_nm", "#insVipInstForm").val(),
@@ -158,7 +158,7 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 	
 	function instReg_mod_vip_instance(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
-		showSwalIcon('상단의 [설정 적용]을 실행해야 변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
 		var dataLen = vipInstTable.rows().data().length;
 		var oriData = vipInstTable.rows().data();

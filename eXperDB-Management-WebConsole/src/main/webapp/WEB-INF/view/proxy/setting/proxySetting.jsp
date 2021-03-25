@@ -624,7 +624,7 @@
 	 			success : function(result) {
 	 				unregSvrInfo = result;
 	 				if(unregSvrInfo.length ==0){
-	 					showSwalIcon("Proxy Agent가 설치된 서버 중 미등록된 서버가 없습니다.", '<spring:message code="common.close" />', '', 'error');
+	 					showSwalIcon("Proxy Agent가 설치된 서버 중 \n미등록된 서버가 없습니다.", '<spring:message code="common.close" />', '', 'error');
 	 					$('#pop_layer_svr_reg').modal("hide");
 	 				}else{
 	 					//ip select 동적 생성
@@ -764,7 +764,6 @@
 	function set_svr_info(listData, mode){
 		var tempSetData = listData;
 		//hidden 정보
-		$("#svrReg_conn_result", "#svrRegProxyServerForm").val("false");				
 		$("#svrReg_pry_svr_id", "#svrRegProxyServerForm").val(tempSetData.pry_svr_id);
 		$("#svrReg_master_svr_id_val", "#svrRegProxyServerForm").val(tempSetData.master_svr_id);
 		$("#svrReg_db_svr_id_val", "#svrRegProxyServerForm").val(tempSetData.db_svr_id);
@@ -780,6 +779,8 @@
 		}
 		
 		if(mode=="reg"){//등록
+			$("#svrReg_conn_result", "#svrRegProxyServerForm").val("false");	
+			$("#svrReg_conn_test", "#svrRegProxyServerForm").show();
 			$("#svrReg_ipadr", "#svrRegProxyServerForm").val(tempSetData.pry_svr_id);//ipadr
 			$("#svrReg_ipadr", "#svrRegProxyServerForm").show();
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").hide();//ipadr
@@ -790,6 +791,8 @@
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
 		}else{//수정
+			$("#svrReg_conn_result", "#svrRegProxyServerForm").val("true");	
+			$("#svrReg_conn_test", "#svrRegProxyServerForm").hide();//연결테스트 버튼
 			$("#svrReg_ipadr", "#svrRegProxyServerForm").val(tempSetData.pry_svr_id);//ipadr
 			$("#svrReg_ipadr", "#svrRegProxyServerForm").hide();//ipadr
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").val(tempSetData.ipadr);//ipadr
@@ -825,7 +828,7 @@
 			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="message.msg147"/>'));
 		}else if (gbn == "pry_svr_del") {
 			confirm_title = 'Proxy Server 삭제';
-			$('#confirm_multi_msg').html(fn_strBrReplcae('삭제하면 해당 Proxy 서버는 더이상 사용할 수 없고, 서버 관련 정보는 모두 삭제됩니다. '+'<spring:message code="message.msg162"/>'));
+			$('#confirm_multi_msg').html(fn_strBrReplcae('해당 Proxy 서버 삭제 시,<br> 서버 관련 정보가 모두 삭제됩니다. <br>'+'<spring:message code="message.msg162"/>'));
 		}else if (gbn == "stop") {
 			confirm_title = 'Proxy Server 중지';
 			$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 중지하시겠습니까?'));
@@ -834,10 +837,10 @@
 			$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 실행하시겠습니까?'));
 		}else if (gbn == "click_svr_list"){
 			confirm_title = '상세 정보 불러오기';
-			$('#confirm_multi_msg').html(fn_strBrReplcae('서버에 적용되지 않은 수정된 정보가 있습니다. 계속 진행 시 수정 사항이 초기화 됩니다. 계속 진행하시겠습니까?'));
+			$('#confirm_multi_msg').html(fn_strBrReplcae('서버에 적용되지 않은 정보가 있습니다. <br> 진행 시 수정 사항이 초기화 됩니다. <br> 계속 진행하시겠습니까?'));
 		}else if(gbn == "apply"){
 			confirm_title = 'Proxy 설정 적용';
-			$('#confirm_multi_msg').html(fn_strBrReplcae('적용 시 Proxy 재구동이 필요하여, Proxy를 통해 현재 연결되어있는 DB 세션이 모두 끊어지게 됩니다. 계속 진행하시겠습니까?'));
+			$('#confirm_multi_msg').html(fn_strBrReplcae('수정 사항 적용 시 Proxy가 재구동되어,<br> 연관된 DB 세션이 모두 끊어지게 됩니다.<br> 계속 진행하시겠습니까?'));
 		}
 		
 		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
@@ -932,7 +935,15 @@
 			if(selRow.use_yn=="Y" || selRow.exe_status=="TC001501"){
 				//사용 및 구동 중지 후 삭제가 가능합니다.
 				showSwalIcon('사용 및 구동 중지 후 삭제가 가능합니다.', '<spring:message code="common.close" />', '', 'error');
-			}else{
+			}else if(selRow.master_gbn=="M"){
+				var rowLen = proxyServerTable.rows().data().length;
+				var rowDatas = proxyServerTable.rows().data();
+				for(var i=0; i < rowLen ; i++){
+					if(selRow.pry_svr_id != rowDatas[i].pry_svr_id && rowDatas[i].master_svr_id == selRow.pry_svr_id){
+						showSwalIcon('해당 서버와 연관된 Backup 서버가 존재합니다.\nBackup 서버를 먼저 삭제한 후 삭제 해주세요.', '<spring:message code="common.close" />', '', 'error');
+						return;
+					}
+				}
 				fn_multiConfirmModal("pry_svr_del");
 			}
 		}
@@ -1076,7 +1087,7 @@
 			return;
 		}else{
 			$("#modYn").val("Y");
-			showSwalIcon('상단의 [설정 적용]을 실행해야 변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+			showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 			delVipInstRows[delVipInstRows.length] = vipInstTable.row('.selected').data();
 			vipInstTable.row('.selected').remove().draw();
 		}
@@ -1090,7 +1101,7 @@
 			return;
 		}else{
 			$("#modYn").val("Y");
-			showSwalIcon('상단의 [설정 적용]을 실행해야 변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+			showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 			delListenerRows[delListenerRows.length] = proxyListenTable.row('.selected').data();
 			proxyListenTable.row('.selected').remove().draw();
 		}
@@ -1214,7 +1225,7 @@
      * 상세 정보 수정 사항 서버에 적용
     ******************************************************** */
 	function fn_apply_conf_info(){
-		showDangerToast('top-right', 'Config 적용 중에는 Proxy가 재구동됩니다. 구동 완료 시 까지 등록/수정이 불가능합니다.', 'Config 파일 재생성 및 적용');
+		showDangerToast('top-right', 'Config 적용 중에는 Proxy가 재구동됩니다. \n구동 완료 시 까지 등록/수정이 불가능합니다.', 'Config 파일 재생성 및 적용');
 		fn_btn_setEnable("disabled");
 		
 		//data 생성
@@ -1488,7 +1499,7 @@
 								</div>
 								<div class="form-group row" style="margin-bottom: 0px !important;">
 									<label for="glb_cl_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
-										클라이언트 연결 최대 시간
+										&nbsp;&nbsp;&nbsp;클라이언트 연결 최대 시간
 									</label>
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-sm glb_cl_con_max_tm_num" maxlength="5" id="glb_cl_con_max_tm_num" name="glb_cl_con_max_tm_num" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
@@ -1514,7 +1525,7 @@
 								</div>
 								<div class="form-group row" style="margin-bottom:-17px !important;">
 									<label for="glb_svr_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
-										서버 연결 최대 시간
+										&nbsp;&nbsp;&nbsp;서버 연결 최대 시간
 									</label>
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-sm glb_svr_con_max_tm_num" maxlength="5" id="glb_svr_con_max_tm_num" name="glb_svr_con_max_tm_num" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />

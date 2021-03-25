@@ -537,10 +537,11 @@
         * Description : Proxy 서버 상태값 업데이트
         * Author : 김민정
         **/
-        UPDATE T_PRY_SVR_I
-           SET EXE_STATUS = #{exe_status}
-             , LST_MDFR_ID = #{lst_mdfr_id}
-             , LST_MDF_DTM = clock_timestamp()
+        UPDATE 	T_PRY_SVR_I
+           SET 	EXE_STATUS = #{exe_status}
+           , 	USE_YN = #{use_yn}
+           ,	LST_MDFR_ID = #{lst_mdfr_id}
+           , 	LST_MDF_DTM = clock_timestamp()
          WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
 	</update>
 </mapper>

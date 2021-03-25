@@ -449,6 +449,8 @@ public class ProxySettingController {
 				String status = request.getParameter("exe_status");
 				param.put("pry_svr_id", prySvrId);
 				param.put("exe_status", status);
+				if(status.equals("TC001502")) param.put("use_yn", "N");
+				else param.put("use_yn", "Y");
 				param.put("lst_mdfr_id", lst_mdfr_id);
 				
 				resultObj = new JSONObject();

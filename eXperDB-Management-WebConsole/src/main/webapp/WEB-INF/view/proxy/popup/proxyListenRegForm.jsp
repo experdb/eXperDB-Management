@@ -48,8 +48,8 @@ function fn_serverListTable_init() {
 					},
 					{data : "chk_portno", className : "dt-center",  defaultContent : "",
 						render : function(data, type, full, meta) {
-							var html = '<input type="number" class="form-control form-control-xsm" maxlength="30"';
-							html +='id="chk_portno_'+meta.row+'" value="'+full.chk_portno+'" name="chk_portno_'+meta.row+'" onkeyup="fn_edit_serverList('+meta.row+',\'chk_portno\');fn_checkWord(this,5);" onblur="this.value=this.value.trim()" placeholder="5자리까지 입력 가능합니다." />';
+							var html = '<input type="number" class="form-control form-control-xsm" maxlength="5"';
+							html +='id="chk_portno_'+meta.row+'" value="'+full.chk_portno+'" name="chk_portno_'+meta.row+'"  onKeyPress="chk_Number(this);" onkeyup="fn_edit_serverList('+meta.row+',\'chk_portno\');fn_checkWord(this,5);" onblur="this.value=this.value.trim()" placeholder="5자리까지 입력 가능합니다." />';
 							return html;
 						}
 					},
@@ -131,7 +131,8 @@ function fn_serverListTable_init() {
 					validatorIpFormat3 :true
 				},
 				lstnReg_con_bind_port: {
-					required: true
+					required: true,
+					validatorPort: true
 				},
 				lstnReg_lsn_desc: {
 					required:true
@@ -161,7 +162,8 @@ function fn_serverListTable_init() {
 					validatorIpFormat3 : '<spring:message code="errors.format" arguments="'+ 'IP주소' +'"/>'
 				},
 				lstnReg_con_bind_port: {
-					required: '<spring:message code="eXperDB_proxy.msg2"/>'
+					required: '<spring:message code="eXperDB_proxy.msg2"/>',
+					validatorPort: '0~65535 사이의 숫자를 입력해야합니다.'
 				},
 				lstnReg_lsn_desc: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>'
@@ -245,7 +247,7 @@ function fn_serverListTable_init() {
 	 ******************************************************** */
 	function lstnReg_add_listener(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
-		showSwalIcon('상단의 [설정 적용]을 실행해야 변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
 		proxyListenTable.row.add({
 			"lsn_nm" : $("#lstnReg_lsn_nm", "#insProxyListenForm").val(),
@@ -267,7 +269,7 @@ function fn_serverListTable_init() {
 	 ******************************************************** */
 	function lnstReg_mod_listener(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
-		showSwalIcon('상단의 [설정 적용]을 실행해야 변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
 		
 		//수정된 내용 반영
@@ -411,13 +413,13 @@ function fn_serverListTable_init() {
 										bind(*)
 									</label>
 									<div class="col-sm-2_2">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_con_bind_ip" name="lstnReg_con_bind_ip" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="ip 주소 또는 *" tabindex=2 />
+										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_con_bind_ip" name="lstnReg_con_bind_ip" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()" placeholder="ip 주소 또는 *" tabindex=2 />
 									</div>
 									<div class="col-sm-auto col-form-label-sm">
 										:
 									</div>
 									<div class="col-sm-1_5">
-										<input type="number" class="form-control form-control-xsm" maxlength="25" id="lstnReg_con_bind_port" name="lstnReg_con_bind_port" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="port" tabindex=2 />
+										<input type="number" class="form-control form-control-xsm" maxlength="5" id="lstnReg_con_bind_port" name="lstnReg_con_bind_port"  onKeyPress="chk_Number(this);" onkeyup="fn_checkWord(this,5)" onblur="this.value=this.value.trim()" placeholder="port" tabindex=2 />
 									</div>
 								</div>
 								<div class="form-group row row-last">
