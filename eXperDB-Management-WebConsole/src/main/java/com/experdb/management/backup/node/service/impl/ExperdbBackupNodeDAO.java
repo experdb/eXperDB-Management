@@ -57,4 +57,9 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 		sql2.update("backupNodeSql.setScheduleJob2", jobInsert);
 	}
 
+
+	public int checkJobExist(String ipadr) {
+		return sql2.selectOne("backupNodeSql.checkJobExist", ipadr);
+	}
+
 }

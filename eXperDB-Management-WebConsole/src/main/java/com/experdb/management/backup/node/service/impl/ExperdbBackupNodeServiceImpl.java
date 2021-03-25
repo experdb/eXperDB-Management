@@ -150,6 +150,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		return result;
 	}
 
+	// 백업 정보 불러오기
 	@Override
 	@SuppressWarnings({ "unchecked"})
 	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException, ParseException, ParserConfigurationException {
@@ -165,7 +166,6 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		Map<String, Object> readXml = new HashMap<>();
 		
 		String fileName = request.getParameter("ipadr").replace(".", "_").trim()+".xml";
-//		String fileName = string.replace(".", "_").trim()+".xml";
 		
 		String path = "C://test//backupXml//" + fileName;
 //		String path = "/opt/Arcserve/d2dserver/bin/jobs" + fileName;
@@ -253,7 +253,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		return result;
 	}
 
-
+	// 백업 정보 등록하기
 	 @Override
 	public void scheduleInsert(HttpServletRequest request, Map<Object, String> param) throws Exception {
 		System.out.println("========= scheduleInsert SERVICE !!! =========");
@@ -272,10 +272,15 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
         
         int schExist = 0;
         
-		 String path = "/opt/Arcserve/d2dserver/bin/jobs";
-//		 String path = "C://test/backupXml/";
+        //////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////
+//		 String path = "/opt/Arcserve/d2dserver/bin/jobs";
+		 String path = "C://test/backupXml/";
+		 //////////////////////////////////////////////////////////////////////////////////////
+		 //////////////////////////////////////////////////////////////////////////////////////
+		 //////////////////////////////////////////////////////////////////////////////////////
 		 
-		
 		
 		String weekData = param.get("weekData").toString();
 		String ipadr = request.getParameter("nodeIpadr");
@@ -287,8 +292,18 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		String fdate = request.getParameter("date");
 		String fsetNum = request.getParameter("setNum");
 		
-		File file = new File(path + ipadr.replace(".", "_").trim()+".xml");
-		boolean fileExist = file.exists();
+		//////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////
+		// job이 등록된 상태인지 조회
+		int fileExist = fileExistCheck(ipadr);
+//		int fileExist = experdbBackupNodeDAO.checkJobExist(ipadr);
+		System.out.println("fileExist : " + fileExist);
+		// ** 존재하면 jobqueue, jobscript에 등록되어있는 정보 지워주기 **
+		
+		//////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////
 
 		
 		System.out.println("=============================");
@@ -347,14 +362,17 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		System.out.println("backupRetention : "+backupRetention.toString());
 		
 		// schedule 찍어보기
-		for(BackupScheduleVO bs : backupSchedule){
-			System.out.println(bs.toString());
-		}
+//		for(BackupScheduleVO bs : backupSchedule){
+//			System.out.println(bs.toString());
+//		}
 		
+		// 
+		
+		
+		
+		// make xml file
 		JobXMLMake xmlMake = new JobXMLMake();
 		xmlMake.xmlMake(backupLocation, backupScript, targetMachine, backupRetention, backupSchedule);
-		
-		
 		
 		Map<String, Object> jobInsert = new HashMap<>();
 		
@@ -368,7 +386,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		jobInsert.put("backupLocation", backupLocation.getUuid());
 		jobInsert.put("jobName", jobName);
 
-		if(fileExist){
+		if(fileExist>0){
 			System.out.println("$$$$$$ 파일이 존재한단다아아아아 $$$$$$");
 			experdbBackupNodeDAO.scheduleInsert2(jobInsert);
 		}else{			
@@ -488,6 +506,12 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 			schedule.setIntervalUnit("0");
 		}
 		return schedule;
+	}
+	
+	public int fileExistCheck(String ipadr) {
+		int fileExist = experdbBackupNodeDAO.checkJobExist(ipadr);
+		
+		return fileExist;
 	}
 	
 	public static Map<String, Object> dateSplit(String date) throws ParseException{
