@@ -140,7 +140,7 @@ function fn_init() {
 				return html;
 			},			
 			className : "dt-center", defaultContent : ""}
-		], 'select': {'style': 'single'}
+		]
 	});
 
 	 monitoringData.tables().header().to$().find('th:eq(0)').css('min-width');
@@ -158,6 +158,17 @@ function fn_init() {
 
 } // fn_init();
 
+
+$(function() {
+	   $('#monitoringData tbody').on( 'click', 'tr', function () {
+	         if ( $(this).hasClass('selected') ) {
+	         }
+	        else {	        	
+	        	monitoringData.$('tr.selected').removeClass('selected');
+	            $(this).addClass('selected');	   
+	        } 
+	    } );   
+	} );  
 
 function fn_runNow() {
 
