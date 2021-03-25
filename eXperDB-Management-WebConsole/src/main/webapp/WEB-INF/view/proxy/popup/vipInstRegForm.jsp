@@ -6,440 +6,275 @@
 
 <%
 	/**
-	* @Class Name : userManagerForm.jsp
-	* @Description : UserManagerForm 화면
+	* @Class Name : vipInstRegForm.jsp
+	* @Description : vipInstRegForm 화면
 	* @Modification Information
 	*
-	*   수정일         수정자                   수정내용
-	*  ------------    -----------    ---------------------------
-	*  2017.05.25     최초 생성
+	*   수정일         		수정자             수정내용
+	*  -----------	-----   -----------    ---------------------------
+	*  2021.03.16  	김민정  	최초 생성
 	*
-	* author 김주영 사원
-	* since 2017.05.25
+	* author 김민정
+	* since 2021.03.16
 	*
 	*/
 %>
 
 <script type="text/javascript">
+var vip_ip_msg =  '<spring:message code="eXperDB_proxy.vip" />';
+var vip_interface_msg = '<spring:message code="eXperDB_proxy.vip_interface" />';
+var vip_router_msg = '<spring:message code="eXperDB_proxy.vip_router" />';
+var vip_state_msg = '<spring:message code="eXperDB_proxy.vip_state" />';
+var vip_priority_msg = '<spring:message code="eXperDB_proxy.vip_priority" />';
+var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 
 	$(window.document).ready(function() {
-		
-		$(".ins_pwd_chk").keyup(function(){
-			var ins_pwd_val = $("#ins_pwd", "#insVipInstForm").val(); 
-			var ins_pwdCheck_val = $("#ins_pwdCheck", "#insVipInstForm").val(); 
-
-			if(ins_pwd_val != "" && ins_pwdCheck_val != ""){
-				if(ins_pwd_val == ins_pwdCheck_val){
-					//$("#pwdCheck_alert-danger", "#insVipInstForm").hide();
- 					$("#ins_save_submit", "#insVipInstForm").removeAttr("disabled");
-					$("#ins_save_submit", "#insVipInstForm").removeAttr("readonly");
-
-					$("#ins_passCheck_hid", "#insVipInstForm").val("1");
-				}else{ 
-					//$("#pwdCheck_alert-danger", "#insVipInstForm").show(); 
-					$("#ins_save_submit", "#insVipInstForm").attr("disabled", "disabled"); 
-					$("#ins_save_submit", "#insVipInstForm").attr("readonly", "readonly"); 
-
-					$("#ins_passCheck_hid", "#insVipInstForm").val("0");
-				}
-			} else {
-				//$("#pwdCheck_alert-danger", "#insVipInstForm").hide();
-				$("#ins_save_submit", "#insVipInstForm").removeAttr("disabled");
-				$("#ins_save_submit", "#insVipInstForm").removeAttr("readonly");
-
-				$("#ins_passCheck_hid", "#insVipInstForm").val("0");
-			}
+		$.validator.addMethod("validatorIpFormat2", function (str, element, param) {
+			  var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(3[0-2]|[0-2][0-9]?)$/;
+			    if (ipformat.test(str)) {
+			        return true;
+			    }
+			    return false;
 		});
-
-		$("#ins_pwd", "#insVipInstForm").blur(function(){
-			var ins_pwd_val = $("#ins_pwd", "#insVipInstForm").val(); 
-			
-			if (ins_pwd_val != "") {
-				var passed = pwdValidate(ins_pwd_val);
-
-				if (passed != "") {
-	 				//$("#ins_pwd_alert-danger", "#insVipInstForm").html(passed);
-					//$("#ins_pwd_alert-danger", "#insVipInstForm").show();
-					
-					//$("#ins_pwd_alert-light", "#insVipInstForm").html("");
-					//$("#ins_pwd_alert-light", "#insVipInstForm").hide();
-
-					$("#ins_save_submit", "#insVipInstForm").attr("disabled", "disabled"); 
-					$("#ins_save_submit", "#insVipInstForm").attr("readonly", "readonly"); 
-				} else {
-	 				//$("#ins_pwd_alert-danger", "#insVipInstForm").html("");
-					//$("#ins_pwd_alert-danger", "#insVipInstForm").hide();
-					$("#ins_save_submit", "#insVipInstForm").removeAttr("disabled");
-					$("#ins_save_submit", "#insVipInstForm").removeAttr("readonly");
-
-					var newpwdVal = pwdSafety($("#ins_pwd", "#insVipInstForm").val());
-					
-					if (newpwdVal != "") {
-		 				//$("#ins_pwd_alert-light", "#insVipInstForm").html(newpwdVal);
-						//$("#ins_pwd_alert-light", "#insVipInstForm").show();
-					} else {
-						//$("#ins_pwd_alert-light", "#insVipInstForm").html("");
-						//$("#ins_pwd_alert-light", "#insVipInstForm").hide();
+		
+		$.validator.addMethod("duplCheckVIp", function (str, element, param) {
+				var cnt = 0;
+			    var listLen = vipInstTable.rows().data().length;
+			    var tblData = vipInstTable.rows().data();
+			    for(var i=0; i< listLen; i++){
+			    	if(str==tblData[i].v_ip){
+			    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && $("#instReg_vip_cng_id", "#insVipInstForm").val() != tblData[i].vip_cng_id){
+			    			cnt++;
+			    		}else if($("#instReg_mode", "#insVipInstForm").val()=="reg"){
+			    			cnt++;
+			    		}
+			    	}
+			    }
+			    if(cnt > 0){
+			    	return false;
+			    }
+			    return true;
+		  });
+		  
+		  $.validator.addMethod("duplCheckRotId", function (str, element, param) {
+			  	var cnt = 0;
+			    var listLen = vipInstTable.rows().data().length;
+			    var tblData = vipInstTable.rows().data();
+			    for(var i=0; i< listLen; i++){
+			    	if(str==tblData[i].v_rot_id){
+			    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && $("#instReg_vip_cng_id", "#insVipInstForm").val() != tblData[i].vip_cng_id){
+			    			cnt++;
+			    		}else if($("#instReg_mode", "#insVipInstForm").val()=="reg"){
+			    			cnt++;
+			    		}
+			    	}
+			    }
+			    if(cnt > 0){
+			    	return false;
+			    }
+			    return true;
+		  });
+		
+		 $("#insVipInstForm").validate({
+		        rules: {
+		        	instReg_v_ip: {
+						required:true,
+						validatorIpFormat2 :true,
+						duplCheckVIp:true
+					},
+					instReg_v_if_nm: {
+						required: true
+					},
+					instReg_v_rot_id: {
+						required: true,
+						duplCheckRotId : true
+					},
+					instReg_state_nm: {
+						required: true
+					},
+					instReg_priority: {
+						required: true
+					},
+					instReg_chk_tm: {
+						required: true
 					}
-				}
-			} else {
- 				//$("#ins_pwd_alert-danger", "#insVipInstForm").html("");
-				//$("#ins_pwd_alert-danger", "#insVipInstForm").hide();
-				//$("#ins_pwd_alert-light", "#insVipInstForm").html("");
-				//$("#ins_pwd_alert-light", "#insVipInstForm").hide();
-				$("#ins_save_submit", "#insVipInstForm").removeAttr("disabled");
-				$("#ins_save_submit", "#insVipInstForm").removeAttr("readonly");
-			}
-		});  
-
-		$("#insVipInstForm").validate({
-			rules: {
-		        	ins_usr_id: {
-						required: true
+		        },
+		        messages: {
+		        	instReg_v_ip: {
+						required: '<spring:message code="eXperDB_proxy.msg2" />',
+						validatorIpFormat2 : '<spring:message code="errors.format" arguments="'+ 'IP주소' +'" />',
+						duplCheckVIp : '가상 IP가 중복됩니다.'
 					},
-					ins_usr_nm: {
-						required: true
+					instReg_v_if_nm: {
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
-					ins_pwd: {
-						required: true
+					instReg_v_rot_id: {
+						required: '<spring:message code="eXperDB_proxy.msg2" />',
+						duplCheckRotId : '가상 라우터 id가 중복됩니다'
 					},
-					ins_pwdCheck: {
-						required: true
+					instReg_state_nm: {
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
+					},
+					instReg_priority: {
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
+					},
+					instReg_chk_tm: {
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					}
-			},
-			messages: {
-					ins_usr_id: {
-						required: "<spring:message code='message.msg121' />"
-					},
-					ins_usr_nm: {
-						required: "<spring:message code='message.msg58' />"
-					},
-					ins_pwd: {
-						required: "<spring:message code='message.msg140' />"
-					},
-					ins_pwdCheck: {
-						required: "<spring:message code='message.msg141' />"
+		        },
+				submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
+					if($("#instReg_mode", "#insVipInstForm").val()=="mod"){
+						instReg_mod_vip_instance();
+					}else{
+						instReg_add_vip_instance();
 					}
-			},
-			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
-				fn_insPop_insert_confirm();
-			},
-			errorPlacement: function(label, element) {
-				label.addClass('mt-2 text-danger');
-				label.insertAfter(element);
-		    },
-		    highlight: function(element, errorClass) {
-		        $(element).parent().addClass('has-danger')
-		        $(element).addClass('form-control-danger')
-		    }
-		}); 
+				},
+		        errorPlacement: function(label, element) {
+		          label.addClass('mt-2 text-danger');
+		          label.insertAfter(element);
+		        },
+		        highlight: function(element, errorClass) {
+		          $(element).parent().addClass('has-danger')
+		          $(element).addClass('form-control-danger')
+		        }
+			});
 	});
-
-	/* ********************************************************
-	 * 작업기간 calender 셋팅
-	 ******************************************************** */
-	function fn_insDateCalenderSetting() {
-		var today = new Date();
-		var startDay = fn_dateParse("20180101");
-		var endDay = fn_dateParse("20991231");
-		
-		var day_today = today.toJSON().slice(0,10);
-		var day_start = startDay.toJSON().slice(0,10);
-		var day_end = endDay.toJSON().slice(0,10);
-
-		if ($("#ins_usr_expr_dt_div", "#insVipInstForm").length) {
-			$("#ins_usr_expr_dt_div", "#insVipInstForm").datepicker({
-			}).datepicker('setDate', day_today)
-			.datepicker('setStartDate', day_start)
-			.datepicker('setEndDate', day_end)
-			.on('hide', function(e) {
-				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
-			}); //값 셋팅
-		}
-
-		$("#ins_usr_expr_dt", "#insVipInstForm").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
-		$("#ins_usr_expr_dt_div", "#insVipInstForm").datepicker('updateDates');
-	}
-
-	/* ********************************************************
-	 * id 중복체크
-	 ******************************************************** */
-	function fn_insIdCheck() {
-		var usr_id_val = $("#ins_usr_id", "#insVipInstForm").val();
-
-		if (usr_id_val == "") {
-			showSwalIcon('<spring:message code="message.msg121" />', '<spring:message code="common.close" />', '', 'warning');
-			$("#ins_idCheck", "#insVipInstForm").val("0");
-			
-			//$("#idCheck_alert-danger", "#insVipInstForm").hide();
-			return;
-		}
-
-		$.ajax({
-			url : '/userManagerIdCheck.do',
-			type : 'post',
-			data : {
-				usr_id : usr_id_val
-			},
-			success : function(result) {
-				if (result == "true") {
-					$("#ins_idCheck", "#insVipInstForm").val("1");
-					
-					//$("#idCheck_alert-danger", "#insVipInstForm").show();
-				} else {
-					showSwalIcon('<spring:message code="message.msg123" />', '<spring:message code="common.close" />', '', 'error');
-					$("#ins_idCheck", "#insVipInstForm").val("0");
-					
-					//$("#idCheck_alert-danger", "#insVipInstForm").hide();
-				}
-			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				$("#ins_idCheck", "#insVipInstForm").val("0");
-				
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			}
-		});
-	}
-
-	/* ********************************************************
-	 * 등록 confirm
-	 ******************************************************** */
-	function fn_insPop_insert_confirm() {
-		if (!fn_ins_Validation())return false;
-
-		fn_multiConfirmModal("ins");
-	}
-
-	/* ********************************************************
-	 * 등록 validate
-	 ******************************************************** */
-	function fn_ins_Validation() {
-		var ins_idCheck_val = $("#ins_idCheck", "#insVipInstForm").val();
-		var ins_pwd_val = $("#ins_pwd", "#insVipInstForm").val(); 
-		var ins_pwdCheck_val = $("#ins_pwdCheck", "#insVipInstForm").val(); 
-
-		//중복체크 확인
-		if (ins_idCheck_val != 1) {
-			showSwalIcon('<spring:message code="message.msg142" />', '<spring:message code="common.close" />', '', 'warning');
-			$("#ins_idCheck", "#insVipInstForm").val("0");
-			
-			//$("#idCheck_alert-danger", "#insVipInstForm").hide();
-			return false;
-		}
-		
-		//패스워드 검증
-		if(ins_pwd_val != ins_pwdCheck_val){
-			//$("#pwdCheck_alert-danger", "#insVipInstForm").show(); 
-			$("#ins_save_submit", "#insVipInstForm").attr("disabled", "disabled"); 
-			$("#ins_save_submit", "#insVipInstForm").attr("readonly", "readonly"); 
-
-			$("#ins_passCheck_hid", "#insVipInstForm").val("0");
-			return false;
-		}
-
-		var passed = pwdValidate(ins_pwd_val);
-
-		if (passed != "") {
- 			//$("#ins_pwd_alert-danger", "#insVipInstForm").html(passed);
-			//$("#ins_pwd_alert-danger", "#insVipInstForm").show();
-				
-			//$("#ins_pwd_alert-light", "#insVipInstForm").html("");
-			//$("#ins_pwd_alert-light", "#insVipInstForm").hide();
-
-			$("#ins_save_submit", "#insVipInstForm").attr("disabled", "disabled"); 
-			$("#ins_save_submit", "#insVipInstForm").attr("readonly", "readonly"); 
-			
-			return false;
-		}
-		
-		return true;
-	}
-
-	/* ********************************************************
-	 * id 변경시
-	 ******************************************************** */
-	function fn_ins_id_chg(obj) {
-		$("#ins_idCheck", "#insVipInstForm").val("0");
-		//$("#idCheck_alert-danger", "#insVipInstForm").hide();
-	}
-
-	/* ********************************************************
-	 * 등록 실행
-	 ******************************************************** */
-	function fn_insPop_insert() {
-
-		if($("#ins_use_yn_chk", "#insVipInstForm").is(":checked") == true){
-			$("#ins_use_yn", "#insVipInstForm").val("Y");
-		} else {
-			$("#ins_use_yn", "#insVipInstForm").val("N");
-		}
-
-		if($("#ins_encp_use_yn_chk", "#insVipInstForm").is(":checked") == true){
-			$("#ins_encp_use_yn", "#insVipInstForm").val("Y");
-		} else {
-			$("#ins_encp_use_yn", "#insVipInstForm").val("N");
-		}
-
-		$('#pop_layer_proxy_inst_reg').modal('hide');
-
-		$.ajax({
-			url : '/insertUserManager.do',
-			data : {
-				usr_id : nvlPrmSet($("#ins_usr_id", "#insVipInstForm").val(), ''),
-				usr_nm : nvlPrmSet($("#ins_usr_nm", "#insVipInstForm").val(), ''),
-				pwd : nvlPrmSet($("#ins_pwd", "#insVipInstForm").val(), ''),
-				bln_nm : nvlPrmSet($("#ins_bln_nm", "#insVipInstForm").val(), ''),
-				dept_nm : nvlPrmSet($("#ins_dept_nm", "#insVipInstForm").val(), ''),
-				pst_nm : nvlPrmSet($("#ins_pst_nm", "#insVipInstForm").val(), ''),
-				rsp_bsn_nm : nvlPrmSet($("#ins_rsp_bsn_nm", "#insVipInstForm").val(), ''),
-				cpn : nvlPrmSet($("#ins_cpn", "#insVipInstForm").val(), ''),
-				usr_expr_dt : nvlPrmSet($("#ins_usr_expr_dt", "#insVipInstForm").val(), ''),
-				use_yn : nvlPrmSet($("#ins_use_yn", "#insVipInstForm").val(), ''),
-				encp_use_yn : nvlPrmSet($("#ins_encp_use_yn", "#insVipInstForm").val(), '')
-			},
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(data) {
-				if(data.resultCode == "0000000000"){
-					fn_multiConfirmModal("ins_menu");
-				} else if(data.resultCode == "8000000002") { //암호화 저장 실패
-					showSwalIcon('<spring:message code="message.msg05"/>', '<spring:message code="common.close" />', '', 'error');
-					$('#pop_layer_proxy_inst_reg').modal('show');
-					return;
-				} else if(data.resultCode == "8000000003") {
-					showSwalIcon(data.resultMessage, '<spring:message code="common.close" />', '', 'warning');
-					$('#pop_layer_proxy_inst_reg').modal('hide');
-				} else {
-					showSwalIcon(data.resultMessage +"("+data.resultCode+")", '<spring:message code="common.close" />', '', 'error');
-					$('#pop_layer_proxy_inst_reg').modal('show');
-					return;
-				}
-			}
-		});
-	}
-
-	/* ********************************************************
-	 * 메뉴권한 환면 이동
-	******************************************************** */
-	function fn_insPop_menu() {
- 		var usr_id = nvlPrmSet($("#ins_usr_id", "#insVipInstForm").val(), '');
+	function instReg_add_vip_instance(){
+		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
+		showSwalIcon('상단의 [설정 적용]을 실행해야 변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		$("#modYn").val("Y");
+		vipInstTable.row.add({
+			"state_nm" : $("#instReg_state_nm", "#insVipInstForm").val(),
+			"v_ip" : $("#instReg_v_ip", "#insVipInstForm").val(),
+			"v_rot_id" : $("#instReg_v_rot_id", "#insVipInstForm").val(),
+			"v_if_nm" : $("#instReg_v_if_nm", "#insVipInstForm").val(),
+			"priority" : $("#instReg_priority", "#insVipInstForm").val(),
+			"chk_tm" : $("#instReg_chk_tm", "#insVipInstForm").val(),
+			"vip_cng_id" : $("#instReg_vip_cng_id", "#insVipInstForm").val(),
+			"pry_svr_id" : $("#instReg_pry_svr_id", "#insVipInstForm").val()
+		}).draw();
 		$('#pop_layer_proxy_inst_reg').modal("hide");
-		
-		location.href='/menuAuthority.do?usr_id=' + nvlPrmSet($("#ins_usr_id", "#insVipInstForm").val(), '');
 	}
 	
-	
-	/* ********************************************************
-	 * 분
-	 ******************************************************** */
-	function fn_makeMin(){
-		var min = "";
-		var minHtml ="";
-		
-		minHtml += '<select class="form-control form-control-sm" name="exe_m" id="exe_m">';	
-		for(var i=0; i<=59; i++){
-			if(i >= 0 && i<10){
-				min = "0" + i;
-			}else{
-				min = i;
+	function instReg_mod_vip_instance(){
+		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
+		showSwalIcon('상단의 [설정 적용]을 실행해야 변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		$("#modYn").val("Y");
+		var dataLen = vipInstTable.rows().data().length;
+		var oriData = vipInstTable.rows().data();
+		for(var i=0; i<dataLen; i++){
+			if(oriData[i].vip_cng_id ==  $("#instReg_vip_cng_id", "#insVipInstForm").val()){
+				oriData[i].state_nm = $("#instReg_state_nm", "#insVipInstForm").val();
+				oriData[i].v_ip = $("#instReg_v_ip", "#insVipInstForm").val();
+				oriData[i].v_rot_id = $("#instReg_v_rot_id", "#insVipInstForm").val();
+				oriData[i].v_if_nm = $("#instReg_v_if_nm", "#insVipInstForm").val();
+				oriData[i].priority = $("#instReg_priority", "#insVipInstForm").val();
+				oriData[i].chk_tm = $("#instReg_chk_tm", "#insVipInstForm").val();
+				
+				var tempData = vipInstTable.rows().data();
+				vipInstTable.clear().draw();
+				vipInstTable.rows.add(tempData).draw();
 			}
-			minHtml += '<option value="'+min+'">'+min+'</option>';
 		}
-		minHtml += '</select> <spring:message code="schedule.minute" />&emsp;';	
-		$( "#min" ).append(minHtml);
+		$('#pop_layer_proxy_inst_reg').modal("hide");
+	}
+	
+	function fn_change_v_if_nm_sel(){
+		$("#instReg_v_if_nm", "#insVipInstForm").val($("#instReg_v_if_nm_sel", "#insVipInstForm").val());
+	}
+	function fn_change_v_ip_sel(){
+		$("#instReg_v_ip", "#insVipInstForm").val($("#instReg_v_ip_sel", "#insVipInstForm").val());
 	}
 	
 </script>
 <div class="modal fade" id="pop_layer_proxy_inst_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">
-		<div class="modal-content" style="width:1040px;">		 
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 200px 330px;">
+		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="eXperDB_proxy.instance_reg"/>
 				</h4>
-				
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="insVipInstForm">
+						<input type="hidden" id="instReg_pry_svr_id" name="instReg_pry_svr_id" />
+						<input type="hidden" id="instReg_vip_cng_id" name="instReg_vip_cng_id" />
+						<input type="hidden" id="instReg_mode" name="instReg_mode" />
 						<fieldset>
 							<div class="card-body card-body-border">
 								<div class="form-group row">
-									<label for="ins_if_nm" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="instReg_v_ip" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.position" /> --%>
-										Interface(*)
+										<spring:message code="eXperDB_proxy.vip" />(*)
 									</label>
-									<div class="col-sm-2" id="div_day_data_del_term">
-										<input type="text" class="form-control form-control-sm ins_if_nm" maxlength="20" id="ins_if_nm" name="ins_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=4 />
+									<div class="col-sm-3">
+										<input type="text" class="form-control form-control-xsm instReg_v_ip" maxlength="20" id="instReg_v_ip" name="instReg_v_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="xxx.xxx.xxx.xxx/xx" tabindex=1 />
 									</div>
-									<label for="ins_master_gbn" class="col-sm-2 col-form-label-sm pop-label-index">
+									<div class="col-sm-3">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_ip_sel" id="instReg_v_ip_sel" onchange="fn_change_v_ip_sel();"  tabindex=4 >
+											<option value="">직접 입력</option>
+											<option value="192.168.50.115/32">192.168.50.115/32</option>
+											<option value="192.168.50.116/32">192.168.50.116/32</option>
+											<option value="10.0.2.15/32">10.0.2.15/32</option>
+										</select>
+									</div>
+									<label for="instReg_state_nm" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.company" /> --%>
-										우선순위(*)
+										<spring:message code="eXperDB_proxy.vip_state" />(*)
 									</label>
 									<div class="col-sm-2">
-										<input type="text" class="form-control form-control-sm ins_priority" maxlength="20" id="ins_priority" name="ins_priority" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=4 />
-											
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_state_nm" id="instReg_state_nm"  tabindex=4 >
+											<option value="MASTER">MASTER</option>
+											<option value="BACKUP">BACKUP</option>
+										</select>
 									</div>
-									<label for="ins_chk_tm" class="col-sm-2 col-form-label-sm pop-label-index">
+								</div>
+								<div class="form-group row">
+									<label for="instReg_v_if_nm" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										체크간격(*)
+										<spring:message code="eXperDB_proxy.vip_interface" />(*)
 									</label>
-									<div class="col-sm-2">
-										<input type="text" class="form-control form-control-sm ins_chk_tm" maxlength="20" id="ins_chk_tm" name="ins_chk_tm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=4 />
+									<div class="col-sm-3">
+										<input type="text" class="form-control form-control-xsm instReg_v_if_nm" maxlength="20" id="instReg_v_if_nm" name="instReg_v_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+									</div>
+									<div class="col-sm-3">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_if_nm_sel" id="instReg_v_if_nm_sel" onchange="fn_change_v_if_nm_sel();"  tabindex=4 >
+											<option value="">직접 입력</option>
+											<option value="enp0s3">enp0s3</option>
+											<option value="enp0s8">enp0s8</option>
+										</select>
+									</div>
+									<label for="instReg_v_rot_id" class="col-sm-2 col-form-label-sm pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="eXperDB_proxy.vip_router" />(*)
+									</label>
+									<div class="col-sm-2" id="div_min_data_del_term">
+										<input type="number" class="form-control form-control-xsm instReg_v_rot_id" maxlength="20" id="instReg_v_rot_id" name="instReg_v_rot_id" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=3 />
 									</div>
 								</div>
 								<div class="form-group row row-last">
-									<label for="ins_v_ip" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="instReg_priority" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.position" /> --%>
-										가상 IP(*)
+										<%-- <spring:message code="user_management.company" /> --%>
+										<spring:message code="eXperDB_proxy.vip_priority" />(*)
 									</label>
 									<div class="col-sm-2">
-										<input type="text" class="form-control form-control-sm ins_v_ip" maxlength="20" id="ins_v_ip" name="ins_v_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=4 />
+										<input type="number" class="form-control form-control-xsm instReg_priority" maxlength="20" id="instReg_priority" name="instReg_priority" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=5 />
 									</div>
-									
-									<label for="ins_v_if_nm" class="col-sm-2 col-form-label-sm pop-label-index">
+									<div class="col-sm-4">
+									</div>
+									<label for="instReg_chk_tm" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.Responsibilities" /> --%>
-										가상 Interface(*)
+										<spring:message code="eXperDB_proxy.vip_check_tm" />(*)
 									</label>
 									<div class="col-sm-2">
-										<input type="text" class="form-control form-control-sm ins_v_if_nm" maxlength="20" id="ins_v_if_nm" name="ins_v_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=4 />
-									</div>
-									<label for="ins_v_rot_id" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.Responsibilities" /> --%>
-										가상 라우터 ID(*)
-									</label>
-									<div class="col-sm-2" id="div_min_data_del_term">
-										<input type="text" class="form-control form-control-sm ins_v_rot_id" maxlength="20" id="ins_v_rot_id" name="ins_v_rot_id" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=4 />
+										<input type="number" class="form-control form-control-xsm instReg_chk_tm" maxlength="20" id="instReg_chk_tm" name="instReg_chk_tm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=6 />
 									</div>
 								</div>
 							</div>
 							<br/>
 							
 							<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" id="ins_save_submit" value='<spring:message code="common.save" />' />
+								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" id="instReg_save_submit" value='<spring:message code="common.save" />'/>
 								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 							</div>
 						</fieldset>

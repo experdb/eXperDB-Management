@@ -197,6 +197,7 @@ $(window).ready(function(){
 			for(var i=0; i<$(this).find('form').length; i++){
 				if ($(this).find('form')[i] != null && $(this).find('form')[i] != undefined) {
 				    $(this).find('form')[i].reset();
+				    $(this).find('form').validate().resetForm();
 				}
 			}
 		}

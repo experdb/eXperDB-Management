@@ -10290,6 +10290,10 @@ pre code {
   border-top: 1px solid #c9ccd7;
 }
 
+.input-table td{
+	padding: 0.4rem 0.9375rem !important;
+}
+
 .table thead th, .jsgrid .jsgrid-table thead th {
   vertical-align: bottom;
   border-bottom: 2px solid #c9ccd7;

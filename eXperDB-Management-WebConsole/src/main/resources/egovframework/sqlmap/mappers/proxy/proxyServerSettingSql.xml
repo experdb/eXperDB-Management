@@ -46,6 +46,36 @@
 	        </if>
         ORDER BY A.LST_MDF_DTM DESC
 	</select>
+	<select id="selectPoxyAgentSvrList" resultType="hashMap">
+		/**
+		* Query ID : selectProxyAgentList
+		* Description : 미등록된 Agent의 프로시 서버 정보를 갖고 오기 위한 쿼리 서버 정보 없어도 ip만 출력
+		* Author : 김민정
+		**/
+		SELECT  A.PRY_SVR_ID,
+       			B.IPADR,
+       			B.AGT_SN,
+       			A.PRY_SVR_NM,
+       			A.PRY_PTH,
+       			A.KAL_PTH,
+       			A.USE_YN,
+       			A.EXE_STATUS,
+       			A.KAL_EXE_STATUS,
+       			A.MASTER_GBN,
+       			A.MASTER_SVR_ID,
+       			A.DB_SVR_ID,
+       			A.DAY_DATA_DEL_TERM,
+       			A.MIN_DATA_DEL_TERM,
+       			A.FRST_REGR_ID,
+       			A.FRST_REG_DTM,
+       			A.LST_MDFR_ID,
+       			A.LST_MDF_DTM
+       	FROM	T_PRY_SVR_I A RIGHT OUTER JOIN T_PRY_AGT_I B ON A.IPADR = B.IPADR 
+		WHERE   1 = 1
+		<if test="svr_use_yn != null and svr_use_yn != '' ">
+				AND B.SVR_USE_YN = #{svr_use_yn}
+		</if>
+	</select>
 	<select id="selectProxyGlobal" resultType="proxyGlobalVO">
         /**
 		* Query ID : selectProxyGlobal
@@ -135,6 +165,7 @@
 		FROM 	T_PRY_SVR_I
 		WHERE 	DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id})
 		AND 	PRY_SVR_ID != #{pry_svr_id}
+		AND		MASTER_GBN = 'M'
 		ORDER 	BY pry_svr_nm
 	</select>
 	<update id="updateProxyAgentInfo" parameterType="proxyServerVO">
@@ -149,6 +180,20 @@
              , LST_MDF_DTM = clock_timestamp()
          WHERE AGT_SN = #{agt_sn}::numeric
 	</update>
+	<update id="updateProxyAgentInfoFromProxyId" parameterType="hashMap">
+        /**
+        * Query ID : updateProxyAgentInfo
+        * Description : Proxy Agent 정보 업데이트
+        * Author : 김민정
+        **/
+        UPDATE T_PRY_AGT_I
+           SET SVR_USE_YN = #{svr_use_yn}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE AGT_SN = (	SELECT	AGT_SN 
+         					FROM 	T_PRY_SVR_I 
+         					WHERE 	PRY_SVR_ID = #{pry_svr_id})
+	</update>
 	<update id="updateProxyServerInfo" parameterType="proxyServerVO">
         /**
         * Query ID : updateProxyServerInfo"
@@ -162,6 +207,338 @@
              , DB_SVR_ID = #{db_svr_id}::numeric
              , MASTER_GBN = #{master_gbn}
              , USE_YN = #{use_yn}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
+	</update>
+	<delete id="deleteProxyConfHistList" parameterType="int">
+		/**
+		* Query ID : deleteProxyConfHist
+		* Description : 프록시 설정 변경 이력 삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRYCNG_G
+         WHERE PRY_SVR_ID=#{pry_svr_id}
+	</delete>
+	<delete id="deleteProxyActStateConfHistList" parameterType="int">
+		/**
+		* Query ID : deleteProxyActStateConfHist
+		* Description : 기동상태 변경 이력
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_ACTSTATE_CNG_G
+        WHERE PRY_SVR_ID=#{pry_svr_id}
+	</delete>
+	<delete id="deleteProxySvrStatusHistList" parameterType="int">
+		/**
+		* Query ID : deleteProxySvrStatusHist
+		* Description : 서버 실시간 상태 로그 삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_SVR_STATUS_G
+        WHERE PRY_SVR_ID=#{pry_svr_id}
+	</delete>
+	<delete id="deletePryListenerSvrList" parameterType="int">
+		/**
+		* Query ID : deleteUserManager
+		* Description : 리스너 서버 정보 삭제
+		* Author : 김민정
+		**/
+		DELETE FROM T_PRY_LSN_SVR_I
+		WHERE PRY_SVR_ID=#{pry_svr_id}
+	</delete>
+	<delete id="deletePryListenerList" parameterType="int">
+		/**
+		* Query ID : deletePryListenerList
+		* Description : 리스너 정보 삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_LSN_I
+		WHERE PRY_SVR_ID=#{pry_svr_id}
+	</delete>
+	<delete id="deletePryVipConfList" parameterType="int">
+		/**
+		* Query ID : deletePryVipConfList
+		* Description : vip 설정 삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_VIPCNG_I
+		WHERE PRY_SVR_ID=#{pry_svr_id}
+	</delete>
+	<delete id="deleteGlobalConfList" parameterType="int">
+		/**
+		* Query ID : deleteGlobalConfList
+		* Description : 프록시 Global 설정  삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_GLB_I
+		WHERE PRY_SVR_ID=#{pry_svr_id}
+	</delete>
+	<delete id="deleteProxyServer" parameterType="int">
+		/**
+		* Query ID : deleteProxyServer
+		* Description : 프록시 서버 정보 삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_SVR_I
+		WHERE PRY_SVR_ID=#{pry_svr_id}
+	</delete>
+	<select id="selectListenServerList" resultType="proxyListenerServerVO">
+		/**
+		* Query ID : selectListenServerList
+		* Description : proxy Listener server list
+		* Author : 김민정
+		**/
+		SELECT 	LSN_SVR_ID, 
+				DB_CON_ADDR, 
+				PRY_SVR_ID, 
+				LSN_ID, 
+				CHK_PORTNO, 
+				BACKUP_YN, 
+				FRST_REGR_ID, 
+				FRST_REG_DTM, 
+				LST_MDFR_ID, 
+				LST_MDF_DTM
+		FROM 	T_PRY_LSN_SVR_I
+		WHERE   1 = 1
+			<if test="pry_svr_id != null ">
+				AND PRY_SVR_ID = #{pry_svr_id}
+			</if>
+			<if test="lsn_id != null ">
+	        	AND LSN_ID = #{lsn_id}
+	        </if>
+        ORDER BY LST_MDF_DTM DESC
+	</select>
+	<update id="updateProxyGlobalConf" parameterType="proxyGlobalVO">
+        /**
+        * Query ID : updateProxyGlobalConf"
+        * Description : Proxy Global Config 정보 수정
+        * Author : 김민정
+        **/
+        UPDATE T_PRY_GLB_I
+           SET MAX_CON_CNT = #{max_con_cnt}
+             , CL_CON_MAX_TM = #{cl_con_max_tm}
+             , CON_DEL_TM = #{con_del_tm}
+             , SVR_CON_MAX_TM = #{svr_con_max_tm}
+             , CHK_TM = #{chk_tm}
+             , IF_NM = #{if_nm}
+             , OBJ_IP = #{obj_ip}
+             , PEER_SERVER_IP = #{peer_server_ip}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	PRY_GLB_ID = #{pry_glb_id}::numeric 
+	</update>
+	<update id="updatePryVipConf" parameterType="proxyVipConfigVO">
+        /**
+        * Query ID : updatePryVipConf"
+        * Description : Proxy VIP Config 정보 수정
+        * Author : 김민정
+        **/
+        UPDATE T_PRY_VIPCNG_I
+           SET V_IP = #{v_ip}
+             , V_ROT_ID = #{v_rot_id}::numeric
+             , V_IF_NM = #{v_if_nm}
+             , PRIORITY = #{priority}::numeric
+             , CHK_TM = #{chk_tm}::numeric
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	VIP_CNG_ID = #{vip_cng_id}::numeric 
+         AND 	STATE_NM = #{state_nm}
+	</update>
+	<insert id="insertPryVipConf" parameterType="proxyVipConfigVO">
+    	/**
+	 	* Query ID : insertPryVipConf
+	 	* Description : Proxy VIP Config 정보 둥록
+	 	* Author : 김민정
+	 	**/
+	 	INSERT INTO T_PRY_VIPCNG_I
+		(
+      		VIP_CNG_ID, 
+      		STATE_NM, 
+      		PRY_SVR_ID, 
+      		V_IP, 
+      		V_ROT_ID, 
+      		V_IF_NM, 
+      		PRIORITY, 
+      		CHK_TM, 
+      		FRST_REGR_ID, 
+      		FRST_REG_DTM, 
+      		LST_MDFR_ID, 
+      		LST_MDF_DTM
+		) 
+		SELECT 	MAX(VIP_CNG_ID)+1 AS VIP_CNG_ID, 
+				#{state_nm} AS STATE_NM,
+				#{pry_svr_id} AS PRY_SVR_ID,
+				#{v_ip} AS V_IP,
+				#{v_rot_id} AS V_ROT_ID,
+				#{v_if_nm} AS V_IF_NM,
+				#{priority} AS PRIORITY,
+				#{chk_tm} AS CHK_TM,
+				#{lst_mdfr_id} AS FRST_REGR_ID,
+				clock_timestamp() AS FRST_REG_DTM,
+				#{lst_mdfr_id} AS LST_MDFR_ID,
+				clock_timestamp() AS LST_MDF_DTM
+		FROM 	T_PRY_VIPCNG_I
+	</insert>
+	<delete id="deletePryVipConf" parameterType="proxyVipConfigVO">
+		/**
+		* Query ID : deletePryVipConf
+		* Description : Proxy VIP Config 정보 삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_VIPCNG_I
+		WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+        AND		VIP_CNG_ID = #{vip_cng_id}::numeric 
+	</delete>
+	<update id="updatePryListener" parameterType="proxyListenerVO">
+        /**
+        * Query ID : updatePryListener"
+        * Description : Proxy Listener 정보 수정
+        * Author : 김민정
+        **/
+        UPDATE T_PRY_LSN_I
+           SET CON_BIND_PORT = #{con_bind_port}
+             , LSN_DESC = #{lsn_desc}
+             , DB_USR_ID = #{db_usr_id}
+             , DB_ID = #{db_id}::numeric
+             , DB_NM = #{db_nm}
+             , CON_SIM_QUERY = #{con_sim_query}
+             , FIELD_VAL = #{field_val}
+             , FIELD_NM = #{field_nm}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	LSN_ID = #{lsn_id}::numeric
+	</update>
+	<insert id="insertPryListener" parameterType="proxyListenerVO">
+    	/**
+	 	* Query ID : insertPryListener
+	 	* Description : Proxy Listener 정보  둥록
+	 	* Author : 김민정
+	 	**/
+	 	INSERT INTO T_PRY_LSN_I
+		(
+      		LSN_ID, 
+      		PRY_SVR_ID, 
+      		LSN_NM, 
+      		CON_BIND_PORT, 
+      		LSN_DESC, 
+      		DB_USR_ID, 
+      		DB_ID, 
+      		DB_NM, 
+      		CON_SIM_QUERY, 
+      		FIELD_VAL, 
+      		FIELD_NM, 
+      		FRST_REGR_ID, 
+      		FRST_REG_DTM, 
+      		LST_MDFR_ID, 
+      		LST_MDF_DTM
+		) 
+		SELECT 	MAX(LSN_ID)+1 AS LSN_ID, 
+				#{pry_svr_id} AS PRY_SVR_ID,
+				#{lsn_nm} AS LSN_NM,
+				#{con_bind_port} AS CON_BIND_PORT,
+				#{lsn_desc} AS LSN_DESC,
+				#{db_usr_id} AS DB_USR_ID,
+				#{db_id} AS DB_ID,
+				#{db_nm} AS DB_NM,
+				#{con_sim_query} AS CON_SIM_QUERY,
+				#{field_val} AS FIELD_VAL,
+				#{field_nm} AS FIELD_NM,
+				#{lst_mdfr_id} AS FRST_REGR_ID,
+				clock_timestamp() AS FRST_REG_DTM,
+				#{lst_mdfr_id} AS LST_MDFR_ID,
+				clock_timestamp() AS LST_MDF_DTM
+		FROM 	T_PRY_LSN_I
+	</insert>
+	<select id="selectPryListenerMaxId" resultType="int">
+		/**
+		* Query ID : selectPryListenerNewId
+		* Description :
+		* Author : 김민정
+		**/
+		SELECT 	MAX(LSN_ID) AS LSN_ID
+		FROM 	T_PRY_LSN_I
+	</select>
+	<update id="updatePryListenerSvr" parameterType="proxyListenerServerVO">
+        /**
+        * Query ID : updatePryListenerSvr"
+        * Description : Proxy Listener Server 정보 수정
+        * Author : 김민정
+        **/
+        UPDATE 	T_PRY_LSN_SVR_I
+           SET 	CHK_PORTNO = #{chk_portno}::numeric
+             , 	BACKUP_YN = #{backup_yn}
+             , 	LST_MDFR_ID = #{lst_mdfr_id}
+             , 	LST_MDF_DTM = clock_timestamp()
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	LSN_ID = #{lsn_id}::numeric
+         AND 	LSN_SVR_ID = #{lsn_svr_id}::numeric
+         AND	DB_CON_ADDR = #{db_con_addr}
+	</update>
+	<insert id="insertPryListenerSvr" parameterType="proxyListenerServerVO">
+    	/**
+	 	* Query ID : insertPryListenerSvr
+	 	* Description : Proxy Listener Server 정보  둥록
+	 	* Author : 김민정
+	 	**/
+	 	INSERT INTO T_PRY_LSN_SVR_I
+		(
+      		LSN_SVR_ID, 
+      		DB_CON_ADDR, 
+      		PRY_SVR_ID, 
+      		LSN_ID, 
+      		CHK_PORTNO, 
+      		BACKUP_YN, 
+      		FRST_REGR_ID, 
+      		FRST_REG_DTM, 
+      		LST_MDFR_ID, 
+      		LST_MDF_DTM
+		) 
+		SELECT 	MAX(LSN_SVR_ID)+1 AS LSN_SVR_ID, 
+				#{db_con_addr} AS DB_CON_ADDR, 
+				#{pry_svr_id} AS PRY_SVR_ID,
+				#{lsn_id} AS LSN_ID,
+				#{chk_portno} AS CHK_PORTNO,
+				#{backup_yn} AS BACKUP_YN,
+				#{lst_mdfr_id} AS FRST_REGR_ID,
+				clock_timestamp() AS FRST_REG_DTM,
+				#{lst_mdfr_id} AS LST_MDFR_ID,
+				clock_timestamp() AS LST_MDF_DTM
+		FROM 	T_PRY_LSN_SVR_I
+	</insert>
+	<delete id="deletePryListenerSvr" parameterType="proxyListenerServerVO">
+		/**
+		* Query ID : deletePryListenerSvr
+		* Description : Proxy Listener Server 정보  삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_LSN_SVR_I
+		WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+        AND		LSN_SVR_ID = #{lsn_svr_id}::numeric 
+        AND		LSN_ID = #{lsn_id}::numeric 
+        AND		DB_CON_ADDR = #{db_con_addr}
+	</delete>
+	<delete id="deletePryListener" parameterType="proxyListenerVO">
+		/**
+		* Query ID : deletePryListener
+		* Description : Proxy Listener 정보  삭제
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_LSN_I
+		WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+        AND		LSN_ID = #{lsn_id}::numeric 
+	</delete>
+	<update id="updateProxyServerStatus" parameterType="hashMap">
+        /**
+        * Query ID : updateProxyServerStatus"
+        * Description : Proxy 서버 상태값 업데이트
+        * Author : 김민정
+        **/
+        UPDATE T_PRY_SVR_I
+           SET EXE_STATUS = #{exe_status}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE PRY_SVR_ID = #{pry_svr_id}::numeric

@@ -70,6 +70,7 @@
 		<typeAlias alias="proxyServerVO" type="com.experdb.management.proxy.service.ProxyServerVO"/>
 		<typeAlias alias="proxyGlobalVO" type="com.experdb.management.proxy.service.ProxyGlobalVO"/> 
 		<typeAlias alias="proxyListenerVO" type="com.experdb.management.proxy.service.ProxyListenerVO"/> 
+		<typeAlias alias="proxyListenerServerVO" type="com.experdb.management.proxy.service.ProxyListenerServerVO"/> 
 		<typeAlias alias="proxyVipConfigVO" type="com.experdb.management.proxy.service.ProxyVipConfigVO"/> 
 		<typeAlias alias="proxyAgentVO" type="com.experdb.management.proxy.service.ProxyAgentVO"/> 
 		<typeAlias alias="proxyStatisticVO" type="com.experdb.management.proxy.service.ProxyStatisticVO"/>

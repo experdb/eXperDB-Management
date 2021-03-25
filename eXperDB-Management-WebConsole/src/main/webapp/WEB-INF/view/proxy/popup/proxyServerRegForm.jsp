@@ -54,8 +54,73 @@ var mgmtDbmsTable = null;
 	}
 	
 	$(window.document).ready(function() {
-		$("#pwd_check_msg_div", "#svrRegProxyServerForm").hide();
 		fn_mgmtDbmsTable_init();
+		
+		 $("#svrRegProxyServerForm").validate({
+		        rules: {
+		        	svrReg_ipadr: {
+						required:true
+					},
+					svrReg_pry_svr_nm: {
+						required: true
+					},
+					svrReg_day_data_del_term: {
+						required: true
+					},
+					svrReg_min_data_del_term: {
+						required: true
+					},
+					svrReg_master_gbn: {
+						required: true
+					},
+					svrReg_master_svr_id:{
+						required: function(){
+							if($("#svrReg_master_gbn", "#svrRegProxyServerForm").val() == "B"){
+								return true;
+							}else{
+								return false;
+							}
+						}
+					},
+					svrReg_db_svr_id: {
+						required: true
+					}
+		        },
+		        messages: {
+		        	svrReg_ipadr: {
+						required: '<spring:message code="errors.required" arguments="'+ 'IP주소' +'" />'
+					},
+					svrReg_pry_svr_nm: {
+						required: '<spring:message code="errors.required" arguments="'+ '서버명' +'" />'
+					},
+					svrReg_day_data_del_term: {
+						required: '<spring:message code="errors.required" arguments="'+ '일별 데이터 보관 기간' +'" />'
+					},
+					svrReg_min_data_del_term: {
+						required: '<spring:message code="errors.required" arguments="'+ '분별 데이터 보관 기간' +'" />'
+					},
+					svrReg_master_gbn: {
+						required: '<spring:message code="errors.required" arguments="'+ 'Proxy 구분' +'" />'
+					},
+					svrReg_master_svr_id : {
+						required: '<spring:message code="errors.required" arguments="'+ 'Master Proxy 서버' +'" />'
+					},
+					svrReg_db_svr_id: {
+						required: '<spring:message code="errors.required" arguments="'+ '연결 DBMS' +'" />'
+					}
+		        },
+				submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
+					fn_reg_svr_check();
+				},
+		        errorPlacement: function(label, element) {
+		          label.addClass('mt-2 text-danger');
+		          label.insertAfter(element);
+		        },
+		        highlight: function(element, errorClass) {
+		          $(element).parent().addClass('has-danger');
+		          $(element).addClass('form-control-danger');
+		        }
+			});
 
 	});
 
@@ -63,6 +128,9 @@ var mgmtDbmsTable = null;
 	 * Master 구분 변경 시 이벤트
 	 ******************************************************** */
 	function fn_changeMasterGbn(){
+		
+		$("#svrReg_master_svr_id-error", "#svrRegProxyServerForm").hide();
+		
 		if($("#svrReg_master_gbn", "#svrRegProxyServerForm").val() == "B"){
 			$("#svrReg_master_svr_id_label", "#svrRegProxyServerForm").show();
 			$("#svrReg_master_svr_id", "#svrRegProxyServerForm").show();
@@ -252,8 +320,6 @@ var mgmtDbmsTable = null;
  					
  					//창 닫기
  					$('#pop_layer_svr_reg').modal("hide");
- 					//검색
- 					fn_serverList_search();
  					
  				}else{
  					var msg ="";
@@ -263,14 +329,15 @@ var mgmtDbmsTable = null;
  						msg ='<spring:message code="eXperDB_scale.msg22"/>';
  					}
  					showSwalIcon(msg +' '+result.errMsg, '<spring:message code="common.close" />', '', 'error');
- 					
 	 			}
+ 				//검색
+				fn_serverList_search();
  			}
  		});
 	}
 </script>
 <div class="modal fade" id="pop_layer_svr_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 80px 330px;">
 		<div class="modal-content" style="width:1040px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
@@ -307,32 +374,6 @@ var mgmtDbmsTable = null;
 										<input type="text" class="form-control form-control-xsm" maxlength="25" id="svrReg_pry_svr_nm" name="svrReg_pry_svr_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=2 />
 									</div>
 								</div>
-								<%-- <div class="form-group row" >
-									<label for="svrReg_root_pwd" class="col-sm-3 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										Root <spring:message code="user_management.password" />(*)
-									</label>
-									<div class="col-sm-3">
-										<input type="hidden" id="svrReg_root_pwd_result" name="svrReg_root_pwd_result">
-										<input type="password" style="display:none" aria-hidden="true">
-										<input type="password" class="form-control form-control-xsm svrReg_root_pwd" autocomplete="new-password" maxlength="20" id="svrReg_root_pwd" name="svrReg_root_pwd" onkeyup="fn_passCheck();" onblur="this.value=this.value.trim()" placeholder="" tabindex=3 />
-									</div>
-									<label for="svrReg_root_pwdChk" class="col-sm-3 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										Root <spring:message code="user_management.confirm_password" />(*)
-									</label>
-									<div class="col-sm-auto">
-										<input type="password" class="form-control form-control-xsm svrReg_root_pwdChk" maxlength="20" id="svrReg_root_pwdChk" name="svrReg_root_pwdChk" onkeyup="fn_passCheck();" onblur="this.value=this.value.trim()" placeholder="" tabindex=4 />
-									</div>
-								</div>
-								<div class="form-group row" id="pwd_check_msg_div">
-									<div class="col-sm-6">
-									</div>
-									<div class="col-sm-6">
-										<div class="alert alert-danger" style="margin-top:5px;" id="pwdCheck_alert-danger"><spring:message code="etc.etc14" /></div>
-									</div>
-								</div> --%>
-								
 								<div class="form-group row">
 									<label for="svrReg_day_data_del_term" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
@@ -341,13 +382,12 @@ var mgmtDbmsTable = null;
 									</label>
 									<div class="col-sm-3" id="div_day_data_del_term">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100px;" name="svrReg_day_data_del_term" id="svrReg_day_data_del_term">
+											<option value="5">5일</option>
+											<option value="10">10일</option>
+											<option value="15">15일</option>
+											<option value="20">20일</option>
+											<option value="25">25일</option>
 											<option value="30">30일</option>
-											<option value="40">40일</option>
-											<option value="50">50일</option>
-											<option value="60">60일</option>
-											<option value="70">70일</option>
-											<option value="80">80일</option>
-											<option value="90">90일</option>
 										</select>
 									</div>
 									
@@ -367,14 +407,6 @@ var mgmtDbmsTable = null;
 											<option value="7">7일</option>
 										</select>
 										<%-- <input type="text" class="form-control form-control-xsm" maxlength="25" id="svrReg_rsp_bsn_nm" name="svrReg_rsp_bsn_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=8 /> --%>
-									</div>
-								</div>
-								<div class="form-group row">
-									<div class="col-sm-6">
-										<div class="alert alert-info" style="margin-top:5px;display:none;" id="prySvrId_alert-danger">IP주소를 선택해주세요.</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="alert alert-info" style="margin-top:5px;display:none;" id="prySvrNm_alert-danger">서버명을 입력해주세요.</div>
 									</div>
 								</div>
 								<div class="form-group row row-last">
@@ -416,8 +448,6 @@ var mgmtDbmsTable = null;
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="svrReg_master_svr_id" id="svrReg_master_svr_id">
-											<option value="m">proxy_server_1</option>
-											<option value="b">proxy_server_10</option>
 										</select>
 									</div>
 								</div>
@@ -452,7 +482,7 @@ var mgmtDbmsTable = null;
 							</div>
 							<br/>
 							<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" id="svrReg_save_submit" onClick="fn_reg_svr_check();" value='<spring:message code="common.save" />' />
+								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" id="svrReg_save_submit" value='<spring:message code="common.save" />' />
 								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_prySvrConnTest();" id="svrReg_conn_test" value='연결테스트' />
 								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 							</div>
