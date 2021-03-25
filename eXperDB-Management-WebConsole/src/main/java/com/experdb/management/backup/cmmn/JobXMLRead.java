@@ -195,6 +195,7 @@ public class JobXMLRead{
 			
 			Element e_jobList = (Element) n_jobList;
 			backupScript.setCompressLevel(Integer.parseInt(e_jobList.getElementsByTagName("compressLevel").item(1).getTextContent()));
+			backupScript.setJobName(e_jobList.getElementsByTagName("jobName").item(1).getTextContent());
 //			System.out.println(backupScript.toString());
 			
 			return backupScript;

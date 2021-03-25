@@ -156,6 +156,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		System.out.println("@@@@@  getScheduleInfo  @@@@@");
 		JSONObject result = new JSONObject();
 		
+		// 
 		List<BackupScheduleVO> backupSchedule = null;
 		BackupScriptVO backupScript = new BackupScriptVO();
 		BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
@@ -218,6 +219,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		String fstorage = backupLocation.getBackupDestLocation();
 		int fcompress = backupScript.getCompressLevel();
 		int fsetNum = backupRetention.getBackupSetCount();
+		String jobName = backupScript.getJobName();
 		String fdateType = backupRetention.getUseWeekly();
 		int fdate = backupRetention.getDayOfMonth();
 		
@@ -242,6 +244,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		result.put("storage", fstorage);
 		result.put("compress", fcompress);
 		result.put("dateType", fdateType);
+		result.put("jobName", jobName);
 		result.put("date", fdate);
 		result.put("setNum", fsetNum);
 		result.put("weekData", weekData);
@@ -269,8 +272,8 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
         
         int schExist = 0;
         
-//		 String path = "/opt/Arcserve/d2dserver/bin/jobs";
-		 String path = "C://test/backupXml/";
+		 String path = "/opt/Arcserve/d2dserver/bin/jobs";
+//		 String path = "C://test/backupXml/";
 		 
 		
 		

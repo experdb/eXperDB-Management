@@ -175,6 +175,17 @@ function fn_scheduleReset(ipadr){
 	// fn_getScheduleInfo(ipadr);
 }
 
+
+function fn_policyReset(){
+	$("#bckStorage").val("");
+	$("#bckStorageType").val("");
+	$("#bckStorageTypeVal").val("");
+	$("#bckCompress").val("");
+	$("#bckSetDate").val("");
+	$("#bckSetNum").val("");
+	$("#startDateSch").val("");
+}
+
 /* ********************************************************
  * 서버 리스트 가져오기
  ******************************************************** */
@@ -236,53 +247,23 @@ function fn_getSvrList() {
 	})
 }
 
-
 function fn_setScheduleInfo(result){
-	console.log("=========== fn_setScheduleInfo =============");
 
 	var scheduleData = [];
-	console.log("startDate : " + result.startDate);
-	console.log("storageType : " + result.storageType);
-	console.log("storage : " + result.storage);
-	console.log("compress : " + result.compress);
-	console.log("dateType : " + result.dateType);
-	console.log("date : " + result.date);
-	console.log("setNum : " + result.setNum);
-	console.log("weekData : " + result.weekData.length);
-	console.log("==============================================");
-
 	scheduleData = result.weekData;
 	
-	console.log("===============@@@@@@@@@@@@=================");
 	for(var i=0 ; i<scheduleData.length; i++){
-		console.log("#" + i + "# : " + scheduleData[i].startTime);
-		console.log("#" + i + "# : " + scheduleData[i].repeat);
-		console.log("#" + i + "# : " + scheduleData[i].repEndTime);
-		console.log("#" + i + "# : " + scheduleData[i].repTime);
-		console.log("#" + i + "# : " + scheduleData[i].repTimeUnit);
-		console.log("#" + i + "# : " + scheduleData[i].dayPick);
-		console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		fn_scheduleInsert(scheduleData[i].dayPick, scheduleData[i].startTime, scheduleData[i].repeat, scheduleData[i].repEndTime, scheduleData[i].repTime, scheduleData[i].repTimeUnit);
-		
 	}
 	$("#startDateSch").val(result.startDate);
 	fn_drawScheduleList();
 	if(result.dateType == "true"){
 		console.log("fn_setScheduleInfo : true");
-		$(':input:radio[name=merge_period]:checked').val("weekly");
-		document.getElementById("merge_month").checked = false;
-		document.getElementById("merge_week").checked = true;
-		/* $("#merge_month").checked = false;
-		$("#merge_week").checked = true; */
+		$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true); 
 		$("#merge_period_week").val(result.date);
 		$("#merge_period_month").val(0);
 	}else{
-		console.log("fn_setScheduleInfo : false");
-		$(':input:radio[name=merge_period]:checked').val("monthly");
-		document.getElementById("merge_month").checked = true;
-		document.getElementById("merge_week").checked = false;
-		/* $("#merge_month").checked = true;
-		$("#merge_week").checked = false; */
+		$("input:radio[name='merge_period']:radio[value='monthly']").prop('checked', true); 
 		$("#merge_period_week").val(0);
 		$("#merge_period_month").val(result.date);
 	}
@@ -299,21 +280,14 @@ function fn_setScheduleInfo(result){
 	
 	$("#backupSetNum").val(result.setNum);
 	$("#bckSetNum").val(result.setNum);
-	/* $("#bckSetNum").val(result.setNum); */
+	
+	$("#jobNameVal").val(result.jobName);
+	
 	fn_policyReg();
 	$("#bckStorage").val(result.storage);
 	
 }
 
-function fn_policyReset(){
-	$("#bckStorage").val("");
-	$("#bckStorageType").val("");
-	$("#bckStorageTypeVal").val("");
-	$("#bckCompress").val("");
-	$("#bckSetDate").val("");
-	$("#bckSetNum").val("");
-	$("#startDateSch").val("");
-}
  
 
 /* ********************************************************
@@ -551,12 +525,6 @@ function fn_nodeRegPopup() {
 			weekData.fri = schFri;
 			weekData.sat = schSat;
 			weekData.sun = schSun;
-			console.log("nodeIpadr : " + NodeList.row('.selected').data().ipadr);
-			console.log("storageType : " + $("#bckStorageTypeVal").val());
-			console.log("compress : " + $("#bckCompressVal").val());
-			console.log("dateType : " + $("#bckSetDateTypeVal").val());
-			console.log("date : " + $("#bckSetDateVal").val());
-
 			$.ajax({
 				url : "/experdb/backupScheduleReg.do",
 				type : "post",
@@ -609,7 +577,9 @@ function fn_nodeRegPopup() {
 		return true;
 	}
  
-
+function fn_delete() {
+	alert($("#jobNameVal").val());
+}
 </script>
 <style>
 table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
@@ -630,6 +600,7 @@ table.dataTable.ccc thead th{
 <%@include file="./popup/bckScheduleRegForm.jsp"%>
 
 <form name="storeInfo">
+	<input type="hidden" name="jobNameVal" id="jobNameVal">
 	<input type="hidden" name="bckStorageTypeVal"  id="bckStorageTypeVal">
 	<input type="hidden" name="bckCompressVal"  id="bckCompressVal" >
 	<input type="hidden" name="bckSetDateTypeVal"  id="bckSetDateTypeVal" >
@@ -686,7 +657,9 @@ table.dataTable.ccc thead th{
 						<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
 							<i class="fa fa-check btn-icon-prepend "></i>적용
 						</button>
-						
+						<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_delete()">
+							<i class="ti-trash btn-icon-prepend "></i>삭제
+						</button>
 					</div>
 				</div>
 			</div>
@@ -783,7 +756,7 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<h4 class="card-title" style="position: absolute;top:22px; right:770px;background-color: white;font-size: 1em; color:black;">
+					<h4 class="card-title" style="position: absolute;top:22px; right:760px;background-color: white;font-size: 1em; color:black;">
 						<i class="item-icon fa fa-desktop"></i>  풀 백업 세팅
 					</h4>
 				</div>
@@ -792,7 +765,7 @@ table.dataTable.ccc thead th{
 				<div class="card-body" style="padding-bottom: 0px;">
 					<div class="card my-sm-2" style="" >
 						<div class="card-body" style="height: 280px;padding-top: 5px;padding-bottom: 5px;">
-							<div class="col-12" id="jobDiv" style="padding-top: 20px;">
+							<div class="col-12" id="jobDiv" style="padding-top: 20px;padding-left: 0px;padding-right: 0px;">
 								<div class="form-group row" style="margin-bottom: 0px; padding-left: 10px;">
 									<div class="col-8 row" style="margin-top: 10px;">
 										<div  class="col-4 col-form-label pop-label-index" style="font-size:1em; padding-top:7px;">
