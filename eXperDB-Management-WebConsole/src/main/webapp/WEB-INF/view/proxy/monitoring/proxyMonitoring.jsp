@@ -57,7 +57,7 @@
 				{data : "pry_svr_nm", 
 					render : function(data, type, full, meta) {
 						var html = "";
-						html += '<a href="#">'+data+'</a>';
+						html += '<a href="#" onclick="fn_logView(' + full.pry_svr_id + ', \'' + full.sys_type + '\', \'' + full.wrk_dtm + '\')">'+data+'</a>';
 						return html;
 					},
 					className : "dt-center", 
@@ -254,7 +254,6 @@
 		if (nvlPrmSet(result.proxyLogList, '') != '') {
 			proxyLogTable.rows.add(result.proxyLogList).draw();
 		}
-		console.log(result.proxyLogList[0].wrk_dtm)
 		// 프록시 리스너 통계 테이블
 // 		fn_proxy_stat_init();
 		fn_lsnStat(pry_svr_id);
@@ -496,12 +495,12 @@
 						if(data == 'UP'){
 							html += '<div class="badge badge-pill badge-success">';
 							html += '	<i class="fa fa-spin fa-spinner mr-2" style="font-size:1em;"></i>';
-							html += data;
+							html += '실행중('+full.lst_status_chk_desc.substring(2)+')';
 							html += '</div>';
 						} else if(data == 'DOWN'){
 							html += '<div class="badge badge-pill badge-danger">';
 							html += '	<i class="fa fa-circle-o-notch mr-2" style="font-size:1em;"></i>';
-							html += data ;
+							html += '정지('+full.lst_status_chk_desc.substring(2)+')';
 							html += '</div>';
 						}
 						return html;
@@ -509,17 +508,17 @@
 					className : "dt-center", 
 					defaultContent : ""
 				},
-				{data : "lst_status_chk_desc", 
+				{data : "svr_stop_tm", 
 					render : function(data, type, full, meta){
 						var html = "";
-						if(data == 'L7OK'){
-							html += '<div class="badge badge-pill badge-success">';
-							html += '	<i class="fa fa-spin fa-spinner mr-2" style="font-size:1em;"></i>';
-							html += data;
+						if(data == '0s'){
+							html += '<div class="">';
+// 							html += '	<i class="mdi mdi-alarm mr-2 text-success" style="font-size:1em;"></i>';
+// 							html += data;
 							html += '</div>';
-						} else if(data == 'L7RSP'){
-							html += '<div class="badge badge-pill badge-danger">';
-							html += '	<i class="fa fa-circle-o-notch mr-2" style="font-size:1em;"></i>';
+						} else {
+							html += '<div class="">';
+							html += '	<i class="mdi mdi-alarm mr-2 text-danger" style="font-size:1em;"></i>';
 							html += data ;
 							html += '</div>';
 						}
@@ -533,8 +532,8 @@
 						html += '<div>'+data;
 						if(full['fail_chk_cnt_cng'] > 0){
 							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['fail_chk_cnt_cng']+')';
-						} else if(full['fail_chk_cnt_cng'] == 0) {
-							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['fail_chk_cnt_cng']+')'
+						} else if(full['fail_chk_cnt_cng'] == 0 || typeof full['fail_chk_cnt_cng'] === 'undefined') {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)'
 						} else {
 							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['fail_chk_cnt_cng']+')'
 						}
@@ -550,8 +549,8 @@
 						html += '<div>'+data;
 						if(full['max_session_cng'] > 0){
 							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['max_session_cng']+')';
-						} else if(full['max_session_cng'] == 0) {
-							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['max_session_cng']+')'
+						} else if(full['max_session_cng'] == 0 || typeof full['max_session_cng'] === 'undefined') {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)'
 						} else {
 							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['max_session_cng']+')'
 						}
@@ -567,8 +566,8 @@
 						html += '<div>'+data;
 						if(full['session_limit_cng'] > 0){
 							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['session_limit_cng']+')';
-						} else if(full['session_limit_cng'] == 0) {
-							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['session_limit_cng']+')'
+						} else if(full['session_limit_cng'] == 0 || typeof full['session_limit_cng'] === 'undefined') {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)'
 						} else {
 							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['session_limit_cng']+')'
 						}
@@ -584,8 +583,8 @@
 						html += '<div>'+data;
 						if(full['cumt_sso_con_cnt_cng'] > 0){
 							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['cumt_sso_con_cnt_cng']+')';
-						} else if(full['cumt_sso_con_cnt_cng'] == 0) {
-							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['cumt_sso_con_cnt_cng']+')'
+						} else if(full['cumt_sso_con_cnt_cng'] == 0 || typeof full['cumt_sso_con_cnt_cng'] === 'undefined') {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)'
 						} else {
 							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['cumt_sso_con_cnt_cng']+')'
 						}
@@ -601,8 +600,8 @@
 						html += '<div>'+data;
 						if(full['byte_receive_cng'] > 0){
 							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['byte_receive_cng']+')';
-						} else if(full['byte_receive_cng'] == 0) {
-							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['byte_receive_cng']+')'
+						} else if(full['byte_receive_cng'] == 0 || typeof full['byte_receive_cng'] === 'undefined') {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)'
 						} else {
 							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['byte_receive_cng']+')'
 						}
@@ -618,8 +617,8 @@
 						html += '<div>'+data;
 						if(full['byte_transmit_cng'] > 0){
 							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['byte_transmit_cng']+')';
-						} else if(full['byte_transmit_cng'] == 0) {
-							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>'+full['byte_transmit_cng']+')'
+						} else if(full['byte_transmit_cng'] == 0 || typeof full['byte_transmit_cng'] === 'undefined') {
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)'
 						} else {
 							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['byte_transmit_cng']+')'
 						}
@@ -672,7 +671,8 @@
 			success : function(result) {
 				proxyStatTable.rows({selected: true}).deselect();
 				proxyStatTable.clear().draw();
-
+				$('#listenerStatChart').html("");
+				
 				if (nvlPrmSet(result.proxyStatisticsInfo, '') != '') {
 					for(var i = 0; i < result.proxyStatisticsInfo.length; i++){
 						console.log(result.proxyStatisticsInfo[i].r)
@@ -709,14 +709,14 @@ console.log("====value===" + $(value).data());
 				  
 			  });*/
 		  		}
-		  		
-		  		if ($("#listenerStatChart").length) {
-		  			var db_con_addr = nvlPrmSet(result.proxyStatisticsInfo[0].db_con_addr, 0);
-// 		  			var byte_receive = nvlPrmSet(result.proxyStatisticsInfo[0].byte_receive, 0);
-// 		  			var byte_transmit = nvlPrmSet(result.proxyStatisticsInfo[0].byte_transmit, 0);
-// 		  			var fail_chk_cnt = nvlPrmSet(result.proxyStatisticsInfo[0].fail_chk_cnt, 0);	
-// 		  			console.log('db_con_addr : ' + db_con_addr);
-		  			var statchart = Morris.Bar({
+		  		if(result.proxyStatisticsInfo != null && result.proxyStatisticsInfo.length > 0){
+		  			if ($("#listenerStatChart").length) {
+		  				var db_con_addr = nvlPrmSet(result.proxyStatisticsInfo[0].db_con_addr, 0);
+// 		  				var byte_receive = nvlPrmSet(result.proxyStatisticsInfo[0].byte_receive, 0);
+// 		  				var byte_transmit = nvlPrmSet(result.proxyStatisticsInfo[0].byte_transmit, 0);
+// 		  				var fail_chk_cnt = nvlPrmSet(result.proxyStatisticsInfo[0].fail_chk_cnt, 0);	
+// 		  				console.log('db_con_addr : ' + db_con_addr);
+		  				var statchart = Morris.Bar({
 		  							element: 'listenerStatChart',
 		  							barColors: ['#76C1FA', '#FABA66', '#63CF72', '#F36368'],
 		  							data: [{
@@ -730,36 +730,36 @@ console.log("====value===" + $(value).data());
 		  							xkey: 'db_con_addr',
 		  							ykeys: ['byte_receive', 'byte_transmit', 'cumt_sso_con_cnt', 'fail_chk_cnt'],
 		  							labels: ['byte in', 'byte out', 'session total', 'fail check']
-		  			});
+		  				});
 					
 		  			
-		  			if (result.proxyStatisticsInfo != null) {
-		  				if (result.proxyStatisticsInfo.length > 0) {
-		  					var proxyStatChart = [];
-		  					for(var i = 0; i<result.proxyStatisticsInfo.length; i++){
-// 		  						if (result.proxyStatisticsInfo[i].bck_opt_cd == "TC000301") {
-// 		  							result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_full_backup;
-// 		  						} else if (result.proxyStatisticsInfo[i].bck_opt_cd == "TC000302") {
-// 		  							result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_incremental_backup;
-// 		  						} else {
-// 		  							result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_change_log_backup;
-// 		  						}
-								if(result.proxyStatisticsInfo[i].r == 1) {
-			  						proxyStatChart.push(result.proxyStatisticsInfo[i]);
-								}
-		  					}	
+		  				if (result.proxyStatisticsInfo != null) {
+		  					if (result.proxyStatisticsInfo.length > 0) {
+		  						var proxyStatChart = [];
+		  						for(var i = 0; i<result.proxyStatisticsInfo.length; i++){
+// 		  							if (result.proxyStatisticsInfo[i].bck_opt_cd == "TC000301") {
+// 		  								result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_full_backup;
+// 		  							} else if (result.proxyStatisticsInfo[i].bck_opt_cd == "TC000302") {
+// 		  								result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_incremental_backup;
+// 		  							} else {
+// 		  								result.proxyStatisticsInfo[i].bck_opt_cd_nm = backup_management_change_log_backup;
+// 		  							}
+									if(result.proxyStatisticsInfo[i].r == 1) {
+			  							proxyStatChart.push(result.proxyStatisticsInfo[i]);
+									}
+		  						}	
 		  			
-		  					statchart.setData(proxyStatChart);
+		  						statchart.setData(proxyStatChart);
+		  					}
 		  				}
-		  			}
 		  			
 // 		  			if (result.proxyStatisticsInfo != null) {
 // 		  				if (result.proxyStatisticsInfo.length > 0) {
 // 		  					statchart.setData(result.proxyStatisticsInfo);
 // 		  				}
 // 		  			}
+		  			}
 		  		}
-		  		
 			}
 		});
 	}
@@ -808,6 +808,51 @@ console.log("====value===" + $(value).data());
 		});
 	}
 
+	/* ********************************************************
+	 * log 파일 view popup
+	 ******************************************************** */
+	function fn_logView(pry_svr_id, type, date){
+		console.log('pry_svr_id : ' + pry_svr_id);
+		console.log('type : ' + type);
+		console.log('date : ' + date);
+		$.ajax({
+			url : '/proxyMonitoring/logView.do',
+			type : 'post',
+			data : {
+				pry_svr_id : pry_svr_id,
+				type : type
+			},
+			success : function(result) {
+				// if (result == "true") {
+				// 	$("#ins_idCheck", "#insProxyListenForm").val("1");
+					
+				// 	//$("#idCheck_alert-danger", "#insProxyListenForm").show();
+				// } else {
+				// 	showSwalIcon('<spring:message code="message.msg123" />', '<spring:message code="common.close" />', '', 'error');
+				// 	$("#ins_idCheck", "#insProxyListenForm").val("0");
+					
+				// 	//$("#idCheck_alert-danger", "#insProxyListenForm").hide();
+				// }
+				fn_logViewAjax(pry_svr_id, type, date);
+				$('#pop_layer_log_view').modal("show");
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				$("#ins_idCheck", "#insProxyListenForm").val("0");
+				
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+	}
+	
 	/* ********************************************************
 	 * rowspan
 	 ******************************************************** */

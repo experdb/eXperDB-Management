@@ -280,13 +280,19 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * proxy / keepavlied log popup
-	 * @param request
-	 * @param pry_svr_id
+	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/log")
-	public ModelAndView selectLogBySysTypeAndDate(HttpServletRequest request, int pry_svr_id){
+	@RequestMapping("/logView.do")
+	public ModelAndView logViewBySysTypeAndDate(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		ModelAndView mv = new ModelAndView();
+		mv.setViewName("proxy/popup/proxyLogView");
+		return mv;
+	}
+	
+	@RequestMapping("/proxyLogViewAjax.do")
+	public ModelAndView logViewAjax(){
+		ModelAndView mv = new ModelAndView("jsonView");
 		return mv;
 	}
 }

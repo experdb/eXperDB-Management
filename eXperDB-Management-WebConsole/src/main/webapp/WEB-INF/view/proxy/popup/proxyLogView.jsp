@@ -4,7 +4,7 @@
 <%
 	/**
 	* @Class Name : proxyLogView.jsp
-	* @Description : Proxy 로그 
+	* @Description : Proxy 로그 화면 popup
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -13,10 +13,17 @@
 	*/
 %>
 <script>
+
+	$(window.document).ready(function() {
+		console.log('proxy log view popup');
+		// calender setting
+		dateCalenderSetting();
+	});
+	
 	/* ********************************************************
 	 * view 실행
 	 ******************************************************** */
-	function fn_addView() {
+	function fn_logViewAjax() {
 		var v_db_svr_id = $("#db_svr_id", "#findList").val();
 		var v_seek = $("#seek", "#proxyViewForm").val();
 		var v_file_name = $("#info_file_name", "#proxyViewForm").val();
@@ -31,7 +38,7 @@
 		}
 		
 		$.ajax({
-			url : "/proxy/proxyLogViewAjax.do",
+			url : "/proxyMonitoring/proxyLogViewAjax.do",
 			dataType : "json",
 			type : "post",
  			data : {
@@ -88,14 +95,49 @@
 		if(e == "-Infinity") return "0 "+s[0]; 
 		else return (bytes/Math.pow(1024, Math.floor(e))).toFixed(2)+" "+s[e];
 	}
+	
+	/* ********************************************************
+	 * log calender 셋팅
+	 ******************************************************** */
+	function dateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+
+		today.setDate(today.getDate() - 7);
+		var day_start = today.toJSON().slice(0,10);
+
+		$("#wrk_strt_dtm").val(day_start);
+		$("#wrk_end_dtm").val(day_end);
+
+		if ($("#wrk_strt_dtm_div").length) {
+			$('#wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+
+		if ($("#wrk_end_dtm_div").length) {
+			$('#wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+		
+		$("#wrk_strt_dtm").datepicker('setDate', day_start);
+	    $("#wrk_end_dtm").datepicker('setDate', day_end);
+	    $('#wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#wrk_end_dtm_div').datepicker('updateDates');
+	}
 </script>
 
-<div class="modal fade" id="pop_layer_proxy_info" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+<div class="modal fade" id="pop_layer_log_view" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 20px 250px;">
 		<div class="modal-content" style="width:1200px;">		 
 			<div class="modal-body" style="margin-bottom:-10px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="auth_management.auditHistoryView"/>
+					log 파일보기
 				</h4>
 				
 				<form class="cmxform" id="proxyViewForm" name="proxyViewForm" >
@@ -117,13 +159,22 @@
 											<option value="5000">5000 Line</option>
 										</select>
 									</div>
-									<div class="col-sm-10">
-										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_addView();" value='<spring:message code="auth_management.viewMore" />' />
+									<div class="col-sm-8">
+										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value='기동' />
+										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_stop();" value='정지' />
+									</div>
+									<div class="col-sm-2">
+										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+											<input type="text" class="form-control totDatepicker" style="height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
+											<span class="input-group-addon input-group-append border-left">
+												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+											</span>
+										</div>
 									</div>
 								</div>
 
 								<div class="form-group" style="border:none;" >
-									<table id="mod_connector_tableList" class="table system-tlb-scroll" style="width:100%;">
+									<table id="mod_connector_tableList" class="table-borderless system-tlb-scroll" style="width:100%;">
 										<tbody>
 											<tr>
 												<td width="100%" colspan="5">
