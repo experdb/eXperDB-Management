@@ -52,4 +52,9 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 		
 	}
 
+
+	public void scheduleInsert2(Map<String, Object> jobInsert) {
+		sql2.update("backupNodeSql.setScheduleJob2", jobInsert);
+	}
+
 }

@@ -27,7 +27,7 @@ public class JobXMLRead{
 		DocumentBuilder docBuilder;
 		Document doc;
 		
-		public Map<String, Object> xmlRead(String file) throws SAXException, IOException{
+		public Map<String, Object> xmlRead(String file) throws SAXException, IOException, ParserConfigurationException{
 			System.out.println("xmlReader");
 			List<BackupScheduleVO> scheduleList = new ArrayList<>();
 			RetentionVO retention = new RetentionVO();
@@ -36,7 +36,7 @@ public class JobXMLRead{
 			
 			Map<String, Object> result = new HashMap<>();
 			
-			try {
+//			try {
 				docFactory = DocumentBuilderFactory.newInstance();
 				docBuilder = docFactory.newDocumentBuilder();
 				
@@ -48,9 +48,9 @@ public class JobXMLRead{
 				backupLocation = backupLocationInfoXml();
 				scheduleList = scheduleXml();
 				
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			}
+//			} catch (ParserConfigurationException e) {
+//				e.printStackTrace();
+//			}
 			
 			result.put("schedule", scheduleList);
 			result.put("retention", retention);
@@ -93,6 +93,7 @@ public class JobXMLRead{
 			weekDate.setMonth(e_weekStart.getElementsByTagName("ns2:month").item(0).getTextContent());
 			weekDate.setDay(e_weekStart.getElementsByTagName("ns2:day").item(0).getTextContent());
 			backupSchedule.add(weekDate);
+//			e_weekStart.getElementsByTagNameNS(ns2, "year");
 
 			// schedules for
 			for(int sh=0; sh<schedules.getLength(); sh++){

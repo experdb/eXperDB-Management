@@ -59,6 +59,25 @@
 		) UPDATE TARGETMACHINE SET ISPROTECTED = 1, JOBNAME = #{jobName} WHERE NAME = #{ipadr}
 	</update>
 	
-	
+	<update id="setScheduleJob2" parameterType="hashmap">
+		WITH DEL AS (
+		 	DELETE FROM JOBQUEUE WHERE TARGETNAME LIKE #{ipadr}
+		), INST1 AS (
+   			INSERT INTO JOBQUEUE (JOBTYPE, JOBNAME, templateid, TARGETNAME, ISREPEAT , JOBSTATUS , LASTRESULT , UUID , BACKUPLOCATION)
+		       values (
+		       		  #{jobType}
+		       		, #{jobName}
+		       		, #{templateID}
+		       		, #{ipadr}
+		       		, #{isRepeat}
+		       		, #{jobStatus}
+		       		, #{lastResult}
+		       		, #{uuid}
+		       		, #{backupLocation}
+		              )
+		), INST2 AS (
+			 UPDATE JOBSCRIPT SET templateid = #{templateID} WHERE NAME = #{jobName}
+		) UPDATE TARGETMACHINE SET ISPROTECTED = 1, JOBNAME = #{jobName} WHERE NAME = #{ipadr}
+	</update>
 	
 </mapper>

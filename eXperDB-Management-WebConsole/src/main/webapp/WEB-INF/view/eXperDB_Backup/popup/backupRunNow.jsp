@@ -42,7 +42,7 @@
 	function fn_runnow() {
 		var jobtype = 	$(":radio[name='backupType']:checked").val();
 		var jobname =  $("#pop_jobname").val();
-		
+		$("#pop_runNow").modal("hide");						
 		 $.ajax({
 			url : "/experdb/runNow.do",
 			data : {
@@ -52,20 +52,23 @@
 			type : "post",
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(data) {
-				$("#pop_runNow").modal("hide");				
 			}
-		}); 
+		})
+		.done(function(data){
+			
+		})
+		.fail(function(xhr, status, error){
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		})
+		.always(function(){
+			
+		})
 	}
 
 

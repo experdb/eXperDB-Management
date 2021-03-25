@@ -102,8 +102,13 @@ public class ExperdbBackupNodeController {
 		JSONObject result = new JSONObject();
 		try {
 			experdbBackupNodeService.scheduleInsert(request, param);
+			result.put("RESULT_CODE", 0);
+		} catch (IOException e) {
+			System.out.println("Controller IOException");
+			result.put("RESULT_CODE", 2);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println("Controller Exception");
+			result.put("RESULT_CODE", 1);
 			e.printStackTrace();
 		}
 		return result;

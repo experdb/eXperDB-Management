@@ -8,6 +8,7 @@ import java.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.*;
+import javax.xml.parsers.*;
 
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -151,7 +152,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 
 	@Override
 	@SuppressWarnings({ "unchecked"})
-	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException, ParseException {
+	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException, ParseException, ParserConfigurationException {
 		System.out.println("@@@@@  getScheduleInfo  @@@@@");
 		JSONObject result = new JSONObject();
 		
@@ -180,7 +181,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 //		System.out.println("backupLocation : " + backupLocation.toString());
 //		System.out.println("backupScript : " + backupScript.toString());
 		
-		String startDate = backupSchedule.get(0).getYear() + "-" + backupSchedule.get(0).getMonth() + "-" + backupSchedule.get(0).getDay();
+		String startDate = (String) dateSplit(backupSchedule.get(0).getYear() + "-" + backupSchedule.get(0).getMonth() + "-" + backupSchedule.get(0).getDay()).get("fullDate");
 		
 		backupSchedule.remove(0);
 		
@@ -209,6 +210,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 //			System.out.println("bs : " + bs.toString());
 //			System.out.println(scheduleMap);
 			
+			
 			weekData.add(scheduleMap);
 		}
 		
@@ -220,9 +222,9 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		int fdate = backupRetention.getDayOfMonth();
 		
 		if(backupLocation.getBackupDestUser()==null){
-			storageType = 0;
-		}else{
 			storageType = 1;
+		}else{
+			storageType = 2;
 		}
 		
 //		System.out.println("=============================");
@@ -266,6 +268,10 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
         String uuid = UUID.randomUUID().toString();
         
         int schExist = 0;
+        
+//		 String path = "/opt/Arcserve/d2dserver/bin/jobs";
+		 String path = "C://test/backupXml/";
+		 
 		
 		
 		String weekData = param.get("weekData").toString();
@@ -277,6 +283,10 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		String fdateType = request.getParameter("dateType");
 		String fdate = request.getParameter("date");
 		String fsetNum = request.getParameter("setNum");
+		
+		File file = new File(path + ipadr.replace(".", "_").trim()+".xml");
+		boolean fileExist = file.exists();
+
 		
 		System.out.println("=============================");
 		System.out.println("uuid : " + uuid);
@@ -342,6 +352,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		xmlMake.xmlMake(backupLocation, backupScript, targetMachine, backupRetention, backupSchedule);
 		
 		
+		
 		Map<String, Object> jobInsert = new HashMap<>();
 		
 		jobInsert.put("jobType", 1);
@@ -353,8 +364,15 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		jobInsert.put("uuid", UUID.randomUUID().toString());
 		jobInsert.put("backupLocation", backupLocation.getUuid());
 		jobInsert.put("jobName", jobName);
+
+		if(fileExist){
+			System.out.println("$$$$$$ 파일이 존재한단다아아아아 $$$$$$");
+			experdbBackupNodeDAO.scheduleInsert2(jobInsert);
+		}else{			
+			System.out.println("$$$$$$ 파일이 없어어어어어어어 $$$$$$");
+			experdbBackupNodeDAO.scheduleInsert(jobInsert);
+		}
 		
-		experdbBackupNodeDAO.scheduleInsert(jobInsert);
 		
 		System.out.println("========= scheduleInsert SERVICE END ==========");
 	
@@ -481,7 +499,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		result.put("year", Integer.parseInt(_yearSDF.format(_dateDt)));
 		result.put("month", Integer.parseInt(_monthSDF.format(_dateDt)));
 		result.put("day", Integer.parseInt(_daySDF.format(_dateDt)));
-
+		result.put("fullDate", _dateSDF.format(_dateDt));
 		return result;
 	}
 	
@@ -515,10 +533,13 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 //		dateSplit("2020-03-15");
 		Map<String, Object> result = new HashMap<>();
 		try {
-			result = timeSplit("3:2");
-			System.out.println("24hour : " + result.get("24hour"));
-			System.out.println("fullHour : " + result.get("fullHour"));
-			System.out.println(timeSplit("3:2").get("fullHour"));
+//			result = timeSplit("3:2");
+//			System.out.println("24hour : " + result.get("24hour"));
+//			System.out.println("fullHour : " + result.get("fullHour"));
+//			System.out.println(timeSplit("3:2").get("fullHour"));
+			
+			result = dateSplit("2021-3-1");
+			System.out.println("fullDate : " + result.get("fullDate"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

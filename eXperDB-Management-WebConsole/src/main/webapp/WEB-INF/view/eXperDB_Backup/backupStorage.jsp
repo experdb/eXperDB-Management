@@ -55,8 +55,7 @@ function fn_init() {
 		{data : "freeSize", className : "dt-center", defaultContent : ""},
 		{data : "rJobCount", className : "dt-center", defaultContent : ""},	
 		{data : "wJobCount", className : "dt-center", defaultContent : ""}
-
-		], 'select': {'style': 'single'}
+		]
 	});
 
 	bckStorageList.tables().header().to$().find('th:eq(1)').css('min-width');
@@ -69,6 +68,18 @@ function fn_init() {
     $(window).trigger('resize'); 
 	
 } // fn_init();
+
+
+$(function() {
+	   $('#bckStorageList tbody').on( 'click', 'tr', function () {
+	         if ( $(this).hasClass('selected') ) {
+	         }
+	        else {	        	
+	        	bckStorageList.$('tr.selected').removeClass('selected');
+	            $(this).addClass('selected');	   
+	        } 
+	    } );   
+	} );    
 
 /* ********************************************************
  * backup storage list

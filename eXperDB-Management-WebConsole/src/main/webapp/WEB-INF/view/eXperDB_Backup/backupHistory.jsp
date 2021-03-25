@@ -100,7 +100,7 @@ function fn_init() {
 		{data : "reducetime", className : "dt-center", defaultContent : ""},
 		{data : "datasize", className : "dt-center", defaultContent : ""},
 		{data : "destinationlocation", className : "dt-center", defaultContent : ""}
-		], 'select': {'style': 'single'}
+		]
 	});
 
 	bckHistoryList.tables().header().to$().find('th:eq(0)').css('min-width');
@@ -166,6 +166,16 @@ function fn_init() {
 } // fn_init();
 
 
+$(function() {
+	   $('#bckHistoryList tbody').on( 'click', 'tr', function () {
+	         if ( $(this).hasClass('selected') ) {
+	         }
+	        else {	        	
+	        	bckHistoryList.$('tr.selected').removeClass('selected');
+	            $(this).addClass('selected');	   
+	        } 
+	    } );   
+	} );  
 
 
 function selectJobHistory() {

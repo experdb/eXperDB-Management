@@ -5,6 +5,7 @@ import java.text.*;
 import java.util.*;
 
 import javax.servlet.http.*;
+import javax.xml.parsers.*;
 
 import org.json.simple.*;
 import org.xml.sax.*;
@@ -31,6 +32,6 @@ public interface ExperdbBackupNodeService {
 
 	void scheduleInsert(HttpServletRequest request, Map<Object, String> param) throws Exception;
 
-	JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException, ParseException;
+	JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException, ParseException, ParserConfigurationException;
 
 }
