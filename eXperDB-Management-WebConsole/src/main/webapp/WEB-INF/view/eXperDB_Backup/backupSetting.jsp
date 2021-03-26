@@ -58,6 +58,7 @@ $(function() {
              var nodeIpadr = NodeList.row('.selected').data().ipadr;
 		
      		fn_scheduleReset();
+     		fn_policyReset();
      		fn_getScheduleInfo(nodeIpadr);
          } 
      } );   
@@ -184,6 +185,7 @@ function fn_policyReset(){
 	$("#bckSetDate").val("");
 	$("#bckSetNum").val("");
 	$("#startDateSch").val("");
+	$("#jobNameVal").val("");
 }
 
 /* ********************************************************
@@ -229,14 +231,12 @@ function fn_getSvrList() {
 		type : "post"
 	})
 	.done(function(result){
-		console.log("get schedule 성공!! " + result);
 		console.log("RESULT_CODE : " + result.RESULT_CODE);
 		if(result.RESULT_CODE == "0"){
 			console.log("성공 : " + result.startDate);
 			fn_setScheduleInfo(result);
 		}else if(result.RESULT_CODE == "2"){
 			console.log("실패 : XML 파일을 찾을 수 없음");
-			fn_policyReset();
 		}
 	})
 	.fail(function(xhr, status, error){
@@ -394,6 +394,8 @@ function fn_nodeRegPopup() {
   function fnc_confirmMultiRst(gbn){
 	  if(gbn == "node_del"){
 		  fn_nodeDelete();
+	  }else if(gbn == "backup_del"){
+		  fn_backupDelete();
 	  }
   }
  
@@ -467,8 +469,6 @@ function fn_nodeRegPopup() {
 			}
 			schWeek[i].sort(compareTime);
 		}
-		
-		// fn_drawScheduleList();
 	}
 	
 	// schedule sort by startTime
@@ -539,7 +539,8 @@ function fn_nodeRegPopup() {
 					compress : $("#bckCompressVal").val(),
 					dateType : $("#bckSetDateTypeVal").val(),
 					date : $("#bckSetDateVal").val(),
-					setNum : $("#bckSetNum").val()
+					setNum : $("#bckSetNum").val(),
+					jobName : $("#jobNameVal").val()
 				}
 			})
 			.done (function(result){
@@ -576,8 +577,26 @@ function fn_nodeRegPopup() {
 		}
 		return true;
 	}
- 
-function fn_delete() {
+
+ /* ********************************************************
+  * backup delete popup
+  ******************************************************** */
+  function fn_backupDelPopup(){
+		var data = NodeList.rows('.selected').data();
+		if(data.length < 1){
+			showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else{
+			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			$('#con_multi_gbn', '#findConfirmMulti').val("backup_del");
+			$('#confirm_multi_tlt').html(confile_title);
+			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+			$('#pop_confirm_multi_md').modal("show");
+		}
+ }
+  
+  
+function fn_backupDelete() {
 
 	 var data = NodeList.rows('.selected').data();
 		if(data.length<1){
@@ -629,6 +648,10 @@ table.dataTable.ccc tfoot th{
 table.dataTable.ccc thead th{
 	border-bottom : 1px solid rgb(168, 168, 168);
 }
+.tooltip-inner {
+    max-width: 250px;
+}
+
 </style>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 
@@ -690,13 +713,22 @@ table.dataTable.ccc thead th{
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">
-					<div id="wrt_button" style="float: right;">
-						<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
-							<i class="fa fa-check btn-icon-prepend "></i>적용
-						</button>
-						<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_delete()">
-							<i class="ti-trash btn-icon-prepend "></i>삭제
-						</button>
+					<div class="row" style="float: right;width: 500px;">					
+						<div class="tooltip-static-demo" id="applyAlertTooltip">
+							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px;">
+								<div class="arrow"></div>
+								<div class="tooltip-inner" style="width: 250px;">백업 정책 설정 후 적용을 눌러주세요</div>
+							</div>
+						</div>
+						<div id="wrt_button" style="float: right;">
+						
+							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
+								<i class="fa fa-check btn-icon-prepend "></i>적용
+							</button>
+							<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_backupDelPopup()">
+								<i class="ti-trash btn-icon-prepend "></i>삭제
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

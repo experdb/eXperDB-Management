@@ -61,9 +61,9 @@
 		var startDay = today.toJSON().slice(0,10);
 		var endDay = fn_dateParse("20991231").toJSON().slice(0, 10);
 		
-		/* console.log("today : " + today);
+		console.log("today : " + today);
 		console.log("startDay : " + startDay);
-		console.log("endDay : " + endDay); */
+		console.log("endDay : " + endDay);
 
 		$("#startDate").val(startDay);
 		
@@ -87,6 +87,10 @@
 	 * timepicker setting
 	 ******************************************************** */
 	function fn_timePickerSetting() {
+		var date = new Date();
+		var time = moment().format("HH:MM");
+		
+		$("#startTime").val(time);
 		$('#timepicker').datetimepicker({
 			// format: 'LT'
 			format: 'HH:mm',
@@ -95,6 +99,7 @@
 		$('#repTimePicker').datetimepicker({
 			format: 'HH:mm'
 		});
+		
 
 	}
 
@@ -139,6 +144,9 @@
 	 }
 	 // time check
 	 function fn_valChkSchTime(){
+		/* if($("#timepicker").val() == ""){
+			
+		}  */
 		if($("#repeat").prop("checked")){
 			var timeChk = $("#startTime").val()>$("#repEndTime").val();
 			if(!$("#repEndTime").val()){

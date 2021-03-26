@@ -35,22 +35,18 @@ public class JobXMLRead{
 			BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
 			
 			Map<String, Object> result = new HashMap<>();
+
+			docFactory = DocumentBuilderFactory.newInstance();
+			docBuilder = docFactory.newDocumentBuilder();
 			
-//			try {
-				docFactory = DocumentBuilderFactory.newInstance();
-				docBuilder = docFactory.newDocumentBuilder();
+			doc = docBuilder.parse(new File(file));
+			doc.getDocumentElement().normalize();
+			
+			retention=fullInfoXml();
+			backupScript=jobInfoXml();
+			backupLocation = backupLocationInfoXml();
+			scheduleList = scheduleXml();
 				
-				doc = docBuilder.parse(new File(file));
-				doc.getDocumentElement().normalize();
-				
-				retention=fullInfoXml();
-				backupScript=jobInfoXml();
-				backupLocation = backupLocationInfoXml();
-				scheduleList = scheduleXml();
-				
-//			} catch (ParserConfigurationException e) {
-//				e.printStackTrace();
-//			}
 			
 			result.put("schedule", scheduleList);
 			result.put("retention", retention);
@@ -63,6 +59,7 @@ public class JobXMLRead{
 		
 		
 		private List<BackupScheduleVO> scheduleXml(){
+			System.out.println("#### scheduleXml ####");
 			List<BackupScheduleVO> backupSchedule = new ArrayList<>();
 			
 //			String ns2 = "http://backup.data.webservice.arcflash.ca.com/xsd";
@@ -74,7 +71,7 @@ public class JobXMLRead{
 			
 			// <weeklySchedule> TAG exist check
 			if(n_week == null || n_week.equals("")){
-				System.out.println("null");
+				System.out.println("weeklySchedule null");
 				return backupSchedule;
 			}
 			
@@ -138,14 +135,14 @@ public class JobXMLRead{
 		
 		// retention
 		private RetentionVO fullInfoXml(){
-			System.out.println("#### fullInfoXML ####");
+			System.out.println("#### fullInfoXML (retention) ####");
 			RetentionVO retentionVO = new RetentionVO();
 			NodeList retention = doc.getElementsByTagName("retention");
 			Node n_retention = retention.item(0);
 			
 			// <retention> TAG exist check
 			if(n_retention == null || n_retention.equals("")){
-				System.out.println("null");
+				System.out.println("retention null");
 				return retentionVO;
 			}
 			
@@ -155,7 +152,6 @@ public class JobXMLRead{
 			retentionVO.setDayOfWeek(Integer.parseInt(e_retention.getElementsByTagName("dayOfWeek").item(0).getTextContent()));
 			retentionVO.setUseWeekly(e_retention.getElementsByTagName("useWeekly").item(0).getTextContent());
 			
-//			System.out.println(retentionVO.toString());
 			return retentionVO;
 		}
 		
@@ -166,7 +162,7 @@ public class JobXMLRead{
 			Node n_backupLocation = backupLocationInfo.item(0);
 			
 			if(n_backupLocation == null || n_backupLocation.equals("")){
-				System.out.println("backupLocationVO null");
+				System.out.println("backupLocationInfo null");
 				return backupLocation;
 			}
 			Element e_backupLocation = (Element) n_backupLocation;

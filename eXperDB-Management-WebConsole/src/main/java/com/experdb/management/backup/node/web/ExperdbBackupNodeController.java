@@ -101,7 +101,7 @@ public class ExperdbBackupNodeController {
 	public @ResponseBody JSONObject scheduleInsert(HttpServletRequest request,@RequestParam Map<Object, String> param){
 		JSONObject result = new JSONObject();
 		try {
-			experdbBackupNodeService.scheduleInsert(request, param);
+			result = experdbBackupNodeService.scheduleInsert(request, param);
 			result.put("RESULT_CODE", 0);
 		} catch (IOException e) {
 			System.out.println("Controller IOException");

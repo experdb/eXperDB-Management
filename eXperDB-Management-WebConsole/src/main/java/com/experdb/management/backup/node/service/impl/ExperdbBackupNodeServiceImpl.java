@@ -157,6 +157,8 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		System.out.println("@@@@@  getScheduleInfo  @@@@@");
 		JSONObject result = new JSONObject();
 		
+		String startDate ="";
+		
 		// 
 		List<BackupScheduleVO> backupSchedule = null;
 		BackupScriptVO backupScript = new BackupScriptVO();
@@ -167,8 +169,16 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		
 		String fileName = request.getParameter("ipadr").replace(".", "_").trim()+".xml";
 		
-		String path = "C://test//backupXml//" + fileName;
-//		String path = "/opt/Arcserve/d2dserver/bin/jobs" + fileName;
+		
+		//////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////  PATH SETTING  ///////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////
+//		String path = "C://test/backupXml/" + fileName;
+		String path = "/opt/Arcserve/d2dserver/bin/jobs/" + fileName;
+		System.out.println("read filepath : " + path);
+		//////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////
 		
 		JobXMLRead xml = new JobXMLRead();
 		readXml = xml.xmlRead(path);
@@ -178,13 +188,12 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		backupRetention = (RetentionVO) readXml.get("retention");
 		backupLocation = (BackupLocationInfoVO) readXml.get("backupLocation");
 		backupScript = (BackupScriptVO) readXml.get("backupScript");
-//		System.out.println("backupRetention : " + backupRetention.toString());
-//		System.out.println("backupLocation : " + backupLocation.toString());
-//		System.out.println("backupScript : " + backupScript.toString());
-		
-		String startDate = (String) dateSplit(backupSchedule.get(0).getYear() + "-" + backupSchedule.get(0).getMonth() + "-" + backupSchedule.get(0).getDay()).get("fullDate");
-		
-		backupSchedule.remove(0);
+		if(backupSchedule.size()>0){			
+			 startDate = (String) dateSplit(backupSchedule.get(0).getYear() + "-" + backupSchedule.get(0).getMonth() + "-" + backupSchedule.get(0).getDay()).get("fullDate");
+			 backupSchedule.remove(0);
+		}else{
+			 startDate = "";
+		}
 		
 		// 스케줄 정보를 정리해서 담아줌
 		for(BackupScheduleVO bs : backupSchedule){
@@ -207,10 +216,6 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 			}
 			dayPick[dayType] = true;
 			scheduleMap.put("dayPick", dayPick);
-			
-//			System.out.println("bs : " + bs.toString());
-//			System.out.println(scheduleMap);
-			
 			
 			weekData.add(scheduleMap);
 		}
@@ -254,33 +259,16 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 	}
 
 	// 백업 정보 등록하기
-	 @Override
-	public void scheduleInsert(HttpServletRequest request, Map<Object, String> param) throws Exception {
+	 @SuppressWarnings("static-access")
+	@Override
+	public JSONObject scheduleInsert(HttpServletRequest request, Map<Object, String> param) throws Exception {
 		System.out.println("========= scheduleInsert SERVICE !!! =========");
+		JSONObject result = new JSONObject();
 		List<BackupScheduleVO> backupSchedule = new ArrayList<>();
 		BackupScriptVO backupScript = new BackupScriptVO();
 		TargetMachineVO targetMachine = new TargetMachineVO();
 		BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
 		RetentionVO backupRetention = new RetentionVO();
-		
-		Date date = new Date();
-        SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String time = transFormat.format(date);   
-        
-        String jobName = "backup_"+time;
-        String uuid = UUID.randomUUID().toString();
-        
-        int schExist = 0;
-        
-        //////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////
-//		 String path = "/opt/Arcserve/d2dserver/bin/jobs";
-		 String path = "C://test/backupXml/";
-		 //////////////////////////////////////////////////////////////////////////////////////
-		 //////////////////////////////////////////////////////////////////////////////////////
-		 //////////////////////////////////////////////////////////////////////////////////////
-		 
 		
 		String weekData = param.get("weekData").toString();
 		String ipadr = request.getParameter("nodeIpadr");
@@ -291,15 +279,35 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		String fdateType = request.getParameter("dateType");
 		String fdate = request.getParameter("date");
 		String fsetNum = request.getParameter("setNum");
+		String jobName_Old = request.getParameter("jobName");
 		
+		Date date = new Date();
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String time = transFormat.format(date);   
+        
+        String jobName_New = "backup_"+time;
+        String uuid = UUID.randomUUID().toString();
+        
+        int schExist = 0;
+        
+        //////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////  PATH SETTING  /////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////
+		String path = "/opt/Arcserve/d2dserver/bin/jobs/";
+//		String path = "C://test/backupXml/";
 		//////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////
+		
 		// job이 등록된 상태인지 조회
-		int fileExist = fileExistCheck(ipadr);
-//		int fileExist = experdbBackupNodeDAO.checkJobExist(ipadr);
+		int fileExist = experdbBackupNodeDAO.checkJobExist(ipadr);
 		System.out.println("fileExist : " + fileExist);
 		// ** 존재하면 jobqueue, jobscript에 등록되어있는 정보 지워주기 **
+		// 새로운 xml 파일 import 되기 전에 수행되어야함
+		if(fileExist > 0){
+			Job job = new Job();
+			result=job.deleteJob(jobName_Old, ipadr);
+		}
 		
 		//////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////
@@ -308,15 +316,18 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		
 		System.out.println("=============================");
 		System.out.println("uuid : " + uuid);
-		System.out.println("weekData : " + weekData);
+		System.out.println("weekData : " + weekData.length());
 		System.out.println("ipadr : " + ipadr);
 		System.out.println("startDate : " + startDate);
+		System.out.println("startDate.length : " + startDate.length());
 		System.out.println("storageType : " + storageType);
 		System.out.println("storage : " + fstorage);
 		System.out.println("compress : " + fcompress);
 		System.out.println("dateType : " + fdateType);
 		System.out.println("date : " + fdate);
 		System.out.println("setNum : " + fsetNum);
+		System.out.println("jobName_New : " + jobName_New);
+		System.out.println("jobName_Old : " + jobName_Old);
 		System.out.println("=============================");
 		
 		// schedule Info List Make
@@ -329,7 +340,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		
 		// backupScript Info Make
 		backupScript.setCompressLevel(Integer.parseInt(fcompress));
-		backupScript.setJobName(jobName);
+		backupScript.setJobName(jobName_New);
 		
 		if(backupSchedule.size()>0){
 			schExist = 1;
@@ -344,7 +355,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		
 		// target Info Make
 		targetMachine = experdbBackupNodeDAO.getScheduleNodeInfo(ipadr);
-		targetMachine.setJobName(jobName);
+		targetMachine.setJobName(jobName_New);
 		targetMachine.setExclude("true");
 		targetMachine.setHypervisor("false");
 		targetMachine.setIsProtected("true");
@@ -361,19 +372,11 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		backupRetention.setUseWeekly(fdateType);
 		System.out.println("backupRetention : "+backupRetention.toString());
 		
-		// schedule 찍어보기
-//		for(BackupScheduleVO bs : backupSchedule){
-//			System.out.println(bs.toString());
-//		}
-		
-		// 
-		
-		
-		
 		// make xml file
 		JobXMLMake xmlMake = new JobXMLMake();
 		xmlMake.xmlMake(backupLocation, backupScript, targetMachine, backupRetention, backupSchedule);
 		
+		// 새로 만들어진 xml 파일이 import 된 후 처리되야함 
 		Map<String, Object> jobInsert = new HashMap<>();
 		
 		jobInsert.put("jobType", 1);
@@ -384,7 +387,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		jobInsert.put("lastResult", 0);
 		jobInsert.put("uuid", UUID.randomUUID().toString());
 		jobInsert.put("backupLocation", backupLocation.getUuid());
-		jobInsert.put("jobName", jobName);
+		jobInsert.put("jobName", jobName_New);
 
 		if(fileExist>0){
 			System.out.println("$$$$$$ 파일이 존재한단다아아아아 $$$$$$");
@@ -394,15 +397,16 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 			experdbBackupNodeDAO.scheduleInsert(jobInsert);
 		}
 		
-		
 		System.out.println("========= scheduleInsert SERVICE END ==========");
-	
+		return result;
 	}
 	 
 	public List<BackupScheduleVO> scheduleListMake(String weekData, String startDate) throws Exception {
 		List<BackupScheduleVO> backupSchedule = new ArrayList<>();
 		
 		Map<String, Object> date = new HashMap<>();
+		System.out.println("startDate Null ???? ");
+		System.out.println(startDate==null);
 		date = dateSplit(startDate);
 		
 		JSONParser jsonParser = new JSONParser();
@@ -508,25 +512,27 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		return schedule;
 	}
 	
-	public int fileExistCheck(String ipadr) {
-		int fileExist = experdbBackupNodeDAO.checkJobExist(ipadr);
-		
-		return fileExist;
-	}
-	
 	public static Map<String, Object> dateSplit(String date) throws ParseException{
 		Map<String, Object> result = new HashMap<>();
-		
 		SimpleDateFormat _dateSDF = new SimpleDateFormat("yyyy-mm-dd");
 		SimpleDateFormat _yearSDF = new SimpleDateFormat("yyyy");
 		SimpleDateFormat _monthSDF = new SimpleDateFormat("mm");
 		SimpleDateFormat _daySDF = new SimpleDateFormat("dd");
+		
+		if(date.length()>0){
+			Date _dateDt = _dateSDF.parse(date);
+			result.put("year", Integer.parseInt(_yearSDF.format(_dateDt)));
+			result.put("month", Integer.parseInt(_monthSDF.format(_dateDt)));
+			result.put("day", Integer.parseInt(_daySDF.format(_dateDt)));
+			result.put("fullDate", _dateSDF.format(_dateDt));
+			
+		}else{
+			result.put("year", "");
+			result.put("month", "");
+			result.put("day", "");
+			result.put("fullDate", "");
+		}
 
-		Date _dateDt = _dateSDF.parse(date);
-		result.put("year", Integer.parseInt(_yearSDF.format(_dateDt)));
-		result.put("month", Integer.parseInt(_monthSDF.format(_dateDt)));
-		result.put("day", Integer.parseInt(_daySDF.format(_dateDt)));
-		result.put("fullDate", _dateSDF.format(_dateDt));
 		return result;
 	}
 	
@@ -540,16 +546,24 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
        SimpleDateFormat _12Hour = new SimpleDateFormat("hh");
        SimpleDateFormat _12Min = new SimpleDateFormat("mm");
        SimpleDateFormat _12Type = new SimpleDateFormat("a", Locale.ENGLISH);
-       Date _24HourDt = _24HourSDF.parse(_24HourTime);
-       	           
-       result.put("12hour",Integer.parseInt(_12Hour.format(_24HourDt)));
-       result.put("min", Integer.parseInt(_12Min.format(_24HourDt)));
-       result.put("24hour", Integer.parseInt(_24Hour.format(_24HourDt)));
-       result.put("fullHour", _24HourSDF.format(_24HourDt));
-       if(_12Type.format(_24HourDt).equals("PM")){
-    	   result.put("type", "1");
+       
+       if(time.length()>0){    	   
+    	   Date _24HourDt = _24HourSDF.parse(_24HourTime);
+    	   result.put("12hour",Integer.parseInt(_12Hour.format(_24HourDt)));
+    	   result.put("min", Integer.parseInt(_12Min.format(_24HourDt)));
+    	   result.put("24hour", Integer.parseInt(_24Hour.format(_24HourDt)));
+    	   result.put("fullHour", _24HourSDF.format(_24HourDt));
+    	   if(_12Type.format(_24HourDt).equals("PM")){
+    		   result.put("type", "1");
+    	   }else{
+    		   result.put("type", "0");
+    	   }
        }else{
-    	   result.put("type", "0");
+    	   result.put("12hour","");
+    	   result.put("min", "");
+    	   result.put("24hour", "");
+    	   result.put("fullHour","");
+    	   result.put("type", "");
        }
 
 		return result;
