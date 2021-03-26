@@ -610,6 +610,7 @@ function fn_delete() {
 						if(result.RESULT_CODE == "0"){		
 							showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
 							fn_getScheduleInfo(ipadr);
+							scheduleList.clear().draw();
 						}
 					}
 				})

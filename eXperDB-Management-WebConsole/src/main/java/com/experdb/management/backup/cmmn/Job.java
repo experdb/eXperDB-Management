@@ -20,7 +20,7 @@ public class Job {
 		try {
 			
 			String path = ServiceContext.getInstance().getHomePath()+"/bin";
-			String cmd = "./d2djob --delete=" + jobName;
+			String cmd = "./d2djob --delete='" + jobName+"'";
 			String strCmd = "cd " + path + ";" + cmd;
 
 			System.out.println("Job Delete CMD = " + strCmd);
@@ -29,9 +29,10 @@ public class Job {
 			
 			if (result.get("RESULT_CODE").equals(0)) {
 
+				System.out.println("Job Delete Success ");
 				 try {
-					 	String fileName = ipadr.toString().replace(".", "_").trim()+".xml";
-					 	result = cmmUtil.execute("rm -rf "+fileName);
+					 	String fileName = ipadr.toString().replace(".", "_").trim()+".xml";				 	
+					 	result = cmmUtil.execute("rm -rf "+ServiceContext.getInstance().getHomePath()+"/bin/jobs/"+fileName);
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -39,6 +40,8 @@ public class Job {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}			
+			}else{
+				System.out.println("Job Delete Fail ");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
