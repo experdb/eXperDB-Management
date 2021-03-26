@@ -78,7 +78,7 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 	}
 	
 	/**
-	 * Proxy 리스너 통계 정보 조회
+	 * Proxy 리스너 상세 정보 조회
 	 * @param pry_svr_id
 	 * @return
 	 */
@@ -89,6 +89,30 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 		return result;
 	}
 	
+	/**
+	 * Proxy 리스너 통계 정보 조회
+	 * @param pry_svr_id
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectProxyStatisticsChartInfo(int pry_svr_id) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectProxyStatisticsChartInfo", pry_svr_id);
+		return result;
+	}
+	
+	/**
+	 * Proxy 리스너 통계 정보 카운트
+	 * @param pry_svr_id
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectProxyChartCntList(int pry_svr_id) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectProxyChartCntList", pry_svr_id);
+		return result;
+	}
+
 	/**
 	 * proxy / keepalived config 파일 정보 조회
 	 * @param param

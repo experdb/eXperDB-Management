@@ -1,8 +1,5 @@
 package com.experdb.management.proxy.service.impl;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,13 +98,33 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy 리스너 통계 정보 조회
+	 * Proxy 리스너 상세 정보 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
 	@Override
 	public List<Map<String, Object>> selectProxyStatisticsInfo(int pry_svr_id) {
 		return proxyMonitoringDAO.selectProxyStatisticsInfo(pry_svr_id);
+	}
+
+	/**
+	 * Proxy 리스너 통계 정보 조회
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectProxyStatisticsChartInfo(int pry_svr_id) {
+		return proxyMonitoringDAO.selectProxyStatisticsChartInfo(pry_svr_id);
+	}
+
+	/**
+	 * Proxy 리스너 통계 정보 카운트
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectProxyChartCntList(int pry_svr_id) {
+		return proxyMonitoringDAO.selectProxyChartCntList(pry_svr_id);
 	}
 
 	/**

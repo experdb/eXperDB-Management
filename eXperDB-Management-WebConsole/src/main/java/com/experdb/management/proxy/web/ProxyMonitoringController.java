@@ -1,5 +1,6 @@
 package com.experdb.management.proxy.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,10 +77,12 @@ public class ProxyMonitoringController {
 				List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
 				List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
 				List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
+
 				mv.addObject("proxyServerTotInfo", proxyServerTotInfo);
 				mv.addObject("proxyServerByMasId", proxyServerByMasId);
 				mv.addObject("dbServerConProxy", dbServerConProxy);
 				mv.addObject("proxyLogList",proxyLogList);
+				
 				mv.setViewName("proxy/monitoring/proxyMonitoring");
 			}	
 		} catch (Exception e) {
@@ -103,10 +106,13 @@ public class ProxyMonitoringController {
 			List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
 			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
 			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
-			
+			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
+
 			mv.addObject("proxyServerByMasId", proxyServerByMasId);
 			mv.addObject("dbServerConProxy", dbServerConProxy);
 			mv.addObject("proxyLogList",proxyLogList);
+			mv.addObject("proxyChartCntList",proxyChartCntList);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,7 +121,7 @@ public class ProxyMonitoringController {
 	}
 	
 	/**
-	 * 리스너 통계 정보
+	 * 리스너 상세 정보
 	 * @param request, pry_svr_id
 	 * @return ModelAndView
 	 */
@@ -147,6 +153,63 @@ public class ProxyMonitoringController {
 			System.out.println(proxyStatisticsInfo.size());
 //			System.out.println("pry_svr_nm : " + proxyStatisitcInfo.get(0).get("pry_svr_nm"));
 			mv.addObject("proxyStatisticsInfo",proxyStatisticsInfo); 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	/**
+	 * 리스너 통계 정보
+	 * @param request, pry_svr_id
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/listenerStatisticsChart.do")
+	public ModelAndView selectProxyStatisticsChartInfo(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request){
+		
+		//권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001801");
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		String dtlCd = "DX-T0160_03";
+		int mnu_id = 44;
+		
+		try {
+			//읽기 권한이 없는경우 에러페이지 호출 
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			} else {
+				// 화면접근이력 이력 남기기
+				proxyMonitoringService.monitoringSaveHistory(request, historyVO, dtlCd, mnu_id);
+			}
+			String strPrySvrId = request.getParameter("pry_svr_id");
+			int pry_svr_id = Integer.parseInt(strPrySvrId); 
+			
+			List<Map<String, Object>>  proxySettingChartresult = new ArrayList<Map<String, Object>>();
+			
+			List<Map<String, Object>> proxyStatisticsInfoChart = proxyMonitoringService.selectProxyStatisticsChartInfo(pry_svr_id);
+
+			if (proxyStatisticsInfoChart != null && proxyStatisticsInfoChart.size() > 0) {
+				for (int i = 0; i < proxyStatisticsInfoChart.size(); i++) {
+					Map<String, Object> chart = new HashMap<String, Object>();
+
+					chart.put("exe_dtm_ss", proxyStatisticsInfoChart.get(i).get("exe_dtm"));
+					chart.put("byte_receive", proxyStatisticsInfoChart.get(i).get("byte_receive"));
+					chart.put("byte_transmit", proxyStatisticsInfoChart.get(i).get("byte_transmit"));
+					chart.put("cumt_sso_con_cnt", proxyStatisticsInfoChart.get(i).get("cumt_sso_con_cnt"));
+					chart.put("fail_chk_cnt", proxyStatisticsInfoChart.get(i).get("fail_chk_cnt"));
+
+					proxySettingChartresult.add(chart);
+				}
+			}
+
+			System.out.println(proxySettingChartresult.size());
+			System.out.println(proxyStatisticsInfoChart.size());
+//			System.out.println("pry_svr_nm : " + proxyStatisitcInfo.get(0).get("pry_svr_nm"));
+			mv.addObject("proxyStatisticsInfoChart",proxyStatisticsInfoChart); 
+			mv.addObject("proxySettingChartresult",proxySettingChartresult); 
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -199,7 +262,6 @@ public class ProxyMonitoringController {
 	 * @param historyVO, request
 	 * @return
 	 */
-	@RequestMapping("/configViewAjax.do")
 	public HashMap configViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		HashMap result = new HashMap<>();
 		String strBuffer = "";

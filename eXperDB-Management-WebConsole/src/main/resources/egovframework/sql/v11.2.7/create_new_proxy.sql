@@ -358,6 +358,7 @@ CREATE TABLE experdb_management.t_pry_svr_status_g (
 	svr_stop_tm varchar(20) NULL,                             -- 서버_중단_시간
 	exe_rslt_cd varchar(20) NOT NULL DEFAULT 'TC001501',      -- 실행_결과_코드
 	lsn_id numeric(18) NOT NULL,                              -- 리스너_ID
+	lsn_svr_id numeric(18) NOT NULL,                 			-- 리스너_서버_ID
 	db_con_addr varchar(30) NOT NULL,                         -- DB_접속_주소
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
@@ -390,6 +391,7 @@ COMMENT ON COLUMN experdb_management.t_pry_svr_status_g.svr_status_chg_cnt IS '�
 COMMENT ON COLUMN experdb_management.t_pry_svr_status_g.svr_stop_tm IS '서버_중단_시간';
 COMMENT ON COLUMN experdb_management.t_pry_svr_status_g.exe_rslt_cd IS '실행_결과_코드';
 COMMENT ON COLUMN experdb_management.t_pry_svr_status_g.lsn_id IS '리스너_ID';
+COMMENT ON COLUMN experdb_management.t_pry_svr_status_g.lsn_svr_id IS '리스너_서버_ID';
 COMMENT ON COLUMN experdb_management.t_pry_svr_status_g.db_con_addr IS 'DB_접속_주소';
 COMMENT ON COLUMN experdb_management.t_pry_svr_status_g.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_pry_svr_status_g.frst_reg_dtm IS '최초_등록_일시';

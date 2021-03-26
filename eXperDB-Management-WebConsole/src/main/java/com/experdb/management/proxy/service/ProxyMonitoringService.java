@@ -58,12 +58,26 @@ public interface ProxyMonitoringService {
 	List<Map<String, Object>> selectDBServerConProxy(int pry_svr_id);
 	
 	/**
-	 * Proxy 리스너 통계 정보 조회
+	 * Proxy 리스너 상세 정보 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
 	List<Map<String, Object>> selectProxyStatisticsInfo(int pry_svr_id);
 	
+	/**
+	 * Proxy 리스너 통계 정보 조회
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	List<Map<String, Object>> selectProxyStatisticsChartInfo(int pry_svr_id);
+	
+	/**
+	 * Proxy 리스너 통계 정보카운트
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	List<Map<String, Object>> selectProxyChartCntList(int pry_svr_id);
+
 	/**
 	 * Proxy, keepalived config 파일 정보 조회
 	 * @param pry_svr_id

@@ -785,7 +785,7 @@
 									<ul class="submenu-item">
 										<li class="nav-item">
 											<span class="nav-heading-title">
-												<b><spring:message code="menu.proxy"/></b>
+												<b><spring:message code="menu.proxy_mgmt"/></b>
 											</span>
 										</li>
 										<li class="nav-item" id="MN0001801">
