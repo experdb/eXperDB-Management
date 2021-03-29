@@ -70,5 +70,7 @@ public interface ProxySettingService {
 
 	public void updateProxyServerStatus(Map<String, Object> param);
 
+	public List<Map<String, Object>> selectIpList(Map<String, Object> param);
+
 
 }

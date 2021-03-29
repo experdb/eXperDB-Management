@@ -544,4 +544,9 @@
            , 	LST_MDF_DTM = clock_timestamp()
          WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
 	</update>
+	<select id="selectIpList" resultType="HashMap" >
+		SELECT IPADR
+		FROM T_DBSVRIPADR_I
+		WHERE DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id}::numeric)
+	</select>	
 </mapper>

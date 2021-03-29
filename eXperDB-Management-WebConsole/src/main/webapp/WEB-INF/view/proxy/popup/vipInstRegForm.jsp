@@ -21,13 +21,6 @@
 %>
 
 <script type="text/javascript">
-var vip_ip_msg =  '<spring:message code="eXperDB_proxy.vip" />';
-var vip_interface_msg = '<spring:message code="eXperDB_proxy.vip_interface" />';
-var vip_router_msg = '<spring:message code="eXperDB_proxy.vip_router" />';
-var vip_state_msg = '<spring:message code="eXperDB_proxy.vip_state" />';
-var vip_priority_msg = '<spring:message code="eXperDB_proxy.vip_priority" />';
-var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
-
 	$(window.document).ready(function() {
 		$.validator.addMethod("validatorIpFormat2", function (str, element, param) {
 			  var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(3[0-2]|[0-2][0-9]?)$/;
@@ -55,6 +48,25 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 			    }
 			    return true;
 		  });
+		
+		$.validator.addMethod("duplCheckPriority", function (str, element, param) {
+			var cnt = 0;
+		    var listLen = vipInstTable.rows().data().length;
+		    var tblData = vipInstTable.rows().data();
+		    for(var i=0; i< listLen; i++){
+		    	if(str==tblData[i].priority){
+		    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && $("#instReg_vip_cng_id", "#insVipInstForm").val() != tblData[i].vip_cng_id){
+		    			cnt++;
+		    		}else if($("#instReg_mode", "#insVipInstForm").val()=="reg"){
+		    			cnt++;
+		    		}
+		    	}
+		    }
+		    if(cnt > 0){
+		    	return false;
+		    }
+		    return true;
+	  });
 		  
 		  $.validator.addMethod("duplCheckRotId", function (str, element, param) {
 			  	var cnt = 0;
@@ -93,7 +105,9 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 						required: true
 					},
 					instReg_priority: {
-						required: true
+						required: true,
+						duplCheckPriority : true
+						
 					},
 					instReg_chk_tm: {
 						required: true
@@ -103,20 +117,21 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 		        	instReg_v_ip: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />',
 						validatorIpFormat2 : '<spring:message code="errors.format" arguments="'+ 'IP주소' +'" />',
-						duplCheckVIp : '가상 IP가 중복됩니다.'
+						duplCheckVIp : '<spring:message code="errors.duplicate" />'
 					},
 					instReg_v_if_nm: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					instReg_v_rot_id: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />',
-						duplCheckRotId : '가상 라우터 id가 중복됩니다'
+						duplCheckRotId : '<spring:message code="errors.duplicate" />'
 					},
 					instReg_state_nm: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					instReg_priority: {
-						required: '<spring:message code="eXperDB_proxy.msg2" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />',
+						duplCheckPriority : '<spring:message code="errors.duplicate" />'
 					},
 					instReg_chk_tm: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
@@ -134,15 +149,51 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 		          label.insertAfter(element);
 		        },
 		        highlight: function(element, errorClass) {
-		          $(element).parent().addClass('has-danger')
-		          $(element).addClass('form-control-danger')
+		          $(element).parent().addClass('has-danger');
+		          $(element).addClass('form-control-danger');
 		        }
 			});
 	});
+	/* ********************************************************
+     * 우선순위가 가장 높은 걸 자동으로 Master로 변경, 그 외 State 모두 Backup으로 수정
+    ******************************************************** */
+	function master_gbn_auto_edit(){
+		var dataLen = vipInstTable.rows().data().length;
+		var maxPriority;
+		var maxindex;
+		//가장 우선순위가 높은 row index 찾기
+		for(var i=0; i<dataLen; i++){
+			if(i==0){
+				maxPriority = vipInstTable.row(i).data().priority;
+				maxindex = 0;
+			}else{
+				if(maxPriority < vipInstTable.row(i).data().priority){
+					maxPriority = vipInstTable.row(i).data().priority;
+					maxindex = i;
+				}
+			}
+		}
+		//MASTER/BACKUP 수정
+		for(var i=0; i<dataLen; i++){
+			if(maxindex == i){
+				vipInstTable.row(i).data().state_nm ="MASTER";
+			}else{
+				vipInstTable.row(i).data().state_nm ="BACKUP";
+			}
+		}
+		var tempData = vipInstTable.rows().data();
+		vipInstTable.clear().draw();
+		vipInstTable.rows.add(tempData).draw();
+	}
+	/* ********************************************************
+     * 등록 후 저장 클릭 시 
+    ******************************************************** */
 	function instReg_add_vip_instance(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
-		showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		showSwalIcon('<spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		vipInstTable.row.add({
 			"state_nm" : $("#instReg_state_nm", "#insVipInstForm").val(),
 			"v_ip" : $("#instReg_v_ip", "#insVipInstForm").val(),
@@ -153,13 +204,20 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 			"vip_cng_id" : $("#instReg_vip_cng_id", "#insVipInstForm").val(),
 			"pry_svr_id" : $("#instReg_pry_svr_id", "#insVipInstForm").val()
 		}).draw();
+		
+		master_gbn_auto_edit();
+		
 		$('#pop_layer_proxy_inst_reg').modal("hide");
 	}
-	
+	/* ********************************************************
+     * 수정 후 저장 클릭 시 
+    ******************************************************** */
 	function instReg_mod_vip_instance(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
-		showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		showSwalIcon('<spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		var dataLen = vipInstTable.rows().data().length;
 		var oriData = vipInstTable.rows().data();
 		for(var i=0; i<dataLen; i++){
@@ -176,6 +234,9 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 				vipInstTable.rows.add(tempData).draw();
 			}
 		}
+		
+		master_gbn_auto_edit(); 
+		
 		$('#pop_layer_proxy_inst_reg').modal("hide");
 	}
 	
@@ -187,11 +248,11 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 	}
 	
 </script>
-<div class="modal fade" id="pop_layer_proxy_inst_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 200px 330px;">
-		<div class="modal-content" style="width:1000px;">		 
+<div class="modal fade" id="pop_layer_proxy_inst_reg" tabindex="-1" role="dialog" aria-labelledby="ModalVipInstance" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 200px 400px;">
+		<div class="modal-content" style="width:800px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
-				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalVipInstance" style="padding-left:5px;">
 					<spring:message code="eXperDB_proxy.instance_reg"/>
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
@@ -202,14 +263,11 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 						<fieldset>
 							<div class="card-body card-body-border">
 								<div class="form-group row">
-									<label for="instReg_v_ip" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="instReg_v_ip" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="eXperDB_proxy.vip" />(*)
 									</label>
-									<div class="col-sm-3">
-										<input type="text" class="form-control form-control-xsm instReg_v_ip" maxlength="20" id="instReg_v_ip" name="instReg_v_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="xxx.xxx.xxx.xxx/xx" tabindex=1 />
-									</div>
-									<div class="col-sm-3">
+									<div class="col-sm-3_75">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_ip_sel" id="instReg_v_ip_sel" onchange="fn_change_v_ip_sel();"  tabindex=4 >
 											<option value="">직접 입력</option>
 											<option value="192.168.50.115/32">192.168.50.115/32</option>
@@ -217,56 +275,62 @@ var vip_chk_tm_msg = '<spring:message code="eXperDB_proxy.vip_check_tm" />';
 											<option value="10.0.2.15/32">10.0.2.15/32</option>
 										</select>
 									</div>
-									<label for="instReg_state_nm" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="eXperDB_proxy.vip_state" />(*)
-									</label>
-									<div class="col-sm-2">
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_state_nm" id="instReg_state_nm"  tabindex=4 >
-											<option value="MASTER">MASTER</option>
-											<option value="BACKUP">BACKUP</option>
-										</select>
+									<div class="col-sm-3_75">
+										<input type="text" class="form-control form-control-xsm instReg_v_ip" maxlength="20" id="instReg_v_ip" name="instReg_v_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="xxx.xxx.xxx.xxx/xx" tabindex=1 />
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="instReg_v_if_nm" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="instReg_v_if_nm" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="eXperDB_proxy.vip_interface" />(*)
 									</label>
-									<div class="col-sm-3">
-										<input type="text" class="form-control form-control-xsm instReg_v_if_nm" maxlength="20" id="instReg_v_if_nm" name="instReg_v_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
-									</div>
-									<div class="col-sm-3">
+									<div class="col-sm-3_75">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_if_nm_sel" id="instReg_v_if_nm_sel" onchange="fn_change_v_if_nm_sel();"  tabindex=4 >
 											<option value="">직접 입력</option>
 											<option value="enp0s3">enp0s3</option>
 											<option value="enp0s8">enp0s8</option>
 										</select>
 									</div>
-									<label for="instReg_v_rot_id" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="eXperDB_proxy.vip_router" />(*)
-									</label>
-									<div class="col-sm-2" id="div_min_data_del_term">
-										<input type="number" class="form-control form-control-xsm instReg_v_rot_id" maxlength="20" id="instReg_v_rot_id" name="instReg_v_rot_id" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=3 />
+									<div class="col-sm-3_75">
+										<input type="text" class="form-control form-control-xsm instReg_v_if_nm" maxlength="20" id="instReg_v_if_nm" name="instReg_v_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
 									</div>
 								</div>
-								<div class="form-group row row-last">
-									<label for="instReg_priority" class="col-sm-2 col-form-label-sm pop-label-index">
+								<%-- <div class="form-group row">
+									<h4 class="text-warning" style="font-size: 0.875rem;">&nbsp;&nbsp;&nbsp; <spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.</h4>
+								</div> --%>
+								<div class="form-group row">
+									<label for="instReg_state_nm" class="col-sm-3 col-form-label-sm pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="eXperDB_proxy.vip_state" />(*)
+									</label>
+									<div class="col-sm-3">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_state_nm" id="instReg_state_nm"  tabindex=4 >
+											<option value="MASTER">MASTER</option>
+											<option value="BACKUP">BACKUP</option>
+										</select>
+									</div>
+									<label for="instReg_priority" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<%-- <spring:message code="user_management.company" /> --%>
 										<spring:message code="eXperDB_proxy.vip_priority" />(*)
 									</label>
-									<div class="col-sm-2">
+									<div class="col-sm-3">
 										<input type="number" class="form-control form-control-xsm instReg_priority" maxlength="20" id="instReg_priority" name="instReg_priority" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=5 />
 									</div>
-									<div class="col-sm-4">
+								</div>
+								<div class="form-group row row-last">
+									<label for="instReg_v_rot_id" class="col-sm-3 col-form-label-sm pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="eXperDB_proxy.vip_router" />(*)
+									</label>
+									<div class="col-sm-3" id="div_min_data_del_term">
+										<input type="number" class="form-control form-control-xsm instReg_v_rot_id" maxlength="20" id="instReg_v_rot_id" name="instReg_v_rot_id" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=3 />
 									</div>
-									<label for="instReg_chk_tm" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="instReg_chk_tm" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="eXperDB_proxy.vip_check_tm" />(*)
 									</label>
-									<div class="col-sm-2">
+									<div class="col-sm-3">
 										<input type="number" class="form-control form-control-xsm instReg_chk_tm" maxlength="20" id="instReg_chk_tm" name="instReg_chk_tm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=6 />
 									</div>
 								</div>

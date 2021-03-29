@@ -34,8 +34,8 @@ function fn_serverListTable_init() {
 		searching : false,
 		paging : false,
 		deferRender : true,
-		columns : [	{data : "db_con_addr", className : "dt-center", defaultContent : "",
-					render : function(data, type, full, meta) {
+		columns : [	{data : "db_con_addr", className : "dt-center", defaultContent : ""
+					/* ,render : function(data, type, full, meta) {
 							if(full.lsn_svr_id == ""){
 								var html = '<input type="text" class="form-control form-control-xsm" maxlength="30"';
 								html +='id="db_con_addr_'+meta.row+'" value="'+full.db_con_addr+'" name="db_con_addr_'+meta.row+'" onkeyup="fn_edit_serverList('+meta.row+',\'db_con_addr\');fn_checkWord(this,21);" onblur="this.value=this.value.trim()" placeholder="DBMS접속 IP : Port 형식으로 입력하세요." />';
@@ -43,15 +43,14 @@ function fn_serverListTable_init() {
 							}else{
 								return full.db_con_addr;
 							}
-						}
-						
+						} */
 					},
-					{data : "chk_portno", className : "dt-center",  defaultContent : "",
-						render : function(data, type, full, meta) {
+					{data : "chk_portno", className : "dt-center",  defaultContent : ""
+					/* ,render : function(data, type, full, meta) {
 							var html = '<input type="number" class="form-control form-control-xsm" maxlength="5"';
 							html +='id="chk_portno_'+meta.row+'" value="'+full.chk_portno+'" name="chk_portno_'+meta.row+'"  onKeyPress="chk_Number(this);" onkeyup="fn_edit_serverList('+meta.row+',\'chk_portno\');fn_checkWord(this,5);" onblur="this.value=this.value.trim()" placeholder="5자리까지 입력 가능합니다." />';
 							return html;
-						}
+						} */
 					},
 					{data : "backup_yn", defaultContent : "",
 						render : function(data, type, full, meta) {
@@ -119,6 +118,36 @@ function fn_serverListTable_init() {
 		        return true;
 		    }
 		    return false;
+		});
+		
+		$("#ipadr_form").validate({
+	        rules: {
+	        	ipadr: {
+					required:true
+				},
+				portno: {
+					required: true,
+				}
+	        },
+	        messages: {
+	        	ipadr: {
+					required: '<spring:message code="eXperDB_proxy.msg2"/>'
+				},
+				portno: {
+					required: '<spring:message code="eXperDB_proxy.msg2"/>'
+				}
+	        },
+			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
+				fn_add_server_list();
+			},
+	        errorPlacement: function(label, element) {
+	          label.addClass('mt-2 text-danger');
+	          label.insertAfter(element);
+	        },
+	        highlight: function(element, errorClass) {
+	          $(element).parent().addClass('has-danger');
+	          $(element).addClass('form-control-danger');
+	        }
 		});
 		
 		$("#insProxyListenForm").validate({
@@ -247,8 +276,9 @@ function fn_serverListTable_init() {
 	 ******************************************************** */
 	function lstnReg_add_listener(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
-		showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		proxyListenTable.row.add({
 			"lsn_nm" : $("#lstnReg_lsn_nm", "#insProxyListenForm").val(),
 			"con_bind_port" : $("#lstnReg_con_bind_ip", "#insProxyListenForm").val()+":"+$("#lstnReg_con_bind_port", "#insProxyListenForm").val(),
@@ -269,8 +299,9 @@ function fn_serverListTable_init() {
 	 ******************************************************** */
 	function lnstReg_mod_listener(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
-		showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		
 		//수정된 내용 반영
 		var dataLen = proxyListenTable.rows().data().length;
@@ -340,17 +371,19 @@ function fn_serverListTable_init() {
 	function fn_add_server_list(){
 		serverListTable.row.add({
 			"backup_yn" : "N",
-			"chk_portno" : "",
-			"db_con_addr" : "",
+			"chk_portno" : $("#portno").val(),
+			"db_con_addr" : $("#ipadr").val()+":"+$("#portno").val(),
 			"lsn_svr_id" : "",
 			"lsn_id" : parseInt($("#lstnReg_lsn_id", "#insProxyListenForm").val()),
 			"pry_svr_id" : parseInt($("#lstnReg_pry_svr_id", "#insProxyListenForm").val()),
-			"edit_yn" : "N"
+			"edit_yn" : "Y"
 		}).draw();
 		
 		var tempData =serverListTable.rows().data();
 		serverListTable.clear();
 		serverListTable.rows.add(tempData).draw(); // row 인덱스 재정비, 삭제 후 row 생성 하면 index 중복 발생하여 생성 시 새로 그려줌
+
+		$('#pop_layer_ip_reg').modal("hide");
 	}
 	/* ********************************************************
 	 * Listener Server List 삭제
@@ -380,12 +413,97 @@ function fn_serverListTable_init() {
 		}
 		serverListTable.row('.selected').data().edit_yn = "Y";
 	}
+	
+
+	function fn_ipadrAddForm(){
+		$.ajax({
+			url : "/proxy/selectIpList.do",
+			data : {pry_svr_id : parseInt($("#lstnReg_pry_svr_id", "#insProxyListenForm").val())},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				var dataLen = serverListTable.rows().data().length;
+				var datas = serverListTable.rows().data();
+				$("#ipadr").children().remove();
+				$("#ipadr").append("<option value='%'><spring:message code='common.choice' /></option>");
+				if(result.length > 0){
+					for(var i=0; i<result.length; i++){
+						var inclu = false;
+						for(var j=0 ; j < dataLen ; j++){
+							var temp = datas[j].db_con_addr;
+							if(temp.substr(0,temp.indexOf(":")) == result[i].ipadr) inclu=true;
+						}
+						if(!inclu) $("#ipadr").append("<option value='"+result[i].ipadr+"'>"+result[i].ipadr+"</option>");	
+					}									
+				}
+			}
+		});
+	  	
+		document.ipadr_form.reset();
+	}
 </script>
-<div class="modal fade" id="pop_layer_proxy_listen_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+<div class="modal fade" id="pop_layer_ip_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; z-index: 1060;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 250px 300px;">
+		<div class="modal-content" style="width:1000px;">			 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="dbms_information.dbms_ip_reg"/>
+				</h4>
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card-body">
+						<form class="cmxform" name="ipadr_form" id="ipadr_form" method="post">
+							<fieldset>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.dbms_ip" />(*)
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control"  id="ipadr" name="ipadr">
+											<option value="%"><spring:message code="schedule.total" /> </option>
+										</select>
+									</div>
+									
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="data_transfer.port" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="portno" name="portno"  maxlength="5" onkeyup="fn_checkWord(this,5)" placeholder="5<spring:message code='message.msg188'/>">
+									</div>
+									
+								</div>
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" value='<spring:message code="common.add" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="pop_layer_proxy_listen_reg" tabindex="-1" role="dialog" aria-labelledby="ModalProxyListen" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
-				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalProxyListen" style="padding-left:5px;">
 					<spring:message code="eXperDB_proxy.listener_reg"/>
 				</h4>
 				
@@ -492,7 +610,7 @@ function fn_serverListTable_init() {
 									</div>
 									<div class="form-group row">
 										<div class="col-sm-12">
-											<a data-toggle="modal" href="#pop_layer_ip_reg"><span onclick="fn_add_server_list();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span></a>
+											<a data-toggle="modal" href="#pop_layer_ip_reg"><span onclick="fn_ipadrAddForm();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span></a>
 											<span onclick="fn_del_server_list();" style="cursor:pointer"><img src="../images/popup/minus.png" alt=""  /></span>
 											<table id="serverList" class="table table-hover table-striped system-tlb-scroll input-table" style="width:100%;">
 												<thead>

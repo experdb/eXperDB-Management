@@ -150,7 +150,7 @@ var mgmtDbmsTable = null;
 		var len = data.length;
 		$( "#svrReg_master_svr_id > option", "#svrRegProxyServerForm" ).remove();
 		
-		//innerHtml += '<option value="">-</option>';
+		innerHtml += '<option value=""> 선택 </option>';
 	
 		for(var i=0; i<len; i++){
 			var id = data[i].pry_svr_id;
@@ -264,7 +264,7 @@ var mgmtDbmsTable = null;
 	function fn_reg_svr_check(){
 		//연결 테스트를 했는지, 안했다면 
 		if($("#svrReg_conn_result", "#svrRegProxyServerForm").val() != "true"){
-			fn_multiConfirmModal("conn_test");
+			showSwalIcon('<spring:message code="message.msg89"/>', '<spring:message code="common.close" />', '', 'error');
 		}else{
 			if($("#svrReg_mode", "#svrRegProxyServerForm").val() == "reg"){
 				fn_multiConfirmModal("pry_svr_reg");
@@ -336,16 +336,18 @@ var mgmtDbmsTable = null;
  		});
 	}
 </script>
-<div class="modal fade" id="pop_layer_svr_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="pop_layer_svr_reg" tabindex="-1" role="dialog" aria-labelledby="ModalProxyServer" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 80px 330px;">
 		<div class="modal-content" style="width:1040px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
-				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalProxyServer" style="padding-left:5px;">
 					<spring:message code="eXperDB_proxy.server_reg"/>
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="svrRegProxyServerForm">
 						<input type="hidden" id="svrReg_mode" name="svrReg_mode">
+						<input type="hidden" id="svrReg_exe_status" name="svrReg_exe_status">
+						<input type="hidden" id="svrReg_kal_exe_status" name="svrReg_kal_exe_status">
 						<input type="hidden" id="svrReg_conn_result" name="svrReg_conn_result">
 						<input type="hidden" id="svrReg_pry_svr_id" name="svrReg_pry_svr_id">
 						<input type="hidden" id="svrReg_master_svr_id_val" name="svrReg_master_svr_id_val">

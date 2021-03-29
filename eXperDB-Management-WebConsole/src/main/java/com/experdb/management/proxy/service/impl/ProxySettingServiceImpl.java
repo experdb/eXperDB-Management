@@ -170,5 +170,10 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		proxySettingDAO.updateProxyServerStatus(param);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectIpList(Map<String, Object> param) {
+		return proxySettingDAO.selectIpList(param);
+	}
+
 
 }

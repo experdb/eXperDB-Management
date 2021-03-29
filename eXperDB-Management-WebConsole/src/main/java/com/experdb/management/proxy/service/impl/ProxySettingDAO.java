@@ -177,5 +177,11 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	public void updateProxyServerStatus(Map<String, Object> param) {
 		insert("proxyServerSettingSql.updateProxyServerStatus", param);	
 	}
+
+	public List<Map<String, Object>> selectIpList(Map<String, Object> param) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyServerSettingSql.selectIpList", param);
+		return result;
+	}
 	
 }

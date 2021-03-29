@@ -32,6 +32,7 @@ import com.experdb.management.proxy.service.ProxyVipConfigVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
@@ -955,4 +956,27 @@ public class ProxySettingController {
 		}
 		return resultObj;
 	}
+	
+	/**
+	 * DBMS IP SelectBox 
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/proxy/selectIpList.do")
+	public @ResponseBody List<Map<String, Object>> selectIpList(HttpServletRequest request, HttpServletResponse response) {
+	
+		List<Map<String, Object>> resultSet = null;
+	
+		try {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("pry_svr_id",  Integer.parseInt(request.getParameter("pry_svr_id")));
+			
+			resultSet = proxySettingService.selectIpList(param);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
 }
