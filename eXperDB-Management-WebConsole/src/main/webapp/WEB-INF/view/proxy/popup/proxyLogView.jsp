@@ -23,7 +23,7 @@
 	/* ********************************************************
 	 * view 실행
 	 ******************************************************** */
-	function fn_logViewAjax() {
+	function fn_logViewAjax(pry_svr_id, type, date) {
 		var v_db_svr_id = $("#db_svr_id", "#findList").val();
 		var v_seek = $("#seek", "#proxyViewForm").val();
 		var v_file_name = $("#info_file_name", "#proxyViewForm").val();
@@ -42,9 +42,9 @@
 			dataType : "json",
 			type : "post",
  			data : {
- 				db_svr_id : v_db_svr_id,
- 				seek : v_seek,
- 				file_name : v_file_name,
+ 				pry_svr_id : pry_svr_id,
+ 				type : type,
+ 				date : date,
  				dwLen : v_dwLen,
  				readLine : v_log_line
  			},
@@ -80,6 +80,7 @@
 					
 					$("#view_file_size", "#proxyViewForm").html(v_fileSize);
 				}
+				dateCalenderSetting(date);
 			}
 		});
 	}
@@ -99,36 +100,41 @@
 	/* ********************************************************
 	 * log calender 셋팅
 	 ******************************************************** */
-	function dateCalenderSetting() {
+	function dateCalenderSetting(date) {
 		var today = new Date();
 		var day_end = today.toJSON().slice(0,10);
 
 		today.setDate(today.getDate() - 7);
 		var day_start = today.toJSON().slice(0,10);
-
-		$("#wrk_strt_dtm").val(day_start);
-		$("#wrk_end_dtm").val(day_end);
+		console.log(date);
+		console.log(today);
+		console.log(today.toJSON());
+		var sys_date = date.slice(0,10);
+		console.log(date.substring(0,10));
+		console.log(today.toJSON().slice(0,10));
+		$("#wrk_strt_dtm").val(sys_date);
+// 		$("#wrk_end_dtm").val(day_end);
 
 		if ($("#wrk_strt_dtm_div").length) {
 			$('#wrk_strt_dtm_div').datepicker({
-			}).datepicker('setDate', day_start)
+			}).datepicker('setDate', sys_date)
 			.on('hide', function(e) {
 				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
 		    }); //값 셋팅
 		}
 
-		if ($("#wrk_end_dtm_div").length) {
-			$('#wrk_end_dtm_div').datepicker({
-			}).datepicker('setDate', day_end)
-			.on('hide', function(e) {
-				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
-		    }); //값 셋팅
-		}
+// 		if ($("#wrk_end_dtm_div").length) {
+// 			$('#wrk_end_dtm_div').datepicker({
+// 			}).datepicker('setDate', day_end)
+// 			.on('hide', function(e) {
+// 				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+// 		    }); //값 셋팅
+// 		}
 		
-		$("#wrk_strt_dtm").datepicker('setDate', day_start);
-	    $("#wrk_end_dtm").datepicker('setDate', day_end);
+		$("#wrk_strt_dtm").datepicker('setDate', sys_date);
+// 	    $("#wrk_end_dtm").datepicker('setDate', sys_date);
 	    $('#wrk_strt_dtm_div').datepicker('updateDates');
-	    $('#wrk_end_dtm_div').datepicker('updateDates');
+// 	    $('#wrk_end_dtm_div').datepicker('updateDates');
 	}
 	
 	/* ********************************************************
@@ -213,6 +219,22 @@
 											<tr>
 												<td width="100%" colspan="5">
 											 		<div class="overflow_area3" id="proxylog" style="width:1065px;">
+											 		Mar 23 16:33:45 vip_backup haproxy: [WARNING] 081/163345 (1116) : Server pgReadOnly/standby is DOWN, reason: Layer4 connection problem, info: "Connection refused at step 1 of tcp-check (connect)", check duration: 0ms. 0 active and 1 backup servers left. Running on backup. 0 sessions active, 0 requeued, 0 remaining in queue.
+											 		<br>
+Mar 23 16:33:50 vip_backup haproxy: [WARNING] 081/163350 (1116) : Backup Server pgReadOnly/primary is DOWN, reason: Layer7 invalid response, info: "TCPCHK did not match content '' at step 10", check duration: 1ms. 0 active and 0 backup servers left. 0 sessions active, 0 requeued, 0 remaining in queue.
+<br>
+Mar 23 16:33:50 vip_backup haproxy: [ALERT] 081/163350 (1116) : proxy 'pgReadOnly' has no server available!
+<br>
+Mar 23 16:33:50 vip_backup haproxy: [WARNING] 081/163350 (1116) : Server pgReadWrite/primary is DOWN, reason: Layer4 connection problem, info: "Connection refused at step 1 of tcp-check (connect)", check duration: 0ms. 0 active and 0 backup servers left. 0 sessions active, 0 requeued, 0 remaining in queue.
+<br>
+Mar 23 16:33:50 vip_backup haproxy: [ALERT] 081/163350 (1116) : proxy 'pgReadWrite' has no server available!
+<br>
+Mar 23 16:34:00 vip_backup haproxy: [WARNING] 081/163400 (1116) : Backup Server pgReadOnly/primary is UP, reason: Layer7 check passed, code: 0, info: "(tcp-check)", check duration: 35ms. 0 active and 1 backup servers online. Running on backup. 0 sessions requeued, 0 total in queue.
+<br>
+Mar 23 16:34:01 vip_backup haproxy: [WARNING] 081/163401 (1116) : Server pgReadWrite/primary is UP, reason: Layer7 check passed, code: 0, info: "(tcp-check)", check duration: 38ms. 1 active and 0 backup servers online. 0 sessions requeued, 0 total in queue.
+<br>
+Mar 23 16:34:03 vip_backup haproxy: [WARNING] 081/163403 (1116) : Server pgReadOnly/standby is UP, reason: Layer7 check passed, code: 0, info: "(tcp-check)", check duration: 35ms. 1 active and 1 backup servers online. 0 sessions requeued, 0 total in queue.
+											 		
 													</div>
 												</td>
 											</tr>

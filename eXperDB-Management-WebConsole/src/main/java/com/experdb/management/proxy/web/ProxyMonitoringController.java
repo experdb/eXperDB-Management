@@ -1,5 +1,6 @@
 package com.experdb.management.proxy.web;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.experdb.management.proxy.service.ProxyLogVO;
@@ -194,7 +196,7 @@ public class ProxyMonitoringController {
 				for (int i = 0; i < proxyStatisticsInfoChart.size(); i++) {
 					Map<String, Object> chart = new HashMap<String, Object>();
 
-					chart.put("exe_dtm_ss", proxyStatisticsInfoChart.get(i).get("exe_dtm"));
+					chart.put("exe_dtm_ss", proxyStatisticsInfoChart.get(i).get("exe_dtm_ss"));
 					chart.put("byte_receive", proxyStatisticsInfoChart.get(i).get("byte_receive"));
 					chart.put("byte_transmit", proxyStatisticsInfoChart.get(i).get("byte_transmit"));
 					chart.put("cumt_sso_con_cnt", proxyStatisticsInfoChart.get(i).get("cumt_sso_con_cnt"));
@@ -262,8 +264,10 @@ public class ProxyMonitoringController {
 	 * @param historyVO, request
 	 * @return
 	 */
-	public HashMap configViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+	@RequestMapping("/configViewAjax.do")
+	public ModelAndView configViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		HashMap result = new HashMap<>();
+		ModelAndView mv = new ModelAndView("jsonView");
 		String strBuffer = "";
 		System.out.println("2222222222222222222222222222222222222222222222");
 		System.out.println("pry_svr_id : " + request.getParameter("pry_svr_id"));
@@ -325,23 +329,44 @@ public class ProxyMonitoringController {
 //			int intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
 //			
 //			Long lngSeek= (Long)objList.get(ClientProtocolID.SEEK);
+			System.out.println("fileName : " + strFileName);
 			
-			result.put("data", strBuffer);
-			result.put("fSize", strBuffer.length());
-			//hp.put("fChrSize", intLastLength - intFirstLength);
+			///////// 화면용 file 처리
+	        FileInputStream fileStream = null; // 파일 스트림
+	        String path = "C:/Users/yj402/git/eXperDB-Management/eXperDB-Management-WebConsole/src/main/java/com/experdb/management/proxy/service/";
+	        fileStream = new FileInputStream(path + strFileName );// 파일 스트림 생성
+	        
+	        //버퍼 선언
+	        byte[ ] readBuffer = new byte[fileStream.available()];
+	        while (fileStream.read( readBuffer ) != -1){
+	        	strBuffer += new String(readBuffer);
+	        }
+	        String config_title = "";
+	        if(type.equals("P")){
+	        	config_title = "[ "+ strPrySvrNm + " ]  Proxy Config 파일";
+	        } else {
+	        	config_title = "[ "+ strPrySvrNm + " ]  Keepavlied Config 파일";
+	        }
+//			result.put("data", strBuffer);
+//			result.put("fSize", strBuffer.length());
+			mv.addObject("data", strBuffer);
+			mv.addObject("fSize", strBuffer.length());
+			mv.addObject("config_title", config_title);
+			fileStream.close();
+			//hp.put("fChrSize", intLastLength - intFirstLength); 
 //			hp.put("seek", lngSeek.toString());
 //			hp.put("dwLen", Integer.toString(intDwlen));
 //			hp.put("endFlag", strEndFlag);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 		
-		return result;
+		return mv;
 	}
 	
 	/**
-	 * proxy / keepavlied log popup
+	 * proxy / keepavlied log popup view
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
@@ -352,9 +377,56 @@ public class ProxyMonitoringController {
 		return mv;
 	}
 	
+	/**
+	 * proxy / keepalived log file
+	 * @return ModelAndView
+	 */
 	@RequestMapping("/proxyLogViewAjax.do")
 	public ModelAndView logViewAjax(){
 		ModelAndView mv = new ModelAndView("jsonView");
+		return mv;
+	}
+	
+	/**
+	 * proxy / keepalived 상태 변경
+	 * @param request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/actExeCng.do")
+	public ModelAndView actExeCng(HttpServletRequest request){
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		String strPrySvrId = request.getParameter("pry_svr_id");
+		String type = request.getParameter("type");
+		int pry_svr_id = Integer.parseInt(strPrySvrId);
+		String status = request.getParameter("status");
+		System.out.println("********************** actExeCng");
+		System.out.println(pry_svr_id);
+		System.out.println(status);
+		System.out.println(type);
+		
+		int result = proxyMonitoringService.actExeCng(pry_svr_id, type, status);
+		System.out.println("result : " +  result);
+		mv.addObject("result", result);
+		return mv;
+	}
+	
+	/**
+	 * proxy / keepalived 기동-정지 실패 로그
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/actExeFailLog.do")
+	public ModelAndView actExeFailLog(HttpServletRequest request){
+		ModelAndView mv = new ModelAndView("jsonView");
+		System.out.println("*************************** actExeFailLog ");
+		int pry_act_exe_sn = Integer.parseInt(request.getParameter("pry_act_exe_sn"));
+		System.out.println(pry_act_exe_sn);
+		Map<String, Object> result = proxyMonitoringService.selectActExeFailLog(pry_act_exe_sn);
+		System.out.println(result.size());
+		System.out.println(result.toString());
+		mv.addObject("actExeFailLog", result);
+//		mv.setViewName("proxy/popup/exeFailMsg");
 		return mv;
 	}
 }
