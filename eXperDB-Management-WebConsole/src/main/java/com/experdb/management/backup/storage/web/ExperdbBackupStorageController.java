@@ -62,7 +62,7 @@ public class ExperdbBackupStorageController {
    
     
     @RequestMapping(value="/experdb/nfsValidation.do")
-    public @ResponseBody JSONObject nfsTest(HttpServletRequest request) {
+    public @ResponseBody JSONObject nfsValidation(HttpServletRequest request) {
     		JSONObject nfsResult =new JSONObject();
     	try {
     		BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
@@ -77,6 +77,27 @@ public class ExperdbBackupStorageController {
 			e.printStackTrace();
 		}
 		return nfsResult;
+    }
+    
+ 
+    @RequestMapping(value="/experdb/cifsValidation.do")
+    public @ResponseBody JSONObject cifsValidation(HttpServletRequest request) {
+    		JSONObject cifsResult =new JSONObject();
+    	try {
+    		BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
+    		backuplocation.setBackupDestLocation(request.getParameter("path"));
+    		backuplocation.setBackupDestUser(request.getParameter("userName"));
+    		backuplocation.setBackupDestPasswd(request.getParameter("passWord"));
+
+    		cifsResult = Backuploaction.validateCifs(backuplocation);
+
+    		System.out.println("RESULT_CODE = "+cifsResult.get("RESULT_CODE"));
+    		System.out.println("RESULT_DATA = "+cifsResult.get("RESULT_DATA"));
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return cifsResult;
     }
 
 }
