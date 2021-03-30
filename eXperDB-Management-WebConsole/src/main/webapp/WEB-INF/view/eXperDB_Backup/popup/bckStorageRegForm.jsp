@@ -26,6 +26,8 @@
 <script type="text/javascript">
 
  var pathList = [];
+ 
+ var storageValid = false;
 
 	/* ********************************************************
 	 * 초기 실행
@@ -164,9 +166,8 @@
 	 /* ********************************************************
 	  * Registration
 	  ******************************************************** */
-	  function fn_storageReg () {
-		  if(fn_validationReg()){
-		  
+	  function fn_storageReg () { 
+		 if(storageValid == true){
 			  $.ajax({
 					url : "/experdb/backupStorageReg.do",
 					data : {
@@ -204,6 +205,8 @@
 			  .always(function(){
 				  $('#pop_layer_popup_backupStorageReg').modal("hide");
 			  }) 
+		  }else{
+			  showSwalIcon('스토리지 설정을 확인해주세요!', '<spring:message code="common.close" />', '', 'error');
 		  }
 	 }
 	 
@@ -249,29 +252,13 @@
 	  * validation
 	  ******************************************************** */
 	 // validation check for registration
-	 function fn_validationReg() {
+	 function fn_storageValidate() {
 		 
-		 var check;
-
-		// INSERT CHECK (PATH, USERNAME, PASSWORD)
-		// path insert check
-		//$("#storageType").val()==1   -> NFS
-		//$("#storageType").val()==2   -> CIFS
-		
-		if($("#storageType").val()==2){
-			var checkVal = fn_valChkPW() + fn_valChkName() + fn_valChkPath();
-			if(checkVal){
-				check=false;
-			}
-		}else if(fn_valChkPath()){
-			check=false;
-		}else{
-			check=true;
-		}
-		
+		 //storageType == 1 (NFS)
+		 //storageType == 2 (CIFS)
 		if($("#storageType").val()==1){
-			
-			 $.ajax({
+			if(fn_valChkPath()){
+				 $.ajax({
 					url : "/experdb/nfsValidation.do",
 					data : {
 						path : $("#storagePath").val(),
@@ -290,17 +277,52 @@
 					success : function(result) {		
 						 if(result.RESULT_CODE == "1"){							 
 							 showSwalIcon('NFS 설정을 확인해주세요!', '<spring:message code="common.close" />', '', 'error');
-							 check=false;
+							 storageValid = false;
 						 }else{
-							 check=true;
+							 showSwalIcon('Connect for Success', '<spring:message code="common.close" />', '', 'success');
+							 storageValid = true;
 						 }	
 					}
 				});
-		}
-		
-		return check;
-		
+			}
+		}else{
+			var checkVal =fn_valChkPW() + fn_valChkName() + fn_valChkPath() ;
+			if(checkVal == 3){
+				 $.ajax({
+						url : "/experdb/cifsValidation.do",
+						data : {
+							path : $("#storagePath").val(),
+							userName : $("#userName").val(),
+							passWord : $("#passWord").val(),						
+						},
+						type : "post",
+						async: false, 
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							} else if (xhr.status == 403){
+								showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+							}
+						},
+						success : function(result) {		
+							 if(result.RESULT_CODE == "1"){
+								 alert(result.RESULT_DATA);
+								 showSwalIcon(result.RESULT_DATA, '<spring:message code="common.close" />', '', 'error');
+								 storageValid = false;
+							 }else{
+								 showSwalIcon('Connect for Success', '<spring:message code="common.close" />', '', 'success');
+								 storageValid = true;
+							 }	
+						}
+					});
+			}
+		}	
 	 }
+	 
+	 
+	 
 	 
 	// validation check for modification
 	 function fn_validationModi() {
@@ -323,25 +345,15 @@
 			$("#storagePathAlert").append("이미 등록된 Path 입니다");
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
-			return true;
+			return false;
 		}else if(!storagePath){
 			$("#storagePath").val("");
 			$("#storagePathAlert").append("Path를 입력해주세요");
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
-			return true;
-		}
-		/* else if(pathCheck != 0){
-			$("#storagePathAlert").append("유효한 Path를 입력해주세요");
-			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
-			$("#storagePath").focus();
-			return true;
-		} */
-		else{
-			// $("#storagePathAlert").append("사용가능한 Path 입니다");
-			// $("#storagePathAlert").removeClass("text-danger").addClass("text-success");
-			// $("#storagePathAlert").show();
 			return false;
+		}else{
+			return true;
 		}
 	 }
 
@@ -354,9 +366,9 @@
 			$("#userNameAlert").append("이름을 입력해주세요");
 			$("#userNameAlert").removeClass("text-success").addClass("text-danger");
 			$("#userName").focus();
-			return true;
-		}else{
 			return false;
+		}else{
+			return true;
 		}
 	 }
 
@@ -369,9 +381,9 @@
 			$("#passWordAlert").append("비밀번호를 입력해주세요");
 			$("#passWordAlert").removeClass("text-success").addClass("text-danger");
 			$("#passWord").focus();
-			return true;
-		}else{
 			return false;
+		}else{
+			return true;
 		}
 	 }
 
@@ -424,7 +436,7 @@
 			 pathList.push(data[i].path);
 		 }
 	 }
-
+ 
 
 </script>
 	
@@ -545,6 +557,7 @@
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<button type="button" class="btn btn-primary" id="regButton" onclick="fn_storageReg()"><spring:message code="common.registory"/></button>
 									<button type="button" class="btn btn-primary" id="modiButton" onclick="fn_storageModi()"><spring:message code="common.modify"/></button>
+									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button" onClick="fn_storageValidate();" value='스토리지 체크' />
 									<button type="button" class="btn btn-light" data-dismiss="modal" onclick=""><spring:message code="common.cancel"/></button>
 								</div>
 							</div>
