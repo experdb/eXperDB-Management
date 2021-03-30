@@ -875,7 +875,7 @@
 			$('#confirm_multi_msg').html(fn_strBrReplcae('해당 Proxy 서버 삭제 시,<br> <b class="text-danger">서버 관련 정보가 모두 삭제</b>됩니다. <br>'+'<spring:message code="message.msg162"/>'));
 		}else if (gbn == "stop") {
 			confirm_title = 'Proxy Server 중지';
-			$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 중지하시겠습니까?'));
+			$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 중지하시겠습니까? 연관된 DB <b class="text-danger">세션이 모두 끊어지게 됩니다.</b><br> 계속 진행하시겠습니까?'));
 		}else if (gbn == "start") {
 			confirm_title = 'Proxy Server 실행';
 			$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 실행하시겠습니까?'));
