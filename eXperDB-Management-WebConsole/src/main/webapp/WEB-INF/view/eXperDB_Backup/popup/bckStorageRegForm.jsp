@@ -308,7 +308,6 @@
 						},
 						success : function(result) {		
 							 if(result.RESULT_CODE == "1"){
-								 alert(result.RESULT_DATA);
 								 showSwalIcon(result.RESULT_DATA, '<spring:message code="common.close" />', '', 'error');
 								 storageValid = false;
 							 }else{

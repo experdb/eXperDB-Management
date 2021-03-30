@@ -46,10 +46,10 @@
 				  AND TARGETNAME LIKE #{server}
 				</if>
 				<if test="type != 0 || type != ''">
-				  AND JOBTYPE = #{type}
+				  AND JOBTYPE = #{type}::numeric
 			    </if>
 			    <if test="status != 0 || status != ''">
-				  AND STATUS = #{status}
+				  AND STATUS = #{status}::numeric
 				</if>
 				  AND EXECUTETIME BETWEEN #{startDate} AND #{endDate}		
 				ORDER BY JOBID DESC		
