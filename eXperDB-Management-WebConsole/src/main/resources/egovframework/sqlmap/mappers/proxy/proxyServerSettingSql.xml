@@ -353,6 +353,7 @@
          AND	VIP_CNG_ID = #{vip_cng_id}::numeric 
          AND 	STATE_NM = #{state_nm}
 	</update>
+
 	<insert id="insertPryVipConf" parameterType="proxyVipConfigVO">
     	/**
 	 	* Query ID : insertPryVipConf
@@ -374,7 +375,7 @@
       		LST_MDFR_ID, 
       		LST_MDF_DTM
 		) 
-		SELECT 	MAX(VIP_CNG_ID)+1 AS VIP_CNG_ID, 
+		SELECT 	(SELECT COALESCE(MAX(VIP_CNG_ID+1),1) FROM T_PRY_VIPCNG_I) AS VIP_CNG_ID, 
 				#{state_nm} AS STATE_NM,
 				#{pry_svr_id} AS PRY_SVR_ID,
 				#{v_ip} AS V_IP,
@@ -386,8 +387,8 @@
 				clock_timestamp() AS FRST_REG_DTM,
 				#{lst_mdfr_id} AS LST_MDFR_ID,
 				clock_timestamp() AS LST_MDF_DTM
-		FROM 	T_PRY_VIPCNG_I
 	</insert>
+
 	<delete id="deletePryVipConf" parameterType="proxyVipConfigVO">
 		/**
 		* Query ID : deletePryVipConf
@@ -418,6 +419,7 @@
          WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
          AND	LSN_ID = #{lsn_id}::numeric
 	</update>
+
 	<insert id="insertPryListener" parameterType="proxyListenerVO">
     	/**
 	 	* Query ID : insertPryListener
@@ -442,7 +444,7 @@
       		LST_MDFR_ID, 
       		LST_MDF_DTM
 		) 
-		SELECT 	MAX(LSN_ID)+1 AS LSN_ID, 
+		SELECT (SELECT COALESCE(MAX(LSN_ID+1),1) AS LSN_ID FROM T_PRY_LSN_I) AS LSN_ID, 
 				#{pry_svr_id} AS PRY_SVR_ID,
 				#{lsn_nm} AS LSN_NM,
 				#{con_bind_port} AS CON_BIND_PORT,
@@ -457,8 +459,8 @@
 				clock_timestamp() AS FRST_REG_DTM,
 				#{lst_mdfr_id} AS LST_MDFR_ID,
 				clock_timestamp() AS LST_MDF_DTM
-		FROM 	T_PRY_LSN_I
 	</insert>
+
 	<select id="selectPryListenerMaxId" resultType="int">
 		/**
 		* Query ID : selectPryListenerNewId
@@ -468,6 +470,7 @@
 		SELECT 	MAX(LSN_ID) AS LSN_ID
 		FROM 	T_PRY_LSN_I
 	</select>
+
 	<update id="updatePryListenerSvr" parameterType="proxyListenerServerVO">
         /**
         * Query ID : updatePryListenerSvr"
@@ -484,6 +487,7 @@
          AND 	LSN_SVR_ID = #{lsn_svr_id}::numeric
          AND	DB_CON_ADDR = #{db_con_addr}
 	</update>
+
 	<insert id="insertPryListenerSvr" parameterType="proxyListenerServerVO">
     	/**
 	 	* Query ID : insertPryListenerSvr
@@ -503,7 +507,7 @@
       		LST_MDFR_ID, 
       		LST_MDF_DTM
 		) 
-		SELECT 	MAX(LSN_SVR_ID)+1 AS LSN_SVR_ID, 
+		SELECT 	(SELECT COALESCE(MAX(LSN_SVR_ID+1),1) FROM T_PRY_LSN_SVR_I) AS LSN_SVR_ID, 
 				#{db_con_addr} AS DB_CON_ADDR, 
 				#{pry_svr_id} AS PRY_SVR_ID,
 				#{lsn_id} AS LSN_ID,
@@ -513,8 +517,8 @@
 				clock_timestamp() AS FRST_REG_DTM,
 				#{lst_mdfr_id} AS LST_MDFR_ID,
 				clock_timestamp() AS LST_MDF_DTM
-		FROM 	T_PRY_LSN_SVR_I
 	</insert>
+
 	<delete id="deletePryListenerSvr" parameterType="proxyListenerServerVO">
 		/**
 		* Query ID : deletePryListenerSvr
