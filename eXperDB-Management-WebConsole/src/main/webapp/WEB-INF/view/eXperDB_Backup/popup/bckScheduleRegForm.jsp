@@ -88,7 +88,7 @@
 	 ******************************************************** */
 	function fn_timePickerSetting() {
 		var date = new Date();
-		var time = moment().format("HH:MM");
+		var time = moment(date).format("HH:mm");
 		
 		$("#startTime").val(time);
 		$('#timepicker').datetimepicker({

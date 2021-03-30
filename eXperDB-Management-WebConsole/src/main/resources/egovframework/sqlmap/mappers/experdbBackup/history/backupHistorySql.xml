@@ -4,7 +4,7 @@
 
 <mapper namespace="experdbHistorySql">
 	
-		<select id="selectJobHistoryList" resultType="backupJobHistoryVO" >
+		<select id="selectJobHistoryList" resultType="backupJobHistoryVO" parameterType="hashMap">
 				SELECT 
 						RECORDID
 						, SERVERNAME
@@ -40,7 +40,18 @@
 						, STATUS
 						, OPERATIONTYPE
 						, SESSIONGUID
-				FROM JOBHISTORY		
+				FROM JOBHISTORY
+			    WHERE 1=1
+			    <if test="server != 0 || server != ''">
+				  AND TARGETNAME LIKE #{server}
+				</if>
+				<if test="type != 0 || type != ''">
+				  AND JOBTYPE = #{type}
+			    </if>
+			    <if test="status != 0 || status != ''">
+				  AND STATUS = #{status}
+				</if>
+				  AND EXECUTETIME BETWEEN #{startDate} AND #{endDate}		
 				ORDER BY JOBID DESC		
 		</select>
 		

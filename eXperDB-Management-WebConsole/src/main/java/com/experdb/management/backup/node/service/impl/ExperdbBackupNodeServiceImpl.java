@@ -571,29 +571,42 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 	}
 	
 	public static void main (String[] args){
-//		dateSplit("2020-03-15");
 		Map<String, Object> result = new HashMap<>();
+		
+		String d = "2021-03-23";
+		DateFormat _dateSDF = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
 		try {
-//			result = timeSplit("3:2");
-//			System.out.println("24hour : " + result.get("24hour"));
-//			System.out.println("fullHour : " + result.get("fullHour"));
-//			System.out.println(timeSplit("3:2").get("fullHour"));
+			Date _dateDt = _dateSDF.parse(d);
+			long time = _dateDt.getTime()/1000;
 			
-			result = dateSplit("2021-3-1");
-			System.out.println("fullDate : " + result.get("fullDate"));
+			System.out.println("time : " + time);
+			
+			cal.setTime(_dateDt);
+			cal.add(Calendar.DATE, 1);
+			System.out.println("day를 더하자 : " + _dateSDF.format(cal.getTime()));
+			System.out.println(cal.getTimeInMillis());
+			long time2 = cal.getTimeInMillis();
+			System.out.println("1데이를 더한 long 값 : " + time2/1000);
+			// 1617088111062
+			// "2021-03-02" 1614610800   --> dd : Tue Mar 02 00:00:00 KST 2021
+			// 1617005319   --> dd : Mon Mar 29 16:51:54 KST 2021
+			// 1617004314
+			// 1617004314
+			
+			// 1615734000
+			
+			Date dd = new Date(1617004314 * 1000L);
+			System.out.println("dd : " + dd);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 	}
 
 
-
-//	@Override
-//	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
 
 }

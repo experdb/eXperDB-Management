@@ -27,9 +27,9 @@ public class ExperdbBackupHistoryDAO extends EgovAbstractMapper {
 	@Resource(name="activitylogDB") 
 	private SqlSession activitylogDBsql;
 	
-	public List<BackupJobHistoryVO> selectJobHistoryList() {
+	public List<BackupJobHistoryVO> selectJobHistoryList(Map<String, Object> param) {
 	       List<BackupJobHistoryVO> result = null;
-	       result =jobhistoryDBsql.selectList("experdbHistorySql.selectJobHistoryList");
+	       result =jobhistoryDBsql.selectList("experdbHistorySql.selectJobHistoryList", param);
 	        return result;
 	}
 

@@ -1,8 +1,7 @@
 package com.experdb.management.backup.history.web;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.text.*;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +43,26 @@ public class ExperdbBackupHistoryController {
 			historyVO.setExe_dtl_cd("DX-T0125_01");
 			accessHistoryService.insertHistory(historyVO);*/
 			
-			resultSet = experdbBackupHistoryService.selectJobHistoryList();
+			Map<String, Object> param = new HashMap<>();
+			DateFormat _dateSDF = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar cal = Calendar.getInstance();
+			
+			Date _sDate = _dateSDF.parse(request.getParameter("startDate"));
+			Date _eDate = _dateSDF.parse(request.getParameter("endDate"));
+			
+			cal.setTime(_eDate);
+			cal.add(Calendar.DATE, 1);
+			
+			long sDate = _sDate.getTime()/1000;
+			long eDate = cal.getTimeInMillis()/1000;
+			
+			param.put("startDate", sDate);
+			param.put("endDate", eDate);
+			param.put("server", request.getParameter("server"));
+			param.put("type", request.getParameter("type"));
+			param.put("status", request.getParameter("status"));
+			
+			resultSet = experdbBackupHistoryService.selectJobHistoryList(param);
 		
 			for(int i=0; i<resultSet.size(); i++){
 				Date startDate = new Date(Long.parseLong(resultSet.get(i).getExecutetime())* 1000L);
@@ -118,5 +136,7 @@ public class ExperdbBackupHistoryController {
 		
 		return resultSet;
 	}
+	
+	
 
 }

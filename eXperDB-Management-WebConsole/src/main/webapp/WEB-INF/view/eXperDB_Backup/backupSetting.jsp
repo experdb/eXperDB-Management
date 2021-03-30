@@ -213,7 +213,6 @@ function fn_getSvrList() {
 		success : function(data) {
 			NodeList.clear().draw();
 			NodeList.rows.add(data).draw();
-			
 		}
 	});
 }
@@ -635,6 +634,11 @@ function fn_backupDelete() {
 				})
 		}
 	 
+}
+
+function fn_aaaa(){
+	console.log("aaaa");
+	console.log("NodeList : " + NodeList.row(0).data());
 }
 </script>
 <style>

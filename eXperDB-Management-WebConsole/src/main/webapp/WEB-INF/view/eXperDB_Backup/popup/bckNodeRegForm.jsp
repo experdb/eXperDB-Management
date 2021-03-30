@@ -296,7 +296,7 @@
 	<div class="modal-dialog  modal-xl" role="document" style="width: 700px">
 		<div class="modal-content" >
 			<div class="modal-body" id="nodeRegPopupDiv" style="margin-bottom:-30px;">
-			<div id="loader"><div class="jumping-dots-loader" style="border: 0px !important;z-index:99999; position:absolute; transform:translate(250%, 250%); size:150%;"><span></span><span></span><span></span></div></div>
+			<div id="loader"><div class="flip-square-loader mx-autor" style="border: 0px !important;z-index:99999; position:absolute; transform:translate(250%, 250%); size:150%;"></div></div>
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					백업 노드
 				</h5>
