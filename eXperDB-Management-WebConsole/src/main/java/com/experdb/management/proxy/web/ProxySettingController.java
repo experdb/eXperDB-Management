@@ -564,6 +564,9 @@ public class ProxySettingController {
 					prySvrVO.setMin_data_del_term(Integer.parseInt(request.getParameter("min_data_del_term")));
 					prySvrVO.setUse_yn(request.getParameter("use_yn"));
 					prySvrVO.setMaster_gbn(request.getParameter("master_gbn"));
+					if("B".equals(request.getParameter("master_gbn"))){
+						prySvrVO.setMaster_svr_id(Integer.parseInt(request.getParameter("master_svr_id")));
+					}
 					prySvrVO.setDb_svr_id(Integer.parseInt(request.getParameter("db_svr_id")));
 					prySvrVO.setLst_mdfr_id(lst_mdfr_id);
 					
