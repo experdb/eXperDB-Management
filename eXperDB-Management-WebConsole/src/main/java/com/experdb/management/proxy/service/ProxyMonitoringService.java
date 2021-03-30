@@ -84,4 +84,19 @@ public interface ProxyMonitoringService {
 	 * @return List<Map<String, Object>>
 	 */
 	Map<String, Object> selectConfiguration(int pry_svr_id, String Type);
+	
+	/**
+	 * proxy / keepavlived 기동-정지 실패 로그 
+	 * @param pry_act_exe_sn
+	 * @return Map<String, Object>
+	 */
+	Map<String, Object> selectActExeFailLog(int pry_act_exe_sn);
+
+	/**
+	 * proxy / keepalived 상태 변경
+	 * @param pry_svr_id, type, status
+	 * @return int
+	 */
+	int actExeCng(int pry_svr_id, String type, String status);
+	
 }

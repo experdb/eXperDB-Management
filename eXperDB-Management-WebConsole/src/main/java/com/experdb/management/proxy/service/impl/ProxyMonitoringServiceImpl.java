@@ -140,7 +140,46 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		Map<String, Object> result = proxyMonitoringDAO.selectConfiguration(param);
 		return result;
 	}
-	
-	
+
+	/**
+	 * proxy / keepavlived 기동-정지 실패 로그 
+	 * @param pry_act_exe_sn
+	 * @return Map<String, Object>
+	 */
+	@Override
+	public Map<String, Object> selectActExeFailLog(int pry_act_exe_sn) {
+		return proxyMonitoringDAO.selectActExeFailLog(pry_act_exe_sn);
+	}
+
+	/**
+	 * proxy / keepalived 상태 변경
+	 * @param pry_svr_id, type, status
+	 * @return int
+	 */
+	@Override
+	public int actExeCng(int pry_svr_id, String type, String cur_status) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("pry_svr_id", pry_svr_id);
+		if(type == "P"){
+			param.put("sys_type", "PROXY");
+		} else if(type == "K") {
+			param.put("sys_type", "KEEPALIVED");
+		}
+		if(cur_status == "TC001501"){
+			param.put("status", "TC001502");
+			param.put("act_type", "S");
+		} else if (cur_status == "TC001502"){
+			param.put("status", "TC001501");
+			param.put("act_type", "R");
+		}
+		param.put("ACT_EXE_TYPE","TC004001");
+		param.put("EXE_RSLT_CD","TC001501");
+		param.put("FRST_REGR_ID", "admin");
+		param.put("LST_MDFR_ID", "admin");
+		proxyMonitoringDAO.actExeCng(param);
+		System.out.println("service result : ");
+		
+		return 1; 
+	}
 	
 }
