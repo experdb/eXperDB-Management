@@ -351,7 +351,7 @@
 	function fn_change_global_info(){
 		if(selPrySvrId != null){
 			$("#modYn").val("Y");
-			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		}else{
 			var temp = '<spring:message code="eXperDB_proxy.server" />';//Proxy 서버
 			showSwalIcon('<spring:message code="eXperDB_proxy.msg1" arguments="'+temp+'" />', '<spring:message code="common.close" />', '', 'error');
@@ -403,7 +403,7 @@
 				if (result != null) {
 					proxyServerTable.rows.add(result).draw();
 				}
-				
+				selectTab('global');
 				//첫번째 로우 자동 선택 후 상세 정보 불러오기
 				setTimeout(function(){
 					if(proxyServerTable.rows().data().length > 0){
@@ -557,7 +557,7 @@
  					selProxyListenerList = result.listener_list;
  					
 	 				if(result.vipconfig_list.length ==0 || result.listener_list.length ==0 || result.global_info == null){
-	 					$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;현재 설정 파일이 없습니다. 상세 정보 입력 완료 후 [적용]을 클릭 하셔야 Proxy 서버가 정상 동작합니다.');
+	 					$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 현재 설정 파일이 없습니다. 상세 정보 입력 완료 후 [적용]을 클릭 하셔야 Proxy 서버가 정상 동작합니다.');
 					}
 	 				//Global 설정 불러오기
  					load_global_info(result.global_info);
@@ -987,9 +987,9 @@
 			return;
 		}else{
 			var selRow = proxyServerTable.row('.selected').data();
-			if(selRow.use_yn=="Y" || selRow.exe_status=="TC001501"){
+			if(selRow.exe_status=="TC001501"){
 				//사용 및 구동 중지 후 삭제가 가능합니다.
-				showSwalIcon('사용 및 구동 중지 후 삭제가 가능합니다.', '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon('구동 중지 후 삭제가 가능합니다.', '<spring:message code="common.close" />', '', 'error');
 			}else if(selRow.master_gbn=="M"){
 				var rowLen = proxyServerTable.rows().data().length;
 				var rowDatas = proxyServerTable.rows().data();
@@ -1110,7 +1110,12 @@
 			$("#instReg_v_if_nm", "#insVipInstForm").val(""); //virtual interface
 			$("#instReg_v_rot_id", "#insVipInstForm").val(""); //virtual router id
 			
-			$("#instReg_state_nm", "#insVipInstForm").val("BACKUP"); //State
+			if(vipInstTable.rows().data().length == 0){
+				$("#instReg_state_nm", "#insVipInstForm").val("MASTER"); //State
+			}else{
+				$("#instReg_state_nm", "#insVipInstForm").val("BACKUP"); //State
+			}
+			
 			$("#instReg_priority", "#insVipInstForm").val("100"); //priority
 			$("#instReg_chk_tm", "#insVipInstForm").val("1"); //체크간격
 			
@@ -1395,8 +1400,8 @@
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Proxy</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="encrypt_policyOption.Settings" /></li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;"><spring:message code="menu.proxy" /></li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.proxy_mgmt" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.proxy_config"/></li>
 										</ol>
 									</div>
@@ -1495,7 +1500,7 @@
 							<i class="item-icon fa fa-dot-circle-o"></i>
 							<spring:message code="menu.proxy_config" />
 						</h4>
-						<h4 class="text-warning" id="warning_init_detail_info" style="font-size: 0.875rem;">
+						<h4 class="text-danger" id="warning_init_detail_info" style="font-size: 0.875rem;">
 						</h4>
 					</div>
 				    <ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">

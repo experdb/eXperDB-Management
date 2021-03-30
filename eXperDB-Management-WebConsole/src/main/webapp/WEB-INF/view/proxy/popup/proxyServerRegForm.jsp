@@ -150,7 +150,7 @@ var mgmtDbmsTable = null;
 		var len = data.length;
 		$( "#svrReg_master_svr_id > option", "#svrRegProxyServerForm" ).remove();
 		
-		innerHtml += '<option value=""> 선택 </option>';
+		innerHtml += '<option value="0"> 선택 </option>';
 	
 		for(var i=0; i<len; i++){
 			var id = data[i].pry_svr_id;
@@ -290,6 +290,7 @@ var mgmtDbmsTable = null;
  				,pry_svr_nm : $("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").val()
  				,day_data_del_term : $("#svrReg_day_data_del_term", "#svrRegProxyServerForm").val()
  				,min_data_del_term : $("#svrReg_min_data_del_term", "#svrRegProxyServerForm").val()
+ 				,master_svr_id : $("#svrReg_master_svr_id", "#svrRegProxyServerForm").val()
  				,use_yn : useYn
  				,master_gbn : $("#svrReg_master_gbn", "#svrRegProxyServerForm").val()
  				,db_svr_id : $("#svrReg_db_svr_id", "#svrRegProxyServerForm").val()

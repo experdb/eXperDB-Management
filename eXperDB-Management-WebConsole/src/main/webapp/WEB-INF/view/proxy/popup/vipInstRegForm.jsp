@@ -193,7 +193,7 @@
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		showSwalIcon('<spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
-		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		vipInstTable.row.add({
 			"state_nm" : $("#instReg_state_nm", "#insVipInstForm").val(),
 			"v_ip" : $("#instReg_v_ip", "#insVipInstForm").val(),
@@ -217,7 +217,7 @@
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		showSwalIcon('<spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
-		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		var dataLen = vipInstTable.rows().data().length;
 		var oriData = vipInstTable.rows().data();
 		for(var i=0; i<dataLen; i++){
