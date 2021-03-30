@@ -146,11 +146,19 @@ public class CmmnUtil {
 				System.out.println("Failed command : " + output.trim());
 			} else if (validateOutput.trim().matches(".*NT_STATUS_LOGON_FAILURE.*")) {
 				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", output.trim());
+				result.put("RESULT_DATA", " Invalid username/password; logon denied");
 				System.out.println("Failed command : " + output.trim());
 			} else if (validateOutput.trim().matches(".*NT_STATUS_BAD_NETWORK_NAME*")) {
 				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", output.trim());
+				result.put("RESULT_DATA", "NT_STATUS_BAD_NETWORK_NAME");
+				System.out.println("Failed command : " + output.trim());
+			}else if (validateOutput.trim().matches(".*NT_STATUS_IO_TIMEOUT*")) {
+				result.put("RESULT_CODE", 1);
+				result.put("RESULT_DATA", "NT_STATUS_IO_TIMEOUT");
+				System.out.println("Failed command : " + output.trim());
+			}else if (validateOutput.trim().matches(".*NT_STATUS_UNSUCCESSFUL*")) {
+				result.put("RESULT_CODE", 1);
+				result.put("RESULT_DATA", "NT_STATUS_UNSUCCESSFUL");
 				System.out.println("Failed command : " + output.trim());
 			}else if (validateOutput.trim().matches(".*32.*")) {
 				result.put("RESULT_CODE", 1);
