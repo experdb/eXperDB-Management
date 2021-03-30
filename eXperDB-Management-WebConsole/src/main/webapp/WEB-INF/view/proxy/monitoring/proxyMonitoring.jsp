@@ -27,7 +27,8 @@
 	var shown = true;
 	var proxyLogTable = "";
 	var proxyStatTable = "";
-
+	var select_pry_svr_id = "";
+	
 	/* ********************************************************
 	 * 화면 onload
 	 ******************************************************** */
@@ -237,8 +238,9 @@
 		}
 		
 		$("#serverSs" + rowChkCnt).css('background-color','#c2defe');
-
+		
 		fn_proxySvrSsSearch(pry_svr_id, rowChkCnt);
+		select_pry_svr_id = pry_svr_id;
 	}
 	
 	
@@ -313,7 +315,7 @@
 		html += '<div class="col-md-12 col-xl-12 justify-content-center" >\n';
 		html += '	<div class="card" style="margin-left:-10px;border:none;">\n';
 		html += '		<div class="card-body" style="border:none;">\n';
-		html += '			<p class="card-title" style="margin-bottom:0px"><i class="item-icon mdi mdi-chart-bar text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.listener_statistics"/></p>\n';
+		html += '			<p class="card-title" style="margin-bottom:0px"><i class="item-icon mdi mdi-chart-bar text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.listener_statistics"/>&nbsp;&nbsp;   &nbsp;<span class="text-info"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg4"/></span>&nbsp;</p>\n';
 		html += '		</div>\n';
 		html += '	</div>\n';
 		html += '</div>\n';
@@ -339,11 +341,11 @@
 				}
 			});
 		} else {
-			html += '<div class="col-md-3 col-xl-3 justify-content-center">\n';
+			html += '<div class="col-md-3 col-xl-12 justify-content-center">\n';
 			html += "	<div class='card'>\n";
-			html += '		<div class="card-body">\n';
+			html += '		<div class="card-body"  style="background-color:#ededed;>\n';
 			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted text-center"">\n';
 			html += '				<spring:message code="message.msg01" /></h5>\n';
 			html += '			</div>\n';
 			html += "		</div>\n";
@@ -513,10 +515,12 @@
 			data : {
 				pry_svr_id : pry_svr_id,
 				type : type,
-				status : status
+				status : status,
+				act_exe_type : 'TC004001'
 			},
 			success : function(result) {	
-				fn_getProxyInfo(pry_svr_id, rowChkCnt);
+				rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
+				fn_getProxyInfo(select_pry_svr_id, rowChkCnt);
 			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -738,14 +742,6 @@
 							defaultContent : ""
 						},
 						{data : "wrk_dtm", className : "dt-center", defaultContent : ""},
-						{data : "pry_svr_id",
-							render : function(data, type, full, meta) {
-								var html = "";
- 								html += '<a href="#" onclick="fn_logView(' + full.pry_svr_id + ', \'P\' , \'' + full.wrk_dtm + '\')">proxy 로그</a>';
-								return html;
-							},
-							className : "dt-center", defaultContent : ""
-						},
 						{data : "rownum", className : "dt-center", defaultContent : "", targets : 0, visible:false, orderable : false},
 						{data : "pry_svr_id", className : "dt-center", defaultContent : "", visible: false},
 						{data : "pry_act_exe_sn", className : "dt-center", defaultContent : "", visible: false}
@@ -757,10 +753,9 @@
 		proxyLogTable.tables().header().to$().find('th:eq(2)').css('min-width', '50px'); // start or restart or stop
 		proxyLogTable.tables().header().to$().find('th:eq(3)').css('min-width', '50px'); // manual or system
 		proxyLogTable.tables().header().to$().find('th:eq(4)').css('min-width', '50px'); // first reg date
-		proxyLogTable.tables().header().to$().find('th:eq(5)').css('min-width', '50px'); // proxy log
-		proxyLogTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px'); //rownum
-		proxyLogTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px'); //proxy server id
-		proxyLogTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px'); // proxy act exe serial number
+		proxyLogTable.tables().header().to$().find('th:eq(5)').css('min-width', '0px'); //rownum
+		proxyLogTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px'); //proxy server id
+		proxyLogTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px'); // proxy act exe serial number
 		
 		$(window).trigger('resize');
 	}
@@ -1059,6 +1054,12 @@
 		console.log('pry_svr_id : ' + pry_svr_id);
 		console.log('type : ' + type);
 		console.log('date : ' + date);
+		
+		if(date == 'today'){
+			pry_svr_id = select_pry_svr_id;
+			date = new Date().toJSON();
+		}
+		
 		$.ajax({
 			url : '/proxyMonitoring/logView.do',
 			type : 'post',
@@ -1135,7 +1136,7 @@
 														return exe_dtm_ss.substring(10);
 													},
 													ykeys: ['byte_receive', 'byte_transmit', 'cumt_sso_con_cnt', 'fail_chk_cnt'],
-													labels: ['데이터전송 수신', '데이터전송 송신', '세션 총합', '실패 건수']
+													labels: ['<spring:message code="eXperDB_proxy.chart_byte_in"/>', '<spring:message code="eXperDB_proxy.chart_byte_out"/>', '<spring:message code="eXperDB_proxy.chart_session_total"/>', '<spring:message code="eXperDB_proxy.chart_health_check_failed"/>']
   			  					});
 			  					
 	 		  					var proxyStatChart = [];
@@ -1188,7 +1189,9 @@
 		});
 	}
 	
-	
+	/* ********************************************************
+	* 기동-정지 실패 로그 popup
+	******************************************************** */
 	function fn_actExeFailLog(pry_act_exe_sn){
 		console.log(pry_act_exe_sn);
 		$.ajax({
@@ -1392,6 +1395,16 @@
  											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;">
 													<div class="card-body" style="border:none;margin-top:-25px;margin-left:-25px;margin-right:-25px;">
+														<div class="row">
+															<div class="col-sm-8">
+																<h6 class="mb-0 alert">
+																	<span class="menu-title text-success"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg3"/></span>
+																</h6>
+															</div>
+															<div class="col-sm-4">
+																<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect text-muted" type="button" onClick="fn_logView('', 'P', 'today')" value="<spring:message code='eXperDB_proxy.current'/> <spring:message code='eXperDB_proxy.proxy_log' />" />
+															</div>
+														</div>
  														<table id="proxyLog" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
 															<thead>
 					 											<tr class="bg-info text-white">
@@ -1401,7 +1414,6 @@
 																	<th width="50px;"><spring:message code="common.status"/></th>
 																	<th width="50px;"><spring:message code="eXperDB_proxy.act_result"/></th>
 																	<th width="50px;"><spring:message code="history_management.time"/></th>	
-																	<th width="50px;"><spring:message code="eXperDB_proxy.proxy_log"/></th>	
 																	<th width="0px;">rownum</th>
 																	<th width="0px;">proxy_id</th>
 																	<th width="0px;">pry_act_exe_sn</th>
@@ -1446,8 +1458,10 @@
 											<div class="col-md-12 col-xl-12 justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
-														<p class="card-title" style="margin-bottom:5px;margin-left:10px;"><i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.listener_detail_info"/></p>
-														
+														<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
+															<i class="item-icon fa fa-toggle-right text-info"></i>
+															&nbsp;<spring:message code="eXperDB_proxy.listener_detail_info"/>
+														</p>
 														<table id="proxyStatTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
 															<thead class="bg-info text-white">
 																<tr>

@@ -190,6 +190,51 @@
 		]]>
 	</select>
 	
+	<select id="selectProxyStatisticsChartInfo2" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectProxyStatisticsChartInfo
+		* Description : proxy listener statistics information
+		* Author : 윤정
+		**/
+		<![CDATA[
+			SELECT 
+				(ROW_NUMBER() OVER(PARTITION BY x.PRY_SVR_ID, x.LSN_ID, x.lsn_svr_id, x.DB_CON_ADDR ORDER BY exe_dtm)) AS ROWNUM, 
+				(ROW_NUMBER() OVER(PARTITION BY x.PRY_SVR_ID, x.LSN_ID, x.lsn_svr_id ,x.DB_CON_ADDR ORDER BY exe_dtm)) AS IDX,
+				DENSE_RANK() OVER( ORDER BY x.PRY_SVR_ID, x.LSN_ID, x.DB_CON_ADDR DESC) AS DENSE_ROW_NUM,
+				*
+			FROM (
+				SELECT
+					ROW_NUMBER() OVER (PARTITION BY tpsi.PRY_SVR_ID, tpssg.LSN_ID, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR ORDER BY exe_dtm desc) AS r, 
+					tpsi.PRY_SVR_ID, 
+					tpssg.LSN_ID,
+					tpssg.EXE_DTM, 
+					to_char(tpssg.EXE_DTM, 'YYYY-MM-DD HH24:MI') as EXE_DTM_SS,
+					tpsi.PRY_SVR_NM,
+					tpli.LSN_NM, 
+					tpssg.DB_CON_ADDR, 
+					tpssg.SVR_STATUS, 
+					tpssg.LST_STATUS_CHK_DESC, 
+					tpssg.FAIL_CHK_CNT, 
+					tpssg.MAX_SESSION, 
+					tpssg.CUR_SESSION,
+					tpssg.SESSION_LIMIT, 
+					tpssg.CUMT_SSO_CON_CNT, 
+					tpssg.BYTE_RECEIVE, 
+					tpssg.BYTE_TRANSMIT,
+					tpssg.SVR_STOP_TM,
+					tpssg.lsn_svr_id
+				FROM T_PRY_SVR_I tpsi 
+				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
+				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
+				JOIN T_PRY_SVR_STATUS_G tpssg ON tpssg.lsn_svr_id = tpsli.lsn_svr_id
+				WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM desc
+			) x
+			WHERE x.r <= 5
+			ORDER BY x.pry_svr_id, x.lsn_id, x.lsn_svr_id, x.DB_CON_ADDR, x.EXE_DTM
+		]]>
+	</select>
+
 	<select id="selectProxyStatisticsChartInfo" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectProxyStatisticsChartInfo

@@ -14,12 +14,6 @@
 %>
 <script>
 
-	$(window.document).ready(function() {
-		console.log('proxy log view popup');
-		// calender setting
-		dateCalenderSetting();
-	});
-	
 	/* ********************************************************
 	 * view 실행
 	 ******************************************************** */
@@ -75,6 +69,14 @@
 					$("#seek", "#proxyViewForm").val(result.seek);
 					$("#endFlag", "#proxyViewForm").val(result.endFlag);
 					$("#dwLen", "#proxyViewForm").val(result.dwLen);
+					$("#type", "#proxyViewForm").val(type);
+					$("#pry_svr_id", "#proxyViewForm").val(pry_svr_id);
+					console.log('ajax type : ' + type);
+					if(type == 'KEEPALIVED') {
+						$('#log_cng').val("Proxy Log");
+					} else {
+						$('#log_cng').val("Keep Log");
+					}
 					
 					v_fileSize = byteConvertor(v_fileSize);
 					
@@ -158,7 +160,14 @@
 		
 	}
 	
-	
+	function fn_sys_type_cng(){
+		var type = "";
+		var langSelect = document.getElementById("log_type");
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		var date = $("#wrk_strt_dtm").val();
+		var pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
+		fn_logViewAjax(pry_svr_id, selectValue, date);
+	}
 	
 </script>
 
@@ -169,11 +178,12 @@
 			<div class="row">
 				<div class="col-sm-9">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					log 파일보기
+					<spring:message code="eXperDB_proxy.log_view"/>
 				</h4>
 				</div>
 				<div class="col-sm-3">
-				<button type="button" class="btn btn-success btn-sm btn-icon-text" style="margin-left:70px;" onclick="fn_download()">
+<!-- 				<button type="button" class="btn btn-success btn-sm btn-icon-text" style="margin-left:70px;" onclick="fn_download()"> -->
+					<button type="button" class="btn btn-success btn-icon-text" style="margin-left:50px;" onclick="fn_download()">
 				<i class='ti-download btn-icon-prepend' >
 				&nbsp;<spring:message code='migration.download' /></i>
 				</button>
@@ -186,24 +196,36 @@
 					<input type="hidden" id="endFlag" name="endFlag" value="0">
 					<input type="hidden" id="dwLen" name="dwLen" value="0">
 					<input type="hidden" id="fSize" name="fSize">
+					<input type="hidden" id="type" name="type">
+					<input type="hidden" id="pry_svr_id" name="pry_svr_id">
 				
 					<fieldset>
 						<div class="card" style="margin-top:10px;border:0px;margin-bottom:-40px;">
 							<div class="card-body">
 								<div class="form-group row">
 									<div class="col-sm-2">
-										<select class="form-control form-control-xsm" name="log_line" id="log_line" tabindex=1 >
+<!-- 										<select class="form-control form-control-xsm" name="log_line" id="log_line" tabindex=1 > -->
+										<select class="form-control" name="log_line" id="log_line" tabindex=1 >
 											<option value="500">500 Line</option>
 											<option value="1000" selected>1000 Line</option>
 											<option value="3000">3000 Line</option>
 											<option value="5000">5000 Line</option>
 										</select>
 									</div>
-									<div class="col-sm-8">
-										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value='기동' />
-										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_stop();" value='정지' />
+									<div class="col-sm-6">
+										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value="<spring:message code="eXperDB_proxy.act_start"/>" />
+										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_stop();" value="<spring:message code="eXperDB_proxy.act_stop"/>" />
+<%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value="<spring:message code="eXperDB_proxy.act_start"/>" /> --%>
+<%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_stop();" value="<spring:message code="eXperDB_proxy.act_stop"/>" /> --%>
 									</div>
-									<div class="col-sm-2" style="margin-left:-37px;">
+									<div class="col-sm-2" style="margin-left:-17px;">
+										<select class="form-control" name="log_type" id="log_type" tabindex=1 onchange="fn_sys_type_cng()">
+											<option value="PROXY">PROXY</option>
+											<option value="KEEPALIVED">KEEPALIVED</option>
+										</select>
+<!-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_sys_type_cng();" id="log_cng" value="" /> -->
+									</div>
+									<div class="col-sm-2" style="margin-left:-17px;">
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
 											<input type="text" class="form-control totDatepicker" style="height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
 											<span class="input-group-addon input-group-append border-left">

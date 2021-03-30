@@ -153,33 +153,36 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 
 	/**
 	 * proxy / keepalived 상태 변경
-	 * @param pry_svr_id, type, status
+	 * @param pry_svr_id, type, status, act_exe_type
 	 * @return int
 	 */
 	@Override
-	public int actExeCng(int pry_svr_id, String type, String cur_status) {
+	public int actExeCng(int pry_svr_id, String type, String cur_status, String act_exe_type) {
 		Map<String, Object> param = new HashMap<String, Object>();
+		System.out.println("actExeCng  : " + pry_svr_id);
+		System.out.println("type : " + type);
+		System.out.println("cur_status : " + cur_status);
 		param.put("pry_svr_id", pry_svr_id);
-		if(type == "P"){
+		if(type.equals("P")){
 			param.put("sys_type", "PROXY");
-		} else if(type == "K") {
+		} else if(type.equals("K")) {
 			param.put("sys_type", "KEEPALIVED");
 		}
-		if(cur_status == "TC001501"){
+		if(cur_status.equals("TC001501")){
 			param.put("status", "TC001502");
 			param.put("act_type", "S");
-		} else if (cur_status == "TC001502"){
+		} else if (cur_status.equals("TC001502")){
 			param.put("status", "TC001501");
 			param.put("act_type", "R");
 		}
-		param.put("ACT_EXE_TYPE","TC004001");
-		param.put("EXE_RSLT_CD","TC001501");
-		param.put("FRST_REGR_ID", "admin");
-		param.put("LST_MDFR_ID", "admin");
-		proxyMonitoringDAO.actExeCng(param);
-		System.out.println("service result : ");
+		param.put("act_exe_type", act_exe_type);
+		param.put("exe_rslt_cd","TC001501");
+		param.put("frst_regr_id", "admin");
+		param.put("lst_mdfr_id", "admin");
+		int result = proxyMonitoringDAO.actExeCng(param);
+		System.out.println("service result : " + result);
 		
-		return 1; 
+		return result; 
 	}
 	
 }

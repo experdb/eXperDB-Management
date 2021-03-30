@@ -94,9 +94,9 @@ public interface ProxyMonitoringService {
 
 	/**
 	 * proxy / keepalived 상태 변경
-	 * @param pry_svr_id, type, status
+	 * @param pry_svr_id, type, status, act_exe_type
 	 * @return int
 	 */
-	int actExeCng(int pry_svr_id, String type, String status);
+	int actExeCng(int pry_svr_id, String type, String status, String act_exe_type);
 	
 }

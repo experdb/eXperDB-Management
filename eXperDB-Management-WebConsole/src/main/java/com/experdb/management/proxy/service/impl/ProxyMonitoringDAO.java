@@ -133,11 +133,18 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 		Map<String, Object> result = selectOne("proxyMonitoringSql.selectActExeFailLog", pry_act_exe_sn);
 		return result;
 	}
-
-	public void actExeCng(Map<String, Object> param) {
-		Object result = insert("proxyMonitoringSql.actExeCng", param);
-		System.out.println(result.toString());
-//		return insert("actExeCng", Integer.parseInt(String.valueOf(result)));
+	
+	/**
+	 * proxy / keepalived 상태 변경
+	 * @param pry_svr_id, type, status
+	 * @return int
+	 */
+	public int actExeCng(Map<String, Object> param) {
+		System.out.println("actExeCng DAO : " + param.size());
+		System.out.println(param.toString());
+		int result = insert("proxyMonitoringSql.insertActExeCng", param);
+		System.out.println(result);
+		return result;
 	}
 	
 }

@@ -333,7 +333,9 @@ public class ProxyMonitoringController {
 			
 			///////// 화면용 file 처리
 	        FileInputStream fileStream = null; // 파일 스트림
-	        String path = "C:/Users/yj402/git/eXperDB-Management/eXperDB-Management-WebConsole/src/main/java/com/experdb/management/proxy/service/";
+//	        String path = "C:/Users/yj402/git/eXperDB-Management/eXperDB-Management-WebConsole/src/main/java/com/experdb/management/proxy/service/";
+	        String path = "/home/experdb/app/eXperDB-Management/eXperDB-Management-WebConsole/webapps/eXperDB-Management-WebConsole/WEB-INF/classes/com/experdb/management/proxy/service/";
+//	        String path = "../service/";
 	        fileStream = new FileInputStream(path + strFileName );// 파일 스트림 생성
 	        
 	        //버퍼 선언
@@ -400,12 +402,13 @@ public class ProxyMonitoringController {
 		String type = request.getParameter("type");
 		int pry_svr_id = Integer.parseInt(strPrySvrId);
 		String status = request.getParameter("status");
+		String act_exe_type = request.getParameter("act_exe_type");
 		System.out.println("********************** actExeCng");
 		System.out.println(pry_svr_id);
 		System.out.println(status);
 		System.out.println(type);
 		
-		int result = proxyMonitoringService.actExeCng(pry_svr_id, type, status);
+		int result = proxyMonitoringService.actExeCng(pry_svr_id, type, status, act_exe_type);
 		System.out.println("result : " +  result);
 		mv.addObject("result", result);
 		return mv;
