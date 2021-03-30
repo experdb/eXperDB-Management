@@ -1,5 +1,6 @@
 package com.experdb.management.proxy.service.impl;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -44,13 +45,33 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
-	public List<Map<String, Object>> selectDbmsList(Map<String, Object> param) {
-		return proxySettingDAO.selectDbmsList(param);
+	public List<Map<String, Object>> selectMasterSvrProxyList(Map<String, Object> param) {
+		return proxySettingDAO.selectMasterSvrProxyList(param);
 	}
 
 	@Override
+	public String proxySetServerNmList(Map<String, Object> param) {
+		return proxySettingDAO.proxySetServerNmList(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectDbmsList(Map<String, Object> param) {
+		return proxySettingDAO.selectDbmsList(param);
+	}
+	
+	@Override
+	public long selectQ_T_PRY_SVR_I_01() throws SQLException {
+		return proxySettingDAO.selectQ_T_PRY_SVR_I_01();
+	}
+	
+	@Override
 	public void updateProxyAgentInfo(ProxyAgentVO pryAgtVO) {
 		proxySettingDAO.updateProxyAgentInfo(pryAgtVO);
+	}
+
+	@Override
+	public void insertProxyServerInfo(ProxyServerVO prySvrVO) {
+		proxySettingDAO.insertProxyServerInfo(prySvrVO);
 	}
 
 	@Override
@@ -116,6 +137,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	@Override
 	public List<ProxyListenerServerVO> selectListenServerList(Map<String, Object> param) {
 		return proxySettingDAO.selectListenServerList(param);
+	}
+
+	@Override
+	public void insertProxyGlobalConf(ProxyGlobalVO globalVO) {
+		proxySettingDAO.insertProxyGlobalConf(globalVO);
 	}
 
 	@Override

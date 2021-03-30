@@ -168,6 +168,45 @@
 		AND		MASTER_GBN = 'M'
 		ORDER 	BY pry_svr_nm
 	</select>
+	
+	<select id="selectMasterSvrProxyList" resultType="hashMap">
+	 	/**
+		* Query ID : selectMasterProxyList
+		* Description : Master Proxy select 항목 가져오기
+		* Author : 김민정
+		**/
+    	SELECT 	pry_svr_id,
+       			pry_svr_nm
+		FROM 	T_PRY_SVR_I
+		WHERE 	1 = 1
+
+        <if test='db_svr_id != null'>
+		  AND 	DB_SVR_ID = #{db_svr_id}
+        </if>
+        
+        <if test='pry_svr_id != null'>
+		  AND 	PRY_SVR_ID != #{pry_svr_id}
+        </if>
+
+		AND		MASTER_GBN = 'M'
+		ORDER 	BY pry_svr_nm
+	</select>
+	
+	<select id="proxySetServerNmList" resultType="String">
+	 	/**
+		* Query ID : proxySetServerNmList
+		* Description : 서버명 조회
+		* Author : 김민정
+		**/
+    	SELECT 	split_part(MAX(pry_svr_nm), '_', (LENGTH(MAX(pry_svr_nm))-LENGTH(replace(MAX(pry_svr_nm), '_', '') )) + 1) AS pry_svr_nm
+		FROM 	T_PRY_SVR_I
+		WHERE 	1 = 1
+
+        <if test='db_svr_id != null'>
+		  AND 	DB_SVR_ID = #{db_svr_id}
+        </if>
+	</select>
+
 	<update id="updateProxyAgentInfo" parameterType="proxyServerVO">
         /**
         * Query ID : updateProxyAgentInfo
@@ -178,8 +217,9 @@
            SET SVR_USE_YN = #{svr_use_yn}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
-         WHERE AGT_SN = #{agt_sn}::numeric
+         WHERE AGT_SN = (SELECT AGT_SN FROM  T_PRY_AGT_I WHERE IPADR = #{ipadr} LIMIT 1)
 	</update>
+
 	<update id="updateProxyAgentInfoFromProxyId" parameterType="hashMap">
         /**
         * Query ID : updateProxyAgentInfo
@@ -194,6 +234,70 @@
          					FROM 	T_PRY_SVR_I 
          					WHERE 	PRY_SVR_ID = #{pry_svr_id})
 	</update>
+
+	<select id="selectQ_T_PRY_SVR_I_01" resultType="long">
+   		/**
+	 	* Query ID : select Q_T_PRY_SVR_I_01
+	 	* Description : T_PRY_SVR_I 테이블 SEQ
+	 	* Author :
+	 	**/
+    	SELECT COALESCE(MAX(PRY_SVR_ID+1),1) AS PRY_SVR_ID FROM T_PRY_SVR_I
+    </select>
+    
+	<insert id="insertProxyServerInfo" parameterType="proxyServerVO">
+        /**
+        * Query ID : insertProxyServerInfo"
+        * Description : Proxy 서버 정보 등록
+        * Author : 김민정
+        **/
+	 	INSERT INTO T_PRY_SVR_I
+		(
+			PRY_SVR_ID
+			, IPADR
+			, AGT_SN
+			, PRY_SVR_NM
+			, PRY_PTH
+			, KAL_PTH
+			, USE_YN
+			, EXE_STATUS
+			, KAL_EXE_STATUS
+			, MASTER_GBN
+			, MASTER_SVR_ID
+			, DB_SVR_ID
+			, DAY_DATA_DEL_TERM
+			, MIN_DATA_DEL_TERM
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+		) 
+		SELECT	#{pry_svr_id}::numeric
+			, #{ipadr}
+			, (SELECT AGT_SN FROM  T_PRY_AGT_I WHERE IPADR = #{ipadr} LIMIT 1)
+			, #{pry_svr_nm}
+			, '/etc/haproxy/haproxy.cfg'
+			, '/etc/keepalived/keepalived.conf'
+			, #{use_yn}::bpchar
+			, 'TC001502'::character varying
+			, 'TC001502'::character varying
+			, #{master_gbn}
+			
+           <if test='master_gbn != null and (master_gbn eq "B".toString())'>
+            , #{master_svr_id}::numeric
+           </if>
+           <if test='master_gbn != null and (master_gbn eq "M".toString())'>
+             , null
+           </if>
+
+			, #{db_svr_id}::numeric
+			, #{day_data_del_term}::numeric
+			, #{min_data_del_term}::numeric
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{lst_mdfr_id}
+			, clock_timestamp()
+	</insert>
+	
 	<update id="updateProxyServerInfo" parameterType="proxyServerVO">
         /**
         * Query ID : updateProxyServerInfo"
@@ -217,6 +321,46 @@
              , LST_MDF_DTM = clock_timestamp()
          WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
 	</update>
+
+	<insert id="insertProxyGlobalConf" parameterType="proxyGlobalVO">
+        /**
+        * Query ID : insertProxyGlobalConf"
+        * Description : Proxy global 정보 업데이트
+        * Author : 김민정
+        **/
+	        INSERT
+              INTO T_PRY_GLB_I (
+                        PRY_GLB_ID,
+                        PRY_SVR_ID,
+                        MAX_CON_CNT,
+                        CL_CON_MAX_TM,
+                        CON_DEL_TM,
+                        SVR_CON_MAX_TM,
+                        CHK_TM,
+                        IF_NM,
+                        OBJ_IP,
+                        PEER_SERVER_IP,
+                        FRST_REGR_ID,
+                        FRST_REG_DTM,
+                        LST_MDFR_ID,
+                        LST_MDF_DTM
+                       )
+                       SELECT (SELECT COALESCE(MAX(PRY_GLB_ID+1),1) AS PRY_GLB_ID FROM T_PRY_GLB_I),
+                              #{pry_svr_id}::numeric,
+                              #{max_con_cnt}::numeric,
+                              #{cl_con_max_tm},
+                              #{con_del_tm},
+                              #{svr_con_max_tm},
+                              #{chk_tm},
+                              #{if_nm},
+                              #{obj_ip},
+                              #{peer_server_ip},
+                              #{frst_regr_id},
+                              clock_timestamp(),
+                              #{lst_mdfr_id},
+                              clock_timestamp()
+	</insert>
+	
 	<delete id="deleteProxyConfHistList" parameterType="int">
 		/**
 		* Query ID : deleteProxyConfHist
@@ -555,6 +699,7 @@
            , 	LST_MDF_DTM = clock_timestamp()
          WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
 	</update>
+
 	<select id="selectIpList" resultType="HashMap" >
 		SELECT IPADR||':'||PORTNO AS DB_CON_ADDR
 		FROM T_DBSVRIPADR_I

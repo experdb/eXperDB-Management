@@ -134,7 +134,13 @@ var mgmtDbmsTable = null;
 		if($("#svrReg_master_gbn", "#svrRegProxyServerForm").val() == "B"){
 			$("#svrReg_master_svr_id_label", "#svrRegProxyServerForm").show();
 			$("#svrReg_master_svr_id", "#svrRegProxyServerForm").show();
-			$("#svrReg_master_svr_id", "#svrRegProxyServerForm").val($("#svrReg_master_svr_id_val", "#svrRegProxyServerForm").val());
+
+			if ($("#svrReg_master_svr_id_val", "#svrRegProxyServerForm").val() != "" && $("#svrReg_master_svr_id_val", "#svrRegProxyServerForm").val() != "0") {
+				$("#svrReg_master_svr_id", "#svrRegProxyServerForm").val($("#svrReg_master_svr_id_val", "#svrRegProxyServerForm").val());
+			} else {
+				$("#svrReg_master_svr_id option:eq(0)", "#svrRegProxyServerForm").prop("selected", true);
+			}
+			
 		}else{
 			$("#svrReg_master_svr_id_label", "#svrRegProxyServerForm").hide();
 			$("#svrReg_master_svr_id", "#svrRegProxyServerForm").hide();
@@ -150,7 +156,7 @@ var mgmtDbmsTable = null;
 		var len = data.length;
 		$( "#svrReg_master_svr_id > option", "#svrRegProxyServerForm" ).remove();
 		
-		innerHtml += '<option value="0"> 선택 </option>';
+		innerHtml += '<option value=""> 선택 </option>';
 	
 		for(var i=0; i<len; i++){
 			var id = data[i].pry_svr_id;
@@ -159,9 +165,14 @@ var mgmtDbmsTable = null;
 		}
 	
 		$( "#svrReg_master_svr_id", "#svrRegProxyServerForm" ).append(innerHtml);
-		$( "#svrReg_master_svr_id", "#svrRegProxyServerForm" ).val(value);
-			
+		
+		if (value != null && value != "") {
+			$( "#svrReg_master_svr_id", "#svrRegProxyServerForm" ).val(value);
+		} else {
+			$("#svrReg_master_svr_id option:eq(0)", "#svrRegProxyServerForm").prop("selected", true);
+		}
 	}
+
 	/* ********************************************************
 	 * Proxy 연결 DBMS select 생성
 	 ******************************************************** */
@@ -178,10 +189,139 @@ var mgmtDbmsTable = null;
 		}
 	
 		$( "#svrReg_db_svr_id", "#svrRegProxyServerForm" ).append(innerHtml);
-		$( "#svrReg_db_svr_id", "#svrRegProxyServerForm" ).val(value);
-			
-			
+		
+		if (value != null && value != "") {
+			$( "#svrReg_db_svr_id", "#svrRegProxyServerForm" ).val(value);
+		} else {
+			$("#svrReg_db_svr_id option:eq(0)", "#svrRegProxyServerForm").prop("selected", true);
+		}
 	}
+	
+	/* ********************************************************
+     * Proxy DBMS onchange
+    ******************************************************** */		
+ 	function fn_svr_dbms_onChange(){
+		var svrReg_db_svr_id = $("#svrReg_db_svr_id", "#svrRegProxyServerForm").val();
+		var ServerNm = "";
+		var ServerServe = "";
+		if (svrReg_db_svr_id != "") {
+	 		$("#svrReg_db_svr_id_val", "#svrRegProxyServerForm").val(svrReg_db_svr_id);
+	 		ServerNm = $("#svrReg_db_svr_id option:checked", "#svrRegProxyServerForm").text() + "-Proxy_"
+		}
+
+		if (ServerNm != "") {
+			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").val(ServerNm); //서버명
+		} else {
+			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").val(""); //서버명
+		}
+
+		fn_svr_dbms_list_search();
+		
+		//master svr 리스트 변경
+		fn_dbmsChange_mstSvrId();
+		
+		//서버명 변경
+		if (ServerNm != "") {
+			fn_dbmsChange_ServerNm();
+		}
+
+	}
+	
+	/* ********************************************************
+	 * 서버명 셋팅
+	 ******************************************************** */
+	function fn_dbmsChange_ServerNm(){
+
+		var dbSvrId = $( "#svrReg_db_svr_id", "#svrRegProxyServerForm" ).val();
+		var returnStr = "";
+
+		$.ajax({
+				url : "/proxySetServerNmChange.do",
+	 			data : { db_svr_id : dbSvrId,
+	 			},
+	 			dataType : "json",
+	 			type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+	 			success : function(result) {
+	 				if (result != null) {
+	 					if (result != "") {
+	 						returnStr = result;
+	 					} else {
+	 						returnStr = "1";
+	 					}
+	 				} else {
+	 					returnStr = "1";
+	 				}
+	 				
+	 				var ServerNm = $("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").val();
+
+	 				$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").val(ServerNm + returnStr); //서버명
+	 			}
+	 	});
+	}
+
+	/* ********************************************************
+	 * Proxy IP 주소 변경 시 이벤트
+	 ******************************************************** */
+	function fn_dbmsChange_mstSvrId(){
+		
+		var prySvrID;
+		var dbSvrId = $("#svrReg_db_svr_id_val", "#svrRegProxyServerForm").val();
+		
+ 		if($("#svrReg_mode", "#svrRegProxyServerForm").val()=="reg") {
+			prySvrID= "";
+		}else{
+			prySvrID =$("#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val();
+			$("#svrMod_ipadr", "#svrRegProxyServerForm" ).val(prySvrID);
+		}
+		
+		$.ajax({
+				url : "/proxySetMstSvrChange.do",
+	 			data : { pry_svr_id : prySvrID,
+	 				db_svr_id : dbSvrId,
+	 			},
+	 			dataType : "json",
+	 			type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+	 			success : function(result) {
+	 				if($("#svrReg_mode", "#svrRegProxyServerForm").val()=="reg"){
+	 					var index = 0; 
+
+	 					fn_create_mstSvr_select(result.mstSvr_sel_list, "");
+	 					fn_svr_dbms_list_search();
+	 				}else{
+	 					var selSvrInfo = proxyServerTable.row('.selected').data();
+	 					
+	 					fn_create_mstSvr_select(result.mstSvr_sel_list, selSvrInfo.master_svr_id);
+	 					fn_svr_dbms_list_search();
+	 				}
+	 				
+	 			}
+	 	});
+	}
+	
 	/* ********************************************************
      * Proxy Server의  연결 DBMS List 검색
     ******************************************************** */		
@@ -277,11 +417,19 @@ var mgmtDbmsTable = null;
      * Proxy Server의  등록 
      ******************************************************** */		
 	function fn_reg_svr(){
-		
+/* 		
 		var useYn = "N";
 		if($("#svrReg_use_yn", "#svrRegProxyServerForm").is(":checked") == true){
 			useYn ="Y";
+		} */
+		var setIpadr = "";
+		
+		if($("#svrReg_mode", "#svrRegProxyServerForm").val() == "reg"){
+			setIpadr = $("#svrReg_ipadr", "#svrRegProxyServerForm").val();
+		} else {
+			setIpadr = $("#svrMod_ipadr", "#svrRegProxyServerForm").val();
 		}
+		
 		$.ajax({
  			url : "/prySvrReg.do",
  			data : {
@@ -291,9 +439,11 @@ var mgmtDbmsTable = null;
  				,day_data_del_term : $("#svrReg_day_data_del_term", "#svrRegProxyServerForm").val()
  				,min_data_del_term : $("#svrReg_min_data_del_term", "#svrRegProxyServerForm").val()
  				,master_svr_id : $("#svrReg_master_svr_id", "#svrRegProxyServerForm").val()
- 				,use_yn : useYn
+ 				,use_yn : $("#svrReg_use_yn", "#svrRegProxyServerForm").val()
  				,master_gbn : $("#svrReg_master_gbn", "#svrRegProxyServerForm").val()
  				,db_svr_id : $("#svrReg_db_svr_id", "#svrRegProxyServerForm").val()
+ 				,reg_mode: $("#svrReg_mode", "#svrRegProxyServerForm").val()
+ 				,ipadr: setIpadr
  			},
  			dataType : "json",
  			type : "post",
@@ -353,7 +503,9 @@ var mgmtDbmsTable = null;
 						<input type="hidden" id="svrReg_pry_svr_id" name="svrReg_pry_svr_id">
 						<input type="hidden" id="svrReg_master_svr_id_val" name="svrReg_master_svr_id_val">
 						<input type="hidden" id="svrReg_db_svr_id_val" name="svrReg_db_svr_id_val">
-						<input type="hidden" id="svrReg_agt_sn" name="svrReg_agt_sn">												
+						<input type="hidden" id="svrReg_agt_sn" name="svrReg_agt_sn">	
+						<input type="hidden" id="svrReg_use_yn" name="svrReg_use_yn" value="Y">	
+																	
 						<fieldset>
 						<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
@@ -412,7 +564,7 @@ var mgmtDbmsTable = null;
 										<%-- <input type="text" class="form-control form-control-xsm" maxlength="25" id="svrReg_rsp_bsn_nm" name="svrReg_rsp_bsn_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=8 /> --%>
 									</div>
 								</div>
-								<div class="form-group row row-last">
+<%-- 								<div class="form-group row row-last">
 									<label for="svrReg_use_yn" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="dbms_information.use_yn" />
@@ -427,7 +579,7 @@ var mgmtDbmsTable = null;
 										</div>	
 									</div>
 									<!-- <div class="col-sm-auto"></div> -->
-								</div>
+								</div> --%>
 							</div> 
 							<br/>
 							<div class="card-body card-body-xsm card-body-border">
@@ -460,9 +612,7 @@ var mgmtDbmsTable = null;
 										연결 DBMS
 									</label>
 									<div class="col-sm-3">
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="svrReg_db_svr_id" id="svrReg_db_svr_id">
-											<option value="2">vip_primary</option>
-											<option value="db_svr_id">test_dbms</option>
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="svrReg_db_svr_id" id="svrReg_db_svr_id" onchange="fn_svr_dbms_onChange();">
 										</select>
 									</div>
 									<div class="col-sm-auto"></div>

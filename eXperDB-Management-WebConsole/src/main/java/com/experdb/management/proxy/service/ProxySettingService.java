@@ -1,5 +1,6 @@
 package com.experdb.management.proxy.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +21,17 @@ public interface ProxySettingService {
 
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param);
 
+	public List<Map<String, Object>> selectMasterSvrProxyList(Map<String, Object> param);
+	
+	public String proxySetServerNmList(Map<String, Object> param);
+
 	public List<Map<String, Object>> selectDbmsList(Map<String, Object> param);
 
+	public long selectQ_T_PRY_SVR_I_01()throws SQLException;
+
 	public void updateProxyAgentInfo(ProxyAgentVO pryAgtVO);
+
+	public void insertProxyServerInfo(ProxyServerVO prySvrVO);
 
 	public void updateProxyServerInfo(ProxyServerVO prySvrVO);
 
@@ -50,6 +59,8 @@ public interface ProxySettingService {
 
 	public List<ProxyListenerServerVO> selectListenServerList(Map<String, Object> param);
 
+	public void insertProxyGlobalConf(ProxyGlobalVO globalVO);
+	
 	public void updateProxyGlobalConf(ProxyGlobalVO globalVO);
 
 	public void insertUpdatePryVipConf(ProxyVipConfigVO proxyVipConfigVO);

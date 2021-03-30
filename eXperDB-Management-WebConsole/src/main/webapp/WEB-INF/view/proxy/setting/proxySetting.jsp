@@ -404,6 +404,7 @@
 				},500);  
  			}
  		});
+ 		$('#loading').hide();
  	} 	
 	
 	/* ********************************************************
@@ -642,7 +643,7 @@
 		if ($("#svrReg_mode", "#svrRegProxyServerForm").val() == "reg") {
 			//등록 모드라면 agent 설치 시 테이블에 등록되어있는 서버 정보 불러오기
 			$.ajax({
-				url : "/selectPoxyServerTable.do",
+				url : "/selectPoxyAgentSvrList.do",
 	 			data : { svr_use_yn : "N"},
 	 			dataType : "json",
 	 			type : "post",
@@ -734,11 +735,18 @@
 		for(var i=0; i<unregLen; i++){
 			var id = tempUnregSvrList[i].pry_svr_id;
 			var ip = tempUnregSvrList[i].ipadr;
-			unregSvrHtml += '<option value='+id+'>'+ip+'</option>';
+			unregSvrHtml += '<option value='+ip+'>'+ip+'</option>';
 		}
+
 		$("#svrReg_ipadr", "#svrRegProxyServerForm" ).append(unregSvrHtml);
-		$("#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val(tempUnregSvrList[0].pry_svr_id);
-		$("#svrReg_ipadr", "#svrRegProxyServerForm").val(tempUnregSvrList[0].pry_svr_id);//ipadr
+		//$("#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val(tempUnregSvrList[0].pry_svr_id);
+		//$("#svrReg_ipadr", "#svrRegProxyServerForm").val(tempUnregSvrList[0].pry_svr_id);//ipadr
+		$("#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val("");
+		$("#svrReg_ipadr", "#svrRegProxyServerForm").val("");//ipadr
+		
+		if (unregLen > 0) {
+			$("#svrReg_ipadr option:eq(0)").prop("selected", true);
+		}
 		
 		fn_changeSvrId();
 	}
@@ -749,7 +757,7 @@
 		
 		var prySvrID;
 		if($("#svrReg_mode", "#svrRegProxyServerForm").val()=="reg") {
-			prySvrID= $("#svrReg_ipadr", "#svrRegProxyServerForm" ).val();
+		//	prySvrID= $("#svrReg_ipadr", "#svrRegProxyServerForm" ).val();
 		}else{
 			prySvrID =$("#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val();
 			$("#svrMod_ipadr", "#svrRegProxyServerForm" ).val(prySvrID);
@@ -774,27 +782,76 @@
 				},
 	 			success : function(result) {
 	 				if($("#svrReg_mode", "#svrRegProxyServerForm").val()=="reg"){
-	 					var index = null; 
+	 					var index = 0; 
 		 			
-		 				for(var i=0; i<unregSvrInfo.length; i++){
-		 					if(unregSvrInfo[i].pry_svr_id ==prySvrID) index = i;
-		 				}
-		 				fn_create_mstSvr_select(result.mstSvr_sel_list, unregSvrInfo[index].master_svr_id);
-		 				fn_create_dbms_select(result.dbms_sel_list, unregSvrInfo[index].db_svr_id);
+	 					fn_create_dbms_select(result.dbms_sel_list, "");
+	 					fn_create_mstSvr_select(result.mstSvr_sel_list, "");
+
+		 				//수정 막기
+		 				$( "#svrReg_db_svr_id", "#svrRegProxyServerForm" ).removeAttr('disabled');
 		 				
-		 				set_svr_info(unregSvrInfo[index], $("#svrReg_mode", "#svrRegProxyServerForm").val());
+	 					set_svr_info_start(unregSvrInfo[index], $("#svrReg_mode", "#svrRegProxyServerForm").val());
 	 				}else{
 	 					var selSvrInfo = proxyServerTable.row('.selected').data();
 	 					
 	 					fn_create_mstSvr_select(result.mstSvr_sel_list, selSvrInfo.master_svr_id);
 		 				fn_create_dbms_select(result.dbms_sel_list, selSvrInfo.db_svr_id);
 		 				
+		 				//수정 막기
+		 				$( "#svrReg_db_svr_id", "#svrRegProxyServerForm" ).attr("disabled", "disabled");
+
 		 				set_svr_info(selSvrInfo, $("#svrReg_mode", "#svrRegProxyServerForm").val());
 	 				}
 	 				
 	 			}
 	 		});
+	}
+
+	/* ********************************************************
+	 * Proxy 정보 setting
+	 ******************************************************** */
+	function set_svr_info_start(listData, mode){
+		var tempSetData = listData;
+		var ServerNm = "";
+
+		//hidden 정보
+		$("#svrReg_pry_svr_id", "#svrRegProxyServerForm").val("");
+		$("#svrReg_master_svr_id_val", "#svrRegProxyServerForm").val("");
+		$("#svrReg_db_svr_id_val", "#svrRegProxyServerForm").val($( "#svrReg_db_svr_id", "#svrRegProxyServerForm" ).val());
+		$("#svrReg_agt_sn", "#svrRegProxyServerForm").val("");
 			
+		ServerNm = $("#svrReg_db_svr_id option:checked", "#svrRegProxyServerForm").text() + "-Proxy_";
+
+		$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").val(ServerNm); //서버명
+		$("#svrReg_use_yn", "#svrRegProxyServerForm").val("Y");
+		
+		$("#svrReg_exe_status", "#svrRegProxyServerForm" ).val("TC001502");
+		$("#svrReg_kal_exe_status", "#svrRegProxyServerForm" ).val("TC001502");
+
+		$("#ModalProxyServer").text('<spring:message code="eXperDB_proxy.server_reg"/>');
+		$("#svrReg_conn_result", "#svrRegProxyServerForm").val("false");	
+		$("#svrReg_conn_test", "#svrRegProxyServerForm").show();
+
+		$("#svrReg_ipadr", "#svrRegProxyServerForm").show();
+		$("#svrMod_ipadr", "#svrRegProxyServerForm").hide();//ipadr
+		$("#svrMod_ipadr", "#svrRegProxyServerForm").val($("#svrReg_ipadr", "#svrRegProxyServerForm").val());//ipadr
+
+		$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("disabled");
+		$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("readonly");
+		$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
+		$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
+		
+		$("#svrReg_day_data_del_term", "#svrRegProxyServerForm").val("30"); //일별 데이터 보관 기간
+		$("#svrReg_min_data_del_term", "#svrRegProxyServerForm").val("7"); //분별 데이터 보관 기간
+		
+		$("#svrReg_master_gbn", "#svrRegProxyServerForm").val("M"); //마스터 구분 
+		
+		fn_changeMasterGbn();
+
+		//list 불러오기
+		fn_svr_dbms_list_search();
+		
+		fn_dbmsChange_ServerNm();
 	}
 	/* ********************************************************
 	 * Proxy 정보 setting
@@ -1462,7 +1519,7 @@
 								<th width="60">상태</th>
 								<th width="0">haproxy 파일 경로</th>
 								<th width="0">keepalived 파일 경로</th>
-								<th width="0">Master/Backup</th>
+								<th width="0">마스터 구분</th>
 								<th width="0">마스터 server id</th>
 								<th width="0">일별데이터삭제기간</th>
 								<th width="0">분별데이터삭제기간</th>

@@ -45,11 +45,26 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		result = (List<ProxyVipConfigVO>) list("proxyServerSettingSql.selectProxyVipConfList", param);
 		return result;
 	}
+
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param) {
 		List<Map<String, Object>> result = null;
 		result = (List<Map<String, Object>>) list("proxyServerSettingSql.selectMasterProxyList", param);
 		return result;
+	}
+
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectMasterSvrProxyList(Map<String, Object> param) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyServerSettingSql.selectMasterSvrProxyList", param);
+		return result;
+	}
+
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public String proxySetServerNmList(Map<String, Object> param) {
+		String resultSet = "";
+		resultSet = (String) getSqlSession().selectOne("proxyServerSettingSql.proxySetServerNmList", param);
+		return resultSet;
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
@@ -59,17 +74,24 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		return result;
 	}
 
+	public long selectQ_T_PRY_SVR_I_01() throws SQLException {
+		return (long) getSqlSession().selectOne("proxyServerSettingSql.selectQ_T_PRY_SVR_I_01");
+	}
+
 	public void updateProxyAgentInfo(ProxyAgentVO pryAgtVO) {
-		insert("proxyServerSettingSql.updateProxyAgentInfo", pryAgtVO);	
+		update("proxyServerSettingSql.updateProxyAgentInfo", pryAgtVO);	
+	}
+
+	public void insertProxyServerInfo(ProxyServerVO prySvrVO) {
+		insert("proxyServerSettingSql.insertProxyServerInfo", prySvrVO);	
 	}
 
 	public void updateProxyServerInfo(ProxyServerVO prySvrVO) {
-		insert("proxyServerSettingSql.updateProxyServerInfo", prySvrVO);	
-		
+		update("proxyServerSettingSql.updateProxyServerInfo", prySvrVO);	
 	}
 
 	public void updateProxyAgentInfoFromProxyId(Map<String, Object> param) {
-		insert("proxyServerSettingSql.updateProxyAgentInfoFromProxyId", param);	
+		update("proxyServerSettingSql.updateProxyAgentInfoFromProxyId", param);	
 	}
 
 	public void deleteProxyConfHistList(int prySvrId) {
@@ -119,17 +141,20 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		return result;
 		
 	}
-
+	
+	public void insertProxyGlobalConf(ProxyGlobalVO globalVO) {
+		insert("proxyServerSettingSql.insertProxyGlobalConf", globalVO);	
+	}
+	
 	public void updateProxyGlobalConf(ProxyGlobalVO globalVO) {
-		insert("proxyServerSettingSql.updateProxyGlobalConf", globalVO);	
+		update("proxyServerSettingSql.updateProxyGlobalConf", globalVO);	
 	}
 
 	public void insertUpdatePryVipConf(ProxyVipConfigVO proxyVipConfigVO) {
 		if(proxyVipConfigVO.getVip_cng_id() == 0){
 			insert("proxyServerSettingSql.insertPryVipConf", proxyVipConfigVO);	
 		}else{
-			
-			insert("proxyServerSettingSql.updatePryVipConf", proxyVipConfigVO);	
+			update("proxyServerSettingSql.updatePryVipConf", proxyVipConfigVO);	
 		}	
 	}
 
@@ -141,7 +166,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		if(proxyListenerVO.getLsn_id() == 0){
 			insert("proxyServerSettingSql.insertPryListener", proxyListenerVO);	
 		}else{
-			insert("proxyServerSettingSql.updatePryListener", proxyListenerVO);	
+			update("proxyServerSettingSql.updatePryListener", proxyListenerVO);	
 		}	
 	}
 
@@ -149,7 +174,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		if(proxyListenerServerVO.getLsn_svr_id() == 0){
 			insert("proxyServerSettingSql.insertPryListenerSvr", proxyListenerServerVO);	
 		}else{
-			insert("proxyServerSettingSql.updatePryListenerSvr", proxyListenerServerVO);	
+			update("proxyServerSettingSql.updatePryListenerSvr", proxyListenerServerVO);	
 		}	
 	}
 	

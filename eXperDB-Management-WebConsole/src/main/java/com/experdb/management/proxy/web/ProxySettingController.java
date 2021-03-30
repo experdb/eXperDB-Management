@@ -309,7 +309,7 @@ public class ProxySettingController {
 	 * @param request
 	 * @return resultSet
 	 * @throws Exception
-	
+	**/	
 	@RequestMapping(value = "/selectPoxyAgentSvrList.do")
 	public @ResponseBody List<Map<String, Object>> selectPoxyAgentList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		//해당메뉴 권한 조회 (공통메소드호출),
@@ -342,7 +342,7 @@ public class ProxySettingController {
 		}
 		return resultSet;
 
-	} */
+	} 
 	
 	/**
 	 * 프록시 서버 상세 정보 
@@ -422,19 +422,28 @@ public class ProxySettingController {
 				response.sendRedirect("/autError.do");
 				return resultObj;
 			}else{
-				int prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
+				int prySvrId = 0;
+				if (request.getParameter("pry_svr_id") != null) {
+					prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
+				}
+
 				param.put("pry_svr_id", prySvrId);
 				
 				System.out.println("param :: "+param.toString());
 				
 				resultObj = new JSONObject();
 				
-				//Master Proxy 정보
-				List<Map<String, Object>> mstSvrSelList = proxySettingService.selectMasterProxyList(param);
-				resultObj.put("mstSvr_sel_list", mstSvrSelList);
 				//연결 DBMS 정보 
 				List<Map<String, Object>> dbmsSelList = proxySettingService.selectDbmsList(param);
 				resultObj.put("dbms_sel_list", dbmsSelList);
+				
+				if (dbmsSelList.size() > 0) {
+					param.put("db_svr_id", dbmsSelList.get(0).get("db_svr_id"));
+				}
+
+				//Master Proxy 정보
+				List<Map<String, Object>> mstSvrSelList = proxySettingService.selectMasterSvrProxyList(param);
+				resultObj.put("mstSvr_sel_list", mstSvrSelList);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -442,7 +451,105 @@ public class ProxySettingController {
 		return resultObj;
 
 	}
-	
+
+	/**
+	 * 동적 select 박스 생성
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/proxySetMstSvrChange.do")
+	public @ResponseBody JSONObject proxySetMstSvrChange(HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+				
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject resultObj = null;
+		try {	
+			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultObj;
+			}else{
+				int prySvrId = 0;
+				int dbSvrId = 0;
+				if (request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))) {
+					prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
+				}
+				if (request.getParameter("db_svr_id") != null) {
+					dbSvrId = Integer.parseInt(request.getParameter("db_svr_id"));
+				}
+
+
+				param.put("pry_svr_id", prySvrId);
+				param.put("db_svr_id", dbSvrId);
+
+				resultObj = new JSONObject();
+
+				//Master Proxy 정보
+				List<Map<String, Object>> mstSvrSelList = proxySettingService.selectMasterSvrProxyList(param);
+				resultObj.put("mstSvr_sel_list", mstSvrSelList);
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultObj;
+
+	}
+
+	/**
+	 * 서버명 조회
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/proxySetServerNmChange.do")
+	public @ResponseBody String proxySetServerNmChange(HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+				
+		Map<String, Object> param = new HashMap<String, Object>();
+		String resultObj = "";
+		int resultObjNum = 0;
+		try {	
+			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultObj;
+			}else{
+				int dbSvrId = 0;
+				if (request.getParameter("db_svr_id") != null) {
+					dbSvrId = Integer.parseInt(request.getParameter("db_svr_id"));
+				}
+
+				param.put("db_svr_id", dbSvrId);
+
+				//Master Proxy 정보
+				resultObj = proxySettingService.proxySetServerNmList(param);
+				
+				if (resultObj != null && !"".equals(resultObj)) {
+					resultObjNum = Integer.parseInt(resultObj) + 1;
+					resultObj = Integer.toString(resultObjNum);
+				} else {
+					resultObj = "1";
+				}
+				
+				System.out.println("resultObj=====" + resultObj);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultObj;
+
+	}
+
 	/**
 	 * proxy 서버 구동/정지
 	 * 
@@ -474,8 +581,10 @@ public class ProxySettingController {
 				param.put("pry_svr_id", prySvrId);
 				param.put("exe_status", status);
 				param.put("kal_exe_status", status);
-				if(status.equals("TC001502")) param.put("use_yn", "N");
-				else param.put("use_yn", "Y");
+				param.put("use_yn", "Y");
+				
+/*				if(status.equals("TC001502")) param.put("use_yn", "N");
+				else param.put("use_yn", "Y");*/
 				param.put("lst_mdfr_id", lst_mdfr_id);
 				
 				resultObj = new JSONObject();
@@ -515,7 +624,11 @@ public class ProxySettingController {
 				response.sendRedirect("/autError.do");
 				return resultObj;
 			}else{
-				int prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
+				int prySvrId = 0;
+				if (request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))) {
+					prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
+				}
+	
 				param.put("pry_svr_id", prySvrId);
 				
 				resultObj = new JSONObject();
@@ -568,34 +681,90 @@ public class ProxySettingController {
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String lst_mdfr_id = loginVo.getUsr_id();
 				
+				String reg_mode = request.getParameter("reg_mode").toString();
+				long pry_svr_id_sn = 1L;
+				
 				//서버명이 중복되는지 확인
 				Map<String, Object> param = new HashMap<String, Object>();
 				param.put("pry_svr_nm", request.getParameter("pry_svr_nm"));
+				
+				if (request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))) {
 				param.put("not_pry_svr_id", Integer.parseInt(request.getParameter("pry_svr_id")));
+				} else {
+					param.put("not_pry_svr_id", null);
+				}
 				
 				List<ProxyServerVO> prySvrList = proxySettingService.selectProxyServerList(param);	
 				
 				if(prySvrList.size() == 0){
 					ProxyAgentVO pryAgtVO = new ProxyAgentVO();
 					pryAgtVO.setSvr_use_yn("Y");
+					
+					if (request.getParameter("agt_sn") != null && !"".equals((String)request.getParameter("agt_sn"))) {
 					pryAgtVO.setAgt_sn(Integer.parseInt(request.getParameter("agt_sn")));
+					} else {
+						pryAgtVO.setAgt_sn(0);
+					}
+					pryAgtVO.setIpadr(request.getParameter("ipadr"));
 					pryAgtVO.setLst_mdfr_id(lst_mdfr_id);
 					
 					ProxyServerVO prySvrVO = new ProxyServerVO();
+					
+					if (request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))) {
 					prySvrVO.setPry_svr_id(Integer.parseInt(request.getParameter("pry_svr_id")));
+					} else {
+						prySvrVO.setPry_svr_id(0);
+					}
+
 					prySvrVO.setPry_svr_nm(request.getParameter("pry_svr_nm"));
 					prySvrVO.setDay_data_del_term(Integer.parseInt(request.getParameter("day_data_del_term")));
 					prySvrVO.setMin_data_del_term(Integer.parseInt(request.getParameter("min_data_del_term")));
 					prySvrVO.setUse_yn(request.getParameter("use_yn"));
 					prySvrVO.setMaster_gbn(request.getParameter("master_gbn"));
+
 					if("B".equals(request.getParameter("master_gbn"))){
+						if (request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))) {
 						prySvrVO.setMaster_svr_id(Integer.parseInt(request.getParameter("master_svr_id")));
+						} else {
+							prySvrVO.setMaster_svr_id(0);
+						}
 					}
+
 					prySvrVO.setDb_svr_id(Integer.parseInt(request.getParameter("db_svr_id")));
 					prySvrVO.setLst_mdfr_id(lst_mdfr_id);
+					prySvrVO.setFrst_regr_id(lst_mdfr_id);
+					prySvrVO.setIpadr(request.getParameter("ipadr"));
 					
 					proxySettingService.updateProxyAgentInfo(pryAgtVO);
-					proxySettingService.updateProxyServerInfo(prySvrVO);
+					
+					//insert 로직 추가
+					if ("reg".equals(reg_mode)) {
+						//global 저장 처리
+						pry_svr_id_sn = proxySettingService.selectQ_T_PRY_SVR_I_01();
+						prySvrVO.setPry_svr_id((int)pry_svr_id_sn);
+
+						proxySettingService.insertProxyServerInfo(prySvrVO);
+						
+						//global 등록
+						ProxyGlobalVO proxyGlobalVO = new ProxyGlobalVO();
+						
+						proxyGlobalVO.setPry_svr_id(prySvrVO.getPry_svr_id());
+						proxyGlobalVO.setMax_con_cnt(1000);
+						proxyGlobalVO.setCl_con_max_tm("30m");
+						proxyGlobalVO.setCon_del_tm("4s");
+						proxyGlobalVO.setSvr_con_max_tm("30m");
+						proxyGlobalVO.setChk_tm("5s");
+						proxyGlobalVO.setIf_nm(null);
+						proxyGlobalVO.setObj_ip(prySvrVO.getIpadr());
+						proxyGlobalVO.setPeer_server_ip(null);
+	
+						proxyGlobalVO.setLst_mdfr_id(lst_mdfr_id);
+						proxyGlobalVO.setFrst_regr_id(lst_mdfr_id);
+	
+						proxySettingService.insertProxyGlobalConf(proxyGlobalVO);
+					} else {
+						proxySettingService.updateProxyServerInfo(prySvrVO);
+					}
 					
 					resultObj.put("result",true);
 					resultObj.put("errMsg","작업이 완료되었습니다.");
