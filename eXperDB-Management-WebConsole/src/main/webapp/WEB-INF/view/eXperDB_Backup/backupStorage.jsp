@@ -304,10 +304,7 @@ function fnc_confirmMultiRst(gbn){
 			<div class="card">
 				<div class="card-body">
 					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
-						<div class="card my-sm-2" >
-							<div class="card card-inverse-info"  style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;;"> 백업 스토리지 리스트 </i>
-							</div>						
+						<div class="card my-sm-2" >									
 							<div class="card-body">
 								<div class="row">
 									<div class="col-12">

@@ -39,8 +39,10 @@ var dataSearch = 0;
 var progress = 0;
 var jobend = 0;
 
+var width=0;
 var monitoringData;
 var table_policy;
+
 
 /* ********************************************************
  * 페이지 시작시
@@ -129,7 +131,26 @@ function fn_init() {
 			className : "dt-center",
 			defaultContent : ""
 		},	
-		{data : "progress", 
+		
+		{
+			data : "status",
+			render : function(data, type, full, meta) {	 						
+				var html = '';
+				//Active
+				if (full.jobstatus == 5) {
+				html += "<div class='badge badge-pill badge-success'>";
+				html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+				html += "	<spring:message code='dashboard.running' />";
+				html += "</div>";
+				}
+				return html;
+			},
+			className : "dt-center",
+			defaultContent : ""
+		}
+		
+		
+		/* {data : "progress", 
 			render : function(data, type, full, meta) {	 						
 				var html = '';											
 				html += "<div class='progress progress-xl'>";
@@ -139,7 +160,7 @@ function fn_init() {
 				html += "</div>";
 				return html;
 			},			
-			className : "dt-center", defaultContent : ""}
+			className : "dt-center", defaultContent : ""} */
 		]
 	});
 
@@ -175,12 +196,11 @@ function fn_runNow() {
 	var datas = monitoringData.row('.selected').length;
 
 	if(datas != 1){
-		showSwalIcon('서버를 선택해 주세요 !', '', 'warning');
+		showSwalIcon('서버를 선택해 주세요', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
 		var jobname = monitoringData.row('.selected').data().jobname;
 	}
-
 	$("#pop_jobname").val(jobname);
 	$("#pop_runNow").modal("show");
 }
@@ -244,15 +264,13 @@ function fn_jobCheck(jobend){
 					monitoringData.rows.add(data).draw();
 					dataSearch++;
 				 }
-				 if(progress == 0){
-					progressBar(7000);
-					progress++;
-				}
+				 progressBar();
 				setTimeout(fn_selectJobEnd, 1000); 
 			}else{
 				if(jobend == 1){
 					monitoringData.clear().draw();
 					monitoringData.rows.add(data).draw();
+					width=0;
 				}
 				setTimeout(fn_jobCheck, 1000);
 			} 
@@ -284,11 +302,7 @@ function fn_selectJobEnd(){
 		success : function(data) {			
 			 if(data == 1){		
 				 dataSearch = 0;
-				 progress=0;
-				 progressBar();
-				 /* if(pCount == 100){
-					 setTimeout(fn_jobCheck(1), 10000);
-				 } */
+				setTimeout(fn_jobCheck(1), 10000);
 			}else{				
 				setTimeout(fn_selectJobEnd, 10000);
 			} 						
@@ -298,28 +312,29 @@ function fn_selectJobEnd(){
 }
 
 
+function progressBar(){
+    var ele=document.getElementById('progressing');
 
-function fn_random(){
-	var random2 = Math.floor(Math.random() * max)+700;
-	alert(random2);
-	return random2
+    var id =setInterval(frame, 3500);
+ 
+    function frame(){
+        if(width>=99){
+            clearInterval(id);
+        }else{
+            width ++;
+            ele.style.width=width+"%";
+            ele.innerHTML=width+"%";
+        }
+    }
 }
 
 
-function rand(min, max) {
-	  return Math.floor(Math.random() * (max - min + 1)) + min;
-	}
-
-
-
-function progressBar(rNum) {
-	//var rNum = rand(7000, 10000);
+/* function progressBar() {
+	var rNum = rand(7000, 10000);
     var elem = document.getElementById("progressing");   
    
-    var width = 1;
-    
     var id = setInterval(function(){
-        if (width >= 100) {
+        if (width >= 99) {
             clearInterval(id);
         } else {
             width++; 
@@ -327,9 +342,7 @@ function progressBar(rNum) {
             elem.innerHTML = width * 1  + '%';
         }
     }, rNum);
-    
-    return width;
-}
+} */
 
 </script>
 <%@include file="./popup/backupRunNow.jsp"%>
@@ -399,10 +412,7 @@ function progressBar(rNum) {
 			<div class="card">
 				<div class="card-body">
 					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
-						<div class="card my-sm-2" >
-							<div class="card card-inverse-info"  style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;;"> 백업 스토리지 리스트 </i>
-							</div>						
+						<div class="card my-sm-2" >					
 							<div class="card-body">
 								<div class="row">
 									<div class="col-12">
@@ -422,7 +432,7 @@ function progressBar(rNum) {
 															<th width="50">Write Throughput(MB/min)</th> -->
 															<th width="100">Backup Destination</th>
 															<th width="100">Last Result</th>
-															<th width="150">Progress</th>
+															<th width="150">Status</th>
 														</tr>
 													</thead>
 												</table>							

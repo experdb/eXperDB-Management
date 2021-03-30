@@ -33,15 +33,10 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     	
     	if(type == 2){        	
     		String [] pth = request.getParameter("path").split("/", 4);
-    		String path = "/"+pth[3];
-    		
+    		String path = "/"+pth[3];	
     		backuplocation.setBackupDestLocation(request.getParameter("path"));
     		backuplocation.setBackupDestUser(request.getParameter("userName"));
     		backuplocation.setBackupDestPasswd(request.getParameter("passWord"));
-    		result = Backuploaction.validateCifs(backuplocation);
-    		if(result.get("RESULT_CODE").toString().equals("1")){
-    			return result;
-    		}
     		locationVO.setTotalSize(Long.parseLong(CmmnUtil.backupLocationTotalSize(path).get("RESULT_DATA").toString()));
     		locationVO.setFreeSize(Long.parseLong(CmmnUtil.backupLocationFreeSize(path).get("RESULT_DATA").toString()));
     		locationVO.setBackupDestPasswd(CmmnUtil.encPassword(request.getParameter("passWord")).get("RESULT_DATA").toString());

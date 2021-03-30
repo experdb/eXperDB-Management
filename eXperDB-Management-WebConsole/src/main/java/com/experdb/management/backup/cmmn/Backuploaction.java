@@ -28,11 +28,15 @@ public class Backuploaction {
 				+ backupLocationInfo.getBackupDestUser() + " "
 				+ backupLocationInfo.getBackupDestLocation().replaceAll("\\\\", "/");
 
+		System.out.println("CIFS CMD="+smd);
+		
 		try {
 			result = cmmUtil.execute(smd.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("RESULT_CODE = "+result.get("RESULT_CODE"));
+		System.out.println("RESULT_DATA = "+result.get("RESULT_DATA"));
 		return result;
 	}
 
