@@ -31,10 +31,8 @@
        		s.LST_MDF_DTM,
        		a.AGT_CNDT_CD 
 		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
-		<if test="value != null and value != '' ">
-        WHERE PRY_SVR_ID = #{value} 
-        OR MASTER_SVR_ID = #{value}
-        </if>
+		WHERE s.USE_YN = 'Y'
+        GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD
 		ORDER BY coalesce(MASTER_SVR_ID, PRY_SVR_ID), MASTER_GBN DESC, LST_MDF_DTM
 	</select>
 	
@@ -78,7 +76,7 @@
 		ORDER BY coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), s.MASTER_GBN DESC, LST_MDF_DTM
 	</select>
 	
-	<select id="selectDBServerConProxy" resultType="hashMap">
+	<select id="selectDBServerConProxy" resultType="hashMap" parameterType="int">
 		/**
 		* Query ID : selectDBServerConProxy
 		* Description : db server connected proxy
@@ -97,20 +95,23 @@
 		FROM T_PRY_SVR_I tpsi 
 		JOIN T_DBSVRIPADR_I tdi  ON tpsi.DB_SVR_ID = tdi.DB_SVR_ID
 		JOIN T_AGTCNDT_I tai ON tdi.IPADR = tai.IPADR
-		WHERE tpsi.PRY_SVR_ID = #{value} OR tpsi.MASTER_SVR_ID = #{value}
+		WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric
 		GROUP BY tdi.MASTER_GBN, tdi.DB_SVR_ID, tdi.IPADR , tdi.PORTNO , tdi.SVR_HOST_NM ,  tai.AGT_CNDT_CD 
 		ORDER BY tdi.MASTER_GBN, tdi.DB_SVR_ID
 	</select>
 	
-	<select id="selectProxyLogList" resultType="hashMap">
+	<select id="selectProxyLogList" resultType="hashMap" parameterType="int">
 		/**
 		* Query ID : selectProxyLogList
 		* Description : proxy starting state list
 		* Author : 윤정
 		**/
 		SELECT
+			(ROW_NUMBER() OVER()) AS ROWNUM, 
+			(ROW_NUMBER() OVER()) AS IDX,
 			tpsi.PRY_SVR_ID, 
 			tpsi.PRY_SVR_NM , 
+			tpacg.PRY_ACT_EXE_SN, 
 			tpacg.SYS_TYPE, 
 			tpacg.ACT_TYPE,
 			tpacg.ACT_EXE_TYPE, 
@@ -118,9 +119,10 @@
 			TO_CHAR(tpacg.WRK_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_DTM
 		FROM T_PRY_SVR_I tpsi 
 		JOIN T_PRY_ACTSTATE_CNG_G tpacg on tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID 
-		WHERE tpsi.PRY_SVR_ID = #{value}
-		OR tpsi.MASTER_SVR_ID = #{value}
+		WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
 		ORDER BY tpacg.WRK_DTM DESC
+		LIMIT 5
 	</select>
 	
 	<select id="selectConfiguration" resultType="hashMap" parameterType="hashMap">
@@ -225,8 +227,7 @@
 				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
 				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
 				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID AND tpssg.lsn_svr_id = tpsli.lsn_svr_id
-				WHERE (tpsi.PRY_SVR_ID = #{value} OR tpsi.MASTER_SVR_ID = #{value})
-				  AND tpsi.MASTER_GBN = 'M'
+				WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
 				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM desc
 			) x
 			WHERE x.r <= 5
@@ -269,5 +270,70 @@
 		]]>
 	</select>
 	
+	<select id="selectActExeFailLog" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectExeFailMsg
+		* Description : proxy / keepalived 기동-정지 실패 시 log 보여주기 
+		* Author : 윤정
+		**/
+		SELECT 
+			tpsi.PRY_SVR_ID , 
+			tpsi.PRY_SVR_NM , 
+			tpacg.PRY_ACT_EXE_SN, 
+			tpacg.SYS_TYPE , 
+			tpacg.ACT_TYPE , 
+			tpacg.ACT_EXE_TYPE , 
+			tpacg.RSLT_MSG
+		FROM T_PRY_SVR_I tpsi
+		JOIN T_PRY_ACTSTATE_CNG_G tpacg
+		ON tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID
+		WHERE tpacg.PRY_ACT_EXE_SN = #{PRY_ACT_EXE_SN}::numeric
+	</select>
+	
+	<insert id="insertActExeCng" parameterType="hashMap">
+		/**
+		* Query ID : insertActExeCng
+		* Description : proxy / keepalived 기동-정지 상태 변경 
+		* Author : 윤정
+		**/
+		WITH ins1 AS (
+			INSERT INTO T_PRY_ACTSTATE_CNG_G (
+				pry_act_exe_sn, 
+				pry_svr_id, 
+				sys_type, 
+				act_type, 
+				act_exe_type, 
+				wrk_dtm,
+				exe_rslt_cd, 
+				rslt_msg, 
+				frst_regr_id, 
+				frst_reg_dtm, 
+				lst_mdfr_id, 
+				lst_mdf_dtm
+			)
+			VALUES (
+				NEXTVAL('SEQ_PRY_ACTSTATE_CNG'),
+				#{pry_svr_id}::numeric, 
+				#{sys_type},
+				#{act_type},
+				#{act_exe_type}, 
+				clock_timestamp(), 
+				#{exe_rslt_cd},
+				'', 
+				#{frst_regr_id}, 
+				clock_timestamp(), 
+				#{lst_mdfr_id}, 
+				clock_timestamp()
+			)
+		)
+		UPDATE T_PRY_SVR_I 
+		<if test='sys_type == "PROXY"'>
+			SET EXE_STATUS = #{status}
+		</if>
+		<if test='sys_type == "KEEPALIVED"'>
+			SET KAL_EXE_STATUS = #{status}
+		</if>
+		WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
+	</insert>
 	
 </mapper>
