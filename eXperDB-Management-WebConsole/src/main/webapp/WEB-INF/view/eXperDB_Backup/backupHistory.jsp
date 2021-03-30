@@ -34,9 +34,9 @@ var serverList=[];
 $(window.document).ready(function() {
 	fn_init();
 	//selectJobHistory();
-	fn_searchHistory();
 	dateCalenderSetting();
 	fn_getSvrList();
+	fn_searchHistory();
 	$('#bckHistoryList tbody').on('click','tr',function() {
 		var jobid = bckHistoryList.row(this).data().jobid;
 		selectActivityLog(jobid);
@@ -225,6 +225,7 @@ $(function() {
 	} );  
 	
 function fn_getSvrList() {
+	console.log("fn_getSvrList");
 	$.ajax({
 		url : "/experdb/backupNodeList.do",
 		data : {
@@ -244,7 +245,9 @@ function fn_getSvrList() {
 			}
 		},
 		success : function(data) {
+			console.log("success : " + data);
 			fn_setServerList(data);
+			
 		}
 	});
 }
@@ -253,10 +256,11 @@ function fn_setServerList(data){
 	serverList.length=0;
 	serverList = data;
 	var html;
+	console.log("fn_setServerList");
 	$("#bckServer").empty();
 	html +='<option value="0"> 백업 서버</option>'
 	for(var i =0; i<serverList.length; i++){			
-		html += '<option value="'+serverList[i].path+'">'+serverList[i].path+'</option>';
+		html += '<option value="'+serverList[i].ipadr+'">'+serverList[i].ipadr+'</option>';
 	}
 	$("#bckServer").append(html);
 }
@@ -315,7 +319,11 @@ function selectActivityLog(jobid) {
 	});
 }
 function fn_searchHistory(){
-	console.log("fn_searchHistory");
+	console.log("fn_searchHistory : " + $("#bckStartDate").val());
+	console.log("endDate : " + $("#bckEndDate").val());
+	console.log("bckServer : " + $("#bckServer").val());
+	console.log("bckType : " + $("#bckType").val());
+	console.log("bckStatus : " + $("#bckStatus").val());
 	$.ajax({
 		url : "/experdb/backupJobHistoryList.do",
 		data : {
@@ -394,21 +402,6 @@ function fn_searchHistory(){
 				</div>
 			</div>
 		</div> 
-		
-		<!-- <div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
-			<div class="card">
-				<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
-					<div class="table-responsive" style="overflow:hidden;">
-						<div id="wrt_button" style="float: right;">
-							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
-								<i class="ti-search btn-icon-prepend "></i>조회
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
-		
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
@@ -437,8 +430,7 @@ function fn_searchHistory(){
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
 									<select class="form-control" style="margin-right: -0.7rem;" name="bckServer" id="bckServer">
-										<!-- <option value="0"> 백업 서버</option>
-										<option value="192.168.20.127"> 192.168.20.127</option> -->
+										
 									</select>
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
@@ -457,7 +449,7 @@ function fn_searchHistory(){
 								</div>
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="read_button" onClick="fn_searchHistory();" >
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-								</button>"target/eXperDB-Management-WebConsole.war"
+								</button>
 							</form>
 						</div>
 					<!-- </div> -->

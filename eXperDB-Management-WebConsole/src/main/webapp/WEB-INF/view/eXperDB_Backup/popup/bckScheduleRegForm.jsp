@@ -49,7 +49,7 @@
 
 		$("#repeat").prop('checked', false);
 		fn_repeatClick();
-
+		
 	}
 
 	/* ********************************************************
@@ -126,6 +126,7 @@
 					$("#repeatTime").val()
 		 )
 		 fn_drawScheduleList();
+			fn_alertShow();
 			$("#pop_layer_popup_backupSchedule").modal("hide");
 		} 
 	}

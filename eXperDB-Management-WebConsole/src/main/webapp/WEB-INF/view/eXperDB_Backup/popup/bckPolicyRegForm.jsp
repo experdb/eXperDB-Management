@@ -278,6 +278,7 @@
 		$("#bckCompressVal").val($("#compressType").val());
 		// $("#bckStorageTypeVal").val($("#storageType").val());	
 		
+		fn_alertShow();
 		$("#pop_layer_popup_backupPolicyReg").modal("hide");
 	}
 

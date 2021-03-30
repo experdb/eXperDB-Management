@@ -36,6 +36,19 @@
 		fn_regReset();
 			
 	});
+	
+	$(function(){
+		$(document).ajaxStart(function() {	
+			console.log("ajax start!!");
+		    $("#loader").show();	
+		});
+		
+		//AJAX 통신 종료
+		$(document).ajaxStop(function() {
+			console.log("ajax stop");
+			$("#loader").hide();
+		});
+	});
 
 	/* ********************************************************
 	 * registration reset
@@ -308,6 +321,7 @@
 						},
 						success : function(result) {		
 							 if(result.RESULT_CODE == "1"){
+								 alert(result.RESULT_DATA);
 								 showSwalIcon(result.RESULT_DATA, '<spring:message code="common.close" />', '', 'error');
 								 storageValid = false;
 							 }else{
@@ -443,6 +457,7 @@
 	<div class="modal-dialog  modal-xl" role="document" style="width: 700px">
 		<div class="modal-content" >
 			<div class="modal-body" style="margin-bottom:-30px;">
+			<div id="loader"><div class="flip-square-loader mx-autor" style="border: 0px !important;z-index:99999; position:absolute; transform:translate(250%, 250%); size:150%;"></div></div>
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					백업 스토리지
 				</h5>

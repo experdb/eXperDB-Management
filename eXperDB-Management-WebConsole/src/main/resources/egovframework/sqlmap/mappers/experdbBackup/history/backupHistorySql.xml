@@ -42,7 +42,7 @@
 						, SESSIONGUID
 				FROM JOBHISTORY
 			    WHERE 1=1
-			    <if test="server != 0 || server != ''">
+			    <if test="server != 0 || server != '' || server != null">
 				  AND TARGETNAME LIKE #{server}
 				</if>
 				<if test="type != 0 || type != ''">
@@ -51,7 +51,7 @@
 			    <if test="status != 0 || status != ''">
 				  AND STATUS = #{status}::numeric
 				</if>
-				  AND EXECUTETIME BETWEEN #{startDate} AND #{endDate}		
+				  AND EXECUTETIME BETWEEN #{startDate}::numeric AND #{endDate}::numeric	
 				ORDER BY JOBID DESC		
 		</select>
 		

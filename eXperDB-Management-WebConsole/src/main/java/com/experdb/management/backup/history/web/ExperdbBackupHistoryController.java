@@ -47,14 +47,21 @@ public class ExperdbBackupHistoryController {
 			DateFormat _dateSDF = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar cal = Calendar.getInstance();
 			
-			Date _sDate = _dateSDF.parse(request.getParameter("startDate"));
-			Date _eDate = _dateSDF.parse(request.getParameter("endDate"));
+			System.out.println("startDate : " + request.getParameter("startDate"));
+			
+			String stDate = request.getParameter("startDate");
+			String edDate = request.getParameter("endDate");
+			Date _sDate = _dateSDF.parse(stDate);
+			Date _eDate = _dateSDF.parse(edDate);
 			
 			cal.setTime(_eDate);
 			cal.add(Calendar.DATE, 1);
 			
 			long sDate = _sDate.getTime()/1000;
 			long eDate = cal.getTimeInMillis()/1000;
+			
+			System.out.println("sDate : " + sDate);
+			System.out.println("eDate : " + eDate);
 			
 			param.put("startDate", sDate);
 			param.put("endDate", eDate);

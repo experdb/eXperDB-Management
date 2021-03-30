@@ -188,6 +188,11 @@ function fn_policyReset(){
 	$("#jobNameVal").val("");
 }
 
+function fn_alertShow(){
+	$("#applyAlert").show();
+	$("#applyAlert_none").hide();
+}
+
 /* ********************************************************
  * 서버 리스트 가져오기
  ******************************************************** */
@@ -403,31 +408,37 @@ function fn_nodeRegPopup() {
  ******************************************************** */
 	
 	function fn_policyRegPopoup() {
-		$.ajax({
-			url : "/experdb/backupStorageList.do",
-			type : "post"
-		})
-		.done (function(result){			
-			fn_setStorageList(result);
-			console.log("$('#bckStorage).val() : " + $("#bckStorage").val() == null);
-			if($("#bckStorage").val() != ""){
-				console.log("정책  수정");
-				fn_policyModiReset();
-			}else{
-				console.log("정책 신규 등록");
-				fn_policyRegReset();
-			}
-			$("#pop_layer_popup_backupPolicyReg").modal("show");
-		})
-		.fail (function(xhr, status, error){
-			 if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if (xhr.status == 403){
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		 })
+		var data = NodeList.rows('.selected').data();
+		if(data.length < 1){
+			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else{
+			$.ajax({
+				url : "/experdb/backupStorageList.do",
+				type : "post"
+			})
+			.done (function(result){			
+				fn_setStorageList(result);
+				console.log("$('#bckStorage).val() : " + $("#bckStorage").val() == null);
+				if($("#bckStorage").val() != ""){
+					console.log("정책  수정");
+					fn_policyModiReset();
+				}else{
+					console.log("정책 신규 등록");
+					fn_policyRegReset();
+				}
+				$("#pop_layer_popup_backupPolicyReg").modal("show");
+			})
+			.fail (function(xhr, status, error){
+				 if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if (xhr.status == 403){
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			 })
+		}
 	}
 /* ********************************************************
  * schedule registration
@@ -719,9 +730,12 @@ table.dataTable.ccc thead th{
 				<div class="table-responsive" style="overflow:hidden;">
 					<div class="row" style="float: right;width: 500px;">					
 						<div class="tooltip-static-demo" id="applyAlertTooltip">
-							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px;">
+							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; display:none;">
 								<div class="arrow"></div>
 								<div class="tooltip-inner" style="width: 250px;">백업 정책 설정 후 적용을 눌러주세요</div>
+							</div>
+							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert_none" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; width: 265px;">
+								
 							</div>
 						</div>
 						<div id="wrt_button" style="float: right;">
@@ -782,7 +796,7 @@ table.dataTable.ccc thead th{
 										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policyRegPopoup()">
 										 	설정
 										</button>
-										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="">
+										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_alertShow()">
 											삭제
 										</button>
 									</div>
