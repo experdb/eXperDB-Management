@@ -278,7 +278,7 @@ function fn_serverListTable_init() {
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
-		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		proxyListenTable.row.add({
 			"lsn_nm" : $("#lstnReg_lsn_nm", "#insProxyListenForm").val(),
 			"con_bind_port" : $("#lstnReg_con_bind_ip", "#insProxyListenForm").val()+":"+$("#lstnReg_con_bind_port", "#insProxyListenForm").val(),
@@ -301,7 +301,7 @@ function fn_serverListTable_init() {
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
-		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
 		
 		//수정된 내용 반영
 		var dataLen = proxyListenTable.rows().data().length;
@@ -372,7 +372,7 @@ function fn_serverListTable_init() {
 		serverListTable.row.add({
 			"backup_yn" : "N",
 			"chk_portno" : $("#portno").val(),
-			"db_con_addr" : $("#ipadr").val()+":"+$("#portno").val(),
+			"db_con_addr" : $("#ipadr").val(),
 			"lsn_svr_id" : "",
 			"lsn_id" : parseInt($("#lstnReg_lsn_id", "#insProxyListenForm").val()),
 			"pry_svr_id" : parseInt($("#lstnReg_pry_svr_id", "#insProxyListenForm").val()),
@@ -434,6 +434,7 @@ function fn_serverListTable_init() {
 				}
 			},
 			success : function(result) {
+				console.log(result);
 				var dataLen = serverListTable.rows().data().length;
 				var datas = serverListTable.rows().data();
 				$("#ipadr").children().remove();
@@ -442,16 +443,21 @@ function fn_serverListTable_init() {
 					for(var i=0; i<result.length; i++){
 						var inclu = false;
 						for(var j=0 ; j < dataLen ; j++){
-							var temp = datas[j].db_con_addr;
-							if(temp.substr(0,temp.indexOf(":")) == result[i].ipadr) inclu=true;
+							if(datas[j].db_con_addr == result[i].db_con_addr) inclu=true;
 						}
-						if(!inclu) $("#ipadr").append("<option value='"+result[i].ipadr+"'>"+result[i].ipadr+"</option>");	
+						if(!inclu){
+							$("#ipadr").append("<option value='"+result[i].db_con_addr+"'>"+result[i].db_con_addr+"</option>");	
+						}
 					}									
 				}
 			}
 		});
 	  	
 		document.ipadr_form.reset();
+	}
+	function fn_change_ipadr(){
+		var ipadr = $("#ipadr").val();
+		$("#portno").val(ipadr.substr(ipadr.indexOf(":")+1,ipadr.length));
 	}
 </script>
 
@@ -460,19 +466,19 @@ function fn_serverListTable_init() {
 		<div class="modal-content" style="width:1000px;">			 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="dbms_information.dbms_ip_reg"/>
+					연결 DBMS 등록
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
 						<form class="cmxform" name="ipadr_form" id="ipadr_form" method="post">
 							<fieldset>
 								<div class="form-group row">
-									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+									<label for="com_max_clusters" class="col-sm-3 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="dbms_information.dbms_ip" />(*)
+										DBMS 접속주소(*)
 									</label>
-									<div class="col-sm-4">
-										<select class="form-control"  id="ipadr" name="ipadr">
+									<div class="col-sm-3">
+										<select class="form-control"  id="ipadr" name="ipadr" onchange="fn_change_ipadr();">
 											<option value="%"><spring:message code="schedule.total" /> </option>
 										</select>
 									</div>
@@ -615,7 +621,7 @@ function fn_serverListTable_init() {
 											<table id="serverList" class="table table-hover table-striped system-tlb-scroll input-table" style="width:100%;">
 												<thead>
 													<tr class="bg-info text-white">
-														<th width="200">DBMS 접속 정보</th>
+														<th width="200">DBMS 접속 주소</th>
 														<th width="100"><spring:message code="data_transfer.port" /></th>
 														<th width="100">백업 여부</th>
 														<th width="0"></th>
