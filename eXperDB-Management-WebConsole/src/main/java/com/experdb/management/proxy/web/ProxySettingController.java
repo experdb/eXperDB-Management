@@ -33,7 +33,10 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
+import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
+import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 
@@ -63,6 +66,10 @@ public class ProxySettingController {
 	
 	@Autowired
 	private AccessHistoryService accessHistoryService;
+	
+	@Autowired
+	private CmmnCodeDtlService cmmnCodeDtlService;
+	
 	
 	private List<Map<String, Object>> menuAut;
 	
@@ -103,6 +110,19 @@ public class ProxySettingController {
 					mv.addObject("usr_id", usr_id);
 				}
 				 
+				// Get Incoding Code List
+				try {
+					PageVO pageVO = new PageVO();
+					pageVO.setGrp_cd("TC0041");
+					pageVO.setSearchCondition("0");
+					List<CmmnCodeVO> cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+					System.out.println("code size :: "+cmmnCodeVO.size());
+					mv.addObject("simpleQueryList",cmmnCodeVO);
+				} catch (Exception e) {
+					System.out.println("error "+e.toString());
+					e.printStackTrace();
+				}
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));				
 				mv.setViewName("proxy/setting/proxySetting");
@@ -368,6 +388,9 @@ public class ProxySettingController {
 				List<ProxyVipConfigVO> vipConfigList = proxySettingService.selectProxyVipConfList(param);	
 				resultObj.put("vipconfig_list", vipConfigList);
 				
+				List<Map<String, Object>> dbSelList = proxySettingService.selectDBSelList(param);
+				resultObj.put("db_sel_list",dbSelList);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -450,6 +473,7 @@ public class ProxySettingController {
 				String status = request.getParameter("exe_status");
 				param.put("pry_svr_id", prySvrId);
 				param.put("exe_status", status);
+				param.put("kal_exe_status", status);
 				if(status.equals("TC001502")) param.put("use_yn", "N");
 				else param.put("use_yn", "Y");
 				param.put("lst_mdfr_id", lst_mdfr_id);

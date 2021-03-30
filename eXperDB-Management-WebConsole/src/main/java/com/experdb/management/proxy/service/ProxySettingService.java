@@ -72,5 +72,6 @@ public interface ProxySettingService {
 
 	public List<Map<String, Object>> selectIpList(Map<String, Object> param);
 
+	public List<Map<String, Object>> selectDBSelList(Map<String, Object> param);
 
 }

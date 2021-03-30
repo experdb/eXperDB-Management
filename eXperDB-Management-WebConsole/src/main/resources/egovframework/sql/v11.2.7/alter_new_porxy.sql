@@ -119,3 +119,21 @@ VALUES('TC0001', 'DX-T0160_02', 'Proxy 모니터링 - config 파일 조회', 'Y'
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
 VALUES('TC0001', 'DX-T0160_03', 'Proxy 모니터링 - Log 파일 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Monitoring Log')
+
+
+
+--Proxy 설정 select 코드 등록 
+INSERT INTO t_sysgrp_c
+(grp_cd, grp_cd_nm, grp_cd_exp, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
+VALUES('TC0041', 'Simple Query', 'PROXY Simple Query', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0041', 'TC004101', 'select haproxy_check();', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'select haproxy_check();');
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0041', 'TC004102', 'select 1;', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'select 1;');
+
+
+
+

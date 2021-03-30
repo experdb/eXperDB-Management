@@ -52,15 +52,15 @@
 			bSort: false,
 			columns : [ 
 			            {data : "rownum", className : "dt-center", defaultContent : "", orderable : false,},
-						{data : "exe_status", 
-			            	render : function(data, type, full, meta) {
-								var html = "";
+			            {data : "status", defaultContent : "",
+			            	render: function (data, type, full){
+			            		var html = "";
 								//TC001501 실행
 								//TC001501 중지
 								html += '<div class="onoffswitch">';
-								if(full.exe_status == "TC001501"){
+								if (!(full.exe_status == "TC001502" || full.kal_exe_status == "TC001502")) {
 									html += '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="fn_prySvrActivation_click()" checked>';
-								}else{ /* if(full.exe_status == "TC001502"){ */
+								}else{ 
 									html += '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="fn_prySvrActivation_click()">';
 								}
 								html += '<label class="onoffswitch-label" for="pry_svr_activeYn'+ full.pry_svr_id +'">';
@@ -70,9 +70,8 @@
 
 								return html;
 							},
-							className : "dt-center",
-							defaultContent : ""
-						},//서버 상태
+			            className : "dt-center"
+			            },//마스터 구분
 			            {data : "pry_svr_nm", defaultContent : ""}, //서버명
 			            {data : "ipadr", defaultContent : ""},//서버 IP
 			            {data : "use_yn",
@@ -115,27 +114,8 @@
 			            {data : "lst_mdf_dtm", defaultContent : "", visible: false},//최종 수정일
 			            {data : "agt_sn", defaultContent : "", visible: false},//agent 일련번호
 			            {data : "pry_svr_id", defaultContent : "", visible: false},//서버 ID
-						{data : "kal_exe_status", 
-			            	render : function(data, type, full, meta) {
-								var html = "";
-								//TC001501 실행
-								//TC001501 중지
-								html += '<div class="onoffswitch">';
-								if(full.exe_status == "TC001501"){
-									html += '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="fn_prySvrActivation_click()" checked>';
-								}else{ /* if(full.exe_status == "TC001502"){ */
-									html += '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="fn_prySvrActivation_click()">';
-								}
-								html += '<label class="onoffswitch-label" for="pry_svr_activeYn'+ full.pry_svr_id +'">';
-								html += '<span class="onoffswitch-inner"></span>';
-								html += '<span class="onoffswitch-switch"></span></label>';
-								html += '</div>';
-
-								return html;
-							},
-							className : "dt-center",
-							defaultContent : "", visible: false
-			            }//keepalived 상태
+			            {data : "exe_status", className : "dt-center",defaultContent : "", visible: false },//서버 상태
+						{data : "kal_exe_status", className : "dt-center", defaultContent : "", visible: false }//keepalived 상태
 				]
 		});
         proxyServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '40px');//checkbox
@@ -153,7 +133,8 @@
 		proxyServerTable.tables().header().to$().find('th:eq(12)').css('min-width', '0px');//최종 수정일
 		proxyServerTable.tables().header().to$().find('th:eq(13)').css('min-width', '0px');//agent 일련번호
 		proxyServerTable.tables().header().to$().find('th:eq(14)').css('min-width', '0px');//서버 ID
-		proxyServerTable.tables().header().to$().find('th:eq(15)').css('min-width', '0px');//kal_EXE_STATUS
+		proxyServerTable.tables().header().to$().find('th:eq(15)').css('min-width', '0px');//EXE_STATUS
+		proxyServerTable.tables().header().to$().find('th:eq(16)').css('min-width', '0px');//kal_EXE_STATUS
 		
 		$('#proxyServer tbody').on('dblclick','tr',function() {
 			if (!$(this).hasClass('selected')){	        	
@@ -570,6 +551,14 @@
 					proxyListenTable.rows({selected: true}).deselect();
 					proxyListenTable.clear().draw();
 					proxyListenTable.rows.add(result.listener_list).draw();
+					
+					//Linstener database select 동적 생성
+					$("#lstnReg_db_nm", "#insProxyListenForm").children().remove();
+					if(result.db_sel_list.length > 0){
+						for(var i=0; i<result.db_sel_list.length; i++){
+							$("#lstnReg_db_nm", "#insProxyListenForm").append("<option value='"+result.db_sel_list[i].db_nm+"'>"+result.db_sel_list[i].db_nm+"</option>");	
+						}									
+					}
 	 			}
 	 		});
  		}
@@ -915,12 +904,14 @@
 			//중지
 			$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", false);
 			proxyServerTable.row('.selected').data().exe_status = "TC001502";
+			proxyServerTable.row('.selected').data().kal_exe_status = "TC001502";
 			//agent에 서버 중지 해달라고 호출
 			fn_proxy_active_set(proxyServerTable.row('.selected').data().pry_svr_id,"TC001502");
 		}else if (gbn == "start") {
 			//실행
 			$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", true);
 			proxyServerTable.row('.selected').data().exe_status = "TC001501";
+			proxyServerTable.row('.selected').data().kal_exe_status = "TC001501";
 			//agent에 서버 실행 해달라고 호출
 			fn_proxy_active_set(proxyServerTable.row('.selected').data().pry_svr_id,"TC001501");
 			
@@ -1046,7 +1037,7 @@
 	}
 	
 	function fn_prySvrActivation_click(){
-		if(proxyServerTable.row('.selected').data().exe_status =="TC001502"){
+		if(proxyServerTable.row('.selected').data().exe_status =="TC001502" || proxyServerTable.row('.selected').data().kal_exe_status =="TC001502"){
 			fn_multiConfirmModal('start');	
 		}else{
 			fn_multiConfirmModal('stop');
@@ -1479,6 +1470,7 @@
 								<th width="0">최종 수정일</th>
 								<th width="0">agent 일련번호</th>
 								<th width="0">서버 id</th>
+								<th width="0">EXE_STATUS</th>
 								<th width="0">KAL_EXE_STATUS</th>
 							</tr>
 						</thead>

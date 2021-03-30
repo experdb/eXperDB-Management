@@ -183,5 +183,11 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		result = (List<Map<String, Object>>) list("proxyServerSettingSql.selectIpList", param);
 		return result;
 	}
+
+	public List<Map<String, Object>> selectDBSelList(Map<String, Object> param) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyServerSettingSql.selectDBSelList", param);
+		return result;
+	}
 	
 }

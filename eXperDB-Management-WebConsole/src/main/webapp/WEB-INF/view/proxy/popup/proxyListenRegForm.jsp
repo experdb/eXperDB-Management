@@ -92,7 +92,6 @@ function fn_serverListTable_init() {
 }
 
 	$(window.document).ready(function() {
-	
 		fn_serverListTable_init();
 		
 		$.validator.addMethod("validatorIpFormat3", function (str, element, param) {
@@ -459,6 +458,27 @@ function fn_serverListTable_init() {
 		var ipadr = $("#ipadr").val();
 		$("#portno").val(ipadr.substr(ipadr.indexOf(":")+1,ipadr.length));
 	}
+	
+	function fn_change_sim_query_sel(){
+		//lstnReg_con_sim_query
+		$("#lstnReg_con_sim_query", "#insProxyListenForm").val($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val());
+		if($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val() == ""){
+			$("#lstnReg_con_sim_query", "#insProxyListenForm").val("");
+			$("#lstnReg_field_nm", "#insProxyListenForm").val("");
+			$("#lstnReg_field_val", "#insProxyListenForm").val("");
+		}else{
+			$("#lstnReg_con_sim_query", "#insProxyListenForm").val($("#lstnReg_con_sim_query_sel").children("option:selected").text());
+			
+			if($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val() == "TC004101"){
+				$("#lstnReg_field_nm", "#insProxyListenForm").val("haproxy_check");
+				$("#lstnReg_field_val", "#insProxyListenForm").val("false");
+			}else if($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val() == "TC004102"){
+				$("#lstnReg_field_nm", "#insProxyListenForm").val("?column?");
+				$("#lstnReg_field_val", "#insProxyListenForm").val("1");
+			}
+		}
+			
+	}
 </script>
 
 <div class="modal fade" id="pop_layer_ip_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; z-index: 1060;">
@@ -573,7 +593,8 @@ function fn_serverListTable_init() {
 										Database(*)
 									</label>
 									<div class="col-sm-4">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_db_nm" name="lstnReg_db_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" tabindex=4 >
+										</select>
 									</div>
 								</div>
 								<div class="form-group row">
@@ -581,7 +602,15 @@ function fn_serverListTable_init() {
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										Simple Query(*)
 									</label>
-									<div class="col-sm-10">
+									<div class="col-sm-4">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_sim_query_sel" id="lstnReg_con_sim_query_sel" onchange="fn_change_sim_query_sel();"  tabindex=4 >
+											<option value="">직접 입력</option>
+											<c:forEach var="result" items="${simpleQueryList}">
+											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+											</c:forEach>
+										</select>
+									</div>
+									<div class="col-sm-6">
 										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
 									</div>
 								</div>

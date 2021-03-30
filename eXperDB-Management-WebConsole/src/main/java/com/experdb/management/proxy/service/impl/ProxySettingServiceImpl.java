@@ -175,5 +175,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		return proxySettingDAO.selectIpList(param);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectDBSelList(Map<String, Object> param) {
+		return proxySettingDAO.selectDBSelList(param);
+	}
 
 }
