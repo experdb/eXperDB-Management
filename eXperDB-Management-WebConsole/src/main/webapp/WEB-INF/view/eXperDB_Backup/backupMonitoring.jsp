@@ -42,7 +42,7 @@ var jobend = 0;
 var width=0;
 var monitoringData;
 var table_policy;
-
+var bckLogList;
 
 /* ********************************************************
  * 페이지 시작시
@@ -73,9 +73,9 @@ function fn_init() {
 				var html = '';
 				//Active
 				if (full.jobstatus == 5) {
-				html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-				html += "	<i class='fa fa-check-circle text-primary' >";
-				html += '&nbsp; Active</i>';
+				html += "<div class='badge badge-light text-primary'' style='background-color: transparent !important;font-size: 0.875rem;'>";
+				html += "	<i class='fa fa-spin fa-spinner mr-2 text-primary'></i>";
+				html += '&nbsp; Active';
 				html += "</div>";
 				//Ready
 				}else{
@@ -89,12 +89,6 @@ function fn_init() {
 			className : "dt-center",
 			defaultContent : ""
 		},		
-		/* {data : "executeTime", className : "dt-center", defaultContent : ""},
-		{data : "elapsedtime", className : "dt-center", defaultContent : ""},	
-		{data : "jobPhase", className : "dt-center", defaultContent : ""},
-		{data : "processedData", className : "dt-center", defaultContent : ""},
-		{data : "throughput", className : "dt-center", defaultContent : ""},
-		{data : "writeThroughput", className : "dt-center", defaultContent : ""}, */
 		{data : "location", className : "dt-center", defaultContent : ""},
 		{
 			data : "jobstatus",
@@ -130,37 +124,7 @@ function fn_init() {
 			},
 			className : "dt-center",
 			defaultContent : ""
-		},	
-		
-		{
-			data : "status",
-			render : function(data, type, full, meta) {	 						
-				var html = '';
-				//Active
-				if (full.jobstatus == 5) {
-				html += "<div class='badge badge-pill badge-success'>";
-				html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
-				html += "	<spring:message code='dashboard.running' />";
-				html += "</div>";
-				}
-				return html;
-			},
-			className : "dt-center",
-			defaultContent : ""
 		}
-		
-		
-		/* {data : "progress", 
-			render : function(data, type, full, meta) {	 						
-				var html = '';											
-				html += "<div class='progress progress-xl'>";
-				html += "	<div class='progress-bar bg-success progress-bar-striped progress-bar-animated' role='progressbar' id='progressing'>";
-				html += "60%"
-				html += "</div>";
-				html += "</div>";
-				return html;
-			},			
-			className : "dt-center", defaultContent : ""} */
 		]
 	});
 
@@ -168,13 +132,58 @@ function fn_init() {
 	 monitoringData.tables().header().to$().find('th:eq(1)').css('min-width');
 	 monitoringData.tables().header().to$().find('th:eq(2)').css('min-width');
 	 monitoringData.tables().header().to$().find('th:eq(3)').css('min-width');
-  	 monitoringData.tables().header().to$().find('th:eq(4)').css('min-width');
-	/* monitoringData.tables().header().to$().find('th:eq(5)').css('min-width');
-	 monitoringData.tables().header().to$().find('th:eq(6)').css('min-width');
-	 monitoringData.tables().header().to$().find('th:eq(7)').css('min-width');
-	 monitoringData.tables().header().to$().find('th:eq(8)').css('min-width');
-	 monitoringData.tables().header().to$().find('th:eq(9)').css('min-width'); */
-	
+
+	 
+	bckLogList = $('#bckLogList').DataTable({
+			scrollY : "500px",
+			scrollX: true,	
+			searching : false,
+			processing : true,
+			paging : false,
+			lengthChange: false,
+			deferRender : true,
+			info : false,
+			bSort : false,
+			columns : [
+			{
+				data : "type",
+				render : function(data, type, full, meta) {	 						
+					var html = '';
+					// TYPE_INFO
+					if (full.type == 1) {
+					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+					html += "	<i class='fa fa-info-circle text-primary' /> </i>";
+					//html += '&nbsp;<spring:message code="common.success" /></i>';
+					html += "</div>";
+					// TYPE_ERROR
+					}else if(full.type == 2){
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-times-circle text-danger' /> </i>";
+						//html += '&nbsp;취소</i>';
+						html += "</div>";
+					// TYPE_WARNING
+					}  else if(full.type == 3){
+					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+					html += "	<i class='fa fa-warning text-warning' /> </i>";
+					//html += '&nbsp;<spring:message code="common.failed" /></i>';
+					html += "</div>";				
+					} 
+
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			},	
+			
+			{data : "time", className : "dt-center", defaultContent : ""},	
+			{data : "message", className : "dt-left", defaultContent : ""}
+			]
+		});
+		// css('min-width').
+		bckLogList.tables().header().to$().find('th:eq(0)').css('min-width');
+		bckLogList.tables().header().to$().find('th:eq(1)').css('min-width');
+		bckLogList.tables().header().to$().find('th:eq(2)').css('min-width');
+	 
     $(window).trigger('resize'); 
 
 } // fn_init();
@@ -185,8 +194,8 @@ $(function() {
 	         if ( $(this).hasClass('selected') ) {
 	         }
 	        else {	        	
-	        	monitoringData.$('tr.selected').removeClass('selected');
-	            $(this).addClass('selected');	   
+	        	monitoringData.$('tr.selected').removeClass('selected');	        	
+	            $(this).addClass('selected');	         
 	        } 
 	    } );   
 	} );  
@@ -228,6 +237,7 @@ function fn_jobStatusList(){
 		success : function(data) {
 			monitoringData.clear().draw();
 			monitoringData.rows.add(data).draw();
+			bckLogList.clear().draw();
 			fn_jobCheck();
 		}
 	});
@@ -258,19 +268,21 @@ function fn_jobCheck(jobend){
 			}
 		},
 		success : function(data) {
-			 if(data[0].jobstatus == 5){
+			 if(data[0].jobstatus == 5){ 		
 				 if(dataSearch == 0){
 					monitoringData.clear().draw();
 					monitoringData.rows.add(data).draw();
 					dataSearch++;
 				 }
-				 progressBar();
+				 
+				 fn_selectJobId();
 				setTimeout(fn_selectJobEnd, 1000); 
+
 			}else{
 				if(jobend == 1){
 					monitoringData.clear().draw();
 					monitoringData.rows.add(data).draw();
-					width=0;
+					bckLogList.clear().draw();
 				}
 				setTimeout(fn_jobCheck, 1000);
 			} 
@@ -312,6 +324,32 @@ function fn_selectJobEnd(){
 }
 
 
+function fn_selectJobId(){
+	
+	$.ajax({
+		url : "/experdb/selectJobId.do",
+		data : {},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(data) {			
+			 fn_selectActivityLog(data);				
+		}
+	});
+	$('#loading').hide();	
+}
+
+
 function progressBar(){
     var ele=document.getElementById('progressing');
 
@@ -329,23 +367,36 @@ function progressBar(){
 }
 
 
-/* function progressBar() {
-	var rNum = rand(7000, 10000);
-    var elem = document.getElementById("progressing");   
-   
-    var id = setInterval(function(){
-        if (width >= 99) {
-            clearInterval(id);
-        } else {
-            width++; 
-            elem.style.width = width + '%'; 
-            elem.innerHTML = width * 1  + '%';
-        }
-    }, rNum);
-} */
+function fn_selectActivityLog(jobid) {
+	$.ajax({
+		url : "/experdb/backupActivityLogList.do",
+		data : {
+			jobid : jobid
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(data) {
+			bckLogList.clear().draw();
+			bckLogList.rows.add(data).draw();		
+			setTimeout(fn_selectActivityLog(jobid), 10000);
+		}
+	});
+}
 
 </script>
 <%@include file="./popup/backupRunNow.jsp"%>
+
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -393,6 +444,7 @@ function progressBar(){
 				</div>
 			</div>
 		</div> 
+		
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">
@@ -408,44 +460,47 @@ function progressBar(){
 			</div>
 		</div>
 		<!-- backup monitoring list -->
-		<div class="col-12 grid-margin stretch-card">
+		
+		
+		<div class="col-lg-5 grid-margin stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
-						<div class="card my-sm-2" >					
-							<div class="card-body">
-								<div class="row">
-									<div class="col-12">
-										 <form class="cmxform" id="optionForm">
-											<fieldset>	
-												<table id="monitoringData" class="table table-hover table-striped system-tlb-scroll" style="width:100%; align:dt-center;">
-													<thead>
-														<tr class="bg-info text-white">
-															<th width="50">Server</th>
-															<th width="30">Type</th>
-															<th width="30">Status</th>
-															<!-- <th width="50">Execute Time</th>
-															<th width="50">Elapsed Time</th>
-															<th width="50">Job Phase</th>
-															<th width="50">Processed Data</th>
-															<th width="50">Read Throughput(MB/min)</th>
-															<th width="50">Write Throughput(MB/min)</th> -->
-															<th width="100">Backup Destination</th>
-															<th width="100">Last Result</th>
-															<th width="150">Status</th>
-														</tr>
-													</thead>
-												</table>							
-											</fieldset>
-										</form>		
-									 </div>
-								 </div>
-							</div>
-						</div>
+						<table id="monitoringData" class="table nonborder table-hover system-tlb-scroll" style="width:100%;align:left;">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="50">Server</th>
+									<th width="30">Type</th>
+									<th width="30">Status</th>
+									<th width="100">Backup Destination</th>
+									<th width="100">Last Result</th>
+								</tr>
+							</thead>
+						</table>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- backup monitoring list end -->
+		
+		
+		
+		<div class="col-lg-7 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
+						<table id="bckLogList" class="table table-hover system-tlb-scroll" style="width:100%;" align:dt-center; ">
+							<thead>
+								<tr class="bg-info text-white">
+									<th width="70" style="background-color: #7e7e7e;">Status</th>
+									<th width="70" style="background-color: #7e7e7e;">Time</th>
+									<th width="500" style="background-color: #7e7e7e;">Message</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+		<!-- backup monitoring list end -->
 </div>

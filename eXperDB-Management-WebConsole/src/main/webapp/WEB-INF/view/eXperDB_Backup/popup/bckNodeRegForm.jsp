@@ -135,8 +135,9 @@
 				if(result.RESULT_CODE == "0"){
 					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
 					fn_getSvrList();
+					 $('#pop_layer_popup_backupNodeReg').modal("hide");
 				}else{					
-					showSwalIconRst('등록에 실패하였습니다', '<spring:message code="common.close" />', '', 'error');
+					showSwalIconRst(result.RESULT_DATA, '<spring:message code="common.close" />', '', 'error');
 				}
 			 })
 			 .fail (function(xhr, status, error){
@@ -148,9 +149,6 @@
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			 })
-			 .always(function(){
-				 $('#pop_layer_popup_backupNodeReg').modal("hide");
-			 }) 
 		}
 	 }
 	 

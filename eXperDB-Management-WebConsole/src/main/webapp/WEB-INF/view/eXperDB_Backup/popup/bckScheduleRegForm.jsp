@@ -176,7 +176,7 @@
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return true;
 			}else if(timeChk){
-				var errStr = "유효한 End Time 값을 입력해주세요";
+				var errStr = "End Time은 Start Time 보다 늦어야합니다";
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return true;
 			}

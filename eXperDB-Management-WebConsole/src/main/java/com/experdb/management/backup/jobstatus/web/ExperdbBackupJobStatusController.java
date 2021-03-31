@@ -98,6 +98,37 @@ public class ExperdbBackupJobStatusController {
 	}	
 	
 	
+	/**
+	 * JobId 조회
+	 * @param 
+	 * @return List<Map<String, Object>>
+	 */
+	@RequestMapping(value="/experdb/selectJobId.do")
+	@ResponseBody
+	public int selectJobId(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
+	
+		int jobid = 0;
+		
+		try {
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0125_01");
+			accessHistoryService.insertHistory(historyVO);*/
+			
+			jobid= experdbBackupJobStatusService.selectJobid();
+			
+			System.out.println("jobid = "+jobid);
+			
+						
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return jobid;
+	}	
+	
+	
 	
 	/**
 	 * 즉시실행

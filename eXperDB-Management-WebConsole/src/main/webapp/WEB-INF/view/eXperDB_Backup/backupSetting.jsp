@@ -731,6 +731,9 @@ table.dataTable.ccc thead th{
 				</div>
 			</div>
 		</div>
+		
+		
+		
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">
@@ -758,6 +761,8 @@ table.dataTable.ccc thead th{
 			</div>
 		</div>
 		<!-- node list -->
+		
+		
 		<div class="col-lg-5 grid-margin stretch-card">
 			<div class="card">
 				<div class="card-body">
