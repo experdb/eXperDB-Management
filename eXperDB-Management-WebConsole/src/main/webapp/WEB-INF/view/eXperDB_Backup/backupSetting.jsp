@@ -60,6 +60,7 @@ $(function() {
      		fn_scheduleReset();
      		fn_policyReset();
      		fn_getScheduleInfo(nodeIpadr);
+
          } 
      } );   
  } );    
@@ -173,11 +174,11 @@ function fn_scheduleReset(ipadr){
 	schSat.length = 0;
 
 	fn_drawScheduleList();
-	// fn_getScheduleInfo(ipadr);
 }
 
 
 function fn_policyReset(){
+	console.log("policyReset");
 	$("#bckStorage").val("");
 	$("#bckStorageType").val("");
 	$("#bckStorageTypeVal").val("");
@@ -186,9 +187,11 @@ function fn_policyReset(){
 	$("#bckSetNum").val("");
 	$("#startDateSch").val("");
 	$("#jobNameVal").val("");
+
 }
 
 function fn_alertShow(){
+	console.log("alertShow");
 	$("#applyAlert").show();
 	$("#applyAlert_none").hide();
 }
@@ -247,7 +250,9 @@ function fn_getSvrList() {
 		
 	})
 	.always(function(){
-
+ 		
+ 		$("#applyAlert").hide();
+ 		$("#applyAlert_none").show();
 	})
 }
 
@@ -445,8 +450,14 @@ function fn_nodeRegPopup() {
  ******************************************************** */
 
 	function fn_scheduleRegPopoup() {
-		fn_scheduleRegReset();
-		$("#pop_layer_popup_backupSchedule").modal("show");
+		var data = NodeList.rows('.selected').data();
+		if(data.length < 1){
+			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else{
+			fn_scheduleRegReset();
+			$("#pop_layer_popup_backupSchedule").modal("show");
+		}
 	}
 	
 	// schedule Insert per day
@@ -646,11 +657,6 @@ function fn_backupDelete() {
 		}
 	 
 }
-
-function fn_aaaa(){
-	console.log("aaaa");
-	console.log("NodeList : " + NodeList.row(0).data());
-}
 </script>
 <style>
 table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
@@ -695,16 +701,16 @@ table.dataTable.ccc thead th{
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">백업설정</span>
+												<span class="menu-title">정책 설정</span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BACKUP</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">백업관리</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">백업설정</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Backup</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">정책 설정</li>
 										</ol>
 									</div>
 								</div>
@@ -725,6 +731,9 @@ table.dataTable.ccc thead th{
 				</div>
 			</div>
 		</div>
+		
+		
+		
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">
@@ -752,6 +761,8 @@ table.dataTable.ccc thead th{
 			</div>
 		</div>
 		<!-- node list -->
+		
+		
 		<div class="col-lg-5 grid-margin stretch-card">
 			<div class="card">
 				<div class="card-body">
@@ -767,8 +778,8 @@ table.dataTable.ccc thead th{
 								삭제
 							</button>
 						</div>
-						<h4 class="card-title">
-							<i class="item-icon fa fa-desktop"></i>  Node List
+						<h4 class="card-title" style="font-size: 1em; color:black;">
+							<i class="item-icon fa fa-desktop"></i>  Server List
 						</h4>
 						<table id="nodeList" class="table nonborder table-hover system-tlb-scroll" style="width:100%;align:left;">
 							<thead>
@@ -796,9 +807,7 @@ table.dataTable.ccc thead th{
 										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policyRegPopoup()">
 										 	설정
 										</button>
-										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_alertShow()">
-											삭제
-										</button>
+										
 									</div>
 								</div>
 							</div>				 	
@@ -844,7 +853,7 @@ table.dataTable.ccc thead th{
 						</div>
 					</div>
 					<h4 class="card-title" style="position: absolute;top:22px; right:760px;background-color: white;font-size: 1em; color:black;">
-						<i class="item-icon fa fa-desktop"></i>  풀 백업 세팅
+						<i class="item-icon fa fa-desktop"></i>  풀 백업 정책
 					</h4>
 				</div>
 				<!-- full backup setting end -->
@@ -894,8 +903,8 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<h4 class="card-title" style="position: absolute;top:320px; right:780px;background-color: white;font-size: 1em; color: #000000; ">
-						<i class="item-icon fa fa-desktop"></i>  백업 배치
+					<h4 class="card-title" style="position: absolute;top:320px; right:745px;background-color: white;font-size: 1em; color: #000000; ">
+						<i class="item-icon fa fa-desktop"></i>  증분 백업 정책
 					</h4>
 				</div>
 				<!-- backup schedule end -->

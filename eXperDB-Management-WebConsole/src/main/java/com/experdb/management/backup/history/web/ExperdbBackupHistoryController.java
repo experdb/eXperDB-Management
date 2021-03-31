@@ -65,7 +65,10 @@ public class ExperdbBackupHistoryController {
 			
 			param.put("startDate", sDate);
 			param.put("endDate", eDate);
-			param.put("server", request.getParameter("server"));
+			
+			System.out.println("server = "+request.getParameter("server").replace(".", "").trim());
+			
+			param.put("server", request.getParameter("server").replace(".", "").trim());
 			param.put("type", request.getParameter("type"));
 			param.put("status", request.getParameter("status"));
 			

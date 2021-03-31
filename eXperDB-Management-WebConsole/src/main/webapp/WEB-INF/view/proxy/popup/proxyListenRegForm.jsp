@@ -278,20 +278,29 @@ function fn_serverListTable_init() {
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
 		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		var svrListLen = serverListTable.rows().data().length;
+		var svrListDatas = new Array();
+		for(var j =0; j<svrListLen ; j++){
+			if(serverListTable.row(j).data().edit_yn=="Y"){
+				svrListDatas[svrListDatas.length] = serverListTable.row(j).data();
+			}
+		}
 		proxyListenTable.row.add({
 			"lsn_nm" : $("#lstnReg_lsn_nm", "#insProxyListenForm").val(),
 			"con_bind_port" : $("#lstnReg_con_bind_ip", "#insProxyListenForm").val()+":"+$("#lstnReg_con_bind_port", "#insProxyListenForm").val(),
 			"lsn_desc" : $("#lstnReg_lsn_desc", "#insProxyListenForm").val(),
-			"db_usr_id" : parseInt($("#lstnReg_db_usr_id", "#insProxyListenForm").val()),
+			"db_usr_id" : $("#lstnReg_db_usr_id", "#insProxyListenForm").val(),
 			"db_id" : parseInt($("#lstnReg_db_id", "#insProxyListenForm").val()),
 			"db_nm" : $("#lstnReg_db_nm", "#insProxyListenForm").val(),
 			"con_sim_query" : $("#lstnReg_con_sim_query", "#insProxyListenForm").val(),
 			"field_val" : $("#lstnReg_field_val", "#insProxyListenForm").val(),
 			"field_nm" : $("#lstnReg_field_nm", "#insProxyListenForm").val(),
 			"pry_svr_id" : parseInt($("#lstnReg_pry_svr_id", "#insProxyListenForm").val()),
-			"lsn_id" : parseInt($("#lstnReg_lsn_id", "#insProxyListenForm").val())
+			"lsn_id" : parseInt($("#lstnReg_lsn_id", "#insProxyListenForm").val()),
+			"lsn_svr_edit_list" : svrListDatas
 		}).draw();
-		$('#pop_layer_proxy_listen_reg').modal("hide");
+		selListenerInfo =null;
+		$('#pop_layer_proxy_listen_reg').modal("hide"); 
 	}
 	/* ********************************************************
 	 * Listener 수정
@@ -306,7 +315,7 @@ function fn_serverListTable_init() {
 		var dataLen = proxyListenTable.rows().data().length;
 		var oriData = proxyListenTable.rows().data();
 		for(var i=0; i<dataLen; i++){
-			if(oriData[i].lsn_id ==  $("#lstnReg_lsn_id", "#insProxyListenForm").val()){
+			if(proxyListenTable.rows('.selected').indexes()[0] = i){
 				oriData[i].con_bind_port = $("#lstnReg_con_bind_ip", "#insProxyListenForm").val()+":"+$("#lstnReg_con_bind_port", "#insProxyListenForm").val();
 				oriData[i].lsn_desc = $("#lstnReg_lsn_desc", "#insProxyListenForm").val();
 				oriData[i].db_usr_id = $("#lstnReg_db_usr_id", "#insProxyListenForm").val();
@@ -331,6 +340,7 @@ function fn_serverListTable_init() {
 				delListnerSvrRows = new Array();
 			}
 		}
+		selListenerInfo =null;
 		$('#pop_layer_proxy_listen_reg').modal("hide");
 	}
 	/* ********************************************************
@@ -554,7 +564,7 @@ function fn_serverListTable_init() {
 									<label for="lstnReg_con_bind" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<%-- <spring:message code="user_management.user_name" /> --%>
-										bind(*)
+										bind IP:Port(*)
 									</label>
 									<div class="col-sm-2_2">
 										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_con_bind_ip" name="lstnReg_con_bind_ip" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()" placeholder="ip 주소 또는 *" tabindex=2 />
@@ -579,14 +589,6 @@ function fn_serverListTable_init() {
 							<br/>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
-									<label for="lstnReg_db_usr_id" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.position" /> --%>
-										 계정(*)
-									</label>
-									<div class="col-sm-4">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_db_usr_id" name="lstnReg_db_usr_id" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
-									</div>
 									<label for="lstnReg_db_nm" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<%-- <spring:message code="user_management.position" /> --%>
@@ -595,6 +597,14 @@ function fn_serverListTable_init() {
 									<div class="col-sm-4">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" tabindex=4 >
 										</select>
+									</div>
+									<label for="lstnReg_db_usr_id" class="col-sm-2 col-form-label-sm pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<%-- <spring:message code="user_management.position" /> --%>
+										 계정(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_db_usr_id" name="lstnReg_db_usr_id" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
 									</div>
 								</div>
 								<div class="form-group row">

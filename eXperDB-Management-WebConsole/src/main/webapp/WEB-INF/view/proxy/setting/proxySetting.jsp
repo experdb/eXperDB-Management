@@ -309,6 +309,9 @@
      * Proxy Server List Click Event
     ******************************************************** */	
 	function click_serverList_row(obj){
+		
+		selectTab('global');
+		
 		if (!$(obj).hasClass('selected') ){	        	
 			proxyServerTable.$('tr.selected').removeClass('selected');
            	$(obj).addClass('selected');	            
@@ -1199,7 +1202,8 @@
 			return;
 		}else{
 			$("#modYn").val("Y");
-			showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+			//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 			delVipInstRows[delVipInstRows.length] = vipInstTable.row('.selected').data();
 			vipInstTable.row('.selected').remove().draw();
 		}
@@ -1213,7 +1217,8 @@
 			return;
 		}else{
 			$("#modYn").val("Y");
-			showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
+			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+			//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 			delListenerRows[delListenerRows.length] = proxyListenTable.row('.selected').data();
 			proxyListenTable.row('.selected').remove().draw();
 		}
@@ -1303,7 +1308,7 @@
 			if(selListenerInfo.lsn_id != ""){
 				fn_listener_svr_list_search();
 			}else{
-				var tempData = selListenerInfo.lsn_svr_list;
+				var tempData = selListenerInfo.lsn_svr_edit_list;
 				serverListTable.clear().draw();
 				serverListTable.rows.add(tempData).draw();
 			}
@@ -1335,6 +1340,7 @@
 		$("#btnApply").prop("disabled", disable);
 		
 	}
+	var tempParam;
 	/* ********************************************************
      * 상세 정보 수정 사항 서버에 적용
     ******************************************************** */
@@ -1371,7 +1377,7 @@
 			listener: tempListener,
 			delListener: delListenerRows
 		};
-		
+		tempParam = param;
 		$.ajax({
  			url : "/applyProxyConf.do",
  			data : {confData : JSON.stringify(param)},
@@ -1398,6 +1404,7 @@
  						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
  	 				},5000);
  				}else{
+ 					fn_btn_setEnable("");
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
  				}
  			}
