@@ -36,7 +36,7 @@
 			    var tblData = vipInstTable.rows().data();
 			    for(var i=0; i< listLen; i++){
 			    	if(str==tblData[i].v_ip){
-			    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && $("#instReg_vip_cng_id", "#insVipInstForm").val() != tblData[i].vip_cng_id){
+			    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && vipInstTable.rows('.selected').indexes()[0] != i){
 			    			cnt++;
 			    		}else if($("#instReg_mode", "#insVipInstForm").val()=="reg"){
 			    			cnt++;
@@ -55,7 +55,7 @@
 		    var tblData = vipInstTable.rows().data();
 		    for(var i=0; i< listLen; i++){
 		    	if(str==tblData[i].priority){
-		    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && $("#instReg_vip_cng_id", "#insVipInstForm").val() != tblData[i].vip_cng_id){
+		    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && vipInstTable.rows('.selected').indexes()[0] != i){
 		    			cnt++;
 		    		}else if($("#instReg_mode", "#insVipInstForm").val()=="reg"){
 		    			cnt++;
@@ -74,7 +74,7 @@
 			    var tblData = vipInstTable.rows().data();
 			    for(var i=0; i< listLen; i++){
 			    	if(str==tblData[i].v_rot_id){
-			    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && $("#instReg_vip_cng_id", "#insVipInstForm").val() != tblData[i].vip_cng_id){
+			    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && vipInstTable.rows('.selected').indexes()[0] != i){
 			    			cnt++;
 			    		}else if($("#instReg_mode", "#insVipInstForm").val()=="reg"){
 			    			cnt++;
@@ -204,7 +204,7 @@
 			"vip_cng_id" : $("#instReg_vip_cng_id", "#insVipInstForm").val(),
 			"pry_svr_id" : $("#instReg_pry_svr_id", "#insVipInstForm").val()
 		}).draw();
-		
+		selConfInfo = null;
 		master_gbn_auto_edit();
 		
 		$('#pop_layer_proxy_inst_reg').modal("hide");
@@ -221,7 +221,7 @@
 		var dataLen = vipInstTable.rows().data().length;
 		var oriData = vipInstTable.rows().data();
 		for(var i=0; i<dataLen; i++){
-			if(oriData[i].vip_cng_id ==  $("#instReg_vip_cng_id", "#insVipInstForm").val()){
+			if(vipInstTable.rows('.selected').indexes()[0] = i){
 				oriData[i].state_nm = $("#instReg_state_nm", "#insVipInstForm").val();
 				oriData[i].v_ip = $("#instReg_v_ip", "#insVipInstForm").val();
 				oriData[i].v_rot_id = $("#instReg_v_rot_id", "#insVipInstForm").val();
@@ -236,7 +236,7 @@
 		}
 		
 		master_gbn_auto_edit(); 
-		
+		selConfInfo = null;
 		$('#pop_layer_proxy_inst_reg').modal("hide");
 	}
 	

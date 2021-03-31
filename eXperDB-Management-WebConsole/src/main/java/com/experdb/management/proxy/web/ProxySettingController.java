@@ -909,7 +909,11 @@ public class ProxySettingController {
 
 	}
 	public int getIntOfJsonObj(JSONObject jobj, String key){
-		return Integer.parseInt(String.valueOf(jobj.get(key)));
+		if(jobj.get(key) == null){
+			return 0;
+		}else{
+			return Integer.parseInt(jobj.get(key).toString());
+		}
 	}
 	
 	public String getStringOfJsonObj(JSONObject jobj, String key){
@@ -1039,6 +1043,7 @@ public class ProxySettingController {
 					if(!nullCheckOfJsonObj(listenerObj, "lsn_id")){
 						listener[i].setLsn_id(getIntOfJsonObj(listenerObj, "lsn_id"));
 					}
+					listener[i].setLsn_nm(getStringOfJsonObj(listenerObj, "lsn_nm"));
 					listener[i].setCon_bind_port(getStringOfJsonObj(listenerObj, "con_bind_port"));
 					listener[i].setLsn_desc(getStringOfJsonObj(listenerObj,"lsn_desc"));
 					listener[i].setDb_usr_id(getStringOfJsonObj(listenerObj, "db_usr_id"));
