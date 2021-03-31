@@ -429,8 +429,7 @@ function fn_searchHistory(){
 									</div>
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
-									<select class="form-control" style="margin-right: -0.7rem;" name="bckServer" id="bckServer">
-										
+									<select class="form-control" style="margin-right: -0.7rem;" name="bckServer" id="bckServer">										
 									</select>
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
@@ -438,6 +437,7 @@ function fn_searchHistory(){
 										<option value="0"> 전체 백업 유형</option>
 										<option value="3"> Full Backup</option>
 										<option value="4"> Incremental Backup</option>
+										<option value="5"> Verify Backup</option>
 									</select>
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
