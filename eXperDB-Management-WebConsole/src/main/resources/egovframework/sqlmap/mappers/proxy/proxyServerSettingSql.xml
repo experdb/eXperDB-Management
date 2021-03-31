@@ -457,7 +457,7 @@
 			<if test="lsn_id != null ">
 	        	AND LSN_ID = #{lsn_id}
 	        </if>
-        ORDER BY LST_MDF_DTM DESC
+        ORDER BY LSN_SVR_ID, LST_MDF_DTM DESC
 	</select>
 	<update id="updateProxyGlobalConf" parameterType="proxyGlobalVO">
         /**
