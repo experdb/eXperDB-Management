@@ -429,7 +429,7 @@ var mgmtDbmsTable = null;
 		} else {
 			setIpadr = $("#svrMod_ipadr", "#svrRegProxyServerForm").val();
 		}
-		
+
 		$.ajax({
  			url : "/prySvrReg.do",
  			data : {

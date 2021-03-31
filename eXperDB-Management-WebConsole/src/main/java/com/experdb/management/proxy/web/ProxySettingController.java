@@ -723,7 +723,7 @@ public class ProxySettingController {
 					prySvrVO.setMaster_gbn(request.getParameter("master_gbn"));
 
 					if("B".equals(request.getParameter("master_gbn"))){
-						if (request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))) {
+						if (request.getParameter("master_svr_id") != null && !"".equals((String)request.getParameter("master_svr_id"))) {
 						prySvrVO.setMaster_svr_id(Integer.parseInt(request.getParameter("master_svr_id")));
 						} else {
 							prySvrVO.setMaster_svr_id(0);
