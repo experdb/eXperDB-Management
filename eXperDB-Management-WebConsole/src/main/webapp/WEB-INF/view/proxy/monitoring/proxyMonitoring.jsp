@@ -28,6 +28,8 @@
 	var proxyLogTable = "";
 	var proxyStatTable = "";
 	var select_pry_svr_id = "";
+	var cng_pry_svr_id = "";
+	var act_sys_type = "";
 	
 	/* ********************************************************
 	 * 화면 onload
@@ -466,7 +468,8 @@
 				}
 				html += '									<tr>\n';
 				html += '										<td style="width:30%;padding-left:20px;" class="text-center">\n';
-				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_actExeCng('+item.pry_svr_id+', \'P\', \''+item.exe_status+'\')">'
+// 				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_actExeCng('+item.pry_svr_id+', \'P\', \''+item.exe_status+'\')">'
+				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_confirm('+item.pry_svr_id+',\''+item.exe_status+'\', \'P\')">';
 				html += '											<i class="fa fa-desktop icon-md mb-0 mb-md-3 mb-xl-0 '+exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
 				html += '											</button>'
 				html += '											<h6 class="text-muted"><i class="fa '+exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i><a href="#" onclick="fn_configView('+item.pry_svr_id+', \'P\')">Proxy</a></h6>\n';
@@ -474,11 +477,12 @@
 				
 				html += '										<td style="width:25%;" class="text-center">\n';
 				html += '											<i class="ti-line-dotted icon-md mb-0 mb-md-3 mb-xl-0 text-secondary" style="font-size: 2em;width:100%;"></i>\n';
-				html += '											<i class="ti-line-dotted icon-md mb-0 mb-md-3 mb-xl-0 text-secondary" style="font-size: 2em;width:100%;"></i>\n';
+// 				html += '											<i class="ti-line-dotted icon-md mb-0 mb-md-3 mb-xl-0 text-secondary" style="font-size: 2em;width:100%;"></i>\n';
 				html += '										</td>\n';
 				
 				html += '										<td style="width:30%;padding-right:20px;" class="text-center">\n';
-				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_actExeCng('+item.pry_svr_id+', \'K\', \''+item.kal_exe_status+'\')">'
+// 				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_actExeCng('+item.pry_svr_id+', \'K\', \''+item.kal_exe_status+'\')">'
+				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_confirm('+item.pry_svr_id+',\''+item.kal_exe_status+'\' , \'K\')">';
 				html += '											<i class="fa fa-cubes icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
 				html += '											</button>'
 				html += '											<h6 class="text-muted"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i><a href="#" onclick="fn_configView('+item.pry_svr_id+', \'K\')">VIP<br/>health check</a></h6>\n';
@@ -778,9 +782,24 @@
 			columns : [
 						{data : "pry_svr_nm", className : "dt-center", defaultContent : ""},
 						{data : "lsn_nm", className : "dt-center", defaultContent : ""},
-						{data : "db_con_addr", className : "dt-center", defaultContent : ""},
+						{data : "db_con_addr",
+							render : function(data, type, full, meta){
+								var html = "";
+								if(full.master_gbn == "M"){
+									html += '<div class="bg-inverse-warning">'									
+								} else {
+									html += '<div class="">';
+								}
+								html += data;
+								html += '</div>';
+								return html;
+							},
+							className : "dt-center", defaultContent : ""
+						},
 						{data : "svr_status", 
 							render : function(data, type, full, meta){
+								console.log(full);
+								console.log(meta);
 								var html = "";
 								if(data == 'UP'){
 									html += '<div class="badge badge-pill badge-success">';
@@ -1224,12 +1243,52 @@
 		});
 	}
 	
+	// confirm 창
+	function fn_confirm(pry_svr_id, act_status, type){
+		cng_pry_svr_id = pry_svr_id;
+		act_sys_type = type;
+		console.log(cng_pry_svr_id + ", " + act_sys_type);
+		if (act_status == "TC001501") {
+			var gbn = "stop";
+			if(type == "P") {
+				confirm_title = 'Proxy Server 중지';
+				$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 중지하시겠습니까?<br> 연관된 DB <b class="text-danger">세션이 모두 끊어지게 됩니다.</b><br> 계속 진행하시겠습니까?'));
+			} else {
+				confirm_title = 'VIP Health Check 중지';
+				$('#confirm_multi_msg').html(fn_strBrReplcae('VIP Health Check를 중지하시겠습니까? <br> 계속 진행하시겠습니까?'));
+			}
+		}else if (act_status == "TC001502") {
+			var gbn = "start";
+			if(type == "P"){
+				confirm_title = 'Proxy Server 실행';
+				$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 실행하시겠습니까?'));
+			} else {
+				confirm_title = 'VIP Health Check 실행';
+				$('#confirm_multi_msg').html(fn_strBrReplcae('VIP Health Check를 실행하시겠습니까?'));
+			}
+		}
+		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
+		$('#confirm_multi_tlt').html(confirm_title);
+		$('#pop_confirm_multi_md').modal("show");
+	}
+	
+	function fnc_confirmMultiRst(gbn){
+		console.log(cng_pry_svr_id + ", " + act_sys_type);
+		if (gbn == "stop") {
+			//중지
+			fn_actExeCng(cng_pry_svr_id, act_sys_type,"TC001501");
+		}else if (gbn == "start") {
+			//실행
+			fn_actExeCng(cng_pry_svr_id, act_sys_type,"TC001502");
+		}
+	}
 	
 	
 </script>
 <%@include file="./../popup/proxyLogView.jsp"%>
 <%@include file="./../popup/proxyConfigViewPop.jsp"%>
-<%@include file="../../cmmn/wrkLog.jsp"%>
+<%@include file="./../../cmmn/wrkLog.jsp"%>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 
 <form name="proxyMonViewForm" id="proxyMonViewForm">
 	<input type="hidden" name="serverSsCnt"  id="serverSsCnt" />
