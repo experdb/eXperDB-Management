@@ -124,8 +124,8 @@
 					$("#repEndTime").val(),
 					$("#everyTime").val(),
 					$("#repeatTime").val()
-		 )
-		 fn_drawScheduleList();
+			)
+			fn_drawScheduleList();
 			fn_alertShow();
 			$("#pop_layer_popup_backupSchedule").modal("hide");
 		} 
@@ -149,13 +149,34 @@
 			
 		}  */
 		if($("#repeat").prop("checked")){
+			/* var timeSplit = $("#repEndTime").val().split(':');
+			
+			// var endTime = new Date('01/01/1970 '+$("#repEndTime").val());
+			// var endTime = new Date(null, null, null, timeSplit[0], timeSplit[1]);
+			var chkEndTime;
+			
+			console.log("endTime1 : " + $("#repEndTime").val());
+			console.log("endTime2: " + endTime);
+			
+			if($("#repeatTime").val() == 1){
+				console.log("111");
+				chkEndTime = endTime.setHours(endTime.getHours() + $("#everyTime").val());
+			}else{
+				console.log("222");
+				chkEndTime = endTime.setMinutes(endTime.getMinutes() + $("#everyTime").val());
+			}
+			
+			console.log("check End Time!! " + chkEndTime);
+			console.log("check End Time!! " + moment(chkEndTime).format("HH:mm"));
+			 */
 			var timeChk = $("#startTime").val()>$("#repEndTime").val();
+//			var timeChk = $("#startTime").val()>chkEndTime;
 			if(!$("#repEndTime").val()){
 				var errStr = "End Time 값을 입력해주세요";
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return true;
 			}else if(timeChk){
-				var errStr = "End Time은 Start Time 보다 늦어야합니다";
+				var errStr = "유효한 End Time 값을 입력해주세요";
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return true;
 			}

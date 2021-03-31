@@ -60,6 +60,7 @@ $(function() {
      		fn_scheduleReset();
      		fn_policyReset();
      		fn_getScheduleInfo(nodeIpadr);
+
          } 
      } );   
  } );    
@@ -173,11 +174,11 @@ function fn_scheduleReset(ipadr){
 	schSat.length = 0;
 
 	fn_drawScheduleList();
-	// fn_getScheduleInfo(ipadr);
 }
 
 
 function fn_policyReset(){
+	console.log("policyReset");
 	$("#bckStorage").val("");
 	$("#bckStorageType").val("");
 	$("#bckStorageTypeVal").val("");
@@ -186,9 +187,11 @@ function fn_policyReset(){
 	$("#bckSetNum").val("");
 	$("#startDateSch").val("");
 	$("#jobNameVal").val("");
+
 }
 
 function fn_alertShow(){
+	console.log("alertShow");
 	$("#applyAlert").show();
 	$("#applyAlert_none").hide();
 }
@@ -247,7 +250,9 @@ function fn_getSvrList() {
 		
 	})
 	.always(function(){
-
+ 		
+ 		$("#applyAlert").hide();
+ 		$("#applyAlert_none").show();
 	})
 }
 
@@ -445,8 +450,14 @@ function fn_nodeRegPopup() {
  ******************************************************** */
 
 	function fn_scheduleRegPopoup() {
-		fn_scheduleRegReset();
-		$("#pop_layer_popup_backupSchedule").modal("show");
+		var data = NodeList.rows('.selected').data();
+		if(data.length < 1){
+			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else{
+			fn_scheduleRegReset();
+			$("#pop_layer_popup_backupSchedule").modal("show");
+		}
 	}
 	
 	// schedule Insert per day
@@ -646,11 +657,6 @@ function fn_backupDelete() {
 		}
 	 
 }
-
-function fn_aaaa(){
-	console.log("aaaa");
-	console.log("NodeList : " + NodeList.row(0).data());
-}
 </script>
 <style>
 table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
@@ -796,9 +802,7 @@ table.dataTable.ccc thead th{
 										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policyRegPopoup()">
 										 	설정
 										</button>
-										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_alertShow()">
-											삭제
-										</button>
+										
 									</div>
 								</div>
 							</div>				 	
