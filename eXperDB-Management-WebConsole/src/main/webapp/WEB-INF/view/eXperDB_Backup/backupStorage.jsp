@@ -247,16 +247,16 @@ function fnc_confirmMultiRst(gbn){
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">백업 스토리지</span>
+												<span class="menu-title">Storage 설정</span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BACKUP</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">백업관리</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">백업스토리지</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Backup</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">Storage 설정</li>
 										</ol>
 									</div>
 								</div>

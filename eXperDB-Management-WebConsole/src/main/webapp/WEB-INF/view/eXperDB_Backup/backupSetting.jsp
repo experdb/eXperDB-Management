@@ -701,16 +701,16 @@ table.dataTable.ccc thead th{
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">백업설정</span>
+												<span class="menu-title">정책 설정</span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
 									</div>
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BACKUP</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">백업관리</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">백업설정</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Backup</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">정책 설정</li>
 										</ol>
 									</div>
 								</div>
@@ -778,8 +778,8 @@ table.dataTable.ccc thead th{
 								삭제
 							</button>
 						</div>
-						<h4 class="card-title">
-							<i class="item-icon fa fa-desktop"></i>  Node List
+						<h4 class="card-title" style="font-size: 1em; color:black;">
+							<i class="item-icon fa fa-desktop"></i>  Server List
 						</h4>
 						<table id="nodeList" class="table nonborder table-hover system-tlb-scroll" style="width:100%;align:left;">
 							<thead>
@@ -853,7 +853,7 @@ table.dataTable.ccc thead th{
 						</div>
 					</div>
 					<h4 class="card-title" style="position: absolute;top:22px; right:760px;background-color: white;font-size: 1em; color:black;">
-						<i class="item-icon fa fa-desktop"></i>  풀 백업 세팅
+						<i class="item-icon fa fa-desktop"></i>  풀 백업 정책
 					</h4>
 				</div>
 				<!-- full backup setting end -->
@@ -903,8 +903,8 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<h4 class="card-title" style="position: absolute;top:320px; right:780px;background-color: white;font-size: 1em; color: #000000; ">
-						<i class="item-icon fa fa-desktop"></i>  백업 배치
+					<h4 class="card-title" style="position: absolute;top:320px; right:745px;background-color: white;font-size: 1em; color: #000000; ">
+						<i class="item-icon fa fa-desktop"></i>  증분 백업 정책
 					</h4>
 				</div>
 				<!-- backup schedule end -->

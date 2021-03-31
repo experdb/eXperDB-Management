@@ -410,36 +410,59 @@
 							<li class="nav-item mega-menu width-div-a" id="eXperDB_Backup">	
 								<a href="#" class="nav-link">
 									<i class="ti-harddrive menu-icon"></i>
-									<span class="menu-title">BACKUP</span>
+									<span class="menu-title">BnR</span>
 									<i class="menu-arrow"></i>
 								</a>
 								<div class="submenu">
 									<div class="col-group-wrapper row">
 										<div class="col-group col-md-3" id="">
 											<p class="category-heading">
-												<b>백업관리</b>
+												<b>BnR 설정</b>
 											</p>
 											<ul class="submenu-item">
 												<li class="nav-item" id="">
 													<a class="nav-link" href="/experdb/backupMonitoring.do" onClick="fn_cookie('backupMonitoring')" target="main">
-														백업모니터링
-													</a>
-												</li>
-												<li class="nav-item" id="">
-													<a class="nav-link" href="/experdb/backupStorage.do" onClick="fn_cookie('backupStorage')" target="main">
-														백업스토리지
-													</a>
-												</li>
-												<li class="nav-item" id="">
-													<a class="nav-link" href="/experdb/backupSetting.do" onClick="fn_cookie('backupSetting')" target="main">
-														백업설정
+														모니터링
 													</a>
 												</li>
 												<li class="nav-item" id="MN0001102">
 													<a class="nav-link" href="/experdb/backupHistory.do" onClick="fn_cookie('')" target="main">
-														백업이력
+														이력 관리
 													</a>
 												</li>
+											</ul>
+										</div>
+										<div class="col-group col-md-3" id="">
+											<p class="category-heading">
+												<b>Backup</b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="">
+													<a class="nav-link" href="/experdb/backupStorage.do" onClick="fn_cookie('backupStorage')" target="main">
+														Storage 설정
+													</a>
+												</li>
+												<li class="nav-item" id="">
+													<a class="nav-link" href="/experdb/backupSetting.do" onClick="fn_cookie('backupSetting')" target="main">
+														정책 설정
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="col-group col-md-3" id="">
+											<p class="category-heading">
+												<b>Restore</b>
+											</p>
+											<ul class="submenu-item">
+												
+											</ul>
+										</div>
+										<div class="col-group col-md-3" id="">
+											<p class="category-heading">
+												<b>Clone</b>
+											</p>
+											<ul class="submenu-item">
+												
 											</ul>
 										</div>
 										<!-- <div class="col-group col-md-3" id="" >
