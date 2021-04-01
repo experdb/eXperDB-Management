@@ -41,7 +41,7 @@
 	        <if test="pry_svr_nm != null and pry_svr_nm != '' ">
 	        	AND A.PRY_SVR_NM = #{pry_svr_nm}
 	        	<if test="not_pry_svr_id != null and not_pry_svr_id != '' ">
-	        		AND A.PRY_SVR_ID != #{not_pry_svr_id}
+	        		AND A.PRY_SVR_ID != #{not_pry_svr_id}::numeric
 	        	</if>
 	        </if>
         ORDER BY coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN DESC, A.LST_MDF_DTM
