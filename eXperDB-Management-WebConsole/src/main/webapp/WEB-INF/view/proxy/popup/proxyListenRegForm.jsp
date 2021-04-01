@@ -277,7 +277,7 @@ function fn_serverListTable_init() {
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
-		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 		var svrListLen = serverListTable.rows().data().length;
 		var svrListDatas = new Array();
 		for(var j =0; j<svrListLen ; j++){
@@ -309,7 +309,7 @@ function fn_serverListTable_init() {
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
-		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 		
 		//수정된 내용 반영
 		var dataLen = proxyListenTable.rows().data().length;
@@ -554,8 +554,7 @@ function fn_serverListTable_init() {
 								<div class="form-group row">
 									<label for="lstnReg_lsn_nm" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.id" /> --%>
-										Listener 명칭(*)
+										<spring:message code="eXperDB_proxy.listener_nm" />(*)
 									</label>
 
 									<div class="col-sm-4">
@@ -563,8 +562,7 @@ function fn_serverListTable_init() {
 									</div>
 									<label for="lstnReg_con_bind" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.user_name" /> --%>
-										bind IP:Port(*)
+										<spring:message code="eXperDB_proxy.bind_ip_port" />(*)
 									</label>
 									<div class="col-sm-2_2">
 										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_con_bind_ip" name="lstnReg_con_bind_ip" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()" placeholder="ip 주소 또는 *" tabindex=2 />
@@ -579,7 +577,7 @@ function fn_serverListTable_init() {
 								<div class="form-group row row-last">
 									<label for="lstnReg_lsn_desc" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										설명
+										<spring:message code="eXperDB_proxy.desc" />
 									</label>
 									<div class="col-sm-10">
 										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
@@ -591,8 +589,7 @@ function fn_serverListTable_init() {
 								<div class="form-group row">
 									<label for="lstnReg_db_nm" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.position" /> --%>
-										Database(*)
+										<spring:message code="eXperDB_proxy.database" />(*)
 									</label>
 									<div class="col-sm-4">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" tabindex=4 >
@@ -600,8 +597,7 @@ function fn_serverListTable_init() {
 									</div>
 									<label for="lstnReg_db_usr_id" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.position" /> --%>
-										 계정(*)
+										<spring:message code="eXperDB_proxy.account" />(*)
 									</label>
 									<div class="col-sm-4">
 										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_db_usr_id" name="lstnReg_db_usr_id" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
@@ -610,11 +606,11 @@ function fn_serverListTable_init() {
 								<div class="form-group row">
 									<label for="lstnReg_con_sim_query" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										Simple Query(*)
+										<spring:message code="eXperDB_proxy.check_query" />(*)
 									</label>
 									<div class="col-sm-4">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_sim_query_sel" id="lstnReg_con_sim_query_sel" onchange="fn_change_sim_query_sel();"  tabindex=4 >
-											<option value="">직접 입력</option>
+											<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>
 											<c:forEach var="result" items="${simpleQueryList}">
 											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 											</c:forEach>
@@ -660,9 +656,9 @@ function fn_serverListTable_init() {
 											<table id="serverList" class="table table-hover table-striped system-tlb-scroll input-table" style="width:100%;">
 												<thead>
 													<tr class="bg-info text-white">
-														<th width="200">DBMS 접속 주소</th>
-														<th width="100"><spring:message code="data_transfer.port" /></th>
-														<th width="100">백업 여부</th>
+														<th width="200"><spring:message code="eXperDB_proxy.dbms_con_adr" /></th>
+														<th width="100"><spring:message code="eXperDB_proxy.port" /></th>
+														<th width="100"><spring:message code="eXperDB_proxy.backup_yn" /></th>
 														<th width="0"></th>
 														<th width="0"></th>
 														<th width="0"></th>			

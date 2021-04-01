@@ -335,7 +335,7 @@
 	function fn_change_global_info(){
 		if(selPrySvrId != null){
 			$("#modYn").val("Y");
-			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 		}else{
 			var temp = '<spring:message code="eXperDB_proxy.server" />';//Proxy 서버
 			showSwalIcon('<spring:message code="eXperDB_proxy.msg1" arguments="'+temp+'" />', '<spring:message code="common.close" />', '', 'error');
@@ -425,8 +425,9 @@
 		if("${read_aut_yn}" == "Y"){
 			fn_serverList_search();
 		} else {
-			 $("#serverList_search").prop("disabled", "disabled");
-			 $("#btnSearch").prop("disabled", "disabled");
+			fn_btn_setEnable("disabled");
+			 /* $("#serverList_search").prop("disabled", "disabled");
+			 $("#btnSearch").prop("disabled", "disabled"); */
 		 }
 		
 		
@@ -1202,7 +1203,7 @@
 			return;
 		}else{
 			$("#modYn").val("Y");
-			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 			//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 			delVipInstRows[delVipInstRows.length] = vipInstTable.row('.selected').data();
 			vipInstTable.row('.selected').remove().draw();
@@ -1217,7 +1218,7 @@
 			return;
 		}else{
 			$("#modYn").val("Y");
-			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 			//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 			delListenerRows[delListenerRows.length] = proxyListenTable.row('.selected').data();
 			proxyListenTable.row('.selected').remove().draw();
@@ -1318,10 +1319,12 @@
      * 적용 버튼 클릭 시 수정 여부 확인 
     ******************************************************** */		
 	function fn_before_apply(){
-		if($("#modYn").val() == "N"){
-			showSwalIcon('변경된 정보가 없습니다.', '<spring:message code="common.close" />', '', 'error');
-		}else{
-			fn_multiConfirmModal("apply");
+		if($("#globalInfoForm").validate().form()){
+			if($("#modYn").val() == "N"){
+				showSwalIcon('<spring:message code="eXperDB_proxy.msg6"/>', '<spring:message code="common.close" />', '', 'error');
+			}else{
+				fn_multiConfirmModal("apply");
+			}
 		}
 	}
 	function fn_btn_setEnable(disable){
@@ -1345,7 +1348,7 @@
      * 상세 정보 수정 사항 서버에 적용
     ******************************************************** */
 	function fn_apply_conf_info(){
-		showDangerToast('top-right', 'Config 적용 중에는 Proxy가 재구동됩니다. \n구동 완료 시 까지 등록/수정이 불가능합니다.', 'Config 파일 재생성 및 적용');
+		showDangerToast('top-right', '<spring:message code="eXperDB_proxy.msg7"/>', '<spring:message code="eXperDB_proxy.apply_msg_title"/>');
 		fn_btn_setEnable("disabled");
 		
 		//data 생성
@@ -1433,7 +1436,7 @@
 <%@include file="./../popup/proxyServerRegForm.jsp"%>
 <%@include file="./../popup/vipInstRegForm.jsp"%>
 <%@include file="./../popup/proxyListenRegForm.jsp"%>
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" id="contentsDiv" style="min-height: calc(100vh);">
 	<input type="hidden" id="modYn" name="modYn" value="N"/>
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
@@ -1520,10 +1523,10 @@
 						<thead>
 							<tr class="bg-info text-white">
 								<th width="40"><spring:message code="common.no"/></th>
-								<th width="60">활성화</th>
-								<th width="100">서버명</th>
-								<th width="100">IP주소</th>
-								<th width="60">상태</th>
+								<th width="60"><spring:message code="eXperDB_proxy.act_status"/></th>
+								<th width="100"><spring:message code="eXperDB_proxy.server_name"/></th>
+								<th width="100"><spring:message code="eXperDB_proxy.ip"/></th>
+								<th width="0">상태</th>
 								<th width="0">haproxy 파일 경로</th>
 								<th width="0">keepalived 파일 경로</th>
 								<th width="0">마스터 구분</th>
@@ -1562,12 +1565,12 @@
 				    <ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
 							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectTab('global');" >
-								Global 설정
+								<spring:message code="eXperDB_proxy.global_conf" />
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="javascript:selectTab('detail');">
-								Proxy & VIP 설정
+								<spring:message code="eXperDB_proxy.pry_vip_conf" />
 							</a>
 						</li>
 					</ul>
@@ -1578,16 +1581,14 @@
 								<div class="form-group row">
 									<label for="glb_obj_ip" class="col-sm-2_5 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>	
-										<%-- <spring:message code="user_management.password" /> --%>
-										Server IP
+										<spring:message code="eXperDB_proxy.svr_ip" />
 									</label>
 									<div class="col-sm-2_27">
 										<input type="text" class="form-control form-control-sm glb_obj_ip" maxlength="15" id="glb_obj_ip" name="glb_obj_ip" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<label for="glb_if_nm" class="col-sm-2_5 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>	
-										<%-- <spring:message code="user_management.password" /> --%>
-										Interface
+										<spring:message code="eXperDB_proxy.interface" />
 									</label>
 									<div class="col-sm-2_27">
 										<input type="text" class="form-control form-control-sm glb_if_nm" maxlength="20" id="glb_if_nm" name="glb_if_nm" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
@@ -1596,8 +1597,7 @@
 								<div class="form-group row">
 									<label for="glb_peer_server_ip" class="col-sm-2_5 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>	
-										<%-- <spring:message code="user_management.password" /> --%>
-										Peer IP
+										<spring:message code="eXperDB_proxy.peer_ip" />
 									</label> 
 									<div class="col-sm-2_27">
 										<input type="text" class="form-control form-control-sm glb_peer_server_ip" maxlength="15" id="glb_peer_server_ip" name="glb_peer_server_ip" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
@@ -1608,7 +1608,7 @@
 								<div class="form-group row">
 									<label for="glb_max_con_cnt" class="col-sm-2_5 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>	
-										동시 접속 최대 수
+										<spring:message code="eXperDB_proxy.max_con_cnt" />
 									</label>
 									<div class="col-sm-2">
 										<input type="number" class="form-control form-control-sm glb_max_con_cnt" maxlength="10" id="glb_max_con_cnt" name="glb_max_con_cnt" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
@@ -1619,59 +1619,58 @@
 								<div class="form-group row" style="margin-bottom:-5px;">
 									<label for="glb_cl_con_max_tm_num" class="col-sm-12 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>	
-										<%-- <spring:message code="user_management.password" /> --%>
-										Timeout 설정
+										<spring:message code="eXperDB_proxy.timeout_conf" />
 									</label>
 								</div>
 								<div class="form-group row" style="margin-bottom: 0px !important;">
 									<label for="glb_cl_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
-										&nbsp;&nbsp;&nbsp;클라이언트 연결 최대 시간
+										&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.cl_con_max_tm" />
 									</label>
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-sm glb_cl_con_max_tm_num" maxlength="5" id="glb_cl_con_max_tm_num" name="glb_cl_con_max_tm_num" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-1_5">
 										<select class="form-control form-control-sm" name="glb_cl_con_max_tm_tm" id="glb_cl_con_max_tm_tm" onchange="fn_change_global_info();">
-											<option value="s">초</option>
-											<option value="m">분</option>
+											<option value="s"><spring:message code="eXperDB_proxy.sec" /></option>
+											<option value="m"><spring:message code="eXperDB_proxy.min" /></option>
 										</select>
 									</div>
 									<label for="glb_con_del_tm_num" class="col-sm-3 col-form-label pop-label-index">
-										연결 지연 최대 시간
+										<spring:message code="eXperDB_proxy.con_del_tm" />
 									</label>
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-sm glb_con_del_tm_num" maxlength="5" id="glb_con_del_tm_num" name="glb_con_del_tm_num" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-1_5">
 										<select class="form-control form-control-sm" name="glb_con_del_tm_tm" id="glb_con_del_tm_tm" onchange="fn_change_global_info();">
-											<option value="s">초</option>
-											<option value="m">분</option>
+											<option value="s"><spring:message code="eXperDB_proxy.sec" /></option>
+											<option value="m"><spring:message code="eXperDB_proxy.min" /></option>
 										</select>
 									</div>
 								</div>
 								<div class="form-group row" style="margin-bottom:-17px !important;">
 									<label for="glb_svr_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
-										&nbsp;&nbsp;&nbsp;서버 연결 최대 시간
+										&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.svr_con_max_tm" />
 									</label>
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-sm glb_svr_con_max_tm_num" maxlength="5" id="glb_svr_con_max_tm_num" name="glb_svr_con_max_tm_num" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-1_5">
 										<select class="form-control form-control-sm" name="glb_svr_con_max_tm_tm" id="glb_svr_con_max_tm_tm" onchange="fn_change_global_info();">
-											<option value="s">초</option>
-											<option value="m">분</option>
+											<option value="s"><spring:message code="eXperDB_proxy.sec" /></option>
+											<option value="m"><spring:message code="eXperDB_proxy.min" /></option>
 										</select>
 									</div>
 									<label for="glb_chk_tm_num" class="col-sm-3 col-form-label pop-label-index">
-										체크 주기
+										<spring:message code="eXperDB_proxy.chk_tm" />
 									</label>
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-sm glb_chk_tm_num" maxlength="5" id="glb_chk_tm_num" name="glb_chk_tm_num" onkeyup="fn_checkWord(this,20);" onkeydown="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-1_5">
 										<select class="form-control form-control-sm" name="glb_chk_tm_tm" id="glb_chk_tm_tm" onchange="fn_change_global_info();">
-											<option value="s">초</option>
-											<option value="m">분</option>
+											<option value="s"><spring:message code="eXperDB_proxy.sec" /></option>
+											<option value="m"><spring:message code="eXperDB_proxy.min" /></option>
 										</select>
 									</div>
 								</div>
@@ -1735,9 +1734,9 @@
 							<table id="proxyListener" class="table table-hover table-striped" style="width:100%;">
 								<thead>
 									<tr class="bg-info text-white">
-										<th width="90">Listen</th>
-										<th width="150">Bind</th>
-										<th width="150">설명</th>
+										<th width="90"><spring:message code="eXperDB_proxy.listener_nm" /></th>
+										<th width="150"><spring:message code="eXperDB_proxy.bind_ip_port" /></th>
+										<th width="150"><spring:message code="eXperDB_proxy.desc" /></th>
 										<th width="0">db 사용자 ID</th>
 										<th width="0">db id</th>
 										<th width="0">db 명</th>

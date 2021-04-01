@@ -193,7 +193,7 @@
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
 		showSwalIcon('<spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
-		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 		vipInstTable.row.add({
 			"state_nm" : $("#instReg_state_nm", "#insVipInstForm").val(),
 			"v_ip" : $("#instReg_v_ip", "#insVipInstForm").val(),
@@ -215,9 +215,9 @@
 	function instReg_mod_vip_instance(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
-		showSwalIcon('<spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.', '<spring:message code="common.close" />', '', 'success');
+		showSwalIcon('<spring:message code="eXperDB_proxy.msg8" />', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
-		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;* 서버에 적용되지 않은 정보가 있습니다. 반드시 [적용]을 눌러 서버에 반영해주세요.');
+		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 		var dataLen = vipInstTable.rows().data().length;
 		var oriData = vipInstTable.rows().data();
 		for(var i=0; i<dataLen; i++){
@@ -269,7 +269,7 @@
 									</label>
 									<div class="col-sm-3_75">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_ip_sel" id="instReg_v_ip_sel" onchange="fn_change_v_ip_sel();"  tabindex=4 >
-											<option value="">직접 입력</option>
+											<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>
 											<option value="192.168.50.115/32">192.168.50.115/32</option>
 											<option value="192.168.50.116/32">192.168.50.116/32</option>
 											<option value="10.0.2.15/32">10.0.2.15/32</option>
@@ -286,7 +286,7 @@
 									</label>
 									<div class="col-sm-3_75">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_if_nm_sel" id="instReg_v_if_nm_sel" onchange="fn_change_v_if_nm_sel();"  tabindex=4 >
-											<option value="">직접 입력</option>
+											<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>
 											<option value="enp0s3">enp0s3</option>
 											<option value="enp0s8">enp0s8</option>
 										</select>
@@ -295,9 +295,6 @@
 										<input type="text" class="form-control form-control-xsm instReg_v_if_nm" maxlength="20" id="instReg_v_if_nm" name="instReg_v_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
 									</div>
 								</div>
-								<%-- <div class="form-group row">
-									<h4 class="text-warning" style="font-size: 0.875rem;">&nbsp;&nbsp;&nbsp; <spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.</h4>
-								</div> --%>
 								<div class="form-group row">
 									<label for="instReg_state_nm" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
@@ -305,13 +302,12 @@
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_state_nm" id="instReg_state_nm"  tabindex=4 >
-											<option value="MASTER">MASTER</option>
-											<option value="BACKUP">BACKUP</option>
+											<option value="MASTER"><spring:message code="eXperDB_proxy.master" /></option>
+											<option value="BACKUP"><spring:message code="eXperDB_proxy.backup" /></option>
 										</select>
 									</div>
 									<label for="instReg_priority" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.company" /> --%>
 										<spring:message code="eXperDB_proxy.vip_priority" />(*)
 									</label>
 									<div class="col-sm-3">
@@ -336,7 +332,6 @@
 								</div>
 							</div>
 							<br/>
-							
 							<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
 								<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" id="instReg_save_submit" value='<spring:message code="common.save" />'/>
 								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
