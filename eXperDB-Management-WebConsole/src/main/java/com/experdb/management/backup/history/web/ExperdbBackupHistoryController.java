@@ -89,8 +89,8 @@ public class ExperdbBackupHistoryController {
 				long diffMinutes = diff / (60 * 1000) % 60; 
 				long diffHours = diff / (60 * 60 * 1000);       
 				
-				reduceTime = (diffHours+":"+diffMinutes+":"+diffSeconds);
-
+				reduceTime = (String.format("%02d", diffHours)+":"+String.format("%02d", diffMinutes)+":"+String.format("%02d", diffSeconds));
+				
 				String dataSize = CmmnUtil.bytes2String(resultSet.get(i).getWritedata()*1024);
 				
 				resultSet.get(i).setDatasize(dataSize);

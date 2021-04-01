@@ -473,7 +473,7 @@ function fn_searchHistory(){
 												<thead>
 													<tr class="bg-info text-white">
 														<th width="50">Status</th>
-														<th width="80">백업서버</th>
+														<th width="80">대상서버</th>
 														<th width="80">Recovery Point</th>
 														<th width="80">백업유형</th>															
 														<th width="60">수행시작일시</th>

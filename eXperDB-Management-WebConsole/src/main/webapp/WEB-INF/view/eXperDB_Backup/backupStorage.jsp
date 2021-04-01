@@ -51,10 +51,27 @@ function fn_init() {
 		columns : [
 		{data : "path", className : "dt-center", defaultContent : ""},	
 		{data : "type", className : "dt-center", defaultContent : ""},	
+		{data : "rJobCount", className : "dt-center", defaultContent : ""},	
+		{data : "wJobCount", className : "dt-center", defaultContent : ""},
 		{data : "totalSize", className : "dt-center", defaultContent : ""},			
 		{data : "freeSize", className : "dt-center", defaultContent : ""},
-		{data : "rJobCount", className : "dt-center", defaultContent : ""},	
-		{data : "wJobCount", className : "dt-center", defaultContent : ""}
+		{data : "diskUsage", 
+			render : function(data, type, full, meta) {
+				var html = '';											
+				html += "<div class='progress progress-xl'>";
+				 if(full.diskUsage <= 70){
+					 html += "	<div class='progress-bar bg-primary progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>";	
+				} else if(71<full.diskUsage && full.diskUsage<89){
+					html += "	<div class='progress-bar bg-warning progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>";	
+				} else if(full.diskUsage >= 90){
+					html += "	<div class='progress-bar bg-danger progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>";	
+				}	 
+				html += full.diskUsage+"%"
+				html += "</div>";
+				html += "</div>";
+				return html;
+			},			
+			className : "dt-center", defaultContent : ""}
 		]
 	});
 
@@ -64,7 +81,8 @@ function fn_init() {
 	bckStorageList.tables().header().to$().find('th:eq(4)').css('min-width');
     bckStorageList.tables().header().to$().find('th:eq(5)').css('min-width');
 	bckStorageList.tables().header().to$().find('th:eq(6)').css('min-width');
-
+	bckStorageList.tables().header().to$().find('th:eq(7)').css('min-width');
+	
     $(window).trigger('resize'); 
 	
 } // fn_init();
@@ -319,10 +337,11 @@ function fnc_confirmMultiRst(gbn){
 														<tr class="bg-info text-white">
 															<th width="300">Backup Destination</th>
 															<th width="50">Type</th>
+															<th width="50">Running Job Count</th>
+															<th width="50">Waiting Job Count</th>															
 															<th width="100">Total Size</th>
 															<th width="50">Free Size</th>
-															<th width="50">Running Job Count</th>
-															<th width="50">Waiting Job Count</th>
+															<th width="50">Use(%)</th>
 														</tr>
 													</thead>
 												</table>							

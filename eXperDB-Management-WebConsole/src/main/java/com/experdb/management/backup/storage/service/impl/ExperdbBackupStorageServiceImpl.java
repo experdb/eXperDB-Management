@@ -112,8 +112,13 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     		}else {
     			result.put("type", "CIFS Share");
     		}		
+    		 		
+    		double diskUsage = ((double)list.get(i).getTotalSize() - (double)list.get(i).getFreeSize()) * 100d / (double)list.get(i).getTotalSize();
+    	
+    		  		
     		result.put("freeSize", CmmnUtil.bytes2String((double)list.get(i).getFreeSize()));
-    		result.put("totalSize", CmmnUtil.bytes2String((double)list.get(i).getTotalSize()));
+    		result.put("totalSize", CmmnUtil.bytes2String((double)list.get(i).getTotalSize()));		
+    		result.put("diskUsage", String.format("%.0f",diskUsage));
     		result.put("path", list.get(i).getBackupDestLocation());
     		result.put("rJobCount", list.get(i).getCurrentJobCount());
     		result.put("wJobCount", list.get(i).getWaitingJobCount());
