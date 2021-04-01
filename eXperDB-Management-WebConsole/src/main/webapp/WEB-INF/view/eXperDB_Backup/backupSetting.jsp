@@ -188,6 +188,11 @@ function fn_alertShow(){
 	$("#applyAlert_none").hide();
 }
 
+function fn_alertHide(){
+	console.log("alertHide");
+	$("#applyAlert").hide();
+	$("#applyAlert_none").show();
+}
 /* ********************************************************
  * 서버 리스트 가져오기
  ******************************************************** */
@@ -246,8 +251,7 @@ function fn_getSvrList() {
 		}
 	})
 	.always(function(){
- 		$("#applyAlert").hide();
- 		$("#applyAlert_none").show();
+ 		fn_alertHide();
 	})
 }
 
@@ -399,6 +403,8 @@ function fn_nodeRegPopup() {
 		  fn_nodeDelete();
 	  }else if(gbn == "backup_del"){
 		  fn_backupDelete();
+	  }else if (gbn == "go_monitoring"){
+		  location.href="/experdb/backupMonitoring.do";
 	  }
   }
  
@@ -522,6 +528,7 @@ function fn_nodeRegPopup() {
 		var dayIndex = scheduleList.cell('.selected').index().column;
 		schWeek[dayIndex].splice(rowIndex, 1);
 		fn_drawScheduleList();
+		fn_alertShow();
 	}
 	
 /* ********************************************************
@@ -558,9 +565,8 @@ function fn_nodeRegPopup() {
 				}
 			})
 			.done (function(result){
-				if(result.RESULT_CODE == "0"){					
-					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
-					location.href="/experdb/backupMonitoring.do";
+				if(result.RESULT_CODE == "0"){			
+					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '','success', 'backupPolicyApply');
 				}else {
 					showSwalIcon('적용에 실패했습니다', '<spring:message code="common.close" />', '', 'error');
 				}
@@ -574,8 +580,21 @@ function fn_nodeRegPopup() {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			})
+			.always(function(){
+		 		fn_alertHide();
+			})
 		}
 	}
+	
+	function fn_goMonitoring(){
+		confile_title = '모니터링 화면으로 이동' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("go_monitoring");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('모니터링 화면으로 이동하시겠습니까?');
+		$('#pop_confirm_multi_md').modal("show");
+	}
+	
+	
 	
 /* ********************************************************
  * apply validation
@@ -598,7 +617,7 @@ function fn_nodeRegPopup() {
   function fn_backupDelPopup(){
 		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
-			showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
 			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
@@ -611,44 +630,41 @@ function fn_nodeRegPopup() {
   
   
 function fn_backupDelete() {
-
-	 var data = NodeList.rows('.selected').data();
-		if(data.length<1){
-			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		}else{
-			 var ipadr = NodeList.row('.selected').data().ipadr;
-			 var jobName = $("#jobNameVal").val();
-			 
-				$.ajax({
-					url : "/experdb/jobDelete.do",
-					type : "post",
-					data : {
-						ipadr:ipadr,
-						jobName:jobName
-					},
-					beforeSend : function(xhr) {
-						xhr.setRequestHeader("AJAX", true);
-					},
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else if(xhr.status == 403) {
-							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-						} else {
-							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-						}
-					},
-					success : function(result){
-						if(result.RESULT_CODE == "0"){		
-							showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
-							fn_getScheduleInfo(ipadr);
-							scheduleList.clear().draw();
-						}
-					}
-				})
-		}
-	 
+		 var ipadr = NodeList.row('.selected').data().ipadr;
+		 var jobName = $("#jobNameVal").val();
+		 
+		$.ajax({
+			url : "/experdb/jobDelete.do",
+			type : "post",
+			data : {
+				ipadr:ipadr,
+				jobName:jobName
+			},
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result){
+				if(result.RESULT_CODE == "0"){		
+					showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
+					fn_scheduleReset();
+		     		fn_policyReset();
+					
+					/* fn_getScheduleInfo(ipadr);
+					scheduleList.clear().draw(); */
+				}else{
+					showSwalIcon('삭제에 실패했습니다', '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		})
 }
 </script>
 <style>
@@ -724,9 +740,6 @@ table.dataTable.ccc thead th{
 				</div>
 			</div>
 		</div>
-		
-		
-		
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">

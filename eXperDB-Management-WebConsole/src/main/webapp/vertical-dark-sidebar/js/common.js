@@ -134,6 +134,8 @@
 				location.href = "/securityPolicy.do";
 			}else if (rstGbn == "securityKeySet") {
 				location.href = "/securityKeySet.do";
+			}else if (rstGbn == "backupPolicyApply"){
+				fn_goMonitoring();
 			}
         });
 	}
