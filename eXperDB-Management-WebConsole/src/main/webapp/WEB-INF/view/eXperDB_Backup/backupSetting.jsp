@@ -142,13 +142,8 @@ function dateCalenderSetting() {
 	var today = new Date();
 	var startDay = today.toJSON().slice(0,10);
 	var endDay = fn_dateParse("20991231").toJSON().slice(0, 10);
-	
-	/* console.log("today : " + today);
-	console.log("startDay : " + startDay);
-	console.log("endDay : " + endDay); */
 
 	$("#startDate").val(startDay);
-	
 
 	$("#startDate").datepicker({
 		}).datepicker('setDate', startDay)
@@ -157,7 +152,6 @@ function dateCalenderSetting() {
 		.on('hide', function(e) {
 			e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
 		}); //값 셋팅
-
 	
 	$("#startDate").datepicker('setStartDate', startDay).datepicker('setEndDate', endDay);
 	// $("#startDate_div").datepicker('updateDates');
@@ -176,7 +170,6 @@ function fn_scheduleReset(ipadr){
 	fn_drawScheduleList();
 }
 
-
 function fn_policyReset(){
 	console.log("policyReset");
 	$("#bckStorage").val("");
@@ -187,7 +180,6 @@ function fn_policyReset(){
 	$("#bckSetNum").val("");
 	$("#startDateSch").val("");
 	$("#jobNameVal").val("");
-
 }
 
 function fn_alertShow(){
@@ -229,7 +221,6 @@ function fn_getSvrList() {
  * get schedule data
  ******************************************************** */
  function fn_getScheduleInfo(ipadr){
-	console.log("NodeList CLICK	!! : " + ipadr);
 	$.ajax({
 		url : "/experdb/getScheduleInfo.do",
 		data : {
@@ -240,17 +231,21 @@ function fn_getSvrList() {
 	.done(function(result){
 		console.log("RESULT_CODE : " + result.RESULT_CODE);
 		if(result.RESULT_CODE == "0"){
-			console.log("성공 : " + result.startDate);
 			fn_setScheduleInfo(result);
 		}else if(result.RESULT_CODE == "2"){
 			console.log("실패 : XML 파일을 찾을 수 없음");
 		}
 	})
 	.fail(function(xhr, status, error){
-		
+		if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if(xhr.status == 403) {
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
 	})
 	.always(function(){
- 		
  		$("#applyAlert").hide();
  		$("#applyAlert_none").show();
 	})
@@ -267,7 +262,6 @@ function fn_setScheduleInfo(result){
 	$("#startDateSch").val(result.startDate);
 	fn_drawScheduleList();
 	if(result.dateType == "true"){
-		console.log("fn_setScheduleInfo : true");
 		$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true); 
 		$("#merge_period_week").val(result.date);
 		$("#merge_period_month").val(0);
@@ -424,7 +418,6 @@ function fn_nodeRegPopup() {
 			})
 			.done (function(result){			
 				fn_setStorageList(result);
-				console.log("$('#bckStorage).val() : " + $("#bckStorage").val() == null);
 				if($("#bckStorage").val() != ""){
 					console.log("정책  수정");
 					fn_policyModiReset();
@@ -484,9 +477,9 @@ function fn_nodeRegPopup() {
 
 		for(var i =0; i<7; i++){
 			if(dayPick[i] == true){
-				console.log("schData : " + JSON.stringify(schData));
+				// console.log("schData : " + JSON.stringify(schData));
 				schWeek[i].push(schData);
-				console.log("schWeek insert print : " + JSON.stringify(schWeek[i]));
+				// console.log("schWeek insert print : " + JSON.stringify(schWeek[i]));
 			}
 			schWeek[i].sort(compareTime);
 		}
@@ -779,7 +772,7 @@ table.dataTable.ccc thead th{
 							</button>
 						</div>
 						<h4 class="card-title" style="font-size: 1em; color:black;">
-							<i class="item-icon fa fa-desktop"></i>  Server List
+							<i class="item-icon fa fa-desktop"></i> 대상 서버 리스트
 						</h4>
 						<table id="nodeList" class="table nonborder table-hover system-tlb-scroll" style="width:100%;align:left;">
 							<thead>
@@ -807,7 +800,6 @@ table.dataTable.ccc thead th{
 										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policyRegPopoup()">
 										 	설정
 										</button>
-										
 									</div>
 								</div>
 							</div>				 	

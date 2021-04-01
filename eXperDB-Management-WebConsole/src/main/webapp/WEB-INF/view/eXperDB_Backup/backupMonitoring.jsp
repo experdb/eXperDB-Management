@@ -57,11 +57,12 @@ function fn_init() {
 	 * backup storage list table setting
 	 ******************************************************** */
 	 monitoringData = $('#monitoringData').DataTable({
-		scrollY : "470px",
+		scrollY : "500px",
 		scrollX: true,	
 		searching : false,
 		processing : true,
 		paging : false,
+		info : false,
 		deferRender : true,
 		bSort : false,
 		columns : [

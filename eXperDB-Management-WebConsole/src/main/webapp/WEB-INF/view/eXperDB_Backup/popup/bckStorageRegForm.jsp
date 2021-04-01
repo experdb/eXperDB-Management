@@ -479,7 +479,7 @@
 													<div  class="col-3" style="padding-top:7px; margin-left: 20px;">
 														Type
 													</div>
-													<select id="storageType" name="storageType"  class="form-control form-control-xsm" style="width:400px; height:40px;" onchange="fn_storageTypeSelect()">
+													<select id="storageType" name="storageType"  class="form-control form-control-xsm" style="width:400px; height:40px; color: #555555" onchange="fn_storageTypeSelect()">
 														<option value="1">NFS share</option>
 														<option value="2">CIFS share</option>
 													</select>

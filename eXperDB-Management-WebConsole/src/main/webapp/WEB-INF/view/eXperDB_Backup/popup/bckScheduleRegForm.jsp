@@ -61,12 +61,7 @@
 		var startDay = today.toJSON().slice(0,10);
 		var endDay = fn_dateParse("20991231").toJSON().slice(0, 10);
 		
-		console.log("today : " + today);
-		console.log("startDay : " + startDay);
-		console.log("endDay : " + endDay);
-
 		$("#startDate").val(startDay);
-		
 		
 		// if ($("#startDate_div", "#scheduleForm").length) {
 		$("#startDate").datepicker({
@@ -100,7 +95,6 @@
 			format: 'HH:mm'
 		});
 		
-
 	}
 
 	/* ********************************************************
@@ -145,38 +139,33 @@
 	 }
 	 // time check
 	 function fn_valChkSchTime(){
-		/* if($("#timepicker").val() == ""){
-			
-		}  */
 		if($("#repeat").prop("checked")){
-			/* var timeSplit = $("#repEndTime").val().split(':');
+					
+			var startTime = new Date('1970-01-01 '+$("#startTime").val());
+			var endTime = new Date('1970-01-01 '+$("#repEndTime").val());
 			
-			// var endTime = new Date('01/01/1970 '+$("#repEndTime").val());
-			// var endTime = new Date(null, null, null, timeSplit[0], timeSplit[1]);
 			var chkEndTime;
 			
-			console.log("endTime1 : " + $("#repEndTime").val());
-			console.log("endTime2: " + endTime);
-			
 			if($("#repeatTime").val() == 1){
-				console.log("111");
-				chkEndTime = endTime.setHours(endTime.getHours() + $("#everyTime").val());
+				chkEndTime = startTime.setHours(startTime.getHours() + parseInt($("#everyTime").val()));
 			}else{
-				console.log("222");
-				chkEndTime = endTime.setMinutes(endTime.getMinutes() + $("#everyTime").val());
+				chkEndTime = startTime.setMinutes(startTime.getMinutes() + parseInt($("#everyTime").val()));
 			}
 			
-			console.log("check End Time!! " + chkEndTime);
-			console.log("check End Time!! " + moment(chkEndTime).format("HH:mm"));
-			 */
-			var timeChk = $("#startTime").val()>$("#repEndTime").val();
-//			var timeChk = $("#startTime").val()>chkEndTime;
+			var valEndTime = new Date(chkEndTime);
+			
+			var timeChk =  endTime.getTime() > valEndTime.getTime();
+			var endStartChk = $("#repEndTime").val()>$("#startTime").val();
 			if(!$("#repEndTime").val()){
 				var errStr = "End Time 값을 입력해주세요";
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return true;
-			}else if(timeChk){
+			}else if(!endStartChk){
 				var errStr = "End Time은 Start Time 보다 늦어야합니다";
+				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
+				return true;
+			}else if(!timeChk){
+				var errStr = "유효한 End Time 값을 입력해주세요";
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return true;
 			}
@@ -300,9 +289,6 @@
 		}
 	}
 
-
-
-
 </script>
 	
 <div class="modal fade" id="pop_layer_popup_backupSchedule" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -381,7 +367,7 @@
 																		</div>
 																	</div>
 																</div>
-																<select class="form-control form-control-xsm" id="repeatTime" style="margin-right: 10px;width:150px; height:40px;" onchange="fn_repTimeSet()" disabled>
+																<select class="form-control form-control-xsm" id="repeatTime" style="margin-right: 10px;width:150px; height:40px; color: #555555;" onchange="fn_repTimeSet()" disabled>
 																	<option value="0">Minutes</option>
 																	<option value="1">Hours</option>
 																</select>
