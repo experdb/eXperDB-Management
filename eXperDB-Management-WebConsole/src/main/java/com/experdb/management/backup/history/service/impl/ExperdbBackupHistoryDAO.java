@@ -29,7 +29,18 @@ public class ExperdbBackupHistoryDAO extends EgovAbstractMapper {
 	
 	public List<BackupJobHistoryVO> selectJobHistoryList(Map<String, Object> param) {
 	       List<BackupJobHistoryVO> result = null;
+	       List<BackupJobHistoryVO> resultRpoint = null;
 	       result =jobhistoryDBsql.selectList("experdbHistorySql.selectJobHistoryList", param);
+	       resultRpoint =activitylogDBsql.selectList("experdbHistorySql.selectRecoveryPointList");
+	       
+	       for(int j=0; j<result.size(); j++){
+	    	   for(int i=0; i<resultRpoint.size(); i++){
+	    		   if(result.get(j).getJobid() == resultRpoint.get(i).getJobid()){
+	    			   result.get(j).setRpoint(resultRpoint.get(i).getRpoint());
+	    		   }
+	    	   }
+	       }
+	       
 	        return result;
 	}
 
@@ -38,5 +49,7 @@ public class ExperdbBackupHistoryDAO extends EgovAbstractMapper {
 	       result =activitylogDBsql.selectList("experdbHistorySql.selectBackupActivityLogList",jobid);
 	        return result;
 	}
+
+
 
 }

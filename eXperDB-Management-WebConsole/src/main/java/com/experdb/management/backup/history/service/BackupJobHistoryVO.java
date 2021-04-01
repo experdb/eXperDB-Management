@@ -32,6 +32,16 @@ public class BackupJobHistoryVO {
 	private int operationtype;
 	private String sessionguid;
 	private String datasize;
+	private String rpoint;
+
+	
+	public String getRpoint() {
+		return rpoint;
+	}
+
+	public void setRpoint(String rpoint) {
+		this.rpoint = rpoint;
+	}
 
 	public int getRecordid() {
 		return recordid;

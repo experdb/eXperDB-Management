@@ -74,4 +74,13 @@
 				FROM ACTIVITYLOG
 				WHERE JOBID = #{jobid}
 		</select>
+		
+		<select id="selectRecoveryPointList" resultType="backupJobHistoryVO" >
+				SELECT 
+					JOBID
+					,TRIM(RTRIM(SPLIT_PART(MESSAGE,':',2),'.')) AS rpoint 
+				FROM ACTIVITYLOG 
+				WHERE MESSAGE LIKE '%Recovery point is%'
+		</select>
+		
 </mapper>

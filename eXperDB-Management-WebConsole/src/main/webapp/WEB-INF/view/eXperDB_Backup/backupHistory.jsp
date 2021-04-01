@@ -141,6 +141,7 @@ function fn_init() {
 				defaultContent : ""
 			},	
 		{data : "targetname", className : "dt-center", defaultContent : ""},
+		{data : "rpoint", className : "dt-center", defaultContent : ""},
 		{data : "jobtype_nm", className : "dt-center", defaultContent : ""},			
 		{data : "executetime", className : "dt-center", defaultContent : ""},	
 		{data : "finishtime", className : "dt-center", defaultContent : ""},
@@ -156,7 +157,7 @@ function fn_init() {
 	bckHistoryList.tables().header().to$().find('th:eq(3)').css('min-width');
     bckHistoryList.tables().header().to$().find('th:eq(4)').css('min-width');
 	bckHistoryList.tables().header().to$().find('th:eq(5)').css('min-width');
-	/* bckHistoryList.tables().header().to$().find('th:eq(6)').css('min-width'); */
+	bckHistoryList.tables().header().to$().find('th:eq(6)').css('min-width'); 
 
 	bckLogList = $('#bckLogList').DataTable({
 		scrollY : "500px",
@@ -347,6 +348,7 @@ function fn_searchHistory(){
 			}
 		},
 		success : function(data) {
+			alert(JSON.stringify(data))
 			bckHistoryList.clear().draw();
 			bckHistoryList.rows.add(data).draw();			
 		}
@@ -473,6 +475,7 @@ function fn_searchHistory(){
 													<tr class="bg-info text-white">
 														<th width="50">Status</th>
 														<th width="80">백업서버</th>
+														<th width="80">Recovery Point</th>
 														<th width="80">백업유형</th>															
 														<th width="60">수행시작일시</th>
 														<th width="60">수행종료일시</th>
