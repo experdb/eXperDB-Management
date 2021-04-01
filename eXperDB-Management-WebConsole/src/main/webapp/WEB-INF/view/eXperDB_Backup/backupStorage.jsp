@@ -142,31 +142,35 @@ function fn_storage_reg_popup(){
  ******************************************************** */
 function fn_storage_modi_popup() {
 	$('#pop_layer_popup_backupStorageReg').modal("hide");
-	
-	$.ajax({
-		url : "/experdb/backupStorageInfo.do",
-		data : {
-			path : bckStorageList.row('.selected').data().path
-		},
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if (xhr.status == 403){
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+	var data = bckStorageList.rows('.selected').data();
+	if(data.length < 1){
+		showSwalIcon('수정할 스토리지를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}else{
+		$.ajax({
+			url : "/experdb/backupStorageInfo.do",
+			data : {
+				path : bckStorageList.row('.selected').data().path
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if (xhr.status == 403){
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				fn_modiReset(result);
+				$('#pop_layer_popup_backupStorageReg').modal("show");
 			}
-		},
-		success : function(result) {
-			fn_modiReset(result);
-			$('#pop_layer_popup_backupStorageReg').modal("show");
-		}
-	})
-	
+		})
+	}
 
 }
 

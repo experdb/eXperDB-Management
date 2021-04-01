@@ -72,7 +72,9 @@
 		$("#modiTitle").hide();
 		
 		$("#regButton").show();
-		$("#modiButton").hide();		
+		$("#modiButton").hide();
+		$("#storageChkBtn_Reg").show();
+		$("#storageChkBtn_Modi").hide();
 
 		$("#userNameAlert").empty();
 		$("#passWordAlert").empty();
@@ -123,6 +125,9 @@
 		$("#modiTitle").show();
 		$("#regButton").hide();
 		$("#modiButton").show();
+		
+		$("#storageChkBtn_Reg").hide();
+		$("#storageChkBtn_Modi").show();
 	}
 	
 	/* ********************************************************
@@ -337,14 +342,67 @@
 	 
 	 
 	// validation check for modification
-	 function fn_validationModi() {
-		if($("#storageType").val()==2){
-			var checkVal = fn_valChkPW() + fn_valChkName();						
-			if(checkVal){
-				return false;
-			}
-		}
-		return true;
+	 function fn_storageValidateModi() {
+		 if($("#storageType").val()==1){
+				 $.ajax({
+					url : "/experdb/nfsValidation.do",
+					data : {
+						path : $("#storagePath").val(),
+					},
+					type : "post",
+					async: false, 
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if (xhr.status == 403){
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {		
+						 if(result.RESULT_CODE == "1"){							 
+							 showSwalIcon('NFS 설정을 확인해주세요!', '<spring:message code="common.close" />', '', 'error');
+							 storageValid = false;
+						 }else{
+							 showSwalIcon('Connect for Success', '<spring:message code="common.close" />', '', 'success');
+							 storageValid = true;
+						 }	
+					}
+				});
+			}else{
+				var checkVal =fn_valChkPW() + fn_valChkName();
+				if(checkVal == 2){
+					 $.ajax({
+							url : "/experdb/cifsValidation.do",
+							data : {
+								path : $("#storagePath").val(),
+								userName : $("#userName").val(),
+								passWord : $("#passWord").val(),						
+							},
+							type : "post",
+							async: false, 
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+								} else if (xhr.status == 403){
+									showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+								} else {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+								}
+							},
+							success : function(result) {		
+								 if(result.RESULT_CODE == "1"){
+									 showSwalIcon(result.RESULT_DATA, '<spring:message code="common.close" />', '', 'error');
+									 storageValid = false;
+								 }else{
+									 showSwalIcon('Connect for Success', '<spring:message code="common.close" />', '', 'success');
+									 storageValid = true;
+								 }	
+							}
+						});
+				}
+			}	
 	 }
 
 	 // path validation check
@@ -570,7 +628,8 @@
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<button type="button" class="btn btn-primary" id="regButton" onclick="fn_storageReg()"><spring:message code="common.registory"/></button>
 									<button type="button" class="btn btn-primary" id="modiButton" onclick="fn_storageModi()"><spring:message code="common.modify"/></button>
-									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button" onClick="fn_storageValidate();" value='스토리지 체크' />
+									<input class="btn btn-primary" width="200px" id="storageChkBtn_Reg" style="vertical-align:middle;" type="button" onClick="fn_storageValidate();" value='스토리지 체크' />
+									<input class="btn btn-primary" width="200px" id="storageChkBtn_Modi" style="vertical-align:middle;" type="button" onClick="fn_storageValidateModi();" value='스토리지 체크' />
 									<button type="button" class="btn btn-light" data-dismiss="modal" onclick=""><spring:message code="common.cancel"/></button>
 								</div>
 							</div>

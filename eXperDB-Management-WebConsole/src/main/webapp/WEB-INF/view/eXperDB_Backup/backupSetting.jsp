@@ -48,6 +48,12 @@ $(window.document).ready(function() {
 	schWeek = [schSun,schMon,schTue,schWed,schThu,schFri,schSat];
 });
 
+$(window).bind('beforeunload', function (){
+	if($("#applyAlert").is(":visible")){
+		return false;
+	}
+});
+
 $(function() {
     $('#nodeList tbody').on( 'click', 'tr', function () {
           if ( $(this).hasClass('selected') ) {
@@ -64,6 +70,7 @@ $(function() {
          } 
      } );   
  } );    
+ 
 
 function fn_init() {
 	

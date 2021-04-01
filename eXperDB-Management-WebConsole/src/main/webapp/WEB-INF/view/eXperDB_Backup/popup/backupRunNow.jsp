@@ -85,21 +85,21 @@
 					<h5 class="modal-title" id="confirm_multi_msg">Backup Type</h5>
 					<div>
 						<div class="form-check" style="margin-left: 20px;">
-							<label class="form-check-label" for="thu">
+							<label class="form-check-label" for="incre">
 								<input type="radio" class="form-check-input" id="incre" name="backupType"  value="1" />
 								Incremental Backup
 								<i class="input-helper"></i>
 							</label>
 						</div>
 						<div class="form-check" style="margin-left: 20px;">
-							<label class="form-check-label" for="thu">
+							<label class="form-check-label" for="verify">
 								<input type="radio" class="form-check-input" id="verify" name="backupType"  value="2" />
 								Verify Backup
 								<i class="input-helper"></i>
 							</label>
 						</div>
 						<div class="form-check" style="margin-left: 20px;">
-							<label class="form-check-label" for="thu">
+							<label class="form-check-label" for="full">
 								<input type="radio" class="form-check-input" id="full" name="backupType"  value="0"/>
 								Full Backup
 								<i class="input-helper"></i>
