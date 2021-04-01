@@ -348,7 +348,6 @@ function fn_searchHistory(){
 			}
 		},
 		success : function(data) {
-			alert(JSON.stringify(data))
 			bckHistoryList.clear().draw();
 			bckHistoryList.rows.add(data).draw();			
 		}
