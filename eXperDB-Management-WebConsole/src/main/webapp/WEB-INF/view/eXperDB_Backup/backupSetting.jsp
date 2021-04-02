@@ -387,6 +387,8 @@ function fn_nodeRegPopup() {
 	.done(function(result){
 		if(result.RESULT_CODE == "0"){
 			showSwalIconRst('<spring:message code="message.msg12" />', '<spring:message code="common.close" />', '', 'success');
+     		fn_scheduleReset();
+     		fn_policyReset();
 		}else {
 			showSwalIcon("ERROR : " + result.RESULT_DATA ,'<spring:message code="common.close" />', '', 'error');
 		}
@@ -402,6 +404,7 @@ function fn_nodeRegPopup() {
 	})
 	.always(function(){
 		fn_getSvrList();
+		fn_alertHide();
 	})
   }
  

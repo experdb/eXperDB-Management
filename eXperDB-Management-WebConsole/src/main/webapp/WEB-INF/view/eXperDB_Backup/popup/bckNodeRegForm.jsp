@@ -69,8 +69,8 @@
 		$("#userCredNameAlert").empty();
 		$("#userCredPwAlert").empty();
 		
-		$("#regTitle").show();
-		$("#modiTitle").hide();
+		$("#ModalLabel_Reg").show();
+		$("#ModalLabel_Modi").hide();
 		$("#regButton").show();
 		$("#modiButton").hide();		
 
@@ -105,9 +105,9 @@
 		$("#rootPWAlert").empty();
 		$("#userCredNameAlert").empty();
 		$("#userCredPwAlert").empty();
-		
-		$("#regTitle").hide();
-		$("#modiTitle").show();
+	
+		$("#ModalLabel_Reg").hide();
+		$("#ModalLabel_Modi").show();
 		$("#regButton").hide();
 		$("#modiButton").show();
 	}
@@ -295,22 +295,18 @@
 		<div class="modal-content" >
 			<div class="modal-body" id="nodeRegPopupDiv" style="margin-bottom:-30px;">
 			<div id="loader"><div class="flip-square-loader mx-autor" style="border: 0px !important;z-index:99999; position:absolute; transform:translate(250%, 250%); size:150%;"></div></div>
-				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					백업 노드
+				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Reg" style="padding-left:5px;">
+					백업 노드 등록
+				</h5>
+				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Modi" style="padding-left:5px;" >
+					백업 노드 수정
 				</h5>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="insRegForm">
 						<fieldset>
-						<div class="card my-sm-2" >
-							<div class="card card-inverse-info" id="regTitle" style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;;"> 백업 노드 등록 </i>
-							</div>
-							<div class="card card-inverse-info" id="modiTitle" style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;;"> 백업 노드 수정 </i>
-							</div>					
-							<div class="card-body">
+							<div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
 								<div class="row">
-									<div class="col-12">
+									<div class="col-12" style="border: 1px solid #dee1e4; padding-top: 20px;padding-left: 30px;">
 	 									<form class="cmxform" id="optionForm">
 											<fieldset>	
 												<div class="form-group row">
@@ -368,7 +364,7 @@
 															</div>
 														</div>
 													</div>
-													<div class="form-check" style="width:145px;background-color: white; font-size: 1rem; margin-left: 20px;position: absolute;top: 185px;margin-top: 0px;margin-bottom: 0px;">
+													<div class="form-check" style="width:145px;background-color: white; font-size: 1rem; margin-left: 20px;position: absolute;top: 203px;margin-top: 0px;margin-bottom: 0px;">
 														<label class="form-check-label" for="userCred" style="font-size: 1em;">
 															<input type="checkbox" class="form-check-input" id="userCred" name="userCred" value="N" onclick="fn_userCredentClick()"/>
 															User Credentials
@@ -376,7 +372,7 @@
 														</label>
 													</div>
 												</div>
-												<div class="form-group row" style="margin-bottom:4px; position:relative">
+												<div class="form-group row" style="margin-bottom:20px; position:relative">
 													<div  class="col-4" style="padding-top:7px; margin-left: 20px;">
 														Description
 													</div>
@@ -389,7 +385,7 @@
 								 	</div>
 							 	</div>
 							</div>
-						</div>
+						
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<button type="button" class="btn btn-primary" id="regButton" onclick="fn_nodeReg()"><spring:message code="common.registory"/></button>

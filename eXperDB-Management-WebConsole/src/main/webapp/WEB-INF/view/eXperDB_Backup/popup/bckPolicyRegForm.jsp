@@ -289,75 +289,70 @@
 		<div class="modal-content" >
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="policyRegTitle" style="padding-left:5px;">
-					백업정책 설정
+					풀 백업 정책 설정
 				</h5>
-
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="insRegForm">
-						<input type="hidden" name="ins_wrk_nmChk" id="ins_wrk_nmChk" value="fail" />					
 						<fieldset>
-						
-						
 						<!-- backup destination -->
-						<div class="card my-sm-2" >
-							<div class="card card-inverse-info"  style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;">	백업 스토리지 설정 </i>
-							</div>					
-							<div class="card-body">
-								<div class="row">
-									<div class="col-12">
-	 									<form class="cmxform" id="optionForm">
-											<fieldset>			
-												<div class="form-group row" style="margin-bottom: 15px;margin-left: 20px;margin-right: 0px;">
-													<select class="form-control form-control-xsm" id="storageType" name="storageType" style="width:150px; height:40px;margin-right: 10px; color:black;" onchange="fn_storageTypeClick()">
-														<option value="1">NFS share</option>
-														<option value="2">CIFS share</option>
-													</select>
-													<select class="form-control form-control-xsm" id="storageList" name="storageList" style="width:300px; height:40px; color:black;">
+						<div style=" margin-bottom: 20px;">
+							<div class="card my-sm-2" >
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+		 									<form class="cmxform" id="optionForm">
+												<fieldset>			
+													<div class="form-group row" style="margin-bottom: 15px;margin-top: 10px; margin-left: 20px;margin-right: 0px;">
+														<select class="form-control form-control-xsm" id="storageType" name="storageType" style="width:150px; height:40px;margin-right: 10px; color:black;" onchange="fn_storageTypeClick()">
+															<option value="1">NFS share</option>
+															<option value="2">CIFS share</option>
+														</select>
+														<select class="form-control form-control-xsm" id="storageList" name="storageList" style="width:300px; height:40px; color:black;">
+															
+														</select>
+													</div>
+												</fieldset>
+											</form>		
+									 	</div>
+								 	</div>
+								</div>
+								<h4 class="card-title" style="position: absolute;top:-5px; right:540px;background-color: white;font-size: 1em; color: #000000; ">
+									Storage 지정
+								</h4>
+							</div>
+						</div>
+						<div style=" margin-bottom: 20px;">
+							<div class="card my-sm-2" >
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+		 									<form class="cmxform" id="optionForm">
+												<fieldset>			
+													<div class="form-group row" style="margin-top:10px;margin-bottom: 10px;margin-left: 20px;margin-right: 0px;">
+														<select class="form-control form-control-xsm" id="compressType" name="compressType" style="width:400px; height:40px; color:black;">
+															<option value="1">Standard Compression</option>
+															<option value="2">Maximum Compression</option>
+														</select>
 														
-													</select>
-												</div>
-											</fieldset>
-										</form>		
+													</div>
+												</fieldset>
+											</form>		
+									 	</div>
 								 	</div>
-							 	</div>
+								</div>
+								<h4 class="card-title" style="position: absolute;top:-5px; right:560px;background-color: white;font-size: 1em; color: #000000; ">
+									압축 정책
+								</h4>
 							</div>
 						</div>
-						
-						<div class="card my-sm-2" >
-							<div class="card card-inverse-info"  style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;">	백업 압축 정책 </i>
-							</div>					
-							<div class="card-body">
-								<div class="row">
-									<div class="col-12">
-	 									<form class="cmxform" id="optionForm">
-											<fieldset>			
-												<div class="form-group row" style="margin-bottom: 15px;margin-left: 20px;margin-right: 0px;">
-													<select class="form-control form-control-xsm" id="compressType" name="compressType" style="width:400px; height:40px; color:black;">
-														<option value="1">Standard Compression</option>
-														<option value="2">Maximum Compression</option>
-													</select>
-													
-												</div>
-											</fieldset>
-										</form>		
-								 	</div>
-							 	</div>
-							</div>
-						</div>
-						
 						<!-- Recovery Set Settings	 -->
 						<div class="card my-sm-2" >
-							<div class="card card-inverse-info"  style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;;">	Full 백업 정책 </i>
-							</div>						
 							<div class="card-body">
 								<div class="row">
 									<div class="col-12">
 	 									<form class="cmxform" id="optionForm">
 											<fieldset>	
-												<div class="form-group row div-form-margin-z">
+												<div class="form-group row div-form-margin-z" style="margin-top: 10px;">
 													<div class="col-7" >
 														<div class="col-7 col-form-label pop-label-index" style="padding-top:7px;">
 															<i class="item-icon fa fa-dot-circle-o"></i>
@@ -400,6 +395,9 @@
 								 	</div>
 							 	</div>
 							</div>
+							<h4 class="card-title" style="position: absolute;top:-5px; right:540px;background-color: white;font-size: 1em; color: #000000; ">
+								풀 백업 정책
+							</h4>
 						</div>
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >

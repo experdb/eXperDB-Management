@@ -68,8 +68,8 @@
 		$("#runScript").prop('checked', false);
 		fn_runScriptClick();
 
-		$("#regTitle").show();
-		$("#modiTitle").hide();
+		$("#ModalLabel_Reg").show();
+		$("#ModalLabel_Modi").hide();
 		
 		$("#regButton").show();
 		$("#modiButton").hide();
@@ -121,8 +121,8 @@
 			$("#runScriptUnit").prop("disabled", true); 
 		}
 
-		$("#regTitle").hide();
-		$("#modiTitle").show();
+		$("#ModalLabel_Reg").hide();
+		$("#ModalLabel_Modi").show();
 		$("#regButton").hide();
 		$("#modiButton").show();
 		
@@ -515,22 +515,18 @@
 		<div class="modal-content" >
 			<div class="modal-body" style="margin-bottom:-30px;">
 			<div id="loader"><div class="flip-square-loader mx-autor" style="border: 0px !important;z-index:99999; position:absolute; transform:translate(250%, 250%); size:150%;"></div></div>
-				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					백업 스토리지
+				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Reg" style="padding-left:5px;">
+					Storage 등록
 				</h5>
-				<div class="card" style="margin-top:10px;border:0px;">
+				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Modi" style="padding-left:5px;">
+					Storage 수정
+				</h5>
+				<div class="card" style="border:0px;">
 					<form class="cmxform" id="insRegForm">
 						<fieldset>
-						<div class="card my-sm-2" >
-							<div class="card card-inverse-info" id="regTitle" style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;;"> 백업 스토리지 등록 </i>
-							</div>
-							<div class="card card-inverse-info" id="modiTitle" style="height:25px;">
-								<i class="mdi mdi-blur" style="margin-left: 10px;;"> 백업 스토리지 수정 </i>
-							</div>					
 							<div class="card-body">
 								<div class="row">
-									<div class="col-12">
+									<div class="col-12" style="border: 1px solid #dee1e4; padding-top: 20px;padding-left: 30px;">
 	 									<form class="cmxform" id="optionForm">
 											<fieldset>	
 												<div class="form-group row">
@@ -623,7 +619,6 @@
 								 	</div>
 							 	</div>
 							</div>
-						</div>
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<button type="button" class="btn btn-primary" id="regButton" onclick="fn_storageReg()"><spring:message code="common.registory"/></button>

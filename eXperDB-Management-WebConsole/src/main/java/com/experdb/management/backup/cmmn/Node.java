@@ -1,5 +1,6 @@
 package com.experdb.management.backup.cmmn;
 
+import java.io.*;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -114,15 +115,26 @@ public class Node {
 		JSONObject result = new JSONObject();	
 		CmmnUtil cmmUtil = new CmmnUtil();
 		
-		try {
-			String path = "/opt/Arcserve/d2dserver/bin";
-			String cmd = "./d2dnode --delete=" + host;
-			String strCmd = "cd " + path + ";" + cmd;
-
-			System.out.println("노드 등록 명령어 = " + strCmd);
+		String xmlFile = host.replace(".", "_").trim()+".xml";
+		File f = new File(ServiceContext.getInstance().getHomePath() + "/bin/jobs/" +xmlFile);
+		System.out.println("xml파일 경로 : " + ServiceContext.getInstance().getHomePath() + "/bin/jobs/" +xmlFile);
+		System.out.println("xml 파일이 존재?? : " + f.exists());
 		
-			result = cmmUtil.execute(strCmd);
-
+		try {
+			if(f.exists()){
+				String path = "/opt/Arcserve/d2dserver/bin";
+				String cmd = "./d2dnode --delete=" + host;
+				String delCmd = "rm -rf "+ServiceContext.getInstance().getHomePath()+"/bin/jobs/"+xmlFile;
+				String strCmd = "cd " + path + ";" + cmd + ";" + delCmd;
+				System.out.println("노드/파일 삭제  명령어 = " + strCmd);
+				result = cmmUtil.execute(strCmd);
+			}else{
+				String path = "/opt/Arcserve/d2dserver/bin";
+				String cmd = "./d2dnode --delete=" + host;
+				String strCmd = "cd " + path + ";" + cmd;
+				System.out.println("노드 삭제 명령어 = " + strCmd);
+				result = cmmUtil.execute(strCmd);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
