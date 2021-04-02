@@ -11,6 +11,7 @@ public class LoginVO {
 	private String version;
 	private String pg_audit;
 	private String transfer;
+	private int aut_id;
 	
 	private String restIp;
 	private int restPort;
@@ -53,6 +54,12 @@ public class LoginVO {
 	}
 	public void setPg_audit(String pg_audit) {
 		this.pg_audit = pg_audit;
+	}
+	public int getAut_id() {
+		return aut_id;
+	}
+	public void setAut_id(int aut_id) {
+		this.aut_id = aut_id;
 	}
 	public String getTransfer() {
 		return transfer;

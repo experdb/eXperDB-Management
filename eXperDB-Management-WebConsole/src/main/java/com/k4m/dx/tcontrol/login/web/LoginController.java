@@ -332,7 +332,7 @@ public class LoginController {
 				LoginVO loginVo = new LoginVO();
 				loginVo.setUsr_id(userList.get(0).getUsr_id());
 				loginVo.setUsr_nm(userList.get(0).getUsr_nm());
-
+				loginVo.setAut_id(userList.get(0).getAut_id());
 				//session 제거
 		        if ( session.getAttribute("session") !=null ){
 		            // 기존에 login이란 세션 값이 존재한다면
