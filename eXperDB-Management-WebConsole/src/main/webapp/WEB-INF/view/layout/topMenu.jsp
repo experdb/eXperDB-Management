@@ -413,9 +413,9 @@
 									<span class="menu-title">BnR</span>
 									<i class="menu-arrow"></i>
 								</a>
-								<div class="submenu">
+								<div class="submenu" style="width:400px;">
 									<div class="col-group-wrapper row">
-										<div class="col-group col-md-3" id="">
+										<div class="col-group col-md-6" id="">
 											<p class="category-heading">
 												<b>BnR 설정</b>
 											</p>
@@ -437,7 +437,7 @@
 												</li>
 											</ul>
 										</div>
-										<div class="col-group col-md-3" id="">
+										<div class="col-group col-md-6" id="">
 											<p class="category-heading">
 												<b>Backup</b>
 											</p>
@@ -452,22 +452,6 @@
 														정책 설정
 													</a>
 												</li>
-											</ul>
-										</div>
-										<div class="col-group col-md-3" id="">
-											<p class="category-heading">
-												<b>Restore</b>
-											</p>
-											<ul class="submenu-item">
-												
-											</ul>
-										</div>
-										<div class="col-group col-md-3" id="">
-											<p class="category-heading">
-												<b>Clone</b>
-											</p>
-											<ul class="submenu-item">
-												
 											</ul>
 										</div>
 										<!-- <div class="col-group col-md-3" id="" >
