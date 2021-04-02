@@ -427,7 +427,12 @@
 												</li>
 												<li class="nav-item" id="MN0001102">
 													<a class="nav-link" href="/experdb/backupHistory.do" onClick="fn_cookie('')" target="main">
-														이력 관리
+														백업이력 관리
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001103">
+													<a class="nav-link" href="/experdb/restoreHistory.do" onClick="fn_cookie('')" target="main">
+														복구이력 관리
 													</a>
 												</li>
 											</ul>
