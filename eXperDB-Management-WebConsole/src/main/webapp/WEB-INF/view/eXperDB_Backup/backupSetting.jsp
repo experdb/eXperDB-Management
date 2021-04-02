@@ -680,7 +680,7 @@ function fn_backupDelete() {
 					showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
 					fn_scheduleReset();
 		     		fn_policyReset();
-					
+		     		jobExist = 0;
 					/* fn_getScheduleInfo(ipadr);
 					scheduleList.clear().draw(); */
 				}else{
