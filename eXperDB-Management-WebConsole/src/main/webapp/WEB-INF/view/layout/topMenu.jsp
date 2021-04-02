@@ -800,6 +800,11 @@
 												<b><spring:message code="menu.proxy_mgmt"/></b>
 											</span>
 										</li>
+										<li class="nav-item" id="MN0001805">
+											<a class="nav-link" href="/proxyMonitoring/proxyAgent.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.proxy_agent"/>
+											</a>
+										</li>
 										<li class="nav-item" id="MN0001801">
 											<a class="nav-link" href="/proxyMonitoring/monitoring.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="menu.proxy_monitoring"/>
