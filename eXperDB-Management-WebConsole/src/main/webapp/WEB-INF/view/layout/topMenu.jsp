@@ -258,7 +258,7 @@
 							$('#' + result[i].mnu_cd).show();
 						}
 						
-						if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none'){
+						if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none' && $('#MN0001805').css('display') == 'none'){
 									//&& $('#MN0001803').css('display') == 'none' && $('#MN0001804').css('display') == 'none'){
 							$('#proxyMenu').hide();
 						}else{
@@ -801,7 +801,7 @@
 											</span>
 										</li>
 										<li class="nav-item" id="MN0001805">
-											<a class="nav-link" href="/proxyMonitoring/proxyAgent.do" onClick="fn_cookie(null)" target="main">
+											<a class="nav-link" href="/proxyAgent/proxyAgent.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="menu.proxy_agent"/>
 											</a>
 										</li>
