@@ -35,6 +35,8 @@ var schThu=[];
 var schFri=[];
 var schSat=[];
 var schWeek = [];
+var jobExist=0;
+
 
 /* ********************************************************
  * 페이지 시작시
@@ -243,8 +245,10 @@ function fn_getSvrList() {
 	.done(function(result){
 		console.log("RESULT_CODE : " + result.RESULT_CODE);
 		if(result.RESULT_CODE == "0"){
+			jobExist = 1;
 			fn_setScheduleInfo(result);
 		}else if(result.RESULT_CODE == "2"){
+			jobExist = 0;
 			console.log("실패 : XML 파일을 찾을 수 없음");
 		}
 	})
@@ -367,11 +371,19 @@ function fn_nodeRegPopup() {
 		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
-		confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
-		$('#con_multi_gbn', '#findConfirmMulti').val("node_del");
-		$('#confirm_multi_tlt').html(confile_title);
-		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
-		$('#pop_confirm_multi_md').modal("show");
+		if(jobExist == 0){			
+			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			$('#con_multi_gbn', '#findConfirmMulti').val("node_del");
+			$('#confirm_multi_tlt').html(confile_title);
+			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
+			$('#pop_confirm_multi_md').modal("show");
+		}else{
+			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			$('#con_multi_gbn', '#findConfirmMulti').val("node_del");
+			$('#confirm_multi_tlt').html(confile_title);
+			$('#confirm_multi_msg').html('등록된 스케줄이 존재합니다.<br><spring:message code="message.msg162" />');
+			$('#pop_confirm_multi_md').modal("show");
+		}
 	}
   }
 
@@ -577,6 +589,7 @@ function fn_nodeRegPopup() {
 			.done (function(result){
 				if(result.RESULT_CODE == "0"){			
 					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '','success', 'backupPolicyApply');
+					jobExist = 1;
 				}else {
 					showSwalIcon('적용에 실패했습니다', '<spring:message code="common.close" />', '', 'error');
 				}
