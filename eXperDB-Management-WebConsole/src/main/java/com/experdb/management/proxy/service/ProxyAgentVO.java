@@ -15,7 +15,49 @@ public class ProxyAgentVO {
 	private String frst_reg_dtm; 
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
-	
+	private String sch_domain_nm; 
+	private String sch_ipadr; 
+	private String sch_svr_use_yn;
+	private int rownum;
+	private String pry_svr_nm;
+	private String master_gbn;
+
+	public String getMaster_gbn() {
+		return master_gbn;
+	}
+	public void setMaster_gbn(String master_gbn) {
+		this.master_gbn = master_gbn;
+	}
+	public String getPry_svr_nm() {
+		return pry_svr_nm;
+	}
+	public void setPry_svr_nm(String pry_svr_nm) {
+		this.pry_svr_nm = pry_svr_nm;
+	}
+	public int getRownum() {
+		return rownum;
+	}
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
+	public String getSch_domain_nm() {
+		return sch_domain_nm;
+	}
+	public void setSch_domain_nm(String sch_domain_nm) {
+		this.sch_domain_nm = sch_domain_nm;
+	}
+	public String getSch_ipadr() {
+		return sch_ipadr;
+	}
+	public void setSch_ipadr(String sch_ipadr) {
+		this.sch_ipadr = sch_ipadr;
+	}
+	public String getSch_svr_use_yn() {
+		return sch_svr_use_yn;
+	}
+	public void setSch_svr_use_yn(String sch_svr_use_yn) {
+		this.sch_svr_use_yn = sch_svr_use_yn;
+	}
 	public int getAgt_sn() {
 		return agt_sn;
 	}
