@@ -24,8 +24,6 @@
 
 <script type="text/javascript">
 
-
-
 	/* ********************************************************
 	 * 초기 실행
 	 ******************************************************** */
@@ -103,6 +101,8 @@
 	function fn_scheduleReg() {
 		var dayPick = new Array();
 		 if(fn_validationSchReg()){
+			 //check된 요일값 dayPick에 넣어주기
+			 // checked --> true / unchecked --> false
 			dayPick.push($("#sun").prop("checked"));
 			dayPick.push($("#mon").prop("checked"));
 			dayPick.push($("#tue").prop("checked"));
@@ -110,7 +110,9 @@
 			dayPick.push($("#thu").prop("checked"));
 			dayPick.push($("#fri").prop("checked"));
 			dayPick.push($("#sat").prop("checked"));
+			
 			$("#startDateSch").val($("#startDate").val());
+			
 			fn_scheduleInsert(
 					dayPick,
 					$("#startTime").val(),
@@ -130,49 +132,58 @@
 	 ******************************************************** */
 	 // schedule registration validation
 	 function fn_validationSchReg(){
-		if(fn_valChkSchTime()){
+		if(!fn_valChkSchTime()){ // time 값 check
 			return false;
-		}else if(fn_valChkSchDay()){
+		}else if(!fn_valChkSchDay()){ // 요일이 선택되었는지 check
 			return false;
 		}
 		return true;
 	 }
+	
 	 // time check
 	 function fn_valChkSchTime(){
+		// repeat이 check 되었을 경우 (endTime이 존재)
 		if($("#repeat").prop("checked")){
-					
+			// 시간 값(String)을 Date 형식으로 만듬
+			// '1970-01-01 ' 의미없음 (단순히 포멧 맞추기 용)
 			var startTime = new Date('1970-01-01 '+$("#startTime").val());
 			var endTime = new Date('1970-01-01 '+$("#repEndTime").val());
 			
+			// endTime을 check할 기준 값
 			var chkEndTime;
 			
+			// repeat 값에 따라 chkEndTime 세팅
+			// endTime > startTime + repeat
 			if($("#repeatTime").val() == 1){
 				chkEndTime = startTime.setHours(startTime.getHours() + parseInt($("#everyTime").val()));
 			}else{
 				chkEndTime = startTime.setMinutes(startTime.getMinutes() + parseInt($("#everyTime").val()));
 			}
 			
+			// chkEndTime을 Date 형식으로 바꿈
 			var valEndTime = new Date(chkEndTime);
 			
 			var timeChk =  endTime.getTime() > valEndTime.getTime();
 			var endStartChk = $("#repEndTime").val()>$("#startTime").val();
-			if(!$("#repEndTime").val()){
+			
+			if(!$("#repEndTime").val()){ // endTime 입력 유무 체크
 				var errStr = "End Time 값을 입력해주세요";
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
-				return true;
-			}else if(!endStartChk){
+				return false;
+			}else if(!endStartChk){ // startTime - endTime 값 체크
 				var errStr = "End Time은 Start Time 보다 늦어야합니다";
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
-				return true;
-			}else if(!timeChk){
+				return false;
+			}else if(!timeChk){ // repeat을 고려한 endTime 값 체크
 				var errStr = "유효한 End Time 값을 입력해주세요";
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	 }
 	
+	 // 요일 check validation
 	function fn_valChkSchDay(){
 		if(
 			$("#sun").is(":checked") ||
@@ -183,11 +194,11 @@
 			$("#fri").is(":checked") ||
 			$("#sat").is(":checked")
 		){
-			return false;
+			return true;
 		}else{
 			var errStr = "하나 이상의 요일을 선택해주세요";
 			showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
-			return true;
+			return false;
 		}
 	}
 
@@ -217,6 +228,7 @@
 	}
 
 	// days click
+	// 모든 요일 check 되었을 경우 alldays check 처리
 	function fn_dayClick() {
 		if(fn_dayCheck()){
 			$("#alldays").prop('checked', true);
@@ -252,7 +264,6 @@
 		}else{
 			$("#repeat_set").find('input, select').prop("disabled", true); 
 			$("#everyTime").val("");
-			// $("#repeatTime").val("");
 			$("#repTimeAlrtM").hide();
 			$("#repTimeAlrtH").hide();
 		

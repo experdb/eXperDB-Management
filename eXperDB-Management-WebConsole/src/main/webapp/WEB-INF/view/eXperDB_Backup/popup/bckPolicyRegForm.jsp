@@ -25,7 +25,6 @@
 
 <script type="text/javascript">
 
-
 	var storageList = [];
 	var CIFSList = [];
 	var NFSList = [];
@@ -33,9 +32,7 @@
 	 * 초기 실행
 	 ******************************************************** */
 	$(window.document).ready(function() {
-		
 		fn_makeMonthDay();
-		
 	});
 	
 	/* ********************************************************
@@ -46,12 +43,9 @@
 		$("#backupSetNum").val(1);
 		
 		$("#compressType").val(1);
-		
-		$(':input:radio[name=merge_period]:checked').val("weekly");
-		document.getElementById("merge_month").checked = false;
-		document.getElementById("merge_week").checked = true;
-		// $("#merge_month").checked = false;
-		// $("#merge_week").checked = true;
+		$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true); 
+		$("#merge_period_week").val(0);
+		$("#merge_period_month").val(1);
 		fn_mergeClick();
 		
 		$("#storageType").val("2");
@@ -60,7 +54,7 @@
 	}
 
 	function fn_policyModiReset(){
-		console.log("=========== fn_policyModiReset ===========");
+		/* console.log("=========== fn_policyModiReset ===========");
 		console.log("storageType val : " + $("#storageType").val());
 		console.log("bck storageType val : " + $("#bckStorageTypeVal").val());
 		console.log("bckStorage : "+$("#bckStorage").val());
@@ -69,7 +63,7 @@
 		console.log("bckSetDateVal : " +$("#bckSetDateVal").val());
 		console.log("bckSetDateTypeVal : " +$("#bckSetDateTypeVal").val());
 		console.log("bckSetDateTypeValTF : " +$("#bckSetDateTypeVal").val() == "true");
-		console.log("merge_period check : " + $(':input:radio[name=merge_period]:checked').val());
+		console.log("merge_period check : " + $(':input:radio[name=merge_period]:checked').val()); */
 		
 		$("#storageList").val($("#bckStorage").val());
 		$("#storageType").val($("#bckStorageTypeVal").val());
@@ -77,27 +71,21 @@
 		$("#backupSetNum").val($("#bckSetNum").val());
 		$("#compressType").val($("#bckCompressVal").val());
 		
+		// full backup 수행일(weekly/monthly)에 따라 값 setting
 		if($("#bckSetDateTypeVal").val() == "true"){
-			console.log("***** modi reset true");
 			$("#merge_period_week").val($("#bckSetDateVal").val());
 			$("#merge_period_month").val(1);
 			$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true);
-			// document.getElementById("merge_month").checked = false;
-			// document.getElementById("merge_week").checked = true;
 		}else if($("#bckSetDateTypeVal").val() == "false"){
-			console.log("***** modi reset false");
 			$("#merge_period_month").val($("#bckSetDateVal").val());
-			$("#merge_period_week").val(1);
+			$("#merge_period_week").val(0);
 			$("input:radio[name='merge_period']:radio[value='monthly']").prop('checked', true);
-			// document.getElementById("merge_month").checked = true;
-			// document.getElementById("merge_week").checked = false;
 		} 
 		
 		fn_mergeClick();
 		fn_storageTypeClick();
-		console.log("=====================================");
 	}
-	
+	// storage에 따라 분류해서 array insert
 	function fn_setStorageList(data){
 		storageList.length=0;
 		CIFSList.length=0;
@@ -110,6 +98,23 @@
 				NFSList.push(storageList[i]);
 			}
 		}
+	}
+	// month select setting
+	function fn_makeMonthDay() {
+		var dayHtml = "";
+		$('#merge_period_month').children().remove();
+		for(var i = 1; i<=31; i++){
+			dayHtml += '<option value="'+i+'">'+i+'</option>';
+		}
+		dayHtml +=  '<option value="32">last day</option>' +
+					'<option value="33">The last Sunday</option>' +
+					'<option value="34">The last Monday</option>' +
+					'<option value="35">The last Tuesday</option>' +
+					'<option value="36">The last Wednesday</option>' +
+					'<option value="37">The last Thursday</option>' +
+					'<option value="38">The last Friday</option>' +
+					'<option value="39">The last Saturday</option>' ;
+		$('#merge_period_month').append(dayHtml);
 	}
 	/* ********************************************************
 	 * click event
@@ -130,9 +135,6 @@
 		$("#storageList").append(html);
 	}
 	
-	/* ********************************************************
-	* backup set setting
-	******************************************************** */
 	// backup storage number check
 	function fn_backupSetVal() {
 		var min = Number($("#backupSetNum").prop("min"));
@@ -148,12 +150,8 @@
 	
 	// merge radio check
 	function fn_mergeClick() {
-		console.log("mergeClick!!!");
 		var mg = $(':input:radio[name=merge_period]:checked').val();
-		/* console.log("merge???? : " + $("#merge_week").checked == "true");
-		console.log("merge???? : " + $("#merge_week").checked == "false"); */
 		if(mg == "weekly"){
-		//if($("#merge_week").checked == true){
 			console.log("weekly~~");
 			$('#merge_period_week').prop("disabled", false);
 			$('#merge_period_month').prop("disabled", true);
@@ -167,25 +165,6 @@
 			$("#setNumTitleMonth").show();
 		}
 	}
-
-	function fn_makeMonthDay() {
-		var dayHtml = "";
-		$('#merge_period_month').children().remove();
-		for(var i = 1; i<=31; i++){
-			dayHtml += '<option value="'+i+'">'+i+'</option>';
-		}
-		dayHtml +=  '<option value="32">last day</option>' +
-					'<option value="33">The last Sunday</option>' +
-					'<option value="34">The last Monday</option>' +
-					'<option value="35">The last Tuesday</option>' +
-					'<option value="36">The last Wednesday</option>' +
-					'<option value="37">The last Thursday</option>' +
-					'<option value="38">The last Friday</option>' +
-					'<option value="39">The last Saturday</option>' ;
-		$('#merge_period_month').append(dayHtml);
-	}
-
-	
 	/* ********************************************************
 	 * registration
 	 ******************************************************** */
@@ -206,7 +185,6 @@
 		}
 
 		if($(':input:radio[name=merge_period]:checked').val() == "weekly"){
-		// if($("#merge_week").checked){
 			$("#bckSetDateTypeVal").val(true);
 			var setDateVal = $("#merge_period_week").val()
 			$("#bckSetDateVal").val(setDateVal);
@@ -274,9 +252,7 @@
 		$("#bckSetDate").val(bckdate);
 		$("#bckSetNum").val($("#backupSetNum").val());
 		
-		
 		$("#bckCompressVal").val($("#compressType").val());
-		// $("#bckStorageTypeVal").val($("#storageType").val());	
 		
 		fn_alertShow();
 		$("#pop_layer_popup_backupPolicyReg").modal("hide");

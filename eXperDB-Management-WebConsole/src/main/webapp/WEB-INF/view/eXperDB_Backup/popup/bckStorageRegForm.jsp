@@ -37,6 +37,7 @@
 			
 	});
 	
+	// loader
 	$(function(){
 		$(document).ajaxStart(function() {	
 			console.log("ajax start!!");
@@ -468,36 +469,6 @@
 		return false;
 	 }
 	 
-	
-
-	 /* 
-	 // Path check
-	function fn_checkPath(){
-		$("#storagePath").val($("#storagePath").val().replace(/ /g, ''));
-		$.ajax({
-			url : "/experdb/checkStoragePath.do",
-			data : {
-				path : $("#storagePath").val(),
-				type : $("#storageType").val()
-			},
-			type : "post",
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if (xhr.status == 403){
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {				
-					$("#pathcheck").val(result);
-					fn_valChkPath(result);
-					
-			}
-		})
-	 }
- */
 	 // path list
 	 function fn_getPathList(data) {
 		 var size = data.length;

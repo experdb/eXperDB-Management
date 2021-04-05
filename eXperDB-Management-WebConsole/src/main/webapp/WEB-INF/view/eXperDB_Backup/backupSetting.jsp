@@ -167,7 +167,8 @@ function dateCalenderSetting() {
 	
 }
 
-function fn_scheduleReset(ipadr){
+// increment policy reset
+function fn_scheduleReset(){
 	schSun.length = 0;
 	schMon.length = 0;
 	schTue.length = 0;
@@ -179,6 +180,7 @@ function fn_scheduleReset(ipadr){
 	fn_drawScheduleList();
 }
 
+// backup policy reset
 function fn_policyReset(){
 	console.log("policyReset");
 	$("#bckStorage").val("");
@@ -250,6 +252,8 @@ function fn_getSvrList() {
 		}else if(result.RESULT_CODE == "2"){
 			jobExist = 0;
 			console.log("실패 : XML 파일을 찾을 수 없음");
+		}else{
+			console.log("실패");
 		}
 	})
 	.fail(function(xhr, status, error){
@@ -266,8 +270,8 @@ function fn_getSvrList() {
 	})
 }
 
+// 불러온 백업정책 setting
 function fn_setScheduleInfo(result){
-
 	var scheduleData = [];
 	scheduleData = result.weekData;
 	
@@ -301,12 +305,11 @@ function fn_setScheduleInfo(result){
 	
 	$("#jobNameVal").val(result.jobName);
 	
+	// full backup 수행일을 문장으로 나타내주기 위해
 	fn_policyReg();
 	$("#bckStorage").val(result.storage);
 	
 }
-
- 
 
 /* ********************************************************
  * node registration popoup
@@ -359,12 +362,12 @@ function fn_nodeRegPopup() {
 			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 		}
 	})
-	
 }
 
  /* ********************************************************
   * node delete popup
   ******************************************************** */
+  // node delete confirm popup
   function fn_nodeDelPopup(){
 	var data = NodeList.rows('.selected').data();
 	if(data.length < 1){
@@ -387,7 +390,7 @@ function fn_nodeRegPopup() {
 	}
   }
 
-
+  // node delete
   function fn_nodeDelete(){
 	$.ajax({
 		url : "/experdb/backupNodeDel.do",
@@ -431,7 +434,7 @@ function fn_nodeRegPopup() {
   }
  
 /* ********************************************************
- * 백업정책 등록 팝업창 호출
+ * full backup policy registration
  ******************************************************** */
 	
 	function fn_policyRegPopoup() {
@@ -467,9 +470,9 @@ function fn_nodeRegPopup() {
 		}
 	}
 /* ********************************************************
- * schedule registration
+ * increment policy registration
  ******************************************************** */
-
+	
 	function fn_scheduleRegPopoup() {
 		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
@@ -484,13 +487,14 @@ function fn_nodeRegPopup() {
 	// schedule Insert per day
 	function fn_scheduleInsert(dayPick, startTime, repCheck, repEndTime, repTime, repTimeUnit) {
 		var schData = new Object();
-		
+		// 입력된 데이터를 Object에 넣어줌
 		schData.st = startTime;
 		schData.rc = repCheck;
 		if(repCheck){
 			schData.rt = repTime;
 			schData.ret = repEndTime;
 			schData.rtu = repTimeUnit;
+			// repeat --> scheduleList에 보여줄 data
 			if(repTimeUnit == 0){
 				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"분 간격";
 			}else{
@@ -502,7 +506,7 @@ function fn_nodeRegPopup() {
 			schData.rtu = "";
 			schData.repeat = "<b>" + startTime + "</b>";
 		}
-
+		// 선택한 요일에 데이터를 넣어줌
 		for(var i =0; i<7; i++){
 			if(dayPick[i] == true){
 				// console.log("schData : " + JSON.stringify(schData));
@@ -523,29 +527,34 @@ function fn_nodeRegPopup() {
                 return 0;
         }
 	}
-
+	
+	// scheduleList draw
 	function fn_drawScheduleList(){
 		var dayLength = [schSun.length, schMon.length, schTue.length, schWed.length, schThu.length, schFri.length, schSat.length];
 		var max = Math.max.apply(null, dayLength);
 		
 		scheduleList.clear().draw();
-		
+		// 스케줄이 많은 요일 기준으로 for 문 돌면서 draw
 		for(var i=0;i<max;i++){
+			// 전체 스케줄 데이터
 			var schRow = [schSun[i],schMon[i],schTue[i],schWed[i],schThu[i],schFri[i],schSat[i]];
 			var viewRow = [];
 			for(var j=0;j<7;j++){
+				// 해당 요일에 i번째 스케줄이 있을시 데이터를 viewRow에 넣어줌
 				if(i<dayLength[j]){
 					viewRow[j] = schRow[j].repeat;
 				}else{
 					viewRow[j]="";
 				}
 			}
+			// i번째 스케줄 그려줌
 			scheduleList.row.add(viewRow).draw();
 		}
 	}
-
-
+	
+	// increment policy delete
 	function fn_scheduleDel(){
+		// 선택된 index로 해당 요일 array의 데이터 지워줌
 		var rowIndex = scheduleList.cell('.selected').index().row;
 		var dayIndex = scheduleList.cell('.selected').index().column;
 		schWeek[dayIndex].splice(rowIndex, 1);
@@ -556,10 +565,10 @@ function fn_nodeRegPopup() {
 /* ********************************************************
  * apply
  ******************************************************** */
-	
 	function fn_apply() {
 		console.log("fn_apply called!!");
 		if(fn_applyValidation()){
+			// jsonParser를 쓰기 위해 Object 형태로 보냄
 			var weekData = new Object();
 			weekData.mon = schMon;
 			weekData.tue = schTue;
@@ -605,6 +614,10 @@ function fn_nodeRegPopup() {
 			})
 			.always(function(){
 		 		fn_alertHide();
+		 		var nodeIpadr = NodeList.row('.selected').data().ipadr;
+		 		fn_scheduleReset();
+		 		fn_policyReset();
+		 		fn_getScheduleInfo(nodeIpadr);
 			})
 		}
 	}
@@ -637,10 +650,14 @@ function fn_nodeRegPopup() {
  /* ********************************************************
   * backup delete popup
   ******************************************************** */
+  // backup policy delete confirm popup
   function fn_backupDelPopup(){
 		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
 			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else if(jobExist!= 1){
+			showSwalIcon('적용된 스케줄이 없습니다', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
 			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
@@ -651,43 +668,42 @@ function fn_nodeRegPopup() {
 		}
  }
   
-  
+// backup policy delete 
 function fn_backupDelete() {
-		 var ipadr = NodeList.row('.selected').data().ipadr;
-		 var jobName = $("#jobNameVal").val();
-		 
-		$.ajax({
-			url : "/experdb/jobDelete.do",
-			type : "post",
-			data : {
-				ipadr:ipadr,
-				jobName:jobName
-			},
-			beforeSend : function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result){
-				if(result.RESULT_CODE == "0"){		
-					showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
-					fn_scheduleReset();
-		     		fn_policyReset();
-		     		jobExist = 0;
-					/* fn_getScheduleInfo(ipadr);
-					scheduleList.clear().draw(); */
-				}else{
-					showSwalIcon('삭제에 실패했습니다', '<spring:message code="common.close" />', '', 'error');
-				}
+	 var ipadr = NodeList.row('.selected').data().ipadr;
+	 var jobName = $("#jobNameVal").val();
+	 
+	$.ajax({
+		url : "/experdb/jobDelete.do",
+		type : "post",
+		data : {
+			ipadr:ipadr,
+			jobName:jobName
+		},
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
-		})
+		},
+		success : function(result){
+			if(result.RESULT_CODE == "0"){		
+				showSwalIcon('<spring:message code="message.msg12"/>', '<spring:message code="common.close" />', '', 'success');
+				fn_scheduleReset();
+	     		fn_policyReset();
+	     		jobExist = 0;
+				fn_getScheduleInfo(ipadr);
+			}else{
+				showSwalIcon('삭제에 실패했습니다', '<spring:message code="common.close" />', '', 'error');
+			}
+		}
+	})
 }
 </script>
 <style>
