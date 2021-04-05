@@ -259,7 +259,7 @@ function fn_setServerList(data){
 	var html;
 	console.log("fn_setServerList");
 	$("#bckServer").empty();
-	html +='<option value="0"> 백업 서버</option>'
+	html +='<option value="0"> 대상 서버</option>'
 	for(var i =0; i<serverList.length; i++){			
 		html += '<option value="'+serverList[i].ipadr+'">'+serverList[i].ipadr+'</option>';
 	}
@@ -371,7 +371,7 @@ function fn_searchHistory(){
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">이력 관리</span>
+												<span class="menu-title">백업이력 관리</span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -380,7 +380,7 @@ function fn_searchHistory(){
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">BnR 설정</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">이력 관리</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">백업이력 관리</li>
 										</ol>
 									</div>
 								</div>
@@ -435,10 +435,10 @@ function fn_searchHistory(){
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
 									<select class="form-control" style="margin-right: -0.7rem;" name="bckType" id="bckType">
-										<option value="0"> 전체 백업 유형</option>
-										<option value="3"> Full Backup</option>
-										<option value="4"> Incremental Backup</option>
-										<option value="5"> Verify Backup</option>
+										<option value="0"> 전체 백업유형</option>
+										<option value="3"> Backup Full</option>
+										<option value="4"> Backup Incremental</option>
+										<option value="5"> Backup Verify</option>
 									</select>
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">

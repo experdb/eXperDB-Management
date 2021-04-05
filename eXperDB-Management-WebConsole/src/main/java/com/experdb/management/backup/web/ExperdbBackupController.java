@@ -67,6 +67,20 @@ public class ExperdbBackupController {
 	}
 	
 	/**
+	 * 복구이력 View page
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/experdb/restoreHistory.do")
+	public ModelAndView restoreHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("eXperDB_Backup/restoreHistory");
+		return mv;
+	}
+	
+	
+	/**
 	 * 백업모니터링 View page
 	 * @param historyVO, request
 	 * @return ModelAndView

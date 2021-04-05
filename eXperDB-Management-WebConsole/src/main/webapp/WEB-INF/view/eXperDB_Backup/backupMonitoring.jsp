@@ -35,7 +35,6 @@
 <script>
 
 
-var dataSearch = 0;
 var progress = 0;
 var jobend = 0;
 
@@ -269,6 +268,9 @@ function fn_jobCheck(jobend){
 			}
 		},
 		success : function(data) {
+			//5 -> Active
+			//else -> Ready
+			
 			 if(data[0].jobstatus == 5){ 		
 				 if(dataSearch == 0){
 					monitoringData.clear().draw();
@@ -277,7 +279,7 @@ function fn_jobCheck(jobend){
 				 }
 				 
 				 fn_selectJobId();
-				setTimeout(fn_selectJobEnd, 1000); 
+				fn_selectJobEnd();
 
 			}else{
 				if(jobend == 1){

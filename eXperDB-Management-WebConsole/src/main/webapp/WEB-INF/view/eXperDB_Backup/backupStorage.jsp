@@ -51,20 +51,35 @@ function fn_init() {
 		columns : [
 		{data : "path", className : "dt-center", defaultContent : ""},	
 		{data : "type", className : "dt-center", defaultContent : ""},	
-		{data : "rJobCount", className : "dt-center", defaultContent : ""},	
-		{data : "wJobCount", className : "dt-center", defaultContent : ""},
+		/* {data : "rJobCount", className : "dt-center", defaultContent : ""},	
+		{data : "wJobCount", className : "dt-center", defaultContent : ""}, */
 		{data : "totalSize", className : "dt-center", defaultContent : ""},			
 		{data : "freeSize", className : "dt-center", defaultContent : ""},
 		{data : "diskUsage", 
 			render : function(data, type, full, meta) {
-				var html = '';											
-				html += "<div class='progress progress-xl'>";
+				var html = '';		
+				
 				 if(full.diskUsage <= 70){
-					 html += "	<div class='progress-bar bg-primary progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>";	
+					 html += "<div class='d-flex justify-content-between mt-2'>"
+					 html += "<small>사용량</small>"
+					 html += "<small>"+full.diskUsage+"%</small>"
+					 html += "</div>"
+					 html += "<div class='progress progress-lg mt-2'>";
+					 html += "	<div class='progress-bar bg-primary progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='"+ full.diskUsage+"' aria-valuemin='0' aria-valuemax='100'>";	
 				} else if(71<full.diskUsage && full.diskUsage<89){
-					html += "	<div class='progress-bar bg-warning progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>";	
+					html += "<div class='d-flex justify-content-between mt-3'>"
+				    html += "<small>사용량</small>"
+					html += "<small>"+full.diskUsage+"%</small>"
+					html += "</div>"
+					html += "<div class='progress progress-lg mt-3'>";
+					html += "	<div class='progress-bar bg-warning progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='"+ full.diskUsage+"' aria-valuemin='0' aria-valuemax='100'>";	
 				} else if(full.diskUsage >= 90){
-					html += "	<div class='progress-bar bg-danger progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>";	
+					html += "<div class='d-flex justify-content-between mt-4'>"
+				    html += "<small>사용량</small>"
+				    html += "<small>"+full.diskUsage+"%</small>"
+				    html += "</div>"
+					html += "<div class='progress progress-lg mt-4'>";
+					html += "	<div class='progress-bar bg-danger progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='"+ full.diskUsage+"' aria-valuemin='0' aria-valuemax='100'>";	
 				}	 
 				html += full.diskUsage+"%"
 				html += "</div>";
@@ -80,8 +95,8 @@ function fn_init() {
 	bckStorageList.tables().header().to$().find('th:eq(3)').css('min-width');
 	bckStorageList.tables().header().to$().find('th:eq(4)').css('min-width');
     bckStorageList.tables().header().to$().find('th:eq(5)').css('min-width');
-	bckStorageList.tables().header().to$().find('th:eq(6)').css('min-width');
-	bckStorageList.tables().header().to$().find('th:eq(7)').css('min-width');
+	/* bckStorageList.tables().header().to$().find('th:eq(6)').css('min-width');
+	bckStorageList.tables().header().to$().find('th:eq(7)').css('min-width'); */
 	
     $(window).trigger('resize'); 
 	
@@ -337,8 +352,8 @@ function fnc_confirmMultiRst(gbn){
 														<tr class="bg-info text-white">
 															<th width="300">Backup Destination</th>
 															<th width="50">Type</th>
-															<th width="50">Running Job Count</th>
-															<th width="50">Waiting Job Count</th>															
+															<!-- <th width="50">Running Job Count</th>
+															<th width="50">Waiting Job Count</th>	 -->														
 															<th width="100">Total Size</th>
 															<th width="50">Free Size</th>
 															<th width="50">Use(%)</th>

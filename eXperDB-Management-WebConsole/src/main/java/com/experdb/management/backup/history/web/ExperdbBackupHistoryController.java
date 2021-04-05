@@ -28,7 +28,7 @@ public class ExperdbBackupHistoryController {
 	
 	
 	/**
-	 * JobHistory 리스트 조회
+	 * JobHistory 백업히스토리 리스트 조회
 	 * @param 
 	 * @return List<Map<String, Object>>
 	 */
@@ -73,6 +73,91 @@ public class ExperdbBackupHistoryController {
 			param.put("status", request.getParameter("status"));
 			
 			resultSet = experdbBackupHistoryService.selectJobHistoryList(param);
+		
+			for(int i=0; i<resultSet.size(); i++){
+				Date startDate = new Date(Long.parseLong(resultSet.get(i).getExecutetime())* 1000L);
+				Date endDate = new Date(Long.parseLong(resultSet.get(i).getFinishtime())* 1000L);
+				
+				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String startTime = transFormat.format(startDate);	
+				String endTime = transFormat.format(endDate);	
+				
+				String reduceTime;
+				
+				long diff = endDate.getTime() -  startDate.getTime();
+				long diffSeconds = diff / 1000 % 60;  
+				long diffMinutes = diff / (60 * 1000) % 60; 
+				long diffHours = diff / (60 * 60 * 1000);       
+				
+				reduceTime = (String.format("%02d", diffHours)+":"+String.format("%02d", diffMinutes)+":"+String.format("%02d", diffSeconds));
+				
+				String dataSize = CmmnUtil.bytes2String(resultSet.get(i).getWritedata()*1024);
+				
+				resultSet.get(i).setDatasize(dataSize);
+				
+				resultSet.get(i).setExecutetime(startTime);
+				resultSet.get(i).setFinishtime(endTime);
+				resultSet.get(i).setReducetime(reduceTime);
+
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultSet;
+	}
+	
+	
+	
+	/**
+	 * JobHistory 복구히스토리 리스트 조회
+	 * @param 
+	 * @return List<Map<String, Object>>
+	 */
+	@RequestMapping(value="/experdb/restoreJobHistoryList.do")
+	@ResponseBody
+	public List<BackupJobHistoryVO> restoreJobHistoryList(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
+		List<BackupJobHistoryVO> resultSet = null;
+
+		try {
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0125_01");
+			accessHistoryService.insertHistory(historyVO);*/
+			
+			Map<String, Object> param = new HashMap<>();
+			DateFormat _dateSDF = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar cal = Calendar.getInstance();
+			
+			System.out.println("startDate : " + request.getParameter("startDate"));
+			
+			String stDate = request.getParameter("startDate");
+			String edDate = request.getParameter("endDate");
+			Date _sDate = _dateSDF.parse(stDate);
+			Date _eDate = _dateSDF.parse(edDate);
+			
+			cal.setTime(_eDate);
+			cal.add(Calendar.DATE, 1);
+			
+			long sDate = _sDate.getTime()/1000;
+			long eDate = cal.getTimeInMillis()/1000;
+			
+			System.out.println("sDate : " + sDate);
+			System.out.println("eDate : " + eDate);
+			
+			param.put("startDate", sDate);
+			param.put("endDate", eDate);
+			
+			System.out.println("server = "+request.getParameter("server").replace(".", "").trim());
+			
+			param.put("server", request.getParameter("server").replace(".", "").trim());
+			param.put("type", request.getParameter("type"));
+			param.put("status", request.getParameter("status"));
+			
+			resultSet = experdbBackupHistoryService.selectRestoreJobHistoryList(param);
 		
 			for(int i=0; i<resultSet.size(); i++){
 				Date startDate = new Date(Long.parseLong(resultSet.get(i).getExecutetime())* 1000L);
