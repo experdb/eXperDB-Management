@@ -102,7 +102,6 @@ function fn_init() {
 		paging : true,
 		lengthChange: false,
 		deferRender : true,
-		info : false,
 		bSort : false,
 		columns : [
 		{
@@ -474,7 +473,7 @@ function fn_searchHistory(){
 														<th width="50">Status</th>
 														<th width="80">대상서버</th>
 														<th width="80">Recovery Point</th>
-														<th width="80">백업유형</th>															
+														<th width="80">Restore 유형</th>															
 														<th width="60">수행시작일시</th>
 														<th width="60">수행종료일시</th>
 														<th width="60">수행시간</th>

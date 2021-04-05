@@ -342,26 +342,32 @@ function fn_nodeRegPopup() {
  * node update popup
  ******************************************************** */
  function fn_nodeModiPopup() {
-	$.ajax({
-		url : "/experdb/backupNodeInfo.do",
-		type : "post",
-		data : {
-			path : NodeList.row('.selected').data().ipadr
-		}
-	})
-	.done (function(result){
-		fn_nodeModiReset(result);
-		$("#pop_layer_popup_backupNodeReg").modal("show");
-	})
-	.fail (function(xhr, status, error){
-		if(xhr.status == 401) {
-			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-		} else if(xhr.status == 403) {
-			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-		} else {
-			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-		}
-	})
+	 var data = NodeList.rows('.selected').data();
+	 if(data.length<1){
+		showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	 }else{		 
+		$.ajax({
+			url : "/experdb/backupNodeInfo.do",
+			type : "post",
+			data : {
+				path : NodeList.row('.selected').data().ipadr
+			}
+		})
+		.done (function(result){
+			fn_nodeModiReset(result);
+			$("#pop_layer_popup_backupNodeReg").modal("show");
+		})
+		.fail (function(xhr, status, error){
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		})
+	 }
 }
 
  /* ********************************************************
@@ -657,7 +663,7 @@ function fn_nodeRegPopup() {
 			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else if(jobExist!= 1){
-			showSwalIcon('적용된 스케줄이 없습니다', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('적용된 정책이 없습니다', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
 			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
@@ -859,7 +865,7 @@ table.dataTable.ccc thead th{
 								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										백업 스토리지
+										백업 Storage
 									</div>
 									<div class="col-2" style="padding-left: 0px;">
 										<input type="text" id="bckStorageType" name = "bckStorageType" class="form-control form-control-sm"  style="height: 40px; background-color:#ffffffdd;" readonly/>

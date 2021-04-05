@@ -296,10 +296,10 @@
 			<div class="modal-body" id="nodeRegPopupDiv" style="margin-bottom:-30px;">
 			<div id="loader"><div class="flip-square-loader mx-autor" style="border: 0px !important;z-index:99999; position:absolute; transform:translate(250%, 250%); size:150%;"></div></div>
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Reg" style="padding-left:5px;">
-					백업 노드 등록
+					대상 서버 등록
 				</h5>
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Modi" style="padding-left:5px;" >
-					백업 노드 수정
+					대상 서버 수정
 				</h5>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="insRegForm">
