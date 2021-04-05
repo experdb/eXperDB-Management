@@ -25,14 +25,14 @@ public class Job {
 
 			System.out.println("Job Delete CMD = " + strCmd);
 		
-			result = cmmUtil.execute(strCmd);
+			result = cmmUtil.execute(strCmd,"job");
 			
 			if (result.get("RESULT_CODE").equals(0)) {
 
 				System.out.println("Job Delete Success ");
 				 try {
 					 	String fileName = ipadr.toString().replace(".", "_").trim()+".xml";				 	
-					 	result = cmmUtil.execute("rm -rf "+ServiceContext.getInstance().getHomePath()+"/bin/jobs/"+fileName);
+					 	result = cmmUtil.execute("rm -rf "+ServiceContext.getInstance().getHomePath()+"/bin/jobs/"+fileName,"job");
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

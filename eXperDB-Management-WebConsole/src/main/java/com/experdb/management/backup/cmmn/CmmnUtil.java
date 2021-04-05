@@ -97,12 +97,13 @@ public class CmmnUtil {
 	 */
 
 	@SuppressWarnings("unchecked")
-	public JSONObject execute(String command) throws FileNotFoundException, IOException {
+	public JSONObject execute(String command, String type) throws FileNotFoundException, IOException {
 
 		JSONObject result = new JSONObject();
 		String output = "";
 		String validateOutput = "";
-
+		String validateCifsOutput = "";
+		
 		try {
 			getChannel();
 
@@ -121,78 +122,28 @@ public class CmmnUtil {
 			byte[] buf = new byte[1024];
 			int length;
 				
+
 			while ((length = in.read(buf)) != -1) {
 				output += new String(buf, 0, length);
 				validateOutput = new String(buf, 0, length);
-				/*System.out.println(length);
-				 System.out.println("=== command result : " + new
-				 String(buf,0,length));*/
 			}
-
-			// Invalid 형태이면
-			if (output.trim().matches(".*Invalid.*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", output.trim());
-				System.out.println("Invalid command : " + output.trim());
-				// invalid 형태이면
-			} else if (output.trim().matches(".*invalid.*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", output.trim());
-				System.out.println("invalid command : " + output.trim());
-				// Failed 형태이면
-			} else if (output.trim().matches(".*Failed.*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", output.trim());
-				System.out.println("Failed command : " + output.trim());
-			} else if (validateOutput.trim().matches(".*NT_STATUS_LOGON_FAILURE.*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", " Invalid username/password; logon denied");
-				System.out.println("Failed command : " + output.trim());
-			} else if (validateOutput.trim().matches(".*NT_STATUS_BAD_NETWORK_NAME*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", "NT_STATUS_BAD_NETWORK_NAME");
-				System.out.println("Failed command : " + output.trim());
-			}else if (validateOutput.trim().matches(".*NT_STATUS_IO_TIMEOUT*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", "NT_STATUS_IO_TIMEOUT");
-				System.out.println("Failed command : " + output.trim());
-			}else if (validateOutput.trim().matches(".*NT_STATUS_UNSUCCESSFUL*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", "NT_STATUS_UNSUCCESSFUL");
-				System.out.println("Failed command : " + output.trim());
-			}else if (validateOutput.trim().matches(".*32.*")) {
-				result.put("RESULT_CODE", 1);
-				System.out.println("Failed command : " + command);
-			}else if (validateOutput.trim().matches(".*0.*") && command.matches(".*umount.*")) {
-				result.put("RESULT_CODE", 0);
-				result.put("RESULT_DATA", "NFS UNMOUNT SUCCESS");
-				System.out.println(command);
-				System.out.println("Result command : NFS UNMOUNT SUCCESS");
-			}else if (validateOutput.trim().matches(".*0.*") && command.matches(".*mount.*"))  {
-				result.put("RESULT_CODE", 0);
-				result.put("RESULT_DATA", "NFS MOUNT SUCCESS");
-				System.out.println(command);
-				System.out.println("Result command : NFS MOUNT SUCCESS");
-			//JOB등록실패	
-			}else if (output.trim().matches(".*formatisnot.*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", output.trim());
-				System.out.println("invalid command : The file format is not correct.");
-			//JOB등록실패	
-			}else if (output.trim().matches(".*notexis.*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", output.trim());
-				System.out.println("invalid command : File does not exist." );
-			//JOB등록실패	
-			}else if (output.trim().matches(".*unreachable.*")) {
-				result.put("RESULT_CODE", 1);
-				result.put("RESULT_DATA", output.trim());
-				System.out.println("invalid command : Verify that the node is valid and can be reached, and then try again");
-			}else {
-				result.put("RESULT_CODE", 0);
-				result.put("RESULT_DATA", output.trim());
-				System.out.println("Result command : " + output.trim());
+			
+			
+			if(type.equals("cifs")){
+				System.out.println("CIFS Validation");
+				result = ResultCode.cifsResultCode(output);
+			}else if(type.equals("nfs")){
+				System.out.println("NFS Validation");
+				result = ResultCode.nfsResultCode(validateOutput, command);
+			}else if(type.equals("node")){
+				System.out.println("NODE Validation");
+				result = ResultCode.nodeResultCode(output);
+			}else if(type.equals("job")){
+				System.out.println("JOB Validation");
+				result = ResultCode.jobResultCode(output);
 			}
+			
+		
 
 		} catch (JSchException e) {
 			e.printStackTrace();
@@ -250,7 +201,7 @@ public class CmmnUtil {
 			
 			try {
 				String strCmd = "echo -e '"+password+"'|/opt/Arcserve/d2dserver/bin/d2dutil --encrypt";
-				result = cmmUtil.execute(strCmd);
+				result = cmmUtil.execute(strCmd,"password");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -260,7 +211,7 @@ public class CmmnUtil {
 	 	
 		 /**
 			 * BackupLoaction Free
-			 * @param  password
+			 * @param  location
 			 * @return 
 			 */
 			public static JSONObject backupLocationFreeSize(String location) {
@@ -272,7 +223,7 @@ public class CmmnUtil {
 				
 				try {
 					String strCmd = "df -B1 --output=avail '"+location+"' | tail -n 1";
-					result = cmmUtil.execute(strCmd);			
+					result = cmmUtil.execute(strCmd, "");			
 					// freeSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));				
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -295,7 +246,7 @@ public class CmmnUtil {
 				
 				try {
 					String strCmd = "df -B1 --output=size '"+location+"' |tail -n 1";
-					result = cmmUtil.execute(strCmd);									
+					result = cmmUtil.execute(strCmd, "");									
 					// totalSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -309,7 +260,7 @@ public class CmmnUtil {
 				
 				try{
 					String strCmd = "find " + location + " -maxdepth 0";
-					result = cmmUtil.execute(strCmd);
+					result = cmmUtil.execute(strCmd, "");
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -335,7 +286,7 @@ public class CmmnUtil {
 				try {
 					cmd = "cd " + path + ";"+ "./d2djob --run='"+ jobname +"' --jobtype=" + jobtype;
 					System.out.println(cmd);
-					result = cmmUtil.execute(cmd);			
+					result = cmmUtil.execute(cmd,"job");			
 					// freeSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));				
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -393,7 +344,7 @@ public class CmmnUtil {
 				try {
 					cmd = "cd " + path + ";"+ "./d2djob --import="+jobPath+"/"+targetMachine.getName().replace(".", "_").trim()+".xml";
 					System.out.println(cmd);
-					result = cmmUtil.execute(cmd);			
+					result = cmmUtil.execute(cmd,"job");			
 			
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -411,7 +362,7 @@ public class CmmnUtil {
 				try{
 					String cmd = "cd " + d2dhome + "; mkdir jobs ;"+ "chmod 777 -R " +path;
 					System.out.println("Create Dir = "+cmd);
-					cmmUtil.execute(cmd);
+					cmmUtil.execute(cmd,"job");
 					
 					return true;
 				}catch(Exception e){

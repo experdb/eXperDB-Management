@@ -49,7 +49,7 @@ public class Node {
 
 			System.out.println("노드 등록 명령어 = " + strCmd);
 		
-			result = cmmUtil.execute(strCmd);
+			result = cmmUtil.execute(strCmd,"node");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,7 +92,7 @@ public class Node {
 
 			System.out.println("노드 수정 명령어 = " + strCmd);
 		
-			result = cmmUtil.execute(strCmd);
+			result = cmmUtil.execute(strCmd,"node");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,13 +127,13 @@ public class Node {
 				String delCmd = "rm -rf "+ServiceContext.getInstance().getHomePath()+"/bin/jobs/"+xmlFile;
 				String strCmd = "cd " + path + ";" + cmd + ";" + delCmd;
 				System.out.println("노드/파일 삭제  명령어 = " + strCmd);
-				result = cmmUtil.execute(strCmd);
+				result = cmmUtil.execute(strCmd,"node");
 			}else{
 				String path = "/opt/Arcserve/d2dserver/bin";
 				String cmd = "./d2dnode --delete=" + host;
 				String strCmd = "cd " + path + ";" + cmd;
 				System.out.println("노드 삭제 명령어 = " + strCmd);
-				result = cmmUtil.execute(strCmd);
+				result = cmmUtil.execute(strCmd,"node");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
