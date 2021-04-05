@@ -45,7 +45,9 @@ public class AgentSetting {
 		String strDatabasePassword = "";
 		String strAgentIp = "";
 		String strAgentPort = "";
-
+		
+		String strAgentPath = "";
+		
 	//	String strRootPwd = "";
 	//	String salt_value = "";
 		
@@ -73,6 +75,12 @@ public class AgentSetting {
 		if(strAgentPort.equals("")) {
 			strAgentPort = "9002";
 		}
+
+		System.out.println("agent path :(/app/eXperDB-Proxy-Agent/bin)");
+		strAgentPath = scan.nextLine();
+		if(strAgentPath.equals("")) {
+			strAgentPath = "/app/eXperDB-Proxy-Agent/bin";
+		} 
 		/////////////////////////////////////////////////////////////////////
 		
 		//Repository db 설정
@@ -93,19 +101,19 @@ public class AgentSetting {
 		
 		System.out.println("Repository database Port(5432) :");
 		strDatabasePort = scan.nextLine();
-		if(strAgentPort.equals("")) {
+		if(strDatabasePort.equals("")) {
 			strDatabasePort = "5432";
 		}
 
 		System.out.println("Repository database Name(experdb) :");
 		strDatabaseName = scan.nextLine();
-		if(strAgentPort.equals("")) {
+		if(strDatabaseName.equals("")) {
 			strDatabaseName = "experdb";
 		}
 		
 		System.out.println("Repository database.username(experdb) :");
 		strDatabaseUsername = scan.nextLine();
-		if(strAgentPort.equals("")) {
+		if(strDatabaseUsername.equals("")) {
 			strDatabaseUsername = "experdb";
 		}
 		///////////////////////////////////////////////////
@@ -124,21 +132,6 @@ public class AgentSetting {
 				break;
 			}
 		}
-		
-	//	System.out.println("Proxy server ROOT password :");
-	//	strRootPwd = scan.nextLine();
-
-	//	while (true) {
-	//		if(strRootPwd.equals("")) {
-	//			System.out.println("Please enter your Proxy server ROOT password. ");
-				
-	//			System.out.println("Proxy server ROOT password :");
-				
-	//			strRootPwd = scan.nextLine();
-	//		} else {
-	//			break;
-	//		}
-	//	}
 
 		//database 설정
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseName;
@@ -208,18 +201,7 @@ public class AgentSetting {
 
 			prop.setProperty("socket.server.port", strAgentPort);
 			prop.setProperty("agent.install.ip", strAgentIp);
-
-			//proxy server root pwd
-	//		if (salt_value == null || "".equals(salt_value)) {
-	//			salt_value = SHA256.getSalt();
-	//		}
-
-	//		if (strRootPwd != null && !"".equals(strRootPwd)) {
-	//			strRootPwd = SHA256.setSHA256(strRootPwd, salt_value);
-	//		}
-
-	//		prop.setProperty("proxy.root.pwd.salt", salt_value);
-	//		prop.setProperty("proxy.root.pwd", strRootPwd);
+			prop.setProperty("agent.path", strAgentPath);
 
 			try {
 				prop.store(new FileOutputStream(path + "context.properties"), "");

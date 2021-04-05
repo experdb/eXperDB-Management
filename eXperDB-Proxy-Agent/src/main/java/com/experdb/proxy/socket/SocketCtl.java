@@ -155,8 +155,6 @@ public class SocketCtl {
 		
 		BufferedInputStream bufferedinputstream = null;
 		try {
-			socketLogger.info("send : " + TranCodeType.DxT015_DL);
-			
 			//BufferedOutputStream out = new BufferedOutputStream( client.getOutputStream() );
 			
 			//OutputStream outputstream = client.getOutputStream();
@@ -172,11 +170,9 @@ public class SocketCtl {
             	 socketLogger.info(readByte + " " + readCount);
                  os.write(readByte, 0, readCount);
              }
-             socketLogger.info("out.flush() : " + TranCodeType.DxT015_DL);
+
              os.flush();
              os.close();
-
-
 		} catch(Exception e) {
 			e.printStackTrace();
 			errLogger.info(e.toString());
@@ -198,30 +194,27 @@ public class SocketCtl {
 		if (client == null) {
 			throw new Exception("TRConnector : Socket이 생성되지 않았습니다.");
 		}
-		
-		
-		
+
 		byte[]	buff = new byte[recvSize];
 		int		i = 0;
-		
 		try {
 			
-		while (true) {
-			if (i >= recvSize)
-				break;
+			while (true) {
+				if (i >= recvSize)
+					break;
+				
+				int		r = is.read(buff, i, recvSize - i);
+				
+				if (r == -1)
+					break;
+				
+				i	+= r;
+			}
 			
-			int		r = is.read(buff, i, recvSize - i);
+			if (i < recvSize) {
+				throw new Exception("수신오류");
+			}
 			
-			if (r == -1)
-				break;
-			
-			i	+= r;
-		}
-		
-		if (i < recvSize) {
-			throw new Exception("수신오류");
-		}
-		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -298,7 +291,7 @@ public class SocketCtl {
 	}
 	
 	
-	protected JSONObject DxT005ResultJSON(String strDxExCode
+	protected JSONObject PsP001ResultJSON(String strDxExCode
 			, String strResultCode
 			, String strErrCode, String strErrMsg) throws Exception{
 		JSONObject outputObj = new JSONObject();
@@ -309,81 +302,4 @@ public class SocketCtl {
 		
 		return outputObj;
 	}
-	
-	
-	protected JSONObject DxT006ResultJSON(List<LinkedHashMap<String, String>> resultData, String strDxExCode
-			, String strResultCode
-			, String strErrCode, String strErrMsg) throws Exception{
-		JSONObject outputObj = new JSONObject();
-		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
-		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-		outputObj.put(ProtocolID.RESULT_DATA, resultData);
-		
-		return outputObj;
-	}
-	
-	protected JSONObject DxT007ResultJSON(List<PgAuditVO> resultData, String strDxExCode
-			, String strResultCode
-			, String strErrCode, String strErrMsg) throws Exception{
-		JSONObject outputObj = new JSONObject();
-		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
-		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-		outputObj.put(ProtocolID.RESULT_DATA, resultData);
-		
-		return outputObj;
-	}
-	
-	protected JSONObject DxT007ResultJSON(PgAuditSettingVO resultData, String strDxExCode
-			, String strResultCode
-			, String strErrCode, String strErrMsg) throws Exception{
-
-		HashMap hp = new HashMap();
-		hp.put("log", resultData.getLog());
-		hp.put("log_level", resultData.getLog_level());
-		hp.put("log_relation", resultData.getLog_relation());
-		hp.put("log_catalog", resultData.getLog_catalog());
-		hp.put("log_parameter", resultData.getLog_parameter());
-		hp.put("log_statement_once", resultData.getLog_statement_once());
-		hp.put("log_roles", resultData.getRole());
-		
-		JSONObject outputObj = new JSONObject();
-		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
-		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-		outputObj.put(ProtocolID.RESULT_DATA, hp);
-		
-		return outputObj;
-	}
-	
-	protected JSONObject DxT013ResultJSON(String strDxExCode
-			, String strResultCode
-			, String strErrCode, String strErrMsg) throws Exception{
-		JSONObject outputObj = new JSONObject();
-		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
-		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-		
-		return outputObj;
-	}
-	
-	protected JSONObject DxT014ResultJSON(List<Map<String, Object>> resultData, String strDxExCode
-			, String strResultCode
-			, String strErrCode, String strErrMsg) throws Exception{
-		JSONObject outputObj = new JSONObject();
-		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
-		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-		outputObj.put(ProtocolID.RESULT_DATA, resultData);
-		
-		return outputObj;
-	}
-
-
 }
