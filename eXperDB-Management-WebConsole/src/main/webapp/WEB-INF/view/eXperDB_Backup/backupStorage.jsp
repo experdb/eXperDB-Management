@@ -61,21 +61,21 @@ function fn_init() {
 				
 				 if(full.diskUsage <= 70){
 					 html += "<div class='d-flex justify-content-between mt-2'>"
-					 html += "<small>사용량</small>"
+					 html += "<small></small>"
 					 html += "<small>"+full.diskUsage+"%</small>"
 					 html += "</div>"
 					 html += "<div class='progress progress-lg mt-2'>";
 					 html += "	<div class='progress-bar bg-primary progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='"+ full.diskUsage+"' aria-valuemin='0' aria-valuemax='100'>";	
 				} else if(71<full.diskUsage && full.diskUsage<89){
 					html += "<div class='d-flex justify-content-between mt-3'>"
-				    html += "<small>사용량</small>"
+				    html += "<small></small>"
 					html += "<small>"+full.diskUsage+"%</small>"
 					html += "</div>"
 					html += "<div class='progress progress-lg mt-3'>";
 					html += "	<div class='progress-bar bg-warning progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='"+ full.diskUsage+"' aria-valuemin='0' aria-valuemax='100'>";	
 				} else if(full.diskUsage >= 90){
 					html += "<div class='d-flex justify-content-between mt-4'>"
-				    html += "<small>사용량</small>"
+				    html += "<small></small>"
 				    html += "<small>"+full.diskUsage+"%</small>"
 				    html += "</div>"
 					html += "<div class='progress progress-lg mt-4'>";

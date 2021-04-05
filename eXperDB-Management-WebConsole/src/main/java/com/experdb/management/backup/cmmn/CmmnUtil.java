@@ -143,8 +143,6 @@ public class CmmnUtil {
 				result = ResultCode.jobResultCode(output);
 			}
 			
-		
-
 		} catch (JSchException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -13,7 +13,6 @@ public class ResultCode {
 		
 		String text = output.trim().replace("\n", "");
 
-		
 		  if (text.matches(".*NT_STATUS_LOGON_FAILURE.*") && text.matches(".*1.*")) {
 				result.put("RESULT_CODE", 1);
 				result.put("RESULT_DATA", " Invalid username/password; logon denied");

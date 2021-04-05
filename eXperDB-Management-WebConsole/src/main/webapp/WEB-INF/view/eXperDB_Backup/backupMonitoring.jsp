@@ -34,21 +34,36 @@
 
 <script>
 
-
-var progress = 0;
-var jobend = 0;
-
-var width=0;
 var monitoringData;
-var table_policy;
 var bckLogList;
+
+var jobend = 0;
+var dataSearch=0;
+
+
+/* ********************************************************
+ * 모니터링 프로세스
+ * 1. 실행 상태 주기적으로 조회 (1초마다)
+ * 2. status==5 일 경우, 상태변경 Active
+ * 2. Active일 경우
+ *		2-1) 실행 상태 주기적으로 조회 정지
+ *		2-2) 현재 수행중인 jobid 추출
+* 		2-3) 해당 jobid의 Activity로그 출력
+* 		2-4) ActivityLog 실시간 출력 (10초 마다)
+* 		2-5) 종료상태 체크 (History테이블 Insert 여부)
+* 		2-6) 종료상태 (1초마다)
+* 	3. 백업 종료(History테이블 조회 카운트 = 1)
+* 	4. status 상태 변경 Ready
+ ******************************************************* */
+
+
 
 /* ********************************************************
  * 페이지 시작시
  ******************************************************* */
 $(window.document).ready(function() {
 	fn_init();
-	fn_jobStatusList();		
+	fn_selectJob();		
 });
 
 function fn_init() {
@@ -153,19 +168,16 @@ function fn_init() {
 					if (full.type == 1) {
 					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 					html += "	<i class='fa fa-info-circle text-primary' /> </i>";
-					//html += '&nbsp;<spring:message code="common.success" /></i>';
 					html += "</div>";
 					// TYPE_ERROR
 					}else if(full.type == 2){
 						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 						html += "	<i class='fa fa-times-circle text-danger' /> </i>";
-						//html += '&nbsp;취소</i>';
 						html += "</div>";
 					// TYPE_WARNING
 					}  else if(full.type == 3){
 					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 					html += "	<i class='fa fa-warning text-warning' /> </i>";
-					//html += '&nbsp;<spring:message code="common.failed" /></i>';
 					html += "</div>";				
 					} 
 
@@ -200,6 +212,8 @@ $(function() {
 	    } );   
 	} );  
 
+
+
 function fn_runNow() {
 
 	var datas = monitoringData.row('.selected').length;
@@ -212,6 +226,37 @@ function fn_runNow() {
 	}
 	$("#pop_jobname").val(jobname);
 	$("#pop_runNow").modal("show");
+}
+
+
+
+// 초기, 1회 조회 (계속 리드로우 하기때문에)
+function fn_selectJob(){
+	
+	$.ajax({
+		url : "/experdb/jobStatusList.do",
+		data : {			
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(data) {
+			monitoringData.clear().draw();
+			monitoringData.rows.add(data).draw();
+			fn_jobStatusList();
+		}
+	});
+	$('#loading').hide();
 }
 
 
@@ -235,65 +280,32 @@ function fn_jobStatusList(){
 			}
 		},
 		success : function(data) {
-			monitoringData.clear().draw();
-			monitoringData.rows.add(data).draw();
-			bckLogList.clear().draw();
-			fn_jobCheck();
-		}
-	});
-	$('#loading').hide();
-}
 
-
-
-
-
-function fn_jobCheck(jobend){
-	
-	$.ajax({
-		url : "/experdb/jobStatusList.do",
-		data : {			
-		},
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		},
-		success : function(data) {
-			//5 -> Active
-			//else -> Ready
-			
-			 if(data[0].jobstatus == 5){ 		
-				 if(dataSearch == 0){
-					monitoringData.clear().draw();
-					monitoringData.rows.add(data).draw();
-					dataSearch++;
-				 }
+			// 2. status==5 일 경우, 상태변경 Active
+			 if(data[0].jobstatus == 5){
 				 
-				 fn_selectJobId();
-				fn_selectJobEnd();
-
-			}else{
-				if(jobend == 1){
-					monitoringData.clear().draw();
-					monitoringData.rows.add(data).draw();
-					bckLogList.clear().draw();
+				 jobend = 0;
+				 
+				 // 2-1) 실행 상태 주기적으로 조회 정지
+				 if(dataSearch == 0){
+						monitoringData.clear().draw();
+						monitoringData.rows.add(data).draw();
+						dataSearch++;
 				}
-				setTimeout(fn_jobCheck, 1000);
-			} 
+				// 2-2) 현재 수행중인 jobid 추출
+				fn_selectJobId();
+				// 2-4) 종료상태 체크 (History테이블 Insert 여부)
+				fn_selectJobEnd();
+				
+			 }
+		
+			// 1. 실행 상태 주기적으로 조회 (1초마다)
+			setTimeout(fn_jobStatusList, 1000);
+
 		}
 	});
 	$('#loading').hide();
 }
-
 
 
 function fn_selectJobEnd(){
@@ -314,11 +326,15 @@ function fn_selectJobEnd(){
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
-		success : function(data) {			
+		success : function(data) {		
+				// 3. 백업 종료(History테이블 조회 카운트 = 1)
 			 if(data == 1){		
 				 dataSearch = 0;
-				setTimeout(fn_jobCheck(1), 10000);
-			}else{				
+				 jobend = 1;
+				// 4. status 상태 변경 Ready	 
+				fn_selectJob();
+			}else{	
+				// 2-6) 종료상태 주기적으로 조회(1초마다)
 				setTimeout(fn_selectJobEnd, 10000);
 			} 						
 		}
@@ -345,29 +361,14 @@ function fn_selectJobId(){
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
-		success : function(data) {			
+		success : function(data) {
+			// 2-3) 해당 jobid의 Activity로그 출력
 			 fn_selectActivityLog(data);				
 		}
 	});
 	$('#loading').hide();	
 }
 
-
-function progressBar(){
-    var ele=document.getElementById('progressing');
-
-    var id =setInterval(frame, 3500);
- 
-    function frame(){
-        if(width>=99){
-            clearInterval(id);
-        }else{
-            width ++;
-            ele.style.width=width+"%";
-            ele.innerHTML=width+"%";
-        }
-    }
-}
 
 
 function fn_selectActivityLog(jobid) {
@@ -390,9 +391,14 @@ function fn_selectActivityLog(jobid) {
 			}
 		},
 		success : function(data) {
-			bckLogList.clear().draw();
-			bckLogList.rows.add(data).draw();		
-			setTimeout(fn_selectActivityLog(jobid), 10000);
+			if(jobend == 0){
+				bckLogList.clear().draw();
+				bckLogList.rows.add(data).draw();	
+				//2-3) ActivityLog 실시간 출력 (10초 마다)
+				setTimeout(fn_selectActivityLog(jobid), 10000)
+			}else{
+				bckLogList.clear().draw();
+			}
 		}
 	});
 }
