@@ -381,5 +381,53 @@
 		</if>
 		WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
 	</insert>
+
+	<select id="selectAgentCount" resultType="int">
+   		/**
+	 	* Query ID : selectAgentCount -에이전트 화면
+	 	* Description : proxy agent count
+	 	* Author :
+	 	**/
+		SELECT 
+       			COUNT(AGT_SN) AS CNT
+		  FROM 	T_PRY_AGT_I
+		WHERE   ISTCNF_YN = 'Y'
+    </select>
+
+	<select id="selectProxyAgentList" parameterType="proxyAgentVO"  resultType="proxyAgentVO">
+			/**
+			* Query ID : selectProxyAgentList
+			* Description : proxy agent 조회
+			* Author : 
+			**/
+	        SELECT 
+	               (ROW_NUMBER() OVER(ORDER BY A.AGT_SN, A.LST_MDF_DTM DESC)) AS ROWNUM
+	             , A.AGT_SN
+	             , A.IPADR
+	             , A.DOMAIN_NM
+	             , A.SOCKET_PORT
+	             , A.AGT_CNDT_CD
+	             , TO_CHAR(A.STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS STRT_DTM
+	             , A.SVR_USE_YN
+	             , A.AGT_VERSION
+	             , B.PRY_SVR_NM
+	             , B.MASTER_GBN
+	          FROM T_PRY_AGT_I A
+	               LEFT JOIN T_PRY_SVR_I B ON A.AGT_SN = B.AGT_SN AND A.IPADR = B.IPADR
+	         WHERE 1 = 1
 	
+	          <if test="sch_domain_nm != null and sch_domain_nm != '' ">
+	           AND A.DOMAIN_NM LIKE '%' || #{sch_domain_nm} || '%'
+	          </if>
+	               
+	          <if test="sch_ipadr != null and sch_ipadr != '' ">
+	           AND A.IPADR = #{sch_ipadr}
+	          </if>
+	               
+	          <if test="sch_svr_use_yn != null and sch_svr_use_yn != '' ">
+	           AND A.SVR_USE_YN = #{sch_svr_use_yn}
+	          </if>
+	
+	         ORDER BY A.AGT_SN, A.LST_MDF_DTM DESC
+	</select>
 </mapper>
