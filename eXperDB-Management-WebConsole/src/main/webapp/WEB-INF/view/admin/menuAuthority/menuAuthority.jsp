@@ -1294,12 +1294,28 @@ function fn_search(){
 								</tr>
 								<!-- Proxy -->
 								<tr>
-									<th scope="row" rowspan="2">
+									<th scope="row" rowspan="3">
 										<div class="inp_chk">
 											<input type="checkbox" id="VirtualIP" name="VirtualIP"/>
 											<label for="functions">Proxy</label>
 										</div>
 									</th>
+									<td colspan="2"><spring:message code="menu.proxy_agent" /> </td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001805" name="r_mnu_nm" value="MN0001805"/>
+											<label for="r_MN0001805"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001805" name="w_mnu_nm"/>
+											<label for="w_MN0001805"></label>
+										</div>
+									</td>
+								</tr>
+								
+								<tr>
 									<td colspan="2"><spring:message code="menu.proxy_monitoring" /> </td>
 									<td>
 										<div class="inp_chk">
@@ -1313,7 +1329,9 @@ function fn_search(){
 											<label for="w_MN0001801"></label>
 										</div>
 									</td>
+
 								</tr>
+																
 								<tr>
 									<td colspan="2"><spring:message code="menu.proxy_config" /> </td>
 									<td>
