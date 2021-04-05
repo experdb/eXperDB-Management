@@ -1,67 +1,105 @@
 --Proxy 메뉴 추가
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(43, 'MN00018', '프록시관리', '', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(nextval('q_mnu_i_01'), 'MN00018', '프록시관리', '', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(44, 'MN0001801', '프록시모니터링', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(nextval('q_mnu_i_01'), 'MN0001801', '프록시모니터링', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(45, 'MN0001802', '프록시설정관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(nextval('q_mnu_i_01'), 'MN0001802', '프록시설정관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(46, 'MN0001803', '프록시상태이력관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(nextval('q_mnu_i_01'), 'MN0001803', '프록시상태이력관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(47, 'MN0001804', '프록시변경이력관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+VALUES(nextval('q_mnu_i_01'), 'MN0001804', '프록시변경이력관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+
+INSERT INTO t_mnu_i
+(mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
+VALUES(nextval('q_mnu_i_01'), 'MN0001805', '프록시관리에이전트', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+
 
 
 -- 기본 사용자 Proxy 메뉴 권한 추가 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(85, 'admin', 43, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+select nextval('q_usrmnuaut_i_01'), 'admin',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN00018' AND mnu_nm = '프록시관리'),
+       'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(86, 'admin', 44, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+select nextval('q_usrmnuaut_i_01'), 'admin',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001801' AND mnu_nm = '프록시모니터링'),
+       'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(87, 'admin', 45, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+select nextval('q_usrmnuaut_i_01'), 'admin',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001802' AND mnu_nm = '프록시설정관리'),
+       'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(88, 'admin', 46, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+select nextval('q_usrmnuaut_i_01'), 'admin',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001803' AND mnu_nm = '프록시상태이력관리'),
+        'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(89, 'admin', 47, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+select nextval('q_usrmnuaut_i_01'), 'admin',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001804' AND mnu_nm = '프록시변경이력관리'),
+        'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(90, 'experdb', 43, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+select nextval('q_usrmnuaut_i_01'), 'admin',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001805' AND mnu_nm = '프록시관리에이전트'),
+        'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+     
+INSERT INTO t_usrmnuaut_i
+(usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
+select nextval('q_usrmnuaut_i_01'), 'experdb',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN00018' AND mnu_nm = '프록시관리'),
+       'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+
+ 
+INSERT INTO t_usrmnuaut_i
+(usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
+select nextval('q_usrmnuaut_i_01'), 'experdb',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001801' AND mnu_nm = '프록시모니터링'),
+       'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+
+       
+INSERT INTO t_usrmnuaut_i
+(usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
+select nextval('q_usrmnuaut_i_01'), 'experdb',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001802' AND mnu_nm = '프록시설정관리'),
+       'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(91, 'experdb', 44, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+select nextval('q_usrmnuaut_i_01'), 'experdb',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001803' AND mnu_nm = '프록시상태이력관리'),
+        'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(92, 'experdb', 45, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+select nextval('q_usrmnuaut_i_01'), 'experdb',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001804' AND mnu_nm = '프록시변경이력관리'),
+        'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(93, 'experdb', 46, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
-
-INSERT INTO t_usrmnuaut_i
-(usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(94, 'experdb', 47, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
-
-
+select nextval('q_usrmnuaut_i_01'), 'experdb',
+       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001805' AND mnu_nm = '프록시관리에이전트'),
+        'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+   
 --접근이력코드 등록
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
@@ -119,6 +157,14 @@ VALUES('TC0001', 'DX-T0160_02', 'Proxy 모니터링 - config 파일 조회', 'Y'
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
 VALUES('TC0001', 'DX-T0160_03', 'Proxy 모니터링 - Log 파일 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Monitoring Log')
+
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0001', 'DX-T0161', 'Proxy 관리 에이전트 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Management Agent');
+
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0001', 'DX-T0161_01', 'Proxy 관리 에이전트  화면 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Management Agent');
 
 
 
