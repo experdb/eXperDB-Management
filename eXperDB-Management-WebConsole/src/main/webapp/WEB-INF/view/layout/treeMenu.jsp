@@ -152,6 +152,77 @@
 															'}';
 											}
 
+											
+											
+											//덤프관리 //////////////////////////////////////////////////////////////////
+											menuJson +=	',{' +
+															 '"text": "덤프관리",' +
+															 '"icon": "ti-files",' +
+															 '"id": "backup'+item.db_svr_id+'"';
+
+											if((aut.length != 0 && aut[index].bck_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].bck_hist_aut_yn == "Y")
+											 || (aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y")){
+												menuJson +=	', "nodes": [';
+
+												if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-cog",' +
+																	'"text": "<spring:message code="menu.backup_settings"/>",' +
+																	'"url": "/backup/dumpList.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "workList'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-history",' +
+																	'"text": "<spring:message code="menu.backup_history"/>",' +
+																	'"url": "/backup/dumpLogList.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "workLogList'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-calendar",' +
+																	'"text": "<spring:message code="menu.backup_scheduler"/>",' +
+																	'"url": "/dumpSchedulerView.do?db_svr_id='+item.db_svr_id+'&db_svr_nm='+item.db_svr_nm+'",' +
+																	'"id": "schedulerView'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-window-restore",' +
+																	'"text": "<spring:message code="restore.Dump_Recovery"/>",' +
+																	'"url": "/dumpRestore.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "dumpRestore'+item.db_svr_id+'"' +
+																'},';
+												}
+												
+												if(aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-history",' +
+																	'"text": "<spring:message code="restore.Recovery_history"/>",' +
+																	'"url": "/restoreDumpHistory.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "restoreHistory'+item.db_svr_id+'"' +
+																'}';
+												}
+
+												
+												//마지막 콤마 제거
+												if (menuJson.charAt(menuJson.length-1) == ",") {
+													menuJson = menuJson.substr(0, menuJson.length -1);
+												}
+
+												menuJson +=		']';
+											}
+
+											menuJson += '}';
+											////////////////////////////////////////////////////////////////////////////
+											
+								
+											
 											//백업관리 //////////////////////////////////////////////////////////////////
 											menuJson +=	',{' +
 															 '"text": "<spring:message code="menu.backup_management"/>",' +

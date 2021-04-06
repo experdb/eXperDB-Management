@@ -213,14 +213,14 @@ public class DatabaseTableInfo {
 					
 				//CUBRID
 				case "TC002207" :
-					String type = serverObj.get("OBJECT-TYPE").toString().toUpperCase();
+					String type = serverObj.get("OBJECT_TYPE").toString().toUpperCase();
 					String ObjectSql = null;
 					if(type.equals("TABLE")){
 						ObjectSql = "AND class_type NOT LIKE '%V%' ";
 					}else if(type.equals("VIEW")){
-						ObjectSql = "AND class_type LIKE '%VCLASS% ";
+						ObjectSql = "AND class_type LIKE '%VCLASS%' ";
 					}else{
-						ObjectSql = "AND class_type LIKE '%% ";
+						ObjectSql = "AND class_type LIKE '%%' ";
 					}
 					
 					sql= "SELECT class_name AS table_name, case when class_type='CLASS' then 'TABLE' when class_type='VCLASS' then 'VIEW' end AS class_type "
