@@ -114,22 +114,22 @@
  								var html = "";
  								
  								if (aut_id == "1") {
- 									html += '<div class="onoffswitch-scale">';
  									if(full.agt_cndt_cd == "TC001101"){
+ 										html += '<div class="onoffswitch-scale">';
  										html += '<input type="checkbox" name="agtCndtCd" class="onoffswitch-scale-checkbox" id="agtCndtCd'+ full.rownum +'" onclick="fn_use_agentChk('+ full.rownum +')" checked>';
+ 										html += '<label class="onoffswitch-scale-label" for="agtCndtCd'+ full.rownum +'">';
+ 	 									html += '<span class="onoffswitch-scale-inner"></span>';
+ 	 									html += '<span class="onoffswitch-scale-switch"></span></label>';
+
+ 		  								html += '<input type="hidden" name="act_agt_sn" id="act_agt_sn'+ full.rownum +'" value="'+ full.agt_sn +'"/>';
+ 		  								html += '<input type="hidden" name="act_ipadr" id="act_ipadr'+ full.rownum +'" value="'+ full.ipadr +'"/>';
+ 		  								html += '<input type="hidden" name="act_socket_port" id="act_socket_port'+ full.rownum +'" value="'+ full.socket_port +'"/>';
+ 		  								html += '<input type="hidden" name="act_agt_cndt_cd" id="act_agt_cndt_cd'+ full.rownum +'" value="'+ full.agt_cndt_cd +'"/>';
  									}else {
- 										html += '<input type="checkbox" name="agtCndtCd" class="onoffswitch-scale-checkbox" id="agtCndtCd'+ full.rownum +'" onclick="fn_use_agentChk('+ full.rownum +')" >';
- 									}
- 									html += '<label class="onoffswitch-scale-label" for="agtCndtCd'+ full.rownum +'">';
- 									html += '<span class="onoffswitch-scale-inner"></span>';
- 									html += '<span class="onoffswitch-scale-switch"></span></label>';
-
-	  									
-	  								html += '<input type="hidden" name="act_agt_sn" id="act_agt_sn'+ full.rownum +'" value="'+ full.agt_sn +'"/>';
-	  								html += '<input type="hidden" name="act_ipadr" id="act_ipadr'+ full.rownum +'" value="'+ full.ipadr +'"/>';
-	  								html += '<input type="hidden" name="act_socket_port" id="act_socket_port'+ full.rownum +'" value="'+ full.socket_port +'"/>';
-	  								html += '<input type="hidden" name="act_agt_cndt_cd" id="act_agt_cndt_cd'+ full.rownum +'" value="'+ full.agt_cndt_cd +'"/>';
-
+	 									html += "<div class='badge badge-pill badge-danger'>";
+ 	 									html += "	<i class='ti-close mr-2'></i>";
+ 	 									html += "	<spring:message code='schedule.stop' />";
+ 	 								}
  								} else {
  	  								if(full.agt_cndt_cd == "TC001101"){
  	 									html += "<div class='badge badge-pill badge-success'>";
@@ -293,7 +293,7 @@
 					return;
 				} else {
 					if (result == "success") {
-						fn_tot_select();
+						setTimeout(fn_agent_select, 3000);
 					} else {
 						validateMsg = '<spring:message code="eXperDB_proxy.msg11"/>';
 						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
