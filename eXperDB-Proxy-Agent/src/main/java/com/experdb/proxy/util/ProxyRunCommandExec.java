@@ -86,7 +86,7 @@ public class ProxyRunCommandExec extends Thread {
     				
     		p = runBuilder.start();
     				
-    		p.waitFor ();
+    	//	p.waitFor ();
 
     		if ( p.exitValue() != 0 ) {
     			BufferedReader out = new BufferedReader ( new InputStreamReader ( p.getInputStream() ) );

@@ -62,10 +62,11 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				switch(strDX_EX_CODE) {
 				//Database List
 				case TranCodeType.PsP001 :
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 					
 					PsP001 psP001 = new PsP001(client, is, os);
-					psP001.execute(strDX_EX_CODE, objSERVER_INFO);
+					psP001.execute(strDX_EX_CODE, jObj);
+		
+					break;
 				}
 				objSERVER_INFO = null;
 

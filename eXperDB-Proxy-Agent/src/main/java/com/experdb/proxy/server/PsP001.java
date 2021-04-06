@@ -57,9 +57,8 @@ public class PsP001 extends SocketCtl{
 */
 		try {
 			String proxyAgentCmd = "";
-			String proxySubAgentCmd = "";
+
 			String agtCndtCd = jObj.get(ProtocolID.AGT_CNDT_CD).toString();             //agent 실행 구분
-			String strResultSubMessge = "";
 
 			//scale 실행일 경우
 			if ("TC001101".equals(agtCndtCd)) {
@@ -68,21 +67,11 @@ public class PsP001 extends SocketCtl{
 				proxyAgentCmd = "sh startup.sh";
 			}
 
-			proxySubAgentCmd = "ps -ef | grep -v grep | grep com.experdb.proxy | wc -l";
-
 			ProxyRunCommandExec proxyExec = new ProxyRunCommandExec(proxyAgentCmd, agtCndtCd, 0);
 			proxyExec.start();
 
-			//실행 확인
-			ProxyRunCommandExec proxyExecWatch = new ProxyRunCommandExec(proxySubAgentCmd, agtCndtCd, 1);
-			proxyExecWatch.start();
-			
 			String retVal = proxyExec.call();
 			String strResultMessge = proxyExec.getMessage();
-
-			socketLogger.info("[RESULT] " + retVal);
-			socketLogger.info("[MSG] " + strResultMessge);
-			socketLogger.info("##### 결과 : " + retVal + " message : " +strResultMessge);	
 
 			strSuccessCode = "0";
 			strErrCode = "";
@@ -97,7 +86,7 @@ public class PsP001 extends SocketCtl{
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 		} catch (Exception e) {
-			errLogger.error("DxT036 {} ", e.toString());
+			errLogger.error("PsP001 {} ", e.toString());
 
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP001);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
