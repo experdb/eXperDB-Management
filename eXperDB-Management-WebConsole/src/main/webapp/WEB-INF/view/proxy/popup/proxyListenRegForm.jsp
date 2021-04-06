@@ -119,6 +119,25 @@ function fn_serverListTable_init() {
 		    return false;
 		});
 		
+		$.validator.addMethod("duplCheckListenerNm", function (str, element, param) {
+			var cnt = 0;
+		    var listLen = proxyListenTable.rows().data().length;
+		    var tblData = proxyListenTable.rows().data();
+		    for(var i=0; i< listLen; i++){
+		    	if(str==tblData[i].lsn_nm){
+		    		if($("#lstnReg_mode", "#insProxyListenForm").val()=="mod" && proxyListenTable.rows('.selected').indexes()[0] != i){
+		    			cnt++;
+		    		}else if($("#lstnReg_mode", "#insProxyListenForm").val() =="reg"){
+		    			cnt++;
+		    		}
+		    	}
+		    }
+		    if(cnt > 0){
+		    	return false;
+		    }
+		    return true;
+		});
+		
 		$("#ipadr_form").validate({
 	        rules: {
 	        	ipadr: {
@@ -152,7 +171,8 @@ function fn_serverListTable_init() {
 		$("#insProxyListenForm").validate({
 	        rules: {
 	        	lstnReg_lsn_nm: {
-					required:true
+					required:true,
+					duplCheckListenerNm : true
 				},
 				lstnReg_con_bind_ip: {
 					required: true,
@@ -164,9 +184,6 @@ function fn_serverListTable_init() {
 				},
 				lstnReg_lsn_desc: {
 					required:true
-				},
-				lstnReg_db_usr_id: {
-					required: true
 				},
 				lstnReg_db_nm: {
 					required: true
@@ -183,7 +200,8 @@ function fn_serverListTable_init() {
 	        },
 	        messages: {
 	        	lstnReg_lsn_nm: {
-					required: '<spring:message code="eXperDB_proxy.msg2"/>'
+					required: '<spring:message code="eXperDB_proxy.msg2"/>',
+					duplCheckListenerNm: '<spring:message code="errors.duplicate"/>'
 				},
 	        	lstnReg_con_bind_ip: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>',
@@ -194,9 +212,6 @@ function fn_serverListTable_init() {
 					validatorPort: '0~65535 사이의 숫자를 입력해야합니다.'
 				},
 				lstnReg_lsn_desc: {
-					required: '<spring:message code="eXperDB_proxy.msg2"/>'
-				},
-				lstnReg_db_usr_id: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>'
 				},
 				lstnReg_db_nm: {
@@ -354,7 +369,7 @@ function fn_serverListTable_init() {
 			validatorIpPortFormat: true,
 			messages: {
 				required: '<spring:message code="eXperDB_proxy.msg2"/>',
-				validatorIpPortFormat: '<spring:message code="errors.format" arguments="'+ 'IP주소 : port' +'"/>'
+				validatorIpPortFormat: '<spring:message code="errors.format" arguments="'+ 'IP : port' +'"/>'
 			}
 		});
 		
@@ -363,7 +378,7 @@ function fn_serverListTable_init() {
 			validatorPort: true,
 			messages: {
 				required: '<spring:message code="eXperDB_proxy.msg2"/>',
-				validatorPort: '0~65535 사이의 숫자를 입력해야합니다.'
+				validatorPort: '<spring:message code="eXperDB_proxy.msg13"/>',
 			}
 		});
 		
@@ -489,6 +504,10 @@ function fn_serverListTable_init() {
 		}
 			
 	}
+	/* 
+	function fn_change_con_bind_ip_sel(){
+		$("#lstnReg_con_bind_ip", "#insProxyListenForm").val($("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val());
+	} */
 </script>
 
 <div class="modal fade" id="pop_layer_ip_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; z-index: 1060;">
@@ -496,7 +515,7 @@ function fn_serverListTable_init() {
 		<div class="modal-content" style="width:1000px;">			 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					연결 DBMS 등록
+					<spring:message code="eXperDB_proxy.con_dbms_reg" />
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
@@ -505,7 +524,7 @@ function fn_serverListTable_init() {
 								<div class="form-group row">
 									<label for="com_max_clusters" class="col-sm-3 col-form-label pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										DBMS 접속주소(*)
+										<spring:message code="eXperDB_proxy.dbms_con_adr" />(*)
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control"  id="ipadr" name="ipadr" onchange="fn_change_ipadr();">
@@ -549,23 +568,33 @@ function fn_serverListTable_init() {
 						<input type="hidden" name="lstnReg_lsn_id" id="lstnReg_lsn_id"/>
 						<input type="hidden" name="lstnReg_db_id" id="lstnReg_db_id"/>
 						<input type="hidden" name="lstnReg_mode" id="lstnReg_mode"/>
+						<input type="hidden" name="lstnReg_db_usr_id" id="lstnReg_db_usr_id" value="reqmgr"/>
+						<input type="hidden" name="lstnReg_field_val" id="lstnReg_field_val"/>
+						<input type="hidden" name="lstnReg_field_nm" id=lstnReg_field_nm/>
 						<fieldset>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
-									<label for="lstnReg_lsn_nm" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="lstnReg_lsn_nm" class="col-sm-3 col-form-label-xsm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="eXperDB_proxy.basic_setting" />
+									</label>
+								</div>
+								<div class="form-group row">
+									<label for="lstnReg_lsn_nm" class="col-sm-2 col-form-label-sm pop-label-index">
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.listener_nm" />(*)
 									</label>
-
-									<div class="col-sm-4">
-										<input type="text" class="form-control form-control-xsm lstnReg_lsn_nm" autocomplete="off" maxlength="15" id="lstnReg_lsn_nm" name="lstnReg_lsn_nm" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()"  placeholder="15<spring:message code='message.msg188'/>" tabindex=1 />
+									<div class="col-sm-3">
+										<input type="text" class="form-control form-control-xsm lstnReg_lsn_nm" autocomplete="off" maxlength="15" id="lstnReg_lsn_nm" name="lstnReg_lsn_nm" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()"  placeholder="" tabindex=1 />
 									</div>
 									<label for="lstnReg_con_bind" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
+										<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.bind_ip_port" />(*)
 									</label>
-									<div class="col-sm-2_2">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_con_bind_ip" name="lstnReg_con_bind_ip" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()" placeholder="ip 주소 또는 *" tabindex=2 />
+									<div class="col-sm-3">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_bind_ip" id="lstnReg_con_bind_ip" tabindex=4 >
+											<option value="*">*</option>
+										</select>
 									</div>
 									<div class="col-sm-auto col-form-label-sm">
 										:
@@ -576,7 +605,7 @@ function fn_serverListTable_init() {
 								</div>
 								<div class="form-group row row-last">
 									<label for="lstnReg_lsn_desc" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.desc" />
 									</label>
 									<div class="col-sm-10">
@@ -587,66 +616,47 @@ function fn_serverListTable_init() {
 							<br/>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
-									<label for="lstnReg_db_nm" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="lstnReg_lsn_nm" class="col-sm-3 col-form-label-xsm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
+										Health Check
+									</label>
+								</div>
+								<div class="form-group row row-last">
+									<label for="lstnReg_db_nm" class="col-sm-2 col-form-label-sm pop-label-index">
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.database" />(*)
 									</label>
-									<div class="col-sm-4">
+									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" tabindex=4 >
 										</select>
 									</div>
-									<label for="lstnReg_db_usr_id" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="eXperDB_proxy.account" />(*)
-									</label>
-									<div class="col-sm-4">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_db_usr_id" name="lstnReg_db_usr_id" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
-									</div>
-								</div>
-								<div class="form-group row">
 									<label for="lstnReg_con_sim_query" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
+										<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.check_query" />(*)
 									</label>
-									<div class="col-sm-4">
+									<div class="col-sm-5">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_sim_query_sel" id="lstnReg_con_sim_query_sel" onchange="fn_change_sim_query_sel();"  tabindex=4 >
-											<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>
+											<option value=""><spring:message code="common.choice"/></option>
 											<c:forEach var="result" items="${simpleQueryList}">
 											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 											</c:forEach>
 										</select>
 									</div>
-									<div class="col-sm-6">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
-									</div>
-								</div>
-								<div class="form-group row row-last">
-									<label for="lstnReg_field_nm" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.position" /> --%>
-										필드명(*)
-									</label>
-									<div class="col-sm-4">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_field_nm" name="lstnReg_field_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
-									</div>
-									<label for="lstnReg_field_val" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.position" /> --%>
-										필드값(*)
-									</label>
-									<div class="col-sm-4">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_field_val" name="lstnReg_field_val" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
-									</div>
 								</div>
 							</div>
-							
 							<br/>
 							
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
+									<label for="lstnReg_lsn_nm" class="col-sm-2 col-form-label-xsm pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="eXperDB_proxy.con_dbms" />
+									</label>
+								</div>
+								<div class="form-group row">
 										<label for="com_db_svr_nm" class="col-sm-12 col-form-label-sm" style="margin-bottom:-50px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											DBMS
+											&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
+											<spring:message code="dbms_information.dbms_list" />
 										</label>
 									</div>
 									<div class="form-group row">

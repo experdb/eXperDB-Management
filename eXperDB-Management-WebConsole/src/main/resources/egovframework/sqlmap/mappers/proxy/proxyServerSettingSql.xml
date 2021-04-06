@@ -120,7 +120,17 @@
 				LST_MDFR_ID, 
 				LST_MDF_DTM 
 		FROM 	T_PRY_LSN_I
-		WHERE 	PRY_SVR_ID =#{pry_svr_id}
+		WHERE 	1=1
+		<if test='peer == null'>
+		AND 	PRY_SVR_ID =#{pry_svr_id}
+		</if>
+		<if test='peer != null and (peer eq "Y".toString())'>
+		AND 	PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID 
+								FROM 		T_PRY_GLB_I A 
+								INNER JOIN 	T_PRY_GLB_I B 
+								ON 			A.PEER_SERVER_IP = B.OBJ_IP
+	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id})
+		</if>
 	</select>
 	<select id="selectProxyVipConfList" resultType="proxyVipConfigVO">
         /**
@@ -141,7 +151,17 @@
 				LST_MDFR_ID, 
 				LST_MDF_DTM 
 		FROM 	T_PRY_VIPCNG_I
-		WHERE 	PRY_SVR_ID =#{pry_svr_id}
+		WHERE 1=1
+		<if test='peer == null'>
+		AND 	PRY_SVR_ID =#{pry_svr_id}
+		</if>
+		<if test='peer != null and (peer eq "Y".toString())'>
+		AND 	PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID AS PRY_SVR_ID
+								FROM 		T_PRY_GLB_I A 
+								INNER JOIN 	T_PRY_GLB_I B 
+								ON 			A.PEER_SERVER_IP = B.OBJ_IP
+	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id})
+		</if>
 	</select> 
 	<select id="selectDbmsList" resultType="hashMap">
 	 	/**

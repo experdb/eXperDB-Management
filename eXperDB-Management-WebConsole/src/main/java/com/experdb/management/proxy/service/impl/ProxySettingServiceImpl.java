@@ -89,14 +89,23 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		//VIP List 정보조회
 		List<ProxyVipConfigVO> vipConfigList = proxySettingDAO.selectProxyVipConfList(param);
 
-		//database 정보조회
+		//Proxy Listener database select box 생성 정보
 		List<Map<String, Object>> dbSelList = proxySettingDAO.selectDBSelList(param);
+		
+		param.put("peer", "Y");
+		//Peer Server VIP List 정보 조회 
+		List<ProxyVipConfigVO> peerVipConfigList = proxySettingDAO.selectProxyVipConfList(param);
+
+		//Peer Server Proxy Listener 정보 조회 
+		List<ProxyListenerVO> peerListenerList = proxySettingDAO.selectProxyListenerList(param);
 		
 		//json set
 		resultObj.put("global_info", globalInfo == null? null:globalInfo);
 		resultObj.put("listener_list", listenerList == null? null:listenerList);
 		resultObj.put("vipconfig_list", vipConfigList == null? null:vipConfigList);
 		resultObj.put("db_sel_list", dbSelList == null? null:dbSelList);
+		resultObj.put("peer_listener_list", peerListenerList == null? null:peerListenerList);
+		resultObj.put("peer_vipconfig_list", peerVipConfigList == null? null:peerVipConfigList);
 		
 		return resultObj;
 	}

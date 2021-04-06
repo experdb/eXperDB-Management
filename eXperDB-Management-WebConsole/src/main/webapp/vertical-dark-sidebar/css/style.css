@@ -15251,7 +15251,7 @@ a.close.disabled {
 
 .tooltip {
   position: absolute;
-  z-index: 1070;
+  z-index: 2070 !important;
   display: block;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";

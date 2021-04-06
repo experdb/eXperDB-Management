@@ -153,6 +153,10 @@
 		          $(element).addClass('form-control-danger');
 		        }
 			});
+		 
+		/*  $('[data-toggle="tooltip_priority"]').tooltip({
+				template: '<div class="tooltip tooltip-info tooltip_priority" role="tooltip" style="z-index: 1;"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+			}); */
 	});
 	/* ********************************************************
      * 우선순위가 가장 높은 걸 자동으로 Master로 변경, 그 외 State 모두 Backup으로 수정
@@ -168,6 +172,7 @@
 				maxindex = 0;
 			}else{
 				if(maxPriority < vipInstTable.row(i).data().priority){
+					
 					maxPriority = vipInstTable.row(i).data().priority;
 					maxindex = i;
 				}
@@ -245,6 +250,13 @@
 	}
 	function fn_change_v_ip_sel(){
 		$("#instReg_v_ip", "#insVipInstForm").val($("#instReg_v_ip_sel", "#insVipInstForm").val());
+		var tempData = selVipInstancePeerList;
+		var tempDataLen = tempData.length;
+		for(var i=0; i <tempDataLen ; i++){
+			if(tempData[i].v_ip == $("#instReg_v_ip_sel", "#insVipInstForm").val()){
+				$("#instReg_v_rot_id", "#insVipInstForm").val(tempData[i].v_rot_id);
+			}
+		}
 	}
 	
 </script>
@@ -265,14 +277,12 @@
 								<div class="form-group row">
 									<label for="instReg_v_ip" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="eXperDB_proxy.vip" />(*)
+										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.vip_tooltip" />'>
+										<spring:message code="eXperDB_proxy.vip" />/Prefix(*)
+										</span>
 									</label>
 									<div class="col-sm-3_75">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_ip_sel" id="instReg_v_ip_sel" onchange="fn_change_v_ip_sel();"  tabindex=4 >
-											<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>
-											<option value="192.168.50.115/32">192.168.50.115/32</option>
-											<option value="192.168.50.116/32">192.168.50.116/32</option>
-											<option value="10.0.2.15/32">10.0.2.15/32</option>
 										</select>
 									</div>
 									<div class="col-sm-3_75">
@@ -282,7 +292,9 @@
 								<div class="form-group row">
 									<label for="instReg_v_if_nm" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
+										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.vip_interface_tooltip" />'>
 										<spring:message code="eXperDB_proxy.vip_interface" />(*)
+										</span>
 									</label>
 									<div class="col-sm-3_75">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_if_nm_sel" id="instReg_v_if_nm_sel" onchange="fn_change_v_if_nm_sel();"  tabindex=4 >
@@ -298,7 +310,9 @@
 								<div class="form-group row">
 									<label for="instReg_state_nm" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
+										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.vip_state_tooltip" />'>
 										<spring:message code="eXperDB_proxy.vip_state" />(*)
+										</span>
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_state_nm" id="instReg_state_nm"  tabindex=4 >
@@ -308,7 +322,9 @@
 									</div>
 									<label for="instReg_priority" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
+										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.vip_priority_tooltip" />'>
 										<spring:message code="eXperDB_proxy.vip_priority" />(*)
+										</span>
 									</label>
 									<div class="col-sm-3">
 										<input type="number" class="form-control form-control-xsm instReg_priority" maxlength="20" id="instReg_priority" name="instReg_priority" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=5 />
@@ -317,18 +333,25 @@
 								<div class="form-group row row-last">
 									<label for="instReg_v_rot_id" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
+										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.vip_router_tooltip" />'>
 										<spring:message code="eXperDB_proxy.vip_router" />(*)
+										</span>
 									</label>
 									<div class="col-sm-3" id="div_min_data_del_term">
 										<input type="number" class="form-control form-control-xsm instReg_v_rot_id" maxlength="20" id="instReg_v_rot_id" name="instReg_v_rot_id" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=3 />
 									</div>
 									<label for="instReg_chk_tm" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
+										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.vip_check_tm_tooltip" />'>
 										<spring:message code="eXperDB_proxy.vip_check_tm" />(*)
+										</span>
 									</label>
-									<div class="col-sm-3">
-										<input type="number" class="form-control form-control-xsm instReg_chk_tm" maxlength="20" id="instReg_chk_tm" name="instReg_chk_tm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=6 />
+									<div class="col-sm-2">
+										<input type="number" class="form-control form-control-xsm instReg_chk_tm" maxlength="20" id="instReg_chk_tm" name="instReg_chk_tm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=6 /> 
 									</div>
+									<label class="col-sm-1 col-form-label-sm pop-label-index" style="padding-left: 0px;">
+									<spring:message code="eXperDB_proxy.sec" />
+									</label>
 								</div>
 							</div>
 							<br/>

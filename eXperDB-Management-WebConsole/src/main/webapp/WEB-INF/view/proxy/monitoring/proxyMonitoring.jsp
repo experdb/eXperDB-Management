@@ -1483,7 +1483,28 @@
 												</div>
 											</div> 
 										</div>
-
+										<div class="row">
+											<!-- monitoring  title -->
+											<div class="accordion_main accordion-multi-colored col-12" id="accordion_moni" role="tablist">
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="moni_div">
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<a data-toggle="collapse" href="#moni_sub" aria-expanded="true" aria-controls="moni_sub" onclick="fn_profileChk('moniTitleText')">
+																		<i class="mdi mdi-monitor-multiple"></i>
+																		<span class="menu-title">DB-Proxy 상태 정보</span>
+																		<i class="menu-arrow_user_af" id="moniTitleText" ></i>
+																	</a>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div id="moni_sub" class="collapse show row" role="tabpanel" aria-labelledby="moni_div" data-parent="#accordion_moni">
+										</div>
 										<div class="row">
 											<!-- 리스너정보 title -->
 											<div class="accordion_main accordion-multi-colored col-12" id="accordion_listner_his" role="tablist">
@@ -1501,7 +1522,7 @@
 															</div>
 															<div class="col-7">
 											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_listner_his_today"></li>
+																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_moni_today"></li>
 																</ol>
 															</div>
 														</div>
