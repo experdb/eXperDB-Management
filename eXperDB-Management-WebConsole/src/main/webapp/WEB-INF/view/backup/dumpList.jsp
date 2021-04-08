@@ -25,7 +25,7 @@
 <script type="text/javascript">
 	var tableRman = null;
 	var tableDump = null;
-	var selectChkTab = "rman";
+	var selectChkTab = "dump";
 	var searchInit = "";
 	var tabGbn = "${tabGbn}";
 	var bck_wrk_id_List = [];
@@ -36,23 +36,13 @@
 	var scheduleTable = null;
 	$(window).ready(function(){
 		//검색조건 초기화
-		selectInitTab(selectChkTab);
+		selectInitTab("dump");
 		
 		//스케줄 테이즐 setting
 		fn_init_schedule();
 
-			//조회
-		if(tabGbn != ""){
-			selectTab(tabGbn);
-		}else{
-			selectTab("rman");
-		}
 			
-		$('#rmanDataTable tbody').on('click','tr',function() {
-			var wrk_id_up = tableRman.row(this).data().wrk_id;
-			
-			fn_schdule_pop_List(wrk_id_up);
-		});
+		selectTab("dump");
 		
 		$('#dumpDataTable tbody').on('click','tr',function() {
 			var wrk_id_up = tableDump.row(this).data().wrk_id;
@@ -194,103 +184,11 @@
 	}
 
 	/* ********************************************************
-	 * Rman Data Table initialization
-	 ******************************************************** */
-	function fn_rman_init(){
-		tableRman = $('#rmanDataTable').DataTable({
-			scrollY: "300px",
-			scrollX : true,
-			searching : false,	
-			deferRender : true,
-			bSort: false,
-			columns : [
-						{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-						{data : "idx", className : "dt-center", defaultContent : ""},
-						{data : "wrk_nm", className : "dt-left", defaultContent : ""
-							,"render": function (data, type, full) {				
-								return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
-							}
-						},
-						{data : "wrk_exp",
-							render : function(data, type, full, meta) {
-								var html = '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
-								return html;
-							},
-							defaultContent : ""
-						},
-						{data: "bck_opt_cd_nm", className: "dt-center", defaultContent: "",
-							render : function(data, type, full, meta) {
-								var html = '';
-
-								if (full.bck_opt_cd == 'TC000301') {
-									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-									html += "	<i class='fa fa-paste mr-2 text-success'></i>";
-									html += '<spring:message code="backup_management.full_backup" />';
-									html += "</div>";									
-								} else if(full.bck_opt_cd == 'TC000302'){
-									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-									html += "	<i class='fa fa-comments-o text-warning'></i>";
-									html += '&nbsp;<spring:message code="backup_management.incremental_backup" />';
-									html += "</button>";
-								} else {
-									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-									html += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
-									html += '<spring:message code="backup_management.change_log_backup" />';
-									html += "</div>";
-								}
-
-								return html;
-							},
-
-						},
-						{data : "data_pth",
-							render : function(data, type, full, meta) {	 	
-								var html = '';					
-								html += '<span title="'+full.data_pth+'">' + full.data_pth + '</span>';
-								return html;
-							},
-							defaultContent : ""
-						},
-						{data : "bck_pth", className : "dt-left", defaultContent : ""
-							,"render": function (data, type, full) {
-								return '<span onClick=javascript:fn_rmanShow("'+full.bck_pth+'","'+full.db_svr_id+'"); data-toggle="modal" title="'+full.bck_pth+'" class="bold">' + full.bck_pth + '</span>';
-							}
-						},
-						{data : "frst_regr_id", className: "dt-center", defaultContent : ""},
-						{data : "frst_reg_dtm", className: "dt-center", defaultContent : ""},
-						{data: "lst_mdfr_id", className: "dt-center", defaultContent: ""}, 
-						{data: "lst_mdf_dtm", className: "dt-center", defaultContent: ""}, 
-						{data : "bck_wrk_id", defaultContent : "", visible: false }
-			],'select': {'style': 'multi'}
-		});
-
-		tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-		tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-		tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
-		tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-		tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '230px');
-		tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '230px');
-		tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-		tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '110px');  
-		tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-		tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-		tableRman.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
-
-		$(window).trigger('resize'); 
-	}
-
-	/* ********************************************************
 	 * 삭제 confirm
 	 ******************************************************** */
 	function fn_work_delete_confirm() {
 		var datas = null;
-
-		if(selectChkTab == "rman"){
-			datas = tableRman.rows('.selected').data();
-		} else {
 			datas = tableDump.rows('.selected').data();
-		}
 
 		bck_wrk_id_List = [];
 		wrk_id_List = [];
@@ -299,18 +197,10 @@
 			showSwalIcon('<spring:message code="message.msg16"/>', '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
-		
-		if(selectChkTab == "rman"){
-			for (var i = 0; i < datas.length; i++) {
-				bck_wrk_id_List.push( tableRman.rows('.selected').data()[i].bck_wrk_id);   
-				wrk_id_List.push( tableRman.rows('.selected').data()[i].wrk_id);   
-			}
-		} else {
 			for (var i = 0; i < datas.length; i++) {
 				bck_wrk_id_List.push( tableDump.rows('.selected').data()[i].bck_wrk_id);   
 				wrk_id_List.push( tableDump.rows('.selected').data()[i].wrk_id);   
 			}
-		}
 		
 		$.ajax({
 			url : "/popup/scheduleCheck.do",
@@ -340,12 +230,12 @@
 				}
 
 				confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
-
-				if(selectChkTab == "rman"){
+				// @@@@@@@@@@@@@@@@@@@@ //////////////////////////////////////////////////
+				/* if(selectChkTab == "rman"){
 					$('#con_multi_gbn', '#findConfirmMulti').val("del_rman");
-				} else {
+				} else { */
 					$('#con_multi_gbn', '#findConfirmMulti').val("del_dump");
-				}
+				// }
 
 				$('#confirm_multi_tlt').html(confile_title);
 				$('#confirm_multi_msg').html('<spring:message code="message.msg17" />');
@@ -381,12 +271,12 @@
 			success : function(result) {
 				if(result == true){
 					showSwalIcon('<spring:message code="message.msg18" />', '<spring:message code="common.close" />', '', 'success');
-					
-					if (gbn == "del_rman") {
+					// @@@@@@@@@@@@@@@@@@@@ //////////////////////////////////////////////////
+					/* if (gbn == "del_rman") {
 						fn_get_rman_list();
-					} else {
+					} else { */
 						fn_get_dump_list();
-					}
+					// }
 				}else{
 					msgVale = "<spring:message code='backup_management.dumpBck' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
@@ -404,14 +294,14 @@
 		var rowCnt = null;
 		
 		immediate_data = null;
-
-		if(selectChkTab == 'rman'){
+		// @@@@@@@@@@@@@@@@@@@@ //////////////////////////////////////////////////
+		/* if(selectChkTab == 'rman'){
 			datas = tableRman.rows('.selected').data();
 			rowCnt = tableRman.rows('.selected').data().length;
-		}else{
+		}else{ */
 			datas = tableDump.rows('.selected').data();
 			rowCnt = tableDump.rows('.selected').data().length;
-		}
+		// }
 
 		if(rowCnt <= 0){
 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
@@ -484,16 +374,9 @@
 		var datas = null;
 		var bck_wrk_id = "";
 		var wrk_id = "";
-		
-		if (selectChkTab == "rman") {
-			datas = tableRman.rows('.selected').data();
-			
-			reregUrl = "/popup/rmanRegReForm.do";
-		} else {
 			datas = tableDump.rows('.selected').data();
 			
 			reregUrl = "/popup/dumpRegReForm.do";
-		}
 		
 		if (datas.length <= 0) {
 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
@@ -502,14 +385,8 @@
 			showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'warning');
 			return;	
 		}
-		
-		if (selectChkTab == "rman") {
-			bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
-			wrk_id = tableRman.row('.selected').data().wrk_id;
-		} else {
 			bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
 			wrk_id = tableDump.row('.selected').data().wrk_id;
-		}
 			
 		$.ajax({
 			url : reregUrl,
@@ -536,16 +413,8 @@
 				
 				if (result.workInfo != null) {
 					fn_update_chogihwa(selectChkTab, result);
-
-					if (selectChkTab == "rman") {
-						$('#rman_call_gbn', '#search_rmanReForm').val("");
-
-						$('#pop_layer_mod_rman').modal("show");
-					} else {
 						$('#dump_call_gbn', '#search_dumpReForm').val("");
-						
 						$('#pop_layer_mod_dump').modal("show");
-					}
 				} else {
 					showSwalIcon('<spring:message code="info.nodata.msg" />', '<spring:message code="common.close" />', '', 'error');
 					return;
@@ -555,13 +424,13 @@
 	}
 </script>
 
-<%@include file="../cmmn/workRmanInfo.jsp"%>
+<%-- <%@include file="../cmmn/workRmanInfo.jsp"%> --%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
-<%@include file="../popup/rmanShow.jsp"%>
+<%-- <%@include file="../popup/rmanShow.jsp"%> --%>
 <%@include file="../popup/dumpShow.jsp"%>
-<%@include file="../popup/rmanRegForm.jsp"%>
+<%-- <%@include file="../popup/rmanRegForm.jsp"%> --%>
 <%@include file="../popup/dumpRegForm.jsp"%>
-<%@include file="../popup/rmanRegReForm.jsp"%>
+<%-- <%@include file="../popup/rmanRegReForm.jsp"%> --%>
 <%@include file="../popup/dumpRegReForm.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/scheduleWrkList.jsp"%>
@@ -625,18 +494,6 @@
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
-						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
-								<spring:message code="backup_management.rman_backup" />
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('dump');">
-								<spring:message code="backup_management.dumpBck"/>
-							</a>
-						</li>
-					</ul>
 
 					<!-- search param start -->
 					<div class="card">
@@ -646,15 +503,6 @@
 									<div class="input-group mb-2 mr-sm-2 col-sm-2">
 										<input hidden="hidden" />
 										<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
-									</div>
-		
-									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_rman">
-										<select class="form-control" name="bck_opt_cd" id="bck_opt_cd">
-											<option value=""><spring:message code="backup_management.backup_option" />&nbsp;<spring:message code="schedule.total" /></option>
-											<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
-											<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
-											<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
-										</select>
 									</div>
 		
 									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_dump" style="display:none;">
@@ -702,39 +550,6 @@
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">
-								<div class="col-12" id="rmanDataTableDiv">
- 									<div class="table-responsive">
-										<div id="order-listing_wrapper"
-											class="dataTables_wrapper dt-bootstrap4 no-footer">
-											<div class="row">
-												<div class="col-sm-12 col-md-6">
-													<div class="dataTables_length" id="order-listing_length">
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-	 								<table id="rmanDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-										<thead>
-											<tr class="bg-info text-white">
-												<th width="10"></th>
-												<th width="30"><spring:message code="common.no" /></th>
-												<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
-												<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
-												<th width="100"><spring:message code="backup_management.backup_option" /></th>
-												<th width="230" class="dt-center"><spring:message code="backup_management.data_dir" /></th>
-												<th width="230" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
-												<%-- <th width="230" class="dt-center"><spring:message code="backup_management.backup_log_dir" /></th> --%>
-												<th width="100"><spring:message code="common.register" /> </th>
-												<th width="110"><spring:message code="common.regist_datetime" /></th>
-												<th width="100"><spring:message code="common.modifier" /></th>
-												<th width="100"><spring:message code="common.modify_datetime" /></th>
-												<th width="0"></th>
-											</tr>
-										</thead>
-									</table>
-							 	</div>
 							 	
 								<div class="col-12" id="dumpDataTableDiv" style="diplay:none;">
  									<div class="table-responsive">
