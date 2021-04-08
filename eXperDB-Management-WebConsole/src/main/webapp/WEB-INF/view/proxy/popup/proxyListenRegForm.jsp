@@ -255,6 +255,7 @@ function fn_serverListTable_init() {
  * Proxy Server의  연결 DBMS List 검색
 ******************************************************** */		
 	function fn_listener_svr_list_search(){
+		console.log("fn_listener_svr_list_search");
 		$.ajax({
 			url : "/selectListenServerList.do",
 			data : {
@@ -484,16 +485,15 @@ function fn_serverListTable_init() {
 		$("#portno").val(ipadr.substr(ipadr.indexOf(":")+1,ipadr.length));
 	}
 	
-	function fn_change_sim_query_sel(){
+	/* function fn_change_sim_query_sel(){
 		//lstnReg_con_sim_query
-		$("#lstnReg_con_sim_query", "#insProxyListenForm").val($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val());
+		//$("#lstnReg_con_sim_query", "#insProxyListenForm").val($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val());
 		if($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val() == ""){
 			$("#lstnReg_con_sim_query", "#insProxyListenForm").val("");
 			$("#lstnReg_field_nm", "#insProxyListenForm").val("");
 			$("#lstnReg_field_val", "#insProxyListenForm").val("");
 		}else{
 			$("#lstnReg_con_sim_query", "#insProxyListenForm").val($("#lstnReg_con_sim_query_sel").children("option:selected").text());
-			
 			if($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val() == "TC004101"){
 				$("#lstnReg_field_nm", "#insProxyListenForm").val("haproxy_check");
 				$("#lstnReg_field_val", "#insProxyListenForm").val("false");
@@ -503,6 +503,31 @@ function fn_serverListTable_init() {
 			}
 		}
 			
+	} */
+	/* ********************************************************
+	 *  리스너명 변경 시 이벤트
+	 ******************************************************** */
+	function fn_change_lsn_nm(){
+		if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() !=""){
+			$("#lstnReg_lsn_nm", "#insProxyListenForm").val($("#lstnReg_lsn_nm_sel").children("option:selected").text());
+			if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() == "TC004201"){//pgReadWrite
+				$("#lstnReg_con_sim_query", "#insProxyListenForm").val("select haproxy_check();");
+				$("#lstnReg_field_nm", "#insProxyListenForm").val("haproxy_check");
+				$("#lstnReg_field_val", "#insProxyListenForm").val("false");
+				//$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val("TC004101"); 
+			}else if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() == "TC004202"){//pgReadOnly
+				$("#lstnReg_con_sim_query", "#insProxyListenForm").val("select 1;");
+				$("#lstnReg_field_nm", "#insProxyListenForm").val("?column?");
+				$("#lstnReg_field_val", "#insProxyListenForm").val("1");
+				$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val("TC004102"); 
+			}
+		}else{
+			$("#lstnReg_lsn_nm", "#insProxyListenForm").val("");
+			$("#lstnReg_con_sim_query", "#insProxyListenForm").val("");
+			$("#lstnReg_field_nm", "#insProxyListenForm").val("");
+			$("#lstnReg_field_val", "#insProxyListenForm").val("");
+			//$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val(""); 
+		}
 	}
 	/* 
 	function fn_change_con_bind_ip_sel(){
@@ -586,6 +611,12 @@ function fn_serverListTable_init() {
 									</label>
 									<div class="col-sm-3">
 										<input type="text" class="form-control form-control-xsm lstnReg_lsn_nm" autocomplete="off" maxlength="15" id="lstnReg_lsn_nm" name="lstnReg_lsn_nm" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()"  placeholder="" tabindex=1 />
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_lsn_nm_sel" id="lstnReg_lsn_nm_sel" onchange="fn_change_lsn_nm();"  tabindex=4 >
+											<option value=""><spring:message code="common.choice"/></option>
+											<c:forEach var="result" items="${listenerNmList}">
+											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+											</c:forEach>
+										</select>
 									</div>
 									<label for="lstnReg_con_bind" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>
@@ -635,12 +666,7 @@ function fn_serverListTable_init() {
 										<spring:message code="eXperDB_proxy.check_query" />(*)
 									</label>
 									<div class="col-sm-5">
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_sim_query_sel" id="lstnReg_con_sim_query_sel" onchange="fn_change_sim_query_sel();"  tabindex=4 >
-											<option value=""><spring:message code="common.choice"/></option>
-											<c:forEach var="result" items="${simpleQueryList}">
-											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
-											</c:forEach>
-										</select>
+										<input type="text" class="form-control form-control-xsm lstnReg_con_sim_query" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" />
 									</div>
 								</div>
 							</div>

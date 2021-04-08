@@ -196,6 +196,7 @@
 			FROM T_DBSVRIPADR_I
 			WHERE 1=1
 			AND db_svr_id = #{db_svr_id}
+			ORDER BY MASTER_GBN ASC
 	</select>
 	
 	

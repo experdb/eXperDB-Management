@@ -292,10 +292,14 @@
 		if(tab == "global"){
 			$(".globalSettingDiv").show();
 			$(".detailSettingDiv").hide();
+			$("#server-tab-1").addClass("active");
+			$("#server-tab-2").removeClass("active");
 			
 		}else{
 			$(".globalSettingDiv").hide();
 			$(".detailSettingDiv").show();
+			$("#server-tab-2").addClass("active");
+			$("#server-tab-1").removeClass("active");
 			
 			setTimeout(function(){
 				if(vipInstTable != null){
@@ -1157,7 +1161,7 @@
 	function fn_init_vip_instance(mode) {
 		$("#instReg_mode", "#insVipInstForm").val(mode);
 		$("#instReg_pry_svr_id", "#insVipInstForm").val(selPrySvrId);
-		fn_create_vip_select();
+		fn_create_vip_select(mode);
 		if (mode == "reg") {
 			
 			/* $("#instReg_v_ip", "#insVipInstForm").removeAttr("disabled");
@@ -1207,7 +1211,7 @@
 	/* ********************************************************
 	 * Vip select 박스 생성
 	 ******************************************************** */
-	function fn_create_vip_select(){
+	function fn_create_vip_select(mode){
 		var tempPeerVipList = selVipInstancePeerList;
 		var tempHtml ="";
 		var vipLen = tempPeerVipList.length;
@@ -1215,7 +1219,17 @@
 		tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
 		for(var i=0; i<vipLen; i++){
 			var id = tempPeerVipList[i].v_ip;
-			tempHtml += '<option value='+id+'>'+id+'</option>';
+			if(mode=="reg"){
+				var vipDatas = vipInstTable.rows().data();
+				var vipDataLen = vipDatas.length;
+				var cnt =0;
+				for(var j=0; j<vipDataLen ; j++){
+					if(tempPeerVipList[i].v_ip==vipDatas[j].v_ip) cnt ++;	
+				}
+				if(cnt==0)	tempHtml += '<option value='+id+'>'+id+'</option>';
+			}else{
+				tempHtml += '<option value='+id+'>'+id+'</option>';	
+			}
 		}
 
 		$("#instReg_v_ip_sel", "#insVipInstForm" ).append(tempHtml);
@@ -1302,12 +1316,16 @@
 		$("#lstnReg_mode", "#insProxyListenForm").val(mode);
 		$("#lstnReg_pry_svr_id", "#insProxyListenForm").val(selPrySvrId);
 		fn_create_bind_ip_select();
+		
+		$("#lstnReg_con_sim_query", "#insProxyListenForm").attr("disabled",true);
+		$("#lstnReg_con_sim_query", "#insProxyListenForm").attr("readonly",true); 
+		
 		if (mode == "reg") {
 			$("#ModalProxyListen").text('<spring:message code="eXperDB_proxy.listener_reg"/>');
-			$("#lstnReg_lsn_nm", "#insProxyListenForm").val(""); //리스너명
 			
-			$("#lstnReg_lsn_nm", "#insProxyListenForm").removeAttr("disabled");
-			$("#lstnReg_lsn_nm", "#insProxyListenForm").removeAttr("readonly");
+			$("#lstnReg_lsn_nm", "#insProxyListenForm").val(""); //리스너명
+			$("#lstnReg_lsn_nm", "#insProxyListenForm").hide();
+			$("#lstnReg_lsn_nm_sel", "#insProxyListenForm").show();
 			
 			//$("#lstnReg_con_bind_ip", "#insProxyListenForm").val(""); //접속IP
 			$("#lstnReg_con_bind_ip option:eq(0)").prop("selected", true);
@@ -1323,10 +1341,13 @@
 			serverListTable.clear().draw();
 		
 		} else {
+			if(isNaN(selListenerInfo.lsn_id)) selListenerInfo.lsn_id = "";
 			$("#ModalProxyListen").text('<spring:message code="eXperDB_proxy.listener_modify"/>');
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").val(selListenerInfo.lsn_nm); //리스너명
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").attr("disabled",true);
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").attr("readonly",true); 
+			$("#lstnReg_lsn_nm", "#insProxyListenForm").show();
+			$("#lstnReg_lsn_nm_sel", "#insProxyListenForm").hide();
 			
 			var bind = selListenerInfo.con_bind_port;
 			$("#lstnReg_con_bind_ip", "#insProxyListenForm").val(bind.substring(0,bind.indexOf(":"))); //접속IP
@@ -1341,6 +1362,7 @@
 			$("#lstnReg_field_val", "#insProxyListenForm").val(selListenerInfo.field_val); //필드값
 			$("#lstnReg_lsn_id", "#insProxyListenForm").val(selListenerInfo.lsn_id); //리스너 ID
 			$("#lstnReg_db_id", "#insProxyListenForm").val(selListenerInfo.db_id);//??
+			console.log(selListenerInfo.lsn_id);
 			if(selListenerInfo.lsn_id != ""){
 				fn_listener_svr_list_search();
 			}else{

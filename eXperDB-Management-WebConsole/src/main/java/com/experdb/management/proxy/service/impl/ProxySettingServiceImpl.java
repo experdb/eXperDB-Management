@@ -631,9 +631,15 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 					delListn[i].setPry_svr_id(prySvrId);
 					delListn[i].setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
 					
-					System.out.println("delete proxy listenener info ----------------------------------------");
-					System.out.println(CommonUtil.toMap(delListn[i]).toString());
+					ProxyListenerServerVO delListnSvr = new ProxyListenerServerVO();
+					delListnSvr.setPry_svr_id(prySvrId);
+					delListnSvr.setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
+					//System.out.println("Before delete proxy listenener info ----------------------------------------");
+					//System.out.println(CommonUtil.toMap(delListn[i]).toString());
+					proxySettingDAO.deletePryListenerSvr(delListnSvr);
 					
+					//System.out.println("delete proxy listenener info ----------------------------------------");
+					//System.out.println(CommonUtil.toMap(delListn[i]).toString());
 					//delete proxy listener
 					proxySettingDAO.deletePryListener(delListn[i]);
 				}

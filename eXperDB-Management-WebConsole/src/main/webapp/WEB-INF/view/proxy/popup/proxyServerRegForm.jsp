@@ -31,14 +31,23 @@ var mgmtDbmsTable = null;
 		 ******************************************************** */
 		 mgmtDbmsTable = $('#mgmtDbms').DataTable({
 			scrollY : "100px",
-			bSort: false,
 			scrollX: true,	
 			searching : false,
 			paging : false,
 			deferRender : true,
+			bSort: false,
 			columns : [
 			    {data : "svr_host_nm",className : "dt-center",  defaultContent : ""},//hostname
-			    {data : "master_gbn",className : "dt-center",  defaultContent : ""},//마스터 구분
+			    {data : "master_gbn",className : "dt-center",  defaultContent : "",
+			    render: function (data, type, full){
+            		var html = "";
+					if (full.master_gbn == "M") {
+						return "Master";
+					}else{ 
+						return "Slave";
+					}				
+				}
+				},//마스터 구분
 				{data : "ipadr", className : "dt-center", defaultContent : ""},//IP
 				{data : "portno", className : "dt-center",  defaultContent : ""},//Port
 				{data : "db_svr_id", defaultContent : "", visible: false}// DBMS ID
@@ -511,8 +520,7 @@ var mgmtDbmsTable = null;
 								<div class="form-group row">
 									<label for="svrReg_ipadr" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.id" /> --%>
-										IP주소(*)
+										<spring:message code="eXperDB_proxy.ip" />(*)
 									</label>
 
 									<div class="col-sm-3">
@@ -522,18 +530,16 @@ var mgmtDbmsTable = null;
 									</div>
 									<label for="svrReg_pry_svr_nm" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.user_name" /> --%>
-										서버명(*)
+										<spring:message code="eXperDB_proxy.server_name" />(*)
 									</label>
 									<div class="col-sm-3">
 										<input type="text" class="form-control form-control-xsm" maxlength="25" id="svrReg_pry_svr_nm" name="svrReg_pry_svr_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=2 />
 									</div>
 								</div>
-								<div class="form-group row">
+								<div class="form-group row row-last">
 									<label for="svrReg_day_data_del_term" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.position" /> --%>
-										일별 데이터 보관 기간(*)
+										<spring:message code="eXperDB_proxy.day_data_del_term" />(*)
 									</label>
 									<div class="col-sm-3" id="div_day_data_del_term">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100px;" name="svrReg_day_data_del_term" id="svrReg_day_data_del_term">
@@ -548,8 +554,7 @@ var mgmtDbmsTable = null;
 									
 									<label for="svrReg_min_data_del_term" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.Responsibilities" /> --%>
-										분별 데이터 보관 기간(*)
+										<spring:message code="eXperDB_proxy.min_data_del_term" />(*)
 									</label>
 									<div class="col-sm-auto" id="div_min_data_del_term">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100px;" name="svrReg_min_data_del_term" id="svrReg_min_data_del_term">
@@ -561,33 +566,15 @@ var mgmtDbmsTable = null;
 											<option value="6">6일</option>
 											<option value="7">7일</option>
 										</select>
-										<%-- <input type="text" class="form-control form-control-xsm" maxlength="25" id="svrReg_rsp_bsn_nm" name="svrReg_rsp_bsn_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=8 /> --%>
 									</div>
 								</div>
-<%-- 								<div class="form-group row row-last">
-									<label for="svrReg_use_yn" class="col-sm-3 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="dbms_information.use_yn" />
-									</label>
-									<div class="col-sm-auto">
-										<div class="onoffswitch-pop" style="margin-top:0.250rem;">
-											<input type="checkbox" name="svrReg_use_yn" class="onoffswitch-pop-checkbox" id="svrReg_use_yn" />
-											<label class="onoffswitch-pop-label" for="svrReg_use_yn">
-												<span class="onoffswitch-pop-inner"></span>
-												<span class="onoffswitch-pop-switch"></span>
-											</label>
-										</div>	
-									</div>
-									<!-- <div class="col-sm-auto"></div> -->
-								</div> --%>
 							</div> 
 							<br/>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
 									<label for="svrReg_master_gbn" class="col-sm-2 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.company" /> --%>
-										Proxy 구분(*)
+										<spring:message code="eXperDB_proxy.proxy_gbn" />(*)
 									</label>
 									<div class="col-sm-2">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="svrReg_master_gbn" id="svrReg_master_gbn" onchange="fn_changeMasterGbn();">
@@ -598,8 +585,7 @@ var mgmtDbmsTable = null;
 									<div class="col-sm-2"></div>
 									<label for="svrReg_master_svr_id" class="col-sm-3 col-form-label-sm pop-label-index" id="svrReg_master_svr_id_label">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<%-- <spring:message code="user_management.company" /> --%>
-										Master Proxy 서버(*)
+										<spring:message code="eXperDB_proxy.master_proxy" />(*)
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="svrReg_master_svr_id" id="svrReg_master_svr_id">
@@ -609,7 +595,7 @@ var mgmtDbmsTable = null;
 								<div class="form-group row" style="margin-bottom:0px;">
 									<label for="svrReg_db_svr_id" class="col-sm-2 col-form-label-sm">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										연결 DBMS
+										<spring:message code="eXperDB_proxy.con_dbms" />(*)
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="svrReg_db_svr_id" id="svrReg_db_svr_id" onchange="fn_svr_dbms_onChange();">
@@ -622,7 +608,7 @@ var mgmtDbmsTable = null;
 										<table id="mgmtDbms" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
 												<tr class="bg-info text-white">
-													<th width="150"><%-- <spring:message code="common.division" /> --%>DBMS명</th>
+													<th width="150"><spring:message code="common.dbms_name" /></th>
 													<th width="150"><spring:message code="common.division" /></th>
 													<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
 													<th width="100"><spring:message code="data_transfer.port" /></th>

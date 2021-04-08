@@ -106,14 +106,22 @@ public class ProxySettingController {
 				mv.addObject("usr_id", request.getParameter("usr_id")==null?"":request.getParameter("usr_id"));
 
 				// simple query code search
-				PageVO pageVO = new PageVO();
 				List<CmmnCodeVO> cmmnCodeVO =  null;
-
+				PageVO pageVO = new PageVO();
+				
 				pageVO.setGrp_cd("TC0041");
 				pageVO.setSearchCondition("0");
 				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
-				
 				mv.addObject("simpleQueryList",cmmnCodeVO);
+				
+				//Listener Nm Code Search
+				PageVO pageVO_2 = new PageVO();
+				
+				pageVO_2.setGrp_cd("TC0042");
+				pageVO_2.setSearchCondition("0");
+				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO_2);
+				mv.addObject("listenerNmList", cmmnCodeVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));	
 

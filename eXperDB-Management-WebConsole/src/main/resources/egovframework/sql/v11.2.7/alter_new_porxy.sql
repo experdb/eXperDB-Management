@@ -180,6 +180,18 @@ INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
 VALUES('TC0041', 'TC004102', 'select 1;', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'select 1;');
 
+--Proxy listener명 코드 등록
+
+INSERT INTO t_sysgrp_c
+(grp_cd, grp_cd_nm, grp_cd_exp, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
+VALUES('TC0042', 'Listener Name', 'PROXY Listener Name', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0042', 'TC004201', 'pgReadWrite', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'pgReadWrite');
+INSERT INTO t_sysdtl_c
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+VALUES('TC0042', 'TC004202', 'pgReadOnly', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'pgReadOnly');
 
 
 
