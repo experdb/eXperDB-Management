@@ -782,7 +782,8 @@ public class Db2pgSettingController {
 		returnStr = returnStr.replaceAll("&quot;", "\"");
 		returnStr = returnStr.replaceAll("&nbsp;", " ");
 		returnStr = returnStr.replaceAll("&amp;", "&");
-		returnStr = returnStr.replaceAll("\"", "&#34;");
+//		returnStr = returnStr.replaceAll("\"", "&#34;");
+		returnStr = returnStr.replaceAll("&#34;", "\"");
 		returnStr = returnStr.replaceAll("&apos;", "'");	
 		
 		return returnStr;
