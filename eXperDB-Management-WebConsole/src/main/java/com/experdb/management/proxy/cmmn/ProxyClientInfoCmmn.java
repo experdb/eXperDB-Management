@@ -1,6 +1,7 @@
 package com.experdb.management.proxy.cmmn;
 
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -63,6 +64,40 @@ public class ProxyClientInfoCmmn implements Runnable{
 			e.printStackTrace();
 		}
 		
+		return result;
+	}
+
+	public Map<String, Object> proxyAgentConnectionTest(String IP, int PORT) throws ConnectException, Exception{
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		JSONObject jObj = new JSONObject();
+		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP002);
+
+		JSONObject objList;
+		
+		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
+		PCA.open(); 
+
+		objList = PCA.psP002(jObj);
+	
+		PCA.close();
+		
+		String strErrMsg = (String)objList.get(ProxyClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objList.get(ProxyClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objList.get(ProxyClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objList.get(ProxyClientProtocolID.RESULT_CODE);
+		String strResultData = (String)objList.get(ProxyClientProtocolID.RESULT_DATA);
+
+		System.out.println("RESULT_CODE : " +  strResultCode);
+		System.out.println("ERR_CODE : " +  strErrCode);
+		System.out.println("ERR_MSG : " +  strErrMsg);
+		System.out.println("RESULT_DATA : " +  strResultData);
+		
+		result.put("RESULT_CODE", strResultCode);
+		result.put("ERR_CODE", strErrCode);
+		result.put("ERR_MSG", strErrMsg);
+		result.put("RESULT_DATA", strErrMsg);
+				
 		return result;
 	}
 }

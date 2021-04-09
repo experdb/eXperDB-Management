@@ -1,5 +1,6 @@
 package com.experdb.management.proxy.service.impl;
 
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.experdb.management.proxy.cmmn.CommonUtil;
+import com.experdb.management.proxy.cmmn.ProxyClientInfoCmmn;
 import com.experdb.management.proxy.service.ProxyAgentVO;
 import com.experdb.management.proxy.service.ProxyGlobalVO;
 import com.experdb.management.proxy.service.ProxyListenerServerVO;
@@ -220,23 +222,48 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	public JSONObject prySvrConnTest(Map<String, Object> param) throws Exception {
+	public JSONObject prySvrConnTest(Map<String, Object> param) throws ConnectException, Exception {
 		JSONObject resultObj = new JSONObject();
 
 		try {
+			System.out.println("prySvrConnTest -0"+param.toString());
 			//Proxy Agent 연결 - 처리로직 들어가야함
+			ProxyAgentVO proxyAgentVO = (ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+			System.out.println("prySvrConnTest -1");
+			String result_code = "";
 			
-			//결과 
-			boolean agentConn = true;
-			if(agentConn){
-				resultObj.put("agentConn", true);
-			}else{
-				resultObj.put("agentConn", false);
-			}
-		} catch (Exception e) {
+			Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
+			boolean agentConn = false;
+			
+				String IP = proxyAgentVO.getIpadr();
+				int PORT = proxyAgentVO.getSocket_port();
+				System.out.println("Agent IP : "+IP+"\n PORT : "+PORT);
+				ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+				agentConnectResult = cic.proxyAgentConnectionTest(IP, PORT);
+
+				if (agentConnectResult != null) {
+					System.out.println(agentConnectResult.toString());
+					result_code = agentConnectResult.get("RESULT_CODE").toString();
+					if ("0".equals(result_code)) {
+						agentConn = true;
+					}
+				}else{
+					agentConn = false;
+				}
+			
+			resultObj.put("agentConn", agentConn);
+			resultObj.put("errcd", 0);
+			resultObj.put("errmsg", "정상처리 되었습니다.");
+		} catch (ConnectException e) {
+			resultObj.put("agentConn", false);
+			resultObj.put("errcd", -2);
+			resultObj.put("errmsg", "Agent 상태를 확인해주세요.");
+			e.printStackTrace();
+			
+		} catch(Exception e){
+			resultObj.put("agentConn", false);
 			resultObj.put("errcd", -1);
-			resultObj.put("errmsg", "작업 중 오류가 발생하였습니");
-			
+			resultObj.put("errmsg", "작업 중 오류가 발생하였습니다.");
 			e.printStackTrace();
 		}
 		return resultObj;

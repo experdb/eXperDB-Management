@@ -33,6 +33,7 @@ var mgmtDbmsTable = null;
 			scrollY : "100px",
 			scrollX: true,	
 			searching : false,
+			processing:true,
 			paging : false,
 			deferRender : true,
 			bSort: false,
@@ -370,10 +371,12 @@ var mgmtDbmsTable = null;
      * Proxy Server의  연결 Test 
      ******************************************************** */		
 	function fn_prySvrConnTest(){
+		$('#loading_pop').show();
 		$.ajax({
  			url : "/prySvrConnTest.do",
  			data : {
- 				pry_svr_id : $("#svrReg_pry_svr_id", "#svrRegProxyServerForm").val()
+ 				pry_svr_id : $("#svrReg_pry_svr_id", "#svrRegProxyServerForm").val(),
+ 				ipadr : $("#svrReg_ipadr", "#svrRegProxyServerForm").val()
  			},
  			dataType : "json",
  			type : "post",
@@ -390,15 +393,17 @@ var mgmtDbmsTable = null;
 				}
 			},
  			success : function(result) {
+ 				$('#loading_pop').hide();
+ 				console.log(result);
  				if (result != null) {
 					if(!result.agentConn){
-						showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon(result.errmsg, '<spring:message code="common.close" />', '', 'error');
 						
 						$("#svrReg_conn_result", "#svrRegProxyServerForm").val("false");
 						$("#svrReg_save_submit", "#svrRegProxyServerForm").attr("disabled", "disabled");
 						
 					}else{
-						showSwalIcon('<spring:message code="message.msg93"/>', '<spring:message code="common.close" />', '', 'success');
+						showSwalIcon('<spring:message code="message.msg93" />', '<spring:message code="common.close" />', '', 'success');
 						$("#svrReg_conn_result", "#svrRegProxyServerForm").val("true");
 						$("#svrReg_save_submit", "#svrRegProxyServerForm").removeAttr("disabled");
 						
@@ -497,6 +502,9 @@ var mgmtDbmsTable = null;
 	}
 </script>
 <div class="modal fade" id="pop_layer_svr_reg" tabindex="-1" role="dialog" aria-labelledby="ModalProxyServer" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div id="loading_pop" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index:2000; display:none;">
+		<div class="flip-square-loader mx-auto" style="border: 0px !important;"></div>
+	</div>
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 80px 330px;">
 		<div class="modal-content" style="width:1040px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
