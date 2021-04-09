@@ -4,11 +4,7 @@ $(window).ready(function(){
 	 ******************************************************** */
 	$("#btnSelect").click(function() {
 		fn_schedule_leftListSize();
-		if(selectChkTab == "rman"){
-			fn_get_rman_list();
-		}else{
 			fn_get_dump_list();
-		}
 	});
 
 	/* ********************************************************
@@ -48,25 +44,9 @@ $(window).ready(function(){
  * Tab Click
  ******************************************************** */
 function selectInitTab(intab){
-	selectChkTab = intab;
-	if(intab == "rman"){			
-		$(".searchRman").show();
-		$(".searchDump").hide();
-		$("#rmanDataTableDiv").show();
-		$("#dumpDataTableDiv").hide();
-
-		seachParamInit(intab);
-	}else{				
-		$(".searchRman").hide();
-		$(".searchDump").show();
-		$("#rmanDataTableDiv").hide();
-		$("#dumpDataTableDiv").show();
-
-		seachParamInit(intab);
-	}
+	seachParamInit(intab);
 
 	//테이블 setting
-	fn_rman_init();
 	fn_dump_init();
 }
 
@@ -74,85 +54,20 @@ function selectInitTab(intab){
 /* ********************************************************
  * 조회조건 초기화
  ******************************************************** */
-function seachParamInit(tabGbn) {
-	if (searchInit == tabGbn) {
-		return;
-	}
-
-	if (tabGbn == "rman") {
-		$("#bck_opt_cd option:eq(0)").attr("selected","selected");
-	} else {
-		$("#db_id option:eq(0)").attr("selected","selected");
-	}
-
-	searchInit = tabGbn;
+function seachParamInit() {
+	$("#db_id option:eq(0)").attr("selected","selected");
 }
 
 
 /* ********************************************************
  * Tab Click
  ******************************************************** */
-function selectTab(intab){
+function selectTab(){
 	fn_schedule_leftListSize();
-	selectChkTab = intab;
 
-	if(intab == "rman"){			
-		$(".search_rman").show();
-		$(".search_dump").hide();
-		$("#rmanDataTableDiv").show();
-		$("#dumpDataTableDiv").hide();
+	seachParamInit();
 
-		seachParamInit(intab);
-
-		fn_get_rman_list();
-	}else{				
-		$(".search_rman").hide();
-		$(".search_dump").show();
-		$("#rmanDataTableDiv").hide();
-		$("#dumpDataTableDiv").show();
-
-		seachParamInit(intab);
-
-		fn_get_dump_list();
-	}
-}
-
-
-/* ********************************************************
- * Get Rman Log List
- ******************************************************** */
-function fn_get_rman_list(){
-		$.ajax({
-			url : "/backup/getWorkList.do", 
-			data : {
-			db_svr_id : $("#db_svr_id", "#findList").val(),
-			bck_bsn_dscd : "TC000201",
-			bck_opt_cd : $("#bck_opt_cd", '#findSearch').val(),
-			wrk_nm : nvlPrmSet($('#wrk_nm', '#findSearch').val(), "")
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-			}
-		},
-		success : function(data) {
-			tableRman.rows({selected: true}).deselect();
-			tableRman.clear().draw();
-
-			if (nvlPrmSet(data, "") != '') {
-				tableRman.rows.add(data).draw();
-			}
-		}
-	});
+	fn_get_dump_list();
 }
 
 /* ********************************************************
@@ -199,8 +114,8 @@ function fn_get_dump_list(){
  * confirm result
  ******************************************************** */
 function fnc_confirmMultiRst(gbn){
-	if (gbn == "del_rman" || gbn == "del_dump") {
-		fn_deleteWork(gbn);
+	if (gbn == "del_dump") {
+		fn_deleteWork();
 	} else if (gbn =="run_immediately") {
 		fn_ImmediateStart();
 	}
@@ -210,16 +125,8 @@ function fnc_confirmMultiRst(gbn){
  * 등록버튼 클릭시 
  ******************************************************** */
 function fn_reg_popup(){
-	var regUrl = "";
-
-	if (selectChkTab == "rman") {
-		regUrl = "/popup/rmanRegForm.do";
-	} else {
-		regUrl = "/popup/dumpRegForm.do";
-	}
-
 	$.ajax({
-		url : regUrl,
+		url : "/popup/dumpRegForm.do",
 		data : {
 			db_svr_id : $("#db_svr_id", "#findList").val()
 		},
@@ -238,13 +145,8 @@ function fn_reg_popup(){
 			}
 		},
 		success : function(result) {
-			fn_insert_chogihwa(selectChkTab, result);
-
-			if (selectChkTab == "rman") {
-				$('#pop_layer_reg_rman').modal("show");
-			} else {
-				$('#pop_layer_reg_dump').modal("show");
-			}
+			fn_insert_chogihwa(result);
+			$('#pop_layer_reg_dump').modal("show");
 		}
 	});
 }
@@ -252,64 +154,7 @@ function fn_reg_popup(){
 /* ********************************************************
  * 등록 팝업 초기화
  ******************************************************** */
-function fn_insert_chogihwa(gbn, result) {
-	if (gbn == "rman") {
-		//work 명
-		$("#ins_wrk_nm", "#workRegForm").val("");
-		//work 설명
-		$("#ins_wrk_exp", "#workRegForm").val("");
-		//name check
-		$("#ins_wrk_nmChk", "#workRegForm").val("fail");
-		$("#ins_check_path2", "#workRegForm").val("N");
-		
-		//백업옵션
-		$("#ins_bck_opt_cd", "#workRegForm").val('').prop("selected", true);
-		//데이터경로
-		$("#ins_data_pth", "#workRegForm").val("");
-		//백업경로
-		$("#ins_bck_pth", "#workRegForm").val("");
-		
-		//용량
-		$("#backupVolume", "#workRegForm").html(common_volume + ' : 0');
-		$("#backupVolume_div", "#workRegForm").show();
-
-		$("#ins_file_stg_dcnt", "#workRegForm").val("0"); 	//Full 백업파일보관일
-		$("#ins_bck_mtn_ecnt", "#workRegForm").val("0"); 	//Full 백업파일 유지개수
-		$("#ins_acv_file_stgdt", "#workRegForm").val("0"); 	//아카이브 파일보관일
-		$("#ins_acv_file_mtncnt", "#workRegForm").val("0"); //아카이브 파일유지개수
-
-		//압축하기
-		$("#ins_cps_yn", "#workRegForm").val("");
-		$("input:checkbox[id='ins_cps_yn_chk']").prop("checked", false); 
-		
-		//로그파일백업 여부
-		$("#ins_log_file_bck_yn", "#workRegForm").val("");
-		$("input:checkbox[id='ins_log_file_bck_yn_chk']").prop("checked", false); 
-		
-		$("#ins_log_file_stg_dcnt", "#workRegForm").val("0"); 	//서버로그 파일 보관일수
-		$("#ins_log_file_mtn_ecnt", "#workRegForm").val("0"); 	//아카이브 파일유지개수
-		
-		//validate box 초기화
-		$("#ins_file_stg_dcnt_alert", "#workRegForm").html("");
-		$("#ins_file_stg_dcnt_alert", "#workRegForm").hide();
-		$("#ins_bck_mtn_ecnt_alert", "#workRegForm").html("");
-		$("#ins_bck_mtn_ecnt_alert", "#workRegForm").hide();
-		$("#ins_log_file_stg_dcnt_alert", "#workRegForm").html("");
-		$("#ins_log_file_stg_dcnt_alert", "#workRegForm").hide();
-		$("#ins_acv_file_stgdt_alert", "#workRegForm").html("");
-		$("#ins_acv_file_stgdt_alert", "#workRegForm").hide();			
-		$("#ins_acv_file_mtncnt_alert", "#workRegForm").html("");
-		$("#ins_acv_file_mtncnt_alert", "#workRegForm").hide();			
-		$("#ins_log_file_mtn_ecnt_alert", "#workRegForm").html("");
-		$("#ins_log_file_mtn_ecnt_alert", "#workRegForm").hide();			
-
-		$("#ins_bck_pth_check_alert", "#workRegForm").html("");
-		$("#ins_bck_pth_check_alert", "#workRegForm").hide();
-		$("#ins_worknm_check_alert", "#workRegForm").html("");
-		$("#ins_worknm_check_alert", "#workRegForm").hide();
-		
-		fn_insertWorkPopStart();
-	} else {
+function fn_insert_chogihwa(result) {
 		//상단
 		$("#ins_dump_wrk_nm", "#workDumpRegForm").val(""); 									//work 명
 		$("#ins_dump_wrk_exp", "#workDumpRegForm").val("");									//work 설명
@@ -366,71 +211,12 @@ function fn_insert_chogihwa(gbn, result) {
 		}
 
 		fn_insertDumpWorkPopStart();
-	}
 }
 
 /* ********************************************************
  * 수정 팝업 초기화
  ******************************************************** */
-function fn_update_chogihwa(gbn, result) {
-	if (gbn == "rman") {
-		//상단
-		$("#mod_wrk_nm", "#workModForm").val(nvlPrmSet(result.workInfo[0].wrk_nm, "")); 						//work 명
-		$("#mod_wrk_exp", "#workModForm").val(nvlPrmSet(result.workInfo[0].wrk_exp, "")); 						//work 설명
-		
-		//hidden
-		$("#mod_check_path2", "#workModForm").val("Y"); 														//백업경로체크
-		$("#mod_bck_wrk_id", "#workModForm").val(nvlPrmSet(result.bck_wrk_id, "")); 							//백업작업id
-		$("#mod_wrk_id", "#workModForm").val(nvlPrmSet(result.wrk_id, "")); 									//작업id
-
-		//옵션 및 경로
-		$("#mod_bck_opt_cd", "#workModForm").val(nvlPrmSet(result.workInfo[0].bck_opt_cd, "")).prop("selected", true); //백업옵션
-		$("#mod_data_pth", "#workModForm").val(nvlPrmSet(result.workInfo[0].data_pth, ""));						//데이터경로
-		$("#mod_bck_pth", "#workModForm").val(nvlPrmSet(result.workInfo[0].bck_pth, ""));						//백업경로
-		$("#mod_backupVolume", "#workModForm").html(common_volume + ' : 0');
-		$("#mod_backupVolume_div", "#workModForm").show();														//용량
-		
-		//옵션 - 왼쪽메뉴
-		$("#mod_file_stg_dcnt", "#workModForm").val(nvlPrmSet(result.workInfo[0].file_stg_dcnt, "0"));			//Full 백업파일보관일
-		$("#mod_bck_mtn_ecnt", "#workModForm").val(nvlPrmSet(result.workInfo[0].bck_mtn_ecnt, "0")); 			//Full 백업파일 유지개수
-		$("#mod_acv_file_stgdt", "#workModForm").val(nvlPrmSet(result.workInfo[0].acv_file_stgdt, "0")); 		//아카이브 파일보관일
-		$("#mod_acv_file_mtncnt", "#workModForm").val(nvlPrmSet(result.workInfo[0].acv_file_mtncnt, "0")); 		//아카이브 파일유지개수
-		$("#mod_log_file_bck_yn", "#workModForm").val(nvlPrmSet(result.workInfo[0].log_file_bck_yn, ""));		//로그파일백업 여부
-		$("#mod_cps_yn", "#workModForm").val(nvlPrmSet(result.workInfo[0].cps_yn, ""));							//압축하기
-		if (nvlPrmSet(result.workInfo[0].cps_yn, "") == "Y") {
-			$("input:checkbox[id='mod_cps_yn_chk']").prop("checked", true);
-		} else {
-			$("input:checkbox[id='mod_cps_yn_chk']").prop("checked", false); 
-		}
-		
-		//옵션 - 오른쪽메뉴	
-		$("#mod_log_file_bck_yn", "#workModForm").val(nvlPrmSet(result.workInfo[0].log_file_bck_yn, ""));		//로그파일백업 여부
-		if (nvlPrmSet(result.workInfo[0].log_file_bck_yn, "") == "Y") {
-			$("input:checkbox[id='mod_log_file_bck_yn_chk']").prop("checked", true);
-		} else {
-			$("input:checkbox[id='mod_log_file_bck_yn_chk']").prop("checked", false); 
-		}
-		$("#mod_log_file_stg_dcnt", "#workModForm").val(nvlPrmSet(result.workInfo[0].log_file_stg_dcnt, "0")); 	//서버로그 파일 보관일수
-		$("#mod_log_file_mtn_ecnt", "#workModForm").val(nvlPrmSet(result.workInfo[0].log_file_mtn_ecnt, "0")); 	//아카이브 파일유지개수
-		
-		//validate box 초기화
-		$("#mod_bck_pth_check_alert", "#workModForm").html("");
-		$("#mod_bck_pth_check_alert", "#workModForm").hide();
-		$("#mod_file_stg_dcnt_alert", "#workModForm").html("");
-		$("#mod_file_stg_dcnt_alert", "#workModForm").hide();
-		$("#mod_bck_mtn_ecnt_alert", "#workModForm").html("");
-		$("#mod_bck_mtn_ecnt_alert", "#workModForm").hide();
-		$("#mod_log_file_stg_dcnt_alert", "#workModForm").html("");
-		$("#mod_log_file_stg_dcnt_alert", "#workModForm").hide();
-		$("#mod_acv_file_stgdt_alert", "#workModForm").html("");
-		$("#mod_acv_file_stgdt_alert", "#workModForm").hide();			
-		$("#mod_acv_file_mtncnt_alert", "#workModForm").html("");
-		$("#mod_acv_file_mtncnt_alert", "#workModForm").hide();			
-		$("#mod_log_file_mtn_ecnt_alert", "#workModForm").html("");
-		$("#mod_log_file_mtn_ecnt_alert", "#workModForm").hide();	
-		
-		fn_modWorkPopStart();
-	} else {
+function fn_update_chogihwa(result) {
 		//상단
 		$("#mod_dump_wrk_nm", "#workDumpModForm").val(nvlPrmSet(result.workInfo[0].wrk_nm, "")); 						//work 명
 		$("#mod_dump_wrk_exp", "#workDumpModForm").val(nvlPrmSet(result.workInfo[0].wrk_exp, "")); 						//work 설명
@@ -562,9 +348,6 @@ function fn_update_chogihwa(gbn, result) {
 				}
 			}
 		}
-
-		//tab 선택
-		$('a[href="#modDumpOptionTab1"]').tab('show');
 		
 		//오브젝트 선택
 		$("#treeview_container", "#workDumpModForm").html("");
@@ -602,7 +385,6 @@ function fn_update_chogihwa(gbn, result) {
 		}
 
 		fn_modDumpWorkPopStart(workList);
-	}
 }
 
 //////////////////dumpRegReForm.jsp///////////////////////////////////////////////

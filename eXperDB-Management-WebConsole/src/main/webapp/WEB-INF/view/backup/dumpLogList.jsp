@@ -20,33 +20,19 @@
 	*/
 %>
 <script type="text/javascript">
-	var selectChkTab = "dump";
-	var searchInit = "";
-	var tableRman = null;
+	// var selectChkTab = "dump";
+	// var searchInit = "";
+	// var tableRman = null;
 	var tableDump = null;
-	var tabGbn = "${tabGbn}";
+	// var tabGbn = "${tabGbn}";
 
 	$(window.document).ready(function() {
-		//검색조건 초기화
-		/* if (tabGbn != null) {
-			selectChkTab = tabGbn;
-		} */
 		
-		selectInitTab(selectChkTab);
+		selectInitTab();
 
 		//작업기간 calender setting
 		dateCalenderSetting();
 		fn_get_dump_list();
-		//조회
- 		if(tabGbn != ""){
- 			if (tabGbn == "rman") {
- 	 			$('#server-tab-1').click();
- 			} else {
- 	 			$('#server-tab-2').click();
- 			}
-		}else{
-			$('#server-tab-1').click();
-		}
 
 		/* ********************************************************
 		 * Click Search Button
@@ -57,11 +43,6 @@
 			}
 			fn_get_dump_list();
 
-			/* if(selectChkTab == "rman"){
-				fn_get_rman_list();
-			}else{
-				fn_get_dump_list();
-			} */
 		});
 	});
 	
@@ -88,48 +69,34 @@
 	/* ********************************************************
 	 * Tab Click
 	 ******************************************************** */
-	function selectInitTab(intab){
-		selectChkTab = intab;
+	function selectInitTab(){
+		// selectChkTab = intab;
 
-		if(intab == "rman"){			
-			$(".search_rman").show();
-			$(".search_dump").hide();
-			$("#logRmanListDiv").show();
-			$("#logDumpListDiv").hide();
+		$(".search_rman").hide();
+		$(".search_dump").show();
+		$("#logRmanListDiv").hide();
+		$("#logDumpListDiv").show();
 
-			seachParamInit(intab);
-		}else{
-			$(".search_rman").hide();
-			$(".search_dump").show();
-			$("#logRmanListDiv").hide();
-			$("#logDumpListDiv").show();
-
-			seachParamInit(intab);
-		}
+		seachParamInit();
 
 		//테이블 setting
-		// fn_rman_init();
 		fn_dump_init();
 	}
 	/* ********************************************************
 	 * 조회조건 초기화
 	 ******************************************************** */
-	function seachParamInit(tabGbn) {
-		if (searchInit == tabGbn) {
+	function seachParamInit() {
+		// 질문 searchInit ?
+		/* if (searchInit == tabGbn) {
 			return;
-		}
+		} */
 		
 		$("#wrk_nm").val("");
 		$("#exe_rslt_cd option:eq(0)").attr("selected","selected");
 		$("#fix_rsltcd option:eq(0)").attr("selected","selected");
+		$("#db_id option:eq(0)").attr("selected","selected");
 
-		if (tabGbn == "rman") {
-			$("#bck_opt_cd option:eq(0)").attr("selected","selected");
-		} else {
-			$("#db_id option:eq(0)").attr("selected","selected");
-		}
-
-		searchInit = tabGbn;
+		//searchInit = tabGbn;
 	}
 
 	/* ********************************************************
@@ -459,82 +426,9 @@
 	}
 
 	/* ********************************************************
-	 * Tab Click
-	 ******************************************************** */
-	function selectTab(intab){
-		selectChkTab = intab;
-		/* if(intab == "rman"){			
-			$(".search_rman").show();
-			$(".search_dump").hide();
-			$("#logRmanListDiv").show();
-			$("#logDumpListDiv").hide();
-
-			seachParamInit(intab);
-
-			fn_get_rman_list();
-		}else{	 */			
-			$(".search_rman").hide();
-			$(".search_dump").show();
-			$("#logRmanListDiv").hide();
-			$("#logDumpListDiv").show();
-
-			seachParamInit(intab);
-			fn_get_dump_list();
-		// }
-	}
-
-	/* ********************************************************
-	 * Get Rman Log List
-	 ******************************************************** */
-	function fn_get_rman_list(){
-		console.log("get rman list!!!!!!");
-		if(!calenderValid()) {
-			return;
-		}
-		
- 		$.ajax({
- 			url : "/backup/selectWorkLogList.do",
- 			data : {
-				hist_gbn : "rman_hist",
-				db_svr_id : $("#db_svr_id", "#findList").val(),
-				bck_bsn_dscd : "TC000201",
-				bck_opt_cd : $("#bck_opt_cd").val(),
-		  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
-		  		wrk_end_dtm : $("#wrk_end_dtm").val(),
-				exe_rslt_cd : $("#exe_rslt_cd").val(),
-				wrk_nm : nvlPrmSet($('#wrk_nm').val(), ""),
-				fix_rsltcd : $("#fix_rsltcd").val()
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				tableRman.rows({selected: true}).deselect();
-				tableRman.clear().draw();
-
-				if (nvlPrmSet(result, "") != '') {
-					tableRman.rows.add(result).draw();
-				}
-			}
-		});
-	}
-
-	/* ********************************************************
 	 * Get Dump Log List
 	 ******************************************************** */
 	function fn_get_dump_list(){
-		console.log("get dump list!!!!!!!");
 		if(!calenderValid()) {
 			return;
 		}
@@ -583,9 +477,9 @@
 
 <%@include file="../cmmn/fixRsltMsgInfo.jsp"%>
 <%@include file="../cmmn/fixRsltMsg.jsp"%>
-<%@include file="../popup/rmanShow.jsp"%>
+<%-- <%@include file="../popup/rmanShow.jsp"%> --%>
 <%@include file="../popup/dumpShow.jsp"%>
-<%@include file="../cmmn/workRmanInfo.jsp"%>
+<%-- <%@include file="../cmmn/workRmanInfo.jsp"%> --%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 <%@include file="../cmmn/wrkLog.jsp"%>
 
@@ -598,7 +492,6 @@
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
 				<div class="card-body">
-
 					<!-- title start -->
 					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
 						<div class="card" style="margin-bottom:0px;">
@@ -645,18 +538,6 @@
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<%-- <ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
-						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
-								Online <spring:message code="menu.backup_history" />
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('dump');">
-								Dump <spring:message code="menu.backup_history" />
-							</a>
-						</li>
-					</ul> --%>
 
 					<!-- search param start -->
 					<div class="card">
@@ -690,16 +571,6 @@
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
 								</div>
-										
-								<%-- <div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_5">
-									<select class="form-control" style="margin-right: -0.7rem;" name="bck_opt_cd" id="bck_opt_cd">
-										<option value=""><spring:message code="backup_management.backup_option" />&nbsp;<spring:message code="schedule.total" /></option>
-										<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
-										<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
-										<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
-									</select>
-								</div> --%>
-									
 								<div class="input-group mb-2 mr-sm-2 search_dump col-sm-1_5">
 									<select class="form-control" style="margin-right: -0.7rem;" name="db_id" id="db_id">
 										<option value=""><spring:message code="common.database" />&nbsp;<spring:message code="schedule.total" /></option>
@@ -738,38 +609,6 @@
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">
-								<%-- <div class="col-12" id="logRmanListDiv">
- 									<div class="table-responsive">
-										<div id="order-listing_wrapper"
-											class="dataTables_wrapper dt-bootstrap4 no-footer">
-											<div class="row">
-												<div class="col-sm-12 col-md-6">
-													<div class="dataTables_length" id="order-listing_length">
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-	 								<table id="logRmanList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-										<thead>
-											<tr class="bg-info text-white">
-												<th width="40"><spring:message code="common.no" /></th>
-												<th width="150"><spring:message code="common.work_name" /></th>
-												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-												<th width="150"><spring:message code="common.work_description" /></th>
-												<th width="90"><spring:message code="backup_management.backup_option" /></th>
-												<th width="230"><spring:message code="etc.etc08"/></th>
-												<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
-												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
-												<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
-												<th width="100"><spring:message code="common.status" /></th>
-												<th width="100"><spring:message code="etc.etc31"/></th>
-											</tr>
-										</thead>
-									</table>
-							 	</div> --%>
-							 	
 								<div class="col-12" id="logDumpListDiv">
  									<div class="table-responsive">
 										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
