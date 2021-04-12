@@ -24,7 +24,6 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 	@Autowired 
 	@Resource(name="backupDB") 
 	private SqlSession sql2;
-
 	
 	public List<TargetMachineVO> getNodeList() {
 	       List<TargetMachineVO> result = null;
@@ -33,33 +32,8 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 	        return result;
 	}
 
-
 	public TargetMachineVO getNodeInfo(String path) {
 		return sql2.selectOne("backupNodeSql.getNodeInfo", path);
 	}
 	
-	public TargetMachineVO getScheduleNodeInfo(String path){
-		return sql2.selectOne("backupNodeSql.getScheduleNodeInfo", path);
-	}
-
-	public BackupLocationInfoVO getScheduleLocationInfo(String path) {
-		return sql2.selectOne("backupStorageSql.getScheduleLocationInfo", path);
-	}
-
-
-	public void scheduleInsert(Map<String, Object> jobInsert) {
-		sql2.update("backupNodeSql.setScheduleJob", jobInsert);
-		
-	}
-
-
-	public void scheduleInsert2(Map<String, Object> jobInsert) {
-		sql2.update("backupNodeSql.setScheduleJob2", jobInsert);
-	}
-
-
-	public int checkJobExist(String ipadr) {
-		return sql2.selectOne("backupNodeSql.checkJobExist", ipadr);
-	}
-
 }

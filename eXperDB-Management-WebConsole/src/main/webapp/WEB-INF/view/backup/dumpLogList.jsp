@@ -6,25 +6,23 @@
 <%@ include file="../cmmn/cs2.jsp"%>
 <%
 	/**
-	* @Class Name : workLogList.jsp
+	* @Class Name : dumpLogList.jsp
 	* @Description : Log List 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2017.06.07     최초 생성
+	*  2021.04.07     최초 생성
 	*
-	* author YoonJH
-	* since 2017.06.07
+	* author 변승우
+	* since 2021.04.07
 	*
 	*/
 %>
 <script type="text/javascript">
-	// var selectChkTab = "dump";
-	// var searchInit = "";
-	// var tableRman = null;
+
 	var tableDump = null;
-	// var tabGbn = "${tabGbn}";
+
 
 	$(window.document).ready(function() {
 		
@@ -86,17 +84,11 @@
 	 * 조회조건 초기화
 	 ******************************************************** */
 	function seachParamInit() {
-		// 질문 searchInit ?
-		/* if (searchInit == tabGbn) {
-			return;
-		} */
-		
 		$("#wrk_nm").val("");
 		$("#exe_rslt_cd option:eq(0)").attr("selected","selected");
 		$("#fix_rsltcd option:eq(0)").attr("selected","selected");
 		$("#db_id option:eq(0)").attr("selected","selected");
 
-		//searchInit = tabGbn;
 	}
 
 	/* ********************************************************
@@ -477,9 +469,7 @@
 
 <%@include file="../cmmn/fixRsltMsgInfo.jsp"%>
 <%@include file="../cmmn/fixRsltMsg.jsp"%>
-<%-- <%@include file="../popup/rmanShow.jsp"%> --%>
 <%@include file="../popup/dumpShow.jsp"%>
-<%-- <%@include file="../cmmn/workRmanInfo.jsp"%> --%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 <%@include file="../cmmn/wrkLog.jsp"%>
 

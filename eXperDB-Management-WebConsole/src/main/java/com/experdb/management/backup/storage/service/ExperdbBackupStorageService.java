@@ -21,6 +21,5 @@ public interface ExperdbBackupStorageService {
 
 	void backupStorageDelete(HttpServletRequest request);
 
-	int checkStoragePath(HttpServletRequest request) throws Exception;
 	
 }

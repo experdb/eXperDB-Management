@@ -22,13 +22,19 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     @Resource(name="ExperdbBackupStorageDAO")
     private ExperdbBackupStorageDAO experdbBackupStorageDAO;
     
+    // 스토리지 등록
     @Override
     public JSONObject backupStorageInsert(HttpServletRequest request) throws Exception{
+    	/**
+    	 *  스토리지 등록
+    	 *  CIFS/NFS에 따라 등록 데이터 다름
+    	 *  CIFS : USER/PASSWORD 필요, PATH split 3번째 부터
+    	 *  NFS : USER/PASSWORD 필요 없음, PATH split 1번째 부터
+    	 */
     	JSONObject result = new JSONObject();
     	BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
     	int type = Integer.parseInt(request.getParameter("type"));
     	long time = new Date().getTime();
-    	// System.out.println("path : " + path);
     	BackupLocationInfoVO locationVO = new BackupLocationInfoVO();
     	
     	if(type == 2){        	
@@ -57,11 +63,6 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
         locationVO.setFreeSizeAlertUnit(Integer.parseInt(request.getParameter("freeSizeAlertUnit")));
         locationVO.setIsRunScript(Integer.parseInt(request.getParameter("runScript")));
         locationVO.setTime(time);
-//        if(type == 2){        	
-//        	locationVO.setBackupDestPasswd(CmmnUtil.encPassword(request.getParameter("passWord")).get("RESULT_DATA").toString());
-//        }else{
-//        	locationVO.setBackupDestPasswd(request.getParameter("passWord"));
-//        }
 
         System.out.println(locationVO.toString());
         experdbBackupStorageDAO.backupStorageInsert(locationVO);     
@@ -69,44 +70,17 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
         return result;
     }
     
-    @Override
-    public int checkStoragePath(HttpServletRequest request) throws Exception {
-    	int type = Integer.parseInt(request.getParameter("type"));
-    	String [] pth = null;
-    	String path = null;
-    	String check = null;
-    	if(type == 2){
-    		pth = request.getParameter("path").split("/", 4);
-    		path = "/"+pth[3];
-    		check = CmmnUtil.backupLocationCheck(path).get("RESULT_DATA").toString();
-    	}else{
-    		pth = request.getParameter("path").split("/", 2);
-    		path = "/"+pth[1];
-    		check = CmmnUtil.backupLocationCheck(path).get("RESULT_DATA").toString();
-    	}
-//    	System.out.println(" check : " + check);
-    	if(!path.equals(check)){
-    		System.out.println("path check << FALSE >>");
-    		return 1;
-    	}else{
-    		System.out.println("path check << TRUE >>");
-    		return 0;
-    	}
-    }
-    
+    // 스토리지 리스트 조회
     @Override
     public List<Map<String, Object>> backupStorageList(){
     	
     	List<BackupLocationInfoVO> list = null;
-//    	Map<String, Object> result = new HashMap<>();
     	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
     	
     	list = experdbBackupStorageDAO.backupStorageList();
-    	// System.out.println("list.size() : " + list.size());
 
     	for(int i = 0; i<list.size(); i++){
     		Map<String, Object> result = new HashMap<>();
-    		// System.out.println(i+" th toString!! : " + list.get(i).toString());
     		if(list.get(i).getType()== 1){
     			result.put("type", "NFS Share");
     		}else {
@@ -154,7 +128,6 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
         }else{
             locationVO.setBackupDestPasswd(request.getParameter("passWord"));
         }
-//        System.out.println("update data : " + locationVO.toString());
         experdbBackupStorageDAO.backupStorageUpdate(locationVO);
 		
 	}

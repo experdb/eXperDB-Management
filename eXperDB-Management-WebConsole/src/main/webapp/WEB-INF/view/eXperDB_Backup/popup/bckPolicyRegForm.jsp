@@ -39,7 +39,6 @@
 	 * reset
 	 ******************************************************** */
 	function fn_policyRegReset() {
-		console.log("fn_policyRegReset");
 		$("#backupSetNum").val(1);
 		
 		$("#compressType").val(1);
@@ -54,17 +53,6 @@
 	}
 
 	function fn_policyModiReset(){
-		/* console.log("=========== fn_policyModiReset ===========");
-		console.log("storageType val : " + $("#storageType").val());
-		console.log("bck storageType val : " + $("#bckStorageTypeVal").val());
-		console.log("bckStorage : "+$("#bckStorage").val());
-		console.log("compress : " + $("#compressType").val());
-		console.log("backupSetNum : " + $("#bckSetNum").val());
-		console.log("bckSetDateVal : " +$("#bckSetDateVal").val());
-		console.log("bckSetDateTypeVal : " +$("#bckSetDateTypeVal").val());
-		console.log("bckSetDateTypeValTF : " +$("#bckSetDateTypeVal").val() == "true");
-		console.log("merge_period check : " + $(':input:radio[name=merge_period]:checked').val()); */
-		
 		$("#storageList").val($("#bckStorage").val());
 		$("#storageType").val($("#bckStorageTypeVal").val());
 		
@@ -152,13 +140,11 @@
 	function fn_mergeClick() {
 		var mg = $(':input:radio[name=merge_period]:checked').val();
 		if(mg == "weekly"){
-			console.log("weekly~~");
 			$('#merge_period_week').prop("disabled", false);
 			$('#merge_period_month').prop("disabled", true);
 			$("#setNumTitleWeek").show();
 			$("#setNumTitleMonth").hide();
 		}else if(mg == "monthly"){
-			console.log("monthly~~");
 			$('#merge_period_month').prop("disabled", false);
 			$('#merge_period_week').prop("disabled", true);
 			$("#setNumTitleWeek").hide();

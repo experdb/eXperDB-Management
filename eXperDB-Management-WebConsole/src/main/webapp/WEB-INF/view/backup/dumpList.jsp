@@ -7,26 +7,22 @@
 
 <%
 	/**
-	* @Class Name : workList.jsp
+	* @Class Name : dumpList.jsp
 	* @Description : 백업 목록
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
-	*  2017.06.07     최초 생성
-	*  2017.10.23 	 변승우			테이블 -> 데이터테이블 변환
+	*  2021.04.07    최초 생성
     *	
-	* author YoonJH
-	* since 2017.06.07
+	* author 변승우
+	* since 2021.04.07
 	*
 	*/
 %>
 <script src="/vertical-dark-sidebar/js/dump_common.js"></script>
 
 <script type="text/javascript">
-	// var tableRman = null;
 	var tableDump = null;
-	// var selectChkTab = "dump";
-	// var searchInit = "";
 	var tabGbn = "${tabGbn}";
 	var bck_wrk_id_List = [];
 	var wrk_id_List = [];
