@@ -156,7 +156,7 @@
 											
 											//덤프관리 //////////////////////////////////////////////////////////////////
 											menuJson +=	',{' +
-															 '"text": "덤프관리",' +
+															 '"text": "<spring:message code="eXperDB_backup.msg85"/>",' +
 															 '"icon": "ti-files",' +
 															 '"id": "dump'+item.db_svr_id+'"';
 
