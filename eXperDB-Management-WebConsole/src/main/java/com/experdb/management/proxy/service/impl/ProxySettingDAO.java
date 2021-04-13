@@ -456,4 +456,20 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		result = (List<Map<String, Object>>) list("proxyServerSettingSql.selectMasterProxyList", param);
 		return result;
 	}
+	
+	/**
+	 * Proxy Agent 정보 조회
+	 * 
+	 * @param param
+	 * @return ProxyAgentVO
+	 * @throws SQLException
+	 */
+	public ProxyAgentVO selectProxyAgentInfo(Map<String, Object> param) throws SQLException {
+		ProxyAgentVO result = null;
+		System.out.println("DAO start");
+		result = (ProxyAgentVO) selectOne("proxyServerSettingSql.selectProxyAgentInfo", param);
+		System.out.println("DAO end");
+		
+		return result;
+	}
 }

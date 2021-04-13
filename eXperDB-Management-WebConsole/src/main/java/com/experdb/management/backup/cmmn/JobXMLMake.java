@@ -43,9 +43,11 @@ public class JobXMLMake{
 		
 	      
 	      public void xmlMake(BackupLocationInfoVO locationInfo, BackupScriptVO backupScript, TargetMachineVO targetMachine, RetentionVO retentionVO, List<BackupScheduleVO> backupSchedule){
-
- 	  
-	    	  System.out.println("xmlMake");
+				
+				// ** 태그 쓰는 순서 변경 금지 **
+				// --> xmlRead 에서 문제 발생할 수 있음
+				
+	    	  System.out.println("==== xmlMake ====");
 
 	            try {
 	            	 docFactory = DocumentBuilderFactory.newInstance();
@@ -101,7 +103,7 @@ public class JobXMLMake{
 	 
 	      
 	    private void scheduleXml(Element jobList, List<BackupScheduleVO> backupSchedule) {
-	    	
+	    	System.out.println("#### scheduleXml ####");
 	    	// target 엘리먼트==================================================
             Element weeklySchedule = doc.createElement("weeklySchedule");
             jobList.appendChild(weeklySchedule);  
@@ -243,6 +245,7 @@ public class JobXMLMake{
 
 
 		private void targetInfoXml(TargetMachineVO targetMachine, Element backupConfiguration, BackupScriptVO backupScript) {
+	    	System.out.println("#### targetInfoXml ####");
 	    	// target 엘리먼트==================================================
             Element target = doc.createElement("target");
             backupConfiguration.appendChild(target);          
@@ -317,6 +320,7 @@ public class JobXMLMake{
 
 
 		private void fullInfoXml(RetentionVO retentionVO, Element backupConfiguration) {
+	    	System.out.println("#### fullInfoXml ####");
 	    	// retention 엘리먼트==================================================
             Element retention = doc.createElement("retention");
             backupConfiguration.appendChild(retention);          
@@ -341,7 +345,7 @@ public class JobXMLMake{
 
 
 		private void jobInfoXml(BackupScriptVO backupScript, Element backupConfiguration, TargetMachineVO targetMachine) {
-	    	
+	    	System.out.println("#### jobInfoXml ####");
 	    	 // compressLevel 엘리먼트
             Element compressLevel = doc.createElement("compressLevel");
             compressLevel.appendChild(doc.createTextNode(Integer.toString(backupScript.getCompressLevel())));
@@ -457,7 +461,7 @@ public class JobXMLMake{
 
 
 		private void backupLocationInfoXml(BackupLocationInfoVO locationInfo, Element backupConfiguration) {
-
+			System.out.println("#### backupLocationInfoXml ####");
 	    	// backupLocationInfo 엘리먼트==================================================
             Element backupLocationInfo = doc.createElement("backupLocationInfo");
             backupConfiguration.appendChild(backupLocationInfo);          

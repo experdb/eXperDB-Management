@@ -28,7 +28,7 @@ public class JobXMLRead{
 		Document doc;
 		
 		public Map<String, Object> xmlRead(String file) throws SAXException, IOException, ParserConfigurationException{
-			System.out.println("xmlReader");
+			System.out.println("=== xmlReader ===");
 			List<BackupScheduleVO> scheduleList = new ArrayList<>();
 			RetentionVO retention = new RetentionVO();
 			BackupScriptVO backupScript = new BackupScriptVO();
@@ -71,7 +71,7 @@ public class JobXMLRead{
 			
 			// <weeklySchedule> TAG exist check
 			if(n_week == null || n_week.equals("")){
-				System.out.println("weeklySchedule null");
+				System.out.println("## scheduleXml_weeklySchedule null ##");
 				return backupSchedule;
 			}
 			
@@ -142,7 +142,7 @@ public class JobXMLRead{
 			
 			// <retention> TAG exist check
 			if(n_retention == null || n_retention.equals("")){
-				System.out.println("retention null");
+				System.out.println("## fullInfoXML (retention) null ##");
 				return retentionVO;
 			}
 			
@@ -162,7 +162,7 @@ public class JobXMLRead{
 			Node n_backupLocation = backupLocationInfo.item(0);
 			
 			if(n_backupLocation == null || n_backupLocation.equals("")){
-				System.out.println("backupLocationInfo null");
+				System.out.println("## backupLocationInfo null ##");
 				return backupLocation;
 			}
 			Element e_backupLocation = (Element) n_backupLocation;
@@ -185,7 +185,7 @@ public class JobXMLRead{
 			Node n_jobList = jobList.item(0);
 			
 			if(n_jobList == null || n_jobList.equals("")){
-				System.out.println("backupScript null");
+				System.out.println("## jobInfoXML_backupScript null ##");
 				return backupScript;
 			}
 			

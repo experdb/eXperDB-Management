@@ -87,7 +87,7 @@
 				{data : "lst_mdf_dtm", defaultContent : ""},
 				{data : "wrk_id", defaultContent : "", visible: false },
 				{data : "bck_wrk_id", defaultContent : "", visible: false }
-			]
+			], 'select': {'style': 'multi'}
 		});
 	
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');

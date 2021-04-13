@@ -1,5 +1,6 @@
 package com.experdb.management.proxy.web;
 
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -484,7 +485,7 @@ public class ProxySettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/prySvrConnTest.do")
-	public @ResponseBody JSONObject prySvrConnTest(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody JSONObject prySvrConnTest(HttpServletRequest request, HttpServletResponse response){
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
@@ -500,7 +501,8 @@ public class ProxySettingController {
 			}else{
 				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))  ? request.getParameter("pry_svr_id").toString() : "0");
 				param.put("pry_svr_id", prySvrId);
-
+				param.put("ipadr", request.getParameter("ipadr"));
+				System.out.println("prySvrConnTest start");
 				resultObj = proxySettingService.prySvrConnTest(param);
 			}
 		} catch (Exception e) {

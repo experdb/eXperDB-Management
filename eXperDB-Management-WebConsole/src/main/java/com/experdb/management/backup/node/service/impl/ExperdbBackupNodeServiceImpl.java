@@ -38,8 +38,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		return experdbBackupNodeDAO.getNodeList();	
 	}
 
-
-
+	// 노드 리스트 조회
 	@Override
 	public List<ServerInfoVO> getNodeInfoList() {
 		List<TargetMachineVO> nodeList = null;
@@ -51,7 +50,6 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		for(ServerInfoVO s : serverList){
 			for(TargetMachineVO n : nodeList){
 				if(s.getIpadr().equals(n.getName())){
-//					System.out.println("REG LIST : " + s.getIpadr() + " || " + n.getName());
 					result.add(s);
 				}
 			}
@@ -60,7 +58,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 	}
 
 
-
+	// 등록되지 않은 노드리스트 조회
 	@Override
 	public List<ServerInfoVO> getUnregNodeList() {
 		List<TargetMachineVO> nodeList = null;
@@ -71,7 +69,6 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		for(ServerInfoVO s : serverList){
 			for(TargetMachineVO n : nodeList){
 				if(s.getIpadr().equals(n.getName())){
-//					System.out.println("UNREG LIST : " + s.getIpadr() + " || " + n.getName());
 					result.add(s);
 				}
 			}
@@ -81,7 +78,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 	}
 
 
-
+	// 노드 등록
 	@Override
 	public JSONObject nodeInsert(HttpServletRequest request) {
 		TargetMachineVO nodeInfo = new TargetMachineVO();
@@ -98,18 +95,16 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		
 		return result;
 	}
-
+	
+	// 노드 정보 불러오기
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject getNodeInfo(HttpServletRequest request) throws Exception{
-//		System.out.println("GET NODE INFO SERVICE!!!");
-//		System.out.println("REQUEST : " + request.getParameter("path"));
 		TargetMachineVO nodeInfo = new TargetMachineVO();
 		JSONObject result = new JSONObject();
 		String path = request.getParameter("path");
 		nodeInfo = experdbBackupNodeDAO.getNodeInfo(path);
 		
-//		System.out.println("nodeInfo to String : " + nodeInfo.toString());
 		String[] name= nodeInfo.getUser().split("\t");
 		
 		if(name.length >1){			
@@ -125,7 +120,8 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		
 		return result;
 	}
-
+	
+	// 노드 수정
 	@Override
 	public JSONObject nodeUpdate(HttpServletRequest request) {
 		TargetMachineVO nodeInfo = new TargetMachineVO();
@@ -143,470 +139,13 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		return result;
 	}
 	
+	// 노드 삭제
 	@Override
 	public JSONObject nodeDelete(HttpServletRequest request) throws Exception{
 		JSONObject result = new JSONObject();
 		result = Node.deleteNode(request.getParameter("ipadr"));
 		return result;
 	}
-
-	// 백업 정보 불러오기
-	@Override
-	@SuppressWarnings({ "unchecked"})
-	public JSONObject getScheduleInfo(HttpServletRequest request) throws SAXException, IOException, ParseException, ParserConfigurationException {
-		System.out.println("@@@@@  getScheduleInfo  @@@@@");
-		JSONObject result = new JSONObject();
-		
-		String startDate ="";
-		
-		// 
-		List<BackupScheduleVO> backupSchedule = null;
-		BackupScriptVO backupScript = new BackupScriptVO();
-		BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
-		RetentionVO backupRetention = new RetentionVO();
-		ArrayList<Object> weekData = new ArrayList<>();
-		Map<String, Object> readXml = new HashMap<>();
-		
-		String fileName = request.getParameter("ipadr").replace(".", "_").trim()+".xml";
-		
-		
-		//////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////  PATH SETTING  ///////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////
-//		String path = "C://test/backupXml/" + fileName;
-		String path = "/opt/Arcserve/d2dserver/bin/jobs/" + fileName;
-		System.out.println("read filepath : " + path);
-		//////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////
-		
-		JobXMLRead xml = new JobXMLRead();
-		readXml = xml.xmlRead(path);
-		
-//		System.out.println("schedule 정보 불러온 결과!!!!!!");
-		backupSchedule = (List<BackupScheduleVO>) readXml.get("schedule");
-		backupRetention = (RetentionVO) readXml.get("retention");
-		backupLocation = (BackupLocationInfoVO) readXml.get("backupLocation");
-		backupScript = (BackupScriptVO) readXml.get("backupScript");
-		if(backupSchedule.size()>0){			
-			 startDate = (String) dateSplit(backupSchedule.get(0).getYear() + "-" + backupSchedule.get(0).getMonth() + "-" + backupSchedule.get(0).getDay()).get("fullDate");
-			 backupSchedule.remove(0);
-		}else{
-			 startDate = "";
-		}
-		
-		// 스케줄 정보를 정리해서 담아줌
-		for(BackupScheduleVO bs : backupSchedule){
-			Map <String, Object> scheduleMap = new HashMap<>();
-			Boolean[] dayPick = new Boolean[7];
-			Arrays.fill(dayPick, Boolean.FALSE);
-			int dayType = Integer.parseInt(bs.getDayType())%7;
-			
-			scheduleMap.put("startTime", timeSplit(bs.getStartHourOfDay() + ":" + bs.getStartMinute()).get("fullHour"));
-			if(Boolean.parseBoolean(bs.getRepeat())){
-				scheduleMap.put("repEndTime", timeSplit(bs.getEndHourOfDay() + ":" + bs.getEndMinute()).get("fullHour"));
-				scheduleMap.put("repTime", bs.getInterval());
-				scheduleMap.put("repTimeUnit", bs.getIntervalUnit());
-				scheduleMap.put("repeat", true);
-			}else{
-				scheduleMap.put("repEndTime", "");
-				scheduleMap.put("repTime", "");
-				scheduleMap.put("repTimeUnit", "");
-				scheduleMap.put("repeat", false);
-			}
-			dayPick[dayType] = true;
-			scheduleMap.put("dayPick", dayPick);
-			
-			weekData.add(scheduleMap);
-		}
-		
-		int storageType;
-		String fstorage = backupLocation.getBackupDestLocation();
-		int fcompress = backupScript.getCompressLevel();
-		int fsetNum = backupRetention.getBackupSetCount();
-		String jobName = backupScript.getJobName();
-		String fdateType = backupRetention.getUseWeekly();
-		int fdate = backupRetention.getDayOfMonth();
-		
-		if(backupLocation.getBackupDestUser()==null){
-			storageType = 1;
-		}else{
-			storageType = 2;
-		}
-		
-//		System.out.println("=============================");
-//		System.out.println("startDate : " + startDate);
-//		System.out.println("storageType : " + storageType);
-//		System.out.println("storage : " + fstorage);
-//		System.out.println("compress : " + fcompress);
-//		System.out.println("dateType : " + fdateType);
-//		System.out.println("date : " + fdate);
-//		System.out.println("setNum : " + fsetNum);
-//		System.out.println("=============================");
-		
-		result.put("startDate", startDate);
-		result.put("storageType", storageType);
-		result.put("storage", fstorage);
-		result.put("compress", fcompress);
-		result.put("dateType", fdateType);
-		result.put("jobName", jobName);
-		result.put("date", fdate);
-		result.put("setNum", fsetNum);
-		result.put("weekData", weekData);
-		
-		
-		return result;
-	}
-
-	// 백업 정보 등록하기
-	 @SuppressWarnings("static-access")
-	@Override
-	public JSONObject scheduleInsert(HttpServletRequest request, Map<Object, String> param) throws Exception {
-		System.out.println("========= scheduleInsert SERVICE !!! =========");
-		JSONObject result = new JSONObject();
-		List<BackupScheduleVO> backupSchedule = new ArrayList<>();
-		BackupScriptVO backupScript = new BackupScriptVO();
-		TargetMachineVO targetMachine = new TargetMachineVO();
-		BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
-		RetentionVO backupRetention = new RetentionVO();
-		
-		String weekData = param.get("weekData").toString();
-		String ipadr = request.getParameter("nodeIpadr");
-		String startDate = request.getParameter("startDate");
-		String storageType = request.getParameter("storageType");
-		String fstorage = request.getParameter("storage");
-		String fcompress = request.getParameter("compress");
-		String fdateType = request.getParameter("dateType");
-		String fdate = request.getParameter("date");
-		String fsetNum = request.getParameter("setNum");
-		String jobName_Old = request.getParameter("jobName");
-		
-		Date date = new Date();
-        SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String time = transFormat.format(date);   
-        
-        String jobName_New = "backup_"+time;
-        String uuid = UUID.randomUUID().toString();
-        
-        int schExist = 0;
-        
-        //////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////  PATH SETTING  /////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////
-		String path = "/opt/Arcserve/d2dserver/bin/jobs/";
-//		String path = "C://test/backupXml/";
-		//////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////
-		
-		// job이 등록된 상태인지 조회
-		int fileExist = experdbBackupNodeDAO.checkJobExist(ipadr);
-		System.out.println("fileExist : " + fileExist);
-		// ** 존재하면 jobqueue, jobscript에 등록되어있는 정보 지워주기 **
-		// 새로운 xml 파일 import 되기 전에 수행되어야함
-		if(fileExist > 0){
-			Job job = new Job();
-			result=job.deleteJob(jobName_Old, ipadr);
-		}
-		
-		//////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////
-
-		
-		System.out.println("=============================");
-		System.out.println("uuid : " + uuid);
-		System.out.println("weekData : " + weekData.length());
-		System.out.println("ipadr : " + ipadr);
-		System.out.println("startDate : " + startDate);
-		System.out.println("startDate.length : " + startDate.length());
-		System.out.println("storageType : " + storageType);
-		System.out.println("storage : " + fstorage);
-		System.out.println("compress : " + fcompress);
-		System.out.println("dateType : " + fdateType);
-		System.out.println("date : " + fdate);
-		System.out.println("setNum : " + fsetNum);
-		System.out.println("jobName_New : " + jobName_New);
-		System.out.println("jobName_Old : " + jobName_Old);
-		System.out.println("=============================");
-		
-		// schedule Info List Make
-		backupSchedule = scheduleListMake(weekData, startDate);
-		
-		// backupLocation Info Make
-		backupLocation=experdbBackupNodeDAO.getScheduleLocationInfo(fstorage);
-		backupLocation.setBackupDestLocation(fstorage);
-		System.out.println("backupLocation : " + backupLocation.toString());
-		
-		// backupScript Info Make
-		backupScript.setCompressLevel(Integer.parseInt(fcompress));
-		backupScript.setJobName(jobName_New);
-		
-		if(backupSchedule.size()>0){
-			schExist = 1;
-			backupScript.setRepeat("true");
-			backupScript.setScheduleType(5);
-		}else{
-			schExist = 0;
-			backupScript.setRepeat("false");			
-			backupScript.setScheduleType(3);
-		}
-		System.out.println("backupScript : " + backupScript.toString());
-		
-		// target Info Make
-		targetMachine = experdbBackupNodeDAO.getScheduleNodeInfo(ipadr);
-		targetMachine.setJobName(jobName_New);
-		targetMachine.setExclude("true");
-		targetMachine.setHypervisor("false");
-		targetMachine.setIsProtected("true");
-		targetMachine.setTemplateId(uuid);
-		if(targetMachine.getDescription()==null){
-			targetMachine.setDescription("");
-		}
-		System.out.println("targetMachine : "+targetMachine.toString());
-		
-		// retention Info Make
-		backupRetention.setBackupSetCount(Integer.parseInt(fsetNum));
-		backupRetention.setDayOfMonth(Integer.parseInt(fdate));
-		backupRetention.setDayOfWeek(Integer.parseInt(fdate));
-		backupRetention.setUseWeekly(fdateType);
-		System.out.println("backupRetention : "+backupRetention.toString());
-		
-		// make xml file
-		JobXMLMake xmlMake = new JobXMLMake();
-		xmlMake.xmlMake(backupLocation, backupScript, targetMachine, backupRetention, backupSchedule);
-		
-		// 새로 만들어진 xml 파일이 import 된 후 처리되야함 
-		Map<String, Object> jobInsert = new HashMap<>();
-		
-		jobInsert.put("jobType", 1);
-		jobInsert.put("templateID", uuid);
-		jobInsert.put("ipadr", ipadr);
-		jobInsert.put("isRepeat", schExist);
-		jobInsert.put("jobStatus", -1);
-		jobInsert.put("lastResult", 0);
-		jobInsert.put("uuid", UUID.randomUUID().toString());
-		jobInsert.put("backupLocation", backupLocation.getUuid());
-		jobInsert.put("jobName", jobName_New);
-
-		if(fileExist>0){
-			System.out.println("$$$$$$ 파일이 존재한단다아아아아 $$$$$$");
-			experdbBackupNodeDAO.scheduleInsert2(jobInsert);
-		}else{			
-			System.out.println("$$$$$$ 파일이 없어어어어어어어 $$$$$$");
-			experdbBackupNodeDAO.scheduleInsert(jobInsert);
-		}
-		
-		System.out.println("========= scheduleInsert SERVICE END ==========");
-		return result;
-	}
-	 
-	public List<BackupScheduleVO> scheduleListMake(String weekData, String startDate) throws Exception {
-		List<BackupScheduleVO> backupSchedule = new ArrayList<>();
-		
-		Map<String, Object> date = new HashMap<>();
-		System.out.println("startDate Null ???? ");
-		System.out.println(startDate==null);
-		date = dateSplit(startDate);
-		
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(weekData);
-		JSONArray mon = (JSONArray) jsonObject.get("mon");
-		JSONArray tue = (JSONArray) jsonObject.get("tue");
-		JSONArray wed = (JSONArray) jsonObject.get("wed");
-		JSONArray thu = (JSONArray) jsonObject.get("thu");
-		JSONArray fri = (JSONArray) jsonObject.get("fri");
-		JSONArray sat = (JSONArray) jsonObject.get("sat");
-		JSONArray sun = (JSONArray) jsonObject.get("sun");
-		
-		// schedule Setting by week of day
-		for(int i=0; i<mon.size(); i++){
-			BackupScheduleVO schedule = new BackupScheduleVO();
-			JSONObject schObj = (JSONObject) mon.get(i);
-			schedule = setSchedule(schObj, date);
-			schedule.setDayType("1");
-			backupSchedule.add(schedule);
-		}
-		for(int i=0; i<tue.size(); i++){
-			BackupScheduleVO schedule = new BackupScheduleVO();
-			JSONObject schObj = (JSONObject) tue.get(i);
-			schedule = setSchedule(schObj, date);
-			schedule.setDayType("2");
-			backupSchedule.add(schedule);
-		}
-		for(int i=0; i<wed.size(); i++){
-			BackupScheduleVO schedule = new BackupScheduleVO();
-			JSONObject schObj = (JSONObject) wed.get(i);
-			schedule = setSchedule(schObj, date);
-			schedule.setDayType("3");
-			backupSchedule.add(schedule);
-		}
-		for(int i=0; i<thu.size(); i++){
-			BackupScheduleVO schedule = new BackupScheduleVO();
-			JSONObject schObj = (JSONObject) thu.get(i);
-			schedule = setSchedule(schObj, date);
-			schedule.setDayType("4");
-			backupSchedule.add(schedule);
-		}
-		for(int i=0; i<fri.size(); i++){
-			BackupScheduleVO schedule = new BackupScheduleVO();
-			JSONObject schObj = (JSONObject) fri.get(i);
-			schedule = setSchedule(schObj, date);
-			schedule.setDayType("5");
-			backupSchedule.add(schedule);
-		}
-		for(int i=0; i<sat.size(); i++){
-			BackupScheduleVO schedule = new BackupScheduleVO();
-			JSONObject schObj = (JSONObject) sat.get(i);
-			schedule = setSchedule(schObj, date);
-			schedule.setDayType("6");
-			backupSchedule.add(schedule);
-		}
-		for(int i=0; i<sun.size(); i++){
-			BackupScheduleVO schedule = new BackupScheduleVO();
-			JSONObject schObj = (JSONObject) sun.get(i);
-			schedule = setSchedule(schObj, date);
-			schedule.setDayType("7");
-			backupSchedule.add(schedule);
-		}
-
-		return backupSchedule;
-	}
-	
-	// schedules setting
-	public BackupScheduleVO setSchedule(JSONObject schObj, Map<String, Object> date) throws ParseException{
-		BackupScheduleVO schedule = new BackupScheduleVO();
-		
-		schedule.setRepeat(Boolean.toString((boolean) schObj.get("rc")));
-
-		schedule.setYear(date.get("year").toString());
-		schedule.setMonth(date.get("month").toString());
-		schedule.setDay(date.get("day").toString());
-		
-		// start time
-		Map<String, Object> startTime = new HashMap<>();
-		startTime = timeSplit((String) schObj.get("st"));
-		
-		schedule.setStartHour(startTime.get("12hour").toString());
-		schedule.setStartHourOfDay(startTime.get("24hour").toString());
-		schedule.setStartMinute(startTime.get("min").toString());
-		schedule.setStartHourType(startTime.get("type").toString());
-
-		// end time
-		if((boolean) schObj.get("rc")){		
-			// interval setting
-			schedule.setInterval(schObj.get("rt").toString());
-			schedule.setIntervalUnit(schObj.get("rtu").toString());
-			
-			Map<String, Object> endTime = new HashMap<>();
-			endTime = timeSplit(schObj.get("ret").toString());
-			
-			schedule.setEndHour(endTime.get("12hour").toString());
-			schedule.setEndHourOfDay(endTime.get("24hour").toString());
-			schedule.setEndMinute(endTime.get("min").toString());
-			schedule.setEndHourType(endTime.get("type").toString());
-		}else{
-			schedule.setInterval("0");
-			schedule.setIntervalUnit("0");
-		}
-		return schedule;
-	}
-	
-	public static Map<String, Object> dateSplit(String date) throws ParseException{
-		Map<String, Object> result = new HashMap<>();
-		SimpleDateFormat _dateSDF = new SimpleDateFormat("yyyy-mm-dd");
-		SimpleDateFormat _yearSDF = new SimpleDateFormat("yyyy");
-		SimpleDateFormat _monthSDF = new SimpleDateFormat("mm");
-		SimpleDateFormat _daySDF = new SimpleDateFormat("dd");
-		
-		if(date.length()>0){
-			Date _dateDt = _dateSDF.parse(date);
-			result.put("year", Integer.parseInt(_yearSDF.format(_dateDt)));
-			result.put("month", Integer.parseInt(_monthSDF.format(_dateDt)));
-			result.put("day", Integer.parseInt(_daySDF.format(_dateDt)));
-			result.put("fullDate", _dateSDF.format(_dateDt));
-			
-		}else{
-			result.put("year", "");
-			result.put("month", "");
-			result.put("day", "");
-			result.put("fullDate", "");
-		}
-
-		return result;
-	}
-	
-	public static Map<String, Object> timeSplit(String time) throws ParseException{
-		
-		Map<String, Object> result = new HashMap<>();
-      
-       String _24HourTime = time;
-       SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
-       SimpleDateFormat _24Hour = new SimpleDateFormat("HH");
-       SimpleDateFormat _12Hour = new SimpleDateFormat("hh");
-       SimpleDateFormat _12Min = new SimpleDateFormat("mm");
-       SimpleDateFormat _12Type = new SimpleDateFormat("a", Locale.ENGLISH);
-       
-       if(time.length()>0){    	   
-    	   Date _24HourDt = _24HourSDF.parse(_24HourTime);
-    	   result.put("12hour",Integer.parseInt(_12Hour.format(_24HourDt)));
-    	   result.put("min", Integer.parseInt(_12Min.format(_24HourDt)));
-    	   result.put("24hour", Integer.parseInt(_24Hour.format(_24HourDt)));
-    	   result.put("fullHour", _24HourSDF.format(_24HourDt));
-    	   if(_12Type.format(_24HourDt).equals("PM")){
-    		   result.put("type", "1");
-    	   }else{
-    		   result.put("type", "0");
-    	   }
-       }else{
-    	   result.put("12hour","");
-    	   result.put("min", "");
-    	   result.put("24hour", "");
-    	   result.put("fullHour","");
-    	   result.put("type", "");
-       }
-
-		return result;
-		
-	}
-	
-	public static void main (String[] args){
-		Map<String, Object> result = new HashMap<>();
-		
-		String d = "2021-03-23";
-		DateFormat _dateSDF = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = Calendar.getInstance();
-		try {
-			Date _dateDt = _dateSDF.parse(d);
-			long time = _dateDt.getTime()/1000;
-			
-			System.out.println("time : " + time);
-			
-			cal.setTime(_dateDt);
-			cal.add(Calendar.DATE, 1);
-			System.out.println("day를 더하자 : " + _dateSDF.format(cal.getTime()));
-			System.out.println(cal.getTimeInMillis());
-			long time2 = cal.getTimeInMillis();
-			System.out.println("1데이를 더한 long 값 : " + time2/1000);
-			// 1617088111062
-			// "2021-03-02" 1614610800   --> dd : Tue Mar 02 00:00:00 KST 2021
-			// 1617005319   --> dd : Mon Mar 29 16:51:54 KST 2021
-			// 1617004314
-			// 1617004314
-			
-			// 1615734000
-			
-			Date dd = new Date(1617004314 * 1000L);
-			System.out.println("dd : " + dd);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	}
-
-
 
 
 }

@@ -40,13 +40,11 @@
 	// loader
 	$(function(){
 		$(document).ajaxStart(function() {	
-			console.log("ajax start!!");
 		    $("#loader").show();	
 		});
 		
 		//AJAX 통신 종료
 		$(document).ajaxStop(function() {
-			console.log("ajax stop");
 			$("#loader").hide();
 		});
 	});
@@ -258,7 +256,6 @@
 					},
 					success : function(result) {
 						fn_getStorageList();
-						// $("#pop_layer_popup_backupStorageReg").hide();
 						showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
 						$('#pop_layer_popup_backupStorageReg').modal("hide");
 					}
@@ -410,7 +407,6 @@
 	 function fn_valChkPath(){
 		 var storagePath = $("#storagePath").val();
 		$("#storagePathAlert").empty();
-		// var pathCheck = $("#pathcheck").val();
 		 // path duplication check
 		if(fn_dupCheckPath()){
 			$("#storagePathAlert").append("이미 등록된 Path 입니다");

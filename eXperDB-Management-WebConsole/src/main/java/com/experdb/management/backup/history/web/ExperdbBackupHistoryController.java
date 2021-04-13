@@ -44,30 +44,33 @@ public class ExperdbBackupHistoryController {
 			accessHistoryService.insertHistory(historyVO);*/
 			
 			Map<String, Object> param = new HashMap<>();
+			
+			// 검색조건 세팅 시작
+			
 			DateFormat _dateSDF = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar cal = Calendar.getInstance();
 			
-			System.out.println("startDate : " + request.getParameter("startDate"));
-			
 			String stDate = request.getParameter("startDate");
 			String edDate = request.getParameter("endDate");
+			
+			// 입력된 startDate, endDate 값을 "yyyy-MM-dd" 포멧으로 맞춰준다
 			Date _sDate = _dateSDF.parse(stDate);
 			Date _eDate = _dateSDF.parse(edDate);
 			
+			// endDate를 하루 늘려준다. --> 다음날 00시 기준으로 검색 (Long 으로 검색하므로)
 			cal.setTime(_eDate);
-			cal.add(Calendar.DATE, 1);
+			cal.add(Calendar.DATE, 1); 
 			
+			// DATE 값을 LONG으로 변경
 			long sDate = _sDate.getTime()/1000;
 			long eDate = cal.getTimeInMillis()/1000;
 			
 			System.out.println("sDate : " + sDate);
 			System.out.println("eDate : " + eDate);
 			
+			// 검색 조건을 Map으로 전달
 			param.put("startDate", sDate);
 			param.put("endDate", eDate);
-			
-			System.out.println("server = "+request.getParameter("server").replace(".", "").trim());
-			
 			param.put("server", request.getParameter("server").replace(".", "").trim());
 			param.put("type", request.getParameter("type"));
 			param.put("status", request.getParameter("status"));

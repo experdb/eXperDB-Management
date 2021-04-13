@@ -208,12 +208,6 @@ function fn_storage_modi_popup() {
 }
 
 function fn_delStorage() {
-	// var datas = bckStorageList.rows('.selected').data();
-	// var storageList = [];
-	
-	// for(var i =0; i<datas.length;i++){
-	// 	storageList.push(bckStorageList.rows('.selected').data()[i].path);
-	// }
 	var delStorage = bckStorageList.row('.selected').data().path
 	$.ajax({
 		url : "/experdb/backupStorageDel.do",
@@ -239,10 +233,7 @@ function fn_delStorage() {
 		}
 
 	})
-
-	
 }
-
 
 function fn_clickDelete() {
 	var delData = bckStorageList.rows('.selected').data();

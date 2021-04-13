@@ -7,26 +7,22 @@
 
 <%
 	/**
-	* @Class Name : workList.jsp
+	* @Class Name : dumpList.jsp
 	* @Description : 백업 목록
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
-	*  2017.06.07     최초 생성
-	*  2017.10.23 	 변승우			테이블 -> 데이터테이블 변환
+	*  2021.04.07    최초 생성
     *	
-	* author YoonJH
-	* since 2017.06.07
+	* author 변승우
+	* since 2021.04.07
 	*
 	*/
 %>
-<script src="/vertical-dark-sidebar/js/backup_common.js"></script>
+<script src="/vertical-dark-sidebar/js/dump_common.js"></script>
 
 <script type="text/javascript">
-	var tableRman = null;
 	var tableDump = null;
-	var selectChkTab = "dump";
-	var searchInit = "";
 	var tabGbn = "${tabGbn}";
 	var bck_wrk_id_List = [];
 	var wrk_id_List = [];
@@ -36,14 +32,11 @@
 	var scheduleTable = null;
 	$(window).ready(function(){
 		//검색조건 초기화
-		selectInitTab("dump");
+		selectInitTab();
 		
 		//스케줄 테이즐 setting
 		fn_init_schedule();
-
-			
-		selectTab("dump");
-		
+		selectTab();
 		$('#dumpDataTable tbody').on('click','tr',function() {
 			var wrk_id_up = tableDump.row(this).data().wrk_id;
 			
@@ -188,7 +181,8 @@
 	 ******************************************************** */
 	function fn_work_delete_confirm() {
 		var datas = null;
-			datas = tableDump.rows('.selected').data();
+
+		datas = tableDump.rows('.selected').data();
 
 		bck_wrk_id_List = [];
 		wrk_id_List = [];
@@ -197,10 +191,10 @@
 			showSwalIcon('<spring:message code="message.msg16"/>', '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
-			for (var i = 0; i < datas.length; i++) {
-				bck_wrk_id_List.push( tableDump.rows('.selected').data()[i].bck_wrk_id);   
-				wrk_id_List.push( tableDump.rows('.selected').data()[i].wrk_id);   
-			}
+		for (var i = 0; i < datas.length; i++) {
+			bck_wrk_id_List.push( tableDump.rows('.selected').data()[i].bck_wrk_id);   
+			wrk_id_List.push( tableDump.rows('.selected').data()[i].wrk_id);   
+		}
 		
 		$.ajax({
 			url : "/popup/scheduleCheck.do",
@@ -230,12 +224,7 @@
 				}
 
 				confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
-				// @@@@@@@@@@@@@@@@@@@@ //////////////////////////////////////////////////
-				/* if(selectChkTab == "rman"){
-					$('#con_multi_gbn', '#findConfirmMulti').val("del_rman");
-				} else { */
-					$('#con_multi_gbn', '#findConfirmMulti').val("del_dump");
-				// }
+				$('#con_multi_gbn', '#findConfirmMulti').val("del_dump");
 
 				$('#confirm_multi_tlt').html(confile_title);
 				$('#confirm_multi_msg').html('<spring:message code="message.msg17" />');
@@ -247,7 +236,7 @@
 	/* ********************************************************
 	 * 삭제 로직 처리
 	 ******************************************************** */
-	function fn_deleteWork(gbn) {
+	function fn_deleteWork() {
 		$.ajax({
 			url : "/popup/workDelete.do",
 		  	data : {
@@ -271,12 +260,8 @@
 			success : function(result) {
 				if(result == true){
 					showSwalIcon('<spring:message code="message.msg18" />', '<spring:message code="common.close" />', '', 'success');
-					// @@@@@@@@@@@@@@@@@@@@ //////////////////////////////////////////////////
-					/* if (gbn == "del_rman") {
-						fn_get_rman_list();
-					} else { */
-						fn_get_dump_list();
-					// }
+					
+					fn_get_dump_list();
 				}else{
 					msgVale = "<spring:message code='backup_management.dumpBck' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
@@ -294,14 +279,8 @@
 		var rowCnt = null;
 		
 		immediate_data = null;
-		// @@@@@@@@@@@@@@@@@@@@ //////////////////////////////////////////////////
-		/* if(selectChkTab == 'rman'){
-			datas = tableRman.rows('.selected').data();
-			rowCnt = tableRman.rows('.selected').data().length;
-		}else{ */
-			datas = tableDump.rows('.selected').data();
-			rowCnt = tableDump.rows('.selected').data().length;
-		// }
+		datas = tableDump.rows('.selected').data();
+		rowCnt = tableDump.rows('.selected').data().length;
 
 		if(rowCnt <= 0){
 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
@@ -361,8 +340,9 @@
 	 * backup history 이동
 	 ******************************************************** */
 	function fn_backupHistory_move() {
-		var id = "workLogList" + $("#db_svr_id", "#findList").val();
-		location.href='/backup/workLogList.do?db_svr_id='+$("#db_svr_id", "#findList").val()+'&tabGbn='+selectChkTab;
+		var id = "dumpLogList" + $("#db_svr_id", "#findList").val();
+		// location.href='/backup/workLogList.do?db_svr_id='+$("#db_svr_id", "#findList").val()+'&tabGbn='+selectChkTab;
+		location.href='/backup/dumpLogList.do?db_svr_id='+$("#db_svr_id", "#findList").val()+'&tabGbn=dump';
 		parent.fn_GoLink(id);
 	}
 
@@ -376,7 +356,6 @@
 		var wrk_id = "";
 			datas = tableDump.rows('.selected').data();
 			
-			reregUrl = "/popup/dumpRegReForm.do";
 		
 		if (datas.length <= 0) {
 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
@@ -389,7 +368,7 @@
 			wrk_id = tableDump.row('.selected').data().wrk_id;
 			
 		$.ajax({
-			url : reregUrl,
+			url : "/popup/dumpRegReForm.do",
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val(),
 				bck_wrk_id : bck_wrk_id,
@@ -412,7 +391,7 @@
 			success : function(result) {
 				
 				if (result.workInfo != null) {
-					fn_update_chogihwa(selectChkTab, result);
+					fn_update_chogihwa(result);
 						$('#dump_call_gbn', '#search_dumpReForm').val("");
 						$('#pop_layer_mod_dump').modal("show");
 				} else {
@@ -424,13 +403,9 @@
 	}
 </script>
 
-<%-- <%@include file="../cmmn/workRmanInfo.jsp"%> --%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
-<%-- <%@include file="../popup/rmanShow.jsp"%> --%>
 <%@include file="../popup/dumpShow.jsp"%>
-<%-- <%@include file="../popup/rmanRegForm.jsp"%> --%>
 <%@include file="../popup/dumpRegForm.jsp"%>
-<%-- <%@include file="../popup/rmanRegReForm.jsp"%> --%>
 <%@include file="../popup/dumpRegReForm.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/scheduleWrkList.jsp"%>
@@ -505,7 +480,7 @@
 										<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
 									</div>
 		
-									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_dump" style="display:none;">
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_dump">
 										<select class="form-control" name="db_id" id="db_id">
 											<option value=""><spring:message code="common.database" />&nbsp;<spring:message code="schedule.total" /></option>
 											<c:forEach var="result" items="${dbList}" varStatus="status">

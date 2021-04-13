@@ -46,7 +46,6 @@ $(window.document).ready(function() {
 	fn_init();
 	dateCalenderSetting();
 	fn_getSvrList();
-	// fn_getNodeList();
 	schWeek = [schSun,schMon,schTue,schWed,schThu,schFri,schSat];
 });
 
@@ -75,7 +74,6 @@ $(function() {
  
 
 function fn_init() {
-	
 	/* ********************************************************
 	 * 노트리스트 테이블
 	 ******************************************************** */
@@ -182,7 +180,6 @@ function fn_scheduleReset(){
 
 // backup policy reset
 function fn_policyReset(){
-	console.log("policyReset");
 	$("#bckStorage").val("");
 	$("#bckStorageType").val("");
 	$("#bckStorageTypeVal").val("");
@@ -194,13 +191,11 @@ function fn_policyReset(){
 }
 
 function fn_alertShow(){
-	console.log("alertShow");
 	$("#applyAlert").show();
 	$("#applyAlert_none").hide();
 }
 
 function fn_alertHide(){
-	console.log("alertHide");
 	$("#applyAlert").hide();
 	$("#applyAlert_none").show();
 }
@@ -245,7 +240,6 @@ function fn_getSvrList() {
 		type : "post"
 	})
 	.done(function(result){
-		console.log("RESULT_CODE : " + result.RESULT_CODE);
 		if(result.RESULT_CODE == "0"){
 			jobExist = 1;
 			fn_setScheduleInfo(result);
@@ -274,12 +268,14 @@ function fn_getSvrList() {
 function fn_setScheduleInfo(result){
 	var scheduleData = [];
 	scheduleData = result.weekData;
-	
+	// 증분 백업 정책 setting
 	for(var i=0 ; i<scheduleData.length; i++){
 		fn_scheduleInsert(scheduleData[i].dayPick, scheduleData[i].startTime, scheduleData[i].repeat, scheduleData[i].repEndTime, scheduleData[i].repTime, scheduleData[i].repTimeUnit);
 	}
 	$("#startDateSch").val(result.startDate);
 	fn_drawScheduleList();
+	
+	// 풀 백업 정책 세팅
 	if(result.dateType == "true"){
 		$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true); 
 		$("#merge_period_week").val(result.date);
@@ -307,6 +303,7 @@ function fn_setScheduleInfo(result){
 	
 	// full backup 수행일을 문장으로 나타내주기 위해
 	fn_policyReg();
+	
 	$("#bckStorage").val(result.storage);
 	
 }
@@ -429,6 +426,7 @@ function fn_nodeRegPopup() {
 	})
   }
  
+  // confirm function
   function fnc_confirmMultiRst(gbn){
 	  if(gbn == "node_del"){
 		  fn_nodeDelete();
@@ -456,10 +454,8 @@ function fn_nodeRegPopup() {
 			.done (function(result){			
 				fn_setStorageList(result);
 				if($("#bckStorage").val() != ""){
-					console.log("정책  수정");
 					fn_policyModiReset();
 				}else{
-					console.log("정책 신규 등록");
 					fn_policyRegReset();
 				}
 				$("#pop_layer_popup_backupPolicyReg").modal("show");
@@ -572,7 +568,6 @@ function fn_nodeRegPopup() {
  * apply
  ******************************************************** */
 	function fn_apply() {
-		console.log("fn_apply called!!");
 		if(fn_applyValidation()){
 			// jsonParser를 쓰기 위해 Object 형태로 보냄
 			var weekData = new Object();
@@ -729,7 +724,6 @@ table.dataTable.ccc thead th{
 
 </style>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
-
 <%@include file="./popup/bckNodeRegForm.jsp"%>
 <%@include file="./popup/bckPolicyRegForm.jsp"%>
 <%@include file="./popup/bckScheduleRegForm.jsp"%>
