@@ -158,7 +158,7 @@
 											menuJson +=	',{' +
 															 '"text": "덤프관리",' +
 															 '"icon": "ti-files",' +
-															 '"id": "backup'+item.db_svr_id+'"';
+															 '"id": "dump'+item.db_svr_id+'"';
 
 											if((aut.length != 0 && aut[index].bck_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].bck_hist_aut_yn == "Y")
 											 || (aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y")){
@@ -169,7 +169,7 @@
 																	'"icon": "fa fa-cog",' +
 																	'"text": "<spring:message code="menu.backup_settings"/>",' +
 																	'"url": "/backup/dumpList.do?db_svr_id='+item.db_svr_id+'",' +
-																	'"id": "workList'+item.db_svr_id+'"' +
+																	'"id": "dumpWorkList'+item.db_svr_id+'"' +
 																'},';
 												}
 
