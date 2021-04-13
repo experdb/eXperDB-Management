@@ -8,8 +8,8 @@
 
 <%
 	/**
-	* @Class Name : arcBackupRegForm.jsp
-	* @Description : 백업정책 등록 팝업
+	* @Class Name : bckStorageRegForm.jsp
+	* @Description : 백업 스토리지 등록 팝업
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -223,7 +223,7 @@
 				  $('#pop_layer_popup_backupStorageReg').modal("hide");
 			  }) 
 		  }else{
-			  showSwalIcon('스토리지 설정을 확인해주세요!', '<spring:message code="common.close" />', '', 'error');
+			  showSwalIcon('<spring:message code="eXperDB_backup.msg35" />', '<spring:message code="common.close" />', '', 'error');
 		  }
 	 }
 	 
@@ -292,7 +292,7 @@
 					},
 					success : function(result) {		
 						 if(result.RESULT_CODE == "1"){							 
-							 showSwalIcon('NFS 설정을 확인해주세요!', '<spring:message code="common.close" />', '', 'error');
+							 showSwalIcon('<spring:message code="eXperDB_backup.msg36" />', '<spring:message code="common.close" />', '', 'error');
 							 storageValid = false;
 						 }else{
 							 showSwalIcon('Connect for Success', '<spring:message code="common.close" />', '', 'success');
@@ -360,7 +360,7 @@
 					},
 					success : function(result) {		
 						 if(result.RESULT_CODE == "1"){							 
-							 showSwalIcon('NFS 설정을 확인해주세요!', '<spring:message code="common.close" />', '', 'error');
+							 showSwalIcon('<spring:message code="eXperDB_backup.msg36" />', '<spring:message code="common.close" />', '', 'error');
 							 storageValid = false;
 						 }else{
 							 showSwalIcon('Connect for Success', '<spring:message code="common.close" />', '', 'success');
@@ -409,13 +409,13 @@
 		$("#storagePathAlert").empty();
 		 // path duplication check
 		if(fn_dupCheckPath()){
-			$("#storagePathAlert").append("이미 등록된 Path 입니다");
+			$("#storagePathAlert").append("<spring:message code='eXperDB_backup.msg37' />");
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
 			return false;
 		}else if(!storagePath){
 			$("#storagePath").val("");
-			$("#storagePathAlert").append("Path를 입력해주세요");
+			$("#storagePathAlert").append("<spring:message code='eXperDB_backup.msg38' />");
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
 			return false;
@@ -430,7 +430,7 @@
 		 $("#userNameAlert").empty();
 		if(!userName){
 			$("#userName").val("");
-			$("#userNameAlert").append("이름을 입력해주세요");
+			$("#userNameAlert").append("<spring:message code='eXperDB_backup.msg39' />");
 			$("#userNameAlert").removeClass("text-success").addClass("text-danger");
 			$("#userName").focus();
 			return false;
@@ -445,7 +445,7 @@
 		 $("#passWordAlert").empty();
 		if(!password){
 			$("#passWord").val("");
-			$("#passWordAlert").append("비밀번호를 입력해주세요");
+			$("#passWordAlert").append("<spring:message code='message.msg88'/>");
 			$("#passWordAlert").removeClass("text-success").addClass("text-danger");
 			$("#passWord").focus();
 			return false;
@@ -483,10 +483,10 @@
 			<div class="modal-body" style="margin-bottom:-30px;">
 			<div id="loader"><div class="flip-square-loader mx-autor" style="border: 0px !important;z-index:99999; position:absolute; transform:translate(250%, 250%); size:150%;"></div></div>
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Reg" style="padding-left:5px;">
-					Storage 등록
+					<spring:message code='eXperDB_backup.msg40' />
 				</h5>
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Modi" style="padding-left:5px;">
-					Storage 수정
+					<spring:message code='eXperDB_backup.msg41' />
 				</h5>
 				<div class="card" style="border:0px;">
 					<form class="cmxform" id="insRegForm">
@@ -590,8 +590,8 @@
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<button type="button" class="btn btn-primary" id="regButton" onclick="fn_storageReg()"><spring:message code="common.registory"/></button>
 									<button type="button" class="btn btn-primary" id="modiButton" onclick="fn_storageModi()"><spring:message code="common.modify"/></button>
-									<input class="btn btn-primary" width="200px" id="storageChkBtn_Reg" style="vertical-align:middle;" type="button" onClick="fn_storageValidate();" value='스토리지 체크' />
-									<input class="btn btn-primary" width="200px" id="storageChkBtn_Modi" style="vertical-align:middle;" type="button" onClick="fn_storageValidateModi();" value='스토리지 체크' />
+									<input class="btn btn-primary" width="200px" id="storageChkBtn_Reg" style="vertical-align:middle;" type="button" onClick="fn_storageValidate();" value="<spring:message code='eXperDB_backup.msg42' />" />
+									<input class="btn btn-primary" width="200px" id="storageChkBtn_Modi" style="vertical-align:middle;" type="button" onClick="fn_storageValidateModi();" value="<spring:message code='eXperDB_backup.msg42' />" />
 									<button type="button" class="btn btn-light" data-dismiss="modal" onclick=""><spring:message code="common.cancel"/></button>
 								</div>
 							</div>

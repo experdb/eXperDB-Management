@@ -9,7 +9,7 @@
 <%
 	/**
 	* @Class Name : bckNodeRegForm.jsp
-	* @Description : 백업노드 등록 팝업
+	* @Description : 백업 대상 서버 등록 팝업
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -176,7 +176,7 @@
 						showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
 						fn_getSvrList();
 					}else{					
-						showSwalIconRst('등록에 실패하였습니다', '<spring:message code="common.close" />', '', 'error');
+						showSwalIconRst('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 					}
 				 })
 				 .fail (function(xhr, status, error){
@@ -211,7 +211,7 @@
 		 $("#rootName").val($("#rootName").val().replace(/ /g, ''));
 		 $("#rootNameAlert").empty();
 		if(!$("#rootName").val()){
-			$("#rootNameAlert").append("Root name을 입력해주세요");
+			$("#rootNameAlert").append('<spring:message code="eXperDB_backup.msg77" />');
 			$("#rootNameAlert").removeClass("text-success").addClass("text-danger");
 			$("#rootName").focus();
 			return true;
@@ -224,7 +224,7 @@
 	 function fn_valChkRootPW() {
 		$("#rootPWAlert").empty();
 		if(!$("#rootPW").val()){
-			$("#rootPWAlert").append("Root Password를 입력해주세요");
+			$("#rootPWAlert").append('<spring:message code="eXperDB_backup.msg78" />');
 			$("#rootPWAlert").removeClass("text-success").addClass("text-danger");
 			$("#rootPW").focus();
 			return true;
@@ -238,7 +238,7 @@
 		$("#userCredName").val($("#userCredName").val().replace(/ /g, ''));
 		$("#userCredNameAlert").empty();
 		if($("#userCred").is(":checked")&&!$("#userCredName").val()){
-			$("#userCredNameAlert").append("User name을 입력해주세요");
+			$("#userCredNameAlert").append('<spring:message code="eXperDB_backup.msg79" />');
 			$("#userCredNameAlert").removeClass("text-success").addClass("text-danger");
 			$("#userCredName").focus();
 			return true;
@@ -251,7 +251,7 @@
 	 function fn_valChkUserPW() {
 		$("#userCredPwAlert").empty();
 		if($("#userCred").is(":checked")&&!$("#userCredPw").val()){
-			$("#userCredPwAlert").append("User Password를 입력해주세요");
+			$("#userCredPwAlert").append('<spring:message code="eXperDB_backup.msg80" />');
 			$("#userCredPwAlert").removeClass("text-success").addClass("text-danger");
 			$("#userCredPw").focus();
 			return true;
@@ -296,10 +296,10 @@
 			<div class="modal-body" id="nodeRegPopupDiv" style="margin-bottom:-30px;">
 			<div id="loader"><div class="flip-square-loader mx-autor" style="border: 0px !important;z-index:99999; position:absolute; transform:translate(250%, 250%); size:150%;"></div></div>
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Reg" style="padding-left:5px;">
-					대상 서버 등록
+					<spring:message code="eXperDB_backup.msg81" />
 				</h5>
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Modi" style="padding-left:5px;" >
-					대상 서버 수정
+					<spring:message code="eXperDB_backup.msg82" />
 				</h5>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="insRegForm">

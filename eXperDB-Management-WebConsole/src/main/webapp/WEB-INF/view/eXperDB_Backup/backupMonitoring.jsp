@@ -119,7 +119,7 @@ function fn_init() {
 				}else if(full.jobstatus == 2){
 					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 					html += "	<i class='fa fa-ban text-danger' >";
-					html += '&nbsp;취소</i>';
+					html += '&nbsp;<spring:message code="common.cancel" /></i>';
 					html += "</div>";
 				//실패
 				}  else if(full.jobstatus == 3){
@@ -219,7 +219,7 @@ function fn_runNow() {
 	var datas = monitoringData.row('.selected').length;
 
 	if(datas != 1){
-		showSwalIcon('서버를 선택해 주세요', '<spring:message code="common.close" />', '', 'error');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg23" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
 		var jobname = monitoringData.row('.selected').data().jobname;
@@ -421,7 +421,7 @@ function fn_selectActivityLog(jobid) {
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">모니터링</span>
+												<span class="menu-title"><spring:message code="eXperDB_scale.monitoring" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -429,8 +429,8 @@ function fn_selectActivityLog(jobid) {
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">BnR 설정</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">모니터링</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_backup.msg24" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_scale.monitoring" /></li>
 										</ol>
 									</div>
 								</div>
@@ -462,7 +462,7 @@ function fn_selectActivityLog(jobid) {
 							<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
 						</button>
 						<button type="button" class="btn btn-danger btn-icon-text mb-2">
-							<i class="mdi mdi-close "></i> 취소
+							<i class="mdi mdi-close "></i><spring:message code="common.cancel" />
 						</button>
 					</div>
 				</div>

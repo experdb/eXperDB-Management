@@ -417,22 +417,22 @@
 									<div class="col-group-wrapper row">
 										<div class="col-group col-md-6" id="">
 											<p class="category-heading">
-												<b>BnR 설정</b>
+												<b><spring:message code="eXperDB_backup.msg24" /></b>
 											</p>
 											<ul class="submenu-item">
 												<li class="nav-item" id="">
 													<a class="nav-link" href="/experdb/backupMonitoring.do" onClick="fn_cookie('backupMonitoring')" target="main">
-														모니터링
+														<spring:message code="eXperDB_scale.monitoring" />
 													</a>
 												</li>
 												<li class="nav-item" id="MN0001102">
 													<a class="nav-link" href="/experdb/backupHistory.do" onClick="fn_cookie('')" target="main">
-														백업이력 관리
+														<spring:message code="eXperDB_backup.msg26" />
 													</a>
 												</li>
 												<li class="nav-item" id="MN0001103">
 													<a class="nav-link" href="/experdb/restoreHistory.do" onClick="fn_cookie('')" target="main">
-														복구이력 관리
+														<spring:message code="eXperDB_backup.msg33" />
 													</a>
 												</li>
 											</ul>
@@ -444,12 +444,12 @@
 											<ul class="submenu-item">
 												<li class="nav-item" id="">
 													<a class="nav-link" href="/experdb/backupStorage.do" onClick="fn_cookie('backupStorage')" target="main">
-														Storage 설정
+														<spring:message code="eXperDB_backup.msg3" />
 													</a>
 												</li>
 												<li class="nav-item" id="">
 													<a class="nav-link" href="/experdb/backupSetting.do" onClick="fn_cookie('backupSetting')" target="main">
-														정책 설정
+														<spring:message code="eXperDB_backup.msg13" />
 													</a>
 												</li>
 											</ul>
