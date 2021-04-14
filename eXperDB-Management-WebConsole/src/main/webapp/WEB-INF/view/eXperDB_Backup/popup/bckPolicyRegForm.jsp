@@ -278,9 +278,11 @@
 									 	</div>
 								 	</div>
 								</div>
-								<h4 class="card-title" style="position: absolute;top:-5px; right:540px;background-color: white;font-size: 1em; color: #000000; ">
-									<spring:message code="eXperDB_backup.msg69" />
-								</h4>
+								<div style="position: absolute;top:-5px; right:520px; width: 120px;">
+									<h4 class="card-title" style=";background-color: white;font-size: 1em; color: #000000; ">
+										<spring:message code="eXperDB_backup.msg69" />
+									</h4>
+								</div>
 							</div>
 						</div>
 						<div style=" margin-bottom: 20px;">
@@ -302,9 +304,11 @@
 									 	</div>
 								 	</div>
 								</div>
-								<h4 class="card-title" style="position: absolute;top:-5px; right:560px;background-color: white;font-size: 1em; color: #000000; ">
-									<spring:message code="eXperDB_backup.msg70" />
-								</h4>
+								<div style="position: absolute;top:-5px; right:510px; width: 130px;">
+									<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
+										<spring:message code="eXperDB_backup.msg70" />
+									</h4>
+								</div>
 							</div>
 						</div>
 						<!-- Recovery Set Settings	 -->
@@ -320,8 +324,8 @@
 															<i class="item-icon fa fa-dot-circle-o"></i>
 															<spring:message code="eXperDB_backup.msg19" />
 														</div>
-														<div class="col-11 row" style="margin-left: 10px;">
-															<label style="padding-top: 5px"><spring:message code="eXperDB_backup.msg72" /> <input type="radio" id="merge_week" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="weekly" onchange="fn_mergeClick()"/></label>
+														<div class="col-11 row" style="margin-left: 10px; padding-left: 5px;">
+															<label style="padding-top: 5px; width: 87px;"><spring:message code="eXperDB_backup.msg72" /> <input type="radio" id="merge_week" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="weekly" onchange="fn_mergeClick()"/></label>
 															<select name="merge_period_week" id="merge_period_week" class="form-control form-control-xsm" style="margin-left: 1rem;width:180px; height:40px; color:black;">
 																<option value="0">Sunday</option>
 																<option value="1">Monday</option>
@@ -332,18 +336,18 @@
 																<option value="6">Saturday</option>
 															</select>
 															
-															<label style="padding-top: 10px"><spring:message code="eXperDB_backup.msg71" /> <input type="radio" id="merge_month" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="monthly" onchange="fn_mergeClick()"/></label>
+															<label style="padding-top: 10px; width: 87px;"><spring:message code="eXperDB_backup.msg71" /> <input type="radio" id="merge_month" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="monthly" onchange="fn_mergeClick()"/></label>
 															<select name="merge_period_month" id="merge_period_month"  class="form-control form-control-xsm" style="margin-top: 10px; margin-left: 1rem;width:180px; height:40px; color:black;" disabled>
 																
 															</select>
 														</div>
 													</div>
 													<div class="col-5">
-														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleWeek" style="padding-top:7px;">
+														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleWeek" style="padding-top:7px;padding-left: 0px;">
 															<i class="item-icon fa fa-dot-circle-o"></i>
 															<spring:message code="eXperDB_backup.msg75" />
 														</div>
-														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleMonth"style="padding-top:7px;">
+														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleMonth"style="padding-top:7px;padding-left: 0px;">
 															<i class="item-icon fa fa-dot-circle-o"></i>
 															<spring:message code="eXperDB_backup.msg76" />
 														</div>
@@ -357,9 +361,11 @@
 								 	</div>
 							 	</div>
 							</div>
-							<h4 class="card-title" style="position: absolute;top:-5px; right:540px;background-color: white;font-size: 1em; color: #000000; ">
-								<spring:message code="eXperDB_backup.msg21" />
-							</h4>
+							<div style="position: absolute;top:-5px; right:507px; width: 131px;">
+								<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
+									<spring:message code="eXperDB_backup.msg21" />
+								</h4>
+							</div>
 						</div>
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >

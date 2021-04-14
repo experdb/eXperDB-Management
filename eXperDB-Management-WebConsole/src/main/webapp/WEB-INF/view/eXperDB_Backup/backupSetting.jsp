@@ -4,7 +4,7 @@
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="../cmmn/cs2.jsp"%>
-
+   
 
 <%
 	/**
@@ -782,7 +782,7 @@ table.dataTable.ccc thead th{
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">
-					<div class="row" style="float: right;width: 500px;">					
+					<div class="row" style="float: right;width: 530px;">					
 						<div class="tooltip-static-demo" id="applyAlertTooltip">
 							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; display:none;">
 								<div class="arrow"></div>
@@ -824,7 +824,7 @@ table.dataTable.ccc thead th{
 							</button>
 						</div>
 						<h4 class="card-title" style="font-size: 1em; color:black;">
-							<i class="item-icon fa fa-desktop"></i><spring:message code="eXperDB_backup.msg15" />
+							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg15" />
 						</h4>
 						<table id="nodeList" class="table nonborder table-hover system-tlb-scroll" style="width:100%;align:left;">
 							<thead>
@@ -896,9 +896,11 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<h4 class="card-title" style="position: absolute;top:22px; right:760px;background-color: white;font-size: 1em; color:black;">
-						<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg21" />
-					</h4>
+					<div style="position: absolute;top:22px; right:730px; width: 155px;">
+						<h4 class="card-title" style="background-color: white;font-size: 1em; color:black;">
+							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg21" />
+						</h4>
+					</div>
 				</div>
 				<!-- full backup setting end -->
 			
@@ -947,9 +949,11 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<h4 class="card-title" style="position: absolute;top:320px; right:745px;background-color: white;font-size: 1em; color: #000000; ">
-						<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg22" />
-					</h4>
+					<div style="position: absolute;top:320px; right:660px; width:215px;">					
+						<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
+							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg22" />
+						</h4>
+					</div>
 				</div>
 				<!-- backup schedule end -->
 			</div>
