@@ -110,7 +110,6 @@
 	</update>
 	
 	<select id="selectProxyServerInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
-		<![CDATA[
 		/**
 	 	* Query ID : selectProxyServerInfo
 	 	* Description : Proxy 서버정보 조회
@@ -136,10 +135,14 @@
 				LST_MDFR_ID,
 				LST_MDF_DTM
 			FROM  T_PRY_SVR_I
-			WHERE
-				IPADR = #{ipadr}
-			LIMIT 1
-		]]>
+			WHERE 1=1
+			<if test="pry_svr_id != null and pry_svr_id != '' ">
+				AND PRY_SVR_ID = #{pry_svr_id}
+			</if>
+			<if test="ipadr != null and ipadr != '' ">
+	        	AND IPADR = #{ipadr}
+	        </if>
+	       	LIMIT 1
 	</select>
 	
     <select id="selectDatabaseMasterConnInfo" parameterType="DbServerInfoVO" resultType="DbServerInfoVO">
@@ -572,15 +575,105 @@
                               clock_timestamp()
          WHERE NOT EXISTS ( SELECT * FROM UPSERT )
 	</insert>	
-			
-	
-	
-	
-	
-
-
-
 		
+	<select id="selectProxyListenerList" parameterType="int" resultType="ProxyListenerVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectProxyListenerList
+	 	* Description : Proxy Lisner 조회
+	 	* Author : 
+	 	**/
+			SELECT	LSN_ID
+					, PRY_SVR_ID
+					, LSN_NM
+					, CON_BIND_PORT
+					, LSN_DESC
+					, DB_USR_ID
+					, DB_ID
+					, DB_NM
+					, CON_SIM_QUERY
+					, FIELD_VAL
+					, FIELD_NM
+					, FRST_REGR_ID
+					, FRST_REG_DTM
+					, LST_MDFR_ID
+					, LST_MDF_DTM
+			FROM  	T_PRY_LSN_I
+			WHERE	PRY_SVR_ID = #{pry_svr_id}::numeric
+		]]>
+	</select>
+	
+	<select id="selectProxyGlobalInfo" parameterType="int" resultType="ProxyGlobalVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectProxyGlobalInfo
+	 	* Description : Proxy Global 조회
+	 	* Author : 
+	 	**/
+			SELECT	PRY_GLB_ID, 
+					PRY_SVR_ID, 
+					MAX_CON_CNT, 
+					CL_CON_MAX_TM, 
+					CON_DEL_TM, 
+					SVR_CON_MAX_TM, 
+					CHK_TM, 
+					IF_NM, 
+					OBJ_IP, 
+					PEER_SERVER_IP, 
+					FRST_REGR_ID, 
+					FRST_REG_DTM, 
+					LST_MDFR_ID, 
+					LST_MDF_DTM
+			FROM  	T_PRY_GLB_I
+			WHERE	PRY_SVR_ID = #{pry_svr_id}::numeric
+		]]>
+	</select>
+	
+	<select id="selectProxyListenerServerList" parameterType="ProxyListenerServerListVO" resultType="ProxyListenerServerListVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectProxyListenerServerList
+	 	* Description : Proxy Lisner server 조회
+	 	* Author : 
+	 	**/
+			SELECT	LSN_SVR_ID, 
+					DB_CON_ADDR, 
+					PRY_SVR_ID, 
+					LSN_ID, 
+					CHK_PORTNO, 
+					BACKUP_YN, 
+					FRST_REGR_ID, 
+					FRST_REG_DTM, 
+					LST_MDFR_ID, 
+					LST_MDF_DTM
+			FROM  	T_PRY_LSN_SVR_I
+			WHERE	PRY_SVR_ID = #{pry_svr_id}::numeric
+			AND 	LSN_ID = #{lsn_id}::numeric
+		]]>
+	</select>
+
+	<insert id="insertT_PRYCNG_G"  parameterType="ProxyConfChangeHistoryVO">
+        /**
+        * Query ID : insertT_PRYCNG_G
+        * Description : PROXY GLOBAL 테이블
+        * Author : 
+        **/
+        INSERT INTO T_PRYCNG_G
+	        (	PRY_CNG_SN, 
+	        	PRY_SVR_ID, 
+	        	PRY_PTH, 
+	        	KAL_PTH, 
+	        	EXE_RST_CD, 
+	        	FRST_REGR_ID, 
+	        	FRST_REG_DTM)
+        SELECT	(SELECT COALESCE(MAX(PRY_CNG_SN+1),1) AS PRY_CNG_SN FROM T_PRYCNG_G),
+        		#{pry_svr_id},
+        		#{pry_pth},
+        		#{kal_pth},
+        		#{exe_rst_cd},
+        		#{frst_regr_id},
+        		clock_timestamp()
+	</insert>
 		
 		
 		

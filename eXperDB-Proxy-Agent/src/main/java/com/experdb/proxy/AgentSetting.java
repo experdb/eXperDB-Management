@@ -47,7 +47,7 @@ public class AgentSetting {
 		String strAgentPort = "";
 		
 		String strAgentPath = "";
-		
+		String strConfBackupPath = "";
 	//	String strRootPwd = "";
 	//	String salt_value = "";
 		
@@ -80,6 +80,12 @@ public class AgentSetting {
 		strAgentPath = scan.nextLine();
 		if(strAgentPath.equals("")) {
 			strAgentPath = "/app/eXperDB-Proxy-Agent/bin";
+		} 
+		
+		System.out.println("proxy config backup path :(/app/eXperDB-Proxy-Agent/backup)");
+		strConfBackupPath = scan.nextLine();
+		if(strConfBackupPath.equals("")) {
+			strConfBackupPath = "/app/eXperDB-Proxy-Agent/backup";
 		} 
 		/////////////////////////////////////////////////////////////////////
 		
@@ -202,6 +208,7 @@ public class AgentSetting {
 			prop.setProperty("socket.server.port", strAgentPort);
 			prop.setProperty("agent.install.ip", strAgentIp);
 			prop.setProperty("agent.path", strAgentPath);
+			prop.setProperty("proxy.conf_backup_path", strConfBackupPath);
 
 			try {
 				prop.store(new FileOutputStream(path + "context.properties"), "");
