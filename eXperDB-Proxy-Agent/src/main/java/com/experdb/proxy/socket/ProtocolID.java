@@ -29,6 +29,10 @@ public class ProtocolID {
 	public static final String RESULT_DATA = "RESULT_DATA";
 	public static final String SCHEMA = "SCHEMA";
 	
+	public static final String FILE_NAME = "FILE_NAME";
+	public static final String FILE_SIZE = "FILE_SIZE";
+	public static final String FILE_DIRECTORY = "FILE_DIRECTORY";
+	
 	public static final String CMD_HOSTNAME = "CMD_HOSTNAME";
 	public static final String CMD_OS_VERSION = "CMD_OS_VERSION";
 	public static final String CMD_OS_KERNUL = "CMD_OS_KERNUL";
