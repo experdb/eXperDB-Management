@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
 import com.experdb.management.proxy.cmmn.CommonUtil;
@@ -27,6 +28,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 
 
 @Service("ProxySettingServiceImpl")
@@ -226,30 +228,28 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		JSONObject resultObj = new JSONObject();
 
 		try {
-			System.out.println("prySvrConnTest -0"+param.toString());
 			//Proxy Agent 연결 - 처리로직 들어가야함
 			ProxyAgentVO proxyAgentVO = (ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
-			System.out.println("prySvrConnTest -1");
 			String result_code = "";
 			
 			Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
 			boolean agentConn = false;
 			
-				String IP = proxyAgentVO.getIpadr();
-				int PORT = proxyAgentVO.getSocket_port();
-				System.out.println("Agent IP : "+IP+"\n PORT : "+PORT);
-				ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
-				agentConnectResult = cic.proxyAgentConnectionTest(IP, PORT);
+			String IP = proxyAgentVO.getIpadr();
+			int PORT = proxyAgentVO.getSocket_port();
+			System.out.println("Agent IP : "+IP+"\n PORT : "+PORT);
+			ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+			agentConnectResult = cic.proxyAgentConnectionTest(IP, PORT);
 
-				if (agentConnectResult != null) {
-					System.out.println(agentConnectResult.toString());
-					result_code = agentConnectResult.get("RESULT_CODE").toString();
-					if ("0".equals(result_code)) {
-						agentConn = true;
-					}
-				}else{
-					agentConn = false;
+			if (agentConnectResult != null) {
+				System.out.println(agentConnectResult.toString());
+				result_code = agentConnectResult.get("RESULT_CODE").toString();
+				if ("0".equals(result_code)) {
+					agentConn = true;
 				}
+			}else{
+				agentConn = false;
+			}
 			
 			resultObj.put("agentConn", agentConn);
 			resultObj.put("errcd", 0);
@@ -476,226 +476,268 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	public JSONObject applyProxyConf(Map<String, Object> param, JSONObject confData) throws Exception {
 		JSONObject resultObj = new JSONObject();
 
-		try {
-			int prySvrId = getIntOfJsonObj(confData,"pry_svr_id");
-			String lst_mdfr_id = param.get("lst_mdfr_id").toString();
+		//DB Data insert/update/delete
+		int prySvrId = getIntOfJsonObj(confData,"pry_svr_id");
+		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
+		
+		ProxyGlobalVO global = new ProxyGlobalVO();
+		global.setCl_con_max_tm(getStringOfJsonObj(confData,"cl_con_max_tm"));
+		global.setCon_del_tm(getStringOfJsonObj(confData,"con_del_tm"));
+		global.setSvr_con_max_tm(getStringOfJsonObj(confData,"svr_con_max_tm"));
+		global.setChk_tm(getStringOfJsonObj(confData,"chk_tm"));
+		global.setIf_nm(getStringOfJsonObj(confData,"if_nm"));
+		global.setObj_ip(getStringOfJsonObj(confData,"obj_ip"));
+		global.setPeer_server_ip(getStringOfJsonObj(confData,"peer_server_ip"));
+		global.setPry_svr_id(prySvrId);
+		global.setPry_glb_id(getIntOfJsonObj(confData,"pry_glb_id"));
+		global.setMax_con_cnt(getIntOfJsonObj(confData,"max_con_cnt"));
+		global.setLst_mdfr_id(lst_mdfr_id);
+		
+		System.out.println("update global conf info ----------------------------------------");
+
+		//update global conf Info
+		proxySettingDAO.updateProxyGlobalConf(global);
+
+		JSONArray vipcngJArray = (JSONArray)confData.get("vipcng");
+		int vipcngSize = vipcngJArray.size();
+
+		if (vipcngSize > 0) {
+			ProxyVipConfigVO vipConf[] = new ProxyVipConfigVO[vipcngSize];
 			
-			ProxyGlobalVO global = new ProxyGlobalVO();
-			global.setCl_con_max_tm(getStringOfJsonObj(confData,"cl_con_max_tm"));
-			global.setCon_del_tm(getStringOfJsonObj(confData,"con_del_tm"));
-			global.setSvr_con_max_tm(getStringOfJsonObj(confData,"svr_con_max_tm"));
-			global.setChk_tm(getStringOfJsonObj(confData,"chk_tm"));
-			global.setIf_nm(getStringOfJsonObj(confData,"if_nm"));
-			global.setObj_ip(getStringOfJsonObj(confData,"obj_ip"));
-			global.setPeer_server_ip(getStringOfJsonObj(confData,"peer_server_ip"));
-			global.setPry_svr_id(prySvrId);
-			global.setPry_glb_id(getIntOfJsonObj(confData,"pry_glb_id"));
-			global.setMax_con_cnt(getIntOfJsonObj(confData,"max_con_cnt"));
-			global.setLst_mdfr_id(lst_mdfr_id);
-			
-			System.out.println("update global conf info ----------------------------------------");
-
-			//update global conf Info
-			proxySettingDAO.updateProxyGlobalConf(global);
-
-			JSONArray vipcngJArray = (JSONArray)confData.get("vipcng");
-			int vipcngSize = vipcngJArray.size();
-
-			if (vipcngSize > 0) {
-				ProxyVipConfigVO vipConf[] = new ProxyVipConfigVO[vipcngSize];
+			for(int i=0; i<vipcngSize; i++){
+				JSONObject vipcngJobj = (JSONObject)vipcngJArray.get(i);
+				System.out.println(vipcngJobj.toJSONString());
+				vipConf[i] = new ProxyVipConfigVO();
+				vipConf[i].setPry_svr_id(prySvrId);
 				
-				for(int i=0; i<vipcngSize; i++){
-					JSONObject vipcngJobj = (JSONObject)vipcngJArray.get(i);
-					System.out.println(vipcngJobj.toJSONString());
-					vipConf[i] = new ProxyVipConfigVO();
-					vipConf[i].setPry_svr_id(prySvrId);
-					
-					if(!nullCheckOfJsonObj(vipcngJobj, "vip_cng_id")){
-						vipConf[i].setVip_cng_id(getIntOfJsonObj(vipcngJobj,"vip_cng_id"));
-					}
-					
-					vipConf[i].setV_ip(getStringOfJsonObj(vipcngJobj,"v_ip"));
-					vipConf[i].setV_rot_id(getStringOfJsonObj(vipcngJobj, "v_rot_id"));
-					vipConf[i].setChk_tm(getIntOfJsonObj(vipcngJobj,"chk_tm"));
-					vipConf[i].setV_if_nm(getStringOfJsonObj(vipcngJobj,"v_if_nm"));
-					vipConf[i].setPriority(getIntOfJsonObj(vipcngJobj,"priority"));
-					vipConf[i].setState_nm(getStringOfJsonObj(vipcngJobj,"state_nm"));
-					vipConf[i].setLst_mdfr_id(lst_mdfr_id);
-					
-					System.out.println("insert/update vip instance info ----------------------------------------");
-					System.out.println(CommonUtil.toMap(vipConf[i]).toString());
-					
-					//insert/update vip instance
-					proxySettingDAO.insertUpdatePryVipConf(vipConf[i]);
+				if(!nullCheckOfJsonObj(vipcngJobj, "vip_cng_id")){
+					vipConf[i].setVip_cng_id(getIntOfJsonObj(vipcngJobj,"vip_cng_id"));
 				}
-			}
-			
-			JSONArray delVipcngJArray = (JSONArray)confData.get("delVipcng");
-			int delVipcngSize = delVipcngJArray.size();
-			
-			if (delVipcngSize > 0) {
-				ProxyVipConfigVO delVipConf[] = new ProxyVipConfigVO[delVipcngSize];
 				
-				for(int i=0; i<delVipcngSize; i++){
-					JSONObject delVipcngJobj = (JSONObject)delVipcngJArray.get(i);
-					System.out.println(delVipcngJobj.toJSONString());
-					delVipConf[i] = new ProxyVipConfigVO();
-					delVipConf[i].setPry_svr_id(prySvrId);
-					delVipConf[i].setVip_cng_id(getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
-					
-					System.out.println("delete vip instance info ----------------------------------------");
-					System.out.println(CommonUtil.toMap(delVipConf[i]).toString());
-					
-					//delete vip instance
-					proxySettingDAO.deletePryVipConf(delVipConf[i]);
-				}
+				vipConf[i].setV_ip(getStringOfJsonObj(vipcngJobj,"v_ip"));
+				vipConf[i].setV_rot_id(getStringOfJsonObj(vipcngJobj, "v_rot_id"));
+				vipConf[i].setChk_tm(getIntOfJsonObj(vipcngJobj,"chk_tm"));
+				vipConf[i].setV_if_nm(getStringOfJsonObj(vipcngJobj,"v_if_nm"));
+				vipConf[i].setPriority(getIntOfJsonObj(vipcngJobj,"priority"));
+				vipConf[i].setState_nm(getStringOfJsonObj(vipcngJobj,"state_nm"));
+				vipConf[i].setLst_mdfr_id(lst_mdfr_id);
+				
+				System.out.println("insert/update vip instance info ----------------------------------------");
+				System.out.println(CommonUtil.toMap(vipConf[i]).toString());
+				
+				//insert/update vip instance
+				proxySettingDAO.insertUpdatePryVipConf(vipConf[i]);
 			}
-			
-			JSONArray listenerJArray = (JSONArray)confData.get("listener");
-			int listenerSize = listenerJArray.size();
-			
-			if (listenerSize > 0) {
-				ProxyListenerVO listener[] = new ProxyListenerVO[listenerSize];
-
-				for(int i=0; i<listenerSize; i++){
-					JSONObject listenerObj = (JSONObject)listenerJArray.get(i);
-
-					listener[i] = new ProxyListenerVO();
-					listener[i].setPry_svr_id(prySvrId);
-					
-					if(!nullCheckOfJsonObj(listenerObj, "lsn_id")){
-						listener[i].setLsn_id(getIntOfJsonObj(listenerObj, "lsn_id"));
-					}
-	
-					listener[i].setLsn_nm(getStringOfJsonObj(listenerObj, "lsn_nm"));
-					listener[i].setCon_bind_port(getStringOfJsonObj(listenerObj, "con_bind_port"));
-					listener[i].setLsn_desc(getStringOfJsonObj(listenerObj,"lsn_desc"));
-					listener[i].setDb_usr_id(getStringOfJsonObj(listenerObj, "db_usr_id"));
-					listener[i].setDb_id(getIntOfJsonObj(listenerObj,"db_id"));
-					listener[i].setDb_nm(getStringOfJsonObj(listenerObj, "db_nm"));
-					listener[i].setCon_sim_query(getStringOfJsonObj(listenerObj, "con_sim_query"));
-					listener[i].setField_nm(getStringOfJsonObj(listenerObj, "field_nm"));
-					listener[i].setField_val(getStringOfJsonObj(listenerObj, "field_val"));
-					listener[i].setLst_mdfr_id(lst_mdfr_id);
-					
-					System.out.println("insert/update proxy listenener info ----------------------------------------");
-					System.out.println(CommonUtil.toMap(listener[i]).toString());
-					
-					//UPDATE/INSERT PROXY LISTENER
-					proxySettingDAO.insertUpdatePryListener(listener[i]);
-
-					if(listenerObj.get("lsn_svr_edit_list") != null){
-						JSONArray listnSvrArry = (JSONArray) listenerObj.get("lsn_svr_edit_list");
-						int listnSvrSize = listnSvrArry.size();
-						
-						if (listnSvrSize > 0) {
-							ProxyListenerServerVO listnSvr[] = new ProxyListenerServerVO[listnSvrSize];
-
-							for(int j=0; j<listnSvrSize; j++){
-								JSONObject listnSvrObj = (JSONObject)listnSvrArry.get(j);
-								listnSvr[j] = new ProxyListenerServerVO();
-								listnSvr[j].setPry_svr_id(prySvrId);
-								
-								if(!nullCheckOfJsonObj(listnSvrObj, "lsn_id")){//newLsnId
-									listnSvr[j].setLsn_id(getIntOfJsonObj(listnSvrObj, "lsn_id"));
-								}else{
-									int newLsnId = proxySettingDAO.selectPryListenerMaxId();
-
-									System.out.println("newLsnID ----------------------------------------------------------------- :: "+newLsnId);
-									listnSvr[j].setLsn_id(newLsnId);
-								}
-								
-								if(!nullCheckOfJsonObj(listnSvrObj, "lsn_svr_id")){
-									listnSvr[j].setLsn_svr_id(getIntOfJsonObj(listnSvrObj, "lsn_svr_id"));
-								}
-
-								listnSvr[j].setDb_con_addr(getStringOfJsonObj(listnSvrObj,"db_con_addr"));
-								listnSvr[j].setChk_portno(getIntOfJsonObj(listnSvrObj, "chk_portno"));
-								listnSvr[j].setBackup_yn(getStringOfJsonObj(listnSvrObj,"backup_yn"));
-								listnSvr[j].setLst_mdfr_id(lst_mdfr_id);
-								
-								System.out.println("insert/update proxy listenener Server info ----------------------------------------");
-								System.out.println(CommonUtil.toMap(listnSvr[j]).toString());
-								
-								//UPDATE/INSERT PROXY LISTENER Server List
-								proxySettingDAO.insertUpdatePryListenerSvr(listnSvr[j]);
-							}
-						}
-					}
-					
-					if(listenerObj.get("lsn_svr_del_list") != null){
-						JSONArray delListnSvrArry = (JSONArray) listenerObj.get("lsn_svr_del_list"); 
-						int delListnSvrSize = delListnSvrArry.size();
-						
-						if (delListnSvrSize > 0) {
-							ProxyListenerServerVO delListnSvr[] = new ProxyListenerServerVO[delListnSvrSize];
-							for(int j=0; j<delListnSvrSize; j++){
-								JSONObject delListnSvrObj = (JSONObject)delListnSvrArry.get(j);
-								delListnSvr[j] = new ProxyListenerServerVO();
-								delListnSvr[j].setPry_svr_id(prySvrId);
-								delListnSvr[j].setLsn_id(getIntOfJsonObj(delListnSvrObj, "lsn_id"));
-								delListnSvr[j].setLsn_svr_id(getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
-								delListnSvr[j].setDb_con_addr(getStringOfJsonObj(delListnSvrObj, "db_con_addr"));
-								System.out.println("delete proxy listenener Server info ----------------------------------------");
-								System.out.println(CommonUtil.toMap(delListnSvr[j]).toString());
-								
-								//delete proxy listener server list
-								proxySettingDAO.deletePryListenerSvr(delListnSvr[j]);
-							}
-						}
-					}
-				}
-			}
-			
-			JSONArray delListnJArray = (JSONArray)confData.get("delListener");
-			int delListnSize = delListnJArray.size();
-			
-			if (delListnSize > 0) {
-				ProxyListenerVO delListn[] = new ProxyListenerVO[delListnSize];
-				for(int i=0; i<delListnSize; i++){
-					JSONObject delListnObj = (JSONObject)delListnJArray.get(i);
-					delListn[i] = new ProxyListenerVO();
-					delListn[i].setPry_svr_id(prySvrId);
-					delListn[i].setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
-					
-					ProxyListenerServerVO delListnSvr = new ProxyListenerServerVO();
-					delListnSvr.setPry_svr_id(prySvrId);
-					delListnSvr.setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
-					//System.out.println("Before delete proxy listenener info ----------------------------------------");
-					//System.out.println(CommonUtil.toMap(delListn[i]).toString());
-					proxySettingDAO.deletePryListenerSvr(delListnSvr);
-					
-					//System.out.println("delete proxy listenener info ----------------------------------------");
-					//System.out.println(CommonUtil.toMap(delListn[i]).toString());
-					//delete proxy listener
-					proxySettingDAO.deletePryListener(delListn[i]);
-				}
-			}
-			
-			//agent 호출  > conf를 만들어서 던져??? agent에서 만들어??
-			
-			
-			//agent가 할 일
-			//conf 파일 만들어?? conf 신규 반영
-			//
-			
-			//재기동 이력 남기기 
-			//이전 config 파일 이력 남기기
-			
-			//기동 상태 return 받으면 ... 
-			
-			resultObj.put("resultLog", "success");
-			resultObj.put("result",true);
-			resultObj.put("errMsg","작업이 완료되었습니다.");
-
-		} catch (Exception e) {
-			resultObj.put("resultLog", "fail");
-			resultObj.put("result",false);
-			resultObj.put("errcd", -1);
-			resultObj.put("errmsg", "작업 중 오류가 발생하였습니");
-			
-			e.printStackTrace();
 		}
+		
+		JSONArray delVipcngJArray = (JSONArray)confData.get("delVipcng");
+		int delVipcngSize = delVipcngJArray.size();
+		
+		if (delVipcngSize > 0) {
+			ProxyVipConfigVO delVipConf[] = new ProxyVipConfigVO[delVipcngSize];
+			
+			for(int i=0; i<delVipcngSize; i++){
+				JSONObject delVipcngJobj = (JSONObject)delVipcngJArray.get(i);
+				System.out.println(delVipcngJobj.toJSONString());
+				delVipConf[i] = new ProxyVipConfigVO();
+				delVipConf[i].setPry_svr_id(prySvrId);
+				delVipConf[i].setVip_cng_id(getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
+				
+				System.out.println("delete vip instance info ----------------------------------------");
+				System.out.println(CommonUtil.toMap(delVipConf[i]).toString());
+				
+				//delete vip instance
+				proxySettingDAO.deletePryVipConf(delVipConf[i]);
+			}
+		}
+		
+		JSONArray listenerJArray = (JSONArray)confData.get("listener");
+		int listenerSize = listenerJArray.size();
+		
+		if (listenerSize > 0) {
+			ProxyListenerVO listener[] = new ProxyListenerVO[listenerSize];
+
+			for(int i=0; i<listenerSize; i++){
+				JSONObject listenerObj = (JSONObject)listenerJArray.get(i);
+
+				listener[i] = new ProxyListenerVO();
+				listener[i].setPry_svr_id(prySvrId);
+				
+				if(!nullCheckOfJsonObj(listenerObj, "lsn_id")){
+					listener[i].setLsn_id(getIntOfJsonObj(listenerObj, "lsn_id"));
+				}
+
+				listener[i].setLsn_nm(getStringOfJsonObj(listenerObj, "lsn_nm"));
+				listener[i].setCon_bind_port(getStringOfJsonObj(listenerObj, "con_bind_port"));
+				listener[i].setLsn_desc(getStringOfJsonObj(listenerObj,"lsn_desc"));
+				listener[i].setDb_usr_id(getStringOfJsonObj(listenerObj, "db_usr_id"));
+				listener[i].setDb_id(getIntOfJsonObj(listenerObj,"db_id"));
+				listener[i].setDb_nm(getStringOfJsonObj(listenerObj, "db_nm"));
+				listener[i].setCon_sim_query(getStringOfJsonObj(listenerObj, "con_sim_query"));
+				listener[i].setField_nm(getStringOfJsonObj(listenerObj, "field_nm"));
+				listener[i].setField_val(getStringOfJsonObj(listenerObj, "field_val"));
+				listener[i].setLst_mdfr_id(lst_mdfr_id);
+				
+				System.out.println("insert/update proxy listenener info ----------------------------------------");
+				System.out.println(CommonUtil.toMap(listener[i]).toString());
+				
+				//UPDATE/INSERT PROXY LISTENER
+				proxySettingDAO.insertUpdatePryListener(listener[i]);
+
+				if(listenerObj.get("lsn_svr_edit_list") != null){
+					JSONArray listnSvrArry = (JSONArray) listenerObj.get("lsn_svr_edit_list");
+					int listnSvrSize = listnSvrArry.size();
+					
+					if (listnSvrSize > 0) {
+						ProxyListenerServerVO listnSvr[] = new ProxyListenerServerVO[listnSvrSize];
+
+						for(int j=0; j<listnSvrSize; j++){
+							JSONObject listnSvrObj = (JSONObject)listnSvrArry.get(j);
+							listnSvr[j] = new ProxyListenerServerVO();
+							listnSvr[j].setPry_svr_id(prySvrId);
+							
+							if(!nullCheckOfJsonObj(listnSvrObj, "lsn_id")){//newLsnId
+								listnSvr[j].setLsn_id(getIntOfJsonObj(listnSvrObj, "lsn_id"));
+							}else{
+								int newLsnId = proxySettingDAO.selectPryListenerMaxId();
+
+								System.out.println("newLsnID ----------------------------------------------------------------- :: "+newLsnId);
+								listnSvr[j].setLsn_id(newLsnId);
+							}
+							
+							if(!nullCheckOfJsonObj(listnSvrObj, "lsn_svr_id")){
+								listnSvr[j].setLsn_svr_id(getIntOfJsonObj(listnSvrObj, "lsn_svr_id"));
+							}
+
+							listnSvr[j].setDb_con_addr(getStringOfJsonObj(listnSvrObj,"db_con_addr"));
+							listnSvr[j].setChk_portno(getIntOfJsonObj(listnSvrObj, "chk_portno"));
+							listnSvr[j].setBackup_yn(getStringOfJsonObj(listnSvrObj,"backup_yn"));
+							listnSvr[j].setLst_mdfr_id(lst_mdfr_id);
+							
+							System.out.println("insert/update proxy listenener Server info ----------------------------------------");
+							System.out.println(CommonUtil.toMap(listnSvr[j]).toString());
+							
+							//UPDATE/INSERT PROXY LISTENER Server List
+							proxySettingDAO.insertUpdatePryListenerSvr(listnSvr[j]);
+						}
+					}
+				}
+				
+				if(listenerObj.get("lsn_svr_del_list") != null){
+					JSONArray delListnSvrArry = (JSONArray) listenerObj.get("lsn_svr_del_list"); 
+					int delListnSvrSize = delListnSvrArry.size();
+					
+					if (delListnSvrSize > 0) {
+						ProxyListenerServerVO delListnSvr[] = new ProxyListenerServerVO[delListnSvrSize];
+						for(int j=0; j<delListnSvrSize; j++){
+							JSONObject delListnSvrObj = (JSONObject)delListnSvrArry.get(j);
+							delListnSvr[j] = new ProxyListenerServerVO();
+							delListnSvr[j].setPry_svr_id(prySvrId);
+							delListnSvr[j].setLsn_id(getIntOfJsonObj(delListnSvrObj, "lsn_id"));
+							delListnSvr[j].setLsn_svr_id(getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
+							delListnSvr[j].setDb_con_addr(getStringOfJsonObj(delListnSvrObj, "db_con_addr"));
+							System.out.println("delete proxy listenener Server info ----------------------------------------");
+							System.out.println(CommonUtil.toMap(delListnSvr[j]).toString());
+							
+							//delete proxy listener server list
+							proxySettingDAO.deletePryListenerSvr(delListnSvr[j]);
+						}
+					}
+				}
+			}
+		}
+		
+		JSONArray delListnJArray = (JSONArray)confData.get("delListener");
+		int delListnSize = delListnJArray.size();
+		
+		if (delListnSize > 0) {
+			ProxyListenerVO delListn[] = new ProxyListenerVO[delListnSize];
+			for(int i=0; i<delListnSize; i++){
+				JSONObject delListnObj = (JSONObject)delListnJArray.get(i);
+				delListn[i] = new ProxyListenerVO();
+				delListn[i].setPry_svr_id(prySvrId);
+				delListn[i].setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
+				
+				ProxyListenerServerVO delListnSvr = new ProxyListenerServerVO();
+				delListnSvr.setPry_svr_id(prySvrId);
+				delListnSvr.setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
+				proxySettingDAO.deletePryListenerSvr(delListnSvr);
+				//delete proxy listener
+				proxySettingDAO.deletePryListener(delListn[i]);
+			}
+		}
+		
+		
+		//Agent에 넘겨줄 Data JSONObject로 생성
+		JSONObject agentJobj = new JSONObject();
+		Map<String, Object> agentParam = new HashMap<String,Object>();
+		agentParam.put("pry_svr_id", prySvrId);
+		
+		/*Global, Listener, Listener Server List, Vip Instance 정보 JSONObject 생성 
+		{global_info:{}, listener_list : [{...server_list : [{]}], vipconfig_list : []} */
+		
+		//GLOBAL 정보
+		JSONObject globalJObj = proxySettingDAO.selectProxyGlobal(agentParam).toJSONObject();
+		agentJobj.put("global_info", globalJObj);
+		
+		//LISTENER 정보
+		List<ProxyListenerVO> listenerList = proxySettingDAO.selectProxyListenerList(agentParam);
+		JSONArray listenerJArr = new JSONArray();
+		for(ProxyListenerVO listenVO : listenerList){
+			JSONObject tempObj = listenVO.toJSONObject();
+			agentParam.put("lsn_id", listenVO.getLsn_id());
+			List<ProxyListenerServerVO> listenerSvrList= proxySettingDAO.selectListenServerList(agentParam);
+			JSONArray listenerSvrJArr = new JSONArray();
+			for(ProxyListenerServerVO listenSvrVO : listenerSvrList){
+				listenerSvrJArr.add(listenSvrVO.toJSONObject());
+			}
+			tempObj.put("server_list", listenerSvrJArr);
+			listenerJArr.add(tempObj);
+			agentParam.remove("lsn_id");
+		}
+		agentJobj.put("listener_list", listenerJArr);
+		
+		//VIP CONFIG 정보
+		List<ProxyVipConfigVO> vipConfigList = proxySettingDAO.selectProxyVipConfList(agentParam);
+		JSONArray vipConfgJArr  = new JSONArray();
+		for(ProxyVipConfigVO vipVO : vipConfigList){
+			vipConfgJArr.add(vipVO.toJSONObject());
+		}
+		agentJobj.put("vipconfig_list", vipConfgJArr);
+		agentJobj.put("lst_mdfr_id", lst_mdfr_id);
+		//Agent 접속 정보 추출 
+		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
+		Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
+		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		agentConnectResult = cic.createProxyConfigFile(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(), agentJobj);
+		
+		boolean createNewConfig = false;
+		String resultLog = "";
+		String errMsg = "";
+		//String result_code = "";
+		if (agentConnectResult != null) {
+			System.out.println(agentConnectResult.toString());
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(agentConnectResult.get("RESULT_DATA").toString());
+			JSONObject agentResult = (JSONObject)obj;
+			if ("0".equals(agentResult.get("errcd").toString())) {
+				createNewConfig = true;
+				resultLog = "success";
+				errMsg= "작업이 완료되었습니다.";
+			}else{
+				createNewConfig = false;
+				resultLog = "faild";
+				errMsg= "작업 중 오류가 발생하였습니다.";
+			}
+		}else{
+			createNewConfig = false;
+			resultLog = "faild";
+			errMsg= "작업 중 오류가 발생하였습니다.";
+		}
+		resultObj.put("resultLog", resultLog);
+		resultObj.put("result",createNewConfig);
+		resultObj.put("errMsg",errMsg);
+		resultObj.put("lst_mdfr_id", lst_mdfr_id);
 		
 		return resultObj;
 	}
@@ -743,6 +785,14 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			return false;
 		}
 	}
+	
+	//ProxyAgent 얻어오기
+	public ProxyAgentVO getProxyAgent(int pry_svr_id) throws Exception{
+		Map<String, Object> agentParam = new HashMap<String,Object>();
+		agentParam.put("pry_svr_id", pry_svr_id);
+		return (ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
+	}
+	
 
 	@Override
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param) {

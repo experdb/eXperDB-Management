@@ -33,6 +33,25 @@ public class CommonUtil {
 		return result;
 	}
 	
+	public static JSONObject toJSONObject(Object target){
+		
+		JSONObject result = null;
+		
+		try{
+			result = new JSONObject();
+			Object obj = target;
+			for(Field field : obj.getClass().getDeclaredFields()){
+				field.setAccessible(true);
+				Object value = field.get(obj);
+				result.put(field.getName(), value);
+			}
+		}catch(Exception e){
+			System.out.println("toJSONObject error"+e.toString());
+			e.printStackTrace();	
+		}
+		return result;
+	}
+	
 	public static void printRequestParam(String start, String end, HttpServletRequest request){
 		
 		System.out.println(start);
