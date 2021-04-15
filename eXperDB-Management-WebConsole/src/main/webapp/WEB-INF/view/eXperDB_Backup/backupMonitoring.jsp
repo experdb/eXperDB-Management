@@ -49,11 +49,14 @@ var dataSearch=0;
  *		2-1) 실행 상태 주기적으로 조회 정지
  *		2-2) 현재 수행중인 jobid 추출
 * 		2-3) 해당 jobid의 Activity로그 출력
-* 		2-4) ActivityLog 실시간 출력 (10초 마다)
+* 		2-4) ActivityLog 실시간 출력 (20초 마다)
 * 		2-5) 종료상태 체크 (History테이블 Insert 여부)
-* 		2-6) 종료상태 (1초마다)
+* 		2-6) 종료상태 주기적으로 조회(1초마다)
 * 	3. 백업 종료(History테이블 조회 카운트 = 1)
 * 	4. status 상태 변경 Ready
+* 
+*  선택한 Job의 모니터링 프로세스
+*  5. Job선택시, 선택한 Job의 jobid 추출
  ******************************************************* */
 
 
@@ -294,7 +297,7 @@ function fn_jobStatusList(){
 				}
 				// 2-2) 현재 수행중인 jobid 추출
 				fn_selectJobId();
-				// 2-4) 종료상태 체크 (History테이블 Insert 여부)
+				// 2-5) 종료상태 체크 (History테이블 Insert 여부)
 				fn_selectJobEnd();
 				
 			 }
@@ -394,8 +397,8 @@ function fn_selectActivityLog(jobid) {
 			if(jobend == 0){
 				bckLogList.clear().draw();
 				bckLogList.rows.add(data).draw();	
-				//2-3) ActivityLog 실시간 출력 (10초 마다)
-				setTimeout(fn_selectActivityLog(jobid), 10000)
+				//2-4) ActivityLog 실시간 출력 (20초 마다)
+				setTimeout(fn_selectActivityLog(jobid), 20000)
 			}else{
 				bckLogList.clear().draw();
 			}

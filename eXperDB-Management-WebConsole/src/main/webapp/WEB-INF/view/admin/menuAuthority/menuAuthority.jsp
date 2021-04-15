@@ -127,7 +127,7 @@ $(window.document).ready(function() {
     		},
     		success : function(result) {
   				for(var i = 0; i<result.length; i++){  
-  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001803" && result[i].mnu_cd != "MN0001804"){
+  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001803" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020"){
      					//읽기권한
   						if(result[i].read_aut_yn == "Y"){	  									
   							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -149,6 +149,10 @@ $(window.document).ready(function() {
 	
 	if('${encrypt_useyn}'=='N'){
 		$('.encrypt').hide();
+	}
+	
+	if('${bnr_useyn}'=='N'){
+		$('.bnr').hide();
 	}
 	
 });
@@ -189,7 +193,7 @@ $(function() {
 	    		},
 	    		success : function(result) {
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001803" && result[i].mnu_cd != "MN0001804"){
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001803" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020"){
       						//읽기권한
 	  						if(result[i].read_aut_yn == "Y"){	  									
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -507,6 +511,82 @@ $(function() {
 				}
 			}
 		});
+		
+		
+		
+		
+		/* 백업메뉴 권한체크 추가 2021-04-13 변승우 */		
+		//BnR 선택 전체 체크박스 
+		$("#bnr").click(function() { 
+			var array = new Array("MN0001901","MN0001902","MN0001903","MN0002001","MN0002002");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
+				 return false;
+			 }
+			if ($("#bnr").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+				document.getElementById("bnrSetting").checked = true;
+				document.getElementById("backup").checked = true;
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+				document.getElementById("bnrSetting").checked = false;
+				document.getElementById("backup").checked = false;
+			}
+		});	
+		
+		
+		//BnR 설정 선택 전체 체크박스
+		$("#bnrSetting").click(function() { 
+			var array = new Array("MN0001901","MN0001902","MN0001903");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
+				 return false;
+			 }
+			if ($("#bnrSetting").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//Backup 선택 전체 체크박스
+		$("#backup").click(function() { 
+			var array = new Array("MN0002001","MN0002002");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
+				 return false;
+			 }
+			if ($("#backup").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});	
+		
+		/* 백업메뉴 권한체크 추가 종료*/
+		
+		
 		
 		//체크박스 클릭시 사용자 선택 검사
 		$(".inp_chk").click(function() { 
@@ -1052,6 +1132,104 @@ function fn_search(){
 										</div>
 									</td>											
 								</tr>	
+								
+																		
+								<!-- Backup 권한 추가 2021-04-13 변승우 -->
+								<tr class="bnr">
+									<th scope="row" rowspan="5">
+										<div class="inp_chk">
+											<input type="checkbox" id="bnr" name="bnr"/>
+											<label for="bnr">BnR</label>
+										</div>
+									</th>
+									<td scope="row" rowspan="3">
+										<div class="inp_chk">
+											<input type="checkbox" id="bnrSetting" name="bnrSetting"/>
+											<label for="bnrSetting">BnR 설정</label>
+										</div>
+									</td>
+									<td>모니터링</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001901" name="r_mnu_nm" value="MN0001901"/>
+											<label for="r_MN0001901"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001901" name="w_mnu_nm"/>
+											<label for="w_MN0001901"></label>
+										</div>
+									</td>
+								</tr>
+								<tr class="bnr">
+									<td>백업이력 관리</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001902" name="r_mnu_nm" value="MN0001902"/>
+											<label for="r_MN0001902"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001902" name="w_mnu_nm"/>
+											<label for="w_MN0001902"></label>
+										</div>
+									</td>													
+								</tr>
+								<tr class="bnr">
+									<td>복구이력 관리</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001903" name="r_mnu_nm"  value="MN0001903"/>
+											<label for="r_MN0001903"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001903" name="w_mnu_nm"  />
+											<label for="w_MN0001903"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr class="bnr">
+									<td scope="row" rowspan="2">
+										<div class="inp_chk">
+											<input type="checkbox" id="backup" name="backup"/>
+											<label for="backup">Backup</label>
+										</div>
+									</td>
+									<td>Storage 설정</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0002001" name="r_mnu_nm" value="MN0002001"/>
+											<label for="r_MN0002001"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0002001" name="w_mnu_nm"  />
+											<label for="w_MN0002001"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr class="bnr">
+									<td>정책설정</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0002002" name="r_mnu_nm" value="MN0002002"/>
+											<label for="r_MN0002002"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0002002" name="w_mnu_nm"  />
+											<label for="w_MN0002002"></label>
+										</div>
+									</td>											
+								</tr>								
+								<!-- Backup 권한 추가 끝 -->
+													
 								<tr class="encrypt">
 									<th scope="row" rowspan="10">
 										<div class="inp_chk">

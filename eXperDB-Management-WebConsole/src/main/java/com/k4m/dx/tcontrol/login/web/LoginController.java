@@ -115,6 +115,10 @@ public class LoginController {
 
         				loginVoSs.setIp(ip);
         				
+        				/*백업 사용유무 추가 2021-04-14  변승우 */
+        				String backup_use_yn = props.get("bnr.useyn").toString(); 
+        				loginVoSs.setBackup_use_yn(backup_use_yn);
+        				
         				String encp_use_yn = props.get("encrypt.useyn").toString();
         				
         				loginVoSs.setEncp_use_yn(encp_use_yn);
@@ -352,6 +356,10 @@ public class LoginController {
 			    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 			    localeResolver.setLocale(request, response, locale);
 				
+			    /*백업 사용유무 추가 2021-04-14  변승우 */
+				String backup_use_yn = props.get("bnr.useyn").toString(); 
+				loginVo.setBackup_use_yn(backup_use_yn);
+			    			    
 				String encp_use_yn = props.get("encrypt.useyn").toString();
 				
 				loginVo.setEncp_use_yn(encp_use_yn);

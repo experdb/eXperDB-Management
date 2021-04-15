@@ -16,6 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.experdb.management.backup.service.ExperdbBackupService;
 import com.experdb.management.backup.service.ServerInfoVO;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 
@@ -25,6 +28,13 @@ public class ExperdbBackupController {
 	@Autowired
 	private ExperdbBackupService experdbBackupService;
 
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
+	private List<Map<String, Object>> menuAut;
 	
 	/**
 	 * 백업설정 View page
@@ -34,8 +44,28 @@ public class ExperdbBackupController {
 	 */
 	@RequestMapping(value = "/experdb/backupSetting.do")
 	public ModelAndView backupSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("eXperDB_Backup/backupSetting");
+		
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0002002");
+			
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			}else{			
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0163");
+				historyVO.setMnu_id(54);
+				accessHistoryService.insertHistory(historyVO);
+				mv.setViewName("eXperDB_Backup/backupSetting");
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 		return mv;
 	}
 	
@@ -48,8 +78,28 @@ public class ExperdbBackupController {
 	 */
 	@RequestMapping(value = "/experdb/backupStorage.do")
 	public ModelAndView backupStorage(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("eXperDB_Backup/backupStorage");
+		
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0002001");
+			
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			}else{			
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0162");
+				historyVO.setMnu_id(53);
+				accessHistoryService.insertHistory(historyVO);
+				mv.setViewName("eXperDB_Backup/backupStorage");
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return mv;
 	}
 
@@ -61,8 +111,29 @@ public class ExperdbBackupController {
 	 */
 	@RequestMapping(value = "/experdb/backupHistory.do")
 	public ModelAndView backupHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("eXperDB_Backup/backupHistory");
+		
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001902");
+			
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			}else{			
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0164");
+				historyVO.setMnu_id(50);
+				accessHistoryService.insertHistory(historyVO);
+				mv.setViewName("eXperDB_Backup/backupHistory");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 		return mv;
 	}
 	
@@ -74,8 +145,29 @@ public class ExperdbBackupController {
 	 */
 	@RequestMapping(value = "/experdb/restoreHistory.do")
 	public ModelAndView restoreHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("eXperDB_Backup/restoreHistory");
+		
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001903");
+			
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			}else{			
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0165");
+				historyVO.setMnu_id(51);
+				accessHistoryService.insertHistory(historyVO);
+				mv.setViewName("eXperDB_Backup/restoreHistory");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return mv;
 	}
 	
@@ -88,9 +180,31 @@ public class ExperdbBackupController {
 	 */
 	@RequestMapping(value = "/experdb/backupMonitoring.do")
 	public ModelAndView backupMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("eXperDB_Backup/backupMonitoring");
-		return mv;
+		
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001901");
+			
+				if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+					mv.setViewName("error/autError");
+				}else{
+					mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+					mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+	
+					// 화면접근이력 이력 남기기
+					CmmnUtils.saveHistory(request, historyVO);
+					historyVO.setExe_dtl_cd("DX-T0166");
+					historyVO.setMnu_id(49);
+					accessHistoryService.insertHistory(historyVO);
+					
+					mv.setViewName("eXperDB_Backup/backupMonitoring");
+				}			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+				return mv;		
 	}
 
 	/**
@@ -115,6 +229,10 @@ public class ExperdbBackupController {
 		List<Map<String, Object>> resultSet = null;
 
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0162_01");
+			accessHistoryService.insertHistory(historyVO);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

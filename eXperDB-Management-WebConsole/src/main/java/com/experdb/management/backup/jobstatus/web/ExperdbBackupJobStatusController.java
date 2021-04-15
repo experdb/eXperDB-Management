@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.experdb.management.backup.cmmn.CmmnUtil;
 import com.experdb.management.backup.jobstatus.service.ExperdbBackupJobStatusService;
 import com.experdb.management.backup.jobstatus.service.JobStatusVO;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 @Controller
@@ -22,6 +24,8 @@ public class ExperdbBackupJobStatusController {
 	@Autowired
 	private ExperdbBackupJobStatusService experdbBackupJobStatusService;
 	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
 	
 	/**
 	 * JobStatus 리스트 조회
@@ -143,9 +147,9 @@ public class ExperdbBackupJobStatusController {
 		
 		try {
 			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0125_01");
-			accessHistoryService.insertHistory(historyVO);*/
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0166_01");
+			accessHistoryService.insertHistory(historyVO);
 			
 			String jobname = request.getParameter("jobname");
 			int jobtype = Integer.parseInt(request.getParameter("jobtype"));
