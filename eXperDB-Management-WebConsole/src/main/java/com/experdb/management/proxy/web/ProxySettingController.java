@@ -704,7 +704,7 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 
 		JSONObject resultObj = new JSONObject();
 		TransactionStatus status = txManager.getTransaction(def);
-
+		boolean runRollback=false;
 		try {	
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
@@ -723,19 +723,25 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 				param.put("lst_mdfr_id", loginVo.getUsr_id());
 				
 				resultObj = proxySettingService.applyProxyConf(param, confData);
-	
+				
 				if ("success".equals(resultObj.get("resultLog"))) {
-					// 화면접근이력 이력 남기기 - Proxy 설정관리 - 서버 삭제
+					// 화면접근이력 이력 남기기 - Proxy 설정관리 - 설정 정보 수정 및 서버 재구동
 					proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_09", sohw_menu_id);
+					txManager.commit(status);
+				}else{
+					txManager.rollback(status);
+					runRollback = true;
 				}
 				
-				txManager.commit(status);
+				//Agent keepalive, haproxy 재구동
+				
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("result",false);
-			resultObj.put("errMsg","서버 등록 중 오류가 발생하였습니다.");
-			txManager.rollback(status);
+			resultObj.put("errMsg","설정 적용 중 오류가 발생하였습니다.");
+			//if(!runRollback) txManager.rollback(status);
 		}
 		return resultObj;
 	}

@@ -23,12 +23,21 @@ public class WebConsoleSetting {
 		String strDatabasePassword = "";
 		String strDatabaseUrl = "";
 		
+		String strBackupDatabaseUrl = "";
+		String strActivitylogDatabaseUrl = "";
+		String strJobhistoryDatabaseUrl = "";
+		
 		String strTransferYN ="";
 		
 		//2020.09.23 trans 컨슈머 전송 추가
 		String strTransferOraYN ="";
 		
 		String strAuditYN="";
+		
+		// 2021-04-13 백업사용 유무 추가 변승우
+		String strBackupYN = "";
+		String strRootPw = "";
+		String strSshPort = "";
 		
 		String strScaleYN="";
 		String strScalePath="";
@@ -98,6 +107,66 @@ public class WebConsoleSetting {
 			}
 		}
 
+		
+		/* DB2PG 설치 경로 */
+		/* 순서변경, 2021-04-13 변승우 */
+		System.out.println("eXperDB-DB2PG installation path : ");
+		strDb2pgPath = scan.nextLine();
+		while (true) {
+			if(strDb2pgPath.equals("")) {
+				System.out.println("Please enter your eXperDB-DB2PG installation path setting. ");
+				System.out.println("eXperDB-DB2PG installation path :");
+				strDb2pgPath = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
+		
+		
+		/* 백업 사용여부  추가  2021-04-13  변승우 */
+		System.out.println("Whether to enable eXperDB-Backup settings? (y, n)");
+		strBackupYN = scan.nextLine();
+		strBackupYN = strBackupYN.toUpperCase();
+		while (true) {
+			if(strBackupYN.equals("")) {
+				System.out.println("Please enter your eXperDB-Backup setting yn. ");
+				System.out.println("Whether to enable eXperDB-Backup settings? (y, n) :");
+				strBackupYN = scan.nextLine();
+				strBackupYN = strBackupYN.toUpperCase();
+			} else {
+				break;
+			}
+		}
+		
+		if(strBackupYN.equals("Y")){
+			System.out.println("Server root password :");
+			strRootPw = scan.nextLine();
+			while (true) {
+				if(strBackupYN.equals("")) {
+					System.out.println("Please enter your Server root password. ");
+					System.out.println("Server root password :");
+					strBackupYN = scan.nextLine();
+					strBackupYN = strBackupYN.toUpperCase();
+				} else {
+					break;
+				}
+			}
+			System.out.println("Server SSH Port : ");
+			strSshPort = scan.nextLine();
+			while (true) {
+				if(strBackupYN.equals("")) {
+					System.out.println("Please enter your Server SSH Port. ");
+					System.out.println("Server SSH Port :");
+					strBackupYN = scan.nextLine();
+					strBackupYN = strBackupYN.toUpperCase();
+				} else {
+					break;
+				}
+			}
+		}
+		
+		
 		/* 감사설정 사용여부 */
 		System.out.println("Whether to enable auditing settings? (y, n)");
 		strAuditYN = scan.nextLine();
@@ -143,18 +212,7 @@ public class WebConsoleSetting {
 			}
 		}
 
-		/* DB2PG 설치 경로 */
-		System.out.println("eXperDB-DB2PG installation path : ");
-		strDb2pgPath = scan.nextLine();
-		while (true) {
-			if(strDb2pgPath.equals("")) {
-				System.out.println("Please enter your eXperDB-DB2PG installation path setting. ");
-				System.out.println("eXperDB-DB2PG installation path :");
-				strDb2pgPath = scan.nextLine();
-			} else {
-				break;
-			}
-		}
+
 
 		/* Scale in/out 사용여부 */
 		System.out.println("Whether to enable eXperDB-Scale settings? (y, n)");
@@ -228,6 +286,12 @@ public class WebConsoleSetting {
 		}
 
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
+		
+		//아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
+		strBackupDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/ARCserveLinuxD2D";
+		strActivitylogDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/ActivityLog";
+		strJobhistoryDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/JobHistory";
+		
 		System.out.println("################globals.properties##################");
 		System.out.println("Repository database IP address :" + strDatabaseIp);
 		System.out.println("Repository database port :" + strDatabasePort);		
@@ -235,6 +299,7 @@ public class WebConsoleSetting {
 		System.out.println("Repository database password :" + strDatabasePassword);
 		System.out.println("Repository database Access information :" + strDatabaseUrl);
 		System.out.println("Whether to enable auditing settings : " + strAuditYN);
+		System.out.println("Whether to enable Backup settings : " + strBackupYN);
 		System.out.println("Whether data transfer is enabled : " + strTransferYN);
 		System.out.println("eXperDB-DB2PG installation path : " + strDb2pgPath);
 		System.out.println("###################eXperDB-Scale##################");
@@ -271,6 +336,13 @@ public class WebConsoleSetting {
 		    String url = pbeEnc.encrypt(strDatabaseUrl);
 		    String username = pbeEnc.encrypt(strDatabaseUsername);
 		    String password = pbeEnc.encrypt(strDatabasePassword);
+		    
+		    
+		    //아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
+		    String backupUrl = pbeEnc.encrypt(strBackupDatabaseUrl);
+		    String activitylUrl = pbeEnc.encrypt(strActivitylogDatabaseUrl);
+		    String jobhistoryUrl = pbeEnc.encrypt(strJobhistoryDatabaseUrl);		    
+		    String backupPw = pbeEnc.encrypt(strRootPw);
 		    
 		    Properties prop = new Properties();
 
@@ -312,7 +384,21 @@ public class WebConsoleSetting {
 		    prop.setProperty("database.url", "ENC(" + url + ")");
 		    prop.setProperty("database.username", "ENC(" + username + ")");
 		    prop.setProperty("database.password", "ENC(" + password + ")");
+		    
+		    //아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
+		    prop.setProperty("backupdb.url", "ENC(" + backupUrl + ")");
+		    prop.setProperty("activitylog.url", "ENC(" + activitylUrl + ")");
+		    prop.setProperty("jobhistory.url", "ENC(" + jobhistoryUrl + ")");
+		    
+		    if(strBackupYN.equals("Y")){
+			    prop.setProperty("backup.url", strDatabaseIp);
+			    prop.setProperty("backup.username", "root");
+			    prop.setProperty("backup.password", backupPw);
+			    prop.setProperty("backup.port", strSshPort);
+		    }
+		    		    
 		    prop.setProperty("pg_audit", strAuditYN);
+		    prop.setProperty("bnr.useyn", strBackupYN);
 		    prop.setProperty("transfer", strTransferYN);	
 		    prop.setProperty("transfer_ora", strTransferOraYN);
 		    

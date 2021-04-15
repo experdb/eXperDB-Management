@@ -1,5 +1,10 @@
 package com.experdb.management.proxy.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+
 public class ProxyListenerVO {
 	
 	private int lsn_id; 
@@ -108,6 +113,46 @@ public class ProxyListenerVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+
+	public Map<String, Object> toMap(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("lsn_id", lsn_id);
+		map.put("pry_svr_id", pry_svr_id);
+		map.put("lsn_nm", lsn_nm);
+		map.put("con_bind_port", con_bind_port);
+		map.put("lsn_desc", lsn_desc);
+		map.put("db_usr_id", db_usr_id);
+		map.put("db_id", db_id);
+		map.put("db_nm", db_nm);
+		map.put("con_sim_query", con_sim_query);
+		map.put("field_val", field_val);
+		map.put("field_nm", field_nm);
+		map.put("frst_regr_id", frst_regr_id);
+		map.put("frst_reg_dtm", frst_reg_dtm);
+		map.put("lst_mdfr_id", lst_mdfr_id);
+		map.put("lst_mdf_dtm", lst_mdf_dtm);
+		
+		return map;
+	}
 	
+	public JSONObject toJSONObject(){
+		JSONObject jobj = new JSONObject();
+		jobj.put("lsn_id", lsn_id);
+		jobj.put("pry_svr_id", pry_svr_id);
+		jobj.put("lsn_nm", lsn_nm);
+		jobj.put("con_bind_port", con_bind_port);
+		jobj.put("lsn_desc", lsn_desc);
+		jobj.put("db_usr_id", db_usr_id);
+		jobj.put("db_id", db_id);
+		jobj.put("db_nm", db_nm);
+		jobj.put("con_sim_query", con_sim_query);
+		jobj.put("field_val", field_val);
+		jobj.put("field_nm", field_nm);
+		jobj.put("frst_regr_id", frst_regr_id);
+		jobj.put("frst_reg_dtm", frst_reg_dtm);
+		jobj.put("lst_mdfr_id", lst_mdfr_id);
+		jobj.put("lst_mdf_dtm", lst_mdf_dtm);
+		return jobj;
+	}
 	
 }

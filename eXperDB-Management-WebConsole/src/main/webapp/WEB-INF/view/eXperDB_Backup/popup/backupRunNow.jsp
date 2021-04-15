@@ -78,7 +78,7 @@
 	<div class="modal-dialog modal-sm" role="document" style="margin: 190px 650px;">
 		<div class="modal-content" style="width:420px;height:300px;">
 			<div class="modal-header" style="height:50px;padding-top:15px;">
-				<h3 class="modal-title fa fa-dot-circle-o" id="confirm_multi_tlt"> 즉시 실행</h3>
+				<h3 class="modal-title fa fa-dot-circle-o" id="confirm_multi_tlt"> <spring:message code="migration.run_immediately" /></h3>
 			</div>
 			<div class="modal-body" style="margin-top:-40px;">
 				<div class="modal-body" style="height:140px;display: table-cell; vertical-align: middle; padding-left: 50px; padding-bottom: 10px;">

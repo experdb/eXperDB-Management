@@ -8,8 +8,8 @@
 
 <%
 	/**
-	* @Class Name : arcBackupRegForm.jsp
-	* @Description : 백업정책 등록 팝업
+	* @Class Name : bckPolicyRegForm.jsp
+	* @Description : 풀 백업 정책 등록 팝업
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -130,7 +130,7 @@
 		var errStr = null;
 		
 		if($('#backupSetNum').val() > max || $('#backupSetNum').val() < min){
-			errStr = min + " 과 " + max + " 사이의 값을 입력해 주세요";
+			errStr = min + " ~ " + max + ' <spring:message code="eXperDB_backup.msg47" />';
 			showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 			$("#backupSetNum").val(1);
 		}
@@ -174,64 +174,64 @@
 			$("#bckSetDateTypeVal").val(true);
 			var setDateVal = $("#merge_period_week").val()
 			$("#bckSetDateVal").val(setDateVal);
-			bckdate = "매주"
+			bckdate = ' <spring:message code="eXperDB_backup.msg74" />'
 			switch($("#merge_period_week").val()){
 				case  "0":
-					bckdate += " 일요일"
+					bckdate += ' <spring:message code="eXperDB_backup.msg52" />'
 					break;
 				case "1":
-					bckdate += " 월요일"
+					bckdate += ' <spring:message code="eXperDB_backup.msg53" />'
 					break;
 				case "2":
-					bckdate += " 화요일"
+					bckdate += ' <spring:message code="eXperDB_backup.msg54" />'
 					break;
 				case "3":
-					bckdate += " 수요일"
+					bckdate += ' <spring:message code="eXperDB_backup.msg55" />'
 					break;
 				case "4":
-					bckdate += " 목요일"
+					bckdate += ' <spring:message code="eXperDB_backup.msg56" />'
 					break;
 				case "5":
-					bckdate += " 금요일"
+					bckdate += ' <spring:message code="eXperDB_backup.msg57" />'
 					break;
 				case "6":
-					bckdate += " 토요일"
+					bckdate += ' <spring:message code="eXperDB_backup.msg58" />'
 					break;
 			}
 		}else{
 			$("#bckSetDateTypeVal").val(false);
 			var setDateVal = $("#merge_period_month").val();
 			$("#bckSetDateVal").val(setDateVal);
-			bckdate = "매월"
+			bckdate = ' <spring:message code="eXperDB_backup.msg73" />'
 			if($("#merge_period_month").val()>31){
 				switch($("#merge_period_month").val()){
 					case "32":
-						bckdate += " 마지막 날"
+						bckdate += ' <spring:message code="eXperDB_backup.msg59" />'
 						break;
 					case "33":
-						bckdate += " 마지막 일요일"
+						bckdate += ' <spring:message code="eXperDB_backup.msg60" />'
 						break;
 					case "34":
-						bckdate += " 마지막 월요일"
+						bckdate += ' <spring:message code="eXperDB_backup.msg61" />'
 						break;
 					case "35":
-						bckdate += " 마지막 화요일"
+						bckdate += ' <spring:message code="eXperDB_backup.msg62" />'
 						break;
 					case "36":
-						bckdate += " 마지막 수요일"
+						bckdate += ' <spring:message code="eXperDB_backup.msg63" />'
 						break;
 					case "37":
-						bckdate += " 마지막 목요일"
+						bckdate += ' <spring:message code="eXperDB_backup.msg64" />'
 						break;
 					case "38":
-						bckdate += " 마지막 금요일"
+						bckdate += ' <spring:message code="eXperDB_backup.msg65" />'
 						break;
 					case "39":
-						bckdate += " 마지막 토요일"
+						bckdate += ' <spring:message code="eXperDB_backup.msg66" />'
 						break;
 				}
 			}else{
-				bckdate += " " + $("#merge_period_month").val() + "일";
+				bckdate += " " + $("#merge_period_month").val() + ' <spring:message code="eXperDB_backup.msg67" />';
 			}
 		}
 		
@@ -251,7 +251,7 @@
 		<div class="modal-content" >
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="policyRegTitle" style="padding-left:5px;">
-					풀 백업 정책 설정
+					<spring:message code="eXperDB_backup.msg68" />
 				</h5>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="insRegForm">
@@ -278,9 +278,11 @@
 									 	</div>
 								 	</div>
 								</div>
-								<h4 class="card-title" style="position: absolute;top:-5px; right:540px;background-color: white;font-size: 1em; color: #000000; ">
-									Storage 지정
-								</h4>
+								<div style="position: absolute;top:-5px; right:520px; width: 120px;">
+									<h4 class="card-title" style=";background-color: white;font-size: 1em; color: #000000; ">
+										<spring:message code="eXperDB_backup.msg69" />
+									</h4>
+								</div>
 							</div>
 						</div>
 						<div style=" margin-bottom: 20px;">
@@ -302,9 +304,11 @@
 									 	</div>
 								 	</div>
 								</div>
-								<h4 class="card-title" style="position: absolute;top:-5px; right:560px;background-color: white;font-size: 1em; color: #000000; ">
-									압축 정책
-								</h4>
+								<div style="position: absolute;top:-5px; right:510px; width: 130px;">
+									<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
+										<spring:message code="eXperDB_backup.msg70" />
+									</h4>
+								</div>
 							</div>
 						</div>
 						<!-- Recovery Set Settings	 -->
@@ -318,10 +322,10 @@
 													<div class="col-7" >
 														<div class="col-7 col-form-label pop-label-index" style="padding-top:7px;">
 															<i class="item-icon fa fa-dot-circle-o"></i>
-															Full 백업 수행일
+															<spring:message code="eXperDB_backup.msg19" />
 														</div>
-														<div class="col-11 row" style="margin-left: 10px;">
-															<label style="padding-top: 5px">매 주 <input type="radio" id="merge_week" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="weekly" onchange="fn_mergeClick()"/></label>
+														<div class="col-11 row" style="margin-left: 10px; padding-left: 5px;">
+															<label style="padding-top: 5px; width: 87px;"><spring:message code="eXperDB_backup.msg72" /> <input type="radio" id="merge_week" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="weekly" onchange="fn_mergeClick()"/></label>
 															<select name="merge_period_week" id="merge_period_week" class="form-control form-control-xsm" style="margin-left: 1rem;width:180px; height:40px; color:black;">
 																<option value="0">Sunday</option>
 																<option value="1">Monday</option>
@@ -332,20 +336,20 @@
 																<option value="6">Saturday</option>
 															</select>
 															
-															<label style="padding-top: 10px">매 월 <input type="radio" id="merge_month" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="monthly" onchange="fn_mergeClick()"/></label>
+															<label style="padding-top: 10px; width: 87px;"><spring:message code="eXperDB_backup.msg71" /> <input type="radio" id="merge_month" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="monthly" onchange="fn_mergeClick()"/></label>
 															<select name="merge_period_month" id="merge_period_month"  class="form-control form-control-xsm" style="margin-top: 10px; margin-left: 1rem;width:180px; height:40px; color:black;" disabled>
 																
 															</select>
 														</div>
 													</div>
 													<div class="col-5">
-														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleWeek" style="padding-top:7px;">
+														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleWeek" style="padding-top:7px;padding-left: 0px;">
 															<i class="item-icon fa fa-dot-circle-o"></i>
-															백업 셋 보관 수 (주별)
+															<spring:message code="eXperDB_backup.msg75" />
 														</div>
-														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleMonth"style="padding-top:7px;">
+														<div  class="col-11 col-form-label pop-label-index" id="setNumTitleMonth"style="padding-top:7px;padding-left: 0px;">
 															<i class="item-icon fa fa-dot-circle-o"></i>
-															백업 셋 보관 수 (월별)
+															<spring:message code="eXperDB_backup.msg76" />
 														</div>
 														<div class="col-sm-4" style="margin-left: 10px">
 															<input type="number" min="1" max="10000" style="width:150px; height:40px;" class="form-control form-control-sm" name="backupSetNum" id="backupSetNum" onchange="fn_backupSetVal()"/>
@@ -357,9 +361,11 @@
 								 	</div>
 							 	</div>
 							</div>
-							<h4 class="card-title" style="position: absolute;top:-5px; right:540px;background-color: white;font-size: 1em; color: #000000; ">
-								풀 백업 정책
-							</h4>
+							<div style="position: absolute;top:-5px; right:507px; width: 131px;">
+								<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
+									<spring:message code="eXperDB_backup.msg21" />
+								</h4>
+							</div>
 						</div>
 							<div class="card-body">
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >

@@ -156,9 +156,9 @@
 											
 											//덤프관리 //////////////////////////////////////////////////////////////////
 											menuJson +=	',{' +
-															 '"text": "덤프관리",' +
+															 '"text": "<spring:message code="eXperDB_backup.msg85"/>",' +
 															 '"icon": "ti-files",' +
-															 '"id": "backup'+item.db_svr_id+'"';
+															 '"id": "dump'+item.db_svr_id+'"';
 
 											if((aut.length != 0 && aut[index].bck_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].bck_hist_aut_yn == "Y")
 											 || (aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y")){
@@ -167,16 +167,16 @@
 												if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
 													menuJson +=	'{' +
 																	'"icon": "fa fa-cog",' +
-																	'"text": "<spring:message code="menu.backup_settings"/>",' +
+																	'"text": "<spring:message code="eXperDB_backup.msg86"/>",' +
 																	'"url": "/backup/dumpList.do?db_svr_id='+item.db_svr_id+'",' +
-																	'"id": "workList'+item.db_svr_id+'"' +
+																	'"id": "dumpWorkList'+item.db_svr_id+'"' +
 																'},';
 												}
 
 												if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
 													menuJson +=	'{' +
 																	'"icon": "fa fa-history",' +
-																	'"text": "<spring:message code="menu.backup_history"/>",' +
+																	'"text": "<spring:message code="eXperDB_backup.msg87"/>",' +
 																	'"url": "/backup/dumpLogList.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "workLogList'+item.db_svr_id+'"' +
 																'},';
@@ -185,7 +185,7 @@
 												if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
 													menuJson +=	'{' +
 																	'"icon": "fa fa-calendar",' +
-																	'"text": "<spring:message code="menu.backup_scheduler"/>",' +
+																	'"text": "<spring:message code="eXperDB_backup.msg88"/>",' +
 																	'"url": "/dumpSchedulerView.do?db_svr_id='+item.db_svr_id+'&db_svr_nm='+item.db_svr_nm+'",' +
 																	'"id": "schedulerView'+item.db_svr_id+'"' +
 																'},';

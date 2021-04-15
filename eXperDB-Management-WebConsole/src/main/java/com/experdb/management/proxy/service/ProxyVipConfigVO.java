@@ -1,5 +1,10 @@
 package com.experdb.management.proxy.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+
 public class ProxyVipConfigVO {
 	
 	
@@ -89,6 +94,41 @@ public class ProxyVipConfigVO {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
 	
+
+	public Map<String, Object> toMap(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("vip_cng_id", vip_cng_id);
+		map.put("state_nm", state_nm);
+		map.put("pry_svr_id", pry_svr_id);
+		map.put("v_ip", v_ip);
+		map.put("v_rot_id", v_rot_id);
+		map.put("v_if_nm", v_if_nm);
+		map.put("priority", priority);
+		map.put("chk_tm", chk_tm);
+		map.put("frst_regr_id", frst_regr_id);
+		map.put("frst_reg_dtm", frst_reg_dtm);
+		map.put("lst_mdfr_id", lst_mdfr_id);
+		map.put("lst_mdf_dtm", lst_mdf_dtm);
+		
+		return map;
+	}
 	
+	public JSONObject toJSONObject(){
+		JSONObject jobj = new JSONObject();
+		jobj.put("vip_cng_id", vip_cng_id);
+		jobj.put("state_nm", state_nm);
+		jobj.put("pry_svr_id", pry_svr_id);
+		jobj.put("v_ip", v_ip);
+		jobj.put("v_rot_id", v_rot_id);
+		jobj.put("v_if_nm", v_if_nm);
+		jobj.put("priority", priority);
+		jobj.put("chk_tm", chk_tm);
+		jobj.put("frst_regr_id", frst_regr_id);
+		jobj.put("frst_reg_dtm", frst_reg_dtm);
+		jobj.put("lst_mdfr_id", lst_mdfr_id);
+		jobj.put("lst_mdf_dtm", lst_mdf_dtm);
+		
+		return jobj;
+	}
 	
 }

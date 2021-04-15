@@ -258,7 +258,7 @@ function fn_setServerList(data){
 	var html;
 	console.log("fn_setServerList");
 	$("#bckServer").empty();
-	html +='<option value="0"> 대상 서버</option>'
+	html +='<option value="0"> <spring:message code="eXperDB_backup.msg25" /></option>'
 	for(var i =0; i<serverList.length; i++){			
 		html += '<option value="'+serverList[i].ipadr+'">'+serverList[i].ipadr+'</option>';
 	}
@@ -370,7 +370,7 @@ function fn_searchHistory(){
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">백업이력 관리</span>
+												<span class="menu-title"><spring:message code="eXperDB_backup.msg26" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -378,8 +378,8 @@ function fn_searchHistory(){
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">BnR 설정</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">백업이력 관리</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_backup.msg24" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_backup.msg26" /></li>
 										</ol>
 									</div>
 								</div>
@@ -434,7 +434,7 @@ function fn_searchHistory(){
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
 									<select class="form-control" style="margin-right: -0.7rem;" name="bckType" id="bckType">
-										<option value="0"> 전체 백업유형</option>
+										<option value="0"> <spring:message code="eXperDB_backup.msg28" /></option>
 										<option value="3"> Backup Full</option>
 										<option value="4"> Backup Incremental</option>
 										<option value="5"> Backup Verify</option>
@@ -442,9 +442,9 @@ function fn_searchHistory(){
 								</div>
 								<div class="input-group mb-2 mr-sm-2  col-sm-1_7">
 									<select class="form-control" style="margin-right: -0.7rem;" name="bckStatus" id="bckStatus">
-										<option value="0"> 전체 상태</option>
-										<option value="1"> 성공</option>
-										<option value="3"> 실패</option>
+										<option value="0"> <spring:message code="eXperDB_backup.msg29" /></option>
+										<option value="1"> <spring:message code="common.success" /></option>
+										<option value="3"> <spring:message code="common.failed" /></option>
 									</select>
 								</div>
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="read_button" onClick="fn_searchHistory();" >
@@ -472,12 +472,12 @@ function fn_searchHistory(){
 												<thead>
 													<tr class="bg-info text-white">
 														<th width="50">Status</th>
-														<th width="80">대상서버</th>
+														<th width="80"><spring:message code="eXperDB_backup.msg25" /></th>
 														<th width="80">Recovery Point</th>
-														<th width="80">백업유형</th>															
-														<th width="60">수행시작일시</th>
-														<th width="60">수행종료일시</th>
-														<th width="60">수행시간</th>
+														<th width="80"><spring:message code="eXperDB_backup.msg29" /></th>															
+														<th width="60"><spring:message code="eXperDB_backup.msg30" /></th>
+														<th width="60"><spring:message code="eXperDB_backup.msg31" /></th>
+														<th width="60"><spring:message code="eXperDB_backup.msg32" /></th>
 														<th width="50">Data Size</th>
 														<th width="100">Backup Destination</th>
 													</tr>

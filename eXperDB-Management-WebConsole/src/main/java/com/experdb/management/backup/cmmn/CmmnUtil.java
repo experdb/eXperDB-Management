@@ -17,6 +17,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.json.simple.JSONObject;
 import org.springframework.util.ResourceUtils;
 import org.w3c.dom.Document;
@@ -54,13 +55,17 @@ public class CmmnUtil {
 
 	public Channel getChannel() throws FileNotFoundException, IOException {
 
+		 StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
+		 pbeEnc.setPassword("k4mda"); // PBE 값(XML PASSWORD설정)
+		
 		Properties props = new Properties();
 		props.load(
 				new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
 
 		String host = props.getProperty("backup.url");
 		String userName = props.getProperty("backup.username");
-		String password = props.getProperty("backup.password");
+		//복호화	
+		String password = pbeEnc.decrypt(props.getProperty("backup.password"));
 		int port = Integer.parseInt(props.getProperty("backup.port"));
 
 		JSch jsch = new JSch();
@@ -141,6 +146,10 @@ public class CmmnUtil {
 			}else if(type.equals("job")){
 				System.out.println("JOB Validation");
 				result = ResultCode.jobResultCode(output);
+			}else{
+				result.put("RESULT_CODE", 0);
+				result.put("RESULT_DATA", output.trim());
+				System.out.println("Result command : " + output.trim());
 			}
 			
 		} catch (JSchException e) {
@@ -221,7 +230,9 @@ public class CmmnUtil {
 				
 				try {
 					String strCmd = "df -B1 --output=avail '"+location+"' | tail -n 1";
-					result = cmmUtil.execute(strCmd, "");			
+					System.out.println("BackupLocationFreeSize CMD : "+strCmd);
+					result = cmmUtil.execute(strCmd, "locationFreeSize");			
+					System.out.println(result.get("RESULT_DATA").toString());
 					// freeSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));				
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -244,7 +255,9 @@ public class CmmnUtil {
 				
 				try {
 					String strCmd = "df -B1 --output=size '"+location+"' |tail -n 1";
-					result = cmmUtil.execute(strCmd, "");									
+					System.out.println("BackupLocationTotalSize CMD : "+strCmd);
+					result = cmmUtil.execute(strCmd, "locationTotalSize");	
+					System.out.println(result.get("RESULT_DATA").toString());
 					// totalSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));					
 				} catch (Exception e) {
 					e.printStackTrace();

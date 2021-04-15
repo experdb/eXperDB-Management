@@ -10,12 +10,14 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
+
 
 public class ProxyClientInfoCmmn implements Runnable{
 
@@ -97,6 +99,39 @@ public class ProxyClientInfoCmmn implements Runnable{
 		result.put("ERR_CODE", strErrCode);
 		result.put("ERR_MSG", strErrMsg);
 		result.put("RESULT_DATA", strErrMsg);
+				
+		return result;
+	}
+	
+	public Map<String, Object> createProxyConfigFile(String IP, int PORT, JSONObject jObj) throws ConnectException, Exception{
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP004);
+		
+		JSONObject objList;
+		
+		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
+		PCA.open(); 
+
+		objList = PCA.psP004(jObj); 
+	
+		PCA.close();
+		
+		String strErrMsg = (String)objList.get(ProxyClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objList.get(ProxyClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objList.get(ProxyClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objList.get(ProxyClientProtocolID.RESULT_CODE);
+		String strResultData = (String)objList.get(ProxyClientProtocolID.RESULT_DATA);
+		
+		System.out.println("RESULT_CODE : " +  strResultCode);
+		System.out.println("ERR_CODE : " +  strErrCode);
+		System.out.println("ERR_MSG : " +  strErrMsg);
+		System.out.println("RESULT_DATA : " + strResultData);
+		
+		result.put("RESULT_CODE", strResultCode);
+		result.put("ERR_CODE", strErrCode);
+		result.put("ERR_MSG", strErrMsg);
+		result.put("RESULT_DATA", strResultData);
 				
 		return result;
 	}

@@ -16,12 +16,19 @@ import org.xml.sax.*;
 
 import com.experdb.management.backup.node.service.*;
 import com.experdb.management.backup.service.*;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 @Controller
 public class ExperdbBackupNodeController {
 	
 	@Autowired
 	private ExperdbBackupNodeService experdbBackupNodeService;
+	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
 	
 	/**
 	 * 노드 리스트를 조회한다.(안씀)
@@ -61,7 +68,18 @@ public class ExperdbBackupNodeController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/experdb/backupUnregNodeList.do")
-	public @ResponseBody List<ServerInfoVO> getUnregNodeList(){
+	public @ResponseBody List<ServerInfoVO> getUnregNodeList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+		
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0163_01");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return experdbBackupNodeService.getUnregNodeList();
 	}
 	
@@ -88,9 +106,15 @@ public class ExperdbBackupNodeController {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/experdb/backupNodeInfo.do")
-	public @ResponseBody JSONObject getNodeInfo(HttpServletRequest request){
+	public @ResponseBody JSONObject getNodeInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		JSONObject result = new JSONObject();
 		try {
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0163_02");
+			accessHistoryService.insertHistory(historyVO);
+			
 			result = experdbBackupNodeService.getNodeInfo(request);
 			result.put("resultCode", "11111");
 		} catch (Exception e) {

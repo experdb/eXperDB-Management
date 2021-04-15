@@ -4,7 +4,7 @@
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="../cmmn/cs2.jsp"%>
-
+   
 
 <%
 	/**
@@ -245,9 +245,9 @@ function fn_getSvrList() {
 			fn_setScheduleInfo(result);
 		}else if(result.RESULT_CODE == "2"){
 			jobExist = 0;
-			console.log("실패 : XML 파일을 찾을 수 없음");
+			console.log("fail : can not find xml file");
 		}else{
-			console.log("실패");
+			console.log("fail");
 		}
 	})
 	.fail(function(xhr, status, error){
@@ -341,7 +341,7 @@ function fn_nodeRegPopup() {
  function fn_nodeModiPopup() {
 	 var data = NodeList.rows('.selected').data();
 	 if(data.length<1){
-		showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	 }else{		 
 		$.ajax({
@@ -378,16 +378,16 @@ function fn_nodeRegPopup() {
 		return false;
 	}else{
 		if(jobExist == 0){			
-			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			confile_title = '<spring:message code="eXperDB_backup.msg5" /> ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 			$('#con_multi_gbn', '#findConfirmMulti').val("node_del");
 			$('#confirm_multi_tlt').html(confile_title);
 			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
 			$('#pop_confirm_multi_md').modal("show");
 		}else{
-			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			confile_title = '<spring:message code="eXperDB_backup.msg5" /> ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 			$('#con_multi_gbn', '#findConfirmMulti').val("node_del");
 			$('#confirm_multi_tlt').html(confile_title);
-			$('#confirm_multi_msg').html('등록된 스케줄이 존재합니다.<br><spring:message code="message.msg162" />');
+			$('#confirm_multi_msg').html('<spring:message code="eXperDB_backup.msg6" /> <br><spring:message code="message.msg162" />');
 			$('#pop_confirm_multi_md').modal("show");
 		}
 	}
@@ -444,7 +444,7 @@ function fn_nodeRegPopup() {
 	function fn_policyRegPopoup() {
 		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
-			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
 			$.ajax({
@@ -478,7 +478,7 @@ function fn_nodeRegPopup() {
 	function fn_scheduleRegPopoup() {
 		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
-			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
 			fn_scheduleRegReset();
@@ -498,9 +498,9 @@ function fn_nodeRegPopup() {
 			schData.rtu = repTimeUnit;
 			// repeat --> scheduleList에 보여줄 data
 			if(repTimeUnit == 0){
-				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"분 간격";
+				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"<spring:message code='eXperDB_backup.msg7' />";
 			}else{
-				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"시간 간격";
+				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"<spring:message code='eXperDB_backup.msg8' />";
 			}
 		}else{
 			schData.rt = "";
@@ -601,7 +601,7 @@ function fn_nodeRegPopup() {
 					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '','success', 'backupPolicyApply');
 					jobExist = 1;
 				}else {
-					showSwalIcon('적용에 실패했습니다', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="eXperDB_backup.msg9" />', '<spring:message code="common.close" />', '', 'error');
 				}
 			})
 			.fail (function(xhr, status, error){
@@ -624,10 +624,10 @@ function fn_nodeRegPopup() {
 	}
 	
 	function fn_goMonitoring(){
-		confile_title = '모니터링 화면으로 이동' + " " + '<spring:message code="common.request" />';
+		confile_title = '<spring:message code="eXperDB_backup.msg10" />' + " " + '<spring:message code="common.request" />';
 		$('#con_multi_gbn', '#findConfirmMulti').val("go_monitoring");
 		$('#confirm_multi_tlt').html(confile_title);
-		$('#confirm_multi_msg').html('모니터링 화면으로 이동하시겠습니까?');
+		$('#confirm_multi_msg').html('<spring:message code="eXperDB_backup.msg11" />');
 		$('#pop_confirm_multi_md').modal("show");
 	}
 	
@@ -639,10 +639,10 @@ function fn_nodeRegPopup() {
  	function fn_applyValidation(){
  		var data = NodeList.rows('.selected').data();
 		if(data.length<1){
-			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else if($("#bckStorage").val() == "" || $("#bckStorage").val() == null){
-			showSwalIcon('백업 정책을 등록해주세요', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_backup.msg83" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 		return true;
@@ -655,13 +655,13 @@ function fn_nodeRegPopup() {
   function fn_backupDelPopup(){
 		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
-			showSwalIcon('노드를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else if(jobExist!= 1){
-			showSwalIcon('적용된 정책이 없습니다', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_backup.msg12" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
-			confile_title = '노드 ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+			confile_title = '<spring:message code="eXperDB_backup.msg5" /> ' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 			$('#con_multi_gbn', '#findConfirmMulti').val("backup_del");
 			$('#confirm_multi_tlt').html(confile_title);
 			$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
@@ -701,7 +701,7 @@ function fn_backupDelete() {
 	     		jobExist = 0;
 				fn_getScheduleInfo(ipadr);
 			}else{
-				showSwalIcon('삭제에 실패했습니다', '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon('<spring:message code="migration.msg09" />', '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	})
@@ -749,7 +749,7 @@ table.dataTable.ccc thead th{
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">정책 설정</span>
+												<span class="menu-title"><spring:message code="eXperDB_backup.msg13" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -758,7 +758,7 @@ table.dataTable.ccc thead th{
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Backup</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">정책 설정</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_backup.msg13" /></li>
 										</ol>
 									</div>
 								</div>
@@ -782,23 +782,23 @@ table.dataTable.ccc thead th{
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">
-					<div class="row" style="float: right;width: 500px;">					
+					<div class="row" style="float: right;width: 530px;">					
 						<div class="tooltip-static-demo" id="applyAlertTooltip">
 							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; display:none;">
 								<div class="arrow"></div>
-								<div class="tooltip-inner" style="width: 250px;">백업 정책 설정 후 적용을 눌러주세요</div>
+								<div class="tooltip-inner" style="width: 250px;"><spring:message code="eXperDB_backup.msg14" /></div>
 							</div>
 							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert_none" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; width: 265px;">
 								
 							</div>
 						</div>
 						<div id="wrt_button" style="float: right;">
-						
+							
 							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
-								<i class="fa fa-check btn-icon-prepend "></i>적용
+								<i class="fa fa-check btn-icon-prepend "></i><spring:message code="common.apply" />
 							</button>
 							<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_backupDelPopup()">
-								<i class="ti-trash btn-icon-prepend "></i>삭제
+								<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 							</button>
 						</div>
 					</div>
@@ -814,24 +814,24 @@ table.dataTable.ccc thead th{
 					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
 						<div id="wrt_button" style="float: right;">
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_nodeRegPopup()">
-								등록
+								<spring:message code="common.registory" />
 							</button>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_nodeModiPopup()">
-								수정
+								<spring:message code="common.modify" />
 							</button>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_nodeDelPopup()">
-								삭제
+								<spring:message code="common.delete" />
 							</button>
 						</div>
 						<h4 class="card-title" style="font-size: 1em; color:black;">
-							<i class="item-icon fa fa-desktop"></i> 대상 서버 리스트
+							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg15" />
 						</h4>
 						<table id="nodeList" class="table nonborder table-hover system-tlb-scroll" style="width:100%;align:left;">
 							<thead>
 								<tr class="bg-info text-white">
-									<th width="100">서버유형</th>
-									<th width="130">호스트명</th>
-									<th width="100">아이피</th>
+									<th width="100"><spring:message code="eXperDB_backup.msg16" /></th>
+									<th width="130"><spring:message code="properties.host" /></th>
+									<th width="100"><spring:message code="data_transfer.ip" /></th>
 								</tr>
 							</thead>
 						</table>
@@ -850,7 +850,7 @@ table.dataTable.ccc thead th{
 								<div class="col-12" style="margin-top: 10px;">
 									<div class="wrt_button" style="float: right">
 										<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_policyRegPopoup()">
-										 	설정
+											 <spring:message code="encrypt_policyOption.Settings" />
 										</button>
 									</div>
 								</div>
@@ -859,7 +859,7 @@ table.dataTable.ccc thead th{
 								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										백업 Storage
+										<spring:message code="eXperDB_backup.msg17" />
 									</div>
 									<div class="col-2" style="padding-left: 0px;">
 										<input type="text" id="bckStorageType" name = "bckStorageType" class="form-control form-control-sm"  style="height: 40px; background-color:#ffffffdd;" readonly/>
@@ -871,7 +871,7 @@ table.dataTable.ccc thead th{
 								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										압축
+										<spring:message code="eXperDB_backup.msg18" />
 									</div>
 									<div class="col-4" style="padding-left: 0px;">
 										<input type="text" id="bckCompress" name="bckCompress" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
@@ -880,14 +880,14 @@ table.dataTable.ccc thead th{
 								<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										Full 백업 수행일
+										<spring:message code="eXperDB_backup.msg19" />
 									</div>
 									<div class="col-sm-2_5" style="margin-left: 0px;padding-left: 0px;">
 										<input type="text" style="width:150px; height:40px; background-color:#ffffffdd;" class="form-control form-control-sm" name="bckSetDate" id="bckSetDate" readonly/>
 									</div>
 									<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										Full 백업 보관 셋
+										<spring:message code="eXperDB_backup.msg20" />
 									</div>
 									<div class="col-sm-2_5" style="margin-left: 0px">
 										<input type="number" min="1" max="10000" style="width:150px; height:40px; background-color:#ffffffdd;" class="form-control form-control-sm" name="bckSetNum" id="bckSetNum" readonly/>
@@ -896,9 +896,11 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<h4 class="card-title" style="position: absolute;top:22px; right:760px;background-color: white;font-size: 1em; color:black;">
-						<i class="item-icon fa fa-desktop"></i>  풀 백업 정책
-					</h4>
+					<div style="position: absolute;top:22px; right:730px; width: 155px;">
+						<h4 class="card-title" style="background-color: white;font-size: 1em; color:black;">
+							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg21" />
+						</h4>
+					</div>
 				</div>
 				<!-- full backup setting end -->
 			
@@ -947,9 +949,11 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<h4 class="card-title" style="position: absolute;top:320px; right:745px;background-color: white;font-size: 1em; color: #000000; ">
-						<i class="item-icon fa fa-desktop"></i>  증분 백업 정책
-					</h4>
+					<div style="position: absolute;top:320px; right:660px; width:215px;">					
+						<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
+							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg22" />
+						</h4>
+					</div>
 				</div>
 				<!-- backup schedule end -->
 			</div>

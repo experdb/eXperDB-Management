@@ -13,6 +13,8 @@ import org.springframework.web.servlet.*;
 import com.experdb.management.backup.cmmn.*;
 import com.experdb.management.backup.service.*;
 import com.experdb.management.backup.storage.service.*;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.*;
 
 @Controller
@@ -20,6 +22,9 @@ public class ExperdbBackupStorageController {
 	
 	@Autowired
 	private ExperdbBackupStorageService experdbBackupStorageService;
+	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
 	
 	/**
 	 * 스토리지를 등록
@@ -41,7 +46,18 @@ public class ExperdbBackupStorageController {
 	 * @throws Exception
 	 */
     @RequestMapping (value = "/experdb/backupStorageList.do")
-    public @ResponseBody List<Map<String, Object>> backupStorageList() {
+    public @ResponseBody List<Map<String, Object>> backupStorageList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+    	
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0163_03");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
     	return experdbBackupStorageService.backupStorageList();
     }
     
@@ -53,7 +69,18 @@ public class ExperdbBackupStorageController {
 	 * @throws Exception
 	 */
     @RequestMapping (value = "/experdb/backupStorageInfo.do")
-    public @ResponseBody BackupLocationInfoVO backupStorageInfo(HttpServletRequest request){
+    public @ResponseBody BackupLocationInfoVO backupStorageInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+    	
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0162_02");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
     	return experdbBackupStorageService.backupStorageInfo(request);
     }
     

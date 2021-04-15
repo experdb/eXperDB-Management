@@ -1,5 +1,10 @@
 package com.experdb.management.proxy.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+
 public class ProxyListenerServerVO {
 	
 	private int lsn_svr_id; 
@@ -72,5 +77,37 @@ public class ProxyListenerServerVO {
 	}
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
+	
+	public Map<String, Object> toMap(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("lsn_svr_id", lsn_svr_id);
+		map.put("db_con_addr", db_con_addr);
+		map.put("pry_svr_id", pry_svr_id);
+		map.put("lsn_id", lsn_id);
+		map.put("chk_portno", chk_portno);
+		map.put("backup_yn", backup_yn);
+		map.put("frst_regr_id", frst_regr_id);
+		map.put("frst_reg_dtm", frst_reg_dtm);
+		map.put("lst_mdfr_id", lst_mdfr_id);
+		map.put("lst_mdf_dtm", lst_mdf_dtm);
+		
+		return map;
+	}
+	
+	public JSONObject toJSONObject(){
+		JSONObject jobj = new JSONObject();
+		jobj.put("lsn_svr_id", lsn_svr_id);
+		jobj.put("db_con_addr", db_con_addr);
+		jobj.put("pry_svr_id", pry_svr_id);
+		jobj.put("lsn_id", lsn_id);
+		jobj.put("chk_portno", chk_portno);
+		jobj.put("backup_yn", backup_yn);
+		jobj.put("frst_regr_id", frst_regr_id);
+		jobj.put("frst_reg_dtm", frst_reg_dtm);
+		jobj.put("lst_mdfr_id", lst_mdfr_id);
+		jobj.put("lst_mdf_dtm", lst_mdf_dtm);
+		
+		return jobj;
 	}
 }

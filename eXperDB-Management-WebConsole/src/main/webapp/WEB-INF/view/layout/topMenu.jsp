@@ -19,6 +19,13 @@
 		var encryptMenu = $( '#encryptMenu' ); 
 		var encryptAgentMenu = $( '#encryptAgentMenu' ); 
 		var trnasferMenu = $( '#trnasferMenu' ); 
+		var bnrMenu = $( '#eXperDB_Backup' ); 
+		
+		if("${sessionScope.session.backup_use_yn}" == "Y"){
+			bnrMenu.show();
+		}else{
+			bnrMenu.hide();
+		}
 
 		if("${sessionScope.session.encp_use_yn}" == "Y"){
 			encryptMenu.show();
@@ -172,6 +179,40 @@
 						}
 					}
 
+					
+					/*백업 추가 2021-04-14 변승우   */
+ 					if("${sessionScope.session.backup_use_yn}" == "Y"){	
+ 						if(result[i].mnu_cd == "MN0001901" || result[i].mnu_cd == "MN0001902" || result[i].mnu_cd == "MN0001903") {
+							if((result[i].mnu_cd == "MN0001901" &&  result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0001902" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0001903" && result[i].read_aut_yn == "N")){
+								$('#MN00019').hide();
+							}else{
+								$('#MN00019').show();
+								if(result[i].read_aut_yn == "N"){
+									$('#' + result[i].mnu_cd).hide();
+								}else{
+									$('#' + result[i].mnu_cd).show();
+								}
+							}
+						}
+ 						
+ 						if(result[i].mnu_cd == "MN0002001" || result[i].mnu_cd == "MN0002002") {
+ 							if((result[i].mnu_cd == "MN0002001" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0002002" && result[i].read_aut_yn == "N")){
+								$('#MN00020').hide();
+							}else{
+								$('#MN00020').show();
+								if(result[i].read_aut_yn == "N"){
+									$('#' + result[i].mnu_cd).hide();
+								}else{
+									$('#' + result[i].mnu_cd).show();
+								}
+							}
+						}
+ 					}
+
+					
+					
+					
+					
 					if("${sessionScope.session.encp_use_yn}" == "Y"){
 	 					if(result[i].mnu_cd == "MN0001101" || result[i].mnu_cd == "MN0001102" || result[i].mnu_cd == "MN0001201" || result[i].mnu_cd == "MN0001202" || result[i].mnu_cd == "MN0001203" || result[i].mnu_cd == "MN0001204"
 							|| result[i].mnu_cd == "MN0001301" || result[i].mnu_cd == "MN0001302" || result[i].mnu_cd == "MN0001303" || result[i].mnu_cd == "MN0001304" || result[i].mnu_cd == "MN0001401") {
@@ -405,7 +446,6 @@
 						<ul class="nav page-navigation nav-justified">
 
 
-
 							<!-- BACKUP -->
 							<li class="nav-item mega-menu width-div-a" id="eXperDB_Backup">	
 								<a href="#" class="nav-link">
@@ -415,41 +455,41 @@
 								</a>
 								<div class="submenu" style="width:400px;">
 									<div class="col-group-wrapper row">
-										<div class="col-group col-md-6" id="">
+										<div class="col-group col-md-6" id="MN00019">
 											<p class="category-heading">
-												<b>BnR 설정</b>
+												<b><spring:message code="eXperDB_backup.msg24" /></b>
 											</p>
 											<ul class="submenu-item">
-												<li class="nav-item" id="">
+												<li class="nav-item" id="MN0001901">
 													<a class="nav-link" href="/experdb/backupMonitoring.do" onClick="fn_cookie('backupMonitoring')" target="main">
-														모니터링
+														<spring:message code="eXperDB_scale.monitoring" />
 													</a>
 												</li>
-												<li class="nav-item" id="MN0001102">
+												<li class="nav-item" id="MN0001902">
 													<a class="nav-link" href="/experdb/backupHistory.do" onClick="fn_cookie('')" target="main">
-														백업이력 관리
+														<spring:message code="eXperDB_backup.msg26" />
 													</a>
 												</li>
-												<li class="nav-item" id="MN0001103">
+												<li class="nav-item" id="MN0001903">
 													<a class="nav-link" href="/experdb/restoreHistory.do" onClick="fn_cookie('')" target="main">
-														복구이력 관리
+														<spring:message code="eXperDB_backup.msg33" />
 													</a>
 												</li>
 											</ul>
 										</div>
-										<div class="col-group col-md-6" id="">
+										<div class="col-group col-md-6" id="MN00020">
 											<p class="category-heading">
 												<b>Backup</b>
 											</p>
 											<ul class="submenu-item">
-												<li class="nav-item" id="">
+												<li class="nav-item" id="MN0002001">
 													<a class="nav-link" href="/experdb/backupStorage.do" onClick="fn_cookie('backupStorage')" target="main">
-														Storage 설정
+														<spring:message code="eXperDB_backup.msg3" />
 													</a>
 												</li>
-												<li class="nav-item" id="">
+												<li class="nav-item" id="MN0002002">
 													<a class="nav-link" href="/experdb/backupSetting.do" onClick="fn_cookie('backupSetting')" target="main">
-														정책 설정
+														<spring:message code="eXperDB_backup.msg13" />
 													</a>
 												</li>
 											</ul>

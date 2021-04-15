@@ -167,15 +167,15 @@
 			var endStartChk = $("#repEndTime").val()>$("#startTime").val();
 			
 			if(!$("#repEndTime").val()){ // endTime 입력 유무 체크
-				var errStr = "End Time 값을 입력해주세요";
+				var errStr = '<spring:message code="eXperDB_backup.msg43" />';
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return false;
 			}else if(!endStartChk){ // startTime - endTime 값 체크
-				var errStr = "End Time은 Start Time 보다 늦어야합니다";
+				var errStr = '<spring:message code="eXperDB_backup.msg44" />';
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return false;
 			}else if(!timeChk){ // repeat을 고려한 endTime 값 체크
-				var errStr = "유효한 End Time 값을 입력해주세요";
+				var errStr = '<spring:message code="eXperDB_backup.msg45" />';
 				showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 				return false;
 			}
@@ -196,7 +196,7 @@
 		){
 			return true;
 		}else{
-			var errStr = "하나 이상의 요일을 선택해주세요";
+			var errStr = '<spring:message code="eXperDB_backup.msg46" />';
 			showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
@@ -294,7 +294,7 @@
 		var errStr = null;
 
 		if($('#everyTime').val() > max || $('#everyTime').val() < min){
-			errStr = min + " 과 " + max + " 사이의 값을 입력해 주세요";
+			errStr = min + " ~ " + max + ' <spring:message code="eXperDB_backup.msg47" />';
 			showSwalIcon(errStr, '<spring:message code="common.close" />', '', 'error');
 			$("#everyTime").val(min);
 		}
@@ -307,7 +307,7 @@
 		<div class="modal-content" >
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h5 class="modal-title mdi mdi-alert-circle text-info" id="regTitle" style="padding-left:5px;">
-					백업배치 설정
+					<spring:message code="eXperDB_backup.msg48" />
 				</h5>
 
 				<div class="card" style="margin-top:10px;border:0px;">
@@ -317,7 +317,7 @@
 									<div class="col-12">
 	 									<form class="cmxform" id="scheduleForm">
 											<fieldset>
-												<div class="col-12" id="scheduleCustom" style="border: 1px solid #dee1e4;padding-top: 20px;padding-left: 30px;" >
+												<div class="col-12" id="scheduleCustom" style="border: 1px solid #dee1e4;padding-top: 20px;padding-left: 15px;" >
 													<div class="form-group row">
 														<label for="ins_connect_nm" for="startDate" class="col-sm-2_3 col-form-label-sm pop-label-index">
 															<i class="item-icon fa fa-dot-circle-o"></i>
@@ -368,13 +368,13 @@
 																<div class="col-sm-4" >
 																	<input type="number" style="width:140px; height:40px;" class="form-control form-control-sm" name="everyTime" id="everyTime" onchange="fn_repTimeVal()" disabled/>
 																	<div class="col-sm-5" style="height: 25px;margin-top: 3px;padding-left: 0px;">
-																		<div id="repTimeAlrtM" class="alert alert-fill-warning" style="font-size: 0.7em; width: 160px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 0px;" >
+																		<div id="repTimeAlrtM" class="alert alert-fill-warning" style="font-size: 0.7em; width: 170px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 0px;" >
 																			<!-- <i class="ti-info-alt" style="margin-right: 2px;"></i> -->
-																			15 ~ 60 값을 입력해주세요
+																			<spring:message code="eXperDB_backup.msg49" />
 																		</div>
-																		<div id="repTimeAlrtH" class="alert alert-fill-warning" style="font-size: 0.7em; width: 160px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 0px;" >
+																		<div id="repTimeAlrtH" class="alert alert-fill-warning" style="font-size: 0.7em; width: 180px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 0px;" >
 																			<!-- <i class="ti-info-alt" style="margin-right: 2px;"></i> -->
-																			 0 ~ 24 값을 입력해주세요
+																			<spring:message code="eXperDB_backup.msg50" />
 																		</div>
 																	</div>
 																</div>
@@ -402,63 +402,63 @@
 														</div>
 													</div>
 													<div class="form-group row">
-														<label for="ins_connect_nm" class="col-sm-2_3 col-form-label-sm pop-label-index">
+														<label for="ins_connect_nm" class="col-sm-2_2 col-form-label-sm pop-label-index">
 															<i class="item-icon fa fa-dot-circle-o"></i>
-															요일 반복
+															<spring:message code="eXperDB_backup.msg51" />
 														</label>
 														<div class="form-check">
 															<label class="form-check-label" for="sun" style="color : red;">
 																<input type="checkbox" class="form-check-input" id="sun" name="sun" onclick="fn_dayClick()"/>
-																일
+																<spring:message code='schedule.sunday' />
 																<i class="input-helper"></i>
 															</label>
 														</div>
-														<div class="form-check" style="margin-left: 20px;">
+														<div class="form-check" style="margin-left: 15px;">
 															<label class="form-check-label" for="mon">
 																<input type="checkbox" class="form-check-input" id="mon" name="mon" onclick="fn_dayClick()"/>
-																월
+																<spring:message code='schedule.monday' />
 																<i class="input-helper"></i>
 															</label>
 														</div>
-														<div class="form-check" style="margin-left: 20px;">
+														<div class="form-check" style="margin-left: 15px;">
 															<label class="form-check-label" for="tue">
 																<input type="checkbox" class="form-check-input" id="tue" name="tue" onclick="fn_dayClick()"/>
-																화
+																<spring:message code='schedule.thuesday' />
 																<i class="input-helper"></i>
 															</label>
 														</div>
-														<div class="form-check" style="margin-left: 20px;">
+														<div class="form-check" style="margin-left: 15px;">
 															<label class="form-check-label" for="wed">
 																<input type="checkbox" class="form-check-input" id="wed" name="wed" onclick="fn_dayClick()"/>
-																수
+																<spring:message code='schedule.wednesday' />
 																<i class="input-helper"></i>
 															</label>
 														</div>
-														<div class="form-check" style="margin-left: 20px;">
+														<div class="form-check" style="margin-left: 15px;">
 															<label class="form-check-label" for="thu">
 																<input type="checkbox" class="form-check-input" id="thu" name="thu" onclick="fn_dayClick()"/>
-																목
+																<spring:message code='schedule.thursday' />
 																<i class="input-helper"></i>
 															</label>
 														</div>
-														<div class="form-check" style="margin-left: 20px;">
+														<div class="form-check" style="margin-left: 15px;">
 															<label class="form-check-label" for="fri">
 																<input type="checkbox" class="form-check-input" id="fri" name="fri" onclick="fn_dayClick()"/>
-																금
+																<spring:message code='schedule.friday' />
 																<i class="input-helper"></i>
 															</label>
 														</div>
-														<div class="form-check" style="margin-left: 20px;">
+														<div class="form-check" style="margin-left: 15px;">
 															<label class="form-check-label" for="sat" style="color : blue;">
 																<input type="checkbox" class="form-check-input" id="sat" name="sat" onclick="fn_dayClick()"/>
-																토
+																<spring:message code='schedule.saturday' />
 																<i class="input-helper"></i>
 															</label>
 														</div>
-														<div class="form-check" style="margin-left: 20px;">
+														<div class="form-check" style="margin-left: 15px;">
 															<label class="form-check-label" for="all">
 																<input type="checkbox" class="form-check-input" id="alldays" name="alldays" onclick="fn_alldays()"/>
-																all days
+																ALL
 																<i class="input-helper"></i>
 															</label>
 														</div>

@@ -177,7 +177,7 @@ function fn_storage_modi_popup() {
 	$('#pop_layer_popup_backupStorageReg').modal("hide");
 	var data = bckStorageList.rows('.selected').data();
 	if(data.length < 1){
-		showSwalIcon('수정할 스토리지를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg1" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
 		$.ajax({
@@ -241,7 +241,7 @@ function fn_clickDelete() {
 		showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	} else {
-		confile_title = ' Storage 삭제'
+		confile_title = ' <spring:message code="eXperDB_backup.msg2" />'
 		$('#con_multi_gbn', '#findConfirmMulti').val("storage_del");
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
@@ -275,7 +275,7 @@ function fnc_confirmMultiRst(gbn){
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">Storage 설정</span>
+												<span class="menu-title"><spring:message code="eXperDB_backup.msg3" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -284,7 +284,7 @@ function fnc_confirmMultiRst(gbn){
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Backup</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">Storage 설정</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_backup.msg3" /></li>
 										</ol>
 									</div>
 								</div>
@@ -321,7 +321,7 @@ function fnc_confirmMultiRst(gbn){
 							<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 						</button>
 						<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_getStorageList()">
-							<i class="ti-search btn-icon-prepend "></i>조회
+							<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 						</button>
 					</div>
 				</div>

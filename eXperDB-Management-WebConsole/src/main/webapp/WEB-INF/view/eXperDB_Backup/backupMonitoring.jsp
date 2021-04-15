@@ -49,11 +49,14 @@ var dataSearch=0;
  *		2-1) 실행 상태 주기적으로 조회 정지
  *		2-2) 현재 수행중인 jobid 추출
 * 		2-3) 해당 jobid의 Activity로그 출력
-* 		2-4) ActivityLog 실시간 출력 (10초 마다)
+* 		2-4) ActivityLog 실시간 출력 (20초 마다)
 * 		2-5) 종료상태 체크 (History테이블 Insert 여부)
-* 		2-6) 종료상태 (1초마다)
+* 		2-6) 종료상태 주기적으로 조회(1초마다)
 * 	3. 백업 종료(History테이블 조회 카운트 = 1)
 * 	4. status 상태 변경 Ready
+* 
+*  선택한 Job의 모니터링 프로세스
+*  5. Job선택시, 선택한 Job의 jobid 추출
  ******************************************************* */
 
 
@@ -119,7 +122,7 @@ function fn_init() {
 				}else if(full.jobstatus == 2){
 					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 					html += "	<i class='fa fa-ban text-danger' >";
-					html += '&nbsp;취소</i>';
+					html += '&nbsp;<spring:message code="common.cancel" /></i>';
 					html += "</div>";
 				//실패
 				}  else if(full.jobstatus == 3){
@@ -219,7 +222,7 @@ function fn_runNow() {
 	var datas = monitoringData.row('.selected').length;
 
 	if(datas != 1){
-		showSwalIcon('서버를 선택해 주세요', '<spring:message code="common.close" />', '', 'error');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg23" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else{
 		var jobname = monitoringData.row('.selected').data().jobname;
@@ -294,7 +297,7 @@ function fn_jobStatusList(){
 				}
 				// 2-2) 현재 수행중인 jobid 추출
 				fn_selectJobId();
-				// 2-4) 종료상태 체크 (History테이블 Insert 여부)
+				// 2-5) 종료상태 체크 (History테이블 Insert 여부)
 				fn_selectJobEnd();
 				
 			 }
@@ -394,8 +397,8 @@ function fn_selectActivityLog(jobid) {
 			if(jobend == 0){
 				bckLogList.clear().draw();
 				bckLogList.rows.add(data).draw();	
-				//2-3) ActivityLog 실시간 출력 (10초 마다)
-				setTimeout(fn_selectActivityLog(jobid), 10000)
+				//2-4) ActivityLog 실시간 출력 (20초 마다)
+				setTimeout(fn_selectActivityLog(jobid), 20000)
 			}else{
 				bckLogList.clear().draw();
 			}
@@ -421,7 +424,7 @@ function fn_selectActivityLog(jobid) {
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">모니터링</span>
+												<span class="menu-title"><spring:message code="eXperDB_scale.monitoring" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -429,8 +432,8 @@ function fn_selectActivityLog(jobid) {
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">BnR 설정</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">모니터링</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_backup.msg24" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_scale.monitoring" /></li>
 										</ol>
 									</div>
 								</div>
@@ -462,7 +465,7 @@ function fn_selectActivityLog(jobid) {
 							<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
 						</button>
 						<button type="button" class="btn btn-danger btn-icon-text mb-2">
-							<i class="mdi mdi-close "></i> 취소
+							<i class="mdi mdi-close "></i><spring:message code="common.cancel" />
 						</button>
 					</div>
 				</div>

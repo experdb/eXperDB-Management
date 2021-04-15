@@ -331,7 +331,7 @@ function fn_serverListTable_init() {
 		var dataLen = proxyListenTable.rows().data().length;
 		var oriData = proxyListenTable.rows().data();
 		for(var i=0; i<dataLen; i++){
-			if(proxyListenTable.rows('.selected').indexes()[0] = i){
+			if(proxyListenTable.rows('.selected').indexes()[0] == i){
 				oriData[i].con_bind_port = $("#lstnReg_con_bind_ip", "#insProxyListenForm").val()+":"+$("#lstnReg_con_bind_port", "#insProxyListenForm").val();
 				oriData[i].lsn_desc = $("#lstnReg_lsn_desc", "#insProxyListenForm").val();
 				oriData[i].db_usr_id = $("#lstnReg_db_usr_id", "#insProxyListenForm").val();
