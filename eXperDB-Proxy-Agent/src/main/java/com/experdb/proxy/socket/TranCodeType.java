@@ -15,7 +15,7 @@ package com.experdb.proxy.socket;
 public class TranCodeType {
 	public static final String PsP001 = "PsP001";
 	public static final String PsP002 = "PsP002";
-	
+	public static final String PsP003 = "PsP003";
 	public static final String PsP004 = "PsP004";
 
 	public static final String STATUS = "STATUS";
