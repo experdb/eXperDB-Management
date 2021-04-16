@@ -76,7 +76,8 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		
 		// 등록된 증분 백업 정책이 있는 경우
 		if(backupSchedule.size()>0){			
-			 startDate = (String) dateSplit(backupSchedule.get(0).getYear() + "-" + backupSchedule.get(0).getMonth() + "-" + backupSchedule.get(0).getDay()).get("fullDate");
+			int monthData = Integer.parseInt(backupSchedule.get(0).getMonth()) + 1;
+			 startDate = (String) dateSplit(backupSchedule.get(0).getYear() + "-" + monthData + "-" + backupSchedule.get(0).getDay()).get("fullDate");
 			 backupSchedule.remove(0);
 		}else{ // 등록된 증분 백업 정책이 없는 경우
 			 startDate = "";
@@ -87,7 +88,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			Map <String, Object> scheduleMap = new HashMap<>();
 			Boolean[] dayPick = new Boolean[7];
 			Arrays.fill(dayPick, Boolean.FALSE);
-			int dayType = Integer.parseInt(bs.getDayType())%7;
+			int dayType = Integer.parseInt(bs.getDayType())-1;
 			
 			scheduleMap.put("startTime", timeSplit(bs.getStartHourOfDay() + ":" + bs.getStartMinute()).get("fullHour"));
 			if(Boolean.parseBoolean(bs.getRepeat())){
@@ -247,10 +248,12 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		if(backupSchedule.size()>0){
 			schExist = 1;
 			backupScript.setRepeat("true");
+			backupScript.setDisable(false);
 			backupScript.setScheduleType(5);
 		}else{
 			schExist = 0;
 			backupScript.setRepeat("false");			
+			backupScript.setDisable(true);
 			backupScript.setScheduleType(3);
 		}
 		
@@ -329,51 +332,51 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		
 		// 3. 요일별로 정책 정보를 List<BackupScheduleVO>에 넣어주기
 		// schedule Setting by week of day
+		for(int i=0; i<sun.size(); i++){
+			BackupScheduleVO schedule = new BackupScheduleVO();
+			JSONObject schObj = (JSONObject) sun.get(i);
+			schedule = setSchedule(schObj, date);
+			schedule.setDayType("1");
+			backupSchedule.add(schedule);
+		}
 		for(int i=0; i<mon.size(); i++){
 			BackupScheduleVO schedule = new BackupScheduleVO();
 			JSONObject schObj = (JSONObject) mon.get(i);
 			schedule = setSchedule(schObj, date);
-			schedule.setDayType("1");
+			schedule.setDayType("2");
 			backupSchedule.add(schedule);
 		}
 		for(int i=0; i<tue.size(); i++){
 			BackupScheduleVO schedule = new BackupScheduleVO();
 			JSONObject schObj = (JSONObject) tue.get(i);
 			schedule = setSchedule(schObj, date);
-			schedule.setDayType("2");
+			schedule.setDayType("3");
 			backupSchedule.add(schedule);
 		}
 		for(int i=0; i<wed.size(); i++){
 			BackupScheduleVO schedule = new BackupScheduleVO();
 			JSONObject schObj = (JSONObject) wed.get(i);
 			schedule = setSchedule(schObj, date);
-			schedule.setDayType("3");
+			schedule.setDayType("4");
 			backupSchedule.add(schedule);
 		}
 		for(int i=0; i<thu.size(); i++){
 			BackupScheduleVO schedule = new BackupScheduleVO();
 			JSONObject schObj = (JSONObject) thu.get(i);
 			schedule = setSchedule(schObj, date);
-			schedule.setDayType("4");
+			schedule.setDayType("5");
 			backupSchedule.add(schedule);
 		}
 		for(int i=0; i<fri.size(); i++){
 			BackupScheduleVO schedule = new BackupScheduleVO();
 			JSONObject schObj = (JSONObject) fri.get(i);
 			schedule = setSchedule(schObj, date);
-			schedule.setDayType("5");
+			schedule.setDayType("6");
 			backupSchedule.add(schedule);
 		}
 		for(int i=0; i<sat.size(); i++){
 			BackupScheduleVO schedule = new BackupScheduleVO();
 			JSONObject schObj = (JSONObject) sat.get(i);
-			schedule = setSchedule(schObj, date);
-			schedule.setDayType("6");
-			backupSchedule.add(schedule);
-		}
-		for(int i=0; i<sun.size(); i++){
-			BackupScheduleVO schedule = new BackupScheduleVO();
-			JSONObject schObj = (JSONObject) sun.get(i);
 			schedule = setSchedule(schObj, date);
 			schedule.setDayType("7");
 			backupSchedule.add(schedule);
@@ -394,10 +397,12 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		 */
 		BackupScheduleVO schedule = new BackupScheduleVO();
 		
+		int monthData = (Integer) date.get("month")-1;
+		
 		// 1. 정책 기본 데이터 세팅 (시작 날짜, 반복 유무)
 		schedule.setRepeat(Boolean.toString((boolean) schObj.get("rc")));
 		schedule.setYear(date.get("year").toString());
-		schedule.setMonth(date.get("month").toString());
+		schedule.setMonth(Integer.toString(monthData));
 		schedule.setDay(date.get("day").toString());
 		
 		// 2. 정책 시작 시간 세팅

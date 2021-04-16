@@ -28,7 +28,7 @@ public class BackupScriptVO implements Serializable {
 	private boolean isTemplate = true;
 	private String templateID;
 	private boolean isBackupToRps;
-	private boolean isDisable;  /*scheduleType none일 경우 false, schedul일 경우 true*/
+	private boolean isDisable;  /*scheduleType none일 경우 true, schedul일 경우 false*/
 	private RetentionVO retention;
 	private int scheduleType;
 	private int sessionType;

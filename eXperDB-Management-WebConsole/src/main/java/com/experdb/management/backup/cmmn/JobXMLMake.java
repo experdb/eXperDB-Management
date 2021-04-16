@@ -437,9 +437,9 @@ public class JobXMLMake{
             backupToRps.appendChild(doc.createTextNode("false"));
             backupConfiguration.appendChild(backupToRps);
             
-         // disable 엘리먼트
+         // disable 엘리먼트 
             Element disable = doc.createElement("disable");
-            disable.appendChild(doc.createTextNode(backupScript.isRepeat()));
+            disable.appendChild(doc.createTextNode(Boolean.toString(backupScript.isDisable())));
             backupConfiguration.appendChild(disable);
             
          // scheduleType 엘리먼트
