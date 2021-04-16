@@ -14,7 +14,7 @@
    		<typeAlias alias="ProxyListenerServerListVO" type="com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO" />
    		<typeAlias alias="ProxyListenerVO" type="com.experdb.proxy.db.repository.vo.ProxyListenerVO" />
    		<typeAlias alias="ProxyVipConfigVO" type="com.experdb.proxy.db.repository.vo.ProxyVipConfigVO" />
-    
+   		<typeAlias alias="ProxyConfChangeHistoryVO" type="com.experdb.proxy.db.repository.vo.ProxyConfChangeHistoryVO" />
     
     
     	<typeAlias alias="DbServerInfoVO" type="com.experdb.proxy.db.repository.vo.DbServerInfoVO" />

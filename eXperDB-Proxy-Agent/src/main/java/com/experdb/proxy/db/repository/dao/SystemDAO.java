@@ -1,6 +1,7 @@
 package com.experdb.proxy.db.repository.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.experdb.proxy.db.repository.vo.AgentInfoVO;
 import com.experdb.proxy.db.repository.vo.DbServerInfoVO;
+import com.experdb.proxy.db.repository.vo.ProxyConfChangeHistoryVO;
 import com.experdb.proxy.db.repository.vo.ProxyGlobalVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerVO;
@@ -142,6 +144,47 @@ public class SystemDAO {
 		 session.insert("system.insertPryvVipCngI", vo);
 	}
 
+	/**
+	 * T_PRY_GLB_I table select
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public ProxyGlobalVO selectProxyGlobalInfo(int pry_svr_id) throws Exception  {
+		return (ProxyGlobalVO) session.selectOne("system.selectProxyGlobalInfo", pry_svr_id);
+	}
+	
+	/**
+	 * T_PRY_LSN_I table select
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public List<ProxyListenerVO> selectProxyListenerList(int pry_svr_id) throws Exception {
+		return (List) session.selectList("system.selectProxyListenerList", pry_svr_id);
+	}
+	
+	/**
+	 * T_PRY_LSN_I table select
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public List<ProxyListenerServerListVO> selectProxyListenerServerList(ProxyListenerServerListVO vo) {
+		return (List) session.selectList("system.selectProxyListenerServerList", vo);
+	}
+	
+	/**
+	 * T_PRYCNG_G table insert
+	 * 
+	 * @param 
+	 * @throws Exception
+	 */
+	public void insertT_PRYCNG_G(ProxyConfChangeHistoryVO vo) throws Exception  {
+		 session.insert("system.insertT_PRYCNG_G", vo);
+	}
+	
+	
 	
 	
 	
@@ -205,4 +248,5 @@ public class SystemDAO {
 	public void insertWRKEXE_G(WrkExeVO vo) throws Exception  {
 		 session.insert("system.insertWRKEXE_G", vo);
 	}
+
 }

@@ -3,7 +3,6 @@ package com.experdb.proxy.db.repository.service;
 import java.util.Map;
 
 import org.codehaus.jettison.json.JSONObject;
-
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 
 /**
@@ -69,4 +68,12 @@ public interface ProxyService {
 	 * @throws Exception
 	 */
 	public String proxyConfFisrtIns(ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam, JSONObject jObjListResult) throws Exception;
+	
+	/**
+	 * proxy Global 설정 조회
+	 * @param ProxyGlovalVO
+	 * @throws Exception
+	 */
+	public JSONObject createNewConfFile(JSONObject jobj) throws Exception;
+
 }
