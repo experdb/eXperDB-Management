@@ -45,8 +45,8 @@ public class SystemServiceImpl implements SystemService{
 	 * @param AgentInfoVO
 	 * @throws Exception
 	 */
-	public AgentInfoVO selectAgentInfo(AgentInfoVO vo) throws Exception  {
-		return (AgentInfoVO) systemDAO.selectAgentInfo(vo);
+	public AgentInfoVO selectPryAgtInfo(AgentInfoVO vo) throws Exception  {
+		return (AgentInfoVO) systemDAO.selectPryAgtInfo(vo);
 	}
 
 	/**
@@ -61,7 +61,8 @@ public class SystemServiceImpl implements SystemService{
 		String domainNm = "";
 		String SvrUseNm = "";
 		
-		AgentInfoVO agentInfo = this.selectAgentInfo(searchAgentInfoVO);
+		//에이전트 조회
+		AgentInfoVO agentInfo = this.selectPryAgtInfo(searchAgentInfoVO);
 		AgentInfoVO vo = new AgentInfoVO();
 			
 		vo.setIpadr(strSocketIp);
@@ -78,7 +79,7 @@ public class SystemServiceImpl implements SystemService{
 			vo.setDomain_nm("PROXY_" + strSocketIp);
 			vo.setSvr_use_yn("N");
 			
-			this.insertAgentInfo(vo);
+			this.insertPryAgtInfo(vo);
 		} else {
 
 			if (agentInfo.getDomain_nm() != null) {
@@ -96,7 +97,7 @@ public class SystemServiceImpl implements SystemService{
 			vo.setDomain_nm(domainNm);
 			vo.setSvr_use_yn(SvrUseNm);
 				
-			this.updateAgentInfo(vo);
+			this.updatePryAgtInfo(vo);
 		} 
 	}
 
@@ -105,10 +106,10 @@ public class SystemServiceImpl implements SystemService{
 	 * @param vo
 	 * @throws Exception
 	 */
-	public void insertAgentInfo(AgentInfoVO vo) throws Exception {
-		socketLogger.info("SystemServiceImpl.insertAgentInfo : " + vo);
+	public void insertPryAgtInfo(AgentInfoVO vo) throws Exception {
+		socketLogger.info("SystemServiceImpl.insertPryAgtInfo : " + vo);
 		
-		systemDAO.insertAgentInfo(vo);
+		systemDAO.insertPryAgtInfo(vo);
 	}
 
 	/**
@@ -116,10 +117,10 @@ public class SystemServiceImpl implements SystemService{
 	 * @param vo
 	 * @throws Exception
 	 */
-	public void updateAgentInfo(AgentInfoVO vo) throws Exception {
-		socketLogger.info("SystemServiceImpl.updateAgentInfo : " + vo);
+	public void updatePryAgtInfo(AgentInfoVO vo) throws Exception {
+		socketLogger.info("SystemServiceImpl.updatePryAgtInfo : " + vo);
 		
-		systemDAO.updateAgentInfo(vo);
+		systemDAO.updatePryAgtInfo(vo);
 	}
 
 	/**
@@ -136,16 +137,16 @@ public class SystemServiceImpl implements SystemService{
 		vo.setIstcnf_yn("Y");
 		vo.setLst_mdfr_id("system");
 
-		this.updateAgentEndInfo(vo);
+		this.updatePryAgtStopInfo(vo);
 	}
 	
 	/**
-	 * Agent 설치 정보 종료 변경
+	 * Agent 종료 정보 변경
 	 * @param vo
 	 * @throws Exception
 	 */
-	public void updateAgentEndInfo(AgentInfoVO vo) throws Exception {
-		systemDAO.updateAgentEndInfo(vo);
+	public void updatePryAgtStopInfo(AgentInfoVO vo) throws Exception {
+		systemDAO.updatePryAgtStopInfo(vo);
 	}
 	
 	/**
@@ -183,68 +184,13 @@ public class SystemServiceImpl implements SystemService{
 			System.exit(0);
 		}
 	}	
-
-	public List<DbServerInfoVO> selectDbServerInfoList() throws Exception {
-		return systemDAO.selectDbServerInfoList();
-	}
 	
-	public DbServerInfoVO selectDbServerInfo(DbServerInfoVO vo)  throws Exception {
-		return (DbServerInfoVO) systemDAO.selectDbServerInfo(vo);
+	/**
+	 * proxy 마지막 이름 조회
+	 * @param ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectPrySvrMaxNmInfo(ProxyServerVO vo) throws Exception {
+		return (ProxyServerVO) systemDAO.selectPrySvrMaxNmInfo(vo);
 	}
-
-	
-
-	public DbServerInfoVO selectDatabaseConnInfo(DbServerInfoVO vo) throws Exception  {
-		return (DbServerInfoVO) systemDAO.selectDatabaseConnInfo(vo);
-	}
-
-	
-
-	
-
-
-	public int selectQ_WRKEXE_G_01_SEQ() throws Exception  {
-		return (int) systemDAO.selectQ_WRKEXE_G_01_SEQ();
-	}
-	
-	public void insertT_WRKEXE_G(WrkExeVO vo) throws Exception  {
-		systemDAO.insertT_WRKEXE_G(vo);
-	}
-
-	public void updateT_WRKEXE_G(WrkExeVO vo) throws Exception {
-		systemDAO.updateT_WRKEXE_G(vo);
-	}
-	
-	public void updateT_TRFTRGCNG_I(TrfTrgCngVO vo) throws Exception {
-		systemDAO.updateT_TRFTRGCNG_I(vo);
-	}
-	
-	public int selectQ_WRKEXE_G_02_SEQ() throws Exception  {
-		return (int) systemDAO.selectQ_WRKEXE_G_02_SEQ();
-	}
-	
-	public void updateSCD_CNDT(WrkExeVO vo) throws Exception  {
-		systemDAO.updateSCD_CNDT(vo);
-	}
-	
-	public void updateDB_CNDT(DbServerInfoVO vo) throws Exception {
-		systemDAO.updateDB_CNDT(vo);
-	}
-	
-	public void updateDBSlaveAll(DbServerInfoVO vo) throws Exception {
-		systemDAO.updateDBSlaveAll(vo);
-	}
-	
-	public DbServerInfoVO selectISMasterGbm(DbServerInfoVO vo) throws Exception  {
-		return (DbServerInfoVO) systemDAO.selectISMasterGbm(vo);
-	}
-
-	public int selectScd_id() throws Exception {
-		return (int) systemDAO.selectScd_id();
-	}
-
-	public void insertWRKEXE_G(WrkExeVO vo)  throws Exception{
-		systemDAO.insertWRKEXE_G(vo);
-	}
-	
 }

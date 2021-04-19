@@ -17,6 +17,7 @@ import com.experdb.proxy.deamon.DxDaemonManager;
 import com.experdb.proxy.deamon.IllegalDxDaemonClassException;
 import com.experdb.proxy.socket.DXTcontrolAgentSocket;
 import com.experdb.proxy.socket.listener.DXTcontrolProxy;
+import com.experdb.proxy.socket.listener.DXTcontrolProxyExecute;
 import com.experdb.proxy.socket.listener.ServerCheckListener;
 import com.experdb.proxy.util.FileUtil;
 
@@ -92,7 +93,6 @@ public class DaemonStart implements DxDaemon{
 			context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 			
 			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
-			ProxyServiceImpl proxyService = (ProxyServiceImpl) context.getBean("ProxyService");
 
 			// SqlSessionManager 초기화
 			try {
@@ -122,12 +122,22 @@ public class DaemonStart implements DxDaemon{
 			
 			// SqlSessionManager 초기화
 			try {
-/*				proxyService.proxyServerCfgSetting(strIpadr, strPort);*/
-				//scale 자동 실행 로직 추가
+				//proxy 서버 데이터 생성
 				DXTcontrolProxy rSet = new DXTcontrolProxy();
 				rSet.start();
 			} catch (Exception e) {
 				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
+				e.printStackTrace();
+				return;
+			}
+			
+			// SqlSessionManager 초기화
+			try {
+				//proxy 서버 실행
+				DXTcontrolProxyExecute rExeSet = new DXTcontrolProxyExecute();
+				rExeSet.start();
+			} catch (Exception e) {
+				errLogger.error("proxy exe 데몬 시작시 에러가 발생하였습니다. {}", e.toString());
 				e.printStackTrace();
 				return;
 			}

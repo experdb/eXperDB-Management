@@ -52,22 +52,22 @@ public class ServerCheckListener extends Thread {
 			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 			try {
-
+//이부분은 체크들이 들어가면 될듯함
 				String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 
 				DbServerInfoVO vo = new DbServerInfoVO();
 				vo.setIPADR(strIpadr);
-
+/*
 				DbServerInfoVO dbServerInfoVO = service.selectDatabaseConnInfo(vo);
-
-				String IPADR = dbServerInfoVO.getIPADR();
+*/
+/*				String IPADR = dbServerInfoVO.getIPADR();
 				int PORTNO = dbServerInfoVO.getPORTNO();
 				String DB_SVR_NM = dbServerInfoVO.getDB_SVR_NM();
 				String DFT_DB_NM = dbServerInfoVO.getDFT_DB_NM();
 				String SVR_SPR_USR_ID = dbServerInfoVO.getSVR_SPR_USR_ID();
 				String SVR_SPR_SCM_PWD = dbServerInfoVO.getSVR_SPR_SCM_PWD();
-
-				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+*/
+/*				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 
 				JSONObject serverObj = new JSONObject();
 
@@ -77,7 +77,7 @@ public class ServerCheckListener extends Thread {
 				serverObj.put(ProtocolID.DATABASE_NAME, DFT_DB_NM);
 				serverObj.put(ProtocolID.USER_ID, SVR_SPR_USR_ID);
 				serverObj.put(ProtocolID.USER_PWD, aes.aesDecode(SVR_SPR_SCM_PWD));
-
+*/
 				String strMasterGbn = "";
 				String strIsMasterGbn = "";
 
@@ -85,29 +85,29 @@ public class ServerCheckListener extends Thread {
 				// after : " + strMasterGbn);
 
 				try {
-					strMasterGbn = selectConnectInfo(serverObj);
-
+/*					strMasterGbn = selectConnectInfo(serverObj);
+*/
 					DbServerInfoVO masterGbnVo = new DbServerInfoVO();
 					masterGbnVo.setIPADR(strIpadr);
-					DbServerInfoVO resultMasterGbnVO = service.selectISMasterGbm(masterGbnVo);
-
-					strIsMasterGbn = resultMasterGbnVO.getMASTER_GBN();
-
+/*					DbServerInfoVO resultMasterGbnVO = service.selectISMasterGbm(masterGbnVo);
+*/
+/*					strIsMasterGbn = resultMasterGbnVO.getMASTER_GBN();*/
+/*
 					dbServerInfoVO.setMASTER_GBN(strMasterGbn);
-					dbServerInfoVO.setDB_CNDT("Y");
-
+					dbServerInfoVO.setDB_CNDT("Y");*/
+/*
 					if (resultMasterGbnVO.getDB_CNDT().equals("N")) {
 						service.updateDB_CNDT(dbServerInfoVO);
-					}
+					}*/
 
 					 //socketLogger.info("@@@@@@ before : " + strMasterGbn + " @@@@ after : " + strMasterGbn);
 
 					if (!strIsMasterGbn.equals(strMasterGbn)) {
-						if (strMasterGbn.equals("M")) {
+/*						if (strMasterGbn.equals("M")) {
 							service.updateDBSlaveAll(dbServerInfoVO);
-						}
+						}*/
 
-						service.updateDB_CNDT(dbServerInfoVO);
+/*						service.updateDB_CNDT(dbServerInfoVO);*/
 					}
 
 				} catch (Exception e) {
@@ -115,15 +115,15 @@ public class ServerCheckListener extends Thread {
 					errLogger.error("Master/Slave Check Error {}", e.toString());
 					// socketLogger.info("@@@@@@ err : " + e.toString());
 					strMasterGbn = "S";
-					dbServerInfoVO.setMASTER_GBN(strMasterGbn);
-					dbServerInfoVO.setDB_CNDT("N");
+/*					dbServerInfoVO.setMASTER_GBN(strMasterGbn);
+					dbServerInfoVO.setDB_CNDT("N");*/
 
-					service.updateDB_CNDT(dbServerInfoVO);
+/*					service.updateDB_CNDT(dbServerInfoVO);*/
 				}
-
+/*
 				serverObj = null;
 				aes = null;
-
+*/
 				i++;
 
 				try {

@@ -1,5 +1,7 @@
 package com.experdb.proxy.db.repository.service;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,8 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static java.nio.file.StandardCopyOption.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.experdb.proxy.db.repository.dao.ProxyDAO;
 import com.experdb.proxy.db.repository.dao.SystemDAO;
 import com.experdb.proxy.db.repository.vo.AgentInfoVO;
 import com.experdb.proxy.db.repository.vo.DbServerInfoVO;
@@ -46,10 +47,11 @@ import com.experdb.proxy.db.repository.vo.ProxyListenerVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
 import com.experdb.proxy.socket.ProtocolID;
+import com.experdb.proxy.util.CommonUtil;
 import com.experdb.proxy.util.FileRunCommandExec;
 import com.experdb.proxy.util.FileUtil;
+import com.experdb.proxy.util.ProxyRunCommandExec;
 import com.experdb.proxy.util.RunCommandExec;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 /**
 * @author 박태혁
@@ -69,10 +71,14 @@ public class ProxyServiceImpl implements ProxyService{
 	@Resource(name = "SystemDAO")
 	private SystemDAO systemDAO;
 
+	@Resource(name = "ProxyDAO")
+	private ProxyDAO proxyDAO;
+
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
 	public final static String TEMPLATE_DIR = "./template/";
+
 	/**
 	 * 설치정보 관리
 	 * @param String cmdGbn
@@ -150,8 +156,8 @@ public class ProxyServiceImpl implements ProxyService{
 	 * @param ProxyServerVO
 	 * @throws Exception
 	 */
-	public ProxyServerVO selectProxyServerInfo(ProxyServerVO vo)  throws Exception {
-		return (ProxyServerVO) systemDAO.selectProxyServerInfo(vo);
+	public ProxyServerVO selectPrySvrInfo(ProxyServerVO vo)  throws Exception {
+		return (ProxyServerVO) proxyDAO.selectPrySvrInfo(vo);
 	}
 
 	/**
@@ -203,24 +209,45 @@ public class ProxyServiceImpl implements ProxyService{
 		try {
 			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();
 			String proxyCmd = proxyCmdSetting(jObj);
-
-			RunCommandExec r = new RunCommandExec(proxyCmd);
-			//명령어 실행
-			r.run();
-
-			try {
-				r.join();
-			} catch (InterruptedException ie) {
-				ie.printStackTrace();
-			}
-
-			String retVal = r.call();
-			String strResultMessge = r.getMessage();
+			
+			RunCommandExec r = null;
+			ProxyRunCommandExec pr = null;
+			
+			String retVal = "";
+			String strResultMessge = "";
 			String strResultSubMessge = "";
+
+			if (searchGbn.equals("proxy_conf_which") || searchGbn.equals("keep_conf_which")) {
+				pr = new ProxyRunCommandExec(proxyCmd, 0);
+				pr.start();
+				
+				try {
+					pr.join();
+				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+				}
+				
+				retVal = pr.call();
+				strResultMessge = pr.getMessage();
+			} else {
+				r = new RunCommandExec(proxyCmd);
+				
+				//명령어 실행
+				r.run();
+
+				try {
+					r.join();
+				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+				}
+
+				retVal = r.call();
+				strResultMessge = r.getMessage();
+			}
 
 			if (retVal.equals("success")) {
 				if (!strResultMessge.isEmpty()) {
-					if (searchGbn.equals("proxy_conf_which") || searchGbn.equals("keep_conf_which") || searchGbn.equals("proxy_exe_status") || searchGbn.equals("keepalived_exe_status")) {
+					if (searchGbn.equals("proxy_conf_which") || searchGbn.equals("keep_conf_which") || searchGbn.equals("proxy_exe_status") || searchGbn.equals("keepalived_exe_status") || searchGbn.equals("proxy_setting_tot") || searchGbn.equals("keepalived_setting_tot")) {
 						strResultSubMessge  = strResultMessge;
 						strResultMessge = "";
 					}
@@ -269,6 +296,8 @@ public class ProxyServiceImpl implements ProxyService{
 		JSONObject outputObj = new JSONObject();
 		JSONObject jsonObj = new JSONObject();
 		JSONParser parser = new JSONParser();
+		
+		CommonUtil util = new CommonUtil();
 
 		DbServerInfoVO dbServerInfoVO = new DbServerInfoVO();
 
@@ -308,7 +337,7 @@ public class ProxyServiceImpl implements ProxyService{
 			ArrayList<String> strResultMessge = r.getListMessage();
 
 			//db리스트 조회
-			List<DbServerInfoVO> serverInfoList = systemDAO.selectDatabaseMasterConnInfo(dbServerInfoVO);
+			List<DbServerInfoVO> serverInfoList = systemDAO.selectDbsvripadrMstGbnInfo(dbServerInfoVO);
 
 			//lisner
 			List<ProxyListenerVO> lisnerSvrList = new ArrayList<ProxyListenerVO>();
@@ -423,7 +452,7 @@ public class ProxyServiceImpl implements ProxyService{
 								temp = temp.substring(temp.lastIndexOf(" ") + 1 , temp.length());
 								
 								if (!"binary".equals(temp)&& !"send-binary".equals(temp)) {
-									temp = getHexToString(temp);
+									temp = util.getHexToString(temp);
 								} else {
 									temp = "";
 								}
@@ -705,15 +734,6 @@ public class ProxyServiceImpl implements ProxyService{
 	}
 
 	/**
-	 * proxy 마지막 이름 조회
-	 * @param ProxyServerVO
-	 * @throws Exception
-	 */
-	public ProxyServerVO selectMaxAgentInfo(ProxyServerVO vo) throws Exception {
-		return (ProxyServerVO) systemDAO.selectMaxAgentInfo(vo);
-	}
-
-	/**
 	 * 설치정보 등록
 	 * @param dbServerInfo
 	 * @throws Exception
@@ -732,12 +752,12 @@ public class ProxyServiceImpl implements ProxyService{
 				
 				try {
 					if ("proxySvrIns".equals(insUpNmGbn)) {
-						pry_svr_id_sn = systemDAO.selectQ_T_PRY_SVR_I_01();
+						pry_svr_id_sn = proxyDAO.selectQ_T_PRY_SVR_I_01();
 						insPryVo.setPry_svr_id((int)pry_svr_id_sn);
 		
-						saveChkPrySvrI = systemDAO.insertT_PRY_SVR_I(insPryVo);
+						saveChkPrySvrI = proxyDAO.insertPrySvrInfo(insPryVo);
 					} else if ("proxySvrUdt".equals(insUpNmGbn)) {
-						saveChkPrySvrI = systemDAO.updateT_PRY_SVR_I(insPryVo);
+						saveChkPrySvrI = proxyDAO.updatePrySvrInfo(insPryVo);
 					}
 				} catch (Exception e) {
 					errLogger.error("proxySvrIns {} ", e.toString());
@@ -751,7 +771,7 @@ public class ProxyServiceImpl implements ProxyService{
 						agtVo.setIpadr(insPryVo.getIpadr());
 						agtVo.setLst_mdfr_id("system");
 	
-						systemDAO.updateT_PRY_AGT_I_Yn(agtVo);
+						systemDAO.updatePryAgtUseYnLInfo(agtVo);
 					}
 				} catch (Exception e) {
 					errLogger.error("saveChkPrySvrI {} ", e.toString());
@@ -780,7 +800,7 @@ public class ProxyServiceImpl implements ProxyService{
 						proxyGlobalVO.setLst_mdfr_id("system");
 						proxyGlobalVO.setFrst_regr_id("system");
 	
-						systemDAO.insertPryGlbI(proxyGlobalVO);
+						proxyDAO.insertPryGlbInfo(proxyGlobalVO);
 					}
 				} catch (Exception e) {
 					errLogger.error("global {} ", e.toString());
@@ -815,7 +835,7 @@ public class ProxyServiceImpl implements ProxyService{
 									schProxyListnerVO.setDb_svr_id(insPryVo.getDb_svr_id());
 									schProxyListnerVO.setLsn_nm(tempObj.get("lsn_nm").toString());
 	
-									ProxyListenerVO proxyListenerVO = systemDAO.selectProxyLisnerInfo(schProxyListnerVO);
+									ProxyListenerVO proxyListenerVO = proxyDAO.selectPryLsnInfo(schProxyListnerVO);
 
 									if (!"".equals(tempObj.get("db_nm").toString()) && !"".equals(tempObj.get("lsn_nm").toString())
 											 && !"".equals(tempObj.get("db_usr_id").toString()) && !"".equals(tempObj.get("con_bind_port").toString())
@@ -827,16 +847,16 @@ public class ProxyServiceImpl implements ProxyService{
 											schProxyListnerVO.setLsn_desc(proxyListenerVO.getLsn_desc());
 											schProxyListnerVO.setDb_nm(proxyListenerVO.getDb_nm());
 	
-											systemDAO.updateT_PRY_LSN_I(schProxyListnerVO);
+											proxyDAO.updatePryLsnInfo(schProxyListnerVO);
 	
 										} else {
-											pry_lsn_id_sn = systemDAO.selectQ_T_PRY_LSN_I_01_SEQ();
+											pry_lsn_id_sn = proxyDAO.selectQ_T_PRY_LSN_I_01();
 											schProxyListnerVO.setDb_id(Integer.parseInt(tempObj.get("db_id").toString()));
 											schProxyListnerVO.setDb_nm(tempObj.get("db_nm").toString());
 											schProxyListnerVO.setLsn_id((int)pry_lsn_id_sn);
 											schProxyListnerVO.setLsn_desc("");
-	
-											systemDAO.insertT_PRY_LSN_I(schProxyListnerVO);
+											
+											proxyDAO.insertPryLsnInfo(schProxyListnerVO);
 										}
 									}
 	
@@ -855,7 +875,7 @@ public class ProxyServiceImpl implements ProxyService{
 									schProxyListnerSebuVO.setDb_con_addr(tempObj.get("db_con_addr").toString());
 									schProxyListnerSebuVO.setLsn_nm(tempObj.get("lsn_nm").toString());
 									
-									systemDAO.deleteProxyLisnerSebuInfo(schProxyListnerSebuVO);
+									proxyDAO.deletePryLsnSvrList(schProxyListnerSebuVO);
 								}
 								
 								for(int i=0 ; i<arrLisner_svr_list.length() ; i++){
@@ -877,10 +897,10 @@ public class ProxyServiceImpl implements ProxyService{
 									schProxyListnerVO.setPry_svr_id(insPryVo.getPry_svr_id());
 									schProxyListnerVO.setLsn_nm(tempObj.get("lsn_nm").toString());
 	
-									ProxyListenerVO proxyListenerVO = systemDAO.selectProxyLisnerInfo(schProxyListnerVO);
+									ProxyListenerVO proxyListenerVO = proxyDAO.selectPryLsnInfo(schProxyListnerVO);
 
 									if (proxyListenerVO != null) {
-										systemDAO.insertProxyListnerSebu(schProxyListnerSebuVO);
+										proxyDAO.insertPryLsnSvrInfo(schProxyListnerSebuVO);
 									}
 
 								}
@@ -905,12 +925,10 @@ public class ProxyServiceImpl implements ProxyService{
 									schProxyVipConfigVO.setLst_mdfr_id("system");
 									schProxyVipConfigVO.setFrst_regr_id("system");
 	
-									systemDAO.insertPryvVipCngI(schProxyVipConfigVO);
+									proxyDAO.insertPryVipCngInfo(schProxyVipConfigVO);
 								}
 							}
 						} catch (JSONException e) {
-							e.printStackTrace();
-						} catch (ParseException e) {
 							e.printStackTrace();
 						}
 					}
@@ -936,7 +954,7 @@ public class ProxyServiceImpl implements ProxyService{
 							socketLogger.info("insPryVo.setPry_svr_nm0 : " +insPryVo.getPry_svr_nm());
 							socketLogger.info("insPryVo.setPry_svr_nm0 : " +insPryVo.getPry_svr_nm());
 							
-							systemDAO.updateMasterSvrIdBack(insPryVo);
+							proxyDAO.updatePrySvrMstSvrIdList(insPryVo);
 						}
 					}
 					returnMsg = "success";
@@ -976,11 +994,16 @@ public class ProxyServiceImpl implements ProxyService{
 				strCmd = "find /etc -name keepalived.conf";
 			} else if (searchGbn.equals("proxy_conf_read") || searchGbn.equals("keepalived_conf_read")) { //설치여부 체크
 				strCmd = "cat " + reqCmd;
-			} else if (searchGbn.equals("proxy_exe_status")) { //설치여부 체크
+			} else if (searchGbn.equals("proxy_exe_status")) { //실행여부 체크
 				strCmd = "systemctl status haproxy |grep Active: |cut -d ' ' -f 5";
-			} else if (searchGbn.equals("keepalived_exe_status")) { //설치여부 체크
+			} else if (searchGbn.equals("keepalived_exe_status")) { //실행여부 체크
 				strCmd = "systemctl status keepalived |grep Active: |cut -d ' ' -f 5";
+			} else if (searchGbn.equals("proxy_setting_tot")) { //proxy 설치 여부 및 실행여부 체크
+				strCmd = "sh proxy_status.sh";
+			} else if (searchGbn.equals("keepalived_setting_tot")) { //keepalived 설치 여부 및 실행여부 체크
+				strCmd = "sh keepalived_status.sh";
 			}
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -988,251 +1011,43 @@ public class ProxyServiceImpl implements ProxyService{
 		return strCmd;
 	}
 
-	/**
-	 * getStringToHex string--> hex 변환
-	 * 
-	 * @return String
-	 * @throws UnsupportedEncodingException  
-	 */
-	public String getStringToHex(String testStr) throws UnsupportedEncodingException {
-		byte[] testBytes = testStr.getBytes("UTF-8");
-		return DatatypeConverter.printHexBinary(testBytes);
-	}
 
 	/**
-	 * getHexToString hex--> string 변환
-	 * 
-	 * @return String
-	 * @throws UnsupportedEncodingException  
+	 * 설치정보 관리
+	 * @param String cmdGbn
+	 * @throws Exception
 	 */
-	public String getHexToString(String testHex) throws UnsupportedEncodingException, DecoderException {
-		// https://mvnrepository.com/artifact/commons-codec/commons-codec/1.10
-		byte[] testBytes = Hex.decodeHex(testHex.toCharArray());
-		return new String(testBytes, "UTF-8").replaceAll("\u0000", "");
-	}
-	
-	/**
-	 * packet length 구하기
-	 * 
-	 * @return String
-	 * @throws UnsupportedEncodingException  
-	 */
-	public String getPacketLength(int total, String data) throws Exception{
-		int dataLen = getStringToHex(data).length()/2;
-		String result = Integer.toHexString(total+dataLen); 
-		return lpad(8, "0", result);
-	}
-	
-	/**
-	 * lpad 
-	 * 
-	 * @return String
-	 * @throws UnsupportedEncodingException  
-	 */
-	public String lpad(int totalLen, String pad, String data) throws Exception{
-		String temp = "";
-		int padCnt = totalLen - data.length();
-		for(int i=0; i< padCnt; i++){
-			temp = pad+temp;
-		}
-		return temp+data;
-	}
-	
-	//파일을 읽어 String으로 반환
-	public String readTemplateFile(String filename)
-	{   	
-		String content = null;
- 	   	File file = new File(getClass().getClassLoader().getResource(TEMPLATE_DIR+filename).getFile()); 
- 	   	try {
- 	   		InputStreamReader reader= new InputStreamReader(new FileInputStream(file),"UTF8"); 
- 	   		char[] chars = new char[(int) file.length()];
- 	   		reader.read(chars);
- 	   		content = new String(chars);
- 	   		reader.close();
- 	   	} catch (IOException e) {
- 		   e.printStackTrace();
- 	   	}
- 	   	return content;
-	}
+	public String selectProxyTotServerChk(String cmdGbn) throws Exception {
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject searchObj = new JSONObject();
+		JSONObject jObjResult = null;
+		String returnData = "";
 
-	/**
-	 * createNewConfFile DB 설정 정보를 conf 파일로 생성
-	 * 
-	 * @return String
-	 * @throws UnsupportedEncodingException  
-	 */
-	@Override
-	public JSONObject createNewConfFile(JSONObject jobj) throws Exception {
-		//socketLogger.info("PsP004.createNewConfFile : "+jobj.toString());
-		JSONObject result = new JSONObject();
-		result.put("errcd", 0);
-		
-		try{
-			//haproxy.cfg 생성
-			String proxyCfg = ""; 
-			
-			String globalConf = readTemplateFile("global.cfg");
-			
-			JSONObject global = jobj.getJSONObject("global_info");
-			
-			int prySvrId = global.getInt("pry_svr_id");
-			String lst_mdfr_id = jobj.getString("lst_mdfr_id");
-			
-			globalConf = globalConf.replace("{max_con_cnt}", global.getString("max_con_cnt"));
-			globalConf = globalConf.replace("{cl_con_max_tm}", global.getString("cl_con_max_tm"));
-			globalConf = globalConf.replace("{con_del_tm}", global.getString("con_del_tm"));
-			globalConf = globalConf.replace("{svr_con_max_tm}", global.getString("svr_con_max_tm"));
-			globalConf = globalConf.replace("{chk_tm}", global.getString("chk_tm"));
-			
-			proxyCfg += globalConf;
-			
-			String readOnlyConf = readTemplateFile("readOnly.cfg");
-			String readWriteConf = readTemplateFile("readWrite.cfg"); 
-			
-			JSONArray listener = jobj.getJSONArray("listener_list");
-			int listenerSize = listener.length();
-			for(int i=0 ; i<listenerSize ; i++){
-				JSONObject proxyListener = listener.getJSONObject(i);
-				String lsn_nm = proxyListener.getString("lsn_nm");
-				String bind = proxyListener.getString("con_bind_port");
-				String db_nm = proxyListener.getString("db_nm");
-				
-				switch(lsn_nm){
-					case "pgReadWrite" :
-						readWriteConf = readWriteConf.replace("{lsn_nm}", lsn_nm);
-						readWriteConf = readWriteConf.replace("{con_bind_port}", bind);
-						readWriteConf = readWriteConf.replace("{db_nm_hex}", getStringToHex(db_nm)+"00");
-						readWriteConf = readWriteConf.replace("{db_nm}", db_nm);
-						readWriteConf = readWriteConf.replace("{packet_len}", getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
-						proxyCfg +="\n"+readWriteConf;
-						break;
-					case "pgReadOnly" :
-						readOnlyConf = readOnlyConf.replace("{lsn_nm}", lsn_nm);
-						readOnlyConf = readOnlyConf.replace("{con_bind_port}", bind);
-						readOnlyConf = readOnlyConf.replace("{db_nm_hex}", getStringToHex(db_nm)+"00");
-						readOnlyConf = readOnlyConf.replace("{db_nm}", db_nm);
-						readOnlyConf = readOnlyConf.replace("{packet_len}",  getPacketLength(31,db_nm));
-						proxyCfg +="\n"+readOnlyConf;
-						break;	
+		try {
+			//1. proxy conf 위치
+			param = paramLoadSetting(cmdGbn, "", ""); //param setting
+
+			searchObj = proxyObjSetting(param);
+			jObjResult = confSetExecute(searchObj);
+
+			if (jObjResult != null) {
+				String resultCode = (String)jObjResult.get(ProtocolID.RESULT_CODE);
+	
+				if (resultCode.equals("0")) {
+					returnData = (String)jObjResult.get(ProtocolID.RESULT_SUB_DATA);
 				}
-				
-				JSONArray listenerSvrList = proxyListener.getJSONArray("server_list");
-				int listenerSvrListSize = listenerSvrList.length();
-				String serverList = "";
-				for(int j =0; j<listenerSvrListSize; j++){
-					JSONObject listenSvr = listenerSvrList.getJSONObject(j);
-					serverList += "    server db"+j+" "+listenSvr.getString("db_con_addr")+" check port "+listenSvr.getString("chk_portno");
-					if("Y".equals(listenSvr.getString("backup_yn"))) serverList +=" BACKUP\n";
-					else serverList +="\n";
-				}
-				
-				proxyCfg +=serverList;
-				
 			}
-			socketLogger.info("new haproxy.cfg : "+proxyCfg);
-		
-			//keepalived.conf 생성
-			String keepalivedCfg = "#add\n";
-			keepalivedCfg += "global_defs {\n";
-			keepalivedCfg += "        router_id LVS_DEVEL\n";
-			keepalivedCfg += "}\n";
-			keepalivedCfg += "\n";
-			keepalivedCfg += "\n";
-			keepalivedCfg += "vrrp_track_process chk_haproxy {\n";
-			keepalivedCfg += "        process \"haproxy\"\n";
-			keepalivedCfg += "        weight 2\n";
-			keepalivedCfg += "}\n";
-			
-			
-			JSONArray vipConfArry = jobj.getJSONArray("vipconfig_list");
-			int vipConfSize = vipConfArry.length();
-			for(int i=0 ; i<vipConfSize ; i++){
-				JSONObject vipConfObj = vipConfArry.getJSONObject(i);
-				String vipConf = readTemplateFile("vip_instance.conf");
-				vipConf = vipConf.replace("{v_index}", String.valueOf(i+1));  
-				vipConf = vipConf.replace("{state_nm}", vipConfObj.getString("state_nm"));
-				vipConf = vipConf.replace("{if_nm}", global.getString("if_nm"));
-				vipConf = vipConf.replace("{v_rot_id}", vipConfObj.getString("v_rot_id"));
-				vipConf = vipConf.replace("{priority}", vipConfObj.getString("priority")); 
-				vipConf = vipConf.replace("{chk_tm}", vipConfObj.getString("chk_tm"));
-				vipConf = vipConf.replace("{obj_ip}", global.getString("obj_ip"));
-				vipConf = vipConf.replace("{peer_server_ip}", global.getString("peer_server_ip"));
-				vipConf = vipConf.replace("{v_ip}", vipConfObj.getString("v_ip"));
-				vipConf = vipConf.replace("{v_if_nm}", vipConfObj.getString("v_if_nm"));
-				keepalivedCfg +="\n"+vipConf;
+
+			if (returnData != null) {
+				returnData = returnData.trim();
+			} else {
+				returnData = "";
 			}
-			
-			socketLogger.info("new keepalived.conf : "+keepalivedCfg);
-		
-			//파일 backup
-			String backupPath = FileUtil.getPropertyValue("context.properties", "proxy.conf_backup_path");
-			
-		  	ProxyServerVO vo = new ProxyServerVO();
-			vo.setPry_svr_id(prySvrId);
-			ProxyServerVO proxySvr = (ProxyServerVO) systemDAO.selectProxyServerInfo(vo);
-			File initHaproxy = new File(proxySvr.getPry_pth());
-			File initKeepa = new File(proxySvr.getKal_pth());
-			
-			//최초 적용 파일 있지만, 백업폴더 없을 경우 백업함
-			File backupFolder = new File(backupPath);
-			if(!backupFolder.exists() && initHaproxy.exists() && initKeepa.exists()){
-				new File(backupPath+"/init/").mkdirs();
-				
-				Path copyHaproxy = Paths.get(backupFolder+"/init/"+initHaproxy.getName());
-				Path copyKeepa = Paths.get(backupFolder+"/init/"+initKeepa.getName());
-				Files.copy(initHaproxy.toPath(), copyHaproxy, REPLACE_EXISTING);
-				Files.copy(initKeepa.toPath(), copyKeepa, REPLACE_EXISTING);
-				socketLogger.info("createNewConfFile : copy files ");
-				ProxyConfChangeHistoryVO confChgHistVo = new ProxyConfChangeHistoryVO();
-				confChgHistVo.setPry_svr_id(prySvrId);
-				confChgHistVo.setFrst_regr_id(lst_mdfr_id);
-				confChgHistVo.setPry_pth(copyHaproxy.toString());
-				confChgHistVo.setKal_pth(copyKeepa.toString());
-				
-				//insert T_PRYCHG_G
-				systemDAO.insertT_PRYCNG_G(confChgHistVo);
-				
-				socketLogger.info("createNewConfFile : Insert init conf file info ");
-			}
-			DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		  	String dateTime = dateFormat.format(new Date());
-			
-			//신규 파일 생성 
-		  	new File(backupPath+"/"+dateTime+"/").mkdirs();
-			File newHaproxy = new File(backupPath+"/"+dateTime+"/"+initHaproxy.getName());
-			File newKeepa = new File(backupPath+"/"+dateTime+"/"+initKeepa.getName());
-			
-			byte[] proxyBytes = proxyCfg.getBytes();
-			byte[] keepBytes = keepalivedCfg.getBytes();
-			
-			FileOutputStream os_h = new FileOutputStream(newHaproxy);
-			os_h.write(proxyBytes);
-			os_h.close();
-			 
-			FileOutputStream os_k = new FileOutputStream(newKeepa);
-			os_k.write(keepBytes);
-			os_k.close();
-			
-			Files.copy(newHaproxy.toPath(), initHaproxy.toPath(), REPLACE_EXISTING);
-			Files.copy(newKeepa.toPath(), initKeepa.toPath(), REPLACE_EXISTING);//덮어쓰기
-			
-			ProxyConfChangeHistoryVO newConfChgHistVo = new ProxyConfChangeHistoryVO();
-			newConfChgHistVo.setPry_svr_id(prySvrId);
-			newConfChgHistVo.setFrst_regr_id(lst_mdfr_id);
-			newConfChgHistVo.setPry_pth(newHaproxy.getPath());
-			newConfChgHistVo.setKal_pth(newKeepa.getPath());
-			
-			//insert T_PRYCHG_G
-			systemDAO.insertT_PRYCNG_G(newConfChgHistVo);
-			socketLogger.info("createNewConfFile : Insert chg conf file info ");
-			
-		}catch(Exception e){
-			result.put("errorCd", -1);
-			result.put("error", e.toString());
-			errLogger.error("createNewConfFile {} ", e.toString());
-			throw e;
+			///////////////////////////////////////////////////////////////
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		
-		return result;
+
+		return returnData;
 	}
 }

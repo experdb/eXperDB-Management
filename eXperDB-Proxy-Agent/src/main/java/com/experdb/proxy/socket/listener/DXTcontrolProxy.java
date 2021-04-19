@@ -14,6 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.experdb.proxy.db.repository.service.ProxyServiceImpl;
+import com.experdb.proxy.db.repository.service.SystemServiceImpl;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.util.FileUtil;
@@ -85,6 +86,7 @@ public class DXTcontrolProxy extends SocketCtl {
 		String returnMsg = "";
 
 		ProxyServiceImpl pryService = (ProxyServiceImpl) context.getBean("ProxyService");
+		SystemServiceImpl systemService = (SystemServiceImpl) context.getBean("SystemService");
 
 		Map<String, Object> insertParam = new HashMap<String, Object>();
 		
@@ -123,7 +125,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			JSONObject jObjListResult = null;
 
 			//proxy 서버 등록 여부 확인
-			ProxyServerVO proxyServerInfo = pryService.selectProxyServerInfo(searchProxyServerVO);
+			ProxyServerVO proxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
 
 			//1. proxy conf 위치
 			proxyPathData = pryService.selectProxyServerChk("proxy_conf_which"); //param setting
@@ -241,7 +243,7 @@ public class DXTcontrolProxy extends SocketCtl {
 				if ("M".equals(masterGbnData)) {
 					proxySvrNmData = dbSvrNmData + "_proxy_1";
 				} else {
-					ProxyServerVO proxyServerVOBack = pryService.selectMaxAgentInfo(searchProxyServerVO);
+					ProxyServerVO proxyServerVOBack = systemService.selectPrySvrMaxNmInfo(searchProxyServerVO);
 
 					if (proxyServerVOBack == null) {
 						proxySvrNmData = dbSvrNmData + "_proxy_2";
@@ -250,7 +252,7 @@ public class DXTcontrolProxy extends SocketCtl {
 						String masterSvrFirst = "";
 						int iMasterSvrEnd = 0;
 						
-						ProxyServerVO masterProxyServerInfo = pryService.selectProxyServerInfo(searchProxyServerVO);
+						ProxyServerVO masterProxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
 
 						if (masterProxyServerInfo != null && masterProxyServerInfo.getPry_svr_nm() != null && !"".equals(masterProxyServerInfo.getPry_svr_nm())) {
 							proxySvrNmData = masterProxyServerInfo.getPry_svr_nm();
@@ -273,7 +275,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			if (peerIpData != null) {
 				searchProxyServerVO.setIpadr(peerIpData);
 
-				ProxyServerVO masterProxyServerInfo = pryService.selectProxyServerInfo(searchProxyServerVO);
+				ProxyServerVO masterProxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
 				if (masterProxyServerInfo != null) {
 					peerIdData = masterProxyServerInfo.getPry_svr_id();
 				}

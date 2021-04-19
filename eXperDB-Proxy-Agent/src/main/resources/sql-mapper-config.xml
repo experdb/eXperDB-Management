@@ -28,7 +28,7 @@
     </typeAliases>
     
  	<mappers>
-
+		<mapper resource="sqlmap/proxy.xml" />
 		<mapper resource="sqlmap/system.xml" />
 		<mapper resource="sqlmap/app.xml" /> 
 	</mappers>

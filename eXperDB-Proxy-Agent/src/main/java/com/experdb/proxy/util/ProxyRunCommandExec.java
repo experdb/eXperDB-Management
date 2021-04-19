@@ -35,7 +35,6 @@ public class ProxyRunCommandExec extends Thread {
 	
 	public String strCmd = null;
 	public String retVal = null;
-	public String agtCndtCd = null;
 	public int iMode;
 	
 	private String returnMessage = "";
@@ -44,10 +43,9 @@ public class ProxyRunCommandExec extends Thread {
 	
 	public ProxyRunCommandExec(){}
 	
-	public ProxyRunCommandExec(String _strCmd, String _agtCndtCd, int _iMode){
+	public ProxyRunCommandExec(String _strCmd, int _iMode){
 		this.strCmd=_strCmd; //cmd값
 		this.iMode=_iMode; //구분값
-		this.agtCndtCd = _agtCndtCd;
 
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 	}

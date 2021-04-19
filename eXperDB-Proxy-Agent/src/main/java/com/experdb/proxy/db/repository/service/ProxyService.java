@@ -3,6 +3,7 @@ package com.experdb.proxy.db.repository.service;
 import java.util.Map;
 
 import org.codehaus.jettison.json.JSONObject;
+
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 
 /**
@@ -19,7 +20,14 @@ import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 */
 
 public interface ProxyService {
-
+	
+	/**
+	 * proxy 서버 정보 조회
+	 * @param ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectPrySvrInfo(ProxyServerVO vo)  throws Exception;
+	
 	/**
 	 * Proxy Properting 설정
 	 * @param String cmdGbn
@@ -33,14 +41,7 @@ public interface ProxyService {
 	 * @throws Exception
 	 */
 	/*public String proxyServerCfgSetting(String strSocketIp, String strSocketPort) throws Exception ;*/
-	
-	/**
-	 * proxy 서버 정보 조회
-	 * @param ProxyServerVO
-	 * @throws Exception
-	 */
-	public ProxyServerVO selectProxyServerInfo(ProxyServerVO vo)  throws Exception;
-	
+
 	/**
 	 * proxy 서버 param setting
 	 * @param String search_gbn, String req_cmd, String server_ip
@@ -54,26 +55,18 @@ public interface ProxyService {
 	 * @throws Exception
 	 */
 	public JSONObject selectProxyServerList(String cmdGbn, String req_cmd, String server_ip) throws Exception;
-	
-	/**
-	 * proxy 마지막 이름 조회
-	 * @param ProxyServerVO
-	 * @throws Exception
-	 */
-	public ProxyServerVO selectMaxAgentInfo(ProxyServerVO vo) throws Exception;
-	
+
 	/**
 	 * proxy 서버 저장 
 	 * @param ProxyServerVO, insUpNmGbn
 	 * @throws Exception
 	 */
 	public String proxyConfFisrtIns(ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam, JSONObject jObjListResult) throws Exception;
-	
+
 	/**
-	 * proxy Global 설정 조회
-	 * @param ProxyGlovalVO
+	 * Proxy 실행상태 및 설치 상태 조회
+	 * @param String cmdGbn
 	 * @throws Exception
 	 */
-	public JSONObject createNewConfFile(JSONObject jobj) throws Exception;
-
+	public String selectProxyTotServerChk(String cmdGbn) throws Exception ;
 }

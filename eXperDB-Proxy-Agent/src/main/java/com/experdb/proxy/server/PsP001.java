@@ -67,7 +67,7 @@ public class PsP001 extends SocketCtl{
 				proxyAgentCmd = "sh startup.sh";
 			}
 
-			ProxyRunCommandExec proxyExec = new ProxyRunCommandExec(proxyAgentCmd, agtCndtCd, 0);
+			ProxyRunCommandExec proxyExec = new ProxyRunCommandExec(proxyAgentCmd, 0);
 			proxyExec.start();
 
 			String retVal = proxyExec.call();

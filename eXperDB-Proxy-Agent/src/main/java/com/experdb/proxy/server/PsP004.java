@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.experdb.proxy.db.repository.service.ProxyLinkServiceImpl;
 import com.experdb.proxy.db.repository.service.ProxyServiceImpl;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
@@ -70,7 +71,7 @@ public class PsP004 extends SocketCtl{
 		JSONObject result;
 		try {
 			context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
-			ProxyServiceImpl service = (ProxyServiceImpl) context.getBean("ProxyService");
+			ProxyLinkServiceImpl service = (ProxyLinkServiceImpl) context.getBean("ProxyLinkService");
 			result = fromJettisonToSimple(service.createNewConfFile(fromSimpleToJettison(jObj)));
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

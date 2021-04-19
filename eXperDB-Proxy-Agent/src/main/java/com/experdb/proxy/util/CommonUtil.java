@@ -4,9 +4,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
 import java.math.BigDecimal;
 
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -165,6 +170,46 @@ public class CommonUtil {
 		String strPoolName = "";
 		
 		return "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+	}
+	
+
+	/**
+	 * getHexToString hex--> string 변환
+	 * 
+	 * @return String
+	 * @throws UnsupportedEncodingException  
+	 */
+	public String getHexToString(String testHex) throws UnsupportedEncodingException, DecoderException {
+		// https://mvnrepository.com/artifact/commons-codec/commons-codec/1.10
+		byte[] testBytes = Hex.decodeHex(testHex.toCharArray());
+		return new String(testBytes, "UTF-8").replaceAll("\u0000", "");
+	}
+
+
+	/**
+	 * getStringToHex string--> hex 변환
+	 * 
+	 * @return String
+	 * @throws UnsupportedEncodingException  
+	 */
+	public String getStringToHex(String testStr) throws UnsupportedEncodingException {
+		byte[] testBytes = testStr.getBytes("UTF-8");
+		return DatatypeConverter.printHexBinary(testBytes);
+	}
+	
+	/**
+	 * lpad 
+	 * 
+	 * @return String
+	 * @throws UnsupportedEncodingException  
+	 */
+	public String lpad(int totalLen, String pad, String data) throws Exception{
+		String temp = "";
+		int padCnt = totalLen - data.length();
+		for(int i=0; i< padCnt; i++){
+			temp = pad+temp;
+		}
+		return temp+data;
 	}
 	
 }
