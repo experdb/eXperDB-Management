@@ -33,6 +33,7 @@
 	 * 초기 실행
 	 ******************************************************** */
 	$(window.document).ready(function() {
+		storageValid = false;
 		fn_regReset();
 			
 	});
@@ -231,7 +232,8 @@
 	  * Modification
 	  ******************************************************** */	 
 	  function fn_storageModi(){
-		if(fn_validationModi()){
+		if(storageValid == true){
+			
 			  $.ajax({
 					url : "/experdb/backupStorageUpdate.do",
 					data : {
@@ -260,6 +262,8 @@
 						$('#pop_layer_popup_backupStorageReg').modal("hide");
 					}
 			  })
+		  }else{
+			  showSwalIcon('<spring:message code="eXperDB_backup.msg35" />', '<spring:message code="common.close" />', '', 'error');
 		  }
 	  }
 	  
@@ -269,7 +273,6 @@
 	  ******************************************************** */
 	 // validation check for registration
 	 function fn_storageValidate() {
-		 
 		 //storageType == 1 (NFS)
 		 //storageType == 2 (CIFS)
 		if($("#storageType").val()==1){
