@@ -476,14 +476,14 @@ function fn_nodeRegPopup() {
  ******************************************************** */
 	
 	function fn_scheduleRegPopoup() {
-		/* var data = NodeList.rows('.selected').data();
+		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
 			showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
-		}else{ */
+		}else{
 			fn_scheduleRegReset();
 			$("#pop_layer_popup_backupSchedule").modal("show");
-		// }
+		}
 	}
 	
 	// schedule Insert per day
@@ -557,30 +557,14 @@ function fn_nodeRegPopup() {
 	// increment policy delete
 	function fn_scheduleDel(){
 		// 선택된 index로 해당 요일 array의 데이터 지워줌
-		var rowIndex = scheduleList.cell('.selected').index().row;
-		var dayIndex = scheduleList.cell('.selected').index().column;
-		schWeek[dayIndex].splice(rowIndex, 1);
+		var delData = scheduleList.cells('.selected');
+		for(var i =0 ;i<delData[0].length; i++){
+			var rowIndex = delData[0][i].row;
+			var colIndex = delData[0][i].column;
+			schWeek[colIndex].splice(rowIndex, 1);
+		}
 		fn_drawScheduleList();
 		fn_alertShow();
-	}
-	
-	var aaa;
-	function fn_aaa(){
-		var schData = scheduleList.cells('.selected');
-		aaa = schData;
-		console.log("#### schData : " + schData);
-		console.log("#### schData.length : " + schData.length);
-		for(var i =0 ;i<schData.length; i++){
-			var rowIndex = schData[0][i].row;
-			var colIndex = schData[0][i].column;
-			console.log("index!!! : " + rowIndex + " //// " + colIndex);
-		}
-		
-		// var rowIndex = scheduleList.cell('.selected').index().row;
-		// var dayIndex = scheduleList.cell('.selected').index().column;
-		// console.log("### row : " + rowIndex);
-		// console.log("### col : " + dayIndex);
-		
 	}
 	
 /* ********************************************************
