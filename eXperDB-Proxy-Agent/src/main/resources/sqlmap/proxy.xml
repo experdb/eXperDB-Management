@@ -3,7 +3,6 @@
 
 <mapper namespace="proxy">
 	<select id="selectPrySvrInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
-		<![CDATA[
 		/**
 	 	* Query ID : selectPrySvrInfo
 	 	* Description : Proxy 서버정보 조회
@@ -29,10 +28,14 @@
 				LST_MDFR_ID,
 				LST_MDF_DTM
 			FROM  T_PRY_SVR_I
-			WHERE
-				IPADR = #{ipadr}
+			WHERE 1 = 1
+				<if test='ipadr != null'>
+				 AND 	IPADR = #{ipadr}
+				</if>
+				<if test='ipadr == null and pry_svr_id != null'>
+				 AND 	PRY_SVR_ID = #{pry_svr_id}
+				</if>
 			LIMIT 1
-		]]>
 	</select>
 
 	<select id="selectQ_T_PRY_SVR_I_01" resultType="long">
@@ -421,4 +424,52 @@
         		#{frst_regr_id},
         		clock_timestamp()
 	</insert>
+	
+	<insert id="insertPryActCngInfo"  parameterType="ProxyConfChangeHistoryVO">
+        /**
+        * Query ID : insertPryActCngInfo
+        * Description : PROXY ActStatus Change 이력 관리 
+        * Author : 
+        **/
+        INSERT INTO T_PRY_ACTSTATE_CNG_G
+	        (	PRY_ACT_EXE_SN, 
+	        	PRY_SVR_ID, 
+	        	SYS_TYPE, 
+	        	ACT_TYPE, 
+	        	ACT_EXE_TYPE, 
+	        	WRK_DTM, 
+	        	EXE_RSLT_CD, 
+	        	RSLT_MSG, 
+	        	FRST_REGR_ID, 
+	        	FRST_REG_DTM,
+	        	LST_MDFR_ID,
+                LST_MDF_DTM)
+        SELECT	(SELECT COALESCE(MAX(PRY_ACT_EXE_SN+1),1) AS PRY_ACT_EXE_SN FROM T_PRY_ACTSTATE_CNG_G),
+        		#{pry_svr_id},
+        		#{sys_type},
+        		#{act_type},
+        		#{act_exe_type},
+        		clock_timestamp(),
+        		#{exe_rslt_cd},
+        		#{rslt_msg},
+        		#{frst_regr_id},
+        		clock_timestamp(),
+        		#{lst_mdfr_id},
+        		clock_timestamp()
+	</insert>
+	 <update id="updatePrySvrExeStatusInfo"  parameterType="ProxyServerVO">
+   		/**
+	 	* Query ID : updatePrySvrExeStatusInfo
+	 	* Description : proxy Exe_Status, Kal_exe_status 수정
+	 	* Author : 
+	 	**/
+		UPDATE T_PRY_SVR_I
+		SET
+			 EXE_STATUS = #{exe_status},
+			 KAL_EXE_STATUS = #{kal_exe_status},
+			 LST_MDFR_ID = #{lst_mdfr_id},
+        	 LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID = #{pry_svr_id}
+    </update>
 </mapper>

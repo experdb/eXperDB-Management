@@ -10,17 +10,15 @@ import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.codehaus.jettison.json.JSONException;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.experdb.proxy.db.repository.vo.PgAuditSettingVO;
-import com.experdb.proxy.db.repository.vo.PgAuditVO;
 import com.experdb.proxy.util.CommonUtil;
 
 /**
@@ -301,5 +299,17 @@ public class SocketCtl {
 		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 		
 		return outputObj;
+	}
+	
+	public org.codehaus.jettison.json.JSONObject fromSimpleToJettison(JSONObject jobj) throws JSONException{
+		org.codehaus.jettison.json.JSONObject result = new org.codehaus.jettison.json.JSONObject(jobj.toJSONString());
+		return result;
+	}
+	
+	public JSONObject fromJettisonToSimple(org.codehaus.jettison.json.JSONObject jobj) throws ParseException{
+		JSONParser parser = new JSONParser();
+		Object obj = parser.parse(jobj.toString());
+		JSONObject result = (JSONObject) obj;
+		return result;
 	}
 }

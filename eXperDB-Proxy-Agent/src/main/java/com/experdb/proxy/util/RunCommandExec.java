@@ -143,7 +143,7 @@ public class RunCommandExec extends Thread {
 		String strResultErrInfo = "";
 		try{
 			//proc = Runtime.getRuntime().exec(cmd);
-socketLogger.info("cmd --> " + cmd);
+			socketLogger.info("cmd --> " + cmd);
 			
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			proc.waitFor ();

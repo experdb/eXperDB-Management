@@ -24,14 +24,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.experdb.proxy.db.repository.dao.ProxyDAO;
-import com.experdb.proxy.db.repository.dao.SystemDAO;
+import com.experdb.proxy.db.repository.vo.ProxyActStateChangeHistoryVO;
 import com.experdb.proxy.db.repository.vo.ProxyConfChangeHistoryVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
+import com.experdb.proxy.socket.ProtocolID;
+import com.experdb.proxy.socket.TranCodeType;
 import com.experdb.proxy.util.CommonUtil;
 import com.experdb.proxy.util.FileUtil;
+import com.experdb.proxy.util.RunCommandExec;
 
 /**
-* @author 박태혁
+* @author 
 * @see
 * 
 *      <pre>
@@ -39,14 +42,11 @@ import com.experdb.proxy.util.FileUtil;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  
 *      </pre>
 */
 @Service("ProxyLinkService")
 public class ProxyLinkServiceImpl implements ProxyLinkService{
-
-	@Resource(name = "SystemDAO")
-	private SystemDAO systemDAO;
 
 	@Resource(name = "ProxyDAO")
 	private ProxyDAO proxyDAO;
@@ -88,7 +88,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 	}
 
 	/**
-	 * createNewConfFile DB 설정 정보를 conf 파일로 생성
+	 * createNewConfFile JSONObject로 받은 설정 정보를 conf 파일로 생성
 	 * 
 	 * @return String
 	 * @throws UnsupportedEncodingException  
@@ -99,7 +99,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		JSONObject result = new JSONObject();
 		CommonUtil util = new CommonUtil();
 		
-		result.put("errcd", 0);
+		String errcd = "0";
 		
 		try{
 			//haproxy.cfg 생성
@@ -156,7 +156,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				for(int j =0; j<listenerSvrListSize; j++){
 					JSONObject listenSvr = listenerSvrList.getJSONObject(j);
 					serverList += "    server db"+j+" "+listenSvr.getString("db_con_addr")+" check port "+listenSvr.getString("chk_portno");
-					if("Y".equals(listenSvr.getString("backup_yn"))) serverList +=" BACKUP\n";
+					if("Y".equals(listenSvr.getString("backup_yn"))) serverList +=" backup\n";
 					else serverList +="\n";
 				}
 				
@@ -200,13 +200,12 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		
 			//파일 backup
 			String backupPath = FileUtil.getPropertyValue("context.properties", "proxy.conf_backup_path");
-			
-		  	ProxyServerVO vo = new ProxyServerVO();
+			ProxyServerVO vo = new ProxyServerVO();
 			vo.setPry_svr_id(prySvrId);
+			
 			ProxyServerVO proxySvr = (ProxyServerVO) proxyDAO.selectPrySvrInfo(vo);
 			File initHaproxy = new File(proxySvr.getPry_pth());
 			File initKeepa = new File(proxySvr.getKal_pth());
-			
 			//최초 적용 파일 있지만, 백업폴더 없을 경우 백업함
 			File backupFolder = new File(backupPath);
 			if(!backupFolder.exists() && initHaproxy.exists() && initKeepa.exists()){
@@ -230,23 +229,19 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			}
 			DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		  	String dateTime = dateFormat.format(new Date());
-			
-			//신규 파일 생성 
+		  	//신규 파일 생성 
 		  	new File(backupPath+"/"+dateTime+"/").mkdirs();
 			File newHaproxy = new File(backupPath+"/"+dateTime+"/"+initHaproxy.getName());
 			File newKeepa = new File(backupPath+"/"+dateTime+"/"+initKeepa.getName());
-			
 			byte[] proxyBytes = proxyCfg.getBytes();
 			byte[] keepBytes = keepalivedCfg.getBytes();
-			
 			FileOutputStream os_h = new FileOutputStream(newHaproxy);
 			os_h.write(proxyBytes);
-			os_h.close();
+			os_h.close(); 
 			 
 			FileOutputStream os_k = new FileOutputStream(newKeepa);
 			os_k.write(keepBytes);
 			os_k.close();
-			
 			Files.copy(newHaproxy.toPath(), initHaproxy.toPath(), REPLACE_EXISTING);
 			Files.copy(newKeepa.toPath(), initKeepa.toPath(), REPLACE_EXISTING);//덮어쓰기
 			
@@ -260,13 +255,124 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			proxyDAO.insertPrycngInfo(newConfChgHistVo);
 			socketLogger.info("createNewConfFile : Insert chg conf file info ");
 			
+			result.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP004);
+			result.put(ProtocolID.RESULT_CODE, "0");
+			result.put(ProtocolID.ERR_CODE, errcd);
+			result.put(ProtocolID.ERR_MSG, "");
+			result.put("PRY_PTH", newHaproxy.getPath());
+			result.put("KAL_PTH", newKeepa.getPath());
+			
 		}catch(Exception e){
-			result.put("errorCd", -1);
-			result.put("error", e.toString());
-			errLogger.error("createNewConfFile {} ", e.toString());
+			errcd = "-1";
+			result.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP004);
+			result.put(ProtocolID.RESULT_CODE, "1");
+			result.put(ProtocolID.ERR_CODE, errcd);
+			result.put(ProtocolID.ERR_MSG, e.toString());
+			
+			errLogger.error("createNewConfFile Error {} ", e.toString());
 			throw e;
 		}
 		
 		return result;
+	}
+	
+	public JSONObject restartService(JSONObject jObj) throws Exception {
+		socketLogger.info("ProxyLinkServiceImpl.restartService : "+jObj.toString());
+
+		String strSuccessCode = "0";
+		String strErrCode = "";
+		String strErrMsg = "";
+		String strPryActResult = "";
+		String strKalActResult = "";
+		
+		JSONObject outputObj = new JSONObject();
+		//JSONObject jsonObj = new JSONObject();
+		
+		int prySvrId =jObj.getInt("pry_svr_id");
+		String userId =jObj.getString("lst_mdfr_id");
+		
+		try {
+			ProxyActStateChangeHistoryVO proxyActHistory= new ProxyActStateChangeHistoryVO();
+			proxyActHistory.setPry_svr_id(prySvrId);
+			proxyActHistory.setFrst_regr_id(userId);
+			proxyActHistory.setLst_mdfr_id(userId);
+			proxyActHistory.setSys_type("PROXY");
+			proxyActHistory.setAct_type("R");
+			proxyActHistory.setAct_exe_type("TC004001");
+			RunCommandExec proxyReset = new RunCommandExec("systemctl restart haproxy");
+			//명령어 실행
+			proxyReset.run();
+
+			try {
+				proxyReset.join();
+			} catch (InterruptedException ie) {
+				socketLogger.error("proxyReset error {}",ie.toString());
+				ie.printStackTrace();
+			}
+		
+			socketLogger.info("call :: "+proxyReset.call());
+			socketLogger.info("Message :: "+proxyReset.getMessage());
+			
+			if(proxyReset.call().equals("success")){
+				strPryActResult="TC001501";
+			}else{
+				strPryActResult="TC001502";
+			}
+			proxyActHistory.setExe_rslt_cd(strPryActResult);
+			proxyActHistory.setRslt_msg(proxyReset.getMessage());
+			
+			//insert
+			proxyDAO.insertPryActCngInfo(proxyActHistory);
+			
+			ProxyActStateChangeHistoryVO keepaActHistory= new ProxyActStateChangeHistoryVO();
+			keepaActHistory.setPry_svr_id(prySvrId);
+			keepaActHistory.setFrst_regr_id(userId);
+			keepaActHistory.setLst_mdfr_id(userId);
+			keepaActHistory.setSys_type("KEEPALIVED");
+			keepaActHistory.setAct_type("R");
+			keepaActHistory.setAct_exe_type("TC004001");
+			RunCommandExec keepaReset = new RunCommandExec("systemctl restart keepalived");
+			//명령어 실행
+			keepaReset.run();
+			
+			try {
+				keepaReset.join();
+			} catch (InterruptedException ie) {
+				socketLogger.error("keepaReset error {}",ie.toString());
+				ie.printStackTrace();
+			}
+			
+			if(keepaReset.call().equals("success")){
+				strKalActResult = "TC001501";
+			}else{
+				strKalActResult = "TC001502";
+			}
+			keepaActHistory.setExe_rslt_cd(strKalActResult);
+			keepaActHistory.setRslt_msg(keepaReset.getMessage());
+			
+			//insert
+			proxyDAO.insertPryActCngInfo(keepaActHistory);
+			
+			ProxyServerVO prySvr = new ProxyServerVO();
+			prySvr.setExe_status(strPryActResult);
+			prySvr.setKal_exe_status(strKalActResult);
+			prySvr.setLst_mdf_dtm(userId);
+			prySvr.setPry_svr_id(prySvrId);
+			
+			proxyDAO.updatePrySvrExeStatusInfo(prySvr);
+			
+		} catch (Exception e) {
+			errLogger.error("ProxyLinkServiceImpl.restartService {}", e.toString());
+			strSuccessCode = "1";
+			strErrCode = "-1";
+			strErrMsg = "restartService Error [" + e.toString() + "]";
+		}
+		outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+		outputObj.put(ProtocolID.RESULT_DATA, "");
+		outputObj.put("PRY_ACT_RESULT", strPryActResult);
+		outputObj.put("KAL_ACT_RESULT", strKalActResult);
+		return outputObj;
 	}
 }

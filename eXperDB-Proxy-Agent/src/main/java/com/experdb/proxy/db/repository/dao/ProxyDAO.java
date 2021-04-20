@@ -1,22 +1,17 @@
 package com.experdb.proxy.db.repository.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.experdb.proxy.db.repository.vo.AgentInfoVO;
-import com.experdb.proxy.db.repository.vo.DbServerInfoVO;
+import com.experdb.proxy.db.repository.vo.ProxyActStateChangeHistoryVO;
 import com.experdb.proxy.db.repository.vo.ProxyConfChangeHistoryVO;
 import com.experdb.proxy.db.repository.vo.ProxyGlobalVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
-import com.experdb.proxy.db.repository.vo.TrfTrgCngVO;
-import com.experdb.proxy.db.repository.vo.WrkExeVO;
+
 
 /**
 * @author 박태혁
@@ -171,5 +166,22 @@ public class ProxyDAO {
 	 */
 	public void insertPrycngInfo(ProxyConfChangeHistoryVO vo) throws Exception  {
 		 session.insert("proxy.insertPrycngInfo", vo);
+	}
+	/**
+	 * Proxy 기동 이력 insert
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void insertPryActCngInfo(ProxyActStateChangeHistoryVO vo) throws Exception  {
+		session.insert("proxy.insertPryActCngInfo", vo);
+	}
+	
+	/**
+	 * Proxy 기동 상태 update
+	 * @param vo
+	 * @throws Exception
+	 */
+	public int updatePrySvrExeStatusInfo(ProxyServerVO vo) throws Exception  {
+		return session.update("proxy.updatePrySvrExeStatusInfo", vo);
 	}
 }
