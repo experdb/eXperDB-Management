@@ -652,9 +652,15 @@ function fn_nodeRegPopup() {
 	}
 
 function fn_filter(){
-	var serverIp = NodeList.row('.selected').data().ipadr;
-	console.log("@@@@" + serverIp);
-	$("#serverIpadr").val(serverIp);
+	var data = NodeList.rows('.selected').data();
+	if(data.length<1){
+		showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	}else{
+		var serverIp = NodeList.row('.selected').data().ipadr;
+		fn_getVolumes(serverIp);
+	}
+
 	$('#pop_layer_popup_backupVolumeFilter').modal("show");
 }
 

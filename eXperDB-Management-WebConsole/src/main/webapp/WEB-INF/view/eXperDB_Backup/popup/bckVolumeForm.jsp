@@ -32,7 +32,6 @@ var volumeList;
 	 ******************************************************** */
 	$(window.document).ready(function() {
 		fn_volumeTableSetting();
-			
 	});
 	
 	// loader
@@ -49,7 +48,7 @@ var volumeList;
 
 	function fn_volumeTableSetting(){
 		 volumeList = $('#volumeList').DataTable({
-				scrollY : "250px",
+				//scrollY : "250px",
 				scrollX : false,
 				searching : false,
 				processing : true,
@@ -59,22 +58,49 @@ var volumeList;
 				bSort : false,
 				columns : [
 				{data : "rownum", className : "dt-center", defaultContent : "" , checkboxes : {'selectRow' : true}},
-				{data : "volumeName", className : "dt-center", defaultContent : ""},
-				{data : "fileSystem", className : "dt-center", defaultContent : ""},
+				{data : "mounton", className : "dt-center", defaultContent : ""},
+				{data : "filesystem", className : "dt-center", defaultContent : ""},
+				{data : "used", className : "dt-center", defaultContent : ""},
 				{data : "type", className : "dt-center", defaultContent : ""}
 				
 				]
 			});
 
+		 volumeList.tables().header().to$().find('th:eq(0)').css('min-width');
 		 volumeList.tables().header().to$().find('th:eq(1)').css('min-width');
 		 volumeList.tables().header().to$().find('th:eq(2)').css('min-width');
 		 volumeList.tables().header().to$().find('th:eq(3)').css('min-width');
 		 volumeList.tables().header().to$().find('th:eq(4)').css('min-width');
-		 
 		 $(window).trigger('resize');
 	}	
  
 
+	function fn_getVolumes(serverIp){
+		$.ajax({
+			url : '/experdb/getVolumes.do',
+			type : 'post',
+			data : {
+				ipadr : serverIp
+			},
+			success : function(result) {
+				volumeList.clear().draw();
+				volumeList.rows.add(result.data).draw();
+			},
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+	}
+	
 </script>
 	
 <div class="modal fade" id="pop_layer_popup_backupVolumeFilter" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -92,6 +118,7 @@ var volumeList;
 									<th width="100"></th>
 									<th width="150">Volume Name</th>
 									<th width="150">File System</th>
+									<th width="150">Used</th>
 									<th width="100">Type</th>
 								</tr>
 							</thead>
