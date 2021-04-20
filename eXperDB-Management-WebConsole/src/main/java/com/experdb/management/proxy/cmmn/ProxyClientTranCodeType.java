@@ -14,10 +14,10 @@ package com.experdb.management.proxy.cmmn;
 */
 public class ProxyClientTranCodeType {
 	public static final String PsP001 = "PsP001";	//proxy 에이전트 실행
-	public static final Object PsP002 = "PsP002"; 	//proxy 에이전트 연결 Test
-	
-	public static final Object PsP004 = "PsP004"; 	//proxy conf 파일 백업 & 신규 생성 
-	public static final Object PsP005 = "PsP005"; 	//proxy restart
+	public static final String PsP002 = "PsP002"; 	//proxy 에이전트 연결 Test
+	public static final String PsP003 = "PsP003"; //proxy, keepalived conf 파일 가져오기
+	public static final String PsP004 = "PsP004"; 	//proxy conf 파일 백업 & 신규 생성 
+	public static final String PsP005 = "PsP005"; 	//proxy restart
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";

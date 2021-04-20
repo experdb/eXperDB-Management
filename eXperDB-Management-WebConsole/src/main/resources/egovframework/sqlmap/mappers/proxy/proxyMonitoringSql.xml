@@ -185,7 +185,7 @@
 				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID
 				WHERE tpsi.PRY_SVR_ID = #{value}
 				OR tpsi.MASTER_SVR_ID = #{value}
-				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
+				ORDER BY  tpsi.master_gbn desc, tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
 			) x
 			WHERE x.r <= 2
 		]]>
@@ -358,7 +358,7 @@
 				lst_mdf_dtm
 			)
 			VALUES (
-				NEXTVAL('SEQ_PRY_ACTSTATE_CNG'),
+				NEXTVAL('q_t_pry_actstate_cng_g_01'),
 				#{pry_svr_id}::numeric, 
 				#{sys_type},
 				#{act_type},

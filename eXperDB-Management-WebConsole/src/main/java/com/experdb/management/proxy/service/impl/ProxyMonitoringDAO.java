@@ -1,5 +1,6 @@
 package com.experdb.management.proxy.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -118,8 +119,11 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 	 * @param param
 	 * @return
 	 */
-	public Map<String, Object> selectConfiguration(Map<String, Object> param) {
+	public Map<String, Object> selectConfigurationInfo(int pry_svr_id, String type) {
 		Map<String, Object> result = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("pry_svr_id", pry_svr_id);
+		param.put("type", type);
 		result = selectOne("proxyMonitoringSql.selectConfiguration", param);
 		return result;
 	}

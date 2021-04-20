@@ -4,18 +4,21 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.experdb.management.proxy.cmmn.ProxyClientAdapter;
 import com.experdb.management.proxy.service.ProxyLogVO;
 import com.experdb.management.proxy.service.ProxyMonitoringService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
@@ -24,6 +27,7 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
 * @author 
@@ -47,7 +51,12 @@ public class ProxyMonitoringController {
 	@Autowired
 	private ProxyMonitoringService proxyMonitoringService;
 	
+	@Autowired
+    MessageSource messageSource;
+	
 	private List<Map<String, Object>> menuAut;
+	
+	private String mnu_id = "44";
 	
 	/**
 	 * Proxy 모니터링 화면
@@ -62,18 +71,18 @@ public class ProxyMonitoringController {
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001801");
 		ModelAndView mv = new ModelAndView();
 
-		String dtlCd = "DX-T0160";
-		int mnu_id = 44;
 		try {
 			//읽기 권한이 없는경우 에러페이지 호출 
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			} else {
 				// 화면접근이력 이력 남기기
-				proxyMonitoringService.monitoringSaveHistory(request, historyVO, dtlCd, mnu_id);
+				proxyMonitoringService.monitoringSaveHistory(request, historyVO, "DX-T0160", mnu_id);
 				List<Map<String, Object>> proxyServerTotInfo = proxyMonitoringService.selectProxyServerList();
 				
-				
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				int aut_id = loginVo.getAut_id();
 				int pry_svr_id = Integer.parseInt(String.valueOf(proxyServerTotInfo.get(0).get("pry_svr_id")));
 				
 				List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
@@ -84,6 +93,7 @@ public class ProxyMonitoringController {
 				mv.addObject("proxyServerByMasId", proxyServerByMasId);
 				mv.addObject("dbServerConProxy", dbServerConProxy);
 				mv.addObject("proxyLogList",proxyLogList);
+				mv.addObject("aut_id", aut_id);
 				
 				mv.setViewName("proxy/monitoring/proxyMonitoring");
 			}	
@@ -135,25 +145,17 @@ public class ProxyMonitoringController {
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001801");
 		ModelAndView mv = new ModelAndView("jsonView");
 		
-		System.out.println("***************listenerstatistics ");
-		System.out.println("pry_svr_id : " + request.getParameter("pry_svr_id"));
-		
-		String dtlCd = "DX-T0160_01";
-		int mnu_id = 44;
-		
 		try {
 			//읽기 권한이 없는경우 에러페이지 호출 
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			} else {
 				// 화면접근이력 이력 남기기
-				proxyMonitoringService.monitoringSaveHistory(request, historyVO, dtlCd, mnu_id);
+				proxyMonitoringService.monitoringSaveHistory(request, historyVO, "DX-T0160_01", mnu_id);
 			}
 			String strPrySvrId = request.getParameter("pry_svr_id");
 			int pry_svr_id = Integer.parseInt(strPrySvrId); 
 			List<Map<String, Object>> proxyStatisticsInfo = proxyMonitoringService.selectProxyStatisticsInfo(pry_svr_id);
-			System.out.println(proxyStatisticsInfo.size());
-//			System.out.println("pry_svr_nm : " + proxyStatisitcInfo.get(0).get("pry_svr_nm"));
 			mv.addObject("proxyStatisticsInfo",proxyStatisticsInfo); 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -174,16 +176,13 @@ public class ProxyMonitoringController {
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001801");
 		ModelAndView mv = new ModelAndView("jsonView");
 
-		String dtlCd = "DX-T0160_03";
-		int mnu_id = 44;
-		
 		try {
 			//읽기 권한이 없는경우 에러페이지 호출 
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			} else {
 				// 화면접근이력 이력 남기기
-				proxyMonitoringService.monitoringSaveHistory(request, historyVO, dtlCd, mnu_id);
+				proxyMonitoringService.monitoringSaveHistory(request, historyVO, "DX-T0160_03", mnu_id);
 			}
 			String strPrySvrId = request.getParameter("pry_svr_id");
 			int pry_svr_id = Integer.parseInt(strPrySvrId); 
@@ -231,23 +230,18 @@ public class ProxyMonitoringController {
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001801");
 		ModelAndView mv = new ModelAndView();
-		System.out.println("111111111111111111111111111111111111111");
-		System.out.println("pry_svr_id : " + request.getParameter("pry_svr_id"));
-		System.out.println("type : " + request.getParameter("type"));
-		
-		String dtlCd = "DX-T0160_02";
-		int mnu_id = 44;
+
 		try {
 			//읽기 권한이 없는경우 에러페이지 호출 
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			} else {
 				// 화면접근이력 이력 남기기
-				proxyMonitoringService.monitoringSaveHistory(request, historyVO, dtlCd, mnu_id);
+				proxyMonitoringService.monitoringSaveHistory(request, historyVO, "DX-T0160_02", mnu_id);
 				int pry_svr_id = Integer.parseInt(request.getParameter("pry_svr_id"));
 				String type = request.getParameter("type");
 				
-				Map<String, Object> selectConfigBySysType = proxyMonitoringService.selectConfiguration(pry_svr_id, type);
+				Map<String, Object> selectConfigBySysType = proxyMonitoringService.selectConfigurationInfo(pry_svr_id, type);
 				mv.addObject("selectConfigBySysType",selectConfigBySysType);
 				mv.addObject("pry_svr_id", pry_svr_id);
 				mv.addObject("type", type);
@@ -266,7 +260,7 @@ public class ProxyMonitoringController {
 	 */
 	@RequestMapping("/configViewAjax.do")
 	public ModelAndView configViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
-		HashMap result = new HashMap<>();
+//		HashMap result = new HashMap<>();
 		ModelAndView mv = new ModelAndView("jsonView");
 		String strBuffer = "";
 		System.out.println("2222222222222222222222222222222222222222222222");
@@ -276,85 +270,23 @@ public class ProxyMonitoringController {
 			String strPrySvrId = request.getParameter("pry_svr_id");
 			String type = request.getParameter("type");
 			int pry_svr_id = Integer.parseInt(strPrySvrId);
+			String strSeek = request.getParameter("seek");
+			String strReadLine = request.getParameter("readLine");
+			String dwLen = request.getParameter("dwLen");
 			
-			Map<String, Object> selectConfigBySysType = proxyMonitoringService.selectConfiguration(pry_svr_id, type);
+			Map<String, Object> param = new HashMap<>();
+			param.put("seek", strSeek);
+			param.put("readLine", strReadLine);
+			param.put("dwLen", dwLen);
+			Map<String, Object> result = proxyMonitoringService.getConfiguration(pry_svr_id, type, param);
 			
-			
-			String strIpAdr = (String) selectConfigBySysType.get("ipadr");
-			String strPrySvrNm = (String) selectConfigBySysType.get("pry_svr_nm");
-			String strConfigFilePath = (String) selectConfigBySysType.get("path");
-			String strDirectory = strConfigFilePath.substring(0, strConfigFilePath.lastIndexOf("/"));
-			String strFileName = strConfigFilePath.substring(strConfigFilePath.lastIndexOf("/")+1);
-			String strPort = String.valueOf(selectConfigBySysType.get("socket_port"));
-			
-			JSONObject serverObj = new JSONObject();
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, strPrySvrNm);
-			serverObj.put(ClientProtocolID.SERVER_IP, strIpAdr);
-//			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			
-			JSONObject jObj = new JSONObject();
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
-			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
-			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_V);
-			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
-			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
-//			jObj.put(ClientProtocolID.SEEK, strSeek);
-//			jObj.put(ClientProtocolID.DW_LEN, dwLen);
-//			jObj.put(ClientProtocolID.READLINE, strReadLine);
-			System.out.println("jObj : " + jObj.toJSONString());
-			String IP = strIpAdr;
-			int PORT = Integer.parseInt(strPort);
-			System.out.println("IP : " + IP + ": " + PORT);
-			//IP = "127.0.0.1";
-//			ClientAdapter CA = new ClientAdapter(IP, PORT);
-//			CA.open(); 
-//			System.out.println("CA : " + CA.toString());
-////			result.put("data", jObj);
-//			JSONObject objList = CA.dxT015_V(jObj);
-//			CA.close();
-//			System.out.println("objList : " + objList.toJSONString());
-//			
-//			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-//			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-//			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-//			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-//			System.out.println("RESULT_CODE : " +  strResultCode);
-//			System.out.println("ERR_CODE : " +  strErrCode);
-//			System.out.println("ERR_MSG : " +  strErrMsg);
-//			
-//			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
-//			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
-//			
-//			int intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
-//			
-//			Long lngSeek= (Long)objList.get(ClientProtocolID.SEEK);
-			System.out.println("fileName : " + strFileName);
-			
-			///////// 화면용 file 처리
-	        FileInputStream fileStream = null; // 파일 스트림
-//	        String path = "C:/Users/yj402/git/eXperDB-Management/eXperDB-Management-WebConsole/src/main/java/com/experdb/management/proxy/service/";
-	        String path = "/home/experdb/app/eXperDB-Management/eXperDB-Management-WebConsole/webapps/eXperDB-Management-WebConsole/WEB-INF/classes/com/experdb/management/proxy/service/";
-//	        String path = "../service/";
-	        fileStream = new FileInputStream(path + strFileName );// 파일 스트림 생성
-	        
+			strBuffer = (String) result.get("RESULT_DATA"); 
 	        //버퍼 선언
-	        byte[ ] readBuffer = new byte[fileStream.available()];
-	        while (fileStream.read( readBuffer ) != -1){
-	        	strBuffer += new String(readBuffer);
-	        }
-	        String config_title = "";
-	        if(type.equals("P")){
-	        	config_title = "[ "+ strPrySvrNm + " ]  Proxy Config 파일";
-	        } else {
-	        	config_title = "[ "+ strPrySvrNm + " ]  Keepavlied Config 파일";
-	        }
 //			result.put("data", strBuffer);
 //			result.put("fSize", strBuffer.length());
 			mv.addObject("data", strBuffer);
 			mv.addObject("fSize", strBuffer.length());
-			mv.addObject("config_title", config_title);
-			fileStream.close();
+			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
 			//hp.put("fChrSize", intLastLength - intFirstLength); 
 //			hp.put("seek", lngSeek.toString());
 //			hp.put("dwLen", Integer.toString(intDwlen));
@@ -363,7 +295,6 @@ public class ProxyMonitoringController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		
 		return mv;
 	}
 	

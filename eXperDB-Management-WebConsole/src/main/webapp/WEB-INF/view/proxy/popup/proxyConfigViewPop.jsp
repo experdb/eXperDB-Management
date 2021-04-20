@@ -34,15 +34,19 @@
 	function fn_configViewAjax(pry_svr_id, type) {
 		// var pry_svr_id = $("pry_svr_id", "configForm").val();
 		// var type = $("type", "configForm").val();
-		console.log('pry_svr_id : ' + pry_svr_id);
-		console.log('type : ' + type);
+		var v_seek = $("#seek", "#configForm").val();
+		var v_endFlag = $("#endFlag", "#configForm").val();
+		var v_dwLen = $("#dwLen", "#configForm").val();
 		$.ajax({
 			url : "/proxyMonitoring/configViewAjax.do",
 			dataType : "json",
 			type : "post",
  			data : {
  				pry_svr_id : pry_svr_id,
-				type : type
+				type : type,
+				seek : v_seek,
+				dwLen : v_dwLen,
+				readLine : "1000"
  			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -62,12 +66,13 @@
 					
 					if (result.data != null) {
 						$("#config", "#configForm").html(result.data);
-						
 						// v_fileSize = Number(v_fileSize) + result.fSize;
 					}
-					if(result.config_title != null) {
-							$(".config_title").html(' '+result.config_title);
-						
+					
+					if(type == "P"){
+						$(".config_title").html(' ' + result.pry_svr_nm + ' Proxy Config');
+					} else {
+						$(".config_title").html(' ' + result.pry_svr_nm + ' Vip Config');
 					}
 
 					// $("#fSize", "#configForm").val(v_fileSize);
@@ -113,6 +118,9 @@
 							<input type="hidden" name="contents_gbn" id="contents_gbn" value="" />
 							<input type="hidden" name="pry_svr_id" id="pry_svr_id" value="${pry_svr_id}" />
 							<input type="hidden" name="type" id="type" value="${type}" />
+							<input type="hidden" name="seek" id="seek" value="0"/>
+							<input type="hidden" name="endFlag" id="endFlag" value="0"/>
+							<input type="hidden" name="dwLen" id="dwLen" value="0"/>
 							<fieldset>
 								<div class="form-group row">
 									<div class="col-sm-12">

@@ -33,4 +33,15 @@ public class ProxyClientProtocolID {
 
 	public static final String pu = "PRE_DATA";
 	
+	public static final String FILE_NAME = "FILE_NAME";
+	public static final String FILE_SIZE = "FILE_SIZE";
+	public static final String FILE_DIRECTORY = "FILE_DIRECTORY";
+	
+	public static final String START_LEN = "START_LEN";
+	public static final String DW_LEN = "DW_LEN";
+	public static final String END_FLAG = "END_FLAG";
+
+	public static final String SEEK = "SEEK";
+	public static final String READLINE = "READLINE";
+	
 }

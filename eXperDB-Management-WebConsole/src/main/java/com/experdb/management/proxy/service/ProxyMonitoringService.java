@@ -26,7 +26,7 @@ public interface ProxyMonitoringService {
 	 * @param request, historyVO, dtlCd
 	 * @throws Exception
 	 */
-	void monitoringSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd, int mnu_id) throws Exception;
+	void monitoringSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd, String mnu_id) throws Exception;
 	
 	/**
 	 * Proxy 서버 목록 조회
@@ -80,10 +80,18 @@ public interface ProxyMonitoringService {
 
 	/**
 	 * Proxy, keepalived config 파일 정보 조회
-	 * @param pry_svr_id
+	 * @param pry_svr_id, type
 	 * @return List<Map<String, Object>>
 	 */
-	Map<String, Object> selectConfiguration(int pry_svr_id, String Type);
+	Map<String, Object> selectConfigurationInfo(int pry_svr_id, String type);
+	
+	/**
+	 * Proxy, keepalived config 파일 가져오기
+	 * @param pry_svr_id, type, Map<String, Object>
+	 * @return Map<String, Object>
+	 * @throws Exception 
+	 */
+	Map<String, Object> getConfiguration(int pry_svr_id, String type, Map<String, Object> param) throws Exception;
 	
 	/**
 	 * proxy / keepavlived 기동-정지 실패 로그 

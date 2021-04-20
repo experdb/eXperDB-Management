@@ -210,7 +210,7 @@ public class ProxyClientSocketCtl {
 		if (client == null) {
 			throw new Exception("SocketExecutor : Socket이 생성되지 않았습니다.");
 		}
-
+		
 		ObjectInputStream ois = new ObjectInputStream(is);
 		Object obj = ois.readObject();
 		return obj;

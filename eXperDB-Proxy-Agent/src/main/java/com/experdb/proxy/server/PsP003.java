@@ -2,7 +2,10 @@ package com.experdb.proxy.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.RandomAccessFile;
 import java.net.Socket;
+import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
+import com.experdb.proxy.util.FileUtil;
 
 /**
  *
@@ -54,6 +58,33 @@ public class PsP003 extends SocketCtl{
 		JSONObject outputObj = new JSONObject();
 		try {
 			
+			String strReadLine = (String) jObj.get(ProtocolID.READLINE);
+			String strSeek = (String) jObj.get(ProtocolID.SEEK);
+			String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
+			
+			int intDwlen = Integer.parseInt(dwLen);
+			int intReadLine = Integer.parseInt(strReadLine);
+			int intLastLine = intDwlen;
+
+			String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
+			File inFile = new File(strConfigFileDir+strFileName);
+
+			HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(strReadLine), Integer.parseInt(strSeek), intLastLine);
+
+			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
+			outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));
+			outputObj.put(ProtocolID.SEEK, hp.get("seek"));
+			outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
+			outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
+			
+			hp = null;
+			inFile = null;
+			
+			send(outputObj);
 		} catch (Exception e) {
 			errLogger.error("PsP003 {} ", e.toString());
 
@@ -71,5 +102,45 @@ public class PsP003 extends SocketCtl{
 		}
 	}
 	
-	
+	public static void main(String args[]) throws NumberFormatException, Exception{
+		String strLogFileDir = "C:/Users/yj402/git/eXperDB-Management/eXperDB-Management-WebConsole/src/main/java/com/experdb/management/proxy/service/";
+		String strFileName = "haproxy.cfg";
+		String startLen = "100";
+		String seek = "0";
+		
+		File inFile = new File(strLogFileDir, strFileName);
+		System.out.println(inFile.getName());
+		System.out.println(inFile.isFile());
+		//byte[] buffer = FileUtil.getFileToByte(inFile);
+		//HashMap hp = FileUtil.getFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
+		RandomAccessFile rdma = null;
+		String strView = "";
+		int intLastLine = 0;
+		int intReadLine = Integer.parseInt(startLen);
+		
+		rdma = new RandomAccessFile(inFile, "r");
+
+		// int intStartLine = intReadLine * intDwlenCount;
+
+		rdma.seek(Integer.parseInt(seek));
+
+		String temp;
+		int recnum = 1;
+		while ((temp = rdma.readLine()) != null) {
+
+			strView += (intLastLine + recnum) + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+			if (((++recnum) % (intReadLine + 1)) == 0) {
+				break;
+			}
+		}
+		System.out.println(strView);
+		System.out.println(strView.length());
+		System.out.println(rdma.getFilePointer());
+		HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(seek), 0);
+		
+		System.out.println(hp.get("file_desc"));
+		System.out.println(hp.get("file_size"));
+		System.out.println(hp.get("seek"));
+//		System.out.println(hp.get("end_flag"));
+	}
 }

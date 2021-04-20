@@ -116,6 +116,14 @@ public class ProxyClientAdapter {
 		return parseToJsonObj(recvBuff);
 	}
 	
+	/* proxy config file */
+	public JSONObject psP003(JSONObject jObj) throws Exception {
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		JSONObject obj = (JSONObject) cc.recvObject();
+		return obj;
+	}
+	
 	/* proxy agent Connection Test*/
 	public JSONObject psP004(JSONObject jObj) throws Exception {
 		byte[] bt = jObj.toString().getBytes();

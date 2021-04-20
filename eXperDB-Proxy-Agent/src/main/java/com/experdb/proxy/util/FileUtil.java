@@ -79,7 +79,8 @@ public class FileUtil {
 			int recnum = 1;
 			while ((temp = rdma.readLine()) != null) {
 
-				strView += (intLastLine + recnum) + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+//				strView += (intLastLine + recnum) + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+				strView += new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "\n";
 
 				if (((++recnum) % (intReadLine + 1)) == 0) {
 					break;

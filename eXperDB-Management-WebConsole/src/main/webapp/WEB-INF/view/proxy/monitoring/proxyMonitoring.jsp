@@ -26,10 +26,12 @@
 <script>
 	var shown = true;
 	var proxyLogTable = "";
+	var configLogTable = "";
 	var proxyStatTable = "";
 	var select_pry_svr_id = "";
 	var cng_pry_svr_id = "";
 	var act_sys_type = "";
+	var aut_id = "";
 	
 	/* ********************************************************
 	 * 화면 onload
@@ -44,8 +46,14 @@
 		// 프록시 log 테이블
 		fn_proxy_log_init();
 
+		// config 파일 수정 이력 테이블
+		fn_config_log_init();
+		
 		// 프록시 리스너 통계 테이블
 		fn_proxy_stat_init();
+		
+		// 권한 id 넣기
+		aut_id = "${aut_id}";
 	});
 	
 
@@ -266,7 +274,6 @@
 				xhr.setRequestHeader("AJAX", true);
 			},
 			error : function(xhr, status, error) {
-				console.log(error);
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
@@ -291,6 +298,9 @@
 		// 프록시 연결 db 모니터링 setting
 		fn_dbMonInfo(result);
 
+		// 프록시 리스너, db, vip 연결 list setting
+		fn_dbListenerVipInfo(result);
+		
 		//서버 기록 테이블 설정
 		proxyLogTable.clear().draw();
 		if (nvlPrmSet(result.proxyLogList, '') != '') {
@@ -308,7 +318,7 @@
 	}
 	
 	/* ********************************************************
-	* 통계리스트 html 설정-
+	* 통계리스트 html 설정
 	******************************************************** */
 	function fn_proxyMonChartSet(result){
 		var html = "";
@@ -469,10 +479,19 @@
 				html += '									<tr>\n';
 				html += '										<td style="width:30%;padding-left:20px;" class="text-center">\n';
 // 				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_actExeCng('+item.pry_svr_id+', \'P\', \''+item.exe_status+'\')">'
-				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_confirm('+item.pry_svr_id+',\''+item.exe_status+'\', \'P\')">';
-				html += '											<i class="fa fa-desktop icon-md mb-0 mb-md-3 mb-xl-0 '+exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
-				html += '											</button>'
-				html += '											<h6 class="text-muted"><i class="fa '+exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i><a href="#" onclick="fn_configView('+item.pry_svr_id+', \'P\')">Proxy</a></h6>\n';
+				if(aut_id == 1) {
+					html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_confirm('+item.pry_svr_id+',\''+item.exe_status+'\', \'P\')">';
+					html += '											<i class="fa fa-desktop icon-md mb-0 mb-md-3 mb-xl-0 '+exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
+					html += '											</button>'
+				} else {
+					html += '											<i class="fa fa-desktop icon-md mb-0 mb-md-3 mb-xl-0 '+exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
+				}
+				html += '											<h6 class="text-muted"><i class="fa '+exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>';
+				if(aut_id == 1) {
+					html += '												<a href="#" onclick="fn_configView('+item.pry_svr_id+', \'P\')"><spring:message code="eXperDB_proxy.server"/></a></h6>\n';
+				} else {
+					html += '												<spring:message code="eXperDB_proxy.server"/></h6>\n';
+				}
 				html += '										</td>\n';
 				
 				html += '										<td style="width:25%;" class="text-center">\n';
@@ -482,10 +501,19 @@
 				
 				html += '										<td style="width:30%;padding-right:20px;" class="text-center">\n';
 // 				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_actExeCng('+item.pry_svr_id+', \'K\', \''+item.kal_exe_status+'\')">'
-				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_confirm('+item.pry_svr_id+',\''+item.kal_exe_status+'\' , \'K\')">';
-				html += '											<i class="fa fa-cubes icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
-				html += '											</button>'
-				html += '											<h6 class="text-muted"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i><a href="#" onclick="fn_configView('+item.pry_svr_id+', \'K\')">VIP<br/>health check</a></h6>\n';
+				if(aut_id == 1){
+					html += '											<button type="button" class="btn btn-outline-warning btn-fw" onclick="fn_confirm('+item.pry_svr_id+',\''+item.kal_exe_status+'\' , \'K\')">';
+					html += '											<i class="fa fa-cubes icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
+					html += '											</button>'
+				} else {
+					html += '											<i class="fa fa-cubes icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
+				}
+				html += '											<h6 class="text-muted"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
+				if(aut_id == 1){
+					html += '												<a href="#" onclick="fn_configView('+item.pry_svr_id+', \'K\')">VIP<br/><spring:message code="eXperDB_proxy.vip_health_check"/></a></h6>\n';
+				} else {
+					html += '												VIP<br/><spring:message code="eXperDB_proxy.vip_health_check"/></h6>\n';
+				}
 				html += '										</td>\n';
 				html += '									</tr>\n';
 				html += '								</table>\n';
@@ -509,10 +537,9 @@
 	}
 	
 	/* ********************************************************
-	* 시스템 기동 정지 / 시작
+	* 시스템 기동 중지 / 시작
 	******************************************************** */
 	function fn_actExeCng(pry_svr_id, type, status){
-		console.log(pry_svr_id +', '+ type + ', ' + status);
 		$.ajax({
 			url : '/proxyMonitoring/actExeCng.do',
 			type : 'post',
@@ -609,7 +636,104 @@
 					if(item.master_gbn == 'M'){
 						html += '										master';
 					} else {
-						html += '										tandby';
+						html += '										standby';
+					}
+				}
+
+				html += '											</h6>';
+				html += '										</td>';
+				html += '										<td rowspan="4" style="width:15%;">';
+				if(item.agt_cndt_cd == 'TC001101'){
+					html += '										<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>';
+				} else {
+					html += '										<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>';
+				}
+				html += '											<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>';
+				html += '										</td>';
+				html += '									</tr>';
+				html += '									<tr>';
+				html += '										<td colspan="2" style="padding-top:5px;">';
+				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP : ' + item.ipadr + '</h6>';
+				html += '										</td>'
+				html += '									</tr>';
+				html += '									<tr>';
+				html += '										<td>'
+				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">PORT : ' + item.portno + '</h6>';
+				html += '										</td>';
+				html += '									</tr>';
+				
+				if(item.agt_cndt_cd == 'TC001101'){
+					db_exe_status_chk = "text-success";
+					db_exe_status_css = "fa-refresh fa-spin text-success";
+					db_exe_status_val = 'running';
+				} else {
+					db_exe_status_chk = "text-danger";
+					db_exe_status_css = "fa-times-circle text-danger";
+					db_exe_status_val = 'stop';
+				}
+				html += '									<tr >\n';
+				html += '										<td class="text-right">\n';
+				html += '											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 '+db_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
+				html += '										</td>\n';
+				html += '										<td class="text-left" style="vertical-align: bottom;height: 50px;">\n';
+				html += '											<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>running</h6>\n';			
+				html += '										</td>\n';
+				html += '									</tr>\n';
+// 				html += '								</table>\n';
+				
+				html += '								</table>'
+			});
+		} else {
+			html += "	<div class='card'>\n";
+			html += '		<div class="card-body">\n';
+			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+			html += '				<spring:message code="message.msg01" /></h5>\n';
+			html += '			</div>\n';
+			html += "		</div>\n";
+			html += "	</div>\n";
+		}
+		$("#dbMonitoringList").html(html);
+	}
+	
+	/* ********************************************************
+	* 디비 서버 모니터링 셋팅
+	******************************************************** */
+	function fn_dbListenerVipInfo(result){
+		var rowCount = 0;
+		var html = "";
+		var master_gbn = "";
+		var pry_svr_id = "";
+		var listCnt = 0;
+		var pry_svr_id_val = "";
+		var db_exe_status_chk = "";
+		var db_exe_status_css = "";
+		var db_exe_status_val = "";
+		
+		if (result.dbServerConProxy != null && result.dbServerConProxy.length > 0) {
+			$(result.dbServerConProxy).each(function (index, item) {
+				html += '								<table class="table-borderless" style="width:100%;">';
+				html += '									<tr>';
+				html += '										<td colspan="2" style="width:85%;">';
+				if(item.master_gbn == 'M'){
+					html += '										<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
+				} else {
+					html += '										<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:20px;padding-top:10px;">';
+				}
+
+				if(item.agt_cndt_cd == 'TC001101'){
+					html += '											<div class="badge badge-pill badge-success" title="">'+item.master_gbn+'</div>';
+				} else {
+					html += '											<div class="badge badge-pill badge-danger" title="">'+item.master_gbn+'</div>';
+				}
+
+				if(item.svr_host_nm != null && item.svr_host_nm != ""){
+					html += '											' + item.svr_host_nm;
+				} else {
+					if(item.master_gbn == 'M'){
+						html += '										master';
+					} else {
+						html += '										standby';
 					}
 				}
 
@@ -666,14 +790,14 @@
 			html += "		</div>\n";
 			html += "	</div>\n";
 		}
-		$("#dbMonitoringList").html(html);
+		$("#dbListenerVipList").html(html);
 	}
-
+	
 	/* ********************************************************
 	 * 프록시 기동 상태 로그 셋팅
 	 ******************************************************** */
 	function fn_proxy_log_init(){
-		proxyLogTable = $('#proxyLog').DataTable({
+		proxyLogTable = $('#proxyLogTable').DataTable({
 			searching : false,
 			scrollY : true,
 			scrollX: true,	
@@ -752,7 +876,7 @@
 			]
 		});
 
-		proxyLogTable.tables().header().to$().find('th:eq(0)').css('min-width', '100px'); // proxy server name
+		proxyLogTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px'); // proxy server name
 		proxyLogTable.tables().header().to$().find('th:eq(1)').css('min-width', '50px'); // proxy or keepavlied
 		proxyLogTable.tables().header().to$().find('th:eq(2)').css('min-width', '50px'); // start or restart or stop
 		proxyLogTable.tables().header().to$().find('th:eq(3)').css('min-width', '50px'); // manual or system
@@ -764,6 +888,62 @@
 		$(window).trigger('resize');
 	}
 
+	function fn_config_log_init(){
+		configLogTable = $('#configLogTable').DataTable({
+			searching : false,
+			scrollY : true,
+			scrollX: true,	
+			paging : false,
+			deferRender : true,
+			info : false,
+			sort: false, 
+			"language" : {
+				"emptyTable" : '<spring:message code="message.msg01" />'
+			},
+			columns : [
+				{data : "pry_svr_nm", 
+					render : function(data, type, full, meta) {
+						var html = "";
+						html += '<a href="#" onclick="fn_logView(' + full.pry_svr_id + ', \'' + full.sys_type + '\', \'' + full.wrk_dtm + '\')">'+data+'</a>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "frst_reg_dtm", className : "dt-center", defaultContent : "" },
+				{data : "exe_rst_cd", 
+					render : function(data, type, full, meta){
+						var html = "";
+						if(data == 'TC001501'){
+							html += "<div class='badge badge-light' style='margin:0px;background-color: transparent !important;font-size: 1rem;'>";
+							html += '<i class="item-icon fa fa-check-circle text-primary icon-sm"></i>';
+							html += '&nbsp;<spring:message code="common.success" />';
+							html += "</div>";
+						} else if(data == 'TC001502'){
+							html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_actExeFailLog(\''+full.pry_act_exe_sn+'\')">';
+							html += '<i class="item-icon fa fa-times icon-sm"></i>';
+							html += '<spring:message code="common.failed" />';
+							html += "</button>";
+						}
+		
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
+				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
+						
+			]
+		});
+		
+		configLogTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px'); // proxy server name
+		configLogTable.tables().header().to$().find('th:eq(2)').css('min-width', '50px'); // start or restart or stop
+		configLogTable.tables().header().to$().find('th:eq(3)').css('min-width', '50px'); // manual or system
+		configLogTable.tables().header().to$().find('th:eq(4)').css('min-width', '0px'); // first reg date
+		
+		$(window).trigger('resize');
+	}
+	
 	/* ********************************************************
 	 * 리스너 통계 테이블 셋팅
 	 ******************************************************** */
@@ -798,8 +978,6 @@
 						},
 						{data : "svr_status", 
 							render : function(data, type, full, meta){
-								console.log(full);
-								console.log(meta);
 								var html = "";
 								if(data == 'UP'){
 									html += '<div class="badge badge-pill badge-success">';
@@ -1046,6 +1224,9 @@
 			},
 			success : function(result) {
 				fn_configViewAjax(pry_svr_id, type);
+				$("#seek", "#auditViewForm").val("0");
+				$("#endFlag", "#auditViewForm").val("0");
+				$("#dwLen", "#auditViewForm").val("0");
 				$('#pop_layer_config_view').modal("show");
 			},
 			beforeSend: function(xhr) {
@@ -1070,9 +1251,6 @@
 	 * log 파일 view popup
 	 ******************************************************** */
 	function fn_logView(pry_svr_id, type, date){
-		console.log('pry_svr_id : ' + pry_svr_id);
-		console.log('type : ' + type);
-		console.log('date : ' + date);
 		
 		if(date == 'today'){
 			pry_svr_id = select_pry_svr_id;
@@ -1087,7 +1265,7 @@
 				type : type
 			},
 			success : function(result) {
-				fn_logViewAjax(pry_svr_id, type, date);
+				fn_logViewAjax(pry_svr_id, type, date, aut_id);
 				$('#pop_layer_log_view').modal("show");
 			},
 			beforeSend: function(xhr) {
@@ -1134,7 +1312,6 @@
 			success : function(result) {
 		  		if(result.proxyStatisticsInfoChart != null && result.proxyStatisticsInfoChart.length > 0){
 		  			var chartCntLoad = $("#chartCnt").val();
-					console.log(result.proxyStatisticsInfoChart[0].exe_dtm_ss.substring(10))
 		  			if (chartCntLoad > 0) {
 			  			for(var i = 0; i < chartCntLoad; i++){
 			  				if ($('#chart-line-' + (i+1)).length) {
@@ -1212,7 +1389,6 @@
 	* 기동-정지 실패 로그 popup
 	******************************************************** */
 	function fn_actExeFailLog(pry_act_exe_sn){
-		console.log(pry_act_exe_sn);
 		$.ajax({
 			url : "/proxyMonitoring/actExeFailLog.do",
 			data : {
@@ -1233,8 +1409,6 @@
 				}
 			},
 			success : function(result) {
-				console.log(result);
-				console.log(result.actExeFailLog);
 				if (result != null) {
 					$("#wrkLogInfo").html(result.rslt_msg);
 				}
@@ -1243,27 +1417,28 @@
 		});
 	}
 	
-	// confirm 창
+	/* ********************************************************
+	* confirm 창
+	******************************************************** */
 	function fn_confirm(pry_svr_id, act_status, type){
 		cng_pry_svr_id = pry_svr_id;
 		act_sys_type = type;
-		console.log(cng_pry_svr_id + ", " + act_sys_type);
 		if (act_status == "TC001501") {
-			var gbn = "stop";
+			var gbn = "sys_stop";
 			if(type == "P") {
-				confirm_title = 'Proxy Server 중지';
-				$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 중지하시겠습니까?<br> 연관된 DB <b class="text-danger">세션이 모두 끊어지게 됩니다.</b><br> 계속 진행하시겠습니까?'));
+				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+				$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 중지하시겠습니까?<br> 연관된 DB <b class="text-danger">세션이 모두 끊어지게 됩니다.</b><br> 계속 진행하시겠습니까?'));
 			} else {
-				confirm_title = 'VIP Health Check 중지';
+				confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
 				$('#confirm_multi_msg').html(fn_strBrReplcae('VIP Health Check를 중지하시겠습니까? <br> 계속 진행하시겠습니까?'));
 			}
 		}else if (act_status == "TC001502") {
-			var gbn = "start";
+			var gbn = "sys_start";
 			if(type == "P"){
-				confirm_title = 'Proxy Server 실행';
-				$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy 서버를 실행하시겠습니까?'));
+				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
+				$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 실행하시겠습니까?'));
 			} else {
-				confirm_title = 'VIP Health Check 실행';
+				confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
 				$('#confirm_multi_msg').html(fn_strBrReplcae('VIP Health Check를 실행하시겠습니까?'));
 			}
 		}
@@ -1273,11 +1448,10 @@
 	}
 	
 	function fnc_confirmMultiRst(gbn){
-		console.log(cng_pry_svr_id + ", " + act_sys_type);
-		if (gbn == "stop") {
+		if (gbn == "sys_stop") {
 			//중지
 			fn_actExeCng(cng_pry_svr_id, act_sys_type,"TC001501");
-		}else if (gbn == "start") {
+		}else if (gbn == "sys_start") {
 			//실행
 			fn_actExeCng(cng_pry_svr_id, act_sys_type,"TC001502");
 		}
@@ -1365,7 +1539,7 @@
 												<div class="col-12">
 													<h6 class="mb-0">
 														<i class="ti-calendar menu-icon"></i>
-														<span class="menu-title"><spring:message code="eXperDB_proxy.server_information"/></span>
+														<span class="menu-title"><spring:message code="eXperDB_proxy.server_cluster"/></span>
 													</h6>
 												</div>
 											</div>
@@ -1416,21 +1590,6 @@
 												</div>
 											</div>
 											
-											<!-- 서버기록 title -->
-											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
-												<div class="card" style="margin-bottom:0px;">
-													<div class="card-header" role="tab" id="page_serverlogging_div" >
-														<div class="row" style="height: 15px;">
-															<div class="col-12">
-																<h6 class="mb-0">
-																	<i class="item-icon fa fa-dot-circle-o"></i>
-																	<span class="menu-title"><spring:message code="eXperDB_proxy.server_logging"/></span>
-																</h6>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
 										</div>
 										
 										<div class="row">
@@ -1445,13 +1604,51 @@
 											<!-- DB 서버  출력-->
 											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbMonitoringList">
+<!-- 													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbMonitoringList"> -->
+													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
 													</div>
 												</div>
 											</div>
+										</div>
 						
-											<!-- Proxy 서버 기록 -->
- 											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
+										<!-- Proxy 서버 기록 -->
+											
+										<div class="row">
+											<!-- 서버기록 title -->
+											<div class="accordion_main accordion-multi-colored col-7" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_serverlogging_div" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<span class="menu-title"><spring:message code="eXperDB_proxy.server_logging"/></span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<!-- conf 파일 수정 기록 title -->
+											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_conf_cng_logging_div" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<span class="menu-title">Config 파일 수정 이력</span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<!-- 서버 기록 -->
+ 											<div class="accordion_main accordion-multi-colored col-7" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;">
 													<div class="card-body" style="border:none;margin-top:-25px;margin-left:-25px;margin-right:-25px;">
 														<div class="row">
@@ -1461,13 +1658,17 @@
 																</h6>
 															</div>
 															<div class="col-sm-4">
-																<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect text-muted" type="button" onClick="fn_logView('', 'P', 'today')" value="<spring:message code='eXperDB_proxy.current'/> <spring:message code='eXperDB_proxy.proxy_log' />" />
+																<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" onClick="fn_logView('', 'P', 'today')">
+																	<i class="mdi mdi-file-document"></i>
+																	<spring:message code='eXperDB_proxy.current'/> <spring:message code='eXperDB_proxy.proxy_log' />
+																</button>
+<%-- 																<input class="btn btn-inverse-info btn-sm btn-icon-text text-muted " type="button" onClick="fn_logView('', 'P', 'today')" value="<spring:message code='eXperDB_proxy.current'/> <spring:message code='eXperDB_proxy.proxy_log' />" /> --%>
 															</div>
 														</div>
- 														<table id="proxyLog" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
+ 														<table id="proxyLogTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
 															<thead>
 					 											<tr class="bg-info text-white">
-																	<th width="100px;"><spring:message code="data_transfer.server_name"/></th>
+																	<th width="50px;"><spring:message code="eXperDB_proxy.server_name"/></th>
 																	<th width="50px;"><spring:message code="eXperDB_proxy.system"/></th>
 
 																	<th width="50px;"><spring:message code="common.status"/></th>
@@ -1475,43 +1676,55 @@
 																	<th width="50px;"><spring:message code="history_management.time"/></th>	
 																	<th width="0px;">rownum</th>
 																	<th width="0px;">proxy_id</th>
-																	<th width="0px;">pry_act_exe_sn</th>
 																</tr>
 															</thead>
 														</table>
 													</div>
 												</div>
-											</div> 
-										</div>
-										<div class="row">
-											<!-- monitoring  title -->
-											<div class="accordion_main accordion-multi-colored col-12" id="accordion_moni" role="tablist">
-												<div class="card" style="margin-bottom:0px;">
-													<div class="card-header" role="tab" id="moni_div">
-														<div class="row" style="height: 15px;">
-															<div class="col-12">
-																<h6 class="mb-0">
-																	<a data-toggle="collapse" href="#moni_sub" aria-expanded="true" aria-controls="moni_sub" onclick="fn_profileChk('moniTitleText')">
-																		<i class="mdi mdi-monitor-multiple"></i>
-																		<span class="menu-title">DB-Proxy 상태 정보</span>
-																		<i class="menu-arrow_user_af" id="moniTitleText" ></i>
-																	</a>
-																</h6>
-															</div>
-														</div>
+											</div>
+											<!-- 서버 기록 end --> 
+											
+											<!-- config 파일 수정 이력 -->
+											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:10px;border:none;">
+													<div class="card-body" style="border:none;margin-top:-25px;margin-left:-25px;margin-right:-25px;">
+<!-- 														<div class="row"> -->
+<!-- 															<div class="col-sm-7"> -->
+<!-- 																<h6 class="mb-0 alert"> -->
+<%-- 																	<span class="menu-title text-success"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg3"/></span> --%>
+<!-- 																</h6> -->
+<!-- 															</div> -->
+<!-- 															<div class="col-sm-5"> -->
+<!-- 																<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" onClick="fn_logView('', 'P', 'today')"> -->
+<!-- 																	<i class="mdi mdi-file-document"></i> -->
+<%-- 																	<spring:message code='eXperDB_proxy.current'/> <spring:message code='eXperDB_proxy.proxy_log' /> --%>
+<!-- 																</button> -->
+<%-- <%-- 																<input class="btn btn-inverse-info btn-sm btn-icon-text text-muted " type="button" onClick="fn_logView('', 'P', 'today')" value="<spring:message code='eXperDB_proxy.current'/> <spring:message code='eXperDB_proxy.proxy_log' />" /> --%> 
+<!-- 															</div> -->
+<!-- 														</div> -->
+ 														<table id="configLogTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
+															<thead>
+					 											<tr class="bg-info text-white">
+																	<th width="50px;"><spring:message code="eXperDB_proxy.server_name"/></th>
+
+																	<th width="50px;"><spring:message code="eXperDB_proxy.act_result"/></th>
+																	<th width="50px;"><spring:message code="history_management.time"/></th>	
+																	<th width="0px;"><spring:message code="common.status"/></th>
+																</tr>
+															</thead>
+														</table>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div id="moni_sub" class="collapse show row" role="tabpanel" aria-labelledby="moni_div" data-parent="#accordion_moni">
-										</div>
+
 										<div class="row">
 											<!-- 리스너정보 title -->
 											<div class="accordion_main accordion-multi-colored col-12" id="accordion_listner_his" role="tablist">
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="listener_header_div">
 														<div class="row" style="height: 15px;">
-															<div class="col-5">
+															<div class="col-6">
 																<h6 class="mb-0">
 																	<a data-toggle="collapse" href="#listener_header_sub" aria-expanded="true" aria-controls="listener_header_sub" onclick="fn_profileChk('listenerTitleText')">
 																		<i class="fa fa-bar-chart-o menu-icon"></i>
@@ -1520,9 +1733,9 @@
 																	</a>
 																</h6>
 															</div>
-															<div class="col-7">
+															<div class="col-6">
 											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_moni_today"></li>
+																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_listner_his_today"></li>
 																</ol>
 															</div>
 														</div>
@@ -1549,7 +1762,7 @@
 																	<th rowspan="2" scope="col" width="100px;"><spring:message code="eXperDB_proxy.listener_name"/></th>
 																	<th rowspan="2" scope="col" width="100px;"><spring:message code="eXperDB_proxy.ipadr"/></th>
 																	<th rowspan="2" scope="col" width="100px;"><spring:message code="properties.status"/></th>
-																	<th rowspan="2" scope="col" width="100px;" style="line-height:120%;"><spring:message code="dashboard.server"/><br/><spring:message code="eXperDB_proxy.downtime"/></th>
+																	<th rowspan="2" scope="col" width="100px;" style="line-height:120%;"><spring:message code="eXperDB_proxy.downtime"/></th>
 																	<th rowspan="2" scope="col" width="100px;" style="line-height:120%;"><spring:message code="common.failed"/><br/><spring:message code="eXperDB_proxy.check_count"/></th>
 																	<th colspan="4" scope="col" width="300px;" style="line-height:120%;"><spring:message code="eXperDB_proxy.session"/></th>
 																	<th colspan="2" scope="col" width="200px;" style="line-height:120%;"><spring:message code="eXperDB_proxy.byte_in_out"/></th>

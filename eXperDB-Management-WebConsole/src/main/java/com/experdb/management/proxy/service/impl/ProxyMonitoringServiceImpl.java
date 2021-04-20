@@ -7,12 +7,19 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.experdb.management.proxy.cmmn.ProxyClientAdapter;
+import com.experdb.management.proxy.cmmn.ProxyClientInfoCmmn;
+import com.experdb.management.proxy.cmmn.ProxyClientProtocolID;
+import com.experdb.management.proxy.cmmn.ProxyClientTranCodeType;
 import com.experdb.management.proxy.service.ProxyLogVO;
 import com.experdb.management.proxy.service.ProxyMonitoringService;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.impl.AccessHistoryDAO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
 
@@ -50,10 +57,13 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	 * @throws Exception
 	 */
 	@Override
-	public void monitoringSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd, int mnu_id) throws Exception {
+	public void monitoringSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd, String mnu_id) throws Exception {
 		CmmnUtils.saveHistory(request, historyVO);
 		historyVO.setExe_dtl_cd(dtlCd);
-		historyVO.setMnu_id(mnu_id);
+		
+		if(mnu_id != null && !mnu_id.equals("")){
+			historyVO.setMnu_id(Integer.parseInt(mnu_id));
+		}
 		accessHistoryDAO.insertHistory(historyVO);
 	}
 
@@ -133,14 +143,54 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	 * @return List<Map<String, Object>>
 	 */
 	@Override
-	public Map<String, Object> selectConfiguration(int pry_svr_id, String type) {
+	public Map<String, Object> selectConfigurationInfo(int pry_svr_id, String type) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("pry_svr_id", pry_svr_id);
 		param.put("type", type);
-		Map<String, Object> result = proxyMonitoringDAO.selectConfiguration(param);
-		return result;
+//		Map<String, Object> result = proxyMonitoringDAO.selectConfiguration(param);
+		
+		return null;
 	}
-
+	
+	/**
+	 * Proxy, keepalived config 파일 가져오기
+	 * @param pry_svr_id, type, Map<String, Object>
+	 * @return Map<String, Object>
+	 */
+	@Override
+	public Map<String, Object> getConfiguration(int pry_svr_id, String type, Map<String, Object> param) throws Exception {
+		String result = "fail";
+		String result_code = "";
+		
+		Map<String, Object> info = proxyMonitoringDAO.selectConfigurationInfo(pry_svr_id, type);
+		
+		String strIpAdr = (String) info.get("ipadr");
+		String strPrySvrNm = (String) info.get("pry_svr_nm");
+		String strConfigFilePath = (String) info.get("path");
+		String strDirectory = strConfigFilePath.substring(0, strConfigFilePath.lastIndexOf("/")+1);
+		String strFileName = strConfigFilePath.substring(strConfigFilePath.lastIndexOf("/")+1);
+		String strPort = String.valueOf(info.get("socket_port"));
+		
+		JSONObject jObj = new JSONObject();
+		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP003);
+		jObj.put(ProxyClientProtocolID.FILE_DIRECTORY, strDirectory);
+		jObj.put(ProxyClientProtocolID.FILE_NAME, strFileName);
+		jObj.put(ProxyClientProtocolID.SEEK, param.get("seek"));
+		jObj.put(ProxyClientProtocolID.DW_LEN, param.get("dwLen"));
+		jObj.put(ProxyClientProtocolID.READLINE, param.get("readLine"));
+		System.out.println("jObj : " + jObj.toJSONString());
+		
+		String IP = strIpAdr;
+		int PORT = Integer.parseInt(strPort);
+		ProxyClientInfoCmmn pcic = new ProxyClientInfoCmmn();
+		
+		Map<String, Object> getConfigResult = new HashMap<String, Object>();
+		getConfigResult = pcic.getConfigFile(IP, PORT, jObj);
+		getConfigResult.put("pry_svr_nm", strPrySvrNm);
+		
+		return getConfigResult;
+	}
+	
 	/**
 	 * proxy / keepavlived 기동-정지 실패 로그 
 	 * @param pry_act_exe_sn
@@ -163,9 +213,9 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		System.out.println("type : " + type);
 		System.out.println("cur_status : " + cur_status);
 		param.put("pry_svr_id", pry_svr_id);
-		if(type.equals("P")){
+		if(type.equals("P") || type.equals("PROXY")){
 			param.put("sys_type", "PROXY");
-		} else if(type.equals("K")) {
+		} else if(type.equals("K") || type.equals("KEEPALIVED")) {
 			param.put("sys_type", "KEEPALIVED");
 		}
 		if(cur_status.equals("TC001501")){
@@ -184,5 +234,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		
 		return result; 
 	}
+
+
 	
 }

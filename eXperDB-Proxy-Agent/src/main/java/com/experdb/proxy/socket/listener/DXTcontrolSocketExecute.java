@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.experdb.proxy.server.PsP001;
 import com.experdb.proxy.server.PsP002;
+import com.experdb.proxy.server.PsP003;
 import com.experdb.proxy.server.PsP004;
 import com.experdb.proxy.server.PsP005;
 import com.experdb.proxy.socket.ProtocolID;
@@ -75,6 +76,12 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					PsP002 psP002 = new PsP002(client, is, os);
 					psP002.execute(strDX_EX_CODE, jObj);
 		
+					break;
+				case TranCodeType.PsP003 ://연결 Test
+					
+					PsP003 psP003 = new PsP003(client, is, os);
+					psP003.execute(strDX_EX_CODE, jObj);
+					
 					break;
 				case TranCodeType.PsP004 : //Config 생성
 					
