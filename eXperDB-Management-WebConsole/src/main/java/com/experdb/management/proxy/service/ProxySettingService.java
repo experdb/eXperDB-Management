@@ -139,4 +139,6 @@ public interface ProxySettingService {
 	public List<Map<String, Object>> selectPoxyAgentSvrList(Map<String, Object> param);
 
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param);
+
+	JSONObject restartAgent(Map<String, Object> param) throws Exception;
 }

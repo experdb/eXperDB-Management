@@ -978,14 +978,14 @@
 			$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", false);
 			proxyServerTable.row('.selected').data().exe_status = "TC001502";
 			proxyServerTable.row('.selected').data().kal_exe_status = "TC001502";
-			//agent에 서버 중지 해달라고 호출
+			//agent에 서비스 중지 해달라고 호출
 			fn_proxy_active_set(proxyServerTable.row('.selected').data().pry_svr_id,"TC001502");
 		}else if (gbn == "start") {
 			//실행
 			$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", true);
 			proxyServerTable.row('.selected').data().exe_status = "TC001501";
 			proxyServerTable.row('.selected').data().kal_exe_status = "TC001501";
-			//agent에 서버 실행 해달라고 호출
+			//agent에 서비스 실행 해달라고 호출
 			fn_proxy_active_set(proxyServerTable.row('.selected').data().pry_svr_id,"TC001501");
 			
 		}else if(gbn == "click_svr_list"){
@@ -1480,13 +1480,13 @@
  				//작업이 완료 되었습니다.
  				if(result.result){
  					fn_init_global_value();
- 					setTimeout(function(){
- 						fn_btn_setEnable("");
- 						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
- 	 				},5000);
+ 					fn_btn_setEnable("");
+ 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
+ 					fn_serverList_search();
  				}else{
  					fn_btn_setEnable("");
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+ 					$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", false);
  				}
  			}
  		});

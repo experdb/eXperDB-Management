@@ -732,16 +732,21 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 					txManager.rollback(status);
 					runRollback = true;
 				}
-				
+				param.put("pry_svr_id", confData.get("pry_svr_id"));
 				//Agent keepalive, haproxy 재구동
-				
-				
+				resultObj = proxySettingService.restartAgent(param);
+
 			}
+		} catch (ConnectException e) {
+			e.printStackTrace();
+			txManager.rollback(status);
+			resultObj.put("result",false);
+			resultObj.put("errMsg","Agent 상태를 확인해주세요.");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("result",false);
 			resultObj.put("errMsg","설정 적용 중 오류가 발생하였습니다.");
-			//if(!runRollback) txManager.rollback(status);
 		}
 		return resultObj;
 	}

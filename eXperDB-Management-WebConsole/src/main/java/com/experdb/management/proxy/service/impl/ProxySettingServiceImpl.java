@@ -1,6 +1,7 @@
 package com.experdb.management.proxy.service.impl;
 
 import java.net.ConnectException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -473,9 +474,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	public JSONObject applyProxyConf(Map<String, Object> param, JSONObject confData) throws Exception {
+	public JSONObject applyProxyConf(Map<String, Object> param, JSONObject confData) throws ConnectException, Exception {
 		JSONObject resultObj = new JSONObject();
-
 		//DB Data insert/update/delete
 		int prySvrId = getIntOfJsonObj(confData,"pry_svr_id");
 		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
@@ -492,15 +492,13 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		global.setPry_glb_id(getIntOfJsonObj(confData,"pry_glb_id"));
 		global.setMax_con_cnt(getIntOfJsonObj(confData,"max_con_cnt"));
 		global.setLst_mdfr_id(lst_mdfr_id);
-		
-		System.out.println("update global conf info ----------------------------------------");
-
 		//update global conf Info
 		proxySettingDAO.updateProxyGlobalConf(global);
-
+		
 		JSONArray vipcngJArray = (JSONArray)confData.get("vipcng");
+		
 		int vipcngSize = vipcngJArray.size();
-
+		
 		if (vipcngSize > 0) {
 			ProxyVipConfigVO vipConf[] = new ProxyVipConfigVO[vipcngSize];
 			
@@ -522,9 +520,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				vipConf[i].setState_nm(getStringOfJsonObj(vipcngJobj,"state_nm"));
 				vipConf[i].setLst_mdfr_id(lst_mdfr_id);
 				
-				System.out.println("insert/update vip instance info ----------------------------------------");
-				System.out.println(CommonUtil.toMap(vipConf[i]).toString());
-				
 				//insert/update vip instance
 				proxySettingDAO.insertUpdatePryVipConf(vipConf[i]);
 			}
@@ -542,9 +537,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				delVipConf[i] = new ProxyVipConfigVO();
 				delVipConf[i].setPry_svr_id(prySvrId);
 				delVipConf[i].setVip_cng_id(getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
-				
-				System.out.println("delete vip instance info ----------------------------------------");
-				System.out.println(CommonUtil.toMap(delVipConf[i]).toString());
 				
 				//delete vip instance
 				proxySettingDAO.deletePryVipConf(delVipConf[i]);
@@ -578,9 +570,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				listener[i].setField_val(getStringOfJsonObj(listenerObj, "field_val"));
 				listener[i].setLst_mdfr_id(lst_mdfr_id);
 				
-				System.out.println("insert/update proxy listenener info ----------------------------------------");
-				System.out.println(CommonUtil.toMap(listener[i]).toString());
-				
 				//UPDATE/INSERT PROXY LISTENER
 				proxySettingDAO.insertUpdatePryListener(listener[i]);
 
@@ -601,7 +590,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 							}else{
 								int newLsnId = proxySettingDAO.selectPryListenerMaxId();
 
-								System.out.println("newLsnID ----------------------------------------------------------------- :: "+newLsnId);
 								listnSvr[j].setLsn_id(newLsnId);
 							}
 							
@@ -613,9 +601,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 							listnSvr[j].setChk_portno(getIntOfJsonObj(listnSvrObj, "chk_portno"));
 							listnSvr[j].setBackup_yn(getStringOfJsonObj(listnSvrObj,"backup_yn"));
 							listnSvr[j].setLst_mdfr_id(lst_mdfr_id);
-							
-							System.out.println("insert/update proxy listenener Server info ----------------------------------------");
-							System.out.println(CommonUtil.toMap(listnSvr[j]).toString());
 							
 							//UPDATE/INSERT PROXY LISTENER Server List
 							proxySettingDAO.insertUpdatePryListenerSvr(listnSvr[j]);
@@ -636,8 +621,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 							delListnSvr[j].setLsn_id(getIntOfJsonObj(delListnSvrObj, "lsn_id"));
 							delListnSvr[j].setLsn_svr_id(getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
 							delListnSvr[j].setDb_con_addr(getStringOfJsonObj(delListnSvrObj, "db_con_addr"));
-							System.out.println("delete proxy listenener Server info ----------------------------------------");
-							System.out.println(CommonUtil.toMap(delListnSvr[j]).toString());
 							
 							//delete proxy listener server list
 							proxySettingDAO.deletePryListenerSvr(delListnSvr[j]);
@@ -669,15 +652,14 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		
 		
 		//Agent에 넘겨줄 Data JSONObject로 생성
-		JSONObject agentJobj = new JSONObject();
+		
 		Map<String, Object> agentParam = new HashMap<String,Object>();
 		agentParam.put("pry_svr_id", prySvrId);
 		
-		/*Global, Listener, Listener Server List, Vip Instance 정보 JSONObject 생성 
-		{global_info:{}, listener_list : [{...server_list : [{]}], vipconfig_list : []} */
-		
 		//GLOBAL 정보
 		JSONObject globalJObj = proxySettingDAO.selectProxyGlobal(agentParam).toJSONObject();
+		
+		JSONObject agentJobj = new JSONObject();
 		agentJobj.put("global_info", globalJObj);
 		
 		//LISTENER 정보
@@ -705,22 +687,24 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		}
 		agentJobj.put("vipconfig_list", vipConfgJArr);
 		agentJobj.put("lst_mdfr_id", lst_mdfr_id);
-		//Agent 접속 정보 추출 
-		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
-		Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
-		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
-		agentConnectResult = cic.createProxyConfigFile(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(), agentJobj);
 		
 		boolean createNewConfig = false;
 		String resultLog = "";
 		String errMsg = "";
+		
+		//Agent 접속 정보 추출 
+		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
+		Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
+		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		try{
+			agentConnectResult = cic.createProxyConfigFile(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(), agentJobj);
+		}catch(ConnectException e){
+			throw e;
+		}
+	
 		//String result_code = "";
 		if (agentConnectResult != null) {
-			System.out.println(agentConnectResult.toString());
-			JSONParser parser = new JSONParser();
-			Object obj = parser.parse(agentConnectResult.get("RESULT_DATA").toString());
-			JSONObject agentResult = (JSONObject)obj;
-			if ("0".equals(agentResult.get("errcd").toString())) {
+			if ("0".equals(agentConnectResult.get("RESULT_CODE"))) {
 				createNewConfig = true;
 				resultLog = "success";
 				errMsg= "작업이 완료되었습니다.";
@@ -797,5 +781,66 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	@Override
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param) {
 		return proxySettingDAO.selectMasterProxyList(param);
+	}
+
+	@Override
+	public JSONObject restartAgent(Map<String, Object> param) throws ConnectException, Exception{
+		JSONObject resultObj = new JSONObject();
+
+		int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
+		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
+		
+		JSONObject agentJobj = new JSONObject();
+		agentJobj.put("pry_svr_id", prySvrId);
+		agentJobj.put("lst_mdfr_id", lst_mdfr_id);
+		
+		boolean restart = false;
+		String resultLog = "";
+		String errMsg = "";
+		
+		//Agent 접속 정보 추출 
+		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+		Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
+		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		
+		try{
+			agentConnectResult = cic.restartAgent(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+		}catch(ConnectException e){
+			throw e;
+		}
+		
+		if (agentConnectResult != null) {
+			System.out.println(agentConnectResult.toString());
+			if ("0".equals(agentConnectResult.get("RESULT_CODE"))) {
+				restart = true;
+				resultLog = "success";
+				if("TC001501".equals(agentConnectResult.get("PRY_ACT_RESULT")) && "TC001501".equals(agentConnectResult.get("KAL_ACT_RESULT"))){
+					errMsg= "정상적으로 재구동 되었습니다.";	
+				}else if("TC001502".equals(agentConnectResult.get("PRY_ACT_RESULT")) && "TC001501".equals(agentConnectResult.get("KAL_ACT_RESULT"))){
+					restart = false;
+					errMsg= "Proxy 구동이 실패 하였습니다.";
+				}else if("TC001501".equals(agentConnectResult.get("PRY_ACT_RESULT")) && "TC001502".equals(agentConnectResult.get("KAL_ACT_RESULT"))){
+					restart = false;
+					errMsg= "Keepalived 구동이 실패 하였습니다.";
+				}else{
+					System.out.println("PryActResult/KalActResult :: "+agentConnectResult.get("PRY_ACT_RESULT") + " / "+agentConnectResult.get("KAL_ACT_RESULT"));
+					restart = false;
+					errMsg= "Proxy/Keepalived 구동이 실패 하였습니다.";
+				}
+			}else{
+				restart = false;
+				resultLog = "faild";
+				errMsg= "Agent 재구동  중 오류가 발생하였습니다.";
+			}
+		}else{
+			restart = false;
+			resultLog = "faild";
+			errMsg= "Agent 재구동  요청 중 오류가  발생하였습니다.";
+		}
+		resultObj.put("resultLog", resultLog);
+		resultObj.put("result",restart);
+		resultObj.put("errMsg",errMsg);
+		
+		return resultObj;
 	}
 }

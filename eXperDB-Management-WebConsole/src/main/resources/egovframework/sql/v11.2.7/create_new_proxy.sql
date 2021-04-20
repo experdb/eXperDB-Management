@@ -305,7 +305,7 @@ CREATE TABLE experdb_management.t_pry_actstate_cng_g (
 	act_exe_type varchar(20) NOT NULL,      	              -- 기동_실행_유형
 	wrk_dtm timestamp NOT NULL DEFAULT clock_timestamp(),     -- 작업_시간
 	exe_rslt_cd varchar(20) NOT NULL DEFAULT 'TC001501',      -- 실행_결과_코드
-	rslt_msg varchar(20) NULL,                                -- 결과_메세지
+	rslt_msg varchar(300) NULL,                                -- 결과_메세지
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                              -- 최종_수정자_ID
