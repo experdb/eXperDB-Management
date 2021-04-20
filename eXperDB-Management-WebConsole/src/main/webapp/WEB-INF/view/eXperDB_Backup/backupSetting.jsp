@@ -476,14 +476,14 @@ function fn_nodeRegPopup() {
  ******************************************************** */
 	
 	function fn_scheduleRegPopoup() {
-		var data = NodeList.rows('.selected').data();
+		/* var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
 			showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
-		}else{
+		}else{ */
 			fn_scheduleRegReset();
 			$("#pop_layer_popup_backupSchedule").modal("show");
-		}
+		// }
 	}
 	
 	// schedule Insert per day
@@ -570,7 +570,9 @@ function fn_nodeRegPopup() {
 		aaa = schData;
 		console.log("#### schData : " + schData);
 		console.log("#### schData.length : " + schData.length);
-		
+		for(var a : schData){
+			
+		}
 		
 		// var rowIndex = scheduleList.cell('.selected').index().row;
 		// var dayIndex = scheduleList.cell('.selected').index().column;
@@ -664,6 +666,9 @@ function fn_nodeRegPopup() {
 	}
 
 function fn_filter(){
+	var serverIp = NodeList.row('.selected').data().ipadr;
+	console.log("@@@@" + serverIp);
+	$("#serverIpadr").val(serverIp);
 	$('#pop_layer_popup_backupVolumeFilter').modal("show");
 }
 
@@ -674,7 +679,7 @@ function fn_filter(){
   function fn_backupDelPopup(){
 		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
-			showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code::="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else if(jobExist!= 1){
 			showSwalIcon('<spring:message code="eXperDB_backup.msg12" />', '<spring:message code="common.close" />', '', 'error');
@@ -754,6 +759,7 @@ table.dataTable.ccc thead th{
 	<input type="hidden" name="bckCompressVal"  id="bckCompressVal" >
 	<input type="hidden" name="bckSetDateTypeVal"  id="bckSetDateTypeVal" >
 	<input type="hidden" name="bckSetDateVal" id="bckSetDateVal">
+	<input type="hidden" name="serverIpadr" id="serverIpadr">
 </form>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
