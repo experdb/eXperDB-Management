@@ -22,7 +22,14 @@
 	*
 	*/
 %>
-
+<script>
+/* ********************************************************
+ *파일 다운로드
+ ******************************************************** */
+function fn_dn_report(path){
+	location.href="/db2pg/popup/db2pgFileDownload.do?name=report.html&path="+path;
+}
+</script>
 
 <div class="modal fade" id="pop_layer_db2pgResult" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
@@ -70,6 +77,9 @@
 																	<td class="bg-info text-white"><spring:message code="schedule.result" /></td>
 																	<td style="text-align: left"><div id="mig_result_exe_rslt_cd" ></div>																
 																	</td>
+																</tr>
+																<tr>
+																	<td style="text-align: center" colspan="2"><div id="mig_result_exe_rslt_report" ></div></td>
 																</tr> 
 															</tbody>
 														</table>

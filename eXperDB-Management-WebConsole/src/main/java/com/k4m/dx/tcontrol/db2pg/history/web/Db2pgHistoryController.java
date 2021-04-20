@@ -191,6 +191,7 @@ public class Db2pgHistoryController {
 
 		mv.addObject("result",result);
 		mv.addObject("db2pgResult",db2pgResult);
+		mv.addObject("trans_save_pth",request.getParameter("trans_save_pth"));
 		
 		return mv;
 	}	
