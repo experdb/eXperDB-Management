@@ -63,6 +63,9 @@ import org.json.simple.parser.JSONParser;
  * 31.  dump restore log 조회
  * 32. switch wal file
  * 
+ * 
+ * 
+ * 42. 백업 볼륨리스트 조회
  * @author thpark
  *
  */
@@ -72,7 +75,7 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "192.168.56.130";
+		String Ip = "192.168.20.127";
 		//Ip = "192.168.56.108";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
@@ -135,7 +138,9 @@ public class ClientTester {
 			//clientTester.dxT032(Ip, port);
 			
 			
-			clientTester.dxT038(Ip, port);
+			//clientTester.dxT038(Ip, port);
+			
+			clientTester.dxT042(Ip, port);
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -2709,4 +2714,60 @@ private void dxT038(String Ip, int port) {
 			e.printStackTrace();
 		}
 	}
+
+
+
+private void dxT042(String Ip, int port) {
+	
+	JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+	JSONObject result = new JSONObject();
+	
+	try {
+
+		
+		JSONObject jObj = new JSONObject();
+				
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT042);
+	
+		JSONObject objList;
+		
+		ClientAdapter CA = new ClientAdapter(Ip, port);
+		CA.open(); 
+		objList = CA.dxT042(jObj);
+
+		CA.close();
+		
+		String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+		
+		
+		List<Object> volumes = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+		
+		if(volumes.size() > 0) {
+			for(int i=0; i<volumes.size(); i++) {
+				JSONObject jsonObj = new JSONObject();
+				Object obj = volumes.get(i);
+				
+				HashMap hp = (HashMap) obj;
+
+				jsonObj.put("mounton", (String) hp.get("mounton"));
+				jsonObj.put("filesystem", (String) hp.get("filesystem"));
+				jsonObj.put("used", (String) hp.get("used"));
+				jsonObj.put("type", (String) hp.get("type"));
+				jsonArray.add(jsonObj);
+
+			}
+		}
+		CA.close();
+		
+		System.out.println(jsonArray);
+		result.put("data", jsonArray);
+			
+		CA.close();
+	} catch(Exception e) {
+		e.printStackTrace();
+	}
+}
 }

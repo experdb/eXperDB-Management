@@ -9,14 +9,24 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
+import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 
 public class ClientInfoCmmn implements Runnable{
+	
+	private ConfigurableApplicationContext context;
+	
 
 	// 1. 서버 연결 테스트 (serverConn)
 	public Map<String, Object> DbserverConn(JSONObject serverObj, String IP, int PORT) {
@@ -90,38 +100,58 @@ public class ClientInfoCmmn implements Runnable{
 
 	// 5. 백업실행
 	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT, ArrayList<String> BCKNM, int db_svr_ipadr_id) {
+		
+		String xml[] = {
+				"egovframework/spring/context-aspect.xml",
+				"egovframework/spring/context-common.xml",
+				"egovframework/spring/context-datasource.xml",
+				"egovframework/spring/context-mapper.xml",
+				"egovframework/spring/context-properties.xml",
+				"egovframework/spring/context-transaction.xml"};
+		
+		context = new ClassPathXmlApplicationContext(xml);
+		context.getAutowireCapableBeanFactory().autowireBeanProperties(this,
+				AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
+		
+		ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");		
+		
 		try {
 			JSONObject reqJObj = new JSONObject();
-			JSONArray arrCmd = new JSONArray();
-
+			JSONObject outputObj = new JSONObject();
 			
+			//작업완료
 			int j = 0;
-			for (int i = 0; i < resultWork.size(); i++) {
-				System.out.println("================================================");	
-				System.out.println("▶▶▶스케줄 시작");			
+			
+			System.out.println(" ");
+			System.out.println(" ");
+			System.out.println(" ");
+						
+			for (int i = 0; i < resultWork.size(); i++) {				
+								
 				if(resultWork.get(i).get("bsn_dscd").equals("TC001901")){
+
+					JSONArray arrCmd = new JSONArray();			
 					JSONObject objJob = new JSONObject();
+					
 					objJob.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
 					objJob.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); // 작업ID
 					objJob.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); // 실행순서
 					objJob.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); // 다음실행여부
 					objJob.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); // db아이디
 					if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
-						System.out.println("▶▶▶ RMAN 백업");
-						System.out.println("▶▶▶명령어 = "+CMD.get(i));
+						System.out.println("> > > > > > > > > > > > > RMAN Backup START");
+						System.out.println("> CMD = "+CMD.get(i));
 						objJob.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
 						objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
 						objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
 					} else {
-						System.out.println("▶▶▶ DUMP 백업");
-						System.out.println("▶▶▶명령어 = "+CMD.get(i));
+						System.out.println("> > > > > > > > > > > > > DUMP Backup START");
+						System.out.println("> CMD = "+CMD.get(i));
 						objJob.put(ClientProtocolID.BCK_OPT_CD, ""); // 백업종류
 						objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로					
 						objJob.put(ClientProtocolID.BCK_FILENM, BCKNM.get(i)); // 저장파일명					
 						objJob.put(ClientProtocolID.BCK_MTN_ECNT, resultWork.get(i).get("bck_mtn_ecnt"));//백업유지개수
 						objJob.put(ClientProtocolID.FILE_STG_DCNT, resultWork.get(i).get("file_stg_dcnt")); // 파일보관일수
-						System.out.println("백업유지개수="+resultWork.get(i).get("bck_mtn_ecnt"));
-						System.out.println("파일보관일수="+resultWork.get(i).get("file_stg_dcnt"));
 					}
 					objJob.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(i).get("bck_bsn_dscd")); //백업종류(RMAN or DUMP)
 					objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
@@ -135,7 +165,7 @@ public class ClientInfoCmmn implements Runnable{
 					// [pg_rman validate -B 백업경로] 정합성 체크하는 명령어, 안할실 복구불가능
 					// rman은 두번 실행되기때문에 두번째 실행시, LOG_YN=N으로 해주면서, 업데이트 및 이력이 남지않도록한다 
 					if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
-						System.out.println("▶▶▶ RMAN Validataion 시작");
+						System.out.println("> RMAN Validataion START");
 						j++;
 						JSONObject objJob2 = new JSONObject();
 						objJob2.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
@@ -148,16 +178,38 @@ public class ClientInfoCmmn implements Runnable{
 						objJob2.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
 						objJob2.put(ClientProtocolID.LOG_YN, "N"); // 로그저장 유무
 						objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B " + resultWork.get(i).get("bck_pth"));// 명령어
-						System.out.println("▶▶▶Validate 명령어 = "+objJob2.get(ClientProtocolID.REQ_CMD));
+						System.out.println("> Validate CMD = "+objJob2.get(ClientProtocolID.REQ_CMD));
 						objJob2.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(i).get("bck_bsn_dscd"));
 						objJob2.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);
 						objJob2.put(ClientProtocolID.BSN_DSCD, resultWork.get(i).get("bsn_dscd"));
 						arrCmd.add(j, objJob2);
 					}
-					j++;
+					
+					JSONObject serverObj = new JSONObject();
+
+					serverObj.put(ClientProtocolID.SERVER_NAME, "");
+					serverObj.put(ClientProtocolID.SERVER_IP, "");
+					serverObj.put(ClientProtocolID.SERVER_PORT, "");
+
+					reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
+					reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+					reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
+
+					ClientAdapter CA = new ClientAdapter(IP, PORT);
+					CA.open();
+					outputObj = CA.dxT005(reqJObj);
+					CA.close();
+			
+					System.out.println(">> > > > > > > > > >> > >  > > Backup END");
+					System.out.println(" ");
+					System.out.println(" ");
+					System.out.println(" ");
+				
 				}else if(resultWork.get(i).get("bsn_dscd").equals("TC001902")){
-					System.out.println("▶▶▶ 스크립트 실행");
-					System.out.println("▶▶▶명령어 = "+CMD.get(i));
+					System.out.println("> > > > > > > > > > > > > Script Batch START");
+					System.out.println("> CMD = "+CMD.get(i));
+					
+					JSONArray arrCmd = new JSONArray();
 					JSONObject objJob3 = new JSONObject();
 					objJob3.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
 					objJob3.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); // 작업ID
@@ -172,13 +224,79 @@ public class ClientInfoCmmn implements Runnable{
 					objJob3.put(ClientProtocolID.BCK_BSN_DSCD, "");
 					objJob3.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);
 					objJob3.put(ClientProtocolID.BSN_DSCD, resultWork.get(i).get("bsn_dscd"));
-					arrCmd.add(j, objJob3);
-					j++;
+					arrCmd.add(0, objJob3);
+					
+					//j++;
+					JSONObject serverObj = new JSONObject();
+
+					serverObj.put(ClientProtocolID.SERVER_NAME, "");
+					serverObj.put(ClientProtocolID.SERVER_IP, "");
+					serverObj.put(ClientProtocolID.SERVER_PORT, "");
+
+					reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
+					reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+					reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
+
+					ClientAdapter CA = new ClientAdapter(IP, PORT);
+					CA.open();
+					outputObj =CA.dxT005(reqJObj);
+					CA.close();
+					
+					System.out.println("> > > > > > > > > > > > > > > > Script Batch END");
+					System.out.println(" ");
+					System.out.println(" ");
+					System.out.println(" ");
+					
+				}else{
+					
+					System.out.println("> > > > > > > > > > > > > > > > DB2PG START");
+					
+					int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());						
+					String oldSavePath = scheduleService.selectOldSavePath(wrk_id);
+							
+					System.out.println("wrk_id= " +  wrk_id);
+					System.out.println("DB2PG oldSavePath = "+ oldSavePath);
+											
+					int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ();
+					int intGrpSeq = scheduleService.selectQ_WRKEXE_G_02_SEQ();
+					WrkExeVO vo = new WrkExeVO();
+									
+					String db2pg = resultWork.get(i).get("bsn_dscd").toString();
+					
+					Map<String, Object> result = null;
+					//Map<String, Object> param = new HashMap<String, Object>();
+					
+					JSONObject obj = new JSONObject();
+					obj.put("wrk_nm", resultWork.get(i).get("wrk_nm"));		
+					obj.put("oldSavePath", oldSavePath);
+					obj.put("wrk_id", resultWork.get(i).get("wrk_id"));
+					obj.put("lst_mdfr_id", resultWork.get(i).get("lst_mdfr_id"));
+									
+					vo.setExe_sn(intSeq);
+					vo.setScd_id(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
+					vo.setWrk_id(Integer.parseInt(resultWork.get(i).get("wrk_id").toString()));
+					vo.setExe_grp_sn(intGrpSeq);
+					
+					scheduleService.insertT_WRKEXE_G(vo);
+					
+					result  = DB2PG_START.db2pgStart(obj);
+					
+					if(result.get("RESULT").equals("SUCCESS")){
+						vo.setExe_rslt_cd("TC001701");
+					}else{
+						vo.setExe_rslt_cd("TC001702");
+					}
+					
+					scheduleService.updateScheduler(vo);
+					
+					System.out.println(" ");
+					System.out.println(" ");
+					System.out.println(" ");
+										
 				}
-				
 			}
 			
-			JSONObject serverObj = new JSONObject();
+			/*JSONObject serverObj = new JSONObject();
 
 			serverObj.put(ClientProtocolID.SERVER_NAME, "");
 			serverObj.put(ClientProtocolID.SERVER_IP, "");
@@ -191,8 +309,8 @@ public class ClientInfoCmmn implements Runnable{
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 			CA.dxT005(reqJObj);
-			CA.close();
-			
+			CA.close();*/
+			System.out.println(">Schedule END ================================================");	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2148,5 +2266,62 @@ System.out.println("=====cmd" + cmd);
 		return result;
 	}
 	
+	
+	
+	public JSONObject  getVolumes(String IP, int PORT) {
+		
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+		JSONObject result = new JSONObject();
+		
+		JSONObject resultHp = null;
+		try {
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT042);
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			objList = CA.dxT042(jObj);
+
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+	
+			List<Object> volumes = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			if(volumes.size() > 0) {
+				for(int i=0; i<volumes.size(); i++) {
+					JSONObject jsonObj = new JSONObject();
+					Object obj = volumes.get(i);
+					
+					HashMap hp = (HashMap) obj;
+
+					jsonObj.put("mounton", (String) hp.get("mounton"));
+					jsonObj.put("filesystem", (String) hp.get("filesystem"));
+					jsonObj.put("size", (String) hp.get("size"));
+					jsonObj.put("used", (String) hp.get("used"));
+					jsonObj.put("avail", (String) hp.get("avail"));
+					jsonObj.put("use", (String) hp.get("use"));
+					jsonObj.put("type", (String) hp.get("type"));
+					jsonArray.add(jsonObj);
+				}
+			}
+			CA.close();
+			
+			System.out.println(jsonArray);
+			result.put("data", jsonArray);
+				
+			CA.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 }
