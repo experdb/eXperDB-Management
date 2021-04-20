@@ -570,8 +570,10 @@ function fn_nodeRegPopup() {
 		aaa = schData;
 		console.log("#### schData : " + schData);
 		console.log("#### schData.length : " + schData.length);
-		for(var a : schData){
-			
+		for(var i =0 ;i<schData.length; i++){
+			var rowIndex = schData[0][i].row;
+			var colIndex = schData[0][i].column;
+			console.log("index!!! : " + rowIndex + " //// " + colIndex);
 		}
 		
 		// var rowIndex = scheduleList.cell('.selected').index().row;
@@ -679,7 +681,7 @@ function fn_filter(){
   function fn_backupDelPopup(){
 		var data = NodeList.rows('.selected').data();
 		if(data.length < 1){
-			showSwalIcon('<spring:message code::="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_backup.msg4" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else if(jobExist!= 1){
 			showSwalIcon('<spring:message code="eXperDB_backup.msg12" />', '<spring:message code="common.close" />', '', 'error');
