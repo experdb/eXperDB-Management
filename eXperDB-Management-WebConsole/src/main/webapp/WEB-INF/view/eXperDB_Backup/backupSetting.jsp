@@ -123,7 +123,7 @@ function fn_init() {
 		paging : false,
 		deferRender : true,
 		info : false,
-		select : {'items' : 'cell', 'style' : 'single'},
+		select : {'items' : 'cell', 'style' : 'multi'},
 		bSort : false,
 		"language" : {
 			"emptyTable" : " "
@@ -564,6 +564,20 @@ function fn_nodeRegPopup() {
 		fn_alertShow();
 	}
 	
+	function fn_aaa(){
+		var schData = scheduleList.cells('.selected').data();
+		console.log("#### schData : " + schData);
+		console.log("#### schData.length : " + schData.length);
+		console.log("#### schData.1 : " + schData[0].index().row);
+		console.log("#### schData.1 : " + schData[0].index().column);
+		
+		// var rowIndex = scheduleList.cell('.selected').index().row;
+		// var dayIndex = scheduleList.cell('.selected').index().column;
+		// console.log("### row : " + rowIndex);
+		// console.log("### col : " + dayIndex);
+		
+	}
+	
 /* ********************************************************
  * apply
  ******************************************************** */
@@ -648,6 +662,10 @@ function fn_nodeRegPopup() {
 		return true;
 	}
 
+function fn_filter(){
+	$('#pop_confirm_multi_md').modal("show");
+}
+
  /* ********************************************************
   * backup delete popup
   ******************************************************** */
@@ -727,6 +745,7 @@ table.dataTable.ccc thead th{
 <%@include file="./popup/bckNodeRegForm.jsp"%>
 <%@include file="./popup/bckPolicyRegForm.jsp"%>
 <%@include file="./popup/bckScheduleRegForm.jsp"%>
+<%@include file="./popup/bckVolumeForm.jsp"%>
 
 <form name="storeInfo">
 	<input type="hidden" name="jobNameVal" id="jobNameVal">
@@ -779,7 +798,10 @@ table.dataTable.ccc thead th{
 				</div>
 			</div>
 		</div>
-		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
+		
+		
+		
+		<%-- <div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div class="table-responsive" style="overflow:hidden;">
 					<div class="row" style="float: right;width: 530px;">					
@@ -797,6 +819,9 @@ table.dataTable.ccc thead th{
 							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
 								<i class="fa fa-check btn-icon-prepend "></i><spring:message code="common.apply" />
 							</button>
+							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_filter()">
+								<i class="fa fa-check btn-icon-prepend "></i><spring:message code="common.apply" />
+							</button>
 							<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_backupDelPopup()">
 								<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 							</button>
@@ -804,9 +829,8 @@ table.dataTable.ccc thead th{
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> --%>
 		<!-- node list -->
-		
 		
 		<div class="col-lg-5 grid-margin stretch-card">
 			<div class="card">
@@ -840,10 +864,37 @@ table.dataTable.ccc thead th{
 			</div>
 		</div>
 		<!-- node list end-->
+		
+		<!-- policy -->
 		<div class="col-lg-7 grid-margin stretch-card">
 			<div class="card"  style="padding-left: 0px;">
+				<div class="table-responsive row" style="overflow:hidden;padding-right: 25px;">	
+					<div class="row" style="padding-left: 320px;margin-bottom: -10;padding-top: 10px;padding-bottom: -10;">			
+						<div class="tooltip-static-demo" id="applyAlertTooltip">
+							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; display:none;">
+								<div class="arrow"></div>
+								<div class="tooltip-inner" style="width: 250px;"><spring:message code="eXperDB_backup.msg14" /></div>
+							</div>
+							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert_none" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; width: 263px; ">
+								
+							</div>
+						</div>
+						
+						<div id="wrt_button" style="float: right;">
+							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
+								<i class="fa fa-check btn-icon-prepend "></i><spring:message code="common.apply" />
+							</button>
+							<button type="button" class="btn btn-warning btn-icon-text mb-2" style="color:white;" onclick="fn_filter()">
+								<i class="mdi mdi-filter-outline "></i>Volume
+							</button>
+							<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_backupDelPopup()">
+								<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+							</button>
+						</div>
+					</div>
+				</div>
 				<!-- full backup setting start -->
-				<div class="card-body" style="padding-top: 20px;height: 280px;">	
+				<div class="card-body" style="padding-top: 20px;height: 280px;padding-top: 0px;">	
 					<div class="card my-sm-2" style="height: 262px;" >
 						<div class="card-body" >
 							 <div class="row" style="margin-top:-20px;"  id="schedule_button">
@@ -896,7 +947,7 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<div style="position: absolute;top:22px; right:730px; width: 155px;">
+					<div style="position: absolute;top:70px; right:730px; width: 155px;">
 						<h4 class="card-title" style="background-color: white;font-size: 1em; color:black;">
 							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg21" />
 						</h4>
@@ -949,7 +1000,7 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<div style="position: absolute;top:320px; right:660px; width:215px;">					
+					<div style="position: absolute;top:365px; right:660px; width:215px;">					
 						<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
 							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg22" />
 						</h4>
