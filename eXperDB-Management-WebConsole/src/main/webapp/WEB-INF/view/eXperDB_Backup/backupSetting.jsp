@@ -564,12 +564,13 @@ function fn_nodeRegPopup() {
 		fn_alertShow();
 	}
 	
+	var aaa;
 	function fn_aaa(){
-		var schData = scheduleList.cells('.selected').data();
+		var schData = scheduleList.cells('.selected');
+		aaa = schData;
 		console.log("#### schData : " + schData);
 		console.log("#### schData.length : " + schData.length);
-		console.log("#### schData.1 : " + schData[0].index().row);
-		console.log("#### schData.1 : " + schData[0].index().column);
+		
 		
 		// var rowIndex = scheduleList.cell('.selected').index().row;
 		// var dayIndex = scheduleList.cell('.selected').index().column;
@@ -663,7 +664,7 @@ function fn_nodeRegPopup() {
 	}
 
 function fn_filter(){
-	$('#pop_confirm_multi_md').modal("show");
+	$('#pop_layer_popup_backupVolumeFilter').modal("show");
 }
 
  /* ********************************************************
