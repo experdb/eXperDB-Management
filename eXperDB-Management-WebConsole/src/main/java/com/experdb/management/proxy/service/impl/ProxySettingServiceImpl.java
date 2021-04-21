@@ -198,23 +198,91 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	public JSONObject runProxyServer(Map<String, Object> param) throws Exception {
+	public JSONObject runProxyService(Map<String, Object> param) throws ConnectException, Exception {
 		JSONObject resultObj = new JSONObject();
 
-		try {
-			//처리로직 들어가야함
-			proxySettingDAO.updateProxyServerStatus(param);
-			
-			resultObj.put("errcd", 0);
-			resultObj.put("errMsg", "정상적으로 처리되었습니다.");
-			
-		} catch (Exception e) {
-			resultObj.put("errcd", -1);
-			resultObj.put("errmsg", "작업 중 요류가 발생하였습니");
-			
-			e.printStackTrace();
+		int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
+		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
+		String status = param.get("status").toString();
+		
+		
+		boolean proxyExecute = false;
+		boolean keepaExecute = false;
+		
+		String resultLog = "";
+		String errMsg = "";
+		
+		//Agent 접속 정보 추출 
+		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+		Map<String, Object> proxyExecuteResult = new  HashMap<String, Object>();
+		Map<String, Object> keepaExecuteResult = new  HashMap<String, Object>();
+		
+		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		JSONObject agentJobj = new JSONObject();
+		
+		if("TC001502".equals(status)) agentJobj.put("act_type", "S");
+		else agentJobj.put("act_type", "A");
+		
+		agentJobj.put("pry_svr_id", prySvrId);
+		agentJobj.put("lst_mdfr_id", lst_mdfr_id);
+		
+		try{
+			agentJobj.put("sys_type", "PROXY");
+			System.out.println("proxyServiceExcute :1: "+agentJobj.toJSONString());
+			proxyExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+		}catch(ConnectException e){
+			throw e;
 		}
-
+		
+		if (proxyExecuteResult != null) {
+			System.out.println(proxyExecuteResult.toString());
+			if (status.equals(proxyExecuteResult.get("EXECUTE_RESULT"))) {
+				proxyExecute = true;
+			}else{
+				proxyExecute = false;
+			}
+		}else{
+			proxyExecute = false;
+		}
+		
+		try{
+			agentJobj.remove("sys_type");
+			agentJobj.put("sys_type", "KEEPALIVED");
+			System.out.println("proxyServiceExcute :2: "+agentJobj.toJSONString());
+			keepaExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+		}catch(ConnectException e){
+			throw e;
+		}
+		
+		if (keepaExecuteResult != null) {
+			System.out.println(keepaExecuteResult.toString());
+			if (status.equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
+				keepaExecute = true;
+			}else{
+				keepaExecute = false;
+			}
+		}else{
+			keepaExecute = false;
+		}
+		
+		if(!proxyExecute || !keepaExecute){
+			if(!proxyExecute){
+				errMsg = "Proxy";
+			}
+			if(!keepaExecute){
+				if(!errMsg.equals("")) errMsg += " / Keepalived";
+				else errMsg += "Keepalived";	
+			}
+			if("TC001502".equals(status)) errMsg +=" 서비스 중단이 실패하였습니다.";
+			else errMsg +=" 서비스 시작이 실패하였습니다.";
+		}else{
+			errMsg = "정상적으로 처리되었습니다.";
+		}
+		
+		resultObj.put("resultLog", resultLog);
+		resultObj.put("result",(proxyExecute && keepaExecute));
+		resultObj.put("errMsg",errMsg);
+		
 		return resultObj;
 	}
 

@@ -116,8 +116,8 @@ public class ProxyClientInfoCmmn implements Runnable{
 		result.put("ERR_CODE", strErrCode);
 		result.put("ERR_MSG", strErrMsg);
 		result.put("RESULT_DATA", strResultData);
-		result.put("PRY_PTH", (String)objList.get("PRY_PTH"));
-		result.put("KAL_PTH", (String)objList.get("KAL_PTH"));
+		result.put("PRY_PTH", (String)objList.get(ProxyClientProtocolID.PRY_PTH));
+		result.put("KAL_PTH", (String)objList.get(ProxyClientProtocolID.KAL_PTH));
 				
 		return result;
 	}
@@ -147,8 +147,8 @@ public class ProxyClientInfoCmmn implements Runnable{
 		result.put("ERR_CODE", strErrCode);
 		result.put("ERR_MSG", strErrMsg);
 		result.put("RESULT_DATA", strResultData);
-		result.put("PRY_ACT_RESULT", (String)objList.get("PRY_ACT_RESULT"));
-		result.put("KAL_ACT_RESULT", (String)objList.get("KAL_ACT_RESULT"));
+		result.put("PRY_ACT_RESULT", (String)objList.get(ProxyClientProtocolID.PRY_ACT_RESULT));
+		result.put("KAL_ACT_RESULT", (String)objList.get(ProxyClientProtocolID.KAL_ACT_RESULT));
 				
 		return result;
 	}
@@ -177,6 +177,35 @@ public class ProxyClientInfoCmmn implements Runnable{
 		result.put("ERR_CODE", strErrCode);
 		result.put("ERR_MSG", strErrMsg);
 		result.put("RESULT_DATA", strResultData);
+				
+		return result;
+	}
+
+	public Map<String, Object> proxyServiceExcute(String IP, int PORT, JSONObject jObj) throws ConnectException, Exception {
+		Map<String, Object> result = new HashMap<>();
+		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP006);
+		JSONObject objResult;
+		
+		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
+		
+		PCA.open();
+		
+		objResult = PCA.psP006(jObj);
+		
+		PCA.close();
+		
+		String strErrMsg = (String)objResult.get(ProxyClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objResult.get(ProxyClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objResult.get(ProxyClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objResult.get(ProxyClientProtocolID.RESULT_CODE);
+		String strResultData = (String)objResult.get(ProxyClientProtocolID.RESULT_DATA);
+		
+		
+		result.put("RESULT_CODE", strResultCode);
+		result.put("ERR_CODE", strErrCode);
+		result.put("ERR_MSG", strErrMsg);
+		result.put("RESULT_DATA", strResultData);
+		result.put("EXECUTE_RESULT", (String)objResult.get(ProxyClientProtocolID.EXECUTE_RESULT));
 				
 		return result;
 	}

@@ -44,4 +44,10 @@ public class ProxyClientProtocolID {
 	public static final String SEEK = "SEEK";
 	public static final String READLINE = "READLINE";
 	
+	public static final String PRY_ACT_RESULT = "PRY_ACT_RESULT"; //haproxy 실행 결과
+	public static final String KAL_ACT_RESULT = "KAL_ACT_RESULT"; //keepalived 실행 결과
+	public static final String EXECUTE_RESULT = "EXECUTE_RESULT"; //실행 결과
+	public static final String PRY_PTH = "PRY_PTH"; //haproxy config 백업 경로
+	public static final String KAL_PTH = "KAL_PTH"; //keepalived config 백업 경로
+	
 }

@@ -439,8 +439,8 @@ public class ProxySettingController {
 	 * @return resultObj
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/runProxyServer.do")
-	public @ResponseBody JSONObject runProxyServer(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/runProxyService.do")
+	public @ResponseBody JSONObject runProxyService(HttpServletRequest request, HttpServletResponse response) {
 	
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -461,13 +461,17 @@ public class ProxySettingController {
 				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))  ? request.getParameter("pry_svr_id").toString() : "0");
 
 				param.put("pry_svr_id", prySvrId);
-				param.put("exe_status", request.getParameter("exe_status")==null ? "" : request.getParameter("exe_status").toString());
-				param.put("kal_exe_status", request.getParameter("exe_status")==null ? "" : request.getParameter("exe_status").toString());
+				param.put("status", request.getParameter("status")==null ? "" : request.getParameter("status").toString());
 				param.put("use_yn", "Y");
 				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
 
-				resultObj = proxySettingService.runProxyServer(param);
+				resultObj = proxySettingService.runProxyService(param);
 			}
+		}  catch (ConnectException e) {
+			e.printStackTrace();
+			resultObj.put("errcd", -1);
+			resultObj.put("errMsg","Agent 상태를 확인해주세요.");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);

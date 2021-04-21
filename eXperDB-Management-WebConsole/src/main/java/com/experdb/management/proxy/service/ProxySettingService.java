@@ -73,7 +73,7 @@ public interface ProxySettingService {
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	public JSONObject runProxyServer(Map<String, Object> param) throws Exception;
+	public JSONObject runProxyService(Map<String, Object> param) throws Exception;
 
 	/**
 	 * Proxy 서버 연결 테스트

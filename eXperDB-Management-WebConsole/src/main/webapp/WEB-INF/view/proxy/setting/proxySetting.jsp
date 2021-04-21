@@ -975,16 +975,16 @@
 			fn_proxy_del();
 		}else if (gbn == "stop") {
 			//중지
-			$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", false);
-			proxyServerTable.row('.selected').data().exe_status = "TC001502";
-			proxyServerTable.row('.selected').data().kal_exe_status = "TC001502";
+			//$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", false);
+			//proxyServerTable.row('.selected').data().exe_status = "TC001502";
+			//proxyServerTable.row('.selected').data().kal_exe_status = "TC001502";
 			//agent에 서비스 중지 해달라고 호출
 			fn_proxy_active_set(proxyServerTable.row('.selected').data().pry_svr_id,"TC001502");
 		}else if (gbn == "start") {
 			//실행
-			$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", true);
-			proxyServerTable.row('.selected').data().exe_status = "TC001501";
-			proxyServerTable.row('.selected').data().kal_exe_status = "TC001501";
+			//$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", true);
+			//proxyServerTable.row('.selected').data().exe_status = "TC001501";
+			//proxyServerTable.row('.selected').data().kal_exe_status = "TC001501";
 			//agent에 서비스 실행 해달라고 호출
 			fn_proxy_active_set(proxyServerTable.row('.selected').data().pry_svr_id,"TC001501");
 			
@@ -1011,9 +1011,9 @@
 	 ******************************************************** */
 	function fn_proxy_active_set(prySvrId,status){
 		$.ajax({
-			url : "/runProxyServer.do",
+			url : "/runProxyService.do",
  			data : { 	pry_svr_id : prySvrId,
- 						exe_status : status
+ 						status : status
  			},
  			dataType : "json",
  			type : "post",
@@ -1030,13 +1030,14 @@
 				}
 			},
  			success : function(result) {
- 				if(result.errcd == 0){
+ 				if(result.result){
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
  				}else{
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
 	 			}
+ 				fn_init_global_value();
  				//검색
-					fn_serverList_search();
+				fn_serverList_search();
  			}
  		});
 		
