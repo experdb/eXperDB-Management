@@ -359,7 +359,10 @@ public class CmmnUtil {
 					System.out.println(cmd);
 					result = cmmUtil.execute(cmd,"job");			
 					
-					if(result.get("RESULT_CODE").equals("0")){
+					System.out.println(result.get("RESULT_CODE"));
+					
+					if(result.get("RESULT_CODE").equals(0)){
+						System.out.println("JOB Attach!!!");
 						JobScriptAttach(targetMachine);
 					}
 			
