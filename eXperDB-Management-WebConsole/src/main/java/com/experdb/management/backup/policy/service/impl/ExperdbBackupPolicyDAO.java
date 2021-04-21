@@ -33,8 +33,8 @@ public class ExperdbBackupPolicyDAO extends EgovAbstractMapper{
 		return sql2.selectOne("backupStorageSql.getScheduleLocationInfo", path);
 	}
 
-	public void scheduleInsert(Map<String, Object> jobInsert) {
-		sql2.update("backupNodeSql.setScheduleJob", jobInsert);
+	public void volumeUpdate(Map<String, Object> volumeInsert) {
+		sql2.update("backupNodeSql.volumeUpdate", volumeInsert);
 	}
 
 	public void scheduleInsert2(Map<String, Object> jobInsert) {
