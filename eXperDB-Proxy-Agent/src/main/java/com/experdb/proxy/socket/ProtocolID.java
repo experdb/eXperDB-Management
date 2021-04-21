@@ -54,5 +54,11 @@ public class ProtocolID {
 	public static final String RESULT_SUB_DATA = "RESULT_SUB_DATA";
 	public static final String SEARCH_GBN = "SEARCH_GBN";
 	public static final String REQ_CMD = "REQ_CMD"; //명령어
+	
+	public static final String PRY_ACT_RESULT = "PRY_ACT_RESULT"; //haproxy 실행 결과
+	public static final String KAL_ACT_RESULT = "KAL_ACT_RESULT"; //keepalived 실행 결과
+	public static final String EXECUTE_RESULT = "EXECUTE_RESULT"; //실행 결과
+	public static final String PRY_PTH = "PRY_PTH"; //haproxy config 백업 경로
+	public static final String KAL_PTH = "KAL_PTH"; //keepalived config 백업 경로
 
 }

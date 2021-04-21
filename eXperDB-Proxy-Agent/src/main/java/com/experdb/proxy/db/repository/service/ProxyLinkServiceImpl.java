@@ -259,8 +259,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			result.put(ProtocolID.RESULT_CODE, "0");
 			result.put(ProtocolID.ERR_CODE, errcd);
 			result.put(ProtocolID.ERR_MSG, "");
-			result.put("PRY_PTH", newHaproxy.getPath());
-			result.put("KAL_PTH", newKeepa.getPath());
+			result.put(ProtocolID.PRY_PTH, newHaproxy.getPath());
+			result.put(ProtocolID.KAL_PTH, newKeepa.getPath());
 			
 		}catch(Exception e){
 			errcd = "-1";
@@ -356,7 +356,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			ProxyServerVO prySvr = new ProxyServerVO();
 			prySvr.setExe_status(strPryActResult);
 			prySvr.setKal_exe_status(strKalActResult);
-			prySvr.setLst_mdf_dtm(userId);
+			prySvr.setLst_mdfr_id(userId);
 			prySvr.setPry_svr_id(prySvrId);
 			
 			proxyDAO.updatePrySvrExeStatusInfo(prySvr);
@@ -371,8 +371,114 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 		outputObj.put(ProtocolID.RESULT_DATA, "");
-		outputObj.put("PRY_ACT_RESULT", strPryActResult);
-		outputObj.put("KAL_ACT_RESULT", strKalActResult);
+		outputObj.put(ProtocolID.PRY_ACT_RESULT, strPryActResult);
+		outputObj.put(ProtocolID.KAL_ACT_RESULT, strKalActResult);
+		return outputObj;
+	}
+
+	public JSONObject executeService(JSONObject jObj) throws Exception {
+		socketLogger.info("ProxyLinkServiceImpl.executeService : "+jObj.toString());
+
+		String strSuccessCode = "0";
+		String strErrCode = "";
+		String strErrMsg = "";
+		String strExecuteResult = "";
+		
+		JSONObject outputObj = new JSONObject();
+		
+		int prySvrId =jObj.getInt("pry_svr_id");
+		String sysType =jObj.getString("sys_type"); //PROXY/KEEPALIVED
+		String actType =jObj.getString("act_type"); //A : active /R : restart /S : stop
+		String userId =jObj.getString("lst_mdfr_id");
+		String cmd = "systemctl ";
+		try {
+			ProxyServerVO prySvr = new ProxyServerVO();
+			prySvr.setLst_mdfr_id(userId);
+			prySvr.setPry_svr_id(prySvrId);
+			
+			ProxyActStateChangeHistoryVO actHistory= new ProxyActStateChangeHistoryVO();
+			actHistory.setPry_svr_id(prySvrId);
+			actHistory.setFrst_regr_id(userId);
+			actHistory.setLst_mdfr_id(userId);
+			actHistory.setSys_type(sysType);
+			actHistory.setAct_type(actType);
+			actHistory.setAct_exe_type("TC004001");
+			
+			switch(actType){
+				case "A" :
+					cmd += "start ";
+					break;
+				case "R" :
+					cmd += "restart ";
+					break;
+				case "S" :
+					cmd += "stop ";
+					break;
+			}
+			
+			switch(sysType){
+				case "PROXY" :
+					cmd += "haproxy";
+					break;
+				case "KEEPALIVED" :
+					cmd += "keepalived ";
+					break;
+			}
+			
+			socketLogger.info("executeService.cmd :: "+cmd);
+			
+			
+			RunCommandExec commandExec = new RunCommandExec(cmd);
+			//명령어 실행
+			commandExec.run();
+
+			try {
+				commandExec.join();
+			} catch (InterruptedException ie) {
+				socketLogger.error("executeService error {}",ie.toString());
+				ie.printStackTrace();
+			}
+		
+			socketLogger.info("call :: "+commandExec.call());
+			socketLogger.info("Message :: "+commandExec.getMessage());
+			
+			if(commandExec.call().equals("success")){
+				if(actType.equals("A") || actType.equals("R")) strExecuteResult="TC001501";
+				else strExecuteResult="TC001502";
+			}else{
+				if(actType.equals("A") || actType.equals("R")) strExecuteResult="TC001502";
+				else strExecuteResult="TC001501";
+			}
+			actHistory.setExe_rslt_cd(strExecuteResult);
+			actHistory.setRslt_msg(commandExec.getMessage());
+			
+			//insert
+			proxyDAO.insertPryActCngInfo(actHistory); 
+			
+			switch(sysType){
+				case "PROXY" :
+					prySvr.setExe_status(strExecuteResult);
+					break;
+				case "KEEPALIVED" :
+					prySvr.setKal_exe_status(strExecuteResult);
+					break;
+			}
+			
+			proxyDAO.updatePrySvrExeStatusInfo(prySvr);
+			
+			
+		} catch (Exception e) {
+			errLogger.error("ProxyLinkServiceImpl.executeService {}", e.toString());
+			strSuccessCode = "1";
+			strErrCode = "-1";
+			strErrMsg = "executeService Error [" + e.toString() + "]";
+		}
+		outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+		outputObj.put(ProtocolID.RESULT_DATA, "");
+		outputObj.put(ProtocolID.EXECUTE_RESULT, strExecuteResult);
+		
 		return outputObj;
 	}
 }

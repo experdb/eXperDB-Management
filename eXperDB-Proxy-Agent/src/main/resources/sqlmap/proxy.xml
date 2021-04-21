@@ -465,8 +465,12 @@
 	 	**/
 		UPDATE T_PRY_SVR_I
 		SET
+			 <if test="exe_status != null">
 			 EXE_STATUS = #{exe_status},
+			 </if>
+			 <if test="kal_exe_status != null">
 			 KAL_EXE_STATUS = #{kal_exe_status},
+			 </if>
 			 LST_MDFR_ID = #{lst_mdfr_id},
         	 LST_MDF_DTM = clock_timestamp()
 		WHERE
