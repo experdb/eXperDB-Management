@@ -45,22 +45,25 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		 *  2. xml 파일 읽어온 데이터 VO에 넣어주기
 		 *  3. 증분 백업 정책 데이터 정리
 		 *  4. 풀 백업 정책 데이터 정리
-		 *  5. Map에 데이터 넣고 return
+		 *  5. volume 데이터 정리
+		 *  6. Map에 데이터 넣고 return
 		 */
 		JSONObject result = new JSONObject();
 		
 		String startDate ="";
 		
 		List<BackupScheduleVO> backupSchedule = null;
+		List<VolumeVO> backupVolumes = null;
 		BackupScriptVO backupScript = new BackupScriptVO();
 		BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
 		RetentionVO backupRetention = new RetentionVO();
 		ArrayList<Object> weekData = new ArrayList<>();
+		ArrayList<Object> volumeList = new ArrayList<>();
 		Map<String, Object> readXml = new HashMap<>();
 		
 		// 1. xml 파일 읽어오기
 		String fileName = request.getParameter("ipadr").replace(".", "_").trim()+".xml";
-//		String path = "C://test/backupXml/" + fileName;
+		// String path = "C://test/backupXml/backup2.xml";
 		String path = "/opt/Arcserve/d2dserver/bin/jobs/" + fileName;
 		
 		// 1-1) 등록된 정책이 없는 경우 (xml 파일이 없는 경우) -> IOException -> 종료
@@ -73,6 +76,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		backupRetention = (RetentionVO) readXml.get("retention");
 		backupLocation = (BackupLocationInfoVO) readXml.get("backupLocation");
 		backupScript = (BackupScriptVO) readXml.get("backupScript");
+		backupVolumes = (List<VolumeVO>) readXml.get("volumes");
 		
 		// 등록된 증분 백업 정책이 있는 경우
 		if(backupSchedule.size()>0){			
@@ -123,6 +127,16 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			storageType = 2;
 		}
 		
+		// 5. volume 데이터 정리
+		for(VolumeVO volume : backupVolumes){
+			Map <String, Object> volumeMap = new HashMap<>();
+			volumeMap.put("fileSystem", volume.getFileSystem());
+			volumeMap.put("mountOn", volume.getMountOn());
+			
+			volumeList.add(volumeMap);
+		}
+		
+		
 //		System.out.println("=============================");
 //		System.out.println("startDate : " + startDate);
 //		System.out.println("storageType : " + storageType);
@@ -133,7 +147,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 //		System.out.println("setNum : " + fsetNum);
 //		System.out.println("=============================");
 		
-		// 5. Map에 데이터 넣고 return
+		// 6. Map에 데이터 넣고 return
 		result.put("startDate", startDate);
 		result.put("storageType", storageType);
 		result.put("storage", fstorage);
@@ -143,6 +157,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		result.put("date", fdate);
 		result.put("setNum", fsetNum);
 		result.put("weekData", weekData);
+		result.put("volumes", volumeList);
 		
 		return result;
 	}
@@ -162,8 +177,9 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		 *    3-1) 증분 백업 정책 스케줄 정보
 		 *    3-2) storage 정보
 		 *    3-3) 백업 스크립트 (compress, jobName, repeat, scheduleType) 정보
-		 *    3-4) target server 정보
-		 *    3-5) 풀백업 정책의 백업셋, 수행일 정보
+		 *    3-4) volume 정보
+		 *    3-5) target server 정보
+		 *    3-6) 풀백업 정책의 백업셋, 수행일 정보
 		 *  4. xml 파일 만들기 및 IMPORT 
 		 *  5. DB에 JOB 정보 INSERT
 		 *    5-1) JOBQUEUE에 JOB 정보 INSERT (기존에 등록된 JOB이 있다면 기존 데이터 지우고 INSERT)
@@ -178,6 +194,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		TargetMachineVO targetMachine = new TargetMachineVO();
 		BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
 		RetentionVO backupRetention = new RetentionVO();
+		List<VolumeVO> volumeList = new ArrayList<>();
 		int schExist = 0;
 		
 		String weekData = param.get("weekData").toString();
@@ -190,6 +207,8 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		String fdate = request.getParameter("date");
 		String fsetNum = request.getParameter("setNum");
 		String jobName_Old = request.getParameter("jobName");
+		String volume = request.getParameter("volumeList").toString().replaceAll("&quot;", "\"");
+		JSONArray volumeJson = (JSONArray)new JSONParser().parse(volume);
 		
 		// 1. 현재 시간으로 jobName 생성
 		Date date = new Date();
@@ -225,11 +244,12 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 //		System.out.println("setNum : " + fsetNum);
 //		System.out.println("jobName_New : " + jobName_New);
 //		System.out.println("jobName_Old : " + jobName_Old);
+//		System.out.println("volumeJson : " + volumeJson);
+//		System.out.println("volumeJson.length : " + volumeJson.size());
 //		System.out.println("=============================");
 		
 		
 		// 3. 입력한 정책 등록값들을 VO에 넣어줌
-		
 		// 3-1) 증분 백업 정책 스케줄 정보
 		// schedule Info List Make
 		backupSchedule = scheduleListMake(weekData, startDate);
@@ -257,11 +277,27 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			backupScript.setScheduleType(3);
 		}
 		
-		// 3-4) 대상 서버 정보
+		// 3-4) volume 정보
+		for(int i=0; i<volumeJson.size(); i++){
+			VolumeVO v = new VolumeVO();
+			JSONObject obj = (JSONObject) volumeJson.get(i);
+			v.setMountOn(obj.get("mountOn").toString());
+			v.setFileSystem(obj.get("filesystem").toString());
+			volumeList.add(v);
+		}
+		
+		// 3-5) 대상 서버 정보
 		// target Info Make
 		targetMachine = experdbBackupPolicyDAO.getScheduleNodeInfo(ipadr);
 		targetMachine.setJobName(jobName_New);
-		targetMachine.setExclude("true");
+		
+		// volume 선택 시 exclude -> false
+		if(volumeList.size()==0){			
+			targetMachine.setExclude("true");
+		}else{
+			targetMachine.setExclude("false");
+		}
+		
 		targetMachine.setHypervisor("false");
 		targetMachine.setIsProtected("true");
 		targetMachine.setTemplateId(uuid);
@@ -269,20 +305,23 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			targetMachine.setDescription("");
 		}
 		
-		// 3-5) 풀백업 정책의 백업셋, 수행일 정보
+		// 3-6) 풀백업 정책의 백업셋, 수행일 정보
 		// retention Info Make
 		backupRetention.setBackupSetCount(Integer.parseInt(fsetNum));
 		backupRetention.setDayOfMonth(Integer.parseInt(fdate));
 		backupRetention.setDayOfWeek(Integer.parseInt(fdate));
 		backupRetention.setUseWeekly(fdateType);
 		
+		
+		
+		
 		// 4. xml 파일 만들기 및 IMPORT 
 		JobXMLMake xmlMake = new JobXMLMake();
-		xmlMake.xmlMake(backupLocation, backupScript, targetMachine, backupRetention, backupSchedule);
+		xmlMake.xmlMake(backupLocation, backupScript, targetMachine, backupRetention, backupSchedule, volumeList);
 		
 		// 5. DB에 JOB 정보 INSERT
 		// *새로 만들어진 xml 파일이 import 된 후 처리되야함 
-		Map<String, Object> jobInsert = new HashMap<>();
+		/*Map<String, Object> jobInsert = new HashMap<>();
 		
 		jobInsert.put("jobType", 1);
 		jobInsert.put("templateID", uuid);
@@ -299,7 +338,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			experdbBackupPolicyDAO.scheduleInsert2(jobInsert);
 		}else{			
 			experdbBackupPolicyDAO.scheduleInsert(jobInsert);
-		}
+		}*/
 		
 		return result;
 	}
@@ -491,10 +530,6 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
     	   result.put("fullHour","");
     	   result.put("type", "");
        }
-
 		return result;
-		
 	}
-
-
 }

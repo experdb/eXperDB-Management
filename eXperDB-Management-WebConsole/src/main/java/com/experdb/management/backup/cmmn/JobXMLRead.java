@@ -19,6 +19,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.*;
 
 import com.experdb.management.backup.node.service.TargetMachineVO;
+import com.experdb.management.backup.policy.service.VolumeVO;
 import com.experdb.management.backup.service.*;
 
 public class JobXMLRead{
@@ -30,6 +31,7 @@ public class JobXMLRead{
 		public Map<String, Object> xmlRead(String file) throws SAXException, IOException, ParserConfigurationException{
 			System.out.println("=== xmlReader ===");
 			List<BackupScheduleVO> scheduleList = new ArrayList<>();
+			List<VolumeVO> volumes = new ArrayList<>();
 			RetentionVO retention = new RetentionVO();
 			BackupScriptVO backupScript = new BackupScriptVO();
 			BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
@@ -46,15 +48,35 @@ public class JobXMLRead{
 			backupScript=jobInfoXml();
 			backupLocation = backupLocationInfoXml();
 			scheduleList = scheduleXml();
-				
+			volumes = volumeXml();
 			
 			result.put("schedule", scheduleList);
 			result.put("retention", retention);
 			result.put("backupScript", backupScript);
 			result.put("backupLocation", backupLocation);
+			result.put("volumes", volumes);
 			
 			return result;
 			
+		}
+		
+		private List<VolumeVO> volumeXml() {
+			System.out.println("#### volumeXml ####");
+			List<VolumeVO> volumes = new ArrayList<>();
+			
+			NodeList excludeVolumes = doc.getElementsByTagName("excludeVolumes");
+			
+			for(int v =0; v< excludeVolumes.getLength(); v++){
+				VolumeVO volume = new VolumeVO();
+				Node node = excludeVolumes.item(v);
+				Element elements = (Element) node;
+				
+				volume.setFileSystem(elements.getElementsByTagName("fileSystem").item(0).getTextContent());
+				volume.setMountOn(elements.getElementsByTagName("mountOn").item(0).getTextContent());
+				
+				volumes.add(volume);
+			}
+			return volumes;
 		}
 		
 		
@@ -62,7 +84,7 @@ public class JobXMLRead{
 			System.out.println("#### scheduleXml ####");
 			List<BackupScheduleVO> backupSchedule = new ArrayList<>();
 			
-//			String ns2 = "http://backup.data.webservice.arcflash.ca.com/xsd";
+			String ns2 = "http://backup.data.webservice.arcflash.ca.com/xsd";
 			NodeList weekly = doc.getElementsByTagName("weeklySchedule");  // weeklySchedule
 			NodeList schedules = doc.getElementsByTagName("scheduleList");
 			
@@ -89,6 +111,13 @@ public class JobXMLRead{
 			weekDate.setYear(e_weekStart.getElementsByTagName("ns2:year").item(0).getTextContent());
 			weekDate.setMonth(e_weekStart.getElementsByTagName("ns2:month").item(0).getTextContent());
 			weekDate.setDay(e_weekStart.getElementsByTagName("ns2:day").item(0).getTextContent());
+
+			// v@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//			weekDate.setYear(e_weekStart.getElementsByTagNameNS(ns2, "year").item(0).getTextContent());
+//			weekDate.setMonth(e_weekStart.getElementsByTagNameNS(ns2, "month").item(0).getTextContent());
+//			weekDate.setDay(e_weekStart.getElementsByTagNameNS(ns2, "day").item(0).getTextContent());
+			
+			
 			backupSchedule.add(weekDate);
 //			e_weekStart.getElementsByTagNameNS(ns2, "year");
 
@@ -102,6 +131,16 @@ public class JobXMLRead{
 				schedule.setDayType(elements.getElementsByTagName("day").item(0).getTextContent());
 				schedule.setInterval(elements.getElementsByTagName("ns2:interval").item(0).getTextContent());
 				schedule.setIntervalUnit(elements.getElementsByTagName("ns2:intervalUnit").item(0).getTextContent());
+
+				// v@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				// elements.getElementsByTagNameNS(ns2, "year")
+//				schedule.setRepeat(elements.getElementsByTagNameNS(ns2, "enabled").item(0).getTextContent());
+//				schedule.setDayType(elements.getElementsByTagNameNS("","day").item(0).getTextContent());
+//				schedule.setInterval(elements.getElementsByTagNameNS(ns2, "interval").item(0).getTextContent());
+//				schedule.setIntervalUnit(elements.getElementsByTagNameNS(ns2, "intervalUnit").item(0).getTextContent());
+				
+				
+				
 				
 				// startTime
 				NodeList startTime = elements.getElementsByTagName("startTime");
@@ -112,17 +151,33 @@ public class JobXMLRead{
 				schedule.setStartHourOfDay(e_startTime.getElementsByTagName("ns2:hourOfday").item(0).getTextContent());
 				schedule.setStartMinute(e_startTime.getElementsByTagName("ns2:minute").item(0).getTextContent());
 				schedule.setStartHourType(e_startTime.getElementsByTagName("ns2:amPM").item(0).getTextContent());
+
+				// v@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				// e_startTime.getElementsByTagNameNS(ns2, "year")
+//				schedule.setStartHour(e_startTime.getElementsByTagNameNS(ns2, "hour").item(0).getTextContent());
+//				schedule.setStartHourOfDay(e_startTime.getElementsByTagNameNS(ns2, "hourOfday").item(0).getTextContent());
+//				schedule.setStartMinute(e_startTime.getElementsByTagNameNS(ns2, "minute").item(0).getTextContent());
+//				schedule.setStartHourType(e_startTime.getElementsByTagNameNS(ns2, "amPM").item(0).getTextContent());
 					
 				// endTime
 				if(elements.getElementsByTagName("ns2:enabled").item(0).getTextContent().equals("true")){
+//				if(elements.getElementsByTagNameNS(ns2, "enabled").item(0).getTextContent().equals("true")){
 					NodeList endTime = elements.getElementsByTagName("endTime");
 					Node n_end = endTime.item(0);
 					Element e_endTime = (Element) n_end;
+					
 					
 					schedule.setEndHour(e_endTime.getElementsByTagName("ns2:hour").item(0).getTextContent());
 					schedule.setEndHourOfDay(e_endTime.getElementsByTagName("ns2:hourOfday").item(0).getTextContent());
 					schedule.setEndMinute(e_endTime.getElementsByTagName("ns2:minute").item(0).getTextContent());
 					schedule.setEndHourType(e_endTime.getElementsByTagName("ns2:amPM").item(0).getTextContent());
+
+					// v@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+					// e_endTime.getElementsByTagNameNS(ns2, "year")
+//					schedule.setEndHour(e_endTime.getElementsByTagNameNS(ns2, "hour").item(0).getTextContent());
+//					schedule.setEndHourOfDay(e_endTime.getElementsByTagNameNS(ns2, "hourOfday").item(0).getTextContent());
+//					schedule.setEndMinute(e_endTime.getElementsByTagNameNS(ns2, "minute").item(0).getTextContent());
+//					schedule.setEndHourType(e_endTime.getElementsByTagNameNS(ns2, "amPM").item(0).getTextContent());
 				}
 
 				// add the schedule in VO List
@@ -147,10 +202,21 @@ public class JobXMLRead{
 			}
 			
 			Element e_retention = (Element) n_retention;
+			
 			retentionVO.setBackupSetCount(Integer.parseInt(e_retention.getElementsByTagName("backupSetCount").item(0).getTextContent()));
 			retentionVO.setDayOfMonth(Integer.parseInt(e_retention.getElementsByTagName("dayOfMonth").item(0).getTextContent()));
 			retentionVO.setDayOfWeek(Integer.parseInt(e_retention.getElementsByTagName("dayOfWeek").item(0).getTextContent()));
 			retentionVO.setUseWeekly(e_retention.getElementsByTagName("useWeekly").item(0).getTextContent());
+
+			// v@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+			// e_retention.getElementsByTagNameNS("", "hour")
+//			retentionVO.setBackupSetCount(Integer.parseInt(e_retention.getElementsByTagNameNS("", "backupSetCount").item(0).getTextContent()));
+//			retentionVO.setDayOfMonth(Integer.parseInt(e_retention.getElementsByTagNameNS("", "dayOfMonth").item(0).getTextContent()));
+//			retentionVO.setDayOfWeek(Integer.parseInt(e_retention.getElementsByTagNameNS("", "dayOfWeek").item(0).getTextContent()));
+//			retentionVO.setUseWeekly(e_retention.getElementsByTagNameNS("", "useWeekly").item(0).getTextContent());
+			
+			// v@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//			System.out.println(retentionVO.toString());
 			
 			return retentionVO;
 		}
@@ -173,6 +239,8 @@ public class JobXMLRead{
 				backupLocation.setBackupDestUser(e_backupLocation.getElementsByTagName("backupDestUser").item(0).getTextContent());
 			}
 			backupLocation.setBackupDestLocation(e_backupLocation.getElementsByTagName("backupDestLocation").item(0).getTextContent());
+			
+			// v@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //			System.out.println(backupLocation.toString());
 			
 			return backupLocation;
@@ -192,24 +260,26 @@ public class JobXMLRead{
 			Element e_jobList = (Element) n_jobList;
 			backupScript.setCompressLevel(Integer.parseInt(e_jobList.getElementsByTagName("compressLevel").item(1).getTextContent()));
 			backupScript.setJobName(e_jobList.getElementsByTagName("jobName").item(1).getTextContent());
+			
+			// v@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //			System.out.println(backupScript.toString());
 			
 			return backupScript;
 		}
 		
 		
-//	    public static void main(String[] args) {
-//	    	 String file = "C:\\test\\backupXml\\192_168_50_133.xml";
-//	    	 
-//    		 JobXMLRead xml = new JobXMLRead();
-//    	
-//				try {
-//					xml.xmlRead(file);
-//				} catch (SAXException | IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			
-//	    	
-//		}
+	    public static void main(String[] args) throws ParserConfigurationException {
+	    	 String file = "C:\\test\\backupXml\\aaa.xml";
+	    	 
+    		 JobXMLRead xml = new JobXMLRead();
+    		 Map<String, Object> result = new HashMap<>();
+				try {
+					result = xml.xmlRead(file);
+				} catch (SAXException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+	    	
+		}
 }

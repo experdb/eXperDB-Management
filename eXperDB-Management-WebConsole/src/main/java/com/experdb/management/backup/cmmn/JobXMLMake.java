@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.experdb.management.backup.node.service.TargetMachineVO;
+import com.experdb.management.backup.policy.service.VolumeVO;
 import com.experdb.management.backup.service.*;
 
 public class JobXMLMake{
@@ -42,7 +43,7 @@ public class JobXMLMake{
 		Document doc;
 		
 	      
-	      public void xmlMake(BackupLocationInfoVO locationInfo, BackupScriptVO backupScript, TargetMachineVO targetMachine, RetentionVO retentionVO, List<BackupScheduleVO> backupSchedule){
+	      public void xmlMake(BackupLocationInfoVO locationInfo, BackupScriptVO backupScript, TargetMachineVO targetMachine, RetentionVO retentionVO, List<BackupScheduleVO> backupSchedule, List<VolumeVO> volume){
 				
 				// ** 태그 쓰는 순서 변경 금지 **
 				// --> xmlRead 에서 문제 발생할 수 있음
@@ -85,14 +86,15 @@ public class JobXMLMake{
 		            fullInfoXml(retentionVO, jobList);
 		            
 		            //targetInfoXml
-		            targetInfoXml(targetMachine, jobList, backupScript);
+		            targetInfoXml(targetMachine, jobList, backupScript, volume);
 		            
 		            //scheduleInfoXml
 		            if(backupSchedule.size()>0){		            	
 		            	scheduleXml(jobList, backupSchedule);
 		            }
 			            		            
-			       CmmnUtil.xmlFileCreate(doc, targetMachine);
+		            CmmnUtil.xmlFileCreate(doc, targetMachine);
+		            // xmlFile(doc, targetMachine.getName());
 					
 				} catch (ParserConfigurationException e) {
 					// TODO Auto-generated catch block
@@ -244,7 +246,7 @@ public class JobXMLMake{
 
 
 
-		private void targetInfoXml(TargetMachineVO targetMachine, Element backupConfiguration, BackupScriptVO backupScript) {
+		private void targetInfoXml(TargetMachineVO targetMachine, Element backupConfiguration, BackupScriptVO backupScript, List<VolumeVO> volumes) {
 	    	System.out.println("#### targetInfoXml ####");
 	    	// target 엘리먼트==================================================
             Element target = doc.createElement("target");
@@ -304,7 +306,43 @@ public class JobXMLMake{
 		            // exclude 엘리먼트
 		            Element exclude = doc.createElement("exclude");
 		            exclude.appendChild(doc.createTextNode(targetMachine.getExclude()));
-		            target.appendChild(exclude);	
+		            target.appendChild(exclude);
+		            
+		            // exclude 값이 false 일 때 volume 작성
+		            if(targetMachine.getExclude().equals("false")){
+		            	// excludeVolumes list 시작
+		            	for(VolumeVO volume : volumes){
+		            		// excludeVolumes 엘리먼트
+		            		Element excludeVolumes = doc.createElement("excludeVolumes");
+		            		target.appendChild(excludeVolumes);
+		            		
+		            		// fileSystem 엘리먼트
+		            		Element fileSystem = doc.createElement("fileSystem");
+		            		fileSystem.appendChild(doc.createTextNode(volume.getFileSystem()));
+		            		excludeVolumes.appendChild(fileSystem);
+		            		
+		            		// mountOn 엘리먼트
+		            		Element mountOn = doc.createElement("mountOn");
+		            		mountOn.appendChild(doc.createTextNode(volume.getMountOn()));
+		            		excludeVolumes.appendChild(mountOn);
+		            		
+		            		// necessary 엘리먼트
+		            		Element necessary = doc.createElement("necessary");
+		            		necessary.appendChild(doc.createTextNode("false"));
+		            		excludeVolumes.appendChild(necessary);
+		            		
+		            		// size 엘리먼트
+		            		Element size = doc.createElement("size");
+		            		size.appendChild(doc.createTextNode("0"));
+		            		excludeVolumes.appendChild(size);
+		            		
+		            		// type 엘리먼트
+		            		Element type = doc.createElement("type");
+		            		type.appendChild(doc.createTextNode("xfs"));
+		            		excludeVolumes.appendChild(type);
+		            	}
+		            }
+		            
 		            // hypervisor 엘리먼트
 		            Element hypervisor = doc.createElement("hypervisor");
 		            hypervisor.appendChild(doc.createTextNode(targetMachine.getHypervisor()));
@@ -351,7 +389,7 @@ public class JobXMLMake{
             compressLevel.appendChild(doc.createTextNode(Integer.toString(backupScript.getCompressLevel())));
             backupConfiguration.appendChild(compressLevel);
 
-         // encryptAlgoName 엘리먼트
+            // encryptAlgoName 엘리먼트
             Element encryptAlgoName = doc.createElement("encryptAlgoName");
             encryptAlgoName.appendChild(doc.createTextNode(backupScript.getEncryptAlgoName()));
             backupConfiguration.appendChild(encryptAlgoName);
@@ -599,10 +637,12 @@ public class JobXMLMake{
 			System.out.println("xmlFile");
 	    	  
 	    	  try{
-	    	  TransformerFactory transformerFactory = TransformerFactory.newInstance();
+	    		  
+	    	   TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//	    	   TransformerFactory transformerFactory = new org.apache.xalan.processor.TransformerFactoryImpl();
 	    	  
 	            Transformer transformer = transformerFactory.newTransformer();
-	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
+	            // transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //정렬 스페이스4칸
 	            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 	            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //들여쓰기
 	            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes"); //doc.setXmlStandalone(true); 했을때 붙어서 출력되는부분 개행
@@ -617,9 +657,7 @@ public class JobXMLMake{
 	    	  }catch(Exception e){
 	    		  e.printStackTrace();
 	    	  }
-	    	  
 	      }
-	      
 	      
 	      public static void main(String[] args) {
 	    	 
@@ -652,6 +690,7 @@ public class JobXMLMake{
 	    	  backupScript.setLogLevel("0");
 	    	  backupScript.setPriority(0);
 	    	  backupScript.setRepeat("true");
+	    	  
 	    	  backupScript.setTemplate(true);
 	    	  backupScript.setBackupToRps(false);
 	    	  backupScript.setDisable(false);
@@ -668,24 +707,25 @@ public class JobXMLMake{
 	    	  
 	    	  TargetMachineVO targetMachine = new TargetMachineVO();
 	    	  targetMachine.setBackupLocationType(0);
+	    	  targetMachine.setTemplateId("57e29e04-79a0-4dbc-bbbe-37ccb7133393");
 	    	  targetMachine.setConnectionStatus(0);
 	    	  targetMachine.setDescription("he description of that node");
 	    	  targetMachine.setLastResult(0);
 	    	  targetMachine.setMachineType(0);
-	    	  targetMachine.setName("192.168.50.131");
+	    	  targetMachine.setName("backup_test");
 	    	  targetMachine.setOperatingSystem("CentOS Linux release 8.2.2004");
 	    	  targetMachine.setPassword("6jpUshj1Yyyb57HRdjRDXA==");
 	    	  targetMachine.setIsProtected("true");
 	    	  targetMachine.setRecoveryPointCount(0);
 	    	  targetMachine.setRecoverySetCount(0);
 	    	  targetMachine.setUser("root");
-	    	  targetMachine.setExclude("true");
+	    	  targetMachine.setExclude("false");
 	    	  targetMachine.setHypervisor("false");
 	    	  targetMachine.setPriority(0);
 	    	  
 	    	  //배열생성
 	    	  List<BackupScheduleVO> backupSchedule = new ArrayList<>();
-	    	  BackupScheduleVO schedule = new BackupScheduleVO();
+//	    	  BackupScheduleVO schedule = new BackupScheduleVO();
 //	    	  schedule.setYear(2021);
 //	    	  schedule.setMonth(3);
 //	    	  schedule.setDay(11);
@@ -726,11 +766,21 @@ public class JobXMLMake{
 //	    	  schedule2.setEndHourType(1);
 //	    	  schedule2.setDayType(2);
 //	    	  backupSchedule.add(schedule2);
-//	    	  
 	    	  
+	    	  List<VolumeVO> volumes = new ArrayList<>();
+	    	  VolumeVO volume1 = new VolumeVO();
+	    	  VolumeVO volume2 = new VolumeVO();
 	    	  
+	    	  volume1.setFileSystem("/dev/mapper/centos-root");
+	    	  volume1.setMountOn("/");
+	    	  
+	    	  volume2.setFileSystem("/dev/sda2");
+	    	  volume2.setMountOn("/boot");
+	    	  
+	    	  volumes.add(volume1);
+	    	  volumes.add(volume2);
 	    	  
 	    	  JobXMLMake xml = new JobXMLMake();
-	    	  xml.xmlMake(locationInfo,backupScript,targetMachine,retentionVO, backupSchedule);
+	    	  xml.xmlMake(locationInfo,backupScript,targetMachine,retentionVO, backupSchedule, volumes);
 		}
 }

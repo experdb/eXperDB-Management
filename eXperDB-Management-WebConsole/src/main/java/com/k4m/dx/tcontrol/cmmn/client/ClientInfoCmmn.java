@@ -2301,7 +2301,7 @@ System.out.println("=====cmd" + cmd);
 					
 					HashMap hp = (HashMap) obj;
 
-					jsonObj.put("mounton", (String) hp.get("mounton"));
+					jsonObj.put("mountOn", (String) hp.get("mounton"));
 					jsonObj.put("filesystem", (String) hp.get("filesystem"));
 					jsonObj.put("size", (String) hp.get("size"));
 					jsonObj.put("used", (String) hp.get("used"));
