@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Properties;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -65,7 +66,8 @@ public class CmmnUtil {
 		String host = props.getProperty("backup.url");
 		String userName = props.getProperty("backup.username");
 		//복호화	
-		String password = pbeEnc.decrypt(props.getProperty("backup.password"));
+		String pwd = props.getProperty("backup.password");
+		String password = pbeEnc.decrypt(pwd);
 		int port = Integer.parseInt(props.getProperty("backup.port"));
 
 		JSch jsch = new JSch();
@@ -356,6 +358,29 @@ public class CmmnUtil {
 					cmd = "cd " + path + ";"+ "./d2djob --import="+jobPath+"/"+targetMachine.getName().replace(".", "_").trim()+".xml";
 					System.out.println(cmd);
 					result = cmmUtil.execute(cmd,"job");			
+					
+					if(result.get("RESULT_CODE").equals("0")){
+						JobScriptAttach(targetMachine);
+					}
+			
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return result;
+				
+			}
+			
+			private static JSONObject JobScriptAttach(TargetMachineVO targetMachine) {
+				JSONObject result = new JSONObject();		
+				CmmnUtil cmmUtil = new CmmnUtil();
+				
+				String path = "/opt/Arcserve/d2dserver/bin";
+				String cmd =null;
+				
+				try {
+					cmd = "cd " + path + ";"+ "./d2dnode --node="+targetMachine.getName()+" --attach="+targetMachine.getJobName();
+					System.out.println(cmd);
+					result = cmmUtil.execute(cmd,"job");			
 			
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -384,11 +409,111 @@ public class CmmnUtil {
 			
 		
 			
+			
+			public JSONObject  getVolumeFilter() throws Exception {
+				
+				ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+				
+				JSch jsch = new JSch();
+				
+				session = jsch.getSession("root", "192.168.20.127", 22);
+				session.setPassword("root0225!!");
+
+				java.util.Properties config = new java.util.Properties();
+				config.put("StrictHostKeyChecking", "no");
+
+				session.setConfig(config);
+				session.connect();
+
+				channel = session.openChannel("exec");
+				channelExec = (ChannelExec) channel;
+
+				
+				JSONObject result = new JSONObject();		
+				String output = "";
+				
+				try {
+					
+					channel = session.openChannel("exec");
+					channelExec = (ChannelExec) channel;
+
+					// 실행할 명령어를 설정한다.
+					channelExec.setCommand("df -h | grep ^/dev | grep -v efi");
+					OutputStream out = channelExec.getOutputStream();
+					InputStream in = channelExec.getInputStream();
+					InputStream err = channelExec.getErrStream();
+
+					// 명령어를 실행한다.
+					channelExec.connect(15000);
+
+					byte[] buf = new byte[1024];
+					int length;
+						
+					while ((length = in.read(buf)) != -1) {
+						output += new String(buf, 0, length);
+					}
+					
+					result.put("RESULT_CODE", 0);
+					result.put("RESULT_DATA", output.trim());
+			
+						String[] arrFileSystem = result.get("RESULT_DATA").toString().split("\n");
+						int intFileI = 0;
+						for(String st: arrFileSystem) {
+							//System.out.println("### intFileI : " + intFileI);
+							if(intFileI >= 0) {
+								HashMap hp = new HashMap();
+						    	  String[] arrStr = st.split(" ");
+						    	  int lineT = 0;
+						    	  for(int i=0; i<arrStr.length; i++) {
+						    		  //System.out.println(arrStr[i].toString());
+						    		  
+						    		  if(!arrStr[i].toString().trim().equals("")) {
+						    			  //System.out.println(lineT + " :: " + arrStr[i].toString());
+							    		  if(lineT == 0) {
+							    			  hp.put("filesystem", arrStr[i].toString());
+							    		  } else if(lineT == 1) {
+							    			  hp.put("size", arrStr[i].toString());
+							    		  } else if(lineT == 2) {
+							    			  hp.put("used", arrStr[i].toString());
+							    		  } else if(lineT == 3) {
+							    			  hp.put("avail", arrStr[i].toString());
+							    		  } else if(lineT == 4) {
+							    			  hp.put("use", arrStr[i].toString());
+							    		  } else if(lineT == 5) {
+							    			  hp.put("mounton", arrStr[i].toString());
+							    		  }				    
+							    		  		hp.put("type", "xfs");
+							    		  lineT = lineT + 1;
+						    		  }
+						    	  }
+						    	  list.add(hp);
+							}
+							
+							intFileI++;
+						}
+			
+					System.out.println(list);
+					for(int i =0; i<list.size(); i++){
+					//System.out.println(list.get(i).get("filesystem"));
+					System.out.println(list.get(i).get("mounton"));
+				}
+	
+				} catch(Exception e) {
+					throw e;
+				} 			
+				return result;				
+			}	
+			
+			
+			
 			public static void main(String[] args) {
+				TargetMachineVO targetMachine = new TargetMachineVO();
+				targetMachine.setName("192.168.20.127");
+				JobScriptApply("/opt/Arcserve/d2dserver/bin/jobs/",targetMachine);
 				//46068
 				//5906844
 				
-				String nodeName =  "192.168.56.130";
+				//String nodeName =  "192.168.56.130";
 				
 				
 				//JobScriptApply("",nodeName);

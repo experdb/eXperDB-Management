@@ -321,7 +321,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		
 		// 5. DB에 JOB 정보 INSERT
 		// *새로 만들어진 xml 파일이 import 된 후 처리되야함 
-		Map<String, Object> jobInsert = new HashMap<>();
+		/*Map<String, Object> jobInsert = new HashMap<>();
 		
 		jobInsert.put("jobType", 1);
 		jobInsert.put("templateID", uuid);
@@ -338,7 +338,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			experdbBackupPolicyDAO.scheduleInsert2(jobInsert);
 		}else{			
 			experdbBackupPolicyDAO.scheduleInsert(jobInsert);
-		}
+		}*/
 		
 		return result;
 	}
