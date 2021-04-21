@@ -49,5 +49,11 @@ public class VolumeVO implements Serializable {
 	public void setNecessary(boolean isNecessary) {
 		this.isNecessary = isNecessary;
 	}
+	
+	@Override
+	public String toString() {
+		return "VolumeVO [mountOn=" + mountOn + ", fileSystem=" + fileSystem + ", type=" + type + ", size=" + size
+				+ ", isNecessary=" + isNecessary + "]";
+	}
 
 }

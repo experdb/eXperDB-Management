@@ -26,6 +26,7 @@
 
 <script>
 var NodeList;
+var volumeDataList = [];
 var scheduleList;
 var schSun=[];
 var schMon=[];
@@ -78,7 +79,7 @@ function fn_init() {
 	 * 노트리스트 테이블
 	 ******************************************************** */
 	 NodeList = $('#nodeList').DataTable({
-		scrollY : "470px",
+		scrollY : "515px",
 		scrollX: true,	
 		searching : false,
 		processing : true,
@@ -167,6 +168,8 @@ function dateCalenderSetting() {
 
 // increment policy reset
 function fn_scheduleReset(){
+	volumeDataList.length = 0;
+	
 	schSun.length = 0;
 	schMon.length = 0;
 	schTue.length = 0;
@@ -174,6 +177,8 @@ function fn_scheduleReset(){
 	schThu.length = 0;
 	schFri.length = 0;
 	schSat.length = 0;
+	
+	
 
 	fn_drawScheduleList();
 }
@@ -264,10 +269,17 @@ function fn_getSvrList() {
 	})
 }
 
+var vl=[];
 // 불러온 백업정책 setting
 function fn_setScheduleInfo(result){
 	var scheduleData = [];
 	scheduleData = result.weekData;
+	vl = result.volumes;
+	
+	for(var index=0; index<result.volumes.length; index++){
+		volumeDataList.push(result.volumes[index]);
+	}
+	
 	// 증분 백업 정책 setting
 	for(var i=0 ; i<scheduleData.length; i++){
 		fn_scheduleInsert(scheduleData[i].dayPick, scheduleData[i].startTime, scheduleData[i].repeat, scheduleData[i].repEndTime, scheduleData[i].repTime, scheduleData[i].repTimeUnit);
@@ -581,6 +593,14 @@ function fn_nodeRegPopup() {
 			weekData.fri = schFri;
 			weekData.sat = schSat;
 			weekData.sun = schSun;
+			
+			var volumeSet=[];
+			for(var i =0; i<volumeDataList.length; i++){
+				var row = new Object();
+				row.mountOn = volumeDataList[i].mountOn;
+				row.filesystem = volumeDataList[i].filesystem;
+				volumeSet.push(row);
+			}
 			$.ajax({
 				url : "/experdb/backupScheduleReg.do",
 				type : "post",
@@ -588,6 +608,7 @@ function fn_nodeRegPopup() {
 				traditional : true,
 				data : {
 					nodeIpadr : NodeList.row('.selected').data().ipadr,
+					volumeList : JSON.stringify(volumeSet),
 					weekData : JSON.stringify(weekData),
 					startDate : $("#startDateSch").val(),
 					storageType : $("#bckStorageTypeVal").val(),
@@ -651,6 +672,9 @@ function fn_nodeRegPopup() {
 		return true;
 	}
 
+ /* ********************************************************
+  * filter popup
+  ******************************************************** */
 function fn_filter(){
 	var data = NodeList.rows('.selected').data();
 	if(data.length<1){
@@ -659,6 +683,7 @@ function fn_filter(){
 	}else{
 		var serverIp = NodeList.row('.selected').data().ipadr;
 		fn_getVolumes(serverIp);
+		
 	}
 
 	$('#pop_layer_popup_backupVolumeFilter').modal("show");
@@ -797,40 +822,7 @@ table.dataTable.ccc thead th{
 				</div>
 			</div>
 		</div>
-		
-		
-		
-		<%-- <div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
-			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
-				<div class="table-responsive" style="overflow:hidden;">
-					<div class="row" style="float: right;width: 530px;">					
-						<div class="tooltip-static-demo" id="applyAlertTooltip">
-							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; display:none;">
-								<div class="arrow"></div>
-								<div class="tooltip-inner" style="width: 250px;"><spring:message code="eXperDB_backup.msg14" /></div>
-							</div>
-							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert_none" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; width: 265px;">
-								
-							</div>
-						</div>
-						<div id="wrt_button" style="float: right;">
-							
-							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
-								<i class="fa fa-check btn-icon-prepend "></i><spring:message code="common.apply" />
-							</button>
-							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_filter()">
-								<i class="fa fa-check btn-icon-prepend "></i><spring:message code="common.apply" />
-							</button>
-							<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_backupDelPopup()">
-								<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> --%>
 		<!-- node list -->
-		
 		<div class="col-lg-5 grid-margin stretch-card">
 			<div class="card">
 				<div class="card-body">
@@ -954,7 +946,7 @@ table.dataTable.ccc thead th{
 				</div>
 				<!-- full backup setting end -->
 			
-				<div class="card-body" style="padding-bottom: 0px;">
+				<div class="card-body" style="padding-bottom: 10px;">
 					<div class="card my-sm-2" style="" >
 						<div class="card-body" style="height: 280px;padding-top: 5px;padding-bottom: 5px;">
 							<div class="col-12" id="jobDiv" style="padding-top: 20px;padding-left: 0px;padding-right: 0px;">

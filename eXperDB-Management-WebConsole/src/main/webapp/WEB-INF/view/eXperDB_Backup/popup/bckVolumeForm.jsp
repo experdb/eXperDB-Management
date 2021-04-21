@@ -25,7 +25,7 @@
 
 <script type="text/javascript">
 
-var volumeList;
+var VolumeList;
 
 	/* ********************************************************
 	 * 초기 실행
@@ -34,21 +34,8 @@ var volumeList;
 		fn_volumeTableSetting();
 	});
 	
-	// loader
-/* 	$(function(){
-		$(document).ajaxStart(function() {	
-		    $("#loader").show();	
-		});
-		
-		//AJAX 통신 종료
-		$(document).ajaxStop(function() {
-			$("#loader").hide();
-		});
-	}); */
-
 	function fn_volumeTableSetting(){
-		 volumeList = $('#volumeList').DataTable({
-				//scrollY : "250px",
+		 VolumeList = $('#volumeList').DataTable({
 				scrollX : false,
 				searching : false,
 				processing : true,
@@ -56,25 +43,29 @@ var volumeList;
 				deferRender : true,
 				info : false,
 				bSort : false,
+				selected : [1],
+				select : {'style' : 'multi'},
 				columns : [
 				{data : "rownum", className : "dt-center", defaultContent : "" , checkboxes : {'selectRow' : true}},
-				{data : "mounton", className : "dt-center", defaultContent : ""},
-				{data : "filesystem", className : "dt-center", defaultContent : ""},
+				{data : "mountOn", defaultContent : ""},
+				{data : "filesystem", defaultContent : ""},
 				{data : "used", className : "dt-center", defaultContent : ""},
 				{data : "type", className : "dt-center", defaultContent : ""}
 				
 				]
 			});
 
-		 volumeList.tables().header().to$().find('th:eq(0)').css('min-width');
-		 volumeList.tables().header().to$().find('th:eq(1)').css('min-width');
-		 volumeList.tables().header().to$().find('th:eq(2)').css('min-width');
-		 volumeList.tables().header().to$().find('th:eq(3)').css('min-width');
-		 volumeList.tables().header().to$().find('th:eq(4)').css('min-width');
+		 VolumeList.tables().header().to$().find('th:eq(0)').css('min-width');
+		 VolumeList.tables().header().to$().find('th:eq(1)').css('min-width');
+		 VolumeList.tables().header().to$().find('th:eq(2)').css('min-width');
+		 VolumeList.tables().header().to$().find('th:eq(3)').css('min-width');
+		 VolumeList.tables().header().to$().find('th:eq(4)').css('min-width');
 		 $(window).trigger('resize');
 	}	
  
-
+	/* ********************************************************
+	 * get volume list
+	 ******************************************************** */
 	function fn_getVolumes(serverIp){
 		$.ajax({
 			url : '/experdb/getVolumes.do',
@@ -83,8 +74,9 @@ var volumeList;
 				ipadr : serverIp
 			},
 			success : function(result) {
-				volumeList.clear().draw();
-				volumeList.rows.add(result.data).draw();
+				VolumeList.clear().draw();
+				VolumeList.rows.add(result.data).draw();
+				fn_volumeSetting(result.data);
 			},
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -99,6 +91,47 @@ var volumeList;
 				}
 			}
 		});
+	}
+	
+	/* ********************************************************
+	 * volume selected setting
+	 ******************************************************** */
+	function fn_volumeSetting(data){
+		// volumeDataList에 데이터가 없을 경우 (선택된 Volume이 없을 경우) -> default All selected
+		if(volumeDataList.length == 0){
+			for(var i =0 ; i<data.length; i++){
+				$('input', VolumeList.rows(i).nodes()).prop('checked', true); 
+				VolumeList.rows(i).nodes().to$().addClass('selected');
+			}
+		}else{	// volumeDataList에 데이터가 있을 경우(선택된 Volume이 있을 경우) -> volumeDataList에 있는 Volume만 selected
+			for(var i =0 ; i<data.length; i++){
+				// selected를 풀어준 뒤
+				$('input', VolumeList.rows(i).nodes()).prop('checked', false); 
+				VolumeList.rows(i).nodes().to$().removeClass('selected');
+				for(var j = 0; j<volumeDataList.length; j++){
+					if(volumeDataList[j].mountOn == data[i].mountOn){
+						// volumeDataList에 존재하면 checked 해준다
+						$('input', VolumeList.rows(i).nodes()).prop('checked', true); 
+						VolumeList.rows(i).nodes().to$().addClass('selected');
+						break;
+					} 
+				}
+			}
+		}
+	}
+	
+	/* ********************************************************
+	 * volume registration
+	 ******************************************************** */
+	function fn_volumeReg() {
+		// 선택된 volume들을 volumeDataList에 넣어준다
+		volumeDataList = VolumeList.rows('.selected').data();
+		fn_alertShow();
+		$('#pop_layer_popup_backupVolumeFilter').modal("hide");
+	}
+	
+	function fn_volumeCancel() {
+		$('#pop_layer_popup_backupVolumeFilter').modal("hide");
 	}
 	
 </script>
@@ -126,8 +159,8 @@ var volumeList;
 					</div>
 					<div class="card-body">
 						<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
-							<button type="button" class="btn btn-primary" id="regButton" onclick=""><spring:message code="common.registory"/></button>
-							<button type="button" class="btn btn-light" data-dismiss="modal" onclick=""><spring:message code="common.cancel"/></button>
+							<button type="button" class="btn btn-primary" id="regButton" onclick="fn_volumeReg()">선택</button>
+							<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_volumeCancel()"><spring:message code="common.cancel"/></button>
 						</div>
 					</div>
 				</div>
