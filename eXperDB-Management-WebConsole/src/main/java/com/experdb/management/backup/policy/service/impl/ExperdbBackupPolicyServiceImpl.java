@@ -181,10 +181,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		 *    3-5) target server 정보
 		 *    3-6) 풀백업 정책의 백업셋, 수행일 정보
 		 *  4. xml 파일 만들기 및 IMPORT 
-		 *  5. DB에 JOB 정보 INSERT
-		 *    5-1) JOBQUEUE에 JOB 정보 INSERT (기존에 등록된 JOB이 있다면 기존 데이터 지우고 INSERT)
-		 *    5-2) JOBSCRIPT 에 TEMPLATEID UPDATE (JOBQUEUE에 들어간 정보와 동일하게 맞춰줌)
-		 *    5-3) TARGETMACHINE 의 ISPROTECTED, JOBNAME UPDATE
+		 *  5. volume Script DB Insert
 		 *  
 		 */
 		
@@ -313,13 +310,11 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		backupRetention.setUseWeekly(fdateType);
 		
 		
-		
-		
 		// 4. xml 파일 만들기 및 IMPORT 
 		JobXMLMake xmlMake = new JobXMLMake();
 		xmlMake.xmlMake(backupLocation, backupScript, targetMachine, backupRetention, backupSchedule, volumeList);
 		
-		// 5. 
+		// 5. volume Script DB Insert
 		if(volumeList.size()>0){		
 			String volumeScript = null;
 			JobVolume jobVolume = new JobVolume();
@@ -331,29 +326,6 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			
 			experdbBackupPolicyDAO.volumeUpdate(volumeInsert);
 		}
-		
-		
-		// 5. DB에 JOB 정보 INSERT
-		// *새로 만들어진 xml 파일이 import 된 후 처리되야함 
-		/*Map<String, Object> jobInsert = new HashMap<>();
-		
-		jobInsert.put("jobType", 1);
-		jobInsert.put("templateID", uuid);
-		jobInsert.put("ipadr", ipadr);
-		jobInsert.put("isRepeat", schExist);
-		jobInsert.put("jobStatus", -1);
-		jobInsert.put("lastResult", 0);
-		jobInsert.put("uuid", UUID.randomUUID().toString());
-		jobInsert.put("backupLocation", backupLocation.getUuid());
-		jobInsert.put("jobName", jobName_New);
-
-		// 기존에 등록된 job이 있는 경우 판단
-		if(fileExist>0){
-			experdbBackupPolicyDAO.scheduleInsert2(jobInsert);
-		}else{			
-			experdbBackupPolicyDAO.scheduleInsert(jobInsert);
-		}*/
-		
 		return result;
 	}
 	 
