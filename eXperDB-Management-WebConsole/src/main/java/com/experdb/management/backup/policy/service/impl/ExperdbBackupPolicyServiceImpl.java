@@ -63,7 +63,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		
 		// 1. xml 파일 읽어오기
 		String fileName = request.getParameter("ipadr").replace(".", "_").trim()+".xml";
-		// String path = "C://test/backupXml/backup2.xml";
+		// String path = "C://test/backupXml/a.xml";
 		String path = "/opt/Arcserve/d2dserver/bin/jobs/" + fileName;
 		
 		// 1-1) 등록된 정책이 없는 경우 (xml 파일이 없는 경우) -> IOException -> 종료
@@ -119,7 +119,8 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		int fsetNum = backupRetention.getBackupSetCount();
 		String jobName = backupScript.getJobName();
 		String fdateType = backupRetention.getUseWeekly();
-		int fdate = backupRetention.getDayOfMonth();
+		int monthDate = backupRetention.getDayOfMonth();
+		int weekDate = backupRetention.getDayOfWeek();
 		// * user 유무에 따라 CIFS, NFS 구분
 		if(backupLocation.getBackupDestUser()==null){
 			storageType = 1;
@@ -154,7 +155,8 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		result.put("compress", fcompress);
 		result.put("dateType", fdateType);
 		result.put("jobName", jobName);
-		result.put("date", fdate);
+		result.put("weekDate", weekDate);
+		result.put("monthDate", monthDate);
 		result.put("setNum", fsetNum);
 		result.put("weekData", weekData);
 		result.put("volumes", volumeList);
@@ -201,7 +203,8 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		String fstorage = request.getParameter("storage");
 		String fcompress = request.getParameter("compress");
 		String fdateType = request.getParameter("dateType");
-		String fdate = request.getParameter("date");
+		String weekDate = request.getParameter("weekDate");
+		String monthDate = request.getParameter("monthDate");
 		String fsetNum = request.getParameter("setNum");
 		String jobName_Old = request.getParameter("jobName");
 		String volume = request.getParameter("volumeList").toString().replaceAll("&quot;", "\"");
@@ -305,8 +308,8 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		// 3-6) 풀백업 정책의 백업셋, 수행일 정보
 		// retention Info Make
 		backupRetention.setBackupSetCount(Integer.parseInt(fsetNum));
-		backupRetention.setDayOfMonth(Integer.parseInt(fdate));
-		backupRetention.setDayOfWeek(Integer.parseInt(fdate));
+		backupRetention.setDayOfMonth(Integer.parseInt(monthDate));
+		backupRetention.setDayOfWeek(Integer.parseInt(weekDate));
 		backupRetention.setUseWeekly(fdateType);
 		
 		

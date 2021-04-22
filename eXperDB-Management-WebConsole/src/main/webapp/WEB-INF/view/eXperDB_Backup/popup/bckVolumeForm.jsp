@@ -159,7 +159,7 @@ var VolumeList;
 					</div>
 					<div class="card-body">
 						<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
-							<button type="button" class="btn btn-primary" id="regButton" onclick="fn_volumeReg()">선택</button>
+							<button type="button" class="btn btn-primary" id="regButton" onclick="fn_volumeReg()"><spring:message code="common.choice"/></button>
 							<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_volumeCancel()"><spring:message code="common.cancel"/></button>
 						</div>
 					</div>

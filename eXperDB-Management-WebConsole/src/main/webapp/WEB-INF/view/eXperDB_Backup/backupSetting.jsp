@@ -288,16 +288,16 @@ function fn_setScheduleInfo(result){
 	fn_drawScheduleList();
 	
 	// 풀 백업 정책 세팅
+	$("#merge_period_week").val(result.weekDate);
+	$("#merge_period_month").val(result.monthDate);
 	if(result.dateType == "true"){
 		$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true); 
-		$("#merge_period_week").val(result.date);
-		$("#merge_period_month").val(0);
 	}else{
 		$("input:radio[name='merge_period']:radio[value='monthly']").prop('checked', true); 
-		$("#merge_period_week").val(0);
-		$("#merge_period_month").val(result.date);
 	}
-	$("#bckSetDateVal").val(result.date);
+	
+	$("#bckSetWeekDateVal").val(result.weekDate);
+	$("#bckSetMonthDateVal").val(result.monthDate);
 	$("#bckSetDateTypeVal").val(result.dateType);
 	
 	$("#storageType").val(result.storageType);
@@ -615,7 +615,8 @@ function fn_nodeRegPopup() {
 					storage : $("#bckStorage").val(),
 					compress : $("#bckCompressVal").val(),
 					dateType : $("#bckSetDateTypeVal").val(),
-					date : $("#bckSetDateVal").val(),
+					weekDate : $("#bckSetWeekDateVal").val(),
+					monthDate : $("#bckSetMonthDateVal").val(),
 					setNum : $("#bckSetNum").val(),
 					jobName : $("#jobNameVal").val()
 				}
@@ -775,7 +776,8 @@ table.dataTable.ccc thead th{
 	<input type="hidden" name="bckStorageTypeVal"  id="bckStorageTypeVal">
 	<input type="hidden" name="bckCompressVal"  id="bckCompressVal" >
 	<input type="hidden" name="bckSetDateTypeVal"  id="bckSetDateTypeVal" >
-	<input type="hidden" name="bckSetDateVal" id="bckSetDateVal">
+	<input type="hidden" name="bckSetWeekDateVal" id="bckSetWeekDateVal">
+	<input type="hidden" name="bckSetMonthDateVal" id="bckSetMonthDateVal">
 	<input type="hidden" name="serverIpadr" id="serverIpadr">
 </form>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -860,7 +862,7 @@ table.dataTable.ccc thead th{
 		<div class="col-lg-7 grid-margin stretch-card">
 			<div class="card"  style="padding-left: 0px;">
 				<div class="table-responsive row" style="overflow:hidden;padding-right: 25px;">	
-					<div class="row" style="padding-left: 320px;margin-bottom: -10;padding-top: 10px;padding-bottom: -10;">			
+					<div class="row" style="padding-left: 310px;margin-bottom: -10;padding-top: 10px;padding-bottom: -10; width : 940px;">			
 						<div class="tooltip-static-demo" id="applyAlertTooltip">
 							<div class="tooltip bs-tooltip-left bs-tooltip-left-demo tooltip-warning" id="applyAlert" role="tooltip" style="margin-top: 10px;margin-right: 10px;margin-bottom: 0px; display:none;">
 								<div class="arrow"></div>

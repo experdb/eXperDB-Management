@@ -43,7 +43,7 @@
 		
 		$("#compressType").val(1);
 		$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true); 
-		$("#merge_period_week").val(0);
+		$("#merge_period_week").val(1);
 		$("#merge_period_month").val(1);
 		fn_mergeClick();
 		
@@ -59,14 +59,13 @@
 		$("#backupSetNum").val($("#bckSetNum").val());
 		$("#compressType").val($("#bckCompressVal").val());
 		
+		$("#merge_period_week").val($("#bckSetWeekDateVal").val());
+		$("#merge_period_month").val($("#bckSetMonthDateVal").val());
+		
 		// full backup 수행일(weekly/monthly)에 따라 값 setting
 		if($("#bckSetDateTypeVal").val() == "true"){
-			$("#merge_period_week").val($("#bckSetDateVal").val());
-			$("#merge_period_month").val(1);
 			$("input:radio[name='merge_period']:radio[value='weekly']").prop('checked', true);
 		}else if($("#bckSetDateTypeVal").val() == "false"){
-			$("#merge_period_month").val($("#bckSetDateVal").val());
-			$("#merge_period_week").val(0);
 			$("input:radio[name='merge_period']:radio[value='monthly']").prop('checked', true);
 		} 
 		
@@ -169,11 +168,14 @@
 		}else{
 			$("#bckCompress").val("Maximum Compression");
 		}
-
+		
+		$("#bckSetWeekDateVal").val($("#merge_period_week").val());
+		$("#bckSetMonthDateVal").val($("#merge_period_month").val());
+		
 		if($(':input:radio[name=merge_period]:checked').val() == "weekly"){
 			$("#bckSetDateTypeVal").val(true);
-			var setDateVal = $("#merge_period_week").val()
-			$("#bckSetDateVal").val(setDateVal);
+			// var setDateVal = $("#merge_period_week").val()
+			
 			bckdate = ' <spring:message code="eXperDB_backup.msg74" />'
 			switch($("#merge_period_week").val()){
 				case  "1":
@@ -201,7 +203,7 @@
 		}else{
 			$("#bckSetDateTypeVal").val(false);
 			var setDateVal = $("#merge_period_month").val();
-			$("#bckSetDateVal").val(setDateVal);
+			$("#bckSetMonthDateVal").val(setDateVal);
 			bckdate = ' <spring:message code="eXperDB_backup.msg73" />'
 			if($("#merge_period_month").val()>31){
 				switch($("#merge_period_month").val()){
