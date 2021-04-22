@@ -132,6 +132,7 @@ public class ProxyClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
+	
 	/* proxy service restart*/
 	public JSONObject psP005(JSONObject jObj) throws Exception {
 		byte[] bt = jObj.toString().getBytes();
@@ -140,6 +141,7 @@ public class ProxyClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
+	
 	/* proxy service stop/start*/
 	public JSONObject psP006(JSONObject jObj) throws Exception {
 		byte[] bt = jObj.toString().getBytes();
@@ -147,5 +149,22 @@ public class ProxyClientAdapter {
 		byte[]	recvBuff = cc.recv(4, false);
 
 		return parseToJsonObj(recvBuff);
+	}
+	
+	/* proxy agent interface*/
+	public JSONObject psP007(JSONObject jObj) throws Exception {
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
+	
+	/* proxy log file*/
+	public JSONObject psP008(JSONObject jObj) throws Exception {
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		JSONObject obj = (JSONObject) cc.recvObject();
+		return obj;
 	}
 }
