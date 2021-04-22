@@ -176,25 +176,25 @@
 			$("#bckSetDateVal").val(setDateVal);
 			bckdate = ' <spring:message code="eXperDB_backup.msg74" />'
 			switch($("#merge_period_week").val()){
-				case  "0":
+				case  "1":
 					bckdate += ' <spring:message code="eXperDB_backup.msg52" />'
 					break;
-				case "1":
+				case "2":
 					bckdate += ' <spring:message code="eXperDB_backup.msg53" />'
 					break;
-				case "2":
+				case "3":
 					bckdate += ' <spring:message code="eXperDB_backup.msg54" />'
 					break;
-				case "3":
+				case "4":
 					bckdate += ' <spring:message code="eXperDB_backup.msg55" />'
 					break;
-				case "4":
+				case "5":
 					bckdate += ' <spring:message code="eXperDB_backup.msg56" />'
 					break;
-				case "5":
+				case "6":
 					bckdate += ' <spring:message code="eXperDB_backup.msg57" />'
 					break;
-				case "6":
+				case "7":
 					bckdate += ' <spring:message code="eXperDB_backup.msg58" />'
 					break;
 			}
@@ -327,13 +327,13 @@
 														<div class="col-11 row" style="margin-left: 10px; padding-left: 5px;">
 															<label style="padding-top: 5px; width: 87px;"><spring:message code="eXperDB_backup.msg72" /> <input type="radio" id="merge_week" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="weekly" onchange="fn_mergeClick()"/></label>
 															<select name="merge_period_week" id="merge_period_week" class="form-control form-control-xsm" style="margin-left: 1rem;width:180px; height:40px; color:black;">
-																<option value="0">Sunday</option>
-																<option value="1">Monday</option>
-																<option value="2">Tuesday</option>
-																<option value="3">Wednesday</option>
-																<option value="4">Thursday</option>
-																<option value="5">Friday</option>
-																<option value="6">Saturday</option>
+																<option value="1">Sunday</option>
+																<option value="2">Monday</option>
+																<option value="3">Tuesday</option>
+																<option value="4">Wednesday</option>
+																<option value="5">Thursday</option>
+																<option value="6">Friday</option>
+																<option value="7">Saturday</option>
 															</select>
 															
 															<label style="padding-top: 10px; width: 87px;"><spring:message code="eXperDB_backup.msg71" /> <input type="radio" id="merge_month" name="merge_period" style="margin-right: 10px; margin-left: 10px;" value="monthly" onchange="fn_mergeClick()"/></label>
