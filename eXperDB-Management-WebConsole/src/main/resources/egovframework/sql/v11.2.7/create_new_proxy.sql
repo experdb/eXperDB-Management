@@ -62,7 +62,7 @@ CREATE TABLE experdb_management.t_pry_svr_i (
 	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp(),  -- 최종_수정_일시
 	CONSTRAINT pk_t_pry_svr_i PRIMARY KEY (pry_svr_id)
 );
-CREATE UNIQUE INDEX uk_t_pry_svr_i_01 ON experdb_management.t_pry_svr_i USING btree (pry_svr_id, ipadr, popry_svr_nm);
+CREATE UNIQUE INDEX uk_t_pry_svr_i_01 ON experdb_management.t_pry_svr_i USING btree (pry_svr_id, ipadr, pry_svr_nm);
 CREATE UNIQUE INDEX uk_t_pry_svr_i_02 ON experdb_management.t_pry_svr_i USING btree (ipadr, pry_svr_nm);
 CREATE INDEX uk_t_pry_svr_i_03 ON experdb_management.t_pry_svr_i USING btree (master_svr_id);
 COMMENT ON TABLE experdb_management.t_pry_svr_i IS 'PROXY_서버정보';
