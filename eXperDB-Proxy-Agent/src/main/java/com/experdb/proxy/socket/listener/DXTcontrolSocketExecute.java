@@ -16,6 +16,7 @@ import com.experdb.proxy.server.PsP003;
 import com.experdb.proxy.server.PsP004;
 import com.experdb.proxy.server.PsP005;
 import com.experdb.proxy.server.PsP006;
+import com.experdb.proxy.server.PsP008;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
@@ -78,7 +79,7 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					psP002.execute(strDX_EX_CODE, jObj);
 		
 					break;
-				case TranCodeType.PsP003 ://연결 Test
+				case TranCodeType.PsP003 :// get config file
 					
 					PsP003 psP003 = new PsP003(client, is, os);
 					psP003.execute(strDX_EX_CODE, jObj);
@@ -101,6 +102,12 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					PsP006 PsP006 = new PsP006(client, is, os);
 					PsP006.execute(strDX_EX_CODE, jObj);
 		
+					break;
+				case TranCodeType.PsP008 : // get log file
+					
+					PsP008 PsP008 = new PsP008(client, is, os);
+					PsP008.execute(strDX_EX_CODE, jObj);
+					
 					break;
 				}
 				objSERVER_INFO = null;

@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
+import com.experdb.proxy.db.repository.service.ProxyGetFileService;
+import com.experdb.proxy.db.repository.service.ProxyGetFileServiceImpl;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
@@ -38,7 +40,7 @@ public class PsP003 extends SocketCtl{
 	
 	ApplicationContext context;
 
-	public PsP003(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
+	public PsP003(Socket socket, BufferedInputStream is, BufferedOutputStream os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
@@ -54,20 +56,19 @@ public class PsP003 extends SocketCtl{
 		String strSuccessCode = "0";
 		
 		String strConfigFileDir = (String) jObj.get(ProtocolID.FILE_DIRECTORY);
-
 		JSONObject outputObj = new JSONObject();
 		try {
-			
+
 			String strReadLine = (String) jObj.get(ProtocolID.READLINE);
 			String strSeek = (String) jObj.get(ProtocolID.SEEK);
 			String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
-			
+
 			int intDwlen = Integer.parseInt(dwLen);
 			int intReadLine = Integer.parseInt(strReadLine);
 			int intLastLine = intDwlen;
 
 			String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
-			File inFile = new File(strConfigFileDir+strFileName);
+			File inFile = new File(strConfigFileDir, strFileName);
 
 			HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(strReadLine), Integer.parseInt(strSeek), intLastLine);
 
@@ -80,10 +81,10 @@ public class PsP003 extends SocketCtl{
 			outputObj.put(ProtocolID.SEEK, hp.get("seek"));
 			outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
 			outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
-			
+
 			hp = null;
 			inFile = null;
-			
+
 			send(outputObj);
 		} catch (Exception e) {
 			errLogger.error("PsP003 {} ", e.toString());
