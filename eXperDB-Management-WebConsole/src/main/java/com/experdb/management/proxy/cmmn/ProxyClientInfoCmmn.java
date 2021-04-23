@@ -209,4 +209,32 @@ public class ProxyClientInfoCmmn implements Runnable{
 				
 		return result;
 	}
+	
+	// proxy, keepalived log 파일 가져오기
+	public Map<String, Object> getLogFile(String IP, int PORT, JSONObject jObj) throws ConnectException, Exception {
+		Map<String, Object> result = new HashMap<>();
+		
+		JSONObject objResult;
+		
+		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
+		
+		PCA.open();
+		
+		objResult = PCA.psP008(jObj);
+		
+		PCA.close();
+		
+		String strErrMsg = (String)objResult.get(ProxyClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objResult.get(ProxyClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objResult.get(ProxyClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objResult.get(ProxyClientProtocolID.RESULT_CODE);
+		String strResultData = (String)objResult.get(ProxyClientProtocolID.RESULT_DATA);
+		
+		result.put("RESULT_CODE", strResultCode);
+		result.put("ERR_CODE", strErrCode);
+		result.put("ERR_MSG", strErrMsg);
+		result.put("RESULT_DATA", strResultData);
+				
+		return result;
+	}
 }

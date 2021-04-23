@@ -260,12 +260,8 @@ public class ProxyMonitoringController {
 	 */
 	@RequestMapping("/configViewAjax.do")
 	public ModelAndView configViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
-//		HashMap result = new HashMap<>();
 		ModelAndView mv = new ModelAndView("jsonView");
 		String strBuffer = "";
-		System.out.println("2222222222222222222222222222222222222222222222");
-		System.out.println("pry_svr_id : " + request.getParameter("pry_svr_id"));
-		System.out.println("type : " + request.getParameter("type"));
 		try {
 			String strPrySvrId = request.getParameter("pry_svr_id");
 			String type = request.getParameter("type");
@@ -281,16 +277,9 @@ public class ProxyMonitoringController {
 			Map<String, Object> result = proxyMonitoringService.getConfiguration(pry_svr_id, type, param);
 			
 			strBuffer = (String) result.get("RESULT_DATA"); 
-	        //버퍼 선언
-//			result.put("data", strBuffer);
-//			result.put("fSize", strBuffer.length());
 			mv.addObject("data", strBuffer);
 			mv.addObject("fSize", strBuffer.length());
 			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
-			//hp.put("fChrSize", intLastLength - intFirstLength); 
-//			hp.put("seek", lngSeek.toString());
-//			hp.put("dwLen", Integer.toString(intDwlen));
-//			hp.put("endFlag", strEndFlag);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -315,8 +304,32 @@ public class ProxyMonitoringController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping("/proxyLogViewAjax.do")
-	public ModelAndView logViewAjax(){
+	public ModelAndView logViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		ModelAndView mv = new ModelAndView("jsonView");
+		String strBuffer = "";
+		try {
+			String strPrySvrId = request.getParameter("pry_svr_id");
+			String type = request.getParameter("type");
+			int pry_svr_id = Integer.parseInt(strPrySvrId);
+			String strSeek = request.getParameter("seek");
+			String strReadLine = request.getParameter("readLine");
+			String dwLen = request.getParameter("dwLen");
+			
+			Map<String, Object> param = new HashMap<>();
+			param.put("seek", strSeek);
+			param.put("readLine", strReadLine);
+			param.put("dwLen", dwLen);
+			Map<String, Object> result = proxyMonitoringService.getLogFile(pry_svr_id, type, param);
+			
+			strBuffer = (String) result.get("RESULT_DATA"); 
+			strBuffer = strBuffer.replaceAll("\n", "<br>");
+			mv.addObject("data", strBuffer);
+			mv.addObject("fSize", strBuffer.length());
+			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return mv;
 	}
 	

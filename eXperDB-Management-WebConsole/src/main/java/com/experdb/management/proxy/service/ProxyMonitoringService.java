@@ -107,4 +107,11 @@ public interface ProxyMonitoringService {
 	 */
 	int actExeCng(int pry_svr_id, String type, String status, String act_exe_type);
 	
+	/**
+	 * proxy / keepalived log 파일 가져오기
+	 * @param pry_svr_id, type, param
+	 * @return Map<String, Object>
+	 */
+	Map<String, Object> getLogFile(int pry_svr_id, String type, Map<String, Object> param) throws Exception;
+	
 }

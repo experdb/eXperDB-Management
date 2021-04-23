@@ -159,8 +159,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	 */
 	@Override
 	public Map<String, Object> getConfiguration(int pry_svr_id, String type, Map<String, Object> param) throws Exception {
-		String result = "fail";
-		String result_code = "";
 		
 		Map<String, Object> info = proxyMonitoringDAO.selectConfigurationInfo(pry_svr_id, type);
 		
@@ -178,7 +176,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		jObj.put(ProxyClientProtocolID.SEEK, param.get("seek"));
 		jObj.put(ProxyClientProtocolID.DW_LEN, param.get("dwLen"));
 		jObj.put(ProxyClientProtocolID.READLINE, param.get("readLine"));
-		System.out.println("jObj : " + jObj.toJSONString());
 		
 		String IP = strIpAdr;
 		int PORT = Integer.parseInt(strPort);
@@ -233,6 +230,41 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		System.out.println("service result : " + result);
 		
 		return result; 
+	}
+
+	/**
+	 * proxy / keepalived log 파일 가져오기
+	 * @param pry_svr_id, type, param
+	 * @return Map<String, Object>
+	 */
+	@Override
+	public Map<String, Object> getLogFile(int pry_svr_id, String type, Map<String, Object> param) throws Exception{
+		Map<String, Object> info = proxyMonitoringDAO.selectConfigurationInfo(pry_svr_id, type);
+		
+		String strIpAdr = (String) info.get("ipadr");
+		String strPrySvrNm = (String) info.get("pry_svr_nm");
+//		String strConfigFilePath = (String) info.get("path");
+//		String strDirectory = strConfigFilePath.substring(0, strConfigFilePath.lastIndexOf("/")+1);
+//		String strFileName = strConfigFilePath.substring(strConfigFilePath.lastIndexOf("/")+1);
+		String strPort = String.valueOf(info.get("socket_port"));
+		
+		JSONObject jObj = new JSONObject();
+		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP008);
+//		jObj.put(ProxyClientProtocolID.FILE_DIRECTORY, strDirectory);
+//		jObj.put(ProxyClientProtocolID.FILE_NAME, strFileName);
+		jObj.put(ProxyClientProtocolID.SEEK, param.get("seek"));
+		jObj.put(ProxyClientProtocolID.DW_LEN, param.get("dwLen"));
+		jObj.put(ProxyClientProtocolID.READLINE, param.get("readLine"));
+		
+		String IP = strIpAdr;
+		int PORT = Integer.parseInt(strPort);
+		ProxyClientInfoCmmn pcic = new ProxyClientInfoCmmn();
+		
+		Map<String, Object> getLogResult = new HashMap<String, Object>();
+		getLogResult = pcic.getLogFile(IP, PORT, jObj);
+		getLogResult.put("pry_svr_nm", strPrySvrNm);
+		
+		return getLogResult;
 	}
 
 
