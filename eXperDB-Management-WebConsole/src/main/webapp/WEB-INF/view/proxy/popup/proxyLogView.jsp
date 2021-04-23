@@ -40,6 +40,7 @@
  				pry_svr_id : pry_svr_id,
  				type : type,
  				date : date,
+				seek : v_seek,
  				dwLen : v_dwLen,
  				readLine : v_log_line
  			},
@@ -293,7 +294,7 @@
 					<input type="hidden" id="fSize" name="fSize">
 					<input type="hidden" id="type" name="type">
 					<input type="hidden" id="pry_svr_id" name="pry_svr_id">
-				
+
 					<fieldset>
 						<div class="card" style="margin-top:10px;border:0px;margin-bottom:-40px;">
 							<div class="card-body">
@@ -336,22 +337,6 @@
 											<tr>
 												<td width="100%" colspan="5">
 											 		<div class="overflow_area3" id="proxylog" style="width:1065px;">
-											 		Mar 23 16:33:45 vip_backup haproxy: [WARNING] 081/163345 (1116) : Server pgReadOnly/standby is DOWN, reason: Layer4 connection problem, info: "Connection refused at step 1 of tcp-check (connect)", check duration: 0ms. 0 active and 1 backup servers left. Running on backup. 0 sessions active, 0 requeued, 0 remaining in queue.
-											 		<br>
-Mar 23 16:33:50 vip_backup haproxy: [WARNING] 081/163350 (1116) : Backup Server pgReadOnly/primary is DOWN, reason: Layer7 invalid response, info: "TCPCHK did not match content '' at step 10", check duration: 1ms. 0 active and 0 backup servers left. 0 sessions active, 0 requeued, 0 remaining in queue.
-<br>
-Mar 23 16:33:50 vip_backup haproxy: [ALERT] 081/163350 (1116) : proxy 'pgReadOnly' has no server available!
-<br>
-Mar 23 16:33:50 vip_backup haproxy: [WARNING] 081/163350 (1116) : Server pgReadWrite/primary is DOWN, reason: Layer4 connection problem, info: "Connection refused at step 1 of tcp-check (connect)", check duration: 0ms. 0 active and 0 backup servers left. 0 sessions active, 0 requeued, 0 remaining in queue.
-<br>
-Mar 23 16:33:50 vip_backup haproxy: [ALERT] 081/163350 (1116) : proxy 'pgReadWrite' has no server available!
-<br>
-Mar 23 16:34:00 vip_backup haproxy: [WARNING] 081/163400 (1116) : Backup Server pgReadOnly/primary is UP, reason: Layer7 check passed, code: 0, info: "(tcp-check)", check duration: 35ms. 0 active and 1 backup servers online. Running on backup. 0 sessions requeued, 0 total in queue.
-<br>
-Mar 23 16:34:01 vip_backup haproxy: [WARNING] 081/163401 (1116) : Server pgReadWrite/primary is UP, reason: Layer7 check passed, code: 0, info: "(tcp-check)", check duration: 38ms. 1 active and 0 backup servers online. 0 sessions requeued, 0 total in queue.
-<br>
-Mar 23 16:34:03 vip_backup haproxy: [WARNING] 081/163403 (1116) : Server pgReadOnly/standby is UP, reason: Layer7 check passed, code: 0, info: "(tcp-check)", check duration: 35ms. 1 active and 1 backup servers online. 0 sessions requeued, 0 total in queue.
-											 		
 													</div>
 												</td>
 											</tr>
