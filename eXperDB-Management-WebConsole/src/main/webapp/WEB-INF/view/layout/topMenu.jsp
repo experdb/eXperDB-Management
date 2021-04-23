@@ -20,6 +20,9 @@
 		var encryptAgentMenu = $( '#encryptAgentMenu' ); 
 		var trnasferMenu = $( '#trnasferMenu' ); 
 		var bnrMenu = $( '#eXperDB_Backup' ); 
+
+		//2021.04.23 proxy 추가
+		var proxyMenu = $( '#proxy_menu' ); 
 		
 		if("${sessionScope.session.backup_use_yn}" == "Y"){
 			bnrMenu.show();
@@ -39,6 +42,13 @@
 			trnasferMenu.show();
 		}else{
 			trnasferMenu.hide();
+		}
+
+		//proxy 사용여부 추가
+		if("${sessionScope.session.proxy_use_yn}" == "Y"){
+			proxyMenu.show();
+		}else{
+			proxyMenu.hide();
 		}
 
 		$.ajax({
@@ -292,18 +302,20 @@
 					}
 					
 					//proxyMenu
-					if ((result[i].mnu_cd).indexOf("MN00018")== 0 ) {
-						if(result[i].read_aut_yn == "N"){
-							$('#' + result[i].mnu_cd).hide();
-						}else{
-							$('#' + result[i].mnu_cd).show();
-						}
-						
-						if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none' && $('#MN0001805').css('display') == 'none'){
-									//&& $('#MN0001803').css('display') == 'none' && $('#MN0001804').css('display') == 'none'){
-							$('#proxyMenu').hide();
-						}else{
-							$('#proxyMenu').show();
+					if("${sessionScope.session.proxy_use_yn}" == "Y"){
+						if ((result[i].mnu_cd).indexOf("MN00018")== 0 ) {
+							if(result[i].read_aut_yn == "N"){
+								$('#' + result[i].mnu_cd).hide();
+							}else{
+								$('#' + result[i].mnu_cd).show();
+							}
+							
+							if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none' && $('#MN0001805').css('display') == 'none'){
+										//&& $('#MN0001803').css('display') == 'none' && $('#MN0001804').css('display') == 'none'){
+								$('#proxy_menu').hide();
+							}else{
+								$('#proxy_menu').show();
+							}
 						}
 					}
 				}
@@ -826,8 +838,9 @@
 									</ul>
 								</div>
 							</li>
+							
 							<!-- Virtual IP -->
-							<li class="nav-item width-div-a" id="proxyMenu">
+							<li class="nav-item width-div-a" id="proxy_menu">
 								<a href="#" class="nav-link">
 									<i class="mdi mdi-server-network menu-icon"></i>
 									<span class="menu-title">Proxy</span>

@@ -59,7 +59,9 @@ public class WebConsoleSetting {
 		Scanner scan = new Scanner(System.in);
 		
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-
+		
+		String strProxyYN="";	//proxy 사용여부
+		
 		/* 사용언어 */
 		System.out.println("Language(ko:Korean), (en:English) :");
 		strLanguage = scan.nextLine();
@@ -143,11 +145,11 @@ public class WebConsoleSetting {
 			System.out.println("Server root password :");
 			strRootPw = scan.nextLine();
 			while (true) {
-				if(strBackupYN.equals("")) {
+				if(strRootPw.equals("")) {
 					System.out.println("Please enter your Server root password. ");
 					System.out.println("Server root password :");
-					strBackupYN = scan.nextLine();
-					strBackupYN = strBackupYN.toUpperCase();
+					strRootPw = scan.nextLine();
+					strRootPw = strRootPw.toUpperCase();
 				} else {
 					break;
 				}
@@ -155,11 +157,11 @@ public class WebConsoleSetting {
 			System.out.println("Server SSH Port : ");
 			strSshPort = scan.nextLine();
 			while (true) {
-				if(strBackupYN.equals("")) {
+				if(strSshPort.equals("")) {
 					System.out.println("Please enter your Server SSH Port. ");
 					System.out.println("Server SSH Port :");
-					strBackupYN = scan.nextLine();
-					strBackupYN = strBackupYN.toUpperCase();
+					strSshPort = scan.nextLine();
+					strSshPort = strSshPort.toUpperCase();
 				} else {
 					break;
 				}
@@ -211,7 +213,21 @@ public class WebConsoleSetting {
 				break;
 			}
 		}
-
+		
+		/* Proxy in/out 사용여부 */
+		System.out.println("Whether data Proxy-Service is enabled? (y, n)");
+		strProxyYN = scan.nextLine();
+		strProxyYN = strProxyYN.toUpperCase();
+		while (true) {
+			if(strProxyYN.equals("")) {
+				System.out.println("Please enter your Proxy-Service setting yn. ");
+				System.out.println("Whether data Proxy Service is enabled? (y, n) :");
+				strProxyYN = scan.nextLine();
+				strProxyYN = strProxyYN.toUpperCase();
+			} else {
+				break;
+			}
+		}
 
 
 		/* Scale in/out 사용여부 */
@@ -304,7 +320,8 @@ public class WebConsoleSetting {
 		System.out.println("eXperDB-DB2PG installation path : " + strDb2pgPath);
 		System.out.println("###################eXperDB-Scale##################");
 		System.out.println("Whether scale is enabled : " + strScaleYN);
-
+		System.out.println("Whether proxy-service is enabled : " + strProxyYN);
+		
 		if(strScaleYN.equals("Y")){
 			System.out.println("eXperDB-Scale scale_path : " + strScalePath);
 			System.out.println("eXperDB-Scale scale_in_cmd : " + strScaleInCmd);
@@ -414,6 +431,8 @@ public class WebConsoleSetting {
 		    }else{
 		    	 prop.setProperty("scale", strScaleYN);	
 		    }
+
+		    prop.setProperty("proxy.useyn", strProxyYN);
 		    
 		    prop.setProperty("db2pg_path", strDb2pgPath);
 

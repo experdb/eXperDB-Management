@@ -56,7 +56,7 @@ public class ProxyMonitoringController {
 	
 	private List<Map<String, Object>> menuAut;
 	
-	private String mnu_id = "44";
+	private String mnu_id = "51";
 	
 	/**
 	 * Proxy 모니터링 화면

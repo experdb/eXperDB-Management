@@ -20,6 +20,17 @@ public class LoginVO {
 	private String ectityUid;
 	private String loginChkTime;
 
+	private String proxy_use_yn;
+	
+	
+	public String getProxy_use_yn() {
+		return proxy_use_yn;
+	}
+
+	public void setProxy_use_yn(String proxy_use_yn) {
+		this.proxy_use_yn = proxy_use_yn;
+	}
+
 	public String getBackup_use_yn() {
 		return backup_use_yn;
 	}

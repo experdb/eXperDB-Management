@@ -23,7 +23,6 @@ import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
-import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
 
 /**
@@ -59,7 +58,7 @@ public class ProxyAgentController {
 	
 	private List<Map<String, Object>> menuAut;
 	
-	private String sohw_menu_id = "48";
+	private String sohw_menu_id = "55";
 
 	
 	/**

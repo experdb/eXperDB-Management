@@ -74,7 +74,7 @@ public class ProxySettingController {
 	
 	private List<Map<String, Object>> menuAut;
 	
-	private String sohw_menu_id = "45";
+	private String sohw_menu_id = "52";
 	
 	/**
 	 * Mybatis Transaction 

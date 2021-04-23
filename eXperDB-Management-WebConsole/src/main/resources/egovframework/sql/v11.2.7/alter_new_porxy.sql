@@ -2,26 +2,32 @@
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN00018', '프록시관리', '', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+-- 50
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN0001801', '프록시모니터링', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+-- 51
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN0001802', '프록시설정관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+-- 52
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN0001803', '프록시상태이력관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+-- 53
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN0001804', '프록시변경이력관리', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+-- 54
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN0001805', '프록시관리에이전트', 'MN00018', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+-- 55
 
 
 

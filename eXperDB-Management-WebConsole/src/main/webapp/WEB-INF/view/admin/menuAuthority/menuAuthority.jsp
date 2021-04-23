@@ -155,6 +155,9 @@ $(window.document).ready(function() {
 		$('.bnr').hide();
 	}
 	
+	if(nvlPrmSet('${proxy_useyn}','N')=='N'){
+		$('.proxy_yn').hide();
+	}
 });
 
 
@@ -1471,7 +1474,7 @@ function fn_search(){
 									</td>
 								</tr>
 								<!-- Proxy -->
-								<tr>
+								<tr class="proxy_yn">
 									<th scope="row" rowspan="3">
 										<div class="inp_chk">
 											<input type="checkbox" id="VirtualIP" name="VirtualIP"/>
@@ -1493,7 +1496,7 @@ function fn_search(){
 									</td>
 								</tr>
 								
-								<tr>
+								<tr class="proxy_yn">
 									<td colspan="2"><spring:message code="menu.proxy_monitoring" /> </td>
 									<td>
 										<div class="inp_chk">
@@ -1510,7 +1513,7 @@ function fn_search(){
 
 								</tr>
 																
-								<tr>
+								<tr class="proxy_yn">
 									<td colspan="2"><spring:message code="menu.proxy_config" /> </td>
 									<td>
 										<div class="inp_chk">
