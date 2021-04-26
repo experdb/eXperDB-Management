@@ -63,7 +63,6 @@ public class DXTcontrolProxy extends SocketCtl {
 			agtVo.setIpadr(strIpadr);
 			AgentInfoVO agentInfoVO = systemService.selectPryAgtInfo(agtVo);
 
-			
 			//proxy 설치시 테이블 insert 실행
 			//D의 경우 사용자 삭제
 			if (proxyServerChk != null && agentInfoVO != null) {
@@ -85,8 +84,6 @@ public class DXTcontrolProxy extends SocketCtl {
 	 */
 	@Transactional
 	public String confSetExecute(String strIpadr, String strPort) throws Exception {
-		socketLogger.info("DXTcontrolProxyChogihwaExe1234.confSetExecute : ");
-
 		ProxyServerVO searchProxyServerVO = new ProxyServerVO();
 		searchProxyServerVO.setIpadr(strIpadr);
 
@@ -210,10 +207,10 @@ public class DXTcontrolProxy extends SocketCtl {
 
 			//5. proxy 실행상태
 			if (proxyPathData != null) {
-				proxyExeStaus = pryService.selectProxyServerChk("proxy_exe_status"); //param setting
+				proxyExeStaus = pryService.selectProxyServerChk("proxy_setting_tot"); //param setting
 				if (proxyExeStaus != null) {
 					proxyExeStaus = proxyExeStaus.trim();
-					if ("active".equals(proxyExeStaus)) {
+					if ("running".equals(proxyExeStaus)) {
 						proxyExeStaus = "TC001501";
 					} else {
 						proxyExeStaus = "TC001502";
@@ -223,13 +220,13 @@ public class DXTcontrolProxy extends SocketCtl {
 				}
 			}
 			/////////////////////////////////////////////////////////////////////
-			
+
 			//6. keepalived 실행상태
 			if (KeepPathData != null) {
-				keepExeStaus = pryService.selectProxyServerChk("keepalived_exe_status"); //param setting
+				keepExeStaus = pryService.selectProxyServerChk("keepalived_setting_tot"); //param setting
 				if (keepExeStaus != null) {
 					keepExeStaus = keepExeStaus.trim();
-					if ("active".equals(keepExeStaus)) {
+					if ("running".equals(keepExeStaus)) {
 						keepExeStaus = "TC001501";
 					} else {
 						keepExeStaus = "TC001502";

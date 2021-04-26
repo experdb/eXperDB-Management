@@ -1,10 +1,10 @@
 package com.experdb.proxy.socket.listener;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 import org.quartz.CronTrigger;
-import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
@@ -49,7 +49,6 @@ public class DXTcontrolProxyExecute extends SocketCtl {
     		//선행조건 설정
     		//agent 가 설치되어있는지?
     		//keep, proxy가 설치되어있는지?
-    		//실행되고 있는
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 
 			String proxySetYn = "";
@@ -62,7 +61,7 @@ public class DXTcontrolProxyExecute extends SocketCtl {
 			ProxyServerVO proxyServerInfo = service.selectPrySvrInfo(searchProxyServerVO);
 
 			//서버 미등록 일 경우 proxy 설치여부 및 keepalived 설치확인
-			proxySetStatus = service.selectProxyTotServerChk("proxy_setting_tot");
+			proxySetStatus = service.selectProxyTotServerChk("proxy_setting_tot", "");
 
 			//서버 등록 시만  logic 실행
 			if (proxyServerInfo != null) {
@@ -72,21 +71,20 @@ public class DXTcontrolProxyExecute extends SocketCtl {
 			//proxy 설치되어 있는 경우 실행
 			if (!"".equals(proxySetStatus) && !"not installed".equals(proxySetStatus)) {
 				if ("true".equals(proxySetYn)) {
+
 					//스케줄러 실행(keep, pxoy 정보 확인) - 매일 5분에 1번씩 실행
-					strProxyJobTime = "0 0/5 * 1/1 * ? *";
-					JobDetail jobproxy = newJob(DXTcontrolProxyExecuteChk.class).withIdentity("jobName", "group1").build();
-					
-    	        	CronTrigger triggerScale = newTrigger().withIdentity("trggerName", "group1").withSchedule(cronSchedule(strProxyJobTime)).build(); //5분마다 설정
+					//strProxyJobTime = "0 0/5 * 1/1 * ? *";
+					strProxyJobTime = "0 0/1 * 1/1 * ? *";
+
+					JobDetail jobProxy = newJob(DXTcontrolProxyExecuteChk.class).withIdentity("jobName", "group1").build();
+    	        	CronTrigger triggerProxy = newTrigger().withIdentity("trggerName", "group1").withSchedule(cronSchedule(strProxyJobTime)).build(); //5분마다 설정
+
+    	        	scheduler.scheduleJob(jobProxy, triggerProxy);
     	        	scheduler.start();
 				}
-			}
+			}        	
         } catch(Exception e) {
             e.printStackTrace();
         }  
     }
-
-	private JobBuilder newJob(Class<DXTcontrolProxyExecuteChk> class1) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

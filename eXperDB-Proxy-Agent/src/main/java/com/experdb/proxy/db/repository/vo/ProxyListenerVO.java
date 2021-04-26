@@ -18,7 +18,14 @@ public class ProxyListenerVO {
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
 	private int db_svr_id;
+	private String lsn_exe_status;
 	
+	public String getLsn_exe_status() {
+		return lsn_exe_status;
+	}
+	public void setLsn_exe_status(String lsn_exe_status) {
+		this.lsn_exe_status = lsn_exe_status;
+	}
 	public int getDb_svr_id() {
 		return db_svr_id;
 	}

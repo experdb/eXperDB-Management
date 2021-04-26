@@ -1,5 +1,8 @@
 package com.experdb.proxy.db.repository.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -184,4 +187,45 @@ public class ProxyDAO {
 	public int updatePrySvrExeStatusInfo(ProxyServerVO vo) throws Exception  {
 		return session.update("proxy.updatePrySvrExeStatusInfo", vo);
 	}
+
+	/**
+	 * Proxy 리스너 포트 내역 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectPryLsnPortList(Map<String, Object> param) {
+		return (List) session.selectList("proxy.selectPryLsnPortList", param);
+	}
+
+	/**
+	 * T_PRY_LSN_I table 수정(실행상태 등록)
+	 * 
+	 * @param 
+	 * @throws Exception
+	 */
+	public int updatePryLsnStatusInfo(ProxyListenerVO vo) throws Exception  {
+		return session.update("proxy.updatePryLsnStatusInfo", vo);
+	}
+
+	/**
+	 * vip 내역 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectPryVipcngVipList(Map<String, Object> param) {
+		return (List) session.selectList("proxy.selectPryVipcngVipList", param);
+	}
+
+	/**
+	 * T_PRY_VIPCNG_I table 수정(실행상태 등록)
+	 * 
+	 * @param 
+	 * @throws Exception
+	 */
+	public int updatePryVipcngStatusInfo(ProxyVipConfigVO vo) throws Exception  {
+		return session.update("proxy.updatePryVipcngStatusInfo", vo);
+	}
+	
 }

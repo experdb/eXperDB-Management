@@ -68,12 +68,12 @@ public class ProxyRunCommandExec extends Thread {
         BufferedReader errorBufferReaderRe = null; // 오류 버퍼
 
         ProcessBuilder runBuilder = null;
-        socketLogger.info("iMode --> " + iMode);
 
         Process p = null;
         try {
     		String path = FileUtil.getPropertyValue("context.properties", "agent.path");
-    		strCmd = strCmd + " >/dev/null 2>1 &";
+    		//strCmd = strCmd + " >/dev/null 2>1 &";
+
     		List runCmd = new ArrayList();
     		runCmd.add("/bin/bash");
     		runCmd.add("-c");
@@ -84,7 +84,7 @@ public class ProxyRunCommandExec extends Thread {
     				
     		p = runBuilder.start();
     				
-    	//	p.waitFor ();
+    		p.waitFor ();
 
     		if ( p.exitValue() != 0 ) {
     			BufferedReader out = new BufferedReader ( new InputStreamReader ( p.getInputStream() ) );
@@ -99,7 +99,7 @@ public class ProxyRunCommandExec extends Thread {
     			}
     					
     			strResult += strResultErrInfo;
-    			socketLogger.info("err.ready() --> " + strResult);
+
     			err.close();
     			strReturnVal = "failed";
     		} else {
@@ -107,7 +107,6 @@ public class ProxyRunCommandExec extends Thread {
 
     			while ( out.ready() ) {
     				strResult += out.readLine();
-    						
     				socketLogger.info("out.ready() --> " + out.readLine());
     			}
     			out.close();
@@ -116,7 +115,7 @@ public class ProxyRunCommandExec extends Thread {
 
     		this.returnMessage = strResult;
     		this.retVal = strReturnVal;
-    		socketLogger.info("out.ready()2 --> ");
+
     		strReturnVal = "success";	
 
     	}catch(IOException e){

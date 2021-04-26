@@ -57,7 +57,7 @@ public class SystemServiceImpl implements SystemService{
 	public void agentInfoStartMng(String strSocketIp, String strSocketPort, String strVersion) throws Exception  {
 		AgentInfoVO searchAgentInfoVO = new AgentInfoVO();
 		searchAgentInfoVO.setIpadr(strSocketIp);
-		socketLogger.info("SystemServiceImpl.strSocketIp : " + strSocketIp);
+
 		String domainNm = "";
 		String SvrUseNm = "";
 		
@@ -75,13 +75,11 @@ public class SystemServiceImpl implements SystemService{
 		vo.setLst_mdfr_id("system");
 
 		if(agentInfo == null) {
-			socketLogger.info("SystemServiceImpl.strSocketIp444 : " + strSocketIp);
 			vo.setDomain_nm("PROXY_" + strSocketIp);
 			vo.setSvr_use_yn("N");
 			
 			this.insertPryAgtInfo(vo);
 		} else {
-			socketLogger.info("SystemServiceImpl.strSocketIp333 : " + strSocketIp);
 			if (agentInfo.getDomain_nm() != null) {
 				domainNm = agentInfo.getDomain_nm();
 			} else {
@@ -99,8 +97,6 @@ public class SystemServiceImpl implements SystemService{
 				
 			this.updatePryAgtInfo(vo);
 		} 
-		
-		socketLogger.info("SystemServiceImpl.strSocketIp555 : " + strSocketIp);
 	}
 
 	/**
@@ -109,8 +105,6 @@ public class SystemServiceImpl implements SystemService{
 	 * @throws Exception
 	 */
 	public void insertPryAgtInfo(AgentInfoVO vo) throws Exception {
-		socketLogger.info("SystemServiceImpl.insertPryAgtInfo : " + vo);
-		
 		systemDAO.insertPryAgtInfo(vo);
 	}
 
@@ -120,8 +114,6 @@ public class SystemServiceImpl implements SystemService{
 	 * @throws Exception
 	 */
 	public void updatePryAgtInfo(AgentInfoVO vo) throws Exception {
-		socketLogger.info("SystemServiceImpl.updatePryAgtInfo : " + vo);
-		
 		systemDAO.updatePryAgtInfo(vo);
 	}
 

@@ -106,7 +106,7 @@ public class DaemonStart implements DxDaemon{
 				e.printStackTrace();
 				return;
 			}		
-			
+
 			//Driver 로딩 
 			try {
 				Class.forName("org.apache.commons.dbcp.PoolingDriver");
@@ -115,7 +115,7 @@ public class DaemonStart implements DxDaemon{
 				errLogger.error("데몬 시작시 에러가 발생하였습니다-driver. {}", e.toString());
 				return;			
 			}
-			
+
 			// SqlSessionManager 초기화
 			try {
 				//proxy 서버 데이터 생성
@@ -126,7 +126,7 @@ public class DaemonStart implements DxDaemon{
 				e.printStackTrace();
 				return;
 			}
-			
+
 			// SqlSessionManager 초기화
 			try {
 				//proxy 서버 실행
@@ -137,7 +137,7 @@ public class DaemonStart implements DxDaemon{
 				e.printStackTrace();
 				return;
 			}
-			
+
 			System.out.println("######################################################################");
 			System.out.println("## load file ");
 			System.out.println("## "+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));

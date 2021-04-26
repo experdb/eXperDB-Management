@@ -9,11 +9,18 @@ public class ProxyVipConfigVO {
 	private String v_if_nm; 
 	private int priority; 
 	private int chk_tm; 
+	private String v_ip_exe_status; 
 	private String frst_regr_id; 
 	private String frst_reg_dtm; 
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
 	
+	public String getV_ip_exe_status() {
+		return v_ip_exe_status;
+	}
+	public void setV_ip_exe_status(String v_ip_exe_status) {
+		this.v_ip_exe_status = v_ip_exe_status;
+	}
 	public int getVip_cng_id() {
 		return vip_cng_id;
 	}

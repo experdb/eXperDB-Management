@@ -68,5 +68,5 @@ public interface ProxyService {
 	 * @param String cmdGbn
 	 * @throws Exception
 	 */
-	public String selectProxyTotServerChk(String cmdGbn) throws Exception ;
+	public String selectProxyTotServerChk(String cmdGbn, String reqCmd) throws Exception ;
 }

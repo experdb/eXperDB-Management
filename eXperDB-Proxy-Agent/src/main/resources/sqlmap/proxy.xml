@@ -476,4 +476,84 @@
 		WHERE
 			PRY_SVR_ID = #{pry_svr_id}
     </update>
+    
+	<select id="selectPryLsnPortList" parameterType="hashmap" resultType="hashMap">
+        /**
+        * Query ID : selectPryLsnPortList
+        * Description : 리스너 포트 조회
+        * Author : 
+        **/
+         SELECT B.LSN_ID
+              , B.PRY_SVR_ID
+              , B.CON_BIND_PORT
+              , A.IPADR 
+           FROM T_PRY_SVR_I A
+                INNER JOIN T_PRY_LSN_I B ON A.PRY_SVR_ID = B.PRY_SVR_ID
+          WHERE 1 = 1
+            <if test='ipadr != null'>
+                AND A.IPADR = #{ipadr}
+            </if>
+            <if test='pry_svr_id != null'>
+                AND A.PRY_SVR_ID = #{pry_svr_id}::numeric
+            </if>
+          ORDER BY B.LSN_ID
+    </select>
+    
+	<update id="updatePryLsnStatusInfo"  parameterType="ProxyListenerVO">
+		/**
+	 	* Query ID : updatePryLsnInfo
+	 	* Description : proxy 리스너 수정
+	 	* Author : 
+	 	**/
+	 	UPDATE T_PRY_LSN_I
+	 	SET 
+			LSN_EXE_STATUS = #{lsn_exe_status}
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+	 	WHERE
+	 		LSN_ID = #{lsn_id}::numeric
+	 	AND PRY_SVR_ID = #{pry_svr_id}::numeric
+	</update>
+    
+	<select id="selectPryVipcngVipList" parameterType="hashmap" resultType="hashMap">
+        /**
+        * Query ID : selectPryVipcngVipList
+        * Description : vip 내역 조회
+        * Author : 
+        **/
+         SELECT B.V_IP
+              , B.PRY_SVR_ID
+              , B.V_ROT_ID
+              , B.V_IF_NM
+              , B.VIP_CNG_ID
+              , B.STATE_NM
+              , A.IPADR 
+           FROM T_PRY_SVR_I A
+                INNER JOIN T_PRY_VIPCNG_I B ON A.PRY_SVR_ID = B.PRY_SVR_ID
+          WHERE 1 = 1
+            <if test='ipadr != null'>
+                AND A.IPADR = #{ipadr}
+            </if>
+            <if test='pry_svr_id != null'>
+                AND A.PRY_SVR_ID = #{pry_svr_id}::numeric
+            </if>
+          ORDER BY B.V_IP
+    </select>
+
+	<update id="updatePryVipcngStatusInfo"  parameterType="ProxyVipConfigVO">
+		/**
+	 	* Query ID : updatePryVipcngStatusInfo
+	 	* Description : VIP 상태 수정
+	 	* Author : 
+	 	**/
+	 	UPDATE T_PRY_VIPCNG_I
+	 	SET 
+			V_IP_EXE_STATUS = #{v_ip_exe_status}
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+	 	WHERE
+	 		VIP_CNG_ID = #{vip_cng_id}::numeric
+	 	AND PRY_SVR_ID = #{pry_svr_id}::numeric
+	 	AND STATE_NM = #{state_nm}
+	</update>
 </mapper>
