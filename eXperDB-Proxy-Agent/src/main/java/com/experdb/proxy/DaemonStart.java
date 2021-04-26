@@ -102,7 +102,7 @@ public class DaemonStart implements DxDaemon{
 
 				service.agentInfoStartMng(strIpadr, strPort, strVersion);
 			} catch (Exception e) {
-				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
+				errLogger.error("데몬 시작시 에러가 발생하였습니다.-agent {}", e.toString());
 				e.printStackTrace();
 				return;
 			}		
@@ -112,7 +112,7 @@ public class DaemonStart implements DxDaemon{
 				Class.forName("org.apache.commons.dbcp.PoolingDriver");
 				Class.forName("org.postgresql.Driver");
 			} catch (Exception e) {
-				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
+				errLogger.error("데몬 시작시 에러가 발생하였습니다-driver. {}", e.toString());
 				return;			
 			}
 			
@@ -122,7 +122,7 @@ public class DaemonStart implements DxDaemon{
 				DXTcontrolProxy rSet = new DXTcontrolProxy();
 				rSet.start();
 			} catch (Exception e) {
-				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
+				errLogger.error("데몬 시작시 에러가 발생하였습니다.-proxy {}", e.toString());
 				e.printStackTrace();
 				return;
 			}

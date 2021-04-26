@@ -48,11 +48,11 @@ public class DXTcontrolProxy extends SocketCtl {
 		String returnSetting = "";
 		
 		AgentInfoVO agtVo = new AgentInfoVO();
-		SystemServiceImpl systemService = (SystemServiceImpl) context.getBean("SystemService");
-		
+
 		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 		ProxyServiceImpl service = (ProxyServiceImpl) context.getBean("ProxyService");
-
+		SystemServiceImpl systemService = (SystemServiceImpl) context.getBean("SystemService");
+		
 		try {
 			//선행조건  proxy 설치 확인
 			proxyServerChk = service.selectProxyServerChk("proxy_conf_which");
@@ -369,10 +369,6 @@ public class DXTcontrolProxy extends SocketCtl {
 
 			if (proxyPathData != null) {
 				returnMsg = pryService.proxyConfFisrtIns(vo, insUpNmGbn, insertParam, jObjListResult);
-				
-				if (returnMsg != null && "success".equals(returnMsg)) {
-					
-				}
 			}
 		} catch (Exception e) {
 			errLogger.error("DXTcontrolScaleAwsExecute {} ", e.toString());

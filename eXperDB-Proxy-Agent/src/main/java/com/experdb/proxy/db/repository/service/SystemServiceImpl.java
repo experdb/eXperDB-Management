@@ -81,7 +81,7 @@ public class SystemServiceImpl implements SystemService{
 			
 			this.insertPryAgtInfo(vo);
 		} else {
-
+			socketLogger.info("SystemServiceImpl.strSocketIp333 : " + strSocketIp);
 			if (agentInfo.getDomain_nm() != null) {
 				domainNm = agentInfo.getDomain_nm();
 			} else {
@@ -99,6 +99,8 @@ public class SystemServiceImpl implements SystemService{
 				
 			this.updatePryAgtInfo(vo);
 		} 
+		
+		socketLogger.info("SystemServiceImpl.strSocketIp555 : " + strSocketIp);
 	}
 
 	/**
