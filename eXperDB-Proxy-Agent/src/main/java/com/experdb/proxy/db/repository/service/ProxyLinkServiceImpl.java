@@ -481,4 +481,54 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		
 		return outputObj;
 	}
+
+	public JSONObject getAgentInterface(JSONObject jobj) throws Exception {
+		socketLogger.info("getAgentInterface :: start");
+		JSONObject outputObj = new JSONObject();
+		
+		String strSuccessCode = "0";
+		String strInterfaceList = "0";
+		String strErrCode = "";
+		String strErrMsg = "";
+		
+		RunCommandExec commandExec = new RunCommandExec();
+		//명령어 실행
+		commandExec.runExecRtn3("ip -o link");
+
+		try {
+			commandExec.join();
+		} catch (InterruptedException ie) {
+			socketLogger.error("executeService error {}",ie.toString());
+			ie.printStackTrace();
+			strSuccessCode = "1";
+			strErrCode = "-1";
+			strErrMsg = "Agent 처리 중 오류가 발생하였습니다.";
+		}
+		
+		if(commandExec.call().equals("success")){
+			strInterfaceList = commandExec.getMessage();
+		}else{
+			strSuccessCode = "1";
+			strErrCode = "-1";
+			strErrMsg = "Agent 처리 중 오류가 발생하였습니다.";
+		}
+			
+		String interfList = "";
+		
+		String interLine[] = strInterfaceList.split("\n");
+		for(int i=0; i<interLine.length; i++){
+			String interf[] = interLine[i].split(":");
+			if(i !=0) {
+				if(i !=1) interfList += "\t";
+				interfList += interf[1].trim();
+			}
+		}
+		
+		outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+		outputObj.put(ProtocolID.INTERFACE_LIST, interfList);
+		
+		return outputObj;
+	}
 }

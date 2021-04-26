@@ -60,5 +60,6 @@ public class ProtocolID {
 	public static final String EXECUTE_RESULT = "EXECUTE_RESULT"; //실행 결과
 	public static final String PRY_PTH = "PRY_PTH"; //haproxy config 백업 경로
 	public static final String KAL_PTH = "KAL_PTH"; //keepalived config 백업 경로
+	public static final String INTERFACE_LIST = "INTERFACE_LIST";//Agent network Interface 목록 결과
 
 }

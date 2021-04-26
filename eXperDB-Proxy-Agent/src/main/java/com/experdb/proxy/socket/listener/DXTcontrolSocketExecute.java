@@ -16,6 +16,7 @@ import com.experdb.proxy.server.PsP003;
 import com.experdb.proxy.server.PsP004;
 import com.experdb.proxy.server.PsP005;
 import com.experdb.proxy.server.PsP006;
+import com.experdb.proxy.server.PsP007;
 import com.experdb.proxy.server.PsP008;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
@@ -102,6 +103,12 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					PsP006 PsP006 = new PsP006(client, is, os);
 					PsP006.execute(strDX_EX_CODE, jObj);
 		
+					break;
+				case TranCodeType.PsP007 : //get network Interface
+					
+					PsP007 PsP007 = new PsP007(client, is, os);
+					PsP007.execute(strDX_EX_CODE, jObj);
+					
 					break;
 				case TranCodeType.PsP008 : // get log file
 					
