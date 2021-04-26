@@ -150,6 +150,7 @@ CREATE TABLE experdb_management.t_pry_lsn_i (
 	con_sim_query varchar(300) NULL,                           -- 전송_쿼리
 	field_val varchar(200) NULL,                               -- 필드_값
 	field_nm varchar(200) NULL,                                -- 필드_명
+	lsn_exe_status varchar(20) NULL,                           -- 리스너_실행_상태
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                              -- 최종_수정자_ID
@@ -159,7 +160,6 @@ CREATE TABLE experdb_management.t_pry_lsn_i (
 );
 CREATE UNIQUE INDEX uk_t_pry_lsn_i_01 ON experdb_management.t_pry_lsn_i USING btree (pry_svr_id, lsn_nm);
 COMMENT ON TABLE experdb_management.t_pry_lsn_i IS 'PROXY_리스너_정보';
-
 
 -- Column comments
 COMMENT ON COLUMN experdb_management.t_pry_lsn_i.lsn_id IS '리스너_ID';
@@ -173,6 +173,7 @@ COMMENT ON COLUMN experdb_management.t_pry_lsn_i.db_nm IS 'DB_명';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_i.con_sim_query IS '전송_쿼리';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_i.field_val IS '필드_값';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_i.field_nm IS '필드_명';
+COMMENT ON COLUMN experdb_management.t_pry_lsn_i.lsn_exe_status IS '리스너_실행_상태';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_i.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_i.lst_mdfr_id IS '최종_수정자_ID';
@@ -231,6 +232,7 @@ CREATE TABLE experdb_management.t_pry_vipcng_i (
 	v_if_nm varchar(20) NULL,                                  -- 가상_인터페이스_명
 	priority numeric(18) NULL,                                  -- 우선순위
 	chk_tm numeric(18) NULL,                                    -- 체크_시간
+	v_ip_exe_status varchar(20) NULL,                          -- 가상_IP_실행_상태
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                              -- 최종_수정자_ID
@@ -249,6 +251,7 @@ COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.v_rot_id IS '가상_라우�
 COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.v_if_nm IS '가상_인터페이스_명';
 COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.priority IS '우선순위';
 COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.chk_tm IS '체크_시간';
+COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.v_ip_exe_status IS '가상_IP_실행_상태';
 COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.lst_mdfr_id IS '최종_수정자_ID';
