@@ -34,24 +34,8 @@ function fn_serverListTable_init() {
 		searching : false,
 		paging : false,
 		deferRender : true,
-		columns : [	{data : "db_con_addr", className : "dt-center", defaultContent : ""
-					/* ,render : function(data, type, full, meta) {
-							if(full.lsn_svr_id == ""){
-								var html = '<input type="text" class="form-control form-control-xsm" maxlength="30"';
-								html +='id="db_con_addr_'+meta.row+'" value="'+full.db_con_addr+'" name="db_con_addr_'+meta.row+'" onkeyup="fn_edit_serverList('+meta.row+',\'db_con_addr\');fn_checkWord(this,21);" onblur="this.value=this.value.trim()" placeholder="DBMS접속 IP : Port 형식으로 입력하세요." />';
-								return html;
-							}else{
-								return full.db_con_addr;
-							}
-						} */
-					},
-					{data : "chk_portno", className : "dt-center",  defaultContent : ""
-					/* ,render : function(data, type, full, meta) {
-							var html = '<input type="number" class="form-control form-control-xsm" maxlength="5"';
-							html +='id="chk_portno_'+meta.row+'" value="'+full.chk_portno+'" name="chk_portno_'+meta.row+'"  onKeyPress="chk_Number(this);" onkeyup="fn_edit_serverList('+meta.row+',\'chk_portno\');fn_checkWord(this,5);" onblur="this.value=this.value.trim()" placeholder="5자리까지 입력 가능합니다." />';
-							return html;
-						} */
-					},
+		columns : [	{data : "db_con_addr", className : "dt-center", defaultContent : ""},
+					{data : "chk_portno", className : "dt-center",  defaultContent : ""},
 					{data : "backup_yn", defaultContent : "",
 						render : function(data, type, full, meta) {
 							var html = "";
@@ -209,7 +193,7 @@ function fn_serverListTable_init() {
 				},
 				lstnReg_con_bind_port: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>',
-					validatorPort: '0~65535 사이의 숫자를 입력해야합니다.'
+					validatorPort: '<spring:message code="eXperDB_proxy.msg13"/>'
 				},
 				lstnReg_lsn_desc: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>'
@@ -230,7 +214,7 @@ function fn_serverListTable_init() {
 			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
 				var dataLen = serverListTable.rows().data().length;
 				if(dataLen == 0){
-					showSwalIcon('최소 한개 이상의 DBMS를 등록해주세요.', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="eXperDB_proxy.msg25" />', '<spring:message code="common.close" />', '', 'error');
 					return;	
 				}else{
 					if($("#lstnReg_mode", "#insProxyListenForm").val() == "reg"){
@@ -485,25 +469,6 @@ function fn_serverListTable_init() {
 		$("#portno").val(ipadr.substr(ipadr.indexOf(":")+1,ipadr.length));
 	}
 	
-	/* function fn_change_sim_query_sel(){
-		//lstnReg_con_sim_query
-		//$("#lstnReg_con_sim_query", "#insProxyListenForm").val($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val());
-		if($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val() == ""){
-			$("#lstnReg_con_sim_query", "#insProxyListenForm").val("");
-			$("#lstnReg_field_nm", "#insProxyListenForm").val("");
-			$("#lstnReg_field_val", "#insProxyListenForm").val("");
-		}else{
-			$("#lstnReg_con_sim_query", "#insProxyListenForm").val($("#lstnReg_con_sim_query_sel").children("option:selected").text());
-			if($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val() == "TC004101"){
-				$("#lstnReg_field_nm", "#insProxyListenForm").val("haproxy_check");
-				$("#lstnReg_field_val", "#insProxyListenForm").val("false");
-			}else if($("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val() == "TC004102"){
-				$("#lstnReg_field_nm", "#insProxyListenForm").val("?column?");
-				$("#lstnReg_field_val", "#insProxyListenForm").val("1");
-			}
-		}
-			
-	} */
 	/* ********************************************************
 	 *  리스너명 변경 시 이벤트
 	 ******************************************************** */
@@ -529,10 +494,7 @@ function fn_serverListTable_init() {
 			//$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val(""); 
 		}
 	}
-	/* 
-	function fn_change_con_bind_ip_sel(){
-		$("#lstnReg_con_bind_ip", "#insProxyListenForm").val($("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val());
-	} */
+	
 </script>
 
 <div class="modal fade" id="pop_layer_ip_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; z-index: 1060;">

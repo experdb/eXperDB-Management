@@ -1,5 +1,6 @@
 package com.experdb.management.proxy.service;
 
+import java.net.ConnectException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -141,4 +142,6 @@ public interface ProxySettingService {
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param);
 
 	JSONObject restartAgent(Map<String, Object> param) throws Exception;
+
+	List<String> getAgentInterface(Map<String, Object> param)throws ConnectException, Exception;
 }

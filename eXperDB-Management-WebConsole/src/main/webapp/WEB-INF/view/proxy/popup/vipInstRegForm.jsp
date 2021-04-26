@@ -196,7 +196,7 @@
 	function instReg_add_vip_instance(){
 		//입력받은 데이터를 Table에 저장하지 않고,DataTable에만 입력 
 		//showSwalIcon('상단의 [적용]을 실행해야 \n변경 사항에 대해 저장/적용 됩니다.', '<spring:message code="common.close" />', '', 'success');
-		showSwalIcon('<spring:message code="eXperDB_proxy.vip_priority" />가 가장 큰 Instance가 Master로 자동 승격됩니다.', '<spring:message code="common.close" />', '', 'success');
+		showSwalIcon('<spring:message code="eXperDB_proxy.msg8" />', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
 		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 		vipInstTable.row.add({

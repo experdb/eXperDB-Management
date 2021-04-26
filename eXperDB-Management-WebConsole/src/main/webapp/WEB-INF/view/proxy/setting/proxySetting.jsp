@@ -548,17 +548,17 @@
 					}
 				},
 	 			success : function(result) {
-	 				if(result.errcd==0){
-		 				//전역변수로 저장
-		 				selAgentConnect = true;
-	 					selGlobalInfo = result.global_info;
+	 				if(result.errcd > -1){
+	 					
+	 					//전역변수로 저장
+		 				selGlobalInfo = result.global_info;
 	 					selVipInstanceList = result.vipconfig_list;
 	 					selProxyListenerList = result.listener_list;
 	 					selVipInstancePeerList = result.peer_vipconfig_list;
 	 					selProxyListenerPeerList = result.peer_listener_list;
 	 					selAgentInterface = result.interface_items;
 	 					
-		 				if(result.vipconfig_list.length ==0 || result.listener_list.length ==0 || result.global_info == null){
+		 				if(selProxyListenerList.length ==0 || selGlobalInfo == null){
 		 					$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg12" />');
 						}
 		 				//Global 설정 불러오기
@@ -580,11 +580,32 @@
 								$("#lstnReg_db_nm", "#insProxyListenForm").append("<option value='"+result.db_sel_list[i].db_nm+"'>"+result.db_sel_list[i].db_nm+"</option>");	
 							}									
 						}
-		 			}else if(result.errcd==-2){
+						selAgentConnect = true;
+						if(result.errcd==0){
+							fn_btn_setEnable2("");
+			 			}else if(result.errcd==1){
+			 				selAgentConnect = false;
+			 				$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg21" />');
+							fn_btn_setEnable2("disabled");
+			 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+			 			}else if(result.errcd==2){
+			 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+			 			}
+	 				}else {
+		 				//오류메세지 표시
+		 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+		 				//오류 발생 시 적용 불가하도록 버튼 disable
+		 				fn_btn_setEnable2("disabled");
 		 				selAgentConnect = false;
-		 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
-		 			}else{
-		 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+		 				
+		 				load_global_info(null);
+		 				
+		 				vipInstTable.rows({selected: true}).deselect();
+						vipInstTable.clear().draw();
+						
+						proxyListenTable.rows({selected: true}).deselect();
+						proxyListenTable.clear().draw();
+						
 		 			}
 	 			}
 	 		});
@@ -688,7 +709,7 @@
 	 			success : function(result) {
 	 				unregSvrInfo = result;
 	 				if(unregSvrInfo.length ==0){
-	 					showSwalIcon("Proxy Agent가 설치된 서버 중 \n미등록된 서버가 없습니다.", '<spring:message code="common.close" />', '', 'error');
+	 					showSwalIcon(fn_strBrReplcae("<spring:message code="eXperDB_proxy.msg22" />"), '<spring:message code="common.close" />', '', 'error');
 	 					$('#pop_layer_svr_reg').modal("hide");
 	 				}else{
 	 					//ip select 동적 생성
@@ -1054,13 +1075,13 @@
 			var selRow = proxyServerTable.row('.selected').data();
 			if(selRow.exe_status=="TC001501"){
 				//사용 및 구동 중지 후 삭제가 가능합니다.
-				showSwalIcon('구동 중지 후 삭제가 가능합니다.', '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon('<spring:message code="eXperDB_proxy.msg23" />', '<spring:message code="common.close" />', '', 'error');
 			}else if(selRow.master_gbn=="M"){
 				var rowLen = proxyServerTable.rows().data().length;
 				var rowDatas = proxyServerTable.rows().data();
 				for(var i=0; i < rowLen ; i++){
 					if(selRow.pry_svr_id != rowDatas[i].pry_svr_id && rowDatas[i].master_svr_id == selRow.pry_svr_id){
-						showSwalIcon('해당 서버와 연관된 Backup 서버가 존재합니다.\nBackup 서버를 먼저 삭제한 후 삭제 해주세요.', '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg24" />'), '<spring:message code="common.close" />', '', 'error');
 						return;
 					}
 				}
@@ -1446,6 +1467,18 @@
 		
 	}
 	
+	function fn_btn_setEnable2(disable){
+		$("#btnInsert_vip").prop("disabled", disable);
+		$("#btnUpdate_vip").prop("disabled", disable);
+		$("#btnDelete_vip").prop("disabled", disable);
+		
+		$("#btnInsert_lsn").prop("disabled", disable);
+		$("#btnUpdate_lsn").prop("disabled", disable);
+		$("#btnDelete_lsn").prop("disabled", disable);
+		
+		$("#btnApply").prop("disabled", disable);
+	}
+	
 	/* ********************************************************
      * 상세 정보 수정 사항 서버에 적용
     ******************************************************** */
@@ -1531,6 +1564,7 @@
 			delListenerRows = new Array();//삭제한 Listener 목록
 			delListnerSvrRows = new Array();//삭제한 Listener Server List 목록 
 	}
+	
 </script>
 <body>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
@@ -1654,7 +1688,7 @@
 					<div class="table-responsive" style="overflow:hidden;">
 						<div id="wrt_button" style="float: right;">
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnApply" onClick="fn_before_apply()">
-								<i class="ti-control-play btn-icon-prepend "></i>적용
+								<i class="ti-control-play btn-icon-prepend "></i><spring:message code="eXperDB_proxy.apply" />
 							</button>
 						</div>
 						<h4 class="card-title">

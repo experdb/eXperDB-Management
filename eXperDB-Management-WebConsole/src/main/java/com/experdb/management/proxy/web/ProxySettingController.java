@@ -323,12 +323,19 @@ public class ProxySettingController {
 					
 				//정보조회
 				resultObj = proxySettingService.getPoxyServerConf(param);
+				try{
+					List<String> interfList = proxySettingService.getAgentInterface(param);
+					resultObj.put("interface_items", interfList);
+				}catch(ConnectException e){
+					resultObj.put("errcd", 1);
+					resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+					resultObj.put("interface_items", null);
+				}catch(Exception e){
+					resultObj.put("errcd", 2);
+					resultObj.put("errMsg","Agent 작업 중 오류가 발생하였습니다.");
+					resultObj.put("interface_items", null);
+				}
 			}
-		} catch (ConnectException e) {
-			e.printStackTrace();
-			resultObj.put("errcd", -2);
-			resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);

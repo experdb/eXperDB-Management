@@ -98,25 +98,25 @@ var mgmtDbmsTable = null;
 		        },
 		        messages: {
 		        	svrReg_ipadr: {
-						required: '<spring:message code="errors.required" arguments="'+ 'IP주소' +'" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					svrReg_pry_svr_nm: {
-						required: '<spring:message code="errors.required" arguments="'+ '서버명' +'" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					svrReg_day_data_del_term: {
-						required: '<spring:message code="errors.required" arguments="'+ '일별 데이터 보관 기간' +'" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					svrReg_min_data_del_term: {
-						required: '<spring:message code="errors.required" arguments="'+ '분별 데이터 보관 기간' +'" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					svrReg_master_gbn: {
-						required: '<spring:message code="errors.required" arguments="'+ 'Proxy 구분' +'" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					svrReg_master_svr_id : {
-						required: '<spring:message code="errors.required" arguments="'+ 'Master Proxy 서버' +'" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					svrReg_db_svr_id: {
-						required: '<spring:message code="errors.required" arguments="'+ '연결 DBMS' +'" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					}
 		        },
 				submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
@@ -166,7 +166,7 @@ var mgmtDbmsTable = null;
 		var len = data.length;
 		$( "#svrReg_master_svr_id > option", "#svrRegProxyServerForm" ).remove();
 		
-		innerHtml += '<option value=""> 선택 </option>';
+		innerHtml += '<option value=""> <spring:message code="common.choice" /> </option>';
 	
 		for(var i=0; i<len; i++){
 			var id = data[i].pry_svr_id;
@@ -551,12 +551,12 @@ var mgmtDbmsTable = null;
 									</label>
 									<div class="col-sm-3" id="div_day_data_del_term">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100px;" name="svrReg_day_data_del_term" id="svrReg_day_data_del_term">
-											<option value="5">5일</option>
-											<option value="10">10일</option>
-											<option value="15">15일</option>
-											<option value="20">20일</option>
-											<option value="25">25일</option>
-											<option value="30">30일</option>
+											<option value="5">5<spring:message code="common.day" /></option>
+											<option value="10">10<spring:message code="common.day" /></option>
+											<option value="15">15<spring:message code="common.day" /></option>
+											<option value="20">20<spring:message code="common.day" /></option>
+											<option value="25">25<spring:message code="common.day" /></option>
+											<option value="30">30<spring:message code="common.day" /></option>
 										</select>
 									</div>
 									
@@ -566,13 +566,13 @@ var mgmtDbmsTable = null;
 									</label>
 									<div class="col-sm-auto" id="div_min_data_del_term">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100px;" name="svrReg_min_data_del_term" id="svrReg_min_data_del_term">
-											<option value="1">1일</option>
-											<option value="2">2일</option>
-											<option value="3">3일</option>
-											<option value="4">4일</option>
-											<option value="5">5일</option>
-											<option value="6">6일</option>
-											<option value="7">7일</option>
+											<option value="1">1<spring:message code="common.day" /></option>
+											<option value="2">2<spring:message code="common.day" /></option>
+											<option value="3">3<spring:message code="common.day" /></option>
+											<option value="4">4<spring:message code="common.day" /></option>
+											<option value="5">5<spring:message code="common.day" /></option>
+											<option value="6">6<spring:message code="common.day" /></option>
+											<option value="7">7<spring:message code="common.day" /></option>
 										</select>
 									</div>
 								</div>

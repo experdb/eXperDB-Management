@@ -76,6 +76,30 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		return proxySettingDAO.selectProxyServerList(param);
 	}
 
+	public List<String> getAgentInterface(Map<String, Object> param) throws ConnectException, Exception {
+		List<String> interfList = new ArrayList<String>();
+		//Agent Interface select box 생성 정보
+		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+		Map<String, Object> intfItemsResult = new HashMap<String, Object>();
+		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		try{
+			intfItemsResult = cic.getProxyAgtInterface(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port());
+		}catch(ConnectException e){
+			throw e;
+		}catch(Exception e){
+			throw e;
+		}
+		
+		if (intfItemsResult != null) {
+			String agentInterfList = intfItemsResult.get("INTF_LIST").toString();
+			String[] interfItems = agentInterfList.split("\t");
+			for(int  i =0; i< interfItems.length; i++){
+				interfList.add(interfItems[i]);
+			}
+		}
+		return interfList;
+	}
+	
 	/**
 	 * Proxy conf 상세조회
 	 * 
@@ -83,7 +107,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	public JSONObject getPoxyServerConf(Map<String, Object> param) throws ConnectException, Exception {
+	public JSONObject getPoxyServerConf(Map<String, Object> param) throws Exception {
 		JSONObject resultObj = new JSONObject();
 		
 		//Global 정보 조회
@@ -105,42 +129,15 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		//Peer Server Proxy Listener 정보 조회 
 		List<ProxyListenerVO> peerListenerList = proxySettingDAO.selectProxyListenerList(param);
 		
-		List<String> interfList = new ArrayList<String>();
-		//Agent Interface select box 생성 정보
-		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
-		Map<String, Object> intfItemsResult = new HashMap<String, Object>();
-		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
-		try{
-			intfItemsResult = cic.getProxyAgtInterface(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port());
-		}catch(ConnectException e){
-			resultObj.put("errcd", -1);
-			resultObj.put("global_info", globalInfo == null? null:globalInfo);
-			resultObj.put("listener_list", listenerList == null? null:listenerList);
-			resultObj.put("vipconfig_list", vipConfigList == null? null:vipConfigList);
-			resultObj.put("db_sel_list", dbSelList == null? null:dbSelList);
-			resultObj.put("peer_listener_list", peerListenerList == null? null:peerListenerList);
-			resultObj.put("peer_vipconfig_list", peerVipConfigList == null? null:peerVipConfigList);
-			resultObj.put("interface_items", null);
-			throw e;
-		}
-		
-		if (intfItemsResult != null) {
-			String agentInterfList = intfItemsResult.get("INTF_LIST").toString();
-			String[] interfItems = agentInterfList.split("\t");
-			for(int  i =0; i< interfItems.length; i++){
-				interfList.add(interfItems[i]);
-			}
-		}
-		
 		//json set
 		resultObj.put("errcd", 0);
+		resultObj.put("errMsg","정상적으로 처리되었습니다.");
 		resultObj.put("global_info", globalInfo == null? null:globalInfo);
 		resultObj.put("listener_list", listenerList == null? null:listenerList);
 		resultObj.put("vipconfig_list", vipConfigList == null? null:vipConfigList);
 		resultObj.put("db_sel_list", dbSelList == null? null:dbSelList);
 		resultObj.put("peer_listener_list", peerListenerList == null? null:peerListenerList);
 		resultObj.put("peer_vipconfig_list", peerVipConfigList == null? null:peerVipConfigList);
-		resultObj.put("interface_items", interfList);
 		return resultObj;
 	}
 
