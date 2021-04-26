@@ -67,11 +67,4 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void agentInfoStopMng(String strSocketIp, String strSocketPort) throws Exception ;
-
-	/**
-	 * Agent Properties 변경
-	 * @param dbServerInfo
-	 * @throws Exception
-	 */
-	public void agentPropertiesChg() throws Exception ;
 }

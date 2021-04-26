@@ -148,43 +148,7 @@ public class SystemServiceImpl implements SystemService{
 	public void updatePryAgtStopInfo(AgentInfoVO vo) throws Exception {
 		systemDAO.updatePryAgtStopInfo(vo);
 	}
-	
-	/**
-	 * 설치정보 관리
-	 * @param dbServerInfo
-	 * @throws Exception
-	 */
-	public void agentPropertiesChg() throws Exception  {
-		Properties prop = new Properties();
 
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		File file = new File(loader.getResource("context.properties").getFile());
-	
-		String path = file.getParent() + File.separator;
-
-		try {
-			prop.load(new FileInputStream(path + "context.properties"));
-		} catch(FileNotFoundException e) {
-			System.out.println("Exit(0) File Not Found ");
-			System.exit(0);
-		} catch(Exception e) {
-			System.out.println("Exit(0) Error : " + e.toString());
-			System.exit(0);
-		}
-		
-		prop.setProperty("proxy.root.pwd", "");
-
-		try {
-			prop.store(new FileOutputStream(path + "context.properties"), "");
-		} catch(FileNotFoundException e) {
-			System.out.println("Exit(0) Error : File Not Found ");
-			System.exit(0);
-		} catch(Exception e) {
-			System.out.println("Exit(0) Error : " + e.toString());
-			System.exit(0);
-		}
-	}	
-	
 	/**
 	 * proxy 마지막 이름 조회
 	 * @param ProxyServerVO

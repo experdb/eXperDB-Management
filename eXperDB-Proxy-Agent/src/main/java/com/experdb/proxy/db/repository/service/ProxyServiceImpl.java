@@ -740,7 +740,7 @@ public class ProxyServiceImpl implements ProxyService{
 	 */
 	@Transactional
 	public String proxyConfFisrtIns(ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam, JSONObject jObjListResult) throws Exception  {
-		String returnMsg = "";
+		String returnMsg = "success";
 		int saveChkPrySvrI = 0;
 		AgentInfoVO agtVo = new AgentInfoVO();
 
@@ -763,21 +763,7 @@ public class ProxyServiceImpl implements ProxyService{
 					errLogger.error("proxySvrIns {} ", e.toString());
 					returnMsg = "false";
 				}
-	
-				try {
-					//최종 t_pry_agt_i 설정 update
-					if (saveChkPrySvrI > 0) {
-						agtVo.setSvr_use_yn("Y");
-						agtVo.setIpadr(insPryVo.getIpadr());
-						agtVo.setLst_mdfr_id("system");
-	
-						systemDAO.updatePryAgtUseYnLInfo(agtVo);
-					}
-				} catch (Exception e) {
-					errLogger.error("saveChkPrySvrI {} ", e.toString());
-					returnMsg = "false";
-				}
-	
+
 				try {
 					//global
 					if (insertParam != null) {
@@ -963,6 +949,21 @@ public class ProxyServiceImpl implements ProxyService{
 					returnMsg = "false";
 				}
 				
+			}
+			
+			
+			try {
+				//최종 t_pry_agt_i 설정 update
+				if ("success".equals(returnMsg)) {
+					agtVo.setSvr_use_yn("Y");
+					agtVo.setIpadr(insPryVo.getIpadr());
+					agtVo.setLst_mdfr_id("system");
+
+					systemDAO.updatePryAgtUseYnLInfo(agtVo);
+				}
+			} catch (Exception e) {
+				errLogger.error("saveChkPrySvrI {} ", e.toString());
+				returnMsg = "false";
 			}
 		} catch (Exception e) {
 			errLogger.error("DXTcontrolScaleAwsExecute {} ", e.toString());

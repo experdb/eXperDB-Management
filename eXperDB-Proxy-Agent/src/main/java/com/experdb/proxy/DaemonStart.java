@@ -101,10 +101,6 @@ public class DaemonStart implements DxDaemon{
 				String strVersion = FileUtil.getPropertyValue("context.properties", "agent.install.version");
 
 				service.agentInfoStartMng(strIpadr, strPort, strVersion);
-				
-				//root properties 삭제
-				service.agentPropertiesChg();
-
 			} catch (Exception e) {
 				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
 				e.printStackTrace();

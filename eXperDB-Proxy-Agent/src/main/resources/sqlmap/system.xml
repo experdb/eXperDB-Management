@@ -10,28 +10,22 @@
 	 	* Author : 최정환
 	 	**/
 			SELECT
-				A.PRY_SVR_ID,
-				A.IPADR,
-				A.AGT_SN,
-				A.PRY_SVR_NM,
-				A.PRY_PTH,
-				A.KAL_PTH,
-				A.USE_YN,
-				A.EXE_STATUS,
-				A.KAL_EXE_STATUS,
-				A.MASTER_GBN,
-				A.MASTER_SVR_ID,
-				A.DB_SVR_ID,
-				A.DAY_DATA_DEL_TERM,
-				A.MIN_DATA_DEL_TERM,
-				A.FRST_REGR_ID,
-				A.FRST_REG_DTM,
-				A.LST_MDFR_ID,
-				A.LST_MDF_DTM
-			FROM  T_PRY_SVR_I A
-			      INNER JOIN T_PRY_AGT_I B ON A.IPADR = B.IPADR AND A.AGT_SN = B.AGT_SN
+				AGT_SN
+				, IPADR
+				, DOMAIN_NM
+				, SOCKET_PORT
+				, AGT_CNDT_CD
+				, STRT_DTM
+				, ISTCNF_YN
+				, AGT_VERSION
+				, FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+				, SVR_USE_YN
+			FROM  T_PRY_AGT_I
 			WHERE
-				A.IPADR = #{ipadr}
+				IPADR = #{ipadr}
 			LIMIT 1
 		]]>
 	</select>

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.experdb.proxy.db.repository.service.ProxyServiceImpl;
 import com.experdb.proxy.db.repository.service.SystemServiceImpl;
+import com.experdb.proxy.db.repository.vo.AgentInfoVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.util.FileUtil;
@@ -45,7 +46,10 @@ public class DXTcontrolProxy extends SocketCtl {
 	public void start() {
 		String proxyServerChk = "";
 		String returnSetting = "";
-
+		
+		AgentInfoVO agtVo = new AgentInfoVO();
+		SystemServiceImpl systemService = (SystemServiceImpl) context.getBean("SystemService");
+		
 		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 		ProxyServiceImpl service = (ProxyServiceImpl) context.getBean("ProxyService");
 
@@ -56,9 +60,14 @@ public class DXTcontrolProxy extends SocketCtl {
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 			String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 
+			agtVo.setIpadr(strIpadr);
+			AgentInfoVO agentInfoVO = systemService.selectPryAgtInfo(agtVo);
+
+			
 			//proxy 설치시 테이블 insert 실행
-			if (proxyServerChk != null) {
-				if (!"".equals(proxyServerChk)) {
+			//D의 경우 사용자 삭제
+			if (proxyServerChk != null && agentInfoVO != null) {
+				if (!"".equals(proxyServerChk) && ("".equals(agentInfoVO.getSvr_use_yn()) || !"D".equals(agentInfoVO.getSvr_use_yn()))) {
 					//proxy 서버일때 데이터 추가해야함
 					returnSetting= confSetExecute(strIpadr, strPort);
 				}
@@ -360,6 +369,10 @@ public class DXTcontrolProxy extends SocketCtl {
 
 			if (proxyPathData != null) {
 				returnMsg = pryService.proxyConfFisrtIns(vo, insUpNmGbn, insertParam, jObjListResult);
+				
+				if (returnMsg != null && "success".equals(returnMsg)) {
+					
+				}
 			}
 		} catch (Exception e) {
 			errLogger.error("DXTcontrolScaleAwsExecute {} ", e.toString());
