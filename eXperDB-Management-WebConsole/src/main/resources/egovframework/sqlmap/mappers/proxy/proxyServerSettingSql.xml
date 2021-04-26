@@ -73,7 +73,12 @@
        	FROM	T_PRY_SVR_I A RIGHT OUTER JOIN T_PRY_AGT_I B ON A.IPADR = B.IPADR 
 		WHERE   1 = 1
 		<if test="svr_use_yn != null and svr_use_yn != '' ">
+			<if test="mode == null or mode == '' ">
 				AND B.SVR_USE_YN = #{svr_use_yn}
+			</if>
+			<if test='mode != null and (mode eq "reg".toString())'>
+				AND B.SVR_USE_YN != 'Y'
+			</if>
 		</if>
 	</select>
 	<select id="selectProxyGlobal" resultType="proxyGlobalVO">

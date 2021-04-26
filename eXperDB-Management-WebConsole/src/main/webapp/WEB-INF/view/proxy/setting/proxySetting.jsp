@@ -691,7 +691,8 @@
 			//등록 모드라면 agent 설치 시 테이블에 등록되어있는 서버 정보 불러오기
 			$.ajax({
 				url : "/selectPoxyAgentSvrList.do",
-	 			data : { svr_use_yn : "N"},
+	 			data : { svr_use_yn : "N",
+	 					mode : "reg"},
 	 			dataType : "json",
 	 			type : "post",
 				beforeSend: function(xhr) {

@@ -281,7 +281,8 @@ public class ProxySettingController {
 				// 화면접근이력 이력 남기기 - Proxy 설정관리 - 서버 정보 조회
 				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_07", sohw_menu_id);		
 
-				param.put("svr_use_yn", request.getParameter("svr_use_yn")==null ? "" : request.getParameter("svr_use_yn").toString());				
+				param.put("svr_use_yn", request.getParameter("svr_use_yn")==null ? "" : request.getParameter("svr_use_yn").toString());			
+				param.put("mode", request.getParameter("mode")==null ? "" : request.getParameter("mode").toString());			
 				resultSet = proxySettingService.selectPoxyAgentSvrList(param);
 				
 			}
@@ -619,7 +620,7 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 
-				param.put("svr_use_yn", "N");
+				param.put("svr_use_yn", "D");
 				param.put("lst_mdfr_id", loginVo.getUsr_id());
 				param.put("pry_svr_id", request.getParameter("pry_svr_id"));
 

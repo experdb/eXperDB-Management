@@ -487,14 +487,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			String lst_mdfr_id = param.get("lst_mdfr_id").toString();
 			int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
 
-			param.put("svr_use_yn", "N");
+			param.put("svr_use_yn", "D");
 			param.put("lst_mdfr_id", lst_mdfr_id);
 			param.put("pry_svr_id", prySvrId);
 
-			
-			//서버 내리기
-
-			//update t_pry_agt_i의 svr_use_yn = N으로 업데이트
+			//update t_pry_agt_i의 svr_use_yn = D으로 업데이트
 			proxySettingDAO.updateProxyAgentInfoFromProxyId(param);
 
 			//delete t_prycng_g
