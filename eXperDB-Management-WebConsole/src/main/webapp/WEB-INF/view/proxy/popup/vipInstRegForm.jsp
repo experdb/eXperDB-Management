@@ -298,9 +298,6 @@
 									</label>
 									<div class="col-sm-3_75">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_v_if_nm_sel" id="instReg_v_if_nm_sel" onchange="fn_change_v_if_nm_sel();"  tabindex=4 >
-											<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>
-											<option value="enp0s3">enp0s3</option>
-											<option value="enp0s8">enp0s8</option>
 										</select>
 									</div>
 									<div class="col-sm-3_75">

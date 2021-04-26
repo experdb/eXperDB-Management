@@ -324,8 +324,15 @@ public class ProxySettingController {
 				//정보조회
 				resultObj = proxySettingService.getPoxyServerConf(param);
 			}
+		} catch (ConnectException e) {
+			e.printStackTrace();
+			resultObj.put("errcd", -2);
+			resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			resultObj.put("errcd", -1);
+			resultObj.put("errMsg","Proxy 상세 정보 불러오는 중 오류가 발생하였습니다.");
 		}
 		return resultObj;
 	}
@@ -470,7 +477,7 @@ public class ProxySettingController {
 		}  catch (ConnectException e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);
-			resultObj.put("errMsg","Agent 상태를 확인해주세요.");
+			resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -731,9 +738,14 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 				if ("success".equals(resultObj.get("resultLog"))) {
 					// 화면접근이력 이력 남기기 - Proxy 설정관리 - 설정 정보 수정 및 서버 재구동
 					proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_09", sohw_menu_id);
+					//설정변경이력 결과 남기기
+					
 					txManager.commit(status);
 				}else{
+					
 					txManager.rollback(status);
+					//설정변경이력 결과 남기기
+					
 					runRollback = true;
 				}
 				param.put("pry_svr_id", confData.get("pry_svr_id"));
@@ -745,7 +757,7 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 			e.printStackTrace();
 			txManager.rollback(status);
 			resultObj.put("result",false);
-			resultObj.put("errMsg","Agent 상태를 확인해주세요.");
+			resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -10,7 +10,7 @@
 		* Author : 김민정
 		**/
 		SELECT 
-       			(ROW_NUMBER() OVER()) AS ROWNUM, 
+       			(ROW_NUMBER() OVER(ORDER BY coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN DESC, A.LST_MDF_DTM)) AS ROWNUM, 
        			(ROW_NUMBER() OVER()) AS IDX,
        			A.PRY_SVR_ID,
        			A.IPADR,
