@@ -23,6 +23,7 @@
 				DB_SVR_ID,
 				DAY_DATA_DEL_TERM,
 				MIN_DATA_DEL_TERM,
+				OLD_MASTER_GBN,
 				FRST_REGR_ID,
 				FRST_REG_DTM,
 				LST_MDFR_ID,
@@ -32,7 +33,7 @@
 				<if test='ipadr != null'>
 				 AND 	IPADR = #{ipadr}
 				</if>
-				<if test='ipadr == null and pry_svr_id != null'>
+				<if test="ipadr == null and pry_svr_id > 0">
 				 AND 	PRY_SVR_ID = #{pry_svr_id}
 				</if>
 			LIMIT 1
@@ -467,16 +468,23 @@
 	 	**/
 		UPDATE T_PRY_SVR_I
 		SET
-			 <if test="exe_status != null">
+			 <if test="exe_status != null and exe_status != '' ">
 			 EXE_STATUS = #{exe_status},
 			 </if>
-			 <if test="kal_exe_status != null">
+			 <if test="kal_exe_status != null and kal_exe_status != '' ">
 			 KAL_EXE_STATUS = #{kal_exe_status},
 			 </if>
 			 LST_MDFR_ID = #{lst_mdfr_id},
         	 LST_MDF_DTM = clock_timestamp()
-		WHERE
-			PRY_SVR_ID = #{pry_svr_id}
+		WHERE 1 = 1
+
+         <if test="ipadr != null and ipadr != '' ">
+             AND IPADR = #{ipadr}
+         </if>
+         <if test="pry_svr_id > 0">
+             AND PRY_SVR_ID = #{pry_svr_id}::numeric
+         </if>
+			
     </update>
     
 	<select id="selectPryLsnPortList" parameterType="hashmap" resultType="hashMap">
@@ -558,4 +566,145 @@
 	 	AND PRY_SVR_ID = #{pry_svr_id}::numeric
 	 	AND STATE_NM = #{state_nm}
 	</update>
+	
+	<select id="selectPryActstateCngMaxTypeInfo" parameterType="hashMap" resultType="hashMap">
+		<![CDATA[
+		/**
+	 	* Query ID : selectPryActstateCngMaxTypeInfo
+	 	* Description : Proxy 기동상태 이력 max 값 조회 
+	 	* Author : 
+	 	**/
+        SELECT
+               C.SYS_TYPE,
+               C.ACT_TYPE,
+               C.PRY_ACT_EXE_SN,
+               C.PRY_SVR_ID
+          FROM (
+               SELECT A.SYS_TYPE,
+                      A.ACT_TYPE,
+                      A.PRY_ACT_EXE_SN,
+                      B.PRY_SVR_ID,
+                      ROW_NUMBER() OVER(PARTITION BY A.SYS_TYPE ORDER BY A.PRY_ACT_EXE_SN DESC, A.SYS_TYPE DESC) as RowIdx  
+                 FROM T_PRY_ACTSTATE_CNG_G A
+                      INNER JOIN T_PRY_SVR_I B ON A.PRY_SVR_ID = B.PRY_SVR_ID 
+                WHERE B.IPADR = #{ipadr}
+                  AND A.EXE_RSLT_CD = 'TC001501'
+         ) AS C
+         WHERE C.RowIdx = 1
+		]]>
+	</select>
+
+	<insert id="insertPryActExeCngInfo" parameterType="hashMap">
+		/**
+		* Query ID : insertPryActExeCngInfo
+		* Description : proxy / keepalived 기동-정지 상태 변경 
+		* Author :
+		**/
+		INSERT INTO T_PRY_ACTSTATE_CNG_G (
+				pry_act_exe_sn, 
+				pry_svr_id, 
+				sys_type, 
+				act_type, 
+				act_exe_type, 
+				wrk_dtm,
+				exe_rslt_cd, 
+				rslt_msg, 
+				frst_regr_id, 
+				frst_reg_dtm, 
+				lst_mdfr_id, 
+				lst_mdf_dtm
+		)
+		SELECT 
+				NEXTVAL('q_t_pry_actstate_cng_g_01'),
+				(SELECT pry_svr_id FROM T_PRY_SVR_I WHERE IPADR = #{ipadr} LIMIT 1), 
+				#{sys_type},
+				#{act_type},
+				'TC004002', 
+				clock_timestamp(), 
+				'TC001501',
+				'', 
+				#{frst_regr_id}, 
+				clock_timestamp(), 
+				#{lst_mdfr_id}, 
+				clock_timestamp()
+	</insert>
+	
+	<select id="selectPrySvrMasterSetInfo" parameterType="hashMap" resultType="ProxyServerVO">
+	    <if test='selQueryGbn == "masterM"'>
+	        SELECT
+	               MIN(PRY_SVR_ID) as PRY_SVR_ID
+	          FROM T_PRY_SVR_I
+	         WHERE 1 = 1
+	           AND (PRY_SVR_ID != #{pry_svr_id}::numeric AND IPADR != #{ipadr})
+	           AND (exe_status = 'TC001501' and KAL_exe_status = 'TC001501')
+	         LIMIT 1
+	    </if>
+	</select>
+	
+    <update id="updatePrySvrMstGbnInfo"  parameterType="ProxyServerVO">
+   		/**
+	 	* Query ID : updatePrySvrMstGbnInfo
+	 	* Description : proxy 서버 수정
+	 	* Author : 
+	 	**/
+	    <if test='sel_query_gbn == "master_down"'>
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{master_gbn}
+	    	, MASTER_SVR_ID = #{master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  = #{pry_svr_id}::numeric;
+
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{old_master_gbn}
+	    	, MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  = #{old_pry_svr_id}::numeric;
+
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  != #{pry_svr_id}::numeric
+		  AND MASTER_GBN = 'B';
+		</if>
+		
+		 <if test='sel_query_gbn == "backup_down"'>
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric
+			, MASTER_GBN = #{master_gbn}
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID = #{pry_svr_id}::numeric
+		 </if>
+		 
+	    <if test='sel_query_gbn == "g_master_up"'>
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{master_gbn}
+	    	, MASTER_SVR_ID = #{master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  = #{pry_svr_id}::numeric;
+
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{old_master_gbn}
+	    	, MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  != #{pry_svr_id}::numeric;
+		</if>
+    </update>
 </mapper>

@@ -3,6 +3,7 @@ package com.experdb.proxy.db.repository.service;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -966,7 +967,7 @@ public class ProxyServiceImpl implements ProxyService{
 				//리스너 및  vip 상태 체크
 				returnMsg = proxyStatusChk(chkParam);
 			} catch (Exception e) {
-				errLogger.error("saveChkPrySvrI {} ", e.toString());
+				errLogger.error("proxyStatusChk {} ", e.toString());
 				returnMsg = "false";
 			}
 		} catch (Exception e) {
@@ -984,6 +985,7 @@ public class ProxyServiceImpl implements ProxyService{
 	 */
 	@Transactional
 	public String proxyStatusChk(Map<String, Object> chkParam) throws Exception  {
+		socketLogger.info("Job proxyStatusChk [" + new Date(System.currentTimeMillis()) + "]");
 		String returnMsg = "";
 		List<Map<String, Object>> proxyLsnPortList = null;
 		List<Map<String, Object>> proxyVipList = null;		
@@ -1057,7 +1059,7 @@ public class ProxyServiceImpl implements ProxyService{
 			}
 			returnMsg = "success";
 		} catch (Exception e) {
-			errLogger.error("saveChkPrySvrI {123} ", e.toString());
+			errLogger.error("proxyStatusChk {sebu} ", e.toString());
 			returnMsg = "false";
 		}
 		
@@ -1142,4 +1144,163 @@ public class ProxyServiceImpl implements ProxyService{
 
 		return returnData;
 	}
+
+	/**
+	 * 마스터 실시간 체크
+	 * @param chkParam
+	 * @throws Exception
+	 */
+	@Transactional
+	public String proxyMasterGbnRealCheck(Map<String, Object> chkParam, ProxyServerVO proxyServerInfo) throws Exception  {
+		socketLogger.info("Job proxyMasterGbnRealCheck [" + new Date(System.currentTimeMillis()) + "]");
+		String returnMsg = "";
+
+		try {
+			//param setting
+			String ipadrPrm = "";
+			String proxySetStatusPrm = "";
+			String keepalivedSetStatusPrm = "";
+			String strAcptype = "";
+			String strAcptypeVal = "";
+			String strProxyChgVal = "";
+			String strKeepalivedChgVal = "";
+
+			if (chkParam.get("ipadr") != null) ipadrPrm = chkParam.get("ipadr").toString();
+			if (chkParam.get("proxySetStatus") != null) proxySetStatusPrm = chkParam.get("proxySetStatus").toString();
+			if (chkParam.get("keepalivedSetStatus") != null) keepalivedSetStatusPrm = chkParam.get("keepalivedSetStatus").toString();
+
+			chkParam.put("ipadr", ipadrPrm);
+			chkParam.put("lst_mdfr_id", "system");
+			chkParam.put("frst_regr_id", "system");
+			
+			//proxy check - 기동 이력등록
+			if (!"".equals(proxySetStatusPrm) && !"not installed".equals(proxySetStatusPrm)) {
+				if ("running".equals(proxySetStatusPrm)) {
+					strAcptype = "TC001501";
+					strAcptypeVal = "A";
+				} else {
+					strAcptype = "TC001502";
+					strAcptypeVal = "S";
+				}
+				
+				socketLogger.info("ProxyServiceImpl.strAcptype1 : " + strAcptype);
+				socketLogger.info("ProxyServiceImpl.getExe_status : " + proxyServerInfo.getExe_status());
+				
+				if (!strAcptype.equals(proxyServerInfo.getExe_status())) {
+					chkParam.put("act_type", strAcptypeVal);
+					chkParam.put("sys_type", "PROXY");
+					
+					strProxyChgVal = strAcptype;
+
+					
+					proxyDAO.insertPryActExeCngInfo(chkParam);
+				}
+			}
+			
+			//Keepalived check - 기동 이력등록
+			if (!"".equals(keepalivedSetStatusPrm) && !"not installed".equals(keepalivedSetStatusPrm)) {
+				if ("running".equals(keepalivedSetStatusPrm)) {
+					strAcptype = "TC001501";
+					strAcptypeVal = "A";
+				} else {
+					strAcptype = "TC001502";
+					strAcptypeVal = "S";
+				}
+
+				socketLogger.info("ProxyServiceImpl.strAcptype2 : " + strAcptype);
+				socketLogger.info("ProxyServiceImpl.getKal_exe_status : " + proxyServerInfo.getKal_exe_status());
+				
+				if (!strAcptype.equals(proxyServerInfo.getKal_exe_status())) {
+					chkParam.put("act_type", strAcptypeVal);
+					chkParam.put("sys_type", "KEEPALIVED");
+					
+					strKeepalivedChgVal = strAcptype;
+
+					
+					proxyDAO.insertPryActExeCngInfo(chkParam);
+				}
+			}
+			
+			//t_pry_svr_i 테이블 status 변경
+			if (!"".equals(strProxyChgVal) || !"".equals(strKeepalivedChgVal)) {
+				ProxyServerVO prySvr = new ProxyServerVO();
+				prySvr.setExe_status(strProxyChgVal);
+				prySvr.setKal_exe_status(strKeepalivedChgVal);
+				prySvr.setLst_mdfr_id("system");
+				prySvr.setIpadr(ipadrPrm);
+
+				proxyDAO.updatePrySvrExeStatusInfo(prySvr);
+			}
+			
+			Map<String, Object> mstChkParam = new HashMap<String, Object>();
+			ProxyServerVO prySvrChk = null;
+
+			//마스터 구분 변경
+			if (!"".equals(strProxyChgVal)) {
+				if ("TC001502".equals(strProxyChgVal)) { //down 된 경우
+					if ("M".equals(proxyServerInfo.getMaster_gbn())) { //마스터 일때
+						//백업 제일 작은수가 마스터로 변경
+						mstChkParam.put("pry_svr_id", proxyServerInfo.getPry_svr_id());
+						mstChkParam.put("ipadr", ipadrPrm);
+						mstChkParam.put("selQueryGbn", "masterM");
+
+			         	prySvrChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
+			         	
+			         	//backup이 있으면 update 없으면 처리 않함
+			         	if (prySvrChk != null) {
+			         		if (!"".equals(prySvrChk.getPry_svr_id()) && !"0".equals(prySvrChk.getPry_svr_id())) {
+			         			prySvrChk.setMaster_gbn("M");
+			         			prySvrChk.setMaster_svr_id_chk(null);
+			         			
+			         			prySvrChk.setOld_pry_svr_id(proxyServerInfo.getPry_svr_id());
+			         			prySvrChk.setOld_master_gbn("B");
+			         			prySvrChk.setOld_master_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
+			         			prySvrChk.setLst_mdfr_id("system");
+			         			prySvrChk.setSel_query_gbn("master_down");
+			         			
+			         			proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
+
+			         		}
+			         	}
+					} else {
+						prySvrChk = new ProxyServerVO();
+						
+						prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+						prySvrChk.setMaster_svr_id_chk(Integer.toString(prySvrChk.getMaster_svr_id()));
+						prySvrChk.setLst_mdfr_id("system");
+	         			prySvrChk.setSel_query_gbn("backup_down");
+	         			
+						proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
+					}				
+				} else { //up
+					//마스터 제외하고 전부 등록
+					prySvrChk = new ProxyServerVO();
+
+					prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
+					prySvrChk.setMaster_svr_id_chk(null);
+
+					prySvrChk.setLst_mdfr_id("system");
+					prySvrChk.setSel_query_gbn("g_master_up");
+					
+					prySvrChk.setOld_master_gbn("B");
+					prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+					
+					if ("M".equals(proxyServerInfo.getOld_master_gbn())) { //기본마스터 일때
+						prySvrChk.setMaster_gbn(proxyServerInfo.getOld_master_gbn());
+					} else {
+						prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+					}
+					proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
+				}
+			}
+
+			returnMsg = "success";
+		} catch (Exception e) {
+			errLogger.error("proxyMasterGbnRealCheck {} ", e.toString());
+			returnMsg = "false";
+		}
+		
+		return returnMsg;
+	}
+
 }

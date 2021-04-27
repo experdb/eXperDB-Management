@@ -227,5 +227,43 @@ public class ProxyDAO {
 	public int updatePryVipcngStatusInfo(ProxyVipConfigVO vo) throws Exception  {
 		return session.update("proxy.updatePryVipcngStatusInfo", vo);
 	}
-	
+
+
+	/**
+	 * Proxy 기동상태 이력 max 값 조회 
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectPryActstateCngMaxTypeInfo(Map<String, Object> param) {
+		return (List) session.selectList("proxy.selectPryActstateCngMaxTypeInfo", param);
+	}
+
+	/**
+	 * proxy / keepalived 기동-정지 상태 변경 
+	 * @param vo
+	 * @throws Exception
+	 */
+	public int insertPryActExeCngInfo(Map<String, Object> param) throws Exception  {
+		return session.insert("proxy.insertPryActExeCngInfo", param);
+	}
+
+	/**
+	 * proxy selectPrySvrMasterSetInfo
+	 * @param ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectPrySvrMasterSetInfo(Map<String, Object> param) throws Exception  {
+		return (ProxyServerVO) session.selectOne("proxy.selectPrySvrMasterSetInfo", param);
+	}
+
+	/**
+	 * Proxy Server 마스터 구분 정보 수정
+	 * @param vo
+	 * @throws Exception
+	 */
+	public int updatePrySvrMstGbnInfo(ProxyServerVO vo) throws Exception  {
+		return session.update("proxy.updatePrySvrMstGbnInfo", vo);
+	}
+
 }

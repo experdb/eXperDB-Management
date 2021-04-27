@@ -21,7 +21,35 @@ public class ProxyServerVO {
 	private String lst_mdf_dtm;
 	private String master_svr_id_chk;
 	private String back_peer_id;
+	private String old_master_gbn;
+	private int old_pry_svr_id;
+	private String old_master_svr_id_chk;
+	private String sel_query_gbn;
 	
+	public String getSel_query_gbn() {
+		return sel_query_gbn;
+	}
+	public void setSel_query_gbn(String sel_query_gbn) {
+		this.sel_query_gbn = sel_query_gbn;
+	}
+	public String getOld_master_svr_id_chk() {
+		return old_master_svr_id_chk;
+	}
+	public void setOld_master_svr_id_chk(String old_master_svr_id_chk) {
+		this.old_master_svr_id_chk = old_master_svr_id_chk;
+	}
+	public int getOld_pry_svr_id() {
+		return old_pry_svr_id;
+	}
+	public void setOld_pry_svr_id(int old_pry_svr_id) {
+		this.old_pry_svr_id = old_pry_svr_id;
+	}
+	public String getOld_master_gbn() {
+		return old_master_gbn;
+	}
+	public void setOld_master_gbn(String old_master_gbn) {
+		this.old_master_gbn = old_master_gbn;
+	}
 	public String getBack_peer_id() {
 		return back_peer_id;
 	}

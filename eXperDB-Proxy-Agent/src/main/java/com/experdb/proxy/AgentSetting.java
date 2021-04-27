@@ -58,6 +58,10 @@ public class AgentSetting {
 		System.out.println("agent ip(" + localIp + ") : ");
 		strAgentIp = scan.nextLine();
 
+		if(strAgentIp.equals("")) {
+			strAgentIp = localIp;
+		}
+/*		
 		while (true) {
 			if(strAgentIp.equals("")) {
 				System.out.println("Please enter the agent ip. ");
@@ -68,7 +72,7 @@ public class AgentSetting {
 			} else {
 				break;
 			}
-		}
+		}*/
 		
 		System.out.println("agent port(9002) : ");
 		strAgentPort = scan.nextLine();

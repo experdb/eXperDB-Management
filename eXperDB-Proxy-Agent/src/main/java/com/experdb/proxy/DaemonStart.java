@@ -137,7 +137,7 @@ public class DaemonStart implements DxDaemon{
 				e.printStackTrace();
 				return;
 			}
-
+			
 			System.out.println("######################################################################");
 			System.out.println("## load file ");
 			System.out.println("## "+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
