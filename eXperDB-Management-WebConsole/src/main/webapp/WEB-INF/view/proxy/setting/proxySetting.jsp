@@ -1223,8 +1223,13 @@
 			$("#instReg_state_nm", "#insVipInstForm").attr("readonly",true); 
 			
 			$("#instReg_vip_cng_id", "#insVipInstForm").val(selConfInfo.vip_cng_id);//vip config id
+			
 			$("#instReg_v_ip", "#insVipInstForm").val(selConfInfo.v_ip);//virtual ip
+			$("#instReg_v_ip_sel", "#insVipInstForm").val(selConfInfo.v_ip);//virtual ip
+			
 			$("#instReg_v_if_nm", "#insVipInstForm").val(selConfInfo.v_if_nm); //virtual interface
+			$("#instReg_v_if_nm_sel", "#insVipInstForm").val(selConfInfo.v_if_nm); //virtual interface
+			
 			$("#instReg_v_rot_id", "#insVipInstForm").val(selConfInfo.v_rot_id); //virtual router id
 			
 			$("#instReg_state_nm", "#insVipInstForm").val(selConfInfo.state_nm); //State
@@ -1377,8 +1382,9 @@
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").hide();
 			$("#lstnReg_lsn_nm_sel", "#insProxyListenForm").show();
 			
-			//$("#lstnReg_con_bind_ip", "#insProxyListenForm").val(""); //접속IP
-			$("#lstnReg_con_bind_ip option:eq(0)").prop("selected", true);
+			//$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val(""); //접속IP
+			$("#lstnReg_con_bind_ip_sel option:eq(0)").prop("selected", true);
+			$("#lstnReg_con_bind_ip", "#insProxyListenForm").val(""); //접속IP
 			$("#lstnReg_con_bind_port", "#insProxyListenForm").val(""); //접속포트
 			$("#lstnReg_lsn_desc", "#insProxyListenForm").val(""); //리스너 설명
 			$("#lstnReg_db_usr_id", "#insProxyListenForm").val("reqmgr"); //DB 사용자 ID
@@ -1400,6 +1406,7 @@
 			$("#lstnReg_lsn_nm_sel", "#insProxyListenForm").hide();
 			
 			var bind = selListenerInfo.con_bind_port;
+			$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val(bind.substring(0,bind.indexOf(":"))); //접속IP
 			$("#lstnReg_con_bind_ip", "#insProxyListenForm").val(bind.substring(0,bind.indexOf(":"))); //접속IP
 			$("#lstnReg_con_bind_port", "#insProxyListenForm").val(bind.substring(bind.indexOf(":")+1)); //접속포트
 			
@@ -1429,7 +1436,8 @@
 		var tempVipList = vipInstTable.rows().data();
 		var tempHtml ="";
 		var vipLen = tempVipList.length;
-		$( "#lstnReg_con_bind_ip > option", "#insProxyListenForm" ).remove();
+		$( "#lstnReg_con_bind_ip_sel > option", "#insProxyListenForm" ).remove();
+		tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
 		tempHtml += '<option value="*">*</option>';
 		for(var i=0; i<vipLen; i++){
 			var vip = tempVipList[i].v_ip;
@@ -1437,10 +1445,10 @@
 			tempHtml += '<option value='+vip+'>'+vip+'</option>';
 		}
 
-		$("#lstnReg_con_bind_ip", "#insProxyListenForm" ).append(tempHtml);
+		$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm" ).append(tempHtml);
 		
 		if (tempHtml > 0) {
-			$("#lstnReg_con_bind_ip option:eq(0)").prop("selected", true);
+			$("#lstnReg_con_bind_ip_sel option:eq(0)").prop("selected", true);
 		}
 	}
 	/* ********************************************************

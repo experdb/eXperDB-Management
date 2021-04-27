@@ -107,8 +107,9 @@ function fn_serverListTable_init() {
 			var cnt = 0;
 		    var listLen = proxyListenTable.rows().data().length;
 		    var tblData = proxyListenTable.rows().data();
+		    
 		    for(var i=0; i< listLen; i++){
-		    	if(str==tblData[i].lsn_nm){
+		    	if( $("#lstnReg_lsn_nm", "#insProxyListenForm").val() == tblData[i].lsn_nm){
 		    		if($("#lstnReg_mode", "#insProxyListenForm").val()=="mod" && proxyListenTable.rows('.selected').indexes()[0] != i){
 		    			cnt++;
 		    		}else if($("#lstnReg_mode", "#insProxyListenForm").val() =="reg"){
@@ -154,7 +155,7 @@ function fn_serverListTable_init() {
 		
 		$("#insProxyListenForm").validate({
 	        rules: {
-	        	lstnReg_lsn_nm: {
+	        	lstnReg_lsn_nm_sel: {
 					required:true,
 					duplCheckListenerNm : true
 				},
@@ -183,7 +184,7 @@ function fn_serverListTable_init() {
 				}
 	        },
 	        messages: {
-	        	lstnReg_lsn_nm: {
+	        	lstnReg_lsn_nm_sel: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>',
 					duplCheckListenerNm: '<spring:message code="errors.duplicate"/>'
 				},
@@ -495,6 +496,10 @@ function fn_serverListTable_init() {
 		}
 	}
 	
+	function fn_change_con_bind_ip_sel(){
+		$("#lstnReg_con_bind_ip", "#insProxyListenForm").val($("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val());
+	}
+	
 </script>
 
 <div class="modal fade" id="pop_layer_ip_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; z-index: 1060;">
@@ -561,7 +566,7 @@ function fn_serverListTable_init() {
 						<fieldset>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
-									<label for="lstnReg_lsn_nm" class="col-sm-3 col-form-label-xsm pop-label-index">
+									<label class="col-sm-3 col-form-label-xsm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="eXperDB_proxy.basic_setting" />
 									</label>
@@ -580,14 +585,20 @@ function fn_serverListTable_init() {
 											</c:forEach>
 										</select>
 									</div>
+									<div class="col-sm-auto"></div>
+								</div>
+								<div class="form-group row">
 									<label for="lstnReg_con_bind" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-angle-double-right"></i>
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.bind_ip_port" />(*)
 									</label>
 									<div class="col-sm-3">
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_bind_ip" id="lstnReg_con_bind_ip" tabindex=4 >
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_bind_ip_sel" id="lstnReg_con_bind_ip_sel" tabindex=4 onchange="fn_change_con_bind_ip_sel();">
 											<option value="*">*</option>
 										</select>
+									</div>
+									<div class="col-sm-3">
+										<input type="text" class="form-control form-control-xsm" id="lstnReg_con_bind_ip" name="lstnReg_con_bind_ip" onblur="this.value=this.value.trim()" placeholder="IP" tabindex=2 />
 									</div>
 									<div class="col-sm-auto col-form-label-sm">
 										:
@@ -595,6 +606,7 @@ function fn_serverListTable_init() {
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-xsm" maxlength="5" id="lstnReg_con_bind_port" name="lstnReg_con_bind_port"  onKeyPress="chk_Number(this);" onkeyup="fn_checkWord(this,5)" onblur="this.value=this.value.trim()" placeholder="port" tabindex=2 />
 									</div>
+									<div class="col-sm-auto"></div>
 								</div>
 								<div class="form-group row row-last">
 									<label for="lstnReg_lsn_desc" class="col-sm-2 col-form-label-sm pop-label-index">
@@ -609,7 +621,7 @@ function fn_serverListTable_init() {
 							<br/>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
-									<label for="lstnReg_lsn_nm" class="col-sm-3 col-form-label-xsm pop-label-index">
+									<label class="col-sm-3 col-form-label-xsm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										Health Check
 									</label>
