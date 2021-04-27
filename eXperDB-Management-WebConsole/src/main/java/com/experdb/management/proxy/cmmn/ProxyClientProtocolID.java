@@ -50,5 +50,6 @@ public class ProxyClientProtocolID {
 	public static final String PRY_PTH = "PRY_PTH"; //haproxy config 백업 경로
 	public static final String KAL_PTH = "KAL_PTH"; //keepalived config 백업 경로
 	public static final String INTERFACE_LIST = "INTERFACE_LIST"; 
+	public static final String INTERFACE = "INTERFACE"; 
 	
 }

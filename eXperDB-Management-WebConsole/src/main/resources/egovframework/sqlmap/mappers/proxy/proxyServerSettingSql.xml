@@ -69,7 +69,8 @@
        			A.FRST_REGR_ID,
        			A.FRST_REG_DTM,
        			A.LST_MDFR_ID,
-       			A.LST_MDF_DTM
+       			A.LST_MDF_DTM,
+       			B.AGT_CNDT_CD
        	FROM	T_PRY_SVR_I A RIGHT OUTER JOIN T_PRY_AGT_I B ON A.IPADR = B.IPADR 
 		WHERE   1 = 1
 		<if test="svr_use_yn != null and svr_use_yn != '' ">
@@ -78,6 +79,7 @@
 			</if>
 			<if test='mode != null and (mode eq "reg".toString())'>
 				AND B.SVR_USE_YN != 'Y'
+				AND B.AGT_CNDT_CD = 'TC001501' 
 			</if>
 		</if>
 	</select>

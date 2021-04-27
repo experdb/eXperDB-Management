@@ -264,7 +264,8 @@ public class ProxyClientInfoCmmn implements Runnable{
 		result.put("ERR_MSG", strErrMsg);
 		result.put("RESULT_DATA", strResultData);
 		result.put("INTF_LIST", (String)objResult.get(ProxyClientProtocolID.INTERFACE_LIST));
-				
+		result.put("INTF", (String)objResult.get(ProxyClientProtocolID.INTERFACE));
+		
 		return result;
 	}
 }

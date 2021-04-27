@@ -42,8 +42,9 @@
     var selVipInstancePeerList = null; //선택하여 불러온 vip instance Peer 정보
     var selProxyListenerPeerList = null; // proxy listener Peer 정보
 	var selAgentConnect = null;//선택한 서버의  Agent 연결 여부 
-	var selAgentInterface = new Array();//선택한 서버의  Agent 연결 여부 
-    
+	var selAgentInterfaceItems = new Array();//선택한 서버의  Agent Interface 목록
+	var selAgentInterface = null;//선택한 서버의  Agent IP와 연결된 Interface
+	
 	function fn_init() {
 		proxyServerTable = $('#proxyServer').DataTable({
 			scrollY : "330px",
@@ -556,8 +557,8 @@
 	 					selProxyListenerList = result.listener_list;
 	 					selVipInstancePeerList = result.peer_vipconfig_list;
 	 					selProxyListenerPeerList = result.peer_listener_list;
-	 					selAgentInterface = result.interface_items;
-	 					
+	 					selAgentInterfaceItems = result.interface_items;
+	 					selAgentInterface =result.interf;
 		 				if(selProxyListenerList.length ==0 || selGlobalInfo == null){
 		 					$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg12" />');
 						}
@@ -630,7 +631,7 @@
     	}else{
     		$("#glb_pry_glb_id", "#globalInfoForm").val("");
 	    	$("#glb_obj_ip", "#globalInfoForm").val(proxyServerTable.row('.selected').data().ipadr);
-	    	$("#glb_if_nm", "#globalInfoForm").val("");
+	    	$("#glb_if_nm", "#globalInfoForm").val(selAgentInterface);
 	    	$("#glb_peer_server_ip", "#globalInfoForm").val("");
 	    	$("#glb_max_con_cnt", "#globalInfoForm").val("1000");
 	    	
@@ -884,8 +885,8 @@
 		$("#svrMod_ipadr", "#svrRegProxyServerForm").hide();//ipadr
 		$("#svrMod_ipadr", "#svrRegProxyServerForm").val($("#svrReg_ipadr", "#svrRegProxyServerForm").val());//ipadr
 
-		$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("disabled");
-		$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("readonly");
+		//$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("disabled");
+		//$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("readonly");
 		$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
 		$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
 		
@@ -932,8 +933,10 @@
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").hide();//ipadr
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").val(tempSetData.ipadr);//ipadr
 			
-			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("disabled");
-			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("readonly");
+			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").attr("disabled",true);
+			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").attr("readonly",true);
+			//$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("disabled");
+			//$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("readonly");
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
 		}else{//수정
@@ -1201,11 +1204,12 @@
 			
 			if(vipInstTable.rows().data().length == 0){
 				$("#instReg_state_nm", "#insVipInstForm").val("MASTER"); //State
+				$("#instReg_priority", "#insVipInstForm").val("101"); //priority
 			}else{
 				$("#instReg_state_nm", "#insVipInstForm").val("BACKUP"); //State
+				$("#instReg_priority", "#insVipInstForm").val("100"); //priority
 			}
 			
-			$("#instReg_priority", "#insVipInstForm").val("100"); //priority
 			$("#instReg_chk_tm", "#insVipInstForm").val("1"); //체크간격
 			
 			/* $(".instReg_alert_div_1", "#insVipInstForm").hide();
@@ -1266,7 +1270,7 @@
 	 * V interface select 박스 생성
 	 ******************************************************** */
 	function fn_create_v_if_select(mode){
-		var tempVInterfNmList = selAgentInterface;
+		var tempVInterfNmList = selAgentInterfaceItems;
 		var tempHtml ="";
 		
 		var vIfLen = tempVInterfNmList.length;

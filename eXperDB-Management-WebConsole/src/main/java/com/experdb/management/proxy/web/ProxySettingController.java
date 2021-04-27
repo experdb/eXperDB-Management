@@ -326,6 +326,8 @@ public class ProxySettingController {
 				resultObj = proxySettingService.getPoxyServerConf(param);
 				try{
 					List<String> interfList = proxySettingService.getAgentInterface(param);
+					resultObj.put("interf", interfList.get(0));
+					interfList.remove(0);
 					resultObj.put("interface_items", interfList);
 				}catch(ConnectException e){
 					resultObj.put("errcd", 1);

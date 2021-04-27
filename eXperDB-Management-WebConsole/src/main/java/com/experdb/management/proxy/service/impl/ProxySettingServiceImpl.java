@@ -92,6 +92,10 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		
 		if (intfItemsResult != null) {
 			String agentInterfList = intfItemsResult.get("INTF_LIST").toString();
+			String agentInterf = intfItemsResult.get("INTF").toString();
+			
+			interfList.add(agentInterf);
+			
 			String[] interfItems = agentInterfList.split("\t");
 			for(int  i =0; i< interfItems.length; i++){
 				interfList.add(interfItems[i]);
