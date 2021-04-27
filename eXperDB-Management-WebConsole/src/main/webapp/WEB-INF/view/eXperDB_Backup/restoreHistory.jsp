@@ -388,10 +388,9 @@ function fn_searchHistory(){
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<!-- /////////////////////////// 내용 수정 필요 ///////////////////////////// -->
-											<p class="mb-0"><spring:message code="help.dbms_registration_01" /></p>
-											<p class="mb-0"><spring:message code="help.dbms_registration_02" /></p>
-											<!-- //////////////////////////////////////////////////////////////////////// -->
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_restoreHistory01" /></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_restoreHistory02" /></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_restoreHistory03" /></p>
 										</div>
 									</div>
 								</div>

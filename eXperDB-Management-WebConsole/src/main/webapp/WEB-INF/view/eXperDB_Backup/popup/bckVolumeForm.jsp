@@ -135,6 +135,11 @@ var VolumeList;
 	}
 	
 </script>
+<style>
+table.dataTable.volume tbody tr.selected {
+	color : #333333
+}
+</style>
 	
 <div class="modal fade" id="pop_layer_popup_backupVolumeFilter" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl" role="document" style="width: 700px">
@@ -145,7 +150,7 @@ var VolumeList;
 				</h5>
 				<div class="card" style="border:0px;">
 					<div class="card-body">
-						<table id="volumeList" class="table table-hover table-striped system-tlb-scroll" style="width:100%; align:dt-center;">
+						<table id="volumeList" class="table table-hover volume table-striped system-tlb-scroll" style="width:100%; align:dt-center;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="100"></th>

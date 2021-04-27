@@ -293,10 +293,8 @@ function fnc_confirmMultiRst(gbn){
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<!-- /////////////////////////// 내용 수정 필요 ///////////////////////////// -->
-											<p class="mb-0"><spring:message code="help.dbms_registration_01" /></p>
-											<p class="mb-0"><spring:message code="help.dbms_registration_02" /></p>
-											<!-- //////////////////////////////////////////////////////////////////////// -->
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_storage01" /></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_storage02" /></p>
 										</div>
 									</div>
 								</div>

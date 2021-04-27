@@ -751,6 +751,9 @@ function fn_backupDelete() {
 </script>
 <style>
 table.dataTable.nonborder tbody td{border-top:1px solid rgb(255, 255, 255);}
+table.dataTable.target tbody tr.selected {
+	color : #333333
+}
 table.dataTable.ccc tbody td.selected {
 	background-color: #7bb8fd
 }
@@ -812,8 +815,8 @@ table.dataTable.ccc thead th{
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0"><spring:message code="help.dbms_registration_01" /></p>
-											<p class="mb-0"><spring:message code="help.dbms_registration_02" /></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_setting01" /></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_setting02" /></p>
 										</div>
 									</div>
 								</div>
@@ -843,7 +846,7 @@ table.dataTable.ccc thead th{
 						<h4 class="card-title" style="font-size: 1em; color:black;">
 							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg15" />
 						</h4>
-						<table id="nodeList" class="table nonborder table-hover system-tlb-scroll" style="width:100%;align:left;">
+						<table id="nodeList" class="table nonborder target table-hover system-tlb-scroll" style="width:100%;align:left;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="100"><spring:message code="eXperDB_backup.msg16" /></th>
