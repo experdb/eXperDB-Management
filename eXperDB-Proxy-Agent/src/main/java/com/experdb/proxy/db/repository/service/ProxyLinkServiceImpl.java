@@ -112,6 +112,25 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			int prySvrId = global.getInt("pry_svr_id");
 			String lst_mdfr_id = jobj.getString("lst_mdfr_id");
 			
+			String logLocal ="";
+			RunCommandExec commandExec = new RunCommandExec();
+			commandExec.runExecRtn3("cat /etc/rsyslog.d/haproxy.conf |grep /var/log/haproxy/haproxy.log");
+			try {
+				commandExec.join();
+			} catch (InterruptedException ie) {
+				socketLogger.error("createNewConfFile log local value error {}",ie.toString());
+				ie.printStackTrace();
+			}
+			if(commandExec.call().equals("success")){
+				String[] strTemp = commandExec.getMessage().split("\n");
+				for(int i=0; i<strTemp.length; i++){
+					if(strTemp[i].length() > 1 && !"#".equals(strTemp[i].substring(0, 1))){
+						logLocal = strTemp[i].substring(0, strTemp[i].indexOf("."));	
+					}
+				}
+			}
+			
+			globalConf = globalConf.replace("{log_local}", logLocal);
 			globalConf = globalConf.replace("{max_con_cnt}", global.getString("max_con_cnt"));
 			globalConf = globalConf.replace("{cl_con_max_tm}", global.getString("cl_con_max_tm"));
 			globalConf = globalConf.replace("{con_del_tm}", global.getString("con_del_tm"));
