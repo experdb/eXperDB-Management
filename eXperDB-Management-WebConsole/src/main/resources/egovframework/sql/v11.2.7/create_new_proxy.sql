@@ -47,7 +47,7 @@ CREATE TABLE experdb_management.t_pry_svr_i (
 	agt_sn numeric(18) NULL,                                   -- 에이전트_일련번호
 	pry_svr_nm varchar(50) NOT NULL,                           -- PROXY_서버_명
 	pry_pth varchar(500) NOT NULL,                             -- PROXY_파일경로
-	kal_pth varchar(500) NOT NULL,                             -- KEEPALIVED_파일경로
+	kal_pth varchar(500) NULL,                             -- KEEPALIVED_파일경로
 	use_yn bpchar(1) NOT NULL DEFAULT 'N'::bpchar,             -- 사용_여부
 	exe_status varchar(20) NULL DEFAULT 'TC001502',            -- 실행_상태
 	kal_exe_status varchar(20) NULL DEFAULT 'TC001502',        -- KEEPALIVED 실행_상태
@@ -56,6 +56,7 @@ CREATE TABLE experdb_management.t_pry_svr_i (
 	db_svr_id numeric(18) NULL,                                -- DB_서버_ID
 	day_data_del_term numeric(2) NOT NULL DEFAULT 30,          -- 일별_데이터_삭제_기간
 	min_data_del_term numeric(2) NOT NULL DEFAULT 7,           -- 분별_데이터_삭제_기간
+	old_master_gbn varchar(1) NULL,                                -- 마스터_구분
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                              -- 최종_수정자_ID
@@ -82,6 +83,7 @@ COMMENT ON COLUMN experdb_management.t_pry_svr_i.master_svr_id IS '마스터_서
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.db_svr_id IS 'DB_서버_ID';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.day_data_del_term IS '일별_데이터_삭제_기간';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.min_data_del_term IS '분별_데이터_삭제_기간';
+COMMENT ON COLUMN experdb_management.t_pry_svr_i.old_master_gbn IS '구_마스터_구분';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.lst_mdfr_id IS '최종_수정자_ID';
@@ -269,7 +271,7 @@ CREATE TABLE experdb_management.t_prycng_g (
 	pry_cng_sn numeric NOT NULL DEFAULT 1,                   -- PROXY_설정_일련번호
 	pry_svr_id numeric(18) NOT NULL DEFAULT 1,               -- PROXY_서버_ID
 	pry_pth varchar(500) NOT NULL,                           -- PROXY_파일경로
-	kal_pth varchar(500) NOT NULL,                           -- KEEPALIVED_파일경로
+	kal_pth varchar(500) NULL,                               -- KEEPALIVED_파일경로
 	exe_rst_cd varchar(20) NULL,                             -- 실행_결과_코드
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
