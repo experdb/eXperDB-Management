@@ -17,6 +17,7 @@ import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
 import com.experdb.proxy.util.FileUtil;
+import com.experdb.proxy.util.RunCommandExec;
 
 /**
 *
@@ -85,12 +86,11 @@ public class PsP008 extends SocketCtl{
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 		
-		String strConfigFileDir = (String) jObj.get(ProtocolID.FILE_DIRECTORY);
+		String strLogFileDir = (String) jObj.get(ProtocolID.FILE_DIRECTORY);
 		JSONObject outputObj = new JSONObject();
 		try {
 
 			String strReadLine = (String) jObj.get(ProtocolID.READLINE);
-			String strSeek = (String) jObj.get(ProtocolID.SEEK);
 			String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
 			
 			int intDwlen = Integer.parseInt(dwLen);
@@ -99,24 +99,43 @@ public class PsP008 extends SocketCtl{
 
 			String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
 //			File inFile = new File(strLogFileDir, strFileName);
-			File inFile = new File("/var/log/haproxy/haproxy.log-20210422");
+//			File inFile = new File("/var/log/haproxy/haproxy.log-20210422");
+//			String strCmd = "tail -" + intReadLine + " "+ strLogFileDir + strFileName;
+			String strCmd = "tac " + strLogFileDir + strFileName + " | head -" + (intDwlen + intReadLine);
 			
-			socketLogger.info("File : " + inFile.length());
-			socketLogger.info("file : " + inFile.isFile());
+			RunCommandExec commandExec = new RunCommandExec();
+			//명령어 실행
+			commandExec.runExecRtn4(strCmd, intLastLine, intReadLine);
 			
-			HashMap hp = FileUtil.getRandomAccessFileView(inFile, intReadLine, Integer.parseInt(strSeek), intLastLine);
+			socketLogger.info("strCmd :: "+strCmd);
+			File inFile = new File(strLogFileDir, strFileName);
 
+			try {
+				commandExec.join();
+			} catch (InterruptedException ie) {
+				socketLogger.error("getLogFile error {}",ie.toString());
+				ie.printStackTrace();
+			}
+		
+			socketLogger.info("call :: "+commandExec.call());
+			socketLogger.info("Message :: "+commandExec.getMessage());
+			
+			String logFile = "";
+			
+			if(commandExec.call().equals("success")){
+				logFile = commandExec.getMessage();
+			}
+			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
-			outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));
-			outputObj.put(ProtocolID.SEEK, hp.get("seek"));
+			outputObj.put(ProtocolID.RESULT_DATA, logFile);
+			outputObj.put(ProtocolID.FILE_SIZE, logFile.length());
+//			outputObj.put(ProtocolID.SEEK, hp.get("seek"));
 			outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
-			outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
+//			outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
 			
-			hp = null;
 			inFile = null;		
 			
 			send(outputObj);

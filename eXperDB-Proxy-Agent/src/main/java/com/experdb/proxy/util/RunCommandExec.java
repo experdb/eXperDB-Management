@@ -196,6 +196,7 @@ public class RunCommandExec extends Thread {
 			System.out.println("Exec End");
 		}
 	}
+	
 	public void runExecRtn3(String cmd){
 		Process proc = null;
 		String strResult = "";
@@ -250,6 +251,73 @@ public class RunCommandExec extends Thread {
 			System.out.println("Exec End");
 		}
 	}
+	
+	// log 파일 불러오기
+	public void runExecRtn4(String cmd, int intLastLine, int intReadLine){
+		Process proc = null;
+		String strResult = "";
+		String strScanner = "";
+		String strReturnVal = "";
+		String strResultErrInfo = "";
+		try{
+			socketLogger.info("cmd --> " + cmd);
+			
+			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
+			proc.waitFor ();
+			
+			if ( proc.exitValue() != 0 ) {
+				BufferedReader out = new BufferedReader ( new InputStreamReader ( proc.getInputStream() ) );
+				while ( out.ready() ) {
+					strResultErrInfo += out.readLine();
+				}
+				out.close();
+				
+				BufferedReader err = new BufferedReader ( new InputStreamReader ( proc.getErrorStream() ) );
+				while ( err.ready() ) {
+					strResult += err.readLine();
+				}
+				
+				strResult += strResultErrInfo;
+				err.close();
+				strReturnVal = "failed";
+			} else {
+				BufferedReader out = new BufferedReader ( new InputStreamReader ( proc.getInputStream() ) );
+				int recnum = 1;
+				int temp = 0;
+				
+				String strView = "";
+				while (out.ready()) {
+					strView += (intLastLine + recnum) + " " + out.readLine() + "<br>";
+					if (((++recnum) % (intReadLine + 1)) == 0) {
+						break;
+					}
+				}
+				
+//				while ( out.ready() ) {
+//					if(temp != 0 ) strResult += "\n";
+//					strResult += out.readLine();
+//					temp++;
+//				}
+				out.close();
+				strReturnVal = "success";
+			}
+			
+			this.returnMessage = strResult;
+			this.retVal = strReturnVal;
+		}catch(IOException e){
+			System.out.println(e);
+			this.retVal = "IOException" + e.toString();
+			this.returnMessage = "IOException" + e.toString();
+		}catch(Exception e){
+			System.out.println(e);
+			this.retVal = "Exception" + e.toString();
+			this.returnMessage = "Exception" + e.toString();
+		} finally {
+			proc.destroy();
+			System.out.println("Exec End");
+		}
+	}
+	
 	public void copy_old(InputStream input, OutputStream output) throws IOException {
         byte[] buffer = new byte[1024];
         int n = 0;
