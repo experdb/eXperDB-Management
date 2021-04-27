@@ -307,6 +307,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 			String proxyCmd = proxyCmdSetting(jObj);
 
+			//conf 파일 조회
 			FileRunCommandExec r = new FileRunCommandExec(proxyCmd);
 			//명령어 실행
 			r.run();
@@ -330,6 +331,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 			String strResultSubMessge = "";
 
+			//proxy 파일 setting
 			if (retVal.equals("success")) {
 				if (strResultMessge != null) {
 					String[] strArray = new String[strResultMessge.size()];
@@ -361,6 +363,7 @@ public class ProxyServiceImpl implements ProxyService{
 					for(String temp : strResultMessge){
 						strArray[size++] = temp;
 
+						//proxy 설정
 						if ("proxy_conf_read".equals(searchGbn)) {
 							// server list 조회
 							if(temp.trim().matches(".*server.*")) {
@@ -402,9 +405,15 @@ public class ProxyServiceImpl implements ProxyService{
 							//리스너 setting
 							///////////////////////////////////////////////////////////////////////////////////
 							if(temp.matches(".*listen.*")) { //리스너 명
-								lisnerVo.setLsn_nm(temp.substring(temp.lastIndexOf(" ") + 1 , temp.length()));
-								lisnerVoView.setLsn_nm(lisnerVo.getLsn_nm());
-								lisnerBindCnt = size + 2; //리스너 bind
+								
+								String strtemp = temp.substring(temp.lastIndexOf(" ") + 1 , temp.length());
+								if (!"stats".equals(strtemp)) {
+									
+									socketLogger.info("ProxyServiceImpl.strtempstrtemp : " + strtemp);
+									lisnerVo.setLsn_nm(strtemp);
+									lisnerVoView.setLsn_nm(lisnerVo.getLsn_nm());
+									lisnerBindCnt = size + 2; //리스너 bind
+								}
 							}
 
 							if(temp.matches(".*startup message.*")) {
@@ -414,7 +423,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 							if(temp.matches(".*run simple query.*")) {
 								lisnerSimQueryCnt1 = size + 4;  //리스너 simQuery1
-								lisnerSimQueryCnt2 = size + 5;  //리스너 simQuery
+								lisnerSimQueryCnt2 = size + 5;  //리스너 simQuery2
 							}
 
 							if(temp.matches(".*Row description packet.*")) {

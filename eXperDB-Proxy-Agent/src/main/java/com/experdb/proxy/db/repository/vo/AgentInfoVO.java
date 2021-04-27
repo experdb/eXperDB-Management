@@ -28,8 +28,8 @@ public class AgentInfoVO {
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
 	
-	public String TC001101 = "TC001101"; //실행
-	public String TC001102 = "TC001102"; //중지
+	public String TC001501 = "TC001501"; //실행
+	public String TC001502 = "TC001502"; //중지
 	public int getAgt_sn() {
 		return agt_sn;
 	}
