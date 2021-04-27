@@ -83,18 +83,21 @@ public class ProxyMonitoringController {
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				int aut_id = loginVo.getAut_id();
-				int pry_svr_id = Integer.parseInt(String.valueOf(proxyServerTotInfo.get(0).get("pry_svr_id")));
-				
-				List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
-				List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
-				List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
+
+				if(proxyServerTotInfo.size() > 0){
+					int pry_svr_id = Integer.parseInt(String.valueOf(proxyServerTotInfo.get(0).get("pry_svr_id")));
+					
+					List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
+					List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
+					List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
+					
+					mv.addObject("proxyServerByMasId", proxyServerByMasId);
+					mv.addObject("dbServerConProxy", dbServerConProxy);
+					mv.addObject("proxyLogList",proxyLogList);
+				}
 
 				mv.addObject("proxyServerTotInfo", proxyServerTotInfo);
-				mv.addObject("proxyServerByMasId", proxyServerByMasId);
-				mv.addObject("dbServerConProxy", dbServerConProxy);
-				mv.addObject("proxyLogList",proxyLogList);
 				mv.addObject("aut_id", aut_id);
-				
 				mv.setViewName("proxy/monitoring/proxyMonitoring");
 			}	
 		} catch (Exception e) {
@@ -119,12 +122,12 @@ public class ProxyMonitoringController {
 			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
 			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
-
+			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
 			mv.addObject("proxyServerByMasId", proxyServerByMasId);
 			mv.addObject("dbServerConProxy", dbServerConProxy);
 			mv.addObject("proxyLogList",proxyLogList);
 			mv.addObject("proxyChartCntList",proxyChartCntList);
-			
+			mv.addObject("selectPryCngList", selectPryCngList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -205,8 +208,6 @@ public class ProxyMonitoringController {
 				}
 			}
 
-			System.out.println(proxySettingChartresult.size());
-			System.out.println(proxyStatisticsInfoChart.size());
 //			System.out.println("pry_svr_nm : " + proxyStatisitcInfo.get(0).get("pry_svr_nm"));
 			mv.addObject("proxyStatisticsInfoChart",proxyStatisticsInfoChart); 
 			mv.addObject("proxySettingChartresult",proxySettingChartresult); 
@@ -314,19 +315,24 @@ public class ProxyMonitoringController {
 			String strSeek = request.getParameter("seek");
 			String strReadLine = request.getParameter("readLine");
 			String dwLen = request.getParameter("dwLen");
-			
+			String strDate = request.getParameter("date").substring(0, 10).replace("-", "");
+			String todayYN = request.getParameter("todayYN");
 			Map<String, Object> param = new HashMap<>();
 			param.put("seek", strSeek);
 			param.put("readLine", strReadLine);
 			param.put("dwLen", dwLen);
+			param.put("date", strDate);
+			param.put("todayYN", todayYN);
+			
 			Map<String, Object> result = proxyMonitoringService.getLogFile(pry_svr_id, type, param);
-			
 			strBuffer = (String) result.get("RESULT_DATA"); 
-			strBuffer = strBuffer.replaceAll("\n", "<br>");
+//			strBuffer = strBuffer.replaceAll("\n", "<br>");
 			mv.addObject("data", strBuffer);
-			mv.addObject("fSize", strBuffer.length());
+			if(strBuffer != null) {
+				mv.addObject("fSize", strBuffer.length());
+			}
 			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
-			
+			mv.addObject("dwLen", result.get("DW_LEN"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -347,10 +353,6 @@ public class ProxyMonitoringController {
 		int pry_svr_id = Integer.parseInt(strPrySvrId);
 		String status = request.getParameter("status");
 		String act_exe_type = request.getParameter("act_exe_type");
-		System.out.println("********************** actExeCng");
-		System.out.println(pry_svr_id);
-		System.out.println(status);
-		System.out.println(type);
 		
 		int result = proxyMonitoringService.actExeCng(pry_svr_id, type, status, act_exe_type);
 		System.out.println("result : " +  result);

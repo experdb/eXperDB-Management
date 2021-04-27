@@ -245,13 +245,23 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		String strPrySvrNm = (String) info.get("pry_svr_nm");
 //		String strConfigFilePath = (String) info.get("path");
 //		String strDirectory = strConfigFilePath.substring(0, strConfigFilePath.lastIndexOf("/")+1);
-//		String strFileName = strConfigFilePath.substring(strConfigFilePath.lastIndexOf("/")+1);
-		String strPort = String.valueOf(info.get("socket_port"));
+		if(type.equals("PROXY")) { 
+			type = "haproxy";
+		}
+		String strDirectory = "/var/log/" + type.toLowerCase() + "/";
+		String strFileName = type.toLowerCase()+".log";
+
+		if(param.get("todayYN").equals("N")){
+			strFileName += "-" + param.get("date");
+		}
 		
+		System.out.println(strDirectory);
+		System.out.println(strFileName);
+		String strPort = String.valueOf(info.get("socket_port"));
 		JSONObject jObj = new JSONObject();
 		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP008);
-//		jObj.put(ProxyClientProtocolID.FILE_DIRECTORY, strDirectory);
-//		jObj.put(ProxyClientProtocolID.FILE_NAME, strFileName);
+		jObj.put(ProxyClientProtocolID.FILE_DIRECTORY, strDirectory);
+		jObj.put(ProxyClientProtocolID.FILE_NAME, strFileName);
 		jObj.put(ProxyClientProtocolID.SEEK, param.get("seek"));
 		jObj.put(ProxyClientProtocolID.DW_LEN, param.get("dwLen"));
 		jObj.put(ProxyClientProtocolID.READLINE, param.get("readLine"));
@@ -265,6 +275,16 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		getLogResult.put("pry_svr_nm", strPrySvrNm);
 		
 		return getLogResult;
+	}
+	
+	/**
+	 * proxy config파일 변경 이력
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectPryCngList(int pry_svr_id) {
+		return proxyMonitoringDAO.selectPryCngList(pry_svr_id);
 	}
 
 

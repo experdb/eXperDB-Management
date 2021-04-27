@@ -150,5 +150,17 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 		System.out.println(result);
 		return result;
 	}
+
+	/**
+	 * proxy config파일 변경 이력
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectPryCngList(int pry_svr_id) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectPryCngList", pry_svr_id);
+		return result;
+	}
 	
 }

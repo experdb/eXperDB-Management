@@ -114,4 +114,11 @@ public interface ProxyMonitoringService {
 	 */
 	Map<String, Object> getLogFile(int pry_svr_id, String type, Map<String, Object> param) throws Exception;
 	
+	/**
+	 * proxy config파일 변경 이력
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	List<Map<String, Object>> selectPryCngList(int pry_svr_id);
+	
 }

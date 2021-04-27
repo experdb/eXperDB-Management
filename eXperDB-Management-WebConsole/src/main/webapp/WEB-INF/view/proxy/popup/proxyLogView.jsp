@@ -14,35 +14,40 @@
 %>
 <script>
 	
-	
 	/* ********************************************************
 	 * view 실행
 	 ******************************************************** */
-	function fn_logViewAjax(pry_svr_id, type, date, aut_id) {
-		var v_db_svr_id = $("#db_svr_id", "#findList").val();
+	function fn_logViewAjax() {
 		var v_seek = $("#seek", "#proxyViewForm").val();
 		var v_file_name = $("#info_file_name", "#proxyViewForm").val();
 		var v_endFlag = $("#endFlag", "#proxyViewForm").val();
 		var v_dwLen = $("#dwLen", "#proxyViewForm").val();
 		var v_log_line = $("#log_line", "#proxyViewForm").val();
-
+		var v_pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
+		var v_type = $("#type", "#proxyViewForm").val();
+		var v_date = $("#date", "#proxyViewForm").val();
+		var v_todayYN = $("#todayYN", "#proxyViewForm").val();
+		var v_aut_id = $("#aut_id", "#proxyViewForm").val();
 		if(v_endFlag > 0) {
 			showSwalIcon('<spring:message code="message.msg66" />', '<spring:message code="common.close" />', '', 'warning');
 			$("#endFlag").val("0");
 			return;
 		}
-		
+		if(v_date.slice(0,10) == new Date().toJSON().slice(0,10)){
+			v_todayYN = 'Y';
+		}
 		$.ajax({
 			url : "/proxyMonitoring/proxyLogViewAjax.do",
 			dataType : "json",
 			type : "post",
  			data : {
- 				pry_svr_id : pry_svr_id,
- 				type : type,
- 				date : date,
+ 				pry_svr_id : v_pry_svr_id,
+ 				type : v_type,
+ 				date : v_date,
 				seek : v_seek,
  				dwLen : v_dwLen,
- 				readLine : v_log_line
+ 				readLine : v_log_line,
+ 				todayYN : v_todayYN
  			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -68,12 +73,11 @@
 
 					$("#fSize", "#proxyViewForm").val(v_fileSize);
 					
-					$("#seek", "#proxyViewForm").val(result.seek);
-					$("#endFlag", "#proxyViewForm").val(result.endFlag);
 					$("#dwLen", "#proxyViewForm").val(result.dwLen);
-					$("#type", "#proxyViewForm").val(type);
-					$("#pry_svr_id", "#proxyViewForm").val(pry_svr_id);
-					$("#aut_id", "#proxyViewForm").val(aut_id);
+// 					$("#type", "#proxyViewForm").val(type);
+// 					$("#pry_svr_id", "#proxyViewForm").val(pry_svr_id);
+// 					$("#aut_id", "#proxyViewForm").val(aut_id);
+					$("#date", "#proxyViewForm").val(v_date);
 					if(type == 'KEEPALIVED') {
 						$('#log_cng').val("Proxy Log");
 					} else {
@@ -84,9 +88,9 @@
 					
 					$("#view_file_size", "#proxyViewForm").html(v_fileSize);
 				}
-				dateCalenderSetting(date);
+				dateCalenderSetting();
 				
-				if(aut_id != 1){
+				if(v_aut_id != 1){
 					$('#start_btn').hide();
 					$('#stop_btn').hide();
 					$('#download_btn').hide();
@@ -98,6 +102,7 @@
 				
 			}
 		});
+		console.log($("#dwLen", "#proxyViewForm").val());
 	}
 
 	/* ********************************************************
@@ -115,13 +120,14 @@
 	/* ********************************************************
 	 * log calender 셋팅
 	 ******************************************************** */
-	function dateCalenderSetting(date) {
+	function dateCalenderSetting() {
+		var s_date = $("#date", "#proxyViewForm").val();
 		var today = new Date();
 		var day_end = today.toJSON().slice(0,10);
 
 		today.setDate(today.getDate() - 7);
 		var day_start = today.toJSON().slice(0,10);
-		var sys_date = date.slice(0,10);
+		var sys_date = s_date.slice(0,10);
 		$("#wrk_strt_dtm").val(sys_date);
 // 		$("#wrk_end_dtm").val(day_end);
 
@@ -256,12 +262,24 @@
 	 * log system change
 	 ******************************************************** */
 	function fn_sys_type_cng(){
-		var type = "";
 		var langSelect = document.getElementById("log_type");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
-		var date = $("#wrk_strt_dtm").val();
-		var pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
-		fn_logViewAjax(pry_svr_id, selectValue, date, aut_id);
+		$("#type", "#proxyViewForm").val(selectValue);
+// 		var date = $("#wrk_strt_dtm").val();
+		fn_logViewAjax();
+	}
+	
+	/* ********************************************************
+	 * log 팝업 닫기
+	 ******************************************************** */
+	function fn_proxyLogViewPopcl() {
+		var contentsGbn_chk = $("#contents_gbn", "#configForm").val();
+		$("#log_line", "#proxyViewForm").val("0");
+		$('#config').scrollTop(0);
+		$("#pop_layer_log_view").modal("hide");
+		if (contentsGbn_chk != null && contentsGbn_chk != "") {
+			$("#"+ contentsGbn_chk).modal("show");
+		}
 	}
 	
 </script>
@@ -294,7 +312,10 @@
 					<input type="hidden" id="fSize" name="fSize">
 					<input type="hidden" id="type" name="type">
 					<input type="hidden" id="pry_svr_id" name="pry_svr_id">
-
+					<input type="hidden" id="date" name="date">
+					<input type="hidden" id="aut_id" name="aut_id">
+					<input type="hidden" id="todayYN" name="todayYN">
+					
 					<fieldset>
 						<div class="card" style="margin-top:10px;border:0px;margin-bottom:-40px;">
 							<div class="card-body">
@@ -309,6 +330,7 @@
 										</select>
 									</div>
 									<div class="col-sm-6">
+										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_logViewAjax();" value='<spring:message code="auth_management.viewMore" />' />
 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_confirm_modal('TC001502')" value="<spring:message code="eXperDB_proxy.act_start"/>" />
 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_confirm_modal('TC001501')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />
 <%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value="<spring:message code="eXperDB_proxy.act_start"/>" /> --%>
@@ -366,7 +388,7 @@
 			</div>
 
 			<div class="top-modal-footer" style="text-align: center !important;" >
-				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+				<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_proxyLogViewPopcl();"><spring:message code="common.close"/></button>
 			</div>
 		</div>
 	</div>

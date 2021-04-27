@@ -31,6 +31,38 @@
        		s.LST_MDF_DTM,
        		a.AGT_CNDT_CD 
 		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
+        GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD
+		ORDER BY coalesce(MASTER_SVR_ID, PRY_SVR_ID), MASTER_GBN DESC, LST_MDF_DTM
+	</select>
+	
+	<select id="selectProxyServerList2" resultType="hashMap">
+		/**
+		* Query ID : selectProxyServerList
+		* Description : proxy server list
+		* Author : 윤정
+		**/
+		SELECT 
+       		(ROW_NUMBER() OVER()) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+       		s.PRY_SVR_ID,
+       		s.IPADR,
+       		s.AGT_SN,
+       		s.PRY_SVR_NM,
+       		s.PRY_PTH,
+       		s.KAL_PTH,
+       		s.USE_YN,
+       		s.EXE_STATUS,
+       		s.MASTER_GBN,
+       		s.MASTER_SVR_ID,
+       		s.DB_SVR_ID,
+       		s.DAY_DATA_DEL_TERM,
+       		s.MIN_DATA_DEL_TERM,
+       		s.FRST_REGR_ID,
+       		s.FRST_REG_DTM,
+       		s.LST_MDFR_ID,
+       		s.LST_MDF_DTM,
+       		a.AGT_CNDT_CD 
+		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
 		WHERE s.USE_YN = 'Y'
         GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD
 		ORDER BY coalesce(MASTER_SVR_ID, PRY_SVR_ID), MASTER_GBN DESC, LST_MDF_DTM
@@ -429,5 +461,26 @@
 	          </if>
 	
 	         ORDER BY A.AGT_SN, A.LST_MDF_DTM DESC
+	</select>
+	
+	<select id="selectPryCngList" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectPryCngList
+		* Description : proxy config 파일 변경 이력 조회
+		* Author : 
+		**/
+		SELECT
+			  (ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+			, tpsi.PRY_SVR_ID 
+			, tpsi.PRY_SVR_NM
+			, tpg.EXE_RST_CD 
+			, TO_CHAR(tpg.LST_MDF_DTM, 'YYYY-MM-DD HH24:MI') as LST_MDF_DTM
+		FROM T_PRY_SVR_I tpsi
+		JOIN T_PRYCNG_G tpg ON tpsi.PRY_SVR_ID = tpg.PRY_SVR_ID
+		WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
+		ORDER BY LST_MDF_DTM DESC
+		LIMIT 5
 	</select>
 </mapper>

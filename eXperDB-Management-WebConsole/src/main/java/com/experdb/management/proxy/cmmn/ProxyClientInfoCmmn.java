@@ -229,12 +229,14 @@ public class ProxyClientInfoCmmn implements Runnable{
 		String strDxExCode = (String)objResult.get(ProxyClientProtocolID.DX_EX_CODE);
 		String strResultCode = (String)objResult.get(ProxyClientProtocolID.RESULT_CODE);
 		String strResultData = (String)objResult.get(ProxyClientProtocolID.RESULT_DATA);
+		int strDwLen = (int) objResult.get(ProxyClientProtocolID.DW_LEN);
 		
 		result.put("RESULT_CODE", strResultCode);
 		result.put("ERR_CODE", strErrCode);
 		result.put("ERR_MSG", strErrMsg);
 		result.put("RESULT_DATA", strResultData);
-				
+		result.put("DW_LEN", strDwLen);
+		
 		return result;
 	}
 	
