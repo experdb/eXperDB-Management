@@ -95,22 +95,27 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 	 */
 	@Override
 	public JSONObject createNewConfFile(JSONObject jobj) throws Exception {
-		//socketLogger.info("PsP004.createNewConfFile : "+jobj.toString());
+		socketLogger.info("PsP004.createNewConfFile : "+jobj.toString());
 		JSONObject result = new JSONObject();
 		CommonUtil util = new CommonUtil();
 		
+		int prySvrId = 0;
+		String lst_mdfr_id = "";
+		String newHaPath ="";
+		String newKePath ="";
+		String dateTime = "";
 		String errcd = "0";
+		ProxyConfChangeHistoryVO newConfChgHistVo = new ProxyConfChangeHistoryVO();
 		
 		try{
 			//haproxy.cfg 생성
 			String proxyCfg = ""; 
 			
 			String globalConf = readTemplateFile("global.cfg");
-			
 			JSONObject global = jobj.getJSONObject("global_info");
 			
-			int prySvrId = global.getInt("pry_svr_id");
-			String lst_mdfr_id = jobj.getString("lst_mdfr_id");
+			prySvrId = global.getInt("pry_svr_id");
+			lst_mdfr_id = jobj.getString("lst_mdfr_id");
 			
 			String logLocal ="";
 			RunCommandExec commandExec = new RunCommandExec();
@@ -141,6 +146,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			
 			String readOnlyConf = readTemplateFile("readOnly.cfg");
 			String readWriteConf = readTemplateFile("readWrite.cfg"); 
+			String readWriteCdNm = jobj.getString("TC004201");
+			String readOnlyCdNm = jobj.getString("TC004202");
 			
 			JSONArray listener = jobj.getJSONArray("listener_list");
 			int listenerSize = listener.length();
@@ -150,23 +157,20 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				String bind = proxyListener.getString("con_bind_port");
 				String db_nm = proxyListener.getString("db_nm");
 				
-				switch(lsn_nm){
-					case "pgReadWrite" :
-						readWriteConf = readWriteConf.replace("{lsn_nm}", lsn_nm);
-						readWriteConf = readWriteConf.replace("{con_bind_port}", bind);
-						readWriteConf = readWriteConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
-						readWriteConf = readWriteConf.replace("{db_nm}", db_nm);
-						readWriteConf = readWriteConf.replace("{packet_len}", getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
-						proxyCfg +="\n"+readWriteConf;
-						break;
-					case "pgReadOnly" :
-						readOnlyConf = readOnlyConf.replace("{lsn_nm}", lsn_nm);
-						readOnlyConf = readOnlyConf.replace("{con_bind_port}", bind);
-						readOnlyConf = readOnlyConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
-						readOnlyConf = readOnlyConf.replace("{db_nm}", db_nm);
-						readOnlyConf = readOnlyConf.replace("{packet_len}",  getPacketLength(31,db_nm));
-						proxyCfg +="\n"+readOnlyConf;
-						break;	
+				if(lsn_nm.equals(readWriteCdNm)){
+					readWriteConf = readWriteConf.replace("{lsn_nm}", lsn_nm);
+					readWriteConf = readWriteConf.replace("{con_bind_port}", bind);
+					readWriteConf = readWriteConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
+					readWriteConf = readWriteConf.replace("{db_nm}", db_nm);
+					readWriteConf = readWriteConf.replace("{packet_len}", getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
+					proxyCfg +="\n"+readWriteConf;
+				}else if(lsn_nm.equals(readOnlyCdNm)){
+					readOnlyConf = readOnlyConf.replace("{lsn_nm}", lsn_nm);
+					readOnlyConf = readOnlyConf.replace("{con_bind_port}", bind);
+					readOnlyConf = readOnlyConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
+					readOnlyConf = readOnlyConf.replace("{db_nm}", db_nm);
+					readOnlyConf = readOnlyConf.replace("{packet_len}",  getPacketLength(31,db_nm));
+					proxyCfg +="\n"+readOnlyConf;
 				}
 				
 				JSONArray listenerSvrList = proxyListener.getJSONArray("server_list");
@@ -182,8 +186,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				proxyCfg +=serverList;
 				
 			}
-			socketLogger.info("new haproxy.cfg : "+proxyCfg);
-		
+			
 			//keepalived.conf 생성
 			String keepalivedCfg = "#add\n";
 			keepalivedCfg += "global_defs {\n";
@@ -215,8 +218,6 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				keepalivedCfg +="\n"+vipConf;
 			}
 			
-			socketLogger.info("new keepalived.conf : "+keepalivedCfg);
-		
 			//파일 backup
 			String backupPath = FileUtil.getPropertyValue("context.properties", "proxy.conf_backup_path");
 			ProxyServerVO vo = new ProxyServerVO();
@@ -247,11 +248,19 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				socketLogger.info("createNewConfFile : Insert init conf file info ");
 			}
 			DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		  	String dateTime = dateFormat.format(new Date());
+		  	dateTime = dateFormat.format(new Date());
 		  	//신규 파일 생성 
 		  	new File(backupPath+"/"+dateTime+"/").mkdirs();
-			File newHaproxy = new File(backupPath+"/"+dateTime+"/"+initHaproxy.getName());
-			File newKeepa = new File(backupPath+"/"+dateTime+"/"+initKeepa.getName());
+		  	newHaPath =backupPath+"/"+dateTime+"/"+initHaproxy.getName();
+			newKePath =backupPath+"/"+dateTime+"/"+initKeepa.getName();
+			
+			newConfChgHistVo.setPry_svr_id(prySvrId);
+			newConfChgHistVo.setFrst_regr_id(lst_mdfr_id);
+			newConfChgHistVo.setPry_pth(newHaPath);
+			newConfChgHistVo.setKal_pth(newKePath);
+			
+			File newHaproxy = new File(newHaPath);
+			File newKeepa = new File(newKePath);
 			byte[] proxyBytes = proxyCfg.getBytes();
 			byte[] keepBytes = keepalivedCfg.getBytes();
 			FileOutputStream os_h = new FileOutputStream(newHaproxy);
@@ -264,24 +273,20 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			Files.copy(newHaproxy.toPath(), initHaproxy.toPath(), REPLACE_EXISTING);
 			Files.copy(newKeepa.toPath(), initKeepa.toPath(), REPLACE_EXISTING);//덮어쓰기
 			
-			ProxyConfChangeHistoryVO newConfChgHistVo = new ProxyConfChangeHistoryVO();
-			newConfChgHistVo.setPry_svr_id(prySvrId);
-			newConfChgHistVo.setFrst_regr_id(lst_mdfr_id);
-			newConfChgHistVo.setPry_pth(newHaproxy.getPath());
-			newConfChgHistVo.setKal_pth(newKeepa.getPath());
-			
-			//insert T_PRYCHG_G
-			proxyDAO.insertPrycngInfo(newConfChgHistVo);
-			socketLogger.info("createNewConfFile : Insert chg conf file info ");
-			
 			result.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP004);
 			result.put(ProtocolID.RESULT_CODE, "0");
 			result.put(ProtocolID.ERR_CODE, errcd);
 			result.put(ProtocolID.ERR_MSG, "");
-			result.put(ProtocolID.PRY_PTH, newHaproxy.getPath());
+			result.put(ProtocolID.PRY_PTH, newHaPath);
 			result.put(ProtocolID.KAL_PTH, newKeepa.getPath());
 			
+			newConfChgHistVo.setExe_rst_cd("TC001501");
+			proxyDAO.insertPrycngInfo(newConfChgHistVo);
 		}catch(Exception e){
+			
+			newConfChgHistVo.setExe_rst_cd("TC001502");
+			proxyDAO.insertPrycngInfo(newConfChgHistVo);
+			
 			errcd = "-1";
 			result.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP004);
 			result.put(ProtocolID.RESULT_CODE, "1");
