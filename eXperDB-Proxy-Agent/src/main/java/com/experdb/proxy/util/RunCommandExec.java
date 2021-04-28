@@ -285,9 +285,8 @@ public class RunCommandExec extends Thread {
 				int recnum = 1;
 				int temp = 0;
 				
-				String strView = "";
 				while (out.ready()) {
-					strView += (intLastLine + recnum) + " " + out.readLine() + "<br>";
+					strResult += (intReadLine + recnum) + " " + out.readLine() + "<br>";
 					if (((++recnum) % (intReadLine + 1)) == 0) {
 						break;
 					}
