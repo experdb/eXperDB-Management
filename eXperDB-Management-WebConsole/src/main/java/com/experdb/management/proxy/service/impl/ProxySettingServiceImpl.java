@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.experdb.management.proxy.cmmn.CommonUtil;
@@ -26,7 +27,10 @@ import com.experdb.management.proxy.service.ProxySettingService;
 import com.experdb.management.proxy.service.ProxyVipConfigVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.impl.AccessHistoryDAO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
+import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -45,6 +49,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	@Resource(name = "cmmnServerInfoDAO")
 	private CmmnServerInfoDAO cmmnServerInfoDAO;
 	
+	@Autowired
+	private CmmnCodeDtlService cmmnCodeDtlService;
 	/**
 	 * proxy 화면 접속 히스토리 등록
 	 * 
@@ -782,6 +788,18 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		}
 		agentJobj.put("vipconfig_list", vipConfgJArr);
 		agentJobj.put("lst_mdfr_id", lst_mdfr_id);
+		
+		List<CmmnCodeVO> cmmnCodeVO =  null;
+		PageVO pageVO = new PageVO();
+		
+		pageVO.setGrp_cd("TC0042");
+		pageVO.setSearchCondition("0");
+		cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+		
+		for(int i=0; i<cmmnCodeVO.size(); i++){
+			CmmnCodeVO tempCode = cmmnCodeVO.get(i);
+			agentJobj.put(tempCode.getSys_cd(), tempCode.getSys_cd_nm());
+		}
 		
 		boolean createNewConfig = false;
 		String resultLog = "";
