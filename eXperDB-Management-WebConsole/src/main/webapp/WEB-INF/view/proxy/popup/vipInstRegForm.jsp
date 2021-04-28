@@ -54,7 +54,7 @@
 		    var listLen = vipInstTable.rows().data().length;
 		    var tblData = vipInstTable.rows().data();
 		    for(var i=0; i< listLen; i++){
-		    	if(str==tblData[i].priority){
+		    	if($("#instReg_priority", "#insVipInstForm").val()==tblData[i].priority){
 		    		if($("#instReg_mode", "#insVipInstForm").val()=="mod" && vipInstTable.rows('.selected').indexes()[0] != i){
 		    			cnt++;
 		    		}else if($("#instReg_mode", "#insVipInstForm").val()=="reg"){
@@ -104,7 +104,7 @@
 					instReg_state_nm: {
 						required: true
 					},
-					instReg_priority: {
+					instReg_priority_sel: {
 						required: true,
 						duplCheckPriority : true
 						
@@ -129,7 +129,7 @@
 					instReg_state_nm: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
-					instReg_priority: {
+					instReg_priority_sel: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />',
 						duplCheckPriority : '<spring:message code="errors.duplicate" />'
 					},
@@ -258,7 +258,9 @@
 			}
 		}
 	}
-	
+	function fn_change_priority_sel(){
+		$("#instReg_priority", "#insVipInstForm").val(weightInit - $("#instReg_priority_sel", "#insVipInstForm").val());
+	}
 </script>
 <div class="modal fade" id="pop_layer_proxy_inst_reg" tabindex="-1" role="dialog" aria-labelledby="ModalVipInstance" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 200px 400px;">
@@ -324,7 +326,19 @@
 										</span>
 									</label>
 									<div class="col-sm-3">
-										<input type="number" class="form-control form-control-xsm instReg_priority" maxlength="20" id="instReg_priority" name="instReg_priority" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=5 />
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_priority_sel" id="instReg_priority_sel" onchange="fn_change_priority_sel();"  tabindex=4 >
+											<option value=1>1</option>
+											<option value=2>2</option>
+											<option value=3>3</option>
+											<option value=4>4</option>
+											<option value=5>5</option>
+											<option value=6>6</option>
+											<option value=7>7</option>
+											<option value=8>8</option>
+											<option value=9>9</option>
+											<option value=10>10</option>
+										</select>
+										<input type="hidden" class="form-control form-control-xsm instReg_priority" maxlength="20" id="instReg_priority" name="instReg_priority" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=5 />
 									</div>
 								</div>
 								<div class="form-group row row-last">

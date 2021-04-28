@@ -169,6 +169,7 @@
 								ON 			A.PEER_SERVER_IP = B.OBJ_IP
 	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id})
 		</if>
+		ORDER BY PRIORITY DESC
 	</select> 
 	<select id="selectDbmsList" resultType="hashMap">
 	 	/**
