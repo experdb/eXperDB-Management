@@ -215,8 +215,9 @@
 				FROM T_PRY_SVR_I tpsi 
 				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
 				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID
-				WHERE tpsi.PRY_SVR_ID = #{value}
-				OR tpsi.MASTER_SVR_ID = #{value}
+				WHERE (tpsi.PRY_SVR_ID = #{value}
+				OR tpsi.MASTER_SVR_ID = #{value})
+				AND tpssg.log_type = 'TC003901'
 				ORDER BY  tpsi.master_gbn desc, tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
 			) x
 			WHERE x.r <= 2
@@ -261,6 +262,7 @@
 				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
 				JOIN T_PRY_SVR_STATUS_G tpssg ON tpssg.lsn_svr_id = tpsli.lsn_svr_id
 				WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+				AND tpssg.log_type = 'TC003901'
 				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM desc
 			) x
 			WHERE x.r <= 5
@@ -306,6 +308,7 @@
 				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
 				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID AND tpssg.lsn_svr_id = tpsli.lsn_svr_id
 				WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+				AND tpssg.log_type = 'TC003901'
 				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM desc
 			) x
 			WHERE x.r <= 5
@@ -341,6 +344,7 @@
 				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID AND tpssg.lsn_svr_id = tpsli.lsn_svr_id
 				WHERE (tpsi.PRY_SVR_ID = #{value} OR tpsi.MASTER_SVR_ID = #{value})
 				  AND tpsi.MASTER_GBN = 'M'
+				  AND tpssg.log_type = 'TC003901'
 				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM
 			) x
 			where r = 1
