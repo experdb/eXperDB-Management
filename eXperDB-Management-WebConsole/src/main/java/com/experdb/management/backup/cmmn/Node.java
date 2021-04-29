@@ -76,7 +76,7 @@ public class Node {
 		try {
 			//사용자유저 사용 체크하지 않았을시
 			if(targetMachineVO.getIsUser().equals("false")){
-				cmd = "./d2dnode --modify=" + targetMachineVO.getName() + " --user=" + targetMachineVO.getUser() + " --password=" + targetMachineVO.getPassword() + " --description="+targetMachineVO.getDescription();
+				cmd = "./d2dnode --modify=" + targetMachineVO.getName() + " --user=" + targetMachineVO.getUser() + " --password=" + targetMachineVO.getPassword() + " --description="+targetMachineVO.getDescription()+ " --force";
 			}else{		
 				/*--user=username
 				루트가 아닌 사용자의 이름을 지정합니다.				
