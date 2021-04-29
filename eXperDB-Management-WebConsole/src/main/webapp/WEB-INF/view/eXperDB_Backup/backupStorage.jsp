@@ -164,6 +164,7 @@ function fn_storage_reg_popup(){
 			}
 		},
 		success : function(result) {
+			$("#storageUrl").val(result.backupUrl);
 			fn_regReset();
 			$('#pop_layer_popup_backupStorageReg').modal("show");
 		}
@@ -259,8 +260,9 @@ function fnc_confirmMultiRst(gbn){
 
 <%@include file="./popup/bckStorageRegForm.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
-
-
+<form name="storageInfo">
+	<input type="hidden" name="storageUrl" id="storageUrl">
+</form>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
