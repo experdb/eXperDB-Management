@@ -56,7 +56,8 @@ CREATE TABLE experdb_management.t_pry_svr_i (
 	db_svr_id numeric(18) NULL,                                -- DB_서버_ID
 	day_data_del_term numeric(2) NOT NULL DEFAULT 30,          -- 일별_데이터_삭제_기간
 	min_data_del_term numeric(2) NOT NULL DEFAULT 7,           -- 분별_데이터_삭제_기간
-	old_master_gbn varchar(1) NULL,                                -- 마스터_구분
+	old_master_gbn varchar(1) NULL,                            -- 마스터_구분
+	kal_install_yn bpchar(1) NULL DEFAULT 'N'::bpchar,         -- KEEPALIVED_설치_여부
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                              -- 최종_수정자_ID
@@ -84,6 +85,7 @@ COMMENT ON COLUMN experdb_management.t_pry_svr_i.db_svr_id IS 'DB_서버_ID';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.day_data_del_term IS '일별_데이터_삭제_기간';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.min_data_del_term IS '분별_데이터_삭제_기간';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.old_master_gbn IS '구_마스터_구분';
+COMMENT ON COLUMN experdb_management.t_pry_svr_i.kal_install_yn IS 'KEEPALIVED_설치_여부';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.lst_mdfr_id IS '최종_수정자_ID';
@@ -196,6 +198,7 @@ CREATE TABLE experdb_management.t_pry_lsn_svr_i (
 	lsn_id numeric(18) NOT NULL DEFAULT 1,                     -- 리스너_ID
 	chk_portno numeric(5) NULL,                                -- 체크_포트
 	backup_yn bpchar(1) NOT NULL DEFAULT 'N'::bpchar,          -- 백업옵션_여부
+	db_conn_ip varchar(30) NULL,                               -- DB_연결_IP
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                              -- 최종_수정자_ID
@@ -212,6 +215,7 @@ COMMENT ON COLUMN experdb_management.t_pry_lsn_svr_i.pry_svr_id IS 'PROXY_서버
 COMMENT ON COLUMN experdb_management.t_pry_lsn_svr_i.lsn_id IS '리스너_ID';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_svr_i.chk_portno IS '체크_포트';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_svr_i.backup_yn IS '백업옵션_여부';
+COMMENT ON COLUMN experdb_management.t_pry_lsn_svr_i.db_conn_ip IS 'DB_연결_IP';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_svr_i.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_svr_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_pry_lsn_svr_i.lst_mdfr_id IS '최종_수정자_ID';
