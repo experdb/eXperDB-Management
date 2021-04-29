@@ -8,13 +8,17 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,6 +31,7 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.history.web.DownloadView;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
@@ -316,6 +321,7 @@ public class ProxyMonitoringController {
 			String strReadLine = request.getParameter("readLine");
 			String dwLen = request.getParameter("dwLen");
 			String strDate = request.getParameter("date").substring(0, 10).replace("-", "");
+			System.out.println(strDate);
 			String todayYN = request.getParameter("todayYN");
 			Map<String, Object> param = new HashMap<>();
 			param.put("seek", strSeek);
@@ -323,7 +329,6 @@ public class ProxyMonitoringController {
 			param.put("dwLen", dwLen);
 			param.put("date", strDate);
 			param.put("todayYN", todayYN);
-			
 			Map<String, Object> result = proxyMonitoringService.getLogFile(pry_svr_id, type, param);
 			strBuffer = (String) result.get("RESULT_DATA"); 
 //			strBuffer = strBuffer.replaceAll("\n", "<br>");
@@ -333,6 +338,7 @@ public class ProxyMonitoringController {
 			}
 			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
 			mv.addObject("dwLen", result.get("DW_LEN"));
+			mv.addObject("file_name", result.get("file_name"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -377,5 +383,24 @@ public class ProxyMonitoringController {
 		mv.addObject("actExeFailLog", result);
 //		mv.setViewName("proxy/popup/exeFailMsg");
 		return mv;
+	}
+	
+	/**
+	 * proxy / keepalived log 파일 다운로드
+	 * @param request, response
+	 */
+	@RequestMapping("/logDownload.do")
+	public int logDownload(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("파일명=" + request.getParameter("file_name"));
+
+		// System.out.println("파일경로=" +request.getParameter("path"));
+
+		String filePath = "/var/log/" + request.getParameter("type").toLowerCase() + "/";
+		String fileName = request.getParameter("file_name");
+		String viewFileNm = request.getParameter("file_name");
+		System.out.println(fileName);
+//		DownloadView fileDown = new DownloadView(); // 파일다운로드 객체생성
+//		fileDown.filDown(request, response, filePath, fileName, viewFileNm); // 파일다운로드
+		return 1;
 	}
 }

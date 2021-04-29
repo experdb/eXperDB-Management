@@ -273,6 +273,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		Map<String, Object> getLogResult = new HashMap<String, Object>();
 		getLogResult = pcic.getLogFile(IP, PORT, jObj);
 		getLogResult.put("pry_svr_nm", strPrySvrNm);
+		getLogResult.put("file_name", strFileName);
 		
 		return getLogResult;
 	}
