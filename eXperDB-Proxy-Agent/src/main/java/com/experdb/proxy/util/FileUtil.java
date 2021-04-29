@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -34,6 +36,7 @@ import org.springframework.core.io.Resource;
 *      </pre>
 */
 public class FileUtil {
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 
 	public static String getFileView(File file) throws Exception {
 		String strView = "";
@@ -78,15 +81,16 @@ public class FileUtil {
 			String temp;
 			int recnum = 1;
 			while ((temp = rdma.readLine()) != null) {
-
-//				strView += (intLastLine + recnum) + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
-				strView += new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "\n";
-
-				if (((++recnum) % (intReadLine + 1)) == 0) {
+				if(file.getName().contains("log")){
+//					strView += (intLastLine + recnum) + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+					strView += recnum + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+				} else {
+					strView += new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "\n";
+				}
+				if (((++recnum) % (intLastLine + 1)) == 0) {
 					break;
 				}
 			}
-
 			if (recnum != (intReadLine + 1))
 				strEndFlag = "1";
 

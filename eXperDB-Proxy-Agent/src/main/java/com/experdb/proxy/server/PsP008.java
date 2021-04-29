@@ -97,18 +97,21 @@ public class PsP008 extends SocketCtl{
 			int intReadLine = Integer.parseInt(strReadLine);
 			int intLastLine = intDwlen;
 
+			
+			if(intDwlen == 0){
+				intLastLine = intReadLine;
+			}
+			
 			String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
-//			File inFile = new File(strLogFileDir, strFileName);
-//			File inFile = new File("/var/log/haproxy/haproxy.log-20210422");
-//			String strCmd = "tail -" + intReadLine + " "+ strLogFileDir + strFileName;
-			String strCmd = "tac " + strLogFileDir + strFileName + " | head -" + (intDwlen + intReadLine);
+			String strCmd = "tac " + strLogFileDir + strFileName + " | head -" + (intLastLine) + " > /var/log/temp/" + strFileName;
 			
 			RunCommandExec commandExec = new RunCommandExec();
 			//명령어 실행
-			commandExec.runExecRtn4(strCmd, intLastLine, intReadLine);
+			commandExec.runExec(strCmd);
+//			commandExec.runExecRtn4(strCmd, intLastLine, intReadLine);
 			
 			socketLogger.info("strCmd :: "+strCmd);
-			File inFile = new File(strLogFileDir, strFileName);
+			File inFile = new File("/var/log/temp/", strFileName);
 
 			try {
 				commandExec.join();
@@ -118,22 +121,31 @@ public class PsP008 extends SocketCtl{
 			}
 		
 			socketLogger.info("call :: "+commandExec.call());
-			socketLogger.info("Message :: "+commandExec.getMessage());
+//			socketLogger.info("Message :: "+commandExec.getMessage());
 			
-			String logFile = "";
+//			String logFile = "";
 			
 			if(commandExec.call().equals("success")){
-				logFile = commandExec.getMessage();
-			}
+//				logFile = commandExec.getMessage();
 			
+				HashMap hp = FileUtil.getRandomAccessFileView(inFile, intReadLine, Integer.parseInt("0"), intLastLine);
+
+				outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
+				outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));
+				outputObj.put(ProtocolID.SEEK, hp.get("seek"));
+				outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
+				outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
+			
+				hp = null;
+			}
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			outputObj.put(ProtocolID.RESULT_DATA, logFile);
-			outputObj.put(ProtocolID.FILE_SIZE, logFile.length());
+//			outputObj.put(ProtocolID.RESULT_DATA, logFile);
+//			outputObj.put(ProtocolID.FILE_SIZE, logFile.length());
 //			outputObj.put(ProtocolID.SEEK, hp.get("seek"));
-			outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
+//			outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
 //			outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
 			
 			inFile = null;		
