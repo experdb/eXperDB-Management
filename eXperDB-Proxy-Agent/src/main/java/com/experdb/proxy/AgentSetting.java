@@ -50,6 +50,7 @@ public class AgentSetting {
 		String strConfBackupPath = "";
 	//	String strRootPwd = "";
 	//	String salt_value = "";
+		String strKeepInstaillYn = "";
 		
 		Scanner scan = new Scanner(System.in);
 		String localIp = NetworkUtil.getLocalServerIp();
@@ -91,6 +92,23 @@ public class AgentSetting {
 		if(strConfBackupPath.equals("")) {
 			strConfBackupPath = "/app/eXperDB-Proxy-Agent/backup";
 		} 
+	
+		System.out.println("keepalived install Status (Y/N) :");
+		strKeepInstaillYn = scan.nextLine();
+		strKeepInstaillYn = strKeepInstaillYn.toUpperCase();
+		while (true) {
+			if(strKeepInstaillYn.equals("")) {
+				System.out.println("Please enter the keepalived install Status. ");
+				
+				System.out.println("keepalived install Status (Y/N) :");
+				
+				strKeepInstaillYn = scan.nextLine();
+				strKeepInstaillYn = strKeepInstaillYn.toUpperCase();
+			} else {
+				break;
+			}
+		}
+		
 		/////////////////////////////////////////////////////////////////////
 		
 		//Repository db 설정
@@ -149,6 +167,7 @@ public class AgentSetting {
 		System.out.println("#####################################################");
 		System.out.println("agent ip :" + strAgentIp);
 		System.out.println("agent port :" + strAgentPort);
+		System.out.println("keepalived install :" + strKeepInstaillYn);
 		System.out.println("database Connection Info :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
@@ -209,6 +228,8 @@ public class AgentSetting {
 			prop.setProperty("database.username", "ENC(" + username + ")");
 			prop.setProperty("database.password", "ENC(" + password + ")");
 
+			prop.setProperty("keepalived.install.yn", strKeepInstaillYn);
+			
 			prop.setProperty("socket.server.port", strAgentPort);
 			prop.setProperty("agent.install.ip", strAgentIp);
 			prop.setProperty("agent.path", strAgentPath);

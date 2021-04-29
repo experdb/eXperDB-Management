@@ -158,8 +158,6 @@ public class FileRunCommandExec extends Thread {
 		
 		try{
 			//proc = Runtime.getRuntime().exec(cmd);
-socketLogger.info("cmd --> " + cmd);
-			
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			proc.waitFor ();
 			

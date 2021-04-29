@@ -27,7 +27,8 @@
 				FRST_REGR_ID,
 				FRST_REG_DTM,
 				LST_MDFR_ID,
-				LST_MDF_DTM
+				LST_MDF_DTM,
+				KAL_INSTALL_YN
 			FROM  T_PRY_SVR_I
 			WHERE 1 = 1
 				<if test='ipadr != null'>
@@ -75,6 +76,7 @@
 			, LST_MDFR_ID
 			, LST_MDF_DTM
 			, OLD_MASTER_GBN
+			, KAL_INSTALL_YN
 		)
 		SELECT
 			#{pry_svr_id}::numeric
@@ -96,6 +98,7 @@
 			, #{lst_mdfr_id}
 			, clock_timestamp()
 			, #{master_gbn}
+			, #{kal_install_yn}
     </insert>
     
     <update id="updatePrySvrInfo"  parameterType="ProxyServerVO">
@@ -120,6 +123,7 @@
 			, MIN_DATA_DEL_TERM = #{min_data_del_term}::numeric
 			, LST_MDFR_ID = #{lst_mdfr_id}
 			, LST_MDF_DTM = clock_timestamp()
+			, KAL_INSTALL_YN = #{kal_install_yn}
 		WHERE
 			IPADR = #{ipadr}
     </update>
@@ -707,4 +711,132 @@
 			PRY_SVR_ID  != #{pry_svr_id}::numeric;
 		</if>
     </update>
+    
+    
+	<select id="selectPryLsnSvrIdInfo" parameterType="ProxyStatisticVO" resultType="hashMap">
+        /**
+        * Query ID : selectPryLsnSvrIdInfo
+        * Description : 리스너 포트 조회
+        * Author : 
+        **/
+         SELECT B.CON_BIND_PORT
+              , A.IPADR 
+              , A.PRY_SVR_ID
+              , B.LSN_ID
+              , C.LSN_SVR_ID
+           FROM T_PRY_SVR_I A
+                INNER JOIN T_PRY_LSN_I B ON A.PRY_SVR_ID = B.PRY_SVR_ID
+                INNER JOIN T_PRY_LSN_SVR_I C ON A.PRY_SVR_ID = C.PRY_SVR_ID and B.LSN_ID = C.LSN_ID
+          WHERE 1 = 1
+            AND A.IPADR = #{ipadr}
+            and B.LSN_NM = #{pxname}
+            and C.DB_CON_ADDR = #{db_con_addr_chk}
+		  LIMIT 1
+    </select>
+ 	
+ 
+    <update id="updatePryLsnSvrDbRealChkInfo"  parameterType="ProxyStatisticVO">
+   		/**
+	 	* Query ID : updatePryLsnSvrDbRealChkInfo
+	 	* Description : proxy 리스너 서버 DB연결 수정
+	 	* Author : 
+	 	**/
+		UPDATE T_PRY_LSN_SVR_I
+		SET
+	    	  DB_CONN_IP = (CASE WHEN #{svr_status} = 'UP' THEN #{db_con_addr}
+	    	                     ELSE '' 
+	    	                 END
+                           )
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			  LSN_SVR_ID  = #{lsn_svr_id}::numeric
+		  AND DB_CON_ADDR  = #{db_con_addr_chk}
+		  AND PRY_SVR_ID  = #{pry_svr_id}::numeric
+		  AND LSN_ID  = #{lsn_id}::numeric
+    </update>
+
+    <insert id="insertPrySvrStatusInfo"  parameterType="ProxyStatisticVO">
+    	/**
+	 	* Query ID : insertPrySvrStatusInfo
+	 	* Description : proxy 리스너 통계 데이터 등록
+	 	* Author : 
+	 	**/
+		 INSERT INTO T_PRY_SVR_STATUS_G
+	 	(
+			PRY_EXE_STATUS_SN
+			, LOG_TYPE
+			, PRY_SVR_ID
+			, EXE_DTM
+			, CUR_SESSION
+			, MAX_SESSION
+			, SESSION_LIMIT
+			, CUMT_SSO_CON_CNT
+			, SVR_PRO_REQ_SEL_CNT
+			, LST_CON_REC_AFT_TM
+			, BYTE_RECEIVE
+			, BYTE_TRANSMIT
+			, SVR_STATUS
+			, LST_STATUS_CHK_DESC
+			, BAKUP_SER_CNT
+			, FAIL_CHK_CNT
+			, SVR_STATUS_CHG_CNT
+			, SVR_STOP_TM
+			, EXE_RSLT_CD
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+			, LSN_ID
+			, DB_CON_ADDR
+			, LSN_SVR_ID
+		)
+		SELECT
+			NEXTVAL('q_t_pry_svr_status_g_01')
+			, #{log_type}
+			, #{pry_svr_id}::numeric
+			, clock_timestamp()
+			, #{cur_session}::numeric
+			, #{max_session}::numeric
+			, #{session_limit}::numeric
+			, #{cumt_sso_con_cnt}::numeric
+			, #{svr_pro_req_sel_cnt}::numeric
+			, #{lst_con_rec_aft_tm}
+			, #{byte_receive}::numeric
+			, #{byte_transmit}::numeric
+			, #{svr_status}
+			, #{lst_status_chk_desc}
+			, #{bakup_ser_cnt}::numeric
+			, #{fail_chk_cnt}::numeric
+			, #{svr_status_chg_cnt}::numeric
+			, #{svr_stop_tm}
+			, #{exe_rslt_cd}
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{lst_mdfr_id}
+			, clock_timestamp()
+			, #{lsn_id}::numeric
+			, #{db_con_addr}
+			, #{lsn_svr_id}::numeric
+    </insert>
+    
+  	
+    <delete id="lsnSvrDelExecuteList"  parameterType="ProxyServerVO">
+   		/**
+	 	* Query ID : lsnSvrDelExecuteList
+	 	* Description : proxy 리스너 통계정보 삭제
+	 	* Author : 
+	 	**/
+	 	DELETE
+          FROM T_PRY_SVR_STATUS_G
+         WHERE pry_svr_id = #{pry_svr_id}::numeric
+           AND (now()::date - #{min_data_del_val}::interval) >= exe_dtm
+           AND LOG_TYPE = 'TC003901';
+	 	
+	 	DELETE
+          FROM T_PRY_SVR_STATUS_G
+         WHERE pry_svr_id = #{pry_svr_id}::numeric
+           AND (now()::date - #{day_data_del_val}::interval) >= exe_dtm
+           AND LOG_TYPE = 'TC003902';
+    </delete>
 </mapper>

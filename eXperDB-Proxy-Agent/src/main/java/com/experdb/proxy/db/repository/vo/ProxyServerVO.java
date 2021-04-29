@@ -25,7 +25,44 @@ public class ProxyServerVO {
 	private int old_pry_svr_id;
 	private String old_master_svr_id_chk;
 	private String sel_query_gbn;
+	private String kal_install_yn;
+
+	private String day_data_del_val;
+	private String min_data_del_val;
 	
+	private String log_type_min;
+	private String log_type_day;
+	
+	public String getLog_type_min() {
+		return log_type_min;
+	}
+	public void setLog_type_min(String log_type_min) {
+		this.log_type_min = log_type_min;
+	}
+	public String getLog_type_day() {
+		return log_type_day;
+	}
+	public void setLog_type_day(String log_type_day) {
+		this.log_type_day = log_type_day;
+	}
+	public String getDay_data_del_val() {
+		return day_data_del_val;
+	}
+	public void setDay_data_del_val(String day_data_del_val) {
+		this.day_data_del_val = day_data_del_val;
+	}
+	public String getMin_data_del_val() {
+		return min_data_del_val;
+	}
+	public void setMin_data_del_val(String min_data_del_val) {
+		this.min_data_del_val = min_data_del_val;
+	}
+	public String getKal_install_yn() {
+		return kal_install_yn;
+	}
+	public void setKal_install_yn(String kal_install_yn) {
+		this.kal_install_yn = kal_install_yn;
+	}
 	public String getSel_query_gbn() {
 		return sel_query_gbn;
 	}

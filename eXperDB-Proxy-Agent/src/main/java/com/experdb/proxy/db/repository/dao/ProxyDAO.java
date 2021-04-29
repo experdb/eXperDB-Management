@@ -1,9 +1,12 @@
 package com.experdb.proxy.db.repository.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +16,7 @@ import com.experdb.proxy.db.repository.vo.ProxyGlobalVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
+import com.experdb.proxy.db.repository.vo.ProxyStatisticVO;
 import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
 
 
@@ -35,6 +39,8 @@ public class ProxyDAO {
 	@Autowired
     private SqlSession session;
 
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	
 	/**
 	 * proxy 서버 정보 조회
 	 * @param ProxyServerVO
@@ -266,4 +272,43 @@ public class ProxyDAO {
 		return session.update("proxy.updatePrySvrMstGbnInfo", vo);
 	}
 
+	/**
+	 * Proxy 관련 id 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectPryLsnSvrIdInfo(ProxyStatisticVO vo) throws SQLException {
+		return (Map<String, Object>) session.selectOne("proxy.selectPryLsnSvrIdInfo", vo);
+	}
+
+
+	/**
+	 * T_PRY_LSN_SVR_I table DB연결체크 수정
+	 * 
+	 * @param 
+	 * @throws Exception
+	 */
+	public int updatePryLsnSvrDbRealChkInfo(ProxyStatisticVO vo) throws Exception  {
+		return session.update("proxy.updatePryLsnSvrDbRealChkInfo", vo);
+	}
+
+	/**
+	 * t_pry_svr_status_g 리스너 정보등록
+	 * @param vo
+	 * @throws Exception
+	 */
+	public int insertPrySvrStatusInfo(ProxyStatisticVO vo) throws Exception  {
+		return session.insert("proxy.insertPrySvrStatusInfo", vo);
+	}
+	
+	/**
+	 * t_pry_svr_status_g table delete
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public void lsnSvrDelExecuteList(ProxyServerVO vo) throws Exception  {
+		 session.delete("proxy.lsnSvrDelExecuteList", vo);
+	}
 }

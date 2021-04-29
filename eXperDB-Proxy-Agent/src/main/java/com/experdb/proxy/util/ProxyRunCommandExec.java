@@ -107,7 +107,7 @@ public class ProxyRunCommandExec extends Thread {
 
     			while ( out.ready() ) {
     				strResult += out.readLine();
-    				socketLogger.info("out.ready() --> " + out.readLine());
+    				//socketLogger.info("out.ready() --> " + out.readLine());
     			}
     			out.close();
     			strReturnVal = "success";

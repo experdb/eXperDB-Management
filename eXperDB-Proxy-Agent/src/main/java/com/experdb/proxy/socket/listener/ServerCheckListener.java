@@ -65,11 +65,10 @@ public class ServerCheckListener extends Thread {
 				if (proxyServerInfo != null) {
 					proxySetYn = "true";
 				}
-				socketLogger.info("Job procyExecuteRealCheckprocyExecuteRealCheckprocyExecuteRealCheckprocyExecuteRealCheck [" + proxyServerInfo + "]");
+
 				//proxy 설치되어 있는 경우 실행
 				if (!"".equals(proxySetStatus) && !"not installed".equals(proxySetStatus)) {
 					if ("true".equals(proxySetYn)) {
-						socketLogger.info("Job getExe_statusgetExe_statusgetExe_status [" + proxyServerInfo.getExe_status() + "]");
 						procyExecuteRealCheck(strIpadr, proxySetStatus, keepalivedSetStatus, proxyServerInfo);
 					}
 				}
@@ -94,6 +93,7 @@ public class ServerCheckListener extends Thread {
 	
 	//실시간 체크
 	private String procyExecuteRealCheck(String strIpar, String proxySetStatus, String keepalivedSetStatus, ProxyServerVO proxyServerInfo) throws Exception {
+		socketLogger.info("Job procyExecuteRealCheck []");
 		String returnMsg = "";
 
 		ProxyServiceImpl service = (ProxyServiceImpl) context.getBean("ProxyService");
@@ -103,12 +103,16 @@ public class ServerCheckListener extends Thread {
 			chkParam.put("ipadr", strIpar);
 			chkParam.put("proxySetStatus",proxySetStatus);
 			chkParam.put("keepalivedSetStatus",keepalivedSetStatus);
+			chkParam.put("real_ins_gbn", "dbchk");
 
 			//마스터 실시간 체크
 			returnMsg = service.proxyMasterGbnRealCheck(chkParam, proxyServerInfo); 	
-			
+
 			//리스너 및  vip 상태 체크
-			returnMsg = service.proxyStatusChk(chkParam); 	
+			returnMsg = service.proxyStatusChk(chkParam);
+			
+			//db 실시간 등록
+			returnMsg = service.proxyDbmsStatusChk(chkParam); 	
         } catch(Exception e) {
             e.printStackTrace();
         }  

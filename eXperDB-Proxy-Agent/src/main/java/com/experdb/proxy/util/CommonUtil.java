@@ -211,5 +211,35 @@ public class CommonUtil {
 		}
 		return temp+data;
 	}
-	
+
+	/**
+	 * 초 -> 년월 시분초 변환
+	 * 
+	 * @return String
+	 * @throws UnsupportedEncodingException  
+	 */
+	public String getLongTimeToString(long realTime) throws UnsupportedEncodingException {
+		String returnTime = "";
+
+		Long day = realTime / (60 * 60 * 24);
+		Long hour = (realTime - day * 60 * 60 * 24) / (60 * 60); 
+		Long minute = (realTime - day * 60 * 60 * 24 - hour * 3600) / 60; 
+		Long second = realTime % 60;
+		
+		if (day != null && day != 0) {
+			returnTime = day + "d " + hour + "h";
+		} else {
+			if (hour != null && hour != 0) {
+				returnTime = hour + "h " + minute + "m";
+			} else {
+				if (hour != null && hour != 0) {
+					returnTime = minute + "m " + second + "s";
+				} else {
+					returnTime = second + "s";
+				}
+			}
+		}
+
+		return returnTime;
+	}
 }

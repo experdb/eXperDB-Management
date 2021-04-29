@@ -58,6 +58,7 @@ public class DXTcontrolProxy extends SocketCtl {
 
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 			String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
+			String strKeepalived = FileUtil.getPropertyValue("context.properties", "keepalived.install.yn");
 
 			agtVo.setIpadr(strIpadr);
 			AgentInfoVO agentInfoVO = systemService.selectPryAgtInfo(agtVo);
@@ -67,7 +68,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			if (proxyServerChk != null && agentInfoVO != null) {
 				if (!"".equals(proxyServerChk) && ("".equals(agentInfoVO.getSvr_use_yn()) || !"D".equals(agentInfoVO.getSvr_use_yn()))) {
 					//proxy 서버일때 데이터 추가해야함
-					confSetExecute(strIpadr, strPort);
+					confSetProxyExecute(strIpadr, strPort, strKeepalived);
 				}
 			}
 
@@ -82,7 +83,7 @@ public class DXTcontrolProxy extends SocketCtl {
 	 * @throws Exception
 	 */
 	@Transactional
-	public String confSetExecute(String strIpadr, String strPort) throws Exception {
+	public String confSetProxyExecute(String strIpadr, String strPort, String strKeepalived) throws Exception {
 		ProxyServerVO searchProxyServerVO = new ProxyServerVO();
 		searchProxyServerVO.setIpadr(strIpadr);
 
@@ -123,6 +124,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			String strlisnerList="";
 			String strlisnerSvrList="";
 			String strVipConfList="";
+			String strKeepInstallYn = "";
 
 			JSONObject jObjResult = null;
 			JSONObject jObjKeepResult = null;
@@ -131,6 +133,9 @@ public class DXTcontrolProxy extends SocketCtl {
 
 			//proxy 서버 등록 여부 확인
 			ProxyServerVO proxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
+			
+			//keepalived 설치 상태
+			strKeepInstallYn = strKeepalived;
 
 			//1. proxy conf 위치
 			proxyPathData = pryService.selectProxyServerChk("proxy_conf_which"); //param setting
@@ -140,7 +145,7 @@ public class DXTcontrolProxy extends SocketCtl {
 
 			//3. proxy conf 열기
 			if (proxyPathData != null) {
-				jObjResult = pryService.selectProxyServerList("proxy_conf_read", proxyPathData, ""); //proxy conf setting
+				jObjResult = pryService.selectProxyServerList("proxy_conf_read", proxyPathData, "",""); //proxy conf setting
 
 				if (jObjResult.length() > 0) {
 					dbSvrIdData = ((Integer)jObjResult.get("db_svr_id")).intValue();
@@ -175,8 +180,8 @@ public class DXTcontrolProxy extends SocketCtl {
 			/////////////////////////////////////////////////////////////////////
 
 			//4. keepalived conf 열기
-			if (KeepPathData != null) {
-				jObjKeepResult = pryService.selectProxyServerList("keepalived_conf_read", KeepPathData, strIpadr); //param setting
+			if (strKeepInstallYn != null && "Y".equals(strKeepInstallYn)) {
+				jObjKeepResult = pryService.selectProxyServerList("keepalived_conf_read", KeepPathData, strIpadr,""); //param setting
 
 				if (jObjKeepResult.length() > 0) {
 					peerIpData = (String)jObjKeepResult.get("peer_id");
@@ -202,6 +207,17 @@ public class DXTcontrolProxy extends SocketCtl {
 					
 					back_peerIpData = "";
 				}
+			} else {
+				peerIpData = "";
+				masterGbnData = "";
+
+				stateMasterInterface = "";
+				strObjIp = "";
+				strPeerServerIp = "";
+
+				strVipConfList = "";
+				
+				back_peerIpData = "";
 			}
 			/////////////////////////////////////////////////////////////////////
 
@@ -222,7 +238,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			/////////////////////////////////////////////////////////////////////
 
 			//6. keepalived 실행상태
-			if (KeepPathData != null) {
+			if (strKeepInstallYn != null && "Y".equals(strKeepInstallYn)) {
 				keepExeStaus = pryService.selectProxyServerChk("keepalived_setting_tot"); //param setting
 				if (keepExeStaus != null) {
 					keepExeStaus = keepExeStaus.trim();
@@ -241,6 +257,9 @@ public class DXTcontrolProxy extends SocketCtl {
 				} else {
 					prySvrUseYn = "N";
 				}
+			} else {
+				keepExeStaus = "";
+				prySvrUseYn = "";
 			}
 			/////////////////////////////////////////////////////////////////////
 
@@ -290,7 +309,16 @@ public class DXTcontrolProxy extends SocketCtl {
 			//proxy 서버 저장
 			vo.setIpadr(strIpadr);
 			vo.setPry_pth(proxyPathData);
-			vo.setKal_pth(KeepPathData);
+			
+			if (strKeepInstallYn != null && "Y".equals(strKeepInstallYn)) {
+				vo.setKal_install_yn("Y");
+				vo.setKal_pth(KeepPathData);
+				
+			} else {
+				vo.setKal_install_yn("N");
+				vo.setKal_pth(null);
+			}
+
 			vo.setDb_svr_id(dbSvrIdData);
 			
 			vo.setFrst_regr_id("system");

@@ -47,14 +47,14 @@ public interface ProxyService {
 	 * @param String search_gbn, String req_cmd, String server_ip
 	 * @throws Exception
 	 */
-	public Map<String, Object> paramLoadSetting(String search_gbn, String req_cmd, String server_ip) throws Exception;
+	public Map<String, Object> paramLoadSetting(String search_gbn, String req_cmd, String server_ip, String db_chk) throws Exception;
 	
 	/**
 	 * 설치정보 conf 조회
 	 * @param String cmdGbn, String req_cmd, String server_ip
 	 * @throws Exception
 	 */
-	public JSONObject selectProxyServerList(String cmdGbn, String req_cmd, String server_ip) throws Exception;
+	public JSONObject selectProxyServerList(String cmdGbn, String req_cmd, String server_ip, String db_chk) throws Exception;
 
 	/**
 	 * proxy 서버 저장 
@@ -69,4 +69,19 @@ public interface ProxyService {
 	 * @throws Exception
 	 */
 	public String selectProxyTotServerChk(String cmdGbn, String reqCmd) throws Exception ;
+	
+
+	/**
+	 * Proxy 실행상태 및 설치 상태 조회
+	 * @param String cmdGbn
+	 * @throws Exception
+	 */
+	public String proxyDbmsStatusChk(Map<String, Object> chkParam) throws Exception ;
+	
+	/**
+	 * Proxy 실시간 통계 데이터 삭제
+	 * @param String cmdGbn
+	 * @throws Exception
+	 */
+	public String proxyLsnScrStatusDel(Map<String, Object> chkParam) throws Exception ;
 }

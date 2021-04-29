@@ -9,6 +9,7 @@
     
     <typeAliases>
     	<typeAlias alias="AgentInfoVO" type="com.experdb.proxy.db.repository.vo.AgentInfoVO" />
+    	<typeAlias alias="ProxyStatisticVO" type="com.experdb.proxy.db.repository.vo.ProxyStatisticVO" />
     	<typeAlias alias="ProxyServerVO" type="com.experdb.proxy.db.repository.vo.ProxyServerVO" />
    		<typeAlias alias="ProxyGlobalVO" type="com.experdb.proxy.db.repository.vo.ProxyGlobalVO" />
    		<typeAlias alias="ProxyListenerServerListVO" type="com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO" />

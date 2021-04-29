@@ -29,6 +29,7 @@ import com.experdb.proxy.db.repository.vo.ProxyGlobalVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
+import com.experdb.proxy.db.repository.vo.ProxyStatisticVO;
 import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.util.CommonUtil;
@@ -75,7 +76,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 		try {
 			//1. proxy conf 위치
-			param = paramLoadSetting(cmdGbn, "", ""); //param setting
+			param = paramLoadSetting(cmdGbn, "", "", ""); //param setting
 
 			searchObj = proxyObjSetting(param);
 			jObjResult = confSetExecute(searchObj);
@@ -106,17 +107,24 @@ public class ProxyServiceImpl implements ProxyService{
 	 * @param String cmdGbn, String req_cmd, String server_ip
 	 * @throws Exception
 	 */
-	public JSONObject selectProxyServerList(String cmdGbn, String req_cmd, String server_ip) throws Exception {
+	public JSONObject selectProxyServerList(String cmdGbn, String req_cmd, String server_ip, String db_chk) throws Exception {
 		Map<String, Object> param = new HashMap<String, Object>();
 		JSONObject searchObj = new JSONObject();
 		JSONObject jObjResult = null;
 		JSONObject resultJObjResult = null;
 
 		try {
-			param = paramLoadSetting(cmdGbn, req_cmd, server_ip); //param setting
+			param = paramLoadSetting(cmdGbn, req_cmd, server_ip, db_chk); //param setting
 
 			searchObj = proxyObjSetting(param);
-			jObjResult = confReadExecute(searchObj);
+
+			if (cmdGbn.equals("dbms_realTime_read")) {
+				jObjResult = dbmsReadExecute(searchObj);
+			} else if (cmdGbn.equals("lsn_svr_data_del")) {
+					jObjResult = lsnSvrDelExecute(searchObj);
+			} else {
+				jObjResult = confReadExecute(searchObj);	
+			}
 
 			if (jObjResult != null) {
 				String resultCode = (String)jObjResult.get(ProtocolID.RESULT_CODE);
@@ -148,12 +156,13 @@ public class ProxyServiceImpl implements ProxyService{
 	 * @param String search_gbn, String req_cmd, String server_ip
 	 * @throws Exception
 	 */
-	public Map<String, Object> paramLoadSetting(String search_gbn, String req_cmd, String server_ip) throws Exception {
+	public Map<String, Object> paramLoadSetting(String search_gbn, String req_cmd, String server_ip, String db_chk) throws Exception {
 		Map<String, Object> param = new HashMap<String, Object>();
 
 		param.put("search_gbn", search_gbn);
 		param.put("req_cmd", req_cmd);
 		param.put("server_ip", server_ip);
+		param.put("db_chk", db_chk);
 		
 		return param;
 	}
@@ -166,6 +175,7 @@ public class ProxyServiceImpl implements ProxyService{
 			obj.put(ProtocolID.SEARCH_GBN, param.get("search_gbn").toString());  
 			obj.put(ProtocolID.REQ_CMD, param.get("req_cmd").toString());  
 			obj.put(ProtocolID.SERVER_IP, param.get("server_ip").toString());  
+			obj.put(ProtocolID.DB_CHK, param.get("db_chk").toString());  
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -409,8 +419,6 @@ public class ProxyServiceImpl implements ProxyService{
 								
 								String strtemp = temp.substring(temp.lastIndexOf(" ") + 1 , temp.length());
 								if (!"stats".equals(strtemp)) {
-									
-									socketLogger.info("ProxyServiceImpl.strtempstrtemp : " + strtemp);
 									lisnerVo.setLsn_nm(strtemp);
 									lisnerVoView.setLsn_nm(lisnerVo.getLsn_nm());
 									lisnerBindCnt = size + 2; //리스너 bind
@@ -928,8 +936,7 @@ public class ProxyServiceImpl implements ProxyService{
 					errLogger.error("global {} ", e.toString());
 					returnMsg = "false";
 				}
-				
-				
+
 				try {
 					if (insPryVo != null) {
 						String strPry_svr_nm_mst = (String)insertParam.get("lisner_list");
@@ -1096,6 +1103,8 @@ public class ProxyServiceImpl implements ProxyService{
 				strCmd = "ss -tulpn|grep " + reqCmd + "|wc -l";
 			} else if (searchGbn.equals("keepalived_vip_exe_cnt")) { //vip 실행여부 체크
 				strCmd = "ip addr | grep '" + reqCmd + "'|wc -l";
+			} else if (searchGbn.equals("dbms_realTime_read")) { //실시간 데이터 체크
+				strCmd = "echo \"show stat\"  | sudo -u root socat stdio unix-connect:/var/run/haproxy.sock | awk -F, '$1!=\"# pxname\" && $2!=\"FRONTEND\" && $2!=\"BACKEND\"'  | cut -d \",\" -f 1,2,5-10,18,21-25,31,34-37,56,74";
 			}
 
 		} catch(Exception e) {
@@ -1119,7 +1128,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 		try {
 			//1. proxy conf 위치
-			param = paramLoadSetting(cmdGbn, reqCmd, ""); //param setting
+			param = paramLoadSetting(cmdGbn, reqCmd, "",""); //param setting
 
 			searchObj = proxyObjSetting(param);
 			jObjResult = confSetExecute(searchObj);
@@ -1155,6 +1164,7 @@ public class ProxyServiceImpl implements ProxyService{
 		socketLogger.info("Job proxyMasterGbnRealCheck [" + new Date(System.currentTimeMillis()) + "]");
 		String returnMsg = "";
 
+		
 		try {
 			//param setting
 			String ipadrPrm = "";
@@ -1182,10 +1192,7 @@ public class ProxyServiceImpl implements ProxyService{
 					strAcptype = "TC001502";
 					strAcptypeVal = "S";
 				}
-				
-				socketLogger.info("ProxyServiceImpl.strAcptype1 : " + strAcptype);
-				socketLogger.info("ProxyServiceImpl.getExe_status : " + proxyServerInfo.getExe_status());
-				
+
 				if (!strAcptype.equals(proxyServerInfo.getExe_status())) {
 					chkParam.put("act_type", strAcptypeVal);
 					chkParam.put("sys_type", "PROXY");
@@ -1207,9 +1214,6 @@ public class ProxyServiceImpl implements ProxyService{
 					strAcptypeVal = "S";
 				}
 
-				socketLogger.info("ProxyServiceImpl.strAcptype2 : " + strAcptype);
-				socketLogger.info("ProxyServiceImpl.getKal_exe_status : " + proxyServerInfo.getKal_exe_status());
-				
 				if (!strAcptype.equals(proxyServerInfo.getKal_exe_status())) {
 					chkParam.put("act_type", strAcptypeVal);
 					chkParam.put("sys_type", "KEEPALIVED");
@@ -1302,5 +1306,320 @@ public class ProxyServiceImpl implements ProxyService{
 		
 		return returnMsg;
 	}
+	
+	/**
+	 * DBMS 연결 실시간 체크
+	 * @param dbServerInfo
+	 * @throws Exception
+	 */
+	@Transactional
+	public String proxyDbmsStatusChk(Map<String, Object> chkParam) throws Exception  {
+		socketLogger.info("Job proxyDbmsStatusChk [" + new Date(System.currentTimeMillis()) + "]");
+		String returnMsg = "";
+		JSONObject jObjResult = null;
 
+		try {
+			//param setting
+			String ipadrPrm = "";
+			String proxySetStatusPrm = "";
+			String realInsGbnPrm = "";
+
+			if (chkParam.get("ipadr") != null) ipadrPrm = chkParam.get("ipadr").toString();
+			if (chkParam.get("proxySetStatus") != null) proxySetStatusPrm = chkParam.get("proxySetStatus").toString();
+			if (chkParam.get("real_ins_gbn") != null) realInsGbnPrm = chkParam.get("real_ins_gbn").toString();
+			
+			//proxy check - DB 연결 실시간 체크
+			if (!"".equals(proxySetStatusPrm) && !"not installed".equals(proxySetStatusPrm)) {
+				jObjResult = selectProxyServerList("dbms_realTime_read", "", ipadrPrm, realInsGbnPrm); //dbms 체크
+
+				if (jObjResult.length() > 0) {
+					returnMsg = "success";
+				}
+			}
+		} catch (Exception e) {
+			errLogger.error("proxyMasterGbnRealCheck {} ", e.toString());
+			returnMsg = "false";
+		}
+		
+		return returnMsg;
+	}
+
+	/**
+	 * conf 정보 조회
+	 * @param dbServerInfo
+	 * @throws Exception
+	 */
+	private JSONObject dbmsReadExecute(JSONObject jObj) throws Exception {
+		socketLogger.info("ProxyServiceImpl.dbmsReadExecute : ");
+
+		String strSuccessCode = "0";
+		String strErrCode = "";
+		String strErrMsg = "";
+
+		JSONObject outputObj = new JSONObject();
+		JSONObject jsonObj = new JSONObject();
+		JSONParser parser = new JSONParser();
+		
+		CommonUtil util = new CommonUtil();
+
+		try {
+			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();
+			String serverIp = jObj.get(ProtocolID.SERVER_IP).toString();
+			String db_chk = jObj.get(ProtocolID.DB_CHK).toString();
+
+			String proxyCmd = proxyCmdSetting(jObj);
+
+			//conf 파일 조회
+			FileRunCommandExec r = new FileRunCommandExec(proxyCmd);
+			//명령어 실행
+			r.run();
+
+			try {
+				r.join();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+
+			String retVal = r.call();
+			ArrayList<String> strResultMessge = r.getListMessage();
+
+			String strResultSubMessge = "";
+			String jsonVipConfList = "";
+			ObjectMapper mapper = new ObjectMapper();
+
+			if (retVal.equals("success")) {
+				if (strResultMessge != null) {
+					String strLastTime = "";
+					
+					for(String temp : strResultMessge){
+						ProxyStatisticVO proxyStatisticVO = new ProxyStatisticVO();
+						String[] dbmsArray = temp.split(",");
+						
+						proxyStatisticVO.setExe_rslt_cd("TC001501");
+						proxyStatisticVO.setLst_mdfr_id("system");
+						proxyStatisticVO.setFrst_regr_id("system");
+
+						proxyStatisticVO.setIpadr(serverIp);
+
+						for(int i=0;i<dbmsArray.length;i++) {
+							if (!dbmsArray[i].isEmpty() && dbmsArray[i].length() > 0) {
+								if (i == 2) { 					//Sessions-cur
+									proxyStatisticVO.setCur_session(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 3) {			//Sessions-max
+									proxyStatisticVO.setMax_session(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 4) {			//Sessions-Limit
+									proxyStatisticVO.setSession_limit(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 5) {			//Sessions-Total
+									proxyStatisticVO.setCumt_sso_con_cnt(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 14) {			//Sessions-LbTot
+									proxyStatisticVO.setCumt_sso_con_cnt(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 19) {			//Sessions-LbTot
+									if ("".equals(dbmsArray[i]) || "-1".equals(dbmsArray[i])) {
+										strLastTime = "";
+									} else {
+										strLastTime = util.getLongTimeToString(Long.parseLong(dbmsArray[i]));
+									}
+									proxyStatisticVO.setLst_con_rec_aft_tm(strLastTime);
+								} else if (i == 6) {			//Bytes-In
+									proxyStatisticVO.setByte_receive(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 7) {			//Bytes-Out
+									proxyStatisticVO.setByte_transmit(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 8) {			//Server-status
+									proxyStatisticVO.setSvr_status(dbmsArray[i]);
+								} else if (i == 18) {			//Server-check_status
+									proxyStatisticVO.setLst_status_chk_desc(dbmsArray[i]);
+								} else if (i == 9) {			//Server-Bck
+									proxyStatisticVO.setBakup_ser_cnt(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 10) {			//Server-Chk(chkfail)
+									proxyStatisticVO.setFail_chk_cnt(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 11) {			//Server-Dwn
+									proxyStatisticVO.setSvr_status_chg_cnt(Integer.parseInt(dbmsArray[i]));
+								} else if (i == 13) {			//Server-Dwntme
+									
+									if ("".equals(dbmsArray[i]) || "-1".equals(dbmsArray[i])) {
+										strLastTime = "";
+									} else {
+										strLastTime = util.getLongTimeToString(Long.parseLong(dbmsArray[i]));
+									}
+									proxyStatisticVO.setSvr_stop_tm(strLastTime);
+								} else if (i == 0) {			//리스너 명
+									proxyStatisticVO.setPxname(dbmsArray[i]);
+								} else if (i == 20) {			//dbms 명
+									proxyStatisticVO.setDb_con_addr_chk(dbmsArray[i]);
+									proxyStatisticVO.setDb_con_addr(dbmsArray[i].substring(0, dbmsArray[i].lastIndexOf(":")));
+									proxyStatisticVO.setChk_portno(Integer.parseInt(dbmsArray[i].substring(dbmsArray[i].lastIndexOf(":") + 1, dbmsArray[i].length())));
+								}
+							}
+						}
+
+						Map<String, Object> pryIdList = proxyDAO.selectPryLsnSvrIdInfo(proxyStatisticVO);
+
+						if (pryIdList != null) {
+							if (pryIdList.get("pry_svr_id") != null) {
+								proxyStatisticVO.setPry_svr_id(Integer.parseInt(pryIdList.get("pry_svr_id").toString()));
+							}
+
+							if (pryIdList.get("lsn_id") != null) {
+								proxyStatisticVO.setLsn_id(Integer.parseInt(pryIdList.get("lsn_id").toString()));
+							}
+
+							if (pryIdList.get("lsn_svr_id") != null) {
+								proxyStatisticVO.setLsn_svr_id(Integer.parseInt(pryIdList.get("lsn_svr_id").toString()));
+							}
+						}
+						
+						//insert 
+						if ("dbchk".equals(db_chk)) { //db 실시간 체크
+							proxyDAO.updatePryLsnSvrDbRealChkInfo(proxyStatisticVO);
+							strResultSubMessge = "true";
+						} else if ("lsn_real_ins".equals(db_chk)) { //리스너 실시간 데이터 저장
+							proxyStatisticVO.setLog_type("TC003901");
+							
+							proxyDAO.insertPrySvrStatusInfo(proxyStatisticVO);
+							strResultSubMessge = "true";
+						} else if ("lsn_mon_real_ins".equals(db_chk)) { //리스너 매일 00시 실시간 데이터 저장
+							proxyStatisticVO.setLog_type("TC003902");
+							
+							proxyDAO.insertPrySvrStatusInfo(proxyStatisticVO);
+							strResultSubMessge = "true";
+						}
+					}
+					
+				}
+			}
+
+			//db conf list
+			jsonObj.put("db_conf_list", jsonVipConfList);
+
+			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			outputObj.put(ProtocolID.RESULT_DATA, jsonObj);
+			outputObj.put(ProtocolID.RESULT_SUB_DATA, strResultSubMessge);
+
+			return outputObj;
+
+		} catch (Exception e) {
+			errLogger.error("ProxyServiceImpl.dbmsReadExecute ", e.toString());
+
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, "confSetExecute Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.RESULT_DATA, jsonObj);
+			outputObj.put(ProtocolID.RESULT_SUB_DATA, "");
+		} finally {
+			outputObj = null;
+		}
+
+		return outputObj;
+	}
+	
+	/**
+	 * DBMS 연결 실시간 체크
+	 * @param dbServerInfo
+	 * @throws Exception
+	 */
+	@Transactional
+	public String proxyLsnScrStatusDel(Map<String, Object> chkParam) throws Exception  {
+		socketLogger.info("Job proxyLsnScrStatusDel [" + new Date(System.currentTimeMillis()) + "]");
+		String returnMsg = "";
+		JSONObject jObjResult = null;
+
+		try {
+			//param setting
+			String ipadrPrm = "";
+			String proxySetStatusPrm = "";
+			String realInsGbnPrm = "";
+
+			if (chkParam.get("ipadr") != null) ipadrPrm = chkParam.get("ipadr").toString();
+			if (chkParam.get("proxySetStatus") != null) proxySetStatusPrm = chkParam.get("proxySetStatus").toString();
+			if (chkParam.get("real_ins_gbn") != null) realInsGbnPrm = chkParam.get("real_ins_gbn").toString();
+			
+			//proxy check - DB 연결 실시간 체크
+			if (!"".equals(proxySetStatusPrm) && !"not installed".equals(proxySetStatusPrm)) {
+				jObjResult = selectProxyServerList("lsn_svr_data_del", "", ipadrPrm, realInsGbnPrm); //dbms 체크
+
+				if (jObjResult.length() > 0) {
+					returnMsg = "success";
+				}
+			}
+		} catch (Exception e) {
+			errLogger.error("proxyMasterGbnRealCheck {} ", e.toString());
+			returnMsg = "false";
+		}
+		
+		return returnMsg;
+	}
+	
+
+	/**
+	 * conf 정보 조회
+	 * @param dbServerInfo
+	 * @throws Exception
+	 */
+	private JSONObject lsnSvrDelExecute(JSONObject jObj) throws Exception {
+		socketLogger.info("ProxyServiceImpl.dbmsReadExecute : ");
+
+		String strSuccessCode = "0";
+		String strErrCode = "";
+		String strErrMsg = "";
+
+		JSONObject outputObj = new JSONObject();
+		JSONObject jsonObj = new JSONObject();
+
+		try {
+			String serverIp = jObj.get(ProtocolID.SERVER_IP).toString();
+			String dayDataDelVal = "";
+			String minDataDelVal = "";
+			String strResultSubMessge = "";
+
+			ProxyServerVO proxyServerVO = new ProxyServerVO();
+			proxyServerVO.setIpadr(serverIp);
+
+			//proxy 서버 등록 여부 확인
+			ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInfo(proxyServerVO);
+			
+			if (proxyServerInfo != null) {
+				proxyServerVO.setPry_svr_id(proxyServerInfo.getPry_svr_id());
+				
+				if (proxyServerInfo.getDay_data_del_term() > 0) {
+					dayDataDelVal = proxyServerInfo.getDay_data_del_term()  + " day";
+				}
+				
+				if (proxyServerInfo.getDay_data_del_term() > 0) {
+					minDataDelVal = proxyServerInfo.getMin_data_del_term()  + " day";
+				}
+				socketLogger.info("ProxyServiceImpl.lsnSvrDelExecute : " + dayDataDelVal + "==" + minDataDelVal);
+				if ((dayDataDelVal != null && !"".equals(dayDataDelVal)) && (minDataDelVal != null && !"".equals(minDataDelVal))) {
+					proxyServerVO.setDay_data_del_val(dayDataDelVal);
+					proxyServerVO.setMin_data_del_val(minDataDelVal);
+
+					proxyDAO.lsnSvrDelExecuteList(proxyServerVO);
+					
+					strResultSubMessge = "success";
+				}
+			}
+
+			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			outputObj.put(ProtocolID.RESULT_DATA, jsonObj);
+			outputObj.put(ProtocolID.RESULT_SUB_DATA, strResultSubMessge);
+
+			return outputObj;
+
+		} catch (Exception e) {
+			errLogger.error("ProxyServiceImpl.lsnSvrDelExecute ", e.toString());
+
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, "confSetExecute Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.RESULT_DATA, jsonObj);
+			outputObj.put(ProtocolID.RESULT_SUB_DATA, "");
+		} finally {
+			outputObj = null;
+		}
+
+		return outputObj;
+	}
 }

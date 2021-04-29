@@ -1,16 +1,10 @@
 package com.experdb.proxy.socket.listener;
 
-import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.TriggerBuilder.newTrigger;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.quartz.CronTrigger;
 import org.quartz.Job;
-import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -19,7 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.experdb.proxy.db.repository.service.ProxyServiceImpl;
-import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.util.FileUtil;
  
@@ -39,12 +32,18 @@ public class DXTcontrolProxyExecuteChk extends SocketCtl implements Job {
     	try {
     		//선행조건 설정
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-			
+			String proxySetStatus = "";
+
+			//roxy 설치여부 및 keepalived 설치확인
+			proxySetStatus = service.selectProxyTotServerChk("proxy_setting_tot", "");
+
 			Map<String, Object> chkParam = new HashMap<String, Object>();
 			chkParam.put("ipadr",strIpadr);
-			
-			//리스너 및  vip 상태 체크
-			returnMsg = service.proxyStatusChk(chkParam); 	
+			chkParam.put("proxySetStatus",proxySetStatus);
+			chkParam.put("real_ins_gbn", "lsn_real_del");
+
+			//실시간 등록
+			returnMsg = service.proxyDbmsStatusChk(chkParam); 
         } catch(Exception e) {
             e.printStackTrace();
         }  
