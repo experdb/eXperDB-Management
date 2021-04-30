@@ -145,6 +145,7 @@
 							, ERRORCODE
 				FROM ACTIVITYLOG
 				WHERE JOBID = #{jobid}
+				ORDER BY RECORDID DESC
 		</select>
 		
 		<select id="selectRecoveryPointList" resultType="backupJobHistoryVO" >
