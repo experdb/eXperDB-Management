@@ -50,7 +50,7 @@ public class DxT042 extends SocketCtl{
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	
-	private String strCmd = "df -h | grep ^/dev | grep -v efi";
+	private String strCmd = "df -hT | grep ^/dev | grep -v efi";
 	
 	
 	public DxT042(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
@@ -134,17 +134,19 @@ public class DxT042 extends SocketCtl{
 				    		  if(lineT == 0) {
 				    			  hp.put("filesystem", arrStr[i].toString());
 				    		  } else if(lineT == 1) {
-				    			  hp.put("size", arrStr[i].toString());
+				    			  hp.put("type", arrStr[i].toString());
 				    		  } else if(lineT == 2) {
-				    			  hp.put("used", arrStr[i].toString());
+				    			  hp.put("size", arrStr[i].toString());
 				    		  } else if(lineT == 3) {
-				    			  hp.put("avail", arrStr[i].toString());
+				    			  hp.put("used", arrStr[i].toString());
 				    		  } else if(lineT == 4) {
-				    			  hp.put("use", arrStr[i].toString());
+				    			  hp.put("avail", arrStr[i].toString());
 				    		  } else if(lineT == 5) {
+				    			  hp.put("use", arrStr[i].toString());
+				    		  }	else if(lineT == 6) {
 				    			  hp.put("mounton", arrStr[i].toString());
-				    		  }				    
-				    		  	  hp.put("type", "xfs");
+				    		  }					    
+	
 				    		  lineT = lineT + 1;
 			    		  }
 			    	  }
@@ -183,12 +185,12 @@ public class DxT042 extends SocketCtl{
 			HashMap hpMapping = new HashMap();
 			
 			hpMapping.put("mounton", mounton);
+			hpMapping.put("type", type);
 			hpMapping.put("use", use);
 			hpMapping.put("avail", avail);
 			hpMapping.put("used", used);
 			hpMapping.put("filesystem", filesystem);
 			hpMapping.put("fsize", fsize);
-			hpMapping.put("type", type);
 			
 			arrMapping.add(hpMapping);
 		}
