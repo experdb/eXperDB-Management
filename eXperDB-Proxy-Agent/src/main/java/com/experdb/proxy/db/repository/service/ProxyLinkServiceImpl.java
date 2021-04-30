@@ -86,6 +86,24 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
  	   	}
  	   	return content;
 	}
+	
+	public String runExeCmd(String cmd) throws Exception {
+		//socketLogger.info("runExeCmd : "+cmd);
+		String result = "";
+		RunCommandExec commandExec = new RunCommandExec();
+		commandExec.runExecRtn3(cmd);
+		try {
+			commandExec.join();
+		} catch (InterruptedException ie) {
+			socketLogger.error("runExeCmd error {}",ie.toString());
+			ie.printStackTrace();
+		}
+		if(commandExec.call().equals("success")){
+			result += "success\n";
+			result += commandExec.getMessage();
+		}
+		return result;
+	}
 
 	/**
 	 * createNewConfFile JSONObject로 받은 설정 정보를 conf 파일로 생성
@@ -106,7 +124,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String dateTime = "";
 		String errcd = "0";
 		ProxyConfChangeHistoryVO newConfChgHistVo = new ProxyConfChangeHistoryVO();
-		
+		String cmdResult = "";
 		try{
 			//haproxy.cfg 생성
 			String proxyCfg = ""; 
@@ -118,17 +136,11 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			lst_mdfr_id = jobj.getString("lst_mdfr_id");
 			
 			String logLocal ="";
-			RunCommandExec commandExec = new RunCommandExec();
-			commandExec.runExecRtn3("cat /etc/rsyslog.d/haproxy.conf |grep /var/log/haproxy/haproxy.log");
-			try {
-				commandExec.join();
-			} catch (InterruptedException ie) {
-				socketLogger.error("createNewConfFile log local value error {}",ie.toString());
-				ie.printStackTrace();
-			}
-			if(commandExec.call().equals("success")){
-				String[] strTemp = commandExec.getMessage().split("\n");
-				for(int i=0; i<strTemp.length; i++){
+			cmdResult =runExeCmd("cat /etc/rsyslog.d/haproxy.conf |grep /var/log/haproxy/haproxy.log");
+			
+			if(!cmdResult.equals("")){
+				String[] strTemp = cmdResult.split("\n");
+				for(int i=1; i<strTemp.length; i++){
 					if(strTemp[i].length() > 1 && !"#".equals(strTemp[i].substring(0, 1))){
 						logLocal = strTemp[i].substring(0, strTemp[i].indexOf("."));	
 					}
@@ -220,70 +232,71 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			
 			//파일 backup
 			String backupPath = FileUtil.getPropertyValue("context.properties", "proxy.conf_backup_path");
-			ProxyServerVO vo = new ProxyServerVO();
+			DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		  	dateTime = dateFormat.format(new Date());
+		  	
+		  	ProxyServerVO vo = new ProxyServerVO();
 			vo.setPry_svr_id(prySvrId);
 			
 			ProxyServerVO proxySvr = (ProxyServerVO) proxyDAO.selectPrySvrInfo(vo);
+			String initHaPath = proxySvr.getPry_pth();
+			String initKalPath = proxySvr.getKal_pth();
+			
 			File initHaproxy = new File(proxySvr.getPry_pth());
 			File initKeepa = new File(proxySvr.getKal_pth());
 			//최초 적용 파일 있지만, 백업폴더 없을 경우 백업함
 			File backupFolder = new File(backupPath);
-			if(!backupFolder.exists() && initHaproxy.exists() && initKeepa.exists()){
-				new File(backupPath+"/init/").mkdirs();
-				
-				Path copyHaproxy = Paths.get(backupFolder+"/init/"+initHaproxy.getName());
-				Path copyKeepa = Paths.get(backupFolder+"/init/"+initKeepa.getName());
-				Files.copy(initHaproxy.toPath(), copyHaproxy, REPLACE_EXISTING);
-				Files.copy(initKeepa.toPath(), copyKeepa, REPLACE_EXISTING);
-				socketLogger.info("createNewConfFile : copy files ");
+			if(!backupFolder.exists() && initHaproxy.exists()){
 				ProxyConfChangeHistoryVO confChgHistVo = new ProxyConfChangeHistoryVO();
 				confChgHistVo.setPry_svr_id(prySvrId);
 				confChgHistVo.setFrst_regr_id(lst_mdfr_id);
-				confChgHistVo.setPry_pth(copyHaproxy.toString());
-				confChgHistVo.setKal_pth(copyKeepa.toString());
 				
+				//최초 conf 파일 백업 폴더 생성
+				new File(backupPath+"/init/").mkdirs();
+				
+				String initBackupHaPath = backupFolder+"/init/"+initHaproxy.getName();
+				Files.copy(initHaproxy.toPath(), Paths.get(initBackupHaPath), REPLACE_EXISTING);
+				confChgHistVo.setPry_pth(initBackupHaPath);
+				
+				if("Y".equals(jobj.getString("KAL_INSTALL_YN")) && initKeepa.exists()){
+					String initBackupKalPath = backupFolder+"/init/"+initKeepa.getName();
+					Files.copy(initKeepa.toPath(), Paths.get(initBackupKalPath), REPLACE_EXISTING);
+					confChgHistVo.setKal_pth(initBackupKalPath);
+				}else{
+					confChgHistVo.setKal_pth("");
+				}
+				confChgHistVo.setExe_rst_cd("TC001501");
 				//insert T_PRYCHG_G
 				proxyDAO.insertPrycngInfo(confChgHistVo);
-				
-				socketLogger.info("createNewConfFile : Insert init conf file info ");
 			}
-			DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		  	dateTime = dateFormat.format(new Date());
-		  	//신규 파일 생성 
-		  	new File(backupPath+"/"+dateTime+"/").mkdirs();
-		  	newHaPath =backupPath+"/"+dateTime+"/"+initHaproxy.getName();
-			newKePath =backupPath+"/"+dateTime+"/"+initKeepa.getName();
 			
-			newConfChgHistVo.setPry_svr_id(prySvrId);
+		  	newConfChgHistVo.setPry_svr_id(prySvrId);
 			newConfChgHistVo.setFrst_regr_id(lst_mdfr_id);
-			newConfChgHistVo.setPry_pth(newHaPath);
-			newConfChgHistVo.setKal_pth(newKePath);
 			
-			File newHaproxy = new File(newHaPath);
-			File newKeepa = new File(newKePath);
-			byte[] proxyBytes = proxyCfg.getBytes();
-			byte[] keepBytes = keepalivedCfg.getBytes();
-			FileOutputStream os_h = new FileOutputStream(newHaproxy);
-			os_h.write(proxyBytes);
-			os_h.close(); 
-			 
-			FileOutputStream os_k = new FileOutputStream(newKeepa);
-			os_k.write(keepBytes);
-			os_k.close();
-			Files.copy(newHaproxy.toPath(), initHaproxy.toPath(), REPLACE_EXISTING);
-			Files.copy(newKeepa.toPath(), initKeepa.toPath(), REPLACE_EXISTING);//덮어쓰기
+			//신규 파일 생성 및 config 폴더에 덮어쓰기
+			newHaPath = backupPath+"/"+dateTime+"/"+initHaproxy.getName();
+			fileBackupReplace("PROXY", dateTime, newHaPath, initHaPath, proxyCfg, newConfChgHistVo);
+			if("Y".equals(jobj.getString("KAL_INSTALL_YN"))){//keepalived 사용 여부
+				newKePath = backupPath+"/"+dateTime+"/"+initKeepa.getName();
+				fileBackupReplace("KEEPALIVED", dateTime, newKePath, initKalPath, keepalivedCfg, newConfChgHistVo);
+			}else{
+				newConfChgHistVo.setKal_pth(newKePath);
+			}
 			
 			result.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP004);
 			result.put(ProtocolID.RESULT_CODE, "0");
 			result.put(ProtocolID.ERR_CODE, errcd);
 			result.put(ProtocolID.ERR_MSG, "");
 			result.put(ProtocolID.PRY_PTH, newHaPath);
-			result.put(ProtocolID.KAL_PTH, newKeepa.getPath());
+			result.put(ProtocolID.KAL_PTH, newKePath);
 			
 			newConfChgHistVo.setExe_rst_cd("TC001501");
 			proxyDAO.insertPrycngInfo(newConfChgHistVo);
 		}catch(Exception e){
-			
+			newConfChgHistVo.setPry_svr_id(prySvrId);
+			newConfChgHistVo.setFrst_regr_id(lst_mdfr_id);
+			newConfChgHistVo.setPry_pth(newHaPath);
+			newConfChgHistVo.setKal_pth(newKePath);
 			newConfChgHistVo.setExe_rst_cd("TC001502");
 			proxyDAO.insertPrycngInfo(newConfChgHistVo);
 			
@@ -300,106 +313,30 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		return result;
 	}
 	
-	public JSONObject restartService(JSONObject jObj) throws Exception {
-		socketLogger.info("ProxyLinkServiceImpl.restartService : "+jObj.toString());
-
-		String strSuccessCode = "0";
-		String strErrCode = "";
-		String strErrMsg = "";
-		String strPryActResult = "";
-		String strKalActResult = "";
+	public void fileBackupReplace(String sysType,String backupFolder, String newFilePath, String replacePath, String fileContent, ProxyConfChangeHistoryVO confChgHistVo) throws Exception {
 		
-		JSONObject outputObj = new JSONObject();
-		//JSONObject jsonObj = new JSONObject();
+		String backupPath = FileUtil.getPropertyValue("context.properties", "proxy.conf_backup_path");
 		
-		int prySvrId =jObj.getInt("pry_svr_id");
-		String userId =jObj.getString("lst_mdfr_id");
+		//Backup폴더 생성
+		if(!new File(backupPath+"/"+backupFolder+"/").exists()) new File(backupPath+"/"+backupFolder+"/").mkdirs();
 		
-		try {
-			ProxyActStateChangeHistoryVO proxyActHistory= new ProxyActStateChangeHistoryVO();
-			proxyActHistory.setPry_svr_id(prySvrId);
-			proxyActHistory.setFrst_regr_id(userId);
-			proxyActHistory.setLst_mdfr_id(userId);
-			proxyActHistory.setSys_type("PROXY");
-			proxyActHistory.setAct_type("R");
-			proxyActHistory.setAct_exe_type("TC004001");
-			RunCommandExec proxyReset = new RunCommandExec("systemctl restart haproxy");
-			//명령어 실행
-			proxyReset.run();
-
-			try {
-				proxyReset.join();
-			} catch (InterruptedException ie) {
-				socketLogger.error("proxyReset error {}",ie.toString());
-				ie.printStackTrace();
-			}
-		
-			socketLogger.info("call :: "+proxyReset.call());
-			socketLogger.info("Message :: "+proxyReset.getMessage());
-			
-			if(proxyReset.call().equals("success")){
-				strPryActResult="TC001501";
-			}else{
-				strPryActResult="TC001502";
-			}
-			proxyActHistory.setExe_rslt_cd(strPryActResult);
-			proxyActHistory.setRslt_msg(proxyReset.getMessage());
-			
-			//insert
-			proxyDAO.insertPryActCngInfo(proxyActHistory);
-			
-			ProxyActStateChangeHistoryVO keepaActHistory= new ProxyActStateChangeHistoryVO();
-			keepaActHistory.setPry_svr_id(prySvrId);
-			keepaActHistory.setFrst_regr_id(userId);
-			keepaActHistory.setLst_mdfr_id(userId);
-			keepaActHistory.setSys_type("KEEPALIVED");
-			keepaActHistory.setAct_type("R");
-			keepaActHistory.setAct_exe_type("TC004001");
-			RunCommandExec keepaReset = new RunCommandExec("systemctl restart keepalived");
-			//명령어 실행
-			keepaReset.run();
-			
-			try {
-				keepaReset.join();
-			} catch (InterruptedException ie) {
-				socketLogger.error("keepaReset error {}",ie.toString());
-				ie.printStackTrace();
-			}
-			
-			if(keepaReset.call().equals("success")){
-				strKalActResult = "TC001501";
-			}else{
-				strKalActResult = "TC001502";
-			}
-			keepaActHistory.setExe_rslt_cd(strKalActResult);
-			keepaActHistory.setRslt_msg(keepaReset.getMessage());
-			
-			//insert
-			proxyDAO.insertPryActCngInfo(keepaActHistory);
-			
-			ProxyServerVO prySvr = new ProxyServerVO();
-			prySvr.setExe_status(strPryActResult);
-			prySvr.setKal_exe_status(strKalActResult);
-			prySvr.setLst_mdfr_id(userId);
-			prySvr.setPry_svr_id(prySvrId);
-			
-			proxyDAO.updatePrySvrExeStatusInfo(prySvr);
-			
-		} catch (Exception e) {
-			errLogger.error("ProxyLinkServiceImpl.restartService {}", e.toString());
-			strSuccessCode = "1";
-			strErrCode = "-1";
-			strErrMsg = "restartService Error [" + e.toString() + "]";
+		if("PROXY".equals(sysType)){
+			confChgHistVo.setPry_pth(newFilePath);
+		}else{
+			confChgHistVo.setKal_pth(newFilePath);
 		}
-		outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
-		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-		outputObj.put(ProtocolID.RESULT_DATA, "");
-		outputObj.put(ProtocolID.PRY_ACT_RESULT, strPryActResult);
-		outputObj.put(ProtocolID.KAL_ACT_RESULT, strKalActResult);
-		return outputObj;
+		
+		//신규 파일 생성 
+		File newFile = new File(newFilePath);
+		byte[] contentBytes = fileContent.getBytes();
+		FileOutputStream os_h = new FileOutputStream(newFile);
+		os_h.write(contentBytes);
+		os_h.close(); 
+		 
+		Files.copy(Paths.get(newFilePath), Paths.get(replacePath), REPLACE_EXISTING);
+		
 	}
-
+	
 	public JSONObject executeService(JSONObject jObj) throws Exception {
 		socketLogger.info("ProxyLinkServiceImpl.executeService : "+jObj.toString());
 
@@ -511,72 +448,47 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		JSONObject outputObj = new JSONObject();
 		
 		String strSuccessCode = "0";
-		String strInterfaceList = "";
 		String strErrCode = "";
 		String strErrMsg = "";
-		
-		RunCommandExec commandExec = new RunCommandExec();
-		//명령어 실행
-		commandExec.runExecRtn3("ip -o link");
-
-		try {
-			commandExec.join();
-		} catch (InterruptedException ie) {
-			socketLogger.error("executeService error {}",ie.toString());
-			ie.printStackTrace();
-			strSuccessCode = "1";
-			strErrCode = "-1";
-			strErrMsg = "Agent 처리 중 오류가 발생하였습니다.";
-		}
-		
-		if(commandExec.call().equals("success")){
-			strInterfaceList = commandExec.getMessage();
-		}else{
-			strSuccessCode = "1";
-			strErrCode = "-1";
-			strErrMsg = "Agent 처리 중 오류가 발생하였습니다.";
-		}
-			
+		String cmdResult ="";
 		String interfList = "";
 		
-		String interLine[] = strInterfaceList.split("\n");
-		for(int i=0; i<interLine.length; i++){
-			String interf[] = interLine[i].split(":");
-			if(i !=0) {
-				if(i !=1) interfList += "\t";
-				interfList += interf[1].trim();
+		//명령어 실행
+		cmdResult =runExeCmd("ip -o link");
+		String[] strTemp = cmdResult.split("\n");
+		if(strTemp[0].equals("success")){
+			for(int i=1; i<strTemp.length; i++){
+				String interf[] = strTemp[i].split(":");
+				if(i !=0) {
+					if(i !=1) interfList += "\t";
+					interfList += interf[1].trim();
+				}
 			}
-		}
-		String interf = "";
-				
-		String ip = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-		socketLogger.info("ip :: " + ip);
-		commandExec.runExecRtn3("ip -f inet addr |grep "+ip);
-		try {
-			commandExec.join();
-		} catch (InterruptedException ie) {
-			socketLogger.error("executeService error {}",ie.toString());
-			ie.printStackTrace();
-			strSuccessCode = "1";
-			strErrCode = "-1";
-			strErrMsg = "Agent 처리 중 오류가 발생하였습니다.";
-		}
-		
-		if(commandExec.call().equals("success")){
-			interf = commandExec.getMessage();
 		}else{
 			strSuccessCode = "1";
 			strErrCode = "-1";
 			strErrMsg = "Agent 처리 중 오류가 발생하였습니다.";
 		}
 		
-		String[] interfCmd = interf.split(" ");
+		String interf="";
 		
+		String ip = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
+		cmdResult =runExeCmd("ip -f inet addr |grep "+ip);
+		strTemp = cmdResult.split("\n");
+		if(strTemp[0].equals("success")){
+			String[] interfCmd = strTemp[strTemp.length-1].split(" ");
+			interf = interfCmd[interfCmd.length-1];
+		}else{
+			strSuccessCode = "1";
+			strErrCode = "-1";
+			strErrMsg = "Agent 처리 중 오류가 발생하였습니다.";
+		}
+
 		outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 		outputObj.put(ProtocolID.INTERFACE_LIST, interfList);
-		outputObj.put(ProtocolID.INTERFACE, interfCmd[interfCmd.length-1]);
+		outputObj.put(ProtocolID.INTERFACE, interf);
 		
 		return outputObj;
 	}

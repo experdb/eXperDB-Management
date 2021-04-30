@@ -46,7 +46,7 @@ public class PsP005 extends SocketCtl{
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
 		socketLogger.info("PsP005.execute : " + strDxExCode);
-
+/*
 		byte[] sendBuff = null;
 		
 		JSONObject outputObj = new JSONObject();
@@ -72,6 +72,6 @@ public class PsP005 extends SocketCtl{
 		} finally {
 			outputObj = null;
 			sendBuff = null;
-		}
+		}*/
 	}
 }
