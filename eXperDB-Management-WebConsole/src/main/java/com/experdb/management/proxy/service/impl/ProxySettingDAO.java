@@ -469,4 +469,17 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		result = (ProxyAgentVO) selectOne("proxyServerSettingSql.selectProxyAgentInfo", param);
 		return result;
 	}
+	
+	/**
+	 * Proxy Global 정보 조회
+	 * 
+	 * @param param
+	 * @return ProxyGlobalVO
+	 * @throws SQLException
+	 */
+	public ProxyServerVO selectProxyServerInfo(int pry_svr_id) throws SQLException {
+		ProxyServerVO result = null;
+		result = (ProxyServerVO) selectOne("proxyServerSettingSql.selectProxyServerInfo", pry_svr_id);
+		return result;
+	}
 }

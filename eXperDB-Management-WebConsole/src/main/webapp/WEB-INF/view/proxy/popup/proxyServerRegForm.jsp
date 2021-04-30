@@ -113,7 +113,12 @@ var mgmtDbmsTable = null;
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
 					},
 					svrReg_master_svr_id : {
-						required: '<spring:message code="eXperDB_proxy.msg2" />'
+						required: function (str, element, param) {
+							if($("#svrReg_master_svr_id > option").length > 1){
+								return '<spring:message code="eXperDB_proxy.msg2" />';
+							} 
+							return '<spring:message code="eXperDB_proxy.msg26" />';
+						}
 					},
 					svrReg_db_svr_id: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
@@ -150,7 +155,7 @@ var mgmtDbmsTable = null;
 			} else {
 				$("#svrReg_master_svr_id option:eq(0)", "#svrRegProxyServerForm").prop("selected", true);
 			}
-			
+			$("#svrReg_master_svr_id").valid();
 		}else{
 			$("#svrReg_master_svr_id_label", "#svrRegProxyServerForm").hide();
 			$("#svrReg_master_svr_id", "#svrRegProxyServerForm").hide();
@@ -181,6 +186,7 @@ var mgmtDbmsTable = null;
 		} else {
 			$("#svrReg_master_svr_id option:eq(0)", "#svrRegProxyServerForm").prop("selected", true);
 		}
+		
 	}
 
 	/* ********************************************************
@@ -394,7 +400,7 @@ var mgmtDbmsTable = null;
 			},
  			success : function(result) {
  				$('#loading_pop').hide();
- 				console.log(result);
+ 				//console.log(result);
  				if (result != null) {
 					if(!result.agentConn){
 						showSwalIcon(result.errmsg, '<spring:message code="common.close" />', '', 'error');
@@ -458,6 +464,7 @@ var mgmtDbmsTable = null;
  				,db_svr_id : $("#svrReg_db_svr_id", "#svrRegProxyServerForm").val()
  				,reg_mode: $("#svrReg_mode", "#svrRegProxyServerForm").val()
  				,ipadr: setIpadr
+ 				,kal_install_yn : $("#svrReg_kal_install_yn", "#svrRegProxyServerForm").val()
  			},
  			dataType : "json",
  			type : "post",
@@ -522,6 +529,7 @@ var mgmtDbmsTable = null;
 						<input type="hidden" id="svrReg_db_svr_id_val" name="svrReg_db_svr_id_val">
 						<input type="hidden" id="svrReg_agt_sn" name="svrReg_agt_sn">	
 						<input type="hidden" id="svrReg_use_yn" name="svrReg_use_yn" value="Y">	
+						<input type="hidden" id="svrReg_kal_install_yn" name="svrReg_kal_install_yn" value="N">	
 																	
 						<fieldset>
 						<div class="card-body card-body-xsm card-body-border">
@@ -580,17 +588,17 @@ var mgmtDbmsTable = null;
 							<br/>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
-									<label for="svrReg_master_gbn" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="svrReg_master_gbn" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="eXperDB_proxy.proxy_gbn" />(*)
 									</label>
-									<div class="col-sm-2">
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="svrReg_master_gbn" id="svrReg_master_gbn" onchange="fn_changeMasterGbn();">
+									<div class="col-sm-3">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100px;" name="svrReg_master_gbn" id="svrReg_master_gbn" onchange="fn_changeMasterGbn();">
 											<option value="M" selected="selected">Master</option>
 											<option value="B">Backup</option>
 										</select>
 									</div>
-									<div class="col-sm-2"></div>
+									<!-- <div class="col-sm-1"></div> -->
 									<label for="svrReg_master_svr_id" class="col-sm-3 col-form-label-sm pop-label-index" id="svrReg_master_svr_id_label">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="eXperDB_proxy.master_proxy" />(*)
@@ -601,7 +609,7 @@ var mgmtDbmsTable = null;
 									</div>
 								</div>
 								<div class="form-group row" style="margin-bottom:0px;">
-									<label for="svrReg_db_svr_id" class="col-sm-2 col-form-label-sm">
+									<label for="svrReg_db_svr_id" class="col-sm-3 col-form-label-sm">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="eXperDB_proxy.con_dbms" />(*)
 									</label>

@@ -122,37 +122,6 @@ public class ProxyClientInfoCmmn implements Runnable{
 		return result;
 	}
 
-	public Map<String, Object> restartAgent(String IP, int PORT, JSONObject jObj)  throws ConnectException, Exception{
-		Map<String, Object> result = new HashMap<String, Object>();
-		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP005);
-		
-		JSONObject objList;
-		
-		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
-		PCA.open(); 
-
-		objList = PCA.psP005(jObj); 
-	
-		PCA.close();
-
-		System.out.println("restartAgent result :: "+objList.toJSONString());
-		
-		String strErrMsg = (String)objList.get(ProxyClientProtocolID.ERR_MSG);
-		String strErrCode = (String)objList.get(ProxyClientProtocolID.ERR_CODE);
-		String strDxExCode = (String)objList.get(ProxyClientProtocolID.DX_EX_CODE);
-		String strResultCode = (String)objList.get(ProxyClientProtocolID.RESULT_CODE);
-		String strResultData = (String)objList.get(ProxyClientProtocolID.RESULT_DATA);
-		
-		result.put("RESULT_CODE", strResultCode);
-		result.put("ERR_CODE", strErrCode);
-		result.put("ERR_MSG", strErrMsg);
-		result.put("RESULT_DATA", strResultData);
-		result.put("PRY_ACT_RESULT", (String)objList.get(ProxyClientProtocolID.PRY_ACT_RESULT));
-		result.put("KAL_ACT_RESULT", (String)objList.get(ProxyClientProtocolID.KAL_ACT_RESULT));
-				
-		return result;
-	}
-	
 	// proxy, keepalived config 파일 가져오기
 	public Map<String, Object> getConfigFile(String IP, int PORT, JSONObject jObj) throws ConnectException, Exception {
 		Map<String, Object> result = new HashMap<>();

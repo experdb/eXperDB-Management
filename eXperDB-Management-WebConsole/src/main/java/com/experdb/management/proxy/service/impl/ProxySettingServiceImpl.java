@@ -240,13 +240,17 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
 		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
 		String status = param.get("status").toString();
-		
+		String actType = param.get("act_type").toString();
+		String statusNm = "";
 		
 		boolean proxyExecute = false;
-		boolean keepaExecute = false;
+		boolean keepaExecute = true;
 		
 		String resultLog = "";
 		String errMsg = "";
+		
+		ProxyServerVO proxyServerVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
+		String kalUseYn = proxyServerVO.getKal_install_yn();
 		
 		//Agent 접속 정보 추출 
 		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
@@ -255,16 +259,21 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		
 		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
 		JSONObject agentJobj = new JSONObject();
+		agentJobj.put("act_type", actType);
 		
-		if("TC001502".equals(status)) agentJobj.put("act_type", "S");
-		else agentJobj.put("act_type", "A");
+		if("S".equals(actType)){
+			statusNm = "정지";
+		}else if("A".equals(actType)){
+			statusNm = "기동";
+		}else if("R".equals(actType)){
+			statusNm = "재기동";
+		}
 		
 		agentJobj.put("pry_svr_id", prySvrId);
 		agentJobj.put("lst_mdfr_id", lst_mdfr_id);
 		
 		try{
 			agentJobj.put("sys_type", "PROXY");
-			System.out.println("proxyServiceExcute :1: "+agentJobj.toJSONString());
 			proxyExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
 		}catch(ConnectException e){
 			throw e;
@@ -281,24 +290,26 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			proxyExecute = false;
 		}
 		
-		try{
-			agentJobj.remove("sys_type");
-			agentJobj.put("sys_type", "KEEPALIVED");
-			System.out.println("proxyServiceExcute :2: "+agentJobj.toJSONString());
-			keepaExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
-		}catch(ConnectException e){
-			throw e;
-		}
-		
-		if (keepaExecuteResult != null) {
-			System.out.println(keepaExecuteResult.toString());
-			if (status.equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
-				keepaExecute = true;
+		//keepalived는 설치 여부에 따라 실행을 하지 않을 수 있음
+		if(kalUseYn.equals("Y")){
+			try{
+				agentJobj.remove("sys_type");
+				agentJobj.put("sys_type", "KEEPALIVED");
+				keepaExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+			}catch(ConnectException e){
+				throw e;
+			}
+			
+			if (keepaExecuteResult != null) {
+				System.out.println(keepaExecuteResult.toString());
+				if (status.equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
+					keepaExecute = true;
+				}else{
+					keepaExecute = false;
+				}
 			}else{
 				keepaExecute = false;
 			}
-		}else{
-			keepaExecute = false;
 		}
 		
 		if(!proxyExecute || !keepaExecute){
@@ -309,10 +320,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				if(!errMsg.equals("")) errMsg += " / Keepalived";
 				else errMsg += "Keepalived";	
 			}
-			if("TC001502".equals(status)) errMsg +=" 서비스 중단이 실패하였습니다.";
-			else errMsg +=" 서비스 시작이 실패하였습니다.";
+			errMsg +=statusNm +" 중 오류가 발생하였습니다.";
 		}else{
-			errMsg = "정상적으로 처리되었습니다.";
+			errMsg = "정상적으로 "+statusNm+"되었습니다.";
 		}
 		
 		resultObj.put("resultLog", resultLog);
@@ -321,7 +331,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		
 		return resultObj;
 	}
-
+	
 	/**
 	 * Proxy 서버 연결 테스트
 	 * 
@@ -751,9 +761,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			}
 		}
 		
-		
 		//Agent에 넘겨줄 Data JSONObject로 생성
-		
 		Map<String, Object> agentParam = new HashMap<String,Object>();
 		agentParam.put("pry_svr_id", prySvrId);
 		
@@ -800,6 +808,10 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			CmmnCodeVO tempCode = cmmnCodeVO.get(i);
 			agentJobj.put(tempCode.getSys_cd(), tempCode.getSys_cd_nm());
 		}
+		
+		ProxyServerVO proxyServerVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
+		String kalUseYn = proxyServerVO.getKal_install_yn();
+		agentJobj.put("KAL_INSTALL_YN", kalUseYn);
 		
 		boolean createNewConfig = false;
 		String resultLog = "";
@@ -896,64 +908,5 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		return proxySettingDAO.selectMasterProxyList(param);
 	}
 
-	@Override
-	public JSONObject restartAgent(Map<String, Object> param) throws ConnectException, Exception{
-		JSONObject resultObj = new JSONObject();
-
-		int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
-		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
-		
-		JSONObject agentJobj = new JSONObject();
-		agentJobj.put("pry_svr_id", prySvrId);
-		agentJobj.put("lst_mdfr_id", lst_mdfr_id);
-		
-		boolean restart = false;
-		String resultLog = "";
-		String errMsg = "";
-		
-		//Agent 접속 정보 추출 
-		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
-		Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
-		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
-		
-		try{
-			agentConnectResult = cic.restartAgent(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
-		}catch(ConnectException e){
-			throw e;
-		}
-		
-		if (agentConnectResult != null) {
-			System.out.println(agentConnectResult.toString());
-			if ("0".equals(agentConnectResult.get("RESULT_CODE"))) {
-				restart = true;
-				resultLog = "success";
-				if("TC001501".equals(agentConnectResult.get("PRY_ACT_RESULT")) && "TC001501".equals(agentConnectResult.get("KAL_ACT_RESULT"))){
-					errMsg= "정상적으로 재구동 되었습니다.";	
-				}else if("TC001502".equals(agentConnectResult.get("PRY_ACT_RESULT")) && "TC001501".equals(agentConnectResult.get("KAL_ACT_RESULT"))){
-					restart = false;
-					errMsg= "Proxy 구동이 실패 하였습니다.";
-				}else if("TC001501".equals(agentConnectResult.get("PRY_ACT_RESULT")) && "TC001502".equals(agentConnectResult.get("KAL_ACT_RESULT"))){
-					restart = false;
-					errMsg= "Keepalived 구동이 실패 하였습니다.";
-				}else{
-					System.out.println("PryActResult/KalActResult :: "+agentConnectResult.get("PRY_ACT_RESULT") + " / "+agentConnectResult.get("KAL_ACT_RESULT"));
-					restart = false;
-					errMsg= "Proxy/Keepalived 구동이 실패 하였습니다.";
-				}
-			}else{
-				restart = false;
-				resultLog = "faild";
-				errMsg= "Agent 재구동  중 오류가 발생하였습니다.";
-			}
-		}else{
-			restart = false;
-			resultLog = "faild";
-			errMsg= "Agent 재구동  요청 중 오류가  발생하였습니다.";
-		}
-		resultObj.put("resultLog", resultLog);
-		resultObj.put("result",restart);
-		resultObj.put("errMsg",errMsg);
-		
-		return resultObj;
-	}
+	
 }

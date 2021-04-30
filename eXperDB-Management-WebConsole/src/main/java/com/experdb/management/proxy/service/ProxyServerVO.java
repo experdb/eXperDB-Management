@@ -24,6 +24,7 @@ public class ProxyServerVO {
 	private String frst_reg_dtm;
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
+	private String kal_install_yn;
 		
 	private ProxyGlobalVO pry_global;
 	private List<ProxyVipConfigVO> pry_conf_list; 
@@ -161,6 +162,12 @@ public class ProxyServerVO {
 	}
 	public void setRownum(String rownum) {
 		this.rownum = rownum;
+	}
+	public String getKal_install_yn() {
+		return kal_install_yn;
+	}
+	public void setKal_install_yn(String kal_install_yn) {
+		this.kal_install_yn = kal_install_yn;
 	}
 	
 	

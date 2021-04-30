@@ -68,7 +68,7 @@ public interface ProxySettingService {
 	public String proxySetServerNmList(Map<String, Object> param);
 
 	/**
-	 * Proxy 적용 실행
+	 * Proxy 서비스 재/구동/중지
 	 * 
 	 * @param param
 	 * @return JSONObject
@@ -139,9 +139,21 @@ public interface ProxySettingService {
 	 */
 	public List<Map<String, Object>> selectPoxyAgentSvrList(Map<String, Object> param);
 
+	/**
+	 * Proxy Master Proxy 목록 조회
+	 * 
+	 * @param param
+	 * @return List<Map<String, Object>>
+	 * @throws 
+	 */
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param);
 
-	JSONObject restartAgent(Map<String, Object> param) throws Exception;
-
+	/**
+	 * Proxy Agent Network Interface 목록 조회
+	 * 
+	 * @param param
+	 * @return List<String>
+	 * @throws 
+	 */
 	List<String> getAgentInterface(Map<String, Object> param)throws ConnectException, Exception;
 }

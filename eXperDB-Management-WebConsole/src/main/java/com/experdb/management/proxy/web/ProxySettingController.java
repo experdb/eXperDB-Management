@@ -477,9 +477,14 @@ public class ProxySettingController {
 
 				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))  ? request.getParameter("pry_svr_id").toString() : "0");
 
+				String status_cd =request.getParameter("status")==null ? "" : request.getParameter("status").toString();
+				if("TC001502".equals(status_cd)){
+					param.put("act_type", "S");//stop
+				}else if("TC001501".equals(status_cd)){
+					param.put("act_type", "A");//active
+				}
 				param.put("pry_svr_id", prySvrId);
-				param.put("status", request.getParameter("status")==null ? "" : request.getParameter("status").toString());
-				param.put("use_yn", "Y");
+				param.put("status", status_cd);
 				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
 
 				resultObj = proxySettingService.runProxyService(param);
@@ -560,7 +565,7 @@ public class ProxySettingController {
 				
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-System.out.println("===ipadr====" + request.getParameter("ipadr"));
+				System.out.println("===ipadr====" + request.getParameter("ipadr"));
 				paramMap.put("pry_svr_nm", request.getParameter("pry_svr_nm")==null ? "" : request.getParameter("pry_svr_nm").toString());
 				paramMap.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
 				paramMap.put("not_pry_svr_id", request.getParameter("pry_svr_id")==null ? "" : request.getParameter("pry_svr_id").toString());
@@ -574,6 +579,7 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 				paramMap.put("master_gbn", request.getParameter("master_gbn")==null ? "" : request.getParameter("master_gbn").toString());
 				paramMap.put("master_svr_id", request.getParameter("master_svr_id")==null ? "" : request.getParameter("master_svr_id").toString());
 				paramMap.put("db_svr_id", request.getParameter("db_svr_id")==null ? "" : request.getParameter("db_svr_id").toString());
+				paramMap.put("kal_install_yn", request.getParameter("kal_install_yn")==null ? "" : request.getParameter("kal_install_yn").toString());
 
 				resultObj = proxySettingService.proxyServerReg(paramMap);
 				
@@ -741,7 +747,7 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 				JSONObject confData = new JSONObject();
 				confData = (JSONObject)jparser.parse(request.getParameter("confData").replaceAll("&quot;", "\""));
 				
-				param.put("lst_mdfr_id", loginVo.getUsr_id());
+				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
 				
 				resultObj = proxySettingService.applyProxyConf(param, confData);
 				
@@ -749,7 +755,6 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 					// 화면접근이력 이력 남기기 - Proxy 설정관리 - 설정 정보 수정 및 서버 재구동
 					proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_09", sohw_menu_id);
 					//설정변경이력 결과 남기기
-					
 					txManager.commit(status);
 				}else{
 					
@@ -758,14 +763,16 @@ System.out.println("===ipadr====" + request.getParameter("ipadr"));
 					
 					runRollback = true;
 				}
-				param.put("pry_svr_id", confData.get("pry_svr_id"));
 				//Agent keepalive, haproxy 재구동
-				resultObj = proxySettingService.restartAgent(param);
-
+				param.put("pry_svr_id", confData.get("pry_svr_id"));
+				param.put("status", "TC001501");
+				param.put("act_type", "R");
+				
+				resultObj = proxySettingService.runProxyService(param);
 			}
 		} catch (ConnectException e) {
 			e.printStackTrace();
-			txManager.rollback(status);
+			if(!runRollback) txManager.rollback(status);
 			resultObj.put("result",false);
 			resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
 			

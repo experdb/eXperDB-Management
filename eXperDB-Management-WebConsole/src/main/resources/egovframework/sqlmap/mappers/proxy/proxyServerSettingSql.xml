@@ -19,6 +19,7 @@
        			A.PRY_PTH,
        			A.KAL_PTH,
        			A.USE_YN,
+       			A.KAL_INSTALL_YN,
        			A.EXE_STATUS,
        			A.KAL_EXE_STATUS,
        			A.MASTER_GBN,
@@ -46,6 +47,34 @@
 	        </if>
         ORDER BY coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN DESC, A.LST_MDF_DTM
 	</select>
+	<select id="selectProxyServerInfo" parameterType="int" resultType="proxyServerVO">
+		/**
+		* Query ID : selectProxyServerInfo
+		* Description : proxy server 정보
+		* Author : 김민정
+		**/
+		SELECT  A.PRY_SVR_ID,
+       			A.IPADR,
+       			A.AGT_SN,
+       			A.PRY_SVR_NM,
+       			A.PRY_PTH,
+       			A.KAL_PTH,
+       			A.USE_YN,
+       			A.KAL_INSTALL_YN,
+       			A.EXE_STATUS,
+       			A.KAL_EXE_STATUS,
+       			A.MASTER_GBN,
+       			A.MASTER_SVR_ID,
+       			A.DB_SVR_ID,
+       			A.DAY_DATA_DEL_TERM,
+       			A.MIN_DATA_DEL_TERM,
+       			A.FRST_REGR_ID,
+       			A.FRST_REG_DTM,
+       			A.LST_MDFR_ID,
+       			A.LST_MDF_DTM
+		FROM 	T_PRY_SVR_I A INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
+		WHERE   A.PRY_SVR_ID = #{pry_svr_id}::numeric
+	</select>
 	<select id="selectPoxyAgentSvrList" resultType="hashMap">
 		/**
 		* Query ID : selectProxyAgentList
@@ -58,6 +87,7 @@
        			A.PRY_SVR_NM,
        			A.PRY_PTH,
        			A.KAL_PTH,
+       			A.KAL_INSTALL_YN,
        			A.USE_YN,
        			A.EXE_STATUS,
        			A.KAL_EXE_STATUS,
@@ -286,6 +316,7 @@
 			, PRY_SVR_NM
 			, PRY_PTH
 			, KAL_PTH
+			, KAL_INSTALL_YN
 			, USE_YN
 			, EXE_STATUS
 			, KAL_EXE_STATUS
@@ -305,6 +336,7 @@
 			, #{pry_svr_nm}
 			, '/etc/haproxy/haproxy.cfg'
 			, '/etc/keepalived/keepalived.conf'
+			, #{kal_install_yn}::bpchar
 			, #{use_yn}::bpchar
 			, 'TC001502'::character varying
 			, 'TC001502'::character varying
@@ -344,6 +376,7 @@
              <if test='master_gbn != null and (master_gbn eq "M".toString())'>
              , MASTER_SVR_ID = null
              </if>
+             , KAL_INSTALL_YN = #{kal_install_yn}
              , USE_YN = #{use_yn}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()

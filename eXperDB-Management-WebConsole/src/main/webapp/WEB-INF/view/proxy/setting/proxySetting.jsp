@@ -122,7 +122,8 @@
 			            {data : "agt_sn", defaultContent : "", visible: false},//agent 일련번호
 			            {data : "pry_svr_id", defaultContent : "", visible: false},//서버 ID
 			            {data : "exe_status", className : "dt-center",defaultContent : "", visible: false },//서버 상태
-						{data : "kal_exe_status", className : "dt-center", defaultContent : "", visible: false }//keepalived 상태
+						{data : "kal_exe_status", className : "dt-center", defaultContent : "", visible: false },//keepalived 상태
+						{data : "kal_install_yn", className : "dt-center", defaultContent : "", visible: false } //keepalived 설치 여부
 				]
 		});
         proxyServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '40px');//checkbox
@@ -450,7 +451,7 @@
 		
 		$.validator.addMethod("validatorIpFormat", function (str, element, param) {
 			var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-			if (ipformat.test(str)) {
+			if (ipformat.test(str) || str == "") {
 				return true;
 			}
 			return false;
@@ -466,7 +467,6 @@
 					required: true
 				},
 				glb_peer_server_ip: {
-					required: true,
 					validatorIpFormat :true
 				},
 				glb_max_con_cnt: {
@@ -931,6 +931,8 @@
 		}
 		
 		if(mode=="reg"){//등록
+			
+			$("#svrReg_kal_install_yn", "#svrRegProxyServerForm" ).val("N");
 			$("#svrReg_exe_status", "#svrRegProxyServerForm" ).val("TC001502");
 			$("#svrReg_kal_exe_status", "#svrRegProxyServerForm" ).val("TC001502");
 			$("#ModalProxyServer").text('<spring:message code="eXperDB_proxy.server_reg"/>');
@@ -948,6 +950,7 @@
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
 		}else{//수정
+			$("#svrReg_kal_install_yn", "#svrRegProxyServerForm" ).val(tempSetData.kal_install_yn);
 			$("#svrReg_exe_status", "#svrRegProxyServerForm" ).val(tempSetData.exe_status);
 			$("#svrReg_kal_exe_status", "#svrRegProxyServerForm" ).val(tempSetData.kal_exe_status);
 			$("#ModalProxyServer").text('<spring:message code="eXperDB_proxy.server_modify"/>');
@@ -1464,13 +1467,20 @@
      * 적용 버튼 클릭 시 수정 여부 확인 
     ******************************************************** */		
 	function fn_before_apply(){
+		selectTab('global');
 		if($("#globalInfoForm").validate().form()){
 			if($("#modYn").val() == "N"){
 				showSwalIcon('<spring:message code="eXperDB_proxy.msg6"/>', '<spring:message code="common.close" />', '', 'error');
 			}else{
-				fn_multiConfirmModal("apply");
+				if(proxyListenTable.rows().data().length > 0){
+					fn_multiConfirmModal("apply");
+				}else{
+					showSwalIcon('등록된 Listener 정보가 없습니다.', '<spring:message code="common.close" />', '', 'error');
+					selectTab('detail');
+				}
 			}
 		}
+		
 	}
 	function fn_btn_setEnable(disable){
 		$("#btnInsert_svr").prop("disabled", disable);
@@ -1735,7 +1745,8 @@
 					<div class="card globalSettingDiv" style="display:block;">
 						<form class="cmxform" id="globalInfoForm">
 							<input type="hidden" id="glb_pry_glb_id" name="glb_pry_glb_id"/>
-							<div class="card-body card-body-border">
+							<div class="card-body card-body-border" style="padding:2.96rem 1.437rem;">
+							<!-- <div class="card-body card-body-border"> -->
 								<div class="form-group row">
 									<label for="glb_obj_ip" class="col-sm-2_5 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>
@@ -1760,7 +1771,7 @@
 									<label for="glb_peer_server_ip" class="col-sm-2_5 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>	
 										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.peer_ip_tooltip" />'>
-											<spring:message code="eXperDB_proxy.peer_ip" />(*)
+											<spring:message code="eXperDB_proxy.peer_ip" />
 										</span>
 										<%-- <spring:message code="eXperDB_proxy.peer_ip" />(*) --%>
 									</label> 
@@ -1783,13 +1794,13 @@
 									<div class="col-sm-auto">
 									</div>
 								</div>
-								<div class="form-group row" style="margin-bottom:-5px;">
+								<div class="form-group row" style="margin-bottom:0px;">
 									<label for="glb_cl_con_max_tm_num" class="col-sm-12 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>	
 										<spring:message code="eXperDB_proxy.timeout_conf" />(*)
 									</label>
 								</div>
-								<div class="form-group row" style="margin-bottom: 0px !important;">
+								<div class="form-group row">
 									<label for="glb_cl_con_max_tm_num" class="col-sm-3 col-form-label pop-label-index">
 										&nbsp;&nbsp;&nbsp;
 										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.cl_con_max_tm_tooltip" />'>	
