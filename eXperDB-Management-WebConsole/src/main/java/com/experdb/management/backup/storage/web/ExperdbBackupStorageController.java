@@ -33,9 +33,18 @@ public class ExperdbBackupStorageController {
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-    @RequestMapping(value = "/experdb/backupStorageReg.do")
-    public JSONObject backupStorageInsert(HttpServletRequest request) throws Exception {
-		return experdbBackupStorageService.backupStorageInsert(request);
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/experdb/backupStorageReg.do")
+    public @ResponseBody JSONObject backupStorageInsert(HttpServletRequest request){
+    	JSONObject result = new JSONObject();
+		try {
+			result = experdbBackupStorageService.backupStorageInsert(request);
+		} catch (Exception e) {
+			result.put("RESULT_CODE", 1);
+			e.printStackTrace();
+		}
+		
+		return result;
     }
     
     /**

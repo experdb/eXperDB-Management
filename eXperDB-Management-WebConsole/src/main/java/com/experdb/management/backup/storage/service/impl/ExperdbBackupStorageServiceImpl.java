@@ -23,7 +23,8 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     private ExperdbBackupStorageDAO experdbBackupStorageDAO;
     
     // 스토리지 등록
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public JSONObject backupStorageInsert(HttpServletRequest request) throws Exception{
     	/**
     	 *  스토리지 등록
@@ -37,20 +38,59 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     	long time = new Date().getTime();
     	BackupLocationInfoVO locationVO = new BackupLocationInfoVO();
     	
+    	Map<String, Object> pathUrlInfo = new HashMap<>();
+    	
+    	pathUrlInfo.put("local", request.getParameter("pathUrlTF"));
+    	pathUrlInfo.put("user", request.getParameter("storageUser"));
+    	
+    	
     	if(type == 2){        	
     		String [] pth = request.getParameter("path").split("/", 4);
+    		String ipadr = pth[2];
     		String path = "/"+pth[3];	
+    		pathUrlInfo.put("ipadr", ipadr);
+    		pathUrlInfo.put("path", path);
     		backuplocation.setBackupDestLocation(request.getParameter("path"));
     		backuplocation.setBackupDestUser(request.getParameter("userName"));
     		backuplocation.setBackupDestPasswd(request.getParameter("passWord"));
-    		locationVO.setTotalSize(Long.parseLong(CmmnUtil.backupLocationTotalSize(path).get("RESULT_DATA").toString()));
-    		locationVO.setFreeSize(Long.parseLong(CmmnUtil.backupLocationFreeSize(path).get("RESULT_DATA").toString()));
+    		String totalSize = CmmnUtil.backupLocationTotalSize(pathUrlInfo).get("RESULT_DATA").toString();
+    		String freeSize = CmmnUtil.backupLocationFreeSize(pathUrlInfo).get("RESULT_DATA").toString();
+    		System.out.println(totalSize);
+    		System.out.println(freeSize);
+    		if(totalSize == ""){
+    			result.put("RESULT_CODE", 2);
+    			return result;
+    		}
+    		if(freeSize == ""){
+    			result.put("RESULT_CODE", 2);
+    			return result;
+    		}
+    		
+    		locationVO.setTotalSize(Long.parseLong(totalSize));
+    		locationVO.setFreeSize(Long.parseLong(freeSize));
     		locationVO.setBackupDestPasswd(CmmnUtil.encPassword(request.getParameter("passWord")).get("RESULT_DATA").toString());
     	}else{
     		String [] pth = request.getParameter("path").split("/", 2);
+    		String [] ip = request.getParameter("path").split(":", 2);
+    		String ipadr = ip[0];
     		String path = "/"+pth[1];
-    		locationVO.setTotalSize(Long.parseLong(CmmnUtil.backupLocationTotalSize(path).get("RESULT_DATA").toString()));
-    		locationVO.setFreeSize(Long.parseLong(CmmnUtil.backupLocationFreeSize(path).get("RESULT_DATA").toString()));
+    		pathUrlInfo.put("ipadr", ipadr);
+    		pathUrlInfo.put("path", path);
+    		String totalSize = CmmnUtil.backupLocationTotalSize(pathUrlInfo).get("RESULT_DATA").toString();
+    		String freeSize = CmmnUtil.backupLocationFreeSize(pathUrlInfo).get("RESULT_DATA").toString();
+    		System.out.println(totalSize);
+    		System.out.println(freeSize);
+    		if(totalSize == ""){
+    			result.put("RESULT_CODE", 2);
+    			return result;
+    		}
+    		if(freeSize == ""){
+    			result.put("RESULT_CODE", 2);
+    			return result;
+    		}
+    		
+    		locationVO.setTotalSize(Long.parseLong(totalSize));
+    		locationVO.setFreeSize(Long.parseLong(freeSize));
     		locationVO.setBackupDestPasswd(request.getParameter("passWord"));
     	}
     	
@@ -66,7 +106,7 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
 
         System.out.println(locationVO.toString());
         experdbBackupStorageDAO.backupStorageInsert(locationVO);     
-        
+        result.put("RESULT_CODE", 0);
         return result;
     }
     
