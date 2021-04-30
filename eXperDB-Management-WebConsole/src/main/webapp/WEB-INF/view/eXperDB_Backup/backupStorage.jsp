@@ -60,25 +60,13 @@ function fn_init() {
 				var html = '';		
 				
 				 if(full.diskUsage <= 70){
-					 html += "<div class='d-flex justify-content-between mt-2'>"
-					 html += "<small></small>"
-					 html += "<small>"+full.diskUsage+"%</small>"
-					 html += "</div>"
-					 html += "<div class='progress progress-lg mt-2'>";
+					 html += "<div class='progress progress-xl'>";
 					 html += "	<div class='progress-bar bg-primary progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='"+ full.diskUsage+"' aria-valuemin='0' aria-valuemax='100'>";	
 				} else if(71<full.diskUsage && full.diskUsage<89){
-					html += "<div class='d-flex justify-content-between mt-3'>"
-				    html += "<small></small>"
-					html += "<small>"+full.diskUsage+"%</small>"
-					html += "</div>"
-					html += "<div class='progress progress-lg mt-3'>";
+					html += "<div class='progress progress-xl'>";
 					html += "	<div class='progress-bar bg-warning progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='"+ full.diskUsage+"' aria-valuemin='0' aria-valuemax='100'>";	
 				} else if(full.diskUsage >= 90){
-					html += "<div class='d-flex justify-content-between mt-4'>"
-				    html += "<small></small>"
-				    html += "<small>"+full.diskUsage+"%</small>"
-				    html += "</div>"
-					html += "<div class='progress progress-lg mt-4'>";
+					html += "<div class='progress progress-xl'>";
 					html += "	<div class='progress-bar bg-danger progress-bar-striped progress-bar-animated' role='progressbar' id='progressing' style='width:"+ full.diskUsage+"%' aria-valuenow='"+ full.diskUsage+"' aria-valuemin='0' aria-valuemax='100'>";	
 				}	 
 				html += full.diskUsage+"%"
@@ -257,6 +245,11 @@ function fnc_confirmMultiRst(gbn){
 }
 
 </script>
+<style>
+table.dataTable.storage tbody tr.selected {
+	color : #333333
+}
+</style>
 
 <%@include file="./popup/bckStorageRegForm.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
@@ -338,7 +331,7 @@ function fnc_confirmMultiRst(gbn){
 									<div class="col-12">
 										 <form class="cmxform" id="optionForm">
 											<fieldset>	
-												<table id="bckStorageList" class="table table-hover table-striped system-tlb-scroll" style="width:100%; align:dt-center;">
+												<table id="bckStorageList" class="table table-hover storage system-tlb-scroll" style="width:100%; align:dt-center;">
 													<thead>
 														<tr class="bg-info text-white">
 															<th width="300">Backup Destination</th>

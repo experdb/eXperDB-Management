@@ -119,7 +119,8 @@
 					$("#repeat").prop("checked"),
 					$("#repEndTime").val(),
 					$("#everyTime").val(),
-					$("#repeatTime").val()
+					$("#repeatTime").val(),
+					$("#backupType").val()
 			)
 			fn_drawScheduleList();
 			fn_alertShow();
@@ -318,6 +319,17 @@
 	 									<form class="cmxform" id="scheduleForm">
 											<fieldset>
 												<div class="col-12" id="scheduleCustom" style="border: 1px solid #dee1e4;padding-top: 20px;padding-left: 15px;" >
+													<div class="form-group row" style="margin-bottom: 20px;">
+														<label for="backupType" class="col-sm-2_3 col-form-label-sm pop-label-index">
+															<i class="item-icon fa fa-dot-circle-o"></i>
+															Type
+														</label>
+														<select class="form-control form-control-xsm" id="backupType" style="margin-right: 10px;width:215px; height:40px; color: #555555;" onchange="">
+															<option value="3">Full Backup</option>
+															<option value="4">Incremental Backup</option>
+														</select>
+													</div>
+													
 													<div class="form-group row">
 														<label for="ins_connect_nm" for="startDate" class="col-sm-2_3 col-form-label-sm pop-label-index">
 															<i class="item-icon fa fa-dot-circle-o"></i>
@@ -332,6 +344,7 @@
 															</div> 
 														</div>
 													</div>
+													
 													<div class="form-group row">
 														<label for="ins_connect_nm" for="startTime" class="col-sm-2_3 col-form-label-sm pop-label-index">
 															<i class="item-icon fa fa-dot-circle-o"></i>

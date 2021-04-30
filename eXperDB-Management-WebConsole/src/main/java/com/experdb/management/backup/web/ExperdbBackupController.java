@@ -1,14 +1,19 @@
 package com.experdb.management.backup.web;
 
+import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -223,23 +228,31 @@ public class ExperdbBackupController {
 	 * @param WorkVO
 	 * @return Map<String, Object>
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/experdb/backupRegForm.do")
 	@ResponseBody
-	public List<Map<String, Object>> backupRegForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		List<Map<String, Object>> resultSet = null;
-
+	public JSONObject backupRegForm(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
+		JSONObject result = new JSONObject();
+		
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0162_01");
 			accessHistoryService.insertHistory(historyVO);
 			
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			String backupUrl = props.get("backup.url").toString();	
+			System.out.println("backupUrl : " + backupUrl);
+			result.put("backupUrl", backupUrl);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return resultSet;	
+		return result;	
 	}
 	
 	

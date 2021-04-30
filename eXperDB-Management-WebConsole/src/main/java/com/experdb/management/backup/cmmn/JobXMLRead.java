@@ -129,6 +129,7 @@ public class JobXMLRead{
 				
 				schedule.setRepeat(elements.getElementsByTagName("ns2:enabled").item(0).getTextContent());
 				schedule.setDayType(elements.getElementsByTagName("day").item(0).getTextContent());
+				schedule.setBackupType(elements.getElementsByTagName("jobType").item(0).getTextContent());
 				schedule.setInterval(elements.getElementsByTagName("ns2:interval").item(0).getTextContent());
 				schedule.setIntervalUnit(elements.getElementsByTagName("ns2:intervalUnit").item(0).getTextContent());
 

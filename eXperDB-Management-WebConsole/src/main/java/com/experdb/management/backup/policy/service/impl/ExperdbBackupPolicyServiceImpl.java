@@ -63,7 +63,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		
 		// 1. xml 파일 읽어오기
 		String fileName = request.getParameter("ipadr").replace(".", "_").trim()+".xml";
-		// String path = "C://test/backupXml/a.xml";
+		// String path = "C://test/backupXml/backup2.xml";
 		String path = "/opt/Arcserve/d2dserver/bin/jobs/" + fileName;
 		
 		// 1-1) 등록된 정책이 없는 경우 (xml 파일이 없는 경우) -> IOException -> 종료
@@ -95,6 +95,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			int dayType = Integer.parseInt(bs.getDayType())-1;
 			
 			scheduleMap.put("startTime", timeSplit(bs.getStartHourOfDay() + ":" + bs.getStartMinute()).get("fullHour"));
+			scheduleMap.put("backupType", bs.getBackupType());
 			if(Boolean.parseBoolean(bs.getRepeat())){
 				scheduleMap.put("repEndTime", timeSplit(bs.getEndHourOfDay() + ":" + bs.getEndMinute()).get("fullHour"));
 				scheduleMap.put("repTime", bs.getInterval());
@@ -432,7 +433,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		schedule.setYear(date.get("year").toString());
 		schedule.setMonth(Integer.toString(monthData));
 		schedule.setDay(date.get("day").toString());
-		
+		schedule.setBackupType((String) schObj.get("bt"));
 		// 2. 정책 시작 시간 세팅
 		// start time
 		Map<String, Object> startTime = new HashMap<>();

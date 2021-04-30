@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.transform.OutputKeys;
@@ -223,18 +224,32 @@ public class CmmnUtil {
 			 * @param  location
 			 * @return 
 			 */
-			public static JSONObject backupLocationFreeSize(String location) {
+			public static JSONObject backupLocationFreeSize(Map<String, Object> pathUrlInfo) {
 				
 				JSONObject result = new JSONObject();		
 				CmmnUtil cmmUtil = new CmmnUtil();
 				
 				String freeSize = "";
 				
+				String path = pathUrlInfo.get("path").toString();
+				String ipadr = pathUrlInfo.get("ipadr").toString();
+				String local = pathUrlInfo.get("local").toString();
+				String user = pathUrlInfo.get("user").toString();
+				
+				// ssh experdb@192.168.50.190 'df -B1 --output=size '/data/cifs' |tail -n 1'.
+				
 				try {
-					String strCmd = "df -B1 --output=avail '"+location+"' | tail -n 1";
-					System.out.println("BackupLocationFreeSize CMD : "+strCmd);
-					result = cmmUtil.execute(strCmd, "locationFreeSize");			
-					System.out.println(result.get("RESULT_DATA").toString());
+					if(local.equals("true")){						
+						String strCmd = "df -B1 --output=avail '"+path+"' | tail -n 1";
+						System.out.println("BackupLocationFreeSize CMD : "+strCmd);
+						result = cmmUtil.execute(strCmd, "locationFreeSize");			
+						System.out.println(result.get("RESULT_DATA").toString());
+					}else{
+						String strCmd = "ssh " + user + "@" + ipadr + " 'df -B1 --output=avail '"+path+"' | tail -n 1'";
+						System.out.println("BackupLocationFreeSize CMD : "+strCmd);
+						result = cmmUtil.execute(strCmd, "locationFreeSize");			
+						System.out.println(result.get("RESULT_DATA").toString());						
+					}
 					// freeSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));				
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -248,18 +263,30 @@ public class CmmnUtil {
 			 * @param  password
 			 * @return 
 			 */
-			public static JSONObject backupLocationTotalSize(String location) {
+			public static JSONObject backupLocationTotalSize(Map<String, Object> pathUrlInfo) {
 				
 				JSONObject result = new JSONObject();		
 				CmmnUtil cmmUtil = new CmmnUtil();
 				
 				String totalSize = "";
 				
+				String path = pathUrlInfo.get("path").toString();
+				String ipadr = pathUrlInfo.get("ipadr").toString();
+				String local = pathUrlInfo.get("local").toString();
+				String user = pathUrlInfo.get("user").toString();
+				
 				try {
-					String strCmd = "df -B1 --output=size '"+location+"' |tail -n 1";
-					System.out.println("BackupLocationTotalSize CMD : "+strCmd);
-					result = cmmUtil.execute(strCmd, "locationTotalSize");	
-					System.out.println(result.get("RESULT_DATA").toString());
+					if(local.equals("true")){						
+						String strCmd = "df -B1 --output=size '"+path+"' |tail -n 1";
+						System.out.println("BackupLocationTotalSize CMD : "+strCmd);
+						result = cmmUtil.execute(strCmd, "locationTotalSize");	
+						System.out.println(result.get("RESULT_DATA").toString());
+					}else{
+						String strCmd = "ssh " + user + "@" + ipadr + " 'df -B1 --output=size '"+path+"' |tail -n 1'";						
+						System.out.println("BackupLocationTotalSize CMD : "+strCmd);
+						result = cmmUtil.execute(strCmd, "locationTotalSize");	
+						System.out.println(result.get("RESULT_DATA").toString());
+					}
 					// totalSize = bytes2String(Double.parseDouble(result.get("RESULT_DATA").toString()));					
 				} catch (Exception e) {
 					e.printStackTrace();

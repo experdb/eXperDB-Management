@@ -19,6 +19,8 @@ public class BackupScheduleVO {
 	private String endMinute;
 	private String endHourType;
 	
+	private String backupType;
+	
 	private String dayType;
 
 	public String getYear() {
@@ -140,6 +142,14 @@ public class BackupScheduleVO {
 	public void setEndHourOfDay(String endHourOfDay) {
 		this.endHourOfDay = endHourOfDay;
 	}
+	
+	public String getBackupType() {
+		return backupType;
+	}
+
+	public void setBackupType(String backupType) {
+		this.backupType = backupType;
+	}
 
 	@Override
 	public String toString() {
@@ -147,8 +157,9 @@ public class BackupScheduleVO {
 				+ ", interval=" + interval + ", intervalUnit=" + intervalUnit + ", startHour=" + startHour
 				+ ", startHourOfDay=" + startHourOfDay + ", startMinute=" + startMinute + ", startHourType="
 				+ startHourType + ", endHour=" + endHour + ", endHourOfDay=" + endHourOfDay + ", endMinute=" + endMinute
-				+ ", endHourType=" + endHourType + ", dayType=" + dayType + "]";
+				+ ", endHourType=" + endHourType + ", backupType=" + backupType + ", dayType=" + dayType + "]";
 	}
 
+	
 	
 }

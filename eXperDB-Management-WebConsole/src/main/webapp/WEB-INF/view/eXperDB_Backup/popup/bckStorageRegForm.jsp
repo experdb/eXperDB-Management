@@ -26,8 +26,9 @@
 <script type="text/javascript">
 
  var pathList = [];
- 
+ var pathUrlCheck = true;
  var storageValid = false;
+ 
 
 	/* ********************************************************
 	 * 초기 실행
@@ -35,7 +36,6 @@
 	$(window.document).ready(function() {
 		storageValid = false;
 		fn_regReset();
-			
 	});
 	
 	// loader
@@ -79,6 +79,8 @@
 		$("#userNameAlert").empty();
 		$("#passWordAlert").empty();
 		$("#storagePathAlert").empty();
+		
+		$("#isSUserDiv").hide();
 	}
 
 	/* ********************************************************
@@ -88,7 +90,7 @@
 		$("#storageType").val(result.type).prop("disabled", true);
 		$("#userName").val(result.backupDestUser);
 		$("#passWord").val("");
-
+		$("#isSUserDiv").hide();
 		fn_storageTypeSelect();
 		
 		$("#storagePathAlert").empty();
@@ -191,6 +193,8 @@
 					data : {
 						type : $("#storageType").val(),
 						path : $("#storagePath").val(),
+						storageUser : $("#storageUser").val(),
+						pathUrlTF : pathUrlCheck,
 						passWord : $("#passWord").val(),
 						userName : $("#userName").val(),
 						jobLimit : $("#currBckLimNum").val(),
@@ -200,16 +204,16 @@
 					},
 					type : "post"
 			  })
-			  .done (function(data){
-				  /* if(data.RESULT_CODE == "0"){
+			  .done (function(result){
+				  if(result.RESULT_CODE == "0"){
 					  fn_getStorageList();
-					  showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');					  
+					  showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
+					  $('#pop_layer_popup_backupStorageReg').modal("hide");
+				  }else if(result.RESULT_CODE == "2"){
+					  showSwalIcon('<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'error');
 				  }else{
-					  showSwalIcon("ERROR Message : "+ data.RESULT_DATA+ "\n\n", '<spring:message code="common.close" />', '', 'error');
-				  } */
-					  fn_getStorageList();
-					  showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');					  
-				  
+					  showSwalIcon("ERROR Message : "+ result.RESULT_DATA+ "\n\n", '<spring:message code="common.close" />', '', 'error');
+				  }
 			  })
 			  .fail (function(xhr, status, error){
 				  if(xhr.status == 401) {
@@ -221,7 +225,7 @@
 					}
 			  })
 			  .always(function(){
-				  $('#pop_layer_popup_backupStorageReg').modal("hide");
+				 
 			  }) 
 		  }else{
 			  showSwalIcon('<spring:message code="eXperDB_backup.msg35" />', '<spring:message code="common.close" />', '', 'error');
@@ -276,11 +280,12 @@
 		 //storageType == 1 (NFS)
 		 //storageType == 2 (CIFS)
 		if($("#storageType").val()==1){
-			if(fn_valChkPath()){
+			var checkVal = fn_valChkPath() + fn_valChkSUser();
+			if(checkVal == 2){
 				 $.ajax({
 					url : "/experdb/nfsValidation.do",
 					data : {
-						path : $("#storagePath").val(),
+						path : $("#storagePath").val()
 					},
 					type : "post",
 					async: false, 
@@ -305,8 +310,8 @@
 				});
 			}
 		}else{
-			var checkVal =fn_valChkPW() + fn_valChkName() + fn_valChkPath() ;
-			if(checkVal == 3){
+			var checkVal =fn_valChkPW() + fn_valChkName() + fn_valChkPath() + fn_valChkSUser();
+			if(checkVal == 4){
 				 $.ajax({
 						url : "/experdb/cifsValidation.do",
 						data : {
@@ -401,7 +406,7 @@
 									 storageValid = true;
 								 }	
 							}
-						});
+					});
 				}
 			}	
 	 }
@@ -410,6 +415,7 @@
 	 function fn_valChkPath(){
 		 var storagePath = $("#storagePath").val();
 		$("#storagePathAlert").empty();
+		fn_checkUrl(storagePath);
 		 // path duplication check
 		if(fn_dupCheckPath()){
 			$("#storagePathAlert").append("<spring:message code='eXperDB_backup.msg37' />");
@@ -422,9 +428,37 @@
 			$("#storagePathAlert").removeClass("text-success").addClass("text-danger");
 			$("#storagePath").focus();
 			return false;
-		}else{
+		}else {
+			
 			return true;
 		}
+	 }
+	 
+	 function fn_checkUrl(storagePath){
+		 var storageUrl = $("#storageUrl").val();
+		if(storagePath.indexOf(storageUrl)<0){
+			pathUrlCheck = false;
+			$("#isSUserDiv").show();
+		}else {
+			pathUrlCheck = true;
+			$("#isSUserDiv").hide();
+		}
+	 }
+	 
+	 function fn_valChkSUser(){
+		 var sUser = $("#storageUser").val();
+		 $("#storageUserAlert").empty();
+		 if(pathUrlCheck == false && !sUser){
+			$("#storageUser").val("");
+			$("#storageUserAlert").append("Storage User를 입력해주세요");
+			$("#storageUserAlert").removeClass("text-success").addClass("text-danger");
+			$("#storageUser").focus();
+			return false;
+		 }else{
+			$("#storageUserAlert").empty();
+			
+			return true;
+		 }
 	 }
 
 	 // user name validation check
@@ -438,6 +472,7 @@
 			$("#userName").focus();
 			return false;
 		}else{
+			storageValid = false;
 			return true;
 		}
 	 }
@@ -453,6 +488,7 @@
 			$("#passWord").focus();
 			return false;
 		}else{
+			storageValid = false;
 			return true;
 		}
 	 }
@@ -479,7 +515,6 @@
  
 
 </script>
-	
 <div class="modal fade" id="pop_layer_popup_backupStorageReg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl" role="document" style="width: 700px">
 		<div class="modal-content" >
@@ -514,17 +549,29 @@
 													</div>
 													<div class="col-4" style="padding-left: 0px;">
 														<input type="text" id="storagePath" name="storagePath" class="form-control form-control-sm" style="width: 400px;" onchange="fn_valChkPath()"/>
-														<!-- <input type="hidden" id="pathcheck" value=1/> -->
 														<div id="storagePathAlert" name="storagePathAlert" class="text-danger" style="font-size:0.8em;  width: 212px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 1px; padding-bottom: 5px; margin-bottom: 0px; ">
 															
 														</div>
 													</div>
 												</div>
+												<div id="isSUserDiv" style="display:none;">
+												<div class="form-group row" id="sUserDiv" style="margin-bottom:4px;" >
+													<div  class="col-3" style="padding-top:7px; margin-left: 20px;">
+														Storage User
+													</div>
+													<div class="col-4" style="padding-left: 0px;">
+														<input type="text" id="storageUser" name="storageUser" class="form-control form-control-sm" style="width: 400px;" onchange="fn_valChkSUser()"/>
+														<div id="storageUserAlert" name="storageUserAlert" class="text-danger" style="font-size:0.8em;  width: 212px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 1px; padding-bottom: 5px; margin-bottom: 0px; ">
+															
+														</div>
+													</div>
+												</div>
+												</div>
 												 
 												<div name="isCifs" id="isCifs">
 												<div class="form-group row" id="userNameDiv" style="margin-bottom:4px">
 													<div  class="col-3" style="padding-top:7px; margin-left: 20px;">
-														User Name
+														Smb User
 													</div>
 													<div class="col-4" style="padding-left: 0px;">
 														<input type="text" id="userName" name="userName" class="form-control form-control-sm" style="width: 400px;" onchange="fn_valChkName()"/>
@@ -535,7 +582,7 @@
 												</div>
 												<div class="form-group row" id="passWordDiv" style="margin-bottom:4px">
 													<div  class="col-3" style="padding-top:7px; margin-left: 20px;">
-														Password
+														Smb Password
 													</div>
 													<div class="col-4" style="padding-left: 0px;">
 														<input type="password" id="passWord" name="passWord" class="form-control form-control-sm" style="width: 400px;" onchange="fn_valChkPW()"/>

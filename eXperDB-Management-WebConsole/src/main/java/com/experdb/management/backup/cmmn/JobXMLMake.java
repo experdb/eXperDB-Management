@@ -203,7 +203,7 @@ public class JobXMLMake{
         	   
         	   // backup jobType
         	   Element jobType = doc.createElement("jobType");
-       	       jobType.appendChild(doc.createTextNode("4"));
+       	       jobType.appendChild(doc.createTextNode(bs.getBackupType()));
         	   scheduleList.appendChild(jobType);
            }
             

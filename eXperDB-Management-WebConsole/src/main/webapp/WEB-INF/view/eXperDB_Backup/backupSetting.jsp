@@ -282,7 +282,7 @@ function fn_setScheduleInfo(result){
 	
 	// 증분 백업 정책 setting
 	for(var i=0 ; i<scheduleData.length; i++){
-		fn_scheduleInsert(scheduleData[i].dayPick, scheduleData[i].startTime, scheduleData[i].repeat, scheduleData[i].repEndTime, scheduleData[i].repTime, scheduleData[i].repTimeUnit);
+		fn_scheduleInsert(scheduleData[i].dayPick, scheduleData[i].startTime, scheduleData[i].repeat, scheduleData[i].repEndTime, scheduleData[i].repTime, scheduleData[i].repTimeUnit, scheduleData[i].backupType);
 	}
 	$("#startDateSch").val(result.startDate);
 	fn_drawScheduleList();
@@ -499,26 +499,34 @@ function fn_nodeRegPopup() {
 	}
 	
 	// schedule Insert per day
-	function fn_scheduleInsert(dayPick, startTime, repCheck, repEndTime, repTime, repTimeUnit) {
+	function fn_scheduleInsert(dayPick, startTime, repCheck, repEndTime, repTime, repTimeUnit, backupType) {
 		var schData = new Object();
 		// 입력된 데이터를 Object에 넣어줌
 		schData.st = startTime;
 		schData.rc = repCheck;
+		schData.bt = backupType;
+		
+		if(backupType == 3){
+			schData.repeat = "Full<br>";
+		}else{
+			schData.repeat = "Incremental<br>";
+		}
+		
 		if(repCheck){
 			schData.rt = repTime;
 			schData.ret = repEndTime;
 			schData.rtu = repTimeUnit;
 			// repeat --> scheduleList에 보여줄 data
 			if(repTimeUnit == 0){
-				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"<spring:message code='eXperDB_backup.msg7' />";
+				schData.repeat += "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"<spring:message code='eXperDB_backup.msg7' />";
 			}else{
-				schData.repeat = "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"<spring:message code='eXperDB_backup.msg8' />";
+				schData.repeat += "<b>" + startTime + " ~ " + repEndTime +"</b><br>"+ repTime +"<spring:message code='eXperDB_backup.msg8' />";
 			}
 		}else{
 			schData.rt = "";
 			schData.ret = "";
 			schData.rtu = "";
-			schData.repeat = "<b>" + startTime + "</b>";
+			schData.repeat += "<b>" + startTime + "</b>";
 		}
 		// 선택한 요일에 데이터를 넣어줌
 		for(var i =0; i<7; i++){
