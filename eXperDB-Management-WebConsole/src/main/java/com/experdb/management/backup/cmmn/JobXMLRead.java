@@ -73,6 +73,7 @@ public class JobXMLRead{
 				
 				volume.setFileSystem(elements.getElementsByTagName("fileSystem").item(0).getTextContent());
 				volume.setMountOn(elements.getElementsByTagName("mountOn").item(0).getTextContent());
+				volume.setType(elements.getElementsByTagName("type").item(0).getTextContent());
 				
 				volumes.add(volume);
 			}

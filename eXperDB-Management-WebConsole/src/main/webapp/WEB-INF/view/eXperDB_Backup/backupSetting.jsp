@@ -444,6 +444,8 @@ function fn_nodeRegPopup() {
 		  fn_backupDelete();
 	  }else if (gbn == "go_monitoring"){
 		  location.href="/experdb/backupMonitoring.do";
+	  }else if(gbn == "backup_apply"){
+		  fn_apply();
 	  }
   }
  
@@ -588,71 +590,70 @@ function fn_nodeRegPopup() {
 /* ********************************************************
  * apply
  ******************************************************** */
-	function fn_apply() {
-		if(fn_applyValidation()){
-			// jsonParser를 쓰기 위해 Object 형태로 보냄
-			var weekData = new Object();
-			weekData.mon = schMon;
-			weekData.tue = schTue;
-			weekData.wed = schWed;
-			weekData.thu = schThu;
-			weekData.fri = schFri;
-			weekData.sat = schSat;
-			weekData.sun = schSun;
-			
-			var volumeSet=[];
-			for(var i =0; i<volumeDataList.length; i++){
-				var row = new Object();
-				row.mountOn = volumeDataList[i].mountOn;
-				row.filesystem = volumeDataList[i].filesystem;
-				row.type = volumeDataList[i].type;
-				volumeSet.push(row);
-			}
-			$.ajax({
-				url : "/experdb/backupScheduleReg.do",
-				type : "post",
-				dataType : "json",
-				traditional : true,
-				data : {
-					nodeIpadr : NodeList.row('.selected').data().ipadr,
-					volumeList : JSON.stringify(volumeSet),
-					weekData : JSON.stringify(weekData),
-					startDate : $("#startDateSch").val(),
-					storageType : $("#bckStorageTypeVal").val(),
-					storage : $("#bckStorage").val(),
-					compress : $("#bckCompressVal").val(),
-					dateType : $("#bckSetDateTypeVal").val(),
-					weekDate : $("#bckSetWeekDateVal").val(),
-					monthDate : $("#bckSetMonthDateVal").val(),
-					setNum : $("#bckSetNum").val(),
-					jobName : $("#jobNameVal").val()
-				}
-			})
-			.done (function(result){
-				if(result.RESULT_CODE == "0"){			
-					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '','success', 'backupPolicyApply');
-					jobExist = 1;
-				}else {
-					showSwalIcon('<spring:message code="eXperDB_backup.msg9" />', '<spring:message code="common.close" />', '', 'error');
-				}
-			})
-			.fail (function(xhr, status, error){
-				 if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if (xhr.status == 403){
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			})
-			.always(function(){
-		 		fn_alertHide();
-		 		var nodeIpadr = NodeList.row('.selected').data().ipadr;
-		 		fn_scheduleReset();
-		 		fn_policyReset();
-		 		fn_getScheduleInfo(nodeIpadr);
-			})
+// if($("#applyAlert").is(":visible")){	
+ 	function fn_apply() {
+		// jsonParser를 쓰기 위해 Object 형태로 보냄
+		var weekData = new Object();
+		weekData.mon = schMon;
+		weekData.tue = schTue;
+		weekData.wed = schWed;
+		weekData.thu = schThu;
+		weekData.fri = schFri;
+		weekData.sat = schSat;
+		weekData.sun = schSun;
+		
+		var volumeSet=[];
+		for(var i =0; i<volumeDataList.length; i++){
+			var row = new Object();
+			row.mountOn = volumeDataList[i].mountOn;
+			row.filesystem = volumeDataList[i].filesystem;
+			row.type = volumeDataList[i].type;
+			volumeSet.push(row);
 		}
+		$.ajax({
+			url : "/experdb/backupScheduleReg.do",
+			type : "post",
+			dataType : "json",
+			traditional : true,
+			data : {
+				nodeIpadr : NodeList.row('.selected').data().ipadr,
+				volumeList : JSON.stringify(volumeSet),
+				weekData : JSON.stringify(weekData),
+				startDate : $("#startDateSch").val(),
+				// storageType : $("#bckStorageTypeVal").val(),
+				storage : $("#bckStorage").val(),
+				compress : $("#bckCompressVal").val(),
+				dateType : $("#bckSetDateTypeVal").val(),
+				weekDate : $("#bckSetWeekDateVal").val(),
+				monthDate : $("#bckSetMonthDateVal").val(),
+				setNum : $("#bckSetNum").val(),
+				jobName : $("#jobNameVal").val()
+			}
+		})
+		.done (function(result){
+			if(result.RESULT_CODE == "0"){			
+				showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '','success', 'backupPolicyApply');
+				jobExist = 1;
+			}else {
+				showSwalIcon('<spring:message code="eXperDB_backup.msg9" />', '<spring:message code="common.close" />', '', 'error');
+			}
+		})
+		.fail (function(xhr, status, error){
+			 if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if (xhr.status == 403){
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		})
+		.always(function(){
+	 		fn_alertHide();
+	 		var nodeIpadr = NodeList.row('.selected').data().ipadr;
+	 		fn_scheduleReset();
+	 		fn_policyReset();
+	 		fn_getScheduleInfo(nodeIpadr);
+		})
 	}
 	
 	function fn_goMonitoring(){
@@ -676,8 +677,16 @@ function fn_nodeRegPopup() {
 		}else if($("#bckStorage").val() == "" || $("#bckStorage").val() == null){
 			showSwalIcon('<spring:message code="eXperDB_backup.msg83" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
+		}else if(!$("#applyAlert").is(":visible")){
+			showSwalIcon('변경된 내용이 없습니다', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else{
+			confile_title = '정책 적용 요청';
+			$('#con_multi_gbn', '#findConfirmMulti').val("backup_apply");
+			$('#confirm_multi_tlt').html(confile_title);
+			$('#confirm_multi_msg').html('적용하시겠습니까?');
+			$('#pop_confirm_multi_md').modal("show");
 		}
-		return true;
 	}
 
  /* ********************************************************
@@ -691,7 +700,6 @@ function fn_filter(){
 	}else{
 		var serverIp = NodeList.row('.selected').data().ipadr;
 		fn_getVolumes(serverIp);
-		
 	}
 
 	$('#pop_layer_popup_backupVolumeFilter').modal("show");
@@ -884,7 +892,7 @@ table.dataTable.ccc thead th{
 						</div>
 						
 						<div id="wrt_button" style="float: right;">
-							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_apply()">
+							<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_applyValidation()">
 								<i class="fa fa-check btn-icon-prepend "></i><spring:message code="common.apply" />
 							</button>
 							<button type="button" class="btn btn-warning btn-icon-text mb-2" style="color:white;" onclick="fn_filter()">

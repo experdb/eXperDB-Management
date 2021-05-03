@@ -134,6 +134,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			Map <String, Object> volumeMap = new HashMap<>();
 			volumeMap.put("filesystem", volume.getFileSystem());
 			volumeMap.put("mountOn", volume.getMountOn());
+			volumeMap.put("type", volume.getType());
 			
 			volumeList.add(volumeMap);
 		}
@@ -195,12 +196,10 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		BackupLocationInfoVO backupLocation = new BackupLocationInfoVO();
 		RetentionVO backupRetention = new RetentionVO();
 		List<VolumeVO> volumeList = new ArrayList<>();
-		int schExist = 0;
 		
 		String weekData = param.get("weekData").toString();
 		String ipadr = request.getParameter("nodeIpadr");
 		String startDate = request.getParameter("startDate");
-		String storageType = request.getParameter("storageType");
 		String fstorage = request.getParameter("storage");
 		String fcompress = request.getParameter("compress");
 		String fdateType = request.getParameter("dateType");
@@ -267,12 +266,10 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		
 		// 등록된 증분백업정책이 있다면
 		if(backupSchedule.size()>0){
-			schExist = 1;
 			backupScript.setRepeat("true");
 			backupScript.setDisable(false);
 			backupScript.setScheduleType(5);
 		}else{
-			schExist = 0;
 			backupScript.setRepeat("false");			
 			backupScript.setDisable(true);
 			backupScript.setScheduleType(3);
@@ -313,7 +310,6 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		backupRetention.setDayOfMonth(Integer.parseInt(monthDate));
 		backupRetention.setDayOfWeek(Integer.parseInt(weekDate));
 		backupRetention.setUseWeekly(fdateType);
-		
 		
 		// 4. xml 파일 만들기 및 IMPORT 
 		JobXMLMake xmlMake = new JobXMLMake();
