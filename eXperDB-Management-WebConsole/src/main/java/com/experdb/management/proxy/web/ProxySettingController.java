@@ -104,7 +104,10 @@ public class ProxySettingController {
 			}else{
 				// 화면접근이력 이력 남기기 - Proxy 설정 관리 화면
 				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159", sohw_menu_id);
-				mv.addObject("usr_id", request.getParameter("usr_id")==null?"":request.getParameter("usr_id"));
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				
+				mv.addObject("usr_id", loginVo.getUsr_id());
 
 				// simple query code search
 				List<CmmnCodeVO> cmmnCodeVO =  null;
@@ -346,7 +349,44 @@ public class ProxySettingController {
 		}
 		return resultObj;
 	}
-	
+	/**
+	 * 프록시 서버 상세 정보 조회
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getVipInstancePeerList.do")
+	public @ResponseBody JSONObject getVipInstancePeerList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+				
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject resultObj = new JSONObject();
+		try {	
+			CmmnUtils.saveHistory(request, historyVO);
+
+			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultObj;
+			}else{
+				String peerSvrIp = request.getParameter("peer_server_ip")==null ? "" : request.getParameter("peer_server_ip").toString();
+				param.put("peer_server_ip", peerSvrIp);
+					
+				//정보조회
+				resultObj = proxySettingService.getVipInstancePeerList(param);
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultObj.put("errcd", -1);
+			resultObj.put("errMsg","Proxy Peer 가상 IP 정보 불러오는 중 오류가 발생하였습니다.");
+		}
+		return resultObj;
+	}
 	/**
 	 * 동적 select 박스 생성
 	 * 
@@ -782,5 +822,52 @@ public class ProxySettingController {
 			resultObj.put("errMsg","설정 적용 중 오류가 발생하였습니다.");
 		}
 		return resultObj;
+	}
+	
+	/**
+	 * 가상 IP 사용 여부 설정 
+	 * 
+	 * @param request, response
+	 * @return resultObj
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/setVipUseYn.do")
+	public @ResponseBody JSONObject setVipUseYn(HttpServletRequest request, HttpServletResponse response) {
+	
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+	
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject resultObj = new JSONObject();
+	
+		try {	
+			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultObj;
+			}else{
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))  ? request.getParameter("pry_svr_id").toString() : "0");
+
+				String kalInstYn =request.getParameter("kal_install_yn")==null ? "" : request.getParameter("kal_install_yn").toString();
+				param.put("kal_install_yn", kalInstYn);//stop
+				param.put("pry_svr_id", prySvrId);
+				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
+
+				proxySettingService.updateDeleteVipUseYn(param);
+				
+				resultObj.put("result", true);
+				resultObj.put("errMsg", "작업이 정상적으로 완료 되었습니다.");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			resultObj.put("result", false);
+			resultObj.put("errMsg", "작업 중 요류가 발생하였습니다.");
+		}
+		return resultObj;
+
 	}
 }

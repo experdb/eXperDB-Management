@@ -482,4 +482,9 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		result = (ProxyServerVO) selectOne("proxyServerSettingSql.selectProxyServerInfo", pry_svr_id);
 		return result;
 	}
+
+	public void updatePrySvrKalInstYn(ProxyServerVO prySvrVO) {
+		// TODO Auto-generated method stub
+		update("proxyServerSettingSql.updatePrySvrKalInstYn", prySvrVO);	
+	}
 }

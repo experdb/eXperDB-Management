@@ -41,6 +41,15 @@ public interface ProxySettingService {
 	public JSONObject getPoxyServerConf(Map<String, Object> param) throws Exception;
 
 	/**
+	 * Proxy Peer Vip 정보 select 박스 생성
+	 * 
+	 * @param param
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	JSONObject getVipInstancePeerList(Map<String, Object> param) throws Exception;
+
+	/**
 	 * Proxy 연결 DBMS 및 Master Proxy 정보 조회
 	 * 
 	 * @param param
@@ -156,4 +165,15 @@ public interface ProxySettingService {
 	 * @throws 
 	 */
 	List<String> getAgentInterface(Map<String, Object> param)throws ConnectException, Exception;
+
+	/**
+	 * VIP 사용 여부 업데이트
+	 * 
+	 * @param param
+	 * @return List<String>
+	 * @throws 
+	 */
+	public void updateDeleteVipUseYn(Map<String, Object> param) throws ConnectException, Exception;
+
+	
 }

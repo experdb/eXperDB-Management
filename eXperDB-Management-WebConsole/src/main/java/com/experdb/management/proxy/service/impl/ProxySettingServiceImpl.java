@@ -151,6 +151,25 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		return resultObj;
 	}
 
+	/**
+	 * Proxy conf 상세조회
+	 * 
+	 * @param param
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	public JSONObject getVipInstancePeerList(Map<String, Object> param) throws Exception {
+		JSONObject resultObj = new JSONObject();
+		
+		param.put("peer", "Y");
+		//Peer Server VIP List 정보 조회 
+		List<ProxyVipConfigVO> peerVipConfigList = proxySettingDAO.selectProxyVipConfList(param);
+		resultObj.put("errcd", 0);
+		resultObj.put("errMsg","정상적으로 처리되었습니다.");
+		resultObj.put("peer_vipconfig_list", peerVipConfigList == null? null:peerVipConfigList);
+		
+		return resultObj;
+	}
 
 	/**
 	 * Proxy 연결 DBMS 및 Master Proxy 정보 조회
@@ -906,6 +925,63 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	@Override
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param) {
 		return proxySettingDAO.selectMasterProxyList(param);
+	}
+
+	@Override
+	public void updateDeleteVipUseYn(Map<String, Object> param) throws ConnectException, Exception{
+		
+		int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
+		String lstMdfrId = param.get("lst_mdfr_id").toString();
+		String kalInstallYn = param.get("kal_install_yn").toString();
+		ProxyServerVO prySvrVO = new ProxyServerVO();
+		prySvrVO.setPry_svr_id(prySvrId);
+		prySvrVO.setLst_mdfr_id(lstMdfrId);
+		prySvrVO.setKal_install_yn(kalInstallYn);
+
+		//Server KAL_INATLL_YN update
+		//N일 경우, Master로 변경 및 Master_svr_id null로 업데이트
+		proxySettingDAO.updatePrySvrKalInstYn(prySvrVO);
+		
+		//Delete T_PRY_VIPCNG_I
+		if(kalInstallYn.equals("N"))
+		{
+			//global peer 정보  공백 처리
+			ProxyGlobalVO globalVO = proxySettingDAO.selectProxyGlobal(param);
+			globalVO.setPeer_server_ip("");
+			proxySettingDAO.updateProxyGlobalConf(globalVO);
+			//vip 설정 정보 삭제 
+			proxySettingDAO.deletePryVipConfList(prySvrId);
+			
+			//기동 중지
+			ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+			Map<String, Object> keepaExecuteResult = new  HashMap<String, Object>();
+			
+			ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+			JSONObject agentJobj = new JSONObject();
+			agentJobj.put("act_type", "S");
+			agentJobj.put("pry_svr_id", prySvrId);
+			agentJobj.put("lst_mdfr_id", lstMdfrId);
+			
+			try{
+				agentJobj.put("sys_type", "KEEPALIVED");
+				keepaExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+			}catch(ConnectException e){
+				throw e;
+			}
+			
+			/*
+			boolean keepaExecute = true;
+			if (keepaExecuteResult != null) {
+				if ("TC001502".equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
+					keepaExecute = true;
+				}else{
+					keepaExecute = false;
+				}
+			}else{
+				keepaExecute = false;
+			}*/
+		}
+
 	}
 
 	

@@ -192,12 +192,17 @@
 		<if test='peer == null'>
 		AND 	PRY_SVR_ID =#{pry_svr_id}
 		</if>
-		<if test='peer != null and (peer eq "Y".toString())'>
+		<if test='pry_svr_id != null and peer != null and (peer eq "Y".toString())'>
 		AND 	PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID AS PRY_SVR_ID
 								FROM 		T_PRY_GLB_I A 
 								INNER JOIN 	T_PRY_GLB_I B 
 								ON 			A.PEER_SERVER_IP = B.OBJ_IP
 	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id})
+		</if>
+		<if test='peer_server_ip != null and peer != null and (peer eq "Y".toString())'>
+		AND 	PRY_SVR_ID = (	SELECT 		PRY_SVR_ID 
+								FROM 		T_PRY_GLB_I  
+								WHERE		OBJ_IP = #{peer_server_ip})
 		</if>
 		ORDER BY PRIORITY DESC
 	</select> 
@@ -803,5 +808,22 @@
         <if test='ipadr != null'>
 		  AND 	IPADR = #{ipadr}
         </if>
-	</select>	
+	</select>
+	
+	<update id="updatePrySvrKalInstYn" parameterType="proxyServerVO">
+        /**
+        * Query ID : updatePrySvrKalInstYn"
+        * Description : Proxy 서버 KAL_INSTALL_YN 업데이트
+        * Author : 김민정
+        **/
+        UPDATE T_PRY_SVR_I
+           SET  KAL_INSTALL_YN = #{kal_install_yn}
+           	 <if test='kal_install_yn != null and (kal_install_yn eq "N".toString())'>
+           	  , MASTER_GBN = 'M'
+              , MASTER_SVR_ID = null
+           	 </if>
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
+	</update>
 </mapper>
