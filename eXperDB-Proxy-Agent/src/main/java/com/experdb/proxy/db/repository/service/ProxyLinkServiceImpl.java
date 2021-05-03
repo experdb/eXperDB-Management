@@ -343,6 +343,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String strSuccessCode = "0";
 		String strErrCode = "";
 		String strErrMsg = "";
+		String strExecute = "";
 		String strExecuteResult = "";
 		
 		JSONObject outputObj = new JSONObject();
@@ -404,11 +405,13 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			socketLogger.info("Message :: "+commandExec.getMessage());
 			
 			if(commandExec.call().equals("success")){
-				if(actType.equals("A") || actType.equals("R")) strExecuteResult="TC001501";
-				else strExecuteResult="TC001502";
+				strExecuteResult = "TC001501";
+				if(actType.equals("A") || actType.equals("R")) strExecute="TC001501";
+				else strExecute="TC001502";
 			}else{
-				if(actType.equals("A") || actType.equals("R")) strExecuteResult="TC001502";
-				else strExecuteResult="TC001501";
+				strExecuteResult = "TC001502";
+				if(actType.equals("A") || actType.equals("R")) strExecute="TC001502";
+				else strExecute="TC001501";
 			}
 			actHistory.setExe_rslt_cd(strExecuteResult);
 			actHistory.setRslt_msg(commandExec.getMessage());
@@ -418,10 +421,10 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			
 			switch(sysType){
 				case "PROXY" :
-					prySvr.setExe_status(strExecuteResult);
+					prySvr.setExe_status(strExecute);
 					break;
 				case "KEEPALIVED" :
-					prySvr.setKal_exe_status(strExecuteResult);
+					prySvr.setKal_exe_status(strExecute);
 					break;
 			}
 			
@@ -438,7 +441,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 		outputObj.put(ProtocolID.RESULT_DATA, "");
-		outputObj.put(ProtocolID.EXECUTE_RESULT, strExecuteResult);
+		outputObj.put(ProtocolID.EXECUTE_RESULT, strExecute);
 		
 		return outputObj;
 	}
