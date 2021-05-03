@@ -4,6 +4,8 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import java.util.Date;
+
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -41,6 +43,7 @@ public class DXTcontrolProxyExecute extends SocketCtl {
 
     public void start() {
     	String strProxyJobTime = "";
+    	String strProxyMonJobTime = "";
    
 		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 		ProxyServiceImpl service = (ProxyServiceImpl) context.getBean("ProxyService");
@@ -71,7 +74,6 @@ public class DXTcontrolProxyExecute extends SocketCtl {
 			//proxy 설치되어 있는 경우 실행
 			if (!"".equals(proxySetStatus) && !"not installed".equals(proxySetStatus)) {
 				if ("true".equals(proxySetYn)) {
-
 					//스케줄러 실행(proxy 리스너 통계 저장) - 매일 5분에 1번씩 실행
 					strProxyJobTime = "0 0/5 * 1/1 * ? *";
 
@@ -82,10 +84,9 @@ public class DXTcontrolProxyExecute extends SocketCtl {
     	        	scheduler.start();
 
     	        	//스케줄러 실행(proxy 리스너 통계 저장 및 데이터 삭제) - 매일 00시 삭제
-					strProxyJobTime = "0 0 0 1/1 * ? *";
-    	        	//strProxyJobTime = "0 0/1 * 1/1 * ? *";
+    	        	strProxyMonJobTime = "0 0 0 1/1 * ? *";
     	        	JobDetail jobProxyDay = newJob(DXTcontrolProxyExecuteDayChk.class).withIdentity("jobName", "group2").build();
-    	        	CronTrigger triggerMons = newTrigger().withIdentity("trggerName", "group2").withSchedule(cronSchedule(strProxyJobTime)).build(); //매주 월요일 8시
+    	        	CronTrigger triggerMons = newTrigger().withIdentity("trggerName", "group2").withSchedule(cronSchedule(strProxyMonJobTime)).build(); //매주 월요일 8시
     	        	scheduler.scheduleJob(jobProxyDay, triggerMons);
     	        	scheduler.start();
 				}

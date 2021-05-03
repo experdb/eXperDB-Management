@@ -40,7 +40,7 @@ public class DXTcontrolProxyExecuteChk extends SocketCtl implements Job {
 			Map<String, Object> chkParam = new HashMap<String, Object>();
 			chkParam.put("ipadr",strIpadr);
 			chkParam.put("proxySetStatus",proxySetStatus);
-			chkParam.put("real_ins_gbn", "lsn_real_del");
+			chkParam.put("real_ins_gbn", "lsn_real_ins");
 
 			//실시간 등록
 			returnMsg = service.proxyDbmsStatusChk(chkParam); 
