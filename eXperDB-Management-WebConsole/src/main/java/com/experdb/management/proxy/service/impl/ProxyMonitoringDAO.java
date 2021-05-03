@@ -162,5 +162,12 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectPryCngList", pry_svr_id);
 		return result;
 	}
+
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectProxyVipLsnList(int pry_svr_id) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectProxyVipLsnList", pry_svr_id);
+		return result;
+	}
 	
 }

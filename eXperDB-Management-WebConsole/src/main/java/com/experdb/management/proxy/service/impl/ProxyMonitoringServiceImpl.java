@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,35 +208,78 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	/**
 	 * proxy / keepalived 상태 변경
 	 * @param pry_svr_id, type, status, act_exe_type
-	 * @return int
+	 * @return JSONObject
 	 */
 	@Override
-	public int actExeCng(int pry_svr_id, String type, String cur_status, String act_exe_type) {
-		Map<String, Object> param = new HashMap<String, Object>();
-		System.out.println("actExeCng  : " + pry_svr_id);
-		System.out.println("type : " + type);
-		System.out.println("cur_status : " + cur_status);
-		param.put("pry_svr_id", pry_svr_id);
-		if(type.equals("P") || type.equals("PROXY")){
-			param.put("sys_type", "PROXY");
-		} else if(type.equals("K") || type.equals("KEEPALIVED")) {
-			param.put("sys_type", "KEEPALIVED");
-		}
-		if(cur_status.equals("TC001501")){
-			param.put("status", "TC001502");
-			param.put("act_type", "S");
-		} else if (cur_status.equals("TC001502")){
-			param.put("status", "TC001501");
-			param.put("act_type", "R");
-		}
-		param.put("act_exe_type", act_exe_type);
-		param.put("exe_rslt_cd","TC001501");
-		param.put("frst_regr_id", "admin");
-		param.put("lst_mdfr_id", "admin");
-		int result = proxyMonitoringDAO.actExeCng(param);
-		System.out.println("service result : " + result);
+	public JSONObject actExeCng(Map<String, Object> param) throws ConnectException, Exception {
 		
-		return result; 
+		JSONObject jObj = new JSONObject();
+		JSONObject resultObj = new JSONObject();
+		
+		String statusNm = "";
+		
+		boolean executeFlag = false;
+		
+		String resultLog = "";
+		String errMsg = "";
+		
+		String type = (String) param.get("type");
+		int pry_svr_id = (int) param.get("pry_svr_id");
+		String cur_status = (String) param.get("cur_status");
+		String act_exe_type = (String) param.get("act_exe_type");
+		System.out.println(pry_svr_id);
+		Map<String, Object> info = proxyMonitoringDAO.selectConfigurationInfo(pry_svr_id, type);
+		String strIpAdr = (String) info.get("ipadr");
+		String strPort = String.valueOf(info.get("socket_port"));
+		
+		jObj.put("pry_svr_id", pry_svr_id);
+		if(type.equals("P") || type.equals("PROXY")){
+			jObj.put("sys_type", "PROXY");
+		} else if(type.equals("K") || type.equals("KEEPALIVED")) {
+			jObj.put("sys_type", "KEEPALIVED");
+		}
+		
+		if(cur_status.equals("TC001501")){
+			jObj.put("status", "TC001502");
+			jObj.put("act_type", "S");
+			statusNm = "정지";
+		} else if (cur_status.equals("TC001502")){
+			jObj.put("status", "TC001501");
+			jObj.put("act_type", "R");
+			statusNm = "재기동";
+		}
+		jObj.put("act_exe_type", act_exe_type);
+//		jObj.put("exe_rslt_cd","TC001501");
+		jObj.put("lst_mdfr_id", param.get("lst_mdfr_id"));
+		
+		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		Map<String, Object> executeResult = new HashMap<String, Object>();
+		System.out.println(jObj.toJSONString());
+		int PORT = Integer.parseInt(strPort);
+		try {
+			executeResult = cic.proxyServiceExcute(strIpAdr, PORT, jObj);
+		} catch (ConnectException e) {
+			e.printStackTrace();
+		} 
+		
+		if(executeResult != null){
+			if(!cur_status.equals(executeResult.get("EXECUTE_RESULT"))) {
+				executeFlag = true;
+			} else {
+				executeFlag = false;
+			}
+		} else {
+			executeFlag = false;
+		}
+		if(!executeFlag){
+			errMsg = (String) jObj.get("sys_type") + " " + statusNm + " 중 오류가 발생하였습니다.";
+		} else {
+			errMsg = "정상적으로 " + statusNm + "되었습니다.";
+		}
+		resultObj.put("resultLog", resultLog);
+		resultObj.put("result",executeFlag);
+		resultObj.put("errMsg",errMsg);
+		return resultObj; 
 	}
 
 	/**
@@ -252,6 +296,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		
 		String strIpAdr = (String) info.get("ipadr");
 		String strPrySvrNm = (String) info.get("pry_svr_nm");
+		String status = (String) info.get("exe_status");
 //		String strConfigFilePath = (String) info.get("path");
 //		String strDirectory = strConfigFilePath.substring(0, strConfigFilePath.lastIndexOf("/")+1);
 		if(type.equals("PROXY")) { 
@@ -283,6 +328,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		getLogResult = pcic.getLogFile(IP, PORT, jObj);
 		getLogResult.put("pry_svr_nm", strPrySvrNm);
 		getLogResult.put("file_name", strFileName);
+		getLogResult.put("status", status);
 	      
         try{
 			if (getLogResult != null) {
@@ -343,5 +389,9 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	@Override
 	public List<Map<String, Object>> selectPryCngList(int pry_svr_id) {
 		return proxyMonitoringDAO.selectPryCngList(pry_svr_id);
+	}
+	
+	public List<Map<String, Object>> selectProxyVipLsnList(int pry_svr_id) {
+		return proxyMonitoringDAO.selectProxyVipLsnList(pry_svr_id);
 	}
 }

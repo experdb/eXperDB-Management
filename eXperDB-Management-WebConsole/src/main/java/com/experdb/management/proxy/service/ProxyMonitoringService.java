@@ -1,9 +1,12 @@
 package com.experdb.management.proxy.service;
 
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.json.simple.JSONObject;
 
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
@@ -103,9 +106,9 @@ public interface ProxyMonitoringService {
 	/**
 	 * proxy / keepalived 상태 변경
 	 * @param pry_svr_id, type, status, act_exe_type
-	 * @return int
+	 * @return JSONObject
 	 */
-	int actExeCng(int pry_svr_id, String type, String status, String act_exe_type);
+	public JSONObject actExeCng(Map<String, Object> param) throws ConnectException, Exception;
 	
 	/**
 	 * proxy / keepalived log 파일 가져오기
@@ -121,4 +124,5 @@ public interface ProxyMonitoringService {
 	 */
 	List<Map<String, Object>> selectPryCngList(int pry_svr_id);
 	
+	List<Map<String, Object>> selectProxyVipLsnList(int pry_svr_id);
 }

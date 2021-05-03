@@ -1495,10 +1495,10 @@
 	function fnc_confirmMultiRst(gbn){
 		if (gbn == "sys_stop") {
 			//중지
-			fn_actExeCng(cng_pry_svr_id, act_sys_type,"TC001501");
+			fn_actExeCng();
 		}else if (gbn == "sys_start") {
 			//실행
-			fn_actExeCng(cng_pry_svr_id, act_sys_type,"TC001502");
+			fn_actExeCng();
 		}
 	}
 	

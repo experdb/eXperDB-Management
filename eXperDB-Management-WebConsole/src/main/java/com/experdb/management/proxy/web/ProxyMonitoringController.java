@@ -1,6 +1,7 @@
 package com.experdb.management.proxy.web;
 
 import java.io.FileInputStream;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.experdb.management.proxy.service.ProxyLogVO;
@@ -89,10 +91,11 @@ public class ProxyMonitoringController {
 					List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
 					List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
 					List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
-					
+					List<Map<String, Object>> selectProxyVipLsnList = proxyMonitoringService.selectProxyVipLsnList(pry_svr_id);
 					mv.addObject("proxyServerByMasId", proxyServerByMasId);
 					mv.addObject("dbServerConProxy", dbServerConProxy);
 					mv.addObject("proxyLogList",proxyLogList);
+					mv.addObject("proxyVipLsnList", selectProxyVipLsnList);
 				}
 
 				mv.addObject("proxyServerTotInfo", proxyServerTotInfo);
@@ -332,6 +335,7 @@ public class ProxyMonitoringController {
 			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
 			mv.addObject("dwLen", result.get("DW_LEN"));
 			mv.addObject("file_name", result.get("file_name"));
+			mv.addObject("status", result.get("status"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -344,19 +348,37 @@ public class ProxyMonitoringController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping("/actExeCng.do")
-	public ModelAndView actExeCng(HttpServletRequest request){
-		ModelAndView mv = new ModelAndView("jsonView");
+	public @ResponseBody JSONObject actExeCng(HttpServletRequest request){
+		JSONObject resultObj = new JSONObject();
+		HttpSession session = request.getSession();
+		try {
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			Map<String, Object> param = new HashMap<String, Object>();
 		
-		String strPrySvrId = request.getParameter("pry_svr_id");
-		String type = request.getParameter("type");
-		int pry_svr_id = Integer.parseInt(strPrySvrId);
-		String status = request.getParameter("status");
-		String act_exe_type = request.getParameter("act_exe_type");
+			String strPrySvrId = request.getParameter("pry_svr_id");
+			String type = request.getParameter("type");
+			int pry_svr_id = Integer.parseInt(strPrySvrId);
+			String status = request.getParameter("status");
+			String act_exe_type = request.getParameter("act_exe_type");
 		
-		int result = proxyMonitoringService.actExeCng(pry_svr_id, type, status, act_exe_type);
-		System.out.println("result : " +  result);
-		mv.addObject("result", result);
-		return mv;
+			param.put("pry_svr_id", pry_svr_id);
+			param.put("type", type);
+			param.put("cur_status", status);
+			param.put("act_exe_type", act_exe_type);
+			param.put("lst_mdfr_id", loginVo.getUsr_id() == null ? "" : loginVo.getUsr_id().toString());
+			resultObj = proxyMonitoringService.actExeCng(param);
+			System.out.println(resultObj.toJSONString());
+		} catch (ConnectException e) {
+			e.printStackTrace();
+			resultObj.put("errcd", -1);
+			resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultObj.put("errcd", -1);
+			resultObj.put("errmsg", "작업 중 오류가 발생하였습니다.");
+		}
+//		mv.addObject("result", result);
+		return resultObj;
 	}
 	
 	/**

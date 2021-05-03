@@ -82,6 +82,7 @@
 // 					$("#pry_svr_id", "#proxyViewForm").val(pry_svr_id);
 // 					$("#aut_id", "#proxyViewForm").val(aut_id);
 					$("#date", "#proxyViewForm").val(v_date);
+					$("#status", "#proxyViewForm").val(result.status);
 					if(type == 'KEEPALIVED') {
 						$('#log_cng').val("Proxy Log");
 					} else {
@@ -95,13 +96,19 @@
 				}
 // 				dateCalenderSetting();
 				
+
 				if(v_aut_id != 1){
 					$('#start_btn').hide();
 					$('#stop_btn').hide();
 					$('#download_btn').hide();
 				} else {
-					$('#start_btn').show();
-					$('#stop_btn').show();
+					if($("#status", "#proxyViewForm").val() == 'TC001502'){
+						$('#start_btn').show();
+						$('#stop_btn').hide();
+					} else {
+						$('#stop_btn').show();
+						$('#start_btn').hide();
+					}
 					$('#download_btn').show();
 				}
 			}
@@ -141,11 +148,11 @@
 			}).datepicker('setDate', sys_date)
 			.on('hide', function(e) {
 				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
-		    })
-		    .on('changeDate', function(selected){
-	        	$("#date", "#proxyViewForm").val($("#wrk_strt_dtm").val());
-	        	fn_logViewAjax();
-			}); //값 셋팅
+		    });
+// 		    .on('changeDate', function(selected){
+// 	        	$("#date", "#proxyViewForm").val($("#wrk_strt_dtm").val());
+// 	        	fn_logViewAjax();
+// 			}); //값 셋팅
 		}
 
 // 		if ($("#wrk_end_dtm_div").length) {
@@ -161,20 +168,63 @@
 // 	    $('#wrk_end_dtm_div').datepicker('updateDates');
 	}
 	
-	$('input.wrk_strt_dtm').datepicker('option','onSelect',function(){
-	    console.log('select');
-// 	    $("#date", "#proxyViewForm").val();
-	  });
-	
 // 	$('#datepicker').datepicker()
 //     .on("input change", function (e) {
 //     console.log("Date changed: ", e.target.value);
 // 	});
+
+	function fn_date_cng(){
+    	$("#date", "#proxyViewForm").val($("#wrk_strt_dtm").val());
+		$("#dwLen", "#proxyViewForm").val("0");
+		$('#proxylog').scrollTop(0);
+		fn_logViewAjax();
+	}
+
 	/* ********************************************************
-	 * 시스템 기동
-	 ******************************************************** */
-	 function fn_server_start(){
+	 * 시스템 기동 / 중지
+	 ******************************************************** */ 
+	function fn_actExeCng(){
+		var v_pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
+		var v_type = $("#type", "#proxyViewForm").val();
+		var v_status = $("#status", "#proxyViewForm").val();
 		
+		$.ajax({
+			url : '/proxyMonitoring/actExeCng.do',
+			type : 'post',
+			data : {
+				pry_svr_id : v_pry_svr_id,
+				type : v_type,
+				status : v_status,
+				act_exe_type : 'TC004001'
+			},
+			success : function(result) {	
+				console.log(result)
+				console.log(result.result)
+	 			if(result.result){
+	 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
+	 			}else{
+	 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+		 		}
+				rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
+				fn_getProxyInfo(select_pry_svr_id, rowChkCnt);
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				$("#ins_idCheck", "#insProxyListenForm").val("0");
+					
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+		
+		$('#loading').hide();
 	}
 	
 	/* ********************************************************
@@ -306,15 +356,15 @@
 	/* ********************************************************
 	 * confirm 결과에 따른 작업
 	 ******************************************************** */
-// 	function fnc_confirmMultiRst(gbn){
-// 		if (gbn == "sys_stop") {
-// 			//중지
-// 			fn_actExeCng(cng_pry_svr_id, act_sys_type,"TC001501");
-// 		}else if (gbn == "sys_start") {
-// 			//실행
-// 			fn_actExeCng(cng_pry_svr_id, act_sys_type,"TC001502");
-// 		}
-// 	}
+	function fnc_confirmMultiRst(gbn){
+		if (gbn == "sys_stop") {
+			//중지
+			fn_actExeCng();
+		}else if (gbn == "sys_start") {
+			//실행
+			fn_actExeCng();
+		}
+	}
 	
 	 
 	/* *************************************************w*******
@@ -377,6 +427,7 @@
 					<input type="hidden" id="date" name="date">
 					<input type="hidden" id="aut_id" name="aut_id">
 					<input type="hidden" id="todayYN" name="todayYN">
+					<input type="hidden" id="status" name="status">
 					
 					<fieldset>
 						<div class="card" style="margin-top:10px;border:0px;margin-bottom:-40px;">
@@ -393,8 +444,10 @@
 									</div>
 									<div class="col-sm-6">
 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_logViewAjax();" value='<spring:message code="auth_management.viewMore" />' />
-										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_confirm_modal('TC001502')" value="<spring:message code="eXperDB_proxy.act_start"/>" />
-										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_confirm_modal('TC001501')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />
+<%-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_confirm_modal('TC001502')" value="<spring:message code="eXperDB_proxy.act_start"/>" /> --%>
+										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_actExeCng()" value="<spring:message code="eXperDB_proxy.act_start"/>" />
+<%-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_confirm_modal('TC001501')" value="<spring:message code="eXperDB_proxy.act_stop"/>" /> --%>
+										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_actExeCng()" value="<spring:message code="eXperDB_proxy.act_stop"/>" />
 <%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value="<spring:message code="eXperDB_proxy.act_start"/>" /> --%>
 <%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_stop();" value="<spring:message code="eXperDB_proxy.act_stop"/>" /> --%>
 									</div>
@@ -407,7 +460,7 @@
 									</div>
 									<div class="col-sm-2" style="margin-left:-17px;">
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" readonly>
+											<input type="text" class="form-control totDatepicker" style="height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" onchange="fn_date_cng()" readonly>
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 											</span>
@@ -450,7 +503,9 @@
 			</div>
 
 			<div class="top-modal-footer" style="text-align: center !important;" >
-				<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_proxyLogViewPopcl();"><spring:message code="common.close"/></button>
+<%-- 				<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_proxyLogViewPopcl();"><spring:message code="common.close"/></button> --%>
+				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+			
 			</div>
 		</div>
 	</div>

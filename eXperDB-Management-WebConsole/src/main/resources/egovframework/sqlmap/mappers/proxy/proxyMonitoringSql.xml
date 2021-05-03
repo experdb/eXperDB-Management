@@ -168,11 +168,13 @@
 			(ROW_NUMBER() OVER()) AS IDX,
 			tpsi.PRY_SVR_ID,
 			tpsi.IPADR,
-		<if test='type == "P"'>
+		<if test='type == "P" or type == "PROXY"'>
 			tpsi.PRY_PTH AS PATH,
+			tpsi.EXE_STATUS as EXE_STATUS,
         </if>
-        <if test='type == "K"'>
+        <if test='type == "K" or type == "KEEPALIVED"'>
 			tpsi.KAL_PTH AS PATH,
+			tpsi.KAL_EXE_STATUS as EXE_STATUS,
         </if>
         	tpsi.PRY_SVR_NM,
         	tpai.SOCKET_PORT
@@ -486,5 +488,17 @@
 		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
 		ORDER BY LST_MDF_DTM DESC
 		LIMIT 5
+	</select>
+	
+	<select id="selectProxyVipLsnList" parameterType="int" resultType="hashMap">
+		select tpsi.pry_svr_nm, tpsi.master_gbn, tpsi.pry_svr_id , tpvi.v_ip, array_agg(tpli.lsn_nm) as lsn_nm_list
+from t_pry_svr_i tpsi 
+join t_pry_lsn_i tpli on tpli.pry_svr_id = tpsi.pry_svr_id 
+join t_pry_vipcng_i tpvi on tpli.pry_svr_id = tpsi.pry_svr_id and tpsi.pry_svr_id = tpvi.pry_svr_id 
+WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
+and tpvi.v_ip_exe_status = 'TC001501'
+group by tpsi.pry_svr_nm ,tpsi.master_gbn, tpsi.pry_svr_id , tpvi.v_ip
+
 	</select>
 </mapper>
