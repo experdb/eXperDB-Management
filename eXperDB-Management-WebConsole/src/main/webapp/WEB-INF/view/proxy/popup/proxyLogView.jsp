@@ -187,19 +187,36 @@
 	/* ********************************************************
 	 * log download 셋팅
 	 ******************************************************** */
-	function fn_download(){
+	function fn_pry_log_download(){
+		var v_type = $("#type", "#proxyViewForm").val();
+		
+		location.href="/proxyMonitoring/logDownload.do?file_type="+v_type;
+	}
+
+	
+	/* ********************************************************
+	 * log download 셋팅
+	 ******************************************************** */
+	function fn_pry_log_download_old(){
+		location.href="/proxyMonitoring/logDownload.do?file_name="+v_file_name;
+/* 		var v_pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
+		var v_type = $("#type", "#proxyViewForm").val();
+
 		var v_file_name = document.getElementById("view_file_name").innerText;
-		console.log(v_file_name);
+		alert(v_type);
 		$.ajax({
-			url : '/proxyMonitoring/logDownload.do',
+			url : "/proxyMonitoring/logDownload.do",
 			dataType : "json",
-			type : 'post',
-			data : {
-				pry_svr_id : pry_svr_id,
-				type : type,
-				file_name : v_file_name
+			type : "post",
+ 			data : {
+				pry_svr_id : v_pry_svr_id,
+ 				type : v_type,
+ 				file_name : v_file_name
+ 			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
 			},
-			success : function(result) {	
+			success : function(result) {
 				console.log(result);
 			},
 			error : function(xhr, status, error) {
@@ -212,8 +229,9 @@
 				}
 			}
 		});
-		$('#loading').hide();
+		$('#loading').hide(); */
 	}
+	
 	
 	/* ********************************************************
 	* 시스템 기동 정지 / 시작
@@ -341,7 +359,7 @@
 				<div class="col-sm-3">
 					
 <!-- 				<button type="button" class="btn btn-success btn-sm btn-icon-text" style="margin-left:70px;" onclick="fn_download()"> -->
-					<button type="button" class="btn btn-outline-success btn-icon-text" id="download_btn" style="margin-left:50px;" onclick="fn_download()">
+					<button type="button" class="btn btn-outline-success btn-icon-text" id="download_btn" style="margin-left:50px;" onclick="fn_pry_log_download()">
 						<i class='ti-download btn-icon-prepend' >
 						&nbsp;<spring:message code='migration.download' /></i>
 					</button>

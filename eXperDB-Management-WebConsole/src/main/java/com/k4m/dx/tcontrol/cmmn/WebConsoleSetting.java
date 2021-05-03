@@ -61,6 +61,7 @@ public class WebConsoleSetting {
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 		
 		String strProxyYN="";	//proxy 사용여부
+		String strProxyPath="";
 		
 		/* 사용언어 */
 		System.out.println("Language(ko:Korean), (en:English) :");
@@ -229,6 +230,14 @@ public class WebConsoleSetting {
 			}
 		}
 
+		//proxy_log_path
+		if(strProxyYN.equals("Y")){
+			System.out.println("eXperDB-Proxy log_path(/home/experdb/app/eXperDB-Management/eXperDB-Proxy):");
+			strProxyPath = scan.nextLine();
+			if(strProxyPath.equals("")) {
+				strProxyPath = "/home/experdb/app/eXperDB-Management/eXperDB-Proxy";
+			}
+		}
 
 		/* Scale in/out 사용여부 */
 		System.out.println("Whether to enable eXperDB-Scale settings? (y, n)");
@@ -433,7 +442,11 @@ public class WebConsoleSetting {
 		    }
 
 		    prop.setProperty("proxy.useyn", strProxyYN);
-		    
+
+			if(strProxyYN.equals("Y")){
+		    	 prop.setProperty("proxy_path", strProxyPath);	
+			}
+				
 		    prop.setProperty("db2pg_path", strDb2pgPath);
 
 		    if(strEnctyptYn.equals("Y")){
