@@ -60,7 +60,8 @@
 		$("#storagePath").val("").prop("disabled", false);
 		fn_storageTypeSelect();
 		
-		// concurrent backup job reset
+		
+		/* // concurrent backup job reset
 		$(':input:radio[name=currBckJob]:checked').val("noLimit");
 		fn_bckJobLimClick();
 		
@@ -80,7 +81,7 @@
 		$("#passWordAlert").empty();
 		$("#storagePathAlert").empty();
 		
-		$("#isSUserDiv").hide();
+		$("#isSUserDiv").hide(); */
 	}
 
 	/* ********************************************************
@@ -89,6 +90,7 @@
 	function fn_modiReset(result){
 		$("#storageType").val(result.type).prop("disabled", true);
 		$("#userName").val(result.backupDestUser);
+		storageValid = false;
 		$("#passWord").val("");
 		$("#isSUserDiv").hide();
 		fn_storageTypeSelect();
@@ -148,6 +150,32 @@
 			/* $("#userName").prop("disabled", false);
 			$("#passWord").prop("disabled", false); */
 		}
+		$("#storagePath").val("");
+		$("#userName").val("");
+		$("#passWord").val("");
+		$("#storageUser").val("");
+		
+		// concurrent backup job reset
+		$(':input:radio[name=currBckJob]:checked').val("noLimit");
+		fn_bckJobLimClick();
+		
+		// run script reset
+		$("#runScript").prop('checked', false);
+		fn_runScriptClick();
+
+		$("#ModalLabel_Reg").show();
+		$("#ModalLabel_Modi").hide();
+		
+		$("#regButton").show();
+		$("#modiButton").hide();
+		$("#storageChkBtn_Reg").show();
+		$("#storageChkBtn_Modi").hide();
+
+		$("#userNameAlert").empty();
+		$("#passWordAlert").empty();
+		$("#storagePathAlert").empty();
+		
+		$("#isSUserDiv").hide();
 	}
 	
 	/* ********************************************************
@@ -210,7 +238,7 @@
 					  showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success');
 					  $('#pop_layer_popup_backupStorageReg').modal("hide");
 				  }else if(result.RESULT_CODE == "2"){
-					  showSwalIcon('<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'error');
+					  showSwalIcon('<spring:message code="eXperDB_backup.msg89" />', '<spring:message code="common.close" />', '', 'error');
 				  }else{
 					  showSwalIcon("ERROR Message : "+ result.RESULT_DATA+ "\n\n", '<spring:message code="common.close" />', '', 'error');
 				  }
@@ -416,6 +444,7 @@
 		 var storagePath = $("#storagePath").val();
 		$("#storagePathAlert").empty();
 		fn_checkUrl(storagePath);
+		storageValid = false;
 		 // path duplication check
 		if(fn_dupCheckPath()){
 			$("#storagePathAlert").append("<spring:message code='eXperDB_backup.msg37' />");
@@ -465,6 +494,7 @@
 	 function fn_valChkName(){
 		 var userName = $("#userName").val().replace(/ /g, '');
 		 $("#userNameAlert").empty();
+			storageValid = false;
 		if(!userName){
 			$("#userName").val("");
 			$("#userNameAlert").append("<spring:message code='eXperDB_backup.msg39' />");
@@ -472,7 +502,6 @@
 			$("#userName").focus();
 			return false;
 		}else{
-			storageValid = false;
 			return true;
 		}
 	 }
@@ -481,6 +510,7 @@
 	 function fn_valChkPW() {
 		 var password = $("#passWord").val().replace(/ /g, '');
 		 $("#passWordAlert").empty();
+			storageValid = false;
 		if(!password){
 			$("#passWord").val("");
 			$("#passWordAlert").append("<spring:message code='message.msg88'/>");
@@ -488,7 +518,6 @@
 			$("#passWord").focus();
 			return false;
 		}else{
-			storageValid = false;
 			return true;
 		}
 	 }
@@ -624,7 +653,7 @@
 														<input type="number" id="runScriptNum" class="form-control form-control-sm" style="height: 30px;"/>
 													</div>
 													<div class="col-2" style="padding-left: 0px; margin-left: 10px;">
-														<select name="runScriptUnit" id="runScriptUnit"  class="form-control form-control-xsm" style="width:100px; height:30px;">
+														<select name="runScriptUnit" id="runScriptUnit"  class="form-control form-control-xsm" style="width:100px; height:30px; color:#333333;">
 															<option value="1">%</option>
 															<option value="2">MB</option>
 															<option value="0" hidden></option>

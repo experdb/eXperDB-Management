@@ -1004,7 +1004,7 @@ table.dataTable.ccc thead th{
 							</div>
 						</div>
 					</div>
-					<div style="position: absolute;top:365px; right:660px; width:215px;">					
+					<div style="position: absolute;top:365px; right:735px; width:150px;">					
 						<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
 							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg22" />
 						</h4>
