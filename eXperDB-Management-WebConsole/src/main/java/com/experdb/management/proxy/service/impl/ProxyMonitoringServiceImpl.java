@@ -1,16 +1,22 @@
 package com.experdb.management.proxy.service.impl;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
-import com.experdb.management.proxy.cmmn.ProxyClientAdapter;
 import com.experdb.management.proxy.cmmn.ProxyClientInfoCmmn;
 import com.experdb.management.proxy.cmmn.ProxyClientProtocolID;
 import com.experdb.management.proxy.cmmn.ProxyClientTranCodeType;
@@ -18,8 +24,6 @@ import com.experdb.management.proxy.service.ProxyLogVO;
 import com.experdb.management.proxy.service.ProxyMonitoringService;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.impl.AccessHistoryDAO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
 
@@ -49,6 +53,8 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	@Resource(name = "cmmnServerInfoDAO")
 	private CmmnServerInfoDAO cmmnServerInfoDAO;
 	
+	@Resource(name = "proxySettingDAO")
+	private ProxySettingDAO proxySettingDAO;
 	
 	
 	/**
@@ -239,6 +245,9 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	 */
 	@Override
 	public Map<String, Object> getLogFile(int pry_svr_id, String type, Map<String, Object> param) throws Exception{
+		Properties props = new Properties();
+		props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+
 		Map<String, Object> info = proxyMonitoringDAO.selectConfigurationInfo(pry_svr_id, type);
 		
 		String strIpAdr = (String) info.get("ipadr");
@@ -274,7 +283,55 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		getLogResult = pcic.getLogFile(IP, PORT, jObj);
 		getLogResult.put("pry_svr_nm", strPrySvrNm);
 		getLogResult.put("file_name", strFileName);
-		
+	      
+        try{
+			if (getLogResult != null) {
+				if (getLogResult.get("RESULT_DATA") != null) {
+					String file_path = "";
+					if (props.get("proxy_path") != null) {
+						file_path = props.get("proxy_path").toString();
+					}
+					
+					String file_name = "";
+					
+					File Folder = new File(file_path);
+		        	if (!Folder.exists()) {
+		        		try{
+		        		    Folder.mkdir(); //폴더 생성
+		        	    }catch(Exception e){
+		        		    e.getStackTrace();
+		        		}  
+		        	}
+					
+					if (type.equals("haproxy")) {
+						file_name = "/haproxy.log";
+					} else {
+						file_name = "/keepalived.log";
+					}
+					
+					File file = new File(file_path + file_name);
+
+					if (!file.exists()) {
+					    try {
+					        file.createNewFile(); //파일 생성
+					    } catch (IOException e) {
+					        e.printStackTrace();
+					    }
+					}
+
+					BufferedWriter fw = new BufferedWriter(new FileWriter(file_path+file_name, true));
+
+					fw.write(getLogResult.get("RESULT_DATA").toString());
+					fw.flush();
+					
+			        // 객체 닫기
+		            fw.close();
+				}
+			}
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
 		return getLogResult;
 	}
 	
@@ -287,7 +344,4 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	public List<Map<String, Object>> selectPryCngList(int pry_svr_id) {
 		return proxyMonitoringDAO.selectPryCngList(pry_svr_id);
 	}
-
-
-	
 }

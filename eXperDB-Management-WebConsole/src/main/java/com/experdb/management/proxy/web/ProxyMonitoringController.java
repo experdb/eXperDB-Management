@@ -4,8 +4,8 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,22 +14,16 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.experdb.management.proxy.cmmn.ProxyClientAdapter;
 import com.experdb.management.proxy.service.ProxyLogVO;
 import com.experdb.management.proxy.service.ProxyMonitoringService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
-import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.history.web.DownloadView;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
@@ -331,11 +325,10 @@ public class ProxyMonitoringController {
 			param.put("todayYN", todayYN);
 			Map<String, Object> result = proxyMonitoringService.getLogFile(pry_svr_id, type, param);
 			strBuffer = (String) result.get("RESULT_DATA"); 
+			System.out.println("strBuffer====" + strBuffer);
+
 //			strBuffer = strBuffer.replaceAll("\n", "<br>");
 			mv.addObject("data", strBuffer);
-			if(strBuffer != null) {
-				mv.addObject("fSize", strBuffer.length());
-			}
 			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
 			mv.addObject("dwLen", result.get("DW_LEN"));
 			mv.addObject("file_name", result.get("file_name"));
@@ -385,12 +378,44 @@ public class ProxyMonitoringController {
 		return mv;
 	}
 	
-	/**
-	 * proxy / keepalived log 파일 다운로드
-	 * @param request, response
-	 */
 	@RequestMapping("/logDownload.do")
-	public int logDownload(HttpServletRequest request, HttpServletResponse response) {
+	public  void logDownload(HttpServletRequest request, HttpServletResponse response){
+		Properties props = new Properties();
+
+		try {
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+			
+			//파일경로입력
+			String file_type = request.getParameter("file_type");
+			String file_name = "";
+			String file_path = "";
+			
+			if(file_type.equals("PROXY")) { 
+				file_type = "haproxy";
+			}
+	
+			if (file_type.equals("haproxy")) {
+				file_name = "/haproxy.log";
+			} else {
+				file_name = "/keepalived.log";
+			}
+			
+			if (props.get("proxy_path") != null) {
+				file_path = props.get("proxy_path").toString();
+			}
+			
+			
+			String viewFileNm = file_name;
+
+			DownloadView fileDown = new DownloadView(); //파일다운로드 객체생성
+			fileDown.filDown(request, response, file_path, file_name, viewFileNm); //파일다운로드 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}		
+	
+	public int logDownload1(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("파일명=" + request.getParameter("file_name"));
 
 		// System.out.println("파일경로=" +request.getParameter("path"));
