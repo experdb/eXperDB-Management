@@ -605,6 +605,7 @@ function fn_nodeRegPopup() {
 				var row = new Object();
 				row.mountOn = volumeDataList[i].mountOn;
 				row.filesystem = volumeDataList[i].filesystem;
+				row.type = volumeDataList[i].type;
 				volumeSet.push(row);
 			}
 			$.ajax({

@@ -131,7 +131,7 @@ public class JobVolume{
 		            		
 		            		// type 엘리먼트
 		            		Element type = doc.createElement("type");
-		            		type.appendChild(doc.createTextNode("xfs"));
+		            		type.appendChild(doc.createTextNode(volume.getType()));
 		            		excludeVolumes.appendChild(type);
 		            	}
 		            }

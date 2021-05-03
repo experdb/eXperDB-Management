@@ -284,6 +284,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			JSONObject obj = (JSONObject) volumeJson.get(i);
 			v.setMountOn(obj.get("mountOn").toString());
 			v.setFileSystem(obj.get("filesystem").toString());
+			v.setType(obj.get("type").toString());
 			volumeList.add(v);
 		}
 		
