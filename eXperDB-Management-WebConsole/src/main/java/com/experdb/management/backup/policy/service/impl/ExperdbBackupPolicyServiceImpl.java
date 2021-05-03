@@ -132,7 +132,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		// 5. volume 데이터 정리
 		for(VolumeVO volume : backupVolumes){
 			Map <String, Object> volumeMap = new HashMap<>();
-			volumeMap.put("fileSystem", volume.getFileSystem());
+			volumeMap.put("filesystem", volume.getFileSystem());
 			volumeMap.put("mountOn", volume.getMountOn());
 			
 			volumeList.add(volumeMap);
@@ -283,7 +283,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 			VolumeVO v = new VolumeVO();
 			JSONObject obj = (JSONObject) volumeJson.get(i);
 			v.setMountOn(obj.get("mountOn").toString());
-			v.setFileSystem(obj.get("filesystem"	).toString());
+			v.setFileSystem(obj.get("filesystem").toString());
 			volumeList.add(v);
 		}
 		

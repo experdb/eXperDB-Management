@@ -177,8 +177,6 @@ function fn_scheduleReset(){
 	schThu.length = 0;
 	schFri.length = 0;
 	schSat.length = 0;
-	
-	
 
 	fn_drawScheduleList();
 }
