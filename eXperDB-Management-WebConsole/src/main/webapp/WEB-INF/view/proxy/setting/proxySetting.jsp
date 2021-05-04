@@ -404,8 +404,8 @@
 			//정보 불러오기
 			var selRow = proxyServerTable.row('.selected').data();
 			selPrySvrId = selRow.pry_svr_id;
-			selVipUseYn = selRow.kal_install_yn;
-			
+			selVipUseYn = nvlPrmSet(selRow.kal_install_yn, "N");
+
 			//vip 사용 여부에 따라 disable
 			fn_inable_kal_use(selVipUseYn);
 			//설정 정보 불러오기
@@ -482,7 +482,7 @@
 							//정보 불러오기
 							var selRow = proxyServerTable.row('.selected').data();
 							selPrySvrId = selRow.pry_svr_id;
-							selVipUseYn = selRow.kal_install_yn;
+							selVipUseYn = nvlPrmSet(selRow.kal_install_yn, "N");
 							//설정 정보 불러오기
 							fn_server_conf_info();
 						}
@@ -1044,7 +1044,7 @@
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
 		}else{//수정
 			console.log(tempSetData);
-			$("#svrReg_kal_install_yn", "#svrRegProxyServerForm" ).val(tempSetData.kal_install_yn);
+			$("#svrReg_kal_install_yn", "#svrRegProxyServerForm" ).val(nvlPrmSet(tempSetData.kal_install_yn, "N"));
 			$("#svrReg_exe_status", "#svrRegProxyServerForm" ).val(tempSetData.exe_status);
 			$("#svrReg_kal_exe_status", "#svrRegProxyServerForm" ).val(tempSetData.kal_exe_status);
 			$("#ModalProxyServer").text('<spring:message code="eXperDB_proxy.server_modify"/>');
@@ -1616,9 +1616,11 @@
 			}else{
 				if(proxyListenTable.rows().data().length > 0){
 					var vipUseYn = selVipUseYn;
+
 					if(vipUseYn == "N" || (vipUseYn == "Y" && vipInstTable.rows().data().length > 0)){
 						fn_multiConfirmModal("apply");
 					}else{
+						
 						showSwalIcon('등록된 가상 IP 정보가 없습니다.', '<spring:message code="common.close" />', '', 'error');
 						selectTab('detail');
 					}

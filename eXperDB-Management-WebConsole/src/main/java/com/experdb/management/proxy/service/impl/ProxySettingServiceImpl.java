@@ -253,103 +253,106 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	public JSONObject runProxyService(Map<String, Object> param) throws ConnectException, Exception {
-		JSONObject resultObj = new JSONObject();
+	   public JSONObject runProxyService(Map<String, Object> param) throws ConnectException, Exception {
+		      JSONObject resultObj = new JSONObject();
 
-		int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
-		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
-		String status = param.get("status").toString();
-		String actType = param.get("act_type").toString();
-		String statusNm = "";
-		
-		boolean proxyExecute = false;
-		boolean keepaExecute = true;
-		
-		String resultLog = "";
-		String errMsg = "";
-		
-		ProxyServerVO proxyServerVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
-		String kalUseYn = proxyServerVO.getKal_install_yn();
-		
-		//Agent 접속 정보 추출 
-		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
-		Map<String, Object> proxyExecuteResult = new  HashMap<String, Object>();
-		Map<String, Object> keepaExecuteResult = new  HashMap<String, Object>();
-		
-		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
-		JSONObject agentJobj = new JSONObject();
-		agentJobj.put("act_type", actType);
-		
-		if("S".equals(actType)){
-			statusNm = "정지";
-		}else if("A".equals(actType)){
-			statusNm = "기동";
-		}else if("R".equals(actType)){
-			statusNm = "재기동";
-		}
-		
-		agentJobj.put("pry_svr_id", prySvrId);
-		agentJobj.put("lst_mdfr_id", lst_mdfr_id);
-		
-		try{
-			agentJobj.put("sys_type", "PROXY");
-			proxyExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
-		}catch(ConnectException e){
-			throw e;
-		}
-		
-		if (proxyExecuteResult != null) {
-			System.out.println(proxyExecuteResult.toString());
-			if (status.equals(proxyExecuteResult.get("EXECUTE_RESULT"))) {
-				proxyExecute = true;
-			}else{
-				proxyExecute = false;
-			}
-		}else{
-			proxyExecute = false;
-		}
-		
-		//keepalived는 설치 여부에 따라 실행을 하지 않을 수 있음
-		if(kalUseYn.equals("Y")){
-			try{
-				agentJobj.remove("sys_type");
-				agentJobj.put("sys_type", "KEEPALIVED");
-				keepaExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
-			}catch(ConnectException e){
-				throw e;
-			}
-			
-			if (keepaExecuteResult != null) {
-				System.out.println(keepaExecuteResult.toString());
-				if (status.equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
-					keepaExecute = true;
-				}else{
-					keepaExecute = false;
-				}
-			}else{
-				keepaExecute = false;
-			}
-		}
-		
-		if(!proxyExecute || !keepaExecute){
-			if(!proxyExecute){
-				errMsg = "Proxy";
-			}
-			if(!keepaExecute){
-				if(!errMsg.equals("")) errMsg += " / Keepalived";
-				else errMsg += "Keepalived";	
-			}
-			errMsg +=statusNm +" 중 오류가 발생하였습니다.";
-		}else{
-			errMsg = "정상적으로 "+statusNm+"되었습니다.";
-		}
-		
-		resultObj.put("resultLog", resultLog);
-		resultObj.put("result",(proxyExecute && keepaExecute));
-		resultObj.put("errMsg",errMsg);
-		
-		return resultObj;
-	}
+		      int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
+		      String lst_mdfr_id = param.get("lst_mdfr_id").toString();
+		      String status = param.get("status").toString();
+		      String actType = param.get("act_type").toString();
+		      String statusNm = "";
+		      
+		      boolean proxyExecute = false;
+		      boolean keepaExecute = true;
+		      
+		      String resultLog = "";
+		      String errMsg = "";
+		      
+		      ProxyServerVO proxyServerVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
+		      String kalUseYn = "";
+		      if (proxyServerVO.getKal_install_yn() != null) {
+		         kalUseYn = proxyServerVO.getKal_install_yn();
+		      }
+
+		      //Agent 접속 정보 추출 
+		      ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+		      Map<String, Object> proxyExecuteResult = new  HashMap<String, Object>();
+		      Map<String, Object> keepaExecuteResult = new  HashMap<String, Object>();
+		      
+		      ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		      JSONObject agentJobj = new JSONObject();
+		      agentJobj.put("act_type", actType);
+		      
+		      if("S".equals(actType)){
+		         statusNm = "정지";
+		      }else if("A".equals(actType)){
+		         statusNm = "기동";
+		      }else if("R".equals(actType)){
+		         statusNm = "재기동";
+		      }
+		      
+		      agentJobj.put("pry_svr_id", prySvrId);
+		      agentJobj.put("lst_mdfr_id", lst_mdfr_id);
+		      
+		      try{
+		         agentJobj.put("sys_type", "PROXY");
+		         proxyExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+		      }catch(ConnectException e){
+		         throw e;
+		      }
+		      
+		      if (proxyExecuteResult != null) {
+		         System.out.println(proxyExecuteResult.toString());
+		         if (status.equals(proxyExecuteResult.get("EXECUTE_RESULT"))) {
+		            proxyExecute = true;
+		         }else{
+		            proxyExecute = false;
+		         }
+		      }else{
+		         proxyExecute = false;
+		      }
+
+		      //keepalived는 설치 여부에 따라 실행을 하지 않을 수 있음
+		      if(kalUseYn.equals("Y")){
+		         try{
+		            agentJobj.remove("sys_type");
+		            agentJobj.put("sys_type", "KEEPALIVED");
+		            keepaExecuteResult = cic.proxyServiceExcute(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+		         }catch(ConnectException e){
+		            throw e;
+		         }
+		         
+		         if (keepaExecuteResult != null) {
+		            System.out.println(keepaExecuteResult.toString());
+		            if (status.equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
+		               keepaExecute = true;
+		            }else{
+		               keepaExecute = false;
+		            }
+		         }else{
+		            keepaExecute = false;
+		         }
+		      }
+		      
+		      if(!proxyExecute || !keepaExecute){
+		         if(!proxyExecute){
+		            errMsg = "Proxy";
+		         }
+		         if(!keepaExecute){
+		            if(!errMsg.equals("")) errMsg += " / Keepalived";
+		            else errMsg += "Keepalived";   
+		         }
+		         errMsg +=statusNm +" 중 오류가 발생하였습니다.";
+		      }else{
+		         errMsg = "정상적으로 "+statusNm+"되었습니다.";
+		      }
+		      
+		      resultObj.put("resultLog", resultLog);
+		      resultObj.put("result",(proxyExecute && keepaExecute));
+		      resultObj.put("errMsg",errMsg);
+		      
+		      return resultObj;
+		   }
 	
 	/**
 	 * Proxy 서버 연결 테스트
@@ -442,6 +445,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			String ipadr = param.get("ipadr").toString();
 			String lst_mdfr_id = param.get("lst_mdfr_id").toString();
 			String master_gbn = param.get("master_gbn").toString();
+			String kal_install_yn = param.get("kal_install_yn").toString();
 
 			pryAgtVO.setAgt_sn(agt_sn);
 			pryAgtVO.setIpadr(ipadr);
@@ -463,7 +467,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			prySvrVO.setLst_mdfr_id(lst_mdfr_id);
 			prySvrVO.setFrst_regr_id(lst_mdfr_id);
 			prySvrVO.setIpadr(param.get("ipadr").toString());
-
+			prySvrVO.setKal_install_yn(kal_install_yn);
 			//agent update
 			proxySettingDAO.updateProxyAgentInfo(pryAgtVO);
 
@@ -702,7 +706,27 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				
 				//UPDATE/INSERT PROXY LISTENER
 				proxySettingDAO.insertUpdatePryListener(listener[i]);
-
+				
+				if(listenerObj.get("lsn_svr_del_list") != null){
+					JSONArray delListnSvrArry = (JSONArray) listenerObj.get("lsn_svr_del_list"); 
+					int delListnSvrSize = delListnSvrArry.size();
+					
+					if (delListnSvrSize > 0) {
+						ProxyListenerServerVO delListnSvr[] = new ProxyListenerServerVO[delListnSvrSize];
+						for(int j=0; j<delListnSvrSize; j++){
+							JSONObject delListnSvrObj = (JSONObject)delListnSvrArry.get(j);
+							delListnSvr[j] = new ProxyListenerServerVO();
+							delListnSvr[j].setPry_svr_id(prySvrId);
+							delListnSvr[j].setLsn_id(getIntOfJsonObj(delListnSvrObj, "lsn_id"));
+							delListnSvr[j].setLsn_svr_id(getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
+							delListnSvr[j].setDb_con_addr(getStringOfJsonObj(delListnSvrObj, "db_con_addr"));
+							
+							//delete proxy listener server list
+							proxySettingDAO.deletePryListenerSvr(delListnSvr[j]);
+						}
+					}
+				}
+				
 				if(listenerObj.get("lsn_svr_edit_list") != null){
 					JSONArray listnSvrArry = (JSONArray) listenerObj.get("lsn_svr_edit_list");
 					int listnSvrSize = listnSvrArry.size();
@@ -734,26 +758,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 							
 							//UPDATE/INSERT PROXY LISTENER Server List
 							proxySettingDAO.insertUpdatePryListenerSvr(listnSvr[j]);
-						}
-					}
-				}
-				
-				if(listenerObj.get("lsn_svr_del_list") != null){
-					JSONArray delListnSvrArry = (JSONArray) listenerObj.get("lsn_svr_del_list"); 
-					int delListnSvrSize = delListnSvrArry.size();
-					
-					if (delListnSvrSize > 0) {
-						ProxyListenerServerVO delListnSvr[] = new ProxyListenerServerVO[delListnSvrSize];
-						for(int j=0; j<delListnSvrSize; j++){
-							JSONObject delListnSvrObj = (JSONObject)delListnSvrArry.get(j);
-							delListnSvr[j] = new ProxyListenerServerVO();
-							delListnSvr[j].setPry_svr_id(prySvrId);
-							delListnSvr[j].setLsn_id(getIntOfJsonObj(delListnSvrObj, "lsn_id"));
-							delListnSvr[j].setLsn_svr_id(getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
-							delListnSvr[j].setDb_con_addr(getStringOfJsonObj(delListnSvrObj, "db_con_addr"));
-							
-							//delete proxy listener server list
-							proxySettingDAO.deletePryListenerSvr(delListnSvr[j]);
 						}
 					}
 				}

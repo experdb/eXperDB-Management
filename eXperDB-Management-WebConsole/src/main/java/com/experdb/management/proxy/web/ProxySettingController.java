@@ -619,7 +619,7 @@ public class ProxySettingController {
 				paramMap.put("master_gbn", request.getParameter("master_gbn")==null ? "" : request.getParameter("master_gbn").toString());
 				paramMap.put("master_svr_id", request.getParameter("master_svr_id")==null ? "" : request.getParameter("master_svr_id").toString());
 				paramMap.put("db_svr_id", request.getParameter("db_svr_id")==null ? "" : request.getParameter("db_svr_id").toString());
-				paramMap.put("kal_install_yn", request.getParameter("kal_install_yn")==null ? "" : request.getParameter("kal_install_yn").toString());
+				paramMap.put("kal_install_yn", request.getParameter("kal_install_yn")==null ? "N" : request.getParameter("kal_install_yn").toString());
 
 				resultObj = proxySettingService.proxyServerReg(paramMap);
 				

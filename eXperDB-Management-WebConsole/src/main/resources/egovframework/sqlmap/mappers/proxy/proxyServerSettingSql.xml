@@ -824,6 +824,7 @@
            	 <if test='kal_install_yn != null and (kal_install_yn eq "N".toString())'>
            	  , MASTER_GBN = 'M'
               , MASTER_SVR_ID = null
+              , OLD_MASTER_GBN = 'M'
            	 </if>
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
