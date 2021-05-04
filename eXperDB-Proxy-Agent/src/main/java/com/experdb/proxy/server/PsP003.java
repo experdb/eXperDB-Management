@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
-import com.experdb.proxy.db.repository.service.ProxyGetFileService;
-import com.experdb.proxy.db.repository.service.ProxyGetFileServiceImpl;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
@@ -22,7 +20,7 @@ import com.experdb.proxy.util.FileUtil;
 /**
  *
  * @author 윤정 매니저
- * @see Proxy config 파일 불러오기
+ * @see proxy config 파일 불러오기
  * 
  *  <pre>
  * == 개정이력(Modification Information) ==
@@ -60,17 +58,21 @@ public class PsP003 extends SocketCtl{
 		try {
 
 			String strReadLine = (String) jObj.get(ProtocolID.READLINE);
-			String strSeek = (String) jObj.get(ProtocolID.SEEK);
+//			String strSeek = (String) jObj.get(ProtocolID.SEEK);
 			String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
 
 			int intDwlen = Integer.parseInt(dwLen);
 			int intReadLine = Integer.parseInt(strReadLine);
 			int intLastLine = intDwlen;
+			
+			if(intDwlen == 0){
+				intLastLine = intReadLine;
+			}
 
 			String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
 			File inFile = new File(strConfigFileDir, strFileName);
 
-			HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(strReadLine), Integer.parseInt(strSeek), intLastLine);
+			HashMap hp = FileUtil.getRandomAccessFileView(inFile, intReadLine, Integer.parseInt("0"), intLastLine);
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
