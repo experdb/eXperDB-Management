@@ -326,7 +326,10 @@
 			, EXE_STATUS
 			, KAL_EXE_STATUS
 			, MASTER_GBN
+			<if test='master_gbn != null' >
 			, MASTER_SVR_ID
+			, OLD_MASTER_GBN
+			</if>
 			, DB_SVR_ID
 			, DAY_DATA_DEL_TERM
 			, MIN_DATA_DEL_TERM
@@ -346,14 +349,14 @@
 			, 'TC001502'::character varying
 			, 'TC001502'::character varying
 			, #{master_gbn}
-			
            <if test='master_gbn != null and (master_gbn eq "B".toString())'>
             , #{master_svr_id}::numeric
+            , 'B'
            </if>
            <if test='master_gbn != null and (master_gbn eq "M".toString())'>
              , null
+             , 'M'
            </if>
-
 			, #{db_svr_id}::numeric
 			, #{day_data_del_term}::numeric
 			, #{min_data_del_term}::numeric

@@ -49,6 +49,8 @@
 	
 	var usrId = '${usr_id}';
 	
+	var runValid = true;
+	
 	function fn_init() {
 		proxyServerTable = $('#proxyServer').DataTable({
 			scrollY : "330px",
@@ -64,8 +66,8 @@
 			            {data : "status", defaultContent : "",
 			            	render: function (data, type, full){
 			            		var html = "";
-								var playHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="fn_multiConfirmModal(\'stop\')" checked>';
-								var stopHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="fn_multiConfirmModal(\'start\')">';
+								var playHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="onclick_runBtn();" checked>';
+								var stopHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="onclick_runBtn();">';
 								//TC001501 실행
 								//TC001502 중지
 								html += '<div class="onoffswitch">';
@@ -173,8 +175,8 @@
 		proxyServerTable.tables().header().to$().find('th:eq(14)').css('min-width', '0px');//서버 ID
 		proxyServerTable.tables().header().to$().find('th:eq(15)').css('min-width', '0px');//EXE_STATUS
 		proxyServerTable.tables().header().to$().find('th:eq(16)').css('min-width', '0px');//kal_EXE_STATUS
-		proxyServerTable.tables().header().to$().find('th:eq(17)').css('min-width', '0px');//kal_EXE_STATUS
-		proxyServerTable.tables().header().to$().find('th:eq(18)').css('min-width', '0px');//kal_EXE_STATUS
+		proxyServerTable.tables().header().to$().find('th:eq(17)').css('min-width', '0px');//kal_install_yn
+		proxyServerTable.tables().header().to$().find('th:eq(18)').css('min-width', '0px');//kal_install_switch
 		
 		$('#proxyServer tbody').on('dblclick','tr',function() {
 			if (!$(this).hasClass('selected')){	        	
@@ -231,12 +233,13 @@
 		vipInstTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px');//가상 IP
 		vipInstTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px');//가상 라우터 id
 		vipInstTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');//가상 인터페이스 명
-		vipInstTable.tables().header().to$().find('th:eq(4)').css('min-width', '50px');//우선순위
-		vipInstTable.tables().header().to$().find('th:eq(5)').css('min-width', '50px');//체크 시간
-		vipInstTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');//최종 수정자
-		vipInstTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px');//최종 수정일
-		vipInstTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');//VIP 설정 ID
-		vipInstTable.tables().header().to$().find('th:eq(9)').css('min-width', '0px');//서버 ID
+		vipInstTable.tables().header().to$().find('th:eq(4)').css('min-width', '0px');//우선순위
+		vipInstTable.tables().header().to$().find('th:eq(5)').css('min-width', '50px');//우선순위 render
+		vipInstTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');//체크 시간
+		vipInstTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px');//최종 수정자
+		vipInstTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');//최종 수정일
+		vipInstTable.tables().header().to$().find('th:eq(9)').css('min-width', '0px');//VIP 설정 ID
+		vipInstTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');//서버 ID
 		
 		$('#vipInstance tbody').on('click','tr',function() {
 			if ( !$(this).hasClass('selected') ){	        	
@@ -329,7 +332,30 @@
 			}
 		},500);  
 	}
-	
+	/* ********************************************************
+     * 기동 상태 버튼 클릭 이벤트 
+    ******************************************************** */		
+	function onclick_runBtn(){
+		//false면 기동, //true면 중지
+		setTimeout(function(){
+			var playBtnVal = $("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
+			
+			if((runValid == true) && (selAgentConnect == true)){
+				if(playBtnVal == true){
+					fn_multiConfirmModal('start');
+				}else{
+					fn_multiConfirmModal('stop');
+				}
+			}else{
+				$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", !playBtnVal);
+				if(runValid == false){
+					showSwalIcon('설정에 문제가 있어 기동/정지가 불가능합니다.', '<spring:message code="common.close" />', '', 'error');
+				}/* else if(selAgentConnect == false){
+					showSwalIcon('Agent 상태를 확인해주세요. 현재 기동/정지가 불가능합니다.', '<spring:message code="common.close" />', '', 'error');
+				} */
+			}
+		},500);  
+	}
 	/* ********************************************************
      * TAB 선택 이벤트 
     ******************************************************** */		
@@ -496,7 +522,7 @@
 	        rules: {
 	        	glb_obj_ip: {
 					required: function(){
-						var vipUseYn =proxyServerTable.row(selPrySvrRow).data().kal_install_yn;
+						var vipUseYn =proxyServerTable.row('.selected').data().kal_install_yn;
 						if(vipUseYn == 'Y') return true;
 						else return false;
 					},
@@ -504,14 +530,14 @@
 				},
 				glb_if_nm: {
 					required: function(){
-						var vipUseYn =proxyServerTable.row(selPrySvrRow).data().kal_install_yn;
+						var vipUseYn =proxyServerTable.row('.selected').data().kal_install_yn;
 						if(vipUseYn == 'Y') return true;
 						else return false;
 					}
 				},
 				glb_peer_server_ip: {
 					required: function(){
-						var vipUseYn =proxyServerTable.row(selPrySvrRow).data().kal_install_yn;
+						var vipUseYn =proxyServerTable.row('.selected').data().kal_install_yn;
 						if(vipUseYn == 'Y') return true;
 						else return false;
 					},
@@ -605,8 +631,8 @@
 					}
 				},
 	 			success : function(result) {
+	 				runValid = true;
 	 				if(result.errcd > -1){
-	 					
 	 					var vipUseYn = proxyServerTable.row('.selected').data().kal_install_yn;
 	 					
 	 					//전역변수로 저장
@@ -619,6 +645,7 @@
 	 					selAgentInterface =result.interf;
 		 				if(selProxyListenerList.length ==0 || selGlobalInfo == null || (vipUseYn == 'Y' && selVipInstanceList.length==0) ){
 		 					$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg12" />');
+		 					runValid = false;
 						}
 		 				//Global 설정 불러오기
 	 					load_global_info(result.global_info);
@@ -645,7 +672,7 @@
 			 			}else if(result.errcd==1){
 			 				selAgentConnect = false;
 			 				$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg21" />');
-							fn_btn_setEnable2("disabled");
+			 				fn_btn_setEnable2("disabled");
 			 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
 			 			}else if(result.errcd==2){
 			 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
@@ -673,13 +700,28 @@
 	
  	/* ********************************************************
      * Global 설정 불러오기
-    ******************************************************** */		
+    ******************************************************** */
     function load_global_info(data){
     	if(data !=null){
-	    	$("#glb_pry_glb_id", "#globalInfoForm").val(data.pry_glb_id);
+    		$("#glb_pry_glb_id", "#globalInfoForm").val(data.pry_glb_id);
 	    	$("#glb_obj_ip", "#globalInfoForm").val(data.obj_ip);
-	    	$("#glb_if_nm", "#globalInfoForm").val(data.if_nm);
-	    	$("#glb_peer_server_ip", "#globalInfoForm").val(data.peer_server_ip);
+	    	if(data.if_nm == null || data.if_nm == "") $("#glb_if_nm", "#globalInfoForm").val(selAgentInterface);
+	    	else $("#glb_if_nm", "#globalInfoForm").val(data.if_nm);
+	    	if(data.peer_server_ip == null || data.peer_server_ip == "") {
+	    		var tempDatas = proxyServerTable.rows().data();
+	    		var selTempData = proxyServerTable.row('.selected').data();
+	    		if(selTempData.master_gbn=="B"){ 
+		    		for(var i=0; i<tempDatas.length; i++){
+		    			if(tempDatas[i].pry_svr_id == selTempData.master_svr_id){
+		    				$("#glb_peer_server_ip", "#globalInfoForm").val(tempDatas[i].ipadr);
+		    			}
+		    		}
+	    		}else{
+	    			$("#glb_peer_server_ip", "#globalInfoForm").val("");
+    			}
+	    	}else{
+	    		$("#glb_peer_server_ip", "#globalInfoForm").val(data.peer_server_ip);
+	    	}
 	    	$("#glb_max_con_cnt", "#globalInfoForm").val(data.max_con_cnt);
 	    	
 	    	setTimeOutData("glb_cl_con_max_tm", data.cl_con_max_tm);
@@ -943,8 +985,8 @@
 		$("#svrMod_ipadr", "#svrRegProxyServerForm").hide();//ipadr
 		$("#svrMod_ipadr", "#svrRegProxyServerForm").val($("#svrReg_ipadr", "#svrRegProxyServerForm").val());//ipadr
 
-		//$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("disabled");
-		//$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("readonly");
+		$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("disabled");
+		$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").removeAttr("readonly");
 		$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
 		$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
 		
@@ -982,7 +1024,7 @@
 		
 		if(mode=="reg"){//등록
 			
-			$("#svrReg_kal_install_yn", "#svrRegProxyServerForm" ).val("N");
+			$("#svrReg_kal_install_yn", "#svrRegProxyServerForm" ).val("Y");
 			$("#svrReg_exe_status", "#svrRegProxyServerForm" ).val("TC001502");
 			$("#svrReg_kal_exe_status", "#svrRegProxyServerForm" ).val("TC001502");
 			$("#ModalProxyServer").text('<spring:message code="eXperDB_proxy.server_reg"/>');
@@ -1000,6 +1042,7 @@
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
 		}else{//수정
+			console.log(tempSetData);
 			$("#svrReg_kal_install_yn", "#svrRegProxyServerForm" ).val(tempSetData.kal_install_yn);
 			$("#svrReg_exe_status", "#svrRegProxyServerForm" ).val(tempSetData.exe_status);
 			$("#svrReg_kal_exe_status", "#svrRegProxyServerForm" ).val(tempSetData.kal_exe_status);
@@ -1142,7 +1185,7 @@
 	 			}
  				fn_init_global_value();
  				//검색
-				fn_serverList_search();
+				fn_serverList_search(); 
  			}
  		});
 		
@@ -1403,6 +1446,7 @@
 			$("#instReg_v_if_nm option:eq(0)").prop("selected", true);
 		}
 	}
+	
 	/* ********************************************************
 	 * Vip Instance 삭제
 	 ******************************************************** */
@@ -1692,12 +1736,14 @@
 		//수정상테 관련 변수 초기화
 			$('#modYn').val("N");
 			$("#warning_init_detail_info").html('');
+			
 			//전역변수 초기화
 			selConfInfo = null; //선택한 상세 정보 초기화
 			selListenerInfo = null; //선택한 Listener 목록
 			delVipInstRows = new Array();//삭제한 Vip Instance 목록
 			delListenerRows = new Array();//삭제한 Listener 목록
 			delListnerSvrRows = new Array();//삭제한 Listener Server List 목록 
+			//runValid = true;
 	}
 	
 	/* ********************************************************
@@ -2074,7 +2120,7 @@
 										<th width="100"><spring:message code="eXperDB_proxy.vip" /></th>
 										<th width="100"><spring:message code="eXperDB_proxy.vip_router" /></th>
 										<th width="100"><spring:message code="eXperDB_proxy.vip_interface" /></th>
-										<th width="50"><spring:message code="eXperDB_proxy.vip_priority" /></th>
+										<th width="0"><spring:message code="eXperDB_proxy.vip_priority" /></th>
 										<th width="50"><spring:message code="eXperDB_proxy.vip_priority" /></th>
 										<th width="50"><spring:message code="eXperDB_proxy.vip_check_tm" /></th>
 										<th width="0">최종 수정자</th>
