@@ -96,6 +96,7 @@
 	function fn_proxyConfigViewPopcl() {
 		var contentsGbn_chk = $("#contents_gbn", "#configForm").val();
 		$('#config').scrollTop(0);
+		$("#config", "#configForm").html("");
 		$("#pop_layer_config_view").modal("hide");
 		
 		if (contentsGbn_chk != null && contentsGbn_chk != "") {

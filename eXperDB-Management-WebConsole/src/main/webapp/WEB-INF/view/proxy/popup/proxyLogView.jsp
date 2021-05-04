@@ -184,7 +184,7 @@
 	}
 
 	/* ********************************************************
-	 * 시스템 기동 / 중지
+	 * 시스템 기동 / 정지
 	 ******************************************************** */ 
 	function fn_actExeCng(){
 		var v_pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
@@ -315,7 +315,7 @@
 // 	}
 	
 	/* ********************************************************
-	 * 기동-중지 확인창
+	 * 기동-정지 확인창
 	 ******************************************************** */
 	function fn_confirm_modal(act_status){
 		console.log(act_status)
@@ -328,7 +328,7 @@
 		if (act_status == "TC001501") {
 			var gbn = "sys_stop";
 			if(act_sys_type == "PROXY") {
-				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.status_down"/>';
 				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15"/>'));
 			} else {
 				confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
@@ -443,7 +443,7 @@
 <%-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_confirm_modal('TC001502')" value="<spring:message code="eXperDB_proxy.act_start"/>" /> --%>
 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_actExeCng()" value="<spring:message code="eXperDB_proxy.act_start"/>" />
 <%-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_confirm_modal('TC001501')" value="<spring:message code="eXperDB_proxy.act_stop"/>" /> --%>
-										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_actExeCng()" value="<spring:message code="eXperDB_proxy.act_stop"/>" />
+										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_actExeCng()" value="<spring:message code="eXperDB_proxy.status_down"/>" />
 <%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value="<spring:message code="eXperDB_proxy.act_start"/>" /> --%>
 <%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_stop();" value="<spring:message code="eXperDB_proxy.act_stop"/>" /> --%>
 									</div>

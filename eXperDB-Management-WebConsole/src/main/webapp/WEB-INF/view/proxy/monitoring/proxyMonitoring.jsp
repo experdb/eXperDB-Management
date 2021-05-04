@@ -296,6 +296,8 @@
 		// 프록시 서버 모니터링 setting
 		fn_proxyMonInfo(result);
 
+// 		fn_proxyMonInfo2(result);
+
 		// 프록시 연결 db 모니터링 setting
 		fn_dbMonInfo(result);
 
@@ -548,57 +550,57 @@
 	function fn_proxyMonInfo2(result){
 		var html = "";
 		$("#proxy_master_nm").text("");
-
-// 		if (result.proxyServerByMasId != null && result.proxyServerByMasId.length > 0) {
-// 			$(result.proxyServerByMasId).each(function (index, item) {
-// 				html += '		<p class="card-title" style="margin-bottom:5px;margin-left:10px;">\n';
-// 				html += '			<i class="item-icon fa fa-toggle-right text-info"></i>\n';
-// 				html += '			&nbsp;<spring:message code="eXperDB_proxy.vip"/>\n';
-// 				html += '			<i class="item-icon fa fa-toggle-right text-info" style="padding-left:65px;"></i>\n';
-// 				html += '			&nbsp;<spring:message code="eXperDB_proxy.server"/>\n';
-// 				html += '		</p>\n';
-// 				html += '		<table class="bg-inverse-info">';
-// 				html += '			<tr>';
-// 				html += '				<td>';
-// 				html += '				</td>';
-// 				html += '				<td style="padding-left:30px;  text-align:center;">';
-// 				html += '					<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
-// 				if(item.master_gbn == "M") {
-// 					$("#proxy_master_nm").text(item.pry_svr_nm);
-// 					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-// 						html += '												<div class="badge badge-pill badge-success" title="">M</div>\n';
-// 					} else {
-// 						html += '												<div class="badge badge-pill badge-danger" title="">M</div>\n';
-// 					}
-// 					master_state = nvlPrmSet(item.agt_cndt_cd, '');
-// 				} else if(item.master_gbn == "B"){
-// 					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-// 						html += '												<div class="badge badge-pill badge-success">B</div>\n'
-// 					} else {
-// 						html += '												<div class="badge badge-pill badge-danger">B</div>\n'
-// 					}
-// 				} else {
-// 					html += '											<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">\n';
-// 				}
-// 				html += '												'+item.pry_svr_nm+'\n';
-// 				if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-// 					html += '						<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt"></i>&nbsp;&nbsp;&nbsp;&nbsp;';
-// 				} else if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001502'){
-// 					html += '						<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db pry_agt"></i>&nbsp;&nbsp;&nbsp;&nbsp;';
-// 				}
-// 				html += '					</h5>';
-// 				html += '				</td>';
-// 				html += '			</tr>';
-// 				html += '			<tr>';
-// 				html += '				<td rowspan="2">';
-// 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:1px;">';
-// 				html += '						VIP<br>';
-// 				html += '						<ul>';
-// 				html += '							<li>192.168.50.115</li>';
-// 				html += '						</ul>';
-// 				html += '					</h6>';
-// 				html += '				</td>';
-// 				html += '				<td style="padding-left:30px; text-align:center;">';
+		console.log(result)
+		if (result.proxyVipLsnList != null && result.proxyVipLsnList.length > 0) {
+			$(result.proxyVipLsnList).each(function (index, item) {
+				html += '		<p class="card-title" style="margin-bottom:5px;margin-left:10px;">\n';
+				html += '			<i class="item-icon fa fa-toggle-right text-info"></i>\n';
+				html += '			&nbsp;<spring:message code="eXperDB_proxy.vip"/>\n';
+				html += '			<i class="item-icon fa fa-toggle-right text-info" style="padding-left:65px;"></i>\n';
+				html += '			&nbsp;<spring:message code="eXperDB_proxy.server"/>\n';
+				html += '		</p>\n';
+				html += '		<table class="bg-inverse-info">';
+				html += '			<tr>';
+				html += '				<td>';
+				html += '				</td>';
+				html += '				<td style="padding-left:30px;  text-align:center;">';
+				html += '					<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
+				if(item.master_gbn == "M") {
+					$("#proxy_master_nm").text(item.pry_svr_nm);
+					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
+						html += '												<div class="badge badge-pill badge-success" title="">M</div>\n';
+					} else {
+						html += '												<div class="badge badge-pill badge-danger" title="">M</div>\n';
+					}
+					master_state = nvlPrmSet(item.agt_cndt_cd, '');
+				} else if(item.master_gbn == "B"){
+					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
+						html += '												<div class="badge badge-pill badge-success">B</div>\n'
+					} else {
+						html += '												<div class="badge badge-pill badge-danger">B</div>\n'
+					}
+				} else {
+					html += '											<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">\n';
+				}
+				html += '												'+item.pry_svr_nm+'\n';
+				if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
+					html += '						<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt"></i>&nbsp;&nbsp;&nbsp;&nbsp;';
+				} else if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001502'){
+					html += '						<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db pry_agt"></i>&nbsp;&nbsp;&nbsp;&nbsp;';
+				}
+				html += '					</h5>';
+				html += '				</td>';
+				html += '			</tr>';
+				html += '			<tr>';
+				html += '				<td rowspan="2">';
+				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:1px;">';
+				html += '						VIP<br>';
+				html += '						<ul>';
+				html += '							<li>192.168.50.115</li>';
+				html += '						</ul>';
+				html += '					</h6>';
+				html += '				</td>';
+				html += '				<td style="padding-left:30px; text-align:center;">';
 // 				for(var i = 0; i < item.lsn_nm_list.length(); i++){
 // 					if(i == 0){
 // 						html += '					<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>';	
@@ -608,25 +610,25 @@
 // 						html += '				</td>';
 // 						html += '			</tr>';
 // 					} else {
-// 						html += '			<tr>';
-// 						html += '				<td style="padding-left:30px;  text-align:center;">';
-// 						html += '					<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>';
-// 						html += '					<h6 class="text-info">';
-// 						html += '						'item.lsn_nm_list[i];
-// 						html += '					</h6>';
-// 						html += '				</td>';
-// 						html += '			</tr>';
+						html += '			<tr>';
+						html += '				<td style="padding-left:30px;  text-align:center;">';
+						html += '					<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>';
+						html += '					<h6 class="text-info">';
+						html += '						'+item.lsn_nm;
+						html += '					</h6>';
+						html += '				</td>';
+						html += '			</tr>';
 // 					}
 // 				} 
-// 				html += '		</table>';
-// 			}
-// 		}
-		
-		// $("#proxyMonitoringList").html(html);
-
-		if (master_state == 'TC001501') {
- 			setInterval(iDatabase_toggle, 5000);
+				html += '		</table>';
+			});
 		}
+		
+		$("#proxyMonitoringList").html(html);
+
+// 		if (master_state == 'TC001501') {
+//  			setInterval(iDatabase_toggle, 5000);
+// 		}
 	}
 	
 	/* ********************************************************
@@ -1334,6 +1336,8 @@
 	 * config 파일 view popup
 	 ******************************************************** */
 	function fn_configView(pry_svr_id, type){
+		console.log(pry_svr_id)
+		console.log(type)
 		$.ajax({
 			url : '/proxyMonitoring/configView.do',
 			type : 'post',
@@ -1733,6 +1737,82 @@
 											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
 													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
+														<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
+															<i class="item-icon fa fa-toggle-right text-info"></i>
+															&nbsp;<spring:message code="eXperDB_proxy.vip"/> 
+															<i class="item-icon fa fa-toggle-right text-info" style="padding-left:65px;"></i>
+															&nbsp;<spring:message code="eXperDB_proxy.server"/>
+														</p>
+														<table class="bg-inverse-info">
+															<tr>
+																<td>
+																</td>
+																<td style="padding-left:30px;  text-align:center;">
+																<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">
+																	<div class="badge badge-pill badge-success" title="">M</div> <a href="#" onclick="fn_configView(1, 'P')">vip_primary_proxy_1</a>
+																	<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt"></i>
+																	&nbsp;&nbsp;&nbsp;&nbsp;
+																</h5>
+																</td>
+															</tr>
+															<tr>
+																<td rowspan="2">
+																	<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:1px;">
+																	<a href="#" onclick="fn_configView(1, 'K')">VIP</a><br>
+																	<ul>
+																	<li>192.168.50.115</li>
+																	</ul>
+																	</h6>
+																</td>
+																<td style="padding-left:30px; text-align:center;">
+																	<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>
+																	<h6 class="text-info">
+<!-- 																	<i class="fa fa-refresh fa-spin text-success icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i> -->
+																		pgReadWrite
+																	</h6>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding-left:30px;  text-align:center;">
+																	<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>
+																	<h6 class="text-info">
+<!-- 																	<i class="fa fa-refresh fa-spin text-success icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i> -->
+																		pgReadOnly
+																	</h6>
+																</td>
+															</tr>
+															<tr>
+																<td></td>
+																<td style="padding-left:30px;  text-align:center;">
+																<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">
+																	<div class="badge badge-pill badge-success" title="">B</div> <a href="#" onclick="fn_configView(2, 'P')">vip_primary_proxy_2</a>
+																	<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt"></i>
+																</h5>
+																</td>
+															</tr>
+															<tr>
+																<td rowspan="2">
+																	<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:1px;">
+																	<a href="#" onclick="fn_configView(2, 'K')">VIP</a><br>
+																	<ul>
+																		<li>192.168.50.116</li>
+																	</ul>
+																	</h6>
+																</td>
+																<td style="padding-left:30px; text-align:center;">
+																	<i class="mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; "></i>
+																	<h6 class="text-muted"><i class="fa fa-refresh fa-spin text-success icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>
+																	<a href="#" onclick="fn_configView()">pgReadWrite</a></h6>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding-left:30px; text-align:center;">
+																	<i class="mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>
+																	<h6 class="text-muted"><i class="fa fa-refresh fa-spin text-success icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>
+																	<a href="#" onclick="fn_configView()">pgReadOnly</a></h6>
+																</td>
+															</tr>
+														</table>
 													</div>
 												</div>
 											</div>
@@ -1743,7 +1823,7 @@
 												<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="listenerDbConnect">
 												<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
 															<i class="item-icon fa fa-toggle-right text-info"></i>
-															&nbsp;<spring:message code="eXperDB_proxy.listener_detail_info"/>
+															&nbsp;리스너 연결 상태
 														</p>
 													<table>
 														<tr><td style="padding:20px;"><i class="mdi mdi-arrow-right icon-md mb-0 mb-md-3 mb-xl-0 text-success " style="font-size: 3em;margin-top:10px; text-align:center;"></i></td></tr>
