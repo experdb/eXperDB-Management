@@ -161,34 +161,27 @@
 	/* ********************************************************
      * 우선순위가 가장 높은 걸 자동으로 Master로 변경, 그 외 State 모두 Backup으로 수정
     ******************************************************** */
-	function master_gbn_auto_edit(){
+    function master_gbn_auto_edit(){
+		var sortedPriority = vipInstTable.column(getColIndex(vipInstTable, "priority")).data().sort();
+		var newPriority = new Array();
 		var dataLen = vipInstTable.rows().data().length;
-		var maxPriority;
-		var maxindex;
-		//가장 우선순위가 높은 row index 찾기
+		
 		for(var i=0; i<dataLen; i++){
-			if(i==0){
-				maxPriority = vipInstTable.row(i).data().priority;
-				maxindex = 0;
-			}else{
-				if(maxPriority < vipInstTable.row(i).data().priority){
-					
-					maxPriority = vipInstTable.row(i).data().priority;
-					maxindex = i;
+			for(var j=0; j<dataLen; j++){
+				if(sortedPriority[j] == vipInstTable.row(i).data().priority) {
+					newPriority[i] = weightInit-(dataLen-j);
 				}
 			}
+			if(i == (dataLen-1)) vipInstTable.row(i).data().state_nm ="MASTER";
+			else vipInstTable.row(i).data().state_nm ="BACKUP";
 		}
-		//MASTER/BACKUP 수정
+		
 		for(var i=0; i<dataLen; i++){
-			if(maxindex == i){
-				vipInstTable.row(i).data().state_nm ="MASTER";
-			}else{
-				vipInstTable.row(i).data().state_nm ="BACKUP";
-			}
+			vipInstTable.row(i).data().priority = newPriority[i];
 		}
-		var tempData = vipInstTable.rows().data();
+		var tempTableDatas = vipInstTable.rows().data();
 		vipInstTable.clear().draw();
-		vipInstTable.rows.add(tempData).draw();
+		vipInstTable.rows.add(tempTableDatas).draw();
 	}
 	/* ********************************************************
      * 등록 후 저장 클릭 시 
@@ -260,6 +253,14 @@
 	}
 	function fn_change_priority_sel(){
 		$("#instReg_priority", "#insVipInstForm").val(weightInit - $("#instReg_priority_sel", "#insVipInstForm").val());
+	}
+	function getColIndex(table, dataStr){
+		var colIndexs = table.columns().indexes();
+		var colIndexSize = colIndexs.length;
+		
+		for(var i=0; i< colIndexSize; i++){
+			if(table.column(colIndexs[i]).dataSrc() ==  dataStr) return i;
+		}
 	}
 </script>
 <div class="modal fade" id="pop_layer_proxy_inst_reg" tabindex="-1" role="dialog" aria-labelledby="ModalVipInstance" aria-hidden="true" data-backdrop="static" data-keyboard="false">
