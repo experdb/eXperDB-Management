@@ -1061,7 +1061,7 @@
 		}
 		
 		if($("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked")){
-			$("#warning_init_svr_reg").html("&nbsp;&nbsp;&nbsp;&nbsp; * 기동 중에는 수정이 불가능합니다.");
+			$("#warning_init_svr_reg").html("&nbsp;&nbsp;&nbsp;&nbsp; <spring:message code='eXperDB_proxy.msg27'/>");
 			$("#svrReg_save_submit", "#svrRegProxyServerForm").attr("disabled",true);
 			$("#svrReg_day_data_del_term", "#svrRegProxyServerForm" ).attr("disabled",true);
 			$("#svrReg_min_data_del_term", "#svrRegProxyServerForm" ).attr("disabled",true);
@@ -1114,13 +1114,11 @@
 			confirm_title = '<spring:message code="eXperDB_proxy.conf_apply" />';//'Proxy 설정 적용'
 			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg18" />'));
 		}else if (gbn == "use_end") {
-			confirm_title = "가상 IP 사용 중지";//'<spring:message code="eXperDB_proxy.act_stop" />';//'Proxy 중지';
-			$('#confirm_multi_msg').html("가상 IP를 사용하지 않겠습니까? <br/>등록된 가상 IP가 모두 삭제되며 ,<br/>Keepalived 기동이 중지됩니다.");
-			//$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15" />'));
+			confirm_title = '<spring:message code="eXperDB_proxy.vip_disable" />';
+			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg30" />'));
 		}else if (gbn == "use_start") {
-			confirm_title = "가상 IP 사용 ";//'<spring:message code="eXperDB_proxy.act_start" />';//'Proxy 실행';
-			$('#confirm_multi_msg').html("가상 IP를 사용하시겠습니까?");
-			//$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16" />'));
+			confirm_title = '<spring:message code="eXperDB_proxy.vip_enable" />';
+			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg31" />'));
 		}
 		
 		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
@@ -1636,11 +1634,11 @@
 						fn_multiConfirmModal("apply");
 					}else{
 						
-						showSwalIcon('등록된 가상 IP 정보가 없습니다.', '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon('<spring:message code="eXperDB_proxy.msg28"/>', '<spring:message code="common.close" />', '', 'error');
 						selectTab('detail');
 					}
 				}else{
-					showSwalIcon('등록된 Listener 정보가 없습니다.', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="eXperDB_proxy.msg29"/>', '<spring:message code="common.close" />', '', 'error');
 					selectTab('detail');
 				}
 			}
