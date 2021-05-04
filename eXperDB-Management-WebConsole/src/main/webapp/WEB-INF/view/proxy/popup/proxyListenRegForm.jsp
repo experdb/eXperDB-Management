@@ -291,8 +291,8 @@ function fn_serverListTable_init() {
 			"con_bind_port" : $("#lstnReg_con_bind_ip", "#insProxyListenForm").val()+":"+$("#lstnReg_con_bind_port", "#insProxyListenForm").val(),
 			"lsn_desc" : $("#lstnReg_lsn_desc", "#insProxyListenForm").val(),
 			"db_usr_id" : $("#lstnReg_db_usr_id", "#insProxyListenForm").val(),
-			"db_id" : parseInt($("#lstnReg_db_id", "#insProxyListenForm").val()),
-			"db_nm" : $("#lstnReg_db_nm", "#insProxyListenForm").val(),
+			"db_id" : parseInt($("#lstnReg_db_nm", "#insProxyListenForm").val()),
+			"db_nm" : $("#lstnReg_db_nm", "#insProxyListenForm").children("option:selected").text(),
 			"con_sim_query" : $("#lstnReg_con_sim_query", "#insProxyListenForm").val(),
 			"field_val" : $("#lstnReg_field_val", "#insProxyListenForm").val(),
 			"field_nm" : $("#lstnReg_field_nm", "#insProxyListenForm").val(),
@@ -320,8 +320,8 @@ function fn_serverListTable_init() {
 				oriData[i].con_bind_port = $("#lstnReg_con_bind_ip", "#insProxyListenForm").val()+":"+$("#lstnReg_con_bind_port", "#insProxyListenForm").val();
 				oriData[i].lsn_desc = $("#lstnReg_lsn_desc", "#insProxyListenForm").val();
 				oriData[i].db_usr_id = $("#lstnReg_db_usr_id", "#insProxyListenForm").val();
-				oriData[i].db_nm = $("#lstnReg_db_nm", "#insProxyListenForm").val();
-				oriData[i].db_id = parseInt($("#lstnReg_db_id", "#insProxyListenForm").val());
+				oriData[i].db_nm = $("#lstnReg_db_nm", "#insProxyListenForm").children("option:selected").text();
+				oriData[i].db_id = parseInt($("#lstnReg_db_nm", "#insProxyListenForm").val());
 				oriData[i].field_val = $("#lstnReg_field_val", "#insProxyListenForm").val();
 				oriData[i].field_nm = $("#lstnReg_field_nm", "#insProxyListenForm").val();
 				oriData[i].con_sim_query = $("#lstnReg_con_sim_query", "#insProxyListenForm").val();
@@ -500,6 +500,10 @@ function fn_serverListTable_init() {
 		$("#lstnReg_con_bind_ip", "#insProxyListenForm").val($("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val());
 	}
 	
+	function fn_db_nm_change(){
+		$("#lstnReg_db_id", "#insProxyListenForm").val($("#lstnReg_db_nm", "#insProxyListenForm").val());
+	}
+	
 </script>
 
 <div class="modal fade" id="pop_layer_ip_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; z-index: 1060;">
@@ -548,6 +552,7 @@ function fn_serverListTable_init() {
 
 <div class="modal fade" id="pop_layer_proxy_listen_reg" tabindex="-1" role="dialog" aria-labelledby="ModalProxyListen" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">
+	<form class="cmxform" id="insProxyListenForm">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalProxyListen" style="padding-left:5px;">
@@ -555,14 +560,13 @@ function fn_serverListTable_init() {
 				</h4>
 				
 				<div class="card" style="margin-top:10px;border:0px;">
-					<form class="cmxform" id="insProxyListenForm">
 						<input type="hidden" name="lstnReg_pry_svr_id" id="lstnReg_pry_svr_id"/>
 						<input type="hidden" name="lstnReg_lsn_id" id="lstnReg_lsn_id"/>
 						<input type="hidden" name="lstnReg_db_id" id="lstnReg_db_id"/>
 						<input type="hidden" name="lstnReg_mode" id="lstnReg_mode"/>
 						<input type="hidden" name="lstnReg_db_usr_id" id="lstnReg_db_usr_id" value="reqmgr"/>
 						<input type="hidden" name="lstnReg_field_val" id="lstnReg_field_val"/>
-						<input type="hidden" name="lstnReg_field_nm" id=lstnReg_field_nm/>
+						<input type="hidden" name="lstnReg_field_nm" id="lstnReg_field_nm"/>
 						<fieldset>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
@@ -632,7 +636,7 @@ function fn_serverListTable_init() {
 										<spring:message code="eXperDB_proxy.database" />(*)
 									</label>
 									<div class="col-sm-3">
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" tabindex=4 >
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" onchange="fn_db_nm_change();" tabindex=4 >
 										</select>
 									</div>
 									<label for="lstnReg_con_sim_query" class="col-sm-2 col-form-label-sm pop-label-index">
@@ -688,9 +692,9 @@ function fn_serverListTable_init() {
 								<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 							</div>
 						</fieldset>
-					</form>
 				</div>
 			</div>
 		</div>
+		</form>
 	</div>
 </div>

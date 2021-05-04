@@ -515,9 +515,10 @@ var mgmtDbmsTable = null;
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 80px 330px;">
 		<div class="modal-content" style="width:1040px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
-				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalProxyServer" style="padding-left:5px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalProxyServer" style="padding:0 5px 5px 0;">
 					<spring:message code="eXperDB_proxy.server_reg"/>
 				</h4>
+				<h4 class="text-danger" id="warning_init_svr_reg" style="font-size: 0.875rem;"></h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="svrRegProxyServerForm">
 						<input type="hidden" id="svrReg_mode" name="svrReg_mode">

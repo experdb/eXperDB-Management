@@ -677,6 +677,26 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			}
 		}
 		
+		JSONArray delListnJArray = (JSONArray)confData.get("delListener");
+		int delListnSize = delListnJArray.size();
+		
+		if (delListnSize > 0) {
+			ProxyListenerVO delListn[] = new ProxyListenerVO[delListnSize];
+			for(int i=0; i<delListnSize; i++){
+				JSONObject delListnObj = (JSONObject)delListnJArray.get(i);
+				delListn[i] = new ProxyListenerVO();
+				delListn[i].setPry_svr_id(prySvrId);
+				delListn[i].setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
+				
+				ProxyListenerServerVO delListnSvr = new ProxyListenerServerVO();
+				delListnSvr.setPry_svr_id(prySvrId);
+				delListnSvr.setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
+				proxySettingDAO.deletePryListenerSvr(delListnSvr);
+				//delete proxy listener
+				proxySettingDAO.deletePryListener(delListn[i]);
+			}
+		}
+		
 		JSONArray listenerJArray = (JSONArray)confData.get("listener");
 		int listenerSize = listenerJArray.size();
 		
@@ -761,26 +781,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 						}
 					}
 				}
-			}
-		}
-		
-		JSONArray delListnJArray = (JSONArray)confData.get("delListener");
-		int delListnSize = delListnJArray.size();
-		
-		if (delListnSize > 0) {
-			ProxyListenerVO delListn[] = new ProxyListenerVO[delListnSize];
-			for(int i=0; i<delListnSize; i++){
-				JSONObject delListnObj = (JSONObject)delListnJArray.get(i);
-				delListn[i] = new ProxyListenerVO();
-				delListn[i].setPry_svr_id(prySvrId);
-				delListn[i].setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
-				
-				ProxyListenerServerVO delListnSvr = new ProxyListenerServerVO();
-				delListnSvr.setPry_svr_id(prySvrId);
-				delListnSvr.setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
-				proxySettingDAO.deletePryListenerSvr(delListnSvr);
-				//delete proxy listener
-				proxySettingDAO.deletePryListener(delListn[i]);
 			}
 		}
 		

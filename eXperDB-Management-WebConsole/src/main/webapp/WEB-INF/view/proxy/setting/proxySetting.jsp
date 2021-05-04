@@ -664,7 +664,7 @@
 						$("#lstnReg_db_nm", "#insProxyListenForm").children().remove();
 						if(result.db_sel_list.length > 0){
 							for(var i=0; i<result.db_sel_list.length; i++){
-								$("#lstnReg_db_nm", "#insProxyListenForm").append("<option value='"+result.db_sel_list[i].db_nm+"'>"+result.db_sel_list[i].db_nm+"</option>");	
+								$("#lstnReg_db_nm", "#insProxyListenForm").append("<option value='"+result.db_sel_list[i].db_id+"'>"+result.db_sel_list[i].db_nm+"</option>");	
 							}									
 						}
 						selAgentConnect = true;
@@ -1043,7 +1043,6 @@
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("disabled");
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").removeAttr("readonly");
 		}else{//수정
-			console.log(tempSetData);
 			$("#svrReg_kal_install_yn", "#svrRegProxyServerForm" ).val(nvlPrmSet(tempSetData.kal_install_yn, "N"));
 			$("#svrReg_exe_status", "#svrRegProxyServerForm" ).val(tempSetData.exe_status);
 			$("#svrReg_kal_exe_status", "#svrRegProxyServerForm" ).val(tempSetData.kal_exe_status);
@@ -1059,6 +1058,22 @@
 			$("#svrReg_pry_svr_nm", "#svrRegProxyServerForm").attr("readonly",true);
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").attr("disabled",true);
 			$("#svrMod_ipadr", "#svrRegProxyServerForm").attr("readonly",true);
+		}
+		
+		if($("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked")){
+			$("#warning_init_svr_reg").html("&nbsp;&nbsp;&nbsp;&nbsp; * 기동 중에는 수정이 불가능합니다.");
+			$("#svrReg_save_submit", "#svrRegProxyServerForm").attr("disabled",true);
+			$("#svrReg_day_data_del_term", "#svrRegProxyServerForm" ).attr("disabled",true);
+			$("#svrReg_min_data_del_term", "#svrRegProxyServerForm" ).attr("disabled",true);
+			$("#svrReg_master_gbn", "#svrRegProxyServerForm" ).attr("disabled",true);
+			$("#svrReg_master_svr_id", "#svrRegProxyServerForm" ).attr("disabled",true);
+		}else{
+			$("#warning_init_svr_reg").html("");
+			$("#svrReg_save_submit", "#svrRegProxyServerForm").removeAttr("disabled");
+			$("#svrReg_day_data_del_term", "#svrRegProxyServerForm" ).removeAttr("disabled");
+			$("#svrReg_min_data_del_term", "#svrRegProxyServerForm" ).removeAttr("disabled");
+			$("#svrReg_master_gbn", "#svrRegProxyServerForm" ).removeAttr("disabled");
+			$("#svrReg_master_svr_id", "#svrRegProxyServerForm" ).removeAttr("disabled");
 		}
 		
 		$("#svrReg_day_data_del_term", "#svrRegProxyServerForm").val(tempSetData.day_data_del_term); //일별 데이터 보관 기간
@@ -1567,7 +1582,7 @@
 			$("#lstnReg_lsn_desc", "#insProxyListenForm").val(selListenerInfo.lsn_desc); //리스너 설명
 			$("#lstnReg_db_usr_id", "#insProxyListenForm").val("reqmgr");
 			//$("#lstnReg_db_usr_id", "#insProxyListenForm").val(selListenerInfo.db_usr_id); //DB 사용자 ID
-			$("#lstnReg_db_nm", "#insProxyListenForm").val(selListenerInfo.db_nm); //DB 명
+			$("#lstnReg_db_nm", "#insProxyListenForm").val(selListenerInfo.db_id); //DB 명
 			$("#lstnReg_con_sim_query", "#insProxyListenForm").val(selListenerInfo.con_sim_query); //전송 쿼리
 			$("#lstnReg_field_nm", "#insProxyListenForm").val(selListenerInfo.field_nm); //필드명
 			$("#lstnReg_field_val", "#insProxyListenForm").val(selListenerInfo.field_val); //필드값

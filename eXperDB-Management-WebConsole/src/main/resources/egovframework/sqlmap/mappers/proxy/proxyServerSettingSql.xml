@@ -779,7 +779,7 @@
 		WHERE DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id}::numeric)
 	</select>
 	<select id="selectDBSelList" resultType="HashMap" >
-		SELECT DB_NM
+		SELECT DB_NM, DB_ID
 		FROM T_DB_I
 		WHERE DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id}::numeric)
 		AND USEYN = 'Y'
