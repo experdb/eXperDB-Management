@@ -329,7 +329,9 @@ public class ProxyMonitoringController {
 			Map<String, Object> result = proxyMonitoringService.getLogFile(pry_svr_id, type, param);
 			strBuffer = (String) result.get("RESULT_DATA"); 
 			System.out.println("strBuffer====" + strBuffer);
-
+			if(strBuffer != null) {
+				mv.addObject("fSize", strBuffer.length());
+			}
 //			strBuffer = strBuffer.replaceAll("\n", "<br>");
 			mv.addObject("data", strBuffer);
 			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
@@ -417,13 +419,15 @@ public class ProxyMonitoringController {
 			}
 	
 			if (file_type.equals("haproxy")) {
-				file_name = "/haproxy.log";
+				file_name = "haproxy.log";
 			} else {
-				file_name = "/keepalived.log";
+				file_name = "keepalived.log";
 			}
 			
 			if (props.get("proxy_path") != null) {
-				file_path = props.get("proxy_path").toString();
+				file_path = props.get("proxy_path").toString() + "/";
+			} else {
+				file_path = "/home/experdb/app/eXperDB-Management/eXperDB-Proxy" + "/";
 			}
 			
 			

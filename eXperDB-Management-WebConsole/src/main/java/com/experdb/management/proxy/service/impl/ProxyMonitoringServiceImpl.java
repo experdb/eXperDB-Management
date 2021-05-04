@@ -332,39 +332,45 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	      
         try{
 			if (getLogResult != null) {
+				String file_path = "";
+				if (props.get("proxy_path") != null) {
+					file_path = props.get("proxy_path").toString();
+				} else {
+					file_path = "/home/experdb/app/eXperDB-Management/eXperDB-Proxy";
+				}
+					System.out.println("===file_path===" + file_path);
+				String file_name = "";
+					
+				File Folder = new File(file_path);
+		        if (!Folder.exists()) {
+		        	try{
+		        	    Folder.mkdir(); //폴더 생성
+		            }catch(Exception e){
+		        	    e.getStackTrace();
+		        	}  
+		        }
+					
+				if (type.equals("haproxy")) {
+					file_name = "/haproxy.log";
+				} else {
+					file_name = "/keepalived.log";
+				}
+					
+				File file = new File(file_path + file_name);
+
+				if (file.exists()) {
+				    file.delete(); //파일삭제
+				}
+
+				if (!file.exists()) {
+				    try {
+				        file.createNewFile(); //파일 생성
+				    } catch (IOException e) {
+				        e.printStackTrace();
+				    }
+				}
+
 				if (getLogResult.get("RESULT_DATA") != null) {
-					String file_path = "";
-					if (props.get("proxy_path") != null) {
-						file_path = props.get("proxy_path").toString();
-					}
-					
-					String file_name = "";
-					
-					File Folder = new File(file_path);
-		        	if (!Folder.exists()) {
-		        		try{
-		        		    Folder.mkdir(); //폴더 생성
-		        	    }catch(Exception e){
-		        		    e.getStackTrace();
-		        		}  
-		        	}
-					
-					if (type.equals("haproxy")) {
-						file_name = "/haproxy.log";
-					} else {
-						file_name = "/keepalived.log";
-					}
-					
-					File file = new File(file_path + file_name);
-
-					if (!file.exists()) {
-					    try {
-					        file.createNewFile(); //파일 생성
-					    } catch (IOException e) {
-					        e.printStackTrace();
-					    }
-					}
-
 					BufferedWriter fw = new BufferedWriter(new FileWriter(file_path+file_name, true));
 
 					fw.write(getLogResult.get("RESULT_DATA").toString());
