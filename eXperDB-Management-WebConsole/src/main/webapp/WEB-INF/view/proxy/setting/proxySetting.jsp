@@ -47,6 +47,8 @@
 	var selAgentInterfaceItems = new Array();//선택한 서버의  Agent Interface 목록
 	var selAgentInterface = null;//선택한 서버의  Agent IP와 연결된 Interface
 	
+	var selVipUseYn = "Y";//
+	
 	var usrId = '${usr_id}';
 	
 	var runValid = true;
@@ -398,12 +400,14 @@
 		fn_init_global_value();
 	
 		if(selRowLen != 0){		
-			//vip 사용 여부에 따라 disable
-			fn_inable_kal_use(proxyServerTable.row('.selected').data().kal_install_yn);
+			
 			//정보 불러오기
 			var selRow = proxyServerTable.row('.selected').data();
 			selPrySvrId = selRow.pry_svr_id;
+			selVipUseYn = selRow.kal_install_yn;
 			
+			//vip 사용 여부에 따라 disable
+			fn_inable_kal_use(selVipUseYn);
 			//설정 정보 불러오기
 			fn_server_conf_info();
 		}
@@ -478,7 +482,7 @@
 							//정보 불러오기
 							var selRow = proxyServerTable.row('.selected').data();
 							selPrySvrId = selRow.pry_svr_id;
-							
+							selVipUseYn = selRow.kal_install_yn;
 							//설정 정보 불러오기
 							fn_server_conf_info();
 						}
@@ -522,23 +526,20 @@
 	        rules: {
 	        	glb_obj_ip: {
 					required: function(){
-						var vipUseYn =proxyServerTable.row('.selected').data().kal_install_yn;
-						if(vipUseYn == 'Y') return true;
+						if(selVipUseYn == 'Y') return true;
 						else return false;
 					},
 					validatorIpFormat :true
 				},
 				glb_if_nm: {
 					required: function(){
-						var vipUseYn =proxyServerTable.row('.selected').data().kal_install_yn;
-						if(vipUseYn == 'Y') return true;
+						if(selVipUseYn == 'Y') return true;
 						else return false;
 					}
 				},
 				glb_peer_server_ip: {
 					required: function(){
-						var vipUseYn =proxyServerTable.row('.selected').data().kal_install_yn;
-						if(vipUseYn == 'Y') return true;
+						if(selVipUseYn == 'Y') return true;
 						else return false;
 					},
 					validatorIpFormat :true
@@ -610,7 +611,7 @@
      * Proxy Server List 선택 시 상세 정보 불러오기
     **********************************************************/
     function fn_server_conf_info(){
- 		if(selPrySvrId != null){
+ 		if(selPrySvrId != null ){
 			$.ajax({
 	 			url : "/getPoxyServerConf.do",
 	 			data : {
@@ -633,7 +634,7 @@
 	 			success : function(result) {
 	 				runValid = true;
 	 				if(result.errcd > -1){
-	 					var vipUseYn = proxyServerTable.row('.selected').data().kal_install_yn;
+	 					var vipUseYn = selVipUseYn;
 	 					
 	 					//전역변수로 저장
 		 				selGlobalInfo = result.global_info;
@@ -1099,7 +1100,7 @@
 			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg18" />'));
 		}else if (gbn == "use_end") {
 			confirm_title = "가상 IP 사용 중지";//'<spring:message code="eXperDB_proxy.act_stop" />';//'Proxy 중지';
-			$('#confirm_multi_msg').html("가상 IP를 사용하지 않겠습니까? <br/>등록된 가상 IP가 모두 삭제되며 ,<br/>Keepalived 기동이 중이됩니다.");
+			$('#confirm_multi_msg').html("가상 IP를 사용하지 않겠습니까? <br/>등록된 가상 IP가 모두 삭제되며 ,<br/>Keepalived 기동이 중지됩니다.");
 			//$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15" />'));
 		}else if (gbn == "use_start") {
 			confirm_title = "가상 IP 사용 ";//'<spring:message code="eXperDB_proxy.act_start" />';//'Proxy 실행';
@@ -1614,7 +1615,7 @@
 				showSwalIcon('<spring:message code="eXperDB_proxy.msg6"/>', '<spring:message code="common.close" />', '', 'error');
 			}else{
 				if(proxyListenTable.rows().data().length > 0){
-					var vipUseYn = proxyServerTable.row('.selected').data().kal_install_yn;
+					var vipUseYn = selVipUseYn;
 					if(vipUseYn == "N" || (vipUseYn == "Y" && vipInstTable.rows().data().length > 0)){
 						fn_multiConfirmModal("apply");
 					}else{
