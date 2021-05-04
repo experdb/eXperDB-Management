@@ -560,14 +560,14 @@ public class ProxyServiceImpl implements ProxyService{
 
 							if(temp.trim().matches(".*unicast_src_ip.*") && firstState == 1) {
 								if (temp.trim().contains(serverIp)) {
-									stateGbn = stateMaster;
+								//	stateGbn = stateMaster;
 
-									if (stateGbn != null) {
-										stateGbn = stateGbn.substring(stateGbn.lastIndexOf(" ") + 1 , stateGbn.length());
+								//	if (stateGbn != null) {
+								//		stateGbn = stateGbn.substring(stateGbn.lastIndexOf(" ") + 1 , stateGbn.length());
 
-										peerInt = keepsize + 2;
-										peerchk = 1;
-									}
+								//		peerInt = keepsize + 2;
+								//		peerchk = 1;
+								//	}
 
 									//대상_IP
 									strObjIp = serverIp;
@@ -576,21 +576,23 @@ public class ProxyServiceImpl implements ProxyService{
 							}
 
 							//PEER_서버_IP
-							if(peerServerIpChk == 1 && temp.trim().matches(".*unicast_peer.*") && firstState == 1) {
+							if(peerServerIpChk == 1 && temp.trim().matches(".*unicast_peer.*")) {
 								 peerServerIpInt = keepsize + 1;
 							}
 
+							//peer_서버_ip setting
 							if (peerServerIpInt == keepsize && peerServerIpChk > 0  && firstState == 1) {
 								strPeerServerIp = temp.trim();
+								strPeerId = temp.trim();
 								peerServerIpChk = 0;
 							}
 
-							//backup일때 peer id 확인
+/*							//backup일때 peer id 확인
 							if (peerInt == keepsize && peerchk > 0  && firstState == 1) {
 								strPeerId = temp.trim();
 								peerchk = 0;
 							}
-
+*/
 
 							//vip - 설정////////////////////////////////////////////////////
 							if(temp.trim().matches(".*virtual_router_id.*")) { //v_router_ip
@@ -648,7 +650,7 @@ public class ProxyServiceImpl implements ProxyService{
 					}
 				}
 			}
-
+			socketLogger.info("Job stateGbn [" + stateGbn + "]");
 			if (stateGbn != null && !"".equals(stateGbn)) {
 				if (stateGbn.contains("MASTER")) {
 					stateGbn = "M";
@@ -661,6 +663,25 @@ public class ProxyServiceImpl implements ProxyService{
 			jsonObj.put("db_svr_id", db_svr_id);
 			jsonObj.put("master_gbn", stateGbn);
 			
+			ProxyServerVO peerServerInfo = new ProxyServerVO();
+			peerServerInfo.setIpadr(strPeerServerIp);
+			
+			//마스터 확인
+			ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInfo(peerServerInfo);
+			if (proxyServerInfo != null) {
+				if ("M".equals(proxyServerInfo.getMaster_gbn())) { //마스터 이면 백업
+					stateGbn = "B";
+				} else if ("B".equals(proxyServerInfo.getMaster_gbn())) { //백업일때 해당 IP의 마스터 ID가 본인과 같으면 마스터 아니면 백업
+					if (strObjIp.equals(proxyServerInfo.getMaster_svr_nm())) {
+						stateGbn = "M";
+					} else {
+						stateGbn = "B";
+					}
+				}
+			} else {
+				stateGbn = "M";
+			}
+
 			if ("B".equals(stateGbn)) {
 				jsonObj.put("peer_id", strPeerId);
 				

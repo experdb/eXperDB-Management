@@ -9,33 +9,34 @@
 	 	* Author : 최정환
 	 	**/
 			SELECT
-				PRY_SVR_ID,
-				IPADR,
-				AGT_SN,
-				PRY_SVR_NM,
-				PRY_PTH,
-				KAL_PTH,
-				USE_YN,
-				EXE_STATUS,
-				KAL_EXE_STATUS,
-				MASTER_GBN,
-				MASTER_SVR_ID,
-				DB_SVR_ID,
-				DAY_DATA_DEL_TERM,
-				MIN_DATA_DEL_TERM,
-				OLD_MASTER_GBN,
-				FRST_REGR_ID,
-				FRST_REG_DTM,
-				LST_MDFR_ID,
-				LST_MDF_DTM,
-				KAL_INSTALL_YN
-			FROM  T_PRY_SVR_I
+				A.PRY_SVR_ID,
+				A.IPADR,
+				A.AGT_SN,
+				A.PRY_SVR_NM,
+				A.PRY_PTH,
+				A.KAL_PTH,
+				A.USE_YN,
+				A.EXE_STATUS,
+				A.KAL_EXE_STATUS,
+				A.MASTER_GBN,
+				A.MASTER_SVR_ID,
+				(SELECT A.IPADR FROM T_PRY_SVR_I B WHERE B.PRY_SVR_ID = A.MASTER_SVR_ID) AS MASTER_SVR_NM,
+				A.DB_SVR_ID,
+				A.DAY_DATA_DEL_TERM,
+				A.MIN_DATA_DEL_TERM,
+				A.OLD_MASTER_GBN,
+				A.FRST_REGR_ID,
+				A.FRST_REG_DTM,
+				A.LST_MDFR_ID,
+				A.LST_MDF_DTM,
+				A.KAL_INSTALL_YN
+			FROM  T_PRY_SVR_I A
 			WHERE 1 = 1
 				<if test='ipadr != null'>
-				 AND 	IPADR = #{ipadr}
+				 AND 	A.IPADR = #{ipadr}
 				</if>
 				<if test="ipadr == null and pry_svr_id > 0">
-				 AND 	PRY_SVR_ID = #{pry_svr_id}
+				 AND 	A.PRY_SVR_ID = #{pry_svr_id}
 				</if>
 			LIMIT 1
 	</select>
@@ -85,7 +86,7 @@
 			, #{pry_svr_nm}
 			, #{pry_pth}
 			, #{kal_pth}
-			, #{use_yn}::bpchar
+			, 'Y'::bpchar
 			, #{exe_status}::character varying
 			, #{kal_exe_status}::character varying
 			, #{master_gbn}
