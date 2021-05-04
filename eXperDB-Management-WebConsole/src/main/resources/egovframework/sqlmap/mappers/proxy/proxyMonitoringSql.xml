@@ -31,6 +31,7 @@
        		s.LST_MDF_DTM,
        		a.AGT_CNDT_CD 
 		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
+		WHERE a.SVR_USE_YN = 'Y'
         GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD
 		ORDER BY coalesce(MASTER_SVR_ID, PRY_SVR_ID), MASTER_GBN DESC, LST_MDF_DTM
 	</select>
@@ -491,14 +492,14 @@
 	</select>
 	
 	<select id="selectProxyVipLsnList" parameterType="int" resultType="hashMap">
-		select tpsi.pry_svr_nm, tpsi.master_gbn, tpsi.pry_svr_id , tpvi.v_ip, array_agg(tpli.lsn_nm) as lsn_nm_list
+		select tpsi.pry_svr_nm, tpsi.master_gbn, tpsi.pry_svr_id , tpvi.v_ip, tpli.lsn_nm
 from t_pry_svr_i tpsi 
 join t_pry_lsn_i tpli on tpli.pry_svr_id = tpsi.pry_svr_id 
 join t_pry_vipcng_i tpvi on tpli.pry_svr_id = tpsi.pry_svr_id and tpsi.pry_svr_id = tpvi.pry_svr_id 
 WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
 		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
 and tpvi.v_ip_exe_status = 'TC001501'
-group by tpsi.pry_svr_nm ,tpsi.master_gbn, tpsi.pry_svr_id , tpvi.v_ip
+
 
 	</select>
 </mapper>
