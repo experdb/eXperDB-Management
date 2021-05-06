@@ -38,9 +38,12 @@ var bootCheck = true;
 	$(function() {
 		
 		$("#volumeList").change(function(){
+			console.log("volumeList CHANGE!!!");
 			fn_bmrCheck();
 		});
+		
 		$('#volumeList tbody').on( 'click', 'tr', function () {
+			console.log("tbody click!!!");
 			if($(this).hasClass('selected')){
 				$(this).removeClass('selected');
 			}else{
@@ -48,15 +51,10 @@ var bootCheck = true;
 			}
 			fn_bmrCheck();
 		});
-		$('#volumeList tbody').on( 'click', 'input[type="checkbox"]', function () {
-			if($(this).hasClass('selected')){
-				$(this).removeClass('selected');
-			}else{
-				$(this).addClass('selected'); 
-			}
-			fn_bmrCheck();
-		});
+		
 	 });   
+	
+	// /, /boot를 선택했는지 확인
 	function fn_bmrCheck(){
 		var vData = VolumeList.rows('.selected').data();
 		rootCheck = true;
@@ -76,6 +74,7 @@ var bootCheck = true;
 		fn_bmrAlert();
 	}
 	
+	// /, /boot 선택 유무에 따라 알림
 	function fn_bmrAlert(){
 		var str;
 		$("#volumeAlert").empty();
