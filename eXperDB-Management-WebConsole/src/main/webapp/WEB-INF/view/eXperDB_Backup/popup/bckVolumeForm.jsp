@@ -26,7 +26,8 @@
 <script type="text/javascript">
 
 var VolumeList;
-
+var rootCheck = true;
+var bootCheck = true;
 	/* ********************************************************
 	 * 초기 실행
 	 ******************************************************** */
@@ -34,6 +35,62 @@ var VolumeList;
 		fn_volumeTableSetting();
 	});
 	
+	$(function() {
+		
+		$("#volumeList").change(function(){
+			fn_bmrCheck();
+		});
+		$('#volumeList tbody').on( 'click', 'tr', function () {
+			if($(this).hasClass('selected')){
+				$(this).removeClass('selected');
+			}else{
+				$(this).addClass('selected'); 
+			}
+			fn_bmrCheck();
+		});
+		$('#volumeList tbody').on( 'click', 'input[type="checkbox"]', function () {
+			if($(this).hasClass('selected')){
+				$(this).removeClass('selected');
+			}else{
+				$(this).addClass('selected'); 
+			}
+			fn_bmrCheck();
+		});
+	 });   
+	function fn_bmrCheck(){
+		var vData = VolumeList.rows('.selected').data();
+		rootCheck = true;
+		bootCheck = true;
+		for(var i=0; i<vData.length; i++){
+			if(vData[i].mountOn == "/"){
+				rootCheck = false;
+				break;
+			}
+		}
+		for(var i=0; i<vData.length; i++){
+			if(vData[i].mountOn == "/boot"){
+				bootCheck = false;
+				break;
+			}
+		}
+		fn_bmrAlert();
+	}
+	
+	function fn_bmrAlert(){
+		var str;
+		$("#volumeAlert").empty();
+		if(rootCheck&&bootCheck){
+			str = '[ /, /boot ] <spring:message code="eXperDB_backup.msg92" />';
+			$("#volumeAlert").append(str);
+		}else if(rootCheck){
+			str = '[ / ] <spring:message code="eXperDB_backup.msg92" />';
+			$("#volumeAlert").append(str);
+		}else if(bootCheck){
+			str = '[ /boot ] <spring:message code="eXperDB_backup.msg92" />';
+			$("#volumeAlert").append(str);
+		}
+		
+	}
 	function fn_volumeTableSetting(){
 		 VolumeList = $('#volumeList').DataTable({
 				scrollX : false,
@@ -43,7 +100,7 @@ var VolumeList;
 				deferRender : true,
 				info : false,
 				bSort : false,
-				selected : [1],
+				// selected : [1],
 				select : {'style' : 'multi'},
 				columns : [
 				{data : "rownum", className : "dt-center", defaultContent : "" , checkboxes : {'selectRow' : true}},
@@ -54,7 +111,7 @@ var VolumeList;
 				
 				]
 			});
-
+		 
 		 VolumeList.tables().header().to$().find('th:eq(0)').css('min-width');
 		 VolumeList.tables().header().to$().find('th:eq(1)').css('min-width');
 		 VolumeList.tables().header().to$().find('th:eq(2)').css('min-width');
@@ -118,6 +175,7 @@ var VolumeList;
 				}
 			}
 		}
+		fn_bmrCheck();
 	}
 	
 	/* ********************************************************
@@ -125,9 +183,15 @@ var VolumeList;
 	 ******************************************************** */
 	function fn_volumeReg() {
 		// 선택된 volume들을 volumeDataList에 넣어준다
-		volumeDataList = VolumeList.rows('.selected').data();
-		fn_alertShow();
-		$('#pop_layer_popup_backupVolumeFilter').modal("hide");
+		var vSelect = VolumeList.rows('.selected').data();
+		if(vSelect.length > 0){			
+			volumeDataList = VolumeList.rows('.selected').data();
+			fn_alertShow();
+			$('#pop_layer_popup_backupVolumeFilter').modal("hide");
+		}else{
+			showSwalIcon('<spring:message code="eXperDB_backup.msg93" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}
 	}
 	
 	function fn_volumeCancel() {
@@ -161,6 +225,9 @@ table.dataTable.volume tbody tr.selected {
 								</tr>
 							</thead>
 						</table>
+						<div id="volumeAlert" class="text-danger" style="font-size:0.8em;">
+							
+						</div>
 					</div>
 					<div class="card-body">
 						<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >

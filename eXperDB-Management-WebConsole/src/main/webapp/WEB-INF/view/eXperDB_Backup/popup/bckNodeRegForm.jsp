@@ -58,13 +58,13 @@
 		$("#userCred").prop('checked', false);
 		fn_userCredentClick();
 		
-		$("#rootName").val("");
+		// $("#rootName").val("");
 		$("#rootPW").val("");
 		$("#userCredName").val("");
 		$("#userCredPw").val("");
 		$("#description").val("");
 		
-		$("#rootNameAlert").empty();
+		// $("#rootNameAlert").empty();
 		$("#rootPWAlert").empty();
 		$("#userCredNameAlert").empty();
 		$("#userCredPwAlert").empty();
@@ -93,7 +93,7 @@
 		$("#ipAddr").empty();
 		$("#ipAddr").append(html);
 		
-		$("#rootName").val(result.rootName);
+		// $("#rootName").val(result.rootName);
 		$("#userCredName").val(result.userName);
 		$("#description").val(result.description);
 		
@@ -101,7 +101,7 @@
 		$("#userCredPw").val("");
 		
 		
-		$("#rootNameAlert").empty();
+		// $("#rootNameAlert").empty();
 		$("#rootPWAlert").empty();
 		$("#userCredNameAlert").empty();
 		$("#userCredPwAlert").empty();
@@ -197,7 +197,7 @@
 	  ******************************************************** */
 	 // registration validation
 	  function fn_validationNodeReg(){
-		var checkVal = fn_valChkUserPW() + fn_valChkUserName() + fn_valChkRootPW() + fn_valChkRootName();
+		var checkVal = fn_valChkUserPW() + fn_valChkUserName() + fn_valChkRootPW();
 		if(checkVal){
 			return false;
 		}
@@ -205,7 +205,7 @@
 	 }
 
 	  // Root name validation check
-	 function fn_valChkRootName(){
+	/*  function fn_valChkRootName(){
 		 $("#rootName").val($("#rootName").val().replace(/ /g, ''));
 		 $("#rootNameAlert").empty();
 		if(!$("#rootName").val()){
@@ -216,7 +216,7 @@
 		}else{
 			return false;
 		}
-	 }
+	 } */
 
 	 // Root Password validation check
 	 function fn_valChkRootPW() {
@@ -315,20 +315,10 @@
 														
 													</select>
 												</div>
+												<input type="hidden" id="rootName" name="rootName" value="root"/>
 												<div class="form-group row" style="margin-bottom:4px">
 													<div  class="col-4" style="padding-top:7px; margin-left: 20px;">
-														Root name
-													</div>
-													<div class="col-4" style="padding-left: 0px;">
-														<input type="text" id="rootName" name="rootName" class="form-control form-control-sm" style="width: 350px;" onchange="fn_valChkRootName()"/>
-														<div id="rootNameAlert" name="rootNameAlert" class="text-danger" style="font-size:0.8em;  width: 212px; height: 20px; padding-left: 5px; padding-right: 5px; padding-top: 1px; padding-bottom: 5px; margin-bottom: 0px; ">
-															
-														</div>
-													</div>
-												</div>
-												<div class="form-group row" style="margin-bottom:4px">
-													<div  class="col-4" style="padding-top:7px; margin-left: 20px;">
-														Password
+														Root Password
 													</div>
 													<div class="col-4" style="padding-left: 0px;">
 														<input type="password" id="rootPW" name="rootPW" class="form-control form-control-sm" style="width: 350px;" onchange="fn_valChkRootPW()"/>
@@ -362,7 +352,7 @@
 															</div>
 														</div>
 													</div>
-													<div class="form-check" style="width:145px;background-color: white; font-size: 1rem; margin-left: 20px;position: absolute;top: 203px;margin-top: 0px;margin-bottom: 0px;">
+													<div class="form-check" style="width:145px;background-color: white; font-size: 1rem; margin-left: 20px;position: absolute;top: 140px;margin-top: 0px;margin-bottom: 0px;">
 														<label class="form-check-label" for="userCred" style="font-size: 1em;">
 															<input type="checkbox" class="form-check-input" id="userCred" name="userCred" value="N" onclick="fn_userCredentClick()"/>
 															User Credentials

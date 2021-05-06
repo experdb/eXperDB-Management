@@ -138,15 +138,17 @@
 	 * type select function
 	 ******************************************************** */
 	function fn_storageTypeSelect(){
+		$("#storageTypeAlert").empty();
 		if($("#storageType").val() == 1){
 			$("#isCifs").hide();
-			
+			$("#storageTypeAlert").append('<spring:message code="eXperDB_backup.msg90" />');
 			/* $("#userName").prop("disabled", true);
 			$("#passWord").prop("disabled", true);
 			$("#userName").val(null);
 			$("#passWord").val(null); */
 		}else{
 			$("#isCifs").show();
+			$("#storageTypeAlert").append('<spring:message code="eXperDB_backup.msg91" />');
 			/* $("#userName").prop("disabled", false);
 			$("#passWord").prop("disabled", false); */
 		}
@@ -567,10 +569,13 @@
 													<div  class="col-3" style="padding-top:7px; margin-left: 20px;">
 														Type
 													</div>
-													<select id="storageType" name="storageType"  class="form-control form-control-xsm" style="width:400px; height:40px; color: #555555" onchange="fn_storageTypeSelect()">
+													<select id="storageType" name="storageType"  class="form-control form-control-xsm" style="width:200px; height:40px; color: #555555" onchange="fn_storageTypeSelect()">
 														<option value="1">NFS share</option>
 														<option value="2">CIFS share</option>
 													</select>
+													<div id="storageTypeAlert" name="storageTypeAlert" class="alert alert-fill-warning" style="font-size:0.7em;height: 20px;margin-top: 17px;margin-left: 6px;margin-bottom: 0px;padding-top: 2px;width: 187px;padding-right: 10px;padding-left: 10px;padding-bottom: 0px;">
+														
+													</div>
 												</div>
 												<div class="form-group row" id="pathDiv" style="margin-bottom:4px">
 													<div  class="col-3" style="padding-top:7px; margin-left: 20px;">

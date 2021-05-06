@@ -337,7 +337,7 @@
 														</label>
 														<div class="col-sm-4" style="padding-left: 0px;">
 															<div class="input-group date datepicker" id="startDate_div">
-																<input type="text" class="form-control totDatepicker" style="width:70px;height:44px;" id="startDate" name="startDate" />
+																<input type="text" class="form-control totDatepicker" style="width:70px;height:44px;" id="startDate" name="startDate"/>
 																<span class="input-group-addon input-group-append border-left">
 																	<span class="ti-calendar input-group-text"></span>
 																</span>
