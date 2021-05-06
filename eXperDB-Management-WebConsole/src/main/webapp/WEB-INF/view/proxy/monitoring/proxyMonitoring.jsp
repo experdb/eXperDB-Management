@@ -21,6 +21,27 @@
 .proxyLog td {
 	font-size: 50pt;
 }
+
+.blinking{ 
+ -webkit-animation:blink 1.0s ease-in-out infinite alternate; 
+ -moz-animation:blink 1.0s ease-in-out infinite alternate; 
+ animation:blink 1.0s ease-in-out infinite alternate;
+} 
+
+@-webkit-keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+} 
+
+@-moz-keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+} 
+
+@keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+}
 </STYLE>
 
 <script>
@@ -214,8 +235,11 @@
 		$("#serverTabList").html(html);
 		$("#serverSsCnt", "#proxyMonViewForm").val(proxyServerTotInfo_cnt);
 
+		//첫번쨰 proxy 자동클릭
 		if (proxyServerTotInfo_cnt > 0) {
-			$("#proxy_master_nm").text("${proxyServerTotInfo[0].pry_svr_nm}").val();
+			//$("#proxy_master_nm").text("${proxyServerTotInfo[0].pry_svr_nm}").val();
+			
+			//첫번쨰 proxy 자동클릭 - fn_getProxyInfo
 			$("#serverSs1").click();
 		}
 	}
@@ -238,7 +262,7 @@
 
 	    //chart 초기화
 	    $("#listenerStatChart").html("");
-	    
+
 		//초기화
 		var serverSsCnt_chk = parseInt(nvlPrmSet($("#serverSsCnt", "#proxyMonViewForm").val(),0));
 		
@@ -254,7 +278,6 @@
 		select_pry_svr_id = pry_svr_id;
 	}
 	
-	
 	/* ********************************************************
 	* 프록시 세부내역 조회
 	******************************************************** */
@@ -268,7 +291,7 @@
 			},
 			dataType : 'json',
 			success : function(result) {
-				// 프록시 모니터링 초기화
+				// 프록시 모니터링 초기화 및 데이터 셋팅
 				fn_proxyMonitoringInit(pry_svr_id, result);
 			},
 			beforeSend: function(xhr) {
@@ -293,17 +316,15 @@
 	* 프록시 서버정보 상세 설정
 	******************************************************** */
 	function fn_proxyMonitoringInit(pry_svr_id, result) {
-		// 프록시 서버 모니터링 setting
+		// vip 모니터링
+		fn_keepMonInfo(result);
+		
+		// 프록시 모니터링 setting
 		fn_proxyMonInfo(result);
-
-// 		fn_proxyMonInfo2(result);
-
+		
 		// 프록시 연결 db 모니터링 setting
 		fn_dbMonInfo(result);
 
-		// 프록시 리스너, db, vip 연결 list setting
-		fn_dbListenerVipInfo(result);
-		
 		//서버 기록 테이블 설정
 		proxyLogTable.clear().draw();
 		if (nvlPrmSet(result.proxyLogList, '') != '') {
@@ -326,376 +347,346 @@
 	}
 	
 	/* ********************************************************
-	* 통계리스트 html 설정
+	* vip 모니터링 셋팅
 	******************************************************** */
-	function fn_proxyMonChartSet(result){
-		var html = "";
-		var chartCnt = 0;
-
-		html += '<div class="col-md-12 col-xl-12 justify-content-center" >\n';
-		html += '	<div class="card" style="margin-left:-10px;border:none;">\n';
-		html += '		<div class="card-body" style="border:none;">\n';
-		html += '			<p class="card-title" style="margin-bottom:0px"><i class="item-icon mdi mdi-chart-bar text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.listener_statistics"/>&nbsp;&nbsp;   &nbsp;<span class="text-info"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg4"/></span>&nbsp;</p>\n';
-		html += '		</div>\n';
-		html += '	</div>\n';
-		html += '</div>\n';
-		
-		if (result.proxyChartCntList != null && result.proxyChartCntList.length > 0) {
-			$(result.proxyChartCntList).each(function (index, item) {
-				chartCnt ++;
-				
-				html += '<div class="col-md-6 col-xl-6 justify-content-center">\n';
-				html += '	<div class="card" style="margin-left:-10px;border:none;">\n';
-				html += '		<div class="card-body" style="border:none;margin-top:-35px;">\n';
-				html += '			<p class="card-title" style="margin-bottom:0px;margin-left:10px;"><i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;' + item.pry_svr_nm + '-' + item.lsn_nm + '-' + item.db_con_addr +'</p>\n';
-				html += '			<div id="chart-line-' + chartCnt + '" style="max-height:200px;"></div>\n';
-				html += '		</div>\n';
-				html += '	</div>\n';
-				html += '</div>\n';
-				
-				if ( chartCnt % 2 == 0 ) {
-					html += '<div class="col-md-12">\n';
-					html += '	<div class="card" style="border:none;">\n';
-					html += '		&nbsp;</div>\n';
-					html += '</div>\n';
-				}
-			});
-		} else {
-			html += '<div class="col-md-3 col-xl-12 justify-content-center">\n';
-			html += "	<div class='card'>\n";
-			html += '		<div class="card-body"  style="background-color:#ededed;>\n';
-			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted text-center"">\n';
-			html += '				<spring:message code="message.msg01" /></h5>\n';
-			html += '			</div>\n';
-			html += "		</div>\n";
-			html += "	</div>\n";
-			html += "</div>\n";
-		}
-
-		$("#chartCnt").val(chartCnt);
-		$("#listener_header_sub").html(html);
-	}
-	
-	/* ********************************************************
-	* 프록시 서버 모니터링 셋팅
-	******************************************************** */
-	function fn_proxyMonInfo(result){
+	function fn_keepMonInfo(result){
 		var rowCount = 0;
-		var html = "";
+		var html_vip = "";
+		var html_sebu = "";
+		var html_vip_line = "";
+		var html_listner = "";
 		var master_gbn = "";
  		var pry_svr_id = "";
 		var listCnt = 0;
 		var pry_svr_id_val = "";
-		var proxyServerByMasId_cnt = "${fn:length(proxyServerByMasId)}";
+		var proxyServerByMasId_cnt = result.proxyServerByMasId.length;
 		var master_state = "";
 		var exe_status_chk = "";
 		var kal_exe_status_chk = "";
 		var exe_status_css = "";
 		var kal_exe_status_css = "";
-		
-		$("#proxy_master_nm").text("");
+		var strVip = "";
 
-		if (result.proxyServerByMasId != null && result.proxyServerByMasId.length > 0) {
-			$(result.proxyServerByMasId).each(function (index, item) {
-				html += '								<table class="table-borderless" style="width:100%;">\n';
-				html += '									<tr>\n'
-				html += '										<td>\n';
-				html += '											<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">\n';
-				html += '											</h5>\n';
-				html += '										</td>\n';
-				html += '										<td colspan="2" style="width:85%;">\n';
-				if(item.master_gbn == "M") {
-					html += '											<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">\n';
-					$("#proxy_master_nm").text(item.pry_svr_nm);
-					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-						html += '												<div class="badge badge-pill badge-success" title="">M</div>\n';
-					} else {
-						html += '												<div class="badge badge-pill badge-danger" title="">M</div>\n';
-					}
-					master_state = nvlPrmSet(item.agt_cndt_cd, '');
-				} else if(item.master_gbn == "B"){
-					html += '											<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:20px;padding-top:10px;">\n';
-					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-						html += '												<div class="badge badge-pill badge-success">B</div>\n'
-					} else {
-						html += '												<div class="badge badge-pill badge-danger">B</div>\n'
-					}
-				} else {
-					html += '											<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">\n';
-				}
+		//ROW 만들기
+		for(var i = 0; i < 2; i++){
+ 			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
+ 			
+			html_vip += '	<p class="card-title" style="margin-bottom:-25px;margin-left:10px;">\n';
+			html_vip += '	<span id="vip_proxy_nm' + i + '"></span>\n';
+			html_vip += '	</p>\n';
+			
+			html_vip += '	<table class="table-borderless" style="width:100%;">\n';
+			html_vip += '		<tr>\n';
 
-				html += '												'+item.pry_svr_nm+'\n';
-				if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-					html += '											<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt"></i>\n';
-				} else if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001502'){
-					html += '											<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db pry_agt"></i>\n'
-				}
-				html += '											</h5>\n';
-				html += '										</td>\n';
-// 				html += '										<td rowspan="4" style="width:15%;" class="text-center">\n';
-// 				html += '										</td>\n';
-				html += '									</tr>\n';
-				
-				//ip/port 시작
-				html += '									<tr>\n';
-				html += '										<td colspan="3">\n';
-				if(item.master_gbn == "M"){
-					html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:3px;">\n';
-				} else if(item.master_gbn == "B"){
-					html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:40px;padding-top:3px;">\n';
-				}
-				html += '												IP/PORT : '+item.ipadr+'\n';
-				if(item.master_gbn == "M"){
-					html += '												/5430\n';
-				} else if(item.master_gbn == "B"){
-					html += '												/5431\n';
-				}
-				html += '											</h6>\n';
-				html += '										</td>\n';
-				html += '									</tr>\n';
-				//ip/port 끝
-				
-				//vip 시작
-				html += '									<tr>\n';
-				html += '										<td colspan="3">\n';
-				if(item.master_gbn == "M"){
-					html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:1px;">\n';
-				} else if(item.master_gbn == "B"){
-					html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:40px;padding-top:1px;">\n';
-				}
-				html += '												VIP : '+item.v_ip+'\n';
-				html += '											</h6>\n';
-				html += '										</td>\n';
-				html += '									</tr>\n';
-				//vip 끝
+			html_vip += '			<td style="width:80%;padding-left:20px;height:220px;" class="text-center" id="keepVipDiv' + i + '">\n';
+			html_vip += '			&nbsp;</td>\n';
 
-				//proxy 실행여부
-				if (item.exe_status != null && item.exe_status == "TC001501") {
-					exe_status_chk = "text-primary";
-					exe_status_css = "fa-refresh fa-spin text-success";
-				} else {
-					exe_status_chk = "text-danger";
-					exe_status_css = "fa-times-circle text-danger";
-				}
-				
-				//keepalived 실행여부
-				if (item.kal_exe_status != null && item.kal_exe_status == "TC001501") {
-					kal_exe_status_chk = "text-primary";
-					kal_exe_status_css = "fa-refresh fa-spin text-success";
-				} else {
-					kal_exe_status_chk = "text-danger";
-					kal_exe_status_css = "fa-times-circle text-danger";
-				}
-				html += '									<tr>\n';
-				html += '										<td style="width:30%;padding-left:20px;" class="text-center">\n';
-// 				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_actExeCng('+item.pry_svr_id+', \'P\', \''+item.exe_status+'\')">'
-				if(aut_id == 1) {
-					html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_confirm('+item.pry_svr_id+',\''+item.exe_status+'\', \'P\')">';
-					html += '											<i class="fa fa-desktop icon-md mb-0 mb-md-3 mb-xl-0 '+exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
-					html += '											</button>'
-				} else {
-					html += '											<i class="fa fa-desktop icon-md mb-0 mb-md-3 mb-xl-0 '+exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
-				}
-				html += '											<h6 class="text-muted"><i class="fa '+exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>';
-				if(aut_id == 1) {
-					html += '												<a href="#" onclick="fn_configView('+item.pry_svr_id+', \'P\')"><spring:message code="eXperDB_proxy.server"/></a></h6>\n';
-				} else {
-					html += '												<spring:message code="eXperDB_proxy.server"/></h6>\n';
-				}
-				html += '										</td>\n';
-				
-				html += '										<td style="width:25%;" class="text-center">\n';
-				html += '											<i class="ti-line-dotted icon-md mb-0 mb-md-3 mb-xl-0 text-secondary" style="font-size: 2em;width:100%;"></i>\n';
-// 				html += '											<i class="ti-line-dotted icon-md mb-0 mb-md-3 mb-xl-0 text-secondary" style="font-size: 2em;width:100%;"></i>\n';
-				html += '										</td>\n';
-				
-				html += '										<td style="width:30%;padding-right:20px;" class="text-center">\n';
-// 				html += '											<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_actExeCng('+item.pry_svr_id+', \'K\', \''+item.kal_exe_status+'\')">'
-				if(aut_id == 1){
-					html += '											<button type="button" class="btn btn-outline-warning btn-fw" onclick="fn_confirm('+item.pry_svr_id+',\''+item.kal_exe_status+'\' , \'K\')">';
-					html += '											<i class="fa fa-cubes icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
-					html += '											</button>'
-				} else {
-					html += '											<i class="fa fa-cubes icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
-				}
-				html += '											<h6 class="text-muted"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
-				if(aut_id == 1){
-					html += '												<a href="#" onclick="fn_configView('+item.pry_svr_id+', \'K\')">VIP<br/><spring:message code="eXperDB_proxy.vip_health_check"/></a></h6>\n';
-				} else {
-					html += '												VIP<br/><spring:message code="eXperDB_proxy.vip_health_check"/></h6>\n';
-				}
-				html += '										</td>\n';
-				html += '									</tr>\n';
-				html += '								</table>\n';
-			});
-		} else {
-			html += "	<div class='card'>\n";
-			html += '		<div class="card-body">\n';
-			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-			html += '				<spring:message code="message.msg01" /></h5>\n';
-			html += '			</div>\n';
-			html += "		</div>\n";
-			html += "	</div>\n";
+			html_vip += '		</tr>\n';
+			html_vip += '	</table>\n';
+ 
+			html_vip_line += '	<p class="card-title" style="margin-bottom:-15px;margin-left:10px;">\n';
+			html_vip_line += '	<span>&nbsp;</span>\n';
+			html_vip_line += '	</p>\n';
+			
+			html_vip_line += '	<table class="table-borderless" style="width:100%;">\n';
+			html_vip_line += '		<tr>\n';
+			
+			html_vip_line += '			<td style="width:100%;height:220px;" class="text-center" id="keepVipDivLine' + i + '">\n';
+			html_vip_line += '			</td>\n';
+
+			html_vip_line += '		</tr>\n';
+			html_vip_line += '	</table>\n';
+			
+	 		if (i != 1) {
+	 			html_vip += '<hr>\n';
+	 			html_vip_line += '<br/>\n';
+	 		}
 		}
 
-// 		$("#proxyMonitoringList").html(html);
-		
+ 		$("#proxyMonitoringList").html(html_vip);
+		$("#proxyVipConLineList").html(html_vip_line);
+
+		var iVipChkCnt = 0;
+ 		if (result.proxyServerVipList != null && result.proxyServerVipList.length > 0) {
+ 			for(var i = 0; i < result.proxyServerVipList.length; i++){
+ 				if (result.proxyServerVipList[i].kal_install_yn == "Y") {
+ 					if (result.proxyServerVipList[i].kal_exe_status != null && result.proxyServerVipList[i].kal_exe_status == "TC001501") {
+ 						kal_exe_status_chk = "text-primary";
+ 						kal_exe_status_css = "fa-refresh fa-spin text-success";
+ 					} else {
+ 						kal_exe_status_chk = "text-danger";
+ 						kal_exe_status_css = "fa-times-circle text-danger";
+ 					}
+ 					
+ 					html_sebu = "";
+ 					html_vip_line = "";
+	 				html_sebu += '				<button type="button" class="btn btn-inverse-warning btn-fw" onclick="fn_configView('+result.proxyServerVipList[i].pry_svr_id+', \'K\')">';
+	 				html_sebu += '					<i class="fa fa-cubes icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 5em;margin-top:10px;" ></i>\n';
+	 				html_sebu += '				</button>'
+	
+	 				strVip = result.proxyServerVipList[i].v_ip;
+
+	 				if (strVip != null && strVip != "," && strVip != "") {
+	 					//마지막 문자열 제거
+	 					if (strVip.charAt(strVip.length-1) == ",") {
+	 						strVip = strVip.slice(0,-1);
+	 					}
+
+	 					//첫 문자열 제거
+	 					if (strVip.substr(0, 1) == ",") {
+	 						strVip = strVip.substr(1);
+	 					}
+
+	 					var strVipSplit = strVip.split(',');
+	 				    for ( var j in strVipSplit ) {
+	 				    	var strVipSplit_val = strVipSplit[j].substr(0, strVipSplit[j].indexOf('/'));
+			 				html_sebu += '				<h5 class="text-muted"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
+			 				html_sebu += '				<a href="#">' + strVipSplit_val + '</a></h5>\n';	
+	 				    }	
+	 				    
+		 				//line 생성
+		 				html_vip_line += '					<i class="ti-line-dotted icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 2em;width:100%;"></i>\n';
+		 				html_vip_line += '					<i class="ti-line-dotted icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 2em;width:100%;"></i>\n';
+	 				}
+
+	 				for(var j = 0; j < result.proxyServerByMasId.length; j++){
+	 					if (result.proxyServerByMasId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
+		 					if (result.proxyServerVipList[i].pry_svr_nm != "") {
+			 					$("#vip_proxy_nm" + j).html('<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm + '<br/>&nbsp;');
+		 					}
+
+		 					$("#keepVipDiv"+ j).html(html_sebu);
+		 					
+		 					$("#keepVipDivLine" + j).html(html_vip_line);
+		 					
+		 					iVipChkCnt = j;
+	 					}
+	 				}
+ 				}
+ 			}
+ 		}
+
+ 		//vip 두번째 row가 없는 경우 row size 변경
+ 		if (result.proxyServerVipList.length  <= 1 && proxyServerByMasId_cnt <= 1 && iVipChkCnt < 1) {
+ 			$("#keepVipDiv" + result.proxyServerVipList.length).attr('style', "width:80%;padding-left:20px;height:30px;");
+ 			
+ 			$("#keepVipDivLine" + result.proxyServerVipList.length).attr('style', "width:80%;padding-left:20px;height:30px;");
+ 		}
+
 		if (master_state == 'TC001501') {
  			setInterval(iDatabase_toggle, 5000);
 		}
 	}
-	
-	function fn_proxyMonInfo2(result){
-		var html = "";
-		$("#proxy_master_nm").text("");
-		console.log(result)
-		if (result.proxyVipLsnList != null && result.proxyVipLsnList.length > 0) {
-			$(result.proxyVipLsnList).each(function (index, item) {
-				html += '		<p class="card-title" style="margin-bottom:5px;margin-left:10px;">\n';
-				html += '			<i class="item-icon fa fa-toggle-right text-info"></i>\n';
-				html += '			&nbsp;<spring:message code="eXperDB_proxy.vip"/>\n';
-				html += '			<i class="item-icon fa fa-toggle-right text-info" style="padding-left:65px;"></i>\n';
-				html += '			&nbsp;<spring:message code="eXperDB_proxy.server"/>\n';
-				html += '		</p>\n';
-				html += '		<table class="bg-inverse-info">';
-				html += '			<tr>';
-				html += '				<td>';
-				html += '				</td>';
-				html += '				<td style="padding-left:30px;  text-align:center;">';
-				html += '					<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
-				if(item.master_gbn == "M") {
-					$("#proxy_master_nm").text(item.pry_svr_nm);
-					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-						html += '												<div class="badge badge-pill badge-success" title="">M</div>\n';
-					} else {
-						html += '												<div class="badge badge-pill badge-danger" title="">M</div>\n';
-					}
-					master_state = nvlPrmSet(item.agt_cndt_cd, '');
-				} else if(item.master_gbn == "B"){
-					if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-						html += '												<div class="badge badge-pill badge-success">B</div>\n'
-					} else {
-						html += '												<div class="badge badge-pill badge-danger">B</div>\n'
-					}
-				} else {
-					html += '											<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">\n';
-				}
-				html += '												'+item.pry_svr_nm+'\n';
-				if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001501'){
-					html += '						<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt"></i>&nbsp;&nbsp;&nbsp;&nbsp;';
-				} else if(nvlPrmSet(item.agt_cndt_cd, '') == 'TC001502'){
-					html += '						<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger blink_db pry_agt"></i>&nbsp;&nbsp;&nbsp;&nbsp;';
-				}
-				html += '					</h5>';
-				html += '				</td>';
-				html += '			</tr>';
-				html += '			<tr>';
-				html += '				<td rowspan="2">';
-				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:1px;">';
-				html += '						VIP<br>';
-				html += '						<ul>';
-				html += '							<li>192.168.50.115</li>';
-				html += '						</ul>';
-				html += '					</h6>';
-				html += '				</td>';
-				html += '				<td style="padding-left:30px; text-align:center;">';
-// 				for(var i = 0; i < item.lsn_nm_list.length(); i++){
-// 					if(i == 0){
-// 						html += '					<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>';	
-// 						html += '					<h6 class="text-info">';
-// 						html += '						'
-// 						html += '					</h6>';
-// 						html += '				</td>';
-// 						html += '			</tr>';
-// 					} else {
-						html += '			<tr>';
-						html += '				<td style="padding-left:30px;  text-align:center;">';
-						html += '					<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>';
-						html += '					<h6 class="text-info">';
-						html += '						'+item.lsn_nm;
-						html += '					</h6>';
-						html += '				</td>';
-						html += '			</tr>';
-// 					}
-// 				} 
-				html += '		</table>';
-			});
-		}
-		
-		$("#proxyMonitoringList").html(html);
 
-// 		if (master_state == 'TC001501') {
-//  			setInterval(iDatabase_toggle, 5000);
-// 		}
-	}
-	
 	/* ********************************************************
-	* 시스템 기동 중지 / 시작
+	* 프록시 서버 모니터링 셋팅
 	******************************************************** */
-	function fn_actExeCng(pry_svr_id, type, status){
-		$.ajax({
-			url : '/proxyMonitoring/actExeCng.do',
-			type : 'post',
-			data : {
-				pry_svr_id : pry_svr_id,
-				type : type,
-				status : status,
-				act_exe_type : 'TC004001'
-			},
-			success : function(result) {	
- 				if(result.result){
- 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
- 				}else{
- 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
-	 			}
-				rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
-				fn_getProxyInfo(select_pry_svr_id, rowChkCnt);
-			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				$("#ins_idCheck", "#insProxyListenForm").val("0");
+	function fn_proxyMonInfo(result){
+		var html_listner = "";
+		var proxyServerByMasId_cnt = result.proxyServerByMasId.length;
+		var iProxyChkCnt = 0;
+		var iProxyChkTitleCnt = 0;
+		var html_pry_title = "";
+		var agent_state = "";
+		var html_agent = "";
+		var html_listner_ss = "";
+		var lsn_status_chk = "";
+		
+		//연결 모니터링
+		var html_listner_con = "";
+		var html_listner_con_ss = "";
+		
+
+		//////////////////////////////////////
+		//Proxy 연결 리스너
+		for(var i = 0; i < 2; i++){
+ 			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
+ 			
+ 			html_listner += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
+
+			html_listner += '	<span id="proxy_listner_nm' + i + '"></span>\n';
+			html_listner += '	</p>\n';
+			
+			html_listner += '	<table class="table-borderless" style="width:100%;">\n';
+			html_listner += '		<tr>\n';
+			html_listner += '			<td style="width:15%;padding-left:10px;" class="text-center" id="proxyAgentDiv' + i + '">\n';
+			html_listner += '			</td>\n';
+			html_listner += '			<td style="width:85%;height:200px;" class="text-center" id="proxyListnerDiv' + i + '">\n';
+			html_listner += '			&nbsp;</td>\n';
+
+			html_listner += '		</tr>\n';
+			html_listner += '	</table>\n';
+
+ 			if (i != 1) {
+ 				html_listner += '<hr>\n';
+ 			}
+ 			/////////////////////////////////////////////////////////////////////////////////////////////
+
+ 			html_listner_con += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
+
+ 			html_listner_con += '	<span id="proxy_listner_con_nm' + i + '">&nbsp;<br/></span>\n';
+ 			html_listner_con += '	</p>\n';
+			
+ 			html_listner_con += '	<table class="table-borderless" style="width:100%;">\n';
+ 			html_listner_con += '		<tr>\n';
+ 			html_listner_con += '			<td style="width:100%;height:200px;" id="dbProxyConDiv' + i + '">\n';
+ 			html_listner_con += '			&nbsp;</td>\n';
+
+ 			html_listner_con += '		</tr>\n';
+ 			html_listner_con += '	</table>\n';
+
+ 			if (i != 1) {
+ 				html_listner_con += '<br/>\n';
+ 			} 
+ 			
+		}
+
+		$("#proxyListnerMornitoringList").html(html_listner);
+		$("#proxyListnerConLineList").html(html_listner_con);
+		
+		//////////////////////////////////////
+
+		//제목 및 agent 상태
+  		for(var j = 0; j < result.proxyServerByMasId.length; j++){
+  			html_listner_ss = "";
+  			html_listner_con_ss = "";
+  			var lsnNulkCnt = 0;
+  			
+  			//title
+			if (result.proxyServerByMasId[j].pry_svr_nm != "") {
+				html_pry_title = '<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
+
+				if(nvlPrmSet(result.proxyServerByMasId[j].exe_status, '') == 'TC001501'){
+					html_pry_title += '		<div class="badge badge-pill badge-success" title="">' + result.proxyServerByMasId[j].master_gbn + '</div>\n';
+				} else {
+					html_pry_title += '		<div class="badge badge-pill badge-danger" title="">' +  result.proxyServerByMasId[j].master_gbn + '</div>\n';
+				}
 				
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			}
-		});
-		$('#loading').hide();
-	}
-	
-	/* ********************************************************
-	* 프록시 서버 모니터링 agent toggle 시작
-	******************************************************** */
-	function iDatabase_toggle() {
-		if(shown) {
-			$(".blink_db").hide();
-			shown = false;
-		} else {
-			$(".blink_db").show();
-			shown = true;
-		}
-		
-		setTimeout(iDatabase_toggle_end, 100);
-	}
+				html_pry_title += '			'+result.proxyServerByMasId[j].pry_svr_nm+'\n';
+				html_pry_title += '</h5>\n';
+				
+				html_pry_title += '<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:30px;padding-top:3px;">';
+				html_pry_title += '		IP : '+result.proxyServerByMasId[j].ipadr+'\n';
+				html_pry_title += '</h6>\n';
 
-	/* ********************************************************
-	* 프록시 서버 모니터링 agent toggle 종료
-	******************************************************** */
-	function iDatabase_toggle_end() {
-		if(shown) {
-			$(".blink_db").hide();
-			shown = false;
-		} else {
-			$(".blink_db").show();
-			shown = true;
+				$("#proxy_listner_nm" + j).html(html_pry_title);
+			}
+			
+			//agent 상태 체크
+			if(result.proxyServerByMasId[j].agt_cndt_cd == 'TC001501'){
+				html_agent = '					<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>\n';
+				html_agent += '					<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>\n';
+			} else {
+				html_agent = '					<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>\n';
+				html_agent += '					<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>\n';
+			}
+			
+			$("#proxyAgentDiv" + j).html(html_agent);
+			
+			if (result.proxyServerLsnList.length > 0) {
+				for(var k = 0; k < result.proxyServerLsnList.length; k++){
+					console.log(result.proxyServerLsnList[k]);
+					if (result.proxyServerByMasId[j].pry_svr_id == result.proxyServerLsnList[k].pry_svr_id) {
+					//	console.log(result.proxyServerLsnList[k]);
+						//proxy 리스너 셋팅
+						if(nvlPrmSet(result.proxyServerLsnList[k].lsn_exe_status, '') == 'TC001501'){
+							lsn_status_chk = "text-primary";
+						} else {
+							lsn_status_chk = "text-danger";
+						}
+						html_listner_ss += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+						html_listner_ss += '	<tr>';
+						html_listner_ss += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+ 						html_listner_ss += '			<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 '+lsn_status_chk+'" style="font-size: 2em;margin-top:10px;" ></i>\n';
+						html_listner_ss += '			<h5 class="mb-0 mb-sm-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:30px;text-align:left;">';
+						
+						if(nvlPrmSet(result.proxyServerLsnList[k].lsn_exe_status, '') == 'TC001501'){
+							html_listner_ss += '			<div class="badge badge-pill badge-success" title="">L</div>\n';
+						} else {
+							html_listner_ss += '			<div class="badge badge-pill badge-danger" title="">L</div>\n';
+						}
+ 
+						html_listner_ss += '			'+result.proxyServerLsnList[k].lsn_nm+'\n';
+						html_listner_ss += '			</h5>\n';
+ 					
+						html_listner_ss += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="text-align:left;padding-left:30px;padding-top:3px;">';
+						html_listner_ss += '				Bind IP : Port(*) : '+result.proxyServerLsnList[k].con_bind_port+'\n';
+						html_listner_ss += '			</h6>\n';
+						
+						html_listner_ss += '		</td>\n';
+						html_listner_ss += '	</tr>\n';
+						html_listner_ss += '</table>\n';
+						
+						///////////////////////////////////////////////////////
+						// db 연결 셋팅
+						html_listner_con_ss += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+						html_listner_con_ss += '	<tr>';
+						html_listner_con_ss += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+ 
+						var db_conn_ip_num = "";
+						var db_conn_ip_num_af = "";
+						
+						if (result.proxyServerLsnList[k].db_conn_ip_num != null) {
+							db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "");
+							
+							if (db_conn_ip_num == '1') {
+								if (k == 0 || k == 2) {
+									//첫번째 오른쪽
+									db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+								} else {
+									//두번째 상단
+									db_conn_ip_num_af = '<img src="../images/arrow_up.png" style="width: 100%;object-fit: cover;" alt=""  />';
+								}
+							} else if (db_conn_ip_num == '2') {
+								if (k == 0 || k == 2) {
+									//첫번째 하단
+									db_conn_ip_num_af = '<img src="../images/arrow_down.png" style="width: 100%;object-fit: cover;" alt=""  />';
+								} else {
+									//두번째 row 일자
+									db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+								}
+							} else {
+								//첫번째 row 일자, 하단
+								if (k == 0 || k == 2) {
+									db_conn_ip_num_af = '<img src="../images/arrow_side_down.png" style="width: 100%;object-fit: cover;" alt=""  />';
+								} else {
+									//두번째 row 일자, 상단
+									db_conn_ip_num_af = '<img src="../images/arrow_up_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+								}
+							}
+						}
+
+						html_listner_con_ss += '		<span class="image blinking"> '+db_conn_ip_num_af+' </span>\n';
+
+						html_listner_con_ss += '		</td>\n';
+						html_listner_con_ss += '	</tr>\n';
+						html_listner_con_ss += '</table>\n';
+						
+						lsnNulkCnt ++;
+					}
+				}
+
+ 				if (lsnNulkCnt < 2) {
+					html_listner_ss += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+					html_listner_ss += '	<tr>';
+					html_listner_ss += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+					html_listner_ss += '		&nbsp;</td>\n';
+					html_listner_ss += '	</tr>\n';
+					html_listner_ss += '</table>\n';
+					
+					html_listner_con_ss += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+					html_listner_con_ss += '	<tr>';
+					html_listner_con_ss += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+					html_listner_con_ss += '		&nbsp;</td>\n';
+					html_listner_con_ss += '	</tr>\n';
+					html_listner_con_ss += '</table>\n';
+				}
+				console.log(html_listner_ss);
+				lsnNulkCnt = 0;
+
+				$("#proxyListnerDiv" + j).html(html_listner_ss);
+				$("#dbProxyConDiv" + j).html(html_listner_con_ss);
+			}
 		}
 	}
 
@@ -703,7 +694,14 @@
 	* 디비 서버 모니터링 셋팅
 	******************************************************** */
 	function fn_dbMonInfo(result){
+		//스탠바이 여러건일때
+		//마스터만 있거나 스탠바이만 있는경우 빈칸만들기'
+		//proxy 서버별로 해야함
+		//값이 아예없는 경우
+		//서버 연결상태 지금은 agent 상태로 되어있는데 변경해야함
+	
 		var rowCount = 0;
+		var dbNulkCnt = 0;
 		var html = "";
 		var master_gbn = "";
 		var pry_svr_id = "";
@@ -713,203 +711,214 @@
 		var db_exe_status_css = "";
 		var db_exe_status_val = "";
 		
-		if (result.dbServerConProxy != null && result.dbServerConProxy.length > 0) {
-			$(result.dbServerConProxy).each(function (index, item) {
-				html += '								<table class="table-borderless" style="width:100%;">';
-				html += '									<tr>';
-				html += '										<td colspan="2" style="width:85%;">';
-				if(item.master_gbn == 'M'){
-					html += '										<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
-				} else {
-					html += '										<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:20px;padding-top:10px;">';
-				}
-
-				if(item.agt_cndt_cd == 'TC001101'){
-					html += '											<div class="badge badge-pill badge-success" title="">'+item.master_gbn+'</div>';
-				} else {
-					html += '											<div class="badge badge-pill badge-danger" title="">'+item.master_gbn+'</div>';
-				}
-
-				if(item.svr_host_nm != null && item.svr_host_nm != ""){
-					html += '											' + item.svr_host_nm;
-				} else {
-					if(item.master_gbn == 'M'){
-						html += '										master';
-					} else {
-						html += '										standby';
-					}
-				}
-
-				html += '											</h6>';
-				html += '										</td>';
-				html += '										<td rowspan="4" style="width:15%;">';
-				if(item.agt_cndt_cd == 'TC001101'){
-					html += '										<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>';
-				} else {
-					html += '										<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>';
-				}
-				html += '											<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>';
-				html += '										</td>';
-				html += '									</tr>';
-				html += '									<tr>';
-				html += '										<td colspan="2" style="padding-top:5px;">';
-				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP : ' + item.ipadr + '</h6>';
-				html += '										</td>'
-				html += '									</tr>';
-				html += '									<tr>';
-				html += '										<td>'
-				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">PORT : ' + item.portno + '</h6>';
-				html += '										</td>';
-				html += '									</tr>';
-				
-				if(item.agt_cndt_cd == 'TC001101'){
-					db_exe_status_chk = "text-success";
-					db_exe_status_css = "fa-refresh fa-spin text-success";
-					db_exe_status_val = 'running';
-				} else {
-					db_exe_status_chk = "text-danger";
-					db_exe_status_css = "fa-times-circle text-danger";
-					db_exe_status_val = 'stop';
-				}
-				html += '									<tr >\n';
-				html += '										<td class="text-right">\n';
-				html += '											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 '+db_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
-				html += '										</td>\n';
-				html += '										<td class="text-left" style="vertical-align: bottom;height: 50px;">\n';
-				html += '											<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>running</h6>\n';			
-				html += '										</td>\n';
-				html += '									</tr>\n';
-// 				html += '								</table>\n';
-				
-				html += '								</table>'
-			});
-		} else {
-			html += "	<div class='card'>\n";
-			html += '		<div class="card-body">\n';
-			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-			html += '				<spring:message code="message.msg01" /></h5>\n';
-			html += '			</div>\n';
-			html += "		</div>\n";
-			html += "	</div>\n";
-		}
-		$("#dbMonitoringList").html(html);
-	}
-	
-	/* ********************************************************
-	* 디비 서버 모니터링 셋팅
-	******************************************************** */
-	function fn_dbListenerVipInfo(result){
-		var rowCount = 0;
-		var html = "";
-		var master_gbn = "";
-		var pry_svr_id = "";
-		var listCnt = 0;
-		var pry_svr_id_val = "";
-		var db_exe_status_chk = "";
-		var db_exe_status_css = "";
-		var db_exe_status_val = "";
+		var proxyServerByMasId_cnt = result.proxyServerByMasId.length;
 		
-		if (result.dbServerConProxy != null && result.dbServerConProxy.length > 0) {
-			$(result.dbServerConProxy).each(function (index, item) {
-				html += '								<table class="table-borderless" style="width:100%;">';
-				html += '									<tr>';
-				html += '										<td colspan="2" style="width:85%;">';
-				if(item.master_gbn == 'M'){
-					html += '										<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
-				} else {
-					html += '										<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:20px;padding-top:10px;">';
-				}
+		var html_db = "";
+		
+		//////////////////////////////////////
+		//Proxy 연결 리스너
+		for(var i = 0; i < 2; i++){
+ 			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
+ 			
+ 			html_db += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
 
-				if(item.agt_cndt_cd == 'TC001101'){
-					html += '											<div class="badge badge-pill badge-success" title="">'+item.master_gbn+'</div>';
-				} else {
-					html += '											<div class="badge badge-pill badge-danger" title="">'+item.master_gbn+'</div>';
-				}
-
-				if(item.svr_host_nm != null && item.svr_host_nm != ""){
-					html += '											' + item.svr_host_nm;
-				} else {
-					if(item.master_gbn == 'M'){
-						html += '										master';
-					} else {
-						html += '										standby';
-					}
-				}
-
-				html += '											</h6>';
-				html += '										</td>';
-				html += '										<td rowspan="4" style="width:15%;">';
-				if(item.agt_cndt_cd == 'TC001101'){
-					html += '										<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>';
-				} else {
-					html += '										<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>';
-				}
-				html += '											<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>';
-				html += '										</td>';
-				html += '									</tr>';
-				html += '									<tr>';
-				html += '										<td colspan="2" style="padding-top:5px;">';
-				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP : ' + item.ipadr + '</h6>';
-				html += '										</td>'
-				html += '									</tr>';
-				html += '									<tr>';
-				html += '										<td>'
-				html += '											<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">PORT : ' + item.portno + '</h6>';
-				html += '										</td>';
-				html += '									</tr>';
-				
-				if(item.agt_cndt_cd == 'TC001101'){
-					db_exe_status_chk = "text-success";
-					db_exe_status_css = "fa-refresh fa-spin text-success";
-					db_exe_status_val = 'running';
-				} else {
-					db_exe_status_chk = "text-danger";
-					db_exe_status_css = "fa-times-circle text-danger";
-					db_exe_status_val = 'stop';
-				}
-				html += '									<tr >\n';
-				html += '										<td class="text-right">\n';
-				html += '											<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 '+db_exe_status_chk+'" style="font-size: 3em;margin-top:10px;"></i>\n';
-				html += '										</td>\n';
-				html += '										<td class="text-left" style="vertical-align: bottom;height: 50px;">\n';
-				html += '											<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>running</h6>\n';			
-				html += '										</td>\n';
-				html += '									</tr>\n';
-				html += '								</table>\n';
-				
-				html += '								</table>'
-			});
-		} else {
-			html += "	<div class='card'>\n";
-			html += '		<div class="card-body">\n';
-			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
-			html += '				<spring:message code="message.msg01" /></h5>\n';
-			html += '			</div>\n';
-			html += "		</div>\n";
-			html += "	</div>\n";
-		}
-		$("#dbListenerVipList").html(html);
-	}
-	
-	/* ********************************************************
-	 * 리스너 db 연결도 셋팅
-	 ******************************************************** */
-	function fn_listenerDbConnect(result){
-		var rowCount = 0;
-		var html = "";
-		var master_gbn = "";
-		var pry_svr_id = "";
-		var listCnt = 0;
-		var pry_svr_id_val = "";
-		var db_exe_status_chk = "";
-		var db_exe_status_css = "";
-		var db_exe_status_val = "";
-		if(result.listenerDbConnect != null  && result.listenerDbConnect.length > 0) {
+ 			html_db += '		<span id="db_proxy_nm' + i + '"></span>\n';
+ 			html_db += '	</p>\n';
 			
+ 			html_db += '	<table class="table-borderless" style="width:100%;">\n';
+ 			html_db += '		<tr>\n';
+ 			html_db += '			<td style="width:100%;height:200px;" id="dbProxyDiv' + i + '">\n';
+ 			html_db += '			&nbsp;</td>\n';
+
+ 			html_db += '		</tr>\n';
+ 			html_db += '	</table>\n';
+
+ 			if (i != 1) {
+ 				html_db += '<hr>\n';
+ 			}
 		}
-		$("#listenerDbConnect").html(html);
+
+		$("#dbListenerVipList").html(html_db);
+		//////////////////////////////////////
+		
+		
+		//////////////////////////////////////
+		//Proxy 연결 db
+
+		//제목 및 agent 상태
+  		for(var j = 0; j < result.proxyServerByMasId.length; j++){
+  			html_db = "";
+  			//title
+			if (result.proxyServerByMasId[j].pry_svr_nm != "") {
+				$("#db_proxy_nm" + j).html('<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerByMasId[j].pry_svr_nm + '<br/>&nbsp;');
+			}
+
+ 			if (result.dbServerConProxyList != null && result.dbServerConProxyList.length > 0) {
+				for(var k = 0; k < result.dbServerConProxyList.length; k++){
+
+					if (result.proxyServerByMasId[j].pry_svr_id == result.dbServerConProxyList[k].pry_svr_id) {
+	
+						html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+						html_db += '	<tr>';
+						
+						html_db += '		<td colspan="2" style="width:85%;">';
+
+						if(result.dbServerConProxyList[k].master_gbn == 'M'){
+							html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">';
+						} else {
+							html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:10px;padding-top:10px;">';
+						}
+ 
+						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
+							html_db += '		<div class="badge badge-pill badge-success" title="">'+result.dbServerConProxyList[k].master_gbn+'</div>';
+						} else {
+							html_db += '		<div class="badge badge-pill badge-danger" title="">'+result.dbServerConProxyList[k].master_gbn+'</div>';
+						}
+						 
+						if(result.dbServerConProxyList[k].svr_host_nm != null && result.dbServerConProxyList[k].svr_host_nm != ""){
+							if(result.dbServerConProxyList[k].master_gbn == 'M'){
+								html_db += '		Master(';
+							} else {
+								html_db += '		Standby(';
+							}
+							html_db += '			' + result.dbServerConProxyList[k].svr_host_nm;
+							if(result.dbServerConProxyList[k].master_gbn == 'M'){
+								html_db += '		)';
+							} else {
+								if(result.dbServerConProxyList[k].cnt_svr_id > 1){
+									html_db += '	외 ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + '건)';
+								} else {
+									html_db += '	)';
+								}
+							}
+						} else {
+							if(result.dbServerConProxyList[k].master_gbn == 'M'){
+								html_db += '		Master';
+							} else {
+								html_db += '		Standby';
+							}
+						}
+						html_db += '			</h6>';
+						html_db += '		</td>';
+						
+						
+						html_db += '		<td rowspan="3" style="width:15%;">';
+						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
+							html_db += '		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>\n';
+						} else {
+							html_db += '		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>';
+						}
+
+						html_db += '		</td>';
+						
+						html_db += '	</tr>';
+
+						html_db += '	<tr>';
+						html_db += '		<td colspan="2" style="padding-top:5px;">';
+
+ 						if(result.dbServerConProxyList[k].master_gbn == 'M'){
+							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
+						} else {
+							if(result.dbServerConProxyList[k].cnt_svr_id > 1){
+								html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">대표 IP : ' + result.dbServerConProxyList[k].ipadr + '</h6>';
+							} else {
+								html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
+							}
+						}
+
+						
+						html_db += '		</td>'
+						html_db += '	</tr>'
+
+
+						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
+							db_exe_status_chk = "text-success";
+							db_exe_status_css = "fa-refresh fa-spin text-success";
+							db_exe_status_val = 'running';
+						} else {
+							db_exe_status_chk = "text-danger";
+							db_exe_status_css = "fa-times-circle text-danger";
+							db_exe_status_val = 'stop';
+						}
+
+						html_db += '	<tr >\n';
+						html_db += '		<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">\n';
+						html_db += '			<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>running</h6>\n';			
+						html_db += '		</td>\n';
+						html_db += '	</tr>\n';
+						html_db += '	</table>\n';
+						
+						dbNulkCnt ++;
+					}
+				}
+				 
+				if (dbNulkCnt < 2) {
+					html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+					html_db += '	<tr>';
+					html_db += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+					html_db += '		&nbsp;</td>\n';
+					html_db += '	</tr>\n';
+					html_db += '</table>\n';
+				}
+
+				dbNulkCnt = 0;
+				
+				$("#dbProxyDiv" + j).html(html_db);
+			}
+  		}
+	}
+
+	/* ********************************************************
+	* 리스너 상세리스트 조회
+	******************************************************** */
+	function fn_lsnStat(pry_svr_id){
+		$.ajax({
+			url : '/proxyMonitoring/listenerstatistics.do', 
+			data : {
+				pry_svr_id : pry_svr_id,
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {
+				proxyStatTable.rows({selected: true}).deselect();
+				proxyStatTable.clear().draw();
+				if (nvlPrmSet(result.proxyStatisticsInfo, '') != '') {
+					for(var i = 0; i < result.proxyStatisticsInfo.length; i++){
+						if(result.proxyStatisticsInfo[i].r == 1){
+							if(i != result.proxyStatisticsInfo.length-1 && result.proxyStatisticsInfo[i+1].r == 2){
+								result.proxyStatisticsInfo[i].fail_chk_cnt_cng = result.proxyStatisticsInfo[i].fail_chk_cnt-result.proxyStatisticsInfo[i+1].fail_chk_cnt;
+								result.proxyStatisticsInfo[i].max_session_cng = result.proxyStatisticsInfo[i].max_session-result.proxyStatisticsInfo[i+1].max_session;
+								result.proxyStatisticsInfo[i].cur_session_cng = result.proxyStatisticsInfo[i].cur_session-result.proxyStatisticsInfo[i+1].cur_session;
+								result.proxyStatisticsInfo[i].session_limit_cng = result.proxyStatisticsInfo[i].session_limit-result.proxyStatisticsInfo[i+1].session_limit;
+								result.proxyStatisticsInfo[i].cumt_sso_con_cnt_cng = result.proxyStatisticsInfo[i].cumt_sso_con_cnt-result.proxyStatisticsInfo[i+1].cumt_sso_con_cnt;
+								result.proxyStatisticsInfo[i].byte_receive_cng = result.proxyStatisticsInfo[i].byte_receive-result.proxyStatisticsInfo[i+1].byte_receive;
+								result.proxyStatisticsInfo[i].byte_transmit_cng = result.proxyStatisticsInfo[i].byte_transmit-result.proxyStatisticsInfo[i+1].byte_transmit;
+							}
+							proxyStatTable.row.add(result.proxyStatisticsInfo[i]).draw();
+						}
+					}
+				}
+
+		  		var tableRows = $('#proxyStatTable tbody tr');
+		  		if (tableRows.length > 1) {
+			  		$('#proxyStatTable').rowspan(0); 
+			  		$('#proxyStatTable').rowspan(1); 
+		  		}
+		  		
+			}
+		});
 	}
 	
 	/* ********************************************************
@@ -1006,8 +1015,10 @@
 		
 		$(window).trigger('resize');
 	}
-	
-	// config 파일 수정 이력 table
+
+	/* ********************************************************
+	* config 파일 수정 이력 table
+	******************************************************** */
 	function fn_config_cng_log_init(){
 		proxyConfigCngLogTable = $('#proxyConfigCngLogTable').DataTable({
 			searching : false,
@@ -1064,7 +1075,6 @@
 		
 		$(window).trigger('resize');
 	}
-	
 	/* ********************************************************
 	 * 리스너 통계 테이블 셋팅
 	 ******************************************************** */
@@ -1279,150 +1289,57 @@
 	}
 
 	/* ********************************************************
-	* 리스너 상세리스트 조회
+	* 통계리스트 html 설정
 	******************************************************** */
-	function fn_lsnStat(pry_svr_id){
-		$.ajax({
-			url : '/proxyMonitoring/listenerstatistics.do', 
-			data : {
-				pry_svr_id : pry_svr_id,
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {
-				proxyStatTable.rows({selected: true}).deselect();
-				proxyStatTable.clear().draw();
-				if (nvlPrmSet(result.proxyStatisticsInfo, '') != '') {
-					for(var i = 0; i < result.proxyStatisticsInfo.length; i++){
-						if(result.proxyStatisticsInfo[i].r == 1){
-							if(i != result.proxyStatisticsInfo.length-1 && result.proxyStatisticsInfo[i+1].r == 2){
-								result.proxyStatisticsInfo[i].fail_chk_cnt_cng = result.proxyStatisticsInfo[i].fail_chk_cnt-result.proxyStatisticsInfo[i+1].fail_chk_cnt;
-								result.proxyStatisticsInfo[i].max_session_cng = result.proxyStatisticsInfo[i].max_session-result.proxyStatisticsInfo[i+1].max_session;
-								result.proxyStatisticsInfo[i].cur_session_cng = result.proxyStatisticsInfo[i].cur_session-result.proxyStatisticsInfo[i+1].cur_session;
-								result.proxyStatisticsInfo[i].session_limit_cng = result.proxyStatisticsInfo[i].session_limit-result.proxyStatisticsInfo[i+1].session_limit;
-								result.proxyStatisticsInfo[i].cumt_sso_con_cnt_cng = result.proxyStatisticsInfo[i].cumt_sso_con_cnt-result.proxyStatisticsInfo[i+1].cumt_sso_con_cnt;
-								result.proxyStatisticsInfo[i].byte_receive_cng = result.proxyStatisticsInfo[i].byte_receive-result.proxyStatisticsInfo[i+1].byte_receive;
-								result.proxyStatisticsInfo[i].byte_transmit_cng = result.proxyStatisticsInfo[i].byte_transmit-result.proxyStatisticsInfo[i+1].byte_transmit;
-							}
-							proxyStatTable.row.add(result.proxyStatisticsInfo[i]).draw();
-						}
-					}
-				}
+	function fn_proxyMonChartSet(result){
+		var html = "";
+		var chartCnt = 0;
 
-		  		var tableRows = $('#proxyStatTable tbody tr');
-		  		if (tableRows.length > 1) {
-			  		$('#proxyStatTable').rowspan(0); 
-			  		$('#proxyStatTable').rowspan(1); 
-		  		}
-		  		
-			}
-		});
-	}
-
-
-	/* ********************************************************
-	 * config 파일 view popup
-	 ******************************************************** */
-	function fn_configView(pry_svr_id, type){
-		console.log(pry_svr_id)
-		console.log(type)
-		$.ajax({
-			url : '/proxyMonitoring/configView.do',
-			type : 'post',
-			data : {
-				pry_svr_id : pry_svr_id,
-				type : type
-			},
-			success : function(result) {
-				$("#config", "#configForm").html("");
-				$("#seek", "#configForm").val("0");
-				$("#endFlag", "#auditViewForm").val("0");
-				$("#dwLen", "#auditViewForm").val("0");
-				fn_configViewAjax(pry_svr_id, type);
-				$('#pop_layer_config_view').modal("show");
-			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				$("#ins_idCheck", "#insProxyListenForm").val("0");
+		html += '<div class="col-md-12 col-xl-12 justify-content-center" >\n';
+		html += '	<div class="card" style="margin-left:-10px;border:none;">\n';
+		html += '		<div class="card-body" style="border:none;">\n';
+		html += '			<p class="card-title" style="margin-bottom:0px"><i class="item-icon mdi mdi-chart-bar text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.listener_statistics"/>&nbsp;&nbsp;   &nbsp;<span class="text-info"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg4"/></span>&nbsp;</p>\n';
+		html += '		</div>\n';
+		html += '	</div>\n';
+		html += '</div>\n';
+		
+		if (result.proxyChartCntList != null && result.proxyChartCntList.length > 0) {
+			$(result.proxyChartCntList).each(function (index, item) {
+				chartCnt ++;
 				
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				html += '<div class="col-md-6 col-xl-6 justify-content-center">\n';
+				html += '	<div class="card" style="margin-left:-10px;border:none;">\n';
+				html += '		<div class="card-body" style="border:none;margin-top:-35px;">\n';
+				html += '			<p class="card-title" style="margin-bottom:0px;margin-left:10px;"><i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;' + item.pry_svr_nm + '-' + item.lsn_nm + '-' + item.db_con_addr +'</p>\n';
+				html += '			<div id="chart-line-' + chartCnt + '" style="max-height:200px;"></div>\n';
+				html += '		</div>\n';
+				html += '	</div>\n';
+				html += '</div>\n';
+				
+				if ( chartCnt % 2 == 0 ) {
+					html += '<div class="col-md-12">\n';
+					html += '	<div class="card" style="border:none;">\n';
+					html += '		&nbsp;</div>\n';
+					html += '</div>\n';
 				}
-			}
-		});
-		$('#loading').hide();
-	}
-
-	/* ********************************************************
-	 * log 파일 view popup
-	 ******************************************************** */
-	function fn_logView(pry_svr_id, type, date){
-		console.log(date);
-		todayYN = 'N';
-		if(date == 'today'){
-			pry_svr_id = select_pry_svr_id;
-			date = new Date().toJSON();
-			todayYN = 'Y';
+			});
+		} else {
+			html += '<div class="col-md-3 col-xl-12 justify-content-center">\n';
+			html += "	<div class='card'>\n";
+			html += '		<div class="card-body"  style="background-color:#ededed;>\n';
+			html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+			html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted text-center"">\n';
+			html += '				<spring:message code="message.msg01" /></h5>\n';
+			html += '			</div>\n';
+			html += "		</div>\n";
+			html += "	</div>\n";
+			html += "</div>\n";
 		}
-		$.ajax({
-			url : '/proxyMonitoring/logView.do',
-			type : 'post',
-			data : {
-				pry_svr_id : pry_svr_id,
-				type : type,
-				date : date,
-			},
-			success : function(result) {
-				$("#proxylog", "#proxyViewForm").html("");
-				$("#dwLen", "#proxyViewForm").val("0");
-				$("#fSize", "#proxyViewForm").val("");
-				$("#pry_svr_id", "#proxyViewForm").val(pry_svr_id);
-				$("#log_line", "#proxyViewForm").val("1000");
-				$("#type", "#proxyViewForm").val(type);
-				$("#date", "#proxyViewForm").val(date);
-				$("#aut_id", "#proxyViewForm").val(aut_id);
-				$("#todayYN", "#proxyViewForm").val(todayYN);
-				$("#view_file_name", "#proxyViewForm").html("");
-				$("#log_type").val(type).prop("selected", true);
-				dateCalenderSetting();
-				fn_logViewAjax();
-				$('#pop_layer_log_view').modal("show");
-			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			}
-		});
+
+		$("#chartCnt").val(chartCnt);
+		$("#listener_header_sub").html(html);
 	}
 
-	
 	/* ********************************************************
 	* 리스너 통계차트 생성
 	******************************************************** */
@@ -1521,7 +1438,185 @@
 			}
 		});
 	}
+
+	/* ********************************************************
+	* 시스템 기동 중지 / 시작
+	******************************************************** */
+	function fn_actExeCng(pry_svr_id, type, status){
+		$.ajax({
+			url : '/proxyMonitoring/actExeCng.do',
+			type : 'post',
+			data : {
+				pry_svr_id : pry_svr_id,
+				type : type,
+				status : status,
+				act_exe_type : 'TC004001'
+			},
+			success : function(result) {	
+ 				if(result.result){
+ 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
+ 				}else{
+ 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+	 			}
+				rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
+				fn_getProxyInfo(select_pry_svr_id, rowChkCnt);
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				$("#ins_idCheck", "#insProxyListenForm").val("0");
+				
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+		$('#loading').hide();
+	}
 	
+	/* ********************************************************
+	* 프록시 서버 모니터링 agent toggle 시작
+	******************************************************** */
+	function iDatabase_toggle() {
+		if(shown) {
+			$(".blink_db").hide();
+			shown = false;
+		} else {
+			$(".blink_db").show();
+			shown = true;
+		}
+		
+		setTimeout(iDatabase_toggle_end, 100);
+	}
+
+	/* ********************************************************
+	* 프록시 서버 모니터링 agent toggle 종료
+	******************************************************** */
+	function iDatabase_toggle_end() {
+		if(shown) {
+			$(".blink_db").hide();
+			shown = false;
+		} else {
+			$(".blink_db").show();
+			shown = true;
+		}
+	}
+
+	/* ********************************************************
+	 * 리스너 db 연결도 셋팅
+	 ******************************************************** */
+	function fn_listenerDbConnect(result){
+		var rowCount = 0;
+		var html = "";
+		var master_gbn = "";
+		var pry_svr_id = "";
+		var listCnt = 0;
+		var pry_svr_id_val = "";
+		var db_exe_status_chk = "";
+		var db_exe_status_css = "";
+		var db_exe_status_val = "";
+		if(result.listenerDbConnect != null  && result.listenerDbConnect.length > 0) {
+			
+		}
+		$("#listenerDbConnect").html(html);
+	}
+
+	/* ********************************************************
+	 * config 파일 view popup
+	 ******************************************************** */
+	function fn_configView(pry_svr_id, type){
+		console.log(pry_svr_id)
+		console.log(type)
+		$.ajax({
+			url : '/proxyMonitoring/configView.do',
+			type : 'post',
+			data : {
+				pry_svr_id : pry_svr_id,
+				type : type
+			},
+			success : function(result) {
+				$("#config", "#configForm").html("");
+				$("#seek", "#configForm").val("0");
+				$("#endFlag", "#auditViewForm").val("0");
+				$("#dwLen", "#auditViewForm").val("0");
+				fn_configViewAjax(pry_svr_id, type);
+				$('#pop_layer_config_view').modal("show");
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				$("#ins_idCheck", "#insProxyListenForm").val("0");
+				
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+		$('#loading').hide();
+	}
+
+	/* ********************************************************
+	 * log 파일 view popup
+	 ******************************************************** */
+	function fn_logView(pry_svr_id, type, date){
+		console.log(date);
+		todayYN = 'N';
+		if(date == 'today'){
+			pry_svr_id = select_pry_svr_id;
+			date = new Date().toJSON();
+			todayYN = 'Y';
+		}
+		$.ajax({
+			url : '/proxyMonitoring/logView.do',
+			type : 'post',
+			data : {
+				pry_svr_id : pry_svr_id,
+				type : type,
+				date : date,
+			},
+			success : function(result) {
+				$("#proxylog", "#proxyViewForm").html("");
+				$("#dwLen", "#proxyViewForm").val("0");
+				$("#fSize", "#proxyViewForm").val("");
+				$("#pry_svr_id", "#proxyViewForm").val(pry_svr_id);
+				$("#log_line", "#proxyViewForm").val("1000");
+				$("#type", "#proxyViewForm").val(type);
+				$("#date", "#proxyViewForm").val(date);
+				$("#aut_id", "#proxyViewForm").val(aut_id);
+				$("#todayYN", "#proxyViewForm").val(todayYN);
+				$("#view_file_name", "#proxyViewForm").html("");
+				$("#log_type").val(type).prop("selected", true);
+				dateCalenderSetting();
+				fn_logViewAjax();
+				$('#pop_layer_log_view').modal("show");
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+	}
+
+
 	/* ********************************************************
 	* 기동-정지 실패 로그 popup
 	******************************************************** */
@@ -1596,6 +1691,7 @@
 	
 	
 </script>
+
 <%@include file="./../popup/proxyLogView.jsp"%>
 <%@include file="./../popup/proxyConfigViewPop.jsp"%>
 <%@include file="./../../cmmn/wrkLog.jsp"%>
@@ -1696,15 +1792,14 @@
 								<div class="carousel-inner">
 									<div class="carousel-item active" id="v-pills-home_test1">
 										<div class="row">
-											<!-- 프록시 서버 -->
-											<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
-													<div class="card-header" role="tab" id="page_proxy_server" >
+													<div class="card-header" role="tab" id="page_keep_vip" >
 														<div class="row" style="height: 15px;">
 															<div class="col-12">
 																<h6 class="mb-0">
 																	<i class="item-icon fa fa-dot-circle-o"></i>
-																	<span class="menu-title"><spring:message code="eXperDB_proxy.server"/></span>
+																	<span class="menu-title">가상IP</span>
 																</h6>
 															</div>
 														</div>
@@ -1712,138 +1807,101 @@
 												</div>
 											</div>
 											
-<!-- 											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" > -->
-<!-- 											</div> -->
-											<!-- db서버 -->
-<!-- 											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" > -->
-<!-- 												<div class="card" style="margin-bottom:0px;"> -->
-<!-- 													<div class="card-header" role="tab" id="page_keepAlived_div" > -->
-<!-- 														<div class="row" style="height: 15px;"> -->
-<!-- 															<div class="col-12"> -->
-<!-- 																<h6 class="mb-0"> -->
-<!-- 																	<i class="item-icon fa fa-dot-circle-o"></i> -->
-<%-- 																	<span class="menu-title"><spring:message code="common.dbServer"/></span> --%>
-<!-- 																</h6> -->
-<!-- 															</div> -->
-<!-- 														</div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 											</div> -->
-											
-										</div>
-										
-										<div class="row">
-											<!-- 프록시 서버  출력-->
-											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
-												<div class="card" style="margin-bottom:10px;border:none;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
-														<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
-															<i class="item-icon fa fa-toggle-right text-info"></i>
-															&nbsp;<spring:message code="eXperDB_proxy.vip"/> 
-															<i class="item-icon fa fa-toggle-right text-info" style="padding-left:65px;"></i>
-															&nbsp;<spring:message code="eXperDB_proxy.server"/>
-														</p>
-														<table class="bg-inverse-info">
-															<tr>
-																<td>
-																</td>
-																<td style="padding-left:30px;  text-align:center;">
-																<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">
-																	<div class="badge badge-pill badge-success" title="">M</div> <a href="#" onclick="fn_configView(1, 'P')">vip_primary_proxy_1</a>
-																	<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt"></i>
-																	&nbsp;&nbsp;&nbsp;&nbsp;
-																</h5>
-																</td>
-															</tr>
-															<tr>
-																<td rowspan="2">
-																	<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:1px;">
-																	<a href="#" onclick="fn_configView(1, 'K')">VIP</a><br>
-																	<ul>
-																	<li>192.168.50.115</li>
-																	</ul>
-																	</h6>
-																</td>
-																<td style="padding-left:30px; text-align:center;">
-																	<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>
-																	<h6 class="text-info">
-<!-- 																	<i class="fa fa-refresh fa-spin text-success icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i> -->
-																		pgReadWrite
-																	</h6>
-																</td>
-															</tr>
-															<tr>
-																<td style="padding-left:30px;  text-align:center;">
-																	<i class="mdi mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>
-																	<h6 class="text-info">
-<!-- 																	<i class="fa fa-refresh fa-spin text-success icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i> -->
-																		pgReadOnly
-																	</h6>
-																</td>
-															</tr>
-															<tr>
-																<td></td>
-																<td style="padding-left:30px;  text-align:center;">
-																<h5	class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">
-																	<div class="badge badge-pill badge-success" title="">B</div> <a href="#" onclick="fn_configView(2, 'P')">vip_primary_proxy_2</a>
-																	<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success blink_db pry_agt"></i>
-																</h5>
-																</td>
-															</tr>
-															<tr>
-																<td rowspan="2">
-																	<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;padding-top:1px;">
-																	<a href="#" onclick="fn_configView(2, 'K')">VIP</a><br>
-																	<ul>
-																		<li>192.168.50.116</li>
-																	</ul>
-																	</h6>
-																</td>
-																<td style="padding-left:30px; text-align:center;">
-																	<i class="mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; "></i>
-																	<h6 class="text-muted"><i class="fa fa-refresh fa-spin text-success icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>
-																	<a href="#" onclick="fn_configView()">pgReadWrite</a></h6>
-																</td>
-															</tr>
-															<tr>
-																<td style="padding-left:30px; text-align:center;">
-																	<i class="mdi mdi-glassdoor icon-md mb-0 mb-md-3 mb-xl-0 text-primary " style="font-size: 3em;margin-top:10px; text-align:center;"></i>
-																	<h6 class="text-muted"><i class="fa fa-refresh fa-spin text-success icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>
-																	<a href="#" onclick="fn_configView()">pgReadOnly</a></h6>
-																</td>
-															</tr>
-														</table>
+											<div class="accordion_main col-0_5" style="border:none;" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+													<div class="card-header" role="tab" id="page_connect_server" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	&nbsp;
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+ 
+											<!-- 프록시 서버 -->
+											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_proxy_server" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<span class="menu-title"><spring:message code="eXperDB_proxy.server"/> 연결 리스너</span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="accordion_main col-1_5" style="border:none;" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+													<div class="card-header" role="tab" id="page_connect_server" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	&nbsp;
+																</h6>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
 											
-											<!-- 리스너 DB 연결도 -->
+											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_db_server" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<span class="menu-title">연결된 db 서버</span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+										
+										<div class="row">
+											<!-- vip 출력 -->
 											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:10px;border:none;" >
+													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
+													</div>
+												</div>
+											</div>
+											
+											<div class="accordion_main accordion-multi-colored col-0_5" id="accordion" role="tablist" >
+												<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+													<div class="card-body" style="border:none;min-height: 200px;margin-left:-17px;" id="proxyVipConLineList">
+													</div>
+												</div>
+											</div>
+
+											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
 											<div class="card" style="margin-bottom:10px;border:none;" >
-												<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="listenerDbConnect">
-												<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
-															<i class="item-icon fa fa-toggle-right text-info"></i>
-															&nbsp;리스너 연결 상태
-														</p>
-													<table>
-														<tr><td style="padding:20px;"><i class="mdi mdi-arrow-right icon-md mb-0 mb-md-3 mb-xl-0 text-success " style="font-size: 3em;margin-top:10px; text-align:center;"></i></td></tr>
-														<tr><td style="padding:20px;"><i class="mdi mdi-arrow-right icon-md mb-0 mb-md-3 mb-xl-0 text-success " style="font-size: 3em;margin-top:10px; text-align:center;"></i></td></tr>
-														<tr><td style="padding:20px;"><i class="mdi mdi-arrow-bottom-right icon-md mb-0 mb-md-3 mb-xl-0 text-success " style="font-size: 3em;margin-top:10px; text-align:center;"></i></td></tr>
-<!-- 														<tr><td style="padding:10px;"><i class="mdi mdi-arrow-top-right icon-md mb-0 mb-md-3 mb-xl-0 text-success " style="font-size: 3em;margin-top:10px; text-align:center;"></i></td></tr> -->
-														<tr><td style="padding:20px;"><i class="mdi mdi-arrow-right icon-md mb-0 mb-md-3 mb-xl-0 text-success " style="font-size: 3em;margin-top:10px; text-align:center;"></i></td></tr>
-														<tr><td style="padding:20px;"><i class="mdi mdi-arrow-right icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;margin-top:10px; text-align:center;"></i></td></tr>
-													</table>
+													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
+													</div>
+												</div>
+											</div>
+																						
+											<div class="accordion_main accordion-multi-colored col-1_5" id="accordion" role="tablist" >
+												<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+													<div class="card-body" style="border:none;min-height: 200px;margin-left:-17px;" id="proxyListnerConLineList">
 												</div>
 											</div>
 											</div>
+											
+											
 											<!-- DB 서버  출력-->
-											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
-<!-- 													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbMonitoringList"> -->
-														<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
-															<i class="item-icon fa fa-toggle-right text-info"></i>
-															&nbsp;연결된 db 서버
-														</p>
 													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
 													</div>
 												</div>
