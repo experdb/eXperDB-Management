@@ -55,6 +55,18 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 	}
 	
 	/**
+	 * Proxy 서버  cluster 조회 by master server id
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectProxyServerVipChk(int pry_svr_id) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectProxyServerVipChk",pry_svr_id);
+		return result;
+	}
+	
+	/**
 	 * proxy / keepalived 기동 상태 이력
 	 * @param pry_svr_id
 	 * @return
@@ -75,6 +87,30 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 	public List<Map<String, Object>> selectDBServerConProxy(int pry_svr_id) {
 		List<Map<String, Object>> result = null;
 		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectDBServerConProxy", pry_svr_id);
+		return result;
+	}
+	
+	/**
+	 * Proxy 연결된 db 서버 조회
+	 * @param pry_svr_id
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectDBServerConProxyList(int pry_svr_id) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectDBServerConProxyList", pry_svr_id);
+		return result;
+	}
+	
+	/**
+	 * Proxy 리스너 목록 및 상태조회
+	 * @param pry_svr_id
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectProxyListnerMainList(int pry_svr_id) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectProxyListnerMainList", pry_svr_id);
 		return result;
 	}
 	

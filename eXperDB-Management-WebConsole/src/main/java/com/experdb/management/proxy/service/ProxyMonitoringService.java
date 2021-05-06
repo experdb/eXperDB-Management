@@ -45,6 +45,13 @@ public interface ProxyMonitoringService {
 	 */
 	List<Map<String, Object>> selectProxyServerByMasterId(int pry_svr_id);
 //	List<DbServerVO> selectDbServerByPryMasterId(HttpServletRequest request, int pry_svr_id);
+
+	/**
+	 * Proxy 서버  cluster 조회 by master server id
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	List<Map<String, Object>> selectProxyServerVipChk(int pry_svr_id);
 	
 	/**
 	 * proxy / keepalived 기동 상태 이력
@@ -60,6 +67,20 @@ public interface ProxyMonitoringService {
 	 */
 	List<Map<String, Object>> selectDBServerConProxy(int pry_svr_id);
 	
+	/**
+	 * Proxy 연결된 db 서버 조회
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	List<Map<String, Object>> selectDBServerConProxyList(int pry_svr_id);
+	
+	/**
+	 * Proxy 리스너 목록 및 상태조회
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	List<Map<String, Object>> selectProxyListnerMainList(int pry_svr_id);
+
 	/**
 	 * Proxy 리스너 상세 정보 조회
 	 * @param pry_svr_id

@@ -95,6 +95,18 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
+	 * Proxy 서버  cluster 조회 by master server id
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectProxyServerVipChk(int pry_svr_id) {
+		return proxyMonitoringDAO.selectProxyServerVipChk(pry_svr_id);
+	}
+	
+	
+
+	/**
 	 * proxy / keepalived 기동 상태 이력
 	 * @param pry_svr_id
 	 * @return List<ProxyLogVO>
@@ -112,6 +124,26 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	@Override
 	public List<Map<String, Object>> selectDBServerConProxy(int pry_svr_id) {
 		return proxyMonitoringDAO.selectDBServerConProxy(pry_svr_id);
+	}
+
+	/**
+	 * Proxy 연결된 db 서버 조회
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectDBServerConProxyList(int pry_svr_id) {
+		return proxyMonitoringDAO.selectDBServerConProxyList(pry_svr_id);
+	}
+
+	/**
+	 * Proxy 리스너 목록 및 상태조회
+	 * @param pry_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectProxyListnerMainList(int pry_svr_id) {
+		return proxyMonitoringDAO.selectProxyListnerMainList(pry_svr_id);
 	}
 
 	/**

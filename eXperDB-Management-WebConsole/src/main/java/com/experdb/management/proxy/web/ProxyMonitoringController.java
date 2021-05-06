@@ -79,13 +79,15 @@ public class ProxyMonitoringController {
 			} else {
 				// 화면접근이력 이력 남기기
 				proxyMonitoringService.monitoringSaveHistory(request, historyVO, "DX-T0160", mnu_id);
+				
+				//서버정보 리스트 
 				List<Map<String, Object>> proxyServerTotInfo = proxyMonitoringService.selectProxyServerList();
 				
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				int aut_id = loginVo.getAut_id();
 
-				if(proxyServerTotInfo.size() > 0){
+/*				if(proxyServerTotInfo.size() > 0){
 					int pry_svr_id = Integer.parseInt(String.valueOf(proxyServerTotInfo.get(0).get("pry_svr_id")));
 					
 					List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
@@ -96,7 +98,7 @@ public class ProxyMonitoringController {
 					mv.addObject("dbServerConProxy", dbServerConProxy);
 					mv.addObject("proxyLogList",proxyLogList);
 					mv.addObject("proxyVipLsnList", selectProxyVipLsnList);
-				}
+				}*/
 
 				mv.addObject("proxyServerTotInfo", proxyServerTotInfo);
 				mv.addObject("aut_id", aut_id);
@@ -120,12 +122,38 @@ public class ProxyMonitoringController {
 		int pry_svr_id = Integer.parseInt(request.getParameter("pry_svr_id"));
 		
 		try {	
+			//proxy 정보 조회
 			List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
+			
+			//vip 목록 조회
+			List<Map<String, Object>> proxyServerVipList = proxyMonitoringService.selectProxyServerVipChk(pry_svr_id);
+			
+			//db connect 조회
+			List<Map<String, Object>> dbServerConProxyList = proxyMonitoringService.selectDBServerConProxyList(pry_svr_id);
+			
+			//리스너 목록 조회
+			List<Map<String, Object>> proxyServerLsnList = proxyMonitoringService.selectProxyListnerMainList(pry_svr_id);
+			
+			
+		
+			
+			
 			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
 			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
 			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
+			
+			
+			mv.addObject("proxyServerVipList", proxyServerVipList);
 			mv.addObject("proxyServerByMasId", proxyServerByMasId);
+			mv.addObject("proxyServerLsnList", proxyServerLsnList);
+			
+			
+			mv.addObject("dbServerConProxyList", dbServerConProxyList);
+			
+			
+			
+			
 			mv.addObject("dbServerConProxy", dbServerConProxy);
 			mv.addObject("proxyLogList",proxyLogList);
 			mv.addObject("proxyChartCntList",proxyChartCntList);
