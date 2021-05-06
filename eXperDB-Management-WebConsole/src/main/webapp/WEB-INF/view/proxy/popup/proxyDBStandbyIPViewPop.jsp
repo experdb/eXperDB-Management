@@ -38,12 +38,16 @@ var proxyDBStandbyListTable = "";
 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "svr_host_nm", className : "dt-center", defaultContent : ""},
 				{data : "ipadr", className : "dt-center", defaultContent : "" },
+				{data : "portno", className : "dt-center", defaultContent : "" },
+				{data : "db_cndt", className : "dt-center", defaultContent : "" },
 			]
 		});
 	
 		proxyDBStandbyListTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
 		proxyDBStandbyListTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // db host name
 		proxyDBStandbyListTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // db ip 
+		proxyDBStandbyListTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // db ip 
+		proxyDBStandbyListTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // db ip 
 		
 		$(window).trigger('resize');
 	}
@@ -103,10 +107,10 @@ var proxyDBStandbyListTable = "";
 </script>
 
 <div class="modal fade config-modal" id="pop_db_standby_ip_list_view" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-3" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
-	<div class="modal-dialog  modal-sm" role="document">
+	<div class="modal-dialog  modal-sm" role="document" style="margin-top:450px; margin-left:1050px;">
 		<div class="modal-content">
 <!-- 			<div class="modal-body" style="margin-bottom:-30px;"> -->
-					<div class="modal-content" style="width:420px;height:260px;">
+					<div class="modal-content" style="width:600px;height:260px;">
 			
 				<h4 class="modal-title mdi mdi-alert-circle text-info config_title" id="ModalLabel" style="height:50px;padding:15px;">
 <!-- 					Proxy Configuration -->
@@ -122,9 +126,9 @@ var proxyDBStandbyListTable = "";
 							<input type="hidden" name="seek" id="seek" value="0"/>
 							<input type="hidden" name="endFlag" id="endFlag" value="0"/>
 							<input type="hidden" name="dwLen" id="dwLen" value="0"/>
-							<fieldset>
-								<div class="form-group row">
-									<div class="col-sm-12">
+<!-- 							<fieldset> -->
+<!-- 								<div class="form-group row"> -->
+<!-- 									<div class="col-sm-12"> -->
 <!-- 										<textarea class="form-control" id="config" name="config" style="height: 400px;" readonly></textarea> -->
 <%-- 										<textarea class="form-control" id="config" name="config" style="height: 400px;" readonly>${data}</textarea> --%>
 									 		<table id="proxyDBStandbyListTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
@@ -133,16 +137,18 @@ var proxyDBStandbyListTable = "";
 					 									<th width="0px;">rownum</th>
 														<th width="50px;"><spring:message code="properties.host"/></th>
 														<th width="50px;"><spring:message code="properties.ip"/></th>
+														<th width="50px;"><spring:message code="eXperDB_proxy.port"/></th>
+														<th width="50px;"><spring:message code="schedule.exeState"/></th>
 													</tr>
 												</thead>
 											</table>
-									</div>
-								</div>
+<!-- 									</div> -->
+<!-- 								</div> -->
 
 								<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
 									<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_proxyDBStandbyIPPopcl();"><spring:message code="common.close"/></button>
 								</div>
-							</fieldset>
+<!-- 							</fieldset> -->
 						</form>
 					</div>
 				</div>
