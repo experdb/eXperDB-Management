@@ -96,7 +96,8 @@
        		s.FRST_REG_DTM,
        		s.LST_MDFR_ID,
        		s.LST_MDF_DTM,
-       		a.AGT_CNDT_CD
+       		a.AGT_CNDT_CD,
+       		s.kal_install_yn
 		FROM T_PRY_SVR_I s 
 		JOIN T_PRY_AGT_I a ON s.AGT_SN = a.AGT_SN 
 		<if test="value != null and value != '' ">

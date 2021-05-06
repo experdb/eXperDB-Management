@@ -626,32 +626,39 @@
 						var db_conn_ip_num = "";
 						var db_conn_ip_num_af = "";
 						
-						if (result.proxyServerLsnList[k].db_conn_ip_num != null) {
-							db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "");
-							
-							if (db_conn_ip_num == '1') {
-								if (k == 0 || k == 2) {
-									//첫번째 오른쪽
-									db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+						//agent가 살아있는 경우, proxy, keep은 kal_agent가 y일때 keepalived가 모두 살아있는 경우, kal_agent 'N' 일때
+						if(result.proxyServerByMasId[j].agt_cndt_cd == 'TC001501' &&
+							result.proxyServerByMasId[j].exe_status == 'TC001501' &&
+							((result.proxyServerByMasId[j].kal_install_yn == '' || result.proxyServerByMasId[j].kal_install_yn != 'Y') ||
+							  (result.proxyServerByMasId[j].kal_install_yn == 'Y' && result.proxyServerByMasId[j].kal_exe_status == 'TC001501'))
+							){
+							if (result.proxyServerLsnList[k].db_conn_ip_num != null) {
+								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "");
+								
+								if (db_conn_ip_num == '1') {
+									if (k == 0 || k == 2) {
+										//첫번째 오른쪽
+										db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+									} else {
+										//두번째 상단
+										db_conn_ip_num_af = '<img src="../images/arrow_up.png" style="width: 100%;object-fit: cover;" alt=""  />';
+									}
+								} else if (db_conn_ip_num == '2') {
+									if (k == 0 || k == 2) {
+										//첫번째 하단
+										db_conn_ip_num_af = '<img src="../images/arrow_down.png" style="width: 100%;object-fit: cover;" alt=""  />';
+									} else {
+										//두번째 row 일자
+										db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+									}
 								} else {
-									//두번째 상단
-									db_conn_ip_num_af = '<img src="../images/arrow_up.png" style="width: 100%;object-fit: cover;" alt=""  />';
-								}
-							} else if (db_conn_ip_num == '2') {
-								if (k == 0 || k == 2) {
-									//첫번째 하단
-									db_conn_ip_num_af = '<img src="../images/arrow_down.png" style="width: 100%;object-fit: cover;" alt=""  />';
-								} else {
-									//두번째 row 일자
-									db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
-								}
-							} else {
-								//첫번째 row 일자, 하단
-								if (k == 0 || k == 2) {
-									db_conn_ip_num_af = '<img src="../images/arrow_side_down.png" style="width: 100%;object-fit: cover;" alt=""  />';
-								} else {
-									//두번째 row 일자, 상단
-									db_conn_ip_num_af = '<img src="../images/arrow_up_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+									//첫번째 row 일자, 하단
+									if (k == 0 || k == 2) {
+										db_conn_ip_num_af = '<img src="../images/arrow_side_down.png" style="width: 100%;object-fit: cover;" alt=""  />';
+									} else {
+										//두번째 row 일자, 상단
+										db_conn_ip_num_af = '<img src="../images/arrow_up_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+									}
 								}
 							}
 						}
