@@ -215,7 +215,7 @@ function fn_serverListTable_init() {
 			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
 				var dataLen = serverListTable.rows().data().length;
 				if(dataLen == 0){
-					showSwalIcon('<spring:message code="eXperDB_proxy.msg25" />', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="eXperDB_proxy.msg25" />', '<spring:message code="common.close" />', '', 'warning');
 					return;	
 				}else{
 					if($("#lstnReg_mode", "#insProxyListenForm").val() == "reg"){
@@ -400,7 +400,7 @@ function fn_serverListTable_init() {
 	 ******************************************************** */
 	function fn_del_server_list(){
 		if(serverListTable.rows('.selected').data().length==0){
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{
 			$("#modYn").val("Y");

@@ -144,10 +144,11 @@
 						render: function (data, type, full){
 								var html = "";
 								html +='<div class="onoffswitch-scale">';
+								html +='<input type="checkbox" id="pry_svr_kal_use_yn'+ full.pry_svr_id +'" class="onoffswitch-scale-checkbox" onclick ="onclick_kalUseYn_Btn()" ';
 								if (full.kal_install_yn == "Y") {
-									html +=	'<input type="checkbox" id="pry_svr_kal_use_yn'+ full.pry_svr_id +'" class="onoffswitch-scale-checkbox" onclick ="fn_multiConfirmModal(\'use_end\')" checked/>';
+									html +=	'checked/>';
 								} else {
-									html +=	'<input type="checkbox" id="pry_svr_kal_use_yn'+ full.pry_svr_id +'" class="onoffswitch-scale-checkbox" onclick ="fn_multiConfirmModal(\'use_start\')"/>';
+									html +=	'/>';
 								}
 								html +=		'<label class="onoffswitch-scale-label" for="pry_svr_kal_use_yn'+ full.pry_svr_id +'">';
 								html +=			'<span class="onoffswitch-scale-inner"></span>';
@@ -351,10 +352,31 @@
 			}else{
 				$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", !playBtnVal);
 				if(runValid == false){
-					showSwalIcon('설정에 문제가 있어 기동/정지가 불가능합니다.', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="eXperDB_proxy.msg32" />', '<spring:message code="common.close" />', '', 'warning');
 				}/* else if(selAgentConnect == false){
 					showSwalIcon('Agent 상태를 확인해주세요. 현재 기동/정지가 불가능합니다.', '<spring:message code="common.close" />', '', 'error');
 				} */
+			}
+		},500);  
+	}
+	/* ********************************************************
+     * 가상 IP 사용 여부 변경 버튼 클릭 이벤트 
+    ******************************************************** */		
+	function onclick_kalUseYn_Btn(){
+		//false면 기동, //true면 중지
+		setTimeout(function(){
+			var useYnBtnVal = $("input:checkbox[id=pry_svr_kal_use_yn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
+			var playBtnVal = $("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
+			
+			if(playBtnVal == true){
+				$("input:checkbox[id=pry_svr_kal_use_yn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", !useYnBtnVal);
+				showSwalIcon('<spring:message code="eXperDB_proxy.msg33" />', '<spring:message code="common.close" />', '', 'warning');
+			}else{
+				if(useYnBtnVal == true){
+					fn_multiConfirmModal('use_start');
+				}else{
+					fn_multiConfirmModal('use_end');
+				}
 			}
 		},500);  
 	}
@@ -406,10 +428,9 @@
 			selPrySvrId = selRow.pry_svr_id;
 			selVipUseYn = nvlPrmSet(selRow.kal_install_yn, "N");
 
-			//vip 사용 여부에 따라 disable
-			fn_inable_kal_use(selVipUseYn);
 			//설정 정보 불러오기
 			fn_server_conf_info();
+			
 		}
 	}
 	/* ********************************************************
@@ -421,7 +442,7 @@
 			$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
 		}else{
 			var temp = '<spring:message code="eXperDB_proxy.server" />';//Proxy 서버
-			showSwalIcon('<spring:message code="eXperDB_proxy.msg1" arguments="'+temp+'" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_proxy.msg1" arguments="'+temp+'" />', '<spring:message code="common.close" />', '', 'warning');
 		}
 	}
 	/* ********************************************************
@@ -660,6 +681,9 @@
 						proxyListenTable.clear().draw();
 						proxyListenTable.rows.add(result.listener_list).draw();
 						
+						//vip 사용 여부에 따라 disable
+						fn_inable_kal_use(selVipUseYn);
+						
 						//Linstener database select 동적 생성
 						$("#lstnReg_db_nm", "#insProxyListenForm").children().remove();
 						if(result.db_sel_list.length > 0){
@@ -812,7 +836,7 @@
 	 			success : function(result) {
 	 				unregSvrInfo = result;
 	 				if(unregSvrInfo.length ==0){
-	 					showSwalIcon(fn_strBrReplcae("<spring:message code="eXperDB_proxy.msg22" />"), '<spring:message code="common.close" />', '', 'error');
+	 					showSwalIcon(fn_strBrReplcae("<spring:message code="eXperDB_proxy.msg22" />"), '<spring:message code="common.close" />', '', 'warning');
 	 					$('#pop_layer_svr_reg').modal("hide");
 	 				}else{
 	 					//ip select 동적 생성
@@ -831,7 +855,7 @@
 		}else{
 			//수정 모드라면 선택되어있는 Grid 항목의 ID값 갖고 오기
 			if(proxyServerTable.rows('.selected').data().length==0){
-				showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 				return;
 			}else{
 				var prySvrID = proxyServerTable.row('.selected').data().pry_svr_id;
@@ -1197,7 +1221,6 @@
  				}else{
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
 	 			}
- 				fn_init_global_value();
  				//검색
 				fn_serverList_search(); 
  			}
@@ -1211,19 +1234,19 @@
 	function fn_proxy_del_confirm(){
 		
 		if(proxyServerTable.rows('.selected').data().length==0){
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{
 			var selRow = proxyServerTable.row('.selected').data();
 			if(selRow.exe_status=="TC001501"){
 				//사용 및 구동 중지 후 삭제가 가능합니다.
-				showSwalIcon('<spring:message code="eXperDB_proxy.msg23" />', '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon('<spring:message code="eXperDB_proxy.msg23" />', '<spring:message code="common.close" />', '', 'warning');
 			}else if(selRow.master_gbn=="M"){
 				var rowLen = proxyServerTable.rows().data().length;
 				var rowDatas = proxyServerTable.rows().data();
 				for(var i=0; i < rowLen ; i++){
 					if(selRow.pry_svr_id != rowDatas[i].pry_svr_id && rowDatas[i].master_svr_id == selRow.pry_svr_id){
-						showSwalIcon(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg24" />'), '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg24" />'), '<spring:message code="common.close" />', '', 'warning');
 						return;
 					}
 				}
@@ -1238,7 +1261,7 @@
 	 ******************************************************** */
 	function fn_proxy_del(){
 		if(proxyServerTable.rows('.selected').data().length==0){
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{
 			var prySvrID = proxyServerTable.row('.selected').data().pry_svr_id;
@@ -1278,7 +1301,7 @@
 	 ******************************************************** */
 	function fn_proxy_instance_popup(mode){
 		if(selPrySvrId == null || (selConfInfo == null && mode == "mod")){//선택한 서버가 없다면 return
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{
 	
@@ -1466,7 +1489,7 @@
 	 ******************************************************** */
 	function instReg_del_vip_instance(){
 		if(vipInstTable.rows('.selected').data().length==0){
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{
 			$("#modYn").val("Y");
@@ -1481,7 +1504,7 @@
 	 ******************************************************** */
 	function lstnReg_del_listener(){
 		if(proxyListenTable.rows('.selected').data().length==0){
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{
 			$("#modYn").val("Y");
@@ -1496,7 +1519,7 @@
 	 ******************************************************** */
 	function fn_proxy_listener_popup(mode){
 		if(selPrySvrId == null || (selListenerInfo == null && mode == "mod")){//선택한 서버가 없다면 return
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{
 	 		$.ajax({
@@ -1625,7 +1648,7 @@
 		selectTab('global');
 		if($("#globalInfoForm").validate().form()){
 			if($("#modYn").val() == "N"){
-				showSwalIcon('<spring:message code="eXperDB_proxy.msg6"/>', '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon('<spring:message code="eXperDB_proxy.msg6"/>', '<spring:message code="common.close" />', '', 'warning');
 			}else{
 				if(proxyListenTable.rows().data().length > 0){
 					var vipUseYn = selVipUseYn;
@@ -1634,11 +1657,11 @@
 						fn_multiConfirmModal("apply");
 					}else{
 						
-						showSwalIcon('<spring:message code="eXperDB_proxy.msg28"/>', '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon('<spring:message code="eXperDB_proxy.msg28"/>', '<spring:message code="common.close" />', '', 'warning');
 						selectTab('detail');
 					}
 				}else{
-					showSwalIcon('<spring:message code="eXperDB_proxy.msg29"/>', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="eXperDB_proxy.msg29"/>', '<spring:message code="common.close" />', '', 'warning');
 					selectTab('detail');
 				}
 			}
@@ -1731,7 +1754,6 @@
  			success : function(result) {
  				//작업이 완료 되었습니다.
  				if(result.result){
- 					fn_init_global_value();
  					fn_btn_setEnable("");
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
  					fn_serverList_search();
@@ -1794,9 +1816,8 @@
  				}else{
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
 	 			}
- 				fn_init_global_value();
  				//검색
-				fn_serverList_search();
+ 				fn_serverList_search();
  			}
  		});
 	}

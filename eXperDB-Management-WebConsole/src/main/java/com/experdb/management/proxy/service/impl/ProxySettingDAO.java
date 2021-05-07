@@ -487,4 +487,14 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		// TODO Auto-generated method stub
 		update("proxyServerSettingSql.updatePrySvrKalInstYn", prySvrVO);	
 	}
+
+	/**
+	 * delete t_pry_svr_status_g
+	 * 
+	 * @param param
+	 * @return 
+	 */
+	public void deletePrySvrStatusList(Map<String, Object> param) {
+		delete("proxyServerSettingSql.deletePrySvrStatusList", param);	
+	}
 }

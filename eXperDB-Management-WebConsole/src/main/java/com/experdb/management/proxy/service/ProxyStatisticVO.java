@@ -27,6 +27,7 @@ public class ProxyStatisticVO {
 	private String lst_mdf_dtm;
 	private int lsn_id;
 	private String db_con_addr;
+	private int lsn_svr_id;
 	
 	public int getPry_exe_status_sn() {
 		return pry_exe_status_sn;
@@ -201,6 +202,12 @@ public class ProxyStatisticVO {
 	}
 	public void setDb_con_addr(String db_con_addr) {
 		this.db_con_addr = db_con_addr;
+	}
+	public int getLsn_svr_id() {
+		return lsn_svr_id;
+	}
+	public void setLsn_svr_id(int lsn_svr_id) {
+		this.lsn_svr_id = lsn_svr_id;
 	}
 	
 	
