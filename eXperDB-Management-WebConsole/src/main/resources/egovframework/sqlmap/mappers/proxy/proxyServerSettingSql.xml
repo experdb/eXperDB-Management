@@ -830,7 +830,6 @@
              , LST_MDF_DTM = clock_timestamp()
          WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
 	</update>
-	
 	<delete id="deletePrySvrStatusList" parameterType="hashMap">
 		/**
 		* Query ID : deletePrySvrStatusList
@@ -840,8 +839,8 @@
         DELETE FROM T_PRY_SVR_STATUS_G
 		WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
         AND		LSN_ID = #{lsn_id}::numeric 
-        <if test='lsn_svr_id != null and lsn_svr_id eq "".toString()) '>
-        AND		LSN_SVR_ID = #{lsn_svr_id}::numeric 
-        </if>
+        <if test="lsn_svr_id != null">
+		AND 	LSN_SVR_ID = #{lsn_svr_id}::numeric 
+		</if>
 	</delete>
 </mapper>
