@@ -187,9 +187,9 @@
 			A.PORTNO , 
 			A.SVR_HOST_NM , 
 			A.AGT_CNDT_CD,
-			2 as CNT_SVR_ID,
+			CNT_SVR_ID as CNT_SVR_ID,
 			A.db_cndt,
-			2 as db_cndt_CNT
+			db_cndt_CNT as db_cndt_CNT
 		 FROM  (
 			SELECT
 				TPSI.PRY_SVR_ID , 
@@ -406,7 +406,7 @@
 				WHERE (tpsi.PRY_SVR_ID = #{value}
 				OR tpsi.MASTER_SVR_ID = #{value})
 				AND tpssg.log_type = 'TC003901'
-				ORDER BY  tpsi.master_gbn desc, tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
+				ORDER BY  tpsi.master_gbn desc, tpsi.pry_svr_id, tpli.lsn_nm desc, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
 			) x
 			WHERE x.r <= 2
 		]]>
