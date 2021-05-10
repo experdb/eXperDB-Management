@@ -113,7 +113,7 @@
  							render: function (data, type, full){
  								var html = "";
  								
- 								if (aut_id == "1") {
+/*  								if (aut_id == "1") {
  									if(full.agt_cndt_cd == "TC001501"){
  										html += '<div class="onoffswitch-scale">';
  										html += '<input type="checkbox" name="agtCndtCd" class="onoffswitch-scale-checkbox" id="agtCndtCd'+ full.rownum +'" onclick="fn_use_agentChk('+ full.rownum +')" checked>';
@@ -130,7 +130,7 @@
  	 									html += "	<i class='ti-close mr-2'></i>";
  	 									html += "	<spring:message code='schedule.stop' />";
  	 								}
- 								} else {
+ 								} else { */
  	  								if(full.agt_cndt_cd == "TC001501"){
  	 									html += "<div class='badge badge-pill badge-success'>";
  	 									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
@@ -140,7 +140,7 @@
  	 									html += "	<i class='ti-close mr-2'></i>";
  	 									html += "	<spring:message code='schedule.stop' />";
  	 								}
- 								}
+/*  								} */
 
 								html += "</div>";
 								
