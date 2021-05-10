@@ -472,10 +472,12 @@
 		 					if (result.proxyServerVipList[i].pry_svr_nm != "") {
 		 						var vip_btn_html = "";
 		 						vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
-		 						if(result.proxyServerVipList[i].kal_exe_status == "TC001501") {
-		 							vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />';
-		 						} else {
-		 							vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_start_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001502\', \'K\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />';
+		 						if(aut_id == 1){
+		 							if(result.proxyServerVipList[i].kal_exe_status == "TC001501") {
+		 								vip_btn_html += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />';
+		 							} else {
+		 								vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_start_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001502\', \'K\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />';
+		 							}
 		 						}
 		 						vip_btn_html +=	'<br/>&nbsp;';
 			 					$("#vip_proxy_nm" + j).html(vip_btn_html);
@@ -589,11 +591,15 @@
 				if(nvlPrmSet(result.proxyServerByMasId[j].exe_status, '') == 'TC001501'){
 					html_pry_title += '		<div class="badge badge-pill badge-success" title="">' + result.proxyServerByMasId[j].master_gbn + '</div>\n';
 					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
-					html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_stop_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001501\', \'P\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
+					if(aut_id == 1) {
+						html_pry_title += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_stop_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001501\', \'P\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
+					}
 				} else {
 					html_pry_title += '		<div class="badge badge-pill badge-danger" title="">' +  result.proxyServerByMasId[j].master_gbn + '</div>\n';
 					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
-					html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_start_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001502\', \'P\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
+					if(aut_id == 1) {
+						html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_start_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001502\', \'P\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
+					}
 				}
 				
 // 				html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
@@ -666,7 +672,8 @@
 							  (result.proxyServerByMasId[j].kal_install_yn == 'Y' && result.proxyServerByMasId[j].kal_exe_status == 'TC001501'))
 							){
 							if (result.proxyServerLsnList[k].db_conn_ip_num != null) {
-								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "").replace(/,\s*/,"").slice(0,1);
+// 								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "").replace(/,\s*/,"").slice(0,1);
+								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "").replace(/,\s*/,"");
 								if (db_conn_ip_num == '1') {
 									if (k == 0 || k == 2) {
 										//첫번째 오른쪽
@@ -684,7 +691,7 @@
 										//두번째 row 일자
 										db_conn_ip_num_af = '<img src="../images/arrow_side.png" class="img-lg" style="object-fit: contain;" alt=""  />';
 									}
-								} else {
+								} else if(db_conn_ip_num != ''){
 									//첫번째 row 일자, 하단
 									if (k == 0 || k == 2) {
 										db_conn_ip_num_af = '<img src="../images/arrow_side_down.png" class="img-lg" style="object-fit: contain;" alt=""  />';
@@ -830,7 +837,7 @@
 								if(result.dbServerConProxyList[k].cnt_svr_id > 1){
 									html_db += '	외 ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + '건</a>)';
 								} else {
-									html_db += '	)';
+									html_db += '	</a>)';
 								}
 							}
 						} else {
@@ -885,7 +892,7 @@
 
 						html_db += '	<tr >\n';
 						html_db += '		<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">\n';
-						html_db += '			<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>running</h6>\n';			
+						html_db += '			<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + db_exe_status_val + '</h6>\n';			
 						html_db += '		</td>\n';
 						html_db += '	</tr>\n';
 						html_db += '	</table>\n';
@@ -917,7 +924,7 @@
 		fn_proxyDBStandbyViewAjax(db_svr_id);
 		setTimeout(function(){
 			if(proxyDBStandbyListTable != null) proxyDBStandbyListTable.columns.adjust().draw();
-		},250);
+		},200);
 		$('#pop_db_standby_ip_list_view').modal("show");
 		$('#loading').hide();
 	}

@@ -101,7 +101,7 @@
 				}
 			},
 			success : function(result) {
-				if (result != null) {
+				if (result != null) {	
 					// var v_fileSize = Number($("#fSize", "#configForm").val());
 					proxyDBStandbyListTable.clear().draw();
 					if(nvlPrmSet(result.selectDBStandbyIPList, '') != '') {

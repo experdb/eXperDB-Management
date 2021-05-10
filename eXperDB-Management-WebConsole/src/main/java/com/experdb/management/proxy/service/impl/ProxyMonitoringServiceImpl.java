@@ -60,13 +60,11 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	/**
 	 * Proxy 모니터링 화면 접속 이력 등록
 	 * 
-	 * @param request,
-	 *            historyVO, dtlCd
+	 * @param request, historyVO, dtlCd
 	 * @throws Exception
 	 */
 	@Override
-	public void monitoringSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd, String mnu_id)
-			throws Exception {
+	public void monitoringSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd, String mnu_id) throws Exception {
 		CmmnUtils.saveHistory(request, historyVO);
 		historyVO.setExe_dtl_cd(dtlCd);
 
