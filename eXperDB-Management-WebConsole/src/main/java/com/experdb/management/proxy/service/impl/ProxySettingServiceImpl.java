@@ -629,6 +629,24 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		//update global conf Info
 		proxySettingDAO.updateProxyGlobalConf(global);
 		
+		JSONArray delVipcngJArray = (JSONArray)confData.get("delVipcng");
+		int delVipcngSize = delVipcngJArray.size();
+		
+		if (delVipcngSize > 0) {
+			ProxyVipConfigVO delVipConf[] = new ProxyVipConfigVO[delVipcngSize];
+			
+			for(int i=0; i<delVipcngSize; i++){
+				JSONObject delVipcngJobj = (JSONObject)delVipcngJArray.get(i);
+				System.out.println(delVipcngJobj.toJSONString());
+				delVipConf[i] = new ProxyVipConfigVO();
+				delVipConf[i].setPry_svr_id(prySvrId);
+				delVipConf[i].setVip_cng_id(getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
+				
+				//delete vip instance
+				proxySettingDAO.deletePryVipConf(delVipConf[i]);
+			}
+		}
+		
 		JSONArray vipcngJArray = (JSONArray)confData.get("vipcng");
 		
 		int vipcngSize = vipcngJArray.size();
@@ -659,24 +677,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			}
 		}
 		
-		JSONArray delVipcngJArray = (JSONArray)confData.get("delVipcng");
-		int delVipcngSize = delVipcngJArray.size();
-		
-		if (delVipcngSize > 0) {
-			ProxyVipConfigVO delVipConf[] = new ProxyVipConfigVO[delVipcngSize];
-			
-			for(int i=0; i<delVipcngSize; i++){
-				JSONObject delVipcngJobj = (JSONObject)delVipcngJArray.get(i);
-				System.out.println(delVipcngJobj.toJSONString());
-				delVipConf[i] = new ProxyVipConfigVO();
-				delVipConf[i].setPry_svr_id(prySvrId);
-				delVipConf[i].setVip_cng_id(getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
-				
-				//delete vip instance
-				proxySettingDAO.deletePryVipConf(delVipConf[i]);
-			}
-		}
-		
 		JSONArray delListnJArray = (JSONArray)confData.get("delListener");
 		int delListnSize = delListnJArray.size();
 		
@@ -694,6 +694,13 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				proxySettingDAO.deletePryListenerSvr(delListnSvr);
 				//delete proxy listener
 				proxySettingDAO.deletePryListener(delListn[i]);
+				
+				Map<String, Object> delStatusParam = new HashMap<String, Object>();
+				delStatusParam.put("pry_svr_id", prySvrId);
+				delStatusParam.put("lsn_id", getIntOfJsonObj(delListnObj, "lsn_id"));
+				
+				//delete t_pry_svr_status_g
+				proxySettingDAO.deletePrySvrStatusList(delStatusParam);
 			}
 		}
 		
@@ -743,6 +750,14 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 							
 							//delete proxy listener server list
 							proxySettingDAO.deletePryListenerSvr(delListnSvr[j]);
+							
+							Map<String, Object> delStatusParam = new HashMap<String, Object>();
+							delStatusParam.put("pry_svr_id", prySvrId);
+							delStatusParam.put("lsn_id", getIntOfJsonObj(delListnSvrObj, "lsn_id"));
+							delStatusParam.put("lsn_svr_id", getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
+							
+							//delete t_pry_svr_status_g
+							proxySettingDAO.deletePrySvrStatusList(delStatusParam);
 						}
 					}
 				}

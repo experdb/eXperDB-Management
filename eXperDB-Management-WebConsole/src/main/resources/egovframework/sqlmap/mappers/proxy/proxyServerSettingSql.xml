@@ -830,4 +830,17 @@
              , LST_MDF_DTM = clock_timestamp()
          WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
 	</update>
+	<delete id="deletePrySvrStatusList" parameterType="hashMap">
+		/**
+		* Query ID : deletePrySvrStatusList
+		* Description : Proxy 서버 실시간 상태 로그 삭제 
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_SVR_STATUS_G
+		WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+        AND		LSN_ID = #{lsn_id}::numeric 
+        <if test="lsn_svr_id != null">
+		AND 	LSN_SVR_ID = #{lsn_svr_id}::numeric 
+		</if>
+	</delete>
 </mapper>

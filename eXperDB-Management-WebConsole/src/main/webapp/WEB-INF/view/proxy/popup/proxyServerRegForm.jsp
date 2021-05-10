@@ -424,7 +424,7 @@ var mgmtDbmsTable = null;
 	function fn_reg_svr_check(){
 		//연결 테스트를 했는지, 안했다면 
 		if($("#svrReg_conn_result", "#svrRegProxyServerForm").val() != "true"){
-			showSwalIcon('<spring:message code="message.msg89"/>', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="message.msg89"/>', '<spring:message code="common.close" />', '', 'warning');
 		}else{
 			if($("#svrReg_mode", "#svrRegProxyServerForm").val() == "reg"){
 				fn_multiConfirmModal("pry_svr_reg");
