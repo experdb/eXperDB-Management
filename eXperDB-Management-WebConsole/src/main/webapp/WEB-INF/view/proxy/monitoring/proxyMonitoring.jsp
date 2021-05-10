@@ -393,8 +393,11 @@
 
 			html_vip += '		</tr>\n';
 			html_vip += '	</table>\n';
- 
-			html_vip_line += '	<p class="card-title" style="margin-bottom:-15px;margin-left:10px;">\n';
+ 			if(i == 0) {
+				html_vip_line += '	<p class="card-title" style="margin-bottom:-15px;margin-left:10px;">\n';
+ 			} else {
+				html_vip_line += '	<p class="card-title" style="margin-bottom:-15px;margin-left:10px;padding-top:2rem;">\n';
+ 			}
 			html_vip_line += '	<span>&nbsp;</span>\n';
 			html_vip_line += '	</p>\n';
 			
@@ -546,8 +549,11 @@
  				html_listner += '<hr>\n';
  			}
  			/////////////////////////////////////////////////////////////////////////////////////////////
-
- 			html_listner_con += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
+			if(i == 1){
+	 			html_listner_con += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;padding-top:2rem;">\n';
+			} else {
+	 			html_listner_con += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
+			}
 
  			html_listner_con += '	<span id="proxy_listner_con_nm' + i + '">&nbsp;<br/></span>\n';
  			html_listner_con += '	</p>\n';
@@ -664,7 +670,8 @@
 								if (db_conn_ip_num == '1') {
 									if (k == 0 || k == 2) {
 										//첫번째 오른쪽
-										db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+										db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="max-width:100%;height:auto;" alt=""/>';
+
 									} else {
 										//두번째 상단
 										db_conn_ip_num_af = '<img src="../images/arrow_up.png" style="width: 100%;object-fit: cover;" alt=""  />';
@@ -904,10 +911,13 @@
 	}
 
 	/* ********************************************************
-	* db standby ip list
+	* db standby ip list 조회
 	******************************************************** */
 	function fn_standby_view(db_svr_id){
 		fn_proxyDBStandbyViewAjax(db_svr_id);
+		setTimeout(function(){
+			if(proxyDBStandbyListTable != null) proxyDBStandbyListTable.columns.adjust().draw();
+		},250);
 		$('#pop_db_standby_ip_list_view').modal("show");
 		$('#loading').hide();
 	}
@@ -1937,7 +1947,7 @@
 											<!-- DB 서버  출력-->
 											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
+													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 15px -20px;" id="dbListenerVipList">
 													</div>
 												</div>
 											</div>

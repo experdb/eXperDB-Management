@@ -25,9 +25,6 @@
  	$(window.document).ready(function() {
  		fn_db_standby_list_init();
  		
-		setTimeout(function(){
-			if(proxyDBStandbyListTable != null) proxyDBStandbyListTable.columns.adjust().draw();
-		},200);
  	});
  	
 	function fn_db_standby_list_init(){
