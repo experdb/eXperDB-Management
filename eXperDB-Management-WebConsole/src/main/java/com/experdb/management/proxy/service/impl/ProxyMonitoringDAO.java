@@ -22,6 +22,7 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 *  2021.03.05              최초 생성
  *      </pre>
  */
+
 @Repository("proxyMonitoringDAO")
 public class ProxyMonitoringDAO extends EgovAbstractMapper {
 

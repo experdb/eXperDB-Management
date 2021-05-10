@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,9 +50,6 @@ public class ProxyMonitoringController {
 	
 	@Autowired
 	private ProxyMonitoringService proxyMonitoringService;
-	
-	@Autowired
-    MessageSource messageSource;
 	
 	private List<Map<String, Object>> menuAut;
 	
@@ -134,25 +130,16 @@ public class ProxyMonitoringController {
 			//리스너 목록 조회
 			List<Map<String, Object>> proxyServerLsnList = proxyMonitoringService.selectProxyListnerMainList(pry_svr_id);
 			
-			
-		
-			
-			
 			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
 			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
 			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
 			
-			
 			mv.addObject("proxyServerVipList", proxyServerVipList);
 			mv.addObject("proxyServerByMasId", proxyServerByMasId);
 			mv.addObject("proxyServerLsnList", proxyServerLsnList);
-			
-			
+
 			mv.addObject("dbServerConProxyList", dbServerConProxyList);
-			
-			
-			
 			
 			mv.addObject("dbServerConProxy", dbServerConProxy);
 			mv.addObject("proxyLogList",proxyLogList);
@@ -238,7 +225,6 @@ public class ProxyMonitoringController {
 				}
 			}
 
-//			System.out.println("pry_svr_nm : " + proxyStatisitcInfo.get(0).get("pry_svr_nm"));
 			mv.addObject("proxyStatisticsInfoChart",proxyStatisticsInfoChart); 
 			mv.addObject("proxySettingChartresult",proxySettingChartresult); 
 			
@@ -346,17 +332,17 @@ public class ProxyMonitoringController {
 			String strReadLine = request.getParameter("readLine");
 			String dwLen = request.getParameter("dwLen");
 			String strDate = request.getParameter("date").substring(0, 10).replace("-", "");
-			System.out.println(strDate);
 			String todayYN = request.getParameter("todayYN");
+			
 			Map<String, Object> param = new HashMap<>();
 			param.put("seek", strSeek);
 			param.put("readLine", strReadLine);
 			param.put("dwLen", dwLen);
 			param.put("date", strDate);
 			param.put("todayYN", todayYN);
+			
 			Map<String, Object> result = proxyMonitoringService.getLogFile(pry_svr_id, type, param);
 			strBuffer = (String) result.get("RESULT_DATA"); 
-			System.out.println("strBuffer====" + strBuffer);
 			if(strBuffer != null) {
 				mv.addObject("fSize", strBuffer.length());
 			}
@@ -386,7 +372,6 @@ public class ProxyMonitoringController {
 			Map<String, Object> param = new HashMap<String, Object>();
 		
 			String strPrySvrId = request.getParameter("pry_svr_id");
-			System.out.println("pry_svr_id : " + strPrySvrId);
 			String type = request.getParameter("type");
 			int pry_svr_id = Integer.parseInt(strPrySvrId);
 			String status = request.getParameter("status");
@@ -398,7 +383,6 @@ public class ProxyMonitoringController {
 			param.put("act_exe_type", act_exe_type);
 			param.put("lst_mdfr_id", loginVo.getUsr_id() == null ? "" : loginVo.getUsr_id().toString());
 			resultObj = proxyMonitoringService.actExeCng(param);
-			System.out.println(resultObj.toJSONString());
 		} catch (ConnectException e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);
@@ -420,12 +404,8 @@ public class ProxyMonitoringController {
 	@RequestMapping("/actExeFailLog.do")
 	public ModelAndView actExeFailLog(HttpServletRequest request){
 		ModelAndView mv = new ModelAndView("jsonView");
-		System.out.println("*************************** actExeFailLog ");
 		int pry_act_exe_sn = Integer.parseInt(request.getParameter("pry_act_exe_sn"));
-		System.out.println(pry_act_exe_sn);
 		Map<String, Object> result = proxyMonitoringService.selectActExeFailLog(pry_act_exe_sn);
-		System.out.println(result.size());
-		System.out.println(result.toString());
 		mv.addObject("actExeFailLog", result);
 //		mv.setViewName("proxy/popup/exeFailMsg");
 		return mv;
@@ -498,7 +478,6 @@ public class ProxyMonitoringController {
 
 	         List<Map<String, Object>> selectDBStandbyIPList = proxyMonitoringService.selectDbStandbyList(db_svr_id);
 	         resultObj.put("selectDBStandbyIPList", selectDBStandbyIPList);
-	         System.out.println(resultObj.toJSONString());
 	      } catch (Exception e) {
 	         e.printStackTrace();
 	      }

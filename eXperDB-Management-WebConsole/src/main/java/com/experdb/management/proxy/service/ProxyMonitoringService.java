@@ -36,14 +36,14 @@ public interface ProxyMonitoringService {
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectProxyServerList();
+	public List<Map<String, Object>> selectProxyServerList();
 	
 	/**
 	 * Proxy 서버  cluster 조회 by master server id
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectProxyServerByMasterId(int pry_svr_id);
+	public List<Map<String, Object>> selectProxyServerByMasterId(int pry_svr_id);
 //	List<DbServerVO> selectDbServerByPryMasterId(HttpServletRequest request, int pry_svr_id);
 
 	/**
@@ -51,63 +51,63 @@ public interface ProxyMonitoringService {
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectProxyServerVipChk(int pry_svr_id);
+	public List<Map<String, Object>> selectProxyServerVipChk(int pry_svr_id);
 	
 	/**
 	 * proxy / keepalived 기동 상태 이력
 	 * @param pry_svr_id
 	 * @return List<ProxyLogVO>
 	 */
-	List<ProxyLogVO> selectProxyLogList(int pry_svr_id);
+	public List<ProxyLogVO> selectProxyLogList(int pry_svr_id);
 	
 	/**
 	 * Proxy 연결된 db 서버 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectDBServerConProxy(int pry_svr_id);
+	public List<Map<String, Object>> selectDBServerConProxy(int pry_svr_id);
 	
 	/**
 	 * Proxy 연결된 db 서버 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectDBServerConProxyList(int pry_svr_id);
+	public List<Map<String, Object>> selectDBServerConProxyList(int pry_svr_id);
 	
 	/**
 	 * Proxy 리스너 목록 및 상태조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectProxyListnerMainList(int pry_svr_id);
+	public List<Map<String, Object>> selectProxyListnerMainList(int pry_svr_id);
 
 	/**
 	 * Proxy 리스너 상세 정보 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectProxyStatisticsInfo(int pry_svr_id);
+	public List<Map<String, Object>> selectProxyStatisticsInfo(int pry_svr_id);
 	
 	/**
 	 * Proxy 리스너 통계 정보 조회
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectProxyStatisticsChartInfo(int pry_svr_id);
+	public List<Map<String, Object>> selectProxyStatisticsChartInfo(int pry_svr_id);
 	
 	/**
 	 * Proxy 리스너 통계 정보카운트
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectProxyChartCntList(int pry_svr_id);
+	public List<Map<String, Object>> selectProxyChartCntList(int pry_svr_id);
 
 	/**
 	 * Proxy, keepalived config 파일 정보 조회
 	 * @param pry_svr_id, type
 	 * @return List<Map<String, Object>>
 	 */
-	Map<String, Object> selectConfigurationInfo(int pry_svr_id, String type);
+	public Map<String, Object> selectConfigurationInfo(int pry_svr_id, String type);
 	
 	/**
 	 * Proxy, keepalived config 파일 가져오기
@@ -115,14 +115,14 @@ public interface ProxyMonitoringService {
 	 * @return Map<String, Object>
 	 * @throws Exception 
 	 */
-	Map<String, Object> getConfiguration(int pry_svr_id, String type, Map<String, Object> param) throws Exception;
+	public Map<String, Object> getConfiguration(int pry_svr_id, String type, Map<String, Object> param) throws Exception;
 	
 	/**
 	 * proxy / keepavlived 기동-정지 실패 로그 
 	 * @param pry_act_exe_sn
 	 * @return Map<String, Object>
 	 */
-	Map<String, Object> selectActExeFailLog(int pry_act_exe_sn);
+	public Map<String, Object> selectActExeFailLog(int pry_act_exe_sn);
 
 	/**
 	 * proxy / keepalived 상태 변경
@@ -136,14 +136,14 @@ public interface ProxyMonitoringService {
 	 * @param pry_svr_id, type, param
 	 * @return Map<String, Object>
 	 */
-	Map<String, Object> getLogFile(int pry_svr_id, String type, Map<String, Object> param) throws Exception;
+	public Map<String, Object> getLogFile(int pry_svr_id, String type, Map<String, Object> param) throws Exception;
 	
 	/**
 	 * proxy config파일 변경 이력
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
-	List<Map<String, Object>> selectPryCngList(int pry_svr_id);
+	public List<Map<String, Object>> selectPryCngList(int pry_svr_id);
 	
 	List<Map<String, Object>> selectProxyVipLsnList(int pry_svr_id);
 	
