@@ -8,13 +8,13 @@
 <%@ include file="../../cmmn/cs2.jsp"%>
 <%
 	/**
-	* @Class Name : experdbProxyMon.jsp
+	* @Class Name : proxyMonitoring.jsp
 	* @Description : experdbProxy Monitoring 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*
+	*	2021.03.02           윤정 매니저   		최초 생성
 	*/
 %>
 <STYLE TYPE="text/css">
@@ -76,6 +76,12 @@
 		
 		// 권한 id 넣기
 		aut_id = "${aut_id}";
+		
+		// 5분에 한번씩 reload
+		setInterval(function() {
+			$('#loading').hide();
+			$("#serverSs1").click();
+		}, 50000);
 	});
 	
 
@@ -87,7 +93,8 @@
 		    var that;     
 		    $('tr', this).each(function(row) {      
 		        $('td:eq('+colIdx+')', this).filter(':visible').each(function(col) {
-		            if ($(this).html() == $(that).html() && (!isStats || isStats && $(this).prev().html() == $(that).prev().html())) {            
+// 		            if ($(this).html() == $(that).html() && (!isStats || isStats && $(this).prev().html() == $(that).prev().html())) {            
+		            if ($(this).html() == $(that).html() && $(this).prev().html() == $(that).prev().html()) {            
 		                rowspan = $(that).attr("rowspan") || 1;
 		                rowspan = Number(rowspan)+1;
 		 
@@ -338,8 +345,10 @@
 		//통계리스트 html 설정
 		fn_proxyMonChartSet(result);
 		
+		// 프록시 리스너 차트
 		fn_lsnStat_chart(pry_svr_id);
 		
+		// config 파일 변경 이력 테이블
 		proxyConfigCngLogTable.clear().draw();
 		if(nvlPrmSet(result.selectPryCngList, '') != '') {
 			proxyConfigCngLogTable.rows.add(result.selectPryCngList).draw();
@@ -373,6 +382,8 @@
  			
 			html_vip += '	<p class="card-title" style="margin-bottom:-25px;margin-left:10px;">\n';
 			html_vip += '	<span id="vip_proxy_nm' + i + '"></span>\n';
+// 			html_vip += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_start_btn' + i + '" type="button" onClick="fn_confirm_modal(\'TC001502\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
+// 			html_vip += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_stop_btn' + i + '" type="button" onClick="fn_confirm_modal(\'TC001501\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
 			html_vip += '	</p>\n';
 			
 			html_vip += '	<table class="table-borderless" style="width:100%;">\n';
@@ -413,9 +424,13 @@
  					if (result.proxyServerVipList[i].kal_exe_status != null && result.proxyServerVipList[i].kal_exe_status == "TC001501") {
  						kal_exe_status_chk = "text-primary";
  						kal_exe_status_css = "fa-refresh fa-spin text-success";
+						$("#kal_start_btn"+i+"").hide();
+						$("#kal_stop_btn"+i+"").show();
  					} else {
  						kal_exe_status_chk = "text-danger";
  						kal_exe_status_css = "fa-times-circle text-danger";
+ 						$("#kal_start_btn"+i+"").show();
+						$('#kal_stop_btn').hide();
  					}
  					
  					html_sebu = "";
@@ -440,8 +455,9 @@
 	 					var strVipSplit = strVip.split(',');
 	 				    for ( var j in strVipSplit ) {
 	 				    	var strVipSplit_val = strVipSplit[j].substr(0, strVipSplit[j].indexOf('/'));
-			 				html_sebu += '				<h5 class="text-muted"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
-			 				html_sebu += '				<a href="#">' + strVipSplit_val + '</a></h5>\n';	
+			 				html_sebu += '				<h5 class="text-info"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
+// 			 				html_sebu += '				<a href="#">' + strVipSplit_val + '</a></h5>\n';	
+			 				html_sebu += '				' + strVipSplit_val + '</h5>\n';	
 	 				    }	
 	 				    
 		 				//line 생성
@@ -449,10 +465,18 @@
 		 				html_vip_line += '					<i class="ti-line-dotted icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 2em;width:100%;"></i>\n';
 	 				}
 
-	 				for(var j = 0; j < result.proxyServerByMasId.length; j++){
+	 				for(var j = 0; j < result.proxyServerByMasId.length; j++) {
 	 					if (result.proxyServerByMasId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
 		 					if (result.proxyServerVipList[i].pry_svr_nm != "") {
-			 					$("#vip_proxy_nm" + j).html('<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm + '<br/>&nbsp;');
+		 						var vip_btn_html = "";
+		 						vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
+		 						if(result.proxyServerVipList[i].kal_exe_status == "TC001501") {
+		 							vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />';
+		 						} else {
+		 							vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_start_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001502\', \'K\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />';
+		 						}
+		 						vip_btn_html +=	'<br/>&nbsp;';
+			 					$("#vip_proxy_nm" + j).html(vip_btn_html);
 		 					}
 
 		 					$("#keepVipDiv"+ j).html(html_sebu);
@@ -499,12 +523,14 @@
 
 		//////////////////////////////////////
 		//Proxy 연결 리스너
-		for(var i = 0; i < 2; i++){
+		for(var i = 0; i < 2; i++) {
  			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
  			
  			html_listner += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
 
 			html_listner += '	<span id="proxy_listner_nm' + i + '"></span>\n';
+// 			html_listner += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_start_btn' + i + '" type="button" onClick="fn_confirm_modal(\'TC001502\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
+// 			html_listner += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_stop_btn' + i + '" type="button" onClick="fn_confirm_modal(\'TC001501\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
 			html_listner += '	</p>\n';
 			
 			html_listner += '	<table class="table-borderless" style="width:100%;">\n';
@@ -555,14 +581,18 @@
   			//title
 			if (result.proxyServerByMasId[j].pry_svr_nm != "") {
 				html_pry_title = '<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
-
+				console.log('proxy : ' + result.proxyServerByMasId[j].pry_svr_id)
 				if(nvlPrmSet(result.proxyServerByMasId[j].exe_status, '') == 'TC001501'){
 					html_pry_title += '		<div class="badge badge-pill badge-success" title="">' + result.proxyServerByMasId[j].master_gbn + '</div>\n';
+					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
+					html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_stop_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001501\', \'P\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
 				} else {
 					html_pry_title += '		<div class="badge badge-pill badge-danger" title="">' +  result.proxyServerByMasId[j].master_gbn + '</div>\n';
+					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
+					html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_start_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001502\', \'P\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
 				}
 				
-				html_pry_title += '			'+result.proxyServerByMasId[j].pry_svr_nm+'\n';
+// 				html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
 				html_pry_title += '</h5>\n';
 				
 				html_pry_title += '<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:30px;padding-top:3px;">';
@@ -633,8 +663,9 @@
 							  (result.proxyServerByMasId[j].kal_install_yn == 'Y' && result.proxyServerByMasId[j].kal_exe_status == 'TC001501'))
 							){
 							if (result.proxyServerLsnList[k].db_conn_ip_num != null) {
+								console.log('db_conn_ip_num : ' + result.proxyServerLsnList[k].db_conn_ip_num)
 								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "");
-								
+								console.log(db_conn_ip_num)
 								if (db_conn_ip_num == '1') {
 									if (k == 0 || k == 2) {
 										//첫번째 오른쪽
@@ -785,15 +816,17 @@
 						if(result.dbServerConProxyList[k].svr_host_nm != null && result.dbServerConProxyList[k].svr_host_nm != ""){
 							if(result.dbServerConProxyList[k].master_gbn == 'M'){
 								html_db += '		Master(';
+// 								html_db += '		Master(<a href="#" onclick="fn_standby_view(' + result.dbServerConProxyList[k].db_svr_id + ')">';
 							} else {
-								html_db += '		Standby(';
+								html_db += '		Standby(<a href="#" onclick="fn_standby_view(' + result.dbServerConProxyList[k].db_svr_id + ')">';
 							}
 							html_db += '			' + result.dbServerConProxyList[k].svr_host_nm;
 							if(result.dbServerConProxyList[k].master_gbn == 'M'){
 								html_db += '		)';
+// 								html_db += '		</a>)';
 							} else {
 								if(result.dbServerConProxyList[k].cnt_svr_id > 1){
-									html_db += '	외 ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + '건)';
+									html_db += '	외 ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + '건</a>)';
 								} else {
 									html_db += '	)';
 								}
@@ -876,6 +909,17 @@
 	}
 
 	/* ********************************************************
+	* db standby ip list
+	******************************************************** */
+	function fn_standby_view(db_svr_id){
+		console.log(db_svr_id);		
+		fn_db_standby_list_init();		
+		fn_proxyDBStandbyViewAjax(db_svr_id);
+		$('#pop_db_standby_ip_list_view').modal("show");
+		$('#loading').hide();
+	}
+	
+	/* ********************************************************
 	* 리스너 상세리스트 조회
 	******************************************************** */
 	function fn_lsnStat(pry_svr_id){
@@ -929,7 +973,7 @@
 	}
 	
 	/* ********************************************************
-	 * 프록시 기동 상태 로그 셋팅
+	 * 프록시  상태 로그 셋팅
 	 ******************************************************** */
 	function fn_proxy_log_init(){
 		proxyLogTable = $('#proxyLogTable').DataTable({
@@ -1041,15 +1085,7 @@
 			columns : [
 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "pry_svr_id", className : "dt-center", defaultContent : "", visible: false},
-				{data : "pry_svr_nm", 
-					render : function(data, type, full, meta) {
-						var html = "";
-						html += '<a href="#" onclick="fn_logView(' + full.pry_svr_id + ', \'' + full.sys_type + '\', \'' + full.wrk_dtm + '\')">'+data+'</a>';
-						return html;
-					},
-					className : "dt-center", 
-					defaultContent : ""
-				},
+				{data : "pry_svr_nm", className : "dt-center", defaultContent : "" },
 				{data : "exe_rst_cd", 
 					render : function(data, type, full, meta){
 						var html = "";
@@ -1064,13 +1100,12 @@
 							html += '<spring:message code="common.failed" />';
 							html += "</button>";
 						}
-		
 						return html;
 					},
 					className : "dt-center", 
 					defaultContent : ""
 				},
-				{data : "frst_reg_dtm", className : "dt-center", defaultContent : "" },
+				{data : "lst_mdf_dtm", className : "dt-center", defaultContent : "" },
 			]
 		});
 		
@@ -1445,11 +1480,12 @@
 			}
 		});
 	}
-
+	
 	/* ********************************************************
-	* 시스템 기동 중지 / 시작
+	* 시스템  중지 / 시작
 	******************************************************** */
-	function fn_actExeCng(pry_svr_id, type, status){
+	function fn_act_exe_cng(pry_svr_id, type, status){
+		console.log('act : ' + pry_svr_id, type, status)		
 		$.ajax({
 			url : '/proxyMonitoring/actExeCng.do',
 			type : 'post',
@@ -1625,7 +1661,7 @@
 
 
 	/* ********************************************************
-	* 기동-정지 실패 로그 popup
+	* -정지 실패 로그 popup
 	******************************************************** */
 	function fn_actExeFailLog(pry_act_exe_sn){
 		$.ajax({
@@ -1659,11 +1695,15 @@
 	/* ********************************************************
 	* confirm 창
 	******************************************************** */
-	function fn_confirm(pry_svr_id, act_status, type){
+	function fn_exe_confirm(pry_svr_id, act_status, type){
 		cng_pry_svr_id = pry_svr_id;
 		act_sys_type = type;
+		console.log('rpyx ' + cng_pry_svr_id)
+		console.log(act_sys_type)
+		console.log(act_status)
+// 		var confirm_title = "";
 		if (act_status == "TC001501") {
-			var gbn = "sys_stop";
+			var gbn = "exe_stop";
 			if(type == "P") {
 				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
 				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15"/>'));
@@ -1672,7 +1712,7 @@
 				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg19"/>'));
 			}
 		}else if (act_status == "TC001502") {
-			var gbn = "sys_start";
+			var gbn = "exe_start";
 			if(type == "P"){
 				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
 				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
@@ -1687,12 +1727,14 @@
 	}
 	
 	function fnc_confirmMultiRst(gbn){
-		if (gbn == "sys_stop") {
+		console.log('gbn : ' + gbn)
+		if (gbn == "exe_stop") {
 			//중지
-			fn_actExeCng();
-		}else if (gbn == "sys_start") {
+			console.log('stop : ' + cng_pry_svr_id)
+			fn_act_exe_cng(cng_pry_svr_id, act_sys_type,"TC001501");
+		}else if (gbn == "exe_start") {
 			//실행
-			fn_actExeCng();
+			fn_act_exe_cng(cng_pry_svr_id, act_sys_type,"TC001502");
 		}
 	}
 	
@@ -1701,8 +1743,10 @@
 
 <%@include file="./../popup/proxyLogView.jsp"%>
 <%@include file="./../popup/proxyConfigViewPop.jsp"%>
+<%@include file="./../popup/proxyDBStandbyIPViewPop.jsp"%>
 <%@include file="./../../cmmn/wrkLog.jsp"%>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
+<%@include file="./../../popup/confirmForm.jsp"%>
 
 <form name="proxyMonViewForm" id="proxyMonViewForm">
 	<input type="hidden" name="serverSsCnt"  id="serverSsCnt" />
@@ -1992,20 +2036,13 @@
 											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;">
 													<div class="card-body" style="border:none;margin-top:-25px;margin-left:-25px;margin-right:-25px;">
-<!-- 														<div class="row"> -->
-<!-- 															<div class="col-sm-7"> -->
-<!-- 																<h6 class="mb-0 alert"> -->
-<%-- 																	<span class="menu-title text-success"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg3"/></span> --%>
-<!-- 																</h6> -->
-<!-- 															</div> -->
-<!-- 															<div class="col-sm-5"> -->
-<!-- 																<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" onClick="fn_logView('', 'P', 'today')"> -->
-<!-- 																	<i class="mdi mdi-file-document"></i> -->
-<%-- 																	<spring:message code='eXperDB_proxy.current'/> <spring:message code='eXperDB_proxy.proxy_log' /> --%>
-<!-- 																</button> -->
-<%-- <%-- 																<input class="btn btn-inverse-info btn-sm btn-icon-text text-muted " type="button" onClick="fn_logView('', 'P', 'today')" value="<spring:message code='eXperDB_proxy.current'/> <spring:message code='eXperDB_proxy.proxy_log' />" /> --%> 
-<!-- 															</div> -->
-<!-- 														</div> -->
+														<div class="row">
+															<div class="col-sm-12">
+																<h6 class="mb-0 alert">
+																	<span class="menu-title text-success"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg3"/></span>
+																</h6>
+															</div>
+														</div>
  														<table id="proxyConfigCngLogTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
 															<thead>
 					 											<tr class="bg-info text-white">

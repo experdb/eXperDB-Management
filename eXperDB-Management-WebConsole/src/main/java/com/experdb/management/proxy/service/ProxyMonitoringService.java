@@ -146,4 +146,11 @@ public interface ProxyMonitoringService {
 	List<Map<String, Object>> selectPryCngList(int pry_svr_id);
 	
 	List<Map<String, Object>> selectProxyVipLsnList(int pry_svr_id);
+	
+	/**
+	 * proxy 연결 db standby ip list
+	 * @param db_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectDbStandbyList(int db_svr_id);
 }

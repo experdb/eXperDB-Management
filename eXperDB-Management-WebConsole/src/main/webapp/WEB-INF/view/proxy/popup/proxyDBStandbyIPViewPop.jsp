@@ -20,7 +20,7 @@
 %>
 <script type="text/javascript">
 
-var proxyDBStandbyListTable = "";
+	var proxyDBStandbyListTable = "";
 
 	function fn_db_standby_list_init(){
 		proxyDBStandbyListTable = $('#proxyDBStandbyListTable').DataTable({
@@ -46,14 +46,14 @@ var proxyDBStandbyListTable = "";
 		proxyDBStandbyListTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
 		proxyDBStandbyListTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // db host name
 		proxyDBStandbyListTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // db ip 
-		proxyDBStandbyListTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // db ip 
-		proxyDBStandbyListTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // db ip 
+		proxyDBStandbyListTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // db port 
+		proxyDBStandbyListTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // db 상태
 		
 		$(window).trigger('resize');
 	}
 	
 	/* *******************************************************
- 	* config 파일 불러오기
+ 	* db standby ip list 불러오기
  	******************************************************** */
 	function fn_proxyDBStandbyViewAjax(db_svr_id) {
 		// var pry_svr_id = $("pry_svr_id", "configForm").val();
@@ -61,7 +61,7 @@ var proxyDBStandbyListTable = "";
 		console.log(db_svr_id);
 		
 		$.ajax({
-			url : "/proxyMonitoring/configViewAjax.do",
+			url : "/proxyMonitoring/dbStandbyListAjax.do",
 			dataType : "json",
 			type : "post",
  			data : {

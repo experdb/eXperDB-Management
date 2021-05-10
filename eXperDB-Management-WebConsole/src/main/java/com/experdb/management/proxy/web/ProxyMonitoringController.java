@@ -386,6 +386,7 @@ public class ProxyMonitoringController {
 			Map<String, Object> param = new HashMap<String, Object>();
 		
 			String strPrySvrId = request.getParameter("pry_svr_id");
+			System.out.println("pry_svr_id : " + strPrySvrId);
 			String type = request.getParameter("type");
 			int pry_svr_id = Integer.parseInt(strPrySvrId);
 			String status = request.getParameter("status");
@@ -482,4 +483,25 @@ public class ProxyMonitoringController {
 //		fileDown.filDown(request, response, filePath, fileName, viewFileNm); // 파일다운로드
 		return 1;
 	}
+	
+	   /**
+	    * proxy 연결 db standby ip list
+	    * @param request
+	    * @return JSONObject 
+	    */
+	   @RequestMapping("/dbStandbyListAjax.do")
+	   public @ResponseBody JSONObject selectDbStandbyList(HttpServletRequest request){
+	      JSONObject resultObj = new JSONObject();
+	      try {
+	         String strDbSvrId = request.getParameter("db_svr_id");
+	         int db_svr_id = Integer.parseInt(strDbSvrId);
+
+	         List<Map<String, Object>> selectDBStandbyIPList = proxyMonitoringService.selectDbStandbyList(db_svr_id);
+	         resultObj.put("selectDBStandbyIPList", selectDBStandbyIPList);
+	         System.out.println(resultObj.toJSONString());
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      return resultObj;
+	   }
 }

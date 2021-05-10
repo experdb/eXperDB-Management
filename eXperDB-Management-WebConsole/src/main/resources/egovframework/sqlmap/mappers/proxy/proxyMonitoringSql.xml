@@ -659,7 +659,7 @@
 		/**
 		* Query ID : selectPryCngList
 		* Description : proxy config 파일 변경 이력 조회
-		* Author : 
+		* Author : 윤정
 		**/
 		SELECT
 			  (ROW_NUMBER() OVER()) AS ROWNUM
@@ -686,5 +686,24 @@ WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
 and tpvi.v_ip_exe_status = 'TC001501'
 
 
+	</select>
+	
+	<select id="selectDbStandbyList" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectPryCngList
+		* Description : proxy config 파일 변경 이력 조회
+		* Author : 윤정
+		**/
+		SELECT 
+		 	  (ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+			, tdi.DB_SVR_ID
+			, tdi.IPADR
+			, tdi.PORTNO
+			, tdi.SVR_HOST_NM
+			, tdi.DB_CNDT
+		FROM T_DBSVRIPADR_I tdi 
+		WHERE DB_SVR_ID = #{db_svr_id}::numeric
+		AND MASTER_GBN = 'S'
 	</select>
 </mapper>
