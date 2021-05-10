@@ -560,7 +560,7 @@
 			
  			html_listner_con += '	<table class="table-borderless" style="width:100%;">\n';
  			html_listner_con += '		<tr>\n';
- 			html_listner_con += '			<td style="width:100%;height:200px;" id="dbProxyConDiv' + i + '">\n';
+ 			html_listner_con += '			<td style="width:100%;height:200px;text-align:center;" id="dbProxyConDiv' + i + '">\n';
  			html_listner_con += '			&nbsp;</td>\n';
 
  			html_listner_con += '		</tr>\n';
@@ -670,27 +670,27 @@
 								if (db_conn_ip_num == '1') {
 									if (k == 0 || k == 2) {
 										//첫번째 오른쪽
-										db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="max-width:100%;height:auto;" alt=""/>';
+										db_conn_ip_num_af = '<img src="../images/arrow_side.png" class="img-lg" style="object-fit: contain;" alt=""/>';
 
 									} else {
 										//두번째 상단
-										db_conn_ip_num_af = '<img src="../images/arrow_up.png" style="width: 100%;object-fit: cover;" alt=""  />';
+										db_conn_ip_num_af = '<img src="../images/arrow_up.png" class="img-lg" style="object-fit: contain;" alt=""  />';
 									}
 								} else if (db_conn_ip_num == '2') {
 									if (k == 0 || k == 2) {
 										//첫번째 하단
-										db_conn_ip_num_af = '<img src="../images/arrow_down.png" style="width: 100%;object-fit: cover;" alt=""  />';
+										db_conn_ip_num_af = '<img src="../images/arrow_down.png" class="img-lg" style="object-fit: contain;" alt=""  />';
 									} else {
 										//두번째 row 일자
-										db_conn_ip_num_af = '<img src="../images/arrow_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+										db_conn_ip_num_af = '<img src="../images/arrow_side.png" class="img-lg" style="object-fit: contain;" alt=""  />';
 									}
 								} else {
 									//첫번째 row 일자, 하단
 									if (k == 0 || k == 2) {
-										db_conn_ip_num_af = '<img src="../images/arrow_side_down.png" style="width: 100%;object-fit: cover;" alt=""  />';
+										db_conn_ip_num_af = '<img src="../images/arrow_side_down.png" class="img-lg" style="object-fit: contain;" alt=""  />';
 									} else {
 										//두번째 row 일자, 상단
-										db_conn_ip_num_af = '<img src="../images/arrow_up_side.png" style="width: 100%;object-fit: cover;" alt=""  />';
+										db_conn_ip_num_af = '<img src="../images/arrow_up_side.png" class="img-lg"  style="object-fit: contain;" alt=""  />';
 									}
 								}
 							}
