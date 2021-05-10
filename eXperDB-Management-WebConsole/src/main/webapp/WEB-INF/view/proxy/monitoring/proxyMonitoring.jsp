@@ -79,7 +79,6 @@
 		
 		// 5분에 한번씩 reload
 		setInterval(function() {
-			$('#loading').hide();
 			$("#serverSs1").click();
 		}, 50000);
 	});
@@ -314,7 +313,7 @@
 				}
 			}
 		});
-		
+		$("#loading").hide();
 		//선택 server row
 		$("#serverSsChkNum", "#proxyMonViewForm").val(rowChkCnt);
 	}
@@ -581,7 +580,6 @@
   			//title
 			if (result.proxyServerByMasId[j].pry_svr_nm != "") {
 				html_pry_title = '<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
-				console.log('proxy : ' + result.proxyServerByMasId[j].pry_svr_id)
 				if(nvlPrmSet(result.proxyServerByMasId[j].exe_status, '') == 'TC001501'){
 					html_pry_title += '		<div class="badge badge-pill badge-success" title="">' + result.proxyServerByMasId[j].master_gbn + '</div>\n';
 					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
@@ -615,7 +613,6 @@
 			
 			if (result.proxyServerLsnList.length > 0) {
 				for(var k = 0; k < result.proxyServerLsnList.length; k++){
-					console.log(result.proxyServerLsnList[k]);
 					if (result.proxyServerByMasId[j].pry_svr_id == result.proxyServerLsnList[k].pry_svr_id) {
 					//	console.log(result.proxyServerLsnList[k]);
 						//proxy 리스너 셋팅
@@ -663,9 +660,7 @@
 							  (result.proxyServerByMasId[j].kal_install_yn == 'Y' && result.proxyServerByMasId[j].kal_exe_status == 'TC001501'))
 							){
 							if (result.proxyServerLsnList[k].db_conn_ip_num != null) {
-								console.log('db_conn_ip_num : ' + result.proxyServerLsnList[k].db_conn_ip_num)
-								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "");
-								console.log(db_conn_ip_num)
+								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "").replace(/,\s*/,"").slice(0,1);
 								if (db_conn_ip_num == '1') {
 									if (k == 0 || k == 2) {
 										//첫번째 오른쪽
@@ -719,7 +714,7 @@
 					html_listner_con_ss += '	</tr>\n';
 					html_listner_con_ss += '</table>\n';
 				}
-				console.log(html_listner_ss);
+// 				console.log(html_listner_ss);
 				lsnNulkCnt = 0;
 
 				$("#proxyListnerDiv" + j).html(html_listner_ss);
@@ -912,8 +907,6 @@
 	* db standby ip list
 	******************************************************** */
 	function fn_standby_view(db_svr_id){
-		console.log(db_svr_id);		
-		fn_db_standby_list_init();		
 		fn_proxyDBStandbyViewAjax(db_svr_id);
 		$('#pop_db_standby_ip_list_view').modal("show");
 		$('#loading').hide();
@@ -1485,7 +1478,6 @@
 	* 시스템  중지 / 시작
 	******************************************************** */
 	function fn_act_exe_cng(pry_svr_id, type, status){
-		console.log('act : ' + pry_svr_id, type, status)		
 		$.ajax({
 			url : '/proxyMonitoring/actExeCng.do',
 			type : 'post',
@@ -1573,8 +1565,6 @@
 	 * config 파일 view popup
 	 ******************************************************** */
 	function fn_configView(pry_svr_id, type){
-		console.log(pry_svr_id)
-		console.log(type)
 		$.ajax({
 			url : '/proxyMonitoring/configView.do',
 			type : 'post',
@@ -1612,7 +1602,6 @@
 	 * log 파일 view popup
 	 ******************************************************** */
 	function fn_logView(pry_svr_id, type, date){
-		console.log(date);
 		todayYN = 'N';
 		if(date == 'today'){
 			pry_svr_id = select_pry_svr_id;
@@ -1698,9 +1687,6 @@
 	function fn_exe_confirm(pry_svr_id, act_status, type){
 		cng_pry_svr_id = pry_svr_id;
 		act_sys_type = type;
-		console.log('rpyx ' + cng_pry_svr_id)
-		console.log(act_sys_type)
-		console.log(act_status)
 // 		var confirm_title = "";
 		if (act_status == "TC001501") {
 			var gbn = "exe_stop";
@@ -1727,10 +1713,8 @@
 	}
 	
 	function fnc_confirmMultiRst(gbn){
-		console.log('gbn : ' + gbn)
 		if (gbn == "exe_stop") {
 			//중지
-			console.log('stop : ' + cng_pry_svr_id)
 			fn_act_exe_cng(cng_pry_svr_id, act_sys_type,"TC001501");
 		}else if (gbn == "exe_start") {
 			//실행

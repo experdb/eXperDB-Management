@@ -20,8 +20,16 @@
 %>
 <script type="text/javascript">
 
-	var proxyDBStandbyListTable = "";
+	var proxyDBStandbyListTable = null;
 
+ 	$(window.document).ready(function() {
+ 		fn_db_standby_list_init();
+ 		
+		setTimeout(function(){
+			if(proxyDBStandbyListTable != null) proxyDBStandbyListTable.columns.adjust().draw();
+		},200);
+ 	});
+ 	
 	function fn_db_standby_list_init(){
 		proxyDBStandbyListTable = $('#proxyDBStandbyListTable').DataTable({
 			searching : false,
@@ -39,7 +47,24 @@
 				{data : "svr_host_nm", className : "dt-center", defaultContent : ""},
 				{data : "ipadr", className : "dt-center", defaultContent : "" },
 				{data : "portno", className : "dt-center", defaultContent : "" },
-				{data : "db_cndt", className : "dt-center", defaultContent : "" },
+				{data : "db_cndt", 
+					render : function(data, type, full, meta) {
+						var html = "";
+						if(data == "Y"){
+							db_exe_status_chk = "text-success";
+							db_exe_status_css = "fa-refresh fa-spin text-success";
+							db_exe_status_val = 'running';
+						} else {
+							db_exe_status_chk = "text-danger";
+							db_exe_status_css = "fa-times-circle text-danger";
+							db_exe_status_val = 'stop';
+						}
+						html += '			<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + db_exe_status_val + '</h6>\n';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
 			]
 		});
 	
@@ -58,7 +83,6 @@
 	function fn_proxyDBStandbyViewAjax(db_svr_id) {
 		// var pry_svr_id = $("pry_svr_id", "configForm").val();
 		// var type = $("type", "configForm").val();
-		console.log(db_svr_id);
 		
 		$.ajax({
 			url : "/proxyMonitoring/dbStandbyListAjax.do",
@@ -96,12 +120,7 @@
 	 * 창닫기
 	 ******************************************************** */
 	function fn_proxyDBStandbyIPPopcl() {
-		var contentsGbn_chk = $("#contents_gbn", "#configForm").val();
 		$("#pop_db_standby_ip_list_view").modal("hide");
-		
-		if (contentsGbn_chk != null && contentsGbn_chk != "") {
-			$("#"+ contentsGbn_chk).modal("show");
-		}
 	}
 	
 </script>
