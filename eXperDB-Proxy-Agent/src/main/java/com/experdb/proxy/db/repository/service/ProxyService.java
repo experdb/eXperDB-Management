@@ -61,7 +61,7 @@ public interface ProxyService {
 	 * @param ProxyServerVO, insUpNmGbn
 	 * @throws Exception
 	 */
-	public String proxyConfFisrtIns(ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam, JSONObject jObjListResult) throws Exception;
+	public String proxyConfFisrtIns(ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam) throws Exception;
 
 	/**
 	 * Proxy 실행상태 및 설치 상태 조회

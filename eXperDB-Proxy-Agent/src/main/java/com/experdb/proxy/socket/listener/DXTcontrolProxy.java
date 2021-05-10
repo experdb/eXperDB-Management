@@ -64,7 +64,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			AgentInfoVO agentInfoVO = systemService.selectPryAgtInfo(agtVo);
 
 			//proxy 설치시 테이블 insert 실행
-			//D의 경우 사용자 삭제
+			//D의 경우 사용자 삭제로 자동등록 실행 안함
 			if (proxyServerChk != null && agentInfoVO != null) {
 				if (!"".equals(proxyServerChk) && ("".equals(agentInfoVO.getSvr_use_yn()) || !"D".equals(agentInfoVO.getSvr_use_yn()))) {
 					//proxy 서버일때 데이터 추가해야함
@@ -78,7 +78,7 @@ public class DXTcontrolProxy extends SocketCtl {
 	}
 
 	/**
-	 * conf 정보 조회
+	 * proxy 데이터 생성 및 등록
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
@@ -129,8 +129,6 @@ public class DXTcontrolProxy extends SocketCtl {
 			JSONObject jObjResult = null;
 			JSONObject jObjKeepResult = null;
 
-			JSONObject jObjListResult = null;
-
 			//proxy 서버 등록 여부 확인
 			ProxyServerVO proxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
 			
@@ -143,7 +141,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			//2. keepalived conf 위치
 			KeepPathData = pryService.selectProxyServerChk("keep_conf_which"); //param setting
 
-			//3. proxy conf 열기
+			//proxy conf 존재일 경우 만 등록
 			if (proxyPathData != null) {
 				jObjResult = pryService.selectProxyServerList("proxy_conf_read", proxyPathData, "",""); //proxy conf setting
 
@@ -360,7 +358,8 @@ public class DXTcontrolProxy extends SocketCtl {
 				vo.setMin_data_del_term(StrUtil.nvlIntChg(proxyServerInfo.getMin_data_del_term(),3));
 				vo.setPry_svr_nm(proxySvrNmData);
 				
-				vo.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+				vo.setMaster_gbn(masterGbnData);
+			//	vo.setMaster_gbn(proxyServerInfo.getMaster_gbn());
 				Integer master_svr_id_num = proxyServerInfo.getMaster_svr_id();
 				if (master_svr_id_num != null) {
 					if (master_svr_id_num > 0) {
@@ -408,7 +407,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			}
 
 			if (proxyPathData != null) {
-				returnMsg = pryService.proxyConfFisrtIns(vo, insUpNmGbn, insertParam, jObjListResult);
+				returnMsg = pryService.proxyConfFisrtIns(vo, insUpNmGbn, insertParam);
 			}
 		} catch (Exception e) {
 			errLogger.error("DXTcontrolScaleAwsExecute {} ", e.toString());

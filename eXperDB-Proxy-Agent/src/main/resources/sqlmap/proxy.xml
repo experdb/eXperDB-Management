@@ -20,7 +20,7 @@
 				A.KAL_EXE_STATUS,
 				A.MASTER_GBN,
 				A.MASTER_SVR_ID,
-				(SELECT A.IPADR FROM T_PRY_SVR_I B WHERE B.PRY_SVR_ID = A.MASTER_SVR_ID) AS MASTER_SVR_NM,
+				(SELECT B.IPADR FROM T_PRY_SVR_I B WHERE B.PRY_SVR_ID = A.MASTER_SVR_ID) AS MASTER_SVR_NM,
 				A.DB_SVR_ID,
 				A.DAY_DATA_DEL_TERM,
 				A.MIN_DATA_DEL_TERM,
@@ -840,4 +840,45 @@
            AND (now()::date - #{day_data_del_val}::interval) >= exe_dtm
            AND LOG_TYPE = 'TC003902';
     </delete>
+    
+	<select id="selectPryLsnSvrChkInfo" parameterType="ProxyListenerServerListVO" resultType="ProxyListenerServerListVO">
+        /**
+        * Query ID : selectPryLsnSvrChkInfo
+        * Description : 리스너 서버 등록 여부 조회
+        * Author : 
+        **/
+         SELECT B.CON_BIND_PORT
+              , A.IPADR 
+              , A.PRY_SVR_ID
+              , B.LSN_ID
+              , C.LSN_SVR_ID
+           FROM T_PRY_SVR_I A
+                JOIN T_PRY_LSN_I B ON A.PRY_SVR_ID = B.PRY_SVR_ID
+                JOIN T_PRY_LSN_SVR_I C ON A.PRY_SVR_ID = C.PRY_SVR_ID and B.LSN_ID = C.LSN_ID
+          WHERE 1 = 1
+            AND A.PRY_SVR_ID  = #{pry_svr_id}::numeric
+            AND B.LSN_NM = #{lsn_nm}
+            AND C.DB_CON_ADDR = #{db_con_addr}
+		  LIMIT 1
+    </select>
+    
+	
+   <update id="updatePryLsnSvrInfo"  parameterType="ProxyListenerServerListVO">
+    	/**
+	 	* Query ID : updatePryLsnSvrInfo
+	 	* Description : proxy 리스너 서버 수정
+	 	* Author : 
+	 	**/
+		UPDATE T_PRY_LSN_SVR_I
+		SET
+	    	  CHK_PORTNO = #{chk_portno_val}::numeric
+	    	, BACKUP_YN = #{backup_yn}::bpchar
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			  LSN_SVR_ID  = #{lsn_svr_id}::numeric
+		  AND DB_CON_ADDR  = #{db_con_addr}
+		  AND PRY_SVR_ID  = #{pry_svr_id}::numeric
+		  AND LSN_ID  = #{lsn_id}::numeric
+    </update>
 </mapper>

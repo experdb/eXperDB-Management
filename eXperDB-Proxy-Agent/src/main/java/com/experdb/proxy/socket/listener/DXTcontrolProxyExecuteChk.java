@@ -23,7 +23,7 @@ public class DXTcontrolProxyExecuteChk extends SocketCtl implements Job {
 	
     @Override
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
-    	socketLogger.info("Job Executed15as1d51a5sd1a5sd15asd [" + new Date(System.currentTimeMillis()) + "]");
+    	socketLogger.info("Job DXTcontrolProxyExecuteChk [" + new Date(System.currentTimeMillis()) + "]");
     	
     	String returnMsg = "";
     	context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
@@ -34,7 +34,7 @@ public class DXTcontrolProxyExecuteChk extends SocketCtl implements Job {
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 			String proxySetStatus = "";
 
-			//roxy 설치여부 및 keepalived 설치확인
+			//proxy 설치여부 및 keepalived 설치확인
 			proxySetStatus = service.selectProxyTotServerChk("proxy_setting_tot", "");
 
 			Map<String, Object> chkParam = new HashMap<String, Object>();

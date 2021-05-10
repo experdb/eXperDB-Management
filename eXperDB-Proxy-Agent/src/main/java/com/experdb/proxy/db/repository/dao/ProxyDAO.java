@@ -311,4 +311,25 @@ public class ProxyDAO {
 	public void lsnSvrDelExecuteList(ProxyServerVO vo) throws Exception  {
 		 session.delete("proxy.lsnSvrDelExecuteList", vo);
 	}
+	
+
+	/**
+	 * T_PRY_GLB_I table 단건 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public ProxyListenerServerListVO selectPryLsnSvrChkInfo(ProxyListenerServerListVO vo) throws Exception  {
+		return (ProxyListenerServerListVO) session.selectOne("proxy.selectPryLsnSvrChkInfo", vo);
+	}
+
+	/**
+	 * T_PRY_LSN_SVR_I table DB연결체크 수정
+	 * 
+	 * @param 
+	 * @throws Exception
+	 */
+	public int updatePryLsnSvrInfo(ProxyListenerServerListVO vo) throws Exception  {
+		return session.update("proxy.updatePryLsnSvrInfo", vo);
+	}
 }
