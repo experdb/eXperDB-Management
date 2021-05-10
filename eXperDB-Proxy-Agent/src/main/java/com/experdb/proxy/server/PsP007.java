@@ -42,7 +42,7 @@ public class PsP007 extends SocketCtl{
 	}
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
-		socketLogger.info("PsP006.execute : " + strDxExCode);
+		socketLogger.info("PsP007.execute : " + strDxExCode);
 
 		byte[] sendBuff = null;
 		
@@ -56,7 +56,7 @@ public class PsP007 extends SocketCtl{
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 		} catch (Exception e) {
-			errLogger.error("PsP006 {} ", e.toString());
+			errLogger.error("PsP007 {} ", e.toString());
 
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP006);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");

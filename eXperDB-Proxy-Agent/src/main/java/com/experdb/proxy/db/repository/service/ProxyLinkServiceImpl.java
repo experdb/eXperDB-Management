@@ -14,6 +14,8 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -22,6 +24,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.experdb.proxy.db.repository.dao.ProxyDAO;
 import com.experdb.proxy.db.repository.vo.ProxyActStateChangeHistoryVO;
@@ -353,6 +356,9 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String actType =jObj.getString("act_type"); //A : active /R : restart /S : stop
 		String userId =jObj.getString("lst_mdfr_id");
 		String cmd = "systemctl ";
+		String proxySetStatus = "";
+		String keepalivedSetStatus = "";
+		
 		try {
 			ProxyServerVO prySvr = new ProxyServerVO();
 			prySvr.setLst_mdfr_id(userId);
@@ -422,13 +428,46 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			switch(sysType){
 				case "PROXY" :
 					prySvr.setExe_status(strExecute);
+					proxySetStatus = strExecute;
 					break;
 				case "KEEPALIVED" :
 					prySvr.setKal_exe_status(strExecute);
+					keepalivedSetStatus = strExecute;
 					break;
 			}
 			
-			proxyDAO.updatePrySvrExeStatusInfo(prySvr);
+			
+			
+			//proxy_svr 상태 변경 및 마스터 구분 체크
+	    	try {
+	    		String returnMsg = "";
+	    		
+	    		ProxyServerVO schProxyServerVO = new ProxyServerVO();
+	    		schProxyServerVO.setPry_svr_id(prySvrId);
+
+				//proxy 서버 등록 여부 확인
+				ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInfo(schProxyServerVO);
+
+	    		proxyDAO.updatePrySvrExeStatusInfo(prySvr);
+
+	    		if (proxyServerInfo != null) {
+					Map<String, Object> chkParam = new HashMap<String, Object>();
+
+					chkParam.put("ipadr", "");
+					chkParam.put("proxySetStatus",proxySetStatus);
+					chkParam.put("real_ins_gbn", "dbchk");
+					chkParam.put("userId",userId);
+
+					//마스터 실시간 체크
+					returnMsg = proxyMasterGbnLinkCheck(chkParam, proxyServerInfo); 	
+	    		}
+
+	        } catch(Exception e) {
+	            e.printStackTrace();
+	        }  
+			
+			
+			
 			
 			
 		} catch (Exception e) {
@@ -445,6 +484,115 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		
 		return outputObj;
 	}
+	
+	/**
+	 * 마스터 체크 및 저장
+	 * @param chkParam
+	 * @throws Exception
+	 */
+	@Transactional
+	public String proxyMasterGbnLinkCheck(Map<String, Object> chkParam, ProxyServerVO proxyServerInfo) throws Exception  {
+		String returnMsg = "";
+
+		try {
+			//param setting
+			String ipadrPrm = "";
+			String proxySetStatusPrm = "";
+			String userIdPrm = "";
+
+			String strAcptype = "";
+			String strProxyChgVal = "";
+
+			if (proxyServerInfo != null) ipadrPrm = proxyServerInfo.getIpadr();
+			if (chkParam.get("proxySetStatus") != null) proxySetStatusPrm = chkParam.get("proxySetStatus").toString();
+			if (chkParam.get("userId") != null) userIdPrm = chkParam.get("userId").toString();
+
+			Map<String, Object> mstChkParam = new HashMap<String, Object>();
+			ProxyServerVO prySvrChk = null;
+
+			//proxy check - 기동 이력등록
+			if (!"".equals(proxySetStatusPrm)) {
+				strAcptype = proxySetStatusPrm;
+
+				if (!strAcptype.equals(proxyServerInfo.getExe_status())) {
+					strProxyChgVal = strAcptype;
+				}
+			}
+
+			//마스터 구분 변경
+			if (!"".equals(strProxyChgVal)) {
+				if ("TC001502".equals(strProxyChgVal)) { //down 된 경우
+					if ("M".equals(proxyServerInfo.getMaster_gbn())) { //마스터 일때
+						//백업 제일 작은수가 마스터로 변경
+						mstChkParam.put("pry_svr_id", proxyServerInfo.getPry_svr_id());
+						mstChkParam.put("ipadr", ipadrPrm);
+						mstChkParam.put("selQueryGbn", "masterM");
+
+			         	prySvrChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
+			         	
+			         	//backup이 있으면 update 없으면 처리 않함
+			         	if (prySvrChk != null) {
+			         		//백업중 제일 낮은 Pry_svr_id 존재
+			         		if (!"".equals(prySvrChk.getPry_svr_id()) && !"0".equals(prySvrChk.getPry_svr_id())) {
+			         			prySvrChk.setMaster_gbn("M");
+			         			prySvrChk.setMaster_svr_id_chk(null);
+			         			
+			         			prySvrChk.setOld_pry_svr_id(proxyServerInfo.getPry_svr_id());
+			         			prySvrChk.setOld_master_gbn("B");
+			         			prySvrChk.setOld_master_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
+			         			prySvrChk.setLst_mdfr_id(userIdPrm);
+			         			prySvrChk.setSel_query_gbn("master_down");
+			         			
+			         			//백업중 제일 낮은 proxy 마스터로 승격
+			         			//기존 마스터는 백업으로 변경
+			         			//전체 백업의 마스터_id를 변경
+			         			proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
+
+			         		}
+			         	}
+					} else {
+						//백업일 경우
+						prySvrChk = new ProxyServerVO();
+						
+						prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
+						prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+						prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+						prySvrChk.setLst_mdfr_id(userIdPrm);
+	         			prySvrChk.setSel_query_gbn("backup_down");
+
+						proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
+					}				
+				} else { //up
+					//마스터 제외하고 전부 등록
+					prySvrChk = new ProxyServerVO();
+
+					prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
+					prySvrChk.setMaster_svr_id_chk(null);
+
+					prySvrChk.setLst_mdfr_id(userIdPrm);
+					prySvrChk.setSel_query_gbn("g_master_up");
+					
+					prySvrChk.setOld_master_gbn("B");
+					prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+					
+					if ("M".equals(proxyServerInfo.getOld_master_gbn())) { //기본마스터 일때
+						prySvrChk.setMaster_gbn(proxyServerInfo.getOld_master_gbn());
+					} else {
+						prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+					}
+					proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
+				}
+			}
+
+			returnMsg = "success";
+		} catch (Exception e) {
+			errLogger.error("proxyMasterGbnRealCheck {} ", e.toString());
+			returnMsg = "false";
+		}
+		
+		return returnMsg;
+	}
+	
 
 	public JSONObject getAgentInterface(JSONObject jobj) throws Exception {
 		socketLogger.info("getAgentInterface :: start");
