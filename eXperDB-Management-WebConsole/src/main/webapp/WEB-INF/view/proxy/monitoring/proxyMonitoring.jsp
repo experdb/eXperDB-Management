@@ -83,7 +83,7 @@
 			fn_proxySvrSsSearch(select_pry_svr_id, rowChkCnt);
 			console.log(rowChkCnt);
 // 			$("#serverSs1").click();
-		}, 100000);
+		}, 10000);
 	});
 	
 
@@ -477,9 +477,9 @@
 		 						vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
 		 						if(aut_id == 1){
 		 							if(result.proxyServerVipList[i].kal_exe_status == "TC001501") {
-		 								vip_btn_html += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />';
+		 								vip_btn_html += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />';
 		 							} else {
-		 								vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_start_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001502\', \'K\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />';
+		 								vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_start_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001502\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />';
 		 							}
 		 						}
 		 						vip_btn_html +=	'<br/>&nbsp;';
@@ -606,13 +606,13 @@
 					html_pry_title += '		<div class="badge badge-pill badge-success" title="">' + result.proxyServerByMasId[j].master_gbn + '</div>\n';
 					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
 					if(aut_id == 1) {
-						html_pry_title += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_stop_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001501\', \'P\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
+						html_pry_title += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_stop_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001501\', \'P\', \'' + result.proxyServerByMasId[j].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
 					}
 				} else {
 					html_pry_title += '		<div class="badge badge-pill badge-danger" title="">' +  result.proxyServerByMasId[j].master_gbn + '</div>\n';
 					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
 					if(aut_id == 1) {
-						html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_start_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001502\', \'P\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
+						html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="proxy_start_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001502\', \'P\', \'' + result.proxyServerByMasId[j].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
 					}
 				}
 				
@@ -1015,7 +1015,7 @@
 						{data : "pry_svr_nm", 
 							render : function(data, type, full, meta) {
 								var html = "";
- 								html += '<a href="#" onclick="fn_logView(' + full.pry_svr_id + ', \'' + full.sys_type + '\', \'' + full.wrk_dtm + '\')">'+data+'</a>';
+ 								html += '<a href="#" onclick="fn_logView(' + full.pry_svr_id + ', \'' + full.sys_type + '\', \'' + full.wrk_dtm + '\', \'' + full.agt_cndt_cd + '\')">'+data+'</a>';
 								return html;
 							},
 							className : "dt-center", 
@@ -1027,7 +1027,7 @@
  								if(data == "PROXY"){
 									html += '<spring:message code="menu.proxy"/>';
 								} else if(data == "KEEPALIVED"){
-									html += 'VIP<br/><spring:message code="eXperDB_proxy.vip_health_check"/>';
+									html += 'VIP<br/>Check';
 								}
 								return html;
 							},	
@@ -1632,7 +1632,9 @@
 	/* ********************************************************
 	 * log 파일 view popup
 	 ******************************************************** */
-	function fn_logView(pry_svr_id, type, date){
+	function fn_logView(pry_svr_id, type, date, agt_cndt_cd){
+		console.log(agt_cndt_cd)
+	
 		todayYN = 'N';
 		if(date == 'today'){
 			pry_svr_id = select_pry_svr_id;
@@ -1658,6 +1660,7 @@
 				$("#aut_id", "#proxyViewForm").val(aut_id);
 				$("#todayYN", "#proxyViewForm").val(todayYN);
 				$("#view_file_name", "#proxyViewForm").html("");
+				$("#agt_cndt_cd", "#proxyViewForm").html(agt_cndt_cd);
 				$("#log_type").val(type).prop("selected", true);
 				dateCalenderSetting();
 				fn_logViewAjax();
@@ -1715,29 +1718,52 @@
 	/* ********************************************************
 	* confirm 창
 	******************************************************** */
-	function fn_exe_confirm(pry_svr_id, act_status, type){
+	function fn_exe_confirm(pry_svr_id, act_status, type, agt_cndt_cd){
 		cng_pry_svr_id = pry_svr_id;
 		act_sys_type = type;
-// 		var confirm_title = "";
-		if (act_status == "TC001501") {
-			var gbn = "exe_stop";
-			if(type == "P") {
-				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
-				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15"/>'));
-			} else {
-				confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
-				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg19"/>'));
+		var confirm_title = "";
+		
+		if(agt_cndt_cd == "TC001502"){
+			if (act_status == "TC001501") {
+				if(type == "P") {
+					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 중지할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+				} else {
+					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('가상 ip 시스템을 중지할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+				}
+			}else if (act_status == "TC001502") {
+				if(type == "P"){
+					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 기동할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+				} else {
+					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('가상 ip 시스템을 기동할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+				}
 			}
-		}else if (act_status == "TC001502") {
-			var gbn = "exe_start";
-			if(type == "P"){
-				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
-				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
-			} else {
-				confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
-				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg20"/>'));
+		
+		} else {
+			if (act_status == "TC001501") {
+				var gbn = "exe_stop";
+				if(type == "P") {
+					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15"/>'));
+				} else {
+					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg19"/>'));
+				}
+			}else if (act_status == "TC001502") {
+				var gbn = "exe_start";
+				if(type == "P"){
+					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
+				} else {
+					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg20"/>'));
+				}
 			}
 		}
+		
 		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
 		$('#confirm_multi_tlt').html(confirm_title);
 		$('#pop_confirm_multi_md').modal("show");
@@ -1750,7 +1776,7 @@
 		}else if (gbn == "exe_start") {
 			//실행
 			fn_act_exe_cng(cng_pry_svr_id, act_sys_type,"TC001502");
-		}
+		} 
 	}
 	
 	

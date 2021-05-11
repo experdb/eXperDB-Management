@@ -78,9 +78,6 @@
 					
 					$("#dwLen", "#proxyViewForm").val(result.dwLen);
 					$("#view_file_name", "#proxyViewForm").html(result.file_name);
-// 					$("#type", "#proxyViewForm").val(type);
-// 					$("#pry_svr_id", "#proxyViewForm").val(pry_svr_id);
-// 					$("#aut_id", "#proxyViewForm").val(aut_id);
 					$("#date", "#proxyViewForm").val(v_date);
 					$("#status", "#proxyViewForm").val(result.status);
 					if(type == 'KEEPALIVED') {
@@ -94,8 +91,6 @@
 					$("#view_file_size", "#proxyViewForm").html(v_fileSize);
 					
 				}
-// 				dateCalenderSetting();
-				
 
 				if(v_aut_id != 1){
 					$('#start_btn').hide();
@@ -141,7 +136,6 @@
 		var day_start = today.toJSON().slice(0,10);
 		var sys_date = s_date.slice(0,10);
 		$("#wrk_strt_dtm").val(sys_date);
-// 		$("#wrk_end_dtm").val(day_end);
 
 		if ($("#wrk_strt_dtm_div").length) {
 			$('#wrk_strt_dtm_div').datepicker({
@@ -149,30 +143,12 @@
 			.on('hide', function(e) {
 				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
 		    });
-// 		    .on('changeDate', function(selected){
-// 	        	$("#date", "#proxyViewForm").val($("#wrk_strt_dtm").val());
-// 	        	fn_logViewAjax();
-// 			}); //값 셋팅
 		}
-
-// 		if ($("#wrk_end_dtm_div").length) {
-// 			$('#wrk_end_dtm_div').datepicker({
-// 			}).datepicker('setDate', day_end)
-// 			.on('hide', function(e) {
-// 				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
-// 		    }); //값 셋팅
-// 		}
+		
 		$("#wrk_strt_dtm").datepicker('setDate', sys_date);
-// 	    $("#wrk_end_dtm").datepicker('setDate', sys_date);
 	    $('#wrk_strt_dtm_div').datepicker('updateDates');
-// 	    $('#wrk_end_dtm_div').datepicker('updateDates');
 	}
 	
-// 	$('#datepicker').datepicker()
-//     .on("input change", function (e) {
-//     console.log("Date changed: ", e.target.value);
-// 	});
-
 	/* ********************************************************
 	 * 날짜 변경
 	 ******************************************************** */ 
@@ -190,7 +166,7 @@
 		var v_pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
 		var v_type = $("#type", "#proxyViewForm").val();
 		var v_status = $("#status", "#proxyViewForm").val();
-		console.log('pry_svr_id : ' + v_pry_svr_id);
+
 		$.ajax({
 			url : '/proxyMonitoring/actExeCng.do',
 			type : 'post',
@@ -201,8 +177,6 @@
 				act_exe_type : 'TC004001'
 			},
 			success : function(result) {	
-				console.log(result)
-				console.log(result.result)
 	 			if(result.result){
 	 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
 	 			}else{
@@ -319,43 +293,56 @@
 	 * 기동-정지 확인창
 	 ******************************************************** */
 	function fn_log_act_confirm_modal(act_status){
-		console.log(act_status)
-		console.log($("#type","#proxyViewForm").val());
 		cng_pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
 		act_sys_type = $("#type", "#proxyViewForm").val();
 		type = $("#type", "#proxyViewForm").val();
-		console.log(cng_pry_svr_id);
-		console.log(act_sys_type);
-		if (act_status == "TC001501") {
-			var gbn = "sys_stop";
-			if(act_sys_type == "PROXY") {
-				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
-// 				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15"/>'));
-				$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15"/>'));
-			} else {
-				confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
-// 				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg19"/>'));
-				$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg19"/>'));
+		agt_cndt_cd = $("#agt_cndt_cd", "#proxyViewForm").val();
+		
+		if(agt_cndt_cd == "TC001502"){
+			if (act_status == "TC001501") {
+				if(type == "P") {
+					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 중지할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+				} else {
+					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('가상 ip 시스템을 중지할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+				}
+			}else if (act_status == "TC001502") {
+				if(type == "P"){
+					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 기동할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+				} else {
+					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
+					$('#confirm_multi_msg').html(fn_strBrReplcae('가상 ip 시스템을 기동할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+				}
 			}
-		}else if (act_status == "TC001502") {
-			var gbn = "sys_start";
-			if(act_sys_type == "PROXY"){
-				confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
-				$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
-// 				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
-			} else {
-				confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
-				$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
-// 				$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
+		
+		} else {
+			if (act_status == "TC001501") {
+				var gbn = "sys_stop";
+			
+				if(act_sys_type == "PROXY") {
+					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+					$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg15"/>'));
+				} else {
+					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
+					$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg19"/>'));
+				}
+			}else if (act_status == "TC001502") {
+				var gbn = "sys_start";
+			
+				if(act_sys_type == "PROXY"){
+					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
+					$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
+				} else {
+					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
+					$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg16"/>'));
+				}
 			}
 		}
+		
 		$('#con_only_gbn', '#findConfirmOnly').val(gbn);
-		console.log('gb : ' + gbn)
-		console.log($('#con_only_gbn', '#findConfirmOnly').val());
-// 		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
-// 		$('#confirm_multi_tlt').html(confirm_title);
-		$('#confirm__tlt').html(confirm_title);
-// 		$('#pop_confirm_multi_md').modal("show");
+		$('#confirm_tlt').html(confirm_title);
 		$('#pop_confirm_md').modal("show");
 	}
 	
@@ -363,7 +350,10 @@
 	 * confirm 결과에 따른 작업
 	 ******************************************************** */
 	function fnc_confirmRst(){
-		fn_actExeCng();
+		agt_cndt_cd = $("#agt_cndt_cd", "#proxyViewForm").val();
+		if(agt_cndt_cd == "T001501"){
+			fn_actExeCng();
+		}
 	}
 	
 	 
@@ -375,7 +365,6 @@
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
 		$("#type", "#proxyViewForm").val(selectValue);
 		$("#dwLen", "#proxyViewForm").val("0");
-// 		var date = $("#wrk_strt_dtm").val();
 		$('#proxylog').scrollTop(0);
 		fn_logViewAjax();
 	}
@@ -408,7 +397,6 @@
 				</div>
 				<div class="col-sm-3">
 					
-<!-- 				<button type="button" class="btn btn-success btn-sm btn-icon-text" style="margin-left:70px;" onclick="fn_download()"> -->
 					<button type="button" class="btn btn-outline-success btn-icon-text" id="download_btn" style="margin-left:50px;" onclick="fn_pry_log_download()">
 						<i class='ti-download btn-icon-prepend' >
 						&nbsp;<spring:message code='migration.download' /></i>
@@ -428,13 +416,12 @@
 					<input type="hidden" id="aut_id" name="aut_id">
 					<input type="hidden" id="todayYN" name="todayYN">
 					<input type="hidden" id="status" name="status">
-					
+					<input type="hidden" id="agt_cndt_cd" name="agt_cndt_cd">
 					<fieldset>
 						<div class="card" style="margin-top:10px;border:0px;margin-bottom:-40px;">
 							<div class="card-body">
 								<div class="form-group row">
 									<div class="col-sm-2">
-<!-- 										<select class="form-control form-control-xsm" name="log_line" id="log_line" tabindex=1 > -->
 										<select class="form-control" name="log_line" id="log_line" tabindex=1 >
 											<option value="500">500 Line</option>
 											<option value="1000" selected>1000 Line</option>
@@ -444,19 +431,14 @@
 									</div>
 									<div class="col-sm-6">
 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_logViewAjax();" value='<spring:message code="auth_management.viewMore" />' />
-<%-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_confirm_modal('TC001502')" value="<spring:message code="eXperDB_proxy.act_start"/>" /> --%>
 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_log_act_confirm_modal('TC001502')" value="<spring:message code="eXperDB_proxy.act_start"/>" />
-<%-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_confirm_modal('TC001501')" value="<spring:message code="eXperDB_proxy.act_stop"/>" /> --%>
 										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_log_act_confirm_modal('TC001501')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />
-<%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_start();" value="<spring:message code="eXperDB_proxy.act_start"/>" /> --%>
-<%-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_server_stop();" value="<spring:message code="eXperDB_proxy.act_stop"/>" /> --%>
 									</div>
 									<div class="col-sm-2" style="margin-left:-17px;">
 										<select class="form-control" name="log_type" id="log_type" tabindex=1 onchange="fn_sys_type_cng()">
 											<option value="PROXY">PROXY</option>
 											<option value="KEEPALIVED">KEEPALIVED</option>
 										</select>
-<!-- 										<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_sys_type_cng();" id="log_cng" value="" /> -->
 									</div>
 									<div class="col-sm-2" style="margin-left:-17px;">
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
@@ -503,7 +485,6 @@
 			</div>
 
 			<div class="top-modal-footer" style="text-align: center !important;" >
-<%-- 				<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_proxyLogViewPopcl();"><spring:message code="common.close"/></button> --%>
 				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 			
 			</div>

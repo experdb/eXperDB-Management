@@ -123,6 +123,7 @@
 			A.MASTER_GBN, 
 			A.MASTER_SVR_ID,
 			A.KAL_INSTALL_YN,
+			A.AGT_CNDT_CD,
 			ARRAY_TO_STRING(ARRAY_AGG(A.V_IP),',')  as V_IP
 		FROM (
 			SELECT 
@@ -133,6 +134,7 @@
 				S.MASTER_GBN,
 				S.MASTER_SVR_ID,
 				S.KAL_INSTALL_YN,
+				A.AGT_CNDT_CD,
 				CASE WHEN V.V_IP_EXE_STATUS = 'TC001501' THEN V.V_IP
 				     ELSE '' END AS V_IP
 			FROM T_PRY_SVR_I s 
@@ -144,7 +146,7 @@
 		</if>
 		ORDER BY s.MASTER_GBN DESC, coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), s.LST_MDF_DTM
 	) A
-	group by A.PRY_SVR_ID, A.PRY_SVR_NM, A.EXE_STATUS, A.KAL_EXE_STATUS, A.MASTER_GBN, A.MASTER_SVR_ID, A.KAL_INSTALL_YN
+	group by A.PRY_SVR_ID, A.PRY_SVR_NM, A.EXE_STATUS, A.KAL_EXE_STATUS, A.MASTER_GBN, A.MASTER_SVR_ID, A.KAL_INSTALL_YN, A.AGT_CNDT_CD
 	</select>
 
 	<select id="selectDBServerConProxy" resultType="hashMap" parameterType="int">
@@ -334,9 +336,11 @@
 			tpacg.ACT_TYPE,
 			tpacg.ACT_EXE_TYPE, 
 			tpacg.EXE_RSLT_CD,
+			tpai.AGT_CNDT_CD,
 			TO_CHAR(tpacg.WRK_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_DTM
 		FROM T_PRY_SVR_I tpsi 
-		JOIN T_PRY_ACTSTATE_CNG_G tpacg on tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID 
+		JOIN T_PRY_AGT_I tpai ON tpsi.AGT_SN = tpai.AGT_SN
+		JOIN T_PRY_ACTSTATE_CNG_G tpacg ON tpsi.AGT_SN = tpai.AGT_SN AND tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID 
 		WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
 		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
 		ORDER BY tpacg.WRK_DTM DESC
