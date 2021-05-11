@@ -27,6 +27,8 @@ public class ProxyServerVO {
 	private String sel_query_gbn;
 	private String kal_install_yn;
 	private String master_svr_nm;
+	private int master_exe_cnt;
+	
 
 	private String day_data_del_val;
 	private String min_data_del_val;
@@ -34,6 +36,12 @@ public class ProxyServerVO {
 	private String log_type_min;
 	private String log_type_day;
 	
+	public int getMaster_exe_cnt() {
+		return master_exe_cnt;
+	}
+	public void setMaster_exe_cnt(int master_exe_cnt) {
+		this.master_exe_cnt = master_exe_cnt;
+	}
 	public String getMaster_svr_nm() {
 		return master_svr_nm;
 	}

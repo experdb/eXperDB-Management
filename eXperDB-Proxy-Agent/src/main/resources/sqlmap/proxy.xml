@@ -21,6 +21,17 @@
 				A.MASTER_GBN,
 				A.MASTER_SVR_ID,
 				(SELECT B.IPADR FROM T_PRY_SVR_I B WHERE B.PRY_SVR_ID = A.MASTER_SVR_ID) AS MASTER_SVR_NM,
+				(select COUNT(*) as master_exe_cnt 
+				   from T_PRY_SVR_I B
+				  where 1=1
+				<if test='ipadr != null'>
+				 AND 	B.IPADR = #{ipadr}
+				</if>
+				<if test="ipadr == null and pry_svr_id > 0">
+				 AND 	B.PRY_SVR_ID = #{pry_svr_id}
+				</if>
+				    and B.EXE_STATUS = 'TC001501' 
+				    and a.DB_SVR_ID = b.DB_SVR_ID) as master_exe_cnt,
 				A.DB_SVR_ID,
 				A.DAY_DATA_DEL_TERM,
 				A.MIN_DATA_DEL_TERM,
@@ -710,6 +721,17 @@
 			, LST_MDF_DTM = clock_timestamp()
 		WHERE
 			PRY_SVR_ID  != #{pry_svr_id}::numeric;
+		</if>
+		
+	    <if test='sel_query_gbn == "g_backup_up"'>
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{master_gbn}
+	    	, MASTER_SVR_ID = #{master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  = #{pry_svr_id}::numeric;
 		</if>
     </update>
     

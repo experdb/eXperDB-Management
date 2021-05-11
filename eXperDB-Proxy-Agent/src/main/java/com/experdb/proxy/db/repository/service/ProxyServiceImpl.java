@@ -1282,7 +1282,8 @@ public class ProxyServiceImpl implements ProxyService{
 			chkParam.put("ipadr", ipadrPrm);
 			chkParam.put("lst_mdfr_id", "system");
 			chkParam.put("frst_regr_id", "system");
-			
+			socketLogger.info("Job proxySetStatusPrmproxySetStatusPrmproxySetStatusPrmproxySetStatusPrm [" + proxySetStatusPrm + "]");
+			socketLogger.info("Job proxyServerInfo.getExe_status()proxyServerInfo.getExe_status() [" + proxyServerInfo.getExe_status() + "]");
 			//proxy check - 기동 이력등록
 			if (!"".equals(proxySetStatusPrm) && !"not installed".equals(proxySetStatusPrm)) {
 				if ("running".equals(proxySetStatusPrm)) {
@@ -1299,7 +1300,6 @@ public class ProxyServiceImpl implements ProxyService{
 					
 					strProxyChgVal = strAcptype;
 
-					
 					proxyDAO.insertPryActExeCngInfo(chkParam);
 				}
 			}
