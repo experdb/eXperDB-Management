@@ -78,12 +78,12 @@
 		aut_id = "${aut_id}";
 		
 		// 1분에 한번씩 reload
-		setInterval(function() {
-			var rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
-			fn_proxySvrSsSearch(select_pry_svr_id, rowChkCnt);
-			console.log(rowChkCnt);
+// 		setInterval(function() {
+// 			var rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
+// 			fn_proxySvrSsSearch(select_pry_svr_id, rowChkCnt);
+// 			console.log(rowChkCnt);
 // 			$("#serverSs1").click();
-		}, 10000);
+// 		}, 10000);
 	});
 	
 
@@ -377,7 +377,7 @@
 		var exe_status_css = "";
 		var kal_exe_status_css = "";
 		var strVip = "";
-
+ 		console.log(proxyServerByMasId_cnt)
 		//ROW 만들기
 		for(var i = 0; i < 2; i++){
  			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
@@ -413,7 +413,7 @@
 			html_vip_line += '		</tr>\n';
 			html_vip_line += '	</table>\n';
 			
-	 		if (i != 1) {
+	 		if (i != 1 && proxyServerByMasId_cnt > 1) {
 	 			html_vip += '<hr>\n';
 	 			html_vip_line += '<br/>\n';
 	 		}
@@ -503,9 +503,12 @@
  			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;가상 ip를 사용하지 않습니다. </h6>';
 //  			for(var k = 0; k < 2; k++) {
  				$("#vip_proxy_nm0").html(vip_btn_html);
- 				$("#keepVipDiv0").attr('style', "width:80%;height:230px;")
+ 				$("#keepVipDiv0").attr('style', "width:80%;height:220px;")
  				$("#keepVipDiv0").html(html_sebu);
 //  			}
+ 			$("#keepVipDiv1").attr('style', "width:80%;padding-left:20px;height:30px;");
+ 			
+ 			$("#keepVipDivLine1").attr('style', "width:80%;padding-left:20px;height:30px;");
  		}
  		
  		//vip 두번째 row가 없는 경우 row size 변경
@@ -541,7 +544,7 @@
 
 		//////////////////////////////////////
 		//Proxy 연결 리스너
-		for(var i = 0; i < 2; i++) {
+		for(var i = 0; i < proxyServerByMasId_cnt; i++) {
  			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
  			
  			html_listner += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
@@ -561,7 +564,7 @@
 			html_listner += '		</tr>\n';
 			html_listner += '	</table>\n';
 
- 			if (i != 1) {
+ 			if (i != 1 && proxyServerByMasId_cnt > 1) {
  				html_listner += '<hr>\n';
  			}
  			/////////////////////////////////////////////////////////////////////////////////////////////
@@ -582,7 +585,7 @@
  			html_listner_con += '		</tr>\n';
  			html_listner_con += '	</table>\n';
 
- 			if (i != 1) {
+ 			if (i != 1 && proxyServerByMasId_cnt > 1) {
  				html_listner_con += '<br/>\n';
  			} 
  			
@@ -778,7 +781,7 @@
 		
 		//////////////////////////////////////
 		//Proxy 연결 리스너
-		for(var i = 0; i < 2; i++){
+		for(var i = 0; i < proxyServerByMasId_cnt; i++){
  			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
  			
  			html_db += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
@@ -794,7 +797,7 @@
  			html_db += '		</tr>\n';
  			html_db += '	</table>\n';
 
- 			if (i != 1) {
+ 			if (i != 1 && proxyServerByMasId_cnt > 1) {
  				html_db += '<hr>\n';
  			}
 		}
@@ -915,7 +918,7 @@
 					}
 				}
 				 
-				if (dbNulkCnt < 2) {
+				if (dbNulkCnt < 2 ) {
 					html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
 					html_db += '	<tr>';
 					html_db += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
