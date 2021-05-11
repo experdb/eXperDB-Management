@@ -195,7 +195,7 @@ public class DXTcontrolProxy extends SocketCtl {
 					
 				} else {
 					peerIpData = "";
-					masterGbnData = "";
+					masterGbnData = "M";
 
 					stateMasterInterface = "";
 					strObjIp = "";
@@ -207,10 +207,10 @@ public class DXTcontrolProxy extends SocketCtl {
 				}
 			} else {
 				peerIpData = "";
-				masterGbnData = "";
+				masterGbnData = "M"; //무조건 마스터가 됨
 
 				stateMasterInterface = "";
-				strObjIp = "";
+				strObjIp = ""; //
 				strPeerServerIp = "";
 
 				strVipConfList = "";

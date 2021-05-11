@@ -315,7 +315,6 @@ public class ProxyServiceImpl implements ProxyService{
 		try {
 			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();
 			String serverIp = jObj.get(ProtocolID.SERVER_IP).toString();
-
 			String proxyCmd = proxyCmdSetting(jObj);
 
 			//conf 파일 조회
@@ -735,8 +734,8 @@ public class ProxyServiceImpl implements ProxyService{
 
 			//마스터 확인
 			ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInfo(peerServerInfo);
+	
 			if (proxyServerInfo != null) {
-				
 				if ("M".equals(proxyServerInfo.getMaster_gbn())) { //peer 마스터 이면 백업
 					stateGbn = "B";
 				} else if ("B".equals(proxyServerInfo.getMaster_gbn())) { //백업일때 해당 IP의 마스터 ID가 본인과 같으면 마스터 아니면 백업
