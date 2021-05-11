@@ -77,10 +77,13 @@
 		// 권한 id 넣기
 		aut_id = "${aut_id}";
 		
-		// 5분에 한번씩 reload
+		// 1분에 한번씩 reload
 		setInterval(function() {
-			$("#serverSs1").click();
-		}, 50000);
+			var rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
+			fn_proxySvrSsSearch(select_pry_svr_id, rowChkCnt);
+			console.log(rowChkCnt);
+// 			$("#serverSs1").click();
+		}, 100000);
 	});
 	
 
@@ -388,7 +391,7 @@
 			html_vip += '	<table class="table-borderless" style="width:100%;">\n';
 			html_vip += '		<tr>\n';
 
-			html_vip += '			<td style="width:80%;padding-left:20px;height:220px;" class="text-center" id="keepVipDiv' + i + '">\n';
+			html_vip += '			<td style="width:80%;height:220px;" class="text-center" id="keepVipDiv' + i + '">\n';
 			html_vip += '			&nbsp;</td>\n';
 
 			html_vip += '		</tr>\n';
@@ -492,10 +495,21 @@
 	 				}
  				}
  			}
+ 		} else if( result.proxyServerVipList.length == 0){
+ 			html_sebu = "";
+ 			var vip_btn_html = "";
+			vip_btn_html += '<br/>&nbsp;';
+//  			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-comment-alert-outline text-warning" style="font-size: 2em;"></i>&nbsp;가상 ip를 사용하지 않습니다. </h6>';
+ 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;가상 ip를 사용하지 않습니다. </h6>';
+//  			for(var k = 0; k < 2; k++) {
+ 				$("#vip_proxy_nm0").html(vip_btn_html);
+ 				$("#keepVipDiv0").attr('style', "width:80%;height:230px;")
+ 				$("#keepVipDiv0").html(html_sebu);
+//  			}
  		}
-
+ 		
  		//vip 두번째 row가 없는 경우 row size 변경
- 		if (result.proxyServerVipList.length  <= 1 && proxyServerByMasId_cnt <= 1 && iVipChkCnt < 1) {
+ 		if (result.proxyServerVipList.length  == 1 && proxyServerByMasId_cnt <= 1 && iVipChkCnt < 1) {
  			$("#keepVipDiv" + result.proxyServerVipList.length).attr('style', "width:80%;padding-left:20px;height:30px;");
  			
  			$("#keepVipDivLine" + result.proxyServerVipList.length).attr('style', "width:80%;padding-left:20px;height:30px;");
