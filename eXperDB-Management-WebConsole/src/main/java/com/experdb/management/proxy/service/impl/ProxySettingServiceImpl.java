@@ -184,17 +184,17 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		//연결 DBMS 정보 
 		List<Map<String, Object>> dbmsSelList = proxySettingDAO.selectDbmsList(param);
 
-		//Master Proxy 정보
+/*		//Master Proxy 정보
 		if (dbmsSelList.size() > 0) {
 			param.put("db_svr_id", dbmsSelList.get(0).get("db_svr_id"));
 		} else {
 			param.put("db_svr_id", null);
-		}
+		}*/
 		List<Map<String, Object>> mstSvrSelList = proxySettingDAO.selectMasterSvrProxyList(param);
 		
 		//json set
-		resultObj.put("dbms_sel_list", dbmsSelList == null? null:dbmsSelList);
-		resultObj.put("mstSvr_sel_list", mstSvrSelList == null? null:mstSvrSelList);
+		resultObj.put("dbmsSvrList", dbmsSelList == null? null:dbmsSelList);
+		resultObj.put("mstSvrList", mstSvrSelList == null? null:mstSvrSelList);
 		
 		return resultObj;
 	}
@@ -490,7 +490,12 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				proxyGlobalVO.setSvr_con_max_tm("30m");
 				proxyGlobalVO.setChk_tm("5s");
 				proxyGlobalVO.setIf_nm(null);
-				proxyGlobalVO.setObj_ip(prySvrVO.getIpadr());
+				if ("Y".equals(kal_install_yn)) {
+					proxyGlobalVO.setObj_ip(prySvrVO.getIpadr());
+				} else {
+					proxyGlobalVO.setObj_ip(null);
+				}
+
 				proxyGlobalVO.setPeer_server_ip(null);
 				proxyGlobalVO.setLst_mdfr_id(lst_mdfr_id);
 				proxyGlobalVO.setFrst_regr_id(lst_mdfr_id);
@@ -1003,5 +1008,29 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 
 	}
 
+	/**
+	 * Proxy 연결 DBMS 정보 조회
+	 * 
+	 * @param param
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectDbmsTotList(Map<String, Object> param) throws Exception {
+		//연결 DBMS 정보 
+		List<Map<String, Object>> dbmsSelList = proxySettingDAO.selectDbmsList(param);
+		return dbmsSelList;
+	}
+
+	/**
+	 * Proxy Master 조회
+	 * 
+	 * @param param
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectProxyMstTotList(Map<String, Object> param) throws Exception {
+		List<Map<String, Object>> mstSvrSelList = proxySettingDAO.selectMasterSvrProxyList(param);
 	
+		return mstSvrSelList;
+	}
 }

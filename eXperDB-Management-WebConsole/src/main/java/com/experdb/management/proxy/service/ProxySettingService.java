@@ -174,6 +174,11 @@ public interface ProxySettingService {
 	 * @throws 
 	 */
 	public void updateDeleteVipUseYn(Map<String, Object> param) throws ConnectException, Exception;
+	
+	
+	public List<Map<String, Object>> selectDbmsTotList(Map<String, Object> param) throws Exception;
+	
+	public List<Map<String, Object>> selectProxyMstTotList(Map<String, Object> param) throws Exception;
 
 	
 }

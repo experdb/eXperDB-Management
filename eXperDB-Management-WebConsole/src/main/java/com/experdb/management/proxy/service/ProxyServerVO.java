@@ -25,11 +25,18 @@ public class ProxyServerVO {
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
 	private String kal_install_yn;
-		
+	private String state_chk;	
+
 	private ProxyGlobalVO pry_global;
 	private List<ProxyVipConfigVO> pry_conf_list; 
 	private List<ProxyListenerVO> pry_lsn_list;
 	
+	public String getState_chk() {
+		return state_chk;
+	}
+	public void setState_chk(String state_chk) {
+		this.state_chk = state_chk;
+	}
 	public int getPry_svr_id() {
 		return pry_svr_id;
 	}

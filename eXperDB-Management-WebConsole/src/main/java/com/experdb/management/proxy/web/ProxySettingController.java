@@ -267,32 +267,44 @@ public class ProxySettingController {
 	 * @throws Exception
 	**/	
 	@RequestMapping(value = "/selectPoxyAgentSvrList.do")
-	public @ResponseBody List<Map<String, Object>> selectPoxyAgentList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-		//해당메뉴 권한 조회 (공통메소드호출),
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+	public @ResponseBody ModelAndView selectPoxyAgentList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView("jsonView");
 				
-		List<Map<String, Object>> resultSet = null;
+		List<Map<String, Object>> dbmsResultSet = null;
+		List<Map<String, Object>> agentResultSet = null;
+		List<Map<String, Object>> mstResultSet = null;
+		
 		Map<String, Object> param = new HashMap<String, Object>();
 
 		try {	
-			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
-				response.sendRedirect("/autError.do");
-				return resultSet;
-			}else{
-				// 화면접근이력 이력 남기기 - Proxy 설정관리 - 서버 정보 조회
-				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_07", sohw_menu_id);		
+			// 화면접근이력 이력 남기기 - Proxy 설정관리 - 서버 정보 조회
+			proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_07", sohw_menu_id);		
 
-				param.put("svr_use_yn", request.getParameter("svr_use_yn")==null ? "" : request.getParameter("svr_use_yn").toString());			
-				param.put("mode", request.getParameter("mode")==null ? "" : request.getParameter("mode").toString());			
-				resultSet = proxySettingService.selectPoxyAgentSvrList(param);
-				
+			param.put("svr_use_yn", request.getParameter("svr_use_yn")==null ? "" : request.getParameter("svr_use_yn").toString());			
+			param.put("mode", request.getParameter("mode")==null ? "" : request.getParameter("mode").toString());			
+			agentResultSet = proxySettingService.selectPoxyAgentSvrList(param);
+			
+			//dbms 조회
+			dbmsResultSet = proxySettingService.selectDbmsTotList(param);
+
+			if (dbmsResultSet.size() > 0) {
+				param.put("db_svr_id", dbmsResultSet.get(0).get("db_svr_id"));
+			} else {
+				param.put("db_svr_id", null);
 			}
+			
+			//Master Proxy 정보
+			mstResultSet = proxySettingService.selectProxyMstTotList(param);
+			
+			mv.addObject("agentSvrList", agentResultSet);
+			mv.addObject("dbmsSvrList", dbmsResultSet);
+			mv.addObject("mstSvrList", mstResultSet);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return resultSet;
+
+		return mv;
 	} 
 	
 	/**
@@ -410,6 +422,9 @@ public class ProxySettingController {
 				return resultObj;
 			}else{
 				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id")) ? request.getParameter("pry_svr_id").toString():"0" );
+				int	dbSvrId = Integer.parseInt(request.getParameter("db_svr_id") != null && !"".equals((String)request.getParameter("db_svr_id")) ? request.getParameter("db_svr_id").toString():"0" );
+				
+				param.put("db_svr_id", dbSvrId);
 				param.put("pry_svr_id", prySvrId);
 				
 				resultObj = proxySettingService.createSelPrySvrReg(param);
