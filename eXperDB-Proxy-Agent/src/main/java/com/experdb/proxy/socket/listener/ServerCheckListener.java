@@ -76,7 +76,7 @@ public class ServerCheckListener extends Thread {
 				i++;
 
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(30000);
 				} catch (InterruptedException ex) {
 					this.interrupt();
 					continue;

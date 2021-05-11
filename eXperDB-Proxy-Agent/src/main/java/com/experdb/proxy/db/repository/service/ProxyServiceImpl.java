@@ -748,6 +748,8 @@ public class ProxyServiceImpl implements ProxyService{
 			} else {
 				stateGbn = "M";
 			}
+			
+			socketLogger.info("keepalived_set.stateGbn.stateGbn" + stateGbn);
 
 			if ("B".equals(stateGbn)) {
 				jsonObj.put("peer_id", strPeerId);
@@ -831,17 +833,19 @@ public class ProxyServiceImpl implements ProxyService{
 	 */
 	@Transactional
 	public String proxyConfFisrtIns(ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam) throws Exception  {
+		socketLogger.info("ProxyServiceImpl.confSetExecute----- : ");
 		String returnMsg = "success";
 		int saveChkPrySvrI = 0;
 		AgentInfoVO agtVo = new AgentInfoVO();
 
 		long pry_svr_id_sn = 1L;
 		long pry_lsn_id_sn = 1L;
-
+		socketLogger.info("insPryVo.getDb_svr_id()----- : " + insPryVo.getDb_svr_id());
 		try {
 			if (insPryVo.getDb_svr_id() > 0) {
 				//서버 등록
 				try {
+					socketLogger.info("insUpNmGbn----- : " + insUpNmGbn);
 					if ("proxySvrIns".equals(insUpNmGbn)) {
 						pry_svr_id_sn = proxyDAO.selectQ_T_PRY_SVR_I_01();
 						insPryVo.setPry_svr_id((int)pry_svr_id_sn);
@@ -1429,7 +1433,7 @@ public class ProxyServiceImpl implements ProxyService{
 								prySvrChk.setSel_query_gbn("g_master_up");
 							} else {
 								prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
-								prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+								prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
 								
 								prySvrChk.setSel_query_gbn("g_backup_up");
 							}

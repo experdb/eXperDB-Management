@@ -128,10 +128,10 @@ public class DXTcontrolProxy extends SocketCtl {
 
 			JSONObject jObjResult = null;
 			JSONObject jObjKeepResult = null;
-
+			socketLogger.info("ProxyServiceImpl.searchProxyServerVO : " + strIpadr);
 			//proxy 서버 등록 여부 확인
 			ProxyServerVO proxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
-			
+			socketLogger.info("ProxyServiceImpl.proxyServerInfo : " + proxyServerInfo);
 			//keepalived 설치 상태
 			strKeepInstallYn = strKeepalived;
 
@@ -218,7 +218,7 @@ public class DXTcontrolProxy extends SocketCtl {
 				back_peerIpData = "";
 			}
 			/////////////////////////////////////////////////////////////////////
-
+			socketLogger.info("ProxyServiceImpl.masterGbnDatamasterGbnData : " + masterGbnData);
 			//5. proxy 실행상태
 			if (proxyPathData != null) {
 				proxyExeStaus = pryService.selectProxyServerChk("proxy_setting_tot"); //param setting

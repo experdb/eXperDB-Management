@@ -572,7 +572,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 					prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
 					prySvrChk.setLst_mdfr_id(userIdPrm);
 					prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
-
+					
 					//마스터 일 경우 
 					if ("M".equals(proxyServerInfo.getMaster_gbn())) { //마스터 일때
 						//현재 master_gbn 저장 
@@ -605,7 +605,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 								prySvrChk.setSel_query_gbn("g_master_up");
 							} else {
 								prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
-								prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+								prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
 								
 								prySvrChk.setSel_query_gbn("g_backup_up");
 							}
