@@ -1958,7 +1958,7 @@
 	}
 </script>
 <form name="findList" id="findList" method="post">
-	<input type="text" name="chk_use_row" id="chk_use_row" value=""/>
+	<input type="hidden" name="chk_use_row" id="chk_use_row" value=""/>
 	<input type="hidden" id="modYn" name="modYn" value="N"/>
 </form>
 
