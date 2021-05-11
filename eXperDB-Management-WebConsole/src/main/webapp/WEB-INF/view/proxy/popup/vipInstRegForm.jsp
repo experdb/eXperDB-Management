@@ -165,6 +165,7 @@
 		var sortedPriority = vipInstTable.column(getColIndex(vipInstTable, "priority")).data().sort();
 		var newPriority = new Array();
 		var dataLen = vipInstTable.rows().data().length;
+		var maxPriority = sortedPriority[dataLen -1];
 		
 		for(var i=0; i<dataLen; i++){
 			for(var j=0; j<dataLen; j++){
@@ -172,12 +173,11 @@
 					newPriority[i] = weightInit-(dataLen-j);
 				}
 			}
-			if(i == (dataLen-1)) vipInstTable.row(i).data().state_nm ="MASTER";
-			else vipInstTable.row(i).data().state_nm ="BACKUP";
 		}
-		
 		for(var i=0; i<dataLen; i++){
 			vipInstTable.row(i).data().priority = newPriority[i];
+			if(maxPriority == newPriority[i]) vipInstTable.row(i).data().state_nm = "MASTER";
+			else vipInstTable.row(i).data().state_nm = "BACKUP";
 		}
 		var tempTableDatas = vipInstTable.rows().data();
 		vipInstTable.clear().draw();
