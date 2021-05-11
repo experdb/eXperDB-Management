@@ -1388,22 +1388,51 @@ public class ProxyServiceImpl implements ProxyService{
 					}				
 				} else { //up
 					//마스터 제외하고 전부 등록
+					//마스터 제외하고 전부 등록
 					prySvrChk = new ProxyServerVO();
 
 					prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
-					prySvrChk.setMaster_svr_id_chk(null);
-
 					prySvrChk.setLst_mdfr_id("system");
-					prySvrChk.setSel_query_gbn("g_master_up");
-					
-					prySvrChk.setOld_master_gbn("B");
-					prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
-					
-					if ("M".equals(proxyServerInfo.getOld_master_gbn())) { //기본마스터 일때
-						prySvrChk.setMaster_gbn(proxyServerInfo.getOld_master_gbn());
-					} else {
+
+					//마스터 일 경우 
+					if ("M".equals(proxyServerInfo.getMaster_gbn())) { //마스터 일때
+						//현재 master_gbn 저장 
+						//현재 마스터 svr_id 값 setting 하여 값 저장
 						prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+						prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+						
+						prySvrChk.setOld_master_gbn("B");
+						prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+						
+						prySvrChk.setSel_query_gbn("g_master_up");
+					} else { //백업일때
+						if ("M".equals(proxyServerInfo.getOld_master_gbn())) { //기본마스터 일때
+							prySvrChk.setMaster_gbn(proxyServerInfo.getOld_master_gbn());
+							prySvrChk.setMaster_svr_id_chk(null);
+							
+							prySvrChk.setOld_master_gbn("B");
+							prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+							
+							prySvrChk.setSel_query_gbn("g_master_up");
+						} else { //기본 백업일때
+							//마스터 한건도 없을때 마스터 up
+							if (proxyServerInfo.getMaster_exe_cnt() <= 0) {
+								prySvrChk.setMaster_gbn("M");
+								prySvrChk.setMaster_svr_id_chk(null);
+								
+								prySvrChk.setOld_master_gbn("B");
+								prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+								
+								prySvrChk.setSel_query_gbn("g_master_up");
+							} else {
+								prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+								prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+								
+								prySvrChk.setSel_query_gbn("g_backup_up");
+							}
+						}
 					}
+
 					proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
 				}
 			}
