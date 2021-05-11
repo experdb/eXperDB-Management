@@ -527,6 +527,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 						mstChkParam.put("pry_svr_id", proxyServerInfo.getPry_svr_id());
 						mstChkParam.put("ipadr", ipadrPrm);
 						mstChkParam.put("selQueryGbn", "masterM");
+						mstChkParam.put("db_svr_id", proxyServerInfo.getDb_svr_id());
 
 			         	prySvrChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
 			         	
@@ -542,6 +543,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			         			prySvrChk.setOld_master_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
 			         			prySvrChk.setLst_mdfr_id(userIdPrm);
 			         			prySvrChk.setSel_query_gbn("master_down");
+			         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
 			         			
 			         			//백업중 제일 낮은 proxy 마스터로 승격
 			         			//기존 마스터는 백업으로 변경
@@ -559,6 +561,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 						prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
 						prySvrChk.setLst_mdfr_id(userIdPrm);
 	         			prySvrChk.setSel_query_gbn("backup_down");
+	         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
 
 						proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
 					}				
@@ -568,6 +571,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 
 					prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
 					prySvrChk.setLst_mdfr_id(userIdPrm);
+					prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
 
 					//마스터 일 경우 
 					if ("M".equals(proxyServerInfo.getMaster_gbn())) { //마스터 일때
