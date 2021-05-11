@@ -123,7 +123,7 @@ public class ProxyMonitoringController {
 			
 			//vip 목록 조회
 			List<Map<String, Object>> proxyServerVipList = proxyMonitoringService.selectProxyServerVipChk(pry_svr_id);
-			
+
 			//db connect 조회
 			List<Map<String, Object>> dbServerConProxyList = proxyMonitoringService.selectDBServerConProxyList(pry_svr_id);
 			
@@ -131,6 +131,7 @@ public class ProxyMonitoringController {
 			List<Map<String, Object>> proxyServerLsnList = proxyMonitoringService.selectProxyListnerMainList(pry_svr_id);
 			
 			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
+			
 			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
 			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);

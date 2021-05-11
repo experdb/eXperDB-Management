@@ -32,8 +32,8 @@
        		a.AGT_CNDT_CD 
 		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
 		WHERE a.SVR_USE_YN = 'Y'
-        GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD
-		ORDER BY coalesce(MASTER_SVR_ID, PRY_SVR_ID), MASTER_GBN DESC, LST_MDF_DTM
+        GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD, s.DB_SVR_ID
+		ORDER BY coalesce(MASTER_SVR_ID, PRY_SVR_ID), s.DB_SVR_ID, MASTER_GBN DESC, LST_MDF_DTM
 	</select>
 	
 	<select id="selectProxyServerList2" resultType="hashMap">
@@ -104,7 +104,7 @@
         WHERE (s.PRY_SVR_ID = #{value} 
         OR s.MASTER_SVR_ID = #{value})
         </if>
-		ORDER BY s.MASTER_GBN desc,coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), LST_MDF_DTM
+		ORDER BY s.DB_SVR_ID, s.MASTER_GBN desc,coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), LST_MDF_DTM
 	</select>
 	
 	<select id="selectProxyServerVipChk" resultType="hashMap" parameterType="int">
@@ -168,12 +168,12 @@
 		JOIN T_AGTCNDT_I tai ON tdi.IPADR = tai.IPADR
 		WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric
 		GROUP BY tdi.MASTER_GBN, tdi.DB_SVR_ID, tdi.IPADR , tdi.PORTNO , tdi.SVR_HOST_NM ,  tai.AGT_CNDT_CD 
-		ORDER BY tdi.MASTER_GBN, tdi.DB_SVR_ID
+		ORDER BY tdi.DB_SVR_ID, tdi.MASTER_GBN
 	</select>
 	
 	<select id="selectDBServerConProxyList" resultType="hashMap" parameterType="int">
 		/**
-		* Query ID : selectDBServerConProxy
+		* Query ID : selectDBServerConProxyList
 		* Description : db server connected proxy
 		* Author : 윤정
 		**/
@@ -218,7 +218,7 @@
 									)
 				)
 			  )
-			ORDER BY TPSI.MASTER_GBN DESC, COALESCE(TPSI.MASTER_SVR_ID, TPSI.PRY_SVR_ID) , TDI.MASTER_GBN, TDI.DB_SVR_ID
+			ORDER BY TDI.DB_SVR_ID, TPSI.MASTER_GBN DESC, COALESCE(TPSI.MASTER_SVR_ID, TPSI.PRY_SVR_ID) , TDI.MASTER_GBN, TDI.DB_SVR_ID
 		) A
 		LEFT JOIN
 		(
@@ -308,14 +308,14 @@
 	               left JOIN T_PRY_LSN_SVR_I D ON B.PRY_SVR_ID = D.PRY_SVR_ID AND B.LSN_ID = D.LSN_ID
 			 WHERE (A.PRY_SVR_ID = #{pry_svr_id}::numeric
 				    OR A.MASTER_SVR_ID = #{pry_svr_id}::numeric)
-	         ORDER BY A.MASTER_GBN DESC, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), B.LSN_NM DESC, D.LSN_SVR_ID, D.db_conn_ip, A.LST_MDF_DTM
+	         ORDER BY A.DB_SVR_ID, A.MASTER_GBN DESC, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), B.LSN_NM DESC, D.LSN_SVR_ID, D.db_conn_ip, A.LST_MDF_DTM
 	         ) F
 	         left join T_DBSVRIPADR_I G  ON F.DB_SVR_ID = G.DB_SVR_ID and F.db_conn_ip = G.ipadr 
 	         
 	         
 	     ) E
-	     group by E.IPADR, E.AGT_CNDT_CD, E.SVR_USE_YN, E.PRY_SVR_ID, E.MASTER_GBN, E.PRY_SVR_NM, E.LSN_ID , E.LSN_NM, E.lsn_exe_status, E.MASTER_SVR_ID, E.con_bind_port
-	     ORDER BY E.MASTER_GBN DESC, E.MASTER_SVR_ID, E.LSN_NM DESC
+	     group by E.DB_SVR_ID, E.IPADR, E.AGT_CNDT_CD, E.SVR_USE_YN, E.PRY_SVR_ID, E.MASTER_GBN, E.PRY_SVR_NM, E.LSN_ID , E.LSN_NM, E.lsn_exe_status, E.MASTER_SVR_ID, E.con_bind_port
+	     ORDER BY E.DB_SVR_ID, E.MASTER_GBN DESC, E.MASTER_SVR_ID, E.LSN_NM DESC
 	</select>
 	
 	<select id="selectProxyLogList" resultType="hashMap" parameterType="int">
@@ -406,7 +406,7 @@
 				WHERE (tpsi.PRY_SVR_ID = #{value}
 				OR tpsi.MASTER_SVR_ID = #{value})
 				AND tpssg.log_type = 'TC003901'
-				ORDER BY  tpsi.master_gbn desc, tpsi.pry_svr_id, tpli.lsn_nm desc, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
+				ORDER BY tpsi.DB_SVR_ID, tpsi.master_gbn desc, tpsi.pry_svr_id, tpli.lsn_nm desc, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
 			) x
 			WHERE x.r <= 2
 		]]>
@@ -490,17 +490,18 @@
 					tpssg.BYTE_RECEIVE, 
 					tpssg.BYTE_TRANSMIT,
 					tpssg.SVR_STOP_TM,
-					tpssg.lsn_svr_id
+					tpssg.lsn_svr_id,
+					tpsi.DB_SVR_ID
 				FROM T_PRY_SVR_I tpsi 
 				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
 				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
 				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID AND tpssg.lsn_svr_id = tpsli.lsn_svr_id
 				WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
 				AND tpssg.log_type = 'TC003901'
-				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM desc
+				ORDER BY tpsi.DB_SVR_ID, tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM desc
 			) x
 			WHERE x.r <= 5
-			ORDER BY x.pry_svr_id, x.lsn_id, x.lsn_svr_id, x.DB_CON_ADDR, x.EXE_DTM
+			ORDER BY x.DB_SVR_ID, x.pry_svr_id, x.lsn_id, x.lsn_svr_id, x.DB_CON_ADDR, x.EXE_DTM
 		]]>
 	</select>
 
@@ -518,14 +519,15 @@
 					x.LSN_NM
 			FROM (
 				SELECT
-					ROW_NUMBER() OVER (PARTITION BY tpsi.PRY_SVR_ID, tpssg.LSN_ID, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR ORDER BY exe_dtm) AS r, 
+					ROW_NUMBER() OVER (PARTITION BY tpsi.DB_SVR_ID, tpsi.PRY_SVR_ID, tpssg.LSN_ID, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR ORDER BY exe_dtm) AS r, 
 					tpsi.PRY_SVR_ID,
 					tpsi.PRY_SVR_NM,
 					tpli.LSN_NM,
 					tpssg.DB_CON_ADDR,
 					tpssg.lsn_svr_id,
 					tpssg.LSN_ID,
-					tpssg.exe_dtm
+					tpssg.exe_dtm,
+					tpsi.DB_SVR_ID
 				FROM T_PRY_SVR_I tpsi 
 				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
 				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
@@ -533,10 +535,10 @@
 				WHERE (tpsi.PRY_SVR_ID = #{value} OR tpsi.MASTER_SVR_ID = #{value})
 				  AND tpsi.MASTER_GBN = 'M'
 				  AND tpssg.log_type = 'TC003901'
-				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM
+				ORDER BY tpsi.DB_SVR_ID, tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM
 			) x
 			where r = 1
-			ORDER BY x.pry_svr_id, x.lsn_id, x.lsn_svr_id, x.DB_CON_ADDR, x.EXE_DTM
+			ORDER BY x.DB_SVR_ID, x.pry_svr_id, x.lsn_id, x.lsn_svr_id, x.DB_CON_ADDR, x.EXE_DTM
 		]]>
 	</select>
 	
