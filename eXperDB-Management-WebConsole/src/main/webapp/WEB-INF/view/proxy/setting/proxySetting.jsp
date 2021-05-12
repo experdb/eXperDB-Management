@@ -224,8 +224,8 @@
 							
 							//TC001501 실행
 							//TC001502 중지
-							var playHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="onclick_runBtn('+ full.rownum +');" checked>';
-							var stopHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="onclick_runBtn('+ full.rownum +');">';
+							var playHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="onclick_runBtn('+ full.rownum +','+ full.pry_svr_id +');" checked>';
+							var stopHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="onclick_runBtn('+ full.rownum +','+ full.pry_svr_id +');">';
 
 							if(full.kal_install_yn == "Y"){
 								if (full.exe_status == "TC001501" && full.kal_exe_status == "TC001501") {
@@ -294,7 +294,7 @@
 						render: function (data, type, full){
 							var html = "";
 							html +='<div class="onoffswitch-scale">';
-							html +='<input type="checkbox" id="pry_svr_kal_use_yn'+ full.pry_svr_id +'" class="onoffswitch-scale-checkbox" onclick ="onclick_kalUseYn_Btn()" ';
+							html +='<input type="checkbox" id="pry_svr_kal_use_yn'+ full.pry_svr_id +'" class="onoffswitch-scale-checkbox" onclick ="onclick_kalUseYn_Btn('+ full.pry_svr_id +')" ';
 							if (full.kal_install_yn == "Y") {
 								html +=	'checked/>';
 							} else {
@@ -1181,35 +1181,39 @@
 	/* ********************************************************
 	* 기동 상태 버튼 클릭 이벤트 
 	******************************************************** */
-	function onclick_runBtn(row){
+	function onclick_runBtn(row, id){
 		//false면 기동, //true면 중지
 		$('#chk_use_row', '#findList').val(row); //라인 체크
 		
-		if($('#modYn').val() == "N"){
-			runBtn_execute();
-		}
+		runBtn_execute(id);
+		
 	}
 	
 	/* ********************************************************
 	* 기동 상태 진행
 	******************************************************** */
-	function runBtn_execute(){
-		setTimeout(function(){
-			var playBtnVal = $("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
-			
-			if((runValid == true) && (selAgentConnect == true)){
-				if(playBtnVal == true){
-					fn_multiConfirmModal('start');
+	function runBtn_execute(id){
+		if($('#modYn').val() == "Y"){
+			var playBtnVal = $("input:checkbox[id=pry_svr_activeYn" + id + "]").prop("checked");
+			$("input:checkbox[id=pry_svr_activeYn" +id + "]").prop("checked", !playBtnVal);
+		}else{
+			//false면 기동, //true면 중지
+			setTimeout(function(){
+				var playBtnVal = $("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
+				if((runValid == true) && (selAgentConnect == true)){
+					if(playBtnVal == true){
+						fn_multiConfirmModal('start');
+					}else{
+						fn_multiConfirmModal('stop');
+					}
 				}else{
-					fn_multiConfirmModal('stop');
+					$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", !playBtnVal);
+					if(runValid == false){
+						showSwalIcon('<spring:message code="eXperDB_proxy.msg32" />', '<spring:message code="common.close" />', '', 'warning');
+					}
 				}
-			}else{
-				$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", !playBtnVal);
-				if(runValid == false){
-					showSwalIcon('<spring:message code="eXperDB_proxy.msg32" />', '<spring:message code="common.close" />', '', 'warning');
-				}
-			}
-		},500);
+			},500);  
+		}
 	}
 
 	/* ********************************************************
@@ -1886,6 +1890,7 @@
  				if(result.result){
  					fn_btn_setEnable("");
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
+ 					fn_init_global_value();
  					fn_serverList_search();
  				}else{
  					fn_btn_setEnable("");
@@ -1938,23 +1943,33 @@
 	/* ********************************************************
      * 가상 IP 사용 여부 변경 버튼 클릭 이벤트 
     ******************************************************** */		
-	function onclick_kalUseYn_Btn(){
-		//false면 기동, //true면 중지
-		setTimeout(function(){
-			var useYnBtnVal = $("input:checkbox[id=pry_svr_kal_use_yn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
-			var playBtnVal = $("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
-			
-			if(playBtnVal == true){
-				$("input:checkbox[id=pry_svr_kal_use_yn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", !useYnBtnVal);
-				showSwalIcon('<spring:message code="eXperDB_proxy.msg33" />', '<spring:message code="common.close" />', '', 'warning');
-			}else{
-				if(useYnBtnVal == true){
-					fn_multiConfirmModal('use_start');
+    function onclick_kalUseYn_Btn(id){
+		if($('#modYn').val() == "Y"){
+			var useYnBtnVal = $("input:checkbox[id=pry_svr_kal_use_yn" + id + "]").prop("checked");
+			$("input:checkbox[id=pry_svr_kal_use_yn" +id + "]").prop("checked", !useYnBtnVal);
+		}else{
+			//false면 기동, //true면 중지
+			setTimeout(function(){
+				if(id == proxyServerTable.row('.selected').data().pry_svr_id ){
+					var useYnBtnVal = $("input:checkbox[id=pry_svr_kal_use_yn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
+					var playBtnVal = $("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
+					
+					if(playBtnVal == false){ 
+						if(useYnBtnVal == true){
+							fn_multiConfirmModal('use_start');
+						}else{
+							fn_multiConfirmModal('use_end');
+						}
+					}else{
+						$("input:checkbox[id=pry_svr_kal_use_yn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", !useYnBtnVal);
+						showSwalIcon('<spring:message code="eXperDB_proxy.msg33" />', '<spring:message code="common.close" />', '', 'warning');
+					}
 				}else{
-					fn_multiConfirmModal('use_end');
+					var useYnBtnVal = $("input:checkbox[id=pry_svr_kal_use_yn" + id + "]").prop("checked");
+					$("input:checkbox[id=pry_svr_kal_use_yn" +id + "]").prop("checked", !useYnBtnVal);
 				}
-			}
-		},500);  
+			},500);  
+		}
 	}
 </script>
 <form name="findList" id="findList" method="post">
