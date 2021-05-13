@@ -106,7 +106,7 @@
 					},
 					instReg_priority_sel: {
 						required: true,
-						duplCheckPriority : true
+						duplCheckPriority : false
 						
 					},
 					instReg_chk_tm: {
@@ -158,27 +158,86 @@
 				template: '<div class="tooltip tooltip-info tooltip_priority" role="tooltip" style="z-index: 1;"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
 			}); */
 	});
+	
+	
 	/* ********************************************************
-     * 우선순위가 가장 높은 걸 자동으로 Master로 변경, 그 외 State 모두 Backup으로 수정
+     * 우선순위 자동 Sort 
+  	 등록일 경우
+    	1) 내 값 보다 클 경우 그대로 유지
+    	2) 내 값과 같거나 작을 경우 -1
+    
+	수정일 경우
+     	1) 입력한 값이 변경 전 값보다 작을 경우
+     		(1) 변경 전 나 보다 작은 값이 내가 입력한 값보다 같거나 클 경우 +1
+     		(2) 변경 전 나 보다 작은 값이 내가 입력한 값보다 작을 경우 그대로 유지
+    		(3) 변경 전 나 보다 큰 값은 그대로 유지
+
+     	2) 입력한 값이 변경 전 값보다 클 경우
+     		(1) 변경 전 나보다 큰 값 이면서 입력한 값 보다 클 경우 그대로 유지
+     		(2) 변경 전 나보다 큰 값 이면서 입력한 값과 같거나 작을 경우 -1
+     		(3) 변경 전 나보다 작은 값일 경우 그대로 유지
+
+     	3) 입력한 값과 변경 전 값이 같다면 그대로 유지
+
+    ******************************************************** */
+    function priority_auto_sort(){
+     	var newVal = Number($("#instReg_priority", "#insVipInstForm").val());
+     	var oldArray = vipInstTable.column(getColIndex(vipInstTable, "priority")).data();	
+     	var minVal = vipInstTable.column(getColIndex(vipInstTable, "priority")).data().sort()[0];
+     	
+     	if(vipInstTable.row('.selected').data() == null){//등록 일 경우
+     		if(newVal < minVal){//최소 값보다 더 작을 경우 최소 -1 값으로 셋팅
+         		$("#instReg_priority", "#insVipInstForm").val(Number(minVal)-1);
+         		newVal = minVal-1;
+         	}
+     		for(var i=0; i< oldArray.length; i++){
+    			if(newVal >= oldArray[i]) vipInstTable.row(i).data().priority=Number(oldArray[i])-1;
+    		}
+    	}else{//수정 일 경우
+    		if(newVal < minVal){ //최소 값보다 더 작을 경우 최소 값으로 셋팅
+         		$("#instReg_priority", "#insVipInstForm").val(minVal);
+         		newVal = minVal;
+         	}
+    		var oldVal = vipInstTable.row('.selected').data().priority;
+    	    if(newVal < oldVal ){//1) 입력한 값이 변경 전 값보다 작을 경우
+    			for(var i=0; i< oldArray.length; i++){
+    				if(vipInstTable.rows('.selected').indexes()[0] != i){
+    					if((oldVal > oldArray[i]) && (newVal <= oldArray[i])){ //(1) 변경 전 나 보다 작은 값이 내가 입력한 값보다 같거나 클 경우 +1
+		    				vipInstTable.row(i).data().priority=Number(oldArray[i])+1; 
+		    			}
+    				}else{
+    					vipInstTable.row(i).data().priority=Number(newVal);
+    				}
+    			}
+    		}else if(newVal > oldVal){//2) 입력한 값이 변경 전 값보다 클 경우
+    			for(var i=0; i< oldArray.length; i++){
+    				if(vipInstTable.rows('.selected').indexes()[0] != i){
+    					if((oldVal < oldArray[i]) && (newVal >= oldArray[i])){ //(1) 변경 전 나보다 큰거나 같은 값 이면서 입력한 값과 같거나 작을 경우 -1
+		    				vipInstTable.row(i).data().priority=Number(oldArray[i])-1; 
+		    			}
+    				}else{
+    					vipInstTable.row(i).data().priority=Number(newVal);
+    				}
+    			}
+    		}
+    	}
+    }
+	
+	/* ********************************************************
+     * priority가 가장 큰 걸 자동으로 Master로 변경, 그 외 모두 Backup으로 수정
     ******************************************************** */
     function master_gbn_auto_edit(){
+		var nonSortedPriority = vipInstTable.column(getColIndex(vipInstTable, "priority")).data();
 		var sortedPriority = vipInstTable.column(getColIndex(vipInstTable, "priority")).data().sort();
-		var newPriority = new Array();
 		var dataLen = vipInstTable.rows().data().length;
 		var maxPriority = sortedPriority[dataLen -1];
 		
+		//Master 지정
 		for(var i=0; i<dataLen; i++){
-			for(var j=0; j<dataLen; j++){
-				if(sortedPriority[j] == vipInstTable.row(i).data().priority) {
-					newPriority[i] = weightInit-(dataLen-j);
-				}
-			}
-		}
-		for(var i=0; i<dataLen; i++){
-			vipInstTable.row(i).data().priority = newPriority[i];
-			if(maxPriority == newPriority[i]) vipInstTable.row(i).data().state_nm = "MASTER";
+			if(maxPriority == vipInstTable.row(i).data().priority) vipInstTable.row(i).data().state_nm = "MASTER";
 			else vipInstTable.row(i).data().state_nm = "BACKUP";
 		}
+		
 		var tempTableDatas = vipInstTable.rows().data();
 		vipInstTable.clear().draw();
 		vipInstTable.rows.add(tempTableDatas).draw();
@@ -192,6 +251,7 @@
 		showSwalIcon('<spring:message code="eXperDB_proxy.msg8" />', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
 		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
+		priority_auto_sort();
 		vipInstTable.row.add({
 			"state_nm" : $("#instReg_state_nm", "#insVipInstForm").val(),
 			"v_ip" : $("#instReg_v_ip", "#insVipInstForm").val(),
@@ -201,7 +261,7 @@
 			"chk_tm" : $("#instReg_chk_tm", "#insVipInstForm").val(),
 			"vip_cng_id" : $("#instReg_vip_cng_id", "#insVipInstForm").val(),
 			"pry_svr_id" : $("#instReg_pry_svr_id", "#insVipInstForm").val()
-		}).draw();
+		});
 		selConfInfo = null;
 		master_gbn_auto_edit();
 		
@@ -216,6 +276,7 @@
 		showSwalIcon('<spring:message code="eXperDB_proxy.msg8" />', '<spring:message code="common.close" />', '', 'success');
 		$("#modYn").val("Y");
 		$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg5"/>');
+		priority_auto_sort();
 		var dataLen = vipInstTable.rows().data().length;
 		var oriData = vipInstTable.rows().data();
 		for(var i=0; i<dataLen; i++){
@@ -228,8 +289,8 @@
 				oriData[i].chk_tm = $("#instReg_chk_tm", "#insVipInstForm").val();
 				
 				var tempData = vipInstTable.rows().data();
-				vipInstTable.clear().draw();
-				vipInstTable.rows.add(tempData).draw();
+				vipInstTable.clear();
+				vipInstTable.rows.add(tempData);
 			}
 		}
 		

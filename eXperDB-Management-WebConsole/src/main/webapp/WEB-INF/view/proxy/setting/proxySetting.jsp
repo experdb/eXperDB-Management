@@ -1403,15 +1403,15 @@
 			$("#instReg_v_ip", "#insVipInstForm").val("");//virtual ip
 			$("#instReg_v_if_nm", "#insVipInstForm").val(""); //virtual interface
 			$("#instReg_v_rot_id", "#insVipInstForm").val(""); //virtual router id
-			
-			if(vipInstTable.rows().data().length == 0){
+			var vipDataLen = vipInstTable.rows().data().length;
+			if(vipDataLen == 0){
 				$("#instReg_state_nm", "#insVipInstForm").val("MASTER"); //State
 				$("#instReg_priority", "#insVipInstForm").val("109"); //priority
 				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - 109); //priority select 
 			}else{
 				$("#instReg_state_nm", "#insVipInstForm").val("BACKUP"); //State
-				$("#instReg_priority", "#insVipInstForm").val("108"); //priority
-				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - 108); //priority select 
+				$("#instReg_priority", "#insVipInstForm").val(109-vipDataLen); //priority
+				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - (109-vipDataLen)); //priority select 
 			}
 			
 			$("#instReg_chk_tm", "#insVipInstForm").val("1"); //체크간격
@@ -1886,17 +1886,19 @@
 				}
 			},
  			success : function(result) {
- 				//작업이 완료 되었습니다.
- 				if(result.result){
- 					fn_btn_setEnable("");
- 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
- 					fn_init_global_value();
- 					fn_serverList_search();
- 				}else{
- 					fn_btn_setEnable("");
- 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
- 					$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", false);
- 				}
+ 				//작업이 완료 후, 상태 변경 까지 10초의 Term을 줌
+ 				setTimeout(function(){
+ 					if(result.result){
+ 	 					fn_btn_setEnable("");
+ 	 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
+ 	 					fn_init_global_value();
+ 	 					fn_serverList_search();
+ 	 				}else{
+ 	 					fn_btn_setEnable("");
+ 	 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+ 	 					$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", false);
+ 	 				}
+				},10000);
  			}
  		});
 	}
