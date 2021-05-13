@@ -70,9 +70,9 @@
 					}
 					
 					if(type == "P"){
-						$(".config_title").html(' ' + result.pry_svr_nm + ' Proxy Config');
+						$(".config_title").html(' ' + result.pry_svr_nm + ' Proxy Configuration');
 					} else {
-						$(".config_title").html(' ' + result.pry_svr_nm + ' Vip Config');
+						$(".config_title").html(' ' + result.pry_svr_nm + ' Vip Configuration');
 					}
 
 					// $("#fSize", "#configForm").val(v_fileSize);
