@@ -1366,7 +1366,13 @@ public class ProxyServiceImpl implements ProxyService{
 			         			prySvrChk.setMaster_svr_id_chk(null);
 			         			
 			         			prySvrChk.setOld_pry_svr_id(proxyServerInfo.getPry_svr_id());
-			         			prySvrChk.setOld_master_gbn("B");
+			         			
+			         			if (proxyServerInfo.getMaster_exe_cnt() <= 0) {
+			         				prySvrChk.setOld_master_gbn("M");
+			         			} else {
+				         			prySvrChk.setOld_master_gbn("B");
+			         			}
+			         			
 			         			prySvrChk.setOld_master_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
 			         			prySvrChk.setLst_mdfr_id("system");
 			         			prySvrChk.setSel_query_gbn("master_down");
