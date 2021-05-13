@@ -33,7 +33,7 @@
 		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
 		WHERE a.SVR_USE_YN = 'Y'
         GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD, s.DB_SVR_ID
-		ORDER BY coalesce(MASTER_SVR_ID, PRY_SVR_ID), s.DB_SVR_ID, MASTER_GBN DESC, LST_MDF_DTM
+		ORDER BY s.DB_SVR_ID, coalesce(MASTER_SVR_ID, PRY_SVR_ID), s.DB_SVR_ID, MASTER_GBN DESC, LST_MDF_DTM
 	</select>
 	
 	<select id="selectProxyServerList2" resultType="hashMap">

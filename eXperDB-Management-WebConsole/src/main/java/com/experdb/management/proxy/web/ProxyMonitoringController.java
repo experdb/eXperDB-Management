@@ -108,6 +108,32 @@ public class ProxyMonitoringController {
 	}
 	
 	/**
+	 * Proxy 모니터링 화면
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value = "/selectReloadMonitoring.do")
+	public ModelAndView selectReloadMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		try {
+			//서버정보 리스트 
+			List<Map<String, Object>> proxyServerTotInfo = proxyMonitoringService.selectProxyServerList();
+				
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			int aut_id = loginVo.getAut_id();
+
+			mv.addObject("proxyServerTotInfo", proxyServerTotInfo);
+			mv.addObject("aut_id", aut_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mv;
+	}
+
+	/**
 	 * proxy server id에 따른 데이터 조회
 	 * @param request
 	 * @return ModelAndView
