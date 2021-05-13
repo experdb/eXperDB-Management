@@ -1166,12 +1166,9 @@
 							render : function(data, type, full, meta){
 								var html = "";
 								if(full.master_gbn == "M"){
-									html += '<div class="bg-inverse-warning">'									
-								} else {
-									html += '<div class="">';
+									html += '<i class="mdi mdi-chart-bar text-warning"></i>';					
 								}
 								html += data;
-								html += '</div>';
 								return html;
 							},
 							className : "dt-center", defaultContent : ""
@@ -1512,6 +1509,8 @@
 	* 시스템  중지 / 시작
 	******************************************************** */
 	function fn_act_exe_cng(pry_svr_id, type, status){
+		showDangerToast('top-right', '<spring:message code="eXperDB_proxy.msg7"/>', '<spring:message code="eXperDB_proxy.apply_msg_title"/>');
+
 		$.ajax({
 			url : '/proxyMonitoring/actExeCng.do',
 			type : 'post',
@@ -1522,13 +1521,16 @@
 				act_exe_type : 'TC004001'
 			},
 			success : function(result) {	
- 				if(result.result){
- 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
- 				}else{
- 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
-	 			}
-				rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
-				fn_getProxyInfo(select_pry_svr_id, rowChkCnt);
+ 					if(result.result){
+ 						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
+
+ 					}else{
+ 						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+	 				}
+					rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
+
+// 				fn_serverListSetting();
+// 				fn_getProxyInfo(select_pry_svr_id, rowChkCnt);
 			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -1545,7 +1547,12 @@
 				}
 			}
 		});
-		$('#loading').hide();
+		
+		setTimeout(function() {
+			window.location.reload(true);
+		}, 2000);
+
+// 		$('#loading').hide();
 	}
 	
 	/* ********************************************************
