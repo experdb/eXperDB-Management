@@ -183,6 +183,125 @@
 		
 	}
 
+	/* ********************************************************
+	 * 프록시 서버 리스트 셋팅
+	 ******************************************************** */
+	function fn_proxyServerListSetting(){
+
+		var proxy_rowCount = 0;
+		var proxy_html = "";
+		var proxy_master_gbn = "";
+		var pry_svr_id = "";
+		var listCnt = 0;
+		var pry_svr_id_val = "";
+		
+		var proxyServerTotInfo_cnt = "${fn:length(proxyServerTotInfo)}";
+
+		if (proxyServerTotInfo_cnt == 0) {
+			proxy_html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+			proxy_html += "	<div class='card'>\n";
+			proxy_html += '		<div class="card-body">\n';
+			proxy_html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+			proxy_html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+			proxy_html += '				<spring:message code="message.msg01" /></h5>\n';
+			proxy_html += '			</div>\n';
+			proxy_html += "		</div>\n";
+			proxy_html += "	</div>\n";
+			proxy_html += '</div>\n';
+		} else {
+			<c:forEach items="${proxyServerTotInfo}" var="serverinfo" varStatus="status">
+				proxy_master_gbn = nvlPrmSet("${serverinfo.master_gbn}", "");
+				proxy_rowCount = proxy_rowCount + 1;
+				listCnt = parseInt("${fn:length(proxyServerTotInfo)}");
+
+				pry_svr_id_val = nvlPrmSet("${serverinfo.pry_svr_id}", '');
+	 			if (pry_svr_id == "") {
+					proxy_html += '<div class="col-md-12 grid-margin stretch-card">\n';
+					proxy_html += '	<div class="card news_text">\n';
+					proxy_html += '		<div class="card-body" id="proxyServerSs'+ proxy_rowCount +'" onClick="fn_getProxyInfo(' + pry_svr_id_val + ', '+ proxy_rowCount +')" style="cursor:pointer;">\n';
+					proxy_html += '			<div class="row">\n';
+				} else if(pry_svr_id != nvlPrmSet("${serverinfo.pry_svr_id}", '')  && proxy_master_gbn == "M") {
+					proxy_html += '				</div>\n';
+					proxy_html += '			</div>\n';
+					proxy_html += '			<div class="col-sm-3" style="margin:auto;">\n';
+					proxy_html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iProxy' + pry_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
+					proxy_html += '			</div>\n';
+					proxy_html += "		</div>\n";
+					proxy_html += "		</div>\n";
+					proxy_html += "	</div>\n";
+					proxy_html += '</div>\n';
+					
+					proxy_html += "<div class='col-md-12 grid-margin stretch-card'>\n";
+					proxy_html += "	<div class='card news_text'>\n";
+					proxy_html += '		<div class="card-body" id="proxyServerSs'+ proxy_rowCount +'" onClick="fn_getProxyInfo('+ pry_svr_id_val +', '+ proxy_rowCount +')" style="cursor:pointer;">\n';
+					proxy_html += '			<div class="row">\n';
+				}
+	 			
+	 			if(proxy_master_gbn == "M") {
+					proxy_html += '			<div class="col-sm-9">';
+	 				proxy_html += '				<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+	 				proxy_html += '					<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+	 				if (nvlPrmSet("${serverinfo.exe_status}", '') == '') {
+	 	 				proxy_html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+					} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001501') { // TC001501
+	 	 				proxy_html += '					<div class="badge badge-pill badge-success" title="">M</div>\n';
+	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001502') { // TC001502
+	 	 				proxy_html += '					<div class="badge badge-pill badge-danger">M</div>\n';
+	 				} else {
+	 	 				proxy_html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 				}
+	 				proxy_html += '					<c:out value="${serverinfo.pry_svr_nm}"/><br/></h5>\n';
+	 				proxy_html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+	 				proxy_html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>\n';
+	 			}
+
+				if (proxy_master_gbn == "B") {
+	 				proxy_html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
+					
+	 				if (nvlPrmSet("${serverinfo.exe_status}", '') == '') {
+	 	 				proxy_html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001501') {
+	 	 				proxy_html += '					<div class="badge badge-pill badge-success">B</div>\n';
+	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001502') {
+	 	 				proxy_html += '					<div class="badge badge-pill badge-danger">B</div>\n';
+	 				} else {
+	 	 				proxy_html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 				}
+	 				proxy_html += '					<c:out value="${serverinfo.pry_svr_nm}"/><br/></h6>';
+	 				proxy_html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">';
+	 				proxy_html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>';
+	 			}
+
+				if (proxy_rowCount == listCnt) {
+					proxy_html += '				</div>\n';
+					proxy_html += '			</div>\n';
+					proxy_html += '			<div class="col-sm-3" style="margin:auto;">\n';
+					proxy_html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+					proxy_html += '			</div>\n';
+					proxy_html += "		</div>\n";
+					proxy_html += "		</div>\n";
+					proxy_html += "	</div>\n";
+					proxy_html += '</div>\n';
+					
+				}
+
+				pry_svr_id = nvlPrmSet("${serverinfo.pry_svr_id}", '') ;
+
+			</c:forEach>
+		}
+
+		$("#proxyServerTabList").html(proxy_html);
+		$("#proxyServerSsCnt", "#dashboardViewForm").val(proxyServerTotInfo_cnt);
+
+		//첫번쨰 proxy 자동클릭
+		if (proxyServerTotInfo_cnt > 0) {
+			//$("#proxy_master_nm").text("${proxyServerTotInfo[0].pry_svr_nm}").val();
+			
+			//첫번쨰 proxy 자동클릭 - fn_getProxyInfo
+			$("#proxyServerSs1").click();
+		}
+	}
+	
 </script>
 
 <%@include file="./popup/scheduleHistoryDetail.jsp"%>
@@ -192,6 +311,7 @@
 <%@include file="./db2pg/popup/db2pgResultDDL.jsp"%> 
 <%@include file="./db2pg/popup/db2pgResult.jsp"%> 
 <%@include file="./scale/scaleWrkLog.jsp"%>
+<%@include file="./proxy/popup/proxyDBStandbyIPViewPop.jsp"%>
 
 <form name="dashboardViewForm" id="dashboardViewForm">
 	<input type="hidden" name="scd_nm"  id="scd_nm" />
@@ -201,6 +321,10 @@
 	<input type="hidden" name="encp_use_yn_chk"  id="encp_use_yn_chk" value="${sessionScope.session.encp_use_yn}"/>
 	
 	<input type="hidden" name="serverSsCnt"  id="serverSsCnt" />
+	
+	<input type="hidden" name="proxy_yn" id="proxy_yn" value="${proxy_yn}"/>
+	<input type="hidden" name="proxyServerSsCnt" id="proxyServerSsCnt" />
+	<input type="hidden" name="proxyServerSsChkNum" id="proxyServerSsChkNum"/>
 </form>
 
 <!-- partial -->
@@ -1215,5 +1339,231 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- proxy -->
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card" style="margin-top:-10px;">
+			<div class="card">
+				<div class="card-body">
+					<c:choose>
+						<c:when test="${proxy_yn eq 'Y'}">							
+	              		<!-- proxy title -->
+					<div class="row">
+	                	<div class="col-3">
+	                    	<!-- 서버정보 title -->
+	                    	<div class="row">
+								<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist" style="margin-bottom:10px;">
+									<div class="card" style="margin-bottom:0px;">
+										<div class="card-header" role="tab" id="page_header_div" >
+											<div class="row" style="height: 15px;">
+												<div class="col-12">
+													<h6 class="mb-0">
+														<i class="ti-calendar menu-icon"></i>
+														<span class="menu-title"><spring:message code="eXperDB_proxy.server_cluster"/></span>
+													</h6>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- title end -->
+							<!-- proxy 서버목록 -->
+							<div class="row" id="proxyServerTabList" >
+							</div>
+						</div>
+						
+						<!-- 상세내역 -->
+						<div class="col-9">
+							<div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
+								<div class="carousel-inner">
+									<div class="carousel-item active" id="v-pills-home_test1">
+										<!-- title row start -->
+										<div class="row">
+										
+											<!-- vip title start -->
+											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_keep_vip" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<span class="menu-title"><spring:message code="eXperDB_proxy.vip"/></span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- vip title end -->
+											
+											<!-- vip <- -> proxy 할당 title start -->
+											<div class="accordion_main col-0_5" style="border:none;" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+													<div class="card-header" role="tab" id="page_connect_server" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	&nbsp;
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- vip <- -> proxy 할당 title end -->
+											
+											<!-- proxy listener title start -->
+											<div class="accordion_main accordion-multi-colored col-3_9" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_proxy_server" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<span class="menu-title"><spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.con_lsn"/></span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- proxy listener title end -->
+											
+											<!-- listener db connect title start -->
+											<div class="accordion_main col-1" style="border:none;" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+													<div class="card-header" role="tab" id="page_connect_server" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	&nbsp;
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- listener db connect title end -->
+											
+											<!-- proxy connected db title start -->
+											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:0px;">
+													<div class="card-header" role="tab" id="page_db_server" >
+														<div class="row" style="height: 15px;">
+															<div class="col-12">
+																<h6 class="mb-0">
+																	<i class="item-icon fa fa-dot-circle-o"></i>
+																	<span class="menu-title"><spring:message code="eXperDB_proxy.con_db_server"/></span>
+																</h6>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- proxy connected db title end -->
+											
+										</div>
+										<!-- title row end -->
+										
+										<!-- proxy content row start -->
+										<div class="row">
+										
+											<!-- vip 출력 -->
+											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:10px;border:none;" >
+													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
+													</div>
+												</div>
+											</div>
+											
+											<!-- 할당 -->
+											<div class="accordion_main accordion-multi-colored col-0_5" id="accordion" role="tablist" >
+												<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+													<div class="card-body" style="border:none;min-height: 200px;margin-left:-17px;" id="proxyVipConLineList">
+													</div>
+												</div>
+											</div>
+											 
+											<!-- 리스너 -->
+											<div class="accordion_main accordion-multi-colored col-3_9" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:10px;border:none;" >
+													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
+													</div>
+												</div>
+											</div>
+											
+											<!-- 리스너 - 디비 연결 화살표 -->									
+											<div class="accordion_main accordion-multi-colored col-1" id="accordion" role="tablist" >
+												<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+													<div class="card-body" style="border:none;min-height: 200px;margin-left:-17px;" id="proxyListnerConLineList">
+													</div>
+												</div>
+											</div>
+											
+											
+											<!-- DB 서버  출력-->
+											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
+												<div class="card" style="margin-bottom:10px;border:none;" >
+													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
+													</div>
+												</div>
+											</div>
+											
+										</div>
+										<!-- proxy content row end -->
+										
+									</div>
+								</div>
+							</div>
+						
+						</div>
+						</div>
+						<!-- 상세내역 end -->
+						</c:when>
+						<c:otherwise>
+						<div class="row">
+							<div class="accordion_main accordion-multi-colored col-12" id="accordion_proxy" role="tablist">
+								<div class="card" style="margin-bottom:0px;">
+									<div class="card-header" role="tab" id="proxy_header_div">
+										<div class="row" style="height: 15px;">
+											<div class="col-12">
+												<h6 class="mb-0">
+													<a data-toggle="collapse" href="#proxy_header_sub" aria-expanded="true" aria-controls="proxy_header_sub" onclick="fn_profileChk('proxy_titleText')">
+														<i class="fa fa-database menu-icon"></i>
+														<span class="menu-title"><spring:message code="menu.proxy"/></span>
+														<i class="menu-arrow_user_af" id="proxy_titleText" ></i>
+													</a>
+												</h6>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="proxy_header_sub" class="collapse show" role="tabpanel" aria-labelledby="proxy_header_div" data-parent="#accordion_proxy">
+							<div class="row">
+								<div class="col-md-12 col-xl-12 justify-content-center">
+									<div class="card card-inverse-danger">
+										<div class="card-body">
+											<p class="card-text">
+												<i class="fa fa-times-circle menu-icon"></i>
+												<spring:message code="dashboard.msg09" />
+					                 	   </p>
+					                	 </div>
+					      	      </div>
+								</div>
+							</div>
+						</div>
+						</c:otherwise>
+					</c:choose>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- proxy end -->
+	
 </div>
 <!-- content-wrapper ends -->
