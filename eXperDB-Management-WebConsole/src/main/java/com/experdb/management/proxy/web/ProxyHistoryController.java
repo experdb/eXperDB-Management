@@ -132,7 +132,7 @@ public class ProxyHistoryController {
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));	
 
-				mv.setViewName("proxy/history/proxyStatusHistory");
+				mv.setViewName("proxy/history/proxyHistory");
 			}	
 		} catch (Exception e) {
 			e.printStackTrace();
