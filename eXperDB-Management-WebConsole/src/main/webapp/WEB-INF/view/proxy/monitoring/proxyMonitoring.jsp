@@ -551,7 +551,7 @@
 			html_vip += '	<table class="table-borderless" style="width:100%;">\n';
 			html_vip += '		<tr>\n';
 
-			html_vip += '			<td style="width:80%;height:220px;" class="text-center" id="keepVipDiv' + i + '">\n';
+			html_vip += '			<td style="width:80%;height:205px;" class="text-center" id="keepVipDiv' + i + '">\n';
 			html_vip += '			&nbsp;</td>\n';
 
 			html_vip += '		</tr>\n';
@@ -567,7 +567,7 @@
 			html_vip_line += '	<table class="table-borderless" style="width:100%;">\n';
 			html_vip_line += '		<tr>\n';
 			
-			html_vip_line += '			<td style="width:100%;height:220px;" class="text-center" id="keepVipDivLine' + i + '">\n';
+			html_vip_line += '			<td style="width:100%;height:205px;" class="text-center" id="keepVipDivLine' + i + '">\n';
 			html_vip_line += '			</td>\n';
 
 			html_vip_line += '		</tr>\n';
@@ -1909,18 +1909,18 @@
 			if (act_status == "TC001501") {
 				if(type == "P") {
 					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
-					$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 중지할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg35"/> <br> <spring:message code="eXperDB_proxy.msg34"/>'));
 				} else {
 					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
-					$('#confirm_multi_msg').html(fn_strBrReplcae('가상 ip 시스템을 중지할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg36"/> <br> <spring:message code="eXperDB_proxy.msg34"/>'));
 				}
 			}else if (act_status == "TC001502") {
 				if(type == "P"){
 					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
-					$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 기동할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg37"/> <br> <spring:message code="eXperDB_proxy.msg34"/>'));
 				} else {
 					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
-					$('#confirm_multi_msg').html(fn_strBrReplcae('가상 ip 시스템을 기동할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg38"/> <br> <spring:message code="eXperDB_proxy.msg34"/>'));
 				}
 			}
 		
@@ -2145,7 +2145,7 @@
 										<div class="row">
 											<!-- vip 출력 -->
 											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
-												<div class="card" style="margin-bottom:10px;border:none;" >
+												<div class="card" style="border:none;" >
 													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
 													</div>
 												</div>
@@ -2176,7 +2176,7 @@
 											<!-- DB 서버  출력-->
 											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 15px -20px;" id="dbListenerVipList">
+													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
 													</div>
 												</div>
 											</div>
