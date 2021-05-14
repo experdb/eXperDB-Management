@@ -681,4 +681,19 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		
 		return outputObj;
 	}
+	
+	public String readBackupConfFile(String filePath){
+		String content = null;
+ 	   	File file = new File(filePath); 
+ 	   	try {
+ 	   		InputStreamReader reader= new InputStreamReader(new FileInputStream(file),"UTF8"); 
+ 	   		char[] chars = new char[(int) file.length()];
+ 	   		reader.read(chars);
+ 	   		content = new String(chars);
+ 	   		reader.close();
+ 	   	} catch (IOException e) {
+ 		   e.printStackTrace();
+ 	   	}
+ 	   	return content;
+	}
 }
