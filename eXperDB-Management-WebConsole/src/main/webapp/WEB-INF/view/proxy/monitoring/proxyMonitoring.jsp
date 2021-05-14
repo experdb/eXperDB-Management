@@ -2073,7 +2073,7 @@
 															<div class="col-12">
 																<h6 class="mb-0">
 																	<i class="item-icon fa fa-dot-circle-o"></i>
-																	<span class="menu-title">가상IP</span>
+																	<span class="menu-title"><spring:message code="eXperDB_proxy.vip"/></span>
 																</h6>
 															</div>
 														</div>
@@ -2103,7 +2103,7 @@
 															<div class="col-12">
 																<h6 class="mb-0">
 																	<i class="item-icon fa fa-dot-circle-o"></i>
-																	<span class="menu-title"><spring:message code="eXperDB_proxy.server"/> 연결 리스너</span>
+																	<span class="menu-title"><spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.con_lsn"/></span>
 																</h6>
 															</div>
 														</div>
@@ -2132,7 +2132,7 @@
 															<div class="col-12">
 																<h6 class="mb-0">
 																	<i class="item-icon fa fa-dot-circle-o"></i>
-																	<span class="menu-title">연결된 db 서버</span>
+																	<span class="menu-title"><spring:message code="eXperDB_proxy.con_db_server"/></span>
 																</h6>
 															</div>
 														</div>

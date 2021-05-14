@@ -302,18 +302,18 @@
 			if (act_status == "TC001501") {
 				if(type == "P") {
 					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_stop"/>';
-					$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 중지할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg35"/> <br> <spring:message code="eXperDB_proxy.msg34"/>'));
 				} else {
 					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_stop"/>';
-					$('#confirm_multi_msg').html(fn_strBrReplcae('가상 ip 시스템을 중지할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg36"/> <br> <spring:message code="eXperDB_proxy.msg34"/>'));
 				}
 			}else if (act_status == "TC001502") {
 				if(type == "P"){
 					confirm_title = '<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.act_start"/>';
-					$('#confirm_multi_msg').html(fn_strBrReplcae('Proxy를 기동할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg37"/> <br> <spring:message code="eXperDB_proxy.msg34"/>'));
 				} else {
 					confirm_title = '<spring:message code="eXperDB_proxy.vip"/> <spring:message code="eXperDB_proxy.vip_health_check"/> <spring:message code="eXperDB_proxy.act_start"/>';
-					$('#confirm_multi_msg').html(fn_strBrReplcae('가상 ip 시스템을 기동할 수 없습니다. <br> Agent가 정상 기동 중인지 상태 확인이 필요합니다.'));
+					$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg38"/> <br> <spring:message code="eXperDB_proxy.msg34"/>'));
 				}
 			}
 		
