@@ -133,7 +133,7 @@ public class ProxyClientAdapter {
 		return parseToJsonObj(recvBuff);
 	}
 	
-	/* proxy service restart*/
+	/* proxy config file Read*/
 	public JSONObject psP005(JSONObject jObj) throws Exception {
 		byte[] bt = jObj.toString().getBytes();
 		cc.send(4, bt);

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="proxyHistorySql">
+
+	<select id="selectProxyActStateHistoryList" resultType="hashMap">
+		/**
+		* Query ID : selectProxyActStateHistoryList
+		* Description : 기동 상태 변경 이력 조회
+		* Author : 김민정
+		**/
+		SELECT  TO_CHAR(WRK_DTM,'YYYY-MM-DD') AS WRK_DTM_DATE,
+				TO_CHAR(WRK_DTM,'HH24:MI') AS WRK_DTM_HOUR,
+				PRY_ACT_EXE_SN, 
+       			PRY_SVR_ID, 
+       			(SELECT PRY_SVR_NM FROM T_PRY_SVR_I WHERE PRY_SVR_ID = A.PRY_SVR_ID) as PRY_SVR_NM,
+       			SYS_TYPE, 
+       			ACT_TYPE, 
+       			ACT_EXE_TYPE, 
+       			WRK_DTM, 
+       			EXE_RSLT_CD, 
+       			RSLT_MSG, 
+       			FRST_REGR_ID, 
+       			FRST_REG_DTM, 
+       			LST_MDFR_ID, 
+       			LST_MDF_DTM
+		FROM 	T_PRY_ACTSTATE_CNG_G A  
+		WHERE   1 = 1
+			<if test="pry_svr_id != null and pry_svr_id != '' ">
+				AND PRY_SVR_ID = #{pry_svr_id}
+			</if>
+			<if test="sys_type != null and sys_type != '' ">
+	        	AND SYS_TYPE = #{sys_type}
+	        </if>
+	        <if test="act_type != null and act_type != '' ">
+	        	AND ACT_TYPE = #{act_type}
+	        </if>
+	        <if test="act_exe_type != null and act_exe_type != '' ">
+	        	AND ACT_EXE_TYPE = #{act_exe_type}
+	        </if>
+	        <if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
+	        	AND EXE_RSLT_CD = #{exe_rslt_cd}
+	        </if>
+	        <if test="lst_mdfr_id != null and lst_mdfr_id != '' ">
+	        	AND LST_MDFR_ID = #{lst_mdfr_id}
+	        </if>
+	        <if test="wlk_dtm_start != null and wlk_dtm_end != null ">
+				AND to_char(WRK_DTM,'YYYY-MM-DD') between #{wlk_dtm_start} and #{wlk_dtm_end}
+			</if>
+		ORDER BY A.WRK_DTM DESC
+	</select>
+	
+	<select id="selectProxySettingChgHistoryList" resultType="hashMap">
+		/**
+		* Query ID : selectProxySettingChgHistoryList
+		* Description : 설정 변경 이력 조회
+		* Author : 김민정
+		**/
+		SELECT  TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD') AS LST_DTM_DATE,
+				TO_CHAR(LST_MDF_DTM,'HH24:MI') AS LST_DTM_HOUR,
+				PRY_CNG_SN,
+				PRY_SVR_ID, 
+       			(SELECT PRY_SVR_NM FROM T_PRY_SVR_I WHERE PRY_SVR_ID = A.PRY_SVR_ID) as PRY_SVR_NM,
+       			PRY_PTH, 
+       			KAL_PTH, 
+       			EXE_RST_CD, 
+       			FRST_REGR_ID, 
+       			FRST_REG_DTM, 
+       			LST_MDFR_ID, 
+       			LST_MDF_DTM
+		FROM 	T_PRYCNG_G A  
+		WHERE   1 = 1
+			<if test="pry_svr_id != null and pry_svr_id != '' ">
+				AND PRY_SVR_ID = #{pry_svr_id}
+			</if>
+			<if test="exe_rst_cd != null and exe_rst_cd != '' ">
+	        	AND EXE_RST_CD = #{exe_rst_cd}
+	        </if>
+	        <if test="lst_mdfr_id != null and lst_mdfr_id != '' ">
+	        	AND LST_MDFR_ID = #{lst_mdfr_id}
+	        </if>
+	        <if test="lst_dtm_start != null and lst_dtm_end != null ">
+				AND to_char(LST_MDF_DTM,'YYYY-MM-DD') between #{lst_dtm_start} and #{lst_dtm_end}
+			</if>
+		ORDER BY A.LST_MDF_DTM DESC
+	</select>
+	<select id="selectProxyConfFilePathInfo" resultType="hashMap">
+		/**
+		* Query ID : selectProxyConfFilePathInfo
+		* Description : 설정 파일 백업 경로 
+		* Author : 김민정
+		**/
+		SELECT  PRY_PTH, 
+       			KAL_PTH
+		FROM 	T_PRYCNG_G A  
+		WHERE   1 = 1
+			<if test="pry_svr_id != null and pry_svr_id != '' ">
+				AND PRY_SVR_ID = #{pry_svr_id}
+			</if>
+			<if test="pry_cng_sn != null and pry_cng_sn != '' ">
+				AND PRY_CNG_SN = #{pry_cng_sn}
+			</if>
+	</select>
+	
+</mapper>

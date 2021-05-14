@@ -310,8 +310,7 @@
 								$('#' + result[i].mnu_cd).show();
 							}
 							
-							if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none' && $('#MN0001805').css('display') == 'none'){
-										//&& $('#MN0001803').css('display') == 'none' && $('#MN0001804').css('display') == 'none'){
+							if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none' && $('#MN0001803').css('display') == 'none' && $('#MN0001805').css('display') == 'none'){
 								$('#proxy_menu').hide();
 							}else{
 								$('#proxy_menu').show();
@@ -868,16 +867,21 @@
 												<spring:message code="menu.proxy_config"/>
 											</a>
 										</li>
-										<%-- <li class="nav-item" id="MN0001803">
-											<a class="nav-link" href="/vipStatusHistory.do" onClick="fn_cookie(null)" target="main">
-												<spring:message code="menu.proxy_status_hist"/>
+										<%-- <li class="nav-item" id="MN00018_history">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.history_management" /></b>
+											</span>
+										</li> --%>
+										<li class="nav-item" id="MN0001803">
+											<a class="nav-link" href="/proxyStatusHistory.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.proxy_hist"/>
 											</a>
 										</li>
-										<li class="nav-item" id="MN0001804">
-											<a class="nav-link" href="/vipChangeHistory.do" onClick="fn_cookie(null)" target="main">
+										<%-- <li class="nav-item" id="MN0001804">
+											<a class="nav-link" href="/proxyChangeHistory.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="menu.proxy_change_hist"/>
 											</a>
-										</li> --%>
+										</li>  --%>
 									</ul>
 								</div>
 							</li>

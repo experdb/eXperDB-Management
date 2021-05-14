@@ -127,8 +127,8 @@ $(window.document).ready(function() {
     		},
     		success : function(result) {
   				for(var i = 0; i<result.length; i++){  
-  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001803" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020"){
-     					//읽기권한
+  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020"){
+  	     				//읽기권한
   						if(result[i].read_aut_yn == "Y"){	  									
   							document.getElementById("r_"+result[i].mnu_cd).checked = true;
   						}else{
@@ -196,7 +196,7 @@ $(function() {
 	    		},
 	    		success : function(result) {
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001803" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020"){
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020"){
       						//읽기권한
 	  						if(result[i].read_aut_yn == "Y"){	  									
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -495,8 +495,8 @@ $(function() {
 		
 		//VirtualIP 선택 전체 체크박스
 		$("#VirtualIP").click(function() { 
-			//var array = new Array("MN0001801","MN0001802","MN0001803","MN0001804");
-			var array = new Array("MN0001801","MN0001802");
+			var array = new Array("MN0001801","MN0001802","MN0001803","MN0001805");
+			//var array = new Array("MN0001801","MN0001802");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
@@ -514,8 +514,6 @@ $(function() {
 				}
 			}
 		});
-		
-		
 		
 		
 		/* 백업메뉴 권한체크 추가 2021-04-13 변승우 */		
@@ -1475,7 +1473,7 @@ function fn_search(){
 								</tr>
 								<!-- Proxy -->
 								<tr class="proxy_yn">
-									<th scope="row" rowspan="3">
+									<th scope="row" rowspan="4">
 										<div class="inp_chk">
 											<input type="checkbox" id="VirtualIP" name="VirtualIP"/>
 											<label for="functions">Proxy</label>
@@ -1528,6 +1526,21 @@ function fn_search(){
 										</div>
 									</td>
 								</tr>
+								<tr class="proxy_yn">
+									<td colspan="2"><spring:message code="menu.proxy_hist" /> </td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0001803" name="r_mnu_nm" value="MN0001803"/>
+											<label for="r_MN0001803"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0001803" name="w_mnu_nm"/>
+											<label for="w_MN0001803"></label>
+										</div>
+									</td>
+								</tr>
 								<%-- <tr>
 									<td scope="row" rowspan="2">
 										<div class="inp_chk">
@@ -1535,7 +1548,7 @@ function fn_search(){
 											<label for="schinfo"><spring:message code="menu.history_management" /></label>
 										</div>
 									</td>
-									<td><spring:message code="menu.proxy_status_hist" /> </td>
+									<td><spring:message code="menu.proxy_hist" /> </td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001803" name="r_mnu_nm" value="MN0001803"/>

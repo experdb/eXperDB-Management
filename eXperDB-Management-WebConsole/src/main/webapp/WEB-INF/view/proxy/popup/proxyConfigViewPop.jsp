@@ -110,7 +110,7 @@
 		<div class="modal-content">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info config_title" id="ModalLabel" style="padding-left:5px;">
-<!-- 					Proxy Configuration -->
+					<!-- 					Proxy Configuration -->
 				</h4>
 
 				<div class="card" style="margin-top:10px;border:0px;">

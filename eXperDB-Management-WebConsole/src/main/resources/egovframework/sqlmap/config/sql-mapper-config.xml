@@ -147,5 +147,7 @@
 		<!-- experdb proxy -->
 		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyServerSettingSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyMonitoringSql.xml"/>
+		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyHistorySql.xml"/>
+		
 	</mappers>
 </configuration>
