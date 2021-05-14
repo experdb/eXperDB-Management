@@ -46,23 +46,28 @@ public class PsP005 extends SocketCtl{
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
 		socketLogger.info("PsP005.execute : " + strDxExCode);
-/*
+
 		byte[] sendBuff = null;
-		
+		String confStr = "";
 		JSONObject outputObj = new JSONObject();
 		try {
 
 			context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 			ProxyLinkServiceImpl service = (ProxyLinkServiceImpl) context.getBean("ProxyLinkService");
-			outputObj = fromJettisonToSimple(service.restartService(fromSimpleToJettison(jObj)));
+			confStr = service.readBackupConfFile(jObj.get("file_path").toString());
+			
 			outputObj.put(ProtocolID.DX_EX_CODE,strDxExCode);
+			outputObj.put(ProtocolID.RESULT_CODE, confStr);
+			outputObj.put(ProtocolID.ERR_CODE, "0");
+			outputObj.put(ProtocolID.ERR_MSG, "");
+			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 		} catch (Exception e) {
 			errLogger.error("PsP005 {} ", e.toString());
 
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP005);
-			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.RESULT_CODE, confStr);
 			outputObj.put(ProtocolID.ERR_CODE, "-1");
 			outputObj.put(ProtocolID.ERR_MSG, e.toString());
 
@@ -72,6 +77,6 @@ public class PsP005 extends SocketCtl{
 		} finally {
 			outputObj = null;
 			sendBuff = null;
-		}*/
+		}
 	}
 }

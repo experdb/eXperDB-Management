@@ -92,7 +92,7 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					psP004.execute(strDX_EX_CODE, jObj);
 		
 					break;
-				case TranCodeType.PsP005 : //restart
+				case TranCodeType.PsP005 : //read a backup conf file 
 					
 					PsP005 psP005 = new PsP005(client, is, os);
 					psP005.execute(strDX_EX_CODE, jObj);
