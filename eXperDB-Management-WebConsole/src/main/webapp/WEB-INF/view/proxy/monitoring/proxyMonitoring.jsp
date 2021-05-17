@@ -82,9 +82,12 @@
 		aut_id = "${aut_id}";
 		
 		//tooltip setting
-		$('[data-toggle="tooltip"]').tooltip({
-			template: '<div class="tooltip tooltip-info" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
-		});
+		setTimeout(function(){
+			$('[data-toggle="tooltip"]').tooltip({
+				template: '<div class="tooltip tooltip-warning" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+			});
+		},200);
+		
 		// 1분에 한번씩 reload
 // 		setInterval(function() {
 // 			var rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
@@ -93,13 +96,7 @@
 // 			$("#serverSs1").click();
 // 		}, 10000);
 	});
-	
-    $(function () {
-		$('[data-toggle="tooltip"]').tooltip({
-			template: '<div class="tooltip tooltip-info" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
-		});
-    });
-	
+
 	/* ********************************************************
 	* 프록시 세부내역 조회
 	******************************************************** */
@@ -838,7 +835,7 @@
 						} else {
 							html_listner_ss += '			<div class="badge badge-pill badge-danger" title="">L</div>\n';
 						}	
- 						html_listner_ss += '			<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="' + result.proxyServerLsnList[k].lsn_desc + '">';
+ 						html_listner_ss += '			<span data-toggle="tooltip" data-placement="bottom" data-html="true" title=\''+result.proxyServerLsnList[k].lsn_desc+'\'>';
 						html_listner_ss += '			'+result.proxyServerLsnList[k].lsn_nm+'\n';
 						html_listner_ss += '			</span>\n';
 						html_listner_ss += '	</h5>\n';
