@@ -81,6 +81,10 @@
 		// 권한 id 넣기
 		aut_id = "${aut_id}";
 		
+		//tooltip setting
+		$('[data-toggle="tooltip"]').tooltip({
+			template: '<div class="tooltip tooltip-info" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+		});
 		// 1분에 한번씩 reload
 // 		setInterval(function() {
 // 			var rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
@@ -89,6 +93,12 @@
 // 			$("#serverSs1").click();
 // 		}, 10000);
 	});
+	
+    $(function () {
+		$('[data-toggle="tooltip"]').tooltip({
+			template: '<div class="tooltip tooltip-info" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+		});
+    });
 	
 	/* ********************************************************
 	* 프록시 세부내역 조회
@@ -827,10 +837,11 @@
 							html_listner_ss += '			<div class="badge badge-pill badge-success" title="">L</div>\n';
 						} else {
 							html_listner_ss += '			<div class="badge badge-pill badge-danger" title="">L</div>\n';
-						}
- 
+						}	
+ 						html_listner_ss += '			<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="' + result.proxyServerLsnList[k].lsn_desc + '">';
 						html_listner_ss += '			'+result.proxyServerLsnList[k].lsn_nm+'\n';
-						html_listner_ss += '			</h5>\n';
+						html_listner_ss += '			</span>\n';
+						html_listner_ss += '	</h5>\n';
  					
 						html_listner_ss += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="text-align:left;padding-left:30px;padding-top:3px;">';
 						html_listner_ss += '				Bind IP : Port(*) : '+result.proxyServerLsnList[k].con_bind_port+'\n';
@@ -1168,7 +1179,7 @@
 	}
 	
 	/* ********************************************************
-	 * 프록시  상태 로그 셋팅
+	 * 프록시  상태 로그 셋팅	
 	 ******************************************************** */
 	function fn_proxy_log_init(){
 		proxyLogTable = $('#proxyLogTable').DataTable({

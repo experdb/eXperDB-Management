@@ -265,6 +265,7 @@
 			E.PRY_SVR_NM, 
 			E.LSN_ID,
 			E.LSN_NM,
+			E.LSN_DESC,
 			E.lsn_exe_status,
 			E.con_bind_port,
 			ARRAY_TO_STRING(ARRAY_AGG(E.db_conn_ip),',')  as db_conn_ip,
@@ -279,6 +280,7 @@
 	             , F.PRY_SVR_NM
 	             , F.LSN_ID
 	             , F.LSN_NM
+	             , F.LSN_DESC
 	             , F.lsn_exe_status
 				 , F.db_conn_ip
 				 , F.con_bind_port
@@ -299,6 +301,7 @@
 	             , A.PRY_SVR_NM
 	             , B.LSN_ID
 	             , B.LSN_NM
+	             , B.LSN_DESC
 	             , B.lsn_exe_status
 				 , D.db_conn_ip
 				 , B.con_bind_port
@@ -316,7 +319,7 @@
 	         
 	         
 	     ) E
-	     group by E.DB_SVR_ID, E.IPADR, E.AGT_CNDT_CD, E.SVR_USE_YN, E.PRY_SVR_ID, E.MASTER_GBN, E.PRY_SVR_NM, E.LSN_ID , E.LSN_NM, E.lsn_exe_status, E.MASTER_SVR_ID, E.con_bind_port
+	     group by E.DB_SVR_ID, E.IPADR, E.AGT_CNDT_CD, E.SVR_USE_YN, E.PRY_SVR_ID, E.MASTER_GBN, E.PRY_SVR_NM, E.LSN_ID , E.LSN_NM, E.LSN_DESC, E.lsn_exe_status, E.MASTER_SVR_ID, E.con_bind_port
 	     ORDER BY E.DB_SVR_ID, E.MASTER_GBN DESC, E.MASTER_SVR_ID, E.LSN_NM DESC
 	</select>
 	
