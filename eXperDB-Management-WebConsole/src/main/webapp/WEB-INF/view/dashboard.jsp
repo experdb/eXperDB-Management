@@ -1523,6 +1523,7 @@
 						</div>
 						<!-- 상세내역 end -->
 						</c:when>
+						<!-- proxy use = n -->
 						<c:otherwise>
 						<div class="row">
 							<div class="accordion_main accordion-multi-colored col-12" id="accordion_proxy" role="tablist">
