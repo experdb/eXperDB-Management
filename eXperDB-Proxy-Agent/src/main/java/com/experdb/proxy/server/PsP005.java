@@ -46,18 +46,18 @@ public class PsP005 extends SocketCtl{
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
 		socketLogger.info("PsP005.execute : " + strDxExCode);
-
 		byte[] sendBuff = null;
-		String confStr = "";
 		JSONObject outputObj = new JSONObject();
 		try {
 
 			context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 			ProxyLinkServiceImpl service = (ProxyLinkServiceImpl) context.getBean("ProxyLinkService");
-			confStr = service.readBackupConfFile(jObj.get("file_path").toString());
-			
+			String backupConfStr = service.readBackupConfFile(jObj.get("backup_file_path").toString());
+			String presentConfStr = service.readBackupConfFile(jObj.get("present_file_path").toString());
 			outputObj.put(ProtocolID.DX_EX_CODE,strDxExCode);
-			outputObj.put(ProtocolID.RESULT_CODE, confStr);
+			outputObj.put(ProtocolID.BACKUP_CONF, backupConfStr);
+			outputObj.put(ProtocolID.PRESENT_CONF, presentConfStr);
+			outputObj.put(ProtocolID.RESULT_CODE, "0");
 			outputObj.put(ProtocolID.ERR_CODE, "0");
 			outputObj.put(ProtocolID.ERR_MSG, "");
 			
@@ -67,7 +67,7 @@ public class PsP005 extends SocketCtl{
 			errLogger.error("PsP005 {} ", e.toString());
 
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP005);
-			outputObj.put(ProtocolID.RESULT_CODE, confStr);
+			outputObj.put(ProtocolID.RESULT_CODE, "-1");
 			outputObj.put(ProtocolID.ERR_CODE, "-1");
 			outputObj.put(ProtocolID.ERR_MSG, e.toString());
 

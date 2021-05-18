@@ -64,5 +64,8 @@ public class ProtocolID {
 	public static final String INTERFACE = "INTERFACE";//Agent network Interface 목록 결과
 	
 	public static final String DB_CHK = "DB_CHK";
+	
+	public static final String BACKUP_CONF = "BACKUP_CONF";
+	public static final String PRESENT_CONF = "PRESENT_CONF";
 
 }
