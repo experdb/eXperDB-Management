@@ -261,9 +261,9 @@
 	 				if (nvlPrmSet("${serverinfo.exe_status}", '') == '') {
 	 	 				proxy_html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001501') {
-	 	 				proxy_html += '					<div class="badge badge-pill badge-success">B</div>\n';
+	 	 				proxy_html += '					<div class="badge badge-pill badge-success">S</div>\n';
 	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001502') {
-	 	 				proxy_html += '					<div class="badge badge-pill badge-danger">B</div>\n';
+	 	 				proxy_html += '					<div class="badge badge-pill badge-danger">S</div>\n';
 	 				} else {
 	 	 				proxy_html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}

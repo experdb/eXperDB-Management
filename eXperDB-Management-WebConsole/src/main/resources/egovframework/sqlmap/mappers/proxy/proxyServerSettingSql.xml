@@ -10,7 +10,7 @@
 		* Author : 김민정
 		**/
 		SELECT 
-       			(ROW_NUMBER() OVER(ORDER BY A.DB_SVR_ID, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN DESC, A.LST_MDF_DTM)) AS ROWNUM, 
+       			(ROW_NUMBER() OVER(ORDER BY A.DB_SVR_ID, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN, A.LST_MDF_DTM)) AS ROWNUM, 
        			(ROW_NUMBER() OVER()) AS IDX,
        			A.PRY_SVR_ID,
        			A.IPADR,
@@ -48,7 +48,7 @@
 	        		AND A.PRY_SVR_ID != #{not_pry_svr_id}::numeric
 	        	</if>
 	        </if>
-        ORDER BY A.DB_SVR_ID, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN DESC, A.LST_MDF_DTM
+        ORDER BY A.DB_SVR_ID, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN, A.LST_MDF_DTM
 	</select>
 	<select id="selectProxyServerInfo" parameterType="int" resultType="proxyServerVO">
 		/**

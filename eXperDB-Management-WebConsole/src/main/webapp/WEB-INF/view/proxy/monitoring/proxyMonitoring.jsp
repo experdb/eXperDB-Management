@@ -212,7 +212,7 @@
 	 				} else if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == 'TC001501') {
 	 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
 	 				} else if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == 'TC001502') {
-	 	 				ht	ml += '					<div class="badge badge-pill badge-danger">S</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
 	 				} else {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}
