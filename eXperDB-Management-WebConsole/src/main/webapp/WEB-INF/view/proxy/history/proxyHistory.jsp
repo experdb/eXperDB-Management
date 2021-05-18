@@ -177,7 +177,7 @@
 								html += '&nbsp;<spring:message code="common.success" />';
 								html += "</div>";
 							} else if(data == 'TC001502'){
-								html += "<div class='badge badge-light' style='margin:0px;background-color: transparent !important;font-size: 1rem;'>";
+								html += '<div class="badge badge-light" style="margin:0px;background-color: transparent !important;font-size: 1rem; cursor: pointer;"  onclick="fn_showExeFailLog('+full.pry_svr_id+','+full.pry_act_exe_sn+')" >';
 								html += '<i class="item-icon fa fa-times text-danger icon-sm"></i>';
 								html += '&nbsp;<spring:message code="common.failed" />';
 								html += "</div>";
@@ -185,7 +185,7 @@
 		         			return html;
 	         			}
 		         	}, 
-		    		{data: "rslt_msg", className: "dt-left", defaultContent: ""},
+		    		{data: "rslt_msg", className: "dt-left", defaultContent: "", visible: false},
 		    		{data: "lst_mdfr_id", className: "dt-left", defaultContent: ""},
 		    		{data: "wrk_dtm", className: "dt-left", defaultContent: "", visible: false}, 
 		    		{data: "lst_mdf_dtm", className: "dt-left", defaultContent: "", visible: false},
@@ -542,9 +542,24 @@
 	 			}
 	 		});
 	 }
+	 var temp ;
+	function fn_showExeFailLog(prySvrId, pryActExeSn){
+  		var datas = runStatusHistoryTable.rows().data();
+  		var dataLen = datas.length;
+  		
+  		for(var i=0; i<dataLen; i++){
+  			if(datas[i].pry_svr_id == prySvrId && datas[i].pry_act_exe_sn == pryActExeSn){
+  				$("#wrkLogInfo").html(datas[i].rslt_msg);
+  				$("#ModalLabel","#pop_layer_wrkLog").html("오류 메세지");
+  				$("#pop_layer_wrkLog").modal("show");	
+  			}
+  		}
+  		
+		
+	}
 </script>
 <%@include file="./../popup/proxyConfigViewPop.jsp"%>
-
+<%@include file="./../../cmmn/wrkLog.jsp"%>
 <%-- <form name="excelForm" method="post">
 	<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
 	<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
@@ -569,7 +584,7 @@
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="mdi mdi-format-list-bulleted menu-icon"></i>
-												<span class="menu-title">기동 상태 변경 이력 관리</span>
+												<span class="menu-title">Proxy 이력 관리</span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -577,8 +592,8 @@
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Proxy</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.history_management" /></li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">변경 이력 및 실시간 상태 로그</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Proxy 관리</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">Proxy 이력 관리</li>
 										</ol>
 									</div>
 								</div>
