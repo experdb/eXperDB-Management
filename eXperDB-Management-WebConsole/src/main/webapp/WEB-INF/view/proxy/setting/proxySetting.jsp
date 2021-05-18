@@ -275,7 +275,7 @@
 							if (full.master_gbn == "M") {
 								html += "<div class='badge badge-pill badge-mb'>Master</div>";
 							} else {
-								html += "<div class='badge badge-pill badge-mb-reverse'>Backup</div>";
+								html += "<div class='badge badge-pill badge-mb-reverse'>Standby</div>";
 							}
 							return html;
 						},
@@ -785,7 +785,7 @@
 					var tempDatas = proxyServerTable.rows().data();
 					var selTempData = proxyServerTable.row('.selected').data();
 					
-					if(selTempData.master_gbn=="B"){
+					if(selTempData.master_gbn=="S"){
 						//벡업일때 리스트의 값을 체크
 						for(var i=0; i<tempDatas.length; i++){
 							if(tempDatas[i].pry_svr_id == selTempData.master_svr_id){
@@ -1409,7 +1409,7 @@
 				$("#instReg_priority", "#insVipInstForm").val("109"); //priority
 				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - 109); //priority select 
 			}else{
-				$("#instReg_state_nm", "#insVipInstForm").val("BACKUP"); //State
+				$("#instReg_state_nm", "#insVipInstForm").val("STANDBY"); //State
 				$("#instReg_priority", "#insVipInstForm").val(109-vipDataLen); //priority
 				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - (109-vipDataLen)); //priority select 
 			}

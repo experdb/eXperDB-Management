@@ -85,7 +85,7 @@ var mgmtDbmsTable = null;
 					},
 					svrReg_master_svr_id:{
 						required: function(){
-							if($("#svrReg_master_gbn", "#svrRegProxyServerForm").val() == "B"){
+							if($("#svrReg_master_gbn", "#svrRegProxyServerForm").val() == "S"){
 								return true;
 							}else{
 								return false;
@@ -146,7 +146,7 @@ var mgmtDbmsTable = null;
 		
 		$("#svrReg_master_svr_id-error", "#svrRegProxyServerForm").hide();
 		
-		if($("#svrReg_master_gbn", "#svrRegProxyServerForm").val() == "B"){
+		if($("#svrReg_master_gbn", "#svrRegProxyServerForm").val() == "S"){
 			$("#svrReg_master_svr_id_label", "#svrRegProxyServerForm").show();
 			$("#svrReg_master_svr_id", "#svrRegProxyServerForm").show();
 
@@ -596,7 +596,7 @@ var mgmtDbmsTable = null;
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100px;" name="svrReg_master_gbn" id="svrReg_master_gbn" onchange="fn_changeMasterGbn();">
 											<option value="M" selected="selected">Master</option>
-											<option value="B">Backup</option>
+											<option value="S">Standby</option>
 										</select>
 									</div>
 									<!-- <div class="col-sm-1"></div> -->

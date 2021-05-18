@@ -205,14 +205,14 @@
 	 				html += '					(' + result.proxyServerTotInfo[i].ipadr + ')</h6>\n';
 	 			}
 
-				if (master_gbn == "B") {
+				if (master_gbn == "S") {
 	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
 					if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == '') {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				} else if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == 'TC001501') {
-	 	 				html += '					<div class="badge badge-pill badge-success">B</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
 	 				} else if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == 'TC001502') {
-	 	 				html += '					<div class="badge badge-pill badge-danger">B</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
 	 				} else {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}
@@ -371,15 +371,15 @@
 	 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>\n';
 	 			}
 
-				if (master_gbn == "B") {
+				if (master_gbn == "S") {
 	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
 					
 	 				if (nvlPrmSet("${serverinfo.exe_status}", '') == '') {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001501') {
-	 	 				html += '					<div class="badge badge-pill badge-success">B</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
 	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001502') {
-	 	 				html += '					<div class="badge badge-pill badge-danger">B</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
 	 				} else {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}

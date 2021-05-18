@@ -458,7 +458,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			prySvrVO.setUse_yn(param.get("use_yn").toString());
 			prySvrVO.setMaster_gbn(param.get("master_gbn").toString());
 
-			if("B".equals(master_gbn)){
+			if("S".equals(master_gbn)){
 				int	master_svr_id = Integer.parseInt(param.get("master_svr_id") != null && !"".equals((String)param.get("master_svr_id"))  ? param.get("master_svr_id").toString() : "0");
 				prySvrVO.setMaster_svr_id(master_svr_id);
 			}

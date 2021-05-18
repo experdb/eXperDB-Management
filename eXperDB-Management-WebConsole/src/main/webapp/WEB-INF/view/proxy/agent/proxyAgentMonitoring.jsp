@@ -82,10 +82,10 @@
  									html += "	<i class='fa fa-database mr-2'></i>";
  									html += "master";
  									html += "</div>";
- 								} else if(full.master_gbn == "B"){
+ 								} else if(full.master_gbn == "S"){
  									html += "<div class='badge badge-pill badge-outline-warning'>";
  									html += "	<i class='fa fa-database mr-2'></i>";
- 									html += "backup";
+ 									html += "standby";
  									html += "</div>";
  								}
 

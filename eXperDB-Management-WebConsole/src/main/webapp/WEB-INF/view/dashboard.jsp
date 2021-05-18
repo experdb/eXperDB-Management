@@ -255,7 +255,7 @@
 	 				proxy_html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>\n';
 	 			}
 
-				if (proxy_master_gbn == "B") {
+				if (proxy_master_gbn == "S") {
 	 				proxy_html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
 					
 	 				if (nvlPrmSet("${serverinfo.exe_status}", '') == '') {

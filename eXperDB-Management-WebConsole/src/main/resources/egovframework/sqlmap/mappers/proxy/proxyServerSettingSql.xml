@@ -352,11 +352,11 @@
 			, 'TC001502'::character varying
 			, 'TC001502'::character varying
 			, #{master_gbn}
-           <if test='master_gbn != null and (master_gbn eq "B".toString())'>
+           <if test='master_gbn != null and (master_gbn eq "S".toString())'>
             , #{master_svr_id}::numeric
-            , 'B'
+            , 'S'
            </if>
-           <if test='master_gbn != null and (master_gbn eq "M".toString())'>
+           <if test='master_gbn != null and (master_gbn eq "S".toString())'>
              , null
              , 'M'
            </if>
@@ -381,7 +381,7 @@
              , MIN_DATA_DEL_TERM = #{min_data_del_term}::numeric
              , DB_SVR_ID = #{db_svr_id}::numeric
              , MASTER_GBN = #{master_gbn}
-             <if test='master_gbn != null and (master_gbn eq "B".toString())'>
+             <if test='master_gbn != null and (master_gbn eq "S".toString())'>
              , MASTER_SVR_ID = #{master_svr_id}
              </if>
              <if test='master_gbn != null and (master_gbn eq "M".toString())'>
