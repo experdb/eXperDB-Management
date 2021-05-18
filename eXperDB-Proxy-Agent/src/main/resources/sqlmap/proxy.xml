@@ -151,7 +151,7 @@
 			 MASTER_SVR_ID = (SELECT PRY_SVR_ID FROM T_PRY_SVR_I WHERE IPADR=#{back_peer_id})
 		WHERE
 			PRY_SVR_NM = #{pry_svr_nm} || '%'
-		  AND MASTER_GBN = 'B'
+		  AND MASTER_GBN = 'S'
     </update>
     
 	<insert id="insertPryGlbInfo"  parameterType="hashmap">
@@ -690,7 +690,7 @@
 			, LST_MDF_DTM = clock_timestamp()
 		WHERE
 			PRY_SVR_ID  != #{pry_svr_id}::numeric
-		  AND MASTER_GBN = 'B'
+		  AND MASTER_GBN = 'S'
 		  AND DB_SVR_ID = #{db_svr_id}::numeric;
 		</if>
 		

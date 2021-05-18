@@ -543,7 +543,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			         			if (proxyServerInfo.getMaster_exe_cnt() <= 0) {
 			         				prySvrChk.setOld_master_gbn("M");
 			         			} else {
-				         			prySvrChk.setOld_master_gbn("B");
+			         				prySvrChk.setOld_master_gbn("S");
 			         			}
 			         			
 			         			prySvrChk.setOld_master_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
@@ -586,7 +586,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 						prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
 						prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 						
-						prySvrChk.setOld_master_gbn("B");
+						prySvrChk.setOld_master_gbn("S");
 						prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 						
 						prySvrChk.setSel_query_gbn("g_master_up");
@@ -595,7 +595,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 							prySvrChk.setMaster_gbn(proxyServerInfo.getOld_master_gbn());
 							prySvrChk.setMaster_svr_id_chk(null);
 							
-							prySvrChk.setOld_master_gbn("B");
+							prySvrChk.setOld_master_gbn("S");
 							prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 							
 							prySvrChk.setSel_query_gbn("g_master_up");
@@ -605,7 +605,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 								prySvrChk.setMaster_gbn("M");
 								prySvrChk.setMaster_svr_id_chk(null);
 								
-								prySvrChk.setOld_master_gbn("B");
+								prySvrChk.setOld_master_gbn("S");
 								prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 								
 								prySvrChk.setSel_query_gbn("g_master_up");

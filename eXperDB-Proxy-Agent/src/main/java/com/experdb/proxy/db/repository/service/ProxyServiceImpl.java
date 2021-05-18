@@ -737,12 +737,12 @@ public class ProxyServiceImpl implements ProxyService{
 	
 			if (proxyServerInfo != null) {
 				if ("M".equals(proxyServerInfo.getMaster_gbn())) { //peer 마스터 이면 백업
-					stateGbn = "B";
-				} else if ("B".equals(proxyServerInfo.getMaster_gbn())) { //백업일때 해당 IP의 마스터 ID가 본인과 같으면 마스터 아니면 백업
+					stateGbn = "S";
+				} else if ("S".equals(proxyServerInfo.getMaster_gbn())) { //백업일때 해당 IP의 마스터 ID가 본인과 같으면 마스터 아니면 백업
 					if (strObjIp.equals(proxyServerInfo.getMaster_svr_nm())) {
 						stateGbn = "M";
 					} else {
-						stateGbn = "B";
+						stateGbn = "S";
 					}
 				}
 			} else {
@@ -751,7 +751,7 @@ public class ProxyServiceImpl implements ProxyService{
 			
 			socketLogger.info("keepalived_set.stateGbn.stateGbn" + stateGbn);
 
-			if ("B".equals(stateGbn)) {
+			if ("S".equals(stateGbn)) {
 				jsonObj.put("peer_id", strPeerId);
 				
 				jsonObj.put("back_peer_id", ""); //backup master_ip 체크
@@ -1370,7 +1370,7 @@ public class ProxyServiceImpl implements ProxyService{
 			         			if (proxyServerInfo.getMaster_exe_cnt() <= 0) {
 			         				prySvrChk.setOld_master_gbn("M");
 			         			} else {
-				         			prySvrChk.setOld_master_gbn("B");
+				         			prySvrChk.setOld_master_gbn("S");
 			         			}
 			         			
 			         			prySvrChk.setOld_master_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
@@ -1414,7 +1414,7 @@ public class ProxyServiceImpl implements ProxyService{
 						prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
 						prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 						
-						prySvrChk.setOld_master_gbn("B");
+						prySvrChk.setOld_master_gbn("S");
 						prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 						
 						prySvrChk.setSel_query_gbn("g_master_up");
@@ -1423,7 +1423,7 @@ public class ProxyServiceImpl implements ProxyService{
 							prySvrChk.setMaster_gbn(proxyServerInfo.getOld_master_gbn());
 							prySvrChk.setMaster_svr_id_chk(null);
 							
-							prySvrChk.setOld_master_gbn("B");
+							prySvrChk.setOld_master_gbn("S");
 							prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 							
 							prySvrChk.setSel_query_gbn("g_master_up");
@@ -1433,7 +1433,7 @@ public class ProxyServiceImpl implements ProxyService{
 								prySvrChk.setMaster_gbn("M");
 								prySvrChk.setMaster_svr_id_chk(null);
 								
-								prySvrChk.setOld_master_gbn("B");
+								prySvrChk.setOld_master_gbn("S");
 								prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 								
 								prySvrChk.setSel_query_gbn("g_master_up");
