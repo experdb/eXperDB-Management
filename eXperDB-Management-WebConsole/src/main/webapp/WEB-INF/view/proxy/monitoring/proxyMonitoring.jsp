@@ -667,7 +667,7 @@
  			var vip_btn_html = "";
 			vip_btn_html += '<br/>&nbsp;';
 //  			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-comment-alert-outline text-warning" style="font-size: 2em;"></i>&nbsp;가상 ip를 사용하지 않습니다. </h6>';
- 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;가상 ip를 사용하지 않습니다. </h6>';
+ 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
 //  			for(var k = 0; k < 2; k++) {
  				$("#vip_proxy_nm0").html(vip_btn_html);
  				$("#keepVipDiv0").attr('style', "width:80%;height:220px;")
@@ -1028,7 +1028,7 @@
 // 								html_db += '		</a>)';
 							} else {
 								if(result.dbServerConProxyList[k].cnt_svr_id > 1){
-									html_db += '	외 ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + '건</a>)';
+									html_db += '	<spring:message code="eXperDB_proxy.and"/> ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + '<spring:message code="eXperDB_proxy.others"/></a>)';
 								} else {
 									html_db += '	</a>)';
 								}
@@ -1062,7 +1062,7 @@
 							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
 						} else {
 							if(result.dbServerConProxyList[k].cnt_svr_id > 1){
-								html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">대표 IP : ' + result.dbServerConProxyList[k].ipadr + '</h6>';
+								html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;"><spring:message code="eXperDB_proxy.representative_ip"/> : ' + result.dbServerConProxyList[k].ipadr + '</h6>';
 							} else {
 								html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
 							}
@@ -1889,9 +1889,9 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 				}
