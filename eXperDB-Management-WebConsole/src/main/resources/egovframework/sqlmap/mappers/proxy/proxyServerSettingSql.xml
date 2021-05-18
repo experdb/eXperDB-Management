@@ -356,7 +356,7 @@
             , #{master_svr_id}::numeric
             , 'S'
            </if>
-           <if test='master_gbn != null and (master_gbn eq "S".toString())'>
+           <if test='master_gbn != null and (master_gbn eq "M".toString())'>
              , null
              , 'M'
            </if>

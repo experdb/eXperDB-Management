@@ -235,7 +235,7 @@
 		//Master 지정
 		for(var i=0; i<dataLen; i++){
 			if(maxPriority == vipInstTable.row(i).data().priority) vipInstTable.row(i).data().state_nm = "MASTER";
-			else vipInstTable.row(i).data().state_nm = "STANDBY";
+			else vipInstTable.row(i).data().state_nm = "BACKUP";
 		}
 		
 		var tempTableDatas = vipInstTable.rows().data();
@@ -378,7 +378,7 @@
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_state_nm" id="instReg_state_nm"  tabindex=4 >
 											<option value="MASTER"><spring:message code="eXperDB_proxy.master" /></option>
-											<option value="STANDBY"><spring:message code="eXperDB_proxy.backup" /></option>
+											<option value="BACKUP"><spring:message code="eXperDB_proxy.backup" /></option>
 										</select>
 									</div>
 									<label for="instReg_priority" class="col-sm-3 col-form-label-sm pop-label-index">

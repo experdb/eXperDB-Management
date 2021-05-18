@@ -1409,7 +1409,7 @@
 				$("#instReg_priority", "#insVipInstForm").val("109"); //priority
 				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - 109); //priority select 
 			}else{
-				$("#instReg_state_nm", "#insVipInstForm").val("STANDBY"); //State
+				$("#instReg_state_nm", "#insVipInstForm").val("BACKUP"); //State
 				$("#instReg_priority", "#insVipInstForm").val(109-vipDataLen); //priority
 				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - (109-vipDataLen)); //priority select 
 			}
