@@ -174,7 +174,7 @@
 					html += '				</div>\n';
 					html += '			</div>\n';
 					html += '			<div class="col-sm-3" style="margin:auto;">\n';
-					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iProxy' + pry_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
+					html += '				<i class="mdi mdi-server icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iProxy' + pry_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
 					html += '			</div>\n';
 					html += "		</div>\n";
 					html += "		</div>\n";
@@ -212,7 +212,7 @@
 	 				} else if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == 'TC001501') {
 	 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
 	 				} else if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == 'TC001502') {
-	 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
+	 	 				ht	ml += '					<div class="badge badge-pill badge-danger">S</div>\n';
 	 				} else {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}
@@ -225,7 +225,7 @@
 					html += '				</div>\n';
 					html += '			</div>\n';
 					html += '			<div class="col-sm-3" style="margin:auto;">\n';
-					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+					html += '				<i class="mdi mdi-server icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
 					html += '			</div>\n';
 					html += "		</div>\n";
 					html += "		</div>\n";
@@ -340,7 +340,7 @@
 					html += '				</div>\n';
 					html += '			</div>\n';
 					html += '			<div class="col-sm-3" style="margin:auto;">\n';
-					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iProxy' + pry_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
+					html += '				<i class="mdi mdi-server icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iProxy' + pry_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
 					html += '			</div>\n';
 					html += "		</div>\n";
 					html += "		</div>\n";
@@ -392,7 +392,7 @@
 					html += '				</div>\n';
 					html += '			</div>\n';
 					html += '			<div class="col-sm-3" style="margin:auto;">\n';
-					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+					html += '				<i class="mdi mdi-server icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
 					html += '			</div>\n';
 					html += "		</div>\n";
 					html += "		</div>\n";
@@ -1149,7 +1149,7 @@
 				proxyStatTable.rows({selected: true}).deselect();
 				proxyStatTable.clear().draw();
 				if (nvlPrmSet(result.proxyStatisticsInfo, '') != '') {
-					for(var i = 0; i < result.proxyStatisticsInfo.length; i++){
+					for(var i = 0; i < result.proxyStatisticsInfo.length; i++){	
 						if(result.proxyStatisticsInfo[i].r == 1){
 							if(i != result.proxyStatisticsInfo.length-1 && result.proxyStatisticsInfo[i+1].r == 2){
 								result.proxyStatisticsInfo[i].fail_chk_cnt_cng = result.proxyStatisticsInfo[i].fail_chk_cnt-result.proxyStatisticsInfo[i+1].fail_chk_cnt;

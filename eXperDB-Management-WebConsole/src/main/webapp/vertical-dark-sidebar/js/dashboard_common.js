@@ -2128,11 +2128,11 @@ function fn_proxySvrSsSearch(pry_svr_id, rowChkCnt) {
 		},
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 			}
 		}
 	});
@@ -2428,11 +2428,11 @@ function fn_proxyMonInfo(result){
 		//agent 상태 체크
 		if(result.proxyServerByMasId[j].agt_cndt_cd == 'TC001501'){
 			html_agent = '					<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>\n';
-			html_agent += '					<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>\n';
+//			html_agent += '					<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>\n';
 		} else {
 			html_agent = '					<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>\n';
-			html_agent += '					<h6 class="text-muted"><spring:message code="eXperDB_proxy.agent"/></h6>\n';
 		}
+		html_agent += '					<h6 class="text-muted">Agent</h6>\n';
 		
 		$("#proxyAgentDiv" + j).html(html_agent);
 		
@@ -2735,7 +2735,7 @@ function fn_dbMonInfo(result){
 			
 			$("#dbProxyDiv" + j).html(html_db);
 		}
-		}
+	}
 }
 
 /* ********************************************************
