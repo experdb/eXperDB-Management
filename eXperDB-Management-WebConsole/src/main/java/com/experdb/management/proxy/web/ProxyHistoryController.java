@@ -263,7 +263,7 @@ public class ProxyHistoryController {
 				
 		Map<String, Object> param = new HashMap<String, Object>();
 		JSONObject resultObj = new JSONObject();
-		String confFileStr = "";
+		Map<String, Object> confFileStrMap = new HashMap();
 		try {	
 			param.put("sys_type", request.getParameter("sys_type")==null ? "" : request.getParameter("sys_type").toString());
 			param.put("pry_svr_id", (request.getParameter("pry_svr_id") ==null || "".equals(request.getParameter("pry_svr_id").toString())) ? "" : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
@@ -271,24 +271,35 @@ public class ProxyHistoryController {
 			param.put("pry_cng_sn", (request.getParameter("pry_cng_sn") ==null || "".equals(request.getParameter("pry_cng_sn").toString())) ? 0 : Integer.parseInt(request.getParameter("pry_cng_sn").toString()));
 			
 			try{
-				confFileStr = proxyHistoryService.getProxyConfFileContent(param);
-				resultObj.put("errcd", 0);
-				resultObj.put("errmsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+				confFileStrMap = proxyHistoryService.getProxyConfFileContent(param);
+				System.out.println("test");
+				System.out.println(confFileStrMap.toString());
 			}catch(ConnectException e){
+				e.printStackTrace();
 				resultObj.put("errcd", 1);
 				resultObj.put("errmsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
 			}catch(Exception e){
+				e.printStackTrace();
 				resultObj.put("errcd", 2);
 				resultObj.put("errmsg","Agent 작업 중 오류가 발생하였습니다.");
 			}
 			resultObj.put("pry_svr_id", param.get("pry_svr_id").toString());
 			resultObj.put("pry_svr_nm", param.get("pry_svr_nm").toString());
-			resultObj.put("data", confFileStr);
+			
+			if( confFileStrMap.get("RESULT_CODE") != null &&   "0".equals(confFileStrMap.get("RESULT_CODE").toString())){
+				resultObj.put("backupConf", confFileStrMap.get("BACKUP_CONF").toString());
+				resultObj.put("presentConf",confFileStrMap.get("PRESENT_CONF").toString());
+				resultObj.put("errcd", 0);
+				resultObj.put("errmsg","정상적으로 실행되었습니다.");
+			}else{
+				resultObj.put("errcd", -1);
+				resultObj.put("errmsg","Proxy 설정 파일을 불러오는 중 오류가 발생하였습니다.");
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);
-			resultObj.put("errmsg","Proxy 상세 정보 불러오는 중 오류가 발생하였습니다.");
+			resultObj.put("errmsg","Proxy 설정 파일을 불러오는 중 오류가 발생하였습니다.");
 		}
 		return resultObj;
 	}

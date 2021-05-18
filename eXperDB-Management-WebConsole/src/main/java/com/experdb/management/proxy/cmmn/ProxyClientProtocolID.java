@@ -52,4 +52,6 @@ public class ProxyClientProtocolID {
 	public static final String INTERFACE_LIST = "INTERFACE_LIST"; 
 	public static final String INTERFACE = "INTERFACE"; 
 	
+	public static final String BACKUP_CONF = "BACKUP_CONF";
+	public static final String PRESENT_CONF = "PRESENT_CONF";
 }

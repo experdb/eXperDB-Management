@@ -57,37 +57,40 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	 * Proxy 설정 파일 읽어오기
 	 * 
 	 * @param param
-	 * @return String
+	 * @return Map<String, Object>
 	 * @throws SQLException 
 	 * @throws Exception
 	 */
 	@Override
-	public String getProxyConfFileContent(Map<String, Object> param) throws ConnectException, Exception{
-		String confStr = "";
+	public  Map<String, Object> getProxyConfFileContent(Map<String, Object> param) throws ConnectException, Exception{
+		System.out.println("getProxyConfFileContent");
+		Map<String, Object> result = new HashMap<String, Object>();
 		
 		Map<String, Object> pathInfo =  proxyHistoryDAO.selectProxyConfFilePath(param);
-		
+		System.out.println("pathInfo :: "+pathInfo.toString());
 		JSONObject agentJobj = new JSONObject();
-		String filePath = "";
+		String backupFilePath = "";
+		String presentFilePath = "";
 		if("P".equals(param.get("sys_type").toString())){
-			filePath=pathInfo.get("pry_pth").toString();
+			backupFilePath=pathInfo.get("backup_pry_pth").toString();
+			presentFilePath=pathInfo.get("present_pry_pth").toString();
 		}else{
-			filePath=pathInfo.get("kal_pth").toString();
+			backupFilePath=pathInfo.get("backup_kal_pth").toString();
+			presentFilePath=pathInfo.get("present_kal_pth").toString();
 		}
 		
 		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
-	    Map<String, Object> fileReadResult = new  HashMap<String, Object>();
 	    ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
 	      try{
-	         agentJobj.put("file_path", filePath);
-	         fileReadResult = cic.getConfigBackupFile(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+	         agentJobj.put("backup_file_path", backupFilePath);
+	         agentJobj.put("present_file_path", presentFilePath);
+	         result = cic.getConfigBackupFile(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+	         System.out.println(result.toString());
 	      }catch(ConnectException e){
 	         throw e;
 	      }
 	      
-	      if (fileReadResult != null) {
-	        confStr = fileReadResult.get("RESULT_CODE").toString();
-	      } 
-		return confStr;
+	      return result;
+	      
 	}
 }

@@ -31,9 +31,9 @@ public interface ProxyHistoryService {
 	 * Proxy 설정 파일 읽어오기
 	 * 
 	 * @param param
-	 * @return String
+	 * @return Map<String, Object>
 	 * @throws Exception
 	 */
-	public String getProxyConfFileContent(Map<String, Object> param) throws ConnectException, Exception;
+	public Map<String, Object> getProxyConfFileContent(Map<String, Object> param) throws ConnectException, Exception;
 
 }

@@ -522,27 +522,37 @@
 					}
 				},
 	 			success : function(result) {
+	 				console.log(result);
 	 				if(result.errcd > -1){
 	 					if(result.errcd==0){//정상
 							$('#pop_layer_config_view').modal("show");
-							if (result.data != null) {
-								$("#config", "#configForm").html(result.data);
-							}
+							$("#config", "#configForm").html(result.presentConf);
+							$("#backup_config", "#configForm").html(result.backupConf);
+							
 							if(sysType == "P"){
 								$(".config_title").html(' ' + svrNm + ' Proxy Configuration');
 							} else {
 								$(".config_title").html(' ' + svrNm + ' Vip Configuration');
 							}
+							
+							var tableDatas = settingChgHistoryTable.rows().data();
+							var datasLen = tableDatas.length;
+							
+							for(var i=0; i<datasLen; i++){
+								if(tableDatas[i].pry_svr_id == svrId && tableDatas[i].pry_cng_sn == chgId){
+									$("#backupConfTitle").html('<i class="item-icon fa fa-dot-circle-o"></i> 백업 Config : '+tableDatas[i].lst_dtm_date+' '+tableDatas[i].lst_dtm_hour);
+								}
+							}
 						}else{ //연결실패
-							showSwalIcon(result.errmmg, '<spring:message code="common.close" />', '', 'error');
+							showSwalIcon(result.errmsg, '<spring:message code="common.close" />', '', 'error');
 						}
 	 				}else{
-	 					showSwalIcon(result.errmmg, '<spring:message code="common.close" />', '', 'error');
+	 					showSwalIcon(result.errmsg, '<spring:message code="common.close" />', '', 'error');
 	 				}
 	 			}
 	 		});
 	 }
-	 var temp ;
+	 
 	function fn_showExeFailLog(prySvrId, pryActExeSn){
   		var datas = runStatusHistoryTable.rows().data();
   		var dataLen = datas.length;
@@ -558,7 +568,7 @@
 		
 	}
 </script>
-<%@include file="./../popup/proxyConfigViewPop.jsp"%>
+<%@include file="./../popup/proxyConfigDiffViewPop.jsp"%>
 <%@include file="./../../cmmn/wrkLog.jsp"%>
 <%-- <form name="excelForm" method="post">
 	<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
