@@ -54,6 +54,17 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 				}
 			}
 		}
+		
+		for(int i=0; i<result.size(); i++){
+			if(result.get(i).getMasterGbn().equals("S")){
+				for(int j=0; j<result.size(); j++){
+					if(result.get(j).getMasterGbn().equals("M") && result.get(i).getDbSvrId().equals(result.get(j).getDbSvrId())){
+						result.get(i).setMasterGbn("SS");
+						break;
+					}
+				}
+			}
+		}
 		return result;
 	}
 

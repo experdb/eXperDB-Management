@@ -94,8 +94,10 @@ function fn_init() {
 			render: function(data, type, full, meta){
 				if(data == "M"){
 					data = '<div class="badge badge-pill badge-success" title="" style="margin-right: 30px;"><b>Primary</b></div>'
-				}else if(data == "S"){
+				}else if(data == "SS"){
 					data = '<i class="mdi mdi-subdirectory-arrow-right" style="margin-left: 50px;"><div class="badge badge-pill badge-outline-warning" title="" style="margin-left: 10px"><b>Standby</b></div>'
+				}else if(data == "S"){
+					data = '<div class="badge badge-pill badge-outline-warning" title="" style="margin-right: 30px"><b>Standby</b></div>'
 				}
 				return data;
 			}},
