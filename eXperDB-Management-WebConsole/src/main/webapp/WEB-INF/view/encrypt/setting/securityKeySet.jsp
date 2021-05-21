@@ -266,14 +266,15 @@
 	}
 
 	function fn_newMasterKey(useYN,chk,initKey){
+		
 		var formData = new FormData(); 
 
 		formData.append("useYN", useYN);
 		formData.append("chk", chk);
 
 		formData.append("keyFile", $("input[name=keyFile]")[0].files[0])
-		formData.append("mstKeyPassword", $("input[name=mstKeyPassword]").val()); 
-		formData.append("mstKeyRenewPassword", $("input[name=mstKeyRenewPassword]").val()); 
+		formData.append("mstKeyPassword", $("input[name=mstKeyRenewPassword]").val()); 
+		formData.append("mstKeyRenewPassword", $("input[name=mstKeyRenewPasswordconfirm]").val()); 
 		formData.append("initKey", initKey); 
 
 		$.ajax({
@@ -376,7 +377,7 @@
 						</div>
 					</div>
 
-					<div class="card my-sm-2" >
+					<div class="card my-sm-2"  id="pnlOldPassword">
 						<div class="card-body" >
 							<div class="row">
 								<div class="col-12">
@@ -487,6 +488,11 @@
 						 	</div>
 						</div>
 					</div>
+					
+					<form name="keyDownload" method="post" target="mskKeyForm" action="/keyDownload.do">
+						<input type="hidden" name="mstKey"  id="mstKey" >
+					</form>
+			
 				</div>
 			</div>
 		</div>
