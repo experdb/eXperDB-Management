@@ -620,7 +620,7 @@ public class ProxySettingController {
 				
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-				System.out.println("===ipadr====" + request.getParameter("ipadr"));
+
 				paramMap.put("pry_svr_nm", request.getParameter("pry_svr_nm")==null ? "" : request.getParameter("pry_svr_nm").toString());
 				paramMap.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
 				paramMap.put("not_pry_svr_id", request.getParameter("pry_svr_id")==null ? "" : request.getParameter("pry_svr_id").toString());

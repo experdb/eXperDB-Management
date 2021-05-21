@@ -447,10 +447,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			String master_gbn = param.get("master_gbn").toString();
 			String kal_install_yn = param.get("kal_install_yn").toString();
 
-			pryAgtVO.setAgt_sn(agt_sn);
-			pryAgtVO.setIpadr(ipadr);
-			pryAgtVO.setLst_mdfr_id(lst_mdfr_id);
-			
 			prySvrVO.setPry_svr_id(prySvrId);
 			prySvrVO.setPry_svr_nm(param.get("pry_svr_nm").toString());
 			prySvrVO.setDay_data_del_term(day_data_del_term);
@@ -468,14 +464,19 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			prySvrVO.setFrst_regr_id(lst_mdfr_id);
 			prySvrVO.setIpadr(param.get("ipadr").toString());
 			prySvrVO.setKal_install_yn(kal_install_yn);
-			//agent update
-			proxySettingDAO.updateProxyAgentInfo(pryAgtVO);
 
 			//insert 로직 추가
 			if ("reg".equals(reg_mode)) {
+				Map<String, Object> agentParam = new HashMap<String,Object>();
+				System.out.println("ipadr===" + ipadr);
+				agentParam.put("ipadr", ipadr);
+				
+				ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
+				
 				//global 저장 처리
 				pry_svr_id_sn = proxySettingDAO.selectQ_T_PRY_SVR_I_01();
-				prySvrVO.setPry_svr_id((int)pry_svr_id_sn);
+				prySvrId = (int)pry_svr_id_sn;
+				prySvrVO.setPry_svr_id(prySvrId);
 
 				//proxy server 등록
 				proxySettingDAO.insertProxyServerInfo(prySvrVO);
@@ -490,8 +491,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				proxyGlobalVO.setSvr_con_max_tm("30m");
 				proxyGlobalVO.setChk_tm("5s");
 				proxyGlobalVO.setIf_nm(null);
-				if ("Y".equals(kal_install_yn)) {
-					proxyGlobalVO.setObj_ip(prySvrVO.getIpadr());
+				System.out.println("proxyAgentVO.getKal_install_yn()===" + proxyAgentVO.getKal_install_yn());
+				if ("Y".equals(proxyAgentVO.getKal_install_yn())) {
+					proxyGlobalVO.setObj_ip(ipadr);
 				} else {
 					proxyGlobalVO.setObj_ip(null);
 				}
@@ -504,6 +506,15 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			} else {
 				proxySettingDAO.updateProxyServerInfo(prySvrVO);
 			}
+
+			Map<String, Object> paramEnd = new HashMap<String, Object>();
+			
+			//agent update
+			paramEnd.put("svr_use_yn", "Y");
+			paramEnd.put("lst_mdfr_id", lst_mdfr_id);
+			paramEnd.put("pry_svr_id", prySvrId);
+
+			proxySettingDAO.updateProxyAgentInfoFromProxyId(paramEnd);
 
 			resultObj.put("resultLog", "success");
 			resultObj.put("result",true);
@@ -964,6 +975,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 
 		//Server KAL_INATLL_YN update
 		//N일 경우, Master로 변경 및 Master_svr_id null로 업데이트
+		proxySettingDAO.updateProxyAgentInfo(prySvrVO);
 		proxySettingDAO.updatePrySvrKalInstYn(prySvrVO);
 		
 		//global peer 정보  공백 처리

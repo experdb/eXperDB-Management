@@ -1361,9 +1361,9 @@
 			
 			$("#svrReg_day_data_del_term", "#svrRegProxyServerForm").val("30"); //일별 데이터 보관 기간
 			$("#svrReg_min_data_del_term", "#svrRegProxyServerForm").val("7"); //분별 데이터 보관 기간
-			
+
 			$("#svrReg_master_gbn", "#svrRegProxyServerForm").val("M"); //마스터 구분 
-			
+
 			//서버명 자동 setting
 			fn_dbmsChange_ServerNm();
 		 } else {

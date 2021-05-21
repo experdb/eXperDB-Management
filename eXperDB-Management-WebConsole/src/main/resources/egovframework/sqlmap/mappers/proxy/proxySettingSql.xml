@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="proxyServerSettingSql">
+<mapper namespace="proxySettingSql">
 
 	<select id="selectProxyServerList" resultType="proxyServerVO">
 		/**
@@ -19,7 +19,7 @@
        			A.PRY_PTH,
        			A.KAL_PTH,
        			A.USE_YN,
-       			A.KAL_INSTALL_YN,
+       			B.KAL_INSTALL_YN,
        			A.EXE_STATUS,
        			A.KAL_EXE_STATUS,
        			A.MASTER_GBN,
@@ -31,8 +31,8 @@
        			A.FRST_REG_DTM,
        			A.LST_MDFR_ID,
        			A.LST_MDF_DTM,
-       			case when A.KAL_INSTALL_YN = 'Y' AND A.EXE_STATUS = 'TC001501' AND A.KAL_EXE_STATUS = 'TC001501' THEN 'checked'
-       			     when A.KAL_INSTALL_YN != 'Y' AND A.EXE_STATUS = 'TC001501' THEN 'checked'
+       			case when B.KAL_INSTALL_YN = 'Y' AND A.EXE_STATUS = 'TC001501' AND A.KAL_EXE_STATUS = 'TC001501' THEN 'checked'
+       			     when B.KAL_INSTALL_YN != 'Y' AND A.EXE_STATUS = 'TC001501' THEN 'checked'
        			     ELSE '' END AS STATE_CHK
 		FROM 	T_PRY_SVR_I A INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
 		WHERE   1 = 1
@@ -64,7 +64,7 @@
        			A.PRY_PTH,
        			A.KAL_PTH,
        			A.USE_YN,
-       			A.KAL_INSTALL_YN,
+       			B.KAL_INSTALL_YN,
        			A.EXE_STATUS,
        			A.KAL_EXE_STATUS,
        			A.MASTER_GBN,
@@ -92,7 +92,7 @@
        			A.PRY_SVR_NM,
        			A.PRY_PTH,
        			A.KAL_PTH,
-       			A.KAL_INSTALL_YN,
+       			B.KAL_INSTALL_YN,
        			A.USE_YN,
        			A.EXE_STATUS,
        			A.KAL_EXE_STATUS,
@@ -303,10 +303,14 @@
         * Author : 김민정
         **/
         UPDATE T_PRY_AGT_I
-           SET SVR_USE_YN = #{svr_use_yn}
+           SET KAL_INSTALL_YN = #{kal_install_yn}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
-         WHERE AGT_SN = (SELECT AGT_SN FROM  T_PRY_AGT_I WHERE IPADR = #{ipadr} LIMIT 1)
+         WHERE AGT_SN = (SELECT B.AGT_SN 
+                           FROM T_PRY_SVR_I A
+                                INNER JOIN T_PRY_AGT_I B ON A.IPADR = B.IPADR 
+                          WHERE A.PRY_SVR_ID = #{pry_svr_id}::numeric
+                          LIMIT 1)
 	</update>
 
 	<update id="updateProxyAgentInfoFromProxyId" parameterType="hashMap">
@@ -347,7 +351,6 @@
 			, PRY_SVR_NM
 			, PRY_PTH
 			, KAL_PTH
-			, KAL_INSTALL_YN
 			, USE_YN
 			, EXE_STATUS
 			, KAL_EXE_STATUS
@@ -370,7 +373,6 @@
 			, #{pry_svr_nm}
 			, '/etc/haproxy/haproxy.cfg'
 			, '/etc/keepalived/keepalived.conf'
-			, #{kal_install_yn}::bpchar
 			, #{use_yn}::bpchar
 			, 'TC001502'::character varying
 			, 'TC001502'::character varying
@@ -410,7 +412,6 @@
              <if test='master_gbn != null and (master_gbn eq "M".toString())'>
              , MASTER_SVR_ID = null
              </if>
-             , KAL_INSTALL_YN = #{kal_install_yn}
              , USE_YN = #{use_yn}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
@@ -826,7 +827,8 @@
        			SVR_USE_YN,
        			STRT_DTM,
        			ISTCNF_YN,
-       			AGT_VERSION
+       			AGT_VERSION,
+       			KAL_INSTALL_YN
 		FROM 	T_PRY_AGT_I
 		WHERE 	1 = 1
         <if test='agt_sn != null'>
@@ -847,15 +849,16 @@
         * Author : 김민정
         **/
         UPDATE T_PRY_SVR_I
-           SET  KAL_INSTALL_YN = #{kal_install_yn}
+           SET  
            	 <if test='kal_install_yn != null and (kal_install_yn eq "N".toString())'>
-           	  , MASTER_GBN = 'M'
-              , MASTER_SVR_ID = null
+           	    MASTER_GBN = 'M',
+                MASTER_SVR_ID = null, 
            	 </if>
-             , LST_MDFR_ID = #{lst_mdfr_id}
-             , LST_MDF_DTM = clock_timestamp()
+              LST_MDFR_ID = #{lst_mdfr_id}, 
+              LST_MDF_DTM = clock_timestamp()
          WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
 	</update>
+	
 	<delete id="deletePrySvrStatusList" parameterType="hashMap">
 		/**
 		* Query ID : deletePrySvrStatusList
