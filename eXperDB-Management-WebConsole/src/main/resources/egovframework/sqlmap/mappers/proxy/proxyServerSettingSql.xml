@@ -50,6 +50,7 @@
 	        </if>
         ORDER BY A.DB_SVR_ID, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN, A.LST_MDF_DTM
 	</select>
+
 	<select id="selectProxyServerInfo" parameterType="int" resultType="proxyServerVO">
 		/**
 		* Query ID : selectProxyServerInfo
@@ -78,7 +79,8 @@
 		FROM 	T_PRY_SVR_I A INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
 		WHERE   A.PRY_SVR_ID = #{pry_svr_id}::numeric
 	</select>
-	<select id="selectPoxyAgentSvrList" resultType="hashMap">
+
+	<select id="selectPoxyAgentSvrList" resultType="hashMap" parameterType="hashMap">
 		/**
 		* Query ID : selectProxyAgentList
 		* Description : 미등록된 Agent의 프로시 서버 정보를 갖고 오기 위한 쿼리 서버 정보 없어도 ip만 출력
@@ -116,29 +118,33 @@
 			</if>
 		</if>
 	</select>
-	<select id="selectProxyGlobal" resultType="proxyGlobalVO">
+
+	<select id="selectProxyGlobal" resultType="proxyGlobalVO" parameterType="hashMap">
         /**
 		* Query ID : selectProxyGlobal
 		* Description : proxy global info 
 		* Author : 김민정
 		**/
-		SELECT 	PRY_GLB_ID,
-				PRY_SVR_ID, 
-				MAX_CON_CNT, 
-				CL_CON_MAX_TM, 
-				CON_DEL_TM, 
-				SVR_CON_MAX_TM, 
-				CHK_TM, IF_NM, 
-				OBJ_IP, 
-				PEER_SERVER_IP, 
-				FRST_REGR_ID, 
-				FRST_REG_DTM, 
-				LST_MDFR_ID, 
-				LST_MDF_DTM 
-		FROM 	T_PRY_GLB_I
-		WHERE 	PRY_SVR_ID =#{pry_svr_id}
+		SELECT 	A.PRY_GLB_ID,
+			A.PRY_SVR_ID, 
+			A.MAX_CON_CNT, 
+			A.CL_CON_MAX_TM, 
+			A.CON_DEL_TM, 
+			A.SVR_CON_MAX_TM, 
+			A.CHK_TM, IF_NM, 
+			A.OBJ_IP, 
+			A.PEER_SERVER_IP, 
+			A.FRST_REGR_ID, 
+			A.FRST_REG_DTM, 
+			A.LST_MDFR_ID, 
+			A.LST_MDF_DTM,
+			B.IPADR
+		FROM 	T_PRY_GLB_I A
+			INNER JOIN T_PRY_SVR_I B ON A.PRY_SVR_ID = B.PRY_SVR_ID
+		WHERE 	A.PRY_SVR_ID =#{pry_svr_id}
 	</select>
-	<select id="selectProxyListenerList" resultType="proxyListenerVO">
+	
+	<select id="selectProxyListenerList" resultType="proxyListenerVO" parameterType="hashMap">
         /**
 		* Query ID : selectProxyListenerList
 		* Description : proxy Listener info List
@@ -161,17 +167,24 @@
 				LST_MDF_DTM 
 		FROM 	T_PRY_LSN_I
 		WHERE 	1=1
-		<if test='peer == null'>
-		AND 	PRY_SVR_ID =#{pry_svr_id}
-		</if>
-		<if test='peer != null and (peer eq "Y".toString())'>
-		AND 	PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID 
+		
+		<choose>
+			<when test = "peer != null and (peer eq 'Y'.toString())">
+			AND PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID 
 								FROM 		T_PRY_GLB_I A 
 								INNER JOIN 	T_PRY_GLB_I B 
 								ON 			A.PEER_SERVER_IP = B.OBJ_IP
-	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id})
-		</if>
+											AND (A.PEER_SERVER_IP is not null and A.PEER_SERVER_IP !='' and B.OBJ_IP is not null and B.OBJ_IP !='')
+	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id}
+	      						LIMIT 1
+	      					)
+			</when>
+			<otherwise>
+			AND PRY_SVR_ID =#{pry_svr_id}
+			</otherwise>
+		</choose>
 	</select>
+
 	<select id="selectProxyVipConfList" resultType="proxyVipConfigVO">
         /**
 		* Query ID : selectProxyVipConfList
@@ -192,23 +205,33 @@
 				LST_MDF_DTM 
 		FROM 	T_PRY_VIPCNG_I
 		WHERE 1=1
-		<if test='peer == null'>
-		AND 	PRY_SVR_ID =#{pry_svr_id}
-		</if>
-		<if test='pry_svr_id != null and peer != null and (peer eq "Y".toString())'>
-		AND 	PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID AS PRY_SVR_ID
+		
+		<choose>
+			<when test = 'pry_svr_id != null and peer != null and (peer eq "Y".toString())'>
+			AND PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID AS PRY_SVR_ID
 								FROM 		T_PRY_GLB_I A 
 								INNER JOIN 	T_PRY_GLB_I B 
 								ON 			A.PEER_SERVER_IP = B.OBJ_IP
-	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id})
-		</if>
-		<if test='peer_server_ip != null and peer != null and (peer eq "Y".toString())'>
-		AND 	PRY_SVR_ID = (	SELECT 		PRY_SVR_ID 
+											AND (A.PEER_SERVER_IP is not null and A.PEER_SERVER_IP !='' and B.OBJ_IP is not null and B.OBJ_IP !='')
+	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id}
+	      						LIMIT 1
+	      					)
+			</when>
+			<when test = 'peer_server_ip != null and peer != null and !peer.equals("") and (peer eq "Y".toString())'>
+			AND PRY_SVR_ID = (	SELECT 		PRY_SVR_ID 
 								FROM 		T_PRY_GLB_I  
-								WHERE		OBJ_IP = #{peer_server_ip})
-		</if>
+								WHERE		OBJ_IP = #{peer_server_ip}
+								LIMIT 1
+							)
+			</when>
+			<otherwise>
+			AND PRY_SVR_ID =#{pry_svr_id}
+			</otherwise>
+		</choose>
+
 		ORDER BY PRIORITY DESC
 	</select> 
+
 	<select id="selectDbmsList" resultType="hashMap">
 	 	/**
 		* Query ID : selectDbmsList
@@ -551,6 +574,7 @@
          WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
          AND	PRY_GLB_ID = #{pry_glb_id}::numeric 
 	</update>
+
 	<update id="updatePryVipConf" parameterType="proxyVipConfigVO">
         /**
         * Query ID : updatePryVipConf"

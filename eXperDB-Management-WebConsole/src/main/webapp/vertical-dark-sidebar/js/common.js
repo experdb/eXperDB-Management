@@ -224,6 +224,10 @@ $(window).ready(function(){
 	});	
 });
 
+String.prototype.replaceAll = function(org, dest) {
+    return this.split(org).join(dest);
+}
+
 /* ********************************************************
  * 로그아웃 
  ******************************************************** */
@@ -657,7 +661,7 @@ function fn_scdLayer(scd_id){
  ******************************************************** */
 function fn_strBrReplcae(msg) {
 	if (nvlPrmSet(msg, "") != "") {
-		msg = msg.replace("<br/>", "\n");
+		msg = msg.replaceAll("<br/>","\n");
 	}
 
 	return msg;

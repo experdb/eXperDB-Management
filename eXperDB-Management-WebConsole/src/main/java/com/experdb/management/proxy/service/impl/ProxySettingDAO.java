@@ -340,7 +340,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	public void updateProxyGlobalConf(ProxyGlobalVO globalVO) {
 		update("proxyServerSettingSql.updateProxyGlobalConf", globalVO);	
 	}
-	
+
 	/**
 	 * insert/update vip instance
 	 * 

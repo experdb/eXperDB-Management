@@ -542,7 +542,7 @@ var mgmtDbmsTable = null;
 
 									<div class="col-sm-3">
 										<input type="text" class="form-control form-control-xsm" style="display:none;" maxlength="25" id="svrMod_ipadr" name="svrMod_ipadr" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=2 />
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem;" name="svrReg_ipadr" id="svrReg_ipadr" onchange="fn_changeSvrId();">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem;" name="svrReg_ipadr" id="svrReg_ipadr" onchange="fn_changeSvrId('mod');">
 										</select>
 									</div>
 									<label for="svrReg_pry_svr_nm" class="col-sm-3 col-form-label-sm pop-label-index">

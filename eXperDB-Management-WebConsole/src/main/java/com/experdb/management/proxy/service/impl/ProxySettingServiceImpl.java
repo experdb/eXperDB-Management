@@ -966,12 +966,17 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		//N일 경우, Master로 변경 및 Master_svr_id null로 업데이트
 		proxySettingDAO.updatePrySvrKalInstYn(prySvrVO);
 		
+		//global peer 정보  공백 처리
+		ProxyGlobalVO globalVO = proxySettingDAO.selectProxyGlobal(param);
+		
 		//Delete T_PRY_VIPCNG_I
 		if(kalInstallYn.equals("N"))
 		{
-			//global peer 정보  공백 처리
-			ProxyGlobalVO globalVO = proxySettingDAO.selectProxyGlobal(param);
+
 			globalVO.setPeer_server_ip("");
+			globalVO.setObj_ip("");
+			globalVO.setIf_nm("");
+			
 			proxySettingDAO.updateProxyGlobalConf(globalVO);
 			//vip 설정 정보 삭제 
 			proxySettingDAO.deletePryVipConfList(prySvrId);
@@ -1004,6 +1009,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			}else{
 				keepaExecute = false;
 			}*/
+		} else {
+			globalVO.setIf_nm("");
+			globalVO.setPeer_server_ip("");
+			globalVO.setObj_ip(globalVO.getIpadr());
+			proxySettingDAO.updateProxyGlobalConf(globalVO);
 		}
 
 	}

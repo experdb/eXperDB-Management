@@ -14,7 +14,7 @@
 		$('#pop_confirm_multi_md').modal('hide');
 		
 		//scale : use_start, use_end
-		var fncArry = ["con_start","con_end","target_con_start","target_con_end","ins_menu","use_start","use_end", "click_svr_list"];
+		var fncArry = ["con_start","con_end","target_con_start","target_con_end","ins_menu","use_start","use_end", "click_svr_list", "server_start", "server_stop"];
 		for(var i =0; i<fncArry.length; i++){
 			if(fncArry[i] == $('#con_multi_gbn').val()){
 				fnc_confirmCancelRst ($('#con_multi_gbn').val());

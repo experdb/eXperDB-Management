@@ -22,7 +22,14 @@ public class ProxyGlobalVO {
 	private String frst_reg_dtm; 
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
+	private String ipadr;
 	
+	public String getIpadr() {
+		return ipadr;
+	}
+	public void setIpadr(String ipadr) {
+		this.ipadr = ipadr;
+	}
 	public int getPry_glb_id() {
 		return pry_glb_id;
 	}
