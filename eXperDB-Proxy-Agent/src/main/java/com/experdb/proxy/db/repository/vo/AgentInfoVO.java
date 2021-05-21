@@ -27,9 +27,17 @@ public class AgentInfoVO {
 	private String frst_reg_dtm; 
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
+	private String kal_install_yn;
 	
 	public String TC001501 = "TC001501"; //실행
 	public String TC001502 = "TC001502"; //중지
+
+	public String getKal_install_yn() {
+		return kal_install_yn;
+	}
+	public void setKal_install_yn(String kal_install_yn) {
+		this.kal_install_yn = kal_install_yn;
+	}
 	public int getAgt_sn() {
 		return agt_sn;
 	}

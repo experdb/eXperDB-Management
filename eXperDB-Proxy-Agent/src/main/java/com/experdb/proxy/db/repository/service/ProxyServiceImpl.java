@@ -1065,7 +1065,9 @@ public class ProxyServiceImpl implements ProxyService{
 				//최종 t_pry_agt_i 설정 update
 				if ("success".equals(returnMsg)) {
 					agtVo.setSvr_use_yn("Y");
+					agtVo.setKal_install_yn(insPryVo.getKal_install_yn());
 					agtVo.setIpadr(insPryVo.getIpadr());
+					
 					agtVo.setLst_mdfr_id("system");
 
 					systemDAO.updatePryAgtUseYnLInfo(agtVo);

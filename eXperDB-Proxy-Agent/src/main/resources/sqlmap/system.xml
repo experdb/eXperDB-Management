@@ -167,6 +167,7 @@
 	 	UPDATE T_PRY_AGT_I
 	 	SET 
 	 		SVR_USE_YN = #{svr_use_yn}
+	 		, KAL_INSTALL_YN = #{kal_install_yn}
 			, LST_MDFR_ID = #{lst_mdfr_id}
 			, LST_MDF_DTM = clock_timestamp()
 	 	WHERE

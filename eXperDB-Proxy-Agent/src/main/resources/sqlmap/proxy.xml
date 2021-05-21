@@ -40,8 +40,9 @@
 				A.FRST_REG_DTM,
 				A.LST_MDFR_ID,
 				A.LST_MDF_DTM,
-				A.KAL_INSTALL_YN
+				B.KAL_INSTALL_YN
 			FROM  T_PRY_SVR_I A
+			INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
 			WHERE 1 = 1
 				<if test='ipadr != null'>
 				 AND 	A.IPADR = #{ipadr}
@@ -88,7 +89,6 @@
 			, LST_MDFR_ID
 			, LST_MDF_DTM
 			, OLD_MASTER_GBN
-			, KAL_INSTALL_YN
 		)
 		SELECT
 			#{pry_svr_id}::numeric
@@ -110,7 +110,6 @@
 			, #{lst_mdfr_id}
 			, clock_timestamp()
 			, #{master_gbn}
-			, #{kal_install_yn}
     </insert>
     
     <update id="updatePrySvrInfo"  parameterType="ProxyServerVO">
@@ -135,7 +134,6 @@
 			, MIN_DATA_DEL_TERM = #{min_data_del_term}::numeric
 			, LST_MDFR_ID = #{lst_mdfr_id}
 			, LST_MDF_DTM = clock_timestamp()
-			, KAL_INSTALL_YN = #{kal_install_yn}
 		WHERE
 			IPADR = #{ipadr}
     </update>
