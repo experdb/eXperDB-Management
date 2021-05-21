@@ -308,7 +308,7 @@
              , LST_MDF_DTM = clock_timestamp()
          WHERE AGT_SN = (SELECT B.AGT_SN 
                            FROM T_PRY_SVR_I A
-                                INNER JOIN T_PRY_AGT_I B ON A.IPADR = B.IPADR 
+                                INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN 
                           WHERE A.PRY_SVR_ID = #{pry_svr_id}::numeric
                           LIMIT 1)
 	</update>
