@@ -21,7 +21,14 @@ public class ProxyAgentVO {
 	private int rownum;
 	private String pry_svr_nm;
 	private String master_gbn;
+	private String kal_install_yn;
 
+	public String getKal_install_yn() {
+		return kal_install_yn;
+	}
+	public void setKal_install_yn(String kal_install_yn) {
+		this.kal_install_yn = kal_install_yn;
+	}
 	public String getMaster_gbn() {
 		return master_gbn;
 	}

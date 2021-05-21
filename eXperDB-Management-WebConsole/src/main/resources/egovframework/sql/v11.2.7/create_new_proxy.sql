@@ -13,6 +13,7 @@ CREATE TABLE experdb_management.t_pry_agt_i (
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                              -- 최종_수정자_ID
 	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp(),  -- 최종_수정_일시
+	kal_install_yn bpchar(1) NULL DEFAULT 'N'::bpchar,         -- KEEPALIVED_설치_여부
 	CONSTRAINT pk_t_pry_agt_i PRIMARY KEY (agt_sn, ipadr)
 );
 COMMENT ON TABLE experdb_management.t_pry_agt_i IS 'PROXY AGENT_정보';
@@ -31,6 +32,7 @@ COMMENT ON COLUMN experdb_management.t_pry_agt_i.frst_regr_id IS '최초_등록�
 COMMENT ON COLUMN experdb_management.t_pry_agt_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_pry_agt_i.lst_mdfr_id IS '최종_수정자_ID';
 COMMENT ON COLUMN experdb_management.t_pry_agt_i.lst_mdf_dtm IS '최종_수정_일시';
+COMMENT ON COLUMN experdb_management.t_pry_agt_i.kal_install_yn IS 'KEEPALIVED_설치_여부';
 
 -- Permissions
 ALTER TABLE experdb_management.t_pry_agt_i OWNER TO experdb;
@@ -57,7 +59,6 @@ CREATE TABLE experdb_management.t_pry_svr_i (
 	day_data_del_term numeric(2) NOT NULL DEFAULT 30,          -- 일별_데이터_삭제_기간
 	min_data_del_term numeric(2) NOT NULL DEFAULT 7,           -- 분별_데이터_삭제_기간
 	old_master_gbn varchar(1) NULL,                            -- 마스터_구분
-	kal_install_yn bpchar(1) NULL DEFAULT 'N'::bpchar,         -- KEEPALIVED_설치_여부
 	frst_regr_id varchar(30) NULL,                             -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                              -- 최종_수정자_ID
@@ -85,7 +86,6 @@ COMMENT ON COLUMN experdb_management.t_pry_svr_i.db_svr_id IS 'DB_서버_ID';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.day_data_del_term IS '일별_데이터_삭제_기간';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.min_data_del_term IS '분별_데이터_삭제_기간';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.old_master_gbn IS '구_마스터_구분';
-COMMENT ON COLUMN experdb_management.t_pry_svr_i.kal_install_yn IS 'KEEPALIVED_설치_여부';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_pry_svr_i.lst_mdfr_id IS '최종_수정자_ID';

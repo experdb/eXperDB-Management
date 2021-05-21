@@ -94,6 +94,26 @@
  							className : "dt-center",
  							defaultContent : "" 	
  						},
+ 						{data : "kal_install_yn", 
+ 							render: function (data, type, full){
+ 								var html = "";
+								if (data == "Y") {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-spin fa-spinner mr-2'></i>";
+									html += "<spring:message code='dbms_information.use' />";
+									html += "</div>";
+								} else {
+									html += "<div class='badge badge-pill badge-danger' style='margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-times-circle mr-2'></i>";
+									html += "<spring:message code='dbms_information.unuse' />";
+									html += "</div>";
+								}
+
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "" 	
+ 						},
  						{data : "agt_version", 
  							render: function (data, type, full){
  								var html = "";
@@ -163,8 +183,9 @@
 		proxyAgentTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		proxyAgentTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 		proxyAgentTable.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-		proxyAgentTable.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
+		proxyAgentTable.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 		proxyAgentTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
+		proxyAgentTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
 
 		$(window).trigger('resize');
 	}
@@ -425,9 +446,10 @@
 												<th width="200"><spring:message code="eXperDB_proxy.agent_name" /></th>
 			 									<th width="100"><spring:message code="eXperDB_proxy.agent_ip" /></th>
 												<th width="100"><spring:message code="agent_monitoring.run_date" /> </th>
-												<th width="100"><spring:message code="eXperDB_proxy.server_use" /></th>
+												<th width="100"><spring:message code="eXperDB_proxy.proxy_use" /></th>
 												<th width="180"><spring:message code="eXperDB_proxy.server_name" /></th>
 												<th width="100"><spring:message code="eXperDB_proxy.master_div" /></th>
+												<th width="100"><spring:message code="eXperDB_proxy.vip_use" /></th>
 												<th width="100"><spring:message code="agent_monitoring.agent_version" /></th>
 												<th width="100"><spring:message code="agent_monitoring.agent_status" /></th>
 												<th width="0"></th>

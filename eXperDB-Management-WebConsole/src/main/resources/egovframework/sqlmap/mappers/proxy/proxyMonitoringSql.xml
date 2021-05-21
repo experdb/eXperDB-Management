@@ -97,7 +97,7 @@
        		s.LST_MDFR_ID,
        		s.LST_MDF_DTM,
        		a.AGT_CNDT_CD,
-       		s.kal_install_yn
+       		a.kal_install_yn
 		FROM T_PRY_SVR_I s 
 		JOIN T_PRY_AGT_I a ON s.AGT_SN = a.AGT_SN 
 		<if test="value != null and value != '' ">
@@ -133,7 +133,7 @@
 				S.KAL_EXE_STATUS,
 				S.MASTER_GBN,
 				S.MASTER_SVR_ID,
-				S.KAL_INSTALL_YN,
+				A.KAL_INSTALL_YN,
 				A.AGT_CNDT_CD,
 				CASE WHEN V.V_IP_EXE_STATUS = 'TC001501' THEN V.V_IP
 				     ELSE '' END AS V_IP
@@ -645,6 +645,7 @@
 	             , A.AGT_VERSION
 	             , B.PRY_SVR_NM
 	             , B.MASTER_GBN
+	             , A.KAL_INSTALL_YN
 	          FROM T_PRY_AGT_I A
 	               LEFT JOIN T_PRY_SVR_I B ON A.AGT_SN = B.AGT_SN AND A.IPADR = B.IPADR
 	         WHERE 1 = 1
