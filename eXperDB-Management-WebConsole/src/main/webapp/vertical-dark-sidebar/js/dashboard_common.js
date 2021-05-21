@@ -2271,7 +2271,7 @@ function fn_keepMonInfo(result){
  					if (result.proxyServerByMasId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
 	 					if (result.proxyServerVipList[i].pry_svr_nm != "") {
 	 						var vip_btn_html = "";
-	 						vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
+	 						vip_btn_html += '<i class="item-icon fa fa-check text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
 //	 						if(aut_id == 1){
 //	 							if(result.proxyServerVipList[i].kal_exe_status == "TC001501") {
 //	 								vip_btn_html += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />';
