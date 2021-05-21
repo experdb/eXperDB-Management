@@ -11,6 +11,32 @@
 
 <script src="/vertical-dark-sidebar/js/dashboard_common.js"></script>
 
+<STYLE TYPE="text/css">
+
+.blinking{ 
+ -webkit-animation:blink 5.0s ease-in-out infinite alternate; 
+ -moz-animation:blink 1.0s ease-in-out infinite alternate; 
+ animation:blink 3.0s ease-in-out infinite alternate;
+} 
+
+.txt_line { width:70px; padding:0 5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+@-webkit-keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+} 
+
+@-moz-keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+} 
+
+@keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+}
+</STYLE>
+
 <script type="text/javascript">
 	var today = "";
 	var scale_yn_chk = "";
@@ -196,7 +222,7 @@
 		var pry_svr_id_val = "";
 		
 		var proxyServerTotInfo_cnt = "${fn:length(proxyServerTotInfo)}";
-		proxy_html += '		<p class="card-title" style="padding:15px 0px 10px 30px; margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.server_cluster"/></p>';
+		proxy_html += '		<p class="card-title" style="padding:15px 0px 10px 30px; margin-bottom:0px;"><i class="item-icon fa fa-toggle-right text-info" style="font-size:1.2rem;"></i>&nbsp;<spring:message code="eXperDB_proxy.server_cluster"/></p>';
 		if (proxyServerTotInfo_cnt == 0) {
 			proxy_html += "<div class='col-md-12 grid-margin stretch-card'>\n";
 			proxy_html += "	<div class='card'>\n";
