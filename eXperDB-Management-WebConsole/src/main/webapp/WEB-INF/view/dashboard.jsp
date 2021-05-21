@@ -364,7 +364,7 @@
 						<div class="col-7">
 							<h6 class="mb-0">
 								<i class="ti-calendar menu-icon"></i>
-								<span class="menu-title"><spring:message code="etc.etc44"/></span>
+								<span class="menu-title"><spring:message code="dashboard.integrate_schedule"/></span>
 							</h6>
 						</div>
 						<div class="col-5">
@@ -737,7 +737,7 @@
 															<div class="col-12">
 																<h6 class="mb-0">
 																	<i class="ti-calendar menu-icon"></i>
-																	<span class="menu-title"><spring:message code="dashboard.backup_schedule"/></span>
+																	<span class="menu-title"><spring:message code="dashboard.dump_schedule"/></span>
 																</h6>
 															</div>
 														</div>
@@ -844,7 +844,7 @@
 											</div>
 										</div>
 
-										<div class="row">
+										<%-- <div class="row">
 											<!-- 백업이력 title -->
 											<div class="accordion_main accordion-multi-colored col-12" id="accordion_back_his" role="tablist">
 												<div class="card" style="margin-bottom:0px;">
@@ -868,9 +868,9 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div>  --%>
 
-										<div id="back_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="back_hist_header_div" data-parent="#accordion_back_his">
+										<%-- <div id="back_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="back_hist_header_div" data-parent="#accordion_back_his">
 											<div class="col-md-12 col-xl-12 justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
@@ -900,17 +900,17 @@
 												 <h4 class="card-title"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="backup_management.dumpBck" /></h4>
 										 		<div id="backupDumpHistChart" style="height:250px;"></div>
 											</div>
-										</div>
+										</div> --%>
 
-										<div class="row">
+										<!-- <div class="row">
 											<div class="col-md-12">
 												<div class="card" style="border:none;">
 													&nbsp;
 												</div>
 											</div>
-										</div>
+										</div> -->
 
-										<div class="row">
+										<%-- <div class="row">
 											<div class="accordion_main accordion-multi-colored col-12" id="accordion_script_his" role="tablist">
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="script_hist_header_div">
@@ -933,9 +933,9 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div> --%>
 										
-										<div id="script_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="script_hist_header_div" data-parent="#accordion_script_his">
+										<%-- <div id="script_hist_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="script_hist_header_div" data-parent="#accordion_script_his">
 											<div class="col-md-8 col-xl-8 justify-content-center">
 												<div class="card" style="margin-left:-10px;border:none;">
 													<div class="card-body" style="border:none;">
@@ -963,15 +963,15 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div>  --%>
 
-										<div class="row">
+										<!-- <div class="row">
 											<div class="col-md-12">
 												<div class="card" style="border:none;">
 													&nbsp;
 												</div>
 											</div>
-										</div>
+										</div> -->
 
 										<div class="row">
 											<div class="accordion_main accordion-multi-colored col-12" id="accordion_scale_his" role="tablist">

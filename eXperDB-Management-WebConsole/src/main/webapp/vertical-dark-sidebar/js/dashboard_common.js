@@ -50,14 +50,14 @@ function fn_serverSebuInfo(db_svr_id, rowChkCnt) {
  ******************************************************** */
 function fn_serverDivClear(db_svr_id, rowChkCnt) {
 	//백업정보
-	if ($('#a_back_hist').attr('aria-expanded') == "false") {
+	/*if ($('#a_back_hist').attr('aria-expanded') == "false") {
 		$('#a_back_hist').click();
-	}
+	}*/
 	
 	//배치정보
-	if ($('#a_script_hist').attr('aria-expanded') == "false") {
+	/*if ($('#a_script_hist').attr('aria-expanded') == "false") {
 		$('#a_script_hist').click();
-	}
+	}*/
 
 	if ($('#a_scale_hist').attr('aria-expanded') == "false") {
 		$('#a_scale_hist').click();
@@ -68,11 +68,11 @@ function fn_serverDivClear(db_svr_id, rowChkCnt) {
 	}
 	
 	$("#scheduleHistChart").html("");
-	$("#backupRmanHistChart").html("");	
-	$("#backupDumpHistChart").html("");	
+	/*$("#backupRmanHistChart").html("");	
+	$("#backupDumpHistChart").html("");	*/
 	
-	var scriptHistChartCanvas = document.getElementById("scriptHistChart");
-	scriptHistChartCanvas.getContext("2d").clearRect(0, 0, scriptHistChartCanvas.width, scriptHistChartCanvas.height);
+	/*var scriptHistChartCanvas = document.getElementById("scriptHistChart");
+	scriptHistChartCanvas.getContext("2d").clearRect(0, 0, scriptHistChartCanvas.width, scriptHistChartCanvas.height);*/
 
 	if ($("#scaleHistChart") != null) {
 		$("#scaleHistChart").html("");	
@@ -121,10 +121,10 @@ function fn_main_tab_setting(result) {
 	fn_schedule_History_set(result);
 
 	//백업 이력 목록 setting
-	fn_backup_History_set(result);
+	//fn_backup_History_set(result);
 	
 	//배치 이력 목록 setting
-	fn_script_History_set(result);
+	//fn_script_History_set(result);
 	
 	//데이터 이관 setting
 	if (nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N") == "Y") {
@@ -1011,7 +1011,7 @@ function fn_schedule_History_progres(result) {
 /* ********************************************************
  * 백업 이력 설정
  ******************************************************** */
-function fn_backup_History_set(result) {
+/*function fn_backup_History_set(result) {
 	var backHisHtml = "";
 	
 	///////////////////////////백업 list start ////////////////////////
@@ -1157,11 +1157,11 @@ function fn_backup_History_set(result) {
 			$("#a_back_hist").click()
 		},500);
 }
-
+*/
 /* ********************************************************
  * 배치 이력 설정
  ******************************************************** */
-function fn_script_History_set(result) {
+/*function fn_script_History_set(result) {
 	var scriptHisHtml = "";
 	var chartListCnt = 0;
 
@@ -1270,7 +1270,7 @@ function fn_script_History_set(result) {
 			{
 				$("#a_script_hist").click()
 			},500);
-}
+}*/
 
 /* ********************************************************
  * migration setting
