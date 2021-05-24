@@ -565,7 +565,7 @@
 		var exe_status_css = "";
 		var kal_exe_status_css = "";
 		var strVip = "";
-		var kal_install_yn = "Y";
+		var kal_install_yn = "";
  		console.log(proxyServerByMasId_cnt)
 		//ROW 만들기
 		for(var i = 0; i < proxyServerByMasId_cnt; i++){
@@ -661,6 +661,7 @@
 
 	 				for(var j = 0; j < result.proxyServerByMasId.length; j++) {
 	 					var count = 0;
+	 					kal_install_yn = result.proxyServerByMasId[j].kal_install_yn;
 	 					if (result.proxyServerByMasId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
 							count++;	 						
 		 					if (result.proxyServerVipList[i].pry_svr_nm != "") {
@@ -717,6 +718,7 @@
 //  			$("#keepVipDivLine1").attr('style', "width:80%;padding-left:20px;height:30px;");
  		} else if ( result.proxyServerVipList.length == 0 ){
  			for(var j = 0; j < result.proxyServerByMasId.length; j++) {
+				kal_install_yn = result.proxyServerByMasId[j].kal_install_yn;
  				html_sebu = "";
  				var vip_btn_html = "";
  				vip_btn_html += '<br/>&nbsp;';
@@ -861,11 +863,10 @@
 			$("#proxyAgentDiv" + j).html(html_agent);
 			
 			if (result.proxyServerLsnList.length > 0) {
-			console.log('length : ' + result.proxyServerLsnList.length);
 				var count = 0;
 				for(var k = 0; k < result.proxyServerLsnList.length; k++){
 					if (result.proxyServerByMasId[j].pry_svr_id == result.proxyServerLsnList[k].pry_svr_id) {
-						count ++;
+						count++;
 						//	console.log(result.proxyServerLsnList[k]);
 						//proxy 리스너 셋팅
 						if(nvlPrmSet(result.proxyServerLsnList[k].lsn_exe_status, '') == 'TC001501'){
@@ -923,7 +924,7 @@
 // 								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "").replace(/,\s*/,"").slice(0,1);
 								db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "").replace(/,\s*/,"");
 								if (db_conn_ip_num == '1') {
-									if (k == 0 || k == 2) {
+									if (k == 0 || (k > 0 && result.proxyServerLsnList[k-1].pry_svr_id != result.proxyServerLsnList[k].pry_svr_id)) {
 										//첫번째 오른쪽
 										db_conn_ip_num_af = '<img src="../images/arrow_side.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""/>';
 
@@ -932,7 +933,7 @@
 										db_conn_ip_num_af = '<img src="../images/arrow_up.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""  />';
 									}
 								} else if (db_conn_ip_num == '2') {
-									if (k == 0 || k == 2) {
+									if (k == 0 || (k > 0 && result.proxyServerLsnList[k-1].pry_svr_id != result.proxyServerLsnList[k].pry_svr_id)) {
 										//첫번째 하단
 										db_conn_ip_num_af = '<img src="../images/arrow_down.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""  />';
 									} else {
@@ -941,7 +942,7 @@
 									}
 								} else if(db_conn_ip_num != ''){
 									//첫번째 row 일자, 하단
-									if (k == 0 || k == 2) {
+									if (k == 0 || (k > 0 && result.proxyServerLsnList[k-1].pry_svr_id != result.proxyServerLsnList[k].pry_svr_id)) {
 										db_conn_ip_num_af = '<img src="../images/arrow_side_down.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""  />';
 									} else {
 										//두번째 row 일자, 상단
@@ -1362,10 +1363,10 @@
 							html += '&nbsp;<spring:message code="common.success" />';
 							html += "</div>";
 						} else if(data == 'TC001502'){
-							html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_actExeFailLog(\''+full.pry_act_exe_sn+'\')">';
-							html += '<i class="item-icon fa fa-times icon-sm"></i>';
-							html += '<spring:message code="common.failed" />';
-							html += "</button>";
+							html += '<div class="badge badge-light" style="margin:0px;background-color: transparent !important;font-size: 1rem;">';
+							html += '<i class="item-icon fa fa-times text-danger icon-sm"></i>';
+							html += '&nbsp;<spring:message code="common.failed" />';
+							html += "</div>";
 						}
 						return html;
 					},
@@ -2139,7 +2140,7 @@
 									<div class="carousel-item active" id="v-pills-home_test1">
 									<!-- proxy 데이터 있는 경우 -->	
 										<div class="row" id="reg_pry_title">
-											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_keep_vip" >
 														<div class="row" style="height: 15px;">
@@ -2169,7 +2170,7 @@
 											</div>
  
 											<!-- 프록시 서버 -->
-											<div class="accordion_main accordion-multi-colored col-3_9" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_proxy_server" >
 														<div class="row" style="height: 15px;">
@@ -2235,7 +2236,7 @@
 										<!-- proxy 데이터 있는 경우 -->	
 										<div class="row" id="reg_pry_detail">
 											<!-- vip 출력 -->
-											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
 												<div class="card" style="border:none;" >
 													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
 													</div>
@@ -2249,7 +2250,7 @@
 												</div>
 											</div>
 
-											<div class="accordion_main accordion-multi-colored col-3_9" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
 													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
 													</div>

@@ -1429,7 +1429,7 @@
 											<div class="row">
 										
 												<!-- vip title start -->
-												<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
+												<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
 													<div class="card" style="margin-bottom:0px; border:none;">
 														<div class="card-body" style="padding:10px 0px 0px 0px;">
 															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.vip"/></p>
@@ -1455,7 +1455,7 @@
 												<!-- vip <- -> proxy 할당 title end -->
 												
 												<!-- proxy listener title start -->
-												<div class="accordion_main accordion-multi-colored col-3_9" id="accordion" role="tablist" >
+												<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
 													<div class="card" style="margin-bottom:0px; border:none;">
 														<div class="card-body" style="padding:10px 0px 0px 0px;">
 															<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.con_lsn"/></p>
@@ -1497,7 +1497,7 @@
 											<div class="row">
 										
 												<!-- vip 출력 -->
-												<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
+												<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
 													<div class="card" style="margin-bottom:10px;border:none;" >
 														<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
 														</div>
@@ -1513,7 +1513,7 @@
 												</div>
 												 
 												<!-- 리스너 -->
-												<div class="accordion_main accordion-multi-colored col-3_9" id="accordion" role="tablist" >
+												<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
 													<div class="card" style="margin-bottom:10px;border:none;" >
 														<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
 														</div>
