@@ -44,7 +44,7 @@ var bootCheck = true;
 		
 		$('#volumeList tbody').on( 'click', 'tr', function () {
 			console.log("tbody click!!!");
-			if($(this).hasClass('selected')){
+			if($(this).is('.selected')){
 				$(this).removeClass('selected');
 			}else{
 				$(this).addClass('selected'); 

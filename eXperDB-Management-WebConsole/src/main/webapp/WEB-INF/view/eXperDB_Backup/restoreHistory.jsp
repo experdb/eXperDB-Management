@@ -100,7 +100,7 @@ function fn_init() {
 		searching : false,
 		processing : true,
 		paging : true,
-		lengthChange: false,
+		lengthChange: true,
 		deferRender : true,
 		bSort : false,
 		columns : [
@@ -461,7 +461,7 @@ function fn_searchHistory(){
 			<div class="card">
 				<div class="card-body">
 					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
-						<div class="card-body">
+						<div class="card-body" style="padding-top: 0px;">
 							<div class="row">
 								<div class="col-12">
 									 <form class="cmxform">

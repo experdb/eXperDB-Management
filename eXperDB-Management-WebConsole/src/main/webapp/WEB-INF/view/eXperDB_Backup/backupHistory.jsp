@@ -100,7 +100,7 @@ function fn_init() {
 		searching : false,
 		processing : true,
 		paging : true,
-		lengthChange: false,
+		lengthChange: true,
 		deferRender : true,
 		bSort : false,
 		columns : [
@@ -118,7 +118,7 @@ function fn_init() {
 					}else if(full.status == 2){
 						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 						html += "	<i class='fa fa-ban text-danger' >";
-						html += '&nbsp;취소</i>';
+						html += '&nbsp;<spring:message code="common.cancel" /></i>';
 						html += "</div>";
 					//실패
 					}  else if(full.status == 3){
@@ -462,7 +462,7 @@ function fn_searchHistory(){
 			<div class="card">
 				<div class="card-body">
 					<div class="table-responsive" style="overflow:hidden;min-height:600px;">
-						<div class="card-body">
+						<div class="card-body" style="padding-top: 0px;">
 							<div class="row">
 								<div class="col-12">
 									 <form class="cmxform">
