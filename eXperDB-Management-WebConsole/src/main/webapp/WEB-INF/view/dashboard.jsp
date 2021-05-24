@@ -1367,12 +1367,11 @@
 	</div>
 	
 	<!-- proxy -->
+	<c:if test="${proxy_yn eq 'Y'}">							
 	<div class="row">
 		<div class="col-md-12 grid-margin stretch-card" style="margin-top:-10px;">
 			<div class="card">
 				<div class="card-body">
-					<c:choose>
-						<c:when test="${proxy_yn eq 'Y'}">							
 	              		<!-- proxy title -->
 						<div class="row">
 	                    	<!-- 서버정보 title -->
@@ -1546,51 +1545,47 @@
 						
 							</div>
 						</div>
-						</div>
+						</div>	
 						<!-- 상세내역 end -->
-						</c:when>
-						<c:otherwise>
-						<div class="row">
-							<div class="accordion_main accordion-multi-colored col-12" id="accordion_proxy" role="tablist">
-								<div class="card" style="margin-bottom:0px;">
-									<div class="card-header" role="tab" id="proxy_header_div">
-										<div class="row" style="height: 15px;">
-											<div class="col-12">
-												<h6 class="mb-0">
-													<a data-toggle="collapse" href="#proxy_header_sub" aria-expanded="true" aria-controls="proxy_header_sub" onclick="fn_profileChk('proxy_titleText')">
-														<i class="fa fa-database menu-icon"></i>
-														<span class="menu-title"><spring:message code="menu.proxy"/></span>
-														<i class="menu-arrow_user_af" id="proxy_titleText" ></i>
-													</a>
-												</h6>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div id="proxy_header_sub" class="collapse show" role="tabpanel" aria-labelledby="proxy_header_div" data-parent="#accordion_proxy">
-							<div class="row">
-								<div class="col-md-12 col-xl-12 justify-content-center">
-									<div class="card card-inverse-danger">
-										<div class="card-body">
-											<p class="card-text">
-												<i class="fa fa-times-circle menu-icon"></i>
-												<spring:message code="dashboard.msg09" />
-					                 	   </p>
-					                	 </div>
-					      	      </div>
-								</div>
-							</div>
-						</div>
-						</c:otherwise>
-					</c:choose>
+
+<!-- 							<div class="accordion_main accordion-multi-colored col-12" id="accordion_proxy" role="tablist"> -->
+<!-- 								<div class="card" style="margin-bottom:0px;"> -->
+<!-- 									<div class="card-header" role="tab" id="proxy_header_div"> -->
+<!-- 										<div class="row" style="height: 15px;"> -->
+<!-- 											<div class="col-12"> -->
+<!-- 												<h6 class="mb-0"> -->
+<!-- 													<a data-toggle="collapse" href="#proxy_header_sub" aria-expanded="true" aria-controls="proxy_header_sub" onclick="fn_profileChk('proxy_titleText')"> -->
+<!-- 														<i class="fa fa-database menu-icon"></i> -->
+<%-- 														<span class="menu-title"><spring:message code="menu.proxy"/></span> --%>
+<!-- 														<i class="menu-arrow_user_af" id="proxy_titleText" ></i> -->
+<!-- 													</a> -->
+<!-- 												</h6> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div id="proxy_header_sub" class="collapse show" role="tabpanel" aria-labelledby="proxy_header_div" data-parent="#accordion_proxy"> -->
+<!-- 							<div class="row"> -->
+<!-- 								<div class="col-md-12 col-xl-12 justify-content-center"> -->
+<!-- 									<div class="card card-inverse-danger"> -->
+<!-- 										<div class="card-body"> -->
+<!-- 											<p class="card-text"> -->
+<!-- 												<i class="fa fa-times-circle menu-icon"></i> -->
+<%-- 												<spring:message code="dashboard.msg09" /> --%>
+<!-- 					                 	   </p> -->
+<!-- 					                	 </div> -->
+<!-- 					      	      </div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+
 
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- proxy end -->
-	
+	</c:if>	
 </div>
 <!-- content-wrapper ends -->

@@ -2277,7 +2277,7 @@ function fn_keepMonInfo(result){
  				    }	
  				    
 	 				//line 생성
-	 				html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;"></i>\n';
+	 				html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;" id="vip_line' + i + '"></i>\n';
 	 			//	html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;"></i>\n';
  				}
 
@@ -2309,11 +2309,11 @@ function fn_keepMonInfo(result){
  						html_sebu = "";
  		 				var vip_btn_html = "";
  		 				vip_btn_html += '<br/>&nbsp;';
- 		 				if(kal_install_yn == 'Y') {
-	 		 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>' + proxy_msg28 + '</h6>';
- 		 				} else {
+// 		 				if(kal_install_yn == 'Y') {
+//	 		 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>' + proxy_msg28 + '</h6>';
+// 		 				} else {
  		 		 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;' + proxy_msg39  + '</h6>';
- 		 				}
+// 		 				}
  						$("#vip_proxy_nm" + j).html(vip_btn_html);
 	 					$("#keepVipDiv"+ j).html(html_sebu);
 	 	 				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
@@ -2329,11 +2329,11 @@ function fn_keepMonInfo(result){
  				html_sebu = "";
  				var vip_btn_html = "";
  				vip_btn_html += '<br/>&nbsp;';
-	 			if(kal_install_yn == 'Y') {
- 		 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>' + proxy_msg28 + '</h6>';
-		 		} else {
+//	 			if(kal_install_yn == 'Y') {
+// 		 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>' + proxy_msg28 + '</h6>';
+//		 		} else {
 		 		 	html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;' + proxy_msg39  + '</h6>';
-		 		}
+//		 		}
 				$("#vip_proxy_nm" + j).html(vip_btn_html);
  				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
  				$("#keepVipDiv" + j).html(html_sebu);
