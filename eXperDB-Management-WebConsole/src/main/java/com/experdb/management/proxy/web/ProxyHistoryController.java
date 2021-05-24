@@ -287,7 +287,8 @@ public class ProxyHistoryController {
 			resultObj.put("pry_svr_nm", param.get("pry_svr_nm").toString());
 			
 			if( confFileStrMap.get("RESULT_CODE") != null &&   "0".equals(confFileStrMap.get("RESULT_CODE").toString())){
-				resultObj.put("backupConf", confFileStrMap.get("BACKUP_CONF").toString());
+				if(confFileStrMap.get("BACKUP_CONF") != null) resultObj.put("backupConf", confFileStrMap.get("BACKUP_CONF").toString());
+				else resultObj.put("backupConf", " conf 파일 생성 실패 ");
 				resultObj.put("presentConf",confFileStrMap.get("PRESENT_CONF").toString());
 				resultObj.put("errcd", 0);
 				resultObj.put("errmsg","정상적으로 실행되었습니다.");

@@ -1873,8 +1873,7 @@
     ******************************************************** */
 	function fn_apply_conf_info(){
 		showDangerToast('top-right', '<spring:message code="eXperDB_proxy.msg7"/>', '<spring:message code="eXperDB_proxy.apply_msg_title"/>');
-		fn_btn_setEnable("disabled");
-		
+		fn_btn_setEnable("total","disabled");
 		//data 생성
 		var tempVipInstance = new Array();
 		var tempListener = new Array();
@@ -1924,20 +1923,23 @@
 			},
  			success : function(result) {
  				//작업이 완료 후, 상태 변경 까지 10초의 Term을 줌
+ 				fn_proxy_loadbar("start");
  				setTimeout(function(){
  					if(result.result){
- 	 					fn_btn_setEnable("");
+ 						fn_btn_setEnable("total","");
  	 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'success');
  	 					fn_init_global_value();
  	 					fn_serverList_search();
  	 				}else{
- 	 					fn_btn_setEnable("");
+ 	 					fn_btn_setEnable("total","");
  	 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
  	 					$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", false);
  	 				}
+ 					fn_proxy_loadbar("stop");
 				},6000);
  			}
  		});
+		
 	}
 	
 	/* ********************************************************
