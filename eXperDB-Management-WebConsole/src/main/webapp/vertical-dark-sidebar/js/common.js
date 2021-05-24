@@ -1442,7 +1442,7 @@ function fn_schdule_pop_List (wrk_id) {
 ******************************************************** */
 function fn_proxy_loadbar(gbn){
 	var htmlLoad_proxy = '<div id="loading_proxy"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
-	$("#contentsDiv").append(htmlLoad_proxy);
+	if($("#loading_proxy").length == 0)	$("#contentsDiv").append(htmlLoad_proxy);
 	
 	if (gbn == "start") {
 	      $('#loading_proxy').css('position', 'absolute');
