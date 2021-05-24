@@ -4816,7 +4816,8 @@
 		var select = $('<select/>', {
 			'name':          tableId+'_length',
 			'aria-controls': tableId,
-			'class':         classes.sLengthSelect
+			'class':         classes.sLengthSelect,
+			'style' : "height: 30px;"
 		} );
 	
 		for ( var i=0, ien=lengths.length ; i<ien ; i++ ) {
@@ -4828,7 +4829,7 @@
 			);
 		}
 	
-		var div = $('<div><label/></div>').addClass( classes.sLength );
+		var div = $('<div style="float:right;"><label/></div>').addClass( classes.sLength );
 		if ( ! settings.aanFeatures.l ) {
 			div[0].id = tableId+'_length';
 		}
@@ -10190,7 +10191,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"aLengthMenu": [ 10, 25, 50, 100 ],
+		"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 	
 	
 		/**
@@ -11627,7 +11628,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLengthMenu": "Show _MENU_ entries",
+			"sLengthMenu": " _MENU_ ",
 	
 	
 			/**
@@ -11884,7 +11885,6 @@
 		 *      } );
 		 *    } );
 		 */
-		"sDom": "lfrtip",
 	
 	
 		/**
@@ -13454,7 +13454,7 @@
 		 *  @type string
 		 *  @default null
 		 */
-		"sDom": null,
+		"sDom":" lfrtip",
 	
 		/**
 		 * Search delay (in mS)
