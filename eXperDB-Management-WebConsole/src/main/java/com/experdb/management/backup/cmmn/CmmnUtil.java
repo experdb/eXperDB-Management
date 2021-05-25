@@ -535,6 +535,27 @@ public class CmmnUtil {
 			}	
 			
 			
+			@SuppressWarnings("unused")
+			public static JSONObject jobCancel(String jobName) {
+				JSONObject result = new JSONObject();		
+				CmmnUtil cmmUtil = new CmmnUtil();
+				
+				String path = "/opt/Arcserve/d2dserver/bin";
+				String cmd =null;
+				
+				try {
+					cmd = "cd " + path + ";"+ "./d2djob --cancel="+jobName+" --wait";
+					System.out.println(cmd);
+					result = cmmUtil.execute(cmd,"job");			
+			
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return result;
+				
+			}
+			
+			
 			
 			public static void main(String[] args) {
 				TargetMachineVO targetMachine = new TargetMachineVO();
