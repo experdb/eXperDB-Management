@@ -128,9 +128,8 @@
 <!-- 			<div class="modal-body" style="margin-bottom:-30px;"> -->
 					<div class="modal-content" style="width:600px;height:260px;">
 			
-				<h4 class="modal-title mdi mdi-alert-circle text-info config_title" id="ModalLabel" style="height:50px;padding:15px;">
-<!-- 					Proxy Configuration -->
-					DB Standby IP 목록
+				<h4 class="modal-title mdi mdi-alert-circle text-info db_standby_title" id="ModalLabel" style="height:50px;padding:15px;">
+					<spring:message code="eXperDB_proxy.db_standby_list"/>
 				</h4>
 
 				<div class="card" style="margin-top:10px;border:0px;">
