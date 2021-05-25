@@ -30,7 +30,12 @@
 	 * 초기 실행
 	 ******************************************************** */
 	$(window.document).ready(function() {	
+		fn_runNowReset();
 	});
+	
+	function fn_runNowReset(){
+		$("input:radio[name='backupType']:radio[value='1']").prop('checked', true);
+	}
 	
 	function fn_cancel() {
 		$("#pop_runNow").modal("hide");

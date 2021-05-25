@@ -1218,7 +1218,7 @@
 	 					////////////////////////////////////////////////////////////////////
 	 					tempUnregSvrList = result.agentSvrList;
 	 					var unregSvrHtml ="";
-	 					
+	 					$( "#svrReg_ipadr > option", "#svrRegProxyServerForm" ).remove();
 	 					if (tempUnregSvrList.length > 0) {
 	 						for(var i=0; i<tempUnregSvrList.length; i++){
 	 							var id = tempUnregSvrList[i].pry_svr_id;
@@ -2122,6 +2122,7 @@
 							</div>
 						</div>
 					</div>
+					<br>
 					<table id="proxyServer" class="table table-hover table-striped" style="width:100%;">
 						<thead>
 							<tr class="bg-info text-white">
