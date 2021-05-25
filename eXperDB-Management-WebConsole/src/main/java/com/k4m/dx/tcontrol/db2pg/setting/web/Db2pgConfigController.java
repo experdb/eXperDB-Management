@@ -33,7 +33,7 @@ public class Db2pgConfigController {
 				fileContent = fileContent.replaceAll("SRC_DDL_EXPORT=FALSE", "SRC_DDL_EXPORT=TRUE");
 				fileContent = fileContent.replaceAll("SRC_HOST=", "SRC_HOST="+configObj.get("src_host").toString());
 				fileContent = fileContent.replaceAll("SRC_USER=", "SRC_USER="+configObj.get("src_user").toString());
-				fileContent = fileContent.replaceAll("SRC_PASSWORD=", "SRC_PASSWORD="+configObj.get("src_password").toString());
+				fileContent = fileContent.replaceAll("SRC_PASSWORD=", "SRC_PASSWORD="+java.util.regex.Matcher.quoteReplacement(configObj.get("src_password").toString()));
 				fileContent = fileContent.replaceAll("SRC_DATABASE=", "SRC_DATABASE="+configObj.get("src_database").toString());
 				fileContent = fileContent.replaceAll("SRC_SCHEMA=", "SRC_SCHEMA="+configObj.get("src_schema").toString());
 				fileContent = fileContent.replaceAll("SRC_DB_TYPE=ORA", "SRC_DB_TYPE="+configObj.get("src_dbms_type").toString());
@@ -85,7 +85,7 @@ public class Db2pgConfigController {
 				fileContent = fileContent.replaceAll("SRC_INCLUDE_DATA_EXPORT=FALSE", "SRC_INCLUDE_DATA_EXPORT=TRUE");
 				fileContent = fileContent.replaceAll("SRC_HOST=", "SRC_HOST="+configObj.get("src_host").toString());
 				fileContent = fileContent.replaceAll("SRC_USER=", "SRC_USER="+configObj.get("src_user").toString());
-				fileContent = fileContent.replaceAll("SRC_PASSWORD=", "SRC_PASSWORD="+configObj.get("src_password").toString());
+				fileContent = fileContent.replaceAll("SRC_PASSWORD=", "SRC_PASSWORD="+java.util.regex.Matcher.quoteReplacement(configObj.get("src_password").toString()));
 				fileContent = fileContent.replaceAll("SRC_DATABASE=", "SRC_DATABASE="+configObj.get("src_database").toString());
 				fileContent = fileContent.replaceAll("SRC_SCHEMA=", "SRC_SCHEMA="+configObj.get("src_schema").toString());
 				fileContent = fileContent.replaceAll("SRC_DB_TYPE=ORA", "SRC_DB_TYPE="+configObj.get("src_dbms_type").toString());
@@ -110,7 +110,7 @@ public class Db2pgConfigController {
 				fileContent = fileContent.replaceAll("#SRC_ROWS_EXPORT=", "SRC_ROWS_EXPORT="+configObj.get("src_rows_export").toString());
 				fileContent = fileContent.replaceAll("TAR_HOST=", "TAR_HOST="+configObj.get("tar_host").toString());
 				fileContent = fileContent.replaceAll("TAR_USER=", "TAR_USER="+configObj.get("tar_user").toString());
-				fileContent = fileContent.replaceAll("TAR_PASSWORD=", "TAR_PASSWORD="+configObj.get("tar_password").toString());
+				fileContent = fileContent.replaceAll("TAR_PASSWORD=", "TAR_PASSWORD="+java.util.regex.Matcher.quoteReplacement(configObj.get("tar_password").toString()));
 				fileContent = fileContent.replaceAll("TAR_DATABASE=", "TAR_DATABASE="+configObj.get("tar_database").toString());
 				fileContent = fileContent.replaceAll("TAR_SCHEMA=", "TAR_SCHEMA="+configObj.get("tar_schema").toString());
 				fileContent = fileContent.replaceAll("TAR_PORT=5432", "TAR_PORT="+configObj.get("tar_port").toString());
