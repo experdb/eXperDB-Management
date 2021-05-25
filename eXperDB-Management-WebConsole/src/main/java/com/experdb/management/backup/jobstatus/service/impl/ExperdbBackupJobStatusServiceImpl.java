@@ -1,5 +1,6 @@
 package com.experdb.management.backup.jobstatus.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -37,8 +38,8 @@ public class ExperdbBackupJobStatusServiceImpl extends EgovAbstractServiceImpl i
 
 
 	@Override
-	public int selectJobid() throws Exception {
-		return experdbBackupJobStatusDAO.selectJobid();
+	public int selectJobid(HashMap<String, Object> paramvalue) throws Exception {
+		return experdbBackupJobStatusDAO.selectJobid(paramvalue);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.experdb.management.backup.jobstatus.web;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,8 @@ public class ExperdbBackupJobStatusController {
 	@ResponseBody
 	public List<JobStatusVO> backupActivityLogList(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
 		List<JobStatusVO> resultSet = null;
-
+		
+		HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 		//int jobid = Integer.parseInt(request.getParameter("jobid"));
 		
 		try {
@@ -44,6 +46,11 @@ public class ExperdbBackupJobStatusController {
 			/*CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0125_01");
 			accessHistoryService.insertHistory(historyVO);*/
+			
+			
+			//String jobname = request.getParameter("jobname");
+			
+			//paramvalue.put("jobname", jobname);
 			
 			resultSet = experdbBackupJobStatusService.selectBackupJobStatusList();
 						
@@ -73,26 +80,21 @@ public class ExperdbBackupJobStatusController {
 	@RequestMapping(value="/experdb/selectJobEnd.do")
 	@ResponseBody
 	public int selectJobEnd(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
-	
+		
+		HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 		int result = 0;
 		int jobid = 0;
 		
 		try {
-			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0125_01");
-			accessHistoryService.insertHistory(historyVO);*/
+			String jobname = request.getParameter("jobname");
+			paramvalue.put("jobname", jobname);
 			
-			jobid= experdbBackupJobStatusService.selectJobid();
-			
-			System.out.println("jobid = "+jobid);
+			jobid= experdbBackupJobStatusService.selectJobid(paramvalue);
 			
 			if(jobid  != 0 ){
 				result = experdbBackupJobStatusService.selectJobEnd(jobid);
 			}
 			
-			System.out.println("end = "+result);
-						
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,18 +114,14 @@ public class ExperdbBackupJobStatusController {
 	public int selectJobId(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
 	
 		int jobid = 0;
+		HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 		
 		try {
-			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0125_01");
-			accessHistoryService.insertHistory(historyVO);*/
-			
-			jobid= experdbBackupJobStatusService.selectJobid();
-			
-			System.out.println("jobid = "+jobid);
-			
-						
+			String jobname = request.getParameter("jobname");
+			paramvalue.put("jobname", jobname);
+				
+			jobid= experdbBackupJobStatusService.selectJobid(paramvalue);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,5 +160,33 @@ public class ExperdbBackupJobStatusController {
 		}
 
 	}	
+	
+	
+	
+	/**
+	 * 작업삭제
+	 * @param 
+	 * @return List<Map<String, Object>>
+	 */
+	@RequestMapping(value="/experdb/jobCancel.do")
+	@ResponseBody
+	public void jobCancel(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0166_01");
+			accessHistoryService.insertHistory(historyVO);
+			
+			String jobname = request.getParameter("jobname");
+			
+			CmmnUtil.jobCancel(jobname);
+						
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	
 }

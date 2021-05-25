@@ -4,7 +4,7 @@
 
 <mapper namespace="jobStatuSsql">
 
-	<select id="selectJobStatusList" resultType="JobStatusVO">
+	<select id="selectJobStatusList" resultType="JobStatusVO"  parameterType="hashmap">
 				SELECT 
 							JQ.UUID
 							, JQ.JOBNAME
@@ -44,6 +44,10 @@
 				FROM JOBQUEUE AS JQ 
 				LEFT JOIN BACKUPLOCATION AS BL
 				ON JQ.BACKUPLOCATION = BL.UUID
+				ORDER BY JQ.JOBNAME
+				<if test="jobname != null and jobname != ''">
+				  WHERE JQ.JOBNAME = #{jobname}
+				</if>
 	</select>
 	
 	
@@ -53,11 +57,14 @@
 	</select>
 	
 	
-	<select id="selectJobid" resultType="int">
+	<select id="selectJobid" resultType="int" parameterType="hashmap">
 		SELECT
 			COALESCE(MAX(jobid),0) AS jobid
 		FROM
 		ActivityLog
+		<if test="jobname != null and jobname != ''">
+			  WHERE JOBNAME = #{jobname}
+		</if>
 	</select>
 		
 </mapper>

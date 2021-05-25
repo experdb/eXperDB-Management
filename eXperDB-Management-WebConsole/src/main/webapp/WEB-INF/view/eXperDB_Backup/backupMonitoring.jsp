@@ -23,42 +23,16 @@
 	*/
 %>
 
-<style>
-	.progress-bar{
-		        width: 0%;
-		        aria-valuenow: 90;
-		        aria-valuemin:0;
-		        aria-valuemax:100;
-		    }
-</style>
-
 <script>
 
 var monitoringData;
 var bckLogList;
-
 var jobend = 0;
-var dataSearch=0;
 
+var jobClick =""; 
 
-/* ********************************************************
- * 모니터링 프로세스
- * 1. 실행 상태 주기적으로 조회 (1초마다)
- * 2. status==5 일 경우, 상태변경 Active
- * 2. Active일 경우
- *		2-1) 실행 상태 주기적으로 조회 정지
- *		2-2) 현재 수행중인 jobid 추출
-* 		2-3) 해당 jobid의 Activity로그 출력
-* 		2-4) ActivityLog 실시간 출력 (20초 마다)
-* 		2-5) 종료상태 체크 (History테이블 Insert 여부)
-* 		2-6) 종료상태 주기적으로 조회(1초마다)
-* 	3. 백업 종료(History테이블 조회 카운트 = 1)
-* 	4. status 상태 변경 Ready
-* 
-*  선택한 Job의 모니터링 프로세스
-*  5. Job선택시, 선택한 Job의 jobid 추출
- ******************************************************* */
-
+var activity="";
+var end ="";
 
 
 /* ********************************************************
@@ -69,206 +43,265 @@ $(window.document).ready(function() {
 	fn_selectJob();		
 });
 
-function fn_init() {
-	/* ********************************************************
-	 * backup storage list table setting
-	 ******************************************************** */
-	 monitoringData = $('#monitoringData').DataTable({
-		scrollY : "500px",
-		scrollX: true,	
-		searching : false,
-		processing : true,
-		paging : false,
-		info : false,
-		deferRender : true,
-		bSort : false,
-		columns : [
-		{data : "targetname", className : "dt-center", defaultContent : ""},	
-		{data : "jobtype_nm", className : "dt-center", defaultContent : ""},	
-		{
-			data : "jobstatus",
-			render : function(data, type, full, meta) {	 						
-				var html = '';
-				//Active
-				if (full.jobstatus == 5) {
-				html += "<div class='badge badge-light text-primary'' style='background-color: transparent !important;font-size: 0.875rem;'>";
-				html += "	<i class='fa fa-spin fa-spinner mr-2 text-primary'></i>";
-				html += '&nbsp; Active';
-				html += "</div>";
-				//Ready
-				}else{
-					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-					html += "	<i class='fa fa-check-circle text-secondary' >";
-					html += '&nbsp; Ready</i>';
-					html += "</div>";				
-				} 
-				return html;
-			},
-			className : "dt-center",
-			defaultContent : ""
-		},		
-		{data : "location", className : "dt-center", defaultContent : ""},
-		{
-			data : "jobstatus",
-			render : function(data, type, full, meta) {	 						
-				var html = '';
-				//성공
-				if (full.jobstatus == 1) {
-				html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-				html += "	<i class='fa fa-check-circle text-primary' >";
-				html += '&nbsp;<spring:message code="common.success" /></i>';
-				html += "</div>";
-				//취소
-				}else if(full.jobstatus == 2){
-					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-					html += "	<i class='fa fa-ban text-danger' >";
-					html += '&nbsp;<spring:message code="common.cancel" /></i>';
-					html += "</div>";
-				//실패
-				}  else if(full.jobstatus == 3){
-					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-					html += "	<i class='fa fa-times text-danger' >";
-					html += '&nbsp;<spring:message code="common.failed" /></i>';
-					html += "</div>";
-				//incomplete
-				} else if(full.jobstatus == 4){
-					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-					html += "	<i class='fa fa-exclamation text-primary' >";
-					html += '&nbsp;<spring:message code="common.success" /></i>';
-					html += "</div>";
-				} 
 
-				return html;
-			},
-			className : "dt-center",
-			defaultContent : ""
-		}
-		]
-	});
-
-	 monitoringData.tables().header().to$().find('th:eq(0)').css('min-width');
-	 monitoringData.tables().header().to$().find('th:eq(1)').css('min-width');
-	 monitoringData.tables().header().to$().find('th:eq(2)').css('min-width');
-	 monitoringData.tables().header().to$().find('th:eq(3)').css('min-width');
-
-	 
-	bckLogList = $('#bckLogList').DataTable({
+	function fn_init() {
+		/* ********************************************************
+		 * backup storage list table setting
+		 ******************************************************** */
+		 monitoringData = $('#monitoringData').DataTable({
 			scrollY : "500px",
 			scrollX: true,	
 			searching : false,
 			processing : true,
 			paging : false,
-			lengthChange: false,
-			deferRender : true,
 			info : false,
+			deferRender : true,
 			bSort : false,
 			columns : [
+			{data : "targetname", className : "dt-center", defaultContent : ""},	
+			{data : "jobtype_nm", className : "dt-center", defaultContent : ""},	
 			{
-				data : "type",
+				data : "jobstatus",
 				render : function(data, type, full, meta) {	 						
 					var html = '';
-					// TYPE_INFO
-					if (full.type == 1) {
-					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-					html += "	<i class='fa fa-info-circle text-primary' /> </i>";
+					//Active
+					if (full.jobstatus == 5) {
+					html += "<div class='badge badge-light text-primary'' style='background-color: transparent !important;font-size: 0.875rem;'>";
+					html += "	<i class='fa fa-spin fa-spinner mr-2 text-primary'></i>";
+					html += '&nbsp; Active';
 					html += "</div>";
-					// TYPE_ERROR
-					}else if(full.type == 2){
+					//Ready
+					}else{
 						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-						html += "	<i class='fa fa-times-circle text-danger' /> </i>";
-						html += "</div>";
-					// TYPE_WARNING
-					}  else if(full.type == 3){
-					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-					html += "	<i class='fa fa-warning text-warning' /> </i>";
-					html += "</div>";				
+						html += "	<i class='fa fa-check-circle text-secondary' >";
+						html += '&nbsp; Ready</i>';
+						html += "</div>";				
 					} 
-
 					return html;
 				},
 				className : "dt-center",
 				defaultContent : ""
-			},	
-			
-			{data : "time", className : "dt-center", defaultContent : ""},	
-			{data : "message", className : "dt-left", defaultContent : ""}
+			},		
+			{data : "location", className : "dt-center", defaultContent : ""},
+			{
+				data : "jobstatus",
+				render : function(data, type, full, meta) {	 						
+					var html = '';
+					//성공
+					if (full.jobstatus == 1) {
+					html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+					html += "	<i class='fa fa-check-circle text-primary' >";
+					html += '&nbsp;<spring:message code="common.success" /></i>';
+					html += "</div>";
+					//취소
+					}else if(full.jobstatus == 2){
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-ban text-danger' >";
+						html += '&nbsp;<spring:message code="common.cancel" /></i>';
+						html += "</div>";
+					//실패
+					}  else if(full.jobstatus == 3){
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-times text-danger' >";
+						html += '&nbsp;<spring:message code="common.failed" /></i>';
+						html += "</div>";
+					//incomplete
+					} else if(full.jobstatus == 4){
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-exclamation text-primary' >";
+						html += '&nbsp;<spring:message code="common.success" /></i>';
+						html += "</div>";
+					} 
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			}
 			]
 		});
-		// css('min-width').
-		bckLogList.tables().header().to$().find('th:eq(0)').css('min-width');
-		bckLogList.tables().header().to$().find('th:eq(1)').css('min-width');
-		bckLogList.tables().header().to$().find('th:eq(2)').css('min-width');
-	 
-    $(window).trigger('resize'); 
+	
+		 monitoringData.tables().header().to$().find('th:eq(0)').css('min-width');
+		 monitoringData.tables().header().to$().find('th:eq(1)').css('min-width');
+		 monitoringData.tables().header().to$().find('th:eq(2)').css('min-width');
+		 monitoringData.tables().header().to$().find('th:eq(3)').css('min-width');
+		 
+		bckLogList = $('#bckLogList').DataTable({
+				scrollY : "500px",
+				scrollX: true,	
+				searching : false,
+				processing : true,
+				paging : false,
+				lengthChange: false,
+				deferRender : true,
+				info : false,
+				bSort : false,
+				columns : [
+				{
+					data : "type",
+					render : function(data, type, full, meta) {	 						
+						var html = '';
+						// TYPE_INFO
+						if (full.type == 1) {
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-info-circle text-primary' /> </i>";
+						html += "</div>";
+						// TYPE_ERROR
+						}else if(full.type == 2){
+							html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+							html += "	<i class='fa fa-times-circle text-danger' /> </i>";
+							html += "</div>";
+						// TYPE_WARNING
+						}  else if(full.type == 3){
+						html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+						html += "	<i class='fa fa-warning text-warning' /> </i>";
+						html += "</div>";				
+						} 
+						return html;
+					},
+					className : "dt-center",
+					defaultContent : ""
+				},				
+				{data : "time", className : "dt-center", defaultContent : ""},	
+				{data : "message", className : "dt-left", defaultContent : ""}
+				]
+			});
+			// css('min-width').
+			bckLogList.tables().header().to$().find('th:eq(0)').css('min-width');
+			bckLogList.tables().header().to$().find('th:eq(1)').css('min-width');
+			bckLogList.tables().header().to$().find('th:eq(2)').css('min-width');
+		 
+	    $(window).trigger('resize'); 
+	
+	} // fn_init();
+	
 
-} // fn_init();
 
 
-$(function() {
+	/* ********************************************************
+	 * 로그,  출력 모니터링 서버 클릭
+	 ******************************************************* */
+	$(function() {
 	   $('#monitoringData tbody').on( 'click', 'tr', function () {
 	         if ( $(this).hasClass('selected') ) {
 	         }
 	        else {	        	
 	        	monitoringData.$('tr.selected').removeClass('selected');	        	
 	            $(this).addClass('selected');	         
+	            
+	             var jobstatus = monitoringData.row('.selected').data().jobstatus;
+	             var jobname = monitoringData.row('.selected').data().jobname;
+
+				 if(jobstatus == 5){
+					 console.log('jobname= '+jobname);
+					fn_selectMonitoring(jobname);
+				}else{
+					clearTimeout(end);
+					clearTimeout(activity);					
+					jobClick = "";
+					end ="";
+					activity = "";				
+					bckLogList.clear().draw();
+				}
 	        } 
 	    } );   
 	} );  
 
 
-
-function fn_runNow() {
-
-	var datas = monitoringData.row('.selected').length;
-
-	if(datas != 1){
-		showSwalIcon('<spring:message code="eXperDB_backup.msg23" />', '<spring:message code="common.close" />', '', 'error');
-		return false;
-	}else{
-		var jobname = monitoringData.row('.selected').data().jobname;
-	}
-	$("#pop_jobname").val(jobname);
-	$("#pop_runNow").modal("show");
-}
-
-
-
-// 초기, 1회 조회 (계속 리드로우 하기때문에)
-function fn_selectJob(){
+	function fn_runNow() {
 	
-	$.ajax({
-		url : "/experdb/jobStatusList.do",
-		data : {			
-		},
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		},
-		success : function(data) {
-			monitoringData.clear().draw();
-			monitoringData.rows.add(data).draw();
-			fn_jobStatusList();
+		var datas = monitoringData.row('.selected').length;
+	
+		if(datas != 1){
+			showSwalIcon('<spring:message code="eXperDB_backup.msg23" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else{
+			var jobname = monitoringData.row('.selected').data().jobname;
 		}
-	});
-	$('#loading').hide();
-}
+		$("#pop_jobname").val(jobname);
+		$("#pop_runNow").modal("show");
+	}
+
+
+
+	function fn_selectJob(){
+		
+		$.ajax({
+			url : "/experdb/jobStatusList.do",
+			data : {},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {
+				monitoringData.clear().draw();
+				monitoringData.rows.add(data).draw();
+				fn_jobStatusList();
+			}
+		});
+		$('#loading').hide();
+	}
 
 
 function fn_jobStatusList(){
 	
+	setInterval(function() {
+		$.ajax({
+			url : "/experdb/jobStatusList.do",
+			data : {},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {	
+				 for(var i=0; i<data.length; i++){				 
+					 monitoringData.cell( {row:i, column:2} ).data(data[i].jobstatus).draw();
+					 monitoringData.cell( {row:i, column:4} ).data(data[i].jobstatus).draw();
+					}						
+			}
+		});
+		$('#loading').hide();
+	}, 10000);	
+}
+
+
+
+function fn_selectMonitoring(jobname){		
+	
+	//선택한 작업 jobId 추출
+	var jobid = fn_selectJobId(jobname);
+	
+	//ActivityLog 조회 체크
+	fn_selectActivityLogCheck(jobid, jobname);
+	
+}
+
+
+
+function fn_selectJobId(jobname){
 	$.ajax({
-		url : "/experdb/jobStatusList.do",
-		data : {			
+		url : "/experdb/selectJobId.do",
+		data : {
+			jobname:jobname
 		},
+		async: false, 
 		type : "post",
 		beforeSend: function(xhr) {
 			xhr.setRequestHeader("AJAX", true);
@@ -283,39 +316,78 @@ function fn_jobStatusList(){
 			}
 		},
 		success : function(data) {
-
-			// 2. status==5 일 경우, 상태변경 Active
-			 if(data[0].jobstatus == 5){
-				 
-				 jobend = 0;
-				 
-				 // 2-1) 실행 상태 주기적으로 조회 정지
-				 if(dataSearch == 0){
-						monitoringData.clear().draw();
-						monitoringData.rows.add(data).draw();
-						dataSearch++;
-				}
-				// 2-2) 현재 수행중인 jobid 추출
-				fn_selectJobId();
-				// 2-5) 종료상태 체크 (History테이블 Insert 여부)
-				fn_selectJobEnd();
-				
-			 }
-		
-			// 1. 실행 상태 주기적으로 조회 (1초마다)
-			setTimeout(fn_jobStatusList, 1000);
-
+			result = data;
 		}
 	});
-	$('#loading').hide();
+	return result;
+	$('#loading').hide();	
 }
 
 
-function fn_selectJobEnd(){
+
+function fn_selectActivityLogCheck(jobid, jobname){
+	
+	//console.log(jobClick+'=='+jobname);	
+	
+	//첫 수행
+	if(jobClick == "" || jobClick != jobname){
+		//console.log('첫수행');		
+		jobClick = jobname;
+		
+		clearTimeout(end);
+		clearTimeout(activity);
+
+		//바로 1회조회
+		fn_selectJobEnd(jobid,jobname);
+		fn_selectActivityLog(jobid,jobname);		
+	//두번째 부터 수행	
+	}else if(jobClick == jobname){
+		//console.log(jobClick+'=='+jobname);	
+		end = setTimeout(fn_selectJobEnd, 8000, jobid,jobname);	
+		activity = setTimeout(fn_selectActivityLog, 5000, jobid,jobname);			
+	}
+}
+
+
+function fn_selectActivityLog(jobid, jobname) {
+$.ajax({
+	url : "/experdb/backupActivityLogList.do",
+	data : {
+		jobid : jobid
+	},
+	type : "post",
+	beforeSend: function(xhr) {
+		xhr.setRequestHeader("AJAX", true);
+	},
+	error : function(xhr, status, error) {
+		if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if(xhr.status == 403) {
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	},
+	success : function(data) {
+		if(jobend == 0){
+		bckLogList.clear().draw();
+		bckLogList.rows.add(data).draw();	
+		}else{
+			bckLogList.clear().draw();
+		}
+	}
+});
+$('#loading').hide();
+} 
+
+
+ function fn_selectJobEnd(jobid,jobname){
 	
 	$.ajax({
 		url : "/experdb/selectJobEnd.do",
-		data : {},
+		data : {
+			jobname:jobname
+		},
 		type : "post",
 		beforeSend: function(xhr) {
 			xhr.setRequestHeader("AJAX", true);
@@ -329,16 +401,18 @@ function fn_selectJobEnd(){
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
-		success : function(data) {		
-				// 3. 백업 종료(History테이블 조회 카운트 = 1)
+		success : function(data) {	
+			//console.log('종료 데이터= '+data);		
 			 if(data == 1){		
-				 dataSearch = 0;
-				 jobend = 1;
-				// 4. status 상태 변경 Ready	 
+				jobend = 1;
+				jobClick = "";
+				activity = "";
+				end ="";
+				bckLogList.clear().draw();
 				fn_selectJob();
 			}else{	
-				// 2-6) 종료상태 주기적으로 조회(1초마다)
-				setTimeout(fn_selectJobEnd, 10000);
+				jobend = 0;
+				fn_selectActivityLogCheck(jobid, jobname);
 			} 						
 		}
 	});
@@ -346,69 +420,60 @@ function fn_selectJobEnd(){
 }
 
 
-function fn_selectJobId(){
+
+
+	function fn_jobCancelConfirm(){
+		var datas = monitoringData.row('.selected').length;
 	
-	$.ajax({
-		url : "/experdb/selectJobId.do",
-		data : {},
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		},
-		success : function(data) {
-			// 2-3) 해당 jobid의 Activity로그 출력
-			 fn_selectActivityLog(data);				
+		if(datas != 1){
+			showSwalIcon('<spring:message code="eXperDB_backup.msg23" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else{			
+			confile_title = '작업취소 요청';
+			$('#con_multi_gbn', '#findConfirmMulti').val("jobCancel");
+			$('#confirm_multi_tlt').html(confile_title);
+			$('#confirm_multi_msg').html('작업을 취소 하시겠습니까?');
+			$('#pop_confirm_multi_md').modal("show");	
 		}
-	});
-	$('#loading').hide();	
-}
+	}
+	
+	function fn_jobCancel(){
+		var jobname = monitoringData.row('.selected').data().jobname;
 
-
-
-function fn_selectActivityLog(jobid) {
-	$.ajax({
-		url : "/experdb/backupActivityLogList.do",
-		data : {
-			jobid : jobid
-		},
-		type : "post",
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("AJAX", true);
-		},
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		$.ajax({
+			url : "/experdb/jobCancel.do",
+			data : {
+				jobname : jobname
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {	
 			}
-		},
-		success : function(data) {
-			if(jobend == 0){
-				bckLogList.clear().draw();
-				bckLogList.rows.add(data).draw();	
-				//2-4) ActivityLog 실시간 출력 (20초 마다)
-				setTimeout(fn_selectActivityLog(jobid), 20000)
-			}else{
-				bckLogList.clear().draw();
-			}
-		}
-	});
-}
+		});
+	}
+	
+		
+	  // confirm function
+	 function fnc_confirmMultiRst(gbn){
+		  if(gbn == "jobCancel"){
+			  fn_jobCancel();
+		  }
+	  }
 
 </script>
+<%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./popup/backupRunNow.jsp"%>
-
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -462,7 +527,7 @@ function fn_selectActivityLog(jobid) {
 						<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_runNow()">
 							<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
 						</button>
-						<button type="button" class="btn btn-danger btn-icon-text mb-2">
+						<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_jobCancelConfirm()">
 							<i class="mdi mdi-close "></i><spring:message code="common.cancel" />
 						</button>
 					</div>
