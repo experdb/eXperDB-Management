@@ -649,10 +649,21 @@
 	               MIN(PRY_SVR_ID) as PRY_SVR_ID
 	          FROM T_PRY_SVR_I
 	         WHERE 1 = 1
-	           AND (PRY_SVR_ID != #{pry_svr_id}::numeric AND IPADR != #{ipadr})
+	           AND MASTER_SVR_ID = #{pry_svr_id}::numeric
+	       --    AND (PRY_SVR_ID != #{pry_svr_id}::numeric AND IPADR != #{ipadr})
 	           AND (exe_status = 'TC001501' and KAL_exe_status = 'TC001501')
 	           AND DB_SVR_ID = #{db_svr_id}::numeric
 	         LIMIT 1
+	    </if>
+	    
+	    <if test='selQueryGbn == "backupM"'>
+	        SELECT
+	               MIN(PRY_SVR_ID) as PRY_SVR_ID
+	          FROM T_PRY_SVR_I
+	         WHERE 1 = 1
+	           AND DB_SVR_ID = #{db_svr_id}::numeric
+	           AND MASTER_GBN = 'M'
+	          LIMIT 1
 	    </if>
 	</select>
 	
@@ -689,6 +700,7 @@
 		WHERE
 			PRY_SVR_ID  != #{pry_svr_id}::numeric
 		  AND MASTER_GBN = 'S'
+		  AND (PRY_SVR_ID = #{old_pry_svr_id}::numeric OR MASTER_SVR_ID = #{old_pry_svr_id}::numeric)
 		  AND DB_SVR_ID = #{db_svr_id}::numeric;
 		</if>
 		
@@ -719,9 +731,67 @@
 	    	, MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric
 			, LST_MDFR_ID = #{lst_mdfr_id}
 			, LST_MDF_DTM = clock_timestamp()
-		WHERE
-			PRY_SVR_ID  != #{pry_svr_id}::numeric
+		WHERE MASTER_SVR_ID = #{pry_svr_id}::numeric
 		  AND DB_SVR_ID = #{db_svr_id}::numeric;
+		</if>
+		
+	    <if test='sel_query_gbn == "g_master_up_keep"'>
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{old_master_gbn}
+	    	, MASTER_SVR_ID = #{pry_svr_id}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  = #{old_pry_svr_id}::numeric
+		 OR MASTER_SVR_ID  = #{old_pry_svr_id}::numeric;
+
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{master_gbn}
+	    	, MASTER_SVR_ID = #{master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE PRY_SVR_ID = #{pry_svr_id}::numeric;
+		  
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{old_master_gbn}
+	    	, MASTER_SVR_ID = #{pry_svr_id}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			MASTER_SVR_ID  = #{pry_svr_id}::numeric;
+		</if>
+		
+	    <if test='sel_query_gbn == "g_master_up_sel"'>
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{master_gbn}
+	    	, MASTER_SVR_ID = #{master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  = #{pry_svr_id}::numeric;
+
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{old_master_gbn}
+	    	, MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE DB_SVR_ID = #{db_svr_id}::numeric;
+		</if>
+
+	    <if test='sel_query_gbn == "g_backup_up_keep"'>
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{master_gbn}
+	    	, MASTER_SVR_ID = #{master_svr_id_chk}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  = #{pry_svr_id}::numeric;
 		</if>
 		
 	    <if test='sel_query_gbn == "g_backup_up"'>
@@ -733,6 +803,16 @@
 			, LST_MDF_DTM = clock_timestamp()
 		WHERE
 			PRY_SVR_ID  = #{pry_svr_id}::numeric;
+			
+		UPDATE T_PRY_SVR_I
+		SET
+			MASTER_GBN = #{old_master_gbn}
+	    	, MASTER_SVR_ID = #{pry_svr_id}::numeric
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+		WHERE
+			PRY_SVR_ID  != #{pry_svr_id}::numeric
+		AND (PRY_SVR_ID = #{old_master_svr_id_chk}::numeric OR MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric);
 		</if>
     </update>
     

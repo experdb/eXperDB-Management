@@ -519,47 +519,72 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				}
 			}
 
+			//down
+			//1. DBMS 서버 설치 - 리스너 1개
+			//2. KEEP 없는 경우
+			//3. 서버 따로 구성 - 리스너 2개
+			
+			
 			//마스터 구분 변경
 			if (!"".equals(strProxyChgVal)) {
 				if ("TC001502".equals(strProxyChgVal)) { //down 된 경우
 					if ("M".equals(proxyServerInfo.getMaster_gbn())) { //마스터 일때
-						//백업 제일 작은수가 마스터로 변경
-						mstChkParam.put("pry_svr_id", proxyServerInfo.getPry_svr_id());
-						mstChkParam.put("ipadr", ipadrPrm);
-						mstChkParam.put("selQueryGbn", "masterM");
-						mstChkParam.put("db_svr_id", proxyServerInfo.getDb_svr_id());
+						if (!"Y".equals(proxyServerInfo.getKal_install_yn())) { //keep 이 없는 경우
+							prySvrChk = new ProxyServerVO();
+							
+							prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
+							prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+							prySvrChk.setOld_master_svr_id_chk(null);
+							prySvrChk.setLst_mdfr_id(userIdPrm);
+		         			prySvrChk.setSel_query_gbn("backup_down");
+		         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
 
-			         	prySvrChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
-			         	
-			         	//backup이 있으면 update 없으면 처리 않함
-			         	if (prySvrChk != null) {
-			         		//백업중 제일 낮은 Pry_svr_id 존재
-			         		if (!"".equals(prySvrChk.getPry_svr_id()) && !"0".equals(prySvrChk.getPry_svr_id())) {
-			         			prySvrChk.setMaster_gbn("M");
-			         			prySvrChk.setMaster_svr_id_chk(null);
-			         			
-			         			prySvrChk.setOld_pry_svr_id(proxyServerInfo.getPry_svr_id());
-			         			
-			         			if (proxyServerInfo.getMaster_exe_cnt() <= 0) {
-			         				prySvrChk.setOld_master_gbn("M");
-			         			} else {
-			         				prySvrChk.setOld_master_gbn("S");
-			         			}
-			         			
-			         			prySvrChk.setOld_master_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
-			         			prySvrChk.setLst_mdfr_id(userIdPrm);
-			         			prySvrChk.setSel_query_gbn("master_down");
+							proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);							
+						} else {
+							//백업 제일 작은수가 마스터로 변경
+							mstChkParam.put("pry_svr_id", proxyServerInfo.getPry_svr_id());
+							mstChkParam.put("ipadr", ipadrPrm);
+							mstChkParam.put("selQueryGbn", "masterM");
+							mstChkParam.put("db_svr_id", proxyServerInfo.getDb_svr_id());
+							
+							prySvrChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
+							
+				         	//backup이 있으면 update 없으면 처리 않함
+				         	if (prySvrChk != null) {
+				         		//백업중 제일 낮은 Pry_svr_id 존재
+				         		if (!"".equals(prySvrChk.getPry_svr_id()) && !"0".equals(prySvrChk.getPry_svr_id())) {
+				         			prySvrChk.setMaster_gbn("M");
+				         			prySvrChk.setMaster_svr_id_chk(null);
+				         			prySvrChk.setLst_mdfr_id(userIdPrm);
+				         			
+				         			prySvrChk.setOld_pry_svr_id(proxyServerInfo.getPry_svr_id());
+				         			prySvrChk.setOld_master_gbn("S");
+				         			prySvrChk.setOld_master_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
+
+				         			prySvrChk.setSel_query_gbn("master_down");
+				         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
+				         			
+				         			//백업중 제일 낮은 proxy 마스터로 승격
+				         			//기존 마스터는 백업으로 변경
+				         			//전체 백업의 마스터_id를 변경
+				         			proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
+				         		}
+				         	} else {
+								//백업일 경우
+								prySvrChk = new ProxyServerVO();
+								
+								prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
+								prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+								prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+								prySvrChk.setLst_mdfr_id(userIdPrm);
+			         			prySvrChk.setSel_query_gbn("backup_down");
 			         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
-			         			
-			         			//백업중 제일 낮은 proxy 마스터로 승격
-			         			//기존 마스터는 백업으로 변경
-			         			//전체 백업의 마스터_id를 변경
-			         			proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
 
-			         		}
-			         	}
-					} else {
-						//백업일 경우
+								proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
+				         	}
+						}
+					} else {//백업일 경우
+						//keep 설치 여부 상관없이 현재를 그냥 저장함
 						prySvrChk = new ProxyServerVO();
 						
 						prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
@@ -570,50 +595,119 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 	         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
 
 						proxyDAO.updatePrySvrMstGbnInfo(prySvrChk);
-					}				
+					}
 				} else { //up
 					//마스터 제외하고 전부 등록
 					prySvrChk = new ProxyServerVO();
-
+					
 					prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
 					prySvrChk.setLst_mdfr_id(userIdPrm);
 					prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
-					
+
 					//마스터 일 경우 
 					if ("M".equals(proxyServerInfo.getMaster_gbn())) { //마스터 일때
+
 						//현재 master_gbn 저장 
 						//현재 마스터 svr_id 값 setting 하여 값 저장
-						prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
-						prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
-						
-						prySvrChk.setOld_master_gbn("S");
-						prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
-						
-						prySvrChk.setSel_query_gbn("g_master_up");
+						//up 일경우
+						//master 일 경우
+						//1. keep 없는 경우
+						// 본서버 M 그대로 
+						// 혹시 연결되어있는 MASTER_SVR_ID 가 있으면 지우고 MASTER로
+						//2. KEEP 있는 경우
+						// 본서버 M 그대로
+						// 연결되어있는 나머지는 MASTER 하위로 S 가 되어야함
+						if (!"Y".equals(proxyServerInfo.getKal_install_yn())) {
+							prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+							prySvrChk.setMaster_svr_id_chk(null);
+							prySvrChk.setOld_master_gbn("M");
+							prySvrChk.setOld_master_svr_id_chk(null);
+							socketLogger.info("g_master_up :: ");
+							prySvrChk.setSel_query_gbn("g_master_up");
+							
+						} else {
+							//기존 마스터 가 있는 경우 확인
+							//같은 dbms 이고 본서버보다 pry_svr_id 가 낮은 경우는 본인이  s가 되어야함
+							//아닌경우는 본서버가 마스터 나머지는 s
+							mstChkParam.put("pry_svr_id", proxyServerInfo.getPry_svr_id());
+							mstChkParam.put("ipadr", ipadrPrm);
+							mstChkParam.put("selQueryGbn", "backupM");
+							mstChkParam.put("db_svr_id", proxyServerInfo.getDb_svr_id());
+							
+							ProxyServerVO backupChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
+							
+							//마스터가 두건이상일때
+							//마스터중 가장 앞자리인것이 위로가야함
+							//마스터 제외, 현재 서버 의 master_svr_id, 현재 마스터의 svr_id 등 모두 
+							prySvrChk.setMaster_gbn("M");
+							prySvrChk.setMaster_svr_id_chk(null);
+
+							prySvrChk.setOld_master_gbn("S");
+							prySvrChk.setOld_pry_svr_id(proxyServerInfo.getPry_svr_id());
+							
+							if (backupChk.getPry_svr_id() != prySvrChk.getPry_svr_id() ||
+								backupChk.getPry_svr_id() < prySvrChk.getPry_svr_id()) {
+								//현재서버와 마스터서버아이디로된 것들을 백업으로 변경, pry_svr_id는 조회한 서버로
+								//그리고 조회한 서버아이디를 마스터로 나머진 백업으로 한번더 up
+								prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
+								socketLogger.info("g_master_up_keep :: ");
+								prySvrChk.setSel_query_gbn("g_master_up_keep");
+								
+							} else {
+								//현재꺼를 마스터 그대로
+								//기존 마스터나 다른 서버를 본서버 하위로
+								prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
+
+								socketLogger.info("g_master_up_sel :: ");
+								prySvrChk.setSel_query_gbn("g_master_up_sel");
+								
+							}
+						}
 					} else { //백업일때
-						if ("M".equals(proxyServerInfo.getOld_master_gbn())) { //기본마스터 일때
-							prySvrChk.setMaster_gbn(proxyServerInfo.getOld_master_gbn());
+						// keep 이 없다가 다시 있는 경우
+						if (!"Y".equals(proxyServerInfo.getKal_install_yn())) { //keep 이 없는 경우
+							//keep 이 없는 경우 master가 됨
+							//나머지는 그대로
+							prySvrChk.setMaster_gbn("M");
 							prySvrChk.setMaster_svr_id_chk(null);
 							
-							prySvrChk.setOld_master_gbn("S");
-							prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
-							
-							prySvrChk.setSel_query_gbn("g_master_up");
-						} else { //기본 백업일때
-							//마스터 한건도 없을때 마스터 up
-							if (proxyServerInfo.getMaster_exe_cnt() <= 0) {
-								prySvrChk.setMaster_gbn("M");
+							prySvrChk.setSel_query_gbn("g_backup_up_keep");
+						} else { //keep 있는 경우
+							if ("M".equals(proxyServerInfo.getOld_master_gbn())) { //기본마스터 일때
+								//기본마스터 일때 는 제일 1번으로 들어가야함
+								//나머지는 현재 pry_svr_id로 master 설정되어야 하며
+								//기존 마스터와 기존마스터의 백업들 모두 변경되어야함
+								prySvrChk.setMaster_gbn("M"); //M으로 들어감
 								prySvrChk.setMaster_svr_id_chk(null);
 								
+								//기존 마스터와 관련된 백업찾아야함
+								//본서버제외
+								if (proxyServerInfo.getMaster_svr_id() > 0) {
+									prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+								} else {
+									prySvrChk.setOld_master_svr_id_chk("");
+								}
 								prySvrChk.setOld_master_gbn("S");
-								prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
-								
-								prySvrChk.setSel_query_gbn("g_master_up");
-							} else {
-								prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
-								prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
-								
+
 								prySvrChk.setSel_query_gbn("g_backup_up");
+							} else { //기본 백업일때
+								//마스터 한건도 없을때 마스터 up
+								//나머지는 현재건의 하위로
+								if (proxyServerInfo.getMaster_exe_cnt() <= 0) {
+									prySvrChk.setMaster_gbn("M");
+									prySvrChk.setMaster_svr_id_chk(null);
+								
+									prySvrChk.setOld_master_gbn("S");
+									prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
+									
+									prySvrChk.setSel_query_gbn("g_backup_up");
+								} else {
+
+									prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
+									prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+									
+									prySvrChk.setSel_query_gbn("g_backup_up_keep");
+								}
 							}
 						}
 					}

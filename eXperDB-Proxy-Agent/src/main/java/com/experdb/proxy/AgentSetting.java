@@ -81,16 +81,16 @@ public class AgentSetting {
 			strAgentPort = "9002";
 		}
 
-		System.out.println("agent path :(/app/eXperDB-Proxy-Agent/bin)");
+		System.out.println("agent path :(/root/app/eXperDB-Proxy-Agent/bin)");
 		strAgentPath = scan.nextLine();
 		if(strAgentPath.equals("")) {
-			strAgentPath = "/app/eXperDB-Proxy-Agent/bin";
+			strAgentPath = "/root/app/eXperDB-Proxy-Agent/bin";
 		} 
 		
-		System.out.println("proxy config backup path :(/app/eXperDB-Proxy-Agent/backup)");
+		System.out.println("proxy config backup path :(/root/app/eXperDB-Proxy-Agent/backup)");
 		strConfBackupPath = scan.nextLine();
 		if(strConfBackupPath.equals("")) {
-			strConfBackupPath = "/app/eXperDB-Proxy-Agent/backup";
+			strConfBackupPath = "/root/app/eXperDB-Proxy-Agent/backup";
 		} 
 	
 		System.out.println("keepalived install Status (Y/N) :");
