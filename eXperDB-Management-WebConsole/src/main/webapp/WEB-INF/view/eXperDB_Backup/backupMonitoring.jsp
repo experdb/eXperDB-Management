@@ -218,6 +218,7 @@ $(window.document).ready(function() {
 			var jobname = monitoringData.row('.selected').data().jobname;
 		}
 		$("#pop_jobname").val(jobname);
+		fn_runNowReset();
 		$("#pop_runNow").modal("show");
 	}
 
