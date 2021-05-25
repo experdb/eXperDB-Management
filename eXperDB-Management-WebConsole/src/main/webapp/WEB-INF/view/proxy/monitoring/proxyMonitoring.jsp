@@ -687,11 +687,11 @@
 	 						html_sebu = "";
 	 		 				var vip_btn_html = "";
 	 		 				vip_btn_html += '<br/>&nbsp;';
-	 		 				if(kal_install_yn == 'Y') {
-		 		 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i><spring:message code="eXperDB_proxy.msg28"/> </h6>';
-	 		 				} else {
+// 	 		 				if(kal_install_yn == 'Y') {
+// 		 		 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i><spring:message code="eXperDB_proxy.msg28"/> </h6>';
+// 	 		 				} else {
 	 		 		 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
-	 		 				}
+// 	 		 				}
 	 						$("#vip_proxy_nm" + j).html(vip_btn_html);
 		 					$("#keepVipDiv"+ j).html(html_sebu);
 		 	 				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
@@ -699,6 +699,14 @@
 		 					$("#vip_line0","#keepVipDivLine" + j).hide();
 	 					}
 	 				}
+ 				} else {
+ 	 				html_sebu = "";
+ 	 				var vip_btn_html = "";
+ 	 				vip_btn_html += '<br/>&nbsp;';
+ 	 		 		html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
+ 					$("#vip_proxy_nm" + i).html(vip_btn_html);
+ 	 				$("#keepVipDiv" + i).attr('style', "width:80%;height:220px;")
+ 	 				$("#keepVipDiv" + i).html(html_sebu);
  				}
  			}
 //  		} else if ( result.proxyServerVipList.length == 0 && kal_install_yn == 'N'){
@@ -722,11 +730,11 @@
  				html_sebu = "";
  				var vip_btn_html = "";
  				vip_btn_html += '<br/>&nbsp;';
- 				if(kal_install_yn == 'Y'){
-	 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i><spring:message code="eXperDB_proxy.msg28"/> </h6>';
- 				} else {
+//  				if(kal_install_yn == 'Y'){
+// 	 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i><spring:message code="eXperDB_proxy.msg28"/> </h6>';
+//  				} else {
  		 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
- 				}
+//  				}
 				$("#vip_proxy_nm" + j).html(vip_btn_html);
  				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
  				$("#keepVipDiv" + j).html(html_sebu);
