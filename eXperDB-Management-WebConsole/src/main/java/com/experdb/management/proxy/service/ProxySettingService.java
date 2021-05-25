@@ -180,5 +180,13 @@ public interface ProxySettingService {
 	
 	public List<Map<String, Object>> selectProxyMstTotList(Map<String, Object> param) throws Exception;
 
+	/**
+	 * Agent에 Conf Data 재등록 요청
+	 * 
+	 * @param param
+	 * @return boolean
+	 * @throws 
+	 */
+	boolean proxyServerReReg(Map<String, Object> param) throws ConnectException, Exception;
 	
 }
