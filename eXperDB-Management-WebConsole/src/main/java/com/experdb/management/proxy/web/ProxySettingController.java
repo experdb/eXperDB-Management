@@ -620,21 +620,21 @@ public class ProxySettingController {
 				
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-
-				paramMap.put("pry_svr_nm", request.getParameter("pry_svr_nm")==null ? "" : request.getParameter("pry_svr_nm").toString());
-				paramMap.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
-				paramMap.put("not_pry_svr_id", request.getParameter("pry_svr_id")==null ? "" : request.getParameter("pry_svr_id").toString());
-				paramMap.put("pry_svr_id", request.getParameter("pry_svr_id")==null ? "" : request.getParameter("pry_svr_id").toString());
-				paramMap.put("reg_mode", request.getParameter("reg_mode")==null ? "" : request.getParameter("reg_mode").toString());
-				paramMap.put("agt_sn", request.getParameter("agt_sn")==null ? "" : request.getParameter("agt_sn").toString());
-				paramMap.put("ipadr", request.getParameter("ipadr")==null ? "" : request.getParameter("ipadr").toString());
-				paramMap.put("day_data_del_term", request.getParameter("day_data_del_term")==null ? "" : request.getParameter("day_data_del_term").toString());
-				paramMap.put("min_data_del_term", request.getParameter("min_data_del_term")==null ? "" : request.getParameter("min_data_del_term").toString());
-				paramMap.put("use_yn", request.getParameter("use_yn")==null ? "" : request.getParameter("use_yn").toString());
-				paramMap.put("master_gbn", request.getParameter("master_gbn")==null ? "" : request.getParameter("master_gbn").toString());
-				paramMap.put("master_svr_id", request.getParameter("master_svr_id")==null ? "" : request.getParameter("master_svr_id").toString());
-				paramMap.put("db_svr_id", request.getParameter("db_svr_id")==null ? "" : request.getParameter("db_svr_id").toString());
-				paramMap.put("kal_install_yn", request.getParameter("kal_install_yn")==null ? "N" : request.getParameter("kal_install_yn").toString());
+				
+				paramMap.put("pry_svr_nm", cu.getStringWithoutNull(request.getParameter("pry_svr_nm")));
+				paramMap.put("lst_mdfr_id", cu.getStringWithoutNull(loginVo.getUsr_id()));
+				paramMap.put("not_pry_svr_id", cu.getStringWithoutNull(request.getParameter("pry_svr_id")));
+				paramMap.put("pry_svr_id", cu.getStringWithoutNull(request.getParameter("pry_svr_id")));
+				paramMap.put("reg_mode", cu.getStringWithoutNull(request.getParameter("reg_mode")));
+				paramMap.put("agt_sn", cu.getStringWithoutNull(request.getParameter("agt_sn")));
+				paramMap.put("ipadr", cu.getStringWithoutNull(request.getParameter("ipadr")));
+				paramMap.put("day_data_del_term", cu.getStringWithoutNull(request.getParameter("day_data_del_term")));
+				paramMap.put("min_data_del_term", cu.getStringWithoutNull(request.getParameter("min_data_del_term")));
+				paramMap.put("use_yn", cu.getStringWithoutNull(request.getParameter("use_yn")));
+				paramMap.put("master_gbn", cu.getStringWithoutNull(request.getParameter("master_gbn")));
+				paramMap.put("master_svr_id", cu.getStringWithoutNull(request.getParameter("master_svr_id")));
+				paramMap.put("db_svr_id", cu.getStringWithoutNull(request.getParameter("db_svr_id")));
+				paramMap.put("kal_install_yn", cu.getStringWithoutNull(request.getParameter("kal_install_yn")));
 
 				resultObj = proxySettingService.proxyServerReg(paramMap);
 				
@@ -644,6 +644,13 @@ public class ProxySettingController {
 				}
 				
 				txManager.commit(status);
+				
+				//재등록일 경우 Conf 파일 읽어와 데이터 등록 Agent 요청
+				if("Y".equals(cu.getStringWithoutNull(resultObj.get("reRegYn")))){
+					Map<String, Object> agentIp = new HashMap<String, Object>();
+					agentIp.put("ipadr", paramMap.get("ipadr").toString());
+					resultObj.put("reRegResult", proxySettingService.proxyServerReReg(agentIp));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

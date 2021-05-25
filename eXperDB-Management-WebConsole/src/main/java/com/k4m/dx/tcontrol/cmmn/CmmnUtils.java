@@ -243,4 +243,16 @@ public class CmmnUtils {
 		}
 		return size;
 	}
+	/**
+	 * Object null 처리
+	 * @param Object
+	 * @return
+	 */
+	public String getStringWithoutNull(Object obj){
+		if(obj == null){
+			return "";
+		}else{
+			return obj.toString();
+		}
+	}
 }

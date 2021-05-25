@@ -916,10 +916,10 @@
 		
 		if (gbn == "pry_svr_reg") { 			//proxy 서버 등록
 			confirm_title =  '<spring:message code="eXperDB_proxy.server_reg" />';//Proxy 등록
-			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="message.msg143"/>'));
+			$('#confirm_multi_msg').html('<spring:message code="message.msg143"/>');
 		}else if (gbn == "pry_svr_mod") { 		//proxy 서버 수정
 			confirm_title = '<spring:message code="eXperDB_proxy.server_modify" />';//'Proxy 수정';
-			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="message.msg147"/>'));
+			$('#confirm_multi_msg').html('<spring:message code="message.msg147"/>');
 		}else if (gbn == "click_svr_list" || gbn == "search_svr_list"){
 			confirm_title = '<spring:message code="eXperDB_proxy.proxy_info" />';//Porxy 정보 조회
 			$('#confirm_multi_msg').html('<spring:message code="eXperDB_proxy.msg17" />');
@@ -934,7 +934,7 @@
 			$('#confirm_multi_msg').html('<spring:message code="eXperDB_proxy.msg14" />'+'<spring:message code="message.msg162"/>');
 		}else if(gbn == "apply"){
 			confirm_title = '<spring:message code="eXperDB_proxy.conf_apply" />';//'Proxy 설정 적용'
-			$('#confirm_multi_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg18" />'));
+			$('#confirm_multi_msg').html('<spring:message code="eXperDB_proxy.msg18" />');
 		}else if (gbn == "use_end") {
 			confirm_title = '<spring:message code="eXperDB_proxy.vip_disable" />';
 			$('#confirm_multi_msg').html('<spring:message code="eXperDB_proxy.msg30" />');

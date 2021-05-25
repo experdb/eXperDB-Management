@@ -493,4 +493,10 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	public void deletePrySvrStatusList(Map<String, Object> param) {
 		delete("proxySettingSql.deletePrySvrStatusList", param);	
 	}
+
+	public String selectProxyAgentSvrUseYnFromProxyId(int prySvrId) {
+		String svrUseYn = "";
+		svrUseYn = (String) getSqlSession().selectOne("proxySettingSql.selectProxyAgentSvrUseYnFromProxyId", prySvrId);
+		return svrUseYn;
+	}
 }

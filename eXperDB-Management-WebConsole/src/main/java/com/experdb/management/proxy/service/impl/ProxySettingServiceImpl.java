@@ -506,16 +506,23 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			} else {
 				proxySettingDAO.updateProxyServerInfo(prySvrVO);
 			}
-
-			Map<String, Object> paramEnd = new HashMap<String, Object>();
 			
+			String svrUseYn = proxySettingDAO.selectProxyAgentSvrUseYnFromProxyId(prySvrId);
+			String reRegYn = "";
+			//삭제 재등록 시 기존 Config 읽어서 데이터 insert
+			if("D".equals(svrUseYn)){
+				reRegYn = "Y";
+			}
+			
+			Map<String, Object> paramEnd = new HashMap<String, Object>();
 			//agent update
 			paramEnd.put("svr_use_yn", "Y");
 			paramEnd.put("lst_mdfr_id", lst_mdfr_id);
 			paramEnd.put("pry_svr_id", prySvrId);
-
+			
 			proxySettingDAO.updateProxyAgentInfoFromProxyId(paramEnd);
-
+			
+			resultObj.put("reRegYn", reRegYn);
 			resultObj.put("resultLog", "success");
 			resultObj.put("result",true);
 			resultObj.put("errMsg","작업이 완료되었습니다.");
@@ -529,6 +536,43 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		}
 
 		return resultObj;
+	}
+	
+	/**
+	 * Proxy Conf 데이터 재등록 요청
+	 * 
+	 * @param param
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public boolean proxyServerReReg(Map<String, Object> param) {
+		try{
+		System.out.println("삭제 재등록 !!!");
+		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+		
+		Map<String, Object> insertDataResult = new  HashMap<String, Object>();
+		
+		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		try{
+			insertDataResult = cic.insertProxyConfigFileInfo(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port());
+		}catch(ConnectException e){
+			throw e;
+		}
+		
+		if (insertDataResult != null) {
+			if ("true".equals(insertDataResult.get("RESULT_DATA"))) {
+				System.out.println("정상적으로 Config 입력 되었습니다.");
+				return true;
+			}else{
+				System.out.println("Config Data Insert 중 오류가 발생하였습니다. :: \n" + insertDataResult.get("ERR_MSG"));
+			}
+		}else{
+			System.out.println("Config 입력이 안되었습니다.");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/**
@@ -629,7 +673,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		//DB Data insert/update/delete
 		int prySvrId = getIntOfJsonObj(confData,"pry_svr_id");
 		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
-		
+		/*System.out.println("applyProxyConf :: "+confData.toJSONString());*/
 		ProxyGlobalVO global = new ProxyGlobalVO();
 		global.setCl_con_max_tm(getStringOfJsonObj(confData,"cl_con_max_tm"));
 		global.setCon_del_tm(getStringOfJsonObj(confData,"con_del_tm"));
@@ -679,7 +723,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				if(!nullCheckOfJsonObj(vipcngJobj, "vip_cng_id")){
 					vipConf[i].setVip_cng_id(getIntOfJsonObj(vipcngJobj,"vip_cng_id"));
 				}
-				
 				vipConf[i].setV_ip(getStringOfJsonObj(vipcngJobj,"v_ip"));
 				vipConf[i].setV_rot_id(getStringOfJsonObj(vipcngJobj, "v_rot_id"));
 				vipConf[i].setChk_tm(getIntOfJsonObj(vipcngJobj,"chk_tm"));
@@ -687,7 +730,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				vipConf[i].setPriority(getIntOfJsonObj(vipcngJobj,"priority"));
 				vipConf[i].setState_nm(getStringOfJsonObj(vipcngJobj,"state_nm"));
 				vipConf[i].setLst_mdfr_id(lst_mdfr_id);
-				
+				/*System.out.println("vipConf :: "+CommonUtil.toMap(vipConf[i]).toString());*/
 				//insert/update vip instance
 				proxySettingDAO.insertUpdatePryVipConf(vipConf[i]);
 			}

@@ -590,9 +590,9 @@
              , CHK_TM = #{chk_tm}::numeric
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
+             , STATE_NM = #{state_nm}
          WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
          AND	VIP_CNG_ID = #{vip_cng_id}::numeric 
-         AND 	STATE_NM = #{state_nm}
 	</update>
 
 	<insert id="insertPryVipConf" parameterType="proxyVipConfigVO">
@@ -835,7 +835,7 @@
 		  AND 	AGT_SN = #{agt_sn}
         </if>
         <if test='pry_svr_id != null and pry_svr_id != 0 '>
-		  AND 	AGT_SN = (SELECT AGT_SN FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id} )
+		  AND 	AGT_SN = (SELECT AGT_SN FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id}::numeric )
         </if>
         <if test='ipadr != null'>
 		  AND 	IPADR = #{ipadr}
@@ -872,4 +872,12 @@
 		AND 	LSN_SVR_ID = #{lsn_svr_id}::numeric 
 		</if>
 	</delete>
+	<select id="selectProxyAgentSvrUseYnFromProxyId" parameterType="int" resultType="String">
+		SELECT 	SVR_USE_YN 
+		FROM 	T_PRY_AGT_I 
+		WHERE	AGT_SN =  (	SELECT	AGT_SN 
+         					FROM 	T_PRY_SVR_I 
+         					WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric )
+    </select>
+	
 </mapper>

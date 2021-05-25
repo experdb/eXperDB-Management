@@ -266,4 +266,33 @@ public class ProxyClientInfoCmmn implements Runnable{
 		
 		return result;
 	}
+
+	public Map<String, Object> insertProxyConfigFileInfo(String IP, int PORT) throws ConnectException, Exception {
+		Map<String, Object> result = new HashMap<>();
+		JSONObject jObj = new JSONObject();
+		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP009);
+		JSONObject objResult;
+		
+		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
+		
+		PCA.open();
+		
+		objResult = PCA.psP009(jObj);
+		
+		PCA.close();
+		System.out.println("result PsP009 :: "+objResult.toJSONString());
+		String strErrMsg = (String)objResult.get(ProxyClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objResult.get(ProxyClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objResult.get(ProxyClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objResult.get(ProxyClientProtocolID.RESULT_CODE);
+		String strResultData = (String)objResult.get(ProxyClientProtocolID.RESULT_DATA);
+		
+		
+		result.put("RESULT_CODE", strResultCode);
+		result.put("ERR_CODE", strErrCode);
+		result.put("ERR_MSG", strErrMsg);
+		result.put("RESULT_DATA", strResultData);
+		
+		return result;
+	}
 }
