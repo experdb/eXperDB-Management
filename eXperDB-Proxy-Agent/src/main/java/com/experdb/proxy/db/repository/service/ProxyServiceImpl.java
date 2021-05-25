@@ -1371,7 +1371,7 @@ public class ProxyServiceImpl implements ProxyService{
 							mstChkParam.put("db_svr_id", proxyServerInfo.getDb_svr_id());
 							
 							prySvrChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
-						
+							
 				         	//backup이 있으면 update 없으면 처리 않함
 				         	if (prySvrChk != null) {
 				         		//백업중 제일 낮은 Pry_svr_id 존재
@@ -1398,7 +1398,13 @@ public class ProxyServiceImpl implements ProxyService{
 								
 								prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
 								prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
-								prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+								
+								if (proxyServerInfo.getMaster_svr_id() <= 0) {
+									prySvrChk.setOld_master_svr_id_chk(null);
+								} else {
+									prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+								}
+
 								prySvrChk.setLst_mdfr_id("system");
 			         			prySvrChk.setSel_query_gbn("backup_down");
 			         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
@@ -1479,8 +1485,7 @@ public class ProxyServiceImpl implements ProxyService{
 							} else {
 								//현재꺼를 마스터 그대로
 								//기존 마스터나 다른 서버를 본서버 하위로
-								prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
-
+							//	prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
 								socketLogger.info("g_master_up_sel :: ");
 								prySvrChk.setSel_query_gbn("g_master_up_sel");
 								

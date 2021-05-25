@@ -548,7 +548,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 							mstChkParam.put("db_svr_id", proxyServerInfo.getDb_svr_id());
 							
 							prySvrChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
-							
+
 				         	//backup이 있으면 update 없으면 처리 않함
 				         	if (prySvrChk != null) {
 				         		//백업중 제일 낮은 Pry_svr_id 존재
@@ -563,7 +563,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 
 				         			prySvrChk.setSel_query_gbn("master_down");
 				         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
-				         			
+				         			socketLogger.info("prySvrChk.getPry_svr_id()123123===" + prySvrChk.getPry_svr_id());
 				         			//백업중 제일 낮은 proxy 마스터로 승격
 				         			//기존 마스터는 백업으로 변경
 				         			//전체 백업의 마스터_id를 변경
@@ -575,7 +575,13 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 								
 								prySvrChk.setPry_svr_id(proxyServerInfo.getPry_svr_id());
 								prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
-								prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+								
+								if (proxyServerInfo.getMaster_svr_id() <= 0) {
+									prySvrChk.setOld_master_svr_id_chk(null);
+								} else {
+									prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+								}
+
 								prySvrChk.setLst_mdfr_id(userIdPrm);
 			         			prySvrChk.setSel_query_gbn("backup_down");
 			         			prySvrChk.setDb_svr_id(proxyServerInfo.getDb_svr_id());
@@ -656,11 +662,9 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 							} else {
 								//현재꺼를 마스터 그대로
 								//기존 마스터나 다른 서버를 본서버 하위로
-								prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
-
+								//prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
 								socketLogger.info("g_master_up_sel :: ");
 								prySvrChk.setSel_query_gbn("g_master_up_sel");
-								
 							}
 						}
 					} else { //백업일때
@@ -688,6 +692,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 									prySvrChk.setOld_master_svr_id_chk("");
 								}
 								prySvrChk.setOld_master_gbn("S");
+								
+								socketLogger.info("g_backup_up :: ");
 
 								prySvrChk.setSel_query_gbn("g_backup_up");
 							} else { //기본 백업일때
@@ -700,11 +706,15 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 									prySvrChk.setOld_master_gbn("S");
 									prySvrChk.setOld_master_svr_id_chk(Integer.toString(proxyServerInfo.getPry_svr_id()));
 									
+									socketLogger.info("g_backup_up123 :: ");
+									
 									prySvrChk.setSel_query_gbn("g_backup_up");
 								} else {
 
 									prySvrChk.setMaster_gbn(proxyServerInfo.getMaster_gbn());
 									prySvrChk.setMaster_svr_id_chk(Integer.toString(proxyServerInfo.getMaster_svr_id()));
+									
+									socketLogger.info("g_backup_up_keep :: ");
 									
 									prySvrChk.setSel_query_gbn("g_backup_up_keep");
 								}

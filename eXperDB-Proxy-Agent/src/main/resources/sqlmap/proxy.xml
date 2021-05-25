@@ -650,7 +650,6 @@
 	          FROM T_PRY_SVR_I
 	         WHERE 1 = 1
 	           AND MASTER_SVR_ID = #{pry_svr_id}::numeric
-	       --    AND (PRY_SVR_ID != #{pry_svr_id}::numeric AND IPADR != #{ipadr})
 	           AND (exe_status = 'TC001501' and KAL_exe_status = 'TC001501')
 	           AND DB_SVR_ID = #{db_svr_id}::numeric
 	         LIMIT 1
@@ -777,10 +776,11 @@
 		UPDATE T_PRY_SVR_I
 		SET
 			MASTER_GBN = #{old_master_gbn}
-	    	, MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric
+	    	, MASTER_SVR_ID = #{pry_svr_id}::numeric
 			, LST_MDFR_ID = #{lst_mdfr_id}
 			, LST_MDF_DTM = clock_timestamp()
-		WHERE DB_SVR_ID = #{db_svr_id}::numeric;
+		WHERE DB_SVR_ID = #{db_svr_id}::numeric
+		AND PRY_SVR_ID  != #{pry_svr_id}::numeric;
 		</if>
 
 	    <if test='sel_query_gbn == "g_backup_up_keep"'>
