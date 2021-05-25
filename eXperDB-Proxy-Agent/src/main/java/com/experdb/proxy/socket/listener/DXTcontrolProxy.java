@@ -264,7 +264,35 @@ public class DXTcontrolProxy extends SocketCtl {
 			////////////////////////////////////PRY_SVR_NM 설정//////////////////////////////
 			if (masterGbnData != null) {
 				if ("M".equals(masterGbnData)) {
-					proxySvrNmData = dbSvrNmData + "_proxy_1";
+					if (strKeepInstallYn != null && "Y".equals(strKeepInstallYn)) {
+						proxySvrNmData = dbSvrNmData + "_proxy_1";
+					} else {
+						ProxyServerVO proxyServerVOBack = systemService.selectDBMSSvrMaxNmInfo(searchProxyServerVO);
+						
+						if (proxyServerVOBack == null) {
+							proxySvrNmData = dbSvrNmData + "_proxy_2";
+						} else {
+							String masterSvrNm = "";
+							String masterSvrFirst = "";
+							int iMasterSvrEnd = 0;
+							
+							ProxyServerVO masterProxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
+
+							if (masterProxyServerInfo != null && masterProxyServerInfo.getPry_svr_nm() != null && !"".equals(masterProxyServerInfo.getPry_svr_nm())) {
+								proxySvrNmData = masterProxyServerInfo.getPry_svr_nm();
+							} else {
+								if (proxyServerVOBack.getPry_svr_nm() != null && !"".equals(proxyServerVOBack.getPry_svr_nm())) {
+									masterSvrNm = proxyServerVOBack.getPry_svr_nm();
+
+									masterSvrFirst = masterSvrNm.substring(0 , masterSvrNm.lastIndexOf("_")+1);
+									iMasterSvrEnd = Integer.parseInt((masterSvrNm.substring(masterSvrNm.lastIndexOf("_") + 1 , masterSvrNm.length()))) + 1;
+									proxySvrNmData = masterSvrFirst + Integer.toString(iMasterSvrEnd);
+								} else {
+									proxySvrNmData = dbSvrNmData + "_proxy_2";
+								}
+							}
+						}	
+					}
 				} else {
 					ProxyServerVO proxyServerVOBack = systemService.selectPrySvrMaxNmInfo(searchProxyServerVO);
 

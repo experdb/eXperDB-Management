@@ -156,6 +156,21 @@
 			) A
 		]]>
 	</select>
+	
+		<select id="selectDBMSSvrMaxNmInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectPrySvrMaxNmInfo
+	 	* Description : Proxy Server Max명 조회
+	 	* Author : 박태혁
+	 	**/
+				SELECT
+					MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
+				  FROM T_PRY_SVR_I A
+				  INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
+				 WHERE A.DB_SVR_ID = #{db_svr_id}
+		]]>
+	</select>
 
 	<update id="updatePryAgtUseYnLInfo"  parameterType="AgentInfoVO">
 	

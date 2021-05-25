@@ -151,4 +151,14 @@ public class SystemServiceImpl implements SystemService{
 	public ProxyServerVO selectPrySvrMaxNmInfo(ProxyServerVO vo) throws Exception {
 		return (ProxyServerVO) systemDAO.selectPrySvrMaxNmInfo(vo);
 	}
+
+	/**
+	 * proxy 마지막 이름 조회
+	 * @param ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectDBMSSvrMaxNmInfo(ProxyServerVO vo) throws Exception {
+		return (ProxyServerVO) systemDAO.selectDBMSSvrMaxNmInfo(vo);
+	}
+	
 }

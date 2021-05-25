@@ -34,6 +34,7 @@ import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.util.CommonUtil;
 import com.experdb.proxy.util.FileRunCommandExec;
+import com.experdb.proxy.util.FileUtil;
 import com.experdb.proxy.util.ProxyRunCommandExec;
 import com.experdb.proxy.util.RunCommandExec;
 
@@ -391,7 +392,6 @@ public class ProxyServiceImpl implements ProxyService{
 								if (temp != null) {
 									strMaxConn = temp.trim().substring(temp.trim().lastIndexOf(" ") + 1 , temp.trim().length());
 								}
-								
 							} else if(temp.trim().matches(".*timeout.*")) { //timeout client / connect / server / check
 								if (temp != null) {
 									if(temp.trim().matches(".*timeout client.*")) { //timeout client
@@ -734,21 +734,25 @@ public class ProxyServiceImpl implements ProxyService{
 
 			//마스터 확인
 			ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInfo(peerServerInfo);
-	
-			if (proxyServerInfo != null) {
-				if ("M".equals(proxyServerInfo.getMaster_gbn())) { //peer 마스터 이면 백업
-					stateGbn = "S";
-				} else if ("S".equals(proxyServerInfo.getMaster_gbn())) { //백업일때 해당 IP의 마스터 ID가 본인과 같으면 마스터 아니면 백업
-					if (strObjIp.equals(proxyServerInfo.getMaster_svr_nm())) {
-						stateGbn = "M";
-					} else {
+			String strKeepalived = FileUtil.getPropertyValue("context.properties", "keepalived.install.yn");
+			if (strKeepalived != null && "Y".equals(strKeepalived)) {
+				if (proxyServerInfo != null) {
+					if ("M".equals(proxyServerInfo.getMaster_gbn())) { //peer 마스터 이면 백업
 						stateGbn = "S";
+					} else if ("S".equals(proxyServerInfo.getMaster_gbn())) { //백업일때 해당 IP의 마스터 ID가 본인과 같으면 마스터 아니면 백업
+						if (strObjIp.equals(proxyServerInfo.getMaster_svr_nm())) {
+							stateGbn = "M";
+						} else {
+							stateGbn = "S";
+						}
 					}
+				} else {
+					stateGbn = "M";
 				}
 			} else {
 				stateGbn = "M";
 			}
-			
+
 			socketLogger.info("keepalived_set.stateGbn.stateGbn" + stateGbn);
 
 			if ("S".equals(stateGbn)) {
