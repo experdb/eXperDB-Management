@@ -60,11 +60,11 @@ public class PsP002 extends SocketCtl{
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 		} catch (Exception e) {
-			errLogger.error("PsP001 {} ", e.toString());
+			errLogger.error("PsP002 {} ", e.toString());
 
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP001);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP002);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.PsP001);
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.PsP002);
 			outputObj.put(ProtocolID.ERR_MSG, "PsP002 Error [" + e.toString() + "]");
 			outputObj.put(ProtocolID.RESULT_DATA, "false");
 
