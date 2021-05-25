@@ -1,5 +1,6 @@
 package com.experdb.management.backup.jobstatus.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -30,8 +31,9 @@ public class ExperdbBackupJobStatusDAO extends EgovAbstractMapper {
 
 	public List<JobStatusVO> selectJobStatusList() {
 	       List<JobStatusVO> result = null;
+	       
 	       result =backupDBsql.selectList("jobStatuSsql.selectJobStatusList");
-      
+	       
 	       for(int i=0; i>result.size(); i++){
 	    	   if (result.get(i).getStatus() == 10) {
 	    		   result.get(i).setStatus(10);
@@ -56,9 +58,9 @@ public class ExperdbBackupJobStatusDAO extends EgovAbstractMapper {
 	}
 
 	
-	public int selectJobid() {
+	public int selectJobid(HashMap<String, Object> paramvalue) {
 		int jobid = 0;
-			jobid =activitylogDBsql.selectOne("jobStatuSsql.selectJobid");
+			jobid =activitylogDBsql.selectOne("jobStatuSsql.selectJobid",paramvalue);
 		return jobid;
 	}
 

@@ -1,5 +1,6 @@
 package com.experdb.management.backup.jobstatus.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ExperdbBackupJobStatusService {
@@ -24,10 +25,11 @@ public interface ExperdbBackupJobStatusService {
 	
 	/**
 	 * jobId 호출
+	 * @param paramvalue 
 	 * @param 
 	 * @return int
 	 * @throws Exception
 	 */
-	int selectJobid() throws Exception ;
+	int selectJobid(HashMap<String, Object> paramvalue) throws Exception ;
 
 }
