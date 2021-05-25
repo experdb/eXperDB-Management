@@ -589,7 +589,7 @@
 
 									<div class="col-sm-1_5">
 										<div class="input-group input-daterange d-flex align-items-center" >
-											<input type="number" class="form-control form-control-sm"  style="width:50px;margin-right:-17px;" maxlength="3" id="mod_bck_mtn_ecnt" name="mod_bck_mtn_ecnt" min="0" tabindex=6 onchange="fn_mod_inputnumberChk(this);" />
+											<input type="number" class="form-control form-control-sm"  style="width:50px;margin-right:-22px;" maxlength="3" id="mod_bck_mtn_ecnt" name="mod_bck_mtn_ecnt" min="0" tabindex=6 onchange="fn_mod_inputnumberChk(this);" />
 											<div class="input-group-addon mx-4" style="font-size: 12px;"><spring:message code="backup_management.count" /></div>
 										</div>
 									</div>
@@ -660,7 +660,7 @@
 
 									<div class="col-sm-1_5">
 										<div class="input-group input-daterange d-flex align-items-center" >
-											<input type="number" class="form-control form-control-sm"  style="width:50px;margin-right:-17px;" maxlength="3" id="mod_acv_file_mtncnt" name="mod_acv_file_mtncnt" min="0" tabindex=8 onchange="fn_mod_inputnumberChk(this);" />
+											<input type="number" class="form-control form-control-sm"  style="width:50px;margin-right:-22px;" maxlength="3" id="mod_acv_file_mtncnt" name="mod_acv_file_mtncnt" min="0" tabindex=8 onchange="fn_mod_inputnumberChk(this);" />
 											<div class="input-group-addon mx-4" style="font-size: 12px;"><spring:message code="backup_management.count" /></div>
 										</div>
 									</div>
@@ -675,8 +675,8 @@
 
 									<div class="col-sm-1_5">
 										<div class="input-group input-daterange d-flex align-items-center" >
-											<input type="number" class="form-control form-control-sm"  style="width:50px;margin-right:-17px;" maxlength="3" id="mod_log_file_mtn_ecnt" name="mod_log_file_mtn_ecnt" min="0" tabindex=10 onchange="fn_mod_inputnumberChk(this);" />
-											<div class="input-group-addon mx-4"><spring:message code="backup_management.count" /></div>
+											<input type="number" class="form-control form-control-sm"  style="width:50px;margin-right:-22px;" maxlength="3" id="mod_log_file_mtn_ecnt" name="mod_log_file_mtn_ecnt" min="0" tabindex=10 onchange="fn_mod_inputnumberChk(this);" />
+											<div class="input-group-addon mx-4" style="font-size: 12px;"><spring:message code="backup_management.count" /></div>
 										</div>
 									</div>
 								</div>
