@@ -58,9 +58,13 @@ public interface SystemService {
 	 */
 	public ProxyServerVO selectDBMSSvrMaxNmInfo(ProxyServerVO vo) throws Exception;
 	
-	
-	
-	
+	/**
+	 * proxy 마지막 이름 조회
+	 * @param ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectDBMSSvrEtcMaxNmInfo(ProxyServerVO vo) throws Exception;
+
 	/**
 	 * Agent 실행
 	 * @param dbServerInfo

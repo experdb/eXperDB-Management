@@ -102,7 +102,15 @@ public class SystemDAO {
 	public ProxyServerVO selectDBMSSvrMaxNmInfo(ProxyServerVO vo) throws Exception  {
 		return (ProxyServerVO) session.selectOne("system.selectDBMSSvrMaxNmInfo", vo);
 	}
-	
+
+	/**
+	 * Proxy 최종 서버명 조회
+	 * @param vo
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectDBMSSvrEtcMaxNmInfo(ProxyServerVO vo) throws Exception  {
+		return (ProxyServerVO) session.selectOne("system.selectDBMSSvrEtcMaxNmInfo", vo);
+	}
 	
 	/**
 	 * Agent 사용여부 변경

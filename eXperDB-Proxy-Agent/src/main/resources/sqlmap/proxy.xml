@@ -109,7 +109,7 @@
 			, clock_timestamp()
 			, #{lst_mdfr_id}
 			, clock_timestamp()
-			, #{master_gbn}
+			, #{old_master_gbn}
     </insert>
     
     <update id="updatePrySvrInfo"  parameterType="ProxyServerVO">
@@ -134,6 +134,10 @@
 			, MIN_DATA_DEL_TERM = #{min_data_del_term}::numeric
 			, LST_MDFR_ID = #{lst_mdfr_id}
 			, LST_MDF_DTM = clock_timestamp()
+
+			<if test="upd_master_gbn != null and upd_master_gbn eq 'M' ">
+			, OLD_MASTER_GBN = #{upd_master_gbn}
+			</if>
 		WHERE
 			IPADR = #{ipadr}
     </update>

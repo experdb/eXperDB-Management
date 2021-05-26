@@ -303,6 +303,7 @@ public class ProxyServiceImpl implements ProxyService{
 		String stateInterface = ""; 		//global_interface명
 		String stateMasterInterface = ""; //global_interface명
 		String stateGbn = "";
+		String old_stateGbn = "";
 		String strPeerId = "";
 
 		String strMaxConn = ""; 	//최대_연결_개수
@@ -765,7 +766,7 @@ public class ProxyServiceImpl implements ProxyService{
 				jsonObj.put("back_peer_id", strObjIp); //backup master_ip 체크
 			}
 			jsonObj.put("master_gbn", stateGbn);
-			
+
 			//global
 			jsonObj.put("max_conn", strMaxConn.trim());
 			jsonObj.put("time_client", strTimeClient.trim());

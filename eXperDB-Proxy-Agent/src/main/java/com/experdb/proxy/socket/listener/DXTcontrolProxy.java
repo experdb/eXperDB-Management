@@ -105,6 +105,8 @@ public class DXTcontrolProxy extends SocketCtl {
 			String peerIpData = "";
 			String back_peerIpData = "";
 			String masterGbnData = "";
+			String old_masterGbnData = "";
+			String upd_masterGbnData = "";
 			String proxyExeStaus = "";		//proxy 상태
 			String keepExeStaus = "";		//keepalived 상태
 			String prySvrUseYn = "N";		//pry_svr_사용여부
@@ -267,6 +269,8 @@ public class DXTcontrolProxy extends SocketCtl {
 					if (strKeepInstallYn != null && "Y".equals(strKeepInstallYn)) {
 						proxySvrNmData = dbSvrNmData + "_proxy_1";
 					} else {
+						searchProxyServerVO.setDb_svr_id(((Integer)jObjResult.get("db_svr_id")).intValue());
+						
 						ProxyServerVO proxyServerVOBack = systemService.selectDBMSSvrMaxNmInfo(searchProxyServerVO);
 						
 						if (proxyServerVOBack == null) {
@@ -320,6 +324,8 @@ public class DXTcontrolProxy extends SocketCtl {
 						}
 					}
 				}
+				
+				
 			}
 
 			//master svr id
@@ -353,6 +359,30 @@ public class DXTcontrolProxy extends SocketCtl {
 			vo.setExe_status(proxyExeStaus);
 			vo.setKal_exe_status(keepExeStaus);
 			vo.setUse_yn(prySvrUseYn);
+			
+			searchProxyServerVO.setDb_svr_id(((Integer)jObjResult.get("db_svr_id")).intValue());
+			searchProxyServerVO.setIpadr(strIpadr);
+		
+			ProxyServerVO proxyOldServerInfo = systemService.selectDBMSSvrEtcMaxNmInfo(searchProxyServerVO);
+
+			//old_master_gbn setting
+			if (strKeepInstallYn != null && "Y".equals(strKeepInstallYn)) {
+				old_masterGbnData = masterGbnData;
+			} else {
+				if (proxyOldServerInfo != null) {
+					if (proxyOldServerInfo.getPry_svr_nm() != null && !"".equals(proxyOldServerInfo.getPry_svr_nm())) {
+						old_masterGbnData = "S";
+					} else {
+						old_masterGbnData = "M";
+					}
+				} else {
+					old_masterGbnData = "M";
+				}
+			}
+			
+			if (proxyOldServerInfo == null) {
+				upd_masterGbnData = "M";
+			}
 
 			//null 이면 insert(t_pry_svr_i)
 			if(proxyServerInfo == null) {
@@ -360,6 +390,7 @@ public class DXTcontrolProxy extends SocketCtl {
 				vo.setMin_data_del_term(3);
 				vo.setPry_svr_nm(proxySvrNmData);
 				vo.setMaster_gbn(masterGbnData);
+				vo.setOld_master_gbn(old_masterGbnData);
 
 				if (peerIdData != 0) {
 					vo.setMaster_svr_id_chk(Integer.toString(peerIdData));
@@ -387,6 +418,9 @@ public class DXTcontrolProxy extends SocketCtl {
 				vo.setPry_svr_nm(proxySvrNmData);
 				
 				vo.setMaster_gbn(masterGbnData);
+				vo.setOld_master_gbn(old_masterGbnData);
+				vo.setUpd_master_gbn(upd_masterGbnData);
+				
 			//	vo.setMaster_gbn(proxyServerInfo.getMaster_gbn());
 				Integer master_svr_id_num = proxyServerInfo.getMaster_svr_id();
 				if (master_svr_id_num != null) {
