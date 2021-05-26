@@ -655,7 +655,7 @@
  					selAgentInterface =result.interf;
  					
  					//초기설정 체크
-	 				if(selProxyListenerList.length ==0 || selGlobalInfo == null || (vipUseYn == 'Y' && selVipInstanceList.length==0) ){
+	 				if(result.listener_list.length ==0 || result.global_info == null || (vipUseYn == 'Y' && result.vipconfig_list.length==0) ){
 	 					$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg12" />');
 	 					runValid = false;
 					}

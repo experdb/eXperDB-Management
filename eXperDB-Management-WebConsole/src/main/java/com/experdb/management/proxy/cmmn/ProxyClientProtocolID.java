@@ -54,4 +54,5 @@ public class ProxyClientProtocolID {
 	
 	public static final String BACKUP_CONF = "BACKUP_CONF";
 	public static final String PRESENT_CONF = "PRESENT_CONF";
+	public static final String KAL_INSTALL_YN = "KAL_INSTALL_YN"; //keepalived 설치 여부
 }

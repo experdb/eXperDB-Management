@@ -188,5 +188,7 @@ public interface ProxySettingService {
 	 * @throws 
 	 */
 	boolean proxyServerReReg(Map<String, Object> param) throws ConnectException, Exception;
+
+	boolean checkAgentKalInstYn(Map<String, Object> param) throws ConnectException, Exception;
 	
 }

@@ -295,4 +295,33 @@ public class ProxyClientInfoCmmn implements Runnable{
 		
 		return result;
 	}
+
+	public Map<String, Object> checkKeepavliedInstallYn(String IP, int PORT, JSONObject agentJobj)  throws ConnectException, Exception {
+		Map<String, Object> result = new HashMap<>();
+		agentJobj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP010);
+		JSONObject objResult;
+		
+		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
+		
+		PCA.open();
+		
+		objResult = PCA.psP010(agentJobj);
+		
+		PCA.close();
+		System.out.println("result PsP010 :: "+objResult.toJSONString());
+		String strErrMsg = (String)objResult.get(ProxyClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objResult.get(ProxyClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objResult.get(ProxyClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objResult.get(ProxyClientProtocolID.RESULT_CODE);
+		String strResultData = (String)objResult.get(ProxyClientProtocolID.RESULT_DATA);
+		
+		
+		result.put("RESULT_CODE", strResultCode);
+		result.put("ERR_CODE", strErrCode);
+		result.put("ERR_MSG", strErrMsg);
+		result.put("RESULT_DATA", strResultData);
+		result.put("KAL_INSTALL_YN", (String)objResult.get(ProxyClientProtocolID.KAL_INSTALL_YN));
+		
+		return result;
+	}
 }

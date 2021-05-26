@@ -879,17 +879,33 @@ public class ProxySettingController {
 				param.put("pry_svr_id", prySvrId);
 				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
 
+				boolean kalInstYnInAgent = true;
+
+				if(kalInstYn.equals("Y")){//keepalvied 사용을 Y로 변경 시, 실제로 Agent에 설치되어있는지 확인 
+					kalInstYnInAgent = proxySettingService.checkAgentKalInstYn(param);
+				}
+				
+				if(kalInstYn.equals("Y") && kalInstYnInAgent != true){ // 사용이 Y이지만, 실제로 Agent에 설치가 되어있지 않다면 중단... 
+					resultObj.put("result", false);
+					resultObj.put("errMsg", "Proxy에 Keepalived가 설치되어있지 않습니다.");
+					return resultObj;
+				}
+				
 				proxySettingService.updateDeleteVipUseYn(param);
 				
 				resultObj.put("result", true);
 				resultObj.put("errMsg", "작업이 정상적으로 완료 되었습니다.");
 			}
+		}catch (ConnectException e){
+			e.printStackTrace();
+			resultObj.put("result", false);
+			resultObj.put("errMsg", "작업 중 요류가 발생하였습니다.");
 		}catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("result", false);
 			resultObj.put("errMsg", "작업 중 요류가 발생하였습니다.");
+			
 		}
 		return resultObj;
-
 	}
 }

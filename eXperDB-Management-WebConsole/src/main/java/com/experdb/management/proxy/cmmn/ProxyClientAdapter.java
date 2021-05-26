@@ -177,4 +177,12 @@ public class ProxyClientAdapter {
 		return parseToJsonObj(recvBuff);
 		
 	}
+	/* proxy keepalived 설치 확인 요청*/
+	public JSONObject psP010(JSONObject jObj) throws Exception {
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
 }

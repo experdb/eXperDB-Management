@@ -1052,23 +1052,12 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			}catch(ConnectException e){
 				throw e;
 			}
-			
-			/*
-			boolean keepaExecute = true;
-			if (keepaExecuteResult != null) {
-				if ("TC001502".equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
-					keepaExecute = true;
-				}else{
-					keepaExecute = false;
-				}
-			}else{
-				keepaExecute = false;
-			}*/
 		} else {
 			globalVO.setIf_nm("");
 			globalVO.setPeer_server_ip("");
 			globalVO.setObj_ip(globalVO.getIpadr());
 			proxySettingDAO.updateProxyGlobalConf(globalVO);
+			
 		}
 
 	}
@@ -1097,5 +1086,41 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		List<Map<String, Object>> mstSvrSelList = proxySettingDAO.selectMasterSvrProxyList(param);
 	
 		return mstSvrSelList;
+	}
+
+	@Override
+	public boolean checkAgentKalInstYn(Map<String, Object> param) throws ConnectException, Exception {
+		
+		boolean result = true;
+		
+		int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
+		String lstMdfrId = param.get("lst_mdfr_id").toString();
+		
+		//기동 중지
+		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+		Map<String, Object> checkKeepaResult = new  HashMap<String, Object>();
+		
+		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+		JSONObject agentJobj = new JSONObject();
+		agentJobj.put("pry_svr_id", prySvrId);
+		agentJobj.put("lst_mdfr_id", lstMdfrId);
+		System.out.println("checkAgentKalInstYn ::  jobj :: "+agentJobj.toJSONString());
+		try{
+			checkKeepaResult = cic.checkKeepavliedInstallYn(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+		}catch(ConnectException e){
+			throw e;
+		}
+		
+		if (checkKeepaResult != null) {
+			if ("Y".equals(checkKeepaResult.get("KAL_INSTALL_YN").toString())) {
+				result = true;
+			}else{
+				result = false;
+			}
+		}else{
+			result = false;
+		}
+		
+		return result;
 	}
 }
