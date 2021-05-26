@@ -270,7 +270,7 @@ public class DXTcontrolProxy extends SocketCtl {
 						ProxyServerVO proxyServerVOBack = systemService.selectDBMSSvrMaxNmInfo(searchProxyServerVO);
 						
 						if (proxyServerVOBack == null) {
-							proxySvrNmData = dbSvrNmData + "_proxy_2";
+							proxySvrNmData = dbSvrNmData + "_proxy_1";
 						} else {
 							String masterSvrNm = "";
 							String masterSvrFirst = "";
@@ -288,7 +288,7 @@ public class DXTcontrolProxy extends SocketCtl {
 									iMasterSvrEnd = Integer.parseInt((masterSvrNm.substring(masterSvrNm.lastIndexOf("_") + 1 , masterSvrNm.length()))) + 1;
 									proxySvrNmData = masterSvrFirst + Integer.toString(iMasterSvrEnd);
 								} else {
-									proxySvrNmData = dbSvrNmData + "_proxy_2";
+									proxySvrNmData = dbSvrNmData + "_proxy_1";
 								}
 							}
 						}	
