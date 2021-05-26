@@ -19,6 +19,7 @@ import com.experdb.proxy.server.PsP006;
 import com.experdb.proxy.server.PsP007;
 import com.experdb.proxy.server.PsP008;
 import com.experdb.proxy.server.PsP009;
+import com.experdb.proxy.server.PsP010;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
@@ -121,6 +122,12 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					
 					PsP009 PsP009 = new PsP009(client, is, os);
 					PsP009.execute(strDX_EX_CODE, jObj);
+					
+					break;
+				case TranCodeType.PsP010 : // check installed keepalived
+					
+					PsP010 PsP010 = new PsP010(client, is, os);
+					PsP010.execute(strDX_EX_CODE, jObj);
 					
 					break;
 				}

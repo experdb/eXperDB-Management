@@ -332,4 +332,12 @@ public class ProxyDAO {
 	public int updatePryLsnSvrInfo(ProxyListenerServerListVO vo) throws Exception  {
 		return session.update("proxy.updatePryLsnSvrInfo", vo);
 	}
-}
+	/**
+	 * T_PRY_SVR_I의 KAL_PATH 수정
+	 * 
+	 * @param 
+	 * @throws Exception
+	 */
+	public int updatePrySvrKalPathInfo(ProxyServerVO vo) {
+		return session.update("proxy.updatePrySvrKalPathInfo", vo);
+	}}

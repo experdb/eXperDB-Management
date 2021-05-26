@@ -988,4 +988,22 @@
 		  AND PRY_SVR_ID  = #{pry_svr_id}::numeric
 		  AND LSN_ID  = #{lsn_id}::numeric
     </update>
+    
+    <update id="updatePrySvrKalPathInfo"  parameterType="ProxyServerVO">
+   		/**
+	 	* Query ID : updatePrySvrKalPathInfo
+	 	* Description : proxy Kal_path 수정
+	 	* Author : 
+	 	**/
+		UPDATE 	T_PRY_SVR_I
+		SET		KAL_PTH = #{kal_pth},
+				LST_MDFR_ID = #{lst_mdfr_id},
+        		LST_MDF_DTM = clock_timestamp()
+		WHERE 	1 = 1
+         <if test="pry_svr_id > 0">
+             AND PRY_SVR_ID = #{pry_svr_id}::numeric
+         </if>
+			
+    </update>
+    
 </mapper>

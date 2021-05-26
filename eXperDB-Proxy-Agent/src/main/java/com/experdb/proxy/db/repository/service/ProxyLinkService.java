@@ -2,6 +2,7 @@ package com.experdb.proxy.db.repository.service;
 
 import java.util.Map;
 
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
@@ -25,5 +26,13 @@ public interface ProxyLinkService {
 	 * @param ProxyGlovalVO
 	 * @throws Exception
 	 */
-	public JSONObject createNewConfFile(JSONObject jobj) throws Exception;
+	public JSONObject createNewConfFile(JSONObject jObj) throws Exception;
+
+	String readBackupConfFile(String filePath);
+
+	JSONObject executeService(JSONObject jObj) throws Exception;
+
+	JSONObject getAgentInterface(JSONObject jObj) throws Exception;
+
+	JSONObject checkKeepalivedInstallYn(JSONObject jObj) throws Exception;
 }

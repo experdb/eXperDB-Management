@@ -4,6 +4,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,10 +17,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -339,7 +342,12 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		Files.copy(Paths.get(newFilePath), Paths.get(replacePath), REPLACE_EXISTING);
 		
 	}
-	
+	/**
+	 * keepalvied, haproxy 서비스 중단/시작/재시작 하기
+	 * 
+	 * @return String
+	 */
+	@Override
 	public JSONObject executeService(JSONObject jObj) throws Exception {
 		socketLogger.info("ProxyLinkServiceImpl.executeService : "+jObj.toString());
 
@@ -735,7 +743,12 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		return returnMsg;
 	}
 	
-
+	/**
+	 * Agent network Interface 정보
+	 * 
+	 * @return JSONObject
+	 */
+	@Override
 	public JSONObject getAgentInterface(JSONObject jobj) throws Exception {
 		socketLogger.info("getAgentInterface :: start");
 		JSONObject outputObj = new JSONObject();
@@ -786,6 +799,12 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		return outputObj;
 	}
 	
+	/**
+	 * Backup Conf 파일 읽어오기
+	 * 
+	 * @return String
+	 */
+	@Override
 	public String readBackupConfFile(String filePath){
 		String content = null;
  	   	File file = new File(filePath); 
@@ -799,5 +818,74 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
  		   e.printStackTrace();
  	   	}
  	   	return content;
+	}
+	
+	/**
+	 * keepalived 설치 여부 및 path update
+	 * 
+	 * @return String
+	 * @throws Exception 
+	 */
+	@Override
+	public JSONObject checkKeepalivedInstallYn(JSONObject jObj) throws Exception {
+		JSONObject outputObj = new JSONObject();
+		
+		String strSuccessCode = "0";
+		String strErrCode = "";
+		String strErrMsg = "";
+		String kalPath = "";
+		String kalInstYn = "Y";
+		
+		RunCommandExec commandExec = new RunCommandExec();
+		commandExec.runExecRtn3("find /etc/keepalived -name keepalived.conf");
+		try {
+			commandExec.join();
+		} catch (InterruptedException ie) {
+			socketLogger.error("find kal_path error {}",ie.toString());
+			strErrMsg = ie.toString();
+			ie.printStackTrace();
+		}
+		if(commandExec.call().equals("success")){
+			kalPath += commandExec.getMessage();
+		}
+		
+		ProxyServerVO prySvr = new ProxyServerVO();
+		prySvr.setPry_svr_id(jObj.getInt("pry_svr_id"));
+		prySvr.setLst_mdfr_id(jObj.getString("lst_mdfr_id"));
+		prySvr.setKal_pth(kalPath);
+		proxyDAO.updatePrySvrKalPathInfo(prySvr);
+		
+		//keepalived.install.yn=Y
+		Properties prop = new Properties();
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		File file = new File(loader.getResource("context.properties").getFile());
+		String path = file.getParent() + File.separator;
+		try {
+			prop.load(new FileInputStream(path + "context.properties"));
+			prop.setProperty("keepalived.install.yn", "Y");
+			prop.store(new FileOutputStream(path + "context.properties"), "");
+		} catch(FileNotFoundException e) {
+			socketLogger.error("context.properties update FileNotFoundException error {}",e.toString());
+		} catch(Exception e) {
+			socketLogger.error("context.properties update Exception error {}",e.toString());
+		}
+		
+		if("".equals(kalPath)){
+			kalInstYn = "N";
+			strSuccessCode = "-1";
+			strErrCode = "-1";
+			strErrMsg = "keepalived.conf를 찾지 못했습니다.";
+		}else{
+			strSuccessCode = "0";
+			strErrCode = "0";
+			strErrMsg = "";
+		}
+		
+		outputObj.put(ProtocolID.KAL_INSTALL_YN, kalInstYn);
+		outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+		
+		return outputObj;
 	}
 }
