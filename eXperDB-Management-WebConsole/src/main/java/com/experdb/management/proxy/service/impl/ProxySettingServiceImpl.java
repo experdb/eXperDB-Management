@@ -589,7 +589,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 
 			String lst_mdfr_id = param.get("lst_mdfr_id").toString();
 			int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
-
+			int dbSvrId = Integer.parseInt(param.get("db_svr_id").toString());
+			
 			param.put("svr_use_yn", "D");
 			param.put("lst_mdfr_id", lst_mdfr_id);
 			param.put("pry_svr_id", prySvrId);
@@ -621,6 +622,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			//delete t_pry_svr_i
 			proxySettingDAO.deleteProxyServer(prySvrId);
 
+			//같은 db_svr_id를 갖는 남은 proxy 중 old_master_gbn이 M이 없을 경우  자동 승격
+			proxySettingDAO.upgradePrySvrOldMaster(dbSvrId);
+			
 			resultObj.put("resultLog", "success");
 			resultObj.put("result",true);
 			resultObj.put("errMsg","작업이 완료되었습니다.");

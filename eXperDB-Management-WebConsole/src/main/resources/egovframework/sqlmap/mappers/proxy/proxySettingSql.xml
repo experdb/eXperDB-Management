@@ -848,7 +848,7 @@
 	
 	<update id="updatePrySvrKalInstYn" parameterType="proxyServerVO">
         /**
-        * Query ID : updatePrySvrKalInstYn"
+        * Query ID : updatePrySvrKalInstYn
         * Description : Proxy 서버 KAL_INSTALL_YN 업데이트
         * Author : 김민정
         **/
@@ -883,5 +883,28 @@
          					FROM 	T_PRY_SVR_I 
          					WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric )
     </select>
+    <update id="upgradePrySvrOldMaster" parameterType="int">
+        /**
+        * Query ID : upgradePrySvrOldMaster
+        * Description : 같은 DB_SVR_ID를 갖는 PROXY 중 OLD_MASTER_GBN이 M이 없을 경우 업그레이드
+        * Author : 김민정
+        **/
+        UPDATE T_PRY_SVR_I
+        SET OLD_MASTER_GBN = 'M'
+        WHERE NOT EXISTS (	
+        					SELECT COUNT(DB_SVR_ID) 
+        					FROM 	T_PRY_SVR_I
+        					WHERE 	OLD_MASTER_GBN = 'M' AND DB_SVR_ID = #{db_svr_id}::numeric
+        					GROUP BY DB_SVR_ID
+        				 )
+        AND DB_SVR_ID  = #{db_svr_id}::numeric
+        AND PRY_SVR_ID = (
+  							SELECT 	PRY_SVR_ID
+  							FROM 	T_PRY_SVR_I
+  							WHERE 	DB_SVR_ID  = #{db_svr_id}::numeric
+  							ORDER BY PRY_SVR_NM DESC
+  							LIMIT 1
+        				  )
+	</update>
 	
 </mapper>

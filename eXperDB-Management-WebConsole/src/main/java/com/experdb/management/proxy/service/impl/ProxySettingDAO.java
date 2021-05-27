@@ -499,4 +499,8 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		svrUseYn = (String) getSqlSession().selectOne("proxySettingSql.selectProxyAgentSvrUseYnFromProxyId", prySvrId);
 		return svrUseYn;
 	}
+
+	public void upgradePrySvrOldMaster(int dbSvrId) {
+		update("proxySettingSql.upgradePrySvrOldMaster", dbSvrId);	
+	}
 }

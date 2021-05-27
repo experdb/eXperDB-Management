@@ -692,8 +692,9 @@ public class ProxySettingController {
 
 				param.put("svr_use_yn", "D");
 				param.put("lst_mdfr_id", loginVo.getUsr_id());
-				param.put("pry_svr_id", request.getParameter("pry_svr_id"));
-
+				param.put("pry_svr_id", cu.getStringWithoutNull(request.getParameter("pry_svr_id")));
+				param.put("db_svr_id", cu.getStringWithoutNull(request.getParameter("db_svr_id")));
+				
 				resultObj = proxySettingService.deletePrySvr(param);
 
 				if ("success".equals(resultObj.get("resultLog"))) {

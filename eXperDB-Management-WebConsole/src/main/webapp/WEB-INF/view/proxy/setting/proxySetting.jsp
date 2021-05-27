@@ -1495,10 +1495,14 @@
 			return;
 		}else{
 			var prySvrID = proxyServerTable.row('.selected').data().pry_svr_id;
+			var dbSvrID = proxyServerTable.row('.selected').data().db_svr_id;
 			$("#svrReg_pry_svr_id", "#svrRegProxyServerForm" ).val(prySvrID);
 			$.ajax({
 				url : "/deletePrySvr.do",
-	 			data : { pry_svr_id : prySvrID},
+	 			data : {
+	 				pry_svr_id : prySvrID,
+	 				db_svr_id : dbSvrID	
+	 			},
 	 			dataType : "json",
 	 			type : "post",
 				beforeSend: function(xhr) {
