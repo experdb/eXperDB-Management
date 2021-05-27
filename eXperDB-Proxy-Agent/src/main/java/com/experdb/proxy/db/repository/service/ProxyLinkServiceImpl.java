@@ -834,35 +834,37 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String strErrCode = "";
 		String strErrMsg = "";
 		String kalPath = "";
-		String kalInstYn = "Y";
+		String kalInstYn = jObj.getString("kal_install_yn");//"Y";
 		
-		RunCommandExec commandExec = new RunCommandExec();
-		commandExec.runExecRtn3("find /etc/keepalived -name keepalived.conf");
-		try {
-			commandExec.join();
-		} catch (InterruptedException ie) {
-			socketLogger.error("find kal_path error {}",ie.toString());
-			strErrMsg = ie.toString();
-			ie.printStackTrace();
+		if("Y".equals(kalInstYn)){ //사용함으로 변경 시 keepalived.conf 파일 경로를 찾아, T_PRY_SVR_I에 업데이트 
+			RunCommandExec commandExec = new RunCommandExec();
+			commandExec.runExecRtn3("find /etc/keepalived -name keepalived.conf");
+			try {
+				commandExec.join();
+			} catch (InterruptedException ie) {
+				socketLogger.error("find kal_path error {}",ie.toString());
+				strErrMsg = ie.toString();
+				ie.printStackTrace();
+			}
+			if(commandExec.call().equals("success")){
+				kalPath += commandExec.getMessage();
+			}
+			
+			ProxyServerVO prySvr = new ProxyServerVO();
+			prySvr.setPry_svr_id(jObj.getInt("pry_svr_id"));
+			prySvr.setLst_mdfr_id(jObj.getString("lst_mdfr_id"));
+			prySvr.setKal_pth(kalPath);
+			proxyDAO.updatePrySvrKalPathInfo(prySvr);
 		}
-		if(commandExec.call().equals("success")){
-			kalPath += commandExec.getMessage();
-		}
 		
-		ProxyServerVO prySvr = new ProxyServerVO();
-		prySvr.setPry_svr_id(jObj.getInt("pry_svr_id"));
-		prySvr.setLst_mdfr_id(jObj.getString("lst_mdfr_id"));
-		prySvr.setKal_pth(kalPath);
-		proxyDAO.updatePrySvrKalPathInfo(prySvr);
-		
-		//keepalived.install.yn=Y
+		//context.properties과 테이블 데이터 동기화
 		Properties prop = new Properties();
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		File file = new File(loader.getResource("context.properties").getFile());
 		String path = file.getParent() + File.separator;
 		try {
 			prop.load(new FileInputStream(path + "context.properties"));
-			prop.setProperty("keepalived.install.yn", "Y");
+			prop.setProperty("keepalived.install.yn", kalInstYn);
 			prop.store(new FileOutputStream(path + "context.properties"), "");
 		} catch(FileNotFoundException e) {
 			socketLogger.error("context.properties update FileNotFoundException error {}",e.toString());
@@ -870,7 +872,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			socketLogger.error("context.properties update Exception error {}",e.toString());
 		}
 		
-		if("".equals(kalPath)){
+		if("".equals(kalPath) && "Y".equals(kalInstYn)){
 			kalInstYn = "N";
 			strSuccessCode = "-1";
 			strErrCode = "-1";
