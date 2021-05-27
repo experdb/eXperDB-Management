@@ -576,7 +576,7 @@ function fn_serverListTable_init() {
 									</label>
 								</div>
 								<div class="form-group row">
-									<label for="lstnReg_lsn_nm" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="lstnReg_lsn_nm" class="col-sm-3 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.listener_nm" />(*)
 									</label>
@@ -592,7 +592,7 @@ function fn_serverListTable_init() {
 									<div class="col-sm-auto"></div>
 								</div>
 								<div class="form-group row">
-									<label for="lstnReg_con_bind" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="lstnReg_con_bind" class="col-sm-3 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.bind_ip_port" />(*)
 									</label>
@@ -612,17 +612,34 @@ function fn_serverListTable_init() {
 									</div>
 									<div class="col-sm-auto"></div>
 								</div>
+								<div class="form-group row">
+									<label for="lstnReg_db_nm" class="col-sm-3 col-form-label-sm pop-label-index">
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
+										Check <spring:message code="eXperDB_proxy.database" />(*)
+									</label>
+									<div class="col-sm-3">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" onchange="fn_db_nm_change();" tabindex=4 >
+										</select>
+									</div>
+									<label for="lstnReg_con_sim_query" class="col-sm-2 col-form-label-sm pop-label-index" style="display: none;">
+										<i class="item-icon fa fa-angle-double-right"></i>
+										<spring:message code="eXperDB_proxy.check_query" />(*)
+									</label>
+									<div class="col-sm-5" style="display: none;">
+										<input type="text" class="form-control form-control-xsm lstnReg_con_sim_query" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" />
+									</div>
+								</div>
 								<div class="form-group row row-last">
-									<label for="lstnReg_lsn_desc" class="col-sm-2 col-form-label-sm pop-label-index">
+									<label for="lstnReg_lsn_desc" class="col-sm-3 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.desc" />
 									</label>
-									<div class="col-sm-10">
+									<div class="col-sm-9">
 										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
 									</div>
 								</div>
 							</div>
-							<br/>
+							<%-- <br/>
 							<div class="card-body card-body-xsm card-body-border">
 								<div class="form-group row">
 									<label class="col-sm-3 col-form-label-xsm pop-label-index">
@@ -647,7 +664,7 @@ function fn_serverListTable_init() {
 										<input type="text" class="form-control form-control-xsm lstnReg_con_sim_query" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" />
 									</div>
 								</div>
-							</div>
+							</div> --%>
 							<br/>
 							
 							<div class="card-body card-body-xsm card-body-border">

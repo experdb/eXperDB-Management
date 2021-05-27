@@ -699,6 +699,12 @@
 					}else if(result.errcd==2){ //연결오류
 						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
 					}
+					
+					//global interface select box setting
+	 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf);
+	 				//popup interface select box setting
+	 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","");
+	 				
  				} else {
 	 				//오류메세지 표시
 	 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
@@ -717,10 +723,6 @@
 					proxyListenTable.rows({selected: true}).deselect();
 					proxyListenTable.clear().draw();
 	 			}
-
- 				//popup select box setting
- 				fn_create_v_if_select();
- 				
 			}
 	 	});
  	}
@@ -838,36 +840,33 @@
 	}
 	
 	/* ********************************************************
-	 * select 박스 생성
+	 * agent interface select 박스 생성
 	 ******************************************************** */
-	function fn_create_v_if_select(){
+	function fn_create_if_select(objId, objForm, objVal){
 		//V interface 생성/////////////////////////////////////////////////////////////
-		var tempVInterfNmList = selAgentInterfaceItems;
+		var tempInterfNmList = selAgentInterfaceItems;
 		var tempHtml ="";
 		
-		var vIfLen = tempVInterfNmList.length;
+		var vIfLen = tempInterfNmList.length;
 		
-		$( "#instReg_v_if_nm_sel > option", "#insVipInstForm" ).remove();
+		$( objId+" > option", objForm ).remove();
 		
-		tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+		if(objId == "#instReg_v_if_nm_sel")	tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+		
 		for(var i=0; i<vIfLen; i++){
-			var id = tempVInterfNmList[i];
+			var id = tempInterfNmList[i];
 			if(id != 'lo') tempHtml += '<option value='+id+'>'+id+'</option>';
 		}
 		
-		$("#instReg_v_if_nm_sel", "#insVipInstForm" ).append(tempHtml);
+		$(objId, objForm ).append(tempHtml);
 		
-		if (tempHtml > 0) {
-			$("#instReg_v_if_nm option:eq(0)").prop("selected", true);
+		if(objVal != ""){
+			$( objId, objForm ).val(objVal);
+		}else if (tempHtml > 0) {
+			$(objId+" option:eq(0)").prop("selected", true);
 		}
-		///////////////////////////////////////////////////////////////////////////////
 		
-		//IP로 동적으로 가상 IP select 박스 생성///////////////////////////////////////////////
-/* 		var peerSvrIp = $("#glb_peer_server_ip", "#globalInfoForm").val();
-		alert(selVipInstancePeerList.length);
-		alert(peerSvrIp); */
 	}
-
 	/* ********************************************************
 	* 기동 상태 버튼 클릭 이벤트 
 	******************************************************** */
@@ -2207,7 +2206,9 @@
 										</span>
 									</label>
 									<div class="col-sm-2_27">
-										<input type="text" class="form-control form-control-sm glb_if_nm" maxlength="20" id="glb_if_nm" name="glb_if_nm" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
+										<!-- <input type="text" class="form-control form-control-sm glb_if_nm" maxlength="20" id="glb_if_nm" name="glb_if_nm" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" /> -->
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="glb_if_nm" id="glb_if_nm" onchange="fn_change_global_info">
+										</select>
 									</div>
 								</div>
 								<div class="form-group row">
