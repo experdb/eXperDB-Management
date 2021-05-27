@@ -688,7 +688,13 @@
 
 					//에이전트 연결 체크
 					if(result.errcd==0){//정상
+						
 						fn_btn_setEnable("sebu","");
+						//global interface select box setting
+		 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf);
+		 				//popup interface select box setting
+		 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","");
+		 				
 					}else if(result.errcd==1){ //연결실패
 						selAgentConnect = false;
 						//문구 추가
@@ -699,11 +705,6 @@
 					}else if(result.errcd==2){ //연결오류
 						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
 					}
-					
-					//global interface select box setting
-	 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf);
-	 				//popup interface select box setting
-	 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","");
 	 				
  				} else {
 	 				//오류메세지 표시
