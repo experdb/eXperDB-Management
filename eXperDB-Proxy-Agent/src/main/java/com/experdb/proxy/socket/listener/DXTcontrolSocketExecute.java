@@ -20,6 +20,7 @@ import com.experdb.proxy.server.PsP007;
 import com.experdb.proxy.server.PsP008;
 import com.experdb.proxy.server.PsP009;
 import com.experdb.proxy.server.PsP010;
+import com.experdb.proxy.server.PsP011;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
@@ -128,6 +129,12 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					
 					PsP010 PsP010 = new PsP010(client, is, os);
 					PsP010.execute(strDX_EX_CODE, jObj);
+					
+					break;
+				case TranCodeType.PsP011 : // insert conf data
+					
+					PsP011 PsP011 = new PsP011(client, is, os);
+					PsP011.execute(strDX_EX_CODE, jObj);
 					
 					break;
 				}
