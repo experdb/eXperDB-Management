@@ -23,6 +23,7 @@ public class ProxyClientTranCodeType {
 	public static final String PsP008 = "PsP008"; 	// proxy log 파일 가져오기
 	public static final String PsP009 = "PsP009"; 	// proxy conf 파일 읽어서 데이터 입력 요청
 	public static final String PsP010 = "PsP010";	// Keepavlied 설치 여부 확인
+	public static final String PsP011 = "PsP011";	// Config Backup 폴더 삭제 
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";

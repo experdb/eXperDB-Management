@@ -185,4 +185,13 @@ public class ProxyClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
+
+	/* proxy backup conf 폴더 삭제 요청 */
+	public JSONObject psP011(JSONObject jObj) throws Exception {
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
 }

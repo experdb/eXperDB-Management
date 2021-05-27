@@ -598,6 +598,18 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			//update t_pry_agt_i의 svr_use_yn = D으로 업데이트
 			proxySettingDAO.updateProxyAgentInfoFromProxyId(param);
 
+			//Agent 접속 정보 추출 하여 기존 backup config 파일 삭제 
+			ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+			Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
+			ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+			try{
+				agentConnectResult = cic.deleteProxyConfigFiles(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port());
+			}catch(ConnectException e){
+				e.printStackTrace();
+			}catch(Exception e){
+				e.printStackTrace();
+			}			
+			
 			//delete t_prycng_g
 			proxySettingDAO.deleteProxyConfHistList(prySvrId);
 

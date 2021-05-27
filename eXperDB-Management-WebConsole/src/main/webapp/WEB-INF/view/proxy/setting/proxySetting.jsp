@@ -1363,6 +1363,15 @@
 			$("#svrReg_min_data_del_term", "#svrRegProxyServerForm").val("7"); //분별 데이터 보관 기간
 
 			$("#svrReg_master_gbn", "#svrRegProxyServerForm").val("M"); //마스터 구분 
+			
+			$("#svrReg_day_data_del_term", "#svrRegProxyServerForm").removeAttr("disabled");
+			$("#svrReg_day_data_del_term", "#svrRegProxyServerForm").removeAttr("readonly");
+			$("#svrReg_min_data_del_term", "#svrRegProxyServerForm").removeAttr("disabled");
+			$("#svrReg_min_data_del_term", "#svrRegProxyServerForm").removeAttr("readonly");
+			$("#svrReg_master_gbn", "#svrRegProxyServerForm").removeAttr("disabled");
+			$("#svrReg_master_gbn", "#svrRegProxyServerForm").removeAttr("readonly");
+			$("#svrReg_master_svr_id", "#svrRegProxyServerForm").removeAttr("disabled");
+			$("#svrReg_master_svr_id", "#svrRegProxyServerForm").removeAttr("readonly");
 
 			//서버명 자동 setting
 			fn_dbmsChange_ServerNm();
