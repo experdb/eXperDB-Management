@@ -1095,6 +1095,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		
 		int prySvrId = Integer.parseInt(param.get("pry_svr_id").toString());
 		String lstMdfrId = param.get("lst_mdfr_id").toString();
+		String kalInstYn = param.get("kal_install_yn").toString();
 		
 		//기동 중지
 		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
@@ -1104,6 +1105,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		JSONObject agentJobj = new JSONObject();
 		agentJobj.put("pry_svr_id", prySvrId);
 		agentJobj.put("lst_mdfr_id", lstMdfrId);
+		agentJobj.put("kal_install_yn", kalInstYn);//stop
 		System.out.println("checkAgentKalInstYn ::  jobj :: "+agentJobj.toJSONString());
 		try{
 			checkKeepaResult = cic.checkKeepavliedInstallYn(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);

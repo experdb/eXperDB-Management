@@ -881,9 +881,8 @@ public class ProxySettingController {
 
 				boolean kalInstYnInAgent = true;
 
-				if(kalInstYn.equals("Y")){//keepalvied 사용을 Y로 변경 시, 실제로 Agent에 설치되어있는지 확인 
-					kalInstYnInAgent = proxySettingService.checkAgentKalInstYn(param);
-				}
+				//keepalvied 사용을 Y로 변경 시, 실제로 Agent에 설치되어있는지 확인 //keepalvied 사용을 N으로 변경 시, Agent에 Context.properties도 변경 
+				kalInstYnInAgent = proxySettingService.checkAgentKalInstYn(param);
 				
 				if(kalInstYn.equals("Y") && kalInstYnInAgent != true){ // 사용이 Y이지만, 실제로 Agent에 설치가 되어있지 않다면 중단... 
 					resultObj.put("result", false);

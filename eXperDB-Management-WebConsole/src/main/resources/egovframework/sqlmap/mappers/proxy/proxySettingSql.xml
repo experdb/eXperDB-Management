@@ -383,7 +383,11 @@
            </if>
            <if test='master_gbn != null and (master_gbn eq "M".toString())'>
              , null
-             , 'M'
+             , CASE WHEN (	SELECT 		COUNT(DB_SVR_ID) 
+             				FROM 		T_PRY_SVR_I 
+             				WHERE 		DB_SVR_ID = #{db_svr_id}::numeric
+             				GROUP BY 	DB_SVR_ID ) IS NULL		THEN 	'M'
+             	ELSE 		'S' 	END AS OLD_MASTER_GBN 
            </if>
 			, #{db_svr_id}::numeric
 			, #{day_data_del_term}::numeric
