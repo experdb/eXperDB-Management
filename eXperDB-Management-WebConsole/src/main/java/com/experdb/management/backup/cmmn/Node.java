@@ -33,7 +33,7 @@ public class Node {
 		try {
 			//사용자유저 사용 체크하지 않았을시
 			if(targetMachineVO.getIsUser().equals("false")){
-				cmd = "./d2dnode --add=" + targetMachineVO.getName() + " --user=" + targetMachineVO.getUser() + " --password=" + targetMachineVO.getPassword() + " --description="+targetMachineVO.getDescription();
+				cmd = "./d2dnode --add=" + targetMachineVO.getName() + " --user=" + targetMachineVO.getUser() + " --password=" + targetMachineVO.getPassword() + " --description="+targetMachineVO.getDescription()+" --force";
 			}else{		
 				/*--user=username
 				루트가 아닌 사용자의 이름을 지정합니다.				
@@ -43,7 +43,7 @@ public class Node {
 				루트 사용자의 이름을 지정합니다.				
 				--rootpwd=rootpassword
 				루트 사용자의 암호를 지정합니다. */
-				cmd = "./d2dnode --add=" + targetMachineVO.getName() + " --user=" + targetMachineVO.getUserName()+ " --password=" + targetMachineVO.getUserPw() + " --rootuser=" + targetMachineVO.getUser() + " --rootpwd=" + targetMachineVO.getPassword() + " --description="+targetMachineVO.getDescription();
+				cmd = "./d2dnode --add=" + targetMachineVO.getName() + " --user=" + targetMachineVO.getUserName()+ " --password=" + targetMachineVO.getUserPw() + " --rootuser=" + targetMachineVO.getUser() + " --rootpwd=" + targetMachineVO.getPassword() + " --description="+targetMachineVO.getDescription()+" --force";
 			}
 			String strCmd = "cd " + path + ";" + cmd;
 
@@ -86,7 +86,7 @@ public class Node {
 				루트 사용자의 이름을 지정합니다.				
 				--rootpwd=rootpassword
 				루트 사용자의 암호를 지정합니다. */
-				cmd = "./d2dnode --modify=" + targetMachineVO.getName() + " --user=" + targetMachineVO.getUserName()+ " --password=" + targetMachineVO.getUserPw() + " --rootuser=" + targetMachineVO.getUser() + " --rootpwd=" + targetMachineVO.getPassword() + " --description="+targetMachineVO.getDescription();
+				cmd = "./d2dnode --modify=" + targetMachineVO.getName() + " --user=" + targetMachineVO.getUserName()+ " --password=" + targetMachineVO.getUserPw() + " --rootuser=" + targetMachineVO.getUser() + " --rootpwd=" + targetMachineVO.getPassword() + " --description="+targetMachineVO.getDescription()+" --force";
 			}
 			String strCmd = "cd " + path + ";" + cmd;
 
