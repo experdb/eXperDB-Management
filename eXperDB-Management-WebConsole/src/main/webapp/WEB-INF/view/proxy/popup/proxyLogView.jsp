@@ -28,6 +28,8 @@
 		var v_date = $("#date", "#proxyViewForm").val();
 		var v_todayYN = $("#todayYN", "#proxyViewForm").val();
 		var v_aut_id = $("#aut_id", "#proxyViewForm").val();
+		var v_kal_install_yn = $("#kal_install_yn", "#proxyViewForm").val();
+		
 		if(v_endFlag > 0) {
 			showSwalIcon('<spring:message code="message.msg66" />', '<spring:message code="common.close" />', '', 'warning');
 			$("#endFlag").val("0");
@@ -38,7 +40,6 @@
 		} else {
 			v_todayYN = 'N';
 		}
-		console.log(v_date);
 		$.ajax({
 			url : "/proxyMonitoring/proxyLogViewAjax.do",
 			dataType : "json",
@@ -105,6 +106,12 @@
 						$('#start_btn').hide();
 					}
 					$('#download_btn').show();
+				}
+				
+				if(v_kal_install_yn == "N"){
+					$('#log_type').hide();
+				} else {
+					$('#log_type').show();
 				}
 			}
 		});
@@ -417,6 +424,7 @@
 					<input type="hidden" id="todayYN" name="todayYN">
 					<input type="hidden" id="status" name="status">
 					<input type="hidden" id="agt_cndt_cd" name="agt_cndt_cd">
+					<input type="hidden" id="kal_install_yn" name="kal_install_yn">
 					<fieldset>
 						<div class="card" style="margin-top:10px;border:0px;margin-bottom:-40px;">
 							<div class="card-body">

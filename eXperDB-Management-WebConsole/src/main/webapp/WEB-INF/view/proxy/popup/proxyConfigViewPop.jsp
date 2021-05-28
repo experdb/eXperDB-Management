@@ -62,11 +62,9 @@
 			},
 			success : function(result) {
 				if (result != null) {
-					// var v_fileSize = Number($("#fSize", "#configForm").val());
 					
 					if (result.data != null) {
 						$("#config", "#configForm").html(result.data);
-						// v_fileSize = Number(v_fileSize) + result.fSize;
 					}
 					
 					if(type == "P"){

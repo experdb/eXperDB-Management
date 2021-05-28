@@ -57,6 +57,7 @@
 	var aut_id = "";
 	var todayYN = "";
 	var proxyServerTotInfo_cnt = "";
+	var kal_install_yn = "";
 	
 	var reload_nom = "0";
 	
@@ -565,8 +566,7 @@
 		var exe_status_css = "";
 		var kal_exe_status_css = "";
 		var strVip = "";
-		var kal_install_yn = "";
- 		console.log(proxyServerByMasId_cnt)
+		
 		//ROW 만들기
 		for(var i = 0; i < proxyServerByMasId_cnt; i++){
  			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
@@ -679,7 +679,9 @@
 		 					}
 
 		 					$("#keepVipDiv"+ j).html(html_sebu);
-		 					
+		 					if(j > 0){
+			 					$("#keepVipDiv" + j).attr('style', "width:80%;height:205px;")
+		 					}
 		 					$("#keepVipDivLine" + j).html(html_vip_line);
 		 					
 		 					iVipChkCnt = j;
@@ -690,7 +692,7 @@
 // 	 		 				if(kal_install_yn == 'Y') {
 // 		 		 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i><spring:message code="eXperDB_proxy.msg28"/> </h6>';
 // 	 		 				} else {
-	 		 		 			html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
+	 		 		 			html_sebu += '<h5 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h5>';
 // 	 		 				}
 	 						$("#vip_proxy_nm" + j).html(vip_btn_html);
 		 					$("#keepVipDiv"+ j).html(html_sebu);
@@ -1896,7 +1898,6 @@
 	 * log 파일 view popup
 	 ******************************************************** */
 	function fn_logView(pry_svr_id, type, date, agt_cndt_cd){
-		console.log(agt_cndt_cd)
 	
 		todayYN = 'N';
 		if(date == 'today'){
@@ -1925,6 +1926,7 @@
 				$("#view_file_name", "#proxyViewForm").html("");
 				$("#agt_cndt_cd", "#proxyViewForm").html(agt_cndt_cd);
 				$("#log_type").val(type).prop("selected", true);
+				$("#kal_install_yn","#proxyViewForm").val(kal_install_yn);
 				dateCalenderSetting();
 				fn_logViewAjax();
 				$('#pop_layer_log_view').modal("show");
