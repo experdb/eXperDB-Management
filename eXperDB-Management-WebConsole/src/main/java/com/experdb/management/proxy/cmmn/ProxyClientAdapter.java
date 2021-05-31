@@ -194,4 +194,13 @@ public class ProxyClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
+	
+	/* proxy 서버 연결 확인 */
+	public JSONObject psP012(JSONObject jObj) throws Exception {
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
 }

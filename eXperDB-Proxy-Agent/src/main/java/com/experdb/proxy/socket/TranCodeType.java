@@ -24,6 +24,7 @@ public class TranCodeType {
 	public static final String PsP009 = "PsP009";
 	public static final String PsP010 = "PsP010";
 	public static final String PsP011 = "PsP011";
+	public static final String PsP012 = "PsP012";
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
