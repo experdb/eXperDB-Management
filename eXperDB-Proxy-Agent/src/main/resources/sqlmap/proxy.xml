@@ -816,7 +816,8 @@
 			, LST_MDF_DTM = clock_timestamp()
 		WHERE
 			PRY_SVR_ID  != #{pry_svr_id}::numeric
-		AND (PRY_SVR_ID = #{old_master_svr_id_chk}::numeric OR MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric);
+		AND ((PRY_SVR_ID = #{old_master_svr_id_chk}::numeric OR MASTER_SVR_ID = #{old_master_svr_id_chk}::numeric)
+		    OR (DB_SVR_ID = #{db_svr_id}::numeric));
 		</if>
     </update>
     
