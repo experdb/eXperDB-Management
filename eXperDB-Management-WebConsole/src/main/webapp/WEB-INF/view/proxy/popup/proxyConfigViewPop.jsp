@@ -19,21 +19,11 @@
 	*/
 %>
 <script type="text/javascript">
-// 	var pry_svr_id = "${pry_svr_id}";
-// 	var type = "${type}";
-	$(window).ready(function(){
-// 		config 파일 불러오기
-// 		console.log('pry_svr_id : ' + pry_svr_id);
-// 		console.log('type : ' + type);
-// 		fn_configViewAjax();	
-	});
 
 	/* *******************************************************
  	* config 파일 불러오기
  	******************************************************** */
 	function fn_configViewAjax(pry_svr_id, type) {
-		// var pry_svr_id = $("pry_svr_id", "configForm").val();
-		// var type = $("type", "configForm").val();
 		var v_seek = $("#seek", "#configForm").val();
 		var v_endFlag = $("#endFlag", "#configForm").val();
 		var v_dwLen = $("#dwLen", "#configForm").val();
@@ -72,16 +62,6 @@
 					} else {
 						$(".config_title").html(' ' + result.pry_svr_nm + ' Vip Configuration');
 					}
-
-					// $("#fSize", "#configForm").val(v_fileSize);
-					
-					// $("#seek", "#configForm").val(result.seek);
-					// $("#endFlag", "#configForm").val(result.endFlag);
-					// $("#dwLen", "#configForm").val(result.dwLen);
-					
-					// v_fileSize = byteConvertor(v_fileSize);
-					
-					// $("#view_file_size", "#configForm").html(v_fileSize);
 				}
 			}
 		});
@@ -124,7 +104,6 @@
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<textarea class="form-control" id="config" name="config" style="height: 400px;" readonly></textarea>
-<%-- 										<textarea class="form-control" id="config" name="config" style="height: 400px;" readonly>${data}</textarea> --%>
 									</div>
 								</div>
 
