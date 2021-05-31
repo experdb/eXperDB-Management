@@ -243,6 +243,7 @@
 		$("#bckCompressVal").val($("#compressType").val());
 		
 		fn_alertShow();
+		fn_scheduleAlert();
 		$("#pop_layer_popup_backupPolicyReg").modal("hide");
 	}
 
