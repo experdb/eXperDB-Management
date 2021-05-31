@@ -26,12 +26,6 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 @Repository("proxyMonitoringDAO")
 public class ProxyMonitoringDAO extends EgovAbstractMapper {
 
-	// public List<ProxyServerVO> selectProxyServerList() {
-	// List<ProxyServerVO> result = null;
-	// result = selectList("proxyMonitoringSql.selectProxyServerList");
-	// return result;
-	// }
-
 	/**
 	 * Proxy 서버 목록 조회
 	 * 
@@ -190,15 +184,11 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 	/**
 	 * proxy / keepalived 상태 변경
 	 * 
-	 * @param pry_svr_id,
-	 *            type, status
+	 * @param pry_svr_id, type, status
 	 * @return int
 	 */
 	public int actExeCng(Map<String, Object> param) {
-		System.out.println("actExeCng DAO : " + param.size());
-		System.out.println(param.toString());
 		int result = insert("proxyMonitoringSql.insertActExeCng", param);
-		System.out.println(result);
 		return result;
 	}
 

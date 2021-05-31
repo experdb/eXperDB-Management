@@ -60,11 +60,13 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	/**
 	 * Proxy 모니터링 화면 접속 이력 등록
 	 * 
-	 * @param request, historyVO, dtlCd
+	 * @param request,
+	 *            historyVO, dtlCd
 	 * @throws Exception
 	 */
 	@Override
-	public void monitoringSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd, String mnu_id) throws Exception {
+	public void monitoringSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd, String mnu_id)
+			throws Exception {
 		CmmnUtils.saveHistory(request, historyVO);
 		historyVO.setExe_dtl_cd(dtlCd);
 
@@ -195,9 +197,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("pry_svr_id", pry_svr_id);
 		param.put("type", type);
-		// Map<String, Object> result =
-		// proxyMonitoringDAO.selectConfiguration(param);
-
+		
 		return null;
 	}
 
@@ -275,7 +275,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		int pry_svr_id = (int) param.get("pry_svr_id");
 		String cur_status = (String) param.get("cur_status");
 		String act_exe_type = (String) param.get("act_exe_type");
-		System.out.println(pry_svr_id);
 		Map<String, Object> info = proxyMonitoringDAO.selectConfigurationInfo(pry_svr_id, type);
 		String strIpAdr = (String) info.get("ipadr");
 		String strPort = String.valueOf(info.get("socket_port"));
@@ -302,7 +301,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 
 		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
 		Map<String, Object> executeResult = new HashMap<String, Object>();
-		System.out.println(jObj.toJSONString());
 		int PORT = Integer.parseInt(strPort);
 		try {
 			executeResult = cic.proxyServiceExcute(strIpAdr, PORT, jObj);
@@ -348,9 +346,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		String strIpAdr = (String) info.get("ipadr");
 		String strPrySvrNm = (String) info.get("pry_svr_nm");
 		String status = (String) info.get("exe_status");
-		// String strConfigFilePath = (String) info.get("path");
-		// String strDirectory = strConfigFilePath.substring(0,
-		// strConfigFilePath.lastIndexOf("/")+1);
+
 		if (type.equals("PROXY")) {
 			type = "haproxy";
 		}
@@ -361,8 +357,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 			strFileName += "-" + param.get("date");
 		}
 
-		System.out.println(strDirectory);
-		System.out.println(strFileName);
 		String strPort = String.valueOf(info.get("socket_port"));
 		JSONObject jObj = new JSONObject();
 		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP008);
@@ -390,7 +384,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 				} else {
 					file_path = "/home/experdb/app/eXperDB-Management/eXperDB-Proxy";
 				}
-				System.out.println("===file_path===" + file_path);
 				String file_name = "";
 
 				File Folder = new File(file_path);
@@ -460,7 +453,43 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	 * @param db_svr_id
 	 * @return List<Map<String, Object>>
 	 */
+	@Override
 	public List<Map<String, Object>> selectDbStandbyList(int db_svr_id) {
 		return proxyMonitoringDAO.selectDbStandbyList(db_svr_id);
+	}
+
+	/**
+	 * proxy agent 상태 확인
+	 * 
+	 * @param pry_svr_id
+	 * @return Map<String, Object>
+	 */
+	@Override
+	public Map<String, Object> getProxyAgentStatus(int pry_svr_id) {
+		Map<String, Object> info = proxyMonitoringDAO.selectConfigurationInfo(pry_svr_id, "proxy");
+
+		String strIpAdr = (String) info.get("ipadr");
+		String strPort = String.valueOf(info.get("socket_port"));
+
+		JSONObject jObj = new JSONObject();
+		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP012);
+
+		String IP = strIpAdr;
+		int PORT = Integer.parseInt(strPort);
+		ProxyClientInfoCmmn pcic = new ProxyClientInfoCmmn();
+
+		Map<String, Object> getProxyAgentStatus = new HashMap<String, Object>();
+		String conn_result = "Y";
+
+		try {
+			getProxyAgentStatus = pcic.getProxyAgentStatus(IP, PORT, jObj);
+		} catch (ConnectException e) {
+			conn_result = "N";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		getProxyAgentStatus.put("conn_result", conn_result);
+		return getProxyAgentStatus;
 	}
 }
