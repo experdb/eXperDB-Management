@@ -132,18 +132,23 @@
 				},
 				glb_max_con_cnt: {
 					required: '<spring:message code="eXperDB_proxy.msg2" />'
+					,maxlength: '5'+'<spring:message code="message.msg211"/>'
 				},
 				glb_cl_con_max_tm_num: {
 					required: '<spring:message code="eXperDB_proxy.msg2" />'
+					,maxlength: '5'+'<spring:message code="message.msg211"/>'	
 				},
 				glb_con_del_tm_num: {
 					required: '<spring:message code="eXperDB_proxy.msg2" />'
+					,maxlength: '5'+'<spring:message code="message.msg211"/>'	
 				},
 				glb_svr_con_max_tm_num: {
 					required: '<spring:message code="eXperDB_proxy.msg2" />'
+					,maxlength: '5'+'<spring:message code="message.msg211"/>'	
 				},
 				glb_chk_tm_num: {
 					required: '<spring:message code="eXperDB_proxy.msg2" />'
+					,maxlength: '5'+'<spring:message code="message.msg211"/>'	
 				}
 			},
 			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
@@ -691,9 +696,9 @@
 						
 						fn_btn_setEnable("sebu","");
 						//global interface select box setting
-		 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf);
+		 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf, vipUseYn);
 		 				//popup interface select box setting
-		 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","");
+		 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","", vipUseYn);
 		 				
 					}else if(result.errcd==1){ //연결실패
 						selAgentConnect = false;
@@ -820,6 +825,8 @@
 			
 			//가상IP관리 등록/수정/삭제 버튼 inable
 			setTimeout(function(){
+				$("#glb_if_nm > option", "#globalInfoForm" ).remove();
+				$("#glb_if_nm", "#globalInfoForm").val("");
 				$("#btnInsert_vip").prop("disabled", "disabled");
 				$("#btnUpdate_vip").prop("disabled", "disabled");
 				$("#btnDelete_vip").prop("disabled", "disabled");
@@ -843,30 +850,34 @@
 	/* ********************************************************
 	 * agent interface select 박스 생성
 	 ******************************************************** */
-	function fn_create_if_select(objId, objForm, objVal){
+	function fn_create_if_select(objId, objForm, objVal, vipUse){
 		//V interface 생성/////////////////////////////////////////////////////////////
-		var tempInterfNmList = selAgentInterfaceItems;
-		var tempHtml ="";
-		
-		var vIfLen = tempInterfNmList.length;
-		
-		$( objId+" > option", objForm ).remove();
-		
-		if(objId == "#instReg_v_if_nm_sel")	tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
-		
-		for(var i=0; i<vIfLen; i++){
-			var id = tempInterfNmList[i];
-			if(id != 'lo') tempHtml += '<option value='+id+'>'+id+'</option>';
+		if(vipUse == "Y"){
+			var tempInterfNmList = selAgentInterfaceItems;
+			var tempHtml ="";
+			
+			var vIfLen = tempInterfNmList.length;
+			
+			$( objId+" > option", objForm ).remove();
+			
+			for(var i=0; i<vIfLen; i++){
+				var id = tempInterfNmList[i];
+				if(id != 'lo') tempHtml += '<option value='+id+'>'+id+'</option>';
+			}
+			if(objId == "#instReg_v_if_nm_sel")	tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+			
+			$(objId, objForm ).append(tempHtml);
+			
+			if(objVal != ""){
+				$( objId, objForm ).val(objVal);
+			}else if (tempHtml > 0) {
+				$(objId+" option:eq(0)").prop("selected", true);
+				if(objId == "#instReg_v_if_nm_sel") $("#instReg_v_if_nm").val($("#instReg_v_if_nm_sel").val());
+			}
+		}else{
+			$( objId+" > option", objForm ).remove();
+			$( objId, objForm ).val("");
 		}
-		
-		$(objId, objForm ).append(tempHtml);
-		
-		if(objVal != ""){
-			$( objId, objForm ).val(objVal);
-		}else if (tempHtml > 0) {
-			$(objId+" option:eq(0)").prop("selected", true);
-		}
-		
 	}
 	/* ********************************************************
 	* 기동 상태 버튼 클릭 이벤트 
@@ -1591,7 +1602,7 @@
 			
 			$("#instReg_vip_cng_id", "#insVipInstForm").val("");
 			$("#instReg_v_ip", "#insVipInstForm").val("");//virtual ip
-			$("#instReg_v_if_nm", "#insVipInstForm").val(""); //virtual interface
+			$("#instReg_v_if_nm", "#insVipInstForm").val($("#instReg_v_if_nm_sel", "#insVipInstForm").val()); //virtual interface
 			$("#instReg_v_rot_id", "#insVipInstForm").val(""); //virtual router id
 			var vipDataLen = vipInstTable.rows().data().length;
 			if(vipDataLen == 0){
@@ -1614,10 +1625,18 @@
 			$("#instReg_vip_cng_id", "#insVipInstForm").val(selConfInfo.vip_cng_id);//vip config id
 			
 			$("#instReg_v_ip", "#insVipInstForm").val(selConfInfo.v_ip);//virtual ip
-			$("#instReg_v_ip_sel", "#insVipInstForm").val(selConfInfo.v_ip);//virtual ip
+			if($("#instReg_v_ip_sel > option", "#insVipInstForm").text().indexOf(selConfInfo.v_ip) < 0){
+				$("#instReg_v_ip_sel", "#insVipInstForm" ).val("");
+			}else{
+				$("#instReg_v_ip_sel", "#insVipInstForm").val(selConfInfo.v_ip);//virtual ip
+			}
 			
 			$("#instReg_v_if_nm", "#insVipInstForm").val(selConfInfo.v_if_nm); //virtual interface
-			$("#instReg_v_if_nm_sel", "#insVipInstForm").val(selConfInfo.v_if_nm); //virtual interface
+			if($("#instReg_v_if_nm_sel > option", "#insVipInstForm").text().indexOf(selConfInfo.v_if_nm) < 0){
+				$("#instReg_v_if_nm_sel", "#insVipInstForm" ).val("");
+			}else{
+				$("#instReg_v_if_nm_sel", "#insVipInstForm").val(selConfInfo.v_if_nm);//virtual interface
+			}
 			
 			$("#instReg_v_rot_id", "#insVipInstForm").val(selConfInfo.v_rot_id); //virtual router id
 			
@@ -1672,7 +1691,7 @@
 		var tempHtml ="";
 		var vipLen = tempPeerVipList.length;
 		$( "#instReg_v_ip_sel > option", "#insVipInstForm" ).remove();
-		tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+		
 		for(var i=0; i<vipLen; i++){
 			var id = tempPeerVipList[i].v_ip;
 			var vipDatas = vipInstTable.rows().data();
@@ -1684,7 +1703,8 @@
 			if(cnt==0)	tempHtml += '<option value='+id+'>'+id+'</option>';
 			else if(selVip == id && mode != "reg") tempHtml += '<option value='+id+'>'+id+'</option>';
 		}
-
+		tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+		
 		$("#instReg_v_ip_sel", "#insVipInstForm" ).append(tempHtml);
 		$("#instReg_v_ip", "#insVipInstForm").val(selVip);
 		
@@ -1786,7 +1806,7 @@
 			
 			//$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val(""); //접속IP
 			$("#lstnReg_con_bind_ip_sel option:eq(0)").prop("selected", true);
-			$("#lstnReg_con_bind_ip", "#insProxyListenForm").val(""); //접속IP
+			$("#lstnReg_con_bind_ip", "#insProxyListenForm").val($("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val()); //접속IP
 			$("#lstnReg_con_bind_port", "#insProxyListenForm").val(""); //접속포트
 			$("#lstnReg_lsn_desc", "#insProxyListenForm").val(""); //리스너 설명
 			$("#lstnReg_db_usr_id", "#insProxyListenForm").val("reqmgr"); //DB 사용자 ID
@@ -1808,9 +1828,13 @@
 			$("#lstnReg_lsn_nm_sel", "#insProxyListenForm").hide();
 			
 			var bind = selListenerInfo.con_bind_port;
-			$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val(bind.substring(0,bind.indexOf(":"))); //접속IP
 			$("#lstnReg_con_bind_ip", "#insProxyListenForm").val(bind.substring(0,bind.indexOf(":"))); //접속IP
 			$("#lstnReg_con_bind_port", "#insProxyListenForm").val(bind.substring(bind.indexOf(":")+1)); //접속포트
+			if($("#lstnReg_con_bind_ip_sel > option", "#insProxyListenForm").text().indexOf(bind.substring(0,bind.indexOf(":"))) < 0){
+				$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm" ).val("");
+			}else{
+				$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val(bind.substring(0,bind.indexOf(":")));
+			}
 			
 			$("#lstnReg_lsn_desc", "#insProxyListenForm").val(selListenerInfo.lsn_desc); //리스너 설명
 			$("#lstnReg_db_usr_id", "#insProxyListenForm").val("reqmgr");
@@ -1840,18 +1864,18 @@
 		var tempHtml ="";
 		var vipLen = tempVipList.length;
 		$( "#lstnReg_con_bind_ip_sel > option", "#insProxyListenForm" ).remove();
-		tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
 		tempHtml += '<option value="*">*</option>';
 		for(var i=0; i<vipLen; i++){
 			var vip = tempVipList[i].v_ip;
 			vip = vip.substr(0, vip.indexOf("/"));
 			tempHtml += '<option value='+vip+'>'+vip+'</option>';
 		}
-
+		tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
 		$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm" ).append(tempHtml);
 		
 		if (tempHtml > 0) {
 			$("#lstnReg_con_bind_ip_sel option:eq(0)").prop("selected", true);
+			$("#lstnReg_con_bind_ip").val($("#lstnReg_con_bind_ip_sel").val());
 		}
 	}
 
@@ -1870,7 +1894,6 @@
 					if(vipUseYn == "N" || (vipUseYn == "Y" && vipInstTable.rows().data().length > 0)){
 						fn_multiConfirmModal("apply");
 					}else{
-						
 						showSwalIcon('<spring:message code="eXperDB_proxy.msg28"/>', '<spring:message code="common.close" />', '', 'warning');
 						selectTab('detail');
 					}
@@ -2242,8 +2265,8 @@
 										<spring:message code="eXperDB_proxy.max_con_cnt" />(*)
 										</span>
 									</label>
-									<div class="col-sm-2">
-										<input type="number" class="form-control form-control-sm glb_max_con_cnt" maxlength="10" id="glb_max_con_cnt" name="glb_max_con_cnt" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
+									<div class="col-sm-4">
+										<input type="number" class="form-control form-control-sm col-sm-6 glb_max_con_cnt" maxlength="10" id="glb_max_con_cnt" name="glb_max_con_cnt" onchange="fn_checkWord(this,10); fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-auto">
 									</div>
@@ -2262,7 +2285,7 @@
 										</span>
 									</label>
 									<div class="col-sm-1_5">
-										<input type="number" class="form-control form-control-sm glb_cl_con_max_tm_num" maxlength="5" id="glb_cl_con_max_tm_num" name="glb_cl_con_max_tm_num" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
+										<input type="number" class="form-control form-control-sm glb_cl_con_max_tm_num" maxlength="5" id="glb_cl_con_max_tm_num" name="glb_cl_con_max_tm_num" onchange="fn_checkWord(this,5); fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-1_5">
 										<select class="form-control form-control-sm" name="glb_cl_con_max_tm_tm" id="glb_cl_con_max_tm_tm" onchange="fn_change_global_info();">
@@ -2276,7 +2299,7 @@
 										</span>
 									</label>
 									<div class="col-sm-1_5">
-										<input type="number" class="form-control form-control-sm glb_con_del_tm_num" maxlength="5" id="glb_con_del_tm_num" name="glb_con_del_tm_num" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
+										<input type="number" class="form-control form-control-sm glb_con_del_tm_num" maxlength="5" id="glb_con_del_tm_num" name="glb_con_del_tm_num" onchange="fn_checkWord(this,5); fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-1_5">
 										<select class="form-control form-control-sm" name="glb_con_del_tm_tm" id="glb_con_del_tm_tm" onchange="fn_change_global_info();">
@@ -2293,7 +2316,7 @@
 										</span>
 									</label>
 									<div class="col-sm-1_5">
-										<input type="number" class="form-control form-control-sm glb_svr_con_max_tm_num" maxlength="5" id="glb_svr_con_max_tm_num" name="glb_svr_con_max_tm_num" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
+										<input type="number" class="form-control form-control-sm glb_svr_con_max_tm_num" maxlength="5" id="glb_svr_con_max_tm_num" name="glb_svr_con_max_tm_num" onchange="fn_checkWord(this,5); fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-1_5">
 										<select class="form-control form-control-sm" name="glb_svr_con_max_tm_tm" id="glb_svr_con_max_tm_tm" onchange="fn_change_global_info();">
@@ -2307,7 +2330,7 @@
 										</span>
 									</label>
 									<div class="col-sm-1_5">
-										<input type="number" class="form-control form-control-sm glb_chk_tm_num" maxlength="5" id="glb_chk_tm_num" name="glb_chk_tm_num" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
+										<input type="number" class="form-control form-control-sm glb_chk_tm_num" maxlength="5" id="glb_chk_tm_num" name="glb_chk_tm_num" onchange="fn_checkWord(this,5); fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 									<div class="col-sm-1_5">
 										<select class="form-control form-control-sm" name="glb_chk_tm_tm" id="glb_chk_tm_tm" onchange="fn_change_global_info();">

@@ -246,9 +246,9 @@ public class ProxySettingController {
 				// 화면접근이력 이력 남기기 - Proxy 설정관리 - Proxy Listen 관리 팝업
 				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_07", sohw_menu_id);		
 
-				param.put("search", request.getParameter("search")==null ? "" : request.getParameter("search").toString());
-				param.put("svr_use_yn", request.getParameter("svr_use_yn")==null ? "" : request.getParameter("svr_use_yn").toString());
-				param.put("pry_svr_id", request.getParameter("pry_svr_id")==null ? "" : request.getParameter("pry_svr_id").toString());
+				param.put("search", cu.getStringWithoutNull(request.getParameter("search")));
+				param.put("svr_use_yn", cu.getStringWithoutNull(request.getParameter("svr_use_yn")));
+				param.put("pry_svr_id", cu.getStringWithoutNull(request.getParameter("pry_svr_id")));
 				
 				resultSet = proxySettingService.selectProxyServerList(param);
 			}
@@ -385,7 +385,7 @@ public class ProxySettingController {
 				response.sendRedirect("/autError.do");
 				return resultObj;
 			}else{
-				String peerSvrIp = request.getParameter("peer_server_ip")==null ? "" : request.getParameter("peer_server_ip").toString();
+				String peerSvrIp = cu.getStringWithoutNull(request.getParameter("peer_server_ip"));
 				param.put("peer_server_ip", peerSvrIp);
 					
 				//정보조회
@@ -420,9 +420,10 @@ public class ProxySettingController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return resultObj;
+				
 			}else{
-				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id")) ? request.getParameter("pry_svr_id").toString():"0" );
-				int	dbSvrId = Integer.parseInt(request.getParameter("db_svr_id") != null && !"".equals((String)request.getParameter("db_svr_id")) ? request.getParameter("db_svr_id").toString():"0" );
+				int	prySvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? request.getParameter("pry_svr_id").toString():"0");
+				int	dbSvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("db_svr_id"))) ? request.getParameter("db_svr_id").toString():"0");
 				
 				param.put("db_svr_id", dbSvrId);
 				param.put("pry_svr_id", prySvrId);
@@ -457,8 +458,8 @@ public class ProxySettingController {
 				response.sendRedirect("/autError.do");
 				return resultObj;
 			}else{	
-				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))  ? request.getParameter("pry_svr_id").toString() : "0");
-				int	dbSvrId = Integer.parseInt(request.getParameter("db_svr_id") != null && !"".equals((String)request.getParameter("db_svr_id")) ? request.getParameter("db_svr_id").toString() : "0");
+				int	prySvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? request.getParameter("pry_svr_id").toString():"0");
+				int	dbSvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("db_svr_id"))) ? request.getParameter("db_svr_id").toString():"0");
 				param.put("pry_svr_id", prySvrId);
 				param.put("db_svr_id", dbSvrId);
 
@@ -493,8 +494,8 @@ public class ProxySettingController {
 				response.sendRedirect("/autError.do");
 				return resultStr;
 			}else{
-				int	dbSvrId = Integer.parseInt(request.getParameter("db_svr_id") != null && !"".equals((String)request.getParameter("db_svr_id")) ? request.getParameter("db_svr_id").toString() : "0");
-
+				int	dbSvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("db_svr_id"))) ? request.getParameter("db_svr_id").toString():"0");
+				
 				param.put("db_svr_id", dbSvrId);
 				resultStr = proxySettingService.proxySetServerNmList(param);
 			}
@@ -530,8 +531,8 @@ public class ProxySettingController {
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 
-				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))  ? request.getParameter("pry_svr_id").toString() : "0");
-
+				int	prySvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? request.getParameter("pry_svr_id").toString():"0");
+				
 				String status_cd =request.getParameter("status")==null ? "" : request.getParameter("status").toString();
 				if("TC001502".equals(status_cd)){
 					param.put("act_type", "S");//stop
@@ -580,7 +581,7 @@ public class ProxySettingController {
 				response.sendRedirect("/autError.do");
 				return resultObj;
 			}else{
-				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))  ? request.getParameter("pry_svr_id").toString() : "0");
+				int	prySvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? request.getParameter("pry_svr_id").toString():"0");
 				param.put("pry_svr_id", prySvrId);
 				param.put("ipadr", request.getParameter("ipadr"));
 				System.out.println("prySvrConnTest start");
@@ -810,7 +811,7 @@ public class ProxySettingController {
 				JSONObject confData = new JSONObject();
 				confData = (JSONObject)jparser.parse(request.getParameter("confData").replaceAll("&quot;", "\""));
 				
-				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
+				param.put("lst_mdfr_id", cu.getStringWithoutNull(loginVo.getUsr_id()));
 				
 				resultObj = proxySettingService.applyProxyConf(param, confData);
 				
@@ -873,12 +874,12 @@ public class ProxySettingController {
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 
-				int	prySvrId = Integer.parseInt(request.getParameter("pry_svr_id") != null && !"".equals((String)request.getParameter("pry_svr_id"))  ? request.getParameter("pry_svr_id").toString() : "0");
-
-				String kalInstYn =request.getParameter("kal_install_yn")==null ? "" : request.getParameter("kal_install_yn").toString();
+				int	prySvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? request.getParameter("pry_svr_id").toString():"0");
+				
+				String kalInstYn =cu.getStringWithoutNull(request.getParameter("kal_install_yn"));
 				param.put("kal_install_yn", kalInstYn);//stop
 				param.put("pry_svr_id", prySvrId);
-				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
+				param.put("lst_mdfr_id", cu.getStringWithoutNull(loginVo.getUsr_id()));
 
 				boolean kalInstYnInAgent = true;
 

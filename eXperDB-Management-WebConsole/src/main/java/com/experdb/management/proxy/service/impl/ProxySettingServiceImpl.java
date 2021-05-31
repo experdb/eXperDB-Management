@@ -302,7 +302,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      }
 		      
 		      if (proxyExecuteResult != null) {
-		         System.out.println(proxyExecuteResult.toString());
+		         //System.out.println(proxyExecuteResult.toString());
 		         if (status.equals(proxyExecuteResult.get("EXECUTE_RESULT"))) {
 		            proxyExecute = true;
 		         }else{
@@ -323,7 +323,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		         }
 		         
 		         if (keepaExecuteResult != null) {
-		            System.out.println(keepaExecuteResult.toString());
+		           // System.out.println(keepaExecuteResult.toString());
 		            if (status.equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
 		               keepaExecute = true;
 		            }else{
@@ -344,7 +344,22 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		         }
 		         errMsg +=statusNm +" 중 오류가 발생하였습니다.";
 		      }else{
-		         errMsg = "정상적으로 "+statusNm+"되었습니다.";
+		         //기동상태 재확인
+		         ProxyServerVO prySvrVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
+		         
+		         if("S".equals(actType)){
+		        	if("TC001502".equals(prySvrVO.getExe_status()) && ((kalUseYn.equals("Y") && "TC001502".equals(prySvrVO.getKal_exe_status())) || kalUseYn.equals("N"))){
+		        		errMsg = "정상적으로 "+statusNm+"되었습니다.";
+		        	}else{
+		        		errMsg =statusNm +" 중 오류가 발생하였습니다.";
+		        	}
+		         }else{
+		        	 if("TC001501".equals(prySvrVO.getExe_status()) && ( kalUseYn.equals("N") || (kalUseYn.equals("Y") && "TC001501".equals(prySvrVO.getKal_exe_status())))){
+		        		errMsg = "정상적으로 "+statusNm+"되었습니다.";	
+		        	}else{
+		        		errMsg =statusNm +" 중 오류가 발생하였습니다.";
+		        	}
+		         }
 		      }
 		      
 		      resultObj.put("resultLog", resultLog);

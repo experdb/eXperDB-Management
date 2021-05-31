@@ -102,6 +102,7 @@ var mgmtDbmsTable = null;
 					},
 					svrReg_pry_svr_nm: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
+						,maxlength: '25'+'<spring:message code="message.msg211"/>'	
 					},
 					svrReg_day_data_del_term: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
@@ -437,11 +438,7 @@ var mgmtDbmsTable = null;
      * Proxy Server의  등록 
      ******************************************************** */		
 	function fn_reg_svr(){
-/* 		
-		var useYn = "N";
-		if($("#svrReg_use_yn", "#svrRegProxyServerForm").is(":checked") == true){
-			useYn ="Y";
-		} */
+		
 		var setIpadr = "";
 		
 		if($("#svrReg_mode", "#svrRegProxyServerForm").val() == "reg"){
@@ -449,7 +446,7 @@ var mgmtDbmsTable = null;
 		} else {
 			setIpadr = $("#svrMod_ipadr", "#svrRegProxyServerForm").val();
 		}
-
+		$('#loading_pop').show();
 		$.ajax({
  			url : "/prySvrReg.do",
  			data : {
@@ -481,6 +478,7 @@ var mgmtDbmsTable = null;
 				}
 			},
  			success : function(result) {
+ 				$('#loading_pop').hide();
  				if(result.result){
  					var msg ="";
  					if($("#svrReg_mode", "#svrRegProxyServerForm").val() == "reg"){
@@ -541,7 +539,7 @@ var mgmtDbmsTable = null;
 									</label>
 
 									<div class="col-sm-3">
-										<input type="text" class="form-control form-control-xsm" style="display:none;" maxlength="25" id="svrMod_ipadr" name="svrMod_ipadr" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=2 />
+										<input type="text" class="form-control form-control-xsm" style="display:none;" maxlength="18" id="svrMod_ipadr" name="svrMod_ipadr" onkeyup="fn_checkWord(this,18)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=2 />
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem;" name="svrReg_ipadr" id="svrReg_ipadr" onchange="fn_changeSvrId('mod');">
 										</select>
 									</div>
