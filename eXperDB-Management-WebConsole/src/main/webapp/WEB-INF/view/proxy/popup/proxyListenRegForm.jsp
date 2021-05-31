@@ -129,7 +129,7 @@ function fn_serverListTable_init() {
 					required:true
 				},
 				portno: {
-					required: true,
+					required: true
 				}
 	        },
 	        messages: {
@@ -137,7 +137,8 @@ function fn_serverListTable_init() {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>'
 				},
 				portno: {
-					required: '<spring:message code="eXperDB_proxy.msg2"/>'
+					required: '<spring:message code="eXperDB_proxy.msg2"/>',
+					maxlength: '5'+'<spring:message code="message.msg211"/>'
 				}
 	        },
 			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
@@ -195,9 +196,11 @@ function fn_serverListTable_init() {
 				lstnReg_con_bind_port: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>',
 					validatorPort: '<spring:message code="eXperDB_proxy.msg13"/>'
+					,maxlength: '5'+'<spring:message code="message.msg211"/>'
 				},
 				lstnReg_lsn_desc: {
-					required: '<spring:message code="eXperDB_proxy.msg2"/>'
+					required: '<spring:message code="eXperDB_proxy.msg2"/>',
+					maxlength: '250'+'<spring:message code="message.msg211"/>'
 				},
 				lstnReg_db_nm: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>'
@@ -635,7 +638,7 @@ function fn_serverListTable_init() {
 										<spring:message code="eXperDB_proxy.desc" />
 									</label>
 									<div class="col-sm-9">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+										<input type="text" class="form-control form-control-xsm" maxlength="250" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onkeyup="fn_checkWord(this,250)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
 									</div>
 								</div>
 							</div>

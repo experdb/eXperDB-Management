@@ -117,14 +117,17 @@
 		        	instReg_v_ip: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />',
 						validatorIpFormat2 : '<spring:message code="errors.format" arguments="'+ 'IP주소' +'" />',
-						duplCheckVIp : '<spring:message code="errors.duplicate" />'
+						duplCheckVIp : '<spring:message code="errors.duplicate" />',
+						maxlength: '20'+'<spring:message code="message.msg211"/>'
 					},
 					instReg_v_if_nm: {
-						required: '<spring:message code="eXperDB_proxy.msg2" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />',
+						maxlength: '20'+'<spring:message code="message.msg211"/>'
 					},
 					instReg_v_rot_id: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />',
-						duplCheckRotId : '<spring:message code="errors.duplicate" />'
+						duplCheckRotId : '<spring:message code="errors.duplicate" />',
+						maxlength: '20'+'<spring:message code="message.msg211"/>'
 					},
 					instReg_state_nm: {
 						required: '<spring:message code="eXperDB_proxy.msg2" />'
@@ -134,7 +137,8 @@
 						duplCheckPriority : '<spring:message code="errors.duplicate" />'
 					},
 					instReg_chk_tm: {
-						required: '<spring:message code="eXperDB_proxy.msg2" />'
+						required: '<spring:message code="eXperDB_proxy.msg2" />',
+						maxlength: '18'+'<spring:message code="message.msg211"/>'
 					}
 		        },
 				submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
@@ -427,7 +431,7 @@
 										</span>
 									</label>
 									<div class="col-sm-2">
-										<input type="number" class="form-control form-control-xsm instReg_chk_tm" maxlength="20" id="instReg_chk_tm" name="instReg_chk_tm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=6 /> 
+										<input type="number" class="form-control form-control-xsm instReg_chk_tm" maxlength="18" id="instReg_chk_tm" name="instReg_chk_tm" onkeyup="fn_checkWord(this,18)" onblur="this.value=this.value.trim()" placeholder="" tabindex=6 /> 
 									</div>
 									<label class="col-sm-1 col-form-label-sm pop-label-index" style="padding-left: 0px;">
 									<spring:message code="eXperDB_proxy.sec" />

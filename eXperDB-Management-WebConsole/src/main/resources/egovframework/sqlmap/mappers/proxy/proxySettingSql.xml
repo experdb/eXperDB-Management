@@ -117,6 +117,7 @@
 				AND B.AGT_CNDT_CD = 'TC001501' 
 			</if>
 		</if>
+		ORDER BY B.IPADR
 	</select>
 
 	<select id="selectProxyGlobal" resultType="proxyGlobalVO" parameterType="hashMap">
