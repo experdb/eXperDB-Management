@@ -124,7 +124,7 @@
 			A.MASTER_SVR_ID,
 			A.KAL_INSTALL_YN,
 			A.AGT_CNDT_CD,
-			ARRAY_TO_STRING(ARRAY_AGG(A.V_IP),',')  as V_IP
+			ARRAY_TO_STRING(array_agg(CASE WHEN A.V_IP is null or TRIM(A.V_IP) = '' THEN NULL ELSE A.V_IP end),',')  as V_IP
 		FROM (
 			SELECT 
 				S.PRY_SVR_ID,
