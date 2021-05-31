@@ -296,7 +296,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 			statusNm = "재기동";
 		}
 		jObj.put("act_exe_type", act_exe_type);
-		// jObj.put("exe_rslt_cd","TC001501");
 		jObj.put("lst_mdfr_id", param.get("lst_mdfr_id"));
 
 		ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
@@ -307,16 +306,18 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		} catch (ConnectException e) {
 			e.printStackTrace();
 		}
-
+		
+		info = proxyMonitoringDAO.selectConfigurationInfo(pry_svr_id, type);
 		if (executeResult != null) {
-			if (!cur_status.equals(executeResult.get("EXECUTE_RESULT"))) {
+			if (!cur_status.equals(executeResult.get("EXECUTE_RESULT")) && info.get("exe_status") != cur_status) {
 				executeFlag = true;
 			} else {
 				executeFlag = false;
 			}
-		} else {
+		} else if(info.get("exe_status") == cur_status){
 			executeFlag = false;
 		}
+		
 		if (!executeFlag) {
 			errMsg = (String) jObj.get("sys_type") + " " + statusNm + " 중 오류가 발생하였습니다.";
 		} else {
@@ -486,9 +487,8 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		} catch (ConnectException e) {
 			conn_result = "N";
 		} catch (Exception e) {
-			e.printStackTrace();
+			conn_result = "N";
 		}
-
 		getProxyAgentStatus.put("conn_result", conn_result);
 		return getProxyAgentStatus;
 	}

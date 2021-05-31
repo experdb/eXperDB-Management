@@ -20,7 +20,7 @@ import com.experdb.proxy.util.FileUtil;
 /**
  *
  * @author 윤정 매니저
- * @see proxy config 파일 불러오기
+ * @see proxy 서버 연결 확인
  * 
  *  <pre>
  * == 개정이력(Modification Information) ==
@@ -60,8 +60,11 @@ public class PsP012 extends SocketCtl{
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-
-			send(outputObj);
+			
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);
+			
+			socketLogger.info("PsP012 : " + outputObj.toJSONString());
 		} catch (Exception e) {
 			errLogger.error("PsP012 {} ", e.toString());
 
@@ -70,9 +73,10 @@ public class PsP012 extends SocketCtl{
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.PsP012);
 			outputObj.put(ProtocolID.ERR_MSG, "PsP012 Error [" + e.toString() + "]");
 			outputObj.put(ProtocolID.RESULT_DATA, "");
-
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
+			
+			socketLogger.info("PsP012 : " + outputObj.toJSONString());
 		} finally {
 			outputObj = null;
 			sendBuff = null;

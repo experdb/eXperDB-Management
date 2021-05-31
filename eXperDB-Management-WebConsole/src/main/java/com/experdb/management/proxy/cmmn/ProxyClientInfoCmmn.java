@@ -369,7 +369,6 @@ public class ProxyClientInfoCmmn implements Runnable{
 		objResult = PCA.psP012(jObj);
 		
 		PCA.close();
-
 		String strErrMsg = (String)objResult.get(ClientProtocolID.ERR_MSG);
 		String strErrCode = (String)objResult.get(ClientProtocolID.ERR_CODE);
 		String strDxExCode = (String)objResult.get(ClientProtocolID.DX_EX_CODE);
