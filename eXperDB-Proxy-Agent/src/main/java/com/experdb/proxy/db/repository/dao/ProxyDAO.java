@@ -21,7 +21,7 @@ import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
 
 
 /**
-* @author 박태혁
+* @author 
 * @see
 * 
 *      <pre>
@@ -29,7 +29,7 @@ import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   		최초 생성
 *      </pre>
 */
 
@@ -44,6 +44,7 @@ public class ProxyDAO {
 	/**
 	 * proxy 서버 정보 조회
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectPrySvrInfo(ProxyServerVO vo) throws Exception  {
@@ -54,6 +55,7 @@ public class ProxyDAO {
 	 * T_PRY_SVR_I table seq 조회
 	 * 
 	 * @param 
+	 * @return long
 	 * @throws Exception
 	 */
 	public long selectQ_T_PRY_SVR_I_01() throws Exception  {
@@ -62,7 +64,8 @@ public class ProxyDAO {
 
 	/**
 	 * Proxy Server 정보 등록
-	 * @param vo
+	 * @param ProxyServerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int insertPrySvrInfo(ProxyServerVO vo) throws Exception  {
@@ -71,7 +74,8 @@ public class ProxyDAO {
 
 	/**
 	 * Proxy Server 정보 수정
-	 * @param vo
+	 * @param ProxyServerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePrySvrInfo(ProxyServerVO vo) throws Exception  {
@@ -80,7 +84,8 @@ public class ProxyDAO {
 
 	/**
 	 * Proxy Server Master_svr_id 변경
-	 * @param vo
+	 * @param ProxyServerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePrySvrMstSvrIdList(ProxyServerVO vo) throws Exception  {
@@ -90,7 +95,7 @@ public class ProxyDAO {
 	/**
 	 * T_PRY_GLB_I table insert
 	 * 
-	 * @param param
+	 * @param ProxyGlobalVO
 	 * @throws Exception
 	 */
 	public void insertPryGlbInfo(ProxyGlobalVO proxyGlobalVO) throws Exception  {
@@ -100,7 +105,8 @@ public class ProxyDAO {
 	/**
 	 * T_PRY_GLB_I table 단건 조회
 	 * 
-	 * @param param
+	 * @param ProxyListenerVO
+	 * @return ProxyListenerVO
 	 * @throws Exception
 	 */
 	public ProxyListenerVO selectPryLsnInfo(ProxyListenerVO vo) throws Exception  {
@@ -111,6 +117,7 @@ public class ProxyDAO {
 	 * T_PRY_LSN_I table seq 조회
 	 * 
 	 * @param 
+	 * @return long
 	 * @throws Exception
 	 */
 	public long selectQ_T_PRY_LSN_I_01() throws Exception  {
@@ -120,7 +127,8 @@ public class ProxyDAO {
 	/**
 	 * T_PRY_LSN_I table 등록
 	 * 
-	 * @param 
+	 * @param ProxyListenerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int insertPryLsnInfo(ProxyListenerVO vo) throws Exception  {
@@ -130,7 +138,8 @@ public class ProxyDAO {
 	/**
 	 * T_PRY_LSN_I table 수정
 	 * 
-	 * @param 
+	 * @param ProxyListenerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePryLsnInfo(ProxyListenerVO vo) throws Exception  {
@@ -140,7 +149,7 @@ public class ProxyDAO {
 	/**
 	 * T_PRY_LSN_SVR_I table delete
 	 * 
-	 * @param param
+	 * @param ProxyListenerServerListVO
 	 * @throws Exception
 	 */
 	public void deletePryLsnSvrList(ProxyListenerServerListVO vo) throws Exception  {
@@ -150,7 +159,8 @@ public class ProxyDAO {
 	/**
 	 * T_PRY_LSN_SVR_I table insert
 	 * 
-	 * @param param
+	 * @param ProxyListenerServerListVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int insertPryLsnSvrInfo(ProxyListenerServerListVO vo) throws Exception  {
@@ -160,7 +170,7 @@ public class ProxyDAO {
 	/**
 	 * T_PRY_VIP table insert
 	 * 
-	 * @param param
+	 * @param ProxyVipConfigVO
 	 * @throws Exception
 	 */
 	public void insertPryVipCngInfo(ProxyVipConfigVO vo) throws Exception  {
@@ -170,7 +180,7 @@ public class ProxyDAO {
 	/**
 	 * T_PRYCNG_G table insert
 	 * 
-	 * @param 
+	 * @param ProxyConfChangeHistoryVO
 	 * @throws Exception
 	 */
 	public void insertPrycngInfo(ProxyConfChangeHistoryVO vo) throws Exception  {
@@ -178,7 +188,7 @@ public class ProxyDAO {
 	}
 	/**
 	 * Proxy 기동 이력 insert
-	 * @param vo
+	 * @param ProxyActStateChangeHistoryVO
 	 * @throws Exception
 	 */
 	public void insertPryActCngInfo(ProxyActStateChangeHistoryVO vo) throws Exception  {
@@ -187,7 +197,8 @@ public class ProxyDAO {
 	
 	/**
 	 * Proxy 기동 상태 update
-	 * @param vo
+	 * @param ProxyServerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePrySvrExeStatusInfo(ProxyServerVO vo) throws Exception  {
@@ -197,17 +208,20 @@ public class ProxyDAO {
 	/**
 	 * Proxy 리스너 포트 내역 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
+	 * @return List<Map<String, Object>>
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectPryLsnPortList(Map<String, Object> param) {
-		return (List) session.selectList("proxy.selectPryLsnPortList", param);
+		List<Map<String, Object>> selectList = session.selectList("proxy.selectPryLsnPortList", param);
+		return selectList;
 	}
 
 	/**
 	 * T_PRY_LSN_I table 수정(실행상태 등록)
 	 * 
-	 * @param 
+	 * @param ProxyListenerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePryLsnStatusInfo(ProxyListenerVO vo) throws Exception  {
@@ -217,37 +231,42 @@ public class ProxyDAO {
 	/**
 	 * vip 내역 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
+	 * @return List<Map<String, Object>>
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectPryVipcngVipList(Map<String, Object> param) {
-		return (List) session.selectList("proxy.selectPryVipcngVipList", param);
+		List<Map<String, Object>> selectList = session.selectList("proxy.selectPryVipcngVipList", param);
+		return selectList ;
 	}
 
 	/**
 	 * T_PRY_VIPCNG_I table 수정(실행상태 등록)
 	 * 
-	 * @param 
+	 * @param ProxyVipConfigVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePryVipcngStatusInfo(ProxyVipConfigVO vo) throws Exception  {
 		return session.update("proxy.updatePryVipcngStatusInfo", vo);
 	}
 
-
 	/**
 	 * Proxy 기동상태 이력 max 값 조회 
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
+	 * @return List<Map<String, Object>>
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectPryActstateCngMaxTypeInfo(Map<String, Object> param) {
-		return (List) session.selectList("proxy.selectPryActstateCngMaxTypeInfo", param);
+		List<Map<String, Object>> selectList = session.selectList("proxy.selectPryActstateCngMaxTypeInfo", param);
+		return selectList;
 	}
 
 	/**
 	 * proxy / keepalived 기동-정지 상태 변경 
-	 * @param vo
+	 * @param Map<String, Object>
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int insertPryActExeCngInfo(Map<String, Object> param) throws Exception  {
@@ -255,8 +274,9 @@ public class ProxyDAO {
 	}
 
 	/**
-	 * proxy selectPrySvrMasterSetInfo
+	 * proxy 현재 마스터 목록 조회
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectPrySvrMasterSetInfo(Map<String, Object> param) throws Exception  {
@@ -265,7 +285,8 @@ public class ProxyDAO {
 
 	/**
 	 * Proxy Server 마스터 구분 정보 수정
-	 * @param vo
+	 * @param ProxyServerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePrySvrMstGbnInfo(ProxyServerVO vo) throws Exception  {
@@ -273,20 +294,23 @@ public class ProxyDAO {
 	}
 
 	/**
-	 * Proxy 관련 id 조회
+	 * Proxy 리스너 포트 조회
 	 * 
-	 * @param param
+	 * @param ProxyStatisticVO
+	 * @return Map<String, Object>
 	 * @throws Exception
 	 */
 	public Map<String, Object> selectPryLsnSvrIdInfo(ProxyStatisticVO vo) throws SQLException {
-		return (Map<String, Object>) session.selectOne("proxy.selectPryLsnSvrIdInfo", vo);
+		@SuppressWarnings("unchecked")
+		Map<String, Object> selectOne = (Map<String, Object>) session.selectOne("proxy.selectPryLsnSvrIdInfo", vo);
+		return selectOne;
 	}
-
 
 	/**
 	 * T_PRY_LSN_SVR_I table DB연결체크 수정
 	 * 
-	 * @param 
+	 * @param ProxyStatisticVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePryLsnSvrDbRealChkInfo(ProxyStatisticVO vo) throws Exception  {
@@ -294,8 +318,9 @@ public class ProxyDAO {
 	}
 
 	/**
-	 * t_pry_svr_status_g 리스너 정보등록
-	 * @param vo
+	 * proxy 리스너 통계 데이터 등록
+	 * @param ProxyStatisticVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int insertPrySvrStatusInfo(ProxyStatisticVO vo) throws Exception  {
@@ -303,20 +328,20 @@ public class ProxyDAO {
 	}
 	
 	/**
-	 * t_pry_svr_status_g table delete
+	 * proxy 리스너 통계정보 삭제
 	 * 
-	 * @param param
+	 * @param ProxyServerVO
 	 * @throws Exception
 	 */
 	public void lsnSvrDelExecuteList(ProxyServerVO vo) throws Exception  {
 		 session.delete("proxy.lsnSvrDelExecuteList", vo);
 	}
-	
 
 	/**
-	 * T_PRY_GLB_I table 단건 조회
+	 * 리스너 서버 등록 여부 조회
 	 * 
-	 * @param param
+	 * @param ProxyListenerServerListVO
+	 * @return ProxyListenerServerListVO
 	 * @throws Exception
 	 */
 	public ProxyListenerServerListVO selectPryLsnSvrChkInfo(ProxyListenerServerListVO vo) throws Exception  {
@@ -326,16 +351,19 @@ public class ProxyDAO {
 	/**
 	 * T_PRY_LSN_SVR_I table DB연결체크 수정
 	 * 
-	 * @param 
+	 * @param ProxyListenerServerListVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePryLsnSvrInfo(ProxyListenerServerListVO vo) throws Exception  {
 		return session.update("proxy.updatePryLsnSvrInfo", vo);
 	}
+	
 	/**
 	 * T_PRY_SVR_I의 KAL_PATH 수정
 	 * 
-	 * @param 
+	 * @param ProxyServerVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePrySvrKalPathInfo(ProxyServerVO vo) {

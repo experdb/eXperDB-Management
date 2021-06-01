@@ -1,7 +1,6 @@
 package com.experdb.proxy.db.repository.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,17 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import com.experdb.proxy.db.repository.vo.AgentInfoVO;
 import com.experdb.proxy.db.repository.vo.DbServerInfoVO;
-import com.experdb.proxy.db.repository.vo.ProxyConfChangeHistoryVO;
-import com.experdb.proxy.db.repository.vo.ProxyGlobalVO;
-import com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO;
-import com.experdb.proxy.db.repository.vo.ProxyListenerVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
-import com.experdb.proxy.db.repository.vo.ProxyVipConfigVO;
-import com.experdb.proxy.db.repository.vo.TrfTrgCngVO;
-import com.experdb.proxy.db.repository.vo.WrkExeVO;
 
 /**
-* @author 박태혁
+* @author 
 * @see
 * 
 *      <pre>
@@ -27,10 +19,9 @@ import com.experdb.proxy.db.repository.vo.WrkExeVO;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   		최초 생성
 *      </pre>
 */
-
 @Repository("SystemDAO")
 public class SystemDAO {
 	
@@ -41,8 +32,9 @@ public class SystemDAO {
 
 	/**
 	 * Agent 설치정보 조회
-	 * @param vo
-	 * @return
+	 * 
+	 * @param AgentInfoVO
+	 * @return AgentInfoVO
 	 * @throws Exception
 	 */
 	public AgentInfoVO selectPryAgtInfo(AgentInfoVO vo) throws Exception  {
@@ -51,7 +43,8 @@ public class SystemDAO {
 
 	/**
 	 * Agent 설치 정보 등록
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
 	 * @throws Exception
 	 */
 	public void insertPryAgtInfo(AgentInfoVO vo) throws Exception  {
@@ -60,7 +53,8 @@ public class SystemDAO {
 
 	/**
 	 * Agent 설치 정보 수정
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
 	 * @throws Exception
 	 */
 	public void updatePryAgtInfo(AgentInfoVO vo) throws Exception {
@@ -69,7 +63,8 @@ public class SystemDAO {
 	
 	/**
 	 * Agent 종료 정보 변경
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
 	 * @throws Exception
 	 */
 	public void updatePryAgtStopInfo(AgentInfoVO vo) throws Exception {
@@ -78,16 +73,20 @@ public class SystemDAO {
 	
 	/**
 	 * db리스트 조회
-	 * @param vo
+	 * @param DbServerInfoVO
+	 * @return List<DbServerInfoVO>
 	 * @throws Exception
 	 */
 	public List<DbServerInfoVO> selectDbsvripadrMstGbnInfo(DbServerInfoVO vo) throws Exception {
-		return (List) session.selectList("system.selectDbsvripadrMstGbnInfo");
+		List<DbServerInfoVO> selectList = session.selectList("system.selectDbsvripadrMstGbnInfo");
+		return selectList;
 	}
 
 	/**
 	 * Proxy 최종 서버명 조회
-	 * @param vo
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectPrySvrMaxNmInfo(ProxyServerVO vo) throws Exception  {
@@ -95,8 +94,10 @@ public class SystemDAO {
 	}
 
 	/**
-	 * Proxy 최종 서버명 조회
-	 * @param vo
+	 * Proxy DBMS 별 최종 서버명 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectDBMSSvrMaxNmInfo(ProxyServerVO vo) throws Exception  {
@@ -104,8 +105,10 @@ public class SystemDAO {
 	}
 
 	/**
-	 * Proxy 최종 서버명 조회
-	 * @param vo
+	 * Proxy DBMS 별 마스터 별 최종 서버명 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectDBMSSvrEtcMaxNmInfo(ProxyServerVO vo) throws Exception  {
@@ -114,7 +117,9 @@ public class SystemDAO {
 	
 	/**
 	 * Agent 사용여부 변경
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
+	 * @return integer
 	 * @throws Exception
 	 */
 	public int updatePryAgtUseYnLInfo(AgentInfoVO vo) throws Exception  {
