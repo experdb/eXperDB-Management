@@ -311,6 +311,7 @@
 		var pry_svr_id = "";
 		var listCnt = 0;
 		var pry_svr_id_val = "";
+		var prev_master_gbn = "";
 		
 		proxyServerTotInfo_cnt = "${fn:length(proxyServerTotInfo)}";
 
@@ -330,7 +331,7 @@
 				master_gbn = nvlPrmSet("${serverinfo.master_gbn}", "");
 				rowCount = rowCount + 1;
 				listCnt = parseInt("${fn:length(proxyServerTotInfo)}");
-
+				
 				pry_svr_id_val = nvlPrmSet("${serverinfo.pry_svr_id}", '');
 	 			if (pry_svr_id == "") {
 					html += '<div class="col-md-12 grid-margin stretch-card">\n';
@@ -371,6 +372,20 @@
 	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
 	 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>\n';
 	 			}
+	 			
+	 			if((rowCount == 1 && master_gbn == "S") || (prev_master_gbn == "S" && master_gbn == "S")) {
+					html += '			<div class="col-sm-9">';
+	 				html += '				<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
+	 				if (nvlPrmSet("${serverinfo.exe_status}", '') == '') {
+	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 				} else {
+	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 				}
+	 				html += '					<spring:message code="eXperDB_proxy.msg43"/><br/></h6>\n';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+	 				html += '					</h6>\n';
+	 			}
 
 				if (master_gbn == "S") {
 	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
@@ -403,7 +418,8 @@
 				}
 
 				pry_svr_id = nvlPrmSet("${serverinfo.pry_svr_id}", '') ;
-
+				prev_master_gbn = master_gbn;
+				
 			</c:forEach>
 		}
 
