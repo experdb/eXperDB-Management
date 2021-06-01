@@ -665,6 +665,7 @@
 	          FROM T_PRY_SVR_I
 	         WHERE 1 = 1
 	           AND DB_SVR_ID = #{db_svr_id}::numeric
+	           AND (exe_status = 'TC001501' and KAL_exe_status = 'TC001501')
 	           AND MASTER_GBN = 'M'
 	          LIMIT 1
 	    </if>

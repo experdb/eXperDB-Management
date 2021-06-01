@@ -137,7 +137,7 @@
 		/**
 	 	* Query ID : selectPrySvrMaxNmInfo
 	 	* Description : Proxy Server Max명 조회
-	 	* Author : 박태혁
+	 	* Author : 최정환
 	 	**/
 			SELECT MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
 			 FROM (
@@ -160,41 +160,40 @@
 	<select id="selectDBMSSvrMaxNmInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
 		<![CDATA[
 		/**
-	 	* Query ID : selectPrySvrMaxNmInfo
-	 	* Description : Proxy Server Max명 조회
-	 	* Author : 박태혁
+	 	* Query ID : selectDBMSSvrMaxNmInfo
+	 	* Description : Proxy DBMS 별 Server Max명 조회
+	 	* Author : 최정환
 	 	**/
-				SELECT
-					MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
-				  FROM T_PRY_SVR_I A
-				  INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
-				 WHERE A.DB_SVR_ID = #{db_svr_id}
+		SELECT
+				MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
+		  FROM T_PRY_SVR_I A
+		  INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
+		 WHERE A.DB_SVR_ID = #{db_svr_id}
 		]]>
 	</select>
 	
 	<select id="selectDBMSSvrEtcMaxNmInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
 		<![CDATA[
 		/**
-	 	* Query ID : selectPrySvrMaxNmInfo
-	 	* Description : Proxy Server Max명 조회
-	 	* Author : 박태혁
+	 	* Query ID : selectDBMSSvrEtcMaxNmInfo
+	 	* Description : Proxy master max Server명 조회
+	 	* Author : 최정환
 	 	**/
-				SELECT
-					MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
-				  FROM T_PRY_SVR_I A
-				  INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
-				 WHERE A.DB_SVR_ID = #{db_svr_id}
-				 AND A.MASTER_GBN = 'M'
-				 AND A.IPADR != #{ipadr}
+		SELECT
+				MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
+		  FROM T_PRY_SVR_I A
+		  INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
+		 WHERE A.DB_SVR_ID = #{db_svr_id}
+		 AND A.MASTER_GBN = 'M'
+		 AND A.IPADR != #{ipadr}
 		]]>
 	</select>
 
 	<update id="updatePryAgtUseYnLInfo"  parameterType="AgentInfoVO">
-	
 		/**
 	 	* Query ID : updatePryAgtUseYnLInfo
 	 	* Description : Agent 설치 정보 수정
-	 	* Author : 박태혁
+	 	* Author : 최정환
 	 	**/
 	 	UPDATE T_PRY_AGT_I
 	 	SET 
@@ -205,4 +204,17 @@
 	 	WHERE
 	 		IPADR = #{ipadr}
 	</update>
+	
+	<select id="selectMasterGbm"  resultType="hashmap">
+		<![CDATA[
+			/**
+		 	* Query ID : selectMasterGbm
+		 	* Description : Master / Slave 구분
+		 	* Author : 최정환
+		 	**/
+			SELECT
+			CASE WHEN pg_is_in_recovery() is true THEN 'S' 
+			ELSE 'M' END MASTER_GBN 
+		]]>
+	</select>
 </mapper>
