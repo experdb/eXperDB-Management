@@ -15,25 +15,20 @@ import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
 
-
-
 /**
- * 24.	Hostname 조회
+ * 04. proxy conf 파일 백업 & 신규 생성 
  *
- * @author 박태혁
+ * @author 
  * @see <pre>
  * == 개정이력(Modification Information) ==
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.05.22   박태혁 최초 생성
  * </pre>
  */
-
 public class PsP004 extends SocketCtl{
 	
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 
 	ApplicationContext context;
 
@@ -46,10 +41,7 @@ public class PsP004 extends SocketCtl{
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
 		
 		byte[] sendBuff = null;
-		String strErrCode = "";
-		String strErrMsg = "";
-		String strSuccessCode = "0";
-		
+
 		JSONObject outputObj = new JSONObject();
 		try {
 			context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });

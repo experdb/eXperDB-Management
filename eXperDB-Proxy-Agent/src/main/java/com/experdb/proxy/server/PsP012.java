@@ -114,14 +114,8 @@ public class PsP012 extends SocketCtl{
 				break;
 			}
 		}
-		System.out.println(strView);
-		System.out.println(strView.length());
-		System.out.println(rdma.getFilePointer());
+
 		HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(seek), 0);
-		
-		System.out.println(hp.get("file_desc"));
-		System.out.println(hp.get("file_size"));
-		System.out.println(hp.get("seek"));
 //		System.out.println(hp.get("end_flag"));
 	}
 }

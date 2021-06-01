@@ -11,26 +11,21 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.experdb.proxy.db.repository.service.ProxyLinkServiceImpl;
-import com.experdb.proxy.db.repository.service.ProxyServiceImpl;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
-import com.experdb.proxy.util.ProxyRunCommandExec;
-import com.experdb.proxy.util.RunCommandExec;
 
 /**
- * 24.	Hostname 조회
+ * 05. proxy service restart
  *
- * @author 박태혁
+ * @author 
  * @see <pre>
  * == 개정이력(Modification Information) ==
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.05.22   박태혁 최초 생성
  * </pre>
  */
-
 public class PsP005 extends SocketCtl{
 	
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");

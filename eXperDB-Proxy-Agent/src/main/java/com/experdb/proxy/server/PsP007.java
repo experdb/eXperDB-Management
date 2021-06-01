@@ -16,18 +16,16 @@ import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
 
 /**
- * 24.	Hostname 조회
+ * 07. proxy agent interface 목록 조회
  *
- * @author 박태혁
+ * @author 
  * @see <pre>
  * == 개정이력(Modification Information) ==
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.05.22   박태혁 최초 생성
  * </pre>
  */
-
 public class PsP007 extends SocketCtl{
 	
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
@@ -58,7 +56,7 @@ public class PsP007 extends SocketCtl{
 		} catch (Exception e) {
 			errLogger.error("PsP007 {} ", e.toString());
 
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP006);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP007);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, "-1");
 			outputObj.put(ProtocolID.ERR_MSG, e.toString());

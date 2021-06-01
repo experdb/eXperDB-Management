@@ -18,11 +18,10 @@ import com.experdb.proxy.socket.TranCodeType;
 import com.experdb.proxy.util.FileUtil;
 
 /**
+ * 03. proxy config 파일 조회
  *
  * @author 윤정 매니저
- * @see proxy config 파일 불러오기
- * 
- *  <pre>
+ * @see <pre>
  * == 개정이력(Modification Information) ==
  *
  *   수정일       수정자           수정내용
@@ -30,7 +29,6 @@ import com.experdb.proxy.util.FileUtil;
  *  2021.04.08				최초 생성
  * </pre>
  */
-
 public class PsP003 extends SocketCtl{
 	
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
@@ -136,14 +134,7 @@ public class PsP003 extends SocketCtl{
 				break;
 			}
 		}
-		System.out.println(strView);
-		System.out.println(strView.length());
-		System.out.println(rdma.getFilePointer());
+
 		HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(seek), 0);
-		
-		System.out.println(hp.get("file_desc"));
-		System.out.println(hp.get("file_size"));
-		System.out.println(hp.get("seek"));
-//		System.out.println(hp.get("end_flag"));
 	}
 }

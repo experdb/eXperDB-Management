@@ -15,18 +15,16 @@ import com.experdb.proxy.socket.TranCodeType;
 import com.experdb.proxy.util.ProxyRunCommandExec;
 
 /**
- * 24.	Hostname 조회
+ * 01. proxy agent setting
  *
- * @author 박태혁
+ * @author 
  * @see <pre>
  * == 개정이력(Modification Information) ==
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.05.22   박태혁 최초 생성
  * </pre>
  */
-
 public class PsP001 extends SocketCtl{
 	
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
@@ -50,17 +48,11 @@ public class PsP001 extends SocketCtl{
 		
 		JSONObject outputObj = new JSONObject();
 
-/*		
-		JSONObject jsonObj = new JSONObject(new TreeMap ());
-		JSONParser parser = new JSONParser();
-		JSONArray arrCmd = new JSONArray();
-*/
 		try {
 			String proxyAgentCmd = "";
 
 			String agtCndtCd = jObj.get(ProtocolID.AGT_CNDT_CD).toString();             //agent 실행 구분
 
-			//scale 실행일 경우
 			if ("TC001101".equals(agtCndtCd)) {
 				proxyAgentCmd = "sh stop.sh";
 			} else {
@@ -91,7 +83,7 @@ public class PsP001 extends SocketCtl{
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP001);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.PsP001);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT036 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_MSG, "PsP001 Error [" + e.toString() + "]");
 			outputObj.put(ProtocolID.RESULT_DATA, "");
 
 			sendBuff = outputObj.toString().getBytes();

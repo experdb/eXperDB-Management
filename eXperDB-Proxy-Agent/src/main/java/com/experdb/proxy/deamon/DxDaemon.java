@@ -1,7 +1,7 @@
 package com.experdb.proxy.deamon;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -9,10 +9,9 @@ package com.experdb.proxy.deamon;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
-
 public interface DxDaemon {
 	/**
 	 * <p>실제로 실행할 코드가 들어가는 곳</p>

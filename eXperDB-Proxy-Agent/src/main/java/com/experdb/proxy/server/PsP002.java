@@ -14,18 +14,16 @@ import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
 
 /**
- * 24.	Hostname 조회
+ * 02. proxy 에이전트 연결 Test
  *
- * @author 박태혁
+ * @author 
  * @see <pre>
  * == 개정이력(Modification Information) ==
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.05.22   박태혁 최초 생성
  * </pre>
  */
-
 public class PsP002 extends SocketCtl{
 	
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
@@ -50,7 +48,6 @@ public class PsP002 extends SocketCtl{
 		JSONObject outputObj = new JSONObject();
 
 		try {
-			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);

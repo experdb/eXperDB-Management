@@ -2,38 +2,31 @@ package com.experdb.proxy.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.net.Socket;
-import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
-import com.experdb.proxy.db.repository.service.ProxyGetFileService;
-import com.experdb.proxy.db.repository.service.ProxyGetFileServiceImpl;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
 import com.experdb.proxy.socket.listener.DXTcontrolProxy;
 import com.experdb.proxy.util.FileUtil;
-import com.experdb.proxy.util.RunCommandExec;
 
 /**
-*
-* @author 윤정 매니저
-* @see proxy log 파일 불러오기
-* 
-*  <pre>
-* == 개정이력(Modification Information) ==
-*
-*   수정일       수정자           수정내용
-*  -------     --------    ---------------------------
-*  2021.04.22				최초 생성
-* </pre>
-*/
-
+ * 09. proxy conf 파일 searh 후 데이터 입력 요청
+ *
+ * @author 윤정 매니저
+ * @see <pre>
+ * == 개정이력(Modification Information) ==
+ *
+ *   수정일       수정자           수정내용
+ *  -------     --------    ---------------------------
+ *  2021.04.22				최초 생성
+ * </pre>
+ */
 public class PsP009 extends SocketCtl{
 	
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
@@ -63,9 +56,7 @@ public class PsP009 extends SocketCtl{
 			
 			DXTcontrolProxy dxt = new DXTcontrolProxy();
 			String result = dxt.confSetProxyExecute(strIpadr, strPort, strKeepalived);
-			
-			socketLogger.info(">>>>>>>>>>>>> PsP009.execute result: " + result);
-			
+
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
