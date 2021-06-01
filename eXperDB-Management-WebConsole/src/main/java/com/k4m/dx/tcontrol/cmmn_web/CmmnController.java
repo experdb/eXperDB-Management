@@ -138,9 +138,6 @@ public class CmmnController {
 			List<DashboardVO> serverInfoVOSelectTot = (List<DashboardVO>) dashboardService.selectDashboardServerInfoNew(dashVo);
 			List<DashboardVO> serverInfoTotVO = new ArrayList<DashboardVO>();
 			
-			// 프록시 정보
-			List<Map<String, Object>> proxyServerTotInfo = proxyMonitoringService.selectProxyServerList();
-			
 			try{
 				if(serverInfoVOSelectTot.size()>0){
 					for(int i=0; i<serverInfoVOSelectTot.size(); i++){
@@ -199,7 +196,6 @@ public class CmmnController {
 			mv.addObject("backupInfo", backupInfoVO);		//백업 정보
 			mv.addObject("serverTotInfo", serverInfoTotVO);	//서버 정보
 			mv.addObject("proxy_yn", strProxyYn); // proxy 사용여부
-			mv.addObject("proxyServerTotInfo", proxyServerTotInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
