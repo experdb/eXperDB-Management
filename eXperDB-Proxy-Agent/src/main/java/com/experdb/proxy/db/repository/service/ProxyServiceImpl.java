@@ -1513,8 +1513,8 @@ public class ProxyServiceImpl implements ProxyService{
 							prySvrChk.setOld_master_gbn("S");
 							prySvrChk.setOld_pry_svr_id(proxyServerInfo.getPry_svr_id());
 							
-							if (backupChk.getPry_svr_id() != prySvrChk.getPry_svr_id() ||
-								backupChk.getPry_svr_id() < prySvrChk.getPry_svr_id()) {
+							if (backupChk != null && (backupChk.getPry_svr_id() != prySvrChk.getPry_svr_id() ||
+								backupChk.getPry_svr_id() < prySvrChk.getPry_svr_id())) {
 								//현재서버와 마스터서버아이디로된 것들을 백업으로 변경, pry_svr_id는 조회한 서버로
 								//그리고 조회한 서버아이디를 마스터로 나머진 백업으로 한번더 up
 								prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
@@ -1524,6 +1524,7 @@ public class ProxyServiceImpl implements ProxyService{
 							} else {
 								//현재꺼를 마스터 그대로
 								//기존 마스터나 다른 서버를 본서버 하위로
+								//prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
 								socketLogger.info("g_master_up_sel :: ");
 								prySvrChk.setSel_query_gbn("g_master_up_sel");
 							}
