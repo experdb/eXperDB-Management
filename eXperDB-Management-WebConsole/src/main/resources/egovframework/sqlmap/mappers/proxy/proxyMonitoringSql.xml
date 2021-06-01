@@ -716,4 +716,39 @@ and tpvi.v_ip_exe_status = 'TC001501'
 		WHERE DB_SVR_ID = #{db_svr_id}::numeric
 		AND MASTER_GBN = 'S'
 	</select>
+	
+	<select id="selectProxyServerByDBSvrId" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectProxyServerByDBSvrId
+		* Description : proxy server list by db server id for dashboard
+		* Author : 윤정
+		**/
+		SELECT 
+       		(ROW_NUMBER() OVER(ORDER BY s.DB_SVR_ID, s.MASTER_GBN,coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), s.LST_MDF_DTM)) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+       		s.PRY_SVR_ID,
+       		s.IPADR,
+       		s.AGT_SN,
+       		s.PRY_SVR_NM,
+       		s.PRY_PTH,
+       		s.KAL_PTH,
+       		s.USE_YN,
+       		s.EXE_STATUS,
+       		s.KAL_EXE_STATUS,
+       		s.MASTER_GBN,
+       		s.MASTER_SVR_ID,
+       		s.DB_SVR_ID,
+       		s.DAY_DATA_DEL_TERM,
+       		s.MIN_DATA_DEL_TERM,
+       		s.FRST_REGR_ID,
+       		s.FRST_REG_DTM,
+       		s.LST_MDFR_ID,
+       		s.LST_MDF_DTM,
+       		a.AGT_CNDT_CD,
+       		a.kal_install_yn
+		FROM T_PRY_SVR_I s 
+		JOIN T_PRY_AGT_I a ON s.AGT_SN = a.AGT_SN 
+        WHERE s.db_svr_id = #{db_svr_id}::numeric
+		ORDER BY s.DB_SVR_ID, s.MASTER_GBN,coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), LST_MDF_DTM;
+	</select>
 </mapper>
