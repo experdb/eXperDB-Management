@@ -68,13 +68,13 @@ public class PsP008 extends SocketCtl{
 			}
 			
 			String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
-			String strCmd = "tac " + strLogFileDir + strFileName + " | head -" + (intLastLine) + " > /var/log/temp/" + strFileName;
+			String strCmd = "tac " + strLogFileDir + strFileName + " | head -" + (intLastLine) + " > /var/log/exproxy_log/" + strFileName;
 			
 			RunCommandExec commandExec = new RunCommandExec();
 			//명령어 실행
 			commandExec.runExec(strCmd);
 
-			File inFile = new File("/var/log/temp/", strFileName);
+			File inFile = new File("/var/log/exproxy_log/", strFileName);
 
 			try {
 				commandExec.join();
