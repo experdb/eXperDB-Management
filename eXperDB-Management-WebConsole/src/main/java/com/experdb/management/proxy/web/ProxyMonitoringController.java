@@ -143,7 +143,7 @@ public class ProxyMonitoringController {
 			//리스너 목록 조회
 			List<Map<String, Object>> proxyServerLsnList = proxyMonitoringService.selectProxyListnerMainList(pry_svr_id);
 			
-			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
+//			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
 			
 			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
@@ -158,8 +158,8 @@ public class ProxyMonitoringController {
 
 			mv.addObject("dbServerConProxyList", dbServerConProxyList);
 			
-			mv.addObject("dbServerConProxy", dbServerConProxy);
-			mv.addObject("proxyLogList",proxyLogList);
+//			mv.addObject("dbServerConProxy", dbServerConProxy);
+			mv.addObject("proxyLogList", proxyLogList);
 			mv.addObject("proxyChartCntList",proxyChartCntList);
 			mv.addObject("selectPryCngList", selectPryCngList);
 			mv.addObject("proxyAgentStatus", proxyAgentStatus);
@@ -428,7 +428,7 @@ public class ProxyMonitoringController {
 	}
 	
 	@RequestMapping("/logDownload.do")
-	public  void logDownload(HttpServletRequest request, HttpServletResponse response){
+	public void logDownload(HttpServletRequest request, HttpServletResponse response){
 		Properties props = new Properties();
 
 		try {
@@ -487,6 +487,43 @@ public class ProxyMonitoringController {
 
 			List<Map<String, Object>> selectDBStandbyIPList = proxyMonitoringService.selectDbStandbyList(db_svr_id);
 			resultObj.put("selectDBStandbyIPList", selectDBStandbyIPList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultObj;
+	}
+	
+	/**
+	 * Dashbord Proxy 조회
+	 * @param request
+	 * @return JSONObject
+	 */
+	@RequestMapping("/dashboardProxy.do")
+	public @ResponseBody JSONObject selectProxyDashboardInfo(HttpServletRequest request) {
+		JSONObject resultObj = new JSONObject();
+		try {
+			String strDbSvrId = request.getParameter("db_svr_id");
+			int db_svr_id = Integer.parseInt(strDbSvrId);
+			int pry_svr_id = 0;
+			List<Map<String, Object>> proxyServerByDBSvrId = proxyMonitoringService.selectProxyServerByDBSvrId(db_svr_id);
+			
+			if(proxyServerByDBSvrId.size() > 0){
+				pry_svr_id = Integer.parseInt(String.valueOf(proxyServerByDBSvrId.get(0).get("pry_svr_id")));
+			}
+			
+			//vip 목록 조회
+			List<Map<String, Object>> proxyServerVipList = proxyMonitoringService.selectProxyServerVipChk(pry_svr_id);
+
+			//db connect 조회
+			List<Map<String, Object>> dbServerConProxyList = proxyMonitoringService.selectDBServerConProxyList(pry_svr_id);
+			
+			//리스너 목록 조회
+			List<Map<String, Object>> proxyServerLsnList = proxyMonitoringService.selectProxyListnerMainList(pry_svr_id);
+			
+			resultObj.put("proxyServerByDBSvrId", proxyServerByDBSvrId);
+			resultObj.put("proxyServerVipList", proxyServerVipList);
+			resultObj.put("dbServerConProxyList", dbServerConProxyList);
+			resultObj.put("proxyServerLsnList", proxyServerLsnList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

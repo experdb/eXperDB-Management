@@ -178,4 +178,12 @@ public interface ProxyMonitoringService {
 	 * @return Map<String, Object>
 	 */
 	public Map<String, Object> getProxyAgentStatus(int pry_svr_id);
+
+	/**
+	 * dashbord Proxy 조회 by db server id
+	 * 
+	 * @param db_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectProxyServerByDBSvrId(int db_svr_id);
 }

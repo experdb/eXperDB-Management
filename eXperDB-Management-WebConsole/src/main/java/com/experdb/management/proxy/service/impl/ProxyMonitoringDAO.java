@@ -224,4 +224,16 @@ public class ProxyMonitoringDAO extends EgovAbstractMapper {
 		return result;
 	}
 
+	/**
+	 * dashbord Proxy 조회 by db server id
+	 * @param db_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectProxyServerByDBSvrId(int db_svr_id) {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyMonitoringSql.selectProxyServerByDBSvrId", db_svr_id);
+		return result;
+	}
+
 }

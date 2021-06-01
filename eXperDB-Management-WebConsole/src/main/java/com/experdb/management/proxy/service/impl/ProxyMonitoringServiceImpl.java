@@ -23,6 +23,7 @@ import com.experdb.management.proxy.cmmn.ProxyClientProtocolID;
 import com.experdb.management.proxy.cmmn.ProxyClientTranCodeType;
 import com.experdb.management.proxy.service.ProxyLogVO;
 import com.experdb.management.proxy.service.ProxyMonitoringService;
+import com.ibm.db2.jcc.am.db;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.impl.AccessHistoryDAO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -491,5 +492,16 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 		}
 		getProxyAgentStatus.put("conn_result", conn_result);
 		return getProxyAgentStatus;
+	}
+
+	/**
+	 * dashbord Proxy 조회 by db server id
+	 * 
+	 * @param db_svr_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectProxyServerByDBSvrId(int db_svr_id) {
+		return proxyMonitoringDAO.selectProxyServerByDBSvrId(db_svr_id);
 	}
 }
