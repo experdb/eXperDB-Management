@@ -13,9 +13,8 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import com.experdb.proxy.util.NetworkUtil;
 
-
 /**
-* @author 김민정
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -23,7 +22,7 @@ import com.experdb.proxy.util.NetworkUtil;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2021.02.25   김민정 최초 생성
+*  2021.02.25   최정환 	최초 생성
 *      </pre>
 */
 public class AgentSetting {
@@ -48,8 +47,6 @@ public class AgentSetting {
 		
 		String strAgentPath = "";
 		String strConfBackupPath = "";
-	//	String strRootPwd = "";
-	//	String salt_value = "";
 		String strKeepInstaillYn = "";
 		
 		Scanner scan = new Scanner(System.in);
@@ -62,19 +59,7 @@ public class AgentSetting {
 		if(strAgentIp.equals("")) {
 			strAgentIp = localIp;
 		}
-/*		
-		while (true) {
-			if(strAgentIp.equals("")) {
-				System.out.println("Please enter the agent ip. ");
-				
-				System.out.println("agent ip(" + localIp + ") : ");
-				
-				strAgentIp = scan.nextLine();
-			} else {
-				break;
-			}
-		}*/
-		
+
 		System.out.println("agent port(9002) : ");
 		strAgentPort = scan.nextLine();
 		if(strAgentPort.equals("")) {
@@ -171,7 +156,6 @@ public class AgentSetting {
 		System.out.println("database Connection Info :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
-	//	System.out.println("Proxy server ROOT password :" + strRootPwd);
 		System.out.println("#####################################################");
 		
 		System.out.println("Do you want to apply what you entered? (y, n)");

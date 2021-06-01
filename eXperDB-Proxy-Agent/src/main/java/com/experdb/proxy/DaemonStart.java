@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.experdb.proxy.db.DBCPPoolManager;
-import com.experdb.proxy.db.repository.service.ProxyServiceImpl;
 import com.experdb.proxy.db.repository.service.SystemServiceImpl;
 import com.experdb.proxy.deamon.DxDaemon;
 import com.experdb.proxy.deamon.DxDaemonManager;
@@ -21,9 +20,8 @@ import com.experdb.proxy.socket.listener.DXTcontrolProxyExecute;
 import com.experdb.proxy.socket.listener.ServerCheckListener;
 import com.experdb.proxy.util.FileUtil;
 
-
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -31,15 +29,14 @@ import com.experdb.proxy.util.FileUtil;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class DaemonStart implements DxDaemon{ 
 	
 	private Logger daemonStartLogger = LoggerFactory.getLogger("DaemonStartLogger");
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
-	
+
 	private DXTcontrolAgentSocket socketService;
 	private ServerCheckListener serverCheckListener;
 
