@@ -488,10 +488,10 @@
 			success : function(result) {
 				// 프록시 모니터링 초기화 및 데이터 셋팅
 				if(result.proxyAgentStatus.conn_result == "N"){
- 		 			showSwalIconRst('Proxy Agent와 연결이 되지 않습니다.', '<spring:message code="common.close" />', '', 'error', 'proxyMoReload');
+ 		 			showSwalIconRst('<spring:message code="eXperDB_proxy.msg42" />', '<spring:message code="common.close" />', '', 'error');
 				}
-				fn_proxy_loadbar("stop");
 				fn_proxyMonitoringInit(pry_svr_id, result);
+				fn_proxy_loadbar("stop");
 			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
