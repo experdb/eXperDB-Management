@@ -14,6 +14,7 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 import org.springframework.batch.core.scope.context.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.xml.sax.*;
 
 import com.experdb.management.backup.cmmn.*;
@@ -40,31 +41,42 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 
 	// 노드 리스트 조회
 	@Override
-	public List<ServerInfoVO> getNodeInfoList() {
+	public JSONObject getNodeInfoList() throws FileNotFoundException, IOException {
 		List<TargetMachineVO> nodeList = null;
 		List<ServerInfoVO> serverList = null;
-		ArrayList<ServerInfoVO> result = new ArrayList<>();
+		ArrayList<ServerInfoVO> resultList = new ArrayList<>();
+		JSONObject result = new JSONObject();
 		nodeList = experdbBackupNodeDAO.getNodeList();
 		serverList = experdbBackupDAO.getServerInfo();
+		
+		Properties props = new Properties();
+		props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+		//props.load(new FileInputStream(ResourceUtils.getFile("C:\\Users\\yeeun\\git\\eXperDB-Management_2\\eXperDB-Management-WebConsole\\src\\main\\resources\\egovframework\\tcontrolProps\\globals.properties")));			
+		String license = props.get("bnr.license").toString();
 		
 		for(ServerInfoVO s : serverList){
 			for(TargetMachineVO n : nodeList){
 				if(s.getIpadr().equals(n.getName())){
-					result.add(s);
+					resultList.add(s);
 				}
 			}
 		}
 		
-		for(int i=0; i<result.size(); i++){
-			if(result.get(i).getMasterGbn().equals("S")){
-				for(int j=0; j<result.size(); j++){
-					if(result.get(j).getMasterGbn().equals("M") && result.get(i).getDbSvrId().equals(result.get(j).getDbSvrId())){
-						result.get(i).setMasterGbn("SS");
+		for(int i=0; i<resultList.size(); i++){
+			if(resultList.get(i).getMasterGbn().equals("S")){
+				for(int j=0; j<resultList.size(); j++){
+					if(resultList.get(j).getMasterGbn().equals("M") && resultList.get(i).getDbSvrId().equals(resultList.get(j).getDbSvrId())){
+						resultList.get(i).setMasterGbn("SS");
 						break;
 					}
 				}
 			}
 		}
+		
+		result.put("serverList", resultList);
+		result.put("license", license);
+		
+		
 		return result;
 	}
 

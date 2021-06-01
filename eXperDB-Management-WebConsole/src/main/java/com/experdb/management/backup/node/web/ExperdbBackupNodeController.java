@@ -55,9 +55,20 @@ public class ExperdbBackupNodeController {
 	 * @return List<ServerInfoVO>
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/experdb/backupNodeList.do")
-	public @ResponseBody List<ServerInfoVO> getNodeInfoList(){
-		return experdbBackupNodeService.getNodeInfoList();
+	public @ResponseBody JSONObject getNodeInfoList(){
+		JSONObject result = new JSONObject();
+		try {
+			result = experdbBackupNodeService.getNodeInfoList();
+		} catch (FileNotFoundException e) {
+			result.put("result", 11111);
+			e.printStackTrace();
+		} catch (IOException e) {
+			result.put("result", 11111);
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	/**

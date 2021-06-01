@@ -37,7 +37,8 @@ var schFri=[];
 var schSat=[];
 var schWeek = [];
 var jobExist=0;
-
+var licenseNum;
+var serverNum;
 
 /* ********************************************************
  * 페이지 시작시
@@ -207,6 +208,7 @@ function fn_alertHide(){
 /* ********************************************************
  * 서버 리스트 가져오기
  ******************************************************** */
+
 function fn_getSvrList() {
 	$.ajax({
 		url : "/experdb/backupNodeList.do",
@@ -227,10 +229,19 @@ function fn_getSvrList() {
 			}
 		},
 		success : function(data) {
-			NodeList.clear().draw();
-			NodeList.rows.add(data).draw();
+			licenseNum=data.license;
+			NodeList.clear();
+			NodeList.rows.add(data.serverList).draw();
+			serverNum = data.serverList.length;
+			fn_setLicenseNum();
 		}
 	});
+}
+
+function fn_setLicenseNum(){
+	$("#licenseNum").empty();
+	var html = "License (" + serverNum + "/" + licenseNum + ")";
+	$("#licenseNum").append(html);
 }
 
 /* ********************************************************
@@ -269,12 +280,10 @@ function fn_getSvrList() {
 	})
 }
 
-var vl=[];
 // 불러온 백업정책 setting
 function fn_setScheduleInfo(result){
 	var scheduleData = [];
 	scheduleData = result.weekData;
-	vl = result.volumes;
 	
 	for(var index=0; index<result.volumes.length; index++){
 		volumeDataList.push(result.volumes[index]);
@@ -587,6 +596,17 @@ function fn_nodeRegPopup() {
 		}
 		fn_drawScheduleList();
 		fn_alertShow();
+		fn_scheduleAlert();
+	}
+	
+	function fn_scheduleAlert(){
+		$("#scheAlertDiv").empty();
+		var bckSetWeekIndex = $("#bckSetWeekDateVal").val()-1;
+		if($("#bckSetDateTypeVal").val() == "true" && schWeek[bckSetWeekIndex].length == 0){
+			$("#scheAlertDiv").append('<spring:message code="eXperDB_backup.msg95" />');
+			return false;
+		}
+		return true;
 	}
 	
 /* ********************************************************
@@ -680,13 +700,16 @@ function fn_nodeRegPopup() {
 			showSwalIcon('<spring:message code="eXperDB_backup.msg83" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else if(!$("#applyAlert").is(":visible")){
-			showSwalIcon('변경된 내용이 없습니다', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_backup.msg96" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}else if(!fn_scheduleAlert()){
+			showSwalIcon('<spring:message code="eXperDB_backup.msg95" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}else{
-			confile_title = '정책 적용 요청';
+			confile_title = '<spring:message code="eXperDB_backup.msg97" />';
 			$('#con_multi_gbn', '#findConfirmMulti').val("backup_apply");
 			$('#confirm_multi_tlt').html(confile_title);
-			$('#confirm_multi_msg').html('적용하시겠습니까?');
+			$('#confirm_multi_msg').html('<spring:message code="eXperDB_backup.msg98" />');
 			$('#pop_confirm_multi_md').modal("show");
 		}
 	}
@@ -860,8 +883,11 @@ table.dataTable.ccc thead th{
 								<spring:message code="common.delete" />
 							</button>
 						</div>
-						<h4 class="card-title" style="font-size: 1em; color:black;">
-							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg15" />
+						<h4 class="card-title" style="font-size: 1em; color:black; margin-bottom:10px;">
+							<i class="item-icon fa fa-desktop"></i> <spring:message code="eXperDB_backup.msg15" /> 
+						</h4>
+						<h4 class="card-title" id="licenseNum" style="font-size: 1em; color:black; margin-bottom:0px;">
+							
 						</h4>
 						<table id="nodeList" class="table nonborder target table-hover system-tlb-scroll" style="width:100%;align:left;">
 							<thead>
@@ -971,7 +997,10 @@ table.dataTable.ccc thead th{
 				<div class="card-body" style="padding-bottom: 10px;">
 					<div class="card my-sm-2" style="" >
 						<div class="card-body" style="height: 280px;padding-top: 5px;padding-bottom: 5px;">
-							<div class="col-12" id="jobDiv" style="padding-top: 20px;padding-left: 0px;padding-right: 0px;">
+							<div class="col-12" id="jobDiv" style="padding-left: 0px;padding-right: 0px;">
+								<div class="text-danger" id="scheAlertDiv" name="scheAlertDiv" style="height: 24px; font-size:0.8em;font-weight:bold;text-align:right;padding-top: 7px;padding-right: 30px;">
+									
+								</div>
 								<div class="form-group row" style="margin-bottom: 0px; padding-left: 10px;">
 									<div class="col-8 row" style="margin-top: 10px;">
 										<div  class="col-4 col-form-label pop-label-index" style="font-size:1em; padding-top:7px;">

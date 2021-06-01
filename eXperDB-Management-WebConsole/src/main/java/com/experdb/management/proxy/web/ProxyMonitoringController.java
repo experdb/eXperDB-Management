@@ -83,19 +83,6 @@ public class ProxyMonitoringController {
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				int aut_id = loginVo.getAut_id();
 
-/*				if(proxyServerTotInfo.size() > 0){
-					int pry_svr_id = Integer.parseInt(String.valueOf(proxyServerTotInfo.get(0).get("pry_svr_id")));
-					
-					List<Map<String, Object>> proxyServerByMasId = proxyMonitoringService.selectProxyServerByMasterId(pry_svr_id);
-					List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
-					List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
-					List<Map<String, Object>> selectProxyVipLsnList = proxyMonitoringService.selectProxyVipLsnList(pry_svr_id);
-					mv.addObject("proxyServerByMasId", proxyServerByMasId);
-					mv.addObject("dbServerConProxy", dbServerConProxy);
-					mv.addObject("proxyLogList",proxyLogList);
-					mv.addObject("proxyVipLsnList", selectProxyVipLsnList);
-				}*/
-
 				mv.addObject("proxyServerTotInfo", proxyServerTotInfo);
 				mv.addObject("aut_id", aut_id);
 				mv.setViewName("proxy/monitoring/proxyMonitoring");
@@ -162,6 +149,9 @@ public class ProxyMonitoringController {
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
 			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
 			
+			// proxy agent 상태 확인
+			Map<String, Object> proxyAgentStatus = proxyMonitoringService.getProxyAgentStatus(pry_svr_id);
+			
 			mv.addObject("proxyServerVipList", proxyServerVipList);
 			mv.addObject("proxyServerByMasId", proxyServerByMasId);
 			mv.addObject("proxyServerLsnList", proxyServerLsnList);
@@ -172,6 +162,8 @@ public class ProxyMonitoringController {
 			mv.addObject("proxyLogList",proxyLogList);
 			mv.addObject("proxyChartCntList",proxyChartCntList);
 			mv.addObject("selectPryCngList", selectPryCngList);
+			mv.addObject("proxyAgentStatus", proxyAgentStatus);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -373,7 +365,6 @@ public class ProxyMonitoringController {
 			if(strBuffer != null) {
 				mv.addObject("fSize", strBuffer.length());
 			}
-//			strBuffer = strBuffer.replaceAll("\n", "<br>");
 			mv.addObject("data", strBuffer);
 			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
 			mv.addObject("dwLen", result.get("DW_LEN"));
@@ -419,7 +410,6 @@ public class ProxyMonitoringController {
 			resultObj.put("errcd", -1);
 			resultObj.put("errmsg", "작업 중 오류가 발생하였습니다.");
 		}
-//		mv.addObject("result", result);
 		return resultObj;
 	}
 	
@@ -434,7 +424,6 @@ public class ProxyMonitoringController {
 		int pry_act_exe_sn = Integer.parseInt(request.getParameter("pry_act_exe_sn"));
 		Map<String, Object> result = proxyMonitoringService.selectActExeFailLog(pry_act_exe_sn);
 		mv.addObject("actExeFailLog", result);
-//		mv.setViewName("proxy/popup/exeFailMsg");
 		return mv;
 	}
 	
@@ -466,7 +455,6 @@ public class ProxyMonitoringController {
 				file_path = "/home/experdb/app/eXperDB-Management/eXperDB-Proxy" + "/";
 			}
 			
-			
 			String viewFileNm = file_name;
 
 			DownloadView fileDown = new DownloadView(); //파일다운로드 객체생성
@@ -478,36 +466,30 @@ public class ProxyMonitoringController {
 	}		
 	
 	public int logDownload1(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("파일명=" + request.getParameter("file_name"));
-
-		// System.out.println("파일경로=" +request.getParameter("path"));
 
 		String filePath = "/var/log/" + request.getParameter("type").toLowerCase() + "/";
 		String fileName = request.getParameter("file_name");
 		String viewFileNm = request.getParameter("file_name");
-		System.out.println(fileName);
-//		DownloadView fileDown = new DownloadView(); // 파일다운로드 객체생성
-//		fileDown.filDown(request, response, filePath, fileName, viewFileNm); // 파일다운로드
 		return 1;
 	}
 	
-	   /**
-	    * proxy 연결 db standby ip list
-	    * @param request
-	    * @return JSONObject 
-	    */
-	   @RequestMapping("/dbStandbyListAjax.do")
-	   public @ResponseBody JSONObject selectDbStandbyList(HttpServletRequest request){
-	      JSONObject resultObj = new JSONObject();
-	      try {
-	         String strDbSvrId = request.getParameter("db_svr_id");
-	         int db_svr_id = Integer.parseInt(strDbSvrId);
+	/**
+	* proxy 연결 db standby ip list
+	* @param request
+	* @return JSONObject 
+	*/
+	@RequestMapping("/dbStandbyListAjax.do")
+	public @ResponseBody JSONObject selectDbStandbyList(HttpServletRequest request) {
+		JSONObject resultObj = new JSONObject();
+		try {
+			String strDbSvrId = request.getParameter("db_svr_id");
+			int db_svr_id = Integer.parseInt(strDbSvrId);
 
-	         List<Map<String, Object>> selectDBStandbyIPList = proxyMonitoringService.selectDbStandbyList(db_svr_id);
-	         resultObj.put("selectDBStandbyIPList", selectDBStandbyIPList);
-	      } catch (Exception e) {
-	         e.printStackTrace();
-	      }
-	      return resultObj;
-	   }
+			List<Map<String, Object>> selectDBStandbyIPList = proxyMonitoringService.selectDbStandbyList(db_svr_id);
+			resultObj.put("selectDBStandbyIPList", selectDBStandbyIPList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultObj;
+	}
 }

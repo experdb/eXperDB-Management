@@ -124,6 +124,7 @@
 			)
 			fn_drawScheduleList();
 			fn_alertShow();
+			fn_scheduleAlert();
 			$("#pop_layer_popup_backupSchedule").modal("hide");
 		} 
 	}

@@ -200,6 +200,9 @@
 		var checkVal = fn_valChkUserPW() + fn_valChkUserName() + fn_valChkRootPW();
 		if(checkVal){
 			return false;
+		}else if(serverNum >= licenseNum){
+			showSwalIcon('<spring:message code="eXperDB_backup.msg94" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
 		}
 		return true;
 	 }

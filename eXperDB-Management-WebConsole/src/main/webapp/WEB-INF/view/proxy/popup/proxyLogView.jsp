@@ -227,74 +227,8 @@
 	 ******************************************************** */
 	function fn_pry_log_download_old(){
 		location.href="/proxyMonitoring/logDownload.do?file_name="+v_file_name;
-/* 		var v_pry_svr_id = $("#pry_svr_id", "#proxyViewForm").val();
-		var v_type = $("#type", "#proxyViewForm").val();
-
-		var v_file_name = document.getElementById("view_file_name").innerText;
-		alert(v_type);
-		$.ajax({
-			url : "/proxyMonitoring/logDownload.do",
-			dataType : "json",
-			type : "post",
- 			data : {
-				pry_svr_id : v_pry_svr_id,
- 				type : v_type,
- 				file_name : v_file_name
- 			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			success : function(result) {
-				console.log(result);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			}
-		});
-		$('#loading').hide(); */
 	}
 	
-	
-	/* ********************************************************
-	* 시스템 기동 정지 / 시작
-	******************************************************** */
-// 	function fn_actExeCng(pry_svr_id, type, status){
-// 		$.ajax({
-// 			url : '/proxyMonitoring/actExeCng.do',
-// 			type : 'post',
-// 			data : {
-// 				pry_svr_id : pry_svr_id,
-// 				type : type,
-// 				status : status,
-// 				act_exe_type : 'TC004001'
-// 			},
-// 			success : function(result) {	
-// 				rowChkCnt = $("#serverSsChkNum", "#proxyMonViewForm").val();
-// 				fn_getProxyInfo(select_pry_svr_id, rowChkCnt);
-// 			},
-// 			beforeSend: function(xhr) {
-// 				xhr.setRequestHeader("AJAX", true);
-// 			},
-// 			error : function(xhr, status, error) {
-// 				$("#ins_idCheck", "#insProxyListenForm").val("0");
-				
-// 				if(xhr.status == 401) {
-// 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-// 				} else if(xhr.status == 403) {
-// 					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-// 				} else {
-// 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-// 				}
-// 			}
-// 		});
-// 		$('#loading').hide();
-// 	}
 	
 	/* ********************************************************
 	 * 기동-정지 확인창

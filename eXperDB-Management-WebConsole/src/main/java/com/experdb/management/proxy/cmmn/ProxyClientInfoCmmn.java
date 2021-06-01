@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.json.simple.JSONObject;
 
+import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
+import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
+
 
 public class ProxyClientInfoCmmn implements Runnable{
 
@@ -351,6 +355,31 @@ public class ProxyClientInfoCmmn implements Runnable{
 		result.put("ERR_MSG", strErrMsg);
 		result.put("RESULT_DATA", strResultData);
 		
+		return result;
+	}
+
+	public Map<String, Object> getProxyAgentStatus(String IP, int PORT, JSONObject jObj) throws ConnectException, Exception {
+		
+		Map<String, Object> result = new HashMap<>();
+		JSONObject objResult;
+
+		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
+		
+		PCA.open();
+		objResult = PCA.psP012(jObj);
+		
+		PCA.close();
+		String strErrMsg = (String)objResult.get(ClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objResult.get(ClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objResult.get(ClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objResult.get(ClientProtocolID.RESULT_CODE);
+		String strResultData = (String)objResult.get(ClientProtocolID.RESULT_DATA);
+
+		result.put("RESULT_CODE", strResultCode);
+		result.put("ERR_CODE", strErrCode);
+		result.put("ERR_MSG", strErrMsg);
+		result.put("RESULT_DATA", strErrMsg);
+
 		return result;
 	}
 }

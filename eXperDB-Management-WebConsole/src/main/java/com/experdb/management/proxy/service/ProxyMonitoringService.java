@@ -26,6 +26,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy 모니터링 화면 접속 이력 등록
+	 * 
 	 * @param request, historyVO, dtlCd
 	 * @throws Exception
 	 */
@@ -33,6 +34,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy 서버 목록 조회
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -40,14 +42,15 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy 서버  cluster 조회 by master server id
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
 	public List<Map<String, Object>> selectProxyServerByMasterId(int pry_svr_id);
-//	List<DbServerVO> selectDbServerByPryMasterId(HttpServletRequest request, int pry_svr_id);
 
 	/**
 	 * Proxy 서버  cluster 조회 by master server id
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -55,6 +58,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * proxy / keepalived 기동 상태 이력
+	 * 
 	 * @param pry_svr_id
 	 * @return List<ProxyLogVO>
 	 */
@@ -62,6 +66,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy 연결된 db 서버 조회
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -69,6 +74,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy 연결된 db 서버 조회
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -76,6 +82,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy 리스너 목록 및 상태조회
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -83,6 +90,7 @@ public interface ProxyMonitoringService {
 
 	/**
 	 * Proxy 리스너 상세 정보 조회
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -90,6 +98,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy 리스너 통계 정보 조회
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -97,6 +106,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy 리스너 통계 정보카운트
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -104,6 +114,7 @@ public interface ProxyMonitoringService {
 
 	/**
 	 * Proxy, keepalived config 파일 정보 조회
+	 * 
 	 * @param pry_svr_id, type
 	 * @return List<Map<String, Object>>
 	 */
@@ -111,6 +122,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * Proxy, keepalived config 파일 가져오기
+	 * 
 	 * @param pry_svr_id, type, Map<String, Object>
 	 * @return Map<String, Object>
 	 * @throws Exception 
@@ -119,6 +131,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * proxy / keepavlived 기동-정지 실패 로그 
+	 * 
 	 * @param pry_act_exe_sn
 	 * @return Map<String, Object>
 	 */
@@ -126,6 +139,7 @@ public interface ProxyMonitoringService {
 
 	/**
 	 * proxy / keepalived 상태 변경
+	 * 
 	 * @param pry_svr_id, type, status, act_exe_type
 	 * @return JSONObject
 	 */
@@ -133,6 +147,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * proxy / keepalived log 파일 가져오기
+	 * 
 	 * @param pry_svr_id, type, param
 	 * @return Map<String, Object>
 	 */
@@ -140,6 +155,7 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * proxy config파일 변경 이력
+	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
 	 */
@@ -149,8 +165,17 @@ public interface ProxyMonitoringService {
 	
 	/**
 	 * proxy 연결 db standby ip list
+	 * 
 	 * @param db_svr_id
 	 * @return List<Map<String, Object>>
 	 */
 	public List<Map<String, Object>> selectDbStandbyList(int db_svr_id);
+
+	/**
+	 * proxy agent 상태 확인
+	 * 
+	 * @param pry_svr_id
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> getProxyAgentStatus(int pry_svr_id);
 }

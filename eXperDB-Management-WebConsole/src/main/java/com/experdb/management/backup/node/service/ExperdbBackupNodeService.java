@@ -17,7 +17,7 @@ public interface ExperdbBackupNodeService {
 	
 	List<TargetMachineVO> getNodeList()  throws Exception;
 
-	List<ServerInfoVO> getNodeInfoList();
+	JSONObject getNodeInfoList() throws FileNotFoundException, IOException;
 
 	List<ServerInfoVO> getUnregNodeList();
 

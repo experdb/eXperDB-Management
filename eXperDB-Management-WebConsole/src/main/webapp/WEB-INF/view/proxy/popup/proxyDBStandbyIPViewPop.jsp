@@ -78,8 +78,6 @@
  	* db standby ip list 불러오기
  	******************************************************** */
 	function fn_proxyDBStandbyViewAjax(db_svr_id) {
-		// var pry_svr_id = $("pry_svr_id", "configForm").val();
-		// var type = $("type", "configForm").val();
 		
 		$.ajax({
 			url : "/proxyMonitoring/dbStandbyListAjax.do",
@@ -102,7 +100,6 @@
 			},
 			success : function(result) {
 				if (result != null) {	
-					// var v_fileSize = Number($("#fSize", "#configForm").val());
 					proxyDBStandbyListTable.clear().draw();
 					if(nvlPrmSet(result.selectDBStandbyIPList, '') != '') {
 						proxyDBStandbyListTable.rows.add(result.selectDBStandbyIPList).draw();
@@ -125,7 +122,6 @@
 <div class="modal fade config-modal" id="pop_db_standby_ip_list_view" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-3" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
 	<div class="modal-dialog  modal-sm" role="document" style="margin-top:450px; margin-left:1050px;">
 		<div class="modal-content">
-<!-- 			<div class="modal-body" style="margin-bottom:-30px;"> -->
 					<div class="modal-content" style="width:600px;height:260px;">
 			
 				<h4 class="modal-title mdi mdi-alert-circle text-info db_standby_title" id="ModalLabel" style="height:50px;padding:15px;">
@@ -141,11 +137,6 @@
 							<input type="hidden" name="seek" id="seek" value="0"/>
 							<input type="hidden" name="endFlag" id="endFlag" value="0"/>
 							<input type="hidden" name="dwLen" id="dwLen" value="0"/>
-<!-- 							<fieldset> -->
-<!-- 								<div class="form-group row"> -->
-<!-- 									<div class="col-sm-12"> -->
-<!-- 										<textarea class="form-control" id="config" name="config" style="height: 400px;" readonly></textarea> -->
-<%-- 										<textarea class="form-control" id="config" name="config" style="height: 400px;" readonly>${data}</textarea> --%>
 									 		<table id="proxyDBStandbyListTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
 												<thead>
 					 								<tr class="bg-info text-white">
@@ -157,13 +148,10 @@
 													</tr>
 												</thead>
 											</table>
-<!-- 									</div> -->
-<!-- 								</div> -->
 
 								<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
 									<button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_proxyDBStandbyIPPopcl();"><spring:message code="common.close"/></button>
 								</div>
-<!-- 							</fieldset> -->
 						</form>
 					</div>
 				</div>
