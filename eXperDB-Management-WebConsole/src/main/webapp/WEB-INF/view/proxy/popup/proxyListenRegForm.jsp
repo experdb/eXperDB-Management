@@ -243,7 +243,6 @@ function fn_serverListTable_init() {
  * Proxy Server의  연결 DBMS List 검색
 ******************************************************** */		
 	function fn_listener_svr_list_search(){
-		console.log("fn_listener_svr_list_search");
 		$.ajax({
 			url : "/selectListenServerList.do",
 			data : {

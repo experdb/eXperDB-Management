@@ -618,6 +618,8 @@
 		delVipInstRows = new Array();//삭제한 Vip Instance 목록
 		delListenerRows = new Array();//삭제한 Listener 목록
 		delListnerSvrRows = new Array();//삭제한 Listener Server List 목록 
+		selAgentInterfaceItems  = new Array();
+		selAgentInterface  = null;
 		//runValid = true;
 	}
 
@@ -625,6 +627,8 @@
 	* Proxy Server List 선택 시 상세 정보 불러오기
 	**********************************************************/
 	function fn_server_conf_info(){
+		//Proxy Server Table click 이벤트 막기
+		$("#proxyServer").css("pointer-events","none");
 		$.ajax({
  			url : "/getPoxyServerConf.do",
  			data : {
@@ -643,6 +647,8 @@
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
+				//Proxy Server Table click 이벤트 풀기
+				$("#proxyServer").css("pointer-events","all");
 			},
 			success : function(result) {
 				runValid = true;
@@ -666,7 +672,7 @@
 					}
 
 	 				//Global 설정 불러오기, vip 사용 여부에 따라 disable
- 					load_global_info(result.global_info, selVipUseYn);
+ 					load_global_info(result.global_info, selVipUseYn); //timeout 100
 	 				
 	 				//vip Instance 관리 Table Data set
 					vipInstTable.rows({selected: true}).deselect();
@@ -693,20 +699,20 @@
 
 					//에이전트 연결 체크
 					if(result.errcd==0){//정상
-						
 						fn_btn_setEnable("sebu","");
 						//global interface select box setting
 		 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf, vipUseYn);
 		 				//popup interface select box setting
 		 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","", vipUseYn);
-		 				
 					}else if(result.errcd==1){ //연결실패
 						selAgentConnect = false;
 						//문구 추가
 						$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg21" />');
-						//버튼 제어
-						fn_btn_setEnable("sebu", "disabled");
-					//	showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+						setTimeout(function(){ //상단  load_global_info 함수에서 disable timeout 100 
+							//버튼 제어
+							fn_btn_setEnable("sebu", "disabled");
+						},200);
+						
 					}else if(result.errcd==2){ //연결오류
 						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
 					}
@@ -729,8 +735,11 @@
 					proxyListenTable.rows({selected: true}).deselect();
 					proxyListenTable.clear().draw();
 	 			}
+ 				//Proxy Server Table click 이벤트 풀기
+ 				$("#proxyServer").css("pointer-events","all");
 			}
 	 	});
+		
  	}
 
  	/* ********************************************************
@@ -742,8 +751,15 @@
 			$("#glb_obj_ip", "#globalInfoForm").val(data.obj_ip);
 			
 			if (selVipUseYn == "Y") {
-				if(data.if_nm == null || data.if_nm == "") $("#glb_if_nm", "#globalInfoForm").val(selAgentInterface);
-				else $("#glb_if_nm", "#globalInfoForm").val(data.if_nm);
+				if(data.if_nm == null || data.if_nm == ""){
+					$("#glb_if_nm", "#globalInfoForm").val(selAgentInterface);
+				}else{
+					if($("#glb_if_nm > option", "#globalInfoForm").text().indexOf(data.if_nm) < 0){
+						$("#glb_if_nm > option", "#globalInfoForm").remove();
+						$("#glb_if_nm", "#globalInfoForm").append('<option value='+data.if_nm+'>'+data.if_nm+'</option>');
+					}
+					$("#glb_if_nm", "#globalInfoForm").val(data.if_nm);
+				}
 				
 				if(data.peer_server_ip == null || data.peer_server_ip == "") {
 					var tempDatas = proxyServerTable.rows().data();
@@ -811,7 +827,7 @@
 				$("#btnInsert_vip").prop("disabled", "");
 				$("#btnUpdate_vip").prop("disabled", "");
 				$("#btnDelete_vip").prop("disabled", "");
-			},500);  
+			},100);  
 		}else{
 			//서버 IP,
 			$("#glb_obj_ip", "#globalInfoForm").attr("disabled",true);
@@ -823,7 +839,7 @@
 			$("#glb_peer_server_ip", "#globalInfoForm").attr("disabled",true);
 			$("#glb_peer_server_ip", "#globalInfoForm").attr("readonly",true);
 			
-			//가상IP관리 등록/수정/삭제 버튼 inable
+			//가상IP관리 등록/수정/삭제 버튼 disabled
 			setTimeout(function(){
 				$("#glb_if_nm > option", "#globalInfoForm" ).remove();
 				$("#glb_if_nm", "#globalInfoForm").val("");
@@ -1601,9 +1617,10 @@
 			$("#instReg_state_nm", "#insVipInstForm").attr("readonly",true); 
 			
 			$("#instReg_vip_cng_id", "#insVipInstForm").val("");
-			$("#instReg_v_ip", "#insVipInstForm").val("");//virtual ip
+			fn_change_v_ip_sel();
+			//$("#instReg_v_ip", "#insVipInstForm").val($("#instReg_v_ip_sel", "#insVipInstForm").val());//virtual ip
 			$("#instReg_v_if_nm", "#insVipInstForm").val($("#instReg_v_if_nm_sel", "#insVipInstForm").val()); //virtual interface
-			$("#instReg_v_rot_id", "#insVipInstForm").val(""); //virtual router id
+			//$("#instReg_v_rot_id", "#insVipInstForm").val(""); //virtual router id
 			var vipDataLen = vipInstTable.rows().data().length;
 			if(vipDataLen == 0){
 				$("#instReg_state_nm", "#insVipInstForm").val("MASTER"); //State
