@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.MessageSourceAccessor;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -13,15 +13,12 @@ import org.springframework.context.support.MessageSourceAccessor;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class Messages {
+	private static final Logger logger = LoggerFactory.getLogger(Messages.class);
 
-
-	 private static final Logger logger = LoggerFactory.getLogger(Messages.class);
-	
-	
 	private MessageSourceAccessor messageSourceAccessor;
 	
 	private static Messages instance = new Messages();
@@ -66,5 +63,4 @@ public class Messages {
 	public static String getMessage(String code, String defaultMessage){
 		return Messages.getInstance().getString(code, defaultMessage);
 	}
-	
 }

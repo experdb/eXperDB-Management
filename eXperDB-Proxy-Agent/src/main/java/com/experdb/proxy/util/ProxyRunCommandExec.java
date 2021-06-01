@@ -4,21 +4,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -26,7 +21,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class ProxyRunCommandExec extends Thread {
@@ -152,11 +147,7 @@ public class ProxyRunCommandExec extends Thread {
 
 	public static void main(String[] args) throws Exception {
 		ProxyRunCommandExec runCommandExec = new ProxyRunCommandExec();
-		
-		String path = runCommandExec.getClass().getResource("/").getPath();
-		
-		System.out.println(path);
 
-		
+		String path = runCommandExec.getClass().getResource("/").getPath();
 	}
 }

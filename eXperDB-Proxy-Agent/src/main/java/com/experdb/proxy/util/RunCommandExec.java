@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class RunCommandExec extends Thread {

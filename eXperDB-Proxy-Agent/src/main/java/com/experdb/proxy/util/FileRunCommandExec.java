@@ -6,15 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -22,7 +20,7 @@ import org.slf4j.LoggerFactory;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class FileRunCommandExec extends Thread {
@@ -93,16 +91,6 @@ public class FileRunCommandExec extends Thread {
 			proc.destroy();
 			System.out.println("Exec End");
 		}
-		
-		/*
-		try {
-			Thread.currentThread().sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-
 	}
 	
 	public void runExecRtn(String cmd){
@@ -157,14 +145,9 @@ public class FileRunCommandExec extends Thread {
 		ArrayList<String> fileList = null;
 		
 		try{
-			//proc = Runtime.getRuntime().exec(cmd);
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			proc.waitFor ();
-			
-		//	socketLogger.info("proc.exitValue() --> " + proc.exitValue());
-			
-		//	socketLogger.info("@@@@@@@@@ scanner start" );
-			
+
 			if ( proc.exitValue() != 0 ) {
 				BufferedReader out = new BufferedReader ( new InputStreamReader ( proc.getInputStream() ) );
 				while ( out.ready() ) {
@@ -198,7 +181,6 @@ public class FileRunCommandExec extends Thread {
 				out.close();
 				strReturnVal = "success";
 			}
-			//socketLogger.info("@@@@@@@@@ scanner end" );
 
 			this.returnListMessage = fileList;
 			this.returnMessage = strResult;
@@ -241,7 +223,5 @@ public class FileRunCommandExec extends Thread {
 		String path = runCommandExec.getClass().getResource("/").getPath();
 		
 		System.out.println(path);
-
-		
 	}
 }

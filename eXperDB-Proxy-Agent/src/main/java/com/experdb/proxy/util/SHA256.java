@@ -10,9 +10,8 @@ import java.util.Random;
 
 import org.springframework.util.ResourceUtils;
 
-
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -20,10 +19,9 @@ import org.springframework.util.ResourceUtils;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
-
 public class SHA256 {
 
 	public static String getSHA256(String str){
@@ -67,11 +65,9 @@ public class SHA256 {
 		}
 
 		return SHA;
-
 	}
 	
 	public static String setSHA256(String str, String salt_value){
-
 		String SHA = ""; 
 
 		try{

@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -13,7 +13,7 @@ import java.util.Date;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class DateUtil {
@@ -84,9 +84,8 @@ public class DateUtil {
 		String strReturnTime = "";
 		
 		Date dt = new Date();
-		//System.out.println(dt.toString());
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); 
-		//System.out.println(sdf.format(dt).toString()); 
+
 		strReturnTime = sdf.format(dt).toString();
 		return strReturnTime;
 	}
@@ -129,27 +128,9 @@ public class DateUtil {
 	
 	public static void main(String args[]) throws Exception{
 		DateUtil dt = new DateUtil();
-		
-		//System.out.println(dt.getYMD());
-		/**
-		System.out.println("YYYY : " + dt.getDate("YYYY"));
-		System.out.println("MM : " + dt.getDate("MM"));
-		System.out.println("DD : " + dt.getDate("DD"));
-		
-		System.out.println("time : " + dt.getTime());
-		
-		System.out.println("week : " + dt.getDayOfWeek());
-		**/
-		
+
 		Date a = getDateToString("2017-07-25 09:51:14");
 		Date b = getDateToString("2017-07-26");
 		Date c = getDateToString("2017-07-22");
-		
-		
-		System.out.println(a.compareTo(b));
-		System.out.println(a.compareTo(c));
-		System.out.println(a.compareTo(a));
-		
 	}
-
 }

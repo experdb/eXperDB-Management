@@ -24,7 +24,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -32,7 +32,7 @@ import org.springframework.core.io.Resource;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class FileUtil {
@@ -72,10 +72,9 @@ public class FileUtil {
 		HashMap hp = new HashMap();
 		RandomAccessFile rdma = null;
 		String strEndFlag = "0";
+
 		try {
 			rdma = new RandomAccessFile(file, "r");
-
-			// int intStartLine = intReadLine * intDwlenCount;
 
 			rdma.seek(intSeekPoint);
 			String temp;
@@ -93,9 +92,6 @@ public class FileUtil {
 			}
 			if (recnum != (intReadLine + 1))
 				strEndFlag = "1";
-
-			// System.out.println("recnum : " + recnum);
-			// System.out.println("intReadLine : " + intReadLine);
 
 			hp.put("file_desc", strView);
 			hp.put("file_size", strView.length());

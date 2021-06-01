@@ -1,6 +1,9 @@
 package com.experdb.proxy.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -19,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.experdb.proxy.socket.ProtocolID;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -27,16 +30,13 @@ import com.experdb.proxy.socket.ProtocolID;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
-
 public class CommonUtil {
 
 	private Logger invokeLogger = LoggerFactory.getLogger("consoleToFile");
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
-
-
 
 	public  String getProcessID() {
 		String name = ManagementFactory.getRuntimeMXBean().getName();
@@ -167,8 +167,6 @@ public class CommonUtil {
 	}
 	
 	public String getPoolName(JSONObject serverInfoObj) throws Exception {
-		String strPoolName = "";
-		
 		return "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
 	}
 	
@@ -241,5 +239,39 @@ public class CommonUtil {
 		}
 
 		return returnTime;
+	}
+	
+	/**
+	 * packet length 구하기
+	 * 
+	 * @return String
+	 * @throws UnsupportedEncodingException  
+	 */
+	public String getPacketLength(int total, String data) throws Exception{
+		int dataLen = getStringToHex(data).length()/2;
+		String result = Integer.toHexString(total+dataLen); 
+		return lpad(8, "0", result);
+	}
+	
+	/**
+	 * 파일을 읽어 String으로 반환
+	 * 
+	 * @return String
+	 * @throws
+	 */
+	public String readTemplateFile(String filename, String TEMPLATE_DIR)
+	{   	
+		String content = null;
+ 	   	File file = new File(getClass().getClassLoader().getResource(TEMPLATE_DIR+filename).getFile()); 
+ 	   	try {
+ 	   		InputStreamReader reader= new InputStreamReader(new FileInputStream(file),"UTF8"); 
+ 	   		char[] chars = new char[(int) file.length()];
+ 	   		reader.read(chars);
+ 	   		content = new String(chars);
+ 	   		reader.close();
+ 	   	} catch (IOException e) {
+ 		   e.printStackTrace();
+ 	   	}
+ 	   	return content;
 	}
 }

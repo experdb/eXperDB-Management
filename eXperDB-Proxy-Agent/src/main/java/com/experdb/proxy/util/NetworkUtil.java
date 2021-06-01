@@ -13,7 +13,7 @@ import java.util.List;
 import com.experdb.proxy.socket.ProtocolID;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -21,7 +21,7 @@ import com.experdb.proxy.socket.ProtocolID;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class NetworkUtil {
@@ -52,10 +52,7 @@ public class NetworkUtil {
 						System.out.println("InterfaceAddress is null");
 						continue;
 					}
-					//System.out.println("InterfaceAddres:"+add.getAddress());
-					//System.out.println("Prefixlaenge: "+add.getNetworkPrefixLength());
-					//System.out.println("InterfaceBrodacast:"+add.getBroadcast()+"\n");
-					
+
 					//listIP.add(add.getAddress());
 					strHostAddress = add.getAddress().getHostAddress();
 					
@@ -66,7 +63,6 @@ public class NetworkUtil {
 				hp.put(ProtocolID.CMD_MACADDRESS, CMD_MACADDRESS);
 				
 				listNetwork.add(hp);
-				
 			}
 			
 		} catch (SocketException e)
@@ -79,23 +75,20 @@ public class NetworkUtil {
 	
 	public static String getMacAddress(InetAddress ip)  throws Exception{
 		String strMacAddress = "";
-		//InetAddress ip;
-		try {
 
+		try {
 			ip = InetAddress.getLocalHost();
-			//System.out.println("Current IP address : " + ip.getHostAddress());
+
 			NetworkInterface.getNetworkInterfaces();
 			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
 
 			byte[] mac = network.getHardwareAddress();
 
-			//System.out.print("Current MAC address : ");
-
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < mac.length; i++) {
 				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
 			}
-			//System.out.println(sb.toString());
+
 			strMacAddress = sb.toString();
 
 		} catch (UnknownHostException e) {
@@ -112,33 +105,28 @@ public class NetworkUtil {
 		String ip =	"";
 
 		try{
-
-			Enumeration en	=		NetworkInterface.getNetworkInterfaces();
+			Enumeration en	= NetworkInterface.getNetworkInterfaces();
 
 			while(en.hasMoreElements()){
 
-				NetworkInterface ni	=	(NetworkInterface)en.nextElement();
+				NetworkInterface ni	= (NetworkInterface)en.nextElement();
 
-				Enumeration inetAddresses	=	ni.getInetAddresses();
+				Enumeration inetAddresses = ni.getInetAddresses();
 
-					while(inetAddresses.hasMoreElements()){
+				while(inetAddresses.hasMoreElements()){
+					InetAddress ia	=	(InetAddress)inetAddresses.nextElement();
 
-						InetAddress ia	=	(InetAddress)inetAddresses.nextElement();
-
-						if(ia.getHostAddress() != null && ia.getHostAddress().indexOf(".") != -1){
-
-							byte[] address	=	ia.getAddress();
-							if(address[0] == 127) continue;
-							ip	=	ia.getHostAddress();
-							break;				
-
-						}
-
+					if(ia.getHostAddress() != null && ia.getHostAddress().indexOf(".") != -1){
+						byte[] address	=	ia.getAddress();
+						if(address[0] == 127) continue;
+						ip	=	ia.getHostAddress();
+						break;				
 					}
+				}
 
-					if(ip.length()>0){
-						break;
-					}
+				if(ip.length()>0){
+					break;
+				}
 			}
 
 		}catch(Exception e){
@@ -147,6 +135,4 @@ public class NetworkUtil {
 
 		return ip;
 	}
-
-
 }
