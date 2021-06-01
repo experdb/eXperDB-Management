@@ -1,27 +1,15 @@
 package com.experdb.proxy.db.repository.service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.List;
-import java.util.Properties;
-
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.experdb.proxy.db.repository.dao.SystemDAO;
 import com.experdb.proxy.db.repository.vo.AgentInfoVO;
-import com.experdb.proxy.db.repository.vo.DbServerInfoVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
-import com.experdb.proxy.db.repository.vo.TrfTrgCngVO;
-import com.experdb.proxy.db.repository.vo.WrkExeVO;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -29,20 +17,20 @@ import com.experdb.proxy.db.repository.vo.WrkExeVO;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
-
 @Service("SystemService")
 public class SystemServiceImpl implements SystemService{
 
 	@Resource(name = "SystemDAO")
 	private SystemDAO systemDAO;
-	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
-	
+
 	/**
-	 * Agent 설치정보 조회
+	 * proxy Agent 설치정보 조회
+	 * 
 	 * @param AgentInfoVO
+	 * @return AgentInfoVO
 	 * @throws Exception
 	 */
 	public AgentInfoVO selectPryAgtInfo(AgentInfoVO vo) throws Exception  {
@@ -50,8 +38,9 @@ public class SystemServiceImpl implements SystemService{
 	}
 
 	/**
-	 * 설치정보 관리
-	 * @param dbServerInfo
+	 * AGENT 정보 변경
+	 * 
+	 * @param String strSocketIp, String strSocketPort, String strVersion
 	 * @throws Exception
 	 */
 	public void agentInfoStartMng(String strSocketIp, String strSocketPort, String strVersion) throws Exception  {
@@ -101,7 +90,8 @@ public class SystemServiceImpl implements SystemService{
 
 	/**
 	 * Agent 설치 정보 등록
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
 	 * @throws Exception
 	 */
 	public void insertPryAgtInfo(AgentInfoVO vo) throws Exception {
@@ -110,7 +100,8 @@ public class SystemServiceImpl implements SystemService{
 
 	/**
 	 * Agent 설치 정보 수정
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
 	 * @throws Exception
 	 */
 	public void updatePryAgtInfo(AgentInfoVO vo) throws Exception {
@@ -119,7 +110,8 @@ public class SystemServiceImpl implements SystemService{
 
 	/**
 	 * Agent 종료
-	 * @param dbServerInfo
+	 * 
+	 * @param String strSocketIp, String strSocketPort
 	 * @throws Exception
 	 */
 	public void agentInfoStopMng(String strSocketIp, String strSocketPort) throws Exception  {
@@ -136,7 +128,8 @@ public class SystemServiceImpl implements SystemService{
 	
 	/**
 	 * Agent 종료 정보 변경
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
 	 * @throws Exception
 	 */
 	public void updatePryAgtStopInfo(AgentInfoVO vo) throws Exception {
@@ -144,8 +137,10 @@ public class SystemServiceImpl implements SystemService{
 	}
 
 	/**
-	 * proxy 마지막 이름 조회
+	 * proxy max 이름 조회
+	 * 
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectPrySvrMaxNmInfo(ProxyServerVO vo) throws Exception {
@@ -153,8 +148,10 @@ public class SystemServiceImpl implements SystemService{
 	}
 
 	/**
-	 * proxy 마지막 이름 조회
+	 * Proxy DBMS 별 최종 서버명 조회
+	 * 
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectDBMSSvrMaxNmInfo(ProxyServerVO vo) throws Exception {
@@ -162,8 +159,10 @@ public class SystemServiceImpl implements SystemService{
 	}
 
 	/**
-	 * proxy 마지막 이름 조회
+	 * Proxy DBMS 별 마스터 중 최종 서버명 조회
+	 * 
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectDBMSSvrEtcMaxNmInfo(ProxyServerVO vo) throws Exception {

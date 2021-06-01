@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,7 +21,6 @@ import java.util.Properties;
 import javax.annotation.Resource;
 
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,63 +61,15 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 	public final static String TEMPLATE_DIR = "./template/";
 
 	/**
-	 * packet length 구하기
-	 * 
-	 * @return String
-	 * @throws UnsupportedEncodingException  
-	 */
-	public String getPacketLength(int total, String data) throws Exception{
-		CommonUtil util = new CommonUtil();
-		
-		int dataLen = util.getStringToHex(data).length()/2;
-		String result = Integer.toHexString(total+dataLen); 
-		return util.lpad(8, "0", result);
-	}
-	
-	//파일을 읽어 String으로 반환
-	public String readTemplateFile(String filename)
-	{   	
-		String content = null;
- 	   	File file = new File(getClass().getClassLoader().getResource(TEMPLATE_DIR+filename).getFile()); 
- 	   	try {
- 	   		InputStreamReader reader= new InputStreamReader(new FileInputStream(file),"UTF8"); 
- 	   		char[] chars = new char[(int) file.length()];
- 	   		reader.read(chars);
- 	   		content = new String(chars);
- 	   		reader.close();
- 	   	} catch (IOException e) {
- 		   e.printStackTrace();
- 	   	}
- 	   	return content;
-	}
-	
-	public String runExeCmd(String cmd) throws Exception {
-		//socketLogger.info("runExeCmd : "+cmd);
-		String result = "";
-		RunCommandExec commandExec = new RunCommandExec();
-		commandExec.runExecRtn3(cmd);
-		try {
-			commandExec.join();
-		} catch (InterruptedException ie) {
-			socketLogger.error("runExeCmd error {}",ie.toString());
-			ie.printStackTrace();
-		}
-		if(commandExec.call().equals("success")){
-			result += "success\n";
-			result += commandExec.getMessage();
-		}
-		return result;
-	}
-
-	/**
 	 * createNewConfFile JSONObject로 받은 설정 정보를 conf 파일로 생성
-	 * 
-	 * @return String
-	 * @throws UnsupportedEncodingException  
+	 * @param JSONObject
+	 * @return JSONObject
+	 * @throws Exception  
 	 */
 	@Override
 	public JSONObject createNewConfFile(JSONObject jobj) throws Exception {
-		socketLogger.info("PsP004.createNewConfFile : "+jobj.toString());
+		socketLogger.info("ProxyLinkServiceImpl.createNewConfFile : "+jobj.toString());
+
 		JSONObject result = new JSONObject();
 		CommonUtil util = new CommonUtil();
 		
@@ -131,11 +81,12 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String errcd = "0";
 		ProxyConfChangeHistoryVO newConfChgHistVo = new ProxyConfChangeHistoryVO();
 		String cmdResult = "";
+
 		try{
 			//haproxy.cfg 생성
 			String proxyCfg = ""; 
 			
-			String globalConf = readTemplateFile("global.cfg");
+			String globalConf = util.readTemplateFile("global.cfg", TEMPLATE_DIR);
 			JSONObject global = jobj.getJSONObject("global_info");
 			
 			prySvrId = global.getInt("pry_svr_id");
@@ -162,13 +113,14 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			
 			proxyCfg += globalConf;
 			
-			String readOnlyConf = readTemplateFile("readOnly.cfg");
-			String readWriteConf = readTemplateFile("readWrite.cfg"); 
+			String readOnlyConf = util.readTemplateFile("readOnly.cfg", TEMPLATE_DIR);
+			String readWriteConf = util.readTemplateFile("readWrite.cfg", TEMPLATE_DIR);
 			String readWriteCdNm = jobj.getString("TC004201");
 			String readOnlyCdNm = jobj.getString("TC004202");
 			
 			JSONArray listener = jobj.getJSONArray("listener_list");
 			int listenerSize = listener.length();
+
 			for(int i=0 ; i<listenerSize ; i++){
 				JSONObject proxyListener = listener.getJSONObject(i);
 				String lsn_nm = proxyListener.getString("lsn_nm");
@@ -180,14 +132,14 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 					readWriteConf = readWriteConf.replace("{con_bind_port}", bind);
 					readWriteConf = readWriteConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
 					readWriteConf = readWriteConf.replace("{db_nm}", db_nm);
-					readWriteConf = readWriteConf.replace("{packet_len}", getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
+					readWriteConf = readWriteConf.replace("{packet_len}", util.getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
 					proxyCfg +="\n"+readWriteConf;
 				}else if(lsn_nm.equals(readOnlyCdNm)){
 					readOnlyConf = readOnlyConf.replace("{lsn_nm}", lsn_nm);
 					readOnlyConf = readOnlyConf.replace("{con_bind_port}", bind);
 					readOnlyConf = readOnlyConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
 					readOnlyConf = readOnlyConf.replace("{db_nm}", db_nm);
-					readOnlyConf = readOnlyConf.replace("{packet_len}",  getPacketLength(31,db_nm));
+					readOnlyConf = readOnlyConf.replace("{packet_len}",  util.getPacketLength(31,db_nm));
 					proxyCfg +="\n"+readOnlyConf;
 				}
 				
@@ -202,7 +154,6 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				}
 				
 				proxyCfg +=serverList;
-				
 			}
 			
 			//keepalived.conf 생성
@@ -216,13 +167,13 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			keepalivedCfg += "        process \"haproxy\"\n";
 			keepalivedCfg += "        weight 2\n";
 			keepalivedCfg += "}\n";
-			
-			
+
 			JSONArray vipConfArry = jobj.getJSONArray("vipconfig_list");
 			int vipConfSize = vipConfArry.length();
+
 			for(int i=0 ; i<vipConfSize ; i++){
 				JSONObject vipConfObj = vipConfArry.getJSONObject(i);
-				String vipConf = readTemplateFile("vip_instance.conf");
+				String vipConf = util.readTemplateFile("vip_instance.conf", TEMPLATE_DIR);
 				vipConf = vipConf.replace("{v_index}", String.valueOf(i+1));  
 				vipConf = vipConf.replace("{state_nm}", vipConfObj.getString("state_nm"));
 				vipConf = vipConf.replace("{if_nm}", global.getString("if_nm"));
@@ -250,8 +201,10 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			
 			File initHaproxy = new File(proxySvr.getPry_pth());
 			File initKeepa = new File(proxySvr.getKal_pth());
+
 			//최초 적용 파일 있지만, 백업폴더 없을 경우 백업함
 			File backupFolder = new File(backupPath);
+
 			if(!backupFolder.exists() && initHaproxy.exists()){
 				ProxyConfChangeHistoryVO confChgHistVo = new ProxyConfChangeHistoryVO();
 				confChgHistVo.setPry_svr_id(prySvrId);
@@ -271,6 +224,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				}else{
 					confChgHistVo.setKal_pth("");
 				}
+
 				confChgHistVo.setExe_rst_cd("TC001501");
 				//insert T_PRYCHG_G
 				proxyDAO.insertPrycngInfo(confChgHistVo);
@@ -318,7 +272,13 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		
 		return result;
 	}
-	
+
+	/**
+	 * fileBackupReplace backup 폴더, conf 생성
+	 * @param String
+	 * @return 
+	 * @throws Exception  
+	 */
 	public void fileBackupReplace(String sysType,String backupFolder, String newFilePath, String replacePath, String fileContent, ProxyConfChangeHistoryVO confChgHistVo) throws Exception {
 		
 		String backupPath = FileUtil.getPropertyValue("context.properties", "proxy.conf_backup_path");
@@ -336,16 +296,17 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		File newFile = new File(newFilePath);
 		byte[] contentBytes = fileContent.getBytes();
 		FileOutputStream os_h = new FileOutputStream(newFile);
+
 		os_h.write(contentBytes);
 		os_h.close(); 
 		 
 		Files.copy(Paths.get(newFilePath), Paths.get(replacePath), REPLACE_EXISTING);
-		
 	}
+	
 	/**
 	 * keepalvied, haproxy 서비스 중단/시작/재시작 하기
-	 * 
-	 * @return String
+	 * @param JSONObject
+	 * @return JSONObject
 	 */
 	@Override
 	public JSONObject executeService(JSONObject jObj) throws Exception {
@@ -365,7 +326,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String userId =jObj.getString("lst_mdfr_id");
 		String cmd = "systemctl ";
 		String proxySetStatus = "";
-		String keepalivedSetStatus = "";
+/*		String keepalivedSetStatus = "";*/
 		
 		try {
 			ProxyServerVO prySvr = new ProxyServerVO();
@@ -440,12 +401,10 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 					break;
 				case "KEEPALIVED" :
 					prySvr.setKal_exe_status(strExecute);
-					keepalivedSetStatus = strExecute;
+/*					keepalivedSetStatus = strExecute;*/
 					break;
 			}
-			
-			
-			
+
 			//proxy_svr 상태 변경 및 마스터 구분 체크
 	    	try {
 	    		String returnMsg = "";
@@ -472,18 +431,14 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 
 	        } catch(Exception e) {
 	            e.printStackTrace();
-	        }  
-			
-			
-			
-			
-			
+	        }
 		} catch (Exception e) {
 			errLogger.error("ProxyLinkServiceImpl.executeService {}", e.toString());
 			strSuccessCode = "1";
 			strErrCode = "-1";
 			strErrMsg = "executeService Error [" + e.toString() + "]";
 		}
+
 		outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
@@ -495,7 +450,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 	
 	/**
 	 * 마스터 체크 및 저장
-	 * @param chkParam
+	 * @param chkParam, proxyServerInfo
+	 * @return String
 	 * @throws Exception
 	 */
 	@Transactional
@@ -527,12 +483,6 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				}
 			}
 
-			//down
-			//1. DBMS 서버 설치 - 리스너 1개
-			//2. KEEP 없는 경우
-			//3. 서버 따로 구성 - 리스너 2개
-			
-			
 			//마스터 구분 변경
 			if (!"".equals(strProxyChgVal)) {
 				if ("TC001502".equals(strProxyChgVal)) { //down 된 경우
@@ -659,8 +609,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 							prySvrChk.setOld_master_gbn("S");
 							prySvrChk.setOld_pry_svr_id(proxyServerInfo.getPry_svr_id());
 							
-							if (backupChk.getPry_svr_id() != prySvrChk.getPry_svr_id() ||
-								backupChk.getPry_svr_id() < prySvrChk.getPry_svr_id()) {
+							if (backupChk != null && (backupChk.getPry_svr_id() != prySvrChk.getPry_svr_id() ||
+								backupChk.getPry_svr_id() < prySvrChk.getPry_svr_id())) {
 								//현재서버와 마스터서버아이디로된 것들을 백업으로 변경, pry_svr_id는 조회한 서버로
 								//그리고 조회한 서버아이디를 마스터로 나머진 백업으로 한번더 up
 								prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
@@ -746,7 +696,9 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 	/**
 	 * Agent network Interface 정보
 	 * 
+	 * @param JSONObject
 	 * @return JSONObject
+	 * @throws Exception
 	 */
 	@Override
 	public JSONObject getAgentInterface(JSONObject jobj) throws Exception {
@@ -802,6 +754,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 	/**
 	 * Backup Conf 파일 읽어오기
 	 * 
+	 * @param String
 	 * @return String
 	 */
 	@Override
@@ -823,7 +776,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 	/**
 	 * keepalived 설치 여부 및 path update
 	 * 
-	 * @return String
+	 * @param JSONObject
+	 * @return JSONObject
 	 * @throws Exception 
 	 */
 	@Override
@@ -889,5 +843,30 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 		
 		return outputObj;
+	}
+	
+	/**
+	 * cmd 실행
+	 * 
+	 * @param String
+	 * @return String
+	 * @throws Exception 
+	 */
+	public String runExeCmd(String cmd) throws Exception {
+		//socketLogger.info("runExeCmd : "+cmd);
+		String result = "";
+		RunCommandExec commandExec = new RunCommandExec();
+		commandExec.runExecRtn3(cmd);
+		try {
+			commandExec.join();
+		} catch (InterruptedException ie) {
+			socketLogger.error("runExeCmd error {}",ie.toString());
+			ie.printStackTrace();
+		}
+		if(commandExec.call().equals("success")){
+			result += "success\n";
+			result += commandExec.getMessage();
+		}
+		return result;
 	}
 }

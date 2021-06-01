@@ -1,15 +1,10 @@
 package com.experdb.proxy.db.repository.service;
 
-import java.util.List;
-
 import com.experdb.proxy.db.repository.vo.AgentInfoVO;
-import com.experdb.proxy.db.repository.vo.DbServerInfoVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
-import com.experdb.proxy.db.repository.vo.TrfTrgCngVO;
-import com.experdb.proxy.db.repository.vo.WrkExeVO;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -17,50 +12,60 @@ import com.experdb.proxy.db.repository.vo.WrkExeVO;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+* 
 *      </pre>
 */
 
 public interface SystemService {
 	/**
-	 * Agent 설치정보 조회
-	 * @param vo
-	 * @return
+	 * proxy Agent 설치정보 조회
+	 * 
+	 * @param AgentInfoVO
+	 * @return AgentInfoVO
 	 * @throws Exception
 	 */
 	public AgentInfoVO selectPryAgtInfo(AgentInfoVO vo) throws Exception;
 
 	/**
 	 * Agent 설치 정보 등록
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
+	 * @return AgentInfoVO
 	 * @throws Exception
 	 */
 	public void insertPryAgtInfo(AgentInfoVO vo) throws Exception ;
 
 	/**
 	 * Agent 설치 정보 수정
-	 * @param vo
+	 * 
+	 * @param AgentInfoVO
 	 * @throws Exception
 	 */
 	public void updatePryAgtInfo(AgentInfoVO vo) throws Exception ;
 	
 	/**
-	 * proxy 마지막 이름 조회
+	 * proxy max 이름 조회
+	 * 
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectPrySvrMaxNmInfo(ProxyServerVO vo) throws Exception;
 	
 	/**
-	 * proxy 마지막 이름 조회
+	 * Proxy DBMS 별 최종 서버명 조회
+	 * 
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectDBMSSvrMaxNmInfo(ProxyServerVO vo) throws Exception;
 	
 	/**
-	 * proxy 마지막 이름 조회
+	 * Proxy DBMS 별 마스터 중 최종 서버명 조회
+	 * 
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectDBMSSvrEtcMaxNmInfo(ProxyServerVO vo) throws Exception;

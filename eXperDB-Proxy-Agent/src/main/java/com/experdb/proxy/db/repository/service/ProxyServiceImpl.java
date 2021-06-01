@@ -39,7 +39,7 @@ import com.experdb.proxy.util.ProxyRunCommandExec;
 import com.experdb.proxy.util.RunCommandExec;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -47,7 +47,7 @@ import com.experdb.proxy.util.RunCommandExec;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 @Service("ProxyService")
@@ -65,8 +65,10 @@ public class ProxyServiceImpl implements ProxyService{
 	public final static String TEMPLATE_DIR = "./template/";
 
 	/**
-	 * 설치정보 관리
+	 * proxy cmd 실행
+	 * 
 	 * @param String cmdGbn
+	 * @return String
 	 * @throws Exception
 	 */
 	public String selectProxyServerChk(String cmdGbn) throws Exception {
@@ -105,7 +107,9 @@ public class ProxyServiceImpl implements ProxyService{
 
 	/**
 	 * 설치정보 conf 조회
-	 * @param String cmdGbn, String req_cmd, String server_ip
+	 * 
+	 * @param String cmdGbn, String req_cmd, String server_ip, String db_chk
+	 * @return JSONObject
 	 * @throws Exception
 	 */
 	public JSONObject selectProxyServerList(String cmdGbn, String req_cmd, String server_ip, String db_chk) throws Exception {
@@ -145,7 +149,9 @@ public class ProxyServiceImpl implements ProxyService{
 
 	/**
 	 * proxy 서버 정보 조회
+	 * 
 	 * @param ProxyServerVO
+	 * @return ProxyServerVO
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectPrySvrInfo(ProxyServerVO vo)  throws Exception {
@@ -154,7 +160,9 @@ public class ProxyServiceImpl implements ProxyService{
 
 	/**
 	 * proxy 서버 param setting
-	 * @param String search_gbn, String req_cmd, String server_ip
+	 * 
+	 * @param String search_gbn, String req_cmd, String server_ip, String db_chk
+	 * @return Map<String, Object>
 	 * @throws Exception
 	 */
 	public Map<String, Object> paramLoadSetting(String search_gbn, String req_cmd, String server_ip, String db_chk) throws Exception {
@@ -168,7 +176,13 @@ public class ProxyServiceImpl implements ProxyService{
 		return param;
 	}
 
-	//proxyObjSetting setting
+	/**
+	 * param JSONObject 변환 setting
+	 * 
+	 * @param Map<String, Object> param
+	 * @return JSONObject
+	 * @throws Exception
+	 */
 	private JSONObject proxyObjSetting(Map<String, Object> param) {
 		JSONObject obj = new JSONObject();
 
@@ -185,8 +199,10 @@ public class ProxyServiceImpl implements ProxyService{
 	}
 
 	/**
-	 * conf 정보 조회
-	 * @param dbServerInfo
+	 * proxy cmd 정보 조회
+	 * 
+	 * @param JSONObject
+	 * @return JSONObject
 	 * @throws Exception
 	 */
 	private JSONObject confSetExecute(JSONObject jObj) throws Exception {
@@ -278,8 +294,10 @@ public class ProxyServiceImpl implements ProxyService{
 	}
 
 	/**
-	 * conf 정보 조회
-	 * @param dbServerInfo
+	 * proxy, keepalived conf 정보 조회
+	 * 
+	 * @param JSONObject
+	 * @return JSONObject
 	 * @throws Exception
 	 */
 	private JSONObject confReadExecute(JSONObject jObj) throws Exception {
@@ -291,8 +309,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 		JSONObject outputObj = new JSONObject();
 		JSONObject jsonObj = new JSONObject();
-		JSONParser parser = new JSONParser();
-		
+
 		CommonUtil util = new CommonUtil();
 
 		DbServerInfoVO dbServerInfoVO = new DbServerInfoVO();
@@ -303,7 +320,6 @@ public class ProxyServiceImpl implements ProxyService{
 		String stateInterface = ""; 		//global_interface명
 		String stateMasterInterface = ""; //global_interface명
 		String stateGbn = "";
-		String old_stateGbn = "";
 		String strPeerId = "";
 
 		String strMaxConn = ""; 	//최대_연결_개수
@@ -755,6 +771,7 @@ public class ProxyServiceImpl implements ProxyService{
 			}
 
 			socketLogger.info("keepalived_set.stateGbn.stateGbn" + stateGbn);
+			socketLogger.info("keepalived_set.strPeerId.strPeerId" + strPeerId);
 
 			if ("S".equals(stateGbn)) {
 				jsonObj.put("peer_id", strPeerId);
@@ -821,7 +838,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-			outputObj.put(ProtocolID.ERR_MSG, "confSetExecute Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_MSG, "confReadExecute Error [" + e.toString() + "]");
 			outputObj.put(ProtocolID.RESULT_DATA, jsonObj);
 			outputObj.put(ProtocolID.RESULT_SUB_DATA, "");
 		} finally {
@@ -832,8 +849,10 @@ public class ProxyServiceImpl implements ProxyService{
 	}
 
 	/**
-	 * 설치정보 등록
-	 * @param dbServerInfo
+	 * proxy 서버 저장 / 설치정보 등록
+	 * 
+	 * @param ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam
+	 * @return String
 	 * @throws Exception
 	 */
 	@Transactional
@@ -842,21 +861,36 @@ public class ProxyServiceImpl implements ProxyService{
 		String returnMsg = "success";
 		int saveChkPrySvrI = 0;
 		AgentInfoVO agtVo = new AgentInfoVO();
+		
+		Map<String, Object> mstChkParam = new HashMap<String, Object>();
+		ProxyServerVO prySvrChk = null;
 
 		long pry_svr_id_sn = 1L;
 		long pry_lsn_id_sn = 1L;
-		socketLogger.info("insPryVo.getDb_svr_id()----- : " + insPryVo.getDb_svr_id());
+
 		try {
 			if (insPryVo.getDb_svr_id() > 0) {
 				//서버 등록
 				try {
-					socketLogger.info("insUpNmGbn----- : " + insUpNmGbn);
 					if ("proxySvrIns".equals(insUpNmGbn)) {
 						pry_svr_id_sn = proxyDAO.selectQ_T_PRY_SVR_I_01();
 						insPryVo.setPry_svr_id((int)pry_svr_id_sn);
 		
 						saveChkPrySvrI = proxyDAO.insertPrySvrInfo(insPryVo);
 					} else if ("proxySvrUdt".equals(insUpNmGbn)) {
+						socketLogger.info("insPryVo.getMaster_svr_id_chk()insPryVo.getMaster_svr_id_chk() : " + insPryVo.getMaster_svr_id_chk());
+						if (insPryVo.getMaster_svr_id_chk() != null && "Y".equals(insPryVo.getMaster_svr_id_chk())) {
+							mstChkParam.put("selQueryGbn", "backupM");
+							mstChkParam.put("db_svr_id", insPryVo.getDb_svr_id());
+							
+							prySvrChk = proxyDAO.selectPrySvrMasterSetInfo(mstChkParam);
+							socketLogger.info("prySvrChk : " + prySvrChk);
+							if (prySvrChk != null) {
+								socketLogger.info("prySvrChk : " + prySvrChk.getPry_svr_id());
+								insPryVo.setMaster_svr_id_chk(Integer.toString(prySvrChk.getPry_svr_id()));
+							}
+						}
+						
 						saveChkPrySvrI = proxyDAO.updatePrySvrInfo(insPryVo);
 					}
 				} catch (Exception e) {
@@ -994,8 +1028,6 @@ public class ProxyServiceImpl implements ProxyService{
 
 									schProxyListnerVO.setPry_svr_id(insPryVo.getPry_svr_id());
 									schProxyListnerVO.setLsn_nm(tempObj.get("lsn_nm").toString());
-	
-									//ProxyListenerVO proxyListenerVO = proxyDAO.selectPryLsnInfo(schProxyListnerVO);
 
 									ProxyListenerServerListVO resultListnerServer = proxyDAO.selectPryLsnSvrChkInfo(schProxyListnerSebuVO);
 									
@@ -1041,7 +1073,7 @@ public class ProxyServiceImpl implements ProxyService{
 					}
 					returnMsg = "success";
 				} catch (Exception e) {
-					errLogger.error("global {} ", e.toString());
+					errLogger.error("listner.error {} ", e.toString());
 					returnMsg = "false";
 				}
 
@@ -1063,7 +1095,6 @@ public class ProxyServiceImpl implements ProxyService{
 					errLogger.error("backup master_svr_id setting {} ", e.toString());
 					returnMsg = "false";
 				}
-				
 			}
 
 			try {
@@ -1084,11 +1115,11 @@ public class ProxyServiceImpl implements ProxyService{
 				//리스너 및  vip 상태 체크
 				returnMsg = proxyStatusChk(chkParam);
 			} catch (Exception e) {
-				errLogger.error("proxyStatusChk {} ", e.toString());
+				errLogger.error("proxy agent update {} ", e.toString());
 				returnMsg = "false";
 			}
 		} catch (Exception e) {
-			errLogger.error("DXTcontrolScaleAwsExecute {} ", e.toString());
+			errLogger.error("proxyConfFisrtIns error {} ", e.toString());
 			returnMsg = "false";
 		}
 
@@ -1097,12 +1128,15 @@ public class ProxyServiceImpl implements ProxyService{
 
 	/**
 	 * 리스너 실행 및 vip 체크
-	 * @param dbServerInfo
+	 * 
+	 * @param Map<String, Object>
+	 * @return String
 	 * @throws Exception
 	 */
 	@Transactional
 	public String proxyStatusChk(Map<String, Object> chkParam) throws Exception  {
 		socketLogger.info("Job proxyStatusChk [" + new Date(System.currentTimeMillis()) + "]");
+		
 		String returnMsg = "";
 		List<Map<String, Object>> proxyLsnPortList = null;
 		List<Map<String, Object>> proxyVipList = null;		
@@ -1186,11 +1220,11 @@ public class ProxyServiceImpl implements ProxyService{
 	/**
 	 * 전송 cmd 값 setting
 	 * 
+	 * @param JSONObject
 	 * @return String
 	 * @throws IOException  
 	 * @throws FileNotFoundException 
 	 * @throws JSONException 
-	 * @throws Exception
 	 */
 	private String proxyCmdSetting(JSONObject obj) throws FileNotFoundException, IOException, JSONException {
 		String strCmd = "";
@@ -1224,10 +1258,11 @@ public class ProxyServiceImpl implements ProxyService{
 		return strCmd;
 	}
 
-
 	/**
-	 * 설치정보 관리
-	 * @param String cmdGbn
+	 * 리스너 실행여부 / keep 실행여부 체크
+	 * 
+	 * @param String cmdGbn, String reqCmd
+	 * @return String
 	 * @throws Exception
 	 */
 	public String selectProxyTotServerChk(String cmdGbn, String reqCmd) throws Exception {
@@ -1266,7 +1301,9 @@ public class ProxyServiceImpl implements ProxyService{
 
 	/**
 	 * 마스터 실시간 체크
-	 * @param chkParam
+	 * 
+	 * @param Map<String, Object> chkParam, ProxyServerVO proxyServerInfo
+	 * @return String
 	 * @throws Exception
 	 */
 	@Transactional
@@ -1274,7 +1311,6 @@ public class ProxyServiceImpl implements ProxyService{
 		socketLogger.info("Job proxyMasterGbnRealCheck [" + new Date(System.currentTimeMillis()) + "]");
 		String returnMsg = "";
 
-		
 		try {
 			//param setting
 			String ipadrPrm = "";
@@ -1292,8 +1328,7 @@ public class ProxyServiceImpl implements ProxyService{
 			chkParam.put("ipadr", ipadrPrm);
 			chkParam.put("lst_mdfr_id", "system");
 			chkParam.put("frst_regr_id", "system");
-			socketLogger.info("Job proxySetStatusPrmproxySetStatusPrmproxySetStatusPrmproxySetStatusPrm [" + proxySetStatusPrm + "]");
-			socketLogger.info("Job proxyServerInfo.getExe_status()proxyServerInfo.getExe_status() [" + proxyServerInfo.getExe_status() + "]");
+
 			//proxy check - 기동 이력등록
 			if (!"".equals(proxySetStatusPrm) && !"not installed".equals(proxySetStatusPrm)) {
 				if ("running".equals(proxySetStatusPrm)) {
@@ -1332,7 +1367,6 @@ public class ProxyServiceImpl implements ProxyService{
 							
 							strKeepalivedChgVal = strAcptype;
 
-							
 							proxyDAO.insertPryActExeCngInfo(chkParam);
 						}
 					}
@@ -1490,10 +1524,8 @@ public class ProxyServiceImpl implements ProxyService{
 							} else {
 								//현재꺼를 마스터 그대로
 								//기존 마스터나 다른 서버를 본서버 하위로
-							//	prySvrChk.setPry_svr_id(backupChk.getPry_svr_id());
 								socketLogger.info("g_master_up_sel :: ");
 								prySvrChk.setSel_query_gbn("g_master_up_sel");
-								
 							}
 						}
 					} else { //백업일때
@@ -1560,8 +1592,10 @@ public class ProxyServiceImpl implements ProxyService{
 	}
 	
 	/**
-	 * DBMS 연결 실시간 체크
-	 * @param dbServerInfo
+	 * db 실시간 등록
+	 * 
+	 * @param Map<String, Object>
+	 * @return String
 	 * @throws Exception
 	 */
 	@Transactional
@@ -1589,7 +1623,7 @@ public class ProxyServiceImpl implements ProxyService{
 				}
 			}
 		} catch (Exception e) {
-			errLogger.error("proxyDbmsStatusChk {} ", e.toString());
+			errLogger.error("proxyDbmsStatusChk error {} ", e.toString());
 			returnMsg = "false";
 		}
 		
@@ -1597,8 +1631,10 @@ public class ProxyServiceImpl implements ProxyService{
 	}
 
 	/**
-	 * conf 정보 조회
-	 * @param dbServerInfo
+	 * db 실시간 체크 / 실시간 데이터 저장
+	 * 
+	 * @param JSONObject
+	 * @return JSONObject
 	 * @throws Exception
 	 */
 	private JSONObject dbmsReadExecute(JSONObject jObj) throws Exception {
@@ -1610,12 +1646,10 @@ public class ProxyServiceImpl implements ProxyService{
 
 		JSONObject outputObj = new JSONObject();
 		JSONObject jsonObj = new JSONObject();
-		JSONParser parser = new JSONParser();
-		
+
 		CommonUtil util = new CommonUtil();
 
 		try {
-			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();
 			String serverIp = jObj.get(ProtocolID.SERVER_IP).toString();
 			String db_chk = jObj.get(ProtocolID.DB_CHK).toString();
 
@@ -1637,7 +1671,6 @@ public class ProxyServiceImpl implements ProxyService{
 
 			String strResultSubMessge = "";
 			String jsonVipConfList = "";
-			ObjectMapper mapper = new ObjectMapper();
 
 			if (retVal.equals("success")) {
 				if (strResultMessge != null) {
@@ -1736,7 +1769,6 @@ public class ProxyServiceImpl implements ProxyService{
 							strResultSubMessge = "true";
 						}
 					}
-					
 				}
 			}
 
@@ -1756,7 +1788,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-			outputObj.put(ProtocolID.ERR_MSG, "confSetExecute Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_MSG, "dbmsReadExecute Error [" + e.toString() + "]");
 			outputObj.put(ProtocolID.RESULT_DATA, jsonObj);
 			outputObj.put(ProtocolID.RESULT_SUB_DATA, "");
 		} finally {
@@ -1796,7 +1828,7 @@ public class ProxyServiceImpl implements ProxyService{
 				}
 			}
 		} catch (Exception e) {
-			errLogger.error("proxyLsnScrStatusDel {} ", e.toString());
+			errLogger.error("proxyLsnScrStatusDel error {} ", e.toString());
 			returnMsg = "false";
 		}
 		
@@ -1805,12 +1837,14 @@ public class ProxyServiceImpl implements ProxyService{
 	
 
 	/**
-	 * conf 정보 조회
-	 * @param dbServerInfo
+	 * proxy 리스너 통계정보 삭제
+	 * 
+	 * @param JSONObject
+	 * @return JSONObject
 	 * @throws Exception
 	 */
 	private JSONObject lsnSvrDelExecute(JSONObject jObj) throws Exception {
-		socketLogger.info("ProxyServiceImpl.dbmsReadExecute : ");
+		socketLogger.info("ProxyServiceImpl.lsnSvrDelExecute : ");
 
 		String strSuccessCode = "0";
 		String strErrCode = "";
@@ -1865,7 +1899,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-			outputObj.put(ProtocolID.ERR_MSG, "confSetExecute Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_MSG, "lsnSvrDelExecute Error [" + e.toString() + "]");
 			outputObj.put(ProtocolID.RESULT_DATA, jsonObj);
 			outputObj.put(ProtocolID.RESULT_SUB_DATA, "");
 		} finally {
