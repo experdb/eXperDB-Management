@@ -7,7 +7,7 @@ import com.experdb.proxy.socket.listener.SocketListener;
 import com.experdb.proxy.util.FileUtil;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -15,7 +15,7 @@ import com.experdb.proxy.util.FileUtil;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class DXTcontrolAgentSocket implements DXTcontrolAgentSocketService{

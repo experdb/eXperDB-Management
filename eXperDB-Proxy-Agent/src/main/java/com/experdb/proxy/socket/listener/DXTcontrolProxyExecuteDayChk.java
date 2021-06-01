@@ -19,6 +19,7 @@ import com.experdb.proxy.util.FileUtil;
 public class DXTcontrolProxyExecuteDayChk extends SocketCtl implements Job {
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+
 	private static ApplicationContext context;
 	
     @Override

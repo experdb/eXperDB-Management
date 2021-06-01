@@ -1,17 +1,13 @@
 package com.experdb.proxy.socket.listener;
 
-import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.experdb.proxy.util.CommonUtil;
-
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -19,7 +15,7 @@ import com.experdb.proxy.util.CommonUtil;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class SocketListener implements Runnable {
@@ -31,8 +27,6 @@ public class SocketListener implements Runnable {
 	private int				listenPort = -1;
 	private int				timeout = -1;
 	private int				backlog = -1;
-	private boolean			acceptMode = true;
-	private	Vector			oppositeIPs = new Vector();
 	private Thread			mainThread  ;
     private ServerSocket	serverSocket = null;	
 	private boolean 		toBeShutdown = false;
@@ -64,12 +58,10 @@ public class SocketListener implements Runnable {
 		socketLogger.info("Backlog : [" + backlog + "]");
 
 		createServerSocket();
-		
-		//Thread		mainThread = new Thread(this);
+
 		mainThread = new Thread(this);
 		mainThread.start();
 		socketLogger.info("SocketListener[" + listenerName + "]가 메시지 수신을 대기하고 있습니다.");
-
 	}
 	
 	public void shutdown() throws Exception {
@@ -93,57 +85,49 @@ public class SocketListener implements Runnable {
 	public void run() {
 		isRunning = true;
 		try {
-		//ServerSocket	serverSocket = new ServerSocket(listenPort);
-		//serverSocket.setSoTimeout(1000);
-		
-		while ( !toBeShutdown) {
-			try {
-				
+			while ( !toBeShutdown) {
+				try {
+					Socket client = serverSocket.accept();
 
-				Socket client = serverSocket.accept();
-
-					
-				if ( toBeShutdown ) break;
+					if ( toBeShutdown ) break;
 				
-				if (client != null && !client.isClosed()){
-					Thread thread = new Thread(new DXTcontrolSocketExecute(client));
+					if (client != null && !client.isClosed()){
+						Thread thread = new Thread(new DXTcontrolSocketExecute(client));
+						thread.start();
+						//socketLogger.info("Thread가 종료될때까지 기다립니다.");
+	//		            try {
+	//		                // 해당 쓰레드가 멈출때까지 멈춤
+	//		                thread.join();
+	//		            } catch (InterruptedException e) {
+	//		                e.printStackTrace();
+	//		            }
+			           // socketLogger.info("Thread가 종료되었습니다."); 
+			            //if(client != null) client.close();
+					}
+				
+				
+	//				if(client != null) {
+	//					socketLogger.info("client socket 종료."); 
+	//					client.close();
+	//					client = null;
+	//				}
+				
+					//System.out.println(client);
 					
-					thread.start();
-					//socketLogger.info("Thread가 종료될때까지 기다립니다.");
-//		            try {
-//		                // 해당 쓰레드가 멈출때까지 멈춤
-//		                thread.join();
-//		            } catch (InterruptedException e) {
-//		                e.printStackTrace();
-//		            }
-		           // socketLogger.info("Thread가 종료되었습니다."); 
-		            //if(client != null) client.close();
+				} catch(Exception e) {
+					errLogger.error("Fail to processing client request. Exception [" + e.toString() + "]");
 				}
-				
-				
-//				if(client != null) {
-//					socketLogger.info("client socket 종료."); 
-//					client.close();
-//					client = null;
-//				}
-				
-				//System.out.println(client);
-					
-			} catch(Exception e) {
-				errLogger.error("Fail to processing client request. Exception [" + e.toString() + "]");
 			}
-		}
 		
-		this.serverSocket.close();
-		socketLogger.info("Please wait for Shutdown a listener...");	
-		socketLogger.info("Closing ServerSocket.");	
+			this.serverSocket.close();
+			socketLogger.info("Please wait for Shutdown a listener...");	
+			socketLogger.info("Closing ServerSocket.");	
 		
-		isRunning = false;
+			isRunning = false;
 		} catch (Exception e) {
 			errLogger.error("Fail to Closing Socket [" + e.toString() + "]");
 		} finally {
 			
 		}
 	}
-
 }

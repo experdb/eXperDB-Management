@@ -27,7 +27,7 @@ import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -35,7 +35,7 @@ import com.experdb.proxy.socket.TranCodeType;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
@@ -72,13 +72,13 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 
 				switch(strDX_EX_CODE) {
 				//Database List
-				case TranCodeType.PsP001 :
+				case TranCodeType.PsP001 : //proxy 에이전트 setting
 					
 					PsP001 psP001 = new PsP001(client, is, os);
 					psP001.execute(strDX_EX_CODE, jObj);
 		
 					break;
-				case TranCodeType.PsP002 ://연결 Test
+				case TranCodeType.PsP002 ://proxy 에이전트 연결 Test
 					
 					PsP002 psP002 = new PsP002(client, is, os);
 					psP002.execute(strDX_EX_CODE, jObj);
@@ -90,37 +90,37 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					psP003.execute(strDX_EX_CODE, jObj);
 					
 					break;
-				case TranCodeType.PsP004 : //Config 생성
+				case TranCodeType.PsP004 : //proxy conf 파일 백업 & 신규 생성 
 					
 					PsP004 psP004 = new PsP004(client, is, os);
 					psP004.execute(strDX_EX_CODE, jObj);
 		
 					break;
-				case TranCodeType.PsP005 : //read a backup conf file 
+				case TranCodeType.PsP005 : //proxy service restart
 					
 					PsP005 psP005 = new PsP005(client, is, os);
 					psP005.execute(strDX_EX_CODE, jObj);
 		
 					break;
-				case TranCodeType.PsP006 : //service excute
+				case TranCodeType.PsP006 : //proxy service start/stop
 					
 					PsP006 PsP006 = new PsP006(client, is, os);
 					PsP006.execute(strDX_EX_CODE, jObj);
 		
 					break;
-				case TranCodeType.PsP007 : //get network Interface
+				case TranCodeType.PsP007 : //get network Interface search
 					
 					PsP007 PsP007 = new PsP007(client, is, os);
 					PsP007.execute(strDX_EX_CODE, jObj);
 					
 					break;
-				case TranCodeType.PsP008 : // get log file
+				case TranCodeType.PsP008 : // get log file search
 					
 					PsP008 PsP008 = new PsP008(client, is, os);
 					PsP008.execute(strDX_EX_CODE, jObj);
 					
 					break;
-				case TranCodeType.PsP009 : // insert conf data
+				case TranCodeType.PsP009 : // proxy conf 파일 searh 후 데이터 입력 요청
 					
 					PsP009 PsP009 = new PsP009(client, is, os);
 					PsP009.execute(strDX_EX_CODE, jObj);
@@ -158,8 +158,5 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				errLogger.error("{} {}", "experDB Socket Close Error : ", e.toString());
 			}
 		}
-		
 	}
-	
-
 }

@@ -423,16 +423,31 @@ public class DXTcontrolProxy extends SocketCtl {
 				
 			//	vo.setMaster_gbn(proxyServerInfo.getMaster_gbn());
 				Integer master_svr_id_num = proxyServerInfo.getMaster_svr_id();
-				if (master_svr_id_num != null) {
-					if (master_svr_id_num > 0) {
-						vo.setMaster_svr_id_chk( Integer.toString(proxyServerInfo.getMaster_svr_id()));
+				socketLogger.info("strKeepInstallYn : " + master_svr_id_num);
+				if (strKeepInstallYn != null && "Y".equals(strKeepInstallYn)) {
+					socketLogger.info("master_svr_id_nummaster_svr_id_num : " + master_svr_id_num);
+					if (master_svr_id_num != null) {
+						if (master_svr_id_num > 0) {
+							vo.setMaster_svr_id_chk( Integer.toString(proxyServerInfo.getMaster_svr_id()));
+						} else {
+							if (peerIdData != 0) {
+								vo.setMaster_svr_id_chk("Y");
+							} else {
+								vo.setMaster_svr_id_chk(null);
+							}
+						}
 					} else {
-						vo.setMaster_svr_id_chk(null);
+						if (peerIdData != 0) {
+							vo.setMaster_svr_id_chk("Y");
+						} else {
+							vo.setMaster_svr_id_chk(null);
+						}
 					}
 				} else {
 					vo.setMaster_svr_id_chk(null);
 				}
-				
+				socketLogger.info("peerIdData : " + peerIdData);
+				socketLogger.info("vo.getMaster_svr_id_chkgetMaster_svr_id_chkgetMaster_svr_id_chk() : " + vo.getMaster_svr_id_chk());
 				vo.setBack_peer_id(null);
 
 				insUpNmGbn = "proxySvrUdt";

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.experdb.proxy.util.CommonUtil;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -30,7 +30,7 @@ import com.experdb.proxy.util.CommonUtil;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환 	최초 생성
 *      </pre>
 */
 public class SocketCtl {
@@ -39,7 +39,7 @@ public class SocketCtl {
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public static final int TotalLengthBit = 4;
-	private static int		DEFAULT_TIMEOUT = 30;
+	private static int		DEFAULT_TIMEOUT = 20;
 	private static int		DEFAULT_BUFFER_SIZE = 1024;
 	
 	protected String		_caller = "unknown";	
@@ -55,10 +55,7 @@ public class SocketCtl {
 	
 	private String		sendmsg = "";
 	private String		recvmsg = "";
-	
-	private String		srccharset = "";
-	private String		dstcharset = "";
-	
+
 	public void setTimeout(int timeout) {
 		this.timeout	= timeout;
 		
@@ -122,7 +119,6 @@ public class SocketCtl {
 		temp = null;
 		os.flush();
 		os.close();
-	
 	}
 	
 	public void send(byte[] buff, int index, int length) throws Exception {
@@ -153,9 +149,6 @@ public class SocketCtl {
 		
 		BufferedInputStream bufferedinputstream = null;
 		try {
-			//BufferedOutputStream out = new BufferedOutputStream( client.getOutputStream() );
-			
-			//OutputStream outputstream = client.getOutputStream();
 			client.setReceiveBufferSize(50000);
 			client.setSendBufferSize(50000);
 
@@ -164,7 +157,6 @@ public class SocketCtl {
 			 byte readByte[] = new byte[4096];
              int readCount = 0;
              while ((readCount = bufferedinputstream.read(readByte, 0, 4096)) != -1) {
-            // while ((bytesRead = fileIn.read(buffer)) != -1) {
             	 socketLogger.info(readByte + " " + readCount);
                  os.write(readByte, 0, readCount);
              }
@@ -287,20 +279,7 @@ public class SocketCtl {
 		
 		return outputObj;
 	}
-	
-	
-	protected JSONObject PsP001ResultJSON(String strDxExCode
-			, String strResultCode
-			, String strErrCode, String strErrMsg) throws Exception{
-		JSONObject outputObj = new JSONObject();
-		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
-		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-		
-		return outputObj;
-	}
-	
+
 	public org.codehaus.jettison.json.JSONObject fromSimpleToJettison(JSONObject jobj) throws JSONException{
 		org.codehaus.jettison.json.JSONObject result = new org.codehaus.jettison.json.JSONObject(jobj.toJSONString());
 		return result;
