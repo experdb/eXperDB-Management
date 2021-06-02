@@ -1,7 +1,7 @@
 package com.experdb.management.proxy.cmmn;
 
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -9,7 +9,7 @@ package com.experdb.management.proxy.cmmn;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  
+*  2021.02.24  	 최정환	 최초 생성
 *      </pre>
 */
 public class ProxyClientTranCodeType {
@@ -34,6 +34,4 @@ public class ProxyClientTranCodeType {
 	 * 결과
 	 */
 	public static final String RESULT = "RESULT";								  //결과
-	
-	
 }

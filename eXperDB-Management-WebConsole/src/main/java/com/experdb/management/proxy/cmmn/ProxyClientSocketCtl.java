@@ -25,10 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
-
 /**
  * 전문에서 사용되는 코드값
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -36,10 +35,9 @@ import org.json.simple.JSONObject;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24  	 최정환	 최초 생성
 *      </pre>
 */
-
 public class ProxyClientSocketCtl {
 	public static final int TotalLengthBit = 4;
 	private static int DEFAULT_TIMEOUT = 20;
@@ -58,9 +56,6 @@ public class ProxyClientSocketCtl {
 
 	private String sendmsg = "";
 	private String recvmsg = "";
-
-	private String srccharset = "";
-	private String dstcharset = "";
 
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
@@ -367,45 +362,6 @@ public class ProxyClientSocketCtl {
             fos = new FileOutputStream(file);
             bos = new BufferedOutputStream(fos);
             **/
-			
-/*			 FileWriter fw = new FileWriter(file);
-			 BufferedWriter bw = new BufferedWriter(fw);
-*/
-         // 바이트 데이터를 전송받으면서 기록
-/*            int len;
-            int size = 4096;
-            byte[] data = new byte[size];
-            while ((len = dis.read(data)) != -1) {
-                //bos.write(data, 0, len);
-            	bw.write(new String(data, 0, len));
-                bw.newLine();
-            }
-            fw.flush();
-            fw.close();
-            */
-            //System.out.println("수신완료");
-            
-           // bos.flush();
-           // bos.close();
-           // fos.close();
-           // dis.close();
-
-
-
-			//response.setHeader("Content-Length", Long.toString(file.length()));
-
-			//byte[] bytestream = new byte[(int) file.length()];
-/*			byte[] bytestream = null;
-
-			//FileInputStream filestream = new FileInputStream(file);
-			int i = 0, j = 0; // 파일 스트림을 바이트 배열에 넣는다.
-			while ((i = dis.read()) != -1) {
-				bytestream = new byte[j+1];
-				bytestream[j] = (byte) i;
-				j++;
-			}*/
-			
-			//filestream.close(); 
 
 			try {
 				//boolean success = file.delete(); 
@@ -430,16 +386,10 @@ public class ProxyClientSocketCtl {
 				response.setHeader("Content-Type", "application/octet-stream; charset=utf-8");
 
 			}
-			
-			 //System.out.println("다운로드");
+
 			OutputStream outStream = response.getOutputStream(); // 응답 스트림 객체를 생성한다. 
 			//outStream.write(bytestream); // 응답 스트림에 파일 바이트 배열을 쓴다. 
 
-/*			int i = 0, j = 0; // 파일 스트림을 바이트 배열에 넣는다.
-			byte[] buffer = new byte[8192]; 
-			while ((i = dis.read()) != -1) {
-				outStream.write(buffer, 0, i);
-			}*/
 			byte[] buffer = new byte[1024]; 
 			int i = 0, j = 0;
 			while ((i = resultReader.read()) != -1) {
@@ -454,8 +404,6 @@ public class ProxyClientSocketCtl {
 			outStream.flush();
 			outStream.close();
 			resultReader.close();
-
-			 //System.out.println("완료");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IOException();
@@ -509,16 +457,10 @@ public class ProxyClientSocketCtl {
 		byte[] b = new byte[4];
 		StringBuffer buffer = new StringBuffer();
 
-		// ByteBuffer bBuffer = ByteBuffer.wrap(b);
-		// bBuffer.flip();
-
 		int i;
 		while ((i = is.read(b, 0, b.length)) != -1) {
 			buffer.append(new String(b, 0, i));
-			// bBuffer.put(b, 0, i);
 		}
-
-		// String buffer = new String(bBuffer.array() , "UTF-8" );
 
 		return buffer.toString();
 	}

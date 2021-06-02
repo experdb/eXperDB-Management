@@ -6,9 +6,8 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
 /**
-* @author 박태혁
+* @author 최정환
 * @see
 * 
 *      <pre>
@@ -16,10 +15,9 @@ import java.net.UnknownHostException;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2021.02.24   최정환	 최초 생성
 *      </pre>
 */
-
 public class ProxyClientConnector extends ProxyClientSocketCtl{	
 	public void create(String ipaddr, int port) throws UnknownHostException, ConnectException, IOException {		
 		this.ipaddr		= ipaddr;
