@@ -133,9 +133,9 @@ function fn_main_tab_setting(result) {
 	//fn_script_History_set(result);
 	
 	//데이터 이관 setting
-	if (nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N") == "Y") {
-		fn_migration_history_set(result);
-	}
+//	if (nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N") == "Y") {
+//		fn_migration_history_set(result);
+//	}
 	
 	//scale setting
 	if (nvlPrmSet($("#scale_yn", "#dashboardViewForm").val(), "N") == "Y") {
@@ -522,8 +522,8 @@ function fn_todaySetting() {
 
 	$( "#tot_sdt_his_today" ).append(sdtHisTimehtml);		//스케줄 이력
 	$( "#tot_back_his_today" ).append(sdtHisTimehtml);		//백업 이력
-	$( "#tot_script_his_today" ).append(sdtHisTimehtml);	//배치 이력
-	$( "#tot_migration_his_today" ).append(sdtHisTimehtml);	//migration 이력
+//	$( "#tot_script_his_today" ).append(sdtHisTimehtml);	//배치 이력
+//	$( "#tot_migration_his_today" ).append(sdtHisTimehtml);	//migration 이력
 	$( "#tot_scale_his_today" ).append(sdtHisTimehtml);	
 
 	$( "#tot_encrypt_his_today" ).append(html);	
@@ -1305,237 +1305,237 @@ function fn_migration_history_set(result) {
 	var chartColor = "";
 
 	/////////////////////migration 일정 start////////////////////////////////////////////////
-	if (result.migtScdCnt != null && result.migtScdCnt > 0) {
-		migtHtml += "<tr>";
-		
-		$(result.migtScdresult).each(function (index, item) {
-			exe_perd_cd_val = item.exe_perd_cd;
-			scdHK = "";
-			var resultYearCheckDt = item.exe_month + "" + item.exe_day;
-			
-			if(exe_perd_cd_val == 'TC001605') {			//1회실행
-				if(item.exe_dt == checkYear) {
-					scdHK = 'TC001605';
-				}
-			} else if(exe_perd_cd_val == 'TC001601') {		//매일
-				if(item.frst_reg_dtm <= checkYear) {
-					scdHK = 'TC001601';
-				}
-			} else if(exe_perd_cd_val == 'TC001602') {		//매주
-				if(item.frst_reg_dtm <= checkYear) {
-					for(var i=0;i<7;i++){
-						if(item.exe_dt.substr(i,1) == '1') {
-							checkMons = i;
-						}
-
-						if (checkMons == todayChkDay) {
-							scdHK = 'TC001602';
-							continue;
-						}
-					}
-				}
-			} else if(exe_perd_cd_val == 'TC001603') {			//매월
-				if(item.frst_reg_dtm <= checkYear) {
-					if(item.exe_day == checkDay) {
-						scdHK = 'TC001603';
-					}
-				}
-			} else if(exe_perd_cd_val == 'TC001604') {
-				if(item.frst_reg_dtm <= checkYear) {
-					if(resultYearCheckDt == checkDt) {
-						scdHK = 'TC001604';
-					}
-				}
-			}
-
-			if (scdHK != null && scdHK != "") {
-				migtHtml += '<td style="width:33%;line-height:150%;border:none;">';
-				
-				migtHtml += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
-				migtHtml += "	<a class='nav-link_title' href='#' onclick='fn_scheduleListMove(\""+item.scd_nm+"\");'>";
-				migtHtml += "		&nbsp;"+ item.scd_nm;
-				migtHtml += "	</a>";
-				migtHtml += '	<br/>';
-				
-				if (item.scd_cndt == 'TC001801') { //대기
-					migtHtml += "	<i class='fa fa-circle mr-2 text-success' ></i>";
-				} else { //실행중
-					migtHtml += '	<div class="badge badge-pill badge-warning">' + dashboard_running + '</div>';
-				}
-				
-				if(scdHK == 'TC001605') { 				//1회실행
-					migtHtml += schedule_one_time_run;
-				} else if(scdHK == 'TC001601') { 		//매일
-					migtHtml += schedule_everyday;
-				} else if (scdHK == 'TC001602') {		//매주
-					migtHtml += schedule_everyweek;
-				} else if (scdHK == 'TC001603') {		//매월
-					migtHtml += schedule_everymonth;
-				} else if(scdHK == 'TC001604') {	//매년
-					migtHtml += schedule_everyyear;
-				}
-				migtHtml += '<br/>';
-				
-				ampm = item.exe_hh >= 12 ? 'pm' : 'am';
-				hours = item.exe_hh % 12;
-				hours = hours.length < 2 ? '0'+hours : hours;
-				minutes = item.exe_mm.length < 2 ? '0'+item.exe_mm : item.exe_mm;
-				
-				migtHtml += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + hours + ":" + minutes + " " + ampm;
-				
-				migtCount = migtCount + 1;
-				
-				migtHtml += '</td>';
-			}
-
-			//4의 배수일때 tr 추가
-			if (migtCount % 3 == 0)  {
-				migtHtml += "</tr>";
-				migtHtml += "<tr>";
-			}
-		});
-		
-		migtHtml += "</tr>";
-	} else {
-		migtHtml += "<tr>";
-		migtHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
-		migtHtml += dashboard_msg06
-		migtHtml += '</td>';
-		migtHtml += "</tr>";
-	}
-
-	$("#migtHistCntList").html(migtHtml);
+//	if (result.migtScdCnt != null && result.migtScdCnt > 0) {
+//		migtHtml += "<tr>";
+//		
+//		$(result.migtScdresult).each(function (index, item) {
+//			exe_perd_cd_val = item.exe_perd_cd;
+//			scdHK = "";
+//			var resultYearCheckDt = item.exe_month + "" + item.exe_day;
+//			
+//			if(exe_perd_cd_val == 'TC001605') {			//1회실행
+//				if(item.exe_dt == checkYear) {
+//					scdHK = 'TC001605';
+//				}
+//			} else if(exe_perd_cd_val == 'TC001601') {		//매일
+//				if(item.frst_reg_dtm <= checkYear) {
+//					scdHK = 'TC001601';
+//				}
+//			} else if(exe_perd_cd_val == 'TC001602') {		//매주
+//				if(item.frst_reg_dtm <= checkYear) {
+//					for(var i=0;i<7;i++){
+//						if(item.exe_dt.substr(i,1) == '1') {
+//							checkMons = i;
+//						}
+//
+//						if (checkMons == todayChkDay) {
+//							scdHK = 'TC001602';
+//							continue;
+//						}
+//					}
+//				}
+//			} else if(exe_perd_cd_val == 'TC001603') {			//매월
+//				if(item.frst_reg_dtm <= checkYear) {
+//					if(item.exe_day == checkDay) {
+//						scdHK = 'TC001603';
+//					}
+//				}
+//			} else if(exe_perd_cd_val == 'TC001604') {
+//				if(item.frst_reg_dtm <= checkYear) {
+//					if(resultYearCheckDt == checkDt) {
+//						scdHK = 'TC001604';
+//					}
+//				}
+//			}
+//
+//			if (scdHK != null && scdHK != "") {
+//				migtHtml += '<td style="width:33%;line-height:150%;border:none;">';
+//				
+//				migtHtml += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
+//				migtHtml += "	<a class='nav-link_title' href='#' onclick='fn_scheduleListMove(\""+item.scd_nm+"\");'>";
+//				migtHtml += "		&nbsp;"+ item.scd_nm;
+//				migtHtml += "	</a>";
+//				migtHtml += '	<br/>';
+//				
+//				if (item.scd_cndt == 'TC001801') { //대기
+//					migtHtml += "	<i class='fa fa-circle mr-2 text-success' ></i>";
+//				} else { //실행중
+//					migtHtml += '	<div class="badge badge-pill badge-warning">' + dashboard_running + '</div>';
+//				}
+//				
+//				if(scdHK == 'TC001605') { 				//1회실행
+//					migtHtml += schedule_one_time_run;
+//				} else if(scdHK == 'TC001601') { 		//매일
+//					migtHtml += schedule_everyday;
+//				} else if (scdHK == 'TC001602') {		//매주
+//					migtHtml += schedule_everyweek;
+//				} else if (scdHK == 'TC001603') {		//매월
+//					migtHtml += schedule_everymonth;
+//				} else if(scdHK == 'TC001604') {	//매년
+//					migtHtml += schedule_everyyear;
+//				}
+//				migtHtml += '<br/>';
+//				
+//				ampm = item.exe_hh >= 12 ? 'pm' : 'am';
+//				hours = item.exe_hh % 12;
+//				hours = hours.length < 2 ? '0'+hours : hours;
+//				minutes = item.exe_mm.length < 2 ? '0'+item.exe_mm : item.exe_mm;
+//				
+//				migtHtml += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + hours + ":" + minutes + " " + ampm;
+//				
+//				migtCount = migtCount + 1;
+//				
+//				migtHtml += '</td>';
+//			}
+//
+//			//4의 배수일때 tr 추가
+//			if (migtCount % 3 == 0)  {
+//				migtHtml += "</tr>";
+//				migtHtml += "<tr>";
+//			}
+//		});
+//		
+//		migtHtml += "</tr>";
+//	} else {
+//		migtHtml += "<tr>";
+//		migtHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
+//		migtHtml += dashboard_msg06
+//		migtHtml += '</td>';
+//		migtHtml += "</tr>";
+//	}
+//
+//	$("#migtHistCntList").html(migtHtml);
 	/////////////////////migration 일정 end////////////////////////////////////////////////
 
 	///////////////////////////migration list start ////////////////////////	
-	if (result.migtHistoryresult != null && result.migtHistoryresult.length > 0) {
-		$(result.migtHistoryresult).each(function (index, item) {
-			migtHisHtml +='	<tr>';
-			
-			migtHisHtml +='		<td>'+item.wrk_nm+'</td>';
-			
-			migtHisHtml +='		<td class="text-center">';
-			if (item.migt_gbn == "DDL") {
-				migtHisHtml += '<i class="fa fa-archive text-primary">';
-			} else {
-				migtHisHtml += '<i class="fa fa-file text-success">';
-			}
-			migtHisHtml += "&nbsp;" + item.migt_gbn;
-			migtHisHtml += '</i>';
-			migtHisHtml +='	</td>';
-			
-			migtHisHtml +='		<td class="text-center">'+item.wrk_strt_dtm+'</td>';
-			migtHisHtml +='		<td class="text-center">'+item.wrk_end_dtm+'</td>';
-			migtHisHtml +='		<td class="text-center">'+item.wrk_dtm+'</td>';
-			
-			migtHisHtml +='		<td class="text-center">';
-			if (item.exe_rslt_cd == "TC001701") {
-/*				if (item.migt_gbn == "DDL") {
+//	if (result.migtHistoryresult != null && result.migtHistoryresult.length > 0) {
+//		$(result.migtHistoryresult).each(function (index, item) {
+//			migtHisHtml +='	<tr>';
+//			
+//			migtHisHtml +='		<td>'+item.wrk_nm+'</td>';
+//			
+//			migtHisHtml +='		<td class="text-center">';
+//			if (item.migt_gbn == "DDL") {
+//				migtHisHtml += '<i class="fa fa-archive text-primary">';
+//			} else {
+//				migtHisHtml += '<i class="fa fa-file text-success">';
+//			}
+//			migtHisHtml += "&nbsp;" + item.migt_gbn;
+//			migtHisHtml += '</i>';
+//			migtHisHtml +='	</td>';
+//			
+//			migtHisHtml +='		<td class="text-center">'+item.wrk_strt_dtm+'</td>';
+//			migtHisHtml +='		<td class="text-center">'+item.wrk_end_dtm+'</td>';
+//			migtHisHtml +='		<td class="text-center">'+item.wrk_dtm+'</td>';
+//			
+//			migtHisHtml +='		<td class="text-center">';
+//			if (item.exe_rslt_cd == "TC001701") {
+///*				if (item.migt_gbn == "DDL") {
+//
+//					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
+//				} else {
+//					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
+//				}
+//				migtHisHtml += '<i class="fa fa-check"></i>';
+//				migtHisHtml += common_success;
+//				migtHisHtml += "</div>";
+//				*/
+//				migtHisHtml += '<i class="fa fa-check text-primary">';
+//				migtHisHtml += '&nbsp;' + common_success + '</i>';
+///*				
+//				migtHisHtml += '<input class="btn btn-primary btn-sm" width="200px;" style="vertical-align:middle;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')" type="button" value="'+common_success+ '" />';
+//				
+//					*/
+//			} else if(item.exe_rslt_cd == 'TC001702'){
+//				if (item.migt_gbn == "DDL") {
+//					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlFailLog('+item.mig_exe_sn+')">';
+//				} else {
+//					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtFailLog('+item.mig_exe_sn+')">';
+//				}
+//
+//				migtHisHtml += '<i class="fa fa-times"></i>';
+//				migtHisHtml += common_failed;
+//				migtHisHtml += "</div>";
+//			} else {
+//				migtHisHtml += "<div class='badge badge-pill badge-warning' style='color: #fff;'>";
+//				migtHisHtml += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+//				migtHisHtml += '&nbsp;' + etc_etc28;
+//				migtHisHtml += "</div>";
+//			}
+//			migtHisHtml +='	</td>';
+//
+//			migtHisHtml +='	</tr>';
+//		});
+//
+//	} else {
+//		migtHisHtml += "<tr>";
+//		migtHisHtml += '<td class="text-center" colspan="6" style="height:300px;border:none;height:20px;background-color:#ededed;">';
+//		migtHisHtml += dashboard_msg07
+//		migtHisHtml += '</td>';
+//		migtHisHtml += "</tr>";
+//	}
 
-					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
-				} else {
-					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
-				}
-				migtHisHtml += '<i class="fa fa-check"></i>';
-				migtHisHtml += common_success;
-				migtHisHtml += "</div>";
-				*/
-				migtHisHtml += '<i class="fa fa-check text-primary">';
-				migtHisHtml += '&nbsp;' + common_success + '</i>';
-/*				
-				migtHisHtml += '<input class="btn btn-primary btn-sm" width="200px;" style="vertical-align:middle;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')" type="button" value="'+common_success+ '" />';
-				
-					*/
-			} else if(item.exe_rslt_cd == 'TC001702'){
-				if (item.migt_gbn == "DDL") {
-					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlFailLog('+item.mig_exe_sn+')">';
-				} else {
-					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtFailLog('+item.mig_exe_sn+')">';
-				}
-
-				migtHisHtml += '<i class="fa fa-times"></i>';
-				migtHisHtml += common_failed;
-				migtHisHtml += "</div>";
-			} else {
-				migtHisHtml += "<div class='badge badge-pill badge-warning' style='color: #fff;'>";
-				migtHisHtml += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
-				migtHisHtml += '&nbsp;' + etc_etc28;
-				migtHisHtml += "</div>";
-			}
-			migtHisHtml +='	</td>';
-
-			migtHisHtml +='	</tr>';
-		});
-
-	} else {
-		migtHisHtml += "<tr>";
-		migtHisHtml += '<td class="text-center" colspan="6" style="height:300px;border:none;height:20px;background-color:#ededed;">';
-		migtHisHtml += dashboard_msg07
-		migtHisHtml += '</td>';
-		migtHisHtml += "</tr>";
-	}
-
-	$("#migrationListT").html(migtHisHtml);
+//	$("#migrationListT").html(migtHisHtml);
 	///////////////////////////migration list end ////////////////////////
 
 	///////////////////////////migration chart start ////////////////////////
-	if ($("#migtHistChart").length) {
-		for (var i = 0; i < 7; i++) {
-			chartMaxCnt = "100";
-			chartCnt = "0";
-			chartWidth = "0";
-
-			if (i == 0) {
-				chartText = dashboard_schedule_history_cht_msg1;
-				chartColor = "bg-success";
-
-			} else if (i == 1) {
-				chartText = dashboard_migration_all;
-				chartColor = "bg-warning";
-
-			} else if (i == 2) {
-				chartText = dashboard_migration_success;	
-				chartColor = "bg-primary";
-
-			} else if (i == 3) {
-				chartText = dashboard_migration_failed;
-				chartColor = "bg-danger";
-
-			} else if (i == 4) {
-				chartText = dashboard_ddl_all;
-				chartColor = "bg-warning";
-
-			} else if (i == 5) {
-				chartText = dashboard_ddl_success;
-				chartColor = "bg-primary";
-
-			} else if (i == 6) {
-				chartText = dashboard_ddl_failed;
-				chartColor = "bg-danger";
-			}
-			chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
-			
-			migtHisChartHtml += '<tr>';
-
-			migtHisChartHtml += '	<td class="text-muted">' + chartText + '</td>';
-			migtHisChartHtml += '	<td class="w-100 px-0">';
-			migtHisChartHtml += '		<div class="progress progress-md mx-4">';
-			migtHisChartHtml += '			<div id="migt_pro_' + i + '" class="progress-bar ' + chartColor + ' progress-bar-striped progress-bar-animated" role="progressbar" style="width: ' + chartWidth + '%" aria-valuenow="' + chartWidth + '" aria-valuemin="0" aria-valuemax="' + chartMaxCnt + '"></div>';
-			migtHisChartHtml += '		</div>';
-			migtHisChartHtml += '	</td>';
-			migtHisChartHtml += '	<td><h5 class="font-weight-bold mb-0" id="migt_pro_text_' + i + '">' + chartCnt + '</h5></td>';
-			
-			migtHisChartHtml += "</tr>";
-		}
-
-		$("#migtHistChart").html(migtHisChartHtml);
-
-		//프로그레스바 설정
-		if (result.migtHistoryChart != null) {
-			setTimeout(fn_migt_History_progres, 1000, result.migtHistoryChart);
-		}
+//	if ($("#migtHistChart").length) {
+//		for (var i = 0; i < 7; i++) {
+//			chartMaxCnt = "100";
+//			chartCnt = "0";
+//			chartWidth = "0";
+//
+//			if (i == 0) {
+//				chartText = dashboard_schedule_history_cht_msg1;
+//				chartColor = "bg-success";
+//
+//			} else if (i == 1) {
+//				chartText = dashboard_migration_all;
+//				chartColor = "bg-warning";
+//
+//			} else if (i == 2) {
+//				chartText = dashboard_migration_success;	
+//				chartColor = "bg-primary";
+//
+//			} else if (i == 3) {
+//				chartText = dashboard_migration_failed;
+//				chartColor = "bg-danger";
+//
+//			} else if (i == 4) {
+//				chartText = dashboard_ddl_all;
+//				chartColor = "bg-warning";
+//
+//			} else if (i == 5) {
+//				chartText = dashboard_ddl_success;
+//				chartColor = "bg-primary";
+//
+//			} else if (i == 6) {
+//				chartText = dashboard_ddl_failed;
+//				chartColor = "bg-danger";
+//			}
+//			chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
+//			
+//			migtHisChartHtml += '<tr>';
+//
+//			migtHisChartHtml += '	<td class="text-muted">' + chartText + '</td>';
+//			migtHisChartHtml += '	<td class="w-100 px-0">';
+//			migtHisChartHtml += '		<div class="progress progress-md mx-4">';
+//			migtHisChartHtml += '			<div id="migt_pro_' + i + '" class="progress-bar ' + chartColor + ' progress-bar-striped progress-bar-animated" role="progressbar" style="width: ' + chartWidth + '%" aria-valuenow="' + chartWidth + '" aria-valuemin="0" aria-valuemax="' + chartMaxCnt + '"></div>';
+//			migtHisChartHtml += '		</div>';
+//			migtHisChartHtml += '	</td>';
+//			migtHisChartHtml += '	<td><h5 class="font-weight-bold mb-0" id="migt_pro_text_' + i + '">' + chartCnt + '</h5></td>';
+//			
+//			migtHisChartHtml += "</tr>";
+//		}
+//
+//		$("#migtHistChart").html(migtHisChartHtml);
+//
+//		//프로그레스바 설정
+//		if (result.migtHistoryChart != null) {
+//			setTimeout(fn_migt_History_progres, 1000, result.migtHistoryChart);
+//		}
 		///////////////////////////migration chart end ////////////////////////
-	}
+//	}
 }
 
 /* ********************************************************
@@ -1545,43 +1545,43 @@ function fn_migt_History_progres(result) {
 	var chartCnt = 0;
 	var chartWidth = "";
 
-	for (var i = 0; i < 7; i++) {
-		chartCnt = 0;
-		chartWidth = "";
-		
-		if (i == 0) {
-			chartCnt = nvlPrmSet(result.tot_cnt, "0");
-			if (chartCnt == "0") {
-				chartWidth = "0";
-			} else {
-				chartWidth = "100";
-			}
-		} else if (i == 1) { //배치건수 / 전체건수
-			chartCnt = nvlPrmSet(result.migration_tot_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.migration_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 2) {
-			chartCnt = nvlPrmSet(result.migration_suc_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.migration_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 3) {
-			chartCnt = nvlPrmSet(result.migration_fal_cnt, "0") ;
-			chartWidth = parseInt(nvlPrmSet(result.migration_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 4) { //백업건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 5) { //백업성공건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 6) { //백업실패건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		}
-		
-		
-		chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
-
-		$("#migt_pro_" + i).css("width", chartWidth + "%"); 
-		$("#migt_pro_text_" + i).html(chartCnt); 
-	}
+//	for (var i = 0; i < 7; i++) {
+//		chartCnt = 0;
+//		chartWidth = "";
+//		
+//		if (i == 0) {
+//			chartCnt = nvlPrmSet(result.tot_cnt, "0");
+//			if (chartCnt == "0") {
+//				chartWidth = "0";
+//			} else {
+//				chartWidth = "100";
+//			}
+//		} else if (i == 1) { //배치건수 / 전체건수
+//			chartCnt = nvlPrmSet(result.migration_tot_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.migration_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 2) {
+//			chartCnt = nvlPrmSet(result.migration_suc_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.migration_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 3) {
+//			chartCnt = nvlPrmSet(result.migration_fal_cnt, "0") ;
+//			chartWidth = parseInt(nvlPrmSet(result.migration_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 4) { //백업건수 / 전체건수
+//			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 5) { //백업성공건수 / 전체건수
+//			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 6) { //백업실패건수 / 전체건수
+//			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		}
+//		
+//		
+//		chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
+//
+//		$("#migt_pro_" + i).css("width", chartWidth + "%"); 
+//		$("#migt_pro_text_" + i).html(chartCnt); 
+//	}
 }
 
 /* ********************************************************
@@ -1880,195 +1880,195 @@ function fn_dash_scaleFailLog(scale_wrk_sn){
  * DDL추출 로그 팝업
  ******************************************************** */
 function fn_dash_ddlResult(mig_exe_sn, ddl_save_pth){
-	$.ajax({
-			url : "/db2pg/popup/db2pgResultDDL.do", 
-			data : {
-		  		mig_exe_sn : mig_exe_sn,
-		  		ddl_save_pth :ddl_save_pth
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {		
-				$('#ddl_result_wrk_nm').html("");
-				$('#ddl_result_wrk_exp').html("");
-				$('#ddl_result_exe_rslt_cd').html("");	
-				
-				fn_ddlResultInit();
-
-				if (result.result != null) {
-					$('#ddl_result_wrk_nm').html(result.result.wrk_nm);
-					$('#ddl_result_wrk_exp').html(result.result.wrk_exp);
-					$('#ddl_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;' + common_success + '</i>');
-				}
-
-				if (result.ddl_save_pth != null && result.ddl_save_pth != "") {
-					getDataResultList(result.ddl_save_pth);
-				}
-
-				$('#pop_layer_db2pgResultDDL').modal("show");
-			}
-	});
+//	$.ajax({
+//			url : "/db2pg/popup/db2pgResultDDL.do", 
+//			data : {
+//		  		mig_exe_sn : mig_exe_sn,
+//		  		ddl_save_pth :ddl_save_pth
+//		  	},
+//			dataType : "json",
+//			type : "post",
+//			beforeSend: function(xhr) {
+//				xhr.setRequestHeader("AJAX", true);
+//			},
+//			error : function(xhr, status, error) {
+//				if(xhr.status == 401) {
+//					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+//				} else if(xhr.status == 403) {
+//					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+//				} else {
+//					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+//				}
+//			},
+//			success : function(result) {		
+//				$('#ddl_result_wrk_nm').html("");
+//				$('#ddl_result_wrk_exp').html("");
+//				$('#ddl_result_exe_rslt_cd').html("");	
+//				
+//				fn_ddlResultInit();
+//
+//				if (result.result != null) {
+//					$('#ddl_result_wrk_nm').html(result.result.wrk_nm);
+//					$('#ddl_result_wrk_exp').html(result.result.wrk_exp);
+//					$('#ddl_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;' + common_success + '</i>');
+//				}
+//
+//				if (result.ddl_save_pth != null && result.ddl_save_pth != "") {
+//					getDataResultList(result.ddl_save_pth);
+//				}
+//
+//				$('#pop_layer_db2pgResultDDL').modal("show");
+//			}
+//	});
 }
 
 /* ********************************************************
  * MIGRATION 로그 팝업
  ******************************************************** */
 function fn_dash_migtResult(mig_exe_sn, trans_save_pth){
-	$.ajax({
-			url : "/db2pg/popup/db2pgResult.do", 
-		  	data : {
-		  		mig_exe_sn : mig_exe_sn,
-		  		trans_save_pth :trans_save_pth
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {
-				$('#mig_result_wrk_nm').html("");
-				$('#mig_result_wrk_exp').html("");
-				$('#mig_result_wrk_strt_dtm').html("");
-				$('#mig_result_wrk_end_dtm').html("");
-				$('#mig_result_wrk_dtm').html("");				
-				$('#mig_result_exe_rslt_cd').html("");
-				
-				$('#mig_result_msg').html("");
-				
-				if (result.result != null) {
-					$('#mig_result_wrk_nm').html(result.result.wrk_nm);
-					$('#mig_result_wrk_exp').html(result.result.wrk_exp);
-					$('#mig_result_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
-					$('#mig_result_wrk_end_dtm').html(result.result.wrk_end_dtm);
-					$('#mig_result_wrk_dtm').html(result.result.wrk_dtm);
-					
-					$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;' + common_success + '</i>');
-				}
-				
-				if(result.db2pgResult == null){
-					$('#mig_result_msg').html("파일이 삭제되어 작업로그정보를 출력할 수 없습니다.");	
-				}else{
-					$('#mig_result_msg').html(result.db2pgResult.RESULT);	
-				}
-
-				$('#pop_layer_db2pgResult').modal("show"); 
-			}
-	});
+//	$.ajax({
+//			url : "/db2pg/popup/db2pgResult.do", 
+//		  	data : {
+//		  		mig_exe_sn : mig_exe_sn,
+//		  		trans_save_pth :trans_save_pth
+//		  	},
+//			dataType : "json",
+//			type : "post",
+//			beforeSend: function(xhr) {
+//		        xhr.setRequestHeader("AJAX", true);
+//		    },
+//			error : function(xhr, status, error) {
+//				if(xhr.status == 401) {
+//					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+//				} else if(xhr.status == 403) {
+//					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+//				} else {
+//					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+//				}
+//			},
+//			success : function(result) {
+//				$('#mig_result_wrk_nm').html("");
+//				$('#mig_result_wrk_exp').html("");
+//				$('#mig_result_wrk_strt_dtm').html("");
+//				$('#mig_result_wrk_end_dtm').html("");
+//				$('#mig_result_wrk_dtm').html("");				
+//				$('#mig_result_exe_rslt_cd').html("");
+//				
+//				$('#mig_result_msg').html("");
+//				
+//				if (result.result != null) {
+//					$('#mig_result_wrk_nm').html(result.result.wrk_nm);
+//					$('#mig_result_wrk_exp').html(result.result.wrk_exp);
+//					$('#mig_result_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+//					$('#mig_result_wrk_end_dtm').html(result.result.wrk_end_dtm);
+//					$('#mig_result_wrk_dtm').html(result.result.wrk_dtm);
+//					
+//					$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;' + common_success + '</i>');
+//				}
+//				
+//				if(result.db2pgResult == null){
+//					$('#mig_result_msg').html("파일이 삭제되어 작업로그정보를 출력할 수 없습니다.");	
+//				}else{
+//					$('#mig_result_msg').html(result.db2pgResult.RESULT);	
+//				}
+//
+//				$('#pop_layer_db2pgResult').modal("show"); 
+//			}
+//	});
 }
 
 /* ********************************************************
  * DDL 에러 로그 팝업
  *********************************************************/
 function fn_dash_ddlFailLog(mig_exe_sn){
-	$.ajax({
-			url : "/db2pg/popup/db2pgDdlErrHistoryDetail.do", 
-		  	data : {
-		  		mig_exe_sn:mig_exe_sn
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {
-				$('#pop_wrk_nm').html("");
-				$('#pop_wrk_exp').html("");
-				$('#pop_wrk_strt_dtm').html("");
-				$('#pop_wrk_end_dtm').html("");
-				$('#pop_wrk_dtm').html("");
-				$('#pop_exe_rslt_cd').html("");
-				$("#pop_rslt_msg", "#subForm").val(""); 
-				
-				if (result.result != null) {
-					$('#pop_wrk_nm').html(result.result.wrk_nm);
-					$('#pop_wrk_exp').html(result.result.wrk_exp);
-					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
-					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
-					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
-					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
-					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
-				}
-
-				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
-			}
-	});
+//	$.ajax({
+//			url : "/db2pg/popup/db2pgDdlErrHistoryDetail.do", 
+//		  	data : {
+//		  		mig_exe_sn:mig_exe_sn
+//		  	},
+//			dataType : "json",
+//			type : "post",
+//			beforeSend: function(xhr) {
+//		        xhr.setRequestHeader("AJAX", true);
+//		    },
+//			error : function(xhr, status, error) {
+//				if(xhr.status == 401) {
+//					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+//				} else if(xhr.status == 403) {
+//					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+//				} else {
+//					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+//				}
+//			},
+//			success : function(result) {
+//				$('#pop_wrk_nm').html("");
+//				$('#pop_wrk_exp').html("");
+//				$('#pop_wrk_strt_dtm').html("");
+//				$('#pop_wrk_end_dtm').html("");
+//				$('#pop_wrk_dtm').html("");
+//				$('#pop_exe_rslt_cd').html("");
+//				$("#pop_rslt_msg", "#subForm").val(""); 
+//				
+//				if (result.result != null) {
+//					$('#pop_wrk_nm').html(result.result.wrk_nm);
+//					$('#pop_wrk_exp').html(result.result.wrk_exp);
+//					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+//					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
+//					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
+//					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
+//					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
+//				}
+//
+//				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
+//			}
+//	});
 }
 
 /* ********************************************************
  * MIGRATION 에러 로그 팝업
  ******************************************************** */
 function fn_dash_migtFailLog(mig_exe_sn){
-	$.ajax({
-			url : "/db2pg/popup/db2pgMigErrHistoryDetail.do", 
-		  	data : {
-		  		mig_exe_sn:mig_exe_sn
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {
-				$('#pop_wrk_nm').html("");
-				$('#pop_wrk_exp').html("");
-				$('#pop_wrk_strt_dtm').html("");
-				$('#pop_wrk_end_dtm').html("");
-				$('#pop_wrk_dtm').html("");
-				$('#pop_exe_rslt_cd').html("");
-				$("#pop_rslt_msg", "#subForm").val(""); 
-				
-				if (result.result != null) {
-					$('#pop_wrk_nm').html(result.result.wrk_nm);
-					$('#pop_wrk_exp').html(result.result.wrk_exp);
-					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
-					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
-					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
-					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
-					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
-				}
-
-				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
-			}
-	});
+//	$.ajax({
+//			url : "/db2pg/popup/db2pgMigErrHistoryDetail.do", 
+//		  	data : {
+//		  		mig_exe_sn:mig_exe_sn
+//		  	},
+//			dataType : "json",
+//			type : "post",
+//			beforeSend: function(xhr) {
+//		        xhr.setRequestHeader("AJAX", true);
+//		    },
+//			error : function(xhr, status, error) {
+//				if(xhr.status == 401) {
+//					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+//				} else if(xhr.status == 403) {
+//					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+//				} else {
+//					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+//				}
+//			},
+//			success : function(result) {
+//				$('#pop_wrk_nm').html("");
+//				$('#pop_wrk_exp').html("");
+//				$('#pop_wrk_strt_dtm').html("");
+//				$('#pop_wrk_end_dtm').html("");
+//				$('#pop_wrk_dtm').html("");
+//				$('#pop_exe_rslt_cd').html("");
+//				$("#pop_rslt_msg", "#subForm").val(""); 
+//				
+//				if (result.result != null) {
+//					$('#pop_wrk_nm').html(result.result.wrk_nm);
+//					$('#pop_wrk_exp').html(result.result.wrk_exp);
+//					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+//					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
+//					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
+//					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
+//					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
+//				}
+//
+//				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
+//			}
+//	});
 }
 
 /* ********************************************************
@@ -2124,9 +2124,11 @@ function fn_proxyInit(result) {
 		
 		// 프록시 연결 db 모니터링 setting
 		fn_dbMonInfo(result);
+		$("#reg_pry_title").show();
 		$("#reg_pry_detail").show();
 		$("#no_reg_pry_detail").hide();
 	} else {
+		$("#reg_pry_title").hide();
 		$("#reg_pry_detail").hide();
 		$("#no_reg_pry_detail").show();
 	}

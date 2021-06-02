@@ -1078,7 +1078,7 @@
 															<div class="carousel-item active" id="v-pills-home_test1">
 															
 																<!-- title row start -->
-																<div class="row">
+																<div class="row" id="reg_pry_title">
 										
 																	<!-- vip title start -->
 																	<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
