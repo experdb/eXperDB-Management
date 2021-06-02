@@ -6,7 +6,7 @@
 	<select id="selectProxyServerList" resultType="hashMap">
 		/**
 		* Query ID : selectProxyServerList
-		* Description : proxy server list
+		* Description : Proxy 서버 목록 조회
 		* Author : 윤정
 		**/
 		SELECT 
@@ -35,44 +35,11 @@
         GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD, s.DB_SVR_ID
 		ORDER BY s.DB_SVR_ID, coalesce(MASTER_SVR_ID, PRY_SVR_ID), s.DB_SVR_ID, MASTER_GBN, LST_MDF_DTM
 	</select>
-	
-	<select id="selectProxyServerList2" resultType="hashMap">
-		/**
-		* Query ID : selectProxyServerList
-		* Description : proxy server list
-		* Author : 윤정
-		**/
-		SELECT 
-       		(ROW_NUMBER() OVER()) AS ROWNUM, 
-       		(ROW_NUMBER() OVER()) AS IDX,
-       		s.PRY_SVR_ID,
-       		s.IPADR,
-       		s.AGT_SN,
-       		s.PRY_SVR_NM,
-       		s.PRY_PTH,
-       		s.KAL_PTH,
-       		s.USE_YN,
-       		s.EXE_STATUS,
-       		s.MASTER_GBN,
-       		s.MASTER_SVR_ID,
-       		s.DB_SVR_ID,
-       		s.DAY_DATA_DEL_TERM,
-       		s.MIN_DATA_DEL_TERM,
-       		s.FRST_REGR_ID,
-       		s.FRST_REG_DTM,
-       		s.LST_MDFR_ID,
-       		s.LST_MDF_DTM,
-       		a.AGT_CNDT_CD 
-		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
-		WHERE s.USE_YN = 'Y'
-        GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD
-		ORDER BY coalesce(MASTER_SVR_ID, PRY_SVR_ID), MASTER_GBN, LST_MDF_DTM
-	</select>
-	
+
 	<select id="selectProxyServerByMasterId" resultType="hashMap">
 		/**
 		* Query ID : selectProxyServerByMasterId
-		* Description : proxy server cluster 1set 
+		* Description : Proxy 서버  cluster 조회 by master server id
 		* Author : 윤정
 		**/
 		SELECT 
@@ -110,7 +77,7 @@
 	<select id="selectProxyServerVipChk" resultType="hashMap" parameterType="int">
 		/**
 		* Query ID : selectProxyServerVipChk
-		* Description : proxy server Vip Chk
+		* Description : Proxy 서버 cluster 별 연결 vip 조회
 		* Author : 윤정
 		**/
 		select 
@@ -149,34 +116,10 @@
 	group by A.PRY_SVR_ID, A.PRY_SVR_NM, A.EXE_STATUS, A.KAL_EXE_STATUS, A.MASTER_GBN, A.MASTER_SVR_ID, A.KAL_INSTALL_YN, A.AGT_CNDT_CD
 	</select>
 
-	<select id="selectDBServerConProxy" resultType="hashMap" parameterType="int">
-		/**
-		* Query ID : selectDBServerConProxy
-		* Description : db server connected proxy
-		* Author : 윤정
-		**/
-		SELECT        		
-       		(ROW_NUMBER() OVER()) AS ROWNUM, 
-       		(ROW_NUMBER() OVER()) AS IDX,
-		--	tpsi.PRY_SVR_ID , 
-			tdi.MASTER_GBN , 
-			tdi.DB_SVR_ID,
-			tdi.IPADR , 
-			tdi.PORTNO , 
-			tdi.SVR_HOST_NM , 
-			tai.AGT_CNDT_CD 
-		FROM T_PRY_SVR_I tpsi 
-		JOIN T_DBSVRIPADR_I tdi  ON tpsi.DB_SVR_ID = tdi.DB_SVR_ID
-		JOIN T_AGTCNDT_I tai ON tdi.IPADR = tai.IPADR
-		WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric
-		GROUP BY tdi.MASTER_GBN, tdi.DB_SVR_ID, tdi.IPADR , tdi.PORTNO , tdi.SVR_HOST_NM ,  tai.AGT_CNDT_CD 
-		ORDER BY tdi.DB_SVR_ID, tdi.MASTER_GBN
-	</select>
-	
 	<select id="selectDBServerConProxyList" resultType="hashMap" parameterType="int">
 		/**
 		* Query ID : selectDBServerConProxyList
-		* Description : db server connected proxy
+		* Description : Proxy 연결된 db 서버 조회
 		* Author : 윤정
 		**/
 		select
@@ -251,7 +194,7 @@
 	<select id="selectProxyListnerMainList" resultType="hashMap" parameterType="int">
 		/**
 		* Query ID : selectProxyListnerMainList
-		* Description : 리스너 데이터 조회
+		* Description : Proxy 리스너 목록 및 상태조회
 		* Author : 윤정
 		**/
 		SELECT 
@@ -326,7 +269,7 @@
 	<select id="selectProxyLogList" resultType="hashMap" parameterType="int">
 		/**
 		* Query ID : selectProxyLogList
-		* Description : proxy starting state list
+		* Description : proxy / keepalived 기동 상태 이력 조회
 		* Author : 윤정
 		**/
 		SELECT
@@ -353,7 +296,7 @@
 	<select id="selectConfiguration" resultType="hashMap" parameterType="hashMap">
 		/**
 		* Query ID : selectConfiguration
-		* Description : proxy, keepalived config file
+		* Description : Proxy, keepalived config 파일 정보 조회
 		* Author : 윤정
 		**/
 		SELECT 
@@ -379,7 +322,7 @@
 	<select id="selectProxyStatisticsInfo" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectProxyStatisticsInfo
-		* Description : proxy listener statistics information
+		* Description : Proxy 리스너 상세 정보 조회
 		* Author : 윤정
 		**/
 		<![CDATA[
@@ -418,57 +361,11 @@
 			WHERE x.r <= 2
 		]]>
 	</select>
-	
-	<select id="selectProxyStatisticsChartInfo2" parameterType="int" resultType="hashMap">
-		/**
-		* Query ID : selectProxyStatisticsChartInfo
-		* Description : proxy listener statistics information
-		* Author : 윤정
-		**/
-		<![CDATA[
-			SELECT 
-				(ROW_NUMBER() OVER(PARTITION BY x.PRY_SVR_ID, x.LSN_ID, x.lsn_svr_id, x.DB_CON_ADDR ORDER BY exe_dtm)) AS ROWNUM, 
-				(ROW_NUMBER() OVER(PARTITION BY x.PRY_SVR_ID, x.LSN_ID, x.lsn_svr_id ,x.DB_CON_ADDR ORDER BY exe_dtm)) AS IDX,
-				DENSE_RANK() OVER( ORDER BY x.PRY_SVR_ID, x.LSN_ID, x.DB_CON_ADDR DESC) AS DENSE_ROW_NUM,
-				*
-			FROM (
-				SELECT
-					ROW_NUMBER() OVER (PARTITION BY tpsi.PRY_SVR_ID, tpssg.LSN_ID, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR ORDER BY exe_dtm desc) AS r, 
-					tpsi.PRY_SVR_ID, 
-					tpssg.LSN_ID,
-					tpssg.EXE_DTM, 
-					to_char(tpssg.EXE_DTM, 'YYYY-MM-DD HH24:MI') as EXE_DTM_SS,
-					tpsi.PRY_SVR_NM,
-					tpli.LSN_NM, 
-					tpssg.DB_CON_ADDR, 
-					tpssg.SVR_STATUS, 
-					tpssg.LST_STATUS_CHK_DESC, 
-					tpssg.FAIL_CHK_CNT, 
-					tpssg.MAX_SESSION, 
-					tpssg.CUR_SESSION,
-					tpssg.SESSION_LIMIT, 
-					tpssg.CUMT_SSO_CON_CNT, 
-					tpssg.BYTE_RECEIVE, 
-					tpssg.BYTE_TRANSMIT,
-					tpssg.SVR_STOP_TM,
-					tpssg.lsn_svr_id
-				FROM T_PRY_SVR_I tpsi 
-				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
-				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
-				JOIN T_PRY_SVR_STATUS_G tpssg ON tpssg.lsn_svr_id = tpsli.lsn_svr_id
-				WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
-				AND tpssg.log_type = 'TC003901'
-				ORDER BY tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM desc
-			) x
-			WHERE x.r <= 5
-			ORDER BY x.pry_svr_id, x.lsn_id, x.lsn_svr_id, x.DB_CON_ADDR, x.EXE_DTM
-		]]>
-	</select>
 
 	<select id="selectProxyStatisticsChartInfo" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectProxyStatisticsChartInfo
-		* Description : proxy listener statistics information
+		* Description : Proxy 리스너 통계 정보 조회
 		* Author : 윤정
 		**/
 		<![CDATA[
@@ -515,7 +412,7 @@
 	<select id="selectProxyChartCntList" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectProxyChartCntList
-		* Description : proxy listener statistics information
+		* Description : Proxy 리스너 통계 정보 카운트
 		* Author : 윤정
 		**/
 		<![CDATA[
@@ -552,7 +449,7 @@
 	<select id="selectActExeFailLog" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectExeFailMsg
-		* Description : proxy / keepalived 기동-정지 실패 시 log 보여주기 
+		* Description : proxy / keepavlived 기동-정지 실패 로그 
 		* Author : 윤정
 		**/
 		SELECT 
@@ -568,52 +465,6 @@
 		ON tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID
 		WHERE tpacg.PRY_ACT_EXE_SN = #{PRY_ACT_EXE_SN}::numeric
 	</select>
-	
-	<insert id="insertActExeCng" parameterType="hashMap">
-		/**
-		* Query ID : insertActExeCng
-		* Description : proxy / keepalived 기동-정지 상태 변경 
-		* Author : 윤정
-		**/
-		WITH ins1 AS (
-			INSERT INTO T_PRY_ACTSTATE_CNG_G (
-				pry_act_exe_sn, 
-				pry_svr_id, 
-				sys_type, 
-				act_type, 
-				act_exe_type, 
-				wrk_dtm,
-				exe_rslt_cd, 
-				rslt_msg, 
-				frst_regr_id, 
-				frst_reg_dtm, 
-				lst_mdfr_id, 
-				lst_mdf_dtm
-			)
-			VALUES (
-				NEXTVAL('q_t_pry_actstate_cng_g_01'),
-				#{pry_svr_id}::numeric, 
-				#{sys_type},
-				#{act_type},
-				#{act_exe_type}, 
-				clock_timestamp(), 
-				#{exe_rslt_cd},
-				'', 
-				#{frst_regr_id}, 
-				clock_timestamp(), 
-				#{lst_mdfr_id}, 
-				clock_timestamp()
-			)
-		)
-		UPDATE T_PRY_SVR_I 
-		<if test='sys_type == "PROXY"'>
-			SET EXE_STATUS = #{status}
-		</if>
-		<if test='sys_type == "KEEPALIVED"'>
-			SET KAL_EXE_STATUS = #{status}
-		</if>
-		WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
-	</insert>
 
 	<select id="selectAgentCount" resultType="int">
    		/**
@@ -668,7 +519,7 @@
 	<select id="selectPryCngList" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectPryCngList
-		* Description : proxy config 파일 변경 이력 조회
+		* Description : proxy config파일 변경 이력 조회
 		* Author : 윤정
 		**/
 		SELECT
@@ -685,23 +536,11 @@
 		ORDER BY LST_MDF_DTM DESC
 		LIMIT 5
 	</select>
-	
-	<select id="selectProxyVipLsnList" parameterType="int" resultType="hashMap">
-		select tpsi.pry_svr_nm, tpsi.master_gbn, tpsi.pry_svr_id , tpvi.v_ip, tpli.lsn_nm
-from t_pry_svr_i tpsi 
-join t_pry_lsn_i tpli on tpli.pry_svr_id = tpsi.pry_svr_id 
-join t_pry_vipcng_i tpvi on tpli.pry_svr_id = tpsi.pry_svr_id and tpsi.pry_svr_id = tpvi.pry_svr_id 
-WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
-		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
-and tpvi.v_ip_exe_status = 'TC001501'
 
-
-	</select>
-	
 	<select id="selectDbStandbyList" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectPryCngList
-		* Description : proxy config 파일 변경 이력 조회
+		* Description : proxy 연결 db standby ip list
 		* Author : 윤정
 		**/
 		SELECT 
@@ -716,7 +555,7 @@ and tpvi.v_ip_exe_status = 'TC001501'
 		WHERE DB_SVR_ID = #{db_svr_id}::numeric
 		AND MASTER_GBN = 'S'
 	</select>
-	
+
 	<select id="selectProxyServerByDBSvrId" parameterType="int" resultType="hashMap">
 		/**
 		* Query ID : selectProxyServerByDBSvrId

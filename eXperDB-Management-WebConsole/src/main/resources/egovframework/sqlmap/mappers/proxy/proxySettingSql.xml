@@ -6,7 +6,7 @@
 	<select id="selectProxyServerList" resultType="proxyServerVO">
 		/**
 		* Query ID : selectProxyServerList
-		* Description : proxy server list
+		* Description : Proxy Server 목록 조회
 		* Author : 김민정
 		**/
 		SELECT 
@@ -54,7 +54,7 @@
 	<select id="selectProxyServerInfo" parameterType="int" resultType="proxyServerVO">
 		/**
 		* Query ID : selectProxyServerInfo
-		* Description : proxy server 정보
+		* Description : Proxy server 정보 조회
 		* Author : 김민정
 		**/
 		SELECT  A.PRY_SVR_ID,
@@ -83,7 +83,7 @@
 	<select id="selectPoxyAgentSvrList" resultType="hashMap" parameterType="hashMap">
 		/**
 		* Query ID : selectProxyAgentList
-		* Description : 미등록된 Agent의 프로시 서버 정보를 갖고 오기 위한 쿼리 서버 정보 없어도 ip만 출력
+		* Description : proxy agent 목록 조회 - 미등록된 Agent의 프로시 서버 정보를 갖고 오기 위한 쿼리 서버 정보 없어도 ip만 출력
 		* Author : 김민정
 		**/
 		SELECT  A.PRY_SVR_ID,
@@ -123,7 +123,7 @@
 	<select id="selectProxyGlobal" resultType="proxyGlobalVO" parameterType="hashMap">
         /**
 		* Query ID : selectProxyGlobal
-		* Description : proxy global info 
+		* Description : Proxy Global 정보 조회
 		* Author : 김민정
 		**/
 		SELECT 	A.PRY_GLB_ID,
@@ -148,7 +148,7 @@
 	<select id="selectProxyListenerList" resultType="proxyListenerVO" parameterType="hashMap">
         /**
 		* Query ID : selectProxyListenerList
-		* Description : proxy Listener info List
+		* Description : Proxy Listener List 정보 조회
 		* Author : 김민정
 		**/
 		SELECT 	LSN_ID, 
@@ -189,7 +189,7 @@
 	<select id="selectProxyVipConfList" resultType="proxyVipConfigVO">
         /**
 		* Query ID : selectProxyVipConfList
-		* Description : proxy Vip Config info List
+		* Description : VIP List 정보 조회
 		* Author : 김민정
 		**/
 		SELECT 	VIP_CNG_ID, 
@@ -236,7 +236,7 @@
 	<select id="selectDbmsList" resultType="hashMap">
 	 	/**
 		* Query ID : selectDbmsList
-		* Description : 연결 DBMS 목록 가져오기
+		* Description : 연결 DBMS 정보 조회
 		* Author : 김민정
 		**/
     	SELECT 	db_svr_id,
@@ -244,10 +244,11 @@
 		FROM 	T_DBSVR_I 
 		ORDER 	BY db_svr_nm
 	</select>
+	
 	<select id="selectMasterProxyList" resultType="hashMap">
 	 	/**
 		* Query ID : selectMasterProxyList
-		* Description : Master Proxy select 항목 가져오기
+		* Description : DBMS 별 Master Proxy 조회
 		* Author : 김민정
 		**/
     	SELECT 	pry_svr_id,
@@ -261,8 +262,8 @@
 	
 	<select id="selectMasterSvrProxyList" resultType="hashMap">
 	 	/**
-		* Query ID : selectMasterProxyList
-		* Description : Master Proxy select 항목 가져오기
+		* Query ID : selectMasterSvrProxyList
+		* Description : aster Proxy 정보 조회 - Master Proxy select 항목 가져오기
 		* Author : 김민정
 		**/
     	SELECT 	pry_svr_id,
@@ -285,7 +286,7 @@
 	<select id="proxySetServerNmList" resultType="String">
 	 	/**
 		* Query ID : proxySetServerNmList
-		* Description : 서버명 조회
+		* Description : Proxy 서버 등록 서버명 조회
 		* Author : 김민정
 		**/
     	SELECT 	split_part(MAX(pry_svr_nm), '_', (LENGTH(MAX(pry_svr_nm))-LENGTH(replace(MAX(pry_svr_nm), '_', '') )) + 1) AS pry_svr_nm
@@ -317,7 +318,7 @@
 	<update id="updateProxyAgentInfoFromProxyId" parameterType="hashMap">
         /**
         * Query ID : updateProxyAgentInfo
-        * Description : Proxy Agent 정보 업데이트
+        * Description : Proxy Agent svr_use_yn 정보 업데이트
         * Author : 김민정
         **/
         UPDATE T_PRY_AGT_I
@@ -332,7 +333,7 @@
 	<select id="selectQ_T_PRY_SVR_I_01" resultType="long">
    		/**
 	 	* Query ID : select Q_T_PRY_SVR_I_01
-	 	* Description : T_PRY_SVR_I 테이블 SEQ
+	 	* Description : proxy server id 조회 - T_PRY_SVR_I 테이블 SEQ
 	 	* Author :
 	 	**/
     	SELECT COALESCE(MAX(PRY_SVR_ID+1),1) AS PRY_SVR_ID FROM T_PRY_SVR_I
@@ -341,7 +342,7 @@
 	<insert id="insertProxyServerInfo" parameterType="proxyServerVO">
         /**
         * Query ID : insertProxyServerInfo"
-        * Description : Proxy 서버 정보 등록
+        * Description : proxy server 정보 등록
         * Author : 김민정
         **/
 	 	INSERT INTO T_PRY_SVR_I
@@ -426,7 +427,7 @@
 	<insert id="insertProxyGlobalConf" parameterType="proxyGlobalVO">
         /**
         * Query ID : insertProxyGlobalConf"
-        * Description : Proxy global 정보 업데이트
+        * Description : Proxy global 정보 등록
         * Author : 김민정
         **/
 	        INSERT
@@ -461,52 +462,35 @@
                               #{lst_mdfr_id},
                               clock_timestamp()
 	</insert>
-	
-	<delete id="deleteProxyConfHistList" parameterType="int">
+
+	<delete id="deleteProxyTblList" parameterType="int">
 		/**
-		* Query ID : deleteProxyConfHist
-		* Description : 프록시 설정 변경 이력 삭제
+		* Query ID : deleteProxyTblList
+		* Description : 테이블 전체 삭제
 		* Author : 김민정
 		**/
         DELETE FROM T_PRYCNG_G
-         WHERE PRY_SVR_ID=#{pry_svr_id}
-	</delete>
-	<delete id="deleteProxyActStateConfHistList" parameterType="int">
-		/**
-		* Query ID : deleteProxyActStateConfHist
-		* Description : 기동상태 변경 이력
-		* Author : 김민정
-		**/
+         WHERE PRY_SVR_ID=#{pry_svr_id};
+         
         DELETE FROM T_PRY_ACTSTATE_CNG_G
-        WHERE PRY_SVR_ID=#{pry_svr_id}
-	</delete>
-	<delete id="deleteProxySvrStatusHistList" parameterType="int">
-		/**
-		* Query ID : deleteProxySvrStatusHist
-		* Description : 서버 실시간 상태 로그 삭제
-		* Author : 김민정
-		**/
+        WHERE PRY_SVR_ID=#{pry_svr_id};
+        
         DELETE FROM T_PRY_SVR_STATUS_G
-        WHERE PRY_SVR_ID=#{pry_svr_id}
-	</delete>
-	<delete id="deletePryListenerSvrList" parameterType="int">
-		/**
-		* Query ID : deleteUserManager
-		* Description : 리스너 서버 정보 삭제
-		* Author : 김민정
-		**/
+        WHERE PRY_SVR_ID=#{pry_svr_id};
+        
 		DELETE FROM T_PRY_LSN_SVR_I
-		WHERE PRY_SVR_ID=#{pry_svr_id}
-	</delete>
-	<delete id="deletePryListenerList" parameterType="int">
-		/**
-		* Query ID : deletePryListenerList
-		* Description : 리스너 정보 삭제
-		* Author : 김민정
-		**/
+		WHERE PRY_SVR_ID=#{pry_svr_id};
+		
         DELETE FROM T_PRY_LSN_I
-		WHERE PRY_SVR_ID=#{pry_svr_id}
+		WHERE PRY_SVR_ID=#{pry_svr_id};
+		
+        DELETE FROM T_PRY_GLB_I
+		WHERE PRY_SVR_ID=#{pry_svr_id};
+		
+        DELETE FROM T_PRY_SVR_I
+		WHERE PRY_SVR_ID=#{pry_svr_id};
 	</delete>
+
 	<delete id="deletePryVipConfList" parameterType="int">
 		/**
 		* Query ID : deletePryVipConfList
@@ -516,28 +500,11 @@
         DELETE FROM T_PRY_VIPCNG_I
 		WHERE PRY_SVR_ID=#{pry_svr_id}
 	</delete>
-	<delete id="deleteGlobalConfList" parameterType="int">
-		/**
-		* Query ID : deleteGlobalConfList
-		* Description : 프록시 Global 설정  삭제
-		* Author : 김민정
-		**/
-        DELETE FROM T_PRY_GLB_I
-		WHERE PRY_SVR_ID=#{pry_svr_id}
-	</delete>
-	<delete id="deleteProxyServer" parameterType="int">
-		/**
-		* Query ID : deleteProxyServer
-		* Description : 프록시 서버 정보 삭제
-		* Author : 김민정
-		**/
-        DELETE FROM T_PRY_SVR_I
-		WHERE PRY_SVR_ID=#{pry_svr_id}
-	</delete>
+
 	<select id="selectListenServerList" resultType="proxyListenerServerVO">
 		/**
 		* Query ID : selectListenServerList
-		* Description : proxy Listener server list
+		* Description : Proxy 리스너 server 목록 조회
 		* Author : 김민정
 		**/
 		SELECT 	LSN_SVR_ID, 
@@ -560,6 +527,7 @@
 	        </if>
         ORDER BY LSN_SVR_ID, LST_MDF_DTM DESC
 	</select>
+	
 	<update id="updateProxyGlobalConf" parameterType="proxyGlobalVO">
         /**
         * Query ID : updateProxyGlobalConf"
@@ -583,7 +551,7 @@
 
 	<update id="updatePryVipConf" parameterType="proxyVipConfigVO">
         /**
-        * Query ID : updatePryVipConf"
+        * Query ID : updatePryVipConf
         * Description : Proxy VIP Config 정보 수정
         * Author : 김민정
         **/
@@ -645,9 +613,10 @@
 		WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
         AND		VIP_CNG_ID = #{vip_cng_id}::numeric 
 	</delete>
+	
 	<update id="updatePryListener" parameterType="proxyListenerVO">
         /**
-        * Query ID : updatePryListener"
+        * Query ID : updatePryListener
         * Description : Proxy Listener 정보 수정
         * Author : 김민정
         **/
@@ -710,7 +679,7 @@
 	<select id="selectPryListenerMaxId" resultType="int">
 		/**
 		* Query ID : selectPryListenerNewId
-		* Description :
+		* Description : 리스너 max id 조회
 		* Author : 김민정
 		**/
 		SELECT 	MAX(LSN_ID) AS LSN_ID
@@ -719,7 +688,7 @@
 
 	<update id="updatePryListenerSvr" parameterType="proxyListenerServerVO">
         /**
-        * Query ID : updatePryListenerSvr"
+        * Query ID : updatePryListenerSvr
         * Description : Proxy Listener Server 정보 수정
         * Author : 김민정
         **/
@@ -781,6 +750,7 @@
         AND		DB_CON_ADDR = #{db_con_addr}
         </if>
 	</delete>
+	
 	<delete id="deletePryListener" parameterType="proxyListenerVO">
 		/**
 		* Query ID : deletePryListener
@@ -791,27 +761,25 @@
 		WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
         AND		LSN_ID = #{lsn_id}::numeric 
 	</delete>
-	<update id="updateProxyServerStatus" parameterType="hashMap">
-        /**
-        * Query ID : updateProxyServerStatus"
-        * Description : Proxy 서버 상태값 업데이트
-        * Author : 김민정
-        **/
-        UPDATE 	T_PRY_SVR_I
-           SET 	EXE_STATUS = #{exe_status}
-           ,	KAL_EXE_STATUS = #{kal_exe_status}
-           , 	USE_YN = #{use_yn}
-           ,	LST_MDFR_ID = #{lst_mdfr_id}
-           , 	LST_MDF_DTM = clock_timestamp()
-         WHERE PRY_SVR_ID = #{pry_svr_id}::numeric
-	</update>
 
 	<select id="selectIpList" resultType="HashMap" >
+		/**
+		* Query ID : selectIpList
+		* Description : Proxy 연결 dbms ip/port 조회
+		* Author : 김민정
+		**/
 		SELECT IPADR||':'||PORTNO AS DB_CON_ADDR
 		FROM T_DBSVRIPADR_I
 		WHERE DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id}::numeric)
 	</select>
+	
+	
 	<select id="selectDBSelList" resultType="HashMap" >
+		/**
+		* Query ID : selectDBSelList
+		* Description : database 정보조회
+		* Author : 김민정
+		**/
 		SELECT DB_NM, DB_ID
 		FROM T_DB_I
 		WHERE DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id}::numeric)
@@ -820,8 +788,8 @@
 	
 	<select id="selectProxyAgentInfo" resultType="proxyAgentVO">
 	 	/**
-		* Query ID : "selectProxyAgentInfo"
-		* Description : Proxy Agent 정보 가져오기
+		* Query ID : selectProxyAgentInfo
+		* Description : Proxy Agent 정보 조회
 		* Author : 김민정
 		**/
     	SELECT 	AGT_SN,
@@ -877,17 +845,24 @@
 		AND 	LSN_SVR_ID = #{lsn_svr_id}::numeric 
 		</if>
 	</delete>
+	
 	<select id="selectProxyAgentSvrUseYnFromProxyId" parameterType="int" resultType="String">
+		/**
+		* Query ID : selectProxyAgentSvrUseYnFromProxyId
+		* Description : Proxy agent SVR_USE_YN 변경
+		* Author : 김민정
+		**/
 		SELECT 	SVR_USE_YN 
 		FROM 	T_PRY_AGT_I 
 		WHERE	AGT_SN =  (	SELECT	AGT_SN 
          					FROM 	T_PRY_SVR_I 
          					WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric )
     </select>
+   
     <update id="upgradePrySvrOldMaster" parameterType="int">
         /**
         * Query ID : upgradePrySvrOldMaster
-        * Description : 같은 DB_SVR_ID를 갖는 PROXY 중 OLD_MASTER_GBN이 M이 없을 경우 업그레이드
+        * Description : Proxy server OLD_MASTER_GBN 변경 - 같은 DB_SVR_ID를 갖는 PROXY 중 OLD_MASTER_GBN이 M이 없을 경우 업그레이드
         * Author : 김민정
         **/
         UPDATE T_PRY_SVR_I
@@ -907,5 +882,4 @@
   							LIMIT 1
         				  )
 	</update>
-	
 </mapper>
