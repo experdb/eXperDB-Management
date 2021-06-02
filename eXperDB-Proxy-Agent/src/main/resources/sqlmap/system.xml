@@ -99,7 +99,6 @@
 	 	UPDATE T_PRY_AGT_I
 	 	SET 
 	 		AGT_CNDT_CD = #{agt_cndt_cd}
-	 		, AGT_VERSION = #{agt_version}
 	 		, SOCKET_PORT = #{socket_port}
 	 		, ISTCNF_YN = #{istcnf_yn}
 	 		, LST_MDF_DTM = clock_timestamp()
