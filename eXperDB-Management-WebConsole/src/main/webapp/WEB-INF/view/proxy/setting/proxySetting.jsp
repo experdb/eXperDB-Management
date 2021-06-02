@@ -592,7 +592,6 @@
 		fn_init_global_value();
 	
 		if(selRowLen != 0){
-			
 			//정보 불러오기
 			var selRow = proxyServerTable.row('.selected').data();
 			selPrySvrId = selRow.pry_svr_id;
@@ -670,6 +669,27 @@
 	 					$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg12" />');
 	 					runValid = false;
 					}
+	 				selAgentConnect = true;
+	 				//에이전트 연결 체크
+					if(result.errcd==0){//정상
+						fn_btn_setEnable("sebu","");
+						//global interface select box setting
+		 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf, vipUseYn);
+		 				//popup interface select box setting
+		 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","", vipUseYn);
+					}else if(result.errcd==1){ //연결실패
+						selAgentConnect = false;
+						setTimeout(function(){//load_global_info 에서 100이후에 INABLE하기 때문에 타임을 더 줌
+							//상세 설정 모든 버튼 disabled
+							fn_btn_setEnable("sebu", "disabled");
+						},200);
+						//문구 추가 :: Agent와 연결이 불가능합니다. Agent가 정상 기동 중일 경우만, [적용]이 가능합니다.
+						$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg21" />');
+						fn_create_if_select("#glb_if_nm","#globalInfoForm",result.global_info.if_nm, vipUseYn);
+						
+					}else if(result.errcd==2){ //연결오류
+						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+					}
 
 	 				//Global 설정 불러오기, vip 사용 여부에 따라 disable
  					load_global_info(result.global_info, selVipUseYn); //timeout 100
@@ -694,27 +714,6 @@
 						for(var i=0; i<result.db_sel_list.length; i++){
 							$("#lstnReg_db_nm", "#insProxyListenForm").append("<option value='"+result.db_sel_list[i].db_id+"'>"+result.db_sel_list[i].db_nm+"</option>");	
 						}
-					}
-					selAgentConnect = true;
-
-					//에이전트 연결 체크
-					if(result.errcd==0){//정상
-						fn_btn_setEnable("sebu","");
-						//global interface select box setting
-		 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf, vipUseYn);
-		 				//popup interface select box setting
-		 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","", vipUseYn);
-					}else if(result.errcd==1){ //연결실패
-						selAgentConnect = false;
-						//문구 추가
-						$("#warning_init_detail_info").html('&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="eXperDB_proxy.msg21" />');
-						setTimeout(function(){ //상단  load_global_info 함수에서 disable timeout 100 
-							//버튼 제어
-							fn_btn_setEnable("sebu", "disabled");
-						},200);
-						
-					}else if(result.errcd==2){ //연결오류
-						showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
 					}
 	 				
  				} else {
@@ -746,18 +745,15 @@
 	* Global 설정 불러오기
 	******************************************************** */
 	function load_global_info(data, str){
+ 		//데이터 설정
 		if(data !=null){
 			$("#glb_pry_glb_id", "#globalInfoForm").val(data.pry_glb_id);
 			$("#glb_obj_ip", "#globalInfoForm").val(data.obj_ip);
 			
-			if (selVipUseYn == "Y") {
+			if (str == "Y") {//vip 사용 시
 				if(data.if_nm == null || data.if_nm == ""){
 					$("#glb_if_nm", "#globalInfoForm").val(selAgentInterface);
 				}else{
-					if($("#glb_if_nm > option", "#globalInfoForm").text().indexOf(data.if_nm) < 0){
-						$("#glb_if_nm > option", "#globalInfoForm").remove();
-						$("#glb_if_nm", "#globalInfoForm").append('<option value='+data.if_nm+'>'+data.if_nm+'</option>');
-					}
 					$("#glb_if_nm", "#globalInfoForm").val(data.if_nm);
 				}
 				
@@ -778,7 +774,8 @@
 				}else{
 					$("#glb_peer_server_ip", "#globalInfoForm").val(data.peer_server_ip);
 				}
-			} else {
+			} else { //vip 사용 안함
+				$("#glb_if_nm > option", "#globalInfoForm" ).remove();
 				$("#glb_if_nm", "#globalInfoForm").val("");
 				$("#glb_peer_server_ip", "#globalInfoForm").val("");
 			}
@@ -790,7 +787,7 @@
 			setTimeOutData("glb_svr_con_max_tm", data.svr_con_max_tm);
 			setTimeOutData("glb_chk_tm", data.chk_tm);
 		}else{ //초기등록시
-			if (selVipUseYn == "Y") {
+			if (str == "Y") {
 				$("#glb_pry_glb_id", "#globalInfoForm").val("");
 				$("#glb_obj_ip", "#globalInfoForm").val(proxyServerTable.row('.selected').data().ipadr);
 				$("#glb_if_nm", "#globalInfoForm").val(selAgentInterface);
@@ -810,7 +807,7 @@
 			setTimeOutData("glb_chk_tm", "5s");
 		}
 
-		//VIP 사용 여부 변경
+		//VIP 사용 여부에 따른 UI 사용 여부
 		if(str == "Y"){
 			//서버 IP,
 			$("#glb_obj_ip", "#globalInfoForm").removeAttr("disabled");
@@ -841,8 +838,6 @@
 			
 			//가상IP관리 등록/수정/삭제 버튼 disabled
 			setTimeout(function(){
-				$("#glb_if_nm > option", "#globalInfoForm" ).remove();
-				$("#glb_if_nm", "#globalInfoForm").val("");
 				$("#btnInsert_vip").prop("disabled", "disabled");
 				$("#btnUpdate_vip").prop("disabled", "disabled");
 				$("#btnDelete_vip").prop("disabled", "disabled");
@@ -869,26 +864,45 @@
 	function fn_create_if_select(objId, objForm, objVal, vipUse){
 		//V interface 생성/////////////////////////////////////////////////////////////
 		if(vipUse == "Y"){
-			var tempInterfNmList = selAgentInterfaceItems;
 			var tempHtml ="";
-			
-			var vIfLen = tempInterfNmList.length;
-			
-			$( objId+" > option", objForm ).remove();
-			
-			for(var i=0; i<vIfLen; i++){
-				var id = tempInterfNmList[i];
-				if(id != 'lo') tempHtml += '<option value='+id+'>'+id+'</option>';
-			}
-			if(objId == "#instReg_v_if_nm_sel")	tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
-			
-			$(objId, objForm ).append(tempHtml);
-			
-			if(objVal != ""){
-				$( objId, objForm ).val(objVal);
-			}else if (tempHtml > 0) {
-				$(objId+" option:eq(0)").prop("selected", true);
-				if(objId == "#instReg_v_if_nm_sel") $("#instReg_v_if_nm").val($("#instReg_v_if_nm_sel").val());
+			if(selAgentInterfaceItems != null){
+				var tempInterfNmList = selAgentInterfaceItems;
+				var vIfLen = tempInterfNmList.length;
+				
+				$( objId+" > option", objForm ).remove();
+				
+				for(var i=0; i<vIfLen; i++){
+					var id = tempInterfNmList[i];
+					if(id != 'lo') tempHtml += '<option value='+id+'>'+id+'</option>';
+				}
+				if(objId == "#instReg_v_if_nm_sel")	tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+				
+				$(objId, objForm ).append(tempHtml);
+				
+				if(objVal != ""){
+					if($(objId+" > option", objForm).text().indexOf(objVal) < 0){
+						$( objId+" > option", objForm ).remove();
+						tempHtml = '<option value='+objVal+'>'+objVal+'</option>' + tempHtml;
+						$(objId, objForm).append(tempHtml);
+					}
+					$(objId, objForm ).val(objVal);
+				}else if (tempHtml > 0) {
+					$(objId+" option:eq(0)").prop("selected", true);
+					if(objId == "#instReg_v_if_nm_sel") $("#instReg_v_if_nm").val($("#instReg_v_if_nm_sel").val());
+				}
+			}else{
+				if(objVal != ""){
+					$( objId+" > option", objForm ).remove();
+					tempHtml = '<option value='+objVal+'>'+objVal+'</option>';
+					if(objId == "#instReg_v_if_nm_sel")	tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+					$(objId, objForm).append(tempHtml);
+					$(objId, objForm ).val(objVal);
+				}else{
+					if(objId == "#instReg_v_if_nm_sel"){
+						tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+						$(objId, objForm).append(tempHtml);
+					}
+				}
 			}
 		}else{
 			$( objId+" > option", objForm ).remove();
