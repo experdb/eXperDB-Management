@@ -1,7 +1,6 @@
 package com.experdb.management.proxy.service.impl;
 
 import java.net.ConnectException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +33,18 @@ import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
-
-
+/**
+ * @author 김민정
+ * @see proxy 설정 관련 화면 serviceImpl
+ * 
+ *      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일                 수정자                   수정내용
+*  -------     --------    ---------------------------
+*  2021.03.05              최초 생성
+ *      </pre>
+ */
 @Service("ProxySettingServiceImpl")
 public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements ProxySettingService{
 	
@@ -51,6 +59,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
+
 	/**
 	 * proxy 화면 접속 히스토리 등록
 	 * 
@@ -73,7 +82,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy Server 목록 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<ProxyServerVO>
 	 * @throws Exception
 	 */
@@ -82,6 +91,14 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		return proxySettingDAO.selectProxyServerList(param);
 	}
 
+	/**
+	 * Proxy Agent Network Interface 목록 조회
+	 * 
+	 * @param Map<String, Object>
+	 * @return List<String>
+	 * @throws ConnectException
+	 * @throws Exception
+	 */
 	public List<String> getAgentInterface(Map<String, Object> param) throws ConnectException, Exception {
 		List<String> interfList = new ArrayList<String>();
 		//Agent Interface select box 생성 정보
@@ -109,11 +126,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		}
 		return interfList;
 	}
-	
+
 	/**
 	 * Proxy conf 상세조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -152,9 +169,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	/**
-	 * Proxy conf 상세조회
+	 * Proxy Peer Vip 정보 select 박스 생성
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -174,7 +191,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy 연결 DBMS 및 Master Proxy 정보 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -202,7 +219,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy Master Proxy 정보 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -220,7 +237,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy 서버 등록 서버명 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return String
 	 * @throws
 	 */
@@ -247,9 +264,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	/**
-	 * Proxy 적용 실행
+	 * Proxy 서비스 재/구동/중지
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -368,11 +385,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      
 		      return resultObj;
 		   }
-	
+
 	/**
 	 * Proxy 서버 연결 테스트
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -424,7 +441,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy 서버 등록
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return Map<String, Object>
 	 * @throws Exception
 	 */
@@ -451,7 +468,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 
 			pryAgtVO.setSvr_use_yn("Y");
 
-			int	agt_sn = Integer.parseInt(param.get("agt_sn") != null && !"".equals((String)param.get("agt_sn"))  ? param.get("agt_sn").toString() : "0");
 			int	prySvrId = Integer.parseInt(param.get("pry_svr_id") != null && !"".equals((String)param.get("pry_svr_id"))  ? param.get("pry_svr_id").toString() : "0");
 			int	day_data_del_term = Integer.parseInt(param.get("day_data_del_term") != null && !"".equals((String)param.get("day_data_del_term"))  ? param.get("day_data_del_term").toString() : "0");
 			int	min_data_del_term = Integer.parseInt(param.get("min_data_del_term") != null && !"".equals((String)param.get("min_data_del_term"))  ? param.get("min_data_del_term").toString() : "0");
@@ -556,9 +572,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy Conf 데이터 재등록 요청
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return boolean
-	 * @throws Exception
+	 * @throws 
 	 */
 	public boolean proxyServerReReg(Map<String, Object> param) {
 		try{
@@ -593,7 +609,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy 서버 삭제
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -624,30 +640,12 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			}catch(Exception e){
 				e.printStackTrace();
 			}			
-			
-			//delete t_prycng_g
-			proxySettingDAO.deleteProxyConfHistList(prySvrId);
 
-			//delete t_pry_actstate_cng_g
-			proxySettingDAO.deleteProxyActStateConfHistList(prySvrId);
-
-			//delete t_pry_svr_status_g
-			proxySettingDAO.deleteProxySvrStatusHistList(prySvrId);
-	
-			//delete t_pry_lsn_svr_i 
-			proxySettingDAO.deletePryListenerSvrList(prySvrId);
-			
-			//delete t_pry_lsn_i
-			proxySettingDAO.deletePryListenerList(prySvrId);
-			
 			//delete t_pry_vipcng_i
 			proxySettingDAO.deletePryVipConfList(prySvrId);
-			
-			//delete t_pry_glb_i
-			proxySettingDAO.deleteGlobalConfList(prySvrId);
 
-			//delete t_pry_svr_i
-			proxySettingDAO.deleteProxyServer(prySvrId);
+			//테이블 전체 삭제
+			proxySettingDAO.deleteProxyTblList(prySvrId);
 
 			//같은 db_svr_id를 갖는 남은 proxy 중 old_master_gbn이 M이 없을 경우  자동 승격
 			proxySettingDAO.upgradePrySvrOldMaster(dbSvrId);
@@ -671,9 +669,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy 리스너 server 목록 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<ProxyListenerServerVO>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@Override
 	public List<ProxyListenerServerVO> selectListenServerList(Map<String, Object> param) {
@@ -681,11 +679,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	/**
-	 * Proxy ip 조회
+	 * Proxy 연결 dbms ip/port 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<Map<String, Object>>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@Override
 	public List<Map<String, Object>> selectIpList(Map<String, Object> param) {
@@ -702,20 +700,20 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	public JSONObject applyProxyConf(Map<String, Object> param, JSONObject confData) throws ConnectException, Exception {
 		JSONObject resultObj = new JSONObject();
 		//DB Data insert/update/delete
-		int prySvrId = getIntOfJsonObj(confData,"pry_svr_id");
+		int prySvrId = CommonUtil.getIntOfJsonObj(confData,"pry_svr_id");
 		String lst_mdfr_id = param.get("lst_mdfr_id").toString();
 		/*System.out.println("applyProxyConf :: "+confData.toJSONString());*/
 		ProxyGlobalVO global = new ProxyGlobalVO();
-		global.setCl_con_max_tm(getStringOfJsonObj(confData,"cl_con_max_tm"));
-		global.setCon_del_tm(getStringOfJsonObj(confData,"con_del_tm"));
-		global.setSvr_con_max_tm(getStringOfJsonObj(confData,"svr_con_max_tm"));
-		global.setChk_tm(getStringOfJsonObj(confData,"chk_tm"));
-		global.setIf_nm(getStringOfJsonObj(confData,"if_nm"));
-		global.setObj_ip(getStringOfJsonObj(confData,"obj_ip"));
-		global.setPeer_server_ip(getStringOfJsonObj(confData,"peer_server_ip"));
+		global.setCl_con_max_tm(CommonUtil.getStringOfJsonObj(confData,"cl_con_max_tm"));
+		global.setCon_del_tm(CommonUtil.getStringOfJsonObj(confData,"con_del_tm"));
+		global.setSvr_con_max_tm(CommonUtil.getStringOfJsonObj(confData,"svr_con_max_tm"));
+		global.setChk_tm(CommonUtil.getStringOfJsonObj(confData,"chk_tm"));
+		global.setIf_nm(CommonUtil.getStringOfJsonObj(confData,"if_nm"));
+		global.setObj_ip(CommonUtil.getStringOfJsonObj(confData,"obj_ip"));
+		global.setPeer_server_ip(CommonUtil.getStringOfJsonObj(confData,"peer_server_ip"));
 		global.setPry_svr_id(prySvrId);
-		global.setPry_glb_id(getIntOfJsonObj(confData,"pry_glb_id"));
-		global.setMax_con_cnt(getIntOfJsonObj(confData,"max_con_cnt"));
+		global.setPry_glb_id(CommonUtil.getIntOfJsonObj(confData,"pry_glb_id"));
+		global.setMax_con_cnt(CommonUtil.getIntOfJsonObj(confData,"max_con_cnt"));
 		global.setLst_mdfr_id(lst_mdfr_id);
 		//update global conf Info
 		proxySettingDAO.updateProxyGlobalConf(global);
@@ -731,7 +729,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				System.out.println(delVipcngJobj.toJSONString());
 				delVipConf[i] = new ProxyVipConfigVO();
 				delVipConf[i].setPry_svr_id(prySvrId);
-				delVipConf[i].setVip_cng_id(getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
+				delVipConf[i].setVip_cng_id(CommonUtil.getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
 				
 				//delete vip instance
 				proxySettingDAO.deletePryVipConf(delVipConf[i]);
@@ -751,15 +749,15 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				vipConf[i] = new ProxyVipConfigVO();
 				vipConf[i].setPry_svr_id(prySvrId);
 				
-				if(!nullCheckOfJsonObj(vipcngJobj, "vip_cng_id")){
-					vipConf[i].setVip_cng_id(getIntOfJsonObj(vipcngJobj,"vip_cng_id"));
+				if(!CommonUtil.nullCheckOfJsonObj(vipcngJobj, "vip_cng_id")){
+					vipConf[i].setVip_cng_id(CommonUtil.getIntOfJsonObj(vipcngJobj,"vip_cng_id"));
 				}
-				vipConf[i].setV_ip(getStringOfJsonObj(vipcngJobj,"v_ip"));
-				vipConf[i].setV_rot_id(getStringOfJsonObj(vipcngJobj, "v_rot_id"));
-				vipConf[i].setChk_tm(getIntOfJsonObj(vipcngJobj,"chk_tm"));
-				vipConf[i].setV_if_nm(getStringOfJsonObj(vipcngJobj,"v_if_nm"));
-				vipConf[i].setPriority(getIntOfJsonObj(vipcngJobj,"priority"));
-				vipConf[i].setState_nm(getStringOfJsonObj(vipcngJobj,"state_nm"));
+				vipConf[i].setV_ip(CommonUtil.getStringOfJsonObj(vipcngJobj,"v_ip"));
+				vipConf[i].setV_rot_id(CommonUtil.getStringOfJsonObj(vipcngJobj, "v_rot_id"));
+				vipConf[i].setChk_tm(CommonUtil.getIntOfJsonObj(vipcngJobj,"chk_tm"));
+				vipConf[i].setV_if_nm(CommonUtil.getStringOfJsonObj(vipcngJobj,"v_if_nm"));
+				vipConf[i].setPriority(CommonUtil.getIntOfJsonObj(vipcngJobj,"priority"));
+				vipConf[i].setState_nm(CommonUtil.getStringOfJsonObj(vipcngJobj,"state_nm"));
 				vipConf[i].setLst_mdfr_id(lst_mdfr_id);
 				/*System.out.println("vipConf :: "+CommonUtil.toMap(vipConf[i]).toString());*/
 				//insert/update vip instance
@@ -776,18 +774,18 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				JSONObject delListnObj = (JSONObject)delListnJArray.get(i);
 				delListn[i] = new ProxyListenerVO();
 				delListn[i].setPry_svr_id(prySvrId);
-				delListn[i].setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
+				delListn[i].setLsn_id(CommonUtil.getIntOfJsonObj(delListnObj,"lsn_id"));
 				
 				ProxyListenerServerVO delListnSvr = new ProxyListenerServerVO();
 				delListnSvr.setPry_svr_id(prySvrId);
-				delListnSvr.setLsn_id(getIntOfJsonObj(delListnObj,"lsn_id"));
+				delListnSvr.setLsn_id(CommonUtil.getIntOfJsonObj(delListnObj,"lsn_id"));
 				proxySettingDAO.deletePryListenerSvr(delListnSvr);
 				//delete proxy listener
 				proxySettingDAO.deletePryListener(delListn[i]);
 				
 				Map<String, Object> delStatusParam = new HashMap<String, Object>();
 				delStatusParam.put("pry_svr_id", prySvrId);
-				delStatusParam.put("lsn_id", getIntOfJsonObj(delListnObj, "lsn_id"));
+				delStatusParam.put("lsn_id", CommonUtil.getIntOfJsonObj(delListnObj, "lsn_id"));
 				
 				//delete t_pry_svr_status_g
 				proxySettingDAO.deletePrySvrStatusList(delStatusParam);
@@ -806,19 +804,19 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				listener[i] = new ProxyListenerVO();
 				listener[i].setPry_svr_id(prySvrId);
 				
-				if(!nullCheckOfJsonObj(listenerObj, "lsn_id")){
-					listener[i].setLsn_id(getIntOfJsonObj(listenerObj, "lsn_id"));
+				if(!CommonUtil.nullCheckOfJsonObj(listenerObj, "lsn_id")){
+					listener[i].setLsn_id(CommonUtil.getIntOfJsonObj(listenerObj, "lsn_id"));
 				}
 
-				listener[i].setLsn_nm(getStringOfJsonObj(listenerObj, "lsn_nm"));
-				listener[i].setCon_bind_port(getStringOfJsonObj(listenerObj, "con_bind_port"));
-				listener[i].setLsn_desc(getStringOfJsonObj(listenerObj,"lsn_desc"));
-				listener[i].setDb_usr_id(getStringOfJsonObj(listenerObj, "db_usr_id"));
-				listener[i].setDb_id(getIntOfJsonObj(listenerObj,"db_id"));
-				listener[i].setDb_nm(getStringOfJsonObj(listenerObj, "db_nm"));
-				listener[i].setCon_sim_query(getStringOfJsonObj(listenerObj, "con_sim_query"));
-				listener[i].setField_nm(getStringOfJsonObj(listenerObj, "field_nm"));
-				listener[i].setField_val(getStringOfJsonObj(listenerObj, "field_val"));
+				listener[i].setLsn_nm(CommonUtil.getStringOfJsonObj(listenerObj, "lsn_nm"));
+				listener[i].setCon_bind_port(CommonUtil.getStringOfJsonObj(listenerObj, "con_bind_port"));
+				listener[i].setLsn_desc(CommonUtil.getStringOfJsonObj(listenerObj,"lsn_desc"));
+				listener[i].setDb_usr_id(CommonUtil.getStringOfJsonObj(listenerObj, "db_usr_id"));
+				listener[i].setDb_id(CommonUtil.getIntOfJsonObj(listenerObj,"db_id"));
+				listener[i].setDb_nm(CommonUtil.getStringOfJsonObj(listenerObj, "db_nm"));
+				listener[i].setCon_sim_query(CommonUtil.getStringOfJsonObj(listenerObj, "con_sim_query"));
+				listener[i].setField_nm(CommonUtil.getStringOfJsonObj(listenerObj, "field_nm"));
+				listener[i].setField_val(CommonUtil.getStringOfJsonObj(listenerObj, "field_val"));
 				listener[i].setLst_mdfr_id(lst_mdfr_id);
 				
 				//UPDATE/INSERT PROXY LISTENER
@@ -834,17 +832,17 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 							JSONObject delListnSvrObj = (JSONObject)delListnSvrArry.get(j);
 							delListnSvr[j] = new ProxyListenerServerVO();
 							delListnSvr[j].setPry_svr_id(prySvrId);
-							delListnSvr[j].setLsn_id(getIntOfJsonObj(delListnSvrObj, "lsn_id"));
-							delListnSvr[j].setLsn_svr_id(getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
-							delListnSvr[j].setDb_con_addr(getStringOfJsonObj(delListnSvrObj, "db_con_addr"));
+							delListnSvr[j].setLsn_id(CommonUtil.getIntOfJsonObj(delListnSvrObj, "lsn_id"));
+							delListnSvr[j].setLsn_svr_id(CommonUtil.getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
+							delListnSvr[j].setDb_con_addr(CommonUtil.getStringOfJsonObj(delListnSvrObj, "db_con_addr"));
 							
 							//delete proxy listener server list
 							proxySettingDAO.deletePryListenerSvr(delListnSvr[j]);
 							
 							Map<String, Object> delStatusParam = new HashMap<String, Object>();
 							delStatusParam.put("pry_svr_id", prySvrId);
-							delStatusParam.put("lsn_id", getIntOfJsonObj(delListnSvrObj, "lsn_id"));
-							delStatusParam.put("lsn_svr_id", getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
+							delStatusParam.put("lsn_id", CommonUtil.getIntOfJsonObj(delListnSvrObj, "lsn_id"));
+							delStatusParam.put("lsn_svr_id", CommonUtil.getIntOfJsonObj(delListnSvrObj, "lsn_svr_id"));
 							
 							//delete t_pry_svr_status_g
 							proxySettingDAO.deletePrySvrStatusList(delStatusParam);
@@ -864,21 +862,21 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 							listnSvr[j] = new ProxyListenerServerVO();
 							listnSvr[j].setPry_svr_id(prySvrId);
 							
-							if(!nullCheckOfJsonObj(listnSvrObj, "lsn_id")){//newLsnId
-								listnSvr[j].setLsn_id(getIntOfJsonObj(listnSvrObj, "lsn_id"));
+							if(!CommonUtil.nullCheckOfJsonObj(listnSvrObj, "lsn_id")){//newLsnId
+								listnSvr[j].setLsn_id(CommonUtil.getIntOfJsonObj(listnSvrObj, "lsn_id"));
 							}else{
 								int newLsnId = proxySettingDAO.selectPryListenerMaxId();
 
 								listnSvr[j].setLsn_id(newLsnId);
 							}
 							
-							if(!nullCheckOfJsonObj(listnSvrObj, "lsn_svr_id")){
-								listnSvr[j].setLsn_svr_id(getIntOfJsonObj(listnSvrObj, "lsn_svr_id"));
+							if(!CommonUtil.nullCheckOfJsonObj(listnSvrObj, "lsn_svr_id")){
+								listnSvr[j].setLsn_svr_id(CommonUtil.getIntOfJsonObj(listnSvrObj, "lsn_svr_id"));
 							}
 
-							listnSvr[j].setDb_con_addr(getStringOfJsonObj(listnSvrObj,"db_con_addr"));
-							listnSvr[j].setChk_portno(getIntOfJsonObj(listnSvrObj, "chk_portno"));
-							listnSvr[j].setBackup_yn(getStringOfJsonObj(listnSvrObj,"backup_yn"));
+							listnSvr[j].setDb_con_addr(CommonUtil.getStringOfJsonObj(listnSvrObj,"db_con_addr"));
+							listnSvr[j].setChk_portno(CommonUtil.getIntOfJsonObj(listnSvrObj, "chk_portno"));
+							listnSvr[j].setBackup_yn(CommonUtil.getStringOfJsonObj(listnSvrObj,"backup_yn"));
 							listnSvr[j].setLst_mdfr_id(lst_mdfr_id);
 							
 							//UPDATE/INSERT PROXY LISTENER Server List
@@ -982,7 +980,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy agent 목록 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<Map<String, Object>>
 	 * @throws 
 	 */
@@ -990,52 +988,40 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	public List<Map<String, Object>> selectPoxyAgentSvrList(Map<String, Object> param) {
 		return proxySettingDAO.selectPoxyAgentSvrList(param);
 	}
-	
-	//int 형변환 / null 처리
-	public int getIntOfJsonObj(JSONObject jobj, String key){
-		if(jobj.get(key) == null){
-			return 0;
-		}else{
-			return Integer.parseInt(jobj.get(key).toString());
-		}
-	}
 
-	//string 형변환
-	public String getStringOfJsonObj(JSONObject jobj, String key){
-		return String.valueOf(jobj.get(key));
-	}
-	
-	//null 체크
-	public boolean nullCheckOfJsonObj(JSONObject jobj, String key){
-		if(jobj.get(key) == null || "".equals(jobj.get(key))){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	//0 체크
-	public boolean zeroCheckOfJsonObj(JSONObject jobj, String key){
-		if(jobj.get(key) == null || Integer.parseInt(jobj.get(key).toString()) == 0 ){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	//ProxyAgent 얻어오기
+	/**
+	 * ProxyAgent 조회
+	 * 
+	 * @param int pry_svr_id
+	 * @return ProxyAgentVO
+	 * @throws Exception
+	 */
 	public ProxyAgentVO getProxyAgent(int pry_svr_id) throws Exception{
 		Map<String, Object> agentParam = new HashMap<String,Object>();
 		agentParam.put("pry_svr_id", pry_svr_id);
 		return (ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
 	}
 	
-
+	/**
+	 * Proxy Master Proxy 목록 조회
+	 * 
+	 * @param Map<String, Object>
+	 * @return List<Map<String, Object>>
+	 * @throws 
+	 */
 	@Override
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param) {
 		return proxySettingDAO.selectMasterProxyList(param);
 	}
 
+	/**
+	 * VIP 사용 여부 업데이트
+	 * 
+	 * @param Map<String, Object>
+	 * @return 
+	 * @throws ConnectException
+	 * @throws Exception
+	 */
 	@Override
 	public void updateDeleteVipUseYn(Map<String, Object> param) throws ConnectException, Exception{
 		
@@ -1058,7 +1044,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		//Delete T_PRY_VIPCNG_I
 		if(kalInstallYn.equals("N"))
 		{
-
 			globalVO.setPeer_server_ip("");
 			globalVO.setObj_ip("");
 			globalVO.setIf_nm("");
@@ -1088,16 +1073,14 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			globalVO.setPeer_server_ip("");
 			globalVO.setObj_ip(globalVO.getIpadr());
 			proxySettingDAO.updateProxyGlobalConf(globalVO);
-			
 		}
-
 	}
 
 	/**
 	 * Proxy 연결 DBMS 정보 조회
 	 * 
-	 * @param param
-	 * @return JSONObject
+	 * @param Map<String, Object>
+	 * @return List<Map<String, Object>>
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectDbmsTotList(Map<String, Object> param) throws Exception {
@@ -1109,8 +1092,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	/**
 	 * Proxy Master 조회
 	 * 
-	 * @param param
-	 * @return JSONObject
+	 * @param Map<String, Object>
+	 * @return List<Map<String, Object>>
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectProxyMstTotList(Map<String, Object> param) throws Exception {
@@ -1119,6 +1102,14 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		return mstSvrSelList;
 	}
 
+	/**
+	 * Proxy Agent kal_install_yn 체크
+	 * 
+	 * @param Map<String, Object>
+	 * @return boolean
+	 * @throws ConnectException
+	 * @throws Exception
+	 */
 	@Override
 	public boolean checkAgentKalInstYn(Map<String, Object> param) throws ConnectException, Exception {
 		

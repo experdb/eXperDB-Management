@@ -154,5 +154,4 @@ public class ProxyListenerVO {
 		jobj.put("lst_mdf_dtm", lst_mdf_dtm);
 		return jobj;
 	}
-	
 }

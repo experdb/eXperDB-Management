@@ -23,7 +23,6 @@ import com.experdb.management.proxy.cmmn.ProxyClientProtocolID;
 import com.experdb.management.proxy.cmmn.ProxyClientTranCodeType;
 import com.experdb.management.proxy.service.ProxyLogVO;
 import com.experdb.management.proxy.service.ProxyMonitoringService;
-import com.ibm.db2.jcc.am.db;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.impl.AccessHistoryDAO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -61,8 +60,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	/**
 	 * Proxy 모니터링 화면 접속 이력 등록
 	 * 
-	 * @param request,
-	 *            historyVO, dtlCd
+	 * @param request, historyVO, dtlCd, mnu_id
 	 * @throws Exception
 	 */
 	@Override
@@ -80,7 +78,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	/**
 	 * Proxy 서버 목록 조회
 	 * 
-	 * @param pry_svr_id
+	 * @param 
 	 * @return List<Map<String, Object>>
 	 */
 	@Override
@@ -89,7 +87,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy 서버 cluster 조회 by master server id
+	 * Proxy 서버  cluster 조회 by master server id
 	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
@@ -100,7 +98,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * Proxy 서버 cluster 조회 by master server id
+	 * Proxy 서버 cluster 별 연결 vip 조회
 	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
@@ -111,7 +109,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * proxy / keepalived 기동 상태 이력
+	 * proxy / keepalived 기동 상태 이력 조회
 	 * 
 	 * @param pry_svr_id
 	 * @return List<ProxyLogVO>
@@ -119,17 +117,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	@Override
 	public List<ProxyLogVO> selectProxyLogList(int pry_svr_id) {
 		return proxyMonitoringDAO.selectProxyLogList(pry_svr_id);
-	}
-
-	/**
-	 * Proxy 연결된 db 서버 조회
-	 * 
-	 * @param pry_svr_id
-	 * @return List<Map<String, Object>>
-	 */
-	@Override
-	public List<Map<String, Object>> selectDBServerConProxy(int pry_svr_id) {
-		return proxyMonitoringDAO.selectDBServerConProxy(pry_svr_id);
 	}
 
 	/**
@@ -153,7 +140,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	public List<Map<String, Object>> selectProxyListnerMainList(int pry_svr_id) {
 		return proxyMonitoringDAO.selectProxyListnerMainList(pry_svr_id);
 	}
-
+	
 	/**
 	 * Proxy 리스너 상세 정보 조회
 	 * 
@@ -188,10 +175,10 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * proxy / keepalived config 파일 정보 조회
+	 * Proxy, keepalived config 파일 정보 조회
 	 * 
-	 * @param pry_svr_id
-	 * @return List<Map<String, Object>>
+	 * @param pry_svr_id, type
+	 * @return Map<String, Object>
 	 */
 	@Override
 	public Map<String, Object> selectConfigurationInfo(int pry_svr_id, String type) {
@@ -205,9 +192,9 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	/**
 	 * Proxy, keepalived config 파일 가져오기
 	 * 
-	 * @param pry_svr_id,
-	 *            type, Map<String, Object>
+	 * @param pry_svr_id, type, Map<String, Object>
 	 * @return Map<String, Object>
+	 * @throws Exception 
 	 */
 	@Override
 	public Map<String, Object> getConfiguration(int pry_svr_id, String type, Map<String, Object> param)
@@ -242,7 +229,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * proxy / keepavlived 기동-정지 실패 로그
+	 * proxy / keepavlived 기동-정지 실패 로그 
 	 * 
 	 * @param pry_act_exe_sn
 	 * @return Map<String, Object>
@@ -255,8 +242,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	/**
 	 * proxy / keepalived 상태 변경
 	 * 
-	 * @param pry_svr_id,
-	 *            type, status, act_exe_type
+	 * @param Map<String, Object>
 	 * @return JSONObject
 	 */
 	@Override
@@ -333,8 +319,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	/**
 	 * proxy / keepalived log 파일 가져오기
 	 * 
-	 * @param pry_svr_id,
-	 *            type, param
+	 * @param pry_svr_id,type, param
 	 * @return Map<String, Object>
 	 */
 	@Override
@@ -435,7 +420,7 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	/**
-	 * proxy config파일 변경 이력
+	 * proxy config파일 변경 이력 조회
 	 * 
 	 * @param pry_svr_id
 	 * @return List<Map<String, Object>>
@@ -443,10 +428,6 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 	@Override
 	public List<Map<String, Object>> selectPryCngList(int pry_svr_id) {
 		return proxyMonitoringDAO.selectPryCngList(pry_svr_id);
-	}
-
-	public List<Map<String, Object>> selectProxyVipLsnList(int pry_svr_id) {
-		return proxyMonitoringDAO.selectProxyVipLsnList(pry_svr_id);
 	}
 
 	/**

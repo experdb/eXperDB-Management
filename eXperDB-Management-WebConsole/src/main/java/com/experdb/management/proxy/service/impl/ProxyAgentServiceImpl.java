@@ -14,7 +14,18 @@ import com.experdb.management.proxy.service.ProxyAgentVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
-
+/**
+ * @author
+ * @see proxy 관리 agent 관련 serviceImpl
+ * 
+ *      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일                 수정자                   수정내용
+*  -------     --------    ---------------------------
+*  2021.03.05              최초 생성
+ *      </pre>
+ */
 @Service("ProxyAgentServiceImpl")
 public class ProxyAgentServiceImpl extends EgovAbstractServiceImpl implements ProxyAgentService{
 	
@@ -24,8 +35,8 @@ public class ProxyAgentServiceImpl extends EgovAbstractServiceImpl implements Pr
 	/**
 	 * Proxy agent count 조회
 	 * 
-	 * @param param
-	 * @return int
+	 * @param 
+	 * @return integer
 	 * @throws Exception
 	 */
 	@Override
@@ -47,9 +58,9 @@ public class ProxyAgentServiceImpl extends EgovAbstractServiceImpl implements Pr
 	/**
 	 * proxy agent 기동 / 정지 실행
 	 * 
-	 * @param response, request
-	 * @return result
-	 * @throws
+	 * @param proxyAgentVO
+	 * @return string
+	 * @throws Exception
 	 */
 	public String proxyAgentExcute(ProxyAgentVO proxyAgentVO) throws Exception {
 		String result = "fail";

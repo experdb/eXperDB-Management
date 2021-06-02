@@ -9,41 +9,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.experdb.management.proxy.cmmn.CommonUtil;
-import com.experdb.management.proxy.service.ProxyAgentVO;
-import com.experdb.management.proxy.service.ProxyGlobalVO;
 import com.experdb.management.proxy.service.ProxyHistoryService;
-import com.experdb.management.proxy.service.ProxyListenerServerVO;
-import com.experdb.management.proxy.service.ProxyListenerVO;
 import com.experdb.management.proxy.service.ProxyServerVO;
 import com.experdb.management.proxy.service.ProxySettingService;
-import com.experdb.management.proxy.service.ProxyVipConfigVO;
-import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
-
 /**
- *Proxy 설정관리
+ *Proxy 설정이력 관리
  *
  * @author 김민정
  * @see
@@ -56,7 +42,6 @@ import com.k4m.dx.tcontrol.login.service.LoginVO;
  *  2021.03.03   김민정 최초 생성
  *      </pre>
  */
-
 @Controller
 public class ProxyHistoryController {
 	
@@ -72,12 +57,9 @@ public class ProxyHistoryController {
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
 	
-	
 	private List<Map<String, Object>> menuAut;
 	
 	private String show_menu_id = "46";
-	
-
 	
 	/**
 	 * Proxy 상태 이력 관리
@@ -85,7 +67,7 @@ public class ProxyHistoryController {
 	 * @param historyVO
 	 * @param request
 	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @throws 
 	 */
 	@RequestMapping(value = "/proxyStatusHistory.do")
 	public ModelAndView proxyStatusHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
@@ -139,12 +121,13 @@ public class ProxyHistoryController {
 		}
 		return mv;
 	}
+
 	/**
 	 * Proxy 기동 상태 변경 이력 리스트를 조회한다.
 	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
+	 * @param request, historyVO, response
+	 * @return List<Map<String, Object>>
+	 * @throws 
 	 */
 	@RequestMapping(value = "/selectProxyActStateHistory.do")
 	public @ResponseBody List<Map<String, Object>> selectProxyActStateHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -186,9 +169,9 @@ public class ProxyHistoryController {
 	/**
 	 * Proxy 설정 변경 이력 리스트를 조회한다.
 	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
+	 * @param historyVO, request, response
+	 * @return List<Map<String, Object>>
+	 * @throws
 	 */
 	@RequestMapping(value = "/selectProxySettingChgHistory.do")
 	public @ResponseBody List<Map<String, Object>> selectProxySettingChgHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -219,17 +202,16 @@ public class ProxyHistoryController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return resultSet;
-
 	}
-	
-	
+
 	/**
 	 * Proxy Conf 파일 확인 팝업 
 	 * 
 	 * @param request, historyVO
 	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @throws
 	 */
 	@RequestMapping(value = "/popup/proxyBackupConfForm.do")
 	public ModelAndView proxyListenRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
@@ -251,12 +233,13 @@ public class ProxyHistoryController {
 		}
 		return mv;
 	}
+	
 	/**
 	 * Proxy Conf 파일 읽어오기
 	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
+	 * @param historyVO, request, response
+	 * @return JSONObject
+	 * @throws 
 	 */
 	@RequestMapping(value = "/getBackupConfFile.do")
 	public @ResponseBody JSONObject getBackupConfFile(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -304,5 +287,4 @@ public class ProxyHistoryController {
 		}
 		return resultObj;
 	}
-
 }

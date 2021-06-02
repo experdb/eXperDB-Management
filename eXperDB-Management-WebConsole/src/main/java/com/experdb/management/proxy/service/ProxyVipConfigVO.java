@@ -6,8 +6,6 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 public class ProxyVipConfigVO {
-	
-	
 	private int vip_cng_id; 
 	private String state_nm; 
 	private int pry_svr_id; 
@@ -94,7 +92,6 @@ public class ProxyVipConfigVO {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
 	
-
 	public Map<String, Object> toMap(){
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("vip_cng_id", vip_cng_id);
@@ -130,5 +127,4 @@ public class ProxyVipConfigVO {
 		
 		return jobj;
 	}
-	
 }

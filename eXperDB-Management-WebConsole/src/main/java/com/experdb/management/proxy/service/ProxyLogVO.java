@@ -97,6 +97,4 @@ public class ProxyLogVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
-	
-	
 }

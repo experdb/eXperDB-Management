@@ -9,30 +9,41 @@ import com.experdb.management.proxy.service.ProxyAgentVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-
+/**
+ * @author
+ * @see proxy 관리 agent dao
+ * 
+ *      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일                 수정자                   수정내용
+*  -------     --------    ---------------------------
+*  2021.02.24              최초 생성
+ *      </pre>
+ */
 @Repository("proxyAgentDAO")
 public class ProxyAgentDAO extends EgovAbstractMapper{
 
 	/**
-	 * proxy agent count 조회
+	 * Proxy agent count 조회
 	 * 
-	 * @param prySvrVO
-	 * @return
-	 * @throws
+	 * @param 
+	 * @return integer
+	 * @throws SQLException
 	 */
 	public int selectAgentCount() throws SQLException {
 		return (int) getSqlSession().selectOne("proxyMonitoringSql.selectAgentCount");
 	}
 
 	/**
-	 * proxy agent 목록 조회
+	 * proxy agent 리스트 조회
 	 * 
-	 * @param transDbmsVO
+	 * @param proxyAgentVO
 	 * @return List<ProxyAgentVO>
-	 * @throws Exception
+	 * @throws SQLException
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<ProxyAgentVO> selectProxyAgentList(ProxyAgentVO proxyAgentVO) {
+	public List<ProxyAgentVO> selectProxyAgentList(ProxyAgentVO proxyAgentVO) throws SQLException {
 		List<ProxyAgentVO> sl = null;
 		sl = (List<ProxyAgentVO>) list("proxyMonitoringSql.selectProxyAgentList", proxyAgentVO);
 		return sl;

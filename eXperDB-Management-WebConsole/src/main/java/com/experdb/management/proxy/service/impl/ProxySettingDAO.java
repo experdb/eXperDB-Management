@@ -15,14 +15,25 @@ import com.experdb.management.proxy.service.ProxyVipConfigVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-
+/**
+ * @author 김민정
+ * @see proxy 설정 관련 화면 dao
+ * 
+ *      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일                 수정자                   수정내용
+*  -------     --------    ---------------------------
+*  2021.03.05              최초 생성
+ *      </pre>
+ */
 @Repository("proxySettingDAO")
 public class ProxySettingDAO extends EgovAbstractMapper{
 
 	/**
 	 * Proxy Server 목록 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<ProxyServerVO>
 	 * @throws SQLException
 	 */
@@ -36,7 +47,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * Proxy Global 정보 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return ProxyGlobalVO
 	 * @throws SQLException
 	 */
@@ -49,7 +60,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * Proxy Listener List 정보 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<ProxyListenerVO>
 	 * @throws SQLException
 	 */
@@ -63,7 +74,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * VIP List 정보 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<ProxyVipConfigVO>
 	 * @throws SQLException
 	 */
@@ -73,7 +84,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		result = (List<ProxyVipConfigVO>) list("proxySettingSql.selectProxyVipConfList", param);
 		return result;
 	}
-
+	
 	/**
 	 * database 정보조회
 	 * 
@@ -87,16 +98,16 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 		result = (List<Map<String, Object>>) list("proxySettingSql.selectDBSelList", param);
 		return result;
 	}
-
+	
 	/**
 	 * 연결 DBMS 정보 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<Map<String, Object>>
-	 * @throws SQLException
+	 * @throws 
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<Map<String, Object>> selectDbmsList(Map<String, Object> param) {
+	public List<Map<String, Object>> selectDbmsList(Map<String, Object> param) throws SQLException {
 		List<Map<String, Object>> result = null;
 		result = (List<Map<String, Object>>) list("proxySettingSql.selectDbmsList", param);
 		return result;
@@ -105,9 +116,9 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * Master Proxy 정보 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<Map<String, Object>>
-	 * @throws SQLException
+	 * @throws 
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Map<String, Object>> selectMasterSvrProxyList(Map<String, Object> param) {
@@ -131,22 +142,9 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * proxy 적용 status 변경
+	 * Proxy Agent 정보 업데이트
 	 * 
-	 * @param param
-	 * @return
-	 * @throws
-	 */
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	public void updateProxyServerStatus(Map<String, Object> param) {
-		update("proxySettingSql.updateProxyServerStatus", param);	
-	}
-
-	/**
-	 * proxy agent update
-	 * 
-	 * @param pryAgtVO
-	 * @return
+	 * @param ProxyServerVO
 	 * @throws
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
@@ -155,11 +153,10 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * proxy server insert
+	 * proxy server 정보 등록
 	 * 
-	 * @param prySvrVO
+	 * @param ProxyServerVO
 	 * @return
-	 * @throws
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void insertProxyServerInfo(ProxyServerVO prySvrVO) {
@@ -167,11 +164,10 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * proxy global insert
+	 * Proxy global 정보 등록
 	 * 
-	 * @param prySvrVO
+	 * @param ProxyGlobalVO
 	 * @return
-	 * @throws
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void insertProxyGlobalConf(ProxyGlobalVO globalVO) {
@@ -179,11 +175,10 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * proxy server update
+	 * Proxy 서버 정보 업데이트
 	 * 
-	 * @param prySvrVO
+	 * @param ProxyServerVO
 	 * @return
-	 * @throws
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void updateProxyServerInfo(ProxyServerVO prySvrVO) {
@@ -193,84 +188,38 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * proxy server id 조회
 	 * 
-	 * @param prySvrVO
 	 * @return
-	 * @throws
+	 * @throws SQLException
 	 */
 	public long selectQ_T_PRY_SVR_I_01() throws SQLException {
 		return (long) getSqlSession().selectOne("proxySettingSql.selectQ_T_PRY_SVR_I_01");
 	}
 
 	/**
-	 * update t_pry_agt_i의 svr_use_yn = N으로 업데이트
+	 * Proxy Agent svr_use_yn 정보 업데이트
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return
-	 * @throws
 	 */
 	public void updateProxyAgentInfoFromProxyId(Map<String, Object> param) {
 		update("proxySettingSql.updateProxyAgentInfoFromProxyId", param);	
 	}
 
 	/**
-	 * delete t_prycng_g
+	 * t_prycng_g, t_pry_actstate_cng_g, t_pry_svr_status_g 정보 삭제
+	 * t_pry_lsn_svr_i, t_pry_lsn_i, t_pry_glb_i, t_pry_svr_i 정보삭제
 	 * 
-	 * @param prySvrId
+	 * @param int prySvrId
 	 * @return
-	 * @throws
 	 */
-	public void deleteProxyConfHistList(int prySvrId) {
-		delete("proxySettingSql.deleteProxyConfHistList", prySvrId);
+	public void deleteProxyTblList(int prySvrId) {
+		delete("proxySettingSql.deleteProxyTblList", prySvrId);
 	}
 
 	/**
-	 * delete t_pry_actstate_cng_g
+	 * vip 설정 삭제
 	 * 
-	 * @param prySvrId
-	 * @return
-	 * @throws
-	 */
-	public void deleteProxyActStateConfHistList(int prySvrId) {
-		delete("proxySettingSql.deleteProxyActStateConfHistList", prySvrId);
-	}
-
-	/**
-	 * delete t_pry_svr_status_g
-	 * 
-	 * @param prySvrId
-	 * @return
-	 * @throws
-	 */
-	public void deleteProxySvrStatusHistList(int prySvrId) {
-		delete("proxySettingSql.deleteProxySvrStatusHistList", prySvrId);
-	}
-
-	/**
-	 * delete t_pry_lsn_svr_i 
-	 * 
-	 * @param prySvrId
-	 * @return
-	 * @throws
-	 */
-	public void deletePryListenerSvrList(int prySvrId) {
-		delete("proxySettingSql.deletePryListenerSvrList", prySvrId);
-	}
-
-	/**
-	 * delete t_pry_lsn_i
-	 * 
-	 * @param prySvrId
-	 * @return
-	 * @throws
-	 */
-	public void deletePryListenerList(int prySvrId) {
-		delete("proxySettingSql.deletePryListenerList", prySvrId);
-	}
-
-	/**
-	 * delete t_pry_vipcng_i
-	 * 
-	 * @param prySvrId
+	 * @param int prySvrId
 	 * @return
 	 * @throws
 	 */
@@ -279,48 +228,25 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * delete t_pry_glb_i
-	 * 
-	 * @param prySvrId
-	 * @return
-	 * @throws
-	 */
-	public void deleteGlobalConfList(int prySvrId) {
-		delete("proxySettingSql.deleteGlobalConfList", prySvrId);
-	}
-
-	/**
-	 * delete t_pry_svr_i
-	 * 
-	 * @param prySvrId
-	 * @return
-	 * @throws
-	 */
-	public void deleteProxyServer(int prySvrId) {
-		delete("proxySettingSql.deleteProxyServer", prySvrId);
-	}
-	
-	/**
 	 * Proxy 리스너 server 목록 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<ProxyListenerServerVO>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<ProxyListenerServerVO> selectListenServerList(Map<String, Object> param) {
 		List<ProxyListenerServerVO> result = null;
 		result = (List<ProxyListenerServerVO>) list("proxySettingSql.selectListenServerList", param);
 		return result;
-		
 	}
 	
 	/**
-	 * Proxy ip 조회
+	 * Proxy 연결 dbms ip/port 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<Map<String, Object>>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Map<String, Object>> selectIpList(Map<String, Object> param) {
@@ -330,11 +256,10 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 	
 	/**
-	 * update global conf Info
+	 * Proxy Global Config 정보 수정
 	 * 
-	 * @param globalVO
+	 * @param ProxyGlobalVO
 	 * @return 
-	 * @throws Exception
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void updateProxyGlobalConf(ProxyGlobalVO globalVO) {
@@ -344,9 +269,8 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * insert/update vip instance
 	 * 
-	 * @param proxyVipConfigVO
+	 * @param ProxyVipConfigVO
 	 * @return 
-	 * @throws Exception
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void insertUpdatePryVipConf(ProxyVipConfigVO proxyVipConfigVO) {
@@ -358,22 +282,21 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * delete vip instance
+	 * Proxy VIP Config 정보 삭제
 	 * 
-	 * @param proxyVipConfigVO
+	 * @param ProxyVipConfigVO
 	 * @return 
-	 * @throws Exception
 	 */
 	public void deletePryVipConf(ProxyVipConfigVO proxyVipConfigVO) {
 		delete("proxySettingSql.deletePryVipConf", proxyVipConfigVO);
 	}
 
 	/**
-	 * 리스너 id 조회
+	 * 리스너 max id 조회
 	 * 
 	 * @param 
-	 * @return int
-	 * @throws Exception
+	 * @return integer
+	 * @throws 
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public int selectPryListenerMaxId() {
@@ -385,9 +308,8 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * UPDATE/INSERT PROXY LISTENER Server List
 	 * 
-	 * @param proxyListenerServerVO
+	 * @param ProxyListenerServerVO
 	 * @return 
-	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void insertUpdatePryListenerSvr(ProxyListenerServerVO proxyListenerServerVO) {
@@ -399,11 +321,11 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * delete proxy listener server list
+	 * Proxy Listener Server 정보  삭제
 	 * 
 	 * @param proxyListenerServerVO
 	 * @return 
-	 * @throws Exception
+	 * @throws
 	 */
 	public void deletePryListenerSvr(ProxyListenerServerVO proxyListenerServerVO) {
 		delete("proxySettingSql.deletePryListenerSvr", proxyListenerServerVO);
@@ -412,9 +334,9 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * proxy agent 목록 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return List<Map<String, Object>>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Map<String, Object>> selectPoxyAgentSvrList(Map<String, Object> param) {
@@ -426,7 +348,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	 * 
 	 * @param proxyListenerVO
 	 * @return 
-	 * @throws Exception
+	 * @throws
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void insertUpdatePryListener(ProxyListenerVO proxyListenerVO) {
@@ -438,16 +360,23 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * delete proxy listener
+	 * Proxy Listener 정보  삭제
 	 * 
 	 * @param proxyListenerVO
 	 * @return 
-	 * @throws Exception
+	 * @throws
 	 */
 	public void deletePryListener(ProxyListenerVO proxyListenerVO) {
 		delete("proxySettingSql.deletePryListener", proxyListenerVO);
 	}
 
+	/**
+	 * DBMS 별 Master Proxy 조회
+	 * 
+	 * @param Map<String, Object>
+	 * @return List<Map<String, Object>>
+	 * @throws
+	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Map<String, Object>> selectMasterProxyList(Map<String, Object> param) {
 		List<Map<String, Object>> result = null;
@@ -458,7 +387,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	/**
 	 * Proxy Agent 정보 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return ProxyAgentVO
 	 * @throws SQLException
 	 */
@@ -469,37 +398,55 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	}
 	
 	/**
-	 * Proxy Global 정보 조회
+	 * Proxy server 정보 조회
 	 * 
-	 * @param param
-	 * @return ProxyGlobalVO
-	 * @throws SQLException
+	 * @param int pry_svr_id
+	 * @return ProxyServerVO
+	 * @throws 
 	 */
 	public ProxyServerVO selectProxyServerInfo(int pry_svr_id) throws SQLException {
 		return (ProxyServerVO) selectOne("proxySettingSql.selectProxyServerInfo", pry_svr_id);
 	}
-
+	
+	/**
+	 * Proxy 서버 KAL_INSTALL_YN 업데이트
+	 * 
+	 * @param ProxyServerVO
+	 * @return
+	 */
 	public void updatePrySvrKalInstYn(ProxyServerVO prySvrVO) {
 		// TODO Auto-generated method stub
 		update("proxySettingSql.updatePrySvrKalInstYn", prySvrVO);	
 	}
 
 	/**
-	 * delete t_pry_svr_status_g
+	 * Proxy 서버 실시간 상태 로그 삭제 
 	 * 
-	 * @param param
+	 * @param Map<String, Object>
 	 * @return 
 	 */
 	public void deletePrySvrStatusList(Map<String, Object> param) {
 		delete("proxySettingSql.deletePrySvrStatusList", param);	
 	}
-
+	
+	/**
+	 * Proxy agent SVR_USE_YN 변경
+	 * 
+	 * @param int prySvrId
+	 * @return String
+	 */
 	public String selectProxyAgentSvrUseYnFromProxyId(int prySvrId) {
 		String svrUseYn = "";
 		svrUseYn = (String) getSqlSession().selectOne("proxySettingSql.selectProxyAgentSvrUseYnFromProxyId", prySvrId);
 		return svrUseYn;
 	}
-
+	
+	/**
+	 * Proxy server OLD_MASTER_GBN 변경
+	 * 
+	 * @param int dbSvrId
+	 * @return 
+	 */
 	public void upgradePrySvrOldMaster(int dbSvrId) {
 		update("proxySettingSql.upgradePrySvrOldMaster", dbSvrId);	
 	}

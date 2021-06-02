@@ -6,7 +6,6 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 public class ProxyListenerServerVO {
-	
 	private int lsn_svr_id; 
 	private String db_con_addr; 
 	private int pry_svr_id; 

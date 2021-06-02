@@ -24,11 +24,10 @@ import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
-
 /**
  *Proxy 설정관리
  *
- * @author 김민정
+ * @author 최정환
  * @see
  * 
  *      <pre>
@@ -36,10 +35,9 @@ import com.k4m.dx.tcontrol.login.service.LoginVO;
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2021.03.03   김민정 최초 생성
+ *  2021.03.03   최정환		 최초 생성
  *      </pre>
  */
-
 @Controller
 @RequestMapping("/proxyAgent")
 public class ProxyAgentController {
@@ -51,16 +49,11 @@ public class ProxyAgentController {
 
 	@Autowired
 	private MenuAuthorityService menuAuthorityService;
-	
-	@Autowired
-	private CmmnCodeDtlService cmmnCodeDtlService;
-	
-	
+
 	private List<Map<String, Object>> menuAut;
 	
 	private String sohw_menu_id = "55";
 
-	
 	/**
 	 * proxy Agent 모니터링 화면을 보여준다.
 	 * 

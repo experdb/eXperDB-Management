@@ -1,7 +1,6 @@
 package com.experdb.management.proxy.service.impl;
 
 import java.net.ConnectException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +13,21 @@ import org.springframework.stereotype.Service;
 import com.experdb.management.proxy.cmmn.ProxyClientInfoCmmn;
 import com.experdb.management.proxy.service.ProxyAgentVO;
 import com.experdb.management.proxy.service.ProxyHistoryService;
-import com.experdb.management.proxy.service.ProxyServerVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
-
-
+/**
+ * @author
+ * @see proxy 설정이력 관련 serviceImpl
+ * 
+ *      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일                 수정자                   수정내용
+*  -------     --------    ---------------------------
+*  2021.03.05              최초 생성
+ *      </pre>
+ */
 @Service("ProxyHistoryServiceImpl")
 public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements ProxyHistoryService{
 	
@@ -28,13 +36,13 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 
 	@Resource(name = "proxySettingDAO")
 	private ProxySettingDAO proxySettingDAO;
-	
+
 	/**
 	 * Proxy 기동 상태 변경 이력 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object> param
 	 * @return List<Map<String, Object>>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@Override
 	public List<Map<String, Object>> selectProxyActStateHistoryList(Map<String, Object> param) {
@@ -46,7 +54,7 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	 * 
 	 * @param param
 	 * @return List<Map<String, Object>>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@Override
 	public List<Map<String, Object>> selectProxySettingChgHistoryList(Map<String, Object> param) {
@@ -58,7 +66,7 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	 * 
 	 * @param param
 	 * @return Map<String, Object>
-	 * @throws SQLException 
+	 * @throws ConnectException 
 	 * @throws Exception
 	 */
 	@Override

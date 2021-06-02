@@ -1,7 +1,6 @@
 package com.experdb.management.proxy.service;
 
 public class ProxyAgentVO {
-	
 	private int agt_sn; 
 	private String ipadr; 
 	private String domain_nm; 
@@ -143,7 +142,4 @@ public class ProxyAgentVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
-	
-	
-	
 }

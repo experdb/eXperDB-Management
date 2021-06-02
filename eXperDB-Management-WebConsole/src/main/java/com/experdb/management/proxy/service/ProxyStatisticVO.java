@@ -209,6 +209,4 @@ public class ProxyStatisticVO {
 	public void setLsn_svr_id(int lsn_svr_id) {
 		this.lsn_svr_id = lsn_svr_id;
 	}
-	
-	
 }

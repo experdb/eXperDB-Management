@@ -6,8 +6,6 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 public class ProxyGlobalVO {
-	
-	
 	private int pry_glb_id; 
 	private int pry_svr_id; 
 	private int max_con_cnt; 
@@ -154,5 +152,4 @@ public class ProxyGlobalVO {
 		
 		return jobj;
 	}
-	
 }

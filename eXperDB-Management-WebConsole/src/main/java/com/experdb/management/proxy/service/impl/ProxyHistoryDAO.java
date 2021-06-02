@@ -6,20 +6,29 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.experdb.management.proxy.service.ProxyAgentVO;
-
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-
+/**
+ * @author
+ * @see proxy 설정이력 dao
+ * 
+ *      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일                 수정자                   수정내용
+*  -------     --------    ---------------------------
+*  2021.02.24              최초 생성
+ *      </pre>
+ */
 @Repository("proxyHistoryDAO")
 public class ProxyHistoryDAO extends EgovAbstractMapper{
 	
 	/**
 	 * Proxy 기동 상태 변경 이력 조회
 	 * 
-	 * @param param
+	 * @param Map<String, Object> param
 	 * @return List<Map<String, Object>>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Map<String, Object>> selectProxyActStateHistoryList(Map<String, Object> param) {
@@ -27,13 +36,13 @@ public class ProxyHistoryDAO extends EgovAbstractMapper{
 		result = (List<Map<String, Object>>) list("proxyHistorySql.selectProxyActStateHistoryList", param);
 		return result;
 	}
-
+	
 	/**
 	 * Proxy 설정 변경 이력 조회
 	 * 
 	 * @param param
 	 * @return List<Map<String, Object>>
-	 * @throws Exception
+	 * @throws 
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Map<String, Object>> selectProxySettingChgHistoryList(Map<String, Object> param) {
@@ -41,11 +50,12 @@ public class ProxyHistoryDAO extends EgovAbstractMapper{
 		result = (List<Map<String, Object>>) list("proxyHistorySql.selectProxySettingChgHistoryList", param);
 		return result;
 	}
+
 	/**
-	 * Proxy Agent 정보 조회
+	 * Proxy 설정 파일 백업 경로 조회
 	 * 
 	 * @param param
-	 * @return ProxyAgentVO
+	 * @return Map<String, Object>
 	 * @throws SQLException
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })

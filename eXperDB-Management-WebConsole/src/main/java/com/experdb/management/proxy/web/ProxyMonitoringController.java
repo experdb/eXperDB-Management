@@ -57,6 +57,7 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * Proxy 모니터링 화면
+	 * 
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
@@ -96,6 +97,7 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * Proxy 모니터링 화면
+	 * 
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
@@ -122,6 +124,7 @@ public class ProxyMonitoringController {
 
 	/**
 	 * proxy server id에 따른 데이터 조회
+	 * 
 	 * @param request
 	 * @return ModelAndView
 	 */
@@ -142,9 +145,7 @@ public class ProxyMonitoringController {
 			
 			//리스너 목록 조회
 			List<Map<String, Object>> proxyServerLsnList = proxyMonitoringService.selectProxyListnerMainList(pry_svr_id);
-			
-//			List<Map<String, Object>> dbServerConProxy = proxyMonitoringService.selectDBServerConProxy(pry_svr_id);
-			
+
 			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
 			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
@@ -157,9 +158,8 @@ public class ProxyMonitoringController {
 			mv.addObject("proxyServerLsnList", proxyServerLsnList);
 
 			mv.addObject("dbServerConProxyList", dbServerConProxyList);
-			
-//			mv.addObject("dbServerConProxy", dbServerConProxy);
-			mv.addObject("proxyLogList", proxyLogList);
+
+			mv.addObject("proxyLogList",proxyLogList);
 			mv.addObject("proxyChartCntList",proxyChartCntList);
 			mv.addObject("selectPryCngList", selectPryCngList);
 			mv.addObject("proxyAgentStatus", proxyAgentStatus);
@@ -173,7 +173,8 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * 리스너 상세 정보
-	 * @param request, pry_svr_id
+	 * 
+	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
 	@RequestMapping("/listenerstatistics.do")
@@ -204,7 +205,8 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * 리스너 통계 정보
-	 * @param request, pry_svr_id
+	 * 
+	 * @param request, historyVO
 	 * @return ModelAndView
 	 */
 	@RequestMapping("/listenerStatisticsChart.do")
@@ -250,13 +252,14 @@ public class ProxyMonitoringController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return mv;
 		
+		return mv;
 	}
 	
 	/**
 	 * proxy / keepalived config 파일 popup
-	 * @param request, pry_svr_id
+	 * 
+	 * @param request, historyVO
 	 * @return ModelAndView
 	 */
 	@RequestMapping("/configView.do")
@@ -291,8 +294,9 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * config 파일 불러오기
+	 * 
 	 * @param historyVO, request
-	 * @return
+	 * @return ModelAndView
 	 */
 	@RequestMapping("/configViewAjax.do")
 	public ModelAndView configViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
@@ -325,6 +329,7 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * proxy / keepavlied log popup view
+	 * 
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
@@ -337,6 +342,8 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * proxy / keepalived log file
+	 * 
+	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
 	@RequestMapping("/proxyLogViewAjax.do")
@@ -378,8 +385,9 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * proxy / keepalived 상태 변경
+	 * 
 	 * @param request
-	 * @return ModelAndView
+	 * @return JSONObject
 	 */
 	@RequestMapping("/actExeCng.do")
 	public @ResponseBody JSONObject actExeCng(HttpServletRequest request){
@@ -415,8 +423,9 @@ public class ProxyMonitoringController {
 	
 	/**
 	 * proxy / keepalived 기동-정지 실패 로그
+	 * 
 	 * @param request
-	 * @return
+	 * @return ModelAndView
 	 */
 	@RequestMapping("/actExeFailLog.do")
 	public ModelAndView actExeFailLog(HttpServletRequest request){
@@ -427,8 +436,14 @@ public class ProxyMonitoringController {
 		return mv;
 	}
 	
+	/**
+	 * log파일 다운로드
+	 * 
+	 * @param request, response
+	 * @return
+	 */
 	@RequestMapping("/logDownload.do")
-	public void logDownload(HttpServletRequest request, HttpServletResponse response){
+	public  void logDownload(HttpServletRequest request, HttpServletResponse response){
 		Properties props = new Properties();
 
 		try {
@@ -464,17 +479,10 @@ public class ProxyMonitoringController {
 			e.printStackTrace();
 		}
 	}		
-	
-	public int logDownload1(HttpServletRequest request, HttpServletResponse response) {
 
-		String filePath = "/var/log/" + request.getParameter("type").toLowerCase() + "/";
-		String fileName = request.getParameter("file_name");
-		String viewFileNm = request.getParameter("file_name");
-		return 1;
-	}
-	
 	/**
 	* proxy 연결 db standby ip list
+	* 
 	* @param request
 	* @return JSONObject 
 	*/

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +21,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.experdb.management.proxy.cmmn.CommonUtil;
-import com.experdb.management.proxy.service.ProxyAgentVO;
-import com.experdb.management.proxy.service.ProxyGlobalVO;
 import com.experdb.management.proxy.service.ProxyListenerServerVO;
-import com.experdb.management.proxy.service.ProxyListenerVO;
 import com.experdb.management.proxy.service.ProxyServerVO;
 import com.experdb.management.proxy.service.ProxySettingService;
-import com.experdb.management.proxy.service.ProxyVipConfigVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
-
 
 /**
  *Proxy 설정관리
@@ -55,7 +47,6 @@ import com.k4m.dx.tcontrol.login.service.LoginVO;
  *  2021.03.03   김민정 최초 생성
  *      </pre>
  */
-
 @Controller
 public class ProxySettingController {
 	
@@ -81,13 +72,14 @@ public class ProxySettingController {
 	 */
 	@Autowired
 	private PlatformTransactionManager txManager;
+	
 	/**
 	 * VIP 설정 관리 화면 
 	 * 
 	 * @param historyVO
 	 * @param request
 	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @throws
 	 */
 	@RequestMapping(value = "/proxySetting.do")
 	public ModelAndView proxySettingForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
@@ -142,7 +134,7 @@ public class ProxySettingController {
 	 * 
 	 * @param request, historyVO
 	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @throws 
 	 */
 	@RequestMapping(value = "/popup/proxySvrRegForm.do")
 	public ModelAndView proxyServerRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
@@ -170,7 +162,7 @@ public class ProxySettingController {
 	 * 
 	 * @param request, historyVO
 	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @throws
 	 */
 	@RequestMapping(value = "/popup/vipInstanceRegForm.do")
 	public ModelAndView vipInstanceRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
@@ -198,7 +190,7 @@ public class ProxySettingController {
 	 * 
 	 * @param request, historyVO
 	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @throws
 	 */
 	@RequestMapping(value = "/popup/proxyListenRegForm.do")
 	public ModelAndView proxyListenRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
@@ -224,9 +216,9 @@ public class ProxySettingController {
 	/**
 	 * Proxy 서버 리스트를 조회한다.
 	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
+	 * @param request, historyVO, response
+	 * @return List<ProxyServerVO>
+	 * @throws
 	 */
 	@RequestMapping(value = "/selectPoxyServerTable.do")
 	public @ResponseBody List<ProxyServerVO> selectPoxyServerTable(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -263,8 +255,8 @@ public class ProxySettingController {
 	 * Proxy 미등록 Agent 리스트를 조회한다.(proxy 서버 등록 팝업)
 	 * 
 	 * @param historyVO, request, response
-	 * @return resultSet
-	 * @throws Exception
+	 * @return ModelAndView
+	 * @throws
 	**/	
 	@RequestMapping(value = "/selectPoxyAgentSvrList.do")
 	public @ResponseBody ModelAndView selectPoxyAgentList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -310,9 +302,9 @@ public class ProxySettingController {
 	/**
 	 * 프록시 서버 상세 정보 조회
 	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
+	 * @param request, historyVO, response
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/getPoxyServerConf.do")
 	public @ResponseBody JSONObject getPoxyServerConf(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -361,12 +353,13 @@ public class ProxySettingController {
 		}
 		return resultObj;
 	}
+	
 	/**
 	 * 프록시 서버 상세 정보 조회
 	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
+	 * @param request, historyVO, response
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/getVipInstancePeerList.do")
 	public @ResponseBody JSONObject getVipInstancePeerList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -399,12 +392,13 @@ public class ProxySettingController {
 		}
 		return resultObj;
 	}
+	
 	/**
 	 * 동적 select 박스 생성
 	 * 
 	 * @param request, response
-	 * @return resultSet
-	 * @throws Exception
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/createSelPrySvrReg.do")
 	public @ResponseBody JSONObject createSelPrySvrReg(HttpServletRequest request, HttpServletResponse response) {
@@ -439,9 +433,9 @@ public class ProxySettingController {
 	/**
 	 * 동적 select 박스 생성(master proxy 서버)
 	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
+	 * @param request, response
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/proxySetMstSvrChange.do")
 	public @ResponseBody JSONObject proxySetMstSvrChange(HttpServletRequest request, HttpServletResponse response) {
@@ -477,7 +471,7 @@ public class ProxySettingController {
 	 * 
 	 * @param request, response
 	 * @return String
-	 * @throws Exception
+	 * @throws
 	 */
 	@RequestMapping(value = "/proxySetServerNmChange.do")
 	public @ResponseBody String proxySetServerNmChange(HttpServletRequest request, HttpServletResponse response) {
@@ -509,8 +503,8 @@ public class ProxySettingController {
 	 * proxy 서버 구동/정지
 	 * 
 	 * @param request, response
-	 * @return resultObj
-	 * @throws Exception
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/runProxyService.do")
 	public @ResponseBody JSONObject runProxyService(HttpServletRequest request, HttpServletResponse response) {
@@ -563,8 +557,8 @@ public class ProxySettingController {
 	 * Proxy Agent Connect Test
 	 * 
 	 * @param request, response
-	 * @return resultObj
-	 * @throws Exception
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/prySvrConnTest.do")
 	public @ResponseBody JSONObject prySvrConnTest(HttpServletRequest request, HttpServletResponse response){
@@ -597,8 +591,8 @@ public class ProxySettingController {
 	 * Proxy 서버 등록
 	 * 
 	 * @param historyVO, request, response
-	 * @return resultObj
-	 * @throws Exception
+	 * @return Map<String, Object>
+	 * @throws
 	 */
 	@RequestMapping(value = "/prySvrReg.do")
 	public @ResponseBody Map<String, Object> proxyServerReg(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -666,8 +660,8 @@ public class ProxySettingController {
 	 * Proxy 서버를 삭제한다.
 	 * 
 	 * @param historyVO, response, request
-	 * @return result
-	 * @throws Exception
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/deletePrySvr.do")
 	public @ResponseBody JSONObject deletePrySvr(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
@@ -718,9 +712,9 @@ public class ProxySettingController {
 	/**
 	 * Proxy 서버 리스트를 조회한다.
 	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
+	 * @param request, historyVO, response
+	 * @return List<ProxyListenerServerVO>
+	 * @throws
 	 */
 	@RequestMapping(value = "/selectListenServerList.do")
 	public @ResponseBody List<ProxyListenerServerVO> selectListenServerList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
@@ -758,8 +752,9 @@ public class ProxySettingController {
 	/**
 	 * DBMS IP SelectBox 
 	 * 
-	 * @return resultSet
-	 * @throws Exception
+	 * @param request, response
+	 * @return List<Map<String, Object>>
+	 * @throws
 	 */
 	@RequestMapping(value = "/proxy/selectIpList.do")
 	public @ResponseBody List<Map<String, Object>> selectIpList(HttpServletRequest request, HttpServletResponse response) {
@@ -782,8 +777,8 @@ public class ProxySettingController {
 	 * Proxy 서버를 업데이트 하고 재실행한다.
 	 * 
 	 * @param historyVO, response, request
-	 * @return result
-	 * @throws Exception
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/applyProxyConf.do")
 	public @ResponseBody JSONObject applyProxyConf(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
@@ -852,8 +847,8 @@ public class ProxySettingController {
 	 * 가상 IP 사용 여부 설정 
 	 * 
 	 * @param request, response
-	 * @return resultObj
-	 * @throws Exception
+	 * @return JSONObject
+	 * @throws
 	 */
 	@RequestMapping(value = "/setVipUseYn.do")
 	public @ResponseBody JSONObject setVipUseYn(HttpServletRequest request, HttpServletResponse response) {

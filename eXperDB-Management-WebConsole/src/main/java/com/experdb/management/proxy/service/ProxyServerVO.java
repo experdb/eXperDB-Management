@@ -176,6 +176,4 @@ public class ProxyServerVO {
 	public void setKal_install_yn(String kal_install_yn) {
 		this.kal_install_yn = kal_install_yn;
 	}
-	
-	
 }
