@@ -47,8 +47,10 @@ public class PsP005 extends SocketCtl{
 
 			context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 			ProxyLinkServiceImpl service = (ProxyLinkServiceImpl) context.getBean("ProxyLinkService");
-			String backupConfStr = service.readBackupConfFile(jObj.get("backup_file_path").toString());
-			String presentConfStr = service.readBackupConfFile(jObj.get("present_file_path").toString());
+			String backupConfStr = null;
+			String presentConfStr = null;
+			if(!"".equals(jObj.get("backup_file_path").toString())) backupConfStr = service.readBackupConfFile(jObj.get("backup_file_path").toString());
+			if(!"".equals(jObj.get("present_file_path").toString())) presentConfStr = service.readBackupConfFile(jObj.get("present_file_path").toString());
 			outputObj.put(ProtocolID.DX_EX_CODE,strDxExCode);
 			outputObj.put(ProtocolID.BACKUP_CONF, backupConfStr);
 			outputObj.put(ProtocolID.PRESENT_CONF, presentConfStr);

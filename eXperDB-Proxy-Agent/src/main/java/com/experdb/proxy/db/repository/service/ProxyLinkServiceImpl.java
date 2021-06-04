@@ -200,7 +200,6 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			String initKalPath = proxySvr.getKal_pth();
 			
 			File initHaproxy = new File(proxySvr.getPry_pth());
-			File initKeepa = new File(proxySvr.getKal_pth());
 
 			//최초 적용 파일 있지만, 백업폴더 없을 경우 백업함
 			File backupFolder = new File(backupPath);
@@ -217,10 +216,13 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				Files.copy(initHaproxy.toPath(), Paths.get(initBackupHaPath), REPLACE_EXISTING);
 				confChgHistVo.setPry_pth(initBackupHaPath);
 				
-				if("Y".equals(jobj.getString("KAL_INSTALL_YN")) && initKeepa.exists()){
-					String initBackupKalPath = backupFolder+"/init/"+initKeepa.getName();
-					Files.copy(initKeepa.toPath(), Paths.get(initBackupKalPath), REPLACE_EXISTING);
-					confChgHistVo.setKal_pth(initBackupKalPath);
+				if("Y".equals(jobj.getString("KAL_INSTALL_YN"))){
+					File initKeepa = new File(initKalPath);
+					if(initKeepa.exists()){
+						String initBackupKalPath = backupFolder+"/init/"+initKeepa.getName();
+						Files.copy(initKeepa.toPath(), Paths.get(initBackupKalPath), REPLACE_EXISTING);
+						confChgHistVo.setKal_pth(initBackupKalPath);
+					}
 				}else{
 					confChgHistVo.setKal_pth("");
 				}
@@ -237,6 +239,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			newHaPath = backupPath+"/"+dateTime+"/"+initHaproxy.getName();
 			fileBackupReplace("PROXY", dateTime, newHaPath, initHaPath, proxyCfg, newConfChgHistVo);
 			if("Y".equals(jobj.getString("KAL_INSTALL_YN"))){//keepalived 사용 여부
+				File initKeepa = new File(initKalPath);
 				newKePath = backupPath+"/"+dateTime+"/"+initKeepa.getName();
 				fileBackupReplace("KEEPALIVED", dateTime, newKePath, initKalPath, keepalivedCfg, newConfChgHistVo);
 			}else{
