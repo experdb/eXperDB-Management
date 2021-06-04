@@ -815,19 +815,18 @@ public class ProxySettingController {
 					proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_09", sohw_menu_id);
 					//설정변경이력 결과 남기기
 					txManager.commit(status);
+					//Agent keepalive, haproxy 재구동
+					param.put("pry_svr_id", confData.get("pry_svr_id"));
+					param.put("status", "TC001501");
+					param.put("act_type", "R");
+					
+					resultObj = proxySettingService.runProxyService(param);
 				}else{
 					
 					txManager.rollback(status);
-					//설정변경이력 결과 남기기
-					
 					runRollback = true;
 				}
-				//Agent keepalive, haproxy 재구동
-				param.put("pry_svr_id", confData.get("pry_svr_id"));
-				param.put("status", "TC001501");
-				param.put("act_type", "R");
 				
-				resultObj = proxySettingService.runProxyService(param);
 			}
 		} catch (ConnectException e) {
 			e.printStackTrace();

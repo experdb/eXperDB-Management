@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.experdb.management.proxy.cmmn.ProxyClientInfoCmmn;
 import com.experdb.management.proxy.service.ProxyAgentVO;
 import com.experdb.management.proxy.service.ProxyHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -71,6 +72,7 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	 */
 	@Override
 	public  Map<String, Object> getProxyConfFileContent(Map<String, Object> param) throws ConnectException, Exception{
+		CmmnUtils cu = new CmmnUtils();
 		System.out.println("getProxyConfFileContent");
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -80,11 +82,11 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 		String backupFilePath = "";
 		String presentFilePath = "";
 		if("P".equals(param.get("sys_type").toString())){
-			backupFilePath=pathInfo.get("backup_pry_pth").toString();
-			presentFilePath=pathInfo.get("present_pry_pth").toString();
+			backupFilePath=cu.getStringWithoutNull(pathInfo.get("backup_pry_pth"));
+			presentFilePath=cu.getStringWithoutNull(pathInfo.get("present_pry_pth"));
 		}else{
-			backupFilePath=pathInfo.get("backup_kal_pth").toString();
-			presentFilePath=pathInfo.get("present_kal_pth").toString();
+			backupFilePath=cu.getStringWithoutNull(pathInfo.get("backup_kal_pth"));
+			presentFilePath=cu.getStringWithoutNull(pathInfo.get("present_kal_pth"));
 		}
 		
 		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);

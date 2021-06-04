@@ -296,6 +296,18 @@
 		proxyServerTable.tables().header().to$().find('th:eq(18)').css('min-width', '0px');//kal_install_switch
 		proxyServerTable.tables().header().to$().find('th:eq(19)').css('min-width', '0px');//활성화 old
 		
+		//proxy 서버 테이블 더블 클릭
+		$('#proxyServer tbody').on('dblclick','tr',function() {
+			console.log("dblclick");
+			if (!$(this).hasClass('selected')){
+				proxyServerTable.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+			}
+
+			if (proxyServerTable.row(this).data() != null) {
+				fn_proxy_update('mod');
+			}
+		});
 		//proxy 서버 테이블 클릭
 		$('#proxyServer tbody').on('click','tr',function() {
 			if($('#modYn').val()!= "N"){
@@ -306,19 +318,6 @@
 				selPrySvrRow = this;
 				click_serverList_row(this);
 			}
-		});
-		
-		//proxy 서버 테이블 더블 클릭
-		$('#proxyServer tbody').on('dblclick','tr',function() {
-			if (!$(this).hasClass('selected')){
-				proxyServerTable.$('tr.selected').removeClass('selected');
-				$(this).addClass('selected');
-			}
-
-			if (proxyServerTable.row(this).data() != null) {
-				fn_proxy_update('mod');
-			}
-
 		});
 		
 		//experdb 계정 keepalived 사용여부 수정
@@ -627,6 +626,7 @@
 	**********************************************************/
 	function fn_server_conf_info(){
 		//Proxy Server Table click 이벤트 막기
+		fn_proxy_loadbar("start");
 		$("#proxyServer").css("pointer-events","none");
 		$.ajax({
  			url : "/getPoxyServerConf.do",
@@ -648,6 +648,7 @@
 				}
 				//Proxy Server Table click 이벤트 풀기
 				$("#proxyServer").css("pointer-events","all");
+				fn_proxy_loadbar("stop");
 			},
 			success : function(result) {
 				runValid = true;
@@ -736,6 +737,7 @@
 	 			}
  				//Proxy Server Table click 이벤트 풀기
  				$("#proxyServer").css("pointer-events","all");
+ 				fn_proxy_loadbar("stop");
 			}
 	 	});
 		

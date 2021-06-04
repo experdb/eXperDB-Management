@@ -255,8 +255,6 @@ public class ProxyHistoryController {
 			
 			try{
 				confFileStrMap = proxyHistoryService.getProxyConfFileContent(param);
-				System.out.println("test");
-				System.out.println(confFileStrMap.toString());
 			}catch(ConnectException e){
 				e.printStackTrace();
 				resultObj.put("errcd", 1);
@@ -271,8 +269,10 @@ public class ProxyHistoryController {
 			
 			if( confFileStrMap.get("RESULT_CODE") != null &&   "0".equals(confFileStrMap.get("RESULT_CODE").toString())){
 				if(confFileStrMap.get("BACKUP_CONF") != null) resultObj.put("backupConf", confFileStrMap.get("BACKUP_CONF").toString());
-				else resultObj.put("backupConf", " conf 파일 생성 실패 ");
-				resultObj.put("presentConf",confFileStrMap.get("PRESENT_CONF").toString());
+				else resultObj.put("backupConf", " 해당 기능을 사용하지 않거나, conf 파일 생성 실패하여 파일이 존재하지 않습니다.");
+				if(confFileStrMap.get("PRESENT_CONF") != null) resultObj.put("presentConf",confFileStrMap.get("PRESENT_CONF").toString());
+				else resultObj.put("presentConf", " 해당 기능을 사용하지 않거나, conf 파일 생성 실패하여 파일이 존재하지 않습니다.");
+				
 				resultObj.put("errcd", 0);
 				resultObj.put("errmsg","정상적으로 실행되었습니다.");
 			}else{
