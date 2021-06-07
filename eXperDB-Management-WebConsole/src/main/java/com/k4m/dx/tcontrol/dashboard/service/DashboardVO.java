@@ -37,6 +37,15 @@ public class DashboardVO {
 	private String lgi_dtm_end;
 	private String bck_opt_cd_nm;
 
+	private String pry_cnt;
+	
+	public String getPry_cnt() {
+		return pry_cnt;
+	}
+	public void setPry_cnt(String pry_cnt) {
+		this.pry_cnt = pry_cnt;
+	}
+	
 	public String getBck_opt_cd_nm() {
 		return bck_opt_cd_nm;
 	}
