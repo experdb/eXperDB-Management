@@ -2168,8 +2168,6 @@ function fn_keepMonInfo(result){
 			
 		html_vip += '	<p class="card-title" style="margin-bottom:-25px;margin-left:10px;">\n';
 		html_vip += '	<span id="vip_proxy_nm' + i + '"></span>\n';
-//			html_vip += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_start_btn' + i + '" type="button" onClick="fn_confirm_modal(\'TC001502\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
-//			html_vip += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="kal_stop_btn' + i + '" type="button" onClick="fn_confirm_modal(\'TC001501\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
 		html_vip += '	</p>\n';
 		
 		html_vip += '	<table class="table-borderless" style="width:100%;">\n';
@@ -2220,9 +2218,7 @@ function fn_keepMonInfo(result){
 					
 				html_sebu = "";
 				html_vip_line = "";
-// 				html_sebu += '				<button type="button" class="btn btn-inverse-warning btn-xs" onclick="fn_configView('+result.proxyServerVipList[i].pry_svr_id+', \'K\')">';
  				html_sebu += '					<i class="ti-vimeo-alt icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 5em;margin-top:10px;" ></i>\n';
-// 				html_sebu += '				</button>'
 
  				strVip = result.proxyServerVipList[i].v_ip;
 
@@ -2241,13 +2237,11 @@ function fn_keepMonInfo(result){
  				    for ( var j in strVipSplit ) {
  				    	var strVipSplit_val = strVipSplit[j].substr(0, strVipSplit[j].indexOf('/'));
 		 				html_sebu += '				<h5 class="text-info"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
-//			 				html_sebu += '				<a href="#">' + strVipSplit_val + '</a></h5>\n';	
 		 				html_sebu += '				' + strVipSplit_val + '</h5>\n';	
  				    }	
  				    
 	 				//line 생성
 	 				html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;" id="vip_line' + i + '"></i>\n';
-	 			//	html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;"></i>\n';
  				}
 
  				for(var j = 0; j < result.proxyServerByDBSvrId.length; j++) {
@@ -2258,13 +2252,6 @@ function fn_keepMonInfo(result){
  						if (result.proxyServerVipList[i].pry_svr_nm != "") {
 	 						var vip_btn_html = "";
 	 						vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
-//	 						if(aut_id == 1){
-//	 							if(result.proxyServerVipList[i].kal_exe_status == "TC001501") {
-//	 								vip_btn_html += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />';
-//	 							} else {
-//	 								vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="kal_start_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001502\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />';
-//	 							}
-//	 						}
 	 						vip_btn_html +=	'<br/>&nbsp;';
 		 					$("#vip_proxy_nm" + j).html(vip_btn_html);
 	 					}
@@ -2444,7 +2431,9 @@ function fn_proxyMonInfo(result){
 						html_listner_ss += '			<div class="badge badge-pill badge-danger" title="">L</div>\n';
 					}
 
-					html_listner_ss += '			'+result.proxyServerLsnList[k].lsn_nm+'\n';
+					html_listner_ss += '				<span data-toggle="tooltip" data-placement="bottom" data-html="true" title=\''+result.proxyServerLsnList[k].lsn_desc+'\'>';
+					html_listner_ss += '				'+result.proxyServerLsnList[k].lsn_nm+'\n';
+					html_listner_ss += '				</span>\n';
 					html_listner_ss += '			</h5>\n';
 					
 					html_listner_ss += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="text-align:left;padding-left:30px;padding-top:3px;">';
@@ -2530,7 +2519,6 @@ function fn_proxyMonInfo(result){
 				html_listner_con_ss += '	</tr>\n';
 				html_listner_con_ss += '</table>\n';
 			}
-//				console.log(html_listner_ss);
 			lsnNulkCnt = 0;
 
 			$("#proxyListnerDiv" + j).html(html_listner_ss);
@@ -2631,14 +2619,12 @@ function fn_dbMonInfo(result){
 					if(result.dbServerConProxyList[k].svr_host_nm != null && result.dbServerConProxyList[k].svr_host_nm != ""){
 						if(result.dbServerConProxyList[k].master_gbn == 'M'){
 							html_db += '		Master(';
-//								html_db += '		Master(<a href="#" onclick="fn_standby_view(' + result.dbServerConProxyList[k].db_svr_id + ')">';
 						} else {
 							html_db += '		Standby(<a href="#" onclick="fn_standby_view(' + result.dbServerConProxyList[k].db_svr_id + ')">';
 						}
 						html_db += '			' + result.dbServerConProxyList[k].svr_host_nm;
 						if(result.dbServerConProxyList[k].master_gbn == 'M'){
 							html_db += '		)';
-//								html_db += '		</a>)';
 						} else {
 							if(result.dbServerConProxyList[k].cnt_svr_id > 1){
 								html_db += '	' + proxy_and  + ' ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + ' ' + proxy_others + '</a>)';

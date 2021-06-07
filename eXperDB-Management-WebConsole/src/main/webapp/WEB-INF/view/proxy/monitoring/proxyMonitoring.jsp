@@ -1371,6 +1371,7 @@
 		
 		$(window).trigger('resize');
 	}
+	
 	/* ********************************************************
 	 * 리스너 통계 테이블 셋팅
 	 ******************************************************** */
@@ -1560,10 +1561,10 @@
 			]
 		});
 
-		proxyStatTable.tables().header().to$().find('th:eq(0)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(1)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(2)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(3)').css('min-width');
+		proxyStatTable.tables().header().to$().find('th:eq(0)').css('min-width','120px');
+		proxyStatTable.tables().header().to$().find('th:eq(1)').css('min-width','100px');
+		proxyStatTable.tables().header().to$().find('th:eq(2)').css('min-width','115px');
+		proxyStatTable.tables().header().to$().find('th:eq(3)').css('min-width','100px');
 		proxyStatTable.tables().header().to$().find('th:eq(4)').css('min-width');
 		proxyStatTable.tables().header().to$().find('th:eq(5)').css('min-width');
 		proxyStatTable.tables().header().to$().find('th:eq(6)').css('min-width');
