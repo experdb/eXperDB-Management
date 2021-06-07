@@ -2535,11 +2535,6 @@ function fn_proxyMonInfo(result){
 * 디비 서버 모니터링 셋팅
 ******************************************************** */
 function fn_dbMonInfo(result){
-	//스탠바이 여러건일때
-	//마스터만 있거나 스탠바이만 있는경우 빈칸만들기'
-	//proxy 서버별로 해야함
-	//값이 아예없는 경우
-	//서버 연결상태 지금은 agent 상태로 되어있는데 변경해야함
 
 	var rowCount = 0;
 	var dbNulkCnt = 0;
