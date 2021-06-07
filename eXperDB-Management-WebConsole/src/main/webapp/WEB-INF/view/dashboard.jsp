@@ -82,8 +82,12 @@
 				} else if (db_svr_id != nvlPrmSet("${serverinfo.db_svr_id}", '')  && master_gbn == "M") {
 					html += '				</div>\n';
 					html += '			</div>\n';
-					html += '			<div class="col-sm-3" style="margin:auto;">\n';
+					html += '			<div class="col-sm-3" style="margin:auto; text-align:center;">\n';
 					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iDatabase' + db_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
+					if("${proxy_yn}" == "Y" && "${serverinfo.pry_cnt}" != "0"){
+						html += '					<div class="badge badge-primary badge-pill" style="margin-top:5px;"><i class="mdi mdi-server-network menu-icon"></i>&nbsp;Proxy</div>\n';
+					}
+// 					html += ' <br/> <i class="mdi mdi-server-network menu-icon text-primary"></i>Proxy\n'
 					html += '			</div>\n';
 					html += "		</div>\n";
 					html += "		</div>\n";
@@ -136,8 +140,11 @@
 				if (rowCount == listCnt) {
 					html += '				</div>\n';
 					html += '			</div>\n';
-					html += '			<div class="col-sm-3" style="margin:auto;">\n';
+					html += '			<div class="col-sm-3" style="margin:auto; text-align:center;">\n';
 					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
+					if("${proxy_yn}" == "Y" && "${serverinfo.pry_cnt}" != "0"){
+						html += '					<div class="badge badge-primary badge-pill" style="margin-top:5px;"><i class="mdi mdi-server-network menu-icon"></i>&nbsp;Proxy</div>\n';
+					}
 					html += '			</div>\n';
 					html += "		</div>\n";
 					html += "		</div>\n";
