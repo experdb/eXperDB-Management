@@ -483,6 +483,9 @@ var mgmtDbmsTable = null;
  					var msg ="";
  					if($("#svrReg_mode", "#svrRegProxyServerForm").val() == "reg"){
  						msg ='<spring:message code="message.msg144"/>';
+ 						if(result.reRegResult){
+ 							msg = fn_strBrReplcae('<spring:message code="eXperDB_proxy.msg54"/>');
+ 						}
  					}else{
  						msg ='<spring:message code="message.msg155"/>';
  					}

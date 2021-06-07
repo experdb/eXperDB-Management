@@ -42,7 +42,7 @@
 		$('#backup_config').scrollTop(0);
 		$("#backup_config", "#configForm").html("");
 		$("#pop_layer_config_view").modal("hide");
-		$("#backupConfTitle").html('<i class="item-icon fa fa-dot-circle-o"></i> 백업 Config ');
+		$("#backupConfTitle").html('<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="eXperDB_proxy.backup_conf" />');
 		if (contentsGbn_chk != null && contentsGbn_chk != "") {
 			$("#"+ contentsGbn_chk).modal("show");
 		}
@@ -69,10 +69,10 @@
 							<fieldset>
 								<div class="form-group row" style="margin-bottom : -7px !important;">
 									<label for="config" id="confTitle" class="col-sm-6 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i> 현재 Config
+										<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="eXperDB_proxy.present_conf" />
 									</label>
 									<label for="backup_config" id="backupConfTitle" class="col-sm-6 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i> 백업 Config
+										<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="eXperDB_proxy.backup_conf" />
 									</label>
 								</div>
 								<div class="form-group row">

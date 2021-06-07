@@ -73,11 +73,10 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	@Override
 	public  Map<String, Object> getProxyConfFileContent(Map<String, Object> param) throws ConnectException, Exception{
 		CmmnUtils cu = new CmmnUtils();
-		System.out.println("getProxyConfFileContent");
+		//System.out.println("getProxyConfFileContent");
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		Map<String, Object> pathInfo =  proxyHistoryDAO.selectProxyConfFilePath(param);
-		System.out.println("pathInfo :: "+pathInfo.toString());
 		JSONObject agentJobj = new JSONObject();
 		String backupFilePath = "";
 		String presentFilePath = "";
@@ -95,7 +94,7 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	         agentJobj.put("backup_file_path", backupFilePath);
 	         agentJobj.put("present_file_path", presentFilePath);
 	         result = cic.getConfigBackupFile(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
-	         System.out.println(result.toString());
+	         //System.out.println(result.toString());
 	      }catch(ConnectException e){
 	         throw e;
 	      }

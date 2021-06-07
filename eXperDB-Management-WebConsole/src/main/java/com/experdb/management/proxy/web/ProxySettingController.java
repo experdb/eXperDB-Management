@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -62,6 +64,8 @@ public class ProxySettingController {
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
 	
+	@Autowired
+	private MessageSource msg;
 	
 	private List<Map<String, Object>> menuAut;
 	
@@ -338,18 +342,18 @@ public class ProxySettingController {
 					resultObj.put("interface_items", interfList);
 				}catch(ConnectException e){
 					resultObj.put("errcd", 1);
-					resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+					resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
 					resultObj.put("interface_items", null);
 				}catch(Exception e){
 					resultObj.put("errcd", 2);
-					resultObj.put("errMsg","Agent 작업 중 오류가 발생하였습니다.");
+					resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg48", null, LocaleContextHolder.getLocale()));
 					resultObj.put("interface_items", null);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);
-			resultObj.put("errMsg","Proxy 상세 정보 불러오는 중 오류가 발생하였습니다.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 		}
 		return resultObj;
 	}
@@ -388,7 +392,7 @@ public class ProxySettingController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);
-			resultObj.put("errMsg","Proxy Peer 가상 IP 정보 불러오는 중 오류가 발생하였습니다.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 		}
 		return resultObj;
 	}
@@ -542,12 +546,12 @@ public class ProxySettingController {
 		}  catch (ConnectException e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);
-			resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);
-			resultObj.put("errmsg", "작업 중 요류가 발생하였습니");
+			resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 		}
 		return resultObj;
 
@@ -650,7 +654,7 @@ public class ProxySettingController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("result",false);
-			resultObj.put("errMsg","서버 등록 중 오류가 발생하였습니다.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 			txManager.rollback(status);
 		}
 		return resultObj;
@@ -703,7 +707,7 @@ public class ProxySettingController {
 			e.printStackTrace();
 
 			resultObj.put("result", false);
-			resultObj.put("errMsg","서버 삭제 중 오류가 발생하였습니다.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 			txManager.rollback(status);
 		}
 		return resultObj;
@@ -832,12 +836,12 @@ public class ProxySettingController {
 			e.printStackTrace();
 			if(!runRollback) txManager.rollback(status);
 			resultObj.put("result",false);
-			resultObj.put("errMsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("result",false);
-			resultObj.put("errMsg","설정 적용 중 오류가 발생하였습니다.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 		}
 		return resultObj;
 	}
@@ -882,23 +886,23 @@ public class ProxySettingController {
 				
 				if(kalInstYn.equals("Y") && kalInstYnInAgent != true){ // 사용이 Y이지만, 실제로 Agent에 설치가 되어있지 않다면 중단... 
 					resultObj.put("result", false);
-					resultObj.put("errMsg", "Proxy에 Keepalived가 설치되어있지 않습니다.");
+					resultObj.put("errMsg", msg.getMessage("eXperDB_proxy.msg53", null, LocaleContextHolder.getLocale()));
 					return resultObj;
 				}
 				
 				proxySettingService.updateDeleteVipUseYn(param);
 				
 				resultObj.put("result", true);
-				resultObj.put("errMsg", "작업이 정상적으로 완료 되었습니다.");
+				resultObj.put("errMsg", msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));
 			}
 		}catch (ConnectException e){
 			e.printStackTrace();
 			resultObj.put("result", false);
-			resultObj.put("errMsg", "작업 중 요류가 발생하였습니다.");
+			resultObj.put("errMsg", msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
 		}catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("result", false);
-			resultObj.put("errMsg", "작업 중 요류가 발생하였습니다.");
+			resultObj.put("errMsg", msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 			
 		}
 		return resultObj;

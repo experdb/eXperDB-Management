@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +58,9 @@ public class ProxyHistoryController {
 	
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
+	
+	@Autowired
+	private MessageSource msg;
 	
 	private List<Map<String, Object>> menuAut;
 	
@@ -243,47 +248,49 @@ public class ProxyHistoryController {
 	 */
 	@RequestMapping(value = "/getBackupConfFile.do")
 	public @ResponseBody JSONObject getBackupConfFile(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-				
+		CmmnUtils cu = new CmmnUtils();		
 		Map<String, Object> param = new HashMap<String, Object>();
 		JSONObject resultObj = new JSONObject();
 		Map<String, Object> confFileStrMap = new HashMap();
 		try {	
-			param.put("sys_type", request.getParameter("sys_type")==null ? "" : request.getParameter("sys_type").toString());
-			param.put("pry_svr_id", (request.getParameter("pry_svr_id") ==null || "".equals(request.getParameter("pry_svr_id").toString())) ? "" : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
-			param.put("pry_svr_nm", request.getParameter("pry_svr_nm") ==null  ? "" : request.getParameter("pry_svr_nm").toString());
-			param.put("pry_cng_sn", (request.getParameter("pry_cng_sn") ==null || "".equals(request.getParameter("pry_cng_sn").toString())) ? 0 : Integer.parseInt(request.getParameter("pry_cng_sn").toString()));
+			param.put("sys_type", cu.getStringWithoutNull(request.getParameter("sys_type")));
+			param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? 0 : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
+			param.put("pry_svr_nm", cu.getStringWithoutNull(request.getParameter("pry_svr_nm")));
+			param.put("pry_cng_sn", "".equals(cu.getStringWithoutNull(request.getParameter("pry_cng_sn"))) ? 0 : Integer.parseInt(request.getParameter("pry_cng_sn").toString()));
+			
+		
 			
 			try{
 				confFileStrMap = proxyHistoryService.getProxyConfFileContent(param);
 			}catch(ConnectException e){
 				e.printStackTrace();
 				resultObj.put("errcd", 1);
-				resultObj.put("errmsg","Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
 			}catch(Exception e){
 				e.printStackTrace();
 				resultObj.put("errcd", 2);
-				resultObj.put("errmsg","Agent 작업 중 오류가 발생하였습니다.");
+				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg48", null, LocaleContextHolder.getLocale()));
 			}
 			resultObj.put("pry_svr_id", param.get("pry_svr_id").toString());
 			resultObj.put("pry_svr_nm", param.get("pry_svr_nm").toString());
 			
 			if( confFileStrMap.get("RESULT_CODE") != null &&   "0".equals(confFileStrMap.get("RESULT_CODE").toString())){
 				if(confFileStrMap.get("BACKUP_CONF") != null) resultObj.put("backupConf", confFileStrMap.get("BACKUP_CONF").toString());
-				else resultObj.put("backupConf", " 해당 기능을 사용하지 않거나, conf 파일 생성 실패하여 파일이 존재하지 않습니다.");
+				else resultObj.put("backupConf", msg.getMessage("eXperDB_proxy.msg44", null, LocaleContextHolder.getLocale()));
 				if(confFileStrMap.get("PRESENT_CONF") != null) resultObj.put("presentConf",confFileStrMap.get("PRESENT_CONF").toString());
-				else resultObj.put("presentConf", " 해당 기능을 사용하지 않거나, conf 파일 생성 실패하여 파일이 존재하지 않습니다.");
+				else resultObj.put("presentConf", msg.getMessage("eXperDB_proxy.msg44", null, LocaleContextHolder.getLocale()));
 				
 				resultObj.put("errcd", 0);
-				resultObj.put("errmsg","정상적으로 실행되었습니다.");
+				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));
 			}else{
 				resultObj.put("errcd", -1);
-				resultObj.put("errmsg","Proxy 설정 파일을 불러오는 중 오류가 발생하였습니다.");
+				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg46", null, LocaleContextHolder.getLocale()));
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultObj.put("errcd", -1);
-			resultObj.put("errmsg","Proxy 설정 파일을 불러오는 중 오류가 발생하였습니다.");
+			resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg46", null, LocaleContextHolder.getLocale()));
 		}
 		return resultObj;
 	}

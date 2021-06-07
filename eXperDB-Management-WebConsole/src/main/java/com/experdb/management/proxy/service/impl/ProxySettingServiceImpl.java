@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.experdb.management.proxy.cmmn.CommonUtil;
@@ -59,6 +61,9 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
+	
+	@Autowired
+	private MessageSource msg;
 
 	/**
 	 * proxy 화면 접속 히스토리 등록
@@ -158,7 +163,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		
 		//json set
 		resultObj.put("errcd", 0);
-		resultObj.put("errMsg","정상적으로 처리되었습니다.");
+		resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));
 		resultObj.put("global_info", globalInfo == null? null:globalInfo);
 		resultObj.put("listener_list", listenerList == null? null:listenerList);
 		resultObj.put("vipconfig_list", vipConfigList == null? null:vipConfigList);
@@ -182,7 +187,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		//Peer Server VIP List 정보 조회 
 		List<ProxyVipConfigVO> peerVipConfigList = proxySettingDAO.selectProxyVipConfList(param);
 		resultObj.put("errcd", 0);
-		resultObj.put("errMsg","정상적으로 처리되었습니다.");
+		resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));
 		resultObj.put("peer_vipconfig_list", peerVipConfigList == null? null:peerVipConfigList);
 		
 		return resultObj;
@@ -277,8 +282,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      String lst_mdfr_id = param.get("lst_mdfr_id").toString();
 		      String status = param.get("status").toString();
 		      String actType = param.get("act_type").toString();
-		      String statusNm = "";
-		      
+		      String[] statusNm = new String[1];
+		     
 		      boolean proxyExecute = false;
 		      boolean keepaExecute = true;
 		      
@@ -301,11 +306,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      agentJobj.put("act_type", actType);
 		      
 		      if("S".equals(actType)){
-		         statusNm = "정지";
+		    	  statusNm[0] = msg.getMessage("eXperDB_proxy.act_stop",null, LocaleContextHolder.getLocale());//중지
 		      }else if("A".equals(actType)){
-		         statusNm = "기동";
+		    	  statusNm[0] = msg.getMessage("eXperDB_proxy.act_start",null, LocaleContextHolder.getLocale());//기동
 		      }else if("R".equals(actType)){
-		         statusNm = "재기동";
+		    	  statusNm[0] = msg.getMessage("eXperDB_proxy.act_restart",null, LocaleContextHolder.getLocale());//재기동
 		      }
 		      
 		      agentJobj.put("pry_svr_id", prySvrId);
@@ -319,7 +324,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      }
 		      
 		      if (proxyExecuteResult != null) {
-		         //System.out.println(proxyExecuteResult.toString());
 		         if (status.equals(proxyExecuteResult.get("EXECUTE_RESULT"))) {
 		            proxyExecute = true;
 		         }else{
@@ -340,41 +344,40 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		         }
 		         
 		         if (keepaExecuteResult != null) {
-		           // System.out.println(keepaExecuteResult.toString());
-		            if (status.equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
-		               keepaExecute = true;
-		            }else{
-		               keepaExecute = false;
-		            }
+		        	 if (status.equals(keepaExecuteResult.get("EXECUTE_RESULT"))) {
+		        		 keepaExecute = true;
+		        	 }else{
+		        		 keepaExecute = false;
+		        	 }
 		         }else{
-		            keepaExecute = false;
+		        	 keepaExecute = false;
 		         }
 		      }
 		      
 		      if(!proxyExecute || !keepaExecute){
 		         if(!proxyExecute){
-		            errMsg = "Proxy";
+		            errMsg = "Proxy ";
 		         }
 		         if(!keepaExecute){
-		            if(!errMsg.equals("")) errMsg += " / Keepalived";
-		            else errMsg += "Keepalived";   
+		            if(!errMsg.equals("")) errMsg += " / Keepalived ";
+		            else errMsg += "Keepalived ";   
 		         }
-		         errMsg +=statusNm +" 중 오류가 발생하였습니다.";
+		         errMsg +=msg.getMessage("eXperDB_proxy.msg51",statusNm, LocaleContextHolder.getLocale());
 		      }else{
 		         //기동상태 재확인
 		         ProxyServerVO prySvrVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
 		         
 		         if("S".equals(actType)){
 		        	if("TC001502".equals(prySvrVO.getExe_status()) && ((kalUseYn.equals("Y") && "TC001502".equals(prySvrVO.getKal_exe_status())) || kalUseYn.equals("N"))){
-		        		errMsg = "정상적으로 "+statusNm+"되었습니다.";
+		        		errMsg = msg.getMessage("eXperDB_proxy.msg52",statusNm, LocaleContextHolder.getLocale());
 		        	}else{
-		        		errMsg =statusNm +" 중 오류가 발생하였습니다.";
+		        		errMsg = msg.getMessage("eXperDB_proxy.msg51",statusNm, LocaleContextHolder.getLocale());
 		        	}
 		         }else{
 		        	 if("TC001501".equals(prySvrVO.getExe_status()) && ( kalUseYn.equals("N") || (kalUseYn.equals("Y") && "TC001501".equals(prySvrVO.getKal_exe_status())))){
-		        		errMsg = "정상적으로 "+statusNm+"되었습니다.";	
+		        		errMsg = msg.getMessage("eXperDB_proxy.msg52",statusNm, LocaleContextHolder.getLocale());
 		        	}else{
-		        		errMsg =statusNm +" 중 오류가 발생하였습니다.";
+		        		errMsg = msg.getMessage("eXperDB_proxy.msg51",statusNm, LocaleContextHolder.getLocale());
 		        	}
 		         }
 		      }
@@ -422,17 +425,17 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			
 			resultObj.put("agentConn", agentConn);
 			resultObj.put("errcd", 0);
-			resultObj.put("errmsg", "정상처리 되었습니다.");
+			resultObj.put("errmsg", msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));
 		} catch (ConnectException e) {
 			resultObj.put("agentConn", false);
 			resultObj.put("errcd", -2);
-			resultObj.put("errmsg", "Proxy Agent와 연결이 불가능합니다.\nAgent 상태를 확인해주세요.");
+			resultObj.put("errmsg", msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
 			e.printStackTrace();
 			
 		} catch(Exception e){
 			resultObj.put("agentConn", false);
 			resultObj.put("errcd", -1);
-			resultObj.put("errmsg", "작업 중 오류가 발생하였습니다.");
+			resultObj.put("errmsg", msg.getMessage("eXperDB_proxy.msg48", null, LocaleContextHolder.getLocale()));
 			e.printStackTrace();
 		}
 		return resultObj;
@@ -457,7 +460,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			if (prySvrList != null && prySvrList.size() > 0) {
 				resultObj.put("resultLog", "fail");
 				resultObj.put("result",false);
-				resultObj.put("errMsg","서버명이 다른 서버와 중복되었습니다.");
+				resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg50", null, LocaleContextHolder.getLocale()));
 				
 				return resultObj;
 			}
@@ -484,7 +487,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			prySvrVO.setMin_data_del_term(min_data_del_term);
 			prySvrVO.setUse_yn(param.get("use_yn").toString());
 			prySvrVO.setMaster_gbn(param.get("master_gbn").toString());
-
+			
 			if("S".equals(master_gbn)){
 				int	master_svr_id = Integer.parseInt(param.get("master_svr_id") != null && !"".equals((String)param.get("master_svr_id"))  ? param.get("master_svr_id").toString() : "0");
 				prySvrVO.setMaster_svr_id(master_svr_id);
@@ -522,7 +525,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				proxyGlobalVO.setSvr_con_max_tm("30m");
 				proxyGlobalVO.setChk_tm("5s");
 				proxyGlobalVO.setIf_nm(null);
-				System.out.println("proxyAgentVO.getKal_install_yn()===" + proxyAgentVO.getKal_install_yn());
+				
 				if ("Y".equals(proxyAgentVO.getKal_install_yn())) {
 					proxyGlobalVO.setObj_ip(ipadr);
 				} else {
@@ -556,12 +559,12 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			resultObj.put("reRegYn", reRegYn);
 			resultObj.put("resultLog", "success");
 			resultObj.put("result",true);
-			resultObj.put("errMsg","작업이 완료되었습니다.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));
 		} catch (Exception e) {
 			resultObj.put("resultLog", "fail");
 			resultObj.put("result", false);
 			resultObj.put("errcd", -1);
-			resultObj.put("errmsg", "작업 중 오류가 발생하였습니");
+			resultObj.put("errmsg", msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 			
 			e.printStackTrace();
 		}
@@ -578,7 +581,6 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 	 */
 	public boolean proxyServerReReg(Map<String, Object> param) {
 		try{
-		System.out.println("삭제 재등록 !!!");
 		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
 		
 		Map<String, Object> insertDataResult = new  HashMap<String, Object>();
@@ -592,13 +594,13 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		
 		if (insertDataResult != null) {
 			if ("true".equals(insertDataResult.get("RESULT_DATA"))) {
-				System.out.println("정상적으로 Config 입력 되었습니다.");
+				//System.out.println("정상적으로 Config 입력 되었습니다.");
 				return true;
 			}else{
-				System.out.println("Config Data Insert 중 오류가 발생하였습니다. :: \n" + insertDataResult.get("ERR_MSG"));
+				//System.out.println("Config Data Insert 중 오류가 발생하였습니다. :: \n" + insertDataResult.get("ERR_MSG"));
 			}
 		}else{
-			System.out.println("Config 입력이 안되었습니다.");
+			//System.out.println("Config 입력이 안되었습니다.");
 		}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -652,13 +654,13 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			
 			resultObj.put("resultLog", "success");
 			resultObj.put("result",true);
-			resultObj.put("errMsg","작업이 완료되었습니다.");
+			resultObj.put("errMsg",msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));
 
 		} catch (Exception e) {
 			resultObj.put("resultLog", "fail");
 			resultObj.put("result",false);
 			resultObj.put("errcd", -1);
-			resultObj.put("errmsg", "작업 중 오류가 발생하였습니");
+			resultObj.put("errmsg", msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 			
 			e.printStackTrace();
 		}
@@ -958,16 +960,16 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			if ("0".equals(agentConnectResult.get("RESULT_CODE"))) {
 				createNewConfig = true;
 				resultLog = "success";
-				errMsg= "작업이 완료되었습니다.";
+				errMsg= msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale());
 			}else{
 				createNewConfig = false;
 				resultLog = "faild";
-				errMsg= "작업 중 오류가 발생하였습니다.";
+				errMsg= msg.getMessage("eXperDB_proxy.msg48", null, LocaleContextHolder.getLocale());
 			}
 		}else{
 			createNewConfig = false;
 			resultLog = "faild";
-			errMsg= "작업 중 오류가 발생하였습니다.";
+			errMsg= msg.getMessage("eXperDB_proxy.msg48", null, LocaleContextHolder.getLocale());
 		}
 		resultObj.put("resultLog", resultLog);
 		resultObj.put("result",createNewConfig);
@@ -1128,7 +1130,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		agentJobj.put("pry_svr_id", prySvrId);
 		agentJobj.put("lst_mdfr_id", lstMdfrId);
 		agentJobj.put("kal_install_yn", kalInstYn);//stop
-		System.out.println("checkAgentKalInstYn ::  jobj :: "+agentJobj.toJSONString());
+		
 		try{
 			checkKeepaResult = cic.checkKeepavliedInstallYn(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
 		}catch(ConnectException e){

@@ -76,7 +76,7 @@
 			         		render: function (data, type, full){
 		         				var html = "";
 			         			html += '<button type="button" class="btn btn-link btn-fw" onclick="fn_show_conf(\'P\','+full.pry_svr_id+',\''+full.pry_svr_nm+'\','+full.pry_cng_sn+')">';
-								html += '<i class="item-icon fa fa-file-text-o"></i> 설정 보기';
+								html += '<i class="item-icon fa fa-file-text-o"></i> <spring:message code="eXperDB_proxy.show_config" />';
 								html += '</button>';
 								return html;
 		         			}
@@ -85,7 +85,7 @@
 			         		render: function (data, type, full){
 		         				var html = "";
 			         			html += '<button type="button" class="btn btn-link btn-fw" onclick="fn_show_conf(\'K\','+full.pry_svr_id+',\''+full.pry_svr_nm+'\','+full.pry_cng_sn+')">';
-								html += '<i class="item-icon fa fa-file-text-o"></i> 설정 보기';
+								html += '<i class="item-icon fa fa-file-text-o"></i> <spring:message code="eXperDB_proxy.show_config" />';
 								html += '</button>';
 								return html;
 		         			}
@@ -162,9 +162,9 @@
 		    		{data: "act_exe_type", className: "dt-center", defaultContent: "",
 	         		render: function (data, type, full){
 		            		if(full.act_exe_type == "TC004001"){
-								return "수동";
+								return '<spring:message code="dashboard.manual" />';
 							}else if(full.act_exe_type == "TC004002"){
-								return "자동";
+								return '<spring:message code="dashboard.auto" />';
 							}
 	         			}
 		         	}, 
@@ -540,7 +540,7 @@
 							
 							for(var i=0; i<datasLen; i++){
 								if(tableDatas[i].pry_svr_id == svrId && tableDatas[i].pry_cng_sn == chgId){
-									$("#backupConfTitle").html('<i class="item-icon fa fa-dot-circle-o"></i> 백업 Config : '+tableDatas[i].lst_dtm_date+' '+tableDatas[i].lst_dtm_hour);
+									$("#backupConfTitle").html('<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="eXperDB_proxy.backup_conf" /> : '+tableDatas[i].lst_dtm_date+' '+tableDatas[i].lst_dtm_hour);
 								}
 							}
 						}else{ //연결실패
@@ -594,7 +594,7 @@
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="mdi mdi-format-list-bulleted menu-icon"></i>
-												<span class="menu-title">Proxy 이력 관리</span>
+												<span class="menu-title"><spring:message code="menu.proxy_hist" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -602,8 +602,8 @@
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Proxy</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Proxy 관리</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">Proxy 이력 관리</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.proxy_mgmt" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.proxy_hist" /></li>
 										</ol>
 									</div>
 								</div>
@@ -631,12 +631,12 @@
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
 							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectTab('settingChange');" >
-								설정 변경 이력
+								<spring:message code="eXperDB_proxy.conf_change_hist" />
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="javascript:selectTab('ActStatus');">
-								기동 상태 변경 이력
+								<spring:message code="eXperDB_proxy.exe_change_hist" />
 							</a>
 						</li>
 						<!-- <li class="nav-item">
@@ -670,7 +670,7 @@
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
 									<select class="form-control" style="margin-right: -0.7rem;" name="setchg_pry_svr_id" id="setchg_pry_svr_id">
-	 									<option value="">Proxy 명 <spring:message code="common.total" /></option>	
+	 									<option value=""><spring:message code="eXperDB_proxy.server_name" /> <spring:message code="common.total" /></option>	
 										<c:forEach var="prySvrList" items="${prySvrList}">
 											<option value="${prySvrList.pry_svr_id}">${prySvrList.pry_svr_nm}</option>							
 										</c:forEach>
@@ -678,9 +678,9 @@
 								</div>		
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
 									<select class="form-control" name="setchg_exe_rst_cd" id="setchg_exe_rst_cd">
-										<option value="">실행 결과 <spring:message code="common.total" /></option>	
-										<option value="TC001501">성공</option> 
-	 									<option value="TC001502">실패</option>
+										<option value=""><spring:message code="eXperDB_proxy.exe_result" /> <spring:message code="common.total" /></option>	
+										<option value="TC001501"><spring:message code="common.success" /></option> 
+	 									<option value="TC001502"><spring:message code="common.failed" /></option>
 									</select>
 								</div>
 
@@ -710,7 +710,7 @@
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
 									<select class="form-control" tyle="margin-right: -0.7rem;" name="actstate_pry_svr_id" id="actstate_pry_svr_id">
-	 									<option value="">Proxy 명 <spring:message code="common.total" /></option>	
+	 									<option value=""><spring:message code="eXperDB_proxy.server_name" /> <spring:message code="common.total" /></option>	
 										<c:forEach var="prySvrList" items="${prySvrList}">
 											<option value="${prySvrList.pry_svr_id}">${prySvrList.pry_svr_nm}</option>							
 										</c:forEach>
@@ -718,7 +718,7 @@
 								</div>		
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
 									<select class="form-control" tyle="margin-right: -0.7rem;" name="actstate_sys_type" id="actstate_sys_type">
-										<option value="">시스템 유형 <spring:message code="common.total" /></option>	
+										<option value=""><spring:message code="eXperDB_proxy.system" /> <spring:message code="common.total" /></option>	
 	 									<option value="PROXY">Proxy</option> 
 	 									<option value="KEEPALIVED">Virtual IP</option>
 									</select>
@@ -726,29 +726,26 @@
 
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
 									<select class="form-control" tyle="margin-right: -0.7rem;" name="actstate_act_type" id="actstate_act_type">
-										<option value="">기동 유형 <spring:message code="common.total" /></option>	
-	 									<option value="A">기동</option> 
-	 									<option value="R">재기동</option>
-	 									<option value="S">중지</option>
+										<option value=""><spring:message code="eXperDB_proxy.exe_type" /> <spring:message code="common.total" /></option>	
+	 									<option value="A"><spring:message code="eXperDB_proxy.act_start" /></option> 
+	 									<option value="R"><spring:message code="eXperDB_proxy.act_restart" /></option>
+	 									<option value="S"><spring:message code="eXperDB_proxy.act_stop" /></option>
 									</select>	
 								</div>
 
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
 									<select class="form-control" style="margin-right: -0.7rem;" name="actstate_act_exe_type" id="actstate_act_exe_type">
-										<option value="">기동 실행 유형 <spring:message code="common.total" /></option>	
-										<option value="TC004001">수동</option>
-	 									<option value="TC004002">자동</option>
-										<%-- <c:forEach var="actExeTypeCd" items="${actExeTypeCd}">
-											<option value="${actExeTypeCd.sys_cd}">${actExeTypeCd.sys_cd_nm}</option>							
-										</c:forEach> --%>
+										<option value=""><spring:message code="eXperDB_proxy.exe_run_type" /> <spring:message code="common.total" /></option>	
+										<option value="TC004001"><spring:message code="dashboard.manual" /></option>
+	 									<option value="TC004002"><spring:message code="dashboard.auto" /></option>
 									</select>
 								</div>
 
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
 									<select class="form-control" name="actstate_exe_rslt_cd" id="actstate_exe_rslt_cd">
-										<option value="">실행 결과 <spring:message code="common.total" /></option>	
-										<option value="TC001501">성공</option> 
-	 									<option value="TC001502">실패</option>
+										<option value=""><spring:message code="eXperDB_proxy.exe_result" /> <spring:message code="common.total" /></option>	
+										<option value="TC001501"><spring:message code="common.success" /></option> 
+	 									<option value="TC001502"><spring:message code="common.failed" /></option>
 									</select>
 								</div>
 
@@ -783,13 +780,13 @@
 	 								<table id="settingChgHistoryTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 										<thead>
 											<tr class="bg-info text-white">
-												<th width="10">작업 일시</th>
-												<th width="10">작업 시간</th>
-												<th width="15">Proxy 명</th>
+												<th width="10"><spring:message code="eXperDB_proxy.work_day" /></th>
+												<th width="10"><spring:message code="eXperDB_proxy.work_time" /></th>
+												<th width="15"><spring:message code="eXperDB_proxy.server_name" /></th>
 												<th width="15">Proxy</th>
 												<th width="15">Virtaul IP</th>
-												<th width="10">실행 결과</th>
-												<th width="10">최종 수정자 ID</th>
+												<th width="10"><spring:message code="eXperDB_proxy.act_result" /></th>
+												<th width="10"><spring:message code="common.modifier" /></th>
 												<th width="0">최종 수정일시</th>
 												<th width="0">변경 일련번호</th>
 												<th width="0">Proxy ID</th>
@@ -813,15 +810,15 @@
 	 								<table id="runStatusHistoryTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 										<thead>
 											<tr class="bg-info text-white">
-												<th width="10">작업 일시</th>
-												<th width="10">작업 시간</th>
-												<th width="15">Proxy 명</th>
-												<th width="10">시스템 유형</th>
-												<th width="10">기동 유형</th>
-												<th width="15">기동 실행 유형</th>
-												<th width="10">실행 결과</th>
+												<th width="10"><spring:message code="eXperDB_proxy.work_day" /></th>
+												<th width="10"><spring:message code="eXperDB_proxy.work_time" /></th>
+												<th width="15"><spring:message code="eXperDB_proxy.server_name" /></th>
+												<th width="10"><spring:message code="eXperDB_proxy.system" /></th>
+												<th width="10"><spring:message code="eXperDB_proxy.exe_type" /></th>
+												<th width="15"><spring:message code="eXperDB_proxy.exe_run_type" /></th>
+												<th width="10"><spring:message code="eXperDB_proxy.exe_result" /></th>
 												<th width="15">오류 메세지</th>
-												<th width="10">최종 수정자 ID</th>
+												<th width="10"><spring:message code="common.modifier" /></th>
 												<th width="0">작업 시간</th>
 												<th width="0">최종 수정일시</th>
 												<th width="0">기동 실행 일련번호</th>
