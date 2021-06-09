@@ -35,10 +35,54 @@ public class OverallExcelBuilder extends AbstractView {
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
         	String locale_type = LocaleContextHolder.getLocale().getLanguage();
-
+        	
+        	Map<String, Object> map = (Map<String, Object>) model.get("categoryMap");  
+			String title = "";
+			if(map.get("excel_title") != null){
+				title = map.get("excel_title").toString();
+	        }else{
+	        	if(locale_type.equals("en")){
+	        		title = "Access Histories";
+		        }else{
+		        	title = "접근이력";
+		        }
+	        } 
+			
+			String[] headers;
+			if(map.get("excel_header_nm") != null){
+				headers = (String[]) map.get("excel_header_nm");
+	        }else{
+	        	if(locale_type.equals("en")){
+	        		headers = new String[9];
+	        		headers[0]="No";
+	        		headers[1]="Date";
+	        		headers[2]="Time";
+	        		headers[3]="Page";
+	        		headers[4]="ID";
+	        		headers[5]="User Name";
+	        		headers[6]="Department";
+	        		headers[7]="Position";
+	        		headers[8]="IP";
+		        }else{
+		        	headers = new String[9];
+	        		headers[0]="No";
+	        		headers[1]="일자";
+	        		headers[2]="시간";
+	        		headers[3]="구분";
+	        		headers[4]="아이디";
+	        		headers[5]="사용자명";
+	        		headers[6]="부서";
+	        		headers[7]="직급";
+	        		headers[8]="아이피";
+		        }
+	        }
+			String[] dataKey = null;
+			if(map.get("excel_data") != null){
+				dataKey = (String[]) map.get("excel_data");
+	        }
+			
         	// flush되기 전까지 메모리에 들고있는 행의 갯수
         	int ROW_ACCESS_WINDOW_SIZE = 500;
-        	String strTitle = "";
         	
         	XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
         	SXSSFWorkbook sxssfWorkbook = new SXSSFWorkbook(xssfWorkbook, ROW_ACCESS_WINDOW_SIZE);
@@ -49,7 +93,7 @@ public class OverallExcelBuilder extends AbstractView {
 			SXSSFCell objCell = null; // 셀 생성
 
 			Font fontHd = sxssfWorkbook.createFont();
-			fontHd.setFontHeightInPoints((short) 9);
+			fontHd.setFontHeightInPoints((short)9);
 			fontHd.setBold(Boolean.TRUE);
 			fontHd.setFontName("맑은고딕");
 
@@ -72,7 +116,7 @@ public class OverallExcelBuilder extends AbstractView {
 
 			// 폰트
 			Font font = sxssfWorkbook.createFont();
-			font.setFontHeightInPoints((short) 9);
+			font.setFontHeightInPoints((short)9);
 			font.setFontName("맑은고딕");
 
 			// 스타일에 폰트 적용, 정렬
@@ -89,51 +133,46 @@ public class OverallExcelBuilder extends AbstractView {
 			styleRow.setRightBorderColor(IndexedColors.BLACK.getIndex());
 			styleRow.setLeftBorderColor(IndexedColors.BLACK.getIndex());
 			
-			objSheet = sxssfWorkbook.createSheet("접근이력"); // 워크시트 생성
+			objSheet = sxssfWorkbook.createSheet(title); // 워크시트 생성
 			objSheet.setRandomAccessWindowSize(100); // 메모리 행 100개로 제한, 초과 시 Disk로 flush
 
 			// 스타일 미리 적용
 			for( int i = 0; i < 1; i++ ) {
 				objRow = objSheet.createRow(i);
-				for( int j = 0; j < 9; j++ ) {
+				for( int j = 0; j < headers.length; j++ ) {
 					objCell = objRow.createCell(j);
 					objCell.setCellStyle(styleHd);
 					objSheet.setColumnWidth(j, (short) 5000);
 				}
 			}
 
-	        if(locale_type.equals("en")){
-	        	strTitle = "Access Histories";
-	        }else{
-	        	strTitle = "접근이력";
-	        }
-	        
-	        SXSSFRow header = (SXSSFRow) objSheet.createRow(0);
-	        setHeaderCellTitle(header, strTitle); // 헤더 칼럼명 설정
+			SXSSFRow header = (SXSSFRow) objSheet.createRow(0);
+	        setHeaderCellTitle(header, title); // 헤더 칼럼명 설정
 	        setHeaderStyleTitle(header, styleHd); // 헤더 스타일 설정
 
 	        header = (SXSSFRow) objSheet.createRow(2);
-	        setHeaderCellValue(header, locale_type); // 헤더 칼럼명 설정
-	        setHeaderStyle(header, styleHd); // 헤더 스타일 설정
+	        setHeaderCellValue(header, headers); // 헤더 칼럼명 설정
+	        setHeaderStyle(header, styleHd, headers.length); // 헤더 스타일 설정
 
 	        int rowNum = 3;
 		
 			CellStyle cellStyle = sxssfWorkbook.createCellStyle(); // 제목 스타일
 			cellStyle.setFillForegroundColor( HSSFColor.GREY_25_PERCENT.index );
 			cellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-
-	        Map<String, Object> map = (Map<String, Object>) model.get("categoryMap");  
-	        List<Object> categories = (List<Object>) map.get("category");  
-	        
+			
+			List<Object> categories = (List<Object>) map.get("category");  
 	        for (int i = 0; i < categories.size(); i++) {
-	        	HistoryVO category = (HistoryVO) categories.get(i);
-
-		    	// 열
-		        objRow = objSheet.createRow(rowNum);
-		        objRow.setHeight((short) 0x150);
-		        
-		        setEachRow(objRow, category);
-		        setHeaderStyle(objRow, styleRow); // 헤더 스타일 설정
+	        		// 열
+			        objRow = objSheet.createRow(rowNum);
+			        objRow.setHeight((short) 0x150);
+			    if(dataKey == null){
+			       	HistoryVO category = (HistoryVO) categories.get(i);
+	        		setEachRow(objRow, category);
+			    }else{
+			    	Map<String, Object> category = (Map<String, Object>) categories.get(i);
+			    	setEachRowData(objRow,category, dataKey);
+			    }
+		        setHeaderStyle(objRow, styleRow,headers.length); // 헤더 스타일 설정
 	        
 		        ++rowNum;
 	        }
@@ -142,7 +181,12 @@ public class OverallExcelBuilder extends AbstractView {
             String yyyymmdd = sdf.format(c1.getTime());
 
 			response.setContentType("Application/Msexcel");
-			response.setHeader("Content-Disposition", "ATTachment; Filename=accessHistory_" + yyyymmdd + ".xlsx");
+			String fileName ="accessHistory";
+			if(map.get("excel_file") != null){
+				fileName = map.get("excel_file").toString();
+	        }
+			response.setHeader("Content-Disposition", "ATTachment; Filename=" + fileName + "_" + yyyymmdd + ".xlsx");
+			
 			
 			OutputStream fileOut = response.getOutputStream();
 			sxssfWorkbook.write(fileOut);
@@ -156,8 +200,8 @@ public class OverallExcelBuilder extends AbstractView {
             throw e;
         }
     }
-    
-    private void setHeaderCellTitle(SXSSFRow header, String title) {
+
+	private void setHeaderCellTitle(SXSSFRow header, String title) {
         header.createCell(0).setCellValue(title);
     }
     
@@ -165,32 +209,13 @@ public class OverallExcelBuilder extends AbstractView {
         header.getCell(0).setCellStyle(style);
     }
    
-    private void setHeaderCellValue(SXSSFRow header, String locale_type) {
-        if(locale_type.equals("en")){
-            header.createCell(0).setCellValue("No");
-            header.createCell(1).setCellValue("Date");
-            header.createCell(2).setCellValue("Time");
-            header.createCell(3).setCellValue("Page");
-            header.createCell(4).setCellValue("ID");
-            header.createCell(5).setCellValue("User Name");
-            header.createCell(6).setCellValue("Department");
-            header.createCell(7).setCellValue("Position");
-            header.createCell(8).setCellValue("IP");
-        }else{
-            header.createCell(0).setCellValue("No");
-            header.createCell(1).setCellValue("일자");
-            header.createCell(2).setCellValue("시간");
-            header.createCell(3).setCellValue("구분");
-            header.createCell(4).setCellValue("아이디");
-            header.createCell(5).setCellValue("사용자명");
-            header.createCell(6).setCellValue("부서");
-            header.createCell(7).setCellValue("직급");
-            header.createCell(8).setCellValue("아이피");
-        }
+	private void setHeaderCellValue(SXSSFRow header, String[] headerStr) {
+    	for(int i=0; i < headerStr.length; i++){
+    		 header.createCell(i).setCellValue(headerStr[i]);
+    	}
     }
-   
-    private void setHeaderStyle(SXSSFRow header, CellStyle style) {
-		for( int i = 0; i < 9; i++ ) {
+    private void setHeaderStyle(SXSSFRow header, CellStyle style, int length) {
+		for( int i = 0; i < length; i++ ) {
 			header.getCell(i).setCellStyle(style);
 		}
     }
@@ -206,4 +231,10 @@ public class OverallExcelBuilder extends AbstractView {
     	aRow.createCell(7).setCellValue(category.getPst_nm());
     	aRow.createCell(8).setCellValue(category.getLgi_ipadr());
     }
+        
+    private void setEachRowData(SXSSFRow aRow, Map<String, Object> category, String[] dataKey) {
+    	for(int i=0; i < dataKey.length; i++){
+    		aRow.createCell(i).setCellValue(category.get(dataKey[i]).toString());
+    	}
+	}
 }

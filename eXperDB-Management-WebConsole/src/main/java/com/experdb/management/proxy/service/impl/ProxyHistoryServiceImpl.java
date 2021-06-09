@@ -1,6 +1,7 @@
 package com.experdb.management.proxy.service.impl;
 
 import java.net.ConnectException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,5 +102,15 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	      
 	      return result;
 	      
+	}
+
+	@Override
+	public List<Map<String, Object>> selectSvrStatusDBConAddrList() {
+		return proxyHistoryDAO.selectSvrStatusDBConAddrList();
+	}
+
+	@Override
+	public List<Map<String, Object>> selectProxyStatusHistory(Map<String, Object> param) throws SQLException {
+		return proxyHistoryDAO.selectProxyStatusHistory(param);
 	}
 }

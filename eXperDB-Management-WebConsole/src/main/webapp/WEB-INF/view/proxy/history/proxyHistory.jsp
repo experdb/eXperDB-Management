@@ -23,6 +23,7 @@
 <script>
 	var runStatusHistoryTable = null;
 	var settingChgHistoryTable = null;
+	var statisTable = null;
 
 	$(window.document).ready(function() {
 		//button setting
@@ -41,12 +42,40 @@
 			$('#actstate_wlk_dtm_end_prm').val(lgi_dtm_end);
 			$('#setchg_lst_dtm_start_prm').val(lgi_dtm_start);
 			$('#setchg_lst_dtm_end_prm').val(lgi_dtm_end);
-		}
-		
+			$('#statis_wlk_dtm_start').val(lgi_dtm_start);
+			$('#statis_wlk_dtm_end').val(lgi_dtm_end);
+		}		
 		selectTab("settingChange");
-		
 	});
-	
+	/* ********************************************************
+	 * rowspan
+	 ******************************************************** */
+	$.fn.rowspan = function(colIdx, isStats){
+		return this.each(function(){      
+		    var that;     
+		    $('tr', this).each(function(row) {      
+		        $('td:eq('+colIdx+')', this).filter(':visible').each(function(col) {
+		            if ($(this).html() == $(that).html() && $(this).prev().html() == $(that).prev().html()) {            
+		                rowspan = $(that).attr("rowspan") || 1;
+		                rowspan = Number(rowspan)+1;
+		 
+		                $(that).attr("rowspan",rowspan);
+		                    
+		                // do your action for the colspan cell here            
+		                $(this).hide();
+		                    
+		                // do your action for the old cell here
+		                    
+		            } else {            
+		                that = this;         
+		            }          
+		                
+		            // set the that if not already set
+		            that = (that == null) ? this : that;      
+		        });     
+		    });    
+		});
+	}
 	/* ********************************************************
 	 * 버튼setting 셋팅
 	 ******************************************************** */
@@ -208,13 +237,96 @@
 	   	runStatusHistoryTable.tables().header().to$().find('th:eq(11)').css('min-width', '0%');
 	   	runStatusHistoryTable.tables().header().to$().find('th:eq(12)').css('min-width', '0%');
 	   	
+	   	statisTable = $('#statisTable').DataTable({	
+	   		scrollY: "600px",
+			searching : false,
+			scrollX: true,
+			bSort: false,
+			paging : false,
+			columns : [	{data: "db_con_addr", className: "dt-center", defaultContent: ""}, //DB_접속_주소
+		               	{data: "pry_svr_nm", className: "dt-center", defaultContent: ""}, //Proxy명 *
+		               	{data: "lsn_nm", className: "dt-center", defaultContent: ""}, //리스너 명 *
+		               	{data: "exe_dtm_date", className: "dt-center", defaultContent: ""}, //실행 일자 *
+		               	{data: "exe_dtm_time", className: "dt-center", defaultContent: ""}, //실행 일시 *
+		               	{data: "exe_rslt_cd", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								if(full.exe_rslt_cd == "TC001501"){
+									return '<i class="fa fa-spinner fa-spin text-success"></i> <spring:message code="schedule.run" />';
+								}else{
+									return '<i class="fa fa-circle-o-notch text-danger"></i> <spring:message code="schedule.stop" />';
+								}
+							}
+						}, //실행 결과 코드
+		            	{data: "svr_status", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+							if(full.svr_status == "UP"){
+								return full.svr_status+' <i class="fa fa-arrow-up text-success"></i>';
+							}else{
+								return full.svr_status+' <i class="fa fa-arrow-down text-danger"></i>';
+							}
+						}}, //서버 상태
+		            	{data: "lst_status_chk_desc", className: "dt-center", defaultContent: ""}, //마지막 상태 체크 내용
+		            	{data: "svr_stop_tm", className: "dt-center", defaultContent: ""}, //서버 중단 시간
+		               	{data: "svr_pro_req_sel_cnt", className: "dt-center", defaultContent: ""}, //서버 처리 요청 선택 건수
+		               	{data: "bakup_ser_cnt", className: "dt-center", defaultContent: ""}, //백업 서버 수
+		               	{data: "svr_status_chg_cnt", className: "dt-center", defaultContent: ""}, //서버 상태 전환 건수
+		               	{data: "fail_chk_cnt", className: "dt-center", defaultContent: ""}, //실패 검사 수
+		               	{data: "cur_session", className: "dt-center", defaultContent: ""}, //현재 세션
+		               	{data: "max_session", className: "dt-center", defaultContent: ""}, //최대 세션
+		               	{data: "session_limit", className: "dt-center", defaultContent: ""}, //세션 제한수
+		               	{data: "cumt_sso_con_cnt", className: "dt-center", defaultContent: ""}, //누적 세션 연결 건수
+		               	{data: "byte_receive", className: "dt-center", defaultContent: ""}, //바이트 수신수
+		               	{data: "byte_transmit", className: "dt-center", defaultContent: ""}, //바이트 송신수
+		               	{data: "lst_con_rec_aft_tm", className: "dt-right", defaultContent: "", visible: false}, //마지막 연결 수신 이후 시간
+		               	{data: "lsn_svr_id", className: "dt-left", defaultContent: "", visible: false}, //리스너 서버 ID
+			    		{data: "lsn_id", className: "dt-left", defaultContent: "", visible: false},//리스너 ID
+			    		{data: "pry_exe_status_sn", className : "dt-left", defaultContent : "", visible: false}, //실행 상태 일련번호
+			    		{data: "log_type", className: "dt-left", defaultContent: "", visible: false}, //로그 유형
+		               	{data: "pry_svr_id", className: "dt-left", defaultContent: "", visible: false},//Proxy ID
+			    		{data: "exe_dtm", className: "dt-left", defaultContent: "", visible: false},//실행 일시
+			    		{data: "lst_mdfr_id", className: "dt-left", defaultContent: "", visible: false},//최종 수정자 ID
+			    		{data: "lst_mdf_dtm", className: "dt-left", defaultContent: "", visible: false},//최종 수정 일시
+			    		{data: "frst_regr_id", className: "dt-left", defaultContent: "", visible: false}, //최초 등록자 ID
+		               	{data: "frst_reg_dtm", className: "dt-left", defaultContent: "", visible: false}, //최초 등록 일시
+		               	{data: "svr_host_nm", className: "dt-left", defaultContent: "", visible: false}//DB명
+	 		        ]
+			});
+	   	 
 	   	
-	   	
+	   	statisTable.tables().header().to$().find('th:eq(0)').css('min-width', '10%');
+	  	statisTable.tables().header().to$().find('th:eq(1)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(2)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(3)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(4)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(5)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(6)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(7)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(8)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(9)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(10)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(11)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(12)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(13)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(14)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(15)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(16)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(17)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(18)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(19)').css('min-width', '10%');
+	   	statisTable.tables().header().to$().find('th:eq(20)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(21)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(22)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(23)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(24)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(25)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(26)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(27)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(28)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(29)').css('min-width', '0%');
+	   	statisTable.tables().header().to$().find('th:eq(30)').css('min-width', '0%');
+		   	
     	$(window).trigger('resize'); 
-    	
-    	
-    	
-    	//더블클릭 하면 해당 서버 그 날짜의 로그 보여주기... 모니터링 페이지 참고 ㅎ
+    
 	}
 
 	/* ********************************************************
@@ -275,64 +387,30 @@
 	    $('#actstate_wrk_strt_dtm_div').datepicker('updateDates');
 	    $('#actstate_wrk_end_dtm_div').datepicker('updateDates');
 		
+	    $("#statis_wlk_dtm_start").val(day_start);
+		$("#statis_wlk_dtm_end").val(day_end);
 		
-	}
-	
-	/* ********************************************************
-	 *  엑셀다운로드
-	 ******************************************************** */
-	function fn_ExportExcel() {
-		var table = document.getElementById("runStatusHistoryTable");
-		var dataCnt = runStatusHistoryTable.rows.length;
-
-		if (dataCnt ==1) {
-			showSwalIcon('<spring:message code="message.msg01" />', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		} else {
-			var lgi_dtm_start = $("#lgi_dtm_start_").val();
-			var lgi_dtm_end = $("#to").val();
-			var search = "%" + $("#search").val() + "%";
-			var type = $("#type").val();
-			var order_type = $("#order_type").val();
-			var order = $("#order").val();
-			var sys_cd = $("#sys_cd").val();
-			
-			var form = document.excelForm;
-
-			$("#lgi_dtm_start").val(lgi_dtm_start);
-			$("#lgi_dtm_end").val(lgi_dtm_end);
-			$("#excel_search").val(search);
-			$("#excel_type").val(type);
-			$("#excel_order_type").val(order_type);
-			$("#excel_order").val(order);
-			$("#excel_sys_cd").val(sys_cd);
-			
-			//loading bar 호출
-			setCookie("fileDownload","false"); //호출
-			checkDownloadCheck();
-			
-			form.action = "/accessHistory_Excel.do";
-			form.submit();
-			$('#loading').show();
-			return;
+		if ($("#statis_wrk_strt_dtm_div").length) {
+			$('#statis_wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
 		}
-	}
-	
-	function setCookie(c_name,value){
-	    var exdate=new Date();
-	    var c_value=escape(value);
-	    document.cookie=c_name + "=" + c_value + "; path=/";
-	}
-	
-	function checkDownloadCheck(){
-	    if (document.cookie.indexOf("fileDownload=true") != -1) {
-			var date = new Date(1000);
-			document.cookie = "fileDownload=; expires=" + date.toUTCString() + "; path=/";
-			//프로그래스바 OFF
-			$('#loading').hide();
-			return;
+
+		if ($("#statis_wrk_end_dtm_div").length) {
+			$('#statis_wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
 		}
-		setTimeout(checkDownloadCheck , 100);
+		
+		$("#statis_wlk_dtm_start").datepicker('setDate', day_start);
+	    $("#statis_wlk_dtm_end").datepicker('setDate', day_end);
+	    $('#statis_wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#statis_wrk_end_dtm_div').datepicker('updateDates');
+		
 	}
 	
 	/* ********************************************************
@@ -437,7 +515,135 @@
 			}
 		});
 	}
-	
+	 /* ********************************************************
+		 *  통계 정보 리스트 조회
+		 ******************************************************** */
+		 function fn_statis_select(){
+			var lgi_dtm_start = $("#statis_wlk_dtm_start").val();
+			var lgi_dtm_end = $("#statis_wlk_dtm_end").val();
+
+			if (lgi_dtm_start != "" && lgi_dtm_end == "") {
+				showSwalIcon('<spring:message code="message.msg14" />', '<spring:message code="common.close" />', '', 'error');
+				return false;
+			}
+
+			if (lgi_dtm_end != "" && lgi_dtm_start == "") {
+				showSwalIcon('<spring:message code="message.msg15" />', '<spring:message code="common.close" />', '', 'error');
+				return false;
+			}
+			
+			var log_type = $("#statis_log_type").val();
+			var pry_svr_id = $("#statis_pry_svr_id").val();
+			var db_con_addr = $("#statis_db_con_addr").val();
+			
+			if (log_type == "") {
+				showSwalIcon('데이터 구분을 선택해주세요.', '<spring:message code="common.close" />', '', 'error');
+				return false;
+			}else if(log_type == "TC003901"){//분별
+				if(lgi_dtm_start!=lgi_dtm_end){
+					showSwalIcon('분별 데이터는 조회 가능 기간이 1일 입니다.', '<spring:message code="common.close" />', '', 'error');
+					return false;
+				}
+				if(db_con_addr ==""){
+					showSwalIcon(fn_strBrReplcae('분별 데이터는 검색 조건 중 DB를  <br/>반드시 선택해야 조회가 가능 합니다.'), '<spring:message code="common.close" />', '', 'error');
+					return false;
+				}	
+			}
+			
+			$.ajax({
+				url : "/selectProxyStatusHistory.do",
+				data : {
+					exe_dtm_start : $("#statis_wlk_dtm_start").val(),
+					exe_dtm_end : $("#statis_wlk_dtm_end").val(),
+					pry_svr_id : $("#statis_pry_svr_id").val(),
+					log_type : $("#statis_log_type").val(),
+					db_con_addr : $("#statis_db_con_addr").val()
+				},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					statisTable.rows({selected: true}).deselect();
+					statisTable.clear().draw();
+		
+					if (nvlPrmSet(result, "") != '') {
+						statisTable.rows.add(result).draw();
+					}
+					
+					var tableRows = $('#statisTable tbody tr');
+			  		if (tableRows.length > 1) {
+				  		$('#statisTable').rowspan(0); 
+				  		$('#statisTable').rowspan(1); 
+				  		$('#statisTable').rowspan(2); 
+			  		}
+					
+				}
+			});
+		}
+		 /* ********************************************************
+			 *  엑셀다운로드
+			 ******************************************************** */
+			function fn_ExportExcel() {
+				var table = document.getElementById("statisTable");
+				var dataCnt = statisTable.rows().data().length;
+
+				if (dataCnt ==0) {
+					showSwalIcon('<spring:message code="message.msg01" />', '<spring:message code="common.close" />', '', 'error');
+					return false;
+				} else {
+					var wlk_dtm_start = $("#statis_wlk_dtm_start").val();
+					var wlk_dtm_end = $("#statis_wlk_dtm_end").val();
+					var pry_svr_id = $("#statis_pry_svr_id").val();
+					var log_type = $("#statis_log_type").val();
+					var db_con_addr = $("#statis_db_con_addr").val();
+					
+					var form = document.excelForm;
+
+					$("#excel_wlk_dtm_start").val(wlk_dtm_start);
+					$("#excel_wlk_dtm_end").val(wlk_dtm_end);
+					$("#excel_pry_svr_id").val(pry_svr_id);
+					$("#excel_log_type").val(log_type);
+					$("#excel_db_con_addr").val(db_con_addr);
+					
+					//loading bar 호출
+					setCookie("fileDownload","false"); //호출
+					checkDownloadCheck();
+					
+					form.action = "/proxyStatusHistory_Excel.do";
+					form.submit();
+					$('#loading').show();
+					return;
+				}
+			}
+			
+			function setCookie(c_name,value){
+			    var exdate=new Date();
+			    var c_value=escape(value);
+			    document.cookie=c_name + "=" + c_value + "; path=/";
+			}
+			
+			function checkDownloadCheck(){
+			    if (document.cookie.indexOf("fileDownload=true") != -1) {
+					var date = new Date(1000);
+					document.cookie = "fileDownload=; expires=" + date.toUTCString() + "; path=/";
+					//프로그래스바 OFF
+					$('#loading').hide();
+					return;
+				}
+				setTimeout(checkDownloadCheck , 100);
+			}
+			
 	 /* ********************************************************
 	  * Tab Click
 	  ******************************************************** */
@@ -446,26 +652,36 @@
 	 		
 	 		$("#searchSettingChg").show();
 	 		$("#searchActStatus").hide();
+	 		$("#searchStatistics").hide();
 	 		
 	 		$("#settingChgHistoryTableDiv").show();
 	 		$("#runStatusHistoryTableDiv").hide();
+	 		$("#statisTableDiv").hide();
 	 		
 	 		fn_setchg_select();
 	 	}else if(tab == "ActStatus"){ //기동상태 변경 이력
 	 		
 	 		$("#searchSettingChg").hide();
 	 		$("#searchActStatus").show();
+	 		$("#searchStatistics").hide();
 	 		
 	 		$("#settingChgHistoryTableDiv").hide();
 	 		$("#runStatusHistoryTableDiv").show();
+	 		$("#statisTableDiv").hide();
 	 		
 	 		fn_actstate_select();
-	 	}else{ //실시간 상태 로그
+	 	}else{ //pryStatistics
 	 		$("#searchSettingChg").hide();
 	 		$("#searchActStatus").hide();
+	 		$("#searchStatistics").show();
 	 	
 	 		$("#settingChgHistoryTableDiv").hide();
 	 		$("#runStatusHistoryTableDiv").hide();
+	 		$("#statisTableDiv").show();
+	 		
+	 		$("#statis_log_type").val("TC003902");
+	 		
+	 		fn_statis_select();
 	 		
 	 	}
 	 }
@@ -570,16 +786,13 @@
 </script>
 <%@include file="./../popup/proxyConfigDiffViewPop.jsp"%>
 <%@include file="./../../cmmn/wrkLog.jsp"%>
-<%-- <form name="excelForm" method="post">
-	<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
-	<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
-	<input type="hidden" name="excel_type" id="excel_type">
-	<input type="hidden" name="excel_search" id="excel_search">
-	<input type="hidden" name="excel_order_type" id="excel_order_type">
-	<input type="hidden" name="excel_order" id="excel_order">
-	<input type="hidden" name="excel_sys_cd" id="excel_sys_cd">
-</form> --%>
-
+<form name="excelForm" method="post">
+	<input type="hidden" name="excel_wlk_dtm_start" id="excel_wlk_dtm_start">
+	<input type="hidden" name="excel_wlk_dtm_end" id="excel_wlk_dtm_end"> 
+	<input type="hidden" name="excel_pry_svr_id" id="excel_pry_svr_id">
+	<input type="hidden" name="excel_log_type" id="excel_log_type">
+	<input type="hidden" name="excel_db_con_addr" id="excel_db_con_addr">
+</form>
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
@@ -639,11 +852,11 @@
 								<spring:message code="eXperDB_proxy.exe_change_hist" />
 							</a>
 						</li>
-						<!-- <li class="nav-item">
-							<a class="nav-link" id="server-tab-3" data-toggle="pill" href="#subTab-3" role="tab" aria-controls="subTab-3" aria-selected="false" onclick="javascript:selectTab('SvrStatus');">
-								실시간 상태 로그 
+						<li class="nav-item">
+							<a class="nav-link" id="server-tab-3" data-toggle="pill" href="#subTab-3" role="tab" aria-controls="subTab-3" aria-selected="false" onclick="javascript:selectTab('pryStatistics');">
+								Proxy 상태 로그
 							</a>
-						</li> -->
+						</li>
 					</ul>
 					<!-- search param start -->
 					<div class="card">
@@ -683,7 +896,6 @@
 	 									<option value="TC001502"><spring:message code="common.failed" /></option>
 									</select>
 								</div>
-
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="setchg_button"onclick="fn_setchg_select()" >
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 								</button>
@@ -709,7 +921,7 @@
 									</div>
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-									<select class="form-control" tyle="margin-right: -0.7rem;" name="actstate_pry_svr_id" id="actstate_pry_svr_id">
+									<select class="form-control" style="margin-right: -0.7rem;" name="actstate_pry_svr_id" id="actstate_pry_svr_id">
 	 									<option value=""><spring:message code="eXperDB_proxy.server_name" /> <spring:message code="common.total" /></option>	
 										<c:forEach var="prySvrList" items="${prySvrList}">
 											<option value="${prySvrList.pry_svr_id}">${prySvrList.pry_svr_nm}</option>							
@@ -717,7 +929,7 @@
 									</select>
 								</div>		
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
-									<select class="form-control" tyle="margin-right: -0.7rem;" name="actstate_sys_type" id="actstate_sys_type">
+									<select class="form-control" style="margin-right: -0.7rem;" name="actstate_sys_type" id="actstate_sys_type">
 										<option value=""><spring:message code="eXperDB_proxy.system" /> <spring:message code="common.total" /></option>	
 	 									<option value="PROXY">Proxy</option> 
 	 									<option value="KEEPALIVED">Virtual IP</option>
@@ -725,7 +937,7 @@
 								</div>
 
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
-									<select class="form-control" tyle="margin-right: -0.7rem;" name="actstate_act_type" id="actstate_act_type">
+									<select class="form-control" style="margin-right: -0.7rem;" name="actstate_act_type" id="actstate_act_type">
 										<option value=""><spring:message code="eXperDB_proxy.exe_type" /> <spring:message code="common.total" /></option>	
 	 									<option value="A"><spring:message code="eXperDB_proxy.act_start" /></option> 
 	 									<option value="R"><spring:message code="eXperDB_proxy.act_restart" /></option>
@@ -750,6 +962,53 @@
 								</div>
 
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="actstate_button"onclick="fn_actstate_select()" >
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
+							</form>
+							<form class="form-inline row" id="searchStatistics">
+								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row" >
+									<div id="statis_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="statis_wlk_dtm_start" name="statis_wlk_dtm_start" readonly>
+										<span class="input-group-addon input-group-append border-left">
+											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+										</span>
+									</div>
+
+									<div class="input-group align-items-center col-sm-1">
+										<span style="border:none;"> ~ </span>
+									</div>
+		
+									<div id="statis_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
+										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="statis_wlk_dtm_end" name="statis_wlk_dtm_end" readonly>
+										<span class="input-group-addon input-group-append border-left" >
+											<span class="ti-calendar input-group-text" style="cursor:pointer;"></span>
+										</span>
+									</div>
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
+									<select class="form-control" style="margin-right: -0.7rem;" name="statis_log_type" id="statis_log_type">
+										<option value="">데이터 구분 <spring:message code="common.choice" /></option>	
+	 									<option value="TC003901">분별</option> 
+	 									<option value="TC003902">일별</option>
+	 								</select>	
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+									<select class="form-control" style="margin-right: -0.7rem;" name="statis_db_con_addr" id="statis_db_con_addr">
+	 									<option value="">DB <spring:message code="common.total" /></option>	
+										<c:forEach var="dbSvrList" items="${dbSvrList}">
+											<option value="${dbSvrList.db_con_addr}">${dbSvrList.svr_host_nm}</option>							
+										</c:forEach>
+									</select>
+								</div>
+								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
+									<select class="form-control" style="margin-right: -0.7rem;" name="statis_pry_svr_id" id="statis_pry_svr_id">
+	 									<option value=""><spring:message code="eXperDB_proxy.server_name" /> <spring:message code="common.total" /></option>	
+										<c:forEach var="prySvrList" items="${prySvrList}">
+											<option value="${prySvrList.pry_svr_id}">${prySvrList.pry_svr_nm}</option>							
+										</c:forEach>
+									</select>
+								</div>		
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="statis_button"onclick="fn_statis_select()" >
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 								</button>
 							</form>
@@ -827,9 +1086,74 @@
 										</thead>
 									</table>
 							 	</div>
+							 	<div class="col-12" id="statisTableDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row" style="margin-top:-20px;">
+										<div class="col-12">
+											<div class="template-demo">	
+												<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnExcel" onclick="fn_ExportExcel()" data-toggle="modal">
+													<i class="fa fa-file-excel-o btn-icon-prepend "></i><spring:message code="history_management.excel_save" />
+												</button>
+											</div>
+										</div>
+									</div>
+	 								<table id="statisTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
+										<thead class="bg-info text-white">
+											<tr>
+												<th rowspan="2"><spring:message code="eXperDB_proxy.ipadr"/></th>
+												<th rowspan="2"><spring:message code="eXperDB_proxy.server_name"/></th>
+												<th rowspan="2"><spring:message code="eXperDB_proxy.listener_name"/></th>
+												<th rowspan="2">실행 일자</th>
+												<th rowspan="2">실행 일시</th>
+												<th rowspan="2">실행 결과</th>
+												<th colspan="7">서버</th>
+												<th colspan="4"><spring:message code="eXperDB_proxy.session"/></th>
+												<th colspan="2"><spring:message code="eXperDB_proxy.byte_in_out"/></th>
+												<th rowspan="2" width="0">마지막 연결 수신 이후 시간</th>
+												<th rowspan="2" width="0">리스너 서버 ID</th>
+												<th rowspan="2" width="0">리스너 ID</th>
+												<th rowspan="2" width="0">실행 상태 일련번호</th>
+												<th rowspan="2" width="0">로그 유형</th>
+												<th rowspan="2" width="0">Proxy ID</th>
+												<th rowspan="2" width="0">실행 일시</th>
+												<th rowspan="2" width="0">최종 수정자 ID</th>
+												<th rowspan="2" width="0">최종 수정 일시</th>
+												<th rowspan="2" width="0">최초 등록자 ID</th>
+												<th rowspan="2" width="0">최초 등록 일시</th>
+												<th rowspan="2" width="0">DB명</th>
+											</tr>
+											<tr>
+												<th width="10">상태</th>
+												<th width="10">마지막 상태 체크</th>
+												<th width="10">중단 시간</th>
+												<th width="10">처리 요청<br/>선택 건수</th>
+												<th width="10">백업<br/>서버 수</th>
+												<th width="10">상태<br/>전환 건수</th>
+												<th width="10">실패<br/>검사 수</th>
+												<th width="10"><spring:message code="eXperDB_proxy.current"/><br/><spring:message code="eXperDB_proxy.session_count"/></th>
+												<th width="10"><spring:message code="eXperDB_proxy.max"/><br/><spring:message code="eXperDB_proxy.session_count"/></th>
+												<th width="10"><spring:message code="eXperDB_proxy.session"/><br/><spring:message code="eXperDB_proxy.limit"/></th>
+												<th width="10">누적 세션<br/>연결 수</th>
+												<th width="10"><spring:message code="eXperDB_proxy.byte_in"/></th>
+												<th width="10"><spring:message code="eXperDB_proxy.byte_out"/></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
 						 	</div>
 						</div>
 					</div>
+					
 					<!-- content-wrapper ends -->
 				</div>
 			</div>

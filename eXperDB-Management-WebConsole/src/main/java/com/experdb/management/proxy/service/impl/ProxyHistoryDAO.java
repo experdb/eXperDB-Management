@@ -64,4 +64,29 @@ public class ProxyHistoryDAO extends EgovAbstractMapper{
 		result = (Map<String, Object>) selectOne("proxyHistorySql.selectProxyConfFilePathInfo", param);
 		return result;
 	}
+	/**
+	 * Proxy DB 접속 주소 목록
+	 * 
+	 * @return Map<String, Object>
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectSvrStatusDBConAddrList() {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyHistorySql.selectSvrStatusDBConAddrList", null);
+		return result;
+	}
+	/**
+	 * Proxy 서버 실시간 상태 로그 조회
+	 * 
+	 * @param param
+	 * @return Map<String, Object>
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectProxyStatusHistory(Map<String, Object> param) throws SQLException {
+		List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("proxyHistorySql.selectProxyStatusHistoryList", param);
+		return result;
+	}
 }

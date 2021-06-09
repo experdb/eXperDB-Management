@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -114,6 +115,9 @@ public class ProxyHistoryController {
 				param.put("svr_use_yn", "Y");
 				List<ProxyServerVO> prySvrList = proxySettingService.selectProxyServerList(param);
 			
+				List<Map<String, Object>> dbSvrList = proxyHistoryService.selectSvrStatusDBConAddrList();
+				
+				mv.addObject("dbSvrList", dbSvrList);
 				mv.addObject("prySvrList", prySvrList);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -152,17 +156,55 @@ public class ProxyHistoryController {
 				// 화면접근이력 이력 남기기 - Proxy 설정관리 - Proxy Listen 관리 팝업
 				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0167_03", show_menu_id);		
 
-				param.put("wlk_dtm_start", request.getParameter("wlk_dtm_start")==null ? "" : request.getParameter("wlk_dtm_start").toString());
-				param.put("wlk_dtm_end", request.getParameter("wlk_dtm_end")==null ? "" : request.getParameter("wlk_dtm_end").toString());
-				param.put("pry_svr_id", (request.getParameter("pry_svr_id") ==null || "".equals(request.getParameter("pry_svr_id").toString())) ? "" : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
-			    
-				param.put("sys_type", request.getParameter("sys_type")==null ? "" : request.getParameter("sys_type").toString());
-				param.put("act_type", request.getParameter("act_type")==null ? "" : request.getParameter("act_type").toString());
-				param.put("act_exe_type", request.getParameter("act_exe_type")==null ? "" : request.getParameter("act_exe_type").toString());
-				param.put("exe_rslt_cd", request.getParameter("exe_rslt_cd")==null ? "" : request.getParameter("exe_rslt_cd").toString());
-				//param.put("lst_mdfr_id", request.getParameter("lst_mdfr_id")==null ? "" : request.getParameter("lst_mdfr_id").toString());
-				  
+				param.put("wlk_dtm_start", cu.getStringWithoutNull(request.getParameter("wlk_dtm_start")));
+				param.put("wlk_dtm_end", cu.getStringWithoutNull(request.getParameter("wlk_dtm_end")));
+				param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? "" : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
+			    param.put("sys_type", cu.getStringWithoutNull(request.getParameter("sys_type")));
+				param.put("act_type", cu.getStringWithoutNull(request.getParameter("act_type")));
+				param.put("act_exe_type", cu.getStringWithoutNull(request.getParameter("act_exe_type")));
+				param.put("exe_rslt_cd", cu.getStringWithoutNull(request.getParameter("exe_rslt_cd")));
+				
 				resultSet = proxyHistoryService.selectProxyActStateHistoryList(param);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+
+	}
+	
+	/**
+	 * Proxy 기동 상태 변경 이력 리스트를 조회한다.
+	 * 
+	 * @param request, historyVO, response
+	 * @return List<Map<String, Object>>
+	 * @throws 
+	 */
+	@RequestMapping(value = "/selectProxyStatusHistory.do")
+	public @ResponseBody List<Map<String, Object>> selectProxyStatusHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001803");
+				
+		List<Map<String, Object>> resultSet = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		try {	
+			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultSet;
+			}else{
+				// 화면접근이력 이력 남기기 - Proxy 설정관리 - Proxy Listen 관리 팝업
+				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0167_03", show_menu_id);		
+
+				param.put("exe_dtm_start", cu.getStringWithoutNull(request.getParameter("exe_dtm_start")));
+				param.put("exe_dtm_end", cu.getStringWithoutNull(request.getParameter("exe_dtm_end")));
+				param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? "" : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
+			    param.put("log_type", cu.getStringWithoutNull(request.getParameter("log_type")));
+				param.put("db_con_addr", cu.getStringWithoutNull(request.getParameter("db_con_addr")));
+				  
+				resultSet = proxyHistoryService.selectProxyStatusHistory(param);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -257,9 +299,7 @@ public class ProxyHistoryController {
 			param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? 0 : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
 			param.put("pry_svr_nm", cu.getStringWithoutNull(request.getParameter("pry_svr_nm")));
 			param.put("pry_cng_sn", "".equals(cu.getStringWithoutNull(request.getParameter("pry_cng_sn"))) ? 0 : Integer.parseInt(request.getParameter("pry_cng_sn").toString()));
-			
-		
-			
+				
 			try{
 				confFileStrMap = proxyHistoryService.getProxyConfFileContent(param);
 			}catch(ConnectException e){
@@ -293,5 +333,56 @@ public class ProxyHistoryController {
 			resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg46", null, LocaleContextHolder.getLocale()));
 		}
 		return resultObj;
+	}
+	
+	/**
+	 * 실시간 상태 로그 엑셀을 저장한다.
+	 * 
+	 * @param request
+	 * @throws Exception
+	 */
+	@RequestMapping("/proxyStatusHistory_Excel.do")
+	public ModelAndView proxyStatusHistory_Excel(@ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletResponse response, HttpServletRequest request) throws Exception {
+		List<Map<String, Object>> resultSet = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+		try {
+            Cookie cookie = new Cookie("fileDownload", "true");
+            cookie.setPath("/");
+            response.addCookie(cookie);
+			
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001803");
+
+			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
+				response.sendRedirect("/autError.do");
+				return null;
+			}
+			
+			param.put("exe_dtm_start", cu.getStringWithoutNull(request.getParameter("excel_wlk_dtm_start")));
+			param.put("exe_dtm_end", cu.getStringWithoutNull(request.getParameter("excel_wlk_dtm_end")));
+			param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("excel_pry_svr_id"))) ? "" : Integer.parseInt(request.getParameter("excel_pry_svr_id").toString()));
+		    param.put("log_type", cu.getStringWithoutNull(request.getParameter("excel_log_type")));
+			param.put("db_con_addr", cu.getStringWithoutNull(request.getParameter("excel_db_con_addr")));
+			
+			resultSet = proxyHistoryService.selectProxyStatusHistory(param);
+			
+			String title = "Proxy 상태 로그";
+			String[] headerNm={"DB서버IP","Proxy명","Listener명","실행일자","실행일시","실행결과","상태","마지막상태체크","중단시간","처리 요청 선택 건수","백업 서버수","상태 전환 건수","실패 검사 수","현재 세션 수","최대 세션 수","세션 제한 수","누적 세션 연결 수","수신수","송신수"};
+			String[] dataSet={"db_con_addr","pry_svr_nm","lsn_nm","exe_dtm_date","exe_dtm_time","exe_rslt_cd","svr_status","lst_status_chk_desc","svr_stop_tm","svr_pro_req_sel_cnt","bakup_ser_cnt","svr_status_chg_cnt","fail_chk_cnt","cur_session","max_session","session_limit","cumt_sso_con_cnt","byte_receive","byte_transmit"};
+			String fileName = "Proxy Status History";
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("category", resultSet);
+			map.put("excel_title",title);
+			map.put("excel_header_nm", headerNm);
+			map.put("excel_data", dataSet);
+			map.put("excel_file", fileName);
+			
+			return new ModelAndView("overallExcelView", "categoryMap", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

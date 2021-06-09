@@ -104,4 +104,71 @@
 				AND A.PRY_CNG_SN = #{pry_cng_sn}
 			</if>
 	</select>
+	
+	<select id="selectSvrStatusDBConAddrList" resultType="hashMap">
+		/**
+		* Query ID : selectSvrStatusDBConAddrList
+		* Description : DB_CON_ADDR select 박스 생성용
+		* Author : 김민정
+		**/
+		SELECT A.DB_CON_ADDR, B.SVR_HOST_NM
+		FROM T_PRY_SVR_STATUS_G A INNER JOIN T_DBSVRIPADR_I B ON A.DB_CON_ADDR=B.IPADR
+		GROUP BY A.DB_CON_ADDR, B.SVR_HOST_NM
+		ORDER BY A.DB_CON_ADDR
+	</select>
+	<select id="selectProxyStatusHistoryList" resultType="hashMap">
+		/**
+		* Query ID : selectPrySvrStatusHistoryList
+		* Description : Proxy 서버 실시간 상태 로그
+		* Author : 김민정
+		**/
+		SELECT 	A.PRY_EXE_STATUS_SN, 
+				A.LOG_TYPE, 
+				A.PRY_SVR_ID, 
+				A.EXE_DTM,
+				TO_CHAR(A.EXE_DTM,'YYYY-MM-DD') AS EXE_DTM_DATE,
+				TO_CHAR(A.EXE_DTM,'HH24:MI') AS EXE_DTM_TIME, 
+				A.CUR_SESSION, 
+				A.MAX_SESSION, 
+				A.SESSION_LIMIT, 
+				A.CUMT_SSO_CON_CNT, 
+				A.SVR_PRO_REQ_SEL_CNT, 
+				A.LST_CON_REC_AFT_TM, 
+				A.BYTE_RECEIVE, 
+				A.BYTE_TRANSMIT, 
+				A.SVR_STATUS, 
+				A.LST_STATUS_CHK_DESC, 
+				A.BAKUP_SER_CNT, 
+				A.FAIL_CHK_CNT, 
+				A.SVR_STATUS_CHG_CNT, 
+				A.SVR_STOP_TM, 
+				A.EXE_RSLT_CD, 
+				A.FRST_REGR_ID, 
+				A.FRST_REG_DTM, 
+				A.LST_MDFR_ID, 
+				A.LST_MDF_DTM, 
+				A.LSN_ID, 
+				A.DB_CON_ADDR, 
+				A.LSN_SVR_ID,
+				B.SVR_HOST_NM,
+				C.PRY_SVR_NM,
+				D.LSN_NM
+		FROM 	T_PRY_SVR_STATUS_G 	A 	INNER JOIN 	T_DBSVRIPADR_I 	B	ON 	A.DB_CON_ADDR=B.IPADR
+										INNER JOIN 	T_PRY_SVR_I		C 	ON 	A.PRY_SVR_ID=C.PRY_SVR_ID
+										INNER JOIN	T_PRY_LSN_I		D	ON	A.LSN_ID=D.LSN_ID
+		WHERE 1 = 1
+		<if test="exe_dtm_start != null and exe_dtm_end != null ">
+			AND TO_CHAR(A.EXE_DTM,'YYYY-MM-DD') BETWEEN #{exe_dtm_start} AND #{exe_dtm_end}
+		</if>
+		<if test="db_con_addr != null and db_con_addr != '' ">
+	        AND A.DB_CON_ADDR = #{db_con_addr}
+        </if>
+        <if test="log_type != null and log_type != '' ">
+        	AND A.LOG_TYPE = #{log_type}
+        </if>
+        <if test="pry_svr_id != null and pry_svr_id != '' ">
+        	AND A.PRY_SVR_ID = #{pry_svr_id}
+        </if>
+		ORDER BY A.DB_CON_ADDR, A.PRY_SVR_ID, A.LSN_ID, A.EXE_DTM DESC
+	</select>
 </mapper>

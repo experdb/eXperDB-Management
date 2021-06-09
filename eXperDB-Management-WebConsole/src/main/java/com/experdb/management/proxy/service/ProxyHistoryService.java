@@ -45,4 +45,20 @@ public interface ProxyHistoryService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> getProxyConfFileContent(Map<String, Object> param) throws ConnectException, Exception;
+	
+	/**
+	 * Proxy DB_CON_ADDR 목록 조회
+	 *
+	 * @return List<Map<String, Object>>
+	 * @throws 
+	 */
+	public List<Map<String, Object>> selectSvrStatusDBConAddrList();
+
+	/**
+	 * Proxy T_PRY_SVR_STATUS_G 조회
+	 *
+	 * @return List<Map<String, Object>>
+	 * @throws 
+	 */
+	public List<Map<String, Object>> selectProxyStatusHistory(Map<String, Object> param) throws Exception;
 }
