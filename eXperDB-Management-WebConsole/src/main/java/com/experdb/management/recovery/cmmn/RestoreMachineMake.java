@@ -21,13 +21,42 @@ public class RestoreMachineMake {
 			
 			String context;
 			
+			String mac =  pbeEnc.encrypt(rm.getGuestMac());
+			String ip = pbeEnc.encrypt(rm.getGuestIp());
+			String subnetmask =pbeEnc.encrypt(rm.getGuestSubnetmask());
+			String gateway = pbeEnc.encrypt(rm.getGuestGateway());
+			String dns = pbeEnc.encrypt(rm.getGuestDns());
+			String network = pbeEnc.encrypt(rm.getGuestNetwork());
+			
+				
 			// restore info
-			context = "mac = " + pbeEnc.encrypt(rm.getGuestMac()) + "\n"
-					+ "ip = " + pbeEnc.encrypt(rm.getGuestIp()) + "\n"
-					+ "subnetmask = " + pbeEnc.encrypt(rm.getGuestSubnetmask()) + "\n"
-					+ "gateway = " + pbeEnc.encrypt(rm.getGuestGateway()) + "\n"
-					+ "dns = " + pbeEnc.encrypt(rm.getGuestDns()) + "\n"
-					+ "netwrok = " + pbeEnc.encrypt(rm.getGuestNetwork()) + "\n";
+			context = "mac = " + mac + "\n"
+					+ "ip = " + ip + "\n"
+					+ "subnetmask = " + subnetmask + "\n"
+					+ "gateway = " + gateway + "\n"
+					+ "dns = " + dns + "\n"
+					+ "netwrok = " + network + "\n";
+			
+			
+			System.out.println("-------------------------------------------------");
+			System.out.println("MAC = "+mac);
+			System.out.println("IP = "+ip);
+			System.out.println("SubnetMask = "+subnetmask);
+			System.out.println("Gateway = "+gateway);
+			System.out.println("DNS = "+dns);
+			System.out.println("Network = "+network);
+			System.out.println("-------------------------------------------------");
+			
+			System.out.println("");
+			
+			System.out.println("-------------------------------------------------");
+			System.out.println("MAC = "+pbeEnc.decrypt(mac));
+			System.out.println("IP = "+pbeEnc.decrypt(ip));
+			System.out.println("SubnetMask = "+pbeEnc.decrypt(subnetmask));
+			System.out.println("Gateway = "+pbeEnc.decrypt(gateway));
+			System.out.println("DNS = "+pbeEnc.decrypt(dns));
+			System.out.println("Network = "+pbeEnc.decrypt(network));
+			System.out.println("-------------------------------------------------");
 			
 			// file write
 			f.write(context);
