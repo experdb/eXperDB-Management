@@ -855,9 +855,10 @@
 									<i class="menu-arrow"></i>
 								</a>
 								
-								<div class="submenu" style="width:400px;">
-									<div class="row">
-										<div class="col-md-6" id="MN00019">
+								<div class="submenu" style="width:700px;">
+									<!-- <div class="row"> -->
+									<div class="col-group-wrapper row" >
+										<div class="col-group col-md-4" id="MN00019" style="padding-right: 0px;">
 											<ul class="submenu-item">
 												<li class="nav-item">
 													<span class="nav-heading-title">
@@ -881,7 +882,7 @@
 												</li>
 											</ul>
 										</div>
-										<div class="col-group col-md-6" id="MN00020">
+										<div class="col-group col-md-4" id="MN00020">
 											<ul class="submenu-item">
 												<li class="nav-item" id="MN00020_etc_Y_tit">
 													<span class="nav-heading-title">
@@ -896,6 +897,30 @@
 												<li class="nav-item" id="MN0002002">
 													<a class="nav-link" href="/experdb/backupSetting.do" onClick="fn_cookie('backupSetting')" target="main">
 														<spring:message code="eXperDB_backup.msg13" />
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="col-group col-md-4" id="MN00021">
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN00021_etc_Y_tit">
+													<span class="nav-heading-title">
+														<b>Recovery</b>
+													</span>
+												</li>
+												<li class="nav-item" id="MN0002101">
+													<a class="nav-link" href="/experdb/completeRecovery.do" onClick="fn_cookie('')" target="main">
+														완전복구
+													</a>
+												</li>
+												<li class="nav-item" id="MN0002102">
+													<a class="nav-link" href="/experdb/timeRecovery.do" onClick="fn_cookie('')" target="main">
+														시점복구
+													</a>
+												</li>
+												<li class="nav-item" id="MN0002103">
+													<a class="nav-link" href="/experdb/fileRecovery.do" onClick="fn_cookie('')" target="main">
+														파일복구
 													</a>
 												</li>
 											</ul>
