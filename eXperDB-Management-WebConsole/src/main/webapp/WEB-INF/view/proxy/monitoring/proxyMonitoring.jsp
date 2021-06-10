@@ -130,7 +130,6 @@
 			}
 		});
 		$("#loading").hide();
-		
 	}
 
 	/* ********************************************************
@@ -561,6 +560,7 @@
 		if(nvlPrmSet(result.selectPryCngList, '') != '') {
 			proxyConfigCngLogTable.rows.add(result.selectPryCngList).draw();
 		}
+		
 	}
 	
 	/* ********************************************************
@@ -1561,18 +1561,19 @@
 			]
 		});
 
-		proxyStatTable.tables().header().to$().find('th:eq(0)').css('min-width','120px');
-		proxyStatTable.tables().header().to$().find('th:eq(1)').css('min-width','100px');
-		proxyStatTable.tables().header().to$().find('th:eq(2)').css('min-width','115px');
-		proxyStatTable.tables().header().to$().find('th:eq(3)').css('min-width','100px');
-		proxyStatTable.tables().header().to$().find('th:eq(4)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(5)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(6)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(7)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(8)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(9)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(10)').css('min-width');
-		proxyStatTable.tables().header().to$().find('th:eq(11)').css('min-width');
+
+		proxyStatTable.tables().header().to$().find('th:eq(0)').css('min-width','145px');
+		proxyStatTable.tables().header().to$().find('th:eq(1)').css('min-width','90px');
+		proxyStatTable.tables().header().to$().find('th:eq(2)').css('min-width','105px');
+		proxyStatTable.tables().header().to$().find('th:eq(3)').css('min-width','90px');
+		proxyStatTable.tables().header().to$().find('th:eq(4)').css('min-width','70px');
+		proxyStatTable.tables().header().to$().find('th:eq(5)').css('min-width','30px');
+		proxyStatTable.tables().header().to$().find('th:eq(6)').css('min-width','30px');
+		proxyStatTable.tables().header().to$().find('th:eq(7)').css('min-width','30px');
+		proxyStatTable.tables().header().to$().find('th:eq(8)').css('min-width','30px');
+		proxyStatTable.tables().header().to$().find('th:eq(9)').css('min-width','30px');
+		proxyStatTable.tables().header().to$().find('th:eq(10)').css('min-width','30px');
+		proxyStatTable.tables().header().to$().find('th:eq(11)').css('min-width','30px');
 		proxyStatTable.tables().header().to$().find('th:eq(12)').css('min-width','0px');
 		proxyStatTable.tables().header().to$().find('th:eq(13)').css('min-width','0px');
 		proxyStatTable.tables().header().to$().find('th:eq(14)').css('min-width','0px');
@@ -2369,11 +2370,11 @@
 														<table id="proxyStatTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
 															<thead class="bg-info text-white">
 																<tr>
-																	<th rowspan="2" scope="col" width="100px;"><spring:message code="eXperDB_proxy.server_name"/></th>
-																	<th rowspan="2" scope="col" width="100px;"><spring:message code="eXperDB_proxy.listener_name"/></th>
+																	<th rowspan="2" scope="col" width="130px;"><spring:message code="eXperDB_proxy.server_name"/></th>
+																	<th rowspan="2" scope="col" width="110px;"><spring:message code="eXperDB_proxy.listener_name"/></th>
 																	<th rowspan="2" scope="col" width="100px;"><spring:message code="eXperDB_proxy.ipadr"/></th>
 																	<th rowspan="2" scope="col" width="100px;"><spring:message code="properties.status"/></th>
-																	<th rowspan="2" scope="col" width="100px;" style="line-height:120%;"><spring:message code="eXperDB_proxy.downtime"/></th>
+																	<th rowspan="2" scope="col" width="90px;" style="line-height:120%;"><spring:message code="eXperDB_proxy.downtime"/></th>
 																	<th rowspan="2" scope="col" width="100px;" style="line-height:120%;"><spring:message code="common.failed"/><br/><spring:message code="eXperDB_proxy.check_count"/></th>
 																	<th colspan="4" scope="col" width="300px;" style="line-height:120%;"><spring:message code="eXperDB_proxy.session"/></th>
 																	<th colspan="2" scope="col" width="200px;" style="line-height:120%;"><spring:message code="eXperDB_proxy.byte_in_out"/></th>
