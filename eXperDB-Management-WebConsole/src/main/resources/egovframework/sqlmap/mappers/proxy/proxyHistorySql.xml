@@ -116,6 +116,7 @@
 		GROUP BY A.DB_CON_ADDR, B.SVR_HOST_NM
 		ORDER BY A.DB_CON_ADDR
 	</select>
+	
 	<select id="selectProxyStatusHistoryList" resultType="hashMap">
 		/**
 		* Query ID : selectPrySvrStatusHistoryList
@@ -152,12 +153,27 @@
 				A.LSN_SVR_ID,
 				B.SVR_HOST_NM,
 				C.PRY_SVR_NM,
-				D.LSN_NM
-		FROM 	T_PRY_SVR_STATUS_G 	A 	INNER JOIN 	T_DBSVRIPADR_I 	B	ON 	A.DB_CON_ADDR=B.IPADR
-										INNER JOIN 	T_PRY_SVR_I		C 	ON 	A.PRY_SVR_ID=C.PRY_SVR_ID
-										INNER JOIN	T_PRY_LSN_I		D	ON	A.LSN_ID=D.LSN_ID
+				D.LSN_NM,
+				(A.CUR_SESSION -  COALESCE(F.CUR_SESSION,0)) as CUR_SESSION_GAP,
+				(A.MAX_SESSION -  COALESCE(F.MAX_SESSION,0)) as MAX_SESSION_GAP,
+				(A.SESSION_LIMIT -  COALESCE(F.SESSION_LIMIT,0)) as SESSION_LIMIT_GAP,
+				(A.CUMT_SSO_CON_CNT -  COALESCE(F.CUMT_SSO_CON_CNT,0)) as CUMT_SSO_CON_CNT_GAP,
+				(A.SVR_PRO_REQ_SEL_CNT -  COALESCE(F.SVR_PRO_REQ_SEL_CNT,0)) as SVR_PRO_REQ_SEL_CNT_GAP,
+				(A.BYTE_RECEIVE -  COALESCE(F.BYTE_RECEIVE,0)) as BYTE_RECEIVE_GAP,
+				(A.BYTE_TRANSMIT -  COALESCE(F.BYTE_TRANSMIT,0)) as BYTE_TRANSMIT_GAP,
+				(A.BAKUP_SER_CNT -  COALESCE(F.BAKUP_SER_CNT,0)) as BAKUP_SER_CNT_GAP,
+				(A.FAIL_CHK_CNT -  COALESCE(F.FAIL_CHK_CNT,0)) as FAIL_CHK_CNT_GAP, 
+				(A.SVR_STATUS_CHG_CNT -  COALESCE(F.SVR_STATUS_CHG_CNT,0)) as SVR_STATUS_CHG_CNT_GAP
+		FROM 	T_PRY_SVR_STATUS_G 	A 	INNER JOIN 		T_DBSVRIPADR_I 			B	ON 	A.DB_CON_ADDR=B.IPADR
+										INNER JOIN 		T_PRY_SVR_I				C 	ON 	A.PRY_SVR_ID=C.PRY_SVR_ID
+										INNER JOIN		T_PRY_LSN_I				D	ON	A.LSN_ID=D.LSN_ID
+										LEFT OUTER JOIN  T_PRY_SVR_STATUS_G 	F 	ON  A.PRY_SVR_ID=F.PRY_SVR_ID 
+																					AND A.LSN_ID=F.LSN_ID 
+																					AND A.DB_CON_ADDR=F.DB_CON_ADDR
+																					AND A.EXE_DTM::DATE=F.EXE_DTM::DATE + '1 day'::INTERVAL
+																					AND F.LOG_TYPE='TC003902'
 		WHERE 1 = 1
-		<if test="exe_dtm_start != null and exe_dtm_end != null ">
+		<if test="exe_dtm_start != null and exe_dtm_end != null">
 			AND TO_CHAR(A.EXE_DTM,'YYYY-MM-DD') BETWEEN #{exe_dtm_start} AND #{exe_dtm_end}
 		</if>
 		<if test="db_con_addr != null and db_con_addr != '' ">
@@ -170,5 +186,33 @@
         	AND A.PRY_SVR_ID = #{pry_svr_id}
         </if>
 		ORDER BY A.DB_CON_ADDR, A.PRY_SVR_ID, A.LSN_ID, A.EXE_DTM DESC
+	</select>
+	
+	<select id="selectProxyStatusChartTitleList" resultType="hashMap">
+		/**
+		* Query ID : selectProxyStatusChartTitleList
+		* Description : Chart 표시 목록 
+		* Author : 김민정
+		**/
+		SELECT 	A.DB_CON_ADDR, 
+				A.PRY_SVR_ID, 
+				B.PRY_SVR_NM, 
+				C.LSN_NM
+		FROM 	T_PRY_SVR_STATUS_G A 	INNER JOIN T_PRY_SVR_I B 	ON A.PRY_SVR_ID=B.PRY_SVR_ID 
+										INNER JOIN T_PRY_LSN_I C 	ON A.PRY_SVR_ID = C.PRY_SVR_ID 	AND 	A.LSN_ID = C.LSN_ID 
+		WHERE 	1 = 1
+		<if test="exe_dtm_start != null and exe_dtm_end != null ">
+			AND TO_CHAR(A.EXE_DTM,'YYYY-MM-DD') BETWEEN #{exe_dtm_start} AND #{exe_dtm_end}
+		</if>
+		<if test="db_con_addr != null and db_con_addr != '' ">
+	        AND A.DB_CON_ADDR = #{db_con_addr}
+        </if>
+        <if test="log_type != null and log_type != '' ">
+        	AND A.LOG_TYPE = #{log_type}
+        </if>
+        <if test="pry_svr_id != null and pry_svr_id != '' ">
+        	AND A.PRY_SVR_ID = #{pry_svr_id}
+        </if>
+		GROUP BY 	A.DB_CON_ADDR, A.PRY_SVR_ID, B.PRY_SVR_NM, C.LSN_NM, A.LOG_TYPE 
 	</select>
 </mapper>

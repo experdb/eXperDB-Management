@@ -26,6 +26,12 @@
 	var statisTable = null;
 
 	$(window.document).ready(function() {
+		
+		//tooltip setting
+		$('[data-toggle="tooltip"]').tooltip({
+			template: '<div class="tooltip tooltip-info" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+		});
+		
 		//button setting
 		fn_buttonAut();
 		
@@ -34,7 +40,6 @@
 
 		//작업기간 calender setting
 		dateCalenderSetting();
-
 		var lgi_dtm_start_val = "${lgi_dtm_start}";
 		var lgi_dtm_end_val = "${lgi_dtm_end}";
 		if (lgi_dtm_start_val != "" && lgi_dtm_end_val != "") {
@@ -238,16 +243,23 @@
 	   	runStatusHistoryTable.tables().header().to$().find('th:eq(12)').css('min-width', '0%');
 	   	
 	   	statisTable = $('#statisTable').DataTable({	
-	   		scrollY: "600px",
+	   		scrollY: "251px",
 			searching : false,
 			scrollX: true,
 			bSort: false,
 			paging : false,
-			columns : [	{data: "db_con_addr", className: "dt-center", defaultContent: ""}, //DB_접속_주소
+			columns : [	{data: "db_con_addr", className: "dt-center", defaultContent: ""
+							/* ,render: function (data, type, full){
+								if(full.log_type != "TC003901"){
+									return ' <a onclick="fn_show_chart(\''+full.db_con_addr+'\',\'day\')">'+full.db_con_addr+'</i>';
+								}else{
+									return full.db_con_addr;
+								}
+							} */
+						}, //DB_접속_주소
 		               	{data: "pry_svr_nm", className: "dt-center", defaultContent: ""}, //Proxy명 *
 		               	{data: "lsn_nm", className: "dt-center", defaultContent: ""}, //리스너 명 *
 		               	{data: "exe_dtm_date", className: "dt-center", defaultContent: ""}, //실행 일자 *
-		               	{data: "exe_dtm_time", className: "dt-center", defaultContent: ""}, //실행 일시 *
 		               	{data: "exe_rslt_cd", className: "dt-center", defaultContent: "",
 							render: function (data, type, full){
 								if(full.exe_rslt_cd == "TC001501"){
@@ -257,26 +269,206 @@
 								}
 							}
 						}, //실행 결과 코드
-		            	{data: "svr_status", className: "dt-center", defaultContent: "",
+		            	{data: "svr_status", className: "dt-right", defaultContent: "",
 							render: function (data, type, full){
-							if(full.svr_status == "UP"){
-								return full.svr_status+' <i class="fa fa-arrow-up text-success"></i>';
-							}else{
-								return full.svr_status+' <i class="fa fa-arrow-down text-danger"></i>';
+								if(full.svr_status == "UP"){
+									return full.svr_status+' <i class="fa fa-arrow-up text-success"></i>';
+								}else{
+									return full.svr_status+' <i class="fa fa-arrow-down text-danger"></i>';
+								}
 							}
-						}}, //서버 상태
-		            	{data: "lst_status_chk_desc", className: "dt-center", defaultContent: ""}, //마지막 상태 체크 내용
-		            	{data: "svr_stop_tm", className: "dt-center", defaultContent: ""}, //서버 중단 시간
-		               	{data: "svr_pro_req_sel_cnt", className: "dt-center", defaultContent: ""}, //서버 처리 요청 선택 건수
-		               	{data: "bakup_ser_cnt", className: "dt-center", defaultContent: ""}, //백업 서버 수
-		               	{data: "svr_status_chg_cnt", className: "dt-center", defaultContent: ""}, //서버 상태 전환 건수
-		               	{data: "fail_chk_cnt", className: "dt-center", defaultContent: ""}, //실패 검사 수
-		               	{data: "cur_session", className: "dt-center", defaultContent: ""}, //현재 세션
-		               	{data: "max_session", className: "dt-center", defaultContent: ""}, //최대 세션
-		               	{data: "session_limit", className: "dt-center", defaultContent: ""}, //세션 제한수
-		               	{data: "cumt_sso_con_cnt", className: "dt-center", defaultContent: ""}, //누적 세션 연결 건수
-		               	{data: "byte_receive", className: "dt-center", defaultContent: ""}, //바이트 수신수
-		               	{data: "byte_transmit", className: "dt-center", defaultContent: ""}, //바이트 송신수
+						}, //서버 상태
+		            	{data: "lst_status_chk_desc", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html ='<span data-toggle="tooltip" data-html="true" data-placement="bottom" title="';
+								switch(full.lst_status_chk_desc){
+								case "UNK":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip1"/>">';
+									break;
+								case "INI":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip2"/>">';
+									break;
+								case "SOCKERR":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip3"/>">';
+									break;
+								case "L4OK":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip4"/>">';
+									break;
+								case "L4TOUT":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip5"/>">';
+									break;
+								case "L4CON":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip6"/>">';
+									break;
+								case "L6OK":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip7"/>">';
+									break;
+								case "L6TOUT":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip8"/>">';
+									break;
+								case "L6RSP":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip9"/>">';
+									break;
+								case "L7OK":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip10"/>">';
+									break;
+								case "L7OKC":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip11"/>">';
+									break;
+								case "L7TOUT":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip12"/>">';
+									break;
+								case "L7RSP":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip13"/>">';
+									break;
+								case "L7STS":
+									html += '<spring:message code="eXperDB_proxy.status_tooltip14"/>">';
+									break;
+									
+								}
+								return html += full.lst_status_chk_desc +"</span>";
+							}
+						}, //마지막 상태 체크 내용
+		            	{data: "svr_stop_tm", className: "dt-left", defaultContent: "",
+							render: function (data, type, full){
+								if(full.svr_stop_tm == "0s"){
+									return "";
+								}else{
+									return '<i class="mdi mdi-alarm mr-2 text-danger" style="font-size:1em;"></i> '+full.svr_stop_tm;
+								}
+							}
+						}, //서버 중단 시간
+		               	{data: "svr_pro_req_sel_cnt", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.svr_pro_req_sel_cnt;
+								if(full.svr_pro_req_sel_cnt_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.svr_pro_req_sel_cnt_gap+')';
+								}else if(full.svr_pro_req_sel_cnt_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.svr_pro_req_sel_cnt_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.svr_pro_req_sel_cnt_gap+')';
+								}
+								return html;
+							}
+						}, //서버 처리 요청 선택 건수
+		               	{data: "bakup_ser_cnt", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.bakup_ser_cnt;
+								if(full.bakup_ser_cnt_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.bakup_ser_cnt_gap+')';
+								}else if(full.bakup_ser_cnt_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.bakup_ser_cnt_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.bakup_ser_cnt_gap+')';
+								}
+								return html;
+							}
+						}, //백업 서버 수
+		               	{data: "svr_status_chg_cnt", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.svr_status_chg_cnt;
+								if(full.svr_status_chg_cnt_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.svr_status_chg_cnt_gap+')';
+								}else if(full.svr_status_chg_cnt_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.svr_status_chg_cnt_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.svr_status_chg_cnt_gap+')';
+								}
+								return html;
+							}
+						}, //서버 상태 전환 건수
+		               	{data: "fail_chk_cnt", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.fail_chk_cnt;
+								if(full.fail_chk_cnt_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.fail_chk_cnt_gap+')';
+								}else if(full.fail_chk_cnt_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.fail_chk_cnt_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.fail_chk_cnt_gap+')';
+								}
+								return html;
+							}
+						}, //실패 검사 수
+		               	{data: "cur_session", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.cur_session;
+								if(full.cur_session_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.cur_session_gap+')';
+								}else if(full.cur_session_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.cur_session_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.cur_session_gap+')';
+								}
+								return html;
+							}
+						}, //현재 세션
+		               	{data: "max_session", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.max_session;
+								if(full.max_session_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.max_session_gap+')';
+								}else if(full.max_session_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.max_session_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.max_session_gap+')';
+								}
+								return html;
+							}
+						}, //최대 세션
+		               	{data: "session_limit", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.session_limit;
+								if(full.session_limit_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.session_limit_gap+')';
+								}else if(full.session_limit_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.session_limit_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.session_limit_gap+')';
+								}
+								return html;
+							}
+						}, //세션 제한수
+		               	{data: "cumt_sso_con_cnt", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.cumt_sso_con_cnt;
+								if(full.cumt_sso_con_cnt_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.cumt_sso_con_cnt_gap+')';
+								}else if(full.cumt_sso_con_cnt_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.cumt_sso_con_cnt_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.cumt_sso_con_cnt_gap+')';
+								}
+								return html;
+							}
+						}, //누적 세션 연결 건수
+		               	{data: "byte_receive", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.byte_receive;
+								if(full.byte_receive_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.byte_receive_gap+')';
+								}else if(full.byte_receive_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.byte_receive_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.byte_receive_gap+')';
+								}
+								return html;
+							}
+						}, //바이트 수신수
+		               	{data: "byte_transmit", className: "dt-center", defaultContent: "",
+							render: function (data, type, full){
+								var html= full.cur_session;
+								if(full.byte_transmit_gap == 0){
+									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.byte_transmit_gap+')';
+								}else if(full.byte_transmit_gap > 0){
+									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.byte_transmit_gap+')';
+								}else{
+									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.byte_transmit_gap+')';
+								}
+								return html;
+							}
+						}, //바이트 송신수
+						{data: "exe_dtm_time", className: "dt-center", defaultContent: "", visible: false}, //실행 일시 *
 		               	{data: "lst_con_rec_aft_tm", className: "dt-right", defaultContent: "", visible: false}, //마지막 연결 수신 이후 시간
 		               	{data: "lsn_svr_id", className: "dt-left", defaultContent: "", visible: false}, //리스너 서버 ID
 			    		{data: "lsn_id", className: "dt-left", defaultContent: "", visible: false},//리스너 ID
@@ -324,21 +516,21 @@
 	   	statisTable.tables().header().to$().find('th:eq(28)').css('min-width', '0%');
 	   	statisTable.tables().header().to$().find('th:eq(29)').css('min-width', '0%');
 	   	statisTable.tables().header().to$().find('th:eq(30)').css('min-width', '0%');
-		   	
+
     	$(window).trigger('resize'); 
     
 	}
-
+	
 	/* ********************************************************
 	 * 작업기간 calender 셋팅
 	 ******************************************************** */
 	function dateCalenderSetting() {
 		var today = new Date();
 		var day_end = today.toJSON().slice(0,10);
-
-		today.setDate(today.getDate());
 		var day_start = today.toJSON().slice(0,10); 
-
+		today.setDate(today.getDate()-1);
+		var yesterday = today.toJSON().slice(0,10);
+		
 		$("#setchg_lst_dtm_start_prm").val(day_start);
 		$("#setchg_lst_dtm_end_prm").val(day_end);
 
@@ -387,12 +579,12 @@
 	    $('#actstate_wrk_strt_dtm_div').datepicker('updateDates');
 	    $('#actstate_wrk_end_dtm_div').datepicker('updateDates');
 		
-	    $("#statis_wlk_dtm_start").val(day_start);
-		$("#statis_wlk_dtm_end").val(day_end);
+	    $("#statis_wlk_dtm_start").val(yesterday);
+		$("#statis_wlk_dtm_end").val(yesterday);
 		
 		if ($("#statis_wrk_strt_dtm_div").length) {
 			$('#statis_wrk_strt_dtm_div').datepicker({
-			}).datepicker('setDate', day_start)
+			}).datepicker('setDate', yesterday)
 			.on('hide', function(e) {
 				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
 		    }); //값 셋팅
@@ -400,14 +592,14 @@
 
 		if ($("#statis_wrk_end_dtm_div").length) {
 			$('#statis_wrk_end_dtm_div').datepicker({
-			}).datepicker('setDate', day_end)
+			}).datepicker('setDate', yesterday)
 			.on('hide', function(e) {
 				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
 		    }); //값 셋팅
 		}
 		
-		$("#statis_wlk_dtm_start").datepicker('setDate', day_start);
-	    $("#statis_wlk_dtm_end").datepicker('setDate', day_end);
+		$("#statis_wlk_dtm_start").datepicker('setDate', yesterday);
+	    $("#statis_wlk_dtm_end").datepicker('setDate', yesterday);
 	    $('#statis_wrk_strt_dtm_div').datepicker('updateDates');
 	    $('#statis_wrk_end_dtm_div').datepicker('updateDates');
 		
@@ -553,8 +745,8 @@
 			$.ajax({
 				url : "/selectProxyStatusHistory.do",
 				data : {
-					exe_dtm_start : $("#statis_wlk_dtm_start").val(),
-					exe_dtm_end : $("#statis_wlk_dtm_end").val(),
+					exe_dtm_start :lgi_dtm_start,
+					exe_dtm_end : lgi_dtm_end,
 					pry_svr_id : $("#statis_pry_svr_id").val(),
 					log_type : $("#statis_log_type").val(),
 					db_con_addr : $("#statis_db_con_addr").val()
@@ -577,8 +769,8 @@
 					statisTable.rows({selected: true}).deselect();
 					statisTable.clear().draw();
 		
-					if (nvlPrmSet(result, "") != '') {
-						statisTable.rows.add(result).draw();
+					if (result.data != null) {
+						statisTable.rows.add(result.data).draw();
 					}
 					
 					var tableRows = $('#statisTable tbody tr');
@@ -776,15 +968,50 @@
   		for(var i=0; i<dataLen; i++){
   			if(datas[i].pry_svr_id == prySvrId && datas[i].pry_act_exe_sn == pryActExeSn){
   				$("#wrkLogInfo").html(datas[i].rslt_msg);
-  				$("#ModalLabel","#pop_layer_wrkLog").html("오류 메세지");
+  				$("#ModalLabel","#pop_layer_wrkLog").html('<spring:message code="eXperDB_proxy.error_msg" />');
   				$("#pop_layer_wrkLog").modal("show");	
   			}
   		}
-  		
-		
+  	}
+	 /* ********************************************************
+	  * chart 타이틀 생성 데이터 ///작성 중... 
+	  ******************************************************** */
+	function fn_show_chart(dbSvrIp, type){
+		if(type=='day'){
+			$.ajax({
+				url : "/popup/proxyStatusChartTitle.do",
+				data : {
+					exe_dtm_start : $("#statis_wlk_dtm_start").val(),
+					exe_dtm_end : $("#statis_wlk_dtm_end").val(),
+					pry_svr_id : $("#statis_pry_svr_id").val(),
+					log_type : type,
+					db_con_addr : dbSvrIp
+				},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					fn_proxyMonChartSet(result);
+				}
+			});
+		}else{
+			
+		}
 	}
 </script>
 <%@include file="./../popup/proxyConfigDiffViewPop.jsp"%>
+<%@include file="./../popup/proxyStatusChartView.jsp"%>
 <%@include file="./../../cmmn/wrkLog.jsp"%>
 <form name="excelForm" method="post">
 	<input type="hidden" name="excel_wlk_dtm_start" id="excel_wlk_dtm_start">
@@ -825,8 +1052,8 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<%-- <p class="mb-0"><spring:message code="help.screen_access_history_01" /></p>
-											<p class="mb-0"><spring:message code="help.screen_access_history_02" /></p> --%>
+											<p class="mb-0"><spring:message code="eXperDB_proxy.msg55" /></p>
+											<p class="mb-0"><spring:message code="eXperDB_proxy.msg56" /></p>
 										</div>
 									</div>
 								</div>
@@ -854,7 +1081,7 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" id="server-tab-3" data-toggle="pill" href="#subTab-3" role="tab" aria-controls="subTab-3" aria-selected="false" onclick="javascript:selectTab('pryStatistics');">
-								Proxy 상태 로그
+								<spring:message code="menu.proxy_status_hist" />
 							</a>
 						</li>
 					</ul>
@@ -967,14 +1194,16 @@
 							</form>
 							<form class="form-inline row" id="searchStatistics">
 								<div class="input-group mb-2 mr-sm-2 col-sm-3_0 row" >
+								<!-- <div class="input-group mb-2 mr-sm-2 col-sm-1_7" > -->
 									<div id="statis_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
-										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="statis_wlk_dtm_start" name="statis_wlk_dtm_start" readonly>
+									<!-- <div id="statis_wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
+									 -->	<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="statis_wlk_dtm_start" name="statis_wlk_dtm_start" readonly>
 										<span class="input-group-addon input-group-append border-left">
 											<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 										</span>
 									</div>
 
-									<div class="input-group align-items-center col-sm-1">
+									<div class="input-group align-items-center col-sm-1"> <!-- style="display:none; -->
 										<span style="border:none;"> ~ </span>
 									</div>
 		
@@ -985,13 +1214,14 @@
 										</span>
 									</div>
 								</div>
-								<div class="input-group mb-2 mr-sm-2 col-sm-1_5">
+								<%-- <div class="input-group mb-2 mr-sm-2 col-sm-1_5">
 									<select class="form-control" style="margin-right: -0.7rem;" name="statis_log_type" id="statis_log_type">
 										<option value="">데이터 구분 <spring:message code="common.choice" /></option>	
 	 									<option value="TC003901">분별</option> 
 	 									<option value="TC003902">일별</option>
-	 								</select>	
-								</div>
+	 								</select>
+								</div>  --%>
+								<input type="hidden" name="statis_log_type" id="statis_log_type" value ="TC003902"/>
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
 									<select class="form-control" style="margin-right: -0.7rem;" name="statis_db_con_addr" id="statis_db_con_addr">
 	 									<option value="">DB <spring:message code="common.total" /></option>	
@@ -1107,18 +1337,18 @@
 											</div>
 										</div>
 									</div>
-	 								<table id="statisTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
-										<thead class="bg-info text-white">
+	 								<table id="statisTable" class="table table-bordered system-tlb-scroll" style="width:100%;">
+										<thead class="bg-info text-white text-center">
 											<tr>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.ipadr"/></th>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.server_name"/></th>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.listener_name"/></th>
-												<th rowspan="2">실행 일자</th>
-												<th rowspan="2">실행 일시</th>
-												<th rowspan="2">실행 결과</th>
-												<th colspan="7">서버</th>
+												<th rowspan="2"><spring:message code="eXperDB_proxy.date"/></th>
+												<th rowspan="2"><spring:message code="eXperDB_proxy.act_result"/></th>
+												<th colspan="7"><spring:message code="dashboard.server"/></th>
 												<th colspan="4"><spring:message code="eXperDB_proxy.session"/></th>
 												<th colspan="2"><spring:message code="eXperDB_proxy.byte_in_out"/></th>
+												<th rowspan="2">실행 일시</th>
 												<th rowspan="2" width="0">마지막 연결 수신 이후 시간</th>
 												<th rowspan="2" width="0">리스너 서버 ID</th>
 												<th rowspan="2" width="0">리스너 ID</th>
@@ -1132,18 +1362,18 @@
 												<th rowspan="2" width="0">최초 등록 일시</th>
 												<th rowspan="2" width="0">DB명</th>
 											</tr>
-											<tr>
-												<th width="10">상태</th>
-												<th width="10">마지막 상태 체크</th>
-												<th width="10">중단 시간</th>
-												<th width="10">처리 요청<br/>선택 건수</th>
-												<th width="10">백업<br/>서버 수</th>
-												<th width="10">상태<br/>전환 건수</th>
-												<th width="10">실패<br/>검사 수</th>
+											<tr class="bg-info text-white text-center">
+												<th width="10" class="text-center"><spring:message code="etc.etc25"/></th>
+												<th width="10"><spring:message code="eXperDB_proxy.last_status_chk"/></th>
+												<th width="10" class="text-center"><spring:message code="eXperDB_proxy.downtime"/></th>
+												<th width="10"><spring:message code="eXperDB_proxy.req_sel_cnt"/></th>
+												<th width="10"><spring:message code="eXperDB_proxy.backup_svr_cnt"/></th>
+												<th width="10"><spring:message code="eXperDB_proxy.status_chg_cnt"/></th>
+												<th width="10"><spring:message code="eXperDB_proxy.chart_health_check_failed"/></th>
 												<th width="10"><spring:message code="eXperDB_proxy.current"/><br/><spring:message code="eXperDB_proxy.session_count"/></th>
 												<th width="10"><spring:message code="eXperDB_proxy.max"/><br/><spring:message code="eXperDB_proxy.session_count"/></th>
 												<th width="10"><spring:message code="eXperDB_proxy.session"/><br/><spring:message code="eXperDB_proxy.limit"/></th>
-												<th width="10">누적 세션<br/>연결 수</th>
+												<th width="10"><spring:message code="eXperDB_proxy.session_total"/></th>
 												<th width="10"><spring:message code="eXperDB_proxy.byte_in"/></th>
 												<th width="10"><spring:message code="eXperDB_proxy.byte_out"/></th>
 											</tr>
