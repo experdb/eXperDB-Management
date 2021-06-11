@@ -27,7 +27,7 @@
 				<if test='ipadr != null'>
 				 AND 	B.IPADR != #{ipadr}
 				</if>
-				<if test="ipadr == null and pry_svr_id > 0">
+				<if test='ipadr == null and pry_svr_id > 0'>
 				 AND 	B.PRY_SVR_ID != #{pry_svr_id}
 				</if>
 				    and B.EXE_STATUS = 'TC001501' 
@@ -132,10 +132,10 @@
 			, DB_SVR_ID = #{db_svr_id}::numeric
 			, DAY_DATA_DEL_TERM = #{day_data_del_term}::numeric
 			, MIN_DATA_DEL_TERM = #{min_data_del_term}::numeric
-			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDFR_ID = #{upd_master_gbn}
 			, LST_MDF_DTM = clock_timestamp()
 
-			<if test="upd_master_gbn != null and upd_master_gbn eq 'M' ">
+			<if test='upd_master_gbn != null and upd_master_gbn eq "M" '>
 			, OLD_MASTER_GBN = #{upd_master_gbn}
 			</if>
 		WHERE
@@ -486,19 +486,20 @@
 	 	**/
 		UPDATE T_PRY_SVR_I
 		SET
-			 <if test="exe_status != null and exe_status != '' ">
+			 <if test='exe_status != null and exe_status != "" '>
 			 EXE_STATUS = #{exe_status},
 			 </if>
-			 <if test="kal_exe_status != null and kal_exe_status != '' ">
+			 <if test='kal_exe_status != null and kal_exe_status != "" '>
 			 KAL_EXE_STATUS = #{kal_exe_status},
 			 </if>
 			 LST_MDFR_ID = #{lst_mdfr_id},
         	 LST_MDF_DTM = clock_timestamp()
 		WHERE 1 = 1
 
-         <if test="ipadr != null and ipadr != '' ">
+         <if test='ipadr != null and ipadr != "" '>
              AND IPADR = #{ipadr}
          </if>
+
          <if test="pry_svr_id > 0">
              AND PRY_SVR_ID = #{pry_svr_id}::numeric
          </if>
@@ -521,6 +522,7 @@
             <if test='ipadr != null'>
                 AND A.IPADR = #{ipadr}
             </if>
+
             <if test='pry_svr_id != null'>
                 AND A.PRY_SVR_ID = #{pry_svr_id}::numeric
             </if>
@@ -562,6 +564,7 @@
             <if test='ipadr != null'>
                 AND A.IPADR = #{ipadr}
             </if>
+            
             <if test='pry_svr_id != null'>
                 AND A.PRY_SVR_ID = #{pry_svr_id}::numeric
             </if>
@@ -821,8 +824,7 @@
 		    OR (DB_SVR_ID = #{db_svr_id}::numeric));
 		</if>
     </update>
-    
-    
+
 	<select id="selectPryLsnSvrIdInfo" parameterType="ProxyStatisticVO" resultType="hashMap">
         /**
         * Query ID : selectPryLsnSvrIdInfo
@@ -843,8 +845,7 @@
             and C.DB_CON_ADDR = #{db_con_addr_chk}
 		  LIMIT 1
     </select>
- 	
- 
+
     <update id="updatePryLsnSvrDbRealChkInfo"  parameterType="ProxyStatisticVO">
    		/**
 	 	* Query ID : updatePryLsnSvrDbRealChkInfo
@@ -929,8 +930,7 @@
 			, #{db_con_addr}
 			, #{lsn_svr_id}::numeric
     </insert>
-    
-  	
+
     <delete id="lsnSvrDelExecuteList"  parameterType="ProxyServerVO">
    		/**
 	 	* Query ID : lsnSvrDelExecuteList
@@ -970,8 +970,7 @@
             AND C.DB_CON_ADDR = #{db_con_addr}
 		  LIMIT 1
     </select>
-    
-	
+
    <update id="updatePryLsnSvrInfo"  parameterType="ProxyListenerServerListVO">
     	/**
 	 	* Query ID : updatePryLsnSvrInfo
@@ -1002,10 +1001,9 @@
 				LST_MDFR_ID = #{lst_mdfr_id},
         		LST_MDF_DTM = clock_timestamp()
 		WHERE 	1 = 1
+		
          <if test="pry_svr_id > 0">
              AND PRY_SVR_ID = #{pry_svr_id}::numeric
          </if>
-			
     </update>
-    
 </mapper>

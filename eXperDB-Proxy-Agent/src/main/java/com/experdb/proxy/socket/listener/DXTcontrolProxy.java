@@ -382,6 +382,8 @@ public class DXTcontrolProxy extends SocketCtl {
 			
 			if (proxyOldServerInfo == null) {
 				upd_masterGbnData = "M";
+			} else {
+				upd_masterGbnData = "S";
 			}
 
 			//null 이면 insert(t_pry_svr_i)
@@ -416,7 +418,7 @@ public class DXTcontrolProxy extends SocketCtl {
 				vo.setDay_data_del_term(StrUtil.nvlIntChg(proxyServerInfo.getDay_data_del_term(),30));
 				vo.setMin_data_del_term(StrUtil.nvlIntChg(proxyServerInfo.getMin_data_del_term(),3));
 				vo.setPry_svr_nm(proxySvrNmData);
-				
+
 				vo.setMaster_gbn(masterGbnData);
 				vo.setOld_master_gbn(old_masterGbnData);
 				vo.setUpd_master_gbn(upd_masterGbnData);

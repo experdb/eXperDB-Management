@@ -80,7 +80,7 @@ public class SystemServiceImpl implements SystemService{
 			} else {
 				SvrUseNm = "N";
 			}
-			
+
 			vo.setDomain_nm(domainNm);
 			vo.setSvr_use_yn(SvrUseNm);
 				
