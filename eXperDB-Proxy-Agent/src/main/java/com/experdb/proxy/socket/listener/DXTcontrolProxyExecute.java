@@ -84,7 +84,7 @@ public class DXTcontrolProxyExecute extends SocketCtl {
     	        	scheduler.start();
 
     	        	//스케줄러 실행(proxy 리스너 통계 저장 및 데이터 삭제) - 매일 00시 삭제
-    	        	strProxyMonJobTime = "0 0 0 1/1 * ? *";
+    	        	strProxyMonJobTime = "0 50 23 1/1 * ? *";
     	        	JobDetail jobProxyDay = newJob(DXTcontrolProxyExecuteDayChk.class).withIdentity("jobName", "group2").build();
     	        	CronTrigger triggerMons = newTrigger().withIdentity("trggerName", "group2").withSchedule(cronSchedule(strProxyMonJobTime)).build(); //매주 월요일 8시
     	        	scheduler.scheduleJob(jobProxyDay, triggerMons);
