@@ -42,12 +42,17 @@ function fn_recTargetDBRegClose(){
 </script>
 	
 <div class="modal fade" id="pop_layer_popup_recTargetDBRegForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl" role="document" style="width: 700px">
+	<div class="modal-dialog  modal-xl" role="document" style="width: 600px">
 		<div class="modal-content" >
 			<div class="modal-body" style="margin-bottom:-30px;">
-				<!-- <h5 class="modal-title mdi mdi-alert-circle text-info" id="policyRegTitle" style="padding-left:5px;">
-					<spring:message code="eXperDB_backup.msg68" />
-				</h5> -->
+			<!-- 	<div class="card-body">
+					<div id="wrt_button" style="margin-left: 410px;">
+						<button type="button" class="btn btn-success btn-icon-text btn-sm" onclick="">
+							찾아보기
+						</button>
+					</div>
+				</div> -->
+				
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" id="insRegForm">
 						<fieldset>
@@ -55,24 +60,56 @@ function fn_recTargetDBRegClose(){
 							<div style=" margin-bottom: 20px;">
 								<div class="card my-sm-2" >
 									<div class="card-body">
-										<div class="row">
+										<!-- <div class="row"> -->
 											<div class="col-12">
 												<form class="cmxform" id="optionForm">
 													<fieldset>			
 														<div class="form-group row" style="margin-bottom: 15px;margin-top: 10px; margin-left: 20px;margin-right: 0px;">
-															<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
+															<div  class="col-4 col-form-label pop-label-index" style="padding-top:7px;">
 																MAC
 															</div>
-															<div class="col-2" style="padding-left: 0px;">
+															<div class="col-7" style="padding-left: 0px;">
 																<input type="text" id="recTargetMAC" name="recTargetMAC" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
+															</div>
+														</div>
+														<div class="form-group row" style="margin-bottom: 15px;margin-top: 10px; margin-left: 20px;margin-right: 0px;">
+															<div  class="col-4 col-form-label pop-label-index" style="padding-top:7px;">
+																IP
+															</div>
+															<div class="col-7" style="padding-left: 0px;">
+																<input type="text" id="recTargetIP" name="recTargetMAC" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
+															</div>
+														</div>
+														<div class="form-group row" style="margin-bottom: 15px;margin-top: 10px; margin-left: 20px;margin-right: 0px;">
+															<div  class="col-4 col-form-label pop-label-index" style="padding-top:7px;">
+																Subnet Mask
+															</div>
+															<div class="col-7" style="padding-left: 0px;">
+																<input type="text" id="recTargetNetMask" name="recTargetMAC" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
+															</div>
+														</div>
+														<div class="form-group row" style="margin-bottom: 15px;margin-top: 10px; margin-left: 20px;margin-right: 0px;">
+															<div  class="col-4 col-form-label pop-label-index" style="padding-top:7px;">
+																Default Gateway
+															</div>
+															<div class="col-7" style="padding-left: 0px;">
+																<input type="text" id="recTargetDGateway" name="recTargetMAC" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
+															</div>
+														</div>
+														<div class="form-group row" style="margin-bottom: 15px;margin-top: 10px; margin-left: 20px;margin-right: 0px;">
+															<div  class="col-4 col-form-label pop-label-index" style="padding-top:7px;">
+																DNS
+															</div>
+															<div class="col-7" style="padding-left: 0px;">
+																<input type="text" id="recTargetDNS" name="recTargetMAC" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
 															</div>
 														</div>
 													</fieldset>
 												</form>		
 											</div>
-										</div>
+										<!-- </div> -->
 									</div>
-									<div style="position: absolute;top:-5px; right:520px; width: 120px;">
+									<div style="position: absolute;top:-5px; right:60%; width: 200px;">
 										<h4 class="card-title" style="background-color: white;font-size: 1em; color: #000000; ">
 											Target Machine Setting
 										</h4>

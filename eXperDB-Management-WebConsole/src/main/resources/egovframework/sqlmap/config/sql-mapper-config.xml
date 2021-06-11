@@ -143,6 +143,7 @@
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/node/backupNodeSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/storage/backupStorageSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/recovery/recoverySql.xml" />
 		
 		<!-- experdb proxy -->
 		<mapper resource="egovframework/sqlmap/mappers/proxy/proxySettingSql.xml" />

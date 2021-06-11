@@ -23,14 +23,21 @@
 	*/
 %>
 
-<script>
+<script type="text/javascript">
 
-
+var storageList = [];
+var CIFSList = [];
+var NFSList = [];
 /* ********************************************************
  * 페이지 시작시
  ******************************************************* */
 $(window.document).ready(function() {
 	fn_init();
+	fn_getBackupDBList();
+	
+	// fn_getStorageList();
+	// $("#storageType").val("1");
+	// fn_storageTypeClick();
 });
 
 
@@ -82,6 +89,118 @@ function fn_init(){
 
 	$(window).trigger('resize'); 
 
+}
+
+function fn_getStorageList(){
+	$.ajax({
+		url : "/experdb/backupStorageList.do",
+		type : "post"
+	})
+	.done(function(result){
+		fn_setStorageList(result);
+	})
+	.fail (function(xhr, status, error){
+		 if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if (xhr.status == 403){
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	 })
+}
+ 
+ 
+function fn_bmrInstanceClick(){
+	var instance = $("#bmrInstant").val();
+	$("#bmrInstantAlert").empty();
+	if(instance == 1){
+		$("#bmrInstantAlert").append("* 먼저 서버 시작에 필요한 데이터를 복구합니다. 이후 나머지 데이터는 서버 시작 후 복구 됩니다.");
+	}
+}
+
+
+function fn_getBackupDBList(){
+	$.ajax({
+		url : "/experdb/nodeInfoList.do",
+		type : "post"
+	})
+	.done(function(result){
+		fn_setBackupDBList(result.serverList);
+	})
+	.fail (function(xhr, status, error){
+		 if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if (xhr.status == 403){
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	 })
+}
+
+function fn_setBackupDBList(data){
+	var html;
+	for(var i =0; i<data.length; i++){
+		html += '<option value="'+data[i].ipadr+'">'+data[i].ipadr+ ' [' + data[i].masterGbn + ']'+'</option>';
+	}
+	$("#backupDBList").append(html);
+}
+
+var aaa;
+function fn_backupDBChoice(){
+	var ipadr = $("#backupDBList").val();
+	if(ipadr != 0) {
+		$.ajax({
+			url : "/experdb/recStorageList.do",
+			type : "post",
+			data : {
+				ipadr : ipadr
+			}
+		})
+		.done(function(result){
+			aaa = result.storageList;
+		})
+		.fail (function(xhr, status, error){
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if (xhr.status == 403){
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		})
+	}
+}
+
+function fn_setStorageList(data) {
+	storageList.length=0;
+	CIFSList.length=0;
+	NFSList.length=0;
+	storageList = data;
+	for(var i =0; i<storageList.length; i++){
+		if(storageList[i].type == "CIFS Share"){
+			CIFSList.push(storageList[i]);
+		}else{
+			NFSList.push(storageList[i]);
+		}
+	}
+}
+
+function fn_storageTypeClick(){
+	var type = $("#storageType").val();
+	var html;
+	$("#storageList").empty();
+	if(type == 2){
+		for(var i =0; i<CIFSList.length; i++){			
+			html += '<option value="'+CIFSList[i].path+'">'+CIFSList[i].path+'</option>';
+		}
+	}else{
+		for(var i =0; i<NFSList.length; i++){			
+			html += '<option value="'+NFSList[i].path+'">'+NFSList[i].path+'</option>';
+		}
+	}
+	$("#storageList").append(html);
 }
 
 
@@ -147,13 +266,11 @@ function fn_targetListPopup(){
 		
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
-				<!-- <div class="table-responsive" style="overflow:hidden;"> -->
-					<div id="wrt_button" style="float: right;">
-						<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_runNow()">
-							<i class="ti-control-forward btn-icon-prepend "></i>복구
-						</button>
-					</div>
-				<!-- </div> -->
+				<div id="wrt_button" style="float: right;">
+					<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_runNow()">
+						<i class="ti-control-forward btn-icon-prepend "></i>복구
+					</button>
+				</div>
 			</div>
 		</div>
 		
@@ -162,26 +279,27 @@ function fn_targetListPopup(){
 			<div class="card grid-margin stretch-card" style="height: 130px;margin-bottom: 10px;">
 				<div class="card-body">
 					<div style="border: 1px solid rgb(200, 200, 200); height: 90px;">
-						<div class="form-group row" style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px;">
+						<div class="form-group row" style="margin-top: 20px; margin-bottom: 5px; margin-left: 15px;">
 							<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 								Instant BMR
 							</div>
 							<div class="col-2" style="padding-left: 0px;">
-								<select class="form-control form-control-xsm" id="bmrInstant" style=" width: 200px; height: 35px;">
+								<select class="form-control form-control-xsm" id="bmrInstant" style=" width: 200px; height: 35px;" onchange="fn_bmrInstanceClick()">
+									<option value="0">선택</option>
 									<option value="1">enable</option>
 									<option value="2">disable</option>
 								</select>
 							</div>
 						</div>
 						<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
-							<div  class="col-12 col-form-label pop-label-index" style="padding-top:7px; color:red; font-size:0.8em;">
-								* 먼저 서버 시작에 필요한 데이터를 복구합니다. 이후 나머지 데이터는 서버 시작 후 복구 됩니다.
+							<div  class="col-12 col-form-label pop-label-index" id="bmrInstantAlert" name="bmrInstantAlert" style="padding-top:0px; color:red; font-size:0.8em; padding-bottom: 0px;">
+								
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="card grid-margin stretch-card" style="height: 500px;">
+			<div class="card grid-margin stretch-card" style="height: 470px;">
 				<div class="card-body" style="height: 140px; margin-top: 10px;">
 					<div style="width:600px; text-align:center;">
 						<div class="row" style="position:absolute; left:50%;transform: translateX(-50%);">
@@ -203,9 +321,8 @@ function fn_targetListPopup(){
 							백업 DB
 						</div>
 						<div class="col-4" style="padding-left: 0px;">
-							<select class="form-control form-control-xsm" id="bmrInstant" style=" width: 200px; height: 35px;">
-								<option value="1">192.168.50.133</option>
-								<option value="2">192.168.50.134</option>
+							<select class="form-control form-control-xsm" id="backupDBList" style=" width: 200px; height: 35px;" onchange="fn_backupDBChoice()">
+								<option value="0">선택</option>
 							</select>
 						</div>
 					</div>
@@ -226,13 +343,10 @@ function fn_targetListPopup(){
 							대상 DB
 						</div>
 						<div class="col-4" style="padding-left: 0px;">
-							<select class="form-control form-control-xsm" id="storageType" name="storageType" style="width:200px; height:35px;">
-								<option value="1">192.168.50.133</option>
-								<option value="2">192.168.50.134</option>
-							</select>
+							<input type="text" id="recTargetNetMask" name="targetDB" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
 						</div>
 						<div class="col-4" style="padding-left: 0px;">
-							<button type="button" class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" onClick="fn_targetListPopup()">추가</button>
+							<button type="button" class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" onClick="fn_targetListPopup()">등록</button>
 						</div>
 					</div>
 				</div>

@@ -91,9 +91,7 @@ table.dataTable.volume tbody tr.selected {
 				<div class="card" style="border:0px;">
 					<div class="card-body" style="padding-top: 0px; padding-bottom: 0px;">					
 						<div id="wrt_button" style="float: right;">
-							<button type="button" class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" onClick="fn_recTargetDBRegPopup()">
-								등록
-							</button>
+							<input type="button" class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" style="margin-left:-20px;" value="등록" onClick="document.getElementById('keyFile').click();">
 						</div>
 					</div>
 					<div class="card-body" style="padding-top: 0px;">
