@@ -27,6 +27,7 @@ import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
@@ -59,6 +60,9 @@ public class ProxyHistoryController {
 	
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
+	
+	@Autowired
+	private CmmnServerInfoService cmmnServerInfoService;
 	
 	@Autowired
 	private MessageSource msg;
@@ -116,7 +120,7 @@ public class ProxyHistoryController {
 				List<ProxyServerVO> prySvrList = proxySettingService.selectProxyServerList(param);
 			
 				List<Map<String, Object>> dbSvrList = proxyHistoryService.selectSvrStatusDBConAddrList();
-				
+				//select current_date as today, current_date-1 as yesterday, current_date-6 as before_6days
 				mv.addObject("dbSvrList", dbSvrList);
 				mv.addObject("prySvrList", prySvrList);
 				
@@ -181,12 +185,12 @@ public class ProxyHistoryController {
 	 * @throws 
 	 */
 	@RequestMapping(value = "/selectProxyStatusHistory.do")
-	public @ResponseBody List<Map<String, Object>> selectProxyStatusHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody Map<String, Object> selectProxyStatusHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001803");
 				
-		List<Map<String, Object>> resultSet = null;
+		Map<String, Object> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 
 		try {	
@@ -197,14 +201,16 @@ public class ProxyHistoryController {
 			}else{
 				// 화면접근이력 이력 남기기 - Proxy 설정관리 - Proxy Listen 관리 팝업
 				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0167_03", show_menu_id);		
-
+				resultSet =  new HashMap<String, Object>();
 				param.put("exe_dtm_start", cu.getStringWithoutNull(request.getParameter("exe_dtm_start")));
 				param.put("exe_dtm_end", cu.getStringWithoutNull(request.getParameter("exe_dtm_end")));
 				param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? "" : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
 			    param.put("log_type", cu.getStringWithoutNull(request.getParameter("log_type")));
 				param.put("db_con_addr", cu.getStringWithoutNull(request.getParameter("db_con_addr")));
-				  
-				resultSet = proxyHistoryService.selectProxyStatusHistory(param);
+				
+				List<Map<String, Object>> data = proxyHistoryService.selectProxyStatusHistory(param);
+			
+				resultSet.put("data", data);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -385,4 +391,46 @@ public class ProxyHistoryController {
 		}
 		return null;
 	}
+	// "/popup/proxyStatusChartTitle.do",
+	/**
+	 * Proxy 설정 변경 이력 리스트를 조회한다.
+	 * 
+	 * @param historyVO, request, response
+	 * @return List<Map<String, Object>>
+	 * @throws
+	 */
+	@RequestMapping(value = "/popup/proxyStatusChartTitle.do")
+	public @ResponseBody List<Map<String, Object>> selectProxyStatusChartTitle(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001803");
+				
+		List<Map<String, Object>> resultSet = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		try {	
+			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultSet;
+			}else{
+				// 화면접근이력 이력 남기기 - Proxy 설정관리 - Proxy Listen 관리 팝업
+				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0167_02", show_menu_id);		
+
+				param.put("exe_dtm_start", cu.getStringWithoutNull(request.getParameter("exe_dtm_start")));
+				param.put("exe_dtm_end", cu.getStringWithoutNull(request.getParameter("exe_dtm_end")));
+				param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? "" : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
+			    param.put("log_type", cu.getStringWithoutNull(request.getParameter("log_type")));
+				param.put("db_con_addr", cu.getStringWithoutNull(request.getParameter("db_con_addr")));
+				  
+				  
+				resultSet = proxyHistoryService.selectProxyStatusChartTitleList(param);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultSet;
+	}
+
 }

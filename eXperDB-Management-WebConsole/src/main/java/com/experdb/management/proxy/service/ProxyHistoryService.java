@@ -61,4 +61,6 @@ public interface ProxyHistoryService {
 	 * @throws 
 	 */
 	public List<Map<String, Object>> selectProxyStatusHistory(Map<String, Object> param) throws Exception;
+
+	public List<Map<String, Object>> selectProxyStatusChartTitleList(Map<String, Object> param);
 }

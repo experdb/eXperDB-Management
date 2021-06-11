@@ -10360,11 +10360,12 @@ pre code {
 .table-bordered th,
 .table-bordered td {
   border: 1px solid #c9ccd7;
+  border-bottom-width: 1px !important;
 }
 
 .table-bordered thead th,
 .table-bordered thead td {
-  border-bottom-width: 2px;
+  border-bottom: 1px solid #c9ccd7 !important;
 }
 
 .table-borderless th,

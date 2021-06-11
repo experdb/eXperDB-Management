@@ -113,4 +113,10 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	public List<Map<String, Object>> selectProxyStatusHistory(Map<String, Object> param) throws SQLException {
 		return proxyHistoryDAO.selectProxyStatusHistory(param);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectProxyStatusChartTitleList(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
