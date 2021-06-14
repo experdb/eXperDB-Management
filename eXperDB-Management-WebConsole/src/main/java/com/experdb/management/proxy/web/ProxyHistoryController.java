@@ -312,6 +312,7 @@ public class ProxyHistoryController {
 				e.printStackTrace();
 				resultObj.put("errcd", 1);
 				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
+				return resultObj;
 			}catch(Exception e){
 				e.printStackTrace();
 				resultObj.put("errcd", 2);
