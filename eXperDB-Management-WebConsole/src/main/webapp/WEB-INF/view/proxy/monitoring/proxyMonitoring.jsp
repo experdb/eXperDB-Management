@@ -502,7 +502,7 @@
 			dataType : 'json',
 			success : function(result) {
 				// 프록시 모니터링 초기화 및 데이터 셋팅
-// 				if(result.proxyAgentStatus.conn_result == "N"){
+// 				if(result.proxy_agent_status == "N"){
 //  		 			showSwalIconRst('<spring:message code="eXperDB_proxy.msg42" />', '<spring:message code="common.close" />', '', 'error');
 // 				}
 				fn_proxyMonitoringInit(pry_svr_id, result);
@@ -824,7 +824,6 @@
   			html_listner_ss = "";
   			html_listner_con_ss = "";
   			var lsnNulkCnt = 0;
-  			console.log(result.proxyServerByMasId[j])
   			var agent_status = result.proxyServerByMasId[j].conn_result;
   			
   			//title

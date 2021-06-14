@@ -2164,6 +2164,8 @@ function fn_keepMonInfo(result){
 	var kal_install_yn = "";
 	//ROW 만들기
 	for(var i = 0; i < proxyServerByDBSvrId_cnt; i++){
+		var pry_agent_status = result.proxyServerByDBSvrId[i].conn_result;
+		
 		//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
 			
 		html_vip += '	<p class="card-title" style="margin-bottom:-25px;margin-left:10px;">\n';
@@ -2207,6 +2209,7 @@ function fn_keepMonInfo(result){
 	var iVipChkCnt = 0;
 	if (result.proxyServerVipList != null && result.proxyServerVipList.length > 0) {
 		for(var i = 0; i < result.proxyServerVipList.length; i++){
+			var count = 0;
 			if (result.proxyServerVipList[i].kal_install_yn == "Y") {
 				if (result.proxyServerVipList[i].kal_exe_status != null && result.proxyServerVipList[i].kal_exe_status == "TC001501") {
 					kal_exe_status_chk = "text-primary";
@@ -2241,11 +2244,12 @@ function fn_keepMonInfo(result){
  				    }	
  				    
 	 				//line 생성
-	 				html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;" id="vip_line' + i + '"></i>\n';
+ 				    if(pry_agent_status == "Y"){
+ 				    	html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;" id="vip_line' + i + '"></i>\n';
+ 				    }
  				}
 
  				for(var j = 0; j < result.proxyServerByDBSvrId.length; j++) {
- 					var count = 0;
  					kal_install_yn = result.proxyServerByDBSvrId[j].kal_install_yn;
  					if (result.proxyServerByDBSvrId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
 	 					count++;
@@ -2274,6 +2278,14 @@ function fn_keepMonInfo(result){
 	 					$("#vip_line0","#keepVipDivLine" + j).hide();
  					}
  				}
+			} else {
+				html_sebu = "";
+				var vip_btn_html = "";
+				vip_btn_html += '</br>&nbsp;';
+	 		 	html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
+ 				$("#vip_proxy_nm" + i).html(vip_btn_html);
+ 	 			$("#keepVipDiv" + i).attr('style', "width:80%;height:220px;")
+ 	 			$("#keepVipDiv" + i).html(html_sebu);
 			}
 		}
 	} else if( result.proxyServerVipList.length == 0){
@@ -2377,7 +2389,8 @@ function fn_proxyMonInfo(result){
 		html_listner_ss = "";
 		html_listner_con_ss = "";
 		var lsnNulkCnt = 0;
-			
+		var pry_agent_status = result.proxyServerByDBSvrId[j].conn_result;
+		
 		//title
 		if (result.proxyServerByDBSvrId[j].pry_svr_nm != "") {
 			html_pry_title = '<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
@@ -2399,7 +2412,7 @@ function fn_proxyMonInfo(result){
 		}
 		
 		//agent 상태 체크
-		if(result.proxyServerByDBSvrId[j].agt_cndt_cd == 'TC001501'){
+		if(result.proxyServerByDBSvrId[j].agt_cndt_cd == 'TC001501' && pry_agent_status == "Y"){
 			html_agent = '					<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>\n';
 		} else {
 			html_agent = '					<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>\n';
@@ -2457,7 +2470,8 @@ function fn_proxyMonInfo(result){
 					if(result.proxyServerByDBSvrId[j].agt_cndt_cd == 'TC001501' &&
 						result.proxyServerByDBSvrId[j].exe_status == 'TC001501' &&
 						((result.proxyServerByDBSvrId[j].kal_install_yn == '' || result.proxyServerByDBSvrId[j].kal_install_yn != 'Y') ||
-						  (result.proxyServerByDBSvrId[j].kal_install_yn == 'Y' && result.proxyServerByDBSvrId[j].kal_exe_status == 'TC001501'))
+						  (result.proxyServerByDBSvrId[j].kal_install_yn == 'Y' && result.proxyServerByDBSvrId[j].kal_exe_status == 'TC001501')) &&
+						  pry_agent_status == 'Y'
 						){
 						if (result.proxyServerLsnList[k].db_conn_ip_num != null) {
 							db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "").replace(/,\s*/,"");

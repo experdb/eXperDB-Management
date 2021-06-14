@@ -150,6 +150,8 @@ public class ProxyMonitoringController {
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
 			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
 			
+			String proxy_agent_status = "Y";
+			
 	        // proxy agent 상태 확인
 	        Map<String, Object> proxyAgentStatus = null;
 	        if (proxyServerByMasId != null && proxyServerByMasId.size() > 0) {
@@ -157,6 +159,10 @@ public class ProxyMonitoringController {
 	               //데이터 불러오기
 	        	   proxyAgentStatus = proxyMonitoringService.getProxyAgentStatus(Integer.parseInt(String.valueOf(proxyServerByMasId.get(i).get("pry_svr_id"))));
 	               proxyServerByMasId.get(i).put("conn_result", proxyAgentStatus.get("conn_result"));
+	               
+	               if(proxyAgentStatus.get("conn_result") == "N"){
+	            	   proxy_agent_status = "N";
+	               }
 	            }
 	         }
 
@@ -169,6 +175,7 @@ public class ProxyMonitoringController {
 			mv.addObject("proxyLogList",proxyLogList);
 			mv.addObject("proxyChartCntList",proxyChartCntList);
 			mv.addObject("selectPryCngList", selectPryCngList);
+			mv.addObject("proxy_agent_status", proxy_agent_status);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -521,8 +528,14 @@ public class ProxyMonitoringController {
 			int pry_svr_id = 0;
 			List<Map<String, Object>> proxyServerByDBSvrId = proxyMonitoringService.selectProxyServerByDBSvrId(db_svr_id);
 			
-			if(proxyServerByDBSvrId.size() > 0){
+			Map<String, Object> proxyAgentStatus = null;
+			if(proxyServerByDBSvrId != null && proxyServerByDBSvrId.size() > 0){
 				pry_svr_id = Integer.parseInt(String.valueOf(proxyServerByDBSvrId.get(0).get("pry_svr_id")));
+				
+				for (int i = 0; i < proxyServerByDBSvrId.size(); i++) {
+					proxyAgentStatus = proxyMonitoringService.getProxyAgentStatus(Integer.parseInt(String.valueOf(proxyServerByDBSvrId.get(i).get("pry_svr_id"))));
+					proxyServerByDBSvrId.get(i).put("conn_result", proxyAgentStatus.get("conn_result"));
+				}
 			}
 			
 			//vip 목록 조회
