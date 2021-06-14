@@ -92,10 +92,12 @@
 		        	instReg_v_ip: {
 						required:true,
 						validatorIpFormat2 :true,
-						duplCheckVIp:true
+						duplCheckVIp:true,
+						maxlength: 20
 					},
 					instReg_v_if_nm: {
-						required: true
+						required: true,
+						maxlength: 20
 					},
 					instReg_v_rot_id: {
 						required: true,
@@ -363,7 +365,7 @@
 										</select>
 									</div>
 									<div class="col-sm-3_75">
-										<input type="text" class="form-control form-control-xsm instReg_v_ip" maxlength="20" id="instReg_v_ip" name="instReg_v_ip" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="xxx.xxx.xxx.xxx/xx" tabindex=1 />
+										<input type="text" class="form-control form-control-xsm instReg_v_ip" maxlength="20" id="instReg_v_ip" name="instReg_v_ip" onblur="this.value=this.value.trim()" placeholder="xxx.xxx.xxx.xxx/xx" tabindex=1 />
 									</div>
 								</div>
 								<div class="form-group row">
@@ -378,7 +380,7 @@
 										</select>
 									</div>
 									<div class="col-sm-3_75">
-										<input type="text" class="form-control form-control-xsm instReg_v_if_nm" maxlength="20" id="instReg_v_if_nm" name="instReg_v_if_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+										<input type="text" class="form-control form-control-xsm instReg_v_if_nm" maxlength="20" id="instReg_v_if_nm" name="instReg_v_if_nm" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
 									</div>
 								</div>
 								<div class="form-group row">
@@ -413,7 +415,7 @@
 											<option value=9>9</option>
 											<option value=10>10</option>
 										</select>
-										<input type="hidden" class="form-control form-control-xsm instReg_priority" maxlength="20" id="instReg_priority" name="instReg_priority" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=5 />
+										<input type="hidden" class="form-control form-control-xsm instReg_priority" maxlength="20" id="instReg_priority" name="instReg_priority" onblur="this.value=this.value.trim()" placeholder="" tabindex=5 />
 									</div>
 								</div>
 								<div class="form-group row row-last">
@@ -424,7 +426,7 @@
 										</span>
 									</label>
 									<div class="col-sm-3" id="div_min_data_del_term">
-										<input type="number" class="form-control form-control-xsm instReg_v_rot_id" maxlength="20" id="instReg_v_rot_id" name="instReg_v_rot_id" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="" tabindex=3 />
+										<input type="number" class="form-control form-control-xsm instReg_v_rot_id" maxlength="20" id="instReg_v_rot_id" name="instReg_v_rot_id" onblur="this.value=this.value.trim()" placeholder="" tabindex=3 />
 									</div>
 									<label for="instReg_chk_tm" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
@@ -433,7 +435,7 @@
 										</span>
 									</label>
 									<div class="col-sm-2">
-										<input type="number" class="form-control form-control-xsm instReg_chk_tm" maxlength="18" id="instReg_chk_tm" name="instReg_chk_tm" onkeyup="fn_checkWord(this,18)" onblur="this.value=this.value.trim()" placeholder="" tabindex=6 /> 
+										<input type="number" class="form-control form-control-xsm instReg_chk_tm" maxlength="18" id="instReg_chk_tm" name="instReg_chk_tm" onblur="this.value=this.value.trim()" placeholder="" tabindex=6 /> 
 									</div>
 									<label class="col-sm-1 col-form-label-sm pop-label-index" style="padding-left: 0px;">
 									<spring:message code="eXperDB_proxy.sec" />

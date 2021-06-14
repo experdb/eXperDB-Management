@@ -162,6 +162,7 @@ function fn_serverListTable_init() {
 				},
 				lstnReg_con_bind_ip: {
 					required: true,
+					maxlength: 15,
 					validatorIpFormat3 :true
 				},
 				lstnReg_con_bind_port: {
@@ -169,7 +170,8 @@ function fn_serverListTable_init() {
 					validatorPort: true
 				},
 				lstnReg_lsn_desc: {
-					required:true
+					required:true,
+					maxlength: 250
 				},
 				lstnReg_db_nm: {
 					required: true
@@ -191,12 +193,13 @@ function fn_serverListTable_init() {
 				},
 	        	lstnReg_con_bind_ip: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>',
+					maxlength: '15'+'<spring:message code="message.msg211"/>',
 					validatorIpFormat3 : '<spring:message code="errors.format" arguments="'+ 'IP주소' +'"/>'
 				},
 				lstnReg_con_bind_port: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>',
-					validatorPort: '<spring:message code="eXperDB_proxy.msg13"/>'
-					,maxlength: '5'+'<spring:message code="message.msg211"/>'
+					validatorPort: '<spring:message code="eXperDB_proxy.msg13"/>',
+					maxlength: '5'+'<spring:message code="message.msg211"/>'
 				},
 				lstnReg_lsn_desc: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>',
@@ -535,7 +538,7 @@ function fn_serverListTable_init() {
 										<spring:message code="data_transfer.port" />(*)
 									</label>
 									<div class="col-sm-4">
-										<input type="text" class="form-control" id="portno" name="portno"  maxlength="5" onkeyup="fn_checkWord(this,5)" placeholder="5<spring:message code='message.msg188'/>">
+										<input type="text" class="form-control" id="portno" name="portno"  maxlength="5" placeholder="5<spring:message code='message.msg188'/>">
 									</div>
 									
 								</div>
@@ -583,7 +586,7 @@ function fn_serverListTable_init() {
 										<spring:message code="eXperDB_proxy.listener_nm" />(*)
 									</label>
 									<div class="col-sm-3">
-										<input type="text" class="form-control form-control-xsm lstnReg_lsn_nm" autocomplete="off" maxlength="15" id="lstnReg_lsn_nm" name="lstnReg_lsn_nm" onkeyup="fn_checkWord(this,15)" onblur="this.value=this.value.trim()"  placeholder="" tabindex=1 />
+										<input type="text" class="form-control form-control-xsm lstnReg_lsn_nm" autocomplete="off" maxlength="15" id="lstnReg_lsn_nm" name="lstnReg_lsn_nm" onblur="this.value=this.value.trim()"  placeholder="" tabindex=1 />
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_lsn_nm_sel" id="lstnReg_lsn_nm_sel" onchange="fn_change_lsn_nm();"  tabindex=4 >
 											<option value=""><spring:message code="common.choice"/></option>
 											<c:forEach var="result" items="${listenerNmList}">
@@ -610,7 +613,7 @@ function fn_serverListTable_init() {
 										:
 									</div>
 									<div class="col-sm-1_5">
-										<input type="number" class="form-control form-control-xsm" maxlength="5" id="lstnReg_con_bind_port" name="lstnReg_con_bind_port"  onKeyPress="chk_Number(this);" onkeyup="fn_checkWord(this,5)" onblur="this.value=this.value.trim()" placeholder="port" tabindex=2 />
+										<input type="number" class="form-control form-control-xsm" maxlength="5" id="lstnReg_con_bind_port" name="lstnReg_con_bind_port"  onKeyPress="chk_Number(this);" onblur="this.value=this.value.trim()" placeholder="port" tabindex=2 />
 									</div>
 									<div class="col-sm-auto"></div>
 								</div>
@@ -637,7 +640,7 @@ function fn_serverListTable_init() {
 										<spring:message code="eXperDB_proxy.desc" />
 									</label>
 									<div class="col-sm-9">
-										<input type="text" class="form-control form-control-xsm" maxlength="250" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onkeyup="fn_checkWord(this,250)" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+										<input type="text" class="form-control form-control-xsm" maxlength="250" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
 									</div>
 								</div>
 							</div>

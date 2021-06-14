@@ -173,7 +173,7 @@
 		            		if(full.sys_type == "PROXY"){
 								return "Proxy";
 							}else{
-								return "Virtual IP";
+								return "VIP Check";
 							}
 	         			}
 		         	},
