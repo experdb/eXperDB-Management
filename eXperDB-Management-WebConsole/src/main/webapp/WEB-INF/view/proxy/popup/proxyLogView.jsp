@@ -139,7 +139,7 @@
 		var today = new Date();
 		var day_end = today.toJSON().slice(0,10);
 
-		today.setDate(today.getDate() - 7);
+		today.setDate(today.getDate() - 1);
 		var day_start = today.toJSON().slice(0,10);
 		var sys_date = s_date.slice(0,10);
 		$("#wrk_strt_dtm").val(sys_date);
@@ -384,7 +384,7 @@
 									</div>
 									<div class="col-sm-2" style="margin-left:-17px;">
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
-											<input type="text" class="form-control totDatepicker" style="height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" onchange="fn_date_cng()" readonly>
+											<input type="text" class="form-control totDatepicker" style="width:150px; height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" onchange="fn_date_cng()" readonly>
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
 											</span>
@@ -408,13 +408,13 @@
 												</td>
 												<td id="view_file_name" style="width:30%;">
 												</td>
-												<td style="width:10%;">
+												<td style="width:6%;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													size : 
 												</td>
 												<td style="width:30%;" id="view_file_size">
 												</td>
-												<td style="width:20%;">
+												<td style="width:10%;">
 												</td>
 											</tr>
 										</tbody>
