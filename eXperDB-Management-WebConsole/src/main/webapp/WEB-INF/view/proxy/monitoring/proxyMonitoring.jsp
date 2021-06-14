@@ -502,9 +502,9 @@
 			dataType : 'json',
 			success : function(result) {
 				// 프록시 모니터링 초기화 및 데이터 셋팅
-				if(result.proxyAgentStatus.conn_result == "N"){
- 		 			showSwalIconRst('<spring:message code="eXperDB_proxy.msg42" />', '<spring:message code="common.close" />', '', 'error');
-				}
+// 				if(result.proxyAgentStatus.conn_result == "N"){
+//  		 			showSwalIconRst('<spring:message code="eXperDB_proxy.msg42" />', '<spring:message code="common.close" />', '', 'error');
+// 				}
 				fn_proxyMonitoringInit(pry_svr_id, result);
 				fn_proxy_loadbar("stop");
 			},
@@ -583,10 +583,10 @@
 		var exe_status_css = "";
 		var kal_exe_status_css = "";
 		var strVip = "";
-		var agent_status = result.proxyAgentStatus.conn_result;
 		
 		//ROW 만들기
 		for(var i = 0; i < proxyServerByMasId_cnt; i++){
+			var agent_status = result.proxyServerByMasId[i].conn_result;
  			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
  			
 			html_vip += '	<p class="card-title" style="margin-bottom:-25px;margin-left:10px;">\n';
@@ -630,8 +630,9 @@
 		var iVipChkCnt = 0;
  		if (result.proxyServerVipList != null && result.proxyServerVipList.length > 0) {
  			for(var i = 0; i < result.proxyServerVipList.length; i++){
+ 				var count = 0;
  				if (result.proxyServerVipList[i].kal_install_yn == "Y") {
- 					if (result.proxyServerVipList[i].kal_exe_status != null && result.proxyServerVipList[i].kal_exe_status == "TC001501") {
+ 					if (result.proxyServerVipList[i].kal_exe_status == "TC001501") {
  						kal_exe_status_chk = "text-primary";
  						kal_exe_status_css = "fa-refresh fa-spin text-success";
 						$("#kal_start_btn"+i+"").hide();
@@ -640,7 +641,7 @@
  						kal_exe_status_chk = "text-danger";
  						kal_exe_status_css = "fa-times-circle text-danger";
  						$("#kal_start_btn"+i+"").show();
-						$('#kal_stop_btn').hide();
+						$("#kal_stop_btn"+i+"").hide();
  					}
  					
  					html_sebu = "";
@@ -676,7 +677,7 @@
 	 				}
 
 	 				for(var j = 0; j < result.proxyServerByMasId.length; j++) {
-	 					var count = 0;
+	 					
 	 					kal_install_yn = result.proxyServerByMasId[j].kal_install_yn;
 	 					if (result.proxyServerByMasId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
 							count++;	 						
@@ -701,7 +702,7 @@
 		 					$("#keepVipDivLine" + j).html(html_vip_line);
 		 					
 		 					iVipChkCnt = j;
-	 					} else if(j == result.proxyServerByMasId.length-1 && count == 0){
+	 					} else if(count == 0 && j == result.proxyServerByMasId.length-1){
 	 						html_sebu = "";
 	 		 				var vip_btn_html = "";
 	 		 				vip_btn_html += '<br/>&nbsp;';
@@ -761,7 +762,6 @@
 		var html_agent = "";
 		var html_listner_ss = "";
 		var lsn_status_chk = "";
-		var agent_status = result.proxyAgentStatus.conn_result;
 		
 		//연결 모니터링
 		var html_listner_con = "";
@@ -824,6 +824,8 @@
   			html_listner_ss = "";
   			html_listner_con_ss = "";
   			var lsnNulkCnt = 0;
+  			console.log(result.proxyServerByMasId[j])
+  			var agent_status = result.proxyServerByMasId[j].conn_result;
   			
   			//title
 			if (result.proxyServerByMasId[j].pry_svr_nm != "") {

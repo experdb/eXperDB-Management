@@ -150,9 +150,16 @@ public class ProxyMonitoringController {
 			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
 			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
 			
-			// proxy agent 상태 확인
-			Map<String, Object> proxyAgentStatus = proxyMonitoringService.getProxyAgentStatus(pry_svr_id);
-			
+	        // proxy agent 상태 확인
+	        Map<String, Object> proxyAgentStatus = null;
+	        if (proxyServerByMasId != null && proxyServerByMasId.size() > 0) {
+	           for (int i = 0; i < proxyServerByMasId.size(); i++) {
+	               //데이터 불러오기
+	        	   proxyAgentStatus = proxyMonitoringService.getProxyAgentStatus(Integer.parseInt(String.valueOf(proxyServerByMasId.get(i).get("pry_svr_id"))));
+	               proxyServerByMasId.get(i).put("conn_result", proxyAgentStatus.get("conn_result"));
+	            }
+	         }
+
 			mv.addObject("proxyServerVipList", proxyServerVipList);
 			mv.addObject("proxyServerByMasId", proxyServerByMasId);
 			mv.addObject("proxyServerLsnList", proxyServerLsnList);
@@ -162,7 +169,6 @@ public class ProxyMonitoringController {
 			mv.addObject("proxyLogList",proxyLogList);
 			mv.addObject("proxyChartCntList",proxyChartCntList);
 			mv.addObject("selectPryCngList", selectPryCngList);
-			mv.addObject("proxyAgentStatus", proxyAgentStatus);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -443,7 +449,7 @@ public class ProxyMonitoringController {
 	 * @return
 	 */
 	@RequestMapping("/logDownload.do")
-	public  void logDownload(HttpServletRequest request, HttpServletResponse response){
+	public void logDownload(HttpServletRequest request, HttpServletResponse response){
 		Properties props = new Properties();
 
 		try {
