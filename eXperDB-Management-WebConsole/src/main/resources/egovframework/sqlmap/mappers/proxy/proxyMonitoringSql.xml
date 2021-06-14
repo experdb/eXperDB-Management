@@ -454,16 +454,17 @@
 		**/
 		SELECT 
 			tpsi.PRY_SVR_ID , 
-			tpsi.PRY_SVR_NM , 
-			tpacg.PRY_ACT_EXE_SN, 
-			tpacg.SYS_TYPE , 
-			tpacg.ACT_TYPE , 
-			tpacg.ACT_EXE_TYPE , 
-			tpacg.RSLT_MSG
+         	tpsi.PRY_SVR_NM , 
+         	tpacg.PRY_ACT_EXE_SN, 
+         	tpacg.SYS_TYPE , 
+        	tpacg.ACT_TYPE , 
+        	tpacg.ACT_EXE_TYPE , 
+        	tpacg.RSLT_MSG
 		FROM T_PRY_SVR_I tpsi
 		JOIN T_PRY_ACTSTATE_CNG_G tpacg
 		ON tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID
 		WHERE tpacg.PRY_ACT_EXE_SN = #{PRY_ACT_EXE_SN}::numeric
+		AND tpacg.EXE_RSLT_CD = 'TC001502'
 	</select>
 
 	<select id="selectAgentCount" resultType="int">
