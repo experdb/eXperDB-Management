@@ -1586,7 +1586,8 @@
 	 * Vip Instance 관리 팝업
 	 ******************************************************** */
 	function fn_proxy_instance_popup(mode){
-		if(selPrySvrId == null || (selConfInfo == null && mode == "mod")){//선택한 서버가 없다면 return
+		
+		if(proxyServerTable.row('.selected').data() == null || (vipInstTable.row('.selected').data() == null && mode == "mod")){//선택한 서버가 없다면 return
 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{
@@ -1782,7 +1783,7 @@
 	 * Vip Listener 관리 팝업
 	 ******************************************************** */
 	function fn_proxy_listener_popup(mode){
-		if(selPrySvrId == null || (selListenerInfo == null && mode == "mod")){//선택한 서버가 없다면 return
+		if(proxyServerTable.row('.selected').data() == null || (proxyListenTable.row('.selected').data() == null && mode == "mod")){//선택한 서버가 없다면 return
 			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}else{

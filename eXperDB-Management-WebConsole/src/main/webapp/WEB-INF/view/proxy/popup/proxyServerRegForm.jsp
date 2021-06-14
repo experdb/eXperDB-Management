@@ -551,7 +551,7 @@ var mgmtDbmsTable = null;
 										<spring:message code="eXperDB_proxy.server_name" />(*)
 									</label>
 									<div class="col-sm-3">
-										<input type="text" class="form-control form-control-xsm" maxlength="25" id="svrReg_pry_svr_nm" name="svrReg_pry_svr_nm" onkeyup="fn_checkWord(this,25)" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=2 />
+										<input type="text" class="form-control form-control-xsm" maxlength="25" id="svrReg_pry_svr_nm" name="svrReg_pry_svr_nm" onblur="this.value=this.value.trim()" placeholder="25<spring:message code='message.msg188'/>" tabindex=2 />
 									</div>
 								</div>
 								<div class="form-group row row-last">
