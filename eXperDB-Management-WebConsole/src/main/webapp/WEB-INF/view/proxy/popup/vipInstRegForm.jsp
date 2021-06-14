@@ -392,8 +392,10 @@
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="instReg_state_nm" id="instReg_state_nm"  tabindex=4 >
-											<option value="MASTER"><spring:message code="eXperDB_proxy.master" /></option>
-											<option value="BACKUP"><spring:message code="eXperDB_proxy.backup" /></option>
+											<%-- <option value="MASTER"><spring:message code="eXperDB_proxy.master" /></option>
+											<option value="BACKUP"><spring:message code="eXperDB_proxy.backup" /></option> --%>
+											<option value="MASTER">Master</option>
+											<option value="BACKUP">Backup</option>
 										</select>
 									</div>
 									<label for="instReg_priority" class="col-sm-3 col-form-label-sm pop-label-index">
