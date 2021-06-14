@@ -54,13 +54,13 @@ INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 select nextval('q_usrmnuaut_i_01'), 'admin',
        (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001803' AND mnu_nm = '프록시상태이력관리'),
-        'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+        'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 select nextval('q_usrmnuaut_i_01'), 'admin',
        (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001804' AND mnu_nm = '프록시변경이력관리'),
-        'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+        'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
@@ -92,7 +92,7 @@ INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 select nextval('q_usrmnuaut_i_01'), 'experdb',
        (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001803' AND mnu_nm = '프록시상태이력관리'),
-        'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+        'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
@@ -104,7 +104,7 @@ INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 select nextval('q_usrmnuaut_i_01'), 'experdb',
        (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN0001805' AND mnu_nm = '프록시관리에이전트'),
-        'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+        'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
    
 --접근이력코드 등록
 INSERT INTO t_sysdtl_c
