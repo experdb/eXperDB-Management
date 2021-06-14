@@ -465,7 +465,7 @@
 	        	FRST_REG_DTM,
 	        	LST_MDFR_ID,
                 LST_MDF_DTM)
-        SELECT	(SELECT COALESCE(MAX(PRY_ACT_EXE_SN+1),1) AS PRY_ACT_EXE_SN FROM T_PRY_ACTSTATE_CNG_G),
+        SELECT	NEXTVAL('q_t_pry_actstate_cng_g_01'),
         		#{pry_svr_id},
         		#{sys_type},
         		#{act_type},
