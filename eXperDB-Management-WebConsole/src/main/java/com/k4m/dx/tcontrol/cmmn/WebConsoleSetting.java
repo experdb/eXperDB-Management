@@ -27,6 +27,8 @@ public class WebConsoleSetting {
 		String strActivitylogDatabaseUrl = "";
 		String strJobhistoryDatabaseUrl = "";
 		
+		String strBnrLicense  = "";
+		
 		String strTransferYN ="";
 		
 		//2020.09.23 trans 컨슈머 전송 추가
@@ -163,6 +165,17 @@ public class WebConsoleSetting {
 					System.out.println("Server SSH Port :");
 					strSshPort = scan.nextLine();
 					strSshPort = strSshPort.toUpperCase();
+				} else {
+					break;
+				}
+			}
+			System.out.println("BnR License cnt : ");
+			strSshPort = scan.nextLine();
+			while (true) {
+				if(strSshPort.equals("")) {
+					System.out.println("Please enter your BnR License cnt. ");
+					System.out.println("BnR License cnt :");
+					strBnrLicense = scan.nextLine();
 				} else {
 					break;
 				}
@@ -421,6 +434,7 @@ public class WebConsoleSetting {
 			    prop.setProperty("backup.username", "root");
 			    prop.setProperty("backup.password", backupPw);
 			    prop.setProperty("backup.port", strSshPort);
+			    prop.setProperty("bnr.license", strBnrLicense);
 		    }
 		    		    
 		    prop.setProperty("pg_audit", strAuditYN);
