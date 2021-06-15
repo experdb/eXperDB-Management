@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "****************************************************"
-echo "eXperDB-Management-11.2.5 Repository DB Install"
+echo "eXperDB-Management-12.1.0 Repository DB Install"
 echo "****************************************************"
 
 echo "**CREATE USER experdb**"
@@ -29,17 +29,9 @@ echo "**Init data start**"
 psql -U experdb -d experdb -f eXperDB-Management_initData.sql
 echo "**Init data END**"
 
-echo "**Migration data start**"
-psql -U experdb -d experdb -f create_new_migraton.sql
-echo "**Migration data END**"
-
-echo "**Scale data start**"
-psql -U experdb -d experdb -f create_new_scale.sql
-echo "**Scale data END**"
-
-echo "**Trans data start**"
-psql -U experdb -d experdb -f create_new_trans.sql
-echo "**Trans data END**"
+echo "**11.1.0**"
+psql -U experdb -d experdb -f eXperDB-Management_11.1.0.sql
+echo "**11.1.0 END**"
 
 echo "**11.2.0**"
 psql -U experdb -d experdb -f eXperDB-Management_11.2.0.sql
@@ -57,6 +49,6 @@ echo "**11.2.5**"
 psql -U experdb -d experdb -f eXperDB-Management_11.2.5.sql
 echo "**11.2.5 END**"
 
-echo "**11.2.7**"
-psql -U experdb -d experdb -f eXperDB-Management_11.2.7.sql
-echo "**11.2.7 END**"
+echo "**12.1.0**"
+psql -U experdb -d experdb -f eXperDB-Management_12.1.0.sql
+echo "**12.1.0 END**"
