@@ -663,14 +663,6 @@ VALUES('TC0001', 'DX-T0167_01', 'Proxy 이력 관리 화면 - Conf 파일 확인
 
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0167', 'Proxy 이력 관리 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Settings History');
-
-INSERT INTO t_sysdtl_c
-(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0167_01', 'Proxy 이력 관리 화면 - Conf 파일 확인 팝업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Settings History - Conf Popup');
-
-INSERT INTO t_sysdtl_c
-(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
 VALUES('TC0001', 'DX-T0167_02', 'Proxy 이력 관리 화면 - 설정 변경 이력 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Proxy Settings History - Conf Popup');
 
 INSERT INTO t_sysdtl_c
