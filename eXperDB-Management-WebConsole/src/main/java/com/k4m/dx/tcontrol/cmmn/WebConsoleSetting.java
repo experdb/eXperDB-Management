@@ -15,7 +15,7 @@ public class WebConsoleSetting {
 	
 	public static void main(String[] args) throws Exception {
 		String strLanguage ="";
-		String strVersion ="eXperDB-Management-WebConsole-11.2.6";
+		String strVersion ="eXperDB-Management-WebConsole-12.1.0";
 		
 		String strDatabaseIp = "";
 		String strDatabasePort = "";
@@ -23,12 +23,23 @@ public class WebConsoleSetting {
 		String strDatabasePassword = "";
 		String strDatabaseUrl = "";
 		
+		String strBackupDatabaseUrl = "";
+		String strActivitylogDatabaseUrl = "";
+		String strJobhistoryDatabaseUrl = "";
+		
+		String strBnrLicense  = "";
+		
 		String strTransferYN ="";
 		
 		//2020.09.23 trans 컨슈머 전송 추가
 		String strTransferOraYN ="";
 		
 		String strAuditYN="";
+		
+		// 2021-04-13 백업사용 유무 추가 변승우
+		String strBackupYN = "";
+		String strRootPw = "";
+		String strSshPort = "";
 		
 		String strScaleYN="";
 		String strScalePath="";
@@ -50,7 +61,10 @@ public class WebConsoleSetting {
 		Scanner scan = new Scanner(System.in);
 		
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-
+		
+		String strProxyYN="";	//proxy 사용여부
+		String strProxyPath="";
+		
 		/* 사용언어 */
 		System.out.println("Language(ko:Korean), (en:English) :");
 		strLanguage = scan.nextLine();
@@ -98,6 +112,77 @@ public class WebConsoleSetting {
 			}
 		}
 
+		
+		/* DB2PG 설치 경로 */
+		/* 순서변경, 2021-04-13 변승우 */
+		System.out.println("eXperDB-DB2PG installation path : ");
+		strDb2pgPath = scan.nextLine();
+		while (true) {
+			if(strDb2pgPath.equals("")) {
+				System.out.println("Please enter your eXperDB-DB2PG installation path setting. ");
+				System.out.println("eXperDB-DB2PG installation path :");
+				strDb2pgPath = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
+		
+		
+		/* 백업 사용여부  추가  2021-04-13  변승우 */
+		System.out.println("Whether to enable eXperDB-Backup settings? (y, n)");
+		strBackupYN = scan.nextLine();
+		strBackupYN = strBackupYN.toUpperCase();
+		while (true) {
+			if(strBackupYN.equals("")) {
+				System.out.println("Please enter your eXperDB-Backup setting yn. ");
+				System.out.println("Whether to enable eXperDB-Backup settings? (y, n) :");
+				strBackupYN = scan.nextLine();
+				strBackupYN = strBackupYN.toUpperCase();
+			} else {
+				break;
+			}
+		}
+		
+		if(strBackupYN.equals("Y")){
+			System.out.println("Server root password :");
+			strRootPw = scan.nextLine();
+			while (true) {
+				if(strRootPw.equals("")) {
+					System.out.println("Please enter your Server root password. ");
+					System.out.println("Server root password :");
+					strRootPw = scan.nextLine();
+					strRootPw = strRootPw.toUpperCase();
+				} else {
+					break;
+				}
+			}
+			System.out.println("Server SSH Port : ");
+			strSshPort = scan.nextLine();
+			while (true) {
+				if(strSshPort.equals("")) {
+					System.out.println("Please enter your Server SSH Port. ");
+					System.out.println("Server SSH Port :");
+					strSshPort = scan.nextLine();
+					strSshPort = strSshPort.toUpperCase();
+				} else {
+					break;
+				}
+			}
+			System.out.println("BnR License cnt : ");
+			strSshPort = scan.nextLine();
+			while (true) {
+				if(strSshPort.equals("")) {
+					System.out.println("Please enter your BnR License cnt. ");
+					System.out.println("BnR License cnt :");
+					strBnrLicense = scan.nextLine();
+				} else {
+					break;
+				}
+			}
+		}
+		
+		
 		/* 감사설정 사용여부 */
 		System.out.println("Whether to enable auditing settings? (y, n)");
 		strAuditYN = scan.nextLine();
@@ -142,17 +227,28 @@ public class WebConsoleSetting {
 				break;
 			}
 		}
-
-		/* DB2PG 설치 경로 */
-		System.out.println("eXperDB-DB2PG installation path : ");
-		strDb2pgPath = scan.nextLine();
+		
+		/* Proxy in/out 사용여부 */
+		System.out.println("Whether data Proxy-Service is enabled? (y, n)");
+		strProxyYN = scan.nextLine();
+		strProxyYN = strProxyYN.toUpperCase();
 		while (true) {
-			if(strDb2pgPath.equals("")) {
-				System.out.println("Please enter your eXperDB-DB2PG installation path setting. ");
-				System.out.println("eXperDB-DB2PG installation path :");
-				strDb2pgPath = scan.nextLine();
+			if(strProxyYN.equals("")) {
+				System.out.println("Please enter your Proxy-Service setting yn. ");
+				System.out.println("Whether data Proxy Service is enabled? (y, n) :");
+				strProxyYN = scan.nextLine();
+				strProxyYN = strProxyYN.toUpperCase();
 			} else {
 				break;
+			}
+		}
+
+		//proxy_log_path
+		if(strProxyYN.equals("Y")){
+			System.out.println("eXperDB-Proxy log_path(/home/experdb/app/eXperDB-Management/eXperDB-Proxy):");
+			strProxyPath = scan.nextLine();
+			if(strProxyPath.equals("")) {
+				strProxyPath = "/home/experdb/app/eXperDB-Management/eXperDB-Proxy";
 			}
 		}
 
@@ -228,6 +324,12 @@ public class WebConsoleSetting {
 		}
 
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
+		
+		//아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
+		strBackupDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/ARCserveLinuxD2D";
+		strActivitylogDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/ActivityLog";
+		strJobhistoryDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/JobHistory";
+		
 		System.out.println("################globals.properties##################");
 		System.out.println("Repository database IP address :" + strDatabaseIp);
 		System.out.println("Repository database port :" + strDatabasePort);		
@@ -235,11 +337,13 @@ public class WebConsoleSetting {
 		System.out.println("Repository database password :" + strDatabasePassword);
 		System.out.println("Repository database Access information :" + strDatabaseUrl);
 		System.out.println("Whether to enable auditing settings : " + strAuditYN);
+		System.out.println("Whether to enable Backup settings : " + strBackupYN);
 		System.out.println("Whether data transfer is enabled : " + strTransferYN);
 		System.out.println("eXperDB-DB2PG installation path : " + strDb2pgPath);
 		System.out.println("###################eXperDB-Scale##################");
 		System.out.println("Whether scale is enabled : " + strScaleYN);
-
+		System.out.println("Whether proxy-service is enabled : " + strProxyYN);
+		
 		if(strScaleYN.equals("Y")){
 			System.out.println("eXperDB-Scale scale_path : " + strScalePath);
 			System.out.println("eXperDB-Scale scale_in_cmd : " + strScaleInCmd);
@@ -271,6 +375,13 @@ public class WebConsoleSetting {
 		    String url = pbeEnc.encrypt(strDatabaseUrl);
 		    String username = pbeEnc.encrypt(strDatabaseUsername);
 		    String password = pbeEnc.encrypt(strDatabasePassword);
+		    
+		    
+		    //아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
+		    String backupUrl = pbeEnc.encrypt(strBackupDatabaseUrl);
+		    String activitylUrl = pbeEnc.encrypt(strActivitylogDatabaseUrl);
+		    String jobhistoryUrl = pbeEnc.encrypt(strJobhistoryDatabaseUrl);		    
+		    String backupPw = pbeEnc.encrypt(strRootPw);
 		    
 		    Properties prop = new Properties();
 
@@ -312,7 +423,22 @@ public class WebConsoleSetting {
 		    prop.setProperty("database.url", "ENC(" + url + ")");
 		    prop.setProperty("database.username", "ENC(" + username + ")");
 		    prop.setProperty("database.password", "ENC(" + password + ")");
+		    
+		    //아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
+		    prop.setProperty("backupdb.url", "ENC(" + backupUrl + ")");
+		    prop.setProperty("activitylog.url", "ENC(" + activitylUrl + ")");
+		    prop.setProperty("jobhistory.url", "ENC(" + jobhistoryUrl + ")");
+		    
+		    if(strBackupYN.equals("Y")){
+			    prop.setProperty("backup.url", strDatabaseIp);
+			    prop.setProperty("backup.username", "root");
+			    prop.setProperty("backup.password", backupPw);
+			    prop.setProperty("backup.port", strSshPort);
+			    prop.setProperty("bnr.license", strBnrLicense);
+		    }
+		    		    
 		    prop.setProperty("pg_audit", strAuditYN);
+		    prop.setProperty("bnr.useyn", strBackupYN);
 		    prop.setProperty("transfer", strTransferYN);	
 		    prop.setProperty("transfer_ora", strTransferOraYN);
 		    
@@ -328,7 +454,13 @@ public class WebConsoleSetting {
 		    }else{
 		    	 prop.setProperty("scale", strScaleYN);	
 		    }
-		    
+
+		    prop.setProperty("proxy.useyn", strProxyYN);
+
+			if(strProxyYN.equals("Y")){
+		    	 prop.setProperty("proxy_path", strProxyPath);	
+			}
+				
 		    prop.setProperty("db2pg_path", strDb2pgPath);
 
 		    if(strEnctyptYn.equals("Y")){

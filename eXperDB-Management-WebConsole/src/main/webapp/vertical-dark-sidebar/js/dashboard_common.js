@@ -18,7 +18,14 @@ $(window).ready(function(){
 	
 	//서버정보 리스트 setting
 	fn_serverListSetting();	
-
+	
+	// tooltip 셋팅
+	setTimeout(function(){
+		$('[data-toggle="tooltip"]').tooltip({
+			template: '<div class="tooltip tooltip-warning" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+		});
+	},250);
+	
 });
 
 /* ********************************************************
@@ -48,14 +55,14 @@ function fn_serverSebuInfo(db_svr_id, rowChkCnt) {
  ******************************************************** */
 function fn_serverDivClear(db_svr_id, rowChkCnt) {
 	//백업정보
-	if ($('#a_back_hist').attr('aria-expanded') == "false") {
+	/*if ($('#a_back_hist').attr('aria-expanded') == "false") {
 		$('#a_back_hist').click();
-	}
+	}*/
 	
 	//배치정보
-	if ($('#a_script_hist').attr('aria-expanded') == "false") {
+	/*if ($('#a_script_hist').attr('aria-expanded') == "false") {
 		$('#a_script_hist').click();
-	}
+	}*/
 
 	if ($('#a_scale_hist').attr('aria-expanded') == "false") {
 		$('#a_scale_hist').click();
@@ -66,11 +73,11 @@ function fn_serverDivClear(db_svr_id, rowChkCnt) {
 	}
 	
 	$("#scheduleHistChart").html("");
-	$("#backupRmanHistChart").html("");	
-	$("#backupDumpHistChart").html("");	
+	/*$("#backupRmanHistChart").html("");	
+	$("#backupDumpHistChart").html("");	*/
 	
-	var scriptHistChartCanvas = document.getElementById("scriptHistChart");
-	scriptHistChartCanvas.getContext("2d").clearRect(0, 0, scriptHistChartCanvas.width, scriptHistChartCanvas.height);
+	/*var scriptHistChartCanvas = document.getElementById("scriptHistChart");
+	scriptHistChartCanvas.getContext("2d").clearRect(0, 0, scriptHistChartCanvas.width, scriptHistChartCanvas.height);*/
 
 	if ($("#scaleHistChart") != null) {
 		$("#scaleHistChart").html("");	
@@ -105,6 +112,7 @@ function fn_serverDivClear(db_svr_id, rowChkCnt) {
 	$("#serverSs" + rowChkCnt).css('background-color','#c2defe');
 
 	fn_dbSvrIdSearch(db_svr_id);
+	fn_prySearch(db_svr_id);
 }
 
 /* ********************************************************
@@ -119,15 +127,15 @@ function fn_main_tab_setting(result) {
 	fn_schedule_History_set(result);
 
 	//백업 이력 목록 setting
-	fn_backup_History_set(result);
+	//fn_backup_History_set(result);
 	
 	//배치 이력 목록 setting
-	fn_script_History_set(result);
+	//fn_script_History_set(result);
 	
 	//데이터 이관 setting
-	if (nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N") == "Y") {
-		fn_migration_history_set(result);
-	}
+//	if (nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N") == "Y") {
+//		fn_migration_history_set(result);
+//	}
 	
 	//scale setting
 	if (nvlPrmSet($("#scale_yn", "#dashboardViewForm").val(), "N") == "Y") {
@@ -514,11 +522,12 @@ function fn_todaySetting() {
 
 	$( "#tot_sdt_his_today" ).append(sdtHisTimehtml);		//스케줄 이력
 	$( "#tot_back_his_today" ).append(sdtHisTimehtml);		//백업 이력
-	$( "#tot_script_his_today" ).append(sdtHisTimehtml);	//배치 이력
-	$( "#tot_migration_his_today" ).append(sdtHisTimehtml);	//migration 이력
+//	$( "#tot_script_his_today" ).append(sdtHisTimehtml);	//배치 이력
+//	$( "#tot_migration_his_today" ).append(sdtHisTimehtml);	//migration 이력
 	$( "#tot_scale_his_today" ).append(sdtHisTimehtml);	
 
 	$( "#tot_encrypt_his_today" ).append(html);	
+	$( "#tot_proxy_his_today" ).append(html);	
 	
 }
 
@@ -1009,7 +1018,7 @@ function fn_schedule_History_progres(result) {
 /* ********************************************************
  * 백업 이력 설정
  ******************************************************** */
-function fn_backup_History_set(result) {
+/*function fn_backup_History_set(result) {
 	var backHisHtml = "";
 	
 	///////////////////////////백업 list start ////////////////////////
@@ -1155,11 +1164,11 @@ function fn_backup_History_set(result) {
 			$("#a_back_hist").click()
 		},500);
 }
-
+*/
 /* ********************************************************
  * 배치 이력 설정
  ******************************************************** */
-function fn_script_History_set(result) {
+/*function fn_script_History_set(result) {
 	var scriptHisHtml = "";
 	var chartListCnt = 0;
 
@@ -1268,7 +1277,8 @@ function fn_script_History_set(result) {
 			{
 				$("#a_script_hist").click()
 			},500);
-}
+}*/
+
 
 /* ********************************************************
  * migration setting
@@ -1295,237 +1305,237 @@ function fn_migration_history_set(result) {
 	var chartColor = "";
 
 	/////////////////////migration 일정 start////////////////////////////////////////////////
-	if (result.migtScdCnt != null && result.migtScdCnt > 0) {
-		migtHtml += "<tr>";
-		
-		$(result.migtScdresult).each(function (index, item) {
-			exe_perd_cd_val = item.exe_perd_cd;
-			scdHK = "";
-			var resultYearCheckDt = item.exe_month + "" + item.exe_day;
-			
-			if(exe_perd_cd_val == 'TC001605') {			//1회실행
-				if(item.exe_dt == checkYear) {
-					scdHK = 'TC001605';
-				}
-			} else if(exe_perd_cd_val == 'TC001601') {		//매일
-				if(item.frst_reg_dtm <= checkYear) {
-					scdHK = 'TC001601';
-				}
-			} else if(exe_perd_cd_val == 'TC001602') {		//매주
-				if(item.frst_reg_dtm <= checkYear) {
-					for(var i=0;i<7;i++){
-						if(item.exe_dt.substr(i,1) == '1') {
-							checkMons = i;
-						}
-
-						if (checkMons == todayChkDay) {
-							scdHK = 'TC001602';
-							continue;
-						}
-					}
-				}
-			} else if(exe_perd_cd_val == 'TC001603') {			//매월
-				if(item.frst_reg_dtm <= checkYear) {
-					if(item.exe_day == checkDay) {
-						scdHK = 'TC001603';
-					}
-				}
-			} else if(exe_perd_cd_val == 'TC001604') {
-				if(item.frst_reg_dtm <= checkYear) {
-					if(resultYearCheckDt == checkDt) {
-						scdHK = 'TC001604';
-					}
-				}
-			}
-
-			if (scdHK != null && scdHK != "") {
-				migtHtml += '<td style="width:33%;line-height:150%;border:none;">';
-				
-				migtHtml += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
-				migtHtml += "	<a class='nav-link_title' href='#' onclick='fn_scheduleListMove(\""+item.scd_nm+"\");'>";
-				migtHtml += "		&nbsp;"+ item.scd_nm;
-				migtHtml += "	</a>";
-				migtHtml += '	<br/>';
-				
-				if (item.scd_cndt == 'TC001801') { //대기
-					migtHtml += "	<i class='fa fa-circle mr-2 text-success' ></i>";
-				} else { //실행중
-					migtHtml += '	<div class="badge badge-pill badge-warning">' + dashboard_running + '</div>';
-				}
-				
-				if(scdHK == 'TC001605') { 				//1회실행
-					migtHtml += schedule_one_time_run;
-				} else if(scdHK == 'TC001601') { 		//매일
-					migtHtml += schedule_everyday;
-				} else if (scdHK == 'TC001602') {		//매주
-					migtHtml += schedule_everyweek;
-				} else if (scdHK == 'TC001603') {		//매월
-					migtHtml += schedule_everymonth;
-				} else if(scdHK == 'TC001604') {	//매년
-					migtHtml += schedule_everyyear;
-				}
-				migtHtml += '<br/>';
-				
-				ampm = item.exe_hh >= 12 ? 'pm' : 'am';
-				hours = item.exe_hh % 12;
-				hours = hours.length < 2 ? '0'+hours : hours;
-				minutes = item.exe_mm.length < 2 ? '0'+item.exe_mm : item.exe_mm;
-				
-				migtHtml += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + hours + ":" + minutes + " " + ampm;
-				
-				migtCount = migtCount + 1;
-				
-				migtHtml += '</td>';
-			}
-
-			//4의 배수일때 tr 추가
-			if (migtCount % 3 == 0)  {
-				migtHtml += "</tr>";
-				migtHtml += "<tr>";
-			}
-		});
-		
-		migtHtml += "</tr>";
-	} else {
-		migtHtml += "<tr>";
-		migtHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
-		migtHtml += dashboard_msg06
-		migtHtml += '</td>';
-		migtHtml += "</tr>";
-	}
-
-	$("#migtHistCntList").html(migtHtml);
+//	if (result.migtScdCnt != null && result.migtScdCnt > 0) {
+//		migtHtml += "<tr>";
+//		
+//		$(result.migtScdresult).each(function (index, item) {
+//			exe_perd_cd_val = item.exe_perd_cd;
+//			scdHK = "";
+//			var resultYearCheckDt = item.exe_month + "" + item.exe_day;
+//			
+//			if(exe_perd_cd_val == 'TC001605') {			//1회실행
+//				if(item.exe_dt == checkYear) {
+//					scdHK = 'TC001605';
+//				}
+//			} else if(exe_perd_cd_val == 'TC001601') {		//매일
+//				if(item.frst_reg_dtm <= checkYear) {
+//					scdHK = 'TC001601';
+//				}
+//			} else if(exe_perd_cd_val == 'TC001602') {		//매주
+//				if(item.frst_reg_dtm <= checkYear) {
+//					for(var i=0;i<7;i++){
+//						if(item.exe_dt.substr(i,1) == '1') {
+//							checkMons = i;
+//						}
+//
+//						if (checkMons == todayChkDay) {
+//							scdHK = 'TC001602';
+//							continue;
+//						}
+//					}
+//				}
+//			} else if(exe_perd_cd_val == 'TC001603') {			//매월
+//				if(item.frst_reg_dtm <= checkYear) {
+//					if(item.exe_day == checkDay) {
+//						scdHK = 'TC001603';
+//					}
+//				}
+//			} else if(exe_perd_cd_val == 'TC001604') {
+//				if(item.frst_reg_dtm <= checkYear) {
+//					if(resultYearCheckDt == checkDt) {
+//						scdHK = 'TC001604';
+//					}
+//				}
+//			}
+//
+//			if (scdHK != null && scdHK != "") {
+//				migtHtml += '<td style="width:33%;line-height:150%;border:none;">';
+//				
+//				migtHtml += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
+//				migtHtml += "	<a class='nav-link_title' href='#' onclick='fn_scheduleListMove(\""+item.scd_nm+"\");'>";
+//				migtHtml += "		&nbsp;"+ item.scd_nm;
+//				migtHtml += "	</a>";
+//				migtHtml += '	<br/>';
+//				
+//				if (item.scd_cndt == 'TC001801') { //대기
+//					migtHtml += "	<i class='fa fa-circle mr-2 text-success' ></i>";
+//				} else { //실행중
+//					migtHtml += '	<div class="badge badge-pill badge-warning">' + dashboard_running + '</div>';
+//				}
+//				
+//				if(scdHK == 'TC001605') { 				//1회실행
+//					migtHtml += schedule_one_time_run;
+//				} else if(scdHK == 'TC001601') { 		//매일
+//					migtHtml += schedule_everyday;
+//				} else if (scdHK == 'TC001602') {		//매주
+//					migtHtml += schedule_everyweek;
+//				} else if (scdHK == 'TC001603') {		//매월
+//					migtHtml += schedule_everymonth;
+//				} else if(scdHK == 'TC001604') {	//매년
+//					migtHtml += schedule_everyyear;
+//				}
+//				migtHtml += '<br/>';
+//				
+//				ampm = item.exe_hh >= 12 ? 'pm' : 'am';
+//				hours = item.exe_hh % 12;
+//				hours = hours.length < 2 ? '0'+hours : hours;
+//				minutes = item.exe_mm.length < 2 ? '0'+item.exe_mm : item.exe_mm;
+//				
+//				migtHtml += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + hours + ":" + minutes + " " + ampm;
+//				
+//				migtCount = migtCount + 1;
+//				
+//				migtHtml += '</td>';
+//			}
+//
+//			//4의 배수일때 tr 추가
+//			if (migtCount % 3 == 0)  {
+//				migtHtml += "</tr>";
+//				migtHtml += "<tr>";
+//			}
+//		});
+//		
+//		migtHtml += "</tr>";
+//	} else {
+//		migtHtml += "<tr>";
+//		migtHtml += '<td class="text-center" style="width:100%;border:none;height:20px;background-color:#ededed;">';
+//		migtHtml += dashboard_msg06
+//		migtHtml += '</td>';
+//		migtHtml += "</tr>";
+//	}
+//
+//	$("#migtHistCntList").html(migtHtml);
 	/////////////////////migration 일정 end////////////////////////////////////////////////
 
 	///////////////////////////migration list start ////////////////////////	
-	if (result.migtHistoryresult != null && result.migtHistoryresult.length > 0) {
-		$(result.migtHistoryresult).each(function (index, item) {
-			migtHisHtml +='	<tr>';
-			
-			migtHisHtml +='		<td>'+item.wrk_nm+'</td>';
-			
-			migtHisHtml +='		<td class="text-center">';
-			if (item.migt_gbn == "DDL") {
-				migtHisHtml += '<i class="fa fa-archive text-primary">';
-			} else {
-				migtHisHtml += '<i class="fa fa-file text-success">';
-			}
-			migtHisHtml += "&nbsp;" + item.migt_gbn;
-			migtHisHtml += '</i>';
-			migtHisHtml +='	</td>';
-			
-			migtHisHtml +='		<td class="text-center">'+item.wrk_strt_dtm+'</td>';
-			migtHisHtml +='		<td class="text-center">'+item.wrk_end_dtm+'</td>';
-			migtHisHtml +='		<td class="text-center">'+item.wrk_dtm+'</td>';
-			
-			migtHisHtml +='		<td class="text-center">';
-			if (item.exe_rslt_cd == "TC001701") {
-/*				if (item.migt_gbn == "DDL") {
+//	if (result.migtHistoryresult != null && result.migtHistoryresult.length > 0) {
+//		$(result.migtHistoryresult).each(function (index, item) {
+//			migtHisHtml +='	<tr>';
+//			
+//			migtHisHtml +='		<td>'+item.wrk_nm+'</td>';
+//			
+//			migtHisHtml +='		<td class="text-center">';
+//			if (item.migt_gbn == "DDL") {
+//				migtHisHtml += '<i class="fa fa-archive text-primary">';
+//			} else {
+//				migtHisHtml += '<i class="fa fa-file text-success">';
+//			}
+//			migtHisHtml += "&nbsp;" + item.migt_gbn;
+//			migtHisHtml += '</i>';
+//			migtHisHtml +='	</td>';
+//			
+//			migtHisHtml +='		<td class="text-center">'+item.wrk_strt_dtm+'</td>';
+//			migtHisHtml +='		<td class="text-center">'+item.wrk_end_dtm+'</td>';
+//			migtHisHtml +='		<td class="text-center">'+item.wrk_dtm+'</td>';
+//			
+//			migtHisHtml +='		<td class="text-center">';
+//			if (item.exe_rslt_cd == "TC001701") {
+///*				if (item.migt_gbn == "DDL") {
+//
+//					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
+//				} else {
+//					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
+//				}
+//				migtHisHtml += '<i class="fa fa-check"></i>';
+//				migtHisHtml += common_success;
+//				migtHisHtml += "</div>";
+//				*/
+//				migtHisHtml += '<i class="fa fa-check text-primary">';
+//				migtHisHtml += '&nbsp;' + common_success + '</i>';
+///*				
+//				migtHisHtml += '<input class="btn btn-primary btn-sm" width="200px;" style="vertical-align:middle;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')" type="button" value="'+common_success+ '" />';
+//				
+//					*/
+//			} else if(item.exe_rslt_cd == 'TC001702'){
+//				if (item.migt_gbn == "DDL") {
+//					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlFailLog('+item.mig_exe_sn+')">';
+//				} else {
+//					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtFailLog('+item.mig_exe_sn+')">';
+//				}
+//
+//				migtHisHtml += '<i class="fa fa-times"></i>';
+//				migtHisHtml += common_failed;
+//				migtHisHtml += "</div>";
+//			} else {
+//				migtHisHtml += "<div class='badge badge-pill badge-warning' style='color: #fff;'>";
+//				migtHisHtml += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+//				migtHisHtml += '&nbsp;' + etc_etc28;
+//				migtHisHtml += "</div>";
+//			}
+//			migtHisHtml +='	</td>';
+//
+//			migtHisHtml +='	</tr>';
+//		});
+//
+//	} else {
+//		migtHisHtml += "<tr>";
+//		migtHisHtml += '<td class="text-center" colspan="6" style="height:300px;border:none;height:20px;background-color:#ededed;">';
+//		migtHisHtml += dashboard_msg07
+//		migtHisHtml += '</td>';
+//		migtHisHtml += "</tr>";
+//	}
 
-					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
-				} else {
-					migtHisHtml += '<div class="badge badge-pill badge-primary " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')">';
-				}
-				migtHisHtml += '<i class="fa fa-check"></i>';
-				migtHisHtml += common_success;
-				migtHisHtml += "</div>";
-				*/
-				migtHisHtml += '<i class="fa fa-check text-primary">';
-				migtHisHtml += '&nbsp;' + common_success + '</i>';
-/*				
-				migtHisHtml += '<input class="btn btn-primary btn-sm" width="200px;" style="vertical-align:middle;" onclick="fn_dash_ddlResult(\''+item.mig_exe_sn+'\',\''+item.save_pth+'/\')" type="button" value="'+common_success+ '" />';
-				
-					*/
-			} else if(item.exe_rslt_cd == 'TC001702'){
-				if (item.migt_gbn == "DDL") {
-					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_ddlFailLog('+item.mig_exe_sn+')">';
-				} else {
-					migtHisHtml += '<div class="badge badge-pill badge-danger " style="font-size: 0.75rem;cursor:pointer;" onclick="fn_dash_migtFailLog('+item.mig_exe_sn+')">';
-				}
-
-				migtHisHtml += '<i class="fa fa-times"></i>';
-				migtHisHtml += common_failed;
-				migtHisHtml += "</div>";
-			} else {
-				migtHisHtml += "<div class='badge badge-pill badge-warning' style='color: #fff;'>";
-				migtHisHtml += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
-				migtHisHtml += '&nbsp;' + etc_etc28;
-				migtHisHtml += "</div>";
-			}
-			migtHisHtml +='	</td>';
-
-			migtHisHtml +='	</tr>';
-		});
-
-	} else {
-		migtHisHtml += "<tr>";
-		migtHisHtml += '<td class="text-center" colspan="6" style="height:300px;border:none;height:20px;background-color:#ededed;">';
-		migtHisHtml += dashboard_msg07
-		migtHisHtml += '</td>';
-		migtHisHtml += "</tr>";
-	}
-
-	$("#migrationListT").html(migtHisHtml);
+//	$("#migrationListT").html(migtHisHtml);
 	///////////////////////////migration list end ////////////////////////
 
 	///////////////////////////migration chart start ////////////////////////
-	if ($("#migtHistChart").length) {
-		for (var i = 0; i < 7; i++) {
-			chartMaxCnt = "100";
-			chartCnt = "0";
-			chartWidth = "0";
-
-			if (i == 0) {
-				chartText = dashboard_schedule_history_cht_msg1;
-				chartColor = "bg-success";
-
-			} else if (i == 1) {
-				chartText = dashboard_migration_all;
-				chartColor = "bg-warning";
-
-			} else if (i == 2) {
-				chartText = dashboard_migration_success;	
-				chartColor = "bg-primary";
-
-			} else if (i == 3) {
-				chartText = dashboard_migration_failed;
-				chartColor = "bg-danger";
-
-			} else if (i == 4) {
-				chartText = dashboard_ddl_all;
-				chartColor = "bg-warning";
-
-			} else if (i == 5) {
-				chartText = dashboard_ddl_success;
-				chartColor = "bg-primary";
-
-			} else if (i == 6) {
-				chartText = dashboard_ddl_failed;
-				chartColor = "bg-danger";
-			}
-			chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
-			
-			migtHisChartHtml += '<tr>';
-
-			migtHisChartHtml += '	<td class="text-muted">' + chartText + '</td>';
-			migtHisChartHtml += '	<td class="w-100 px-0">';
-			migtHisChartHtml += '		<div class="progress progress-md mx-4">';
-			migtHisChartHtml += '			<div id="migt_pro_' + i + '" class="progress-bar ' + chartColor + ' progress-bar-striped progress-bar-animated" role="progressbar" style="width: ' + chartWidth + '%" aria-valuenow="' + chartWidth + '" aria-valuemin="0" aria-valuemax="' + chartMaxCnt + '"></div>';
-			migtHisChartHtml += '		</div>';
-			migtHisChartHtml += '	</td>';
-			migtHisChartHtml += '	<td><h5 class="font-weight-bold mb-0" id="migt_pro_text_' + i + '">' + chartCnt + '</h5></td>';
-			
-			migtHisChartHtml += "</tr>";
-		}
-
-		$("#migtHistChart").html(migtHisChartHtml);
-
-		//프로그레스바 설정
-		if (result.migtHistoryChart != null) {
-			setTimeout(fn_migt_History_progres, 1000, result.migtHistoryChart);
-		}
+//	if ($("#migtHistChart").length) {
+//		for (var i = 0; i < 7; i++) {
+//			chartMaxCnt = "100";
+//			chartCnt = "0";
+//			chartWidth = "0";
+//
+//			if (i == 0) {
+//				chartText = dashboard_schedule_history_cht_msg1;
+//				chartColor = "bg-success";
+//
+//			} else if (i == 1) {
+//				chartText = dashboard_migration_all;
+//				chartColor = "bg-warning";
+//
+//			} else if (i == 2) {
+//				chartText = dashboard_migration_success;	
+//				chartColor = "bg-primary";
+//
+//			} else if (i == 3) {
+//				chartText = dashboard_migration_failed;
+//				chartColor = "bg-danger";
+//
+//			} else if (i == 4) {
+//				chartText = dashboard_ddl_all;
+//				chartColor = "bg-warning";
+//
+//			} else if (i == 5) {
+//				chartText = dashboard_ddl_success;
+//				chartColor = "bg-primary";
+//
+//			} else if (i == 6) {
+//				chartText = dashboard_ddl_failed;
+//				chartColor = "bg-danger";
+//			}
+//			chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
+//			
+//			migtHisChartHtml += '<tr>';
+//
+//			migtHisChartHtml += '	<td class="text-muted">' + chartText + '</td>';
+//			migtHisChartHtml += '	<td class="w-100 px-0">';
+//			migtHisChartHtml += '		<div class="progress progress-md mx-4">';
+//			migtHisChartHtml += '			<div id="migt_pro_' + i + '" class="progress-bar ' + chartColor + ' progress-bar-striped progress-bar-animated" role="progressbar" style="width: ' + chartWidth + '%" aria-valuenow="' + chartWidth + '" aria-valuemin="0" aria-valuemax="' + chartMaxCnt + '"></div>';
+//			migtHisChartHtml += '		</div>';
+//			migtHisChartHtml += '	</td>';
+//			migtHisChartHtml += '	<td><h5 class="font-weight-bold mb-0" id="migt_pro_text_' + i + '">' + chartCnt + '</h5></td>';
+//			
+//			migtHisChartHtml += "</tr>";
+//		}
+//
+//		$("#migtHistChart").html(migtHisChartHtml);
+//
+//		//프로그레스바 설정
+//		if (result.migtHistoryChart != null) {
+//			setTimeout(fn_migt_History_progres, 1000, result.migtHistoryChart);
+//		}
 		///////////////////////////migration chart end ////////////////////////
-	}
+//	}
 }
 
 /* ********************************************************
@@ -1535,43 +1545,43 @@ function fn_migt_History_progres(result) {
 	var chartCnt = 0;
 	var chartWidth = "";
 
-	for (var i = 0; i < 7; i++) {
-		chartCnt = 0;
-		chartWidth = "";
-		
-		if (i == 0) {
-			chartCnt = nvlPrmSet(result.tot_cnt, "0");
-			if (chartCnt == "0") {
-				chartWidth = "0";
-			} else {
-				chartWidth = "100";
-			}
-		} else if (i == 1) { //배치건수 / 전체건수
-			chartCnt = nvlPrmSet(result.migration_tot_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.migration_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 2) {
-			chartCnt = nvlPrmSet(result.migration_suc_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.migration_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 3) {
-			chartCnt = nvlPrmSet(result.migration_fal_cnt, "0") ;
-			chartWidth = parseInt(nvlPrmSet(result.migration_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 4) { //백업건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 5) { //백업성공건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		} else if (i == 6) { //백업실패건수 / 전체건수
-			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
-			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
-		}
-		
-		
-		chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
-
-		$("#migt_pro_" + i).css("width", chartWidth + "%"); 
-		$("#migt_pro_text_" + i).html(chartCnt); 
-	}
+//	for (var i = 0; i < 7; i++) {
+//		chartCnt = 0;
+//		chartWidth = "";
+//		
+//		if (i == 0) {
+//			chartCnt = nvlPrmSet(result.tot_cnt, "0");
+//			if (chartCnt == "0") {
+//				chartWidth = "0";
+//			} else {
+//				chartWidth = "100";
+//			}
+//		} else if (i == 1) { //배치건수 / 전체건수
+//			chartCnt = nvlPrmSet(result.migration_tot_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.migration_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 2) {
+//			chartCnt = nvlPrmSet(result.migration_suc_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.migration_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 3) {
+//			chartCnt = nvlPrmSet(result.migration_fal_cnt, "0") ;
+//			chartWidth = parseInt(nvlPrmSet(result.migration_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 4) { //백업건수 / 전체건수
+//			chartCnt = nvlPrmSet(result.ddl_tot_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.ddl_tot_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 5) { //백업성공건수 / 전체건수
+//			chartCnt = nvlPrmSet(result.ddl_suc_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.ddl_suc_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		} else if (i == 6) { //백업실패건수 / 전체건수
+//			chartCnt = nvlPrmSet(result.ddl_fal_cnt, "0");
+//			chartWidth = parseInt(nvlPrmSet(result.ddl_fal_cnt, "0")) / parseInt(nvlPrmSet(result.tot_cnt, "0")) * 100;
+//		}
+//		
+//		
+//		chartWidth = Math.floor(nvlPrmSet(chartWidth, 0));
+//
+//		$("#migt_pro_" + i).css("width", chartWidth + "%"); 
+//		$("#migt_pro_text_" + i).html(chartCnt); 
+//	}
 }
 
 /* ********************************************************
@@ -1870,195 +1880,195 @@ function fn_dash_scaleFailLog(scale_wrk_sn){
  * DDL추출 로그 팝업
  ******************************************************** */
 function fn_dash_ddlResult(mig_exe_sn, ddl_save_pth){
-	$.ajax({
-			url : "/db2pg/popup/db2pgResultDDL.do", 
-			data : {
-		  		mig_exe_sn : mig_exe_sn,
-		  		ddl_save_pth :ddl_save_pth
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {		
-				$('#ddl_result_wrk_nm').html("");
-				$('#ddl_result_wrk_exp').html("");
-				$('#ddl_result_exe_rslt_cd').html("");	
-				
-				fn_ddlResultInit();
-
-				if (result.result != null) {
-					$('#ddl_result_wrk_nm').html(result.result.wrk_nm);
-					$('#ddl_result_wrk_exp').html(result.result.wrk_exp);
-					$('#ddl_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;' + common_success + '</i>');
-				}
-
-				if (result.ddl_save_pth != null && result.ddl_save_pth != "") {
-					getDataResultList(result.ddl_save_pth);
-				}
-
-				$('#pop_layer_db2pgResultDDL').modal("show");
-			}
-	});
+//	$.ajax({
+//			url : "/db2pg/popup/db2pgResultDDL.do", 
+//			data : {
+//		  		mig_exe_sn : mig_exe_sn,
+//		  		ddl_save_pth :ddl_save_pth
+//		  	},
+//			dataType : "json",
+//			type : "post",
+//			beforeSend: function(xhr) {
+//				xhr.setRequestHeader("AJAX", true);
+//			},
+//			error : function(xhr, status, error) {
+//				if(xhr.status == 401) {
+//					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+//				} else if(xhr.status == 403) {
+//					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+//				} else {
+//					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+//				}
+//			},
+//			success : function(result) {		
+//				$('#ddl_result_wrk_nm').html("");
+//				$('#ddl_result_wrk_exp').html("");
+//				$('#ddl_result_exe_rslt_cd').html("");	
+//				
+//				fn_ddlResultInit();
+//
+//				if (result.result != null) {
+//					$('#ddl_result_wrk_nm').html(result.result.wrk_nm);
+//					$('#ddl_result_wrk_exp').html(result.result.wrk_exp);
+//					$('#ddl_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;' + common_success + '</i>');
+//				}
+//
+//				if (result.ddl_save_pth != null && result.ddl_save_pth != "") {
+//					getDataResultList(result.ddl_save_pth);
+//				}
+//
+//				$('#pop_layer_db2pgResultDDL').modal("show");
+//			}
+//	});
 }
 
 /* ********************************************************
  * MIGRATION 로그 팝업
  ******************************************************** */
 function fn_dash_migtResult(mig_exe_sn, trans_save_pth){
-	$.ajax({
-			url : "/db2pg/popup/db2pgResult.do", 
-		  	data : {
-		  		mig_exe_sn : mig_exe_sn,
-		  		trans_save_pth :trans_save_pth
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {
-				$('#mig_result_wrk_nm').html("");
-				$('#mig_result_wrk_exp').html("");
-				$('#mig_result_wrk_strt_dtm').html("");
-				$('#mig_result_wrk_end_dtm').html("");
-				$('#mig_result_wrk_dtm').html("");				
-				$('#mig_result_exe_rslt_cd').html("");
-				
-				$('#mig_result_msg').html("");
-				
-				if (result.result != null) {
-					$('#mig_result_wrk_nm').html(result.result.wrk_nm);
-					$('#mig_result_wrk_exp').html(result.result.wrk_exp);
-					$('#mig_result_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
-					$('#mig_result_wrk_end_dtm').html(result.result.wrk_end_dtm);
-					$('#mig_result_wrk_dtm').html(result.result.wrk_dtm);
-					
-					$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;' + common_success + '</i>');
-				}
-				
-				if(result.db2pgResult == null){
-					$('#mig_result_msg').html("파일이 삭제되어 작업로그정보를 출력할 수 없습니다.");	
-				}else{
-					$('#mig_result_msg').html(result.db2pgResult.RESULT);	
-				}
-
-				$('#pop_layer_db2pgResult').modal("show"); 
-			}
-	});
+//	$.ajax({
+//			url : "/db2pg/popup/db2pgResult.do", 
+//		  	data : {
+//		  		mig_exe_sn : mig_exe_sn,
+//		  		trans_save_pth :trans_save_pth
+//		  	},
+//			dataType : "json",
+//			type : "post",
+//			beforeSend: function(xhr) {
+//		        xhr.setRequestHeader("AJAX", true);
+//		    },
+//			error : function(xhr, status, error) {
+//				if(xhr.status == 401) {
+//					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+//				} else if(xhr.status == 403) {
+//					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+//				} else {
+//					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+//				}
+//			},
+//			success : function(result) {
+//				$('#mig_result_wrk_nm').html("");
+//				$('#mig_result_wrk_exp').html("");
+//				$('#mig_result_wrk_strt_dtm').html("");
+//				$('#mig_result_wrk_end_dtm').html("");
+//				$('#mig_result_wrk_dtm').html("");				
+//				$('#mig_result_exe_rslt_cd').html("");
+//				
+//				$('#mig_result_msg').html("");
+//				
+//				if (result.result != null) {
+//					$('#mig_result_wrk_nm').html(result.result.wrk_nm);
+//					$('#mig_result_wrk_exp').html(result.result.wrk_exp);
+//					$('#mig_result_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+//					$('#mig_result_wrk_end_dtm').html(result.result.wrk_end_dtm);
+//					$('#mig_result_wrk_dtm').html(result.result.wrk_dtm);
+//					
+//					$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;' + common_success + '</i>');
+//				}
+//				
+//				if(result.db2pgResult == null){
+//					$('#mig_result_msg').html("파일이 삭제되어 작업로그정보를 출력할 수 없습니다.");	
+//				}else{
+//					$('#mig_result_msg').html(result.db2pgResult.RESULT);	
+//				}
+//
+//				$('#pop_layer_db2pgResult').modal("show"); 
+//			}
+//	});
 }
 
 /* ********************************************************
  * DDL 에러 로그 팝업
  *********************************************************/
 function fn_dash_ddlFailLog(mig_exe_sn){
-	$.ajax({
-			url : "/db2pg/popup/db2pgDdlErrHistoryDetail.do", 
-		  	data : {
-		  		mig_exe_sn:mig_exe_sn
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {
-				$('#pop_wrk_nm').html("");
-				$('#pop_wrk_exp').html("");
-				$('#pop_wrk_strt_dtm').html("");
-				$('#pop_wrk_end_dtm').html("");
-				$('#pop_wrk_dtm').html("");
-				$('#pop_exe_rslt_cd').html("");
-				$("#pop_rslt_msg", "#subForm").val(""); 
-				
-				if (result.result != null) {
-					$('#pop_wrk_nm').html(result.result.wrk_nm);
-					$('#pop_wrk_exp').html(result.result.wrk_exp);
-					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
-					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
-					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
-					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
-					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
-				}
-
-				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
-			}
-	});
+//	$.ajax({
+//			url : "/db2pg/popup/db2pgDdlErrHistoryDetail.do", 
+//		  	data : {
+//		  		mig_exe_sn:mig_exe_sn
+//		  	},
+//			dataType : "json",
+//			type : "post",
+//			beforeSend: function(xhr) {
+//		        xhr.setRequestHeader("AJAX", true);
+//		    },
+//			error : function(xhr, status, error) {
+//				if(xhr.status == 401) {
+//					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+//				} else if(xhr.status == 403) {
+//					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+//				} else {
+//					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+//				}
+//			},
+//			success : function(result) {
+//				$('#pop_wrk_nm').html("");
+//				$('#pop_wrk_exp').html("");
+//				$('#pop_wrk_strt_dtm').html("");
+//				$('#pop_wrk_end_dtm').html("");
+//				$('#pop_wrk_dtm').html("");
+//				$('#pop_exe_rslt_cd').html("");
+//				$("#pop_rslt_msg", "#subForm").val(""); 
+//				
+//				if (result.result != null) {
+//					$('#pop_wrk_nm').html(result.result.wrk_nm);
+//					$('#pop_wrk_exp').html(result.result.wrk_exp);
+//					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+//					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
+//					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
+//					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
+//					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
+//				}
+//
+//				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
+//			}
+//	});
 }
 
 /* ********************************************************
  * MIGRATION 에러 로그 팝업
  ******************************************************** */
 function fn_dash_migtFailLog(mig_exe_sn){
-	$.ajax({
-			url : "/db2pg/popup/db2pgMigErrHistoryDetail.do", 
-		  	data : {
-		  		mig_exe_sn:mig_exe_sn
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-				}
-			},
-			success : function(result) {
-				$('#pop_wrk_nm').html("");
-				$('#pop_wrk_exp').html("");
-				$('#pop_wrk_strt_dtm').html("");
-				$('#pop_wrk_end_dtm').html("");
-				$('#pop_wrk_dtm').html("");
-				$('#pop_exe_rslt_cd').html("");
-				$("#pop_rslt_msg", "#subForm").val(""); 
-				
-				if (result.result != null) {
-					$('#pop_wrk_nm').html(result.result.wrk_nm);
-					$('#pop_wrk_exp').html(result.result.wrk_exp);
-					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
-					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
-					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
-					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
-					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
-				}
-
-				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
-			}
-	});
+//	$.ajax({
+//			url : "/db2pg/popup/db2pgMigErrHistoryDetail.do", 
+//		  	data : {
+//		  		mig_exe_sn:mig_exe_sn
+//		  	},
+//			dataType : "json",
+//			type : "post",
+//			beforeSend: function(xhr) {
+//		        xhr.setRequestHeader("AJAX", true);
+//		    },
+//			error : function(xhr, status, error) {
+//				if(xhr.status == 401) {
+//					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+//				} else if(xhr.status == 403) {
+//					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+//				} else {
+//					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+//				}
+//			},
+//			success : function(result) {
+//				$('#pop_wrk_nm').html("");
+//				$('#pop_wrk_exp').html("");
+//				$('#pop_wrk_strt_dtm').html("");
+//				$('#pop_wrk_end_dtm').html("");
+//				$('#pop_wrk_dtm').html("");
+//				$('#pop_exe_rslt_cd').html("");
+//				$("#pop_rslt_msg", "#subForm").val(""); 
+//				
+//				if (result.result != null) {
+//					$('#pop_wrk_nm').html(result.result.wrk_nm);
+//					$('#pop_wrk_exp').html(result.result.wrk_exp);
+//					$('#pop_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
+//					$('#pop_wrk_end_dtm').html(result.result.wrk_end_dtm);
+//					$('#pop_wrk_dtm').html(result.result.wrk_dtm);
+//					$('#pop_exe_rslt_cd').html('<i class="fa fa-times text-danger">&nbsp;' + common_failed + '</i>');
+//					$("#pop_rslt_msg", "#subForm").val(nvlPrmSet(result.result.rslt_msg, "")); 
+//				}
+//
+//				$('#pop_layer_db2pgDdlErrHistoryDetail').modal("show");
+//			}
+//	});
 }
 
 /* ********************************************************
@@ -2069,4 +2079,653 @@ function fn_scheduleListMove(scd_nm) {
 	
 	$("#dashboardViewForm").attr("action", "/selectScheduleListView.do");
 	$("#dashboardViewForm").submit();
+}
+
+/* ********************************************************
+ * proxy setting
+ ******************************************************** */
+function fn_prySearch(db_svr_id_val) {
+	$.ajax({
+		url : "/proxyMonitoring/dashboardProxy.do",
+		data : {
+			db_svr_id : db_svr_id_val
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	    	xhr.setRequestHeader("AJAX", true);
+	    },
+	    error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			//update setting
+			fn_proxyInit(result);
+		}
+	});
+}
+
+/* ********************************************************
+* 프록시 서버정보 상세 설정
+******************************************************** */
+function fn_proxyInit(result) {
+	if (result.proxyServerByDBSvrId.length > 0) {
+		// vip 모니터링
+		fn_keepMonInfo(result);
+		
+		// 프록시 모니터링 setting
+		fn_proxyMonInfo(result);
+		
+		// 프록시 연결 db 모니터링 setting
+		fn_dbMonInfo(result);
+		$("#reg_pry_title").show();
+		$("#reg_pry_detail").show();
+		$("#no_reg_pry_detail").hide();
+	} else {
+		$("#reg_pry_title").hide();
+		$("#reg_pry_detail").hide();
+		$("#no_reg_pry_detail").show();
+	}
+	
+	setTimeout(function(){
+		$('[data-toggle="tooltip"]').tooltip({
+			template: '<div class="tooltip tooltip-warning" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+		});
+	},250);
+}
+
+
+/* ********************************************************
+* vip 모니터링 셋팅
+******************************************************** */
+function fn_keepMonInfo(result){
+	var rowCount = 0;
+	var html_vip = "";
+	var html_sebu = "";
+	var html_vip_line = "";
+	var html_listner = "";
+	var master_gbn = "";
+	var pry_svr_id = "";
+	var listCnt = 0;
+	var pry_svr_id_val = "";
+	var proxyServerByDBSvrId_cnt = result.proxyServerByDBSvrId.length;
+	var master_state = "";
+	var exe_status_chk = "";
+	var kal_exe_status_chk = "";
+	var exe_status_css = "";
+	var kal_exe_status_css = "";
+	var strVip = "";
+	var kal_install_yn = "";
+	//ROW 만들기
+	for(var i = 0; i < proxyServerByDBSvrId_cnt; i++){
+		var pry_agent_status = result.proxyServerByDBSvrId[i].conn_result;
+		
+		//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
+			
+		html_vip += '	<p class="card-title" style="margin-bottom:-25px;margin-left:10px;">\n';
+		html_vip += '	<span id="vip_proxy_nm' + i + '"></span>\n';
+		html_vip += '	</p>\n';
+		
+		html_vip += '	<table class="table-borderless" style="width:100%;">\n';
+		html_vip += '		<tr>\n';
+
+		html_vip += '			<td style="width:80%;height:220px;" class="text-center" id="keepVipDiv' + i + '">\n';
+		html_vip += '			&nbsp;</td>\n';
+
+		html_vip += '		</tr>\n';
+		html_vip += '	</table>\n';
+		if(i == 0) {
+			html_vip_line += '	<p class="card-title" style="margin-bottom:-15px;margin-left:10px;">\n';
+		} else {
+			html_vip_line += '	<p class="card-title" style="margin-bottom:-15px;margin-left:10px;padding-top:2rem;">\n';
+		}
+		html_vip_line += '	<span>&nbsp;</span>\n';
+		html_vip_line += '	</p>\n';
+		
+		html_vip_line += '	<table class="table-borderless" style="width:100%;">\n';
+		html_vip_line += '		<tr>\n';
+		
+		html_vip_line += '			<td style="width:100%;height:220px;" class="text-center" id="keepVipDivLine' + i + '">\n';
+		html_vip_line += '			</td>\n';
+
+		html_vip_line += '		</tr>\n';
+		html_vip_line += '	</table>\n';
+		
+ 		if (i != proxyServerByDBSvrId_cnt-1 && proxyServerByDBSvrId_cnt > 1) {
+ 			html_vip += '<hr>\n';
+ 			html_vip_line += '<br/>\n';
+ 		}
+	}
+
+	$("#proxyMonitoringList").html(html_vip);
+	$("#proxyVipConLineList").html(html_vip_line);
+
+	var iVipChkCnt = 0;
+	if (result.proxyServerVipList != null && result.proxyServerVipList.length > 0) {
+		for(var i = 0; i < result.proxyServerVipList.length; i++){
+			var count = 0;
+			if (result.proxyServerVipList[i].kal_install_yn == "Y") {
+				if (result.proxyServerVipList[i].kal_exe_status != null && result.proxyServerVipList[i].kal_exe_status == "TC001501") {
+					kal_exe_status_chk = "text-primary";
+					kal_exe_status_css = "fa-refresh fa-spin text-success";
+				} else {
+					kal_exe_status_chk = "text-danger";
+					kal_exe_status_css = "fa-times-circle text-danger";
+				}
+					
+				html_sebu = "";
+				html_vip_line = "";
+ 				html_sebu += '					<i class="ti-vimeo-alt icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 5em;margin-top:10px;" ></i>\n';
+
+ 				strVip = result.proxyServerVipList[i].v_ip;
+
+ 				if (strVip != null && strVip != "," && strVip != "") {
+ 					//마지막 문자열 제거
+ 					if (strVip.charAt(strVip.length-1) == ",") {
+ 						strVip = strVip.slice(0,-1);
+ 					}
+
+ 					//첫 문자열 제거
+ 					if (strVip.substr(0, 1) == ",") {
+ 						strVip = strVip.substr(1);
+ 					}
+
+ 					var strVipSplit = strVip.split(',');
+ 				    for ( var j in strVipSplit ) {
+ 				    	var strVipSplit_val = strVipSplit[j].substr(0, strVipSplit[j].indexOf('/'));
+		 				html_sebu += '				<h5 class="text-info"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
+		 				html_sebu += '				' + strVipSplit_val + '</h5>\n';	
+ 				    }	
+ 				    
+	 				//line 생성
+ 				    if(pry_agent_status == "Y"){
+ 				    	html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;" id="vip_line' + i + '"></i>\n';
+ 				    }
+ 				}
+
+ 				for(var j = 0; j < result.proxyServerByDBSvrId.length; j++) {
+ 					kal_install_yn = result.proxyServerByDBSvrId[j].kal_install_yn;
+ 					if (result.proxyServerByDBSvrId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
+	 					count++;
+ 						if (result.proxyServerVipList[i].pry_svr_nm != "") {
+	 						var vip_btn_html = "";
+	 						vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
+	 						vip_btn_html +=	'<br/>&nbsp;';
+		 					$("#vip_proxy_nm" + j).html(vip_btn_html);
+	 					}
+
+	 					$("#keepVipDiv"+ j).html(html_sebu);
+	 					
+	 					$("#keepVipDivLine" + j).html(html_vip_line);
+	 					
+	 					iVipChkCnt = j;
+ 					} else if(j == result.proxyServerByDBSvrId.length-1 && count == 0){
+ 						html_sebu = "";
+ 		 				var vip_btn_html = "";
+ 		 				vip_btn_html += '<br/>&nbsp;';
+ 		 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;' + proxy_msg39  + '</h6>';
+ 						
+ 		 				$("#vip_proxy_nm" + j).html(vip_btn_html);
+	 					$("#keepVipDiv"+ j).html(html_sebu);
+	 	 				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
+	 					$("#keepVipDivLine" + j).html(html_vip_line);
+	 					$("#vip_line0","#keepVipDivLine" + j).hide();
+ 					}
+ 				}
+			} else {
+				html_sebu = "";
+				var vip_btn_html = "";
+				vip_btn_html += '</br>&nbsp;';
+	 		 	html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
+ 				$("#vip_proxy_nm" + i).html(vip_btn_html);
+ 	 			$("#keepVipDiv" + i).attr('style', "width:80%;height:220px;")
+ 	 			$("#keepVipDiv" + i).html(html_sebu);
+			}
+		}
+	} else if( result.proxyServerVipList.length == 0){
+			for(var j = 0; j < result.proxyServerByDBSvrId.length; j++) {
+				kal_install_yn = result.proxyServerByDBSvrId[j].kal_install_yn;
+ 				html_sebu = "";
+ 				var vip_btn_html = "";
+ 				vip_btn_html += '<br/>&nbsp;';
+		 		html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;' + proxy_msg39  + '</h6>';
+				
+		 		$("#vip_proxy_nm" + j).html(vip_btn_html);
+ 				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
+ 				$("#keepVipDiv" + j).html(html_sebu);
+ 			}
+	}
+		
+	//vip 두번째 row가 없는 경우 row size 변경
+	if (result.proxyServerVipList.length  == 1 && proxyServerByDBSvrId_cnt <= 1 && iVipChkCnt < 1) {
+		$("#keepVipDiv" + result.proxyServerVipList.length).attr('style', "width:80%;padding-left:20px;height:30px;");
+		$("#keepVipDivLine" + result.proxyServerVipList.length).attr('style', "width:80%;padding-left:20px;height:30px;");
+	}
+
+	if (master_state == 'TC001501') {
+			setInterval(iDatabase_toggle, 5000);
+	}
+}
+
+/* ********************************************************
+* 프록시 서버 모니터링 셋팅
+******************************************************** */
+function fn_proxyMonInfo(result){
+	var html_listner = "";
+	var proxyServerByDBSvrId_cnt = result.proxyServerByDBSvrId.length;
+	var iProxyChkCnt = 0;
+	var iProxyChkTitleCnt = 0;
+	var html_pry_title = "";
+	var agent_state = "";
+	var html_agent = "";
+	var html_listner_ss = "";
+	var lsn_status_chk = "";
+	
+	//연결 모니터링
+	var html_listner_con = "";
+	var html_listner_con_ss = "";
+	
+
+	//////////////////////////////////////
+	//Proxy 연결 리스너
+	for(var i = 0; i < proxyServerByDBSvrId_cnt; i++) {
+		//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
+			
+		html_listner += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
+
+		html_listner += '	<span id="proxy_listner_nm' + i + '"></span>\n';
+		html_listner += '	</p>\n';
+		
+		html_listner += '	<table class="table-borderless" style="width:100%;">\n';
+		html_listner += '		<tr>\n';
+		html_listner += '			<td style="width:15%;padding-left:10px;" class="text-center" id="proxyAgentDiv' + i + '">\n';
+		html_listner += '			</td>\n';
+		html_listner += '			<td style="width:85%;height:200px;" class="text-center" id="proxyListnerDiv' + i + '">\n';
+		html_listner += '			&nbsp;</td>\n';
+
+		html_listner += '		</tr>\n';
+		html_listner += '	</table>\n';
+
+		if (i != 1 && proxyServerByDBSvrId_cnt > 1) {
+			html_listner += '<hr>\n';
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		if(i == 1){
+ 			html_listner_con += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;padding-top:2rem;">\n';
+		} else {
+ 			html_listner_con += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
+		}
+
+		html_listner_con += '	<span id="proxy_listner_con_nm' + i + '">&nbsp;<br/></span>\n';
+		html_listner_con += '	</p>\n';
+		
+		html_listner_con += '	<table class="table-borderless" style="width:100%;">\n';
+		html_listner_con += '		<tr>\n';
+		html_listner_con += '			<td style="width:100%;height:200px;text-align:center;" id="dbProxyConDiv' + i + '">\n';
+		html_listner_con += '			&nbsp;</td>\n';
+
+		html_listner_con += '		</tr>\n';
+		html_listner_con += '	</table>\n';
+
+		if (i != 1 && proxyServerByDBSvrId_cnt > 1) {
+			html_listner_con += '<br/>\n';
+		} 
+			
+	}
+
+	$("#proxyListnerMornitoringList").html(html_listner);
+	$("#proxyListnerConLineList").html(html_listner_con);
+	
+	//////////////////////////////////////
+
+	//제목 및 agent 상태
+	for(var j = 0; j < result.proxyServerByDBSvrId.length; j++){
+		html_listner_ss = "";
+		html_listner_con_ss = "";
+		var lsnNulkCnt = 0;
+		var pry_agent_status = result.proxyServerByDBSvrId[j].conn_result;
+		
+		//title
+		if (result.proxyServerByDBSvrId[j].pry_svr_nm != "") {
+			html_pry_title = '<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
+			if(nvlPrmSet(result.proxyServerByDBSvrId[j].exe_status, '') == 'TC001501'){
+				html_pry_title += '		<div class="badge badge-pill badge-success" title="">' + result.proxyServerByDBSvrId[j].master_gbn + '</div>\n';
+				html_pry_title += '			'+result.proxyServerByDBSvrId[j].pry_svr_nm+'\n';
+			} else {
+				html_pry_title += '		<div class="badge badge-pill badge-danger" title="">' +  result.proxyServerByDBSvrId[j].master_gbn + '</div>\n';
+				html_pry_title += '			'+result.proxyServerByDBSvrId[j].pry_svr_nm+'\n';
+			}
+			
+			html_pry_title += '</h5>\n';
+
+			html_pry_title += '<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:30px;padding-top:3px;">';
+			html_pry_title += '		IP : '+result.proxyServerByDBSvrId[j].ipadr+'\n';
+			html_pry_title += '</h6>\n';
+
+			$("#proxy_listner_nm" + j).html(html_pry_title);
+		}
+		
+		//agent 상태 체크
+		if(result.proxyServerByDBSvrId[j].agt_cndt_cd == 'TC001501' && pry_agent_status == "Y"){
+			html_agent = '					<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>\n';
+		} else {
+			html_agent = '					<i class="mdi mdi-server-network icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>\n';
+		}
+		html_agent += '					<h6 class="text-muted">Agent</h6>\n';
+		
+		$("#proxyAgentDiv" + j).html(html_agent);
+		
+		if (result.proxyServerLsnList.length > 0) {
+			var count = 0;
+			for(var k = 0; k < result.proxyServerLsnList.length; k++){
+				if (result.proxyServerByDBSvrId[j].pry_svr_id == result.proxyServerLsnList[k].pry_svr_id) {
+					count++;
+					//proxy 리스너 셋팅
+					if(nvlPrmSet(result.proxyServerLsnList[k].lsn_exe_status, '') == 'TC001501'){
+						lsn_status_chk = "text-primary";
+					} else {
+						lsn_status_chk = "text-danger";
+					}
+					html_listner_ss += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+					html_listner_ss += '	<tr>';
+					html_listner_ss += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+
+					html_listner_ss += '			<h5 class="mb-0 mb-sm-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:8%;padding-left:30px;text-align:left;">';
+					
+					if(nvlPrmSet(result.proxyServerLsnList[k].lsn_exe_status, '') == 'TC001501'){
+						html_listner_ss += '			<div class="badge badge-pill badge-success" title="">L</div>\n';
+					} else {
+						html_listner_ss += '			<div class="badge badge-pill badge-danger" title="">L</div>\n';
+					}
+
+					html_listner_ss += '				<span data-toggle="tooltip" data-placement="bottom" data-html="true" title=\''+result.proxyServerLsnList[k].lsn_desc+'\'>';
+					html_listner_ss += '				'+result.proxyServerLsnList[k].lsn_nm+'\n';
+					html_listner_ss += '				</span>\n';
+					html_listner_ss += '			</h5>\n';
+					
+					html_listner_ss += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="text-align:left;padding-left:30px;padding-top:3px;">';
+					html_listner_ss += '				Bind IP : Port(*) : '+result.proxyServerLsnList[k].con_bind_port+'\n';
+					html_listner_ss += '			</h6>\n';
+					
+					html_listner_ss += '		</td>\n';
+					html_listner_ss += '	</tr>\n';
+					html_listner_ss += '</table>\n';
+					
+					///////////////////////////////////////////////////////
+					// db 연결 셋팅
+					html_listner_con_ss += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+					html_listner_con_ss += '	<tr>';
+					html_listner_con_ss += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+
+					var db_conn_ip_num = "";
+					var db_conn_ip_num_af = "";
+					
+					//agent가 살아있는 경우, proxy, keep은 kal_agent가 y일때 keepalived가 모두 살아있는 경우, kal_agent 'N' 일때
+					if(result.proxyServerByDBSvrId[j].agt_cndt_cd == 'TC001501' &&
+						result.proxyServerByDBSvrId[j].exe_status == 'TC001501' &&
+						((result.proxyServerByDBSvrId[j].kal_install_yn == '' || result.proxyServerByDBSvrId[j].kal_install_yn != 'Y') ||
+						  (result.proxyServerByDBSvrId[j].kal_install_yn == 'Y' && result.proxyServerByDBSvrId[j].kal_exe_status == 'TC001501')) &&
+						  pry_agent_status == 'Y'
+						){
+						if (result.proxyServerLsnList[k].db_conn_ip_num != null) {
+							db_conn_ip_num = result.proxyServerLsnList[k].db_conn_ip_num.replace(/,\s*$/, "").replace(/,\s*/,"");
+							if (db_conn_ip_num == '1') {
+								if (k == 0 || (k > 0 && result.proxyServerLsnList[k-1].pry_svr_id != result.proxyServerLsnList[k].pry_svr_id)) {
+									//첫번째 오른쪽
+									db_conn_ip_num_af = '<img src="../images/arrow_side.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""/>';
+
+								} else {
+									//두번째 상단
+									db_conn_ip_num_af = '<img src="../images/arrow_up.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""  />';
+								}
+							} else if (db_conn_ip_num == '2') {
+								if (k == 0 || (k > 0 && result.proxyServerLsnList[k-1].pry_svr_id != result.proxyServerLsnList[k].pry_svr_id)) {
+									//첫번째 하단
+									db_conn_ip_num_af = '<img src="../images/arrow_down.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""  />';
+								} else {
+									//두번째 row 일자
+									db_conn_ip_num_af = '<img src="../images/arrow_side.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""  />';
+								}
+							} else if(db_conn_ip_num != ''){
+								//첫번째 row 일자, 하단
+								if (k == 0 || (k > 0 && result.proxyServerLsnList[k-1].pry_svr_id != result.proxyServerLsnList[k].pry_svr_id)) {
+									db_conn_ip_num_af = '<img src="../images/arrow_side_down.png" class="img-lg" style="max-width:120%;object-fit: contain;" alt=""  />';
+								} else {
+									//두번째 row 일자, 상단
+									db_conn_ip_num_af = '<img src="../images/arrow_up_side.png" class="img-lg"  style="max-width:120%;object-fit: contain;" alt=""  />';
+								}
+							}
+						}
+					}
+
+					html_listner_con_ss += '		<span class="image blinking"> '+db_conn_ip_num_af+' </span>\n';
+
+					html_listner_con_ss += '		</td>\n';
+					html_listner_con_ss += '	</tr>\n';
+					html_listner_con_ss += '</table>\n';
+					
+					lsnNulkCnt ++;
+				} else if(k == result.proxyServerLsnList.length-1 && count == 0){
+					html_listner_ss = "";
+	 				html_listner_ss += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>' + proxy_msg41 + '</h6>';
+	 				$("#proxyListnerDiv" + j).html(html_listner_ss);
+				}
+			}
+
+			if (lsnNulkCnt < 2) {
+				html_listner_ss += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+				html_listner_ss += '	<tr>';
+				html_listner_ss += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+				html_listner_ss += '		&nbsp;</td>\n';
+				html_listner_ss += '	</tr>\n';
+				html_listner_ss += '</table>\n';
+				
+				html_listner_con_ss += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+				html_listner_con_ss += '	<tr>';
+				html_listner_con_ss += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+				html_listner_con_ss += '		&nbsp;</td>\n';
+				html_listner_con_ss += '	</tr>\n';
+				html_listner_con_ss += '</table>\n';
+			}
+			lsnNulkCnt = 0;
+
+			$("#proxyListnerDiv" + j).html(html_listner_ss);
+			$("#dbProxyConDiv" + j).html(html_listner_con_ss);
+		} else {
+			html_listner_ss = "";
+			html_listner_ss += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>' + proxy_msg41 + '</h6>';
+			$("#proxyListnerDiv" + j).html(html_listner_ss);
+		}
+	}
+}
+
+/* ********************************************************
+* 디비 서버 모니터링 셋팅
+******************************************************** */
+function fn_dbMonInfo(result){
+
+	var rowCount = 0;
+	var dbNulkCnt = 0;
+	var html = "";
+	var master_gbn = "";
+	var pry_svr_id = "";
+	var listCnt = 0;
+	var pry_svr_id_val = "";
+	var db_exe_status_chk = "";
+	var db_exe_status_css = "";
+	var db_exe_status_val = "";
+	
+	var proxyServerByDBSvrId_cnt = result.proxyServerByDBSvrId.length;
+	
+	var html_db = "";
+	
+	//////////////////////////////////////
+	//db 연결 리스너
+	for(var i = 0; i < proxyServerByDBSvrId_cnt; i++){
+			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
+			
+			html_db += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
+
+			html_db += '		<span id="db_proxy_nm' + i + '"></span>\n';
+			html_db += '	</p>\n';
+		
+			html_db += '	<table class="table-borderless" style="width:100%;">\n';
+			html_db += '		<tr>\n';
+			html_db += '			<td style="width:100%;height:200px;" id="dbProxyDiv' + i + '">\n';
+			html_db += '			&nbsp;</td>\n';
+
+			html_db += '		</tr>\n';
+			html_db += '	</table>\n';
+
+			if (i != 1 && proxyServerByDBSvrId_cnt > 1) {
+				html_db += '<hr>\n';
+			}
+	}
+
+	$("#dbListenerVipList").html(html_db);
+	//////////////////////////////////////
+	
+	
+	//////////////////////////////////////
+	//Proxy 연결 db
+
+	//제목 및 agent 상태
+		for(var j = 0; j < result.proxyServerByDBSvrId.length; j++){
+			html_db = "";
+			//title
+		if (result.proxyServerByDBSvrId[j].pry_svr_nm != "") {
+			$("#db_proxy_nm" + j).html('<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerByDBSvrId[j].pry_svr_nm + '<br/>&nbsp;');
+		}
+
+			if (result.dbServerConProxyList != null && result.dbServerConProxyList.length > 0) {
+			for(var k = 0; k < result.dbServerConProxyList.length; k++){
+
+				if (result.proxyServerByDBSvrId[j].pry_svr_id == result.dbServerConProxyList[k].pry_svr_id) {
+
+					html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+					html_db += '	<tr>';
+					
+					html_db += '		<td colspan="2" style="width:85%;">';
+
+					if(result.dbServerConProxyList[k].master_gbn == 'M'){
+						html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">';
+					} else {
+						html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:10px;padding-top:10px;">';
+					}
+
+					if(result.dbServerConProxyList[k].db_cndt == 'Y'){
+						html_db += '		<div class="badge badge-pill badge-success" title="">'+result.dbServerConProxyList[k].master_gbn+'</div>';
+					} else {
+						html_db += '		<div class="badge badge-pill badge-danger" title="">'+result.dbServerConProxyList[k].master_gbn+'</div>';
+					}
+					 
+					if(result.dbServerConProxyList[k].svr_host_nm != null && result.dbServerConProxyList[k].svr_host_nm != ""){
+						if(result.dbServerConProxyList[k].master_gbn == 'M'){
+							html_db += '		Master(';
+						} else {
+							html_db += '		Standby(<a href="#" onclick="fn_standby_view(' + result.dbServerConProxyList[k].db_svr_id + ')">';
+						}
+						html_db += '			' + result.dbServerConProxyList[k].svr_host_nm;
+						if(result.dbServerConProxyList[k].master_gbn == 'M'){
+							html_db += '		)';
+						} else {
+							if(result.dbServerConProxyList[k].cnt_svr_id > 1){
+								html_db += '	' + proxy_and  + ' ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + ' ' + proxy_others + '</a>)';
+							} else {
+								html_db += '	</a>)';
+							}
+						}
+					} else {
+						if(result.dbServerConProxyList[k].master_gbn == 'M'){
+							html_db += '		Master';	
+						} else {
+							html_db += '		Standby';
+						}
+					}
+					html_db += '			</h6>';
+					html_db += '		</td>';
+					
+					
+					html_db += '		<td rowspan="3" style="width:15%;">';
+					if(result.dbServerConProxyList[k].db_cndt == 'Y'){
+						html_db += '		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>\n';
+					} else {
+						html_db += '		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>';
+					}
+
+					html_db += '		</td>';
+					
+					html_db += '	</tr>';
+
+					html_db += '	<tr>';
+					html_db += '		<td colspan="2" style="padding-top:5px;">';
+
+						if(result.dbServerConProxyList[k].master_gbn == 'M'){
+						html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
+					} else {
+						if(result.dbServerConProxyList[k].cnt_svr_id > 1){
+							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">대표 IP : ' + result.dbServerConProxyList[k].ipadr + '</h6>';
+						} else {
+							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
+						}
+					}
+
+					
+					html_db += '		</td>'
+					html_db += '	</tr>'
+
+
+					if(result.dbServerConProxyList[k].db_cndt == 'Y'){
+						db_exe_status_chk = "text-success";
+						db_exe_status_css = "fa-refresh fa-spin text-success";
+						db_exe_status_val = 'running';
+					} else {
+						db_exe_status_chk = "text-danger";
+						db_exe_status_css = "fa-times-circle text-danger";
+						db_exe_status_val = 'stop';
+					}
+
+					html_db += '	<tr >\n';
+					html_db += '		<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">\n';
+					html_db += '			<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + db_exe_status_val + '</h6>\n';			
+					html_db += '		</td>\n';
+					html_db += '	</tr>\n';
+					html_db += '	</table>\n';
+					
+					dbNulkCnt ++;
+				}
+			}
+			 
+			if (dbNulkCnt < 2 ) {
+				html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
+				html_db += '	<tr>';
+				html_db += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
+				html_db += '		&nbsp;</td>\n';
+				html_db += '	</tr>\n';
+				html_db += '</table>\n';
+			}
+
+			dbNulkCnt = 0;
+			
+			$("#dbProxyDiv" + j).html(html_db);
+		}
+	}
+}
+
+/* ********************************************************
+* db standby ip list 조회
+******************************************************** */
+function fn_standby_view(db_svr_id){
+	fn_proxyDBStandbyViewAjax(db_svr_id);
+	setTimeout(function(){
+		if(proxyDBStandbyListTable != null) proxyDBStandbyListTable.columns.adjust().draw();
+	},200);
+	$('#pop_db_standby_ip_list_view').modal("show");
+	$('#loading').hide();
 }

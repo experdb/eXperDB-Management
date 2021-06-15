@@ -79,7 +79,7 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "192.168.56.130";
+		String Ip = "192.168.20.127";
 		//Ip = "192.168.56.108";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
@@ -125,7 +125,7 @@ public class ClientTester {
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			//clientTester.dxT021(Ip, port);
+		//	clientTester.dxT021(Ip, port);
 			//clientTester.dxT023(Ip, port);
 			//clientTester.dxT024(Ip, port);
 			//clientTester.dxT025(Ip, port);
@@ -146,7 +146,8 @@ public class ClientTester {
 			//clientTester.dxT037(Ip, port);
 			//clientTester.dxT038(Ip, port);
 			//clientTester.dxT039(Ip, port);
-			clientTester.dxT040(Ip, port);
+			//clientTester.dxT040(Ip, port);
+			clientTester.dxT042(Ip, port);
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -170,8 +171,8 @@ public class ClientTester {
 		**/
 			
 		
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.241");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.241");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.130");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.130");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
@@ -225,12 +226,12 @@ public class ClientTester {
 			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
 			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");*/
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ClientProtocolID.USER_ID, "experdba");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.130");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.130");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
 			JSONObject objList;
 			
@@ -2023,8 +2024,8 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.11");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.11");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "182.252.133.57");
+			serverObj.put(ClientProtocolID.SERVER_IP, "182.252.133.57");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
@@ -3036,6 +3037,61 @@ public class ClientTester {
 	            System.out.println( String.format("키 : %s, 값 : %s", key, resultHp.get(key)) );
 	        }
 	
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	private void dxT042(String Ip, int port) {
+		
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+		JSONObject result = new JSONObject();
+		
+		try {
+
+			
+			JSONObject jObj = new JSONObject();
+					
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT042);
+		
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+			objList = CA.dxT042(jObj);
+
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			
+			List<Object> volumes = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			if(volumes.size() > 0) {
+				for(int i=0; i<volumes.size(); i++) {
+					JSONObject jsonObj = new JSONObject();
+					Object obj = volumes.get(i);
+					
+					HashMap hp = (HashMap) obj;
+
+					jsonObj.put("mounton", (String) hp.get("mounton"));
+					jsonObj.put("filesystem", (String) hp.get("filesystem"));
+					jsonObj.put("type", (String) hp.get("type"));
+					jsonArray.add(jsonObj);
+	
+				}
+			}
+			CA.close();
+			
+			System.out.println(jsonArray);
+			result.put("data", jsonArray);
 				
 			CA.close();
 		} catch(Exception e) {

@@ -108,6 +108,15 @@ var button_delete = "<spring:message code='button.delete' />";
 var common_request = "<spring:message code='common.request' />";
 var restore_progress = "<spring:message code='restore.progress' />";
 
+var proxy_and = "<spring:message code='eXperDB_proxy.and'/>"
+var proxy_others = "<spring:message code='eXperDB_proxy.others'/>"
+var proxy_rep_ip = "<spring:message code='eXperDB_proxy.representative_ip'/>"
+var proxy_msg28 = "<spring:message code='eXperDB_proxy.msg28'/>"
+var proxy_msg39 = "<spring:message code='eXperDB_proxy.msg39'/>"
+var proxy_msg40 = "<spring:message code='eXperDB_proxy.msg40'/>"
+var proxy_msg41 = "<spring:message code='eXperDB_proxy.msg41'/>"
+
+
 </script>
 <body>
 

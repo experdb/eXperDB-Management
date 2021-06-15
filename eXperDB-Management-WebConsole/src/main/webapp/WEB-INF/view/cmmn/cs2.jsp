@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/mdi/css/materialdesignicons.min.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/css-stars.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/x-editable/bootstrap-editable.css">  
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/bootstrap4-toggle/bootstrap4-toggle.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/select2/select2.min.css">
@@ -26,6 +27,7 @@
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/bars-1to10.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/examples.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/morris.js/morris.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/c3/c3.min.css">
 
 <!-- End plugin css for this page -->
 
@@ -81,6 +83,7 @@
 <script src="/vertical-dark-sidebar/js/vendors/fullcalendar/fullcalendar.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/calender/ko.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/bootstrap-datepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/calender/addEvent.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/calender/editEvent.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/calender/etcSetting.js"></script>
@@ -94,6 +97,9 @@
 <script src="/vertical-dark-sidebar/js/vendors/justgage/justgage.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/chart.js/Chart.min.js"></script>
 
+<script src="/vertical-dark-sidebar/js/vendors/c3/c3.js"></script>
+
+<script src="/vertical-dark-sidebar/js/vendors/inputmask/jquery.inputmask.bundle.min.js"></script>
 <!-- End custom js for this page-->
 
 <!-- endinject -->

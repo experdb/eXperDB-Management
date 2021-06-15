@@ -268,8 +268,11 @@ function fn_ddl_reg_popup(){
 	$("#db2pg_ddl_wrk_nm", "#ddlRegForm").val("");
 	$("#db2pg_ddl_wrk_exp", "#ddlRegForm").val("");
 	$("#db2pg_sys_nm", "#ddlRegForm").val("");
-	$("#src_include_tables", "#ddlRegForm").val("");
-	$("#src_exclude_tables", "#ddlRegForm").val("");
+	$("#src_include_table_nm", "#ddlRegForm").val("");
+	$("#src_exclude_table_nm", "#ddlRegForm").val("");
+	$("#src_tables", "#ddlRegForm").val("include");
+	
+	fn_table_clear_reg();
 	
 	$('#pop_layer_ddl_reg').modal("show");
 }
@@ -304,21 +307,26 @@ function fn_ddl_regre_popup(){
 				$("#db2pg_sys_id_reg_re").val(nvlPrmSet(result.db2pg_sys_id, ""));
 				$("#src_include_table_nm_reg_re").val(nvlPrmSet(result.exrt_trg_tb_nm, ""));
 				$("#src_exclude_table_nm_reg_re").val(nvlPrmSet(result.exrt_exct_tb_nm, ""));
+				$("#db2pg_sys_nm_reg_re").val(nvlPrmSet(result.db2pg_sys_nm, ""));
 				 if(result.exrt_trg_tb_cnt>0){
 					 $("#src_tables_reg_re option:eq(0)").attr("selected", "selected");
 					 $("#src_include_tables_reg_re").val("<spring:message code='migration.total_table'/>: "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
 					 $("#src_table_total_cnt_reg_re").val(result.exrt_trg_tb_total_cnt);
-					 $("#include_reg_re").show();
-					 $("#exclude_reg_re").hide();
+					 $("#src_tables_re").val("include");
+					 fn_tableList_re('include');
+					 // $("#include_reg_re").show();
+					 // $("#exclude_reg_re").hide();
 				 }else if(result.exrt_exct_tb_cnt>0){
 					 $("#src_tables_reg_re option:eq(1)").attr("selected", "selected");
 					 $("#src_exclude_tables_reg_re").val("<spring:message code='migration.total_table'/> : "+result.exrt_exct_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_exct_tb_cnt+"<spring:message code='migration.items'/>");
-					 $("#src_table_total_cnt_reg_re").val(result.exrt_exct_tb_total_cnt)
-					 $("#exclude_reg_re").show();
-					 $("#include_reg_re").hide(); 
+					 $("#src_table_total_cnt_reg_re").val(result.exrt_exct_tb_total_cnt);
+					 $("#src_tables_re").val("exclude");
+					 fn_tableList_re('exclude');
+					 // $("#exclude_reg_re").show();
+					 // $("#include_reg_re").hide(); 
 				 }	 
 				
-				$("#db2pg_sys_nm_reg_re").val(nvlPrmSet(result.db2pg_sys_nm, ""));
+				
 				$("#db2pg_ddl_wrk_nm_reg_re").val(nvlPrmSet(result.db2pg_ddl_wrk_nm, ""));
 				$("#wrk_id_reg_re").val(nvlPrmSet(result.wrk_id, ""));
 				$("#db2pg_ddl_wrk_id_reg_re").val(nvlPrmSet(result.db2pg_ddl_wrk_id, ""));
@@ -344,18 +352,7 @@ function fn_data_reg_popup(){
 // 	$("#db2pg_trsf_wrk_exp", "#dataRegForm").val("");
 // 	$("#db2pg_source_system_nm", "#dataRegForm").val("");
 // 	$("#db2pg_trg_sys_nm", "#dataRegForm").val("");
-
-	$('#db2pg_trsf_wrk_nm').prop('readonly', false);
-	$("#mod_button_data_work").hide();
-	$("#inset_button_data_work").show();
-	$("#inset_button_data_work2").show();
-	$("#inset_title").show();
-	$("#mod_title").hide();
-	
-	//tab 선택
-	$('a[href="#insDumpOptionTab1"]').tab('show');
-	$('#con_multi_gbn', '#findConfirmMulti').val("data_reg");
-				
+	fn_reset_mig();		
 	$('#pop_layer_data_reg').modal("show");
 }
 
@@ -391,14 +388,16 @@ function fn_data_regre_popup(){
 					 $("#src_tables_trsf option:eq(0)").attr("selected", "selected");
 					 $("#src_include_tables_trsf").val("<spring:message code='migration.total_table'/>: "+result.exrt_trg_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_trg_tb_cnt+"<spring:message code='migration.items'/>");
 					 $("#src_table_total_cnt_trsf").val(result.exrt_trg_tb_total_cnt);
-					 $("#include_trsf").show();
-					 $("#exclude_trsf").hide();
+					 $("#src_tables_trsf").val("include");
+					 // $("#include_trsf").show();
+					 // $("#exclude_trsf").hide();
 				 }else if(result.exrt_exct_tb_cnt>0){
 					 $("#src_tables_trsf option:eq(1)").attr("selected", "selected");
 					 $("#src_exclude_tables_trsf").val("<spring:message code='migration.total_table'/> : "+result.exrt_exct_tb_total_cnt+" <spring:message code='migration.selected_out_of'/>   /   "+result.exrt_exct_tb_cnt+"<spring:message code='migration.items'/>");
-					 $("#src_table_total_cnt_trsf").val(result.exrt_exct_tb_total_cnt)
-					 $("#exclude_trsf").show();
-					 $("#include_trsf").hide(); 
+					 $("#src_table_total_cnt_trsf").val(result.exrt_exct_tb_total_cnt);
+					 $("#src_tables_trsf").val("exclude");
+					 // $("#exclude_trsf").show();
+					 // $("#include_trsf").hide(); 
 				 }	
 			
 				$("#db2pg_sys_id_trsf").val(nvlPrmSet(result.db2pg_sys_id, ""));
@@ -434,7 +433,9 @@ function fn_data_regre_popup(){
 				 
 				//tab 선택
 				$('a[href="#insDumpOptionTab1"]').tab('show');
-				 
+				fn_dbmsInfo_set();
+
+				fn_reset_mig_modi(result.usr_qry);
 				$('#pop_layer_data_reg').modal("show");
 			}
 		});	
@@ -457,6 +458,8 @@ function fnc_confirmMultiRst(gbn){
 		location.href='/db2pgHistory.do?gbn=ddl' ;
 	}else if(gbn =="data_history"){
 		location.href='/db2pgHistory.do?gbn=mig' ;
+	}else if(gbn == "usrqry_del"){
+		fn_delSql();
 	}
 }
 
@@ -847,15 +850,16 @@ function fn_ImmediateStart(gbn){
 	}
 }
 
+
 </script>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
 
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
-<%@include file="../popup/ddlRegForm.jsp"%>
-<%@include file="../popup/ddlRegReForm.jsp"%>
-<%@include file="../popup/dataRegForm.jsp"%>
+<%@include file="../popup/ddlRegForm2.jsp"%>
+<%@include file="../popup/ddlRegReForm2.jsp"%>
+<%@include file="../popup/dataRegForm2.jsp"%>
 <%@include file="../popup/dbmsDDLInfo.jsp"%>
-<%@include file="../popup/tableInfo.jsp"%>
+
 <%@include file="../popup/dbmsInfo.jsp"%>
 <%@include file="../popup/dbmsPgInfo.jsp"%>
 

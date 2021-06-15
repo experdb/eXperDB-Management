@@ -140,6 +140,10 @@ function fn_init(){
 						html += "	<i class='fa fa-check-circle text-primary' >";
 						html += '&nbsp;Complete</i>';
 						html += "</button>";
+						html += '<br/><button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_dn_report(\''+full.save_pth+'/result/\')" style="margin-top:4pt">';
+						html += "	<i class='fa fa-check-circle text-primary' >";
+						html += '&nbsp;Mig Report</i>';
+						html += "</button>";
 						
 					} else if(full.exe_rslt_cd == 'TC001702'){
 						html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_migFailLog('+full.mig_exe_sn+')">';
@@ -490,6 +494,7 @@ function getdataDataList(){
 				$('#mig_result_wrk_end_dtm').html(result.result.wrk_end_dtm);
 				$('#mig_result_wrk_dtm').html(result.result.wrk_dtm);				
  				$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;Complete</i>');
+ 				$('#mig_result_exe_rslt_report').html("<a href=\"javascript:fn_dn_report('" + trans_save_pth + "result/')\" ><b>Migration Report Download</b></a>");
 
  				 if(result.db2pgResult.RESULT == null){
  					$('#mig_result_msg').html("파일이 삭제되어 작업로그정보를 출력할 수 없습니다.");	
@@ -575,7 +580,12 @@ function getdataDataList(){
 	    $('#mig_wrk_end_dtm_div').datepicker('updateDates');
 	}	
  
- 
+	/* ********************************************************
+	 *파일 다운로드
+	 ******************************************************** */
+	function fn_dn_report(path){
+		location.href="/db2pg/popup/db2pgFileDownload.do?name=report.html&path="+path;
+	}
 </script>
 
 <%-- <%@include file="../popup/db2pgConfigInfo.jsp"%> --%>

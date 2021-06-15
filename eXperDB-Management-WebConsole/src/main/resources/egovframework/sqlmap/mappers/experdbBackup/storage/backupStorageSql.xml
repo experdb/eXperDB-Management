@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="backupStorageSql">
+
+	<select id="backupStorageList" resultType="backupLocationInfoVO">
+			SELECT 
+			        "location" as backupDestLocation
+			      , "type" as "type"
+			      , "free" as freeSize
+			      , total as totalSize
+			      , currentjobcount as currentJobCount
+			      , waitingjobcount as waitingJobCount
+		      FROM  backuplocation
+		
+	</select>
+		
+	<insert id="backupStorageInsert" parameterType="backupLocationInfoVO">
+		INSERT INTO backuplocation 
+		( 
+		    uuid
+		  , "location"
+		  <if test="type == 2">
+		  , username
+		  , "password"
+		  </if>
+		  , "free"
+		  , total
+		  , "type"
+		  , isrunscript
+		  , freealert
+		  , freealertunit
+		  , joblimit
+		  , "time"
+		  , currentjobcount
+		  , waitingjobcount
+		  , rpsport
+		  , enablededup
+		 )
+		 VALUES 
+		 (
+	    	  #{uuid}
+	    	, #{backupDestLocation}
+	    	<if test="type == 2">
+	    	, #{backupDestUser}
+	    	, #{backupDestPasswd}
+	    	</if>
+	    	, #{freeSize}
+	    	, #{totalSize}
+	    	, #{type}
+	    	, #{isRunScript}
+	    	, #{freeSizeAlert}
+	    	, #{freeSizeAlertUnit}
+	    	, #{jobLimit}
+	    	, #{time}
+	    	, #{currentJobCount}
+	    	, #{waitingJobCount}
+	    	, 0
+	    	, 0
+    		)
+	</insert>
+	
+	<select id="backupStorageInfo" parameterType="backupLocationInfoVO" resultType="backupLocationInfoVO">
+		SELECT 
+		     "location" as backupDestLocation
+		   , username as backupDestUser
+		   , "password" as backupDestPasswd
+		   , isrunscript as isRunScript 
+		   , joblimit as jobLimit 
+		   , freealert as freeSizeAlert
+		   , freealertunit as freeSizeAlertUnit
+		   , "type" as "type"
+		FROM
+		   backuplocation b2 
+		WHERE "location" like #{backupDestLocation}
+		    
+	</select>
+	
+	<update id="backupStorageUpdate" parameterType="backupLocationInfoVO">
+		UPDATE backuplocation
+		   SET isrunscript = #{isRunScript}
+	       <if test="type == 2">
+			  , username = #{backupDestUser}
+			  , "password" = #{backupDestPasswd}
+		   </if>
+		      , joblimit = #{jobLimit}
+		      , freealert = #{freeSizeAlert}
+		      , freealertunit = #{freeSizeAlertUnit}
+		 WHERE "location" like #{backupDestLocation}		       
+		
+	</update>
+	
+	<delete id="backupStorageDelete" parameterType="backupLocationInfoVO">
+		 DELETE FROM backuplocation WHERE "location" like #{backupDestLocation}
+	</delete>
+	
+	<select id="getScheduleLocationInfo" parameterType="String" resultType="backupLocationInfoVO">
+		select 
+		     uuid as uuid 
+		   , "location" as backupDestLocation
+		   , username as backupDestUser
+		   , "password" as backupDestPasswd
+		   , "free" as freeSize
+		   , total as totalSize
+		   , "type" as type
+		   , isrunscript as isRunScript
+		   , freealert as freeSizeAlert
+		   , freealertunit as freeSizeAlertUnit
+		   , joblimit as jobLimit
+		   , currentJobCount as currentJobCount
+		   , waitingJobCount as waitingJobCount
+		   , "time" as time
+		   , enablededup as enablededup
+		  from backuplocation  
+		 WHERE "location" like #{path}
+	</select>
+
+</mapper>

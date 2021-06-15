@@ -9293,10 +9293,10 @@ pre code {
   padding-left: 0;
 }
 
-.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .lightGallery .image-tile, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col,  .col-13,
+.col-0_5, .col-1, .col-1_5, .col-2, .col-2_5, .col-2_8, .col-3, .col-3_2, .col-3_4, .col-3_7, .col-3_9, .col-4, .col-5, .col-6, .lightGallery .image-tile, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col,  .col-13,
 .col-auto, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm,
 .col-sm-2_1, .col-sm-2_2, .col-sm-2_3, .col-sm-8_5,
-.col-sm-2_5, .col-sm-1_3, .col-sm-1_4, .col-sm-1_5, .col-sm-1_6, .col-sm-1_7, .col-sm-1_9, .col-sm-2_6, .col-sm-0_5, .col-sm-6_3, .col-sm-3_0, .col-sm-2_27, .col-sm-5_5, .col-md-2_2, .col-sm-2_8,
+.col-sm-2_5, .col-sm-1_3, .col-sm-1_4, .col-sm-1_5, .col-sm-1_6, .col-sm-1_7, .col-sm-1_9, .col-sm-2_6, .col-sm-0_5, .col-sm-6_3, .col-sm-3_0, .col-sm-3_75, .col-sm-2_27, .col-sm-5_5, .col-md-2_2, .col-sm-2_8,
 .col-md-2_5, .col-md-3_5,
 .col-sm-auto, .col-md-1, .col-md-2, .col-md-2_1, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md,
 .col-md-auto, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg,
@@ -9355,14 +9355,54 @@ pre code {
   max-width: 8.33333%;
 }
 
+.col-1_5 {
+  flex: 0 0 12.33333%;
+  max-width: 12.33333%;
+}
+
+.col-0_5 {
+  flex: 0 0 4.33333%;
+  max-width: 4.33333%;
+}
+
 .col-2 {
   flex: 0 0 16.66667%;
   max-width: 16.66667%;
 }
 
+.col-2_5 {
+  flex: 0 0 20.66667%;
+  max-width: 20.66667%;
+}
+
+.col-2_8 {
+  flex: 0 0 21%;
+  max-width: 21%;
+}
+
 .col-3 {
   flex: 0 0 25%;
   max-width: 25%;
+}
+
+.col-3_2 {
+  flex: 0 0 27%;
+  max-width: 27%;
+}
+
+.col-3_4 {
+  flex: 0 0 29%;
+  max-width: 29%;
+}
+
+.col-3_7 {
+  flex: 0 0 31%;
+  max-width: 31%;	
+}
+
+.col-3_9 {
+  flex: 0 0 33%;
+  max-width: 33%;
 }
 
 .col-4 {
@@ -9574,7 +9614,7 @@ pre code {
     flex: 0 0 11.33333%;
     max-width: 11.33333%;
   }
-    .col-sm-1_6 {
+  .col-sm-1_6 {
     flex: 0 0 12.33333%;
     max-width: 12.33333%;
   }
@@ -9626,6 +9666,10 @@ pre code {
     flex: 0 0 30.33333%;
     max-width: 30.33333%;
   }
+  .col-sm-3_75 {
+    flex: 0 0 37.5%;
+    max-width: 37.5%;
+  }
  
   .col-sm-4 {
     flex: 0 0 33.33333%;
@@ -9675,6 +9719,7 @@ pre code {
     flex: 0 0 100%;
     max-width: 100%;
   }
+  
   .order-sm-first {
     order: -1;
   }
@@ -10290,6 +10335,10 @@ pre code {
   border-top: 1px solid #c9ccd7;
 }
 
+.input-table td{
+	padding: 0.4rem 0.9375rem !important;
+}
+
 .table thead th, .jsgrid .jsgrid-table thead th {
   vertical-align: bottom;
   border-bottom: 2px solid #c9ccd7;
@@ -10311,11 +10360,12 @@ pre code {
 .table-bordered th,
 .table-bordered td {
   border: 1px solid #c9ccd7;
+  border-bottom-width: 1px !important;
 }
 
 .table-bordered thead th,
 .table-bordered thead td {
-  border-bottom-width: 2px;
+  border-bottom: 1px solid #c9ccd7 !important;
 }
 
 .table-borderless th,
@@ -13861,6 +13911,22 @@ input[type="button"].btn-block {
   border-bottom-left-radius: 0;
 }
 
+.card-body-xsm > .form-group{
+	margin-bottom: 0.5rem;
+}
+
+.card-body > .row-last{
+	margin-bottom: -7px !important;
+}
+
+.card-body-xsm > .row-last{
+	margin-bottom: -16px !important;
+}
+
+.card-body-border{
+	border: 1px solid #adb5bd;
+}
+
 .card-body {
   flex: 1 1 auto;
   min-height: 1px;
@@ -14354,6 +14420,18 @@ a.badge-dark:focus, a.badge-dark.focus {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(40, 47, 58, 0.5);
 }
+
+.badge-mb-reverse {
+  border : 1px solid #68afff;
+  background-color: #FFFFFF;
+  color: #68afff;
+}
+.badge-mb {
+  color: #FFFFFF;
+  background-color: #68afff;
+  border : 1px solid #68afff;
+}
+
 
 .jumbotron {
   padding: 2rem 1rem;
@@ -15214,7 +15292,7 @@ a.close.disabled {
 
 .tooltip {
   position: absolute;
-  z-index: 1070;
+  z-index: 2070 !important;
   display: block;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -21520,6 +21598,27 @@ code {
 .btn-outline-light {
   color: #6c7383;
   border-color: #e3e3e3;
+}
+
+/* Icon Button */
+.icon_btn{
+	padding: 0.4rem 0.5rem;
+    background-color: transparent;
+    border: 1px solid #248afd;
+    border-radius: 0.1875rem;
+    margin-top:1rem !important;
+    margin-right:0.5rem !important;
+}
+
+/* Icon Button */
+.icon_text_btn{
+	padding: 0.6rem 0.5rem;
+    background-color: transparent;
+    border: 1px solid #248afd;
+    border-radius: 0.1875rem;
+    margin-top:1rem !important;
+    margin-right:0.5rem !important;
+    font-size: 0.875rem;
 }
 
 /* Breadcrumbs */

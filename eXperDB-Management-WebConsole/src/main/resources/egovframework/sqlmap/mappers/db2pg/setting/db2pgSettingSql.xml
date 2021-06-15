@@ -314,25 +314,31 @@
 		/**
 		* Query ID : insertUsrQry
 		* Description : 사용자 쿼리 등록
-		* Author : 김주영
+		* Author : 신예은
 		**/
 		INSERT INTO t_db2pg_usrqry_ls
 		(
-		  db2pg_usr_qry_id
+		  db2pg_trsf_wrk_id
+		, tar_tb_nm
 		, usr_qry_exp 
 		, frst_regr_id
 		, frst_reg_dtm
+		, lst_mdfr_id
+		, lst_mdf_dtm
 		)
 		VALUES
 		(
-		  #{db2pg_usr_qry_id}
+		  #{db2pg_trsf_wrk_id}
+		, #{tar_tb_name}
 		, #{usr_qry_exp} 
-		, #{frst_regr_id}
+		, (select frst_regr_id from t_db2pg_trsf_wrk_inf where db2pg_trsf_wrk_id = #{db2pg_trsf_wrk_id})
+		, (select frst_reg_dtm from t_db2pg_trsf_wrk_inf where db2pg_trsf_wrk_id = #{db2pg_trsf_wrk_id})
+		, #{lst_mdfr_id}
 		, clock_timestamp()
 		)
 	</insert>
 	
-	<insert id="insertDataWork" parameterType="dataConfigVO">
+	<select id="insertDataWork" resultType="int" parameterType="dataConfigVO">
 		/**
 		* Query ID : insertDataWork
 		* Description : Data WORK 등록
@@ -401,8 +407,9 @@
 		, #{trans_save_pth}
 		, #{src_cnd_qry}
 		, #{db2pg_uchr_lchr_val}
-		)		
-	</insert>
+		)	
+		RETURNING db2pg_trsf_wrk_id;	
+	</select>
 	
 	<update id="updateDataWorkNM" parameterType="dataConfigVO">
 		/**
@@ -468,6 +475,10 @@
 		* Author : 김주영
 		**/
 		DELETE FROM t_db2pg_trsf_wrk_inf WHERE db2pg_trsf_wrk_id=#{db2pg_trsf_wrk_id}
+	</delete>
+
+	<delete id="deleteUsrQry" parameterType="int">
+		DELETE FROM t_db2pg_usrqry_ls WHERE db2pg_trsf_wrk_id = #{db2pg_trsf_wrk_id}
 	</delete>
 	
 	<select id="selectDetailDDLWork" resultType="ddlConfigVO" parameterType="int">
@@ -538,6 +549,21 @@
 		FROM t_db2pg_trsf_wrk_inf wrk_inf, t_wrkcng_i wrkcng
 		WHERE db2pg_trsf_wrk_id=#{db2pg_trsf_wrk_id}
 		AND wrk_inf.wrk_id=wrkcng.wrk_id
+	</select>
+
+	<select id ="selectDetailUsrQry" resultType="QueryVO" parameterType="int">
+		/**
+		* Query ID : selectDetailUsrQry
+		* Description : Data WORK user query 조회
+		* Author : 신예은
+		**/
+		select
+			  tar_tb_nm as tar_tb_name
+			, usr_qry_exp as usr_qry_exp
+			, frst_regr_id as frst_regr_id
+			, frst_reg_dtm as frst_reg_dtm
+		from t_db2pg_usrqry_ls 
+		where db2pg_trsf_wrk_id = #{db2pg_trsf_wrk_id} order by db2pg_usr_qry_id ASC;
 	</select>
 	
 	<select id="selectDBMS" resultType="db2pgSysInfVO" parameterType="int">

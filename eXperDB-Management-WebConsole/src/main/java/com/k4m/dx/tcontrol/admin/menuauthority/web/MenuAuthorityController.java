@@ -94,8 +94,18 @@ public class MenuAuthorityController {
 				Properties props = new Properties();
 				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
 				String encrypt_useyn = props.get("encrypt.useyn").toString();		
+				//백업 사용 여부 추가 2021-04-13 변승우
+				String bnr_useyn = props.get("bnr.useyn").toString();		
+
+			    /*proxy 사용유무 추가 2021-04-23  */
+				String proxy_useyn = "";
+				if (props.get("proxy.useyn") != null) {
+					proxy_useyn = props.get("proxy.useyn").toString(); 
+				}
 				
 				mv.addObject("encrypt_useyn", encrypt_useyn);
+				mv.addObject("bnr_useyn", bnr_useyn);
+				mv.addObject("proxy_useyn", proxy_useyn);
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));				
 				mv.setViewName("admin/menuAuthority/menuAuthority");

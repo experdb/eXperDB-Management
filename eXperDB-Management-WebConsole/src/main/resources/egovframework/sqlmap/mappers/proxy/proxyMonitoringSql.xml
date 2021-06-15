@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="proxyMonitoringSql">
+
+	<select id="selectProxyServerList" resultType="hashMap">
+		/**
+		* Query ID : selectProxyServerList
+		* Description : Proxy 서버 목록 조회
+		* Author : 윤정
+		**/
+		SELECT 
+       		(ROW_NUMBER() OVER()) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+       		s.PRY_SVR_ID,
+       		s.IPADR,
+       		s.AGT_SN,
+       		s.PRY_SVR_NM,
+       		s.PRY_PTH,
+       		s.KAL_PTH,
+       		s.USE_YN,
+       		s.EXE_STATUS,
+       		s.MASTER_GBN,
+       		s.MASTER_SVR_ID,
+       		s.DB_SVR_ID,
+       		s.DAY_DATA_DEL_TERM,
+       		s.MIN_DATA_DEL_TERM,
+       		s.FRST_REGR_ID,
+       		s.FRST_REG_DTM,
+       		s.LST_MDFR_ID,
+       		s.LST_MDF_DTM,
+       		a.AGT_CNDT_CD 
+		FROM T_PRY_SVR_I s join T_PRY_AGT_I a on s.AGT_SN = a.AGT_SN
+		WHERE a.SVR_USE_YN = 'Y'
+        GROUP by s.PRY_SVR_ID, s.IPADR, s.MASTER_GBN, s.MASTER_SVR_ID, a.AGT_CNDT_CD, s.DB_SVR_ID
+		ORDER BY s.DB_SVR_ID, coalesce(MASTER_SVR_ID, PRY_SVR_ID), s.DB_SVR_ID, MASTER_GBN, LST_MDF_DTM
+	</select>
+
+	<select id="selectProxyServerByMasterId" resultType="hashMap">
+		/**
+		* Query ID : selectProxyServerByMasterId
+		* Description : Proxy 서버  cluster 조회 by master server id
+		* Author : 윤정
+		**/
+		SELECT 
+       		(ROW_NUMBER() OVER(ORDER BY s.DB_SVR_ID, s.MASTER_GBN,coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), s.LST_MDF_DTM)) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+       		s.PRY_SVR_ID,
+       		s.IPADR,
+       		s.AGT_SN,
+       		s.PRY_SVR_NM,
+       		s.PRY_PTH,
+       		s.KAL_PTH,
+       		s.USE_YN,
+       		s.EXE_STATUS,
+       		s.KAL_EXE_STATUS,
+       		s.MASTER_GBN,
+       		s.MASTER_SVR_ID,
+       		s.DB_SVR_ID,
+       		s.DAY_DATA_DEL_TERM,
+       		s.MIN_DATA_DEL_TERM,
+       		s.FRST_REGR_ID,
+       		s.FRST_REG_DTM,
+       		s.LST_MDFR_ID,
+       		s.LST_MDF_DTM,
+       		a.AGT_CNDT_CD,
+       		a.kal_install_yn
+		FROM T_PRY_SVR_I s 
+		JOIN T_PRY_AGT_I a ON s.AGT_SN = a.AGT_SN 
+		<if test="value != null and value != '' ">
+        WHERE (s.PRY_SVR_ID = #{value} 
+        OR s.MASTER_SVR_ID = #{value})
+        </if>
+		ORDER BY s.DB_SVR_ID, s.MASTER_GBN,coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), LST_MDF_DTM
+	</select>
+	
+	<select id="selectProxyServerVipChk" resultType="hashMap" parameterType="int">
+		/**
+		* Query ID : selectProxyServerVipChk
+		* Description : Proxy 서버 cluster 별 연결 vip 조회
+		* Author : 윤정
+		**/
+		select 
+			(ROW_NUMBER() OVER()) AS ROWNUM, 
+			(ROW_NUMBER() OVER()) AS IDX,
+			A.PRY_SVR_ID,
+			A.PRY_SVR_NM,
+			A.EXE_STATUS, 
+			A.KAL_EXE_STATUS, 
+			A.MASTER_GBN, 
+			A.MASTER_SVR_ID,
+			A.KAL_INSTALL_YN,
+			A.AGT_CNDT_CD,
+			ARRAY_TO_STRING(array_agg(CASE WHEN A.V_IP is null or TRIM(A.V_IP) = '' THEN NULL ELSE A.V_IP end),',')  as V_IP
+		FROM (
+			SELECT 
+				S.PRY_SVR_ID,
+				S.PRY_SVR_NM,
+				S.EXE_STATUS,
+				S.KAL_EXE_STATUS,
+				S.MASTER_GBN,
+				S.MASTER_SVR_ID,
+				A.KAL_INSTALL_YN,
+				A.AGT_CNDT_CD,
+				CASE WHEN V.V_IP_EXE_STATUS = 'TC001501' THEN V.V_IP
+				     ELSE '' END AS V_IP
+			FROM T_PRY_SVR_I s 
+			JOIN T_PRY_AGT_I a ON s.AGT_SN = a.AGT_SN 
+			JOIN T_PRY_VIPCNG_I v ON s.PRY_SVR_ID = v.PRY_SVR_ID
+		<if test="value != null and value != '' ">
+			WHERE (s.PRY_SVR_ID = #{value} 
+				OR s.MASTER_SVR_ID = #{value})
+		</if>
+		ORDER BY s.DB_SVR_ID, s.MASTER_GBN, coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), s.LST_MDF_DTM
+	) A
+	group by A.PRY_SVR_ID, A.PRY_SVR_NM, A.EXE_STATUS, A.KAL_EXE_STATUS, A.MASTER_GBN, A.MASTER_SVR_ID, A.KAL_INSTALL_YN, A.AGT_CNDT_CD
+	</select>
+
+	<select id="selectDBServerConProxyList" resultType="hashMap" parameterType="int">
+		/**
+		* Query ID : selectDBServerConProxyList
+		* Description : Proxy 연결된 db 서버 조회
+		* Author : 윤정
+		**/
+		select
+			(ROW_NUMBER() OVER()) AS ROWNUM, 
+			(ROW_NUMBER() OVER()) AS IDX,
+			A.PRY_SVR_ID , 
+			A.MASTER_GBN , 
+			A.DB_SVR_ID,
+			A.IPADR , 
+			A.PORTNO , 
+			A.SVR_HOST_NM , 
+			A.AGT_CNDT_CD,
+			CNT_SVR_ID as CNT_SVR_ID,
+			A.db_cndt,
+			db_cndt_CNT as db_cndt_CNT
+		 FROM  (
+			SELECT
+				TPSI.PRY_SVR_ID , 
+				TDI.MASTER_GBN , 
+				TDI.DB_SVR_ID,
+				TDI.IPADR , 
+				TDI.PORTNO , 
+				TDI.SVR_HOST_NM ,
+				TDI.db_cndt, 
+				TAI.AGT_CNDT_CD
+			FROM T_PRY_SVR_I TPSI 
+				JOIN T_DBSVRIPADR_I TDI  ON TPSI.DB_SVR_ID = TDI.DB_SVR_ID
+				JOIN T_AGTCNDT_I TAI ON TDI.IPADR = TAI.IPADR
+			WHERE (TPSI.PRY_SVR_ID = #{pry_svr_id}::numeric
+				OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
+			  AND 
+			  (TDI.MASTER_GBN = 'M' OR (TDI.MASTER_GBN = 'S' AND TDI.DB_SVR_ID = (
+									  SELECT
+										MIN(DB_SVR_ID) as DB_SVR_ID
+									    FROM T_DBSVRIPADR_I A 
+									   WHERE A.DB_SVR_ID = (SELECT DB_SVR_ID 
+												  FROM T_PRY_SVR_I 
+												 WHERE PRY_SVR_ID = #{pry_svr_id}::numeric OR MASTER_SVR_ID = #{pry_svr_id}::numeric
+												 LIMIT 1)
+									    AND A.MASTER_GBN = 'S'
+									)
+				)
+			  )
+			ORDER BY TDI.DB_SVR_ID, TPSI.MASTER_GBN, TDI.MASTER_GBN, COALESCE(TPSI.MASTER_SVR_ID, TPSI.PRY_SVR_ID)
+		) A
+		LEFT JOIN
+		(
+        select B.MASTER_GBN,
+               COUNT(B.DB_SVR_ID) as CNT_SVR_ID,
+               SUM(B.db_cndt_CNT) as db_cndt_CNT
+          from (
+		SELECT
+			A.MASTER_GBN ,
+			A.DB_SVR_ID,
+			case when db_cndt = 'Y' then 1
+			     else 0 
+			 end as db_cndt_CNT
+		  FROM T_DBSVRIPADR_I A 
+		 WHERE A.DB_SVR_ID = (
+					SELECT DB_SVR_ID 
+					  FROM T_PRY_SVR_I 
+					  WHERE PRY_SVR_ID = #{pry_svr_id}::numeric OR MASTER_SVR_ID = #{pry_svr_id}::numeric
+					 LIMIT 1
+				      )
+		   AND A .MASTER_GBN = 'S'
+		   ) B 
+		 GROUP by B.MASTER_GBN 
+		) B
+		ON A.MASTER_GBN = B.MASTER_GBN
+	</select>
+	
+	<select id="selectProxyListnerMainList" resultType="hashMap" parameterType="int">
+		/**
+		* Query ID : selectProxyListnerMainList
+		* Description : Proxy 리스너 목록 및 상태조회
+		* Author : 윤정
+		**/
+		SELECT 
+			(ROW_NUMBER() OVER()) AS ROWNUM, 
+			(ROW_NUMBER() OVER()) AS IDX,
+			E.IPADR,
+			E.AGT_CNDT_CD,
+			E.SVR_USE_YN, 
+			E.PRY_SVR_ID, 
+			E.MASTER_GBN, 
+			E.PRY_SVR_NM, 
+			E.LSN_ID,
+			E.LSN_NM,
+			E.LSN_DESC,
+			E.lsn_exe_status,
+			E.con_bind_port,
+			ARRAY_TO_STRING(ARRAY_AGG(E.db_conn_ip),',')  as db_conn_ip,
+			ARRAY_TO_STRING(ARRAY_AGG(E.db_conn_ip_num),',')  as db_conn_ip_num
+		FROM (
+		select   
+	               F.IPADR
+	             , F.AGT_CNDT_CD
+	             , F.SVR_USE_YN
+	             , F.PRY_SVR_ID
+	             , F.MASTER_GBN
+	             , F.PRY_SVR_NM
+	             , F.LSN_ID
+	             , F.LSN_NM
+	             , F.LSN_DESC
+	             , F.lsn_exe_status
+				 , F.db_conn_ip
+				 , F.con_bind_port
+				 , F.MASTER_SVR_ID
+				 , F.DB_SVR_ID
+	     		, case when F.db_conn_ip = G.IPADR and G.master_gbn = 'M' then '1'
+				        when F.db_conn_ip = G.IPADR and G.master_gbn = 'S' then '2'
+				        else null
+				    end as db_conn_ip_num
+				 FROM
+		(
+	        SELECT 
+	               C.IPADR
+	             , C.AGT_CNDT_CD
+	             , C.SVR_USE_YN
+	             , A.PRY_SVR_ID
+	             , A.MASTER_GBN
+	             , A.PRY_SVR_NM
+	             , B.LSN_ID
+	             , B.LSN_NM
+	             , B.LSN_DESC
+	             , B.lsn_exe_status
+				 , D.db_conn_ip
+				 , B.con_bind_port
+				 , coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID) as MASTER_SVR_ID
+				 , A.DB_SVR_ID
+	          FROM T_PRY_SVR_I A
+	               JOIN T_PRY_LSN_I B ON A.PRY_SVR_ID = B.PRY_SVR_ID
+	               left join T_PRY_AGT_I C on A.AGT_SN = C.AGT_SN AND A.IPADR = C.IPADR
+	               left JOIN T_PRY_LSN_SVR_I D ON B.PRY_SVR_ID = D.PRY_SVR_ID AND B.LSN_ID = D.LSN_ID
+			 WHERE (A.PRY_SVR_ID = #{pry_svr_id}::numeric
+				    OR A.MASTER_SVR_ID = #{pry_svr_id}::numeric)
+	         ORDER BY A.DB_SVR_ID, A.MASTER_GBN, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), B.LSN_NM DESC, D.LSN_SVR_ID, D.db_conn_ip, A.LST_MDF_DTM
+	         ) F
+	         left join T_DBSVRIPADR_I G  ON F.DB_SVR_ID = G.DB_SVR_ID and F.db_conn_ip = G.ipadr 
+	         
+	         
+	     ) E
+	     group by E.DB_SVR_ID, E.IPADR, E.AGT_CNDT_CD, E.SVR_USE_YN, E.PRY_SVR_ID, E.MASTER_GBN, E.PRY_SVR_NM, E.LSN_ID , E.LSN_NM, E.LSN_DESC, E.lsn_exe_status, E.MASTER_SVR_ID, E.con_bind_port
+	     ORDER BY E.DB_SVR_ID, E.MASTER_GBN, E.MASTER_SVR_ID, E.LSN_NM DESC
+	</select>
+	
+	<select id="selectProxyLogList" resultType="hashMap" parameterType="int">
+		/**
+		* Query ID : selectProxyLogList
+		* Description : proxy / keepalived 기동 상태 이력 조회
+		* Author : 윤정
+		**/
+		SELECT
+			(ROW_NUMBER() OVER()) AS ROWNUM, 
+			(ROW_NUMBER() OVER()) AS IDX,
+			tpsi.PRY_SVR_ID, 
+			tpsi.PRY_SVR_NM , 
+			tpacg.PRY_ACT_EXE_SN, 
+			tpacg.SYS_TYPE, 
+			tpacg.ACT_TYPE,
+			tpacg.ACT_EXE_TYPE, 
+			tpacg.EXE_RSLT_CD,
+			tpai.AGT_CNDT_CD,
+			TO_CHAR(tpacg.WRK_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_DTM
+		FROM T_PRY_SVR_I tpsi 
+		JOIN T_PRY_AGT_I tpai ON tpsi.AGT_SN = tpai.AGT_SN
+		JOIN T_PRY_ACTSTATE_CNG_G tpacg ON tpsi.AGT_SN = tpai.AGT_SN AND tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID 
+		WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
+		ORDER BY tpacg.WRK_DTM DESC
+		LIMIT 5
+	</select>
+	
+	<select id="selectConfiguration" resultType="hashMap" parameterType="hashMap">
+		/**
+		* Query ID : selectConfiguration
+		* Description : Proxy, keepalived config 파일 정보 조회
+		* Author : 윤정
+		**/
+		SELECT 
+			(ROW_NUMBER() OVER()) AS ROWNUM, 
+			(ROW_NUMBER() OVER()) AS IDX,
+			tpsi.PRY_SVR_ID,
+			tpsi.IPADR,
+		<if test='type == "P" or type == "PROXY"'>
+			tpsi.PRY_PTH AS PATH,
+			tpsi.EXE_STATUS as EXE_STATUS,
+        </if>
+        <if test='type == "K" or type == "KEEPALIVED"'>
+			tpsi.KAL_PTH AS PATH,
+			tpsi.KAL_EXE_STATUS as EXE_STATUS,
+        </if>
+        	tpsi.PRY_SVR_NM,
+        	tpai.SOCKET_PORT
+		FROM T_PRY_SVR_I tpsi
+		JOIN T_PRY_AGT_I tpai ON tpsi.AGT_SN = tpai.AGT_SN
+		WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+	</select>
+	
+	<select id="selectProxyStatisticsInfo" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectProxyStatisticsInfo
+		* Description : Proxy 리스너 상세 정보 조회
+		* Author : 윤정
+		**/
+		<![CDATA[
+			SELECT *
+			FROM (
+				SELECT
+					ROW_NUMBER() OVER (PARTITION BY tpsi.PRY_SVR_ID, tpssg.LSN_ID, tpssg.DB_CON_ADDR ORDER BY exe_dtm desc) AS r, 
+					(ROW_NUMBER() OVER()) AS ROWNUM, 
+					(ROW_NUMBER() OVER()) AS IDX,
+					tpsi.PRY_SVR_ID,
+					tpsi.MASTER_GBN, 
+					tpssg.EXE_DTM, 
+					to_char(tpssg.EXE_DTM, 'HH24:MI') as EXE_DTM_SS,
+					tpsi.PRY_SVR_NM,
+					tpli.LSN_NM, 
+					tpssg.DB_CON_ADDR, 
+					tpssg.SVR_STATUS, 
+					tpssg.LST_STATUS_CHK_DESC, 
+					tpssg.FAIL_CHK_CNT, 
+					tpssg.MAX_SESSION, 
+					tpssg.CUR_SESSION,
+					tpssg.SESSION_LIMIT, 
+					tpssg.CUMT_SSO_CON_CNT, 
+					tpssg.BYTE_RECEIVE, 
+					tpssg.BYTE_TRANSMIT,
+					tpssg.SVR_STOP_TM,
+					tpssg.lsn_svr_id
+				FROM T_PRY_SVR_I tpsi 
+				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
+				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID
+				WHERE (tpsi.PRY_SVR_ID = #{value}
+				OR tpsi.MASTER_SVR_ID = #{value})
+				AND tpssg.log_type = 'TC003901'
+				ORDER BY tpsi.DB_SVR_ID, tpsi.master_gbn, tpsi.pry_svr_id, tpli.lsn_nm desc, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.EXE_DTM DESC
+			) x
+			WHERE x.r <= 2
+		]]>
+	</select>
+
+	<select id="selectProxyStatisticsChartInfo" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectProxyStatisticsChartInfo
+		* Description : Proxy 리스너 통계 정보 조회
+		* Author : 윤정
+		**/
+		<![CDATA[
+			SELECT 
+				(ROW_NUMBER() OVER(PARTITION BY x.PRY_SVR_ID, x.LSN_ID, x.lsn_svr_id, x.DB_CON_ADDR ORDER BY exe_dtm)) AS ROWNUM, 
+				(ROW_NUMBER() OVER(PARTITION BY x.PRY_SVR_ID, x.LSN_ID, x.lsn_svr_id ,x.DB_CON_ADDR ORDER BY exe_dtm)) AS IDX,
+				DENSE_RANK() OVER( ORDER BY x.PRY_SVR_ID, x.LSN_ID, x.DB_CON_ADDR DESC) AS DENSE_ROW_NUM,
+				*
+			FROM (
+				SELECT
+					ROW_NUMBER() OVER (PARTITION BY tpsi.PRY_SVR_ID, tpssg.LSN_ID, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR ORDER BY exe_dtm desc) AS r, 
+					tpsi.PRY_SVR_ID, 
+					tpssg.LSN_ID,
+					tpssg.EXE_DTM, 
+					to_char(tpssg.EXE_DTM, 'YYYY-MM-DD HH24:MI') as EXE_DTM_SS,
+					tpsi.PRY_SVR_NM,
+					tpli.LSN_NM, 
+					tpssg.DB_CON_ADDR, 
+					tpssg.SVR_STATUS, 
+					tpssg.LST_STATUS_CHK_DESC, 
+					tpssg.FAIL_CHK_CNT, 
+					tpssg.MAX_SESSION, 
+					tpssg.CUR_SESSION,
+					tpssg.SESSION_LIMIT, 
+					tpssg.CUMT_SSO_CON_CNT, 
+					tpssg.BYTE_RECEIVE, 
+					tpssg.BYTE_TRANSMIT,
+					tpssg.SVR_STOP_TM,
+					tpssg.lsn_svr_id,
+					tpsi.DB_SVR_ID
+				FROM T_PRY_SVR_I tpsi 
+				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
+				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
+				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID AND tpssg.lsn_svr_id = tpsli.lsn_svr_id
+				WHERE tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+				AND tpssg.log_type = 'TC003901'
+				ORDER BY tpsi.DB_SVR_ID, tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM desc
+			) x
+			WHERE x.r <= 5
+			ORDER BY x.DB_SVR_ID, x.pry_svr_id, x.lsn_id, x.lsn_svr_id, x.DB_CON_ADDR, x.EXE_DTM
+		]]>
+	</select>
+
+	<select id="selectProxyChartCntList" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectProxyChartCntList
+		* Description : Proxy 리스너 통계 정보 카운트
+		* Author : 윤정
+		**/
+		<![CDATA[
+			SELECT
+					x.PRY_SVR_ID,
+					x.PRY_SVR_NM,
+					x.DB_CON_ADDR,
+					x.LSN_NM
+			FROM (
+				SELECT
+					ROW_NUMBER() OVER (PARTITION BY tpsi.DB_SVR_ID, tpsi.PRY_SVR_ID, tpssg.LSN_ID, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR ORDER BY exe_dtm) AS r, 
+					tpsi.PRY_SVR_ID,
+					tpsi.PRY_SVR_NM,
+					tpli.LSN_NM,
+					tpssg.DB_CON_ADDR,
+					tpssg.lsn_svr_id,
+					tpssg.LSN_ID,
+					tpssg.exe_dtm,
+					tpsi.DB_SVR_ID
+				FROM T_PRY_SVR_I tpsi 
+				JOIN T_PRY_LSN_I tpli ON tpsi.PRY_SVR_ID = tpli.PRY_SVR_ID 
+				JOIN T_PRY_LSN_SVR_I tpsli ON tpsi.PRY_SVR_ID = tpsli.PRY_SVR_ID AND tpli.LSN_ID = tpsli.LSN_ID
+				JOIN T_PRY_SVR_STATUS_G tpssg ON tpsi.PRY_SVR_ID = tpssg.PRY_SVR_ID AND tpli.LSN_ID = tpssg.LSN_ID AND tpssg.lsn_svr_id = tpsli.lsn_svr_id
+				WHERE (tpsi.PRY_SVR_ID = #{value} OR tpsi.MASTER_SVR_ID = #{value})
+				  AND tpsi.MASTER_GBN = 'M'
+				  AND tpssg.log_type = 'TC003901'
+				ORDER BY tpsi.DB_SVR_ID, tpsi.pry_svr_id, tpli.lsn_id, tpssg.lsn_svr_id, tpssg.DB_CON_ADDR, tpssg.EXE_DTM
+			) x
+			where r = 1
+			ORDER BY x.DB_SVR_ID, x.pry_svr_id, x.lsn_id, x.lsn_svr_id, x.DB_CON_ADDR, x.EXE_DTM
+		]]>
+	</select>
+	
+	<select id="selectActExeFailLog" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectExeFailMsg
+		* Description : proxy / keepavlived 기동-정지 실패 로그 
+		* Author : 윤정
+		**/
+		SELECT 
+			tpsi.PRY_SVR_ID , 
+         	tpsi.PRY_SVR_NM , 
+         	tpacg.PRY_ACT_EXE_SN, 
+         	tpacg.SYS_TYPE , 
+        	tpacg.ACT_TYPE , 
+        	tpacg.ACT_EXE_TYPE , 
+        	tpacg.RSLT_MSG
+		FROM T_PRY_SVR_I tpsi
+		JOIN T_PRY_ACTSTATE_CNG_G tpacg
+		ON tpsi.PRY_SVR_ID = tpacg.PRY_SVR_ID
+		WHERE tpacg.PRY_ACT_EXE_SN = #{PRY_ACT_EXE_SN}::numeric
+		AND tpacg.EXE_RSLT_CD = 'TC001502'
+	</select>
+
+	<select id="selectAgentCount" resultType="int">
+   		/**
+	 	* Query ID : selectAgentCount -에이전트 화면
+	 	* Description : proxy agent count
+	 	* Author :
+	 	**/
+		SELECT 
+       			COUNT(AGT_SN) AS CNT
+		  FROM 	T_PRY_AGT_I
+		WHERE   ISTCNF_YN = 'Y'
+    </select>
+
+	<select id="selectProxyAgentList" parameterType="proxyAgentVO"  resultType="proxyAgentVO">
+			/**
+			* Query ID : selectProxyAgentList
+			* Description : proxy agent 조회
+			* Author : 
+			**/
+	        SELECT 
+	               (ROW_NUMBER() OVER(ORDER BY A.AGT_SN, A.LST_MDF_DTM DESC)) AS ROWNUM
+	             , A.AGT_SN
+	             , A.IPADR
+	             , A.DOMAIN_NM
+	             , A.SOCKET_PORT
+	             , A.AGT_CNDT_CD
+	             , TO_CHAR(A.STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS STRT_DTM
+	             , A.SVR_USE_YN
+	             , A.AGT_VERSION
+	             , B.PRY_SVR_NM
+	             , B.MASTER_GBN
+	             , A.KAL_INSTALL_YN
+	          FROM T_PRY_AGT_I A
+	               LEFT JOIN T_PRY_SVR_I B ON A.AGT_SN = B.AGT_SN AND A.IPADR = B.IPADR
+	         WHERE 1 = 1
+	
+	          <if test="sch_domain_nm != null and sch_domain_nm != '' ">
+	           AND A.DOMAIN_NM LIKE '%' || #{sch_domain_nm} || '%'
+	          </if>
+	               
+	          <if test="sch_ipadr != null and sch_ipadr != '' ">
+	           AND A.IPADR = #{sch_ipadr}
+	          </if>
+	               
+	          <if test="sch_svr_use_yn != null and sch_svr_use_yn != '' ">
+	           AND A.SVR_USE_YN = #{sch_svr_use_yn}
+	          </if>
+	
+	         ORDER BY A.AGT_SN, A.LST_MDF_DTM DESC
+	</select>
+	
+	<select id="selectPryCngList" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectPryCngList
+		* Description : proxy config파일 변경 이력 조회
+		* Author : 윤정
+		**/
+		SELECT
+			  (ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+			, tpsi.PRY_SVR_ID 
+			, tpsi.PRY_SVR_NM
+			, tpg.EXE_RST_CD 
+			, TO_CHAR(tpg.LST_MDF_DTM, 'YYYY-MM-DD HH24:MI') as LST_MDF_DTM
+		FROM T_PRY_SVR_I tpsi
+		JOIN T_PRYCNG_G tpg ON tpsi.PRY_SVR_ID = tpg.PRY_SVR_ID
+		WHERE (tpsi.PRY_SVR_ID = #{pry_svr_id}::numeric
+		OR tpsi.MASTER_SVR_ID = #{pry_svr_id}::numeric)
+		ORDER BY LST_MDF_DTM DESC
+		LIMIT 5
+	</select>
+
+	<select id="selectDbStandbyList" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectPryCngList
+		* Description : proxy 연결 db standby ip list
+		* Author : 윤정
+		**/
+		SELECT 
+		 	  (ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+			, tdi.DB_SVR_ID
+			, tdi.IPADR
+			, tdi.PORTNO
+			, tdi.SVR_HOST_NM
+			, tdi.DB_CNDT
+		FROM T_DBSVRIPADR_I tdi 
+		WHERE DB_SVR_ID = #{db_svr_id}::numeric
+		AND MASTER_GBN = 'S'
+	</select>
+
+	<select id="selectProxyServerByDBSvrId" parameterType="int" resultType="hashMap">
+		/**
+		* Query ID : selectProxyServerByDBSvrId
+		* Description : proxy server list by db server id for dashboard
+		* Author : 윤정
+		**/
+		SELECT 
+       		(ROW_NUMBER() OVER(ORDER BY s.DB_SVR_ID, s.MASTER_GBN,coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), s.LST_MDF_DTM)) AS ROWNUM, 
+       		(ROW_NUMBER() OVER()) AS IDX,
+       		s.PRY_SVR_ID,
+       		s.IPADR,
+       		s.AGT_SN,
+       		s.PRY_SVR_NM,
+       		s.PRY_PTH,
+       		s.KAL_PTH,
+       		s.USE_YN,
+       		s.EXE_STATUS,
+       		s.KAL_EXE_STATUS,
+       		s.MASTER_GBN,
+       		s.MASTER_SVR_ID,
+       		s.DB_SVR_ID,
+       		s.DAY_DATA_DEL_TERM,
+       		s.MIN_DATA_DEL_TERM,
+       		s.FRST_REGR_ID,
+       		s.FRST_REG_DTM,
+       		s.LST_MDFR_ID,
+       		s.LST_MDF_DTM,
+       		a.AGT_CNDT_CD,
+       		a.kal_install_yn
+		FROM T_PRY_SVR_I s 
+		JOIN T_PRY_AGT_I a ON s.AGT_SN = a.AGT_SN 
+        WHERE s.db_svr_id = #{db_svr_id}::numeric
+		ORDER BY s.DB_SVR_ID, s.MASTER_GBN,coalesce(s.MASTER_SVR_ID, s.PRY_SVR_ID), LST_MDF_DTM;
+	</select>
+</mapper>

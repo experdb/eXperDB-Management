@@ -44,17 +44,29 @@ public class BackupImmediate {
 		//아카이브로그 백업시 FULL백업 보관일수, FULL백업 유지갯수 명령어 호출 X
 		
 		if(resultWork.get(0).get("bck_opt_cd").toString().equals("TC000303")){
-			rmanCmd += " --keep-arclog-files="+resultWork.get(0).get("acv_file_mtncnt");
-			rmanCmd += " --keep-arclog-days="+resultWork.get(0).get("acv_file_stgdt");
-			rmanCmd += " --keep-srvlog-files="+resultWork.get(0).get("log_file_mtn_ecnt");
-			rmanCmd += " --keep-srvlog-days="+resultWork.get(0).get("log_file_stg_dcnt");
+			if(Integer.parseInt(resultWork.get(0).get("acv_file_mtncnt").toString()) != 0){
+				rmanCmd += " --keep-arclog-files="+resultWork.get(0).get("acv_file_mtncnt");
+			}if(Integer.parseInt(resultWork.get(0).get("acv_file_stgdt").toString()) != 0){
+				rmanCmd += " --keep-arclog-days="+resultWork.get(0).get("acv_file_stgdt");
+			}if(Integer.parseInt(resultWork.get(0).get("log_file_mtn_ecnt").toString()) != 0){
+				rmanCmd += " --keep-srvlog-files="+resultWork.get(0).get("log_file_mtn_ecnt");
+			}if(Integer.parseInt(resultWork.get(0).get("log_file_stg_dcnt").toString()) != 0){
+				rmanCmd += " --keep-srvlog-days="+resultWork.get(0).get("log_file_stg_dcnt");
+			}
 		}else{
-		rmanCmd += " --keep-data-generations="+resultWork.get(0).get("bck_mtn_ecnt");
-		rmanCmd += " --keep-data-days="+resultWork.get(0).get("file_stg_dcnt");
-		rmanCmd += " --keep-arclog-files="+resultWork.get(0).get("acv_file_mtncnt");
-		rmanCmd += " --keep-arclog-days="+resultWork.get(0).get("acv_file_stgdt");
-		rmanCmd += " --keep-srvlog-files="+resultWork.get(0).get("log_file_mtn_ecnt");
-		rmanCmd += " --keep-srvlog-days="+resultWork.get(0).get("log_file_stg_dcnt");
+			if(Integer.parseInt(resultWork.get(0).get("bck_mtn_ecnt").toString()) != 0){
+				rmanCmd += " --keep-data-generations="+resultWork.get(0).get("bck_mtn_ecnt");
+			}if(Integer.parseInt(resultWork.get(0).get("file_stg_dcnt").toString()) != 0){
+				rmanCmd += " --keep-data-days="+resultWork.get(0).get("file_stg_dcnt");
+			}if(Integer.parseInt(resultWork.get(0).get("acv_file_mtncnt").toString()) != 0){
+				rmanCmd += " --keep-arclog-files="+resultWork.get(0).get("acv_file_mtncnt");
+			}if(Integer.parseInt(resultWork.get(0).get("acv_file_stgdt").toString()) != 0){
+				rmanCmd += " --keep-arclog-days="+resultWork.get(0).get("acv_file_stgdt");
+			}if(Integer.parseInt(resultWork.get(0).get("log_file_mtn_ecnt").toString()) != 0){
+				rmanCmd += " --keep-srvlog-files="+resultWork.get(0).get("log_file_mtn_ecnt");
+			}if(Integer.parseInt(resultWork.get(0).get("log_file_stg_dcnt").toString()) != 0){
+				rmanCmd += " --keep-srvlog-days="+resultWork.get(0).get("log_file_stg_dcnt");
+			}
 		}
 
 		//rmanCmd += " >> "+resultWork.get(i).get("log_file_pth")+"/"+resultWork.get(i).get("wrk_nm").toString().replaceAll(" ", "")+".log 2>&1";

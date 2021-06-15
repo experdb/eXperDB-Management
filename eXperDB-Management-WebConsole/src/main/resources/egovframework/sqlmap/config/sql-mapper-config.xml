@@ -58,6 +58,23 @@
 		<typeAlias alias="transVO" type="com.k4m.dx.tcontrol.transfer.service.TransVO"/>
 		<typeAlias alias="transMappVO" type="com.k4m.dx.tcontrol.transfer.service.TransMappVO"/>
 		<typeAlias alias="transDbmsVO" type="com.k4m.dx.tcontrol.transfer.service.TransDbmsVO"/>
+		
+		<typeAlias alias="serverInfoVO" type="com.experdb.management.backup.service.ServerInfoVO"/>
+		<typeAlias alias="targetMachineVO" type="com.experdb.management.backup.node.service.TargetMachineVO" />
+		<typeAlias alias="backupLocationInfoVO" type="com.experdb.management.backup.service.BackupLocationInfoVO"/>
+		<typeAlias alias="backupJobHistoryVO" type="com.experdb.management.backup.history.service.BackupJobHistoryVO"/>
+		<typeAlias alias="backupActivityLogVO" type="com.experdb.management.backup.history.service.BackupActivityLogVO"/>
+		<typeAlias alias="JobStatusVO" type="com.experdb.management.backup.jobstatus.service.JobStatusVO"/>
+		
+		<!-- proxy -->
+		<typeAlias alias="proxyServerVO" type="com.experdb.management.proxy.service.ProxyServerVO"/>
+		<typeAlias alias="proxyGlobalVO" type="com.experdb.management.proxy.service.ProxyGlobalVO"/> 
+		<typeAlias alias="proxyListenerVO" type="com.experdb.management.proxy.service.ProxyListenerVO"/> 
+		<typeAlias alias="proxyListenerServerVO" type="com.experdb.management.proxy.service.ProxyListenerServerVO"/> 
+		<typeAlias alias="proxyVipConfigVO" type="com.experdb.management.proxy.service.ProxyVipConfigVO"/> 
+		<typeAlias alias="proxyAgentVO" type="com.experdb.management.proxy.service.ProxyAgentVO"/> 
+		<typeAlias alias="proxyStatisticVO" type="com.experdb.management.proxy.service.ProxyStatisticVO"/>
+		<typeAlias alias="proxyLogVO" type="com.experdb.management.proxy.service.ProxyLogVO"/>
     </typeAliases>
     
  	<mappers>
@@ -116,6 +133,22 @@
 		
 		<!-- transfer -->
 		<mapper resource="egovframework/sqlmap/mappers/transfer/transSql.xml" />
+		
+		<!-- experdb backup -->
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
+
+		<!-- experdb backup history -->
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/status/jobStatusSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/history/backupHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/node/backupNodeSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/storage/backupStorageSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/recovery/recoverySql.xml" />
+		
+		<!-- experdb proxy -->
+		<mapper resource="egovframework/sqlmap/mappers/proxy/proxySettingSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyMonitoringSql.xml"/>
+		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyHistorySql.xml"/>
 		
 	</mappers>
 </configuration>

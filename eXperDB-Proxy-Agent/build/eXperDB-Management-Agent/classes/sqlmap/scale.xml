@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="scale">
+	<select id="selectMonitorInfo" parameterType="hashmap" resultType="hashMap">
+   		/**
+	 	* Query ID : selectMonitor
+	 	* Description : monitoring cpu_mem 사용량 조회
+	 	* Author : 
+	 	**/
+        SELECT AVG(CPU_MAIN) CPU_UTIL_RATE, AVG(MEM_USED_RATE) MEM_USED_RATE
+          FROM (
+	            WITH HGI AS (
+	        	             SELECT HA_GROUP FROM PGMON.TB_INSTANCE_INFO
+	        	               WHERE SERVER_IP = #{IPADR}
+	            )
+	            SELECT /* SELECTCPUMEMINFO */ A.INSTANCE_ID
+	                 , C.COLLECT_DT AS REG_DATE
+	                 , CASE WHEN C.USER_UTIL_RATE + C.NICE_UTIL_RATE + C.SYS_UTIL_RATE + C.WAIT_UTIL_RATE > 100 THEN 100 ELSE C.USER_UTIL_RATE + C.NICE_UTIL_RATE + C.SYS_UTIL_RATE + C.WAIT_UTIL_RATE END AS CPU_MAIN                                          --PT_03_03_001, PT_04_02_001(AVG)
+	                 , C.WAIT_UTIL_RATE                                                                                                                --PT_04_05_001(CPU_WAIT)
+	                 , CASE WHEN E.MEM_TOTAL_KB != 0 THEN (((E.MEM_TOTAL_KB - (E.MEM_FREE_KB +E.MEM_BUFFERED_KB + E.MEM_CACHED_KB)) / E.MEM_TOTAL_KB ) * 100)::int ELSE E.MEM_TOTAL_KB END AS MEM_USED_RATE       --PT_03_03_001, PT_04_02_001(MEM_AVG)
+	                 , CASE WHEN E.SWP_TOTAL_KB != 0 THEN (((E.SWP_TOTAL_KB - (E.SWP_FREE_KB + E.SWP_CACHED_KB)) / E.SWP_TOTAL_KB) * 100)::int ELSE E.SWP_TOTAL_KB END AS SWP_USED_RATE                         --PT_03_03_001(MEM SWAP_RATE), PT_04_05_001(PG_MEMORY)
+	                 , A.HOST_NAME
+	                 , A.HA_GROUP
+	              FROM PGMON.TB_INSTANCE_INFO A
+	                 , (SELECT MAX(REG_DATE) AS REG_DATE, MAX(REG_TIME) AS REG_TIME, MAX(RSC_REG_SEQ) AS RSC_REG_SEQ, INSTANCE_ID
+	                      FROM PGMON.TB_RSC_COLLECT_INFO
+	                     WHERE REG_DATE=TO_CHAR(NOW(),'YYYYMMDD')
+	                       AND RSC_REG_SEQ >= (SELECT (LAST_VALUE - (SELECT COUNT(*) * 2 + 1 FROM PGMON.TB_INSTANCE_INFO)) + 1 AS LAST_VALUE FROM PGMON.RSC_REG_SEQ)
+	                     GROUP BY INSTANCE_ID) B
+	                 , PGMON.TB_CPU_STAT_MASTER C, PGMON.TB_MEMORY_STAT E, HGI
+	             WHERE A.COLLECT_YN = 'Y'
+	               AND A.DELETE_YN = 'N'
+	               AND A.HA_GROUP = HGI.HA_GROUP
+     	          AND B.REG_DATE = C.REG_DATE
+     	          AND B.REG_DATE = E.REG_DATE
+     	          AND A.INSTANCE_ID = B.INSTANCE_ID
+     	          AND B.RSC_REG_SEQ = C.RSC_REG_SEQ
+     			  AND B.RSC_REG_SEQ = E.RSC_REG_SEQ
+         ) AS GRP
+	</select>
+	
+	<select id="selectConnectionFailure" parameterType="hashmap" resultType="hashMap">
+   		/**
+	 	* Query ID : selectConnectionFailure
+	 	* Description : 에이전트 비정상 연결실패
+	 	* Author : 
+	 	**/
+        WITH TEMP_MAX_SEQ AS (
+             SELECT A.INSTANCE_ID, MAX(A.REPL_REG_SEQ) MAX_REG_SEQ, ha_role
+               FROM PGMON.TB_REPLICATION_INFO A
+              WHERE A.REG_DATE    = TO_CHAR(NOW(), 'YYYYMMDD')
+                AND REPL_REG_SEQ >= (SELECT (LAST_VALUE - (SELECT COUNT(*) * 3 FROM PGMON.TB_INSTANCE_INFO)) + 1 AS LAST_VALUE FROM PGMON.REPL_REG_SEQ)
+              GROUP BY A.INSTANCE_ID, ha_role
+        ),
+        HGI AS (
+            SELECT HA_GROUP FROM PGMON.TB_INSTANCE_INFO
+             WHERE SERVER_IP = #{IPADR}
+        )
+        SELECT SERVER_IP
+          FROM PGMON.TB_INSTANCE_INFO A, HGI, PGMON.TB_HCHK_COLLECT_INFO B
+               RIGHT OUTER JOIN PGMON.TB_HCHK_THRD_LIST  C
+                     ON B.INSTANCE_ID = C.INSTANCE_ID
+                        AND B.HCHK_NAME = C.HCHK_NAME
+                        AND B.REG_DATE = TO_CHAR(NOW(), 'YYYYMMDD')
+                        AND B.HCHK_REG_SEQ = (SELECT MAX(X.HCHK_REG_SEQ) FROM PGMON.TB_HCHK_COLLECT_INFO X WHERE X.REG_DATE = TO_CHAR(NOW(), 'YYYYMMDD'))
+             , TEMP_MAX_SEQ D
+         WHERE A.COLLECT_YN = 'Y'
+           AND A.DELETE_YN = 'N'
+           AND A.HA_GROUP = HGI.HA_GROUP
+           AND A.INSTANCE_ID = C.INSTANCE_ID
+           AND A.INSTANCE_ID = D.INSTANCE_ID
+           AND C.HCHK_NAME = 'CONNECTIONFAIL'
+           AND B.VALUE >= CRITICAL_THRESHOLD
+           limit 1
+	</select>
+
+	<insert id="insertScaleLog_G"  parameterType="hashmap">
+   		/**
+	 	* Query ID : insertScaleLog_G
+	 	* Description : 스케일 실행 로그 등록
+	 	* Author : 
+	 	**/
+		INSERT INTO T_SCALE_G
+		(
+			SCALE_WRK_SN
+			, WRK_ID
+			, SCALE_TYPE
+			, DB_SVR_ID
+			, DB_SVR_IPADR_ID
+			, WRK_TYPE
+			, AUTO_POLICY
+			, AUTO_POLICY_SET_DIV
+			, AUTO_POLICY_TIME									
+			, AUTO_LEVEL
+			, CLUSTERS
+			, PROCESS_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, EXE_RSLT_CD
+			, RSLT_MSG
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+		)
+		VALUES
+		(
+		  nextval('q_t_scale_g_01')
+		, #{wrk_id}::numeric
+		, #{scale_type}
+		, #{db_svr_id}::numeric
+		, #{db_svr_ipadr_id}::numeric
+		, #{wrk_type}
+		, #{auto_policy}
+		, #{auto_policy_set_div}
+		, #{auto_policy_time}::numeric
+		, #{auto_level}
+		, #{scale_exe_cnt}::numeric
+		, #{process_id}
+		, clock_timestamp()
+		, clock_timestamp()
+		, #{exe_rslt_cd}
+		, #{rslt_msg}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		, #{lst_mdfr_id}
+		, clock_timestamp()
+		)	
+    </insert>
+
+	<update id="updateScaleLog_G" parameterType="hashmap">
+		/**
+	 	* Query ID : "updateScaleLog_G"
+	 	* Description : 스케일 LOG 수정
+	 	* Author :
+	 	**/         
+        UPDATE T_SCALE_G
+           SET WRK_END_DTM = clock_timestamp(),
+               EXE_RSLT_CD = #{exe_rslt_cd},
+               RSLT_MSG = #{rslt_msg},
+               LST_MDFR_ID = #{login_id},
+               LST_MDF_DTM = clock_timestamp(),
+               WRK_ID = #{wrk_id}::numeric
+         WHERE 1 = 1
+           AND SCALE_WRK_SN = (SELECT SCALE_WRK_SN
+                                 FROM T_SCALE_G
+                                WHERE 1 = 1
+                                  AND EXE_RSLT_CD = 'TC001701'
+                                  AND FRST_REGR_ID = #{login_id}
+                                  AND PROCESS_ID = #{process_id}
+                              )	
+    </update>
+    
+	<insert id="insertScaleLoadLog_G"  parameterType="hashmap">
+   		/**
+	 	* Query ID : insertScaleLoadLog_G
+	 	* Description : 스케일 load 발생 등록
+	 	* Author : 
+	 	**/
+		INSERT INTO T_SCALELOADLOG_G
+		(
+			WRK_SN
+			, DB_SVR_ID
+			, DB_SVR_IPADR_ID
+			, POLICY_TYPE
+			, EXENUM
+			, EXEDTM
+		)
+		VALUES
+		(
+		  NEXTVAL('q_t_scaleloadlog_g_01')
+		, #{db_svr_id}::numeric
+		, (SELECT COALESCE(DB_SVR_IPADR_ID, 1) AS DB_SVR_IPADR_ID
+             FROM T_DBSVRIPADR_I
+            WHERE 1=1
+              AND db_svr_id = #{db_svr_id}::numeric
+              AND MASTER_GBN = 'M')
+		, #{policy_type}
+	    , #{exenum}::numeric
+		, clock_timestamp()
+		)	
+    </insert>
+    
+	<delete id="deleteScaleLoadLog_G"  parameterType="hashmap">
+   		/**
+	 	* Query ID : deleteScaleLoadLog_G
+	 	* Description : 스케일 load 데이터 삭제
+	 	* Author : 
+	 	**/
+	 	DELETE FROM T_SCALELOADLOG_G
+	 	 WHERE 1=1
+           AND DB_SVR_ID = #{db_svr_id}::numeric
+           AND (now() - '7 day'::interval)::date >= EXEDTM::date
+    </delete>
+    
+	<select id="selectScaleITotCnt" parameterType="hashmap" resultType="int">
+    	/**
+	 	* Query ID : selectScaleITotCnt
+	 	* Description : scale 설정 목록 count
+	 	* Author : 
+	 	**/	
+	 	SELECT
+	 	       COUNT(*) AS TOT_CNT
+          FROM T_SCALE_I
+	 	 WHERE 1=1
+           AND DB_SVR_ID = #{db_svr_id}::numeric
+           AND USEYN = 'Y'
+	</select>
+	
+	<select id="selectQ_T_SCALELOADLOG_G_01_SEQ" resultType="long">
+   		/**
+	 	* Query ID : selectQ_T_SCALELOADLOG_G_01_SEQ
+	 	* Description : SCALE LOAD 테이블 SEQ
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('q_t_scaleloadlog_g_01')
+    </select>
+    
+	<delete id="deleteScaleLoadSEQ">
+   		/**
+	 	* Query ID : deleteScaleLoadSEQ
+	 	* Description : LOAD 테이블 시퀀스 초기화
+	 	* Author : 
+	 	**/
+	 	ALTER SEQUENCE q_t_scaleloadlog_g_01 RESTART WITH 1
+    </delete>
+
+	<select id="selectScaleCngList" parameterType="hashmap" resultType="hashMap">
+        /**
+        * Query ID : selectScaleCngList
+        * Description : scale Auto 설정 list 조회
+        * Author : 
+        **/
+         SELECT WRK_ID
+              , DB_SVR_ID
+              , DB_SVR_IPADR_ID
+              , SCALE_TYPE
+              , POLICY_TYPE
+              , AUTO_POLICY_SET_DIV
+              , AUTO_POLICY_TIME
+              , AUTO_LEVEL
+              , EXECUTE_TYPE
+              , EXPANSION_CLUSTERS
+              , MIN_CLUSTERS
+              , MAX_CLUSTERS
+           FROM T_SCALE_I
+          WHERE DB_SVR_ID=#{db_svr_id}::numeric
+            AND USEYN = 'Y'
+          ORDER BY WRK_ID
+    </select>
+
+	<select id="selectAutoScaleDataChk" parameterType="hashmap" resultType="hashMap">
+        /**
+        * Query ID : selectAutoScaleDataChk
+        * Description : auto scale data 체크
+        * Author : 
+        **/
+        SELECT COALESCE(SUM(CHK_CNT),0) AS CHK_CNT,
+               COALESCE(MAX(EXE_NUM_AVG),0) AS EXE_NUM_AVG
+          FROM (
+                SELECT CASE WHEN ((#{auto_level}::numeric > ROUND(COALESCE(avg(exenum), 0)) AND '1'= #{scale_type}) or (ROUND(COALESCE(avg(exenum), 0)) >= #{auto_level}::numeric AND '2'= #{scale_type})) THEN 1
+                            ELSE 0 END AS CHK_CNT, 
+                       ROUND(COALESCE(avg(exenum), 0)) AS EXE_NUM_AVG
+                  FROM T_SCALELOADLOG_G
+                 WHERE to_char(EXEDTM,'YYYYMMDDHH24MI') between to_char((now() - #{auto_policy_time_pm}::interval),'YYYYMMDDHH24MI') and to_char(now(),'YYYYMMDDHH24MI')
+                   AND POLICY_TYPE = #{policy_type}
+                   AND DB_SVR_ID = #{db_svr_id}::numeric
+                   AND '1' = #{auto_policy_set_div}
+                 UNION 
+                SELECT COUNT(* ) AS CHK_CNT,
+                       CASE WHEN '1'= #{scale_type} THEN MIN(EXENUM)
+                            ELSE MAX(EXENUM)
+                        END AS EXE_NUM_AVG
+                  FROM T_SCALELOADLOG_G
+                 WHERE to_char(EXEDTM,'YYYYMMDDHH24MI') between to_char((now() - #{auto_policy_time_pm}::interval),'YYYYMMDDHH24MI') and to_char(now(),'YYYYMMDDHH24MI')
+                   AND POLICY_TYPE = #{policy_type}
+                   AND DB_SVR_ID = #{db_svr_id}::numeric
+                   AND ((#{auto_level}::numeric > EXENUM AND '1'= #{scale_type}) OR (EXENUM >= #{auto_level}::numeric AND '2'= #{scale_type}))
+                   AND '2' = #{auto_policy_set_div}
+           ) A
+    </select>
+
+	<insert id="insertScaleOccurLog_G"  parameterType="hashmap">
+        /**
+        * Query ID : insertScaleOccurLog_G
+        * Description : auto scale 발생이력 등록
+        * Author : 
+        **/
+        INSERT INTO T_SCALEOCCUR_G
+                    (
+                     WRK_SN
+                   , DB_SVR_ID
+                   , DB_SVR_IPADR_ID
+                   , SCALE_TYPE
+                   , POLICY_TYPE
+                   , AUTO_POLICY_SET_DIV
+                   , AUTO_POLICY_TIME
+                   , AUTO_LEVEL
+                   , EXECUTE_TYPE
+                   , EVENT_OCCUR_CONTENTS
+                   , EVENT_OCCUR_DTM
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                    )
+              VALUES
+                    (
+                     nextval('q_t_scaleoccur_g_01')
+                   , #{db_svr_id}::numeric
+                   , #{db_svr_ipadr_id}::numeric
+                   , #{scale_type}
+                   , #{policy_type}
+                   , #{auto_policy_set_div}
+                   , #{auto_policy_time}::numeric
+                   , #{auto_level}
+                   , #{execute_type}
+                   , #{exe_num_avg}
+                   , clock_timestamp()
+                   , #{login_id}
+                   , clock_timestamp()
+                   , #{login_id}
+                   , clock_timestamp()
+                   )
+	</insert>
+
+	<select id="selectDbServerIpadrInfo" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		/**
+	 	* Query ID : selectDbServerIpadrInfo
+	 	* Description : Database Server IPADR 조회
+	 	* Author : 
+	 	**/
+        SELECT
+               DB_SVR_IPADR_ID
+             , DB_SVR_ID
+             , IPADR
+          FROM T_DBSVRIPADR_I
+         WHERE IPADR = #{IPADR}
+               LIMIT 1
+		]]>
+	</select>	
+
+
+	<insert id="insertScaleServer"  parameterType="hashmap">
+        /**
+        * Query ID : insertScaleServer
+        * Description : aws 서버 등록
+        * Author : 
+        **/
+        WITH UPSERT AS(
+               UPDATE T_SCALEAWSSVR_I
+                  SET DB_SVR_ID = #{db_svr_id}::numeric,
+                      DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric,
+                      IPADR = #{ipdar_set}
+                WHERE DB_SVR_ID  = #{db_svr_id}::numeric
+                  AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric
+                RETURNING *
+                      )
+        INSERT
+              INTO T_SCALEAWSSVR_I (
+                        DB_SVR_ID,
+                        DB_SVR_IPADR_ID,
+                        IPADR,
+                        FRST_REGR_ID,
+                        FRST_REG_DTM,
+                        LST_MDFR_ID,
+                        LST_MDF_DTM
+                       )
+                       SELECT #{db_svr_id}::numeric,
+                              #{db_svr_ipadr_id}::numeric,
+                              #{ipdar_set},
+                              #{login_id},
+                              clock_timestamp(),
+                              #{login_id},
+                              clock_timestamp()
+         WHERE NOT EXISTS ( SELECT * FROM UPSERT )
+	</insert>
+	
+	<select id="selectAutoScaleComCngInfo" resultType="hashMap" parameterType="hashMap">
+   		/**
+	 	* Query ID : selectAutoScaleComCngInfo
+	 	* Description : scale 설정 정보 상세 조회
+	 	* Author : 
+	 	**/
+       SELECT A.DB_SVR_ID,
+              A.DB_SVR_IPADR_ID,
+              A.AUTO_RUN_CYCLE
+         FROM T_SCALEAWSSVR_I A
+        WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
+        LIMIT 1
+	</select>
+</mapper>

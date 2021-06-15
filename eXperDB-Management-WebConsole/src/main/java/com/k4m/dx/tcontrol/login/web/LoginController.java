@@ -115,6 +115,10 @@ public class LoginController {
 
         				loginVoSs.setIp(ip);
         				
+        				/*백업 사용유무 추가 2021-04-14  변승우 */
+        				String backup_use_yn = props.get("bnr.useyn").toString(); 
+        				loginVoSs.setBackup_use_yn(backup_use_yn);
+        				
         				String encp_use_yn = props.get("encrypt.useyn").toString();
         				
         				loginVoSs.setEncp_use_yn(encp_use_yn);
@@ -127,6 +131,14 @@ public class LoginController {
         				
         				String transfer = props.get("transfer").toString();
         				loginVoSs.setTransfer(transfer);
+        				
+        				/*proxy 사용유무 추가 2021-04-23 */
+        				String proxy_use_yn = "";
+        				if (props.get("proxy.useyn") != null) {
+        					proxy_use_yn = props.get("proxy.useyn").toString(); 
+        				}		
+        				loginVoSs.setProxy_use_yn(proxy_use_yn);
+        				
         				
         				if(encp_use_yn.equals("Y")){
         					String restIp = props.get("encrypt.server.url").toString();
@@ -332,7 +344,7 @@ public class LoginController {
 				LoginVO loginVo = new LoginVO();
 				loginVo.setUsr_id(userList.get(0).getUsr_id());
 				loginVo.setUsr_nm(userList.get(0).getUsr_nm());
-
+				loginVo.setAut_id(userList.get(0).getAut_id());
 				//session 제거
 		        if ( session.getAttribute("session") !=null ){
 		            // 기존에 login이란 세션 값이 존재한다면
@@ -352,6 +364,10 @@ public class LoginController {
 			    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 			    localeResolver.setLocale(request, response, locale);
 				
+			    /*백업 사용유무 추가 2021-04-14  변승우 */
+				String backup_use_yn = props.get("bnr.useyn").toString(); 
+				loginVo.setBackup_use_yn(backup_use_yn);
+			    			    
 				String encp_use_yn = props.get("encrypt.useyn").toString();
 				
 				loginVo.setEncp_use_yn(encp_use_yn);
@@ -364,6 +380,13 @@ public class LoginController {
 				
 				String transfer = props.get("transfer").toString();
 				loginVo.setTransfer(transfer);
+
+			    /*proxy 사용유무 추가 2021-04-23  */
+				String proxy_use_yn = "";
+				if (props.get("proxy.useyn") != null) {
+					proxy_use_yn = props.get("proxy.useyn").toString(); 
+				}		
+				loginVo.setProxy_use_yn(proxy_use_yn);
 				
 				if(encp_use_yn.equals("Y")){
 					String restIp = props.get("encrypt.server.url").toString();

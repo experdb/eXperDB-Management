@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="experdbRecoverySql">
+
+	<select id="getStorageList" parameterType="String" resultType="backupLocationInfoVO">
+		SELECT distinct 
+			  destinationlocation as "backupDestLocation"
+		FROM jobhistory
+		WHERE targetname  = #{ipadr}
+	
+	</select>
+
+	<select id="getStorageType" parameterType="String" resultType="int">
+		SELECT 
+		     'type'
+		  FROM backuplocation
+	  	 WHERE location = #{path}
+	</select>
+
+</mapper>

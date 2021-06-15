@@ -149,7 +149,7 @@
 			
 			<!-- <button type="submit" class="btn btn-block btn-primary btn-lg" onclick="javascript:fn_login();">로그인</button> -->
 		</form>
-		<p class="copy">&copy; 2020 IZENT. All rights reserved</p>
+		<p class="copy">&copy; 2020 INZENT. All rights reserved</p>
 	</div>
 </div>
 

@@ -16,15 +16,27 @@
 	
 	//상단 메뉴 setting
 	function fnc_topMenu_setting() {
-		var encryptMenu = $( '#encryptMenu' ); 
+		var encryptMenu = $( '#encryptMenu_Y' ); 
 		var encryptAgentMenu = $( '#encryptAgentMenu' ); 
 		var trnasferMenu = $( '#trnasferMenu' ); 
+//		var bnrMenu = $( '#eXperDB_Backup_Y' ); 
 
+		//2021.04.23 proxy 추가
+/* 		var proxyMenu_Y = $( '#proxy_menu_Y' ); 
+		var proxyMenu_N = $( '#proxy_menu_N' );  */
+		
+/* 		if("${sessionScope.session.backup_use_yn}" == "Y"){
+			bnrMenu.show();
+		}else{
+			bnrMenu.hide();
+		} */
+
+		//암호화 모니터링 화면 
 		if("${sessionScope.session.encp_use_yn}" == "Y"){
-			encryptMenu.show();
+		//	encryptMenu.show();
 			encryptAgentMenu.show();
 		}else{
-			encryptMenu.hide();
+		//	encryptMenu.hide();
 			encryptAgentMenu.hide();
 		}
 
@@ -33,6 +45,14 @@
 		}else{
 			trnasferMenu.hide();
 		}
+
+/* 		//proxy 사용여부 추가
+		if("${sessionScope.session.proxy_use_yn}" == "Y"){
+			proxyMenu_Y.show();
+		}else{
+			proxyMenu_N.hide();
+		}
+ */
 
 		$.ajax({
 			url : "/menuAuthorityList.do",
@@ -172,17 +192,47 @@
 						}
 					}
 
+					/*백업 추가 2021-04-14 변승우   */
+ 					if("${sessionScope.session.backup_use_yn}" == "Y"){	
+ 						if(result[i].mnu_cd == "MN0001901" || result[i].mnu_cd == "MN0001902" || result[i].mnu_cd == "MN0001903") {
+							if((result[i].mnu_cd == "MN0001901" &&  result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0001902" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0001903" && result[i].read_aut_yn == "N")){
+								$('#MN00019').hide();
+							}else{
+								$('#MN00019').show();
+								if(result[i].read_aut_yn == "N"){
+									$('#' + result[i].mnu_cd).hide();
+								}else{
+									$('#' + result[i].mnu_cd).show();
+								}
+							}
+						}
+ 						
+ 						if(result[i].mnu_cd == "MN0002001" || result[i].mnu_cd == "MN0002002") {
+ 							if((result[i].mnu_cd == "MN0002001" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0002002" && result[i].read_aut_yn == "N")){
+								$('#MN00020').hide();
+							}else{
+								$('#MN00020').show();
+								if(result[i].read_aut_yn == "N"){
+									$('#' + result[i].mnu_cd).hide();
+								}else{
+									$('#' + result[i].mnu_cd).show();
+								}
+							}
+						}
+ 					}
+
 					if("${sessionScope.session.encp_use_yn}" == "Y"){
 	 					if(result[i].mnu_cd == "MN0001101" || result[i].mnu_cd == "MN0001102" || result[i].mnu_cd == "MN0001201" || result[i].mnu_cd == "MN0001202" || result[i].mnu_cd == "MN0001203" || result[i].mnu_cd == "MN0001204"
 							|| result[i].mnu_cd == "MN0001301" || result[i].mnu_cd == "MN0001302" || result[i].mnu_cd == "MN0001303" || result[i].mnu_cd == "MN0001304" || result[i].mnu_cd == "MN0001401") {
-	
-							if((result[i].mnu_cd == "MN0001101" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001102" && result[i].read_aut_yn == "N") &&
+
+	/* 						if((result[i].mnu_cd == "MN0001101" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001102" && result[i].read_aut_yn == "N") &&
 								(result[i].mnu_cd == "MN0001201" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001202" && result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001203" && result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001204" && result[i].read_aut_yn == "N") &&
 								(result[i].mnu_cd == "MN0001301" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001302" && result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001303" && result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001304" && result[i].read_aut_yn == "N") &&
 								(result[i].mnu_cd == "MN0001401" &&  result[i].read_aut_yn == "N")){
-								$('#encryptMenu').hide();
-							} else {
-								$('#encryptMenu').show();
+							//	$('#encryptMenu_Y').hide();
+							} else { */
+							//	$('#encryptMenu_Y').show();
+							
 								if(result[i].mnu_cd == "MN0001101" || result[i].mnu_cd == "MN0001102") {
 									if((result[i].mnu_cd == "MN0001101" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001102" && result[i].read_aut_yn == "N")){
 										$('#MN00011').hide();
@@ -231,7 +281,7 @@
 										$('#MN00014').hide();
 									}
 								}
-							}
+/* 							} */
 						}
 					}
 
@@ -250,9 +300,90 @@
 						}
 					}
 					
-					
-					
+					//proxyMenu
+					if("${sessionScope.session.proxy_use_yn}" == "Y"){
+						if ((result[i].mnu_cd).indexOf("MN00018")== 0 ) {
+							if(result[i].read_aut_yn == "N"){
+								$('#' + result[i].mnu_cd).hide();
+							}else{
+								$('#' + result[i].mnu_cd).show();
+							}
+						}
+					}
 				}
+
+				//proxy 
+				if("${sessionScope.session.proxy_use_yn}" != "Y"){
+					$('#proxy_menu_Y').hide();
+					$('#proxy_menu_N').show();
+					
+					$('#MN00018_etc_tit').html('<spring:message code="message.msg225"/>');
+					$('#MN00018_etc_msg').html('<spring:message code="message.msg226"/>');
+				} else {
+					$('#proxy_menu_Y').show();
+					$('#proxy_menu_N').hide();
+					
+					if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none' && $('#MN0001803').css('display') == 'none' && $('#MN0001805').css('display') == 'none'){		
+						$('#proxy_menu_Y').hide();
+						$('#proxy_menu_N').show();
+						
+						$('#MN00018_etc_tit').html('<spring:message code="message.msg227"/>');
+						$('#MN00018_etc_msg').html('<spring:message code="message.msg224"/>');
+					}else{
+						$('#proxy_menu_Y').show();
+						$('#proxy_menu_N').hide();
+					}
+				}
+
+				//backup
+				if("${sessionScope.session.backup_use_yn}" != "Y"){	
+					$('#eXperDB_Backup_Y').hide();
+					$('#eXperDB_Backup_N').show();
+					
+					$('#MN00019_etc_tit').html('<spring:message code="message.msg225"/>');
+					$('#MN00019_etc_msg').html('<spring:message code="message.msg226"/>');
+				} else {
+					$('#eXperDB_Backup_Y').show();
+					$('#eXperDB_Backup_N').hide();
+					
+					if($('#MN0001901').css('display') == 'none' && $('#MN0001902').css('display') == 'none' && $('#MN0001903').css('display') == 'none' && $('#MN0002001').css('display') == 'none' && $('#MN0002002').css('display') == 'none'){		
+						$('#eXperDB_Backup_Y').hide();
+						$('#eXperDB_Backup_N').show();
+						
+						$('#MN00019_etc_tit').html('<spring:message code="message.msg227"/>');
+						$('#MN00019_etc_msg').html('<spring:message code="message.msg224"/>');
+					}else{
+						$('#eXperDB_Backup_Y').show();
+						$('#eXperDB_Backup_N').hide();
+					}
+				}
+				
+				//ENCPT
+				if("${sessionScope.session.encp_use_yn}" != "Y"){	
+					$('#encryptMenu_Y').hide();
+					$('#encryptMenu_N').show();
+					
+					$('#MN00011_etc_tit').html('<spring:message code="message.msg225"/>');
+					$('#MN00011_etc_msg').html('<spring:message code="message.msg226"/>');
+				} else {
+					$('#encryptMenu_Y').show();
+					$('#encryptMenu_N').hide();
+
+					if($('#MN0001101').css('display') == 'none' && $('#MN0001102').css('display') == 'none' && $('#MN0001201').css('display') == 'none' && $('#MN0001202').css('display') == 'none' && $('#MN0001203').css('display') == 'none'
+						&& $('#MN0001301').css('display') == 'none' && $('#MN0001302').css('display') == 'none' && $('#MN0001303').css('display') == 'none' && $('#MN0001304').css('display') == 'none'
+						&& $('#MN00014').css('display') == 'none'
+					){		
+						$('#encryptMenu_Y').hide();
+						$('#encryptMenu_N').show();
+						
+						$('#MN00011_etc_tit').html('<spring:message code="message.msg227"/>');
+						$('#MN00011_etc_msg').html('<spring:message code="message.msg224"/>');
+					}else{
+						$('#encryptMenu_Y').show();
+						$('#encryptMenu_N').hide();
+					}
+				}
+				
 			}
 		});
 		
@@ -391,39 +522,6 @@
 					<div class="container">
 						<ul class="nav page-navigation nav-justified">
 
-							<!-- SCHEDULE -->
-							<li class="nav-item width-div-a" id="scheduleMenu" >
- 								<a href="#" class="nav-link">
-									<i class="ti-calendar menu-icon"></i>
-									<span class="menu-title">SCHEDULE</span>
-									<i class="menu-arrow"></i>
-								</a>
-								<div class="submenu" id="MN0001">
-									<ul class="submenu-item">
-										<li class="nav-item">
-											<span class="nav-heading-title">
-												<b><spring:message code="menu.schedule_information" /></b>
-											</span>
-										</li>
-										<li class="nav-item" id="MN000101">
-											<a class="nav-link" href="/insertScheduleView.do" onClick="fn_cookie('insertScheduleView')" target="main">
-												<spring:message code="menu.schedule_registration" />
-											</a>
-										</li>
-										<li class="nav-item" id="MN000102">
-											<a class="nav-link" href="/selectScheduleListView.do" onClick="fn_cookie('selectScheduleListView')" target="main">
-												<spring:message code="etc.etc27"/>
-											</a>
-										</li>
-										<li class="nav-item" id="MN000103" >
-											<a class="nav-link" href="/selectScheduleHistoryView.do" onClick="fn_cookie('selectScheduleHistoryView')" target="main">
-												<spring:message code="menu.shedule_execution_history" />
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-									
 							<!-- DATA TRANSFER -->
 <%-- 						<li class="nav-item width-div-a" id="trnasferMenu" >
 								<a href="#" class="nav-link">
@@ -567,8 +665,74 @@
 								</div>
 							</li>
 
+							<!-- MIGRATION -->
+							<li class="nav-item width-div-a"  id="migrationMenu">
+								<a href="#" class="nav-link">
+									<i class="ti-server menu-icon"></i>
+									<span class="menu-title">MIGRATION</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu">
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.data_migration" /></b>
+											</span>
+										</li>
+										<li class="nav-item" id="MN00015">
+											<a class="nav-link" href="/db2pgDBMS.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="migration.source/target_dbms_management"/>
+											</a>
+										</li>
+										<li class="nav-item" id="MN00016">
+											<a class="nav-link" href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="migration.setting_information_management" />
+											</a>
+										</li>
+										<li class="nav-item" id="MN00017">
+											<a class="nav-link" href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="migration.performance_history" />
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+
+							<!-- SCHEDULE -->
+							<li class="nav-item width-div-a" id="scheduleMenu" >
+ 								<a href="#" class="nav-link">
+									<i class="ti-calendar menu-icon"></i>
+									<span class="menu-title">SCHEDULE</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu" id="MN0001">
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.schedule_information" /></b>
+											</span>
+										</li>
+										<li class="nav-item" id="MN000101">
+											<a class="nav-link" href="/insertScheduleView.do" onClick="fn_cookie('insertScheduleView')" target="main">
+												<spring:message code="menu.schedule_registration" />
+											</a>
+										</li>
+										<li class="nav-item" id="MN000102">
+											<a class="nav-link" href="/selectScheduleListView.do" onClick="fn_cookie('selectScheduleListView')" target="main">
+												<spring:message code="etc.etc27"/>
+											</a>
+										</li>
+										<li class="nav-item" id="MN000103" >
+											<a class="nav-link" href="/selectScheduleHistoryView.do" onClick="fn_cookie('selectScheduleHistoryView')" target="main">
+												<spring:message code="menu.shedule_execution_history" />
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							
 							<!-- ENCRYPT -->
-							<li class="nav-item mega-menu width-div-a" id="encryptMenu">	
+							<li class="nav-item mega-menu width-div-a" id="encryptMenu_Y">	
 								<a href="#" class="nav-link">
 									<i class="ti-lock menu-icon"></i>
 									<span class="menu-title">ENCRYPT</span>
@@ -662,40 +826,197 @@
 									</div>
 								</div>
 							</li>
-
-							<!-- MIGRATION -->
-							<li class="nav-item width-div-a"  id="migrationMenu">
+							
+							<li class="nav-item width-div-a" id="encryptMenu_N">
 								<a href="#" class="nav-link">
-									<i class="ti-server menu-icon"></i>
-									<span class="menu-title">MIGRATION</span>
+									<i class="ti-lock menu-icon"></i>
+									<span class="menu-title">ENCRYPT</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu" style="width:280px;">
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b id="MN00011_etc_tit"><spring:message code="message.msg225"/></b>
+											</span>
+										</li>
+										<li class="nav-item" id="MN00011_etc_msg" style="text-align:left;">
+											<spring:message code="message.msg226"/>
+										</li>
+									</ul>
+								</div>
+							</li>	
+							
+							<!-- BACKUP -->
+							<li class="nav-item width-div-a" id="eXperDB_Backup_Y">	
+								<a href="#" class="nav-link">
+									<i class="ti-harddrive menu-icon"></i>
+									<span class="menu-title">BnR</span>
+									<i class="menu-arrow"></i>
+								</a>
+								
+								<div class="submenu" style="width:430px;">
+									<!-- <div class="row"> -->
+									<div class="col-group-wrapper row" >
+										<div class="col-group col-md-5" id="MN00019" style="padding-right: 0px;">
+											<ul class="submenu-item">
+												<li class="nav-item">
+													<span class="nav-heading-title">
+														<b><spring:message code="eXperDB_backup.msg24"/></b>
+													</span>
+												</li>
+												<li class="nav-item" id="MN0001901">
+													<a class="nav-link" href="/experdb/backupMonitoring.do" onClick="fn_cookie('backupMonitoring')" target="main">
+														<spring:message code="eXperDB_scale.monitoring" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001902">
+													<a class="nav-link" href="/experdb/backupHistory.do" onClick="fn_cookie('')" target="main">
+														<spring:message code="eXperDB_backup.msg26" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0001903">
+													<a class="nav-link" href="/experdb/restoreHistory.do" onClick="fn_cookie('')" target="main">
+														<spring:message code="eXperDB_backup.msg33" />
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="col-group col-md-5" id="MN00020">
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN00020_etc_Y_tit">
+													<span class="nav-heading-title">
+														<b>Backup</b>
+													</span>
+												</li>
+												<li class="nav-item" id="MN0002001">
+													<a class="nav-link" href="/experdb/backupStorage.do" onClick="fn_cookie('backupStorage')" target="main">
+														<spring:message code="eXperDB_backup.msg3" />
+													</a>
+												</li>
+												<li class="nav-item" id="MN0002002">
+													<a class="nav-link" href="/experdb/backupSetting.do" onClick="fn_cookie('backupSetting')" target="main">
+														<spring:message code="eXperDB_backup.msg13" />
+													</a>
+												</li>
+											</ul>
+										</div>
+										<!-- <div class="col-group col-md-4" id="MN00021">
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN00021_etc_Y_tit">
+													<span class="nav-heading-title">
+														<b>Recovery</b>
+													</span>
+												</li>
+												<li class="nav-item" id="MN0002101">
+													<a class="nav-link" href="/experdb/completeRecovery.do" onClick="fn_cookie('')" target="main">
+														완전복구
+													</a>
+												</li>
+												<li class="nav-item" id="MN0002102">
+													<a class="nav-link" href="/experdb/timeRecovery.do" onClick="fn_cookie('')" target="main">
+														시점복구
+													</a>
+												</li>
+												<li class="nav-item" id="MN0002103">
+													<a class="nav-link" href="/experdb/fileRecovery.do" onClick="fn_cookie('')" target="main">
+														파일복구
+													</a>
+												</li>
+											</ul>
+										</div> -->
+									</div>
+								</div>
+							</li>
+
+							<li class="nav-item width-div-a" id="eXperDB_Backup_N">
+								<a href="#" class="nav-link">
+									<i class="ti-harddrive menu-icon"></i>
+									<span class="menu-title">BnR</span>
+									<i class="menu-arrow"></i>
+								</a>
+								<div class="submenu" style="width:280px;">
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b id="MN00019_etc_tit"><spring:message code="message.msg225"/></b>
+											</span>
+										</li>
+										<li class="nav-item" id="MN00019_etc_msg" style="text-align:left;">
+											<spring:message code="message.msg226"/>
+										</li>
+									</ul>
+								</div>
+							</li>	
+							
+							<!-- Virtual IP -->
+							<li class="nav-item width-div-a" id="proxy_menu_Y">
+								<a href="#" class="nav-link">
+									<i class="mdi mdi-server-network menu-icon"></i>
+									<span class="menu-title">Proxy</span>
 									<i class="menu-arrow"></i>
 								</a>
 								<div class="submenu">
 									<ul class="submenu-item">
 										<li class="nav-item">
 											<span class="nav-heading-title">
-												<b><spring:message code="menu.data_migration" /></b>
+												<b><spring:message code="menu.proxy_mgmt"/></b>
 											</span>
 										</li>
-										<li class="nav-item" id="MN00015">
-											<a class="nav-link" href="/db2pgDBMS.do" onClick="fn_cookie(null)" target="main">
-												<spring:message code="migration.source/target_dbms_management"/>
+										<li class="nav-item" id="MN0001805">
+											<a class="nav-link" href="/proxyAgent/proxyAgent.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.proxy_agent"/>
 											</a>
 										</li>
-										<li class="nav-item" id="MN00016">
-											<a class="nav-link" href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">
-												<spring:message code="migration.setting_information_management" />
+										<li class="nav-item" id="MN0001801">
+											<a class="nav-link" href="/proxyMonitoring/monitoring.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.proxy_monitoring"/>
 											</a>
 										</li>
-										<li class="nav-item" id="MN00017">
-											<a class="nav-link" href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">
-												<spring:message code="migration.performance_history" />
+										<li class="nav-item" id="MN0001802">
+											<a class="nav-link" href="/proxySetting.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.proxy_config"/>
 											</a>
 										</li>
+										<%-- <li class="nav-item" id="MN00018_history">
+											<span class="nav-heading-title">
+												<b><spring:message code="menu.history_management" /></b>
+											</span>
+										</li> --%>
+										<li class="nav-item" id="MN0001803">
+											<a class="nav-link" href="/proxyStatusHistory.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.proxy_hist"/>
+											</a>
+										</li>
+										<%-- <li class="nav-item" id="MN0001804">
+											<a class="nav-link" href="/proxyChangeHistory.do" onClick="fn_cookie(null)" target="main">
+												<spring:message code="menu.proxy_change_hist"/>
+											</a>
+										</li>  --%>
 									</ul>
 								</div>
 							</li>
-
+							
+							<li class="nav-item width-div-a" id="proxy_menu_N">
+								<a href="#" class="nav-link">
+									<i class="mdi mdi-server-network menu-icon"></i>
+									<span class="menu-title">Proxy</span>
+									<i class="menu-arrow"></i> 
+								</a>
+								<div class="submenu" style="width:280px;">
+									<ul class="submenu-item">
+										<li class="nav-item">
+											<span class="nav-heading-title">
+												<b id="MN00018_etc_tit"><spring:message code="message.msg225"/></b>
+											</span>
+										</li>
+										<li class="nav-item" id="MN00018_etc_msg" style="text-align:left;">
+											<spring:message code="message.msg226"/>
+										</li>
+									</ul>
+								</div>
+							</li>					
+							
 							<li class="nav-item width-div-a"  id="myPageMenu">
 								<a href="#" class="nav-link">
 									<i class="ti-user menu-icon"></i>
@@ -752,9 +1073,9 @@
 								</div>
 							</li>
 							
-							<li class="nav-item" id="li_blnck" style="width:0px">
+							<!-- <li class="nav-item" id="li_blnck" style="width:0px">
 								&nbsp;
-							</li>
+							</li> -->
 						</ul>
 					</div>
 				</nav>

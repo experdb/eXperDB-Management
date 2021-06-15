@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.experdb.management.proxy.service.ProxyMonitoringService;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
@@ -91,6 +92,8 @@ public class CmmnController {
 	@Autowired
 	private InstanceScaleService instanceScaleService;
 	
+	@Autowired
+	private ProxyMonitoringService proxyMonitoringService;
 	/**
 	 * 메인(홈)을 보여준다.
 	 * @return ModelAndView mv
@@ -134,7 +137,7 @@ public class CmmnController {
 			//서버정보
 			List<DashboardVO> serverInfoVOSelectTot = (List<DashboardVO>) dashboardService.selectDashboardServerInfoNew(dashVo);
 			List<DashboardVO> serverInfoTotVO = new ArrayList<DashboardVO>();
-
+			
 			try{
 				if(serverInfoVOSelectTot.size()>0){
 					for(int i=0; i<serverInfoVOSelectTot.size(); i++){
@@ -178,11 +181,21 @@ public class CmmnController {
 				}
 			}
 
+			// proxy_yn 확인
+			String strProxyYn = "N";
+			if(props.get("proxy.useyn") != null) {
+				strProxyYn = props.get("proxy.useyn").toString();
+				if(!"Y".equals(strProxyYn)){
+					strProxyYn = "N";
+				}
+			}
+			
 			mv.addObject("db2pg_yn", db2pg_yn);				//DB2_PG 사용여부
 			mv.addObject("scale_yn", strScaleYn);			//scale 사용여부
 			mv.addObject("scheduleInfo", scheduleInfoVO);	//스케줄 정보
 			mv.addObject("backupInfo", backupInfoVO);		//백업 정보
 			mv.addObject("serverTotInfo", serverInfoTotVO);	//서버 정보
+			mv.addObject("proxy_yn", strProxyYn); // proxy 사용여부
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

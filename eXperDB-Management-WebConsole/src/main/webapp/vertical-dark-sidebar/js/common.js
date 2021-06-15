@@ -26,6 +26,20 @@
 			loaderBg: '#f2a654'
 		})
 	}
+	
+	/* 경고 호출*/
+	showDangerToast_proxy = function(position, msg, titleMsg) {
+		'use strict';
+		resetToastPosition();
+		$.toast({
+			heading: titleMsg,
+			text: msg,
+			showHideTransition: 'slide',
+			position: String(position),
+			icon: 'warning',
+			loaderBg: '#f2a654'
+		});
+	}
 
 	showToastInCustomPosition_login = function() {
 		'use strict';
@@ -134,6 +148,10 @@
 				location.href = "/securityPolicy.do";
 			}else if (rstGbn == "securityKeySet") {
 				location.href = "/securityKeySet.do";
+			}else if (rstGbn == "backupPolicyApply"){
+				fn_goMonitoring();
+			}else if (rstGbn == "proxyMoReload"){
+				fn_proxySvrReloadSearch();
 			}
         });
 	}
@@ -197,6 +215,7 @@ $(window).ready(function(){
 			for(var i=0; i<$(this).find('form').length; i++){
 				if ($(this).find('form')[i] != null && $(this).find('form')[i] != undefined) {
 				    $(this).find('form')[i].reset();
+				    $(this).find('form').validate().resetForm();
 				}
 			}
 		}
@@ -204,6 +223,10 @@ $(window).ready(function(){
 
 	});	
 });
+
+String.prototype.replaceAll = function(org, dest) {
+    return this.split(org).join(dest);
+}
 
 /* ********************************************************
  * 로그아웃 
@@ -638,7 +661,7 @@ function fn_scdLayer(scd_id){
  ******************************************************** */
 function fn_strBrReplcae(msg) {
 	if (nvlPrmSet(msg, "") != "") {
-		msg = msg.replace("<br/>", "\n");
+		msg = msg.replaceAll("<br/>","\n");
 	}
 
 	return msg;
@@ -1412,4 +1435,22 @@ function fn_schdule_pop_List (wrk_id) {
 			$('#center_div').show();
 		}
 	}); 
+}
+
+/* ********************************************************
+* load bar 추가
+******************************************************** */
+function fn_proxy_loadbar(gbn){
+	var htmlLoad_proxy = '<div id="loading_proxy"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
+	if($("#loading_proxy").length == 0)	$("#contentsDiv").append(htmlLoad_proxy);
+	
+	if (gbn == "start") {
+	      $('#loading_proxy').css('position', 'absolute');
+	      $('#loading_proxy').css('left', '50%');
+	      $('#loading_proxy').css('top', '50%');
+	      $('#loading_proxy').css('transform', 'translate(-50%,-50%)');	  
+	      $('#loading_proxy').show();	
+	} else {
+		$('#loading_proxy').hide();	
+	}
 }

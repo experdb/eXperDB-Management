@@ -183,8 +183,7 @@
 		 	* Description : 아이피 정보 조회
 		 	* Author : 변승우
 		 	**/
-		 	SELECT
-					DB_SVR_IPADR_ID
+		 	SELECT	DB_SVR_IPADR_ID
 			        ,DB_SVR_ID
 			        ,IPADR
 			        ,PORTNO
@@ -193,9 +192,11 @@
 			        ,FRST_REG_DTM
 			        ,LST_MDFR_ID
 			        ,LST_MDF_DTM
+			        ,SVR_HOST_NM
 			FROM T_DBSVRIPADR_I
 			WHERE 1=1
 			AND db_svr_id = #{db_svr_id}
+			ORDER BY MASTER_GBN ASC
 	</select>
 	
 	

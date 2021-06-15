@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +53,7 @@ import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.Db2pgSettingService;
+import com.k4m.dx.tcontrol.db2pg.setting.service.QueryVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.SrcTableVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
@@ -256,6 +258,7 @@ public class Db2pgSettingController {
 			ddlConfigVO.setWrk_id(wrk_id);
 			ddlConfigVO.setFrst_regr_id(id);
 			ddlConfigVO.setLst_mdfr_id(id);
+			ddlConfigVO.setDb2pg_ddl_wrk_exp(toString(ddlConfigVO.getDb2pg_ddl_wrk_exp()));
 			//작업 정보등록
 			db2pgSettingService.insertDb2pgWork(ddlConfigVO);
 			
@@ -347,6 +350,7 @@ public class Db2pgSettingController {
 			ddlConfigVO.setWrk_id(wrk_id);
 			ddlConfigVO.setFrst_regr_id(id);
 			ddlConfigVO.setLst_mdfr_id(id);
+			ddlConfigVO.setDb2pg_ddl_wrk_exp(toString(ddlConfigVO.getDb2pg_ddl_wrk_exp()));
 			//작업 정보등록
 			db2pgSettingService.insertDb2pgWork(ddlConfigVO);
 	
@@ -500,6 +504,7 @@ public class Db2pgSettingController {
 			ddlConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			ddlConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			ddlConfigVO.setDdl_save_pth(ddl_path);
+			ddlConfigVO.setDb2pg_ddl_wrk_exp(toString(ddlConfigVO.getDb2pg_ddl_wrk_exp()));
 			db2pgSettingService.updateDDLWork(ddlConfigVO);
 			
 			//5.config 생성
@@ -628,6 +633,8 @@ public class Db2pgSettingController {
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String id = loginVo.getUsr_id();
 			
+			JSONObject configObj = new JSONObject();
+			
 			SrcTableVO srctableVO = new SrcTableVO();
 			srctableVO.setFrst_regr_id(id);
 			int exrt_trg_tb_wrk_id =0;
@@ -636,7 +643,9 @@ public class Db2pgSettingController {
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
 			int src_table_total_cnt = Integer.parseInt(request.getParameter("src_table_total_cnt"));
-					
+			String [] usrqry_content = request.getParameterValues("db2pg_usrqry_content");
+			String [] usrqry_table = request.getParameterValues("db2pg_usrqry_table");
+			
 			//1. WORK 등록
 			String time = nowTime();
 			Properties props = new Properties();
@@ -646,9 +655,11 @@ public class Db2pgSettingController {
 			
 			//시퀀스 조회
 			wrk_id=db2pgSettingService.selectWorkSeq();
+
 			dataConfigVO.setWrk_id(wrk_id);
 			dataConfigVO.setFrst_regr_id(id);
 			dataConfigVO.setLst_mdfr_id(id);
+			dataConfigVO.setDb2pg_trsf_wrk_exp(toString(dataConfigVO.getDb2pg_trsf_wrk_exp()));
 			//작업 정보등록
 			db2pgSettingService.insertDb2pgWorkData(dataConfigVO);
 			
@@ -670,17 +681,8 @@ public class Db2pgSettingController {
 				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
 			}
 			
-			//3.사용자쿼리를 사용할 경우 insert(보류)
-			int usr_qry_id=0;
-//			if(dataConfigVO.getUsr_qry_use_tf()==true){
-//				QueryVO queryVO = new QueryVO();
-//				usr_qry_id=db2pgSettingService.selectExrtusrQryIdSeq();
-//				queryVO.setDb2pg_usr_qry_id(usr_qry_id);
-//				queryVO.setUsr_qry_exp(request.getParameter("db2pg_usr_qry"));
-//				queryVO.setFrst_regr_id(id);
-//				db2pgSettingService.insertUsrQry(queryVO);
-//			}
 			
+			int usr_qry_id=0;
 			//4.T_DB2PG_Data_작업_정보 insert
 			dataConfigVO.setTrans_save_pth(trans_path);
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
@@ -698,12 +700,33 @@ public class Db2pgSettingController {
 					dataConfigVO.setSrc_cnd_qry(dataConfigVO.getSrc_cnd_qry().replaceAll(";", ""));
 				}
 			}
-			db2pgSettingService.insertDataWork(dataConfigVO);
+			int dataWorkId = db2pgSettingService.insertDataWork(dataConfigVO);
+			
+			
+			//3.사용자쿼리를 사용할 경우 insert
+			if(usrqry_table.length == 1 && usrqry_table[0].equals("")){
+				configObj.put("usrqry_tf", false);
+			}else{
+				configObj.put("usrqry_tf", true);
+				QueryVO queryVO = new QueryVO();
+				queryVO.setDb2pg_trsf_wrk_id(dataWorkId);
+				queryVO.setFrst_regr_id(id);
+				queryVO.setLst_mdfr_id(id);
+				for(int i=0;i<usrqry_table.length;i++){
+					usrqry_content[i]=toString(usrqry_content[i]);
+					usrqry_table[i]=toString(usrqry_table[i]);
+					queryVO.setTar_tb_name(usrqry_table[i].toString());
+					queryVO.setUsr_qry_exp(usrqry_content[i].toString());
+					db2pgSettingService.insertUsrQry(queryVO);
+				}
+				result = Db2pgConfigController.createXml(usrqry_table, usrqry_content, db2pg_path, dataConfigVO.getDb2pg_trsf_wrk_nm());
+			}
+			
 			
 			//5. config 파일 만들기
 			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_src_sys_id());
 			Db2pgSysInfVO targetDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_trg_sys_id());
-			JSONObject configObj = new JSONObject();
+			
 			configObj.put("path", db2pg_path);
 			configObj.put("wrk_nm", dataConfigVO.getDb2pg_trsf_wrk_nm());
 			configObj.put("src_host", sourceDBMS.getIpadr());
@@ -759,7 +782,8 @@ public class Db2pgSettingController {
 		returnStr = returnStr.replaceAll("&quot;", "\"");
 		returnStr = returnStr.replaceAll("&nbsp;", " ");
 		returnStr = returnStr.replaceAll("&amp;", "&");
-		returnStr = returnStr.replaceAll("\"", "&#34;");
+//		returnStr = returnStr.replaceAll("\"", "&#34;");
+		returnStr = returnStr.replaceAll("&#34;", "\"");
 		returnStr = returnStr.replaceAll("&apos;", "'");	
 		
 		return returnStr;
@@ -775,6 +799,7 @@ public class Db2pgSettingController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("null")
 	@RequestMapping(value = "/db2pg/insertCopyDataWork.do")
 	 public @ResponseBody JSONObject insertCopyDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
@@ -789,6 +814,10 @@ public class Db2pgSettingController {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String id = loginVo.getUsr_id();
+
+			JSONObject configObj = new JSONObject();
+			
+			int sourceDataWorkId = Integer.parseInt(request.getParameter("db2pg_trsf_wrk_id"));
 			
 			//1. WORK 등록
 			String time = nowTime();
@@ -799,14 +828,16 @@ public class Db2pgSettingController {
 			
 			//시퀀스 조회
 			int wrk_id=db2pgSettingService.selectWorkSeq();
+
 			dataConfigVO.setWrk_id(wrk_id);
 			dataConfigVO.setFrst_regr_id(id);
 			dataConfigVO.setLst_mdfr_id(id);
+			dataConfigVO.setDb2pg_trsf_wrk_exp(toString(dataConfigVO.getDb2pg_trsf_wrk_exp()));
 			//작업 정보등록
 			db2pgSettingService.insertDb2pgWorkData(dataConfigVO);
 			
 			//4.T_DB2PG_Data_작업_정보 insert
-			DataConfigVO sourceDataWork = (DataConfigVO) db2pgSettingService.selectDetailDataWork(Integer.parseInt(request.getParameter("db2pg_trsf_wrk_id")));
+			DataConfigVO sourceDataWork = (DataConfigVO) db2pgSettingService.selectDetailDataWork(sourceDataWorkId);
 			DataConfigVO targetDataWork = new DataConfigVO();
 			targetDataWork.setWrk_id(wrk_id);
 			targetDataWork.setDb2pg_src_sys_id(sourceDataWork.getDb2pg_src_sys_id());
@@ -829,12 +860,36 @@ public class Db2pgSettingController {
 			targetDataWork.setSrc_cnd_qry(sourceDataWork.getSrc_cnd_qry());
 			targetDataWork.setDb2pg_uchr_lchr_val(sourceDataWork.getDb2pg_uchr_lchr_val());
 			
-			db2pgSettingService.insertDataWork(targetDataWork);
+			int targetDataWorkId = db2pgSettingService.insertDataWork(targetDataWork);
+
+			List<QueryVO> usrqry_result = db2pgSettingService.selectDetailUsrQry(sourceDataWorkId);
+		
+			int usrqryCount = usrqry_result.size();
+			if(usrqryCount>0){
+				configObj.put("usrqry_tf", true);
+				QueryVO queryVO = new QueryVO();
+				String [] usrqry_content = new String [usrqryCount];
+				String [] usrqry_table = new String [usrqryCount];
+				queryVO.setDb2pg_trsf_wrk_id(targetDataWorkId);
+				queryVO.setFrst_regr_id(id);
+				queryVO.setLst_mdfr_id(id);
+				for(int i=0;i<usrqryCount;i++){
+					
+					usrqry_content[i] = usrqry_result.get(i).getUsr_qry_exp().toString();
+					usrqry_table[i] = usrqry_result.get(i).getTar_tb_name().toString();
+					queryVO.setTar_tb_name(usrqry_table[i]);
+					queryVO.setUsr_qry_exp(usrqry_content[i]);
+					db2pgSettingService.insertUsrQry(queryVO);
+				}
+				result = Db2pgConfigController.createXml(usrqry_table, usrqry_content, db2pg_path, dataConfigVO.getDb2pg_trsf_wrk_nm());
+			}else{
+				configObj.put("usrqry_tf", false);
+			}		
+			
 			
 			//3. config 파일 만들기
 			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(sourceDataWork.getDb2pg_src_sys_id());
 			Db2pgSysInfVO targetDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(sourceDataWork.getDb2pg_trg_sys_id());
-			JSONObject configObj = new JSONObject();
 			configObj.put("path", db2pg_path);
 			configObj.put("wrk_nm", dataConfigVO.getDb2pg_trsf_wrk_nm());
 			configObj.put("src_host", sourceDBMS.getIpadr());
@@ -894,6 +949,7 @@ public class Db2pgSettingController {
 			
 			int db2pg_trsf_wrk_id = Integer.parseInt(request.getParameter("db2pg_trsf_wrk_id"));
 			DataConfigVO result = (DataConfigVO) db2pgSettingService.selectDetailDataWork(db2pg_trsf_wrk_id);
+			
 			mv.addObject("db2pg_trsf_wrk_id", result.getDb2pg_trsf_wrk_id());
 			mv.addObject("db2pg_trsf_wrk_nm",result.getDb2pg_trsf_wrk_nm());
 			mv.addObject("db2pg_trsf_wrk_exp", result.getDb2pg_trsf_wrk_exp());
@@ -922,6 +978,9 @@ public class Db2pgSettingController {
 			mv.addObject("exrt_trg_tb_total_cnt", result.getExrt_trg_tb_total_cnt());
 			mv.addObject("exrt_exct_tb_total_cnt", result.getExrt_exct_tb_total_cnt());
 			mv.addObject("db2pg_uchr_lchr_val",result.getDb2pg_uchr_lchr_val());
+
+			List<QueryVO> usrqry_result = db2pgSettingService.selectDetailUsrQry(result.getDb2pg_trsf_wrk_id());
+			mv.addObject("usr_qry", usrqry_result);
 			
 			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
 			mv.addObject("codeInputMode", codeInputMode);
@@ -959,6 +1018,7 @@ public class Db2pgSettingController {
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String id = loginVo.getUsr_id();
 			
+			JSONObject configObj = new JSONObject();
 			SrcTableVO srctableVO = new SrcTableVO();
 			srctableVO.setFrst_regr_id(id);
 			int exrt_trg_tb_wrk_id =0;
@@ -967,6 +1027,8 @@ public class Db2pgSettingController {
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
 			int src_table_total_cnt = Integer.parseInt(request.getParameter("src_table_total_cnt"));
+			String [] usrqry_content = request.getParameterValues("db2pg_usrqry_content");
+			String [] usrqry_table = request.getParameterValues("db2pg_usrqry_table");
 			
 			//1. WORK 등록
 			String time = nowTime();
@@ -992,18 +1054,7 @@ public class Db2pgSettingController {
 		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
 			}
-			
-			//3.사용자쿼리를 사용할 경우 insert(보류)
-			int usr_qry_id=0;
-//			if(dataConfigVO.getUsr_qry_use_tf()==true){
-//				QueryVO queryVO = new QueryVO();
-//				usr_qry_id=db2pgSettingService.selectExrtusrQryIdSeq();
-//				queryVO.setDb2pg_usr_qry_id(usr_qry_id);
-//				queryVO.setUsr_qry_exp(request.getParameter("db2pg_usr_qry"));
-//				queryVO.setFrst_regr_id(id);
-//				db2pgSettingService.insertUsrQry(queryVO);
-//			}
-			
+
 			//src_cnd_qry where문절에 where, ; 문자 제거
 			if(!dataConfigVO.getSrc_cnd_qry().equals("")){
 				dataConfigVO.setSrc_cnd_qry(toString(dataConfigVO.getSrc_cnd_qry()));
@@ -1016,18 +1067,40 @@ public class Db2pgSettingController {
 				}
 			}
 			
+			int usr_qry_id=0;
 			//4.T_DB2PG_Data_작업_정보 insert
 			dataConfigVO.setLst_mdfr_id(id);
 			dataConfigVO.setTrans_save_pth(trans_path);
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
+			dataConfigVO.setDb2pg_trsf_wrk_exp(toString(dataConfigVO.getDb2pg_trsf_wrk_exp()));
+			
 			db2pgSettingService.updateDataWork(dataConfigVO);
 			
+			db2pgSettingService.deleteUsrQry(dataConfigVO.getDb2pg_trsf_wrk_id());
+			// User Query 입력
+			if(usrqry_table.length == 1 && usrqry_table[0].equals("")){
+				configObj.put("usrqry_tf", false);
+			}else{
+				configObj.put("usrqry_tf", true);
+				QueryVO queryVO = new QueryVO();
+				queryVO.setDb2pg_trsf_wrk_id(dataConfigVO.getDb2pg_trsf_wrk_id());
+				queryVO.setLst_mdfr_id(id);
+				for(int i=0;i<usrqry_table.length;i++){
+					usrqry_content[i]=toString(usrqry_content[i]);
+					usrqry_table[i]=toString(usrqry_table[i]);
+					queryVO.setTar_tb_name(usrqry_table[i].toString());
+					queryVO.setUsr_qry_exp(usrqry_content[i].toString());
+					db2pgSettingService.insertUsrQry(queryVO);
+				}
+				result = Db2pgConfigController.createXml(usrqry_table, usrqry_content, db2pg_path, dataConfigVO.getDb2pg_trsf_wrk_nm());
+			}
+
 			//5. config 파일 만들기
 			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_src_sys_id());
 			Db2pgSysInfVO targetDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_trg_sys_id());
-			JSONObject configObj = new JSONObject();
+			
 			configObj.put("path", db2pg_path);
 			configObj.put("wrk_nm", dataConfigVO.getDb2pg_trsf_wrk_nm());
 			configObj.put("src_host", sourceDBMS.getIpadr());
@@ -1107,6 +1180,7 @@ public class Db2pgSettingController {
 			String[] db2pg_trsf_wrk_nm = request.getParameter("db2pg_trsf_wrk_nm").toString().split(",");
 			for (i = 0; i < db2pg_trsf_wrk_nm.length; i++) {
 				result = Db2pgConfigController.deleteConfig(db2pg_trsf_wrk_nm[i],db2pg_path);
+				result = Db2pgConfigController.deleteXml(db2pg_trsf_wrk_nm[i], db2pg_path);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

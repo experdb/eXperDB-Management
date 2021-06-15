@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="backupNodeSql">
+	<select id="getNodeList" parameterType="targetMachineVO" resultType="targetMachineVO">
+			SELECT
+					name,
+					user,
+					password,
+					operatingsystem,
+					description,
+					isprotected,
+					jobname,
+					licensestatus,
+					connectionstatus,
+					lastresult,
+					recoverypointcount,
+					recoverysetcount,
+					excludevolumes,
+					backuplocationtype,
+					machinetype,
+					uuid
+			FROM TARGETMACHINE
+			WHERE 1 =1
+	</select>
+		
+	<select id="getNodeInfo" resultType="targetMachineVO" parameterType="String">
+		SELECT 
+		    "name" AS "name"
+		  , "User" AS "user"
+		  , description
+		  FROM targetmachine
+	     WHERE "name" like #{path}
+	</select>
+	
+	<select id="getScheduleNodeInfo" resultType="targetMachineVO" parameterType="String">
+		SELECT *
+		  FROM targetmachine
+		 WHERE "name" like #{path}
+	</select>
+	
+	<update id="volumeUpdate" parameterType="String">
+		UPDATE TARGETMACHINE SET EXCLUDEVOLUMES = #{volumeScript} WHERE NAME = #{ipadr}
+	</update>
+	
+	<update id="setScheduleJob2" parameterType="hashmap">
+		WITH DEL AS (
+		 	DELETE FROM JOBQUEUE WHERE TARGETNAME LIKE #{ipadr}
+		), INST1 AS (
+   			INSERT INTO JOBQUEUE (JOBTYPE, JOBNAME, templateid, TARGETNAME, ISREPEAT , JOBSTATUS , LASTRESULT , UUID , BACKUPLOCATION)
+		       values (
+		       		  #{jobType}
+		       		, #{jobName}
+		       		, #{templateID}
+		       		, #{ipadr}
+		       		, #{isRepeat}
+		       		, #{jobStatus}
+		       		, #{lastResult}
+		       		, #{uuid}
+		       		, #{backupLocation}
+		              )
+		), INST2 AS (
+			 UPDATE JOBSCRIPT SET templateid = #{templateID} WHERE NAME = #{jobName}
+		) UPDATE TARGETMACHINE SET ISPROTECTED = 1, JOBNAME = #{jobName} WHERE NAME = #{ipadr}
+	</update>
+	
+	<select id="checkJobExist" parameterType="String" resultType="Integer">
+		SELECT count(*) FROM JOBQUEUE J WHERE TARGETNAME LIKE #{ipadr}
+	</select>
+	
+</mapper>

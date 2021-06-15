@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="jobStatuSsql">
+
+	<select id="selectJobStatusList" resultType="JobStatusVO"  parameterType="hashmap">
+				SELECT 
+							JQ.UUID
+							, JQ.JOBNAME
+							, JQ.JOBTYPE
+							, (CASE 
+										 when JQ.JOBTYPE = 1 then 'Backup'
+										 when JQ.JOBTYPE = 2 then 'Restore'
+										 when JQ.JOBTYPE = 3 then 'Full Backup'
+									     when JQ.JOBTYPE = 4 then 'Incremental Backup'
+							     ELSE 'Verify Backup'
+								  end) AS JOBTYPE_NM
+							, JQ.TARGETNAME
+							, JQ.BACKUPLOCATION
+							, JQ.ISREPEAT
+							, JQ.JOBSTATUS
+							, (CASE 
+									 when JQ.JOBSTATUS = -1 then 'Ready'
+									 when JQ.JOBSTATUS = 0 then 'Idle'
+									 when JQ.JOBSTATUS = 1 then 'Finished'
+								     when JQ.JOBSTATUS = 2 then 'Cancelled'
+								     when JQ.JOBSTATUS = 3 then 'Failed'
+									 when JQ.JOBSTATUS = 4 then 'Incomplete'
+									 when JQ.JOBSTATUS = 5 then 'Active'
+								     when JQ.JOBSTATUS = 6 then 'Waiting'
+								     when JQ.JOBSTATUS = 7 then 'Crashed'
+									 when JQ.JOBSTATUS = 8 then 'NeedReBoot'
+									 when JQ.JOBSTATUS = 9 then 'failed_No_License'
+						     ELSE 'Done'
+							  end) AS JOBSTATUS_NM
+							, JQ.LASTRESULT
+							, JQ.TEMPLATEID
+							, JQ.JOBMETHOD
+							, BL.LOCATION
+							, BL.RPSSERVER
+							, BL.DSNAME
+							, BL.TYPE 
+				FROM JOBQUEUE AS JQ 
+				LEFT JOIN BACKUPLOCATION AS BL
+				ON JQ.BACKUPLOCATION = BL.UUID
+				ORDER BY JQ.JOBNAME
+				<if test="jobname != null and jobname != ''">
+				  WHERE JQ.JOBNAME = #{jobname}
+				</if>
+	</select>
+	
+	
+	<select id="selectJobEndTotCnt" resultType="int">
+		SELECT COUNT(*) FROM JOBHISTORY
+		WHERE JOBID = #{jobid}
+	</select>
+	
+	
+	<select id="selectJobid" resultType="int" parameterType="hashmap">
+		SELECT
+			COALESCE(MAX(jobid),0) AS jobid
+		FROM
+		ActivityLog
+		<if test="jobname != null and jobname != ''">
+			  WHERE JOBNAME = #{jobname}
+		</if>
+	</select>
+		
+</mapper>

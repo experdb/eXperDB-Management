@@ -49,6 +49,15 @@ public class DataConfigVO {
 	private int exrt_trg_tb_total_cnt;
 	private int exrt_exct_tb_total_cnt;
 
+	
+	@Override
+	public String toString() {
+		return "DataConfigVO [idx=" + idx + ", db2pg_trsf_wrk_id=" + db2pg_trsf_wrk_id + ", db2pg_trsf_wrk_nm="
+				+ db2pg_trsf_wrk_nm + ", db2pg_trsf_wrk_exp=" + db2pg_trsf_wrk_exp + ", frst_regr_id=" + frst_regr_id
+				+ ", frst_reg_dtm=" + frst_reg_dtm + ", lst_mdfr_id=" + lst_mdfr_id + ", lst_mdf_dtm=" + lst_mdf_dtm
+				+ ", trans_save_pth=" + trans_save_pth + ", wrk_id=" + wrk_id + "]";
+	}
+
 	public int getExrt_trg_tb_total_cnt() {
 		return exrt_trg_tb_total_cnt;
 	}
