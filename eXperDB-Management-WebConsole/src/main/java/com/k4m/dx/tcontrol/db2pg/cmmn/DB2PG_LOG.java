@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 import org.springframework.util.ResourceUtils;
 
 import com.k4m.dx.tcontrol.db2pg.setting.web.Db2pgSettingController;
+import org.apache.commons.io.input.ReversedLinesFileReader;
 
 public class DB2PG_LOG {
 	
@@ -176,6 +177,17 @@ public class DB2PG_LOG {
 		return result;		
 	}
 	
-
+    public static List<String> readLastLine(File file, int numLastLineToRead) {
+        List<String> result = new ArrayList<>();
+        try (ReversedLinesFileReader reader = new ReversedLinesFileReader(file)) {
+            String line = "";
+            while ((line = reader.readLine()) != null && result.size() < numLastLineToRead) {
+                result.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }

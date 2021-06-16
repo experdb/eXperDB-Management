@@ -151,11 +151,14 @@ function fn_init(){
 //						html += '<spring:message code="common.failed" />';
 						html += "</button>";
 					} else {
-						html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+						html += "<div id='progress"+full.idx+"'></div>";
+						/* html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
 						html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
 						html += '&nbsp;<spring:message code="etc.etc28" />';
-						html += "</div>";
+						html += "</div>"; */
+						getProgress(full.mig_exe_sn,full.save_pth,full.idx);
 					}
+
 					return html;
 				},
 				className : "dt-center",
@@ -167,8 +170,6 @@ function fn_init(){
 		{data : "mig_exe_sn", defaultContent : "", visible: false}
 	]
 	});
-
-	
 	
 	tableDDL.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableDDL.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
@@ -184,7 +185,6 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
-
 	
 	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
@@ -339,7 +339,58 @@ function getdataDataList(){
 	});
 }
 
+/* ********************************************************
+ * Migration 진행현황
+ ******************************************************** */
+function getProgress(mig_exe_sn, trans_save_pth, idx){
+	var html;
+	var reCycle = true;
+	
+	$.ajax({
+		url : "/db2pg/db2pgProgress.do", 
+	  	data : {
+	  		mig_exe_sn : mig_exe_sn,
+	  		trans_save_pth :trans_save_pth
+	  	},
+		dataType : "json",
+		type : "post",
+		async: false,
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			var perCent = 0;
+			if(result.totalcnt > 0)	perCent = Math.round((result.nowcnt / result.totalcnt)*100);
+			if(result.totalcnt != null && result.totalcnt != "" && result.totalcnt == result.nowcnt){
+				reCycle = false;
+				getdataDataList();
 
+			} else{
+				html = '<div id="outer" style="width: 100%; height: 22px; background: #fff;border:1px solid #5e50f9;">';
+				html += '  <div id="inner1" style="width: ' + perCent + '%; height: 20px;background: #68afff;color:red;font-size:14px;vertical-align:middle;"></div>';
+				html += '</div>';
+				html += '<div id="inner2" style="width: 100%; margin-top:4pt; height: 20px;color:red;font-size:14px;vertical-align:middle;align:center">' + result.nowcnt + " / " + result.totalcnt + ' ('+perCent+'%)</div>';
+			}
+			
+			eval("$('#progress"+idx+"')").html(html);
+
+			if(reCycle){
+				setTimeout(function() {
+					  getProgress(mig_exe_sn, trans_save_pth, idx);
+					}, 2000);
+			}
+		}
+	});
+}
 
 
  /* ********************************************************

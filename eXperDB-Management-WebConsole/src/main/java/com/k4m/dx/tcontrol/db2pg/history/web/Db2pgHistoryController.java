@@ -194,7 +194,44 @@ public class Db2pgHistoryController {
 		mv.addObject("trans_save_pth",request.getParameter("trans_save_pth"));
 		
 		return mv;
-	}	
+	}
+	
+	/**
+	 * DB2PG 수행 결과 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/db2pgProgress.do")
+	public ModelAndView db2pgProgress( HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		List<String> lines = null;
+		String[] result = null;
+		try {
+			String trans_save_pth = request.getParameter("trans_save_pth");			
+			lines = DB2PG_LOG.readLastLine(new File(trans_save_pth+"/result/progress.txt"), 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(lines.size() > 0 && lines.get(0).contains(",")){
+			result = lines.get(0).split(",");
+			mv.addObject("totalcnt",result[0]);
+			mv.addObject("nowcnt",result[1]);
+			mv.addObject("tables",result[2]);
+			mv.addObject("rows",result[3]);
+			mv.addObject("migtime",result[4]);
+		}else{
+			mv.addObject("totalcnt","");
+			mv.addObject("nowcnt","");
+			mv.addObject("tables","");
+			mv.addObject("rows","");
+			mv.addObject("migtime","");
+		}
+		mv.addObject("trans_save_pth",request.getParameter("trans_save_pth"));
+		
+		return mv;
+	}
 	
 	/**
 	 * DDL 수행이력 상세보기 화면을 보여준다.
