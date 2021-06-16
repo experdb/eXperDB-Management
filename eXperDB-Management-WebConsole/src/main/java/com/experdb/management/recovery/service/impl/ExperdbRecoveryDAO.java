@@ -55,6 +55,11 @@ public class ExperdbRecoveryDAO extends EgovAbstractMapper{
 		System.out.println("### recoveryDBDelete DAO ## " + dbId);
 		sql.delete("experdbRecoverySql.recoveryDBDelete", dbId);
 	}
+
+	public String getUserPassword(String usr_id) {
+		String user_password = sql.selectOne("experdbRecoverySql.getUserPassword", usr_id);
+		return user_password;
+	}
 	
 	
 	

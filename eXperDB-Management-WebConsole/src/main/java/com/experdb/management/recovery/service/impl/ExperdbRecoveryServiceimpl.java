@@ -6,13 +6,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
@@ -30,6 +38,10 @@ import com.experdb.management.backup.storage.service.impl.ExperdbBackupStorageDA
 import com.experdb.management.recovery.cmmn.RestoreInfoVO;
 import com.experdb.management.recovery.cmmn.RestoreMachineMake;
 import com.experdb.management.recovery.service.ExperdbRecoveryService;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -186,6 +198,41 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		
 		result.put("result_code", 1);
 		return result;
+	}
+
+	@Override
+	public JSONObject completeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		JSONObject result = new JSONObject();
+		HttpSession session = request.getSession();
+		String password = request.getParameter("password");
+		if(!checkAccountPassword(session, password)){
+			result.put("result_code", 5);
+			return result;
+		}
+		
+		
+		
+		
+		
+		return result;
+	}
+	
+	public boolean checkAccountPassword(HttpSession session, String password) throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
+		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+		
+		System.out.println("### checkAccountPassword ###");
+		System.out.println("user ID : " + usr_id);
+		System.out.println("password : " + password);
+		System.out.println("password enc : " + aes.aesEncode(password));
+		String user_password = aes.aesDecode(experdbRecoveryDAO.getUserPassword(usr_id));
+		
+		if(user_password.equals(password)){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	

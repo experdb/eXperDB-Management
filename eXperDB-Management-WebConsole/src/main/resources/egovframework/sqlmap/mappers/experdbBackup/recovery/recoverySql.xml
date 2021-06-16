@@ -55,4 +55,10 @@
 		DELETE FROM restoremachine WHERE restoremachine_id = #{dbId}::numeric
 	</delete>
 	
+	<select id="getUserPassword" parameterType="String" resultType="String">
+		SELECT 
+		     trans_chk_key 
+		  FROM t_trans_encrypt 
+		 WHERE trans_id = #{usr_id}
+	</select>
 </mapper>

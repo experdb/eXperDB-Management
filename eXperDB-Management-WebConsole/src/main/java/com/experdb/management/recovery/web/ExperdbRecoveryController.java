@@ -1,7 +1,14 @@
 package com.experdb.management.recovery.web;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
@@ -92,6 +99,38 @@ public class ExperdbRecoveryController {
 		JSONObject result = new JSONObject();
 		
 		result = experdbRecoveryService.recoveryDBDelete(request);
+		
+		return result;
+	}
+	
+	@RequestMapping(value = "/experdb/completeRecoveryRun.do")
+	public @ResponseBody JSONObject completeRecoveryRun(HttpServletRequest request){
+		JSONObject result = new JSONObject();
+		
+		try {
+			result = experdbRecoveryService.completeRecoveryRun(request);
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return result;
 	}

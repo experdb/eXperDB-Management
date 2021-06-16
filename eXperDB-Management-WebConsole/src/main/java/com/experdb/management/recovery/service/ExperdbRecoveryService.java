@@ -2,7 +2,14 @@ package com.experdb.management.recovery.service;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
@@ -21,5 +28,7 @@ public interface ExperdbRecoveryService {
 	JSONObject recoveryDBInsert(HttpServletRequest request);
 
 	JSONObject recoveryDBDelete(HttpServletRequest request);
+
+	JSONObject completeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException;
 	
 }

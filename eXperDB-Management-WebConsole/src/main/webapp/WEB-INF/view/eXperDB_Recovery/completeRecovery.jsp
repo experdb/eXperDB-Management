@@ -244,6 +244,8 @@ function fn_targetListPopup(){
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		})
+	}else{
+		showSwalIcon('선택된 백업 DB가 없습니다', '<spring:message code="common.close" />', '', 'error');
 	}
 }
 
@@ -285,7 +287,39 @@ function fn_passwordCheckPopup(){
 }
 
 function fn_completeRecoveryRun(){
-	
+	if($("#recoveryPW").val() != ""){
+		$.ajax({
+			url : "/experdb/completeRecoveryRun.do",
+			type : "post",
+			data : {
+				password : $("#recoveryPW").val(),
+				bmrInstant : $("#bmrInstant").val(),
+				sourceDB : $("#backupDBList").val(),
+				storageType : $("#recStorageType").val(),
+				storagePath : $("#recStoragePath").val(),
+				targetMac : $("#recMachineMAC").val(),
+				targetIp : $("#recMachineIP").val(),
+				targetSNM : $("#recMachineSNM").val(),
+				targetGW : $("#recMachineGateWay").val(),
+				targetDNS : $("#recMachineDNS").val()
+			}
+		})
+		.done(function(data){
+			
+		})
+		.fail (function(xhr, status, error){
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if (xhr.status == 403){
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		})
+	}else{
+		showSwalIcon('비밀번호를 입력해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
+		$("#recoveryPW").focus();
+	}
 }
 
 </script>
