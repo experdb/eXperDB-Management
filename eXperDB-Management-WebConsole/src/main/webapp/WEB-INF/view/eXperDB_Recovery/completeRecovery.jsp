@@ -28,16 +28,14 @@
 var storageList = [];
 var CIFSList = [];
 var NFSList = [];
+var storageExist = "N";
 /* ********************************************************
  * 페이지 시작시
  ******************************************************* */
 $(window.document).ready(function() {
 	fn_init();
 	fn_getBackupDBList();
-	
-	// fn_getStorageList();
-	// $("#storageType").val("1");
-	// fn_storageTypeClick();
+	$("#storageDiv").hide();
 });
 
 
@@ -91,25 +89,6 @@ function fn_init(){
 
 }
 
-function fn_getStorageList(){
-	$.ajax({
-		url : "/experdb/backupStorageList.do",
-		type : "post"
-	})
-	.done(function(result){
-		fn_setStorageList(result);
-	})
-	.fail (function(xhr, status, error){
-		 if(xhr.status == 401) {
-			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-		} else if (xhr.status == 403){
-			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-		} else {
-			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-		}
-	 })
-}
- 
  
 function fn_bmrInstanceClick(){
 	var instance = $("#bmrInstant").val();
@@ -147,7 +126,7 @@ function fn_setBackupDBList(data){
 	$("#backupDBList").append(html);
 }
 
-var aaa;
+
 function fn_backupDBChoice(){
 	var ipadr = $("#backupDBList").val();
 	if(ipadr != 0) {
@@ -159,7 +138,7 @@ function fn_backupDBChoice(){
 			}
 		})
 		.done(function(result){
-			aaa = result.storageList;
+			fn_setStorageList(result.storageList);
 		})
 		.fail (function(xhr, status, error){
 			if(xhr.status == 401) {
@@ -170,7 +149,28 @@ function fn_backupDBChoice(){
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		})
+		.always(function(){
+			fn_storageListReset();
+			fn_recoveryDBReset();
+		})
 	}
+}
+
+function fn_storageListReset(){
+	storageList.length=0;
+	CIFSList.length=0;
+	NFSList.length=0;
+	$("#recStorageType").val("");
+	$("#recStoragePath").val("");
+}
+
+function fn_recoveryDBReset(){
+	$("#recMachineMAC").val("");
+	$("#recMachineIP").val("");
+	$("#recoveryDB").val("");
+	$("#recMachineSNM").val("");
+	$("#recMachineGateWay").val("");
+	$("#recMachineDNS").val("");
 }
 
 function fn_setStorageList(data) {
@@ -178,12 +178,30 @@ function fn_setStorageList(data) {
 	CIFSList.length=0;
 	NFSList.length=0;
 	storageList = data;
-	for(var i =0; i<storageList.length; i++){
-		if(storageList[i].type == "CIFS Share"){
-			CIFSList.push(storageList[i]);
-		}else{
-			NFSList.push(storageList[i]);
+	$("#storageDiv").hide();
+	$("#recStorageType").val("");
+	$("#recStoragePath").val("");
+	
+	if(storageList.length == 0){
+		storageExist = "N";
+		showSwalIcon('백업된 데이터가 존재하지 않습니다.', '<spring:message code="common.close" />', '', 'error');
+		$("#backupDBList").val(0);
+		
+	}else if(storageList.length == 1){
+		storageExist = "Y";
+		$("#recStorageType").val(storageList[0].type);
+		$("#recStoragePath").val(storageList[0].path);
+		
+	}else{
+		storageExist = "Y";
+		for(var i =0; i<storageList.length; i++){
+			if(storageList[i].type == "2"){
+				CIFSList.push(storageList[i]);
+			}else{
+				NFSList.push(storageList[i]);
+			}
 		}
+		$("#storageDiv").show();
 	}
 }
 
@@ -203,18 +221,85 @@ function fn_storageTypeClick(){
 	$("#storageList").append(html);
 }
 
-
+var aa;
 function fn_targetListPopup(){
-	$("#pop_layer_popup_recoveryTargetList").modal("show");
+	if($("#backupDBList").val() != 0){
+		$.ajax({
+			url : "/experdb/recoveryDBList.do",
+			type : "post"
+		})
+		.done(function(result){
+			aa = result.recoveryList;
+			TargetList.clear();
+			TargetList.rows.add(result.recoveryList).draw();
+			fn_setIpList(result.recoveryList);
+			$("#pop_layer_popup_recoveryTargetList").modal("show");
+		})
+		.fail (function(xhr, status, error){
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if (xhr.status == 403){
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		})
+	}
 }
 
+function fn_runNow(){
+	if(fn_valCheck()){
+		confile_title = '복구 수행';
+		$('#con_multi_gbn', '#findConfirmMulti').val("recovery_run");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('복구를 수행하시겠습니까?');
+		$('#pop_confirm_multi_md').modal("show");
+	}
+}
 
+function fn_valCheck(){
+	if($("#bmrInstant").val() == 0){
+		showSwalIcon('Instance BMR을 선택해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
+		return false;
+	}else if($("#backupDBList").val() == 0){
+		showSwalIcon('백업 DB를 선택해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
+		return false;
+	}else if($("#recMachineIP").val() == ""){
+		showSwalIcon('복구 DB를 선택해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
+		return false;
+	}
+	return true;
+}
+
+function fnc_confirmMultiRst(gbn){
+	  if(gbn == "recovery_run"){
+		  fn_passwordCheckPopup();
+	  }else if(gbn == "recoveryDB_del"){
+		  fn_recMachineDel();
+	  }
+}
+
+function fn_passwordCheckPopup(){
+	 fn_pwCheckFormReset();
+	 $("#pop_layer_popup_recoveryPasswordCheckForm").modal("show");
+}
 
 </script>
 
-
+<%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./popup/recTargetListForm.jsp"%>
 <%@include file="./popup/recTargetDBRegForm.jsp"%>
+<%@include file="./popup/recPwChkForm.jsp"%>
+
+<form name="recoveryInfo">
+	<input type="hidden" name="recStorageType" id="recStorageType">
+	<input type="hidden" name="recStoragePath"  id="recStoragePath">
+	<input type="hidden" name="recMachineMAC"  id="recMachineMAC">
+	<input type="hidden" name="recMachineIP"  id="recMachineIP">
+	<input type="hidden" name="recMachineSNM"  id="recMachineSNM">
+	<input type="hidden" name="recMachineGateWay"  id="recMachineGateWay">
+	<input type="hidden" name="recMachineDNS"  id="recMachineDNS">	
+</form>
 
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -326,7 +411,7 @@ function fn_targetListPopup(){
 							</select>
 						</div>
 					</div>
-					<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
+					<div class="form-group row" id="storageDiv" style="margin-top: 10px;margin-left: 0px; ">
 						<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 							Storage
 						</div>
@@ -340,10 +425,10 @@ function fn_targetListPopup(){
 					</div>
 					<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 						<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
-							대상 DB
+							복구 DB
 						</div>
 						<div class="col-4" style="padding-left: 0px;">
-							<input type="text" id="recTargetNetMask" name="targetDB" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
+							<input type="text" id="recoveryDB" name="recoveryDB" class="form-control form-control-sm" style="height: 40px; background-color:#ffffffdd;" readonly/>
 						</div>
 						<div class="col-4" style="padding-left: 0px;">
 							<button type="button" class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" onClick="fn_targetListPopup()">등록</button>
@@ -359,7 +444,7 @@ function fn_targetListPopup(){
 			<div class="card">
 				<div class="card-body">
 					<div class="table-responsive" style="overflow:hidden;min-height:500px;">
-						<table id="recLogList" class="table table-hover system-tlb-scroll" style="width:100%;" align:dt-center; ">
+						<table id="recLogList" class="table table-hover system-tlb-scroll" style="width:100%; align:dt-center; ">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="70" style="background-color: #7e7e7e;">Status</th>

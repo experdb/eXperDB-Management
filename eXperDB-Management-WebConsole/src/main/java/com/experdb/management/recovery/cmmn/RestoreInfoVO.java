@@ -6,6 +6,7 @@ import com.experdb.management.backup.policy.service.VolumeVO;
 
 public class RestoreInfoVO {
 	private String jobName;
+	private String machineId;
 	private String storageLocation;
 	private String sourceNode;
 	private String recoveryPoint;
@@ -19,6 +20,14 @@ public class RestoreInfoVO {
 	private String guestMac;
 	private String guestSubnetmask;
 	private List<VolumeVO> volumes;
+	
+	public String getMachineId() {
+		return machineId;
+	}
+
+	public void setMachineId(String machineId) {
+		this.machineId = machineId;
+	}
 
 	public String getGuestSubnetmask() {
 		return guestSubnetmask;
@@ -134,11 +143,11 @@ public class RestoreInfoVO {
 
 	@Override
 	public String toString() {
-		return "RestoreInfoVO [jobName=" + jobName + ", storageLocation=" + storageLocation + ", sourceNode="
-				+ sourceNode + ", recoveryPoint=" + recoveryPoint + ", encryptionPassword=" + encryptionPassword
-				+ ", restoreTarget=" + restoreTarget + ", guestNetwork=" + guestNetwork + ", guestIp=" + guestIp
-				+ ", guestNetmask=" + guestNetmask + ", guestGateway=" + guestGateway + ", guestDns=" + guestDns
+		return "RestoreInfoVO [jobName=" + jobName + ", machineId=" + machineId + ", storageLocation=" + storageLocation
+				+ ", sourceNode=" + sourceNode + ", recoveryPoint=" + recoveryPoint + ", encryptionPassword="
+				+ encryptionPassword + ", restoreTarget=" + restoreTarget + ", guestNetwork=" + guestNetwork
+				+ ", guestIp=" + guestIp + ", guestNetmask=" + guestNetmask + ", guestGateway=" + guestGateway
+				+ ", guestDns=" + guestDns + ", guestMac=" + guestMac + ", guestSubnetmask=" + guestSubnetmask
 				+ ", volumes=" + volumes + "]";
 	}
-
 }

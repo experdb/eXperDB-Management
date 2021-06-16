@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.experdb.management.backup.service.BackupLocationInfoVO;
+import com.experdb.management.recovery.cmmn.RestoreInfoVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -28,18 +29,31 @@ public class ExperdbRecoveryDAO extends EgovAbstractMapper{
 	private SqlSession jobhistoryDBsql;
 
 	public List<BackupLocationInfoVO> getStorageList(String ipadr) {
-		System.out.println("####### getStorageList DAO #######");
 		return jobhistoryDBsql.selectList("experdbRecoverySql.getStorageList", ipadr);
 	}
 
 	public int getStorageType(String backupDestLocation) {
-		System.out.println("####### getStorageType DAO #######");
-		int r;
-		r = sql2.selectOne("experdbRecoverySql.getStorageType", backupDestLocation);
+		int result = -1;
+		BackupLocationInfoVO resultInfo = sql2.selectOne("experdbRecoverySql.getStorageType", backupDestLocation);
 		
-		System.out.println("**** " + r);
-		
-		return r;
+		if(resultInfo != null){
+			result = resultInfo.getType();
+		}
+		return result;
+	}
+
+	public List<RestoreInfoVO> getRecoveryDBList() {
+		System.out.println("@@ getRecoveryDBList DAO @@");
+		return sql.selectList("experdbRecoverySql.getRecoveryDBList");
+	}
+
+	public void recoveryDBInsert(RestoreInfoVO resultInfo) {
+		sql.insert("experdbRecoverySql.recoveryDBInsert", resultInfo);
+	}
+
+	public void recoveryDBDelete(String dbId) {
+		System.out.println("### recoveryDBDelete DAO ## " + dbId);
+		sql.delete("experdbRecoverySql.recoveryDBDelete", dbId);
 	}
 	
 	

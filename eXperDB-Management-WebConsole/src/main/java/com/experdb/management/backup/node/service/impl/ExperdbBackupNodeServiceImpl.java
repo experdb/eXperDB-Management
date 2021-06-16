@@ -76,7 +76,6 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		result.put("serverList", resultList);
 		result.put("license", license);
 		
-		
 		return result;
 	}
 

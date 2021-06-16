@@ -12,11 +12,47 @@
 	
 	</select>
 
-	<select id="getStorageType" parameterType="String" resultType="int">
+	<select id="getStorageType" parameterType="String" resultType="backupLocationInfoVO">
 		SELECT 
-		     'type'
+		     type
 		  FROM backuplocation
-	  	 WHERE location = #{path}
+	  	 WHERE location = #{backupDestLocation}
 	</select>
-
+	
+	<select id="getRecoveryDBList" resultType="restoreInfoVO">
+		SELECT
+		   	mac as guestMac
+		  , ip as guestIp
+		  , restoremachine_id as machineId
+		  , subnetmask as guestSubnetmask
+		  , gateway as guestGateway
+		  , dns as guestDns  
+		  , network as guestNetwork
+		  FROM restoremachine
+	</select>
+	
+	<insert id="recoveryDBInsert" parameterType="restoreInfoVO">
+		INSERT INTO restoremachine
+		(
+			  mac
+			, ip
+			, subnetmask 
+			, gateway 
+			, dns 
+			, network 
+		) VALUES 
+		(
+			  #{guestMac}
+			, #{guestIp}
+			, #{guestSubnetmask}
+			, #{guestGateway}
+			, #{guestDns}
+			, #{guestNetwork}
+		)
+	</insert>
+	
+	<delete id="recoveryDBDelete" parameterType="String">
+		DELETE FROM restoremachine WHERE restoremachine_id = #{dbId}::numeric
+	</delete>
+	
 </mapper>

@@ -35,7 +35,7 @@ public class RestoreMachineMake {
 					+ "subnetmask = " + subnetmask + "\n"
 					+ "gateway = " + gateway + "\n"
 					+ "dns = " + dns + "\n"
-					+ "netwrok = " + network + "\n";
+					+ "network = " + network + "\n";
 			
 			
 			System.out.println("-------------------------------------------------");
@@ -65,6 +65,71 @@ public class RestoreMachineMake {
 			System.out.println("#### RestorMachine Write End ####");
 		}
 	
+	public RestoreInfoVO restoreInfoDecrypt(RestoreInfoVO rm){
+		StandardPBEStringEncryptor pbeDnc = new StandardPBEStringEncryptor();
+		pbeDnc.setPassword("k4mda"); 
+		RestoreInfoVO result = new RestoreInfoVO();
+		
+		String mac =  pbeDnc.decrypt(rm.getGuestMac());
+		String ip = pbeDnc.decrypt(rm.getGuestIp());
+		String subnetmask =pbeDnc.decrypt(rm.getGuestSubnetmask());
+		String gateway = pbeDnc.decrypt(rm.getGuestGateway());
+		String dns = pbeDnc.decrypt(rm.getGuestDns());
+		String network = pbeDnc.decrypt(rm.getGuestNetwork());
+		String id = rm.getMachineId();
+		
+//		System.out.println("-------------------------------------------------");
+//		System.out.println("MAC = "+mac);
+//		System.out.println("IP = "+ip);
+//		System.out.println("SubnetMask = "+subnetmask);
+//		System.out.println("Gateway = "+gateway);
+//		System.out.println("DNS = "+dns);
+//		System.out.println("Network = "+network);
+//		System.out.println("-------------------------------------------------");
+		
+		result.setGuestMac(mac);
+		result.setGuestIp(ip);
+		result.setGuestSubnetmask(subnetmask);
+		result.setGuestGateway(gateway);
+		result.setGuestDns(dns);
+		result.setGuestNetwork(network);
+		result.setMachineId(id);
+		
+		return result;
+		
+	}
+	
+	public RestoreInfoVO restoreInfoEncrypt(RestoreInfoVO rm){
+		StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
+		pbeEnc.setPassword("k4mda"); 
+		RestoreInfoVO result = new RestoreInfoVO();
+		
+		String mac =  pbeEnc.encrypt(rm.getGuestMac());
+		String ip = pbeEnc.encrypt(rm.getGuestIp());
+		String subnetmask =pbeEnc.encrypt(rm.getGuestSubnetmask());
+		String gateway = pbeEnc.encrypt(rm.getGuestGateway());
+		String dns = pbeEnc.encrypt(rm.getGuestDns());
+		String network = pbeEnc.encrypt(rm.getGuestNetwork());
+		
+		System.out.println("-------------------------------------------------");
+		System.out.println("MAC = "+mac);
+		System.out.println("IP = "+ip);
+		System.out.println("SubnetMask = "+subnetmask);
+		System.out.println("Gateway = "+gateway);
+		System.out.println("DNS = "+dns);
+		System.out.println("Network = "+network);
+		System.out.println("-------------------------------------------------");
+		
+		result.setGuestMac(mac);
+		result.setGuestIp(ip);
+		result.setGuestSubnetmask(subnetmask);
+		result.setGuestGateway(gateway);
+		result.setGuestDns(dns);
+		result.setGuestNetwork(network);
+		
+		return result;
+	}
+	
 	
 	public static void main(String args[]) {
 		try {
@@ -73,7 +138,7 @@ public class RestoreMachineMake {
 	
 		/* ============ Restore Target Infomation =============	*/
 	    String mac  = "08:00:27:27:4d:b8"; 
-	    String ip  = "192.168.50.201"; 
+	    String ip  = "192.168.50.155"; 
 	    String subnetmask  = "255.255.255.0";    
 	    String gateway  = "192.168.50.1 ";  
 	    String dns  = "8.8.8.8";   
@@ -93,4 +158,6 @@ public class RestoreMachineMake {
 			e.printStackTrace();
 		}
 	}
+	
+	
 }
