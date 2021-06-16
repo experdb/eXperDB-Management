@@ -247,7 +247,7 @@ function fn_targetListPopup(){
 	}
 }
 
-function fn_runNow(){
+function fn_runNowClick(){
 	if(fn_valCheck()){
 		confile_title = '복구 수행';
 		$('#con_multi_gbn', '#findConfirmMulti').val("recovery_run");
@@ -282,6 +282,10 @@ function fnc_confirmMultiRst(gbn){
 function fn_passwordCheckPopup(){
 	 fn_pwCheckFormReset();
 	 $("#pop_layer_popup_recoveryPasswordCheckForm").modal("show");
+}
+
+function fn_completeRecoveryRun(){
+	
 }
 
 </script>
@@ -352,7 +356,7 @@ function fn_passwordCheckPopup(){
 		<div class="col-12 grid-margin stretch-card" style="margin-bottom: 0px;">
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div id="wrt_button" style="float: right;">
-					<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_runNow()">
+					<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_runNowClick()">
 						<i class="ti-control-forward btn-icon-prepend "></i>복구
 					</button>
 				</div>
