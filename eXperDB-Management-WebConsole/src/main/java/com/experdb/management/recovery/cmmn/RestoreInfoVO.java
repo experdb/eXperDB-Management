@@ -8,6 +8,7 @@ public class RestoreInfoVO {
 	private String jobName;
 	private String machineId;
 	private String storageLocation;
+	private String storageType;
 	private String sourceNode;
 	private String recoveryPoint;
 	private String encryptionPassword;
@@ -21,6 +22,27 @@ public class RestoreInfoVO {
 	private String guestSubnetmask;
 	private List<VolumeVO> volumes;
 	
+	private String bmr;
+	
+	
+	
+	
+	public String getStorageType() {
+		return storageType;
+	}
+
+	public void setStorageType(String storageType) {
+		this.storageType = storageType;
+	}
+
+	public String getBmr() {
+		return bmr;
+	}
+
+	public void setBmr(String bmr) {
+		this.bmr = bmr;
+	}
+
 	public String getMachineId() {
 		return machineId;
 	}
@@ -148,6 +170,8 @@ public class RestoreInfoVO {
 				+ encryptionPassword + ", restoreTarget=" + restoreTarget + ", guestNetwork=" + guestNetwork
 				+ ", guestIp=" + guestIp + ", guestNetmask=" + guestNetmask + ", guestGateway=" + guestGateway
 				+ ", guestDns=" + guestDns + ", guestMac=" + guestMac + ", guestSubnetmask=" + guestSubnetmask
-				+ ", volumes=" + volumes + "]";
+				+ ", volumes=" + volumes + ", bmr=" + bmr + "]";
 	}
+
+	
 }

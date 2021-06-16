@@ -29,6 +29,6 @@ public interface ExperdbRecoveryService {
 
 	JSONObject recoveryDBDelete(HttpServletRequest request);
 
-	JSONObject completeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException;
+	JSONObject completeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException;
 	
 }

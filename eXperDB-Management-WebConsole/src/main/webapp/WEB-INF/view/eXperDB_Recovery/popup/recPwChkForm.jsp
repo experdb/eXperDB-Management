@@ -31,6 +31,7 @@
 	
 	function fn_pwCheckFormReset(){
 		$("#recoveryPW").val("");
+		$("#recoveryPW").focus();
 	}
 
 

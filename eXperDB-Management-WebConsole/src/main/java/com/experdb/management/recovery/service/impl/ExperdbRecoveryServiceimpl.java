@@ -10,7 +10,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ import com.experdb.management.backup.service.impl.ExperdbBackupDAO;
 import com.experdb.management.backup.storage.service.impl.ExperdbBackupStorageDAO;
 import com.experdb.management.recovery.cmmn.RestoreInfoVO;
 import com.experdb.management.recovery.cmmn.RestoreMachineMake;
+import com.experdb.management.recovery.cmmn.RestoreMake;
 import com.experdb.management.recovery.service.ExperdbRecoveryService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -201,18 +204,49 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 	}
 
 	@Override
-	public JSONObject completeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+	public JSONObject completeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException {
 		JSONObject result = new JSONObject();
 		HttpSession session = request.getSession();
+		RestoreMake make = new RestoreMake();
+		
+		Date date = new Date();
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String time = transFormat.format(date);   
+        
+        String jobName_New = "recovery_"+time;
+		
 		String password = request.getParameter("password");
 		if(!checkAccountPassword(session, password)){
 			result.put("result_code", 5);
 			return result;
 		}
 		
+		RestoreInfoVO restoreInfoVo = new RestoreInfoVO();
+		restoreInfoVo.setJobName(jobName_New);
+		restoreInfoVo.setSourceNode(request.getParameter("sourceDB"));
+		restoreInfoVo.setStorageLocation(request.getParameter("storagePath"));
+		restoreInfoVo.setGuestMac(request.getParameter("targetMac"));
+		restoreInfoVo.setGuestIp(request.getParameter("targetIp"));
+		restoreInfoVo.setGuestSubnetmask(request.getParameter("targetSNM"));
+		restoreInfoVo.setGuestGateway(request.getParameter("targetGW"));
+		restoreInfoVo.setGuestDns(request.getParameter("targetDNS"));
+		restoreInfoVo.setRecoveryPoint("last");
+		restoreInfoVo.setGuestNetwork("static");
 		
+		if(request.getParameter("storageType").equals("1")){
+			restoreInfoVo.setStorageType("nfs");
+		}else{
+			restoreInfoVo.setStorageType("cifs");
+		}
+		if(request.getParameter("bmrInstant").equals("1")){
+			restoreInfoVo.setBmr("yes");
+		}else{
+			restoreInfoVo.setBmr("no");
+		}
 		
+		make.bmr(restoreInfoVo);
 		
+		result.put("result_code", 1);
 		
 		return result;
 	}

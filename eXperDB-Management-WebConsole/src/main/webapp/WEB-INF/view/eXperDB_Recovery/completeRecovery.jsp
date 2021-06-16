@@ -305,7 +305,13 @@ function fn_completeRecoveryRun(){
 			}
 		})
 		.done(function(data){
-			
+			if(data.result_code == 5){
+				showSwalIcon('잘못된 비밀번호 입니다', '<spring:message code="common.close" />', '', 'error', 'top');
+				fn_pwCheckFormReset();
+				
+			}else if(data.result_code == 1){
+				$("#pop_layer_popup_recoveryPasswordCheckForm").modal("hide");
+			}
 		})
 		.fail (function(xhr, status, error){
 			if(xhr.status == 401) {
