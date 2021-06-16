@@ -1,3 +1,6 @@
+CREATE SEQUENCE Q_RESTORE_MACHINE_01; 
+
+
 create table experdb_management.restoremachine(
 restoremachine_id     numeric not null default nextval('q_restore_machine_01'),
 mac varchar(512) NOT NULL,
@@ -12,4 +15,3 @@ username varchar(512) NULL ,
 password  varchar(512) NULL);
 
 
-CREATE SEQUENCE Q_RESTORE_MACHINE_01; 
