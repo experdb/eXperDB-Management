@@ -134,5 +134,21 @@ public class ExperdbRecoveryController {
 		
 		return result;
 	}
+	
+	
+	
+	/**
+	 * 시점 복구 View page
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/experdb/timeRecovery.do")
+	public ModelAndView timeRecovery(){
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("/eXperDB_Recovery/timeRecovery");
+		return mv;
+	}
 
 }
