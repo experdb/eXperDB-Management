@@ -256,10 +256,6 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		String usr_id = loginVo.getUsr_id();
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 		
-		System.out.println("### checkAccountPassword ###");
-		System.out.println("user ID : " + usr_id);
-		System.out.println("password : " + password);
-		System.out.println("password enc : " + aes.aesEncode(password));
 		String user_password = aes.aesDecode(experdbRecoveryDAO.getUserPassword(usr_id));
 		
 		if(user_password.equals(password)){

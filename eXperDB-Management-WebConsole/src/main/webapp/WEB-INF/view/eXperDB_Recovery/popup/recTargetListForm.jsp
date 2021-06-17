@@ -187,10 +187,9 @@ table.dataTable.volume tbody tr.selected {
 				<div class="card" style="border:0px;">
 					<div class="card-body" style="padding-top: 0px; padding-bottom: 0px;">					
 						<div id="wrt_button" style="float: right;">
-							<input class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" style="margin-left:-20px;" type="button" onClick="fn_recMachineDelConfirm()" value='삭제' />
-							<input class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" style="" type="button" onClick="document.getElementById('recSvrInfoFile').click();" value='추가' />
+							<input class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" style="margin-left:-20px;" type="button" onClick="document.getElementById('recSvrInfoFile').click();" value='추가' />
+							<input class="btn btn-inverse-danger btn-icon-text btn-sm btn-search-disable" style="" type="button" onClick="fn_recMachineDelConfirm()" value='삭제' />
 							<input type="file"  id="recSvrInfoFile" style="margin-left:-20px; display:none;" value="등록" onChange="fn_fileRead()">
-							
 						</div>
 					</div>
 					<div class="card-body" style="padding-top: 0px;">
