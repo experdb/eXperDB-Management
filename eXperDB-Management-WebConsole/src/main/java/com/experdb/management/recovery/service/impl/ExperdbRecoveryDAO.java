@@ -1,10 +1,12 @@
 package com.experdb.management.recovery.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSession;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +25,10 @@ public class ExperdbRecoveryDAO extends EgovAbstractMapper{
 	@Autowired 
 	@Resource(name="backupDB") 
 	private SqlSession sql2;
+	
+	@Autowired 
+	@Resource(name="activitylogDB") 
+	private SqlSession sql3;
 	
 	@Autowired 
 	@Resource(name="jobhistoryDB") 
@@ -59,6 +65,18 @@ public class ExperdbRecoveryDAO extends EgovAbstractMapper{
 	public String getUserPassword(String usr_id) {
 		String user_password = sql.selectOne("experdbRecoverySql.getUserPassword", usr_id);
 		return user_password;
+	}
+
+	public List<Map<String, Object>> getRecoveryTimeList(String target) {
+		return jobhistoryDBsql.selectList("experdbRecoverySql.getRecoveryTimeList", target);
+	}
+
+	public List<Map<String, Object>> getRecoveryPoinList(String jobid) {
+		return sql3.selectList("experdbRecoverySql.getRecoveryPoinList", jobid);
+	}
+
+	public List<Map<String, Object>> getRecoveryTimeOption(String jobid) {
+		return jobhistoryDBsql.selectList("experdbRecoverySql.getRecoveryTimeOption", jobid);
 	}
 	
 	

@@ -24,6 +24,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -263,6 +264,65 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		}else{
 			return false;
 		}
+	}
+
+	
+	@Override
+	public JSONObject getRecoveryTimeListList(HttpServletRequest request) {
+		System.out.println("####### getRecoveryTimeList SERVICE #######");
+		JSONObject result = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		
+		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+		
+		resultList = experdbRecoveryDAO.getRecoveryTimeList(request.getParameter("ipadr"));
+	
+		for(int i=0; i<resultList.size(); i++){
+			JSONObject jsonObj = new JSONObject();
+			Date endDate = new Date(Long.parseLong(resultList.get(i).get("finishtime").toString())* 1000L);
+
+			SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String endTime = transFormat.format(endDate);	
+				
+			jsonObj.put("jobid", resultList.get(i).get("jobid"));
+			jsonObj.put("finishtime", endTime);
+			jsonArray.add(jsonObj);
+		}
+		
+		result.put("data", jsonArray);
+		
+		return result;
+	}
+
+	@Override
+	public JSONObject getRecoveryTimeOption(HttpServletRequest request) {
+		System.out.println("####### getRecoveryOption SERVICE #######");
+		JSONObject result = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		
+		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> resultRpoint = new ArrayList<Map<String, Object>>();
+		
+		resultList = experdbRecoveryDAO.getRecoveryTimeOption(request.getParameter("jobid"));
+		resultRpoint = experdbRecoveryDAO.getRecoveryPoinList(request.getParameter("jobid"));
+		
+		
+			JSONObject jsonObj = new JSONObject();
+			Date endDate = new Date(Long.parseLong(resultList.get(0).get("finishtime").toString())* 1000L);
+
+			SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String endTime = transFormat.format(endDate);	
+			
+			jsonObj.put("jobid", resultList.get(0).get("jobid"));
+			jsonObj.put("finishtime", endTime);
+			jsonObj.put("location", resultList.get(0).get("destinationlocation"));		
+			jsonObj.put("rPoint", resultRpoint.get(0).get("rpoint"));	    			
+	    	
+			jsonArray.add(jsonObj);
+	
+			result.put("data", jsonArray);
+			
+		return result;
 	}
 	
 	

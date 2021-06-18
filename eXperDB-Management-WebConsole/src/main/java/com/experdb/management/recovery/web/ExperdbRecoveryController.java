@@ -133,5 +133,24 @@ public class ExperdbRecoveryController {
 		mv.setViewName("/eXperDB_Recovery/timeRecovery");
 		return mv;
 	}
+	
+	
+	@RequestMapping(value = "/experdb/recoveryTimeList.do")
+	public @ResponseBody JSONObject recoveryTimeList(HttpServletRequest request){
+		JSONObject result = new JSONObject();
+		
+		result = experdbRecoveryService.getRecoveryTimeListList(request);
+		
+		return result;
+	}
+	
+	@RequestMapping(value = "/experdb/getRecoveryTimeOption.do")
+	public @ResponseBody JSONObject getRecoveryTimeOption(HttpServletRequest request){
+		JSONObject result = new JSONObject();
+		
+		result = experdbRecoveryService.getRecoveryTimeOption(request);
+		
+		return result;
+	}
 
 }

@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -30,5 +32,9 @@ public interface ExperdbRecoveryService {
 	JSONObject recoveryDBDelete(HttpServletRequest request);
 
 	JSONObject completeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException;
+
+	JSONObject getRecoveryTimeListList(HttpServletRequest request);
+
+	JSONObject getRecoveryTimeOption(HttpServletRequest request);
 	
 }

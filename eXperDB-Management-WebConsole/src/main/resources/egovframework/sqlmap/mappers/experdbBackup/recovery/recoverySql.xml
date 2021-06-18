@@ -61,4 +61,37 @@
 		  FROM t_trans_encrypt 
 		 WHERE trans_id = #{usr_id}
 	</select>
+	
+	
+	<select id="getRecoveryTimeList" parameterType="String" resultType="hashmap">
+		SELECT 
+				jobid,
+				finishtime,
+				destinationlocation
+		FROM JOBHISTORY 
+		WHERE TARGETNAME = #{target}
+		AND STATUS = 1
+	</select>
+	
+	
+	<select id="getRecoveryTimeOption" parameterType="String" resultType="hashmap">
+		SELECT 
+				jobid,
+				finishtime,
+				destinationlocation
+		FROM JOBHISTORY 
+		WHERE JOBID = #{jobid}::numeric
+		AND STATUS = 1
+	</select>
+		
+		
+	<select id="getRecoveryPoinList" parameterType="String" resultType="hashmap">
+		SELECT 
+				JOBID
+				,TRIM(RTRIM(SPLIT_PART(MESSAGE,':',2),'.')) AS rpoint 
+		FROM ACTIVITYLOG 
+		WHERE MESSAGE LIKE '%Recovery point is%'
+		AND JOBID  = #{jobid}::numeric
+	</select>
+	
 </mapper>
