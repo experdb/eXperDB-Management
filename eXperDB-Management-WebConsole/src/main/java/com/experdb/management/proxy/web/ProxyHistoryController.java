@@ -1,6 +1,7 @@
 package com.experdb.management.proxy.web;
 
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -401,12 +402,12 @@ public class ProxyHistoryController {
 	 * @throws
 	 */
 	@RequestMapping(value = "/popup/proxyStatusChartTitle.do")
-	public @ResponseBody List<Map<String, Object>> selectProxyStatusChartTitle(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody Map<String, Object> selectProxyStatusChartTitle(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001803");
 				
-		List<Map<String, Object>> resultSet = null;
+		Map<String, Object> resultSet = new HashMap<String, Object>();
 		Map<String, Object> param = new HashMap<String, Object>();
 
 		try {	
@@ -417,15 +418,61 @@ public class ProxyHistoryController {
 			}else{
 				// 화면접근이력 이력 남기기 - Proxy 설정관리 - Proxy Listen 관리 팝업
 				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0167_02", show_menu_id);		
-
 				param.put("exe_dtm_start", cu.getStringWithoutNull(request.getParameter("exe_dtm_start")));
 				param.put("exe_dtm_end", cu.getStringWithoutNull(request.getParameter("exe_dtm_end")));
 				param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? "" : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
-			    param.put("log_type", cu.getStringWithoutNull(request.getParameter("log_type")));
-				param.put("db_con_addr", cu.getStringWithoutNull(request.getParameter("db_con_addr")));
-				  
-				  
-				resultSet = proxyHistoryService.selectProxyStatusChartTitleList(param);
+			    param.put("db_con_addr", cu.getStringWithoutNull(request.getParameter("db_con_addr")));
+				param.put("lsn_id", cu.getStringWithoutNull(request.getParameter("lsn_id")));
+				param.put("log_type", cu.getStringWithoutNull(request.getParameter("log_type")));
+				
+				List<Map<String, Object>>  serverChartData = new ArrayList<Map<String, Object>>();
+				List<Map<String, Object>>  sessionChartData = new ArrayList<Map<String, Object>>();
+				List<Map<String, Object>>  byteChartData = new ArrayList<Map<String, Object>>();
+				
+				String prySvrNm = "";
+				String lsnNm = "";
+				String dbConAddr = "";
+				
+				List<Map<String, Object>> statusData = proxyHistoryService.selectProxyStatusHistory(param);
+				
+				for(int i=0; i < statusData.size(); i++){
+					Map<String, Object> serverChart = new HashMap<String, Object>();
+					serverChart.put("exe_dtm_date", statusData.get(i).get("exe_dtm_date"));
+					serverChart.put("svr_pro_req_sel_cnt", statusData.get(i).get("svr_pro_req_sel_cnt"));
+					serverChart.put("bakup_ser_cnt", statusData.get(i).get("bakup_ser_cnt"));
+					serverChart.put("svr_status_chg_cnt", statusData.get(i).get("svr_status_chg_cnt"));
+					serverChart.put("fail_chk_cnt", statusData.get(i).get("fail_chk_cnt"));
+					
+					serverChartData.add(serverChart);
+					
+					Map<String, Object> sessionChart = new HashMap<String, Object>();
+					sessionChart.put("exe_dtm_date", statusData.get(i).get("exe_dtm_date"));
+					sessionChart.put("cur_session", statusData.get(i).get("cur_session"));
+					sessionChart.put("max_session", statusData.get(i).get("max_session"));
+					sessionChart.put("session_limit", statusData.get(i).get("session_limit"));
+					sessionChart.put("cumt_sso_con_cnt", statusData.get(i).get("cumt_sso_con_cnt"));
+
+					sessionChartData.add(sessionChart);
+					
+					Map<String, Object> byteChart = new HashMap<String, Object>();
+					byteChart.put("exe_dtm_date", statusData.get(i).get("exe_dtm_date"));
+					byteChart.put("byte_receive", statusData.get(i).get("byte_receive"));
+					byteChart.put("byte_transmit", statusData.get(i).get("byte_transmit"));
+					
+					byteChartData.add(byteChart);
+					
+					prySvrNm = cu.getStringWithoutNull(statusData.get(i).get("pry_svr_nm"));
+					lsnNm = cu.getStringWithoutNull(statusData.get(i).get("lsn_nm"));
+					dbConAddr = cu.getStringWithoutNull(statusData.get(i).get("db_con_addr"));
+				}
+				
+				resultSet.put("prySvrNm", prySvrNm);
+				resultSet.put("lsnNm", lsnNm);
+				resultSet.put("serverChartData", serverChartData);
+				resultSet.put("sessionChartData", sessionChartData);
+				resultSet.put("byteChartData", byteChartData);
+				resultSet.put("dbConAddr", dbConAddr);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -185,34 +185,10 @@
         <if test="pry_svr_id != null and pry_svr_id != '' ">
         	AND A.PRY_SVR_ID = #{pry_svr_id}
         </if>
+        <if test="lsn_id != null and lsn_id != '' ">
+        	AND A.LSN_ID = #{lsn_id}::numeric
+        </if>
 		ORDER BY A.DB_CON_ADDR, A.PRY_SVR_ID, A.LSN_ID, A.EXE_DTM DESC
 	</select>
 	
-	<select id="selectProxyStatusChartTitleList" resultType="hashMap">
-		/**
-		* Query ID : selectProxyStatusChartTitleList
-		* Description : Chart 표시 목록 
-		* Author : 김민정
-		**/
-		SELECT 	A.DB_CON_ADDR, 
-				A.PRY_SVR_ID, 
-				B.PRY_SVR_NM, 
-				C.LSN_NM
-		FROM 	T_PRY_SVR_STATUS_G A 	INNER JOIN T_PRY_SVR_I B 	ON A.PRY_SVR_ID=B.PRY_SVR_ID 
-										INNER JOIN T_PRY_LSN_I C 	ON A.PRY_SVR_ID = C.PRY_SVR_ID 	AND 	A.LSN_ID = C.LSN_ID 
-		WHERE 	1 = 1
-		<if test="exe_dtm_start != null and exe_dtm_end != null ">
-			AND TO_CHAR(A.EXE_DTM,'YYYY-MM-DD') BETWEEN #{exe_dtm_start} AND #{exe_dtm_end}
-		</if>
-		<if test="db_con_addr != null and db_con_addr != '' ">
-	        AND A.DB_CON_ADDR = #{db_con_addr}
-        </if>
-        <if test="log_type != null and log_type != '' ">
-        	AND A.LOG_TYPE = #{log_type}
-        </if>
-        <if test="pry_svr_id != null and pry_svr_id != '' ">
-        	AND A.PRY_SVR_ID = #{pry_svr_id}
-        </if>
-		GROUP BY 	A.DB_CON_ADDR, A.PRY_SVR_ID, B.PRY_SVR_NM, C.LSN_NM, A.LOG_TYPE 
-	</select>
 </mapper>

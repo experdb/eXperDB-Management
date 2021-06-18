@@ -248,17 +248,18 @@
 			scrollX: true,
 			bSort: false,
 			paging : false,
-			columns : [	{data: "db_con_addr", className: "dt-center", defaultContent: ""
-							/* ,render: function (data, type, full){
-								if(full.log_type != "TC003901"){
-									return ' <a onclick="fn_show_chart(\''+full.db_con_addr+'\',\'day\')">'+full.db_con_addr+'</i>';
-								}else{
-									return full.db_con_addr;
-								}
-							} */
-						}, //DB_접속_주소
+			columns : [	{data: "db_con_addr", className: "dt-center", defaultContent: ""}, //DB_접속_주소
 		               	{data: "pry_svr_nm", className: "dt-center", defaultContent: ""}, //Proxy명 *
-		               	{data: "lsn_nm", className: "dt-center", defaultContent: ""}, //리스너 명 *
+		               	{data: "lsn_nm", className: "dt-left", defaultContent: "",
+		               	 render: function (data, type, full){
+		               		if(full.log_type == "TC003902"){//
+		               			
+		               			return '<a onclick="fn_show_chart(\''+full.db_con_addr+'\',\''+full.pry_svr_id+'\',\''+full.lsn_id+'\',\''+full.log_type+'\')" style="cursor: pointer; "><i class="mdi mdi-chart-bar text-warning"></i> '+full.lsn_nm+'</a>';
+							}else{
+								return full.lsn_nm;
+							}
+						 }
+						}, //리스너 명 *
 		               	{data: "exe_dtm_date", className: "dt-center", defaultContent: ""}, //실행 일자 *
 		               	{data: "exe_rslt_cd", className: "dt-center", defaultContent: "",
 							render: function (data, type, full){
@@ -976,16 +977,17 @@
 	 /* ********************************************************
 	  * chart 타이틀 생성 데이터 ///작성 중... 
 	  ******************************************************** */
-	function fn_show_chart(dbSvrIp, type){
-		if(type=='day'){
+	function fn_show_chart(dbSvrIp,prySvrId,lsnId,type){
+		if(type=='TC003902'){
 			$.ajax({
 				url : "/popup/proxyStatusChartTitle.do",
 				data : {
 					exe_dtm_start : $("#statis_wlk_dtm_start").val(),
 					exe_dtm_end : $("#statis_wlk_dtm_end").val(),
-					pry_svr_id : $("#statis_pry_svr_id").val(),
-					log_type : type,
-					db_con_addr : dbSvrIp
+					db_con_addr: dbSvrIp,
+					pry_svr_id : prySvrId,
+					lsn_id : lsnId,
+					log_type : type
 				},
 				dataType : "json",
 				type : "post",
@@ -1002,11 +1004,14 @@
 					}
 				},
 				success : function(result) {
-					fn_proxyMonChartSet(result);
+					if(result.prySvrNm =="") return;
+					$(".chart-title").html(" - "+result.dbConAddr+" / "+result.prySvrNm+" / "+result.lsnNm);
+					$('#pop_pry_status_chart_view').modal("show");
+					fn_draw_chart(result);
+					selectChartTab("server");
+					
 				}
 			});
-		}else{
-			
 		}
 	}
 </script>
@@ -1342,7 +1347,7 @@
 											<tr>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.ipadr"/></th>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.server_name"/></th>
-												<th rowspan="2"><spring:message code="eXperDB_proxy.listener_name"/></th>
+												<th rowspan="2" class="text-center"><spring:message code="eXperDB_proxy.listener_name"/></th>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.date"/></th>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.act_result"/></th>
 												<th colspan="7"><spring:message code="dashboard.server"/></th>
