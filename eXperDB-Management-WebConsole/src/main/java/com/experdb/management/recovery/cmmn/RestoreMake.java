@@ -15,7 +15,11 @@ public class RestoreMake {
 	public void bmr (RestoreInfoVO restore) throws IOException{
 		
 		System.out.println("#### BMR Write ####");
-		FileWriter f = new FileWriter("C://test/"+ restore.getJobName() +".txt");
+		
+//		String path = "C://test/"+ restore.getJobName() +".txt";
+		String path = "/opt/Arcserve/d2dserver/bin/jobs/" + restore.getJobName() + ".txt";
+		
+		FileWriter f = new FileWriter(path);
 		
 		String context;
 		String content_info;
@@ -25,15 +29,13 @@ public class RestoreMake {
 		String content_script;
 		
 		// restore info
-		
 		content_info = "########## info ##########\n"
 				+ "job_name = " + restore.getJobName() + "\n"
 				+ "source_node = " + restore.getSourceNode() + "\n"
 				+ "enable_instant_restore = " + restore.getBmr() + "\n"
 				+ "#auto_restore_data = " + "\n"
 				+ "restore_target = " + restore.getGuestMac() + "\n"
-				+ "recovery_point = " + restore.getRecoveryPoint() + "\n"
-				+ "#encryption_password = " + "\n";
+				+ "recovery_point = " + restore.getRecoveryPoint() + "\n";
 		
 		// storage
 		content_storage = "########## storage ##########\n"
@@ -46,7 +48,7 @@ public class RestoreMake {
 		content_guest = "########## recoveryDB ##########\n"
 				+ "guest_network = " + restore.getGuestNetwork() + "\n"
 				+ "guest_ip = " + restore.getGuestIp() + "\n"
-				+ "guest_netmask = " + restore.getGuestNetmask() + "\n"
+				+ "guest_netmask = " + restore.getGuestSubnetmask() + "\n"
 				+ "guest_gateway = " + restore.getGuestGateway() + "\n"
 				+ "guest_dns = " + restore.getGuestDns() + "\n"
 				+ "#guest_hostname = " + "\n"

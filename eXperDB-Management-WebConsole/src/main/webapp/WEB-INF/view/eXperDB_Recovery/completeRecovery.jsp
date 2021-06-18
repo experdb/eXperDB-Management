@@ -126,7 +126,6 @@ function fn_setBackupDBList(data){
 	$("#backupDBList").append(html);
 }
 
-
 function fn_backupDBChoice(){
 	var ipadr = $("#backupDBList").val();
 	if(ipadr != 0) {
@@ -150,19 +149,11 @@ function fn_backupDBChoice(){
 			}
 		})
 		.always(function(){
-			fn_storageListReset();
 			fn_recoveryDBReset();
 		})
 	}
 }
 
-function fn_storageListReset(){
-	storageList.length=0;
-	CIFSList.length=0;
-	NFSList.length=0;
-	$("#recStorageType").val("");
-	$("#recStoragePath").val("");
-}
 
 function fn_recoveryDBReset(){
 	$("#recMachineMAC").val("");
@@ -189,8 +180,9 @@ function fn_setStorageList(data) {
 		
 	}else if(storageList.length == 1){
 		storageExist = "Y";
-		$("#recStorageType").val(storageList[0].type);
-		$("#recStoragePath").val(storageList[0].path);
+		
+		$("#recStorageType").val(data[0].type);
+		$("#recStoragePath").val(data[0].path);
 		
 	}else{
 		storageExist = "Y";
@@ -221,7 +213,6 @@ function fn_storageTypeClick(){
 	$("#storageList").append(html);
 }
 
-var aa;
 function fn_targetListPopup(){
 	if($("#backupDBList").val() != 0){
 		$.ajax({
@@ -229,7 +220,6 @@ function fn_targetListPopup(){
 			type : "post"
 		})
 		.done(function(result){
-			aa = result.recoveryList;
 			TargetList.clear();
 			TargetList.rows.add(result.recoveryList).draw();
 			fn_setIpList(result.recoveryList);
@@ -288,6 +278,24 @@ function fn_passwordCheckPopup(){
 
 function fn_completeRecoveryRun(){
 	if($("#recoveryPW").val() != ""){
+		
+		// console.log("=================================================");
+		// console.log("password		" + $("#recoveryPW").val());
+		// console.log("bmrInstant		" + $("#bmrInstant").val());
+		// console.log("sourceDB		" + $("#backupDBList").val());
+		// console.log("storageType	" + $("#recStorageType").val());
+		// console.log("storagePath	" + $("#recStoragePath").val());
+		// console.log("targetMac		" + $("#recMachineMAC").val());
+		// console.log("targetIp		" + $("#recMachineIP").val());
+		// console.log("targetSNM		" + $("#recMachineSNM").val());
+		// console.log("targetGW		" + $("#recMachineGateWay").val());
+		// console.log("targetDNS		" + $("#recMachineDNS").val());
+		// console.log("=================================================");
+		
+		if($("#recStorageType").val() == "" || $("#recStoragePath").val() == ""){
+			$("#recStorageType").val($("#storageType").val());
+			$("#recStoragePath").val($("#storageList").val());
+		}
 		$.ajax({
 			url : "/experdb/completeRecoveryRun.do",
 			type : "post",

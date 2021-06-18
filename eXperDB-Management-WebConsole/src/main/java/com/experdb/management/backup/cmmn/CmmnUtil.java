@@ -335,6 +335,29 @@ public class CmmnUtil {
 			}
 			
 			
+			/**
+			 * recovery run now
+			 * @throws IOException 
+			 * @throws FileNotFoundException 
+			 * 
+			 */
+			public JSONObject recoveryRun(String jobname, String jobType) throws FileNotFoundException, IOException{
+				JSONObject result = new JSONObject();
+				CmmnUtil cmmUtil = new CmmnUtil();
+				
+				String path = "/opt/Arcserve/d2dserver/bin";
+				String cmd = null;
+				
+				if(jobType.equals("complete")){
+					cmd = "cd " + path + ";" + "./d2dbmr --template=" + path + "/jobs/" + jobname + ".txt; cd " + path + "/jobs;rm -rf " + jobname + ".txt";
+					System.out.println(cmd);
+					result = cmmUtil.execute(cmd, "job");
+				}
+				
+				return result;
+			}
+			
+			
 			 /**
 			 * JobScript 디렉토리 및 파일생성
 			 * @param  

@@ -209,6 +209,7 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		JSONObject result = new JSONObject();
 		HttpSession session = request.getSession();
 		RestoreMake make = new RestoreMake();
+		CmmnUtil util = new CmmnUtil();
 		
 		Date date = new Date();
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -245,10 +246,10 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 			restoreInfoVo.setBmr("no");
 		}
 		
+		
 		make.bmr(restoreInfoVo);
-		
-		result.put("result_code", 1);
-		
+		result = util.recoveryRun(jobName_New, "complete");
+
 		return result;
 	}
 	

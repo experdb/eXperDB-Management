@@ -137,10 +137,10 @@ public class RestoreMachineMake {
 
 	
 		/* ============ Restore Target Infomation =============	*/
-	    String mac  = "08:00:27:27:4d:b8"; 
-	    String ip  = "192.168.50.155"; 
+	    String mac  = "08:00:27:17:7a:84"; 
+	    String ip  = "192.168.50.100"; 
 	    String subnetmask  = "255.255.255.0";    
-	    String gateway  = "192.168.50.1 ";  
+	    String gateway  = "192.168.50.0";  
 	    String dns  = "8.8.8.8";   
 	    String netowrk  = "static"; 
 	    /* =========================================	*/
