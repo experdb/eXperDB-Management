@@ -41,7 +41,7 @@ $(window.document).ready(function() {
 		xkey: 'exe_dtm_date',
 		xLabelAngle: 30,
 		ykeys: ['svr_pro_req_sel_cnt', 'bakup_ser_cnt', 'svr_status_chg_cnt', 'fail_chk_cnt'],
-		labels: ['처리요청 선택 건수', '백업 서버 수', '상태 전환 건수', '실패 검사 수']
+		labels: [fn_strBrRemove('<spring:message code="eXperDB_proxy.req_sel_cnt"/>'), fn_strBrRemove('<spring:message code="eXperDB_proxy.backup_svr_cnt"/>'), fn_strBrRemove('<spring:message code="eXperDB_proxy.status_chg_cnt"/>'), fn_strBrRemove('<spring:message code="eXperDB_proxy.chart_health_check_failed"/>')]
 	});
 	
 	sessionChart = Morris.Line({
@@ -59,7 +59,7 @@ $(window.document).ready(function() {
 		xkey: 'exe_dtm_date',
 		xLabelAngle: 30,
 		ykeys: ['cur_session', 'max_session', 'session_limit', 'cumt_sso_con_cnt'],
-		labels: ['현재 세션 수', '최대 세션 수', '세션 제한 수', '누적 세션 연결 수']
+		labels: ['<spring:message code="eXperDB_proxy.current"/> <spring:message code="eXperDB_proxy.session_count"/>', '<spring:message code="eXperDB_proxy.max"/><br/><spring:message code="eXperDB_proxy.session_count"/>', '<spring:message code="eXperDB_proxy.session"/> <spring:message code="eXperDB_proxy.limit"/>', fn_strBrRemove('<spring:message code="eXperDB_proxy.session_total"/>')]
 	});
 	
 	byteChart = Morris.Line({
@@ -75,11 +75,20 @@ $(window.document).ready(function() {
 		xkey: 'exe_dtm_date',
 		xLabelAngle: 30,
 		ykeys: ['byte_receive', 'byte_transmit'],
-		labels: ['<spring:message code="eXperDB_proxy.chart_byte_in"/>', '<spring:message code="eXperDB_proxy.chart_byte_out"/>']
+		labels: [fn_strBrRemove('<spring:message code="eXperDB_proxy.chart_byte_in"/>'), fn_strBrRemove('<spring:message code="eXperDB_proxy.chart_byte_out"/>')]
 	});
 
 });
+/* ********************************************************
+ * br 제거
+ ******************************************************** */
+function fn_strBrRemove(msg) {
+	if (nvlPrmSet(msg, "") != "") {
+		msg = msg.replaceAll("<br/>","");
+	}
 
+	return msg;
+}
 /* ********************************************************
 * 데이터 그리기
 ******************************************************** */
@@ -133,24 +142,24 @@ function selectChartTab(tab){
 		<div class="modal-content">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					일별 로그 차트
+					<spring:message code="eXperDB_proxy.daily_log_statistics"/>
 				</h4>
 				<h6 class="modal-title chart-title" id="ModalLabel" style="padding-left:5px;"></h6>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="chart-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
 							<a class="nav-link active" id="chart-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectChartTab('server');" >
-								서버 차트
+								<spring:message code="dashboard.server"/>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" id="chart-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="javascript:selectChartTab('session');">
-								세션 차트
+								<spring:message code="eXperDB_proxy.session"/>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" id="chart-tab-3" data-toggle="pill" href="#subTab-3" role="tab" aria-controls="subTab-3" aria-selected="false" onclick="javascript:selectChartTab('byte');">
-								데이터 전송 차트
+								<spring:message code="eXperDB_proxy.byte_in_out"/>
 							</a>
 						</li>
 					</ul>
