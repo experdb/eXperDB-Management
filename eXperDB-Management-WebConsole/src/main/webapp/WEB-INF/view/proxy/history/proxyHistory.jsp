@@ -248,242 +248,246 @@
 			scrollX: true,
 			bSort: false,
 			paging : false,
-			columns : [	{data: "db_con_addr", className: "dt-center", defaultContent: ""}, //DB_접속_주소
-		               	{data: "pry_svr_nm", className: "dt-center", defaultContent: ""}, //Proxy명 *
-		               	{data: "lsn_nm", className: "dt-left", defaultContent: "",
-		               	 render: function (data, type, full){
-		               		if(full.log_type == "TC003902"){//
-		               			
-		               			return '<a onclick="fn_show_chart(\''+full.db_con_addr+'\',\''+full.pry_svr_id+'\',\''+full.lsn_id+'\',\''+full.log_type+'\')" style="cursor: pointer; "><i class="mdi mdi-chart-bar text-warning"></i> '+full.lsn_nm+'</a>';
-							}else{
-								return full.lsn_nm;
-							}
-						 }
-						}, //리스너 명 *
-		               	{data: "exe_dtm_date", className: "dt-center", defaultContent: ""}, //실행 일자 *
-		               	{data: "exe_rslt_cd", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								if(full.exe_rslt_cd == "TC001501"){
-									return '<i class="fa fa-spinner fa-spin text-success"></i> <spring:message code="schedule.run" />';
-								}else{
-									return '<i class="fa fa-circle-o-notch text-danger"></i> <spring:message code="schedule.stop" />';
-								}
-							}
-						}, //실행 결과 코드
-		            	{data: "svr_status", className: "dt-right", defaultContent: "",
-							render: function (data, type, full){
-								if(full.svr_status == "UP"){
-									return full.svr_status+' <i class="fa fa-arrow-up text-success"></i>';
-								}else{
-									return full.svr_status+' <i class="fa fa-arrow-down text-danger"></i>';
-								}
-							}
-						}, //서버 상태
-		            	{data: "lst_status_chk_desc", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html ='<span data-toggle="tooltip" data-html="true" data-placement="bottom" title="';
-								switch(full.lst_status_chk_desc){
-								case "UNK":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip1"/>">';
-									break;
-								case "INI":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip2"/>">';
-									break;
-								case "SOCKERR":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip3"/>">';
-									break;
-								case "L4OK":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip4"/>">';
-									break;
-								case "L4TOUT":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip5"/>">';
-									break;
-								case "L4CON":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip6"/>">';
-									break;
-								case "L6OK":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip7"/>">';
-									break;
-								case "L6TOUT":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip8"/>">';
-									break;
-								case "L6RSP":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip9"/>">';
-									break;
-								case "L7OK":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip10"/>">';
-									break;
-								case "L7OKC":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip11"/>">';
-									break;
-								case "L7TOUT":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip12"/>">';
-									break;
-								case "L7RSP":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip13"/>">';
-									break;
-								case "L7STS":
-									html += '<spring:message code="eXperDB_proxy.status_tooltip14"/>">';
-									break;
-									
-								}
-								return html += full.lst_status_chk_desc +"</span>";
-							}
-						}, //마지막 상태 체크 내용
-		            	{data: "svr_stop_tm", className: "dt-left", defaultContent: "",
-							render: function (data, type, full){
-								if(full.svr_stop_tm == "0s"){
-									return "";
-								}else{
-									return '<i class="mdi mdi-alarm mr-2 text-danger" style="font-size:1em;"></i> '+full.svr_stop_tm;
-								}
-							}
-						}, //서버 중단 시간
-		               	{data: "svr_pro_req_sel_cnt", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.svr_pro_req_sel_cnt;
-								if(full.svr_pro_req_sel_cnt_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.svr_pro_req_sel_cnt_gap+')';
-								}else if(full.svr_pro_req_sel_cnt_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.svr_pro_req_sel_cnt_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.svr_pro_req_sel_cnt_gap+')';
-								}
-								return html;
-							}
-						}, //서버 처리 요청 선택 건수
-		               	{data: "bakup_ser_cnt", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.bakup_ser_cnt;
-								if(full.bakup_ser_cnt_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.bakup_ser_cnt_gap+')';
-								}else if(full.bakup_ser_cnt_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.bakup_ser_cnt_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.bakup_ser_cnt_gap+')';
-								}
-								return html;
-							}
-						}, //백업 서버 수
-		               	{data: "svr_status_chg_cnt", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.svr_status_chg_cnt;
-								if(full.svr_status_chg_cnt_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.svr_status_chg_cnt_gap+')';
-								}else if(full.svr_status_chg_cnt_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.svr_status_chg_cnt_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.svr_status_chg_cnt_gap+')';
-								}
-								return html;
-							}
-						}, //서버 상태 전환 건수
-		               	{data: "fail_chk_cnt", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.fail_chk_cnt;
-								if(full.fail_chk_cnt_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.fail_chk_cnt_gap+')';
-								}else if(full.fail_chk_cnt_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.fail_chk_cnt_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.fail_chk_cnt_gap+')';
-								}
-								return html;
-							}
-						}, //실패 검사 수
-		               	{data: "cur_session", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.cur_session;
-								if(full.cur_session_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.cur_session_gap+')';
-								}else if(full.cur_session_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.cur_session_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.cur_session_gap+')';
-								}
-								return html;
-							}
-						}, //현재 세션
-		               	{data: "max_session", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.max_session;
-								if(full.max_session_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.max_session_gap+')';
-								}else if(full.max_session_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.max_session_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.max_session_gap+')';
-								}
-								return html;
-							}
-						}, //최대 세션
-		               	{data: "session_limit", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.session_limit;
-								if(full.session_limit_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.session_limit_gap+')';
-								}else if(full.session_limit_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.session_limit_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.session_limit_gap+')';
-								}
-								return html;
-							}
-						}, //세션 제한수
-		               	{data: "cumt_sso_con_cnt", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.cumt_sso_con_cnt;
-								if(full.cumt_sso_con_cnt_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.cumt_sso_con_cnt_gap+')';
-								}else if(full.cumt_sso_con_cnt_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.cumt_sso_con_cnt_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.cumt_sso_con_cnt_gap+')';
-								}
-								return html;
-							}
-						}, //누적 세션 연결 건수
-		               	{data: "byte_receive", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.byte_receive;
-								if(full.byte_receive_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.byte_receive_gap+')';
-								}else if(full.byte_receive_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.byte_receive_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.byte_receive_gap+')';
-								}
-								return html;
-							}
-						}, //바이트 수신수
-		               	{data: "byte_transmit", className: "dt-center", defaultContent: "",
-							render: function (data, type, full){
-								var html= full.cur_session;
-								if(full.byte_transmit_gap == 0){
-									html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.byte_transmit_gap+')';
-								}else if(full.byte_transmit_gap > 0){
-									html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.byte_transmit_gap+')';
-								}else{
-									html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.byte_transmit_gap+')';
-								}
-								return html;
-							}
-						}, //바이트 송신수
-						{data: "exe_dtm_time", className: "dt-center", defaultContent: "", visible: false}, //실행 일시 *
-		               	{data: "lst_con_rec_aft_tm", className: "dt-right", defaultContent: "", visible: false}, //마지막 연결 수신 이후 시간
-		               	{data: "lsn_svr_id", className: "dt-left", defaultContent: "", visible: false}, //리스너 서버 ID
-			    		{data: "lsn_id", className: "dt-left", defaultContent: "", visible: false},//리스너 ID
-			    		{data: "pry_exe_status_sn", className : "dt-left", defaultContent : "", visible: false}, //실행 상태 일련번호
-			    		{data: "log_type", className: "dt-left", defaultContent: "", visible: false}, //로그 유형
-		               	{data: "pry_svr_id", className: "dt-left", defaultContent: "", visible: false},//Proxy ID
-			    		{data: "exe_dtm", className: "dt-left", defaultContent: "", visible: false},//실행 일시
-			    		{data: "lst_mdfr_id", className: "dt-left", defaultContent: "", visible: false},//최종 수정자 ID
-			    		{data: "lst_mdf_dtm", className: "dt-left", defaultContent: "", visible: false},//최종 수정 일시
-			    		{data: "frst_regr_id", className: "dt-left", defaultContent: "", visible: false}, //최초 등록자 ID
-		               	{data: "frst_reg_dtm", className: "dt-left", defaultContent: "", visible: false}, //최초 등록 일시
-		               	{data: "svr_host_nm", className: "dt-left", defaultContent: "", visible: false}//DB명
-	 		        ]
-			});
+			columns : [	{data: "db_con_addr", className: "dt-center", defaultContent: "",
+				              	 render: function (data, type, full){
+					               		return full.svr_host_nm+"<br/>("+full.db_con_addr+")";
+									 }
+								}, //DB_접속_주소SVR_HOST_NM
+				               	{data: "pry_svr_nm", className: "dt-center", defaultContent: ""}, //Proxy명 *
+				               	{data: "lsn_nm", className: "dt-left", defaultContent: "",
+				               	 render: function (data, type, full){
+				               		if(full.log_type == "TC003902"){//
+				               			
+				               			return '<a onclick="fn_show_chart(\''+full.db_con_addr+'\',\''+full.pry_svr_id+'\',\''+full.lsn_id+'\',\''+full.log_type+'\', \''+full.svr_host_nm+'\')" style="cursor: pointer; "><i class="mdi mdi-chart-bar text-warning"></i> '+full.lsn_nm+'</a>';
+									}else{
+										return full.lsn_nm;
+									}
+								 }
+								}, //리스너 명 *
+				               	{data: "exe_dtm_date", className: "dt-center", defaultContent: ""}, //실행 일자 *
+				               	{data: "exe_rslt_cd", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										if(full.exe_rslt_cd == "TC001501"){
+											return '<i class="fa fa-spinner fa-spin text-success"></i> <spring:message code="schedule.run" />';
+										}else{
+											return '<i class="fa fa-circle-o-notch text-danger"></i> <spring:message code="schedule.stop" />';
+										}
+									}
+								}, //실행 결과 코드
+				            	{data: "svr_status", className: "dt-right", defaultContent: "",
+									render: function (data, type, full){
+										if(full.svr_status == "UP"){
+											return full.svr_status+' <i class="fa fa-arrow-up text-success"></i>';
+										}else{
+											return full.svr_status+' <i class="fa fa-arrow-down text-danger"></i>';
+										}
+									}
+								}, //서버 상태
+				            	{data: "lst_status_chk_desc", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html ='<span data-toggle="tooltip" data-html="true" data-placement="bottom" title="';
+										switch(full.lst_status_chk_desc){
+										case "UNK":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip1"/>">';
+											break;
+										case "INI":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip2"/>">';
+											break;
+										case "SOCKERR":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip3"/>">';
+											break;
+										case "L4OK":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip4"/>">';
+											break;
+										case "L4TOUT":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip5"/>">';
+											break;
+										case "L4CON":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip6"/>">';
+											break;
+										case "L6OK":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip7"/>">';
+											break;
+										case "L6TOUT":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip8"/>">';
+											break;
+										case "L6RSP":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip9"/>">';
+											break;
+										case "L7OK":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip10"/>">';
+											break;
+										case "L7OKC":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip11"/>">';
+											break;
+										case "L7TOUT":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip12"/>">';
+											break;
+										case "L7RSP":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip13"/>">';
+											break;
+										case "L7STS":
+											html += '<spring:message code="eXperDB_proxy.status_tooltip14"/>">';
+											break;
+											
+										}
+										return html += full.lst_status_chk_desc +"</span>";
+									}
+								}, //마지막 상태 체크 내용
+				            	{data: "svr_stop_tm", className: "dt-left", defaultContent: "",
+									render: function (data, type, full){
+										if(full.svr_stop_tm == "0s"){
+											return "";
+										}else{
+											return '<i class="mdi mdi-alarm mr-2 text-danger" style="font-size:1em;"></i> '+full.svr_stop_tm;
+										}
+									}
+								}, //서버 중단 시간
+				               	{data: "svr_pro_req_sel_cnt", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.svr_pro_req_sel_cnt;
+										if(full.svr_pro_req_sel_cnt_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.svr_pro_req_sel_cnt_gap+')';
+										}else if(full.svr_pro_req_sel_cnt_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.svr_pro_req_sel_cnt_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.svr_pro_req_sel_cnt_gap+')';
+										}
+										return html;
+									}
+								}, //서버 처리 요청 선택 건수
+				               	{data: "bakup_ser_cnt", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.bakup_ser_cnt;
+										if(full.bakup_ser_cnt_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.bakup_ser_cnt_gap+')';
+										}else if(full.bakup_ser_cnt_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.bakup_ser_cnt_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.bakup_ser_cnt_gap+')';
+										}
+										return html;
+									}
+								}, //백업 서버 수
+				               	{data: "svr_status_chg_cnt", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.svr_status_chg_cnt;
+										if(full.svr_status_chg_cnt_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.svr_status_chg_cnt_gap+')';
+										}else if(full.svr_status_chg_cnt_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.svr_status_chg_cnt_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.svr_status_chg_cnt_gap+')';
+										}
+										return html;
+									}
+								}, //서버 상태 전환 건수
+				               	{data: "fail_chk_cnt", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.fail_chk_cnt;
+										if(full.fail_chk_cnt_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.fail_chk_cnt_gap+')';
+										}else if(full.fail_chk_cnt_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.fail_chk_cnt_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.fail_chk_cnt_gap+')';
+										}
+										return html;
+									}
+								}, //실패 검사 수
+				               	{data: "cur_session", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.cur_session;
+										if(full.cur_session_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.cur_session_gap+')';
+										}else if(full.cur_session_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.cur_session_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.cur_session_gap+')';
+										}
+										return html;
+									}
+								}, //현재 세션
+				               	{data: "max_session", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.max_session;
+										if(full.max_session_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.max_session_gap+')';
+										}else if(full.max_session_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.max_session_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.max_session_gap+')';
+										}
+										return html;
+									}
+								}, //최대 세션
+				               	{data: "session_limit", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.session_limit;
+										if(full.session_limit_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.session_limit_gap+')';
+										}else if(full.session_limit_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.session_limit_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.session_limit_gap+')';
+										}
+										return html;
+									}
+								}, //세션 제한수
+				               	{data: "cumt_sso_con_cnt", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.cumt_sso_con_cnt;
+										if(full.cumt_sso_con_cnt_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.cumt_sso_con_cnt_gap+')';
+										}else if(full.cumt_sso_con_cnt_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.cumt_sso_con_cnt_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.cumt_sso_con_cnt_gap+')';
+										}
+										return html;
+									}
+								}, //누적 세션 연결 건수
+				               	{data: "byte_receive", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.byte_receive;
+										if(full.byte_receive_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.byte_receive_gap+')';
+										}else if(full.byte_receive_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.byte_receive_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.byte_receive_gap+')';
+										}
+										return html;
+									}
+								}, //바이트 수신수
+				               	{data: "byte_transmit", className: "dt-center", defaultContent: "",
+									render: function (data, type, full){
+										var html= full.cur_session;
+										if(full.byte_transmit_gap == 0){
+											html += '(<i class="mdi mdi-minus menu-icon text-muted"></i>'+full.byte_transmit_gap+')';
+										}else if(full.byte_transmit_gap > 0){
+											html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success"></i>'+full.byte_transmit_gap+')';
+										}else{
+											html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger"></i>'+full.byte_transmit_gap+')';
+										}
+										return html;
+									}
+								}, //바이트 송신수
+								{data: "exe_dtm_time", className: "dt-center", defaultContent: "", visible: false}, //실행 일시 *
+				               	{data: "lst_con_rec_aft_tm", className: "dt-right", defaultContent: "", visible: false}, //마지막 연결 수신 이후 시간
+				               	{data: "lsn_svr_id", className: "dt-left", defaultContent: "", visible: false}, //리스너 서버 ID
+					    		{data: "lsn_id", className: "dt-left", defaultContent: "", visible: false},//리스너 ID
+					    		{data: "pry_exe_status_sn", className : "dt-left", defaultContent : "", visible: false}, //실행 상태 일련번호
+					    		{data: "log_type", className: "dt-left", defaultContent: "", visible: false}, //로그 유형
+				               	{data: "pry_svr_id", className: "dt-left", defaultContent: "", visible: false},//Proxy ID
+					    		{data: "exe_dtm", className: "dt-left", defaultContent: "", visible: false},//실행 일시
+					    		{data: "lst_mdfr_id", className: "dt-left", defaultContent: "", visible: false},//최종 수정자 ID
+					    		{data: "lst_mdf_dtm", className: "dt-left", defaultContent: "", visible: false},//최종 수정 일시
+					    		{data: "frst_regr_id", className: "dt-left", defaultContent: "", visible: false}, //최초 등록자 ID
+				               	{data: "frst_reg_dtm", className: "dt-left", defaultContent: "", visible: false}, //최초 등록 일시
+				               	{data: "svr_host_nm", className: "dt-left", defaultContent: "", visible: false}//DB명
+			 		        ]
+					});
 	   	 
 	   	
 	   	statisTable.tables().header().to$().find('th:eq(0)').css('min-width', '10%');
@@ -977,7 +981,7 @@
 	 /* ********************************************************
 	  * chart 타이틀 생성 데이터 ///작성 중... 
 	  ******************************************************** */
-	function fn_show_chart(dbSvrIp,prySvrId,lsnId,type){
+	function fn_show_chart(dbSvrIp,prySvrId,lsnId,type, hostNm){
 		if(type=='TC003902'){
 			$.ajax({
 				url : "/popup/proxyStatusChartTitle.do",
@@ -1005,7 +1009,7 @@
 				},
 				success : function(result) {
 					if(result.prySvrNm =="") return;
-					$(".chart-title").html(" - "+result.dbConAddr+" / "+result.prySvrNm+" / "+result.lsnNm);
+					$(".chart-title").html(" - "+hostNm+" ("+result.dbConAddr+") / "+result.prySvrNm+" / "+result.lsnNm);
 					$('#pop_pry_status_chart_view').modal("show");
 					fn_draw_chart(result);
 					selectChartTab("server");
@@ -1345,7 +1349,7 @@
 	 								<table id="statisTable" class="table table-bordered system-tlb-scroll" style="width:100%;">
 										<thead class="bg-info text-white text-center">
 											<tr>
-												<th rowspan="2"><spring:message code="eXperDB_proxy.ipadr"/></th>
+												<th rowspan="2"><spring:message code="common.dbServer"/> (IP)</th>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.server_name"/></th>
 												<th rowspan="2" class="text-center"><spring:message code="eXperDB_proxy.listener_name"/></th>
 												<th rowspan="2"><spring:message code="eXperDB_proxy.date"/></th>
