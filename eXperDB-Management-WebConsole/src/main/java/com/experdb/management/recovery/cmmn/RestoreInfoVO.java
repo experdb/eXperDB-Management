@@ -6,7 +6,9 @@ import com.experdb.management.backup.policy.service.VolumeVO;
 
 public class RestoreInfoVO {
 	private String jobName;
+	private String machineId;
 	private String storageLocation;
+	private String storageType;
 	private String sourceNode;
 	private String recoveryPoint;
 	private String encryptionPassword;
@@ -19,6 +21,35 @@ public class RestoreInfoVO {
 	private String guestMac;
 	private String guestSubnetmask;
 	private List<VolumeVO> volumes;
+	
+	private String bmr;
+	
+	
+	
+	
+	public String getStorageType() {
+		return storageType;
+	}
+
+	public void setStorageType(String storageType) {
+		this.storageType = storageType;
+	}
+
+	public String getBmr() {
+		return bmr;
+	}
+
+	public void setBmr(String bmr) {
+		this.bmr = bmr;
+	}
+
+	public String getMachineId() {
+		return machineId;
+	}
+
+	public void setMachineId(String machineId) {
+		this.machineId = machineId;
+	}
 
 	public String getGuestSubnetmask() {
 		return guestSubnetmask;
@@ -134,11 +165,13 @@ public class RestoreInfoVO {
 
 	@Override
 	public String toString() {
-		return "RestoreInfoVO [jobName=" + jobName + ", storageLocation=" + storageLocation + ", sourceNode="
-				+ sourceNode + ", recoveryPoint=" + recoveryPoint + ", encryptionPassword=" + encryptionPassword
-				+ ", restoreTarget=" + restoreTarget + ", guestNetwork=" + guestNetwork + ", guestIp=" + guestIp
-				+ ", guestNetmask=" + guestNetmask + ", guestGateway=" + guestGateway + ", guestDns=" + guestDns
-				+ ", volumes=" + volumes + "]";
+		return "RestoreInfoVO [jobName=" + jobName + ", machineId=" + machineId + ", storageLocation=" + storageLocation
+				+ ", sourceNode=" + sourceNode + ", recoveryPoint=" + recoveryPoint + ", encryptionPassword="
+				+ encryptionPassword + ", restoreTarget=" + restoreTarget + ", guestNetwork=" + guestNetwork
+				+ ", guestIp=" + guestIp + ", guestNetmask=" + guestNetmask + ", guestGateway=" + guestGateway
+				+ ", guestDns=" + guestDns + ", guestMac=" + guestMac + ", guestSubnetmask=" + guestSubnetmask
+				+ ", volumes=" + volumes + ", bmr=" + bmr + "]";
 	}
 
+	
 }

@@ -9,7 +9,7 @@
 <%
 	/**
 	* @Class Name : completeRecovery.jsp
-	* @Description : 완전복구 화면
+	* @Description : 시점복구 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -25,9 +25,7 @@
 
 <script type="text/javascript">
 
-var storageList = [];
-var CIFSList = [];
-var NFSList = [];
+
 var storageExist = "N";
 /* ********************************************************
  * 페이지 시작시
@@ -35,7 +33,6 @@ var storageExist = "N";
 $(window.document).ready(function() {
 	fn_init();
 	fn_getBackupDBList();
-	$("#storageDiv").hide();
 });
 
 
@@ -126,33 +123,6 @@ function fn_setBackupDBList(data){
 	$("#backupDBList").append(html);
 }
 
-function fn_backupDBChoice(){
-	var ipadr = $("#backupDBList").val();
-	if(ipadr != 0) {
-		$.ajax({
-			url : "/experdb/recStorageList.do",
-			type : "post",
-			data : {
-				ipadr : ipadr
-			}
-		})
-		.done(function(result){
-			fn_setStorageList(result.storageList);
-		})
-		.fail (function(xhr, status, error){
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if (xhr.status == 403){
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		})
-		.always(function(){
-			fn_recoveryDBReset();
-		})
-	}
-}
 
 
 function fn_recoveryDBReset(){
@@ -164,54 +134,8 @@ function fn_recoveryDBReset(){
 	$("#recMachineDNS").val("");
 }
 
-function fn_setStorageList(data) {
-	storageList.length=0;
-	CIFSList.length=0;
-	NFSList.length=0;
-	storageList = data;
-	$("#storageDiv").hide();
-	$("#recStorageType").val("");
-	$("#recStoragePath").val("");
-	
-	if(storageList.length == 0){
-		storageExist = "N";
-		showSwalIcon('백업된 데이터가 존재하지 않습니다.', '<spring:message code="common.close" />', '', 'error');
-		$("#backupDBList").val(0);
-		
-	}else if(storageList.length == 1){
-		storageExist = "Y";
-		
-		$("#recStorageType").val(data[0].type);
-		$("#recStoragePath").val(data[0].path);
-		
-	}else{
-		storageExist = "Y";
-		for(var i =0; i<storageList.length; i++){
-			if(storageList[i].type == "2"){
-				CIFSList.push(storageList[i]);
-			}else{
-				NFSList.push(storageList[i]);
-			}
-		}
-		$("#storageDiv").show();
-	}
-}
 
-function fn_storageTypeClick(){
-	var type = $("#storageType").val();
-	var html;
-	$("#storageList").empty();
-	if(type == 2){
-		for(var i =0; i<CIFSList.length; i++){			
-			html += '<option value="'+CIFSList[i].path+'">'+CIFSList[i].path+'</option>';
-		}
-	}else{
-		for(var i =0; i<NFSList.length; i++){			
-			html += '<option value="'+NFSList[i].path+'">'+NFSList[i].path+'</option>';
-		}
-	}
-	$("#storageList").append(html);
-}
+var aa;
 
 function fn_targetListPopup(){
 	if($("#backupDBList").val() != 0){
@@ -220,6 +144,7 @@ function fn_targetListPopup(){
 			type : "post"
 		})
 		.done(function(result){
+			aa = result.recoveryList;
 			TargetList.clear();
 			TargetList.rows.add(result.recoveryList).draw();
 			fn_setIpList(result.recoveryList);
@@ -234,8 +159,6 @@ function fn_targetListPopup(){
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		})
-	}else{
-		showSwalIcon('선택된 백업 DB가 없습니다', '<spring:message code="common.close" />', '', 'error');
 	}
 }
 
@@ -277,64 +200,72 @@ function fn_passwordCheckPopup(){
 }
 
 function fn_completeRecoveryRun(){
-	if($("#recoveryPW").val() != ""){
-		
-		// console.log("=================================================");
-		// console.log("password		" + $("#recoveryPW").val());
-		// console.log("bmrInstant		" + $("#bmrInstant").val());
-		// console.log("sourceDB		" + $("#backupDBList").val());
-		// console.log("storageType	" + $("#recStorageType").val());
-		// console.log("storagePath	" + $("#recStoragePath").val());
-		// console.log("targetMac		" + $("#recMachineMAC").val());
-		// console.log("targetIp		" + $("#recMachineIP").val());
-		// console.log("targetSNM		" + $("#recMachineSNM").val());
-		// console.log("targetGW		" + $("#recMachineGateWay").val());
-		// console.log("targetDNS		" + $("#recMachineDNS").val());
-		// console.log("=================================================");
-		
-		if($("#recStorageType").val() == "" || $("#recStoragePath").val() == ""){
-			$("#recStorageType").val($("#storageType").val());
-			$("#recStoragePath").val($("#storageList").val());
-		}
-		$.ajax({
-			url : "/experdb/completeRecoveryRun.do",
-			type : "post",
-			data : {
-				password : $("#recoveryPW").val(),
-				bmrInstant : $("#bmrInstant").val(),
-				sourceDB : $("#backupDBList").val(),
-				storageType : $("#recStorageType").val(),
-				storagePath : $("#recStoragePath").val(),
-				targetMac : $("#recMachineMAC").val(),
-				targetIp : $("#recMachineIP").val(),
-				targetSNM : $("#recMachineSNM").val(),
-				targetGW : $("#recMachineGateWay").val(),
-				targetDNS : $("#recMachineDNS").val()
-			}
-		})
-		.done(function(data){
-			if(data.result_code == 5){
-				showSwalIcon('잘못된 비밀번호 입니다', '<spring:message code="common.close" />', '', 'error', 'top');
-				fn_pwCheckFormReset();
-				
-			}else if(data.result_code == 1){
-				$("#pop_layer_popup_recoveryPasswordCheckForm").modal("hide");
-			}
-		})
-		.fail (function(xhr, status, error){
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if (xhr.status == 403){
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		})
-	}else{
-		showSwalIcon('비밀번호를 입력해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
-		$("#recoveryPW").focus();
-	}
+	
 }
+
+
+function fn_getRecoveryTimeList(){
+	
+	var ipadr = $("#backupDBList").val();
+
+	$.ajax({
+		url : "/experdb/recoveryTimeList.do",
+		type : "post",
+		data : {
+			ipadr : ipadr
+		}
+	})
+	.done(function(result){
+		fn_setRecoveryTimeList(result.data);
+	})
+	.fail (function(xhr, status, error){
+		 if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if (xhr.status == 403){
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	 })
+} 
+
+
+function fn_setRecoveryTimeList(data){
+
+	var html;
+	for(var i =0; i<data.length; i++){
+		html += '<option value="'+data[i].jobid+'">'+data[i].finishtime+ '</option>';
+	}
+	$("#recoveryTimeList").append(html);
+}
+
+function fn_getRecoveryTimeOption(){
+	
+	var jobid = $("#recoveryTimeList").val();
+	
+	$.ajax({
+		url : "/experdb/getRecoveryTimeOption.do",
+		type : "post",
+		data : {
+			jobid : jobid
+		}
+	})
+	.done(function(result){
+		alert(JSON.stringify(result));
+		//fn_setRecoveryTimeList(result.data);
+	})
+	.fail (function(xhr, status, error){
+		 if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if (xhr.status == 403){
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	 })
+	
+}
+
 
 </script>
 
@@ -368,7 +299,7 @@ function fn_completeRecoveryRun(){
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-desktop menu-icon"></i>
-												<span class="menu-title">Complete Recovery</span>
+												<span class="menu-title">Point-in-Time Recovery</span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -458,23 +389,22 @@ function fn_completeRecoveryRun(){
 							백업 DB
 						</div>
 						<div class="col-4" style="padding-left: 0px;">
-							<select class="form-control form-control-xsm" id="backupDBList" style=" width: 200px; height: 35px;" onchange="fn_backupDBChoice()">
+							<select class="form-control form-control-xsm" id="backupDBList" style=" width: 200px; height: 35px;" onchange="fn_getRecoveryTimeList()">
 								<option value="0">선택</option>
 							</select>
 						</div>
 					</div>
-					<div class="form-group row" id="storageDiv" style="margin-top: 10px;margin-left: 0px; ">
+					<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 						<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
-							Storage
+							시점선택
 						</div>
-						<select class="form-control form-control-xsm" id="storageType" name="storageType" style="width:130px; height:35px;margin-right: 10px; color:black;" onchange="fn_storageTypeClick()">
-							<option value="1">NFS share</option>
-							<option value="2">CIFS share</option>
-						</select>
-						<select class="form-control form-control-xsm" id="storageList" name="storageList" style="width:200px; height:35px; color:black;">
-							
-						</select>
+					 <div class="col-4" style="padding-left: 0px;">
+							<select class="form-control form-control-xsm"  name="recoveryTimeList"  id="recoveryTimeList" style=" width: 200px; height: 35px;" onchange="fn_getRecoveryTimeOption()">
+								<option value="0">선택</option>
+							</select>
+						</div>
 					</div>
+
 					<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 						<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 							복구 DB

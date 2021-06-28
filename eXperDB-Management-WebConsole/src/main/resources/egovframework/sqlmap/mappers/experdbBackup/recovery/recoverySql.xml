@@ -12,11 +12,86 @@
 	
 	</select>
 
-	<select id="getStorageType" parameterType="String" resultType="int">
+	<select id="getStorageType" parameterType="String" resultType="backupLocationInfoVO">
 		SELECT 
-		     'type'
+		     type
 		  FROM backuplocation
-	  	 WHERE location = #{path}
+	  	 WHERE location = #{backupDestLocation}
 	</select>
-
+	
+	<select id="getRecoveryDBList" resultType="restoreInfoVO">
+		SELECT
+		   	mac as guestMac
+		  , ip as guestIp
+		  , restoremachine_id as machineId
+		  , subnetmask as guestSubnetmask
+		  , gateway as guestGateway
+		  , dns as guestDns  
+		  , network as guestNetwork
+		  FROM restoremachine
+	</select>
+	
+	<insert id="recoveryDBInsert" parameterType="restoreInfoVO">
+		INSERT INTO restoremachine
+		(
+			  mac
+			, ip
+			, subnetmask 
+			, gateway 
+			, dns 
+			, network 
+		) VALUES 
+		(
+			  #{guestMac}
+			, #{guestIp}
+			, #{guestSubnetmask}
+			, #{guestGateway}
+			, #{guestDns}
+			, #{guestNetwork}
+		)
+	</insert>
+	
+	<delete id="recoveryDBDelete" parameterType="String">
+		DELETE FROM restoremachine WHERE restoremachine_id = #{dbId}::numeric
+	</delete>
+	
+	<select id="getUserPassword" parameterType="String" resultType="String">
+		SELECT 
+		     trans_chk_key 
+		  FROM t_trans_encrypt 
+		 WHERE trans_id = #{usr_id}
+	</select>
+	
+	
+	<select id="getRecoveryTimeList" parameterType="String" resultType="hashmap">
+		SELECT 
+				jobid,
+				finishtime,
+				destinationlocation
+		FROM JOBHISTORY 
+		WHERE TARGETNAME = #{target}
+		AND STATUS = 1
+	</select>
+	
+	
+	<select id="getRecoveryTimeOption" parameterType="String" resultType="hashmap">
+		SELECT 
+				jobid,
+				finishtime,
+				destinationlocation
+		FROM JOBHISTORY 
+		WHERE JOBID = #{jobid}::numeric
+		AND STATUS = 1
+	</select>
+		
+		
+	<select id="getRecoveryPoinList" parameterType="String" resultType="hashmap">
+		SELECT 
+				JOBID
+				,TRIM(RTRIM(SPLIT_PART(MESSAGE,':',2),'.')) AS rpoint 
+		FROM ACTIVITYLOG 
+		WHERE MESSAGE LIKE '%Recovery point is%'
+		AND JOBID  = #{jobid}::numeric
+	</select>
+	
 </mapper>

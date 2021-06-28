@@ -15,38 +15,84 @@ public class RestoreMake {
 	public void bmr (RestoreInfoVO restore) throws IOException{
 		
 		System.out.println("#### BMR Write ####");
-		FileWriter f = new FileWriter("C://test/"+ restore.getJobName() +".txt");
+		
+//		String path = "C://test/"+ restore.getJobName() +".txt";
+		String path = "/opt/Arcserve/d2dserver/bin/jobs/" + restore.getJobName() + ".txt";
+		
+		FileWriter f = new FileWriter(path);
 		
 		String context;
+		String content_info;
+		String content_storage;
+		String content_guest;
+		String content_rps;
+		String content_script;
 		
 		// restore info
-		context = "job_name = " + restore.getJobName() + "\n"
-				+ "storage_location_type = " + restore.getStorageLocation() + "\n"
+		content_info = "########## info ##########\n"
+				+ "job_name = " + restore.getJobName() + "\n"
 				+ "source_node = " + restore.getSourceNode() + "\n"
-				+ "recovery_point = " + restore.getRecoveryPoint() + "\n"
-				+ "encryption_password = " + restore.getEncryptionPassword() + "\n"
-				+ "restore_target = " + restore.getRestoreTarget() + "\n"
+				+ "enable_instant_restore = " + restore.getBmr() + "\n"
+				+ "#auto_restore_data = " + "\n"
+				+ "restore_target = " + restore.getGuestMac() + "\n"
+				+ "recovery_point = " + restore.getRecoveryPoint() + "\n";
+		
+		// storage
+		content_storage = "########## storage ##########\n"
+				+ "storage_location_type = " + restore.getStorageType() + "\n"
+				+ "storage_location = " + restore.getStorageLocation() + "\n"
+				+ "#storage_username = " + "\n"
+				+ "#storage_password = " + "\n";
+		
+		// recoveryDB information
+		content_guest = "########## recoveryDB ##########\n"
 				+ "guest_network = " + restore.getGuestNetwork() + "\n"
 				+ "guest_ip = " + restore.getGuestIp() + "\n"
-				+ "guest_netmask = " + restore.getGuestNetmask() + "\n"
+				+ "guest_netmask = " + restore.getGuestSubnetmask() + "\n"
 				+ "guest_gateway = " + restore.getGuestGateway() + "\n"
-				+ "guest_dns = " + restore.getGuestDns() + "\n";
+				+ "guest_dns = " + restore.getGuestDns() + "\n"
+				+ "#guest_hostname = " + "\n"
+				+ "#guest_reboot = " + "\n"
+				+ "#guest_reset_username = " + "\n"
+				+ "#guest_reset_password = " + "\n";
+		
+		// rps backup
+		content_rps = "########## rps ###########\n"
+				+ "#rps_server_password = " + "\n"
+				+ "#rps_server_protocol = " + "\n"
+				+ "#rps_server_port = " + "\n"
+				+ "#rps_server = " + "\n"
+				+ "#rps_server_username = " + "\n"
+				+ "#rps_server_datastore = " + "\n";
+		
+		// script
+		content_script = "########## script ##########\n"
+				+ "#script_pre_job_server = " + "\n"
+				+ "#script_post_job_server = " + "\n"
+				+ "#script_pre_job_client = " + "\n"
+				+ "#script_post_job_client = " + "\n"
+				+ "#script_ready_to_use = " + "\n";
+		
 		
 		// include volume
-		String volume = "include_volumes = ";
-		int volumeCount = 0;
-		for (VolumeVO v : restore.getVolumes()){
-			volume += v.getMountOn();
-			volumeCount ++;
-			if(volumeCount < restore.getVolumes().size()){
-				volume += ":";
-			}
-		}
-		volume += "\n";
+//		String volume = "include_volumes = ";
+//		int volumeCount = 0;
+//		if(restore.getVolumes() != null){			
+//			for (VolumeVO v : restore.getVolumes()){
+//				volume += v.getMountOn();
+//				volumeCount ++;
+//				if(volumeCount < restore.getVolumes().size()){
+//					volume += ":";
+//				}
+//			}
+//		}
+//		volume += "\n";
+		
+		context = content_info + content_storage + content_guest + content_rps + content_script;
 		
 		// file write
 		f.write(context);
-		f.write(volume);
+		//f.write(volume);
 		f.close();
 		
 		System.out.println("#### BMR Write End ####");

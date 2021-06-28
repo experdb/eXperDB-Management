@@ -19,103 +19,121 @@
 	*/
 %>
 <script type="text/javascript">
-
-
+var serverChart;
+var sessionChart;
+var byteChart;
 /* ********************************************************
-* 통계리스트 html 설정
+* 통계차트 생성
 ******************************************************** */
-function fn_create_chartTitle(data){
-	var html = "";
-	$("#listener_header_sub").html(html);
-	var chartCnt = 0;
-
-	html += '<div class="col-md-12 col-xl-12 justify-content-center" >\n';
-	html += '	<div class="card" style="margin-left:-10px;border:none;">\n';
-	html += '		<div class="card-body" style="border:none;">\n';
-	html += '			<p class="card-title" style="margin-bottom:0px"><i class="item-icon mdi mdi-chart-bar text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.listener_statistics"/>&nbsp;&nbsp;   &nbsp;<span class="text-info"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg4"/></span>&nbsp;</p>\n';
-	html += '		</div>\n';
-	html += '	</div>\n';
-	html += '</div>\n';
+$(window.document).ready(function() {
+	serverChart = Morris.Line({
+		element: 'chart-line-server',
+		lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
+		data: [
+				{
+					exe_dtm_date: '',//기본값
+					svr_pro_req_sel_cnt : 0,
+					bakup_ser_cnt: 0,
+					svr_status_chg_cnt: 0,
+					fail_chk_cnt: 0
+			    }
+		],
+		xkey: 'exe_dtm_date',
+		xLabelAngle: 30,
+		ykeys: ['svr_pro_req_sel_cnt', 'bakup_ser_cnt', 'svr_status_chg_cnt', 'fail_chk_cnt'],
+		labels: [fn_strBrRemove('<spring:message code="eXperDB_proxy.req_sel_cnt"/>'), fn_strBrRemove('<spring:message code="eXperDB_proxy.backup_svr_cnt"/>'), fn_strBrRemove('<spring:message code="eXperDB_proxy.status_chg_cnt"/>'), fn_strBrRemove('<spring:message code="eXperDB_proxy.chart_health_check_failed"/>')]
+	});
 	
-	if (data != null && data > 0) {
-		$(data).each(function (index, item) {
-			chartCnt ++;
-			
-			html += '<div class="col-md-6 col-xl-6 justify-content-center">\n';
-			html += '	<div class="card" style="margin-left:-10px;border:none;">\n';
-			html += '		<div class="card-body" style="border:none;margin-top:-35px;">\n';
-			html += '			<p class="card-title" style="margin-bottom:0px;margin-left:10px;"><i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;' + item.pry_svr_nm + '-' + item.lsn_nm + '-' + item.db_con_addr +'</p>\n';
-			html += '			<div id="chart-line-' + chartCnt + '" style="max-height:200px;"></div>\n';
-			html += '		</div>\n';
-			html += '	</div>\n';
-			html += '</div>\n';
-			
-			if ( chartCnt % 2 == 0 ) {
-				html += '<div class="col-md-12">\n';
-				html += '	<div class="card" style="border:none;">\n';
-				html += '		&nbsp;</div>\n';
-				html += '</div>\n';
-			}
-		});
-	} else {
-		html += '<div class="col-md-3 col-xl-12 justify-content-center">\n';
-		html += "	<div class='card'>\n";
-		html += '		<div class="card-body"  style="background-color:#ededed;>\n';
-		html += '			<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">\n';
-		html += '				<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted text-center"">\n';
-		html += '				<spring:message code="message.msg01" /></h5>\n';
-		html += '			</div>\n';
-		html += "		</div>\n";
-		html += "	</div>\n";
-		html += "</div>\n";
+	sessionChart = Morris.Line({
+		element: 'chart-line-session',
+		lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
+		data: [
+				{
+					exe_dtm_date: '',//기본값
+					cur_session: 0,
+					max_session: 0,
+					session_limit: 0,
+					cumt_sso_con_cnt: 0
+			    }
+		],
+		xkey: 'exe_dtm_date',
+		xLabelAngle: 30,
+		ykeys: ['cur_session', 'max_session', 'session_limit', 'cumt_sso_con_cnt'],
+		labels: ['<spring:message code="eXperDB_proxy.current"/> <spring:message code="eXperDB_proxy.session_count"/>', '<spring:message code="eXperDB_proxy.max"/><br/><spring:message code="eXperDB_proxy.session_count"/>', '<spring:message code="eXperDB_proxy.session"/> <spring:message code="eXperDB_proxy.limit"/>', fn_strBrRemove('<spring:message code="eXperDB_proxy.session_total"/>')]
+	});
+	
+	byteChart = Morris.Line({
+		element: 'chart-line-byte',
+		lineColors: ['#63CF72', '#F36368'],
+		data: [
+				{
+					exe_dtm_date: '',//기본값
+					byte_receive: 0,
+					byte_transmit: 0
+			    }
+		],
+		xkey: 'exe_dtm_date',
+		xLabelAngle: 30,
+		ykeys: ['byte_receive', 'byte_transmit'],
+		labels: [fn_strBrRemove('<spring:message code="eXperDB_proxy.chart_byte_in"/>'), fn_strBrRemove('<spring:message code="eXperDB_proxy.chart_byte_out"/>')]
+	});
+
+});
+/* ********************************************************
+ * br 제거
+ ******************************************************** */
+function fn_strBrRemove(msg) {
+	if (nvlPrmSet(msg, "") != "") {
+		msg = msg.replaceAll("<br/>","");
 	}
 
-	$("#listener_header_sub").html(html);
-	
-	setTimeout(function() {
-		fn_draw_chart(chartCnt, data);
-	}, 7000);
+	return msg;
 }
 /* ********************************************************
-* 리스너 통계차트 생성
+* 데이터 그리기
 ******************************************************** */
-function fn_draw_chart(cnt, data){
-	if(result.proxyStatisticsInfoChart != null && result.proxyStatisticsInfoChart.length > 0){
-		var chartCntLoad = cnt;
-		if (chartCntLoad > 0) {
-  			for(var i = 0; i < chartCntLoad; i++){
-  				if ($('#chart-line-' + (i+1)).length) {
-  					var statchart = Morris.Line({
-  				    					element: 'chart-line-' + (i+1),
-  				    					lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
-  				    					data: [
-  				    							{
-  				    								exe_dtm_ss: '',
-  				  									byte_receive: 0,
-  				  									byte_transmit: 0,
-  				  									cumt_sso_con_cnt: 0,
-  				  									fail_chk_cnt: 0
-	  										    }
-										],
-										xkey: 'exe_dtm_ss',
-										xkeyFormat: function(exe_dtm_ss) {
-											return exe_dtm_ss.substring(10);
-										},
-										ykeys: ['byte_receive', 'byte_transmit', 'cumt_sso_con_cnt', 'fail_chk_cnt'],
-										labels: ['<spring:message code="eXperDB_proxy.chart_byte_in"/>', '<spring:message code="eXperDB_proxy.chart_byte_out"/>', '<spring:message code="eXperDB_proxy.chart_session_total"/>', '<spring:message code="eXperDB_proxy.chart_health_check_failed"/>']
-	  					});
-  					
-	  					var proxyStatChart = [];
+function fn_draw_chart(chartData){
+	
+	setTimeout(function(){
+		//데이터 적용
+		serverChart.setData(chartData.serverChartData);
+		sessionChart.setData(chartData.sessionChartData);
+		byteChart.setData(chartData.byteChartData);
+		//사이즈 조절
+		serverChart.resizeHandler();
+		sessionChart.resizeHandler();
+		byteChart.resizeHandler();
+	},250);	
+}
 
-  					for(var j = 0; j<result.proxySettingChartresult.length; j++){
-  						if (result.proxyStatisticsInfoChart[j].dense_row_num == (i+1)) {
-	  						proxyStatChart.push(result.proxySettingChartresult[j]);
-	  						statchart.setData(proxyStatChart);
-  						}
-  					}
-  				}
-  			}
-		}
+/* ********************************************************
+ * Chart Tab Click
+ ******************************************************** */
+function selectChartTab(tab){
+	if(tab == "server"){
+		$(".server_chart_div").show();
+		$(".session_chart_div").hide();
+		$(".byte_chart_div").hide();
+		$("#chart-tab-1").addClass("active");
+		$("#chart-tab-2").removeClass("active");
+		$("#chart-tab-3").removeClass("active");
+		serverChart.resizeHandler();
+	}else if(tab == "session"){
+		$(".server_chart_div").hide();
+		$(".session_chart_div").show();
+		$(".byte_chart_div").hide();
+		$("#chart-tab-1").removeClass("active");
+		$("#chart-tab-2").addClass("active");
+		$("#chart-tab-3").removeClass("active");
+		sessionChart.resizeHandler();
+	}else if(tab == "byte"){ 
+		$(".server_chart_div").hide();
+		$(".session_chart_div").hide();
+		$(".byte_chart_div").show();
+		$("#chart-tab-1").removeClass("active");
+		$("#chart-tab-2").removeClass("active");
+		$("#chart-tab-3").addClass("active");
+		byteChart.resizeHandler();
 	}
 }
 </script>
@@ -123,22 +141,49 @@ function fn_draw_chart(cnt, data){
 	<div class="modal-dialog  modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-body" style="margin-bottom:-30px;">
-				<h4 class="modal-title mdi mdi-alert-circle text-info config_title" id="ModalLabel" style="padding-left:5px;">
-					<!-- 					Proxy Configuration -->
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="eXperDB_proxy.daily_log_statistics"/>
 				</h4>
-
+				<h6 class="modal-title chart-title" id="ModalLabel" style="padding-left:5px;"></h6>
 				<div class="card" style="margin-top:10px;border:0px;">
-					<div class="card-body">
-						<div id="listener_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="listener_header_div" data-parent="#accordion_listner_his">
-						<!-- chart -->
+					<ul class="nav nav-pills nav-pills-setting nav-justified" id="chart-tab" role="tablist" style="border:none;">
+						<li class="nav-item">
+							<a class="nav-link active" id="chart-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectChartTab('server');" >
+								<spring:message code="dashboard.server"/>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="chart-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="javascript:selectChartTab('session');">
+								<spring:message code="eXperDB_proxy.session"/>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="chart-tab-3" data-toggle="pill" href="#subTab-3" role="tab" aria-controls="subTab-3" aria-selected="false" onclick="javascript:selectChartTab('byte');">
+								<spring:message code="eXperDB_proxy.byte_in_out"/>
+							</a>
+						</li>
+					</ul>
+					<div class="card server_chart_div">
+						<div class="card-body">
+							<div id="chart-line-server"></div>
 						</div>
-						<fieldset>
-							<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
-								<button type="button" class="btn btn-light" data-dismiss="modal" onclick=""><spring:message code="common.close"/></button>
-							</div>
-						</fieldset>
+					</div>
+					<div class="card session_chart_div">
+						<div class="card-body">
+							<div id="chart-line-session"></div>
+						</div>
+					</div>
+					<div class="card byte_chart_div">
+						<div class="card-body">
+							<div id="chart-line-byte"></div>
+						</div>
 					</div>
 				</div>
+				<fieldset>
+					<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
+						<button type="button" class="btn btn-light" data-dismiss="modal" onclick=""><spring:message code="common.close"/></button>
+					</div>
+				</fieldset>
 			</div>
 		</div>
 	</div>

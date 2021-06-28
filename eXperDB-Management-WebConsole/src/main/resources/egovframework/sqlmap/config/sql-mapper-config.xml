@@ -65,6 +65,7 @@
 		<typeAlias alias="backupJobHistoryVO" type="com.experdb.management.backup.history.service.BackupJobHistoryVO"/>
 		<typeAlias alias="backupActivityLogVO" type="com.experdb.management.backup.history.service.BackupActivityLogVO"/>
 		<typeAlias alias="JobStatusVO" type="com.experdb.management.backup.jobstatus.service.JobStatusVO"/>
+		<typeAlias alias="restoreInfoVO" type="com.experdb.management.recovery.cmmn.RestoreInfoVO"/>
 		
 		<!-- proxy -->
 		<typeAlias alias="proxyServerVO" type="com.experdb.management.proxy.service.ProxyServerVO"/>
