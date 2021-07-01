@@ -47,6 +47,7 @@
 			, FRST_REG_DTM
 			, LST_MDFR_ID
 			, LST_MDF_DTM
+			, INTL_IPADR
 	 	)
 	 	VALUES
 	 	(
@@ -61,6 +62,7 @@
 			, now()
 			, #{LST_MDFR_ID}
 			, now()
+			, #{INTL_IPADR}
 	 	)
 	</insert>
 	
@@ -79,11 +81,30 @@
 	 		, ISTCNF_YN = #{ISTCNF_YN}
 	 		, LST_MDF_DTM = now()
 	 		, STRT_DTM = now()
+	 		, INTL_IPADR = #{INTL_IPADR}
 	 	WHERE
 	 		IPADR = #{IPADR}
-	 	
 	</update>
-
+	
+	<update id="updateAgentStopInfo"  parameterType="AgentInfoVO">
+	
+		/**
+	 	* Query ID : updateAgentStopInfo
+	 	* Description : Agent 설치 정보 수정(종료)
+	 	* Author : 박태혁
+	 	**/
+	 	UPDATE T_AGTCNDT_I
+	 	SET 
+	 		AGT_CNDT_CD = #{AGT_CNDT_CD}
+	 		, AGT_VERSION = #{AGT_VERSION}
+	 		, SOCKET_PORT = #{SOCKET_PORT}
+	 		, ISTCNF_YN = #{ISTCNF_YN}
+	 		, LST_MDF_DTM = now()
+	 		, STRT_DTM = now()
+	 	WHERE
+	 		IPADR = #{IPADR}
+	</update>
+	
 	<select id="selectAgentInfo" parameterType="AgentInfoVO" resultType="AgentInfoVO">
 		<![CDATA[
 		/**

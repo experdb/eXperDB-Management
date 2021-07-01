@@ -26,13 +26,17 @@ public class AgentInfoVO {
 	private String FRST_REG_DTM;
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
-	
+	private String INTL_IPADR;
+
 	public String TC001101 = "TC001101"; //실행
 	public String TC001102 = "TC001102"; //중지
-	
 
-
-	
+	public String getINTL_IPADR() {
+		return INTL_IPADR;
+	}
+	public void setINTL_IPADR(String iNTL_IPADR) {
+		INTL_IPADR = iNTL_IPADR;
+	}
 	public String getMASTER_GBN() {
 		return MASTER_GBN;
 	}
@@ -105,6 +109,4 @@ public class AgentInfoVO {
 	public void setLST_MDF_DTM(String lST_MDF_DTM) {
 		LST_MDF_DTM = lST_MDF_DTM;
 	}
-	
-	
 }
