@@ -49,6 +49,9 @@ public class AgentSetting {
 		String strConfBackupPath = "";
 		String strKeepInstaillYn = "";
 		
+		String strProxyUser = "";
+		String strProxyGroup = "";
+
 		Scanner scan = new Scanner(System.in);
 		String localIp = NetworkUtil.getLocalServerIp();
 		
@@ -64,6 +67,18 @@ public class AgentSetting {
 		strAgentPort = scan.nextLine();
 		if(strAgentPort.equals("")) {
 			strAgentPort = "9002";
+		}
+		
+		System.out.println("proxy global user(exproxy) : ");
+		strProxyUser = scan.nextLine();
+		if(strProxyUser.equals("")) {
+			strProxyUser = "exproxy";
+		}
+		
+		System.out.println("proxy global group(exproxy) : ");
+		strProxyGroup = scan.nextLine();
+		if(strProxyGroup.equals("")) {
+			strProxyGroup = "exproxy";
 		}
 
 		System.out.println("agent path :(/root/app/eXperDB-Proxy-Agent/bin)");
@@ -218,6 +233,8 @@ public class AgentSetting {
 			prop.setProperty("agent.install.ip", strAgentIp);
 			prop.setProperty("agent.path", strAgentPath);
 			prop.setProperty("proxy.conf_backup_path", strConfBackupPath);
+			prop.setProperty("proxy.global.user", strProxyUser);
+			prop.setProperty("proxy.global.group", strProxyGroup);
 
 			try {
 				prop.store(new FileOutputStream(path + "context.properties"), "");
