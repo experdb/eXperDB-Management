@@ -26,8 +26,15 @@ public class DbServerInfoVO {
 	private String LST_MDF_DTM;
 	private String DB_CNDT;
 	private String MASTER_GBN;
+	private String INTL_IPADR;
+
 	
-	
+	public String getINTL_IPADR() {
+		return INTL_IPADR;
+	}
+	public void setINTL_IPADR(String iNTL_IPADR) {
+		INTL_IPADR = iNTL_IPADR;
+	}
 	public String getDB_CNDT() {
 		return DB_CNDT;
 	}

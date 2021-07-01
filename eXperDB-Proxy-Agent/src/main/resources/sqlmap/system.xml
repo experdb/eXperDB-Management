@@ -116,6 +116,7 @@
 	 	**/
 			SELECT 
 				A.IPADR
+				,B.IPADR
 				, A.DB_SVR_ID
 				, A.PORTNO
 				, B.DB_SVR_NM
@@ -123,11 +124,14 @@
 				, B.SVR_SPR_USR_ID
 				, B.SVR_SPR_SCM_PWD
 				, A.MASTER_GBN
-			FROM T_DBSVRIPADR_I A, T_DBSVR_I B
+				, C.INTL_IPADR
+			FROM T_DBSVRIPADR_I A, T_DBSVR_I B, T_AGTCNDT_I C
 			WHERE
 				A.DB_SVR_ID = B.DB_SVR_ID
+				and A.ipadr = C.ipadr
 				AND B.USEYN = 'Y'
-				AND A.MASTER_GBN = 'M'
+				AND A.MASTER_GBN = 'M';
+				
 		]]>
 	</select>
 

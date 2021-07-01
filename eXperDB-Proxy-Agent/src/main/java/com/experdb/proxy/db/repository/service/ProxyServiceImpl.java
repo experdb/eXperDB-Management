@@ -391,13 +391,14 @@ public class ProxyServiceImpl implements ProxyService{
 
 						//proxy 설정
 						if ("proxy_conf_read".equals(searchGbn)) {
-							// server list 조회
+							// server list 조회  -- 내부망일때 체크하는 부분도 추가 2021.07.01
 							if(temp.trim().matches(".*server.*")) {
 								if (serverInfoList.size() > 0) {
 									for(int j=0; j<serverInfoList.size(); j++){
 										String db_ipadr = serverInfoList.get(j).getIPADR();
+										String intl_db_ipadr = serverInfoList.get(j).getINTL_IPADR();
 
-										if (db_ipadr != null && temp.contains(db_ipadr)) {
+										if ((db_ipadr != null && temp.contains(db_ipadr)) || (intl_db_ipadr != null && temp.contains(intl_db_ipadr))) {
 											db_svr_nm = serverInfoList.get(j).getDB_SVR_NM();
 											db_svr_id = serverInfoList.get(j).getDB_SVR_ID();
 										}
@@ -858,7 +859,7 @@ public class ProxyServiceImpl implements ProxyService{
 	@Transactional
 	public String proxyConfFisrtIns(ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam) throws Exception  {
 		socketLogger.info("ProxyServiceImpl.confSetExecute----- : ");
-		String returnMsg = "success";
+		String returnMsg = "false";
 		int saveChkPrySvrI = 0;
 		AgentInfoVO agtVo = new AgentInfoVO();
 		
@@ -893,11 +894,13 @@ public class ProxyServiceImpl implements ProxyService{
 						
 						saveChkPrySvrI = proxyDAO.updatePrySvrInfo(insPryVo);
 					}
+					
+					returnMsg = "success";
 				} catch (Exception e) {
 					errLogger.error("proxySvrIns {} ", e.toString());
 					returnMsg = "false";
 				}
-
+				socketLogger.info("returnMsg : "+returnMsg);
 				//global
 				try {
 					if (insertParam != null) {
@@ -922,11 +925,12 @@ public class ProxyServiceImpl implements ProxyService{
 	
 						proxyDAO.insertPryGlbInfo(proxyGlobalVO);
 					}
+					returnMsg = "success";
 				} catch (Exception e) {
 					errLogger.error("global {} ", e.toString());
 					returnMsg = "false";
 				}
-	
+				socketLogger.info("returnMsg2 : "+returnMsg);
 				try {
 					//리스너, vip
 					if (insertParam != null) {
@@ -1076,7 +1080,7 @@ public class ProxyServiceImpl implements ProxyService{
 					errLogger.error("listner.error {} ", e.toString());
 					returnMsg = "false";
 				}
-
+				socketLogger.info("returnMsg3 : "+returnMsg);
 				try {
 					if (insPryVo != null) {
 						String strPry_svr_nm_mst = (String)insertParam.get("lisner_list");
@@ -1095,6 +1099,7 @@ public class ProxyServiceImpl implements ProxyService{
 					errLogger.error("backup master_svr_id setting {} ", e.toString());
 					returnMsg = "false";
 				}
+				socketLogger.info("returnMsg4 : "+returnMsg);
 			}
 
 			try {
