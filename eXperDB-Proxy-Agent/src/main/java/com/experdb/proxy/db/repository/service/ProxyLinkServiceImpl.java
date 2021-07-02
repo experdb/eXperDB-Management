@@ -111,6 +111,10 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			globalConf = globalConf.replace("{svr_con_max_tm}", global.getString("svr_con_max_tm"));
 			globalConf = globalConf.replace("{chk_tm}", global.getString("chk_tm"));
 			
+			//proxy user, group이 사이트 마다 달라질 수 있다 하여 수정 -- 20210701
+			globalConf = globalConf.replace("{proxy_user}", FileUtil.getPropertyValue("context.properties", "proxy.global.user"));
+			globalConf = globalConf.replace("{proxy_group}", FileUtil.getPropertyValue("context.properties", "proxy.global.group"));
+			
 			proxyCfg += globalConf;
 			
 			String readOnlyConf = util.readTemplateFile("readOnly.cfg", TEMPLATE_DIR);
