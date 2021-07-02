@@ -768,9 +768,12 @@
 		* Description : Proxy 연결 dbms ip/port 조회
 		* Author : 김민정
 		**/
-		SELECT IPADR||':'||PORTNO AS DB_CON_ADDR
-		FROM T_DBSVRIPADR_I
-		WHERE DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id}::numeric)
+		SELECT A.IPADR||':'||A.PORTNO 			AS DB_CON_ADDR,
+					(SELECT 	INTL_IPADR||':'||A.PORTNO 
+		 			FROM 		T_AGTCNDT_I 
+		 			WHERE		IPADR=A.IPADR) 		AS INTL_IPADR
+		FROM T_DBSVRIPADR_I A
+		WHERE A.DB_SVR_ID = (SELECT DB_SVR_ID FROM T_PRY_SVR_I WHERE PRY_SVR_ID = #{pry_svr_id}::numeric)
 	</select>
 	
 	

@@ -50,6 +50,7 @@ var mgmtDbmsTable = null;
 				}
 				},//마스터 구분
 				{data : "ipadr", className : "dt-center", defaultContent : ""},//IP
+				{data : "intl_ipadr", className : "dt-center", defaultContent : ""},//내부IP
 				{data : "portno", className : "dt-center",  defaultContent : ""},//Port
 				{data : "db_svr_id", defaultContent : "", visible: false}// DBMS ID
 			]
@@ -58,8 +59,9 @@ var mgmtDbmsTable = null;
 		mgmtDbmsTable.tables().header().to$().find('th:eq(0)').css('min-width', '150px');//server명
 		mgmtDbmsTable.tables().header().to$().find('th:eq(1)').css('min-width', '150px');//마스터 구분
 		mgmtDbmsTable.tables().header().to$().find('th:eq(2)').css('min-width', '150px');//ip 주소
-		mgmtDbmsTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');//포트 번호
-		mgmtDbmsTable.tables().header().to$().find('th:eq(4)').css('min-width', '0px');//db server id
+		mgmtDbmsTable.tables().header().to$().find('th:eq(3)').css('min-width', '150px');//내부 ip 주소
+		mgmtDbmsTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px');//포트 번호
+		mgmtDbmsTable.tables().header().to$().find('th:eq(5)').css('min-width', '0px');//db server id
 		
 	}
 	
@@ -629,6 +631,7 @@ var mgmtDbmsTable = null;
 													<th width="150"><spring:message code="common.dbms_name" /></th>
 													<th width="150"><spring:message code="common.division" /></th>
 													<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
+													<th width="150">내부 아이피</th>
 													<th width="100"><spring:message code="data_transfer.port" /></th>
 													<th width="0">DBMS_ID</th>									
 												</tr>

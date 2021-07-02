@@ -457,11 +457,17 @@ function fn_serverListTable_init() {
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						var inclu = false;
+						var inner_inclu = false;
 						for(var j=0 ; j < dataLen ; j++){
 							if(datas[j].db_con_addr == result[i].db_con_addr) inclu=true;
+							if(datas[j].db_con_addr == result[i].intl_ipadr || result[i].intl_ipadr ==null || result[i].intl_ipadr =="") inner_inclu=true;
+							
 						}
 						if(!inclu){
 							$("#ipadr").append("<option value='"+result[i].db_con_addr+"'>"+result[i].db_con_addr+"</option>");	
+						}
+						if(!inner_inclu){
+							$("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (내부)</option>");	
 						}
 					}									
 				}
