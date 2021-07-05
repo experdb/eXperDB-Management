@@ -596,7 +596,7 @@
 			html_vip += '	<table class="table-borderless" style="width:100%;">\n';
 			html_vip += '		<tr>\n';
 
-			html_vip += '			<td style="width:80%;height:205px;" class="text-center" id="keepVipDiv' + i + '">\n';
+			html_vip += '			<td style="width:80%;height:225px;" class="text-center" id="keepVipDiv' + i + '">\n';
 			html_vip += '			&nbsp;</td>\n';
 
 			html_vip += '		</tr>\n';
@@ -612,7 +612,7 @@
 			html_vip_line += '	<table class="table-borderless" style="width:100%;">\n';
 			html_vip_line += '		<tr>\n';
 			
-			html_vip_line += '			<td style="width:100%;height:205px;" class="text-center" id="keepVipDivLine' + i + '">\n';
+			html_vip_line += '			<td style="width:100%;height:225px;" class="text-center" id="keepVipDivLine' + i + '">\n';
 			html_vip_line += '			</td>\n';
 
 			html_vip_line += '		</tr>\n';
@@ -697,7 +697,7 @@
 
 		 					$("#keepVipDiv"+ j).html(html_sebu);
 		 					if(j > 0){
-			 					$("#keepVipDiv" + j).attr('style', "width:80%;height:205px;")
+			 					$("#keepVipDiv" + j).attr('style', "width:80%;height:225px;")
 		 					}
 		 					$("#keepVipDivLine" + j).html(html_vip_line);
 		 					
@@ -781,7 +781,7 @@
 			html_listner += '		<tr>\n';
 			html_listner += '			<td style="width:15%;padding-left:10px;" class="text-center" id="proxyAgentDiv' + i + '">\n';
 			html_listner += '			</td>\n';
-			html_listner += '			<td style="width:85%;height:200px;" class="text-center" id="proxyListnerDiv' + i + '">\n';
+			html_listner += '			<td style="width:85%;height:220px;" class="text-center" id="proxyListnerDiv' + i + '">\n';
 			html_listner += '			&nbsp;</td>\n';
 
 			html_listner += '		</tr>\n';
@@ -802,7 +802,7 @@
 			
  			html_listner_con += '	<table class="table-borderless" style="width:100%;">\n';
  			html_listner_con += '		<tr>\n';
- 			html_listner_con += '			<td style="width:100%;height:200px;text-align:center;" id="dbProxyConDiv' + i + '">\n';
+ 			html_listner_con += '			<td style="width:100%;height:220px;text-align:center;" id="dbProxyConDiv' + i + '">\n';
  			html_listner_con += '			&nbsp;</td>\n';
 
  			html_listner_con += '		</tr>\n';
@@ -1023,7 +1023,7 @@
 			
  			html_db += '	<table class="table-borderless" style="width:100%;">\n';
  			html_db += '		<tr>\n';
- 			html_db += '			<td style="width:100%;height:200px;" id="dbProxyDiv' + i + '">\n';
+ 			html_db += '			<td style="width:100%;height:220px;" id="dbProxyDiv' + i + '">\n';
  			html_db += '			&nbsp;</td>\n';
 
  			html_db += '		</tr>\n';
@@ -1122,8 +1122,17 @@
 							}
 						}
 						
-						html_db += '		</td>'
-						html_db += '	</tr>'
+						html_db += '		</td>';
+						html_db += '	</tr>';
+						
+						//내부 ip setting
+						if(result.dbServerConProxyList[k].intl_ipadr != null && result.dbServerConProxyList[k].intl_ipadr != "") {
+							html_db += '	<tr>';
+							html_db += '		<td colspan="2" style="padding-top:5px;">';
+							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:70px;">(<spring:message code="eXperDB_proxy.internal_ip"/> : ' + result.dbServerConProxyList[k].intl_ipadr + ')</h6>';
+							html_db += '		</td>';
+							html_db += '	</tr>';
+						}
 
 						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
 							db_exe_status_chk = "text-success";
@@ -1397,7 +1406,14 @@
 								if(full.master_gbn == "M"){
 									html += '<i class="mdi mdi-chart-bar text-warning"></i>';					
 								}
-								html += data;
+								
+						//		INTL_IPADR
+								html += full.db_con_addr;
+								
+								if (full.intl_ipadr != "") {
+									html += "<br/>(" + full.intl_ipadr + ")";
+								}
+						
 								return html;
 							},
 							className : "dt-center", defaultContent : ""
@@ -2003,7 +2019,6 @@
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
 				<div class="card-body">
-
 					<!-- title start -->
 					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
 						<div class="card" style="margin-bottom:0px;">
@@ -2184,28 +2199,28 @@
 											<!-- vip 출력 -->
 											<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
 												<div class="card" style="border:none;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
+													<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
 													</div>
 												</div>
 											</div>
 											
 											<div class="accordion_main accordion-multi-colored col-0_5" id="accordion" role="tablist" >
 												<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin-left:-17px;" id="proxyVipConLineList">
+													<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyVipConLineList">
 													</div>
 												</div>
 											</div>
 
 											<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
+													<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
 													</div>
 												</div>
 											</div>
 																						
 											<div class="accordion_main accordion-multi-colored col-1" id="accordion" role="tablist" >
 												<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin-left:-17px;" id="proxyListnerConLineList">
+													<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyListnerConLineList">
 													</div>
 												</div>
 											</div>
@@ -2214,7 +2229,7 @@
 											<!-- DB 서버  출력-->
 											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
-													<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
+													<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
 													</div>
 												</div>
 											</div>

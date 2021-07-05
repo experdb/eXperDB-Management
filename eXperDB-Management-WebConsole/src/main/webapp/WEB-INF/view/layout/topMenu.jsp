@@ -300,40 +300,52 @@
 						}
 					}
 					
-					//proxyMenu
-					if("${sessionScope.session.proxy_use_yn}" == "Y"){
+					//proxy menu use
+					if("${sessionScope.session.proxy_menu_use_yn}" != "Y"){
 						if ((result[i].mnu_cd).indexOf("MN00018")== 0 ) {
-							if(result[i].read_aut_yn == "N"){
-								$('#' + result[i].mnu_cd).hide();
-							}else{
-								$('#' + result[i].mnu_cd).show();
+							$('#' + result[i].mnu_cd).hide();
+						}
+					} else {
+						//proxy use
+						if("${sessionScope.session.proxy_use_yn}" == "Y"){
+							if ((result[i].mnu_cd).indexOf("MN00018")== 0 ) {
+								if(result[i].read_aut_yn == "N"){
+									$('#' + result[i].mnu_cd).hide();
+								}else{
+									$('#' + result[i].mnu_cd).show();
+								}
 							}
 						}
 					}
 				}
 
-				//proxy 
-				if("${sessionScope.session.proxy_use_yn}" != "Y"){
+				if("${sessionScope.session.proxy_menu_use_yn}" != "Y"){
 					$('#proxy_menu_Y').hide();
-					$('#proxy_menu_N').show();
-					
-					$('#MN00018_etc_tit').html('<spring:message code="message.msg225"/>');
-					$('#MN00018_etc_msg').html('<spring:message code="message.msg226"/>');
-				} else {
-					$('#proxy_menu_Y').show();
 					$('#proxy_menu_N').hide();
-					
-					if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none' && $('#MN0001803').css('display') == 'none' && $('#MN0001805').css('display') == 'none'){		
+				} else {
+					if("${sessionScope.session.proxy_use_yn}" != "Y"){
 						$('#proxy_menu_Y').hide();
 						$('#proxy_menu_N').show();
 						
-						$('#MN00018_etc_tit').html('<spring:message code="message.msg227"/>');
-						$('#MN00018_etc_msg').html('<spring:message code="message.msg224"/>');
-					}else{
+						$('#MN00018_etc_tit').html('<spring:message code="message.msg225"/>');
+						$('#MN00018_etc_msg').html('<spring:message code="message.msg226"/>');
+					} else {
 						$('#proxy_menu_Y').show();
 						$('#proxy_menu_N').hide();
+						
+						if($('#MN0001801').css('display') == 'none' && $('#MN0001802').css('display') == 'none' && $('#MN0001803').css('display') == 'none' && $('#MN0001805').css('display') == 'none'){		
+							$('#proxy_menu_Y').hide();
+							$('#proxy_menu_N').show();
+							
+							$('#MN00018_etc_tit').html('<spring:message code="message.msg227"/>');
+							$('#MN00018_etc_msg').html('<spring:message code="message.msg224"/>');
+						}else{
+							$('#proxy_menu_Y').show();
+							$('#proxy_menu_N').hide();
+						}
 					}
 				}
+
 
 				//backup
 				if("${sessionScope.session.backup_use_yn}" != "Y"){	
