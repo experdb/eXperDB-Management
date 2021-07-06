@@ -95,11 +95,21 @@ public class AgentMonitoringServiceCall {
 					if(targetType.equals("AGENT") && targetUid.equals("STATUS") && targetName.equals("STATUS") && monitorType.equals("CONNECTION") && resultLevel.equals("WARN")){
 						JSONObject jObj = new JSONObject();
 						jObj.put("monitoredName", monitoredName);
+						jObj.put("logMessage", logMessage);
 						jObj.put("status", "stop");
 						jObj.put("resultCode", resultCode);
 						jObj.put("resultMessage", resultMessage);
 						jsonArray.add(jObj);
-					}							
+					}
+					
+					if(targetType.equals("LICENSE") && targetName.equals("LICENSE")){
+						JSONObject jObj = new JSONObject();
+						jObj.put("monitoredName", monitoredName);
+						jObj.put("logMessage", logMessage);
+						jObj.put("status", "licenseCheck");
+						jsonArray.add(jObj);
+					}
+					
 				}
 			}
 		}else{

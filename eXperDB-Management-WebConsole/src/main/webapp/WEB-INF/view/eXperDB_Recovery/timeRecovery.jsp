@@ -8,7 +8,7 @@
 
 <%
 	/**
-	* @Class Name : completeRecovery.jsp
+	* @Class Name : timeRecovery.jsp
 	* @Description : 시점복구 화면
 	* @Modification Information
 	*
@@ -135,8 +135,6 @@ function fn_recoveryDBReset(){
 }
 
 
-var aa;
-
 function fn_targetListPopup(){
 	if($("#backupDBList").val() != 0){
 		$.ajax({
@@ -144,7 +142,6 @@ function fn_targetListPopup(){
 			type : "post"
 		})
 		.done(function(result){
-			aa = result.recoveryList;
 			TargetList.clear();
 			TargetList.rows.add(result.recoveryList).draw();
 			fn_setIpList(result.recoveryList);
@@ -159,7 +156,10 @@ function fn_targetListPopup(){
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		})
+	}else{
+		showSwalIcon('선택된 백업 DB가 없습니다', '<spring:message code="common.close" />', '', 'error');
 	}
+	
 }
 
 function fn_runNowClick(){
@@ -199,13 +199,38 @@ function fn_passwordCheckPopup(){
 	 $("#pop_layer_popup_recoveryPasswordCheckForm").modal("show");
 }
 
-function fn_completeRecoveryRun(){
-	
+function fn_recoveryRun(){
+	$.ajax({
+		url : "/experdb/timeRecovery.do",
+		type: "post",
+		data : {
+			password : $("#recoveryPW").val(),
+			bmrInstant : $("#bmrInstant").val(),
+			sourceDB : $("#backupDBList").val(),
+			storageType : $("#recStorageType").val(),
+			storagePath : $("#recStoragePath").val(),
+			targetMac : $("#recMachineMAC").val(),
+			targetIp : $("#recMachineIP").val(),
+			targetSNM : $("#recMachineSNM").val(),
+			targetGW : $("#recMachineGateWay").val(),
+			targetDNS : $("#recMachineDNS").val()
+		}
+	})
+	.done(function(result){
+		
+	})
+	.fail (function(xhr, status, error){
+		 if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if (xhr.status == 403){
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	 })
 }
 
-
 function fn_getRecoveryTimeList(){
-	
 	var ipadr = $("#backupDBList").val();
 
 	$.ajax({
@@ -229,9 +254,7 @@ function fn_getRecoveryTimeList(){
 	 })
 } 
 
-
 function fn_setRecoveryTimeList(data){
-
 	var html;
 	for(var i =0; i<data.length; i++){
 		html += '<option value="'+data[i].jobid+'">'+data[i].finishtime+ '</option>';
@@ -251,8 +274,7 @@ function fn_getRecoveryTimeOption(){
 		}
 	})
 	.done(function(result){
-		alert(JSON.stringify(result));
-		//fn_setRecoveryTimeList(result.data);
+		fn_setStorageInfo(result.data);
 	})
 	.fail (function(xhr, status, error){
 		 if(xhr.status == 401) {
@@ -262,8 +284,13 @@ function fn_getRecoveryTimeOption(){
 		} else {
 			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 		}
-	 })
-	
+	})
+}
+
+function fn_setStorageInfo(data){
+	$("#recStoragePath").val(data[0].location);
+	$("#recStorageType").val(data[0].locationType);
+	$("#recPoint").val(data[0].rPoint);
 }
 
 
@@ -275,6 +302,7 @@ function fn_getRecoveryTimeOption(){
 <%@include file="./popup/recPwChkForm.jsp"%>
 
 <form name="recoveryInfo">
+	<input type="hidden" name="recPoint"  id="recPoint">	
 	<input type="hidden" name="recStorageType" id="recStorageType">
 	<input type="hidden" name="recStoragePath"  id="recStoragePath">
 	<input type="hidden" name="recMachineMAC"  id="recMachineMAC">
@@ -308,7 +336,7 @@ function fn_getRecoveryTimeOption(){
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">BnR</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">Recovery</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">Complete Recovery</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">Point-in-Time Recovery</li>
 										</ol>
 									</div>
 								</div>
