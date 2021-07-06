@@ -67,7 +67,7 @@ public interface SystemService {
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
-	public void agentInfoStartMng(String strSocketIp, String strSocketPort, String strVersion) throws Exception ;
+	public void agentInfoStartMng(String strSocketIp, String strSocketPort, String strVersion, String strProxyInterIP) throws Exception ;
 	
 	/**
 	 * Agent 종료
@@ -188,5 +188,4 @@ public interface SystemService {
 	public TransVO selectTransComSettingInfo(TransVO vo) throws Exception;
 	
 	public List<TransVO> selectTablePkInfo(TransVO vo) throws Exception;
-	
 }

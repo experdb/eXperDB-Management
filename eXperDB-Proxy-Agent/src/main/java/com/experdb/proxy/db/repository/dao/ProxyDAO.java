@@ -52,6 +52,16 @@ public class ProxyDAO {
 	}
 
 	/**
+	 * proxy 서버 정보 조회
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectPrySvrInslInfo(ProxyServerVO vo) throws Exception  {
+		return (ProxyServerVO) session.selectOne("proxy.selectPrySvrInslInfo", vo);
+	}
+	
+	/**
 	 * T_PRY_SVR_I table seq 조회
 	 * 
 	 * @param 

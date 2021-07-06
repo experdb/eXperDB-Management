@@ -1,6 +1,7 @@
 package com.experdb.proxy.db.repository.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -83,6 +84,19 @@ public class SystemDAO {
 		List<DbServerInfoVO> selectList = session.selectList("system.selectDbsvripadrMstGbnInfo");
 		return selectList;
 	}
+	
+	/**
+	 * db리스트 내부ip 조회
+	 * @param DbServerInfoVO
+	 * @return List<DbServerInfoVO>
+	 * @throws Exception
+	 */
+	public DbServerInfoVO selectDbsvripadrMstGbnIntlInfo(DbServerInfoVO vo) throws Exception {
+		DbServerInfoVO selectList = session.selectOne("system.selectDbsvripadrMstGbnIntlInfo", vo);
+		return selectList;
+	}
+
+
 
 	/**
 	 * Proxy 최종 서버명 조회

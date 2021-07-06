@@ -145,7 +145,7 @@ public class DXTcontrolProxy extends SocketCtl {
 
 			//proxy conf 존재일 경우 만 등록
 			if (proxyPathData != null) {
-				jObjResult = pryService.selectProxyServerList("proxy_conf_read", proxyPathData, "",""); //proxy conf setting
+				jObjResult = pryService.selectProxyServerList("proxy_conf_read", proxyPathData, strIpadr,""); //proxy conf setting
 
 				if (jObjResult.length() > 0) {
 					dbSvrIdData = ((Integer)jObjResult.get("db_svr_id")).intValue();
@@ -332,7 +332,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			if (peerIpData != null) {
 				searchProxyServerVO.setIpadr(peerIpData);
 
-				ProxyServerVO masterProxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
+				ProxyServerVO masterProxyServerInfo = pryService.selectPrySvrInslInfo(searchProxyServerVO);
 				if (masterProxyServerInfo != null) {
 					peerIdData = masterProxyServerInfo.getPry_svr_id();
 				}
@@ -489,7 +489,7 @@ public class DXTcontrolProxy extends SocketCtl {
 				returnMsg = pryService.proxyConfFisrtIns(vo, insUpNmGbn, insertParam);
 			}
 		} catch (Exception e) {
-			errLogger.error("DXTcontrolScaleAwsExecute {} ", e.toString());
+			errLogger.error("DXTcontrolProxy {} ", e.toString());
 			returnMsg = "false";
 		}
 		return returnMsg;

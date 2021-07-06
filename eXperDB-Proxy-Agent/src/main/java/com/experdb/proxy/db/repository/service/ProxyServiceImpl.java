@@ -159,6 +159,18 @@ public class ProxyServiceImpl implements ProxyService{
 	}
 
 	/**
+	 * proxy 서버 정보 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectPrySvrInslInfo(ProxyServerVO vo)  throws Exception {
+		return (ProxyServerVO) proxyDAO.selectPrySvrInslInfo(vo);
+	}
+	
+
+	/**
 	 * proxy 서버 param setting
 	 * 
 	 * @param String search_gbn, String req_cmd, String server_ip, String db_chk
@@ -329,6 +341,8 @@ public class ProxyServiceImpl implements ProxyService{
 		String strTimeCheck = ""; 	//체크_시간
 		String strObjIp = ""; 		//대상 ip
 		String strPeerServerIp = ""; //PEER_서버_IP
+		
+		String strInslIp = "";
 
 		try {
 			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();
@@ -344,6 +358,16 @@ public class ProxyServiceImpl implements ProxyService{
 				r.join();
 			} catch (InterruptedException ie) {
 				ie.printStackTrace();
+			}
+			
+			//내부 ip확인
+			if (serverIp != null) {
+				dbServerInfoVO.setIPADR(serverIp);
+				DbServerInfoVO serverInfoIntlList = systemDAO.selectDbsvripadrMstGbnIntlInfo(dbServerInfoVO);
+
+				if (serverInfoIntlList != null) {
+					strInslIp = serverInfoIntlList.getINTL_IPADR();
+				}
 			}
 
 			String retVal = r.call();
@@ -391,15 +415,25 @@ public class ProxyServiceImpl implements ProxyService{
 
 						//proxy 설정
 						if ("proxy_conf_read".equals(searchGbn)) {
-							// server list 조회
+							// server list 조회  -- 내부망일때 체크하는 부분도 추가 2021.07.01
 							if(temp.trim().matches(".*server.*")) {
 								if (serverInfoList.size() > 0) {
 									for(int j=0; j<serverInfoList.size(); j++){
 										String db_ipadr = serverInfoList.get(j).getIPADR();
-
-										if (db_ipadr != null && temp.contains(db_ipadr)) {
+										String intl_db_ipadr = serverInfoList.get(j).getINTL_IPADR();
+										
+										socketLogger.info("proxy_set.intl_db_ipadrintl_db_ipadr : " + intl_db_ipadr);
+										socketLogger.info("proxy_set.db_ipadrdb_ipadrdb_ipadr : " + db_ipadr);
+										
+										socketLogger.info("proxy_set.temp : " + temp);
+										
+										socketLogger.info("proxy_set.temp.contains(intl_db_ipadr) : " + temp.contains(intl_db_ipadr));
+										
+										if ((db_ipadr != null && temp.contains(db_ipadr)) || (intl_db_ipadr != null && temp.contains(intl_db_ipadr))) {
 											db_svr_nm = serverInfoList.get(j).getDB_SVR_NM();
 											db_svr_id = serverInfoList.get(j).getDB_SVR_ID();
+											
+											socketLogger.info("proxy_set.temp.db_svr_iddb_svr_iddb_svr_id : " + db_svr_id);
 										}
 									}
 								}
@@ -628,10 +662,17 @@ public class ProxyServiceImpl implements ProxyService{
 								
 								//대상_IP
 								if(temp.trim().matches(".*unicast_src_ip.*")) {
+									//서버 ip와 내부ip 전부 조회
 									if (temp.trim().contains(serverIp)) {
 										//대상_IP
 										strObjIp = serverIp;
 										peerServerIpChk = 1;
+									} else if (!strInslIp.equals("")) {
+										if (temp.trim().contains(strInslIp)) { //내부일때는 내부ip setting
+											//대상_IP
+											strObjIp = strInslIp;
+											peerServerIpChk = 1;
+										}
 									}
 								}
 
@@ -748,9 +789,10 @@ public class ProxyServiceImpl implements ProxyService{
 			
 			ProxyServerVO peerServerInfo = new ProxyServerVO();
 			peerServerInfo.setIpadr(strPeerServerIp);
+			
 
 			//마스터 확인
-			ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInfo(peerServerInfo);
+			ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInslInfo(peerServerInfo); //외부, 내부 조회 로 변경
 			String strKeepalived = FileUtil.getPropertyValue("context.properties", "keepalived.install.yn");
 			if (strKeepalived != null && "Y".equals(strKeepalived)) {
 				if (proxyServerInfo != null) {
@@ -858,7 +900,7 @@ public class ProxyServiceImpl implements ProxyService{
 	@Transactional
 	public String proxyConfFisrtIns(ProxyServerVO insPryVo, String insUpNmGbn, Map<String, Object> insertParam) throws Exception  {
 		socketLogger.info("ProxyServiceImpl.confSetExecute----- : ");
-		String returnMsg = "success";
+		String returnMsg = "false";
 		int saveChkPrySvrI = 0;
 		AgentInfoVO agtVo = new AgentInfoVO();
 		
@@ -893,11 +935,13 @@ public class ProxyServiceImpl implements ProxyService{
 						
 						saveChkPrySvrI = proxyDAO.updatePrySvrInfo(insPryVo);
 					}
+					
+					returnMsg = "success";
 				} catch (Exception e) {
 					errLogger.error("proxySvrIns {} ", e.toString());
 					returnMsg = "false";
 				}
-
+				socketLogger.info("returnMsg : "+returnMsg);
 				//global
 				try {
 					if (insertParam != null) {
@@ -922,11 +966,12 @@ public class ProxyServiceImpl implements ProxyService{
 	
 						proxyDAO.insertPryGlbInfo(proxyGlobalVO);
 					}
+					returnMsg = "success";
 				} catch (Exception e) {
 					errLogger.error("global {} ", e.toString());
 					returnMsg = "false";
 				}
-	
+				socketLogger.info("returnMsg2 : "+returnMsg);
 				try {
 					//리스너, vip
 					if (insertParam != null) {
@@ -1076,7 +1121,7 @@ public class ProxyServiceImpl implements ProxyService{
 					errLogger.error("listner.error {} ", e.toString());
 					returnMsg = "false";
 				}
-
+				socketLogger.info("returnMsg3 : "+returnMsg);
 				try {
 					if (insPryVo != null) {
 						String strPry_svr_nm_mst = (String)insertParam.get("lisner_list");
@@ -1095,6 +1140,7 @@ public class ProxyServiceImpl implements ProxyService{
 					errLogger.error("backup master_svr_id setting {} ", e.toString());
 					returnMsg = "false";
 				}
+				socketLogger.info("returnMsg4 : "+returnMsg);
 			}
 
 			try {

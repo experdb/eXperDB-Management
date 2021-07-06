@@ -42,7 +42,15 @@
 			columns : [
 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "svr_host_nm", className : "dt-center", defaultContent : ""},
-				{data : "ipadr", className : "dt-center", defaultContent : "" },
+				{data : "ipadr", 
+					render : function(data, type, full, meta) {
+						var html = full.ipadr;
+						if (full.intl_ipadr != "") {
+							html += '<br/>(<spring:message code="eXperDB_proxy.internal_ip" /> :' + full.intl_ipadr + ')';
+						}
+						return html;
+					},
+					className : "dt-center", defaultContent : "" },
 				{data : "portno", className : "dt-center", defaultContent : "" },
 				{data : "db_cndt", 
 					render : function(data, type, full, meta) {

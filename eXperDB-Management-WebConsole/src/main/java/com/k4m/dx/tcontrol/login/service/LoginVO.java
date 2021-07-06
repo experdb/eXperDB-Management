@@ -1,7 +1,5 @@
 package com.k4m.dx.tcontrol.login.service;
 
-import java.util.Date;
-
 public class LoginVO {
 	private String usr_id;
 	private String usr_nm;
@@ -21,8 +19,16 @@ public class LoginVO {
 	private String loginChkTime;
 
 	private String proxy_use_yn;
-	
-	
+	private String proxy_menu_use_yn;
+
+	public String getProxy_menu_use_yn() {
+		return proxy_menu_use_yn;
+	}
+
+	public void setProxy_menu_use_yn(String proxy_menu_use_yn) {
+		this.proxy_menu_use_yn = proxy_menu_use_yn;
+	}
+
 	public String getProxy_use_yn() {
 		return proxy_use_yn;
 	}
@@ -142,5 +148,4 @@ public class LoginVO {
 	public void setLoginChkTime(String loginChkTime) {
 		this.loginChkTime = loginChkTime;
 	}
-
 }

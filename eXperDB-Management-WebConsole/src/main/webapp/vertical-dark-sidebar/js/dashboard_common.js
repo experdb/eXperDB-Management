@@ -9,23 +9,22 @@ var todayMinutes = null;
 $(window).ready(function(){
 	//금일 날짜 체크
 	fn_today_setChk();
-	
+
 	//오늘날짜 setting
 	fn_todaySetting();
-	
+
 	//통합 스케줄 setting
 	fn_totScdSetting();
-	
+
 	//서버정보 리스트 setting
 	fn_serverListSetting();	
-	
+
 	// tooltip 셋팅
 	setTimeout(function(){
 		$('[data-toggle="tooltip"]').tooltip({
 			template: '<div class="tooltip tooltip-warning" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
 		});
 	},250);
-	
 });
 
 /* ********************************************************
@@ -38,13 +37,13 @@ function fn_serverSebuInfo(db_svr_id, rowChkCnt) {
 	var iHeight = (($(window).height() - obj.outerHeight()) / 2) + $("#contentsDivDash").scrollTop();
 	var iWidth = (($(window).width() - obj.outerWidth()) / 2) + $("#contentsDivDash").scrollLeft();
 	obj.css({
-        position: 'absolute',
-        display:'block',
-        top: iHeight,
-        left: iWidth
-    });
+		position: 'absolute',
+		display:'block',
+		top: iHeight,
+		left: iWidth
+	});
 
-    $('#loading_dash').show();
+	$('#loading_dash').show();
 
 	//초기화
 	fn_serverDivClear(db_svr_id, rowChkCnt);
@@ -58,7 +57,7 @@ function fn_serverDivClear(db_svr_id, rowChkCnt) {
 	/*if ($('#a_back_hist').attr('aria-expanded') == "false") {
 		$('#a_back_hist').click();
 	}*/
-	
+
 	//배치정보
 	/*if ($('#a_script_hist').attr('aria-expanded') == "false") {
 		$('#a_script_hist').click();
@@ -71,18 +70,18 @@ function fn_serverDivClear(db_svr_id, rowChkCnt) {
 	if ($('#a_encrypt_hist').attr('aria-expanded') == "false") {
 		$('#a_encrypt_hist').click();
 	}
-	
+
 	$("#scheduleHistChart").html("");
-	/*$("#backupRmanHistChart").html("");	
+	/*$("#backupRmanHistChart").html("");
 	$("#backupDumpHistChart").html("");	*/
-	
+
 	/*var scriptHistChartCanvas = document.getElementById("scriptHistChart");
 	scriptHistChartCanvas.getContext("2d").clearRect(0, 0, scriptHistChartCanvas.width, scriptHistChartCanvas.height);*/
 
 	if ($("#scaleHistChart") != null) {
 		$("#scaleHistChart").html("");	
 	}
-	
+
 	if (document.getElementById("scaleSetChart") != null) {
 		var scaleSetChartCanvas = document.getElementById("scaleSetChart");
 		scaleSetChartCanvas.getContext("2d").clearRect(0, 0, scaleSetChartCanvas.width, scaleSetChartCanvas.height);
@@ -102,13 +101,13 @@ function fn_serverDivClear(db_svr_id, rowChkCnt) {
 
 	//클릭시 css
 	var serverSsCnt_chk = parseInt(nvlPrmSet($("#serverSsCnt", "#dashboardViewForm").val(),0));
-	
+
 	if (serverSsCnt_chk > 0) {
 		for (var i = 1; i <= serverSsCnt_chk; i++) {
 			$("#serverSs" + i).css('background-color','#fff');
 		}
 	}
-	
+
 	$("#serverSs" + rowChkCnt).css('background-color','#c2defe');
 
 	fn_dbSvrIdSearch(db_svr_id);
@@ -119,7 +118,7 @@ function fn_serverDivClear(db_svr_id, rowChkCnt) {
  * 메인 대시보드 셋팅
  ******************************************************** */
 function fn_main_tab_setting(result) {
-	
+
 	//백업일정, 배치일정, 데이터이관 일정 setting
 	fn_schedule_cnt_set(result);
 
@@ -128,15 +127,15 @@ function fn_main_tab_setting(result) {
 
 	//백업 이력 목록 setting
 	//fn_backup_History_set(result);
-	
+
 	//배치 이력 목록 setting
 	//fn_script_History_set(result);
-	
+
 	//데이터 이관 setting
 //	if (nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N") == "Y") {
 //		fn_migration_history_set(result);
 //	}
-	
+
 	//scale setting
 	if (nvlPrmSet($("#scale_yn", "#dashboardViewForm").val(), "N") == "Y") {
 		fn_scale_history_set(result);
@@ -151,10 +150,9 @@ function fn_main_tab_setting(result) {
 		$("#encrypt_div_none").show();
 		$("#encrypt_div_set").hide();
 	} 
-	
+
 	//테이블스페이즈 정보 setting
 	fn_tablescpace_setting(result);
-
 }
 
 /* ********************************************************
@@ -178,7 +176,7 @@ function fn_tablescpace_setting(result) {
 			$("#tablespaceInfoAvailTd").html("0");
 			fn_gData("0%");
 		}
-		
+
 		//backup
 		if (result.tablespaceObj.BACKUP_PATH != null && result.tablespaceObj.BACKUP_PATH != undefined) {
 			$("#backupPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.BACKUP_PATH, "") + '</i>');
@@ -186,7 +184,7 @@ function fn_tablescpace_setting(result) {
 			$("#backupPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 			$("#backupspaceInfoFsizeTd").html("0");
 		}
-		
+
 		if (result.tablespaceObj.CMD_BACKUPSPACE_INFO != null && result.tablespaceObj.CMD_BACKUPSPACE_INFO != undefined) {
 			$("#backupspaceInfoFsizeTd").html(nvlPrmSet(result.tablespaceObj.CMD_BACKUPSPACE_INFO[0].fsize, "0"));
 			$("#backupVTd").html(nvlPrmSet(result.tablespaceObj.BACKUP_V, "0"));
@@ -220,14 +218,14 @@ function fn_tablescpace_setting(result) {
 			
 			fn_gWal("0", "0");
 		}
-		
+
 		//ARCHIVE
 		if (result.tablespaceObj.PGALOG_PATH != null && result.tablespaceObj.PGALOG_PATH != undefined) {
 			$("#pgalogPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.PGALOG_PATH, "") + '</i>');
 		} else {
 			$("#pgalogPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		}
-		
+
 		if (result.tablespaceObj.PGALOG_CNT != null && result.tablespaceObj.PGALOG_CNT != undefined) {
 			$("#pgalogCntTd").html('<i class="ti-files"> ARCHIVE_FILE :  </i>'+ nvlPrmSet(result.tablespaceObj.PGALOG_CNT, "") + " " + dashboard_count +'</i>');
 		} else {
@@ -239,14 +237,14 @@ function fn_tablescpace_setting(result) {
 		} else {
 			fn_gArc("0");
 		}
-		
+
 		//LOG
 		if (result.tablespaceObj.LOG_PATH != null && result.tablespaceObj.LOG_PATH != undefined) {
 			$("#logPathTd").html('<i class="fa fa-hdd-o text-primary">'+ nvlPrmSet(result.tablespaceObj.LOG_PATH, "") + '</i>');
 		} else {
 			$("#logPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		}
-		
+
 		if (result.tablespaceObj.LOG_CNT != null && result.tablespaceObj.LOG_CNT != undefined) {
 			$("#logFileCntTd").html('<i class="ti-files"> LOG_FILE :  </i>'+ nvlPrmSet(result.tablespaceObj.LOG_CNT, "") + " " + dashboard_count +'</i>');
 		} else {
@@ -264,16 +262,16 @@ function fn_tablescpace_setting(result) {
 		$("#tablespaceInfoUsedTd").html("0");
 		$("#tablespaceInfoAvailTd").html("0");
 		fn_gData("0%");
-		
+
 		$("#backupPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		$("#backupspaceInfoFsizeTd").html("0");
 		fn_gBackup("0M", "0M");
-		
+
 		$("#pgwalPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		$("#walKeepSegmentsTd").html('<i class="ti-files"> WAL_KEEP_SEGMENTS : </i>0' + dashboard_count);
 		$("#pgwalCntTd").html('<i class="ti-files"> WAL_FILE : </i>0' + dashboard_count);
 		fn_gWal("0", "0");
-		
+
 		$("#pgalogPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		fn_gArc("0");
 
@@ -281,8 +279,8 @@ function fn_tablescpace_setting(result) {
 		$("#logFileCntTd").html('<i class="ti-files"> LOG_FILE :  </i>');
 		fn_gLog("0");
 	}
-	
-    $('#loading_dash').hide();	
+
+	$('#loading_dash').hide();	
 }
 
 /* ********************************************************
@@ -295,8 +293,8 @@ function fn_encrypt_serverStatus() {
 		dataType : "json",
 		type : "post",
 		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
+			xhr.setRequestHeader("AJAX", true);
+		},
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
@@ -309,7 +307,7 @@ function fn_encrypt_serverStatus() {
 		success : function(data) {
 			fn_encrypt_setting(data);
 		}
-	});	
+	});
 }
 
 /* ********************************************************
@@ -317,7 +315,7 @@ function fn_encrypt_serverStatus() {
  ******************************************************** */
 function fn_encrypt_setting(data) {
 	var keyServerHtml = "";
-	
+
 	keyServerHtml += "<tr>";
 	keyServerHtml += '<td style="width:50%;line-height:150%;border:none;">';
 	
@@ -341,10 +339,10 @@ function fn_encrypt_setting(data) {
  * 암호화키 agent 조회
  ******************************************************** */
 function fn_selectSecurityStatistics(today){
- 	var encryptSuccessCount = 0;
- 	var encryptFailCount = 0;
- 	var decryptSuccessCount = 0;
- 	var decryptFailCount = 0;
+	var encryptSuccessCount = 0;
+	var encryptFailCount = 0;
+	var decryptSuccessCount = 0;
+	var decryptFailCount = 0;
 
 	$.ajax({
 		url : "/selectDashSecurityStatistics.do",
@@ -356,8 +354,8 @@ function fn_selectSecurityStatistics(today){
 		dataType : "json",
 		type : "post",
 		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	    },
+			xhr.setRequestHeader("AJAX", true);
+		},
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
@@ -369,20 +367,20 @@ function fn_selectSecurityStatistics(today){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-			 	var html ="";
+				var html ="";
 
-			 	if (data.list.length > 0) {
-			 		for(var i=0; i<data.list.length; i++){
-			 			html += '<tr>';
-			 			html += '<td style="width:100%;line-height:150%;border:none;">';
+				if (data.list.length > 0) {
+					for(var i=0; i<data.list.length; i++){
+						html += '<tr>';
+						html += '<td style="width:100%;line-height:150%;border:none;">';
 	
-			 			if(data.list[i].status == "start"){
-			 				html += '<div class="badge badge-pill badge-success"><i class="fa fa-spin fa-spinner"></i></div>';
-			 			} else {
-			 				html += '<div class="badge badge-pill badge-danger"><i class="fa fa-minus"></i></div>';
-			 			}
+						if(data.list[i].status == "start"){
+							html += '<div class="badge badge-pill badge-success"><i class="fa fa-spin fa-spinner"></i></div>';
+						} else {
+							html += '<div class="badge badge-pill badge-danger"><i class="fa fa-minus"></i></div>';
+						}
 						html += "&nbsp;" + data.list[i].monitoredName;
-			 			
+
 						html += '</td>';
 						html += "</tr>";
 
@@ -390,10 +388,10 @@ function fn_selectSecurityStatistics(today){
 						encryptFailCount += encryptFailCount + parseInt(nvlPrmSet(data.list[i].encryptFailCount, 0));
 						decryptSuccessCount += decryptSuccessCount + parseInt(nvlPrmSet(data.list[i].decryptSuccessCount, 0));
 						decryptFailCount += decryptFailCount + parseInt(nvlPrmSet(data.list[i].decryptFailCount, 0));
-			 		}
-			 		
-			 		$( "#agentKeyServerState" ).html(html);
-			 	}
+					}
+
+					$( "#agentKeyServerState" ).html(html);
+				}
 			}else if(data.resultCode == "8000000002"){
 				showSwalIcon(message_msg05, closeBtn, '', 'error');
 			}else if(data.resultCode == "8000000003"){
@@ -406,8 +404,8 @@ function fn_selectSecurityStatistics(today){
 				}
 			}
 		}
-	});		
-	
+	});
+
 	fn_selectSecurityChart(encryptSuccessCount, encryptFailCount, decryptSuccessCount, decryptFailCount);
 }
 
@@ -462,7 +460,7 @@ function fn_selectSecurityChart(encryptSuccessCount, encryptFailCount, decryptSu
 					fill: false
 				}]
 		};
-		
+
 		var barChartCanvas = $("#encryptHistChart").get(0).getContext("2d");
 		var barChart = new Chart(barChartCanvas, {
 			type: 'bar',
@@ -485,9 +483,9 @@ function fn_dbSvrIdSearch(db_svr_id_val) {
 		dataType : "json",
 		type : "post",
 		beforeSend: function(xhr) {
-	    	xhr.setRequestHeader("AJAX", true);
-	    },
-	    error : function(xhr, status, error) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
@@ -516,7 +514,7 @@ function fn_todaySetting() {
 
 	var html = "<i class='fa fa-calendar menu-icon'></i> "+today_ing;
 	var sdtHisTimehtml = "<i class='fa fa-calendar menu-icon'></i> "+today_date.toJSON().slice(0,10).replace(/-/g,'-') + " ~ " + today_ing;
-	
+
 	$( "#tot_sdt_today" ).append(html);						//통합스케줄
 	$( "#tot_scd_ing_msg" ).append(html);					//금일예정
 
@@ -528,7 +526,6 @@ function fn_todaySetting() {
 
 	$( "#tot_encrypt_his_today" ).append(html);	
 	$( "#tot_proxy_his_today" ).append(html);	
-	
 }
 
 /* ********************************************************
@@ -551,7 +548,7 @@ function fn_today_setChk() {
 	if(todayChkDate.length == 1){ 
 		todayChkDate = "0" + todayChkDate;
 	}
-	
+
 	if(todayChkHours.length < 2){ 
 		todayChkHours = "0" + todayChkHours; 
 	}
@@ -868,7 +865,7 @@ function fn_schedule_History_set(result) {
 	if (result.scheduleHistoryChart != null) {
 		chartListCnt = 1;
 	}
-	
+
 	db2_pgYn = nvlPrmSet($("#db2pg_yn", "#dashboardViewForm").val(), "N");
 
 	if (db2_pgYn == "Y") {
@@ -876,7 +873,7 @@ function fn_schedule_History_set(result) {
 			var back_tot_cnt = 0; back_suc_cnt = 0; back_fal_cnt = 0;
 			var script_tot_cnt = 0; script_suc_cnt = 0; script_fal_cnt = 0;
 			var db2_pg_tot_cnt = 0; db2_pg_suc_cnt = 0; db2_pg_fal_cnt = 0;
-			
+
 			if  (chartListCnt > 0) {
 				back_tot_cnt = nvlPrmSet(result.scheduleHistoryChart.back_tot_cnt, 0);
 				back_suc_cnt = nvlPrmSet(result.scheduleHistoryChart.back_suc_cnt, 0);
@@ -961,12 +958,12 @@ function fn_schedule_History_set(result) {
 			scdHisChartHtml += '		</div>';
 			scdHisChartHtml += '	</td>';
 			scdHisChartHtml += '	<td><h5 class="font-weight-bold mb-0" id="scd_pro_text_' + i + '">' + chartCnt + '</h5></td>';
-			
+
 			scdHisChartHtml += "</tr>";
 		}
 
 		$("#scheduleHistChart").html(scdHisChartHtml);
-		
+
 		//스케줄 프로그레스바 설정
 		if (chartListCnt > 0) {
 			setTimeout(fn_schedule_History_progres, 1000, result.scheduleHistoryChart);
@@ -984,7 +981,7 @@ function fn_schedule_History_progres(result) {
 	for (var i = 0; i < 7; i++) {
 		chartCnt = 0;
 		chartWidth = "";
-		
+
 		if (i == 0) {
 			chartCnt = nvlPrmSet(result.tot_cnt, "0");
 			chartWidth = "100";
@@ -1013,7 +1010,6 @@ function fn_schedule_History_progres(result) {
 		$("#scd_pro_text_" + i).html(chartCnt); 
 	}
 }
-
 
 /* ********************************************************
  * 백업 이력 설정
@@ -1279,7 +1275,6 @@ function fn_schedule_History_progres(result) {
 			},500);
 }*/
 
-
 /* ********************************************************
  * migration setting
  ******************************************************** */
@@ -1295,7 +1290,7 @@ function fn_migration_history_set(result) {
 	var ampm ="";
 	var hours = "";
 	var migtCount=0;
-	
+
 	var migtHisHtml = "";
 	var migtHisChartHtml = "";
 	var chartMaxCnt = "";
@@ -1591,7 +1586,7 @@ function fn_scale_history_set(result) {
 	if (result.scale_install_yn != null && result.scale_install_yn == "Y") {
 		$("#scale_div_none").hide();
 		$("#scale_div_set").show();
-		
+
 		var scaleHistHtml = "";
 		var chartListCnt = 0;
 
@@ -1658,7 +1653,7 @@ function fn_scale_history_set(result) {
 					}
 				}
 				scaleHistHtml +='	</td>';
-	
+				
 				scaleHistHtml +='		<td class="text-center">'+item.wrk_strt_dtm+'</td>';
 
 				scaleHistHtml +='		<td class="text-center">';
@@ -1668,7 +1663,7 @@ function fn_scale_history_set(result) {
 					scaleHistHtml += "";
 				}
 				scaleHistHtml +='	</td>';
-				
+
 				scaleHistHtml +='		<td class="text-center">';
 				if (item.exe_rslt_cd == 'TC001701' && item.wrk_id == '2') {
 					scaleHistHtml += '<i class="fa fa-check text-primary">';
@@ -1689,7 +1684,6 @@ function fn_scale_history_set(result) {
 				
 				scaleHistHtml +='	</tr>';
 			});
-
 		} else {
 			scaleHistHtml += "<tr>";
 			scaleHistHtml += '<td class="text-center" colspan="7" style="width:100%;border:none;height:20px;background-color:#ededed;">';
@@ -1700,9 +1694,9 @@ function fn_scale_history_set(result) {
 
 		$("#scaleHistListT").html(scaleHistHtml);
 		///////////////////////////scale list end ////////////////////////
-		
+
 		///////////////////////////scale chart start ////////////////////////
-		
+
 		if ($("#scaleHistChart").length) {
 			var scalechart = Morris.Bar({
 							element: 'scaleHistChart',
@@ -1746,10 +1740,10 @@ function fn_scale_history_set(result) {
 						} else {
 							result.scaleSettingChartresult[i].scale_nm = etc_etc39 + "-" + dashboard_manual;
 						}
-						
+
 						scaleHitChart.push(result.scaleSettingChartresult[i]);
-					}	
-			
+					}
+
 					scalechart.setData(scaleHitChart);
 				}
 			}
@@ -1784,7 +1778,7 @@ function fn_scale_history_set(result) {
 						}
 					}
 			};
-			
+
 			var data = {
 					labels: [common_registory, dashboard_progress_end, common_success, common_failed],
 					datasets: [{
@@ -1819,8 +1813,6 @@ function fn_scale_history_set(result) {
 			{
 				$("#a_scale_hist").click()
 			},500);
-		
-		
 	} else { //aws 서버가 아닌경우
 		$("#scale_div_none").show();
 		$("#scale_div_set").hide();
@@ -1840,7 +1832,7 @@ function fn_dash_scaleFailLog(scale_wrk_sn){
 		dataType : "json",
 		type : "post",
 		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
+			xhr.setRequestHeader("AJAX", true);
 		},
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
@@ -1858,7 +1850,7 @@ function fn_dash_scaleFailLog(scale_wrk_sn){
 				} else if (nvlPrmSet(result.rslt_msg,"") == "Auto scale-out_fail") {
 					result.rslt_msg = eXperDB_scale_msg12;
 				}
-					
+
 				if (result.rslt_msg != "") {
 					result.rslt_msg = fn_strBrReplcae(result.rslt_msg);
 				}
@@ -1869,11 +1861,10 @@ function fn_dash_scaleFailLog(scale_wrk_sn){
 				$('#pop_layer_err_msg').modal("show");
 			} else {
 				$("#d_scaleWrkLogInfo").html("");
-
 				$('#pop_layer_err_msg').modal("hide");
 			}
 		}
-	});	
+	});
 }
 
 /* ********************************************************
@@ -2076,7 +2067,7 @@ function fn_dash_migtFailLog(mig_exe_sn){
  ******************************************************** */
 function fn_scheduleListMove(scd_nm) {
 	$("#scd_nm", "#dashboardViewForm").val(scd_nm);
-	
+
 	$("#dashboardViewForm").attr("action", "/selectScheduleListView.do");
 	$("#dashboardViewForm").submit();
 }
@@ -2093,9 +2084,9 @@ function fn_prySearch(db_svr_id_val) {
 		dataType : "json",
 		type : "post",
 		beforeSend: function(xhr) {
-	    	xhr.setRequestHeader("AJAX", true);
-	    },
-	    error : function(xhr, status, error) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
@@ -2118,10 +2109,10 @@ function fn_proxyInit(result) {
 	if (result.proxyServerByDBSvrId.length > 0) {
 		// vip 모니터링
 		fn_keepMonInfo(result);
-		
+
 		// 프록시 모니터링 setting
 		fn_proxyMonInfo(result);
-		
+
 		// 프록시 연결 db 모니터링 setting
 		fn_dbMonInfo(result);
 		$("#reg_pry_title").show();
@@ -2132,14 +2123,13 @@ function fn_proxyInit(result) {
 		$("#reg_pry_detail").hide();
 		$("#no_reg_pry_detail").show();
 	}
-	
+
 	setTimeout(function(){
 		$('[data-toggle="tooltip"]').tooltip({
 			template: '<div class="tooltip tooltip-warning" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
 		});
 	},250);
 }
-
 
 /* ********************************************************
 * vip 모니터링 셋팅
@@ -2162,12 +2152,13 @@ function fn_keepMonInfo(result){
 	var kal_exe_status_css = "";
 	var strVip = "";
 	var kal_install_yn = "";
+
 	//ROW 만들기
 	for(var i = 0; i < proxyServerByDBSvrId_cnt; i++){
 		var pry_agent_status = result.proxyServerByDBSvrId[i].conn_result;
-		
+
 		//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
-			
+
 		html_vip += '	<p class="card-title" style="margin-bottom:-25px;margin-left:10px;">\n';
 		html_vip += '	<span id="vip_proxy_nm' + i + '"></span>\n';
 		html_vip += '	</p>\n';
@@ -2175,7 +2166,7 @@ function fn_keepMonInfo(result){
 		html_vip += '	<table class="table-borderless" style="width:100%;">\n';
 		html_vip += '		<tr>\n';
 
-		html_vip += '			<td style="width:80%;height:220px;" class="text-center" id="keepVipDiv' + i + '">\n';
+		html_vip += '			<td style="width:80%;height:240px;" class="text-center" id="keepVipDiv' + i + '">\n';
 		html_vip += '			&nbsp;</td>\n';
 
 		html_vip += '		</tr>\n';
@@ -2187,20 +2178,20 @@ function fn_keepMonInfo(result){
 		}
 		html_vip_line += '	<span>&nbsp;</span>\n';
 		html_vip_line += '	</p>\n';
-		
+
 		html_vip_line += '	<table class="table-borderless" style="width:100%;">\n';
 		html_vip_line += '		<tr>\n';
-		
-		html_vip_line += '			<td style="width:100%;height:220px;" class="text-center" id="keepVipDivLine' + i + '">\n';
+
+		html_vip_line += '			<td style="width:100%;height:240px;" class="text-center" id="keepVipDivLine' + i + '">\n';
 		html_vip_line += '			</td>\n';
 
 		html_vip_line += '		</tr>\n';
 		html_vip_line += '	</table>\n';
-		
- 		if (i != proxyServerByDBSvrId_cnt-1 && proxyServerByDBSvrId_cnt > 1) {
- 			html_vip += '<hr>\n';
- 			html_vip_line += '<br/>\n';
- 		}
+
+		if (i != proxyServerByDBSvrId_cnt-1 && proxyServerByDBSvrId_cnt > 1) {
+			html_vip += '<hr>\n';
+			html_vip_line += '<br/>\n';
+		}
 	}
 
 	$("#proxyMonitoringList").html(html_vip);
@@ -2218,90 +2209,90 @@ function fn_keepMonInfo(result){
 					kal_exe_status_chk = "text-danger";
 					kal_exe_status_css = "fa-times-circle text-danger";
 				}
-					
+
 				html_sebu = "";
 				html_vip_line = "";
- 				html_sebu += '					<i class="ti-vimeo-alt icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 5em;margin-top:10px;" ></i>\n';
+				html_sebu += '					<i class="ti-vimeo-alt icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 5em;margin-top:10px;" ></i>\n';
 
- 				strVip = result.proxyServerVipList[i].v_ip;
+				strVip = result.proxyServerVipList[i].v_ip;
 
- 				if (strVip != null && strVip != "," && strVip != "") {
- 					//마지막 문자열 제거
- 					if (strVip.charAt(strVip.length-1) == ",") {
- 						strVip = strVip.slice(0,-1);
- 					}
+				if (strVip != null && strVip != "," && strVip != "") {
+					//마지막 문자열 제거
+					if (strVip.charAt(strVip.length-1) == ",") {
+						strVip = strVip.slice(0,-1);
+					}
 
- 					//첫 문자열 제거
- 					if (strVip.substr(0, 1) == ",") {
- 						strVip = strVip.substr(1);
- 					}
+					//첫 문자열 제거
+					if (strVip.substr(0, 1) == ",") {
+						strVip = strVip.substr(1);
+					}
 
- 					var strVipSplit = strVip.split(',');
- 				    for ( var j in strVipSplit ) {
- 				    	var strVipSplit_val = strVipSplit[j].substr(0, strVipSplit[j].indexOf('/'));
-		 				html_sebu += '				<h5 class="text-info"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
-		 				html_sebu += '				' + strVipSplit_val + '</h5>\n';	
- 				    }	
- 				    
-	 				//line 생성
- 				    if(pry_agent_status == "Y"){
- 				    	html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;" id="vip_line' + i + '"></i>\n';
- 				    }
- 				}
+					var strVipSplit = strVip.split(',');
+					for ( var j in strVipSplit ) {
+						var strVipSplit_val = strVipSplit[j].substr(0, strVipSplit[j].indexOf('/'));
+						html_sebu += '				<h5 class="text-info"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
+						html_sebu += '				' + strVipSplit_val + '</h5>\n';	
+					}
 
- 				for(var j = 0; j < result.proxyServerByDBSvrId.length; j++) {
- 					kal_install_yn = result.proxyServerByDBSvrId[j].kal_install_yn;
- 					if (result.proxyServerByDBSvrId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
-	 					count++;
- 						if (result.proxyServerVipList[i].pry_svr_nm != "") {
-	 						var vip_btn_html = "";
-	 						vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
-	 						vip_btn_html +=	'<br/>&nbsp;';
-		 					$("#vip_proxy_nm" + j).html(vip_btn_html);
-	 					}
+					//line 생성
+					if(pry_agent_status == "Y"){
+						html_vip_line += '					<i class="mdi mdi-swap-horizontal icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;width:100%;" id="vip_line' + i + '"></i>\n';
+					}
+				}
 
-	 					$("#keepVipDiv"+ j).html(html_sebu);
-	 					
-	 					$("#keepVipDivLine" + j).html(html_vip_line);
-	 					
-	 					iVipChkCnt = j;
- 					} else if(j == result.proxyServerByDBSvrId.length-1 && count == 0){
- 						html_sebu = "";
- 		 				var vip_btn_html = "";
- 		 				vip_btn_html += '<br/>&nbsp;';
- 		 				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;' + proxy_msg39  + '</h6>';
- 						
- 		 				$("#vip_proxy_nm" + j).html(vip_btn_html);
-	 					$("#keepVipDiv"+ j).html(html_sebu);
-	 	 				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
-	 					$("#keepVipDivLine" + j).html(html_vip_line);
-	 					$("#vip_line0","#keepVipDivLine" + j).hide();
- 					}
- 				}
+				for(var j = 0; j < result.proxyServerByDBSvrId.length; j++) {
+					kal_install_yn = result.proxyServerByDBSvrId[j].kal_install_yn;
+					if (result.proxyServerByDBSvrId[j].pry_svr_id == result.proxyServerVipList[i].pry_svr_id) {
+						count++;
+						if (result.proxyServerVipList[i].pry_svr_nm != "") {
+							var vip_btn_html = "";
+							vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
+							vip_btn_html +=	'<br/>&nbsp;';
+							$("#vip_proxy_nm" + j).html(vip_btn_html);
+						}
+
+						$("#keepVipDiv"+ j).html(html_sebu);
+
+						$("#keepVipDivLine" + j).html(html_vip_line);
+
+						iVipChkCnt = j;
+					} else if(j == result.proxyServerByDBSvrId.length-1 && count == 0){
+						html_sebu = "";
+						var vip_btn_html = "";
+						vip_btn_html += '<br/>&nbsp;';
+						html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;' + proxy_msg39  + '</h6>';
+
+						$("#vip_proxy_nm" + j).html(vip_btn_html);
+						$("#keepVipDiv"+ j).html(html_sebu);
+						$("#keepVipDiv" + j).attr('style', "width:80%;height:240px;")
+						$("#keepVipDivLine" + j).html(html_vip_line);
+						$("#vip_line0","#keepVipDivLine" + j).hide();
+					}
+				}
 			} else {
 				html_sebu = "";
 				var vip_btn_html = "";
 				vip_btn_html += '</br>&nbsp;';
-	 		 	html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
- 				$("#vip_proxy_nm" + i).html(vip_btn_html);
- 	 			$("#keepVipDiv" + i).attr('style', "width:80%;height:220px;")
- 	 			$("#keepVipDiv" + i).html(html_sebu);
+				html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 2em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h6>';
+				$("#vip_proxy_nm" + i).html(vip_btn_html);
+				$("#keepVipDiv" + i).attr('style', "width:80%;height:220px;")
+				$("#keepVipDiv" + i).html(html_sebu);
 			}
 		}
 	} else if( result.proxyServerVipList.length == 0){
-			for(var j = 0; j < result.proxyServerByDBSvrId.length; j++) {
-				kal_install_yn = result.proxyServerByDBSvrId[j].kal_install_yn;
- 				html_sebu = "";
- 				var vip_btn_html = "";
- 				vip_btn_html += '<br/>&nbsp;';
-		 		html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;' + proxy_msg39  + '</h6>';
-				
-		 		$("#vip_proxy_nm" + j).html(vip_btn_html);
- 				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
- 				$("#keepVipDiv" + j).html(html_sebu);
- 			}
+		for(var j = 0; j < result.proxyServerByDBSvrId.length; j++) {
+			kal_install_yn = result.proxyServerByDBSvrId[j].kal_install_yn;
+				html_sebu = "";
+				var vip_btn_html = "";
+				vip_btn_html += '<br/>&nbsp;';
+	 		html_sebu += '<h6 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;' + proxy_msg39  + '</h6>';
+
+	 		$("#vip_proxy_nm" + j).html(vip_btn_html);
+				$("#keepVipDiv" + j).attr('style', "width:80%;height:220px;")
+				$("#keepVipDiv" + j).html(html_sebu);
+			}
 	}
-		
+
 	//vip 두번째 row가 없는 경우 row size 변경
 	if (result.proxyServerVipList.length  == 1 && proxyServerByDBSvrId_cnt <= 1 && iVipChkCnt < 1) {
 		$("#keepVipDiv" + result.proxyServerVipList.length).attr('style', "width:80%;padding-left:20px;height:30px;");
@@ -2326,11 +2317,10 @@ function fn_proxyMonInfo(result){
 	var html_agent = "";
 	var html_listner_ss = "";
 	var lsn_status_chk = "";
-	
+
 	//연결 모니터링
 	var html_listner_con = "";
 	var html_listner_con_ss = "";
-	
 
 	//////////////////////////////////////
 	//Proxy 연결 리스너
@@ -2346,7 +2336,7 @@ function fn_proxyMonInfo(result){
 		html_listner += '		<tr>\n';
 		html_listner += '			<td style="width:15%;padding-left:10px;" class="text-center" id="proxyAgentDiv' + i + '">\n';
 		html_listner += '			</td>\n';
-		html_listner += '			<td style="width:85%;height:200px;" class="text-center" id="proxyListnerDiv' + i + '">\n';
+		html_listner += '			<td style="width:85%;height:220px;" class="text-center" id="proxyListnerDiv' + i + '">\n';
 		html_listner += '			&nbsp;</td>\n';
 
 		html_listner += '		</tr>\n';
@@ -2367,7 +2357,7 @@ function fn_proxyMonInfo(result){
 		
 		html_listner_con += '	<table class="table-borderless" style="width:100%;">\n';
 		html_listner_con += '		<tr>\n';
-		html_listner_con += '			<td style="width:100%;height:200px;text-align:center;" id="dbProxyConDiv' + i + '">\n';
+		html_listner_con += '			<td style="width:100%;height:220px;text-align:center;" id="dbProxyConDiv' + i + '">\n';
 		html_listner_con += '			&nbsp;</td>\n';
 
 		html_listner_con += '		</tr>\n';
@@ -2577,7 +2567,7 @@ function fn_dbMonInfo(result){
 		
 			html_db += '	<table class="table-borderless" style="width:100%;">\n';
 			html_db += '		<tr>\n';
-			html_db += '			<td style="width:100%;height:200px;" id="dbProxyDiv' + i + '">\n';
+			html_db += '			<td style="width:100%;height:220px;" id="dbProxyDiv' + i + '">\n';
 			html_db += '			&nbsp;</td>\n';
 
 			html_db += '		</tr>\n';
@@ -2670,7 +2660,7 @@ function fn_dbMonInfo(result){
 						html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
 					} else {
 						if(result.dbServerConProxyList[k].cnt_svr_id > 1){
-							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">대표 IP : ' + result.dbServerConProxyList[k].ipadr + '</h6>';
+							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">' + representative_ip +' : ' + result.dbServerConProxyList[k].ipadr + '</h6>';
 						} else {
 							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
 						}
@@ -2680,6 +2670,15 @@ function fn_dbMonInfo(result){
 					html_db += '		</td>'
 					html_db += '	</tr>'
 
+						
+					//내부 ip setting
+					if(result.dbServerConProxyList[k].intl_ipadr != null && result.dbServerConProxyList[k].intl_ipadr != "") {
+						html_db += '	<tr>';
+						html_db += '		<td colspan="2" style="padding-top:5px;">';
+						html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:70px;">('+ internal_ip + ' : ' + result.dbServerConProxyList[k].intl_ipadr + ')</h6>';
+						html_db += '		</td>';
+						html_db += '	</tr>';
+					}
 
 					if(result.dbServerConProxyList[k].db_cndt == 'Y'){
 						db_exe_status_chk = "text-success";

@@ -51,6 +51,10 @@ public class SystemDAO {
 		session.update("system.updateAgentInfo", vo);
 	}
 	
+	public void updateAgentStopInfo(AgentInfoVO vo) throws Exception {
+		session.update("system.updateAgentStopInfo", vo);
+	}
+
 	public AgentInfoVO selectAgentInfo(AgentInfoVO vo) throws Exception  {
 		return (AgentInfoVO) session.selectOne("system.selectAgentInfo", vo);
 	}

@@ -52,6 +52,70 @@
 				</if>
 			LIMIT 1
 	</select>
+	
+	<select id="selectPrySvrInslInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
+		/**
+	 	* Query ID : selectPrySvrInslInfo
+	 	* Description : Proxy 마스터 서버정보 조회
+	 	* Author : 최정환
+	 	**/
+			SELECT
+				A.PRY_SVR_ID,
+				A.IPADR,
+				A.AGT_SN,
+				A.PRY_SVR_NM,
+				A.PRY_PTH,
+				A.KAL_PTH,
+				A.USE_YN,
+				A.EXE_STATUS,
+				A.KAL_EXE_STATUS,
+				A.MASTER_GBN,
+				A.MASTER_SVR_ID,
+				(SELECT B.IPADR FROM T_PRY_SVR_I B WHERE B.PRY_SVR_ID = A.MASTER_SVR_ID) AS MASTER_SVR_NM,
+				(select COUNT(*) as master_exe_cnt 
+				   from T_PRY_SVR_I B
+				  where 1=1
+				<if test='ipadr != null'>
+				 AND (B.IPADR != #{ipadr} AND A.IPADR != (SELECT A.IPADR 
+									    FROM T_DBSVRIPADR_I A, T_DBSVR_I B, T_AGTCNDT_I C 
+									   WHERE A.DB_SVR_ID = B.DB_SVR_ID
+									     AND A.ipadr = C.ipadr
+									     AND B.USEYN = 'Y'
+									     AND C.INTL_IPADR = #{ipadr}))
+				</if>
+				<if test='ipadr == null and pry_svr_id > 0'>
+				 AND 	B.PRY_SVR_ID != #{pry_svr_id}
+				</if>
+				    and B.EXE_STATUS = 'TC001501' 
+				    and a.DB_SVR_ID = b.DB_SVR_ID) as master_exe_cnt,
+				A.DB_SVR_ID,
+				A.DAY_DATA_DEL_TERM,
+				A.MIN_DATA_DEL_TERM,
+				A.OLD_MASTER_GBN,
+				A.FRST_REGR_ID,
+				A.FRST_REG_DTM,
+				A.LST_MDFR_ID,
+				A.LST_MDF_DTM,
+				B.KAL_INSTALL_YN
+			FROM  T_PRY_SVR_I A
+			INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
+			WHERE 1 = 1
+				<if test='ipadr != null'>
+				 AND (A.IPADR = #{ipadr}
+				      OR
+				      A.IPADR = (SELECT A.IPADR 
+						   FROM T_DBSVRIPADR_I A, T_DBSVR_I B, T_AGTCNDT_I C 
+						  WHERE A.DB_SVR_ID = B.DB_SVR_ID
+						    AND A.IPADR = C.IPADR
+						    AND B.USEYN = 'Y'
+						    AND C.INTL_IPADR = #{ipadr})
+				 )
+				</if>
+				<if test="ipadr == null and pry_svr_id > 0">
+				 AND 	A.PRY_SVR_ID = #{pry_svr_id}
+				</if>
+			LIMIT 1
+	</select>
 
 	<select id="selectQ_T_PRY_SVR_I_01" resultType="long">
    		/**

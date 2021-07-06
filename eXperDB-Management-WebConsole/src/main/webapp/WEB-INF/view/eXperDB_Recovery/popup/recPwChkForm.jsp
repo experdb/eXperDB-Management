@@ -59,7 +59,7 @@
 					</div>
 					<div class="card-body">
 						<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
-							<button type="button" class="btn btn-primary" id="regButton" onclick="fn_completeRecoveryRun()">실행</button>
+							<button type="button" class="btn btn-primary" id="regButton" onclick="fn_recoveryRun()">실행</button>
 							<button type="button" class="btn btn-light" data-dismiss="modal" onclick=""><spring:message code="common.cancel"/></button>
 						</div>
 					</div>
