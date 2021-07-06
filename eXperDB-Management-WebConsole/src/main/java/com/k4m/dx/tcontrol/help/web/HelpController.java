@@ -82,8 +82,8 @@ public class HelpController {
 			HttpSession session = request.getSession();
 			
 			Properties props = new Properties();
-			//props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
-			props.load(new FileInputStream(ResourceUtils.getFile("C:\\Users\\yeeun\\git\\eXperDB-Management_2\\eXperDB-Management-WebConsole\\src\\main\\resources\\egovframework\\tcontrolProps\\globals.properties")));			
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			//props.load(new FileInputStream(ResourceUtils.getFile("C:\\Users\\yeeun\\git\\eXperDB-Management_2\\eXperDB-Management-WebConsole\\src\\main\\resources\\egovframework\\tcontrolProps\\globals.properties")));			
 			String encrypt = props.get("encrypt.useyn").toString();
 			
 			if(encrypt.equals("Y")||encrypt.equals("y")){				
