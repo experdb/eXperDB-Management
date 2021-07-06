@@ -807,6 +807,11 @@ function fn_openSource() {
 				html += '	<p style="padding-left:25px;">' + encryptLicense + '</p>';
 				html += '</div>';
 			$("#encryptLicenseInfo").append(html);
+			$("#pop_layer_openSource").modal("show");
+			
+		}else{
+			$("#pop_layer_openSource").modal("show");
+			
 		}
 	})
 	.fail(function(xhr, status, error){
@@ -818,9 +823,7 @@ function fn_openSource() {
 			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 		}
 	})
-	.always(function(){
-		$("#pop_layer_openSource").modal("show");
-	});
+
 }
 
 /* ********************************************************
