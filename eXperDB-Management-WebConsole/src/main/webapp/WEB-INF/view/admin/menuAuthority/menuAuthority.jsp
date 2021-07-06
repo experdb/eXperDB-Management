@@ -154,10 +154,15 @@ $(window.document).ready(function() {
 	if('${bnr_useyn}'=='N'){
 		$('.bnr').hide();
 	}
-	
-	if(nvlPrmSet('${proxy_useyn}','N')=='N'){
+
+	if(nvlPrmSet('${proxy_menu_useyn}','N') == 'N'){
 		$('.proxy_yn').hide();
+	} else {
+		if(nvlPrmSet('${proxy_useyn}','N') == 'N'){
+			$('.proxy_yn').hide();
+		}
 	}
+
 });
 
 

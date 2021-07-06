@@ -27,8 +27,15 @@ public class DbServerInfoVO {
 	private String DB_CNDT;
 	private String MASTER_GBN;
 	private String INTL_IPADR;
-
 	
+	private String SEARCH_IPADR;
+
+	public String getSEARCH_IPADR() {
+		return SEARCH_IPADR;
+	}
+	public void setSEARCH_IPADR(String sEARCH_IPADR) {
+		SEARCH_IPADR = sEARCH_IPADR;
+	}
 	public String getINTL_IPADR() {
 		return INTL_IPADR;
 	}

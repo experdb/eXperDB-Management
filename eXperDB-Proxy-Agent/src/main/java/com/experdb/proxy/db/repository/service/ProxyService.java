@@ -28,6 +28,17 @@ public interface ProxyService {
 	 * @throws Exception
 	 */
 	public ProxyServerVO selectPrySvrInfo(ProxyServerVO vo)  throws Exception;
+
+	
+	/**
+	 * proxy 서버 정보 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectPrySvrInslInfo(ProxyServerVO vo)  throws Exception;
+	
 	
 	/**
 	 * Proxy Properting 설정

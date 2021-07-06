@@ -84,9 +84,13 @@
 					html += '			</div>\n';
 					html += '			<div class="col-sm-3" style="margin:auto; text-align:center;">\n';
 					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iDatabase' + db_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
-					if("${proxy_yn}" == "Y" && "${serverinfo.pry_cnt}" != "0"){
-						html += '					<div class="badge badge-primary badge-pill" style="margin-top:5px;"><i class="mdi mdi-server-network menu-icon"></i>&nbsp;Proxy</div>\n';
+					
+					if("${proxy_menu_yn}" == "Y"){
+						if("${proxy_yn}" == "Y" && "${serverinfo.pry_cnt}" != "0"){
+							html += '					<div class="badge badge-primary badge-pill" style="margin-top:5px;"><i class="mdi mdi-server-network menu-icon"></i>&nbsp;Proxy</div>\n';
+						}
 					}
+					
 // 					html += ' <br/> <i class="mdi mdi-server-network menu-icon text-primary"></i>Proxy\n'
 					html += '			</div>\n';
 					html += "		</div>\n";
@@ -142,9 +146,14 @@
 					html += '			</div>\n';
 					html += '			<div class="col-sm-3" style="margin:auto; text-align:center;">\n';
 					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 3.0em;"></i>\n';
-					if("${proxy_yn}" == "Y" && "${serverinfo.pry_cnt}" != "0"){
-						html += '					<div class="badge badge-primary badge-pill" style="margin-top:5px;"><i class="mdi mdi-server-network menu-icon"></i>&nbsp;Proxy</div>\n';
+					
+					//proxy menu 추가
+					if("${proxy_menu_yn}" == "Y"){
+						if("${proxy_yn}" == "Y" && "${serverinfo.pry_cnt}" != "0"){
+							html += '					<div class="badge badge-primary badge-pill" style="margin-top:5px;"><i class="mdi mdi-server-network menu-icon"></i>&nbsp;Proxy</div>\n';
+						}					
 					}
+
 					html += '			</div>\n';
 					html += "		</div>\n";
 					html += "		</div>\n";
@@ -237,6 +246,7 @@
 	<input type="hidden" name="serverSsCnt"  id="serverSsCnt" />
 	
 	<input type="hidden" name="proxy_yn" id="proxy_yn" value="${proxy_yn}"/>
+	<input type="hidden" name="proxy_menu_yn" id="proxy_menu_yn" value="${proxy_menu_yn}"/>
 </form>
 
 <!-- partial -->
@@ -1049,194 +1059,195 @@
 										</div>
 										
 										<!-- proxy -->
-										<div class="row">
-											<!-- proxy title -->
-	                    					<div class="accordion_main accordion-multi-colored col-12" id="accordion_proxy" role="tablist">
-												<div class="card" style="margin-bottom:0px;">
-													<div class="card-header" role="tab" id="proxy_header_div">
-														<div class="row" style="height: 15px;">
-															<div class="col-7">
-																<h6 class="mb-0">
-																	<a data-toggle="collapse" href="#proxy_header_sub" aria-expanded="true" aria-controls="proxy_header_sub" onclick="fn_profileChk('proxy_titleText')">
-																		<i class="mdi mdi-server-network menu-icon"></i>
-																		<span class="menu-title"><spring:message code="menu.proxy"/></span>
-																		<i class="menu-arrow_user_af" id="proxy_titleText" ></i>
-																	</a>
-																</h6>
-															</div>
-															<div class="col-5">
-											 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-																	<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_proxy_his_today"></li>
-																</ol>
+										<c:if test="${proxy_menu_yn eq 'Y'}">
+											<div class="row">
+												<!-- proxy title -->
+		                    					<div class="accordion_main accordion-multi-colored col-12" id="accordion_proxy" role="tablist">
+													<div class="card" style="margin-bottom:0px;">
+														<div class="card-header" role="tab" id="proxy_header_div">
+															<div class="row" style="height: 15px;">
+																<div class="col-7">
+																	<h6 class="mb-0">
+																		<a data-toggle="collapse" href="#proxy_header_sub" aria-expanded="true" aria-controls="proxy_header_sub" onclick="fn_profileChk('proxy_titleText')">
+																			<i class="mdi mdi-server-network menu-icon"></i>
+																			<span class="menu-title"><spring:message code="menu.proxy"/></span>
+																			<i class="menu-arrow_user_af" id="proxy_titleText" ></i>
+																		</a>
+																	</h6>
+																</div>
+																<div class="col-5">
+												 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+																		<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page" id="tot_proxy_his_today"></li>
+																	</ol>
+																</div>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-										<div id="proxy_header_sub" class="collapse show" role="tabpanel" aria-labelledby="proxy_header_div" data-parent="#accordion_proxy">
-										<c:choose>
-										<c:when test="${proxy_yn eq 'Y'}">
-											<div class="row">
-											<!-- 상세내역 -->
-												<div class="col-12">
-													<div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
-														<div class="carousel-inner">
-															<div class="carousel-item active" id="v-pills-home_test1">
-															
-																<!-- title row start -->
-																<div class="row" id="reg_pry_title">
-										
-																	<!-- vip title start -->
-																	<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
-																		<div class="card" style="margin-bottom:0px; border:none;">
-																			<div class="card-body" style="padding:10px 0px 0px 0px;">
-																				<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.vip"/></p>
-																			</div>
-																		</div>
-																	</div>
-																	<!-- vip title end -->
 											
-																	<!-- vip <- -> proxy 할당 title start -->
-																	<div class="accordion_main col-0_5" style="border:none;" id="accordion" role="tablist" >
-																		<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
-																			<div class="card-header" role="tab" id="page_connect_server" >
-																				<div class="row" style="height: 15px;">
-																					<div class="col-12">
-																						<h6 class="mb-0">
-																							&nbsp;
-																						</h6>
+											<div id="proxy_header_sub" class="collapse show" role="tabpanel" aria-labelledby="proxy_header_div" data-parent="#accordion_proxy">
+												<c:choose>
+													<c:when test="${proxy_yn eq 'Y'}">
+														<div class="row">
+															<!-- 상세내역 -->
+															<div class="col-12">
+																<div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
+																	<div class="carousel-inner">
+																		<div class="carousel-item active" id="v-pills-home_test1">
+																			<!-- title row start -->
+																			<div class="row" id="reg_pry_title">
+													
+																				<!-- vip title start -->
+																				<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
+																					<div class="card" style="margin-bottom:0px; border:none;">
+																						<div class="card-body" style="padding:10px 0px 0px 0px;">
+																							<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.vip"/></p>
+																						</div>
 																					</div>
+																				</div>
+																				<!-- vip title end -->
+																				
+																				<!-- vip <- -> proxy 할당 title start -->
+																				<div class="accordion_main col-0_5" style="border:none;" id="accordion" role="tablist" >
+																					<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+																						<div class="card-header" role="tab" id="page_connect_server" >
+																							<div class="row" style="height: 15px;">
+																								<div class="col-12">
+																									<h6 class="mb-0">
+																										&nbsp;
+																									</h6>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<!-- vip <- -> proxy 할당 title end -->
+																				
+																				<!-- proxy listener title start -->
+																				<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
+																					<div class="card" style="margin-bottom:0px; border:none;">
+																						<div class="card-body" style="padding:10px 0px 0px 0px;">
+																							<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.con_lsn"/></p>
+																						</div>
+																					</div>
+																				</div>
+																				<!-- proxy listener title end -->
+																				
+																				<!-- listener db connect title start -->
+																				<div class="accordion_main col-1" style="border:none;" id="accordion" role="tablist" >
+																					<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+																						<div class="card-header" role="tab" id="page_connect_server" >
+																							<div class="row" style="height: 15px;">
+																								<div class="col-12">
+																									<h6 class="mb-0">
+																										&nbsp;
+																									</h6>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<!-- listener db connect title end -->
+																							
+																				<!-- proxy connected db title start -->
+																				<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
+																					<div class="card" style="margin-bottom:0px; border:none;">
+																						<div class="card-body" style="padding:10px 0px 0px 0px;">
+																							<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.con_db_server"/></p>
+																						</div>
+																					</div>
+																				</div>
+																				<!-- proxy connected db title end -->
+																				
+																			</div>
+																			<!-- title row end -->
+										
+																			<!-- proxy content row start -->
+																			<div class="row" id="reg_pry_detail">
+													
+																				<!-- vip 출력 -->
+																				<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
+																					<div class="card" style="margin-bottom:10px;border:none;" >
+																						<div class="card-body" style="border:none;min-height: 240px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
+																						</div>
+																					</div>
+																				</div>
+																				
+																				<!-- 할당 -->
+																				<div class="accordion_main accordion-multi-colored col-0_5" id="accordion" role="tablist" >
+																					<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+																						<div class="card-body" style="border:none;min-height: 240px;margin-left:-17px;" id="proxyVipConLineList">
+																						</div>
+																					</div>
+																				</div>
+															 
+																				<!-- 리스너 -->
+																				<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
+																					<div class="card" style="margin-bottom:10px;border:none;" >
+																						<div class="card-body" style="border:none;min-height: 240px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
+																						</div>
+																					</div>
+																				</div>
+																				
+																				<!-- 리스너 - 디비 연결 화살표 -->									
+																				<div class="accordion_main accordion-multi-colored col-1" id="accordion" role="tablist" >
+																					<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+																						<div class="card-body" style="border:none;min-height: 240px;margin-left:-17px;" id="proxyListnerConLineList">
+																						</div>
+																					</div>
+																				</div>
+														
+														
+																				<!-- DB 서버  출력-->
+																				<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
+																					<div class="card" style="margin-bottom:10px;border:none;" >
+																						<div class="card-body" style="border:none;min-height: 240px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
+																						</div>
+																					</div>
+																				</div>
+														
+																			</div>
+																			<!-- proxy content row end -->
+																			
+																			<!-- proxy 데이터 없는 경우 -->										
+																			<div class="row" id="no_reg_pry_detail">
+																				<div class="col-md-12 col-xl-12 justify-content-center">
+																					<div class="card card-inverse-info">
+																						<div class="card-body">
+																							<p class="card-text">
+																								<i class="fa fa-times-circle menu-icon"></i>
+																								<spring:message code="eXperDB_proxy.msg40" />
+									                       									</p>
+									                    								</div>
+									                 								</div>
 																				</div>
 																			</div>
 																		</div>
 																	</div>
-																	<!-- vip <- -> proxy 할당 title end -->
-												
-																	<!-- proxy listener title start -->
-																	<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
-																		<div class="card" style="margin-bottom:0px; border:none;">
-																			<div class="card-body" style="padding:10px 0px 0px 0px;">
-																				<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.server"/> <spring:message code="eXperDB_proxy.con_lsn"/></p>
-																			</div>
-																		</div>
-																	</div>
-																	<!-- proxy listener title end -->
-											
-																	<!-- listener db connect title start -->
-																	<div class="accordion_main col-1" style="border:none;" id="accordion" role="tablist" >
-																		<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
-																			<div class="card-header" role="tab" id="page_connect_server" >
-																				<div class="row" style="height: 15px;">
-																					<div class="col-12">
-																						<h6 class="mb-0">
-																							&nbsp;
-																						</h6>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<!-- listener db connect title end -->
-											
-																	<!-- proxy connected db title start -->
-																	<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
-																		<div class="card" style="margin-bottom:0px; border:none;">
-																			<div class="card-body" style="padding:10px 0px 0px 0px;">
-																				<p class="card-title" style="margin-bottom:0px"><i class="fa fa-toggle-right text-info"></i>&nbsp;<spring:message code="eXperDB_proxy.con_db_server"/></p>
-																			</div>
-																		</div>
-																	</div>
-																	<!-- proxy connected db title end -->
-											
 																</div>
-																<!-- title row end -->
-										
-																<!-- proxy content row start -->
-																<div class="row" id="reg_pry_detail">
-										
-																	<!-- vip 출력 -->
-																	<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
-																		<div class="card" style="margin-bottom:10px;border:none;" >
-																			<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
-																			</div>
-																		</div>
-																	</div>
-											
-																	<!-- 할당 -->
-																	<div class="accordion_main accordion-multi-colored col-0_5" id="accordion" role="tablist" >
-																		<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
-																			<div class="card-body" style="border:none;min-height: 200px;margin-left:-17px;" id="proxyVipConLineList">
-																			</div>
-																		</div>
-																	</div>
-												 
-																	<!-- 리스너 -->
-																	<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
-																		<div class="card" style="margin-bottom:10px;border:none;" >
-																			<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
-																			</div>
-																		</div>
-																	</div>
-												
-																	<!-- 리스너 - 디비 연결 화살표 -->									
-																	<div class="accordion_main accordion-multi-colored col-1" id="accordion" role="tablist" >
-																		<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
-																			<div class="card-body" style="border:none;min-height: 200px;margin-left:-17px;" id="proxyListnerConLineList">
-																			</div>
-																		</div>
-																	</div>
-											
-											
-																	<!-- DB 서버  출력-->
-																	<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
-																		<div class="card" style="margin-bottom:10px;border:none;" >
-																			<div class="card-body" style="border:none;min-height: 200px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
-																			</div>
-																		</div>
-																	</div>
-											
-																</div>
-																<!-- proxy content row end -->
-											
-															<!-- proxy 데이터 없는 경우 -->										
-															<div class="row" id="no_reg_pry_detail">
-																<div class="col-md-12 col-xl-12 justify-content-center">
-																	<div class="card card-inverse-info">
-																		<div class="card-body">
-																			<p class="card-text">
-																				<i class="fa fa-times-circle menu-icon"></i>
-																				<spring:message code="eXperDB_proxy.msg40" />
-					                       									</p>
-					                    								</div>
-					                 								</div>
-																</div>
-															</div>
 															
 															</div>
 														</div>
-													</div>
-							
-												</div>											
+													</c:when>
+													<c:otherwise>
+														<div class="row">
+															<div class="col-md-12 col-xl-12 justify-content-center">
+																<div class="card card-inverse-danger">
+																	<div class="card-body">
+																		<p class="card-text">
+																			<i class="fa fa-times-circle menu-icon"></i>
+																			<spring:message code="dashboard.msg12" />
+								                       					</p>
+								                    				</div>
+								                 				</div>
+															</div>
+														</div>
+													</c:otherwise>	
+												</c:choose>		
 											</div>
-										</c:when>
-										<c:otherwise>
-											<div class="row">
-												<div class="col-md-12 col-xl-12 justify-content-center">
-													<div class="card card-inverse-danger">
-														<div class="card-body">
-															<p class="card-text">
-																<i class="fa fa-times-circle menu-icon"></i>
-																<spring:message code="dashboard.msg12" />
-					                       					</p>
-					                    				</div>
-					                 				</div>
-												</div>
-											</div>
-										</c:otherwise>
-										</c:choose>
-										</div>
-										<!-- proxy end -->
+											<!-- proxy end -->
+										</c:if>
 
 										<div class="row">
 											<div class="col-md-12">

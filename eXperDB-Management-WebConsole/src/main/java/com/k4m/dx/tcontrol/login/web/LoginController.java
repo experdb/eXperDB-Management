@@ -132,14 +132,20 @@ public class LoginController {
         				String transfer = props.get("transfer").toString();
         				loginVoSs.setTransfer(transfer);
         				
+        				/*proxy 메뉴사용유무 추가 2021-04-23 */
+        				String proxy_menu_use_yn = "";
+        				if (props.get("proxy.menu.useyn") != null) {
+        					proxy_menu_use_yn = props.get("proxy.menu.useyn").toString(); 
+        				}
+        				loginVoSs.setProxy_menu_use_yn(proxy_menu_use_yn);
+        				
         				/*proxy 사용유무 추가 2021-04-23 */
         				String proxy_use_yn = "";
         				if (props.get("proxy.useyn") != null) {
         					proxy_use_yn = props.get("proxy.useyn").toString(); 
         				}		
         				loginVoSs.setProxy_use_yn(proxy_use_yn);
-        				
-        				
+
         				if(encp_use_yn.equals("Y")){
         					String restIp = props.get("encrypt.server.url").toString();
         					int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
@@ -381,6 +387,13 @@ public class LoginController {
 				String transfer = props.get("transfer").toString();
 				loginVo.setTransfer(transfer);
 
+				/*proxy 메뉴사용유무 추가 2021-04-23 */
+				String proxy_menu_use_yn = "";
+				if (props.get("proxy.menu.useyn") != null) {
+					proxy_menu_use_yn = props.get("proxy.menu.useyn").toString(); 
+				}
+				loginVo.setProxy_menu_use_yn(proxy_menu_use_yn);
+				
 			    /*proxy 사용유무 추가 2021-04-23  */
 				String proxy_use_yn = "";
 				if (props.get("proxy.useyn") != null) {
