@@ -1410,7 +1410,7 @@
 						//		INTL_IPADR
 								html += full.db_con_addr;
 								
-								if (full.intl_ipadr != "") {
+								if (full.intl_ipadr != null && full.intl_ipadr != "") {
 									html += "<br/>(" + full.intl_ipadr + ")";
 								}
 						
