@@ -52,3 +52,11 @@ echo "**11.2.5 END**"
 echo "**12.1.0**"
 psql -U experdb -d experdb -f eXperDB-Management_12.1.0.sql
 echo "**12.1.0 END**"
+
+echo "**12.1.1**"
+psql -U experdb -d experdb -f eXperDB-Management_12.1.1.sql
+echo "**12.1.1 END**"
+
+echo "**12.1.2**"
+psql -U experdb -d experdb -f eXperDB-Management_12.1.2.sql
+echo "**12.1.2 END**"
