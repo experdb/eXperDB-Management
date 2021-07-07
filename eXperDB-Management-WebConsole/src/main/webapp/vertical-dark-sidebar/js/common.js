@@ -788,7 +788,42 @@ function pwdSafety(pw) {
  * help_Open Source 클릭
  ******************************************************** */
 function fn_openSource() {
-	$("#pop_layer_openSource").modal("show");
+	console.log("fn_openSource function called!!!@@");
+	$.ajax({
+		url : "/encryptLicenseInfo.do",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		}
+	})
+	.done(function(result){
+		var encryptLicense;
+		$("#encryptLicenseInfo").empty();
+		if(result.resultCode == 0){			
+			encryptLicense = result.license;
+			var html  = '<div class="top-deadLine"></div>';
+				html += '<div class="form-group">';
+				html += '	<p class="col-form-label" style="background: url(../../images/popup/ico_p_2.png) 8px 48% no-repeat; font-weight: bold;padding-left:25px;">Encrypt</p>';
+				html += '	<p style="padding-left:25px;">' + encryptLicense + '</p>';
+				html += '</div>';
+			$("#encryptLicenseInfo").append(html);
+			$("#pop_layer_openSource").modal("show");
+			
+		}else{
+			$("#pop_layer_openSource").modal("show");
+			
+		}
+	})
+	.fail(function(xhr, status, error){
+		if(xhr.status == 401) {
+			showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else if(xhr.status == 403) {
+			showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+		} else {
+			showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+		}
+	})
+
 }
 
 /* ********************************************************

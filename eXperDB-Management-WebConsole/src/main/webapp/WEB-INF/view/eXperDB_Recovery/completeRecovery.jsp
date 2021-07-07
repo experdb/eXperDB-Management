@@ -276,7 +276,7 @@ function fn_passwordCheckPopup(){
 	 $("#pop_layer_popup_recoveryPasswordCheckForm").modal("show");
 }
 
-function fn_completeRecoveryRun(){
+function fn_recoveryRun(){
 	if($("#recoveryPW").val() != ""){
 		
 		// console.log("=================================================");

@@ -53,7 +53,6 @@ public class DatabaseTableInfo {
 					while (oraRs.next()) {
 						i++;
 						JSONObject jsonObj = new JSONObject();
-						System.out.println(oraRs.getString("table_name"));
 							jsonObj.put("rownum",i);
 							jsonObj.put("table_name", oraRs.getString("table_name"));
 							jsonObj.put("obj_type", oraRs.getString("object_type"));
@@ -236,7 +235,6 @@ public class DatabaseTableInfo {
 					while (cubRs.next()) {
 						i++;
 						JSONObject jsonObj = new JSONObject();
-						System.out.println(cubRs.getString("table_name"));
 							jsonObj.put("rownum",i);
 							jsonObj.put("table_name", cubRs.getString("table_name"));
 							jsonObj.put("obj_type", cubRs.getString("class_type"));
@@ -263,7 +261,6 @@ public class DatabaseTableInfo {
 					while (tibRs.next()) {
 						i++;
 						JSONObject jsonObj = new JSONObject();
-						System.out.println(tibRs.getString("table_name"));
 							jsonObj.put("rownum",i);
 							jsonObj.put("table_name", tibRs.getString("table_name"));
 							jsonObj.put("obj_type", tibRs.getString("object_type"));
