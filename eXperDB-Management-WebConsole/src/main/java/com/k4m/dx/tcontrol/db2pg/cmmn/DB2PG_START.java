@@ -53,7 +53,7 @@ public class DB2PG_START {
         JSONObject result = new JSONObject();
         
         
-		System.out.println( " [ 0. 데이터 이관  ]  START ");
+		System.out.println( " [ 0. DataMigration  ]  START ");
 		
 		
 		
@@ -66,7 +66,7 @@ public class DB2PG_START {
 		String cmd = "./db2pg.sh -c "+config_path;
 		String strCmd = "cd "+db2pg_path+";"+cmd;
 
-		System.out.println(" [ 1. MIGRATION 명령어 ]  "+strCmd);
+		System.out.println(" [ 1. MIGRATION CMD ]  "+strCmd);
 
 		List<String> cmdList = new ArrayList<String>(); 
 		
@@ -80,7 +80,7 @@ public class DB2PG_START {
 		
 		// 저장 경로 변경
 		try{
-		System.out.println(" [ 2. 기존 저장경로 변경 ]  ");
+		System.out.println(" [ 2. Change the existing save path ]  ");
 			db2pgSavePthChange(db2pg_path, filePath, wrk_nm, old_save_pth);			
 		}catch (Exception e) {
 			changePath = "8000000003";
@@ -92,12 +92,12 @@ public class DB2PG_START {
 		if(changePath.equals("0000000000")){
 	        try {       	
 	            // 명령어 실행
-	        	System.out.println(" [ 3. 명령어 실행 ]  ");
+	        	System.out.println(" [ 3. Command Execution ]  ");
 	            process = runtime.exec(array);
 	            
 	            startTime = nowTime();
 	            
-	            System.out.println(" [ 3. MIGRATION 수행이력 저장 ]  ");
+	            System.out.println(" [ 3. MIGRATION Save execution history ]  ");
 	            migExeInsert(wrk_id, "TC003202", startTime, id, new_save_pth);
 	            
 	 
@@ -124,7 +124,7 @@ public class DB2PG_START {
 	            	endTime = nowTime();
 	            	String exe_rslt_cd = "TC001701"; 
 	            	
-	            	 System.out.println(" [ 5. MIGRATION 수행이력 업데이트 ]  ");
+	            	 System.out.println(" [ 5. MIGRATION Update execution history ]  ");
 	            	migExeUpdate(wrk_id, exe_rslt_cd, endTime, id, startTime, msg);
 	            	 
 	                result.put("RESULT_CODE", 0);
@@ -136,7 +136,7 @@ public class DB2PG_START {
 	            	String exe_rslt_cd = "TC001702"; 
 	            	msg = successOutput.toString();
 	            	
-	            	System.out.println(" [ 5. MIGRATION 수행이력 업데이트 ]  ");
+	            	System.out.println(" [ 5. MIGRATION Update execution history ]  ");
 	            	migExeUpdate(wrk_id, exe_rslt_cd, endTime, id, startTime, msg);
 	            	
 	            	result.put("RESULT_MSG", successOutput.toString());
@@ -161,18 +161,18 @@ public class DB2PG_START {
 	        	result.put("RESULT_endTime", endTime);
 	        	result.put("new_save_pth", new_save_pth);
 
-	        	System.out.println(" [ 6. 기존 저장 경로 ] " +old_save_pth);
-	        	System.out.println(" [ 7. 새로운 저장 경로 ] " +new_save_pth);
-	        	System.out.println(" [ 8. 시작시간 ] " +result.get("RESULT_startTime"));
-	        	System.out.println(" [ 9. 종료시간 ] " +result.get("RESULT_endTime"));
-	        	System.out.println(" [ 10. 에러 메세지 ] "  +result.get("RESULT_MSG"));
+	        	System.out.println(" [ 6. Old Save Path ] " +old_save_pth);
+	        	System.out.println(" [ 7. New Save Path ] " +new_save_pth);
+	        	System.out.println(" [ 8. Start Time ] " +result.get("RESULT_startTime"));
+	        	System.out.println(" [ 9. End Time ] " +result.get("RESULT_endTime"));
+	        	System.out.println(" [ 10. Err Massage ] "  +result.get("RESULT_MSG"));
 	        	
 	        	/*System.out.println("2. 시작시간 = "+result.get("RESULT_startTime"));
 	    		System.out.println("3. 종료시간 = "+result.get("RESULT_endTime"));
 	    		System.out.println("4. 에러 메세지 = "+result.get("RESULT_MSG"));*/
 	
 	    		
-	    		System.out.println( " [ 11. 데이터 이관  ]  END");
+	    		System.out.println( " [ 11. Data Migration  ]  END");
 	    		
 	    		if (new_save_pth != null) {
 		    		updateSavePth(wrk_id, new_save_pth);
@@ -208,7 +208,7 @@ public class DB2PG_START {
 		param.put("wrk_id", wrk_id);
 		param.put("save_pth", new_save_pth);
 		
-		System.out.println( " [ 12. 기존 저장경로 업데이트  ] ");
+		System.out.println( " [ 12. Update Old Save Path  ] ");
 		
 		scheduleService.updateSavePth(param);
 		
