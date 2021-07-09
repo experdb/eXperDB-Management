@@ -114,4 +114,35 @@ public class ProxyHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 		return proxyHistoryDAO.selectProxyStatusHistory(param);
 	}
 
+	@Override
+	public Map<String, Object> deleteProxyConfFolder(Map<String, Object> param)	throws ConnectException, Exception {
+		CmmnUtils cu = new CmmnUtils();
+		//System.out.println("getProxyConfFileContent");
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Map<String, Object> pathInfo =  proxyHistoryDAO.selectProxyConfFilePath(param);
+		JSONObject agentJobj = new JSONObject();
+		String backupPryFilePath = "";
+		
+		backupPryFilePath=cu.getStringWithoutNull(pathInfo.get("backup_pry_pth"));
+		
+		ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
+	    ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
+	    
+	    try{
+		    backupPryFilePath = backupPryFilePath.substring(0, backupPryFilePath.lastIndexOf("/")+1);
+		    agentJobj.put("del_backup_folder", backupPryFilePath);
+		    result = cic.deleteConfigBackupFolder(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(),agentJobj);
+		    
+		    if( result.get("RESULT_CODE") != null &&   "0".equals(result.get("RESULT_CODE").toString())){
+		    	proxyHistoryDAO.updateProxySettingChgHistoryList(param);
+		    }
+		    
+	    }catch(ConnectException e){
+	         throw e;
+	     }
+	      
+	      return result;
+	}
+
 }

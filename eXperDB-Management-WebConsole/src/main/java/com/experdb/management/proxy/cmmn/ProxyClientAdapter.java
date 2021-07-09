@@ -200,4 +200,13 @@ public class ProxyClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
+	
+	/* 백업 설정 파일 삭제 */
+	public JSONObject psP013(JSONObject jObj) throws Exception {
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
 }

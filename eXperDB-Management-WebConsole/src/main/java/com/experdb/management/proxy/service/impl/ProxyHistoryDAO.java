@@ -89,4 +89,15 @@ public class ProxyHistoryDAO extends EgovAbstractMapper{
 		result = (List<Map<String, Object>>) list("proxyHistorySql.selectProxyStatusHistoryList", param);
 		return result;
 	}
+	/**
+	 * Proxy Agent 정보 업데이트
+	 * 
+	 * @param ProxyServerVO
+	 * @throws
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public void updateProxySettingChgHistoryList(Map<String, Object> param) {
+		update("proxyHistorySql.updateProxySettingChgHistoryList", param);	
+		
+	}
 }

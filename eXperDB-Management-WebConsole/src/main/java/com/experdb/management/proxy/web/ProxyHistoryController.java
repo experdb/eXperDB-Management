@@ -266,7 +266,7 @@ public class ProxyHistoryController {
 	 * @param request, historyVO
 	 * @return ModelAndView mv
 	 * @throws
-	 */
+
 	@RequestMapping(value = "/popup/proxyBackupConfForm.do")
 	public ModelAndView proxyListenRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
@@ -287,6 +287,7 @@ public class ProxyHistoryController {
 		}
 		return mv;
 	}
+		 */
 	
 	/**
 	 * Proxy Conf 파일 읽어오기
@@ -343,6 +344,59 @@ public class ProxyHistoryController {
 		return resultObj;
 	}
 	
+	/**
+	 * Proxy Conf 파일 읽어오기
+	 * 
+	 * @param historyVO, request, response
+	 * @return JSONObject
+	 * @throws 
+	 */
+	@RequestMapping(value = "/deleteBackupConfFile.do")
+	public @ResponseBody JSONObject deleteBackupConfFile(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();		
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject resultObj = new JSONObject();
+		Map<String, Object> confFileStrMap = new HashMap();
+		
+		try {	
+			param.put("pry_svr_id", "".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? 0 : Integer.parseInt(request.getParameter("pry_svr_id").toString()));
+			param.put("pry_cng_sn", "".equals(cu.getStringWithoutNull(request.getParameter("pry_cng_sn"))) ? 0 : Integer.parseInt(request.getParameter("pry_cng_sn").toString()));
+			param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());	
+			try{
+				confFileStrMap = proxyHistoryService.deleteProxyConfFolder(param);
+			}catch(ConnectException e){
+				e.printStackTrace();
+				resultObj.put("errcd", 1);
+				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
+				return resultObj;
+			}catch(Exception e){
+				e.printStackTrace();
+				resultObj.put("errcd", 2);
+				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg48", null, LocaleContextHolder.getLocale()));
+				return resultObj;
+			}
+			
+			if( confFileStrMap.get("RESULT_CODE") != null &&   "0".equals(confFileStrMap.get("RESULT_CODE").toString())){
+				resultObj.put("errcd", 0);
+				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));		
+			}else{
+				resultObj.put("errcd", -1);
+				resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg46", null, LocaleContextHolder.getLocale()));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultObj.put("errcd", -1);
+			resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg46", null, LocaleContextHolder.getLocale()));
+		}
+		return resultObj;
+	}
+
 	/**
 	 * 실시간 상태 로그 엑셀을 저장한다.
 	 * 

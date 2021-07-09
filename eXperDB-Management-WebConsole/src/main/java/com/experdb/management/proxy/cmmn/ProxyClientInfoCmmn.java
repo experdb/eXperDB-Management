@@ -392,4 +392,31 @@ public class ProxyClientInfoCmmn implements Runnable{
 
 		return result;
 	}
+	
+	public Map<String, Object> deleteConfigBackupFolder(String IP, int PORT, JSONObject jObj) throws ConnectException, Exception{
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		jObj.put(ProxyClientProtocolID.DX_EX_CODE, ProxyClientTranCodeType.PsP013);
+		
+		JSONObject objList;
+		
+		ProxyClientAdapter PCA = new ProxyClientAdapter(IP, PORT);
+		PCA.open(); 
+
+		objList = PCA.psP013(jObj); 
+	
+		PCA.close();
+		
+		String strErrMsg = (String)objList.get(ProxyClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objList.get(ProxyClientProtocolID.ERR_CODE);
+		String strResultCode = (String)objList.get(ProxyClientProtocolID.RESULT_CODE);
+		String strResultData = (String)objList.get(ProxyClientProtocolID.RESULT_DATA);
+		
+		
+		result.put("RESULT_CODE", strResultCode);
+		result.put("ERR_CODE", strErrCode);
+		result.put("ERR_MSG", strErrMsg);
+		result.put("RESULT_DATA", strResultData);
+		return result;
+	}
 }
