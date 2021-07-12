@@ -22,6 +22,7 @@ import com.experdb.proxy.server.PsP009;
 import com.experdb.proxy.server.PsP010;
 import com.experdb.proxy.server.PsP011;
 import com.experdb.proxy.server.PsP012;
+import com.experdb.proxy.server.PsP013;
 import com.experdb.proxy.socket.ProtocolID;
 import com.experdb.proxy.socket.SocketCtl;
 import com.experdb.proxy.socket.TranCodeType;
@@ -144,6 +145,13 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					PsP012.execute(strDX_EX_CODE, jObj);
 					
 					break;
+				case TranCodeType.PsP013 : // delete backup conf File
+					
+					PsP013 PsP013 = new PsP013(client, is, os);
+					PsP013.execute(strDX_EX_CODE, jObj);
+					
+					break;
+					
 				}
 				objSERVER_INFO = null;
 

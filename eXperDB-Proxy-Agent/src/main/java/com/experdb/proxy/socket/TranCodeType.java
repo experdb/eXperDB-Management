@@ -25,6 +25,7 @@ public class TranCodeType {
 	public static final String PsP010 = "PsP010"; // Keepavlied 설치 여부 확인
 	public static final String PsP011 = "PsP011"; // Config Backup 폴더 삭제 
 	public static final String PsP012 = "PsP012";
+	public static final String PsP013 = "PsP013";// backup 폴더 삭제
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
@@ -34,4 +35,5 @@ public class TranCodeType {
 	 * 결과
 	 */
 	public static final String RESULT = "RESULT";								  //결과	
+
 }

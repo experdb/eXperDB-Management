@@ -3,7 +3,7 @@ echo "eXperDB-Management-Agent setting .. "
 
 SCRIPTPATH=$(cd "$(dirname "$0")" && pwd)
 PROJECT_HOME=${SCRIPTPATH%/*}
-JAVA_HOME=$PROJECT_HOME/java/jdk1.7.0_80
+JAVA_HOME=$PROJECT_HOME/java/jdk1.8.0_91
 LOG_DIR=$PROJECT_HOME/logs
 APP_HOME=$PROJECT_HOME/classes
 APP_HOME=$PROJECT_HOME/classes/*:$APP_HOME

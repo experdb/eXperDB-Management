@@ -43,7 +43,7 @@ import org.json.simple.JSONObject;
 
 public class ClientSocketCtl {
 	public static final int TotalLengthBit = 4;
-	private static int DEFAULT_TIMEOUT = 600;
+	private static int DEFAULT_TIMEOUT = 18000;
 	private static int DEFAULT_BUFFER_SIZE = 1024;
 
 	protected String _caller = "unknown";

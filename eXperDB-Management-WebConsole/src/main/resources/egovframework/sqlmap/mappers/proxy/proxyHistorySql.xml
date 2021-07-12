@@ -54,10 +54,12 @@
 		/**
 		* Query ID : selectProxySettingChgHistoryList
 		* Description : 설정 변경 이력 조회
+		* FRST_REGR_ID :  설정 변경한 사용자
+		* LST_MDFR_ID : 벡업 설정 파일 삭제한 사용자
 		* Author : 김민정
 		**/
-		SELECT  TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD') AS LST_DTM_DATE,
-				TO_CHAR(LST_MDF_DTM,'HH24:MI') AS LST_DTM_HOUR,
+		SELECT  TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD') AS LST_DTM_DATE,
+				TO_CHAR(FRST_REG_DTM,'HH24:MI') AS LST_DTM_HOUR,
 				PRY_CNG_SN,
 				PRY_SVR_ID, 
        			(SELECT PRY_SVR_NM FROM T_PRY_SVR_I WHERE PRY_SVR_ID = A.PRY_SVR_ID) as PRY_SVR_NM,
@@ -80,9 +82,9 @@
 	        	AND LST_MDFR_ID = #{lst_mdfr_id}
 	        </if>
 	        <if test="lst_dtm_start != null and lst_dtm_end != null ">
-				AND to_char(LST_MDF_DTM,'YYYY-MM-DD') between #{lst_dtm_start} and #{lst_dtm_end}
+				AND to_char(FRST_REG_DTM,'YYYY-MM-DD') between #{lst_dtm_start} and #{lst_dtm_end}
 			</if>
-		ORDER BY A.LST_MDF_DTM DESC
+		ORDER BY A.FRST_REG_DTM DESC
 	</select>
 	
 	<select id="selectProxyConfFilePathInfo" resultType="hashMap">
@@ -192,4 +194,16 @@
 		ORDER BY A.DB_CON_ADDR, A.PRY_SVR_ID, A.LSN_ID, A.EXE_DTM DESC
 	</select>
 	
+	<update id="updateProxySettingChgHistoryList" parameterType="hashMap">
+        /**
+		* Query ID : updateProxySettingChgHistoryList
+		* Description : 설정 변경 이력 업데이트
+		* Author : 김민정
+		**/
+        UPDATE 	T_PRYCNG_G
+        SET 			LST_MDFR_ID = #{lst_mdfr_id}, 
+        				LST_MDF_DTM = clock_timestamp()
+        WHERE 	PRY_CNG_SN = #{pry_cng_sn} 
+        AND 			PRY_SVR_ID = #{pry_svr_id}::numeric
+	</update>
 </mapper>

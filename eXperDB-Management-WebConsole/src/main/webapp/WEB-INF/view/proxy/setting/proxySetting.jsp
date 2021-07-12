@@ -184,11 +184,18 @@
 					{data : "status", defaultContent : "", className : "dt-center",
 						render: function (data, type, full){
 							var html = '<div class="onoffswitch">';
-							
+							var onclickFun = "";
 							//TC001501 실행
 							//TC001502 중지
-							var playHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="onclick_runBtn('+ full.rownum +');" checked>';
-							var stopHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick="onclick_runBtn('+ full.rownum +');">';
+							
+							if("${wrt_aut_yn}" == "Y"){
+								onclickFun = '"onclick_runBtn('+ full.rownum +');"'; 
+							}else{
+								onclickFun = '"onclick_runBtn_disable('+ full.rownum +');"';
+							}
+							
+							var playHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick='+ onclickFun +' checked>';
+							var stopHtml = '<input type="checkbox" class="onoffswitch-checkbox" id="pry_svr_activeYn'+ full.pry_svr_id +'" onclick='+ onclickFun +'>';
 
 							if(full.kal_install_yn == "Y"){
 								if (full.exe_status == "TC001501" && full.kal_exe_status == "TC001501") {
@@ -461,18 +468,17 @@
      * 읽기 / 쓰기 권한 체크 
     **********************************************************/
 	function fnc_aut_yn_chk() {
-		if("${wrt_aut_yn}" == "Y"){
-			fn_btn_setEnable("total","");
-		} else {
-			fn_btn_setEnable("total","disabled");
-		}
-		
 		if("${read_aut_yn}" == "Y"){
 			fn_serverList_search();
 		} else {
 			fn_btn_setEnable("total","disabled");
-			 /* $("#serverList_search").prop("disabled", "disabled");
-			 $("#btnSearch").prop("disabled", "disabled"); */
+			
+		}
+		
+		if("${wrt_aut_yn}" == "Y"){
+			fn_btn_setEnable("total","");
+		} else {
+			fn_btn_setEnable("total","disabled");
 		}
 	}
 	
@@ -716,7 +722,7 @@
 							$("#lstnReg_db_nm", "#insProxyListenForm").append("<option value='"+result.db_sel_list[i].db_id+"'>"+result.db_sel_list[i].db_nm+"</option>");	
 						}
 					}
-	 				
+					
  				} else {
 	 				//오류메세지 표시
 	 				showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
@@ -735,11 +741,21 @@
 					proxyListenTable.rows({selected: true}).deselect();
 					proxyListenTable.clear().draw();
 	 			}
+ 				
  				//Proxy Server Table click 이벤트 풀기
  				$("#proxyServer").css("pointer-events","all");
  				fn_proxy_loadbar("stop");
+ 				
+ 				//쓰기 권한 없는 경우 
+ 				setTimeout(function(){
+ 					if("${wrt_aut_yn}" != "Y"){
+ 						fn_btn_setEnable("total","disabled");
+ 					}
+ 				},500);
 			}
 	 	});
+		
+		
 		
  	}
 
@@ -921,6 +937,12 @@
 		if($('#modYn').val() == "N"){
 			runBtn_execute();
 		}
+	}
+	
+	function onclick_runBtn_disable(row){
+		$('#chk_use_row', '#findList').val(row); //라인 체크
+		var playBtnVal = $("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked");
+		$("input:checkbox[id=pry_svr_activeYn" + proxyServerTable.row('.selected').data().pry_svr_id + "]").prop("checked", !playBtnVal);
 	}
 	
 	/* ********************************************************

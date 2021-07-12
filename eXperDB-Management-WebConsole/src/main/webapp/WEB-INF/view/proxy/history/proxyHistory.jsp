@@ -24,7 +24,10 @@
 	var runStatusHistoryTable = null;
 	var settingChgHistoryTable = null;
 	var statisTable = null;
-
+	var selSvrId=null;
+	var selSvrNm=null;
+	var selChgId=null;
+	
 	$(window.document).ready(function() {
 		
 		//tooltip setting
@@ -108,8 +111,12 @@
 			         	{data: "pry_svr_nm", className: "dt-left", defaultContent: ""}, 
 			         	{data: "pry_pth", className: "dt-center", defaultContent: "",
 			         		render: function (data, type, full){
+			         			var delYn="Y";
+			         			if(full.lst_mdfr_id == null || full.lst_mdfr_id == ""){
+			         				delYn="N";
+			         			}
 		         				var html = "";
-			         			html += '<button type="button" class="btn btn-link btn-fw" onclick="fn_show_conf(\'P\','+full.pry_svr_id+',\''+full.pry_svr_nm+'\','+full.pry_cng_sn+')">';
+			         			html += '<button type="button" class="btn btn-link btn-fw" onclick="fn_show_conf(\'P\','+full.pry_svr_id+',\''+full.pry_svr_nm+'\','+full.pry_cng_sn+',\''+delYn+'\')">';
 								html += '<i class="item-icon fa fa-file-text-o"></i> <spring:message code="eXperDB_proxy.show_config" />';
 								html += '</button>';
 								return html;
@@ -117,8 +124,12 @@
 			         	}, 
 			         	{data: "kal_pth", className: "dt-center", defaultContent: "",
 			         		render: function (data, type, full){
+			         			var delYn="Y";
+			         			if(full.lst_mdfr_id == null || full.lst_mdfr_id == ""){
+			         				delYn="N";
+			         			}
 		         				var html = "";
-			         			html += '<button type="button" class="btn btn-link btn-fw" onclick="fn_show_conf(\'K\','+full.pry_svr_id+',\''+full.pry_svr_nm+'\','+full.pry_cng_sn+')">';
+			         			html += '<button type="button" class="btn btn-link btn-fw" onclick="fn_show_conf(\'K\','+full.pry_svr_id+',\''+full.pry_svr_nm+'\','+full.pry_cng_sn+',\''+delYn+'\')">';
 								html += '<i class="item-icon fa fa-file-text-o"></i> <spring:message code="eXperDB_proxy.show_config" />';
 								html += '</button>';
 								return html;
@@ -142,6 +153,20 @@
 		         			}
 			         	}, 
 			    		{data: "frst_regr_id", className: "dt-center", defaultContent: ""},
+			    		{data: "del_conf", className: "dt-center", defaultContent: "",
+			         		render: function (data, type, full){
+			         			var html = "";
+			         			if(full.lst_mdfr_id == null || full.lst_mdfr_id == ""){
+			         				html += '<button type="button" class="btn btn-link btn-fw" onclick="fn_before_del_conf('+full.pry_svr_id+',\''+full.pry_svr_nm+'\','+full.pry_cng_sn+')">';
+									html += '<i class="item-icon fa fa-trash-o"></i> <spring:message code="eXperDB_proxy.del_config" />';
+									html += '</button>';
+								}else{
+			         				html += '<i class="item-icon fa fa-trash-o"></i> <spring:message code="eXperDB_proxy.del_config" />';
+								}
+		         				return html;
+		         			}
+			         	},
+			         	{data: "lst_mdfr_id", className: "dt-center", defaultContent: ""},
 			    		{data: "lst_mdf_dtm", className: "dt-left", defaultContent: "", visible: false},
 			    		{data: "pry_cng_sn", className : "dt-left", defaultContent : "", visible: false},
 			         	{data: "pry_svr_id", className: "dt-center", defaultContent: "", visible: false}
@@ -153,12 +178,19 @@
 		settingChgHistoryTable.tables().header().to$().find('th:eq(2)').css('min-width', '15%');
 		settingChgHistoryTable.tables().header().to$().find('th:eq(3)').css('min-width', '15%');
 		settingChgHistoryTable.tables().header().to$().find('th:eq(4)').css('min-width', '15%');
-		settingChgHistoryTable.tables().header().to$().find('th:eq(5)').css('min-width', '15%');
+		settingChgHistoryTable.tables().header().to$().find('th:eq(5)').css('min-width', '10%');
 		settingChgHistoryTable.tables().header().to$().find('th:eq(6)').css('min-width', '10%');
 		settingChgHistoryTable.tables().header().to$().find('th:eq(7)').css('min-width', '10%');
-		settingChgHistoryTable.tables().header().to$().find('th:eq(8)').css('min-width', '0%');
+		settingChgHistoryTable.tables().header().to$().find('th:eq(8)').css('min-width', '10%');
 		settingChgHistoryTable.tables().header().to$().find('th:eq(9)').css('min-width', '0%');
+		settingChgHistoryTable.tables().header().to$().find('th:eq(10)').css('min-width', '0%');
+		settingChgHistoryTable.tables().header().to$().find('th:eq(11)').css('min-width', '0%');
 
+		if("${wrt_aut_yn}" == "Y"){
+			settingChgHistoryTable.column(5).visible(true);
+		}else {
+			settingChgHistoryTable.column(5).visible(false);
+		}
 		   	
    		runStatusHistoryTable = $('#runStatusHistoryTable').DataTable({	
    		scrollY: "275px",
@@ -883,10 +915,10 @@
 	 	}
 	 }
 	 
-	 /* ********************************************************
+	  /* ********************************************************
 	  * config file confirm button Click
 	  ******************************************************** */
-	 function fn_popup_conf(sysTeyp,svrId,svrNm, chgId){
+	  /*function fn_popup_conf(sysTeyp,svrId,svrNm, chgId){
 		 $.ajax({
 				url : "/popup/proxyBackupConfForm.do",
 				data : {},
@@ -908,11 +940,11 @@
 					fn_show_conf(sysType,svrId,svrNm,chgId);
 				}
 			});
-	 }
+	 } */
 	 /* ********************************************************
 	  * config file 내용 갖고 오기
 	  ******************************************************** */
-	  function fn_show_conf(sysType,svrId,svrNm,chgId){
+	  function fn_show_conf(sysType,svrId,svrNm,chgId,delYn){
 		  $.ajax({
 				url : "/getBackupConfFile.do",
 				data :{	sys_type : sysType,
@@ -935,13 +967,15 @@
 					}
 				},
 	 			success : function(result) {
-	 				console.log(result);
+	 				//console.log(result);
 	 				if(result.errcd > -1){
 	 					if(result.errcd==0){//정상
 							$('#pop_layer_config_view').modal("show");
-							$("#config", "#configForm").html(result.presentConf);
-							$("#backup_config", "#configForm").html(result.backupConf);
-							
+	 						$("#config", "#configForm").html(result.presentConf);
+	 						
+	 						if(delYn == "N")	$("#backup_config", "#configForm").html(result.backupConf);
+	 						if(delYn == "Y")	$("#backup_config", "#configForm").html('<spring:message code="eXperDB_proxy.msg58" />');
+	 						
 							if(sysType == "P"){
 								$(".config_title").html(' ' + svrNm + ' Proxy Configuration');
 							} else {
@@ -965,60 +999,130 @@
 	 			}
 	 		});
 	 }
-	 
-	function fn_showExeFailLog(prySvrId, pryActExeSn){
-  		var datas = runStatusHistoryTable.rows().data();
-  		var dataLen = datas.length;
-  		
-  		for(var i=0; i<dataLen; i++){
-  			if(datas[i].pry_svr_id == prySvrId && datas[i].pry_act_exe_sn == pryActExeSn){
-  				$("#wrkLogInfo").html(datas[i].rslt_msg);
-  				$("#ModalLabel","#pop_layer_wrkLog").html('<spring:message code="eXperDB_proxy.error_msg" />');
-  				$("#pop_layer_wrkLog").modal("show");	
-  			}
-  		}
-  	}
-	 /* ********************************************************
-	  * chart 타이틀 생성 데이터 ///작성 중... 
-	  ******************************************************** */
-	function fn_show_chart(dbSvrIp,prySvrId,lsnId,type, hostNm){
-		if(type=='TC003902'){
-			$.ajax({
-				url : "/popup/proxyStatusChartTitle.do",
-				data : {
-					exe_dtm_start : $("#statis_wlk_dtm_start").val(),
-					exe_dtm_end : $("#statis_wlk_dtm_end").val(),
-					db_con_addr: dbSvrIp,
-					pry_svr_id : prySvrId,
-					lsn_id : lsnId,
-					log_type : type
-				},
-				dataType : "json",
-				type : "post",
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader("AJAX", true);
-				},
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					} else if(xhr.status == 403) {
-						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+	  /* ********************************************************
+		  * config file 삭제 전 확인창
+		  ******************************************************** */
+	 function fn_before_del_conf(svrId,svrNm,chgId){
+		 
+		 selSvrId = svrId;
+		 selSvrNm = svrNm;
+		 selChgId = chgId;
+		 
+		  fn_multiConfirmModal("del_backup_conf");
+		  
+	  }
+	  /* ********************************************************
+		  * config file 삭제
+		  ******************************************************** */
+		  function fn_del_conf(){
+			  $.ajax({
+					url : "/deleteBackupConfFile.do",
+					data :{	
+								pry_svr_id : selSvrId,
+								pry_svr_nm : selSvrNm,
+								pry_cng_sn : selChgId
+					},
+		 			dataType : "json",
+		 			type : "post",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+		 			success : function(result) {
+		 				showSwalIcon('<spring:message code="eXperDB_proxy.msg45" />', '<spring:message code="common.close" />', '', 'success');
+		 				fn_setchg_select();
+		 			}	
+		 		});
+		 }
+	  
+		function fn_showExeFailLog(prySvrId, pryActExeSn){
+		 		var datas = runStatusHistoryTable.rows().data();
+		 		var dataLen = datas.length;
+		 		
+		 		for(var i=0; i<dataLen; i++){
+		 			if(datas[i].pry_svr_id == prySvrId && datas[i].pry_act_exe_sn == pryActExeSn){
+		 				$("#wrkLogInfo").html(datas[i].rslt_msg);
+		 				$("#ModalLabel","#pop_layer_wrkLog").html('<spring:message code="eXperDB_proxy.error_msg" />');
+		 				$("#pop_layer_wrkLog").modal("show");	
+		 			}
+		 		}
+		 	}
+		
+		 /* ********************************************************
+		  * chart 타이틀 생성 데이터 ///작성 중... 
+		  ******************************************************** */
+		function fn_show_chart(dbSvrIp,prySvrId,lsnId,type, hostNm){
+			if(type=='TC003902'){
+				$.ajax({
+					url : "/popup/proxyStatusChartTitle.do",
+					data : {
+						exe_dtm_start : $("#statis_wlk_dtm_start").val(),
+						exe_dtm_end : $("#statis_wlk_dtm_end").val(),
+						db_con_addr: dbSvrIp,
+						pry_svr_id : prySvrId,
+						lsn_id : lsnId,
+						log_type : type
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {
+						if(result.prySvrNm =="") return;
+						$(".chart-title").html(" - "+hostNm+" ("+result.dbConAddr+") / "+result.prySvrNm+" / "+result.lsnNm);
+						$('#pop_pry_status_chart_view').modal("show");
+						fn_draw_chart(result);
+						selectChartTab("server");
+						
 					}
-				},
-				success : function(result) {
-					if(result.prySvrNm =="") return;
-					$(".chart-title").html(" - "+hostNm+" ("+result.dbConAddr+") / "+result.prySvrNm+" / "+result.lsnNm);
-					$('#pop_pry_status_chart_view').modal("show");
-					fn_draw_chart(result);
-					selectChartTab("server");
-					
-				}
-			});
+				});
+			}
 		}
-	}
+		 
+		/* ********************************************************
+		 * confirm modal open
+		 ******************************************************** */
+		function fn_multiConfirmModal(gbn) {
+			var confirm_title = "";
+			
+			if (gbn == "del_backup_conf") { 			
+				confirm_title =  '<spring:message code="eXperDB_proxy.del_config" />';//백업 삭제
+				$('#confirm_multi_msg').html('<spring:message code="eXperDB_proxy.msg57"/>'); //이력은 남지만 파일 확인이 불가능합니다. 
+			}
+			
+			$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
+			$('#confirm_multi_tlt').html(confirm_title);
+			$('#pop_confirm_multi_md').modal("show");
+		}
+		/* ********************************************************
+		 * confirm result
+		 ******************************************************** */
+		function fnc_confirmMultiRst(gbn){
+			 if (gbn == "del_backup_conf") {
+				 fn_del_conf();
+			}
+		}
+	
 </script>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/proxyConfigDiffViewPop.jsp"%>
 <%@include file="./../popup/proxyStatusChartView.jsp"%>
 <%@include file="./../../cmmn/wrkLog.jsp"%>
@@ -1285,6 +1389,8 @@
 												<th width="15">Virtaul IP</th>
 												<th width="10"><spring:message code="eXperDB_proxy.act_result" /></th>
 												<th width="10"><spring:message code="common.modifier" /></th>
+												<th width="10">백업 삭제</th>
+												<th width="10">백업 삭제자</th>
 												<th width="0">최종 수정일시</th>
 												<th width="0">변경 일련번호</th>
 												<th width="0">Proxy ID</th>
