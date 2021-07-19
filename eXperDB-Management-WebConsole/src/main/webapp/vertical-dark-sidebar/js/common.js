@@ -788,7 +788,6 @@ function pwdSafety(pw) {
  * help_Open Source 클릭
  ******************************************************** */
 function fn_openSource() {
-	console.log("fn_openSource function called!!!@@");
 	$.ajax({
 		url : "/encryptLicenseInfo.do",
 		type : "post",

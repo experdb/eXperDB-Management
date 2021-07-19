@@ -26,7 +26,7 @@
 <script type="text/javascript">
 	var tableRman = null;
 	var tableDump = null;
-	var tabGbn = nvlPrmSet("${tabGbn}", "rman");
+	var tabGbn = nvlPrmSet("${tabGbn}", "dump");
 	var searchInit = "";
 
 	/* ********************************************************
@@ -41,11 +41,12 @@
 		dateCalenderSetting();
 
 		//조회
-		if(tabGbn != ""){
+		/* if(tabGbn != ""){
 			selectTab(tabGbn);
 		}else{
 			selectTab("rman");
-		}
+		} */
+			selectTab("dump");
 
 		/* ********************************************************
 		 * Click Search Button
@@ -55,11 +56,12 @@
 				return;
 			}
 
-			if(tabGbn == "rman"){
+			/* if(tabGbn == "rman"){
 				fn_get_rman_list();
 			}else{
 				fn_get_dump_list();
-			}
+			} */
+				fn_get_dump_list();
 		});
 	});
 
@@ -68,24 +70,24 @@
 	 ******************************************************** */
 	function selectInitTab(intab){
 		tabGbn = intab;
-		if(intab == "rman"){			
+		/* if(intab == "rman"){			
 			$(".search_rman").show();
 			$(".search_dump").hide();
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
 
 			seachParamInit(intab);
-		}else{				
+		}else{	 */			
 			$(".search_rman").hide();
 			$(".search_dump").show();
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
 
 			seachParamInit(intab);
-		}
+		// }
 
 		//테이블 setting
-		fn_rman_init();
+		// fn_rman_init();
 		fn_dump_init();
 	}
 
@@ -182,7 +184,7 @@
 	 ******************************************************** */
 	function selectTab(intab){
 		tabGbn = intab;
-		if(intab == "rman"){			
+		/* if(intab == "rman"){			
 			$(".search_rman").show();
 			$(".search_dump").hide();
 			$("#logRmanListDiv").show();
@@ -191,7 +193,7 @@
 			seachParamInit(intab);
 	
 			fn_get_rman_list();
-		}else{
+		}else{ */
 			$(".search_rman").hide();
 			$(".search_dump").show();
 			$("#logRmanListDiv").hide();
@@ -199,7 +201,7 @@
 	
 			seachParamInit(intab);
 			fn_get_dump_list();
-		}
+		// }
 	}
 
 	/* ********************************************************
@@ -631,7 +633,7 @@
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
+					<%-- <ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
 							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
 								<spring:message code="restore.Emergency_Point-in-Time" /> <spring:message code="restore.Recovery_history" />
@@ -642,7 +644,7 @@
 								Dump <spring:message code="restore.Recovery_history" />
 							</a>
 						</li>
-					</ul>
+					</ul> --%>
 
 					<!-- search param start -->
 					<div class="card">
