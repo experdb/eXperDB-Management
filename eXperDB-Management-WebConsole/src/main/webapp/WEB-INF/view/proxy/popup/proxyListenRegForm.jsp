@@ -467,7 +467,7 @@ function fn_serverListTable_init() {
 							$("#ipadr").append("<option value='"+result[i].db_con_addr+"'>"+result[i].db_con_addr+"</option>");	
 						}
 						if(!inner_inclu){
-							$("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (내부)</option>");	
+							if(result[i].intl_ipadr != null && result[i].intl_ipadr!="")	$("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (내부)</option>");	
 						}
 					}									
 				}
