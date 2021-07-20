@@ -218,7 +218,6 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String time = transFormat.format(date);   
         
-        String jobName_New = "recovery_"+time;
 		
 		String password = request.getParameter("password");
 		if(!checkAccountPassword(session, password)){
@@ -227,6 +226,16 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		}
 		
 		RestoreInfoVO restoreInfoVo = new RestoreInfoVO();
+		String instanceBmr = request.getParameter("bmrInstant");
+		String jobName_New = "recovery"+time;
+		if(instanceBmr.equals("1")){
+			jobName_New = "InstantBmr"+time;
+			restoreInfoVo.setBmr("yes");
+		}else if(instanceBmr.equals("2")){
+			jobName_New = "Bmr"+time;
+			restoreInfoVo.setBmr("no");
+		}
+		
 		restoreInfoVo.setJobName(jobName_New);
 		restoreInfoVo.setSourceNode(request.getParameter("sourceDB"));
 		restoreInfoVo.setStorageLocation(request.getParameter("storagePath"));
@@ -242,11 +251,6 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 			restoreInfoVo.setStorageType("nfs");
 		}else{
 			restoreInfoVo.setStorageType("cifs");
-		}
-		if(request.getParameter("bmrInstant").equals("1")){
-			restoreInfoVo.setBmr("yes");
-		}else{
-			restoreInfoVo.setBmr("no");
 		}
 		
 		
@@ -335,6 +339,58 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 			result.put("data", jsonArray);
 			
 		return result;
+	}
+
+	@Override
+	public JSONObject timeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException {
+		JSONObject result = new JSONObject();
+		HttpSession session = request.getSession();
+		RestoreMake make = new RestoreMake();
+		CmmnUtil util = new CmmnUtil();
+		
+		Date date = new Date();
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String time = transFormat.format(date);   
+        
+		
+		String password = request.getParameter("password");
+		if(!checkAccountPassword(session, password)){
+			result.put("result_code", 5);
+			return result;
+		}
+		
+		RestoreInfoVO restoreInfoVo = new RestoreInfoVO();
+		String instanceBmr = request.getParameter("bmrInstant");
+		String jobName_New = "recovery"+time;
+		if(instanceBmr.equals("1")){
+			jobName_New = "InstantBmr"+time;
+			restoreInfoVo.setBmr("yes");
+		}else if(instanceBmr.equals("2")){
+			jobName_New = "Bmr"+time;
+			restoreInfoVo.setBmr("no");
+		}
+		
+		restoreInfoVo.setJobName(jobName_New);
+		restoreInfoVo.setSourceNode(request.getParameter("sourceDB"));
+		restoreInfoVo.setRecoveryPoint(request.getParameter("timePoint"));
+		restoreInfoVo.setStorageLocation(request.getParameter("storagePath"));
+		restoreInfoVo.setGuestMac(request.getParameter("targetMac"));
+		restoreInfoVo.setGuestIp(request.getParameter("targetIp"));
+		restoreInfoVo.setGuestSubnetmask(request.getParameter("targetSNM"));
+		restoreInfoVo.setGuestGateway(request.getParameter("targetGW"));
+		restoreInfoVo.setGuestDns(request.getParameter("targetDNS"));
+		restoreInfoVo.setGuestNetwork("static");
+		
+		if(request.getParameter("storageType").equals("1")){
+			restoreInfoVo.setStorageType("nfs");
+		}else{
+			restoreInfoVo.setStorageType("cifs");
+		}
+		
+		make.bmr(restoreInfoVo);
+		result = util.recoveryRun(jobName_New, "timePoint");
+
+		return result;		
 	}
 	
 	

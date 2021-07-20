@@ -317,7 +317,7 @@ function fn_recoveryRun(){
 				showSwalIcon('잘못된 비밀번호 입니다', '<spring:message code="common.close" />', '', 'error', 'top');
 				fn_pwCheckFormReset();
 				
-			}else if(data.result_code == 1){
+			}else{
 				$("#pop_layer_popup_recoveryPasswordCheckForm").modal("hide");
 			}
 		})
