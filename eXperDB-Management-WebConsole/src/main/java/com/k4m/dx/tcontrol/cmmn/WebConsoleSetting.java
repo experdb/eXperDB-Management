@@ -169,7 +169,7 @@ public class WebConsoleSetting {
 			}
 
 			System.out.println("BnR License cnt : ");
-			strBnrLicense = scan.nextLine();
+			strBnrLicense = scan.nextLine(); 
 			while (true) {
 				if(strSshPort.equals("")) {
 					System.out.println("Please enter your BnR License cnt. ");
