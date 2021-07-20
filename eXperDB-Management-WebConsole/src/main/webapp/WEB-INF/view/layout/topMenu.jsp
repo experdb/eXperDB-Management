@@ -867,10 +867,11 @@
 									<i class="menu-arrow"></i>
 								</a>
 								
-								<div class="submenu" style="width:700px;">
+								<!-- <div class="submenu" style="width:700px;"> -->
+								<div class="submenu" style="width:450px;">
 									<!-- <div class="row"> -->
 									<div class="col-group-wrapper row" >
-										<div class="col-group col-md-4" id="MN00019" style="padding-right: 0px;">
+										<div class="col-group col-md-5" id="MN00019" style="padding-right: 0px;">
 											<ul class="submenu-item">
 												<li class="nav-item">
 													<span class="nav-heading-title">
@@ -894,7 +895,7 @@
 												</li>
 											</ul>
 										</div>
-										<div class="col-group col-md-4" id="MN00020">
+										<div class="col-group col-md-5" id="MN00020">
 											<ul class="submenu-item">
 												<li class="nav-item" id="MN00020_etc_Y_tit">
 													<span class="nav-heading-title">
@@ -913,7 +914,7 @@
 												</li>
 											</ul>
 										</div>
-										<div class="col-group col-md-4" id="MN00021">
+										<!-- <div class="col-group col-md-4" id="MN00021">
 											<ul class="submenu-item">
 												<li class="nav-item" id="MN00021_etc_Y_tit">
 													<span class="nav-heading-title">
@@ -936,7 +937,7 @@
 													</a>
 												</li>
 											</ul>
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</li>
