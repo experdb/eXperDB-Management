@@ -20,6 +20,7 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
+import org.apache.maven.doxia.logging.Log;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -117,35 +118,54 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			
 			proxyCfg += globalConf;
 			
-			String readOnlyConf = util.readTemplateFile("readOnly.cfg", TEMPLATE_DIR);
-			String readWriteConf = util.readTemplateFile("readWrite.cfg", TEMPLATE_DIR);
 			String readWriteCdNm = jobj.getString("TC004201");
 			String readOnlyCdNm = jobj.getString("TC004202");
 			
 			JSONArray listener = jobj.getJSONArray("listener_list");
 			int listenerSize = listener.length();
-
+			
 			for(int i=0 ; i<listenerSize ; i++){
 				JSONObject proxyListener = listener.getJSONObject(i);
 				String lsn_nm = proxyListener.getString("lsn_nm");
 				String bind = proxyListener.getString("con_bind_port");
 				String db_nm = proxyListener.getString("db_nm");
+				String sim_query = proxyListener.getString("con_sim_query").replace("select ", "");
+				String field_nm = proxyListener.getString("field_nm");
+				String filed_val = proxyListener.getString("field_val");
+				String type_oid="00000017";
 				
+				String confStr = "";
 				if(lsn_nm.equals(readWriteCdNm)){
-					readWriteConf = readWriteConf.replace("{lsn_nm}", lsn_nm);
-					readWriteConf = readWriteConf.replace("{con_bind_port}", bind);
-					readWriteConf = readWriteConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
-					readWriteConf = readWriteConf.replace("{db_nm}", db_nm);
-					readWriteConf = readWriteConf.replace("{packet_len}", util.getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
-					proxyCfg +="\n"+readWriteConf;
+					confStr = util.readTemplateFile("readWrite.cfg", TEMPLATE_DIR);
 				}else if(lsn_nm.equals(readOnlyCdNm)){
-					readOnlyConf = readOnlyConf.replace("{lsn_nm}", lsn_nm);
-					readOnlyConf = readOnlyConf.replace("{con_bind_port}", bind);
-					readOnlyConf = readOnlyConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
-					readOnlyConf = readOnlyConf.replace("{db_nm}", db_nm);
-					readOnlyConf = readOnlyConf.replace("{packet_len}",  util.getPacketLength(31,db_nm));
-					proxyCfg +="\n"+readOnlyConf;
+					confStr = util.readTemplateFile("readOnly.cfg", TEMPLATE_DIR);
 				}
+				confStr = confStr.replace("{lsn_nm}", lsn_nm);
+				confStr = confStr.replace("{con_bind_port}", bind);
+				confStr = confStr.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
+				confStr = confStr.replace("{db_nm}", db_nm);
+				confStr = confStr.replace("{packet_len}", util.getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
+				
+				confStr = confStr.replace("{simple_query_hex}", util.getStringToHex(sim_query));
+				confStr = confStr.replace("{simple_query}", sim_query);
+				confStr = confStr.replace("{packet_len_sim}", util.getPacketLength(12,sim_query)); //8자, 패딩 0으로 넣기 
+
+				confStr = confStr.replace("{field_nm_hex}", util.getStringToHex(field_nm));
+				confStr = confStr.replace("{field_nm}", field_nm);
+				confStr = confStr.replace("{packet_len_field}", util.getPacketLength(25,field_nm)); //8자, 패딩 0으로 넣기 
+				if(field_nm.equals("haproxy_check")){
+					type_oid="00000000";
+				}else if(field_nm.equals("pg_is_in_recovery")){
+					type_oid="00000010";
+				}
+				confStr = confStr.replace("{type_oid}", type_oid); 
+				
+				confStr = confStr.replace("{column_hex}", util.getStringToHex(filed_val));
+				confStr = confStr.replace("{column}", filed_val);
+				confStr = confStr.replace("{column_len}", util.getPacketLength(0,filed_val)); //8자, 패딩 0으로 넣기 
+				confStr = confStr.replace("{packet_len_column}", util.getPacketLength(10,filed_val)); //8자, 패딩 0으로 넣기 
+				
+				proxyCfg +="\n"+confStr;
 				
 				JSONArray listenerSvrList = proxyListener.getJSONArray("server_list");
 				int listenerSvrListSize = listenerSvrList.length();
