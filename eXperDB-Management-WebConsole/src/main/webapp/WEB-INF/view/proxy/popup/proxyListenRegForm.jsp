@@ -485,28 +485,73 @@ function fn_serverListTable_init() {
 	 *  리스너명 변경 시 이벤트
 	 ******************************************************** */
 	function fn_change_lsn_nm(){
+		var checkQuery = ["select haproxy_check();","select 1;","select pg_is_in_recovery();"];
+		var checkQueryFiled=["haproxy_check","?column?","pg_is_in_recovery();"];
+		var checkQueryFiledVal = ["false", "1", "f"];
+		
 		if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() !=""){
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").val($("#lstnReg_lsn_nm_sel").children("option:selected").text());
-			if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() == "TC004201"){//pgReadWrite
-				$("#lstnReg_con_sim_query", "#insProxyListenForm").val("select haproxy_check();");
-				$("#lstnReg_field_nm", "#insProxyListenForm").val("haproxy_check");
-				$("#lstnReg_field_val", "#insProxyListenForm").val("false");
-				//$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val("TC004101"); 
-			}else if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() == "TC004202"){//pgReadOnly
-				$("#lstnReg_con_sim_query", "#insProxyListenForm").val("select 1;");
-				$("#lstnReg_field_nm", "#insProxyListenForm").val("?column?");
-				$("#lstnReg_field_val", "#insProxyListenForm").val("1");
-				$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val("TC004102"); 
-			}
+			fn_create_checkQuery_sel();
 		}else{
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").val("");
 			$("#lstnReg_con_sim_query", "#insProxyListenForm").val("");
 			$("#lstnReg_field_nm", "#insProxyListenForm").val("");
 			$("#lstnReg_field_val", "#insProxyListenForm").val("");
-			//$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val(""); 
+			$("#lstnReg_con_sim_query_sel").children().remove();
+			$("#lstnReg_con_sim_query_sel").append("<option value=''><spring:message code='common.choice' /></option>");
+		}
+	}
+	function fn_create_checkQuery_sel(query){
+		//Create lstnReg_con_sim_query_sel
+		var checkQuery;
+		if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() =="TC004201"){
+			checkQuery = ["select haproxy_check();","select pg_is_in_recovery();"];
+		}else if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() =="TC004202"){
+			checkQuery = ["select 1;"];
+		}else{
+			checkQuery = null;
+		}
+		
+		$("#lstnReg_con_sim_query_sel").children().remove();
+		
+		if(checkQuery != null){
+			for(var i=0; i<checkQuery.length; i++){
+				$("#lstnReg_con_sim_query_sel").append("<option value='"+checkQuery[i]+"'>"+checkQuery[i]+"</option>");	
+			}
+			$("#lstnReg_con_sim_query_sel").val(query);
+	
+		}else{
+			$("#lstnReg_con_sim_query_sel").append("<option value=''><spring:message code='common.choice' /></option>");
 		}
 	}
 	
+	function fn_change_checkQuery_sel(){
+		
+		var checkQuery;
+		var checkQueryFiled;
+		var checkQueryFiledVal;
+		
+		if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() =="TC004201"){
+			checkQuery = ["select haproxy_check();","select pg_is_in_recovery();"];
+			checkQueryFiled=["haproxy_check","pg_is_in_recovery"];
+			checkQueryFiledVal = ["false", "f"];
+		
+		}else if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() =="TC004202"){
+			checkQuery = ["select 1;"];
+			checkQueryFiled=["?column?"];
+			checkQueryFiledVal = ["1"];
+		}else{
+			checkQuery = null;
+		}
+		
+		if(checkQuery != null){
+			var i = $("#lstnReg_con_sim_query_sel > option:selected").index();
+			
+			$("#lstnReg_con_sim_query", "#insProxyListenForm").val(checkQuery[i]);
+			$("#lstnReg_field_nm", "#insProxyListenForm").val(checkQueryFiled[i]);
+			$("#lstnReg_field_val", "#insProxyListenForm").val(checkQueryFiledVal[i]);
+		}
+	}
 	function fn_change_con_bind_ip_sel(){
 		$("#lstnReg_con_bind_ip", "#insProxyListenForm").val($("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val());
 	}
@@ -576,6 +621,8 @@ function fn_serverListTable_init() {
 						<input type="hidden" name="lstnReg_db_id" id="lstnReg_db_id"/>
 						<input type="hidden" name="lstnReg_mode" id="lstnReg_mode"/>
 						<input type="hidden" name="lstnReg_db_usr_id" id="lstnReg_db_usr_id" value="reqmgr"/>
+						
+						<input type="hidden" name="lstnReg_con_sim_query" id="lstnReg_con_sim_query"/>
 						<input type="hidden" name="lstnReg_field_val" id="lstnReg_field_val"/>
 						<input type="hidden" name="lstnReg_field_nm" id="lstnReg_field_nm"/>
 						<fieldset>
@@ -602,6 +649,15 @@ function fn_serverListTable_init() {
 									</div>
 									<div class="col-sm-auto"></div>
 								</div>
+								<div class="form-group row row">
+									<label for="lstnReg_lsn_desc" class="col-sm-3 col-form-label-sm pop-label-index">
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
+										<spring:message code="eXperDB_proxy.desc" />
+									</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control form-control-xsm" maxlength="250" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+									</div>
+								</div>
 								<div class="form-group row">
 									<label for="lstnReg_con_bind" class="col-sm-3 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
@@ -626,56 +682,28 @@ function fn_serverListTable_init() {
 								<div class="form-group row">
 									<label for="lstnReg_db_nm" class="col-sm-3 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
-										Check <spring:message code="eXperDB_proxy.database" />(*)
-									</label>
-									<div class="col-sm-3">
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" onchange="fn_db_nm_change();" tabindex=4 >
-										</select>
-									</div>
-									<label for="lstnReg_con_sim_query" class="col-sm-2 col-form-label-sm pop-label-index" style="display: none;">
-										<i class="item-icon fa fa-angle-double-right"></i>
-										<spring:message code="eXperDB_proxy.check_query" />(*)
-									</label>
-									<div class="col-sm-5" style="display: none;">
-										<input type="text" class="form-control form-control-xsm lstnReg_con_sim_query" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" />
-									</div>
-								</div>
-								<div class="form-group row row-last">
-									<label for="lstnReg_lsn_desc" class="col-sm-3 col-form-label-sm pop-label-index">
-										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
-										<spring:message code="eXperDB_proxy.desc" />
-									</label>
-									<div class="col-sm-9">
-										<input type="text" class="form-control form-control-xsm" maxlength="250" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
-									</div>
-								</div>
-							</div>
-							<%-- <br/>
-							<div class="card-body card-body-xsm card-body-border">
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label-xsm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										Health Check
-									</label>
-								</div>
-								<div class="form-group row row-last">
-									<label for="lstnReg_db_nm" class="col-sm-2 col-form-label-sm pop-label-index">
-										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.database" />(*)
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" onchange="fn_db_nm_change();" tabindex=4 >
 										</select>
 									</div>
-									<label for="lstnReg_con_sim_query" class="col-sm-2 col-form-label-sm pop-label-index">
-										<i class="item-icon fa fa-angle-double-right"></i>
+									<div class="col-sm-auto"></div>
+								</div>
+								<div class="form-group row row-last">
+									<label for="lstnReg_con_sim_query" class="col-sm-3 col-form-label-sm pop-label-index">
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.check_query" />(*)
 									</label>
 									<div class="col-sm-5">
-										<input type="text" class="form-control form-control-xsm lstnReg_con_sim_query" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" />
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_sim_query_sel" id="lstnReg_con_sim_query_sel" onchange="fn_change_checkQuery_sel();">
+											<option value=''><spring:message code='common.choice' /></option>
+										</select>
 									</div>
 								</div>
-							</div> --%>
+								<div class="col-sm-auto"></div>
+							</div>
+							
 							<br/>
 							
 							<div class="card-body card-body-xsm card-body-border">

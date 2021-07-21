@@ -1856,9 +1856,11 @@
 		if (mode == "reg") {
 			$("#ModalProxyListen").text('<spring:message code="eXperDB_proxy.listener_reg"/>');
 			
+			$("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val("");
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").val(""); //리스너명
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").hide();
 			$("#lstnReg_lsn_nm_sel", "#insProxyListenForm").show();
+			fn_create_checkQuery_sel("");
 			
 			//$("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val(""); //접속IP
 			$("#lstnReg_con_bind_ip_sel option:eq(0)").prop("selected", true);
@@ -1877,6 +1879,14 @@
 		} else {
 			if(isNaN(selListenerInfo.lsn_id)) selListenerInfo.lsn_id = "";
 			$("#ModalProxyListen").text('<spring:message code="eXperDB_proxy.listener_modify"/>');
+			
+			var lsnSelOpt = $("#lstnReg_lsn_nm_sel > option", "#insProxyListenForm");
+			for(var i=0; i < lsnSelOpt.length; i++){
+				if(lsnSelOpt[i].text ==  selListenerInfo.lsn_nm){
+					$("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val(lsnSelOpt[i].value);
+				}
+			}
+			fn_create_checkQuery_sel(selListenerInfo.con_sim_query);
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").val(selListenerInfo.lsn_nm); //리스너명
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").attr("disabled",true);
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").attr("readonly",true); 
