@@ -29,6 +29,8 @@ var storageList = [];
 var CIFSList = [];
 var NFSList = [];
 var storageExist = "N";
+var recLogList;
+var jobend = 0;
 /* ********************************************************
  * 페이지 시작시
  ******************************************************* */
@@ -276,6 +278,7 @@ function fn_passwordCheckPopup(){
 	 $("#pop_layer_popup_recoveryPasswordCheckForm").modal("show");
 }
 
+var test;
 function fn_recoveryRun(){
 	if($("#recoveryPW").val() != ""){
 		
@@ -313,11 +316,14 @@ function fn_recoveryRun(){
 			}
 		})
 		.done(function(data){
+			test = data;
 			if(data.result_code == 5){
 				showSwalIcon('잘못된 비밀번호 입니다', '<spring:message code="common.close" />', '', 'error', 'top');
 				fn_pwCheckFormReset();
-				
 			}else{
+				var jobName = data.jobName;
+				var jobId = fn_selectJobId(jobName);
+				fn_selectActivityLogCheck(jobId, jobName);
 				$("#pop_layer_popup_recoveryPasswordCheckForm").modal("hide");
 			}
 		})
@@ -334,6 +340,115 @@ function fn_recoveryRun(){
 		showSwalIcon('비밀번호를 입력해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
 		$("#recoveryPW").focus();
 	}
+}
+
+function fn_selectActivityLogCheck(jobid, jobname){
+		
+		//console.log("fn_selectActivityLogCheck!! --> " + jobid + " // " + jobname);
+	
+		setTimeout(fn_selectJobEnd, 8000, jobid,jobname);	
+		setTimeout(fn_selectActivityLog, 5000, jobid,jobname);			
+}
+
+
+function fn_selectJobId(jobname){
+	//console.log("fn_selectJobId");
+	var result = 0;
+	while(!result){		
+		$.ajax({
+			url : "/experdb/selectJobId.do",
+			data : {
+				jobname : jobname
+			},
+			async: false, 
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {
+				result = data;
+			}
+		});
+		console.log("jobId : " + result);
+	}
+	// console.log("while end!!");
+	return result;
+	//$('#loading').hide();	
+}
+
+function fn_selectActivityLog(jobid, jobname) {
+	$.ajax({
+		url : "/experdb/backupActivityLogList.do",
+		data : {
+			jobid : jobid
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(data) {
+			if(jobend == 0){
+				recLogList.clear().draw();
+				recLogList.rows.add(data).draw();	
+			}else{
+				recLogList.clear().draw();
+			}
+		}
+	});
+	$('#loading').hide();
+} 
+
+function fn_selectJobEnd(jobid,jobname){
+	
+	$.ajax({
+		url : "/experdb/selectJobEnd.do",
+		data : {
+			jobname:jobname
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(data) {	
+			//console.log('종료 데이터= '+data);		
+			 if(data == 1){		
+				jobend = 1;
+				// end ="";
+				recLogList.clear().draw();
+			}else{	
+				jobend = 0;
+				fn_selectActivityLogCheck(jobid, jobname);
+			} 						
+		}
+	});
+	$('#loading').hide();	
 }
 
 </script>

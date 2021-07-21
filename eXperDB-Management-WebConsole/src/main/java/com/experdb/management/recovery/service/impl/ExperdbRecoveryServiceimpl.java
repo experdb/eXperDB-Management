@@ -256,6 +256,7 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		
 		make.bmr(restoreInfoVo);
 		result = util.recoveryRun(jobName_New, "complete");
+		result.put("jobName", jobName_New);
 
 		return result;
 	}
