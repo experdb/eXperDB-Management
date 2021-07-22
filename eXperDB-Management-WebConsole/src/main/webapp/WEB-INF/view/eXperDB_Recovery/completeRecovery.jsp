@@ -278,7 +278,7 @@ function fn_passwordCheckPopup(){
 	 $("#pop_layer_popup_recoveryPasswordCheckForm").modal("show");
 }
 
-var test;
+// recovery run
 function fn_recoveryRun(){
 	if($("#recoveryPW").val() != ""){
 		
@@ -316,13 +316,16 @@ function fn_recoveryRun(){
 			}
 		})
 		.done(function(data){
-			test = data;
 			if(data.result_code == 5){
 				showSwalIcon('잘못된 비밀번호 입니다', '<spring:message code="common.close" />', '', 'error', 'top');
 				fn_pwCheckFormReset();
 			}else{
+				showSwalIcon('복원이 시작됩니다', '<spring:message code="common.close" />', '', 'success');
+				// 생성된 jobName
 				var jobName = data.jobName;
+				// 실행된 Job의 id 조회
 				var jobId = fn_selectJobId(jobName);
+				// logCheck 함수 called
 				fn_selectActivityLogCheck(jobId, jobName);
 				$("#pop_layer_popup_recoveryPasswordCheckForm").modal("hide");
 			}
@@ -342,18 +345,18 @@ function fn_recoveryRun(){
 	}
 }
 
+// logcheck 함수
 function fn_selectActivityLogCheck(jobid, jobname){
 		
-		//console.log("fn_selectActivityLogCheck!! --> " + jobid + " // " + jobname);
-	
+		// console.log("fn_selectActivityLogCheck!! --> " + jobid + " // " + jobname);
 		setTimeout(fn_selectJobEnd, 8000, jobid,jobname);	
 		setTimeout(fn_selectActivityLog, 5000, jobid,jobname);			
 }
 
-
+// jobId 조회
 function fn_selectJobId(jobname){
-	//console.log("fn_selectJobId");
 	var result = 0;
+	// jobId가 0이 아닐때까지(제대로 조회 될 때까지) 조회
 	while(!result){		
 		$.ajax({
 			url : "/experdb/selectJobId.do",
@@ -380,11 +383,11 @@ function fn_selectJobId(jobname){
 		});
 		console.log("jobId : " + result);
 	}
-	// console.log("while end!!");
 	return result;
 	//$('#loading').hide();	
 }
 
+// log 조회
 function fn_selectActivityLog(jobid, jobname) {
 	$.ajax({
 		url : "/experdb/backupActivityLogList.do",
@@ -416,6 +419,7 @@ function fn_selectActivityLog(jobid, jobname) {
 	$('#loading').hide();
 } 
 
+// job 종료 여부 조회
 function fn_selectJobEnd(jobid,jobname){
 	
 	$.ajax({
@@ -440,7 +444,6 @@ function fn_selectJobEnd(jobid,jobname){
 			//console.log('종료 데이터= '+data);		
 			 if(data == 1){		
 				jobend = 1;
-				// end ="";
 				recLogList.clear().draw();
 			}else{	
 				jobend = 0;
