@@ -467,7 +467,10 @@ function fn_serverListTable_init() {
 							$("#ipadr").append("<option value='"+result[i].db_con_addr+"'>"+result[i].db_con_addr+"</option>");	
 						}
 						if(!inner_inclu){
-							if(result[i].intl_ipadr != null && result[i].intl_ipadr!="")	$("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (내부)</option>");	
+				        	if(result[i].intl_ipadr != null && result[i].intl_ipadr!=""){
+				            	var intlTemp = result[i].intl_ipadr;
+				            	if(intlTemp.substring(0,intlTemp.indexOf(":")) != "")  $("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (?대?)</option>");
+				            }	
 						}
 					}									
 				}
