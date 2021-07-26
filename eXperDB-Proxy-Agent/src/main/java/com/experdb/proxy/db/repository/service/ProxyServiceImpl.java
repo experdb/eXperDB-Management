@@ -756,7 +756,7 @@ public class ProxyServiceImpl implements ProxyService{
 			socketLogger.info("======================================================");
 			socketLogger.info("2. keepalived server");			
 			
-			if (vipConfList != null) {
+			if (vipConfList.size()>0) {
 				socketLogger.info("keepalived_set.stateMasterInterface: " + stateMasterInterface);	
 				socketLogger.info("keepalived_set.strObjIp: " + strObjIp);
 				socketLogger.info("keepalived_set.strPeerServerIp: " + strPeerServerIp);
@@ -789,10 +789,14 @@ public class ProxyServiceImpl implements ProxyService{
 			
 			ProxyServerVO peerServerInfo = new ProxyServerVO();
 			peerServerInfo.setIpadr(strPeerServerIp);
-			
 
 			//마스터 확인
-			ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInslInfo(peerServerInfo); //외부, 내부 조회 로 변경
+			ProxyServerVO proxyServerInfo = null;
+			
+			if (strPeerServerIp != null && !"".equals(strPeerServerIp)) {
+				proxyServerInfo = proxyDAO.selectPrySvrInslInfo(peerServerInfo); //외부, 내부 조회 로 변경
+			}
+			
 			String strKeepalived = FileUtil.getPropertyValue("context.properties", "keepalived.install.yn");
 			if (strKeepalived != null && "Y".equals(strKeepalived)) {
 				if (proxyServerInfo != null) {
