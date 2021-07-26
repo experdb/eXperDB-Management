@@ -1319,12 +1319,15 @@ function fn_topic_search_tg_ins(){
 	$('#loading').hide();
 	if (kc_ip != "") {
 		
-		$("#pop_layer_con_reg_two_target").append(htmlLoadPop);
-		
-		$('#loading_pop').css('position', 'absolute');
-		$('#loading_pop').css('left', '50%');
-		$('#loading_pop').css('top', '50%');
-		$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
+		if($('#loading_pop').length <= 0){ 
+			$("#pop_layer_con_reg_two_target").append(htmlLoadPop);
+			
+			$('#loading_pop').css('position', 'absolute');
+			$('#loading_pop').css('left', '50%');
+			$('#loading_pop').css('top', '50%');
+			$('#loading_pop').css('transform', 'translate(-50%,-50%)');	
+		}
+
 		$('#loading_pop').show();	
 		
 		$.ajax({
@@ -1365,6 +1368,7 @@ function fn_topic_search_tg_ins(){
 
 		$( document ).ajaxStop(function() {
 			$('#loading_pop').hide();
+		//	$("#loading_pop").remove();
 		});
 	} else {
 		ins_tg_topicList.rows({selected: true}).deselect();
@@ -1633,13 +1637,16 @@ function fn_topic_search_tg_mod(){
 	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
 
 	if (kc_ip != "") {
-		
-		$("#pop_layer_con_re_reg_two_target").append(htmlLoadPop);
-		
-		$('#loading_pop').css('position', 'absolute');
-		$('#loading_pop').css('left', '50%');
-		$('#loading_pop').css('top', '50%');
-		$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
+
+		if($('#loading_pop').length <= 0){ 
+			$("#pop_layer_con_re_reg_two_target").append(htmlLoadPop);
+
+			$('#loading_pop').css('position', 'absolute');
+			$('#loading_pop').css('left', '50%');
+			$('#loading_pop').css('top', '50%');
+			$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
+		}
+
 		$('#loading_pop').show();	
 		$('#loading').hide();
 		

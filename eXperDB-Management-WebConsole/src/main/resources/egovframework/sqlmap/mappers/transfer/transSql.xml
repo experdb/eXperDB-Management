@@ -38,7 +38,7 @@
            AND A.DB_SVR_ID = #{db_svr_id}
 
          <if test="connect_nm != null and connect_nm != '' ">
-           AND A.CONNECT_NM LIKE #{connect_nm}
+           AND A.CONNECT_NM = #{connect_nm}
          </if>
 
          ORDER BY A.LST_MDF_DTM DESC
@@ -238,7 +238,7 @@
            AND A.DB_SVR_ID = #{db_svr_id}
 
          <if test="connect_nm != null and connect_nm != '' ">
-           AND A.CONNECT_NM LIKE #{connect_nm}
+           AND A.CONNECT_NM = #{connect_nm}
          </if>
 
          ORDER BY A.LST_MDF_DTM DESC

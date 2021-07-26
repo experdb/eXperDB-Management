@@ -96,11 +96,11 @@
 			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		} else if(nvlPrmSet($("#ins_tg_trans_trg_sys_nm", "#insTargetRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="data_transfer.msg26" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}
 
-		//전성대상테이블 length 체크
+		//전송대상테이블 length 체크
 		if (ins_connector_tg_tableList.rows().data().length <= 0) {
 			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
 			return false;
