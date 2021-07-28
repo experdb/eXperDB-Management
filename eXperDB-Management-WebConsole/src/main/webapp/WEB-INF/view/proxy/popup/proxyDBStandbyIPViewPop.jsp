@@ -45,7 +45,7 @@
 				{data : "ipadr", 
 					render : function(data, type, full, meta) {
 						var html = full.ipadr;
-						if (full.intl_ipadr != "") {
+						if (full.intl_ipadr != null &&full.intl_ipadr != "") {
 							html += '<br/>(<spring:message code="eXperDB_proxy.internal_ip" /> :' + full.intl_ipadr + ')';
 						}
 						return html;
