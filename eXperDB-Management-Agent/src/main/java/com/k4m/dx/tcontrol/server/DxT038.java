@@ -52,6 +52,7 @@ public class DxT038 extends SocketCtl{
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
+		String soucreTransformYN = "N";
 		
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
@@ -114,6 +115,8 @@ public class DxT038 extends SocketCtl{
 					
 					String transforms_yn = commonInfo.getTransforms_yn();
 					if (transforms_yn != null && "Y".equals(transforms_yn)) {
+						soucreTransformYN = "Y";
+						
 						config.put("transforms", "route");
 						config.put("transforms.route.type", "org.apache.kafka.connect.transforms.RegexRouter");
 						config.put("transforms.route.regex", "([^.]+)\\.([^.]+)\\.([^.]+)");
@@ -144,9 +147,7 @@ public class DxT038 extends SocketCtl{
 						} else {
 							indexOf = 0;
 						}
-						
-socketLogger.info("DxT038.indexOf" + indexOf);
-socketLogger.info("DxT038.indexOf : " + table_param.substring(indexOf, table_param.length()));
+
 						searchTransVO.setTable_name(table_param.substring(indexOf, table_param.length()));
 						
 						List<TransVO> tableList = service.selectTablePkInfo(searchTransVO);
@@ -166,8 +167,6 @@ socketLogger.info("DxT038.indexOf : " + table_param.substring(indexOf, table_par
 					}
 				}
 
-				socketLogger.info("DxT038.pk_tot_valuepk_tot_valuepk_tot_valuepk_tot_value : " + pk_tot_value);
-				
 				if (pk_tot_value == null || "".equals(pk_tot_value)) {
 					pk_tot_value = "id";
 				}
@@ -226,12 +225,48 @@ socketLogger.info("DxT038.indexOf : " + table_param.substring(indexOf, table_par
 				transVO.setTrans_id(trans_id);
 				transVO.setExe_status("TC001501");
 				
+				String topicNm = "";
+				
+				if ("source".equals(con_start_gbn)) {
+					String exrt_trg_tb_nm = ""; //테이블 목록
+					String[] exrt_trg_tb_nm_array = null; //테이블 목록 배열
+					int nm_cnt = 1;
+					
+					if (objMAPP_INFO.get("EXRT_TRG_TB_NM") != null) {
+						exrt_trg_tb_nm = objMAPP_INFO.get("EXRT_TRG_TB_NM").toString();
+						exrt_trg_tb_nm_array = exrt_trg_tb_nm.split(",");
+					}
+					
+					if (exrt_trg_tb_nm_array != null) {
+						if ("Y".equals(soucreTransformYN)) { //table 이름만 topic명
+							for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
+								String tb_nm = exrt_trg_tb_nm_array[i];
+								topicNm += tb_nm.trim().substring(tb_nm.trim().lastIndexOf(".") + 1 , tb_nm.trim().length());
+								
+								if (nm_cnt < exrt_trg_tb_nm_array.length) {
+									topicNm += ",";
+								}
+							}
+						} else {//connect명.스키마명.테이블명
+							for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
+								String tb_nm = exrt_trg_tb_nm_array[i];
+								topicNm += objCONNECT_INFO.get("CONNECT_NM").toString() + "." + tb_nm;
+								
+								if (nm_cnt < exrt_trg_tb_nm_array.length) {
+									topicNm += ",";
+								}
+							}
+						}
+					}
+				}
+				
+				transVO.setTopic_nm(topicNm);
+
 				if ("source".equals(con_start_gbn)) {
 					service.updateTransExe(transVO);
 				} else {
 					service.updateTransTargetExe(transVO);
 				}
-				
 			}
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

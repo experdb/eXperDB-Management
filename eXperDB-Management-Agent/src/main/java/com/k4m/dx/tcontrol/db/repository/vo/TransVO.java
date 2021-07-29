@@ -19,6 +19,15 @@ public class TransVO {
 	private String column_name;
 	private String table_name;
 	private String db_name;
+	private String topic_nm;
+
+	public String getTopic_nm() {
+		return topic_nm;
+	}
+
+	public void setTopic_nm(String topic_nm) {
+		this.topic_nm = topic_nm;
+	}
 
 	public String getColumn_name() {
 		return column_name;

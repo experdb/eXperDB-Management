@@ -93,8 +93,11 @@ public class DxT039 extends SocketCtl{
 				TransVO transVO = new TransVO();
 				transVO.setTrans_id(trans_id);
 				transVO.setExe_status("TC001502");
-				
+
 				if ("source".equals(con_start_gbn)) {
+					
+					
+					
 					service.updateTransExe(transVO);
 				} else {
 					service.updateTransTargetExe(transVO);

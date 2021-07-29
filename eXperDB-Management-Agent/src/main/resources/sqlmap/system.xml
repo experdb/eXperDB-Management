@@ -636,11 +636,16 @@
 	 	**/         
         UPDATE T_TRANSCNG_I
            SET EXE_STATUS = #{exe_status},
+           
+            <if test='start_gbn != null and start_gbn.equals("start")'>
+                TOPIC_NM = #{topic_nm},
+            </if>
+            
            		LST_MDF_DTM = clock_timestamp()
          WHERE 1 = 1
            AND TRANS_ID = #{trans_id}
     	</update>
-    	
+
      <update id="updateTransTargetExe" parameterType="TransVO">
    		/**
 	 	* Query ID : updateTransTargetExe
@@ -648,7 +653,7 @@
 	 	* Author :
 	 	**/         
         UPDATE T_TRANSCNG_TARGET_I
-           SET EXE_STATUS = #{exe_status},
+           SET EXE_STATUS = #{exe_status}
            	   LST_MDF_DTM = clock_timestamp()
          WHERE 1 = 1
            AND TRANS_ID = #{trans_id}
