@@ -54,6 +54,15 @@ public class TransVO {
 	private String trans_com_cng_nm;
 	private String trans_com_cng_gbn;
 	private String trans_com_id_Rows;
+	private String topic_nm;
+
+	public String getTopic_nm() {
+		return topic_nm;
+	}
+
+	public void setTopic_nm(String topic_nm) {
+		this.topic_nm = topic_nm;
+	}
 
 	public String getTrans_com_id_Rows() {
 		return trans_com_id_Rows;

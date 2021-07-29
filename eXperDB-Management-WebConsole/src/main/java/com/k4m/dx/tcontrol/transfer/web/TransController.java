@@ -192,7 +192,7 @@ public class TransController {
 	}
 	
 	/**
-	 * 소스시스템 전송설정 조회한다.
+	 * 소스시스템 전송설정 조회
 	 * 
 	 * @param transVO, request, response
 	 * @return result
@@ -216,7 +216,7 @@ public class TransController {
 	}
 	
 	/**
-	 * 타켓시스템 전송설정 조회한다.
+	 * 타켓시스템 전송설정 조회
 	 * 
 	 * @param transVO, request, response
 	 * @return result

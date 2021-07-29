@@ -68,8 +68,8 @@ a:hover.tip span {
 	 ******************************************************** */
 	$(window.document).ready(function() {
 		//테이블 setting
-		fn_source_init();
-		fn_target_init();
+		fn_source_init(); //source 테이블 초기화
+		fn_target_init(); //target 테이블 초기화
 
 		//kafka connect 확인
 		fn_selectKafkaConnectChk();
@@ -115,7 +115,7 @@ a:hover.tip span {
 					connect_yn = "N";
 				}
 
-				//AWS 서버인경우
+				//kafa connect 존재여부
 				if (connect_yn == "Y") {
 					//화면 조회
 					fn_tot_select();

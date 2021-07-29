@@ -272,7 +272,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													offset.flush.timeout.ms
-													<span style="width: 550px;"><spring:message code="help.eXperDB_scale_set_msg08" /></span>
+													<span style="width: 550px;"><spring:message code="help.data_transfer_com_set_msg07" /></span>
 												</a>
 											</label>
 											<div class="col-sm-3">
@@ -283,8 +283,11 @@
 										
 										<div class="form-group row" style="margin-top:-15px;margin-bottom:-20px;">
 											<label for="mod_com_transforms_yn_chk" class="col-sm-3 col-form-label pop-label-index" style="margin-top:-10px">
-												<i class="item-icon fa fa-dot-circle-o"></i>
-												transform route <spring:message code="user_management.use_yn" />
+												<a href="#" class="tip" onclick="return false;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													transform route <spring:message code="user_management.use_yn" />
+													<span style="width: 550px;"><spring:message code="help.data_transfer_com_set_msg08" /></span>
+												</a>
 											</label>
 											<div class="col-sm-9">
 												<div class="onoffswitch-pop">

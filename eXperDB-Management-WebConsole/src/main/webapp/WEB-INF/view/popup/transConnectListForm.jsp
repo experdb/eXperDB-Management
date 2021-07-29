@@ -22,15 +22,11 @@
 	  		})		
 	  	});
 	});
-	
 
 	/* ********************************************************
 	 * 테이블 셋팅
 	 ******************************************************** */
 	function fn_trans_kafka_con_pop_init() {
-		/* ********************************************************
-		 * 리스트
-		 ******************************************************** */
 		trans_kafka_con_pop_table = $('#transKfkConPopList').DataTable({
 			scrollY : "260px",
 			searching : false,
@@ -69,7 +65,6 @@
 				{data : "kc_id",  defaultContent : "", visible: false }
 			]
 		});
-		 
 
 		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 		trans_kafka_con_pop_table.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
@@ -109,6 +104,7 @@
 			success : function(result) {
 				trans_kafka_con_pop_table.rows({selected: true}).deselect();
 				trans_kafka_con_pop_table.clear().draw();
+
 				if (nvlPrmSet(result, '') != '') {
 					trans_kafka_con_pop_table.rows.add(result).draw();
 				}
@@ -127,7 +123,7 @@
 			$('#transKfkConPopList tbody').on( 'click', 'tr', function () {
 				if ( $(this).hasClass('selected') ) {
 				}else {
-					tans_dbms_pop_table.$('tr.selected').removeClass('selected');
+					trans_kafka_con_pop_table.$('tr.selected').removeClass('selected');
 					$(this).addClass('selected');
 				}
 			})
