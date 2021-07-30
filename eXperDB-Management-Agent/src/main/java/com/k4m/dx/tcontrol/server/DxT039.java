@@ -16,7 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
-import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.service.TransServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.socket.ErrCodeMng;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
@@ -59,7 +59,7 @@ public class DxT039 extends SocketCtl{
 		String strSuccessCode = "0";
 
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
-		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
+		TransServiceImpl transService = (TransServiceImpl) context.getBean("TransService");
 		
 		String strCmd = (String) jObj.get(ProtocolID.REQ_CMD);
 		int trans_id = Integer.parseInt((String) jObj.get(ProtocolID.TRANS_ID));
@@ -95,14 +95,10 @@ public class DxT039 extends SocketCtl{
 				transVO.setExe_status("TC001502");
 
 				if ("source".equals(con_start_gbn)) {
-					
-					
-					
-					service.updateTransExe(transVO);
+					transService.updateTransExe(transVO);
 				} else {
-					service.updateTransTargetExe(transVO);
+					transService.updateTransTargetExe(transVO);
 				}
-
 			}
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

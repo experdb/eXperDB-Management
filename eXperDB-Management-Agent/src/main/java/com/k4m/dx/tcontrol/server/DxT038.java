@@ -14,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.service.TransServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
@@ -55,7 +56,7 @@ public class DxT038 extends SocketCtl{
 		String soucreTransformYN = "N";
 		
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
-		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
+		TransServiceImpl transService = (TransServiceImpl) context.getBean("TransService");
 		
 		JSONObject objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		JSONObject objCONNECT_INFO = (JSONObject) jObj.get(ProtocolID.CONNECT_INFO);
@@ -84,7 +85,7 @@ public class DxT038 extends SocketCtl{
 			}
 			
 			searchTransVO.setTrans_com_id(trans_com_id);
-			commonInfo = service.selectTransComSettingInfo(searchTransVO);
+			commonInfo = transService.selectTransComSettingInfo(searchTransVO); //기본사항 조회
 			
 			JSONObject config = new JSONObject();
 			
@@ -150,7 +151,7 @@ public class DxT038 extends SocketCtl{
 
 						searchTransVO.setTable_name(table_param.substring(indexOf, table_param.length()));
 						
-						List<TransVO> tableList = service.selectTablePkInfo(searchTransVO);
+						List<TransVO> tableList = transService.selectTablePkInfo(searchTransVO); // table pk 조회
 						
 						int ichkCnt = 0;
 
@@ -226,46 +227,36 @@ public class DxT038 extends SocketCtl{
 				transVO.setExe_status("TC001501");
 				
 				String topicNm = "";
-				
+
 				if ("source".equals(con_start_gbn)) {
 					String exrt_trg_tb_nm = ""; //테이블 목록
 					String[] exrt_trg_tb_nm_array = null; //테이블 목록 배열
-					int nm_cnt = 1;
-					
+
 					if (objMAPP_INFO.get("EXRT_TRG_TB_NM") != null) {
 						exrt_trg_tb_nm = objMAPP_INFO.get("EXRT_TRG_TB_NM").toString();
 						exrt_trg_tb_nm_array = exrt_trg_tb_nm.split(",");
 					}
 					
 					if (exrt_trg_tb_nm_array != null) {
-						if ("Y".equals(soucreTransformYN)) { //table 이름만 topic명
-							for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
-								String tb_nm = exrt_trg_tb_nm_array[i];
-								topicNm += tb_nm.trim().substring(tb_nm.trim().lastIndexOf(".") + 1 , tb_nm.trim().length());
-								
-								if (nm_cnt < exrt_trg_tb_nm_array.length) {
-									topicNm += ",";
-								}
-							}
-						} else {//connect명.스키마명.테이블명
-							for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
-								String tb_nm = exrt_trg_tb_nm_array[i];
+						for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
+							String tb_nm = exrt_trg_tb_nm_array[i];
+							
+							if ("Y".equals(soucreTransformYN)) { //table 이름만 topic명
+								topicNm = tb_nm.trim().substring(tb_nm.trim().lastIndexOf(".") + 1 , tb_nm.trim().length());
+							} else {
 								topicNm += objCONNECT_INFO.get("CONNECT_NM").toString() + "." + tb_nm;
-								
-								if (nm_cnt < exrt_trg_tb_nm_array.length) {
-									topicNm += ",";
-								}
 							}
-						}
+							
+							transVO.setTopic_nm(topicNm);	
+							
+							//topic 테이블 등록
+							transService.updateTransExe(transVO);
+						}						
 					}
-				}
-				
-				transVO.setTopic_nm(topicNm);
 
-				if ("source".equals(con_start_gbn)) {
-					service.updateTransExe(transVO);
+					transService.updateTransExe(transVO);
 				} else {
-					service.updateTransTargetExe(transVO);
+					transService.updateTransTargetExe(transVO);
 				}
 			}
 

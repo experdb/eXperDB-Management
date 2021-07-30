@@ -178,14 +178,4 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateDUMP_RESTORE_EXELOG(DumpRestoreVO vo) throws Exception;
-
-	/**
-	 * trans 기본사항 조회
-	 * @param 
-	 * @return
-	 * @throws Exception
-	 */
-	public TransVO selectTransComSettingInfo(TransVO vo) throws Exception;
-	
-	public List<TransVO> selectTablePkInfo(TransVO vo) throws Exception;
 }

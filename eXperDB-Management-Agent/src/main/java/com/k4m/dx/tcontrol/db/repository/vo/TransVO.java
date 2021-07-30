@@ -20,6 +20,24 @@ public class TransVO {
 	private String table_name;
 	private String db_name;
 	private String topic_nm;
+	private String start_gbn;
+	private String topic_gbn;
+
+	public String getTopic_gbn() {
+		return topic_gbn;
+	}
+
+	public void setTopic_gbn(String topic_gbn) {
+		this.topic_gbn = topic_gbn;
+	}
+
+	public String getStart_gbn() {
+		return start_gbn;
+	}
+
+	public void setStart_gbn(String start_gbn) {
+		this.start_gbn = start_gbn;
+	}
 
 	public String getTopic_nm() {
 		return topic_nm;
