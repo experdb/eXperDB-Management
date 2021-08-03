@@ -305,7 +305,7 @@
 		
 		//proxy 서버 테이블 더블 클릭
 		$('#proxyServer tbody').on('dblclick','tr',function() {
-			console.log("dblclick");
+			
 			if (!$(this).hasClass('selected')){
 				proxyServerTable.$('tr.selected').removeClass('selected');
 				$(this).addClass('selected');
@@ -415,7 +415,9 @@
 					{data : "ipadr", defaultContent : "", visible: false},//proxy 서버 ip
 					{data : "pry_svr_id", defaultContent : "", visible: false},//proxy 서버 ID
 					{data : "lsn_id", defaultContent : "", visible: false},//리스너 ID
-					{data : "lsn_svr_list", defaultContent : "", visible: false}//서버리스트 data
+					{data : "lsn_svr_list", defaultContent : "", visible: false},//서버리스트 data
+					{data : "bal_yn", defaultContent : "", visible: false},//Balance 사용여부
+					{data : "bal_opt", defaultContent : "", visible: false}//Balance 옵션
 			]
 		});
 
@@ -434,6 +436,8 @@
 		proxyListenTable.tables().header().to$().find('th:eq(12)').css('min-width', '0px');//proxy 서버 id
 		proxyListenTable.tables().header().to$().find('th:eq(13)').css('min-width', '0px');//리스너 id
 		proxyListenTable.tables().header().to$().find('th:eq(14)').css('min-width', '0px');//서버리스트 Data
+		proxyListenTable.tables().header().to$().find('th:eq(15)').css('min-width', '0px');//Balance 사용여부
+		proxyListenTable.tables().header().to$().find('th:eq(16)').css('min-width', '0px');//Balance 옵션
 		
 		$('#proxyListener tbody').on('click','tr',function() {
 			if ( !$(this).hasClass('selected') ){	        	
@@ -1874,6 +1878,14 @@
 			$("#lstnReg_field_nm", "#insProxyListenForm").val(""); //필드명
 			$("#lstnReg_field_val", "#insProxyListenForm").val(""); //필드값
 			$("#lstnReg_lsn_id", "#insProxyListenForm").val(""); //리스너 ID
+			
+			//balance 숨김 처리
+			$("#lstnReg_db_nm", "#insProxyListenForm").parent("div").parent("div").attr('class', "form-group row row-last");
+			$(".bal-group", "#insProxyListenForm").hide();
+			$("#lstnReg_bal_yn", "#insProxyListenForm").val("N"); //로드발란싱 사용여부
+			$("#lstnReg_bal_opt", "#insProxyListenForm").val(""); //로드발란싱 
+			$(".bal-opt-div", "#insProxyListenForm").hide(); //로드발란싱 
+			
 			serverListTable.clear().draw();
 		
 		} else {
@@ -1912,6 +1924,27 @@
 			$("#lstnReg_lsn_id", "#insProxyListenForm").val(selListenerInfo.lsn_id); //리스너 ID
 			$("#lstnReg_db_id", "#insProxyListenForm").val(selListenerInfo.db_id);//??
 
+			//balance 숨김 처리
+			if((selListenerInfo.lsn_nm).indexOf("ReadOnly") > 0 ){
+				$("#lstnReg_db_nm", "#insProxyListenForm").parent("div").parent("div").attr('class', "form-group row");
+				$(".bal-group", "#insProxyListenForm").show();
+			}else{
+				$("#lstnReg_db_nm", "#insProxyListenForm").parent("div").parent("div").attr('class', "form-group row row-last");
+				$(".bal-group", "#insProxyListenForm").hide();
+			}
+			
+			$("#lstnReg_bal_opt", "#insProxyListenForm").val(selListenerInfo.bal_opt); //로드발란싱 
+			
+			if(selListenerInfo.bal_yn=="Y"){
+				$(".bal-opt-div", "#insProxyListenForm").show();
+				$("#lstnReg_bal_yn", "#insProxyListenForm").val(selListenerInfo.bal_yn); //로드발란싱 사용여부
+				$("#lstnReg_bal_opt", "#insProxyListenForm").val(selListenerInfo.bal_opt); //로드발란싱
+			}else{
+				$(".bal-opt-div", "#insProxyListenForm").hide();
+				$("#lstnReg_bal_yn", "#insProxyListenForm").val("N"); //로드발란싱 사용여부
+				$("#lstnReg_bal_opt", "#insProxyListenForm").val(""); //로드발란싱
+			}
+					
 			if(selListenerInfo.lsn_id != ""){
 				fn_listener_svr_list_search();
 			}else{

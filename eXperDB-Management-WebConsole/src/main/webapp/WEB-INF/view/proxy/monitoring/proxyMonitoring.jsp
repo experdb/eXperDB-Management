@@ -1067,7 +1067,7 @@
 							html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">';
 						} else {
 							html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:10px;padding-top:10px;">';
-							standby	wCnt ++;
+							standbyCnt ++;
 						}
  
 						if(result.dbServerConProxyList[k].db_cndt == 'Y'){

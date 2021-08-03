@@ -132,6 +132,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				String sim_query = proxyListener.getString("con_sim_query").replace("select ", "");
 				String field_nm = proxyListener.getString("field_nm");
 				String filed_val = proxyListener.getString("field_val");
+				String bal_yn=proxyListener.getString("bal_yn");
+				String bal_opt=proxyListener.getString("bal_opt");
 				String type_oid="00000017";
 				
 				String confStr = "";
@@ -141,6 +143,11 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 					confStr = util.readTemplateFile("readOnly.cfg", TEMPLATE_DIR);
 				}
 				confStr = confStr.replace("{lsn_nm}", lsn_nm);
+				if(bal_yn.equals("Y")){
+					confStr = confStr.replace("{balance}","balance "+bal_opt);
+				}else{
+					confStr = confStr.replace("\n    {balance}","");
+				}
 				confStr = confStr.replace("{con_bind_port}", bind);
 				confStr = confStr.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
 				confStr = confStr.replace("{db_nm}", db_nm);
@@ -164,6 +171,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				confStr = confStr.replace("{column}", filed_val);
 				confStr = confStr.replace("{column_len}", util.getPacketLength(0,filed_val)); //8자, 패딩 0으로 넣기 
 				confStr = confStr.replace("{packet_len_column}", util.getPacketLength(10,filed_val)); //8자, 패딩 0으로 넣기 
+				
+				//balance roundrobin
 				
 				proxyCfg +="\n"+confStr;
 				

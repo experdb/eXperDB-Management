@@ -298,6 +298,8 @@
 				, FRST_REG_DTM
 				, LST_MDFR_ID
 				, LST_MDF_DTM
+				, BAL_YN
+				, BAL_OPT
 			FROM  T_PRY_LSN_I
 			WHERE
 				PRY_SVR_ID = #{pry_svr_id}::numeric
@@ -338,6 +340,8 @@
 			, FRST_REG_DTM
 			, LST_MDFR_ID
 			, LST_MDF_DTM
+			, BAL_YN
+			, BAL_OPT
 		)
 		SELECT
 			#{lsn_id}::numeric
@@ -355,6 +359,8 @@
 			, clock_timestamp()
 			, #{lst_mdfr_id}
 			, clock_timestamp()
+			, #{bal_yn}
+			, #{bal_opt}
     </insert>
 
 	<update id="updatePryLsnInfo"  parameterType="ProxyListenerVO">
@@ -376,6 +382,8 @@
 			, FIELD_NM = #{field_nm}
 			, LST_MDFR_ID = #{lst_mdfr_id}
 			, LST_MDF_DTM = clock_timestamp()
+			, BAL_YN = #{bal_yn}
+			, BAL_OPT = #{bal_opt}
 	 	WHERE
 	 		LSN_ID = #{lsn_id}::numeric
 	 	AND PRY_SVR_ID = #{pry_svr_id}::numeric
