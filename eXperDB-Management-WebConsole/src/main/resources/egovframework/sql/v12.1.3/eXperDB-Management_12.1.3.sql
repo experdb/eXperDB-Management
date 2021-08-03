@@ -18,3 +18,7 @@ VALUES('TC0043', 'TC004301', 'RoundRobin', 'Y', 'ADMIN', clock_timestamp(), 'ADM
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
 VALUES('TC0043', 'TC004302', 'LeastConn', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'leastconn');
+
+-- trans 모니터링 메뉴 추가
+ALTER TABLE t_usrdbsvraut_i ADD COLUMN trans_mtr_aut_yn bpchar(1) NULL;
+COMMENT ON COLUMN experdb_management.t_usrdbsvraut_i.trans_mtr_aut_yn IS 'connector_모니터링_여부';
