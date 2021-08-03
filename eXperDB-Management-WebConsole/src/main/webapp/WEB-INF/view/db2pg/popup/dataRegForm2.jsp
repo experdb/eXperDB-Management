@@ -1068,13 +1068,13 @@ function fn_search_tableInfo_mig(){
 															</select>
 														</div>
 														<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-															<input type="text" class="form-control" id="mig_sys_nm_reg" name="mig_sys_nm_reg" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
+															<input type="text" class="form-control" id="mig_sys_nm_reg" name="mig_sys_nm_reg" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>' readonly />
 														</div>
 														<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-															<input type="text" class="form-control" id="mig_ipadr_reg" name="mig_ipadr_reg" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>'  />
+															<input type="text" class="form-control" id="mig_ipadr_reg" name="mig_ipadr_reg" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.ip'/>' readonly />
 														</div>
 														<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
-															<input type="text" class="form-control" id="mig_scm_nm_reg" name="mig_scm_nm_reg" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>'  />
+															<input type="text" class="form-control" id="mig_scm_nm_reg" name="mig_scm_nm_reg" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.schema_Name'/>' readonly />
 														</div>
 														<div class="input-group mb-2 mr-sm-2 col-sm-2">
 															<select class="form-control" name="work" id="mig_object_type_reg" style="height:41px;">
