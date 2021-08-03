@@ -397,10 +397,12 @@ public class ProxyServiceImpl implements ProxyService{
 					int lisnerUserCnt = 0;		//lisnerUser
 					int lisnerDbNmCnt = 0;		//lisnerDBNm
 					int lisnerBindCnt = 0;		//lisnerBind
+					int lisnerBalCnt = 0;		//listenerBalance
 					int lisnerSimQueryCnt1 = 0;	//lisnerSimQuery1
 					int lisnerSimQueryCnt2 = 0;	//lisnerSimQuery2
 					int lisnerFieldNmCnt = 0;	//lisnerFieldNm
 					int lisnerFieldValCnt = 0;	//lisnerFieldVal
+					
 
 					int vipAddCnt = 0;
 					
@@ -470,6 +472,7 @@ public class ProxyServiceImpl implements ProxyService{
 									lisnerVo.setLsn_nm(strtemp.trim());
 									lisnerVoView.setLsn_nm(lisnerVo.getLsn_nm());
 									lisnerBindCnt = size + 2; //리스너 bind
+									lisnerBalCnt = size +3; //리스너 balance
 								}
 							}
 							
@@ -479,6 +482,19 @@ public class ProxyServiceImpl implements ProxyService{
 								lisnerVoView.setCon_bind_port(lisnerVo.getCon_bind_port());
 							}
 							
+							//리스너 balcne setting
+							if (lisnerBalCnt == size) { //bind
+								if(temp.matches(".*balance.*")){//로드 발란싱 옵션 
+									lisnerVo.setBal_yn("Y");
+									lisnerVo.setBal_opt(temp.substring(temp.lastIndexOf(" ")+1, temp.length()));
+								}else{
+									lisnerVo.setBal_yn("N");
+									lisnerVo.setBal_opt("");
+								}
+								lisnerVoView.setBal_yn(lisnerVo.getBal_yn());
+								lisnerVoView.setBal_opt(lisnerVo.getBal_opt());
+							}
+														
 							//리스너 user, 리스너 db_nm
 							if(temp.matches(".*startup message.*")) {
 								lisnerUserCnt = size + 4;  //리스너 user
@@ -522,7 +538,7 @@ public class ProxyServiceImpl implements ProxyService{
 									lisnerVo.setCon_sim_query(temp);
 								} else if (lisnerSimQueryCnt2 == size) { //SimQuery2
 									if (!temp.equals("")) {
-										lisnerVo.setCon_sim_query(lisnerVo.getCon_sim_query() + " " + temp.trim());
+										lisnerVo.setCon_sim_query(lisnerVo.getCon_sim_query() + temp.trim());
 									}
 								} else if (lisnerFieldNmCnt == size) { //field nm
 									lisnerVo.setField_nm(temp);
@@ -608,6 +624,8 @@ public class ProxyServiceImpl implements ProxyService{
 							socketLogger.info("proxy_set.lisnerSvrList.Con_sim_query_" + i + ": " + lisnerSvrList.get(i).getCon_sim_query());	
 							socketLogger.info("proxy_set.lisnerSvrList.Field_nm_" + i + ": " + lisnerSvrList.get(i).getField_nm());	
 							socketLogger.info("proxy_set.lisnerSvrList.Field_val_" + i + ": " + lisnerSvrList.get(i).getField_val());	
+							socketLogger.info("proxy_set.lisnerSvrList.Bal_yn_" + i + ": " + lisnerSvrList.get(i).getBal_yn());	
+							socketLogger.info("proxy_set.lisnerSvrList.Bal_opt_" + i + ": " + lisnerSvrList.get(i).getBal_opt());	
 						}
 					} else {
 						socketLogger.info("proxy_set.lisnerSvrList.Db_usr_id_");	
