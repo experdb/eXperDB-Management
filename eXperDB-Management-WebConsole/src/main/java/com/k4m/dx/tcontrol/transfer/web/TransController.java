@@ -1118,7 +1118,7 @@ public class TransController {
 					transMappVO.setTable_total_cnt("0");
 				}
 
-				//전송대상 테이블 등록
+				//전송대상 테이블 등록 / topic cnt 등록
 				transService.insertTransExrttrgMapp(transMappVO);	
 
 				transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
