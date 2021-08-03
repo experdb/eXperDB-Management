@@ -414,7 +414,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			agentConnectResult = cic.proxyAgentConnectionTest(IP, PORT);
 
 			if (agentConnectResult != null) {
-				System.out.println(agentConnectResult.toString());
+				
 				result_code = agentConnectResult.get("RESULT_CODE").toString();
 				if ("0".equals(result_code)) {
 					agentConn = true;
@@ -502,7 +502,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			//insert 로직 추가
 			if ("reg".equals(reg_mode)) {
 				Map<String, Object> agentParam = new HashMap<String,Object>();
-				System.out.println("ipadr===" + ipadr);
+				
 				agentParam.put("ipadr", ipadr);
 				
 				ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
@@ -728,7 +728,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			
 			for(int i=0; i<delVipcngSize; i++){
 				JSONObject delVipcngJobj = (JSONObject)delVipcngJArray.get(i);
-				System.out.println(delVipcngJobj.toJSONString());
+				
 				delVipConf[i] = new ProxyVipConfigVO();
 				delVipConf[i].setPry_svr_id(prySvrId);
 				delVipConf[i].setVip_cng_id(CommonUtil.getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
@@ -747,7 +747,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			
 			for(int i=0; i<vipcngSize; i++){
 				JSONObject vipcngJobj = (JSONObject)vipcngJArray.get(i);
-				System.out.println(vipcngJobj.toJSONString());
+				
 				vipConf[i] = new ProxyVipConfigVO();
 				vipConf[i].setPry_svr_id(prySvrId);
 				
@@ -820,6 +820,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				listener[i].setField_nm(CommonUtil.getStringOfJsonObj(listenerObj, "field_nm"));
 				listener[i].setField_val(CommonUtil.getStringOfJsonObj(listenerObj, "field_val"));
 				listener[i].setLst_mdfr_id(lst_mdfr_id);
+				listener[i].setBal_yn(CommonUtil.getStringOfJsonObj(listenerObj, "bal_yn"));
+				listener[i].setBal_opt(CommonUtil.getStringOfJsonObj(listenerObj, "bal_opt"));
 				
 				//UPDATE/INSERT PROXY LISTENER
 				proxySettingDAO.insertUpdatePryListener(listener[i]);
