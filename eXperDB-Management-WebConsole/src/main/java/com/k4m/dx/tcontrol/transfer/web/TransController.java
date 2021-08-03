@@ -361,6 +361,10 @@ public class TransController {
 		String resultSebu = "";
 
 		try {	
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0148_02");
@@ -372,7 +376,9 @@ public class TransController {
 				transVOPrm.setTrans_id_Rows(trans_id_Rows);
 				transVOPrm.setTrans_exrt_trg_tb_id_Rows(trans_exrt_trg_tb_id_Rows);
 				transVOPrm.setTrans_active_gbn(trans_active_gbn);
-				
+
+				transVOPrm.setLst_mdfr_id(usr_id);
+
 				resultSebu = transService.deleteTransTotSetting(transVOPrm);
 				
 				if (!"S".equals(resultSebu)) {
@@ -1117,14 +1123,11 @@ public class TransController {
 				if(transMappVO.getTable_total_cnt().equals("") || transMappVO.getSchema_total_cnt().equals(null)){
 					transMappVO.setTable_total_cnt("0");
 				}
-
-				//전송대상 테이블 등록 / topic cnt 등록
-				transService.insertTransExrttrgMapp(transMappVO);	
-
-				transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
-				transService.insertTargetConnectInfo(transVO);	
 				
-				result = "success";
+				transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
+				
+				//전송대상 테이블 등록
+				result = transService.insertTargetConnectInfoTot(transMappVO, transVO);
 			} catch (Exception e) {
 				result = "fail";
 				e.printStackTrace();
@@ -1184,6 +1187,8 @@ public class TransController {
 			serverObj.put(ClientProtocolID.REQ_CMD, strCmd);
 
 			result = cic.trans_topic_List(serverObj,IP,PORT);
+
+			System.out.println("result====" + result);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1296,11 +1301,10 @@ public class TransController {
 					transMappVO.setTable_total_cnt("0");
 				}
 				
-				transService.updateTransExrttrgMapp(transMappVO);	
-				
-				transService.updateTargetConnectInfo(transVO);
-				
-				result = "success";
+				transVO.setTrans_exrt_trg_tb_id(Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id")));
+
+				//전송대상 테이블 수정
+				result = transService.updateTargetConnectInfoTot(transMappVO, transVO);
 			}catch (Exception e) {
 				result = "fail";
 				e.printStackTrace();

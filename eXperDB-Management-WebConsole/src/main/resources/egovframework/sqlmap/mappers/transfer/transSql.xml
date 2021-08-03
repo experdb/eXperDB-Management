@@ -497,7 +497,7 @@
                    ) 
             VALUES
                    (
-                    nextval('q_t_transcng_i_01')
+                    #{trans_id}::numeric
                   , #{kc_ip}
                   , #{kc_port}
                   , #{connect_nm}
@@ -947,4 +947,58 @@
         DELETE FROM T_TRANSCOMCNG_I
          WHERE TRANS_COM_ID = #{trans_com_id}::numeric
 	</delete>
+
+	<update id="updateTransTarTopic"  parameterType="transVO">
+		/**
+	 	* Query ID : updateTransTarTopic
+	 	* Description : TRANS target topic update
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_TOPIC_I
+           SET
+               TAR_TRANS_EXRT_TRG_TB_ID = #{tar_trans_exrt_trg_tb_id}::numeric
+             , TAR_TRANS_ID = #{tar_trans_id}::numeric
+             , TABLE_TOTAL_CNT = 1
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE TOPIC_NM = #{topic_nm}
+	</update>
+	
+	<select id="selectTargetConnectSeq" resultType="int">
+		/**
+	 	*  Query ID : selectTargetConnectSeq
+	 	*  Description : 타겟 커넥터 seq
+	 	*  Author : 변승우
+	 	**/		
+        SELECT nextval('q_t_transcng_i_01')
+	</select>
+
+	<update id="updateTransTarTopicChogihwa"  parameterType="transVO">
+		/**
+	 	* Query ID : updateTransTarTopic
+	 	* Description : TRANS target topic update
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_TOPIC_I
+           SET
+               TAR_TRANS_EXRT_TRG_TB_ID = null
+             , TAR_TRANS_ID = null
+             , TABLE_TOTAL_CNT = 0
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE TAR_TRANS_ID = #{tar_trans_id}::numeric
+	</update>
+
+	<select id="selectTransTopicList" parameterType="transVO" resultType="transVO">
+		/**
+		*  Query ID : selectTransTopicList
+		* Description : trans topic 리스트 조회
+		* Author :
+		**/
+        SELECT
+               TOPIC_ID,
+               TOPIC_NM
+          FROM T_TRANS_TOPIC_I
+         WHERE TAR_TRANS_ID IS NOT NULL
+	</select>
 </mapper>

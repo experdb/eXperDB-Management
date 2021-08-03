@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -17,6 +18,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.service.TransDbmsVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMappVO;
 import com.k4m.dx.tcontrol.transfer.service.TransService;
@@ -534,8 +536,14 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 						transDAO.deleteTransSetting(trans_id);
 					} else {
 						transDAO.deleteTransTargetSetting(trans_id);
+						
+						//target topic 테이블 초기화
+						transVo.setTar_trans_id(trans_id);
+						
+						//기존 topic 연결 초기화
+						transDAO.updateTransTarTopicChogihwa(transVo);
 					}
-					
+
 					if (trans_exrt_trg_tb_id != -1) {
 						// 맵핑 테이블 삭제
 						transDAO.deleteTransExrttrgMapp(trans_exrt_trg_tb_id);
@@ -966,5 +974,115 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * target 전송설정 total 등록
+	 * 
+	 * @param transMappVO, transVO
+	 * @throws Exception
+	 */
+	@Override
+	public String insertTargetConnectInfoTot(TransMappVO transMappVO, TransVO transVO) throws Exception{
+		String result = "success";
+		int tar_trans_id  =0;
+		try{
+			//전송대상 테이블 등록
+			transDAO.insertTransExrttrgMapp(transMappVO);
+			
+			//target trans_id
+			tar_trans_id = transDAO.selectTargetConnectSeq();
+			transVO.setTrans_id(tar_trans_id);
+
+			if (transMappVO != null) {
+				String[] exrt_trg_tb_nm_array = null; //테이블 목록 배열
+				String exrt_trg_tb_nm = transMappVO.getExrt_trg_tb_nm();
+				exrt_trg_tb_nm_array = exrt_trg_tb_nm.split(",");
+				
+				if (exrt_trg_tb_nm_array != null) {
+					transVO.setTar_trans_exrt_trg_tb_id(transVO.getTrans_exrt_trg_tb_id());
+					transVO.setTar_trans_id(transVO.getTrans_id());
+					
+					for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
+						//테이블별
+						String topic_nm = exrt_trg_tb_nm_array[i];
+						transVO.setTopic_nm(topic_nm);
+
+						//TRANS target topic update
+						transDAO.updateTransTarTopic(transVO);
+					}						
+				}
+			}
+			
+			transDAO.insertTargetConnectInfo(transVO);
+
+			result = "success";
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	/**
+	 * target 전송설정 total 수정
+	 * 
+	 * @param transMappVO, transVO
+	 * @throws Exception
+	 */
+	@Override
+	public String updateTargetConnectInfoTot(TransMappVO transMappVO, TransVO transVO) throws Exception{
+		String result = "success";
+		try{
+			//전송대상 테이블 수정
+			transDAO.updateTransExrttrgMapp(transMappVO);
+
+			if (transMappVO != null) {
+				String[] exrt_trg_tb_nm_array = null; //테이블 목록 배열
+				String exrt_trg_tb_nm = transMappVO.getExrt_trg_tb_nm();
+				exrt_trg_tb_nm_array = exrt_trg_tb_nm.split(",");
+				
+				if (exrt_trg_tb_nm_array != null) {
+					transVO.setTar_trans_exrt_trg_tb_id(transVO.getTrans_exrt_trg_tb_id());
+					transVO.setTar_trans_id(transVO.getTrans_id());
+					
+					//기존 topic 연결 초기화
+					transDAO.updateTransTarTopicChogihwa(transVO);
+					
+					for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
+						//테이블별
+						String topic_nm = exrt_trg_tb_nm_array[i];
+						transVO.setTopic_nm(topic_nm);
+						
+						//TRANS target topic update
+						transDAO.updateTransTarTopic(transVO);
+					}						
+				}
+			}
+			
+			transDAO.updateTargetConnectInfo(transVO);
+
+			result = "success";
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	
+	/**
+	 * trans topic 리스트 조회
+	 * 
+	 * @param transVO
+	 * @return List<TransVO>
+	 * @throws Exception
+	 */
+	@Override
+	public List<TransVO> selectTransTopicList(TransVO transVO) throws Exception {
+		System.out.println("===asdasdasd==");
+		return transDAO.selectTransTopicList(transVO);
 	}
 }

@@ -55,6 +55,33 @@ public class TransVO {
 	private String trans_com_cng_gbn;
 	private String trans_com_id_Rows;
 	private String topic_nm;
+	private int tar_trans_exrt_trg_tb_id;
+	private int tar_trans_id;
+	private int topic_id;
+
+	public int getTopic_id() {
+		return topic_id;
+	}
+
+	public void setTopic_id(int topic_id) {
+		this.topic_id = topic_id;
+	}
+
+	public int getTar_trans_id() {
+		return tar_trans_id;
+	}
+
+	public void setTar_trans_id(int tar_trans_id) {
+		this.tar_trans_id = tar_trans_id;
+	}
+
+	public int getTar_trans_exrt_trg_tb_id() {
+		return tar_trans_exrt_trg_tb_id;
+	}
+
+	public void setTar_trans_exrt_trg_tb_id(int tar_trans_exrt_trg_tb_id) {
+		this.tar_trans_exrt_trg_tb_id = tar_trans_exrt_trg_tb_id;
+	}
 
 	public String getTopic_nm() {
 		return topic_nm;
@@ -415,5 +442,7 @@ public class TransVO {
 	public void setExe_status(String exe_status) {
 		this.exe_status = exe_status;
 	}
+	
+	
 
 }
