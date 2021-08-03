@@ -2586,16 +2586,20 @@ function fn_dbMonInfo(result){
 	//Proxy 연결 db
 
 	//제목 및 agent 상태
-		for(var j = 0; j < result.proxyServerByDBSvrId.length; j++){
-			html_db = "";
-			//title
+	for(var j = 0; j < result.proxyServerByDBSvrId.length; j++){
+		html_db = "";
+		//title
 		if (result.proxyServerByDBSvrId[j].pry_svr_nm != "") {
 			$("#db_proxy_nm" + j).html('<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerByDBSvrId[j].pry_svr_nm + '<br/>&nbsp;');
 		}
 
-			if (result.dbServerConProxyList != null && result.dbServerConProxyList.length > 0) {
+		if (result.dbServerConProxyList != null && result.dbServerConProxyList.length > 0) {
+			var standbyCnt = 0;
 			for(var k = 0; k < result.dbServerConProxyList.length; k++){
-
+				if(standbyCnt == 1){
+					standbyCnt = 0;
+					continue;
+				}
 				if (result.proxyServerByDBSvrId[j].pry_svr_id == result.dbServerConProxyList[k].pry_svr_id) {
 
 					html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
@@ -2607,6 +2611,7 @@ function fn_dbMonInfo(result){
 						html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">';
 					} else {
 						html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:10px;padding-top:10px;">';
+						standbyCnt++;
 					}
 
 					if(result.dbServerConProxyList[k].db_cndt == 'Y'){
