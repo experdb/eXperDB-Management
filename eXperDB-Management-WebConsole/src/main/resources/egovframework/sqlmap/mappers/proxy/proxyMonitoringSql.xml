@@ -230,8 +230,8 @@
                     , F.CON_BIND_PORT
                     , F.MASTER_SVR_ID
                     , F.DB_SVR_ID
-                    , CASE WHEN (F.DB_CONN_IP = X.IPADR OR F.DB_CONN_IP=X.INTL_IPADR) AND G.MASTER_GBN = 'M' THEN '1'
-                           WHEN (F.DB_CONN_IP = X.IPADR OR F.DB_CONN_IP=X.INTL_IPADR) AND G.MASTER_GBN = 'S' then '2'
+                    , CASE WHEN (F.DB_CONN_IP = X.IPADR OR (COALESCE(F.DB_CONN_IP,'') != '' AND F.DB_CONN_IP=X.INTL_IPADR)) AND G.MASTER_GBN = 'M' THEN '1'
+                           WHEN (F.DB_CONN_IP = X.IPADR OR (COALESCE(F.DB_CONN_IP,'') != '' AND F.DB_CONN_IP=X.INTL_IPADR)) AND G.MASTER_GBN = 'S' then '2'
                            ELSE NULL
                        END AS DB_CONN_IP_NUM
                  FROM (
