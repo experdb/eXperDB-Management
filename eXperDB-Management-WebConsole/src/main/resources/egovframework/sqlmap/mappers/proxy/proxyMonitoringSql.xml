@@ -153,8 +153,8 @@
                       JOIN T_AGTCNDT_I TAI ON TDI.IPADR = TAI.IPADR
                 WHERE (TPSI.PRY_SVR_ID = #{pry_svr_id}::numeric
                        OR TPSI.MASTER_SVR_ID = #{pry_svr_id}::numeric)
-                       AND (TDI.MASTER_GBN = 'M' OR (TDI.MASTER_GBN = 'S' AND TDI.DB_SVR_ID = (
-                                                                                               SELECT MIN(DB_SVR_ID) as DB_SVR_ID
+                       AND (TDI.MASTER_GBN = 'M' OR (TDI.MASTER_GBN = 'S' AND TDI.DB_SVR_IPADR_ID = (
+                                                                                               SELECT MIN(A.DB_SVR_IPADR_ID) as DB_SVR_IPADR_ID
                                                                                                  FROM T_DBSVRIPADR_I A 
                                                                                                 WHERE A.DB_SVR_ID = (SELECT DB_SVR_ID 
                                                                                                                        FROM T_PRY_SVR_I 
