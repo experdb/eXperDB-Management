@@ -49,6 +49,7 @@
 		var html = "";
 		var master_gbn = "";
 		var db_svr_id = "";
+		var pry_cnt = "";
 		var listCnt = 0;
 		var db_svr_id_val = "";
 		
@@ -79,14 +80,14 @@
 					html += "	<div class='card news_text'>\n";
 					html += '		<div class="card-body" id="serverSs'+ rowCount +'" onClick="fn_serverSebuInfo(' + db_svr_id_val + ', '+ rowCount +')" style="cursor:pointer;">\n';
 					html += '			<div class="row">\n';
-				} else if (db_svr_id != nvlPrmSet("${serverinfo.db_svr_id}", '')  && master_gbn == "M") {
+				} else if (db_svr_id != db_svr_id_val  && master_gbn == "M") {
 					html += '				</div>\n';
 					html += '			</div>\n';
 					html += '			<div class="col-sm-3" style="margin:auto; text-align:center;">\n';
 					html += '				<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" id="iDatabase' + db_svr_id_val + '" style="font-size: 3.0em;"></i>\n';
 					
 					if("${proxy_menu_yn}" == "Y"){
-						if("${proxy_yn}" == "Y" && "${serverinfo.pry_cnt}" != "0"){
+						if("${proxy_yn}" == "Y" && pry_cnt != "0"){
 							html += '					<div class="badge badge-primary badge-pill" style="margin-top:5px;"><i class="mdi mdi-server-network menu-icon"></i>&nbsp;Proxy</div>\n';
 						}
 					}
@@ -161,8 +162,8 @@
 					html += '</div>\n';
 					
 				}
-				db_svr_id = nvlPrmSet("${serverinfo.db_svr_id}", '') ;
-	
+				db_svr_id = db_svr_id_val ;
+				pry_cnt = "${serverinfo.pry_cnt}";
 			</c:forEach>
 		}
 
