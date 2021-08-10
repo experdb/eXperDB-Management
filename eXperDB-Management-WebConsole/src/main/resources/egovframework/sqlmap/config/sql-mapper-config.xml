@@ -134,6 +134,7 @@
 		
 		<!-- transfer -->
 		<mapper resource="egovframework/sqlmap/mappers/transfer/transSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/transfer/transMonitoringSql.xml"/>
 		
 		<!-- experdb backup -->
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
