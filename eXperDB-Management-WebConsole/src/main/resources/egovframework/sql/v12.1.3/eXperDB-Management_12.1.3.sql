@@ -58,6 +58,7 @@ CREATE TABLE experdb_management.t_trans_topic_i (
   	tar_trans_id numeric NULL, -- 타겟_전송_아이디
 	table_total_cnt numeric NULL, -- 전송대상테이블수
  	src_topic_use_yn varchar(1) NOT NULL DEFAULT 'N', -- 소스_토픽_사용여부
+    write_use_yn varchar(1) NOT NULL DEFAULT 'Y', -- 등록 사용여부
 	frst_regr_id varchar(30) NULL, -- 최초_등록자_ID
 	frst_reg_dtm timestamp NOT NULL, -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,
@@ -75,6 +76,7 @@ COMMENT ON COLUMN experdb_management.t_trans_topic_i.src_trans_id IS '소스_전
 COMMENT ON COLUMN experdb_management.t_trans_topic_i.tar_trans_id IS '타겟_전송_아이디';
 COMMENT ON COLUMN experdb_management.t_trans_topic_i.table_total_cnt IS '전송대상테이블수';
 COMMENT ON COLUMN experdb_management.t_trans_topic_i.src_topic_use_yn IS '소스_토픽_사용여부';
+COMMENT ON COLUMN experdb_management.t_trans_topic_i .write_use_yn IS '등록_사용_여부';
 COMMENT ON COLUMN experdb_management.t_trans_topic_i.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_trans_topic_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_trans_topic_i.lst_mdfr_id IS '최종_수정자_ID';
