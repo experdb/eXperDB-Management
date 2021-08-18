@@ -494,4 +494,52 @@ public class TransDAO extends EgovAbstractMapper{
 		sl = (List<TransVO>) list("transSQL.selectTransTopicList",transVO);
 		return sl;
 	}
+
+	/**
+	 * 소스시스템 topic 삭제
+	 * 
+	 * @param trans_id
+	 * @return 
+	 * @throws 
+	 */
+	public void deleteTransTopicSetting(int trans_id) {
+		delete("transSQL.deleteTransTopicSetting",trans_id);	
+	}
+	
+	/**
+	 * trans 타겟 전송관리 테이블 조회
+	 * 
+	 * @param transVO
+	 * @return List<Map<String, Object>>
+	 * @throws 
+	 */
+	public List<TransVO> selectTranExrtTrgList(TransVO transVO) {
+		List<TransVO>  sl = null;
+		sl = (List<TransVO>) list("transSQL.selectTranExrtTrgList",transVO);
+		return sl;
+	}
+	
+	/**
+	 * trans topic 리스트  조회
+	 * 
+	 * @param transVO
+	 * @return List<TransVO>
+	 * @throws 
+	 */
+	public List<TransVO> selectTranIdTopicList(TransVO transVO) {
+		List<TransVO>  sl = null;
+		sl = (List<TransVO>) list("transSQL.selectTranIdTopicList",transVO);
+		return sl;
+	}
+
+	/**
+	 * trans 타겟 전송관리 테이블 수정
+	 * 
+	 * @param transDbmsVO
+	 * @throws Exception
+	 */
+	public void updateTranExrtTrgInfo(TransVO transVO) {
+		update("transSQL.updateTranExrtTrgInfo", transVO);
+	}
+
 }

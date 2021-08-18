@@ -438,6 +438,7 @@ public class TransController {
 		
 		String result_code = "";
 		int sucCnt = 0;
+		int sucCnt_no = 0;
 
 		if (request.getParameter("trans_id_List") != null) {
 			trans_id_Rows = request.getParameter("trans_id_List").toString().replaceAll("&quot;", "\"");
@@ -506,18 +507,26 @@ public class TransController {
 	
 						resultSs = transService.transStop(transVOPrm);
 					}
-	
+	System.out.println("=======resultSs===" + resultSs);
 					if (resultSs != null && "success".equals(resultSs)) {
 					//	result_code = connStartResult.get("RESULT_CODE").toString();
 					//	if ("0".equals(result_code)) {
 							//result = "success";
 							sucCnt = sucCnt + 1;
 					//	}
+					} else if (resultSs != null && "no_depth".equals(resultSs)) {
+						sucCnt = sucCnt + 1;
+						sucCnt_no = sucCnt_no + 1;
 					}
 				}
 				
 				if (sucCnt == trans_exrt_trg_tb_ids.size() ) {
-					result = "success";
+					if (sucCnt_no <= 0) {
+						result = "success";
+					} else {
+						result = "no_depth";
+					}
+					
 				} else {
 					result = "fail";
 				}

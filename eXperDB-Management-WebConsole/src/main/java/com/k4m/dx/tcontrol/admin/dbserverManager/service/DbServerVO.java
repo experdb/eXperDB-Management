@@ -25,7 +25,14 @@ public class DbServerVO {
 	private String db_cndt;
 	private String db_nm;
 	private String db_exp;
+	private String svr_spr_scm_pwd_old;
 
+	public String getSvr_spr_scm_pwd_old() {
+		return svr_spr_scm_pwd_old;
+	}
+	public void setSvr_spr_scm_pwd_old(String svr_spr_scm_pwd_old) {
+		this.svr_spr_scm_pwd_old = svr_spr_scm_pwd_old;
+	}
 	public String getDb_exp() {
 		return db_exp;
 	}

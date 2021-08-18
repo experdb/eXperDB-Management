@@ -1001,4 +1001,51 @@
           FROM T_TRANS_TOPIC_I
          WHERE TAR_TRANS_ID IS NOT NULL
 	</select>
+	
+    <delete id="deleteTransTopicSetting" parameterType="int">
+    	/**
+	 	* Query ID : deleteTransTopicSetting
+	 	* Description : 데이터전송 topic 설정 삭제
+	 	* Author : 변승우
+	 	**/
+        DELETE FROM T_TRANS_TOPIC_I
+         WHERE SRC_TRANS_ID = #{trans_id}
+    </delete>
+    
+	<select id="selectTranExrtTrgList" parameterType="transVO" resultType="transVO">
+    	/**
+	 	* Query ID : selectTranExrtTrgList
+	 	* Description : 소스 전송관리 테이블 조회
+	 	* Author : 
+	 	**/
+       SELECT TRANS_EXRT_TRG_TB_ID, EXRT_TRG_TB_NM
+         FROM T_TRANS_EXRTTRG_MAPP
+        WHERE TRANS_EXRT_TRG_TB_ID IN (SELECT TAR_TRANS_EXRT_TRG_TB_ID
+                                         FROM T_TRANS_TOPIC_I
+                                        WHERE SRC_TRANS_ID = #{trans_id}::numeric
+                                      )
+	</select>
+
+	<select id="selectTranIdTopicList" parameterType="transVO" resultType="transVO">
+		/**
+		*  Query ID : selectTranIdTopicList
+		* Description : trans topic 리스트 조회
+		* Author :
+		**/
+        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, A.KC_IP, A.KC_PORT
+          FROM T_TRANSCNG_I A
+               JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.SRC_TRANS_ID
+         WHERE A.TRANS_ID = #{trans_id}::numeric
+	</select>
+
+    <update id="updateTranExrtTrgInfo"  parameterType="TransVO">
+    	/**
+	 	* Query ID : updateTransSrcTopic
+	 	* Description : source connect 활성화 topic 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_EXRTTRG_MAPP
+           SET EXRT_TRG_TB_NM = #{exrt_trg_tb_nm}
+        WHERE TRANS_EXRT_TRG_TB_ID = #{trans_exrt_trg_tb_id}::numeric
+    </update>
 </mapper>

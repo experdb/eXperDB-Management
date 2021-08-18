@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -18,7 +17,6 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
-import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.service.TransDbmsVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMappVO;
 import com.k4m.dx.tcontrol.transfer.service.TransService;
@@ -325,7 +323,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 
-			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd_old()));
 
 			//전송정보 조회
 			transInfo = transDAO.selectTransInfo(trans_id);
@@ -394,11 +392,14 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			connStartResult = cic.connectStop(IP, PORT, strCmd, trans_id, trans_active_gbn);
-			
+System.out.println("connStartResult=========================" + connStartResult);
 			if (connStartResult != null) {
+				System.out.println("connStartResult=========123123================" + connStartResult.get("RESULT_CODE").toString());
 				result_code = connStartResult.get("RESULT_CODE").toString();
 				if ("0".equals(result_code)) {
 					result = "success";
+				} else if ("-1".equals(result_code)) {
+					result = "no_depth";
 				} else {
 					result = "fail";
 				}
@@ -491,6 +492,8 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 	@Override
 	public void deleteTransSetting(int trans_id) throws Exception {
 		transDAO.deleteTransSetting(trans_id);		
+		
+		transDAO.deleteTransTopicSetting(trans_id);
 	}
 	
 	/**
@@ -533,7 +536,12 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 
 					// 데이터전송 삭제
 					if ("del".equals(transVo.getTrans_active_gbn())) {
+						//연결되어있는 타겟전송테이블 정리
+						updateTranExrtTrgList(trans_id);
+
 						transDAO.deleteTransSetting(trans_id);
+						
+						transDAO.deleteTransTopicSetting(trans_id);
 					} else {
 						transDAO.deleteTransTargetSetting(trans_id);
 						
@@ -555,6 +563,59 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			e.printStackTrace();
 		}
 
+		return result;
+	}
+	
+	/**
+	 * trans 소스 전송관리 등록
+	 * 
+	 * @param connect_nm
+	 * @return int
+	 * @throws Exception 
+	 */
+	public String updateTranExrtTrgList(int trans_id) throws Exception {
+		String result = "success";
+		String tb_nm = "";
+		try {
+			TransVO searchTransVO = new TransVO();
+			searchTransVO.setTrans_id(trans_id);
+			
+			List<TransVO> tblTableList = transDAO.selectTranExrtTrgList(searchTransVO); // 전송관리 테이블 조회
+			List<TransVO> topicTableList = transDAO.selectTranIdTopicList(searchTransVO); // topic 테이블 조회
+
+			if (tblTableList.size() > 0 && topicTableList.size() > 0) {
+				for(int i=0; i<tblTableList.size(); i++){
+					String[] exrt_trg_tb_nm_arr = tblTableList.get(i).getExrt_trg_tb_nm().split(",");
+					
+					for(int j=0; j<exrt_trg_tb_nm_arr.length; j++){
+						for(int h=0; h<topicTableList.size(); h++){
+							tb_nm = "";
+							if (exrt_trg_tb_nm_arr[j].equals(topicTableList.get(h).getTopic_nm())) {
+								tb_nm += "";
+							} else {
+								tb_nm += exrt_trg_tb_nm_arr[j];
+								
+								if (j != topicTableList.size() -1) {
+									tb_nm += ",";
+								}
+							}
+						}
+					}
+
+					TransVO insTransVO = new TransVO();
+					insTransVO.setTrans_exrt_trg_tb_id(tblTableList.get(i).getTrans_exrt_trg_tb_id());
+					insTransVO.setExrt_trg_tb_nm(tb_nm);
+					
+					transDAO.updateTranExrtTrgInfo(insTransVO);
+				}
+			}
+
+			result = "success";
+		} catch (Exception e) {
+			result = "failed";
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 	

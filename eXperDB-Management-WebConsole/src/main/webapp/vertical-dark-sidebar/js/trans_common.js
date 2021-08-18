@@ -263,6 +263,11 @@ function fn_act_execute(act_gbn) {
 				} else {
 					if (result == "success") {
 						fn_tot_select();
+					} else if (result == "no_depth") {
+						validateMsg = data_transfer_msg34;
+						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+						$("input:checkbox[id='" + checkId + "']").prop("checked", true);
+						return;
 					} else {
 						validateMsg = data_transfer_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
@@ -580,6 +585,10 @@ function fn_tot_act_execute(exeGbn){
 				} else {
 					if (result == "success") {
 						showSwalIcon(data_transfer_msg16, closeBtn, '', 'success');
+						fn_tot_select();
+					} else if (result == "no_depth") {
+						validateMsg = data_transfer_msg35;
+						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						fn_tot_select();
 					} else {
 						validateMsg = data_transfer_msg10;

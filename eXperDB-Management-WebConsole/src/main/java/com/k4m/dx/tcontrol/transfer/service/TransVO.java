@@ -58,6 +58,15 @@ public class TransVO {
 	private int tar_trans_exrt_trg_tb_id;
 	private int tar_trans_id;
 	private int topic_id;
+	private String exrt_trg_tb_nm;
+
+	public String getExrt_trg_tb_nm() {
+		return exrt_trg_tb_nm;
+	}
+
+	public void setExrt_trg_tb_nm(String exrt_trg_tb_nm) {
+		this.exrt_trg_tb_nm = exrt_trg_tb_nm;
+	}
 
 	public int getTopic_id() {
 		return topic_id;
