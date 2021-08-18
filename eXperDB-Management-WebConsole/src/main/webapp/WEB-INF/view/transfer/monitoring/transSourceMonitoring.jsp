@@ -37,8 +37,27 @@
 				"emptyTable" : '<spring:message code="message.msg01" />'
 			},
 			columns : [
-					{data : "schema_nm", className : "dt-center", defaultContent : ""}, 
-					{data : "table_nm", className : "dt-center", defaultContent : ""}	
+					{data : "schema_nm", 
+						render : function(data, type, full, meta){
+							var html = "";
+// 							html += full.exrt_trg_tb_nm.split('.')[0];
+							html += '	<i class="fa fa-power-off mr-2"></i>' + data;
+							return html;
+						}, 
+						className : "dt-center", 
+						defaultContent : ""
+					}, 
+					{data : "table_nm", 
+						render : function(data, type, full, meta){
+							var html = "";
+							html += '<div class="badge badge-pill badge-light" style="background-color: #EEEEEE;">';
+							html += '	<i class="fa fa-power-off mr-2"></i>' + data;
+// 							html += '		' + data.split('.')[1] + '</div>';
+							return html;
+						}, 
+						className : "dt-center", 
+						defaultContent : ""
+					},	
 			]
 		});
 		
@@ -62,10 +81,30 @@
 			},
 			columns : [
 					{data : "connect_nm", className : "dt-center", defaultContent : ""}, 
-					{data : "database_nm", className : "dt-center", defaultContent : ""},	
-					{data : "metadata", className : "dt-center", defaultContent : ""},	
+					{data : "db_nm", className : "dt-center", defaultContent : ""},	
+					{data : "meta_data", 
+						render : function(data, type, full, meta){
+							var html = "";
+							html += '<div class="badge badge-pill badge-light" style="background-color: #EEEEEE;">';
+							html += '	<i class="fa fa-power-off mr-2"></i>';
+							html += '		' + data + '</div>';
+							return html;
+						}, 
+						className : "dt-center", 
+						defaultContent : ""
+					},	
 					{data : "snapshot_mode", className : "dt-center", defaultContent : ""},	
-					{data : "compression_type", className : "dt-center", defaultContent : ""}	
+					{data : "compression_type", 
+						render : function(data, type, full, meta){
+							var html = "";
+							html += '<div class="badge badge-light" style="background-color: transparent !important;">';
+							html += '	<i class="fa fa-file-zip-o text-success mr-2"></i>';
+							html += '		' + data + '</div>';
+							return html;
+						},
+						className : "dt-center", 
+						defaultContent : ""
+					}	
 			]
 		});
 		
@@ -235,14 +274,6 @@
 			$("#server-tab-2").addClass("active");
 			$("#server-tab-1").removeClass("active");
 			
-// 			setTimeout(function(){
-// 				if(vipInstTable != null){
-// 					vipInstTable.columns.adjust().draw();
-// 				}
-// 				if(proxyListenTable != null){
-// 					proxyListenTable.columns.adjust().draw();
-// 				}
-// 			},100);  
 		}
 	}
 	
@@ -343,6 +374,7 @@
 		});
 		
 	}
+
 	
 	
 </script>
@@ -498,25 +530,25 @@
 													<th width="500" class="dt-center" >압축형태</th>	
 												</tr>
 											</thead>
-											<tbody>
-												<tr>
-													<td>inventory-connector
-													</td>
-													<td>inventory</td>
-													<td>
-														<div class="badge badge-pill badge-light" style="background-color: #EEEEEE;">	
-															<i class="fa fa-power-off mr-2"></i>
-															OFF
-														</div>
-													</td>
-													<td>NEVER </td>
-													<td>
-														<div class="badge badge-light" style="background-color: transparent !important;">	
-															<i class="fa fa-file-zip-o text-success mr-2"></i>GZIP
-														</div>
-													</td>
-												</tr>
-											</tbody>
+<!-- 											<tbody> -->
+<!-- 												<tr> -->
+<!-- 													<td>inventory-connector -->
+<!-- 													</td> -->
+<!-- 													<td>inventory</td> -->
+<!-- 													<td> -->
+<!-- 														<div class="badge badge-pill badge-light" style="background-color: #EEEEEE;">	 -->
+<!-- 															<i class="fa fa-power-off mr-2"></i> -->
+<!-- 															OFF -->
+<!-- 														</div> -->
+<!-- 													</td> -->
+<!-- 													<td>NEVER </td> -->
+<!-- 													<td> -->
+<!-- 														<div class="badge badge-light" style="background-color: transparent !important;">	 -->
+<!-- 															<i class="fa fa-file-zip-o text-success mr-2"></i>GZIP -->
+<!-- 														</div> -->
+<!-- 													</td> -->
+<!-- 												</tr> -->
+<!-- 											</tbody> -->
 										</table>
 									</div>
 								</div>
@@ -542,13 +574,13 @@
 													<th width="100" class="dt-center" >스키마명</th>
 													<th width="500" class="dt-center" >테이블명</th>	
 												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>experdb</td>
-													<td>dumb_table</td>
-												</tr>
-											</tbody>
+<!-- 											</thead> -->
+<!-- 											<tbody> -->
+<!-- 												<tr> -->
+<!-- 													<td>experdb</td> -->
+<!-- 													<td>dumb_table</td> -->
+<!-- 												</tr> -->
+<!-- 											</tbody> -->
 										</table>
 									</div>
 								</div>

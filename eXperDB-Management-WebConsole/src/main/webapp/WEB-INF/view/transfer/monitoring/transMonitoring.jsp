@@ -24,66 +24,113 @@
 %>
 
 <script type="text/javascript">
-/* ********************************************************
- * 화면 onload
- ******************************************************** */
-$(window).ready(function(){
-	//금일 날짜 setting
-	fn_todaySetting();
+	/* ********************************************************
+	 * 화면 onload
+	 ******************************************************** */
+	$(window).ready(function(){
+		//금일 날짜 setting
+		fn_todaySetting();
 	
-	// 소스 chart init
-	fn_src_chart_init();
+		// 소스 chart init
+		fn_src_chart_init();
 	
-	// 소스 snapshot init
-	fn_src_snapshot_init();
+		// 소스 snapshot init
+		fn_src_snapshot_init();
 	
-	// 소스 streaming init
-	fn_src_streaming_init();
+		// 소스 streaming init
+		fn_src_streaming_init();
 	
-	// 소스 connect setting info init
-	fn_src_setting_info_init();
+		// 소스 connect setting info init
+		fn_src_setting_info_init();
 	
-	// 소스 connect mapping table init
-	fn_src_mapping_list_init();
+		// 소스 connect mapping table init
+		fn_src_mapping_list_init();
 	
-	// 소스 connect init
-	fn_src_connect_init();
+		// 소스 connect init
+		fn_src_connect_init();
 	
-	// 소스 error 리스트 init
-	fn_src_error_init();
+		// 소스 error 리스트 init
+		fn_src_error_init();
 	
-	// 타겟 connect 토픽 리스트 init
-	fn_tar_topic_list_init();
+		// 타겟 connect 토픽 리스트 init
+		fn_tar_topic_list_init();
+		
+		// 타겟 connect 리스트 init
+		fn_tar_connect_init();
 	
-	// 타겟 connect 리스트 init
-	fn_tar_connect_init();
+		// 타겟 error 리스트 init
+		fn_tar_error_init();
 	
-	// 타겟 error 리스트 init
-	fn_tar_error_init();
-	
-	// 타겟 chart init
-	fn_sink_chart_init();
-});
+		// 타겟 chart init
+		fn_sink_chart_init();
+	});
 
-/* ********************************************************
- * 화면시작 오늘날짜 셋팅
- ******************************************************** */
-function fn_todaySetting() {
-	today = new Date();
-	var today_date = new Date();
+	/* ********************************************************
+	 * 화면시작 오늘날짜 셋팅
+ 	******************************************************** */
+	function fn_todaySetting() {
+		today = new Date();
+		var today_date = new Date();
 
-	var today_ing = today.toJSON().slice(0,10).replace(/-/g,'-');
-	var dayOfMonth = today.getDate();
-	today_date.setDate(dayOfMonth - 7);
+		var today_ing = today.toJSON().slice(0,10).replace(/-/g,'-');
+		var dayOfMonth = today.getDate();
+		today_date.setDate(dayOfMonth - 7);
 
-	var html = "<i class='fa fa-calendar menu-icon'></i> "+today_ing;
+		var html = "<i class='fa fa-calendar menu-icon'></i> "+today_ing;
 
-	$( "#tot_src_connect_his_today" ).append(html);	
-	$( "#tot_src_error_his_today" ).append(html);	
-	$( "#tot_tar_dbms_his_today" ).append(html);	
-	$( "#tot_tar_connect_his_today" ).append(html);	
-	$( "#tot_tar_error_his_today" ).append(html);	
-}
+		$( "#tot_src_connect_his_today" ).append(html);	
+		$( "#tot_src_error_his_today" ).append(html);	
+		$( "#tot_tar_dbms_his_today" ).append(html);	
+		$( "#tot_tar_connect_his_today" ).append(html);	
+		$( "#tot_tar_error_his_today" ).append(html);	
+	}
+
+	function fn_srcConnectInfo() {
+		var langSelect = document.getElementById("src_connect");
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		
+		$.ajax({
+			url : "/transSrcConnectInfo",
+			dataType : "json",
+			type : "post",
+ 			data : {
+ 				trans_id : selectValue,
+ 			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					$('#table_cnt').html(result.table_cnt);
+					srcConnectSettingInfoTable.clear().draw();
+					if (nvlPrmSet(result.connectInfo, '') != '') {
+						srcConnectSettingInfoTable.rows.add(result.connectInfo).draw();
+					}
+					srcMappingListTable.clear().draw();
+					if (nvlPrmSet(result.table_name_list, '') != '') {
+						srcMappingListTable.rows.add(result.table_name_list).draw();
+					}
+					srcSnapshotTable.clear().draw();
+					if (nvlPrmSet(result.snapshotInfo, '') != '') {
+						srcSnapshotTable.rows.add(result.snapshotInfo).draw();
+					}
+				}
+				
+			}
+		});
+		
+		
+		
+	}
 
 </script>
 
@@ -228,13 +275,13 @@ function fn_todaySetting() {
 										<div class="card-body">
 											<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
 												source connect <br/>
-												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="" id="" onChange="" tabindex=1>
+												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="src_connect" id="src_connect" onChange="fn_srcConnectInfo()" tabindex=1>
 													<option value="">소스 Connector</option>
 													<c:forEach var="srcConnectorList" items="${srcConnectorList}">
 														<option value="${srcConnectorList.trans_id}">${srcConnectorList.connect_nm}</option>							
 													</c:forEach>
 												</select>
-												: 연결 table 수 <br/>
+												: 연결 table 수<p id="table_cnt"></p> <br/>
 												: 폴링 된 총 레코드 수  <br/>
 												: 오류 수
 											</div>
