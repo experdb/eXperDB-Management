@@ -13,7 +13,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
-import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.service.TransServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
@@ -80,10 +79,10 @@ public class DxT038 extends SocketCtl{
 	   	TransVO searchTransVO = new TransVO();
 
 		try {
-			if (trans_com_id == null || "".equals(trans_com_id)) {
+			if (trans_com_id == null || "".equals(trans_com_id) || "null".equals(trans_com_id)) {
 				trans_com_id = "1";
 			}
-			
+
 			searchTransVO.setTrans_com_id(trans_com_id);
 			commonInfo = transService.selectTransComSettingInfo(searchTransVO); //기본사항 조회
 			
@@ -236,23 +235,56 @@ public class DxT038 extends SocketCtl{
 						exrt_trg_tb_nm = objMAPP_INFO.get("EXRT_TRG_TB_NM").toString();
 						exrt_trg_tb_nm_array = exrt_trg_tb_nm.split(",");
 					}
+					socketLogger.info("[MSG]exrt_trg_tb_nm_array.length " + exrt_trg_tb_nm_array.length);
 					
+					//기존 토픽리스트 조회 후 데이터 가 있는 경우
+					List<TransVO> topicTableList = transService.selectTranIdTopicList(transVO); // topic 테이블 조회
+
+					
+			//		transService.deleteTransTopic(transVO);
+
 					if (exrt_trg_tb_nm_array != null) {
 						for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
 							String tb_nm = exrt_trg_tb_nm_array[i];
-							
+							int overLabCnt = 0;
+
 							if ("Y".equals(soucreTransformYN)) { //table 이름만 topic명
 								topicNm = tb_nm.trim().substring(tb_nm.trim().lastIndexOf(".") + 1 , tb_nm.trim().length());
 							} else {
-								topicNm += objCONNECT_INFO.get("CONNECT_NM").toString() + "." + tb_nm;
+								topicNm = objCONNECT_INFO.get("CONNECT_NM").toString() + "." + tb_nm;
 							}
-							
+							socketLogger.info("[MSG]trans_id " + trans_id);
+							socketLogger.info("[MSG]topicNm " + topicNm);
 							transVO.setTopic_nm(topicNm);	
 							
-							//topic 테이블 등록
-							transService.updateTransExe(transVO);
-						}						
+							if (topicTableList.size() > 0) {
+								for(int j=0;j < topicTableList.size();j++) {
+									if (topicTableList.get(j).getTopic_nm().equals(topicNm)) {
+										overLabCnt = overLabCnt + 1;
+									}
+								}
+								
+								if (overLabCnt > 0) {
+									transVO.setSrc_topic_use_yn("Y");
+									transVO.setWrite_use_yn("Y");
+									
+									//topic 테이블 수정
+									transService.updateTransTopic(transVO);
+									
+								} else {
+									//topic 테이블 등록
+									transService.insertTransTopic(transVO);
+								}
+							} else {
+								//topic 테이블 등록
+								transService.insertTransTopic(transVO);
+							}
+						}					
 					}
+					
+					//이전  topic 삭제
+					transVO.setWrite_use_yn("N");
+					transService.deleteTransTopic(transVO);
 
 					transService.updateTransExe(transVO);
 				} else {

@@ -22,7 +22,7 @@
 	 	* Author :
 	 	**/         
         UPDATE T_TRANSCNG_TARGET_I
-           SET EXE_STATUS = #{exe_status}
+           SET EXE_STATUS = #{exe_status},
            	   LST_MDF_DTM = clock_timestamp()
          WHERE 1 = 1
            AND TRANS_ID = #{trans_id}
@@ -68,19 +68,39 @@
 		]]>
 	</select>
 
+    <update id="updateTransTopic"  parameterType="TransVO">
+    	/**
+	 	* Query ID : updateTransTopic
+	 	* Description : source connect 활성화 topic 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_TOPIC_I
+           SET SRC_TOPIC_USE_YN = #{src_topic_use_yn}
+             , WRITE_USE_YN = #{write_use_yn}
+             , TAR_TRANS_ID = COALESCE(TAR_TRANS_ID, (SELECT MAX(B.TAR_TRANS_ID) FROM T_TRANS_TOPIC_I B WHERE B.TOPIC_NM = TOPIC_NM AND B.TOPIC_ID != TOPIC_ID))
+             , TAR_TRANS_EXRT_TRG_TB_ID = COALESCE(TAR_TRANS_EXRT_TRG_TB_ID, (SELECT MAX(B.TAR_TRANS_EXRT_TRG_TB_ID) FROM T_TRANS_TOPIC_I B WHERE B.TOPIC_NM = TOPIC_NM AND B.TOPIC_ID != TOPIC_ID))
+             , LST_MDFR_ID = 'system'
+             , LST_MDF_DTM = clock_timestamp()
+        WHERE SRC_TRANS_ID = #{trans_id}::numeric
+    </update>
+
     <insert id="insertTransTopic"  parameterType="TransVO">
     	/**
 	 	* Query ID : insertTransTopic
 	 	* Description : source connect 활성화 topic 등록
 	 	* Author : 
 	 	**/
-        INSERT INTO T_TRANS_TOPIC
+        INSERT INTO T_TRANS_TOPIC_I
                     (
                      TOPIC_ID,
                      TOPIC_NM, 
                      SRC_TRANS_EXRT_TRG_TB_ID, 
                      SRC_TRANS_ID, 
                      TABLE_TOTAL_CNT, 
+                     SRC_TOPIC_USE_YN,
+                     WRITE_USE_YN,
+                     TAR_TRANS_ID,
+                     TAR_TRANS_EXRT_TRG_TB_ID,
                      FRST_REGR_ID, 
                      FRST_REG_DTM, 
                      LST_MDFR_ID, 
@@ -89,15 +109,172 @@
                     SELECT
                            nextval('q_t_transcng_i_01'),
                            #{topic_nm},
-                           (SELECT COALESCE(TRANS_EXRT_EXCT_TB_ID,0) FROM  T_TRANSCNG_I WHERE TRANS_ID = #{trans_id} LIMIT 1),
+                           (SELECT COALESCE(trans_exrt_trg_tb_id,0) FROM  T_TRANSCNG_I WHERE TRANS_ID = #{trans_id} LIMIT 1),
                            #{trans_id},
                            (select COALESCE(table_total_cnt,0)
                              from t_trans_exrttrg_mapp
-                            where trans_exrt_trg_tb_id = (SELECT COALESCE(TRANS_EXRT_EXCT_TB_ID,0) FROM  T_TRANSCNG_I WHERE TRANS_ID = #{trans_id} LIMIT 1)
+                            where trans_exrt_trg_tb_id = (SELECT COALESCE(trans_exrt_trg_tb_id,0) FROM  T_TRANSCNG_I WHERE TRANS_ID = #{trans_id} LIMIT 1)
                             LIMIT 1),
+                           'Y',
+                           'Y',
+                           (SELECT MAX(TAR_TRANS_ID) FROM T_TRANS_TOPIC_I WHERE TOPIC_NM = #{topic_nm}),
+                           (SELECT MAX(TAR_TRANS_EXRT_TRG_TB_ID) FROM T_TRANS_TOPIC_I WHERE TOPIC_NM = #{topic_nm}),
                            'system',
                            clock_timestamp(),
                            'system',
                            clock_timestamp()
     </insert>
+	
+	<select id="selectTranIdTopicList" parameterType="TransVO" resultType="TransVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectTranIdTopicList
+	 	* Description : trans id별 topic 조회
+	 	* Author : 
+	 	**/
+        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, A.KC_IP, A.KC_PORT
+          FROM T_TRANSCNG_I A
+               JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.SRC_TRANS_ID
+         WHERE A.TRANS_ID = #{trans_id}::numeric
+		]]>
+	</select>
+	
+    <delete id="deleteTransTopic"  parameterType="TransVO">
+    	/**
+	 	* Query ID : deleteTransTopic
+	 	* Description : source connect 활성화 topic 삭제
+	 	* Author : 
+	 	**/
+        DELETE FROM T_TRANS_TOPIC_I
+        WHERE SRC_TRANS_ID = #{trans_id}
+        
+         <if test="write_use_yn != null and write_use_yn != '' ">
+           AND WRITE_USE_YN = #{write_use_yn}
+         </if>
+        
+    </delete>
+ 	
+	<select id="selectTranIdTopicTotCnt" parameterType="TransVO" resultType="TransVO">
+    	/**
+	 	* Query ID : selectTranIdTopicTotCnt
+	 	* Description : topic 상세 카운트 조회
+	 	* Author : 
+	 	**/
+        SELECT COALESCE(SUM(TAR_TRANS_ID_CNT), 0) AS TAR_TRANS_ID_CNT,
+               COALESCE(SUM(TOPIC_OVERLAP_CNT), 0) AS TOPIC_OVERLAP_CNT,
+               COALESCE(SUM(TOPIC_OVERLAP_SRC_ING_CNT), 0) AS TOPIC_OVERLAP_SRC_ING_CNT,
+               COALESCE(SUM(TOPIC_OVERLAP_TAR_CNT), 0) AS TOPIC_OVERLAP_TAR_CNT,
+               COALESCE(SUM(TAR_TOPIC_OVERLAP_ING_CNT), 0) AS TAR_TOPIC_OVERLAP_ING_CNT,
+               COALESCE(SUM(TAR_TOPIC_ING_CNT), 0) AS TAR_TOPIC_ING_CNT
+          FROM (
+               SELECT CASE WHEN F.TAR_TRANS_ID IS NOT NULL THEN 1
+                           ELSE 0
+                       END TAR_TRANS_ID_CNT,
+                      F.SRC_TOPIC_USE_YN, 
+                      F.TOPIC_OVERLAP_CNT, 
+                      F.TOPIC_OVERLAP_SRC_ING_CNT, 
+                      F.TOPIC_OVERLAP_TAR_CNT, 
+                      F.TAR_TOPIC_OVERLAP_ING_CNT,
+                      CASE WHEN G.EXE_STATUS = 'TC001501' THEN 1
+                           ELSE 0
+                       END AS TAR_TOPIC_ING_CNT  
+                 FROM (
+                      SELECT A.TOPIC_ID, 
+                             A.TOPIC_NM, 
+                             A.SRC_TRANS_ID, 
+                             A.TAR_TRANS_ID, 
+                             A.SRC_TOPIC_USE_YN, 
+                             COALESCE(B.TOPIC_OVERLAP_CNT, 0) AS TOPIC_OVERLAP_CNT,
+                             COALESCE(C.TOPIC_OVERLAP_SRC_ING_CNT, 0) AS TOPIC_OVERLAP_SRC_ING_CNT,
+                             COALESCE(D.TOPIC_OVERLAP_TAR_CNT, 0) AS TOPIC_OVERLAP_TAR_CNT,
+                             COALESCE(E.TAR_TOPIC_OVERLAP_ING_CNT, 0) AS TAR_TOPIC_OVERLAP_ING_CNT
+                        FROM T_TRANS_TOPIC_I A
+                             LEFT JOIN (SELECT TOPIC_NM, COUNT(TOPIC_NM) AS TOPIC_OVERLAP_CNT 
+                                          FROM T_TRANS_TOPIC_I 
+                                         WHERE TOPIC_NM IN (SELECT TOPIC_NM
+                                                              FROM T_TRANS_TOPIC_I
+                                                             WHERE SRC_TRANS_ID = #{trans_id}::numeric)
+                                           AND SRC_TRANS_ID != #{trans_id}::numeric
+                                         GROUP BY TOPIC_NM
+                             ) B ON A.TOPIC_NM = B.TOPIC_NM
+                             LEFT JOIN (SELECT TOPIC_NM, COUNT(TOPIC_NM) AS TOPIC_OVERLAP_SRC_ING_CNT
+                                          FROM T_TRANS_TOPIC_I 
+                                         WHERE TOPIC_NM IN (SELECT TOPIC_NM
+                                                              FROM T_TRANS_TOPIC_I
+                                                             WHERE SRC_TRANS_ID = #{trans_id}::numeric)
+                                           AND SRC_TRANS_ID != #{trans_id}::numeric
+                                           AND SRC_TOPIC_USE_YN ='Y'
+                                         GROUP BY TOPIC_NM
+                             ) C ON A.TOPIC_NM = C.TOPIC_NM
+                             LEFT JOIN (SELECT TOPIC_NM, COUNT(TOPIC_NM) AS TOPIC_OVERLAP_TAR_CNT 
+                                          FROM T_TRANS_TOPIC_I 
+                                         WHERE TOPIC_NM IN (SELECT TOPIC_NM
+                                                              FROM T_TRANS_TOPIC_I
+                                                             WHERE SRC_TRANS_ID = #{trans_id}::numeric)
+                                           AND SRC_TRANS_ID != #{trans_id}::numeric
+                                           AND TAR_TRANS_ID IS NOT NULL
+                                         GROUP BY TOPIC_NM
+                             ) D ON A.TOPIC_NM = D.TOPIC_NM
+                             LEFT JOIN (SELECT C.TOPIC_NM, SUM(TAR_TOPIC_ING_CNT) AS TAR_TOPIC_OVERLAP_ING_CNT
+                                          FROM (
+                                               SELECT A.TOPIC_NM, CASE WHEN B.EXE_STATUS = 'TC001501' THEN 1
+                                                                       ELSE 0
+                                                                   END AS TAR_TOPIC_ING_CNT
+                                                 FROM (
+                                                       SELECT TOPIC_NM, SRC_TRANS_ID
+                                                         FROM T_TRANS_TOPIC_I 
+                                                        WHERE TOPIC_NM IN (SELECT TOPIC_NM
+                                                                             FROM T_TRANS_TOPIC_I
+                                                                            WHERE SRC_TRANS_ID = #{trans_id}::numeric)
+                                                          AND SRC_TRANS_ID != #{trans_id}::numeric
+                                                          AND TAR_TRANS_ID IS NOT NULL
+                                                 ) A
+                                                 LEFT JOIN T_TRANSCNG_I B ON A.SRC_TRANS_ID = B.TRANS_ID
+                                          ) C
+                                          GROUP BY C.TOPIC_NM
+                             ) E ON A.TOPIC_NM = E.TOPIC_NM
+                       WHERE SRC_TRANS_ID = #{trans_id}::numeric
+                 ) F
+                 LEFT JOIN T_TRANSCNG_TARGET_I G ON F.TAR_TRANS_ID = G.TRANS_ID
+          ) G
+	</select>
+
+    <update id="updateTransSrcTopic"  parameterType="TransVO">
+    	/**
+	 	* Query ID : updateTransSrcTopic
+	 	* Description : source connect 활성화 topic 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_TOPIC_I
+           SET SRC_TOPIC_USE_YN = #{src_topic_use_yn}
+             , WRITE_USE_YN = #{write_use_yn}
+             , LST_MDFR_ID = 'system'
+             , LST_MDF_DTM = clock_timestamp()
+        WHERE SRC_TRANS_ID = #{trans_id}::numeric
+    </update>
+ 	
+	<select id="selectTranExrtTrgList" parameterType="TransVO" resultType="TransVO">
+    	/**
+	 	* Query ID : selectTranExrtTrgList
+	 	* Description : 소스 전송관리 테이블 조회
+	 	* Author : 
+	 	**/
+       SELECT TRANS_EXRT_TRG_TB_ID, EXRT_TRG_TB_NM
+         FROM T_TRANS_EXRTTRG_MAPP
+        WHERE TRANS_EXRT_TRG_TB_ID IN (SELECT TAR_TRANS_EXRT_TRG_TB_ID
+                                         FROM T_TRANS_TOPIC_I
+                                        WHERE SRC_TRANS_ID = #{trans_id}::numeric
+                                      )
+	</select>
+
+    <update id="updateTranExrtTrgInfo"  parameterType="TransVO">
+    	/**
+	 	* Query ID : updateTransSrcTopic
+	 	* Description : source connect 활성화 topic 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_EXRTTRG_MAPP
+           SET EXRT_TRG_TB_NM = #{exrt_trg_tb_nm}
+        WHERE TRANS_EXRT_TRG_TB_ID = #{trans_exrt_trg_tb_id}::numeric
+    </update>
 </mapper>

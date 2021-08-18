@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.db.repository.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,39 @@ public class TransDAO {
 	public void insertTransTopic(TransVO vo) throws Exception  {
 		 session.insert("trans.insertTransTopic", vo);
 	}
-	
+
+	//tran id 별 topic 리스트 조회
+	public List<TransVO> selectTranIdTopicList(TransVO vo) throws Exception {
+		return (List) session.selectList("trans.selectTranIdTopicList", vo);
+	}
+
+	//topic list 삭제
+	public void deleteTransTopic(TransVO vo) throws Exception  {
+		 session.insert("trans.deleteTransTopic", vo);
+	}
+
+	//topic 상세 count 조회
+	public List<TransVO> selectTranIdTopicTotCnt(TransVO vo) throws Exception {
+		return (List) session.selectList("trans.selectTranIdTopicTotCnt", vo);
+	}
+
+	//source topic list 수정
+	public void updateTransSrcTopic(TransVO vo) throws Exception  {
+		 session.insert("trans.updateTransSrcTopic", vo);
+	}
+
+	//소스 전송관리 테이블 조회
+	public List<TransVO> selectTranExrtTrgList(TransVO vo) throws Exception {
+		return (List) session.selectList("trans.selectTranExrtTrgList", vo);
+	}
+
+	//소스 전송관리 테이블 수정
+	public void updateTranExrtTrgInfo(TransVO vo) throws Exception  {
+		 session.insert("trans.updateTranExrtTrgInfo", vo);
+	}
+
+	//source topic list 수정
+	public void updateTransTopic(TransVO vo) throws Exception  {
+		 session.insert("trans.updateTransTopic", vo);
+	}
 }

@@ -22,6 +22,141 @@ public class TransVO {
 	private String topic_nm;
 	private String start_gbn;
 	private String topic_gbn;
+	private int topic_id;
+	private int kc_port;
+	private String kc_ip;
+	private int src_trans_id;
+	private int tar_trans_id;
+	private String src_topic_use_yn;
+	private int topic_overlap_cnt;
+	private int topic_overlap_src_ing_cnt;
+	private int topic_overlap_tar_cnt;
+	private int tar_topic_overlap_ing_cnt;
+	private int tar_topic_ing_cnt;
+	private int tar_trans_id_cnt;
+	private String exrt_trg_tb_nm;
+	private int trans_exrt_trg_tb_id;
+	private String write_use_yn;
+	
+	public String getWrite_use_yn() {
+		return write_use_yn;
+	}
+
+	public void setWrite_use_yn(String write_use_yn) {
+		this.write_use_yn = write_use_yn;
+	}
+
+	public String getExrt_trg_tb_nm() {
+		return exrt_trg_tb_nm;
+	}
+
+	public void setExrt_trg_tb_nm(String exrt_trg_tb_nm) {
+		this.exrt_trg_tb_nm = exrt_trg_tb_nm;
+	}
+
+	public int getTrans_exrt_trg_tb_id() {
+		return trans_exrt_trg_tb_id;
+	}
+
+	public void setTrans_exrt_trg_tb_id(int trans_exrt_trg_tb_id) {
+		this.trans_exrt_trg_tb_id = trans_exrt_trg_tb_id;
+	}
+
+	public int getTar_trans_id_cnt() {
+		return tar_trans_id_cnt;
+	}
+
+	public void setTar_trans_id_cnt(int tar_trans_id_cnt) {
+		this.tar_trans_id_cnt = tar_trans_id_cnt;
+	}
+
+	public int getSrc_trans_id() {
+		return src_trans_id;
+	}
+
+	public void setSrc_trans_id(int src_trans_id) {
+		this.src_trans_id = src_trans_id;
+	}
+
+	public int getTar_trans_id() {
+		return tar_trans_id;
+	}
+
+	public void setTar_trans_id(int tar_trans_id) {
+		this.tar_trans_id = tar_trans_id;
+	}
+
+	public String getSrc_topic_use_yn() {
+		return src_topic_use_yn;
+	}
+
+	public void setSrc_topic_use_yn(String src_topic_use_yn) {
+		this.src_topic_use_yn = src_topic_use_yn;
+	}
+
+	public int getTopic_overlap_cnt() {
+		return topic_overlap_cnt;
+	}
+
+	public void setTopic_overlap_cnt(int topic_overlap_cnt) {
+		this.topic_overlap_cnt = topic_overlap_cnt;
+	}
+
+	public int getTopic_overlap_src_ing_cnt() {
+		return topic_overlap_src_ing_cnt;
+	}
+
+	public void setTopic_overlap_src_ing_cnt(int topic_overlap_src_ing_cnt) {
+		this.topic_overlap_src_ing_cnt = topic_overlap_src_ing_cnt;
+	}
+
+	public int getTopic_overlap_tar_cnt() {
+		return topic_overlap_tar_cnt;
+	}
+
+	public void setTopic_overlap_tar_cnt(int topic_overlap_tar_cnt) {
+		this.topic_overlap_tar_cnt = topic_overlap_tar_cnt;
+	}
+
+	public int getTar_topic_overlap_ing_cnt() {
+		return tar_topic_overlap_ing_cnt;
+	}
+
+	public void setTar_topic_overlap_ing_cnt(int tar_topic_overlap_ing_cnt) {
+		this.tar_topic_overlap_ing_cnt = tar_topic_overlap_ing_cnt;
+	}
+
+	public int getTar_topic_ing_cnt() {
+		return tar_topic_ing_cnt;
+	}
+
+	public void setTar_topic_ing_cnt(int tar_topic_ing_cnt) {
+		this.tar_topic_ing_cnt = tar_topic_ing_cnt;
+	}
+
+	public int getKc_port() {
+		return kc_port;
+	}
+
+	public void setKc_port(int kc_port) {
+		this.kc_port = kc_port;
+	}
+
+	public String getKc_ip() {
+		return kc_ip;
+	}
+
+	public void setKc_ip(String kc_ip) {
+		this.kc_ip = kc_ip;
+	}
+
+	public int getTopic_id() {
+		return topic_id;
+	}
+
+	public void setTopic_id(int topic_id) {
+		this.topic_id = topic_id;
+	}
 
 	public String getTopic_gbn() {
 		return topic_gbn;

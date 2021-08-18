@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.db.repository.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -23,7 +24,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 *      </pre>
 */
 
-@Service("TrnasService")
+@Service("TransService")
 public class TransServiceImpl implements TransService{
 
 	@Resource(name = "TransDAO")
@@ -53,5 +54,47 @@ public class TransServiceImpl implements TransService{
 	public void insertTransTopic(TransVO transVO)  throws Exception{
 		transDAO.insertTransTopic(transVO);
 	}
-	
+
+	/* tran id 별 topic 리스트 조회 */
+	public List<TransVO> selectTranIdTopicList(TransVO vo) throws Exception {
+		return transDAO.selectTranIdTopicList(vo);
+	}
+
+	/* topic list 삭제 */
+	public void deleteTransTopic(TransVO vo)  throws Exception{
+		if (vo != null) {
+			transDAO.deleteTransTopic(vo);
+		}
+	}
+
+	/* topic 상세 카운트 조회 */
+	public List<TransVO> selectTranIdTopicTotCnt(TransVO vo) throws Exception {
+		return transDAO.selectTranIdTopicTotCnt(vo);
+	}
+
+	/* source topic list 수정 */
+	public void updateTransSrcTopic(TransVO vo)  throws Exception{
+		if (vo != null) {
+			transDAO.updateTransSrcTopic(vo);
+		}
+	}
+
+	/* 소스 전송관리 테이블 조회 */
+	public List<TransVO> selectTranExrtTrgList(TransVO vo) throws Exception {
+		return transDAO.selectTranExrtTrgList(vo);
+	}
+
+	/* 소스 전송관리 테이블  수정 */
+	public void updateTranExrtTrgInfo(TransVO vo)  throws Exception{
+		if (vo != null) {
+			transDAO.updateTranExrtTrgInfo(vo);
+		}
+	}
+
+	/* source topic list 수정 */
+	public void updateTransTopic(TransVO vo)  throws Exception{
+		if (vo != null) {
+			transDAO.updateTransTopic(vo);
+		}
+	}
 }
