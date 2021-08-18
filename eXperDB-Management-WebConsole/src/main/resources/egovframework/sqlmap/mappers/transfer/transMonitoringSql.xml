@@ -41,8 +41,71 @@
 			(
 			 SELECT TRANS_EXRT_TRG_TB_ID 
 			 FROM T_TRANSCNG_I TTI 
-			 WHERE TRANS_ID = {trans_id}::numeric
+			 WHERE TRANS_ID = #{trans_id}::numeric
 			)
+	</select>
+	
+	<select id="selectSourceSnapshotChart" resultType="hashMap">
+		/**
+		* Query ID : selectSourceSnapshotChart
+		* Description : 소스 Connector snapshot 차트
+		* Author : 윤정
+		**/
+		SELECT 
+			CONNECTOR_SRC_NAME
+			, NUMBER_OF_EVENTS_FILTERED
+			, NUMBER_OF_ERRONEOUS_EVENTS
+		FROM CDC_DBSERVER_SNAPSHOT
+		WHERE CONNECTOR_SRC_NAME = (
+									SELECT 
+										TTTI.CONNECT_NM 
+									FROM T_TRANSCNG_TARGET_I TTTI 
+									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+									)
+		ORDER BY TIME DESC
+		LIMIT 5
+	</select>
+	
+	<select id="selectSourceSnapshotInfo" resultType="hashMap">
+		/**
+		* Query ID : selectSourceSnapshotInfo
+		* Description : 소스 Connector snapshot 정보 테이블
+		* Author : 윤정
+		**/
+		SELECT 
+			(ROW_NUMBER() OVER()) AS ROWNUM 
+ 		    , (ROW_NUMBER() OVER()) AS IDX
+			, CONNECTOR_SRC_NAME
+			, NUMBER_OF_EVENTS_FILTERED
+			, NUMBER_OF_ERRONEOUS_EVENTS
+			, QUEUE_TOTAL_CAPACITY
+			, QUEUE_REMAINING_CAPACITY
+			, REMAINING_TABLE_COUNT
+		FROM CDC_DBSERVER_SNAPSHOT
+		WHERE CONNECTOR_SRC_NAME = (
+									SELECT 
+										TTTI.CONNECT_NM 
+									FROM T_TRANSCNG_TARGET_I TTTI 
+									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+									)
+		ORDER BY TIME DESC
+		LIMIT 2
+	</select>
+	
+	<select id="selectSourceConnectInfo" resultType="hashMap">
+		/**
+		* Query ID : selectSourceConnectInfo
+		* Description : 소스 Connect 정보
+		* Author : 윤정
+		**/
+		SELECT 
+			TTI.CONNECT_NM
+			, TDI.DB_NM
+			, TTI.META_DATA 
+			, (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTI.SNAPSHOT_MODE) AS SNAPSHOT_MODE 
+			, (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTI.COMPRESSION_TYPE) AS COMPRESSION_TYPE 
+		FROM T_TRANSCNG_I TTI JOIN T_DB_I TDI ON TTI.DB_ID = TDI.DB_ID 
+		WHERE TTI.TRANS_ID = #{trans_id}::numeric
 	</select>
 
 </mapper>

@@ -20,4 +20,12 @@ public class TransMonitoringDAO extends EgovAbstractMapper{
 		return selectOne("transMonitoringSql.selectSourceConnectorTableList", trans_id);
 	}
 
+	public List<Map<String, Object>> selectSourceConnectInfo(int trans_id) {
+		return selectList("transMonitoringSql.selectSourceConnectInfo", trans_id);
+	}
+
+	public List<Map<String, Object>> selectSourceSnapshotInfo(int trans_id) {
+		return selectList("transMonitoringSql.selectSourceSnapshotInfo", trans_id);
+	}
+
 }

@@ -9,4 +9,8 @@ public interface TransMonitoringService {
 
 	public Map<String, Object> selectSourceConnectorTableList(int trans_id);
 
+	public List<Map<String, Object>> selectSourceConnectInfo(int trans_id);
+
+	public List<Map<String, Object>> selectSourceSnapshotInfo(int trans_id);
+
 }

@@ -26,6 +26,16 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	public Map<String, Object> selectSourceConnectorTableList(int trans_id) {
 		return transMonitoringDAO.selectSourceConnectorTableList(trans_id);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectSourceConnectInfo(int trans_id) {
+		return transMonitoringDAO.selectSourceConnectInfo(trans_id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectSourceSnapshotInfo(int trans_id) {
+		return transMonitoringDAO.selectSourceSnapshotInfo(trans_id);
+	}
 	
 	
 }
