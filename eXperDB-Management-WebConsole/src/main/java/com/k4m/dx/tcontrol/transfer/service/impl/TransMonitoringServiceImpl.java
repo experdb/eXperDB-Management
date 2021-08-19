@@ -33,9 +33,40 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	}
 
 	@Override
+	public List<Map<String, Object>> selectSourceSnapshotChart(int trans_id) {
+		return transMonitoringDAO.selectSourceSnapshotChart(trans_id);
+	}
+
+	@Override
 	public List<Map<String, Object>> selectSourceSnapshotInfo(int trans_id) {
 		return transMonitoringDAO.selectSourceSnapshotInfo(trans_id);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectSourceChart_1(int trans_id) {
+		return transMonitoringDAO.selectSourceChart_1(trans_id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectSourceChart_2(int trans_id) {
+		return transMonitoringDAO.selectSourceChart_2(trans_id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectSourceErrorChart(int trans_id) {
+		return transMonitoringDAO.selectSourceErrorChart(trans_id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectSourceErrorInfo(int trans_id) {
+		return transMonitoringDAO.selectSourceErrorInfo(trans_id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectTargetConnectList(int trans_id) {
+		return transMonitoringDAO.selectTargetConnectList(trans_id);
+	}
+
 	
 	
 }

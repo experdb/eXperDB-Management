@@ -111,6 +111,13 @@
 			success : function(result) {
 				if (result != null) {
 					$('#table_cnt').html(result.table_cnt);
+					$('#tar_connector_list').empty();
+					$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
+					if (nvlPrmSet(result.targetConnectorList, '') != '') {
+						for (i = 0; i < result.targetConnectorList.length; i++) {
+		                    $('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+		            	}
+					}
 					srcConnectSettingInfoTable.clear().draw();
 					if (nvlPrmSet(result.connectInfo, '') != '') {
 						srcConnectSettingInfoTable.rows.add(result.connectInfo).draw();
@@ -119,17 +126,64 @@
 					if (nvlPrmSet(result.table_name_list, '') != '') {
 						srcMappingListTable.rows.add(result.table_name_list).draw();
 					}
+					if (nvlPrmSet(result.snapshotChart, '') != '') {
+						snapshotChart.setData(result.snapshotChart);
+					}
 					srcSnapshotTable.clear().draw();
 					if (nvlPrmSet(result.snapshotInfo, '') != '') {
 						srcSnapshotTable.rows.add(result.snapshotInfo).draw();
+					}
+					if (nvlPrmSet(result.sourceChart1, '') != '') {
+						srcChart1.setData(result.sourceChart1);
+					}
+					if (nvlPrmSet(result.sourceChart2, '') != '') {
+						srcChart2.setData(result.sourceChart1);
+					}
+					if (nvlPrmSet(result.sourceErrorChart, '') != '') {
+						srcErrorChart.setData(result.sourceErrorChart);
+					}
+					srcErrorTable.clear().draw();
+					if (nvlPrmSet(result.sourceErrorInfo, '') != '') {
+						srcErrorTable.rows.add(result.sourceErrorinfo).draw();
 					}
 				}
 				
 			}
 		});
+	}
+	
+	function fn_tarConnectInfo(){
+		var langSelect = document.getElementById("tar_connector_list");
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
 		
+		console.log('tar : ' + selectValue);
 		
-		
+		$.ajax({
+			url : "/transTarConnectInfo",
+			dataType : "json",
+			type : "post",
+ 			data : {
+ 				trans_id : selectValue,
+ 			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					
+				}
+				
+			}
+		});
 	}
 
 </script>
@@ -303,8 +357,11 @@
 										<div class="card-body">
 											<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
 												sink connect <br/>
-												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-4" style="margin-right: 1rem;" name="" id="" onChange="" tabindex=1>
+												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-4" style="margin-right: 1rem;" name="tar_connector_list" id="tar_connector_list" onChange="fn_tarConnectInfo()" tabindex=1>
 													<option value="">타겟 Connector</option>
+<%-- 													<c:forEach var="tarConnectorList" items="${targetConnectorList}"> --%>
+<%-- 														<option value="${tarConnectorList.trans_id}">${tarConnectorList.connect_nm}</option>							 --%>
+<%-- 													</c:forEach> --%>
 												</select>
 												: 소스 연결 connect 수 / topic 수 <br/>
 												: 완료 총 수 <br/>

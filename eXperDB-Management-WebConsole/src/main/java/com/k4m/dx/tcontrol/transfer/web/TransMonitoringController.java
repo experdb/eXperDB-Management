@@ -94,6 +94,8 @@ public class TransMonitoringController {
 //		JSONObject connectInfo = new JSONObject();
 		// 연결 테이블수(split 후 count), 
 		Map<String, Object> tableList = transMonitoringService.selectSourceConnectorTableList(trans_id);
+		
+		
 		List<Map<String, Object>> connectInfo = transMonitoringService.selectSourceConnectInfo(trans_id);
 		String[] tableNmList = tableList.get("exrt_trg_tb_nm").toString().split(",");
 		List<Map<String, Object>> table_name_list = new ArrayList<Map<String, Object>>(); 
@@ -110,14 +112,40 @@ public class TransMonitoringController {
 			table_name_list.add(temp);
 		}
 		
+		List<Map<String, Object>> snapshotChart = transMonitoringService.selectSourceSnapshotChart(trans_id);
 		List<Map<String, Object>> snapshotInfo = transMonitoringService.selectSourceSnapshotInfo(trans_id);
+		List<Map<String, Object>> sourceChart1 = transMonitoringService.selectSourceChart_1(trans_id);
+		List<Map<String, Object>> sourceChart2 = transMonitoringService.selectSourceChart_2(trans_id);
+		List<Map<String, Object>> sourceErrorChart = transMonitoringService.selectSourceErrorChart(trans_id);
+		List<Map<String, Object>> sourceErrorInfo = transMonitoringService.selectSourceErrorInfo(trans_id);
+		
+		List<Map<String, Object>> targetConnectorList = transMonitoringService.selectTargetConnectList(trans_id);
+
 		mv.addObject("table_cnt", tableNmList.length);
 		mv.addObject("connectInfo", connectInfo);
 		mv.addObject("table_name_list", table_name_list);
+		mv.addObject("snapshotChart", snapshotChart);
 		mv.addObject("snapshotInfo", snapshotInfo);
+		mv.addObject("sourceChart1", sourceChart1);
+		mv.addObject("sourceChart2", sourceChart2);
+		mv.addObject("sourceErrorChart", sourceErrorChart);
+		mv.addObject("sourceErrorInfo", sourceErrorInfo);
+		mv.addObject("targetConnectorList", targetConnectorList);
 		// 폴링 레코드 / 오류수 연결된 sink connector list
 		return mv;
 	}
 	
+	/**
+	 * trans 모니터링 타겟 connector info
+	 * 
+	 * @param historyVO,request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/transTarConnectInfo")
+	public ModelAndView transTarConnectInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		return mv;
+	}
 	
 }

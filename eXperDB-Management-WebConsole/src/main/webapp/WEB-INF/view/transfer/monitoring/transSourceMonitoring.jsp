@@ -23,6 +23,12 @@
 	var srcConnectTable = "";
 	var srcErrorTable = "";
 	var srcMappingListTable = "";
+	var snapshotChart = "";
+	var streamingChart = "";
+	var streamingChart = "";
+	var srcChart1 = "";
+	var srcChart2 = "";
+	var srcErrorChart = "";
 	
 	function fn_src_mapping_list_init(){
 		srcMappingListTable = $('#srcMappingListTable').DataTable({
@@ -37,32 +43,13 @@
 				"emptyTable" : '<spring:message code="message.msg01" />'
 			},
 			columns : [
-					{data : "schema_nm", 
-						render : function(data, type, full, meta){
-							var html = "";
-// 							html += full.exrt_trg_tb_nm.split('.')[0];
-							html += '	<i class="fa fa-power-off mr-2"></i>' + data;
-							return html;
-						}, 
-						className : "dt-center", 
-						defaultContent : ""
-					}, 
-					{data : "table_nm", 
-						render : function(data, type, full, meta){
-							var html = "";
-							html += '<div class="badge badge-pill badge-light" style="background-color: #EEEEEE;">';
-							html += '	<i class="fa fa-power-off mr-2"></i>' + data;
-// 							html += '		' + data.split('.')[1] + '</div>';
-							return html;
-						}, 
-						className : "dt-center", 
-						defaultContent : ""
-					},	
+					{data : "schema_nm", className : "dt-center", defaultContent : ""}, 
+					{data : "table_nm", className : "dt-center", defaultContent : ""},	
 			]
 		});
 		
-		srcMappingListTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px'); // rownum
-		srcMappingListTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // proxy server id
+		srcMappingListTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px'); // schema name
+		srcMappingListTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // table name
 	
 		$(window).trigger('resize');
 	}
@@ -108,11 +95,11 @@
 			]
 		});
 		
-		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px'); // rownum
-		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // proxy server id
-		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // proxy server id
-		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // proxy server id
-		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // proxy server id
+		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px'); // connect name
+		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // database name
+		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // metadata
+		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // snapshot mode
+		srcConnectSettingInfoTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // compression type
 	
 		$(window).trigger('resize');
 	}
@@ -140,13 +127,13 @@
 			]
 		});
 		
-		srcSnapshotTable.tables().header().to$().find('th:eq(0)').css('min-width', '100px'); // rownum
-		srcSnapshotTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // proxy server id
-		srcSnapshotTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // proxy server name
-		srcSnapshotTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // success or fail
-		srcSnapshotTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // first reg date
-		srcSnapshotTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px'); // first reg date
-		srcSnapshotTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px'); // first reg date
+		srcSnapshotTable.tables().header().to$().find('th:eq(0)').css('min-width', '100px'); // connector source name
+		srcSnapshotTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // time
+		srcSnapshotTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // number_of_events_filtered
+		srcSnapshotTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // number_of_erroneous_events
+		srcSnapshotTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // queue_total_capacity
+		srcSnapshotTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px'); // queue_remaining_capacity
+		srcSnapshotTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px'); // remaining_table_count
 	
 		$(window).trigger('resize');
 	}
@@ -175,14 +162,14 @@
 			]
 		});
 		
-		srcStreamingTable.tables().header().to$().find('th:eq(0)').css('min-width', '100px'); // rownum
-		srcStreamingTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // proxy server id
-		srcStreamingTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // proxy server name
-		srcStreamingTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // success or fail
-		srcStreamingTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // first reg date
-		srcStreamingTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px'); // first reg date
-		srcStreamingTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px'); // first reg date
-		srcStreamingTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px'); // first reg date
+		srcStreamingTable.tables().header().to$().find('th:eq(0)').css('min-width', '100px'); // connector source name
+		srcStreamingTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // time
+		srcStreamingTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // last transaction id
+		srcStreamingTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // number of committed transactions
+		srcStreamingTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // total number of events
+		srcStreamingTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px'); // number of events filtered
+		srcStreamingTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px'); // number of erroneous events
+		srcStreamingTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px'); // milliseconds since last event
 	
 		$(window).trigger('resize');
 	}
@@ -279,25 +266,25 @@
 	
 	function fn_src_chart_init(){
 		
-		var snapshotChart = Morris.Line({
+		snapshotChart = Morris.Line({
 			element: 'src-chart-line-snapshot',
 			lineColors: ['#63CF72', '#FABA66',],
 			data: [
 					{
-					exe_dtm_ss: '2021-06-10 10:20:35',
+					time: '',
 					number_of_events_filtered : 0,
 					number_of_erroneous_events : 0,
 					}
 			],
-			xkey: 'exe_dtm_ss',
-			xkeyFormat: function(exe_dtm_ss) {
-				return exe_dtm_ss.substring(10);
+			xkey: 'time',
+			xkeyFormat: function(time) {
+				return time.substring(10);
 			},
 			ykeys: ['number_of_events_filtered', 'number_of_erroneous_events'],
 			labels: ['필터링 된 이벤트 수', '오류 난 이벤트 수']
 		});
 		
-		var streamingChart = Morris.Line({
+		streamingChart = Morris.Line({
 			element: 'src-chart-line-streaming',
 			lineColors: ['#63CF72', '#FABA66','#F36368'],
 			data: [
@@ -316,58 +303,58 @@
 			labels: ['이벤트 총 수','필터링 된 이벤트 수', '오류 난 이벤트 수']
 		});
 
-		var scrChart1 = Morris.Line({
+		srcChart1 = Morris.Line({
 			element: 'src-chart-line-1',
 			lineColors: ['#63CF72', '#FABA66','#F36368'],
 			data: [
 					{
-					exe_dtm_ss: '2021-06-10 10:20:35',
-					source_record_write_total : 0,
-					source_record_poll_total : 0,
-					source_record_active_count : 0,
+						time: '',
+						source_record_write_total : 0,
+						source_record_poll_total : 0,
+						source_record_active_count : 0,
 					}
 			],
-			xkey: 'exe_dtm_ss',
-			xkeyFormat: function(exe_dtm_ss) {
-				return exe_dtm_ss.substring(10);
+			xkey: 'time',
+			xkeyFormat: function(time) {
+				return time.substring(10);
 			},
 			ykeys: ['source_record_write_total', 'source_record_poll_total', 'source_record_active_count'],
 			labels: ['kafka에 기록된 레코드 수','폴링 된 총 레코드 수', 'kafka에 기록되지 않은 레코드 수']
 		});
 		
-		var srcChart2 = Morris.Line({
+		srcChart2 = Morris.Line({
 			element: 'src-chart-line-2',
 			lineColors: ['#63CF72', '#FABA66','#F36368'],
 			data: [
 					{
-					exe_dtm_ss: '2021-06-10 10:20:35',
+					time: '',
 					source_record_write_rate : 0,
 					source_record_active_count_avg : 0,
 					}
 			],
-			xkey: 'exe_dtm_ss',
-			xkeyFormat: function(exe_dtm_ss) {
-				return exe_dtm_ss.substring(10);
+			xkey: 'time',
+			xkeyFormat: function(time) {
+				return time.substring(10);
 			},
 			ykeys: ['source_record_write_rate', 'source_record_active_count_avg'],
 			labels: ['kafka에 기록된 초당 평균 레코드 수','kafka에 기록되지 않은 평균 레코드 수']
 		});
 		
-		var srcErrorChart = Morris.Line({
+		srcErrorChart = Morris.Line({
 			element: 'src-chart-line-error',
 			lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
 			data: [
 					{
-					exe_dtm_ss: '2021-06-10 10:20:35',
+					time: '',
 					total_record_errors: 0,
 					total_record_failures: 0,
 					total_records_skipped: 0,
 					total_retries : 0
 					}
 			],
-			xkey: 'exe_dtm_ss',
-			xkeyFormat: function(exe_dtm_ss) {
-				return exe_dtm_ss.substring(10);
+			xkey: 'time',
+			xkeyFormat: function(time) {
+				return time.substring(10);
 			},
 			ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped', 'total_retries'],
 			labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수', '재시도 작업 수']

@@ -108,4 +108,106 @@
 		WHERE TTI.TRANS_ID = #{trans_id}::numeric
 	</select>
 
+	<select id="selectSourceChart_1" resultType="hashMap">
+		/**
+		* Query ID : selectSourceChart_1
+		* Description : 소스 Connect 실시간 chart1
+		* Author : 윤정
+		**/
+		SELECT 
+			TIME
+			, SOURCE_RECORD_WRITE_TOTAL
+			, SOURCE_RECORD_POLL_TOTAL
+			, SOURCE_RECORD_ACTIVE_COUNT
+		FROM CDC_CONNECTOR_TASK_SRC
+		WHERE CONNECTOR_NAME = (
+								SELECT 
+									TTTI.CONNECT_NM 
+								FROM T_TRANSCNG_TARGET_I TTTI 
+								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+								)
+		ORDER BY TIME DESC LIMIT 5;
+	</select>
+	
+	<select id="selectSourceChart_2" resultType="hashMap">
+		/**
+		* Query ID : selectSourceChart_2
+		* Description : 소스 Connect 실시간 chart2
+		* Author : 윤정
+		**/
+		SELECT 
+			TIME
+			, SOURCE_RECORD_WRITE_RATE
+			, SOURCE_RECORD_ACTIVE_COUNT_AVG
+		FROM CDC_CONNECTOR_TASK_SRC
+		WHERE CONNECTOR_NAME = (
+								SELECT 
+									TTTI.CONNECT_NM 
+								FROM T_TRANSCNG_TARGET_I TTTI 
+								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+								)
+		ORDER BY TIME DESC LIMIT 5;
+	</select>
+	
+	<select id="selectSourceErrorChart" resultType="hashMap">
+		/**
+		* Query ID : selectSourceErrorChart
+		* Description : 소스 Connect error 차트
+		* Author : 윤정
+		**/
+		SELECT 
+			TIME
+			, TOTAL_RECORD_ERRORS
+			, TOTAL_RECORD_FAILURES
+			, TOTAL_RECORDS_SKIPPED
+			, TOTAL_RETRIES
+		FROM CDC_CONNECTOR_TASK_SRC
+		WHERE CONNECTOR_NAME = (
+								SELECT 
+									TTTI.CONNECT_NM 
+								FROM T_TRANSCNG_TARGET_I TTTI 
+								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+								)
+		ORDER BY TIME DESC LIMIT 5;
+	</select>
+	
+	<select id="selectSourceErrorInfo" resultType="hashMap">
+		/**
+		* Query ID : selectSourceErrorInfo
+		* Description : 소스 Connect error Info
+		* Author : 윤정
+		**/
+		SELECT 
+			(ROW_NUMBER() OVER()) AS ROWNUM 
+			, TIME
+			, LAST_ERROR_TIMESTAMP
+			, TOTAL_ERRORS_LOGGED
+			, DEADLETTERQUEUE_PRODUCE_REQUESTS
+			, DEADLETTERQUEUE_PRODUCE_FAILURES
+			, TOTAL_RECORD_FAILURES
+			, TOTAL_RECORDS_SKIPPED
+			, TOTAL_RECORD_ERRORS
+			, TOTAL_RETRIES
+		FROM CDC_CONNECTOR_TASK_SRC
+		WHERE CONNECTOR_NAME = (
+								SELECT 
+									TTTI.CONNECT_NM 
+								FROM T_TRANSCNG_TARGET_I TTTI 
+								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+								)
+		ORDER BY TIME DESC LIMIT 2;
+	</select>
+	
+	<select id="selectTargetConnectList" resultType="hashMap">
+		/**
+		* Query ID : selectTargetConnectList
+		* Description : 타겟 Connector 목록 조회
+		* Author : 윤정
+		**/
+		SELECT 
+			TTTI2.TRANS_ID 
+			, TTTI2.CONNECT_NM 
+		FROM T_TRANS_TOPIC_I TTTI JOIN T_TRANSCNG_TARGET_I TTTI2 ON TTTI.TAR_TRANS_ID = TTTI2.TRANS_ID 
+		WHERE TTTI.SRC_TRANS_ID = #{trans_id}::numeric ;
+	</select>
 </mapper>
