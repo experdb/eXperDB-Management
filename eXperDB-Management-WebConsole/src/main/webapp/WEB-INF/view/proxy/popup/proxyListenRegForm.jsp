@@ -643,7 +643,7 @@ function fn_serverListTable_init() {
 </div>
 
 <div class="modal fade" id="pop_layer_proxy_listen_reg" tabindex="-1" role="dialog" aria-labelledby="ModalProxyListen" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 80px 330px;">
 	<form class="cmxform" id="insProxyListenForm">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
@@ -734,23 +734,23 @@ function fn_serverListTable_init() {
 								<div class="form-group row bal-group">
 									<label class="col-sm-3 col-form-label-xsm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										로드발란싱
+										<spring:message code='eXperDB_proxy.loadbalancing' />
 									</label>
 								</div>
 								<div class="form-group row  row-last bal-group">
 									<label for="lstnReg_bal_yn" class="col-sm-2 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
-										사용여부(*)
+										<spring:message code='dbms_information.use_yn' />(*)
 									</label>
 									<div class="col-sm-3">
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_bal_yn" id="lstnReg_bal_yn" onchange="fn_change_bal_yn();"  tabindex=4 >
-											<option value="Y">사용</option>
-											<option value="N">미사용</option>
+											<option value="Y"><spring:message code='dbms_information.use' /></option>
+											<option value="N"><spring:message code='dbms_information.unuse' /></option>
 										</select>
 									</div>
 									<label for="lstnReg_bal_opt" class="col-sm-2 col-form-label-sm pop-label-index bal-opt-div">
 										<i class="item-icon fa fa-angle-double-right"></i>
-										방식
+										<spring:message code='eXperDB_proxy.method' />
 									</label>
 									<div class="col-sm-3 bal-opt-div"> 
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_bal_opt" id="lstnReg_bal_opt" tabindex=4 >
@@ -758,12 +758,6 @@ function fn_serverListTable_init() {
 											<c:forEach var="result" items="${BalOptList}">
 											<option value="<c:out value="${result.sys_cd_nm}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 											</c:forEach>
-											<!-- <option value="roundrobin">Roundrobin</option>
-											<option value="leastconn">Least Conn</option>
-											<option value="static-rr">static-rr</option>
-											<option value="source">source</option>
-											<option value="uri">uri</option>
-											<option value="url_param">url_param</option> -->
 										</select>
 									</div>
 								</div>

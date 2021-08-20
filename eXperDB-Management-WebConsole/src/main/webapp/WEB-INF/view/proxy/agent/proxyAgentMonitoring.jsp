@@ -170,7 +170,27 @@
  							defaultContent : "" 	
  						},
  						{data : "agt_sn",  defaultContent : "", visible: false },
- 						{data : "socket_port",  defaultContent : "", visible: false }
+ 						{data : "socket_port",  defaultContent : "", visible: false },
+ 						{data : "aws_yn", 
+ 							render: function (data, type, full){
+ 								var html = "";
+								if (data == "Y") {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-spin fa-spinner mr-2'></i>";
+									html += "<spring:message code='dbms_information.use' />";
+									html += "</div>";
+								} else {
+									html += "<div class='badge badge-pill badge-danger' style='margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-times-circle mr-2'></i>";
+									html += "<spring:message code='dbms_information.unuse' />";
+									html += "</div>";
+								}
+
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "" 	
+ 						}
  			]
 		});
 
@@ -186,6 +206,7 @@
 		proxyAgentTable.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 		proxyAgentTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
 		proxyAgentTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+		proxyAgentTable.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 
 		$(window).trigger('resize');
 	}
@@ -454,6 +475,8 @@
 												<th width="100"><spring:message code="agent_monitoring.agent_status" /></th>
 												<th width="0"></th>
 												<th width="0"></th>
+												<%-- <th width="100"><spring:message code="eXperDB_proxy.vip_use" /></th> --%>
+												<th width="100">AWS 환경 여부</th>
 											</tr>
 										</thead>
 									</table>

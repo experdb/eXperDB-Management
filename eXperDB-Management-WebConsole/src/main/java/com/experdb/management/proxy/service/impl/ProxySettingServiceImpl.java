@@ -291,11 +291,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      String errMsg = "";
 		      
 		      ProxyServerVO proxyServerVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
-		      String kalUseYn = "";
-		      if (proxyServerVO.getKal_install_yn() != null) {
-		         kalUseYn = proxyServerVO.getKal_install_yn();
-		      }
-
+		      String kalUseYn = (proxyServerVO.getKal_install_yn() == null) ? "" : proxyServerVO.getKal_install_yn(); 
+		     
 		      //Agent 접속 정보 추출 
 		      ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
 		      Map<String, Object> proxyExecuteResult = new  HashMap<String, Object>();
@@ -760,8 +757,10 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				vipConf[i].setV_if_nm(CommonUtil.getStringOfJsonObj(vipcngJobj,"v_if_nm"));
 				vipConf[i].setPriority(CommonUtil.getIntOfJsonObj(vipcngJobj,"priority"));
 				vipConf[i].setState_nm(CommonUtil.getStringOfJsonObj(vipcngJobj,"state_nm"));
+				vipConf[i].setAws_if_id(CommonUtil.getStringOfJsonObj(vipcngJobj,"aws_if_id"));
+				vipConf[i].setPeer_aws_if_id(CommonUtil.getStringOfJsonObj(vipcngJobj,"peer_aws_if_id"));
 				vipConf[i].setLst_mdfr_id(lst_mdfr_id);
-				/*System.out.println("vipConf :: "+CommonUtil.toMap(vipConf[i]).toString());*/
+				
 				//insert/update vip instance
 				proxySettingDAO.insertUpdatePryVipConf(vipConf[i]);
 			}
@@ -940,9 +939,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		}
 		
 		ProxyServerVO proxyServerVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
-		String kalUseYn = proxyServerVO.getKal_install_yn();
+		String kalUseYn = (proxyServerVO.getKal_install_yn() == null) ? "" : proxyServerVO.getKal_install_yn(); 
+	    String awsYn = (proxyServerVO.getAws_yn() == null) ? "N" : proxyServerVO.getAws_yn(); 
 		agentJobj.put("KAL_INSTALL_YN", kalUseYn);
-		
+		agentJobj.put("AWS_YN", awsYn);
+
 		boolean createNewConfig = false;
 		String resultLog = "";
 		String errMsg = "";

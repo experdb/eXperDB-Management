@@ -14,10 +14,13 @@ public class ProxyVipConfigVO {
 	private String v_if_nm; 
 	private int priority; 
 	private int chk_tm; 
+	private String v_ip_exe_status; 
 	private String frst_regr_id; 
 	private String frst_reg_dtm; 
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
+	private String aws_if_id;
+	private String peer_aws_if_id;
 	
 	public int getVip_cng_id() {
 		return vip_cng_id;
@@ -91,6 +94,24 @@ public class ProxyVipConfigVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+	public String getAws_if_id() {
+		return aws_if_id;
+	}
+	public void setAws_if_id(String aws_if_id) {
+		this.aws_if_id = aws_if_id;
+	}
+	public String getPeer_aws_if_id() {
+		return peer_aws_if_id;
+	}
+	public void setPeer_aws_if_id(String peer_aws_if_id) {
+		this.peer_aws_if_id = peer_aws_if_id;
+	}
+	public String getV_ip_exe_status() {
+		return v_ip_exe_status;
+	}
+	public void setV_ip_exe_status(String v_ip_exe_status) {
+		this.v_ip_exe_status = v_ip_exe_status;
+	}
 	
 	public Map<String, Object> toMap(){
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -106,7 +127,8 @@ public class ProxyVipConfigVO {
 		map.put("frst_reg_dtm", frst_reg_dtm);
 		map.put("lst_mdfr_id", lst_mdfr_id);
 		map.put("lst_mdf_dtm", lst_mdf_dtm);
-		
+		map.put("aws_if_id", aws_if_id);
+		map.put("peer_aws_if_id", peer_aws_if_id);
 		return map;
 	}
 	
@@ -124,7 +146,9 @@ public class ProxyVipConfigVO {
 		jobj.put("frst_reg_dtm", frst_reg_dtm);
 		jobj.put("lst_mdfr_id", lst_mdfr_id);
 		jobj.put("lst_mdf_dtm", lst_mdf_dtm);
-		
+		jobj.put("aws_if_id", aws_if_id);
+		jobj.put("peer_aws_if_id", peer_aws_if_id);
 		return jobj;
 	}
+	
 }

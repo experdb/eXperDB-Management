@@ -631,7 +631,7 @@ var mgmtDbmsTable = null;
 													<th width="150"><spring:message code="common.dbms_name" /></th>
 													<th width="150"><spring:message code="common.division" /></th>
 													<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
-													<th width="150">내부 아이피</th>
+													<th width="150"><spring:message code="eXperDB_proxy.internal_ip" /></th>
 													<th width="100"><spring:message code="data_transfer.port" /></th>
 													<th width="0">DBMS_ID</th>									
 												</tr>

@@ -505,6 +505,7 @@
               , B.PRY_SVR_NM
               , B.MASTER_GBN
               , A.KAL_INSTALL_YN
+              , A.AWS_YN
            FROM T_PRY_AGT_I A
                 LEFT JOIN T_PRY_SVR_I B ON A.AGT_SN = B.AGT_SN AND A.IPADR = B.IPADR
           WHERE 1 = 1

@@ -1,11 +1,10 @@
 
-
-ALTER TABLE T_PRY_LSN_I ADD COLUMN BAL_YN bpchar(1)  NULL;
+--Proxy 수정 사항
+--Loadbalance Option
+ALTER TABLE T_PRY_LSN_I ADD COLUMN BAL_YN bpchar(1)  NULL DEFAULT 'N'::bpchar;
 COMMENT ON COLUMN experdb_management.T_PRY_LSN_I.BAL_YN IS '로드발란스_사용여부';
 ALTER TABLE T_PRY_LSN_I ADD COLUMN BAL_OPT varchar(10)  NULL;
 COMMENT ON COLUMN experdb_management.T_PRY_LSN_I.BAL_OPT IS '로드발란스_옵션';
-
-ALTER TABLE experdb_management.t_pry_lsn_i ALTER COLUMN bal_yn SET DEFAULT 'N'::bpchar;
 
 UPDATE T_PRY_LSN_I SET BAL_YN='N', BAL_OPT='';
 
@@ -18,6 +17,16 @@ VALUES('TC0043', 'TC004301', 'RoundRobin', 'Y', 'ADMIN', clock_timestamp(), 'ADM
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
 VALUES('TC0043', 'TC004302', 'LeastConn', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'leastconn');
+
+--AWS 환경 Option
+ALTER TABLE experdb_management.t_pry_agt_i ADD aws_yn bpchar(1) NOT NULL DEFAULT 'N';
+COMMENT ON COLUMN experdb_management.t_pry_agt_i.aws_yn IS 'AWS_환경_여부';
+ALTER TABLE experdb_management.t_pry_vipcng_i ADD aws_if_id varchar(30) NULL;
+COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.aws_if_id IS 'AWS_네트워크_인터페이스_ID';
+ALTER TABLE experdb_management.t_pry_vipcng_i ADD peer_aws_if_id varchar(30) NULL;
+COMMENT ON COLUMN experdb_management.t_pry_vipcng_i.peer_aws_if_id IS 'AWS_Peer_네트워크_인터페이스_ID';
+
+UPDATE T_PRY_AGT_I SET AWS_YN='N';
 
 -- trans 모니터링 메뉴 추가
 ALTER TABLE t_usrdbsvraut_i ADD COLUMN trans_mtr_aut_yn bpchar(1) NULL;

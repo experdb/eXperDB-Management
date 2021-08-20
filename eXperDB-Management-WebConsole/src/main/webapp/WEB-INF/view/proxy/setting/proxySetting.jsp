@@ -36,6 +36,9 @@
 	
 	var selPrySvrId = null; //ProxyServerTable에서 선택된 항목의 pry_svr_id
 	var selVipUseYn = null; //keepalived 설치여부 확인
+	
+	var selAwsYn = null;//AWS 환경 여부
+	
 	var selConfInfo = null; //vipInstTable에서 선택된 항목의 Data
 	var selListenerInfo = null;//proxyListenTable에서 선택된 항목의 Data
 	var selPrySvrRow = null; //선택한 proxy 서버 목록
@@ -53,7 +56,7 @@
 	var selAgentInterfaceItems = new Array();//선택한 서버의  Agent Interface 목록
 	var selAgentInterface = null;//선택한 서버의  Agent IP와 연결된 Interface
 	
-	var selVipUseYn = "Y";
+	//var selVipUseYn = "Y";
 	var usrId = '${usr_id}';
 	var runValid = true;
 
@@ -279,6 +282,7 @@
 						}
 					},
 					{data : "state_chk", defaultContent : "", visible: false},//활성화 old
+					{data : "aws_yn",  defaultContent : "", visible: false }
 			]
 		});
 
@@ -302,6 +306,7 @@
 		proxyServerTable.tables().header().to$().find('th:eq(17)').css('min-width', '0px');//kal_install_yn
 		proxyServerTable.tables().header().to$().find('th:eq(18)').css('min-width', '0px');//kal_install_switch
 		proxyServerTable.tables().header().to$().find('th:eq(19)').css('min-width', '0px');//활성화 old
+		proxyServerTable.tables().header().to$().find('th:eq(20)').css('min-width', '0px');//aws 환경 여부
 		
 		//proxy 서버 테이블 더블 클릭
 		$('#proxyServer tbody').on('dblclick','tr',function() {
@@ -355,7 +360,9 @@
 					{data : "lst_mdfr_id", defaultContent : "", visible: false},//최종 수정자
 					{data : "lst_mdf_dtm", defaultContent : "", visible: false},//최종 수정일
 					{data : "vip_cng_id", defaultContent : "", visible: false},//VIP 설정 ID
-					{data : "pry_svr_id", defaultContent : "", visible: false}//서버 ID
+					{data : "pry_svr_id", defaultContent : "", visible: false},//서버 ID
+					{data : "aws_if_id", defaultContent : "", visible: false},//aws_if_id
+					{data : "peer_aws_if_id", defaultContent : "", visible: false}//peer_aws_if_id
 			]
 		});
 
@@ -370,6 +377,8 @@
 		vipInstTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');//최종 수정일
 		vipInstTable.tables().header().to$().find('th:eq(9)').css('min-width', '0px');//VIP 설정 ID
 		vipInstTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');//서버 ID
+		vipInstTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');//aws_if_id
+		vipInstTable.tables().header().to$().find('th:eq(12)').css('min-width', '0px');//peer_aws_if_id
 		
 		$('#vipInstance tbody').on('click','tr',function() {
 			if ( !$(this).hasClass('selected') ){	        	
@@ -605,7 +614,8 @@
 			var selRow = proxyServerTable.row('.selected').data();
 			selPrySvrId = selRow.pry_svr_id;
 			selVipUseYn = nvlPrmSet(selRow.kal_install_yn, "N");
-
+			selAwsYn  = nvlPrmSet(selRow.aws_yn, "N");
+			
 			//설정 정보 불러오기
 			fn_server_conf_info();
 			
@@ -718,6 +728,7 @@
 					if (result.listener_list != null) {
 						proxyListenTable.rows.add(result.listener_list).draw();
 					}
+					console.log(result.listener_list);
 
 					//Linstener database select 동적 생성
 					$("#lstnReg_db_nm", "#insProxyListenForm").children().remove();
@@ -1676,6 +1687,9 @@
 			}
 			
 			$("#instReg_chk_tm", "#insVipInstForm").val("1"); //체크간격
+			$("#instReg_aws_if_id", "#insVipInstForm").val("");
+			$("#instReg_peer_aws_if_id", "#insVipInstForm").val("");
+			
 		} else {
 			fn_create_vip_select(mode, selConfInfo.v_ip);
 			$("#ModalVipInstance").text('<spring:message code="eXperDB_proxy.instance_modify"/>');
@@ -1704,6 +1718,25 @@
 			$("#instReg_priority", "#insVipInstForm").val(selConfInfo.priority); //priority
 			$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - selConfInfo.priority); 
 			$("#instReg_chk_tm", "#insVipInstForm").val(selConfInfo.chk_tm); //체크간격
+			$("#instReg_aws_if_id", "#insVipInstForm").val(selConfInfo.aws_if_id);
+			$("#instReg_peer_aws_if_id", "#insVipInstForm").val(selConfInfo.peer_aws_if_id);
+		}
+		
+		if(selAwsYn == "Y"){
+			
+			/* if($(".vip_last_div", "#insVipInstForm").hasClass("row-last")){
+				$(".vip_last_div", "#insVipInstForm").removeClass("row-last");
+			} */
+			$(".aws_div", "#insVipInstForm").show();
+			
+		}else{
+			$("#instReg_aws_if_id", "#insVipInstForm").val("");
+			$("#instReg_peer_aws_if_id", "#insVipInstForm").val("");
+			
+			/* if(!$(".vip_last_div", "#insVipInstForm").hasClass("row-last")){
+				$(".vip_last_div", "#insVipInstForm").addClass("row-last");
+			} */
+			$(".aws_div", "#insVipInstForm").hide();
 		}
 	}
 	
@@ -2281,6 +2314,7 @@
 								<th width="0">KAL_INSTALL_YN</th>
 								<th width="0">가상 IP 사용</th>
 								<th width="0">state_chk</th>
+								<th width="0">aws_yn</th>
 							</tr>
 						</thead>
 					</table>
@@ -2473,6 +2507,8 @@
 										<th width="0">최종 수정일</th>
 										<th width="0">VIP ID</th>
 										<th width="0">Proxy Server ID</th>
+										<th width="0">AWS Network Interface ID</th>
+										<th width="0">AWS Peer Network Interface ID</th>
 									</tr>
 								</thead>
 							</table>
@@ -2514,6 +2550,8 @@
 										<th width="0">proxy id</th>
 										<th width="0">listener id</th>
 										<th width="0">Server List Data</th>
+										<th width="0">LoadBalance Use YN</th>
+										<th width="0">LoadBalance Option</th>
 									</tr>
 								</thead>
 							</table>
