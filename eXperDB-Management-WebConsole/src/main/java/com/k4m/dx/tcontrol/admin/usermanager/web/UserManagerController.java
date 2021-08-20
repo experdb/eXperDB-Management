@@ -561,7 +561,7 @@ public class UserManagerController {
 				userVo.setPwd_edc(aes.aesEncode(pwd_now)); // 패스워드 암호화
 				userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
 			}
-			
+			 
 			
 /*			//패스워드가 null이 아닌경우만
 			if (userVo.getPwd() != null && !"".equals(userVo.getPwd())) {
