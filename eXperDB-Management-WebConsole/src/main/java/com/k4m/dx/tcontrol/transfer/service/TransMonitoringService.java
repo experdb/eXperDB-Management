@@ -4,14 +4,28 @@ import java.util.List;
 import java.util.Map;
 
 public interface TransMonitoringService {
+	
+	/**
+	 * kafka Process CPU 조회
+	 * 
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectProcessCpuList();
 
+	/**
+	 * kafka Memory 조회
+	 * 
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectMemoryList();
+	
 	/**
 	 * 소스 Connector 목록 조회
 	 * 
 	 * @return List<Map<String, Object>>
 	 */
 	public List<Map<String, Object>> selectSrcConnectorList();
-	
+
 	/**
 	 * 소스 Connector 연결 테이블 조회
 	 * 
@@ -59,6 +73,14 @@ public interface TransMonitoringService {
 	 * @return List<Map<String, Object>>
 	 */
 	public List<Map<String, Object>> selectSourceChart_2(int trans_id);
+	
+	/**
+	 * 소스 connect 실시간 정보
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectSourceInfo(int trans_id);
 	
 	/**
 	 * 소스 Connect error chart
@@ -139,6 +161,9 @@ public interface TransMonitoringService {
 	 * @return List<Map<String, Object>>
 	 */
 	public List<Map<String, Object>> selectTargetErrorInfo(int trans_id);
+
+
+
 
 
 }

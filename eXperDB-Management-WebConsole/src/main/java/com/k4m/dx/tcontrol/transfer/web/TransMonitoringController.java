@@ -79,6 +79,22 @@ public class TransMonitoringController {
 	}
 	
 	/**
+	 * trans 모니터링 CPU, Memory 정보
+	 * 
+	 * @param historyVO,request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/transMonitoringCpuMemList")
+	public ModelAndView transMonitoringCpuMemList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		List<Map<String, Object>> processCpuList = transMonitoringService.selectProcessCpuList();
+		List<Map<String, Object>> memoryList = transMonitoringService.selectMemoryList();
+		
+		mv.addObject("processCpuList", processCpuList);
+		mv.addObject("memoryList", memoryList);
+		return mv;
+	}
+	/**
 	 * trans 모니터링 소스 connector info
 	 * 
 	 * @param historyVO,request
@@ -96,7 +112,6 @@ public class TransMonitoringController {
 		
 		// 소스 connect 정보
 		List<Map<String, Object>> connectInfo = transMonitoringService.selectSourceConnectInfo(trans_id);
-		
 		// 소스 연결 테이블 분리
 		String[] tableNmList = tableList.get("exrt_trg_tb_nm").toString().split(",");
 		List<Map<String, Object>> table_name_list = new ArrayList<Map<String, Object>>(); 
@@ -117,6 +132,7 @@ public class TransMonitoringController {
 		List<Map<String, Object>> snapshotInfo = transMonitoringService.selectSourceSnapshotInfo(trans_id);
 		List<Map<String, Object>> sourceChart1 = transMonitoringService.selectSourceChart_1(trans_id);
 		List<Map<String, Object>> sourceChart2 = transMonitoringService.selectSourceChart_2(trans_id);
+		List<Map<String, Object>> sourceInfo = transMonitoringService.selectSourceInfo(trans_id);
 		List<Map<String, Object>> sourceErrorChart = transMonitoringService.selectSourceErrorChart(trans_id);
 		List<Map<String, Object>> sourceErrorInfo = transMonitoringService.selectSourceErrorInfo(trans_id);
 		
@@ -129,6 +145,7 @@ public class TransMonitoringController {
 		mv.addObject("snapshotInfo", snapshotInfo);
 		mv.addObject("sourceChart1", sourceChart1);
 		mv.addObject("sourceChart2", sourceChart2);
+		mv.addObject("sourceInfo", sourceInfo);
 		mv.addObject("sourceErrorChart", sourceErrorChart);
 		mv.addObject("sourceErrorInfo", sourceErrorInfo);
 		mv.addObject("targetConnectorList", targetConnectorList);

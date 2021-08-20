@@ -18,6 +18,26 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	private TransMonitoringDAO transMonitoringDAO;
 	
 	/**
+	 * kafka Process CPU 조회
+	 * 
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectProcessCpuList() {
+		return transMonitoringDAO.selectProcessCpuList();
+	}
+	
+	/**
+	 * kafka Memory 조회
+	 * 
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectMemoryList() {
+		return transMonitoringDAO.selectMemoryList();
+	}
+	
+	/**
 	 * 소스 Connector 목록 조회
 	 * 
 	 * @return List<Map<String, Object>>
@@ -92,7 +112,18 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	public List<Map<String, Object>> selectSourceChart_2(int trans_id) {
 		return transMonitoringDAO.selectSourceChart_2(trans_id);
 	}
-
+	
+	/**
+	 * 소스 connect 실시간 정보
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectSourceInfo(int trans_id) {
+		return transMonitoringDAO.selectSourceInfo(trans_id);
+	}
+	
 	/**
 	 * 소스 Connect error chart
 	 * 
@@ -204,6 +235,5 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	}
 
 
-	
 	
 }
