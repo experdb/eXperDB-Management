@@ -561,7 +561,7 @@ public class UserManagerController {
 				userVo.setPwd_edc(aes.aesEncode(pwd_now)); // 패스워드 암호화
 				userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
 			}
-			
+			 
 			
 /*			//패스워드가 null이 아닌경우만
 			if (userVo.getPwd() != null && !"".equals(userVo.getPwd())) {
@@ -646,6 +646,11 @@ public class UserManagerController {
 			}else{
 				//암호화 사용유무가 Y-> Y, N-> N(management DB 업데이트)
 				userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
+				
+			    if (!userInfo.getPwd().equals(userVo.getPwd())) {
+		               result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, pwd_now);
+		            }
+			    
 				userManagerService.updateUserManager(userVo);
 				
 				//backup 저장
