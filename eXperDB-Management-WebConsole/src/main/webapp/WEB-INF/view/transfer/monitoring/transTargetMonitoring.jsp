@@ -21,6 +21,9 @@
 	var tarConnectTable = "";
 	var tarErrorTable = "";
 	var tarTopicListTable = "";
+	var sinkChart = "";
+	var sinkCompleteChart = "";
+	var sinkErrorChart = "";
 	
 	function fn_tar_connect_init(){
 		tarConnectTable = $('#tarConnectTable').DataTable({
@@ -35,7 +38,7 @@
 				"emptyTable" : '<spring:message code="message.msg01" />'
 			},
 			columns : [
-				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
+// 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "time", className : "dt-center", defaultContent : ""},
 				{data : "sink_record_active_count", className : "dt-center", defaultContent : "" },
 				{data : "put_batch_avg_time_ms", className : "dt-center", defaultContent : "" },
@@ -49,17 +52,17 @@
 			]
 		});
 	
-		tarConnectTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
-		tarConnectTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // proxy server id
-		tarConnectTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // proxy server name
-		tarConnectTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // success or fail
+// 		tarConnectTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
+		tarConnectTable.tables().header().to$().find('th:eq(0)').css('min-width', '100px'); // proxy server id
+		tarConnectTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // proxy server name
+		tarConnectTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // success or fail
+		tarConnectTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // first reg date
 		tarConnectTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // first reg date
 		tarConnectTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px'); // first reg date
 		tarConnectTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px'); // first reg date
 		tarConnectTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px'); // first reg date
 		tarConnectTable.tables().header().to$().find('th:eq(8)').css('min-width', '100px'); // first reg date
 		tarConnectTable.tables().header().to$().find('th:eq(9)').css('min-width', '100px'); // first reg date
-		tarConnectTable.tables().header().to$().find('th:eq(10)').css('min-width', '100px'); // first reg date
 	
 		$(window).trigger('resize');
 	}
@@ -77,7 +80,7 @@
 				"emptyTable" : '<spring:message code="message.msg01" />'
 			},
 			columns : [
-				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
+// 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "last_error_timestamp", className : "dt-center", defaultContent : ""},
 				{data : "total_errors_logged", className : "dt-center", defaultContent : "" },
 				{data : "deadletterqueue_produce_requests", className : "dt-center", defaultContent : "" },
@@ -87,14 +90,14 @@
 				{data : "total_record_errors", className : "dt-center", defaultContent : "" },
 			]
 		});
-		tarErrorTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
-		tarErrorTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // proxy server id
-		tarErrorTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // proxy server name
-		tarErrorTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // success or fail
+// 		tarErrorTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
+		tarErrorTable.tables().header().to$().find('th:eq(0)').css('min-width', '100px'); // proxy server id
+		tarErrorTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // proxy server name
+		tarErrorTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // success or fail
+		tarErrorTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // first reg date
 		tarErrorTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px'); // first reg date
 		tarErrorTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px'); // first reg date
 		tarErrorTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px'); // first reg date
-		tarErrorTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px'); // first reg date
 	
 		$(window).trigger('resize');
 	}
@@ -112,7 +115,7 @@
 				"emptyTable" : '<spring:message code="message.msg01" />'
 			},
 			columns : [
-					{data : "idx", className : "dt-center", defaultContent : ""}, 
+					{data : "rownum", className : "dt-center", defaultContent : ""}, 
 					{data : "topic_name", className : "dt-center", defaultContent : ""}	
 			]
 		});
@@ -125,56 +128,56 @@
 	
 	function fn_sink_chart_init(){
 
-		var sinkChart = Morris.Line({
+		sinkChart = Morris.Line({
 				element: 'chart-line-1',
 				lineColors: ['#63CF72', '#FABA66',],
 				data: [
 						{
-						exe_dtm_ss: '2021-06-10 10:20:35',
+						time: '',
 						sink_record_active_count: 0,
 						sink_record_send_total: 0,
 						}
 				],
-				xkey: 'exe_dtm_ss',
-				xkeyFormat: function(exe_dtm_ss) {
-					return exe_dtm_ss.substring(10);
+				xkey: 'time',
+				xkeyFormat: function(time) {
+					return time.substring(10);
 				},
 				ykeys: ['sink_record_active_count', 'sink_record_send_total'],
 				labels: ['싱크 중인 레코드 수', '싱크 완료 총 수']
 			});
 		
-		var sinkCompleteChart = Morris.Line({
+		sinkCompleteChart = Morris.Line({
 			element: 'chart-line-2',
 			lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
 			data: [
 					{
-					exe_dtm_ss: '2021-06-10 10:20:35',
+					time: '',
 					offset_commit_completion_total: 0,
 					offset_commit_skip_total: 0,
 					}
 			],
-			xkey: 'exe_dtm_ss',
-			xkeyFormat: function(exe_dtm_ss) {
-				return exe_dtm_ss.substring(10);
+			xkey: 'time',
+			xkeyFormat: function(time) {
+				return time.substring(10);
 			},
 			ykeys: ['offset_commit_completion_total', 'offset_commit_skip_total'],
 			labels: ['완료 총 수', '무시된 총 커밋 수']
 		});
 		
-		var sinkErrorChart = Morris.Line({
+		sinkErrorChart = Morris.Line({
 			element: 'chart-line-3',
 			lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
 			data: [
 					{
-					exe_dtm_ss: '2021-06-10 10:20:35',
+					time: '',
 					total_record_errors: 0,
 					total_record_failures: 0,
 					total_records_skipped: 0,
 					}
 			],
-			xkey: 'exe_dtm_ss',
-			xkeyFormat: function(exe_dtm_ss) {
-				return exe_dtm_ss.substring(10);
+			xkey: 'time',
+			xkeyFormat: function(time) {
+				return time.substring(10);
 			},
 			ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped'],
 			labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수']
@@ -303,7 +306,7 @@
 								<spring:message code="data_transfer.connect_name_set" />
 							</label>
 							<div class="col-sm-8">
-								<span class="form-control-xsm float-left text-muted" id="d_tg_connect_nm" ></span>
+								<span class="form-control-xsm float-left text-muted" id="tar_connect_nm" ></span>
 							</div>
 							<div class="col-sm-1">
 								&nbsp;
@@ -385,7 +388,6 @@
 							<table id="tarConnectTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
 								<thead class="bg-info text-white">
 									<tr>
-										<th width="0px;">rownum</th>
 										<th width="100px;">time</th>
 										<th width="100px;">sink_record_active_count</th>
 										<th width="100px;">put_batch_avg_time_ms</th>
@@ -447,7 +449,6 @@
 						<table id="tarErrorTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
 							<thead class="bg-info text-white">
 								<tr>
-									<th width="0px;">rownum</th>
 									<th width="100px;">last_error_timestamp </th>
 									<th width="100px;">total_errors_logged </th>
 									<th width="100px;">deadletterqueue_produce_requests</th>

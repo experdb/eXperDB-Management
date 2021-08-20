@@ -84,106 +84,156 @@
 		$( "#tot_tar_connect_his_today" ).append(html);	
 		$( "#tot_tar_error_his_today" ).append(html);	
 	}
-
+	
+	function fn_src_init(){
+		
+	}
+	
 	function fn_srcConnectInfo() {
 		var langSelect = document.getElementById("src_connect");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
 		
-		$.ajax({
-			url : "/transSrcConnectInfo",
-			dataType : "json",
-			type : "post",
- 			data : {
- 				trans_id : selectValue,
- 			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				if (result != null) {
-					$('#table_cnt').html(result.table_cnt);
-					$('#tar_connector_list').empty();
-					$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
-					if (nvlPrmSet(result.targetConnectorList, '') != '') {
-						for (i = 0; i < result.targetConnectorList.length; i++) {
-		                    $('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
-		            	}
+		fn_tar_init();
+		
+		if(selectValue != ""){
+			$.ajax({
+				url : "/transSrcConnectInfo",
+				dataType : "json",
+				type : "post",
+	 			data : {
+	 				trans_id : selectValue,
+	 			},
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
-					srcConnectSettingInfoTable.clear().draw();
-					if (nvlPrmSet(result.connectInfo, '') != '') {
-						srcConnectSettingInfoTable.rows.add(result.connectInfo).draw();
+				},
+				success : function(result) {
+					if (result != null) {
+						$('#table_cnt').html(result.table_cnt);
+						$('#tar_connector_list').empty();
+						$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
+						if (nvlPrmSet(result.targetConnectorList, '') != '') {
+							for (i = 0; i < result.targetConnectorList.length; i++) {
+			                    $('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+			            	}
+						}
+						srcConnectSettingInfoTable.clear().draw();
+						if (nvlPrmSet(result.connectInfo, '') != '') {
+							srcConnectSettingInfoTable.rows.add(result.connectInfo).draw();
+						}
+						srcMappingListTable.clear().draw();
+						if (nvlPrmSet(result.table_name_list, '') != '') {
+							srcMappingListTable.rows.add(result.table_name_list).draw();
+						}
+						if (nvlPrmSet(result.snapshotChart, '') != '') {
+							snapshotChart.setData(result.snapshotChart);
+						}
+						srcSnapshotTable.clear().draw();
+						if (nvlPrmSet(result.snapshotInfo, '') != '') {
+							srcSnapshotTable.rows.add(result.snapshotInfo).draw();
+						}
+						if (nvlPrmSet(result.sourceChart1, '') != '') {
+							srcChart1.setData(result.sourceChart1);
+						}
+						if (nvlPrmSet(result.sourceChart2, '') != '') {
+							srcChart2.setData(result.sourceChart1);
+						}
+						if (nvlPrmSet(result.sourceErrorChart, '') != '') {
+							srcErrorChart.setData(result.sourceErrorChart);
+						}
+						srcErrorTable.clear().draw();
+						if (nvlPrmSet(result.sourceErrorInfo, '') != '') {
+							srcErrorTable.rows.add(result.sourceErrorinfo).draw();
+						}
 					}
-					srcMappingListTable.clear().draw();
-					if (nvlPrmSet(result.table_name_list, '') != '') {
-						srcMappingListTable.rows.add(result.table_name_list).draw();
-					}
-					if (nvlPrmSet(result.snapshotChart, '') != '') {
-						snapshotChart.setData(result.snapshotChart);
-					}
-					srcSnapshotTable.clear().draw();
-					if (nvlPrmSet(result.snapshotInfo, '') != '') {
-						srcSnapshotTable.rows.add(result.snapshotInfo).draw();
-					}
-					if (nvlPrmSet(result.sourceChart1, '') != '') {
-						srcChart1.setData(result.sourceChart1);
-					}
-					if (nvlPrmSet(result.sourceChart2, '') != '') {
-						srcChart2.setData(result.sourceChart1);
-					}
-					if (nvlPrmSet(result.sourceErrorChart, '') != '') {
-						srcErrorChart.setData(result.sourceErrorChart);
-					}
-					srcErrorTable.clear().draw();
-					if (nvlPrmSet(result.sourceErrorInfo, '') != '') {
-						srcErrorTable.rows.add(result.sourceErrorinfo).draw();
-					}
-				}
 				
-			}
-		});
+				}
+			});
+		}
+	}
+	
+	function fn_tar_init(){
+		$('#d_tg_connect_nm').text("");
+		$('#d_tg_sys_nm').text("");
+		$('#d_tg_dbms_type').text("");
+		$('#d_tg_dbms_nm').text("");
+		$('#d_tg_schema_nm').text("");
+		
+		$('#tar_connect_nm').text("");
+		tarTopicListTable.clear().draw();
 	}
 	
 	function fn_tarConnectInfo(){
 		var langSelect = document.getElementById("tar_connector_list");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
 		
-		console.log('tar : ' + selectValue);
-		
-		$.ajax({
-			url : "/transTarConnectInfo",
-			dataType : "json",
-			type : "post",
- 			data : {
- 				trans_id : selectValue,
- 			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				if (result != null) {
-					
-				}
+		fn_tar_init();
+		console.log('tar : ' + langSelect.options[langSelect.selectedIndex].text);
+		if(selectValue != ""){
+			$.ajax({
+				url : "/transTarConnectInfo",
+				dataType : "json",
+				type : "post",
+ 				data : {
+ 					trans_id : selectValue,
+ 				},
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					if (result != null) {
+						if (nvlPrmSet(result.targetDBMSInfo, '') != '') {
+							$('#d_tg_connect_nm').text(langSelect.options[langSelect.selectedIndex].text);
+							$('#d_tg_sys_nm').text(result.targetDBMSInfo[0].trans_sys_nm);
+							$('#d_tg_dbms_type').text(result.targetDBMSInfo[0].dbms_type);
+							$('#d_tg_dbms_nm').text(result.targetDBMSInfo[0].dtb_nm);
+							$('#d_tg_schema_nm').text(result.targetDBMSInfo[0].scm_nm);
+						}
+						
+						tarTopicListTable.clear().draw();
+						if (nvlPrmSet(result.targetTopicList, '') != '') {
+							$('#tar_connect_nm').text(langSelect.options[langSelect.selectedIndex].text);
+							tarTopicListTable.rows.add(result.targetTopicList).draw();
+						}
+						if (nvlPrmSet(result.targetSinkRecordChart, '') != '') {
+							sinkChart.setData(result.targetSinkRecordChart);
+						}
+						if (nvlPrmSet(result.targetSinkCompleteChart, '') != '') {
+							sinkCompleteChart.setData(result.targetSinkCompleteChart);
+						}
+						tarConnectTable.clear().draw();
+						if (nvlPrmSet(result.targetSinkInfo, '') != '') {
+							tarConnectTable.rows.add(result.targetSinkInfo).draw();
+						}
+						if (nvlPrmSet(result.targetErrorChart, '') != '') {
+							sinkErrorChart.setData(result.targetErrorChart);
+						}
+						tarErrorTable.clear().draw();
+						if (nvlPrmSet(result.targetErrorInfo, '') != '') {
+							tarErrorTable.rows.add(result.targetErrorInfo).draw();
+						}
+					}
 				
-			}
-		});
+				}
+			});
+		}
 	}
 
 </script>

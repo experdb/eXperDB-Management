@@ -90,13 +90,14 @@ public class TransMonitoringController {
 		
 		String strTransId = request.getParameter("trans_id");
 		int trans_id = Integer.parseInt(strTransId);
-		System.out.println(trans_id);
-//		JSONObject connectInfo = new JSONObject();
-		// 연결 테이블수(split 후 count), 
+		
+		// 소스 연결 테이블
 		Map<String, Object> tableList = transMonitoringService.selectSourceConnectorTableList(trans_id);
 		
-		
+		// 소스 connect 정보
 		List<Map<String, Object>> connectInfo = transMonitoringService.selectSourceConnectInfo(trans_id);
+		
+		// 소스 연결 테이블 분리
 		String[] tableNmList = tableList.get("exrt_trg_tb_nm").toString().split(",");
 		List<Map<String, Object>> table_name_list = new ArrayList<Map<String, Object>>(); 
 		
@@ -131,7 +132,7 @@ public class TransMonitoringController {
 		mv.addObject("sourceErrorChart", sourceErrorChart);
 		mv.addObject("sourceErrorInfo", sourceErrorInfo);
 		mv.addObject("targetConnectorList", targetConnectorList);
-		// 폴링 레코드 / 오류수 연결된 sink connector list
+		
 		return mv;
 	}
 	
@@ -144,6 +145,32 @@ public class TransMonitoringController {
 	@RequestMapping("/transTarConnectInfo")
 	public ModelAndView transTarConnectInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
+		
+		String strTransId = request.getParameter("trans_id");
+		int trans_id = Integer.parseInt(strTransId);
+		
+		// 타겟 DBMS 정보
+		List<Map<String, Object>> targetDBMSInfo = transMonitoringService.selectTargetDBMSInfo(trans_id);
+		// 타겟 전송대상 테이블 목록
+		List<Map<String, Object>> targetTopicList = transMonitoringService.selectTargetTopicList(trans_id);
+		// 타겟 record sink chart
+		List<Map<String, Object>> targetSinkRecordChart = transMonitoringService.selectTargetSinkRecordChart(trans_id);
+		// 타겟 complete sink chart
+		List<Map<String, Object>> targetSinkCompleteChart = transMonitoringService.selectTargetSinkCompleteChart(trans_id);
+		// 타겟 sink info
+		List<Map<String, Object>> targetSinkInfo = transMonitoringService.selectTargetSinkInfo(trans_id);
+		// 타겟 error chart
+		List<Map<String, Object>> targetErrorChart = transMonitoringService.selectTargetErrorChart(trans_id);
+		// 타겟 error info
+		List<Map<String, Object>> targetErrorInfo = transMonitoringService.selectTargetErrorInfo(trans_id);
+		
+		mv.addObject("targetDBMSInfo", targetDBMSInfo);
+		mv.addObject("targetTopicList", targetTopicList);
+		mv.addObject("targetSinkRecordChart", targetSinkRecordChart);
+		mv.addObject("targetSinkCompleteChart", targetSinkCompleteChart);
+		mv.addObject("targetSinkInfo", targetSinkInfo);
+		mv.addObject("targetErrorChart", targetErrorChart);
+		mv.addObject("targetErrorInfo", targetErrorInfo);
 		
 		return mv;
 	}
