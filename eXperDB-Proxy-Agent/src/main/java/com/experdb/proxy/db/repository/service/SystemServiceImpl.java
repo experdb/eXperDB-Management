@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.experdb.proxy.db.repository.dao.SystemDAO;
 import com.experdb.proxy.db.repository.vo.AgentInfoVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
+import com.experdb.proxy.util.FileUtil;
 
 /**
 * @author 최정환
@@ -62,7 +63,8 @@ public class SystemServiceImpl implements SystemService{
 		vo.setIstcnf_yn("Y");
 		vo.setFrst_regr_id("system");
 		vo.setLst_mdfr_id("system");
-
+		vo.setAws_yn(FileUtil.getPropertyValue("context.properties", "aws.yn"));
+		
 		if(agentInfo == null) {
 			vo.setDomain_nm("PROXY_" + strSocketIp);
 			vo.setSvr_use_yn("N");

@@ -51,7 +51,9 @@ public class AgentSetting {
 		
 		String strProxyUser = "";
 		String strProxyGroup = "";
-
+		
+		String strAWSUseYn="";
+		
 		Scanner scan = new Scanner(System.in);
 		String localIp = NetworkUtil.getLocalServerIp();
 		
@@ -109,6 +111,19 @@ public class AgentSetting {
 			}
 		}
 		
+		System.out.println("Is installed the proxy in AWS (Y/N) :");
+		strAWSUseYn = scan.nextLine();
+		strAWSUseYn = strAWSUseYn.toUpperCase();
+		
+		while (true) {
+			if(strAWSUseYn.equals("")) {
+				System.out.println("Is installed the proxy in AWS (Y/N) :");
+				strAWSUseYn = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+				
 		/////////////////////////////////////////////////////////////////////
 		
 		//Repository db 설정
@@ -168,6 +183,7 @@ public class AgentSetting {
 		System.out.println("agent ip :" + strAgentIp);
 		System.out.println("agent port :" + strAgentPort);
 		System.out.println("keepalived install :" + strKeepInstaillYn);
+		System.out.println("installed in AWS :" + strAWSUseYn);
 		System.out.println("database Connection Info :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
@@ -228,6 +244,8 @@ public class AgentSetting {
 			prop.setProperty("database.password", "ENC(" + password + ")");
 
 			prop.setProperty("keepalived.install.yn", strKeepInstaillYn);
+			
+			prop.setProperty("aws.yn", strAWSUseYn);
 			
 			prop.setProperty("socket.server.port", strAgentPort);
 			prop.setProperty("agent.install.ip", strAgentIp);

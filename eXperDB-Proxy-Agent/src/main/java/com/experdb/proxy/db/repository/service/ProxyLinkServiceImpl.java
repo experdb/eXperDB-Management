@@ -84,6 +84,9 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String cmdResult = "";
 
 		try{
+			//aws 환경 여부
+			String awsYn = (jobj.getString("AWS_YN") == null || jobj.getString("AWS_YN").equals(""))? "N" : jobj.getString("AWS_YN");
+			
 			//haproxy.cfg 생성
 			String proxyCfg = ""; 
 			
@@ -206,7 +209,17 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 
 			for(int i=0 ; i<vipConfSize ; i++){
 				JSONObject vipConfObj = vipConfArry.getJSONObject(i);
-				String vipConf = util.readTemplateFile("vip_instance.conf", TEMPLATE_DIR);
+				String vipConf = "";
+				if(awsYn.equals("Y")){
+					vipConf = util.readTemplateFile("vip_instance_aws.conf", TEMPLATE_DIR);
+					String vip = vipConfObj.getString("v_ip");
+					vipConf = vipConf.replaceAll("\\{v_ip_aws\\}",  vip.substring(0, vip.indexOf("/")));
+					vipConf = vipConf.replaceAll("\\{peer_net_inter_id\\}", vipConfObj.getString("peer_aws_if_id"));
+					vipConf = vipConf.replaceAll("\\{obj_net_inter_id\\}", vipConfObj.getString("aws_if_id"));
+				}else{
+					vipConf = util.readTemplateFile("vip_instance.conf", TEMPLATE_DIR);
+				}
+				//String vipConf = util.readTemplateFile("vip_instance.conf", TEMPLATE_DIR);
 				vipConf = vipConf.replace("{v_index}", String.valueOf(i+1));  
 				vipConf = vipConf.replace("{state_nm}", vipConfObj.getString("state_nm"));
 				vipConf = vipConf.replace("{if_nm}", global.getString("if_nm"));
@@ -215,8 +228,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				vipConf = vipConf.replace("{chk_tm}", vipConfObj.getString("chk_tm"));
 				vipConf = vipConf.replace("{obj_ip}", global.getString("obj_ip"));
 				vipConf = vipConf.replace("{peer_server_ip}", global.getString("peer_server_ip"));
-				vipConf = vipConf.replace("{v_ip}", vipConfObj.getString("v_ip"));
 				vipConf = vipConf.replace("{v_if_nm}", vipConfObj.getString("v_if_nm"));
+				vipConf = vipConf.replace("{v_ip}", vipConfObj.getString("v_ip"));
 				keepalivedCfg +="\n"+vipConf;
 			}
 			
@@ -382,7 +395,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 					cmd += "start ";
 					break;
 				case "R" :
-					cmd += "restart ";
+					cmd += "reload ";
 					break;
 				case "S" :
 					cmd += "stop ";

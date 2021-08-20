@@ -460,7 +460,9 @@
                       PRIORITY = #{priority}::numeric,
                       CHK_TM = #{chk_tm}::numeric,
                       LST_MDFR_ID = #{lst_mdfr_id},
-                      LST_MDF_DTM = clock_timestamp()
+                      LST_MDF_DTM = clock_timestamp(),
+                      AWS_IF_ID = #{aws_if_id},
+                      PEER_AWS_IF_ID = #{peer_aws_if_id}
                 WHERE PRY_SVR_ID  = #{pry_svr_id}::numeric
                   AND STATE_NM = #{state_nm}
                 RETURNING *
@@ -478,7 +480,9 @@
                         FRST_REGR_ID,
                         FRST_REG_DTM,
                         LST_MDFR_ID,
-                        LST_MDF_DTM
+                        LST_MDF_DTM,
+                        AWS_IF_ID,
+                        PEER_AWS_IF_ID
                        )
                        SELECT (SELECT COALESCE(MAX(VIP_CNG_ID+1),1) AS VIP_CNG_ID FROM T_PRY_VIPCNG_I),
                               #{state_nm},
@@ -491,7 +495,9 @@
                               #{frst_regr_id},
                               clock_timestamp(),
                               #{lst_mdfr_id},
-                              clock_timestamp()
+                              clock_timestamp(),
+                              #{aws_if_id},
+                              #{peer_aws_if_id}
          WHERE NOT EXISTS ( SELECT * FROM UPSERT )
 	</insert>	
 		
