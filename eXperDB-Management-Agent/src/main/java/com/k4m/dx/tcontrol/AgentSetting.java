@@ -290,6 +290,8 @@ public class AgentSetting {
 			} finally {
 				if(conn != null) conn.close();
 			}	
+			
+			prop.setProperty("repoDB_ip", strDatabaseIp);
 		    
 		    prop.setProperty("database.url", "ENC(" + url + ")");
 		    prop.setProperty("database.username", "ENC(" + username + ")");
