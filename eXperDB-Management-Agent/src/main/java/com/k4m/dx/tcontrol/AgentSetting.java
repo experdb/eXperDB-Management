@@ -296,7 +296,7 @@ public class AgentSetting {
 		    prop.setProperty("database.url", "ENC(" + url + ")");
 		    prop.setProperty("database.username", "ENC(" + username + ")");
 		    prop.setProperty("database.password", "ENC(" + password + ")");
-		    
+		     
 		    prop.setProperty("socket.server.port", strAgentPort);
 		    prop.setProperty("agent.install.ip", strAgentIp);
 
