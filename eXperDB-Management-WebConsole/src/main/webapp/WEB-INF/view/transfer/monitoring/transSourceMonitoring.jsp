@@ -119,11 +119,91 @@
 			columns : [
 				{data : "connector_src_name", className : "dt-center", defaultContent : ""},
 				{data : "time", className : "dt-center", defaultContent : "" },
-				{data : "number_of_events_filtered", className : "dt-center", defaultContent : "" },
-				{data : "number_of_erroneous_events", className : "dt-center", defaultContent : "" },
-				{data : "queue_total_capacity", className : "dt-center", defaultContent : "" },
-				{data : "queue_remaining_capacity", className : "dt-center", defaultContent : "" },
-				{data : "remaining_table_count", className : "dt-center", defaultContent : "" },
+				{data : "number_of_events_filtered", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['number_of_events_filtered_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['number_of_events_filtered_cng']+')';
+						} else if(full['number_of_events_filtered_cng'] == 0 || typeof full['number_of_events_filtered_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['number_of_events_filtered_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "number_of_erroneous_events", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['number_of_erroneous_events_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['number_of_erroneous_events_cng']+')';
+						} else if(full['number_of_erroneous_events_cng'] == 0 || typeof full['number_of_erroneous_events_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['number_of_erroneous_events_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "queue_total_capacity", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['queue_total_capacity_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['queue_total_capacity_cng']+')';
+						} else if(full['queue_total_capacity_cng'] == 0 || typeof full['queue_total_capacity_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['queue_total_capacity_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "queue_remaining_capacity", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['queue_remaining_capacity_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['queue_remaining_capacity_cng']+')';
+						} else if(full['queue_remaining_capacity_cng'] == 0 || typeof full['queue_remaining_capacity_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['queue_remaining_capacity_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "remaining_table_count", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['remaining_table_count_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['remaining_table_count_cng']+')';
+						} else if(full['remaining_table_count_cng'] == 0 || typeof full['remaining_table_count_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['remaining_table_count_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
 			]
 		});
 		
@@ -154,11 +234,91 @@
 				{data : "connector_src_name", className : "dt-center", defaultContent : ""},
 				{data : "time", className : "dt-center", defaultContent : "" },
 				{data : "last_transaction_id", className : "dt-center", defaultContent : "" },
-				{data : "number_of_committed_transactions", className : "dt-center", defaultContent : "" },
-				{data : "total_number_of_events_seen", className : "dt-center", defaultContent : "" },
-				{data : "number_of_events_filtered", className : "dt-center", defaultContent : "" },
-				{data : "number_of_erroneous_events", className : "dt-center", defaultContent : "" },
-				{data : "milli_seconds_since_last_event", className : "dt-center", defaultContent : "" },
+				{data : "number_of_committed_transactions", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['number_of_committed_transactions_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['number_of_committed_transactions_cng']+')';
+						} else if(full['number_of_committed_transactions_cng'] == 0 || typeof full['number_of_committed_transactions_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['number_of_committed_transactions_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "total_number_of_events_seen",  
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_number_of_events_seen_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_number_of_events_seen_cng']+')';
+						} else if(full['total_number_of_events_seen_cng'] == 0 || typeof full['total_number_of_events_seen_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_number_of_events_seen_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "number_of_events_filtered",  
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['number_of_events_filtered_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['number_of_events_filtered_cng']+')';
+						} else if(full['number_of_events_filtered_cng'] == 0 || typeof full['number_of_events_filtered_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['number_of_events_filtered_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "number_of_erroneous_events",  
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['number_of_erroneous_events_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['number_of_erroneous_events_cng']+')';
+						} else if(full['number_of_erroneous_events_cng'] == 0 || typeof full['number_of_erroneous_events_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['number_of_erroneous_events_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "milli_seconds_since_last_event",  
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['milli_seconds_since_last_event_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['milli_seconds_since_last_event_cng']+')';
+						} else if(full['milli_seconds_since_last_event_cng'] == 0 || typeof full['milli_seconds_since_last_event_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['milli_seconds_since_last_event_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
 			]
 		});
 		
@@ -188,12 +348,108 @@
 			},
 			columns : [
 				{data : "time", className : "dt-center", defaultContent : ""},
-				{data : "source_record_active_count_max", className : "dt-center", defaultContent : "" },
-				{data : "source_record_write_rate", className : "dt-center", defaultContent : "" },
-				{data : "source_record_active_count_avg", className : "dt-center", defaultContent : "" },
-				{data : "source_record_write_total", className : "dt-center", defaultContent : "" },
-				{data : "source_record_poll_total", className : "dt-center", defaultContent : "" },
-				{data : "source_record_active_count", className : "dt-center", defaultContent : "" },
+				{data : "source_record_active_count_max", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['source_record_active_count_max_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['source_record_active_count_max_cng']+')';
+						} else if(full['source_record_active_count_max_cng'] == 0 || typeof full['source_record_active_count_max_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['source_record_active_count_max_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "source_record_write_rate", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['source_record_write_rate_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['source_record_write_rate_cng']+')';
+						} else if(full['source_record_write_rate_cng'] == 0 || typeof full['source_record_write_rate_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['source_record_write_rate_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "source_record_active_count_avg", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['source_record_active_count_avg_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['source_record_active_count_avg_cng']+')';
+						} else if(full['source_record_active_count_avg_cng'] == 0 || typeof full['source_record_active_count_avg_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['source_record_active_count_avg_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "source_record_write_total", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['source_record_write_total_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['source_record_write_total_cng']+')';
+						} else if(full['source_record_write_total_cng'] == 0 || typeof full['source_record_write_total_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['source_record_write_total_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "source_record_poll_total", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['source_record_poll_total_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['source_record_poll_total_cng']+')';
+						} else if(full['source_record_poll_total_cng'] == 0 || typeof full['source_record_poll_total_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['source_record_poll_total_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "source_record_active_count", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['source_record_active_count_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['source_record_active_count_cng']+')';
+						} else if(full['source_record_active_count_cng'] == 0 || typeof full['source_record_active_count_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['source_record_active_count_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
 			]
 		});
 		
@@ -223,13 +479,125 @@
 			columns : [
 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "last_error_timestamp", className : "dt-center", defaultContent : ""},
-				{data : "total_errors_logged", className : "dt-center", defaultContent : "" },
-				{data : "deadletterqueue_produce_requests", className : "dt-center", defaultContent : "" },
-				{data : "deadletterqueue_produce_failures", className : "dt-center", defaultContent : "" },
-				{data : "total_record_failures", className : "dt-center", defaultContent : "" },
-				{data : "total_records_skipped", className : "dt-center", defaultContent : "" },
-				{data : "total_record_errors", className : "dt-center", defaultContent : "" },
-				{data : "total_retries ", className : "dt-center", defaultContent : "" },
+				{data : "total_errors_logged", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_errors_logged_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_errors_logged_cng']+')';
+						} else if(full['total_errors_logged_cng'] == 0 || typeof full['total_errors_logged_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_errors_logged_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "deadletterqueue_produce_requests", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['deadletterqueue_produce_requests_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['deadletterqueue_produce_requests_cng']+')';
+						} else if(full['deadletterqueue_produce_requests_cng'] == 0 || typeof full['deadletterqueue_produce_requests_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['deadletterqueue_produce_requests_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "deadletterqueue_produce_failures", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['deadletterqueue_produce_failures_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['deadletterqueue_produce_failures_cng']+')';
+						} else if(full['deadletterqueue_produce_failures_cng'] == 0 || typeof full['deadletterqueue_produce_failures_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['deadletterqueue_produce_failures_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "total_record_failures", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_record_failures_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_record_failures_cng']+')';
+						} else if(full['total_record_failures_cng'] == 0 || typeof full['total_record_failures_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_record_failures_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "total_records_skipped", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_records_skipped_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_records_skipped_cng']+')';
+						} else if(full['total_records_skipped_cng'] == 0 || typeof full['total_records_skipped_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_records_skipped_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "total_record_errors", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_record_errors_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_record_errors_cng']+')';
+						} else if(full['total_record_errors_cng'] == 0 || typeof full['total_record_errors_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_record_errors_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "total_retries", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_retries_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_retries_cng']+')';
+						} else if(full['total_retries_cng'] == 0 || typeof full['total_retries_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_retries_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
 			]
 		});
 		srcErrorTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
@@ -254,55 +622,18 @@
 			$(".streamingDiv").hide();
 			$("#server-tab-1").addClass("active");
 			$("#server-tab-2").removeClass("active");
-			
+			fn_snapshot();
 		}else{
 			$(".snapshotDiv").hide();
 			$(".streamingDiv").show();
 			$("#server-tab-2").addClass("active");
 			$("#server-tab-1").removeClass("active");
-			
+			fn_streaming();
 		}
 	}
 	
 	function fn_src_chart_init(){
 		
-		snapshotChart = Morris.Line({
-			element: 'src-chart-line-snapshot',
-			lineColors: ['#63CF72', '#FABA66',],
-			data: [
-					{
-					time: '',
-					number_of_events_filtered : 0,
-					number_of_erroneous_events : 0,
-					}
-			],
-			xkey: 'time',
-			xkeyFormat: function(time) {
-				return time.substring(10);
-			},
-			ykeys: ['number_of_events_filtered', 'number_of_erroneous_events'],
-			labels: ['필터링 된 이벤트 수', '오류 난 이벤트 수']
-		});
-		
-		streamingChart = Morris.Line({
-			element: 'src-chart-line-streaming',
-			lineColors: ['#63CF72', '#FABA66','#F36368'],
-			data: [
-					{
-					exe_dtm_ss: '2021-06-10 10:20:35',
-					total_number_of_events_seen : 0,
-					number_of_events_filtered : 0,
-					number_of_erroneous_events : 0,
-					}
-			],
-			xkey: 'exe_dtm_ss',
-			xkeyFormat: function(exe_dtm_ss) {
-				return exe_dtm_ss.substring(10);
-			},
-			ykeys: ['total_number_of_events_seen', 'number_of_events_filtered', 'number_of_erroneous_events'],
-			labels: ['이벤트 총 수','필터링 된 이벤트 수', '오류 난 이벤트 수']
-		});
-
 		srcChart1 = Morris.Line({
 			element: 'src-chart-line-1',
 			lineColors: ['#63CF72', '#FABA66','#F36368'],
@@ -361,8 +692,148 @@
 		});
 		
 	}
-
 	
+	function fn_snapshot(){
+		var langSelect = document.getElementById("src_connect");
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		
+		$('#src-chart-line-snapshot').empty();
+		
+		if(selectValue != ""){
+			$.ajax({
+				url : "/transSrcSnapshotInfo",
+				dataType : "json",
+				type : "post",
+	 			data : {
+	 				trans_id : selectValue,
+	 			},
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					if (result != null) {
+						if (nvlPrmSet(result.snapshotChart, '') != '') {
+							var snapshotChart = Morris.Line({
+								element: 'src-chart-line-snapshot',
+								lineColors: ['#63CF72', '#FABA66',],
+								data: [
+										{
+										time: '',
+										number_of_events_filtered : 0,
+										number_of_erroneous_events : 0,
+										}
+								],
+								xkey: 'time',
+								xkeyFormat: function(time) {
+									return time.substring(10);
+								},
+								ykeys: ['number_of_events_filtered', 'number_of_erroneous_events'],
+								labels: ['필터링 된 이벤트 수', '오류 난 이벤트 수']
+							});
+							snapshotChart.setData(result.snapshotChart);
+						}
+						srcSnapshotTable.clear().draw();
+						if (nvlPrmSet(result.snapshotInfo, '') != '') {
+							for(var i = 0; i < result.snapshotInfo.length; i++){	
+								if(result.snapshotInfo[i].rownum == 1){
+									if(i != result.snapshotInfo.length-1 && result.snapshotInfo[i+1].rownum == 2){
+										result.snapshotInfo[i].number_of_events_filtered_cng = result.snapshotInfo[i].number_of_events_filtered - result.snapshotInfo[i+1].number_of_events_filtered;
+										result.snapshotInfo[i].number_of_erroneous_events_cng = result.snapshotInfo[i].number_of_erroneous_events - result.snapshotInfo[i+1].number_of_erroneous_events;
+										result.snapshotInfo[i].queue_total_capacity_cng = result.snapshotInfo[i].queue_total_capacity - result.snapshotInfo[i+1].queue_total_capacity;
+										result.snapshotInfo[i].queue_remaining_capacity_cng = result.snapshotInfo[i].queue_remaining_capacity - result.snapshotInfo[i+1].queue_remaining_capacity;
+										result.snapshotInfo[i].remaining_table_count_cng = result.snapshotInfo[i].remaining_table_count - result.snapshotInfo[i+1].remaining_table_count;
+									}
+									srcSnapshotTable.row.add(result.snapshotInfo[i]).draw();
+								}
+							}
+						}
+					}
+				}
+			});
+		} 
+		$("#loading").hide();
+	}
+	
+	function fn_streaming(){
+		var langSelect = document.getElementById("src_connect");
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+
+		$('#src-chart-line-streaming').empty();
+		
+		if(selectValue != ""){
+			$.ajax({
+				url : "/transSrcStreamingInfo",
+				dataType : "json",
+				type : "post",
+	 			data : {
+	 				trans_id : selectValue,
+	 			},
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					if (result != null) {
+						if (nvlPrmSet(result.streamingChart, '') != '') {
+							var streamingChart = Morris.Line({
+								element: 'src-chart-line-streaming',
+								lineColors: ['#63CF72', '#FABA66','#F36368'],
+								data: [
+										{
+										time: '',
+										total_number_of_events_seen : 0,
+										number_of_events_filtered : 0,
+										number_of_erroneous_events : 0,
+										}
+								],
+								xkey: 'time',
+								xkeyFormat: function(time) {
+									console.log('time : ' +  time.substring(10))
+									return time.substring(10);
+								},
+								ykeys: ['total_number_of_events_seen', 'number_of_events_filtered', 'number_of_erroneous_events'],
+								labels: ['이벤트 총 수','필터링 된 이벤트 수', '오류 난 이벤트 수']
+							});
+							streamingChart.setData(result.streamingChart);
+						}
+						srcStreamingTable.clear().draw();
+						if (nvlPrmSet(result.streamingInfo, '') != '') {
+							for(var i = 0; i < result.streamingInfo.length; i++){	
+								if(result.streamingInfo[i].rownum == 1){
+									if(i != result.streamingInfo.length-1 && result.streamingInfo[i+1].rownum == 2){
+										result.streamingInfo[i].number_of_committed_transactions_cng = result.streamingInfo[i].number_of_committed_transactions - result.streamingInfo[i+1].number_of_committed_transactions;
+										result.streamingInfo[i].total_number_of_events_seen_cng = result.streamingInfo[i].total_number_of_events_seen - result.streamingInfo[i+1].total_number_of_events_seen;
+										result.streamingInfo[i].number_of_events_filtered_cng = result.streamingInfo[i].number_of_events_filtered - result.streamingInfo[i+1].number_of_events_filtered;
+										result.streamingInfo[i].number_of_erroneous_events_cng = result.streamingInfo[i].number_of_erroneous_events - result.streamingInfo[i+1].number_of_erroneous_events;
+										result.streamingInfo[i].milli_seconds_since_last_event_cng = result.streamingInfo[i].milli_seconds_since_last_event - result.streamingInfo[i+1].milli_seconds_since_last_event;
+									}
+									srcStreamingTable.row.add(result.streamingInfo[i]).draw();
+								}
+							}
+						}
+					}
+				}
+			});
+		}
+		$("#loading").hide();
+	}
 	
 </script>
 

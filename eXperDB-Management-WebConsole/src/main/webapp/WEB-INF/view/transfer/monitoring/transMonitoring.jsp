@@ -133,31 +133,78 @@
 						if (nvlPrmSet(result.table_name_list, '') != '') {
 							srcMappingListTable.rows.add(result.table_name_list).draw();
 						}
-						if (nvlPrmSet(result.snapshotChart, '') != '') {
-							snapshotChart.setData(result.snapshotChart);
-						}
-						srcSnapshotTable.clear().draw();
-						if (nvlPrmSet(result.snapshotInfo, '') != '') {
-							srcSnapshotTable.rows.add(result.snapshotInfo).draw();
-						}
+						selectTab('snapshot');
+// 						if (nvlPrmSet(result.snapshotChart, '') != '') {
+// 							snapshotChart.setData(result.snapshotChart);
+// 						}
+// 						srcSnapshotTable.clear().draw();
+// 						if (nvlPrmSet(result.snapshotInfo, '') != '') {
+// 							for(var i = 0; i < result.snapshotInfo.length; i++){	
+// 								if(result.snapshotInfo[i].rownum == 1){
+// 									if(i != result.snapshotInfo.length-1 && result.snapshotInfo[i+1].rownum == 2){
+// 										result.snapshotInfo[i].number_of_events_filtered_cng = result.snapshotInfo[i].number_of_events_filtered - result.snapshotInfo[i+1].number_of_events_filtered;
+// 										result.snapshotInfo[i].number_of_erroneous_events_cng = result.snapshotInfo[i].number_of_erroneous_events - result.snapshotInfo[i+1].number_of_erroneous_events;
+// 										result.snapshotInfo[i].queue_total_capacity_cng = result.snapshotInfo[i].queue_total_capacity - result.snapshotInfo[i+1].queue_total_capacity;
+// 										result.snapshotInfo[i].queue_remaining_capacity_cng = result.snapshotInfo[i].queue_remaining_capacity - result.snapshotInfo[i+1].queue_remaining_capacity;
+// 										result.snapshotInfo[i].remaining_table_count_cng = result.snapshotInfo[i].remaining_table_count - result.snapshotInfo[i+1].remaining_table_count;
+// 									}
+// 									srcSnapshotTable.row.add(result.snapshotInfo[i]).draw();
+// 								}
+// 							}
+// // 							srcSnapshotTable.rows.add(result.snapshotInfo).draw();
+// 						}
+						console.log(result.sourceChart1)
 						if (nvlPrmSet(result.sourceChart1, '') != '') {
 							srcChart1.setData(result.sourceChart1);
 						}
 						if (nvlPrmSet(result.sourceChart2, '') != '') {
-							srcChart2.setData(result.sourceChart1);
+							srcChart2.setData(result.sourceChart2);
+						}
+						srcConnectTable.clear().draw();
+						if (nvlPrmSet(result.sourceInfo, '') != '') {
+							for(var i = 0; i < result.sourceInfo.length; i++){	
+								if(result.sourceInfo[i].rownum == 1){
+									if(i != result.sourceInfo.length-1 && result.sourceInfo[i+1].rownum == 2){
+										result.sourceInfo[i].source_record_active_count_max_cng = result.sourceInfo[i].source_record_active_count_max - result.sourceInfo[i+1].source_record_active_count_max;
+										result.sourceInfo[i].source_record_write_rate_cng = result.sourceInfo[i].source_record_write_rate - result.sourceInfo[i+1].source_record_write_rate;
+										result.sourceInfo[i].source_record_active_count_avg_cng = result.sourceInfo[i].source_record_active_count_avg - result.sourceInfo[i+1].source_record_active_count_avg;
+										result.sourceInfo[i].source_record_write_total_cng = result.sourceInfo[i].source_record_write_total - result.sourceInfo[i+1].source_record_write_total;
+										result.sourceInfo[i].source_record_poll_total_cng = result.sourceInfo[i].source_record_poll_total - result.sourceInfo[i+1].source_record_poll_total;
+										result.sourceInfo[i].source_record_active_count_cng = result.sourceInfo[i].source_record_active_count - result.sourceInfo[i+1].source_record_active_count;
+									}
+									srcConnectTable.row.add(result.sourceInfo[i]).draw();
+								}
+							}
+// 							srcConnectTable.rows.add(result.sourceInfo).draw();
 						}
 						if (nvlPrmSet(result.sourceErrorChart, '') != '') {
 							srcErrorChart.setData(result.sourceErrorChart);
 						}
 						srcErrorTable.clear().draw();
 						if (nvlPrmSet(result.sourceErrorInfo, '') != '') {
-							srcErrorTable.rows.add(result.sourceErrorinfo).draw();
+							console.log(result.sourceErrorInfo)
+							for(var i = 0; i < result.sourceErrorInfo.length; i++){	
+								if(result.sourceErrorInfo[i].rownum == 1){
+									if(i != result.sourceErrorInfo.length-1 && result.sourceErrorInfo[i+1].rownum == 2){
+										result.sourceErrorInfo[i].total_errors_logged_cng = result.sourceErrorInfo[i].total_errors_logged - result.sourceErrorInfo[i+1].total_errors_logged;
+										result.sourceErrorInfo[i].deadletterqueue_produce_requests_cng = result.sourceErrorInfo[i].deadletterqueue_produce_requests - result.sourceErrorInfo[i+1].deadletterqueue_produce_requests;
+										result.sourceErrorInfo[i].deadletterqueue_produce_failures_cng = result.sourceErrorInfo[i].deadletterqueue_produce_failures - result.sourceErrorInfo[i+1].deadletterqueue_produce_failures;
+										result.sourceErrorInfo[i].total_record_failures_cng = result.sourceErrorInfo[i].total_record_failures - result.sourceErrorInfo[i+1].total_record_failures;
+										result.sourceErrorInfo[i].total_records_skipped_cng = result.sourceErrorInfo[i].total_records_skipped - result.sourceErrorInfo[i+1].total_records_skipped;
+										result.sourceErrorInfo[i].total_record_errors_cng = result.sourceErrorInfo[i].total_record_errors - result.sourceErrorInfo[i+1].total_record_errors;
+										result.sourceErrorInfo[i].total_retries_cng = result.sourceErrorInfo[i].total_retries - result.sourceErrorInfo[i+1].total_retries;
+									}
+									srcErrorTable.row.add(result.sourceErrorInfo[i]).draw();
+								}
+							}
+// 							srcErrorTable.rows.add(result.sourceErrorInfo).draw();
 						}
 					}
 				
 				}
 			});
 		}
+		$("#loading").hide();
 	}
 	
 	function fn_tar_init(){
@@ -220,20 +267,52 @@
 						}
 						tarConnectTable.clear().draw();
 						if (nvlPrmSet(result.targetSinkInfo, '') != '') {
-							tarConnectTable.rows.add(result.targetSinkInfo).draw();
+// 							tarConnectTable.rows.add(result.targetSinkInfo).draw();
+							console.log(result.targetSinkInfo)
+							for(var i = 0; i < result.targetSinkInfo.length; i++){	
+								if(result.targetSinkInfo[i].rownum == 1){
+									if(i != result.targetSinkInfo.length-1 && result.targetSinkInfo[i+1].rownum == 2){
+										result.targetSinkInfo[i].sink_record_active_count_cng = result.targetSinkInfo[i].sink_record_active_count - result.targetSinkInfo[i+1].sink_record_active_count;
+										result.targetSinkInfo[i].put_batch_avg_time_ms_cng = result.targetSinkInfo[i].put_batch_avg_time_ms - result.targetSinkInfo[i+1].put_batch_avg_time_ms;
+										result.targetSinkInfo[i].offset_commit_completion_rate_cng = result.targetSinkInfo[i].offset_commit_completion_rate - result.targetSinkInfo[i+1].offset_commit_completion_rate;
+										result.targetSinkInfo[i].sink_record_send_total_cng = result.targetSinkInfo[i].sink_record_send_total - result.targetSinkInfo[i+1].sink_record_send_total;
+										result.targetSinkInfo[i].sink_record_active_count_avg_cng = result.targetSinkInfo[i].sink_record_active_count_avg - result.targetSinkInfo[i+1].sink_record_active_count_avg;
+										result.targetSinkInfo[i].offset_commit_completion_total_cng = result.targetSinkInfo[i].offset_commit_completion_total - result.targetSinkInfo[i+1].offset_commit_completion_total;
+										result.targetSinkInfo[i].offset_commit_skip_rate_cng = result.targetSinkInfo[i].offset_commit_skip_rate - result.targetSinkInfo[i+1].offset_commit_skip_rate;
+										result.targetSinkInfo[i].offset_commit_skip_total_cng = result.targetSinkInfo[i].offset_commit_skip_total - result.targetSinkInfo[i+1].offset_commit_skip_total;
+										result.targetSinkInfo[i].sink_record_read_total_cng = result.targetSinkInfo[i].sink_record_read_total - result.targetSinkInfo[i+1].sink_record_read_total;
+									}
+									tarConnectTable.row.add(result.targetSinkInfo[i]).draw();
+								}
+							}
 						}
 						if (nvlPrmSet(result.targetErrorChart, '') != '') {
 							sinkErrorChart.setData(result.targetErrorChart);
 						}
 						tarErrorTable.clear().draw();
 						if (nvlPrmSet(result.targetErrorInfo, '') != '') {
-							tarErrorTable.rows.add(result.targetErrorInfo).draw();
+							console.log(result.targetErrorInfo)
+							for(var i = 0; i < result.targetErrorInfo.length; i++){	
+								if(result.targetErrorInfo[i].rownum == 1){
+									if(i != result.targetErrorInfo.length-1 && result.targetErrorInfo[i+1].rownum == 2){
+										result.targetErrorInfo[i].total_errors_logged_cng = result.targetErrorInfo[i].total_errors_logged - result.targetErrorInfo[i+1].total_errors_logged;
+										result.targetErrorInfo[i].deadletterqueue_produce_requests_cng = result.targetErrorInfo[i].deadletterqueue_produce_requests - result.targetErrorInfo[i+1].deadletterqueue_produce_requests;
+										result.targetErrorInfo[i].deadletterqueue_produce_failures_cng = result.targetErrorInfo[i].deadletterqueue_produce_failures - result.targetErrorInfo[i+1].deadletterqueue_produce_failures;
+										result.targetErrorInfo[i].total_record_failures_cng = result.targetErrorInfo[i].total_record_failures - result.targetErrorInfo[i+1].total_record_failures;
+										result.targetErrorInfo[i].total_records_skipped_cng = result.targetErrorInfo[i].total_records_skipped - result.targetErrorInfo[i+1].total_records_skipped;
+										result.targetErrorInfo[i].total_record_errors_cng = result.targetErrorInfo[i].total_record_errors - result.targetErrorInfo[i+1].total_record_errors;
+									}
+									tarErrorTable.row.add(result.targetErrorInfo[i]).draw();
+								}
+							}
+// 							tarErrorTable.rows.add(result.targetErrorInfo).draw();
 						}
 					}
 				
 				}
 			});
 		}
+		$("#loading").hide();
 	}
 
 </script>

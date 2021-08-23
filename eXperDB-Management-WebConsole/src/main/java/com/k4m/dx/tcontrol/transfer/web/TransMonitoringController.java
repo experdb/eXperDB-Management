@@ -154,6 +154,50 @@ public class TransMonitoringController {
 	}
 	
 	/**
+	 * trans 모니터링 소스 Connector Snapshot
+	 * 
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/transSrcSnapshotInfo")
+	public ModelAndView transSrcSnapshotInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		String strTransId = request.getParameter("trans_id");
+		int trans_id = Integer.parseInt(strTransId);
+		
+		List<Map<String, Object>> snapshotChart = transMonitoringService.selectSourceSnapshotChart(trans_id);
+		List<Map<String, Object>> snapshotInfo = transMonitoringService.selectSourceSnapshotInfo(trans_id);
+		
+		mv.addObject("snapshotChart", snapshotChart);
+		mv.addObject("snapshotInfo", snapshotInfo);
+		
+		return mv;
+	}
+	
+	/**
+	 * trans 모니터링 소스 Connector Streaming
+	 * 
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/transSrcStreamingInfo")
+	public ModelAndView transSrcStreamingInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		String strTransId = request.getParameter("trans_id");
+		int trans_id = Integer.parseInt(strTransId);
+		
+		List<Map<String, Object>> streamingChart = transMonitoringService.selectStreamingChart(trans_id);
+		List<Map<String, Object>> streamingInfo = transMonitoringService.selectStreamingInfo(trans_id);
+		
+		mv.addObject("streamingChart", streamingChart);
+		mv.addObject("streamingInfo", streamingInfo);
+		
+		return mv;
+	}
+	
+	/**
 	 * trans 모니터링 타겟 connector info
 	 * 
 	 * @param historyVO,request
@@ -169,7 +213,16 @@ public class TransMonitoringController {
 		// 타겟 DBMS 정보
 		List<Map<String, Object>> targetDBMSInfo = transMonitoringService.selectTargetDBMSInfo(trans_id);
 		// 타겟 전송대상 테이블 목록
-		List<Map<String, Object>> targetTopicList = transMonitoringService.selectTargetTopicList(trans_id);
+		Map<String, Object> targetTopic = transMonitoringService.selectTargetTopicList(trans_id);
+		String[] topicTemp = targetTopic.get("topic_name").toString().split(",");
+		List<Map<String, Object>> targetTopicList = new ArrayList<Map<String, Object>>(); 
+		for(int i = 0; i < topicTemp.length; i++){
+			Map<String, Object> temp = new HashMap<String, Object>();
+			temp.put("rownum", i+1);
+			temp.put("topic_name", topicTemp[i]);
+			targetTopicList.add(temp);
+		}
+		
 		// 타겟 record sink chart
 		List<Map<String, Object>> targetSinkRecordChart = transMonitoringService.selectTargetSinkRecordChart(trans_id);
 		// 타겟 complete sink chart

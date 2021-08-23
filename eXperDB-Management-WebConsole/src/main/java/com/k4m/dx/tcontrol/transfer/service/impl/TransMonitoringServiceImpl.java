@@ -90,7 +90,29 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	public List<Map<String, Object>> selectSourceSnapshotInfo(int trans_id) {
 		return transMonitoringDAO.selectSourceSnapshotInfo(trans_id);
 	}
-
+	
+	/**
+	 * 소스 Connector streaming chart 
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>> 
+	 */
+	@Override
+	public List<Map<String, Object>> selectStreamingChart(int trans_id) {
+		return transMonitoringDAO.selectStreamingChart(trans_id);
+	}
+	
+	/**
+	 * 소스 Connector streaming 정보 조회
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectStreamingInfo(int trans_id) {
+		return transMonitoringDAO.selectStreamingInfo(trans_id);
+	}
+	
 	/**
 	 * 소스 Connect 실시간 chart1
 	 * 
@@ -175,7 +197,7 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	 * @return List<Map<String, Object>>
 	 */
 	@Override
-	public List<Map<String, Object>> selectTargetTopicList(int trans_id) {
+	public Map<String, Object> selectTargetTopicList(int trans_id) {
 		return transMonitoringDAO.selectTargetTopicList(trans_id);
 	}
 
@@ -233,6 +255,8 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	public List<Map<String, Object>> selectTargetErrorInfo(int trans_id) {
 		return transMonitoringDAO.selectTargetErrorInfo(trans_id);
 	}
+
+
 
 
 	

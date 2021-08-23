@@ -80,6 +80,27 @@ public class TransMonitoringDAO extends EgovAbstractMapper{
 	}
 
 	/**
+	 * 소스 Connector streaming chart 
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>> 
+	 */
+	public List<Map<String, Object>> selectStreamingChart(int trans_id) {
+		return selectList("transMonitoringSql.selectStreamingChart", trans_id);
+	}
+
+	/**
+	 * 소스 Connector streaming 정보 조회
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectStreamingInfo(int trans_id) {
+		return selectList("transMonitoringSql.selectStreamingInfo", trans_id);
+	}
+
+
+	/**
 	 * 소스 Connect 실시간 chart1
 	 * 
 	 * @param trans_id
@@ -155,8 +176,8 @@ public class TransMonitoringDAO extends EgovAbstractMapper{
 	 * @param trans_id
 	 * @return List<Map<String, Object>>
 	 */
-	public List<Map<String, Object>> selectTargetTopicList(int trans_id) {
-		return selectList("transMonitoringSql.selectTargetTopicList", trans_id);
+	public Map<String, Object> selectTargetTopicList(int trans_id) {
+		return selectOne("transMonitoringSql.selectTargetTopicList", trans_id);
 	}
 	
 	/**
