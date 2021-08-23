@@ -25,6 +25,7 @@
 
 <script type="text/javascript">
 	var cpuChart = "";
+	var memChart = "";
 	/* ********************************************************
 	 * 화면 onload
 	 ******************************************************** */
@@ -32,8 +33,8 @@
 		//금일 날짜 setting
 		fn_todaySetting();
 		
-		//
-		fn_cpu_chart();
+		// cpu, memory chart
+		fn_cpu_mem_chart();
 		
 		// 소스 chart init
 		fn_src_chart_init();
@@ -89,7 +90,7 @@
 		$( "#tot_tar_error_his_today" ).append(html);	
 	}
 	
-	function fn_cpu_chart(){
+	function fn_cpu_mem_chart(){
 		$.ajax({
 			url : "/transMonitoringCpuMemList",
 			dataType : "json",
@@ -110,49 +111,58 @@
 			},
 			success : function(result) {
 				if (result != null) {
-					console.log(result.processCpuList)
 					cpuChart = Morris.Line({
 				        element: 'chart-cpu',
 				        // Tell Morris where the data is
 				        data: result.processCpuList,
 				        // Tell Morris which property of the data is to be mapped to which axis
 				        xkey: 'time',
+				        xLabelFormat: function(time) {
+				        	return time.label.slice(10);
+						},
 				        ykeys: ['process_cpu_load', 'system_cpu_load'],
 //			 	        postUnits: ' °c',
 				        lineColors: ['#199cef','#FF0000'],
 // 				        goals: [6.0],
 // 				        goalLineColors: ['#FF0000'],
-				        labels: [],
-				        lineWidth: 3,
+				        labels: ['process_cpu_load', 'system_cpu_load'],
+				        lineWidth: 2,
+				        parseTime: false,
+				        hideHover: false,
+				        pointSize: 0,
+				        resize: true
+					});
+					
+					memChart = Morris.Line({
+				        element: 'chart-memory',
+				        // Tell Morris where the data is
+				        data: result.memoryList,
+				        // Tell Morris which property of the data is to be mapped to which axis
+				        xkey: 'time',
+				        xLabelFormat: function(time) {
+							return time.label.slice(10);
+						},
+				        ykeys: ['used'],
+//			 	        postUnits: ' °c',
+				        lineColors: ['#199cef'],
+// 				        goals: [6.0],
+// 				        goalLineColors: ['#FF0000'],
+				        labels: ['used'],
+				        lineWidth: 2,
+				        parseTime: false,
+				        hideHover: false,
 				        pointSize: 0,
 				        resize: true
 					});
 				}
 			}
 		});		
-// 		var cpuChart = Morris.Line({
-// 	        element: 'chart-cpu',
-// 	        // Tell Morris where the data is
-// 	        data: results.graphData,
-// 	        // Tell Morris which property of the data is to be mapped to which axis
-// 	        xkey: 'time',
-// 	        ykeys: ['system_cpu_load'],
-// // 	        postUnits: ' °c',
-// 	        lineColors: ['#199cef'],
-// 	        goals: [6.0],
-// 	        goalLineColors: ['#FF0000'],
-// 	        labels: ['time'],
-// 	        lineWidth: 3,
-// 	        pointSize: 2,
-// 	        resize: true
-// 		});
-	 
-	      // Set up an interval on which the graph data is to be updated
-	      // Note the passing of the mainGraph parameter
-	      setInterval(function() { updateLiveTempGraph(cpuChart); }, 5000);
+		setInterval(function() { 
+			updateLiveTempGraph(cpuChart, memChart); 
+		}, 5000);
 	}
 	
-	function updateLiveTempGraph(cpuChart) {
+	function updateLiveTempGraph(cpuChart, memChart) {
 		$.ajax({
 			url : "/transMonitoringCpuMemList",
 			dataType : "json",
@@ -174,15 +184,10 @@
 			success : function(result) {
 				if (result != null) {
 					cpuChart.setData(result.processCpuList);
+					memChart.setData(result.memoryList);
 				}
 			}
 		});		
-// 		  // Make our API call again, requesting fresh data
-// 		  $.getJSON('/devices/1/recent-temps',
-// 		    function(results) {
-// 		      // Set the already-initialised graph to use this new data
-// 		      mainGraph.setData(results.graphData);
-// 		    });
 	}
 	
 	function fn_src_init(){
@@ -490,6 +495,7 @@
 					<h4 class="card-title">
 						<i class="item-icon fa fa-dot-circle-o"></i> memory
 					</h4>
+					<div id="chart-memory" style="max-height:200px;"></div>
 				</div>
 			</div>
 		</div>
