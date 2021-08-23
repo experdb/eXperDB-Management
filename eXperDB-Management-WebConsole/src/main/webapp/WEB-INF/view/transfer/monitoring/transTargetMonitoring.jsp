@@ -40,15 +40,159 @@
 			columns : [
 // 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "time", className : "dt-center", defaultContent : ""},
-				{data : "sink_record_active_count", className : "dt-center", defaultContent : "" },
-				{data : "put_batch_avg_time_ms", className : "dt-center", defaultContent : "" },
-				{data : "offset_commit_completion_rate", className : "dt-center", defaultContent : "" },
-				{data : "sink_record_send_total", className : "dt-center", defaultContent : "" },
-				{data : "sink_record_active_count_avg", className : "dt-center", defaultContent : "" },
-				{data : "offset_commit_completion_total", className : "dt-center", defaultContent : "" },
-				{data : "offset_commit_skip_rate", className : "dt-center", defaultContent : "" },
-				{data : "offset_commit_skip_total", className : "dt-center", defaultContent : "" },
-				{data : "sink_record_read_total", className : "dt-center", defaultContent : "" },
+				{data : "sink_record_active_count", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['sink_record_active_count_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['sink_record_active_count_cng']+')';
+						} else if(full['sink_record_active_count_cng'] == 0 || typeof full['sink_record_active_count_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['sink_record_active_count_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "put_batch_avg_time_ms", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['put_batch_avg_time_ms_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['put_batch_avg_time_ms_cng']+')';
+						} else if(full['put_batch_avg_time_ms_cng'] == 0 || typeof full['put_batch_avg_time_ms_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['put_batch_avg_time_ms_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "offset_commit_completion_rate", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['offset_commit_completion_rate_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['offset_commit_completion_rate_cng']+')';
+						} else if(full['offset_commit_completion_rate_cng'] == 0 || typeof full['offset_commit_completion_rate_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['offset_commit_completion_rate_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "sink_record_send_total", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['sink_record_send_total_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['sink_record_send_total_cng']+')';
+						} else if(full['sink_record_send_total_cng'] == 0 || typeof full['sink_record_send_total_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['sink_record_send_total_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "sink_record_active_count_avg", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['sink_record_active_count_avg_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['sink_record_active_count_avg_cng']+')';
+						} else if(full['sink_record_active_count_avg_cng'] == 0 || typeof full['sink_record_active_count_avg_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['sink_record_active_count_avg_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "offset_commit_completion_total", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['offset_commit_completion_total_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['offset_commit_completion_total_cng']+')';
+						} else if(full['offset_commit_completion_total_cng'] == 0 || typeof full['offset_commit_completion_total_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['offset_commit_completion_total_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "offset_commit_skip_rate", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['offset_commit_skip_rate_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['offset_commit_skip_rate_cng']+')';
+						} else if(full['offset_commit_skip_rate_cng'] == 0 || typeof full['offset_commit_skip_rate_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['offset_commit_skip_rate_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "offset_commit_skip_total", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['offset_commit_skip_total_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['offset_commit_skip_total_cng']+')';
+						} else if(full['offset_commit_skip_total_cng'] == 0 || typeof full['offset_commit_skip_total_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['offset_commit_skip_total_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "sink_record_read_total", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['sink_record_read_total_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['sink_record_read_total_cng']+')';
+						} else if(full['sink_record_read_total_cng'] == 0 || typeof full['sink_record_read_total_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['sink_record_read_total_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
 			]
 		});
 	
@@ -82,12 +226,108 @@
 			columns : [
 // 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "last_error_timestamp", className : "dt-center", defaultContent : ""},
-				{data : "total_errors_logged", className : "dt-center", defaultContent : "" },
-				{data : "deadletterqueue_produce_requests", className : "dt-center", defaultContent : "" },
-				{data : "deadletterqueue_produce_failures", className : "dt-center", defaultContent : "" },
-				{data : "total_record_failures", className : "dt-center", defaultContent : "" },
-				{data : "total_records_skipped", className : "dt-center", defaultContent : "" },
-				{data : "total_record_errors", className : "dt-center", defaultContent : "" },
+				{data : "total_errors_logged", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_errors_logged_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_errors_logged_cng']+')';
+						} else if(full['total_errors_logged_cng'] == 0 || typeof full['total_errors_logged_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_errors_logged_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "deadletterqueue_produce_requests", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['deadletterqueue_produce_requests_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['deadletterqueue_produce_requests_cng']+')';
+						} else if(full['deadletterqueue_produce_requests_cng'] == 0 || typeof full['deadletterqueue_produce_requests_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['deadletterqueue_produce_requests_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "deadletterqueue_produce_failures", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['deadletterqueue_produce_failures_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['deadletterqueue_produce_failures_cng']+')';
+						} else if(full['deadletterqueue_produce_failures_cng'] == 0 || typeof full['deadletterqueue_produce_failures_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['deadletterqueue_produce_failures_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "total_record_failures", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_record_failures_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_record_failures_cng']+')';
+						} else if(full['total_record_failures_cng'] == 0 || typeof full['total_record_failures_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_record_failures_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "total_records_skipped", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_records_skipped_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_records_skipped_cng']+')';
+						} else if(full['total_records_skipped_cng'] == 0 || typeof full['total_records_skipped_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_records_skipped_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
+				{data : "total_record_errors", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['total_record_errors_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['total_record_errors_cng']+')';
+						} else if(full['total_record_errors_cng'] == 0 || typeof full['total_record_errors_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['total_record_errors_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				},
 			]
 		});
 // 		tarErrorTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
