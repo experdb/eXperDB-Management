@@ -329,7 +329,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			}
 
 			//master svr id
-			if (peerIpData != null) {
+			if (peerIpData != null && !peerIpData.equals("")) {
 				searchProxyServerVO.setIpadr(peerIpData);
 
 				ProxyServerVO masterProxyServerInfo = pryService.selectPrySvrInslInfo(searchProxyServerVO);
