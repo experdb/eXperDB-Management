@@ -24,13 +24,17 @@
 %>
 
 <script type="text/javascript">
+	var cpuChart = "";
 	/* ********************************************************
 	 * 화면 onload
 	 ******************************************************** */
 	$(window).ready(function(){
 		//금일 날짜 setting
 		fn_todaySetting();
-	
+		
+		//
+		fn_cpu_chart();
+		
 		// 소스 chart init
 		fn_src_chart_init();
 	
@@ -83,6 +87,102 @@
 		$( "#tot_tar_dbms_his_today" ).append(html);	
 		$( "#tot_tar_connect_his_today" ).append(html);	
 		$( "#tot_tar_error_his_today" ).append(html);	
+	}
+	
+	function fn_cpu_chart(){
+		$.ajax({
+			url : "/transMonitoringCpuMemList",
+			dataType : "json",
+			type : "post",
+ 			data : {
+ 			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					console.log(result.processCpuList)
+					cpuChart = Morris.Line({
+				        element: 'chart-cpu',
+				        // Tell Morris where the data is
+				        data: result.processCpuList,
+				        // Tell Morris which property of the data is to be mapped to which axis
+				        xkey: 'time',
+				        ykeys: ['process_cpu_load', 'system_cpu_load'],
+//			 	        postUnits: ' °c',
+				        lineColors: ['#199cef','#FF0000'],
+// 				        goals: [6.0],
+// 				        goalLineColors: ['#FF0000'],
+				        labels: [],
+				        lineWidth: 3,
+				        pointSize: 0,
+				        resize: true
+					});
+				}
+			}
+		});		
+// 		var cpuChart = Morris.Line({
+// 	        element: 'chart-cpu',
+// 	        // Tell Morris where the data is
+// 	        data: results.graphData,
+// 	        // Tell Morris which property of the data is to be mapped to which axis
+// 	        xkey: 'time',
+// 	        ykeys: ['system_cpu_load'],
+// // 	        postUnits: ' °c',
+// 	        lineColors: ['#199cef'],
+// 	        goals: [6.0],
+// 	        goalLineColors: ['#FF0000'],
+// 	        labels: ['time'],
+// 	        lineWidth: 3,
+// 	        pointSize: 2,
+// 	        resize: true
+// 		});
+	 
+	      // Set up an interval on which the graph data is to be updated
+	      // Note the passing of the mainGraph parameter
+	      setInterval(function() { updateLiveTempGraph(cpuChart); }, 5000);
+	}
+	
+	function updateLiveTempGraph(cpuChart) {
+		$.ajax({
+			url : "/transMonitoringCpuMemList",
+			dataType : "json",
+			type : "post",
+ 			data : {
+ 			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					cpuChart.setData(result.processCpuList);
+				}
+			}
+		});		
+// 		  // Make our API call again, requesting fresh data
+// 		  $.getJSON('/devices/1/recent-temps',
+// 		    function(results) {
+// 		      // Set the already-initialised graph to use this new data
+// 		      mainGraph.setData(results.graphData);
+// 		    });
 	}
 	
 	function fn_src_init(){
@@ -377,6 +477,7 @@
 					<h4 class="card-title">
 						<i class="item-icon fa fa-dot-circle-o"></i> CPU
 					</h4>
+					<div id="chart-cpu" style="max-height:200px;"></div>
 				</div>
 			</div>
 		</div>
