@@ -61,6 +61,13 @@
 <script src="/vertical-dark-sidebar/js/vendors/bootstrap4-toggle/bootstrap4-toggle.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/inputmask/jquery.inputmask.bundle.min.js"></script>
 
+<script src="/vertical-dark-sidebar/js/vendors/flot/jquery.flot.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/flot/jquery.flot.resize.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/flot/jquery.flot.categories.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/flot/jquery.flot.fillbetween.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/flot/jquery.flot.stack.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/flot/jquery.flot.pie.js"></script>
+
 <!-- <script src="/vertical-dark-sidebar/js/vendors/moment/moment.min.js"></script> -->
 
 <script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>

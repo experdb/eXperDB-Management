@@ -330,7 +330,7 @@
 		FROM T_TRANS_SYS_INF TTSI 
 		WHERE TTSI.TRANS_SYS_ID = (
 									SELECT 
-										TTTI.TRANS_TRG_SYS_ID 
+										TTTI.TRANS_SYS_ID 
 									FROM T_TRANSCNG_TARGET_I TTTI 
 									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 									);

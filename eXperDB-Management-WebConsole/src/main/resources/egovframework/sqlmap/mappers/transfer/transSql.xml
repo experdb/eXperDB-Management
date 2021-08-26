@@ -172,7 +172,7 @@
                        TRANS_ID,
                        CASE WHEN EXE_STATUS = 'TC001501' THEN 1 ELSE 0 END AS ING_CNT
                   FROM T_TRANSCNG_TARGET_I
-                 WHERE TRANS_TRG_SYS_ID = #{trans_trg_sys_id}::numeric
+                 WHERE TRANS_SYS_ID = #{trans_trg_sys_id}::numeric
           ) A
 	</select>
 
@@ -230,10 +230,10 @@
              , A.FRST_REG_DTM
              , A.LST_MDFR_ID
              , A.LST_MDF_DTM
-             , A.TRANS_TRG_SYS_ID
+             , A.TRANS_SYS_ID
              , B.TRANS_SYS_NM
           FROM T_TRANSCNG_TARGET_I A
-               LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_TRG_SYS_ID = B.TRANS_SYS_ID
+               LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_SYS_ID = B.TRANS_SYS_ID
          WHERE 1=1
            AND A.DB_SVR_ID = #{db_svr_id}
 
@@ -329,7 +329,7 @@
              , A.CONNECT_NM
              , A.DB_SVR_ID
              , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = A.DB_SVR_ID) AS DB_SVR_NM
-             , A.TRANS_TRG_SYS_ID
+             , A.TRANS_SYS_ID
              , A.TRANS_EXRT_TRG_TB_ID
              , A.TRANS_EXRT_EXCT_TB_ID
              , A.EXE_STATUS
@@ -341,7 +341,7 @@
              , B.SCM_NM
              , B.TRANS_SYS_NM
           FROM T_TRANSCNG_TARGET_I A
-               LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_TRG_SYS_ID = B.TRANS_SYS_ID
+               LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_SYS_ID = B.TRANS_SYS_ID
          WHERE 1=1
            AND A.TRANS_ID = #{trans_id}
          LIMIT 1
@@ -487,7 +487,7 @@
                   , KC_PORT
                   , CONNECT_NM
                   , DB_SVR_ID
-                  , TRANS_TRG_SYS_ID
+                  , TRANS_SYS_ID
                   , TRANS_EXRT_TRG_TB_ID
                   , FRST_REGR_ID
                   , FRST_REG_DTM
@@ -552,7 +552,7 @@
 	 	**/
 		UPDATE T_TRANSCNG_TARGET_I 
 		   SET
-				TRANS_TRG_SYS_ID = #{trans_trg_sys_id}::numeric,
+				TRANS_SYS_ID = #{trans_trg_sys_id}::numeric,
 				lst_mdfr_id =  #{frst_regr_id}, 
 				lst_mdf_dtm =  clock_timestamp()
 	 		WHERE TRANS_ID = #{trans_id}	 		
@@ -670,7 +670,7 @@
                A.TRANS_ID
              , A.TRANS_EXRT_TRG_TB_ID
           FROM T_TRANSCNG_TARGET_I A
-               LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_TRG_SYS_ID = B.TRANS_SYS_ID
+               LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_SYS_ID = B.TRANS_SYS_ID
          WHERE 1=1
            AND A.EXE_STATUS = 'TC001502'
          ORDER BY A.LST_MDF_DTM DESC

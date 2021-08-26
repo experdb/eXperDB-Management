@@ -891,7 +891,7 @@ function fn_update_setting(result, active_gbn) {
 		$("#mod_tg_connect_nm", "#modTargetRegForm").val(nvlPrmSet(result.connect_nm, ""));
 		$("#mod_tg_trans_id", "#modTargetRegForm").val(nvlPrmSet(result.trans_id, ""));
 		$("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
-		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.trans_trg_sys_id, ""));
+		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.trans_sys_id, ""));
 		$("#mod_tg_trans_trg_sys_nm","#modTargetRegForm").val(nvlPrmSet(result.trans_sys_nm, ""));
 		
 		mod_connector_tg_tableList.rows({selected: true}).deselect();
