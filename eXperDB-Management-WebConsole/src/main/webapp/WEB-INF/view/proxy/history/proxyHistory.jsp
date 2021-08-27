@@ -231,6 +231,8 @@
 								return '<spring:message code="dashboard.manual" />';
 							}else if(full.act_exe_type == "TC004002"){
 								return '<spring:message code="dashboard.auto" />';
+							}else if(full.act_exe_type == "TC004003"){
+								return 'Auto Scale';
 							}
 	         			}
 		         	}, 

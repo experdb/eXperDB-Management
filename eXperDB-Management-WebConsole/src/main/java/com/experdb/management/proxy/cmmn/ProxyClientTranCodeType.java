@@ -26,6 +26,7 @@ public class ProxyClientTranCodeType {
 	public static final String PsP011 = "PsP011";	// Config Backup 폴더 삭제 
 	public static final String PsP012 = "PsP012";	// proxy 서버 확인
 	public static final String PsP013 = "PsP013";	// 백업 파일 삭제
+	public static final String PsP014 = "PsP014";	// Scale In 시 haproxy.cfg 수정
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";

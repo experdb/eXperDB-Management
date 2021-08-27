@@ -279,8 +279,8 @@ public class ProxyMonitoringServiceImpl extends EgovAbstractServiceImpl implemen
 			statusNm = "정지";
 		} else if (cur_status.equals("TC001502")) {
 			jObj.put("status", "TC001501");
-			jObj.put("act_type", "R");
-			statusNm = "재기동";
+			jObj.put("act_type", "A");
+			statusNm = "기동";
 		}
 		jObj.put("act_exe_type", act_exe_type);
 		jObj.put("lst_mdfr_id", param.get("lst_mdfr_id"));

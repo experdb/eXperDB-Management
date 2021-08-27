@@ -17,6 +17,9 @@ VALUES('TC0043', 'TC004301', 'RoundRobin', 'Y', 'ADMIN', clock_timestamp(), 'ADM
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
 VALUES('TC0043', 'TC004302', 'LeastConn', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'leastconn');
+INSERT into T_SYSDTL_C 
+(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+values ('TC0040', 'TC004003', 'Auto Scale', 'Y', 'system', clock_timestamp(), 'system', clock_timestamp(), 'Auto Scale');
 
 --AWS 환경 Option
 ALTER TABLE experdb_management.t_pry_agt_i ADD aws_yn bpchar(1) NOT NULL DEFAULT 'N';

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="proxyRestSql">
+
+	<select id="selectScaleInProxyList" resultType="hashMap" parameterType="hashMap">
+		/**
+		* Query ID : selectScaleProxyList
+		* Description : Scale in에 따른 수정이 필요한 Proxy Server 목록 조회
+		* Author : 김민정
+		**/
+		SELECT 		A.PRY_SVR_ID,	
+							B.AGT_SN,
+							C.IPADR,
+							C.SOCKET_PORT 
+		FROM 			T_PRY_LSN_SVR_I 	A 
+		INNER JOIN 	T_PRY_SVR_I 	B 	ON A.PRY_SVR_ID=B.PRY_SVR_ID 
+		INNER JOIN 	T_PRY_AGT_I 	C	ON B.AGT_SN=C.AGT_SN
+		WHERE 		1=1
+		AND 				A.DB_CON_ADDR IN 
+			<foreach collection="db_con_addr" item="item" index="index" open="(" separator="," close=")">
+					        #{item}
+			</foreach>
+		GROUP BY A.PRY_SVR_ID, B.AGT_SN, C.IPADR, C.SOCKET_PORT 
+	</select>
+	
+	<select id="selectScaleOutProxyList" resultType="hashMap" parameterType="hashMap">
+		/**
+		* Query ID : selectScaleOutProxyList
+		* Description : Scale out에 따른 수정이 필요한 Proxy Server 목록 조회
+		* Author : 김민정
+		**/
+		SELECT 		A.PRY_SVR_ID,	
+							B.AGT_SN,
+							C.IPADR,
+							C.SOCKET_PORT 
+		FROM 			T_PRY_LSN_SVR_I 	A 
+		INNER JOIN 	T_PRY_SVR_I 	B 	ON A.PRY_SVR_ID=B.PRY_SVR_ID 
+		INNER JOIN 	T_PRY_AGT_I 	C	ON B.AGT_SN=C.AGT_SN
+		WHERE 		1=1
+		AND B.DB_SVR_ID = (	SELECT 	X.DB_SVR_ID
+											FROM 		T_DBSVRIPADR_I X
+											WHERE 	X.IPADR IN
+												<foreach collection="ipadr" item="item" index="index" open="(" separator="," close=")">
+														    #{item}
+												</foreach>
+											GROUP BY X.DB_SVR_ID )
+		GROUP BY A.PRY_SVR_ID, B.AGT_SN, C.IPADR, C.SOCKET_PORT 
+	</select>
+		
+	<delete id="deletProxyLsnSvrList" parameterType="hashMap">
+		/**
+		* Query ID : deletProxyLsnSvrList
+		* Description : Scale In 시 Proxy Listener Svr List 삭제 
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_LSN_SVR_I
+		WHERE 	DB_CON_ADDR IN
+      	<foreach collection="db_con_addr" item="item" index="index" open="(" separator="," close=")">
+					        #{item}
+		</foreach>
+	</delete>
+	
+	<insert id="insertProxyLsnSvrList" parameterType="proxyListenerServerVO">
+		/**
+		* Query ID : insertProxyLsnSvrList
+		* Description : Scale out 시 Proxy Listener Svr List 추가 
+		* Author : 김민정
+		**/
+		INSERT INTO T_PRY_LSN_SVR_I (LSN_SVR_ID, DB_CON_ADDR, PRY_SVR_ID, LSN_ID, CHK_PORTNO, BACKUP_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)
+		SELECT 	(SELECT COALESCE(MAX(LSN_SVR_ID+1),1) FROM T_PRY_LSN_SVR_I) AS LSN_SVR_ID, 
+						#{db_con_addr} AS DB_CON_ADDR, 
+						#{pry_svr_id} AS PRY_SVR_ID, 
+						LSN_ID, 
+						#{chk_portno} AS CHK_PORTNO, 
+						#{backup_yn} AS BACKUP_YN, 
+						#{lst_mdfr_id} AS FRST_REGR_ID, 
+						clock_timestamp() AS FRST_REG_DTM , 
+						#{lst_mdfr_id} AS LST_MDFR_ID, 
+						clock_timestamp() AS LST_MDF_DTM
+		FROM 		T_PRY_LSN_I 
+		WHERE 	PRY_SVR_ID=#{pry_svr_id}
+	</insert>
+	
+</mapper>

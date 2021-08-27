@@ -282,6 +282,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      String lst_mdfr_id = param.get("lst_mdfr_id").toString();
 		      String status = param.get("status").toString();
 		      String actType = param.get("act_type").toString();
+		      String exeActType = param.get("act_exe_type").toString();
 		      String[] statusNm = new String[1];
 		     
 		      boolean proxyExecute = false;
@@ -312,6 +313,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      
 		      agentJobj.put("pry_svr_id", prySvrId);
 		      agentJobj.put("lst_mdfr_id", lst_mdfr_id);
+		      agentJobj.put("act_exe_type", exeActType);
 		      
 		      try{
 		         agentJobj.put("sys_type", "PROXY");

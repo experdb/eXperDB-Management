@@ -545,7 +545,8 @@ public class ProxySettingController {
 				param.put("pry_svr_id", prySvrId);
 				param.put("status", status_cd);
 				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
-
+				param.put("act_exe_type", "TC004001");
+				
 				resultObj = proxySettingService.runProxyService(param);
 			}
 		}  catch (ConnectException e) {
@@ -828,6 +829,7 @@ public class ProxySettingController {
 					param.put("pry_svr_id", confData.get("pry_svr_id"));
 					param.put("status", "TC001501");
 					param.put("act_type", "R");
+					param.put("act_exe_type", "TC004001");
 					
 					resultObj = proxySettingService.runProxyService(param);
 				}else{
