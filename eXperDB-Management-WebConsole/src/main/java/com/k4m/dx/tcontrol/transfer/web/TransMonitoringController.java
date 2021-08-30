@@ -89,9 +89,12 @@ public class TransMonitoringController {
 		ModelAndView mv = new ModelAndView("jsonView");
 		List<Map<String, Object>> processCpuList = transMonitoringService.selectProcessCpuList();
 		List<Map<String, Object>> memoryList = transMonitoringService.selectMemoryList();
+		List<Map<String, Object>> allErrorList = transMonitoringService.selectAllErrorList();
 		
 		mv.addObject("processCpuList", processCpuList);
 		mv.addObject("memoryList", memoryList);
+		mv.addObject("allErrorList", allErrorList);
+		
 		return mv;
 	}
 	/**
@@ -269,24 +272,6 @@ public class TransMonitoringController {
 		mv.addObject("targetSinkCompleteChart", targetSinkCompleteChart);
 		mv.addObject("targetErrorChart", targetErrorChart);
 		
-		return mv;
-	}
-	
-	/**
-	 * trans 모니터링 타겟 sink error 차트
-	 * 
-	 * @param historyVO, request
-	 * @return ModelAndView
-	 */
-	@RequestMapping("/transTarSinkErrorChart")
-	public ModelAndView transTarSinkErrorChart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("jsonView");
-		
-		String strTransId = request.getParameter("trans_id");
-		int trans_id = Integer.parseInt(strTransId);
-		
-
-
 		return mv;
 	}
 }

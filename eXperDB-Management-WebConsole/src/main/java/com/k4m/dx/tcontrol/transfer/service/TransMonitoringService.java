@@ -177,10 +177,12 @@ public interface TransMonitoringService {
 	 * @return List<Map<String, Object>>
 	 */
 	public List<Map<String, Object>> selectTargetErrorInfo(int trans_id);
-
-
-
-
-
+	
+	/**
+	 * kafka Connect 전체 에러 조회
+	 * 
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectAllErrorList();
 
 }

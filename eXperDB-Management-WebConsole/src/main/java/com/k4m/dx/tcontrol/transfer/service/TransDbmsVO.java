@@ -30,7 +30,21 @@ public class TransDbmsVO {
 	private String exe_status;
 	private String trans_dbms_id_Rows;
 	private String trans_connect_id_Rows;
-
+	private String db_exe_status;
+	private String dbms_sch_gbn;
+	
+	public String getDbms_sch_gbn() {
+		return dbms_sch_gbn;
+	}
+	public void setDbms_sch_gbn(String dbms_sch_gbn) {
+		this.dbms_sch_gbn = dbms_sch_gbn;
+	}
+	public String getDb_exe_status() {
+		return db_exe_status;
+	}
+	public void setDb_exe_status(String db_exe_status) {
+		this.db_exe_status = db_exe_status;
+	}
 	public String getTrans_connect_id_Rows() {
 		return trans_connect_id_Rows;
 	}

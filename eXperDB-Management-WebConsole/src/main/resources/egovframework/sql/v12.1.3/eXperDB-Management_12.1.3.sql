@@ -113,6 +113,10 @@ COMMENT ON TABLE experdb_management.t_trans_sys_inf IS 'TRANS_시스템_정보';
 -- 인덱스 추가
 CREATE INDEX IDX_TRANS_SYS_INF_01 ON T_TRANS_SYS_INF(TRANS_SYS_NM);
 
+-- 실행_상태
+ALTER TABLE experdb_management.t_trans_sys_inf ADD COLUMN exe_status varchar(20) NOT NULL DEFAULT 'TC001502'::character varying;
+COMMENT ON COLUMN experdb_management.t_trans_sys_inf.exe_status IS '실행상태';
+
 --COMMENT 변경
 COMMENT ON COLUMN experdb_management.t_trans_sys_inf.trans_sys_id IS '전송_시스템_ID';
 COMMENT ON COLUMN experdb_management.t_trans_sys_inf.trans_sys_nm IS '전송_시스템_명';
@@ -415,8 +419,3 @@ COMMENT ON COLUMN experdb_management.cdc_connector_task_sink.total_records_skipp
 COMMENT ON COLUMN experdb_management.cdc_connector_task_sink.total_record_errors IS '오류_총_수';
 COMMENT ON COLUMN experdb_management.cdc_connector_task_sink.total_retries IS '재시도_작업_총_수';
 -- cdc_connector_task_sink 테이블 추가 끝------
-
-
-
-
-

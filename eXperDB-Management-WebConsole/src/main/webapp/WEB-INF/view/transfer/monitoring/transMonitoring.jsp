@@ -29,6 +29,7 @@
 <script type="text/javascript">
 	var cpuChart = "";
 	var memChart = "";
+	var allErrorChart = "";
 
 	/* ********************************************************
 	 * 화면 onload
@@ -37,8 +38,15 @@
 		//금일 날짜 setting
 		fn_todaySetting();
 		
-		// cpu, memory chart
-		fn_cpu_mem_chart();
+		// cpu, memory error chart
+		fn_cpu_mem_err_chart();
+		
+		
+		
+		
+		
+		
+		
 		
 		// 소스 chart init
 // 		fn_src_chart_init();
@@ -69,7 +77,7 @@
 	
 		// 타겟 error 리스트 init
 		fn_tar_error_init();
-
+	
 	});
 
 	function fn_srcConnectInfo() {
@@ -115,7 +123,7 @@
 						srcMappingListTable.clear().draw();
 						if (nvlPrmSet(result.table_name_list, '') != '') {
 							srcMappingListTable.rows.add(result.table_name_list).draw();
-						}	
+						}
 						selectTab('snapshot');
 						$('#src-chart-line-1').empty();
 						if(nvlPrmSet(result.sourceChart1, '') != '') {
@@ -453,6 +461,7 @@
 					<h4 class="card-title">
 						<i class="item-icon fa fa-dot-circle-o"></i> error
 					</h4>
+					<div id="chart-allError" style="max-height:200px;"></div>
 				</div>
 			</div>
 		</div>

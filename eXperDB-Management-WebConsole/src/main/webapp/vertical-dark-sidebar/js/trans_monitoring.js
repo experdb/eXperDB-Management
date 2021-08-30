@@ -22,9 +22,9 @@ function fn_todaySetting() {
 }
 
 /* ********************************************************
- * CPU / MEM 차트
+ * CPU / MEM / ERROR 차트
  * ******************************************************** */
-function fn_cpu_mem_chart(){
+function fn_cpu_mem_err_chart(){
 	$.ajax({
 		url : "/transMonitoringCpuMemList",
 		dataType : "json",
@@ -83,21 +83,39 @@ function fn_cpu_mem_chart(){
 					pointSize: 0,
 					resize: true
 				});
+				
+				allErrorChart = Morris.Line({
+					element: 'chart-allError',
+					// Tell Morris where the data is
+					data: result.allErrorList,
+					// Tell Morris which property of the data is to be mapped to which axis
+					xkey: 'time',
+					xLabelFormat: function(time) {
+						return time.label.slice(10);
+					},
+					ykeys: ['error'],
+					lineColors: ['#199cef'],
+					labels: ['error'],
+					lineWidth: 2,
+					parseTime: false,
+					hideHover: false,
+					pointSize: 0,
+					resize: true
+				});
 			}
 		}
 	});
 	$('#loading').hide();
-	
-	
+
 	setInterval(function() { 
-		updateLiveTempGraph(cpuChart, memChart); 
+		updateLiveTempGraph(cpuChart, memChart, allErrorChart); 
 	}, 5000);
 }
 
 /* ********************************************************
  * CPU / MEM 차트 조회
  * ******************************************************** */
-function updateLiveTempGraph(cpuChart, memChart) {
+function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
 	$.ajax({
 		url : "/transMonitoringCpuMemList",
 		dataType : "json",
@@ -120,6 +138,7 @@ function updateLiveTempGraph(cpuChart, memChart) {
 			if (result != null) {
 				cpuChart.setData(result.processCpuList);
 				memChart.setData(result.memoryList);
+				allErrorChart.setData(result.allErrorList);
 			}
 		}
 	});	

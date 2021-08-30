@@ -229,7 +229,13 @@ public class TransMonitoringDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectTargetErrorInfo(int trans_id) {
 		return selectList("transMonitoringSql.selectTargetErrorInfo", trans_id);
 	}
-
-
-
+	
+	/**
+	 * kafka Connect 전체 에러 조회
+	 * 
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectAllErrorList() {
+		return selectList("transMonitoringSql.selectAllErrorList");
+	}
 }

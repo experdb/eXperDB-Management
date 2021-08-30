@@ -292,7 +292,7 @@
 	 ******************************************************** */
 	function fnc_confirmRst(){
 		agt_cndt_cd = $("#agt_cndt_cd", "#proxyViewForm").val();
-		if(agt_cndt_cd == "T001501"){
+		if(agt_cndt_cd == "TC001501"){
 			fn_actExeCng();
 		}
 	}

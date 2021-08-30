@@ -255,9 +255,15 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	public List<Map<String, Object>> selectTargetErrorInfo(int trans_id) {
 		return transMonitoringDAO.selectTargetErrorInfo(trans_id);
 	}
-
-
-
-
+	
+	/**
+	 * kafka Connect 전체 에러 조회
+	 * 
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectAllErrorList() {
+		return transMonitoringDAO.selectAllErrorList();
+	}
 	
 }

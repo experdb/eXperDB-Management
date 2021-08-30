@@ -67,6 +67,7 @@
              , A.FRST_REG_DTM
              , A.LST_MDFR_ID
              , A.LST_MDF_DTM
+             , A.EXE_STATUS
           FROM (
                SELECT
                       TRANS_SYS_ID
@@ -83,6 +84,7 @@
                     , TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
                     , LST_MDFR_ID
                     , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
+                    , EXE_STATUS
                  FROM T_TRANS_SYS_INF
                 WHERE 1 = 1
 
@@ -100,6 +102,10 @@
 
                <if test="dtb_nm != null and dtb_nm != '' ">
                   AND DTB_NM = #{dtb_nm}
+               </if>
+               
+                <if test="dbms_sch_gbn != null and dbms_sch_gbn != '' ">
+                  AND EXE_STATUS = 'TC001501'
                </if>
 	
                 ORDER BY LST_MDF_DTM DESC
@@ -139,6 +145,7 @@
                    , FRST_REG_DTM
                    , LST_MDFR_ID
                    , LST_MDF_DTM
+                   , EXE_STATUS
                     ) 
                     VALUES
                     (
@@ -155,6 +162,7 @@
                    , clock_timestamp()
                    , #{lst_mdfr_id}
                    , clock_timestamp()	
+                   , #{exe_status}
                     )
 	</insert>
 	
@@ -190,6 +198,7 @@
              , PORTNO = #{portno}
              , SCM_NM = #{scm_nm}
              , PWD = #{pwd}
+             , EXE_STATUS = #{exe_status}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE TRANS_SYS_ID=#{trans_sys_id}::numeric
@@ -232,6 +241,7 @@
              , A.LST_MDF_DTM
              , A.TRANS_SYS_ID
              , B.TRANS_SYS_NM
+             , B.EXE_STATUS AS DB_EXE_STATUS
           FROM T_TRANSCNG_TARGET_I A
                LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_SYS_ID = B.TRANS_SYS_ID
          WHERE 1=1
@@ -340,6 +350,7 @@
              , B.PWD
              , B.SCM_NM
              , B.TRANS_SYS_NM
+             , B.EXE_STATUS AS DB_EXE_STATUS
           FROM T_TRANSCNG_TARGET_I A
                LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_SYS_ID = B.TRANS_SYS_ID
          WHERE 1=1
