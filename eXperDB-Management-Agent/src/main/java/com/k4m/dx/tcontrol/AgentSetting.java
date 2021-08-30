@@ -52,6 +52,8 @@ public class AgentSetting {
 		String strProxyYN = "";
 		String strProxyInterYN = "";
 		String strProxyInterIP = "";
+		
+		String strTransYN = "";
 
 		Scanner scan = new Scanner(System.in);
 		
@@ -161,13 +163,31 @@ public class AgentSetting {
 			}
 		}
 		
-		//trans setting 추가
-		System.out.println("trans path :(/home/experdb/programs/kafka)");
-		strTransPath = scan.nextLine();
-		if(strTransPath.equals("")) {
-			strTransPath = "/home/experdb/programs/kafka";
-		} 
+		/* CDC 사용여부 */
+		System.out.println("Whether CDC-Service is enabled (y, n) :");
+		strTransYN = scan.nextLine();
+		strTransYN = strTransYN.toUpperCase();
+		while (true) {
+			if(strTransYN.equals("")) {
+				System.out.println("Please enter your Proxy-Service setting yn. ");
+				System.out.println("Whether Proxy Service is enabled (y, n) :");
+				strTransYN = scan.nextLine();
+				strTransYN = strTransYN.toUpperCase();
+			} else {
+				break;
+			}
+		}
 		
+		//cdc 사용일 경우
+		if(strTransYN.equals("Y")){
+			//trans setting 추가
+			System.out.println("trans path :(/home/experdb/programs/kafka)");
+			strTransPath = scan.nextLine();
+			if(strTransPath.equals("")) {
+				strTransPath = "/home/experdb/programs/kafka";
+			} 
+		}
+
 		/* Proxy in/out 사용여부 */
 		System.out.println("Whether Proxy-Service is enabled (y, n) :");
 		strProxyYN = scan.nextLine();
@@ -227,6 +247,8 @@ public class AgentSetting {
 		System.out.println("database Connection Info :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
+		
+		System.out.println("trans_yn :" + strTransYN);
 		System.out.println("trans_path :" + strTransPath);
 
 		System.out.println("proxy_yn :" + strProxyYN);
@@ -300,6 +322,7 @@ public class AgentSetting {
 		    prop.setProperty("socket.server.port", strAgentPort);
 		    prop.setProperty("agent.install.ip", strAgentIp);
 
+		    prop.setProperty("agent.trans_yn", strTransYN);
 		    prop.setProperty("agent.trans_path", strTransPath);
 		    
 
@@ -321,9 +344,5 @@ public class AgentSetting {
 		} else {
 			System.out.println("#### Exit(0) Cancel Agent Setting #####");
 		}
-		
-
-
-
 	}
 }

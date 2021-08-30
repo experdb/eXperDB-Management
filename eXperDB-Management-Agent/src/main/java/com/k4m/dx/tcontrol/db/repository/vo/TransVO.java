@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.db.repository.vo;
 
-public class TransVO {
-
+public class TransVO { 
 	private int trans_id;
 	private String exe_status;
 
@@ -38,6 +37,52 @@ public class TransVO {
 	private int trans_exrt_trg_tb_id;
 	private String write_use_yn;
 	
+	private int kc_id;
+	private String kc_nm;
+	private String con_gbn;
+	private String connect_nm;
+	private int db_svr_id;
+
+	public String getCon_gbn() {
+		return con_gbn;
+	}
+
+	public void setCon_gbn(String con_gbn) {
+		this.con_gbn = con_gbn;
+	}
+
+	public String getConnect_nm() {
+		return connect_nm;
+	}
+
+	public void setConnect_nm(String connect_nm) {
+		this.connect_nm = connect_nm;
+	}
+
+	public int getDb_svr_id() {
+		return db_svr_id;
+	}
+
+	public void setDb_svr_id(int db_svr_id) {
+		this.db_svr_id = db_svr_id;
+	}
+
+	public int getKc_id() {
+		return kc_id;
+	}
+
+	public void setKc_id(int kc_id) {
+		this.kc_id = kc_id;
+	}
+
+	public String getKc_nm() {
+		return kc_nm;
+	}
+
+	public void setKc_nm(String kc_nm) {
+		this.kc_nm = kc_nm;
+	}
+
 	public String getWrite_use_yn() {
 		return write_use_yn;
 	}

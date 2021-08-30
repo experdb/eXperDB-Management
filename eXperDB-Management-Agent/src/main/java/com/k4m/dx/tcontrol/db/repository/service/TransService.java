@@ -115,4 +115,12 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public void updateTransTopic(TransVO vo)  throws Exception;
+
+	/**
+	 * trans 실시간 체크
+	 * @param  TransVO
+	 * @return 
+	 * @throws Exception
+	 */
+	public String transRealTimeCheck(TransVO searChTransVO) throws Exception;
 }

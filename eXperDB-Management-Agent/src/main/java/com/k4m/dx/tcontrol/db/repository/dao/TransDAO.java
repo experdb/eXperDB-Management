@@ -1,19 +1,12 @@
 package com.k4m.dx.tcontrol.db.repository.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
-import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
-import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
-import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
-import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
-import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
 /**
 * @author 박태혁
@@ -89,5 +82,25 @@ public class TransDAO {
 	//source topic list 수정
 	public void updateTransTopic(TransVO vo) throws Exception  {
 		 session.insert("trans.updateTransTopic", vo);
+	}
+
+	//kafka connect 리스트 조회
+	public List<TransVO> selectTransKafkaConList(TransVO vo) throws Exception {
+		return (List) session.selectList("trans.selectTransKafkaConList", vo);
+	}
+
+	//kafka connect update
+	public void updateTranConInfInfo(TransVO vo) throws Exception  {
+		 session.insert("trans.updateTranConInfInfo", vo);
+	}
+
+	//소스, 타겟 connect 전체 리스트 조회
+	public List<TransVO> selectTransCngTotList(TransVO vo) throws Exception {
+		return (List) session.selectList("trans.selectTransCngTotList", vo);
+	}
+
+	//전송가능 테이블 조회
+	public List<TransVO> selectTransExrttrgMappList(TransVO vo) throws Exception {
+		return (List) session.selectList("trans.selectTransExrttrgMappList", vo);
 	}
 }

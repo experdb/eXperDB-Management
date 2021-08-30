@@ -109,9 +109,9 @@ public class DxT039 extends SocketCtl{
 				conectStopGbn = "total";
 			}
 			socketLogger.info("##### 결과 : conectStopGbn ==" + conectStopGbn);	
-
+			
 			//conectStopGbn 이 total 일 경우 전체 삭제
-			if ("total".equals(conectStopGbn) || "2deps".equals(conectStopGbn) || "4deps".equals(conectStopGbn)) {
+			if ("total".equals(conectStopGbn) || "2deps".equals(conectStopGbn) || "4deps".equals(conectStopGbn) || "no_deps".equals(conectStopGbn)) {
 				RunCommandExec r = new RunCommandExec(strCmd);
 				
 				//명령어 실행
@@ -137,26 +137,30 @@ public class DxT039 extends SocketCtl{
 						transVO.setSrc_topic_use_yn("N");
 						transVO.setWrite_use_yn("N");
 
-						if ("source".equals(con_start_gbn)) {
-							//타겟 전송테이블 삭제
-							if ("4deps".equals(conectStopGbn)) {
-							//	updateTranExrtTrgList(transVO);
-							}
-							
-							//1. 같은 토픽을 가진것이 있으면 본인것만 삭제
-							transService.updateTransExe(transVO);
+						//타겟 전송테이블 삭제
+						if ("4deps".equals(conectStopGbn)) {
+						//	updateTranExrtTrgList(transVO);
+						}
 
-							//topic 테이블 수정
-							updateTransTopicTbl(transVO);
+						//topic 테이블 수정
+						updateTransTopicTbl(transVO);
 							
-							if ("total".equals(conectStopGbn) || "4deps".equals(conectStopGbn)) {
-								//topic 삭제
-								deleteTransTopic(transVO);
-							}
-						} else {
-							transService.updateTransTargetExe(transVO);
+						if ("total".equals(conectStopGbn) || "4deps".equals(conectStopGbn)) {
+							//topic 삭제
+							deleteTransTopic(transVO);
 						}
 					}
+				}
+				
+				TransVO transMainVO = new TransVO();
+				transMainVO.setTrans_id(trans_id);
+				transMainVO.setExe_status("TC001502");
+				
+				if ("source".equals(con_start_gbn)) {
+					//1. 같은 토픽을 가진것이 있으면 본인것만 삭제
+					transService.updateTransExe(transMainVO);
+				}else {
+					transService.updateTransTargetExe(transMainVO);
 				}
 
 				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

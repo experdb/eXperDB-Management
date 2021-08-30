@@ -277,4 +277,84 @@
            SET EXRT_TRG_TB_NM = #{exrt_trg_tb_nm}
         WHERE TRANS_EXRT_TRG_TB_ID = #{trans_exrt_trg_tb_id}::numeric
     </update>
+
+	<select id="selectTransKafkaConList" parameterType="TransVO" resultType="TransVO">
+    	/**
+	 	* Query ID : selectTransKafkaConList
+	 	* Description : kafka connect 리스트 조회
+	 	* Author : 
+	 	**/
+        SELECT
+               KC_ID
+             , KC_NM
+             , KC_IP
+             , KC_PORT
+             , EXE_STATUS
+          FROM T_TRANS_CON_INF
+       --  WHERE EXE_STATUS = 'TC001501'       
+	</select>
+
+    <update id="updateTranConInfInfo"  parameterType="TransVO">
+    	/**
+	 	* Query ID : updateTranConInfInfo
+	 	* Description : kafka connect update
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_CON_INF
+           SET EXE_STATUS = #{exe_status}
+        WHERE KC_ID = #{kc_id}::numeric
+    </update>
+ 	
+	<select id="selectTransCngTotList" parameterType="TransVO" resultType="TransVO">
+    	/**
+	 	* Query ID : selectTransCngTotList
+	 	* Description : connect 전체 조회
+	 	* Author : 
+	 	**/
+        SELECT 'SOURCE' as CON_GBN,
+               TRANS_ID, 
+               KC_IP, 
+               KC_PORT, 
+               CONNECT_NM, 
+               DB_SVR_ID, 
+               EXE_STATUS, 
+               TRANS_EXRT_TRG_TB_ID, 
+               KC_ID,
+               TRANS_COM_ID
+          FROM T_TRANSCNG_I
+        UNION ALL
+        SELECT 'TARGET' as CON_GBN,
+               TRANS_ID, 
+               KC_IP, 
+               KC_PORT, 
+               CONNECT_NM, 
+               DB_SVR_ID, 
+               EXE_STATUS, 
+               TRANS_EXRT_TRG_TB_ID, 
+               KC_ID,
+               0 AS TRANS_COM_ID
+          FROM T_TRANSCNG_TARGET_I
+         ORDER BY CON_GBN, TRANS_ID
+	</select>
+ 	
+	<select id="selectTransExrttrgMappList" parameterType="TransVO" resultType="TransVO">
+    	/**
+	 	* Query ID : selectTransExrttrgMappList
+	 	* Description : 전송가능 테이블 조회
+	 	* Author : 
+	 	**/
+        SELECT A.TRANS_ID, 
+               B.TRANS_EXRT_TRG_TB_ID,
+               B.EXRT_TRG_TB_NM
+         FROM T_TRANSCNG_I A
+              JOIN T_TRANS_EXRTTRG_MAPP B ON A.TRANS_EXRT_TRG_TB_ID = B.TRANS_EXRT_TRG_TB_ID
+        WHERE TRANS_ID = #{trans_id}
+        UNION ALL
+       SELECT A.TRANS_ID,
+              B.TRANS_EXRT_TRG_TB_ID,
+              B.EXRT_TRG_TB_NM
+         FROM T_TRANSCNG_TARGET_I A
+              JOIN T_TRANS_EXRTTRG_MAPP B ON A.TRANS_EXRT_TRG_TB_ID = B.TRANS_EXRT_TRG_TB_ID
+        WHERE TRANS_ID = #{trans_id}
+	</select>
 </mapper>
