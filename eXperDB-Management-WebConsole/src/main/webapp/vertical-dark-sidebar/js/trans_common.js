@@ -770,10 +770,11 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			$("#ins_compression_type", "#insRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 
 			$("#ins_snapshotModeDetail", "#insRegForm").html(data_transfer_msg1);
-
 			//메타데이타 설정
 			$("#ins_meta_data", "#insRegForm").val("OFF");
 			$("input:checkbox[id='ins_meta_data_chk']").prop("checked", false); 
+
+			$("#ins_kc_connect_td","#searchRegForm").html("");
 			
 			$("#ins_source_trans_active_div").hide();
 			
@@ -788,8 +789,9 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			
 			ins_tg_topicList.clear().draw();
 			ins_connector_tg_tableList.clear().draw();
-			
 			$("#ins_target_trans_active_div").hide();
+			
+			$("#ins_tg_kc_connect_td","#searchTargetRegForm").html("");
 			
 			ins_tg_connect_status_Chk = "fail";
 			ins_tg_connect_nm_Chk = "fail";
@@ -1859,7 +1861,6 @@ function fn_common_con_set_pop() {
 		},
 		success : function(result) {
 			fn_transCommonConSetPopStart();
-
 			$('#pop_layer_con_com_ins_list').modal("show");
 		}
 	});
@@ -2121,7 +2122,7 @@ function fn_kc_nm_chg(hw_gbn) {
 						connectTd += schedule_stop;
 						connectTd += "</div>";
 					}
-
+					
 					if (hw_gbn == "source_ins") {
 						$("#ins_kc_ip","#searchRegForm").val(nvlPrmSet(result.ip, ''));
 						$("#ins_kc_port","#searchRegForm").val(nvlPrmSet(result.port, ''));
@@ -2133,7 +2134,6 @@ function fn_kc_nm_chg(hw_gbn) {
 						
 						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html(connectTd);
 					}
-					
 					
 					//topic list 조회
 					if (hw_gbn == "target_ins") {
@@ -2156,12 +2156,12 @@ function fn_kc_nm_chg(hw_gbn) {
 						$("#ins_kc_ip","#searchRegForm").val("");
 						$("#ins_kc_port","#searchRegForm").val("");
 
-						$("#ins_kc_connect_td","#searchRegForm").html(connectTd);
+						$("#ins_kc_connect_td","#searchRegForm").html("");
 					} else {
 						$("#ins_tg_kc_ip","#searchTargetRegForm").val("");
 						$("#ins_tg_kc_port","#searchTargetRegForm").val("");
 						
-						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html(connectTd);
+						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html("");
 						
 						ins_tg_topicList.rows({selected: true}).deselect();
 						ins_tg_topicList.clear().draw();
