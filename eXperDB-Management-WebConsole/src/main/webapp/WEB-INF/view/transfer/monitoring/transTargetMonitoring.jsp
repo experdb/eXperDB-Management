@@ -366,67 +366,104 @@
 		$(window).trigger('resize');
 	}
 	
-	function fn_sink_chart_init(){
-
-		sinkChart = Morris.Line({
-				element: 'chart-line-1',
-				lineColors: ['#63CF72', '#FABA66',],
-				data: [
-						{
-						time: '',
-						sink_record_active_count: 0,
-						sink_record_send_total: 0,
-						}
-				],
-				xkey: 'time',
-				xkeyFormat: function(time) {
-					return time.substring(10);
+	function fn_sink_chart_init(trans_id){
+		console.log(trans_id)
+		if(trans_id != ""){
+			$.ajax({
+				url : "/transTarSinkChart",
+				dataType : "json",
+				type : "post",
+	 			data : {
+	 				trans_id : trans_id,
+	 			},
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
 				},
-				ykeys: ['sink_record_active_count', 'sink_record_send_total'],
-				labels: ['싱크 중인 레코드 수', '싱크 완료 총 수']
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					if (result != null) {
+						if (nvlPrmSet(result.targetSinkRecordChart, '') != '') {
+							var sinkChart = Morris.Line({
+								element: 'tar-chart-line-sink',
+								ineColors: ['#63CF72', '#FABA66',],
+								data: [
+									{
+										time: '',
+										sink_record_active_count: 0,
+										sink_record_send_total: 0,
+									}
+								],
+								xkey: 'time',
+								xkeyFormat: function(time) {
+									return time.substring(10);
+								},
+								ykeys: ['sink_record_active_count', 'sink_record_send_total'],
+								labels: ['싱크 중인 레코드 수', '싱크 완료 총 수']
+							});
+							sinkChart.setData(result.targetSinkRecordChart);
+						}
+						
+						if (nvlPrmSet(result.targetSinkCompleteChart, '') != '') {
+							var sinkCompleteChart = Morris.Line({
+								element: 'tar-chart-line-complete',
+								lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
+								data: [
+										{
+											time: '',
+											offset_commit_completion_total: 0,
+											offset_commit_skip_total: 0,
+										}
+								],
+								xkey: 'time',
+								xkeyFormat: function(time) {
+									return time.substring(10);
+								},
+								ykeys: ['offset_commit_completion_total', 'offset_commit_skip_total'],
+								labels: ['완료 총 수', '무시된 총 커밋 수']
+							});
+							sinkCompleteChart.setData(result.targetSinkCompleteChart);
+						}
+						
+						if (nvlPrmSet(result.targetErrorChart, '') != '') {
+							var sinkErrorChart = Morris.Line({
+								element: 'tar-chart-line-sink-error',
+								lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
+								data: [
+										{
+											time: '',
+											total_record_errors: 0,
+											total_record_failures: 0,
+											total_records_skipped: 0,
+										}
+								],
+								xkey: 'time',
+								xkeyFormat: function(time) {
+									return time.substring(10);
+								},
+								ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped'],
+								labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수']
+							});
+							sinkErrorChart.setData(result.targetErrorChart);
+						}
+					}
+				}
 			});
-		
-		sinkCompleteChart = Morris.Line({
-			element: 'chart-line-2',
-			lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
-			data: [
-					{
-					time: '',
-					offset_commit_completion_total: 0,
-					offset_commit_skip_total: 0,
-					}
-			],
-			xkey: 'time',
-			xkeyFormat: function(time) {
-				return time.substring(10);
-			},
-			ykeys: ['offset_commit_completion_total', 'offset_commit_skip_total'],
-			labels: ['완료 총 수', '무시된 총 커밋 수']
-		});
-		
-		sinkErrorChart = Morris.Line({
-			element: 'chart-line-3',
-			lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
-			data: [
-					{
-					time: '',
-					total_record_errors: 0,
-					total_record_failures: 0,
-					total_records_skipped: 0,
-					}
-			],
-			xkey: 'time',
-			xkeyFormat: function(time) {
-				return time.substring(10);
-			},
-			ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped'],
-			labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수']
-		});
-	
+		} 
+		$("#loading").hide();
 	}
+	
+	
 </script>
 
-<div class="col-lg-6 grid-margin stretch-card">
+<div class="col-lg-6 grid-margin stretch-card" id="trans_monitoring_target_info">
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">
@@ -556,7 +593,7 @@
 						<div class="form-group row" style="margin-bottom:-20px;">
 							<label class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 								<i class="item-icon fa fa-dot-circle-o"></i>
-								<spring:message code="data_transfer.transfer_table" />
+								<spring:message code="data_transfer.transfer_topic" />
 							</label>
 							<div class="col-sm-9">
 							</div>
@@ -604,7 +641,7 @@
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
 								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;싱크 중
 							</p>
-							<div id="chart-line-1" style="max-height:200px;"></div>
+							<div id="tar-chart-line-sink" style="max-height:200px;"></div>
 						</div>
 					</div>
 				</div>
@@ -616,7 +653,7 @@
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
 								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;완료
 							</p>
-							<div id="chart-line-2" style="max-height:200px;"></div>
+							<div id="tar-chart-line-complete" style="max-height:200px;"></div>
 						</div>
 					</div>
 				</div>
@@ -677,31 +714,31 @@
 						<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
 							<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;error 차트
 						</p>
-						<div id="chart-line-3" style="max-height:200px;"></div>
+						<div id="tar-chart-line-sink-error" style="max-height:200px;"></div>
 					</div>
 				</div>
 			</div>
 			
 			<!-- error 리스트 -->
-			<div class="col-md-12 col-xl-12 justify-content-center">
-				<div class="card" style="margin-left:-10px;border:none;">
-					<div class="card-body" style="border:none;">
-						<table id="tarErrorTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
-							<thead class="bg-info text-white">
-								<tr>
-									<th width="100px;">last_error_timestamp </th>
-									<th width="100px;">total_errors_logged </th>
-									<th width="100px;">deadletterqueue_produce_requests</th>
-									<th width="100px;">deadletterqueue_produce_failures </th>
-									<th width="100px;">total_record_failures</th>
-									<th width="100px;">total_records_skipped </th>
-									<th width="100px;">total_record_errors</th>
-								</tr>
-							</thead>
-						</table>
-					</div>
-				</div>
-			</div>
+<!-- 			<div class="col-md-12 col-xl-12 justify-content-center"> -->
+<!-- 				<div class="card" style="margin-left:-10px;border:none;"> -->
+<!-- 					<div class="card-body" style="border:none;"> -->
+<!-- 						<table id="tarErrorTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;"> -->
+<!-- 							<thead class="bg-info text-white"> -->
+<!-- 								<tr> -->
+<!-- 									<th width="100px;">last_error_timestamp </th> -->
+<!-- 									<th width="100px;">total_errors_logged </th> -->
+<!-- 									<th width="100px;">deadletterqueue_produce_requests</th> -->
+<!-- 									<th width="100px;">deadletterqueue_produce_failures </th> -->
+<!-- 									<th width="100px;">total_record_failures</th> -->
+<!-- 									<th width="100px;">total_records_skipped </th> -->
+<!-- 									<th width="100px;">total_record_errors</th> -->
+<!-- 								</tr> -->
+<!-- 							</thead> -->
+<!-- 						</table> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
 				
 			<!-- error 정보 end -->
 			

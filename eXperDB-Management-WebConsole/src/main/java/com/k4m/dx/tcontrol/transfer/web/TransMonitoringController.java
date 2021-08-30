@@ -245,4 +245,48 @@ public class TransMonitoringController {
 		return mv;
 	}
 	
+	/**
+	 * trans 모니터링 타겟 sink 차트
+	 * 
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/transTarSinkChart")
+	public ModelAndView transTarSinkChart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		String strTransId = request.getParameter("trans_id");
+		int trans_id = Integer.parseInt(strTransId);
+		
+		// 타겟 record sink chart
+		List<Map<String, Object>> targetSinkRecordChart = transMonitoringService.selectTargetSinkRecordChart(trans_id);
+		// 타겟 complete sink chart
+		List<Map<String, Object>> targetSinkCompleteChart = transMonitoringService.selectTargetSinkCompleteChart(trans_id);
+		// 타겟 error chart
+		List<Map<String, Object>> targetErrorChart = transMonitoringService.selectTargetErrorChart(trans_id);
+		
+		mv.addObject("targetSinkRecordChart", targetSinkRecordChart);
+		mv.addObject("targetSinkCompleteChart", targetSinkCompleteChart);
+		mv.addObject("targetErrorChart", targetErrorChart);
+		
+		return mv;
+	}
+	
+	/**
+	 * trans 모니터링 타겟 sink error 차트
+	 * 
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/transTarSinkErrorChart")
+	public ModelAndView transTarSinkErrorChart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		String strTransId = request.getParameter("trans_id");
+		int trans_id = Integer.parseInt(strTransId);
+		
+
+
+		return mv;
+	}
 }

@@ -26,8 +26,8 @@
 	var snapshotChart = "";
 	var streamingChart = "";
 	var streamingChart = "";
-	var srcChart1 = "";
-	var srcChart2 = "";
+// 	var srcChart1 = "";
+// 	var srcChart2 = "";
 	var srcErrorChart = "";
 	
 	function fn_src_mapping_list_init(){
@@ -741,21 +741,21 @@
 							});
 							snapshotChart.setData(result.snapshotChart);
 						}
-						srcSnapshotTable.clear().draw();
-						if (nvlPrmSet(result.snapshotInfo, '') != '') {
-							for(var i = 0; i < result.snapshotInfo.length; i++){	
-								if(result.snapshotInfo[i].rownum == 1){
-									if(i != result.snapshotInfo.length-1 && result.snapshotInfo[i+1].rownum == 2){
-										result.snapshotInfo[i].number_of_events_filtered_cng = result.snapshotInfo[i].number_of_events_filtered - result.snapshotInfo[i+1].number_of_events_filtered;
-										result.snapshotInfo[i].number_of_erroneous_events_cng = result.snapshotInfo[i].number_of_erroneous_events - result.snapshotInfo[i+1].number_of_erroneous_events;
-										result.snapshotInfo[i].queue_total_capacity_cng = result.snapshotInfo[i].queue_total_capacity - result.snapshotInfo[i+1].queue_total_capacity;
-										result.snapshotInfo[i].queue_remaining_capacity_cng = result.snapshotInfo[i].queue_remaining_capacity - result.snapshotInfo[i+1].queue_remaining_capacity;
-										result.snapshotInfo[i].remaining_table_count_cng = result.snapshotInfo[i].remaining_table_count - result.snapshotInfo[i+1].remaining_table_count;
-									}
-									srcSnapshotTable.row.add(result.snapshotInfo[i]).draw();
-								}
-							}
-						}
+// 						srcSnapshotTable.clear().draw();
+// 						if (nvlPrmSet(result.snapshotInfo, '') != '') {
+// 							for(var i = 0; i < result.snapshotInfo.length; i++){	
+// 								if(result.snapshotInfo[i].rownum == 1){
+// 									if(i != result.snapshotInfo.length-1 && result.snapshotInfo[i+1].rownum == 2){
+// 										result.snapshotInfo[i].number_of_events_filtered_cng = result.snapshotInfo[i].number_of_events_filtered - result.snapshotInfo[i+1].number_of_events_filtered;
+// 										result.snapshotInfo[i].number_of_erroneous_events_cng = result.snapshotInfo[i].number_of_erroneous_events - result.snapshotInfo[i+1].number_of_erroneous_events;
+// 										result.snapshotInfo[i].queue_total_capacity_cng = result.snapshotInfo[i].queue_total_capacity - result.snapshotInfo[i+1].queue_total_capacity;
+// 										result.snapshotInfo[i].queue_remaining_capacity_cng = result.snapshotInfo[i].queue_remaining_capacity - result.snapshotInfo[i+1].queue_remaining_capacity;
+// 										result.snapshotInfo[i].remaining_table_count_cng = result.snapshotInfo[i].remaining_table_count - result.snapshotInfo[i+1].remaining_table_count;
+// 									}
+// 									srcSnapshotTable.row.add(result.snapshotInfo[i]).draw();
+// 								}
+// 							}
+// 						}
 					}
 				}
 			});
@@ -805,7 +805,6 @@
 								],
 								xkey: 'time',
 								xkeyFormat: function(time) {
-									console.log('time : ' +  time.substring(10))
 									return time.substring(10);
 								},
 								ykeys: ['total_number_of_events_seen', 'number_of_events_filtered', 'number_of_erroneous_events'],
@@ -813,21 +812,21 @@
 							});
 							streamingChart.setData(result.streamingChart);
 						}
-						srcStreamingTable.clear().draw();
-						if (nvlPrmSet(result.streamingInfo, '') != '') {
-							for(var i = 0; i < result.streamingInfo.length; i++){	
-								if(result.streamingInfo[i].rownum == 1){
-									if(i != result.streamingInfo.length-1 && result.streamingInfo[i+1].rownum == 2){
-										result.streamingInfo[i].number_of_committed_transactions_cng = result.streamingInfo[i].number_of_committed_transactions - result.streamingInfo[i+1].number_of_committed_transactions;
-										result.streamingInfo[i].total_number_of_events_seen_cng = result.streamingInfo[i].total_number_of_events_seen - result.streamingInfo[i+1].total_number_of_events_seen;
-										result.streamingInfo[i].number_of_events_filtered_cng = result.streamingInfo[i].number_of_events_filtered - result.streamingInfo[i+1].number_of_events_filtered;
-										result.streamingInfo[i].number_of_erroneous_events_cng = result.streamingInfo[i].number_of_erroneous_events - result.streamingInfo[i+1].number_of_erroneous_events;
-										result.streamingInfo[i].milli_seconds_since_last_event_cng = result.streamingInfo[i].milli_seconds_since_last_event - result.streamingInfo[i+1].milli_seconds_since_last_event;
-									}
-									srcStreamingTable.row.add(result.streamingInfo[i]).draw();
-								}
-							}
-						}
+// 						srcStreamingTable.clear().draw();
+// 						if (nvlPrmSet(result.streamingInfo, '') != '') {
+// 							for(var i = 0; i < result.streamingInfo.length; i++){	
+// 								if(result.streamingInfo[i].rownum == 1){
+// 									if(i != result.streamingInfo.length-1 && result.streamingInfo[i+1].rownum == 2){
+// 										result.streamingInfo[i].number_of_committed_transactions_cng = result.streamingInfo[i].number_of_committed_transactions - result.streamingInfo[i+1].number_of_committed_transactions;
+// 										result.streamingInfo[i].total_number_of_events_seen_cng = result.streamingInfo[i].total_number_of_events_seen - result.streamingInfo[i+1].total_number_of_events_seen;
+// 										result.streamingInfo[i].number_of_events_filtered_cng = result.streamingInfo[i].number_of_events_filtered - result.streamingInfo[i+1].number_of_events_filtered;
+// 										result.streamingInfo[i].number_of_erroneous_events_cng = result.streamingInfo[i].number_of_erroneous_events - result.streamingInfo[i+1].number_of_erroneous_events;
+// 										result.streamingInfo[i].milli_seconds_since_last_event_cng = result.streamingInfo[i].milli_seconds_since_last_event - result.streamingInfo[i+1].milli_seconds_since_last_event;
+// 									}
+// 									srcStreamingTable.row.add(result.streamingInfo[i]).draw();
+// 								}
+// 							}
+// 						}
 					}
 				}
 			});
@@ -837,7 +836,7 @@
 	
 </script>
 
-<div class="col-lg-6 grid-margin stretch-card">
+<div class="col-lg-6 grid-margin stretch-card" id="trans_monitoring_source_info">
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">
@@ -872,25 +871,25 @@
 				</div>
 				
 				<!-- table -->
-				<div class="col-md-12 col-xl-12 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
-						<div class="card-body" style="border:none;">
-							<table id="srcSnapshotTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
-								<thead class="bg-info text-white">
-									<tr>
-										<th width="100px;">connector_src_name </th>
-										<th width="100px;">time </th>
-										<th width="100px;">number_of_events_filtered </th>
-										<th width="100px;">number_of_erroneous_events </th>
-										<th width="100px;">queue_total_capacity </th>
-										<th width="100px;">queue_remaining_capacity </th>
-										<th width="100px;">remaining_table_count </th>
-									</tr>
-								</thead>
-							</table>
-						</div>
-					</div>
-				</div>
+<!-- 				<div class="col-md-12 col-xl-12 justify-content-center"> -->
+<!-- 					<div class="card" style="margin-left:-10px;border:none;"> -->
+<!-- 						<div class="card-body" style="border:none;"> -->
+<!-- 							<table id="srcSnapshotTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;"> -->
+<!-- 								<thead class="bg-info text-white"> -->
+<!-- 									<tr> -->
+<!-- 										<th width="100px;">connector_src_name </th> -->
+<!-- 										<th width="100px;">time </th> -->
+<!-- 										<th width="100px;">number_of_events_filtered </th> -->
+<!-- 										<th width="100px;">number_of_erroneous_events </th> -->
+<!-- 										<th width="100px;">queue_total_capacity </th> -->
+<!-- 										<th width="100px;">queue_remaining_capacity </th> -->
+<!-- 										<th width="100px;">remaining_table_count </th> -->
+<!-- 									</tr> -->
+<!-- 								</thead> -->
+<!-- 							</table> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 				
 			</div>
 			<!-- snapshot end -->
@@ -911,26 +910,26 @@
 				</div>
 				
 				<!-- table -->
-				<div class="col-md-12 col-xl-12 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
-						<div class="card-body" style="border:none;">
-							<table id="srcStreamingTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
-								<thead class="bg-info text-white">
-									<tr>
-										<th width="100px;">connector_src_name </th>
-										<th width="100px;">time </th>
-										<th width="100px;">last_transaction_id </th>
-										<th width="100px;">number_of_committed_transactions </th>
-										<th width="100px;">total_number_of_events_seen </th>
-										<th width="100px;">number_of_events_filtered </th>
-										<th width="100px;">number_of_erroneous_events </th>
-										<th width="100px;">milli_seconds_since_last_event </th>
-									</tr>
-								</thead>
-							</table>
-						</div>
-					</div>
-				</div>
+<!-- 				<div class="col-md-12 col-xl-12 justify-content-center"> -->
+<!-- 					<div class="card" style="margin-left:-10px;border:none;"> -->
+<!-- 						<div class="card-body" style="border:none;"> -->
+<!-- 							<table id="srcStreamingTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;"> -->
+<!-- 								<thead class="bg-info text-white"> -->
+<!-- 									<tr> -->
+<!-- 										<th width="100px;">connector_src_name </th> -->
+<!-- 										<th width="100px;">time </th> -->
+<!-- 										<th width="100px;">last_transaction_id </th> -->
+<!-- 										<th width="100px;">number_of_committed_transactions </th> -->
+<!-- 										<th width="100px;">total_number_of_events_seen </th> -->
+<!-- 										<th width="100px;">number_of_events_filtered </th> -->
+<!-- 										<th width="100px;">number_of_erroneous_events </th> -->
+<!-- 										<th width="100px;">milli_seconds_since_last_event </th> -->
+<!-- 									</tr> -->
+<!-- 								</thead> -->
+<!-- 							</table> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 				
 			</div>
 			<!-- streaming end -->
@@ -1145,27 +1144,27 @@
 			</div>
 			
 			<!-- error 리스트 -->
-			<div class="col-md-12 col-xl-12 justify-content-center">
-				<div class="card" style="margin-left:-10px;border:none;">
-					<div class="card-body" style="border:none;">
-						<table id="srcErrorTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
-							<thead class="bg-info text-white">
-								<tr>
-									<th width="0px;">rownum</th>
-									<th width="100px;">last_error_timestamp </th>
-									<th width="100px;">total_errors_logged </th>
-									<th width="100px;">deadletterqueue_produce_requests</th>
-									<th width="100px;">deadletterqueue_produce_failures </th>
-									<th width="100px;">total_record_failures</th>
-									<th width="100px;">total_records_skipped </th>
-									<th width="100px;">total_record_errors</th>
-									<th width="100px;">total_retries</th>
-								</tr>
-							</thead>
-						</table>
-					</div>
-				</div>
-			</div>
+<!-- 			<div class="col-md-12 col-xl-12 justify-content-center"> -->
+<!-- 				<div class="card" style="margin-left:-10px;border:none;"> -->
+<!-- 					<div class="card-body" style="border:none;"> -->
+<!-- 						<table id="srcErrorTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;"> -->
+<!-- 							<thead class="bg-info text-white"> -->
+<!-- 								<tr> -->
+<!-- 									<th width="0px;">rownum</th> -->
+<!-- 									<th width="100px;">last_error_timestamp </th> -->
+<!-- 									<th width="100px;">total_errors_logged </th> -->
+<!-- 									<th width="100px;">deadletterqueue_produce_requests</th> -->
+<!-- 									<th width="100px;">deadletterqueue_produce_failures </th> -->
+<!-- 									<th width="100px;">total_record_failures</th> -->
+<!-- 									<th width="100px;">total_records_skipped </th> -->
+<!-- 									<th width="100px;">total_record_errors</th> -->
+<!-- 									<th width="100px;">total_retries</th> -->
+<!-- 								</tr> -->
+<!-- 							</thead> -->
+<!-- 						</table> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
 				
 			<!-- error 정보 end -->
 			
