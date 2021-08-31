@@ -40,14 +40,7 @@
 		
 		// cpu, memory error chart
 		fn_cpu_mem_err_chart();
-		
-		
-		
-		
-		
-		
-		
-		
+
 		// 소스 chart init
 // 		fn_src_chart_init();
 	
@@ -85,6 +78,7 @@
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
 		
 		fn_tar_init();
+		fn_src_init();
 		
 		if(selectValue != ""){
 			$.ajax({
@@ -113,7 +107,12 @@
 						$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
 						if (nvlPrmSet(result.targetConnectorList, '') != '') {
 							for (i = 0; i < result.targetConnectorList.length; i++) {
-			                    $('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+								if(i == 0){
+									$('#tar_connector_list').append('<option selected value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+									fn_tarConnectInfo();
+								} else {
+				                    $('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+								}
 			            	}
 						}
 						srcConnectSettingInfoTable.clear().draw();
@@ -260,8 +259,26 @@
 				
 				}
 			});
+		} else{
+// 			srcConnectSettingInfoTable.clear().draw();
+// 			srcMappingListTable.clear().draw();
+// 			$('#src-chart-line-1').empty();
+// 			$('#src-chart-line-2').empty();
+// 			srcConnectTable.clear().draw();
+// 			$('#src-chart-line-error').empty();
 		}
 		$("#loading").hide();
+	}
+	
+	function fn_src_init(){
+		srcConnectSettingInfoTable.clear().draw();
+		srcMappingListTable.clear().draw();
+		$('#src-chart-line-1').empty();
+		$('#src-chart-line-2').empty();
+		srcConnectTable.clear().draw();
+		$('#src-chart-line-error').empty();
+		$('#src-chart-line-snapshot').empty();
+		$('#src-chart-line-streaming').empty();
 	}
 	
 	function fn_tar_init(){
@@ -273,6 +290,7 @@
 		
 		$('#tar_connect_nm').text("");
 		tarTopicListTable.clear().draw();
+		tarConnectTable.clear().draw();
 		$('#tar-chart-line-sink').empty();
 		$('#tar-chart-line-complete').empty();
 		$('#tar-chart-line-sink-error').empty();
@@ -326,7 +344,6 @@
 // 						}
 						tarConnectTable.clear().draw();
 						if (nvlPrmSet(result.targetSinkInfo, '') != '') {
-							console.log(result.targetSinkInfo)
 							for(var i = 0; i < result.targetSinkInfo.length; i++){	
 								if(result.targetSinkInfo[i].rownum == 1){
 									if(i != result.targetSinkInfo.length-1 && result.targetSinkInfo[i+1].rownum == 2){

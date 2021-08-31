@@ -25,7 +25,6 @@
 	var srcMappingListTable = "";
 	var snapshotChart = "";
 	var streamingChart = "";
-	var streamingChart = "";
 // 	var srcChart1 = "";
 // 	var srcChart2 = "";
 	var srcErrorChart = "";
