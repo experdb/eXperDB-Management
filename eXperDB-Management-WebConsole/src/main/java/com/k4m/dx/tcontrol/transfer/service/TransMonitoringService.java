@@ -184,5 +184,13 @@ public interface TransMonitoringService {
 	 * @return List<Map<String, Object>>
 	 */
 	public List<Map<String, Object>> selectAllErrorList();
+	
+	/**
+	 * trans Connector log 파일 가져오기
+	 * 
+	 * @param param
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> getLogFile(TransVO transVO, Map<String, Object> param);
 
 }

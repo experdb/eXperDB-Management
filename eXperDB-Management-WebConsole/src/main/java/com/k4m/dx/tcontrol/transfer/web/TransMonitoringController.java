@@ -18,6 +18,7 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMonitoringService;
+import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
 
 /**
@@ -271,6 +272,72 @@ public class TransMonitoringController {
 		mv.addObject("targetSinkRecordChart", targetSinkRecordChart);
 		mv.addObject("targetSinkCompleteChart", targetSinkCompleteChart);
 		mv.addObject("targetErrorChart", targetErrorChart);
+		
+		return mv;
+	}
+	
+	/**
+	 * trans Connector log view
+	 * 
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/transConnectorLogView.do")
+	public ModelAndView logViewBySysTypeAndDate(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+		ModelAndView mv = new ModelAndView();
+		
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		mv.addObject("db_svr_id", db_svr_id);
+		mv.setViewName("transfer/popup/transConnectorLogView");
+		return mv;
+	}
+	
+	/**
+	 * trans Connector log file
+	 * 
+	 * @param historyVO, request
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/transConnectorLogViewAjax")
+	public ModelAndView transConnectorLogView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		String strBuffer = "";
+		System.out.println("----------------------------------");
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			String strTransId = request.getParameter("trans_id");
+//			String type = request.getParameter("type");
+//			int trans_id = Integer.parseInt(strTransId);
+			String strSeek = request.getParameter("seek");
+			String strReadLine = request.getParameter("readLine");
+			String dwLen = request.getParameter("dwLen");
+			String strDate = request.getParameter("date").substring(0, 10).replace("-", "");
+			String todayYN = request.getParameter("todayYN");
+			
+			TransVO transVO = new TransVO();
+			transVO.setDb_svr_id(db_svr_id);
+			
+			Map<String, Object> param = new HashMap<>();
+			param.put("seek", strSeek);
+			param.put("readLine", strReadLine);
+			param.put("dwLen", dwLen);
+//			param.put("date", strDate);
+//			param.put("todayYN", todayYN);
+			
+//			Map<String, Object> result = transMonitoringService.getLogFile(trans_id, type, param);
+			Map<String, Object> result = transMonitoringService.getLogFile(transVO, param);
+			strBuffer = (String) result.get("RESULT_DATA"); 
+			if(strBuffer != null) {
+				mv.addObject("fSize", strBuffer.length());
+			}
+			mv.addObject("data", strBuffer);
+//			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
+			mv.addObject("dwLen", result.get("DW_LEN"));
+			mv.addObject("file_name", result.get("file_name"));
+			mv.addObject("status", result.get("status"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return mv;
 	}

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.experdb.management.proxy.cmmn.ProxyClientProtocolID;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -2351,6 +2352,38 @@ System.out.println("=====cmd" + cmd);
 			CA.close();
 			
 		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	// connector 로그 파일 가져오기
+	public Map<String, Object> getLogFile(String IP, int PORT, DbServerVO dbServerVO, JSONObject jObj) {
+		Map<String, Object> result = new HashMap<>();
+		
+		JSONObject objResult;
+		try {
+			System.out.println("12312312312313132");
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			System.out.println(" CA : " + CA.toString());
+			CA.open();
+			objResult = CA.dxT043(jObj);
+			CA.close();
+			
+			String strErrMsg = (String)objResult.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objResult.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objResult.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objResult.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objResult.get(ClientProtocolID.RESULT_DATA);
+			int strDwLen = (int) objResult.get(ClientProtocolID.DW_LEN);
+			
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strResultData);
+			result.put("DW_LEN", strDwLen);
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;

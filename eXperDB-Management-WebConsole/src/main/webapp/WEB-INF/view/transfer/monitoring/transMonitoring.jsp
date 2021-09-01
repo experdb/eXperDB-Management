@@ -30,7 +30,8 @@
 	var cpuChart = "";
 	var memChart = "";
 	var allErrorChart = "";
-
+	var connectorActTable = "";
+	
 	/* ********************************************************
 	 * 화면 onload
 	 ******************************************************** */
@@ -40,6 +41,9 @@
 		
 		// cpu, memory error chart
 		fn_cpu_mem_err_chart();
+		
+		// connector 기동정지 init
+		fn_connector_act_init();
 
 		// 소스 chart init
 // 		fn_src_chart_init();
@@ -72,7 +76,36 @@
 		fn_tar_error_init();
 	
 	});
-
+	
+	function fn_connector_act_init(){
+		
+		connectorActTable = $('#connectorActTable').DataTable({
+			searching : false,
+			scrollY : true,
+			scrollX: true,	
+			paging : false,
+			deferRender : true,
+			info : false,
+			sort: false, 
+			"language" : {
+				"emptyTable" : '<spring:message code="message.msg01" />'
+			},
+			columns : [
+				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
+				{data : "connector_name", className : "dt-center", defaultContent : ""},
+				{data : "act_type", className : "dt-center", defaultContent : "" },
+				{data : "wrk_dtm", className : "dt-center", defaultContent : "" },
+			]
+		});
+		
+		connectorActTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
+		connectorActTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // time
+		connectorActTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // number_of_events_filtered
+		connectorActTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // number_of_erroneous_events
+		
+		$(window).trigger('resize');
+	}
+	
 	function fn_srcConnectInfo() {
 		var langSelect = document.getElementById("src_connect");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
@@ -389,8 +422,55 @@
 		}
 		$("#loading").hide();
 	}
-
+	
+	function fn_logView(){
+		
+		var v_db_svr_id = $("#db_svr_id", "#transMonitoringForm").val();
+		
+		$.ajax({
+			url : "/transConnectorLogView.do",
+			data : {
+				db_svr_id : v_db_svr_id
+			},
+			type : 'post',
+			success : function(result) {
+				$("#connectorlog", "#connectorViewForm").html("");
+				$("#dwLen", "#connectorViewForm").val("0");
+				$("#fSize", "#connectorViewForm").val("");
+				$("#log_line", "#connectorViewForm").val("1000");
+// 				$("#type", "#connectorViewForm").val(type);
+				$("#date", "#connectorViewForm").val(date);
+// 				$("#aut_id", "#connectorViewForm").val(aut_id);
+// 				$("#todayYN", "#connectorViewForm").val(todayYN);
+				$("#todayYN", "#connectorViewForm").val("Y");
+				$("#view_file_name", "#connectorViewForm").html("");
+				dateCalenderSetting();
+				fn_logViewAjax();
+				$('#pop_layer_log_view').modal("show");
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+	}
+	
 </script>
+
+<!-- log 팝업 -->
+<%@ include file="./../popup/transConnectorLogView.jsp" %>
+		
+<form name="transMonitoringForm" id="transMonitoringForm" method="post">
+	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+</form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -486,7 +566,7 @@
 		<!-- 실시간 chart end -->
 		
 		<!-- 연결 상태 그림 start -->
-		<div class="col-12 div-form-margin-cts stretch-card">
+		<div class="col-8 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<h4 class="card-title">
@@ -496,6 +576,7 @@
 					<table class="table-borderless" style="width:100%;">
 						<tr>
 							<td>
+							
 								<div class="col-md-12 grid-margin stretch-card">
 									<div class="card news_text">
 										<div class="card-body">
@@ -617,6 +698,63 @@
 						</tr>
 					</table>
 			
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-4 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title -->
+					
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist" >
+						<div class="card" style="margin-bottom:5px;">
+							<div class="card-header" role="tab" id="page_serverlogging_div" >
+								<div class="row" style="height: 15px;">
+									<div class="col-12">
+										<h6 class="mb-0">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+											<span class="menu-title">Connector 기동 정지 이력</span>
+										</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-sm-8">
+							<h6 class="mb-0 alert">
+								<span class="menu-title text-success">
+									<i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i>
+									최근 3개 항목만 보여집니다.
+								</span>
+							</h6>
+						</div>
+						<div class="col-sm-4.5">
+							<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView()">
+								<i class="mdi mdi-file-document"></i>
+								connector로그
+							</button>
+						</div>
+					</div>
+					<!-- connector 기동 정지 이력 리스트 -->
+					<div class="col-md-12 col-xl-12 justify-content-center">
+						<div class="card" style="margin-left:-10px;border:none;">
+							<div class="card-body" style="border:none;">
+								<table id="connectorActTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
+									<thead class="bg-info text-white">
+										<tr>
+											<th width="0px;">rownum</th>
+											<th width="100px;">Connector 명</th>
+											<th width="100px;">실행결과</th>
+											<th width="100px;">시간</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
