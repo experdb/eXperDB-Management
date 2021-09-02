@@ -382,6 +382,7 @@ public class ProxyServiceImpl implements ProxyService{
 			List<ProxyVipConfigVO> vipConfList = new ArrayList<ProxyVipConfigVO>();
 
 			String strResultSubMessge = "";
+			String strAwsYn = FileUtil.getPropertyValue("context.properties", "aws.yn");
 
 			//proxy 파일 setting
 			if (retVal.equals("success")) {
@@ -405,6 +406,7 @@ public class ProxyServiceImpl implements ProxyService{
 					
 
 					int vipAddCnt = 0;
+					int vipAwsAddCnt = 0;
 					
 					ProxyListenerVO lisnerVo = new ProxyListenerVO();
 					ProxyListenerServerListVO lisnerSebuVo = new ProxyListenerServerListVO();
@@ -772,11 +774,21 @@ public class ProxyServiceImpl implements ProxyService{
 									vipConfVo.setPeer_aws_if_id(notifyArray[3]);
 									vipConfVo.setAws_if_id(notifyArray[4]);
 								}
+								
+								vipAwsAddCnt = keepsize + 1;
 							}
-														
-							if((strResultMessge.size()-1) == keepsize){
-								vipConfList.add(vipConfVo);
-								vipConfVo = new ProxyVipConfigVO();
+							
+							//aws 여부 에 따라 list 담기
+							if ("Y".equals(strAwsYn)) {
+								if (vipAwsAddCnt == keepsize) {
+									vipConfList.add(vipConfVo);
+									vipConfVo = new ProxyVipConfigVO();
+								}
+							} else { 
+								if (vipAddCnt == keepsize) {
+									vipConfList.add(vipConfVo);
+									vipConfVo = new ProxyVipConfigVO();
+								}
 							}
 							//////////////////////////////////////////////////////	
 						}
