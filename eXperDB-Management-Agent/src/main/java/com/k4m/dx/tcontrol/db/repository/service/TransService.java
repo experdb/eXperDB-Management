@@ -123,4 +123,28 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public String transRealTimeCheck(TransVO searChTransVO) throws Exception;
+
+	/**
+	 * kafka connect 등록 시 topic 삭제
+	 * @param  TransVO
+	 * @return 
+	 * @throws Exception
+	 */
+	public String deleteTransKakfkaTopic(TransVO transVO) throws Exception;
+
+	/**
+	 * kafka connect 동록 시 topic 실시간 등록
+	 * @param  TransVO
+	 * @return 
+	 * @throws Exception
+	 */
+	public String insertKafkaRealTopic(TransVO transVO) throws Exception;
+	
+	/**
+	 * 소스, 타겟 connect 이력 등록
+	 * @param 
+	 * @return
+	 * @throws Exception
+	 */
+	public void insertTransActstateCngInfo(TransVO transVO) throws Exception;
 }

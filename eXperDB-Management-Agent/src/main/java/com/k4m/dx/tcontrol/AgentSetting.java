@@ -169,8 +169,8 @@ public class AgentSetting {
 		strTransYN = strTransYN.toUpperCase();
 		while (true) {
 			if(strTransYN.equals("")) {
-				System.out.println("Please enter your Proxy-Service setting yn. ");
-				System.out.println("Whether Proxy Service is enabled (y, n) :");
+				System.out.println("Please enter your CDC-Service setting yn. ");
+				System.out.println("Whether CDC-Service is enabled (y, n) :");
 				strTransYN = scan.nextLine();
 				strTransYN = strTransYN.toUpperCase();
 			} else {

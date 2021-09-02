@@ -171,8 +171,7 @@ public class DaemonStart implements DxDaemon{
 				e.printStackTrace();
 				return;
 			}
-			
-			
+
 			//System.out.println("2222222222");
 			socketService = new DXTcontrolAgentSocket();
 			socketService.start();

@@ -103,4 +103,19 @@ public class TransDAO {
 	public List<TransVO> selectTransExrttrgMappList(TransVO vo) throws Exception {
 		return (List) session.selectList("trans.selectTransExrttrgMappList", vo);
 	}
+
+	//trans 리스트 조회
+	public List<TransVO> selectTranscngKcList(TransVO vo) throws Exception {
+		return (List) session.selectList("trans.selectTranscngKcList", vo);
+	}
+	
+	//소스, 타겟 시스템 활성/ 비활성화 시 로그 등록
+	public void insertTransActstateCngInfo(TransVO vo) throws Exception  {
+		 session.insert("trans.insertTransActstateCngInfo", vo);
+	}
+	
+	//kafka connect 활성/ 비활성화 시 로그 등록
+	public void insertTransKafkaActstateCngInfo(TransVO vo) throws Exception  {
+		 session.insert("trans.insertTransKafkaActstateCngInfo", vo);
+	}
 }

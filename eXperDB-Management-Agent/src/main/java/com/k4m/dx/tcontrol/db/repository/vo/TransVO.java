@@ -36,12 +36,67 @@ public class TransVO {
 	private String exrt_trg_tb_nm;
 	private int trans_exrt_trg_tb_id;
 	private String write_use_yn;
-	
+	private String write_use_yn_val;
+
 	private int kc_id;
 	private String kc_nm;
 	private String con_gbn;
 	private String connect_nm;
 	private int db_svr_id;
+
+	private String act_type;
+	private String act_exe_type;
+	private String connector_type;
+	private String exe_rslt_cd;
+	private String login_id;
+	
+	public String getLogin_id() {
+		return login_id;
+	}
+
+	public void setLogin_id(String login_id) {
+		this.login_id = login_id;
+	}
+
+	public String getExe_rslt_cd() {
+		return exe_rslt_cd;
+	}
+
+	public void setExe_rslt_cd(String exe_rslt_cd) {
+		this.exe_rslt_cd = exe_rslt_cd;
+	}
+
+	public String getAct_type() {
+		return act_type;
+	}
+
+	public void setAct_type(String act_type) {
+		this.act_type = act_type;
+	}
+
+	public String getAct_exe_type() {
+		return act_exe_type;
+	}
+
+	public void setAct_exe_type(String act_exe_type) {
+		this.act_exe_type = act_exe_type;
+	}
+
+	public String getConnector_type() {
+		return connector_type;
+	}
+
+	public void setConnector_type(String connector_type) {
+		this.connector_type = connector_type;
+	}
+
+	public String getWrite_use_yn_val() {
+		return write_use_yn_val;
+	}
+
+	public void setWrite_use_yn_val(String write_use_yn_val) {
+		this.write_use_yn_val = write_use_yn_val;
+	}
 
 	public String getCon_gbn() {
 		return con_gbn;

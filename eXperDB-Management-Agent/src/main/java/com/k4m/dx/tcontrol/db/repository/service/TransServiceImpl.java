@@ -4,17 +4,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.db.repository.dao.TransDAO;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
-import com.k4m.dx.tcontrol.socket.ProtocolID;
-import com.k4m.dx.tcontrol.socket.TranCodeType;
-import com.k4m.dx.tcontrol.util.FileUtil;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 import com.k4m.dx.tcontrol.util.TransRunCommandExec;
 
@@ -107,7 +102,7 @@ public class TransServiceImpl implements TransService{
 		}
 	}
 
-	/* lastLoad값 받기  */
+	/* trans 실시간  */
 	public String transRealTimeCheck(TransVO searChTransVO) throws Exception {
 		String transConListCmd = "";
 		String transConYnCmd = "";
@@ -118,6 +113,7 @@ public class TransServiceImpl implements TransService{
 			TransVO transVO = new TransVO();
 			List<TransVO> KafkaConList = transDAO.selectTransKafkaConList(transVO); // kafka connect list
 			
+			//kafka 서버 실시간 확인
 			if (KafkaConList.size() > 0) {
 				for(int i=0; i<KafkaConList.size(); i++){
 					TransVO kafkaTransVO = new TransVO();
@@ -128,7 +124,7 @@ public class TransServiceImpl implements TransService{
 					String strExeStatus = kafkaTransVO.getExe_status();
 					String strExeStatusIng = "";
 					
-					transConYnCmd = "curl -H 'Accept:application/json' "+strKcIp+":"+strKcPort+"/";
+					transConYnCmd = "curl -H 'Accept:application/json' "+strKcIp+":"+strKcPort+"/"; //kafka 서버 실시간 확인
 					
 					RunCommandExec rMain = new RunCommandExec(transConYnCmd);
 					
@@ -148,14 +144,26 @@ public class TransServiceImpl implements TransService{
 						strExeStatusIng = "TC001502";
 					}
 					
+					//값이 다른 경우 변경
 					if (!strExeStatusIng.equals(strExeStatus)) {
 						kafkaTransVO.setExe_status(strExeStatusIng);
 						transDAO.updateTranConInfInfo(kafkaTransVO); 
+						
+						//log 추가
+						if ("TC001501".equals(strExeStatusIng)) { //활성화
+							kafkaTransVO.setAct_type("A");				//활성화
+						} else { //비활성화
+							kafkaTransVO.setAct_type("S");				//비활성화
+						}
 
-						//로그 남겨야함
+						kafkaTransVO.setAct_exe_type("TC004002");	//auto
+						kafkaTransVO.setExe_rslt_cd("TC001501");
+						kafkaTransVO.setLogin_id("system");
+
+						transDAO.insertTransKafkaActstateCngInfo(kafkaTransVO);
 					}
 
-					if (!strExeStatusIng.equals("TC001502")) {
+					if (!strExeStatusIng.equals("TC001502")) { //실행 중일 경우 connect 목록 확인
 						transConListCmd = "curl -H 'Accept:application/json' "+strKcIp+":"+strKcPort+"/connectors/";
 						
 						RunCommandExec rListMain = new RunCommandExec(transConListCmd);
@@ -169,43 +177,34 @@ public class TransServiceImpl implements TransService{
 							ie.printStackTrace();
 						}
 						
+						String retMainVal = rListMain.call();
 						String strResultMessgeMainList = rListMain.getMessage();
-						socketLogger.info("strResultMessgeMainstrResultMessgeMainstrResultMessgeMainstrResultMessgeMain : " + strResultMessgeMainList);
+						socketLogger.info("#####strResultMessgeMainstrResultMessgeMainstrResultMessgeMainstrResultMessgeMain : " + strResultMessgeMainList);
 						
-						if (strResultMessgeMainList != null) {
-							List<TransVO> transCngTotList = transDAO.selectTransCngTotList(transVO); // 소스, 타겟 connect list
-							
-							if (transCngTotList.size() > 0) {
-								for(int j=0; j < transCngTotList.size(); j++){
-									//connect 존재여부 체크
-									if(strResultMessgeMainList.contains(transCngTotList.get(j).getConnect_nm())) {
-										
-										//실행 스크립트
-										if ("TC001502".equals(transCngTotList.get(j).getExe_status())) {
-											connectRealUpdate(transCngTotList.get(j), "TC001501");
-											/*if ("SOURCE".equals(transCngTotList.get(j).getCon_gbn())) { //소스 connect 
+						if (retMainVal.equals("success")) {
+							if (strResultMessgeMainList != null && !"[]".equals(strResultMessgeMainList)) { //값이 있는 경우
+								List<TransVO> transCngTotList = transDAO.selectTransCngTotList(transVO); // 소스, 타겟 connect 전체 list
+
+								if (transCngTotList.size() > 0) {
+									for(int j=0; j < transCngTotList.size(); j++){
+										//connect 존재여부
+										if(strResultMessgeMainList.contains(transCngTotList.get(j).getConnect_nm())) { //connect 존재 여부 확인
+											//실행 스크립트
+											if ("TC001502".equals(transCngTotList.get(j).getExe_status())) {
 												connectRealUpdate(transCngTotList.get(j), "TC001501");
-											} else { //타겟 connect
-												
-											}*/
-											//로그 넣어야함
-										}
-										
-									} else {
-										//종료 스크립트
-										if ("TC001501".equals(transCngTotList.get(j).getExe_status())) {
-											connectRealUpdate(transCngTotList.get(j), "TC001502");
-											/*if ("SOURCE".equals(transCngTotList.get(j).getCon_gbn())) { //소스 connect 
-												
-											} else { //타겟 connect
-												
-											}*/
-											//로그 넣어야함
+											}
+										} else {
+											//종료 스크립트
+											if ("TC001501".equals(transCngTotList.get(j).getExe_status())) {
+												connectRealUpdate(transCngTotList.get(j), "TC001502");
+											}
+
 										}
 									}
 								}
 							}
 						}
+
 					}
 				}
 			}
@@ -216,6 +215,7 @@ public class TransServiceImpl implements TransService{
 		return lastNodeCnt;
 	}
 
+	/* trans 실시간  update */
 	public void connectRealUpdate(TransVO updateTransVO, String exeStatus) throws Exception {
 		
 		int trans_id = updateTransVO.getTrans_id();
@@ -228,6 +228,7 @@ public class TransServiceImpl implements TransService{
 		try {
 			TransVO transVO = new TransVO();
 			transVO.setTrans_id(trans_id);
+			transVO.setLogin_id("system");
 			
 			String topicNm = "";
 			String exrt_trg_tb_nm = "";
@@ -272,6 +273,8 @@ public class TransServiceImpl implements TransService{
 									transVO.setTopic_nm(topicNm);
 	
 									if (topicTableList.size() > 0) {
+										transVO.setKc_ip(topicTableList.get(0).getKc_ip());
+
 										for(int j=0;j < topicTableList.size();j++) {
 											if (topicTableList.get(j).getTopic_nm().equals(topicNm)) {
 												overLabCnt = overLabCnt + 1;
@@ -282,16 +285,34 @@ public class TransServiceImpl implements TransService{
 											transVO.setSrc_topic_use_yn("Y");
 											transVO.setWrite_use_yn("Y");
 											
-											//topic 테이블 수정
-											transDAO.updateTransTopic(transVO);
+											//topic 추가 로 kafka 생성
+											String insResult = insertKafkaRealTopic(transVO);
 											
-										} else {
+											if ("success".equals(insResult)) {
+												//topic 테이블 수정
+												transDAO.updateTransTopic(transVO);
+											}
+											
+										} else {	
+											//topic 추가 로 kafka 생성
+											String insResult = insertKafkaRealTopic(transVO);
+											
+											if ("success".equals(insResult)) {
+												//topic 테이블 등록
+												transDAO.insertTransTopic(transVO);
+											}
+										}
+									} else {
+										List<TransVO> kcIpList = transDAO.selectTranscngKcList(transVO); // topic 테이블 조회
+										
+										transVO.setKc_ip(kcIpList.get(0).getKc_ip());
+										
+										String insResult = insertKafkaRealTopic(transVO);
+										
+										if ("success".equals(insResult)) {
 											//topic 테이블 등록
 											transDAO.insertTransTopic(transVO);
 										}
-									} else {
-										//topic 테이블 등록
-										transDAO.insertTransTopic(transVO);
 									}
 								}
 							}
@@ -300,13 +321,26 @@ public class TransServiceImpl implements TransService{
 					
 					//이전  topic 삭제
 					transVO.setWrite_use_yn("N");
+					transVO.setConnector_type("source");
+					
 					transDAO.deleteTransTopic(transVO);
 		
 					//전송관리 테이블 수정
-					transDAO.updateTransExe(transVO);	
+					transDAO.updateTransExe(transVO);
+					
+					
 				} else { //타겟
+					transVO.setConnector_type("target");
+					
 					transDAO.updateTransTargetExe(transVO);
 				}
+
+				//log 추가
+				transVO.setAct_type("A");				//활성화
+				transVO.setAct_exe_type("TC004002");	//auto
+				transVO.setExe_rslt_cd("TC001501");
+
+				transDAO.insertTransActstateCngInfo(transVO);
 			} else {
 				if ("SOURCE".equals(con_start_gbn)) { //소스시스템
 					List<TransVO> topicTableList = transDAO.selectTranIdTopicTotCnt(transVO); // topic count 조회
@@ -346,11 +380,6 @@ public class TransServiceImpl implements TransService{
 						transVO.setSrc_topic_use_yn("N");
 						transVO.setWrite_use_yn("N");
 
-						//타겟 전송테이블 삭제
-						if ("4deps".equals(conectStopGbn)) {
-						//	updateTranExrtTrgList(transVO);
-						}
-
 						//topic 테이블 수정
 						updateTransTopicTbl(transVO);
 
@@ -371,6 +400,14 @@ public class TransServiceImpl implements TransService{
 						transDAO.updateTransTargetExe(transMainVO);
 					}
 				}
+				
+
+				//log 추가
+				transVO.setAct_type("S");				//비활성화
+				transVO.setAct_exe_type("TC004002");	//auto
+				transVO.setExe_rslt_cd("TC001501");
+
+				transDAO.insertTransActstateCngInfo(transVO);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -439,21 +476,17 @@ public class TransServiceImpl implements TransService{
 					if (retSearchVal.equals("success")) {	
 						if (!strResultSearchMessge.isEmpty()) {
 							resultTopic = "Y";
-							socketLogger.info("DxT039.strResultSearchMessge1-1 : " + strResultSearchMessge);
 						} else {
 							resultTopic = "N";
-							socketLogger.info("DxT039.strResultSearchMessge2 : " + strResultSearchMessge);
 						}
 					} else {
 						resultTopic = "N";
-						socketLogger.info("DxT039.strResultSearchMessge3 : " + strResultSearchMessge);
 					}
 					
 					//////////////////////////////////////////////////////////////////////////////////////////////////////
 					
 					if ("Y".equals(resultTopic)) {
 						String strCmd = "bin/kafka-topics.sh --delete --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
-						socketLogger.info("DxT039.strCmdstrCmdstrCmd : " + strCmd);
 						TransRunCommandExec r = new TransRunCommandExec(strCmd);
 
 						//명령어 실행
@@ -474,6 +507,8 @@ public class TransServiceImpl implements TransService{
 						}
 					}
 				}
+				
+				return result;
 			}
 
 			result = "success";
@@ -485,4 +520,167 @@ public class TransServiceImpl implements TransService{
 		return result;
 	}
 
+	/* kafka 등록 시 topic 삭제 */
+	public String deleteTransKakfkaTopic(TransVO transVO) throws Exception {
+		String result = "success";
+
+		try {
+			TransVO searchTransVO = new TransVO();
+			searchTransVO.setTrans_id(transVO.getTrans_id());
+			searchTransVO.setWrite_use_yn_val(transVO.getWrite_use_yn());
+
+			List<TransVO> topicTableList = transDAO.selectTranIdTopicList(searchTransVO); // topic 테이블 조회
+			
+			if (topicTableList.size() > 0) {
+				for(int i=0; i<topicTableList.size(); i++){
+					String kc_ip = topicTableList.get(i).getKc_ip();
+					String topic_nm = topicTableList.get(i).getTopic_nm();
+					String resultTopic = "N";
+					
+					//topic 존재 여부 확인
+					//////////////////////////////////////////////////////////////////////////////////////////////////////
+					String stCmdSearch ="bin/kafka-topics.sh --list --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
+					TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
+
+					//명령어 실행
+					searchR.run();
+					
+					try {
+						searchR.join();
+					} catch (InterruptedException ie) {
+						ie.printStackTrace();
+					}
+					
+					String retSearchVal = searchR.call();
+					String strResultSearchMessge = searchR.getMessage();
+					
+					if (retSearchVal.equals("success")) {	
+						if (!strResultSearchMessge.isEmpty()) { //값이 있으면 Y
+							resultTopic = "Y";
+						} else {
+							resultTopic = "N"; // 없으면 N
+						}
+					} else {
+						resultTopic = "N";
+					}
+					
+					//////////////////////////////////////////////////////////////////////////////////////////////////////
+					
+					//topic이 있는 경우 삭제
+					if ("Y".equals(resultTopic)) {
+						String strCmd = "bin/kafka-topics.sh --delete --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
+						TransRunCommandExec r = new TransRunCommandExec(strCmd);
+
+						//명령어 실행
+						r.run();
+
+						try {
+							r.join();
+						} catch (InterruptedException ie) {
+							ie.printStackTrace();
+						}
+						
+						String retVal = r.call();
+
+						if (retVal.equals("success")) {	
+							result = "success";
+						} else {
+							result = "failed";
+						}
+					}
+				}
+				
+				return result;
+			}
+
+			result = "success";
+		} catch (Exception e) {
+			result = "failed";
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	/* kafka connect 동록 시 topic 실시간 등록 */
+	public String insertKafkaRealTopic(TransVO transVO) throws Exception {
+		String result = "success";
+
+		try {
+			TransVO searchTransVO = new TransVO();
+			searchTransVO.setTrans_id(transVO.getTrans_id());
+
+			String kc_ip = transVO.getKc_ip();
+			String topic_nm = transVO.getTopic_nm();			
+			
+			//topic 존재 여부 확인
+			//////////////////////////////////////////////////////////////////////////////////////////////////////
+			String stCmdSearch ="bin/kafka-topics.sh --list --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
+			TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
+
+			//명령어 실행
+			searchR.run();
+
+			try {
+				searchR.join();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+
+			String retSearchVal = searchR.call();
+			String strResultSearchMessge = searchR.getMessage();
+			String resultTopic = "N";
+
+			if (retSearchVal.equals("success")) {
+				if (!strResultSearchMessge.isEmpty()) {
+					resultTopic = "Y";
+				} else {
+					resultTopic = "N";
+				}
+
+				//////////////////////////////////////////////////////////////////////////////////////////////////////
+				socketLogger.info("##### resultTopicresultTopic : " + resultTopic);
+				//topic 이 없는 경우만 생성
+				if ("N".equals(resultTopic)) {
+					String strInsCmd = "bin/kafka-topics.sh --create --zookeeper " + kc_ip + ":2181 --replication-factor 1 --partitions 1 --topic " + topic_nm;
+					
+					socketLogger.info("##### strInsCmdstrInsCmdstrInsCmd : " + strInsCmd);
+					
+					TransRunCommandExec r = new TransRunCommandExec(strInsCmd);
+
+					//명령어 실행
+					r.run();
+
+					try {
+						r.join();
+					} catch (InterruptedException ie) {
+						ie.printStackTrace();
+					}
+						
+					String retVal = r.call();
+
+					if (retVal.equals("success")) {	
+						result = "success";
+					} else {
+						result = "failed";
+					}
+						
+					return result;
+				}
+			}
+
+			result = "success";
+		} catch (Exception e) {
+			result = "failed";
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+
+	/* kafka connect 동록 시 topic 실시간 등록 */
+	public void insertTransActstateCngInfo(TransVO transVO) throws Exception {
+		transDAO.insertTransActstateCngInfo(transVO);
+	}
 }
