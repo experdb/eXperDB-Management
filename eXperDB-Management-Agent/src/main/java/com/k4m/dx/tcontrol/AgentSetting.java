@@ -54,6 +54,16 @@ public class AgentSetting {
 		String strProxyInterIP = "";
 		
 		String strTransYN = "";
+		
+		//scale
+		String strScaleYN = "";
+		String strScalePath = "";
+		String strScaleInCmd = "";
+		String strScaleOutCmd = "";
+		String strScaleInMultiCmd = "";
+		String strScaleOutMultiCmd = "";
+		String strScaleJsonView = "";
+		String strScaleChkPrgress = "";
 
 		Scanner scan = new Scanner(System.in);
 		
@@ -162,7 +172,9 @@ public class AgentSetting {
 				break;
 			}
 		}
+
 		
+		////////////////////////////////////////////////////////////////////////////////////
 		/* CDC 사용여부 */
 		System.out.println("Whether CDC-Service is enabled (y, n) :");
 		strTransYN = scan.nextLine();
@@ -177,7 +189,7 @@ public class AgentSetting {
 				break;
 			}
 		}
-		
+
 		//cdc 사용일 경우
 		if(strTransYN.equals("Y")){
 			//trans setting 추가
@@ -187,7 +199,9 @@ public class AgentSetting {
 				strTransPath = "/home/experdb/programs/kafka";
 			} 
 		}
-
+		////////////////////////////////////////////////////////////////////////////////////
+		
+		////////////////////////////////////////////////////////////////////////////////////
 		/* Proxy in/out 사용여부 */
 		System.out.println("Whether Proxy-Service is enabled (y, n) :");
 		strProxyYN = scan.nextLine();
@@ -238,6 +252,69 @@ public class AgentSetting {
 				}
 			}
 		}
+		////////////////////////////////////////////////////////////////////////////////////
+		
+		////////////////////////////////////////////////////////////////////////////////////
+		/* Scale in/out 사용여부 */
+		System.out.println("Whether eXperDB-Scale is enabled (y, n) :");
+		strScaleYN = scan.nextLine();
+		strScaleYN = strScaleYN.toUpperCase();
+		while (true) {
+			if(strScaleYN.equals("")) {
+				System.out.println("Please enter your PeXperDB-Scale setting yn. ");
+				System.out.println("Whether eXperDB-Scale is enabled (y, n) :");
+				strScaleYN = scan.nextLine();
+				strScaleYN = strScaleYN.toUpperCase();
+			} else {
+				break;
+			}
+		}
+
+		/* Scale in/out 사용여부 */
+		if(strScaleYN.equals("Y")){
+			System.out.println("eXperDB-Scale scale_path(/home/experdb/.experscale):");
+			strScalePath = scan.nextLine();
+			if(strScalePath.equals("")) {
+				strScalePath = "/home/experdb/.experscale";
+			}
+
+			System.out.println("eXperDB-Scale scale_in_cmd (./experscale scale-in -id %s):");
+			strScaleInCmd = scan.nextLine();
+			if(strScaleInCmd.equals("")) {
+				strScaleInCmd = "./experscale scale-in -id %s";
+			}
+
+			System.out.println("eXperDB-Scale scale_out_cmd (./experscale scale-out -id %s):");
+			strScaleOutCmd = scan.nextLine();
+			if(strScaleOutCmd.equals("")) {
+				strScaleOutCmd = "./experscale scale-out -id %s";
+			}
+
+			System.out.println("eXperDB-Scale scale_in_multi_cmd (./experscale multi-scale-in --scale-in-count %s):");
+			strScaleInMultiCmd = scan.nextLine();
+			if(strScaleInMultiCmd.equals("")) {
+				strScaleInMultiCmd = "./experscale multi-scale-in --scale-in-count %s";
+			}
+
+			System.out.println("eXperDB-Scale scale_out_multi_cmd (./experscale multi-scale-out --scale-out-count %s):");
+			strScaleOutMultiCmd = scan.nextLine();
+			if(strScaleOutMultiCmd.equals("")) {
+				strScaleOutMultiCmd = "./experscale multi-scale-out --scale-out-count %s";
+			}
+
+			System.out.println("eXperDB-Scale scale_json_view (aws ec2 describe-instances %s --filters ):");
+			strScaleJsonView = scan.nextLine();
+			if(strScaleJsonView.equals("")) {
+				strScaleJsonView = "aws ec2 describe-instances %s --filters ";
+			}
+
+			System.out.println("eXperDB-Scale scale_chk_prgress (ps -ef | grep -v grep | grep %s | wc -l):");
+			strScaleChkPrgress = scan.nextLine();
+			if(strScaleChkPrgress.equals("")) {
+				strScaleChkPrgress = "ps -ef | grep -v grep | grep %s | wc -l";
+			}
+		}
+		
 		
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseName;
 		
@@ -254,11 +331,18 @@ public class AgentSetting {
 		System.out.println("proxy_yn :" + strProxyYN);
 		System.out.println("proxy_inter_yn :" + strProxyInterYN);
 		System.out.println("proxy_inter_ip :" + strProxyInterIP);
+		
+		System.out.println("scale_yn :" + strScaleYN);
+		System.out.println("scale_path : " + strScalePath);
+		System.out.println("scale_in_cmd : " + strScaleInCmd);
+		System.out.println("scale_out_cmd : " + strScaleOutCmd);
+		System.out.println("scale_in_multi_cmd : " + strScaleInMultiCmd);
+		System.out.println("scale_out_multi_cmd : " + strScaleOutMultiCmd);
+		System.out.println("scale_json_view : " + strScaleJsonView);
+		System.out.println("scale_chk_prgress : " + strScaleChkPrgress);
+		
 		System.out.println("#####################################################");
-		
-		
 
-		
 		System.out.println("Do you want to apply what you entered? (y, n)");
 		
 		String strApply = scan.nextLine();
@@ -329,6 +413,16 @@ public class AgentSetting {
 		    prop.setProperty("agent.proxy_yn", strProxyYN);
 		    prop.setProperty("agent.proxy_inter_yn", strProxyInterYN);
 		    prop.setProperty("agent.proxy_inter_ip", strProxyInterIP);
+
+		    prop.setProperty("agent.scale_yn", strScaleYN);
+		    prop.setProperty("agent.scale_auto_reset_time", "0 0/5 * 1/1 * ? *");
+		    prop.setProperty("agent.scale_path", strScalePath);
+		    prop.setProperty("agent.scale_in_cmd", strScaleInCmd);
+		    prop.setProperty("agent.scale_out_cmd", strScaleOutCmd);
+		    prop.setProperty("agent.scale_in_multi_cmd", strScaleInMultiCmd);
+		    prop.setProperty("agent.scale_out_multi_cmd", strScaleOutMultiCmd);
+		    prop.setProperty("agent.scale_json_view", strScaleJsonView);
+		    prop.setProperty("agent.scale_chk_prgress", strScaleChkPrgress);
 
 		    try {
 		    	prop.store(new FileOutputStream(path + "context.properties"), "");
