@@ -1059,4 +1059,98 @@
            SET EXRT_TRG_TB_NM = #{exrt_trg_tb_nm}
         WHERE TRANS_EXRT_TRG_TB_ID = #{trans_exrt_trg_tb_id}::numeric
     </update>
+	
+	 <delete id="deleteTransConnectLog" parameterType="TransVO">
+		/**
+	 	* Query ID : deleteTransConnectLog
+	 	* Description : 소스 / 타겟 connect log 삭제
+	 	* Author : 
+	 	**/	
+        DELETE FROM T_TRANS_ACTSTATE_CNG_G
+         WHERE TRANS_ID = #{trans_id}::numeric
+	</delete>
+	
+	<insert id="insertTransKafkaConnectLog"  parameterType="transDbmsVO">
+		/**
+		* Query ID : insertTransKafkaConnectLog
+		* Description : TRANS kafka connect 로그 등록
+		* Author : 
+		**/
+        INSERT INTO T_TRANS_KAFKA_ACTSTATE_CNG_G
+                    (
+                     KAFKA_ACT_EXE_SN
+                   , KC_ID
+                   , KC_IP
+                   , KC_PORT
+                   , ACT_TYPE
+                   , ACT_EXE_TYPE
+                   , WRK_DTM 
+                   , EXE_RSLT_CD
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                    ) 
+                    VALUES
+                    (
+                     nextval('q_t_trans_kafka_actstate_cng_g_01')
+                   , (SELECT KC_ID FROM T_TRANS_CON_INF WHERE KC_NM = #{kc_nm} LIMIT 1)
+                   , #{kc_ip}
+                   , #{kc_port}::numeric
+                   , #{act_type}
+                   , #{act_exe_type}
+                   , clock_timestamp()
+                   , #{exe_rslt_cd}
+                   , #{frst_regr_id}
+                   , clock_timestamp()
+                   , #{lst_mdfr_id}
+                   , clock_timestamp()
+                    )
+	</insert>
+
+	<insert id="insertUpTransKafkaConnectLog"  parameterType="transDbmsVO">
+		/**
+		* Query ID : insertTransKafkaConnectLog
+		* Description : TRANS kafka connect 로그 등록
+		* Author : 
+		**/
+        INSERT INTO T_TRANS_KAFKA_ACTSTATE_CNG_G
+                    (
+                     KAFKA_ACT_EXE_SN
+                   , KC_ID
+                   , KC_IP
+                   , KC_PORT
+                   , ACT_TYPE
+                   , ACT_EXE_TYPE
+                   , WRK_DTM 
+                   , EXE_RSLT_CD
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                    ) 
+                    SELECT nextval('q_t_trans_kafka_actstate_cng_g_01'),
+                           #{kc_id}::numeric,
+                           #{kc_ip}, 
+                           #{kc_port}::numeric,
+                           #{act_type},
+                           #{act_exe_type},
+                           clock_timestamp()
+                           #{exe_rslt_cd},
+                           #{frst_regr_id},
+                           clock_timestamp(),
+                           #{lst_mdfr_id},
+                           clock_timestamp()
+	</insert>
+	
+	 <delete id="deleteTransKafkaConnectLog" parameterType="transDbmsVO">
+		/**
+	 	* Query ID : deleteTransKafkaConnectLog
+	 	* Description : kafka connect log 삭제
+	 	* Author : 
+	 	**/	
+        DELETE FROM T_TRANS_KAFKA_ACTSTATE_CNG_G
+         WHERE KC_ID = #{kc_id}::numeric
+	</delete>
+	
 </mapper>

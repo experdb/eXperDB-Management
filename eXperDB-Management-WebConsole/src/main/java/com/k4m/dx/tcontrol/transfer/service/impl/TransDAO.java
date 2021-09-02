@@ -542,4 +542,33 @@ public class TransDAO extends EgovAbstractMapper{
 		update("transSQL.updateTranExrtTrgInfo", transVO);
 	}
 
+	/**
+	 * 소스 / 타겟 connect log 삭제
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void deleteTransConnectLog(TransVO transVO) {
+		delete("transSQL.deleteTransConnectLog", transVO);
+	}
+
+	/**
+	 * kafka connect log 등록
+	 * 
+	 * @param transDbmsVO
+	 * @throws Exception
+	 */
+	public void insertTransKafkaConnectLog(TransDbmsVO transDbmsVO) {
+		insert("transSQL.insertTransKafkaConnectLog", transDbmsVO);
+	}
+
+	/**
+	 * kafka connect log 삭제
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void deleteTransKafkaConnectLog(TransDbmsVO transDbmsVO) {
+		delete("transSQL.deleteTransKafkaConnectLog", transDbmsVO);
+	}
 }

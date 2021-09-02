@@ -13,7 +13,6 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.experdb.management.proxy.cmmn.ProxyClientProtocolID;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -2017,6 +2016,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.LOGIN_ID, dbServerVO.getUsr_id());
 
 			JSONObject transObj = new JSONObject();
 			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
@@ -2103,6 +2103,7 @@ System.out.println("=====cmd" + cmd);
 			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.LOGIN_ID, dbServerVO.getUsr_id());
 
 			JSONObject transObj = new JSONObject();
 			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
@@ -2158,7 +2159,7 @@ System.out.println("=====cmd" + cmd);
 	}
 
 	// 39. trans connect stop
-	public Map<String, Object> connectStop(String IP, int PORT, String strCmd, String trans_id, String trans_active_gbn) {
+	public Map<String, Object> connectStop(String IP, int PORT, String strCmd, String trans_id, String trans_active_gbn, String str_login_id) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -2169,6 +2170,7 @@ System.out.println("=====cmd" + cmd);
 			jObj.put(ClientProtocolID.REQ_CMD, strCmd);
 			jObj.put(ClientProtocolID.TRANS_ID, trans_id);
 			jObj.put(ClientProtocolID.CON_START_GBN, trans_active_gbn);
+			jObj.put(ClientProtocolID.LOGIN_ID, str_login_id);
 
 			JSONObject objList;
 			

@@ -324,6 +324,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			int PORT = agentInfo.getSOCKET_PORT();
 
 			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd_old()));
+			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
 
 			//전송정보 조회
 			transInfo = transDAO.selectTransInfo(trans_id);
@@ -373,6 +374,11 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			int db_svr_id = transVO.getDb_svr_id();
 			String trans_id = Integer.toString(transVO.getTrans_id());
 			String trans_active_gbn = transVO.getTrans_active_gbn();
+			String str_login_id = "system";
+			
+			if (transVO.getFrst_regr_id() != null && !"".equals(transVO.getFrst_regr_id())) {
+				str_login_id = transVO.getFrst_regr_id();
+			}
 
 			String strCmd =" curl -i -X DELETE -H 'Accept:application/json' "+kc_ip+":"+kc_port+"/connectors/"+connect_nm;
 			
@@ -391,7 +397,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			int PORT = agentInfo.getSOCKET_PORT();
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			connStartResult = cic.connectStop(IP, PORT, strCmd, trans_id, trans_active_gbn);
+			connStartResult = cic.connectStop(IP, PORT, strCmd, trans_id, trans_active_gbn, str_login_id);
 System.out.println("connStartResult=========================" + connStartResult);
 			if (connStartResult != null) {
 				System.out.println("connStartResult=========123123================" + connStartResult.get("RESULT_CODE").toString());
@@ -451,7 +457,8 @@ System.out.println("connStartResult=========================" + connStartResult)
 			int PORT = agentInfo.getSOCKET_PORT();
 
 			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-
+			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
+			
 			//전송정보 조회
 			transInfo = transDAO.selectTargetTransInfo(trans_id);
 			System.out.println("전송정보 : "+transInfo.get(0));
@@ -536,6 +543,8 @@ System.out.println("connStartResult=========================" + connStartResult)
 
 					// 데이터전송 삭제
 					if ("del".equals(transVo.getTrans_active_gbn())) {
+						transVo.setTrans_id(trans_id);
+						
 						//연결되어있는 타겟전송테이블 정리
 						updateTranExrtTrgList(trans_id);
 
@@ -547,6 +556,7 @@ System.out.println("connStartResult=========================" + connStartResult)
 						
 						//target topic 테이블 초기화
 						transVo.setTar_trans_id(trans_id);
+						transVo.setTrans_id(trans_id);
 						
 						//기존 topic 연결 초기화
 						transDAO.updateTransTarTopicChogihwa(transVo);
@@ -556,6 +566,9 @@ System.out.println("connStartResult=========================" + connStartResult)
 						// 맵핑 테이블 삭제
 						transDAO.deleteTransExrttrgMapp(trans_exrt_trg_tb_id);
 					}
+					
+					//삭제 시 log파일 삭제
+					transDAO.deleteTransConnectLog(transVo);
 				}
 			}
 		}catch(Exception e){
@@ -799,6 +812,12 @@ System.out.println("connStartResult=========================" + connStartResult)
 
 			if ("S".equals(result) ) {
 				transDAO.insertTransKafkaConnect(transDbmsVO);
+				
+				transDbmsVO.setAct_type("A");			//활성화
+				transDbmsVO.setAct_exe_type("TC004001");//manual
+				transDbmsVO.setExe_rslt_cd("TC001501");
+
+				transDAO.insertTransKafkaConnectLog(transDbmsVO);
 			}
 		} catch (SQLException e) {
 			result = "F";
@@ -858,6 +877,8 @@ System.out.println("connStartResult=========================" + connStartResult)
 					transDbmsPrmVO.setKc_id(trans_connect_ids.get(i).toString());
 					
 					transDAO.deleteTransKafkaConnect(transDbmsPrmVO);
+
+					transDAO.deleteTransKafkaConnectLog(transDbmsPrmVO);
 				}
 			}
 		}catch(Exception e){
@@ -878,6 +899,9 @@ System.out.println("connStartResult=========================" + connStartResult)
 
 		try {
 			transDAO.updateTransKafkaConnect(transDbmsVO);
+
+			//kafka connect 이력 등록
+			
 		} catch (Exception e) {
 			result = "F";
 			e.printStackTrace();

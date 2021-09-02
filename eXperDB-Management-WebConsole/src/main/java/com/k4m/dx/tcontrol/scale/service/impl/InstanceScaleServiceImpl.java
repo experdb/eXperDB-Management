@@ -71,6 +71,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	public Map<String, Object> scaleInstallChk(InstanceScaleVO instanceScaleVO) throws Exception {
 
 		Map<String, Object> recultChk = null;
+		
 		Map<String, Object> result = new JSONObject();
 		Map<String, Object> param = new HashMap<String, Object>();
 		String scalejsonChk = "";

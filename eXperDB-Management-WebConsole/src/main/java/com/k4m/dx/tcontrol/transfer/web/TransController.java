@@ -248,6 +248,9 @@ public class TransController {
 	@RequestMapping(value = "/transStart.do")
 	@ResponseBody
 	public String transStart(HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		String result = "fail";
 
 		try {					
@@ -259,6 +262,8 @@ public class TransController {
 			transVOPrm.setDb_svr_id(db_svr_id);
 			transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 			transVOPrm.setTrans_id(trans_id);
+			transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+			transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
 	
 			result = transService.transStart(transVOPrm);	
 		} catch (Exception e) {
@@ -278,6 +283,9 @@ public class TransController {
 	@RequestMapping(value = "/transTargetStart.do")
 	@ResponseBody
 	public String transTargetStart(HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		String result = "fail";
 
 		try {					
@@ -289,7 +297,9 @@ public class TransController {
 			transVOPrm.setDb_svr_id(db_svr_id);
 			transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 			transVOPrm.setTrans_id(trans_id);
-	
+			transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+			transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
+			
 			result = transService.transTargetStart(transVOPrm);	
 		} catch (Exception e) {
 			result = "fail";
@@ -309,6 +319,9 @@ public class TransController {
 	@RequestMapping(value = "/transStop.do")
 	@ResponseBody
 	public String transStop(HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		String result = "fail";
 
 		try {
@@ -328,6 +341,7 @@ public class TransController {
 			transVOPrm.setTrans_id(trans_id);
 			transVOPrm.setDb_svr_id(db_svr_id);
 			transVOPrm.setTrans_active_gbn(trans_active_gbn);
+			transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
 	
 			result = transService.transStop(transVOPrm);
 		} catch (Exception e) {
@@ -411,7 +425,9 @@ public class TransController {
 	@RequestMapping(value = "/transTotExecute.do")
 	@ResponseBody
 	public String transTotExecute(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
-
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -480,6 +496,8 @@ public class TransController {
 						transVOPrm.setDb_svr_id(db_svr_id);
 						transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 						transVOPrm.setTrans_id(trans_id);
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+						transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
 						
 						resultSs = transService.transStart(transVOPrm);
 					} else if ("target_active".equals(execute_gbn)) {
@@ -489,6 +507,8 @@ public class TransController {
 						transVOPrm.setDb_svr_id(db_svr_id);
 						transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 						transVOPrm.setTrans_id(trans_id);
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+						transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
 							
 						resultSs = transService.transTargetStart(transVOPrm);
 					} else {
@@ -497,14 +517,14 @@ public class TransController {
 						String connect_nm = connect_nms.get(i).toString();
 						String trans_id_str = trans_ids.get(i).toString();
 
-						
 						transVOPrm.setKc_ip(kc_ip);
 						transVOPrm.setKc_port(Integer.parseInt(kc_port));
 						transVOPrm.setConnect_nm(connect_nm);
 						transVOPrm.setTrans_id(Integer.parseInt(trans_id_str));
 						transVOPrm.setDb_svr_id(db_svr_id);
 						transVOPrm.setTrans_active_gbn(trans_active_gbn);
-	
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+						
 						resultSs = transService.transStop(transVOPrm);
 					}
 	System.out.println("=======resultSs===" + resultSs);
@@ -1586,9 +1606,12 @@ public class TransController {
 	@RequestMapping(value = "/transAutoStart.do")
 	@ResponseBody
 	public String transAutoStart(HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		String result = "fail";
 		List<Map<String, Object>> transInfo = null;
-
+		
 		try {					
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			int trans_exrt_trg_tb_id = -1;
@@ -1618,6 +1641,8 @@ public class TransController {
 				transVOPrm.setDb_svr_id(db_svr_id);
 				transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 				transVOPrm.setTrans_id(trans_id);
+				transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+				transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
 
 				if ("ins_target".equals(trans_active_gbn) || "mod_target".equals(trans_active_gbn)) {
 					result = transService.transTargetStart(transVOPrm);

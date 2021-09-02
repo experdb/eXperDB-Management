@@ -419,3 +419,72 @@ COMMENT ON COLUMN experdb_management.cdc_connector_task_sink.total_records_skipp
 COMMENT ON COLUMN experdb_management.cdc_connector_task_sink.total_record_errors IS '오류_총_수';
 COMMENT ON COLUMN experdb_management.cdc_connector_task_sink.total_retries IS '재시도_작업_총_수';
 -- cdc_connector_task_sink 테이블 추가 끝------
+
+-- T_TRANS_KAFKA_ACTSTATE_CNG_G 테이블 추가 시작 ------
+CREATE TABLE experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G (
+   KAFKA_ACT_EXE_SN numeric NOT NULL DEFAULT 1,
+   KC_ID numeric(18) NOT NULL,
+   KC_IP varchar(50) NOT NULL,
+   KC_PORT numeric(5) NOT NULL,
+   ACT_TYPE varchar(1) NOT NULL,
+   ACT_EXE_TYPE varchar(20) NOT NULL,
+   WRK_DTM timestamp NOT NULL DEFAULT clock_timestamp(),
+   EXE_RSLT_CD varchar(20) NOT NULL DEFAULT 'TC001501'::character varying,
+   FRST_REGR_ID varchar(30) NULL,
+   FRST_REG_DTM timestamp NOT NULL DEFAULT clock_timestamp(),
+   LST_MDFR_ID varchar(30) NULL,
+   LST_MDF_DTM timestamp NOT NULL DEFAULT clock_timestamp(),
+   CONSTRAINT pk_t_trans_kafka_actstate_cng_g PRIMARY KEY (kafka_act_exe_sn, kc_id, act_type)
+);   
+COMMENT ON TABLE experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G IS '카프카_커넥트_기동상태_변경_이력';
+
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.KAFKA_ACT_EXE_SN IS '카프카_커넥트_실행_상태_일련번호';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.KC_ID IS '카프카_커넥트_ID';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.KC_IP IS '카프카_커넥트_IP';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.KC_PORT IS '카프카_커넥트_PORT';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.ACT_TYPE IS '기동_유형';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.ACT_EXE_TYPE IS '기동_실행_유형';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.WRK_DTM IS '작업_시간';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.EXE_RSLT_CD IS '실행_결과_코드';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.FRST_REGR_ID IS '최초_등록자_ID';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.FRST_REG_DTM IS '최초_등록_일시';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.LST_MDFR_ID IS '최종_수정자_ID';
+COMMENT ON COLUMN experdb_management.T_TRANS_KAFKA_ACTSTATE_CNG_G.LST_MDF_DTM IS '최종_수정_일시';
+
+CREATE SEQUENCE Q_T_TRANS_KAFKA_ACTSTATE_CNG_G_01;
+-- T_TRANS_KAFKA_ACTSTATE_CNG_G 테이블 추가 끝 ------
+
+-- T_TRANS_ACTSTATE_CNG_G 테이블 추가 시작 ------
+CREATE TABLE experdb_management.T_TRANS_ACTSTATE_CNG_G (
+   TRANS_ACT_EXE_SN numeric NOT NULL DEFAULT 1,
+   TRANS_ID numeric(18) NOT NULL DEFAULT 1,
+   CONNECTOR_TYPE varchar(20) NOT NULL,
+   ACT_TYPE varchar(1) NOT NULL,
+   ACT_EXE_TYPE varchar(20) NOT NULL,
+   WRK_DTM timestamp NOT NULL DEFAULT clock_timestamp(),
+   EXE_RSLT_CD varchar(20) NOT NULL DEFAULT 'TC001501'::character varying,
+   FRST_REGR_ID varchar(30) NULL,
+   FRST_REG_DTM timestamp NOT NULL DEFAULT clock_timestamp(),
+   LST_MDFR_ID varchar(30) NULL,
+   LST_MDF_DTM timestamp NOT NULL DEFAULT clock_timestamp(),
+   CONSTRAINT pk_t_trans_actstate_cng_g PRIMARY KEY (trans_act_exe_sn, trans_id, CONNECTOR_TYPE, act_type)
+);
+COMMENT ON TABLE experdb_management.T_TRANS_ACTSTATE_CNG_G IS '커넥터_기동상태_변경_이력';
+
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.TRANS_ACT_EXE_SN IS '커넥터_실행_상태_일련번호';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.TRANS_ID IS '커넥터_ID';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.CONNECTOR_TYPE IS '커넥터_유형';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.ACT_TYPE IS '기동_유형';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.ACT_EXE_TYPE IS '기동_실행_유형';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.WRK_DTM IS '작업_시간';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.EXE_RSLT_CD IS '실행_결과_코드';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.FRST_REGR_ID IS '최초_등록자_ID';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.FRST_REG_DTM IS '최초_등록_일시';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.LST_MDFR_ID IS '최종_수정자_ID';
+COMMENT ON COLUMN experdb_management.T_TRANS_ACTSTATE_CNG_G.LST_MDF_DTM IS '최종_수정_일시';
+
+CREATE SEQUENCE Q_T_TRANS_ACTSTATE_CNG_G_01;
+-- T_TRANS_ACTSTATE_CNG_G 테이블 추가 끝 ------
+
+
+ALTER TABLE t_pry_svr_i ALTER COLUMN pry_svr_nm TYPE VARCHAR(300);

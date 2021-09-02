@@ -32,7 +32,29 @@ public class TransDbmsVO {
 	private String trans_connect_id_Rows;
 	private String db_exe_status;
 	private String dbms_sch_gbn;
-	
+
+	private String act_type;
+	private String act_exe_type;
+	private String exe_rslt_cd;
+
+	public String getAct_type() {
+		return act_type;
+	}
+	public void setAct_type(String act_type) {
+		this.act_type = act_type;
+	}
+	public String getAct_exe_type() {
+		return act_exe_type;
+	}
+	public void setAct_exe_type(String act_exe_type) {
+		this.act_exe_type = act_exe_type;
+	}
+	public String getExe_rslt_cd() {
+		return exe_rslt_cd;
+	}
+	public void setExe_rslt_cd(String exe_rslt_cd) {
+		this.exe_rslt_cd = exe_rslt_cd;
+	}
 	public String getDbms_sch_gbn() {
 		return dbms_sch_gbn;
 	}
