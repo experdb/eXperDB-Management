@@ -118,9 +118,7 @@ public class ProxyRestController {
 		} catch (Exception e) {
 			System.out.println("setProxyScaleIn :: error : "+e.toString());
 			e.printStackTrace();
-		
 		}
-		
 		return resultObj;
 	}
 	
@@ -174,7 +172,8 @@ public class ProxyRestController {
 				System.out.println(resultObj.toJSONString());
 			}
 		}catch(Exception e){
-			System.out.println("error :: " + e.toString());
+			System.out.println("setProxyScaleIn :: error : "+e.toString());
+			e.printStackTrace();
 		}
 		return resultObj;
 	}
