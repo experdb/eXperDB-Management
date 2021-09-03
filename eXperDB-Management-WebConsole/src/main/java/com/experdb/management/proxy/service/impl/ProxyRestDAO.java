@@ -73,6 +73,18 @@ public class ProxyRestDAO extends EgovAbstractMapper{
 	public void insertProxyLsnSvrList(ProxyListenerServerVO proxyListenerServerVO)  throws SQLException {
 		insert("proxyRestSql.insertProxyLsnSvrList", proxyListenerServerVO);	
 	}
+
+
+	/**
+	 * Scale In 시 Proxy Listener Svr 이력 삭제 
+	 * 
+	 * @param Map<String, Object>
+	 * @return 
+	 */
+	public void deletProxySvrStatusHistoryList(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		delete("proxyRestSql.deletProxySvrStatusHistoryList", param);	
+	}
 	
 	
 	

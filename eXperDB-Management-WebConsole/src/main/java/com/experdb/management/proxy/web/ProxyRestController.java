@@ -1,14 +1,17 @@
 package com.experdb.management.proxy.web;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -87,25 +90,33 @@ public class ProxyRestController {
 			
 			Map<String, Object> param = new HashMap<String, Object>();
 			List<String> dbConAddr = new ArrayList<String>();
+			List<String> dbConIp = new ArrayList<String>();
 			
-			for(int i=0; i<instanceArray.size(); i++){
-				JSONObject jObj = (JSONObject) instanceArray.get(i);
-				dbConAddr.add(jObj.get("ip")+":"+jObj.get("port"));
+			Properties prop = new Properties();
+			prop.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			if("Y".equals(prop.getProperty("proxy.useyn"))){
+				
+				for(int i=0; i<instanceArray.size(); i++){
+					JSONObject jObj = (JSONObject) instanceArray.get(i);
+					dbConAddr.add(jObj.get("ip")+":"+jObj.get("port"));
+					dbConIp.add(jObj.get("ip").toString());
+				}
+				param.put("db_con_addr", dbConAddr);
+				param.put("db_con_ip", dbConIp);
+				
+				//어떤 Proxy 서버와, Agent를 수정해야되는지 List 추출
+				List<Map<String, Object>> pryScaleList = proxyRestService.selectScaleInProxyList(param);	
+			
+				//Delete T_PRY_LSN_SVR_I
+				proxyRestService.scaleInProxyLsnSvrList(param);
+				
+				//Agent로 cfg 수정 후 반영 요청 
+				resultObj= proxyRestService.setProxyConfScaleIn(pryScaleList);
+				System.out.println(resultObj.toJSONString());
+			
 			}
-			param.put("db_con_addr", dbConAddr);
-			
-			//어떤 Proxy 서버와, Agent를 수정해야되는지 List 추출
-			List<Map<String, Object>> pryScaleList = proxyRestService.selectScaleInProxyList(param);	
-		
-			//Delete T_PRY_LSN_SVR_I
-			proxyRestService.scaleInProxyLsnSvrList(param);
-			
-			//Agent로 cfg 수정 후 반영 요청 
-			resultObj= proxyRestService.setProxyConfScaleIn(pryScaleList);
-			System.out.println(resultObj.toJSONString());
-			
 		} catch (Exception e) {
-		
+			System.out.println("setProxyScaleIn :: error : "+e.toString());
 			e.printStackTrace();
 		
 		}
@@ -134,29 +145,34 @@ public class ProxyRestController {
 			JSONArray instanceArray = (JSONArray)paramObj.get("instance");
 			Map<String, Object> param = new HashMap<String, Object>();
 			List<String> dbConIp = new ArrayList<String>();
-			ProxyListenerServerVO listnSvr[] = new ProxyListenerServerVO[instanceArray.size()];
 			
-			for(int i=0; i<instanceArray.size(); i++){
-				JSONObject jObj = (JSONObject) instanceArray.get(i);
-				listnSvr[i] = new ProxyListenerServerVO();
-				listnSvr[i].setDb_con_addr(jObj.get("ip")+":"+jObj.get("port"));
-				listnSvr[i].setChk_portno(Integer.parseInt(jObj.get("port").toString()));
-				listnSvr[i].setBackup_yn("N");
-				listnSvr[i].setLst_mdfr_id("system");
-				dbConIp.add(jObj.get("ip").toString());
+			Properties prop = new Properties();
+			prop.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			if("Y".equals(prop.getProperty("proxy.useyn"))){
+				ProxyListenerServerVO listnSvr[] = new ProxyListenerServerVO[instanceArray.size()];
+				
+				for(int i=0; i<instanceArray.size(); i++){
+					JSONObject jObj = (JSONObject) instanceArray.get(i);
+					listnSvr[i] = new ProxyListenerServerVO();
+					listnSvr[i].setDb_con_addr(jObj.get("ip")+":"+jObj.get("port"));
+					listnSvr[i].setChk_portno(Integer.parseInt(jObj.get("port").toString()));
+					listnSvr[i].setBackup_yn("N");
+					listnSvr[i].setLst_mdfr_id("system");
+					dbConIp.add(jObj.get("ip").toString());
+				}
+				param.put("ipadr", dbConIp);
+				
+				System.out.println("Param :: "+param.toString());
+				//어떤 Proxy 서버와, Agent를 수정해야되는지 List 추출
+				List<Map<String, Object>> pryScaleList = proxyRestService.selectScaleOutProxyList(param);	
+			
+				//Insert T_PRY_LSN_SVR_I
+				proxyRestService.scaleOutProxyLsnSvrList(listnSvr, pryScaleList);
+				
+				//Agent로 cfg 수정 후 반영 요청 
+				resultObj= proxyRestService.setProxyConfScaleIn(pryScaleList);
+				System.out.println(resultObj.toJSONString());
 			}
-			param.put("ipadr", dbConIp);
-			
-			System.out.println("Param :: "+param.toString());
-			//어떤 Proxy 서버와, Agent를 수정해야되는지 List 추출
-			List<Map<String, Object>> pryScaleList = proxyRestService.selectScaleOutProxyList(param);	
-		
-			//Insert T_PRY_LSN_SVR_I
-			proxyRestService.scaleOutProxyLsnSvrList(listnSvr, pryScaleList);
-			
-			//Agent로 cfg 수정 후 반영 요청 
-			resultObj= proxyRestService.setProxyConfScaleIn(pryScaleList);
-			System.out.println(resultObj.toJSONString());
 		}catch(Exception e){
 			System.out.println("error :: " + e.toString());
 		}

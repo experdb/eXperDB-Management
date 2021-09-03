@@ -81,5 +81,18 @@
 		FROM 		T_PRY_LSN_I 
 		WHERE 	PRY_SVR_ID=#{pry_svr_id}
 	</insert>
+	<delete id="deletProxySvrStatusHistoryList" parameterType="hashMap">
+		/**
+		* Query ID : deletProxySvrStatusHistoryList
+		* Description : Scale In 시 Proxy Svr 이력 삭제 
+		* Author : 김민정
+		**/
+        DELETE FROM T_PRY_SVR_STATUS_G
+		WHERE 	DB_CON_ADDR IN
+      	<foreach collection="db_con_ip" item="item" index="index" open="(" separator="," close=")">
+					        #{item}
+		</foreach>
+	</delete>
+	
 	
 </mapper>
