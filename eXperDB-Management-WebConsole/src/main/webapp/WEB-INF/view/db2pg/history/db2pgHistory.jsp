@@ -688,7 +688,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 			type : "post",
 			success : function(result){
 				if(result.RESULT_CODE == '0'){					
-					showSwalIcon('<spring:message code="migration.stop_succes" />', '<spring:message code="common.close" />', '', 'success');
+					showSwalIcon('<spring:message code="migration.stop_success" />', '<spring:message code="common.close" />', '', 'success');
 				}else{
 					showSwalIcon('<spring:message code="migration.stop_tail" />', '<spring:message code="common.close" />', '', 'error');
 				}
