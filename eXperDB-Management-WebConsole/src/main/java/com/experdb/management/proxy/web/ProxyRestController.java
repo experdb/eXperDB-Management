@@ -87,12 +87,15 @@ public class ProxyRestController {
 			
 			Map<String, Object> param = new HashMap<String, Object>();
 			List<String> dbConAddr = new ArrayList<String>();
+			List<String> dbConIp = new ArrayList<String>();
 			
 			for(int i=0; i<instanceArray.size(); i++){
 				JSONObject jObj = (JSONObject) instanceArray.get(i);
 				dbConAddr.add(jObj.get("ip")+":"+jObj.get("port"));
+				dbConIp.add(jObj.get("ip").toString());
 			}
 			param.put("db_con_addr", dbConAddr);
+			param.put("db_con_ip", dbConIp);
 			
 			//어떤 Proxy 서버와, Agent를 수정해야되는지 List 추출
 			List<Map<String, Object>> pryScaleList = proxyRestService.selectScaleInProxyList(param);	

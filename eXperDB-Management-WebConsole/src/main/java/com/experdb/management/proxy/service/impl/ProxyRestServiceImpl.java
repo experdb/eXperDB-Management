@@ -79,7 +79,7 @@ public class ProxyRestServiceImpl extends EgovAbstractServiceImpl implements Pro
 	}
 	
 	/**
-	 * Scale In시 Proxy Listener Svr List 삭제 
+	 * Scale In시 Proxy Listener Svr List 및 이력 삭제 
 	 * 
 	 * @param Map<String, Object>
 	 * @return 
@@ -87,7 +87,13 @@ public class ProxyRestServiceImpl extends EgovAbstractServiceImpl implements Pro
 	 */
 	@Override
 	public void scaleInProxyLsnSvrList(Map<String, Object> param) throws Exception {
+		//상태 이력 삭제
+		System.out.println("상태 이력 삭제 ");
+		proxyRestDAO.deletProxySvrStatusHistoryList(param);
+		//서버리스트 삭제 
+		System.out.println("서버 리스트 삭제 ");
 		proxyRestDAO.deletProxyLsnSvrList(param);
+		
 	}
 
 	/**
