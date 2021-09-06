@@ -302,7 +302,6 @@ public class TransMonitoringController {
 	public ModelAndView transConnectorLogViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		String strBuffer = "";
-		System.out.println("----------------------------------");
 		try {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			String strTransId = request.getParameter("trans_id");
@@ -324,14 +323,12 @@ public class TransMonitoringController {
 			param.put("date", strDate);
 			param.put("todayYN", todayYN);
 			param.put("type", type);
-//			Map<String, Object> result = transMonitoringService.getLogFile(trans_id, type, param);
 			Map<String, Object> result = transMonitoringService.getLogFile(transVO, param);
 			strBuffer = (String) result.get("RESULT_DATA"); 
 			if(strBuffer != null) {
 				mv.addObject("fSize", strBuffer.length());
 			}
 			mv.addObject("data", strBuffer);
-//			mv.addObject("pry_svr_nm", result.get("pry_svr_nm"));
 			mv.addObject("dwLen", result.get("DW_LEN"));
 			mv.addObject("file_name", result.get("file_name"));
 			mv.addObject("status", result.get("status"));

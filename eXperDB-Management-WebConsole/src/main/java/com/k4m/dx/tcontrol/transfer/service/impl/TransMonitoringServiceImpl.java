@@ -284,20 +284,16 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	}
 
 	/**
-	 * trans Connector log 파일 가져오기
+	 * trans log 파일 가져오기
 	 * 
 	 * @param transVO, param
 	 * @return Map<String, Object>
 	 */
 	@Override
 	public Map<String, Object> getLogFile(TransVO transVO, Map<String, Object> param) {
-		String strDirectory = "/home/experdb/";
-		String strFileName = "connect-service.log";
-
 		Map<String, Object> logResult = new HashMap<String, Object>();
 
 		try {
-			
 			int db_svr_id = transVO.getDb_svr_id();
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -321,8 +317,6 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT043);
-			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
-			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
 			jObj.put(ClientProtocolID.SEEK, param.get("seek"));
 			jObj.put(ClientProtocolID.DW_LEN, param.get("dwLen"));
 			jObj.put(ClientProtocolID.READLINE, param.get("readLine"));

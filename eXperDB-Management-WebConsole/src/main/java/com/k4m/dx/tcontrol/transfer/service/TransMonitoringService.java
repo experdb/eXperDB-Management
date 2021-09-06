@@ -186,7 +186,7 @@ public interface TransMonitoringService {
 	public List<Map<String, Object>> selectAllErrorList();
 	
 	/**
-	 * trans Connector log 파일 가져오기
+	 * trans log 파일 가져오기
 	 * 
 	 * @param param
 	 * @return Map<String, Object>

@@ -271,7 +271,6 @@
 // 						}
 						srcErrorTable.clear().draw();
 						if (nvlPrmSet(result.sourceErrorInfo, '') != '') {
-							console.log(result.sourceErrorInfo)
 							for(var i = 0; i < result.sourceErrorInfo.length; i++){	
 								if(result.sourceErrorInfo[i].rownum == 1){
 									if(i != result.sourceErrorInfo.length-1 && result.sourceErrorInfo[i+1].rownum == 2){
@@ -424,7 +423,6 @@
 	}
 	
 	function fn_logView(type){
-		console.log(type)
 		var todayYN = 'N';
 		
 // 		if(date == 'today'){
