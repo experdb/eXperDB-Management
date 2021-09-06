@@ -13,6 +13,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.ibm.db2.jcc.am.ob;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -2365,9 +2366,8 @@ System.out.println("=====cmd" + cmd);
 		
 		JSONObject objResult;
 		try {
-			System.out.println("12312312312313132");
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			System.out.println(" CA : " + CA.toString());
+			
 			CA.open();
 			objResult = CA.dxT043(jObj);
 			CA.close();
@@ -2377,6 +2377,7 @@ System.out.println("=====cmd" + cmd);
 			String strDxExCode = (String)objResult.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String)objResult.get(ClientProtocolID.RESULT_CODE);
 			String strResultData = (String)objResult.get(ClientProtocolID.RESULT_DATA);
+			String strFileName = (String)objResult.get(ClientProtocolID.FILE_NAME);
 			int strDwLen = (int) objResult.get(ClientProtocolID.DW_LEN);
 			
 			result.put("RESULT_CODE", strResultCode);
@@ -2384,6 +2385,7 @@ System.out.println("=====cmd" + cmd);
 			result.put("ERR_MSG", strErrMsg);
 			result.put("RESULT_DATA", strResultData);
 			result.put("DW_LEN", strDwLen);
+			result.put("file_name", strFileName);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

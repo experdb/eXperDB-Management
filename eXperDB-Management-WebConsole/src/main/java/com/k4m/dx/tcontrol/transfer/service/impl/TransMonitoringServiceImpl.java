@@ -291,7 +291,6 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	 */
 	@Override
 	public Map<String, Object> getLogFile(TransVO transVO, Map<String, Object> param) {
-		// String strDirectory = "/var/log/" + type.toLowerCase() + "/";
 		String strDirectory = "/home/experdb/";
 		String strFileName = "connect-service.log";
 
@@ -300,8 +299,6 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 		try {
 			
 			int db_svr_id = transVO.getDb_svr_id();
-//			int trans_exrt_trg_tb_id = transVO.getTrans_exrt_trg_tb_id();
-//			int trans_id = transVO.getTrans_id();
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			
@@ -318,9 +315,9 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-			System.out.println("service IP : " + IP);
-			System.out.println("service port : " + PORT);
+			
 			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd_old()));
+			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
 			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT043);
@@ -329,19 +326,13 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 			jObj.put(ClientProtocolID.SEEK, param.get("seek"));
 			jObj.put(ClientProtocolID.DW_LEN, param.get("dwLen"));
 			jObj.put(ClientProtocolID.READLINE, param.get("readLine"));
-			System.out.println("jobj : " + jObj.toJSONString());
+			jObj.put(ClientProtocolID.SYS_TYPE, param.get("type"));
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 
-			Map<String, Object> getLogResult = new HashMap<String, Object>();
-			getLogResult = cic.getLogFile(IP, PORT, dbServerVO, jObj);
-			// getLogResult.put("pry_svr_nm", strPrySvrNm);
-			getLogResult.put("file_name", strFileName);
-			// getLogResult.put("status", status);
-
+			logResult = cic.getLogFile(IP, PORT, dbServerVO, jObj);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
-
 		return logResult;
 	}
 	

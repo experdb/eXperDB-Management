@@ -277,36 +277,36 @@ public class TransMonitoringController {
 	}
 	
 	/**
-	 * trans Connector log view
+	 * trans log view
 	 * 
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transConnectorLogView.do")
-	public ModelAndView logViewBySysTypeAndDate(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
+	@RequestMapping("/transLogView.do")
+	public ModelAndView transConnectorLogView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		ModelAndView mv = new ModelAndView();
 		
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		mv.addObject("db_svr_id", db_svr_id);
-		mv.setViewName("transfer/popup/transConnectorLogView");
+		mv.setViewName("transfer/popup/transLogView");
 		return mv;
 	}
 	
 	/**
-	 * trans Connector log file
+	 * trans log file
 	 * 
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transConnectorLogViewAjax")
-	public ModelAndView transConnectorLogView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	@RequestMapping("/transLogViewAjax")
+	public ModelAndView transConnectorLogViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		String strBuffer = "";
 		System.out.println("----------------------------------");
 		try {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			String strTransId = request.getParameter("trans_id");
-//			String type = request.getParameter("type");
+			String type = request.getParameter("type");
 //			int trans_id = Integer.parseInt(strTransId);
 			String strSeek = request.getParameter("seek");
 			String strReadLine = request.getParameter("readLine");
@@ -321,9 +321,9 @@ public class TransMonitoringController {
 			param.put("seek", strSeek);
 			param.put("readLine", strReadLine);
 			param.put("dwLen", dwLen);
-//			param.put("date", strDate);
-//			param.put("todayYN", todayYN);
-			
+			param.put("date", strDate);
+			param.put("todayYN", todayYN);
+			param.put("type", type);
 //			Map<String, Object> result = transMonitoringService.getLogFile(trans_id, type, param);
 			Map<String, Object> result = transMonitoringService.getLogFile(transVO, param);
 			strBuffer = (String) result.get("RESULT_DATA"); 

@@ -17,18 +17,18 @@
 	/* ********************************************************
 	 * view 실행
 	 ******************************************************** */
-	function fn_logViewAjax() {
-		var v_seek = $("#seek", "#connectorViewForm").val();
-		var v_file_name = $("#info_file_name", "#connectorViewForm").val();
-		var v_endFlag = $("#endFlag", "#connectorViewForm").val();
-		var v_dwLen = $("#dwLen", "#connectorViewForm").val();
-		var v_log_line = $("#log_line", "#connectorViewForm").val();
-		var v_trans_id = $("#trans_id", "#connectorViewForm").val();
-		var v_db_svr_id = $("#db_svr_id", "#connectorViewForm").val();
-		var v_type = $("#type", "#connectorViewForm").val();
-		var v_date = $("#date", "#connectorViewForm").val();
-		var v_todayYN = $("#todayYN", "#connectorViewForm").val();
-// 		var v_aut_id = $("#aut_id", "#connectorViewForm").val();
+	function fn_transLogViewAjax() {
+		var v_seek = $("#seek", "#transLogViewForm").val();
+		var v_file_name = $("#info_file_name", "#transLogViewForm").val();
+		var v_endFlag = $("#endFlag", "#transLogViewForm").val();
+		var v_dwLen = $("#dwLen", "#transLogViewForm").val();
+		var v_log_line = $("#log_line", "#transLogViewForm").val();
+		var v_trans_id = $("#trans_id", "#transLogViewForm").val();
+		var v_db_svr_id = $("#db_svr_id", "#transLogViewForm").val();
+		var v_type = $("#type", "#transLogViewForm").val();
+		var v_date = $("#date", "#transLogViewForm").val();
+		var v_todayYN = $("#todayYN", "#transLogViewForm").val();
+// 		var v_aut_id = $("#aut_id", "#transLogViewForm").val();
 		
 		if(v_endFlag > 0) {
 			showSwalIcon('<spring:message code="message.msg66" />', '<spring:message code="common.close" />', '', 'warning');
@@ -41,7 +41,7 @@
 			v_todayYN = 'N';
 		}
 		$.ajax({
-			url : "/transConnectorLogViewAjax",
+			url : "/transLogViewAjax",
 			dataType : "json",
 			type : "post",
  			data : {
@@ -51,7 +51,8 @@
 				seek : v_seek,
  				dwLen : v_dwLen,
  				readLine : v_log_line,
- 				todayYN : v_todayYN
+ 				todayYN : v_todayYN,
+ 				type : v_type
  			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -67,24 +68,24 @@
 			},
 			success : function(result) {
 				if (result != null) {
-					var v_fileSize = Number($("#fSize", "#connectorViewForm").val());
+					var v_fileSize = Number($("#fSize", "#transLogViewForm").val());
 					
 					if (result.data != null) {
-						$("#connectorlog", "#connectorViewForm").html(result.data);
+						$("#connectorlog", "#transLogViewForm").html(result.data);
 						
 						v_fileSize = result.fSize;
 					}
 
-					$("#fSize", "#connectorViewForm").val(v_fileSize);
+					$("#fSize", "#transLogViewForm").val(v_fileSize);
 					
-					$("#dwLen", "#connectorViewForm").val(result.dwLen);
-					$("#view_file_name", "#connectorViewForm").html(result.file_name);
-					$("#date", "#connectorViewForm").val(v_date);
-					$("#status", "#connectorViewForm").val(result.status);
+					$("#dwLen", "#transLogViewForm").val(result.dwLen);
+					$("#view_file_name", "#transLogViewForm").html(result.file_name);
+					$("#date", "#transLogViewForm").val(v_date);
+					$("#status", "#transLogViewForm").val(result.status);
 					
 					v_fileSize = byteConvertor(v_fileSize);
 					
-					$("#view_file_size", "#connectorViewForm").html(v_fileSize);
+					$("#view_file_size", "#transLogViewForm").html(v_fileSize);
 					
 				}
 
@@ -93,7 +94,7 @@
 // 					$('#stop_btn').hide();
 // 					$('#download_btn').hide();
 // 				} else {
-// 					if($("#status", "#connectorViewForm").val() == 'TC001502'){
+// 					if($("#status", "#transLogViewForm").val() == 'TC001502'){
 // 						$('#start_btn').show();
 // 						$('#stop_btn').hide();
 // 					} else {
@@ -124,7 +125,7 @@
 	 * log calender 셋팅
 	 ******************************************************** */
 	function dateCalenderSetting() {
-		var s_date = $("#date", "#connectorViewForm").val();
+		var s_date = $("#date", "#transLogViewForm").val();
 		var today = new Date();
 		var day_end = today.toJSON().slice(0,10);
 
@@ -149,10 +150,10 @@
 	 * 날짜 변경
 	 ******************************************************** */ 
 	function fn_date_cng(){
-    	$("#date", "#connectorViewForm").val($("#wrk_strt_dtm").val());
-		$("#dwLen", "#connectorViewForm").val("0");
+    	$("#date", "#transLogViewForm").val($("#wrk_strt_dtm").val());
+		$("#dwLen", "#transLogViewForm").val("0");
 		$('#connectorlog').scrollTop(0);
-		fn_logViewAjax();
+		fn_transLogViewAjax();
 	}
 
 	
@@ -161,7 +162,7 @@
 	 ******************************************************** */
 	function fn_connectorLogViewPopcl() {
 		var contentsGbn_chk = $("#contents_gbn", "#configForm").val();
-		$("#log_line", "#connectorViewForm").val("0");
+		$("#log_line", "#transLogViewForm").val("0");
 		$('#connectorlog').scrollTop(0);
 		$("#pop_layer_log_view").modal("hide");
 		if (contentsGbn_chk != null && contentsGbn_chk != "") {
@@ -178,8 +179,7 @@
 			<div class="modal-body" style="margin-bottom:-10px;">
 			<div class="row">
 				<div class="col-sm-9">
-				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					커넥터 로그 보기
+				<h4 class="modal-title mdi mdi-alert-circle text-info log_title" id="ModalLabel" style="padding-left:5px;">
 				</h4>
 				</div>
 <!-- 				<div class="col-sm-3"> -->
@@ -191,14 +191,14 @@
 <!-- 				</div> -->
 			</div>
 				
-				<form class="cmxform" id="connectorViewForm" name="connectorViewForm" >
+				<form class="cmxform" id="transLogViewForm" name="transLogViewForm" >
 					<input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
 					<input type="hidden" id="seek" name="seek" value="0">
 					<input type="hidden" id="info_file_name" name="info_file_name" value="">
 					<input type="hidden" id="endFlag" name="endFlag" value="0">
 					<input type="hidden" id="dwLen" name="dwLen" value="0">
 					<input type="hidden" id="fSize" name="fSize">
-<!-- 					<input type="hidden" id="type" name="type"> -->
+					<input type="hidden" id="type" name="type">
 					<input type="hidden" id="date" name="date">
 					<input type="hidden" id="aut_id" name="aut_id">
 					<input type="hidden" id="todayYN" name="todayYN">
@@ -216,12 +216,12 @@
 											<option value="5000">5000 Line</option>
 										</select>
 									</div>
-									<div class="col-sm-6">
-										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_logViewAjax();" value='<spring:message code="auth_management.viewMore" />' />
-										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_log_act_confirm_modal('TC001502')" value="중지" />
-										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" id="stop_btn" type="button" onClick="fn_log_act_confirm_modal('TC001501')" value="기동" />
+									<div class="col-sm-8">
+										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_transLogViewAjax();" value='<spring:message code="auth_management.viewMore" />' />
+<!-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_log_act_confirm_modal('TC001502')" value="중지" /> -->
+										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" id="restart_btn" type="button" onClick="fn_log_act_confirm_modal('TC001501')" value="재시작" />
 									</div>
-									<div class="col-sm-2" style="margin-left:-17px;">
+									<div class="col-sm-2" style="margin-left:-37px;">
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
 											<input type="text" class="form-control totDatepicker" style="width:150px; height:44px;" id="wrk_strt_dtm" name="wrk_strt_dtm" onchange="fn_date_cng()" readonly>
 											<span class="input-group-addon input-group-append border-left">

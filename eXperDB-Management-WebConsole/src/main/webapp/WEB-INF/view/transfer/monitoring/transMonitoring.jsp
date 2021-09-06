@@ -423,29 +423,47 @@
 		$("#loading").hide();
 	}
 	
-	function fn_logView(){
+	function fn_logView(type){
+		console.log(type)
+		var todayYN = 'N';
+		
+// 		if(date == 'today'){
+// 			pry_svr_id = select_pry_svr_id;
+// 			todayYN = 'Y';
+// 		}
+		var date = new Date().toJSON();
 		
 		var v_db_svr_id = $("#db_svr_id", "#transMonitoringForm").val();
 		
 		$.ajax({
-			url : "/transConnectorLogView.do",
-			data : {
-				db_svr_id : v_db_svr_id
-			},
+			url : "/transLogView.do",
 			type : 'post',
+			data : {
+				db_svr_id : v_db_svr_id,
+				date : date
+			},
 			success : function(result) {
-				$("#connectorlog", "#connectorViewForm").html("");
-				$("#dwLen", "#connectorViewForm").val("0");
-				$("#fSize", "#connectorViewForm").val("");
-				$("#log_line", "#connectorViewForm").val("1000");
-// 				$("#type", "#connectorViewForm").val(type);
-				$("#date", "#connectorViewForm").val(date);
-// 				$("#aut_id", "#connectorViewForm").val(aut_id);
-// 				$("#todayYN", "#connectorViewForm").val(todayYN);
-				$("#todayYN", "#connectorViewForm").val("Y");
-				$("#view_file_name", "#connectorViewForm").html("");
-				dateCalenderSetting();
-				fn_logViewAjax();
+				$("#connectorlog", "#transLogViewForm").html("");
+				$("#dwLen", "#transLogViewForm").val("0");
+				$("#fSize", "#transLogViewForm").val("");
+				$("#log_line", "#transLogViewForm").val("1000");
+				$("#type", "#transLogViewForm").val(type);
+				$("#date", "#transLogViewForm").val(date);
+// 				$("#aut_id", "#transLogViewForm").val(aut_id);
+// 				$("#todayYN", "#transLogViewForm").val(todayYN);
+				$("#todayYN", "#transLogViewForm").val("Y");
+				$("#view_file_name", "#transLogViewForm").html("");
+				if(type === 'connector'){
+					dateCalenderSetting();
+					$('#restart_btn').hide();
+					$('#wrk_strt_dtm_div').show();
+					$('.log_title').html(' Connector 로그');
+				} else if(type === 'kafka'){
+					$('#restart_btn').show();
+					$('#wrk_strt_dtm_div').hide();
+					$('.log_title').html(' Kafka 로그');
+				}
+				fn_transLogViewAjax();
 				$('#pop_layer_log_view').modal("show");
 			},
 			beforeSend: function(xhr) {
@@ -466,7 +484,7 @@
 </script>
 
 <!-- log 팝업 -->
-<%@ include file="./../popup/transConnectorLogView.jsp" %>
+<%@ include file="./../popup/transLogView.jsp" %>
 		
 <form name="transMonitoringForm" id="transMonitoringForm" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
@@ -634,7 +652,7 @@
 							<td>
 								연결 화살표
 							</td>							
-							<td><i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 3.0em;"></i>
+							<td><i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 3.0em;" onClick="fn_logView('kafka')"></i>
 							</td>
 							<td> 
 								연결 화살표
@@ -732,7 +750,7 @@
 							</h6>
 						</div>
 						<div class="col-sm-4.5">
-							<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView()">
+							<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView('connector')">
 								<i class="mdi mdi-file-document"></i>
 								connector로그
 							</button>
