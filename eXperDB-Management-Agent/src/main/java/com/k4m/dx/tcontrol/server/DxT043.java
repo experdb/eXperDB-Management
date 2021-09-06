@@ -61,80 +61,83 @@ public class DxT043 extends SocketCtl {
 		JSONObject outputObj = new JSONObject();
 		try {
 
-//			if ("connector".equals(sys_type)) {
-				String strReadLine = (String) jObj.get(ProtocolID.READLINE);
-				String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
-				String sys_type = (String) jObj.get(ProtocolID.SYS_TYPE);
-				
-				int intDwlen = Integer.parseInt(dwLen);
-				int intReadLine = Integer.parseInt(strReadLine);
-				int intLastLine = intDwlen;
+			String strReadLine = (String) jObj.get(ProtocolID.READLINE);
+			String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
+			String sys_type = (String) jObj.get(ProtocolID.SYS_TYPE);
 
-				if (intDwlen == 0) {
-					intLastLine = intReadLine;
-				}
-				RunCommandExec r = new RunCommandExec();
+			int intDwlen = Integer.parseInt(dwLen);
+			int intReadLine = Integer.parseInt(strReadLine);
+			int intLastLine = intDwlen;
 
-				String kafkaPath = FileUtil.getPropertyValue("context.properties", "agent.trans_path");
-				String kafkaLogDirectory = "trans_logs/kafka/";
-				String connectorLogDirectory = "trans_logs/connector/";
-				// trans 로그 폴더 생성
-				if(!new File(kafkaPath+"/"+kafkaLogDirectory).exists()) {
-					new File(kafkaPath+"/"+kafkaLogDirectory).mkdirs();
-				}
-				
-				if(!new File(kafkaPath+"/"+connectorLogDirectory).exists()) {
-					new File(kafkaPath+"/"+connectorLogDirectory).mkdirs();
-				}
-				String strFileName = "";
-				String strCmd = "";
-				String logDirectory = "";
-//				String strConnectorNmCmd = "docker ps -a --format \"table {{.Names}}\"  |  grep connect";
-//				String strConnectorName = r.runExec(strConnectorNmCmd);
-//				String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
-				if(sys_type.equals("connector")){
-					strFileName = "connect-service.log";
-					strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep connect`:/kafka/logs/connect-service.log " + kafkaPath + "/" + connectorLogDirectory;
-					logDirectory = kafkaPath + "/" + connectorLogDirectory;
-				} else if(sys_type.equals("kafka")){
-					strFileName = "server.log";
-					strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep kafka`:/kafka/logs/server.log " + kafkaPath + "/" + kafkaLogDirectory;
-					logDirectory = kafkaPath + "/" + kafkaLogDirectory;
-				}
-//				String strCmd = "tac " + "/home/experdb/" + "connect-service.log" + " | head -" + (intLastLine);
-				// 명령어 실행
-				r.runExec(strCmd);
-				File inFile = new File(logDirectory, strFileName);
-				
-				try {
-					r.join();
-				} catch (InterruptedException ie) {
-					socketLogger.error("getLogFile error {}", ie.toString());
-					ie.printStackTrace();
-				}
+			if (intDwlen == 0) {
+				intLastLine = intReadLine;
+			}
+			RunCommandExec r = new RunCommandExec();
 
-				if (r.call().equals("success")) {
-					HashMap hp = FileUtil.getRandomAccessLogFileView(inFile, intReadLine, Integer.parseInt("0"), intLastLine);
+			String kafkaPath = FileUtil.getPropertyValue("context.properties", "agent.trans_path");
+			String kafkaLogDirectory = "trans_logs/kafka/";
+			String connectorLogDirectory = "trans_logs/connector/";
+			// trans 로그 폴더 생성
+			if (!new File(kafkaPath + "/" + kafkaLogDirectory).exists()) {
+				new File(kafkaPath + "/" + kafkaLogDirectory).mkdirs();
+			}
 
-					outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
-					outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));
-					outputObj.put(ProtocolID.SEEK, hp.get("seek"));
-					outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
-					outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
-					outputObj.put(ProtocolID.FILE_NAME, inFile.getName());
+			if (!new File(kafkaPath + "/" + connectorLogDirectory).exists()) {
+				new File(kafkaPath + "/" + connectorLogDirectory).mkdirs();
+			}
+			String strFileName = "";
+			String strCmd = "";
+			String logDirectory = "";
+			// String strConnectorNmCmd = "docker ps -a --format \"table
+			// {{.Names}}\" | grep connect";
+			// String strConnectorName = r.runExec(strConnectorNmCmd);
+			// String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
+			if (sys_type.equals("connector")) {
+				strFileName = "connect-service.log";
+				strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep connect`:/kafka/logs/connect-service.log "
+						+ kafkaPath + "/" + connectorLogDirectory;
+				logDirectory = kafkaPath + "/" + connectorLogDirectory;
+			} else if (sys_type.equals("kafka")) {
+				strFileName = "server.log";
+				strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep kafka`:/kafka/logs/server.log "
+						+ kafkaPath + "/" + kafkaLogDirectory;
+				logDirectory = kafkaPath + "/" + kafkaLogDirectory;
+			}
+			// String strCmd = "tac " + "/home/experdb/" + "connect-service.log"
+			// + " | head -" + (intLastLine);
+			// 명령어 실행
+			r.runExec(strCmd);
+			File inFile = new File(logDirectory, strFileName);
 
-					hp = null;
-				}
+			try {
+				r.join();
+			} catch (InterruptedException ie) {
+				socketLogger.error("getLogFile error {}", ie.toString());
+				ie.printStackTrace();
+			}
 
-				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-				outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
-				outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			if (r.call().equals("success")) {
+				HashMap hp = FileUtil.getRandomAccessLogFileView(inFile, intReadLine, Integer.parseInt("0"),
+						intLastLine);
 
-				inFile = null;
+				outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
+				outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));
+				outputObj.put(ProtocolID.SEEK, hp.get("seek"));
+				outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
+				outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
+				outputObj.put(ProtocolID.FILE_NAME, inFile.getName());
 
-				send(outputObj);
-//			}
+				hp = null;
+			}
+
+			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+
+			inFile = null;
+
+			send(outputObj);
 		} catch (Exception e) {
 			errLogger.error("DxT043 {} ", e.toString());
 
