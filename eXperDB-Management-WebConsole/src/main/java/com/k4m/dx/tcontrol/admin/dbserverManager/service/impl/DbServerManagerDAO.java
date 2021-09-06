@@ -366,10 +366,27 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		resultSet = (int) getSqlSession().selectOne("dbserverManagerSql.selectIpadrCnt", null);
 		return resultSet;
 	}
-
+	
+	/**
+	 * scale DB ipadr add
+	 * 
+	 * @param ipadrVO
+	 * @return 
+	 * @throws 
+	 */	
+	public void insertScaleIpadr(IpadrVO ipadrVO) throws SQLException {
+		insert("dbserverManagerSql.insertScaleIpadr", ipadrVO);		
+	}
+	
+	/**
+	 * scale DB ipadr DELETE
+	 * 
+	 * @param ipadrVO
+	 * @return 
+	 * @throws 
+	 */	
+	public void deleteScaleIpadr(IpadrVO ipadrVO) throws SQLException{
+		delete("dbserverManagerSql.deleteScaleIpadr", ipadrVO);	
+	}
 
 }
-
-
-
-

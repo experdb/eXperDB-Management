@@ -32,6 +32,41 @@
 		LIMIT 20;
 	</select>
 	
+	<select id="selectAllErrorList" resultType="hashMap">
+		/**
+		* Query ID : selectAllErrorList
+		* Description : 전체 오류 정보 조회
+		* Author : 
+		**/
+        SELECT B.TIME, 
+               SUM(B.SRC_TOTAL_RECORD_ERRORS) AS SRC_TOTAL_RECORD_ERRORS,
+               SUM(B.TAR_TOTAL_RECORD_ERRORS) AS TAR_TOTAL_RECORD_ERRORS
+          FROM (
+               SELECT A.TIME, 
+                      SUM(A.TOTAL_RECORD_ERRORS) AS SRC_TOTAL_RECORD_ERRORS, 
+                      0 AS TAR_TOTAL_RECORD_ERRORS
+                 FROM (
+                       SELECT TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME,
+                              TOTAL_RECORD_ERRORS
+                         FROM CDC_CONNECTOR_TASK_SRC
+                ) A
+                GROUP BY A.TIME
+                UNION ALL
+                SELECT A.TIME,
+                       0 AS SRC_TOTAL_RECORD_ERRORS,
+                       SUM(A.TOTAL_RECORD_ERRORS) AS TAR_TOTAL_RECORD_ERRORS
+                 FROM (
+                       SELECT TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME,
+                              TOTAL_RECORD_ERRORS
+                         FROM CDC_CONNECTOR_TASK_SINK
+                ) A
+                GROUP BY A.TIME
+          ) B
+          GROUP BY B.TIME
+          ORDER BY TIME DESC 
+          LIMIT 20
+	</select>
+
 	<select id="selectSourceConnectorList" resultType="hashMap">
 		/**
 		* Query ID : selectSourceConnectorList
@@ -463,40 +498,5 @@
 									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 									)
 		ORDER BY TIME DESC LIMIT 2;
-	</select>
-	
-	<select id="selectAllErrorList" resultType="hashMap">
-		/**
-		* Query ID : selectAllErrorList
-		* Description : 전체 오류 정보 조회
-		* Author : 
-		**/
-        SELECT B.TIME, 
-               SUM(B.SRC_TOTAL_RECORD_ERRORS) AS SRC_TOTAL_RECORD_ERRORS,
-               SUM(B.TAR_TOTAL_RECORD_ERRORS) AS TAR_TOTAL_RECORD_ERRORS
-          FROM (
-               SELECT A.TIME, 
-                      SUM(A.TOTAL_RECORD_ERRORS) AS SRC_TOTAL_RECORD_ERRORS, 
-                      0 AS TAR_TOTAL_RECORD_ERRORS
-                 FROM (
-                       SELECT TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME,
-                              TOTAL_RECORD_ERRORS
-                         FROM CDC_CONNECTOR_TASK_SRC
-                ) A
-                GROUP BY A.TIME
-                UNION ALL
-                SELECT A.TIME,
-                       0 AS SRC_TOTAL_RECORD_ERRORS,
-                       SUM(A.TOTAL_RECORD_ERRORS) AS TAR_TOTAL_RECORD_ERRORS
-                 FROM (
-                       SELECT TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME,
-                              TOTAL_RECORD_ERRORS
-                         FROM CDC_CONNECTOR_TASK_SINK
-                ) A
-                GROUP BY A.TIME
-          ) B
-          GROUP BY B.TIME
-          ORDER BY TIME DESC 
-          LIMIT 20
 	</select>
 </mapper>

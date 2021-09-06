@@ -119,4 +119,37 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper {
 		sl = (List<Map<String, Object>>) list("cmmnSql.selectDashboardServerInfoImg", dbServerVO);
 		return sl;
 	}
+	
+	/**
+	 * scale Agent 등록
+	 * 
+	 * @param AgentInfoVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public void insertScaleAgentInfo(AgentInfoVO vo) {
+		insert("cmmnSql.insertScaleAgentInfo", vo);	
+	}
+
+	/**
+	 * scale Agent 수정
+	 * 
+	 * @param AgentInfoVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public void updateScaleAgentInfo(AgentInfoVO vo) {
+		update("cmmnSql.updateScaleAgentInfo", vo);	
+	}
+
+	/**
+	 * scale Agent 삭제
+	 * 
+	 * @param AgentInfoVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public void deleteScaleAgentInfo(AgentInfoVO vo) {
+		delete("cmmnSql.deleteScaleAgentInfo", vo);
+	}
 }

@@ -494,7 +494,7 @@
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else if(ins_connect_status_Chk == "fail"){
-			showSwalIcon('Kafka-Connect ' + '<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="data_transfer.msg36" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		
 		} else if(nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), '') == "") {

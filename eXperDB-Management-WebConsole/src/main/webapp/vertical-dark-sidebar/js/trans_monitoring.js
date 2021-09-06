@@ -117,7 +117,7 @@ function fn_cpu_mem_err_chart(){
  * ******************************************************** */
 function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
 	$.ajax({
-		url : "/transMonitoringCpuMemList",
+		url : "/transMonitoringCpuMemList.do",
 		dataType : "json",
 		type : "post",
 			data : {
@@ -139,6 +139,13 @@ function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
 				cpuChart.setData(result.processCpuList);
 				memChart.setData(result.memoryList);
 				allErrorChart.setData(result.allErrorList);
+				
+				//로그 기록 테이블 설정
+				connectorActTable.clear().draw();
+				if (nvlPrmSet(result.connectorActLogList, '') != '') {
+					connectorActTable.rows.add(result.connectorActLogList).draw();
+				}
+				$('#proxyLog').css('min-height','100px');
 			}
 		}
 	});	
