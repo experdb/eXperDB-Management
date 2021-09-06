@@ -11,12 +11,19 @@ public class AgentInfoVO {
 	private String FRST_REG_DTM;
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
+	private String INTL_IPADR;
 	
 	public static String TC001101 = "TC001101"; //실행
 	public static String TC001102 = "TC001102"; //중지
 	
 
 
+	public String getINTL_IPADR() {
+		return INTL_IPADR;
+	}
+	public void setINTL_IPADR(String iNTL_IPADR) {
+		INTL_IPADR = iNTL_IPADR;
+	}
 	public int getAGT_SN() {
 		return AGT_SN;
 	}

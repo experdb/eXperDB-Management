@@ -1450,9 +1450,9 @@ System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
 		try{
 			
 			if (instanceScaleList != null) {
-				List<Map> dbConIpList = (List<Map>) instanceScaleList.get("db_con_ip");
-				List<Map> dbConPortList = (List<Map>) instanceScaleList.get("db_con_port");
-				List<Map> dbMasterIpList = (List<Map>) instanceScaleList.get("master_ip");
+				List<String> dbConIpList = (List<String>) instanceScaleList.get("db_con_ip");
+				List<String> dbConPortList = (List<String>) instanceScaleList.get("db_con_port");
+				List<String> dbMasterIpList = (List<String>) instanceScaleList.get("master_ip");
 
 				String scaleType = "";
 				
@@ -1493,6 +1493,7 @@ System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
 							if (strMasterIp != null && !"".equals(strMasterIp)) {
 								Map<String, Object> resultCon =new HashMap<String, Object>();
 								String sttHostName = "";
+								String strIpadrRe = "";
 								
 								IpadrVO ipadrVO = new IpadrVO();
 								ipadrVO.setPortno(Integer.parseInt(strPort));
@@ -1518,7 +1519,14 @@ System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
 								}
 								///////////////////////////////////////////////////////////////
 */								
-								sttHostName = "ip-" + strIpadr.replaceAll(".", "-");
+								strIpadrRe = strIpadr.replaceAll(".", "-");
+								sttHostName = "ip-" + strIpadrRe;
+								
+								System.out.println("==strIpadr===" + strIpadr);
+								System.out.println("==strIpadr.replaceAll()===" + strIpadr.replaceAll(".", "-"));
+								System.out.println("==strIpadrRe===" + strIpadrRe);
+								System.out.println("==sttHostName===" + sttHostName);
+
 								ipadrVO.setSvr_host_nm(sttHostName);
 									
 								dbServerManagerDAO.insertScaleIpadr(ipadrVO);

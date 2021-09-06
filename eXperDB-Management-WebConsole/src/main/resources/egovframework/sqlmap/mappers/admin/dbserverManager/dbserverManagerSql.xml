@@ -879,5 +879,3 @@
            AND PORTNO = #{portno}
 	</delete>
 </mapper>
-
-master_ip
