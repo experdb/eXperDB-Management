@@ -64,7 +64,8 @@ public class DxT043 extends SocketCtl {
 //			if ("connector".equals(sys_type)) {
 				String strReadLine = (String) jObj.get(ProtocolID.READLINE);
 				String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
-
+				String sys_type = (String) jObj.get(ProtocolID.SYS_TYPE);
+				
 				int intDwlen = Integer.parseInt(dwLen);
 				int intReadLine = Integer.parseInt(strReadLine);
 				int intLastLine = intDwlen;
@@ -75,26 +76,35 @@ public class DxT043 extends SocketCtl {
 				RunCommandExec r = new RunCommandExec();
 
 				String kafkaPath = FileUtil.getPropertyValue("context.properties", "agent.trans_path");
-				String kafkaLogFolder = "trans_logs/kafka/";
-				String connectorLogFolder = "trans_logs/connector/";
+				String kafkaLogDirectory = "trans_logs/kafka/";
+				String connectorLogDirectory = "trans_logs/connector/";
 				// trans 로그 폴더 생성
-				if(!new File(kafkaPath+"/"+kafkaLogFolder).exists()) {
-					new File(kafkaPath+"/"+kafkaLogFolder).mkdirs();
+				if(!new File(kafkaPath+"/"+kafkaLogDirectory).exists()) {
+					new File(kafkaPath+"/"+kafkaLogDirectory).mkdirs();
 				}
 				
-				if(!new File(kafkaPath+"/"+connectorLogFolder).exists()) {
-					new File(kafkaPath+"/"+connectorLogFolder).mkdirs();
+				if(!new File(kafkaPath+"/"+connectorLogDirectory).exists()) {
+					new File(kafkaPath+"/"+connectorLogDirectory).mkdirs();
 				}
-				
+				String strFileName = "";
+				String strCmd = "";
+				String logDirectory = "";
 //				String strConnectorNmCmd = "docker ps -a --format \"table {{.Names}}\"  |  grep connect";
 //				String strConnectorName = r.runExec(strConnectorNmCmd);
 //				String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
-				String strFileName = "connect-service.log";
+				if(sys_type.equals("connector")){
+					strFileName = "connect-service.log";
+					strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep connect`:/kafka/logs/connect-service.log " + kafkaPath + "/" + connectorLogDirectory;
+					logDirectory = kafkaPath + "/" + connectorLogDirectory;
+				} else if(sys_type.equals("kafka")){
+					strFileName = "server.log";
+					strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep kafka`:/kafka/logs/server.log " + kafkaPath + "/" + kafkaLogDirectory;
+					logDirectory = kafkaPath + "/" + kafkaLogDirectory;
+				}
 //				String strCmd = "tac " + "/home/experdb/" + "connect-service.log" + " | head -" + (intLastLine);
-				String strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep connect`:/kafka/logs/connect-service.log " + kafkaPath + "/" + connectorLogFolder;
 				// 명령어 실행
 				r.runExec(strCmd);
-				File inFile = new File(kafkaPath + "/" + connectorLogFolder, strFileName);
+				File inFile = new File(logDirectory, strFileName);
 				
 				try {
 					r.join();
@@ -111,6 +121,7 @@ public class DxT043 extends SocketCtl {
 					outputObj.put(ProtocolID.SEEK, hp.get("seek"));
 					outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
 					outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
+					outputObj.put(ProtocolID.FILE_NAME, inFile.getName());
 
 					hp = null;
 				}
