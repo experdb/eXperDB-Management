@@ -75,15 +75,15 @@ public class DxT043 extends SocketCtl {
 				RunCommandExec r = new RunCommandExec();
 
 				String kafkaPath = FileUtil.getPropertyValue("context.properties", "agent.trans_path");
-				String kafkaLogFolder = "trans_logs/kafka";
-				String connectorLogFolder = "trans_logs/connector";
+				String kafkaLogFolder = "trans_logs/kafka/";
+				String connectorLogFolder = "trans_logs/connector/";
 				// trans 로그 폴더 생성
-				if(!new File(kafkaPath+"/"+kafkaLogFolder+"/").exists()) {
-					new File(kafkaPath+"/"+kafkaLogFolder+"/").mkdirs();
+				if(!new File(kafkaPath+"/"+kafkaLogFolder).exists()) {
+					new File(kafkaPath+"/"+kafkaLogFolder).mkdirs();
 				}
 				
-				if(!new File(kafkaPath+"/"+connectorLogFolder+"/").exists()) {
-					new File(kafkaPath+"/"+connectorLogFolder+"/").mkdirs();
+				if(!new File(kafkaPath+"/"+connectorLogFolder).exists()) {
+					new File(kafkaPath+"/"+connectorLogFolder).mkdirs();
 				}
 				
 //				String strConnectorNmCmd = "docker ps -a --format \"table {{.Names}}\"  |  grep connect";
@@ -91,12 +91,11 @@ public class DxT043 extends SocketCtl {
 //				String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
 				String strFileName = "connect-service.log";
 //				String strCmd = "tac " + "/home/experdb/" + "connect-service.log" + " | head -" + (intLastLine);
-				String strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep connect`:/kafka/logs/connect-service.log " + kafkaPath + connectorLogFolder;
+				String strCmd = "docker cp `docker ps -a --format \"table {{.Names}}\"  |  grep connect`:/kafka/logs/connect-service.log " + kafkaPath + "/" + connectorLogFolder;
 				// 명령어 실행
 				r.runExec(strCmd);
-
-				File inFile = new File(kafkaPath + connectorLogFolder, strFileName);
-
+				File inFile = new File(kafkaPath + "/" + connectorLogFolder, strFileName);
+				
 				try {
 					r.join();
 				} catch (InterruptedException ie) {
@@ -105,7 +104,7 @@ public class DxT043 extends SocketCtl {
 				}
 
 				if (r.call().equals("success")) {
-					HashMap hp = FileUtil.getRandomAccessFileView(inFile, intReadLine, Integer.parseInt("0"), intLastLine);
+					HashMap hp = FileUtil.getRandomAccessLogFileView(inFile, intReadLine, Integer.parseInt("0"), intLastLine);
 
 					outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
 					outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));

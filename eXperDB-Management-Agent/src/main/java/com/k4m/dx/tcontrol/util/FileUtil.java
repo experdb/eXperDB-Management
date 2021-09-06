@@ -109,7 +109,51 @@ public class FileUtil {
 
 		return hp;
 	}
+	
+	public static HashMap getRandomAccessLogFileView(File file, int intReadLine, int intSeekPoint, int intLastLine)
+			throws Exception {
+		String strView = "";
 
+		HashMap hp = new HashMap();
+		RandomAccessFile rdma = null;
+		String strEndFlag = "0";
+		
+		try {
+			rdma = new RandomAccessFile(file, "r");
+
+			rdma.seek(intSeekPoint);
+			String temp;
+			int recnum = 1;
+			while ((temp = rdma.readLine()) != null) {
+
+				strView += recnum + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+
+				if (((++recnum) % (intLastLine + 1)) == 0) {
+					break;
+				}
+			}
+
+			if (recnum != (intReadLine + 1))
+				strEndFlag = "1";
+
+			hp.put("file_desc", strView);
+			hp.put("file_size", strView.length());
+			hp.put("seek", rdma.getFilePointer());
+			hp.put("end_flag", strEndFlag);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rdma != null)
+				try {
+					rdma.close();
+				} catch (IOException e) {
+				}
+		}
+
+		return hp;
+	}
+	
 	private static long readLines(RandomAccessFile rf, int intReadline) throws IOException {
 		long recnum = 1;
 		String temp;
