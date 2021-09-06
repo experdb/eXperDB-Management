@@ -195,7 +195,7 @@
                    , LST_MDF_DTM
                     )
               SELECT NEXTVAL('Q_AGTCNDT_I_01')
-                   , #{IPADR},
+                   , #{IPADR}
                    , SOCKET_PORT
                    , #{AGT_CNDT_CD}
                    , AGT_VERSION
@@ -205,7 +205,6 @@
                    , now()
                    , #{LST_MDFR_ID}
                    , now()
-                   , #{INTL_IPADR}
                 FROM T_AGTCNDT_I
                WHERE AGT_SN = (SELECT MAX(AGT_SN) FROM T_AGTCNDT_I)    
 	</insert>

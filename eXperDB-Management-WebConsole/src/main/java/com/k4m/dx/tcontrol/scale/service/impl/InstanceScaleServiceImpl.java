@@ -1519,13 +1519,8 @@ System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
 								}
 								///////////////////////////////////////////////////////////////
 */								
-								strIpadrRe = strIpadr.replaceAll(".", "-");
+								strIpadrRe = strIpadr.replace(".", "-");
 								sttHostName = "ip-" + strIpadrRe;
-								
-								System.out.println("==strIpadr===" + strIpadr);
-								System.out.println("==strIpadr.replaceAll()===" + strIpadr.replaceAll(".", "-"));
-								System.out.println("==strIpadrRe===" + strIpadrRe);
-								System.out.println("==sttHostName===" + sttHostName);
 
 								ipadrVO.setSvr_host_nm(sttHostName);
 									
