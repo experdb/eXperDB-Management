@@ -42,8 +42,10 @@
 		// cpu, memory error chart
 		fn_cpu_mem_err_chart();
 		
-		// connector 기동정지 init
+		// connector 기동정지 table init
 		fn_connector_act_init();
+		
+
 
 		// 소스 chart init
 // 		fn_src_chart_init();
@@ -76,9 +78,11 @@
 		fn_tar_error_init();
 	
 	});
-	
+
+	/* ********************************************************
+	 * connect 기동 정지 이력 테이블 setting
+	 ******************************************************** */
 	function fn_connector_act_init(){
-		
 		connectorActTable = $('#connectorActTable').DataTable({
 			searching : false,
 			scrollY : true,
@@ -105,7 +109,7 @@
 		
 		$(window).trigger('resize');
 	}
-	
+
 	function fn_srcConnectInfo() {
 		var langSelect = document.getElementById("src_connect");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
@@ -452,7 +456,7 @@
 				$("#todayYN", "#transLogViewForm").val("Y");
 				$("#view_file_name", "#transLogViewForm").html("");
 				if(type === 'connector'){
-					dateCalenderSetting();
+				dateCalenderSetting();
 					$('#restart_btn').hide();
 					$('#wrk_strt_dtm_div').show();
 					$('.log_title').html(' Connector 로그');
@@ -504,7 +508,7 @@
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-send"></i>
-												<span class="menu-title">모니터링 </span>
+												<span class="menu-title"><spring:message code="menu.monitoring" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -515,7 +519,7 @@
 					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
 					 						</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_transfer" /></li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">모니터링</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.monitoring" /> </li>
 										</ol>
 									</div>
 								</div>
@@ -538,8 +542,7 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- 실시간 chart start -->
 		<!-- cpu chart start -->
 		<div class="col-4 div-form-margin-cts stretch-card">
@@ -717,21 +720,25 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-4 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<!-- title -->
-					
-					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist" >
-						<div class="card" style="margin-bottom:5px;">
-							<div class="card-header" role="tab" id="page_serverlogging_div" >
-								<div class="row" style="height: 15px;">
-									<div class="col-12">
-										<h6 class="mb-0">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											<span class="menu-title">Connector 기동 정지 이력</span>
-										</h6>
+				
+					<!-- Connector 기동 정지 이력 -->
+					<div class="row">
+						<!-- title -->
+						<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:0px;">
+								<div class="card-header" role="tab" id="page_serverlogging_div" >
+									<div class="row" style="height: 15px;">
+										<div class="col-12">
+											<h6 class="mb-0">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<span class="menu-title">Connector 기동 정지 이력</span>
+											</h6>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -739,38 +746,38 @@
 					</div>
 					
 					<div class="row">
-						<div class="col-sm-8">
-							<h6 class="mb-0 alert">
-								<span class="menu-title text-success">
-									<i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i>
-									최근 3개 항목만 보여집니다.
-								</span>
-							</h6>
-						</div>
-						<div class="col-sm-4.5">
-							<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView('connector')">
-								<i class="mdi mdi-file-document"></i>
-								connector로그
-							</button>
-						</div>
-					</div>
-					<!-- connector 기동 정지 이력 리스트 -->
-					<div class="col-md-12 col-xl-12 justify-content-center">
-						<div class="card" style="margin-left:-10px;border:none;">
-							<div class="card-body" style="border:none;">
-								<table id="connectorActTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
-									<thead class="bg-info text-white">
-										<tr>
-											<th width="0px;">rownum</th>
-											<th width="100px;">Connector 명</th>
-											<th width="100px;">실행결과</th>
-											<th width="100px;">시간</th>
-										</tr>
-									</thead>
-								</table>
+						<!-- connector 기동 정지 이력 리스트 -->
+ 						<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:10px;border:none;">
+								<div class="card-body" style="border:none;margin-top:-25px;margin-left:-25px;margin-right:-25px;">
+									<div class="row">
+										<div class="col-sm-8">
+											<h6 class="mb-0 alert">
+												<span class="menu-title text-success"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i>최근 3개 항목만 보여집니다.</span>
+											</h6>
+										</div>
+										<div class="col-sm-4.5">
+											<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView()">
+												<i class="mdi mdi-file-document"></i>
+												connector로그
+											</button>
+										</div>
+									</div>
+ 									<table id="connectorActTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="0px;">rownum</th>
+												<th width="100px;">Connector 명</th>
+												<th width="100px;">실행결과</th>
+												<th width="100px;">시간</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>
+					<!-- connector 기동 정지 이력 리스트 end -->
 				</div>
 			</div>
 		</div>

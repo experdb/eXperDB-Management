@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -80,12 +79,12 @@ public class TransMonitoringController {
 	}
 	
 	/**
-	 * trans 모니터링 CPU, Memory 정보
+	 * trans 모니터링 CPU, Memory, 기동정지 이력 정보
 	 * 
 	 * @param historyVO,request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transMonitoringCpuMemList")
+	@RequestMapping("/transMonitoringCpuMemList.do")
 	public ModelAndView transMonitoringCpuMemList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		List<Map<String, Object>> processCpuList = transMonitoringService.selectProcessCpuList();
@@ -277,7 +276,7 @@ public class TransMonitoringController {
 	}
 	
 	/**
-	 * trans log view
+	 * trans Connector log view
 	 * 
 	 * @param historyVO, request
 	 * @return ModelAndView
