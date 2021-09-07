@@ -3,6 +3,8 @@ package com.k4m.dx.tcontrol.transfer.service;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 public interface TransMonitoringService {
 	
 	/**
@@ -192,5 +194,13 @@ public interface TransMonitoringService {
 	 * @return Map<String, Object>
 	 */
 	public Map<String, Object> getLogFile(TransVO transVO, Map<String, Object> param);
+
+	/**
+	 * trans kafka connect 재시작
+	 * 
+	 * @param transVO, param
+	 * @return JSONObject
+	 */
+	public JSONObject transKafkaConnectRestart(TransVO transVO);
 
 }

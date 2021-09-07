@@ -2392,5 +2392,33 @@ System.out.println("=====cmd" + cmd);
 		}
 		return result;
 	}
+
+	public JSONObject kafkaConnectRestart(String IP, int PORT, DbServerVO dbServerVO, JSONObject jObj) {
+		JSONObject result = new JSONObject();
+		JSONObject objResult;
+		
+		try {
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			
+			CA.open();
+			objResult = CA.dxT044(jObj);
+			CA.close();
+			
+			String strErrMsg = (String)objResult.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objResult.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objResult.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objResult.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objResult.get(ClientProtocolID.RESULT_DATA);
+			
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strResultData);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 }

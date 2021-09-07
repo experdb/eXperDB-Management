@@ -329,5 +329,54 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 		}
 		return logResult;
 	}
+
+	/**
+	 * trans kafka connect 재시작
+	 * 
+	 * @param transVO, param
+	 * @return JSONObject
+	 */
+	@Override
+	public JSONObject transKafkaConnectRestart(TransVO transVO) {
+		JSONObject jObj = new JSONObject();
+		JSONObject resultObj = new JSONObject();
+		
+		boolean executeFlag = false;
+
+		String resultLog = "";
+		String errMsg = "";
+		
+		try {
+			int db_svr_id = transVO.getDb_svr_id();
+			
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			
+			//db 서버 조회
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoDAO.selectServerInfo(schDbServerVO);
+			
+			//agent 조회
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoDAO.selectAgentInfo(vo);
+
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd_old()));
+			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT044);
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			resultObj = cic.kafkaConnectRestart(IP, PORT, dbServerVO, jObj);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultObj;
+	}
 	
 }

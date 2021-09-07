@@ -170,6 +170,63 @@
 		}
 	}
 	
+	function fn_log_act_confirm_modal(act_status){
+		var gbn = "restart";
+		
+		confirm_title = 'kafka 재시작';
+		$('#confirm_msg').html(fn_strBrReplcae('kafka를 재시작하시겠습니까?'));
+	
+		$('#con_only_gbn', '#findConfirmOnly').val(gbn);
+		$('#confirm_tlt').html(confirm_title);
+		$('#pop_confirm_md').modal("show");
+	}
+	
+	/* ********************************************************
+	 * confirm 결과에 따른 작업
+	 ******************************************************** */
+	function fnc_confirmRst(){
+		fn_actExeCng();
+	}
+	
+	function fn_actExeCng(){
+		var v_db_svr_id = $("#db_svr_id", "#transLogViewForm").val();
+		
+		$.ajax({
+			url : '/transKafkaConnectRestart',
+			type : 'post',
+			data : {
+				db_svr_id : v_db_svr_id
+			},
+			success : function(result) {
+
+ 				if(result.result){
+ 					fn_proxy_loadbar("start");
+
+ 					setTimeout(function() {
+ 						fn_proxy_loadbar("stop");
+ 		 				showSwalIconRst(result.errMsg, '<spring:message code="common.close" />', '', 'success', 'proxyMoReload');
+ 					}, 7000);
+ 				}else{
+ 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+	 			}
+
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				$("#ins_idCheck", "#insProxyListenForm").val("0");
+				
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			}
+		});
+	}
 	
 </script>
 

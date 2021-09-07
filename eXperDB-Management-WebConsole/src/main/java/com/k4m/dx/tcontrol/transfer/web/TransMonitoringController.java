@@ -7,10 +7,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
@@ -84,7 +86,7 @@ public class TransMonitoringController {
 	 * @param historyVO,request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transMonitoringCpuMemList.do")
+	@RequestMapping("/transMonitoringCpuMemList")
 	public ModelAndView transMonitoringCpuMemList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		List<Map<String, Object>> processCpuList = transMonitoringService.selectProcessCpuList();
@@ -336,5 +338,24 @@ public class TransMonitoringController {
 		}
 		
 		return mv;
+	}
+	
+	/**
+	 * trans Kafka Connect 재시작
+	 * 
+	 * @param historyVO, request
+	 * @return JSONObject
+	 */
+	@RequestMapping("/transKafkaConnectRestart")
+	public @ResponseBody JSONObject transKafkaConnectRestart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		JSONObject resultObj = new JSONObject();
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		
+		TransVO transVO = new TransVO();
+		transVO.setDb_svr_id(db_svr_id);
+		
+		resultObj = transMonitoringService.transKafkaConnectRestart(transVO);
+		
+		return resultObj;
 	}
 }

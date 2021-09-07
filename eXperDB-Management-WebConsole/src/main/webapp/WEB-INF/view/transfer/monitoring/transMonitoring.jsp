@@ -482,11 +482,14 @@
 			}
 		});
 	}
+
 	
 </script>
 
 <!-- log 팝업 -->
 <%@ include file="./../popup/transLogView.jsp" %>
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
+<%@include file="./../../popup/confirmForm.jsp"%>
 		
 <form name="transMonitoringForm" id="transMonitoringForm" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
