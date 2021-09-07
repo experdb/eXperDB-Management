@@ -41,7 +41,7 @@
 			v_todayYN = 'N';
 		}
 		$.ajax({
-			url : "/transLogViewAjax",
+			url : "/transLogViewAjax.do",
 			dataType : "json",
 			type : "post",
  			data : {
@@ -192,7 +192,7 @@
 		var v_db_svr_id = $("#db_svr_id", "#transLogViewForm").val();
 		
 		$.ajax({
-			url : '/transKafkaConnectRestart',
+			url : '/transKafkaConnectRestart.do',
 			type : 'post',
 			data : {
 				db_svr_id : v_db_svr_id
