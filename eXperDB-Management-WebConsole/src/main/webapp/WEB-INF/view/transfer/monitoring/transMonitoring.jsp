@@ -760,7 +760,7 @@
 											</h6>
 										</div>
 										<div class="col-sm-4.5">
-											<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView()">
+											<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView('connector')">
 												<i class="mdi mdi-file-document"></i>
 												connector로그
 											</button>
