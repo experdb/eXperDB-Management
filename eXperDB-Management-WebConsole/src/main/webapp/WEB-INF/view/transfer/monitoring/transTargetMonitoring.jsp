@@ -370,7 +370,7 @@
 		console.log(trans_id)
 		if(trans_id != ""){
 			$.ajax({
-				url : "/transTarSinkChart",
+				url : "/transTarSinkChart.do",
 				dataType : "json",
 				type : "post",
 	 			data : {

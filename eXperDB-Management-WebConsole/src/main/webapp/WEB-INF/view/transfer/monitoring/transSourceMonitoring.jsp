@@ -700,7 +700,7 @@
 		
 		if(selectValue != ""){
 			$.ajax({
-				url : "/transSrcSnapshotInfo",
+				url : "/transSrcSnapshotInfo.do",
 				dataType : "json",
 				type : "post",
 	 			data : {
@@ -770,7 +770,7 @@
 		
 		if(selectValue != ""){
 			$.ajax({
-				url : "/transSrcStreamingInfo",
+				url : "/transSrcStreamingInfo.do",
 				dataType : "json",
 				type : "post",
 	 			data : {

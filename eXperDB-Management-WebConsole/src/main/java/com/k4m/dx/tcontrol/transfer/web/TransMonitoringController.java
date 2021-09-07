@@ -86,7 +86,7 @@ public class TransMonitoringController {
 	 * @param historyVO,request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transMonitoringCpuMemList")
+	@RequestMapping("/transMonitoringCpuMemList.do")
 	public ModelAndView transMonitoringCpuMemList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		List<Map<String, Object>> processCpuList = transMonitoringService.selectProcessCpuList();
@@ -105,7 +105,7 @@ public class TransMonitoringController {
 	 * @param historyVO,request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transSrcConnectInfo")
+	@RequestMapping("/transSrcConnectInfo.do")
 	public ModelAndView transSrcConnectInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		
@@ -164,7 +164,7 @@ public class TransMonitoringController {
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transSrcSnapshotInfo")
+	@RequestMapping("/transSrcSnapshotInfo.do")
 	public ModelAndView transSrcSnapshotInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		
@@ -186,7 +186,7 @@ public class TransMonitoringController {
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transSrcStreamingInfo")
+	@RequestMapping("/transSrcStreamingInfo.do")
 	public ModelAndView transSrcStreamingInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		
@@ -208,7 +208,7 @@ public class TransMonitoringController {
 	 * @param historyVO,request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transTarConnectInfo")
+	@RequestMapping("/transTarConnectInfo.do")
 	public ModelAndView transTarConnectInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		
@@ -256,7 +256,7 @@ public class TransMonitoringController {
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transTarSinkChart")
+	@RequestMapping("/transTarSinkChart.do")
 	public ModelAndView transTarSinkChart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		
@@ -299,7 +299,7 @@ public class TransMonitoringController {
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 */
-	@RequestMapping("/transLogViewAjax")
+	@RequestMapping("/transLogViewAjax.do")
 	public ModelAndView transConnectorLogViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		String strBuffer = "";
@@ -346,7 +346,7 @@ public class TransMonitoringController {
 	 * @param historyVO, request
 	 * @return JSONObject
 	 */
-	@RequestMapping("/transKafkaConnectRestart")
+	@RequestMapping("/transKafkaConnectRestart.do")
 	public @ResponseBody JSONObject transKafkaConnectRestart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		JSONObject resultObj = new JSONObject();
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));

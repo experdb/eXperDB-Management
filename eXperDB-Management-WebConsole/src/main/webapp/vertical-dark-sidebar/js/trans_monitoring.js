@@ -26,7 +26,7 @@ function fn_todaySetting() {
  * ******************************************************** */
 function fn_cpu_mem_err_chart(){
 	$.ajax({
-		url : "/transMonitoringCpuMemList",
+		url : "/transMonitoringCpuMemList.do",
 		dataType : "json",
 		type : "post",
 			data : {
@@ -118,7 +118,7 @@ function fn_cpu_mem_err_chart(){
 function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
 	$.ajax({
 		url : "/transMonitoringCpuMemList.do",
-		dataType : "json",
+		dataType 	: "json",
 		type : "post",
 			data : {
 			},

@@ -119,7 +119,7 @@
 		
 		if(selectValue != ""){
 			$.ajax({
-				url : "/transSrcConnectInfo",
+				url : "/transSrcConnectInfo.do",
 				dataType : "json",
 				type : "post",
 	 			data : {
@@ -339,7 +339,7 @@
 		fn_tar_init();
 		if(selectValue != ""){
 			$.ajax({
-				url : "/transTarConnectInfo",
+				url : "/transTarConnectInfo.do",
 				dataType : "json",
 				type : "post",
  				data : {
