@@ -183,11 +183,9 @@
         UPDATE T_SCALEAWSSVR_I
            SET MIN_CLUSTERS = #{min_clusters}::numeric
              , MAX_CLUSTERS = #{max_clusters}::numeric
-             , AUTO_RUN_CYCLE = #{auto_run_cycle}::numeric
              , LST_MDFR_ID = #{login_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE DB_SVR_ID = #{db_svr_id}::numeric
-           AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric
 	</update>
 
 	<update id="updateTotalAutoScaleSetting" parameterType="instanceScaleVO">
@@ -239,6 +237,20 @@
            AND MASTER_GBN = 'M'
     </select>
 
+    <select id="selectSvrIpadrTotalList" resultType="map" parameterType="int">
+		/**
+		*  Query ID : selectSvrIpadrList
+		* Description : 아이피 정보 조회
+		* Author :
+		**/
+		SELECT
+		      DB_SVR_IPADR_ID
+             ,DB_SVR_ID
+          FROM T_DBSVRIPADR_I
+         WHERE 1=1
+           AND DB_SVR_ID = #{db_svr_id}
+    </select>
+    
 	<insert id="insertAutoScaleSetting" parameterType="instanceScaleVO">
         /**
         * Query ID : "insertAutoScaleSetting"
@@ -386,7 +398,8 @@
                       A.LST_MDFR_ID AS LST_MDFR_ID,
                       TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
                 FROM T_SCALE_G A
-                     JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
+                     JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID
+                     -- AND B.MASTER_GBN = 'M'
                WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
                <if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
                    <if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
@@ -465,7 +478,8 @@
                       A.LST_MDFR_ID AS LST_MDFR_ID,
                       TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
                 FROM T_SCALEOCCUR_G A
-                     JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
+                     JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+                     --AND B.MASTER_GBN = 'M'
                WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
                <if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
                    <if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
@@ -524,7 +538,8 @@
                A.LST_MDFR_ID AS LST_MDFR_ID,
                TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
           FROM T_SCALE_G A
-               JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
+               JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+               --AND B.MASTER_GBN = 'M'
          WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
            AND A.SCALE_WRK_SN = #{scale_wrk_sn}
 	</select>
@@ -538,7 +553,8 @@
         SELECT 
                A.RSLT_MSG
           FROM T_SCALE_G A
-               JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
+               JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+               --AND B.MASTER_GBN = 'M'
          WHERE 1 = 1
            AND B.DB_SVR_ID=#{db_svr_id}::numeric
            AND A.SCALE_WRK_SN = #{scale_wrk_sn}
@@ -570,7 +586,8 @@
                      clock_timestamp(),
                      'Y'
                 FROM T_DBSVR_I A
-                     JOIN T_DBSVRIPADR_I B ON A.DB_SVR_ID = B.DB_SVR_ID AND B.MASTER_GBN = 'M'
+                     JOIN T_DBSVRIPADR_I B ON A.DB_SVR_ID = B.DB_SVR_ID 
+                     --AND B.MASTER_GBN = 'M'
                WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
                LIMIT 1
 	</insert>
