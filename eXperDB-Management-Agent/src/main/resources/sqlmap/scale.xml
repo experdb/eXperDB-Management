@@ -173,13 +173,12 @@
 		, #{db_svr_id}::numeric
 		, (SELECT COALESCE(DB_SVR_IPADR_ID, 1) AS DB_SVR_IPADR_ID
              FROM T_DBSVRIPADR_I
-            WHERE 1=1
-              AND db_svr_id = #{db_svr_id}::numeric
-              AND MASTER_GBN = 'M')
+            WHERE IPADR = #{IPADR}
+            LIMIT 1)
 		, #{policy_type}
 	    , #{exenum}::numeric
 		, clock_timestamp()
-		)	
+		)
     </insert>
     
 	<delete id="deleteScaleLoadLog_G"  parameterType="hashmap">
@@ -353,7 +352,10 @@
                UPDATE T_SCALEAWSSVR_I
                   SET DB_SVR_ID = #{db_svr_id}::numeric,
                       DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric,
-                      IPADR = #{ipdar_set}
+                      IPADR = #{ipdar_set},
+                      AUTO_RUN_CYCLE = COALESCE((SELECT AUTO_RUN_CYCLE FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL),
+                      MIN_CLUSTERS = COALESCE((SELECT MIN_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL),
+                      MAX_CLUSTERS = COALESCE((SELECT MAX_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL)
                 WHERE DB_SVR_ID  = #{db_svr_id}::numeric
                   AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric
                 RETURNING *
@@ -363,6 +365,9 @@
                         DB_SVR_ID,
                         DB_SVR_IPADR_ID,
                         IPADR,
+                        AUTO_RUN_CYCLE,
+                        MIN_CLUSTERS,
+                        MAX_CLUSTERS,
                         FRST_REGR_ID,
                         FRST_REG_DTM,
                         LST_MDFR_ID,
@@ -371,13 +376,17 @@
                        SELECT #{db_svr_id}::numeric,
                               #{db_svr_ipadr_id}::numeric,
                               #{ipdar_set},
+                              COALESCE((SELECT AUTO_RUN_CYCLE FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL),
+                              COALESCE((SELECT MIN_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL),
+                              COALESCE((SELECT MAX_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL),
                               #{login_id},
                               clock_timestamp(),
                               #{login_id},
                               clock_timestamp()
+                              
          WHERE NOT EXISTS ( SELECT * FROM UPSERT )
 	</insert>
-	
+
 	<select id="selectAutoScaleComCngInfo" resultType="hashMap" parameterType="hashMap">
    		/**
 	 	* Query ID : selectAutoScaleComCngInfo
@@ -391,4 +400,19 @@
         WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
         LIMIT 1
 	</select>
+
+	<select id="selectAutoScaleOverlabChk" resultType="hashMap" parameterType="hashMap">
+   		/**
+	 	* Query ID : selectAutoScaleComCngInfo
+	 	* Description : scale 설정 정보 상세 조회
+	 	* Author : 
+	 	**/
+       SELECT A.DB_SVR_ID,
+              COUNT(*) AS EXE_CNT
+         FROM T_SCALE_G A
+        WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
+          AND A.WRK_ID != 2
+        GROUP BY A.DB_SVR_ID
+	</select>
+
 </mapper>
