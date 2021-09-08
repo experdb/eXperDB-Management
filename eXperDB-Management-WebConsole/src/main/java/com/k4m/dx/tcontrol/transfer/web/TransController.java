@@ -1304,7 +1304,6 @@ public class TransController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		String result = "fail";
-		System.out.println(request.getParameter("trans_trg_sys_id"));
 		try {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -1331,7 +1330,6 @@ public class TransController {
 				}
 				
 				transVO.setTrans_exrt_trg_tb_id(Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id")));
-				System.out.println("controller : " + transVO.getTrans_trg_sys_id());
 				//전송대상 테이블 수정
 				result = transService.updateTargetConnectInfoTot(transMappVO, transVO);
 			}catch (Exception e) {
