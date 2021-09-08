@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.socket.listener;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,11 +34,17 @@ public class DXTcontrolScaleFailExecute extends SocketCtl implements Job {
 
     	Map<String, Object> loadParam = new HashMap<String, Object>();
     	Map<String, Object> usageMap = new HashMap<String, Object>();
+    	Map<String, Object> chkParam = new HashMap<String, Object>();
 
     	int iScaleExecute = 0;
 
     	//0. 선행조건 : scale load중인지 확인
-    	iScaleExecute = serviceScale.scaleExecutionSearch(client, is, os);
+    	try {
+			iScaleExecute = serviceScale.scaleExecutionSearch(client, is, os, chkParam);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
     	//scale load중이면 auto-scale 실행x
     	if (iScaleExecute <= 0) {

@@ -282,4 +282,6 @@ public class ProtocolID {
 	public static final String TRANS_COM_ID = "TRANS_COM_ID";
 	public static final String SYS_TYPE = "SYS_TYPE";
 	
+	public static final String DB_SVR_ID_VAL = "DB_SVR_ID_VAL";
+	
 }
