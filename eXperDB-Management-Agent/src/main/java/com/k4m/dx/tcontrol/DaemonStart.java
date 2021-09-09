@@ -15,6 +15,7 @@ import com.k4m.dx.tcontrol.deamon.DxDaemon;
 import com.k4m.dx.tcontrol.deamon.DxDaemonManager;
 import com.k4m.dx.tcontrol.deamon.IllegalDxDaemonClassException;
 import com.k4m.dx.tcontrol.socket.DXTcontrolAgentSocket;
+import com.k4m.dx.tcontrol.socket.listener.DXTcontrolTrans;
 import com.k4m.dx.tcontrol.socket.listener.ScaleCheckListener;
 import com.k4m.dx.tcontrol.socket.listener.ServerCheckListener;
 import com.k4m.dx.tcontrol.socket.listener.TransCheckListener;
@@ -160,10 +161,24 @@ public class DaemonStart implements DxDaemon{
 
 			// CDC  
 			try {
+				//trans 설정 setting 추가
+				DXTcontrolTrans rSet = new DXTcontrolTrans();
+				rSet.start();
+			} catch (Exception e) {
+				errLogger.error("CDC 설정 시작시 에러가 발생하였습니다. {}", e.toString());
+				e.printStackTrace();
+				return;
+			}
+			
+			try {
 				String strTransYN = FileUtil.getPropertyValue("context.properties", "agent.trans_yn");
 				socketLogger.info("strTransYN[] : " + strTransYN);
 				//CDC 자동 실행 로직 추가
 				if ("Y".equals(strTransYN)) {
+					//trans 설정 setting 추가
+				//	DXTcontrolTrans rSet = new DXTcontrolTrans();
+				//	rSet.start();
+					
 					transCheckListener = new TransCheckListener(context);
 					transCheckListener.start();
 				}

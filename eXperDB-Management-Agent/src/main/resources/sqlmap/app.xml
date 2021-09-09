@@ -40,6 +40,44 @@
 		order by table_schema
 	</select>
 	
+	<select id="selectPostgresql" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPostgresql
+	 	* Description : postgresql.conf 조회
+	 	* Author : 
+	 	**/
+		SELECT 
+			pg_read_file 
+		FROM pg_catalog.pg_read_file('postgresql.conf')
+	</select>
+	
+	<select id="selectPostgresqlUnlink" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPostgresqlUnlink
+	 	* Description : postgresql.conf.bak unlink
+	 	* Author : 
+	 	**/
+		SELECT pg_file_unlink('postgresql.conf.bak')
+	</select>
+	
+	<select id="selectPostgresqlWrite" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPostgresqlWrite
+	 	* Description : postgresql.conf.tmp 생성
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_file_write('postgresql.conf.tmp',  #{hbadata} , false)
+	</select>
+	
+	<select id="selectPostgresqlRename" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectPostgresqlRename
+	 	* Description : 접근제어 pg_hba.conf 생성
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_file_rename('postgresql.conf.tmp', 'postgresql.conf', 'postgresql.conf.bak')
+	</select>
+	
 	<select id="selectAuthentication" parameterType="hashmap" resultType="hashmap">
 		/**
 	 	* Query ID : selectAuthentication
