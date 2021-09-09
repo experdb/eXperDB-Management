@@ -256,6 +256,7 @@
 		          , A.GRP_CD
 		          , B.SYS_CD
 			      , B.SYS_CD_NM
+			      , B.SYS_CD_NM_EN
 			      , B.USE_YN
 			      , B.FRST_REGR_ID
 			      , B.FRST_REG_DTM

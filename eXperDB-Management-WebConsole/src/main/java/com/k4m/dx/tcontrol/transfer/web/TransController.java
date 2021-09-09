@@ -808,7 +808,7 @@ public class TransController {
 				mv.addObject("exe_status", transInfo.get(0).get("exe_status"));		//use
 
 				mv.addObject("trans_sys_nm", transInfo.get(0).get("trans_sys_nm"));			//use
-				mv.addObject("tran_sys_id", transInfo.get(0).get("trans_sys_id"));			//use
+				mv.addObject("trans_sys_id", transInfo.get(0).get("trans_sys_id"));			//use
 				mv.addObject("ipadr", transInfo.get(0).get("ipadr"));						//use
 				mv.addObject("dtb_nm", transInfo.get(0).get("dtb_nm"));						//use
 				mv.addObject("spr_usr_id", transInfo.get(0).get("spr_usr_id"));				//use
@@ -1304,7 +1304,6 @@ public class TransController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		String result = "fail";
-		
 		try {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -1331,7 +1330,6 @@ public class TransController {
 				}
 				
 				transVO.setTrans_exrt_trg_tb_id(Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id")));
-
 				//전송대상 테이블 수정
 				result = transService.updateTargetConnectInfoTot(transMappVO, transVO);
 			}catch (Exception e) {

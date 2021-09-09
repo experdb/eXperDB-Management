@@ -32,9 +32,11 @@ public class WebConsoleSetting {
 		String strTransferYN ="";
 
 		//2020.09.23 trans 컨슈머 전송 추가
+		//2021.09.09 trans 모니터링 메뉴 사용여부 추가
 		String strTransferOraYN ="";
 		String strAuditYN="";
-
+		String strTransferMonMenuYN="";
+		
 		// 2021-04-13 백업사용 유무 추가 변승우
 		String strBackupYN = "";
 		String strRootPw = "";
@@ -212,20 +214,39 @@ public class WebConsoleSetting {
 		}
 
 		/* 전송설정-컨슈머전송 사용여부 */
-		System.out.println("Whether data consumer transfer is enabled? (y, n)");
-		strTransferOraYN = scan.nextLine();
-		strTransferOraYN = strTransferOraYN.toUpperCase();
-		while (true) {
-			if(strTransferOraYN.equals("")) {
-				System.out.println("Please enter your consumer transfer setting yn. ");
-				System.out.println("Whether data consumer transfer is enabled? (y, n) :");
-				strTransferOraYN = scan.nextLine();
-				strTransferOraYN = strTransferOraYN.toUpperCase();
-			} else {
-				break;
+		if (strTransferYN.equals("Y")) {
+			System.out.println("Whether data consumer transfer is enabled? (y, n)");
+			strTransferOraYN = scan.nextLine();
+			strTransferOraYN = strTransferOraYN.toUpperCase();
+			while (true) {
+				if (strTransferOraYN.equals("")) {
+					System.out.println("Please enter your consumer transfer setting yn. ");
+					System.out.println("Whether data consumer transfer is enabled? (y, n) :");
+					strTransferOraYN = scan.nextLine();
+					strTransferOraYN = strTransferOraYN.toUpperCase();
+				} else {
+					break;
+				}
 			}
 		}
-
+		
+		/* 전송설정 모니터링 메뉴 사용여부 */
+		if (strTransferYN.equals("Y")) {
+			System.out.println("Whether data transfer monitoring Menu is enabled? (y, n)");
+			strTransferMonMenuYN = scan.nextLine();
+			strTransferMonMenuYN = strTransferMonMenuYN.toUpperCase();
+			while (true) {
+				if (strTransferMonMenuYN.equals("")) {
+					System.out.println("Please enter your transfer monitoring Menu setting yn. ");
+					System.out.println("Whether data transfer monitoring Menu is enabled? (y, n)");
+					strTransferMonMenuYN = scan.nextLine();
+					strTransferMonMenuYN = strTransferMonMenuYN.toUpperCase();
+				} else {
+					break;
+				}
+			}
+		}
+		
 		/* Proxy Menu in/out 사용여부 */
 		System.out.println("Whether data Proxy Menu is enabled? (y, n)");
 		strProxyMenuYN = scan.nextLine();
@@ -362,6 +383,10 @@ public class WebConsoleSetting {
 		System.out.println("Whether to enable auditing settings : " + strAuditYN);
 		System.out.println("Whether to enable Backup settings : " + strBackupYN);
 		System.out.println("Whether data transfer is enabled : " + strTransferYN);
+		if(strTransferYN.equals("Y")){
+			System.out.println("Whether data consumer transfer is enabled : " + strTransferOraYN);
+			System.out.println("Whether data transfer monitoring Menu is enabled : " + strTransferMonMenuYN);
+		}
 		System.out.println("eXperDB-DB2PG installation path : " + strDb2pgPath);
 		System.out.println("###################eXperDB-Scale##################");
 		System.out.println("Whether scale is enabled : " + strScaleYN);
@@ -464,7 +489,7 @@ public class WebConsoleSetting {
 			prop.setProperty("bnr.useyn", strBackupYN);
 			prop.setProperty("transfer", strTransferYN);	
 			prop.setProperty("transfer_ora", strTransferOraYN);
-
+			prop.setProperty("transfer_mon_menu", strTransferMonMenuYN);
 			if(strScaleYN.equals("Y")){
 				prop.setProperty("scale", strScaleYN);	
 				prop.setProperty("scale_path", strScalePath);	
