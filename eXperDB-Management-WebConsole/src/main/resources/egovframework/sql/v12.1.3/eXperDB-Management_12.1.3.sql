@@ -12,10 +12,10 @@ INSERT INTO t_sysgrp_c
 (grp_cd, grp_cd_nm, grp_cd_exp, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES('TC0043', '로드발란싱 옵션', 'Proxy 로드발란싱 옵션', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO t_sysdtl_c
-(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+(grp_cd, sys_cd, sys_cd_nm_en, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm)
 VALUES('TC0043', 'TC004301', 'RoundRobin', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'roundrobin');
 INSERT INTO t_sysdtl_c
-(grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
+(grp_cd, sys_cd, sys_cd_nm_en, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm)
 VALUES('TC0043', 'TC004302', 'LeastConn', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'leastconn');
 INSERT into T_SYSDTL_C 
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)

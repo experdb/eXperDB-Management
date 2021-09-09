@@ -2301,7 +2301,7 @@
 								<th width="0">상태</th>
 								<th width="0">haproxy 파일 경로</th>
 								<th width="0">keepalived 파일 경로</th>
-								<th width="0">마스터 구분</th>
+								<th width="0"><spring:message code="eXperDB_proxy.master_div"/></th>
 								<th width="0">마스터 server id</th>
 								<th width="0">일별데이터삭제기간</th>
 								<th width="0">분별데이터삭제기간</th>

@@ -476,7 +476,7 @@
 												<th width="0"></th>
 												<th width="0"></th>
 												<%-- <th width="100"><spring:message code="eXperDB_proxy.vip_use" /></th> --%>
-												<th width="100">AWS 환경 여부</th>
+												<th width="100"><spring:message code="eXperDB_proxy.aws_yn" /></th>
 											</tr>
 										</thead>
 									</table>

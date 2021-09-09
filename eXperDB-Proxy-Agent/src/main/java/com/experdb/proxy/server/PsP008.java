@@ -67,6 +67,11 @@ public class PsP008 extends SocketCtl{
 				intLastLine = intReadLine;
 			}
 			
+			File proxyLogFolder = new File("/var/log/exproxy_log");
+			if(!proxyLogFolder.exists()){
+				new File("/var/log/exproxy_log").mkdirs();
+			}
+			
 			String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
 			String strCmd = "tac " + strLogFileDir + strFileName + " | head -" + (intLastLine) + " > /var/log/exproxy_log/" + strFileName;
 			

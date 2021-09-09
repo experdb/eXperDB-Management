@@ -13,6 +13,7 @@ public class CmmnCodeVO implements Serializable {
 	private String use_yn;
 	private String sys_cd;
 	private String sys_cd_nm;
+	private String sys_cd_nm_en;
 	private String sys_use_yn;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
@@ -129,6 +130,14 @@ public class CmmnCodeVO implements Serializable {
 
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
+
+	public String getSys_cd_nm_en() {
+		return sys_cd_nm_en;
+	}
+
+	public void setSys_cd_nm_en(String sys_cd_nm_en) {
+		this.sys_cd_nm_en = sys_cd_nm_en;
 	}
 
 }
