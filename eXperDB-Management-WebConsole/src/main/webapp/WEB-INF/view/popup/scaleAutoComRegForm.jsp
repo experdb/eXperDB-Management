@@ -86,13 +86,18 @@
 				}
 			},
 			success : function(result) {
-				
 				if(result == "F"){//저장실패
-					showSwalIcon('<spring:message code="eXperDB_scale.msg2"/>', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon(fn_strBrReplcae('<spring:message code="eXperDB_scale.msg2"/>'), '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_com_ins_cng').modal('show');
 					return false;
 				}else{
-					showSwalIcon('<spring:message code="message.msg144"/>', '<spring:message code="common.close" />', '', 'success');
+					//자동확장 실행 주기 변경 시 message 추가
+					if ($("#com_auto_run_cycle").val() != $("#com_auto_run_cycle_old").val()) {
+						showSwalIcon(fn_strBrReplcae('<spring:message code="eXperDB_scale.msg34"/>'), '<spring:message code="common.close" />', '', 'success');
+					} else {
+						showSwalIcon('<spring:message code="message.msg144"/>', '<spring:message code="common.close" />', '', 'success');
+					}
+
 					$('#pop_layer_com_ins_cng').modal('hide');
 					fn_search_list();
 				}
@@ -100,6 +105,10 @@
 		});
 	}
 </script>
+
+<form name="frmAutoComRegPopup" id="frmAutoComRegPopup" method="post">
+	<input type="hidden" name="com_auto_run_cycle_old" id="com_auto_run_cycle_old" value=""/>
+</form>
 
 <div class="modal fade" id="pop_layer_com_ins_cng" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document">
@@ -169,7 +178,7 @@
 										</a>
 									</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control" maxlength="2" id="com_auto_run_cycle" name="com_auto_run_cycle" onKeyUp="chk_Number(this);" placeholder='<spring:message code="eXperDB_scale.msg16" />' disabled>
+										<input type="text" class="form-control" maxlength="2" id="com_auto_run_cycle" name="com_auto_run_cycle" onKeyUp="chk_Number(this);" placeholder='<spring:message code="eXperDB_scale.msg16" />'>
 									</div>
 									<label class="col-sm-1 col-form-label"><spring:message code="eXperDB_scale.time_minute"/></label>
 								</div>
