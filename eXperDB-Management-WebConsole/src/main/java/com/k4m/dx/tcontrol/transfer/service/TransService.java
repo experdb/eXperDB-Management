@@ -369,4 +369,12 @@ public interface TransService {
 	 */
 	public List<TransVO> selectTransTopicList(TransVO transVO) throws Exception;
 
+	/**
+	 * trans heatbeat 체크
+	 * 
+	 * @param transVO
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws Exception;
 }

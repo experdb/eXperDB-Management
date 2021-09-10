@@ -14,6 +14,9 @@
 				mod_com_heartbeat_interval_ms: {
 					number: true
 				},
+				mod_com_heartbeat_action_query: {
+					required: true
+				},
 				mod_com_max_batch_size: {
 					number: true
 				},
@@ -33,6 +36,9 @@
 				},
 				mod_com_heartbeat_interval_ms: {
 					number: '<spring:message code="eXperDB_scale.msg15" />'
+				},
+				mod_com_heartbeat_action_query: {
+					required: '<spring:message code="data_transfer.msg40" />'
 				},
 				mod_com_max_batch_size: {
 					number: '<spring:message code="eXperDB_scale.msg15" />'
@@ -151,6 +157,15 @@
 
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
+					
+						<div class="row" style="margin-top:-20px;margin-bottom:15px;margin-right:-30px;">
+							<div class="col-12">
+								<div class="template-demo mb-2">						
+									<i class="fa fa-check-circle-o btn-icon-prepend " style="font-size: 1.0rem;font-color:red;"><spring:message code="data_transfer.msg41" /></i>
+								</div>
+							</div>
+						</div>
+					
 						<form class="cmxform" id="comConModForm">
 							<input type="hidden" name="mod_com_trans_com_id" id="mod_com_trans_com_id" value=""/>
 							<input type="hidden" name="mod_com_transforms_yn" id="mod_com_transforms_yn" value=""/>

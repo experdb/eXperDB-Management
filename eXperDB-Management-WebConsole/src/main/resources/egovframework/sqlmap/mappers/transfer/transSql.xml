@@ -1152,5 +1152,22 @@
         DELETE FROM T_TRANS_KAFKA_ACTSTATE_CNG_G
          WHERE KC_ID = #{kc_id}::numeric
 	</delete>
-	
+
+	<select id="selectTransComCoIngChk" parameterType="transVO" resultType="hashmap">
+		/**
+		*  Query ID : selectTransDbmsIngChk
+		* Description : trans DBMS 사용여부 체크
+		* Author :
+		**/
+        SELECT
+               COUNT(*) AS TOT_CNT,
+               COALESCE(SUM(A.ING_CNT),0) AS ING_CNT
+          FROM (
+                SELECT
+                       TRANS_COM_ID,
+                       CASE WHEN HEARTBEAT_ACTION_QUERY IS NULL OR HEARTBEAT_ACTION_QUERY = '' THEN 1 ELSE 0 END AS ING_CNT
+                  FROM T_TRANSCOMCNG_I
+                 WHERE 1 = 1
+          ) A
+	</select>
 </mapper>

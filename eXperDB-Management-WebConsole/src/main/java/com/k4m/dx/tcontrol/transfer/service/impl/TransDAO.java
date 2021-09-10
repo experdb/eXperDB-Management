@@ -571,4 +571,16 @@ public class TransDAO extends EgovAbstractMapper{
 	public void deleteTransKafkaConnectLog(TransDbmsVO transDbmsVO) {
 		delete("transSQL.deleteTransKafkaConnectLog", transDbmsVO);
 	}
+	
+	/**
+	 * trans heatbeat 체크
+	 * 
+	 * @param transVO
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws SQLException {
+		return (Map<String, Object>) selectOne("transSQL.selectTransComCoIngChk", transVO);
+	}
+
 }

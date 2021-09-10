@@ -1170,4 +1170,16 @@ System.out.println("connStartResult=========================" + connStartResult)
 		System.out.println("===asdasdasd==");
 		return transDAO.selectTransTopicList(transVO);
 	}
+	
+	/**
+	 * trans heatbeat 체크
+	 * 
+	 * @param transVO
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws Exception {
+		return transDAO.selectTransComCoIngChk(transVO);
+	}	
 }

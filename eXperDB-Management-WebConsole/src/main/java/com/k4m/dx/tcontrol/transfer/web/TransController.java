@@ -109,6 +109,7 @@ public class TransController {
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
 		
 		TransDbmsVO transDbmsVO = new TransDbmsVO();
+		TransVO transVO = new TransVO();
 
 		try {
 			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
@@ -177,6 +178,14 @@ public class TransController {
 					if (props.get("transfer_ora") != null) {
 						transfer_ora = props.get("transfer_ora").toString();
 					}
+				}
+				
+				//trans heatbeat 체크
+				try {
+					mv.addObject("heartbeatchk", transService.selectTransComCoIngChk(transVO));
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 				
 				if (transfer_ora != null && "Y".equals(transfer_ora)) {

@@ -120,6 +120,8 @@ a:hover.tip span {
 					//화면 조회
 					fn_tot_select();
 					
+					//heartbeat 체크
+					fn_selectHeartbeatChk();
 				} else {
 					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="data_transfer.msg30" />');
 					
@@ -139,6 +141,49 @@ a:hover.tip span {
 			}
 		});
 	}
+	
+	/* ********************************************************
+	 * heatbeat 체크
+	 ******************************************************** */
+	function fn_selectHeartbeatChk() {
+	  	//heartbeat 체크
+		if("${heartbeatchk.ing_cnt}" != "0"){
+			showDangerToast('top-right', '<spring:message code="data_transfer.msg38" />', '<spring:message code="data_transfer.msg30" />');
+			
+			//설치안된경우 버튼 막아야함
+			$("#btnChoActive").prop("disabled", "disabled");
+			$("#btnChoDisabled").prop("disabled", "disabled");
+
+			$("#btnScDelete").prop("disabled", "disabled");
+			$("#btnTgDelete").prop("disabled", "disabled");
+			$("#btnScModify").prop("disabled", "disabled");
+			$("#btnTgModify").prop("disabled", "disabled");
+			$("#btnScInsert").prop("disabled", "disabled");
+			$("#btnTgInsert").prop("disabled", "disabled");
+			$("#btnSearch").prop("disabled", "");
+			$("#btnCommonConSetInsert").prop("disabled", "");			
+			
+			$("#btnCommonConChk").show();
+		}else{
+			//설치안된경우 버튼 막아야함
+			$("#btnChoActive").prop("disabled", "");
+			$("#btnChoDisabled").prop("disabled", "");
+
+			$("#btnScDelete").prop("disabled", "");
+			$("#btnTgDelete").prop("disabled", "");
+			$("#btnScModify").prop("disabled", "");
+			$("#btnTgModify").prop("disabled", "");
+			$("#btnScInsert").prop("disabled", "");
+			$("#btnTgInsert").prop("disabled", "");
+			$("#btnSearch").prop("disabled", "");
+			$("#btnCommonConSetInsert").prop("disabled", "");
+			
+			$("#btnCommonConChk").hide();
+		}
+	}
+	
+  	
+
 
 	/* ********************************************************
 	 * table 초기화 및 설정
@@ -466,6 +511,7 @@ a:hover.tip span {
 	<input type="hidden" name="mod_prm_trans_id" id="mod_prm_trans_id" value=""/>
 	<input type="hidden" name="mod_prm_trans_exrt_trg_tb_id" id="mod_prm_trans_exrt_trg_tb_id" value=""/>
 	<input type="hidden" name="chk_act_row" id="chk_act_row" value=""/>
+	<input type="hidden" name="hb_chk" id="hb_chk" value="${heartbeatchk.ing_cnt}"/>
 </form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -543,13 +589,18 @@ a:hover.tip span {
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_pop();" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
 								</button>
-												
+								
+								<button type="button" class="btn btn-outline-danger btn-icon-text mb-2 btn-search-disable" style="border:none;text-align:left;" id="btnCommonConChk" onClick="fn_common_con_set_pop();" data-toggle="modal">
+									<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="data_transfer.msg37" />
+								</button>
+		
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
 									<i class="fa fa-stop btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
 									<i class="fa fa-play btn-icon-prepend "></i><spring:message code="data_transfer.save_select_active" />
 								</button>
+
 							</div>
 						</div>
 					</div>

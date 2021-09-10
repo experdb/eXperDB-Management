@@ -488,3 +488,9 @@ CREATE SEQUENCE Q_T_TRANS_ACTSTATE_CNG_G_01;
 
 
 ALTER TABLE t_pry_svr_i ALTER COLUMN pry_svr_nm TYPE VARCHAR(300);
+
+
+-- trans 기본설정 heatbeet 제거 --
+UPDATE experdb_management.t_transcomcng_i
+   SET heartbeat_action_query = NULL;
+
