@@ -701,6 +701,11 @@
 												<spring:message code="migration.setting_information_management" />
 											</a>
 										</li>
+										<li class="nav-item" id="">
+											<a class="nav-link" href="/db2pgMonitoring.do" onClick="fn_cookie(null)" target="main">
+												모니터링
+											</a>
+										</li>
 										<li class="nav-item" id="MN00017">
 											<a class="nav-link" href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="migration.performance_history" />
