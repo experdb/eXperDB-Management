@@ -235,7 +235,8 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 			jobName_New = "Bmr"+time;
 			restoreInfoVo.setBmr("no");
 		}
-		
+				
+		restoreInfoVo.setType("completeRecovery");
 		restoreInfoVo.setJobName(jobName_New);
 		restoreInfoVo.setSourceNode(request.getParameter("sourceDB"));
 		restoreInfoVo.setStorageLocation(request.getParameter("storagePath"));
@@ -371,6 +372,7 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 			restoreInfoVo.setBmr("no");
 		}
 		
+		restoreInfoVo.setType("timeRecovery");
 		restoreInfoVo.setJobName(jobName_New);
 		restoreInfoVo.setSourceNode(request.getParameter("sourceDB"));
 		restoreInfoVo.setRecoveryPoint(request.getParameter("timePoint"));
