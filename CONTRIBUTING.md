@@ -1,11 +1,11 @@
-Contributing to eXperDB-Mamagement
+Contributing to eXperDB-Management
 =======================
 
-Thanks for considering contribution to eXperDB-Mamagement.  You can git clone the
-eXperDB-Mamagement source on the following address and send PR with your patch.  But,
+Thanks for considering contribution to eXperDB-Management.  You can git clone the
+eXperDB-Management source on the following address and send PR with your patch.  But,
 before doing that, I recommend you to read this to follow the conventions.
 
-  https://github.com/experdb/eXperDB-Mamagement
+  https://github.com/ep/eXperDB-Management
 
 ## How to Contribute
 
@@ -26,21 +26,21 @@ There are various ways to contribute and participate. Please read the guidelines
 
 ### Issues and Bugs
 
-If you find a bug or other issues in eXperDB-Mamagement, please [submit an issue](https://github.com/experdb/eXperDB-Mamagement/issues). Before submitting an issue, please invest some extra time to figure out that:
+If you find a bug or other issues in eXperDB-Management, please [submit an issue](https://github.com/experdb/eXperDB-Management/issues). Before submitting an issue, please invest some extra time to figure out that:
 
 - The issue is not a duplicate issue.
-- The issue has not been fixed in the latest release of eXperDB-Mamagement.
+- The issue has not been fixed in the latest release of eXperDB-Management.
 
 When you report a bug, please make sure that your report has the following information.
 - Steps to reproduce the issue.
 - A clear and complete description of the issue.
 - Code and/or screen captures are highly recommended.
 
-After confirming your report meets the above criteria, [submit the issue](https://github.com/eXperDB/eXperDB-Mamagement/issues). Please use [labels](#usage-of-labels) to categorize your issue.
+After confirming your report meets the above criteria, [submit the issue](https://github.com/eXperDB/eXperDB-Management/issues). Please use [labels](#usage-of-labels) to categorize your issue.
 
 ### Feature Requests
 
-You can also use the [issue tracker](https://github.com/experdb/eXperDB-Mamagement/issues) to request a new feature or enhancement. Note that any code contribution without an issue link will not be accepted. Please submit an issue explaining your proposal first so that experdb community can fully understand and discuss the idea. Please use [labels](#usage-of-labels) for your feature request as well.
+You can also use the [issue tracker](https://github.com/experdb/eXperDB-Management/issues) to request a new feature or enhancement. Note that any code contribution without an issue link will not be accepted. Please submit an issue explaining your proposal first so that experdb community can fully understand and discuss the idea. Please use [labels](#usage-of-labels) for your feature request as well.
 
 #### Usage of Labels
 
