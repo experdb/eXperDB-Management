@@ -13,7 +13,9 @@
 										 when JQ.JOBTYPE = 1 then 'Backup'
 										 when JQ.JOBTYPE = 2 then 'Restore'
 										 when JQ.JOBTYPE = 3 then 'Full Backup'
-									     when JQ.JOBTYPE = 4 then 'Incremental Backup'
+									     when JQ.JOBTYPE = 4 then 'Incremental Backup'									     
+									     when JQ.JOBTYPE = 21 and JQ.JOBMETHOD = 0  then 'BMR'
+									     when JQ.JOBTYPE = 21 and JQ.JOBMETHOD > 0 then 'Instant BMR'									     
 							     ELSE 'Verify Backup'
 								  end) AS JOBTYPE_NM
 							, JQ.TARGETNAME
