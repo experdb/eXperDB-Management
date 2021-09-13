@@ -5,7 +5,7 @@ Thanks for considering contribution to eXperDB-Management.  You can git clone th
 eXperDB-Management source on the following address and send PR with your patch.  But,
 before doing that, I recommend you to read this to follow the conventions.
 
-  https://github.com/ep/eXperDB-Management
+  https://github.com/experdb/eXperDB-Management
 
 ## How to Contribute
 
