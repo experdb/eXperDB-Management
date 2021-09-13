@@ -122,21 +122,4 @@ public class SystemDAO {
 	public void insertWRKEXE_G(WrkExeVO vo) throws Exception  {
 		 session.insert("system.insertWRKEXE_G", vo);
 	}
-	
-	public void updateTransExe(TransVO transVO) throws Exception{
-		session.update("system.updateTransExe", transVO);
-	}
-	
-	public void updateTransTargetExe(TransVO transVO) throws Exception{
-		session.update("system.updateTransTargetExe", transVO);
-	}
-
-	//trans 기본사항 조회
-	public TransVO selectTransComSettingInfo(TransVO vo) throws Exception  {
-		return (TransVO) session.selectOne("system.selectTransComSettingInfo", vo);
-	}
-
-	public List<TransVO> selectTablePkInfo(TransVO vo) throws Exception {
-		return (List) session.selectList("system.selectTablePkInfo", vo);
-	}
 }

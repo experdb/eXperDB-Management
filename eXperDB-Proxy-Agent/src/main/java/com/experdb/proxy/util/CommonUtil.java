@@ -274,4 +274,26 @@ public class CommonUtil {
  	   	}
  	   	return content;
 	}
+	
+	/**
+	 * 파일을 읽어 String으로 반환
+	 * 
+	 * @return String
+	 * @throws
+	 */
+	public String readFile(String fileFullPath)
+	{   	
+		String content = null;
+ 	   	File file = new File(getClass().getClassLoader().getResource(fileFullPath).getFile()); 
+ 	   	try {
+ 	   		InputStreamReader reader= new InputStreamReader(new FileInputStream(file),"UTF8"); 
+ 	   		char[] chars = new char[(int) file.length()];
+ 	   		reader.read(chars);
+ 	   		content = new String(chars);
+ 	   		reader.close();
+ 	   	} catch (IOException e) {
+ 		   e.printStackTrace();
+ 	   	}
+ 	   	return content;
+	}
 }

@@ -278,7 +278,9 @@
 			"priority" : Number($("#instReg_priority", "#insVipInstForm").val()),
 			"chk_tm" : $("#instReg_chk_tm", "#insVipInstForm").val(),
 			"vip_cng_id" : $("#instReg_vip_cng_id", "#insVipInstForm").val(),
-			"pry_svr_id" : $("#instReg_pry_svr_id", "#insVipInstForm").val()
+			"pry_svr_id" : $("#instReg_pry_svr_id", "#insVipInstForm").val(),
+			"aws_if_id" : $("#instReg_aws_if_id", "#insVipInstForm").val(),
+			"peer_aws_if_id" : $("#instReg_peer_aws_if_id", "#insVipInstForm").val()
 		});
 		selConfInfo = null;
 		$('#pop_layer_proxy_inst_reg').modal("hide");
@@ -302,6 +304,8 @@
 				oriData[i].v_if_nm = $("#instReg_v_if_nm", "#insVipInstForm").val();
 				oriData[i].priority = Number($("#instReg_priority", "#insVipInstForm").val());
 				oriData[i].chk_tm = $("#instReg_chk_tm", "#insVipInstForm").val();
+				oriData[i].aws_if_id = $("#instReg_aws_if_id", "#insVipInstForm").val();
+				oriData[i].peer_aws_if_id = $("#instReg_peer_aws_if_id", "#insVipInstForm").val();
 				
 				var tempData = vipInstTable.rows().data();
 				vipInstTable.clear();
@@ -340,8 +344,8 @@
 	}
 </script>
 <div class="modal fade" id="pop_layer_proxy_inst_reg" tabindex="-1" role="dialog" aria-labelledby="ModalVipInstance" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 200px 400px;">
-		<div class="modal-content" style="width:800px;">		 
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 80px 330px;">
+		<div class="modal-content" style="width:1040px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalVipInstance" style="padding-left:5px;">
 					<spring:message code="eXperDB_proxy.instance_reg"/>
@@ -420,7 +424,7 @@
 										<input type="hidden" class="form-control form-control-xsm instReg_priority" maxlength="20" id="instReg_priority" name="instReg_priority" onblur="this.value=this.value.trim()" placeholder="" tabindex=5 />
 									</div>
 								</div>
-								<div class="form-group row row-last">
+								<div class="form-group row row-last vip_last_div">
 									<label for="instReg_v_rot_id" class="col-sm-3 col-form-label-sm pop-label-index">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.vip_router_tooltip" />'>
@@ -442,6 +446,35 @@
 									<label class="col-sm-1 col-form-label-sm pop-label-index" style="padding-left: 0px;">
 									<spring:message code="eXperDB_proxy.sec" />
 									</label>
+								</div>
+							</div>
+							<br/>
+							<div class="card-body card-body-border aws_div">
+								<div class="form-group row row-last">
+									<label class="col-sm-3 col-form-label-sm pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										AWS
+									</label>
+								</div>
+								<div class="form-group row row-last">
+									<label for="instReg_aws_if_id" class="col-sm-3 col-form-label-sm pop-label-index">
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
+										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.aws_if_id_tooltip" />'>
+										<spring:message code="eXperDB_proxy.aws_if_id" />(*)
+										</span>
+									</label>
+									<div class="col-sm-3" id="div_min_data_del_term">
+										<input type="text" class="form-control form-control-xsm instReg_aws_if_id" maxlength="30" id="instReg_aws_if_id" name="instReg_aws_if_id" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+									</div>
+									<label for="instReg_peer_aws_if_id" class="col-sm-3 col-form-label-sm pop-label-index">
+										<i class="item-icon fa fa-angle-double-right"></i>
+										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.peer_aws_if_id_tooltip" />'>
+										<spring:message code="eXperDB_proxy.peer_aws_if_id" />(*)
+										</span>
+									</label>
+									<div class="col-sm-3">
+										<input type="text" class="form-control form-control-xsm instReg_peer_aws_if_id" maxlength="30" id="instReg_peer_aws_if_id" name="instReg_peer_aws_if_id" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+									</div>
 								</div>
 							</div>
 							<br/>

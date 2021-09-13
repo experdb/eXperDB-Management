@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.math.BigDecimal;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -217,6 +218,8 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 			Map<String, Object> scaleparam = new HashMap<String, Object>();
 			Map<String, Object> logParam = new HashMap<String, Object>();
 			
+	    	socketLogger.info("setResultsetResult: [" + setResult + "]");
+	    	
 			SimpleDateFormat formatDate = new SimpleDateFormat ( "yyyMMddHHmmss");
 			Date time = new Date();
 			String timeId = formatDate.format(time);
@@ -234,14 +237,14 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 					Map<String, Object> scaleChkData = null;
 
 					scaleparam = (Map<String, Object>) setResult.get(i);
-					
+						
 					String scale_type_cd  = (String) scaleparam.get("scale_type");
-							
+								
 					int auto_policy_time = ((BigDecimal) scaleparam.get("auto_policy_time")).intValue();
 
 					scaleparam.put("auto_policy_time_pm", auto_policy_time + " minute");
 					scaleparam.put("auto_policy_time", auto_policy_time);
-					
+						
 					BigDecimal expansion_clusters_big = (BigDecimal) scaleparam.get("expansion_clusters");
 					int expansion_clusters = 0;
 					if (expansion_clusters_big != null) {
@@ -253,22 +256,26 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 					if (min_clusters_big != null) {
 						min_clusters = min_clusters_big.intValue();
 					}
-					
+						
 					BigDecimal max_clusters_big = (BigDecimal) scaleparam.get("max_clusters");
 					int max_clusters = 0;
 					if (max_clusters_big != null) {
 						max_clusters = max_clusters_big.intValue();
 					}
-					
+						
 					scaleparam.put("expansion_clusters", expansion_clusters);
 					scaleparam.put("min_clusters", min_clusters);
 					scaleparam.put("max_clusters", max_clusters);
 
 					scaleChkData = scaleDAO.selectAutoScaleDataChk(scaleparam);
-
+				    	
+				    socketLogger.info("scaleChkData: [" + scaleChkData + "]");
+				    	
 					if (scaleChkData != null) {
 						int chk_cnt = ((BigDecimal) scaleChkData.get("chk_cnt")).intValue();
-						
+					    	
+					   	socketLogger.info("chk_cnt: [" + chk_cnt + "]");
+					    	
 						BigDecimal exe_num_avg_big = (BigDecimal) scaleChkData.get("exe_num_avg");
 						int exe_num_avg = 0;
 						if (exe_num_avg_big != null) {
@@ -283,12 +290,12 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 							boolean logChk = true;
 							if ("1".equals(scale_type_cd)) {
 								jObjCnt = scaleInstanceCnt(client, is, os);
-								
+									
 								if (jObjCnt <= scaleLastNodeCnt) {
 									logChk = false;
 								}
 							}
-							
+							socketLogger.info("logChk: [" + logChk + "]");
 							if (logChk == true) {
 								scaleDAO.insertScaleOccurLog_G(scaleparam);  //체크가 맞을때만 저장
 							}
@@ -329,12 +336,12 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 									}
 								}
 								socketLogger.info("clusterChk: [" + clusterChk + "]");
-								
+									
 								//오류가 아닌경우 auto_scale 실행
 								if ("success".equals(clusterChk)) {
 									//auto scale 실행로직 필요  -- 내일해야함
 									// multi 또는 single
-									
+										
 									//process_id 셋팅
 									scaleparam.put("process_id", timeId);
 
@@ -352,13 +359,10 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 									}
 								}
 							} 
-							
-							
-							
 						}
-
 					}
-				}
+		    	}
+
 			}
 		} catch (Exception e) {
 			errLogger.error("auto scale 실행중 오류가 발생하였습니다. {}", e.toString());
@@ -470,7 +474,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
     }
     
     //scale 실행여부 조회
-    public int scaleExecutionSearch(Socket client, BufferedInputStream is, BufferedOutputStream os) {
+    public int scaleExecutionSearch(Socket client, BufferedInputStream is, BufferedOutputStream os, Map<String, Object> param) throws SQLException {
     	int jObjCnt = 0;
     	JSONObject jObjResult = null;
     	String scalejsonChk = null;
@@ -495,7 +499,21 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 		} else {
 			jObjCnt = 1;
 		}
+
+		//실시간 log 체크
+		if (jObjCnt <= 0) {
+			Map<String, Object> scaleOverLabChkData = scaleDAO.selectAutoScaleOverlabChk(param);	
+			
+			if (scaleOverLabChkData != null) {
+				if (scaleOverLabChkData.get("exe_cnt") != null) {
+					String exe_cnt_val = scaleOverLabChkData.get("exe_cnt").toString();
+					jObjCnt = Integer.parseInt(exe_cnt_val);
+				}
+			}
+		}
 		
+		socketLogger.info("jObjCnt: [" + jObjCnt + "]");
+
 		return jObjCnt;
     }
 	
@@ -504,7 +522,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
     	JSONObject jObj = null;
       	JSONObject jObjResult = null;
     	Map<String, Object> param = new HashMap<String, Object>();
-    	
+    	socketLogger.info("scaleparam.get(db_svr_id): [" + scaleparam + "]");
     	try {
 	    	if ("scaleAwsChk".equals(awsGbn) || "instanceCnt".equals(awsGbn) || "scaleChk".equals(awsGbn) || "scaleIngChk".equals(awsGbn)) {
 	    		param.put("search_gbn", awsGbn);
@@ -519,6 +537,8 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 				param.put("auto_policy_set_div", "");
 				param.put("auto_policy_time", "");
 				param.put("auto_level", "");
+				
+				param.put("db_svr_id_val", "");
 	    	} else if ("scaleIn".equals(awsGbn) || "scaleOut".equals(awsGbn)) {
 				param.put("search_gbn", "");
 				param.put("scale_set", awsGbn);
@@ -533,8 +553,12 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 				param.put("auto_policy_set_div", (String)scaleparam.get("auto_policy_set_div"));
 				param.put("auto_policy_time", scaleparam.get("auto_policy_time"));
 				param.put("auto_level", (String)scaleparam.get("auto_level"));
+				
+				socketLogger.info("scaleparam.get(db_svr_id)2-1: [" + scaleparam + "]");
+				param.put("db_svr_id_val", scaleparam.get("db_svr_id"));
+				socketLogger.info("scaleparam.get(db_svr_id)2-1-1: [" + scaleparam.get("db_svr_id") + "]");
 	    	}
-	    	
+	    	socketLogger.info("scaleparam.get(db_svr_id)2: [" + scaleparam + "]");
 			jObj = this.scaleAwsSetting(param);
 
 	    	DXTcontrolScaleAwsExecute scaleAwsExecute = new DXTcontrolScaleAwsExecute(client, is, os);
@@ -554,7 +578,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 
 		try {
 			db_svr_id = this.dbServerInfoSet();
-			
+			socketLogger.info("scaleparam.get(db_svr_id)3: [" + param.get("db_svr_id_val") + "]");
 			obj.put(ProtocolID.SCALE_COUNT_SET, param.get("scale_count").toString());     //scale 갯수
 			obj.put(ProtocolID.SCALE_SET, scale_set);                                     //scale 구분
 			obj.put(ProtocolID.SEARCH_GBN, param.get("search_gbn").toString());           //조회구분
@@ -569,6 +593,8 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 			obj.put(ProtocolID.AUTO_POLICY_SET_DIV, param.get("auto_policy_set_div").toString());
 			obj.put(ProtocolID.AUTO_POLICY_TIME, param.get("auto_policy_time").toString());
 			obj.put(ProtocolID.AUTO_LEVEL, param.get("auto_level").toString());
+			obj.put(ProtocolID.DB_SVR_ID_VAL, param.get("db_svr_id_val").toString());                               //DB_서버_ID
+			
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -634,10 +660,10 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 			
 			scaleparam.put("IPADR", strIpadr);
-			
+
 			//서버정보 조회
 			scaleChkData = scaleDAO.selectDbServerIpadrInfo(scaleparam);
-socketLogger.info("insertScaleServer.scaleChkData : " + scaleChkData);
+
 			if (scaleChkData != null) {
 				scaleparam.put("db_svr_id", scaleChkData.get("db_svr_id"));
 				scaleparam.put("db_svr_ipadr_id", scaleChkData.get("db_svr_ipadr_id"));

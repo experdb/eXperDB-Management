@@ -184,7 +184,14 @@ function fn_serverListTable_init() {
 				},
 				lstnReg_field_val: {
 					required: true
+				},
+				lstnReg_bal_opt: {
+					required: function(){
+						if($("#lstnReg_bal_yn", "#insProxyListenForm").val() == 'Y') return true;
+						else return false;
+					},
 				}
+				
 	        },
 	        messages: {
 	        	lstnReg_lsn_nm_sel: {
@@ -215,6 +222,9 @@ function fn_serverListTable_init() {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>'
 				},
 				lstnReg_field_val: {
+					required: '<spring:message code="eXperDB_proxy.msg2"/>'
+				},
+				lstnReg_bal_opt: {
 					required: '<spring:message code="eXperDB_proxy.msg2"/>'
 				}
 	        },
@@ -303,7 +313,9 @@ function fn_serverListTable_init() {
 			"field_nm" : $("#lstnReg_field_nm", "#insProxyListenForm").val(),
 			"pry_svr_id" : parseInt($("#lstnReg_pry_svr_id", "#insProxyListenForm").val()),
 			"lsn_id" : parseInt($("#lstnReg_lsn_id", "#insProxyListenForm").val()),
-			"lsn_svr_edit_list" : svrListDatas
+			"lsn_svr_edit_list" : svrListDatas,
+			"bal_yn" : $("#lstnReg_bal_yn", "#insProxyListenForm").val(),
+			"bal_opt" : $("#lstnReg_bal_opt", "#insProxyListenForm").val()
 		}).draw();
 		selListenerInfo =null;
 		$('#pop_layer_proxy_listen_reg').modal("hide"); 
@@ -330,6 +342,9 @@ function fn_serverListTable_init() {
 				oriData[i].field_val = $("#lstnReg_field_val", "#insProxyListenForm").val();
 				oriData[i].field_nm = $("#lstnReg_field_nm", "#insProxyListenForm").val();
 				oriData[i].con_sim_query = $("#lstnReg_con_sim_query", "#insProxyListenForm").val();
+				oriData[i].bal_yn = $("#lstnReg_bal_yn", "#insProxyListenForm").val();
+				oriData[i].bal_opt = $("#lstnReg_bal_opt", "#insProxyListenForm").val();
+				
 				var svrListLen = serverListTable.rows().data().length;
 				var svrListDatas = new Array();
 				for(var j =0; j<svrListLen ; j++){
@@ -449,7 +464,7 @@ function fn_serverListTable_init() {
 				}
 			},
 			success : function(result) {
-				console.log(result);
+				
 				var dataLen = serverListTable.rows().data().length;
 				var datas = serverListTable.rows().data();
 				$("#ipadr").children().remove();
@@ -467,7 +482,10 @@ function fn_serverListTable_init() {
 							$("#ipadr").append("<option value='"+result[i].db_con_addr+"'>"+result[i].db_con_addr+"</option>");	
 						}
 						if(!inner_inclu){
-							if(result[i].intl_ipadr != null && result[i].intl_ipadr!="")	$("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (내부)</option>");	
+				        	if(result[i].intl_ipadr != null && result[i].intl_ipadr!=""){
+				            	var intlTemp = result[i].intl_ipadr;
+				            	if(intlTemp.substring(0,intlTemp.indexOf(":")) != "")  $("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (?대?)</option>");
+				            }	
 						}
 					}									
 				}
@@ -485,34 +503,97 @@ function fn_serverListTable_init() {
 	 *  리스너명 변경 시 이벤트
 	 ******************************************************** */
 	function fn_change_lsn_nm(){
+		var checkQuery = ["select haproxy_check();","select 1;","select pg_is_in_recovery();"];
+		var checkQueryFiled=["haproxy_check","?column?","pg_is_in_recovery();"];
+		var checkQueryFiledVal = ["false", "1", "f"];
+		
 		if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() !=""){
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").val($("#lstnReg_lsn_nm_sel").children("option:selected").text());
-			if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() == "TC004201"){//pgReadWrite
-				$("#lstnReg_con_sim_query", "#insProxyListenForm").val("select haproxy_check();");
-				$("#lstnReg_field_nm", "#insProxyListenForm").val("haproxy_check");
-				$("#lstnReg_field_val", "#insProxyListenForm").val("false");
-				//$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val("TC004101"); 
-			}else if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() == "TC004202"){//pgReadOnly
-				$("#lstnReg_con_sim_query", "#insProxyListenForm").val("select 1;");
-				$("#lstnReg_field_nm", "#insProxyListenForm").val("?column?");
-				$("#lstnReg_field_val", "#insProxyListenForm").val("1");
-				$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val("TC004102"); 
+			fn_create_checkQuery_sel();
+			
+			if($("#lstnReg_lsn_nm", "#insProxyListenForm").val().indexOf("ReadOnly") > 0 ){
+				$("#lstnReg_db_nm", "#insProxyListenForm").parent("div").parent("div").attr('class', "form-group row");
+				$(".bal-group", "#insProxyListenForm").show();
+			}else{
+				$("#lstnReg_db_nm", "#insProxyListenForm").parent("div").parent("div").attr('class', "form-group row row-last");
+				$(".bal-group", "#insProxyListenForm").hide();
 			}
+			
 		}else{
 			$("#lstnReg_lsn_nm", "#insProxyListenForm").val("");
 			$("#lstnReg_con_sim_query", "#insProxyListenForm").val("");
 			$("#lstnReg_field_nm", "#insProxyListenForm").val("");
 			$("#lstnReg_field_val", "#insProxyListenForm").val("");
-			//$("#lstnReg_con_sim_query_sel", "#insProxyListenForm").val(""); 
+			$("#lstnReg_con_sim_query_sel").children().remove();
+			$("#lstnReg_con_sim_query_sel").append("<option value=''><spring:message code='common.choice' /></option>");
+		}
+	}
+	function fn_create_checkQuery_sel(query){
+		//Create lstnReg_con_sim_query_sel
+		var checkQuery;
+		if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() =="TC004201"){
+			checkQuery = ["select haproxy_check();","select pg_is_in_recovery();"];
+		}else if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() =="TC004202"){
+			checkQuery = ["select 1;"];
+		}else{
+			checkQuery = null;
+		}
+		
+		$("#lstnReg_con_sim_query_sel").children().remove();
+		
+		if(checkQuery != null){
+			for(var i=0; i<checkQuery.length; i++){
+				$("#lstnReg_con_sim_query_sel").append("<option value='"+checkQuery[i]+"'>"+checkQuery[i]+"</option>");	
+			}
+			$("#lstnReg_con_sim_query_sel").val(query);
+	
+		}else{
+			$("#lstnReg_con_sim_query_sel").append("<option value=''><spring:message code='common.choice' /></option>");
 		}
 	}
 	
+	function fn_change_checkQuery_sel(){
+		
+		var checkQuery;
+		var checkQueryFiled;
+		var checkQueryFiledVal;
+		
+		if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() =="TC004201"){
+			checkQuery = ["select haproxy_check();","select pg_is_in_recovery();"];
+			checkQueryFiled=["haproxy_check","pg_is_in_recovery"];
+			checkQueryFiledVal = ["false", "f"];
+		
+		}else if($("#lstnReg_lsn_nm_sel", "#insProxyListenForm").val() =="TC004202"){
+			checkQuery = ["select 1;"];
+			checkQueryFiled=["?column?"];
+			checkQueryFiledVal = ["1"];
+		}else{
+			checkQuery = null;
+		}
+		
+		if(checkQuery != null){
+			var i = $("#lstnReg_con_sim_query_sel > option:selected").index();
+			
+			$("#lstnReg_con_sim_query", "#insProxyListenForm").val(checkQuery[i]);
+			$("#lstnReg_field_nm", "#insProxyListenForm").val(checkQueryFiled[i]);
+			$("#lstnReg_field_val", "#insProxyListenForm").val(checkQueryFiledVal[i]);
+		}
+	}
 	function fn_change_con_bind_ip_sel(){
 		$("#lstnReg_con_bind_ip", "#insProxyListenForm").val($("#lstnReg_con_bind_ip_sel", "#insProxyListenForm").val());
 	}
 	
 	function fn_db_nm_change(){
 		$("#lstnReg_db_id", "#insProxyListenForm").val($("#lstnReg_db_nm", "#insProxyListenForm").val());
+	}
+	
+	function fn_change_bal_yn(){
+		$("#lstnReg_bal_opt", "#insProxyListenForm").val("");
+		if($("#lstnReg_bal_yn", "#insProxyListenForm").val()=="Y"){
+			$(".bal-opt-div", "#insProxyListenForm").show();
+		}else{
+			$(".bal-opt-div", "#insProxyListenForm").hide();
+		}
 	}
 	
 </script>
@@ -562,7 +643,7 @@ function fn_serverListTable_init() {
 </div>
 
 <div class="modal fade" id="pop_layer_proxy_listen_reg" tabindex="-1" role="dialog" aria-labelledby="ModalProxyListen" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 330px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 80px 330px;">
 	<form class="cmxform" id="insProxyListenForm">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
@@ -576,6 +657,8 @@ function fn_serverListTable_init() {
 						<input type="hidden" name="lstnReg_db_id" id="lstnReg_db_id"/>
 						<input type="hidden" name="lstnReg_mode" id="lstnReg_mode"/>
 						<input type="hidden" name="lstnReg_db_usr_id" id="lstnReg_db_usr_id" value="reqmgr"/>
+						
+						<input type="hidden" name="lstnReg_con_sim_query" id="lstnReg_con_sim_query"/>
 						<input type="hidden" name="lstnReg_field_val" id="lstnReg_field_val"/>
 						<input type="hidden" name="lstnReg_field_nm" id="lstnReg_field_nm"/>
 						<fieldset>
@@ -587,7 +670,7 @@ function fn_serverListTable_init() {
 									</label>
 								</div>
 								<div class="form-group row">
-									<label for="lstnReg_lsn_nm" class="col-sm-3 col-form-label-sm pop-label-index">
+									<label for="lstnReg_lsn_nm" class="col-sm-2 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.listener_nm" />(*)
 									</label>
@@ -600,10 +683,16 @@ function fn_serverListTable_init() {
 											</c:forEach>
 										</select>
 									</div>
-									<div class="col-sm-auto"></div>
+									<label for="lstnReg_lsn_desc" class="col-sm-2 col-form-label-sm pop-label-index">
+										<i class="item-icon fa fa-angle-double-right"></i>
+										<spring:message code="eXperDB_proxy.desc" />
+									</label>
+									<div class="col-sm-5">
+										<input type="text" class="form-control form-control-xsm" maxlength="250" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
+									</div>
 								</div>
 								<div class="form-group row">
-									<label for="lstnReg_con_bind" class="col-sm-3 col-form-label-sm pop-label-index">
+									<label for="lstnReg_con_bind" class="col-sm-2 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.bind_ip_port" />(*)
 									</label>
@@ -615,7 +704,7 @@ function fn_serverListTable_init() {
 									<div class="col-sm-3">
 										<input type="text" class="form-control form-control-xsm" id="lstnReg_con_bind_ip" name="lstnReg_con_bind_ip" onblur="this.value=this.value.trim()" placeholder="IP" tabindex=2 />
 									</div>
-									<div class="col-sm-auto col-form-label-sm">
+									<div class="col-sm-0_5 col-form-label-sm" style="text-align: center">
 										:
 									</div>
 									<div class="col-sm-1_5">
@@ -624,41 +713,6 @@ function fn_serverListTable_init() {
 									<div class="col-sm-auto"></div>
 								</div>
 								<div class="form-group row">
-									<label for="lstnReg_db_nm" class="col-sm-3 col-form-label-sm pop-label-index">
-										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
-										Check <spring:message code="eXperDB_proxy.database" />(*)
-									</label>
-									<div class="col-sm-3">
-										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_db_nm" id="lstnReg_db_nm" onchange="fn_db_nm_change();" tabindex=4 >
-										</select>
-									</div>
-									<label for="lstnReg_con_sim_query" class="col-sm-2 col-form-label-sm pop-label-index" style="display: none;">
-										<i class="item-icon fa fa-angle-double-right"></i>
-										<spring:message code="eXperDB_proxy.check_query" />(*)
-									</label>
-									<div class="col-sm-5" style="display: none;">
-										<input type="text" class="form-control form-control-xsm lstnReg_con_sim_query" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" />
-									</div>
-								</div>
-								<div class="form-group row row-last">
-									<label for="lstnReg_lsn_desc" class="col-sm-3 col-form-label-sm pop-label-index">
-										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
-										<spring:message code="eXperDB_proxy.desc" />
-									</label>
-									<div class="col-sm-9">
-										<input type="text" class="form-control form-control-xsm" maxlength="250" id="lstnReg_lsn_desc" name="lstnReg_lsn_desc" onblur="this.value=this.value.trim()" placeholder="" tabindex=2 />
-									</div>
-								</div>
-							</div>
-							<%-- <br/>
-							<div class="card-body card-body-xsm card-body-border">
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label-xsm pop-label-index">
-										<i class="item-icon fa fa-dot-circle-o"></i>
-										Health Check
-									</label>
-								</div>
-								<div class="form-group row row-last">
 									<label for="lstnReg_db_nm" class="col-sm-2 col-form-label-sm pop-label-index">
 										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.database" />(*)
@@ -671,11 +725,44 @@ function fn_serverListTable_init() {
 										<i class="item-icon fa fa-angle-double-right"></i>
 										<spring:message code="eXperDB_proxy.check_query" />(*)
 									</label>
-									<div class="col-sm-5">
-										<input type="text" class="form-control form-control-xsm lstnReg_con_sim_query" id="lstnReg_con_sim_query" name="lstnReg_con_sim_query" />
+									<div class="col-sm-3">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_con_sim_query_sel" id="lstnReg_con_sim_query_sel" onchange="fn_change_checkQuery_sel();">
+											<option value=''><spring:message code='common.choice' /></option>
+										</select>
 									</div>
 								</div>
-							</div> --%>
+								<div class="form-group row bal-group">
+									<label class="col-sm-3 col-form-label-xsm pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code='eXperDB_proxy.loadbalancing' />
+									</label>
+								</div>
+								<div class="form-group row  row-last bal-group">
+									<label for="lstnReg_bal_yn" class="col-sm-2 col-form-label-sm pop-label-index">
+										&nbsp;&nbsp;&nbsp;<i class="item-icon fa fa-angle-double-right"></i>
+										<spring:message code='dbms_information.use_yn' />(*)
+									</label>
+									<div class="col-sm-3">
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_bal_yn" id="lstnReg_bal_yn" onchange="fn_change_bal_yn();"  tabindex=4 >
+											<option value="Y"><spring:message code='dbms_information.use' /></option>
+											<option value="N"><spring:message code='dbms_information.unuse' /></option>
+										</select>
+									</div>
+									<label for="lstnReg_bal_opt" class="col-sm-2 col-form-label-sm pop-label-index bal-opt-div">
+										<i class="item-icon fa fa-angle-double-right"></i>
+										<spring:message code='eXperDB_proxy.method' />
+									</label>
+									<div class="col-sm-3 bal-opt-div"> 
+										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_bal_opt" id="lstnReg_bal_opt" tabindex=4 >
+											<option value=""><spring:message code="common.choice"/></option>
+											<c:forEach var="result" items="${BalOptList}">
+											<option value="<c:out value="${result.sys_cd_nm_en}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</div>
+							
 							<br/>
 							
 							<div class="card-body card-body-xsm card-body-border">

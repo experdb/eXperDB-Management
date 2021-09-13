@@ -134,6 +134,7 @@
 		
 		<!-- transfer -->
 		<mapper resource="egovframework/sqlmap/mappers/transfer/transSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/transfer/transMonitoringSql.xml"/>
 		
 		<!-- experdb backup -->
 		<mapper resource="egovframework/sqlmap/mappers/experdbBackup/experdbBackupSql.xml" />
@@ -150,6 +151,7 @@
 		<mapper resource="egovframework/sqlmap/mappers/proxy/proxySettingSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyMonitoringSql.xml"/>
 		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyHistorySql.xml"/>
+		<mapper resource="egovframework/sqlmap/mappers/proxy/proxyRestSql.xml"/>
 		
 	</mappers>
 </configuration>

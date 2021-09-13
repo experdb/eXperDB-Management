@@ -120,6 +120,13 @@ public class InstanceScaleDAO extends EgovAbstractMapper{
 		sl = (List<Map<String, Object>>) list("instanceScaleSql.selectSvrIpadrList", db_svr_id);
 		return sl;
 	}
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectSvrIpadrTotalList(int db_svr_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("instanceScaleSql.selectSvrIpadrTotalList", db_svr_id);
+		return sl;
+	}
 
 	/**
 	 * scale Auto 설정 등록

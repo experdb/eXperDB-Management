@@ -108,7 +108,6 @@ public class ProxySettingController {
 				// simple query code search
 				List<CmmnCodeVO> cmmnCodeVO =  null;
 				PageVO pageVO = new PageVO();
-				
 				pageVO.setGrp_cd("TC0041");
 				pageVO.setSearchCondition("0");
 				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
@@ -116,11 +115,17 @@ public class ProxySettingController {
 				
 				//Listener Nm Code Search
 				PageVO pageVO_2 = new PageVO();
-				
 				pageVO_2.setGrp_cd("TC0042");
 				pageVO_2.setSearchCondition("0");
 				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO_2);
 				mv.addObject("listenerNmList", cmmnCodeVO);
+				
+				//Listener Nm Code Search
+				PageVO pageVO_3 = new PageVO();
+				pageVO_3.setGrp_cd("TC0043");
+				pageVO_3.setSearchCondition("0");
+				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO_3);
+				mv.addObject("BalOptList", cmmnCodeVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));	
@@ -540,7 +545,8 @@ public class ProxySettingController {
 				param.put("pry_svr_id", prySvrId);
 				param.put("status", status_cd);
 				param.put("lst_mdfr_id", loginVo.getUsr_id()==null ? "" : loginVo.getUsr_id().toString());
-
+				param.put("act_exe_type", "TC004001");
+				
 				resultObj = proxySettingService.runProxyService(param);
 			}
 		}  catch (ConnectException e) {
@@ -819,10 +825,11 @@ public class ProxySettingController {
 					proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_09", sohw_menu_id);
 					//설정변경이력 결과 남기기
 					txManager.commit(status);
-					//Agent keepalive, haproxy 재구동
+					//Agent keepalive, haproxy Reload
 					param.put("pry_svr_id", confData.get("pry_svr_id"));
 					param.put("status", "TC001501");
 					param.put("act_type", "R");
+					param.put("act_exe_type", "TC004001");
 					
 					resultObj = proxySettingService.runProxyService(param);
 				}else{
@@ -907,4 +914,60 @@ public class ProxySettingController {
 		}
 		return resultObj;
 	}
+	
+	@RequestMapping(value = "/addProxyServerList.do")
+	public @ResponseBody JSONObject addProxyServerList(HttpServletRequest request, HttpServletResponse response) {
+	
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
+	
+		Map<String, Object> param = new HashMap<String, Object>();
+		JSONObject resultObj = new JSONObject();
+	
+		try {	
+			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultObj;
+			}else{
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+				int	prySvrId = Integer.parseInt(!"".equals(cu.getStringWithoutNull(request.getParameter("pry_svr_id"))) ? request.getParameter("pry_svr_id").toString():"0");
+				
+				String kalInstYn =cu.getStringWithoutNull(request.getParameter("kal_install_yn"));
+				param.put("kal_install_yn", kalInstYn);//stop
+				param.put("pry_svr_id", prySvrId);
+				param.put("lst_mdfr_id", cu.getStringWithoutNull(loginVo.getUsr_id()));
+
+				boolean kalInstYnInAgent = true;
+
+				//keepalvied 사용을 Y로 변경 시, 실제로 Agent에 설치되어있는지 확인 //keepalvied 사용을 N으로 변경 시, Agent에 Context.properties도 변경 
+				kalInstYnInAgent = proxySettingService.checkAgentKalInstYn(param);
+				
+				if(kalInstYn.equals("Y") && kalInstYnInAgent != true){ // 사용이 Y이지만, 실제로 Agent에 설치가 되어있지 않다면 중단... 
+					resultObj.put("result", false);
+					resultObj.put("errMsg", msg.getMessage("eXperDB_proxy.msg53", null, LocaleContextHolder.getLocale()));
+					return resultObj;
+				}
+				
+				proxySettingService.updateDeleteVipUseYn(param);
+				
+				resultObj.put("result", true);
+				resultObj.put("errMsg", msg.getMessage("eXperDB_proxy.msg45", null, LocaleContextHolder.getLocale()));
+			}
+		}catch (ConnectException e){
+			e.printStackTrace();
+			resultObj.put("result", false);
+			resultObj.put("errMsg", msg.getMessage("eXperDB_proxy.msg47", null, LocaleContextHolder.getLocale()));
+		}catch (Exception e) {
+			e.printStackTrace();
+			resultObj.put("result", false);
+			resultObj.put("errMsg", msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
+			
+		}
+		return resultObj;
+	}
+	
 }

@@ -13,12 +13,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
-import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.service.TransServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
+import com.k4m.dx.tcontrol.util.TransRunCommandExec;
 
 /**
  * Connect 실행
@@ -52,9 +53,10 @@ public class DxT038 extends SocketCtl{
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
+		String soucreTransformYN = "N";
 		
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
-		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
+		TransServiceImpl transService = (TransServiceImpl) context.getBean("TransService");
 		
 		JSONObject objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		JSONObject objCONNECT_INFO = (JSONObject) jObj.get(ProtocolID.CONNECT_INFO);
@@ -68,9 +70,14 @@ public class DxT038 extends SocketCtl{
 		String pk_tot_value = "";
 
 		//구분
+		String login_id = "";
+		if (objSERVER_INFO.get("LOGIN_ID") != null) {
+			login_id = objSERVER_INFO.get("LOGIN_ID").toString();
+		}
 		String con_start_gbn = (String)objCONNECT_INFO.get("CON_START_GBN");
 
 		String trans_com_id = String.valueOf((Long)objCONNECT_INFO.get("TRANS_COM_ID"));
+		String trans_kc_ip = (String)objCONNECT_INFO.get("KC_IP");
 
 		JSONObject outputObj = new JSONObject();
 		
@@ -78,12 +85,12 @@ public class DxT038 extends SocketCtl{
 	   	TransVO searchTransVO = new TransVO();
 
 		try {
-			if (trans_com_id == null || "".equals(trans_com_id)) {
+			if (trans_com_id == null || "".equals(trans_com_id) || "null".equals(trans_com_id)) {
 				trans_com_id = "1";
 			}
-			
+
 			searchTransVO.setTrans_com_id(trans_com_id);
-			commonInfo = service.selectTransComSettingInfo(searchTransVO);
+			commonInfo = transService.selectTransComSettingInfo(searchTransVO); //기본사항 조회
 			
 			JSONObject config = new JSONObject();
 			
@@ -114,6 +121,8 @@ public class DxT038 extends SocketCtl{
 					
 					String transforms_yn = commonInfo.getTransforms_yn();
 					if (transforms_yn != null && "Y".equals(transforms_yn)) {
+						soucreTransformYN = "Y";
+						
 						config.put("transforms", "route");
 						config.put("transforms.route.type", "org.apache.kafka.connect.transforms.RegexRouter");
 						config.put("transforms.route.regex", "([^.]+)\\.([^.]+)\\.([^.]+)");
@@ -144,12 +153,10 @@ public class DxT038 extends SocketCtl{
 						} else {
 							indexOf = 0;
 						}
-						
-socketLogger.info("DxT038.indexOf" + indexOf);
-socketLogger.info("DxT038.indexOf : " + table_param.substring(indexOf, table_param.length()));
+
 						searchTransVO.setTable_name(table_param.substring(indexOf, table_param.length()));
 						
-						List<TransVO> tableList = service.selectTablePkInfo(searchTransVO);
+						List<TransVO> tableList = transService.selectTablePkInfo(searchTransVO); // table pk 조회
 						
 						int ichkCnt = 0;
 
@@ -166,8 +173,6 @@ socketLogger.info("DxT038.indexOf : " + table_param.substring(indexOf, table_par
 					}
 				}
 
-				socketLogger.info("DxT038.pk_tot_valuepk_tot_valuepk_tot_valuepk_tot_value : " + pk_tot_value);
-				
 				if (pk_tot_value == null || "".equals(pk_tot_value)) {
 					pk_tot_value = "id";
 				}
@@ -222,16 +227,109 @@ socketLogger.info("DxT038.indexOf : " + table_param.substring(indexOf, table_par
 			
 			//정상시 update
 			if (retVal.equals("success")) {
+				//param 등록
 				TransVO transVO = new TransVO();
 				transVO.setTrans_id(trans_id);
 				transVO.setExe_status("TC001501");
-				
+				transVO.setKc_ip(trans_kc_ip);
+				transVO.setLogin_id(login_id);
+
+				String topicNm = "";
+
+				//소스시스템
 				if ("source".equals(con_start_gbn)) {
-					service.updateTransExe(transVO);
+					String[] exrt_trg_tb_nm_array = null; //테이블 목록 배열
+					
+					if (objMAPP_INFO.get("EXRT_TRG_TB_NM") != null) { //전송대상 테이블 param 추가
+						exrt_trg_tb_nm_array = objMAPP_INFO.get("EXRT_TRG_TB_NM").toString().split(",");
+					}
+					
+					//기존 토픽리스트 조회 후 데이터 가 있는 경우
+					List<TransVO> topicTableList = transService.selectTranIdTopicList(transVO); // topic 테이블 조회
+					
+					if (exrt_trg_tb_nm_array != null) {
+						for(int i=0;i < exrt_trg_tb_nm_array.length;i++) { //전송대상 테이블 목록을 체크
+							String tb_nm = exrt_trg_tb_nm_array[i];
+							int overLabCnt = 0;
+
+							if ("Y".equals(soucreTransformYN)) { //table 이름만 topic명
+								topicNm = tb_nm.trim().substring(tb_nm.trim().lastIndexOf(".") + 1 , tb_nm.trim().length());
+							} else {
+								topicNm = objCONNECT_INFO.get("CONNECT_NM").toString() + "." + tb_nm;
+							}
+							transVO.setTopic_nm(topicNm); //topic명 param 등록
+						
+							if (topicTableList.size() > 0) {
+								for(int j=0;j < topicTableList.size();j++) { //전송대상 테이블
+									if (topicTableList.get(j).getTopic_nm().equals(topicNm)) {
+										overLabCnt = overLabCnt + 1;
+										
+										if (overLabCnt > 0) {
+											break;
+										}
+									}
+								}
+
+								//topic 추가 로 kafka 생성
+								String insResult = transService.insertKafkaRealTopic(transVO);
+									
+								//topic 생성 일때만 로직 실행
+								if ("success".equals(insResult)) {
+									if (overLabCnt > 0) { //기존에 topic 테이블에 값이 있는 경우
+										transVO.setSrc_topic_use_yn("Y");
+										transVO.setWrite_use_yn("Y");
+														
+										//topic 테이블 수정
+										transService.updateTransTopic(transVO);
+									} else {
+										//topic 테이블 등록
+										transService.insertTransTopic(transVO);
+									}	
+								}
+							} else {
+								//topic 추가 로 kafka 생성
+								String insResult = transService.insertKafkaRealTopic(transVO);
+								
+								if ("success".equals(insResult)) {
+									//topic 테이블 등록
+									transService.insertTransTopic(transVO);
+								}
+							}
+						}
+						
+						//이전  topic 삭제
+						transVO.setWrite_use_yn("N");
+						
+						//Write_use_yn가 N 인것만 삭제
+						//kafka topic 삭제
+						transService.deleteTransKakfkaTopic(transVO);
+						
+						//토픽테이블 삭제
+						transService.deleteTransTopic(transVO);
+					} else { //전송대상 테이블이 없는 경우는 전체 삭제
+						transVO.setWrite_use_yn("");
+						
+						//kafka topic 삭제
+						transService.deleteTransKakfkaTopic(transVO);
+						
+						//토픽테이블 삭제
+						transService.deleteTransTopic(transVO);
+					}
+					transService.updateTransExe(transVO);
+					
+					transVO.setConnector_type("source");
 				} else {
-					service.updateTransTargetExe(transVO);
+					transService.updateTransTargetExe(transVO);
+					
+					transVO.setConnector_type("target");
 				}
 				
+				//login_id
+				transVO.setAct_type("A");				//활성화
+				transVO.setAct_exe_type("TC004001");	//manual
+				transVO.setExe_rslt_cd("TC001501");
+
+				transService.insertTransActstateCngInfo(transVO);
 			}
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

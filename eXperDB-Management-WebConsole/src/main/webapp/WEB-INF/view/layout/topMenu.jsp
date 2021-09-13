@@ -701,6 +701,11 @@
 												<spring:message code="migration.setting_information_management" />
 											</a>
 										</li>
+										<!-- <li class="nav-item" id="">
+											<a class="nav-link" href="/db2pgMonitoring.do" onClick="fn_cookie(null)" target="main">
+												모니터링
+											</a>
+										</li> -->
 										<li class="nav-item" id="MN00017">
 											<a class="nav-link" href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="migration.performance_history" />
@@ -867,11 +872,10 @@
 									<i class="menu-arrow"></i>
 								</a>
 								
-								<!-- <div class="submenu" style="width:700px;"> -->
-								<div class="submenu" style="width:450px;">
+								<div class="submenu" style="width:700px;">
 									<!-- <div class="row"> -->
 									<div class="col-group-wrapper row" >
-										<div class="col-group col-md-5" id="MN00019" style="padding-right: 0px;">
+										<div class="col-group col-md-4" id="MN00019" style="padding-right: 0px;">
 											<ul class="submenu-item">
 												<li class="nav-item">
 													<span class="nav-heading-title">
@@ -895,7 +899,7 @@
 												</li>
 											</ul>
 										</div>
-										<div class="col-group col-md-5" id="MN00020">
+										<div class="col-group col-md-4" id="MN00020">
 											<ul class="submenu-item">
 												<li class="nav-item" id="MN00020_etc_Y_tit">
 													<span class="nav-heading-title">
@@ -914,7 +918,7 @@
 												</li>
 											</ul>
 										</div>
-										<!-- <div class="col-group col-md-4" id="MN00021">
+										<div class="col-group col-md-4" id="MN00021">
 											<ul class="submenu-item">
 												<li class="nav-item" id="MN00021_etc_Y_tit">
 													<span class="nav-heading-title">
@@ -931,13 +935,13 @@
 														시점복구
 													</a>
 												</li>
-												<li class="nav-item" id="MN0002103">
+												<!-- <li class="nav-item" id="MN0002103">
 													<a class="nav-link" href="/experdb/fileRecovery.do" onClick="fn_cookie('')" target="main">
 														파일복구
 													</a>
-												</li>
+												</li> -->
 											</ul>
-										</div> -->
+										</div>
 									</div>
 								</div>
 							</li>

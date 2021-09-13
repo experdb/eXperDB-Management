@@ -299,6 +299,12 @@
 	function fn_trans_dbms_insert_proc(){
 		if (!ins_trans_dbms_valCheck()) return false;
 
+		if (nvlPrmSet($("#reg_trans_sys_connection", "#trasnDbmsInsertPop").val(), '') == "success") {
+			$("#reg_trans_exe_status", "#trasnDbmsInsertPop").val("TC001501");
+		} else {
+			$("#reg_trans_exe_status", "#trasnDbmsInsertPop").val("TC001502");
+		}
+
 		$.ajax({
 			async : false,
 	  		url : "/popup/insertTransDBMS.do",
@@ -310,7 +316,8 @@
 	  		  	scm_nm : nvlPrmSet($("#reg_trans_schema_nm", "#trasnDbmsInsertPop").val(), ''),
 	  		   	spr_usr_id : nvlPrmSet($("#reg_trans_spr_usr_id", "#trasnDbmsInsertPop").val(), ''),
 	  		   	pwd : nvlPrmSet($("#reg_trans_pwd", "#trasnDbmsInsertPop").val(), ''),
-	  		  	dbms_dscd : nvlPrmSet($("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val(), '')
+	  		  	dbms_dscd : nvlPrmSet($("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val(), ''),
+				exe_status : nvlPrmSet($("#reg_trans_exe_status", "#trasnDbmsInsertPop").val(), 'TC001502')
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -353,6 +360,7 @@
 					<form class="cmxform" name="trasnDbmsInsertPop" id="trasnDbmsInsertPop" method="post">
 						<input type="hidden" name="reg_trans_sys_nmChk" id="reg_trans_sys_nmChk" value="fail" />
 						<input type="hidden" name="reg_trans_sys_connection" id="reg_trans_sys_connection" value="" />
+						<input type="hidden" name="reg_trans_exe_status" id="reg_trans_exe_status" value="" />
 
 						<fieldset>
 							<div class="card-body" style="border: 1px solid #adb5bd;">

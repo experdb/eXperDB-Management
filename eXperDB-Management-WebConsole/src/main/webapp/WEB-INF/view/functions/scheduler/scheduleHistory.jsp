@@ -338,7 +338,7 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0"><spring:message code="help.shedule_execution_history" /></p>
+											<p class="mb-0"><spring:message code="help.shedule_execution_history_01" /></p>
 										</div>
 									</div>
 								</div>

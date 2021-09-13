@@ -129,7 +129,8 @@
   			url : "/selectTransDBMS.do",
   			data : {
   				trans_sys_nm : $("#info_tg_tans_sys_nm").val(),
-  				dbms_dscd : $("#info_tg_dbms_work").val()
+  				dbms_dscd : $("#info_tg_dbms_work").val(),
+  				dbms_sch_gbn : "tar_ins"
 	  		},
 	  		type : "post",
 	  		beforeSend: function(xhr) {
@@ -220,7 +221,7 @@
 					<br>
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<p class="card-description"><spring:message code="schedule.workList"/></p>
+						<p class="card-description"><spring:message code="extension_pack_installation_information.dbms_list"/></p>
 						<table id="info_trans_dbmsList" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
 							<thead>
 								<tr class="bg-info text-white">

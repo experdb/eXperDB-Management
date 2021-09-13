@@ -3,6 +3,7 @@ package com.k4m.dx.tcontrol.scale.service.impl;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,6 +27,8 @@ import org.springframework.util.ResourceUtils;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.impl.AccessHistoryDAO;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.IpadrVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.impl.DbServerManagerDAO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
@@ -60,7 +63,10 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	
 	@Resource(name = "cmmnServerInfoDAO")
 	private CmmnServerInfoDAO cmmnServerInfoDAO;
-	
+
+	@Resource(name = "dbServerManagerDAO")
+	private DbServerManagerDAO dbServerManagerDAO;
+
 	/**
 	 * aws 설치 여부 조회
 	 * 
@@ -71,6 +77,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	public Map<String, Object> scaleInstallChk(InstanceScaleVO instanceScaleVO) throws Exception {
 
 		Map<String, Object> recultChk = null;
+		
 		Map<String, Object> result = new JSONObject();
 		Map<String, Object> param = new HashMap<String, Object>();
 		String scalejsonChk = "";
@@ -613,6 +620,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						}
 						
 						String key_name_val = (String) instancesObj.get("TagsName");
+						key_name_val = key_name_val.toUpperCase();
 
 						//재확인 필요 일단 넣어놈 - staticLastNode 수를 확인함
 						if (scalejsonChk != null && privateIpAddressVal != null) {
@@ -624,7 +632,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 									//추가
 									String key_name_val_last = key_name_val.substring(key_name_val.length()-1, key_name_val.length());
 
-									if (key_name_val.indexOf("master") > 0 || "master".contains(key_name_val) || !isInteger(key_name_val_last)) {
+									if (key_name_val.indexOf("MASTER") > 0 || "MASTER".contains(key_name_val) || !isInteger(key_name_val_last)) {
 										if (iLastNodeCnt >= iLastNodeChkCnt) {
 											default_chk = "Y";
 											iLastNodeChkCnt = iLastNodeChkCnt + 1;
@@ -1425,5 +1433,120 @@ System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
 	        return false;
 	    }
 	    return true;
+	}
+	
+	/**
+	 * scale 완료 후 agent setting
+	 * 
+	 * @param List<Map<String, Object>>, JSONArray
+	 * @return String
+	 * @throws ConnectException
+	 * @throws Exception
+	 */
+	@Override
+	public String setScaleResultProcess(Map<String, Object> instanceScaleList) throws ConnectException, Exception {
+		String result = "";
+
+		try{
+			
+			if (instanceScaleList != null) {
+				List<String> dbConIpList = (List<String>) instanceScaleList.get("db_con_ip");
+				List<String> dbConPortList = (List<String>) instanceScaleList.get("db_con_port");
+				List<String> dbMasterIpList = (List<String>) instanceScaleList.get("master_ip");
+
+				String scaleType = "";
+				
+				if (instanceScaleList.get("scale_type") != null) {
+					scaleType = (String)instanceScaleList.get("scale_type");
+				}
+
+				//addr 값이 null 이 아닌경우
+				if (dbConIpList.size() > 0) {
+					for (int i = 0; i < dbConIpList.size(); i++) {
+			
+						//agent 등록 시작
+						AgentInfoVO vo = new AgentInfoVO();
+							
+						String strIpadr = dbConIpList.get(i).toString();
+						String strPort = dbConPortList.get(i).toString();
+						String strMasterIp = dbMasterIpList.get(i).toString();
+	
+						vo.setIPADR(strIpadr);
+							
+						if ("2".equals(scaleType)) { //scale out
+							vo.setAGT_CNDT_CD(vo.TC001101); //실행
+							vo.setISTCNF_YN("Y");
+							vo.setFRST_REGR_ID("system");
+							vo.setLST_MDFR_ID("system");
+								
+							//agent 등록 시작
+							AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoDAO.selectAgentInfo(vo);
+
+							if(agentInfo == null) {
+								cmmnServerInfoDAO.insertScaleAgentInfo(vo);
+							} else {
+								cmmnServerInfoDAO.updateScaleAgentInfo(vo);
+							}
+							//agent 등록 종료
+							
+							//T_DBSVRIPADR_I 등록 시작
+							if (strMasterIp != null && !"".equals(strMasterIp)) {
+								Map<String, Object> resultCon =new HashMap<String, Object>();
+								String sttHostName = "";
+								String strIpadrRe = "";
+								
+								IpadrVO ipadrVO = new IpadrVO();
+								ipadrVO.setPortno(Integer.parseInt(strPort));
+								ipadrVO.setIpadr(strIpadr);
+								ipadrVO.setDb_svr_ip(strMasterIp);
+								ipadrVO.setFrst_regr_id("system");
+								ipadrVO.setLst_mdfr_id("system");
+									
+								//svr_host_nm 추가 //////////////////////////////////////////
+/*								JSONObject serverObj = new JSONObject();
+								serverObj.put(ClientProtocolID.SERVER_IP, strIpadr);
+								serverObj.put(ClientProtocolID.SERVER_PORT, Integer.parseInt(strPort));
+								serverObj.put(ClientProtocolID.DATABASE_NAME, "");
+
+								AgentInfoVO agentScaleInfo =  (AgentInfoVO) cmmnServerInfoDAO.selectAgentInfo(vo);
+								int PORT = agentInfo.getSOCKET_PORT();
+								
+								ClientInfoCmmn conn  = new ClientInfoCmmn();
+								resultCon = conn.DbserverConnTest(serverObj, strIpadr, PORT);
+								
+								if (resultCon != null) {
+									sttHostName = resultCon.get(ClientProtocolID.CMD_HOSTNAME).toString();
+								}
+								///////////////////////////////////////////////////////////////
+*/								
+								strIpadrRe = strIpadr.replace(".", "-");
+								sttHostName = "ip-" + strIpadrRe;
+
+								ipadrVO.setSvr_host_nm(sttHostName);
+									
+								dbServerManagerDAO.insertScaleIpadr(ipadrVO);
+							}
+							//T_DBSVRIPADR_I 등록 종료
+						} else { //scale in
+							cmmnServerInfoDAO.deleteScaleAgentInfo(vo); //agent 삭제
+							
+							IpadrVO ipadrVO = new IpadrVO();
+							ipadrVO.setPortno(Integer.parseInt(strPort));
+							ipadrVO.setIpadr(strIpadr);
+								
+							dbServerManagerDAO.deleteScaleIpadr(ipadrVO);
+						}
+					}
+				}
+			}
+			
+			result = "success";
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+		}
+		
+		
+		return result;
 	}
 }

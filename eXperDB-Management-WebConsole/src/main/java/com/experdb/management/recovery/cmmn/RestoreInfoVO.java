@@ -23,10 +23,17 @@ public class RestoreInfoVO {
 	private List<VolumeVO> volumes;
 	
 	private String bmr;
+	private String type;
 	
 	
-	
-	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String getStorageType() {
 		return storageType;
 	}

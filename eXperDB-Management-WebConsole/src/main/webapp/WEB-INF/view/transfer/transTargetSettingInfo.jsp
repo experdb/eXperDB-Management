@@ -156,7 +156,7 @@
 								<div class="form-group row" style="margin-top:20px;margin-bottom:-20px;">
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.transfer_table" />
+										<spring:message code="data_transfer.transfer_topic" />
 									</label>
 									<div class="col-sm-10">
 									</div>

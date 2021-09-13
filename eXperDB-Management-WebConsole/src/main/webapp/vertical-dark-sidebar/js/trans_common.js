@@ -263,6 +263,11 @@ function fn_act_execute(act_gbn) {
 				} else {
 					if (result == "success") {
 						fn_tot_select();
+					} else if (result == "no_depth") {
+						validateMsg = data_transfer_msg34;
+						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+						$("input:checkbox[id='" + checkId + "']").prop("checked", true);
+						return;
 					} else {
 						validateMsg = data_transfer_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
@@ -581,6 +586,10 @@ function fn_tot_act_execute(exeGbn){
 					if (result == "success") {
 						showSwalIcon(data_transfer_msg16, closeBtn, '', 'success');
 						fn_tot_select();
+					} else if (result == "no_depth") {
+						validateMsg = data_transfer_msg35;
+						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+						fn_tot_select();
 					} else {
 						validateMsg = data_transfer_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
@@ -761,10 +770,11 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			$("#ins_compression_type", "#insRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 
 			$("#ins_snapshotModeDetail", "#insRegForm").html(data_transfer_msg1);
-
 			//메타데이타 설정
 			$("#ins_meta_data", "#insRegForm").val("OFF");
 			$("input:checkbox[id='ins_meta_data_chk']").prop("checked", false); 
+
+			$("#ins_kc_connect_td","#searchRegForm").html("");
 			
 			$("#ins_source_trans_active_div").hide();
 			
@@ -779,8 +789,9 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			
 			ins_tg_topicList.clear().draw();
 			ins_connector_tg_tableList.clear().draw();
-			
 			$("#ins_target_trans_active_div").hide();
+			
+			$("#ins_tg_kc_connect_td","#searchTargetRegForm").html("");
 			
 			ins_tg_connect_status_Chk = "fail";
 			ins_tg_connect_nm_Chk = "fail";
@@ -882,7 +893,7 @@ function fn_update_setting(result, active_gbn) {
 		$("#mod_tg_connect_nm", "#modTargetRegForm").val(nvlPrmSet(result.connect_nm, ""));
 		$("#mod_tg_trans_id", "#modTargetRegForm").val(nvlPrmSet(result.trans_id, ""));
 		$("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
-		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.trans_trg_sys_id, ""));
+		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.trans_sys_id, ""));
 		$("#mod_tg_trans_trg_sys_nm","#modTargetRegForm").val(nvlPrmSet(result.trans_sys_nm, ""));
 		
 		mod_connector_tg_tableList.rows({selected: true}).deselect();
@@ -1319,12 +1330,15 @@ function fn_topic_search_tg_ins(){
 	$('#loading').hide();
 	if (kc_ip != "") {
 		
-		$("#pop_layer_con_reg_two_target").append(htmlLoadPop);
-		
-		$('#loading_pop').css('position', 'absolute');
-		$('#loading_pop').css('left', '50%');
-		$('#loading_pop').css('top', '50%');
-		$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
+		if($('#loading_pop').length <= 0){ 
+			$("#pop_layer_con_reg_two_target").append(htmlLoadPop);
+			
+			$('#loading_pop').css('position', 'absolute');
+			$('#loading_pop').css('left', '50%');
+			$('#loading_pop').css('top', '50%');
+			$('#loading_pop').css('transform', 'translate(-50%,-50%)');	
+		}
+
 		$('#loading_pop').show();	
 		
 		$.ajax({
@@ -1365,6 +1379,7 @@ function fn_topic_search_tg_ins(){
 
 		$( document ).ajaxStop(function() {
 			$('#loading_pop').hide();
+		//	$("#loading_pop").remove();
 		});
 	} else {
 		ins_tg_topicList.rows({selected: true}).deselect();
@@ -1633,13 +1648,16 @@ function fn_topic_search_tg_mod(){
 	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
 
 	if (kc_ip != "") {
-		
-		$("#pop_layer_con_re_reg_two_target").append(htmlLoadPop);
-		
-		$('#loading_pop').css('position', 'absolute');
-		$('#loading_pop').css('left', '50%');
-		$('#loading_pop').css('top', '50%');
-		$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
+
+		if($('#loading_pop').length <= 0){ 
+			$("#pop_layer_con_re_reg_two_target").append(htmlLoadPop);
+
+			$('#loading_pop').css('position', 'absolute');
+			$('#loading_pop').css('left', '50%');
+			$('#loading_pop').css('top', '50%');
+			$('#loading_pop').css('transform', 'translate(-50%,-50%)');	  
+		}
+
 		$('#loading_pop').show();	
 		$('#loading').hide();
 		
@@ -1788,7 +1806,7 @@ function fn_mod_t_tg_allLeftMove() {
 }
 
 /* ********************************************************
- * target kafka 설정 버튼 클릭
+ * kafka 설정 조회 버튼 클릭
  ******************************************************** */
 function fn_common_kafka_ins(){
 	$.ajax({
@@ -1843,7 +1861,6 @@ function fn_common_con_set_pop() {
 		},
 		success : function(result) {
 			fn_transCommonConSetPopStart();
-
 			$('#pop_layer_con_com_ins_list').modal("show");
 		}
 	});
@@ -2105,7 +2122,7 @@ function fn_kc_nm_chg(hw_gbn) {
 						connectTd += schedule_stop;
 						connectTd += "</div>";
 					}
-
+					
 					if (hw_gbn == "source_ins") {
 						$("#ins_kc_ip","#searchRegForm").val(nvlPrmSet(result.ip, ''));
 						$("#ins_kc_port","#searchRegForm").val(nvlPrmSet(result.port, ''));
@@ -2117,7 +2134,6 @@ function fn_kc_nm_chg(hw_gbn) {
 						
 						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html(connectTd);
 					}
-					
 					
 					//topic list 조회
 					if (hw_gbn == "target_ins") {
@@ -2140,12 +2156,12 @@ function fn_kc_nm_chg(hw_gbn) {
 						$("#ins_kc_ip","#searchRegForm").val("");
 						$("#ins_kc_port","#searchRegForm").val("");
 
-						$("#ins_kc_connect_td","#searchRegForm").html(connectTd);
+						$("#ins_kc_connect_td","#searchRegForm").html("");
 					} else {
 						$("#ins_tg_kc_ip","#searchTargetRegForm").val("");
 						$("#ins_tg_kc_port","#searchTargetRegForm").val("");
 						
-						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html(connectTd);
+						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html("");
 						
 						ins_tg_topicList.rows({selected: true}).deselect();
 						ins_tg_topicList.clear().draw();

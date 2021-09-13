@@ -22,6 +22,8 @@ public class ProxyListenerVO {
 	private String frst_reg_dtm; 
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
+	private String bal_yn; 
+	private String bal_opt;
 	
 	public int getLsn_id() {
 		return lsn_id;
@@ -113,7 +115,19 @@ public class ProxyListenerVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
-
+	public String getBal_yn() {
+		return bal_yn;
+	}
+	public void setBal_yn(String bal_yn) {
+		this.bal_yn = bal_yn;
+	}
+	public String getBal_opt() {
+		return bal_opt;
+	}
+	public void setBal_opt(String bal_opt) {
+		this.bal_opt = bal_opt;
+	}
+	
 	public Map<String, Object> toMap(){
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("lsn_id", lsn_id);
@@ -131,6 +145,8 @@ public class ProxyListenerVO {
 		map.put("frst_reg_dtm", frst_reg_dtm);
 		map.put("lst_mdfr_id", lst_mdfr_id);
 		map.put("lst_mdf_dtm", lst_mdf_dtm);
+		map.put("bal_yn", bal_yn);
+		map.put("bal_opt", bal_opt);
 		
 		return map;
 	}
@@ -152,6 +168,10 @@ public class ProxyListenerVO {
 		jobj.put("frst_reg_dtm", frst_reg_dtm);
 		jobj.put("lst_mdfr_id", lst_mdfr_id);
 		jobj.put("lst_mdf_dtm", lst_mdf_dtm);
+		jobj.put("bal_yn", bal_yn);
+		jobj.put("bal_opt", bal_opt);
+		
 		return jobj;
 	}
+	
 }

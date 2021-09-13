@@ -26,6 +26,7 @@ public class ProxyServerVO {
 	private String lst_mdf_dtm;
 	private String kal_install_yn;
 	private String state_chk;	
+	private String aws_yn;
 
 	private ProxyGlobalVO pry_global;
 	private List<ProxyVipConfigVO> pry_conf_list; 
@@ -175,5 +176,11 @@ public class ProxyServerVO {
 	}
 	public void setKal_install_yn(String kal_install_yn) {
 		this.kal_install_yn = kal_install_yn;
+	}
+	public String getAws_yn() {
+		return aws_yn;
+	}
+	public void setAws_yn(String aws_yn) {
+		this.aws_yn = aws_yn;
 	}
 }

@@ -14,6 +14,8 @@ public class ProxyVipConfigVO {
 	private String frst_reg_dtm; 
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
+	private String aws_if_id;
+	private String peer_aws_if_id;
 	
 	public String getV_ip_exe_status() {
 		return v_ip_exe_status;
@@ -92,5 +94,17 @@ public class ProxyVipConfigVO {
 	}
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
+	public String getAws_if_id() {
+		return aws_if_id;
+	}
+	public void setAws_if_id(String aws_if_id) {
+		this.aws_if_id = aws_if_id;
+	}
+	public String getPeer_aws_if_id() {
+		return peer_aws_if_id;
+	}
+	public void setPeer_aws_if_id(String peer_aws_if_id) {
+		this.peer_aws_if_id = peer_aws_if_id;
 	}	
 }

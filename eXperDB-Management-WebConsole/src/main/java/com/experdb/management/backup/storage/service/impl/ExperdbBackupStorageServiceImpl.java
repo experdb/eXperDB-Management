@@ -53,7 +53,7 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     		backuplocation.setBackupDestLocation(request.getParameter("path"));
     		backuplocation.setBackupDestUser(request.getParameter("userName"));
     		backuplocation.setBackupDestPasswd(request.getParameter("passWord"));
-    		String totalSize = CmmnUtil.backupLocationTotalSize(pathUrlInfo).get("RESULT_DATA").toString();
+    		/*String totalSize = CmmnUtil.backupLocationTotalSize(pathUrlInfo).get("RESULT_DATA").toString();
     		String freeSize = CmmnUtil.backupLocationFreeSize(pathUrlInfo).get("RESULT_DATA").toString();
     		System.out.println(totalSize);
     		System.out.println(freeSize);
@@ -64,10 +64,10 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     		if(freeSize == ""){
     			result.put("RESULT_CODE", 2);
     			return result;
-    		}
+    		}*/
     		
-    		locationVO.setTotalSize(Long.parseLong(totalSize));
-    		locationVO.setFreeSize(Long.parseLong(freeSize));
+    		//locationVO.setTotalSize(Long.parseLong(totalSize));
+    		//locationVO.setFreeSize(Long.parseLong(freeSize));
     		locationVO.setBackupDestPasswd(CmmnUtil.encPassword(request.getParameter("passWord")).get("RESULT_DATA").toString());
     	}else{
     		String [] pth = request.getParameter("path").split("/", 2);
@@ -76,7 +76,7 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     		String path = "/"+pth[1];
     		pathUrlInfo.put("ipadr", ipadr);
     		pathUrlInfo.put("path", path);
-    		String totalSize = CmmnUtil.backupLocationTotalSize(pathUrlInfo).get("RESULT_DATA").toString();
+    	/*	String totalSize = CmmnUtil.backupLocationTotalSize(pathUrlInfo).get("RESULT_DATA").toString();
     		String freeSize = CmmnUtil.backupLocationFreeSize(pathUrlInfo).get("RESULT_DATA").toString();
     		System.out.println(totalSize);
     		System.out.println(freeSize);
@@ -87,10 +87,10 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     		if(freeSize == ""){
     			result.put("RESULT_CODE", 2);
     			return result;
-    		}
+    		}*/
     		
-    		locationVO.setTotalSize(Long.parseLong(totalSize));
-    		locationVO.setFreeSize(Long.parseLong(freeSize));
+    		//locationVO.setTotalSize(Long.parseLong(totalSize));
+    		//locationVO.setFreeSize(Long.parseLong(freeSize));
     		locationVO.setBackupDestPasswd(request.getParameter("passWord"));
     	}
     	

@@ -15,8 +15,10 @@ import com.k4m.dx.tcontrol.deamon.DxDaemon;
 import com.k4m.dx.tcontrol.deamon.DxDaemonManager;
 import com.k4m.dx.tcontrol.deamon.IllegalDxDaemonClassException;
 import com.k4m.dx.tcontrol.socket.DXTcontrolAgentSocket;
-import com.k4m.dx.tcontrol.socket.listener.DXTcontrolScale;
+import com.k4m.dx.tcontrol.socket.listener.DXTcontrolTrans;
+import com.k4m.dx.tcontrol.socket.listener.ScaleCheckListener;
 import com.k4m.dx.tcontrol.socket.listener.ServerCheckListener;
+import com.k4m.dx.tcontrol.socket.listener.TransCheckListener;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
 /**
@@ -35,9 +37,12 @@ public class DaemonStart implements DxDaemon{
 	
 	private Logger daemonStartLogger = LoggerFactory.getLogger("DaemonStartLogger");
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 
 	private DXTcontrolAgentSocket socketService;
 	private ServerCheckListener serverCheckListener;
+	private TransCheckListener transCheckListener;
+	private ScaleCheckListener scaleCheckListener;
 
 	public static void main(String args[]) {
 		// -shutdown 옵션이 있을 경우 데몬을 종료시킨다.
@@ -153,13 +158,56 @@ public class DaemonStart implements DxDaemon{
 			//System.out.println("111111111111");
 			serverCheckListener = new ServerCheckListener(context);
 			serverCheckListener.start();
+
+			// CDC  
+			try {
+				//trans 설정 setting 추가
+				DXTcontrolTrans rSet = new DXTcontrolTrans();
+				rSet.start();
+			} catch (Exception e) {
+				errLogger.error("CDC 설정 시작시 에러가 발생하였습니다. {}", e.toString());
+				e.printStackTrace();
+				return;
+			}
 			
+			try {
+				String strTransYN = FileUtil.getPropertyValue("context.properties", "agent.trans_yn");
+				socketLogger.info("strTransYN[] : " + strTransYN);
+				//CDC 자동 실행 로직 추가
+				if ("Y".equals(strTransYN)) {
+					//trans 설정 setting 추가
+				//	DXTcontrolTrans rSet = new DXTcontrolTrans();
+				//	rSet.start();
+					
+					transCheckListener = new TransCheckListener(context);
+					transCheckListener.start();
+				}
+			} catch (Exception e) {
+				errLogger.error("CDC 시작시 에러가 발생하였습니다. {}", e.toString());
+				e.printStackTrace();
+				return;
+			}
 			
+			//scale
+			try {
+				String strScaleYN = FileUtil.getPropertyValue("context.properties", "agent.scale_yn");
+				socketLogger.info("strScaleYN[] : " + strScaleYN);
+				//CDC 자동 실행 로직 추가
+				if ("Y".equals(strScaleYN)) {
+					scaleCheckListener = new ScaleCheckListener(context);
+					scaleCheckListener.start();
+				}
+			} catch (Exception e) {
+				errLogger.error("auto scale 시작시 에러가 발생하였습니다. {}", e.toString());
+				e.printStackTrace();
+				return;
+			}	
+
 			//System.out.println("2222222222");
 			socketService = new DXTcontrolAgentSocket();
 			socketService.start();
 			
-			// SqlSessionManager 초기화
+/*			
 			try {
 				//scale 자동 실행 로직 추가
 				DXTcontrolScale rSet = new DXTcontrolScale();
@@ -170,6 +218,8 @@ public class DaemonStart implements DxDaemon{
 				e.printStackTrace();
 				return;
 			}	
+
+*/
 			
 			///monitoring task
 			//TaskExecuteListener.load();

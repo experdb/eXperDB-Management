@@ -348,4 +348,33 @@ public interface TransService {
 	 */
 	public void deleteTransComConSet(TransVO transVO) throws Exception;
 
+	/**
+	 * 타겟시스템 전송설정 total 등록
+	 * @param TransVO
+	 * @throws Exception
+	 */
+	public String insertTargetConnectInfoTot(TransMappVO transMappVO, TransVO transVO) throws Exception;
+
+	/**
+	 * 타겟시스템 전송설정 total 수정
+	 * @param TransVO
+	 * @throws Exception
+	 */
+	public String updateTargetConnectInfoTot(TransMappVO transMappVO, TransVO transVO) throws Exception;
+
+	/**
+	 * trans topic 리스트 조회
+	 * @param TransVO
+	 * @throws Exception
+	 */
+	public List<TransVO> selectTransTopicList(TransVO transVO) throws Exception;
+
+	/**
+	 * trans heatbeat 체크
+	 * 
+	 * @param transVO
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws Exception;
 }

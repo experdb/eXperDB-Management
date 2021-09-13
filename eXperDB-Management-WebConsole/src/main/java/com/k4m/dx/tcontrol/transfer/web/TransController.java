@@ -109,6 +109,7 @@ public class TransController {
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
 		
 		TransDbmsVO transDbmsVO = new TransDbmsVO();
+		TransVO transVO = new TransVO();
 
 		try {
 			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
@@ -179,6 +180,14 @@ public class TransController {
 					}
 				}
 				
+				//trans heatbeat 체크
+				try {
+					mv.addObject("heartbeatchk", transService.selectTransComCoIngChk(transVO));
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				if (transfer_ora != null && "Y".equals(transfer_ora)) {
 					mv.setViewName("transfer/transFullSetting");
 				} else {
@@ -192,7 +201,7 @@ public class TransController {
 	}
 	
 	/**
-	 * 소스시스템 전송설정 조회한다.
+	 * 소스시스템 전송설정 조회
 	 * 
 	 * @param transVO, request, response
 	 * @return result
@@ -216,7 +225,7 @@ public class TransController {
 	}
 	
 	/**
-	 * 타켓시스템 전송설정 조회한다.
+	 * 타켓시스템 전송설정 조회
 	 * 
 	 * @param transVO, request, response
 	 * @return result
@@ -248,6 +257,9 @@ public class TransController {
 	@RequestMapping(value = "/transStart.do")
 	@ResponseBody
 	public String transStart(HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		String result = "fail";
 
 		try {					
@@ -259,6 +271,8 @@ public class TransController {
 			transVOPrm.setDb_svr_id(db_svr_id);
 			transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 			transVOPrm.setTrans_id(trans_id);
+			transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+			transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
 	
 			result = transService.transStart(transVOPrm);	
 		} catch (Exception e) {
@@ -278,6 +292,9 @@ public class TransController {
 	@RequestMapping(value = "/transTargetStart.do")
 	@ResponseBody
 	public String transTargetStart(HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		String result = "fail";
 
 		try {					
@@ -289,7 +306,9 @@ public class TransController {
 			transVOPrm.setDb_svr_id(db_svr_id);
 			transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 			transVOPrm.setTrans_id(trans_id);
-	
+			transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+			transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
+			
 			result = transService.transTargetStart(transVOPrm);	
 		} catch (Exception e) {
 			result = "fail";
@@ -309,6 +328,9 @@ public class TransController {
 	@RequestMapping(value = "/transStop.do")
 	@ResponseBody
 	public String transStop(HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		String result = "fail";
 
 		try {
@@ -328,6 +350,7 @@ public class TransController {
 			transVOPrm.setTrans_id(trans_id);
 			transVOPrm.setDb_svr_id(db_svr_id);
 			transVOPrm.setTrans_active_gbn(trans_active_gbn);
+			transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
 	
 			result = transService.transStop(transVOPrm);
 		} catch (Exception e) {
@@ -361,6 +384,10 @@ public class TransController {
 		String resultSebu = "";
 
 		try {	
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0148_02");
@@ -372,7 +399,9 @@ public class TransController {
 				transVOPrm.setTrans_id_Rows(trans_id_Rows);
 				transVOPrm.setTrans_exrt_trg_tb_id_Rows(trans_exrt_trg_tb_id_Rows);
 				transVOPrm.setTrans_active_gbn(trans_active_gbn);
-				
+
+				transVOPrm.setLst_mdfr_id(usr_id);
+
 				resultSebu = transService.deleteTransTotSetting(transVOPrm);
 				
 				if (!"S".equals(resultSebu)) {
@@ -405,7 +434,9 @@ public class TransController {
 	@RequestMapping(value = "/transTotExecute.do")
 	@ResponseBody
 	public String transTotExecute(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
-
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -432,6 +463,7 @@ public class TransController {
 		
 		String result_code = "";
 		int sucCnt = 0;
+		int sucCnt_no = 0;
 
 		if (request.getParameter("trans_id_List") != null) {
 			trans_id_Rows = request.getParameter("trans_id_List").toString().replaceAll("&quot;", "\"");
@@ -473,6 +505,8 @@ public class TransController {
 						transVOPrm.setDb_svr_id(db_svr_id);
 						transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 						transVOPrm.setTrans_id(trans_id);
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+						transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
 						
 						resultSs = transService.transStart(transVOPrm);
 					} else if ("target_active".equals(execute_gbn)) {
@@ -482,6 +516,8 @@ public class TransController {
 						transVOPrm.setDb_svr_id(db_svr_id);
 						transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 						transVOPrm.setTrans_id(trans_id);
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+						transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
 							
 						resultSs = transService.transTargetStart(transVOPrm);
 					} else {
@@ -490,28 +526,36 @@ public class TransController {
 						String connect_nm = connect_nms.get(i).toString();
 						String trans_id_str = trans_ids.get(i).toString();
 
-						
 						transVOPrm.setKc_ip(kc_ip);
 						transVOPrm.setKc_port(Integer.parseInt(kc_port));
 						transVOPrm.setConnect_nm(connect_nm);
 						transVOPrm.setTrans_id(Integer.parseInt(trans_id_str));
 						transVOPrm.setDb_svr_id(db_svr_id);
 						transVOPrm.setTrans_active_gbn(trans_active_gbn);
-	
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+						
 						resultSs = transService.transStop(transVOPrm);
 					}
-	
+	System.out.println("=======resultSs===" + resultSs);
 					if (resultSs != null && "success".equals(resultSs)) {
 					//	result_code = connStartResult.get("RESULT_CODE").toString();
 					//	if ("0".equals(result_code)) {
 							//result = "success";
 							sucCnt = sucCnt + 1;
 					//	}
+					} else if (resultSs != null && "no_depth".equals(resultSs)) {
+						sucCnt = sucCnt + 1;
+						sucCnt_no = sucCnt_no + 1;
 					}
 				}
 				
 				if (sucCnt == trans_exrt_trg_tb_ids.size() ) {
-					result = "success";
+					if (sucCnt_no <= 0) {
+						result = "success";
+					} else {
+						result = "no_depth";
+					}
+					
 				} else {
 					result = "fail";
 				}
@@ -622,7 +666,7 @@ public class TransController {
 					mv.addObject("offset_flush_timeout_ms", transInfo.get(0).get("offset_flush_timeout_ms"));	//use
 				} else {
 					mv.addObject("trans_sys_nm", transInfo.get(0).get("trans_sys_nm"));			//use
-					mv.addObject("trans_trg_sys_id", transInfo.get(0).get("trans_trg_sys_id"));	//use
+					mv.addObject("trans_sys_id", transInfo.get(0).get("trans_sys_id"));			//use
 					mv.addObject("ipadr", transInfo.get(0).get("ipadr"));						//use
 					mv.addObject("dtb_nm", transInfo.get(0).get("dtb_nm"));						//use
 					mv.addObject("spr_usr_id", transInfo.get(0).get("spr_usr_id"));				//use
@@ -658,7 +702,7 @@ public class TransController {
 					mv.addObject("offset_flush_timeout_ms", "");					//use
 				} else {
 					mv.addObject("trans_sys_nm", "");								//use
-					mv.addObject("trans_trg_sys_id", "");							//use
+					mv.addObject("trans_sys_id", "");								//use
 					mv.addObject("ipadr", "");										//use
 					mv.addObject("dtb_nm", "");										//use
 					mv.addObject("spr_usr_id", "");									//use
@@ -773,7 +817,7 @@ public class TransController {
 				mv.addObject("exe_status", transInfo.get(0).get("exe_status"));		//use
 
 				mv.addObject("trans_sys_nm", transInfo.get(0).get("trans_sys_nm"));			//use
-				mv.addObject("trans_trg_sys_id", transInfo.get(0).get("trans_trg_sys_id"));	//use
+				mv.addObject("trans_sys_id", transInfo.get(0).get("trans_sys_id"));			//use
 				mv.addObject("ipadr", transInfo.get(0).get("ipadr"));						//use
 				mv.addObject("dtb_nm", transInfo.get(0).get("dtb_nm"));						//use
 				mv.addObject("spr_usr_id", transInfo.get(0).get("spr_usr_id"));				//use
@@ -788,8 +832,8 @@ public class TransController {
 				mv.addObject("trans_id", "");										//use
 				mv.addObject("exe_status", "");										//use
 
-				mv.addObject("trans_sys_nm", "");							//use
-				mv.addObject("trans_trg_sys_id", "");							//use
+				mv.addObject("trans_sys_nm", "");								//use
+				mv.addObject("trans_sys_id", "");								//use
 				mv.addObject("ipadr", "");										//use
 				mv.addObject("dtb_nm", "");										//use
 				mv.addObject("spr_usr_id", "");									//use
@@ -1117,14 +1161,11 @@ public class TransController {
 				if(transMappVO.getTable_total_cnt().equals("") || transMappVO.getSchema_total_cnt().equals(null)){
 					transMappVO.setTable_total_cnt("0");
 				}
-
-				//전송대상 테이블 등록
-				transService.insertTransExrttrgMapp(transMappVO);	
-
-				transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
-				transService.insertTargetConnectInfo(transVO);	
 				
-				result = "success";
+				transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
+				
+				//전송대상 테이블 등록
+				result = transService.insertTargetConnectInfoTot(transMappVO, transVO);
 			} catch (Exception e) {
 				result = "fail";
 				e.printStackTrace();
@@ -1184,6 +1225,8 @@ public class TransController {
 			serverObj.put(ClientProtocolID.REQ_CMD, strCmd);
 
 			result = cic.trans_topic_List(serverObj,IP,PORT);
+
+			System.out.println("result====" + result);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1270,7 +1313,6 @@ public class TransController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		String result = "fail";
-		
 		try {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -1296,11 +1338,9 @@ public class TransController {
 					transMappVO.setTable_total_cnt("0");
 				}
 				
-				transService.updateTransExrttrgMapp(transMappVO);	
-				
-				transService.updateTargetConnectInfo(transVO);
-				
-				result = "success";
+				transVO.setTrans_exrt_trg_tb_id(Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id")));
+				//전송대상 테이블 수정
+				result = transService.updateTargetConnectInfoTot(transMappVO, transVO);
 			}catch (Exception e) {
 				result = "fail";
 				e.printStackTrace();
@@ -1573,9 +1613,12 @@ public class TransController {
 	@RequestMapping(value = "/transAutoStart.do")
 	@ResponseBody
 	public String transAutoStart(HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
 		String result = "fail";
 		List<Map<String, Object>> transInfo = null;
-
+		
 		try {					
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			int trans_exrt_trg_tb_id = -1;
@@ -1605,6 +1648,8 @@ public class TransController {
 				transVOPrm.setDb_svr_id(db_svr_id);
 				transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 				transVOPrm.setTrans_id(trans_id);
+				transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+				transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
 
 				if ("ins_target".equals(trans_active_gbn) || "mod_target".equals(trans_active_gbn)) {
 					result = transService.transTargetStart(transVOPrm);

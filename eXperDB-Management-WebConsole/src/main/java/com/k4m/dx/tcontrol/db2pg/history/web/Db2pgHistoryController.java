@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.util.SystemOutLogger;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +23,7 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_LOG;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_STOP;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
 
@@ -212,7 +215,7 @@ public class Db2pgHistoryController {
 			String trans_save_pth = request.getParameter("trans_save_pth");			
 			lines = DB2PG_LOG.readLastLine(new File(trans_save_pth+"/result/progress.txt"), 1);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("* cannot found progress.txt");
 		}
 		if(lines.size() > 0 && lines.get(0).contains(",")){
 			result = lines.get(0).split(",");
@@ -325,4 +328,15 @@ public class Db2pgHistoryController {
 			e.printStackTrace();
 		}
 	}	
+	
+	@RequestMapping(value = "/db2pg/cancel.do")
+	public @ResponseBody JSONObject db2pgCancel(HttpServletRequest request){
+		JSONObject result = new JSONObject();
+		String wrkName = request.getParameter("wrk_nm");
+		DB2PG_STOP db2pgStop = new DB2PG_STOP();
+		
+		result = db2pgStop.db2pgStop(wrkName);
+		
+		return result;
+	}
 }

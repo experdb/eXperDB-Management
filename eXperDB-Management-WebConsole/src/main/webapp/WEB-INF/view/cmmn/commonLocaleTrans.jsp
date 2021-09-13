@@ -48,6 +48,8 @@ var data_transfer_msg5 = "<spring:message code='data_transfer.msg5' />";
 
 var data_transfer_connecting = "<spring:message code='data_transfer.connecting' />";
 
+var data_transfer_msg34 = "<spring:message code='data_transfer.msg34' />";
+var data_transfer_msg35 = "<spring:message code='data_transfer.msg35' />";
 
 </script>
 <body>

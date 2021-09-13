@@ -452,4 +452,135 @@ public class TransDAO extends EgovAbstractMapper{
 		delete("transSQL.deleteTransComConSet", transVO);
 	}
 
+	/**
+	 * trans topic 수정
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void updateTransTarTopic(TransVO transVO) {
+		update("transSQL.updateTransTarTopic", transVO);
+	}
+	
+	/**
+	 * trans 타겟 커넥터 seq
+	 * @param 
+	 * @return int
+	 * @throws
+	 */
+	public int selectTargetConnectSeq() {
+		return (int) getSqlSession().selectOne("transSQL.selectTargetConnectSeq");
+	}
+
+	/**
+	 * trans topic 초기화
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void updateTransTarTopicChogihwa(TransVO transVO) {
+		update("transSQL.updateTransTarTopicChogihwa", transVO);
+	}
+	
+	/**
+	 * trans topic 리스트 조회
+	 * 
+	 * @param transVO
+	 * @return List<Map<String, Object>>
+	 * @throws 
+	 */
+	public List<TransVO> selectTransTopicList(TransVO transVO) {
+		List<TransVO>  sl = null;
+		sl = (List<TransVO>) list("transSQL.selectTransTopicList",transVO);
+		return sl;
+	}
+
+	/**
+	 * 소스시스템 topic 삭제
+	 * 
+	 * @param trans_id
+	 * @return 
+	 * @throws 
+	 */
+	public void deleteTransTopicSetting(int trans_id) {
+		delete("transSQL.deleteTransTopicSetting",trans_id);	
+	}
+	
+	/**
+	 * trans 타겟 전송관리 테이블 조회
+	 * 
+	 * @param transVO
+	 * @return List<Map<String, Object>>
+	 * @throws 
+	 */
+	public List<TransVO> selectTranExrtTrgList(TransVO transVO) {
+		List<TransVO>  sl = null;
+		sl = (List<TransVO>) list("transSQL.selectTranExrtTrgList",transVO);
+		return sl;
+	}
+	
+	/**
+	 * trans topic 리스트  조회
+	 * 
+	 * @param transVO
+	 * @return List<TransVO>
+	 * @throws 
+	 */
+	public List<TransVO> selectTranIdTopicList(TransVO transVO) {
+		List<TransVO>  sl = null;
+		sl = (List<TransVO>) list("transSQL.selectTranIdTopicList",transVO);
+		return sl;
+	}
+
+	/**
+	 * trans 타겟 전송관리 테이블 수정
+	 * 
+	 * @param transDbmsVO
+	 * @throws Exception
+	 */
+	public void updateTranExrtTrgInfo(TransVO transVO) {
+		update("transSQL.updateTranExrtTrgInfo", transVO);
+	}
+
+	/**
+	 * 소스 / 타겟 connect log 삭제
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void deleteTransConnectLog(TransVO transVO) {
+		delete("transSQL.deleteTransConnectLog", transVO);
+	}
+
+	/**
+	 * kafka connect log 등록
+	 * 
+	 * @param transDbmsVO
+	 * @throws Exception
+	 */
+	public void insertTransKafkaConnectLog(TransDbmsVO transDbmsVO) {
+		insert("transSQL.insertTransKafkaConnectLog", transDbmsVO);
+	}
+
+	/**
+	 * kafka connect log 삭제
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void deleteTransKafkaConnectLog(TransDbmsVO transDbmsVO) {
+		delete("transSQL.deleteTransKafkaConnectLog", transDbmsVO);
+	}
+	
+	/**
+	 * trans heatbeat 체크
+	 * 
+	 * @param transVO
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws SQLException {
+		return (Map<String, Object>) selectOne("transSQL.selectTransComCoIngChk", transVO);
+	}
+
 }

@@ -146,7 +146,7 @@ public class CmmnController {
 						dashVo.setAudit_state("-");
 						dashVo.setMaster_gbn(serverInfoVOSelectTot.get(i).getMaster_gbn());
 						dashVo.setSvr_host_nm(serverInfoVOSelectTot.get(i).getSvr_host_nm());
-
+						dashVo.setPry_cnt(serverInfoVOSelectTot.get(i).getPry_cnt());
 						serverInfoTotVO.add(dashVo);
 					}
 				}

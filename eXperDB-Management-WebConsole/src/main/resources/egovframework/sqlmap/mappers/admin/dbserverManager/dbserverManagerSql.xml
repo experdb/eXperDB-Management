@@ -5,181 +5,173 @@
 
 	<select id="selectDbListTree" resultType="dbVO" parameterType="int">
 		/**
-	 	*  Query ID : selectDbListTree
-	 	* Description : DB서버 리스트 조회
-	 	* Author : 변승우
-	 	**/    
-          SELECT 
-                  (ROW_NUMBER() OVER()) AS ROWNUM
-				, (ROW_NUMBER() OVER()) AS IDX
-				, DB_SVR_ID
-                , DB_ID
-                , DB_NM
-                , DB_USR_ID
-                , DB_EXP
-                , USEYN
-				, FRST_REGR_ID
-				, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-				, LST_MDFR_ID
-				, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+		*  Query ID : selectDbListTree
+		* Description : DB서버 리스트 조회
+		* Author : 변승우
+		**/    
+        SELECT 
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , DB_SVR_ID
+             , DB_ID
+             , DB_NM
+             , DB_USR_ID
+             , DB_EXP
+             , USEYN
+             , FRST_REGR_ID
+             , TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+             , LST_MDFR_ID
+             , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
           FROM T_DB_I
           WHERE DB_SVR_ID = #{db_svr_id}
 	</select>
 
-
 	<select id="selectDbServerList" resultType="dbServerVO">
 		/**
-	 	*  Query ID : selectDbServerList
-	 	* Description : DB서버 리스트 조회
-	 	* Author : 변승우
-	 	**/
-	 	
-	  SELECT
-      		(ROW_NUMBER() OVER()) AS ROWNUM
-			, (ROW_NUMBER() OVER()) AS IDX
-			, AA.DB_SVR_ID
-			, AA.DB_SVR_NM
-			, AA.IPADR
-			, AA.PORTNO
-			, AA.MASTER_GBN
-			, AA.DFT_DB_NM
-			, AA.SVR_SPR_USR_ID
-			, AA.SVR_SPR_SCM_PWD
-			, AA.PGHOME_PTH
-			, AA.PGDATA_PTH
-			, AA.USEYN
-			, AA.AGT_CNDT_CD
-			, AA.SOCKET_PORT
-			, AA.FRST_REGR_ID
-			, AA.FRST_REG_DTM
-			, AA.LST_MDFR_ID
-			, AA.LST_MDF_DTM
-      FROM(      
-         SELECT 
-                 A.DB_SVR_ID
-                , A.DB_SVR_NM
-                , C.IPADR
-                , C.PORTNO
-                , C.MASTER_GBN
-                , A.DFT_DB_NM
-                , A.SVR_SPR_USR_ID
-                , A.SVR_SPR_SCM_PWD
-                , A.PGHOME_PTH
-				, A.PGDATA_PTH
-				, A.FRST_REGR_ID
-				, A.USEYN
-				, B.AGT_CNDT_CD
-				, B.SOCKET_PORT
-				, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-				, A.LST_MDFR_ID
-				, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-          FROM T_DBSVR_I	A, T_AGTCNDT_I B, T_DBSVRIPADR_I C
-          WHERE 1 = 1
-          AND A.DB_SVR_ID = C.DB_SVR_ID
-          AND C.IPADR = B.IPADR
-          AND C.MASTER_GBN = 'M'
-  	      <if test="db_svr_id != null and db_svr_id != '' and db_svr_id != 0">
-	      AND A.DB_SVR_ID = #{db_svr_id}
-	      </if>	         
-	      <if test="db_svr_nm != null and db_svr_nm != ''">
-	      AND A.DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
-	      </if>	     
-	      <if test="ipadr != null and ipadr != ''">
-	      AND C.IPADR LIKE '%' || #{ipadr} || '%'
-	      </if>	      
-	      <if test="dft_db_nm != null and dft_db_nm != ''">
-	      AND A.DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
-	      </if>   
-	      <if test="useyn != null and useyn != ''">
-	      AND A.USEYN LIKE  '%' || #{useyn} || '%'
-	      </if>      
-          ORDER BY LST_MDF_DTM DESC
-      ) AA		
-    </select>
-    
-    
-    <insert id="insertDbServer" parameterType="dbServerVO">
-    	/**
-	 	*  Query ID : insertDbServer
-	 	* Description : insertDbServer 등록
-	 	* Author : 변승우
-	 	**/
-	 	
-		INSERT INTO T_DBSVR_I
-		(
-			  DB_SVR_ID
-			, DB_SVR_NM
-			, IPADR
-			, PORTNO
-			, DFT_DB_NM
-			, SVR_SPR_USR_ID
-			, SVR_SPR_SCM_PWD
-			, PGHOME_PTH
-			, PGDATA_PTH
-			, USEYN
-			, FRST_REGR_ID
-			, FRST_REG_DTM
-			, LST_MDFR_ID
-			, LST_MDF_DTM
-		) 
-		VALUES
-		(
-			  nextval('q_dbsvr_i_01')
-			, #{db_svr_nm}
-			, #{ipadr}
-			, #{portno}
-			, #{dft_db_nm}
-			, #{svr_spr_usr_id}
-			, #{svr_spr_scm_pwd}
-			, #{pghome_pth}
-			, #{pgdata_pth}
-			, 'Y'
-			, #{frst_regr_id}
-			, clock_timestamp()
-			, #{lst_mdfr_id}
-			, clock_timestamp()	
-		)
-	</insert>    
-	
-	
-	   <update id="updateDbServer" parameterType="dbServerVO">
-   	    /**
-	 	* Query ID : updateDbServer
-	 	* Description : DB서버 수정
-	 	* Author : 변승우
-	 	**/
-	 	
-		UPDATE T_DBSVR_I
-		SET 
-	  	 	   DB_SVR_NM= #{db_svr_nm}
-		      , IPADR=#{ipadr}
-		      , PORTNO=#{portno}
-		      , DFT_DB_NM=#{dft_db_nm}
-			  , SVR_SPR_USR_ID=#{svr_spr_usr_id}
-			  , SVR_SPR_SCM_PWD=#{svr_spr_scm_pwd}
-			  , PGHOME_PTH=#{pghome_pth}
-			  , PGDATA_PTH=#{pgdata_pth}
-			  , USEYN = #{useyn}
-			  , LST_MDFR_ID=#{lst_mdfr_id}
-			  , LST_MDF_DTM=clock_timestamp()	
-		WHERE DB_SVR_ID=#{db_svr_id}
-	</update> 
-	
-	
+		*  Query ID : selectDbServerList
+		* Description : DB서버 리스트 조회
+		* Author : 변승우
+		**/
+		
+        SELECT
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , AA.DB_SVR_ID
+             , AA.DB_SVR_NM
+             , AA.IPADR
+             , AA.PORTNO
+             , AA.MASTER_GBN
+             , AA.DFT_DB_NM
+             , AA.SVR_SPR_USR_ID
+             , AA.SVR_SPR_SCM_PWD
+             , AA.PGHOME_PTH
+             , AA.PGDATA_PTH
+             , AA.USEYN
+             , AA.AGT_CNDT_CD
+             , AA.SOCKET_PORT
+             , AA.FRST_REGR_ID
+             , AA.FRST_REG_DTM
+             , AA.LST_MDFR_ID
+             , AA.LST_MDF_DTM
+         FROM (
+               SELECT 
+                       A.DB_SVR_ID
+                     , A.DB_SVR_NM
+                     , C.IPADR
+                     , C.PORTNO
+                     , C.MASTER_GBN
+                     , A.DFT_DB_NM
+                     , A.SVR_SPR_USR_ID
+                     , A.SVR_SPR_SCM_PWD
+                     , A.PGHOME_PTH
+                     , A.PGDATA_PTH
+                     , A.FRST_REGR_ID
+                     , A.USEYN
+                     , B.AGT_CNDT_CD
+                     , B.SOCKET_PORT
+                     , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+                     , A.LST_MDFR_ID
+                     , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+                  FROM T_DBSVR_I A, T_AGTCNDT_I B, T_DBSVRIPADR_I C
+                 WHERE 1 = 1
+                   AND A.DB_SVR_ID = C.DB_SVR_ID
+                   AND C.IPADR = B.IPADR
+                   AND C.MASTER_GBN = 'M'
+                 <if test="db_svr_id != null and db_svr_id != '' and db_svr_id != 0">
+                       AND A.DB_SVR_ID = #{db_svr_id}
+                   </if>
+                   <if test="db_svr_nm != null and db_svr_nm != ''">
+                       AND A.DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
+                   </if>
+                   <if test="ipadr != null and ipadr != ''">
+                       AND C.IPADR LIKE '%' || #{ipadr} || '%'
+                   </if>
+                   <if test="dft_db_nm != null and dft_db_nm != ''">
+                       AND A.DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
+                   </if>
+                   <if test="useyn != null and useyn != ''">
+                       AND A.USEYN LIKE  '%' || #{useyn} || '%'
+                   </if>
+                  ORDER BY LST_MDF_DTM DESC
+        ) AA
+	</select>
+
+	<insert id="insertDbServer" parameterType="dbServerVO">
+		/**
+		*  Query ID : insertDbServer
+		* Description : insertDbServer 등록
+		* Author : 변승우
+		**/
+        INSERT INTO T_DBSVR_I
+                   (
+                    DB_SVR_ID
+                  , DB_SVR_NM
+                  , IPADR
+                  , PORTNO
+                  , DFT_DB_NM
+                  , SVR_SPR_USR_ID
+                  , SVR_SPR_SCM_PWD
+                  , PGHOME_PTH
+                  , PGDATA_PTH
+                  , USEYN
+                  , FRST_REGR_ID
+                  , FRST_REG_DTM
+                  , LST_MDFR_ID
+                  , LST_MDF_DTM
+                   ) 
+            VALUES
+                   (
+                    nextval('q_dbsvr_i_01')
+                  , #{db_svr_nm}
+                  , #{ipadr}
+                  , #{portno}
+                  , #{dft_db_nm}
+                  , #{svr_spr_usr_id}
+                  , #{svr_spr_scm_pwd}
+                  , #{pghome_pth}
+                  , #{pgdata_pth}
+                  , 'Y'
+                  , #{frst_regr_id}
+                  , clock_timestamp()
+                  , #{lst_mdfr_id}
+                  , clock_timestamp()	
+                  )
+	</insert>
+
+	<update id="updateDbServer" parameterType="dbServerVO">
+		/**
+		* Query ID : updateDbServer
+		* Description : DB서버 수정
+		* Author : 변승우
+		**/
+        UPDATE T_DBSVR_I
+           SET 
+               DB_SVR_NM= #{db_svr_nm}
+             , IPADR=#{ipadr}
+             , PORTNO=#{portno}
+             , DFT_DB_NM=#{dft_db_nm}
+             , SVR_SPR_USR_ID=#{svr_spr_usr_id}
+             , SVR_SPR_SCM_PWD=#{svr_spr_scm_pwd}
+             , PGHOME_PTH=#{pghome_pth}
+             , PGDATA_PTH=#{pgdata_pth}
+             , USEYN = #{useyn}
+             , LST_MDFR_ID=#{lst_mdfr_id}
+             , LST_MDF_DTM=clock_timestamp()	
+         WHERE DB_SVR_ID=#{db_svr_id}
+	</update>
+
 	<update id="updateDbServerPort" parameterType="dbServerVO">
-   	    /**
-	 	* Query ID : updateDbServerPort
-	 	* Description : DB서버 포트 수정
-	 	* Author : 변승우
-	 	**/
-	 	
-		UPDATE T_DBSVRIPADR_I
-		SET 
-		       PORTNO=#{portno}
-		WHERE DB_SVR_ID=#{db_svr_id}
-	</update> 
-	
-	
+		/**
+		* Query ID : updateDbServerPort
+		* Description : DB서버 포트 수정
+		* Author : 변승우
+		**/
+        UPDATE T_DBSVRIPADR_I
+           SET 
+               PORTNO=#{portno}
+         WHERE DB_SVR_ID=#{db_svr_id}
+	</update>
+
 <!-- <delete id="deleteCmmnCode" parameterType="cmmnCodeVO">
        	/**
 	 	* Query ID : deleteCmmnCode
@@ -191,681 +183,699 @@
 	  FROM T_SYSGRP_C 
 	  WHERE GRP_CD=#{grp_cd}
 	</delete> -->
-	
-	
+
 	<delete id="deleteDB" parameterType="dbServerVO">
-       	/**
-	 	* Query ID : deleteDB
-	 	* Description : DB삭제
-	 	* Author : 변승우
-	 	**/
-	 	
-	  DELETE 
-	  FROM T_DB_I 
-	  WHERE DB_SVR_ID=#{db_svr_id}
-	  AND USEYN = 'Y'
+		/**
+		* Query ID : deleteDB
+		* Description : DB삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_DB_I 
+         WHERE DB_SVR_ID=#{db_svr_id}
+           AND USEYN = 'Y'
 	</delete>
-	
-	
+
 	<insert id="insertDB" parameterType="HashMap">
-    	/**
-	 	*  Query ID : insertDB
-	 	* Description : insertDB 등록
-	 	* Author : 변승우
-	 	**/
-	 	
-		INSERT INTO T_DB_I
-		(
-			  DB_ID
-			, DB_SVR_ID
-			, DB_NM
-			, USEYN
-			, DB_EXP
-			, FRST_REGR_ID
-			, FRST_REG_DTM
-			, LST_MDFR_ID
-			, LST_MDF_DTM
-		) 
-		VALUES
-		(
-			  nextval('q_db_i_01')
-			, #{db_svr_id}
-			, #{dft_db_nm}
-			, #{useyn}
-			, #{db_exp}
-			, #{frst_regr_id}
-			, clock_timestamp()
-			, #{lst_mdfr_id}
-			, clock_timestamp()	
-		)
-	</insert>    
-	
-	
+		/**
+		*  Query ID : insertDB
+		* Description : insertDB 등록
+		* Author : 변승우
+		**/
+        INSERT INTO T_DB_I
+                   (
+                    DB_ID
+                  , DB_SVR_ID
+                  , DB_NM
+                  , USEYN
+                  , DB_EXP
+                  , FRST_REGR_ID
+                  , FRST_REG_DTM
+                  , LST_MDFR_ID
+                  , LST_MDF_DTM
+                    ) 
+             VALUES
+                    (
+                     nextval('q_db_i_01')
+                   , #{db_svr_id}
+                   , #{dft_db_nm}
+                   , #{useyn}
+                   , #{db_exp}
+                   , #{frst_regr_id}
+                   , clock_timestamp()
+                   , #{lst_mdfr_id}
+                   , clock_timestamp()	
+                    )
+	</insert>
+
 	<select id="selectDbList" resultType="dbVO">
 		/**
-	 	*  Query ID : selectDbList
-	 	* Description : DB 리스트 조회
-	 	* Author : 변승우
-	 	**/
-	 	
-          SELECT 
-                  (ROW_NUMBER() OVER()) AS ROWNUM
-				, (ROW_NUMBER() OVER()) AS IDX
-                , DB_ID
-                , DB_SVR_ID
-                , DB_NM
-                , DB_USR_ID
-                , DB_EXP
-				, FRST_REGR_ID
-				, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-				, LST_MDFR_ID
-				, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+		*  Query ID : selectDbList
+		* Description : DB 리스트 조회
+		* Author : 변승우
+		**/
+        SELECT 
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , DB_ID
+             , DB_SVR_ID
+             , DB_NM
+             , DB_USR_ID
+             , DB_EXP
+             , FRST_REGR_ID
+             , TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+             , LST_MDFR_ID
+             , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
           FROM T_DB_I
-          WHERE USEYN = 'Y'
-     </select>	
-     
-     
-     <select id="selectRepoDBList" resultType="HashMap" parameterType="HashMap">
-		/**
-	 	*  Query ID : selectRepoDBList
-	 	* Description : DB Repository 리스트 조회
-	 	* Author : 변승우
-	 	**/
-	 	
-		SELECT
-              (ROW_NUMBER() OVER()) AS ROWNUM
-			, (ROW_NUMBER() OVER()) AS IDX
-            , AA.DB_SVR_NM
-            , AA.IPADR
-            , AA.PORTNO
-            , AA.MASTER_GBN
-            , AA.DB_ID
-            , AA.DB_NM
-            , AA.DB_EXP
-			, AA.FRST_REGR_ID
-			, AA.FRST_REG_DTM
-			, AA.LST_MDFR_ID
-			, AA.LST_MDF_DTM
-        FROM(
-	            SELECT
-	                 A.DB_SVR_NM
-	                , C.IPADR
-	                , C.PORTNO
-	                , C.MASTER_GBN
-	                , B.DB_ID
-	                , B.DB_NM
-	                , B.DB_EXP
-					, A.FRST_REGR_ID
-					, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-					, A.LST_MDFR_ID
-					, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-	            FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
-	            WHERE 1 = 1
-	            AND A.DB_SVR_ID = B.DB_SVR_ID
-	            AND A.DB_SVR_ID = C.DB_SVR_ID
-	            AND C.MASTER_GBN = 'M'
-			    <if test="db_svr_nm != null and db_svr_nm != ''">
-			    AND A.DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
-			    </if>	     
-			    <if test="ipadr != null and ipadr != ''">
-			    AND C.IPADR LIKE '%' || #{ipadr} || '%'
-			    </if>	      
-			    <if test="dft_db_nm != null and dft_db_nm != ''">
-			    AND B.DB_NM LIKE  '%' || #{dft_db_nm} || '%'
-			    </if>         	            
-			    AND B.USEYN = 'Y'
-	            ORDER BY A.LST_MDF_DTM DESC
-            	)AA
-     </select>	
-     
+         WHERE USEYN = 'Y'
+	</select>
 
-     <select id="selectSvrList" resultType="HashMap" parameterType="integer">
+ 	<select id="selectRepoDBList" resultType="HashMap" parameterType="HashMap">
 		/**
-	 	*  Query ID : selectSvrList
-	 	* Description : Repository 등록된 DB의 서버 리스트 조회
-	 	* Author : 변승우
-	 	**/ 	
-	 	
-            SELECT
-            		A.DB_SVR_ID
-                 	, A.DB_SVR_NM
-	                , C.IPADR
-	                , C.PORTNO
-	                , C.MASTER_GBN
-            FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
-            WHERE 1 = 1
-            AND A.DB_SVR_ID = B.DB_SVR_ID
-            AND A.DB_SVR_ID = C.DB_SVR_ID
-            AND C.MASTER_GBN = 'M'
-			<if test="value != null and value != 0">
-			AND A.DB_SVR_ID = #{value}
-			</if>
-			AND A.USEYN = 'Y'
-			AND B.USEYN = 'Y'
-            GROUP BY A.DB_SVR_NM, A.DB_SVR_ID, C.IPADR, C.PORTNO, C.MASTER_GBN
-     </select>	
-     
-     
-     <select id="dbServerIpCheck" resultType="int">
+		*  Query ID : selectRepoDBList
+		* Description : DB Repository 리스트 조회
+		* Author : 변승우
+		**/
+        SELECT
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , AA.DB_SVR_NM
+             , AA.IPADR
+             , AA.PORTNO
+             , AA.MASTER_GBN
+             , AA.DB_ID
+             , AA.DB_NM
+             , AA.DB_EXP
+             , AA.FRST_REGR_ID
+             , AA.FRST_REG_DTM
+             , AA.LST_MDFR_ID
+             , AA.LST_MDF_DTM
+         FROM (
+               SELECT
+                      A.DB_SVR_NM
+                    , C.IPADR
+                    , C.PORTNO
+                    , C.MASTER_GBN
+                    , B.DB_ID
+                    , B.DB_NM
+                    , B.DB_EXP
+                    , A.FRST_REGR_ID
+                    , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+                    , A.LST_MDFR_ID
+                    , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+                 FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
+                WHERE 1 = 1
+                  AND A.DB_SVR_ID = B.DB_SVR_ID
+                  AND A.DB_SVR_ID = C.DB_SVR_ID
+                  AND C.MASTER_GBN = 'M'
+               <if test="db_svr_nm != null and db_svr_nm != ''">
+                  AND A.DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
+               </if>
+               <if test="ipadr != null and ipadr != ''">
+                  AND C.IPADR LIKE '%' || #{ipadr} || '%'
+               </if>
+               <if test="dft_db_nm != null and dft_db_nm != ''">
+                  AND B.DB_NM LIKE  '%' || #{dft_db_nm} || '%'
+               </if>
+                  AND B.USEYN = 'Y'
+                ORDER BY A.LST_MDF_DTM DESC
+        )AA
+     </select>
+
+	<select id="selectSvrList" resultType="HashMap" parameterType="integer">
+		/**
+		*  Query ID : selectSvrList
+		* Description : Repository 등록된 DB의 서버 리스트 조회
+		* Author : 변승우
+		**/
+        SELECT
+               A.DB_SVR_ID
+             , A.DB_SVR_NM
+             , C.IPADR
+             , C.PORTNO
+             , C.MASTER_GBN
+          FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
+         WHERE 1 = 1
+           AND A.DB_SVR_ID = B.DB_SVR_ID
+           AND A.DB_SVR_ID = C.DB_SVR_ID
+           AND C.MASTER_GBN = 'M'
+        <if test="value != null and value != 0">
+           AND A.DB_SVR_ID = #{value}
+        </if>
+           AND A.USEYN = 'Y'
+           AND B.USEYN = 'Y'
+         GROUP BY A.DB_SVR_NM, A.DB_SVR_ID, C.IPADR, C.PORTNO, C.MASTER_GBN
+	</select>
+
+	<select id="dbServerIpCheck" resultType="int">
 		/**
 		* Query ID : dbServerIpCheck
 		* Description : IP 중복 체크
 		* Author : 변승우
 		**/
-		SELECT 
-				 COUNT(*)
-		FROM T_DBSVR_I A, T_DBSVRIPADR_I B		
-		WHERE 1=1
-		AND A.DB_SVR_ID = B.DB_SVR_ID 
-		AND B.MASTER_GBN = 'M'
-		AND B.IPADR = #{ipadr}	
+        SELECT 
+               COUNT(*)
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         WHERE 1=1
+           AND A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.MASTER_GBN = 'M'
+           AND B.IPADR = #{ipadr}
 	</select>
-	
-	
+
 	<select id="selectDBcnt" resultType="int" parameterType="hashmap">
 		/**
 		* Query ID : selectDBcnt
 		* Description : DB서버 갯수 체크
 		* Author : 변승우
 		**/
-		SELECT 
-				 COUNT(*)
-		FROM T_DB_I
-		WHERE DB_NM = #{dft_db_nm}
+        SELECT 
+               COUNT(*)
+          FROM T_DB_I
+         WHERE DB_NM = #{dft_db_nm}
 	</select>
 
+	<update id="updateDB" parameterType="hashmap">
+		/**
+		* Query ID : updateDB
+		* Description : DB 수정
+		* Author : 변승우
+		**/
+        UPDATE T_DB_I
+           SET 
+               USEYN= #{useyn}
+             , DB_EXP=#{db_exp}
+             , LST_MDFR_ID=#{lst_mdfr_id}
+             , LST_MDF_DTM=clock_timestamp()	
+         WHERE DB_SVR_ID=#{db_svr_id}::numeric
+           AND DB_NM=#{dft_db_nm}
+	</update>
 
-	 <update id="updateDB" parameterType="hashmap">
-   	    /**
-	 	* Query ID : updateDB
-	 	* Description : DB 수정
-	 	* Author : 변승우
-	 	**/
-	 	
-		UPDATE T_DB_I
-		SET 
-	  	 	   USEYN= #{useyn}
-	  	 	  , DB_EXP=#{db_exp}
-			  , LST_MDFR_ID=#{lst_mdfr_id}
-			  , LST_MDF_DTM=clock_timestamp()	
-		WHERE DB_SVR_ID=#{db_svr_id}::numeric
-		AND DB_NM=#{dft_db_nm}
-	</update> 
-	
-	
-     <select id="db_svr_nmCheck" resultType="int">
+	<select id="db_svr_nmCheck" resultType="int">
 		/**
 		* Query ID : db_svr_nmCheck
 		* Description : 서버명 중복 체크
 		* Author : 변승우
 		**/
-		SELECT 
-				 COUNT(*)
-		FROM T_DBSVR_I
-		WHERE DB_SVR_NM = #{db_svr_nm}
-	</select>	
-	
-	
+        SELECT 
+               COUNT(*)
+          FROM T_DBSVR_I
+         WHERE DB_SVR_NM = #{db_svr_nm}
+	</select>
+
 	<select id="selectIpList" resultType="HashMap" >
 		/**
 		* Query ID : selectIpList
 		* Description : 등록된 Agent IP 리스트
 		* Author : 변승우
 		**/
-		SELECT DISTINCT
-				A.IPADR
-		FROM T_AGTCNDT_I A
-		WHERE 1=1
-		AND A.AGT_CNDT_CD = 'TC001101'
-		AND A.ISTCNF_YN = 'Y'
-        AND A.ipadr NOT IN(
-            				SELECT  ipadr
-            				FROM T_DBSVRIPADR_I
-							)
+        SELECT DISTINCT
+                        A.IPADR
+          FROM T_AGTCNDT_I A
+         WHERE 1=1
+           AND A.AGT_CNDT_CD = 'TC001101'
+           AND A.ISTCNF_YN = 'Y'
+           AND A.ipadr NOT IN(
+                              SELECT  ipadr
+                                FROM T_DBSVRIPADR_I
+                              )
 	</select>	
-	
+
 	<select id="selectDbsvrid"  resultType="int">
-		SELECT
-			COALESCE(MAX(DB_SVR_ID),0) AS db_svr_id
-		FROM
-		T_DBSVR_I
+		/**
+		* Query ID : selectDbsvrid
+		* Description : max db_svr_id 조회
+		* Author : 변승우
+		**/
+        SELECT
+               COALESCE(MAX(DB_SVR_ID),0) AS db_svr_id
+          FROM
+               T_DBSVR_I
 	</select>
 
-   <insert id="insertIpadr" parameterType="ipadrVO">
-    	/**
-	 	*  Query ID : insertIpadr
-	 	* Description : insertIpadr 등록
-	 	* Author : 변승우
-	 	**/
-	 	
-		INSERT INTO T_DBSVRIPADR_I
-		(
-			  DB_SVR_IPADR_ID
-			, DB_SVR_ID
-			, IPADR
-			, PORTNO
-			, MASTER_GBN
-			, SVR_HOST_NM
-			, FRST_REGR_ID
-			, FRST_REG_DTM
-			, LST_MDFR_ID
-			, LST_MDF_DTM
-		) 
-		VALUES
-		(
-			  nextval('q_dbsvripadr_i_01')
-			, #{db_svr_id}
-			, #{ipadr}
-			, #{portno}
-			, #{master_gbn}
-			, #{svr_host_nm}
-			, #{frst_regr_id}
-			, clock_timestamp()
-			, #{lst_mdfr_id}
-			, clock_timestamp()	
-		)
-	</insert>    	
-	
-	
+	<insert id="insertIpadr" parameterType="ipadrVO">
+		/**
+		*  Query ID : insertIpadr
+		* Description : insertIpadr 등록
+		* Author : 변승우
+		**/
+        INSERT INTO T_DBSVRIPADR_I
+                   (
+                    DB_SVR_IPADR_ID
+                  , DB_SVR_ID
+                  , IPADR
+                  , PORTNO
+                  , MASTER_GBN
+                  , SVR_HOST_NM
+                  , FRST_REGR_ID
+                  , FRST_REG_DTM
+                  , LST_MDFR_ID
+                  , LST_MDF_DTM
+                    ) 
+             VALUES
+                    (
+                     nextval('q_dbsvripadr_i_01')
+                   , #{db_svr_id}
+                   , #{ipadr}
+                   , #{portno}
+                   , #{master_gbn}
+                   , #{svr_host_nm}
+                   , #{frst_regr_id}
+                   , clock_timestamp()
+                   , #{lst_mdfr_id}
+                   , clock_timestamp()	
+                    )
+	</insert> 	
+
 	<select id="connectorExeCheck"  resultType="int">
 		/**
-	 	*  Query ID : connectorExeCheck
-	 	* Description : 커넥터 실행중 체크
-	 	* Author : 변승우
-	 	**/
-		SELECT 
-			COUNT(*)
-		FROM T_DBSVR_I A, T_DB_I B, T_TRFTRGCNG_I C, T_TRFTRGMPP_R D
-		where 1 = 1
-		AND A.DB_SVR_ID = #{db_svr_id}
-		AND A.DB_SVR_ID = B.DB_SVR_ID
-		AND B.DB_ID = D.DB_ID
-		AND C.TRF_TRG_ID=D.TRF_TRG_ID
-		AND C.TRF_TRG_ID=D.TRF_TRG_ID
-		AND C.BW_PID = 1
+		*  Query ID : connectorExeCheck
+		* Description : 커넥터 실행중 체크
+		* Author : 변승우
+		**/
+        SELECT 
+               COUNT(*)
+          FROM T_DBSVR_I A, T_DB_I B, T_TRFTRGCNG_I C, T_TRFTRGMPP_R D
+         WHERE 1 = 1
+           AND A.DB_SVR_ID = #{db_svr_id}
+           AND A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.DB_ID = D.DB_ID
+           AND C.TRF_TRG_ID=D.TRF_TRG_ID
+           AND C.TRF_TRG_ID=D.TRF_TRG_ID
+           AND C.BW_PID = 1
 	</select>
 	
 	<select id="scheduleExeCheck"  resultType="int">
 		/**
-	 	*  Query ID : connectorExeCheck
-	 	* Description : 스케줄 실행중 체크
-	 	* Author : 변승우
-	 	**/	
-	     SELECT 
-	     		COUNT(*)
-	     FROM T_DBSVR_I A, T_BCK_WRKCNG_I B, T_SCD_M C, T_SCD_D D
-	     WHERE 1 = 1
-	     AND A.DB_SVR_ID = B.DB_SVR_ID
-	     AND B.WRK_ID = D.WRK_ID
-	     AND C.SCD_ID = D.SCD_ID
-	     AND C.SCD_CNDT = 'TC001802'		
+		*  Query ID : connectorExeCheck
+		* Description : 스케줄 실행중 체크
+		* Author : 변승우
+		**/
+        SELECT 
+               COUNT(*)
+          FROM T_DBSVR_I A, T_BCK_WRKCNG_I B, T_SCD_M C, T_SCD_D D
+         WHERE 1 = 1
+           AND A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.WRK_ID = D.WRK_ID
+           AND C.SCD_ID = D.SCD_ID
+           AND C.SCD_CNDT = 'TC001802'
 	</select>
-	
-	
+
 	<delete id="deleteConnMappingTable" parameterType="int">
 		/**
-	 	*  Query ID : deleteConnMappingTable
-	 	* Description : 전송매핑테이블내역 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_TRFMPPTB_L
-		WHERE TRF_TRG_MPP_ID IN (SELECT 
-					                                C.TRF_TB_ID
-					                          FROM T_DB_I A, T_TRFTRGMPP_R B, T_TRFMPPTB_L C
-					                          WHERE A.DB_SVR_ID = #{db_svr_id}
-					                          AND A.DB_ID = B.DB_ID
-					                          AND B.TRF_TRG_MPP_ID = C.TRF_TRG_MPP_ID)	 	
+		*  Query ID : deleteConnMappingTable
+		* Description : 전송매핑테이블내역 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_TRFMPPTB_L
+         WHERE TRF_TRG_MPP_ID IN (SELECT 
+                                         C.TRF_TB_ID
+                                    FROM T_DB_I A, T_TRFTRGMPP_R B, T_TRFMPPTB_L C
+                                   WHERE A.DB_SVR_ID = #{db_svr_id}
+                                     AND A.DB_ID = B.DB_ID
+                                     AND B.TRF_TRG_MPP_ID = C.TRF_TRG_MPP_ID)
 	</delete>
 	
 	<delete id="deleteConnMappingRelation" parameterType="int">
 		/**
-	 	*  Query ID : deleteConnMappingRelation
-	 	* Description : 전송대상매핑관계 삭제
-	 	* Author : 변승우
-	 	**/		
-	 	DELETE 
-	 				FROM T_TRFTRGMPP_R
-		WHERE TRF_TRG_MPP_ID IN (SELECT 
-					                                B.TRF_TRG_MPP_ID
-					                          FROM T_DB_I A, T_TRFTRGMPP_R B
-					                          WHERE A.DB_SVR_ID = #{db_svr_id}
-					                          AND A.DB_ID = B.DB_ID)
+		*  Query ID : deleteConnMappingRelation
+		* Description : 전송대상매핑관계 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_TRFTRGMPP_R
+         WHERE TRF_TRG_MPP_ID IN (SELECT 
+                                         B.TRF_TRG_MPP_ID
+                                    FROM T_DB_I A, T_TRFTRGMPP_R B
+                                   WHERE A.DB_SVR_ID = #{db_svr_id}
+                                     AND A.DB_ID = B.DB_ID)
 	</delete>
-
 
 	<delete id="deleteServerAccessControlHistory" parameterType="int">
 		/**
-	 	*  Query ID : deleteServerAccessControlHistory
-	 	* Description : 서버접근제어이력정보 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_SVRACSCNTR_HIS_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		*  Query ID : deleteServerAccessControlHistory
+		* Description : 서버접근제어이력정보 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_SVRACSCNTR_HIS_I
+         WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
-	
-	
+
 	<delete id="deleteServerAccessControlInfo" parameterType="int">
 		/**
-	 	*  Query ID : deleteServerAccessControlInfo
-	 	* Description : 서버접근제어정보 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_SVRACSCNTR_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		*  Query ID : deleteServerAccessControlInfo
+		* Description : 서버접근제어정보 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_SVRACSCNTR_I
+         WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
-	
-	
-     <select id="selectBckWrkId" resultType="HashMap" parameterType="integer">
+
+	<select id="selectBckWrkId" resultType="HashMap" parameterType="integer">
 		/**
-	 	*  Query ID : selectBckWrkId
-	 	* Description : bck_wrk_id 조회
-	 	* Author : 변승우
-	 	**/ 	
-	 	
-            SELECT
-            		BCK_WRK_ID
-            FROM T_BCK_WRKCNG_I
-            WHERE 1 = 1
-            AND DB_SVR_ID = #{db_svr_id}
-     </select>		
-     
-     
-     <delete id="deleteBckObjHistory" parameterType="HashMap">
+		*  Query ID : selectBckWrkId
+		* Description : bck_wrk_id 조회
+		* Author : 변승우
+		**/
+        SELECT
+               BCK_WRK_ID
+          FROM T_BCK_WRKCNG_I
+         WHERE 1 = 1
+           AND DB_SVR_ID = #{db_svr_id}
+	</select>	
+
+	<delete id="deleteBckObjHistory" parameterType="HashMap">
 		/**
-	 	*  Query ID : deleteBckObjHistory
-	 	* Description : 백업오브젝트내역 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_BCKOBJ_L
-		WHERE BCK_WRK_ID IN
-      <foreach item="item" index="index" collection="bck_wrk_id" open="(" separator="," close=")"> 
-				 #{item}::numeric
-	   </foreach>
+		*  Query ID : deleteBckObjHistory
+		* Description : 백업오브젝트내역 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_BCKOBJ_L
+         WHERE BCK_WRK_ID IN
+           <foreach item="item" index="index" collection="bck_wrk_id" open="(" separator="," close=")"> 
+               #{item}::numeric
+           </foreach>
 	</delete>
 	
 	<delete id="deleteBckOptInfo" parameterType="HashMap">
 		/**
-	 	*  Query ID : deleteBckOptInfo
-	 	* Description : 백업옵션정보 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_BCKOPT_I
-		WHERE BCK_WRK_ID IN
-      <foreach item="item" index="index" collection="bck_wrk_id" open="(" separator="," close=")"> 
-				 #{item}::numeric
-	   </foreach>
+		*  Query ID : deleteBckOptInfo
+		* Description : 백업옵션정보 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_BCKOPT_I
+         WHERE BCK_WRK_ID IN
+           <foreach item="item" index="index" collection="bck_wrk_id" open="(" separator="," close=")"> 
+               #{item}::numeric
+           </foreach>
 	</delete>
-	
-	
-	 <select id="selectScheduleId" resultType="HashMap" parameterType="integer">
-		/**
-	 	*  Query ID : selectScheduleId
-	 	* Description : scd_id 조회
-	 	* Author : 변승우
-	 	**/ 	
-			SELECT DISTINCT
-					SCD_ID
-			FROM T_BCK_WRKCNG_I A, T_SCD_D B
-			WHERE A.DB_SVR_ID = #{db_svr_id}
-			AND A.WRK_ID = B.WRK_ID
-			ORDER BY 1 	
-     </select>	
 
-     
-     <delete id="deleteWrkexe" parameterType="HashMap">
+	<select id="selectScheduleId" resultType="HashMap" parameterType="integer">
 		/**
-	 	*  Query ID : deleteWrkexe
-	 	* Description : 작업실행로그
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_WRKEXE_G
-		WHERE SCD_ID IN
-      <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
-				 #{item}::numeric
-	   </foreach>
+		*  Query ID : selectScheduleId
+		* Description : scd_id 조회
+		* Author : 변승우
+		**/
+        SELECT DISTINCT
+                        SCD_ID
+          FROM T_BCK_WRKCNG_I A, T_SCD_D B
+         WHERE A.DB_SVR_ID = #{db_svr_id}
+           AND A.WRK_ID = B.WRK_ID
+         ORDER BY 1
+	</select>
+
+	<delete id="deleteWrkexe" parameterType="HashMap">
+		/**
+		*  Query ID : deleteWrkexe
+		* Description : 작업실행로그
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_WRKEXE_G
+         WHERE SCD_ID IN
+           <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
+               #{item}::numeric
+           </foreach>
 	</delete>
-	
-	
+
 	<delete id="deleteScdD" parameterType="HashMap">
 		/**
-	 	*  Query ID : deleteScdD
-	 	* Description : 스케줄 디테일 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_SCD_D
-		WHERE SCD_ID IN
-      <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
-				 #{item}::numeric
-	   </foreach>
+		*  Query ID : deleteScdD
+		* Description : 스케줄 디테일 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_SCD_D
+         WHERE SCD_ID IN
+           <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
+               #{item}::numeric
+           </foreach>
 	</delete>
-	
-	
+
 	<delete id="deleteScdM" parameterType="HashMap">
 		/**
-	 	*  Query ID : deleteScdM
-	 	* Description : 스케줄기본 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_SCD_M
-		WHERE SCD_ID IN
-      <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
-				 #{item}::numeric
-	   </foreach>
+		*  Query ID : deleteScdM
+		* Description : 스케줄기본 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_SCD_M
+         WHERE SCD_ID IN
+           <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
+               #{item}::numeric
+           </foreach>
 	</delete>
-	
-	
+
 	<delete id="deleteBckWrkcng" parameterType="HashMap">
 		/**
-	 	*  Query ID : deleteBckWrkcng
-	 	* Description : 백업작업설정정보 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_BCK_WRKCNG_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		*  Query ID : deleteBckWrkcng
+		* Description : 백업작업설정정보 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_BCK_WRKCNG_I
+         WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
-	
-	
+
 	<delete id="deleteWrkcng" parameterType="HashMap">
 		/**
-	 	*  Query ID : deleteWrkcng
-	 	* Description : WORK정보 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE FROM T_WRKCNG_I
-		WHERE WRK_ID IN ( SELECT WRK_ID FROM T_BCK_WRKCNG_I
-						   		  WHERE DB_SVR_ID =#{db_svr_id})
+		*  Query ID : deleteWrkcng
+		* Description : WORK정보 삭제
+		* Author : 변승우
+		**/
+        DELETE FROM T_WRKCNG_I
+         WHERE WRK_ID IN ( SELECT WRK_ID FROM T_BCK_WRKCNG_I
+                            WHERE DB_SVR_ID =#{db_svr_id})
 	</delete>
-	
 
 	<delete id="deleteUsrDbAut" parameterType="int">
 		/**
-	 	*  Query ID : deleteUsrDbAut
-	 	* Description : 사용자DB권한
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_USRDBAUT_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		*  Query ID : deleteUsrDbAut
+		* Description : 사용자DB권한
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_USRDBAUT_I
+         WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
-	
-		<delete id="deleteDbInfo" parameterType="int">
+
+	<delete id="deleteDbInfo" parameterType="int">
 		/**
-	 	*  Query ID : deleteDbInfo
-	 	* Description : DB정보 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_DB_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		*  Query ID : deleteDbInfo
+		* Description : DB정보 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_DB_I
+         WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
-	
-	
+
 	<delete id="deleteUsrDbSvrAut" parameterType="int">
 		/**
-	 	*  Query ID : deleteUsrDbSvrAut
-	 	* Description : 사용자DB서버권한정보 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_USRDBSVRAUT_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		*  Query ID : deleteUsrDbSvrAut
+		* Description : 사용자DB서버권한정보 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_USRDBSVRAUT_I
+         WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
-	
-	
+
 	<delete id="deleteDbSvrIpAdr" parameterType="int">
 		/**
-	 	*  Query ID : deleteDbSvrIpAdr
-	 	* Description : DB아이피주소정보 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_DBSVRIPADR_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		*  Query ID : deleteDbSvrIpAdr
+		* Description : DB아이피주소정보 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_DBSVRIPADR_I
+         WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
 	
 	<delete id="deleteDbServer" parameterType="int">
 		/**
-	 	*  Query ID : deleteDbServer
-	 	* Description : DB서버 삭제
-	 	* Author : 변승우
-	 	**/	
-	 	DELETE 
-	 				FROM T_DBSVR_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		*  Query ID : deleteDbServer
+		* Description : DB서버 삭제
+		* Author : 변승우
+		**/
+        DELETE 
+          FROM T_DBSVR_I
+         WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
-	
-	
+
 	<select id="selectDBSync" resultType="dbVO" parameterType="int">
 		/**
-	 	*  Query ID : selectDBSync
-	 	* Description : DB서버 리스트 조회[USE_YN = Y]
-	 	* Author : 변승우
-	 	**/    
-          SELECT 
-                  (ROW_NUMBER() OVER()) AS ROWNUM
-				, (ROW_NUMBER() OVER()) AS IDX
-				, DB_SVR_ID
-                , DB_ID
-                , DB_NM
-                , DB_USR_ID
-                , DB_EXP
-                , USEYN
-				, FRST_REGR_ID
-				, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-				, LST_MDFR_ID
-				, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+		*  Query ID : selectDBSync
+		* Description : DB서버 리스트 조회[USE_YN = Y]
+		* Author : 변승우
+		**/
+        SELECT 
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , DB_SVR_ID
+             , DB_ID
+             , DB_NM
+             , DB_USR_ID
+             , DB_EXP
+             , USEYN
+             , FRST_REGR_ID
+             , TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+             , LST_MDFR_ID
+             , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
           FROM T_DB_I
-          WHERE DB_SVR_ID = #{db_svr_id}
-          AND USEYN = 'Y'
+         WHERE DB_SVR_ID = #{db_svr_id}
+           AND USEYN = 'Y'
 	</select>
-	
-	
-	  <update id="syncUpdate" >
+
+	<update id="syncUpdate" >
 		/**
 		* Query ID : syncUpdate
 		* Description : 데이터베이스 동기화
 		* Author : 변승우
 		**/
-		UPDATE T_DB_I
-		SET 
-	  	 	   USEYN= 'N'
-		WHERE DB_ID IN
-      <foreach item="item" index="index" collection="db_id" open="(" separator="," close=")"> 
-				 #{item}::numeric
-	   </foreach>
-  	</update>
-  	
-  	
-  		<select id="selectPgDbmsList" resultType="dbServerVO" >
+        UPDATE T_DB_I
+           SET 
+               USEYN= 'N'
+         WHERE DB_ID IN
+           <foreach item="item" index="index" collection="db_id" open="(" separator="," close=")"> 
+               #{item}::numeric
+           </foreach>
+	</update>
+
+ 	<select id="selectPgDbmsList" resultType="dbServerVO" >
 		/**
-	 	*  Query ID : selectPgDbmsList
-	 	* Description : DB2PG 기 등록된 PG DB리스트
-	 	* Author : 변승우
-	 	**/    
-		SELECT
-              (ROW_NUMBER() OVER()) AS ROWNUM
-			, (ROW_NUMBER() OVER()) AS IDX
-            , AA.DB_SVR_NM
-            , AA.SVR_SPR_USR_ID
-            , AA.SVR_SPR_SCM_PWD
-            , AA.IPADR
-            , AA.PORTNO
-            , AA.MASTER_GBN
-            , AA.DB_ID
-            , AA.DB_NM
-			, AA.FRST_REGR_ID
-			, AA.FRST_REG_DTM
-			, AA.LST_MDFR_ID
-			, AA.LST_MDF_DTM
-        FROM(
-	            SELECT
-	                 A.DB_SVR_NM
-	                , A.SVR_SPR_USR_ID
-	                , A.SVR_SPR_SCM_PWD
-	                , C.IPADR
-	                , C.PORTNO
-	                , C.MASTER_GBN
-	                , B.DB_ID
-	                , B.DB_NM
-					, A.FRST_REGR_ID
-					, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-					, A.LST_MDFR_ID
-					, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-	            FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
-	            WHERE 1 = 1
-	            AND A.DB_SVR_ID = B.DB_SVR_ID
-	            AND A.DB_SVR_ID = C.DB_SVR_ID
-	            AND C.MASTER_GBN = 'M'   	            
-			    AND B.USEYN = 'Y'
-	            ORDER BY A.LST_MDF_DTM DESC
-            )AA	 	
-	 	</select>
-	 	
-	 	
-	 		<update id="updateIpadr" parameterType="ipadrVO">
-		   	    /**
-			 	* Query ID : updateIpadr
-			 	* Description : DB서버 포트 수정
-			 	* Author : 변승우
-			 	**/
-			 	
-				UPDATE T_DBSVRIPADR_I
-				SET 
-				       PORTNO=#{portno}
-				WHERE DB_SVR_IPADR_ID=#{db_svr_ipadr_id}
-			</update> 
-			
-			
-		  <delete id="deleteIpadr" >
-				/**
-				* Query ID : deleteIpadr
-				* Description : DB서버 삭제
-				* Author : 변승우
-				**/
-				DELETE
-				FROM
-				T_DBSVRIPADR_I
-				WHERE DB_SVR_ID=#{db_svr_id}::numeric
-				AND DB_SVR_IPADR_ID NOT IN
-		      <foreach item="item" index="index" collection="db_svr_ipadr_id" open="(" separator="," close=")"> 
-						 #{item}::numeric
-			   </foreach>
-		  	</delete>
-		  	
-		  	<select id="selectIpadrCnt"  resultType="int">
-				SELECT
-					COUNT(*)
-				FROM
-				T_DBSVRIPADR_I
-			</select>
-  	
+		*  Query ID : selectPgDbmsList
+		* Description : DB2PG 기 등록된 PG DB리스트
+		* Author : 변승우
+		**/
+        SELECT
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , AA.DB_SVR_NM
+             , AA.SVR_SPR_USR_ID
+             , AA.SVR_SPR_SCM_PWD
+             , AA.IPADR
+             , AA.PORTNO
+             , AA.MASTER_GBN
+             , AA.DB_ID
+             , AA.DB_NM
+             , AA.FRST_REGR_ID
+             , AA.FRST_REG_DTM
+             , AA.LST_MDFR_ID
+             , AA.LST_MDF_DTM
+         FROM (
+               SELECT
+                      A.DB_SVR_NM
+                    , A.SVR_SPR_USR_ID
+                    , A.SVR_SPR_SCM_PWD
+                    , C.IPADR
+                    , C.PORTNO
+                    , C.MASTER_GBN
+                    , B.DB_ID
+                    , B.DB_NM
+                    , A.FRST_REGR_ID
+                    , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+                    , A.LST_MDFR_ID
+                    , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+                 FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
+                WHERE 1 = 1
+                  AND A.DB_SVR_ID = B.DB_SVR_ID
+                  AND A.DB_SVR_ID = C.DB_SVR_ID
+                  AND C.MASTER_GBN = 'M'
+                  AND B.USEYN = 'Y'
+                ORDER BY A.LST_MDF_DTM DESC
+        )AA
+	</select>
+
+	<update id="updateIpadr" parameterType="ipadrVO">
+		/**
+		* Query ID : updateIpadr
+		* Description : DB서버 포트 수정
+		* Author : 변승우
+		**/
+        UPDATE T_DBSVRIPADR_I
+           SET 
+               PORTNO=#{portno}
+         WHERE DB_SVR_IPADR_ID=#{db_svr_ipadr_id}
+	</update>
+
+	<delete id="deleteIpadr" >
+		/**
+		* Query ID : deleteIpadr
+		* Description : DB서버 삭제
+		* Author : 변승우
+		**/
+        DELETE
+          FROM
+               T_DBSVRIPADR_I
+         WHERE DB_SVR_ID=#{db_svr_id}::numeric
+           AND DB_SVR_IPADR_ID NOT IN
+        <foreach item="item" index="index" collection="db_svr_ipadr_id" open="(" separator="," close=")"> 
+             #{item}::numeric
+         </foreach>
+	</delete>
+
+	<select id="selectIpadrCnt"  resultType="int">
+        SELECT
+               COUNT(*)
+          FROM
+               T_DBSVRIPADR_I
+	</select>
+
+	<insert id="insertScaleIpadr" parameterType="ipadrVO">
+		/**
+		* Query ID : insertScaleIpadr
+		* Description : scale ipadr 등록
+		* Author : 
+		**/
+        WITH UPSERT AS(
+               UPDATE T_DBSVRIPADR_I
+                  SET PORTNO=#{portno},
+                      MASTER_GBN = 'S',
+                      LST_MDF_DTM = clock_timestamp()
+                WHERE IPADR = #{ipadr}
+                RETURNING *
+                      )
+        INSERT
+              INTO T_DBSVRIPADR_I (
+                                   DB_SVR_IPADR_ID
+                                 , DB_SVR_ID
+                                 , IPADR
+                                 , PORTNO
+                                 , MASTER_GBN
+                                 , SVR_HOST_NM
+                                 , FRST_REGR_ID
+                                 , FRST_REG_DTM
+                                 , LST_MDFR_ID
+                                 , LST_MDF_DTM
+                       )
+                       SELECT nextval('q_dbsvripadr_i_01'),
+                              (SELECT DB_SVR_ID FROM T_DBSVRIPADR_I WHERE IPADR = #{db_svr_ip}),
+                              #{ipadr},
+                              #{portno},
+                              'S',
+                              #{svr_host_nm},
+                              #{frst_regr_id},
+                              clock_timestamp(),
+                              #{lst_mdfr_id},
+                              clock_timestamp()
+         WHERE NOT EXISTS ( SELECT * FROM UPSERT )
+	</insert>
+	
+	<delete id="deleteScaleIpadr" parameterType="ipadrVO">
+		/**
+		*  Query ID : deleteScaleIpadr
+		* Description : 아이피 정보 삭제
+		* Author : 
+		**/
+        DELETE
+          FROM T_DBSVRIPADR_I
+         WHERE 1=1
+           AND IPADR = #{ipadr}
+           AND PORTNO = #{portno}
+	</delete>
 </mapper>

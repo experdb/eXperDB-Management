@@ -9,11 +9,11 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.ibm.db2.jcc.am.ob;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -22,6 +22,8 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
+import com.k4m.dx.tcontrol.transfer.service.TransService;
+import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
 public class ClientInfoCmmn implements Runnable{
 	
@@ -2015,6 +2017,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.LOGIN_ID, dbServerVO.getUsr_id());
 
 			JSONObject transObj = new JSONObject();
 			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
@@ -2101,6 +2104,7 @@ System.out.println("=====cmd" + cmd);
 			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.LOGIN_ID, dbServerVO.getUsr_id());
 
 			JSONObject transObj = new JSONObject();
 			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
@@ -2156,7 +2160,7 @@ System.out.println("=====cmd" + cmd);
 	}
 
 	// 39. trans connect stop
-	public Map<String, Object> connectStop(String IP, int PORT, String strCmd, String trans_id, String trans_active_gbn) {
+	public Map<String, Object> connectStop(String IP, int PORT, String strCmd, String trans_id, String trans_active_gbn, String str_login_id) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -2167,6 +2171,7 @@ System.out.println("=====cmd" + cmd);
 			jObj.put(ClientProtocolID.REQ_CMD, strCmd);
 			jObj.put(ClientProtocolID.TRANS_ID, trans_id);
 			jObj.put(ClientProtocolID.CON_START_GBN, trans_active_gbn);
+			jObj.put(ClientProtocolID.LOGIN_ID, str_login_id);
 
 			JSONObject objList;
 			
@@ -2229,6 +2234,18 @@ System.out.println("=====cmd" + cmd);
 	// 41. trans topic list 조호
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT) {
+		
+		String xml[] = {
+				"egovframework/spring/context-aspect.xml",
+				"egovframework/spring/context-common.xml",
+				"egovframework/spring/context-datasource.xml",
+				"egovframework/spring/context-mapper.xml",
+				"egovframework/spring/context-properties.xml",
+				"egovframework/spring/context-transaction.xml"};
+		
+		context = new ClassPathXmlApplicationContext(xml);
+		context.getAutowireCapableBeanFactory().autowireBeanProperties(this,
+				AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
 
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
@@ -2247,16 +2264,35 @@ System.out.println("=====cmd" + cmd);
 			String strStrReult_data = (String) objList.get(ClientProtocolID.RESULT_DATA);
 
 			if (strStrReult_data != null && !"".equals(strStrReult_data)) {
+				//등록된 topic 리스트 조회
+				TransService transService = (TransService) context.getBean("transServiceImpl");
+				TransVO transVO = new TransVO();
+				List<TransVO> tarTopicList = transService.selectTransTopicList(transVO);
+
 				String[] splitStrResultMessge = strStrReult_data.split(",");
 
 				for(int i=0; i<splitStrResultMessge.length; i++){
 					JSONObject jsonObj = new JSONObject();
 					String topicName = splitStrResultMessge[i];
+					boolean topicNmChk = true;
 
-					jsonObj.put("topic_name", topicName);
+					//target trans_id가 등록된 topic은 제외
+					if (tarTopicList.size() > 0) {
+						for(int j=0; j<tarTopicList.size(); j++){
+							if (tarTopicList.get(j).getTopic_nm().equals(topicName)) {
+								topicNmChk = false;
+								break;
+							}
+						}
+					}
+					
+					//topic 테이블에 target이 등록되어있지 않은 내역만 출력
+					if (topicNmChk == true) {
+						jsonObj.put("topic_name", topicName);
 
-					jsonObj.put("rownum_chk", i);
-					jsonArray.add(jsonObj);
+						jsonObj.put("rownum_chk", i);
+						jsonArray.add(jsonObj);
+					}
 				}
 				result.put("data", jsonArray);
 			}
@@ -2321,6 +2357,74 @@ System.out.println("=====cmd" + cmd);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		return result;
+	}
+
+	// connector 로그 파일 가져오기
+	public Map<String, Object> getLogFile(String IP, int PORT, DbServerVO dbServerVO, JSONObject jObj) {
+		Map<String, Object> result = new HashMap<>();
+		
+		JSONObject objResult;
+		try {
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			
+			CA.open();
+			objResult = CA.dxT043(jObj);
+			CA.close();
+			
+			String strErrMsg = (String)objResult.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objResult.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objResult.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objResult.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objResult.get(ClientProtocolID.RESULT_DATA);
+			String strFileName = (String)objResult.get(ClientProtocolID.FILE_NAME);
+			int strDwLen = (int) objResult.get(ClientProtocolID.DW_LEN);
+			
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strResultData);
+			result.put("DW_LEN", strDwLen);
+			result.put("file_name", strFileName);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	// trans kafka 재시작
+	public Map<String, Object> kafkaConnectRestart(String IP, int PORT, DbServerVO dbServerVO, JSONObject jObj) {
+		Map<String, Object> result = new HashMap<>();
+		
+		JSONObject objResult;
+		try {
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			
+			CA.open();
+			objResult = CA.dxT044(jObj);
+			CA.close();
+			
+			String strErrMsg = (String) objResult.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objResult.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objResult.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objResult.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String) objResult.get(ClientProtocolID.RESULT_DATA);
+
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+			System.out.println("RESULT_DATA : " + strResultData);
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strResultData);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 	

@@ -209,4 +209,13 @@ public class ProxyClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
+	
+	/* Auto Scale 발생 시 HAProxy 설정 변경 및 reload*/
+	public JSONObject psP014(JSONObject jObj) throws Exception {
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
 }

@@ -13,9 +13,16 @@ public class IpadrVO {
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
+	private String db_svr_ip;
 
-	
-	
+	public String getDb_svr_ip() {
+		return db_svr_ip;
+	}
+
+	public void setDb_svr_ip(String db_svr_ip) {
+		this.db_svr_ip = db_svr_ip;
+	}
+
 	public String getSvr_host_nm() {
 		return svr_host_nm;
 	}

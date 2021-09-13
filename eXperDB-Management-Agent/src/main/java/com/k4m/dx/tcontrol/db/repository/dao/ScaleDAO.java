@@ -178,6 +178,14 @@ public class ScaleDAO {
 	public Map<String, Object> selectMonitorInfo(Map<String, Object> param) throws SQLException {
 		return (Map<String, Object>) session.selectOne("scale.selectMonitorInfo", param);
 	}
-	
 
+	/**
+	 * 실행중 데이터 확인
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectAutoScaleOverlabChk(Map<String, Object> param) throws SQLException {
+		return (Map<String, Object>) session.selectOne("scale.selectAutoScaleOverlabChk", param);
+	}
 }

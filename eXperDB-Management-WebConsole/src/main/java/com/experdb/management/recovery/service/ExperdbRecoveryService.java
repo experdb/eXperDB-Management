@@ -36,5 +36,7 @@ public interface ExperdbRecoveryService {
 	JSONObject getRecoveryTimeListList(HttpServletRequest request);
 
 	JSONObject getRecoveryTimeOption(HttpServletRequest request);
+
+	JSONObject timeRecoveryRun(HttpServletRequest request) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException;
 	
 }

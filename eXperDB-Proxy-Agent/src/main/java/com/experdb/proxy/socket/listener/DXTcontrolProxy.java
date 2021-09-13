@@ -182,7 +182,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			//4. keepalived conf 열기
 			if (strKeepInstallYn != null && "Y".equals(strKeepInstallYn)) {
 				jObjKeepResult = pryService.selectProxyServerList("keepalived_conf_read", KeepPathData, strIpadr,""); //param setting
-
+socketLogger.info("#ProxyServiceImpl.jObjKeepResult : " + jObjKeepResult);
 				if (jObjKeepResult.length() > 0) {
 					peerIpData = (String)jObjKeepResult.get("peer_id");
 					masterGbnData = (String)jObjKeepResult.get("master_gbn");
@@ -329,7 +329,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			}
 
 			//master svr id
-			if (peerIpData != null) {
+			if (peerIpData != null && !peerIpData.equals("")) {
 				searchProxyServerVO.setIpadr(peerIpData);
 
 				ProxyServerVO masterProxyServerInfo = pryService.selectPrySvrInslInfo(searchProxyServerVO);

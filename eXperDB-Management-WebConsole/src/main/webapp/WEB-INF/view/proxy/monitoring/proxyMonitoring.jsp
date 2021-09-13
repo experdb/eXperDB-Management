@@ -1050,10 +1050,14 @@
 			}
 
  			if (result.dbServerConProxyList != null && result.dbServerConProxyList.length > 0) {
+				var standbyCnt = 0;
 				for(var k = 0; k < result.dbServerConProxyList.length; k++){
-
+					if(standbyCnt == 1){
+						standbyCnt = 0;
+						continue;
+					}
 					if (result.proxyServerByMasId[j].pry_svr_id == result.dbServerConProxyList[k].pry_svr_id) {
-	
+						
 						html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
 						html_db += '	<tr>';
 						
@@ -1063,6 +1067,7 @@
 							html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">';
 						} else {
 							html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:10px;padding-top:10px;">';
+							standbyCnt ++;
 						}
  
 						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
@@ -1070,7 +1075,7 @@
 						} else {
 							html_db += '		<div class="badge badge-pill badge-danger" title="">'+result.dbServerConProxyList[k].master_gbn+'</div>';
 						}
-						 
+						
 						if(result.dbServerConProxyList[k].svr_host_nm != null && result.dbServerConProxyList[k].svr_host_nm != ""){
 							if(result.dbServerConProxyList[k].master_gbn == 'M'){
 								html_db += '		Master(';

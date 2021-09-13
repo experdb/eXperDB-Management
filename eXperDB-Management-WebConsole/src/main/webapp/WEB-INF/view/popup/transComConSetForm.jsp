@@ -5,6 +5,12 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<style>
+.null_red {
+  color: red;
+}
+</style>
+
 <script>
 	var trans_com_con_pop_table = null;
 	var trans_com_id_List = [];
@@ -25,26 +31,117 @@
 			bSort: false,
 			columns : [
  						{data : "rownum",  className : "dt-center", defaultContent : ""},
-						{ data : "trans_com_cng_nm", className : "dt-center", defaultContent : "",orderable : false},
- 						{data : "plugin_name", className : "dt-center", defaultContent : ""},
- 						{data : "heartbeat_interval_ms", className : "dt-right", defaultContent : ""},
- 						{data : "max_batch_size", className : "dt-right", defaultContent : ""},
- 						{data : "max_queue_size", className : "dt-right", defaultContent : ""},
- 						{data : "offset_flush_interval_ms", className : "dt-right", defaultContent : ""}, 						
- 						{data : "offset_flush_timeout_ms", className : "dt-right", defaultContent : ""},
+						{data : "trans_com_cng_nm", className : "dt-center", defaultContent : "",orderable : false
+ 							,render: function (data, type, full) {
+ 								var color = 'red';
+ 								var html = "";
+ 								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
+ 									html = '<span style="color:' + color + '">' + data + '</span>';
+ 								} else {
+ 									html = data;
+ 								}
+ 							  return html;
+ 							}
+						},
+						{data : "", className : "dt-center", defaultContent : "",orderable : false
+ 							,render: function (data, type, full) {
+ 								var color = 'red';
+ 								var html = "";
+ 								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
+ 									html = '<span style="color:' + color + '">' + '<spring:message code="data_transfer.unregistered" />' + '</span>';
+ 								} else {
+ 									html = '<spring:message code="data_transfer.add_complet" />';
+ 								}
+
+								return html;
+ 							}
+						},
+ 						{data : "plugin_name", className : "dt-center", defaultContent : ""
+ 							,render: function (data, type, full) {
+ 								var color = 'red';
+ 								var html = "";
+ 								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
+ 									html = '<span style="color:' + color + '">' + data + '</span>';
+ 								} else {
+ 									html = data;
+ 								}
+ 							  return html;
+ 							}
+ 						},
+ 						{data : "heartbeat_interval_ms", className : "dt-right", defaultContent : ""
+ 							,render: function (data, type, full) {
+ 								var color = 'red';
+ 								var html = "";
+ 								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
+ 									html = '<span style="color:' + color + '">' + data + '</span>';
+ 								} else {
+ 									html = data;
+ 								}
+ 							  return html;
+ 							}
+ 						},
+ 						{data : "max_batch_size", className : "dt-right", defaultContent : ""
+ 							,render: function (data, type, full) {
+ 								var color = 'red';
+ 								var html = "";
+ 								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
+ 									html = '<span style="color:' + color + '">' + data + '</span>';
+ 								} else {
+ 									html = data;
+ 								}
+ 							  return html;
+ 							}						
+ 						},
+ 						{data : "max_queue_size", className : "dt-right", defaultContent : ""
+ 							,render: function (data, type, full) {
+ 								var color = 'red';
+ 								var html = "";
+ 								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
+ 									html = '<span style="color:' + color + '">' + data + '</span>';
+ 								} else {
+ 									html = data;
+ 								}
+ 							  return html;
+ 							}						
+ 						},
+ 						{data : "offset_flush_interval_ms", className : "dt-right", defaultContent : ""
+ 							,render: function (data, type, full) {
+ 								var color = 'red';
+ 								var html = "";
+ 								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
+ 									html = '<span style="color:' + color + '">' + data + '</span>';
+ 								} else {
+ 									html = data;
+ 								}
+ 							  return html;
+ 							}						
+ 						}, 						
+ 						{data : "offset_flush_timeout_ms", className : "dt-right", defaultContent : ""
+ 							,render: function (data, type, full) {
+ 								var color = 'red';
+ 								var html = "";
+ 								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
+ 									html = '<span style="color:' + color + '">' + data + '</span>';
+ 								} else {
+ 									html = data;
+ 								}
+ 							  return html;
+ 							}						
+ 						},
  						{data : "trans_com_id",  defaultContent : "", visible: false }
  			],'select': {'style': 'multi'}
 		});
 
 		trans_com_con_pop_table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 		trans_com_con_pop_table.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-		trans_com_con_pop_table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
-		trans_com_con_pop_table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		trans_com_con_pop_table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		trans_com_con_pop_table.tables().header().to$().find('th:eq(3)').css('min-width', '120px');
 		trans_com_con_pop_table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		trans_com_con_pop_table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		trans_com_con_pop_table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');		
-		trans_com_con_pop_table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');	
-		trans_com_con_pop_table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
+		trans_com_con_pop_table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		trans_com_con_pop_table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');		
+		trans_com_con_pop_table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');	
+		trans_com_con_pop_table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 
 		$(window).trigger('resize');
 	}
@@ -61,6 +158,7 @@
 	 * 기본사항 조회
 	 ******************************************************** */
 	function fn_trans_com_con_pop_search(){
+
 		$.ajax({
 			url : "/selectTransComConPopList.do",
 			data : {
@@ -252,6 +350,10 @@
 						<div class="row" style="margin-top:-50px;margin-right:-30px;">
 							<div class="col-12">
 								<div class="template-demo">	
+									<button type="button" class="btn btn-outline-danger btn-icon-text mb-2 btn-search-disable" style="border:none;text-align:left;" id="btnPopCommonConChk" onClick="#">
+										<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="data_transfer.msg39" />
+									</button>
+
 									<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnTransDmbsDelete" onClick="fn_transComConSetDelete();" >
 										<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 									</button>
@@ -274,6 +376,7 @@
 								<tr class="bg-info text-white">
 									<th width="30"><spring:message code="common.no" /></th>
 									<th width="150"><spring:message code="data_transfer.default_setting_name" /></th>
+									<th width="150"><spring:message code="data_transfer.heartbeat_regist_yn" /></th>
 									<th width="120">plugin.name</th>
  									<th width="100">heartbeat.interval.ms</th>
 									<th width="100">max.batch.size</th>

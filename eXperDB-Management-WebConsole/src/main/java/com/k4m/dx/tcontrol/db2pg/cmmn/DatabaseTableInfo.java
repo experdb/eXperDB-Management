@@ -37,8 +37,8 @@ public class DatabaseTableInfo {
 				case "TC002201" :
 					sql =  "SELECT A.OBJECT_NAME AS TABLE_NAME,  A.OBJECT_TYPE AS OBJECT_TYPE, B.COMMENTS AS COMMENTS "
 							+ "FROM ALL_OBJECTS A,  ALL_TAB_COMMENTS B "
-							+ "WHERE A.OWNER='" +serverObj.get("USER_ID").toString().toUpperCase() + "'"
-							+ "AND B.OWNER='" +serverObj.get("USER_ID").toString().toUpperCase() + "'"
+							+ "WHERE A.OWNER='" +serverObj.get("SCHEMA").toString().toUpperCase() + "'"
+							+ "AND B.OWNER='" +serverObj.get("SCHEMA").toString().toUpperCase() + "'"
 							+ "AND A.OBJECT_NAME = B.TABLE_NAME "
 							+ "AND A.OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE')  "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDRT%' "
@@ -161,7 +161,7 @@ public class DatabaseTableInfo {
 				case "TC002205" :
 						sql = "		SELECT A.TABLE_NAME AS TABLE_NAME, A.TABLE_TYPE  AS TABLE_TYPE,  B.REMARKS AS COMMENTS "
 								+ "FROM SYSIBM.TABLES A, SYSIBM.SYSTABLES B "
-								+ "WHERE A.TABLE_SCHEMA = '" +serverObj.get("USER_ID").toString().toUpperCase() + "' "
+								+ "WHERE A.TABLE_SCHEMA = '" +serverObj.get("SCHEMA").toString().toUpperCase() + "' "
 								+ "AND A.TABLE_NAME = B.NAME "
 								+ "AND A.TABLE_NAME LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase() + "%' "
 								+ "AND A.TABLE_TYPE LIKE '%" +serverObj.get("OBJECT_TYPE").toString().toUpperCase() + "%'"

@@ -28,7 +28,7 @@
 
 var tableDDL = null;
 var tableData = null;
-
+var stopWrkNm = null;
 
 /* ********************************************************
  * Tab Click
@@ -77,30 +77,44 @@ function fn_init(){
 			{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""},
 			{data : "wrk_dtm", className : "dt-center", defaultContent : ""},
 		   	{
-					data : "exe_rslt_cd",
-					render : function(data, type, full, meta) {	 						
-						var html = '';
-						if (full.exe_rslt_cd == 'TC001701') {
-							html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_ddlResult(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
-							html += "	<i class='fa fa-check-circle text-primary' >";
-							html += '&nbsp;Complete</i>';
-							html += "</button>";					
-						} else if(full.exe_rslt_cd == 'TC001702'){
-							html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_ddlFailLog('+full.mig_exe_sn+')">';
-							html += '<i class="fa fa-times">&nbsp;Fail</i>';
-//							html += '<spring:message code="common.failed" />';
-							html += "</button>";		
-						} else {
-							html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
-							html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
-							html += '&nbsp;<spring:message code="etc.etc28" />';
-							html += "</div>";
-						}
-						return html;
-					},
-					className : "dt-center",
-					defaultContent : ""
+				data : "exe_rslt_cd",
+				render : function(data, type, full, meta) {	 						
+					var html = '';
+					if (full.exe_rslt_cd == 'TC001701') {
+						html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_ddlResult(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
+						html += "	<i class='fa fa-check-circle text-primary' >";
+						html += '&nbsp;Complete</i>';
+						html += "</button>";					
+					} else if(full.exe_rslt_cd == 'TC001702'){
+						html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_ddlFailLog('+full.mig_exe_sn+')">';
+						html += '<i class="fa fa-times">&nbsp;Fail</i>';
+//						html += '<spring:message code="common.failed" />';
+						html += "</button>";		
+					} else {
+						html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+						html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+						html += '&nbsp;<spring:message code="etc.etc28" />';
+						html += "</div>";
+					}
+					return html;
 				},
+				className : "dt-center",
+				defaultContent : ""
+			},
+		   	{
+				data : "stop",
+				render : function(data, type, full, meta) {	 						
+					var html = '';
+					if (full.exe_rslt_cd == 'TC001703') {
+						html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_db2pgCancel(\''+full.wrk_nm+'\')">';
+						html += 'Stop';
+						html += '</button>';					
+					}
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			},
 			{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 			{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 			{data : "wrk_id", defaultContent : "", visible: false},
@@ -132,38 +146,52 @@ function fn_init(){
 		{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_dtm", className : "dt-center", defaultContent : ""},
 	   	{
-				data : "exe_rslt_cd",
-				render : function(data, type, full, meta) {	 						
-					var html = '';
-					if (full.exe_rslt_cd == 'TC001701') {
-						html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_result(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
-						html += "	<i class='fa fa-check-circle text-primary' >";
-						html += '&nbsp;Complete</i>';
-						html += "</button>";
-						html += '<br/><button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_dn_report(\''+full.save_pth+'/result/\')" style="margin-top:4pt">';
-						html += "	<i class='fa fa-check-circle text-primary' >";
-						html += '&nbsp;Mig Report</i>';
-						html += "</button>";
-						
-					} else if(full.exe_rslt_cd == 'TC001702'){
-						html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_migFailLog('+full.mig_exe_sn+')">';
-						html += '<i class="fa fa-times">&nbsp;Fail</i>';
-//						html += '<spring:message code="common.failed" />';
-						html += "</button>";
-					} else {
-						html += "<div id='progress"+full.idx+"'></div>";
-						/* html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
-						html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
-						html += '&nbsp;<spring:message code="etc.etc28" />';
-						html += "</div>"; */
-						getProgress(full.mig_exe_sn,full.save_pth,full.idx);
-					}
+			data : "exe_rslt_cd",
+			render : function(data, type, full, meta) {	 						
+				var html = '';
+				if (full.exe_rslt_cd == 'TC001701') {
+					html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_result(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
+					html += "	<i class='fa fa-check-circle text-primary' >";
+					html += '&nbsp;Complete</i>';
+					html += "</button>";
+					html += '<br/><button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_dn_report(\''+full.save_pth+'/result/\')" style="margin-top:4pt">';
+					html += "	<i class='fa fa-check-circle text-primary' >";
+					html += '&nbsp;Mig Report</i>';
+					html += "</button>";
+					
+				} else if(full.exe_rslt_cd == 'TC001702'){
+					html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_migFailLog('+full.mig_exe_sn+')">';
+					html += '<i class="fa fa-times">&nbsp;Fail</i>';
+//					html += '<spring:message code="common.failed" />';
+					html += "</button>";
+				} else {
+					html += "<div id='progress"+full.idx+"'></div>";
+					/* html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+					html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+					html += '&nbsp;<spring:message code="etc.etc28" />';
+					html += "</div>"; */
+					getProgress(full.mig_exe_sn,full.save_pth,full.idx,full.wrk_nm);
+				}
 
-					return html;
-				},
-				className : "dt-center",
-				defaultContent : ""
+				return html;
 			},
+			className : "dt-center",
+			defaultContent : ""
+		},
+		{
+			data : "stop",
+			render : function(data, type, full, meta) {	 						
+				var html = '';
+				if (full.exe_rslt_cd == 'TC001703') {
+					html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_db2pgCancel(\''+full.wrk_nm+'\')">';
+					html += 'Stop';
+					html += '</button>';
+				}
+				return html;
+			},
+			className : "dt-center",
+			defaultContent : ""
+		},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 		{data : "wrk_id", defaultContent : "", visible: false},
@@ -202,6 +230,7 @@ function fn_init(){
 	tableData.tables().header().to$().find('th:eq(13)').css('min-width', '130px');
 	tableData.tables().header().to$().find('th:eq(14)').css('min-width', '130px');
 	tableData.tables().header().to$().find('th:eq(15)').css('min-width', '95px');
+	tableData.tables().header().to$().find('th:eq(16)').css('min-width', '95px');
 
     
 	$(window).trigger('resize'); 
@@ -342,7 +371,7 @@ function getdataDataList(){
 /* ********************************************************
  * Migration 진행현황
  ******************************************************** */
-function getProgress(mig_exe_sn, trans_save_pth, idx){
+function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 	var html;
 	var reCycle = true;
 	
@@ -637,13 +666,53 @@ function getProgress(mig_exe_sn, trans_save_pth, idx){
 	function fn_dn_report(path){
 		location.href="/db2pg/popup/db2pgFileDownload.do?name=report.html&path="+path;
 	}
+	
+	
+	function fn_db2pgCancel(wrk_nm){
+		// console.log("fn_db2pgCancel function called!!! : " + wrk_nm);
+		stopWrkNm = wrk_nm;
+		confile_title = 'db2pg' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("db2pg_cancel");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="migration.stop_question" />');
+		$('#pop_confirm_multi_md').modal("show");
+		
+	}
+	
+	function fn_db2pgCancelRun(){
+		$.ajax({
+			url : "/db2pg/cancel.do",
+			data : {
+				wrk_nm : stopWrkNm
+			},
+			type : "post",
+			success : function(result){
+				if(result.RESULT_CODE == '0'){					
+					showSwalIcon('<spring:message code="migration.stop_success" />', '<spring:message code="common.close" />', '', 'success');
+				}else{
+					showSwalIcon('<spring:message code="migration.stop_tail" />', '<spring:message code="common.close" />', '', 'error');
+				}
+				stopWrkNm = null;
+			}
+		})
+	}
+	
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmMultiRst(gbn){
+		if (gbn == "db2pg_cancel") {
+			fn_db2pgCancelRun();
+		}
+	}
+	
 </script>
 
 <%-- <%@include file="../popup/db2pgConfigInfo.jsp"%> --%>
 <%@include file="../popup/db2pgHistoryDetail.jsp"%>
 <%@include file="../popup/db2pgResultDDL.jsp"%> 
 <%@include file="../popup/db2pgResult.jsp"%> 
-
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 
 <form name="frmPopup">
 	<input type="hidden" name="mig_exe_sn"  id="mig_exe_sn">
@@ -683,8 +752,8 @@ function getProgress(mig_exe_sn, trans_save_pth, idx){
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0"><spring:message code="help.shedule_execution_history" /></p>
-											<p class="mb-0">수행 결과에 대해선 수행이 완료 후 상태가 변경되며, 수동으로 조회 하셔야 합니다.</p>
+											<p class="mb-0"><spring:message code="help.shedule_execution_history_01" /></p>
+											<p class="mb-0"><spring:message code="help.shedule_execution_history_02" /></p>
 										</div>
 									</div>
 								</div>
@@ -818,6 +887,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx){
 													<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 													<th width="100"><spring:message code="schedule.jobTime"/></th>
 													<th width="100"><spring:message code="properties.status" /></th>
+													<th width="100">Stop</th>
 													<th width="100"><spring:message code="migration.performer"/></th>
 													<th width="0"></th>
 													<th width="0"></th>
@@ -827,6 +897,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx){
 									</table>
 							 	</div>					 	
 								<div class="col-12" id="dumpDataTableDiv">
+									
  									<div class="table-responsive">
 										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 											<div class="row">
@@ -838,7 +909,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx){
 										</div>
 									</div>
 	 								<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-											<thead>
+										<thead>
 											<tr class="bg-info text-white">
 												<th width="30" rowspan="2">NO</th>
 												<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
@@ -849,17 +920,18 @@ function getProgress(mig_exe_sn, trans_save_pth, idx){
 												<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
 												<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
 												<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
+												<th width="95" rowspan="2">Stop</th>
 												<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
-										</tr>
-										<tr class="bg-info text-white">
+											</tr>
+											<tr class="bg-info text-white">
 												<th width="100">DBMS<spring:message code="common.division" /></th>
 												<th width="100"><spring:message code="data_transfer.ip" /></th>
 												<th width="100">Database</th>
 												<th width="100"><spring:message code="data_transfer.ip" /></th>
 												<th width="100">Database</th>
-										</tr>
-									</thead>
-								</table>	
+											</tr>
+										</thead>
+									</table>	
 							 	</div>
 						 	</div>
 						</div>

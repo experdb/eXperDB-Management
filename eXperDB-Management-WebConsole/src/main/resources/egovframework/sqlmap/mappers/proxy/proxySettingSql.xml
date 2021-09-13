@@ -20,6 +20,7 @@
        			A.KAL_PTH,
        			A.USE_YN,
        			B.KAL_INSTALL_YN,
+       			B.AWS_YN,
        			A.EXE_STATUS,
        			A.KAL_EXE_STATUS,
        			A.MASTER_GBN,
@@ -65,6 +66,7 @@
        			A.KAL_PTH,
        			A.USE_YN,
        			B.KAL_INSTALL_YN,
+       			B.AWS_YN,
        			A.EXE_STATUS,
        			A.KAL_EXE_STATUS,
        			A.MASTER_GBN,
@@ -93,6 +95,7 @@
        			A.PRY_PTH,
        			A.KAL_PTH,
        			B.KAL_INSTALL_YN,
+       			B.AWS_YN,
        			A.USE_YN,
        			A.EXE_STATUS,
        			A.KAL_EXE_STATUS,
@@ -165,7 +168,9 @@
 				FRST_REGR_ID, 
 				FRST_REG_DTM, 
 				LST_MDFR_ID, 
-				LST_MDF_DTM 
+				LST_MDF_DTM,
+				BAL_YN,
+				BAL_OPT 
 		FROM 	T_PRY_LSN_I
 		WHERE 	1=1
 		
@@ -203,7 +208,9 @@
 				FRST_REGR_ID, 
 				FRST_REG_DTM, 
 				LST_MDFR_ID, 
-				LST_MDF_DTM 
+				LST_MDF_DTM ,
+				AWS_IF_ID,
+				PEER_AWS_IF_ID
 		FROM 	T_PRY_VIPCNG_I
 		WHERE 1=1
 		
@@ -564,6 +571,8 @@
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
              , STATE_NM = #{state_nm}
+             , AWS_IF_ID = #{aws_if_id}
+             , PEER_AWS_IF_ID = #{peer_aws_if_id}
          WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
          AND	VIP_CNG_ID = #{vip_cng_id}::numeric 
 	</update>
@@ -587,7 +596,9 @@
       		FRST_REGR_ID, 
       		FRST_REG_DTM, 
       		LST_MDFR_ID, 
-      		LST_MDF_DTM
+      		LST_MDF_DTM,
+      		AWS_IF_ID,
+      		PEER_AWS_IF_ID
 		) 
 		SELECT 	(SELECT COALESCE(MAX(VIP_CNG_ID+1),1) FROM T_PRY_VIPCNG_I) AS VIP_CNG_ID, 
 				#{state_nm} AS STATE_NM,
@@ -600,7 +611,9 @@
 				#{lst_mdfr_id} AS FRST_REGR_ID,
 				clock_timestamp() AS FRST_REG_DTM,
 				#{lst_mdfr_id} AS LST_MDFR_ID,
-				clock_timestamp() AS LST_MDF_DTM
+				clock_timestamp() AS LST_MDF_DTM,
+				#{aws_if_id} AS ,
+				#{peer_aws_if_id} AS PEER_AWS_IF_ID
 	</insert>
 
 	<delete id="deletePryVipConf" parameterType="proxyVipConfigVO">
@@ -631,6 +644,8 @@
              , FIELD_NM = #{field_nm}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
+             , BAL_YN = #{bal_yn}
+             , BAL_OPT = #{bal_opt}
          WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
          AND	LSN_ID = #{lsn_id}::numeric
 	</update>
@@ -657,7 +672,9 @@
       		FRST_REGR_ID, 
       		FRST_REG_DTM, 
       		LST_MDFR_ID, 
-      		LST_MDF_DTM
+      		LST_MDF_DTM,
+      		BAL_YN,
+      		BAL_OPT
 		) 
 		SELECT (SELECT COALESCE(MAX(LSN_ID+1),1) AS LSN_ID FROM T_PRY_LSN_I) AS LSN_ID, 
 				#{pry_svr_id} AS PRY_SVR_ID,
@@ -673,7 +690,9 @@
 				#{lst_mdfr_id} AS FRST_REGR_ID,
 				clock_timestamp() AS FRST_REG_DTM,
 				#{lst_mdfr_id} AS LST_MDFR_ID,
-				clock_timestamp() AS LST_MDF_DTM
+				clock_timestamp() AS LST_MDF_DTM,
+				#{bal_yn} AS BAL_YN,
+				#{bal_opt} AS BAL_OPT
 	</insert>
 
 	<select id="selectPryListenerMaxId" resultType="int">
@@ -804,7 +823,8 @@
        			STRT_DTM,
        			ISTCNF_YN,
        			AGT_VERSION,
-       			KAL_INSTALL_YN
+       			KAL_INSTALL_YN,
+       			AWS_YN
 		FROM 	T_PRY_AGT_I
 		WHERE 	1 = 1
         <if test='agt_sn != null'>

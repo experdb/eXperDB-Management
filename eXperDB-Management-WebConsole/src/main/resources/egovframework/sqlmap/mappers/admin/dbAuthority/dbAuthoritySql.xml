@@ -213,6 +213,7 @@
              , A.transSetting_aut_yn
              , A.TRANS_DBMS_CNG_AUT_YN
              , A.TRANS_CON_CNG_AUT_YN
+             , A.TRANS_MTR_AUT_YN
              , C.IPADR
           FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
          WHERE 1 = 1

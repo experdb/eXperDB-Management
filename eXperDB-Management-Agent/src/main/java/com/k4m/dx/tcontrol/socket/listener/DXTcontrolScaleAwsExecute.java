@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.json.simple.JSONObject;
@@ -14,7 +16,9 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.k4m.dx.tcontrol.db.repository.service.ScaleServiceImpl;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -51,6 +55,9 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 	public JSONObject execute(JSONObject jObj) throws Exception {
 		socketLogger.info("DXTcontrolScaleAwsExecute.execute : ");
 
+		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+		ScaleServiceImpl serviceScale = (ScaleServiceImpl) context.getBean("ScaleService");
+		
 		String strSuccessCode = "0";
 		String strErrCode = "";
 		String strErrMsg = "";
@@ -58,6 +65,7 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 		JSONObject jsonObj = new JSONObject(new TreeMap ());
 		JSONParser parser = new JSONParser();
 		JSONObject outputObj = new JSONObject();
+		Map<String, Object> chkParam = new HashMap<String, Object>();
 
 		try {
 			String scaleCmd = scaleCmdSetting(jObj);
@@ -65,32 +73,47 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();           //조회구분
 			String strResultSubMessge = "";
 			String scaleSubCmd = "";
+			int iScaleExecute = 0;
+			
+			String db_svr_id_val = "";
+			if (jObj.get(ProtocolID.DB_SVR_ID_VAL) != null) {
+				db_svr_id_val = jObj.get(ProtocolID.DB_SVR_ID_VAL).toString();
+			}
 
-socketLogger.info("scaleSet : " + scaleSet);
-socketLogger.info("scaleCmd : " + scaleCmd);
-socketLogger.info("scaleIn_check : " + scaleSet);
+			socketLogger.info("scaleCmd [" + scaleCmd + "]");
+
 			//scale 실행일 경우
 			if ("scaleIn".equals(scaleSet) || "scaleOut".equals(scaleSet)) {
-socketLogger.info("jObj : " + jObj);
-				ScaleRunCommandExec scaleExec = new ScaleRunCommandExec(scaleCmd, jObj, 0);
-				scaleExec.start();
-socketLogger.info("jObj11 : ");
-				jObj.put(ProtocolID.SCALE_SET,  jObj.get(ProtocolID.MONITERING).toString());
-				scaleSubCmd = scaleCmdSetting(jObj);
-socketLogger.info("scaleSubCmd : " + scaleSubCmd);
-				//scale 확인
-				ScaleRunCommandExec scaleExecWatch = new ScaleRunCommandExec(scaleSubCmd, jObj, 1);
-				scaleExecWatch.start();
+				//체크
+				chkParam.put("db_svr_id", Integer.parseInt(db_svr_id_val));
+				iScaleExecute = serviceScale.scaleExecutionSearch(client, is, os, chkParam);
+				
+				socketLogger.info("iScaleExecute_last [" + iScaleExecute + "]");
+				
+				if (iScaleExecute <= 0) {
+					ScaleRunCommandExec scaleExec = new ScaleRunCommandExec(scaleCmd, jObj, 0);
+					scaleExec.start();
+	
+					jObj.put(ProtocolID.SCALE_SET,  jObj.get(ProtocolID.MONITERING).toString());
+					scaleSubCmd = scaleCmdSetting(jObj);
+					socketLogger.info("scaleSubCmd [" + scaleSubCmd + "]");
+	
+
+					//scale 확인
+					ScaleRunCommandExec scaleExecWatch = new ScaleRunCommandExec(scaleSubCmd, jObj, 1);
+					scaleExecWatch.start();
+				}
 
 				strSuccessCode = "0";
 				strErrCode = "";
 				strErrMsg = "";
 			} else { //조회인경우
-socketLogger.info("jObj123123 : ");
+
 				//조회 쿼리돌리고 값 리턴함
 				//instance ip 찾기
 				String masterNm = "";		
-socketLogger.info("searchGbn : " + searchGbn);
+				socketLogger.info("searchGbn [" + searchGbn + "]");
+
 				if ("instanceCnt".equals(searchGbn) || "scaleIngChk".equals(searchGbn))  {
 					masterNm = masterIpSearch();
 					//scaleCmd = scaleCmd + " \"Name=private-ip-address,Values=" + masterIp + "\"";

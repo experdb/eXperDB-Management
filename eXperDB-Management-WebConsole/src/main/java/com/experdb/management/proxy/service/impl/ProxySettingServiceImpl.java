@@ -282,6 +282,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      String lst_mdfr_id = param.get("lst_mdfr_id").toString();
 		      String status = param.get("status").toString();
 		      String actType = param.get("act_type").toString();
+		      String exeActType = param.get("act_exe_type").toString();
 		      String[] statusNm = new String[1];
 		     
 		      boolean proxyExecute = false;
@@ -291,11 +292,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      String errMsg = "";
 		      
 		      ProxyServerVO proxyServerVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
-		      String kalUseYn = "";
-		      if (proxyServerVO.getKal_install_yn() != null) {
-		         kalUseYn = proxyServerVO.getKal_install_yn();
-		      }
-
+		      String kalUseYn = (proxyServerVO.getKal_install_yn() == null) ? "" : proxyServerVO.getKal_install_yn(); 
+		     
 		      //Agent 접속 정보 추출 
 		      ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(param);
 		      Map<String, Object> proxyExecuteResult = new  HashMap<String, Object>();
@@ -315,6 +313,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		      
 		      agentJobj.put("pry_svr_id", prySvrId);
 		      agentJobj.put("lst_mdfr_id", lst_mdfr_id);
+		      agentJobj.put("act_exe_type", exeActType);
 		      
 		      try{
 		         agentJobj.put("sys_type", "PROXY");
@@ -414,7 +413,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			agentConnectResult = cic.proxyAgentConnectionTest(IP, PORT);
 
 			if (agentConnectResult != null) {
-				System.out.println(agentConnectResult.toString());
+				
 				result_code = agentConnectResult.get("RESULT_CODE").toString();
 				if ("0".equals(result_code)) {
 					agentConn = true;
@@ -502,7 +501,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			//insert 로직 추가
 			if ("reg".equals(reg_mode)) {
 				Map<String, Object> agentParam = new HashMap<String,Object>();
-				System.out.println("ipadr===" + ipadr);
+				
 				agentParam.put("ipadr", ipadr);
 				
 				ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
@@ -728,7 +727,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			
 			for(int i=0; i<delVipcngSize; i++){
 				JSONObject delVipcngJobj = (JSONObject)delVipcngJArray.get(i);
-				System.out.println(delVipcngJobj.toJSONString());
+				
 				delVipConf[i] = new ProxyVipConfigVO();
 				delVipConf[i].setPry_svr_id(prySvrId);
 				delVipConf[i].setVip_cng_id(CommonUtil.getIntOfJsonObj(delVipcngJobj,"vip_cng_id"));
@@ -747,7 +746,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			
 			for(int i=0; i<vipcngSize; i++){
 				JSONObject vipcngJobj = (JSONObject)vipcngJArray.get(i);
-				System.out.println(vipcngJobj.toJSONString());
+				
 				vipConf[i] = new ProxyVipConfigVO();
 				vipConf[i].setPry_svr_id(prySvrId);
 				
@@ -760,8 +759,10 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				vipConf[i].setV_if_nm(CommonUtil.getStringOfJsonObj(vipcngJobj,"v_if_nm"));
 				vipConf[i].setPriority(CommonUtil.getIntOfJsonObj(vipcngJobj,"priority"));
 				vipConf[i].setState_nm(CommonUtil.getStringOfJsonObj(vipcngJobj,"state_nm"));
+				vipConf[i].setAws_if_id(CommonUtil.getStringOfJsonObj(vipcngJobj,"aws_if_id"));
+				vipConf[i].setPeer_aws_if_id(CommonUtil.getStringOfJsonObj(vipcngJobj,"peer_aws_if_id"));
 				vipConf[i].setLst_mdfr_id(lst_mdfr_id);
-				/*System.out.println("vipConf :: "+CommonUtil.toMap(vipConf[i]).toString());*/
+				
 				//insert/update vip instance
 				proxySettingDAO.insertUpdatePryVipConf(vipConf[i]);
 			}
@@ -820,6 +821,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				listener[i].setField_nm(CommonUtil.getStringOfJsonObj(listenerObj, "field_nm"));
 				listener[i].setField_val(CommonUtil.getStringOfJsonObj(listenerObj, "field_val"));
 				listener[i].setLst_mdfr_id(lst_mdfr_id);
+				listener[i].setBal_yn(CommonUtil.getStringOfJsonObj(listenerObj, "bal_yn"));
+				listener[i].setBal_opt(CommonUtil.getStringOfJsonObj(listenerObj, "bal_opt"));
 				
 				//UPDATE/INSERT PROXY LISTENER
 				proxySettingDAO.insertUpdatePryListener(listener[i]);
@@ -938,9 +941,11 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		}
 		
 		ProxyServerVO proxyServerVO =(ProxyServerVO) proxySettingDAO.selectProxyServerInfo(prySvrId);
-		String kalUseYn = proxyServerVO.getKal_install_yn();
+		String kalUseYn = (proxyServerVO.getKal_install_yn() == null) ? "" : proxyServerVO.getKal_install_yn(); 
+	    String awsYn = (proxyServerVO.getAws_yn() == null) ? "N" : proxyServerVO.getAws_yn(); 
 		agentJobj.put("KAL_INSTALL_YN", kalUseYn);
-		
+		agentJobj.put("AWS_YN", awsYn);
+
 		boolean createNewConfig = false;
 		String resultLog = "";
 		String errMsg = "";

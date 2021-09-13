@@ -56,6 +56,26 @@
  						{data : "scm_nm", className : "dt-center", defaultContent : ""},
  						{data : "portno", className : "dt-center", defaultContent : ""},
  					    {data : "spr_usr_id", className : "dt-center", defaultContent : ""},
+ 						{data : "exe_status", 
+ 							render: function (data, type, full){
+ 								var html = "";
+ 								if(full.exe_status == "TC001501"){
+ 									html += "<div class='badge badge-pill badge-success'>";
+ 									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+ 									html += "	<spring:message code='data_transfer.connecting' />";
+ 								} else {
+ 									html += "<div class='badge badge-pill badge-danger'>";
+ 									html += "	<i class='ti-close mr-2'></i>";
+ 									html += "	<spring:message code='schedule.stop' />";
+ 								}
+
+ 								html += "</div>";
+
+ 								return html;
+ 							},
+ 							className : "dt-left",
+ 							defaultContent : "" 	
+ 						},
  						{data : "trans_sys_id",  defaultContent : "", visible: false }
  			],'select': {'style': 'multi'}
 		});
@@ -68,8 +88,9 @@
 		trans_dbms_table.tables().header().to$().find('th:eq(5)').css('min-width', '120px');
 		trans_dbms_table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
 		trans_dbms_table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');		
-		trans_dbms_table.tables().header().to$().find('th:eq(8)').css('min-width', '138px');	
-		trans_dbms_table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
+		trans_dbms_table.tables().header().to$().find('th:eq(8)').css('min-width', '138px');
+		trans_dbms_table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
+		trans_dbms_table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
 
 		$(window).trigger('resize');
 	}
@@ -83,7 +104,8 @@
 			data : {
 				trans_sys_nm : nvlPrmSet($("#trans_sys_nm").val(), ''),
 				ipadr : nvlPrmSet($("#ipadr").val(), ''),
-				dtb_nm : nvlPrmSet($("#dtb_nm").val(), '')
+				dtb_nm : nvlPrmSet($("#dtb_nm").val(), ''),
+				dbms_sch_gbn : ""
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -441,6 +463,7 @@
 												<th width="150">Schema</th>
 												<th width="100"><spring:message code="data_transfer.port" /></th>
 												<th width="130"><spring:message code="dbms_information.account" /></th>
+												<th width="130"><spring:message code="data_transfer.connection_status" /></th>
 												<th width="0"><spring:message code="common.modify_datetime" /></th>
 											</tr>
 										</thead>

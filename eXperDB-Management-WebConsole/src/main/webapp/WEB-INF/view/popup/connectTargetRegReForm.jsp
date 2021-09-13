@@ -223,7 +223,7 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title" style="margin-bottom:3px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.transfer_table" />
+													<spring:message code="data_transfer.transfer_topic" />
 												</h4>
 	
 								 				<table id="mod_connector_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">

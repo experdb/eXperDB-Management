@@ -14,6 +14,9 @@
 				mod_com_heartbeat_interval_ms: {
 					number: true
 				},
+				mod_com_heartbeat_action_query: {
+					required: true
+				},
 				mod_com_max_batch_size: {
 					number: true
 				},
@@ -33,6 +36,9 @@
 				},
 				mod_com_heartbeat_interval_ms: {
 					number: '<spring:message code="eXperDB_scale.msg15" />'
+				},
+				mod_com_heartbeat_action_query: {
+					required: '<spring:message code="data_transfer.msg40" />'
 				},
 				mod_com_max_batch_size: {
 					number: '<spring:message code="eXperDB_scale.msg15" />'
@@ -151,6 +157,15 @@
 
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
+					
+						<div class="row" style="margin-top:-20px;margin-bottom:15px;margin-right:-30px;">
+							<div class="col-12">
+								<div class="template-demo mb-2">						
+									<i class="fa fa-check-circle-o btn-icon-prepend " style="font-size: 1.0rem;font-color:red;"><spring:message code="data_transfer.msg41" /></i>
+								</div>
+							</div>
+						</div>
+					
 						<form class="cmxform" id="comConModForm">
 							<input type="hidden" name="mod_com_trans_com_id" id="mod_com_trans_com_id" value=""/>
 							<input type="hidden" name="mod_com_transforms_yn" id="mod_com_transforms_yn" value=""/>
@@ -272,7 +287,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													offset.flush.timeout.ms
-													<span style="width: 550px;"><spring:message code="help.eXperDB_scale_set_msg08" /></span>
+													<span style="width: 550px;"><spring:message code="help.data_transfer_com_set_msg07" /></span>
 												</a>
 											</label>
 											<div class="col-sm-3">
@@ -283,8 +298,11 @@
 										
 										<div class="form-group row" style="margin-top:-15px;margin-bottom:-20px;">
 											<label for="mod_com_transforms_yn_chk" class="col-sm-3 col-form-label pop-label-index" style="margin-top:-10px">
-												<i class="item-icon fa fa-dot-circle-o"></i>
-												transform route <spring:message code="user_management.use_yn" />
+												<a href="#" class="tip" onclick="return false;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													transform route <spring:message code="user_management.use_yn" />
+													<span style="width: 550px;"><spring:message code="help.data_transfer_com_set_msg08" /></span>
+												</a>
 											</label>
 											<div class="col-sm-9">
 												<div class="onoffswitch-pop">

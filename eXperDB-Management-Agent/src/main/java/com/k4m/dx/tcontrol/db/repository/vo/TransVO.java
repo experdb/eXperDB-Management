@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.db.repository.vo;
 
-public class TransVO {
-
+public class TransVO { 
 	private int trans_id;
 	private String exe_status;
 
@@ -19,6 +18,269 @@ public class TransVO {
 	private String column_name;
 	private String table_name;
 	private String db_name;
+	private String topic_nm;
+	private String start_gbn;
+	private String topic_gbn;
+	private int topic_id;
+	private int kc_port;
+	private String kc_ip;
+	private int src_trans_id;
+	private int tar_trans_id;
+	private String src_topic_use_yn;
+	private int topic_overlap_cnt;
+	private int topic_overlap_src_ing_cnt;
+	private int topic_overlap_tar_cnt;
+	private int tar_topic_overlap_ing_cnt;
+	private int tar_topic_ing_cnt;
+	private int tar_trans_id_cnt;
+	private String exrt_trg_tb_nm;
+	private int trans_exrt_trg_tb_id;
+	private String write_use_yn;
+	private String write_use_yn_val;
+
+	private int kc_id;
+	private String kc_nm;
+	private String con_gbn;
+	private String connect_nm;
+	private int db_svr_id;
+
+	private String act_type;
+	private String act_exe_type;
+	private String connector_type;
+	private String exe_rslt_cd;
+	private String login_id;
+	
+	public String getLogin_id() {
+		return login_id;
+	}
+
+	public void setLogin_id(String login_id) {
+		this.login_id = login_id;
+	}
+
+	public String getExe_rslt_cd() {
+		return exe_rslt_cd;
+	}
+
+	public void setExe_rslt_cd(String exe_rslt_cd) {
+		this.exe_rslt_cd = exe_rslt_cd;
+	}
+
+	public String getAct_type() {
+		return act_type;
+	}
+
+	public void setAct_type(String act_type) {
+		this.act_type = act_type;
+	}
+
+	public String getAct_exe_type() {
+		return act_exe_type;
+	}
+
+	public void setAct_exe_type(String act_exe_type) {
+		this.act_exe_type = act_exe_type;
+	}
+
+	public String getConnector_type() {
+		return connector_type;
+	}
+
+	public void setConnector_type(String connector_type) {
+		this.connector_type = connector_type;
+	}
+
+	public String getWrite_use_yn_val() {
+		return write_use_yn_val;
+	}
+
+	public void setWrite_use_yn_val(String write_use_yn_val) {
+		this.write_use_yn_val = write_use_yn_val;
+	}
+
+	public String getCon_gbn() {
+		return con_gbn;
+	}
+
+	public void setCon_gbn(String con_gbn) {
+		this.con_gbn = con_gbn;
+	}
+
+	public String getConnect_nm() {
+		return connect_nm;
+	}
+
+	public void setConnect_nm(String connect_nm) {
+		this.connect_nm = connect_nm;
+	}
+
+	public int getDb_svr_id() {
+		return db_svr_id;
+	}
+
+	public void setDb_svr_id(int db_svr_id) {
+		this.db_svr_id = db_svr_id;
+	}
+
+	public int getKc_id() {
+		return kc_id;
+	}
+
+	public void setKc_id(int kc_id) {
+		this.kc_id = kc_id;
+	}
+
+	public String getKc_nm() {
+		return kc_nm;
+	}
+
+	public void setKc_nm(String kc_nm) {
+		this.kc_nm = kc_nm;
+	}
+
+	public String getWrite_use_yn() {
+		return write_use_yn;
+	}
+
+	public void setWrite_use_yn(String write_use_yn) {
+		this.write_use_yn = write_use_yn;
+	}
+
+	public String getExrt_trg_tb_nm() {
+		return exrt_trg_tb_nm;
+	}
+
+	public void setExrt_trg_tb_nm(String exrt_trg_tb_nm) {
+		this.exrt_trg_tb_nm = exrt_trg_tb_nm;
+	}
+
+	public int getTrans_exrt_trg_tb_id() {
+		return trans_exrt_trg_tb_id;
+	}
+
+	public void setTrans_exrt_trg_tb_id(int trans_exrt_trg_tb_id) {
+		this.trans_exrt_trg_tb_id = trans_exrt_trg_tb_id;
+	}
+
+	public int getTar_trans_id_cnt() {
+		return tar_trans_id_cnt;
+	}
+
+	public void setTar_trans_id_cnt(int tar_trans_id_cnt) {
+		this.tar_trans_id_cnt = tar_trans_id_cnt;
+	}
+
+	public int getSrc_trans_id() {
+		return src_trans_id;
+	}
+
+	public void setSrc_trans_id(int src_trans_id) {
+		this.src_trans_id = src_trans_id;
+	}
+
+	public int getTar_trans_id() {
+		return tar_trans_id;
+	}
+
+	public void setTar_trans_id(int tar_trans_id) {
+		this.tar_trans_id = tar_trans_id;
+	}
+
+	public String getSrc_topic_use_yn() {
+		return src_topic_use_yn;
+	}
+
+	public void setSrc_topic_use_yn(String src_topic_use_yn) {
+		this.src_topic_use_yn = src_topic_use_yn;
+	}
+
+	public int getTopic_overlap_cnt() {
+		return topic_overlap_cnt;
+	}
+
+	public void setTopic_overlap_cnt(int topic_overlap_cnt) {
+		this.topic_overlap_cnt = topic_overlap_cnt;
+	}
+
+	public int getTopic_overlap_src_ing_cnt() {
+		return topic_overlap_src_ing_cnt;
+	}
+
+	public void setTopic_overlap_src_ing_cnt(int topic_overlap_src_ing_cnt) {
+		this.topic_overlap_src_ing_cnt = topic_overlap_src_ing_cnt;
+	}
+
+	public int getTopic_overlap_tar_cnt() {
+		return topic_overlap_tar_cnt;
+	}
+
+	public void setTopic_overlap_tar_cnt(int topic_overlap_tar_cnt) {
+		this.topic_overlap_tar_cnt = topic_overlap_tar_cnt;
+	}
+
+	public int getTar_topic_overlap_ing_cnt() {
+		return tar_topic_overlap_ing_cnt;
+	}
+
+	public void setTar_topic_overlap_ing_cnt(int tar_topic_overlap_ing_cnt) {
+		this.tar_topic_overlap_ing_cnt = tar_topic_overlap_ing_cnt;
+	}
+
+	public int getTar_topic_ing_cnt() {
+		return tar_topic_ing_cnt;
+	}
+
+	public void setTar_topic_ing_cnt(int tar_topic_ing_cnt) {
+		this.tar_topic_ing_cnt = tar_topic_ing_cnt;
+	}
+
+	public int getKc_port() {
+		return kc_port;
+	}
+
+	public void setKc_port(int kc_port) {
+		this.kc_port = kc_port;
+	}
+
+	public String getKc_ip() {
+		return kc_ip;
+	}
+
+	public void setKc_ip(String kc_ip) {
+		this.kc_ip = kc_ip;
+	}
+
+	public int getTopic_id() {
+		return topic_id;
+	}
+
+	public void setTopic_id(int topic_id) {
+		this.topic_id = topic_id;
+	}
+
+	public String getTopic_gbn() {
+		return topic_gbn;
+	}
+
+	public void setTopic_gbn(String topic_gbn) {
+		this.topic_gbn = topic_gbn;
+	}
+
+	public String getStart_gbn() {
+		return start_gbn;
+	}
+
+	public void setStart_gbn(String start_gbn) {
+		this.start_gbn = start_gbn;
+	}
+
+	public String getTopic_nm() {
+		return topic_nm;
+	}
+
+	public void setTopic_nm(String topic_nm) {
+		this.topic_nm = topic_nm;
+	}
 
 	public String getColumn_name() {
 		return column_name;

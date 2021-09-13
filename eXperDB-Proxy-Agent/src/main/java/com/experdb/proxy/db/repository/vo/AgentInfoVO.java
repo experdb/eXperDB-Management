@@ -27,6 +27,7 @@ public class AgentInfoVO {
 	private String lst_mdfr_id; 
 	private String lst_mdf_dtm;
 	private String kal_install_yn;
+	private String aws_yn;
 	
 	public String TC001501 = "TC001501"; //실행
 	public String TC001502 = "TC001502"; //중지
@@ -114,5 +115,11 @@ public class AgentInfoVO {
 	}
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
+	public String getAws_yn() {
+		return aws_yn;
+	}
+	public void setAws_yn(String aws_yn) {
+		this.aws_yn = aws_yn;
 	}
 }

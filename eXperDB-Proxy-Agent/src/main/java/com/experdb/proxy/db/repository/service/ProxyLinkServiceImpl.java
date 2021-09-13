@@ -83,6 +83,9 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String cmdResult = "";
 
 		try{
+			//aws 환경 여부
+			String awsYn = (jobj.getString("AWS_YN") == null || jobj.getString("AWS_YN").equals(""))? "N" : jobj.getString("AWS_YN");
+			
 			//haproxy.cfg 생성
 			String proxyCfg = ""; 
 			
@@ -117,35 +120,63 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			
 			proxyCfg += globalConf;
 			
-			String readOnlyConf = util.readTemplateFile("readOnly.cfg", TEMPLATE_DIR);
-			String readWriteConf = util.readTemplateFile("readWrite.cfg", TEMPLATE_DIR);
 			String readWriteCdNm = jobj.getString("TC004201");
 			String readOnlyCdNm = jobj.getString("TC004202");
 			
 			JSONArray listener = jobj.getJSONArray("listener_list");
 			int listenerSize = listener.length();
-
+			
 			for(int i=0 ; i<listenerSize ; i++){
 				JSONObject proxyListener = listener.getJSONObject(i);
 				String lsn_nm = proxyListener.getString("lsn_nm");
 				String bind = proxyListener.getString("con_bind_port");
 				String db_nm = proxyListener.getString("db_nm");
+				String sim_query = proxyListener.getString("con_sim_query").replace("select ", "");
+				String field_nm = proxyListener.getString("field_nm");
+				String filed_val = proxyListener.getString("field_val");
+				String bal_yn=proxyListener.getString("bal_yn");
+				String bal_opt=proxyListener.getString("bal_opt");
+				String type_oid="00000017";
 				
+				String confStr = "";
 				if(lsn_nm.equals(readWriteCdNm)){
-					readWriteConf = readWriteConf.replace("{lsn_nm}", lsn_nm);
-					readWriteConf = readWriteConf.replace("{con_bind_port}", bind);
-					readWriteConf = readWriteConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
-					readWriteConf = readWriteConf.replace("{db_nm}", db_nm);
-					readWriteConf = readWriteConf.replace("{packet_len}", util.getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
-					proxyCfg +="\n"+readWriteConf;
+					confStr = util.readTemplateFile("readWrite.cfg", TEMPLATE_DIR);
 				}else if(lsn_nm.equals(readOnlyCdNm)){
-					readOnlyConf = readOnlyConf.replace("{lsn_nm}", lsn_nm);
-					readOnlyConf = readOnlyConf.replace("{con_bind_port}", bind);
-					readOnlyConf = readOnlyConf.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
-					readOnlyConf = readOnlyConf.replace("{db_nm}", db_nm);
-					readOnlyConf = readOnlyConf.replace("{packet_len}",  util.getPacketLength(31,db_nm));
-					proxyCfg +="\n"+readOnlyConf;
+					confStr = util.readTemplateFile("readOnly.cfg", TEMPLATE_DIR);
 				}
+				confStr = confStr.replace("{lsn_nm}", lsn_nm);
+				if(bal_yn.equals("Y")){
+					confStr = confStr.replace("{balance}","balance "+bal_opt);
+				}else{
+					confStr = confStr.replace("\n    {balance}","");
+				}
+				confStr = confStr.replace("{con_bind_port}", bind);
+				confStr = confStr.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
+				confStr = confStr.replace("{db_nm}", db_nm);
+				confStr = confStr.replace("{packet_len}", util.getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
+				
+				confStr = confStr.replace("{simple_query_hex}", util.getStringToHex(sim_query));
+				confStr = confStr.replace("{simple_query}", sim_query);
+				confStr = confStr.replace("{packet_len_sim}", util.getPacketLength(12,sim_query)); //8자, 패딩 0으로 넣기 
+
+				confStr = confStr.replace("{field_nm_hex}", util.getStringToHex(field_nm));
+				confStr = confStr.replace("{field_nm}", field_nm);
+				confStr = confStr.replace("{packet_len_field}", util.getPacketLength(25,field_nm)); //8자, 패딩 0으로 넣기 
+				if(field_nm.equals("haproxy_check")){
+					type_oid="00000000";
+				}else if(field_nm.equals("pg_is_in_recovery")){
+					type_oid="00000010";
+				}
+				confStr = confStr.replace("{type_oid}", type_oid); 
+				
+				confStr = confStr.replace("{column_hex}", util.getStringToHex(filed_val));
+				confStr = confStr.replace("{column}", filed_val);
+				confStr = confStr.replace("{column_len}", util.getPacketLength(0,filed_val)); //8자, 패딩 0으로 넣기 
+				confStr = confStr.replace("{packet_len_column}", util.getPacketLength(10,filed_val)); //8자, 패딩 0으로 넣기 
+				
+				//balance roundrobin
+				
+				proxyCfg +="\n"+confStr;
 				
 				JSONArray listenerSvrList = proxyListener.getJSONArray("server_list");
 				int listenerSvrListSize = listenerSvrList.length();
@@ -177,7 +208,17 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 
 			for(int i=0 ; i<vipConfSize ; i++){
 				JSONObject vipConfObj = vipConfArry.getJSONObject(i);
-				String vipConf = util.readTemplateFile("vip_instance.conf", TEMPLATE_DIR);
+				String vipConf = "";
+				if(awsYn.equals("Y")){
+					vipConf = util.readTemplateFile("vip_instance_aws.conf", TEMPLATE_DIR);
+					String vip = vipConfObj.getString("v_ip");
+					vipConf = vipConf.replaceAll("\\{v_ip_aws\\}",  vip.substring(0, vip.indexOf("/")));
+					vipConf = vipConf.replaceAll("\\{peer_net_inter_id\\}", vipConfObj.getString("peer_aws_if_id"));
+					vipConf = vipConf.replaceAll("\\{obj_net_inter_id\\}", vipConfObj.getString("aws_if_id"));
+				}else{
+					vipConf = util.readTemplateFile("vip_instance.conf", TEMPLATE_DIR);
+				}
+				//String vipConf = util.readTemplateFile("vip_instance.conf", TEMPLATE_DIR);
 				vipConf = vipConf.replace("{v_index}", String.valueOf(i+1));  
 				vipConf = vipConf.replace("{state_nm}", vipConfObj.getString("state_nm"));
 				vipConf = vipConf.replace("{if_nm}", global.getString("if_nm"));
@@ -186,8 +227,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				vipConf = vipConf.replace("{chk_tm}", vipConfObj.getString("chk_tm"));
 				vipConf = vipConf.replace("{obj_ip}", global.getString("obj_ip"));
 				vipConf = vipConf.replace("{peer_server_ip}", global.getString("peer_server_ip"));
-				vipConf = vipConf.replace("{v_ip}", vipConfObj.getString("v_ip"));
 				vipConf = vipConf.replace("{v_if_nm}", vipConfObj.getString("v_if_nm"));
+				vipConf = vipConf.replace("{v_ip}", vipConfObj.getString("v_ip"));
 				keepalivedCfg +="\n"+vipConf;
 			}
 			
@@ -331,6 +372,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String sysType =jObj.getString("sys_type"); //PROXY/KEEPALIVED
 		String actType =jObj.getString("act_type"); //A : active /R : restart /S : stop
 		String userId =jObj.getString("lst_mdfr_id");
+		String actExeType = "TC004001";
+		if(jObj.get("act_exe_type") != null) actExeType = jObj.getString("act_exe_type");
 		String cmd = "systemctl ";
 		String proxySetStatus = "";
 /*		String keepalivedSetStatus = "";*/
@@ -346,14 +389,14 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			actHistory.setLst_mdfr_id(userId);
 			actHistory.setSys_type(sysType);
 			actHistory.setAct_type(actType);
-			actHistory.setAct_exe_type("TC004001");
+			actHistory.setAct_exe_type(actExeType);
 			
 			switch(actType){
 				case "A" :
 					cmd += "start ";
 					break;
 				case "R" :
-					cmd += "restart ";
+					cmd += "reload ";
 					break;
 				case "S" :
 					cmd += "stop ";
@@ -874,6 +917,230 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			result += "success\n";
 			result += commandExec.getMessage();
 		}
+		return result;
+	}
+
+	/**
+	 * Scale 연동 
+	 * 
+	 * @param JSONObject
+	 * @return JSONObject
+	 * @throws  throws Exception  
+	 * @throws Exception 
+	 */
+	public JSONObject setConfScale(JSONObject jobj) throws Exception  {
+		socketLogger.info("ProxyLinkServiceImpl.setConfScale : "+jobj.toString());
+
+		JSONObject result = new JSONObject();
+		CommonUtil util = new CommonUtil();
+		
+		int prySvrId = 0;
+		String lst_mdfr_id = "";
+		String newHaPath ="";
+		String newKePath ="";
+		String dateTime = "";
+		String errcd = "0";
+		ProxyConfChangeHistoryVO newConfChgHistVo = new ProxyConfChangeHistoryVO();
+		String cmdResult = "";
+
+		try{
+			//aws 환경 여부
+			//String awsYn = (jobj.getString("AWS_YN") == null || jobj.getString("AWS_YN").equals(""))? "N" : jobj.getString("AWS_YN");
+			
+			//haproxy.cfg 생성
+			String proxyCfg = ""; 
+			
+			String globalConf = util.readTemplateFile("global.cfg", TEMPLATE_DIR);
+			JSONObject global = jobj.getJSONObject("global_info");
+			
+			prySvrId = global.getInt("pry_svr_id");
+			lst_mdfr_id = jobj.getString("lst_mdfr_id");
+			
+			String logLocal ="";
+			cmdResult =runExeCmd("cat /etc/rsyslog.d/haproxy.conf |grep /var/log/haproxy/haproxy.log");
+			
+			if(!cmdResult.equals("")){
+				String[] strTemp = cmdResult.split("\n");
+				for(int i=1; i<strTemp.length; i++){
+					if(strTemp[i].length() > 1 && !"#".equals(strTemp[i].substring(0, 1))){
+						logLocal = strTemp[i].substring(0, strTemp[i].indexOf("."));	
+					}
+				}
+			}
+			
+			globalConf = globalConf.replace("{log_local}", logLocal);
+			globalConf = globalConf.replace("{max_con_cnt}", global.getString("max_con_cnt"));
+			globalConf = globalConf.replace("{cl_con_max_tm}", global.getString("cl_con_max_tm"));
+			globalConf = globalConf.replace("{con_del_tm}", global.getString("con_del_tm"));
+			globalConf = globalConf.replace("{svr_con_max_tm}", global.getString("svr_con_max_tm"));
+			globalConf = globalConf.replace("{chk_tm}", global.getString("chk_tm"));
+			
+			//proxy user, group이 사이트 마다 달라질 수 있다 하여 수정 -- 20210701
+			globalConf = globalConf.replace("{proxy_user}", FileUtil.getPropertyValue("context.properties", "proxy.global.user"));
+			globalConf = globalConf.replace("{proxy_group}", FileUtil.getPropertyValue("context.properties", "proxy.global.group"));
+			
+			proxyCfg += globalConf;
+			
+			String readWriteCdNm = jobj.getString("TC004201");
+			String readOnlyCdNm = jobj.getString("TC004202");
+			
+			JSONArray listener = jobj.getJSONArray("listener_list");
+			int listenerSize = listener.length();
+			
+			for(int i=0 ; i<listenerSize ; i++){
+				JSONObject proxyListener = listener.getJSONObject(i);
+				String lsn_nm = proxyListener.getString("lsn_nm");
+				String bind = proxyListener.getString("con_bind_port");
+				String db_nm = proxyListener.getString("db_nm");
+				String sim_query = proxyListener.getString("con_sim_query").replace("select ", "");
+				String field_nm = proxyListener.getString("field_nm");
+				String filed_val = proxyListener.getString("field_val");
+				String bal_yn=proxyListener.getString("bal_yn");
+				String bal_opt=proxyListener.getString("bal_opt");
+				String type_oid="00000017";
+				
+				String confStr = "";
+				if(lsn_nm.equals(readWriteCdNm)){
+					confStr = util.readTemplateFile("readWrite.cfg", TEMPLATE_DIR);
+				}else if(lsn_nm.equals(readOnlyCdNm)){
+					confStr = util.readTemplateFile("readOnly.cfg", TEMPLATE_DIR);
+				}
+				confStr = confStr.replace("{lsn_nm}", lsn_nm);
+				if(bal_yn.equals("Y")){
+					confStr = confStr.replace("{balance}","balance "+bal_opt);
+				}else{
+					confStr = confStr.replace("\n    {balance}","");
+				}
+				confStr = confStr.replace("{con_bind_port}", bind);
+				confStr = confStr.replace("{db_nm_hex}", util.getStringToHex(db_nm)+"00");
+				confStr = confStr.replace("{db_nm}", db_nm);
+				confStr = confStr.replace("{packet_len}", util.getPacketLength(31,db_nm)); //8자, 패딩 0으로 넣기 
+				
+				confStr = confStr.replace("{simple_query_hex}", util.getStringToHex(sim_query));
+				confStr = confStr.replace("{simple_query}", sim_query);
+				confStr = confStr.replace("{packet_len_sim}", util.getPacketLength(12,sim_query)); //8자, 패딩 0으로 넣기 
+
+				confStr = confStr.replace("{field_nm_hex}", util.getStringToHex(field_nm));
+				confStr = confStr.replace("{field_nm}", field_nm);
+				confStr = confStr.replace("{packet_len_field}", util.getPacketLength(25,field_nm)); //8자, 패딩 0으로 넣기 
+				if(field_nm.equals("haproxy_check")){
+					type_oid="00000000";
+				}else if(field_nm.equals("pg_is_in_recovery")){
+					type_oid="00000010";
+				}
+				confStr = confStr.replace("{type_oid}", type_oid); 
+				
+				confStr = confStr.replace("{column_hex}", util.getStringToHex(filed_val));
+				confStr = confStr.replace("{column}", filed_val);
+				confStr = confStr.replace("{column_len}", util.getPacketLength(0,filed_val)); //8자, 패딩 0으로 넣기 
+				confStr = confStr.replace("{packet_len_column}", util.getPacketLength(10,filed_val)); //8자, 패딩 0으로 넣기 
+				
+				//balance roundrobin
+				
+				proxyCfg +="\n"+confStr;
+				
+				JSONArray listenerSvrList = proxyListener.getJSONArray("server_list");
+				int listenerSvrListSize = listenerSvrList.length();
+				String serverList = "";
+				for(int j =0; j<listenerSvrListSize; j++){
+					JSONObject listenSvr = listenerSvrList.getJSONObject(j);
+					serverList += "    server db"+j+" "+listenSvr.getString("db_con_addr")+" check port "+listenSvr.getString("chk_portno");
+					if("Y".equals(listenSvr.getString("backup_yn"))) serverList +=" backup\n";
+					else serverList +="\n";
+				}
+				
+				proxyCfg +=serverList;
+			}
+			socketLogger.info("Proxy Cfg *****************************************************\n"+proxyCfg);
+	
+			//파일 backup
+			String backupPath = FileUtil.getPropertyValue("context.properties", "proxy.conf_backup_path");
+			DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		  	dateTime = dateFormat.format(new Date());
+		  	
+		  	ProxyServerVO vo = new ProxyServerVO();
+			vo.setPry_svr_id(prySvrId);
+			
+			ProxyServerVO proxySvr = (ProxyServerVO) proxyDAO.selectPrySvrInfo(vo);
+			String initHaPath = proxySvr.getPry_pth();
+			String initKalPath = proxySvr.getKal_pth();
+			
+			File initHaproxy = new File(proxySvr.getPry_pth());
+
+			//최초 적용 파일 있지만, 백업폴더 없을 경우 백업함
+			File backupFolder = new File(backupPath);
+
+			if(!backupFolder.exists() && initHaproxy.exists()){
+				ProxyConfChangeHistoryVO confChgHistVo = new ProxyConfChangeHistoryVO();
+				confChgHistVo.setPry_svr_id(prySvrId);
+				confChgHistVo.setFrst_regr_id(lst_mdfr_id);
+				
+				//최초 conf 파일 백업 폴더 생성
+				new File(backupPath+"/init/").mkdirs();
+				
+				String initBackupHaPath = backupFolder+"/init/"+initHaproxy.getName();
+				Files.copy(initHaproxy.toPath(), Paths.get(initBackupHaPath), REPLACE_EXISTING);
+				confChgHistVo.setPry_pth(initBackupHaPath);
+				
+				if("Y".equals(jobj.getString("KAL_INSTALL_YN"))){
+					File initKeepa = new File(initKalPath);
+					if(initKeepa.exists()){
+						String initBackupKalPath = backupFolder+"/init/"+initKeepa.getName();
+						Files.copy(initKeepa.toPath(), Paths.get(initBackupKalPath), REPLACE_EXISTING);
+						confChgHistVo.setKal_pth(initBackupKalPath);
+					}
+				}else{
+					confChgHistVo.setKal_pth("");
+				}
+
+				confChgHistVo.setExe_rst_cd("TC001501");
+				//insert T_PRYCHG_G
+				proxyDAO.insertPrycngInfo(confChgHistVo);
+			}
+			
+		  	newConfChgHistVo.setPry_svr_id(prySvrId);
+			newConfChgHistVo.setFrst_regr_id(lst_mdfr_id);
+			
+			//신규 파일 생성 및 config 폴더에 덮어쓰기
+			newHaPath = backupPath+"/"+dateTime+"/"+initHaproxy.getName();
+			fileBackupReplace("PROXY", dateTime, newHaPath, initHaPath, proxyCfg, newConfChgHistVo);
+			newConfChgHistVo.setKal_pth(newKePath);
+			newConfChgHistVo.setExe_rst_cd("TC001501");
+			proxyDAO.insertPrycngInfo(newConfChgHistVo);//설정 변경 이력 저장
+			
+			JSONObject exeHist = new JSONObject();
+			exeHist.put("pry_svr_id",prySvrId);
+			exeHist.put("sys_type","PROXY");
+			exeHist.put("act_type","R");
+			exeHist.put("lst_mdfr_id",lst_mdfr_id);
+			exeHist.put("act_exe_type","TC004003");//Scale
+			JSONObject exeResult = new JSONObject();
+			exeResult= executeService(exeHist);//재구동 및 구동 변경 이력 저장
+			if(exeResult.getString(ProtocolID.ERR_CODE).equals("-1")) errcd="-2";
+			result.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP014);
+			result.put(ProtocolID.RESULT_CODE, "0");
+			result.put(ProtocolID.ERR_CODE, errcd);
+			result.put(ProtocolID.ERR_MSG, "");
+			
+		}catch(Exception e){
+			newConfChgHistVo.setPry_svr_id(prySvrId);
+			newConfChgHistVo.setFrst_regr_id(lst_mdfr_id);
+			newConfChgHistVo.setPry_pth(newHaPath);
+			newConfChgHistVo.setKal_pth(newKePath);
+			newConfChgHistVo.setExe_rst_cd("TC001502");
+			proxyDAO.insertPrycngInfo(newConfChgHistVo);
+			
+			errcd = "-1";
+			
+			result.put(ProtocolID.DX_EX_CODE, TranCodeType.PsP014);
+			result.put(ProtocolID.RESULT_CODE, "1");
+			result.put(ProtocolID.ERR_CODE, errcd);
+			result.put(ProtocolID.ERR_MSG, e.toString());
+			
+			errLogger.error("setConfScale Error {} ", e.toString());
+			throw e;
+		}
+				
 		return result;
 	}
 }

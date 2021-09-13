@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.scale.service;
 
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 
@@ -184,4 +185,14 @@ public interface InstanceScaleService {
 	 * @throws Exception
 	 */
 	String updateAutoScaleUseSetting(InstanceScaleVO instanceScaleVO) throws Exception;
+	
+	/**
+	 * scale 완료 후 agent setting
+	 * 
+	 * @param List<Map<String, Object>>, JSONArray
+	 * @return String
+	 * @throws ConnectException
+	 * @throws Exception
+	 */
+	String setScaleResultProcess(Map<String, Object> instanceScaleList) throws ConnectException, Exception;
 }

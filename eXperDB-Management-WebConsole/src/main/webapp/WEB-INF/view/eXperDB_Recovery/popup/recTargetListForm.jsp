@@ -77,16 +77,16 @@ var ipList=[];
 	}	
 	
 	function fn_recMachineReg(){
-		var data = TargetList.rows('.selected').data()[0];
+		var data = TargetList.rows('.selected').data();
 		if(data.length<1){
 			showSwalIcon('복구DB를 선택해주세요', '<spring:message code="common.close" />', '', 'error');
 		}else{
-			$("#recMachineMAC").val(data.guestMac);
-			$("#recMachineIP").val(data.guestIp);
-			$("#recoveryDB").val(data.guestIp);
-			$("#recMachineSNM").val(data.guestSubnetmask);
-			$("#recMachineGateWay").val(data.guestGateway);
-			$("#recMachineDNS").val(data.guestDns);
+			$("#recMachineMAC").val(data[0].guestMac);
+			$("#recMachineIP").val(data[0].guestIp);
+			$("#recoveryDB").val(data[0].guestIp);
+			$("#recMachineSNM").val(data[0].guestSubnetmask);
+			$("#recMachineGateWay").val(data[0].guestGateway);
+			$("#recMachineDNS").val(data[0].guestDns);
 			$("#pop_layer_popup_recoveryTargetList").modal('hide');
 		}
 		

@@ -19,6 +19,9 @@ public class ProxyListenerVO {
 	private String lst_mdf_dtm;
 	private int db_svr_id;
 	private String lsn_exe_status;
+	private String bal_yn;
+	private String bal_opt;
+	
 	
 	public String getLsn_exe_status() {
 		return lsn_exe_status;
@@ -121,5 +124,17 @@ public class ProxyListenerVO {
 	}
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
+	public String getBal_yn() {
+		return bal_yn;
+	}
+	public void setBal_yn(String bal_yn) {
+		this.bal_yn = bal_yn;
+	}
+	public String getBal_opt() {
+		return bal_opt;
+	}
+	public void setBal_opt(String bal_opt) {
+		this.bal_opt = bal_opt;
 	}
 }

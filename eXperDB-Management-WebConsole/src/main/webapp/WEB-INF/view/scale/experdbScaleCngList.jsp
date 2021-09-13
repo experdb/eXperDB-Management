@@ -782,6 +782,9 @@ a:hover.tip span {
 					// auto scale 실행 주기
 					$("#com_auto_run_cycle").val(nvlPrmSet(result.auto_run_cycle, ""));
 					
+					// auto scale 실행 주기
+					$("#com_auto_run_cycle_old").val(nvlPrmSet(result.auto_run_cycle, ""));
+					
 					$('#pop_layer_com_ins_cng').modal("show");
 				}
 			}

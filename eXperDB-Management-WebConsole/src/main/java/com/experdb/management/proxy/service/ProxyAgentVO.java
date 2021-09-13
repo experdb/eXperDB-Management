@@ -21,6 +21,7 @@ public class ProxyAgentVO {
 	private String pry_svr_nm;
 	private String master_gbn;
 	private String kal_install_yn;
+	private String aws_yn;
 
 	public String getKal_install_yn() {
 		return kal_install_yn;
@@ -142,4 +143,11 @@ public class ProxyAgentVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+	public String getAws_yn() {
+		return aws_yn;
+	}
+	public void setAws_yn(String aws_yn) {
+		this.aws_yn = aws_yn;
+	}
+
 }

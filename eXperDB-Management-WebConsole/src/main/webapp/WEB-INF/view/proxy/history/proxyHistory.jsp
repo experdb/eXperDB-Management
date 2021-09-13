@@ -231,6 +231,8 @@
 								return '<spring:message code="dashboard.manual" />';
 							}else if(full.act_exe_type == "TC004002"){
 								return '<spring:message code="dashboard.auto" />';
+							}else if(full.act_exe_type == "TC004003"){
+								return 'Auto Scale';
 							}
 	         			}
 		         	}, 
@@ -1389,8 +1391,8 @@
 												<th width="15">Virtaul IP</th>
 												<th width="10"><spring:message code="eXperDB_proxy.act_result" /></th>
 												<th width="10"><spring:message code="common.modifier" /></th>
-												<th width="10">백업 삭제</th>
-												<th width="10">백업 삭제자</th>
+												<th width="10"><spring:message code="eXperDB_proxy.delete_conf" /></th>
+												<th width="10"><spring:message code="eXperDB_proxy.delete_user" /></th>
 												<th width="0">최종 수정일시</th>
 												<th width="0">변경 일련번호</th>
 												<th width="0">Proxy ID</th>

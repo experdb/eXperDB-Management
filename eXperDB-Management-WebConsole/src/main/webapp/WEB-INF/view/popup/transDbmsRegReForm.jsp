@@ -111,7 +111,14 @@
 		$("#mod_trans_schema_nm", "#trasnDbmsModifyPop").val(nvlPrmSet(result.resultInfo[0].scm_nm, ""));
 		$("#mod_trans_spr_usr_id", "#trasnDbmsModifyPop").val(nvlPrmSet(result.resultInfo[0].spr_usr_id, ""));
 		$("#mod_trans_pwd", "#trasnDbmsModifyPop").val(nvlPrmSet(result.pwd, "")); 
-		$('#mod_trans_sys_connection', '#trasnDbmsModifyPop').val("success");
+
+		$("#mod_trans_exe_status", "#trasnDbmsModifyPop").val(nvlPrmSet(result.resultInfo[0].exe_status, "")); 
+
+		if (result.resultInfo[0].exe_status == "TC001501") {
+			$('#mod_trans_sys_connection', '#trasnDbmsModifyPop').val("success");
+		} else {
+			$('#mod_trans_sys_connection', '#trasnDbmsModifyPop').val("fail");
+		}
 
 		$("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").find('option').remove();
 		$("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").append('<option value=""><spring:message code="common.choice" /></option>');
@@ -206,6 +213,12 @@
 	function fn_trans_dbms_modify_proc(){
 		if (!mod_trans_dbms_valCheck()) return false;
 
+		if (nvlPrmSet($("#mod_trans_sys_connection", "#trasnDbmsModifyPop").val(), '') == "success") {
+			$("#mod_trans_exe_status", "#trasnDbmsModifyPop").val("TC001501");
+		} else {
+			$("#mod_trans_exe_status", "#trasnDbmsModifyPop").val("TC001502");
+		}
+
 		$.ajax({
 			async : false,
 	  		url : "/popup/updateTransDBMS.do",
@@ -218,7 +231,8 @@
 	  		  	scm_nm : nvlPrmSet($("#mod_trans_schema_nm", "#trasnDbmsModifyPop").val(), ''),
 	  		   	spr_usr_id : nvlPrmSet($("#mod_trans_spr_usr_id", "#trasnDbmsModifyPop").val(), ''),
 	  		   	pwd : nvlPrmSet($("#mod_trans_pwd", "#trasnDbmsModifyPop").val(), ''),
-	  		  	dbms_dscd : nvlPrmSet($("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val(), '')
+	  		  	dbms_dscd : nvlPrmSet($("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val(), ''),
+	  		  exe_status : nvlPrmSet($("#mod_trans_exe_status", "#trasnDbmsModifyPop").val(), 'TC001502')
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -290,6 +304,7 @@
 					<form class="cmxform" name="trasnDbmsModifyPop" id="trasnDbmsModifyPop" method="post">
 						<input type="hidden" name="mod_trans_sys_connection" id="mod_trans_sys_connection" value="" />
 						<input type="hidden" name="mod_trans_sys_id" id="mod_trans_sys_id"/>
+						<input type="hidden" name="mod_trans_exe_status" id="mod_trans_exe_status" value="" />
 
 						<fieldset>
 							<div class="card-body" style="border: 1px solid #adb5bd;">

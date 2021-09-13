@@ -323,7 +323,8 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 
-			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd_old()));
+			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
 
 			//전송정보 조회
 			transInfo = transDAO.selectTransInfo(trans_id);
@@ -373,6 +374,11 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			int db_svr_id = transVO.getDb_svr_id();
 			String trans_id = Integer.toString(transVO.getTrans_id());
 			String trans_active_gbn = transVO.getTrans_active_gbn();
+			String str_login_id = "system";
+			
+			if (transVO.getFrst_regr_id() != null && !"".equals(transVO.getFrst_regr_id())) {
+				str_login_id = transVO.getFrst_regr_id();
+			}
 
 			String strCmd =" curl -i -X DELETE -H 'Accept:application/json' "+kc_ip+":"+kc_port+"/connectors/"+connect_nm;
 			
@@ -391,12 +397,15 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			int PORT = agentInfo.getSOCKET_PORT();
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			connStartResult = cic.connectStop(IP, PORT, strCmd, trans_id, trans_active_gbn);
-			
+			connStartResult = cic.connectStop(IP, PORT, strCmd, trans_id, trans_active_gbn, str_login_id);
+System.out.println("connStartResult=========================" + connStartResult);
 			if (connStartResult != null) {
+				System.out.println("connStartResult=========123123================" + connStartResult.get("RESULT_CODE").toString());
 				result_code = connStartResult.get("RESULT_CODE").toString();
 				if ("0".equals(result_code)) {
 					result = "success";
+				} else if ("-1".equals(result_code)) {
+					result = "no_depth";
 				} else {
 					result = "fail";
 				}
@@ -448,7 +457,8 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			int PORT = agentInfo.getSOCKET_PORT();
 
 			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-
+			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
+			
 			//전송정보 조회
 			transInfo = transDAO.selectTargetTransInfo(trans_id);
 			System.out.println("전송정보 : "+transInfo.get(0));
@@ -489,6 +499,8 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 	@Override
 	public void deleteTransSetting(int trans_id) throws Exception {
 		transDAO.deleteTransSetting(trans_id);		
+		
+		transDAO.deleteTransTopicSetting(trans_id);
 	}
 	
 	/**
@@ -531,15 +543,32 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 
 					// 데이터전송 삭제
 					if ("del".equals(transVo.getTrans_active_gbn())) {
+						transVo.setTrans_id(trans_id);
+						
+						//연결되어있는 타겟전송테이블 정리
+						updateTranExrtTrgList(trans_id);
+
 						transDAO.deleteTransSetting(trans_id);
+						
+						transDAO.deleteTransTopicSetting(trans_id);
 					} else {
 						transDAO.deleteTransTargetSetting(trans_id);
+						
+						//target topic 테이블 초기화
+						transVo.setTar_trans_id(trans_id);
+						transVo.setTrans_id(trans_id);
+						
+						//기존 topic 연결 초기화
+						transDAO.updateTransTarTopicChogihwa(transVo);
 					}
-					
+
 					if (trans_exrt_trg_tb_id != -1) {
 						// 맵핑 테이블 삭제
 						transDAO.deleteTransExrttrgMapp(trans_exrt_trg_tb_id);
 					}
+					
+					//삭제 시 log파일 삭제
+					transDAO.deleteTransConnectLog(transVo);
 				}
 			}
 		}catch(Exception e){
@@ -547,6 +576,59 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			e.printStackTrace();
 		}
 
+		return result;
+	}
+	
+	/**
+	 * trans 소스 전송관리 등록
+	 * 
+	 * @param connect_nm
+	 * @return int
+	 * @throws Exception 
+	 */
+	public String updateTranExrtTrgList(int trans_id) throws Exception {
+		String result = "success";
+		String tb_nm = "";
+		try {
+			TransVO searchTransVO = new TransVO();
+			searchTransVO.setTrans_id(trans_id);
+			
+			List<TransVO> tblTableList = transDAO.selectTranExrtTrgList(searchTransVO); // 전송관리 테이블 조회
+			List<TransVO> topicTableList = transDAO.selectTranIdTopicList(searchTransVO); // topic 테이블 조회
+
+			if (tblTableList.size() > 0 && topicTableList.size() > 0) {
+				for(int i=0; i<tblTableList.size(); i++){
+					String[] exrt_trg_tb_nm_arr = tblTableList.get(i).getExrt_trg_tb_nm().split(",");
+					
+					for(int j=0; j<exrt_trg_tb_nm_arr.length; j++){
+						for(int h=0; h<topicTableList.size(); h++){
+							tb_nm = "";
+							if (exrt_trg_tb_nm_arr[j].equals(topicTableList.get(h).getTopic_nm())) {
+								tb_nm += "";
+							} else {
+								tb_nm += exrt_trg_tb_nm_arr[j];
+								
+								if (j != topicTableList.size() -1) {
+									tb_nm += ",";
+								}
+							}
+						}
+					}
+
+					TransVO insTransVO = new TransVO();
+					insTransVO.setTrans_exrt_trg_tb_id(tblTableList.get(i).getTrans_exrt_trg_tb_id());
+					insTransVO.setExrt_trg_tb_nm(tb_nm);
+					
+					transDAO.updateTranExrtTrgInfo(insTransVO);
+				}
+			}
+
+			result = "success";
+		} catch (Exception e) {
+			result = "failed";
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 	
@@ -730,6 +812,12 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 
 			if ("S".equals(result) ) {
 				transDAO.insertTransKafkaConnect(transDbmsVO);
+				
+				transDbmsVO.setAct_type("A");			//활성화
+				transDbmsVO.setAct_exe_type("TC004001");//manual
+				transDbmsVO.setExe_rslt_cd("TC001501");
+
+				transDAO.insertTransKafkaConnectLog(transDbmsVO);
 			}
 		} catch (SQLException e) {
 			result = "F";
@@ -789,6 +877,8 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 					transDbmsPrmVO.setKc_id(trans_connect_ids.get(i).toString());
 					
 					transDAO.deleteTransKafkaConnect(transDbmsPrmVO);
+
+					transDAO.deleteTransKafkaConnectLog(transDbmsPrmVO);
 				}
 			}
 		}catch(Exception e){
@@ -809,6 +899,9 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 
 		try {
 			transDAO.updateTransKafkaConnect(transDbmsVO);
+
+			//kafka connect 이력 등록
+			
 		} catch (Exception e) {
 			result = "F";
 			e.printStackTrace();
@@ -967,4 +1060,126 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * target 전송설정 total 등록
+	 * 
+	 * @param transMappVO, transVO
+	 * @throws Exception
+	 */
+	@Override
+	public String insertTargetConnectInfoTot(TransMappVO transMappVO, TransVO transVO) throws Exception{
+		String result = "success";
+		int tar_trans_id  =0;
+		try{
+			//전송대상 테이블 등록
+			transDAO.insertTransExrttrgMapp(transMappVO);
+			
+			//target trans_id
+			tar_trans_id = transDAO.selectTargetConnectSeq();
+			transVO.setTrans_id(tar_trans_id);
+
+			if (transMappVO != null) {
+				String[] exrt_trg_tb_nm_array = null; //테이블 목록 배열
+				String exrt_trg_tb_nm = transMappVO.getExrt_trg_tb_nm();
+				exrt_trg_tb_nm_array = exrt_trg_tb_nm.split(",");
+				
+				if (exrt_trg_tb_nm_array != null) {
+					transVO.setTar_trans_exrt_trg_tb_id(transVO.getTrans_exrt_trg_tb_id());
+					transVO.setTar_trans_id(transVO.getTrans_id());
+					
+					for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
+						//테이블별
+						String topic_nm = exrt_trg_tb_nm_array[i];
+						transVO.setTopic_nm(topic_nm);
+
+						//TRANS target topic update
+						transDAO.updateTransTarTopic(transVO);
+					}						
+				}
+			}
+			
+			transDAO.insertTargetConnectInfo(transVO);
+
+			result = "success";
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	/**
+	 * target 전송설정 total 수정
+	 * 
+	 * @param transMappVO, transVO
+	 * @throws Exception
+	 */
+	@Override
+	public String updateTargetConnectInfoTot(TransMappVO transMappVO, TransVO transVO) throws Exception{
+		String result = "success";
+		try{
+			//전송대상 테이블 수정
+			transDAO.updateTransExrttrgMapp(transMappVO);
+
+			if (transMappVO != null) {
+				String[] exrt_trg_tb_nm_array = null; //테이블 목록 배열
+				String exrt_trg_tb_nm = transMappVO.getExrt_trg_tb_nm();
+				exrt_trg_tb_nm_array = exrt_trg_tb_nm.split(",");
+				
+				if (exrt_trg_tb_nm_array != null) {
+					transVO.setTar_trans_exrt_trg_tb_id(transVO.getTrans_exrt_trg_tb_id());
+					transVO.setTar_trans_id(transVO.getTrans_id());
+					
+					//기존 topic 연결 초기화
+					transDAO.updateTransTarTopicChogihwa(transVO);
+					
+					for(int i=0;i < exrt_trg_tb_nm_array.length;i++) {
+						//테이블별
+						String topic_nm = exrt_trg_tb_nm_array[i];
+						transVO.setTopic_nm(topic_nm);
+						
+						//TRANS target topic update
+						transDAO.updateTransTarTopic(transVO);
+					}						
+				}
+			}
+			
+			transDAO.updateTargetConnectInfo(transVO);
+
+			result = "success";
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	
+	/**
+	 * trans topic 리스트 조회
+	 * 
+	 * @param transVO
+	 * @return List<TransVO>
+	 * @throws Exception
+	 */
+	@Override
+	public List<TransVO> selectTransTopicList(TransVO transVO) throws Exception {
+		System.out.println("===asdasdasd==");
+		return transDAO.selectTransTopicList(transVO);
+	}
+	
+	/**
+	 * trans heatbeat 체크
+	 * 
+	 * @param transVO
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws Exception {
+		return transDAO.selectTransComCoIngChk(transVO);
+	}	
 }

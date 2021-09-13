@@ -382,6 +382,7 @@ public class ProxyServiceImpl implements ProxyService{
 			List<ProxyVipConfigVO> vipConfList = new ArrayList<ProxyVipConfigVO>();
 
 			String strResultSubMessge = "";
+			String strAwsYn = FileUtil.getPropertyValue("context.properties", "aws.yn");
 
 			//proxy 파일 setting
 			if (retVal.equals("success")) {
@@ -397,12 +398,15 @@ public class ProxyServiceImpl implements ProxyService{
 					int lisnerUserCnt = 0;		//lisnerUser
 					int lisnerDbNmCnt = 0;		//lisnerDBNm
 					int lisnerBindCnt = 0;		//lisnerBind
+					int lisnerBalCnt = 0;		//listenerBalance
 					int lisnerSimQueryCnt1 = 0;	//lisnerSimQuery1
 					int lisnerSimQueryCnt2 = 0;	//lisnerSimQuery2
 					int lisnerFieldNmCnt = 0;	//lisnerFieldNm
 					int lisnerFieldValCnt = 0;	//lisnerFieldVal
+					
 
 					int vipAddCnt = 0;
+					int vipAwsAddCnt = 0;
 					
 					ProxyListenerVO lisnerVo = new ProxyListenerVO();
 					ProxyListenerServerListVO lisnerSebuVo = new ProxyListenerServerListVO();
@@ -470,6 +474,7 @@ public class ProxyServiceImpl implements ProxyService{
 									lisnerVo.setLsn_nm(strtemp.trim());
 									lisnerVoView.setLsn_nm(lisnerVo.getLsn_nm());
 									lisnerBindCnt = size + 2; //리스너 bind
+									lisnerBalCnt = size +3; //리스너 balance
 								}
 							}
 							
@@ -479,6 +484,19 @@ public class ProxyServiceImpl implements ProxyService{
 								lisnerVoView.setCon_bind_port(lisnerVo.getCon_bind_port());
 							}
 							
+							//리스너 balcne setting
+							if (lisnerBalCnt == size) { //bind
+								if(temp.matches(".*balance.*")){//로드 발란싱 옵션 
+									lisnerVo.setBal_yn("Y");
+									lisnerVo.setBal_opt(temp.substring(temp.lastIndexOf(" ")+1, temp.length()));
+								}else{
+									lisnerVo.setBal_yn("N");
+									lisnerVo.setBal_opt("");
+								}
+								lisnerVoView.setBal_yn(lisnerVo.getBal_yn());
+								lisnerVoView.setBal_opt(lisnerVo.getBal_opt());
+							}
+														
 							//리스너 user, 리스너 db_nm
 							if(temp.matches(".*startup message.*")) {
 								lisnerUserCnt = size + 4;  //리스너 user
@@ -522,7 +540,7 @@ public class ProxyServiceImpl implements ProxyService{
 									lisnerVo.setCon_sim_query(temp);
 								} else if (lisnerSimQueryCnt2 == size) { //SimQuery2
 									if (!temp.equals("")) {
-										lisnerVo.setCon_sim_query(lisnerVo.getCon_sim_query() + " " + temp.trim());
+										lisnerVo.setCon_sim_query(lisnerVo.getCon_sim_query() + temp.trim());
 									}
 								} else if (lisnerFieldNmCnt == size) { //field nm
 									lisnerVo.setField_nm(temp);
@@ -608,6 +626,8 @@ public class ProxyServiceImpl implements ProxyService{
 							socketLogger.info("proxy_set.lisnerSvrList.Con_sim_query_" + i + ": " + lisnerSvrList.get(i).getCon_sim_query());	
 							socketLogger.info("proxy_set.lisnerSvrList.Field_nm_" + i + ": " + lisnerSvrList.get(i).getField_nm());	
 							socketLogger.info("proxy_set.lisnerSvrList.Field_val_" + i + ": " + lisnerSvrList.get(i).getField_val());	
+							socketLogger.info("proxy_set.lisnerSvrList.Bal_yn_" + i + ": " + lisnerSvrList.get(i).getBal_yn());	
+							socketLogger.info("proxy_set.lisnerSvrList.Bal_opt_" + i + ": " + lisnerSvrList.get(i).getBal_opt());	
 						}
 					} else {
 						socketLogger.info("proxy_set.lisnerSvrList.Db_usr_id_");	
@@ -744,10 +764,33 @@ public class ProxyServiceImpl implements ProxyService{
 									vipConfVo.setV_ip("");
 								}
 
-								vipConfList.add(vipConfVo);
-								vipConfVo = new ProxyVipConfigVO();
 							}
-							//////////////////////////////////////////////////////
+							
+							//AWS 설정
+							if(temp.trim().matches(".*notify_master.*")) {
+								String strNotifyMaster =  temp.trim().replaceAll("\"", "");
+								String[] notifyArray =  strNotifyMaster.split(" ");
+								if(notifyArray.length == 6){
+									vipConfVo.setPeer_aws_if_id(notifyArray[3]);
+									vipConfVo.setAws_if_id(notifyArray[4]);
+								}
+								
+								vipAwsAddCnt = keepsize + 1;
+							}
+							
+							//aws 여부 에 따라 list 담기
+							if ("Y".equals(strAwsYn)) {
+								if (vipAwsAddCnt == keepsize) {
+									vipConfList.add(vipConfVo);
+									vipConfVo = new ProxyVipConfigVO();
+								}
+							} else { 
+								if (vipAddCnt == keepsize) {
+									vipConfList.add(vipConfVo);
+									vipConfVo = new ProxyVipConfigVO();
+								}
+							}
+							//////////////////////////////////////////////////////	
 						}
 					}
 				}
@@ -756,7 +799,7 @@ public class ProxyServiceImpl implements ProxyService{
 			socketLogger.info("======================================================");
 			socketLogger.info("2. keepalived server");			
 			
-			if (vipConfList != null) {
+			if (vipConfList.size()>0) {
 				socketLogger.info("keepalived_set.stateMasterInterface: " + stateMasterInterface);	
 				socketLogger.info("keepalived_set.strObjIp: " + strObjIp);
 				socketLogger.info("keepalived_set.strPeerServerIp: " + strPeerServerIp);
@@ -769,6 +812,8 @@ public class ProxyServiceImpl implements ProxyService{
 					socketLogger.info("keepalived_set.vipConfList.Priority_" + i + ": " + vipConfList.get(i).getPriority());
 					socketLogger.info("keepalived_set.vipConfList.V_if_nm_" + i + ": " + vipConfList.get(i).getV_if_nm());
 					socketLogger.info("keepalived_set.vipConfList.V_ip_" + i + ": " + vipConfList.get(i).getV_ip());
+					socketLogger.info("keepalived_set.vipConfList.Aws_if_id_" + i + ": " + vipConfList.get(i).getAws_if_id());
+					socketLogger.info("keepalived_set.vipConfList.Peer_aws_if_id_" + i + ": " + vipConfList.get(i).getPeer_aws_if_id());
 				}
 			} else {
 				socketLogger.info("keepalived_set.stateMasterInterface");	
@@ -789,10 +834,14 @@ public class ProxyServiceImpl implements ProxyService{
 			
 			ProxyServerVO peerServerInfo = new ProxyServerVO();
 			peerServerInfo.setIpadr(strPeerServerIp);
-			
 
 			//마스터 확인
-			ProxyServerVO proxyServerInfo = proxyDAO.selectPrySvrInslInfo(peerServerInfo); //외부, 내부 조회 로 변경
+			ProxyServerVO proxyServerInfo = null;
+			
+			if (strPeerServerIp != null && !"".equals(strPeerServerIp)) {
+				proxyServerInfo = proxyDAO.selectPrySvrInslInfo(peerServerInfo); //외부, 내부 조회 로 변경
+			}
+			
 			String strKeepalived = FileUtil.getPropertyValue("context.properties", "keepalived.install.yn");
 			if (strKeepalived != null && "Y".equals(strKeepalived)) {
 				if (proxyServerInfo != null) {
@@ -1004,10 +1053,9 @@ public class ProxyServiceImpl implements ProxyService{
 									schProxyListnerVO.setDb_usr_id(tempObj.get("db_usr_id").toString());
 									schProxyListnerVO.setField_val(tempObj.get("field_val").toString());
 									schProxyListnerVO.setField_nm(tempObj.get("field_nm").toString());
-	
+									
 									schProxyListnerVO.setLst_mdfr_id("system");
 									schProxyListnerVO.setFrst_regr_id("system");
-	
 									schProxyListnerVO.setDb_svr_id(insPryVo.getDb_svr_id());
 									schProxyListnerVO.setLsn_nm(tempObj.get("lsn_nm").toString());
 	
@@ -1022,7 +1070,10 @@ public class ProxyServiceImpl implements ProxyService{
 											schProxyListnerVO.setDb_id(proxyListenerVO.getDb_id());
 											schProxyListnerVO.setLsn_desc(proxyListenerVO.getLsn_desc());
 											schProxyListnerVO.setDb_nm(proxyListenerVO.getDb_nm());
-	
+											
+											schProxyListnerVO.setBal_yn(tempObj.get("bal_yn").toString());
+											schProxyListnerVO.setBal_opt(tempObj.get("bal_opt").toString());
+											
 											proxyDAO.updatePryLsnInfo(schProxyListnerVO);
 	
 										} else {
@@ -1031,6 +1082,9 @@ public class ProxyServiceImpl implements ProxyService{
 											schProxyListnerVO.setDb_nm(tempObj.get("db_nm").toString());
 											schProxyListnerVO.setLsn_id((int)pry_lsn_id_sn);
 											schProxyListnerVO.setLsn_desc("");
+											
+											schProxyListnerVO.setBal_yn(tempObj.get("bal_yn").toString());
+											schProxyListnerVO.setBal_opt(tempObj.get("bal_opt").toString());
 											
 											proxyDAO.insertPryLsnInfo(schProxyListnerVO);
 										}
@@ -1091,7 +1145,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 							//vip 등록
 							JSONArray arrVip_conf_list= new JSONArray(strVip_conf_list);
-
+							
 							if (arrVip_conf_list.length() > 0 ) {
 								for(int i=0 ; i<arrVip_conf_list.length() ; i++){
 									JSONObject tempObj = (JSONObject) arrVip_conf_list.get(i);
@@ -1105,7 +1159,9 @@ public class ProxyServiceImpl implements ProxyService{
 									schProxyVipConfigVO.setV_if_nm(tempObj.get("v_if_nm").toString());
 									schProxyVipConfigVO.setPriority(Integer.parseInt(tempObj.get("priority").toString()));
 									schProxyVipConfigVO.setChk_tm(Integer.parseInt(tempObj.get("chk_tm").toString()));
-	
+									schProxyVipConfigVO.setAws_if_id(tempObj.get("aws_if_id").toString());
+									schProxyVipConfigVO.setPeer_aws_if_id(tempObj.get("peer_aws_if_id").toString());
+									
 									schProxyVipConfigVO.setLst_mdfr_id("system");
 									schProxyVipConfigVO.setFrst_regr_id("system");
 	
@@ -1120,7 +1176,9 @@ public class ProxyServiceImpl implements ProxyService{
 				} catch (Exception e) {
 					errLogger.error("listner.error {} ", e.toString());
 					returnMsg = "false";
+					socketLogger.info("Exception : "+e.toString());
 				}
+				
 				socketLogger.info("returnMsg3 : "+returnMsg);
 				try {
 					if (insPryVo != null) {

@@ -87,7 +87,8 @@
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else if(ins_tg_connect_status_Chk == "fail"){
-			showSwalIcon('Kafka-Connect ' + '<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="data_transfer.msg36" />', '<spring:message code="common.close" />', '', 'error');
+		//	showSwalIcon('Kafka-Connect ' + '<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		} else if(nvlPrmSet($("#ins_tg_connect_nm", "#insTargetRegForm").val(), '') == "") {
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_tg_connectNmMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
@@ -96,11 +97,11 @@
 			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		} else if(nvlPrmSet($("#ins_tg_trans_trg_sys_nm", "#insTargetRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="data_transfer.msg26" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}
 
-		//전성대상테이블 length 체크
+		//전송대상테이블 length 체크
 		if (ins_connector_tg_tableList.rows().data().length <= 0) {
 			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
 			return false;
@@ -296,7 +297,7 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title" style="margin-bottom:3px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.transfer_table" />
+													<spring:message code="data_transfer.transfer_topic" />
 												</h4>
 	
 								 				<table id="ins_connector_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">

@@ -33,7 +33,7 @@ public class RestoreMake {
 				+ "job_name = " + restore.getJobName() + "\n"
 				+ "source_node = " + restore.getSourceNode() + "\n"
 				+ "enable_instant_restore = " + restore.getBmr() + "\n"
-				+ "#auto_restore_data = " + "\n"
+				+ "auto_restore_data = yes" + "\n"
 				+ "restore_target = " + restore.getGuestMac() + "\n"
 				+ "recovery_point = " + restore.getRecoveryPoint() + "\n";
 		
@@ -51,8 +51,8 @@ public class RestoreMake {
 				+ "guest_netmask = " + restore.getGuestSubnetmask() + "\n"
 				+ "guest_gateway = " + restore.getGuestGateway() + "\n"
 				+ "guest_dns = " + restore.getGuestDns() + "\n"
-				+ "#guest_hostname = " + "\n"
-				+ "#guest_reboot = " + "\n"
+				+ "guest_hostname = experdb" + "\n"
+				+ "guest_reboot = yes" + "\n"
 				+ "#guest_reset_username = " + "\n"
 				+ "#guest_reset_password = " + "\n";
 		
@@ -66,14 +66,24 @@ public class RestoreMake {
 				+ "#rps_server_datastore = " + "\n";
 		
 		// script
-		content_script = "########## script ##########\n"
-				+ "#script_pre_job_server = " + "\n"
-				+ "#script_post_job_server = " + "\n"
-				+ "#script_pre_job_client = " + "\n"
-				+ "#script_post_job_client = " + "\n"
-				+ "#script_ready_to_use = " + "\n";
 		
+		if(restore.getType().equals("completeRecovery")){
+			content_script = "########## script ##########\n"
+					+ "#script_pre_job_server = " + "\n"
+					+ "#script_post_job_server = " + "\n"
+					+ "#script_pre_job_client = " + "\n"
+					+ "script_post_job_client = completeRecovery.sh" + "\n"
+					+ "#script_ready_to_use = " + "\n";
+		}else{
+			content_script = "########## script ##########\n"
+					+ "#script_pre_job_server = " + "\n"
+					+ "#script_post_job_server = " + "\n"
+					+ "#script_pre_job_client = " + "\n"
+					+ "script_post_job_client = timeRecovery.sh" + "\n"
+					+ "#script_ready_to_use = " + "\n";
+		}
 		
+
 		// include volume
 //		String volume = "include_volumes = ";
 //		int volumeCount = 0;

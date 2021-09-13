@@ -86,6 +86,14 @@ public class Db2pgDbmsSystemController {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/db2pgMonitoring.do")
+	public ModelAndView db2pgMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO){
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("db2pg/monitoring/db2pgMonitoring");
+		
+		return mv;
+	}
 	
 	/**
 	 * DBMS 수정 팝업 화면을 보여준다.

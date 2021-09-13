@@ -38,7 +38,7 @@
 </script>
 	
 <div class="modal fade" id="pop_layer_popup_recoveryPasswordCheckForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl" role="document" style="width: 450px;margin-top: 220px;margin-right: 700px;">
+	<div class="modal-dialog  modal-xl" role="document" style="width: 450px;margin-top: 220px;">
 		<div class="modal-content" >
 			<div class="modal-body" style="margin-bottom:-30px;padding-top: 30px;">
 				<div class="row">
