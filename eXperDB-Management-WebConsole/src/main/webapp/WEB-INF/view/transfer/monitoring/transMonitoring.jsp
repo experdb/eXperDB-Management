@@ -428,7 +428,8 @@
 	
 	function fn_logView(type){
 		var todayYN = 'N';
-		
+		var langSelect = document.getElementById("src_connect");
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
 // 		if(date == 'today'){
 // 			pry_svr_id = select_pry_svr_id;
 // 			todayYN = 'Y';
@@ -442,7 +443,7 @@
 			type : 'post',
 			data : {
 				db_svr_id : v_db_svr_id,
-				date : date
+				date : date,
 			},
 			success : function(result) {
 				$("#connectorlog", "#transLogViewForm").html("");
@@ -455,8 +456,9 @@
 // 				$("#todayYN", "#transLogViewForm").val(todayYN);
 				$("#todayYN", "#transLogViewForm").val("Y");
 				$("#view_file_name", "#transLogViewForm").html("");
+				$("#trans_id","#transLogViewForm").val(selectValue);
 				if(type === 'connector'){
-				dateCalenderSetting();
+					dateCalenderSetting();
 					$('#restart_btn').hide();
 					$('#wrk_strt_dtm_div').show();
 					$('.log_title').html(' Connector 로그');

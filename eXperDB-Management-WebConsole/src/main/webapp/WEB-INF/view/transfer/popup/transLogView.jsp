@@ -190,21 +190,23 @@
 	
 	function fn_actExeCng(){
 		var v_db_svr_id = $("#db_svr_id", "#transLogViewForm").val();
-		
+		var v_trans_id = $("#trans_id", "#transLogViewForm").val();
+		$('#loading').show();
 		$.ajax({
 			url : '/transKafkaConnectRestart.do',
 			type : 'post',
+			dataType : "json",
 			data : {
-				db_svr_id : v_db_svr_id
+				db_svr_id : v_db_svr_id,
+				trans_id : v_trans_id
 			},
 			success : function(result) {
-
- 				if(result.result){
- 					fn_proxy_loadbar("start");
+ 				if(result.data === "success"){
+ 					fn_trans_loadbar("start");
 
  					setTimeout(function() {
- 						fn_proxy_loadbar("stop");
- 		 				showSwalIconRst(result.errMsg, '<spring:message code="common.close" />', '', 'success', 'proxyMoReload');
+ 						fn_trans_loadbar("stop");
+ 		 				showSwalIconRst(result.errMsg, '<spring:message code="common.close" />', '', 'success');
  					}, 7000);
  				}else{
  					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
@@ -212,7 +214,7 @@
 
 			},
 			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
+				xhr.setRequestHeader("AJAX", true);	
 			},
 			error : function(xhr, status, error) {
 				$("#ins_idCheck", "#insProxyListenForm").val("0");
@@ -226,6 +228,7 @@
 				}
 			}
 		});
+		$('#loading').hide();
 	}
 	
 </script>
@@ -250,6 +253,7 @@
 				
 				<form class="cmxform" id="transLogViewForm" name="transLogViewForm" >
 					<input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
+					<input type="hidden" id="trans_id" name="trans_id">
 					<input type="hidden" id="seek" name="seek" value="0">
 					<input type="hidden" id="info_file_name" name="info_file_name" value="">
 					<input type="hidden" id="endFlag" name="endFlag" value="0">

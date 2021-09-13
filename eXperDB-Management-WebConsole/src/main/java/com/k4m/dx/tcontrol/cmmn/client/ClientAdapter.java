@@ -589,12 +589,14 @@ public class ClientAdapter {
 		return obj;
 	}
 	
-	/* kafka 재시작 */
-	public JSONObject dxT044(JSONObject jObj) throws Exception {
+	/* trans kafka 재시작 */
+	public JSONObject dxT044(JSONObject jObj) throws Exception{
+		
 		byte[] bt = jObj.toString().getBytes();
 		cc.send(4, bt);
-		byte[]	recvBuff = cc.recv(4, false);
-
+		byte[] recvBuff = cc.recv(4, false);
+		
 		return parseToJsonObj(recvBuff);
 	}
+
 }
