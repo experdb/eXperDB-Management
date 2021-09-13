@@ -295,8 +295,12 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 
 		try {
 			int db_svr_id = transVO.getDb_svr_id();
-			
+			int trans_id = transVO.getTrans_id();
+			System.out.println("trans_id : " + trans_id);
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			
+			// kafka 정보 조회
+			Map<String, Object> kafkaInfo = transMonitoringDAO.selectKafkaConnectInfo(trans_id);
 			
 			//db 서버 조회
 			DbServerVO schDbServerVO = new DbServerVO();
@@ -309,9 +313,9 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 			vo.setIPADR(strIpAdr);
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoDAO.selectAgentInfo(vo);
 
-			String IP = dbServerVO.getIpadr();
+			String IP = String.valueOf(kafkaInfo.get("kc_ip"));
+//			int PORT = Integer.parseInt(String.valueOf(kafkaInfo.get("kc_port")));
 			int PORT = agentInfo.getSOCKET_PORT();
-			
 			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd_old()));
 			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
 			
@@ -337,20 +341,16 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	 * @return JSONObject
 	 */
 	@Override
-	public JSONObject transKafkaConnectRestart(TransVO transVO) {
+	public Map<String, Object> transKafkaConnectRestart(TransVO transVO, Map<String, Object> param) {
 		JSONObject jObj = new JSONObject();
-		JSONObject resultObj = new JSONObject();
-		
-		boolean executeFlag = false;
-
-		String resultLog = "";
-		String errMsg = "";
+		Map<String, Object> resultObj = new HashMap<String, Object>();
 		
 		try {
 			int db_svr_id = transVO.getDb_svr_id();
-			
+			int trans_id = transVO.getTrans_id();
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-			
+			Map<String, Object> kafkaInfo = transMonitoringDAO.selectKafkaConnectInfo(trans_id);
+
 			//db 서버 조회
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
@@ -362,16 +362,22 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 			vo.setIPADR(strIpAdr);
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoDAO.selectAgentInfo(vo);
 
-			String IP = dbServerVO.getIpadr();
+//			String IP = dbServerVO.getIpadr();
+			String IP = String.valueOf(kafkaInfo.get("kc_ip"));
 			int PORT = agentInfo.getSOCKET_PORT();
 			
 			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd_old()));
 			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
-			
+			System.out.println(dbServerVO.toString());
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT044);
-			
+			jObj.put(ClientProtocolID.USER_ID, param.get("lst_mdfr_id"));
+			jObj.put(ClientProtocolID.KC_IP, IP);
+			jObj.put(ClientProtocolID.KC_PORT,kafkaInfo.get("kc_port"));
+			jObj.put("kc_id", kafkaInfo.get("kc_id"));
+			System.out.println(jObj.toJSONString());
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			resultObj = cic.kafkaConnectRestart(IP, PORT, dbServerVO, jObj);
+			System.out.println("resultObj : " + resultObj.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

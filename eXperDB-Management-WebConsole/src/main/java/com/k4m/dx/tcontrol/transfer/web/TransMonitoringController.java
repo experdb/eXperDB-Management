@@ -6,18 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMonitoringService;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
@@ -307,7 +307,7 @@ public class TransMonitoringController {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			String strTransId = request.getParameter("trans_id");
 			String type = request.getParameter("type");
-//			int trans_id = Integer.parseInt(strTransId);
+			int trans_id = Integer.parseInt(strTransId);
 			String strSeek = request.getParameter("seek");
 			String strReadLine = request.getParameter("readLine");
 			String dwLen = request.getParameter("dwLen");
@@ -316,7 +316,7 @@ public class TransMonitoringController {
 			
 			TransVO transVO = new TransVO();
 			transVO.setDb_svr_id(db_svr_id);
-			
+			transVO.setTrans_id(trans_id);
 			Map<String, Object> param = new HashMap<>();
 			param.put("seek", strSeek);
 			param.put("readLine", strReadLine);
@@ -344,18 +344,30 @@ public class TransMonitoringController {
 	 * trans Kafka Connect 재시작
 	 * 
 	 * @param historyVO, request
-	 * @return JSONObject
+	 * @return ModelAndView
 	 */
 	@RequestMapping("/transKafkaConnectRestart.do")
-	public @ResponseBody JSONObject transKafkaConnectRestart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		JSONObject resultObj = new JSONObject();
-		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-		
-		TransVO transVO = new TransVO();
-		transVO.setDb_svr_id(db_svr_id);
-		
-		resultObj = transMonitoringService.transKafkaConnectRestart(transVO);
-		
-		return resultObj;
+	public ModelAndView transKafkaConnectRestart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		HttpSession session = request.getSession();
+		try {
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("lst_mdfr_id", loginVo.getUsr_id() == null ? "" : loginVo.getUsr_id().toString());
+
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			int trans_id = Integer.parseInt(request.getParameter("trans_id"));
+			TransVO transVO = new TransVO();
+			transVO.setDb_svr_id(db_svr_id);
+			transVO.setTrans_id(trans_id);
+			Map<String, Object> resultObj = transMonitoringService.transKafkaConnectRestart(transVO, param);
+			System.out.println(resultObj.toString());
+			System.out.println(resultObj.get("RESULT_DATA"));
+			mv.addObject("data", resultObj.get("RESULT_DATA"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return mv;
 	}
 }

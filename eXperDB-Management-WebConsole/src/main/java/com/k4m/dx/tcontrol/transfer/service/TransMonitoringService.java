@@ -201,6 +201,6 @@ public interface TransMonitoringService {
 	 * @param transVO, param
 	 * @return JSONObject
 	 */
-	public JSONObject transKafkaConnectRestart(TransVO transVO);
+	public Map<String, Object> transKafkaConnectRestart(TransVO transVO, Map<String, Object> param);
 
 }
