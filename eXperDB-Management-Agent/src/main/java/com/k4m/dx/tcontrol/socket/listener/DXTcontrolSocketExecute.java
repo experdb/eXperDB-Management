@@ -422,7 +422,6 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					
 				case TranCodeType.DxT044 :
 					
-					
 					DxT044 dxT044 = new DxT044(client, is, os);
 					dxT044.execute(strDX_EX_CODE, jObj);
 					
