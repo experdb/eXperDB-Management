@@ -25,8 +25,8 @@
 		  , username
 		  , "password"
 		  </if>
-		  , "free"
-		  , total
+		  <!-- , "free"
+		  , total -->
 		  , "type"
 		  , isrunscript
 		  , freealert
@@ -46,8 +46,8 @@
 	    	, #{backupDestUser}
 	    	, #{backupDestPasswd}
 	    	</if>
-	    	, #{freeSize}
-	    	, #{totalSize}
+	    <!-- 	, #{freeSize}
+	    	, #{totalSize} -->
 	    	, #{type}
 	    	, #{isRunScript}
 	    	, #{freeSizeAlert}
