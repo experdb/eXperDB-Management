@@ -17,6 +17,11 @@ before doing that, I recommend you to read this to follow the conventions.
 6. Once the change has been approved, the PR is merged by the project moderator.
 7. After merging the PR, we close the pull request. You can then delete the now obsolete branch.
 
+### Branches
+
+contribution branch is develop
+master branch for release
+
 ## Types of Contribution
 There are various ways to contribute and participate. Please read the guidelines below regarding the process of each type of contribution.
 
