@@ -112,7 +112,7 @@
 		$("#ins_view_check_path1","#bckScdInsViewForm").val("N");
 		$("#ins_view_check_path3","#bckScdInsViewForm").val("N");
 		$("#ins_view_check_path5","#bckScdInsViewForm").val("N");
-
+		
 		if (result != null) {
 			$("#ins_view_db_svr_id", "#bckScdInsViewForm").val(result.db_svr_id);
 
@@ -320,7 +320,7 @@
 
 		var bck = nvlPrmSet($("#ins_view_bck", "#bckScdInsViewForm").val(), "");
 		
-		if(bck == "rman"){
+		/* if(bck == "rman"){
 			$("#ins_view_rman_bck_opt", "#bckScdInsViewForm").show();
 			//$("#r_log_pth").show();
 			$("#ins_view_r_data_pth", "#bckScdInsViewForm").show();
@@ -329,7 +329,7 @@
 			//$("#d_log_pth").hide();
 			$("#ins_view_d_bck_pth", "#bckScdInsViewForm").hide();
 			$("#ins_view_dump_bck_opt", "#bckScdInsViewForm").hide();
-		}else if(bck == "dump"){
+		}else if(bck == "dump"){ */
 			$("#ins_view_d_bck_pth", "#bckScdInsViewForm").show();
 			//$("#d_log_pth").show();
 			$("#ins_view_dump_bck_opt", "#bckScdInsViewForm").show();
@@ -337,7 +337,7 @@
 			$("#ins_view_r_data_pth", "#bckScdInsViewForm").hide();
 			$("#ins_view_r_bck_pth", "#bckScdInsViewForm").hide();
 			$("#ins_view_rman_bck_opt", "#bckScdInsViewForm").hide();
-		}else{
+		/* }else{
 			$("#ins_view_d_bck_pth", "#bckScdInsViewForm").hide();
 			//$("#d_log_pth").hide();
 			//$("#r_log_pth").hide();
@@ -345,7 +345,7 @@
 			$("#ins_view_r_bck_pth", "#bckScdInsViewForm").hide();
 			$("#ins_view_rman_bck_opt", "#bckScdInsViewForm").hide();
 			$("#ins_view_dump_bck_opt", "#bckScdInsViewForm").hide();
-		}	
+		}	 */
 	} 	
 
 	/* ********************************************************
@@ -1089,11 +1089,12 @@
 									</label>
 
 									<div class="col-sm-3">
-										<select class="form-control" style="margin-right: 1rem;" name="ins_view_bck" id="ins_view_bck" tabindex=2 onChange="fn_ins_view_bck();">
+										<%-- <select class="form-control" style="margin-right: 1rem;" name="ins_view_bck" id="ins_view_bck" tabindex=2 onChange="fn_ins_view_bck();">
 											<option value=""><spring:message code="common.choice" /></option>
-											<option value="rman">Online</option>
+											<!-- <option value="rman">Online</option> -->
 											<option value="dump">Dump</option>
-										</select>
+										</select> --%>
+										<input type="text" class="form-control" id="ins_view_bck" name="ins_view_bck" value="Dump" tabindex=2 style="color:black; background:white;" readonly/>
 									</div>
 									
 									<div class="col-sm-3" id="ins_view_rman_bck_opt">

@@ -892,6 +892,7 @@
 
 				//POP START
 				fn_insertScdViewPopStart();
+				fn_ins_view_bck();
 
 				$("#pop_layer_backup_week_scd_ins").modal("show");
 			}
