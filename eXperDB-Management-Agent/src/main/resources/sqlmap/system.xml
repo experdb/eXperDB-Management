@@ -330,10 +330,24 @@
 			show wal_buffers
 		]]>
 	</select>
-
+	
+	<select id="selectServer_version" resultType="String">
+		<![CDATA[
+			show server_version
+		]]>
+	</select>
+	
+	<!-- DB버전 12까지 -->
     <select id="selectWal_keep_segments" resultType="String">
 		<![CDATA[
 			show wal_keep_segments
+		]]>
+	</select>
+	
+	<!-- DB버전이 13이상이면 -->
+	 <select id="selectWal_keep_size" resultType="String">
+		<![CDATA[
+			show wal_keep_size
 		]]>
 	</select>
 

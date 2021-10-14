@@ -214,7 +214,7 @@ public class DxT022 extends SocketCtl {
 
 			// DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-
+			
 			sessDB = sqlSessionFactory.openSession(connDB);
 
 			String listen_addresses = sessDB.selectOne("system.selectListen_addresses");
@@ -239,8 +239,16 @@ public class DxT022 extends SocketCtl {
 			resultHP.put(ProtocolID.CMD_WAL_LEVEL, wal_level);
 			String wal_buffers = sessDB.selectOne("system.selectWal_buffers");
 			resultHP.put(ProtocolID.CMD_WAL_BUFFERS, wal_buffers);
-			String wal_keep_segments = sessDB.selectOne("system.selectWal_keep_segments");
+			
+			Double server_version = Double.parseDouble((String) sessDB.selectOne("system.selectServer_version"));
+			String wal_keep_segments;
+			if(server_version<13.0){
+				wal_keep_segments = sessDB.selectOne("system.selectWal_keep_segments");				
+			}else{
+				wal_keep_segments = sessDB.selectOne("system.selectWal_keep_size");								
+			}
 			resultHP.put(ProtocolID.CMD_WAL_KEEP_SEGMENTS, wal_keep_segments);
+			
 			String archive_mode = sessDB.selectOne("system.selectArchive_mode");
 			resultHP.put(ProtocolID.CMD_ARCHIVE_MODE, archive_mode);
 			String archive_command = sessDB.selectOne("system.selectArchive_command");
