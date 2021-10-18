@@ -147,4 +147,11 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public void insertTransActstateCngInfo(TransVO transVO) throws Exception;
+	
+	/**
+	 * kafka 재시작 이력 등록
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void insertTransKafkaActstateCngInfo(TransVO transVO) throws Exception;
 }

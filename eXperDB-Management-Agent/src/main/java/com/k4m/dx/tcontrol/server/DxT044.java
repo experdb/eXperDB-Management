@@ -8,11 +8,14 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.k4m.dx.tcontrol.db.repository.service.TransServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.socket.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 
 /**
@@ -43,26 +46,29 @@ public class DxT044 extends SocketCtl {
 	}
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
-
 		socketLogger.info("DxT044.execute : " + strDxExCode);
+
+		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
+		TransServiceImpl transService = (TransServiceImpl) context.getBean("TransService");
 
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
-		socketLogger.info("[123456789132136547654] " + jObj.toJSONString());
-//		String strExeStatusIng = ""
+		String strExeStatusIng = "";
 		// 정보 넣어주고 insert 하는거 하기!
 		
-//		TransVO transVO = new TransVO();
-//		transVO.setKc_id((int) jObj.get("kc_id"));
-		
-		
+		TransVO transVO = new TransVO();
+		transVO.setKc_id(Integer.parseInt(String.valueOf(jObj.get("kc_id"))));
+		transVO.setAct_type("R"); // 재시작	
+		transVO.setAct_exe_type("TC004001"); // 수동
+		transVO.setKc_ip(String.valueOf(jObj.get(ClientProtocolID.KC_IP)));
+		transVO.setKc_port(Integer.parseInt(String.valueOf(jObj.get(ClientProtocolID.KC_PORT))));
+		transVO.setLogin_id(String.valueOf(jObj.get(ClientProtocolID.USER_ID)));
 		JSONObject outputObj = new JSONObject();
 		try {
 			
 			String strCmd = "docker restart `docker ps -a --format \"table {{.Names}}\" | grep connect`";
-//			String strCmd = "docker ps -a --format \"table {{.Names}}\" | grep kafka";
 			RunCommandExec r = new RunCommandExec(strCmd);
 			
 			r.start();
@@ -80,11 +86,15 @@ public class DxT044 extends SocketCtl {
 			socketLogger.info("[MSG] " + strResultMessge);
 
 			socketLogger.info("##### 결과 : " + retVal + " message : " +strResultMessge);	
-//			jObj.put("",);
 			if(retVal.equals("success")){
-				
+				strExeStatusIng = "TC001501";
+			} else {
+				strExeStatusIng = "TC001502";
 			}
+			transVO.setExe_rslt_cd(strExeStatusIng);
 			
+//			transService.insertTransKafkaActstateCngInfo(transVO);
+
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);

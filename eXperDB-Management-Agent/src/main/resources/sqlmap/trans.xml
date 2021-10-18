@@ -432,7 +432,7 @@
                            #{kc_port}::numeric,
                            #{act_type},
                            #{act_exe_type},
-                           clock_timestamp()
+                           clock_timestamp(),
                            #{exe_rslt_cd},
                            #{login_id},
                            clock_timestamp(),

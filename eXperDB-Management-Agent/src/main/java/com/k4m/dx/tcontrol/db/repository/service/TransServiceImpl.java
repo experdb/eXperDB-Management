@@ -683,4 +683,9 @@ public class TransServiceImpl implements TransService{
 	public void insertTransActstateCngInfo(TransVO transVO) throws Exception {
 		transDAO.insertTransActstateCngInfo(transVO);
 	}
+	
+	/* kafka connect 재시작시 이력 등록 */
+	public void insertTransKafkaActstateCngInfo(TransVO transVO) throws Exception {
+		transDAO.insertTransKafkaActstateCngInfo(transVO);
+	}
 }
