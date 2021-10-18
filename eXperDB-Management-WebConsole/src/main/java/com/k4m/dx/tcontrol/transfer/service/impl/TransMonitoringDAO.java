@@ -247,4 +247,14 @@ public class TransMonitoringDAO extends EgovAbstractMapper{
 	public Map<String, Object> selectKafkaConnectInfo(int trans_id){
 		return selectOne("transMonitoringSql.selectKafkaConnectInfo", trans_id);
 	}
+	
+	/**
+	 * trans kafka 기동 정지 이력 조회
+	 * 
+	 * @param kc_id
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectKafkaActCngList(int kc_id) {
+		return selectList("transMonitoringSql.selectKafkaActCngList", kc_id);
+	}
 }

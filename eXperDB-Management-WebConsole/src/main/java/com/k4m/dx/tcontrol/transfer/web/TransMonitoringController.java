@@ -112,6 +112,9 @@ public class TransMonitoringController {
 		String strTransId = request.getParameter("trans_id");
 		int trans_id = Integer.parseInt(strTransId);
 		
+		// 카프카 커넥트 이력
+		List<Map<String, Object>> selectKafkaActCngList = transMonitoringService.selectKafkaActCngList(trans_id);
+		
 		// 소스 연결 테이블
 		Map<String, Object> tableList = transMonitoringService.selectSourceConnectorTableList(trans_id);
 		
@@ -154,6 +157,7 @@ public class TransMonitoringController {
 		mv.addObject("sourceErrorChart", sourceErrorChart);
 		mv.addObject("sourceErrorInfo", sourceErrorInfo);
 		mv.addObject("targetConnectorList", targetConnectorList);
+		mv.addObject("kafkaActCngList",selectKafkaActCngList);
 		
 		return mv;
 	}
@@ -217,8 +221,11 @@ public class TransMonitoringController {
 		
 		// 타겟 DBMS 정보
 		List<Map<String, Object>> targetDBMSInfo = transMonitoringService.selectTargetDBMSInfo(trans_id);
+		System.out.println(targetDBMSInfo.size());
+		System.out.println(targetDBMSInfo.get(0).toString());
 		// 타겟 전송대상 테이블 목록
 		Map<String, Object> targetTopic = transMonitoringService.selectTargetTopicList(trans_id);
+		System.out.println(targetTopic.toString());
 		String[] topicTemp = targetTopic.get("topic_name").toString().split(",");
 		List<Map<String, Object>> targetTopicList = new ArrayList<Map<String, Object>>(); 
 		for(int i = 0; i < topicTemp.length; i++){
@@ -361,8 +368,6 @@ public class TransMonitoringController {
 			transVO.setDb_svr_id(db_svr_id);
 			transVO.setTrans_id(trans_id);
 			Map<String, Object> resultObj = transMonitoringService.transKafkaConnectRestart(transVO, param);
-			System.out.println(resultObj.toString());
-			System.out.println(resultObj.get("RESULT_DATA"));
 			mv.addObject("data", resultObj.get("RESULT_DATA"));
 		} catch (Exception e) {
 			e.printStackTrace();

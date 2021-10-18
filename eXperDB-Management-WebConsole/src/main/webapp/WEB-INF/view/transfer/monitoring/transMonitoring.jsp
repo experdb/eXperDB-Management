@@ -97,7 +97,24 @@
 			columns : [
 				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
 				{data : "connector_name", className : "dt-center", defaultContent : ""},
-				{data : "act_type", className : "dt-center", defaultContent : "" },
+				{data : "act_type",							
+					render : function(data, type, full, meta){
+						var html = "";
+							if(data == 'A'){
+							html += '	<i class="fa fa-spinner fa-spin mr-2 icon-sm text-success"></i>';
+							html += '	<spring:message code="eXperDB_proxy.act_start"/>';
+						} else if(data == 'R') {
+							html += '	<i class="fa fa-refresh fa-spin mr-2 icon-sm text-warning"></i>';
+							html += '	<spring:message code="eXperDB_proxy.act_restart"/>';
+						} else if(data == 'S'){
+							html += '	<i class="fa fa-circle-o-notch mr-2 icon-sm text-danger"></i>';
+							html += '	<spring:message code="eXperDB_proxy.act_stop"/>';
+						}
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : ""
+				},
 				{data : "wrk_dtm", className : "dt-center", defaultContent : "" },
 			]
 		});
@@ -151,6 +168,10 @@
 				                    $('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
 								}
 			            	}
+						}
+						connectorActTable.clear().draw();
+						if (nvlPrmSet(result.kafkaActCngList, '') != '') {
+							connectorActTable.rows.add(result.kafkaActCngList).draw();
 						}
 						srcConnectSettingInfoTable.clear().draw();
 						if (nvlPrmSet(result.connectInfo, '') != '') {

@@ -141,13 +141,31 @@ function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
 				allErrorChart.setData(result.allErrorList);
 				
 				//로그 기록 테이블 설정
-				connectorActTable.clear().draw();
-				if (nvlPrmSet(result.connectorActLogList, '') != '') {
-					connectorActTable.rows.add(result.connectorActLogList).draw();
-				}
+//				connectorActTable.clear().draw();
+//				if (nvlPrmSet(result.connectorActLogList, '') != '') {
+//					connectorActTable.rows.add(result.connectorActLogList).draw();
+//				}
 				$('#proxyLog').css('min-height','100px');
 			}
 		}
 	});	
 	$('#loading').hide();
+}
+
+/* ********************************************************
+* load bar 추가
+******************************************************** */
+function fn_trans_loadbar(gbn){
+	var htmlLoad_trans = '<div id="loading_trans"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
+	if($("#loading_trans").length == 0)	$("#contentsDiv").append(htmlLoad_trans);
+	
+	if (gbn == "start") {
+	      $('#loading_trans').css('position', 'absolute');
+	      $('#loading_trans').css('left', '50%');
+	      $('#loading_trans').css('top', '50%');
+	      $('#loading_trans').css('transform', 'translate(-50%,-50%)');	  
+	      $('#loading_trans').show();	
+	} else {
+		$('#loading_trans').hide();	
+	}
 }

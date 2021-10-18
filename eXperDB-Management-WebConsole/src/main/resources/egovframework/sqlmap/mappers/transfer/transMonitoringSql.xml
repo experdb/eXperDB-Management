@@ -15,7 +15,7 @@
 			, TRUNC(SYSTEM_CPU_LOAD, 2) AS SYSTEM_CPU_LOAD
 		FROM CDC_RS_CONNECTOR_CPU CRCC 
 		ORDER BY TIME DESC 
-		LIMIT 20;
+		LIMIT 20
 	</select>
 	
 	<select id="selectMemoryList" resultType="hashMap">
@@ -29,7 +29,7 @@
 			, USED 
 		FROM CDC_RS_CONNECTOR_MEM CRCM 
 		ORDER BY TIME DESC 
-		LIMIT 20;
+		LIMIT 20
 	</select>
 	
 	<select id="selectAllErrorList" resultType="hashMap">
@@ -239,7 +239,8 @@
 								FROM T_TRANSCNG_I TTTI 
 								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 								)
-		ORDER BY TIME DESC LIMIT 5;
+		ORDER BY TIME DESC 
+		LIMIT 5
 	</select>
 	
 	<select id="selectSourceChart_2" resultType="hashMap">
@@ -259,7 +260,8 @@
 								FROM T_TRANSCNG_I TTTI 
 								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 								)
-		ORDER BY TIME DESC LIMIT 5;
+		ORDER BY TIME DESC 
+		LIMIT 5
 	</select>
 	
 	<select id="selectSourceInfo" resultType="hashMap">
@@ -284,7 +286,8 @@
 								FROM T_TRANSCNG_I TTTI 
 								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 								)
-		ORDER BY TIME DESC LIMIT 2
+		ORDER BY TIME DESC 
+		LIMIT 2
 	</select>
 	
 	<select id="selectSourceErrorChart" resultType="hashMap">
@@ -306,7 +309,8 @@
 								FROM T_TRANSCNG_I TTTI 
 								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 								)
-		ORDER BY TIME DESC LIMIT 5;
+		ORDER BY TIME DESC 
+		LIMIT 5
 	</select>
 	
 	<select id="selectSourceErrorInfo" resultType="hashMap">
@@ -333,7 +337,8 @@
 								FROM T_TRANSCNG_I TTTI 
 								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 								)
-		ORDER BY TIME DESC LIMIT 2;
+		ORDER BY TIME DESC 
+		LIMIT 2
 	</select>
 	
 	<select id="selectTargetConnectList" resultType="hashMap">
@@ -347,7 +352,8 @@
 			, TTTI2.CONNECT_NM 
 		FROM T_TRANS_TOPIC_I TTTI 
 		JOIN T_TRANSCNG_TARGET_I TTTI2 ON TTTI.TAR_TRANS_ID = TTTI2.TRANS_ID 
-		WHERE TTTI.SRC_TRANS_ID = #{trans_id}::numeric ;
+		WHERE TTTI.SRC_TRANS_ID = #{trans_id}::numeric 
+		GROUP BY TTTI2.TRANS_ID, TTTI2.CONNECT_NM
 	</select>
 	
 	<select id="selectTargetDBMSInfo" resultType="hashMap">
@@ -368,7 +374,7 @@
 										TTTI.TRANS_SYS_ID 
 									FROM T_TRANSCNG_TARGET_I TTTI 
 									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									);
+									)
 	</select>
 	
 	<select id="selectTargetTopicList" resultType="hashMap">
@@ -383,7 +389,7 @@
 			, TTEM.EXRT_TRG_TB_NM AS TOPIC_NAME
 		FROM T_TRANSCNG_TARGET_I TTTI 
 		JOIN T_TRANS_EXRTTRG_MAPP TTEM ON TTEM.TRANS_EXRT_TRG_TB_ID = TTTI.TRANS_EXRT_TRG_TB_ID 
-		WHERE TTTI.TRANS_ID = #{trans_id}::numeric;
+		WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 	</select>
 	
 	<select id="selectTargetSinkRecordChart" resultType="hashMap">
@@ -403,7 +409,8 @@
 									FROM T_TRANSCNG_TARGET_I TTTI 
 									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 									)
-		ORDER BY TIME DESC LIMIT 5;
+		ORDER BY TIME DESC 
+		LIMIT 5
 	</select>
 	
 	<select id="selectTargetSinkCompleteChart" resultType="hashMap">
@@ -423,7 +430,8 @@
 									FROM T_TRANSCNG_TARGET_I TTTI 
 									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 									)
-		ORDER BY TIME DESC LIMIT 5;
+		ORDER BY TIME DESC 
+		LIMIT 5
 	</select>
 	
 	<select id="selectTargetSinkInfo" resultType="hashMap">
@@ -451,7 +459,8 @@
 									FROM T_TRANSCNG_TARGET_I TTTI 
 									WHERE TTTI.TRANS_ID = #{trans_id}
 									)
-		ORDER BY TIME DESC LIMIT 2;
+		ORDER BY TIME DESC 
+		LIMIT 2
 	</select>
 	
 	<select id="selectTargetErrorChart" resultType="hashMap">
@@ -472,7 +481,8 @@
 									FROM T_TRANSCNG_TARGET_I TTTI 
 									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 									)
-		ORDER BY TIME DESC LIMIT 5;
+		ORDER BY TIME DESC 
+		LIMIT 5
 	</select>
 	
 	<select id="selectTargetErrorInfo" resultType="hashMap">
@@ -497,6 +507,40 @@
 									FROM T_TRANSCNG_TARGET_I TTTI
 									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
 									)
-		ORDER BY TIME DESC LIMIT 2;
+		ORDER BY TIME DESC 
+		LIMIT 2
+	</select>
+	
+	<select id="selectKafkaConnectInfo" resultType="hashMap">
+		/**
+		* Query ID : selectKafkaConnectInfo
+		* Description : 타겟 error 정보
+		* Author : 윤정
+		**/
+		SELECT 
+			TTCI.KC_ID
+			, TTCI.KC_IP 
+			, TTCI.KC_PORT 
+		FROM T_TRANS_CON_INF TTCI 
+		JOIN T_TRANSCNG_I TTI ON TTCI.KC_ID = TTI.KC_ID 
+		WHERE TTI.TRANS_ID = #{trans_id}::numeric
+	</select>
+	
+	<select id="selectKafkaActCngList" resultType="hashMap">
+		/**
+		* Query ID : selectKafkaActCngList
+		* Description : 카프카 Connect 기동 정지 이력 조회
+		* Author : 윤정
+		**/	
+		SELECT 
+			(ROW_NUMBER() OVER()) AS ROWNUM 
+			, TTCI.KC_NM AS CONNECTOR_NAME
+			, TTKACG.ACT_TYPE
+			, TO_CHAR(TTKACG.WRK_DTM, 'YYYY-MM-DD HH24:MI:SS') AS WRK_DTM
+		FROM T_TRANS_KAFKA_ACTSTATE_CNG_G TTKACG
+		JOIN T_TRANS_CON_INF TTCI ON TTKACG.KC_ID = TTCI.KC_ID 
+		WHERE TTKACG.KC_ID = #{kc_id}::numeric
+		ORDER BY TTKACG.WRK_DTM DESC
+		LIMIT 3
 	</select>
 </mapper>

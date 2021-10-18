@@ -202,5 +202,13 @@ public interface TransMonitoringService {
 	 * @return JSONObject
 	 */
 	public Map<String, Object> transKafkaConnectRestart(TransVO transVO, Map<String, Object> param);
+	
+	/**
+	 * trans kafka 기동 정지 이력 조회
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectKafkaActCngList(int trans_id);
 
 }

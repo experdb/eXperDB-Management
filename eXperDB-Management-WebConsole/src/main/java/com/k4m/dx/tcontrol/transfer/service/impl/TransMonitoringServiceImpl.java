@@ -384,5 +384,19 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 		
 		return resultObj;
 	}
+
+	/**
+	 * trans kafka 기동 정지 이력 조회
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectKafkaActCngList(int trans_id) {
+		Map<String, Object> kafkaInfo = transMonitoringDAO.selectKafkaConnectInfo(trans_id);
+		String strKcId = String.valueOf(kafkaInfo.get("kc_id"));
+		int kc_id = Integer.parseInt(strKcId);
+		return transMonitoringDAO.selectKafkaActCngList(kc_id);
+	}
 	
 }
