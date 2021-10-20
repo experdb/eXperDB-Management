@@ -373,8 +373,9 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 		String actType =jObj.getString("act_type"); //A : active /R : restart /S : stop
 		String userId =jObj.getString("lst_mdfr_id");
 		String actExeType = "TC004001";
-		if(jObj.get("act_exe_type") != null) actExeType = jObj.getString("act_exe_type");
+		if(jObj.has("act_exe_type")) actExeType = jObj.getString("act_exe_type");
 		String cmd = "systemctl ";
+		
 		String proxySetStatus = "";
 /*		String keepalivedSetStatus = "";*/
 		
