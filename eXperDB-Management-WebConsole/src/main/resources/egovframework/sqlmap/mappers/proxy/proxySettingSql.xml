@@ -612,7 +612,7 @@
 				clock_timestamp() AS FRST_REG_DTM,
 				#{lst_mdfr_id} AS LST_MDFR_ID,
 				clock_timestamp() AS LST_MDF_DTM,
-				#{aws_if_id} AS ,
+				#{aws_if_id} AS AWS_IF_ID,
 				#{peer_aws_if_id} AS PEER_AWS_IF_ID
 	</insert>
 
