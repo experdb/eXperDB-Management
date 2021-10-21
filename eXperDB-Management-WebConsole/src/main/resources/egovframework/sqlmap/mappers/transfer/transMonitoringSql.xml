@@ -560,21 +560,38 @@
       * Author : 윤정
       **/
       SELECT 
-             T2.ROWNUM 
-           , T2.LAST_ERROR_TIMESTAMP
-           , T2.TOTAL_ERRORS_LOGGED
-           , T2.DEADLETTERQUEUE_PRODUCE_REQUESTS
-           , T2.DEADLETTERQUEUE_PRODUCE_FAILURES
-           , T2.TOTAL_RECORD_FAILURES
-           , T2.TOTAL_RECORDS_SKIPPED
-           , T2.TOTAL_RECORD_ERRORS
-           , T1.TRANS_ID
-        FROM T_TRANSCNG_TARGET_I T1
-             LEFT JOIN
-              ( 
-                 SELECT
-                        (ROW_NUMBER() OVER(ORDER BY TIME DESC)) AS ROWNUM 
-                      , CONNECTOR_NAME
+              C.ROWNUM
+            , SUM(LAST_ERROR_TIMESTAMP) AS LAST_ERROR_TIMESTAMP
+            , SUM(TOTAL_ERRORS_LOGGED) AS TOTAL_ERRORS_LOGGED
+            , SUM(DEADLETTERQUEUE_PRODUCE_REQUESTS) AS DEADLETTERQUEUE_PRODUCE_REQUESTS
+            , SUM(DEADLETTERQUEUE_PRODUCE_FAILURES) AS DEADLETTERQUEUE_PRODUCE_FAILURES
+            , SUM(TOTAL_RECORD_FAILURES) AS TOTAL_RECORD_FAILURES
+            , SUM(TOTAL_RECORDS_SKIPPED) AS TOTAL_RECORDS_SKIPPED
+            , SUM(TOTAL_RECORD_ERRORS) AS TOTAL_RECORD_ERRORS
+        FROM ( 
+              SELECT 
+                     1 AS ROWNUM
+                   , 0 AS LAST_ERROR_TIMESTAMP
+                   , 0 AS TOTAL_ERRORS_LOGGED
+                   , 0 AS DEADLETTERQUEUE_PRODUCE_REQUESTS
+                   , 0 AS DEADLETTERQUEUE_PRODUCE_FAILURES
+                   , 0 AS TOTAL_RECORD_FAILURES
+                   , 0 AS TOTAL_RECORDS_SKIPPED
+                   , 0 AS TOTAL_RECORD_ERRORS
+               UNION ALL
+              SELECT 
+                     2 AS ROWNUM
+                   , 0 AS LAST_ERROR_TIMESTAMP
+                   , 0 AS TOTAL_ERRORS_LOGGED
+                   , 0 AS DEADLETTERQUEUE_PRODUCE_REQUESTS
+                   , 0 AS DEADLETTERQUEUE_PRODUCE_FAILURES
+                      , 0 AS TOTAL_RECORD_FAILURES
+                   , 0 AS TOTAL_RECORDS_SKIPPED
+                   , 0 AS TOTAL_RECORD_ERRORS
+               UNION ALL
+               (
+                SELECT
+                       (ROW_NUMBER() OVER(ORDER BY TIME DESC)) AS ROWNUM 
                       , LAST_ERROR_TIMESTAMP
                       , TOTAL_ERRORS_LOGGED
                       , DEADLETTERQUEUE_PRODUCE_REQUESTS
@@ -589,10 +606,11 @@
                                                 FROM T_TRANSCNG_TARGET_I TTTI
                                                WHERE TTTI.TRANS_ID = #{trans_id}::numeric
                                                )
-                  ORDER BY TIME DESC 
                   LIMIT 2
-              ) T2  ON T1.CONNECT_NM = T2.CONNECTOR_NAME
-       WHERE T1.TRANS_ID = #{trans_id}::numeric
+               )
+       ) C
+       GROUP BY C.ROWNUM
+       ORDER BY C.ROWNUM
    </select>
    
    <select id="selectKafkaConnectInfo" resultType="hashMap">

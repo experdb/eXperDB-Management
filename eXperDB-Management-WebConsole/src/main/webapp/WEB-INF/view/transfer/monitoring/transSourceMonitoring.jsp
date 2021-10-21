@@ -896,13 +896,11 @@
 				<div class="col-md-12 col-xl-12 justify-content-center" >
 					<div class="card " style="margin-bottom:0px;border:none;">
 						<div class="card-body" style="border:none; box-shadow: 0px 1px 7px 1px rgba(211, 211, 211, 2);margin-bottom:8px;">
-							<div class="form-group row" style="margin-bottom:-20px;">
-								<label class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+							<div class="form-group row" style="margin-bottom:-20px;margin-top:-20px;">
+								<label class="col-sm-12 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 									<i class="item-icon fa fa-dot-circle-o"></i>
 									connect 설정 정보
 								</label>
-								<div class="col-sm-9">
-								</div>
 							</div>
 							
 							<div class="form-group row" style="margin-bottom:-10px;">
@@ -945,12 +943,10 @@
 							</div>
 							<br/>
 							<div class="form-group row" style="margin-bottom:-20px;">
-								<label class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+								<label class="col-sm-12 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 									<i class="item-icon fa fa-dot-circle-o"></i>
 									<spring:message code="data_transfer.transfer_table" />
 								</label>
-								<div class="col-sm-9">
-								</div>
 							</div>
 							
 							<div class="form-group row" style="margin-bottom:-10px;">
