@@ -415,23 +415,6 @@
 					className : "dt-center", 
 					defaultContent : "" 
 				},
-				{data : "source_record_poll_total", 
-					render: function(data, type, full, meta){
-						var html = "";
-						html += '<div>' + data;
-						if(full['source_record_poll_total_cng'] > 0){
-							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['source_record_poll_total_cng']+')';
-						} else if(full['source_record_poll_total_cng'] == 0 || typeof full['source_record_poll_total_cng'] === 'undefined'){
-							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
-						} else {
-							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['source_record_poll_total_cng']+')';
-						}
-						html += '</div>';
-						return html;
-					},
-					className : "dt-center", 
-					defaultContent : "" 
-				},
 				{data : "source_record_active_count", 
 					render: function(data, type, full, meta){
 						var html = "";
@@ -449,6 +432,23 @@
 					className : "dt-center", 
 					defaultContent : "" 
 				},
+				{data : "source_record_poll_total", 
+					render: function(data, type, full, meta){
+						var html = "";
+						html += '<div>' + data;
+						if(full['source_record_poll_total_cng'] > 0){
+							html += '(<i class="mdi mdi-arrow-up-bold menu-icon text-success" style="font-size: 1rem;"></i>'+full['source_record_poll_total_cng']+')';
+						} else if(full['source_record_poll_total_cng'] == 0 || typeof full['source_record_poll_total_cng'] === 'undefined'){
+							html += '(<i class="mdi mdi-minus menu-icon text-muted" style="font-size: 1rem;"></i>0)';
+						} else {
+							html += '(<i class="mdi mdi-arrow-down-bold menu-icon text-danger" style="font-size: 1rem;"></i>'+full['source_record_poll_total_cng']+')';
+						}
+						html += '</div>';
+						return html;
+					},
+					className : "dt-center", 
+					defaultContent : "" 
+				}
 			]
 		});
 		
@@ -619,14 +619,11 @@
 		if(tab == "snapshot"){
 			$(".snapshotDiv").show();
 			$(".streamingDiv").hide();
-			$("#server-tab-1").addClass("active");
-			$("#server-tab-2").removeClass("active");
 			fn_snapshot();
 		}else{
 			$(".snapshotDiv").hide();
 			$(".streamingDiv").show();
-			$("#server-tab-2").addClass("active");
-			$("#server-tab-1").removeClass("active");
+
 			fn_streaming();
 		}
 	}
@@ -841,7 +838,7 @@
 			<h4 class="card-title">
 				<i class="item-icon fa fa-dot-circle-o"></i> 소스 시스템
 			</h4>
-			
+
 			<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 				<li class="nav-item">
 					<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectTab('snapshot');" >
@@ -854,89 +851,24 @@
 					</a>
 				</li>
 			</ul>
-			
-			<!-- snapshot start -->
-			<div class="snapshotDiv" style="display:block;">
-				<!-- chart -->
-				<div class="col-md-12 col-xl-12 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
-						<div class="card-body" style="border:none;">
-							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;snapshot
-							</p>
-							<div id="src-chart-line-snapshot" style="max-height:200px;"></div>
-						</div>
-					</div>
+
+			<div class="tab-content" id="pills-tabContent" style="border:none;">
+				<div class="tab-pane fade show active snapshotDiv" style="margin-top:-30px;" role="tabpanel" id="subTab-1">
+					<p class="card-title" style="margin-bottom:0px;">
+						<i class="item-icon mdi mdi-snapchat text-info"></i>&nbsp;snapshot
+					</p>
+					<div id="src-chart-line-snapshot" style="height:170px;"></div>
 				</div>
-				
-				<!-- table -->
-<!-- 				<div class="col-md-12 col-xl-12 justify-content-center"> -->
-<!-- 					<div class="card" style="margin-left:-10px;border:none;"> -->
-<!-- 						<div class="card-body" style="border:none;"> -->
-<!-- 							<table id="srcSnapshotTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;"> -->
-<!-- 								<thead class="bg-info text-white"> -->
-<!-- 									<tr> -->
-<!-- 										<th width="100px;">connector_src_name </th> -->
-<!-- 										<th width="100px;">time </th> -->
-<!-- 										<th width="100px;">number_of_events_filtered </th> -->
-<!-- 										<th width="100px;">number_of_erroneous_events </th> -->
-<!-- 										<th width="100px;">queue_total_capacity </th> -->
-<!-- 										<th width="100px;">queue_remaining_capacity </th> -->
-<!-- 										<th width="100px;">remaining_table_count </th> -->
-<!-- 									</tr> -->
-<!-- 								</thead> -->
-<!-- 							</table> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-				
-			</div>
-			<!-- snapshot end -->
-			
-			<!-- streaming start -->
-			<div class="streamingDiv" style="display:none;">
-			
-				<!-- chart -->
-				<div class="col-md-12 col-xl-12 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
-						<div class="card-body" style="border:none;">
-							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;streaming
-							</p>
-							<div id="src-chart-line-streaming" style="max-height:200px;"></div>
-						</div>
-					</div>
+				<div class="tab-pane fade streamingDiv" style="margin-top:-30px;" role="tabpanel" id="subTab-2">	
+					<p class="card-title" style="margin-bottom:0px;">
+						<i class="item-icon mdi mdi-access-point text-info"></i>&nbsp;streaming
+					</p>
+					<div id="src-chart-line-streaming" style="height:170px;"></div>
 				</div>
-				
-				<!-- table -->
-<!-- 				<div class="col-md-12 col-xl-12 justify-content-center"> -->
-<!-- 					<div class="card" style="margin-left:-10px;border:none;"> -->
-<!-- 						<div class="card-body" style="border:none;"> -->
-<!-- 							<table id="srcStreamingTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;"> -->
-<!-- 								<thead class="bg-info text-white"> -->
-<!-- 									<tr> -->
-<!-- 										<th width="100px;">connector_src_name </th> -->
-<!-- 										<th width="100px;">time </th> -->
-<!-- 										<th width="100px;">last_transaction_id </th> -->
-<!-- 										<th width="100px;">number_of_committed_transactions </th> -->
-<!-- 										<th width="100px;">total_number_of_events_seen </th> -->
-<!-- 										<th width="100px;">number_of_events_filtered </th> -->
-<!-- 										<th width="100px;">number_of_erroneous_events </th> -->
-<!-- 										<th width="100px;">milli_seconds_since_last_event </th> -->
-<!-- 									</tr> -->
-<!-- 								</thead> -->
-<!-- 							</table> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-				
 			</div>
-			<!-- streaming end -->
-			
-			<!-- connect 정보 start -->
-			<!-- connect title start -->
-			<div class="accordion_main accordion-multi-colored col-12" id="accordion_src_connect_his" role="tablist">
-				<div class="card" style="margin-bottom:0px;">
+
+			<div class="accordion_main accordion-multi-colored " id="accordion_src_connect_his" role="tablist">
+				<div class="card " style="margin-bottom:0px;">
 					<div class="card-header" role="tab" id="src_connect_header_div">
 						<div class="row" style="height: 15px;">
 							<div class="col-6">
@@ -962,97 +894,100 @@
 			<!-- connect info start -->
 			<div id="src_connect_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="src_connect_header_div" data-parent="#accordion_src_connect_his">
 				<div class="col-md-12 col-xl-12 justify-content-center" >
-					<div class="card-body" style="border: 1px solid #adb5bd; margin-bottom:8px;">
-						<div class="form-group row" style="margin-bottom:-20px;">
-							<label class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-								<i class="item-icon fa fa-dot-circle-o"></i>
-								connect 설정 정보
-							</label>
-							<div class="col-sm-9">
+					<div class="card " style="margin-bottom:0px;border:none;">
+						<div class="card-body" style="border:none; box-shadow: 0px 1px 7px 1px rgba(211, 211, 211, 2);margin-bottom:8px;">
+							<div class="form-group row" style="margin-bottom:-20px;">
+								<label class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<i class="item-icon fa fa-dot-circle-o"></i>
+									connect 설정 정보
+								</label>
+								<div class="col-sm-9">
+								</div>
 							</div>
-						</div>
-						
-						<div class="form-group row" style="margin-bottom:-10px;">
-							<div class="col-12 stretch-card div-form-margin-table" style="margin-top:-15px;">
-								<div class="card" style="border:0px;">
-									<div class="card-body" style="padding-left:0px;padding-right:0px;">	
-								 		<table id="srcConnectSettingInfoTable" class="table table-hover system-tlb-scroll" style="width:100%;">
-											<thead>
-												<tr class="bg-info text-white">
-													<th width="100" class="dt-center" >connect명</th>
-													<th width="500" class="dt-center" >데이터베이스</th>	
-													<th width="500" class="dt-center" >메타데이터여부</th>	
-													<th width="500" class="dt-center" >스냅샷여부</th>	
-													<th width="500" class="dt-center" >압축형태</th>	
-												</tr>
-											</thead>
-<!-- 											<tbody> -->
-<!-- 												<tr> -->
-<!-- 													<td>inventory-connector -->
-<!-- 													</td> -->
-<!-- 													<td>inventory</td> -->
-<!-- 													<td> -->
-<!-- 														<div class="badge badge-pill badge-light" style="background-color: #EEEEEE;">	 -->
-<!-- 															<i class="fa fa-power-off mr-2"></i> -->
-<!-- 															OFF -->
-<!-- 														</div> -->
-<!-- 													</td> -->
-<!-- 													<td>NEVER </td> -->
-<!-- 													<td> -->
-<!-- 														<div class="badge badge-light" style="background-color: transparent !important;">	 -->
-<!-- 															<i class="fa fa-file-zip-o text-success mr-2"></i>GZIP -->
-<!-- 														</div> -->
-<!-- 													</td> -->
-<!-- 												</tr> -->
-<!-- 											</tbody> -->
-										</table>
+							
+							<div class="form-group row" style="margin-bottom:-10px;">
+								<div class="col-12 stretch-card div-form-margin-table" style="margin-top:-15px;">
+									<div class="card" style="border:0px;">
+										<div class="card-body" style="padding-left:0px;padding-right:0px;">	
+									 		<table id="srcConnectSettingInfoTable" class="table table-hover system-tlb-scroll" style="width:100%;">
+												<thead>
+													<tr class="bg-info text-white">
+														<th width="100" class="dt-center" >connect명</th>
+														<th width="500" class="dt-center" >데이터베이스</th>	
+														<th width="500" class="dt-center" >메타데이터여부</th>	
+														<th width="500" class="dt-center" >스냅샷여부</th>	
+														<th width="500" class="dt-center" >압축형태</th>	
+													</tr>
+												</thead>
+	<!-- 											<tbody> -->
+	<!-- 												<tr> -->
+	<!-- 													<td>inventory-connector -->
+	<!-- 													</td> -->
+	<!-- 													<td>inventory</td> -->
+	<!-- 													<td> -->
+	<!-- 														<div class="badge badge-pill badge-light" style="background-color: #EEEEEE;">	 -->
+	<!-- 															<i class="fa fa-power-off mr-2"></i> -->
+	<!-- 															OFF -->
+	<!-- 														</div> -->
+	<!-- 													</td> -->
+	<!-- 													<td>NEVER </td> -->
+	<!-- 													<td> -->
+	<!-- 														<div class="badge badge-light" style="background-color: transparent !important;">	 -->
+	<!-- 															<i class="fa fa-file-zip-o text-success mr-2"></i>GZIP -->
+	<!-- 														</div> -->
+	<!-- 													</td> -->
+	<!-- 												</tr> -->
+	<!-- 											</tbody> -->
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<br/>
-						<div class="form-group row" style="margin-bottom:-20px;">
-							<label class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
-								<i class="item-icon fa fa-dot-circle-o"></i>
-								<spring:message code="data_transfer.transfer_table" />
-							</label>
-							<div class="col-sm-9">
+							<br/>
+							<div class="form-group row" style="margin-bottom:-20px;">
+								<label class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<i class="item-icon fa fa-dot-circle-o"></i>
+									<spring:message code="data_transfer.transfer_table" />
+								</label>
+								<div class="col-sm-9">
+								</div>
 							</div>
-						</div>
-						
-						<div class="form-group row" style="margin-bottom:-10px;">
-							<div class="col-12 stretch-card div-form-margin-table" style="margin-top:-15px;">
-								<div class="card" style="border:0px;">
-									<div class="card-body" style="padding-left:0px;padding-right:0px;">	
-								 		<table id="srcMappingListTable" class="table table-hover system-tlb-scroll" style="width:100%;">
-											<thead>
-												<tr class="bg-info text-white">
-													<th width="100" class="dt-center" >스키마명</th>
-													<th width="500" class="dt-center" >테이블명</th>	
-												</tr>
-<!-- 											</thead> -->
-<!-- 											<tbody> -->
-<!-- 												<tr> -->
-<!-- 													<td>experdb</td> -->
-<!-- 													<td>dumb_table</td> -->
-<!-- 												</tr> -->
-<!-- 											</tbody> -->
-										</table>
+							
+							<div class="form-group row" style="margin-bottom:-10px;">
+								<div class="col-12 stretch-card div-form-margin-table" style="margin-top:-15px;">
+									<div class="card" style="border:0px;">
+										<div class="card-body" style="padding-left:0px;padding-right:0px;">	
+									 		<table id="srcMappingListTable" class="table table-hover system-tlb-scroll" style="width:100%;">
+												<thead>
+													<tr class="bg-info text-white">
+														<th width="100" class="dt-center" >스키마명</th>
+														<th width="500" class="dt-center" >테이블명</th>	
+													</tr>
+	<!-- 											</thead> -->
+	<!-- 											<tbody> -->
+	<!-- 												<tr> -->
+	<!-- 													<td>experdb</td> -->
+	<!-- 													<td>dumb_table</td> -->
+	<!-- 												</tr> -->
+	<!-- 											</tbody> -->
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
+									
 						</div>
-								
 					</div>
 				</div>
 			</div>
 			<!-- connect info end -->
+
 			<div id="src_connect_header_sub_list" class="collapse show row" role="tabpanel" aria-labelledby="src_connect_header_div" data-parent="#accordion_src_connect_his">
 				<div class="col-md-12 col-xl-12 justify-content-center">
 					<div class="card" style="margin-left:-10px;border:none;">
 						<div class="card-body" style="border:none;">
 							<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>
+								<i class="item-icon fa fa-bar-chart-o text-info"></i>
 								&nbsp;connect 실시간 차트
 <!-- 								<i class="fa fa-bar-chart-o menu-icon text-info"></i> -->
 <!-- 								connect 실시간 차트 -->
@@ -1060,57 +995,56 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<!-- chart 1 -->
 				<div class="col-md-6 col-xl-6 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
+					<div class="card" style="border:none;">
 						<div class="card-body" style="border:none;margin-top:-35px;">
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;chart1
+								<i class="item-icon mdi mdi-chart-line text-info"></i>&nbsp;실시간 전송 레코드
 							</p>
-							<div id="src-chart-line-1" style="max-height:200px;"></div>
+							<div id="src-chart-line-1" style="height:200px;"></div>
 						</div>
 					</div>
 				</div>
-						
+				
 				<!-- chart 2 -->
 				<div class="col-md-6 col-xl-6 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
+					<div class="card" style="border:none;">
 						<div class="card-body" style="border:none;margin-top:-35px;">
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;chart2
+								<i class="item-icon mdi mdi-chart-areaspline text-info"></i>&nbsp;평균 전송 레코드
 							</p>
-							<div id="src-chart-line-2" style="max-height:200px;"></div>
+							<div id="src-chart-line-2" style="height:200px;"></div>
 						</div>
 					</div>
 				</div>
 
 				<!-- connect 리스트 -->
 				<div class="col-md-12 col-xl-12 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
+					<div class="card" style="margin-left:-10px;margin-top:-30px;border:none;">
 						<div class="card-body" style="border:none;">
 							<table id="srcConnectTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
 								<thead class="bg-info text-white">
 									<tr>
 										<th width="100px;">time</th>
-										<th width="100px;">source_record_active_count_max</th>
-										<th width="100px;">source_record_write_rate</th>
-										<th width="100px;">source_record_active_count_avg </th>
-										<th width="100px;">source_record_write_total </th>
-										<th width="100px;">source_record_poll_total</th>
-										<th width="100px;">source_record_active_count </th>
+										<th width="100px;">커넥터 미기록 최대 레코드 수</th>
+										<th width="100px;">커넥터 기록된 평균 레코드 수 </th>
+										<th width="100px;">커넥터 미기록 평균 레코드 수<</th>
+										<th width="100px;">커넥터 기록된 레코드 수 </th>
+										<th width="100px;">커넥터 미기록 레코드 수 </th>
+										<th width="100px;">폴링 총 레코드 수</th>
 									</tr>
 								</thead>
 							</table>
 						</div>
 					</div>
 				</div>
-
 			</div>
 			<!-- connect 정보 end -->
-			
+
 			<!-- error 정보 start -->
-			<div class="accordion_main accordion-multi-colored col-12" id="accordion_src_error_his" role="tablist">
+			<div class="accordion_main accordion-multi-colored" id="accordion_src_error_his" role="tablist">
 				<div class="card" style="margin-bottom:0px;">
 					<div class="card-header" role="tab" id="src_error_header_div">
 						<div class="row" style="height: 15px;">
@@ -1129,19 +1063,16 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- error chart -->
 			<div class="col-md-12 col-xl-12 justify-content-center">
-				<div class="card" style="margin-left:-10px;border:none;">
+				<div class="card" style="margin-left:-20px;border:none;">
 					<div class="card-body" style="border:none;">
-						<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-							<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;error 차트
-						</p>
 						<div id="src-chart-line-error" style="max-height:200px;"></div>
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- error 리스트 -->
 <!-- 			<div class="col-md-12 col-xl-12 justify-content-center"> -->
 <!-- 				<div class="card" style="margin-left:-10px;border:none;"> -->
@@ -1166,7 +1097,6 @@
 <!-- 			</div> -->
 				
 			<!-- error 정보 end -->
-			
 		</div>
 	</div>
 </div>

@@ -618,131 +618,299 @@
 						<i class="item-icon fa fa-dot-circle-o"></i> 연결도
 					</h4>
 					
-					<table class="table-borderless" style="width:100%;">
-						<tr>
-							<td>
-							
-								<div class="col-md-12 grid-margin stretch-card">
-									<div class="card news_text">
-										<div class="card-body">
-											<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												<table class="table-borderless" style="width:100%;height:100px;">
-													<tr>
-														<td colspan="2" style="width:85%">
-															<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">
-																<div class="badge badge-pill badge-success" title="">S</div>
-																소스 시스템 명
-															</h6>
-														</td>
-														<td rowspan="3" style="width:15%;">
-															<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>
-														</td>
-													</tr>
-													<tr>
-														<td colspan="2" style="padding-top:5px;">
-															<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : 192.168.50.110/5432 </h6>
-														</td>
-													</tr>
-													<tr>
-														<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">
-															<h6 class="text-muted" style="padding-left:10px;">[DBMS 종류]</h6>
-														</td>
-													</tr>
-												</table>
-											</div>
+					<div class="row" id="reg_trans_title">
+						<div class="accordion_main accordion-multi-colored col-4" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:0px;">
+								<div class="card-header" role="tab" id="page_ss_server" >
+									<div class="row" style="height: 15px;">
+										<div class="col-12">
+											<h6 class="mb-0">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<span class="menu-title">소스커넥터</span>
+											</h6>
 										</div>
 									</div>
 								</div>
-							</td>
-							<td> 연결 화살표
-							</td>
-							<td>
-								<div class="col-md-10 grid-margin stretch-card" style="margin-left:50px;">
-									<div class="card">
-										<div class="card-body">
-											<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												source connect <br/>
-												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="src_connect" id="src_connect" onChange="fn_srcConnectInfo()" tabindex=1>
+							</div>
+						</div>
+											
+						<div class="accordion_main col-1" style="border:none;" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+								<div class="card-header" role="tab" id="page_ss_connect_server" >
+									<div class="row" style="height: 15px;">
+										<div class="col-12">
+											<h6 class="mb-0">
+												&nbsp;
+											</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="accordion_main col-2" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+								<div class="card-header" role="tab" id="page_kafka_server" >
+									<div class="row" style="height: 15px;">
+										<div class="col-12">
+											<h6 class="mb-0">
+												&nbsp;
+											</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="accordion_main col-1" style="border:none;" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
+								<div class="card-header" role="tab" id="page_sk_connect_server" >
+									<div class="row" style="height: 15px;">
+										<div class="col-12">
+											<h6 class="mb-0">
+												&nbsp;
+											</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+											
+						<div class="accordion_main accordion-multi-colored col-4" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:0px;">
+								<div class="card-header" role="tab" id="page_sk_server" >
+									<div class="row" style="height: 15px;">
+										<div class="col-12">
+											<h6 class="mb-0">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<span class="menu-title">싱크커넥터</span>
+											</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+					<!-- proxy 데이터 있는 경우 -->	
+					<div class="row" id="reg_trans_detail">
+						<div class="accordion_cdc accordion-multi-colored col-4" id="accordion" role="tablist" >
+							<div class="card" style="border:none;" >
+								<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
+									<table class="table-borderless" style="width:100%;">
+										<tr>
+											<td style="width:80%;" class="text-center" ">
+												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="src_connect" id="src_connect" onChange="fn_srcConnectInfo()" onblur="this.value=this.value.trim()" tabindex=1>
 													<option value="">소스 Connector</option>
 													<c:forEach var="srcConnectorList" items="${srcConnectorList}">
 														<option value="${srcConnectorList.trans_id}">${srcConnectorList.connect_nm}</option>							
 													</c:forEach>
 												</select>
-												: 연결 table 수<p id="table_cnt"></p> <br/>
-												: 폴링 된 총 레코드 수  <br/>
-												: 오류 수
-											</div>
-										</div>
-									</div>
-								</div>
-							</td>
-							<td>
-								연결 화살표
-							</td>							
-							<td><i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 3.0em;" onClick="fn_logView('kafka')"></i>
-							</td>
-							<td> 
-								연결 화살표
-							</td>
-							<td>
-								<div class="col-md-10 grid-margin stretch-card">
-									<div class="card">
-										<div class="card-body">
-											<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												sink connect <br/>
-												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-4" style="margin-right: 1rem;" name="tar_connector_list" id="tar_connector_list" onChange="fn_tarConnectInfo()" tabindex=1>
-													<option value="">타겟 Connector</option>
-<%-- 													<c:forEach var="tarConnectorList" items="${targetConnectorList}"> --%>
-<%-- 														<option value="${tarConnectorList.trans_id}">${tarConnectorList.connect_nm}</option>							 --%>
-<%-- 													</c:forEach> --%>
-												</select>
-												: 소스 연결 connect 수 / topic 수 <br/>
-												: 완료 총 수 <br/>
-												: 오류 수
-											</div>
-										</div>
-									</div>
-								</div>
-							</td>
-							<td>
-								연결 화살표
-							</td>
-							<td> 						
-								<div class="col-md-12 grid-margin stretch-card">
-									<div class="card news_text">
-										<div class="card-body">
-											<div class="d-block flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												<table class="table-borderless" style="width:100%;height:100px;">
-													<tr>
-														<td colspan="2" style="width:85%">
-															<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">
-																<div class="badge badge-pill badge-success" title="">S</div>
-																타겟 시스템 명
-															</h6>
-														</td>
-														<td rowspan="3" style="width:15%;">
-															<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>
-														</td>
-													</tr>
-													<tr>
-														<td colspan="2" style="padding-top:5px;">
-															<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : 192.168.50.171/1521 </h6>
-														</td>
-													</tr>
-													<tr>
-														<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">
-															<h6 class="text-muted" style="padding-left:10px;">[DBMS 종류]</h6>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:80%;" class="text-center">
+			 									<table id="ssconResultTable" class="table table-striped system-tlb-scroll" style="width:100%;">
+													<thead>
+														<tr class="bg-info text-white">
+															<th style="width:25%;font-size:12px;">테이블 수</th>
+															<th style="width:37%;font-size:12px;">전체 완료 수</th>
+															<th style="width:38%;font-size:12px;">오류 수</th>
+														</tr>
+														<tr id="ssconResultCntTableNvl" >
+															<td colspan="3" style="font-size:12px;">
+																<spring:message code="message.msg01" />
+															</td>
+														</tr>
+														<tr id="ssconResultCntTable" style="display:none;">
+															<td style="text-align:center;font-size:12px;" id="table_cnt"></td>
+															<td style="text-align:center;font-size:12px;"></td>
+															<td style="text-align:center;font-size:12px;"></td>
+														</tr>
+													</thead>
+												</table>
+											</td>
+										</tr>
+										
+										<tr>
+											<td style="width:80%;" class="text-center">
+			 									<table id="ssconResultTable" class="table-borderless" style="width:100%;">
+													<tr id="ssconResultCntTable">
+														<td style="width:100%;">
+															
+															
+															<table class="table-borderless" style="width:100%;text-align:left;">
+																<tr>
+																	<td colspan="2" style="width:85%;">
+																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">
+																			<img src="../images/postgresql_icon.png" class="img-sm" style="max-width:120%;object-fit: contain;" alt=""/>
+																			DB네임
+																		</h6>
+																	</td>
+																	<td rowspan="3" style="width:15%;">
+																		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>
+																	</td>
+																</tr>
+																
+																<tr>
+																	<td colspan="2" style="padding-top:5px;">
+																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : 192.168.50.11/5432</h6>
+																	</td>
+																</tr>
+
+																<tr>
+																	<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">
+																		<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6>
+																	</td>
+																</tr>
+																
+															</table>
 														</td>
 													</tr>
 												</table>
-											</div>
-										</div>
-									</div>
+											</td>
+										</tr>
+									</table>
+									
 								</div>
-							</td>
-						</tr>
-					</table>
-			
+							</div>
+						</div>
+
+						<div class="accordion_cdc accordion-multi-colored col-1" id="accordion" role="tablist" >
+							<div class="card" style="margin-left:-10px;margin-right:-30px;border:none;box-shadow: 0 0 0px black;">
+								<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyListnerConLineList">
+								
+									<table class="table-borderless" style="width:100%;margin-top:35px;">
+										<tbody><tr>
+											<td style="margin-left:10px;" class="text-center" id="123">
+												<img src="../images/arrow_side.png" class="img-lg" style="max-width:120%;object-fit: contain;width:120px;height:120px;" alt="">
+											</td>
+										</tr>
+									</tbody></table>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="accordion_cdc_none accordion-multi-colored col-2" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:10px;border:none;" >
+								<div class="card-body" style="border:none;" id="proxyListnerMornitoringList">
+								
+									<table class="table-borderless" style="width:100%;">
+										<tr>
+											<td style="width:100%;height:100%;margin-left:-10px;" class="text-center" id="123">
+												<i onClick="fn_logView('kafka')">
+													<img src="../images/connector_icon.png" class="img-lg" style="max-width:140%;object-fit: contain;width:140px;height:140px;" alt="">
+												</i>
+												<!-- <i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 8.0em;" onClick="fn_logView('kafka')"></i> -->
+											</td>
+										</tr>
+									</table>
+								
+								<!-- 	<i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 3.0em;" onClick="fn_logView('kafka')"></i> -->
+								</div>
+							</div>
+						</div>
+ 																						
+						<div class="accordion_cdc accordion-multi-colored col-1" id="accordion" role="tablist" >
+							<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+								<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyListnerConLineList">
+								
+									<table class="table-borderless" style="width:100%;margin-top:35px;">
+										<tr>
+											<td style="width:100%;height:100%;" class="text-center" id="123">
+												<img src="../images/arrow_side.png" class="img-lg" style="max-width:120%;object-fit: contain;width:120px;height:120px;" alt=""/>
+											</td>
+										</tr>
+									</table>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="accordion_cdc accordion-multi-colored col-4" id="accordion" role="tablist" >
+							<div class="card" style="margin-bottom:10px;border:none;" >
+								<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
+
+									<table class="table-borderless" style="width:100%;">
+										<tr>
+											<td style="width:80%;" class="text-center" ">
+												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="tar_connector_list" id="tar_connector_list" onChange="fn_tarConnectInfo()" onblur="this.value=this.value.trim()"  tabindex=1>
+													<option value="">타겟 Connector</option>
+													<c:forEach var="tarConnectorList" items="${targetConnectorList}">
+														<option value="${tarConnectorList.trans_id}">${tarConnectorList.connect_nm}</option>							
+													</c:forEach>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:80%;" class="text-center">
+			 									<table id="ssconResultTable" class="table table-striped system-tlb-scroll" style="width:100%;">
+													<thead>
+														<tr class="bg-info text-white">
+															<th style="width:25%;font-size:12px;">토픽 수</th>
+															<th style="width:37%;font-size:12px;">전체 완료 수</th>
+															<th style="width:38%;font-size:12px;">오류 수</th>
+														</tr>
+														<tr id="ssconResultCntTableNvl">
+															<td colspan="3" >
+																<spring:message code="message.msg01" />
+															</td>
+														</tr>
+														<tr id="ssconResultCntTable" style="display:none;">
+															<td style="text-align:center;font-size:12px;" id="topic_cnt"></td>
+															<td style="text-align:center;font-size:12px;"></td>
+															<td style="text-align:center;font-size:12px;"></td>
+														</tr>
+													</thead>
+												</table>
+											</td>
+										</tr>
+										
+										<tr>
+											<td style="width:80%;" class="text-center">
+			 									<table id="skconResultTable" class="table-borderless" style="width:100%;">
+													<tr id="skconResultCntTable">
+														<td style="width:100%;">
+															
+															
+															<table class="table-borderless" style="width:100%;text-align:left;">
+																<tr>
+																	<td colspan="2" style="width:85%;">
+																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">
+																			<!-- <div class="badge badge-pill badge-success" title="">M</div> -->
+																			<img src="../images/oracle_icon.png" class="img-sm" style="max-width:120%;object-fit: contain;" alt=""/>
+																			DB네임
+																		</h6>
+																	</td>
+																	<td rowspan="3" style="width:15%;">
+																		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>
+																	</td>
+																</tr>
+																
+																<tr>
+																	<td colspan="2" style="padding-top:5px;">
+																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : 192.168.50.11/5432</h6>
+																	</td>
+																</tr>
+
+																<tr>
+																	<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">
+																		<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6>
+																	</td>
+																</tr>
+																
+															</table>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
