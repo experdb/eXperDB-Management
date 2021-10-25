@@ -557,7 +557,7 @@
 			<!-- connect 정보 title -->
 			<div class="row">
 				<div class="accordion_main accordion-multi-colored col-12" id="accordion_tar_connect_his" role="tablist">
-					<div class="card" style="margin-bottom:0px;">
+					<div class="card" style="margin-bottom:0px; margin-top:45px;">
 						<div class="card-header" role="tab" id="tar_connect_header_div">
 							<div class="row" style="height: 15px;">
 								<div class="col-6">
@@ -629,7 +629,7 @@
 			</div>
 			
 			<div id="tar_connect_header_sub_list" class="collapse show row" role="tabpanel" aria-labelledby="tar_connect_header_div" data-parent="#accordion_tar_connect_his">
-				<div class="col-md-12 col-xl-12 justify-content-center">
+				<div class="col-md-12 col-xl-12 justify-content-center" style="margin-top:82px;">
 					<div class="card" style="margin-left:-10px;border:none;">
 						<div class="card-body" style="border:none;">
 							<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
@@ -668,7 +668,7 @@
 
 				<!-- connect 리스트 -->
 				<div class="col-md-12 col-xl-12 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
+					<div class="card" style="margin-left:-10px;margin-top:-30px;border:none;">
 						<div class="card-body" style="border:none;">
 							<table id="tarConnectTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
 								<thead class="bg-info text-white">

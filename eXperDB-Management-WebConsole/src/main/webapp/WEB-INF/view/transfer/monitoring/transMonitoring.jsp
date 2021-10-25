@@ -843,6 +843,7 @@
 												<i onClick="fn_logView('kafka')">
 													<img src="../images/connector_icon.png" class="img-lg" style="max-width:140%;object-fit: contain;width:140px;height:140px;" alt="">
 												</i>
+												<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6>
 												<!-- <i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 8.0em;" onClick="fn_logView('kafka')"></i> -->
 											</td>
 										</tr>
