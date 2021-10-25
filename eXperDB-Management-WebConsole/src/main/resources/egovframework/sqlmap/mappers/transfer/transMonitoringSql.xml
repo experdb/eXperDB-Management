@@ -137,23 +137,61 @@
       * Author : 윤정
       **/
       SELECT 
-         (ROW_NUMBER() OVER(ORDER BY CDS.TIME DESC)) AS ROWNUM
-         , CONNECTOR_SRC_NAME
-         , TO_CHAR(CDS.TIME, 'YYYY-MM-DD HH24:MI') AS TIME
-         , NUMBER_OF_EVENTS_FILTERED
-         , NUMBER_OF_ERRONEOUS_EVENTS
-         , QUEUE_TOTAL_CAPACITY
-         , QUEUE_REMAINING_CAPACITY
-         , REMAINING_TABLE_COUNT
-      FROM CDC_DBSERVER_SNAPSHOT CDS
-      WHERE CONNECTOR_SRC_NAME = (
-                           SELECT 
-                              TTTI.CONNECT_NM 
-                           FROM T_TRANSCNG_I TTTI 
-                           WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-                           )
-      ORDER BY TIME DESC
-      LIMIT 2
+	  		 C.ROWNUM
+     		 , MAX(CONNECTOR_SRC_NAME)
+     		 , MAX(TIME)
+     		 , SUM(NUMBER_OF_EVENTS_FILTERED) AS NUMBER_OF_EVENTS_FILTERED
+     		 , SUM(NUMBER_OF_ERRONEOUS_EVENTS) AS NUMBER_OF_ERRONEOUS_EVENTS
+     		 , SUM(QUEUE_TOTAL_CAPACITY) AS QUEUE_TOTAL_CAPACITY
+     		 , SUM(QUEUE_REMAINING_CAPACITY) AS QUEUE_REMAINING_CAPACITY
+    	 	 , SUM(REMAINING_TABLE_COUNT) AS REMAINING_TABLE_COUNT
+	    FROM 
+			  (     
+				  (
+				  SELECT 
+					     1 AS ROWNUM
+					     , '' AS CONNECTOR_SRC_NAME
+					     , '' AS  TIME
+					     , 0 AS NUMBER_OF_EVENTS_FILTERED
+					     , 0 AS NUMBER_OF_ERRONEOUS_EVENTS
+					     , 0 AS QUEUE_TOTAL_CAPACITY
+					     , 0 AS QUEUE_REMAINING_CAPACITY
+					     , 0 AS REMAINING_TABLE_COUNT
+			  	   UNION ALL
+				  SELECT 
+                         2 AS ROWNUM
+					     , '' AS CONNECTOR_SRC_NAME
+					     , '' AS TIME
+					     , 0 AS NUMBER_OF_EVENTS_FILTERED
+					     , 0 AS NUMBER_OF_ERRONEOUS_EVENTS
+					     , 0 AS QUEUE_TOTAL_CAPACITY
+					     , 0 AS QUEUE_REMAINING_CAPACITY
+					     , 0 AS REMAINING_TABLE_COUNT
+				  )
+			  UNION ALL
+			  (
+			  SELECT 
+				    (ROW_NUMBER() OVER(ORDER BY CDS.TIME DESC)) AS ROWNUM
+				     , CONNECTOR_SRC_NAME
+				     , TO_CHAR(CDS.TIME, 'YYYY-MM-DD HH24:MI') AS TIME
+				     , NUMBER_OF_EVENTS_FILTERED
+				     , NUMBER_OF_ERRONEOUS_EVENTS
+				     , QUEUE_TOTAL_CAPACITY
+				     , QUEUE_REMAINING_CAPACITY
+				     , REMAINING_TABLE_COUNT
+			    FROM CDC_DBSERVER_SNAPSHOT CDS
+			   WHERE CONNECTOR_SRC_NAME = (
+									  		SELECT 
+										   		  TTTI.CONNECT_NM 
+									  		 FROM T_TRANSCNG_I TTTI 
+									 		 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+											)
+			   ORDER BY TIME DESC
+			   LIMIT 2
+			  ) 
+		  )C
+       GROUP BY C.ROWNUM
+       ORDER BY C.ROWNUM
    </select>
    
    <select id="selectStreamingChart" resultType="hashMap">
@@ -304,24 +342,62 @@
       * Description : 소스 Connect 실시간 정보
       * Author : 윤정
       **/
-      SELECT
-         (ROW_NUMBER() OVER(ORDER BY CCTS.TIME DESC)) AS ROWNUM
-         , TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME
-         , SOURCE_RECORD_ACTIVE_COUNT_MAX
-         , SOURCE_RECORD_WRITE_RATE
-         , SOURCE_RECORD_ACTIVE_COUNT_AVG
-         , SOURCE_RECORD_WRITE_TOTAL
-         , SOURCE_RECORD_POLL_TOTAL
-         , SOURCE_RECORD_ACTIVE_COUNT
-      FROM CDC_CONNECTOR_TASK_SRC CCTS
-      WHERE CONNECTOR_NAME = (
-                        SELECT 
-                           TTTI.CONNECT_NM 
-                        FROM T_TRANSCNG_I TTTI 
-                        WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-                        )
-      ORDER BY TIME DESC 
-      LIMIT 2
+	  SELECT 
+		  	  C.ROWNUM
+			  , MAX(TIME) AS TIME
+			  , SUM(SOURCE_RECORD_ACTIVE_COUNT_MAX) AS SOURCE_RECORD_ACTIVE_COUNT_MAX
+			  , TRUNC(SUM(SOURCE_RECORD_WRITE_RATE),2) AS SOURCE_RECORD_WRITE_RATE
+			  , TRUNC(SUM(SOURCE_RECORD_ACTIVE_COUNT_AVG),2) AS SOURCE_RECORD_ACTIVE_COUNT_AVG
+			  , SUM(SOURCE_RECORD_WRITE_TOTAL) AS SOURCE_RECORD_WRITE_TOTAL
+			  , SUM(SOURCE_RECORD_POLL_TOTAL) AS SOURCE_RECORD_POLL_TOTAL
+			  , TRUNC(SUM(SOURCE_RECORD_ACTIVE_COUNT),2) AS SOURCE_RECORD_ACTIVE_COUNT
+	    FROM 
+			(
+	     		(
+     				SELECT 
+                       	   1 AS ROWNUM
+                       	   , '' AS TIME
+                       	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT_MAX
+                       	   , 0 AS SOURCE_RECORD_WRITE_RATE
+                       	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT_AVG
+                       	   , 0 AS SOURCE_RECORD_WRITE_TOTAL
+                       	   , 0 AS SOURCE_RECORD_POLL_TOTAL
+                      	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT
+               		 UNION ALL
+					SELECT 
+                       	   2 AS ROWNUM
+                       	   , '' AS TIME
+                           , 0 AS SOURCE_RECORD_ACTIVE_COUNT_MAX
+                       	   , 0 AS SOURCE_RECORD_WRITE_RATE
+                       	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT_AVG
+                       	   , 0 AS SOURCE_RECORD_WRITE_TOTAL
+                       	   , 0 AS SOURCE_RECORD_POLL_TOTAL
+                       	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT
+             	)
+      			UNION ALL
+      			(
+     			 SELECT
+        		  	    (ROW_NUMBER() OVER(ORDER BY CCTS.TIME DESC)) AS ROWNUM
+        		  	    , TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME
+        		 	    , SOURCE_RECORD_ACTIVE_COUNT_MAX
+        			    , SOURCE_RECORD_WRITE_RATE
+        		   	    , SOURCE_RECORD_ACTIVE_COUNT_AVG
+        			    , SOURCE_RECORD_WRITE_TOTAL
+        		  	    , SOURCE_RECORD_POLL_TOTAL
+        		  	    , SOURCE_RECORD_ACTIVE_COUNT
+     			   FROM CDC_CONNECTOR_TASK_SRC CCTS
+     			  WHERE CONNECTOR_NAME = (
+                        					SELECT 
+                           				   		   TTTI.CONNECT_NM 
+                        			  	   	  FROM T_TRANSCNG_I TTTI 
+                        			 		 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           				  )
+     			 ORDER BY TIME DESC 
+     			 LIMIT 2
+      			)
+			)C
+	   GROUP BY C.ROWNUM
+	   ORDER BY C.ROWNUM
    </select>
    
    <select id="selectSourceErrorChart" resultType="hashMap">
@@ -433,8 +509,8 @@
                FROM CDC_CONNECTOR_TASK_SINK
                      WHERE CONNECTOR_NAME = (
                                          SELECT 
-                                          CONNECT_NM 
-                                       FROM T_TRANSCNG_TARGET_I 
+                                          	CONNECT_NM 
+                                      	 FROM T_TRANSCNG_TARGET_I 
                                           WHERE TRANS_ID = #{trans_id}::numeric
                                           )
                ORDER BY TIME DESC
@@ -509,26 +585,73 @@
       * Author : 윤정
       **/
       SELECT 
-         (ROW_NUMBER() OVER(ORDER BY TIME DESC)) AS ROWNUM 
-         , TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME 
-         , SINK_RECORD_ACTIVE_COUNT
-         , PUT_BATCH_AVG_TIME_MS
-         , OFFSET_COMMIT_COMPLETION_RATE
-         , SINK_RECORD_SEND_TOTAL
-         , SINK_RECORD_ACTIVE_COUNT_AVG
-         , OFFSET_COMMIT_COMPLETION_TOTAL
-         , OFFSET_COMMIT_SKIP_RATE
-         , OFFSET_COMMIT_SKIP_TOTAL
-         , SINK_RECORD_READ_TOTAL
-      FROM CDC_CONNECTOR_TASK_SINK CCTS 
-      WHERE CCTS.CONNECTOR_NAME = (
-                           SELECT 
-                              TTTI.CONNECT_NM 
-                           FROM T_TRANSCNG_TARGET_I TTTI 
-                           WHERE TTTI.TRANS_ID = #{trans_id}
-                           )
-      ORDER BY TIME DESC 
-      LIMIT 2
+    		 C.ROWNUM
+    		 , MAX(TIME) AS TIME
+    		 , SUM(SINK_RECORD_ACTIVE_COUNT) AS SINK_RECORD_ACTIVE_COUNT
+    		 , SUM(PUT_BATCH_AVG_TIME_MS) AS PUT_BATCH_AVG_TIME_MS
+    		 , TRUNC(SUM(OFFSET_COMMIT_COMPLETION_RATE),2) AS OFFSET_COMMIT_COMPLETION_RATE
+    		 , SUM(SINK_RECORD_SEND_TOTAL) AS SINK_RECORD_SEND_TOTAL
+    		 , SUM(SINK_RECORD_ACTIVE_COUNT_AVG) AS SINK_RECORD_ACTIVE_COUNT_AVG
+    		 , SUM(OFFSET_COMMIT_COMPLETION_TOTAL) AS OFFSET_COMMIT_COMPLETION_TOTAL
+    		 , SUM(OFFSET_COMMIT_SKIP_RATE) AS OFFSET_COMMIT_SKIP_RATE
+    		 , SUM(OFFSET_COMMIT_SKIP_TOTAL) AS OFFSET_COMMIT_SKIP_TOTAL
+    		 , SUM(SINK_RECORD_READ_TOTAL) AS SINK_RECORD_READ_TOTAL
+        FROM
+			(
+				(
+    		    SELECT 
+                         1 AS ROWNUM
+                       , '' AS  TIME
+                       , 0 AS SINK_RECORD_ACTIVE_COUNT
+                       , 0 AS PUT_BATCH_AVG_TIME_MS
+                       , 0 AS OFFSET_COMMIT_COMPLETION_RATE
+                       , 0 AS SINK_RECORD_SEND_TOTAL
+                       , 0 AS SINK_RECORD_ACTIVE_COUNT_AVG
+                       , 0 AS OFFSET_COMMIT_COMPLETION_TOTAL
+                       , 0 AS OFFSET_COMMIT_SKIP_RATE
+                       , 0 AS OFFSET_COMMIT_SKIP_TOTAL
+                       , 0 AS SINK_RECORD_READ_TOTAL
+                 UNION ALL
+				SELECT 
+                         2 AS ROWNUM
+                       , '' AS TIME
+                       , 0 AS SINK_RECORD_ACTIVE_COUNT
+                       , 0 AS PUT_BATCH_AVG_TIME_MS
+                       , 0 AS OFFSET_COMMIT_COMPLETION_RATE
+                       , 0 AS SINK_RECORD_SEND_TOTAL
+                       , 0 AS SINK_RECORD_ACTIVE_COUNT_AVG
+                       , 0 AS OFFSET_COMMIT_COMPLETION_TOTAL
+                       , 0 AS OFFSET_COMMIT_SKIP_RATE
+                       , 0 AS OFFSET_COMMIT_SKIP_TOTAL
+                       , 0 AS SINK_RECORD_READ_TOTAL
+				)
+				 UNION ALL
+				(
+				SELECT 
+					   (ROW_NUMBER() OVER(ORDER BY TIME DESC)) AS ROWNUM 
+					   , TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME 
+					   , SINK_RECORD_ACTIVE_COUNT
+					   , PUT_BATCH_AVG_TIME_MS
+				 	   , OFFSET_COMMIT_COMPLETION_RATE
+					   , SINK_RECORD_SEND_TOTAL
+					   , SINK_RECORD_ACTIVE_COUNT_AVG
+					   , OFFSET_COMMIT_COMPLETION_TOTAL
+					   , OFFSET_COMMIT_SKIP_RATE
+					   , OFFSET_COMMIT_SKIP_TOTAL
+				 	   , SINK_RECORD_READ_TOTAL
+				  FROM CDC_CONNECTOR_TASK_SINK CCTS 
+				 WHERE CCTS.CONNECTOR_NAME = (
+												SELECT 
+													   TTTI.CONNECT_NM 
+												  FROM T_TRANSCNG_TARGET_I TTTI 
+												 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+											  ) 
+				 ORDER BY TIME DESC 
+				 LIMIT 2
+				)
+			)C
+      GROUP BY C.ROWNUM
+      ORDER BY C.ROWNUM
    </select>
    
    <select id="selectTargetErrorChart" resultType="hashMap">
@@ -585,7 +708,7 @@
                    , 0 AS TOTAL_ERRORS_LOGGED
                    , 0 AS DEADLETTERQUEUE_PRODUCE_REQUESTS
                    , 0 AS DEADLETTERQUEUE_PRODUCE_FAILURES
-                      , 0 AS TOTAL_RECORD_FAILURES
+                   , 0 AS TOTAL_RECORD_FAILURES
                    , 0 AS TOTAL_RECORDS_SKIPPED
                    , 0 AS TOTAL_RECORD_ERRORS
                UNION ALL
