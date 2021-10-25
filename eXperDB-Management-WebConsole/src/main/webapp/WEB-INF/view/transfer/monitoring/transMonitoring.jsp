@@ -157,6 +157,15 @@
 				success : function(result) {
 					if (result != null) {
 						$('#table_cnt').html(result.table_cnt);
+						$('#ssconDBResultTable').show();
+						$('#trans_monitoring_source_info').show();
+						$('#trans_monitoring_target_info').show();
+						if(result.connectInfo[0] != null && result.connectInfo[0] != undefined){
+							$('#src_total_poll_cnt').html(result.connectInfo[0].source_record_poll_total);
+							$('#src_total_error_cnt').html(result.connectInfo[0].total_record_errors);
+							$('#ssconResultCntTable').show();
+							$('#ssconResultCntTableNvl').hide();
+						}
 						$('#tar_connector_list').empty();
 						$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
 						if (nvlPrmSet(result.targetConnectorList, '') != '') {
@@ -317,6 +326,12 @@
 				}
 			});
 		} else{
+			$('#ssconResultCntTable').hide();
+			$('#ssconResultCntTableNvl').show();
+			$('#tar_connector_list').empty();
+			$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
+			fn_tarConnectInfo();
+			$('#ssconDBResultTable').hide();
 // 			srcConnectSettingInfoTable.clear().draw();
 // 			srcMappingListTable.clear().draw();
 // 			$('#src-chart-line-1').empty();
@@ -328,6 +343,11 @@
 	}
 	
 	function fn_src_init(){
+		$('#trans_monitoring_source_info').hide();
+		$('#trans_monitoring_target_info').hide();
+		$('#table_cnt').html("");
+		$('#src_total_poll_cnt').html("");
+		$('#src_total_error_cnt').html("");
 		srcConnectSettingInfoTable.clear().draw();
 		srcMappingListTable.clear().draw();
 		$('#src-chart-line-1').empty();
@@ -336,9 +356,11 @@
 		$('#src-chart-line-error').empty();
 		$('#src-chart-line-snapshot').empty();
 		$('#src-chart-line-streaming').empty();
+		$('#ssconDBResultTable').hide();
 	}
 	
 	function fn_tar_init(){
+		$('#topic_cnt').html("");
 		$('#d_tg_connect_nm').text("");
 		$('#d_tg_sys_nm').text("");
 		$('#d_tg_dbms_type').text("");
@@ -351,6 +373,7 @@
 		$('#tar-chart-line-sink').empty();
 		$('#tar-chart-line-complete').empty();
 		$('#tar-chart-line-sink-error').empty();
+		$('#skconResultTable').hide();
 	}
 	
 	function fn_tarConnectInfo(){
@@ -381,6 +404,18 @@
 				success : function(result) {
 					if (result != null) {
 						if (nvlPrmSet(result.targetDBMSInfo, '') != '') {
+							$('#topic_cnt').html(result.topic_cnt);
+							
+							if(result.targetConnectInfo != null && result.targetConnectInfo != undefined){
+								$('#tarconResultCntTableNvl').hide();
+								$('#tarconResultCntTable').show();
+								$('#sink_record_send_total').html(result.targetConnectInfo.sink_record_send_total);
+								$('#tar_total_error').html(result.targetConnectInfo.total_record_errors);
+								$('#skconResultTable').show();
+							} else {
+								$('#tarconResultCntTable').hide();
+								$('#tarconResultCntTableNvl').show();
+							}
 							$('#d_tg_connect_nm').text(langSelect.options[langSelect.selectedIndex].text);
 							$('#d_tg_sys_nm').text(result.targetDBMSInfo[0].trans_sys_nm);
 							$('#d_tg_dbms_type').text(result.targetDBMSInfo[0].dbms_type);
@@ -440,9 +475,13 @@
 // 							}
 // 						}
 					}
-				
+
 				}
 			});
+		} else {
+			$('#tarconResultCntTable').hide();
+			$('#tarconResultCntTableNvl').show();
+			$('#skconResultTable').hide();
 		}
 		$("#loading").hide();
 	}
@@ -719,13 +758,14 @@
 														</tr>
 														<tr id="ssconResultCntTableNvl" >
 															<td colspan="3" style="font-size:12px;">
-																<spring:message code="message.msg01" />
+<%-- 																<spring:message code="message.msg01" /> --%>
+																커넥터를 선택해주세요
 															</td>
 														</tr>
 														<tr id="ssconResultCntTable" style="display:none;">
 															<td style="text-align:center;font-size:12px;" id="table_cnt"></td>
-															<td style="text-align:center;font-size:12px;"></td>
-															<td style="text-align:center;font-size:12px;"></td>
+															<td style="text-align:center;font-size:12px;" id="src_total_poll_cnt"></td>
+															<td style="text-align:center;font-size:12px;" id="src_total_error_cnt"></td>
 														</tr>
 													</thead>
 												</table>
@@ -734,10 +774,9 @@
 										
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="ssconResultTable" class="table-borderless" style="width:100%;">
-													<tr id="ssconResultCntTable">
+			 									<table id="ssconDBResultTable" class="table-borderless" style="width:100%; display:none;">
+													<tr id="ssconDBResultCntTable">
 														<td style="width:100%;">
-															
 															
 															<table class="table-borderless" style="width:100%;text-align:left;">
 																<tr>
@@ -763,8 +802,8 @@
 																		<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6>
 																	</td>
 																</tr>
-																
 															</table>
+															
 														</td>
 													</tr>
 												</table>
@@ -781,12 +820,14 @@
 								<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyListnerConLineList">
 								
 									<table class="table-borderless" style="width:100%;margin-top:35px;">
-										<tbody><tr>
-											<td style="margin-left:10px;" class="text-center" id="123">
-												<img src="../images/arrow_side.png" class="img-lg" style="max-width:120%;object-fit: contain;width:120px;height:120px;" alt="">
-											</td>
-										</tr>
-									</tbody></table>
+										<tbody>
+											<tr>
+												<td style="margin-left:10px;" class="text-center" id="123">
+													<img src="../images/arrow_side.png" class="img-lg" style="max-width:120%;object-fit: contain;width:120px;height:120px;" alt="">
+												</td>
+											</tr>
+										</tbody>
+									</table>
 
 								</div>
 							</div>
@@ -845,22 +886,23 @@
 										</tr>
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="ssconResultTable" class="table table-striped system-tlb-scroll" style="width:100%;">
+			 									<table id="tarconResultTable" class="table table-striped system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
 															<th style="width:25%;font-size:12px;">토픽 수</th>
 															<th style="width:37%;font-size:12px;">전체 완료 수</th>
 															<th style="width:38%;font-size:12px;">오류 수</th>
 														</tr>
-														<tr id="ssconResultCntTableNvl">
+														<tr id="tarconResultCntTableNvl">
 															<td colspan="3" >
-																<spring:message code="message.msg01" />
+<%-- 																<spring:message code="message.msg01" /> --%>
+																커넥터를 선택해주세요
 															</td>
 														</tr>
-														<tr id="ssconResultCntTable" style="display:none;">
+														<tr id="tarconResultCntTable">
 															<td style="text-align:center;font-size:12px;" id="topic_cnt"></td>
-															<td style="text-align:center;font-size:12px;"></td>
-															<td style="text-align:center;font-size:12px;"></td>
+															<td style="text-align:center;font-size:12px;" id="sink_record_send_total"></td>
+															<td style="text-align:center;font-size:12px;" id="tar_total_error"></td>
 														</tr>
 													</thead>
 												</table>
@@ -869,8 +911,8 @@
 										
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="skconResultTable" class="table-borderless" style="width:100%;">
-													<tr id="skconResultCntTable">
+			 									<table id="skconResultTable" class="table-borderless" style="width:100%; display:none;">
+													<tr id="skconResultCntTable" >
 														<td style="width:100%;">
 															
 															

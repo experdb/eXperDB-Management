@@ -832,7 +832,7 @@
 	
 </script>
 
-<div class="col-lg-6 grid-margin stretch-card" id="trans_monitoring_source_info">
+<div class="col-lg-6 grid-margin stretch-card" id="trans_monitoring_source_info" style="display:none;">
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">

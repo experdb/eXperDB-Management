@@ -246,6 +246,8 @@ public class TransMonitoringController {
 		// 타겟 error info
 		List<Map<String, Object>> targetErrorInfo = transMonitoringService.selectTargetErrorInfo(trans_id);
 		
+		mv.addObject("topic_cnt", targetTopicList.size());
+		mv.addObject("targetConnectInfo", targetTopic);
 		mv.addObject("targetDBMSInfo", targetDBMSInfo);
 		mv.addObject("targetTopicList", targetTopicList);
 		mv.addObject("targetSinkRecordChart", targetSinkRecordChart);
