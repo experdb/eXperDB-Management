@@ -201,19 +201,19 @@
       * Author : 윤정
       **/
       SELECT 
-          TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-          , TOTAL_NUMBER_OF_EVENTS_SEEN  
-          , NUMBER_OF_EVENTS_FILTERED  
-          , NUMBER_OF_ERRONEOUS_EVENTS  
-      FROM CDC_DBSERVER_STREAMING CDS 
-      WHERE CONNECTOR_SRC_NAME = (
-                           SELECT 
-                              TTTI.CONNECT_NM 
-                           FROM T_TRANSCNG_I TTTI 
-                           WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-                           )
-      ORDER BY TIME DESC
-      LIMIT 5
+         	 TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+        	 , TOTAL_NUMBER_OF_EVENTS_SEEN  
+        	 , NUMBER_OF_EVENTS_FILTERED  
+       		 , NUMBER_OF_ERRONEOUS_EVENTS  
+        FROM CDC_DBSERVER_STREAMING CDS 
+       WHERE CONNECTOR_SRC_NAME = (
+                          			SELECT 
+                             			   TTTI.CONNECT_NM 
+                           			  FROM T_TRANSCNG_I TTTI 
+                           			 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           			)
+       ORDER BY TIME DESC
+       LIMIT 5
    </select>
    
    <select id="selectStreamingInfo" resultType="hashMap">
@@ -300,19 +300,19 @@
       * Author : 윤정
       **/
       SELECT 
-         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-         , SOURCE_RECORD_WRITE_TOTAL
-         , SOURCE_RECORD_POLL_TOTAL
-         , SOURCE_RECORD_ACTIVE_COUNT
-      FROM CDC_CONNECTOR_TASK_SRC
-      WHERE CONNECTOR_NAME = (
-                        SELECT 
-                           TTTI.CONNECT_NM 
-                        FROM T_TRANSCNG_I TTTI 
-                        WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-                        )
-      ORDER BY TIME DESC 
-      LIMIT 5
+        	 TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+         	 , SOURCE_RECORD_WRITE_TOTAL
+         	 , SOURCE_RECORD_POLL_TOTAL
+        	 , TRUNC(SOURCE_RECORD_ACTIVE_COUNT,2) AS SOURCE_RECORD_ACTIVE_COUNT
+        FROM CDC_CONNECTOR_TASK_SRC
+       WHERE CONNECTOR_NAME = (
+                       			 SELECT 
+                         			    TTTI.CONNECT_NM 
+                        		   FROM T_TRANSCNG_I TTTI 
+                       			  WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                       			 )
+       ORDER BY TIME DESC 
+       LIMIT 5
    </select>
    
    <select id="selectSourceChart_2" resultType="hashMap">
@@ -322,18 +322,18 @@
       * Author : 윤정
       **/
       SELECT 
-         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-         , SOURCE_RECORD_WRITE_RATE
-         , SOURCE_RECORD_ACTIVE_COUNT_AVG
-      FROM CDC_CONNECTOR_TASK_SRC
-      WHERE CONNECTOR_NAME = (
-                        SELECT 
-                           TTTI.CONNECT_NM 
-                        FROM T_TRANSCNG_I TTTI 
-                        WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-                        )
-      ORDER BY TIME DESC 
-      LIMIT 5
+         	 TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+        	 , TRUNC(SOURCE_RECORD_WRITE_RATE, 2) AS SOURCE_RECORD_WRITE_RATE
+       		 , TRUNC(SOURCE_RECORD_ACTIVE_COUNT_AVG, 2) AS SOURCE_RECORD_ACTIVE_COUNT_AVG
+        FROM CDC_CONNECTOR_TASK_SRC
+       WHERE CONNECTOR_NAME = (
+                        		SELECT 
+                           				TTTI.CONNECT_NM 
+                        		  FROM T_TRANSCNG_I TTTI 
+                        		 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                        		)
+       ORDER BY TIME DESC 
+       LIMIT 5
    </select>
    
    <select id="selectSourceInfo" resultType="hashMap">
