@@ -43,7 +43,7 @@
 			},
 			columns : [
 					{data : "schema_nm", className : "dt-center", defaultContent : ""}, 
-					{data : "table_nm", className : "dt-center", defaultContent : ""},	
+					{data : "table_nm", className : "dt-left", defaultContent : ""},	
 			]
 		});
 		

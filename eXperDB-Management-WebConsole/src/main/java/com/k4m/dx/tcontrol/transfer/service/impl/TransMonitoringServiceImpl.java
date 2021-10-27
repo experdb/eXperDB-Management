@@ -399,4 +399,27 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 		return transMonitoringDAO.selectKafkaActCngList(kc_id);
 	}
 	
+	/**
+	 * 소스 Connector 연결 테이블 조회
+	 * 
+	 * @param trans_id
+	 * @return Map<String, Object>
+	 */
+	@Override
+	public List<Map<String, Object>> selectSourceConnectorTableListNew(int trans_id) {
+		return transMonitoringDAO.selectSourceConnectorTableListNew(trans_id);
+	}
+
+	/**
+	 * 타겟 전송대상 테이블 목록 조회
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>>
+	 */
+	@Override
+	public List<Map<String, Object>> selectTargetTopicListNew(int trans_id) {
+		return transMonitoringDAO.selectTargetTopicListNew(trans_id);
+	}
+
+	
 }
