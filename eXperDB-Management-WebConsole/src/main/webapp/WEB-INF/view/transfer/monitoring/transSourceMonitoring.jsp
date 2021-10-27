@@ -1026,7 +1026,7 @@
 										<th width="100px;">time</th>
 										<th width="100px;">커넥터 미기록 최대 레코드 수</th>
 										<th width="100px;">커넥터 기록된 평균 레코드 수 </th>
-										<th width="100px;">커넥터 미기록 평균 레코드 수<</th>
+										<th width="100px;">커넥터 미기록 평균 레코드 수</th>
 										<th width="100px;">커넥터 기록된 레코드 수 </th>
 										<th width="100px;">커넥터 미기록 레코드 수 </th>
 										<th width="100px;">폴링 총 레코드 수</th>

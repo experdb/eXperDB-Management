@@ -289,11 +289,11 @@
 								if(result.sourceInfo[i].rownum == 1){
 									if(i != result.sourceInfo.length-1 && result.sourceInfo[i+1].rownum == 2){
 										result.sourceInfo[i].source_record_active_count_max_cng = result.sourceInfo[i].source_record_active_count_max - result.sourceInfo[i+1].source_record_active_count_max;
-										result.sourceInfo[i].source_record_write_rate_cng = result.sourceInfo[i].source_record_write_rate - result.sourceInfo[i+1].source_record_write_rate;
-										result.sourceInfo[i].source_record_active_count_avg_cng = result.sourceInfo[i].source_record_active_count_avg - result.sourceInfo[i+1].source_record_active_count_avg;
+										result.sourceInfo[i].source_record_write_rate_cng = (result.sourceInfo[i].source_record_write_rate - result.sourceInfo[i+1].source_record_write_rate).toFixed(2);
+										result.sourceInfo[i].source_record_active_count_avg_cng = (result.sourceInfo[i].source_record_active_count_avg - result.sourceInfo[i+1].source_record_active_count_avg).toFixed(2);
 										result.sourceInfo[i].source_record_write_total_cng = result.sourceInfo[i].source_record_write_total - result.sourceInfo[i+1].source_record_write_total;
 										result.sourceInfo[i].source_record_poll_total_cng = result.sourceInfo[i].source_record_poll_total - result.sourceInfo[i+1].source_record_poll_total;
-										result.sourceInfo[i].source_record_active_count_cng = result.sourceInfo[i].source_record_active_count - result.sourceInfo[i+1].source_record_active_count;
+										result.sourceInfo[i].source_record_active_count_cng = (result.sourceInfo[i].source_record_active_count - result.sourceInfo[i+1].source_record_active_count).toFixed(2);
 									}
 									srcConnectTable.row.add(result.sourceInfo[i]).draw();
 								}
@@ -441,7 +441,7 @@
 									if(i != result.targetSinkInfo.length-1 && result.targetSinkInfo[i+1].rownum == 2){
 										result.targetSinkInfo[i].sink_record_active_count_cng = result.targetSinkInfo[i].sink_record_active_count - result.targetSinkInfo[i+1].sink_record_active_count;
 										result.targetSinkInfo[i].put_batch_avg_time_ms_cng = result.targetSinkInfo[i].put_batch_avg_time_ms - result.targetSinkInfo[i+1].put_batch_avg_time_ms;
-										result.targetSinkInfo[i].offset_commit_completion_rate_cng = result.targetSinkInfo[i].offset_commit_completion_rate - result.targetSinkInfo[i+1].offset_commit_completion_rate;
+										result.targetSinkInfo[i].offset_commit_completion_rate_cng = (result.targetSinkInfo[i].offset_commit_completion_rate - result.targetSinkInfo[i+1].offset_commit_completion_rate).toFixed(2);
 										result.targetSinkInfo[i].sink_record_send_total_cng = result.targetSinkInfo[i].sink_record_send_total - result.targetSinkInfo[i+1].sink_record_send_total;
 										result.targetSinkInfo[i].sink_record_active_count_avg_cng = result.targetSinkInfo[i].sink_record_active_count_avg - result.targetSinkInfo[i+1].sink_record_active_count_avg;
 										result.targetSinkInfo[i].offset_commit_completion_total_cng = result.targetSinkInfo[i].offset_commit_completion_total - result.targetSinkInfo[i+1].offset_commit_completion_total;
@@ -653,9 +653,9 @@
 		<div class="col-8 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<h4 class="card-title">
-						<i class="item-icon fa fa-dot-circle-o"></i> 연결도
-					</h4>
+<!-- 					<h4 class="card-title"> -->
+<!-- 						<i class="item-icon fa fa-dot-circle-o"></i> 연결도 -->
+<!-- 					</h4> -->
 					
 					<div class="row" id="reg_trans_title">
 						<div class="accordion_main accordion-multi-colored col-4" id="accordion" role="tablist" >
@@ -757,7 +757,8 @@
 															<th style="width:38%;font-size:12px;">오류 수</th>
 														</tr>
 														<tr id="ssconResultCntTableNvl" >
-															<td colspan="3" style="font-size:12px;">
+<!-- 															<td colspan="3" style="font-size:12px;"> -->
+															<td colspan="3">
 <%-- 																<spring:message code="message.msg01" /> --%>
 																커넥터를 선택해주세요
 															</td>
