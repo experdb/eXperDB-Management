@@ -433,6 +433,7 @@
 						}
 						
 						if (nvlPrmSet(result.targetErrorChart, '') != '') {
+
 							var sinkErrorChart = Morris.Line({
 								element: 'tar-chart-line-sink-error',
 								lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
@@ -451,7 +452,12 @@
 								ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped'],
 								labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수']
 							});
+							$('#tar-chart-error').show();							
+							$('#tar-chart-error-nvl').hide();
 							sinkErrorChart.setData(result.targetErrorChart);
+						} else {
+							$('#tar-chart-error').hide();							
+							$('#tar-chart-error-nvl').show();	
 						}
 					}
 				}
@@ -479,7 +485,7 @@
 								<div class="col-6">
 									<h6 class="mb-0">
 										<a data-toggle="collapse" href="#tar_dbms_header_sub" aria-expanded="true" aria-controls="tar_dbms_header_sub" onclick="fn_profileChk('TarDBMSTitleText')">
-											<i class="fa fa-bar-chart-o menu-icon"></i>
+											<i class="item-icon fa fa-dot-circle-o"></i>
 											<span class="menu-title">타겟 DBMS 정보</span>
 											<i class="menu-arrow_user_af" id="TarDBMSTitleText" ></i>
 										</a>
@@ -498,7 +504,7 @@
 								
 			<div id="tar_dbms_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="tar_dbms_header_div" data-parent="#accordion_tar_dbms_his">
 				<div class="col-md-12 col-xl-12 justify-content-center" >
-					<div class="card" style="border:none; box-shadow: 0px 1px 15px 1px rgba(230, 234, 236, 0.35);">
+					<div class="card" style="border:none; box-shadow: 0px 1px 7px 1px rgba(211, 211, 211, 2);">
 						<div class="card-body" style="border:none; margin-bottom:8px; ">
 							<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 								<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
@@ -563,7 +569,7 @@
 								<div class="col-6">
 									<h6 class="mb-0">
 										<a data-toggle="collapse" href="#tar_connect_header_sub" aria-expanded="true" aria-controls="tar_connect_header_sub" onclick="fn_profileChk('TarConnectTitleText')">
-											<i class="fa fa-bar-chart-o menu-icon"></i>
+											<i class="item-icon fa fa-dot-circle-o"></i>
 											<span class="menu-title">Connect 정보</span>
 											<i class="menu-arrow_user_af" id="TarConnectTitleText" ></i>
 										</a>
@@ -582,8 +588,8 @@
 					
 			<div id="tar_connect_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="tar_connect_header_div" data-parent="#accordion_tar_connect_his">
 				<div class="col-md-12 col-xl-12 justify-content-center" >
-					<div class="card" style="">
-						<div class="card-body" style=" margin-bottom:8px;">
+					<div class="card" style="box-shadow: 0px 1px 7px 1px rgba(211, 211, 211, 2);">
+						<div class="card-body" style=" margin-bottom:8px; border:none;">
 							<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 								<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 									<i class="item-icon fa fa-dot-circle-o"></i>
@@ -609,7 +615,7 @@
 							<div class="form-group row" style="margin-bottom:-10px;">
 								<div class="col-12 stretch-card div-form-margin-table" style="margin-top:-15px;">
 									<div class="card" style="border:0px;">
-										<div class="card-body" style="padding-left:0px;padding-right:0px;">	
+										<div class="card-body" style="padding-left:0px;padding-right:0px; ">	
 								 			<table id="tarTopicListTable" class="table table-hover system-tlb-scroll" style="width:100%;">
 												<thead>
 													<tr class="bg-info text-white">
@@ -633,7 +639,7 @@
 					<div class="card" style="margin-left:-10px;border:none;">
 						<div class="card-body" style="border:none;">
 							<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>
+								<i class="item-icon fa fa-bar-chart-o text-info"></i>
 								&nbsp;connect 실시간 차트
 <!-- 								<i class="fa fa-bar-chart-o menu-icon text-info"></i> -->
 <!-- 								connect 실시간 차트 -->
@@ -647,9 +653,9 @@
 					<div class="card" style="margin-left:-10px;border:none;">
 						<div class="card-body" style="border:none;margin-top:-35px;">
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;
+								<i class="item-icon mdi mdi-chart-line text-info"></i>&nbsp;실시간 레코드
 							</p>
-							<div id="tar-chart-line-sink" style="max-height:200px;"></div>
+							<div id="tar-chart-line-sink" style="height:200px;"></div>
 						</div>
 					</div>
 				</div>
@@ -659,9 +665,9 @@
 					<div class="card" style="margin-left:-10px;border:none;">
 						<div class="card-body" style="border:none;margin-top:-35px;">
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;완료
+								<i class="item-icon mdi mdi-chart-areaspline text-info"></i>&nbsp;완료 레코드
 							</p>
-							<div id="tar-chart-line-complete" style="max-height:200px;"></div>
+							<div id="tar-chart-line-complete" style="height:200px;"></div>
 						</div>
 					</div>
 				</div>
@@ -717,16 +723,23 @@
 				</div>
 
 			<!-- error chart -->
-				<div class="col-md-12 col-xl-12 justify-content-center">
+				<div class="col-md-12 col-xl-12 justify-content-center" id="tar-chart-error" >
 					<div class="card" style="margin-left:-10px;border:none;">
-						<div class="card-body" style="border:none;">
-							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;error 차트
-							</p>
-							<div id="tar-chart-line-sink-error" style="max-height:200px;"></div>
+<!-- 						<div class="card-body" style="border:none;"> -->
+						<div class="card-body">
+							<div id="tar-chart-line-sink-error" style="height:200px;"></div>
 						</div>
 					</div>
 				</div>
+				
+				<div class="col-md-12 col-xl-12 justify-content-center" id="tar-chart-error-nvl" style="border:1px; display:none;">
+					<div class="card" >
+						<div class="card-body">
+							<div id="tar-chart-line-sink-error-nvl" style="height:30px;">데이터가 없습니다.</div>
+						</div>
+					</div>
+				</div>
+								
 			</div>			
 			<!-- error 리스트 -->
 <!-- 			<div class="col-md-12 col-xl-12 justify-content-center"> -->
