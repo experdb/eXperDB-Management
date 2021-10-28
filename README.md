@@ -27,6 +27,7 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 * Auto Scaling(On AWS)
   - Auto Scale-Out/In function according to threshold setting On public cloud(AWS)
   - Automatic and manual management
+  - 
 
 ## TODO
 * Supports PostgreSQL Version 12
