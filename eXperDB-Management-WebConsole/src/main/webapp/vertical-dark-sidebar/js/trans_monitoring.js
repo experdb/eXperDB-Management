@@ -93,9 +93,9 @@ function fn_cpu_mem_err_chart(){
 					xLabelFormat: function(time) {
 						return time.label.slice(10);
 					},
-					ykeys: ['error'],
-					lineColors: ['#199cef'],
-					labels: ['error'],
+					ykeys: ['src_total_record_errors', 'tar_total_record_errors'],
+					lineColors: ['#FABA66','#F36368'],
+					labels: ['소스 error', '타겟 error'],
 					lineWidth: 2,
 					parseTime: false,
 					hideHover: false,

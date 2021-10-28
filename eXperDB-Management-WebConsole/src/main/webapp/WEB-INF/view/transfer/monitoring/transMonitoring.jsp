@@ -749,7 +749,7 @@
 										</tr>
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="ssconResultTable" class="table table-striped system-tlb-scroll" style="width:100%;">
+			 									<table id="ssconResultTable" class="table table-striped system-tlb-scroll" style="width:100%; border-bottom:1px solid;">
 													<thead>
 														<tr class="bg-info text-white">
 															<th style="width:25%;font-size:12px;">테이블 수</th>
@@ -888,7 +888,7 @@
 										</tr>
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="tarconResultTable" class="table table-striped system-tlb-scroll" style="width:100%;">
+			 									<table id="tarconResultTable" class="table table-striped system-tlb-scroll" style="width:100%; border-bottom:1px solid;">
 													<thead>
 														<tr class="bg-info text-white">
 															<th style="width:25%;font-size:12px;">토픽 수</th>
@@ -901,7 +901,7 @@
 																커넥터를 선택해주세요
 															</td>
 														</tr>
-														<tr id="tarconResultCntTable">
+														<tr id="tarconResultCntTable" style="display:none;">
 															<td style="text-align:center;font-size:12px;" id="topic_cnt"></td>
 															<td style="text-align:center;font-size:12px;" id="sink_record_send_total"></td>
 															<td style="text-align:center;font-size:12px;" id="tar_total_error"></td>

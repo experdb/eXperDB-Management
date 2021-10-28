@@ -505,7 +505,7 @@
 			<div id="tar_dbms_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="tar_dbms_header_div" data-parent="#accordion_tar_dbms_his">
 				<div class="col-md-12 col-xl-12 justify-content-center" >
 					<div class="card" style="border:none; box-shadow: 0px 1px 7px 1px rgba(211, 211, 211, 2);">
-						<div class="card-body" style="border:none; margin-bottom:8px; ">
+						<div class="card-body" style="border:none; margin-bottom:8px; display:none; ">
 							<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 								<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 									<i class="item-icon fa fa-dot-circle-o"></i>
@@ -553,6 +553,10 @@
 								</div>
 							</div>
 							
+						</div>
+						
+						<div class="card-body" style="border:none; margin-bottom:8px; height:184px; ">
+							데이터가 없습니다.
 						</div>
 					</div>
 				</div>
