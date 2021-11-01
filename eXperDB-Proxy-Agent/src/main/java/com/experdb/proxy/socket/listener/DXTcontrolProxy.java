@@ -133,7 +133,7 @@ public class DXTcontrolProxy extends SocketCtl {
 			socketLogger.info("ProxyServiceImpl.searchProxyServerVO : " + strIpadr);
 			//proxy 서버 등록 여부 확인
 			ProxyServerVO proxyServerInfo = pryService.selectPrySvrInfo(searchProxyServerVO);
-			socketLogger.info("ProxyServiceImpl.proxyServerInfo : " + proxyServerInfo.toString());
+			//socketLogger.info("ProxyServiceImpl.proxyServerInfo : " + proxyServerInfo.toString());
 			//keepalived 설치 상태
 			strKeepInstallYn = strKeepalived;
 
