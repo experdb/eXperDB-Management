@@ -18,6 +18,7 @@ import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMonitoringService;
+import com.k4m.dx.tcontrol.transfer.service.TransService;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
 
@@ -43,7 +44,9 @@ public class TransMonitoringController {
 	
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
-	
+
+	@Autowired
+	private TransService transService;
 	
 	/**
 	 * trans 모니터링 view
@@ -148,6 +151,8 @@ public class TransMonitoringController {
 		List<Map<String, Object>> sourceErrorInfo = transMonitoringService.selectSourceErrorInfo(trans_id);
 		
 		List<Map<String, Object>> targetConnectorList = transMonitoringService.selectTargetConnectList(trans_id);
+		
+		Map<String, Object> kafkaInfo = transMonitoringService.selectKafkaConnectInfo(trans_id);
 
 		if (table_name_list.size() > 0) {
 			for(int i = 0; i < table_name_list.size(); i++){
@@ -169,7 +174,8 @@ public class TransMonitoringController {
 		mv.addObject("sourceErrorInfo", sourceErrorInfo);
 		mv.addObject("targetConnectorList", targetConnectorList);
 		mv.addObject("kafkaActCngList",selectKafkaActCngList);
-		
+		mv.addObject("kafkaInfo",kafkaInfo);
+
 		return mv;
 	}
 	
@@ -187,10 +193,10 @@ public class TransMonitoringController {
 		int trans_id = Integer.parseInt(strTransId);
 		
 		List<Map<String, Object>> snapshotChart = transMonitoringService.selectSourceSnapshotChart(trans_id);
-		List<Map<String, Object>> snapshotInfo = transMonitoringService.selectSourceSnapshotInfo(trans_id);
+		//List<Map<String, Object>> snapshotInfo = transMonitoringService.selectSourceSnapshotInfo(trans_id);
 		
 		mv.addObject("snapshotChart", snapshotChart);
-		mv.addObject("snapshotInfo", snapshotInfo);
+		//mv.addObject("snapshotInfo", snapshotInfo);
 		
 		return mv;
 	}
@@ -209,10 +215,10 @@ public class TransMonitoringController {
 		int trans_id = Integer.parseInt(strTransId);
 		
 		List<Map<String, Object>> streamingChart = transMonitoringService.selectStreamingChart(trans_id);
-		List<Map<String, Object>> streamingInfo = transMonitoringService.selectStreamingInfo(trans_id);
+		//List<Map<String, Object>> streamingInfo = transMonitoringService.selectStreamingInfo(trans_id);
 		
 		mv.addObject("streamingChart", streamingChart);
-		mv.addObject("streamingInfo", streamingInfo);
+		//mv.addObject("streamingInfo", streamingInfo);
 		
 		return mv;
 	}
@@ -222,9 +228,10 @@ public class TransMonitoringController {
 	 * 
 	 * @param historyVO,request
 	 * @return ModelAndView
+	 * @throws Exception 
 	 */
 	@RequestMapping("/transTarConnectInfo.do")
-	public ModelAndView transTarConnectInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView transTarConnectInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("jsonView");
 		
 		String strTransId = request.getParameter("trans_id");
@@ -282,6 +289,8 @@ public class TransMonitoringController {
 		} else {
 			topic_cnt = 0;
 		}
+		
+		List<Map<String, Object>> transDbmsInfoList = transService.selectTargetTransInfo(trans_id);
 
 		mv.addObject("topic_cnt", topic_cnt);
 		mv.addObject("targetConnectInfo", targetTopic);
@@ -292,6 +301,8 @@ public class TransMonitoringController {
 		mv.addObject("targetSinkInfo", targetSinkInfo);
 		mv.addObject("targetErrorChart", targetErrorChart);
 		mv.addObject("targetErrorInfo", targetErrorInfo);
+		
+		mv.addObject("transDbmsInfoList", transDbmsInfoList);
 		
 		return mv;
 	}

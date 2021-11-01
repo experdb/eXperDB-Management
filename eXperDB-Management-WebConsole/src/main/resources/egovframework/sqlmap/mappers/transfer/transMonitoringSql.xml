@@ -789,6 +789,7 @@
              TTCI.KC_ID
            , TTCI.KC_IP 
            , TTCI.KC_PORT 
+           , TTCI.EXE_STATUS
         FROM T_TRANS_CON_INF TTCI 
              JOIN T_TRANSCNG_I TTI ON TTCI.KC_ID = TTI.KC_ID 
        WHERE TTI.TRANS_ID = #{trans_id}::numeric

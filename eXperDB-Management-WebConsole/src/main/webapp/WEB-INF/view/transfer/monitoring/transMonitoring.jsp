@@ -31,6 +31,9 @@
 	var memChart = "";
 	var allErrorChart = "";
 	var connectorActTable = "";
+	var sinkChart = "";
+	var sinkCompleteChart = "";
+	var sinkErrorChart = "";
 	
 	/* ********************************************************
 	 * 화면 onload
@@ -45,88 +48,37 @@
 		// connector 기동정지 table init
 		fn_connector_act_init();
 		
-
-
-		// 소스 chart init
-// 		fn_src_chart_init();
-	
-		// 소스 snapshot init
-		fn_src_snapshot_init();
-	
-		// 소스 streaming init
-		fn_src_streaming_init();
-	
-		// 소스 connect setting info init
+		// 소스 connect setting info init - connect 설정정보
 		fn_src_setting_info_init();
-	
-		// 소스 connect mapping table init
+		
+		// 소스 connect mapping table init - 전송대상 테이블 정보
 		fn_src_mapping_list_init();
-	
-		// 소스 connect init
+		
+		// 소스 connect init     -- 실시간리스트
 		fn_src_connect_init();
-	
-		// 소스 error 리스트 init
-		fn_src_error_init();
-	
-		// 타겟 connect 토픽 리스트 init
+		
+		// 타겟 connect 토픽 리스트 init -- 전송대상 토픽리스트 정보
 		fn_tar_topic_list_init();
 		
-		// 타겟 connect 리스트 init
+		// 타겟 connect 리스트 init     -- 실시간리스트
 		fn_tar_connect_init();
-	
+		
+		// 소스 snapshot init
+		//fn_src_snapshot_init();
+
+		// 소스 streaming init
+		//fn_src_streaming_init();
+
+		// 소스 error 리스트 init
+		//fn_src_error_init();
+
 		// 타겟 error 리스트 init
-		fn_tar_error_init();
-	
+		//fn_tar_error_init();
 	});
 
 	/* ********************************************************
-	 * connect 기동 정지 이력 테이블 setting
+	 * 소스 커넥터 select box 변경
 	 ******************************************************** */
-	function fn_connector_act_init(){
-		connectorActTable = $('#connectorActTable').DataTable({
-			searching : false,
-			scrollY : true,
-			scrollX: true,	
-			paging : false,
-			deferRender : true,
-			info : false,
-			sort: false, 
-			"language" : {
-				"emptyTable" : '<spring:message code="message.msg01" />'
-			},
-			columns : [
-				{data : "rownum", className : "dt-center", defaultContent : "", visible: false},
-				{data : "connector_name", className : "dt-center", defaultContent : ""},
-				{data : "act_type",							
-					render : function(data, type, full, meta){
-						var html = "";
-							if(data == 'A'){
-							html += '	<i class="fa fa-spinner fa-spin mr-2 icon-sm text-success"></i>';
-							html += '	<spring:message code="eXperDB_proxy.act_start"/>';
-						} else if(data == 'R') {
-							html += '	<i class="fa fa-refresh fa-spin mr-2 icon-sm text-warning"></i>';
-							html += '	<spring:message code="eXperDB_proxy.act_restart"/>';
-						} else if(data == 'S'){
-							html += '	<i class="fa fa-circle-o-notch mr-2 icon-sm text-danger"></i>';
-							html += '	<spring:message code="eXperDB_proxy.act_stop"/>';
-						}
-						return html;
-					},
-					className : "dt-center", 
-					defaultContent : ""
-				},
-				{data : "wrk_dtm", className : "dt-center", defaultContent : "" },
-			]
-		});
-		
-		connectorActTable.tables().header().to$().find('th:eq(0)').css('min-width', '0px'); // rownum
-		connectorActTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // time
-		connectorActTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px'); // number_of_events_filtered
-		connectorActTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px'); // number_of_erroneous_events
-		
-		$(window).trigger('resize');
-	}
-
 	function fn_srcConnectInfo() {
 		var langSelect = document.getElementById("src_connect");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
@@ -156,18 +108,25 @@
 				},
 				success : function(result) {
 					if (result != null) {
+						
+						//소스커넥터 테이블수, 전체완료수, 오류수 setting
 						$('#table_cnt').html(result.table_cnt);
 						$('#ssconDBResultTable').show();
-						$('#trans_monitoring_source_info').show();
-						$('#trans_monitoring_target_info').show();
 						if(result.connectInfo[0] != null && result.connectInfo[0] != undefined){
 							$('#src_total_poll_cnt').html(result.connectInfo[0].source_record_poll_total);
 							$('#src_total_error_cnt').html(result.connectInfo[0].total_record_errors);
 							$('#ssconResultCntTable').show();
 							$('#ssconResultCntTableNvl').hide();
 						}
+						
+						//하단 상세화면 출력
+						$('#trans_monitoring_source_info').show();
+						$('#trans_monitoring_target_info').show();
+						
+						//싱크커넥터 select 활성화
 						$('#tar_connector_list').empty();
 						$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
+
 						if (nvlPrmSet(result.targetConnectorList, '') != '') {
 							for (i = 0; i < result.targetConnectorList.length; i++) {
 								if(i == 0){
@@ -177,210 +136,73 @@
 				                    $('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
 								}
 			            	}
+						} else {
+							fn_tarConnectInfo();
 						}
+						
+						//Kafka Connect 별 기동정지이력 setting
 						connectorActTable.clear().draw();
 						if (nvlPrmSet(result.kafkaActCngList, '') != '') {
 							connectorActTable.rows.add(result.kafkaActCngList).draw();
 						}
+						
+						//소스시스템 connect 설정정보  setting
 						srcConnectSettingInfoTable.clear().draw();
 						if (nvlPrmSet(result.connectInfo, '') != '') {
 							srcConnectSettingInfoTable.rows.add(result.connectInfo).draw();
 						}
+						
+						//소스시스템 connect 전송대상테이블  setting
 						srcMappingListTable.clear().draw();
 						if (nvlPrmSet(result.table_name_list, '') != '') {
 							srcMappingListTable.rows.add(result.table_name_list).draw();
 						}
+						
+						//소스시스템 - snapshot tap 선택
 						selectTab('snapshot');
-						$('#src-chart-line-1').empty();
-						if(nvlPrmSet(result.sourceChart1, '') != '') {
-							var srcChart1 = Morris.Line({
-								element: 'src-chart-line-1',
-								lineColors: ['#63CF72', '#FABA66','#F36368'],
-								data: [
-										{
-											time: '',
-											source_record_write_total : 0,
-											source_record_poll_total : 0,
-											source_record_active_count : 0,
-										}
-								],
-								xkey: 'time',
-								xkeyFormat: function(time) {
-									return time.substring(10);
-								},
-								ykeys: ['source_record_write_total', 'source_record_poll_total', 'source_record_active_count'],
-								labels: ['kafka에 기록된 레코드 수','폴링 된 총 레코드 수', 'kafka에 기록되지 않은 레코드 수']
-							});
-							srcChart1.setData(result.sourceChart1);
-						}
-						$('#src-chart-line-2').empty();
-						if(nvlPrmSet(result.sourceChart2, '') != '') {
-							var srcChart2 = Morris.Line({
-								element: 'src-chart-line-2',
-								lineColors: ['#63CF72', '#FABA66','#F36368'],
-								data: [
-										{
-										time: '',
-										source_record_write_rate : 0,
-										source_record_active_count_avg : 0,
-										}
-								],
-								xkey: 'time',
-								xkeyFormat: function(time) {
-									return time.substring(10);
-								},
-								ykeys: ['source_record_write_rate', 'source_record_active_count_avg'],
-								labels: ['kafka에 기록된 초당 평균 레코드 수','kafka에 기록되지 않은 평균 레코드 수']
-							});
-							srcChart2.setData(result.sourceChart2);
-						}
-						$('#src-chart-line-error').empty();
-						if(nvlPrmSet(result.sourceErrorChart, '') != '') {
-							var srcErrorChart = Morris.Line({
-								element: 'src-chart-line-error',
-								lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
-								data: [
-										{
-										time: '',
-										total_record_errors: 0,
-										total_record_failures: 0,
-										total_records_skipped: 0,
-										total_retries : 0
-										}
-								],
-								xkey: 'time',
-								xkeyFormat: function(time) {
-									return time.substring(10);
-								},
-								ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped', 'total_retries'],
-								labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수', '재시도 작업 수']
-							});
-							srcErrorChart.setData(result.sourceErrorChart);
+						
+						//소스시스템 chart setting
+						funcSsChartSetting(result);
+						
+						//소스시스템 리스트별 setting
+						funcSsListSetting(result);
+						
+						//kafka setting
+						if (result.kafkaInfo != null) {
+							$('#kc_id', '#transMonitoringForm').val(result.kafkaInfo.kc_id);
+						} else {
+							$('#kc_id', '#transMonitoringForm').val("");
 						}
 						
-// 						if (nvlPrmSet(result.snapshotChart, '') != '') {
-// 							snapshotChart.setData(result.snapshotChart);
-// 						}
-// 						srcSnapshotTable.clear().draw();
-// 						if (nvlPrmSet(result.snapshotInfo, '') != '') {
-// 							for(var i = 0; i < result.snapshotInfo.length; i++){	
-// 								if(result.snapshotInfo[i].rownum == 1){
-// 									if(i != result.snapshotInfo.length-1 && result.snapshotInfo[i+1].rownum == 2){
-// 										result.snapshotInfo[i].number_of_events_filtered_cng = result.snapshotInfo[i].number_of_events_filtered - result.snapshotInfo[i+1].number_of_events_filtered;
-// 										result.snapshotInfo[i].number_of_erroneous_events_cng = result.snapshotInfo[i].number_of_erroneous_events - result.snapshotInfo[i+1].number_of_erroneous_events;
-// 										result.snapshotInfo[i].queue_total_capacity_cng = result.snapshotInfo[i].queue_total_capacity - result.snapshotInfo[i+1].queue_total_capacity;
-// 										result.snapshotInfo[i].queue_remaining_capacity_cng = result.snapshotInfo[i].queue_remaining_capacity - result.snapshotInfo[i+1].queue_remaining_capacity;
-// 										result.snapshotInfo[i].remaining_table_count_cng = result.snapshotInfo[i].remaining_table_count - result.snapshotInfo[i+1].remaining_table_count;
-// 									}
-// 									srcSnapshotTable.row.add(result.snapshotInfo[i]).draw();
-// 								}
-// 							}
-// // 							srcSnapshotTable.rows.add(result.snapshotInfo).draw();
-// 						}
-// 						if (nvlPrmSet(result.sourceChart1, '') != '') {
-// 							srcChart1.setData(result.sourceChart1);
-// 						}
-// 						if (nvlPrmSet(result.sourceChart2, '') != '') {
-// 							srcChart2.setData(result.sourceChart2);
-// 						}
-						srcConnectTable.clear().draw();
-						if (nvlPrmSet(result.sourceInfo, '') != '') {
-							for(var i = 0; i < result.sourceInfo.length; i++){	
-								if(result.sourceInfo[i].rownum == 1){
-									if(i != result.sourceInfo.length-1 && result.sourceInfo[i+1].rownum == 2){
-										result.sourceInfo[i].source_record_active_count_max_cng = result.sourceInfo[i].source_record_active_count_max - result.sourceInfo[i+1].source_record_active_count_max;
-										result.sourceInfo[i].source_record_write_rate_cng = (result.sourceInfo[i].source_record_write_rate - result.sourceInfo[i+1].source_record_write_rate).toFixed(2);
-										result.sourceInfo[i].source_record_active_count_avg_cng = (result.sourceInfo[i].source_record_active_count_avg - result.sourceInfo[i+1].source_record_active_count_avg).toFixed(2);
-										result.sourceInfo[i].source_record_write_total_cng = result.sourceInfo[i].source_record_write_total - result.sourceInfo[i+1].source_record_write_total;
-										result.sourceInfo[i].source_record_poll_total_cng = result.sourceInfo[i].source_record_poll_total - result.sourceInfo[i+1].source_record_poll_total;
-										result.sourceInfo[i].source_record_active_count_cng = (result.sourceInfo[i].source_record_active_count - result.sourceInfo[i+1].source_record_active_count).toFixed(2);
-									}
-									srcConnectTable.row.add(result.sourceInfo[i]).draw();
-								}
-							}
-// 							srcConnectTable.rows.add(result.sourceInfo).draw();
-						}
-// 						if (nvlPrmSet(result.sourceErrorChart, '') != '') {
-// 							srcErrorChart.setData(result.sourceErrorChart);
-// 						}
-						srcErrorTable.clear().draw();
-						if (nvlPrmSet(result.sourceErrorInfo, '') != '') {
-							for(var i = 0; i < result.sourceErrorInfo.length; i++){	
-								if(result.sourceErrorInfo[i].rownum == 1){
-									if(i != result.sourceErrorInfo.length-1 && result.sourceErrorInfo[i+1].rownum == 2){
-										result.sourceErrorInfo[i].total_errors_logged_cng = result.sourceErrorInfo[i].total_errors_logged - result.sourceErrorInfo[i+1].total_errors_logged;
-										result.sourceErrorInfo[i].deadletterqueue_produce_requests_cng = result.sourceErrorInfo[i].deadletterqueue_produce_requests - result.sourceErrorInfo[i+1].deadletterqueue_produce_requests;
-										result.sourceErrorInfo[i].deadletterqueue_produce_failures_cng = result.sourceErrorInfo[i].deadletterqueue_produce_failures - result.sourceErrorInfo[i+1].deadletterqueue_produce_failures;
-										result.sourceErrorInfo[i].total_record_failures_cng = result.sourceErrorInfo[i].total_record_failures - result.sourceErrorInfo[i+1].total_record_failures;
-										result.sourceErrorInfo[i].total_records_skipped_cng = result.sourceErrorInfo[i].total_records_skipped - result.sourceErrorInfo[i+1].total_records_skipped;
-										result.sourceErrorInfo[i].total_record_errors_cng = result.sourceErrorInfo[i].total_record_errors - result.sourceErrorInfo[i+1].total_record_errors;
-										result.sourceErrorInfo[i].total_retries_cng = result.sourceErrorInfo[i].total_retries - result.sourceErrorInfo[i+1].total_retries;
-									}
-									srcErrorTable.row.add(result.sourceErrorInfo[i]).draw();
-								}
-							}
-// 							srcErrorTable.rows.add(result.sourceErrorInfo).draw();
-						}
 					}
-				
 				}
 			});
-		} else{
+		} else {
+			$('#kc_id', '#transMonitoringForm').val("");
+			
 			$('#ssconResultCntTable').hide();
 			$('#ssconResultCntTableNvl').show();
 			$('#tar_connector_list').empty();
 			$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
+			
+			//싱크 커넥터 select change
 			fn_tarConnectInfo();
+			
 			$('#ssconDBResultTable').hide();
-// 			srcConnectSettingInfoTable.clear().draw();
-// 			srcMappingListTable.clear().draw();
-// 			$('#src-chart-line-1').empty();
-// 			$('#src-chart-line-2').empty();
-// 			srcConnectTable.clear().draw();
-// 			$('#src-chart-line-error').empty();
 		}
 		$("#loading").hide();
 	}
-	
-	function fn_src_init(){
-		$('#trans_monitoring_source_info').hide();
-		$('#trans_monitoring_target_info').hide();
-		$('#table_cnt').html("");
-		$('#src_total_poll_cnt').html("");
-		$('#src_total_error_cnt').html("");
-		srcConnectSettingInfoTable.clear().draw();
-		srcMappingListTable.clear().draw();
-		$('#src-chart-line-1').empty();
-		$('#src-chart-line-2').empty();
-		srcConnectTable.clear().draw();
-		$('#src-chart-line-error').empty();
-		$('#src-chart-line-snapshot').empty();
-		$('#src-chart-line-streaming').empty();
-		$('#ssconDBResultTable').hide();
-	}
-	
-	function fn_tar_init(){
-		$('#topic_cnt').html("");
-		$('#d_tg_connect_nm').text("");
-		$('#d_tg_sys_nm').text("");
-		$('#d_tg_dbms_type').text("");
-		$('#d_tg_dbms_nm').text("");
-		$('#d_tg_schema_nm').text("");
-		
-		$('#tar_connect_nm').text("");
-		tarTopicListTable.clear().draw();
-		tarConnectTable.clear().draw();
-		$('#tar-chart-line-sink').empty();
-		$('#tar-chart-line-complete').empty();
-		$('#tar-chart-line-sink-error').empty();
-		$('#skconResultTable').hide();
-	}
-	
+
+	/* ********************************************************
+	 * 싱크 커넥터 select box 변경
+	 ******************************************************** */
 	function fn_tarConnectInfo(){
 		var langSelect = document.getElementById("tar_connector_list");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
-		
-		fn_tar_init();
+
+		//싱크 커넥터 - 하단 상세화면 초기화
+		fn_tar_init()
+
 		if(selectValue != ""){
 			$.ajax({
 				url : "/transTarConnectInfo.do",
@@ -404,8 +226,8 @@
 				success : function(result) {
 					if (result != null) {
 						if (nvlPrmSet(result.targetDBMSInfo, '') != '') {
+							//싱크커넥터 - 토픽수, 전체완료수, 오류수
 							$('#topic_cnt').html(result.topic_cnt);
-							
 							if(result.targetConnectInfo != null && result.targetConnectInfo != undefined){
 								$('#tarconResultCntTableNvl').hide();
 								$('#tarconResultCntTable').show();
@@ -416,6 +238,8 @@
 								$('#tarconResultCntTable').hide();
 								$('#tarconResultCntTableNvl').show();
 							}
+
+							//연결도 dbms setting
 							$('#d_tg_connect_nm').text(langSelect.options[langSelect.selectedIndex].text);
 							$('#d_tg_sys_nm').text(result.targetDBMSInfo[0].trans_sys_nm);
 							$('#d_tg_dbms_type').text(result.targetDBMSInfo[0].dbms_type);
@@ -423,57 +247,14 @@
 							$('#d_tg_schema_nm').text(result.targetDBMSInfo[0].scm_nm);
 						}
 						
-						tarTopicListTable.clear().draw();
-						if (nvlPrmSet(result.targetTopicList, '') != '') {
-							$('#tar_connect_nm').text(langSelect.options[langSelect.selectedIndex].text);
-							tarTopicListTable.rows.add(result.targetTopicList).draw();
-						}
-// 						if (nvlPrmSet(result.targetSinkRecordChart, '') != '') {
-// 							sinkChart.setData(result.targetSinkRecordChart);
-// 						}
-// 						if (nvlPrmSet(result.targetSinkCompleteChart, '') != '') {
-// 							sinkCompleteChart.setData(result.targetSinkCompleteChart);
-// 						}
-						tarConnectTable.clear().draw();
-						if (nvlPrmSet(result.targetSinkInfo, '') != '') {
-							for(var i = 0; i < result.targetSinkInfo.length; i++){	
-								if(result.targetSinkInfo[i].rownum == 1){
-									if(i != result.targetSinkInfo.length-1 && result.targetSinkInfo[i+1].rownum == 2){
-										result.targetSinkInfo[i].sink_record_active_count_cng = result.targetSinkInfo[i].sink_record_active_count - result.targetSinkInfo[i+1].sink_record_active_count;
-										result.targetSinkInfo[i].put_batch_avg_time_ms_cng = result.targetSinkInfo[i].put_batch_avg_time_ms - result.targetSinkInfo[i+1].put_batch_avg_time_ms;
-										result.targetSinkInfo[i].offset_commit_completion_rate_cng = (result.targetSinkInfo[i].offset_commit_completion_rate - result.targetSinkInfo[i+1].offset_commit_completion_rate).toFixed(2);
-										result.targetSinkInfo[i].sink_record_send_total_cng = result.targetSinkInfo[i].sink_record_send_total - result.targetSinkInfo[i+1].sink_record_send_total;
-										result.targetSinkInfo[i].sink_record_active_count_avg_cng = result.targetSinkInfo[i].sink_record_active_count_avg - result.targetSinkInfo[i+1].sink_record_active_count_avg;
-										result.targetSinkInfo[i].offset_commit_completion_total_cng = result.targetSinkInfo[i].offset_commit_completion_total - result.targetSinkInfo[i+1].offset_commit_completion_total;
-										result.targetSinkInfo[i].offset_commit_skip_rate_cng = result.targetSinkInfo[i].offset_commit_skip_rate - result.targetSinkInfo[i+1].offset_commit_skip_rate;
-										result.targetSinkInfo[i].offset_commit_skip_total_cng = result.targetSinkInfo[i].offset_commit_skip_total - result.targetSinkInfo[i+1].offset_commit_skip_total;
-										result.targetSinkInfo[i].sink_record_read_total_cng = result.targetSinkInfo[i].sink_record_read_total - result.targetSinkInfo[i+1].sink_record_read_total;
-									}
-									tarConnectTable.row.add(result.targetSinkInfo[i]).draw();
-								}
-							}
-						}
+						//싱크 커넥터 - connect 정보 리스트 setting
+						funcTarListSetting(result, langSelect);
+						
+						//싱크 커넥터 - 차트 setting
 						fn_sink_chart_init(selectValue);
-// 						if (nvlPrmSet(result.targetErrorChart, '') != '') {
-// 							sinkErrorChart.setData(result.targetErrorChart);
-// 						}
-// 						tarErrorTable.clear().draw();
-// 						if (nvlPrmSet(result.targetErrorInfo, '') != '') {
-// 							console.log(result.targetErrorInfo)
-// 							for(var i = 0; i < result.targetErrorInfo.length; i++){	
-// 								if(result.targetErrorInfo[i].rownum == 1){
-// 									if(i != result.targetErrorInfo.length-1 && result.targetErrorInfo[i+1].rownum == 2){
-// 										result.targetErrorInfo[i].total_errors_logged_cng = result.targetErrorInfo[i].total_errors_logged - result.targetErrorInfo[i+1].total_errors_logged;
-// 										result.targetErrorInfo[i].deadletterqueue_produce_requests_cng = result.targetErrorInfo[i].deadletterqueue_produce_requests - result.targetErrorInfo[i+1].deadletterqueue_produce_requests;
-// 										result.targetErrorInfo[i].deadletterqueue_produce_failures_cng = result.targetErrorInfo[i].deadletterqueue_produce_failures - result.targetErrorInfo[i+1].deadletterqueue_produce_failures;
-// 										result.targetErrorInfo[i].total_record_failures_cng = result.targetErrorInfo[i].total_record_failures - result.targetErrorInfo[i+1].total_record_failures;
-// 										result.targetErrorInfo[i].total_records_skipped_cng = result.targetErrorInfo[i].total_records_skipped - result.targetErrorInfo[i+1].total_records_skipped;
-// 										result.targetErrorInfo[i].total_record_errors_cng = result.targetErrorInfo[i].total_record_errors - result.targetErrorInfo[i+1].total_record_errors;
-// 									}
-// 									tarErrorTable.row.add(result.targetErrorInfo[i]).draw();
-// 								}
-// 							}
-// 						}
+						
+						//상단연결도 setting
+						fn_dbmsConnect_digm("tar", result);
 					}
 
 				}
@@ -485,15 +266,14 @@
 		}
 		$("#loading").hide();
 	}
-	
+
+	/* ********************************************************
+	 * kafka / connector 로그 보기 - 클릭
+	 ******************************************************** */
 	function fn_logView(type){
 		var todayYN = 'N';
 		var langSelect = document.getElementById("src_connect");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
-// 		if(date == 'today'){
-// 			pry_svr_id = select_pry_svr_id;
-// 			todayYN = 'Y';
-// 		}
 		var date = new Date().toJSON();
 		
 		var v_db_svr_id = $("#db_svr_id", "#transMonitoringForm").val();
@@ -517,6 +297,7 @@
 				$("#todayYN", "#transLogViewForm").val("Y");
 				$("#view_file_name", "#transLogViewForm").html("");
 				$("#trans_id","#transLogViewForm").val(selectValue);
+				
 				if(type === 'connector'){
 					dateCalenderSetting();
 					$('#restart_btn').hide();
@@ -544,8 +325,6 @@
 			}
 		});
 	}
-
-	
 </script>
 
 <!-- log 팝업 -->
@@ -555,6 +334,7 @@
 		
 <form name="transMonitoringForm" id="transMonitoringForm" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+	<input type="hidden" name="kc_id" id="kc_id" value=""/>
 </form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -844,8 +624,7 @@
 												<i onClick="fn_logView('kafka')">
 													<img src="../images/connector_icon.png" class="img-lg" style="max-width:140%;object-fit: contain;width:140px;height:140px;" alt="">
 												</i>
-												<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6>
-												<!-- <i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 8.0em;" onClick="fn_logView('kafka')"></i> -->
+												<!-- <h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6> -->
 											</td>
 										</tr>
 									</table>
@@ -921,26 +700,25 @@
 															<table class="table-borderless" style="width:100%;text-align:left;">
 																<tr>
 																	<td colspan="2" style="width:85%;">
-																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">
+																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;" id="targetDbmsNm">
 																			<!-- <div class="badge badge-pill badge-success" title="">M</div> -->
 																			<img src="../images/oracle_icon.png" class="img-sm" style="max-width:120%;object-fit: contain;" alt=""/>
-																			DB네임
 																		</h6>
 																	</td>
-																	<td rowspan="3" style="width:15%;">
+																	<td rowspan="3" style="width:15%;" id="targetDbmsImg">
 																		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>
 																	</td>
 																</tr>
 																
 																<tr>
 																	<td colspan="2" style="padding-top:5px;">
-																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : 192.168.50.11/5432</h6>
+																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;" id="targetDbmsIp"></h6>
 																	</td>
 																</tr>
 
 																<tr>
 																	<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">
-																		<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6>
+																		<h6 class="text-muted" style="padding-left:10px;" id="targetDbmsStatus"></h6>
 																	</td>
 																</tr>
 																
