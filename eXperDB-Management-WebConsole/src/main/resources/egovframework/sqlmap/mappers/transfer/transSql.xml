@@ -732,6 +732,41 @@
         ) A
 	</select>
 	
+	<select id="selectTransRegiList" parameterType="transRegiVO"  resultType="transRegiVO">
+		/**
+		* Query ID : selectTransRegiList
+		* Description : Schema Registry 조회(완료)
+		* Author : 
+		**/
+        SELECT 
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , A.*
+         FROM (
+               SELECT
+                      REGI_ID
+                    , REGI_NM
+                    , REGI_IP
+                    , REGI_PORT
+                    , EXE_STATUS
+                    , FRST_REGR_ID
+                    , TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+                    , LST_MDFR_ID
+                    , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
+                 FROM T_TRANS_REGI_INF
+                WHERE 1 = 1
+                  <if test="regi_id != null and regi_id != '' ">
+                      AND REGI_ID = #{regi_id}::numeric
+                  </if>
+
+                  <if test="regi_nm != null and regi_nm != '' ">
+                      AND REGI_NM LIKE '%' || #{regi_nm} || '%'
+                  </if>
+	
+                ORDER BY LST_MDF_DTM DESC
+        ) A
+	</select>
+	
 	<select id="trans_connect_nmCheck" resultType="int" parameterType="string"  >
 		/**
 		* Query ID : trans_connect_nmCheck
@@ -742,6 +777,18 @@
                COUNT(*)
           FROM T_TRANS_CON_INF
          WHERE KC_NM = #{kc_nm}
+	</select>
+	
+	<select id="trans_Registry_nmCheck" resultType="int" parameterType="string"  >
+		/**
+		* Query ID : trans_Registry_nmCheck
+		* Description : 커넥트명 중복 체크
+		* Author : 김민정
+		**/
+        SELECT 
+               COUNT(*)
+          FROM T_TRANS_REGI_INF
+         WHERE REGI_NM = #{regi_nm}
 	</select>
 
 	<insert id="insertTransKafkaConnect"  parameterType="transDbmsVO">
@@ -776,6 +823,39 @@
                     )
 	</insert>
 	
+	
+	<insert id="insertTransSchemaRegistry"  parameterType="transRegiVO">
+		/**
+		* Query ID : insertTransSchemaRegistry
+		* Description : TRANS Schema Registry
+		* Author : 
+		**/
+        INSERT INTO T_TRANS_REGI_INF
+                    (
+                     REGI_ID
+                   , REGI_NM
+                   , REGI_IP
+                   , REGI_PORT
+                   , EXE_STATUS
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                    ) 
+                    VALUES
+                    (
+                     nextval('q_trans_regi_inf_01')
+                   , #{regi_nm}
+                   , #{regi_ip}
+                   , #{regi_port}::numeric
+                   , 'TC001501'
+                   , #{frst_regr_id}
+                   , clock_timestamp()
+                   , #{lst_mdfr_id}
+                   , clock_timestamp()
+                    )
+	</insert>
+	
 	 <delete id="deleteTransKafkaConnect" parameterType="transDbmsVO">
 		/**
 	 	* Query ID : deleteTransKafkaConnect
@@ -784,6 +864,16 @@
 	 	**/	
         DELETE FROM T_TRANS_CON_INF
          WHERE KC_ID = #{kc_id}::numeric
+	</delete>
+
+	 <delete id="deleteTransSchemaRegistry" parameterType="transRegiVO">
+		/**
+	 	* Query ID : deleteTransSchemaRegistry
+	 	* Description : Schema Registry 삭제
+	 	* Author : 
+	 	**/	
+        DELETE FROM T_TRANS_REGI_INF
+         WHERE REGI_ID = #{regi_id}::numeric
 	</delete>
 
 	<update id="updateTransKafkaConnect"  parameterType="transDbmsVO">
@@ -799,6 +889,21 @@
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE KC_ID=#{kc_id}::numeric
+	</update>
+	
+		<update id="updateTransShcemaRegistry"  parameterType="transRegiVO">
+		/**
+	 	* Query ID : updateTransShcemaRegistry
+	 	* Description : TRANS Schema Registry 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_REGI_INF
+           SET
+               REGI_IP = #{regi_ip}
+             , REGI_PORT = #{regi_port}::numeric
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE REGI_ID=#{regi_id}::numeric
 	</update>
 	
 	<select id="selectTransComSettingCngInfo" resultType="hashMap" parameterType="hashMap">
@@ -897,6 +1002,18 @@
          WHERE KC_ID = #{kc_id}::numeric
 	</select>
 	
+		<select id="selectTransSchemRegiIngChk" parameterType="transDbmsVO" resultType="hashMap">
+		/**
+		*  Query ID : selectTransSchemRegiIngChk
+		* Description : trans schema Registry 사용여부 체크
+		* Author :
+		**/
+        SELECT
+               COUNT(*) AS TOT_CNT
+          FROM T_TRANSCNG_TARGET_I
+         WHERE REGI_ID = #{regi_id}::numeric
+	</select>
+	
 	<update id="updateTransKafkaConnectFaild"  parameterType="transDbmsVO">
 		/**
 	 	* Query ID : updateTransKafkaConnect
@@ -910,6 +1027,8 @@
              , LST_MDF_DTM = clock_timestamp()
          WHERE KC_ID=#{kc_id}::numeric
 	</update>
+	
+	
 	
 	<select id="selectTransComConPopList" parameterType="transVO"  resultType="hashmap">
 			/**
@@ -1108,18 +1227,18 @@
                     )
 	</insert>
 
-	<insert id="insertUpTransKafkaConnectLog"  parameterType="transDbmsVO">
+	<insert id="insertTransSchemaRegistryLog"  parameterType="transRegiVO">
 		/**
-		* Query ID : insertTransKafkaConnectLog
-		* Description : TRANS kafka connect 로그 등록
+		* Query ID : insertTransSchemaRegistryLog
+		* Description : TRANS Schema Registry 로그 등록
 		* Author : 
 		**/
-        INSERT INTO T_TRANS_KAFKA_ACTSTATE_CNG_G
+        INSERT INTO t_trans_schem_regi_actstate_cng_g
                     (
-                     KAFKA_ACT_EXE_SN
-                   , KC_ID
-                   , KC_IP
-                   , KC_PORT
+                     REGI_ACT_EXE_SN
+                   , REGI_ID
+                   , REGI_IP
+                   , REGI_PORT
                    , ACT_TYPE
                    , ACT_EXE_TYPE
                    , WRK_DTM 
@@ -1129,10 +1248,10 @@
                    , LST_MDFR_ID
                    , LST_MDF_DTM
                     ) 
-                    SELECT nextval('q_t_trans_kafka_actstate_cng_g_01'),
-                           #{kc_id}::numeric,
-                           #{kc_ip}, 
-                           #{kc_port}::numeric,
+                    SELECT nextval('q_t_trans_schem_regi_actstate_cng_g_01'),
+                           #{regi_id}::numeric,
+                           #{regi_ip}, 
+                           #{regi_port}::numeric,
                            #{act_type},
                            #{act_exe_type},
                            clock_timestamp()
@@ -1143,16 +1262,26 @@
                            clock_timestamp()
 	</insert>
 	
-	 <delete id="deleteTransKafkaConnectLog" parameterType="transDbmsVO">
+	<delete id="deleteTransKafkaConnectLog" parameterType="transDbmsVO">
 		/**
 	 	* Query ID : deleteTransKafkaConnectLog
 	 	* Description : kafka connect log 삭제
 	 	* Author : 
 	 	**/	
         DELETE FROM T_TRANS_KAFKA_ACTSTATE_CNG_G
-         WHERE KC_ID = #{kc_id}::numeric
+        WHERE KC_ID = #{kc_id}::numeric
 	</delete>
-
+	
+	<delete id="deleteTransSchemaRegistryLog" parameterType="transDbmsVO">
+		/**
+	 	* Query ID : deleteTransSchemaRegistryLog
+	 	* Description : Schema Registry  log 삭제
+	 	* Author : 
+	 	**/	
+        DELETE FROM t_trans_schem_regi_actstate_cng_g
+        WHERE REGI_ID = #{regi_id}::numeric
+	</delete>
+		
 	<select id="selectTransComCoIngChk" parameterType="transVO" resultType="hashmap">
 		/**
 		*  Query ID : selectTransDbmsIngChk
