@@ -210,5 +210,17 @@ public interface TransMonitoringService {
 	 * @return List<Map<String, Object>>
 	 */
 	public List<Map<String, Object>> selectKafkaActCngList(int trans_id);
+	
+	public List<Map<String, Object>> selectSourceConnectorTableListNew(int trans_id);
+	
+	public List<Map<String, Object>> selectTargetTopicListNew(int trans_id);
+	
+	
+	/**
+	 * kafka Connect 정보조회
+	 * 
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> selectKafkaConnectInfo(int trans_id);
 
 }

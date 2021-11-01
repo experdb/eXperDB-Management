@@ -1,6 +1,5 @@
 package com.k4m.dx.tcontrol.transfer.web;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMonitoringService;
+import com.k4m.dx.tcontrol.transfer.service.TransService;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
 
@@ -44,7 +44,9 @@ public class TransMonitoringController {
 	
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
-	
+
+	@Autowired
+	private TransService transService;
 	
 	/**
 	 * trans 모니터링 view
@@ -111,19 +113,23 @@ public class TransMonitoringController {
 		
 		String strTransId = request.getParameter("trans_id");
 		int trans_id = Integer.parseInt(strTransId);
+		int tot_cnt = 0;
 		
 		// 카프카 커넥트 이력
 		List<Map<String, Object>> selectKafkaActCngList = transMonitoringService.selectKafkaActCngList(trans_id);
 		
 		// 소스 연결 테이블
-		Map<String, Object> tableList = transMonitoringService.selectSourceConnectorTableList(trans_id);
+	//	Map<String, Object> tableList = transMonitoringService.selectSourceConnectorTableList(trans_id);
 		
 		// 소스 connect 정보
 		List<Map<String, Object>> connectInfo = transMonitoringService.selectSourceConnectInfo(trans_id);
 		// 소스 연결 테이블 분리
-		String[] tableNmList = tableList.get("exrt_trg_tb_nm").toString().split(",");
-		List<Map<String, Object>> table_name_list = new ArrayList<Map<String, Object>>(); 
+	//	String[] tableNmList = tableList.get("exrt_trg_tb_nm").toString().split(",");
 		
+		//Map<String, Object> tableList = transMonitoringService.selectSourceConnectorTableList(trans_id);
+		
+		List<Map<String, Object>> table_name_list = transMonitoringService.selectSourceConnectorTableListNew(trans_id);
+/*		
 		for(String tab : tableNmList){
 			Map<String, Object> temp = new HashMap<String, Object>();
 			String strTemp[] = tab.split("\\.");
@@ -134,7 +140,7 @@ public class TransMonitoringController {
 				temp.put("table_nm", strTemp[1]);
 			}
 			table_name_list.add(temp);
-		}
+		}*/
 		
 		List<Map<String, Object>> snapshotChart = transMonitoringService.selectSourceSnapshotChart(trans_id);
 		List<Map<String, Object>> snapshotInfo = transMonitoringService.selectSourceSnapshotInfo(trans_id);
@@ -145,8 +151,18 @@ public class TransMonitoringController {
 		List<Map<String, Object>> sourceErrorInfo = transMonitoringService.selectSourceErrorInfo(trans_id);
 		
 		List<Map<String, Object>> targetConnectorList = transMonitoringService.selectTargetConnectList(trans_id);
+		
+		Map<String, Object> kafkaInfo = transMonitoringService.selectKafkaConnectInfo(trans_id);
 
-		mv.addObject("table_cnt", tableNmList.length);
+		if (table_name_list.size() > 0) {
+			for(int i = 0; i < table_name_list.size(); i++){
+				tot_cnt += Integer.parseInt(table_name_list.get(i).get("tot_cnt").toString());
+			}
+		} else {
+			tot_cnt = 0;
+		}
+
+		mv.addObject("table_cnt", tot_cnt);
 		mv.addObject("connectInfo", connectInfo);
 		mv.addObject("table_name_list", table_name_list);
 		mv.addObject("snapshotChart", snapshotChart);
@@ -158,7 +174,8 @@ public class TransMonitoringController {
 		mv.addObject("sourceErrorInfo", sourceErrorInfo);
 		mv.addObject("targetConnectorList", targetConnectorList);
 		mv.addObject("kafkaActCngList",selectKafkaActCngList);
-		
+		mv.addObject("kafkaInfo",kafkaInfo);
+
 		return mv;
 	}
 	
@@ -176,10 +193,10 @@ public class TransMonitoringController {
 		int trans_id = Integer.parseInt(strTransId);
 		
 		List<Map<String, Object>> snapshotChart = transMonitoringService.selectSourceSnapshotChart(trans_id);
-		List<Map<String, Object>> snapshotInfo = transMonitoringService.selectSourceSnapshotInfo(trans_id);
+		//List<Map<String, Object>> snapshotInfo = transMonitoringService.selectSourceSnapshotInfo(trans_id);
 		
 		mv.addObject("snapshotChart", snapshotChart);
-		mv.addObject("snapshotInfo", snapshotInfo);
+		//mv.addObject("snapshotInfo", snapshotInfo);
 		
 		return mv;
 	}
@@ -198,10 +215,10 @@ public class TransMonitoringController {
 		int trans_id = Integer.parseInt(strTransId);
 		
 		List<Map<String, Object>> streamingChart = transMonitoringService.selectStreamingChart(trans_id);
-		List<Map<String, Object>> streamingInfo = transMonitoringService.selectStreamingInfo(trans_id);
+		//List<Map<String, Object>> streamingInfo = transMonitoringService.selectStreamingInfo(trans_id);
 		
 		mv.addObject("streamingChart", streamingChart);
-		mv.addObject("streamingInfo", streamingInfo);
+		//mv.addObject("streamingInfo", streamingInfo);
 		
 		return mv;
 	}
@@ -211,29 +228,39 @@ public class TransMonitoringController {
 	 * 
 	 * @param historyVO,request
 	 * @return ModelAndView
+	 * @throws Exception 
 	 */
 	@RequestMapping("/transTarConnectInfo.do")
-	public ModelAndView transTarConnectInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView transTarConnectInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("jsonView");
 		
 		String strTransId = request.getParameter("trans_id");
 		int trans_id = Integer.parseInt(strTransId);
+		int topic_cnt = 0;
+		int sink_record_send_total = 0;
+		int total_record_errors = 0;
 		
 		// 타겟 DBMS 정보
 		List<Map<String, Object>> targetDBMSInfo = transMonitoringService.selectTargetDBMSInfo(trans_id);
 		System.out.println(targetDBMSInfo.size());
 		System.out.println(targetDBMSInfo.get(0).toString());
+
 		// 타겟 전송대상 테이블 목록
-		Map<String, Object> targetTopic = transMonitoringService.selectTargetTopicList(trans_id);
-		System.out.println(targetTopic.toString());
-		String[] topicTemp = targetTopic.get("topic_name").toString().split(",");
+		//Map<String, Object> targetTopic = transMonitoringService.selectTargetTopicList(trans_id);
+		List<Map<String, Object>> targetTopicList = transMonitoringService.selectTargetTopicListNew(trans_id);
+		
+/*		String[] topicTemp = targetTopic.get("topic_name").toString().split(",");
 		List<Map<String, Object>> targetTopicList = new ArrayList<Map<String, Object>>(); 
 		for(int i = 0; i < topicTemp.length; i++){
 			Map<String, Object> temp = new HashMap<String, Object>();
 			temp.put("rownum", i+1);
 			temp.put("topic_name", topicTemp[i]);
 			targetTopicList.add(temp);
-		}
+		}*/
+		
+		Map<String, Object> targetTopic = new HashMap<String, Object>();
+		
+		
 		
 		// 타겟 record sink chart
 		List<Map<String, Object>> targetSinkRecordChart = transMonitoringService.selectTargetSinkRecordChart(trans_id);
@@ -246,6 +273,27 @@ public class TransMonitoringController {
 		// 타겟 error info
 		List<Map<String, Object>> targetErrorInfo = transMonitoringService.selectTargetErrorInfo(trans_id);
 		
+
+		if (targetTopicList.size() > 0) {
+			for(int i = 0; i < targetTopicList.size(); i++){
+				topic_cnt += Integer.parseInt(targetTopicList.get(i).get("tot_cnt").toString());
+				
+				if (i == 0) {
+					sink_record_send_total = Integer.parseInt(targetTopicList.get(i).get("sink_record_send_total").toString());
+					total_record_errors = Integer.parseInt(targetTopicList.get(i).get("total_record_errors").toString());
+				}
+			}
+
+			targetTopic.put("sink_record_send_total", sink_record_send_total);
+			targetTopic.put("total_record_errors", total_record_errors);
+		} else {
+			topic_cnt = 0;
+		}
+		
+		List<Map<String, Object>> transDbmsInfoList = transService.selectTargetTransInfo(trans_id);
+
+		mv.addObject("topic_cnt", topic_cnt);
+		mv.addObject("targetConnectInfo", targetTopic);
 		mv.addObject("targetDBMSInfo", targetDBMSInfo);
 		mv.addObject("targetTopicList", targetTopicList);
 		mv.addObject("targetSinkRecordChart", targetSinkRecordChart);
@@ -253,6 +301,8 @@ public class TransMonitoringController {
 		mv.addObject("targetSinkInfo", targetSinkInfo);
 		mv.addObject("targetErrorChart", targetErrorChart);
 		mv.addObject("targetErrorInfo", targetErrorInfo);
+		
+		mv.addObject("transDbmsInfoList", transDbmsInfoList);
 		
 		return mv;
 	}

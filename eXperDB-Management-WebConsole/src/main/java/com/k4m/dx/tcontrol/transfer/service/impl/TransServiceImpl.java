@@ -19,6 +19,7 @@ import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
 import com.k4m.dx.tcontrol.transfer.service.TransDbmsVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMappVO;
+import com.k4m.dx.tcontrol.transfer.service.TransRegiVO;
 import com.k4m.dx.tcontrol.transfer.service.TransService;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
@@ -786,6 +787,18 @@ System.out.println("connStartResult=========================" + connStartResult)
 	public List<TransDbmsVO> selectTransKafkaConList(TransDbmsVO transDbmsVO) throws Exception {
 		return transDAO.selectTransKafkaConList(transDbmsVO);
 	}
+	
+	/**
+	 * Schema Registry list 조회
+	 * 
+	 * @param transDbmsVO
+	 * @return List<TransRegiVO>
+	 * @throws Exception
+	 */
+	@Override
+	public List<TransRegiVO> selectTransRegiList(TransRegiVO transRegiVO) throws Exception {
+		return transDAO.selectTransRegiList(transRegiVO);
+	}
 
 	/**
 	 * TRANS kafka connect 설정 등록
@@ -831,6 +844,51 @@ System.out.println("connStartResult=========================" + connStartResult)
 	}
 	
 	/**
+	 * TRANS Schema Registry 설정 등록
+	 * 
+	 * @param TransRegiVO
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String insertTransSchemaRegistry(TransRegiVO transRegiVO) throws Exception {
+		String result = "S";
+		String resultMsg = "";
+
+		try {
+			//커넥트명 중복체크
+			String regi_nm = transRegiVO.getRegi_nm();
+			if (regi_nm != null && !"".equals(regi_nm)) {
+				resultMsg = trans_Registry_nmCheck(regi_nm);
+			}
+
+			if (!"true".equals(resultMsg)) {
+				result = "O";
+			}
+
+			if ("S".equals(result) ) {
+				transDAO.insertTransSchemaRegistry(transRegiVO);
+				
+			    transRegiVO.setAct_type("A");			//활성화
+				transRegiVO.setAct_exe_type("TC004001");//manual
+				transRegiVO.setExe_rslt_cd("TC001501");
+
+				transDAO.insertTransSchemaRegistryLog(transRegiVO);
+			}
+		} catch (SQLException e) {
+			result = "F";
+			e.printStackTrace();
+		} catch (Exception e) {
+			result = "F";
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	
+	
+	/**
 	 * trans DBMS시스템 명 체크
 	 * 
 	 * @param transDbmsVO
@@ -860,6 +918,38 @@ System.out.println("connStartResult=========================" + connStartResult)
 		return resultStr;
 	}
 
+
+	/**
+	 * trans DBMS시스템 명 체크
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String trans_Registry_nmCheck(String regi_nm) throws Exception {
+		int resultCnt = 0;
+		String resultStr = "true";
+
+		try {
+			resultCnt = transDAO.trans_Registry_nmCheck(regi_nm);
+			
+			if (resultCnt > 0) {
+				// 중복값이 존재함.
+				resultStr = "false";
+			} else {
+				resultStr = "true";
+			}
+
+		} catch (Exception e) {
+			resultStr = "false";
+			e.printStackTrace();
+		}
+	
+		return resultStr;
+	}
+
+	
 	/**
 	 * trans kafka connect 설정 삭제
 	 * 
@@ -887,6 +977,31 @@ System.out.println("connStartResult=========================" + connStartResult)
 	}
 
 	/**
+	 * trans kafka connect 설정 삭제
+	 * 
+	 * @param transRegiVO
+	 * @throws Exception
+	 */
+	@Override
+	public void deleteTransSchemaRegistry(TransRegiVO transRegiVO) throws Exception {
+		try{
+			JSONArray trans_connect_ids = (JSONArray) new JSONParser().parse(transRegiVO.getTrans_regi_id_Rows());
+
+			if (trans_connect_ids != null && trans_connect_ids.size() > 0) {
+				for(int i=0; i<trans_connect_ids.size(); i++){
+					TransRegiVO transRegiPrmVO = new TransRegiVO();	
+					transRegiPrmVO.setRegi_id(trans_connect_ids.get(i).toString());
+					
+					transDAO.deleteTransSchemaRegistry(transRegiPrmVO);
+					transDAO.deleteTransSchemaRegistryLog(transRegiPrmVO);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * trans connect 수정
 	 * 
 	 * @param transDbmsVO
@@ -899,6 +1014,30 @@ System.out.println("connStartResult=========================" + connStartResult)
 
 		try {
 			transDAO.updateTransKafkaConnect(transDbmsVO);
+
+			//kafka connect 이력 등록
+			
+		} catch (Exception e) {
+			result = "F";
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * trans Schema Registry 정보 수정
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String updateTransShcemaRegistry(TransRegiVO transRegiVO) throws Exception {
+		String result = "S";
+
+		try {
+			transDAO.updateTransSchemaRegistry(transRegiVO);
 
 			//kafka connect 이력 등록
 			
@@ -1004,6 +1143,54 @@ System.out.println("connStartResult=========================" + connStartResult)
 		return result;
 	}
 
+	/**
+	 * trans Schema Registry 사용여부 확인
+	 * 
+	 * @param transRegiVO
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String selectTransSchemRegiIngChk(TransRegiVO transRegiVO) throws Exception {
+		String result = "";
+		
+		Map<String, Object> resultChk = null;
+		int rstCnt = 0;
+
+		try {
+			JSONArray trans_regi_ids = (JSONArray) new JSONParser().parse(transRegiVO.getTrans_regi_id_Rows());
+			if (trans_regi_ids != null && trans_regi_ids.size() > 0) {
+				for(int i=0; i<trans_regi_ids.size(); i++){
+					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
+					transDbmsPrmVO.setRegi_id(trans_regi_ids.get(i).toString());
+
+					resultChk = (Map<String, Object>) transDAO.selectTransSchemRegiIngChk(transDbmsPrmVO);
+					if (resultChk != null) {
+						int ingCnt = 0;
+	
+						ingCnt = Integer.parseInt(resultChk.get("tot_cnt").toString());
+						
+						rstCnt = rstCnt + ingCnt;
+					}
+				}
+			}
+
+			if (rstCnt > 0) {
+				result = "O";
+			} else {
+				result = "S";
+			}
+		} catch (SQLException e) {
+			result = "F";
+			e.printStackTrace();
+		} catch (Exception e) {
+			result = "F";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
 	/**
 	 * trans connect 수정
 	 * 

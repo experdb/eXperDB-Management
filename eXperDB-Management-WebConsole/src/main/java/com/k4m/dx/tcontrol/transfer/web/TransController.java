@@ -1041,6 +1041,52 @@ public class TransController {
 	}
 	
 	/**
+	 * kafka-Connection 연결 테스트
+	 * 
+	 * @param response, request
+	 * @return result
+	 * @throws Exception
+	 */
+	// 
+	@RequestMapping(value = "/SchemaRegiConnectionTest.do")
+	@ResponseBody
+	public Map<String, Object> SchemaRegiConnectionTest(HttpServletResponse response, HttpServletRequest request) {
+
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		try {					
+			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			String regiIP = request.getParameter("regiIP");
+			String regiPort = request.getParameter("regiPort");
+			
+			//String cmd = "curl -H 'Accept:application/json' "+regiIP+":"+regiPort+"/";
+			String cmd = "curl -X GET http://"+regiIP+":"+regiPort+"/subjects";
+			System.out.println("명령어 = "+cmd);
+
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			//System.out.println("IP :: "+IP +"\n PORT: : "+PORT);
+
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.kafkaConnectionTest(IP, PORT, cmd);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
 	 * 전송설정 등록한다.
 	 * 
 	 * @param transVO

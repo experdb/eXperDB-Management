@@ -37,6 +37,12 @@ public class TransDbmsVO {
 	private String act_exe_type;
 	private String exe_rslt_cd;
 
+	private String regi_id;
+	private String regi_nm;
+	private String regi_ip;
+	private String regi_port;
+	private String trans_regi_id_Rows;
+	
 	public String getAct_type() {
 		return act_type;
 	}
@@ -234,5 +240,35 @@ public class TransDbmsVO {
 	}
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
+	public String getRegi_id() {
+		return regi_id;
+	}
+	public void setRegi_id(String regi_id) {
+		this.regi_id = regi_id;
+	}
+	public String getRegi_nm() {
+		return regi_nm;
+	}
+	public void setRegi_nm(String regi_nm) {
+		this.regi_nm = regi_nm;
+	}
+	public String getRegi_ip() {
+		return regi_ip;
+	}
+	public void setRegi_ip(String regi_ip) {
+		this.regi_ip = regi_ip;
+	}
+	public String getRegi_port() {
+		return regi_port;
+	}
+	public void setRegi_port(String regi_port) {
+		this.regi_port = regi_port;
+	}
+	public String getTrans_regi_id_Rows() {
+		return trans_regi_id_Rows;
+	}
+	public void setTrans_regi_id_Rows(String trans_regi_id_Rows) {
+		this.trans_regi_id_Rows = trans_regi_id_Rows;
 	}
 }

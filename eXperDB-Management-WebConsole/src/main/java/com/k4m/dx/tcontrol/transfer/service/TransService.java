@@ -377,4 +377,58 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws Exception;
+	
+	/**
+	 * Schema Registry 정보 
+	 * 
+	 * @param transRegiVO
+	 * @return List<TransRegiVO>
+	 * @throws Exception
+	 */
+	public List<TransRegiVO> selectTransRegiList(TransRegiVO transRegiVO) throws Exception;
+
+	/**
+	 * Schema Registry 등록
+	 * 
+	 * @param transRegiVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public String insertTransSchemaRegistry(TransRegiVO transRegiVO) throws Exception;
+
+	/**
+	 * Schema Registry 커넥트명 중복 체크
+	 * 
+	 * @param transRegiVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public String trans_Registry_nmCheck(String regi_nm) throws Exception;
+
+	/**
+	 * Schema Registry 수정
+	 * 
+	 * @param transRegiVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public String updateTransShcemaRegistry(TransRegiVO transRegiVO) throws Exception;
+
+	/**
+	 * Schema Registry 수정
+	 * 
+	 * @param transRegiVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public void deleteTransSchemaRegistry(TransRegiVO transRegiVO) throws Exception;
+
+	/**
+	 * trans Schema Registry 사용여부 확인
+	 * 
+	 * @param transRegiVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public String selectTransSchemRegiIngChk(TransRegiVO transRegiVO) throws Exception;
 }

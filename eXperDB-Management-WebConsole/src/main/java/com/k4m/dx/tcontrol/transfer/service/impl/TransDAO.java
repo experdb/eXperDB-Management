@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.transfer.service.TransDbmsVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMappVO;
+import com.k4m.dx.tcontrol.transfer.service.TransRegiVO;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
@@ -344,6 +345,19 @@ public class TransDAO extends EgovAbstractMapper{
 		resultSet = (int) getSqlSession().selectOne("transSQL.trans_connect_nmCheck", kc_nm);
 		return resultSet;
 	}
+	
+	/**
+	 * trans Schema Registry conmnect 명 체크
+	 * 
+	 * @param trans_sys_nm
+	 * @return int
+	 * @throws Exception
+	 */
+	public int trans_Registry_nmCheck(String regi_nm) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("transSQL.trans_Registry_nmCheck", regi_nm);
+		return resultSet;
+	}
 
 	/**
 	 * trans kafka connecnt 등록
@@ -354,6 +368,16 @@ public class TransDAO extends EgovAbstractMapper{
 	public void insertTransKafkaConnect(TransDbmsVO transDbmsVO) {
 		insert("transSQL.insertTransKafkaConnect", transDbmsVO);
 	}
+	
+	/**
+	 * trans Schema Registry 등록
+	 * 
+	 * @param transRegiVO
+	 * @throws Exception
+	 */
+	public void insertTransSchemaRegistry(TransRegiVO transRegiVO) {
+		insert("transSQL.insertTransSchemaRegistry", transRegiVO);
+	}
 
 	/**
 	 * trans kafka connect 설정 삭제
@@ -363,6 +387,16 @@ public class TransDAO extends EgovAbstractMapper{
 	 */
 	public void deleteTransKafkaConnect(TransDbmsVO transDbmsVO) {
 		delete("transSQL.deleteTransKafkaConnect", transDbmsVO);
+	}
+	
+	/**
+	 * trans kafka connect 설정 삭제
+	 * 
+	 * @param transRegiVO
+	 * @throws Exception
+	 */
+	public void deleteTransSchemaRegistry(TransRegiVO transRegiVO) {
+		delete("transSQL.deleteTransSchemaRegistry", transRegiVO);
 	}
 	
 	/**
@@ -563,6 +597,17 @@ public class TransDAO extends EgovAbstractMapper{
 	}
 
 	/**
+	 * Schema Registry log 등록
+	 * 
+	 * @param transDbmsVO
+	 * @throws Exception
+	 */
+	public void insertTransSchemaRegistryLog(TransRegiVO transRegiVO) {
+		insert("transSQL.insertTransSchemaRegistryLog", transRegiVO);
+	}
+
+	
+	/**
 	 * kafka connect log 삭제
 	 * 
 	 * @param transVO
@@ -583,4 +628,50 @@ public class TransDAO extends EgovAbstractMapper{
 		return (Map<String, Object>) selectOne("transSQL.selectTransComCoIngChk", transVO);
 	}
 
+	/**
+	 * Schema Registry 정보 
+	 * 
+	 * @param transRegiVO
+	 * @return List<TransRegiVO>
+	 * @throws Exception
+	 */
+	public List<TransRegiVO> selectTransRegiList(TransRegiVO transRegiVO) {
+		return (List<TransRegiVO>) list("transSQL.selectTransRegiList", transRegiVO);
+	}
+
+	/**
+	 * trans Schema Registry 수정
+	 * 
+	 * @param transRegiVO
+	 * @throws Exception
+	 */
+	public void updateTransSchemaRegistry(TransRegiVO transRegiVO) {
+		update("transSQL.updateTransShcemaRegistry", transRegiVO);
+	}
+
+	/**
+	 * trans Schema Registry 사용여부 확인
+	 * 
+	 * @param transRegiVOselectTransSchemRegiIngChk
+	 * @return String
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectTransSchemRegiIngChk(TransDbmsVO transDbmsVO) throws SQLException {
+		return (Map<String, Object>) selectOne("transSQL.selectTransSchemRegiIngChk", transDbmsVO);
+	}
+
+	
+
+	/**
+	 * Schema Registry log 삭제
+	 * 
+	 * @param transRegiVO
+	 * @throws Exception
+	 */
+	
+	public void deleteTransSchemaRegistryLog(TransRegiVO transRegiVO) {
+		delete("transSQL.deleteTransSchemaRegistryLog", transRegiVO);
+		
+	}
+	
 }
