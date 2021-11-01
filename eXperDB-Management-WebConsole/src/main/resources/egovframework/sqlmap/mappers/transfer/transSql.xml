@@ -351,6 +351,7 @@
              , B.SCM_NM
              , B.TRANS_SYS_NM
              , B.EXE_STATUS AS DB_EXE_STATUS
+             , B.DBMS_DSCD 
           FROM T_TRANSCNG_TARGET_I A
                LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_SYS_ID = B.TRANS_SYS_ID
          WHERE 1=1
@@ -1227,13 +1228,48 @@
                     )
 	</insert>
 
+	<insert id="insertUpTransKafkaConnectLog"  parameterType="transDbmsVO">
+		/**
+		* Query ID : insertTransKafkaConnectLog
+		* Description : TRANS kafka connect 로그 등록
+		* Author : 
+		**/
+        INSERT INTO T_TRANS_KAFKA_ACTSTATE_CNG_G
+                    (
+                     KAFKA_ACT_EXE_SN
+                   , KC_ID
+                   , KC_IP
+                   , KC_PORT
+                   , ACT_TYPE
+                   , ACT_EXE_TYPE
+                   , WRK_DTM 
+                   , EXE_RSLT_CD
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                    ) 
+                    SELECT nextval('q_t_trans_kafka_actstate_cng_g_01'),
+                           #{kc_id}::numeric,
+                           #{kc_ip}, 
+                           #{kc_port}::numeric,
+                           #{act_type},
+                           #{act_exe_type},
+                           clock_timestamp()
+                           #{exe_rslt_cd},
+                           #{frst_regr_id},
+                           clock_timestamp(),
+                           #{lst_mdfr_id},
+                           clock_timestamp()
+	</insert>
+	
 	<insert id="insertTransSchemaRegistryLog"  parameterType="transRegiVO">
 		/**
 		* Query ID : insertTransSchemaRegistryLog
 		* Description : TRANS Schema Registry 로그 등록
 		* Author : 
 		**/
-        INSERT INTO t_trans_schem_regi_actstate_cng_g
+         INSERT INTO t_trans_schem_regi_actstate_cng_g
                     (
                      REGI_ACT_EXE_SN
                    , REGI_ID
@@ -1248,18 +1284,20 @@
                    , LST_MDFR_ID
                    , LST_MDF_DTM
                     ) 
-                    SELECT nextval('q_t_trans_schem_regi_actstate_cng_g_01'),
-                           #{regi_id}::numeric,
+                     VALUES
+                    ( nextval('q_t_trans_schem_regi_actstate_cng_g_01'),
+                            (SELECT REGI_ID FROM T_TRANS_REGI_INF WHERE REGI_NM = #{regi_nm} LIMIT 1),
                            #{regi_ip}, 
                            #{regi_port}::numeric,
                            #{act_type},
                            #{act_exe_type},
-                           clock_timestamp()
+                           clock_timestamp(),
                            #{exe_rslt_cd},
                            #{frst_regr_id},
                            clock_timestamp(),
                            #{lst_mdfr_id},
                            clock_timestamp()
+                           )
 	</insert>
 	
 	<delete id="deleteTransKafkaConnectLog" parameterType="transDbmsVO">
