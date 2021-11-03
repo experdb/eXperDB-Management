@@ -3,8 +3,6 @@ package com.k4m.dx.tcontrol.transfer.service;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
-
 public interface TransMonitoringService {
 	
 	/**
@@ -182,10 +180,11 @@ public interface TransMonitoringService {
 	
 	/**
 	 * kafka Connect 전체 에러 조회
+    * @param param
 	 * 
 	 * @return List<Map<String, Object>>
 	 */
-	public List<Map<String, Object>> selectAllErrorList();
+   public List<Map<String, Object>> selectAllErrorList(Map<String, Object> param);
 	
 	/**
 	 * trans log 파일 가져오기

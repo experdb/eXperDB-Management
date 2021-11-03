@@ -14,9 +14,9 @@
 	* @Description : 전송관리 모니터링
 	* @Modification Information
 	*
-	*   수정일         수정자                   수정내용
-	*  ------------    -----------    ---------------------------
-	*  2021.07.26     최초 생성
+	*	수정일			수정자						 수정내용
+	*  ------------	 -----------	 ---------------------------
+	*  2021.07.26	  최초 생성
 	*
 	* author 윤정 매니저
 	* since 2021.07.26
@@ -34,33 +34,33 @@
 	var sinkChart = "";
 	var sinkCompleteChart = "";
 	var sinkErrorChart = "";
-	
+
 	/* ********************************************************
-	 * 화면 onload
-	 ******************************************************** */
+	* 화면 onload
+	******************************************************** */
 	$(window).ready(function(){
 		//금일 날짜 setting
 		fn_todaySetting();
-		
+
 		// cpu, memory error chart
 		fn_cpu_mem_err_chart();
-		
+
 		// connector 기동정지 table init
 		fn_connector_act_init();
-		
+
 		// 소스 connect setting info init - connect 설정정보
 		fn_src_setting_info_init();
-		
+
 		// 소스 connect mapping table init - 전송대상 테이블 정보
 		fn_src_mapping_list_init();
-		
-		// 소스 connect init     -- 실시간리스트
+
+		// 소스 connect init	  -- 실시간리스트
 		fn_src_connect_init();
 		
 		// 타겟 connect 토픽 리스트 init -- 전송대상 토픽리스트 정보
 		fn_tar_topic_list_init();
-		
-		// 타겟 connect 리스트 init     -- 실시간리스트
+
+		// 타겟 connect 리스트 init	  -- 실시간리스트
 		fn_tar_connect_init();
 		
 		// 소스 snapshot init
@@ -77,8 +77,8 @@
 	});
 
 	/* ********************************************************
-	 * 소스 커넥터 select box 변경
-	 ******************************************************** */
+	* 소스 커넥터 select box 변경
+	******************************************************** */
 	function fn_srcConnectInfo() {
 		var langSelect = document.getElementById("src_connect");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
@@ -91,9 +91,9 @@
 				url : "/transSrcConnectInfo.do",
 				dataType : "json",
 				type : "post",
-	 			data : {
-	 				trans_id : selectValue,
-	 			},
+				data : {
+					trans_id : selectValue,
+				},
 				beforeSend: function(xhr) {
 					xhr.setRequestHeader("AJAX", true);
 				},
@@ -108,7 +108,6 @@
 				},
 				success : function(result) {
 					if (result != null) {
-						
 						//소스커넥터 테이블수, 전체완료수, 오류수 setting
 						$('#table_cnt').html(result.table_cnt);
 						$('#ssconDBResultTable').show();
@@ -118,11 +117,11 @@
 							$('#ssconResultCntTable').show();
 							$('#ssconResultCntTableNvl').hide();
 						}
-						
+
 						//하단 상세화면 출력
 						$('#trans_monitoring_source_info').show();
 						$('#trans_monitoring_target_info').show();
-						
+
 						//싱크커넥터 select 활성화
 						$('#tar_connector_list').empty();
 						$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
@@ -133,43 +132,44 @@
 									$('#tar_connector_list').append('<option selected value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
 									fn_tarConnectInfo();
 								} else {
-				                    $('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+									$('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
 								}
-			            	}
+								}
 						} else {
 							fn_tarConnectInfo();
 						}
-						
+
 						//Kafka Connect 별 기동정지이력 setting
 						connectorActTable.clear().draw();
 						if (nvlPrmSet(result.kafkaActCngList, '') != '') {
 							connectorActTable.rows.add(result.kafkaActCngList).draw();
 						}
-						
+
 						//소스시스템 connect 설정정보  setting
 						srcConnectSettingInfoTable.clear().draw();
 						if (nvlPrmSet(result.connectInfo, '') != '') {
 							srcConnectSettingInfoTable.rows.add(result.connectInfo).draw();
 						}
-						
+
 						//소스시스템 connect 전송대상테이블  setting
 						srcMappingListTable.clear().draw();
 						if (nvlPrmSet(result.table_name_list, '') != '') {
 							srcMappingListTable.rows.add(result.table_name_list).draw();
 						}
-						
+
 						//소스시스템 - snapshot tap 선택
-						selectTab('snapshot');
-						
+						document.getElementById('server-tab-1').click();
+//						 selectTab('snapshot');
+
 						//소스시스템 chart setting
 						funcSsChartSetting(result);
-						
+
 						//소스시스템 리스트별 setting
 						funcSsListSetting(result);
 
 						//상단연결도 setting
 						fn_dbmsConnect_digm("source", result);
-						
+
 						//상단연결도 setting
 						fn_dbmsConnect_digm("kafka", result);
 					}
@@ -177,16 +177,17 @@
 			});
 		} else {
 			$('#kc_id', '#transMonitoringForm').val("");
-			
+
 			$('#ssconResultCntTable').hide();
 			$('#ssconResultCntTableNvl').show();
 			$('#tar_connector_list').empty();
 			$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
-			
+
 			//싱크 커넥터 select change
 			fn_tarConnectInfo();
-			
+
 			$('#ssconDBResultTable').hide();
+			connectorActTable.clear().draw();
 		}
 		$("#loading").hide();
 	}
@@ -197,18 +198,18 @@
 	function fn_tarConnectInfo(){
 		var langSelect = document.getElementById("tar_connector_list");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
-
+		
 		//싱크 커넥터 - 하단 상세화면 초기화
-		fn_tar_init()
+		fn_tar_init();
 
 		if(selectValue != ""){
 			$.ajax({
 				url : "/transTarConnectInfo.do",
 				dataType : "json",
 				type : "post",
- 				data : {
- 					trans_id : selectValue,
- 				},
+				data : {
+					 trans_id : selectValue,
+				},
 				beforeSend: function(xhr) {
 					xhr.setRequestHeader("AJAX", true);
 				},
@@ -244,7 +245,11 @@
 							$('#d_tg_dbms_nm').text(result.targetDBMSInfo[0].dtb_nm);
 							$('#d_tg_schema_nm').text(result.targetDBMSInfo[0].scm_nm);
 						}
-						
+
+//						if(nvlPrmSet(result.allErrorList, '') != '') {
+//							 allErrorChart.setData(result.allErrorList);
+//						}
+
 						//싱크 커넥터 - connect 정보 리스트 setting
 						funcTarListSetting(result, langSelect);
 						
@@ -275,13 +280,15 @@
 		var date = new Date().toJSON();
 		
 		var v_db_svr_id = $("#db_svr_id", "#transMonitoringForm").val();
-		
+		var v_kc_id = $("#kc_id", "#transMonitoringForm").val();
+
 		$.ajax({
 			url : "/transLogView.do",
 			type : 'post',
 			data : {
 				db_svr_id : v_db_svr_id,
 				date : date,
+				kc_id : v_kc_id
 			},
 			success : function(result) {
 				$("#connectorlog", "#transLogViewForm").html("");
@@ -290,12 +297,12 @@
 				$("#log_line", "#transLogViewForm").val("1000");
 				$("#type", "#transLogViewForm").val(type);
 				$("#date", "#transLogViewForm").val(date);
-// 				$("#aut_id", "#transLogViewForm").val(aut_id);
-// 				$("#todayYN", "#transLogViewForm").val(todayYN);
+//				$("#aut_id", "#transLogViewForm").val(aut_id);
+//				$("#todayYN", "#transLogViewForm").val(todayYN);
 				$("#todayYN", "#transLogViewForm").val("Y");
 				$("#view_file_name", "#transLogViewForm").html("");
 				$("#trans_id","#transLogViewForm").val(selectValue);
-				
+				$("#kc_id", "#transLogViewForm").val(v_kc_id);
 				if(type === 'connector'){
 					dateCalenderSetting();
 					$('#restart_btn').hide();
@@ -304,7 +311,7 @@
 				} else if(type === 'kafka'){
 					$('#restart_btn').show();
 					$('#wrk_strt_dtm_div').hide();
-					$('.log_title').html(' Kafka 로그');
+					$('.log_title').html('');
 				}
 				fn_transLogViewAjax();
 				$('#pop_layer_log_view').modal("show");
@@ -332,7 +339,7 @@
 		
 <form name="transMonitoringForm" id="transMonitoringForm" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
-	<input type="text" name="kc_id" id="kc_id" value=""/>
+	<input type="hidden" name="kc_id" id="kc_id" value=""/>
 </form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -357,11 +364,11 @@
 										</h6>
 									</div>
 									<div class="col-7">
-					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
-					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
-					 						</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_transfer" /></li>
+										 <ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+											 <li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+												 <a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
+											 </li>
+											 <li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_transfer" /></li>
 											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.monitoring" /> </li>
 										</ol>
 									</div>
@@ -431,9 +438,9 @@
 		<div class="col-8 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-<!-- 					<h4 class="card-title"> -->
-<!-- 						<i class="item-icon fa fa-dot-circle-o"></i> 연결도 -->
-<!-- 					</h4> -->
+<!--					 <h4 class="card-title"> -->
+<!--						 <i class="item-icon fa fa-dot-circle-o"></i> 연결도 -->
+<!--					 </h4> -->
 					
 					<div class="row" id="reg_trans_title">
 						<div class="accordion_main accordion-multi-colored col-4" id="accordion" role="tablist" >
@@ -527,7 +534,7 @@
 										</tr>
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="ssconResultTable" class="table table-striped system-tlb-scroll" style="width:100%; border-bottom:1px solid;">
+												 <table id="ssconResultTable" class="table table-striped system-tlb-scroll" style="width:100%; border-bottom:1px solid;">
 													<thead>
 														<tr class="bg-info text-white">
 															<th style="width:25%;font-size:12px;">테이블 수</th>
@@ -535,9 +542,9 @@
 															<th style="width:38%;font-size:12px;">오류 수</th>
 														</tr>
 														<tr id="ssconResultCntTableNvl" >
-<!-- 															<td colspan="3" style="font-size:12px;"> -->
+<!--															 <td colspan="3" style="font-size:12px;"> -->
 															<td colspan="3">
-<%-- 																<spring:message code="message.msg01" /> --%>
+<%--																 <spring:message code="message.msg01" /> --%>
 																커넥터를 선택해주세요
 															</td>
 														</tr>
@@ -553,7 +560,7 @@
 										
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="ssconDBResultTable" class="table-borderless" style="width:100%; display:none;">
+												 <table id="ssconDBResultTable" class="table-borderless" style="width:100%; display:none;">
 													<tr id="ssconDBResultCntTable">
 														<td style="width:100%;">
 															
@@ -579,7 +586,6 @@
 																		<h6 class="text-muted" style="padding-left:10px;" id="sourceDbmsStatus"></h6>
 																	</td>
 																</tr>
-
 															</table>
 															
 														</td>
@@ -637,11 +643,11 @@
 										</tr>
 									</table>
 								
-								<!-- 	<i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 3.0em;" onClick="fn_logView('kafka')"></i> -->
+								<!--	 <i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 3.0em;" onClick="fn_logView('kafka')"></i> -->
 								</div>
 							</div>
 						</div>
- 																						
+
 						<div class="accordion_cdc accordion-multi-colored col-1" id="accordion" role="tablist" >
 							<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
 								<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyListnerConLineList">
@@ -675,7 +681,7 @@
 										</tr>
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="tarconResultTable" class="table table-striped system-tlb-scroll" style="width:100%; border-bottom:1px solid;">
+												 <table id="tarconResultTable" class="table table-striped system-tlb-scroll" style="width:100%; border-bottom:1px solid;">
 													<thead>
 														<tr class="bg-info text-white">
 															<th style="width:25%;font-size:12px;">토픽 수</th>
@@ -684,7 +690,7 @@
 														</tr>
 														<tr id="tarconResultCntTableNvl">
 															<td colspan="3" >
-<%-- 																<spring:message code="message.msg01" /> --%>
+<%--																 <spring:message code="message.msg01" /> --%>
 																커넥터를 선택해주세요
 															</td>
 														</tr>
@@ -700,7 +706,7 @@
 										
 										<tr>
 											<td style="width:80%;" class="text-center">
-			 									<table id="skconResultTable" class="table-borderless" style="width:100%; display:none;">
+												 <table id="skconResultTable" class="table-borderless" style="width:100%; display:none;">
 													<tr id="skconResultCntTable" >
 														<td style="width:100%;">
 															
@@ -771,7 +777,7 @@
 					
 					<div class="row">
 						<!-- connector 기동 정지 이력 리스트 -->
- 						<div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist" >
+						 <div class="accordion_main accordion-multi-colored col-12" id="accordion" role="tablist" >
 							<div class="card" style="margin-bottom:10px;border:none;">
 								<div class="card-body" style="border:none;margin-top:-25px;margin-left:-25px;margin-right:-25px;">
 									<div class="row">
@@ -783,11 +789,11 @@
 										<div class="col-sm-4.5">
 											<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView('connector')">
 												<i class="mdi mdi-file-document"></i>
-												connector로그
+												connector 로그
 											</button>
 										</div>
 									</div>
- 									<table id="connectorActTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
+									 <table id="connectorActTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
 										<thead>
 											<tr class="bg-info text-white">
 												<th width="0px;">rownum</th>

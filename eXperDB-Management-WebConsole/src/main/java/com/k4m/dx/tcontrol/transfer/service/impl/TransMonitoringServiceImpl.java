@@ -9,9 +9,6 @@ import javax.annotation.Resource;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
-import com.experdb.management.proxy.cmmn.ProxyClientProtocolID;
-import com.experdb.management.proxy.cmmn.ProxyClientTranCodeType;
-import com.ibm.db2.jcc.am.j;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -276,11 +273,12 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	/**
 	 * kafka Connect 전체 에러 조회
 	 * 
+    * @param param
 	 * @return List<Map<String, Object>>
 	 */
 	@Override
-	public List<Map<String, Object>> selectAllErrorList() {
-		return transMonitoringDAO.selectAllErrorList();
+   public List<Map<String, Object>> selectAllErrorList(Map<String, Object> param) {
+      return transMonitoringDAO.selectAllErrorList(param);
 	}
 	
 	/**
@@ -337,6 +335,7 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 
 			logResult = cic.getLogFile(IP, PORT, dbServerVO, jObj);
+         logResult.put("kc_nm", kafkaInfo.get("kc_nm"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

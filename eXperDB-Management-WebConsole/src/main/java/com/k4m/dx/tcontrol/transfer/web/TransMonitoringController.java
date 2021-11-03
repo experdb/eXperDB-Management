@@ -91,10 +91,16 @@ public class TransMonitoringController {
 	@RequestMapping("/transMonitoringCpuMemList.do")
 	public ModelAndView transMonitoringCpuMemList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
+      
+      String src_con_nm = request.getParameter("src_con_nm");
+      String tar_con_nm = request.getParameter("tar_con_nm");
+      Map<String, Object> param = new HashMap<String, Object>();
+      param.put("src_con_nm", src_con_nm);
+      param.put("tar_con_nm", tar_con_nm);
+      
 		List<Map<String, Object>> processCpuList = transMonitoringService.selectProcessCpuList();
 		List<Map<String, Object>> memoryList = transMonitoringService.selectMemoryList();
-		List<Map<String, Object>> allErrorList = transMonitoringService.selectAllErrorList();
-		
+      List<Map<String, Object>> allErrorList = transMonitoringService.selectAllErrorList(param);
 		mv.addObject("processCpuList", processCpuList);
 		mv.addObject("memoryList", memoryList);
 		mv.addObject("allErrorList", allErrorList);
@@ -368,6 +374,7 @@ public class TransMonitoringController {
 			String strTransId = request.getParameter("trans_id");
 			String type = request.getParameter("type");
 			int trans_id = Integer.parseInt(strTransId);
+         String strKcId = request.getParameter("kc_id");
 			String strSeek = request.getParameter("seek");
 			String strReadLine = request.getParameter("readLine");
 			String dwLen = request.getParameter("dwLen");
@@ -377,6 +384,7 @@ public class TransMonitoringController {
 			TransVO transVO = new TransVO();
 			transVO.setDb_svr_id(db_svr_id);
 			transVO.setTrans_id(trans_id);
+         transVO.setKc_id(strKcId);
 			Map<String, Object> param = new HashMap<>();
 			param.put("seek", strSeek);
 			param.put("readLine", strReadLine);
@@ -393,6 +401,7 @@ public class TransMonitoringController {
 			mv.addObject("dwLen", result.get("DW_LEN"));
 			mv.addObject("file_name", result.get("file_name"));
 			mv.addObject("status", result.get("status"));
+         mv.addObject("kc_nm", result.get("kc_nm"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

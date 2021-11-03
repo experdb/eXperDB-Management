@@ -232,11 +232,12 @@ public class TransMonitoringDAO extends EgovAbstractMapper{
 	
 	/**
 	 * kafka Connect 전체 에러 조회
+    * @param param 
 	 * 
 	 * @return List<Map<String, Object>>
 	 */
-	public List<Map<String, Object>> selectAllErrorList() {
-		return selectList("transMonitoringSql.selectAllErrorList");
+   public List<Map<String, Object>> selectAllErrorList(Map<String, Object> param) {
+      return selectList("transMonitoringSql.selectAllErrorList", param);
 	}
 	
 	/**

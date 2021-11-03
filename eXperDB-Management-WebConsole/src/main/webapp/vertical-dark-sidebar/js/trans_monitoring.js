@@ -1,6 +1,11 @@
 $(window).ready(function(){
 });
 
+var src_langSelect = "";
+var tar_langSelect = "";
+var src_con_nm = "";
+var tar_con_nm = "";
+
 /* ********************************************************
  * 화면시작 오늘날짜 셋팅
  ******************************************************** */
@@ -116,12 +121,27 @@ function fn_cpu_mem_err_chart(){
  * CPU / MEM 차트 조회
  * ******************************************************** */
 function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
+	src_langSelect = document.getElementById("src_connect");
+	var src_con_nm = "";
+
+	if(src_langSelect.options[src_langSelect.selectedIndex].value != ''){
+		src_con_nm = src_langSelect.options[src_langSelect.selectedIndex].text;
+	}
+
+	tar_langSelect = document.getElementById("tar_connector_list");
+	var tar_con_nm = "";
+	if(tar_langSelect.options[tar_langSelect.selectedIndex].value != ''){
+		tar_con_nm = tar_langSelect.options[tar_langSelect.selectedIndex].text;
+	}
+
 	$.ajax({
 		url : "/transMonitoringCpuMemList.do",
 		dataType 	: "json",
 		type : "post",
-			data : {
-			},
+		data : {
+			src_con_nm : src_con_nm, 
+			tar_con_nm : tar_con_nm
+		},
 		beforeSend: function(xhr) {
 			xhr.setRequestHeader("AJAX", true);
 		},
@@ -138,7 +158,31 @@ function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
 			if (result != null) {
 				cpuChart.setData(result.processCpuList);
 				memChart.setData(result.memoryList);
-				allErrorChart.setData(result.allErrorList);
+
+//            fn_all_error_chart_init();
+				$('#chart-allError').empty();
+				allErrorChart = Morris.Line({
+					element : 'chart-allError',
+					// Tell Morris where the data is
+					data: result.allErrorList,
+					// Tell Morris which property of the data is to be mapped to which axis
+					xkey : 'time',
+					xLabelFormat : function(time) {
+						return time.label.slice(10);
+					},
+					ykeys : [ 'src_total_record_errors', 'tar_total_record_errors' ],
+					lineColors : [ '#FABA66', '#F36368' ],
+					labels : [ '소스 error', '타겟 error' ],
+					lineWidth : 2,
+					parseTime : false,
+					hideHover : false,
+					pointSize : 0,
+					resize : true
+				});
+
+				if(nvlPrmSet(result.allErrorList, '') != '') {
+					allErrorChart.setData(result.allErrorList);
+				} 
 				
 				//로그 기록 테이블 설정
 //				connectorActTable.clear().draw();
@@ -160,11 +204,11 @@ function fn_trans_loadbar(gbn){
 	if($("#loading_trans").length == 0)	$("#contentsDiv").append(htmlLoad_trans);
 	
 	if (gbn == "start") {
-	      $('#loading_trans').css('position', 'absolute');
-	      $('#loading_trans').css('left', '50%');
-	      $('#loading_trans').css('top', '50%');
-	      $('#loading_trans').css('transform', 'translate(-50%,-50%)');	  
-	      $('#loading_trans').show();	
+		$('#loading_trans').css('position', 'absolute');
+		$('#loading_trans').css('left', '50%');
+		$('#loading_trans').css('top', '50%');
+		$('#loading_trans').css('transform', 'translate(-50%,-50%)');	  
+		$('#loading_trans').show();	
 	} else {
 		$('#loading_trans').hide();	
 	}
@@ -210,7 +254,7 @@ function fn_src_setting_info_init(){
 					},
 					className : "dt-center", 
 					defaultContent : ""
-				}	
+				}
 		]
 	});
 	
@@ -230,7 +274,7 @@ function fn_src_mapping_list_init(){
 	srcMappingListTable = $('#srcMappingListTable').DataTable({
 		searching : false,
 		scrollY : true,
-		scrollX: true,	
+		scrollX: true,
 		paging : false,
 		deferRender : true,
 		info : false,
@@ -243,7 +287,7 @@ function fn_src_mapping_list_init(){
 				{data : "table_nm", className : "dt-left", defaultContent : ""},	
 		]
 	});
-	
+
 	srcMappingListTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px'); // schema name
 	srcMappingListTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px'); // table name
 
@@ -257,7 +301,7 @@ function fn_src_connect_init(){
 	srcConnectTable = $('#srcConnectTable').DataTable({
 		searching : false,
 		scrollY : true,
-		scrollX: true,	
+		scrollX: true,
 		paging : false,
 		deferRender : true,
 		info : false,
@@ -400,7 +444,7 @@ function fn_tar_topic_list_init(){
 		},
 		columns : [
 				{data : "rownum", className : "dt-center", defaultContent : ""}, 
-				{data : "topic_name", className : "dt-center", defaultContent : ""}	
+				{data : "topic_name", className : "dt-left", defaultContent : ""}   
 		]
 	});
 	
@@ -622,13 +666,13 @@ function fn_connector_act_init(){
 					var html = "";
 						if(data == 'A'){
 						html += '	<i class="fa fa-spinner fa-spin mr-2 icon-sm text-success"></i>';
-						html += '	<spring:message code="eXperDB_proxy.act_start"/>';
+						html += '   ' + message_act_start;
 					} else if(data == 'R') {
 						html += '	<i class="fa fa-refresh fa-spin mr-2 icon-sm text-warning"></i>';
-						html += '	<spring:message code="eXperDB_proxy.act_restart"/>';
+						html += '   ' + message_act_restart;
 					} else if(data == 'S'){
 						html += '	<i class="fa fa-circle-o-notch mr-2 icon-sm text-danger"></i>';
-						html += '	<spring:message code="eXperDB_proxy.act_stop"/>';
+						html += '   ' + message_act_stop;
 					}
 					return html;
 				},
@@ -672,6 +716,8 @@ function fn_src_init(){
  ******************************************************** */
 function fn_tar_init(){
 	$('#topic_cnt').html("");
+   $('#sink_record_send_total').html("");
+   $('#tar_total_error').html("");
 	$('#d_tg_connect_nm').text("");
 	$('#d_tg_sys_nm').text("");
 	$('#d_tg_dbms_type').text("");
@@ -694,73 +740,76 @@ function funcSsChartSetting(result) {
 	
 	//실시간 차트 - 실시간 전송 레코드
 	$('#src-chart-line-1').empty();
+	var srcChart1 = Morris.Line({
+		element: 'src-chart-line-1',
+		lineColors: ['#63CF72', '#FABA66','#F36368'],
+		data: [
+				{
+					time: '',
+					source_record_write_total : 0,
+					source_record_poll_total : 0,
+					source_record_active_count : 0,
+				}
+		],
+		xkey: 'time',
+		xkeyFormat: function(time) {
+			return time.substring(10);
+		},
+		ykeys: ['source_record_write_total', 'source_record_poll_total', 'source_record_active_count'],
+		labels: ['kafka에 기록된 레코드 수','폴링 된 총 레코드 수', 'kafka에 기록되지 않은 레코드 수']
+	});
+
 	if(nvlPrmSet(result.sourceChart1, '') != '') {
-		var srcChart1 = Morris.Line({
-			element: 'src-chart-line-1',
-			lineColors: ['#63CF72', '#FABA66','#F36368'],
-			data: [
-					{
-						time: '',
-						source_record_write_total : 0,
-						source_record_poll_total : 0,
-						source_record_active_count : 0,
-					}
-			],
-			xkey: 'time',
-			xkeyFormat: function(time) {
-				return time.substring(10);
-			},
-			ykeys: ['source_record_write_total', 'source_record_poll_total', 'source_record_active_count'],
-			labels: ['kafka에 기록된 레코드 수','폴링 된 총 레코드 수', 'kafka에 기록되지 않은 레코드 수']
-		});
 		srcChart1.setData(result.sourceChart1);
 	}
 
 	//실시간 차트 - 평균 전송 레코드
 	$('#src-chart-line-2').empty();
+	var srcChart2 = Morris.Line({
+		element: 'src-chart-line-2',
+		lineColors: ['#63CF72', '#FABA66','#F36368'],
+		data: [
+			{
+				time: '',
+				source_record_write_rate : 0,
+				source_record_active_count_avg : 0,
+			}
+		],
+		xkey: 'time',
+		xkeyFormat: function(time) {
+			return time.substring(10);
+		},
+		ykeys: ['source_record_write_rate', 'source_record_active_count_avg'],
+		labels: ['kafka에 기록된 초당 평균 레코드 수','kafka에 기록되지 않은 평균 레코드 수']
+	});
+
 	if(nvlPrmSet(result.sourceChart2, '') != '') {
-		var srcChart2 = Morris.Line({
-			element: 'src-chart-line-2',
-			lineColors: ['#63CF72', '#FABA66','#F36368'],
-			data: [
-					{
-					time: '',
-					source_record_write_rate : 0,
-					source_record_active_count_avg : 0,
-					}
-			],
-			xkey: 'time',
-			xkeyFormat: function(time) {
-				return time.substring(10);
-			},
-			ykeys: ['source_record_write_rate', 'source_record_active_count_avg'],
-			labels: ['kafka에 기록된 초당 평균 레코드 수','kafka에 기록되지 않은 평균 레코드 수']
-		});
 		srcChart2.setData(result.sourceChart2);
 	}
 
 	//에러 차트
 	$('#src-chart-line-error').empty();
+	var srcErrorChart = Morris.Line({
+		element: 'src-chart-line-error',
+		lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
+		data: [
+			{
+				time: '',
+				total_record_errors: 0,
+				total_record_failures: 0,
+				total_records_skipped: 0,
+				total_retries : 0
+			}
+		],
+		xkey: 'time',
+		xkeyFormat: function(time) {
+			return time.substring(10);
+		},
+		ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped', 'total_retries'],
+		labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수', '재시도 작업 수']
+	});
+
 	if(nvlPrmSet(result.sourceErrorChart, '') != '') {
-		var srcErrorChart = Morris.Line({
-			element: 'src-chart-line-error',
-			lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
-			data: [
-					{
-					time: '',
-					total_record_errors: 0,
-					total_record_failures: 0,
-					total_records_skipped: 0,
-					total_retries : 0
-					}
-			],
-			xkey: 'time',
-			xkeyFormat: function(time) {
-				return time.substring(10);
-			},
-			ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped', 'total_retries'],
-			labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수', '재시도 작업 수']
-		});
 		srcErrorChart.setData(result.sourceErrorChart);
 	}
 	
@@ -809,7 +858,10 @@ function funcSsListSetting(result) {
 					result.sourceInfo[i].source_record_poll_total_cng = result.sourceInfo[i].source_record_poll_total - result.sourceInfo[i+1].source_record_poll_total;
 					result.sourceInfo[i].source_record_active_count_cng = (result.sourceInfo[i].source_record_active_count - result.sourceInfo[i+1].source_record_active_count).toFixed(2);
 				}
-				srcConnectTable.row.add(result.sourceInfo[i]).draw();
+
+				if(nvlPrmSet(result.sourceInfo[0].time, '') != '') {
+					srcConnectTable.row.add(result.sourceInfo[i]).draw();
+				}
 			}
 		}
 //			srcConnectTable.rows.add(result.sourceInfo).draw();
@@ -860,7 +912,10 @@ function funcTarListSetting(result, langSelect) {
 					result.targetSinkInfo[i].offset_commit_skip_total_cng = result.targetSinkInfo[i].offset_commit_skip_total - result.targetSinkInfo[i+1].offset_commit_skip_total;
 					result.targetSinkInfo[i].sink_record_read_total_cng = result.targetSinkInfo[i].sink_record_read_total - result.targetSinkInfo[i+1].sink_record_read_total;
 				}
-				tarConnectTable.row.add(result.targetSinkInfo[i]).draw();
+
+				if(nvlPrmSet(result.targetSinkInfo[0].time, '') != '') {
+					tarConnectTable.row.add(result.targetSinkInfo[i]).draw();
+				}
 			}
 		}
 	}
@@ -892,82 +947,78 @@ function fn_sink_chart_init(trans_id){
 			},
 			success : function(result) {
 				if (result != null) {
+					var sinkChart = Morris.Line({
+						element: 'tar-chart-line-sink',
+						ineColors: ['#63CF72', '#FABA66',],
+						data: [
+							{
+								time: '',
+								sink_record_active_count: 0,
+								sink_record_send_total: 0,
+							}
+						],
+						xkey: 'time',
+						xkeyFormat: function(time) {
+							return time.substring(10);
+						},
+						ykeys: ['sink_record_active_count', 'sink_record_send_total'],
+						labels: ['싱크 중인 레코드 수', '싱크 완료 총 수']
+					});
+
 					if (nvlPrmSet(result.targetSinkRecordChart, '') != '') {
-						var sinkChart = Morris.Line({
-							element: 'tar-chart-line-sink',
-							ineColors: ['#63CF72', '#FABA66',],
-							data: [
-								{
-									time: '',
-									sink_record_active_count: 0,
-									sink_record_send_total: 0,
-								}
-							],
-							xkey: 'time',
-							xkeyFormat: function(time) {
-								return time.substring(10);
-							},
-							ykeys: ['sink_record_active_count', 'sink_record_send_total'],
-							labels: ['싱크 중인 레코드 수', '싱크 완료 총 수']
-						});
 						sinkChart.setData(result.targetSinkRecordChart);
 					}
 					
+					var sinkCompleteChart = Morris.Line({
+						element: 'tar-chart-line-complete',
+						lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
+						data: [
+								{
+									time: '',
+									offset_commit_completion_total: 0,
+									offset_commit_skip_total: 0,
+								}
+						],
+						xkey: 'time',
+						xkeyFormat: function(time) {
+							return time.substring(10);
+						},
+						ykeys: ['offset_commit_completion_total', 'offset_commit_skip_total'],
+						labels: ['완료 총 수', '무시된 총 커밋 수']
+					});
+
 					if (nvlPrmSet(result.targetSinkCompleteChart, '') != '') {
-						var sinkCompleteChart = Morris.Line({
-							element: 'tar-chart-line-complete',
-							lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
-							data: [
-									{
-										time: '',
-										offset_commit_completion_total: 0,
-										offset_commit_skip_total: 0,
-									}
-							],
-							xkey: 'time',
-							xkeyFormat: function(time) {
-								return time.substring(10);
-							},
-							ykeys: ['offset_commit_completion_total', 'offset_commit_skip_total'],
-							labels: ['완료 총 수', '무시된 총 커밋 수']
-						});
 						sinkCompleteChart.setData(result.targetSinkCompleteChart);
 					}
 					
-					if (nvlPrmSet(result.targetErrorChart, '') != '') {
+					var sinkErrorChart = Morris.Line({
+						element: 'tar-chart-line-sink-error',
+						lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
+						data: [
+								{
+									time: '',
+									total_record_errors: 0,
+									total_record_failures: 0,
+									total_records_skipped: 0,
+								}
+						],
+						xkey: 'time',
+						xkeyFormat: function(time) {
+							return time.substring(10);
+						},
+						ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped'],
+						labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수']
+					});
 
-						var sinkErrorChart = Morris.Line({
-							element: 'tar-chart-line-sink-error',
-							lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
-							data: [
-									{
-										time: '',
-										total_record_errors: 0,
-										total_record_failures: 0,
-										total_records_skipped: 0,
-									}
-							],
-							xkey: 'time',
-							xkeyFormat: function(time) {
-								return time.substring(10);
-							},
-							ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped'],
-							labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수']
-						});
-						$('#tar-chart-error').show();							
-						$('#tar-chart-error-nvl').hide();
+					if (nvlPrmSet(result.targetErrorChart, '') != '') {
 						sinkErrorChart.setData(result.targetErrorChart);
-					} else {
-						$('#tar-chart-error').hide();							
-						$('#tar-chart-error-nvl').show();	
 					}
 				}
 			}
 		});
-	} 
+	}
 	$("#loading").hide();
 }
-
 
 
 //	if (nvlPrmSet(result.targetErrorChart, '') != '') {
@@ -1108,24 +1159,24 @@ function fn_snapshot_strem(strGbn) {
 				url : "/transSrcSnapshotInfo.do",
 				dataType : "json",
 				type : "post",
-	 			data : {
-	 				trans_id : selectValue,
-	 			},
+				data : {
+					trans_id : selectValue,
+				},
 				beforeSend: function(xhr) {
 					xhr.setRequestHeader("AJAX", true);
 				},
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 					}
 				},
 				success : function(result) {
 					if (result != null) {
-						if (nvlPrmSet(result.snapshotChart, '') != '') {
+                  console.log(strGbn == "snapshot")
 							var snapshotChart = Morris.Line({
 								element: 'src-chart-line-snapshot',
 								lineColors: ['#63CF72', '#FABA66',],
@@ -1143,27 +1194,30 @@ function fn_snapshot_strem(strGbn) {
 								ykeys: ['number_of_events_filtered', 'number_of_erroneous_events'],
 								labels: ['필터링 된 이벤트 수', '오류 난 이벤트 수']
 							});
-							snapshotChart.setData(result.snapshotChart);
+
+							if (nvlPrmSet(result.snapshotChart, '') != '') {
+								snapshotChart.setData(result.snapshotChart);
+							}
+
+	// 						srcSnapshotTable.clear().draw();
+	// 						if (nvlPrmSet(result.snapshotInfo, '') != '') {
+	// 							for(var i = 0; i < result.snapshotInfo.length; i++){	
+	// 								if(result.snapshotInfo[i].rownum == 1){
+	// 									if(i != result.snapshotInfo.length-1 && result.snapshotInfo[i+1].rownum == 2){
+	// 										result.snapshotInfo[i].number_of_events_filtered_cng = result.snapshotInfo[i].number_of_events_filtered - result.snapshotInfo[i+1].number_of_events_filtered;
+	// 										result.snapshotInfo[i].number_of_erroneous_events_cng = result.snapshotInfo[i].number_of_erroneous_events - result.snapshotInfo[i+1].number_of_erroneous_events;
+	// 										result.snapshotInfo[i].queue_total_capacity_cng = result.snapshotInfo[i].queue_total_capacity - result.snapshotInfo[i+1].queue_total_capacity;
+	// 										result.snapshotInfo[i].queue_remaining_capacity_cng = result.snapshotInfo[i].queue_remaining_capacity - result.snapshotInfo[i+1].queue_remaining_capacity;
+	// 										result.snapshotInfo[i].remaining_table_count_cng = result.snapshotInfo[i].remaining_table_count - result.snapshotInfo[i+1].remaining_table_count;
+	// 									}
+	// 									srcSnapshotTable.row.add(result.snapshotInfo[i]).draw();
+	// 								}
+	// 							}
+	// 						}
 						}
-// 						srcSnapshotTable.clear().draw();
-// 						if (nvlPrmSet(result.snapshotInfo, '') != '') {
-// 							for(var i = 0; i < result.snapshotInfo.length; i++){	
-// 								if(result.snapshotInfo[i].rownum == 1){
-// 									if(i != result.snapshotInfo.length-1 && result.snapshotInfo[i+1].rownum == 2){
-// 										result.snapshotInfo[i].number_of_events_filtered_cng = result.snapshotInfo[i].number_of_events_filtered - result.snapshotInfo[i+1].number_of_events_filtered;
-// 										result.snapshotInfo[i].number_of_erroneous_events_cng = result.snapshotInfo[i].number_of_erroneous_events - result.snapshotInfo[i+1].number_of_erroneous_events;
-// 										result.snapshotInfo[i].queue_total_capacity_cng = result.snapshotInfo[i].queue_total_capacity - result.snapshotInfo[i+1].queue_total_capacity;
-// 										result.snapshotInfo[i].queue_remaining_capacity_cng = result.snapshotInfo[i].queue_remaining_capacity - result.snapshotInfo[i+1].queue_remaining_capacity;
-// 										result.snapshotInfo[i].remaining_table_count_cng = result.snapshotInfo[i].remaining_table_count - result.snapshotInfo[i+1].remaining_table_count;
-// 									}
-// 									srcSnapshotTable.row.add(result.snapshotInfo[i]).draw();
-// 								}
-// 							}
-// 						}
 					}
-				}
 			});
-		} 
+		}
 	} else {
 		$('#src-chart-line-streaming').empty();
 
@@ -1189,42 +1243,44 @@ function fn_snapshot_strem(strGbn) {
 				},
 				success : function(result) {
 					if (result != null) {
+						var streamingChart = Morris.Line({
+							element: 'src-chart-line-streaming',
+							lineColors: ['#63CF72', '#FABA66','#F36368'],
+							data: [
+									{
+									time: '',
+									total_number_of_events_seen : 0,
+									number_of_events_filtered : 0,
+									number_of_erroneous_events : 0,
+									}
+							],
+							xkey: 'time',
+							xkeyFormat: function(time) {
+								return time.substring(10);
+							},
+							ykeys: ['total_number_of_events_seen', 'number_of_events_filtered', 'number_of_erroneous_events'],
+							labels: ['이벤트 총 수','필터링 된 이벤트 수', '오류 난 이벤트 수']
+						});
+
 						if (nvlPrmSet(result.streamingChart, '') != '') {
-							var streamingChart = Morris.Line({
-								element: 'src-chart-line-streaming',
-								lineColors: ['#63CF72', '#FABA66','#F36368'],
-								data: [
-										{
-										time: '',
-										total_number_of_events_seen : 0,
-										number_of_events_filtered : 0,
-										number_of_erroneous_events : 0,
-										}
-								],
-								xkey: 'time',
-								xkeyFormat: function(time) {
-									return time.substring(10);
-								},
-								ykeys: ['total_number_of_events_seen', 'number_of_events_filtered', 'number_of_erroneous_events'],
-								labels: ['이벤트 총 수','필터링 된 이벤트 수', '오류 난 이벤트 수']
-							});
 							streamingChart.setData(result.streamingChart);
 						}
-// 						srcStreamingTable.clear().draw();
-// 						if (nvlPrmSet(result.streamingInfo, '') != '') {
-// 							for(var i = 0; i < result.streamingInfo.length; i++){	
-// 								if(result.streamingInfo[i].rownum == 1){
-// 									if(i != result.streamingInfo.length-1 && result.streamingInfo[i+1].rownum == 2){
-// 										result.streamingInfo[i].number_of_committed_transactions_cng = result.streamingInfo[i].number_of_committed_transactions - result.streamingInfo[i+1].number_of_committed_transactions;
-// 										result.streamingInfo[i].total_number_of_events_seen_cng = result.streamingInfo[i].total_number_of_events_seen - result.streamingInfo[i+1].total_number_of_events_seen;
-// 										result.streamingInfo[i].number_of_events_filtered_cng = result.streamingInfo[i].number_of_events_filtered - result.streamingInfo[i+1].number_of_events_filtered;
-// 										result.streamingInfo[i].number_of_erroneous_events_cng = result.streamingInfo[i].number_of_erroneous_events - result.streamingInfo[i+1].number_of_erroneous_events;
-// 										result.streamingInfo[i].milli_seconds_since_last_event_cng = result.streamingInfo[i].milli_seconds_since_last_event - result.streamingInfo[i+1].milli_seconds_since_last_event;
-// 									}
-// 									srcStreamingTable.row.add(result.streamingInfo[i]).draw();
-// 								}
-// 							}
-// 						}
+
+	// 					srcStreamingTable.clear().draw();
+	// 					if (nvlPrmSet(result.streamingInfo, '') != '') {
+	// 						for(var i = 0; i < result.streamingInfo.length; i++){	
+	// 							if(result.streamingInfo[i].rownum == 1){
+	// 								if(i != result.streamingInfo.length-1 && result.streamingInfo[i+1].rownum == 2){
+	// 									result.streamingInfo[i].number_of_committed_transactions_cng = result.streamingInfo[i].number_of_committed_transactions - result.streamingInfo[i+1].number_of_committed_transactions;
+	// 									result.streamingInfo[i].total_number_of_events_seen_cng = result.streamingInfo[i].total_number_of_events_seen - result.streamingInfo[i+1].total_number_of_events_seen;
+	// 									result.streamingInfo[i].number_of_events_filtered_cng = result.streamingInfo[i].number_of_events_filtered - result.streamingInfo[i+1].number_of_events_filtered;
+	// 									result.streamingInfo[i].number_of_erroneous_events_cng = result.streamingInfo[i].number_of_erroneous_events - result.streamingInfo[i+1].number_of_erroneous_events;
+	// 									result.streamingInfo[i].milli_seconds_since_last_event_cng = result.streamingInfo[i].milli_seconds_since_last_event - result.streamingInfo[i+1].milli_seconds_since_last_event;
+	// 								}
+	// 								srcStreamingTable.row.add(result.streamingInfo[i]).draw();
+	// 							}
+	// 						}
+	// 					}
 					}
 				}
 			});

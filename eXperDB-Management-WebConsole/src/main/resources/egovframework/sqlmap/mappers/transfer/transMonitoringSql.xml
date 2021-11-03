@@ -49,6 +49,7 @@
                        SELECT TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME,
                               TOTAL_RECORD_ERRORS
                          FROM CDC_CONNECTOR_TASK_SRC
+                        WHERE CONNECTOR_NAME = #{src_con_nm}
                 ) A
                 GROUP BY A.TIME
                 UNION ALL
@@ -59,6 +60,7 @@
                        SELECT TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME,
                               TOTAL_RECORD_ERRORS
                          FROM CDC_CONNECTOR_TASK_SINK
+                        WHERE CONNECTOR_NAME = #{tar_con_nm}
                 ) A
                 GROUP BY A.TIME
           ) B
