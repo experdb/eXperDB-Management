@@ -430,5 +430,12 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 		return transMonitoringDAO.selectTargetTopicListNew(trans_id);
 	}
 
-	
+	/**
+	 * source DBMS 정보 조회
+	 * 
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> selectSourceDbmsInfo(int trans_id){
+		return transMonitoringDAO.selectSourceDbmsInfo(trans_id);
+	}
 }

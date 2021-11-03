@@ -996,6 +996,8 @@ function fn_sink_chart_init(trans_id){
  ******************************************************** */
 function fn_dbmsConnect_digm(connectGbn, result) {
 	var htmlTargetDbms = "";
+	var htmlsourceDbms = "";
+	var htmlKafka = "";
 	var db_exe_status_chk = "";
 	var db_exe_status_css = "";
 	var db_exe_status_val = "";
@@ -1035,6 +1037,59 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 				$('#targetDbmsImg').html(htmlTargetDbms);
 			}
 		}
+	} else if (connectGbn == "kafka") {
+		
+		//kafka setting
+		if (result.kafkaInfo != null) {
+			htmlKafka = '<i class="text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + result.kafkaInfo.kc_nm;
+
+			$('#kc_id', '#transMonitoringForm').val(result.kafkaInfo.kc_id);
+			$('#kafkaConnectorNm').html(htmlKafka);
+			
+			if(result.kafkaInfo.exe_status == 'TC001501'){
+				db_exe_status_chk = "text-success";
+				db_exe_status_css = "fa-refresh fa-spin text-success";
+				db_exe_status_val = 'running';
+			} else {
+				db_exe_status_chk = "text-danger";
+				db_exe_status_css = "fa-times-circle text-danger";
+				db_exe_status_val = 'stop';
+			}
+
+			htmlKafka = '<i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + db_exe_status_val;
+			$('#kafkaStatus').html(htmlKafka);
+		} else {
+			$('#kc_id', '#transMonitoringForm').val("");
+			$('#kafkaConnectorNm').html("");
+			$('#kafkaStatus').html("");
+		}
+	} else if (connectGbn == "source") {
+		//dbms 연결도 변경
+		if (result.sourceDbmsInfo != null) {
+			htmlsourceDbms = '<img src="../images/postgresql_icon.png" class="img-sm" style="max-width:120%;object-fit: contain;" alt=""/>';
+			htmlsourceDbms += " " + result.sourceDbmsInfo.svr_host_nm;
+			$('#sourceDbmsNm').html(htmlsourceDbms);
+
+			htmlsourceDbms = "IP/PORT : " + result.sourceDbmsInfo.ipadr + "/" + result.sourceDbmsInfo.portno;
+			$('#sourceDbmsIp').html(htmlsourceDbms);
+			
+			if(result.sourceDbmsInfo.db_cndt == 'Y'){
+				db_exe_status_chk = "text-success";
+				db_exe_status_css = "fa-refresh fa-spin text-success";
+				db_exe_status_val = 'running';
+			} else {
+				db_exe_status_chk = "text-danger";
+				db_exe_status_css = "fa-times-circle text-danger";
+				db_exe_status_val = 'stop';
+			}
+			
+			htmlsourceDbms = '<i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + db_exe_status_val;
+			$('#sourceDbmsStatus').html(htmlsourceDbms);
+			
+			htmlsourceDbms = '<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 '+db_exe_status_chk+'" style="font-size: 3em;"></i>';
+			$('#sourceDbmsImg').html(htmlsourceDbms);
+		}
+		
 	}
 }
 

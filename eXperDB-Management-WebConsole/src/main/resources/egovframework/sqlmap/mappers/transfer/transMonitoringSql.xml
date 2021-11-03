@@ -788,6 +788,7 @@
       SELECT 
              TTCI.KC_ID
            , TTCI.KC_IP 
+           , TTCI.KC_NM
            , TTCI.KC_PORT 
            , TTCI.EXE_STATUS
         FROM T_TRANS_CON_INF TTCI 
@@ -812,4 +813,49 @@
        ORDER BY TTKACG.WRK_DTM DESC
        LIMIT 3
    </select>
+   
+   <select id="selectSourceDbmsInfo" resultType="hashMap">
+      /**
+      * Query ID : selectSourceDbmsInfo
+      * Description : source dbms 정보조회 
+      * Author : 윤정
+      **/  
+       SELECT
+             A.MASTER_GBN , 
+             A.DB_SVR_ID,
+             A.IPADR , 
+             A.PORTNO , 
+             A.SVR_HOST_NM , 
+             COALESCE(B.CNT_SVR_ID,0) AS CNT_SVR_ID,
+             A.DB_CNDT
+        FROM (
+             SELECT
+                    TDI.MASTER_GBN , 
+                    TDI.DB_SVR_ID,
+                    TDI.IPADR , 
+                    TDI.PORTNO , 
+                    TDI.SVR_HOST_NM ,
+                    TDI.DB_CNDT
+               FROM T_DBSVRIPADR_I TDI
+              WHERE TDI.MASTER_GBN = 'M'
+                AND TDI.DB_SVR_ID = ( SELECT DB_SVR_ID FROM T_TRANSCNG_I TTI WHERE TRANS_ID = #{trans_id}::numeric)
+          ) A
+          LEFT JOIN
+          (
+          SELECT B.MASTER_GBN, 
+                 B.DB_SVR_ID,
+                 COUNT(B.DB_SVR_ID) AS CNT_SVR_ID
+            FROM (
+                 SELECT
+                        A.MASTER_GBN ,
+                        A.DB_SVR_ID
+                   FROM T_DBSVRIPADR_I A 
+                  WHERE A.DB_SVR_ID = ( SELECT DB_SVR_ID FROM T_TRANSCNG_I TTI WHERE TRANS_ID = #{trans_id}::numeric)
+                    AND A .MASTER_GBN = 'S'
+            ) B 
+            GROUP BY B.MASTER_GBN , B.DB_SVR_ID
+          ) B
+          ON A.DB_SVR_ID = B.DB_SVR_ID
+   </select>
+  
 </mapper>

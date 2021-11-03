@@ -162,6 +162,8 @@ public class TransMonitoringController {
 			tot_cnt = 0;
 		}
 
+		Map<String, Object> sourceDbmsInfo = transMonitoringService.selectSourceDbmsInfo(trans_id);
+		
 		mv.addObject("table_cnt", tot_cnt);
 		mv.addObject("connectInfo", connectInfo);
 		mv.addObject("table_name_list", table_name_list);
@@ -175,7 +177,8 @@ public class TransMonitoringController {
 		mv.addObject("targetConnectorList", targetConnectorList);
 		mv.addObject("kafkaActCngList",selectKafkaActCngList);
 		mv.addObject("kafkaInfo",kafkaInfo);
-
+		mv.addObject("sourceDbmsInfo",sourceDbmsInfo);
+		
 		return mv;
 	}
 	

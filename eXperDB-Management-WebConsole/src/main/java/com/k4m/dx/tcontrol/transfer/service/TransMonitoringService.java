@@ -223,4 +223,10 @@ public interface TransMonitoringService {
 	 */
 	public Map<String, Object> selectKafkaConnectInfo(int trans_id);
 
+	/**
+	 * source DBMS 정보 조회
+	 * 
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> selectSourceDbmsInfo(int trans_id);
 }

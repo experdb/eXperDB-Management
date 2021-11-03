@@ -278,4 +278,13 @@ public class TransMonitoringDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectTargetTopicListNew(int trans_id) {
 		return selectList("transMonitoringSql.selectTargetTopicList", trans_id);
 	}
+	
+	/**
+	 * source DBMS 정보 조회
+	 * 
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> selectSourceDbmsInfo(int trans_id){
+		return selectOne("transMonitoringSql.selectSourceDbmsInfo", trans_id);
+	}
 }

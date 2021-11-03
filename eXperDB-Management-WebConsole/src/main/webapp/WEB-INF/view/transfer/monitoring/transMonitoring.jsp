@@ -166,14 +166,12 @@
 						
 						//소스시스템 리스트별 setting
 						funcSsListSetting(result);
+
+						//상단연결도 setting
+						fn_dbmsConnect_digm("source", result);
 						
-						//kafka setting
-						if (result.kafkaInfo != null) {
-							$('#kc_id', '#transMonitoringForm').val(result.kafkaInfo.kc_id);
-						} else {
-							$('#kc_id', '#transMonitoringForm').val("");
-						}
-						
+						//상단연결도 setting
+						fn_dbmsConnect_digm("kafka", result);
 					}
 				}
 			});
@@ -334,7 +332,7 @@
 		
 <form name="transMonitoringForm" id="transMonitoringForm" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
-	<input type="hidden" name="kc_id" id="kc_id" value=""/>
+	<input type="text" name="kc_id" id="kc_id" value=""/>
 </form>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -562,27 +560,26 @@
 															<table class="table-borderless" style="width:100%;text-align:left;">
 																<tr>
 																	<td colspan="2" style="width:85%;">
-																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">
-																			<img src="../images/postgresql_icon.png" class="img-sm" style="max-width:120%;object-fit: contain;" alt=""/>
-																			DB네임
+																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;" id="sourceDbmsNm">
 																		</h6>
 																	</td>
-																	<td rowspan="3" style="width:15%;">
+																	<td rowspan="3" style="width:15%;" id="sourceDbmsImg">
 																		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>
 																	</td>
 																</tr>
 																
 																<tr>
 																	<td colspan="2" style="padding-top:5px;">
-																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : 192.168.50.11/5432</h6>
+																		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;" id="sourceDbmsIp"></h6>
 																	</td>
 																</tr>
 
 																<tr>
 																	<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">
-																		<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6>
+																		<h6 class="text-muted" style="padding-left:10px;" id="sourceDbmsStatus"></h6>
 																	</td>
 																</tr>
+
 															</table>
 															
 														</td>
@@ -620,11 +617,22 @@
 								
 									<table class="table-borderless" style="width:100%;">
 										<tr>
-											<td style="width:100%;height:100%;margin-left:-10px;" class="text-center" id="123">
+											<td style="width:100%;height:100%;margin-left:-20px;" class="text-center">
 												<i onClick="fn_logView('kafka')">
 													<img src="../images/connector_icon.png" class="img-lg" style="max-width:140%;object-fit: contain;width:140px;height:140px;" alt="">
 												</i>
-												<!-- <h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6> -->
+												<!-- <h6 class="text-muted mb-0 mb-md-3 mb-xl-0" style="padding-left:10px;max-width:140%" id="kafkaConnectorNm"></h6>
+												<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6> -->
+											</td>
+										</tr>
+										<tr>
+											<td class="text-center" style="vertical-align: middle;padding-top:5px;padding-left:10px;">
+												<h6 class="text-muted" style="padding-left:10px;font-weight: bold;" id="kafkaConnectorNm"></h6>
+											</td>
+										</tr>
+										<tr>
+											<td class="text-center" style="vertical-align: middle;padding-top:5px;">
+												<h6 class="text-muted" style="padding-left:10px;" id="kafkaStatus"></h6>
 											</td>
 										</tr>
 									</table>
