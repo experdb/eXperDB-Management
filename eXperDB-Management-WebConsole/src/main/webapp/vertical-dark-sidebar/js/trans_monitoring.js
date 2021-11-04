@@ -89,10 +89,16 @@ function fn_cpu_mem_err_chart(){
 					resize: true
 				});
 				
-				allErrorChart = Morris.Line({
+				var allErrorChart = Morris.Line({
 					element: 'chart-allError',
 					// Tell Morris where the data is
-					data: result.allErrorList,
+					data: [
+					       	{
+					       		time : '',
+					       		src_total_record_errors : 0,
+					       		tar_total_record_errors : 0
+					       	}
+					],
 					// Tell Morris which property of the data is to be mapped to which axis
 					xkey: 'time',
 					xLabelFormat: function(time) {
@@ -113,7 +119,8 @@ function fn_cpu_mem_err_chart(){
 	$('#loading').hide();
 
 	setInterval(function() { 
-		updateLiveTempGraph(cpuChart, memChart, allErrorChart); 
+		updateLiveTempGraph(cpuChart, memChart); 
+//		updateLiveTempGraph(cpuChart, memChart, allErrorChart); 
 	}, 5000);
 }
 
@@ -161,10 +168,16 @@ function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
 
 //            fn_all_error_chart_init();
 				$('#chart-allError').empty();
-				allErrorChart = Morris.Line({
+				var allErrorChart = Morris.Line({
 					element : 'chart-allError',
 					// Tell Morris where the data is
-					data: result.allErrorList,
+					data: [
+					       	{
+					       		time : '',
+					       		src_total_record_errors : 0,
+					       		tar_total_record_errors : 0
+					       	}
+					],
 					// Tell Morris which property of the data is to be mapped to which axis
 					xkey : 'time',
 					xLabelFormat : function(time) {
@@ -1176,8 +1189,7 @@ function fn_snapshot_strem(strGbn) {
 				},
 				success : function(result) {
 					if (result != null) {
-                  console.log(strGbn == "snapshot")
-							var snapshotChart = Morris.Line({
+						var snapshotChart = Morris.Line({
 								element: 'src-chart-line-snapshot',
 								lineColors: ['#63CF72', '#FABA66',],
 								data: [
@@ -1195,9 +1207,9 @@ function fn_snapshot_strem(strGbn) {
 								labels: ['필터링 된 이벤트 수', '오류 난 이벤트 수']
 							});
 
-							if (nvlPrmSet(result.snapshotChart, '') != '') {
-								snapshotChart.setData(result.snapshotChart);
-							}
+						if (nvlPrmSet(result.snapshotChart, '') != '') {
+							snapshotChart.setData(result.snapshotChart);
+						}
 
 	// 						srcSnapshotTable.clear().draw();
 	// 						if (nvlPrmSet(result.snapshotInfo, '') != '') {

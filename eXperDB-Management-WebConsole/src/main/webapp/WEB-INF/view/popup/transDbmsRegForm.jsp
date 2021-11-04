@@ -117,7 +117,7 @@
 			return;
 		}
 
-		if (nvlPrmSet($("#reg_trans_dtb_nm", "#trasnDbmsInsertPop").val(), '') == "") {
+		if (nvlPrmSet($("#reg_trans_dtb_nm", "#trasnDbmsInsertPop").val(), '') == "" &&  $("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val() != "TC002210") {
 			showSwalIcon('<spring:message code="migration.msg16" />', '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
@@ -215,7 +215,7 @@
 
 		if (result.dbmsGrb_reg != null) {
 			for (var idx=0; idx < result.dbmsGrb_reg.length; idx++) {
-				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201") {
+				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201" || result.dbmsGrb_reg[idx].sys_cd == "TC002210") {
 					$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").append("<option value='"+ result.dbmsGrb_reg[idx].sys_cd + "'>" + result.dbmsGrb_reg[idx].sys_cd_nm + "</option>");
 				}
 			}
@@ -273,6 +273,13 @@
 		
 		$("#reg_trans_connectTest_check_alert", "#trasnDbmsInsertPop").html('');
 		$("#reg_trans_connectTest_check_alert", "#trasnDbmsInsertPop").hide();
+		
+		if($("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val() == "TC002210"){
+			$(".no-hd", "#trasnDbmsInsertPop").hide();
+		}else{
+			$(".no-hd", "#trasnDbmsInsertPop").show();
+		}
+		
 	}
 
 	/* ********************************************************
@@ -419,7 +426,7 @@
 										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="5" id="reg_trans_portno" name="reg_trans_portno" onKeyUp="fn_checkWord(this,5);chk_Number(this);" onblur="this.value=this.value.trim()" placeholder="5<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
 									</div>
 								</div>
-								<div class="form-group row">
+								<div class="form-group row no-hd">
 									<label for="reg_trans_dtb_nm" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										Database(*)
@@ -438,7 +445,7 @@
 							<!-- 			<select name="scm_nm" id="schema_pg_reg" class="form-control" style="margin-right: 1rem;width: 100% !important;"></select> -->
 									</div>
 								</div>
-								<div class="form-group row">
+								<div class="form-group row no-hd">
 									<label for="reg_trans_spr_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="dbms_information.account"/>(*)

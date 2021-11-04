@@ -125,13 +125,18 @@
 		
 		if (result.dbmsGrb_reg != null) {
 			for (var idx=0; idx < result.dbmsGrb_reg.length; idx++) {
-				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201") {
+				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201" || result.dbmsGrb_reg[idx].sys_cd == "TC002210") {
 					$("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").append("<option value='"+ result.dbmsGrb_reg[idx].sys_cd + "'>" + result.dbmsGrb_reg[idx].sys_cd_nm + "</option>");
 				}
 			}
 		}
 
-		$("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val(result.resultInfo[0].dbms_dscd).prop("selected", true)
+		$("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val(result.resultInfo[0].dbms_dscd).prop("selected", true);
+		if($("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val() == "TC002210"){
+			$(".no-hd", "#trasnDbmsModifyPop").hide();
+		}else{
+			$(".no-hd", "#trasnDbmsModifyPop").show();	
+		}
 	}
 	
 
@@ -155,7 +160,7 @@
 			return;
 		}
 
-		if (nvlPrmSet($("#mod_trans_dtb_nm", "#trasnDbmsModifyPop").val(), '') == "") {
+		if (nvlPrmSet($("#mod_trans_dtb_nm", "#trasnDbmsModifyPop").val(), '') == ""  &&  $("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val() != "TC002210") {
 			showSwalIcon('<spring:message code="migration.msg16" />', '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
@@ -353,7 +358,7 @@
 									</div>
 								</div>
 
-								<div class="form-group row">
+								<div class="form-group row no-hd">
 									<label for="mod_trans_dtb_nm" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										Database(*)
@@ -372,7 +377,7 @@
 									</div>
 								</div>
 								
-								<div class="form-group row">
+								<div class="form-group row no-hd">
 									<label for="mod_trans_spr_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="dbms_information.account"/>(*)

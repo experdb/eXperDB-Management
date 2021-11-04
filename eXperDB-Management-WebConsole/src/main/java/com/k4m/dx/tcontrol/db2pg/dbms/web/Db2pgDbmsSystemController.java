@@ -385,7 +385,12 @@ public class Db2pgDbmsSystemController {
 		serverObj.put(ClientProtocolID.USER_PWD, svr_spr_scm_pwd);
 		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
 		
-		result =  DBCPPoolManager.setupDriver(serverObj);
+		if(dbms_cd.equals("TC002210")){//hadoop
+			result =  DBCPPoolManager.conHadoop(serverObj);
+		}else{
+			result =  DBCPPoolManager.setupDriver(serverObj);	
+		}
+		
 
 	}catch (Exception e) {
 		e.printStackTrace();

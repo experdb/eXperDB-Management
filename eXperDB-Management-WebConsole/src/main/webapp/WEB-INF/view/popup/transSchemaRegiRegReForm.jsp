@@ -82,7 +82,7 @@
 			type : 'post',
 			data : {
 				db_svr_id : $("#db_svr_id","#findList").val(),
-				regiIp : regiIp,
+				regiIP : regiIp,
 				regiPort : regiPort
 			},
 			success : function(result) {

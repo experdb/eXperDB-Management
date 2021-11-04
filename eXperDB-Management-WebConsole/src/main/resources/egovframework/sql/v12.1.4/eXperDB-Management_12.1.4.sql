@@ -38,6 +38,9 @@ INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0169_01', 'Schema Registry 수정', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0170', 'Schema Registry 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
+-- Database에 하둡 코드 추가
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0022', 'TC002210', 'Hadoop', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
 
 --전송설정 타켓 시스템 정보 ----------- SchemaRegistry 정보 추가 
 ALTER TABLE experdb_management.t_transcng_target_i ADD regi_id numeric(18) NULL;

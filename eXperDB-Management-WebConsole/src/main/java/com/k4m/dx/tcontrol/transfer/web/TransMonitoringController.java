@@ -92,15 +92,15 @@ public class TransMonitoringController {
 	public ModelAndView transMonitoringCpuMemList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
       
-      String src_con_nm = request.getParameter("src_con_nm");
-      String tar_con_nm = request.getParameter("tar_con_nm");
-      Map<String, Object> param = new HashMap<String, Object>();
-      param.put("src_con_nm", src_con_nm);
-      param.put("tar_con_nm", tar_con_nm);
+		String src_con_nm = request.getParameter("src_con_nm");
+		String tar_con_nm = request.getParameter("tar_con_nm");
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("src_con_nm", src_con_nm);
+		param.put("tar_con_nm", tar_con_nm);
       
 		List<Map<String, Object>> processCpuList = transMonitoringService.selectProcessCpuList();
 		List<Map<String, Object>> memoryList = transMonitoringService.selectMemoryList();
-      List<Map<String, Object>> allErrorList = transMonitoringService.selectAllErrorList(param);
+		List<Map<String, Object>> allErrorList = transMonitoringService.selectAllErrorList(param);
 		mv.addObject("processCpuList", processCpuList);
 		mv.addObject("memoryList", memoryList);
 		mv.addObject("allErrorList", allErrorList);
@@ -419,6 +419,7 @@ public class TransMonitoringController {
 	public ModelAndView transKafkaConnectRestart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		HttpSession session = request.getSession();
+		
 		try {
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			Map<String, Object> param = new HashMap<String, Object>();

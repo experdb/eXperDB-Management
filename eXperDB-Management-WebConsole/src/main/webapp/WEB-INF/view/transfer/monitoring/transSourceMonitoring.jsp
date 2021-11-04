@@ -33,7 +33,6 @@
 	* TAB 선택 이벤트 
 	******************************************************** */
 	function selectTab(tab){
-		console.log("tab : " + tab);
 		if(tab == "snapshot"){
 			fn_snapshot_strem("snapshot");
 			$(".streamingDiv").hide();
