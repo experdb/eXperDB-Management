@@ -182,7 +182,7 @@ a:hover.tip span {
 					fn_tot_select();
 					
 				} else {
-					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="data_transfer.msg30" />');
+					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="eXperDB_CDC.msg30" />');
 					
 					$("#btnChoActive").prop("disabled", "disabled");
 					$("#btnChoDisabled").prop("disabled", "disabled");
@@ -515,7 +515,7 @@ a:hover.tip span {
 		if(snapshot_mode_re == "TC003601"){
 			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg2" />'); //(초기스냅샷 1회만 수행)
 		}else if(snapshot_mode_re == "TC003602"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg3" />'); //(스냅샷 항상 수행)
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg3" />'); //(스냅샷 항상 수행)
 		}else if (snapshot_mode_re == "TC003603"){
 			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />'); //(스냅샷 수행하지 않음)
 		}else if (snapshot_mode_re == "TC003604"){
@@ -864,7 +864,7 @@ a:hover.tip span {
 		if(snapshot_mode_re == "TC003601"){
 			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg2" />';
 		}else if(snapshot_mode_re == "TC003602"){
-			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg3" />';
+			snapshot_mode_nm += ' ' + '<spring:message code="eXperDB_CDC.msg3" />';
 		}else if (snapshot_mode_re == "TC003603"){
 			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg1" />';
 		}else if (snapshot_mode_re == "TC003604"){

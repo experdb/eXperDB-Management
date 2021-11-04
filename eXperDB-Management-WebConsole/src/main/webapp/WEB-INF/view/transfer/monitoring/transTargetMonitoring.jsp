@@ -26,7 +26,7 @@
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">
-				<i class="item-icon fa fa-dot-circle-o"></i> 타겟 시스템
+				<i class="item-icon fa fa-dot-circle-o"></i> 타겟 Connect
 			</h4>
 			
 			<div id="tar_connect" style="display:none;">

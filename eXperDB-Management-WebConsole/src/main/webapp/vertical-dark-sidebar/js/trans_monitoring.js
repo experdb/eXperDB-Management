@@ -722,6 +722,9 @@ function fn_src_init(){
 	$('#src-chart-line-snapshot').empty();
 	$('#src-chart-line-streaming').empty();
 	$('#ssconDBResultTable').hide();
+	
+	//연결선
+	$('#soureConLineInfo').html("");
 }
 
 /* ********************************************************
@@ -744,6 +747,9 @@ function fn_tar_init(){
 	$('#tar-chart-line-complete').empty();
 	$('#tar-chart-line-sink-error').empty();
 	$('#skconResultTable').hide();
+	
+	//연결선
+	$('#targetConLineInfo').html("");
 }
 
 /* ********************************************************
@@ -1061,6 +1067,11 @@ function fn_sink_chart_init(trans_id){
 function fn_dbmsConnect_digm(connectGbn, result) {
 	var htmlTargetDbms = "";
 	var htmlsourceDbms = "";
+	
+	//연결 모니터링
+	var html_slur_con = "";
+	var slur_conn_num_af = "";
+	
 	var htmlKafka = "";
 	var db_exe_status_chk = "";
 	var db_exe_status_css = "";
@@ -1101,14 +1112,58 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 				$('#targetDbmsImg').html(htmlTargetDbms);
 			}
 		}
+
+		//연결선 작성			
+		html_slur_con = '	<table class="table-borderless" style="width:100%;">\n';
+		html_slur_con += '		<tr>\n';
+		html_slur_con += '			<td style="width:100%;height:200px;text-align:center;">\n';
+
+		if (result.targetTopicList != null) {
+			if(result.targetTopicList[0] != null && result.targetTopicList[0] != undefined){
+				if(result.targetTopicList[0].exe_status == 'TC001501'){
+					slur_conn_num_af = '<img src="../images/arrow_side.png" class="img-lg" style="max-width:130%;object-fit: contain;" alt=""/>';
+					html_slur_con += '			<span class="image blinking"> '+slur_conn_num_af+' </span>\n';
+				} else {
+					//첫번째 오른쪽
+					slur_conn_num_af = '<img src="../images/arrow_side_stop.png" class="img-lg" style="max-width:130%;object-fit: contain;cursor:pointer;" alt=""/>';
+
+					html_slur_con += '			<a href="#" class="tip" onclick="fn_transActivation_moni_click(' +'\'' + result.targetTopicList[0].connect_nm +'\'' + ',2)">\n';
+					html_slur_con += '				'+slur_conn_num_af+' \n';
+					html_slur_con += '				<span style="width: 450px;">Connect가 비활성화 상태입니다.\n연결 화살표 클릭 시 활성화가 가능합니다.</span>\n';
+					html_slur_con += '			</a>\n';					
+
+					//시작실행 setting
+					$('#tar_db_svr_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].db_svr_id, ''));
+					$('#tar_trans_exrt_trg_tb_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].trans_exrt_trg_tb_id, ''));
+					$('#tar_trans_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].trans_id, ''));
+					
+				}
+			} else {
+				html_slur_con += '&nbsp;\n';
+			}
+		} else {
+			html_slur_con += '&nbsp;\n';
+		}
+		
+		html_slur_con += '			</td>\n';
+
+		html_slur_con += '		</tr>\n';
+		html_slur_con += '	</table>\n';
+
+		$('#targetConLineInfo').html(html_slur_con);
 	} else if (connectGbn == "kafka") {
 		
 		//kafka setting
 		if (result.kafkaInfo != null) {
-			htmlKafka = '<i class="text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + result.kafkaInfo.kc_nm;
-
+			htmlKafka = result.kafkaInfo.kc_nm;
+			
 			$('#kc_id', '#transMonitoringForm').val(result.kafkaInfo.kc_id);
 			$('#kafkaConnectorNm').html(htmlKafka);
+			
+/*			htmlKafka = '<i class="text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + result.kafkaInfo.kc_nm;
+
+			$('#kc_id', '#transMonitoringForm').val(result.kafkaInfo.kc_id);
+			$('#kafkaConnectorNm').html(htmlKafka);*/
 			
 			if(result.kafkaInfo.exe_status == 'TC001501'){
 				db_exe_status_chk = "text-success";
@@ -1120,7 +1175,7 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 				db_exe_status_val = 'stop';
 			}
 
-			htmlKafka = '<i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + db_exe_status_val;
+			htmlKafka = '<i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="padding-top:3px;"></i>&nbsp;' + db_exe_status_val;
 			$('#kafkaStatus').html(htmlKafka);
 		} else {
 			$('#kc_id', '#transMonitoringForm').val("");
@@ -1153,8 +1208,80 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 			htmlsourceDbms = '<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 '+db_exe_status_chk+'" style="font-size: 3em;"></i>';
 			$('#sourceDbmsImg').html(htmlsourceDbms);
 		}
+
+		//연결선 작성			
+		html_slur_con = '	<table class="table-borderless" style="width:100%;">\n';
+		html_slur_con += '		<tr>\n';
+		html_slur_con += '			<td style="width:100%;height:200px;text-align:center;">\n';
+
+		if (result.connectInfo != null) {
+			if(result.connectInfo[0] != null && result.connectInfo[0] != undefined){
+				if(result.connectInfo[0].exe_status == 'TC001501'){
+					slur_conn_num_af = '<img src="../images/arrow_side.png" class="img-lg" style="max-width:130%;object-fit: contain;" alt=""/>';
+					html_slur_con += '			<span class="image blinking"> '+slur_conn_num_af+' </span>\n';
+				} else {
+					//첫번째 오른쪽
+					slur_conn_num_af = '<img src="../images/arrow_side_stop.png" class="img-lg" style="max-width:130%;object-fit: contain;cursor:pointer;" alt=""/>';
+					
+					html_slur_con += '			<a href="#" class="tip" onclick="fn_transActivation_moni_click(' +'\'' + result.connectInfo[0].connect_nm +'\'' + ', 1)">\n';
+					html_slur_con += '				'+slur_conn_num_af+' \n';
+					html_slur_con += '				<span style="width: 450px;">Connect가 비활성화 상태입니다.\n연결 화살표 클릭 시 활성화가 가능합니다.</span>\n';
+					html_slur_con += '			</a>\n';	
+					
+					//시작실행 setting
+					$('#sou_db_svr_id', '#transMonConStartForm').val(nvlPrmSet(result.connectInfo[0].db_svr_id, ''));
+					$('#sou_trans_exrt_trg_tb_id', '#transMonConStartForm').val(nvlPrmSet(result.connectInfo[0].trans_exrt_trg_tb_id, ''));
+					$('#sou_trans_id', '#transMonConStartForm').val(nvlPrmSet(result.connectInfo[0].trans_id, ''));
+				}
+			} else {
+				html_slur_con += '&nbsp;\n';
+			}
+		} else {
+			html_slur_con += '&nbsp;\n';
+		}
 		
+		html_slur_con += '			</td>\n';
+
+		html_slur_con += '		</tr>\n';
+		html_slur_con += '	</table>\n';
+
+		$('#soureConLineInfo').html(html_slur_con);
 	}
+}
+
+/* ********************************************************
+ * 소스시스템 - 스냅샷 / 스트리밍 챠트 setting
+ ******************************************************** */
+function fn_kafkaLoadSetting(strgbn) {
+	var htmlKafka = "";
+
+	htmlKafka += '	<table class="table-borderless" style="width:100%;table-layout:fixed;">\n';
+	htmlKafka += '		<tr>\n';
+	htmlKafka += '			<td style="width:100%;" class="text-center">\n';
+	htmlKafka += '				<i onClick="fn_logView(\'kafka\')">\n';
+	htmlKafka += '					<img src="../images/connector_icon.png" class="img-lg" style="cursor:pointer;" alt="">\n';
+	htmlKafka += '				</i>\n';
+	htmlKafka += '			</td>\n';
+	htmlKafka += '		</tr>\n';
+
+	//커넥터명
+	htmlKafka += '		<tr>\n';
+	htmlKafka += '			<td style="width:100%;vertical-align: middle;padding-top:5px;" class="text-center">\n';
+	htmlKafka += '				<h6 class="text-muted" style="padding-left:10px;font-weight: bold;" id="kafkaConnectorNm"></h6>\n';
+	htmlKafka += '			</td>\n';
+	htmlKafka += '		</tr>\n';
+
+	//진행상태
+	htmlKafka += '		<tr>\n';
+	htmlKafka += '			<td style="width:100%;vertical-align: middle;padding-top:10px;" class="text-center">\n';
+	htmlKafka += '				<h6 class="text-muted" style="padding-left:10px;" id="kafkaStatus"></h6>\n';
+	htmlKafka += '			</td>\n';
+	htmlKafka += '		</tr>\n';
+
+	htmlKafka += '	</table>\n';
+
+	$('#kafkaMornitoringInfo').html(htmlKafka);
+	
 }
 
 /* ********************************************************
@@ -1303,6 +1430,154 @@ function fn_snapshot_strem(strGbn) {
 }
 
 
+/* ********************************************************
+ * 활성화 클릭
+ ******************************************************** */
+function fn_transActivation_moni_click(connect_nm, activeGbn){
+
+	//activeGbn 1이면 source 2이면 target
+	var con_gbn = "";
+	var con_msg = "";
+
+	if (activeGbn  == "1") {
+		con_gbn = "con_start";
+		con_msg = "connect명 : " + connect_nm + '<br/><br/>' + 'source ' + data_transfer_msg8;
+	} else {
+		con_gbn = "target_con_start";
+		con_msg = "connect명 : " + connect_nm + '<br/><br/>' + 'target ' + data_transfer_msg8;
+	}
+
+	$('#con_multi_gbn', '#findConfirmMulti').val(con_gbn);
+	$('#confirm_multi_msg').html(con_msg);
+	
+	confile_title = menu_trans_management + " " + data_transfer_transfer_activity;
+	$('#confirm_multi_tlt').html(confile_title);
+
+	$('#pop_confirm_multi_md').modal("show");
+}
+
+/* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmCancelRst(gbn){
+	if ($('#sou_db_svr_id', '#transMonConStartForm').val() != null) {
+		if (gbn == "con_start") {
+			return;
+		}
+	} else 	if ($('#tar_db_svr_id', '#transMonConStartForm').val() != null) {
+		if (gbn == "target_con_start") {
+			return;
+		}
+	}
+}
+
+/* ********************************************************
+ * confirm result
+ ******************************************************** */
+function fnc_confirmMultiRst(gbn){
+	if (gbn == "con_start" || gbn == "target_con_start") {
+		fn_act_mon_execute(gbn);
+	}
+}
+
+
+/* ********************************************************
+ * 활성화 단건실행
+ ******************************************************** */
+function fn_act_mon_execute(act_gbn) {
+	alert($('#tar_db_svr_id', '#transMonConStartForm').val());
+	
+/*	$('#tar_db_svr_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].db_svr_id, ''));
+	$('#tar_trans_exrt_trg_tb_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].trans_exrt_trg_tb_id, ''));
+	$('#tar_trans_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].trans_id, ''));*/
+	var ascRow =  $('#chk_act_row', '#findList').val();
+	var validateMsg ="";
+	var checkId = "";
+
+	if (act_gbn == "con_start") {
+		$.ajax({
+			url : "/transStart.do",
+			data : {
+				db_svr_id : $('#sou_db_svr_id', '#transMonConStartForm').val(),
+				trans_exrt_trg_tb_id : $('#sou_trans_exrt_trg_tb_id', '#transMonConStartForm').val(),
+				trans_id : $('#sou_trans_id', '#transMonConStartForm').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {
+				checkId = 'source_transActivation' + ascRow;
+				
+				if (result == null) {
+					validateMsg = data_transfer_msg10;
+					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+					$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
+					return;
+				} else {
+					if (result == "success") {
+						fn_srcConnectInfo("restart");
+					} else {
+						validateMsg = data_transfer_msg10;
+						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+						return;
+					}
+				}
+			}
+		});
+	} else 	if (act_gbn == "target_con_start") {
+		$.ajax({
+			url : "transTargetStart.do",
+			data : {
+				db_svr_id : $('#tar_db_svr_id', '#transMonConStartForm').val(),
+				trans_exrt_trg_tb_id : $('#tar_trans_exrt_trg_tb_id', '#transMonConStartForm').val(),
+				trans_id : $('#tar_trans_id', '#transMonConStartForm').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {
+				checkId = 'target_transActivation' + ascRow;
+				
+				if (result == null) {
+					validateMsg = data_transfer_msg10;
+					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+					$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
+					return;
+				} else {
+					if (result == "success") {
+						fn_tarConnectInfo();
+					} else {
+						validateMsg = data_transfer_msg10;
+						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+						return;
+					}
+				}
+			}
+		});
+	}
+}
 
 
 ///////////////////////////////////////////////////////미사용////////////////////////////////////////////////

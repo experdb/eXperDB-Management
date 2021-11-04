@@ -33,7 +33,7 @@
 			 if(this.value == "TC003601"){
 				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg2" />'); //(초기스냅샷 1회만 수행)
 			 }else if(this.value == "TC003602"){
-				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg3" />'); //(스냅샷 항상 수행)
+				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg3" />'); //(스냅샷 항상 수행)
 			 }else if (this.value == "TC003603"){
 				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />'); //(스냅샷 수행하지 않음)
 			 }else if (this.value == "TC003604"){

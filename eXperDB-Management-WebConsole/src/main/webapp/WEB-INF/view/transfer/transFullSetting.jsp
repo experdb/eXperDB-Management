@@ -123,7 +123,7 @@ a:hover.tip span {
 					//heartbeat 체크
 					fn_selectHeartbeatChk();
 				} else {
-					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="data_transfer.msg30" />');
+					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="eXperDB_CDC.msg30" />');
 					
 					//설치안된경우 버튼 막아야함
 					$("#btnChoActive").prop("disabled", "disabled");
@@ -148,7 +148,7 @@ a:hover.tip span {
 	function fn_selectHeartbeatChk() {
 	  	//heartbeat 체크
 		if("${heartbeatchk.ing_cnt}" != "0"){
-			showDangerToast('top-right', '<spring:message code="data_transfer.msg38" />', '<spring:message code="data_transfer.msg30" />');
+			showDangerToast('top-right', '<spring:message code="eXperDB_CDC.msg38" />', '<spring:message code="eXperDB_CDC.msg30" />');
 			
 			//설치안된경우 버튼 막아야함
 			$("#btnChoActive").prop("disabled", "disabled");
@@ -591,7 +591,7 @@ a:hover.tip span {
 								</button>
 								
 								<button type="button" class="btn btn-outline-danger btn-icon-text mb-2 btn-search-disable" style="border:none;text-align:left;" id="btnCommonConChk" onClick="fn_common_con_set_pop();" data-toggle="modal">
-									<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="data_transfer.msg37" />
+									<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="eXperDB_CDC.msg37" />
 								</button>
 		
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">

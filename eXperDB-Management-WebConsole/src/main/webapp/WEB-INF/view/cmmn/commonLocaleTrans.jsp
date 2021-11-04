@@ -42,18 +42,20 @@ var data_transfer_save_select_active = "<spring:message code='data_transfer.save
 var data_transfer_save_select_disabled = "<spring:message code='data_transfer.save_select_disabled' />";
 var data_transfer_msg1 = "<spring:message code='data_transfer.msg1' />";
 var data_transfer_msg2 = "<spring:message code='data_transfer.msg2' />";
-var data_transfer_msg3 = "<spring:message code='data_transfer.msg3' />";
+var data_transfer_msg3 = "<spring:message code='eXperDB_CDC.msg3' />";
 var data_transfer_msg4 = "<spring:message code='data_transfer.msg4' />";
 var data_transfer_msg5 = "<spring:message code='data_transfer.msg5' />";
 
 var data_transfer_connecting = "<spring:message code='data_transfer.connecting' />";
 
-var data_transfer_msg34 = "<spring:message code='data_transfer.msg34' />";
-var data_transfer_msg35 = "<spring:message code='data_transfer.msg35' />";
+var data_transfer_msg34 = "<spring:message code='eXperDB_CDC.msg34' />";
+var data_transfer_msg35 = "<spring:message code='eXperDB_CDC.msg35' />";
 
 var message_act_start = "<spring:message code='eXperDB_proxy.act_start'/>";
 var message_act_restart = "<spring:message code='eXperDB_proxy.act_restart'/>";
 var message_act_stop = "<spring:message code='eXperDB_proxy.act_stop'/>";
+
+var data_transfer_msg8 = "<spring:message code='data_transfer.msg8'/>";
 </script>
 <body>
 

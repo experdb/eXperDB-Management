@@ -49,7 +49,7 @@
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">
-				<i class="item-icon fa fa-dot-circle-o"></i> 소스 시스템
+				<i class="item-icon fa fa-dot-circle-o"></i> 소스 Connect
 			</h4>
 
 			<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">

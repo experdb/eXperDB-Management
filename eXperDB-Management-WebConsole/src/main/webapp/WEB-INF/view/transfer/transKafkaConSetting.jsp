@@ -567,12 +567,12 @@
 							if (datas[0].exe_status != "TC001501") {
 								fn_kafka_con_update("O");
 							} else {
-								msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg31" />');
+								msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg31" />');
 								showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 								return;
 							}
 						} else {
-							msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg31" />');
+							msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg31" />');
 							showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 							return;
 						}
@@ -653,12 +653,12 @@
 							if (datas[0].exe_status != "TC001501") {
 								fn_sche_regi_update("O");
 							} else {
-								msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg31" />');
+								msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg31" />');
 								showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 								return;
 							}
 						} else {
-							msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg31" />');
+							msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg31" />');
 							showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 							return;
 						}

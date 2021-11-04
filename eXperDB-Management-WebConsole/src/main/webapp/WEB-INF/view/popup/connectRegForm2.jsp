@@ -43,7 +43,7 @@
 			 if(this.value == "TC003601"){
 				 $("#ins_snapshotModeDetail", "#insRegForm").html('<spring:message code="data_transfer.msg2" />'); //(초기스냅샷 1회만 수행)
 			 }else if(this.value == "TC003602"){
-				 $("#ins_snapshotModeDetail", "#insRegForm").html('<spring:message code="data_transfer.msg3" />'); //(스냅샷 항상 수행)
+				 $("#ins_snapshotModeDetail", "#insRegForm").html('<spring:message code="eXperDB_CDC.msg3" />'); //(스냅샷 항상 수행)
 			 }else if (this.value == "TC003603"){
 				 $("#ins_snapshotModeDetail", "#insRegForm").html('<spring:message code="data_transfer.msg1" />'); //(스냅샷 수행하지 않음)
 			 }else if (this.value == "TC003604"){
@@ -494,7 +494,7 @@
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else if(ins_connect_status_Chk == "fail"){
-			showSwalIcon('<spring:message code="data_transfer.msg36" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_CDC.msg36" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		
 		} else if(nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), '') == "") {

@@ -47,13 +47,13 @@
 			},
 			messages: {
 				ins_com_trans_cng_nm: {
-					required: '<spring:message code="data_transfer.msg32" />'
+					required: '<spring:message code="eXperDB_CDC.msg32" />'
 				},
 				ins_com_heartbeat_interval_ms: {
 					number: '<spring:message code="eXperDB_scale.msg15" />'
 				},
 				ins_com_heartbeat_action_query: {
-					required: '<spring:message code="data_transfer.msg40" />'
+					required: '<spring:message code="eXperDB_CDC.msg40" />'
 				},
 				ins_com_max_batch_size: {
 					number: '<spring:message code="eXperDB_scale.msg15" />'
@@ -151,7 +151,7 @@
 		<div class="modal-content" style="width:1040px;">			 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="data_transfer.reg_default_setting"/>
+					<spring:message code="eXperDB_CDC.reg_default_setting"/>
 				</h4>
 
 				<div class="card" style="margin-top:10px;border:0px;">
@@ -159,7 +159,7 @@
 						<div class="row" style="margin-top:-20px;margin-bottom:15px;margin-right:-30px;">
 							<div class="col-12">
 								<div class="template-demo mb-2">						
-									<i class="fa fa-check-circle-o btn-icon-prepend " style="font-size: 1.0rem;font-color:red;">&nbsp;<spring:message code="data_transfer.msg41" /></i>
+									<i class="fa fa-check-circle-o btn-icon-prepend " style="font-size: 1.0rem;font-color:red;">&nbsp;<spring:message code="eXperDB_CDC.msg41" /></i>
 								</div>
 							</div>
 						</div>

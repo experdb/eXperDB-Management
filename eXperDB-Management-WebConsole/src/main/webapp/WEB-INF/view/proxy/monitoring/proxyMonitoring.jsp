@@ -88,7 +88,7 @@
 			$('[data-toggle="tooltip"]').tooltip({
 				template: '<div class="tooltip tooltip-warning" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
 			});
-		},250);
+		},500);
 		
 		// 1분에 한번씩 reload
 // 		setInterval(function() {
@@ -482,7 +482,7 @@
 			$('[data-toggle="tooltip"]').tooltip({
 				template: '<div class="tooltip tooltip-warning" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
 			});
-		},250);
+		},500);
 		
 	}
 	

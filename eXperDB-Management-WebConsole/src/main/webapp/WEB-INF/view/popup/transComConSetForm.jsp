@@ -48,9 +48,9 @@
  								var color = 'red';
  								var html = "";
  								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
- 									html = '<span style="color:' + color + '">' + '<spring:message code="data_transfer.unregistered" />' + '</span>';
+ 									html = '<span style="color:' + color + '">' + '<spring:message code="eXperDB_CDC.unregistered" />' + '</span>';
  								} else {
- 									html = '<spring:message code="data_transfer.add_complet" />';
+ 									html = '<spring:message code="eXperDB_CDC.add_complet" />';
  								}
 
 								return html;
@@ -278,7 +278,7 @@
 		}
 		
 		if (totDatas.length <= datas.length) {
-			showSwalIcon('<spring:message code="data_transfer.msg33" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_CDC.msg33" />', '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
 		
@@ -351,7 +351,7 @@
 							<div class="col-12">
 								<div class="template-demo">	
 									<button type="button" class="btn btn-outline-danger btn-icon-text mb-2 btn-search-disable" style="border:none;text-align:left;" id="btnPopCommonConChk" onClick="#">
-										<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="data_transfer.msg39" />
+										<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="eXperDB_CDC.msg39" />
 									</button>
 
 									<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnTransDmbsDelete" onClick="fn_transComConSetDelete();" >
@@ -376,7 +376,7 @@
 								<tr class="bg-info text-white">
 									<th width="30"><spring:message code="common.no" /></th>
 									<th width="150"><spring:message code="data_transfer.default_setting_name" /></th>
-									<th width="150"><spring:message code="data_transfer.heartbeat_regist_yn" /></th>
+									<th width="150"><spring:message code="eXperDB_CDC.heartbeat_regist_yn" /></th>
 									<th width="120">plugin.name</th>
  									<th width="100">heartbeat.interval.ms</th>
 									<th width="100">max.batch.size</th>

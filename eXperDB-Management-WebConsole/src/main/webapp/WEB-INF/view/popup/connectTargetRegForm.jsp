@@ -87,7 +87,7 @@
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ valideMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else if(ins_tg_connect_status_Chk == "fail"){
-			showSwalIcon('<spring:message code="data_transfer.msg36" />', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_CDC.msg36" />', '<spring:message code="common.close" />', '', 'error');
 		//	showSwalIcon('Kafka-Connect ' + '<spring:message code="message.msg89" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		} else if(nvlPrmSet($("#ins_tg_connect_nm", "#insTargetRegForm").val(), '') == "") {

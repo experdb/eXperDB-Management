@@ -23,6 +23,56 @@
 	*
 	*/
 %>
+<STYLE TYPE="text/css">
+/*툴팁 스타일*/
+a.tip {
+    position: relative;
+    color:black;
+}
+
+a.tip span {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: -10px;
+    width: 200px;
+    padding: 5px;
+    z-index: 10000;
+    background: #000;
+    color: #fff;
+    line-height: 20px;
+    -moz-border-radius: 5px; /* 파폭 박스 둥근 정도 */
+    -webkit-border-radius: 5px; /* 사파리 박스 둥근 정도 */
+}
+
+a:hover.tip span {
+    display: block;
+}
+
+
+.blinking{ 
+ -webkit-animation:blink 5.0s ease-in-out infinite alternate; 
+ -moz-animation:blink 1.0s ease-in-out infinite alternate; 
+ animation:blink 3.0s ease-in-out infinite alternate;
+} 
+
+.txt_line { width:70px; padding:0 5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+@-webkit-keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+} 
+
+@-moz-keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+} 
+
+@keyframes blink{ 
+ 0% {opacity:0;} 
+ 100% {opacity:1;} 
+}
+</STYLE>
 
 <script src="/vertical-dark-sidebar/js/trans_monitoring.js"></script>
 
@@ -34,13 +84,17 @@
 	var sinkChart = "";
 	var sinkCompleteChart = "";
 	var sinkErrorChart = "";
+	var confile_title = "";
 
 	/* ********************************************************
 	* 화면 onload
 	******************************************************** */
-	$(window).ready(function(){
+	$(window).ready(function(){		
 		//금일 날짜 setting
 		fn_todaySetting();
+		
+		//kafka 연결도 setting
+		fn_kafkaLoadSetting("start");
 
 		// cpu, memory error chart
 		fn_cpu_mem_err_chart();
@@ -79,13 +133,16 @@
 	/* ********************************************************
 	* 소스 커넥터 select box 변경
 	******************************************************** */
-	function fn_srcConnectInfo() {
+	function fn_srcConnectInfo(strgbn) {
 		var langSelect = document.getElementById("src_connect");
 		var selectValue = langSelect.options[langSelect.selectedIndex].value;
 		
 		fn_tar_init();
 		fn_src_init();
-		
+	
+		//kafka 연결도 setting
+		fn_kafkaLoadSetting("start");
+
 		if(selectValue != ""){
 			$.ajax({
 				url : "/transSrcConnectInfo.do",
@@ -123,23 +180,29 @@
 						$('#trans_monitoring_target_info').show();
 
 						//싱크커넥터 select 활성화
-						$('#tar_connector_list').empty();
-						$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
+						if (strgbn != null && strgbn != "restart") {
+							$('#tar_connector_list').empty();
+							$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
 
-						if (nvlPrmSet(result.targetConnectorList, '') != '') {
-							for (i = 0; i < result.targetConnectorList.length; i++) {
-								if(i == 0){
-									$('#tar_connector_list').append('<option selected value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
-									fn_tarConnectInfo();
-								} else {
-									$('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+							if (nvlPrmSet(result.targetConnectorList, '') != '') {
+								for (i = 0; i < result.targetConnectorList.length; i++) {
+									if(i == 0){
+										$('#tar_connector_list').append('<option selected value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+										fn_tarConnectInfo();
+									} else {
+										$('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
+									}
 								}
-							}
-							$('#tar_connect').show();
-							$('#tar_connect_nvl').hide();
-						} else {
+
+								$('#tar_connect').show();
+								$('#tar_connect_nvl').hide();
+							} else {
 							$('#tar_connect').hide();
 							$('#tar_connect_nvl').show();
+
+								fn_tarConnectInfo();
+							}
+						} else {
 							fn_tarConnectInfo();
 						}
 
@@ -272,6 +335,19 @@
 			$('#skconResultTable').hide();
 		}
 		$("#loading").hide();
+
+		// 10초에 한번씩 reload
+
+		var src_connect = $('#src_connect').val();
+		var tar_connector = $('#tar_connector_list').val();
+		
+		if (src_connect != "" || tar_connector != "") {
+			console.log("test");
+			clearTimeout();
+			setTimeout(function(){
+				fn_srcConnectInfo("restart");
+			},10000);
+		}
 	}
 
 	/* ********************************************************
@@ -353,6 +429,17 @@
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 	<input type="hidden" name="kc_id" id="kc_id" value=""/>
 </form>
+		
+<form name="transMonConStartForm" id="transMonConStartForm" method="post">
+	<input type="hidden" name="sou_db_svr_id" id="sou_db_svr_id" value=""/>
+	<input type="hidden" name="sou_trans_exrt_trg_tb_id" id="sou_trans_exrt_trg_tb_id" value=""/>
+	<input type="hidden" name="sou_trans_id" id="sou_trans_id" value=""/>
+
+	<input type="hidden" name="tar_db_svr_id" id="tar_db_svr_id" value=""/>
+	<input type="hidden" name="tar_trans_exrt_trg_tb_id" id="tar_trans_exrt_trg_tb_id" value=""/>
+	<input type="hidden" name="tar_trans_id" id="tar_trans_id" value=""/>
+</form>
+
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -391,7 +478,7 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0">전송관리에서 등록한 소스 시스템과 타겟 시스템의  상태를 모니터링 할 수 있습니다.</p>
+											<p class="mb-0">전송관리에서 등록한 소스 시스템의 소스 connect와 타겟 시스템의 싱크 connect의 상태를 모니터링 할 수 있습니다.</p>
 										</div>
 									</div>
 								</div>
@@ -462,7 +549,7 @@
 										<div class="col-12">
 											<h6 class="mb-0">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<span class="menu-title">소스커넥터</span>
+												<span class="menu-title">소스Connect</span>
 											</h6>
 										</div>
 									</div>
@@ -519,7 +606,7 @@
 										<div class="col-12">
 											<h6 class="mb-0">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<span class="menu-title">싱크커넥터</span>
+												<span class="menu-title">싱크Connect</span>
 											</h6>
 										</div>
 									</div>
@@ -536,8 +623,8 @@
 									<table class="table-borderless" style="width:100%;">
 										<tr>
 											<td style="width:80%;" class="text-center" ">
-												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="src_connect" id="src_connect" onChange="fn_srcConnectInfo()" onblur="this.value=this.value.trim()" tabindex=1>
-													<option value="">소스 Connector</option>
+												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="src_connect" id="src_connect" onChange="fn_srcConnectInfo('change')" onblur="this.value=this.value.trim()" tabindex=1>
+													<option value="">소스 Connect</option>
 													<c:forEach var="srcConnectorList" items="${srcConnectorList}">
 														<option value="${srcConnectorList.trans_id}">${srcConnectorList.connect_nm}</option>							
 													</c:forEach>
@@ -611,56 +698,22 @@
 							</div>
 						</div>
 
-						<div class="accordion_cdc accordion-multi-colored col-1" id="accordion" role="tablist" >
-							<div class="card" style="margin-left:-10px;margin-right:-30px;border:none;box-shadow: 0 0 0px black;">
-								<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyListnerConLineList">
-								
-									<table class="table-borderless" style="width:100%;margin-top:35px;">
-										<tbody>
-											<tr>
-												<td style="margin-left:10px;" class="text-center" id="123">
-													<img src="../images/arrow_side.png" class="img-lg" style="max-width:120%;object-fit: contain;width:120px;height:120px;" alt="">
-												</td>
-											</tr>
-										</tbody>
-									</table>
-
+						<div class="accordion_main accordion-multi-colored col-1" id="accordion" role="tablist" >
+							<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+								<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="soureConLineInfo">
 								</div>
 							</div>
 						</div>
 
-						<div class="accordion_cdc_none accordion-multi-colored col-2" id="accordion" role="tablist" >
+						<div class="accordion_cdc_none accordion-multi-colored col-2" id="accordion" role="tablist">
 							<div class="card" style="margin-bottom:10px;border:none;" >
-								<div class="card-body" style="border:none;" id="proxyListnerMornitoringList">
+								<div class="card-body" style="border:none;min-height: 220px;margin: 20px -35px 0px -35px;" id="kafkaMornitoringInfo">
 								
-									<table class="table-borderless" style="width:100%;">
-										<tr>
-											<td style="width:100%;height:100%;margin-left:-20px;" class="text-center">
-												<i onClick="fn_logView('kafka')">
-													<img src="../images/connector_icon.png" class="img-lg" style="max-width:140%;object-fit: contain;width:140px;height:140px;" alt="">
-												</i>
-												<!-- <h6 class="text-muted mb-0 mb-md-3 mb-xl-0" style="padding-left:10px;max-width:140%" id="kafkaConnectorNm"></h6>
-												<h6 class="text-muted" style="padding-left:10px;"><i class="fa fa-refresh fa-spin text-success icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>진행중</h6> -->
-											</td>
-										</tr>
-										<tr>
-											<td class="text-center" style="vertical-align: middle;padding-top:5px;padding-left:10px;">
-												<h6 class="text-muted" style="padding-left:10px;font-weight: bold;" id="kafkaConnectorNm"></h6>
-											</td>
-										</tr>
-										<tr>
-											<td class="text-center" style="vertical-align: middle;padding-top:5px;">
-												<h6 class="text-muted" style="padding-left:10px;" id="kafkaStatus"></h6>
-											</td>
-										</tr>
-									</table>
-								
-								<!--	 <i class="mdi mdi-cloud-sync menu-icon text-info" style="font-size: 3.0em;" onClick="fn_logView('kafka')"></i> -->
 								</div>
 							</div>
 						</div>
 
-						<div class="accordion_cdc accordion-multi-colored col-1" id="accordion" role="tablist" >
+<!-- 						<div class="accordion_cdc accordion-multi-colored col-1" id="accordion" role="tablist" >
 							<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
 								<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyListnerConLineList">
 								
@@ -674,6 +727,13 @@
 
 								</div>
 							</div>
+						</div> -->
+						
+						<div class="accordion_main accordion-multi-colored col-1" id="accordion" role="tablist" >
+							<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
+								<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="targetConLineInfo">
+								</div>
+							</div>
 						</div>
 
 						<div class="accordion_cdc accordion-multi-colored col-4" id="accordion" role="tablist" >
@@ -684,7 +744,7 @@
 										<tr>
 											<td style="width:80%;" class="text-center" ">
 												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="tar_connector_list" id="tar_connector_list" onChange="fn_tarConnectInfo()" onblur="this.value=this.value.trim()"  tabindex=1>
-													<option value="">타겟 Connector</option>
+													<option value=""><spring:message code="eXperDB_CDC.target_connect"/></option> <!--  타겟 connect -->
 													<c:forEach var="tarConnectorList" items="${targetConnectorList}">
 														<option value="${tarConnectorList.trans_id}">${tarConnectorList.connect_nm}</option>							
 													</c:forEach>
@@ -697,13 +757,12 @@
 													<thead>
 														<tr class="bg-info text-white">
 															<th style="width:25%;font-size:12px;">토픽 수</th>
-															<th style="width:37%;font-size:12px;">전체 완료 수</th>
-															<th style="width:38%;font-size:12px;">오류 수</th>
+															<th style="width:37%;font-size:12px;"><spring:message code="eXperDB_CDC.complet_count"/></th> <!-- 완료 건수 -->
+															<th style="width:38%;font-size:12px;"><spring:message code="eXperDB_CDC.error_count"/></th> <!-- 오류 건수 -->
 														</tr>
 														<tr id="tarconResultCntTableNvl">
 															<td colspan="3" >
-<%--																 <spring:message code="message.msg01" /> --%>
-																커넥터를 선택해주세요
+																<spring:message code="message.msg228" />
 															</td>
 														</tr>
 														<tr id="tarconResultCntTable" style="display:none;">
@@ -721,8 +780,6 @@
 												 <table id="skconResultTable" class="table-borderless" style="width:100%; display:none;">
 													<tr id="skconResultCntTable" >
 														<td style="width:100%;">
-															
-															
 															<table class="table-borderless" style="width:100%;text-align:left;">
 																<tr>
 																	<td colspan="2" style="width:85%;">
@@ -778,7 +835,7 @@
 										<div class="col-12">
 											<h6 class="mb-0">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<span class="menu-title">Connector 기동 정지 이력</span>
+												<span class="menu-title"><spring:message code="eXperDB_CDC.con_str_stop_hist"/></span> <!-- Connect 기동정지 이력 -->
 											</h6>
 										</div>
 									</div>
@@ -795,23 +852,23 @@
 									<div class="row">
 										<div class="col-sm-8">
 											<h6 class="mb-0 alert">
-												<span class="menu-title text-success"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i>최근 3개 항목만 보여집니다.</span>
+												<span class="menu-title text-success"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_CDC.msg42"/></span>
 											</h6>
 										</div>
 										<div class="col-sm-4.5">
 											<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="connector_log_btn" onClick="fn_logView('connector')">
 												<i class="mdi mdi-file-document"></i>
-												connector 로그
+												<spring:message code="eXperDB_CDC.connect_log"/> <!-- connect 로그 -->
 											</button>
 										</div>
 									</div>
 									 <table id="connectorActTable" class="table table-striped system-tlb-scroll" style="width:100%;border:none;">
 										<thead>
 											<tr class="bg-info text-white">
-												<th width="0px;">rownum</th>
-												<th width="100px;">Connector 명</th>
-												<th width="100px;">실행결과</th>
-												<th width="100px;">시간</th>
+												<th width="0px;"><spring:message code="common.order"/></th> <!-- 순번 -->
+												<th width="100px;"><spring:message code="data_transfer.connect_name_set" /></th> <!-- connect 명 -->
+												<th width="100px;"><spring:message code="eXperDB_proxy.act_result"/></th> <!-- 실행결과 -->
+												<th width="100px;"><spring:message code="history_management.time"/></th> <!-- 시간 -->
 											</tr>
 										</thead>
 									</table>
