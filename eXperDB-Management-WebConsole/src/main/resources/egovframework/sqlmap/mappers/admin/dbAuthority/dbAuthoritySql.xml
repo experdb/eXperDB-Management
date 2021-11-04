@@ -3,29 +3,29 @@
 
 <mapper namespace="dbAuthoritySql">
 
-	<select id="selectSvrList" resultType="HashMap">
-		/**
-	 	*  Query ID : selectSvrList
-	 	* Description : DB서버 리스트 조회
-	 	* Author : 변승우
-	 	**/
-	  SELECT
-      		(ROW_NUMBER() OVER()) AS ROWNUM
-			, (ROW_NUMBER() OVER()) AS IDX
-			, AA.DB_SVR_ID
-			, AA.DB_SVR_NM
-			, AA.IPADR
-			, AA.PORTNO
-			, AA.MASTER_GBN
-			, AA.DFT_DB_NM
-			, AA.SVR_SPR_USR_ID
-			, AA.SVR_SPR_SCM_PWD
-			, AA.PGHOME_PTH
+   <select id="selectSvrList" resultType="HashMap">
+      /**
+       *  Query ID : selectSvrList
+       * Description : DB서버 리스트 조회
+       * Author : 변승우
+       **/
+     SELECT
+            (ROW_NUMBER() OVER()) AS ROWNUM
+         , (ROW_NUMBER() OVER()) AS IDX
+         , AA.DB_SVR_ID
+         , AA.DB_SVR_NM
+         , AA.IPADR
+         , AA.PORTNO
+         , AA.MASTER_GBN
+         , AA.DFT_DB_NM
+         , AA.SVR_SPR_USR_ID
+         , AA.SVR_SPR_SCM_PWD
+         , AA.PGHOME_PTH
             , AA.PGDATA_PTH
-			, AA.FRST_REGR_ID
-			, AA.FRST_REG_DTM
-			, AA.LST_MDFR_ID
-			, AA.LST_MDF_DTM
+         , AA.FRST_REGR_ID
+         , AA.FRST_REG_DTM
+         , AA.LST_MDFR_ID
+         , AA.LST_MDF_DTM
       FROM(      
           SELECT 
                  A.DB_SVR_ID
@@ -38,20 +38,20 @@
                 , A.SVR_SPR_SCM_PWD
                 , A.PGHOME_PTH
                 , A.PGDATA_PTH
-			, A.FRST_REGR_ID
-			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-			, A.LST_MDFR_ID
-			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+         , A.FRST_REGR_ID
+         , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+         , A.LST_MDFR_ID
+         , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
           FROM T_DBSVR_I A, T_DBSVRIPADR_I B
           WHERE 1 = 1
           AND A.DB_SVR_ID = B.DB_SVR_ID
           AND B.MASTER_GBN = 'M'
           ORDER BY LST_MDF_DTM DESC
-      ) AA	
-	</select>
-	
-	
-	<insert id="insertUsrDbSvrAut" parameterType="HashMap">
+      ) AA   
+   </select>
+   
+   
+   <insert id="insertUsrDbSvrAut" parameterType="HashMap">
         /**
         * Query ID : insertUsrDbSvrAut
         * Description : 유저디비서버권한 초기등록
@@ -107,88 +107,88 @@
                    , 'N'
                    , 'N'
                    )
-	</insert>
-	
-	
-	<select id="selectDBList" resultType="HashMap">
-		/**
-	 	*  Query ID : selectDBList
-	 	* Description : DB 리스트 조회
-	 	* Author : 변승우
-	 	**/
-		SELECT 
-			A.DB_SVR_ID
-		    , A.DB_SVR_NM
-		    , B.DB_ID
-		    , B.DB_NM
-		FROM T_DBSVR_I A, T_DB_I B
-		WHERE 1 = 1
-		AND A.DB_SVR_ID = B.DB_SVR_ID
-		AND B.USEYN = 'Y'
-	</select>
-	
-	
-	<insert id="insertUsrDbAut" parameterType="HashMap">
-		/**
-		* Query ID : insertUsrDbAut
-		* Description : 유저디비권한 초기등록
-		* Author : 변승우
-		**/
-  			INSERT INTO T_USRDBAUT_I
-			(
-			USR_DB_AUT_ID
-			, DB_SVR_ID			
-			, DB_ID
-			, USR_ID		
-			, AUT_YN
-			, FRST_REGR_ID
-			, FRST_REG_DTM
-			, LST_MDFR_ID
-			, LST_MDF_DTM
-			)
-		VALUES
-			(			
-			nextval('q_usrdbaut_i_01')
-			, #{db_svr_id}
-			, #{db_id}
-			, #{user}		
-			, 'N'
-			, #{usr_id}
-			, clock_timestamp()
-			, #{usr_id}
-			, clock_timestamp()
-			)
-	</insert>	
-	
-	<delete id="deleteDbSvrAuthority" parameterType="string">
-		/**
-		* Query ID : deleteDbSvrAuthority
-		* Description : 사용자삭제시, 디비서버권한 삭제
-		* Author : 변승우
-		**/
-		DELETE FROM T_USRDBSVRAUT_I
-		WHERE usr_id=#{usr_id}
-	</delete>
-	
-	
-	<delete id="deleteDbAuthority" parameterType="string">
-		/**
-		* Query ID : deleteDbAuthority
-		* Description : 사용자삭제시, 디비권한 삭제
-		* Author : 변승우
-		**/
-		DELETE FROM T_USRDBAUT_I
-		WHERE usr_id=#{usr_id}
-	</delete>	
-	
-	
+   </insert>
+   
+   
+   <select id="selectDBList" resultType="HashMap">
+      /**
+       *  Query ID : selectDBList
+       * Description : DB 리스트 조회
+       * Author : 변승우
+       **/
+      SELECT 
+         A.DB_SVR_ID
+          , A.DB_SVR_NM
+          , B.DB_ID
+          , B.DB_NM
+      FROM T_DBSVR_I A, T_DB_I B
+      WHERE 1 = 1
+      AND A.DB_SVR_ID = B.DB_SVR_ID
+      AND B.USEYN = 'Y'
+   </select>
+   
+   
+   <insert id="insertUsrDbAut" parameterType="HashMap">
+      /**
+      * Query ID : insertUsrDbAut
+      * Description : 유저디비권한 초기등록
+      * Author : 변승우
+      **/
+           INSERT INTO T_USRDBAUT_I
+         (
+         USR_DB_AUT_ID
+         , DB_SVR_ID         
+         , DB_ID
+         , USR_ID      
+         , AUT_YN
+         , FRST_REGR_ID
+         , FRST_REG_DTM
+         , LST_MDFR_ID
+         , LST_MDF_DTM
+         )
+      VALUES
+         (         
+         nextval('q_usrdbaut_i_01')
+         , #{db_svr_id}
+         , #{db_id}
+         , #{user}      
+         , 'N'
+         , #{usr_id}
+         , clock_timestamp()
+         , #{usr_id}
+         , clock_timestamp()
+         )
+   </insert>   
+   
+   <delete id="deleteDbSvrAuthority" parameterType="string">
+      /**
+      * Query ID : deleteDbSvrAuthority
+      * Description : 사용자삭제시, 디비서버권한 삭제
+      * Author : 변승우
+      **/
+      DELETE FROM T_USRDBSVRAUT_I
+      WHERE usr_id=#{usr_id}
+   </delete>
+   
+   
+   <delete id="deleteDbAuthority" parameterType="string">
+      /**
+      * Query ID : deleteDbAuthority
+      * Description : 사용자삭제시, 디비권한 삭제
+      * Author : 변승우
+      **/
+      DELETE FROM T_USRDBAUT_I
+      WHERE usr_id=#{usr_id}
+   </delete>   
+   
+   
 
-	<select id="selectUsrDBSrvAutInfo" resultType="HashMap" parameterType="String">
+   <select id="selectUsrDBSrvAutInfo" resultType="HashMap" parameterType="String">
         /**
         *  Query ID : selectUsrDBSrvAutInfo
         * Description : 유저 DB서버 권한 조회
         * Author : 변승우
-        **/	
+        **/   
         SELECT 
                A.USR_DB_SVR_AUT_ID
              , A.USR_ID
@@ -222,10 +222,10 @@
            AND C.MASTER_GBN = 'M'
            AND A.USR_ID = #{usr_id}
            ORDER BY A.DB_SVR_ID
-	</select>
-	
-	
-	<update id="updateUsrDBSrvAutInfo" parameterType="object">
+   </select>
+   
+   
+   <update id="updateUsrDBSrvAutInfo" parameterType="object">
         /**
         * Query ID : updateUsrDBSrvAutInfo
         * Description : 사용자 DB서버권한 저장
@@ -239,7 +239,7 @@
              , ADT_CNG_AUT_YN = #{adt_cng_aut_yn} 
              , ADT_HIST_AUT_YN = #{adt_hist_aut_yt}
              , BCK_SCDR_AUT_YN = #{bck_scdr_aut_yn}
-             , POLICY_CHANGE_HIS_AUT_YN = #{policy_change_his_aut_yn} 	 	
+             , POLICY_CHANGE_HIS_AUT_YN = #{policy_change_his_aut_yn}        
              , SCRIPT_CNG_AUT_YN = #{script_cng_aut_yn} 
              , SCRIPT_HIS_AUT_YN = #{script_his_aut_yn} 
              , EMERGENCY_RESTORE_AUT_YN = #{emergency_restore_aut_yn} 
@@ -247,93 +247,93 @@
              , DUMP_RESTORE_AUT_YN = #{dump_restore_aut_yn} 
              , RESTORE_HIS_AUT_YN = #{restore_his_aut_yn} 
 
-	    	<if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
-	    	 , SCALE_CNG_AUT_YN = #{scale_cng_aut_yn}
+          <if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
+           , SCALE_CNG_AUT_YN = #{scale_cng_aut_yn}
              , SCALE_AUT_YN = #{scale_aut_yn} 
              , SCALE_HIST_AUT_YN = #{scale_hist_aut_yn} 
-	    	</if>
+          </if>
              
              <if test='trans_yn_chk != null and (trans_yn_chk eq "Y".toString())'>      
-	    	   ,transSetting_aut_yn = #{transSetting_aut_yn}
-	    	   ,TRANS_DBMS_CNG_AUT_YN = #{trans_dbms_cng_aut_yn}
-	    	   ,TRANS_CON_CNG_AUT_YN = #{trans_con_cng_aut_yn}
-	    	</if>
+             ,transSetting_aut_yn = #{transSetting_aut_yn}
+             ,TRANS_DBMS_CNG_AUT_YN = #{trans_dbms_cng_aut_yn}
+             ,TRANS_CON_CNG_AUT_YN = #{trans_con_cng_aut_yn}
+          </if>
 
          WHERE USR_ID=#{usr_id}
            AND DB_SVR_ID = #{db_svr_id}::numeric
-	</update>
-	
-	
-	<select id="selectDBAutInfo" resultType="HashMap">
-		/**
-	 	*  Query ID : selectDBAutInfo
-	 	* Description : 서버 DB정보 조회
-	 	* Author : 변승우
-	 	**/
-		SELECT 
-				A.DB_SVR_ID
-		        , A.DB_SVR_NM
-		        , B.DB_ID
-		        , B.DB_NM
-		FROM T_DBSVR_I A , T_DB_I B
-		WHERE A.DB_SVR_ID = B.DB_SVR_ID	 
-		AND B.USEYN='Y' 
-		ORDER BY A.DB_SVR_ID
-	 </select>
-	 
-	 <select id="selectUsrDBAutInfo" resultType="HashMap">
-		/**
-	 	*  Query ID : selectUsrDBAutInfo
-	 	* Description : 유저 서버 DB정보 조회
-	 	* Author : 변승우
-	 	**/
-		SELECT 
-				A.USR_DB_AUT_ID
-		        , A.DB_SVR_ID
-		        , A.DB_ID
-		        , A.AUT_YN
-		        , A.FRST_REGR_ID
-				, A.FRST_REG_DTM
-				, A.LST_MDFR_ID
-				, A.LST_MDF_DTM
-		FROM T_USRDBAUT_I A, T_DB_I B
-		WHERE A.DB_ID = B.DB_ID
-        AND A.USR_ID = #{usr_id}	
-        AND B.USEYN = 'Y'	 	
-	 </select>
-	 
-	 
-	 <select id="selectUsrDBSrvAutInfoCnt" parameterType="object" resultType="int">
-		/**
-	 	*  Query ID : selectUsrDBSrvAutInfoCnt
-	 	* Description : 등록된 유저 서버 권한 조회
-	 	* Author : 변승우
-	 	**/	
-		SELECT 
-			COUNT(*)
-		FROM T_USRDBSVRAUT_I 
-		WHERE 1 = 1
-		AND USR_ID = #{usr_id}
-		AND DB_SVR_ID = #{db_svr_id}::numeric	
-	 </select>		
-	 
-	 
-	 <update id="updateUsrDBAutInfo" parameterType="object">
-	   	/**
-	 	* Query ID : updateUsrDBAutInfo
-	 	* Description : 사용자 DB권한 저장
-	 	* Author : 변승우
-	 	**/
-	 	UPDATE T_USRDBAUT_I
-	 	SET
-	            AUT_YN = #{aut_yn} 	
-	 	WHERE USR_ID=#{usr_id}
-	 	AND DB_SVR_ID = #{db_svr_id}::numeric
-	 	AND DB_ID = #{db_id}::numeric
-	</update>
-	
-	
-	<insert id="insertUsrDBSrvAutInfo" parameterType="HashMap">
+   </update>
+   
+   
+   <select id="selectDBAutInfo" resultType="HashMap">
+      /**
+       *  Query ID : selectDBAutInfo
+       * Description : 서버 DB정보 조회
+       * Author : 변승우
+       **/
+      SELECT 
+            A.DB_SVR_ID
+              , A.DB_SVR_NM
+              , B.DB_ID
+              , B.DB_NM
+      FROM T_DBSVR_I A , T_DB_I B
+      WHERE A.DB_SVR_ID = B.DB_SVR_ID    
+      AND B.USEYN='Y' 
+      ORDER BY A.DB_SVR_ID
+    </select>
+    
+    <select id="selectUsrDBAutInfo" resultType="HashMap">
+      /**
+       *  Query ID : selectUsrDBAutInfo
+       * Description : 유저 서버 DB정보 조회
+       * Author : 변승우
+       **/
+      SELECT 
+            A.USR_DB_AUT_ID
+              , A.DB_SVR_ID
+              , A.DB_ID
+              , A.AUT_YN
+              , A.FRST_REGR_ID
+            , A.FRST_REG_DTM
+            , A.LST_MDFR_ID
+            , A.LST_MDF_DTM
+      FROM T_USRDBAUT_I A, T_DB_I B
+      WHERE A.DB_ID = B.DB_ID
+        AND A.USR_ID = #{usr_id}   
+        AND B.USEYN = 'Y'       
+    </select>
+    
+    
+    <select id="selectUsrDBSrvAutInfoCnt" parameterType="object" resultType="int">
+      /**
+       *  Query ID : selectUsrDBSrvAutInfoCnt
+       * Description : 등록된 유저 서버 권한 조회
+       * Author : 변승우
+       **/   
+      SELECT 
+         COUNT(*)
+      FROM T_USRDBSVRAUT_I 
+      WHERE 1 = 1
+      AND USR_ID = #{usr_id}
+      AND DB_SVR_ID = #{db_svr_id}::numeric   
+    </select>      
+    
+    
+    <update id="updateUsrDBAutInfo" parameterType="object">
+         /**
+       * Query ID : updateUsrDBAutInfo
+       * Description : 사용자 DB권한 저장
+       * Author : 변승우
+       **/
+       UPDATE T_USRDBAUT_I
+       SET
+               AUT_YN = #{aut_yn}    
+       WHERE USR_ID=#{usr_id}
+       AND DB_SVR_ID = #{db_svr_id}::numeric
+       AND DB_ID = #{db_id}::numeric
+   </update>
+   
+   
+   <insert id="insertUsrDBSrvAutInfo" parameterType="HashMap">
         /**
         * Query ID : insertUsrDBSrvAutInfo
         * Description : 유저디비서버 등록
@@ -363,17 +363,17 @@
                   , RESTORE_HIS_AUT_YN
                   
             <if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>      
-	    	      , SCALE_CNG_AUT_YN
+                , SCALE_CNG_AUT_YN
                   , SCALE_AUT_YN
                   , SCALE_HIST_AUT_YN
-	    	</if>
-	    	
-	    	 <if test='trans_yn_chk != null and (trans_yn_chk eq "Y".toString())'>      
-	    	      , transSetting_aut_yn
-	    	      , TRANS_DBMS_CNG_AUT_YN
-	    	      , TRANS_CON_CNG_AUT_YN
-	    	      
-	    	</if>
+          </if>
+          
+           <if test='trans_yn_chk != null and (trans_yn_chk eq "Y".toString())'>      
+                , transSetting_aut_yn
+                , TRANS_DBMS_CNG_AUT_YN
+                , TRANS_CON_CNG_AUT_YN
+                
+          </if>
 
                   )
             VALUES
@@ -399,127 +399,127 @@
                   , #{dump_restore_aut_yn}
                   , #{restore_his_aut_yn}
                   
-			<if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
-	    	      , #{scale_cng_aut_yn}
+         <if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
+                , #{scale_cng_aut_yn}
                   , #{scale_aut_yn}
                   , #{scale_hist_aut_yn}
-	    	</if>
-	    	
-			<if test='trans_yn_chk != null and (trans_yn_chk eq "Y".toString())'>      
-	    	      , #{transSetting_aut_yn}
-	    	      , #{trans_dbms_cng_aut_yn}
-	    	      , #{trans_con_cng_aut_yn}
-	    	</if>
+          </if>
+          
+         <if test='trans_yn_chk != null and (trans_yn_chk eq "Y".toString())'>      
+                , #{transSetting_aut_yn}
+                , #{trans_dbms_cng_aut_yn}
+                , #{trans_con_cng_aut_yn}
+          </if>
                   )
-	</insert>
+   </insert>
 
 
-	 <select id="selectUsrDBAutInfoCnt" parameterType="object" resultType="int">
-		/**
-	 	*  Query ID : selectUsrDBAutInfoCnt
-	 	* Description : 등록된 유저 디비 권한 조회
-	 	* Author : 변승우
-	 	**/		
-		SELECT 
-			COUNT(*)
-		FROM T_USRDBAUT_I 
-		WHERE 1 = 1
-		AND USR_ID = #{usr_id}
-		AND DB_SVR_ID = #{db_svr_id}::numeric
+    <select id="selectUsrDBAutInfoCnt" parameterType="object" resultType="int">
+      /**
+       *  Query ID : selectUsrDBAutInfoCnt
+       * Description : 등록된 유저 디비 권한 조회
+       * Author : 변승우
+       **/      
+      SELECT 
+         COUNT(*)
+      FROM T_USRDBAUT_I 
+      WHERE 1 = 1
+      AND USR_ID = #{usr_id}
+      AND DB_SVR_ID = #{db_svr_id}::numeric
         AND DB_ID = #{db_id}::numeric
       </select>
       
       
       
       <insert id="insertUsrDBAutInfo" parameterType="HashMap">
-		/**
-		* Query ID : insertUsrDBAutInfo
-		* Description : 유저디비권한 초기등록
-		* Author : 변승우
-		**/
-  			INSERT INTO T_USRDBAUT_I
-			(
-			USR_DB_AUT_ID
-			, DB_SVR_ID			
-			, DB_ID
-			, USR_ID		
-			, AUT_YN
-			, FRST_REGR_ID
-			, FRST_REG_DTM
-			, LST_MDFR_ID
-			, LST_MDF_DTM
-			)
-		VALUES
-			(			
-			nextval('q_usrdbaut_i_01')
-			, #{db_svr_id}::numeric
-			, #{db_id}::numeric
-			, #{usr_id}		
-			, #{aut_yn}
-			, #{usr_id}
-			, clock_timestamp()
-			, #{usr_id}
-			, clock_timestamp()
-			)
-	</insert>	
-	
-	
-	<select id="selectUserDBSvrAutList" parameterType="HashMap" resultType="HashMap">
-		/**
-	 	*  Query ID : selectUserDBSvrAutList
-	 	* Description : 유저 서버 DB정보 조회
-	 	* Author : 변승우
-	 	**/
-		SELECT 
-				USR_DB_SVR_AUT_ID
-		        , DB_SVR_ID
-		        , BCK_CNG_AUT_YN
-		        , BCK_HIST_AUT_YN
-				, BCK_SCDR_AUT_YN
-		        , ACS_CNTR_AUT_YN
-		        , POLICY_CHANGE_HIS_AUT_YN
-		        , ADT_CNG_AUT_YN
-		        , ADT_HIST_AUT_YN
-		        , SCRIPT_CNG_AUT_YN
-				, SCRIPT_HIS_AUT_YN
-				, EMERGENCY_RESTORE_AUT_YN
-				, POINT_RESTORE_AUT_YN
-				, DUMP_RESTORE_AUT_YN
-				, RESTORE_HIS_AUT_YN
-				, SCALE_CNG_AUT_YN
-				, SCALE_AUT_YN
-				, SCALE_HIST_AUT_YN
-				, transSetting_aut_yn
-				, TRANS_DBMS_CNG_AUT_YN
-				, TRANS_CON_CNG_AUT_YN
-		        , FRST_REGR_ID
-				, FRST_REG_DTM
-				, LST_MDFR_ID
-				, LST_MDF_DTM
-		FROM T_USRDBSVRAUT_I
-		WHERE USR_ID = #{usr_id}
-		AND DB_SVR_ID = #{db_svr_id}	  
-	 </select>
-	 
-	 
-	 <select id="selectTreeDBSvrList" resultType="HashMap">
-	   SELECT
-      		(ROW_NUMBER() OVER()) AS ROWNUM
-			, (ROW_NUMBER() OVER()) AS IDX
-			, AA.DB_SVR_ID
-			, AA.DB_SVR_NM
-			, AA.IPADR
-			, AA.PORTNO
-			, AA.MASTER_GBN
-			, AA.DFT_DB_NM
-			, AA.SVR_SPR_USR_ID
-			, AA.SVR_SPR_SCM_PWD
-			, AA.PGHOME_PTH
+      /**
+      * Query ID : insertUsrDBAutInfo
+      * Description : 유저디비권한 초기등록
+      * Author : 변승우
+      **/
+           INSERT INTO T_USRDBAUT_I
+         (
+         USR_DB_AUT_ID
+         , DB_SVR_ID         
+         , DB_ID
+         , USR_ID      
+         , AUT_YN
+         , FRST_REGR_ID
+         , FRST_REG_DTM
+         , LST_MDFR_ID
+         , LST_MDF_DTM
+         )
+      VALUES
+         (         
+         nextval('q_usrdbaut_i_01')
+         , #{db_svr_id}::numeric
+         , #{db_id}::numeric
+         , #{usr_id}      
+         , #{aut_yn}
+         , #{usr_id}
+         , clock_timestamp()
+         , #{usr_id}
+         , clock_timestamp()
+         )
+   </insert>   
+   
+   
+   <select id="selectUserDBSvrAutList" parameterType="HashMap" resultType="HashMap">
+      /**
+       *  Query ID : selectUserDBSvrAutList
+       * Description : 유저 서버 DB정보 조회
+       * Author : 변승우
+       **/
+      SELECT 
+            USR_DB_SVR_AUT_ID
+              , DB_SVR_ID
+              , BCK_CNG_AUT_YN
+              , BCK_HIST_AUT_YN
+            , BCK_SCDR_AUT_YN
+              , ACS_CNTR_AUT_YN
+              , POLICY_CHANGE_HIS_AUT_YN
+              , ADT_CNG_AUT_YN
+              , ADT_HIST_AUT_YN
+              , SCRIPT_CNG_AUT_YN
+            , SCRIPT_HIS_AUT_YN
+            , EMERGENCY_RESTORE_AUT_YN
+            , POINT_RESTORE_AUT_YN
+            , DUMP_RESTORE_AUT_YN
+            , RESTORE_HIS_AUT_YN
+            , SCALE_CNG_AUT_YN
+            , SCALE_AUT_YN
+            , SCALE_HIST_AUT_YN
+            , transSetting_aut_yn
+            , TRANS_DBMS_CNG_AUT_YN
+            , TRANS_CON_CNG_AUT_YN
+              , FRST_REGR_ID
+            , FRST_REG_DTM
+            , LST_MDFR_ID
+            , LST_MDF_DTM
+      FROM T_USRDBSVRAUT_I
+      WHERE USR_ID = #{usr_id}
+      AND DB_SVR_ID = #{db_svr_id}     
+    </select>
+    
+    
+    <select id="selectTreeDBSvrList" resultType="HashMap">
+      SELECT
+            (ROW_NUMBER() OVER()) AS ROWNUM
+         , (ROW_NUMBER() OVER()) AS IDX
+         , AA.DB_SVR_ID
+         , AA.DB_SVR_NM
+         , AA.IPADR
+         , AA.PORTNO
+         , AA.MASTER_GBN
+         , AA.DFT_DB_NM
+         , AA.SVR_SPR_USR_ID
+         , AA.SVR_SPR_SCM_PWD
+         , AA.PGHOME_PTH
             , AA.PGDATA_PTH
-			, AA.FRST_REGR_ID
-			, AA.FRST_REG_DTM
-			, AA.LST_MDFR_ID
-			, AA.LST_MDF_DTM
+         , AA.FRST_REGR_ID
+         , AA.FRST_REG_DTM
+         , AA.LST_MDFR_ID
+         , AA.LST_MDF_DTM
       FROM(      
           SELECT 
                  A.DB_SVR_ID
@@ -532,10 +532,10 @@
                 , A.SVR_SPR_SCM_PWD
                 , A.PGHOME_PTH
                 , A.PGDATA_PTH
-			, A.FRST_REGR_ID
-			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-			, A.LST_MDFR_ID
-			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+         , A.FRST_REGR_ID
+         , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+         , A.LST_MDFR_ID
+         , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
           FROM T_DBSVR_I A, T_USRDBSVRAUT_I B, T_DBSVRIPADR_I C
           WHERE 1 = 1
           AND A.DB_SVR_ID = B.DB_SVR_ID
@@ -543,15 +543,15 @@
           AND C.MASTER_GBN = 'M'
           AND B.USR_ID = #{usr_id}
           ORDER BY A.DB_SVR_ID 
-      ) AA	
+      ) AA   
        </select>
        
        <select id="selectDatabase" parameterType="int" resultType="int">
-       	/**
-	 	*  Query ID : selectDatabase
-	 	* Description : 해당 서버에 대한 디비 조회
-	 	* Author : 김주영
-	 	**/
-	 	SELECT DB_ID FROM T_DB_I WHERE USEYN='Y' AND DB_SVR_ID = #{db_svr_id}
+          /**
+       *  Query ID : selectDatabase
+       * Description : 해당 서버에 대한 디비 조회
+       * Author : 김주영
+       **/
+       SELECT DB_ID FROM T_DB_I WHERE USEYN='Y' AND DB_SVR_ID = #{db_svr_id}
        </select>
 </mapper>
