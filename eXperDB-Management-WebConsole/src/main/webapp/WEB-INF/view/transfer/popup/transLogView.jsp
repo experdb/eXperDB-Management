@@ -190,7 +190,7 @@
 	function fn_actExeCng(){
 		var v_db_svr_id = $("#db_svr_id", "#transLogViewForm").val();
 		var v_trans_id = $("#trans_id", "#transLogViewForm").val();
-		$('#loading').show();
+		fn_trans_restart_loadbar("start");
 		$.ajax({
 			url : '/transKafkaConnectRestart.do',
 			type : 'post',
@@ -200,24 +200,22 @@
 				trans_id : v_trans_id
 			},
 			success : function(result) {
+//  				fn_trans_restart_loadbar("start");
  				if(result.data === "success"){
- 					fn_trans_loadbar("start");
 
  					setTimeout(function() {
- 						fn_trans_loadbar("stop");
- 		 				showSwalIconRst(result.errMsg, '<spring:message code="common.close" />', '', 'success');
+ 						fn_trans_restart_loadbar("stop");
+ 		 				showSwalIconRst('kafka가 재시작되었습니다.', '<spring:message code="common.close" />', '', 'success');
  					}, 7000);
  				}else{
- 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+ 					showSwalIcon('kafka connector가 재시작을 실패했습니다.', '<spring:message code="common.close" />', '', 'error');
 	 			}
-
+ 				fn_trans_restart_loadbar("stop");
 			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);	
 			},
 			error : function(xhr, status, error) {
-				$("#ins_idCheck", "#insProxyListenForm").val("0");
-				
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
@@ -226,13 +224,30 @@
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			}
-		});
-		$('#loading').hide();
+		}); 
+// 		fn_trans_restart_loadbar("stop");
+	}
+	
+	function fn_trans_restart_loadbar(gbn){
+		var htmlLoad_trans = '<div id="loading_trans"><div class="flip-square-loader mx-auto" data-backdrop="static" data-keyboard="false" style="border: 0px !important;z-index:99999;"></div></div>';
+		if($("#loading_trans").length == 0)	{
+			$("#pop_layer_log_view").append(htmlLoad_trans);
+		}
+		
+		if (gbn == "start") {
+			$('#loading_trans').css('position', 'absolute');
+			$('#loading_trans').css('left', '50%');
+			$('#loading_trans').css('top', '50%');
+			$('#loading_trans').css('transform', 'translate(-50%,-50%)');	  
+			$('#loading_trans').show();	
+		} else {
+			$('#loading_trans').hide();	
+		}
 	}
 	
 </script>
 
-<div class="modal fade" id="pop_layer_log_view" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+<div class="modal fade" id="pop_layer_log_view" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="ModalLabel" aria-hidden="true">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 20px 250px;">
 		<div class="modal-content" style="width:1200px;">		 
 			<div class="modal-body" style="margin-bottom:-10px;">

@@ -303,7 +303,6 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 		try {
 			int db_svr_id = transVO.getDb_svr_id();
 			int trans_id = transVO.getTrans_id();
-			System.out.println("trans_id : " + trans_id);
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			
 			// kafka 정보 조회
@@ -376,16 +375,13 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 			
 			dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd_old()));
 			dbServerVO.setUsr_id(transVO.getFrst_regr_id());
-			System.out.println(dbServerVO.toString());
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT044);
 			jObj.put(ClientProtocolID.USER_ID, param.get("lst_mdfr_id"));
 			jObj.put(ClientProtocolID.KC_IP, IP);
 			jObj.put(ClientProtocolID.KC_PORT,kafkaInfo.get("kc_port"));
 			jObj.put("kc_id", kafkaInfo.get("kc_id"));
-			System.out.println(jObj.toJSONString());
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			resultObj = cic.kafkaConnectRestart(IP, PORT, dbServerVO, jObj);
-			System.out.println("resultObj : " + resultObj.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -135,7 +135,11 @@
 									$('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
 								}
 							}
+							$('#tar_connect').show();
+							$('#tar_connect_nvl').hide();
 						} else {
+							$('#tar_connect').hide();
+							$('#tar_connect_nvl').show();
 							fn_tarConnectInfo();
 						}
 
@@ -275,60 +279,68 @@
 	 ******************************************************** */
 	function fn_logView(type){
 		var todayYN = 'N';
-		var langSelect = document.getElementById("src_connect");
-		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		var langSel = document.getElementById("src_connect");
+		var src_select = langSel.options[langSel.selectedIndex].value;
 		var date = new Date().toJSON();
+		
+		langSel = document.getElementById("tar_connector_list");
+		var tar_select = langSel.options[langSel.selectedIndex].value;
 		
 		var v_db_svr_id = $("#db_svr_id", "#transMonitoringForm").val();
 		var v_kc_id = $("#kc_id", "#transMonitoringForm").val();
-
-		$.ajax({
-			url : "/transLogView.do",
-			type : 'post',
-			data : {
-				db_svr_id : v_db_svr_id,
-				date : date,
-				kc_id : v_kc_id
-			},
-			success : function(result) {
-				$("#connectorlog", "#transLogViewForm").html("");
-				$("#dwLen", "#transLogViewForm").val("0");
-				$("#fSize", "#transLogViewForm").val("");
-				$("#log_line", "#transLogViewForm").val("1000");
-				$("#type", "#transLogViewForm").val(type);
-				$("#date", "#transLogViewForm").val(date);
-//				$("#aut_id", "#transLogViewForm").val(aut_id);
-//				$("#todayYN", "#transLogViewForm").val(todayYN);
-				$("#todayYN", "#transLogViewForm").val("Y");
-				$("#view_file_name", "#transLogViewForm").html("");
-				$("#trans_id","#transLogViewForm").val(selectValue);
-				$("#kc_id", "#transLogViewForm").val(v_kc_id);
-				if(type === 'connector'){
-					dateCalenderSetting();
-					$('#restart_btn').hide();
-					$('#wrk_strt_dtm_div').show();
-					$('.log_title').html(' Connector 로그');
-				} else if(type === 'kafka'){
-					$('#restart_btn').show();
-					$('#wrk_strt_dtm_div').hide();
-					$('.log_title').html('');
+		
+		if(src_select == '') {
+			showSwalIcon('커넥터를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
+			return;
+		} else {
+			$.ajax({
+				url : "/transLogView.do",
+				type : 'post',
+				data : {
+					db_svr_id : v_db_svr_id,
+					date : date,
+					kc_id : v_kc_id
+				},
+				success : function(result) {
+					$("#connectorlog", "#transLogViewForm").html("");
+					$("#dwLen", "#transLogViewForm").val("0");
+					$("#fSize", "#transLogViewForm").val("");
+					$("#log_line", "#transLogViewForm").val("1000");
+					$("#type", "#transLogViewForm").val(type);
+					$("#date", "#transLogViewForm").val(date);
+	//				$("#aut_id", "#transLogViewForm").val(aut_id);
+	//				$("#todayYN", "#transLogViewForm").val(todayYN);
+					$("#todayYN", "#transLogViewForm").val("Y");
+					$("#view_file_name", "#transLogViewForm").html("");
+					$("#trans_id","#transLogViewForm").val(src_select);
+					$("#kc_id", "#transLogViewForm").val(v_kc_id);
+					if(type === 'connector'){
+						dateCalenderSetting();
+						$('#restart_btn').hide();
+						$('#wrk_strt_dtm_div').show();
+						$('.log_title').html(' Connector 로그');
+					} else if(type === 'kafka'){
+						$('#restart_btn').show();
+						$('#wrk_strt_dtm_div').hide();
+						$('.log_title').html('');
+					}
+					fn_transLogViewAjax();
+					$('#pop_layer_log_view').modal("show");
+				},
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
 				}
-				fn_transLogViewAjax();
-				$('#pop_layer_log_view').modal("show");
-			},
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			}
-		});
+			});
+		}
 	}
 </script>
 

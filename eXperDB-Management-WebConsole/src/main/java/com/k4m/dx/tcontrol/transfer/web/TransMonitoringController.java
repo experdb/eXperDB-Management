@@ -251,8 +251,6 @@ public class TransMonitoringController {
 		
 		// 타겟 DBMS 정보
 		List<Map<String, Object>> targetDBMSInfo = transMonitoringService.selectTargetDBMSInfo(trans_id);
-		System.out.println(targetDBMSInfo.size());
-		System.out.println(targetDBMSInfo.get(0).toString());
 
 		// 타겟 전송대상 테이블 목록
 		//Map<String, Object> targetTopic = transMonitoringService.selectTargetTopicList(trans_id);
