@@ -29,6 +29,8 @@
 				<i class="item-icon fa fa-dot-circle-o"></i> 타겟 시스템
 			</h4>
 			
+<!-- 			<div  style="display:none;"> -->
+
 			<!-- 타겟 DBMS start -->
 			<div class="row">
 				<div class="accordion_main accordion-multi-colored col-12" id="accordion_tar_dbms_his" role="tablist">
@@ -317,9 +319,14 @@
 <!-- 					</div> -->
 <!-- 				</div> -->
 <!-- 			</div> -->
-				
 			<!-- error 정보 end -->
 			
+<!-- 			</div> -->
+			
+			
+			<div class="card" style="display:none;">
+				커넥터를 선택해주세요.
+			</div>
 			
 		</div>
 	</div>

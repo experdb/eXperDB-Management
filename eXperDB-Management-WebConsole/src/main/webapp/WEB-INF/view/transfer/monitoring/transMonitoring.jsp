@@ -29,7 +29,7 @@
 <script type="text/javascript">
 	var cpuChart = "";
 	var memChart = "";
-	var allErrorChart = "";
+// 	var allErrorChart = "";
 	var connectorActTable = "";
 	var sinkChart = "";
 	var sinkCompleteChart = "";
@@ -134,7 +134,7 @@
 								} else {
 									$('#tar_connector_list').append('<option value=\"'+result.targetConnectorList[i].trans_id+'\">'+result.targetConnectorList[i].connect_nm+'</option>');
 								}
-								}
+							}
 						} else {
 							fn_tarConnectInfo();
 						}
