@@ -6,14 +6,14 @@
 <%
 	/**
 	* @Class Name : dbAuthority.jsp
-	* @Description : DbAuthority 화면
+	* @Description : DbAuthority íë©´
 	* @Modification Information
 	*
-	*   수정일         수정자                   수정내용
+	*   ìì ì¼         ìì ì                   ìì ë´ì©
 	*  ------------    -----------    ---------------------------
-	*  2017.05.29     최초 생성
+	*  2017.05.29     ìµì´ ìì±
 	*
-	* author 변승우 사원
+	* author ë³ì¹ì° ì¬ì
 	* since 2017.05.29
 	*
 	*/
@@ -98,7 +98,7 @@
 					html1+='	</tr>';
 					
 					if (scale_yn_chk == "Y") {
-						/* 2020.04.09 scale_cng 추가 start */
+						/* 2020.04.09 scale_cng ì¶ê° start */
 						html1+='	<tr>';
 						html1+='		<td class="pl-4"><spring:message code="menu.eXperDB_scale_settings" /></td>';
 						html1+='		<td>';
@@ -108,9 +108,9 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
-						/* 2020.04.09 scale_cng 추가 end */
+						/* 2020.04.09 scale_cng ì¶ê° end */
 
-						/* 2020.03.03 scale 추가 start */
+						/* 2020.03.03 scale ì¶ê° start */
 						html1+='	<tr>';
 						html1+='		<td class="pl-4"><spring:message code="menu.scale_manual" /></td>';
 						html1+='		<td>';
@@ -120,9 +120,9 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
-						/* 2020.03.03 scale 추가 end */
+						/* 2020.03.03 scale ì¶ê° end */
 						
-						/* 2020.04.03 scale_hist 추가 start */
+						/* 2020.04.03 scale_hist ì¶ê° start */
 						html1+='	<tr>';
 						html1+='		<td class="pl-4"><spring:message code="menu.eXperDB_scale_history" /></td>';
 						html1+='		<td>';
@@ -132,7 +132,7 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
-						/* 2020.04.03 scale_hist 추가 end */
+						/* 2020.04.03 scale_hist ì¶ê° end */
 					}
 
 					html1+='	<tr>';
@@ -199,7 +199,7 @@
 					html1+='		</td>';
 					html1+='	</tr>';
 					
-					/* 전송관리 */
+					/* ì ì¡ê´ë¦¬ */
 					if("${sessionScope.session.transfer}" == "Y"){
 						
 						//2020.09.23
@@ -228,16 +228,6 @@
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_transSetting" name="transSetting_aut" onClick="fn_userCheck();" />';
 						html1+='				<label for="'+item.db_svr_id+'_transSetting"></label>';
-						html1+='			</div>';
-						html1+='		</td>';
-						html1+='	</tr>';
-						
-						html1+='	<tr>';
-						html1+='		<td class="pl-4"><spring:message code="menu.trans_monitoring" /></td>';
-						html1+='		<td>';
-						html1+='			<div class="inp_chk">';
-						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_mtr_aut" name="trans_mtr_aut" onClick="fn_userCheck();" />';
-						html1+='				<label for="'+item.db_svr_id+'_trans_mtr_aut"></label>';
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
@@ -325,7 +315,7 @@
 			}
 
 			/* ********************************************************
-			* 선택된 유저 대한 디비서버권한 조회
+			* ì íë ì ì  ëí ëë¹ìë²ê¶í ì¡°í
 			******************************************************** */
 			$.ajax({
 				url : "/selectUsrDBSrvAutInfo.do",
@@ -352,21 +342,21 @@
 					if(result.length != 0){
 						for(var i = 0; i<result.length; i++){  
  							if (scale_yn_chk == "Y") {
- 								/* 2020.04.09 scale 설정 추가 */
+ 								/* 2020.04.09 scale ì¤ì  ì¶ê° */
  								if(result.length != 0 && result[i].scale_cng_aut_yn == "Y"){
  									document.getElementById(result[i].db_svr_id+"_scale_cng").checked = true;
  								}else{
  									document.getElementById(result[i].db_svr_id+"_scale_cng").checked = false;
  								}
  								
- 								/* 2020.03.03 scale 추가 */
+ 								/* 2020.03.03 scale ì¶ê° */
  								if(result.length != 0 && result[i].scale_aut_yn == "Y"){
  									document.getElementById(result[i].db_svr_id+"_scale").checked = true;
  								}else{
  									document.getElementById(result[i].db_svr_id+"_scale").checked = false;
  								}
  								
- 								/* 2020.04.03 scale_hist 추가 */
+ 								/* 2020.04.03 scale_hist ì¶ê° */
  								if(result.length != 0 && result[i].scale_hist_aut_yn == "Y"){
  									document.getElementById(result[i].db_svr_id+"_scale_hist").checked = true;
  								}else{
@@ -374,49 +364,49 @@
  								}
 							}
 
-							//백업설정 권한
+							//ë°±ìì¤ì  ê¶í
 							if(result.length != 0 && result[i].bck_cng_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_bck_cng").checked = true;
 							}else{
 								document.getElementById(result[i].db_svr_id+"_bck_cng").checked = false;
 							}
 
-	  						//백업이력 권한
+	  						//ë°±ìì´ë ¥ ê¶í
 	  						if(result.length != 0 && result[i].bck_hist_aut_yn == "Y"){
 	  							document.getElementById(result[i].db_svr_id+"_bck_hist").checked = true;
 	  						}else{
 	  							document.getElementById(result[i].db_svr_id+"_bck_hist").checked = false;
 	  						}
 
-							//백업스케줄러 권한
+							//ë°±ìì¤ì¼ì¤ë¬ ê¶í
 							if(result.length != 0 && result[i].bck_scdr_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_bck_scdr").checked = true;
 							}else{
 								document.getElementById(result[i].db_svr_id+"_bck_scdr").checked = false;
 							}
 
-							//긴급복구 권한
+							//ê¸´ê¸ë³µêµ¬ ê¶í
 							if(result.length != 0 && result[i].emergency_restore_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_emergency_restore").checked = true;
 							}else{
 								document.getElementById(result[i].db_svr_id+"_emergency_restore").checked = false;
 							}
 
-							//시점복구 권한
+							//ìì ë³µêµ¬ ê¶í
 							if(result.length != 0 && result[i].point_restore_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_point_restore").checked = true;
 							}else{
 								document.getElementById(result[i].db_svr_id+"_point_restore").checked = false;
 							}
 
-							//덤프복구 권한
+							//ë¤íë³µêµ¬ ê¶í
 							if(result.length != 0 && result[i].dump_restore_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_dump_restore").checked = true;
 							}else{
 								document.getElementById(result[i].db_svr_id+"_dump_restore").checked = false;
 							}
 
-							//복구이력 권한
+							//ë³µêµ¬ì´ë ¥ ê¶í
 							if(result.length != 0 && result[i].restore_his_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_restore_hist").checked = true;
 							}else{
@@ -424,43 +414,36 @@
 							}
 							
 							if("${sessionScope.session.transfer}"== "Y"){
-								//전송설정(2020-08-31)
+								//ì ì¡ì¤ì (2020-08-31)
 								if(result.length != 0 && result[i].transsetting_aut_yn == "Y"){
 									document.getElementById(result[i].db_svr_id+"_transSetting").checked = true;
 								}else{
 									document.getElementById(result[i].db_svr_id+"_transSetting").checked = false;
 								}
 								
-								//전송설정(2020-09-23)
+								//ì ì¡ì¤ì (2020-09-23)
 								if(result.length != 0 && result[i].trans_dbms_cng_aut_yn == "Y"){
 									document.getElementById(result[i].db_svr_id+"_trans_dbms_aut").checked = true;
 								}else{
 									document.getElementById(result[i].db_svr_id+"_trans_dbms_aut").checked = false;
 								}
 								
-								//전송설정(2020-08-31)
+								//ì ì¡ì¤ì (2020-08-31)
 								if(result.length != 0 && result[i].trans_con_cng_aut_yn == "Y"){
 									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = true;
 								}else{
 									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = false;
 								}
-								
-								//모니터링
-								if(result.length != 0 && result[i].trans_mtr_aut_yn == "Y"){
-									document.getElementById(result[i].db_svr_id+"_trans_mtr_aut").checked = true;
-								}else{
-									document.getElementById(result[i].db_svr_id+"_trans_mtr_aut").checked = false;
-								}
 							}
 
-							//서버접근제어 권한
+							//ìë²ì ê·¼ì ì´ ê¶í
 							if(result.length != 0 && result[i].acs_cntr_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_acs_cntr").checked = true;
 							}else{
 								document.getElementById(result[i].db_svr_id+"_acs_cntr").checked = false;
 							}
 							
-							//정책변경이력 권한
+							//ì ì±ë³ê²½ì´ë ¥ ê¶í
 							if(result.length != 0 && result[i].policy_change_his_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_policy_change_his").checked = true;
 							}else{
@@ -468,14 +451,14 @@
 							}
 
 							if("${sessionScope.session.pg_audit}"== "Y"){
-								//감사설정 권한
+								//ê°ì¬ì¤ì  ê¶í
 								if(result.length != 0 && result[i].adt_cng_aut_yn == "Y"){
 									document.getElementById(result[i].db_svr_id+"_adt_cng").checked = true;
 								}else{
 									document.getElementById(result[i].db_svr_id+"_adt_cng").checked = false;
 								}
 
-								//감사이력 권한
+								//ê°ì¬ì´ë ¥ ê¶í
 								if(result.length != 0 && result[i].adt_hist_aut_yn == "Y"){
 									document.getElementById(result[i].db_svr_id+"_adt_hist").checked = true;
 								}else{
@@ -483,14 +466,14 @@
 								}
 							}
 
-							//배치설정 권한
+							//ë°°ì¹ì¤ì  ê¶í
 							if(result.length != 0 && result[i].script_cng_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_script_cng").checked = true;
 							}else{
 								document.getElementById(result[i].db_svr_id+"_script_cng").checked = false;
 							}
 
-							//배치설정 권한
+							//ë°°ì¹ì¤ì  ê¶í
 							if(result.length != 0 && result[i].script_his_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_script_his").checked = true;
 							}else{
@@ -524,7 +507,6 @@
 							document.getElementById(svr_server[0].db_svr_id+"_transSetting").checked = false;
 							document.getElementById(svr_server[0].db_svr_id+"_trans_dbms_aut").checked = false;
 							document.getElementById(svr_server[0].db_svr_id+"_trans_con_aut").checked = false;
-							document.getElementById(svr_server[0].db_svr_id+"_trans_mtr_aut").checked = false;
 						}
 					}
 				}
@@ -532,7 +514,7 @@
 		});
 	});
 
-	/* 버튼제어 */
+	/* ë²í¼ì ì´ */
 	function fn_buttonAut(){
 		var server_button = document.getElementById("server_button");
 
@@ -576,21 +558,21 @@
 		$(window).trigger('resize');
 	}
 
-	/* 전체체크 */
+	/* ì ì²´ì²´í¬ */
 	function fn_allCheck(db_svr_id){
 		fn_userCheck();
 
-		/* 2020.03.03 scale 추가 */
+		/* 2020.03.03 scale ì¶ê° */
 		if("${sessionScope.session.pg_audit}"== "Y"){
 			if (scale_yn_chk == "Y") {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his","_trans_mtr_aut");
+					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}else{
 					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}		
 			} else {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his", "_trans_mtr_aut");
+					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}else{
 					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}
@@ -598,13 +580,13 @@
 		}else{
 			if (scale_yn_chk == "Y") {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his", "_trans_mtr_aut");
+					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}else{
 					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}	
 			} else {				
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his", "_trans_mtr_aut");
+					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}else{
 					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}	
@@ -620,7 +602,7 @@
 		}
 	}
 
-	/* 전체체크 validate */
+	/* ì ì²´ì²´í¬ validate */
 	function fn_userCheck(){
 		var datas = userTable.row('.selected').length;
 		if(datas != 1){
@@ -630,7 +612,7 @@
 		}
 	}
 
-	/* 저장 */
+	/* ì ì¥ */
 	function fn_svr_save(){
 		datasArr = new Array();
 		var datas = userTable.row('.selected').length;
@@ -645,7 +627,7 @@
 			var trans_dbms_aut = null;
 			var trans_con_aut = null;
 			
-			/* 2020.03.03 scale 추가 */
+			/* 2020.03.03 scale ì¶ê° */
 			var db_svr_id = $("input[name='db_svr_id']");
 			var bck_cng_aut = $("input[name='bck_cng_aut']");
 			var bck_hist_aut = $("input[name='bck_hist_aut']");
@@ -655,7 +637,7 @@
 			var dump_restore_aut = $("input[name='dump_restore_aut']");
 			var restore_hist_aut = $("input[name='restore_hist_aut']");
 					
-			/* 2020-08-31 전송관리 추가 */
+			/* 2020-08-31 ì ì¡ê´ë¦¬ ì¶ê° */
 			if("${sessionScope.session.transfer}"== "Y"){
 				transSetting_aut = $("input[name='transSetting_aut']");
 				trans_dbms_aut = $("input[name='trans_dbms_aut']");
@@ -691,21 +673,21 @@
 				rows.db_svr_id = db_svr_id[i].value;
 
 				if (scale_yn_chk == "Y") {
-					if(eXperDB_scale_cng[i].checked){ //선택되어 있으면 배열에 값을 저장함 scale cng
+					if(eXperDB_scale_cng[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨ scale cng
 						rows.scale_cng_aut_yn = "Y";   
 						autCheck++;
 					}else{
 						rows.scale_cng_aut_yn = "N";
 					}
 					
-					if(eXperDB_scale[i].checked){ //선택되어 있으면 배열에 값을 저장함 scale
+					if(eXperDB_scale[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨ scale
 						rows.scale_aut_yn = "Y";   
 						autCheck++;
 					}else{
 						rows.scale_aut_yn = "N";
 					}
 
-					if(eXperDB_scale_hist[i].checked){ //선택되어 있으면 배열에 값을 저장함 scale hist
+					if(eXperDB_scale_hist[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨ scale hist
 						rows.scale_hist_aut_yn = "Y";   
 						autCheck++;
 					}else{
@@ -713,96 +695,87 @@
 					}
 				}
 
-				if(bck_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(bck_cng_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.bck_cng_aut_yn = "Y";   
 					autCheck++;
 				}else{
 					rows.bck_cng_aut_yn = "N";
 				}
 
-				if(bck_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(bck_hist_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.bck_hist_aut_yn = "Y"; 
 					autCheck++;
 				}else{
 					rows.bck_hist_aut_yn = "N";
 				}
 
-				if(bck_scdr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(bck_scdr_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.bck_scdr_aut_yn = "Y"; 
 					autCheck++;
 				}else{
 					rows.bck_scdr_aut_yn = "N";
 				}
 
-				if(emergency_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(emergency_restore_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.emergency_restore_aut_yn= "Y"; 
 					autCheck++;
 				}else{
 					rows.emergency_restore_aut_yn = "N";
 				}
 
-				if(point_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(point_restore_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.point_restore_aut_yn = "Y"; 
 					autCheck++;
 				}else{
 					rows.point_restore_aut_yn = "N";
 				}
 
-				if(dump_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(dump_restore_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.dump_restore_aut_yn = "Y"; 
 					autCheck++;
 				}else{
 					rows.dump_restore_aut_yn = "N";
 				}
 
-				if(restore_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(restore_hist_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.restore_his_aut_yn = "Y"; 
 					autCheck++;
 				}else{
 					rows.restore_his_aut_yn = "N";
 				}
 				
-				/* 전송관리 추가 (2020-08-31) */
+				/* ì ì¡ê´ë¦¬ ì¶ê° (2020-08-31) */
 				if("${sessionScope.session.transfer}"== "Y"){
-					if(transSetting_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함			
+					if(transSetting_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨			
 						rows.transSetting_aut_yn = "Y"; 
 						autCheck++;
 					}else{				
 						rows.transSetting_aut_yn = "N";
 					}
 					
-					if(trans_dbms_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함			
+					if(trans_dbms_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨			
 						rows.trans_dbms_cng_aut_yn = "Y"; 
 						autCheck++;
 					}else{				
 						rows.trans_dbms_cng_aut_yn = "N";
 					}
 					
-					if(trans_con_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함			
+					if(trans_con_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨			
 						rows.trans_con_cng_aut_yn = "Y"; 
 						autCheck++;
 					}else{				
 						rows.trans_con_cng_aut_yn = "N";
 					}
-					
-					if(trans_mtr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함			
-						rows.trans_mtr_cng_aut_yn = "Y"; 
-						autCheck++;
-					}else{				
-						rows.trans_mtr_cng_aut_yn = "N";
-					}
-					
-					
 				}
 					
-				if(acs_cntr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(acs_cntr_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.acs_cntr_aut_yn = "Y";   
 					autCheck++;
 				}else{
 					rows.acs_cntr_aut_yn = "N";
 				}
 
-				if(policy_change_his_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(policy_change_his_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.policy_change_his_aut_yn = "Y";   
 					autCheck++;
 				}else{
@@ -810,14 +783,14 @@
 				}
 
 				if("${sessionScope.session.pg_audit}"== "Y"){
-					if(adt_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+					if(adt_cng_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 						rows.adt_cng_aut_yn = "Y";   
 						autCheck++;
 					}else{
 						rows.adt_cng_aut_yn = "N";
 					}
 
-					if(adt_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+					if(adt_hist_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 						rows.adt_hist_aut_yt = "Y";   
 						autCheck++;
 					}else{
@@ -825,14 +798,14 @@
 					}
 				}
 
-				if(script_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(script_cng_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.script_cng_aut_yn = "Y";   
 					autCheck++;
 				}else{
 					rows.script_cng_aut_yn = "N";
 				}
 
-				if(script_his_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				if(script_his_aut[i].checked){ //ì íëì´ ìì¼ë©´ ë°°ì´ì ê°ì ì ì¥í¨
 					rows.script_his_aut_yn = "Y";   
 					autCheck++;
 				}else{
@@ -840,7 +813,7 @@
 				}
 				datasArr.push(rows);
 
-				/*DB서버 메뉴권한이 있으면 해당 DB서버 DB권한 가지기*/
+				/*DBìë² ë©ë´ê¶íì´ ìì¼ë©´ í´ë¹ DBìë² DBê¶í ê°ì§ê¸°*/
 				if(autCheck > 0){
 					$.ajax({
 						url : "/updateServerDBAutInfo.do",
@@ -885,7 +858,7 @@
 	}
 
 	/* ********************************************************
-	 * db서버권한 등록
+	 * dbìë²ê¶í ë±ë¡
 	 ******************************************************** */
 	function fn_UsrDBSrvAutInfo() {
 		$.ajax({
@@ -919,7 +892,7 @@
 		});
 	}
 
-	/* 유저조회버튼 클릭시 */
+	/* ì ì ì¡°íë²í¼ í´ë¦­ì */
  	function fn_search(){
 		$.ajax({
 			url : "/selectMenuAutUserManager.do",
