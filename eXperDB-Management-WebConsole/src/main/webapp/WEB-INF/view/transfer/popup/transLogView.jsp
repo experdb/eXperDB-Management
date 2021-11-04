@@ -28,6 +28,7 @@
 		var v_type = $("#type", "#transLogViewForm").val();
 		var v_date = $("#date", "#transLogViewForm").val();
 		var v_todayYN = $("#todayYN", "#transLogViewForm").val();
+		var v_kc_id = $("#kc_id", "#transLogViewForm").val();
 // 		var v_aut_id = $("#aut_id", "#transLogViewForm").val();
 		
 		if(v_endFlag > 0) {
@@ -47,6 +48,7 @@
  			data : {
  				db_svr_id : v_db_svr_id,
  				trans_id : v_trans_id,
+ 				kc_id : v_kc_id,
  				date : v_date,
 				seek : v_seek,
  				dwLen : v_dwLen,
@@ -69,24 +71,21 @@
 			success : function(result) {
 				if (result != null) {
 					var v_fileSize = Number($("#fSize", "#transLogViewForm").val());
-					
 					if (result.data != null) {
 						$("#connectorlog", "#transLogViewForm").html(result.data);
-						
 						v_fileSize = result.fSize;
 					}
-
+					if(result.kc_nm != null) {
+						$(".log_title").html(' [' + result.kc_nm + '] ' + v_type + ' 로그');
+					}
 					$("#fSize", "#transLogViewForm").val(v_fileSize);
-					
 					$("#dwLen", "#transLogViewForm").val(result.dwLen);
 					$("#view_file_name", "#transLogViewForm").html(result.file_name);
 					$("#date", "#transLogViewForm").val(v_date);
 					$("#status", "#transLogViewForm").val(result.status);
 					
 					v_fileSize = byteConvertor(v_fileSize);
-					
 					$("#view_file_size", "#transLogViewForm").html(v_fileSize);
-					
 				}
 
 // 				if(v_aut_id != 1){
@@ -237,11 +236,11 @@
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 20px 250px;">
 		<div class="modal-content" style="width:1200px;">		 
 			<div class="modal-body" style="margin-bottom:-10px;">
-			<div class="row">
-				<div class="col-sm-9">
-				<h4 class="modal-title mdi mdi-alert-circle text-info log_title" id="ModalLabel" style="padding-left:5px;">
-				</h4>
-				</div>
+				<div class="row">
+					<div class="col-sm-9">
+						<h4 class="modal-title mdi mdi-alert-circle text-info log_title" id="ModalLabel" style="padding-left:5px;">
+						</h4>
+					</div>
 <!-- 				<div class="col-sm-3"> -->
 					
 <!-- 					<button type="button" class="btn btn-outline-success btn-icon-text" id="download_btn" style="margin-left:50px;" onclick="fn_pry_log_download()"> -->
@@ -249,7 +248,7 @@
 <%-- 						&nbsp;<spring:message code='migration.download' /></i> --%>
 <!-- 					</button> -->
 <!-- 				</div> -->
-			</div>
+				</div>
 				
 				<form class="cmxform" id="transLogViewForm" name="transLogViewForm" >
 					<input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
@@ -265,6 +264,7 @@
 					<input type="hidden" id="todayYN" name="todayYN">
 					<input type="hidden" id="status" name="status">
 					<input type="hidden" id="agt_cndt_cd" name="agt_cndt_cd">
+					<input type="hidden" id="kc_id" name="kc_id" value="">
 					<fieldset>
 						<div class="card" style="margin-top:10px;border:0px;margin-bottom:-40px;">
 							<div class="card-body">
@@ -328,7 +328,6 @@
 
 			<div class="top-modal-footer" style="text-align: center !important;" >
 				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
-			
 			</div>
 		</div>
 	</div>

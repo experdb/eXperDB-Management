@@ -51,6 +51,9 @@ var data_transfer_connecting = "<spring:message code='data_transfer.connecting' 
 var data_transfer_msg34 = "<spring:message code='data_transfer.msg34' />";
 var data_transfer_msg35 = "<spring:message code='data_transfer.msg35' />";
 
+var message_act_start = "<spring:message code='eXperDB_proxy.act_start'/>";
+var message_act_restart = "<spring:message code='eXperDB_proxy.act_restart'/>";
+var message_act_stop = "<spring:message code='eXperDB_proxy.act_stop'/>";
 </script>
 <body>
 

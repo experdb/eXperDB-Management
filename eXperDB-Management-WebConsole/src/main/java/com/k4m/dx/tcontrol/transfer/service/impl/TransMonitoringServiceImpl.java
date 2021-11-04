@@ -273,7 +273,7 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	/**
 	 * kafka Connect 전체 에러 조회
 	 * 
-    * @param param
+	 * @param param
 	 * @return List<Map<String, Object>>
 	 */
 	@Override
@@ -335,7 +335,7 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 
 			logResult = cic.getLogFile(IP, PORT, dbServerVO, jObj);
-         logResult.put("kc_nm", kafkaInfo.get("kc_nm"));
+			logResult.put("kc_nm", kafkaInfo.get("kc_nm"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

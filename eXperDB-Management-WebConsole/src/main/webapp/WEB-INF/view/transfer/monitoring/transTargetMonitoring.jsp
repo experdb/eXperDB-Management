@@ -58,7 +58,7 @@
 			<div id="tar_dbms_header_sub" class="collapse show row" role="tabpanel" aria-labelledby="tar_dbms_header_div" data-parent="#accordion_tar_dbms_his">
 				<div class="col-md-12 col-xl-12 justify-content-center" >
 					<div class="card" style="border:none; box-shadow: 0px 1px 7px 1px rgba(211, 211, 211, 2);">
-						<div class="card-body" style="border:none; margin-bottom:8px; ">
+						<div class="card-body" style="border:none; margin-bottom:8px;">
 							<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 								<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 									<i class="item-icon fa fa-dot-circle-o"></i>
@@ -107,6 +107,9 @@
 							</div>
 							
 						</div>
+						<div class="card-body" style="border:none; margin-bottom:8px; height:205px; display:none;">
+							데이터가 없습니다.
+						</div>
 					</div>
 				</div>
 			</div>
@@ -116,7 +119,7 @@
 			<!-- connect 정보 title -->
 			<div class="row">
 				<div class="accordion_main accordion-multi-colored col-12" id="accordion_tar_connect_his" role="tablist">
-					<div class="card" style="margin-bottom:0px; margin-top:45px;">
+					<div class="card" style="margin-bottom:0px; margin-top:42px;">
 						<div class="card-header" role="tab" id="tar_connect_header_div">
 							<div class="row" style="height: 15px;">
 								<div class="col-6">
@@ -188,7 +191,7 @@
 			</div>
 			
 			<div id="tar_connect_header_sub_list" class="collapse show row" role="tabpanel" aria-labelledby="tar_connect_header_div" data-parent="#accordion_tar_connect_his">
-				<div class="col-md-12 col-xl-12 justify-content-center" style="margin-top:82px;">
+				<div class="col-md-12 col-xl-12 justify-content-center" style="margin-top:42px;">
 					<div class="card" style="margin-left:-10px;border:none;">
 						<div class="card-body" style="border:none;">
 							<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
@@ -203,7 +206,7 @@
 				
 				<!-- chart 1 -->
 				<div class="col-md-6 col-xl-6 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
+					<div class="card" style="border:none;">
 						<div class="card-body" style="border:none;margin-top:-35px;">
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
 								<i class="item-icon mdi mdi-chart-line text-info"></i>&nbsp;실시간 레코드
@@ -215,7 +218,7 @@
 						
 				<!-- chart 2 -->
 				<div class="col-md-6 col-xl-6 justify-content-center">
-					<div class="card" style="margin-left:-10px;border:none;">
+					<div class="card" style="border:none;">
 						<div class="card-body" style="border:none;margin-top:-35px;">
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
 								<i class="item-icon mdi mdi-chart-areaspline text-info"></i>&nbsp;완료 레코드

@@ -32,16 +32,16 @@
 	/* ********************************************************
 	* TAB 선택 이벤트 
 	******************************************************** */
-	function selectTab(tab){	
+	function selectTab(tab){
+		console.log("tab : " + tab);
 		if(tab == "snapshot"){
-			$(".snapshotDiv").show();
-			$(".streamingDiv").hide();
 			fn_snapshot_strem("snapshot");
+			$(".streamingDiv").hide();
+			$(".snapshotDiv").show();
 		}else{
+			fn_snapshot_strem("streaming");
 			$(".snapshotDiv").hide();
 			$(".streamingDiv").show();
-
-			fn_snapshot_strem("stream");
 		}
 	}
 </script>
