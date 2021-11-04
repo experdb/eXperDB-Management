@@ -81,6 +81,7 @@
                    , TRANSSETTING_AUT_YN
                    , TRANS_DBMS_CNG_AUT_YN
                    , TRANS_CON_CNG_AUT_YN
+                   , TRANS_MTR_AUT_YN
                    )
               VALUES
                    (
@@ -98,6 +99,7 @@
                    , clock_timestamp()
                    , #{usr_id}
                    , clock_timestamp()
+                   , 'N'
                    , 'N'
                    , 'N'
                    , 'N'
@@ -257,6 +259,7 @@
 	    	   ,transSetting_aut_yn = #{transSetting_aut_yn}
 	    	   ,TRANS_DBMS_CNG_AUT_YN = #{trans_dbms_cng_aut_yn}
 	    	   ,TRANS_CON_CNG_AUT_YN = #{trans_con_cng_aut_yn}
+	    	   ,TRANS_MTR_AUT_YN = #{trans_mtr_aut_yn}
 	    	</if>
 
          WHERE USR_ID=#{usr_id}
@@ -372,7 +375,7 @@
 	    	      , transSetting_aut_yn
 	    	      , TRANS_DBMS_CNG_AUT_YN
 	    	      , TRANS_CON_CNG_AUT_YN
-	    	      
+	    	      , TRANS_MTR_AUT_YN
 	    	</if>
 
                   )
@@ -409,6 +412,7 @@
 	    	      , #{transSetting_aut_yn}
 	    	      , #{trans_dbms_cng_aut_yn}
 	    	      , #{trans_con_cng_aut_yn}
+	    	      , #{trans_mtr_aut_yn}
 	    	</if>
                   )
 	</insert>
@@ -492,6 +496,7 @@
 				, transSetting_aut_yn
 				, TRANS_DBMS_CNG_AUT_YN
 				, TRANS_CON_CNG_AUT_YN
+				, TRANS_MTR_AUT_YN
 		        , FRST_REGR_ID
 				, FRST_REG_DTM
 				, LST_MDFR_ID

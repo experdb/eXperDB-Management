@@ -231,6 +231,16 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
+						
+						html1+='	<tr>';
+						html1+='		<td class="pl-4"><spring:message code="menu.trans_monitoring" /></td>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_mtr_aut" name="trans_mtr_aut" onClick="fn_userCheck();" />';
+						html1+='				<label for="'+item.db_svr_id+'_trans_mtr_aut"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
 					}
 					
 					html1+='	<tr>';
@@ -434,6 +444,13 @@
 								}else{
 									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = false;
 								}
+								
+								//모니터링
+								if(result.length != 0 && result[i].trans_mtr_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_trans_mtr_aut").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_trans_mtr_aut").checked = false;
+								}
 							}
 
 							//서버접근제어 권한
@@ -507,6 +524,7 @@
 							document.getElementById(svr_server[0].db_svr_id+"_transSetting").checked = false;
 							document.getElementById(svr_server[0].db_svr_id+"_trans_dbms_aut").checked = false;
 							document.getElementById(svr_server[0].db_svr_id+"_trans_con_aut").checked = false;
+							document.getElementById(svr_server[0].db_svr_id+"_trans_mtr_aut").checked = false;
 						}
 					}
 				}
@@ -566,13 +584,13 @@
 		if("${sessionScope.session.pg_audit}"== "Y"){
 			if (scale_yn_chk == "Y") {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his","_trans_mtr_aut");
 				}else{
 					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}		
 			} else {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his", "_trans_mtr_aut");
 				}else{
 					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}
@@ -580,13 +598,13 @@
 		}else{
 			if (scale_yn_chk == "Y") {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his", "_trans_mtr_aut");
 				}else{
 					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}	
 			} else {				
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his", "_trans_mtr_aut");
 				}else{
 					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}	
@@ -766,6 +784,15 @@
 					}else{				
 						rows.trans_con_cng_aut_yn = "N";
 					}
+					
+					if(trans_mtr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함			
+						rows.trans_mtr_cng_aut_yn = "Y"; 
+						autCheck++;
+					}else{				
+						rows.trans_mtr_cng_aut_yn = "N";
+					}
+					
+					
 				}
 					
 				if(acs_cntr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
