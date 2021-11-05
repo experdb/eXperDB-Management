@@ -224,7 +224,7 @@ public class ScheduleQuartzJob implements Job{
 
 						CMD.add("");						
 						
-						/*int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());						
+						int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());						
 						String oldSavePath = scheduleService.selectOldSavePath(wrk_id);
 								
 						System.out.println("wrk_id= " +  wrk_id);
@@ -261,7 +261,7 @@ public class ScheduleQuartzJob implements Job{
 						}
 						
 						scheduleService.updateScheduler(vo);
-							*/				
+									
 					}				
 				}		
 							
