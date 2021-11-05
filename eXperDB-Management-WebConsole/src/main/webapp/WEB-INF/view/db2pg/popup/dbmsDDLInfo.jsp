@@ -172,6 +172,7 @@ function fn_Mod(){
 									<option value="TC002201">Oracle</option>
 									<option value="TC002202">MS-SQL</option>
 									<option value="TC002203">MySQL</option>	
+									<option value="TC002208">Tibero</option>
 								</select>
 							</div>
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search_dbmsInfo();" >

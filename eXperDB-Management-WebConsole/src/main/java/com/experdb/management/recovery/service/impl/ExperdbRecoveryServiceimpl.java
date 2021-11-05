@@ -228,13 +228,13 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		RestoreInfoVO restoreInfoVo = new RestoreInfoVO();
 		String instanceBmr = request.getParameter("bmrInstant");
 		String jobName_New = "recovery"+time;
-		if(instanceBmr.equals("1")){
+		/*if(instanceBmr.equals("1")){*/
 			jobName_New = "InstantBmr"+time;
 			restoreInfoVo.setBmr("yes");
-		}else if(instanceBmr.equals("2")){
+		/*}else if(instanceBmr.equals("2")){
 			jobName_New = "Bmr"+time;
 			restoreInfoVo.setBmr("no");
-		}
+		}*/
 				
 		restoreInfoVo.setType("completeRecovery");
 		restoreInfoVo.setJobName(jobName_New);
@@ -267,7 +267,7 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		String usr_id = loginVo.getUsr_id();
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 		
-		String user_password = aes.aesDecode(experdbRecoveryDAO.getUserPassword(usr_id));
+		String user_password = aes.aesDecode(experdbRecoveryDAO.getUserPassword(usr_id));	
 		
 		if(user_password.equals(password)){
 			return true;
@@ -356,6 +356,7 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
         
 		
 		String password = request.getParameter("password");
+
 		if(!checkAccountPassword(session, password)){
 			result.put("result_code", 5);
 			return result;
@@ -364,13 +365,18 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		RestoreInfoVO restoreInfoVo = new RestoreInfoVO();
 		String instanceBmr = request.getParameter("bmrInstant");
 		String jobName_New = "recovery"+time;
-		if(instanceBmr.equals("1")){
+		
+		jobName_New = "InstantBmr"+time;
+		restoreInfoVo.setBmr("yes");
+		
+	/*	if(instanceBmr.equals("1")){
 			jobName_New = "InstantBmr"+time;
 			restoreInfoVo.setBmr("yes");
 		}else if(instanceBmr.equals("2")){
 			jobName_New = "Bmr"+time;
 			restoreInfoVo.setBmr("no");
 		}
+		*/
 		
 		restoreInfoVo.setType("timeRecovery");
 		restoreInfoVo.setJobName(jobName_New);
@@ -392,6 +398,7 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		
 		make.bmr(restoreInfoVo);
 		result = util.recoveryRun(jobName_New, "timePoint");
+		result.put("jobName", jobName_New);
 
 		return result;		
 	}

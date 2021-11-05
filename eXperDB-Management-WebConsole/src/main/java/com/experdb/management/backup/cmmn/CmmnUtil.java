@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -348,11 +349,12 @@ public class CmmnUtil {
 				String path = "/opt/Arcserve/d2dserver/bin";
 				String cmd = null;
 				
-				if(jobType.equals("complete")){
-					cmd = "cd " + path + ";" + "./d2dbmr --template=" + path + "/jobs/" + jobname + ".txt; cd " + path + "/jobs;rm -rf " + jobname + ".txt";
+				//if(jobType.equals("complete")){
+					//cmd = "cd " + path + ";" + "./d2dbmr --template=" + path + "/jobs/" + jobname + ".txt; cd " + path + "/jobs;rm -rf " + jobname + ".txt";
+					cmd = "cd " + path + ";" + "./d2dbmr --template=" + path + "/jobs/" + jobname + ".txt";
 					System.out.println(cmd);
 					result = cmmUtil.execute(cmd, "job");
-				}
+				//}
 				
 				return result;
 			}
@@ -578,6 +580,83 @@ public class CmmnUtil {
 				
 			}
 			
+			public JSONObject getRecoveryPoint(String storagePth, String ipadr) {
+				
+				JSONObject result = new JSONObject();		
+				JSONObject recoveryResult = new JSONObject();	
+				CmmnUtil cmmUtil = new CmmnUtil();
+				
+				String mountPoint = getMountPointPath().replaceAll("\\\\", "/");
+				
+				 try {
+						cmmUtil.execute("mkdir "+mountPoint,"nfs");
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					 
+					
+				 String cmd = "mount " + storagePth + " "+mountPoint + " -o timeo=50,retry=0; echo $?" ;
+
+				 System.out.println("MOUNT CMD = " +cmd);
+				 
+				try {
+					result = cmmUtil.execute(cmd.toString(), "nfs");
+					
+					//mount 후  ->  umount 명령어 실행
+					if (result.get("RESULT_CODE").equals(0)) {
+						
+						String recoveryPointCmd = "cd " + mountPoint +"/"+ ipadr + ";" + " ls -F | grep / | tr -d /";
+						
+						System.out.println("RecoveryPoint =" + recoveryPointCmd);
+						
+						recoveryResult = cmmUtil.execute(recoveryPointCmd,"");
+						
+						result = unmountNfs(mountPoint);
+					}
+
+					// file.delete();
+					 try {
+							cmmUtil.execute("rm -rf "+mountPoint, "nfs");
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return recoveryResult;
+			}
+			
+			
+			private static String getMountPointPath() {
+				return ServiceContext.getInstance().getTempFolder() + File.separator + "ws_" + UUID.randomUUID();
+			}
+			
+			
+			
+			public static JSONObject unmountNfs(String mountPoint) {
+
+				JSONObject result = new JSONObject();
+				CmmnUtil cmmUtil = new CmmnUtil();
+
+				 String smd = "umount -l " +mountPoint+"; echo $?";
+				 System.out.println("CMD = "+smd);
+				 
+				try {
+					result = cmmUtil.execute(smd.toString(), "nfs");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return result;
+			}
 			
 			
 			public static void main(String[] args) {
@@ -608,6 +687,10 @@ public class CmmnUtil {
 				// encPassword("root0225!!");
 			
 			}
+
+
+
+		
 			
 
 

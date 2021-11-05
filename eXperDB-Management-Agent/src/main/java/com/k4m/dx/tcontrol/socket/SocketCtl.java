@@ -44,7 +44,7 @@ public class SocketCtl {
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public static final int TotalLengthBit = 4;
-	private static int		DEFAULT_TIMEOUT = 30;
+	private static int		DEFAULT_TIMEOUT = 18000;
 	private static int		DEFAULT_BUFFER_SIZE = 1024;
 	
 	protected String		_caller = "unknown";	

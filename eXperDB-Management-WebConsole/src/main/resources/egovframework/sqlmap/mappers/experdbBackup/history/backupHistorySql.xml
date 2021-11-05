@@ -157,4 +157,57 @@
 				WHERE MESSAGE LIKE '%Recovery point is%'
 		</select>
 		
+		<select id="selectRecoveryPoint"  resultType="backupJobHistoryVO" parameterType="hashmap">
+				SELECT 
+						RECORDID
+						, SERVERNAME
+						, TARGETNAME
+						, JOBNAME
+						, JOBUUID
+						, JOBID
+						, JOBTYPE 
+						, (CASE 
+								 when JOBTYPE = 1 then 'Backup'
+								 when JOBTYPE = 2 then 'Restore'
+								 when JOBTYPE = 3 then 'Backup Full'
+							     when JOBTYPE = 4 then 'Backup Incremental '     
+							     when JOBTYPE = 5 then 'Backup Verify'
+								 when JOBTYPE = 40 then 'Stanby'
+								 when JOBTYPE = 21 then 'Restore BMR'
+							     when JOBTYPE = 22 then 'Restore Volumn'	     
+							     when JOBTYPE = 23 then 'Restore File '
+								 when JOBTYPE = 24 then 'Restore VM'
+								 when JOBTYPE = 26 then 'Restore Migration'
+							     when JOBTYPE = 27 then 'Share Recovery Point'  
+							     when JOBTYPE = 28 then 'Assure Recovery'
+								 when JOBTYPE = 60 then 'Start Instant VM JOB'
+					     ELSE 'Stop Instant VM JOB'
+						  end) AS JOBTYPE_NM
+						, JOBMETHOD
+						, DESTINATIONLOCATION
+						, ENCRYPTIONALGONAME
+						, COMPRESSLEVEL
+						, EXECUTETIME
+						, FINISHTIME
+						, THROUGHPUT
+						, WRITETHROUGHPUT
+						, WRITEDATA
+						, PROCESSEDDATA
+						, PROTECTEDDATA
+						, RPSHOSTNAME
+						, RPSUUID
+						, DATASTORENAME
+						, DATASTOREUUID
+						, SOURCEMACHINENAME
+						, SOURCEMACHINEUUID
+						, STATUS
+						, OPERATIONTYPE
+						, SESSIONGUID
+				FROM JOBHISTORY
+			    WHERE 1=1
+			    AND STATUS = 1
+			    AND TARGETNAME = #{ipadr}
+				ORDER BY JOBID DESC		
+				LIMIT #{limit_cnt}
+		</select>		
 </mapper>
