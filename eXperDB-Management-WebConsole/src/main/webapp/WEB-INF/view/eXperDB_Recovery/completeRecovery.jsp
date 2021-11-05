@@ -23,6 +23,19 @@
 	*/
 %>
 
+<style>
+.moving-square-loader:before {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: calc(50% - -15px);
+    left: 0px;
+    background-color: #68afff;
+    animation: rotatemove 1s infinite;
+}
+</style>
+
 <script type="text/javascript">
 
 var storageList = [];
@@ -38,6 +51,11 @@ $(window.document).ready(function() {
 	fn_init();
 	fn_getBackupDBList();
 	$("#storageDiv").hide();
+	$(".moving-square-loader").hide();
+	$("#status_basic").show();
+	/* $("#status_ing").hide();
+	$("#status_basic").show(); */
+
 });
 
 
@@ -299,6 +317,7 @@ function fn_recoveryRun(){
 			$("#recStorageType").val($("#storageType").val());
 			$("#recStoragePath").val($("#storageList").val());
 		}
+		
 		$.ajax({
 			url : "/experdb/completeRecoveryRun.do",
 			type : "post",
@@ -327,7 +346,10 @@ function fn_recoveryRun(){
 				var jobId = fn_selectJobId(jobName);
 				// logCheck 함수 called
 				fn_selectActivityLogCheck(jobId, jobName);
-				$("#pop_layer_popup_recoveryPasswordCheckForm").modal("hide");
+				$("#pop_layer_popup_recoveryPasswordCheckForm").modal("hide");			
+				$(".moving-square-loader").show();
+				$("#status_basic").hide();
+				
 			}
 		})
 		.fail (function(xhr, status, error){
@@ -445,6 +467,8 @@ function fn_selectJobEnd(jobid,jobname){
 			 if(data == 1){		
 				jobend = 1;
 				recLogList.clear().draw();
+				$("#status_basic").show();
+				$(".moving-square-loader").hide();
 			}else{	
 				jobend = 0;
 				fn_selectActivityLogCheck(jobid, jobname);
@@ -531,7 +555,7 @@ function fn_selectJobEnd(jobid,jobname){
 		
 		<!-- recovery setting -->
 		<div class="col-lg-5">
-			<div class="card grid-margin stretch-card" style="height: 130px;margin-bottom: 10px;">
+			<!-- <div class="card grid-margin stretch-card" style="height: 130px;margin-bottom: 10px;">
 				<div class="card-body">
 					<div style="border: 1px solid rgb(200, 200, 200); height: 90px;">
 						<div class="form-group row" style="margin-top: 20px; margin-bottom: 5px; margin-left: 15px;">
@@ -553,24 +577,34 @@ function fn_selectJobEnd(jobid,jobname){
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="card grid-margin stretch-card" style="height: 470px;">
-				<div class="card-body" style="height: 140px; margin-top: 10px;">
-					<div style="width:600px; text-align:center;">
+			</div> -->
+			<div class="card grid-margin stretch-card" style="height: 570px;">
+				<div class="card-body" style="height: 140px; margin-top: 140px;">
+					<div style="width:900px; text-align:center;">
 						<div class="row" style="position:absolute; left:50%;transform: translateX(-50%);">
 							<div class="col-4" style="text-align:center;">
-								<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 7.0em;"></i>
-								<h5 style="margin-top: 8px;">백업 DB</h5>
+								<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 9.0em;margin-left: -100px;"></i>
+								<h5 style="margin-top: 20px;width:100px; margin-left: -60px;">SOURCE DB</h5>
+								<select class="form-control form-control-xsm" id="backupDBList" style="width: 200px; height: 35px; margin-top: 20px; margin-left: -100px;" onchange="fn_backupDBChoice()">
+									<option value="0">선택</option>
+								</select>
 							</div>
-							<i class="mdi mdi-arrow-right-bold icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 7.0em;"></i>
+							<div id="status_basic" ><i class="mdi mdi-arrow-right-bold icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="padding-left: 20px;margin-right: 20p;font-size: 6.0em;margin-top: 20px;"></i></div>
+							<i class="moving-square-loader"></i>
 							<div class="col-4" style="text-align:center;">
-								<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 7.0em;"></i>
-								<h5 style="margin-top: 8px;">복구 DB</h5>
+								<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 9.0em;margin-right: -150px;"></i>
+								<h5 style="margin-top: 20px;width:100px;margin-left: 68px;">TARGET DB</h5>
+								<div class="col-4" style="padding-left: 0px;">
+									<input type="text" id="recoveryDB" name="recoveryDB" class="form-control form-control-sm" style="height: 35px;background-color:#ffffffdd;margin-top: 20px;margin-left: 20px;width: 200px;" readonly/>								
+								</div>
+								<div class="col-4" style="padding-left: 157px;margin-top: -35px;">
+									<button type="button" class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" onClick="fn_targetListPopup()" style="width: 63px;height: 35px;">등록</button>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="card-body">
+				<!-- <div class="card-body">
 					<div class="form-group row" style="margin-top: 10px;margin-left: 0px;">
 						<div  class="col-3 col-form-label pop-label-index" style="padding-top:7px;">
 							백업 DB
@@ -604,7 +638,7 @@ function fn_selectJobEnd(jobid,jobname){
 							<button type="button" class="btn btn-inverse-primary btn-icon-text btn-sm btn-search-disable" onClick="fn_targetListPopup()">등록</button>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<!-- recovery setting end-->
