@@ -1138,6 +1138,8 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 					$('#tar_trans_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].trans_id, ''));
 					
 				}
+				
+//				$('#tar_exe_status', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].exe_status, ''));
 			} else {
 				html_slur_con += '&nbsp;\n';
 			}
@@ -1233,6 +1235,8 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 					$('#sou_trans_exrt_trg_tb_id', '#transMonConStartForm').val(nvlPrmSet(result.connectInfo[0].trans_exrt_trg_tb_id, ''));
 					$('#sou_trans_id', '#transMonConStartForm').val(nvlPrmSet(result.connectInfo[0].trans_id, ''));
 				}
+//				$('#src_exe_status', '#transMonConStartForm').val(nvlPrmSet(result.connectInfo[0].exe_status, ''));
+
 			} else {
 				html_slur_con += '&nbsp;\n';
 			}
@@ -1485,7 +1489,6 @@ function fnc_confirmMultiRst(gbn){
  * 활성화 단건실행
  ******************************************************** */
 function fn_act_mon_execute(act_gbn) {
-	alert($('#tar_db_svr_id', '#transMonConStartForm').val());
 	
 /*	$('#tar_db_svr_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].db_svr_id, ''));
 	$('#tar_trans_exrt_trg_tb_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].trans_exrt_trg_tb_id, ''));

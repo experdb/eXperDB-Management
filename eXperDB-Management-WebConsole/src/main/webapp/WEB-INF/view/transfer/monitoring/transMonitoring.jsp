@@ -85,7 +85,8 @@ a:hover.tip span {
 	var sinkCompleteChart = "";
 	var sinkErrorChart = "";
 	var confile_title = "";
-
+	var src_exe_status = "";
+	var tar_exe_status = "";
 	/* ********************************************************
 	* 화면 onload
 	******************************************************** */
@@ -200,12 +201,14 @@ a:hover.tip span {
 							$('#tar_connect').hide();
 							$('#tar_connect_nvl').show();
 
-								fn_tarConnectInfo();
+							fn_tarConnectInfo();
 							}
 						} else {
 							fn_tarConnectInfo();
 						}
-
+						
+						src_exe_status = result.connectInfo[0].exe_status;
+						
 						//Kafka Connect 별 기동정지이력 setting
 						connectorActTable.clear().draw();
 						if (nvlPrmSet(result.kafkaActCngList, '') != '') {
@@ -322,7 +325,10 @@ a:hover.tip span {
 						
 						//싱크 커넥터 - 차트 setting
 						fn_sink_chart_init(selectValue);
-						
+						// 값 넣어주기
+
+// 						$('#tar_exe_status', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].exe_status, ''));
+						tar_exe_status = result.targetTopicList[0].exe_status;
 						//상단연결도 setting
 						fn_dbmsConnect_digm("tar", result);
 					}
@@ -336,17 +342,20 @@ a:hover.tip span {
 		}
 		$("#loading").hide();
 
-		// 10초에 한번씩 reload
+		// 30초에 한번씩 reload
 
 		var src_connect = $('#src_connect').val();
 		var tar_connector = $('#tar_connector_list').val();
 		
-		if (src_connect != "" || tar_connector != "") {
-			console.log("test");
+// 		var src_exe_status = $('#src_exe_status','#transMonConStartForm').val();
+// 		var tar_exe_status = $('#tar_exe_status', '#transMonConStartForm').val();
+		console.log(src_exe_status + " . " + tar_exe_status)	
+// 		if ((src_connect != "" || tar_connector != "") && (src_exe_status == "TC001501" && tar_exe_status == "TC001501")) {
+		if ((src_connect != "" || tar_connector != "")) {
 			clearTimeout();
 			setTimeout(function(){
 				fn_srcConnectInfo("restart");
-			},10000);
+			},30000);
 		}
 	}
 
@@ -438,6 +447,9 @@ a:hover.tip span {
 	<input type="hidden" name="tar_db_svr_id" id="tar_db_svr_id" value=""/>
 	<input type="hidden" name="tar_trans_exrt_trg_tb_id" id="tar_trans_exrt_trg_tb_id" value=""/>
 	<input type="hidden" name="tar_trans_id" id="tar_trans_id" value=""/>
+	
+	<input type="hidden" name="src_exe_status" id="src_exe_status" value=""/>
+	<input type="hidden" name="tar_exe_status" id="tar_exe_status" value=""/>
 </form>
 
 
