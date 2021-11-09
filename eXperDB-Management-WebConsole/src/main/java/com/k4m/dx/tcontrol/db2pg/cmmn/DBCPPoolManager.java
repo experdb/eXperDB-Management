@@ -17,6 +17,7 @@ import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.net.ConnectTimeoutException;
 
 import java.net.URI;
 
@@ -79,43 +80,46 @@ public class DBCPPoolManager {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		try {
+		
+			Configuration conf = new Configuration();
+			conf.set("ipc.client.connect.max.retries.on.timeouts","1");
+			System.out.println("conf :: "+conf.get("ipc.client.connect.max.retries.on.timeouts"));
+			String conUri = "hdfs://"+serverObj.get(ClientProtocolID.SERVER_IP)+":"+serverObj.get(ClientProtocolID.SERVER_PORT);
+			System.out.println(conUri);
+			FileSystem hdfs = FileSystem.get(new URI(conUri),conf);	
 			
-				Configuration conf = new Configuration();
-				conf.set("hbase.rest.client.max.retries", "2");
-				String conUri = "hdfs://"+serverObj.get(ClientProtocolID.SERVER_IP)+":"+serverObj.get(ClientProtocolID.SERVER_PORT);
-				System.out.println(conUri);
-				FileSystem hdfs = FileSystem.get(new URI(conUri),conf);	
-				
-				FileStatus[] fileStatus = hdfs.listStatus(new Path(conUri+"/"));
-				 Path[] paths = FileUtil.stat2Paths(fileStatus);
-				System.out.println("***** Contents of the Directory *****");
-			    for(Path path : paths)
-			    {
-			      System.out.println(path);
-			    }
-			    
-			    System.out.println( "Hadoop Connection Success!");
-				System.out.println( "************************************************************");
-				
-				result.put("RESULT_CODE", 0);
-	            result.put("RESULT_Conn", "Hadoop Connection Success!");
-				
-			} catch (Exception e) {
-					System.out.println(e.toString());
-					System.out.println( "Database Connection fail!");
-					//shutdownDriver(poolName);
-
-					if (e.toString() != null) {
-						result.put("ERR_MSG", e.toString() );
-					} else {
-						result.put("ERR_MSG", "Database Connection fail!");
-					}
-					
-					result.put("RESULT_CODE", 1);
-					return result;	
-	
-				}
-				return result;	
+			FileStatus[] fileStatus = hdfs.listStatus(new Path(conUri+"/"));
+			 Path[] paths = FileUtil.stat2Paths(fileStatus);
+			System.out.println("***** Contents of the Directory *****");
+		    for(Path path : paths)
+		    {
+		      System.out.println(path);
+		    }
+		    
+		    System.out.println( "Hadoop Connection Success!");
+			System.out.println( "************************************************************");
+			
+			result.put("RESULT_CODE", 0);
+            result.put("RESULT_Conn", "Hadoop Connection Success!");
+			
+		}catch (ConnectTimeoutException ce){
+			System.out.println(ce.toString());
+			result.put("ERR_MSG", "Hadoop Connection fail!");
+			result.put("RESULT_CODE", 1);
+		
+		}catch (Exception e) {
+			System.out.println(e.toString());
+			result.put("ERR_MSG", "Hadoop Connection fail!");
+		
+			if (e.toString() != null) {
+				result.put("ERR_MSG", e.toString() );
+			} else {
+				result.put("ERR_MSG", "Database Connection fail!");
+			}
+			result.put("RESULT_CODE", 1);
+		}
+		
+		return result;	
 	}
 	
 	

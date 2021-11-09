@@ -184,7 +184,7 @@
 								<div class="form-group row">
 									<label for="com_db_svr_nm" class="col-sm-3 col-form-label">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="etc.etc04"/>
+										Schema Registry 명
 									</label>
 									<div class="col-sm-9">
 										<input type="text" class="form-control" id="ins_trans_sche_regi_nm" name="ins_trans_sche_regi_nm" maxlength="200" placeholder='200<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()" tabindex=1 />	

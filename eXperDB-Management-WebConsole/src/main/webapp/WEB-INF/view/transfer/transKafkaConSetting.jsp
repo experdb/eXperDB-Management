@@ -759,6 +759,9 @@
 		<div class="col-6 div-form-margin-table stretch-card">
 			<div class="card">
 				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> Kafka 정보
+					</h4>
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">	
@@ -816,6 +819,9 @@
 		<div class="col-6 div-form-margin-table stretch-card">
 			<div class="card">
 				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> Schema Registry 정보
+					</h4>
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">	
@@ -853,7 +859,7 @@
 	 										<tr class="bg-info text-white">
 												<th width="10"></th>
 												<th width="20" height="0"><spring:message code="common.no" /></th>
-												<th width="150"><spring:message code="etc.etc04"/></th>
+												<th width="150">Schema Registry명</th>
 			 									<th width="100"><spring:message code="data_transfer.ip" /></th>
 												<th width="50"><spring:message code="data_transfer.port" /></th>
 												<th width="80"><spring:message code="data_transfer.connection_status" /></th>

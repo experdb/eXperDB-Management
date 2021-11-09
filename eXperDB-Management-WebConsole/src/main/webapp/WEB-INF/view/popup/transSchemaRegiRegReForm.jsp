@@ -187,7 +187,7 @@
 								<div class="form-group row">
 									<label for="com_db_svr_nm" class="col-sm-3 col-form-label">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="etc.etc04"/>
+										Schema Registry 명
 									</label>
 									<div class="col-sm-9">
 										<input type="text" class="form-control" id="mod_trans_regi_nm" name="mod_trans_regi_nm"  disabled />	
