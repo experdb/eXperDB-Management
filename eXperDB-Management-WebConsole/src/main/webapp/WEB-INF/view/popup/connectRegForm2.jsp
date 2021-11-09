@@ -537,6 +537,24 @@
 		$('#pop_layer_trans_com_con_cho').modal("show");
 	}
 	
+	/* ********************************************************
+	 * Schema Regsitry 등록 버튼 클릭 시 
+	 ******************************************************** */
+	function fn_ins_regiInfo(){
+		$('#cho_trans_sel_schem_mod').hide();
+		$('#cho_trans_sel_schem_add').show();
+		
+		$('#cho_trans_com_cng_nm').val("");
+		
+		 cho_schema_gbn = "ins";
+
+		fn_cho_trans_search_schema();
+		
+
+		$('#pop_layer_trans_sel_schem').modal("show");
+	}
+	
+	
 
 	/* ********************************************************
 	 * DBMS 서버 호출하여 입력
@@ -544,6 +562,31 @@
 	function fn_trans_com_conAddCallback(trans_com_id, trans_com_cng_nm){
 		 $("#ins_trans_com_id", "#insRegForm").val(nvlPrmSet(trans_com_id, ''));
 		 $("#ins_trans_com_cng_nm", "#insRegForm").val(nvlPrmSet(trans_com_cng_nm, ''));
+	}
+
+	/* ********************************************************
+	 * Schema Regsitry 정보 팝업에서 호출하여 입력
+	 ******************************************************** */
+	function fn_trans_schema_AddCallback(regi_id, regi_nm, regi_ip, regi_port){
+		 $("#ins_trans_regi_id", "#insRegForm").val(nvlPrmSet(regi_id, ''));
+		 $("#ins_trans_regi_nm", "#insRegForm").val(nvlPrmSet(regi_nm, ''));
+		 $("#ins_trans_regi_ip", "#insRegForm").val(nvlPrmSet(regi_ip, ''));
+		 $("#ins_trans_regi_port", "#insRegForm").val(nvlPrmSet(regi_port, ''));
+	}
+	
+	/* ********************************************************
+	 * Connect Type 변경 이벤트 
+	 * TC004301 : debezium
+	 * TC004302 : confluent
+	 ******************************************************** */
+	function fn_ConType_change(){
+		 if("TC004302" != $("#ins_connect_type", "#insRegForm").val()){
+			 $(".schemRow").hide();
+		 }else{
+			 $(".schemRow").show();
+		 }
+		
+		
 	}
 
 </script>
@@ -634,25 +677,37 @@
 									<input type="hidden" name="ins_trans_com_id" id="ins_trans_com_id" />
 
 									<fieldset>
+										<!-- Connect명 -->
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.connect_name_set" />
 											</label>
-											<div class="col-sm-8">
+											<div class="col-sm-3">
 												<input type="text" class="form-control form-control-xsm" id="ins_connect_nm" name="ins_connect_nm" maxlength="50" placeholder='<spring:message code='data_transfer.msg18'/>' onblur="this.value=this.value.trim()" tabindex=3 />
 											</div>
 											<div class="col-sm-2">
 												<button type="button" class="btn btn-inverse-danger btn-sm btn-icon-text" onclick="fn_insConNmCheck();"><spring:message code="common.overlap_check" /></button>
 											</div>
+											<label for="ins_connect_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Connect Type<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
+											</label>
+											<div class="col-sm-3">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_connect_type" id="ins_connect_type" tabindex=4 onchange="fn_ConType_change();">
+													<option value=""><spring:message code="common.choice" /></option>
+													<option value="TC004301">Debezium</option>
+													<option value="TC004302">Confluent</option>
+												</select>
+											</div>
 										</div>
-	
+										<!-- 데이터베이스 -->
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="ins_db_id" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.database" />
 											</label>
-											<div class="col-sm-4">
+											<div class="col-sm-3">
 												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_db_id" id="ins_db_id" tabindex=4>
 													<option value=""><spring:message code="common.choice" /></option>
 													<c:forEach var="result" items="${dbList}" varStatus="status">
@@ -660,11 +715,12 @@
 													</c:forEach>
 												</select>
 											</div>
+											<div class="col-sm-2"></div>
 											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.metadata" />
 											</label>
-											<div class="col-sm-4">
+											<div class="col-sm-3">
 												<div class="onoffswitch-pop">
 													<input type="checkbox" name="ins_meta_data_chk" class="onoffswitch-pop-checkbox" id="ins_meta_data_chk" />
 													<label class="onoffswitch-pop-label" for="ins_meta_data_chk">
@@ -674,24 +730,35 @@
 												</div>
 											</div>
 										</div>
-											
+										<!--  스냅샷 모드  -->
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="ins_snapshot_mode" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.snapshot_mode" />
 											</label>
-											<div class="col-sm-4">
+											<div class="col-sm-3">
 											<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_snapshot_mode" id="ins_snapshot_mode" tabindex=5>
 													<c:forEach var="result" items="${snapshotModeList}">
 													<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 													</c:forEach>
 												</select>
 											</div>
-											<div class="col-sm-6" style="height:30px;display: flex;align-items: center;">
-												<span class="text-sm-left" style="font-size: 0.875rem;" id="ins_snapshotModeDetail"></span>	
+											<div class="col-sm-2" style="height:30px;display: flex;align-items: center;padding-right: 0px;">
+												<span class="text-sm-left" style="font-size: 0.75rem;" id="ins_snapshotModeDetail"></span>	
+											</div>
+											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="data_transfer.compression_type" />
+											</label>
+											<div class="col-sm-3">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_compression_type" id="ins_compression_type" tabindex=5>
+													<c:forEach var="result" items="${compressionTypeList}">
+														<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+													</c:forEach>
+												</select>
 											</div>
 										</div>
-
+										<!--  기본 설정 -->
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="ins_trans_com_cng_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
@@ -701,23 +768,32 @@
 												<input type="text" class="form-control form-control-xsm" id="ins_trans_com_cng_nm" name="ins_trans_com_cng_nm" readonly="readonly" />
 											</div>
 											<div class="col-sm-2">
-												<button type="button" class="btn btn-inverse-info btn-sm" style="width: 100px;" onclick="fn_ins_sc_comConCho()"><spring:message code="button.create" /></button>
+												<button type="button" class="btn btn-inverse-info btn-sm btn-icon-text" style="min-width: 84px;" onclick="fn_ins_sc_comConCho()"><spring:message code="button.create" /></button>
 											</div>
-										</div>
-
-										<div class="form-group row" style="margin-bottom:1px;">
-											<label for="ins_compression_type" class="col-sm-2_2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										</div>	
+										<!-- Schema Registry 설정 -->
+										<div class="form-group row schemRow" style="margin-bottom:10px; display: none;">
+											<label for="ins_trans_regi_id" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.compression_type" />
+												Schema Registry
 											</label>
-											<div class="col-sm-4">
-												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_compression_type" id="ins_compression_type" tabindex=5>
-													<c:forEach var="result" items="${compressionTypeList}">
-														<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
-													</c:forEach>
-												</select>
+											<div class="col-sm-3">
+												<input type="hidden" class="form-control form-control-xsm" id="ins_trans_regi_id" name="ins_trans_regi_id" readonly="readonly" />
+												<input type="text" class="form-control form-control-xsm" id="ins_trans_regi_nm" name="ins_trans_regi_nm" placeholder="Schema Registry명" readonly="readonly" />
 											</div>
-											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+											<div class="col-sm-3">
+												<input type="text" class="form-control form-control-xsm" id="ins_trans_regi_ip" name="ins_trans_regi_ip" placeholder="아이피" readonly="readonly" />
+											</div>
+											<div class="col-sm-2">
+												<input type="text" class="form-control form-control-xsm" id="ins_trans_regi_port" name="ins_trans_regi_port" placeholder="포트"  readonly="readonly" />
+											</div>
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-inverse-info btn-sm btn-icon-text" style="min-width: 84px;" onclick="fn_ins_regiInfo()"><spring:message code="button.create" /></button>
+											</div>
+										</div>	
+										<!-- 활성화  -->
+										<div class="form-group row" style="margin-bottom:-15px;">
+											<label for="ins_compression_type" class="col-sm-2 col-form-label-sm pop-label-index">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="access_control_management.activation" />
 											</label>
@@ -730,14 +806,14 @@
 													</label>
 												</div>
 											</div>
-										</div>
-
-										<div class="form-group row div-form-margin-z" id="ins_source_trans_active_div" style="display:none;">
-											<div class="col-sm-12">
-												<div class="alert alert-info" style="margin-top:5px;margin-bottom:-15px;" >
+											<div class="col-sm-7 col-form-label-sm">
+												<span class="text-sm-left text-info" style="font-size: 0.75rem;"  id="ins_source_trans_active_div">
 													<spring:message code="data_transfer.msg27" />
-												</div>
-											</div> 
+												</span>	
+												<%-- <div class="alert alert-info" id="ins_source_trans_active_div" style="display:none; margin-top:5px;margin-bottom:-15px;" >
+													<spring:message code="data_transfer.msg27" />
+												</div> --%>
+											</div>
 										</div>
 									</fieldset>
 								</form>	
