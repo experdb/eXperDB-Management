@@ -26,7 +26,7 @@
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">
-				<i class="item-icon fa fa-dot-circle-o"></i> 타겟 Connect
+				<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="eXperDB_CDC.target_connect"/>
 			</h4>
 			
 			<div id="tar_connect" style="display:none;">
@@ -41,7 +41,7 @@
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#tar_dbms_header_sub" aria-expanded="true" aria-controls="tar_dbms_header_sub" onclick="fn_profileChk('TarDBMSTitleText')">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<span class="menu-title">타겟 DBMS 정보</span>
+												<span class="menu-title"><spring:message code="eXperDB_CDC.target_dbms_info" /></span>
 												<i class="menu-arrow_user_af" id="TarDBMSTitleText" ></i>
 											</a>
 										</h6>
@@ -77,14 +77,14 @@
 								<div class="form-group row" style="margin-bottom:5px;">
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										시스템 명
+										<spring:message code="eXperDB_CDC.system_name"/>
 									</label>
 									<div class="col-sm-4">
 										<span class="form-control-xsm float-left text-muted" id="d_tg_sys_nm" ></span>
 									</div>
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										DBMS 구분
+										<spring:message code="eXperDB_CDC.dbms_type"/>
 									</label>
 									<div class="col-sm-4">
 										<span class="form-control-xsm float-left text-muted" id="d_tg_dbms_type" ></span>
@@ -94,14 +94,14 @@
 								<div class="form-group row" style="margin-bottom:5px;">
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										DB
+										<spring:message code="eXperDB_CDC.database"/>
 									</label>
 									<div class="col-sm-4">
 										<span class="form-control-xsm float-left text-muted" id="d_tg_dbms_nm" ></span>
 									</div>
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										스키마
+										<spring:message code="eXperDB_CDC.schema"/>
 									</label>
 									<div class="col-sm-4">
 										<span class="form-control-xsm float-left text-muted" id="d_tg_schema_nm" ></span>
@@ -110,7 +110,7 @@
 								
 							</div>
 							<div class="card-body" style="border:none; margin-bottom:8px; height:205px; display:none;">
-								데이터가 없습니다.
+								<spring:message code="eXperDB_CDC.msg44"/>
 							</div>
 						</div>
 					</div>
@@ -128,7 +128,7 @@
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#tar_connect_header_sub" aria-expanded="true" aria-controls="tar_connect_header_sub" onclick="fn_profileChk('TarConnectTitleText')">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<span class="menu-title">Connect 정보</span>
+												<span class="menu-title"><spring:message code="eXperDB_CDC.connect_info"/></span>
 												<i class="menu-arrow_user_af" id="TarConnectTitleText" ></i>
 											</a>
 										</h6>
@@ -198,7 +198,7 @@
 							<div class="card-body" style="border:none;">
 								<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
 									<i class="item-icon fa fa-bar-chart-o text-info"></i>
-									&nbsp;connect 실시간 차트
+									&nbsp;<spring:message code="eXperDB_CDC.connect_real_time_chart"/>
 	<!-- 								<i class="fa fa-bar-chart-o menu-icon text-info"></i> -->
 	<!-- 								connect 실시간 차트 -->
 								</p>
@@ -211,7 +211,7 @@
 						<div class="card" style="border:none;">
 							<div class="card-body" style="border:none;margin-top:-35px;">
 								<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-									<i class="item-icon mdi mdi-chart-line text-info"></i>&nbsp;실시간 레코드
+									<i class="item-icon mdi mdi-chart-line text-info"></i>&nbsp;<spring:message code="eXperDB_CDC.real_time_record"/>
 								</p>
 								<div id="tar-chart-line-sink" style="height:200px;"></div>
 							</div>
@@ -223,7 +223,7 @@
 						<div class="card" style="border:none;">
 							<div class="card-body" style="border:none;margin-top:-35px;">
 								<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-									<i class="item-icon mdi mdi-chart-areaspline text-info"></i>&nbsp;완료 레코드
+									<i class="item-icon mdi mdi-chart-areaspline text-info"></i>&nbsp;<spring:message code="eXperDB_CDC.completion_record"/>
 								</p>
 								<div id="tar-chart-line-complete" style="height:200px;"></div>
 							</div>
@@ -237,16 +237,16 @@
 								<table id="tarConnectTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
 									<thead class="bg-info text-white">
 										<tr>
-											<th width="100px;">time</th>
-											<th width="100px;">sink_record_active_count</th>
-											<th width="100px;">put_batch_avg_time_ms</th>
-											<th width="100px;">offset_commit_completion_rate </th>
-											<th width="100px;">sink_record_send_total </th>
-											<th width="100px;">sink_record_active_count_avg</th>
-											<th width="100px;">offset_commit_completion_total </th>
-											<th width="100px;">offset_commit_skip_rate </th>
-											<th width="100px;">offset_commit_skip_total </th>
-											<th width="100px;">sink_record_read_total </th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.time"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.sink_record_active_count"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.put_batch_avg_time_ms"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.offset_commit_completion_rate"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.sink_record_send_total"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.sink_record_active_count_avg"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.offset_commit_completion_total"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.offset_commit_skip_rate"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.offset_commit_skip_total"/></th>
+											<th width="100px;"><spring:message code="eXperDB_CDC.sink_record_read_total"/></th>
 										</tr>
 									</thead>
 								</table>
@@ -267,7 +267,7 @@
 									<div class="col-6">
 										<h6 class="mb-0">
 											<i class="item-icon fa fa-dot-circle-o"></i>
-											<span class="menu-title">Error 정보</span>
+											<span class="menu-title"><spring:message code="eXperDB_CDC.error_info"/></span>
 										</h6>
 									</div>
 									<div class="col-6">
@@ -293,7 +293,7 @@
 					<div class="col-md-12 col-xl-12 justify-content-center" id="tar-chart-error-nvl" style="border:1px; display:none;">
 						<div class="card" >
 							<div class="card-body">
-								<div id="tar-chart-line-sink-error-nvl" style="height:30px;">데이터가 없습니다.</div>
+								<div id="tar-chart-line-sink-error-nvl" style="height:30px;"><spring:message code="eXperDB_CDC.msg44"/></div>
 							</div>
 						</div>
 					</div>
@@ -328,7 +328,7 @@
 				<div class="card bg-inverse-info">
 					<div class="card-body">
 						<p class="card-text">
-							커넥터를 선택해주세요.
+							<spring:message code="message.msg228" />
 						</p>
 					</div>
 				</div>

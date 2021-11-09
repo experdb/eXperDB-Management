@@ -49,7 +49,7 @@
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">
-				<i class="item-icon fa fa-dot-circle-o"></i> 소스 Connect
+				<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="eXperDB_CDC.source_connect"/>
 			</h4>
 
 			<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
@@ -88,7 +88,7 @@
 								<h6 class="mb-0">
 									<a data-toggle="collapse" href="#src_connect_header_sub" aria-expanded="true" aria-controls="src_connect_header_sub" onclick="fn_profileChk('SrcConnectTitleText')">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<span class="menu-title">Connect 정보</span>
+										<span class="menu-title"><spring:message code="eXperDB_CDC.connect_info"/></span>
 										<i class="menu-arrow_user_af" id="SrcConnectTitleText" ></i>
 									</a>
 								</h6>
@@ -112,7 +112,7 @@
 							<div class="form-group row" style="margin-bottom:-20px;margin-top:-20px;">
 								<label class="col-sm-12 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 									<i class="item-icon fa fa-dot-circle-o"></i>
-									connect 설정 정보
+									<spring:message code="eXperDB_CDC.connect_config_info"/>
 								</label>
 							</div>
 							
@@ -123,11 +123,11 @@
 									 		<table id="srcConnectSettingInfoTable" class="table table-hover system-tlb-scroll" style="width:100%;">
 												<thead>
 													<tr class="bg-info text-white">
-														<th width="100" class="dt-center" >connect명</th>
-														<th width="500" class="dt-center" >데이터베이스</th>	
-														<th width="500" class="dt-center" >메타데이터여부</th>	
-														<th width="500" class="dt-center" >스냅샷여부</th>	
-														<th width="500" class="dt-center" >압축형태</th>	
+														<th width="100" class="dt-center" ><spring:message code="eXperDB_CDC.connect_name"/></th>
+														<th width="500" class="dt-center" ><spring:message code="eXperDB_CDC.database"/></th>	
+														<th width="500" class="dt-center" ><spring:message code="eXperDB_CDC.metadata_availability"/></th>	
+														<th width="500" class="dt-center" ><spring:message code="eXperDB_CDC.snapshot_availability"/></th>	
+														<th width="500" class="dt-center" ><spring:message code="eXperDB_CDC.compression_type"/></th>	
 													</tr>
 												</thead>
 	<!-- 											<tbody> -->
@@ -169,8 +169,8 @@
 									 		<table id="srcMappingListTable" class="table table-hover system-tlb-scroll" style="width:100%;">
 												<thead>
 													<tr class="bg-info text-white">
-														<th width="100" class="dt-center" >스키마명</th>
-														<th width="500" class="dt-center" >테이블명</th>	
+														<th width="100" class="dt-center" ><spring:message code="eXperDB_CDC.schema_name"/></th>
+														<th width="500" class="dt-center" ><spring:message code="eXperDB_CDC.table_name"/></th>	
 													</tr>
 	<!-- 											</thead> -->
 	<!-- 											<tbody> -->
@@ -197,7 +197,7 @@
 						<div class="card-body" style="border:none;">
 							<p class="card-title" style="margin-bottom:5px;margin-left:10px;">
 								<i class="item-icon fa fa-bar-chart-o text-info"></i>
-								&nbsp;connect 실시간 차트
+								&nbsp;<spring:message code="eXperDB_CDC.connect_real_time_chart"/>
 <!-- 								<i class="fa fa-bar-chart-o menu-icon text-info"></i> -->
 <!-- 								connect 실시간 차트 -->
 							</p>
@@ -210,7 +210,7 @@
 					<div class="card" style="border:none;">
 						<div class="card-body" style="border:none;margin-top:-35px;">
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon mdi mdi-chart-line text-info"></i>&nbsp;실시간 전송 레코드
+								<i class="item-icon mdi mdi-chart-line text-info"></i>&nbsp;<spring:message code="eXperDB_CDC.real_time_trans_record"/>
 							</p>
 							<div id="src-chart-line-1" style="height:200px;"></div>
 						</div>
@@ -222,7 +222,7 @@
 					<div class="card" style="border:none;">
 						<div class="card-body" style="border:none;margin-top:-35px;">
 							<p class="card-title" style="margin-bottom:0px;margin-left:10px;">
-								<i class="item-icon mdi mdi-chart-areaspline text-info"></i>&nbsp;평균 전송 레코드
+								<i class="item-icon mdi mdi-chart-areaspline text-info"></i>&nbsp;<spring:message code="eXperDB_CDC.avg_trans_record"/>
 							</p>
 							<div id="src-chart-line-2" style="height:200px;"></div>
 						</div>
@@ -236,13 +236,13 @@
 							<table id="srcConnectTable" class="table table-bordered system-tlb-scroll text-center" style="width:100%;">
 								<thead class="bg-info text-white">
 									<tr>
-										<th width="100px;">time</th>
-										<th width="100px;">커넥터 미기록 최대 레코드 수</th>
-										<th width="100px;">커넥터 기록된 평균 레코드 수 </th>
-										<th width="100px;">커넥터 미기록 평균 레코드 수</th>
-										<th width="100px;">커넥터 기록된 레코드 수 </th>
-										<th width="100px;">커넥터 미기록 레코드 수 </th>
-										<th width="100px;">폴링 총 레코드 수</th>
+										<th width="100px;"><spring:message code="eXperDB_CDC.time"/></th>
+										<th width="100px;"><spring:message code="eXperDB_CDC.source_record_active_count_max"/></th>
+										<th width="100px;"><spring:message code="eXperDB_CDC.source_record_write_rate"/></th>
+										<th width="100px;"><spring:message code="eXperDB_CDC.source_record_active_count_avg"/></th>
+										<th width="100px;"><spring:message code="eXperDB_CDC.source_record_write_total"/> </th>
+										<th width="100px;"><spring:message code="eXperDB_CDC.source_record_active_count"/> </th>
+										<th width="100px;"><spring:message code="eXperDB_CDC.source_record_poll_total"/></th>
 									</tr>
 								</thead>
 							</table>
@@ -260,7 +260,7 @@
 							<div class="col-6">
 								<h6 class="mb-0">
 									<i class="item-icon fa fa-dot-circle-o"></i>
-									<span class="menu-title">Error 정보</span>
+									<span class="menu-title"><spring:message code="eXperDB_CDC.error_info"/></span>
 								</h6>
 							</div>
 							<div class="col-6">

@@ -76,7 +76,7 @@
 						v_fileSize = result.fSize;
 					}
 					if(result.kc_nm != null) {
-						$(".log_title").html(' [' + result.kc_nm + '] ' + v_type + ' 로그');
+						$(".log_title").html(' [' + result.kc_nm + '] ' + v_type + ' <spring:message code="restore.log"/>');
 					}
 					$("#fSize", "#transLogViewForm").val(v_fileSize);
 					$("#dwLen", "#transLogViewForm").val(result.dwLen);
@@ -172,8 +172,8 @@
 	function fn_log_act_confirm_modal(act_status){
 		var gbn = "restart";
 		
-		confirm_title = 'kafka 재시작';
-		$('#confirm_msg').html(fn_strBrReplcae('kafka를 재시작하시겠습니까?'));
+		confirm_title = '<spring:message code="eXperDB_CDC.kafka_restart"/>';
+		$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg46"/>'));
 	
 		$('#con_only_gbn', '#findConfirmOnly').val(gbn);
 		$('#confirm_tlt').html(confirm_title);
@@ -205,10 +205,10 @@
 
  					setTimeout(function() {
  						fn_trans_restart_loadbar("stop");
- 		 				showSwalIconRst('kafka가 재시작되었습니다.', '<spring:message code="common.close" />', '', 'success');
+ 		 				showSwalIconRst('<spring:message code="eXperDB_CDC.msg47"/>', '<spring:message code="common.close" />', '', 'success');
  					}, 7000);
  				}else{
- 					showSwalIcon('kafka connector가 재시작을 실패했습니다.', '<spring:message code="common.close" />', '', 'error');
+ 					showSwalIcon('<spring:message code="eXperDB_CDC.msg48"/>', '<spring:message code="common.close" />', '', 'error');
 	 			}
  				fn_trans_restart_loadbar("stop");
 			},
@@ -223,6 +223,7 @@
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
+ 				fn_trans_restart_loadbar("stop");
 			}
 		}); 
 // 		fn_trans_restart_loadbar("stop");
@@ -295,7 +296,7 @@
 									<div class="col-sm-8">
 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_transLogViewAjax();" value='<spring:message code="auth_management.viewMore" />' />
 <!-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_log_act_confirm_modal('TC001502')" value="중지" /> -->
-										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" id="restart_btn" type="button" onClick="fn_log_act_confirm_modal('TC001501')" value="재시작" />
+										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" id="restart_btn" type="button" onClick="fn_log_act_confirm_modal('TC001501')" value='<spring:message code="eXperDB_CDC.restart"/>' />
 									</div>
 									<div class="col-sm-2" style="margin-left:-37px;">
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">

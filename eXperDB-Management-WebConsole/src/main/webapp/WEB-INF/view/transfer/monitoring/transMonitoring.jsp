@@ -183,7 +183,7 @@ a:hover.tip span {
 						//싱크커넥터 select 활성화
 						if (strgbn != null && strgbn != "restart") {
 							$('#tar_connector_list').empty();
-							$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
+							$('#tar_connector_list').append('<option value=\"\"><spring:message code="eXperDB_CDC.target_connector" /></option>');
 
 							if (nvlPrmSet(result.targetConnectorList, '') != '') {
 								for (i = 0; i < result.targetConnectorList.length; i++) {
@@ -251,7 +251,7 @@ a:hover.tip span {
 			$('#ssconResultCntTable').hide();
 			$('#ssconResultCntTableNvl').show();
 			$('#tar_connector_list').empty();
-			$('#tar_connector_list').append('<option value=\"\">타겟 Connector</option>');
+			$('#tar_connector_list').append('<option value=\"\"><spring:message code="eXperDB_CDC.target_connector" /></option>');
 
 			//싱크 커넥터 select change
 			fn_tarConnectInfo();
@@ -350,8 +350,8 @@ a:hover.tip span {
 // 		var src_exe_status = $('#src_exe_status','#transMonConStartForm').val();
 // 		var tar_exe_status = $('#tar_exe_status', '#transMonConStartForm').val();
 		console.log(src_exe_status + " . " + tar_exe_status)	
-// 		if ((src_connect != "" || tar_connector != "") && (src_exe_status == "TC001501" && tar_exe_status == "TC001501")) {
-		if ((src_connect != "" || tar_connector != "")) {
+		if ((src_connect != "" || tar_connector != "") && (src_exe_status == "TC001501" && tar_exe_status == "TC001501")) {
+// 		if ((src_connect != "" || tar_connector != "")) {
 			clearTimeout();
 			setTimeout(function(){
 				fn_srcConnectInfo("restart");
@@ -375,7 +375,7 @@ a:hover.tip span {
 		var v_kc_id = $("#kc_id", "#transMonitoringForm").val();
 		
 		if(src_select == '') {
-			showSwalIcon('커넥터를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="message.msg228" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		} else {
 			$.ajax({
@@ -403,11 +403,11 @@ a:hover.tip span {
 						dateCalenderSetting();
 						$('#restart_btn').hide();
 						$('#wrk_strt_dtm_div').show();
-						$('.log_title').html(' Connector 로그');
+						$('.log_title').html(' <spring:message code="eXperDB_CDC.connect_log" /> ');
 					} else if(type === 'kafka'){
 						$('#restart_btn').show();
 						$('#wrk_strt_dtm_div').hide();
-						$('.log_title').html('');
+						$('.log_title').html(' <spring:message code="eXperDB_CDC.kafka_log" /> ');
 					}
 					fn_transLogViewAjax();
 					$('#pop_layer_log_view').modal("show");
@@ -490,7 +490,7 @@ a:hover.tip span {
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0">전송관리에서 등록한 소스 시스템의 소스 connect와 타겟 시스템의 싱크 connect의 상태를 모니터링 할 수 있습니다.</p>
+											<p class="mb-0"><spring:message code="eXperDB_CDC.msg43"/></p>
 										</div>
 									</div>
 								</div>
@@ -561,7 +561,7 @@ a:hover.tip span {
 										<div class="col-12">
 											<h6 class="mb-0">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<span class="menu-title">소스Connect</span>
+												<span class="menu-title"><spring:message code="eXperDB_CDC.source_connect"/></span>
 											</h6>
 										</div>
 									</div>
@@ -618,7 +618,7 @@ a:hover.tip span {
 										<div class="col-12">
 											<h6 class="mb-0">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<span class="menu-title">싱크Connect</span>
+												<span class="menu-title"><spring:message code="eXperDB_CDC.sink_connect"/></span>
 											</h6>
 										</div>
 									</div>
@@ -636,7 +636,7 @@ a:hover.tip span {
 										<tr>
 											<td style="width:80%;" class="text-center" ">
 												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="src_connect" id="src_connect" onChange="fn_srcConnectInfo('change')" onblur="this.value=this.value.trim()" tabindex=1>
-													<option value="">소스 Connect</option>
+													<option value=""><spring:message code="eXperDB_CDC.source_connector"/></option>
 													<c:forEach var="srcConnectorList" items="${srcConnectorList}">
 														<option value="${srcConnectorList.trans_id}">${srcConnectorList.connect_nm}</option>							
 													</c:forEach>
@@ -648,15 +648,14 @@ a:hover.tip span {
 												 <table id="ssconResultTable" class="table table-striped system-tlb-scroll" style="width:100%; border-bottom:1px solid;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th style="width:25%;font-size:12px;">테이블 수</th>
-															<th style="width:37%;font-size:12px;">전체 완료 수</th>
-															<th style="width:38%;font-size:12px;">오류 수</th>
+															<th style="width:25%;font-size:12px;"><spring:message code="eXperDB_CDC.table_count"/></th>
+															<th style="width:37%;font-size:12px;"><spring:message code="eXperDB_CDC.total_poll_count"/></th>
+															<th style="width:38%;font-size:12px;"><spring:message code="eXperDB_CDC.error_count"/></th>
 														</tr>
 														<tr id="ssconResultCntTableNvl" >
 <!--															 <td colspan="3" style="font-size:12px;"> -->
 															<td colspan="3">
-<%--																 <spring:message code="message.msg01" /> --%>
-																커넥터를 선택해주세요
+																 <spring:message code="message.msg228" />
 															</td>
 														</tr>
 														<tr id="ssconResultCntTable" style="display:none;">
@@ -756,7 +755,7 @@ a:hover.tip span {
 										<tr>
 											<td style="width:80%;" class="text-center" ">
 												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="tar_connector_list" id="tar_connector_list" onChange="fn_tarConnectInfo()" onblur="this.value=this.value.trim()"  tabindex=1>
-													<option value=""><spring:message code="eXperDB_CDC.target_connect"/></option> <!--  타겟 connect -->
+													<option value=""><spring:message code="eXperDB_CDC.sink_connect"/></option> <!--  타겟 connect -->
 													<c:forEach var="tarConnectorList" items="${targetConnectorList}">
 														<option value="${tarConnectorList.trans_id}">${tarConnectorList.connect_nm}</option>							
 													</c:forEach>
@@ -768,7 +767,7 @@ a:hover.tip span {
 												 <table id="tarconResultTable" class="table table-striped system-tlb-scroll" style="width:100%; border-bottom:1px solid;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th style="width:25%;font-size:12px;">토픽 수</th>
+															<th style="width:25%;font-size:12px;"><spring:message code="eXperDB_CDC.topic_count"/></th>
 															<th style="width:37%;font-size:12px;"><spring:message code="eXperDB_CDC.complet_count"/></th> <!-- 완료 건수 -->
 															<th style="width:38%;font-size:12px;"><spring:message code="eXperDB_CDC.error_count"/></th> <!-- 오류 건수 -->
 														</tr>

@@ -106,7 +106,7 @@ function fn_cpu_mem_err_chart(){
 					},
 					ykeys: ['src_total_record_errors', 'tar_total_record_errors'],
 					lineColors: ['#FABA66','#F36368'],
-					labels: ['소스 error', '타겟 error'],
+					labels: [message_source_error, message_target_error],
 					lineWidth: 2,
 					parseTime: false,
 					hideHover: false,
@@ -185,7 +185,7 @@ function updateLiveTempGraph(cpuChart, memChart, allErrorChart) {
 					},
 					ykeys : [ 'src_total_record_errors', 'tar_total_record_errors' ],
 					lineColors : [ '#FABA66', '#F36368' ],
-					labels : [ '소스 error', '타겟 error' ],
+					labels : [ message_source_error, message_target_error ],
 					lineWidth : 2,
 					parseTime : false,
 					hideHover : false,
@@ -732,8 +732,8 @@ function fn_src_init(){
  ******************************************************** */
 function fn_tar_init(){
 	$('#topic_cnt').html("");
-   $('#sink_record_send_total').html("");
-   $('#tar_total_error').html("");
+    $('#sink_record_send_total').html("");
+    $('#tar_total_error').html("");
 	$('#d_tg_connect_nm').text("");
 	$('#d_tg_sys_nm').text("");
 	$('#d_tg_dbms_type').text("");
@@ -775,7 +775,7 @@ function funcSsChartSetting(result) {
 			return time.substring(10);
 		},
 		ykeys: ['source_record_write_total', 'source_record_poll_total', 'source_record_active_count'],
-		labels: ['kafka에 기록된 레코드 수','폴링 된 총 레코드 수', 'kafka에 기록되지 않은 레코드 수']
+		labels: [message_source_record_write_total,message_source_record_poll_total, message_source_record_active_count]
 	});
 
 	if(nvlPrmSet(result.sourceChart1, '') != '') {
@@ -799,7 +799,7 @@ function funcSsChartSetting(result) {
 			return time.substring(10);
 		},
 		ykeys: ['source_record_write_rate', 'source_record_active_count_avg'],
-		labels: ['kafka에 기록된 초당 평균 레코드 수','kafka에 기록되지 않은 평균 레코드 수']
+		labels: [message_source_record_write_rate, message_source_record_active_count_avg]
 	});
 
 	if(nvlPrmSet(result.sourceChart2, '') != '') {
@@ -825,7 +825,7 @@ function funcSsChartSetting(result) {
 			return time.substring(10);
 		},
 		ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped', 'total_retries'],
-		labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수', '재시도 작업 수']
+		labels: [message_total_record_errors, message_total_record_failures, message_total_records_skipped, message_total_retries]
 	});
 
 	if(nvlPrmSet(result.sourceErrorChart, '') != '') {
@@ -981,7 +981,7 @@ function fn_sink_chart_init(trans_id){
 							return time.substring(10);
 						},
 						ykeys: ['sink_record_active_count', 'sink_record_send_total'],
-						labels: ['싱크 중인 레코드 수', '싱크 완료 총 수']
+						labels: [message_sink_record_active_count, message_sink_record_send_total]
 					});
 
 					if (nvlPrmSet(result.targetSinkRecordChart, '') != '') {
@@ -1003,7 +1003,7 @@ function fn_sink_chart_init(trans_id){
 							return time.substring(10);
 						},
 						ykeys: ['offset_commit_completion_total', 'offset_commit_skip_total'],
-						labels: ['완료 총 수', '무시된 총 커밋 수']
+						labels: [message_offset_commit_completion_total, message_offset_commit_skip_total]
 					});
 
 					if (nvlPrmSet(result.targetSinkCompleteChart, '') != '') {
@@ -1026,7 +1026,7 @@ function fn_sink_chart_init(trans_id){
 							return time.substring(10);
 						},
 						ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped'],
-						labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수']
+						labels: [message_total_record_errors, message_total_record_failures, message_total_records_skipped]
 					});
 
 					if (nvlPrmSet(result.targetErrorChart, '') != '') {
@@ -1129,7 +1129,7 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 
 					html_slur_con += '			<a href="#" class="tip" onclick="fn_transActivation_moni_click(' +'\'' + result.targetTopicList[0].connect_nm +'\'' + ',2)">\n';
 					html_slur_con += '				'+slur_conn_num_af+' \n';
-					html_slur_con += '				<span style="width: 450px;">Connect가 비활성화 상태입니다.\n연결 화살표 클릭 시 활성화가 가능합니다.</span>\n';
+					html_slur_con += '				<span style="width: 450px;">' + message_msg45 + '</span>\n';
 					html_slur_con += '			</a>\n';					
 
 					//시작실행 setting
@@ -1227,7 +1227,7 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 					
 					html_slur_con += '			<a href="#" class="tip" onclick="fn_transActivation_moni_click(' +'\'' + result.connectInfo[0].connect_nm +'\'' + ', 1)">\n';
 					html_slur_con += '				'+slur_conn_num_af+' \n';
-					html_slur_con += '				<span style="width: 450px;">Connect가 비활성화 상태입니다.\n연결 화살표 클릭 시 활성화가 가능합니다.</span>\n';
+					html_slur_con += '				<span style="width: 450px;">'+ message_msg45 + '</span>\n';
 					html_slur_con += '			</a>\n';	
 					
 					//시작실행 setting
@@ -1335,7 +1335,7 @@ function fn_snapshot_strem(strGbn) {
 									return time.substring(10);
 								},
 								ykeys: ['number_of_events_filtered', 'number_of_erroneous_events'],
-								labels: ['필터링 된 이벤트 수', '오류 난 이벤트 수']
+								labels: [message_number_of_events_filtered, message_number_of_erroneous_events]
 							});
 
 						if (nvlPrmSet(result.snapshotChart, '') != '') {
@@ -1377,11 +1377,11 @@ function fn_snapshot_strem(strGbn) {
 				},
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 					}
 				},
 				success : function(result) {
@@ -1402,7 +1402,7 @@ function fn_snapshot_strem(strGbn) {
 								return time.substring(10);
 							},
 							ykeys: ['total_number_of_events_seen', 'number_of_events_filtered', 'number_of_erroneous_events'],
-							labels: ['이벤트 총 수','필터링 된 이벤트 수', '오류 난 이벤트 수']
+							labels: [message_total_number_of_events_seen, message_number_of_events_filtered, message_number_of_erroneous_events]
 						});
 
 						if (nvlPrmSet(result.streamingChart, '') != '') {
@@ -1445,10 +1445,10 @@ function fn_transActivation_moni_click(connect_nm, activeGbn){
 
 	if (activeGbn  == "1") {
 		con_gbn = "con_start";
-		con_msg = "connect명 : " + connect_nm + '<br/><br/>' + 'source ' + data_transfer_msg8;
+		con_msg = message_connect_name + " : " + connect_nm + '<br/><br/>' + 'source ' + data_transfer_msg8;
 	} else {
 		con_gbn = "target_con_start";
-		con_msg = "connect명 : " + connect_nm + '<br/><br/>' + 'target ' + data_transfer_msg8;
+		con_msg = message_connect_name + " : " + connect_nm + '<br/><br/>' + 'target ' + data_transfer_msg8;
 	}
 
 	$('#con_multi_gbn', '#findConfirmMulti').val(con_gbn);
@@ -1496,7 +1496,7 @@ function fn_act_mon_execute(act_gbn) {
 	var ascRow =  $('#chk_act_row', '#findList').val();
 	var validateMsg ="";
 	var checkId = "";
-
+	fn_trans_loadbar("start");
 	if (act_gbn == "con_start") {
 		$.ajax({
 			url : "/transStart.do",
@@ -1518,10 +1518,11 @@ function fn_act_mon_execute(act_gbn) {
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 				}
+				fn_trans_loadbar("stop");
 			},
 			success : function(result) {
 				checkId = 'source_transActivation' + ascRow;
-				
+				fn_trans_loadbar("stop");
 				if (result == null) {
 					validateMsg = data_transfer_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
@@ -1559,10 +1560,11 @@ function fn_act_mon_execute(act_gbn) {
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 				}
+				fn_trans_loadbar("stop");
 			},
 			success : function(result) {
 				checkId = 'target_transActivation' + ascRow;
-				
+				fn_trans_loadbar("stop");
 				if (result == null) {
 					validateMsg = data_transfer_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
@@ -1577,6 +1579,7 @@ function fn_act_mon_execute(act_gbn) {
 						return;
 					}
 				}
+				
 			}
 		});
 	}
@@ -2116,7 +2119,7 @@ function fn_src_chart_init(){
 			return time.substring(10);
 		},
 		ykeys: ['source_record_write_total', 'source_record_poll_total', 'source_record_active_count'],
-		labels: ['kafka에 기록된 레코드 수','폴링 된 총 레코드 수', 'kafka에 기록되지 않은 레코드 수']
+		labels: [message_source_record_write_total, message_source_record_poll_total, message_source_record_active_count]
 	});
 	
 	srcChart2 = Morris.Line({
@@ -2134,7 +2137,7 @@ function fn_src_chart_init(){
 			return time.substring(10);
 		},
 		ykeys: ['source_record_write_rate', 'source_record_active_count_avg'],
-		labels: ['kafka에 기록된 초당 평균 레코드 수','kafka에 기록되지 않은 평균 레코드 수']
+		labels: [message_source_record_write_rate, message_source_record_active_count_avg]
 	});
 	
 	srcErrorChart = Morris.Line({
@@ -2154,7 +2157,7 @@ function fn_src_chart_init(){
 			return time.substring(10);
 		},
 		ykeys: ['total_record_errors', 'total_record_failures', 'total_records_skipped', 'total_retries'],
-		labels: ['오류 수', '레코드 처리 실패 수', '미처리 레코드 수', '재시도 작업 수']
+		labels: [message_total_record_errors, message_total_record_failures, message_total_records_skipped, message_total_retries]
 	});
 	
 }
