@@ -387,6 +387,21 @@
 		 $("#mod_trans_com_id", "#modRegForm").val(nvlPrmSet(trans_com_id, ''));
 		 $("#mod_trans_com_cng_nm", "#modRegForm").val(nvlPrmSet(trans_com_cng_nm, ''));
 	}
+	
+	/* ********************************************************
+	 * Connect Type 변경 이벤트 
+	 * TC004301 : debezium
+	 * TC004302 : confluent
+	 ******************************************************** */
+	function fn_mod_ConType_change(){
+		 if("TC004302" != $("#mod_connect_type", "#modRegForm").val()){
+//			 $(".schemRow").hide();
+			 $("#mod_schema_registry_info").hide();
+		 }else{
+//			 $(".schemRow").show();
+			 $("#mod_schema_registry_info").show();
+		 }
+	 }
 </script>
 
 <form name="frmTablePopup">
@@ -486,16 +501,24 @@
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.connect_name_set" />
 											</label>
-											<div class="col-sm-8">
+											<div class="col-sm-4">
 												<input type="text" class="form-control form-control-xsm" id="mod_connect_nm" name="mod_connect_nm" maxlength="50" readonly />
 											</div>
-											<div class="col-sm-2">
-												&nbsp;
+											<label for="mod_connect_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Connect Type<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
+											</label>
+											<div class="col-sm-3">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_connect_type" id="mod_connect_type" tabindex=4 onchange="fn_mod_ConType_change();">
+													<option value=""><spring:message code="common.choice" /></option>
+													<option value="TC004301">Debezium</option>
+													<option value="TC004302">Confluent</option>
+												</select>
 											</div>
 										</div>
 										
 										<!-- Schema Registry -->
-										<div id="mod_schema_registry_info" class="card-body" style="border: 1px solid #adb5bd; margin-bottom:20px;display: none;">
+										<div id="mod_schema_registry_info" class="card-body" style="border: 1px solid #adb5bd; margin-bottom:20px; display:none;">
 											<div class="table-responsive">
 												<label for="mod_connect_type" class="col-sm-12 col-form-label-sm pop-label-index" style="margin-top:-10px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
@@ -503,17 +526,15 @@
 												</label>
 												<table id="connectRegPopList" class="table system-tlb-scroll" style="width:100%;">
 													<colgroup>
-														<col style="width: 35%;" />
-														<col style="width: 27%;" />
-														<col style="width: 18%;" />
-														<col style="width: 15%;" />
+														<col style="width: 44%;" />
+														<col style="width: 36%;" />
+														<col style="width: 20%;" />
 													</colgroup>
 													<thead>
 														<tr class="bg-info text-white">
 															<th class="table-text-align-c">Schema Registry <spring:message code="data_transfer.server_name" /></th>
 															<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
 															<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
-															<th class="table-text-align-c"><spring:message code="data_transfer.connection_status" /></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -522,7 +543,7 @@
 																<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_source_sch_nm" id="mod_source_sch_nm" onChange="fn_sch_nm_chg('source_ins');" tabindex=1>
 																	<option value=""><spring:message code="common.choice" /></option>
 																	<c:forEach var="result" items="${schemaRegistryList}" varStatus="status">
-																		<option value="<c:out value="${result.kc_id}"/>"><c:out value="${result.kc_nm}"/></option>
+																		<option value="<c:out value="${result.regi_id}"/>"><c:out value="${result.regi_nm}"/></option>
 																	</c:forEach>
 																</select>
 															</td>				
@@ -532,10 +553,6 @@
 															<td class="table-text-align-c">
 																<input type="text" class="form-control form-control-xsm" maxlength="5" id="mod_sch_port" name="mod_sch_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" disabled tabindex=2 />						
 															</td>
-															<td class="table-text-align-c" id="mod_sch_connect_td" >
-																<%-- <input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="data_transfer.test_connection" />' />
-															--%>
-															</td>											
 														</tr>					
 													</tbody>
 												</table>

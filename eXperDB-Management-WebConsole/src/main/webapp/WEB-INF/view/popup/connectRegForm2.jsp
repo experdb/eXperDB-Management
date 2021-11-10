@@ -110,6 +110,7 @@
   				fn_table_search_ins();
   			}
 		});
+		
 	});
 
 	/* ********************************************************
@@ -581,14 +582,12 @@
 	 ******************************************************** */
 	function fn_ConType_change(){
 		 if("TC004302" != $("#ins_connect_type", "#insRegForm").val()){
-			 $(".schemRow").hide();
+// 			 $(".schemRow").hide();
 			 $("#ins_schema_registry_info").hide();
 		 }else{
-			 $(".schemRow").show();
+// 			 $(".schemRow").show();
 			 $("#ins_schema_registry_info").show();
 		 }
-		
-		
 	}
 
 </script>
@@ -732,7 +731,7 @@
 																<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_source_sch_nm" id="ins_source_sch_nm" onChange="fn_sch_nm_chg('source_ins');" tabindex=1>
 																	<option value=""><spring:message code="common.choice" /></option>
 																	<c:forEach var="result" items="${schemaRegistryList}" varStatus="status">
-																		<option value="<c:out value="${result.kc_id}"/>"><c:out value="${result.kc_nm}"/></option>
+																		<option value="<c:out value="${result.regi_id}"/>"><c:out value="${result.regi_nm}"/></option>
 																	</c:forEach>
 																</select>
 															</td>				

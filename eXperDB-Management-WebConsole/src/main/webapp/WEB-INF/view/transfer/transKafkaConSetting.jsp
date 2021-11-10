@@ -295,7 +295,7 @@
 			trans_connect_id_List.push(datas[i].kc_id);   
 		} */
 
-		confile_title = '<spring:message code="data_transfer.btn_title02" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		confile_title = 'Kafka' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 		$('#con_multi_gbn', '#findConfirmMulti').val("trans_connect_del");
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
@@ -307,7 +307,7 @@
 	 ******************************************************** */
 	function fn_sche_regi_delete(){
 
-		confile_title = '<spring:message code="data_transfer.btn_title02" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		confile_title = 'Schema Registry' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 		$('#con_multi_gbn', '#findConfirmMulti').val("trans_regi_del");
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
@@ -703,7 +703,7 @@
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-database"></i>
-												<span class="menu-title"><spring:message code="data_transfer.btn_title02"/></span>
+												<span class="menu-title"><spring:message code="eXperDB_CDC.connector_server_settings"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -714,7 +714,7 @@
 					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
 					 						</li>
 						 					<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_transfer" /></li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="data_transfer.btn_title02"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_CDC.connector_server_settings"/></li>
 										</ol>
 									</div>
 								</div>

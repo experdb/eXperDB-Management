@@ -785,6 +785,8 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			ins_connect_nm_Chk = "fail";
 			
 			$('a[href="#insSettingTab"]').tab('show');
+
+			$("#ins_schema_registry_info").hide();
 		} else {
 			
 			ins_tg_topicList.clear().draw();
@@ -883,6 +885,10 @@ function fn_update_setting(result, active_gbn) {
 		
 		if (result.tables.data != null) {
 			mod_connector_tableList.rows.add(result.tables.data).draw();	
+		}
+		
+		if(result.connect_type == "TC004301"){
+			$("#ins_schema_registry_info").hide();
 		}
 	} else {
 		$("#mod_target_kc_nm", "#searchTargetModForm").val(nvlPrmSet(result.kc_id, ""));
@@ -2172,5 +2178,21 @@ function fn_kc_nm_chg(hw_gbn) {
 				}
 			}
 		});
+	}
+}
+
+/* ********************************************************
+ * schema registry 등록
+ ******************************************************** */
+function fn_sch_nm_chg(hw_gbn){
+	
+	var prm_schrg_id = "";
+	var prm_schrg_staus = "";
+	var connectTd = "";
+
+	if (hw_gbn == "source_ins") {
+		prm_schrg_id = nvlPrmSet($("#ins_source_sch_nm","#searchRegForm").val(), "");
+	} else {
+		prm_schrg_id = nvlPrmSet($("#ins_target_kc_nm","#searchTargetRegForm").val(), "");
 	}
 }
