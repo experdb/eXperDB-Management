@@ -967,8 +967,13 @@ public class TransController {
 				if(transMappVO.getTable_total_cnt().equals("") || transMappVO.getSchema_total_cnt().equals(null)){
 					transMappVO.setTable_total_cnt("0");
 				}
+				
+				if (transVO.getRegi_id() != null && !"".equals(transVO.getRegi_id())) {
+					transMappVO.setRegi_id(transVO.getRegi_id());
+				} else {
+					transMappVO.setRegi_id(null);
+				}
 
-				transMappVO.setRegi_id(transVO.getRegi_id());
 				//전송대상 테이블 등록
 				transService.insertTransExrttrgMapp(transMappVO);	
 				
@@ -981,6 +986,10 @@ public class TransController {
 			}
 
 			transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
+			if (transVO.getRegi_id() == null || "".equals(transVO.getRegi_id())) {
+				transVO.setRegi_id(null);
+			}
+			
 			transService.insertConnectInfo(transVO);		
 		} catch (Exception e) {
 			result = "fail";
@@ -1043,8 +1052,17 @@ public class TransController {
 				}
 				
 				transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
-				transMappVO.setRegi_id(transVO.getRegi_id());
+
+				if (transVO.getRegi_id() != null && !"".equals(transVO.getRegi_id())) {
+					transMappVO.setRegi_id(transVO.getRegi_id());
+				} else {
+					transMappVO.setRegi_id(null);
+				}
 				
+				if (transVO.getRegi_id() == null || "".equals(transVO.getRegi_id())) {
+					transVO.setRegi_id(null);
+				}
+
 				//전송대상 테이블 등록
 				result = transService.insertTargetConnectInfoTot(transMappVO, transVO);
 			} catch (Exception e) {
