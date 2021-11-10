@@ -140,7 +140,7 @@
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="access_control_management.activation" />
 									</label>
-									<div class="col-sm-6">
+									<div class="col-sm-4">
 										<div class="onoffswitch-pop-play">
 											<input type="checkbox" name="mod_target_transActive_act" class="onoffswitch-pop-play-checkbox" id="mod_target_transActive_act" onclick="fn_transActivation_msg_set('mod_target')" >
 											<label class="onoffswitch-pop-play-label" for="mod_target_transActive_act">
@@ -149,8 +149,19 @@
 											</label>
 										</div>
 									</div>
-									<div class="col-sm-4">
-										&nbsp;
+									<div class="col-sm-6">
+										<div class="row">
+											<label for="ins_tg_trans_trg_sys_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="eXperDB_CDC.topic_type"/>
+											</label>
+											<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
+												<input type="radio" id="avro_type" class="form-check-input" name="topic_type" onclick="" >
+												<label class="form-check-label" for="avro_type" style="padding-right:30px;">avro</label>
+												<input type="radio" id="normal_type" class="form-check-input" name="topic_type" onclick="" >
+												<label class="form-check-label" for="normal_type">normal</label>
+											</div>
+										</div>
 									</div>
 								</div>
 								

@@ -219,20 +219,19 @@
 									</div>
 									<div class="col-sm-6">
 										<div class="row">
-										<label for="ins_tg_trans_trg_sys_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+											<label for="ins_tg_trans_trg_sys_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 											<i class="item-icon fa fa-dot-circle-o"></i>
-											<spring:message code="eXperDB_CDC.topic_type"/>
-										</label>
-										<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
-											<input type="radio" id="avro_type" class="form-check-input" name="topic_type" onclick="" >
-											<label class="form-check-label" for="avro_type" style="padding-right:30px;">avro</label>
-											<input type="radio" id="normal_type" class="form-check-input" name="topic_type" onclick="" >
-											<label class="form-check-label" for="normal_type">normal</label>
+												<spring:message code="eXperDB_CDC.topic_type"/>
+											</label>
+											<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
+												<input type="radio" id="avro_type" class="form-check-input" name="topic_type" onclick="" >
+												<label class="form-check-label" for="avro_type" style="padding-right:30px;">avro</label>
+												<input type="radio" id="normal_type" class="form-check-input" name="topic_type" onclick="" >
+												<label class="form-check-label" for="normal_type">normal</label>
+											</div>
 										</div>
-										
 									</div>
 								</div>
-								
 								<div class="form-group row div-form-margin-z" id="ins_target_trans_active_div" style="display:none;">
 									<div class="col-sm-12">
 										<div class="alert alert-info" style="margin-top:5px;margin-bottom:0px;" >
