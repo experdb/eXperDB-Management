@@ -1016,8 +1016,20 @@
          WHERE KC_ID=#{kc_id}::numeric
 	</update>
 	
-	
-	
+	<update id="updateTransSchemaConnectFaild"  parameterType="transDbmsVO">
+		/**
+	 	* Query ID : updateTransSchemaConnectFaild
+	 	* Description : TRANS schema Registry 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_REGI_INF
+           SET
+               EXE_STATUS = #{exe_status}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE REGI_ID=#{regi_id}::numeric
+	</update>
+
 	<select id="selectTransComConPopList" parameterType="transVO"  resultType="hashmap">
 			/**
 			* Query ID : selectTransComConPopList 

@@ -128,4 +128,31 @@ public interface TransConService {
 	 * @throws Exception
 	 */
 	public String updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) throws Exception;
+
+	/**
+	 * select box kafka-Connection 연결 테스트
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public Map<String, Object> kafkaConnectionTestUpdate(TransDbmsVO transDbmsVO, List<TransDbmsVO> resultSet, int db_svr_id, String id) throws Exception;
+
+	/**
+	 * select box schema Registry 연결 테스트
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public Map<String, Object> schemaRegistryTestUpdate(TransRegiVO transRegiVO, List<TransRegiVO> resultSet, int db_svr_id, String id) throws Exception;
+	
+	/**
+	 * trans schema registry connect 수정
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public String updateTransSchemaConnectFaild(TransRegiVO transRegiVO) throws Exception;
 }

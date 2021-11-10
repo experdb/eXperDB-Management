@@ -22,6 +22,8 @@
 	var mod_tableList = null;
 	var mod_connector_tableList = null;
 	var mod_trans_com_cng_nm_val = '<spring:message code="data_transfer.default_setting" />';
+	
+	var mod_schema_status_Chk = "fail";
 
 	$(window.document).ready(function() {
 		//테이블셋팅
@@ -286,6 +288,7 @@
 		} else {
 			$("#mod_meta_data", "#modRegForm").val("OFF");
 		}
+alert("12312321");
 
 		$.ajax({
 			async : false,
@@ -318,7 +321,6 @@
 				}
 			},
 			success : function(result) {
-				
 				if(result == true){
 					showSwalIcon('<spring:message code="message.msg84" />', '<spring:message code="common.close" />', '', 'success');
 					$('#pop_layer_con_re_reg_two').modal('hide');
@@ -499,7 +501,7 @@
 													<tbody>
 														<tr style="border-bottom: 1px solid #adb5bd;">
 															<td class="table-text-align-c">
-																<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_source_sch_nm" id="mod_source_sch_nm" onChange="fn_sch_nm_chg('source_ins');" tabindex=1 disabled>
+																<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_source_sch_nm" id="mod_source_sch_nm" onChange="fn_sch_nm_chg('source_mod');" tabindex=1 disabled>
 																	<option value=""><spring:message code="common.choice" /></option>
 																	<c:forEach var="result" items="${schemaRegistryList}" varStatus="status">
 																		<option value="<c:out value="${result.regi_id}"/>"><c:out value="${result.regi_nm}"/></option>

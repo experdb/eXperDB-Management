@@ -2213,9 +2213,107 @@ function fn_sch_nm_chg(hw_gbn){
 	var connectTd = "";
 
 	if (hw_gbn == "source_ins") {
-		prm_schrg_id = nvlPrmSet($("#ins_source_sch_nm","#searchRegForm").val(), "");
+		prm_schrg_id = nvlPrmSet($("#ins_source_sch_nm","#insRegForm").val(), "");
+	} else if (hw_gbn == "source_mod") {
+		prm_schrg_id = nvlPrmSet($("#mod_source_sch_nm","#modRegForm").val(), "");
+	}
+	
+	if (prm_schrg_id == "") {
+		if (hw_gbn == "source_ins") {
+			ins_schema_status_Chk = "fail";
+		} else if (hw_gbn == "source_mod") {
+			mod_schema_status_Chk = "fail";
+		}
+
+		if (hw_gbn == "source_ins") {
+			$("#ins_sch_ip","#insRegForm").val("");
+			$("#ins_sch_port","#insRegForm").val("");
+
+			$("#ins_sch_connect_td","#insRegForm").html("");
+		} else if (hw_gbn == "source_mod") {
+			$("#mod_sch_ip","#modRegForm").val("");
+			$("#mod_sch_port","#modRegForm").val("");
+		}	
 	} else {
-		prm_schrg_id = nvlPrmSet($("#ins_target_kc_nm","#searchTargetRegForm").val(), "");
+		$.ajax({
+			url : "/schemaRegistryTestUpdate.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				regi_id : prm_schrg_id
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(result) {
+				if (nvlPrmSet(result, '') != '') {
+					//결과 체크
+					if(result.RESULT_DATA =="success"){
+						if (hw_gbn == "source_ins") {
+							ins_schema_status_Chk = "success";
+						} else if (hw_gbn == "source_mod") {
+							mod_schema_status_Chk = "success";
+						}
+
+						connectTd = "<div class='badge badge-pill badge-success'>";
+						connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+						connectTd += data_transfer_connecting;
+						connectTd += "</div>";
+					} else {
+						if (hw_gbn == "source_ins") {
+							ins_schema_status_Chk = "fail";
+						} else if (hw_gbn == "source_mod") {
+							mod_schema_status_Chk = "fail";
+						}
+
+						connectTd = "<div class='badge badge-pill badge-danger'>";
+						connectTd += "	<i class='ti-close mr-2'></i>";
+						connectTd += schedule_stop;
+						connectTd += "</div>";
+					}
+					
+					if (hw_gbn == "source_ins") {
+						$("#ins_sch_ip","#insRegForm").val(nvlPrmSet(result.ip, ''));
+						$("#ins_sch_port","#insRegForm").val(nvlPrmSet(result.port, ''));
+						
+						$("#ins_sch_connect_td","#insRegForm").html(connectTd);
+					} else if (hw_gbn == "source_mod") {
+						$("#mod_sch_ip","#insRegForm").val(nvlPrmSet(result.ip, ''));
+						$("#mod_sch_port","#insRegForm").val(nvlPrmSet(result.port, ''));
+					}
+				} else {
+					if (hw_gbn == "source_ins") {
+						ins_schema_status_Chk = "fail";
+					} else if (hw_gbn == "source_mod") {
+						mod_schema_status_Chk = "fail";
+					}
+
+					connectTd = "<div class='badge badge-pill badge-danger'>";
+					connectTd += "	<i class='ti-close mr-2'></i>";
+					connectTd += schedule_stop;
+					connectTd += "</div>";
+
+					if (hw_gbn == "source_ins") {
+						$("#ins_sch_ip","#insRegForm").val("");
+						$("#ins_sch_port","#insRegForm").val("");
+
+						$("#ins_sch_connect_td","#insRegForm").html("");
+					} else if (hw_gbn == "source_mod") {
+						$("#mod_sch_ip","#insRegForm").val("");
+						$("#mod_sch_port","#insRegForm").val("");
+					}
+				}
+			}
+		});
 	}
 }
 

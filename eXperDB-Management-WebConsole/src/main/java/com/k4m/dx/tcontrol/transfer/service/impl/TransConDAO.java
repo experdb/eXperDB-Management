@@ -200,4 +200,14 @@ public class TransConDAO extends EgovAbstractMapper{
 	public void updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) {
 		update("transSQL.updateTransKafkaConnectFaild", transDbmsVO);
 	}
+
+	/**
+	 * trans schema Registry faild 수정
+	 * 
+	 * @param transDbmsVO
+	 * @throws Exception
+	 */
+	public void updateTransSchemaConnectFaild(TransRegiVO transRegiVO) {
+		update("transSQL.updateTransSchemaConnectFaild", transRegiVO);
+	}
 }

@@ -640,77 +640,51 @@ public class TransConController {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<TransDbmsVO> resultSet = null;
-		String resultCode = "";
-		String exeStatus = "";
-		String dbStatus = "";
 		
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 		String id = loginVo.getUsr_id();
-		String kafkaIp = "";
-		String kafkaPort = "";
 
 		try {
 			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-
 			//리스트 조회
 			resultSet = transConService.selectTransKafkaConList(transDbmsVO);
 			
-			if (resultSet != null) {
-				exeStatus = resultSet.get(0).getExe_status();
-				kafkaIp = resultSet.get(0).getKc_ip();
-				kafkaPort = resultSet.get(0).getKc_port();
-				
-				String cmd = "curl -H 'Accept:application/json' "+kafkaIp+":"+kafkaPort+"/";
-				System.out.println("명령어 = "+cmd);				
+			result = transConService.kafkaConnectionTestUpdate(transDbmsVO, resultSet, db_svr_id, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
-				DbServerVO schDbServerVO = new DbServerVO();
-				schDbServerVO.setDb_svr_id(db_svr_id);
-				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-				
-				String strIpAdr = dbServerVO.getIpadr();
-				AgentInfoVO vo = new AgentInfoVO();
-				vo.setIPADR(strIpAdr);
-				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 
-				String IP = dbServerVO.getIpadr();
-				int PORT = agentInfo.getSOCKET_PORT();
+	/**
+	 * select box kafka-Connection 연결 테스트
+	 * 
+	 * @param response, request
+	 * @return result
+	 * @throws Exception
+	 */
+	// 
+	@RequestMapping(value = "/schemaRegistryTestUpdate.do")
+	@ResponseBody
+	public Map<String, Object> schemaRegistryTestUpdate(@ModelAttribute("transRegiVO") TransRegiVO transRegiVO, HttpServletResponse response, HttpServletRequest request) {
 
-				ClientInfoCmmn cic = new ClientInfoCmmn();
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<TransRegiVO> resultSet = null;
+		
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String id = loginVo.getUsr_id();
 
-				result = cic.kafkaConnectionTest(IP, PORT, cmd);
-				
-				if (result == null) {
-					result.put("RESULT_DATA", "fail");
-				} else {					
-					resultCode = (String)result.get("RESULT_DATA");
-					if ("TC001501".equals(exeStatus)) {
-						dbStatus = "success";
-					} else {
-						dbStatus = "fali";
-					}
-					
-					if (!resultCode.equals(dbStatus)) {
-						if ("success".equals(resultCode)) {
-							transDbmsVO.setExe_status("TC001501");
-						} else {
-							transDbmsVO.setExe_status("TC001502");
-						}
-
-						transDbmsVO.setFrst_regr_id(id);
-						transDbmsVO.setLst_mdfr_id(id);
-
-						transConService.updateTransKafkaConnectFaild(transDbmsVO);
-					}
-				}
-
-				result.put("ip", kafkaIp);
-				result.put("port", kafkaPort);
-			} else {
-				result.put("ip", "");
-				result.put("port", "");
-			}
+		try {
+			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			//리스트 조회
+			resultSet = transConService.selectTransRegiList(transRegiVO);
+			
+			result = transConService.schemaRegistryTestUpdate(transRegiVO, resultSet, db_svr_id, id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

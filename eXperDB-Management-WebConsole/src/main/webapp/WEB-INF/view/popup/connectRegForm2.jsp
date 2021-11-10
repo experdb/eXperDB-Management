@@ -24,6 +24,8 @@
 	
 	var ins_connect_status_Chk = "fail";
 	var ins_connect_nm_Chk = "fail";
+
+	var ins_schema_status_Chk = "fail";
 	
 	var ins_kc_ip_msg = '<spring:message code="data_transfer.ip" />';
 	var ins_kc_port_msg = '<spring:message code="data_transfer.port" />';
@@ -577,7 +579,6 @@
 		 $("#ins_trans_regi_ip", "#insRegForm").val(nvlPrmSet(regi_ip, ''));
 		 $("#ins_trans_regi_port", "#insRegForm").val(nvlPrmSet(regi_port, ''));
 	}
-
 </script>
 
 <div class="modal fade" id="pop_layer_con_reg_two" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">

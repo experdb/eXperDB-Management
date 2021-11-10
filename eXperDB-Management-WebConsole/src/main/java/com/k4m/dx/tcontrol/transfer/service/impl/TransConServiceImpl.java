@@ -486,4 +486,171 @@ public class TransConServiceImpl extends EgovAbstractServiceImpl implements Tran
 		
 		return result;
 	}
+	
+	/**
+	 * trans schema registry connect 수정
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String updateTransSchemaConnectFaild(TransRegiVO transRegiVO) throws Exception {
+		String result = "S";
+
+		try {
+			transConDAO.updateTransSchemaConnectFaild(transRegiVO);
+		} catch (Exception e) {
+			result = "F";
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * select box kafka-Connection 연결 테스트
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public Map<String, Object> kafkaConnectionTestUpdate(TransDbmsVO transDbmsVO, List<TransDbmsVO> resultSet, int db_svr_id, String id) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		String resultCode = "";
+		String exeStatus = "";
+		String dbStatus = "";
+		String kafkaIp = "";
+		String kafkaPort = "";
+		
+		if (resultSet != null) {
+			exeStatus = resultSet.get(0).getExe_status();
+			kafkaIp = resultSet.get(0).getKc_ip();
+			kafkaPort = resultSet.get(0).getKc_port();
+			
+			String cmd = "curl -H 'Accept:application/json' "+kafkaIp+":"+kafkaPort+"/";
+			System.out.println("명령어 = "+cmd);				
+
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoDAO.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoDAO.selectAgentInfo(vo);
+
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+
+			result = cic.kafkaConnectionTest(IP, PORT, cmd);
+			
+			if (result == null) {
+				result.put("RESULT_DATA", "fail");
+			} else {					
+				resultCode = (String)result.get("RESULT_DATA");
+				if ("TC001501".equals(exeStatus)) {
+					dbStatus = "success";
+				} else {
+					dbStatus = "fali";
+				}
+				
+				if (!resultCode.equals(dbStatus)) {
+					if ("success".equals(resultCode)) {
+						transDbmsVO.setExe_status("TC001501");
+					} else {
+						transDbmsVO.setExe_status("TC001502");
+					}
+
+					transDbmsVO.setFrst_regr_id(id);
+					transDbmsVO.setLst_mdfr_id(id);
+
+					updateTransKafkaConnectFaild(transDbmsVO);
+				}
+			}
+
+			result.put("ip", kafkaIp);
+			result.put("port", kafkaPort);
+		} else {
+			result.put("ip", "");
+			result.put("port", "");
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * select box schema Registry 연결 테스트
+	 * 
+	 * @param transDbmsVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public Map<String, Object> schemaRegistryTestUpdate(TransRegiVO transRegiVO, List<TransRegiVO> resultSet, int db_svr_id, String id) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		String resultCode = "";
+		String exeStatus = "";
+		String dbStatus = "";
+		String regiIP = "";
+		String regiPort = "";
+		
+		if (resultSet != null) {
+			exeStatus = resultSet.get(0).getExe_status();
+			regiIP = resultSet.get(0).getRegi_ip();
+			regiPort = resultSet.get(0).getRegi_port();
+
+			String cmd = "curl -X GET http://"+regiIP+":"+regiPort+"/subjects";
+			System.out.println("명령어 = "+cmd);				
+
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoDAO.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoDAO.selectAgentInfo(vo);
+
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+
+			result = cic.kafkaConnectionTest(IP, PORT, cmd);
+			
+			if (result == null) {
+				result.put("RESULT_DATA", "fail");
+			} else {					
+				resultCode = (String)result.get("RESULT_DATA");
+				if ("TC001501".equals(exeStatus)) {
+					dbStatus = "success";
+				} else {
+					dbStatus = "fali";
+				}
+				
+				if (!resultCode.equals(dbStatus)) {
+					if ("success".equals(resultCode)) {
+						transRegiVO.setExe_status("TC001501");
+					} else {
+						transRegiVO.setExe_status("TC001502");
+					}
+
+					transRegiVO.setFrst_regr_id(id);
+					transRegiVO.setLst_mdfr_id(id);
+
+					updateTransSchemaConnectFaild(transRegiVO);
+				}
+			}
+
+			result.put("ip", regiIP);
+			result.put("port", regiPort);
+		} else {
+			result.put("ip", "");
+			result.put("port", "");
+		}
+		
+		return result;		
+	}
 }
