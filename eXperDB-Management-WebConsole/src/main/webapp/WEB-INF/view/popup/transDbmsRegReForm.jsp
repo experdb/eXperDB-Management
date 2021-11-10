@@ -125,7 +125,7 @@
 		
 		if (result.dbmsGrb_reg != null) {
 			for (var idx=0; idx < result.dbmsGrb_reg.length; idx++) {
-				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201" || result.dbmsGrb_reg[idx].sys_cd == "TC002210") {
+				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201" || result.dbmsGrb_reg[idx].sys_cd == "TC002210" || result.dbmsGrb_reg[idx].sys_cd == "TC002204") {
 					$("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").append("<option value='"+ result.dbmsGrb_reg[idx].sys_cd + "'>" + result.dbmsGrb_reg[idx].sys_cd_nm + "</option>");
 				}
 			}
@@ -237,7 +237,7 @@
 	  		   	spr_usr_id : nvlPrmSet($("#mod_trans_spr_usr_id", "#trasnDbmsModifyPop").val(), ''),
 	  		   	pwd : nvlPrmSet($("#mod_trans_pwd", "#trasnDbmsModifyPop").val(), ''),
 	  		  	dbms_dscd : nvlPrmSet($("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val(), ''),
-	  		  exe_status : nvlPrmSet($("#mod_trans_exe_status", "#trasnDbmsModifyPop").val(), 'TC001502')
+	  		  	exe_status : nvlPrmSet($("#mod_trans_exe_status", "#trasnDbmsModifyPop").val(), 'TC001502')
 			},
 			type : "post",
 			beforeSend: function(xhr) {
