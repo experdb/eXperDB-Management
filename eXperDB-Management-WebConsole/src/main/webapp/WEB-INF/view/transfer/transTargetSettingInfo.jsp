@@ -153,7 +153,7 @@
 												<thead>
 													<tr class="bg-info text-white">
 														<th width="0%" >idx</th>
-														<th width="44%"><spring:message code="eXperDB_CDC.schema_registry_name"/></th>
+														<th width="44%"><spring:message code="eXperDB_CDC.schema_registr_nm"/></th>
 														<th width="36%" ><spring:message code="data_transfer.ip" /></th>
 														<th width="20%" ><spring:message code="data_transfer.port" /></th>
 													</tr>
@@ -229,7 +229,7 @@
 														<tr class="bg-info text-white">
 															<th width="10%" class="dt-center" ><spring:message code="common.order" /></th>
 															<th width="40%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
-															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registry_name" /></th>	
+															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
 														</tr>
 													</thead>
 												</table>

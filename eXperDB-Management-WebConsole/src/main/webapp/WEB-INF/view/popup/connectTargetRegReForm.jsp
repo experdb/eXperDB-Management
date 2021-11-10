@@ -215,7 +215,7 @@
 													<thead>
 														<tr class="bg-info text-white">
 															<th width="336" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
-															<th width="336" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registry_name" /></th>
+															<th width="336" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
 														</tr>
 													</thead>
 												</table>
@@ -271,7 +271,7 @@
 													<thead>
 														<tr class="bg-info text-white">
 															<th width="60%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
-															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registry_name" /></th>	
+															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
 														</tr>
 													</thead>
 												</table>
