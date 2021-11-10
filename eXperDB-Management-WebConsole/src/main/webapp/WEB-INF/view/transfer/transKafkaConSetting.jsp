@@ -743,7 +743,7 @@
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<form class="form-inline row" onsubmit="return false">
 								<div class="input-group mb-2 mr-sm-2 col-sm-4">
-									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="trans_kafka_con_nm" name="trans_kafka_con_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="etc.etc04" />'/>				
+									<input type="text" class="form-control" style="margin-right: -0.7rem;" id="trans_kafka_con_nm" name="trans_kafka_con_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="eXperDB_CDC.connector_server_nm" />'/>				
 								</div>
 
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_connect_select();fn_regi_select();" >

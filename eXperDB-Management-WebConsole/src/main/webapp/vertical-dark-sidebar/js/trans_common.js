@@ -2526,6 +2526,34 @@ function fn_trans_kafka_con_pop_search(){
 			}
 		}
 	});
+	
+	$.ajax({
+		url : "/selectTransRegiList.do",
+		data : {
+			regi_nm : nvlPrmSet($("#pop_trans_kafka_con_nm").val(), '')
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			trans_regi_con_pop_table.rows({selected: true}).deselect();
+			trans_regi_con_pop_table.clear().draw();
+
+			if (nvlPrmSet(result, '') != '') {
+				trans_regi_con_pop_table.rows.add(result).draw();
+			}
+		}
+	});
 }
 
 /* ********************************************************
@@ -2536,12 +2564,132 @@ function fn_transKafkaConPopStart() {
 	fn_trans_kafka_con_pop_search();
 
   	$(function() {	
-		$('#transKfkConPopList tbody').on( 'click', 'tr', function () {
+/*		$('#transKfkConPopList tbody').on( 'click', 'tr', function () {
 			if ( $(this).hasClass('selected') ) {
 			}else {
 				trans_kafka_con_pop_table.$('tr.selected').removeClass('selected');
 				$(this).addClass('selected');
 			}
-		})
+		})*/
+	});
+}
+
+
+/* ********************************************************
+ * 기본사항 팝업 시작
+ ******************************************************** */
+function fn_transCommonConSetPopStart(){
+	//조회
+	fn_trans_com_con_pop_search();
+}
+
+/* ********************************************************
+ * 기본사항 조회
+ ******************************************************** */
+function fn_trans_com_con_pop_search(){
+
+	$.ajax({
+		url : "/selectTransComConPopList.do",
+		data : {
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			trans_com_con_pop_table.rows({selected: true}).deselect();
+			trans_com_con_pop_table.clear().draw();
+			if (nvlPrmSet(result, '') != '') {
+				trans_com_con_pop_table.rows.add(result).draw();
+			}
+		}
+	});
+}
+
+/* ********************************************************
+ * 기본사항 등록 팝업페이지 호출
+ ******************************************************** */
+function fn_transComConSetIns_pop(){
+	$('#pop_layer_con_com_ins_cng').modal("hide");
+
+		$.ajax({ 
+		url : "/transComSettingCngIns.do",
+		data : {
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			fn_transComConSetRegPopStart(result);
+			
+			$('#pop_layer_con_com_ins_cng').modal("show");
+		}
+	});
+}
+
+/* ********************************************************
+ * 기본사항 수정팝업
+ ******************************************************** */
+function fn_transComConSetUpd_pop() {
+	var datas = trans_com_con_pop_table.rows('.selected').data();
+	
+	if (datas.length <= 0) {
+		showSwalIcon(message_msg35, closeBtn, '', 'error');
+		return;
+	}
+
+	if(datas.length > 1){
+		showSwalIcon(message_msg04, closeBtn, '', 'error');
+		return;
+	} 
+	
+	var mod_trans_com_id = trans_com_con_pop_table.row('.selected').data().trans_com_id;
+
+	$.ajax({
+		url : "/selectTransComSettingCngInfo.do",
+		data : {
+			trans_com_id : mod_trans_com_id
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			if(result != null){
+				fn_transComConSetModPopStart(result);
+			}
+
+			$('#pop_layer_con_com_mod_cng').modal('show');
+		}
 	});
 }
