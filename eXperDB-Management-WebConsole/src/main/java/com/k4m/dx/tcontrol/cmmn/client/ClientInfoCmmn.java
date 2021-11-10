@@ -2032,7 +2032,12 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			transObj.put(ClientProtocolID.CON_START_GBN, "source");
 
 			transObj.put(ClientProtocolID.TRANS_COM_ID, transInfo.get(0).get("trans_com_id"));
+
+			//regi_id 추가
 			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
+			transObj.put(ClientProtocolID.REGI_NM, transInfo.get(0).get("regi_nm"));
+			transObj.put(ClientProtocolID.REGI_PORT, transInfo.get(0).get("regi_port"));
+			transObj.put(ClientProtocolID.CONNECT_TYPE, transInfo.get(0).get("connect_type"));
 
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_SCM_NM, mappInfo.get(0).get("exrt_trg_scm_nm"));

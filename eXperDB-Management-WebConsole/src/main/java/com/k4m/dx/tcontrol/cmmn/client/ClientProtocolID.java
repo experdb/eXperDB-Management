@@ -277,5 +277,7 @@ public class ClientProtocolID {
 	public static final String SYS_TYPE = "SYS_TYPE";
 
 	public static final String REGI_ID = "REGI_ID";
-	
+	public static final String REGI_NM = "REGI_NM";
+	public static final String REGI_PORT = "REGI_PORT";
+	public static final String CONNECT_TYPE = "CONNECT_TYPE";
 }
