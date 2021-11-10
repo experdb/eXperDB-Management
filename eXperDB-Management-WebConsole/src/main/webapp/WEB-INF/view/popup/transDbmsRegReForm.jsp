@@ -294,6 +294,12 @@
 		
 		$("#mod_trans_connectTest_check_alert", "#trasnDbmsModifyPop").html('');
 		$("#mod_trans_connectTest_check_alert", "#trasnDbmsModifyPop").hide();
+		
+		if($("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val() == "TC002210"){
+			$(".no-hd", "#trasnDbmsModifyPop").hide();
+		}else{
+			$(".no-hd", "#trasnDbmsModifyPop").show();	
+		}
 	}
 </script>
 
