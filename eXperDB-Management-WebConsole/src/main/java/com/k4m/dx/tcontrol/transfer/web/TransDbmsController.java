@@ -32,14 +32,13 @@ import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
+import com.k4m.dx.tcontrol.transfer.service.TransDbmsService;
 import com.k4m.dx.tcontrol.transfer.service.TransDbmsVO;
-import com.k4m.dx.tcontrol.transfer.service.TransRegiVO;
-import com.k4m.dx.tcontrol.transfer.service.TransService;
 
 /**
  * Transfer 컨트롤러 클래스를 정의한다.
  *
- * @author 변승우
+ * @author 
  * @see
  * 
  *      <pre>
@@ -47,15 +46,15 @@ import com.k4m.dx.tcontrol.transfer.service.TransService;
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.06.08   변승우 최초 생성
+ *  
  *      </pre>
  */
 @Controller
 public class TransDbmsController {
 
 	@Autowired
-	private TransService transService;
-	
+	private TransDbmsService transDbmsService;
+
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 
@@ -165,7 +164,7 @@ public class TransDbmsController {
 			historyVO.setExe_dtl_cd("DX-T0147_01");
 			accessHistoryService.insertHistory(historyVO);
 			
-			resultSet = transService.selectTransDBMS(transDbmsVO);
+			resultSet = transDbmsService.selectTransDBMS(transDbmsVO);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -212,7 +211,7 @@ public class TransDbmsController {
 		String resultMsg = "";
 		
 		try {	
-			resultMsg = transService.trans_sys_nmCheck(trans_sys_nm);
+			resultMsg = transDbmsService.trans_sys_nmCheck(trans_sys_nm);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -244,7 +243,7 @@ public class TransDbmsController {
 			transDbmsVO.setFrst_regr_id(id);
 			transDbmsVO.setLst_mdfr_id(id);
 
-			result = transService.insertTransDBMS(transDbmsVO);	
+			result = transDbmsService.insertTransDBMS(transDbmsVO);	
 	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -271,7 +270,7 @@ public class TransDbmsController {
 				transDbmsVO.setTrans_dbms_id_Rows(trans_dbms_id_Rows);
 				
 				//scale log 확인
-				result = transService.selectTransDbmsIngChk(transDbmsVO);
+				result = transDbmsService.selectTransDbmsIngChk(transDbmsVO);
 			} else {
 				result = "F";
 			}
@@ -284,7 +283,7 @@ public class TransDbmsController {
 	}
 	
 	/**
-	 * Rman Backup Reregistration View page
+	 * 타겟 dbms 수정
 	 * @param historyVO, transDbmsVO, request
 	 * @return ModelAndView
 	 */
@@ -305,7 +304,8 @@ public class TransDbmsController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			
 			//리스트 조회
-			resultSet = transService.selectTransDBMS(transDbmsVO);
+			resultSet = transDbmsService.selectTransDBMS(transDbmsVO);
+
 			//password
 			String pwd = dec.aesDecode(resultSet.get(0).getPwd()).toString();
 			
@@ -346,7 +346,7 @@ public class TransDbmsController {
 			transDbmsVO.setFrst_regr_id(id);
 			transDbmsVO.setLst_mdfr_id(id);
 
-			result = transService.updateTransDBMS(transDbmsVO);	
+			result = transDbmsService.updateTransDBMS(transDbmsVO);	
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -384,7 +384,7 @@ public class TransDbmsController {
 				transDbmsVO.setTrans_dbms_id_Rows(trans_dbms_id_Rows);
 				
 				//scale log 확인
-				transService.deleteTransDBMS(transDbmsVO);	
+				transDbmsService.deleteTransDBMS(transDbmsVO);	
 				
 				result = true;
 			} else {
@@ -399,512 +399,4 @@ public class TransDbmsController {
 		}
 		return result;
 	}
-	
-	/**
-	 * 타켓 DBMS 설정 화면 출력
-	 * 
-	 * @param
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/transConnectSetting.do")
-	public ModelAndView transConnectSetting(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		int db_svr_id=Integer.parseInt(request.getParameter("db_svr_id"));
-
-		//유저 디비서버 권한 조회 (공통메소드호출),
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
-
-		try {
-			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
-				mv.setViewName("error/autError");
-			} else {
-				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
-				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
-
-				// 화면접근이력 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0153");
-				accessHistoryService.insertHistory(historyVO);
-				
-				//db서버명 조회
-				DbServerVO schDbServerVO = new DbServerVO();
-				schDbServerVO.setDb_svr_id(db_svr_id);
-				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-
-				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm()); //db서버명
-				mv.addObject("db_svr_id", db_svr_id);
-
-				mv.setViewName("transfer/transKafkaConSetting");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-
-	/**
-	 * kafka connect 설정 팝업 화면을 보여준다.
-	 * 
-	 * @param
-	 * @return ModelAndView mv
-	 * @throws 
-	 */
-	@RequestMapping(value = "/popup/transConSettingForm.do")
-	public ModelAndView transConSettingForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
-		ModelAndView mv = new ModelAndView("jsonView");
-
-		try {
-			CmmnUtils.saveHistory(request, historyVO);
-
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-
-			// 화면접근이력 이력 남기기
-			historyVO.setExe_dtl_cd("DX-T0153");
-			accessHistoryService.insertHistory(historyVO);
-
-			mv.addObject("db_svr_id", db_svr_id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
-	/**
-	 * kafka connenct를 조회한다.
-	 * 
-	 * @param historyVO, transDbmsVO, response, request
-	 * @return List<TransDbmsVO>
-	 */
-	@RequestMapping(value = "/selectTransKafkaConList.do")
-	@ResponseBody
-	public List<TransDbmsVO> selectTransKafkaConList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletResponse response, HttpServletRequest request) {
-		
-		List<TransDbmsVO> resultSet = null;
-		
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0153_01");
-			accessHistoryService.insertHistory(historyVO);
-			
-			resultSet = transService.selectTransKafkaConList(transDbmsVO);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return resultSet;
-	}
-	
-	/**
-	 * Schema Registry 정보를 조회한다.
-	 * 
-	 * @param historyVO, TransRegiVO, response, request
-	 * @return List<TransRegiVO>
-	 */
-	@RequestMapping(value = "/selectTransRegiList.do")
-	@ResponseBody
-	public List<TransRegiVO> selectTransRegiList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transRegiVO") TransRegiVO transRegiVO, HttpServletResponse response, HttpServletRequest request) {
-		
-		List<TransRegiVO> resultSet = null;
-		
-		try {
-
-			resultSet = transService.selectTransRegiList(transRegiVO);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return resultSet;
-	}
-	
-	
-	/**
-	 * kafka connenct 설정 등록 팝업 화면을 보여준다.
-	 * 
-	 * @param
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/popup/transTargetKfkConIns.do")
-	public ModelAndView transTargetKfkConIns(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
-		ModelAndView mv = new ModelAndView("jsonView");
-
-		try {
-			CmmnUtils.saveHistory(request, historyVO);
-	
-			// 화면접근이력 이력 남기기
-			historyVO.setExe_dtl_cd("DX-T0154");
-			accessHistoryService.insertHistory(historyVO);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
-	/**
-	 * Schema Registry 설정 등록 팝업 화면을 보여준다.
-	 * 
-	 * @param
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/popup/transSchemaRegistryIns.do")
-	public ModelAndView transSchemaRegistryIns(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
-		ModelAndView mv = new ModelAndView("jsonView");
-
-		try {
-			CmmnUtils.saveHistory(request, historyVO);
-	
-			// 화면접근이력 이력 남기기
-			historyVO.setExe_dtl_cd("DX-T0168");
-			accessHistoryService.insertHistory(historyVO);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
-	
-	/**
-	 * TRANS kafka connect 설정을 등록한다.
-	 * 
-	 * @param historyVO, transDbmsVO, workVO, request, response
-	 * @return String
-	 * @throws ParseException
-	 */
-	@RequestMapping(value = "/popup/insertTransKafkaConnect.do")
-	public @ResponseBody String insertTransKafkaConnect(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, @ModelAttribute("workVO") WorkVO workVO, 
-			HttpServletRequest request, HttpServletResponse response) throws ParseException {
-		String result = "S";
-
-		try {
-			HttpSession session = request.getSession();
-			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String id = loginVo.getUsr_id();
-
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0154_01");
-			accessHistoryService.insertHistory(historyVO);
-			
-			transDbmsVO.setFrst_regr_id(id);
-			transDbmsVO.setLst_mdfr_id(id);
-			
-			result = transService.insertTransKafkaConnect(transDbmsVO);	
-	
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = "F";
-			return result;
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * TRANS Schema Registry 설정을 등록한다.
-	 * 
-	 * @param historyVO, transRegiVO, workVO, request, response
-	 * @return String
-	 * @throws ParseException
-	 */
-	@RequestMapping(value = "/popup/insertTransSchemaRegistry.do")
-	public @ResponseBody String insertTransSchemaRegistry(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transRegiVO") TransRegiVO transRegiVO, @ModelAttribute("workVO") WorkVO workVO, 
-			HttpServletRequest request, HttpServletResponse response) throws ParseException {
-		String result = "S";
-
-		try {
-			HttpSession session = request.getSession();
-			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String id = loginVo.getUsr_id();
-
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0168_01");
-			accessHistoryService.insertHistory(historyVO);
-			
-			transRegiVO.setFrst_regr_id(id);
-			transRegiVO.setLst_mdfr_id(id);
-			
-			//Map<String, Object> transMap = BeanUtils.describe(transRegiVO);
-			//System.out.println("transMap :: "+transMap.toString());
-			//System.out.println("regi_ip :: "+transRegiVO.getRegi_ip());
-
-			result = transService.insertTransSchemaRegistry(transRegiVO);	
-	
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = "F";
-			return result;
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * Work deleteTransKafkaConnect
-	 * @param transDbmsVO, response, request, historyVO
-	 * @return boolean
-	 * @throws IOException 
-	 * @throws ParseException 
-	 */
-	@RequestMapping(value = "/deleteTransKafkaConnect.do")
-	@ResponseBody
-	public boolean deleteTransKafkaConnect(@ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
-		boolean result = false;
-
-		// Transaction 
-		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
-		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-		TransactionStatus status = txManager.getTransaction(def);
-
-		String trans_connect_id_Rows = request.getParameter("trans_connect_id_List").toString().replaceAll("&quot;", "\"");
-		
-		try{
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0151_02");
-			accessHistoryService.insertHistory(historyVO);
-
-			if (!"".equals(trans_connect_id_Rows)) {
-				transDbmsVO.setTrans_connect_id_Rows(trans_connect_id_Rows);
-				
-				transService.deleteTransKafkaConnect(transDbmsVO);	
-				
-				result = true;
-			} else {
-				result = false;
-			}
-		}catch(Exception e){
-			result = false;
-			e.printStackTrace();
-			txManager.rollback(status);
-		}finally{
-			txManager.commit(status);
-		}
-		return result;
-	}
-	
-	/**
-	 * Work deleteTransSchemaRegistry
-	 * @param transRegiVO, response, request, historyVO
-	 * @return boolean
-	 * @throws IOException 
-	 * @throws ParseException 
-	 */
-	@RequestMapping(value = "/deleteTransSchemaRegistry.do")
-	@ResponseBody
-	public boolean deleteTransSchemaRegistry(@ModelAttribute("transRegiVO") TransRegiVO transRegiVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
-		boolean result = false;
-
-		// Transaction 
-		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
-		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-		TransactionStatus status = txManager.getTransaction(def);
-
-		String trans_regi_id_List = request.getParameter("trans_regi_id_List").toString().replaceAll("&quot;", "\"");
-		
-		try{
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0170");
-			accessHistoryService.insertHistory(historyVO);
-
-			if (!"".equals(trans_regi_id_List)) {
-				transRegiVO.setTrans_regi_id_Rows(trans_regi_id_List);
-				
-				transService.deleteTransSchemaRegistry(transRegiVO);	
-				
-				result = true;
-			} else {
-				result = false;
-			}
-		}catch(Exception e){
-			result = false;
-			e.printStackTrace();
-			txManager.rollback(status);
-		}finally{
-			txManager.commit(status);
-		}
-		return result;
-	}
-	
-	/**
-	 * Rman Backup Reregistration View page
-	 * @param historyVO, transDbmsVO, request
-	 * @return ModelAndView
-	 */
-	@SuppressWarnings("null")
-	@RequestMapping(value = "/popup/transTargetKfkConUdt.do")
-	public ModelAndView transTargetKfkConUdt(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("jsonView");
-		
-		List<TransDbmsVO> resultSet = null;
-		
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0155");
-			accessHistoryService.insertHistory(historyVO);
-
-			//리스트 조회
-			resultSet = transService.selectTransKafkaConList(transDbmsVO);
-
-			mv.addObject("resultInfo", resultSet);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
-	/**
-	 * Schema Registry Reregistration View page
-	 * @param historyVO, transRegiVO, request
-	 * @return ModelAndView
-	 */
-	@SuppressWarnings("null")
-	@RequestMapping(value = "/popup/transTargetScheRegiUdt.do")
-	public ModelAndView transTargetScheRegiUdt(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transRegiVO") TransRegiVO transRegiVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("jsonView");
-		
-		List<TransRegiVO> resultSet = null;
-		
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0169");
-			accessHistoryService.insertHistory(historyVO);
-
-			//리스트 조회
-			resultSet = transService.selectTransRegiList(transRegiVO);
-
-			mv.addObject("resultInfo", resultSet);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
-	/**
-	 * TRANS DBMS 시스템을 수정한다.
-	 * 
-	 * @param transDbmsVO, workVO, historyVO, request, response
-	 * @return String
-	 * @throws ParseException
-	 */
-	@RequestMapping(value = "/popup/updateTransKafkaConnect.do")
-	public @ResponseBody String updateTransKafkaConnect(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, @ModelAttribute("workVO") WorkVO workVO, 
-			HttpServletRequest request, HttpServletResponse response) throws ParseException {
-		String result = "S";
-
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0155_01");
-			accessHistoryService.insertHistory(historyVO);
-
-			HttpSession session = request.getSession();
-			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String id = loginVo.getUsr_id();
-
-			transDbmsVO.setFrst_regr_id(id);
-			transDbmsVO.setLst_mdfr_id(id);
-
-			result = transService.updateTransKafkaConnect(transDbmsVO);	
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = "F";
-			return result;
-		}
-		return result;
-	}
-
-	/**
-	 * TRANS Schema Registry 시스템을 수정한다.
-	 * 
-	 * @param transRegiVO, workVO, historyVO, request, response
-	 * @return String
-	 * @throws ParseException
-	 */
-	@RequestMapping(value = "/popup/updateTransSchemaRegistry.do")
-	public @ResponseBody String updateTransSchemaRegistry(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("transRegiVO") TransRegiVO transRegiVO, @ModelAttribute("workVO") WorkVO workVO, 
-			HttpServletRequest request, HttpServletResponse response) throws ParseException {
-		String result = "S";
-
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0169_01");
-			accessHistoryService.insertHistory(historyVO);
-
-			HttpSession session = request.getSession();
-			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String id = loginVo.getUsr_id();
-
-			transRegiVO.setFrst_regr_id(id);
-			transRegiVO.setLst_mdfr_id(id);
-
-			result = transService.updateTransShcemaRegistry(transRegiVO);	
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = "F";
-			return result;
-		}
-		return result;
-	}
-	
-	/**
-	 * kafka connect 사용중 또는 등록 되있는 경우 확인
-	 * @param response, request , transDbmsVO
-	 * @return String
-	 */
-	@RequestMapping("/selectTransKafkaConIngChk.do")
-	public @ResponseBody String selectTransKafkaConIngChk(@ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletRequest request, HttpServletResponse response) {	
-		String result = "S";
-
-		String trans_connect_id_Rows = request.getParameter("trans_connect_id_List").toString().replaceAll("&quot;", "\"");
-
-		try {
-			if (!"".equals(trans_connect_id_Rows)) {
-				transDbmsVO.setTrans_connect_id_Rows(trans_connect_id_Rows);
-
-				result = transService.selectTransKafkaConIngChk(transDbmsVO);
-			} else {
-				result = "F";
-			}
-		} catch (Exception e1) {
-			result = "F";
-			e1.printStackTrace();
-		}
-
-		return result;
-	}	
-	
-
-	/**
-	 * Schema Registry 사용중 또는 등록 되있는 경우 확인
-	 * @param response, request , transDbmsVO
-	 * @return String
-	 */
-	@RequestMapping("/selectTransScheRegiIngChk.do")
-	public @ResponseBody String selectTransScheRegiIngChk(@ModelAttribute("transRegiVO") TransRegiVO transRegiVO, HttpServletRequest request, HttpServletResponse response) {	
-		String result = "S";
-
-		String trans_regi_id_Rows = request.getParameter("trans_regi_id_List").toString().replaceAll("&quot;", "\"");
-
-		try {
-			if (!"".equals(trans_regi_id_Rows)) {
-				transRegiVO.setTrans_regi_id_Rows(trans_regi_id_Rows);
-
-				result = transService.selectTransSchemRegiIngChk(transRegiVO);
-			} else {
-				result = "F";
-			}
-		} catch (Exception e1) {
-			result = "F";
-			e1.printStackTrace();
-		}
-
-		return result;
-	}	
 }

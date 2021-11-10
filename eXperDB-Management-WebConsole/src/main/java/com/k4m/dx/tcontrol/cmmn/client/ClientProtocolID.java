@@ -275,4 +275,7 @@ public class ClientProtocolID {
 	public static final String CON_START_GBN = "CON_START_GBN";
 	public static final String TRANS_COM_ID = "TRANS_COM_ID";
 	public static final String SYS_TYPE = "SYS_TYPE";
+
+	public static final String REGI_ID = "REGI_ID";
+	
 }

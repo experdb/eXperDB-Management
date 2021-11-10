@@ -154,34 +154,6 @@
 		});
 	}
 
-	/* ********************************************************
-	 * 조회 데이터 중복 내역 방지
-	 ******************************************************** */
- 	function fn_trableListModRemove(result){
-		var connTableRows = mod_connector_tableList.rows().data();
-		var iChkCnt = 0;
-
-		if (connTableRows.length > 0 && result.length > 0) {
-			for(var i=0; i<result.length; i++){
-				for(var j=0; j<connTableRows.length; j++){
- 					if (result[i].table_name != null && connTableRows[j].table_name != null) {
-						if(result[i].table_name == connTableRows[j].table_name){
-							iChkCnt = iChkCnt + 1;
-						}
-						if (j == (connTableRows.length -1) && iChkCnt > 0 ) {
-							
-							result.splice(i, 1);
-							iChkCnt = 0;
-							i--; //row 삭제로 인해 추가로 -1 필요
-						}
-					}
-				}
-			}
-		}
-		
-		mod_tableList.rows.add(result).draw();
-	}
-	
 	/*================ 테이블 리스트 조정 ======================= */
 	/* ********************************************************
 	 * 선택 우측이동 (> 클릭)
@@ -328,7 +300,9 @@
 				meta_data : nvlPrmSet($("#mod_meta_data", "#modRegForm").val(), 'OFF'),
 				trans_id : $("#mod_trans_id","#modRegForm").val(),
 				trans_exrt_trg_tb_id : $("#mod_trans_exrt_trg_tb_id","#modRegForm").val(),
-				trans_com_id : parseInt($("#mod_trans_com_id", "#modRegForm").val())
+				trans_com_id : parseInt($("#mod_trans_com_id", "#modRegForm").val()),
+				connect_type : nvlPrmSet($("#mod_connect_type", "#insRegForm").val(), ''),
+				regi_id : nvlPrmSet($("#mod_source_sch_nm", "#insRegForm").val(), '')
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -387,21 +361,6 @@
 		 $("#mod_trans_com_id", "#modRegForm").val(nvlPrmSet(trans_com_id, ''));
 		 $("#mod_trans_com_cng_nm", "#modRegForm").val(nvlPrmSet(trans_com_cng_nm, ''));
 	}
-	
-	/* ********************************************************
-	 * Connect Type 변경 이벤트 
-	 * TC004301 : debezium
-	 * TC004302 : confluent
-	 ******************************************************** */
-	function fn_mod_ConType_change(){
-		 if("TC004302" != $("#mod_connect_type", "#modRegForm").val()){
-//			 $(".schemRow").hide();
-			 $("#mod_schema_registry_info").hide();
-		 }else{
-//			 $(".schemRow").show();
-			 $("#mod_schema_registry_info").show();
-		 }
-	 }
 </script>
 
 <form name="frmTablePopup">
@@ -506,19 +465,19 @@
 											</div>
 											<label for="mod_connect_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												Connect Type<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
+												Scema Registry<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
 											</label>
-											<div class="col-sm-3">
-												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_connect_type" id="mod_connect_type" tabindex=4 onchange="fn_mod_ConType_change();">
+											<div class="col-sm-4">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_connect_type" id="mod_connect_type" tabindex=4 disabled>
 													<option value=""><spring:message code="common.choice" /></option>
-													<option value="TC004301">Debezium</option>
-													<option value="TC004302">Confluent</option>
+													<option value="TC004301"><spring:message code="dbms_information.unuse" /></option>
+													<option value="TC004302"><spring:message code="dbms_information.use" /></option>
 												</select>
 											</div>
 										</div>
 										
 										<!-- Schema Registry -->
-										<div id="mod_schema_registry_info" class="card-body" style="border: 1px solid #adb5bd; margin-bottom:20px; display:none;">
+										<div id="mod_schema_registry_info" class="card-body" style="border: 1px solid #adb5bd; margin-bottom:20px;display: none;">
 											<div class="table-responsive">
 												<label for="mod_connect_type" class="col-sm-12 col-form-label-sm pop-label-index" style="margin-top:-10px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
@@ -540,7 +499,7 @@
 													<tbody>
 														<tr style="border-bottom: 1px solid #adb5bd;">
 															<td class="table-text-align-c">
-																<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_source_sch_nm" id="mod_source_sch_nm" onChange="fn_sch_nm_chg('source_ins');" tabindex=1>
+																<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_source_sch_nm" id="mod_source_sch_nm" onChange="fn_sch_nm_chg('source_ins');" tabindex=1 disabled>
 																	<option value=""><spring:message code="common.choice" /></option>
 																	<c:forEach var="result" items="${schemaRegistryList}" varStatus="status">
 																		<option value="<c:out value="${result.regi_id}"/>"><c:out value="${result.regi_nm}"/></option>
@@ -688,7 +647,7 @@
 									<div class="col-1 stretch-card div-form-margin-table" style="max-width: 6%;" id="center_div">
 										<div class="card" style="background-color: transparent !important;border:0px;">
 											<div class="card-body">	
-												<div class="card my-sm-2 row" style="border:0px;background-color: transparent !important;">
+												<div class="card my-sm-2 row connectRegReForm" style="border:0px;background-color: transparent !important;">
 													<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-top:15px;margin-bottom:-15px;">
 														<a href="#" class="tip" onclick="fn_mod_t_allRightMove();">
 															<i class="fa fa-angle-double-right" style="font-size: 35px;cursor:pointer;"></i>

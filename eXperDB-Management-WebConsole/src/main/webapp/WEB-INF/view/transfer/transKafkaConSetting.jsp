@@ -760,7 +760,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h4 class="card-title">
-						<i class="item-icon fa fa-dot-circle-o"></i> Kafka 정보
+						<i class="item-icon fa fa-dot-circle-o"></i> Kafka <spring:message code="common.infomation" />
 					</h4>
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
@@ -820,7 +820,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h4 class="card-title">
-						<i class="item-icon fa fa-dot-circle-o"></i> Schema Registry 정보
+						<i class="item-icon fa fa-dot-circle-o"></i> Schema Registry <spring:message code="common.infomation" />
 					</h4>
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">

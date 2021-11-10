@@ -41,15 +41,6 @@ INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG
 -- Database에 하둡 코드 추가
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0022', 'TC002210', 'Hadoop', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
-
---전송설정 타켓 시스템 정보 ----------- SchemaRegistry 정보 추가 
-ALTER TABLE experdb_management.t_transcng_target_i ADD regi_id numeric(18) NULL;
-COMMENT ON COLUMN experdb_management.t_transcng_target_i.regi_id IS 'SchemaRegistry_ID';
-ALTER TABLE experdb_management.t_transcng_target_i ADD regi_ip varchar(50) NULL;
-COMMENT ON COLUMN experdb_management.t_transcng_target_i.regi_ip IS 'SchemaRegistry_IP';
-ALTER TABLE experdb_management.t_transcng_target_i ADD regi_port numeric(5) NULL;
-COMMENT ON COLUMN experdb_management.t_transcng_target_i.regi_port IS 'SchemaRegistry_PORT';
-
 -- Schema Registry 기동 상태 변경 이력 
 CREATE TABLE experdb_management.t_trans_schem_regi_actstate_cng_g (
 	regi_act_exe_sn numeric NOT NULL DEFAULT 1,
@@ -83,3 +74,29 @@ COMMENT ON COLUMN experdb_management.t_trans_schem_regi_actstate_cng_g.frst_reg_
 COMMENT ON COLUMN experdb_management.t_trans_schem_regi_actstate_cng_g.lst_mdfr_id IS '최종_수정자_ID';
 COMMENT ON COLUMN experdb_management.t_trans_schem_regi_actstate_cng_g.lst_mdf_dtm IS '최종_수정일';
 
+-- T_TRANSCNG_I 테이블 regi_id, kc_id, connect_type 추가
+ALTER TABLE T_TRANSCNG_I ADD COLUMN regi_id numeric(18) NULL;
+COMMENT ON COLUMN experdb_management.T_TRANSCNG_I.regi_id IS 'schema_regi_ID'; 
+
+ALTER TABLE T_TRANSCNG_I ADD COLUMN connect_type varchar(20) NOT NULL DEFAULT 'TC004301'::character varying;
+COMMENT ON COLUMN experdb_management.T_TRANSCNG_I.connect_type IS '커넥트_타입' ; 
+
+ALTER TABLE T_TRANSCNG_TARGET_I ADD regi_id numeric(18) NULL;
+COMMENT ON COLUMN experdb_management.t_transcng_target_i.regi_id IS 'SchemaRegistry_ID';
+
+ALTER TABLE T_TRANSCNG_TARGET_I ADD COLUMN topic_type varchar(20) NOT NULL DEFAULT 'TC004401'::character varying;
+COMMENT ON COLUMN experdb_management.T_TRANSCNG_TARGET_I.topic_type IS '토픽_타입'; 
+
+INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0043', '커넥터타입', 'CDC 커넥터 타입', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0044', '토픽타입', 'CDC 토픽 타입', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0043', 'TC004301', 'Debezium', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0043', 'TC004302', 'Confluent', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0044', 'TC004401', 'Normal', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0044', 'TC004402', 'Avro', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+ALTER TABLE T_TRANS_TOPIC_I ADD COLUMN regi_id numeric(18) NULL;
+COMMENT ON COLUMN experdb_management.T_TRANS_TOPIC_I.regi_id IS 'schema_regi_ID'; 
+
+ALTER TABLE t_trans_exrttrg_mapp ADD COLUMN regi_id numeric(18) NULL;
+COMMENT ON COLUMN experdb_management.t_trans_exrttrg_mapp.regi_id IS 'schema_regi_ID'; 

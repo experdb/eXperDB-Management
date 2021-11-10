@@ -116,6 +116,9 @@ var proxy_msg39 = "<spring:message code='eXperDB_proxy.msg39'/>"
 var proxy_msg40 = "<spring:message code='eXperDB_proxy.msg40'/>"
 var proxy_msg41 = "<spring:message code='eXperDB_proxy.msg41'/>"
 
+var message_msg60="<spring:message code='message.msg60' />";
+var eXperDB_scale_msg9="<spring:message code='eXperDB_scale.msg9' />";
+
 
 </script>
 <body>

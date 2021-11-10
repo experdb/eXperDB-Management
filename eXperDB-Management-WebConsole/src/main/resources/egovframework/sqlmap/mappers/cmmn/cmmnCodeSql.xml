@@ -274,6 +274,9 @@
 	      <if test='searchCondition == "2"'>
 	      AND B.SYS_CD_NM like '%' || #{searchKeyword} || '%'
 	      </if>
+	      <if test='searchCondition == "3"'>
+	      AND B.USE_YN = 'Y'
+	      </if>
     	</select>
     	
 </mapper>

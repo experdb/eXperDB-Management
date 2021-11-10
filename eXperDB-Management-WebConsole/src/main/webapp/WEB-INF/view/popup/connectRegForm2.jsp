@@ -4,7 +4,7 @@
 
 <%
 	/**
-	* @Class Name : connectRegForm.jsp
+	* @Class Name : connectRegForm2.jsp
 	* @Description : connectRegForm 화면
 	* @Modification Information
 	*
@@ -12,7 +12,7 @@
 	*  ------------    -----------    ---------------------------
 	*  2020.04.07     최초 생성
 	*
-	* author 변승우 과장
+	* author 
 	* since 2020. 04. 07
 	*
 	*/
@@ -110,7 +110,6 @@
   				fn_table_search_ins();
   			}
 		});
-		
 	});
 
 	/* ********************************************************
@@ -169,7 +168,8 @@
 			data : {
 				db_svr_id : $("#db_svr_id","#findList").val(),
 				kafkaIp : kafkaIp,
-				kafkaPort : kafkaPort
+				kafkaPort : kafkaPort,
+				connect_gbn : "kakfa"
 			},
 			success : function(result) {
 				if(result.RESULT_DATA =="success"){
@@ -211,7 +211,8 @@
 			url : '/connect_nm_Check.do',
 			type : 'post',
 			data : {
-				connect_nm : connect_nm_val
+				connect_nm : connect_nm_val,
+				connect_gbn : "source"
 			},
 			success : function(result) {
 				if (result == "true") {
@@ -440,7 +441,9 @@
 					meta_data : nvlPrmSet($("#ins_meta_data", "#insRegForm").val(), 'OFF'),
 					kc_port : parseInt($("#ins_kc_port", "#searchRegForm").val()) ,
 					db_id : parseInt($("#ins_db_id", "#insRegForm").val()),
-					trans_com_id : parseInt($("#ins_trans_com_id", "#insRegForm").val())
+					trans_com_id : parseInt($("#ins_trans_com_id", "#insRegForm").val()),
+					connect_type : nvlPrmSet($("#ins_connect_type", "#insRegForm").val(), ''),
+					regi_id : nvlPrmSet($("#ins_source_sch_nm", "#insRegForm").val(), '')
 			  	},
 				type : "post",
 				beforeSend: function(xhr) {
@@ -574,21 +577,6 @@
 		 $("#ins_trans_regi_ip", "#insRegForm").val(nvlPrmSet(regi_ip, ''));
 		 $("#ins_trans_regi_port", "#insRegForm").val(nvlPrmSet(regi_port, ''));
 	}
-	
-	/* ********************************************************
-	 * Connect Type 변경 이벤트 
-	 * TC004301 : debezium
-	 * TC004302 : confluent
-	 ******************************************************** */
-	function fn_ConType_change(){
-		 if("TC004302" != $("#ins_connect_type", "#insRegForm").val()){
-// 			 $(".schemRow").hide();
-			 $("#ins_schema_registry_info").hide();
-		 }else{
-// 			 $(".schemRow").show();
-			 $("#ins_schema_registry_info").show();
-		 }
-	}
 
 </script>
 
@@ -692,13 +680,13 @@
 											</div>
 											<label for="ins_connect_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												Connect Type<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
+												Schema Registry<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
 											</label>
 											<div class="col-sm-3">
-												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_connect_type" id="ins_connect_type" tabindex=4 onchange="fn_ConType_change();">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="ins_connect_type" id="ins_connect_type" tabindex=4 onchange="fn_conType_change(1);">
 													<option value=""><spring:message code="common.choice" /></option>
-													<option value="TC004301">Debezium</option>
-													<option value="TC004302">Confluent</option>
+													<option value="TC004301"><spring:message code="dbms_information.unuse" /></option>
+													<option value="TC004302"><spring:message code="dbms_information.use" /></option>
 												</select>
 											</div>
 										</div>

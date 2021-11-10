@@ -1,13 +1,14 @@
 package com.k4m.dx.tcontrol.transfer.service.impl;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,8 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.impl.CmmnServerInfoDAO;
-import com.k4m.dx.tcontrol.transfer.service.TransDbmsVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMappVO;
-import com.k4m.dx.tcontrol.transfer.service.TransRegiVO;
 import com.k4m.dx.tcontrol.transfer.service.TransService;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
@@ -46,199 +46,6 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 	@Override
 	public List<Map<String, Object>> selectTransSetting(TransVO transVO) throws Exception {
 		return transDAO.selectTransSetting(transVO);
-	}
-	
-	/**
-	 * trans DBMS시스템 리스트 조회
-	 * 
-	 * @param transDbmsVO
-	 * @return List<TransDbmsVO>
-	 * @throws Exception
-	 */
-	@Override
-	public List<TransDbmsVO> selectTransDBMS(TransDbmsVO transDbmsVO) throws Exception {
-		return transDAO.selectTransDBMS(transDbmsVO);
-	}
-	
-	/**
-	 * trans DBMS시스템 명 체크
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String trans_sys_nmCheck(String db2pg_sys_nm) throws Exception {
-		int resultCnt = 0;
-		String resultStr = "true";
-
-		try {
-			resultCnt = transDAO.trans_sys_nmCheck(db2pg_sys_nm);
-			
-			if (resultCnt > 0) {
-				// 중복값이 존재함.
-				resultStr = "false";
-			} else {
-				resultStr = "true";
-			}
-
-		} catch (Exception e) {
-			resultStr = "false";
-			e.printStackTrace();
-		}
-	
-		return resultStr;
-	}
-
-	/**
-	 * trans DBMS시스템 등록
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String insertTransDBMS(TransDbmsVO transDbmsVO) throws Exception {
-		String result = "S";
-		String resultMsg = "";
-
-		try {
-			//시스템명 중복체크
-			String trans_sys_nm = transDbmsVO.getTrans_sys_nm();
-			if (trans_sys_nm != null && !"".equals(trans_sys_nm)) {
-				resultMsg = trans_sys_nmCheck(trans_sys_nm);
-			}
-
-			if (!"true".equals(resultMsg)) {
-				result = "O";
-			}
-
-			if ("S".equals(result) ) {
-				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-				
-				String pwd = aes.aesEncode(transDbmsVO.getPwd());
-				transDbmsVO.setPwd(pwd);
-
-				transDbmsVO.setScm_nm(transDbmsVO.getScm_nm().toUpperCase());
-				transDbmsVO.setDtb_nm(transDbmsVO.getDtb_nm().toUpperCase());
-
-				transDAO.insertTransDBMS(transDbmsVO);
-
-			}
-		} catch (SQLException e) {
-			result = "F";
-			e.printStackTrace();
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-
-	/**
-	 * trans dbms 사용여부 확인
-	 * 
-	 * @param param
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String selectTransDbmsIngChk(TransDbmsVO transDbmsVO) throws Exception {
-		String result = "";
-		
-		Map<String, Object> resultChk = null;
-		int rstCnt = 0;
-
-		try {
-			JSONArray trans_dbms_ids = (JSONArray) new JSONParser().parse(transDbmsVO.getTrans_dbms_id_Rows());
-			if (trans_dbms_ids != null && trans_dbms_ids.size() > 0) {
-				for(int i=0; i<trans_dbms_ids.size(); i++){
-					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
-					transDbmsPrmVO.setTrans_trg_sys_id(trans_dbms_ids.get(i).toString());
-
-					resultChk = (Map<String, Object>) transDAO.selectTransDbmsIngChk(transDbmsPrmVO);
-					if (resultChk != null) {
-						String exeGbn = (String)transDbmsVO.getExeGbn();
-						int ingCnt = 0;
-	
-						if ("update".equals(exeGbn)) {
-							ingCnt = Integer.parseInt(resultChk.get("ing_cnt").toString());
-						} else {
-							ingCnt = Integer.parseInt(resultChk.get("tot_cnt").toString());
-						}
-						
-						rstCnt = rstCnt + ingCnt;
-					}
-				}
-			}
-
-			if (rstCnt > 0) {
-				result = "O";
-			} else {
-				result = "S";
-			}
-		} catch (SQLException e) {
-			result = "F";
-			e.printStackTrace();
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-	
-	/**
-	 * trans DBMS시스템 수정
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String updateTransDBMS(TransDbmsVO transDbmsVO) throws Exception {
-		String result = "S";
-
-		try {
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			
-			String pwd = aes.aesEncode(transDbmsVO.getPwd());
-			transDbmsVO.setPwd(pwd);
-			transDbmsVO.setScm_nm(transDbmsVO.getScm_nm().toUpperCase());
-			transDbmsVO.setDtb_nm(transDbmsVO.getDtb_nm().toUpperCase());
-
-			transDAO.updateTransDBMS(transDbmsVO);
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-
-	/**
-	 * trans DBMS시스템 삭제
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	@Override
-	public void deleteTransDBMS(TransDbmsVO transDbmsVO) throws Exception {
-		try{
-			JSONArray trans_dbms_ids = (JSONArray) new JSONParser().parse(transDbmsVO.getTrans_dbms_id_Rows());
-
-			if (trans_dbms_ids != null && trans_dbms_ids.size() > 0) {
-				for(int i=0; i<trans_dbms_ids.size(); i++){
-					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
-					transDbmsPrmVO.setTrans_sys_id(Integer.parseInt(trans_dbms_ids.get(i).toString()));
-					
-					transDAO.deleteTransDBMS(transDbmsPrmVO);
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -399,10 +206,10 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			connStartResult = cic.connectStop(IP, PORT, strCmd, trans_id, trans_active_gbn, str_login_id);
-System.out.println("connStartResult=========================" + connStartResult);
+
 			if (connStartResult != null) {
-				System.out.println("connStartResult=========123123================" + connStartResult.get("RESULT_CODE").toString());
 				result_code = connStartResult.get("RESULT_CODE").toString();
+
 				if ("0".equals(result_code)) {
 					result = "success";
 				} else if ("-1".equals(result_code)) {
@@ -641,22 +448,18 @@ System.out.println("connStartResult=========================" + connStartResult)
 	 * @throws Exception 
 	 */
 	@Override
-	public int connect_nm_Check(String connect_nm) throws Exception {
-		return transDAO.connect_nm_Check(connect_nm);
+	public int connect_nm_Check(String connect_nm, String connect_gbn) throws Exception {
+		int resultSet = 0;
+		
+		if ("source".equals(connect_gbn)) {
+			resultSet = transDAO.connect_nm_Check(connect_nm);
+		} else {
+			resultSet = transDAO.connect_target_nm_Check(connect_nm);
+		}
+		
+		return resultSet;
 	}
-	
-	/**
-	 * trans target connect 명 중복체크
-	 * 
-	 * @param connect_nm
-	 * @return int
-	 * @throws Exception 
-	 */
-	@Override
-	public int connect_target_nm_Check(String connect_nm) throws Exception {
-		return transDAO.connect_target_nm_Check(connect_nm);
-	}
-	
+
 	/**
 	 * 포함대상 스키마,테이블 시퀀스 조회
 	 * @param 
@@ -733,28 +536,6 @@ System.out.println("connStartResult=========================" + connStartResult)
 	}
 
 	/**
-	 * 스냅샷모드 목록 조회
-	 * @param TransVO
-	 * @return List<TransVO>
-	 * @throws Exception
-	 */
-	@Override
-	public List<TransVO> selectSnapshotModeList() throws Exception {
-		return transDAO.selectSnapshotModeList();
-	}
-
-	/**
-	 * 압축형식
-	 * @param TransVO
-	 * @return List<TransVO>
-	 * @throws Exception
-	 */
-	@Override
-	public List<TransVO> selectCompressionTypeList() throws Exception {
-		return transDAO.selectCompressionTypeList();
-	}
-
-	/**
 	 * source auto 커넥트 정보 조회
 	 * @param trans_id
 	 * @return List<Map<String, Object>>
@@ -775,280 +556,7 @@ System.out.println("connStartResult=========================" + connStartResult)
 	public List<Map<String, Object>> selectTargetTransInfoAuto(int db_svr_id) throws Exception {
 		return transDAO.selectTargetTransInfoAuto(db_svr_id);
 	}
-	
-	/**
-	 * trans kafka connect list 조회
-	 * 
-	 * @param transDbmsVO
-	 * @return List<TransDbmsVO>
-	 * @throws Exception
-	 */
-	@Override
-	public List<TransDbmsVO> selectTransKafkaConList(TransDbmsVO transDbmsVO) throws Exception {
-		return transDAO.selectTransKafkaConList(transDbmsVO);
-	}
-	
-	/**
-	 * Schema Registry list 조회
-	 * 
-	 * @param transDbmsVO
-	 * @return List<TransRegiVO>
-	 * @throws Exception
-	 */
-	@Override
-	public List<TransRegiVO> selectTransRegiList(TransRegiVO transRegiVO) throws Exception {
-		return transDAO.selectTransRegiList(transRegiVO);
-	}
 
-	/**
-	 * TRANS kafka connect 설정 등록
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String insertTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception {
-		String result = "S";
-		String resultMsg = "";
-
-		try {
-			//커넥트명 중복체크
-			String kc_nm = transDbmsVO.getKc_nm();
-			if (kc_nm != null && !"".equals(kc_nm)) {
-				resultMsg = trans_connect_nmCheck(kc_nm);
-			}
-
-			if (!"true".equals(resultMsg)) {
-				result = "O";
-			}
-
-			if ("S".equals(result) ) {
-				transDAO.insertTransKafkaConnect(transDbmsVO);
-				
-				transDbmsVO.setAct_type("A");			//활성화
-				transDbmsVO.setAct_exe_type("TC004001");//manual
-				transDbmsVO.setExe_rslt_cd("TC001501");
-
-				transDAO.insertTransKafkaConnectLog(transDbmsVO);
-			}
-		} catch (SQLException e) {
-			result = "F";
-			e.printStackTrace();
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * TRANS Schema Registry 설정 등록
-	 * 
-	 * @param TransRegiVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String insertTransSchemaRegistry(TransRegiVO transRegiVO) throws Exception {
-		String result = "S";
-		String resultMsg = "";
-
-		try {
-			//커넥트명 중복체크
-			String regi_nm = transRegiVO.getRegi_nm();
-			if (regi_nm != null && !"".equals(regi_nm)) {
-				resultMsg = trans_Registry_nmCheck(regi_nm);
-			}
-
-			if (!"true".equals(resultMsg)) {
-				result = "O";
-			}
-
-			if ("S".equals(result) ) {
-				transDAO.insertTransSchemaRegistry(transRegiVO);
-				
-			    transRegiVO.setAct_type("A");			//활성화
-				transRegiVO.setAct_exe_type("TC004001");//manual
-				transRegiVO.setExe_rslt_cd("TC001501");
-
-				transDAO.insertTransSchemaRegistryLog(transRegiVO);
-			}
-		} catch (SQLException e) {
-			result = "F";
-			e.printStackTrace();
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-	
-	
-	
-	/**
-	 * trans DBMS시스템 명 체크
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String trans_connect_nmCheck(String kc_nm) throws Exception {
-		int resultCnt = 0;
-		String resultStr = "true";
-
-		try {
-			resultCnt = transDAO.trans_connect_nmCheck(kc_nm);
-			
-			if (resultCnt > 0) {
-				// 중복값이 존재함.
-				resultStr = "false";
-			} else {
-				resultStr = "true";
-			}
-
-		} catch (Exception e) {
-			resultStr = "false";
-			e.printStackTrace();
-		}
-	
-		return resultStr;
-	}
-
-
-	/**
-	 * trans DBMS시스템 명 체크
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String trans_Registry_nmCheck(String regi_nm) throws Exception {
-		int resultCnt = 0;
-		String resultStr = "true";
-
-		try {
-			resultCnt = transDAO.trans_Registry_nmCheck(regi_nm);
-			
-			if (resultCnt > 0) {
-				// 중복값이 존재함.
-				resultStr = "false";
-			} else {
-				resultStr = "true";
-			}
-
-		} catch (Exception e) {
-			resultStr = "false";
-			e.printStackTrace();
-		}
-	
-		return resultStr;
-	}
-
-	
-	/**
-	 * trans kafka connect 설정 삭제
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	@Override
-	public void deleteTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception {
-		try{
-			JSONArray trans_connect_ids = (JSONArray) new JSONParser().parse(transDbmsVO.getTrans_connect_id_Rows());
-
-			if (trans_connect_ids != null && trans_connect_ids.size() > 0) {
-				for(int i=0; i<trans_connect_ids.size(); i++){
-					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
-					transDbmsPrmVO.setKc_id(trans_connect_ids.get(i).toString());
-					
-					transDAO.deleteTransKafkaConnect(transDbmsPrmVO);
-
-					transDAO.deleteTransKafkaConnectLog(transDbmsPrmVO);
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * trans kafka connect 설정 삭제
-	 * 
-	 * @param transRegiVO
-	 * @throws Exception
-	 */
-	@Override
-	public void deleteTransSchemaRegistry(TransRegiVO transRegiVO) throws Exception {
-		try{
-			JSONArray trans_connect_ids = (JSONArray) new JSONParser().parse(transRegiVO.getTrans_regi_id_Rows());
-
-			if (trans_connect_ids != null && trans_connect_ids.size() > 0) {
-				for(int i=0; i<trans_connect_ids.size(); i++){
-					TransRegiVO transRegiPrmVO = new TransRegiVO();	
-					transRegiPrmVO.setRegi_id(trans_connect_ids.get(i).toString());
-					
-					transDAO.deleteTransSchemaRegistry(transRegiPrmVO);
-					transDAO.deleteTransSchemaRegistryLog(transRegiPrmVO);
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * trans connect 수정
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String updateTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception {
-		String result = "S";
-
-		try {
-			transDAO.updateTransKafkaConnect(transDbmsVO);
-
-			//kafka connect 이력 등록
-			
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * trans Schema Registry 정보 수정
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String updateTransShcemaRegistry(TransRegiVO transRegiVO) throws Exception {
-		String result = "S";
-
-		try {
-			transDAO.updateTransSchemaRegistry(transRegiVO);
-
-			//kafka connect 이력 등록
-			
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-	
 	/**
 	 * 기본설정 등록 조회
 	 * @param transVO, request, historyVO
@@ -1092,123 +600,6 @@ System.out.println("connStartResult=========================" + connStartResult)
 			e.printStackTrace();
 		}
 
-		return result;
-	}
-
-	/**
-	 * trans kafka 사용여부 확인
-	 * 
-	 * @param param
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String selectTransKafkaConIngChk(TransDbmsVO transDbmsVO) throws Exception {
-		String result = "";
-		
-		Map<String, Object> resultChk = null;
-		int rstCnt = 0;
-
-		try {
-			JSONArray trans_connect_ids = (JSONArray) new JSONParser().parse(transDbmsVO.getTrans_connect_id_Rows());
-			if (trans_connect_ids != null && trans_connect_ids.size() > 0) {
-				for(int i=0; i<trans_connect_ids.size(); i++){
-					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
-					transDbmsPrmVO.setKc_id(trans_connect_ids.get(i).toString());
-
-					resultChk = (Map<String, Object>) transDAO.selectTransKafkaConIngChk(transDbmsPrmVO);
-					if (resultChk != null) {
-						int ingCnt = 0;
-	
-						ingCnt = Integer.parseInt(resultChk.get("tot_cnt").toString());
-						
-						rstCnt = rstCnt + ingCnt;
-					}
-				}
-			}
-
-			if (rstCnt > 0) {
-				result = "O";
-			} else {
-				result = "S";
-			}
-		} catch (SQLException e) {
-			result = "F";
-			e.printStackTrace();
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	/**
-	 * trans Schema Registry 사용여부 확인
-	 * 
-	 * @param transRegiVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String selectTransSchemRegiIngChk(TransRegiVO transRegiVO) throws Exception {
-		String result = "";
-		
-		Map<String, Object> resultChk = null;
-		int rstCnt = 0;
-
-		try {
-			JSONArray trans_regi_ids = (JSONArray) new JSONParser().parse(transRegiVO.getTrans_regi_id_Rows());
-			if (trans_regi_ids != null && trans_regi_ids.size() > 0) {
-				for(int i=0; i<trans_regi_ids.size(); i++){
-					TransDbmsVO transDbmsPrmVO = new TransDbmsVO();	
-					transDbmsPrmVO.setRegi_id(trans_regi_ids.get(i).toString());
-
-					resultChk = (Map<String, Object>) transDAO.selectTransSchemRegiIngChk(transDbmsPrmVO);
-					if (resultChk != null) {
-						int ingCnt = 0;
-	
-						ingCnt = Integer.parseInt(resultChk.get("tot_cnt").toString());
-						
-						rstCnt = rstCnt + ingCnt;
-					}
-				}
-			}
-
-			if (rstCnt > 0) {
-				result = "O";
-			} else {
-				result = "S";
-			}
-		} catch (SQLException e) {
-			result = "F";
-			e.printStackTrace();
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-	
-	/**
-	 * trans connect 수정
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	@Override
-	public String updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) throws Exception {
-		String result = "S";
-
-		try {
-			transDAO.updateTransKafkaConnectFaild(transDbmsVO);
-		} catch (Exception e) {
-			result = "F";
-			e.printStackTrace();
-		}
-		
 		return result;
 	}
 
@@ -1369,4 +760,330 @@ System.out.println("connStartResult=========================" + connStartResult)
 	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws Exception {
 		return transDAO.selectTransComCoIngChk(transVO);
 	}	
+	
+	/**
+	 * 다중 kafka-Connection 시작
+	 * 
+	 * @param request
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String transTotExecute(HttpServletRequest request, LoginVO loginVo) throws Exception {
+
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		String execute_gbn = request.getParameter("execute_gbn").toString();
+		String trans_active_gbn = request.getParameter("trans_active_gbn").toString();
+
+		String trans_exrt_trg_tb_id_Rows = "";
+		String kc_ip_Rows = "";
+		String kc_port_Rows = "";
+		String connect_nm_Rows = "";
+
+		String trans_id_Rows = "";
+		JSONArray trans_ids = null;
+
+		JSONArray trans_exrt_trg_tb_ids = null;
+		JSONArray kc_ips = null;
+		JSONArray kc_ports = null;
+		JSONArray connect_nms = null;
+		
+		String result = "fail";
+		
+		String result_code = "";
+		int sucCnt = 0;
+		int sucCnt_no = 0;
+
+		if (request.getParameter("trans_id_List") != null) {
+			trans_id_Rows = request.getParameter("trans_id_List").toString().replaceAll("&quot;", "\"");
+			trans_ids = (JSONArray) new JSONParser().parse(trans_id_Rows);
+		}
+
+		if (request.getParameter("trans_exrt_trg_tb_id_List") != null) {
+			trans_exrt_trg_tb_id_Rows = request.getParameter("trans_exrt_trg_tb_id_List").toString().replaceAll("&quot;", "\"");
+			trans_exrt_trg_tb_ids = (JSONArray) new JSONParser().parse(trans_exrt_trg_tb_id_Rows);
+		}
+
+		if (request.getParameter("kc_ip_List") != null) {
+			kc_ip_Rows = request.getParameter("kc_ip_List").toString().replaceAll("&quot;", "\"");
+			kc_ips = (JSONArray) new JSONParser().parse(kc_ip_Rows);
+		}
+
+		if (request.getParameter("kc_port_List") != null) {
+			kc_port_Rows = request.getParameter("kc_port_List").toString().replaceAll("&quot;", "\"");
+			kc_ports = (JSONArray) new JSONParser().parse(kc_port_Rows);
+		}
+
+		if (request.getParameter("connect_nm_List") != null) {
+			connect_nm_Rows = request.getParameter("connect_nm_List").toString().replaceAll("&quot;", "\"");
+			connect_nms = (JSONArray) new JSONParser().parse(connect_nm_Rows);
+		}
+
+		Map<String, Object> connStartResult = new  HashMap<String, Object>();
+
+		try {
+			if (trans_exrt_trg_tb_ids != null && trans_exrt_trg_tb_ids.size() > 0) {
+				for(int i=0; i<trans_exrt_trg_tb_ids.size(); i++){
+					String resultSs = "fail";
+					TransVO transVOPrm = new TransVO();
+
+					if ("active".equals(execute_gbn)) {
+						int trans_exrt_trg_tb_id = Integer.parseInt(trans_exrt_trg_tb_ids.get(i).toString());
+						int trans_id = Integer.parseInt(trans_ids.get(i).toString());
+
+						transVOPrm.setDb_svr_id(db_svr_id);
+						transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
+						transVOPrm.setTrans_id(trans_id);
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+						transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
+
+						resultSs = transStart(transVOPrm);
+					} else if ("target_active".equals(execute_gbn)) {
+						int trans_exrt_trg_tb_id = Integer.parseInt(trans_exrt_trg_tb_ids.get(i).toString());
+						int trans_id = Integer.parseInt(trans_ids.get(i).toString());
+
+						transVOPrm.setDb_svr_id(db_svr_id);
+						transVOPrm.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
+						transVOPrm.setTrans_id(trans_id);
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+						transVOPrm.setLst_mdfr_id((String)loginVo.getUsr_id());
+							
+						resultSs = transTargetStart(transVOPrm);
+					} else {
+						String kc_ip = kc_ips.get(i).toString();
+						String kc_port = kc_ports.get(i).toString();
+						String connect_nm = connect_nms.get(i).toString();
+						String trans_id_str = trans_ids.get(i).toString();
+
+						transVOPrm.setKc_ip(kc_ip);
+						transVOPrm.setKc_port(Integer.parseInt(kc_port));
+						transVOPrm.setConnect_nm(connect_nm);
+						transVOPrm.setTrans_id(Integer.parseInt(trans_id_str));
+						transVOPrm.setDb_svr_id(db_svr_id);
+						transVOPrm.setTrans_active_gbn(trans_active_gbn);
+						transVOPrm.setFrst_regr_id((String)loginVo.getUsr_id());
+
+						resultSs = transStop(transVOPrm);
+					}
+
+					if (resultSs != null && "success".equals(resultSs)) {
+					//	result_code = connStartResult.get("RESULT_CODE").toString();
+					//	if ("0".equals(result_code)) {
+							//result = "success";
+							sucCnt = sucCnt + 1;
+					//	}
+					} else if (resultSs != null && "no_depth".equals(resultSs)) {
+						sucCnt = sucCnt + 1;
+						sucCnt_no = sucCnt_no + 1;
+					}
+				}	
+
+				if (sucCnt == trans_exrt_trg_tb_ids.size() ) {
+					if (sucCnt_no <= 0) {
+						result = "success";
+					} else {
+						result = "no_depth";
+					}
+					
+				} else {
+					result = "fail";
+				}
+			}
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();	
+			return result;
+		}
+		return result;
+	}
+	
+	/**
+	 * 전송대상테이블정보 setting
+	 * 
+	 * @param mappInfo, trans_active_gbn
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public JSONObject selectTransMatchMappInfo(List<Map<String, Object>> mappInfo, String trans_active_gbn, String multi_gbn) throws Exception {
+
+		JSONObject tableResult = new JSONObject();
+		String[] tables = null;
+
+		JSONArray tableArray = new JSONArray();
+
+		try {
+			if (mappInfo != null) {
+				tables = mappInfo.get(0).get("exrt_trg_tb_nm").toString().split(",");
+			}
+
+			if(mappInfo.get(0).get("exrt_trg_tb_nm") != null) {
+				if (!"".equals(mappInfo.get(0).get("exrt_trg_tb_nm").toString())) {
+					for (int i = 0; i < tables.length; i++) {
+						JSONObject jsonObj = new JSONObject();
+						String[] datas = null;
+	
+						if ("source".equals(trans_active_gbn)) {
+							datas = tables[i].toString().split("\\.");
+							
+							for(int j = 0; j < 1; j++){
+								jsonObj.put("schema_name", datas[0]);
+								jsonObj.put("table_name", datas[1]);
+								tableArray.add(jsonObj);
+							}
+						} else {
+							if (!"tar_single".equals(multi_gbn)) {
+								jsonObj.put("idx", i + 1);
+							}
+
+							jsonObj.put("topic_name", tables[i]);
+							tableArray.add(jsonObj);
+						}
+					}
+					tableResult.put("data", tableArray);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+		return tableResult;
+	}
+
+	/**
+	 * 전송상세 전송설정정보 setting
+	 * 
+	 * @param mappInfo, trans_active_gbn
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> selectTransMatchInfo(List<Map<String, Object>> transInfo, String trans_active_gbn) throws Exception {
+		Map<String, Object> transInfoMap = new HashMap<String, Object>();
+
+		if (transInfo != null) {
+			transInfoMap.put("kc_nm", transInfo.get(0).get("kc_nm"));				//use
+			transInfoMap.put("kc_id", transInfo.get(0).get("kc_id"));				//use
+			transInfoMap.put("kc_ip", transInfo.get(0).get("kc_ip"));				//use
+			transInfoMap.put("kc_port", transInfo.get(0).get("kc_port"));			//use
+			transInfoMap.put("connect_nm", transInfo.get(0).get("connect_nm"));		//use
+			transInfoMap.put("trans_id", transInfo.get(0).get("trans_id"));			//use
+			transInfoMap.put("exe_status", transInfo.get(0).get("exe_status"));		//use
+
+			transInfoMap.put("regi_id", transInfo.get(0).get("regi_id"));			//use
+			transInfoMap.put("regi_nm", transInfo.get(0).get("regi_nm"));			//use
+			transInfoMap.put("regi_ip", transInfo.get(0).get("regi_ip"));			//use
+			transInfoMap.put("regi_port", transInfo.get(0).get("regi_port"));		//use
+
+			if ("source".equals(trans_active_gbn)) {
+				transInfoMap.put("db_id", transInfo.get(0).get("db_id"));			//use
+				transInfoMap.put("db_nm", transInfo.get(0).get("db_nm"));			//use
+				transInfoMap.put("snapshot_mode", transInfo.get(0).get("snapshot_mode"));	//use
+				transInfoMap.put("snapshot_nm", transInfo.get(0).get("snapshot_nm"));		//use
+				transInfoMap.put("compression_type", transInfo.get(0).get("compression_type"));	//use
+				transInfoMap.put("compression_nm", transInfo.get(0).get("compression_nm"));		//use
+				transInfoMap.put("meta_data", transInfo.get(0).get("meta_data"));				//use
+
+				transInfoMap.put("trans_com_id", transInfo.get(0).get("trans_com_id"));							//use
+				transInfoMap.put("trans_com_cng_nm", transInfo.get(0).get("trans_com_cng_nm"));					//use
+				transInfoMap.put("plugin_name", transInfo.get(0).get("plugin_name"));							//use
+				transInfoMap.put("heartbeat_interval_ms", transInfo.get(0).get("heartbeat_interval_ms"));		//use
+				transInfoMap.put("max_batch_size", transInfo.get(0).get("max_batch_size"));						//use
+				transInfoMap.put("max_queue_size", transInfo.get(0).get("max_queue_size"));						//use
+				transInfoMap.put("offset_flush_interval_ms", transInfo.get(0).get("offset_flush_interval_ms"));	//use
+				transInfoMap.put("offset_flush_timeout_ms", transInfo.get(0).get("offset_flush_timeout_ms"));	//use
+
+				transInfoMap.put("connect_type", transInfo.get(0).get("connect_type"));						//use
+			} else {
+				transInfoMap.put("trans_sys_nm", transInfo.get(0).get("trans_sys_nm"));			//use
+				transInfoMap.put("trans_sys_id", transInfo.get(0).get("trans_sys_id"));			//use
+				transInfoMap.put("ipadr", transInfo.get(0).get("ipadr"));						//use
+				transInfoMap.put("dtb_nm", transInfo.get(0).get("dtb_nm"));						//use
+				transInfoMap.put("spr_usr_id", transInfo.get(0).get("spr_usr_id"));				//use
+				transInfoMap.put("portno", transInfo.get(0).get("portno"));						//use
+				transInfoMap.put("pwd", transInfo.get(0).get("pwd"));							//use
+				transInfoMap.put("scm_nm", transInfo.get(0).get("scm_nm"));						//use
+				
+				transInfoMap.put("topic_type", transInfo.get(0).get("topic_type"));				//use
+			}
+		} else {
+			transInfoMap.put("kc_nm", "");				//use
+			transInfoMap.put("kc_id", "");				//use
+			transInfoMap.put("kc_ip", "");											//use
+			transInfoMap.put("kc_port", "");										//use
+			transInfoMap.put("connect_nm", "");										//use
+			transInfoMap.put("trans_id", "");										//use
+			transInfoMap.put("exe_status", "");										//use
+
+			transInfoMap.put("regi_id", "");										//use
+			transInfoMap.put("regi_nm", "");										//use
+			transInfoMap.put("regi_ip", "");										//use
+			transInfoMap.put("regi_port", "");										//use
+
+			if ("source".equals(trans_active_gbn)) {
+				transInfoMap.put("db_id", "");										//use
+				transInfoMap.put("db_nm", "");										//use
+				transInfoMap.put("snapshot_mode", "");								//use
+				transInfoMap.put("snapshot_nm", "");								//use
+				transInfoMap.put("compression_type", "");							//use
+				transInfoMap.put("compression_nm", "");								//use
+				transInfoMap.put("meta_data", "");									//use
+
+				transInfoMap.put("trans_com_id", "");								//use
+				transInfoMap.put("trans_com_cng_nm", "");							//use
+				transInfoMap.put("plugin_name", "");								//use
+				transInfoMap.put("heartbeat_interval_ms", "");						//use
+				transInfoMap.put("max_batch_size", "");								//use
+				transInfoMap.put("max_queue_size", "");								//use
+				transInfoMap.put("offset_flush_interval_ms", "");					//use
+				transInfoMap.put("offset_flush_timeout_ms", "");					//use
+
+				transInfoMap.put("connect_type", "");								//use
+			} else {
+				transInfoMap.put("trans_sys_nm", "");								//use
+				transInfoMap.put("trans_sys_id", "");								//use
+				transInfoMap.put("ipadr", "");										//use
+				transInfoMap.put("dtb_nm", "");										//use
+				transInfoMap.put("spr_usr_id", "");									//use
+				transInfoMap.put("portno", "");										//use
+				transInfoMap.put("pwd", "");										//use
+				transInfoMap.put("scm_nm", "");										//use
+
+				transInfoMap.put("topic_type", "");									//use
+			}
+		}
+		
+		System.out.println("kc_nm====" + transInfo.get(0).get("kc_nm"));
+		System.out.println("kc_id====" + transInfo.get(0).get("kc_id"));
+		System.out.println("kc_ip====" + transInfo.get(0).get("kc_ip"));
+		System.out.println("kc_port====" + transInfo.get(0).get("kc_port"));
+		System.out.println("connect_nm====" + transInfo.get(0).get("connect_nm"));
+		System.out.println("trans_id====" + transInfo.get(0).get("trans_id"));
+		System.out.println("exe_status====" + transInfo.get(0).get("exe_status"));
+		System.out.println("regi_id====" + transInfo.get(0).get("regi_id"));
+		System.out.println("regi_nm====" + transInfo.get(0).get("regi_nm"));
+		System.out.println("regi_ip====" + transInfo.get(0).get("regi_ip"));
+		System.out.println("regi_port====" + transInfo.get(0).get("regi_port"));
+		System.out.println("db_id====" + transInfo.get(0).get("db_id"));
+		System.out.println("db_nm====" + transInfo.get(0).get("db_nm"));
+		System.out.println("snapshot_mode====" + transInfo.get(0).get("snapshot_mode"));
+		System.out.println("snapshot_nm====" + transInfo.get(0).get("snapshot_nm"));
+		System.out.println("compression_type====" + transInfo.get(0).get("compression_type"));
+		System.out.println("compression_nm====" + transInfo.get(0).get("compression_nm"));
+		System.out.println("meta_data====" + transInfo.get(0).get("meta_data"));
+		System.out.println("trans_com_id====" + transInfo.get(0).get("trans_com_id"));
+		System.out.println("trans_com_cng_nm====" + transInfo.get(0).get("trans_com_cng_nm"));
+		System.out.println("plugin_name====" + transInfo.get(0).get("plugin_name"));
+		System.out.println("meta_data====" + transInfo.get(0).get("meta_data"));
+		System.out.println("heartbeat_interval_ms====" + transInfo.get(0).get("heartbeat_interval_ms"));
+		System.out.println("max_batch_size====" + transInfo.get(0).get("max_batch_size"));
+		System.out.println("max_queue_size====" + transInfo.get(0).get("max_queue_size"));
+		System.out.println("offset_flush_interval_ms====" + transInfo.get(0).get("offset_flush_interval_ms"));
+		System.out.println("offset_flush_timeout_ms====" + transInfo.get(0).get("offset_flush_timeout_ms"));
+		System.out.println("connect_type====" + transInfo.get(0).get("connect_type"));
+		
+		System.out.println("transInfoMap====" + transInfoMap);
+
+		return transInfoMap;
+	}
 }

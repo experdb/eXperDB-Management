@@ -138,7 +138,8 @@
 			data : {
 				db_svr_id : $("#db_svr_id","#findList").val(),
 				regiIP : regiIP,
-				regiPort : regiPort
+				regiPort : regiPort,
+				connect_gbn : "schema"
 			},
 			success : function(result) {
 				if(result.RESULT_DATA =="success"){

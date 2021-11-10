@@ -75,22 +75,24 @@
       * Description : 소스 Connector 목록 조회
       * Author : 윤정
       **/
-      SELECT 
-           TRANS_ID
-         , KC_IP
-         , KC_PORT
-         , CONNECT_NM
-         , SNAPSHOT_MODE
-         , DB_ID
-         , DB_SVR_ID
-         , TRANS_EXRT_TRG_TB_ID
-         , EXE_STATUS
-         , FRST_REGR_ID
-         , COMPRESSION_TYPE
-         , META_DATA
-         , KC_ID
-         , TRANS_COM_ID
-      FROM T_TRANSCNG_I TTI 
+        SELECT 
+               A.TRANS_ID
+             , B.KC_IP
+             , B.KC_PORT
+             , A.CONNECT_NM
+             , A.SNAPSHOT_MODE
+             , A.DB_ID
+             , A.DB_SVR_ID
+             , A.TRANS_EXRT_TRG_TB_ID
+             , A.EXE_STATUS
+             , A.FRST_REGR_ID
+             , A.COMPRESSION_TYPE
+             , A.META_DATA
+             , A.KC_ID
+             , A.TRANS_COM_ID
+          FROM T_TRANSCNG_I A 
+               LEFT JOIN T_TRANS_CON_INF B ON A.KC_ID = B.KC_ID
+         ORDER BY A.TRANS_ID
    </select>
    
    <select id="selectSourceConnectorTableList" resultType="hashMap">

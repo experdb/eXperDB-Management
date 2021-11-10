@@ -35,6 +35,7 @@ var data_transfer_msg18 = "<spring:message code='data_transfer.msg18' />";
 var data_transfer_msg22 = "<spring:message code='data_transfer.msg22' />";
 var data_transfer_msg21 = "<spring:message code='data_transfer.msg21' />";
 var data_transfer_msg28 = "<spring:message code='data_transfer.msg28' />";
+var data_transfer_msg29 = "<spring:message code='data_transfer.msg29' />";
 
 var data_transfer_transfer_activity = "<spring:message code='data_transfer.transfer_activity' />";
 var data_transfer_msg23 = "<spring:message code='data_transfer.msg23' />";
@@ -56,6 +57,7 @@ var message_act_restart = "<spring:message code='eXperDB_proxy.act_restart'/>";
 var message_act_stop = "<spring:message code='eXperDB_proxy.act_stop'/>";
 
 var data_transfer_msg8 = "<spring:message code='data_transfer.msg8'/>";
+var data_transfer_msg9 = "<spring:message code='data_transfer.msg9'/>";
 
 var message_connect_name ="<spring:message code='eXperDB_CDC.connect_name'/>"
 var message_source_error = "<spring:message code='eXperDB_CDC.source_error'/>";
@@ -77,6 +79,10 @@ var message_msg45 = "<spring:message code='eXperDB_CDC.msg45'/>";
 var message_number_of_events_filtered = "<spring:message code='eXperDB_CDC.number_of_events_filtered'/>";
 var message_number_of_erroneous_events = "<spring:message code='eXperDB_CDC.number_of_erroneous_events'/>";
 var message_total_number_of_events_seen = "<spring:message code='eXperDB_CDC.total_number_of_events_seen'/>";
+
+var eXperDB_CDC_msg30 = "<spring:message code='eXperDB_CDC.msg30' />";
+var eXperDB_CDC_msg38 = "<spring:message code='eXperDB_CDC.msg38' />";
+
 </script>
 <body>
 

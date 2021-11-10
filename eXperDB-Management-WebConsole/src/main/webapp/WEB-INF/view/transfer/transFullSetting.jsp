@@ -84,64 +84,7 @@ a:hover.tip span {
 			});
 	  	});
 	});
-	
-	/* ********************************************************
-	 * kafka 체크
-	 ******************************************************** */
-	function fn_selectKafkaConnectChk() {
-		var errorMsg = "";
-		var titleMsg = "";
 
-		$.ajax({
-			url : "/selectTransKafkaConList.do",
-			data : {
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				console.log("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			},
-			success : function(result) {
-				if (result != null) {
-					if (result.length > 0) {
-						connect_yn = "Y";
-					} else {
-						connect_yn = "N";
-					}
-				} else {
-					connect_yn = "N";
-				}
-
-				//kafa connect 존재여부
-				if (connect_yn == "Y") {
-					//화면 조회
-					fn_tot_select();
-					
-					//heartbeat 체크
-					fn_selectHeartbeatChk();
-				} else {
-					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="eXperDB_CDC.msg30" />');
-					
-					//설치안된경우 버튼 막아야함
-					$("#btnChoActive").prop("disabled", "disabled");
-					$("#btnChoDisabled").prop("disabled", "disabled");
-
-					$("#btnScDelete").prop("disabled", "disabled");
-					$("#btnTgDelete").prop("disabled", "disabled");
-					$("#btnScModify").prop("disabled", "disabled");
-					$("#btnTgModify").prop("disabled", "disabled");
-					$("#btnScInsert").prop("disabled", "disabled");
-					$("#btnTgInsert").prop("disabled", "disabled");
-					$("#btnSearch").prop("disabled", "disabled");
-					$("#btnCommonConSetInsert").prop("disabled", "disabled");
-				}
-			}
-		});
-	}
-	
 	/* ********************************************************
 	 * heatbeat 체크
 	 ******************************************************** */
@@ -181,9 +124,6 @@ a:hover.tip span {
 			$("#btnCommonConChk").hide();
 		}
 	}
-	
-  	
-
 
 	/* ********************************************************
 	 * table 초기화 및 설정
@@ -506,7 +446,6 @@ a:hover.tip span {
 <%@include file="./../popup/transComConSetForm.jsp"%>
 <%@include file="./../popup/transComConChoForm.jsp"%>
 <%@include file="./../popup/transSchemRegiSelectForm.jsp"%>
-
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>

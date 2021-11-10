@@ -659,20 +659,20 @@ function fn_buttonExecuteAut(autIngGbn, exeIngGbn){
 function fn_info_setting(result, active_gbn) {
 	if (active_gbn == "source") {
 		//스냅샷 모드 추가
-		var snapshot_mode_re = nvlPrmSet(result.snapshot_mode, "");
-		var snapshot_mode_nm = nvlPrmSet(result.snapshot_nm, "");
+		var snapshot_mode_re = nvlPrmSet(result.transInfoMap.snapshot_mode, "");
+		var snapshot_mode_nm = nvlPrmSet(result.transInfoMap.snapshot_nm, "");
 		var info_meta_data_chk = "";
 
 		//압축형태
 		var compression_type_info_val = "";
-		var compression_type_info = nvlPrmSet(result.compression_type, "");
+		var compression_type_info = nvlPrmSet(result.transInfoMap.compression_type, "");
 
-		$("#d_kc_id_nm", "#searchInfoForm").html(nvlPrmSet(result.kc_nm, ""));
-		$("#d_kc_ip", "#searchInfoForm").html(nvlPrmSet(result.kc_ip, ""));
-		$("#d_kc_port", "#searchInfoForm").html(nvlPrmSet(result.kc_port, ""));
+		$("#d_kc_id_nm", "#searchInfoForm").html(nvlPrmSet(result.transInfoMap.kc_nm, ""));
+		$("#d_kc_ip", "#searchInfoForm").html(nvlPrmSet(result.transInfoMap.kc_ip, ""));
+		$("#d_kc_port", "#searchInfoForm").html(nvlPrmSet(result.transInfoMap.kc_port, ""));
 
-		$("#d_connect_nm", "#infoRegForm").html(nvlPrmSet(result.connect_nm, ""));
-		$("#d_db_id", "#infoRegForm").html(nvlPrmSet(result.db_nm, ""));
+		$("#d_connect_nm", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.connect_nm, ""));
+		$("#d_db_id", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.db_nm, ""));
 
 		//스냅샷 모드 change
 		if(snapshot_mode_re == "TC003601"){
@@ -693,12 +693,12 @@ function fn_info_setting(result, active_gbn) {
 			if (compression_type_info == 'TC003701') {
 				compression_type_info_val += "<div class='badge badge-light' style='background-color: transparent !important;'>";
 				compression_type_info_val += "	<i class='ti-close text-danger mr-2'></i>";
-				compression_type_info_val += nvlPrmSet(result.compression_nm, "");
+				compression_type_info_val += nvlPrmSet(result.transInfoMap.compression_nm, "");
 				compression_type_info_val += "</div>";
 			} else {
 				compression_type_info_val += "<div class='badge badge-light' style='background-color: transparent !important;'>";
 				compression_type_info_val += "	<i class='fa fa-file-zip-o text-success mr-2'></i>";
-				compression_type_info_val += nvlPrmSet(result.compression_nm, "");
+				compression_type_info_val += nvlPrmSet(result.transInfoMap.compression_nm, "");
 				compression_type_info_val += "</div>";
 			}
 		}
@@ -706,7 +706,7 @@ function fn_info_setting(result, active_gbn) {
 		$("#d_compression_type_nm", "#infoRegForm").html(compression_type_info_val);
 		
 		//메타데이타 설정
-		if (nvlPrmSet(result.meta_data, "") == "OFF" || nvlPrmSet(result.meta_data, "") == "") {
+		if (nvlPrmSet(result.transInfoMap.meta_data, "") == "OFF" || nvlPrmSet(result.transInfoMap.meta_data, "") == "") {
 			info_meta_data_chk += "<div class='badge badge-pill badge-light' style='background-color: #EEEEEE;'>";
 			info_meta_data_chk += "	<i class='fa fa-power-off mr-2'></i>";
 			info_meta_data_chk += "OFF";
@@ -726,27 +726,27 @@ function fn_info_setting(result, active_gbn) {
 			info_connector_tableList.rows.add(result.tables.data).draw();
 		}
 
-		$("#d_sc_trans_com_cng_nm", "#infoRegForm").html(nvlPrmSet(result.trans_com_cng_nm, ""));
-		$("#d_sc_plugin_name", "#infoRegForm").html(nvlPrmSet(result.plugin_name, ""));
-		$("#d_sc_heartbeat_interval_ms", "#infoRegForm").html(nvlPrmSet(result.heartbeat_interval_ms, ""));
-		$("#d_sc_max_batch_size", "#infoRegForm").html(nvlPrmSet(result.max_batch_size, ""));
-		$("#d_sc_max_queue_size", "#infoRegForm").html(nvlPrmSet(result.max_queue_size, ""));
-		$("#d_sc_offset_flush_interval_ms", "#infoRegForm").html(nvlPrmSet(result.offset_flush_interval_ms, ""));
-		$("#d_sc_offset_flush_timeout_ms", "#infoRegForm").html(nvlPrmSet(result.offset_flush_timeout_ms, ""));
+		$("#d_sc_trans_com_cng_nm", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.trans_com_cng_nm, ""));
+		$("#d_sc_plugin_name", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.plugin_name, ""));
+		$("#d_sc_heartbeat_interval_ms", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.heartbeat_interval_ms, ""));
+		$("#d_sc_max_batch_size", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.max_batch_size, ""));
+		$("#d_sc_max_queue_size", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.max_queue_size, ""));
+		$("#d_sc_offset_flush_interval_ms", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.offset_flush_interval_ms, ""));
+		$("#d_sc_offset_flush_timeout_ms", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.offset_flush_timeout_ms, ""));
 
 		$('a[href="#infoSettingTab"]').tab('show');
 	} else {
-		$("#d_tg_kc_id_nm", "#searchTargetInfoForm").html(nvlPrmSet(result.kc_nm, ""));
-		$("#d_tg_kc_ip", "#searchTargetInfoForm").html(nvlPrmSet(result.kc_ip, ""));
-		$("#d_tg_kc_port", "#searchTargetInfoForm").html(nvlPrmSet(result.kc_port, ""));
+		$("#d_tg_kc_id_nm", "#searchTargetInfoForm").html(nvlPrmSet(result.transInfoMap.kc_nm, ""));
+		$("#d_tg_kc_ip", "#searchTargetInfoForm").html(nvlPrmSet(result.transInfoMap.kc_ip, ""));
+		$("#d_tg_kc_port", "#searchTargetInfoForm").html(nvlPrmSet(result.transInfoMap.kc_port, ""));
 
-		$("#d_tg_connect_nm", "#infoTargetForm").html(nvlPrmSet(result.connect_nm, ""));
+		$("#d_tg_connect_nm", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.connect_nm, ""));
 
-		$("#d_tg_system_name", "#infoTargetForm").html(nvlPrmSet(result.trans_sys_nm, ""));
-		$("#d_tg_system_ip", "#infoTargetForm").html(nvlPrmSet(result.ipadr, ""));
-		$("#d_tg_system_port", "#infoTargetForm").html(nvlPrmSet(result.portno, ""));
-		$("#d_tg_system_database", "#infoTargetForm").html(nvlPrmSet(result.dtb_nm, ""));
-		$("#d_tg_system_account", "#infoTargetForm").html(nvlPrmSet(result.spr_usr_id, ""));
+		$("#d_tg_system_name", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.trans_sys_nm, ""));
+		$("#d_tg_system_ip", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.ipadr, ""));
+		$("#d_tg_system_port", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.portno, ""));
+		$("#d_tg_system_database", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.dtb_nm, ""));
+		$("#d_tg_system_account", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.spr_usr_id, ""));
 
 		info_target_connector_tableList.rows({selected: true}).deselect();
 		info_target_connector_tableList.clear().draw();
@@ -766,6 +766,12 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			//스냅샷 모드 추가
 			$("#ins_snapshot_mode", "#insRegForm").val('TC003603').prop("selected", true); //값이 1인 option 선택
 
+			//connect type 추가
+			$("#ins_connect_type", "#insRegForm").val('TC004301').prop("selected", true);
+			
+			//스키마 레지스트리 초기화
+			fn_conType_change(1);
+			
 			//압축형태 추가
 			$("#ins_compression_type", "#insRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 
@@ -785,8 +791,6 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			ins_connect_nm_Chk = "fail";
 			
 			$('a[href="#insSettingTab"]').tab('show');
-
-			$("#ins_schema_registry_info").hide();
 		} else {
 			
 			ins_tg_topicList.clear().draw();
@@ -805,6 +809,12 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			//스냅샷 모드 추가
 			$("#mod_snapshot_mode", "#modRegForm").val('TC003603').prop("selected", true); //값이 1인 option 선택
 
+			//connect type 추가
+			$("#mod_connect_type", "#insRegForm").val('TC004301').prop("selected", true);
+			
+			//스키마 레지스트리 초기화
+			fn_conType_change(2);
+			
 			//압축형태 추가
 			$("#mod_compression_type", "#modRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 			
@@ -837,31 +847,31 @@ function fn_insert_chogihwa(gbn, active_gbn) {
  ******************************************************** */
 function fn_update_setting(result, active_gbn) {
 	if (active_gbn == "source") {
-		$("#mod_source_kc_nm", "#searchModForm").val(nvlPrmSet(result.kc_id, ""));
+		$("#mod_source_kc_nm", "#searchModForm").val(nvlPrmSet(result.transInfoMap.kc_id, ""));
 		
-		$("#mod_kc_ip", "#searchModForm").val(nvlPrmSet(result.kc_ip, ""));
-		$("#mod_kc_port", "#searchModForm").val(nvlPrmSet(result.kc_port, ""));
+		$("#mod_kc_ip", "#searchModForm").val(nvlPrmSet(result.transInfoMap.kc_ip, ""));
+		$("#mod_kc_port", "#searchModForm").val(nvlPrmSet(result.transInfoMap.kc_port, ""));
 		
-		$("#mod_connect_nm", "#modRegForm").val(nvlPrmSet(result.connect_nm, ""));
-		$("#mod_db_id", "#modRegForm").val(nvlPrmSet(result.db_nm, ""));
-		$("#mod_db_id_set", "#modRegForm").val(nvlPrmSet(result.db_id, ""));
-		$("#mod_trans_id", "#modRegForm").val(nvlPrmSet(result.trans_id, ""));
-		$("#mod_trans_exrt_trg_tb_id","#modRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
+		$("#mod_connect_nm", "#modRegForm").val(nvlPrmSet(result.transInfoMap.connect_nm, ""));
+		$("#mod_db_id", "#modRegForm").val(nvlPrmSet(result.transInfoMap.db_nm, ""));
+		$("#mod_db_id_set", "#modRegForm").val(nvlPrmSet(result.transInfoMap.db_id, ""));
+		$("#mod_trans_id", "#modRegForm").val(nvlPrmSet(result.transInfoMap.trans_id, ""));
+		$("#mod_trans_exrt_trg_tb_id","#modRegForm").val(nvlPrmSet(result.transInfoMap.trans_exrt_trg_tb_id, ""));
 
-		$("#mod_trans_com_id", "#modRegForm").val(nvlPrmSet(result.trans_com_id, ""));
-		$("#mod_trans_com_cng_nm", "#modRegForm").val(nvlPrmSet(result.trans_com_cng_nm, ""));
+		$("#mod_trans_com_id", "#modRegForm").val(nvlPrmSet(result.transInfoMap.trans_com_id, ""));
+		$("#mod_trans_com_cng_nm", "#modRegForm").val(nvlPrmSet(result.transInfoMap.trans_com_cng_nm, ""));
 
 		//스냅샷 모드 추가
-		var snapshot_mode_re = nvlPrmSet(result.snapshot_mode, "");
+		var snapshot_mode_re = nvlPrmSet(result.transInfoMap.snapshot_mode, "");
 		$("#mod_snapshot_mode", "#modRegForm").val(snapshot_mode_re).prop("selected", true);
 
 		//압축형태 추가
-		$("#mod_compression_type", "#modRegForm").val(nvlPrmSet(result.compression_type, "TC003701")).prop("selected", true);
-		
-		//메타데이타 설정
-		$("#mod_meta_data", "#modRegForm").val(nvlPrmSet(result.meta_data, ""));
+		$("#mod_compression_type", "#modRegForm").val(nvlPrmSet(result.transInfoMap.compression_type, "TC003701")).prop("selected", true);
 
-		if (nvlPrmSet(result.meta_data, "") == "ON") {
+		//메타데이타 설정
+		$("#mod_meta_data", "#modRegForm").val(nvlPrmSet(result.transInfoMap.meta_data, ""));
+
+		if (nvlPrmSet(result.transInfoMap.meta_data, "") == "ON") {
 			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", true);
 		} else {
 			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", false); 
@@ -879,6 +889,20 @@ function fn_update_setting(result, active_gbn) {
 		}else if (snapshot_mode_re == "TC003605"){
 			$("#mod_snapshotModeDetail", "#modRegForm").html(data_transfer_msg5); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법)
 		}
+
+		//connect_type
+		var connect_type_re = nvlPrmSet(result.transInfoMap.connect_type, "");
+		$("#mod_connect_type", "#modRegForm").val(connect_type_re).prop("selected", true);
+
+		//스키마 레지스트리 선택
+		if (connect_type_re == "TC004302") {
+			//스키마 레지스트리 초기화
+			fn_conType_change(2);
+
+			$("#mod_source_sch_nm", "#modRegForm").val(nvlPrmSet(result.transInfoMap.regi_id, ""));
+			$("#mod_sch_ip", "#modRegForm").val(nvlPrmSet(result.transInfoMap.regi_ip, ""));
+			$("#mod_sch_port", "#modRegForm").val(nvlPrmSet(result.transInfoMap.regi_port, ""));
+		}
 		
 		mod_connector_tableList.rows({selected: true}).deselect();
 		mod_connector_tableList.clear().draw();
@@ -886,21 +910,17 @@ function fn_update_setting(result, active_gbn) {
 		if (result.tables.data != null) {
 			mod_connector_tableList.rows.add(result.tables.data).draw();	
 		}
-		
-		if(result.connect_type == "TC004301"){
-			$("#ins_schema_registry_info").hide();
-		}
 	} else {
-		$("#mod_target_kc_nm", "#searchTargetModForm").val(nvlPrmSet(result.kc_id, ""));
+		$("#mod_target_kc_nm", "#searchTargetModForm").val(nvlPrmSet(result.transInfoMap.kc_id, ""));
 		
-		$("#mod_tg_kc_ip", "#searchTargetModForm").val(nvlPrmSet(result.kc_ip, ""));
-		$("#mod_tg_kc_port", "#searchTargetModForm").val(nvlPrmSet(result.kc_port, ""));
+		$("#mod_tg_kc_ip", "#searchTargetModForm").val(nvlPrmSet(result.transInfoMap.kc_ip, ""));
+		$("#mod_tg_kc_port", "#searchTargetModForm").val(nvlPrmSet(result.transInfoMap.kc_port, ""));
 		
-		$("#mod_tg_connect_nm", "#modTargetRegForm").val(nvlPrmSet(result.connect_nm, ""));
-		$("#mod_tg_trans_id", "#modTargetRegForm").val(nvlPrmSet(result.trans_id, ""));
-		$("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
-		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.trans_sys_id, ""));
-		$("#mod_tg_trans_trg_sys_nm","#modTargetRegForm").val(nvlPrmSet(result.trans_sys_nm, ""));
+		$("#mod_tg_connect_nm", "#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.connect_nm, ""));
+		$("#mod_tg_trans_id", "#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_id, ""));
+		$("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_exrt_trg_tb_id, ""));
+		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_sys_id, ""));
+		$("#mod_tg_trans_trg_sys_nm","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_sys_nm, ""));
 		
 		mod_connector_tg_tableList.rows({selected: true}).deselect();
 		mod_connector_tg_tableList.clear().draw();
@@ -1154,7 +1174,8 @@ function fn_ins_target_kcConnectTest() {
 		data : {
 			db_svr_id : $("#db_svr_id","#findList").val(),
 			kafkaIp : kafkaIp,
-			kafkaPort : kafkaPort
+			kafkaPort : kafkaPort,
+			connect_gbn : "kakfa"
 		},
 		success : function(result) {
 			if(result.RESULT_DATA =="success"){
@@ -1195,10 +1216,11 @@ function fn_ins_target_ConNmCheck() {
 	}
 	
 	$.ajax({
-		url : '/connect_target_nm_Check.do',
+		url : '/connect_nm_Check.do',
 		type : 'post',
 		data : {
-			connect_nm : connect_nm_val
+			connect_nm : connect_nm_val,
+			connect_gbn : "target"
 		},
 		success : function(result) {
 			if (result == "true") {
@@ -2195,4 +2217,154 @@ function fn_sch_nm_chg(hw_gbn){
 	} else {
 		prm_schrg_id = nvlPrmSet($("#ins_target_kc_nm","#searchTargetRegForm").val(), "");
 	}
+}
+
+/* ********************************************************
+ * kafka 체크
+ ******************************************************** */
+function fn_selectKafkaConnectChk() {
+	var errorMsg = "";
+	var titleMsg = "";
+
+	$.ajax({
+		url : "/selectTransKafkaConList.do",
+		data : {
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			console.log("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+		},
+		success : function(result) {
+			if (result != null) {
+				if (result.length > 0) {
+					connect_yn = "Y";
+				} else {
+					connect_yn = "N";
+				}
+			} else {
+				connect_yn = "N";
+			}
+
+			//kafa connect 존재여부
+			if (connect_yn == "Y") {
+				//화면 조회
+				fn_tot_select();
+				
+				//heartbeat 체크
+				fn_selectHeartbeatChk();
+			} else {
+				showDangerToast('top-right', data_transfer_msg29, eXperDB_CDC_msg30);
+				
+				//설치안된경우 버튼 막아야함
+				$("#btnChoActive").prop("disabled", "disabled");
+				$("#btnChoDisabled").prop("disabled", "disabled");
+
+				$("#btnScDelete").prop("disabled", "disabled");
+				$("#btnTgDelete").prop("disabled", "disabled");
+				$("#btnScModify").prop("disabled", "disabled");
+				$("#btnTgModify").prop("disabled", "disabled");
+				$("#btnScInsert").prop("disabled", "disabled");
+				$("#btnTgInsert").prop("disabled", "disabled");
+				$("#btnSearch").prop("disabled", "disabled");
+				$("#btnCommonConSetInsert").prop("disabled", "disabled");
+			}
+		}
+	});
+}
+
+/* ********************************************************
+ * 활성화 클릭
+ ******************************************************** */
+function fn_transActivation_click(row, activeGbn){
+	//activeGbn 1이면 source 2이면 target
+	var con_gbn = "";
+	var con_msg = "";
+
+	if (activeGbn  == "1") {
+		if($("#source_transActivation"+row).is(":checked") == true){
+			con_gbn = "con_start";
+			con_msg = 'source ' + data_transfer_msg8;
+		} else {
+			con_gbn = "con_end";
+			con_msg = 'source ' + data_transfer_msg9;
+		}
+	} else {
+		if($("#target_transActivation"+row).is(":checked") == true){
+			con_gbn = "target_con_start";
+			con_msg = 'target ' + data_transfer_msg8;
+		} else {
+			con_gbn = "target_con_end";
+			con_msg = 'target ' + data_transfer_msg9;
+		}
+	}
+
+	$('#con_multi_gbn', '#findConfirmMulti').val(con_gbn);
+	$('#confirm_multi_msg').html(con_msg);
+	
+	confile_title = menu_trans_management + " " + data_transfer_transfer_activity;
+	$('#confirm_multi_tlt').html(confile_title);
+	$('#chk_act_row', '#findList').val(row);
+	
+	$('#pop_confirm_multi_md').modal("show");
+}
+
+/* ********************************************************
+ * 조회 데이터 중복 내역 방지
+ ******************************************************** */
+function fn_trableListModRemove(result){
+	var connTableRows = mod_connector_tableList.rows().data();
+	var iChkCnt = 0;
+
+	if (connTableRows.length > 0 && result.length > 0) {
+		for(var i=0; i<result.length; i++){
+			for(var j=0; j<connTableRows.length; j++){
+					if (result[i].table_name != null && connTableRows[j].table_name != null) {
+					if(result[i].table_name == connTableRows[j].table_name){
+						iChkCnt = iChkCnt + 1;
+					}
+					if (j == (connTableRows.length -1) && iChkCnt > 0 ) {
+						
+						result.splice(i, 1);
+						iChkCnt = 0;
+						i--; //row 삭제로 인해 추가로 -1 필요
+					}
+				}
+			}
+		}
+	}
+	
+	mod_tableList.rows.add(result).draw();
+}
+
+/* ********************************************************
+ * Connect Type 변경 이벤트 
+ * TC004301 : debezium
+ * TC004302 : confluent
+ ******************************************************** */
+function fn_conType_change(ins_gbn){
+	 if (ins_gbn == "1") {
+		 if("TC004302" != $("#ins_connect_type", "#insRegForm").val()){
+			 $("#ins_schema_registry_info").hide();
+			 
+			$("#ins_source_sch_nm", "#insRegForm").val("");
+			$("#ins_sch_ip", "#insRegForm").val("");
+			$("#ins_sch_port", "#insRegForm").val("");
+		 }else{
+			 $("#ins_schema_registry_info").show();
+		 }
+	 } else {
+		 if("TC004302" != $("#mod_connect_type", "#modRegForm").val()){
+			 $("#mod_schema_registry_info").hide();
+			 
+			$("#mod_source_sch_nm", "#modRegForm").val("");
+			$("#mod_sch_ip", "#modRegForm").val("");
+			$("#mod_sch_port", "#modRegForm").val("");
+		 }else{
+			 $("#mod_schema_registry_info").show();
+		 }
+	 }
 }

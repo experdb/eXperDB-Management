@@ -11,6 +11,15 @@ public class TransMappVO {
 	private String table_total_cnt;
 	private String frst_regr_id;
 	private String first_reg_dtm;
+	private String regi_id;
+	
+	public String getRegi_id() {
+		return regi_id;
+	}
+
+	public void setRegi_id(String regi_id) {
+		this.regi_id = regi_id;
+	}
 
 	public int getTrans_exrt_trg_tb_id() {
 		return trans_exrt_trg_tb_id;
