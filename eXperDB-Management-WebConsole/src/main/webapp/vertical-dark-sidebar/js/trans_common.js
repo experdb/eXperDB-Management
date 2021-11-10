@@ -718,6 +718,33 @@ function fn_info_setting(result, active_gbn) {
 			info_meta_data_chk += "</div>";
 		}
 		$("#d_meta_data_chk", "#infoRegForm").html(info_meta_data_chk);
+		
+		//regi 관련 추가
+		var connect_type_re = nvlPrmSet(result.transInfoMap.connect_type, "");
+		var connect_type_re_nm = "";
+		
+		if (connect_type_re == "TC004301" || connect_type_re == "" || connect_type_re == null) {
+			connect_type_re_nm = dbms_information_unuse;
+		} else {
+			connect_type_re_nm = dbms_information_use;
+		}
+		
+		$("#d_connect_type_nm", "#infoRegForm").html(connect_type_re_nm);
+
+		//스키마 레지스트리 선택
+		if (connect_type_re == "TC004302") {
+			$("#d_schema_registry_info", "#infoRegForm").show();
+
+			$("#d_source_sch_nm", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.regi_nm, ""));
+			$("#d_sch_ip", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.regi_ip, ""));
+			$("#d_sch_port", "#infoRegForm").html(nvlPrmSet(result.transInfoMap.regi_port, ""));
+		} else {
+			$("#d_schema_registry_info", "#infoRegForm").hide();
+
+			$("#d_source_sch_nm", "#infoRegForm").html("");
+			$("#d_sch_ip", "#infoRegForm").html("");
+			$("#d_sch_port", "#infoRegForm").html("");
+		}
 
 		info_connector_tableList.rows({selected: true}).deselect();
 		info_connector_tableList.clear().draw();
@@ -893,7 +920,7 @@ function fn_update_setting(result, active_gbn) {
 		//connect_type
 		var connect_type_re = nvlPrmSet(result.transInfoMap.connect_type, "");
 		$("#mod_connect_type", "#modRegForm").val(connect_type_re).prop("selected", true);
-alert(result.transInfoMap.connect_type);
+
 		//스키마 레지스트리 선택
 		if (connect_type_re == "TC004302") {
 			//스키마 레지스트리 초기화
@@ -2465,4 +2492,56 @@ function fn_conType_change(ins_gbn){
 			 $("#mod_schema_registry_info").show();
 		 }
 	 }
+}
+
+/* ********************************************************
+ * kafka connect 조회
+ ******************************************************** */
+function fn_trans_kafka_con_pop_search(){
+
+	$.ajax({
+		url : "/selectTransKafkaConList.do",
+		data : {
+			kc_nm : nvlPrmSet($("#pop_trans_kafka_con_nm").val(), '')
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			trans_kafka_con_pop_table.rows({selected: true}).deselect();
+			trans_kafka_con_pop_table.clear().draw();
+
+			if (nvlPrmSet(result, '') != '') {
+				trans_kafka_con_pop_table.rows.add(result).draw();
+			}
+		}
+	});
+}
+
+/* ********************************************************
+ * 팝업시작
+ ******************************************************** */
+function fn_transKafkaConPopStart() {
+	//조회
+	fn_trans_kafka_con_pop_search();
+
+  	$(function() {	
+		$('#transKfkConPopList tbody').on( 'click', 'tr', function () {
+			if ( $(this).hasClass('selected') ) {
+			}else {
+				trans_kafka_con_pop_table.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+			}
+		})
+	});
 }

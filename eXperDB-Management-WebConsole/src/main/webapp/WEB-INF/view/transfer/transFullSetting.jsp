@@ -525,7 +525,7 @@ a:hover.tip span {
 						<div class="col-12" style="margin-top:-10px;margin-bottom:-10px;">
 							<div class="template-demo">	
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnKafkaInsert" onClick="fn_common_kafka_ins();" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" /> <spring:message code="common.search" />
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_CDC.connector_server_settings" /> <spring:message code="common.search" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_pop();" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />

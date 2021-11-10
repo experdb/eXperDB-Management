@@ -51,8 +51,8 @@
 </script>
 
 <div class="modal fade" id="pop_layer_trans_info" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 350px;">
-		<div class="modal-content" style="width:1000px;">		 
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 320px;">
+		<div class="modal-content" style="width:1200px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="menu.trans_management"/> <spring:message code="data_transfer.detail_search"/>
@@ -118,14 +118,49 @@
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="data_transfer.connect_name_set" />
 											</label>
-											<div class="col-sm-8">
+											<div class="col-sm-4">
 												<span class="form-control-xsm float-left text-muted" id="d_connect_nm" ></span>
 											</div>
-											<div class="col-sm-2">
-												&nbsp;
+											<label for="d_connect_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Schema Registry<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
+											</label>
+											<div class="col-sm-4">
+												<span class="form-control-xsm float-left text-muted" id="d_connect_type_nm" ></span>
 											</div>
 										</div>
-	
+
+										<div id="d_schema_registry_info" class="card-body" style="border: 1px solid #adb5bd; margin-bottom:20px;display: none;">
+											<div class="table-responsive">
+												<label for="d_connect_type" class="col-sm-12 col-form-label-sm pop-label-index" style="margin-top:-10px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													Schema Registry <spring:message code="dashboard.server"/>
+												</label>
+												
+												<table id="d_schemaPopList" class="table system-tlb-scroll" style="width:100%;">
+													<colgroup>
+														<col style="width: 44%;" />
+														<col style="width: 36%;" />
+														<col style="width: 20%;" />
+													</colgroup>
+													<thead>
+														<tr class="bg-info text-white">
+															<th class="table-text-align-c">Schema Registry <spring:message code="data_transfer.server_name" /></th>
+															<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
+															<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr style="border-bottom: 1px solid #adb5bd;">
+															<td class="table-text-align-c" id="d_source_sch_nm"></td>
+															<td class="table-text-align-c" id="d_sch_ip"></td>
+															<td class="table-text-align-c" id="d_sch_port"></td>					
+														</tr>					
+													</tbody>
+												</table>
+											</div>
+										</div>
+
 										<div class="form-group row" style="margin-bottom:5px;">
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>

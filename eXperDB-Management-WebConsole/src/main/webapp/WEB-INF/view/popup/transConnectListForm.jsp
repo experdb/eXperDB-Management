@@ -76,59 +76,6 @@
 
 		$(window).trigger('resize');
 	}
-
-
-	/* ********************************************************
-	 * kafka connect 조회
-	 ******************************************************** */
-	function fn_trans_kafka_con_pop_search(){
-
-		$.ajax({
-			url : "/selectTransKafkaConList.do",
-			data : {
-				kc_nm : nvlPrmSet($("#pop_trans_kafka_con_nm").val(), '')
-			},
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				trans_kafka_con_pop_table.rows({selected: true}).deselect();
-				trans_kafka_con_pop_table.clear().draw();
-
-				if (nvlPrmSet(result, '') != '') {
-					trans_kafka_con_pop_table.rows.add(result).draw();
-				}
-			}
-		});
-	}
-
-	/* ********************************************************
-	 * 팝업시작
-	 ******************************************************** */
-	function fn_transKafkaConPopStart() {
-		//조회
-		fn_trans_kafka_con_pop_search();
-
-	  	$(function() {	
-			$('#transKfkConPopList tbody').on( 'click', 'tr', function () {
-				if ( $(this).hasClass('selected') ) {
-				}else {
-					trans_kafka_con_pop_table.$('tr.selected').removeClass('selected');
-					$(this).addClass('selected');
-				}
-			})
-		});
-	}
 </script>
 
 <div class="modal fade" id="pop_layer_trans_con_list" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">

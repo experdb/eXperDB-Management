@@ -466,7 +466,7 @@
 											</div>
 											<label for="mod_connect_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												Scema Registry<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
+												Schema Registry<%-- <spring:message code="data_transfer.connect_name_set" /> --%>
 											</label>
 											<div class="col-sm-4">
 												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_connect_type" id="mod_connect_type" tabindex=4 disabled>
