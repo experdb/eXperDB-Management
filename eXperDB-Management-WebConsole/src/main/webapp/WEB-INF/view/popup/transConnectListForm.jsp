@@ -133,7 +133,7 @@
 
 <div class="modal fade" id="pop_layer_trans_con_list" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 60px 300px;">
-		<div class="modal-content" style="width:1000px;">
+		<div class="modal-content" style="width:2000px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="data_transfer.btn_title02"/>
@@ -154,7 +154,7 @@
 					<br />
 
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i> Kafka Connect LIST</p>
+						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i> Kafka Connect <spring:message code="button.list"/></p>
 						
 						<table id="transKfkConPopList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 							<thead>

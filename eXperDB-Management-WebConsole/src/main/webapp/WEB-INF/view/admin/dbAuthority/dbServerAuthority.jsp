@@ -238,7 +238,7 @@
 						html1+='		</td>';
 						html1+='	</tr>';
 						html1+='	<tr>';
-						html1+='		<td class="pl-5"><spring:message code="data_transfer.btn_title02" /></td>';
+						html1+='		<td class="pl-5"><spring:message code="eXperDB_CDC.connector_server_settings" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_con_aut" name="trans_con_aut" onClick="fn_userCheck();" />';

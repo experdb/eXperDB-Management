@@ -224,10 +224,10 @@
 												<spring:message code="eXperDB_CDC.topic_type"/>
 											</label>
 											<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
-												<input type="radio" id="avro_type" class="form-check-input" name="topic_type" onclick="" >
-												<label class="form-check-label" for="avro_type" style="padding-right:30px;">avro</label>
-												<input type="radio" id="normal_type" class="form-check-input" name="topic_type" onclick="" >
-												<label class="form-check-label" for="normal_type">normal</label>
+												<input type="radio" id="ins_tg_avro_type" class="form-check-input" name="ins_tg_topic_type" onclick="" >
+												<label class="form-check-label" for="ins_tg_avro_type" style="padding-right:30px;">avro</label>
+												<input type="radio" id="ins_tg_normal_type" class="form-check-input" name="ins_tg_topic_type" onclick="" >
+												<label class="form-check-label" for="ins_tg_normal_type">normal</label>
 											</div>
 										</div>
 									</div>
