@@ -818,6 +818,8 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			ins_connect_nm_Chk = "fail";
 			
 			$('a[href="#insSettingTab"]').tab('show');
+
+			$("#ins_schema_registry_info").hide();
 		} else {
 			
 			ins_tg_topicList.clear().draw();
@@ -937,6 +939,11 @@ function fn_update_setting(result, active_gbn) {
 		if (result.tables.data != null) {
 			mod_connector_tableList.rows.add(result.tables.data).draw();	
 		}
+		
+		if(result.connect_type == "TC004301"){
+			$("#ins_schema_registry_info").hide();
+		}
+		
 	} else {
 		$("#mod_target_kc_nm", "#searchTargetModForm").val(nvlPrmSet(result.transInfoMap.kc_id, ""));
 		
@@ -954,6 +961,15 @@ function fn_update_setting(result, active_gbn) {
 		
 		if (result.tables.data != null) {
 			mod_connector_tg_tableList.rows.add(result.tables.data).draw();	
+		}
+		
+		// TODO 토픽 type 가져오도록 쿼리 수정하고 값 불러오기
+		if(result.topic_type == "TC004401"){
+			$("#mod_tg_normal_type").prop("checked", true);
+			fn_mod_topic_type_cng('normal');
+		} else if(result.topic_type == "TC004402"){
+			$("#mod_tg_avro_type").prop("checked", true);
+			fn_mod_topic_type_cng('avro');
 		}
 		
 		fn_topic_search_tg_mod();
@@ -1321,7 +1337,8 @@ function fn_target_ins_insert() {
 		}
 		
 		$("#ins_tg_topic_mapp_nm", "#insTargetRegForm").val(table_mapp);
-		
+		var topic_type = $("input[name='ins_tg_topic_type']:checked").val(); // TODO 등록할 때 topic type도 가져가기
+		console.log(topic_type)
 		var schema_total_cnt= 0;
 		var table_total_cnt = 0;
 
@@ -1337,7 +1354,8 @@ function fn_target_ins_insert() {
 				exrt_trg_tb_nm : nvlPrmSet($("#ins_tg_topic_mapp_nm", "#insTargetRegForm").val(), ''),
 				trans_trg_sys_id : nvlPrmSet($("#ins_tg_trans_trg_sys_id", "#insTargetRegForm").val(), ''),
 				schema_total_cnt : schema_total_cnt,
-				table_total_cnt : table_total_cnt
+				table_total_cnt : table_total_cnt,
+//				topic_type : topic_type
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -1573,10 +1591,12 @@ function fn_tg_mod_init(){
 			{
 				data : "topic_name", className : "dt-left", defaultContent : ""
 			},
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
 		],'select': {'style': 'multi'}
 	});
 
 	mod_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '350px');
+	mod_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '350px');
 		
 	mod_connector_tg_tableList = $('#mod_connector_tg_topicList').DataTable({
 		scrollY : "200px",
@@ -1587,10 +1607,12 @@ function fn_tg_mod_init(){
 		bSort: false,
 		columns : [
 			{data : "topic_name", className : "dt-left", defaultContent : ""},			
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }		
 		 ],'select': {'style': 'multi'}
 	});
 	
 	mod_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '350px');
+	mod_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '350px');
 
 	$(window).trigger('resize'); 
 }
