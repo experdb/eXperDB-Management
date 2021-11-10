@@ -138,7 +138,7 @@
 				db_svr_id : $("#db_svr_id","#findList").val(),
 				kafkaIp : kafkaIp,
 				kafkaPort : kafkaPort,
-				connect_gbn : "kakfa"
+				connect_gbn : "kafka"
 			},
 			success : function(result) {
 				if(result.RESULT_DATA =="success"){

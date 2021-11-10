@@ -2036,6 +2036,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			//regi_id 추가
 			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
 			transObj.put(ClientProtocolID.REGI_NM, transInfo.get(0).get("regi_nm"));
+			transObj.put(ClientProtocolID.REGI_IP, transInfo.get(0).get("regi_ip"));
 			transObj.put(ClientProtocolID.REGI_PORT, transInfo.get(0).get("regi_port"));
 			transObj.put(ClientProtocolID.CONNECT_TYPE, transInfo.get(0).get("connect_type"));
 

@@ -78,7 +78,7 @@
 		}
 		
 		$.ajax({
-			url : '/SchemaRegiConnectionTest.do',
+			url : '/kafkaConnectionTest.do',
 			type : 'post',
 			data : {
 				db_svr_id : $("#db_svr_id","#findList").val(),
