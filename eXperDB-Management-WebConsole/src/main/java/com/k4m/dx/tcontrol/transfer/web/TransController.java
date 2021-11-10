@@ -1144,56 +1144,66 @@ public class TransController {
 	public @ResponseBody boolean updateConnectInfo(@ModelAttribute("transVO") TransVO transVO, @ModelAttribute("transMappVO") TransMappVO transMappVO,
 			@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,
 			HttpServletResponse response) {
-System.out.println("12312313");
+
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = txManager.getTransaction(def);
-		System.out.println("5555");
+
 		try {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String usr_id = loginVo.getUsr_id();
-			System.out.println("6666");
+
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0152_01");
 			accessHistoryService.insertHistory(historyVO);
-			System.out.println("77777");
+
 			transMappVO.setTrans_exrt_trg_tb_id(Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id")));
 			transMappVO.setFrst_regr_id(usr_id);
-			System.out.println("88888");
+
 			transVO.setFrst_regr_id(usr_id);
 			transVO.setLst_mdfr_id(usr_id);
-			System.out.println("999999");
+
 			try{			
 				if(transMappVO.getSchema_total_cnt().equals("") || transMappVO.getSchema_total_cnt().equals(null)){
 					transMappVO.setSchema_total_cnt("0");
 				}
-				System.out.println("10101");
+
 				if(transMappVO.getTable_total_cnt().equals("") || transMappVO.getSchema_total_cnt().equals(null)){
 					transMappVO.setTable_total_cnt("0");
 				}
-				System.out.println("102020");
+
+				if (transVO.getRegi_id() != null && !"".equals(transVO.getRegi_id())) {
+					transMappVO.setRegi_id(transVO.getRegi_id());
+				} else {
+					transMappVO.setRegi_id(null);
+				}
+				
+				if (transVO.getRegi_id() == null || "".equals(transVO.getRegi_id())) {
+					transVO.setRegi_id(null);
+				}
+
 				transService.updateTransExrttrgMapp(transMappVO);	
-				System.out.println("103030");
+
 				transService.updateConnectInfo(transVO);
-				System.out.println("104040");
+
 			}catch (Exception e) {
-				System.out.println("106060");
+
 				e.printStackTrace();
 				txManager.rollback(status);
 				return false;
 			}
 		} catch (Exception e) {
-			System.out.println("107070");
+
 			e.printStackTrace();
 			txManager.rollback(status);
 			return false;
 		}finally{
 			txManager.commit(status);
 		}
-		System.out.println("105050");
+
 		return true;
 	}
 	
@@ -1239,6 +1249,16 @@ System.out.println("12312313");
 				
 				if(transMappVO.getTable_total_cnt().equals("") || transMappVO.getSchema_total_cnt().equals(null)){
 					transMappVO.setTable_total_cnt("0");
+				}
+
+				if (transVO.getRegi_id() != null && !"".equals(transVO.getRegi_id())) {
+					transMappVO.setRegi_id(transVO.getRegi_id());
+				} else {
+					transMappVO.setRegi_id(null);
+				}
+				
+				if (transVO.getRegi_id() == null || "".equals(transVO.getRegi_id())) {
+					transVO.setRegi_id(null);
 				}
 				
 				transVO.setTrans_exrt_trg_tb_id(Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id")));

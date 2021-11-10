@@ -288,7 +288,6 @@
 		} else {
 			$("#mod_meta_data", "#modRegForm").val("OFF");
 		}
-alert("12312321");
 
 		$.ajax({
 			async : false,
@@ -304,8 +303,8 @@ alert("12312321");
 				trans_id : $("#mod_trans_id","#modRegForm").val(),
 				trans_exrt_trg_tb_id : $("#mod_trans_exrt_trg_tb_id","#modRegForm").val(),
 				trans_com_id : parseInt($("#mod_trans_com_id", "#modRegForm").val()),
-				connect_type : nvlPrmSet($("#mod_connect_type", "#insRegForm").val(), ''),
-				regi_id : nvlPrmSet($("#mod_source_sch_nm", "#insRegForm").val(), '')
+				connect_type : nvlPrmSet($("#mod_connect_type", "#modRegForm").val(), ''),
+				regi_id : nvlPrmSet($("#mod_source_sch_nm", "#modRegForm").val(), '')
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {

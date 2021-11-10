@@ -856,7 +856,7 @@ function fn_update_setting(result, active_gbn) {
 		$("#mod_db_id", "#modRegForm").val(nvlPrmSet(result.transInfoMap.db_nm, ""));
 		$("#mod_db_id_set", "#modRegForm").val(nvlPrmSet(result.transInfoMap.db_id, ""));
 		$("#mod_trans_id", "#modRegForm").val(nvlPrmSet(result.transInfoMap.trans_id, ""));
-		$("#mod_trans_exrt_trg_tb_id","#modRegForm").val(nvlPrmSet(result.transInfoMap.trans_exrt_trg_tb_id, ""));
+		$("#mod_trans_exrt_trg_tb_id","#modRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
 
 		$("#mod_trans_com_id", "#modRegForm").val(nvlPrmSet(result.transInfoMap.trans_com_id, ""));
 		$("#mod_trans_com_cng_nm", "#modRegForm").val(nvlPrmSet(result.transInfoMap.trans_com_cng_nm, ""));
@@ -893,7 +893,7 @@ function fn_update_setting(result, active_gbn) {
 		//connect_type
 		var connect_type_re = nvlPrmSet(result.transInfoMap.connect_type, "");
 		$("#mod_connect_type", "#modRegForm").val(connect_type_re).prop("selected", true);
-
+alert(result.transInfoMap.connect_type);
 		//스키마 레지스트리 선택
 		if (connect_type_re == "TC004302") {
 			//스키마 레지스트리 초기화
@@ -918,7 +918,7 @@ function fn_update_setting(result, active_gbn) {
 		
 		$("#mod_tg_connect_nm", "#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.connect_nm, ""));
 		$("#mod_tg_trans_id", "#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_id, ""));
-		$("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_exrt_trg_tb_id, ""));
+		$("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
 		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_sys_id, ""));
 		$("#mod_tg_trans_trg_sys_nm","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_sys_nm, ""));
 		
