@@ -164,7 +164,7 @@ public class TransServiceImpl implements TransService{
 					}
 
 					if (!strExeStatusIng.equals("TC001502")) { //실행 중일 경우 connect 목록 확인
-						transConListCmd = "curl -H 'Accept:application/json' "+strKcIp+":"+strKcPort+"/connectors/";
+/*						transConListCmd = "curl -H 'Accept:application/json' "+strKcIp+":"+strKcPort+"/connectors/";
 						
 						RunCommandExec rListMain = new RunCommandExec(transConListCmd);
 						
@@ -179,8 +179,9 @@ public class TransServiceImpl implements TransService{
 						
 						String retMainVal = rListMain.call();
 						String strResultMessgeMainList = rListMain.getMessage();
-						socketLogger.info("#####strResultMessgeMainstrResultMessgeMainstrResultMessgeMainstrResultMessgeMain : " + strResultMessgeMainList);
-						
+						socketLogger.info("#####retMainValretMainVal : " + retMainVal);
+						socketLogger.info("#####strResultMessgeMainstrResultMessgeMainstrResultMessgeMainstrResultMessgeMain : " + strResultMessgeMainList);*/
+						/*
 						if (retMainVal.equals("success")) {
 							if (strResultMessgeMainList != null && !"[]".equals(strResultMessgeMainList)) { //값이 있는 경우
 								List<TransVO> transCngTotList = transDAO.selectTransCngTotList(transVO); // 소스, 타겟 connect 전체 list
@@ -203,7 +204,7 @@ public class TransServiceImpl implements TransService{
 									}
 								}
 							}
-						}
+						}*/
 
 					}
 				}

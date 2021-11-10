@@ -79,6 +79,12 @@
              , WRITE_USE_YN = #{write_use_yn}
              , TAR_TRANS_ID = COALESCE(TAR_TRANS_ID, (SELECT MAX(B.TAR_TRANS_ID) FROM T_TRANS_TOPIC_I B WHERE B.TOPIC_NM = TOPIC_NM AND B.TOPIC_ID != TOPIC_ID))
              , TAR_TRANS_EXRT_TRG_TB_ID = COALESCE(TAR_TRANS_EXRT_TRG_TB_ID, (SELECT MAX(B.TAR_TRANS_EXRT_TRG_TB_ID) FROM T_TRANS_TOPIC_I B WHERE B.TOPIC_NM = TOPIC_NM AND B.TOPIC_ID != TOPIC_ID))
+         <if test="regi_id != null and regi_id != '' and regi_id != 'null' ">
+             , REGI_ID = #{regi_id}::numeric
+         </if>
+         <if test="regi_id == null or regi_id == '' or regi_id == 'null' ">
+             , REGI_ID = null
+         </if>
              , LST_MDFR_ID = #{login_id}
              , LST_MDF_DTM = clock_timestamp()
         WHERE SRC_TRANS_ID = #{trans_id}::numeric
@@ -101,6 +107,7 @@
                      WRITE_USE_YN,
                      TAR_TRANS_ID,
                      TAR_TRANS_EXRT_TRG_TB_ID,
+                     REGI_ID,
                      FRST_REGR_ID, 
                      FRST_REG_DTM, 
                      LST_MDFR_ID, 
@@ -119,6 +126,13 @@
                            'Y',
                            (SELECT MAX(TAR_TRANS_ID) FROM T_TRANS_TOPIC_I WHERE TOPIC_NM = #{topic_nm}),
                            (SELECT MAX(TAR_TRANS_EXRT_TRG_TB_ID) FROM T_TRANS_TOPIC_I WHERE TOPIC_NM = #{topic_nm}),
+         <if test="regi_id != null and regi_id != '' and regi_id != 'null' ">
+             #{regi_id}::numeric,
+         </if>
+         <if test="regi_id == null or regi_id == '' or regi_id == 'null' ">
+             null,
+         </if>
+                           #{regi_id}::numeric,
                            #{login_id},
                            clock_timestamp(),
                            #{login_id},
