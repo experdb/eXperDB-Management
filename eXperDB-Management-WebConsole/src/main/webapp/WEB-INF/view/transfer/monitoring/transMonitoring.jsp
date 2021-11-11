@@ -328,7 +328,7 @@ a:hover.tip span {
 						// 값 넣어주기
 
 // 						$('#tar_exe_status', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].exe_status, ''));
-						tar_exe_status = result.targetTopicList[0].exe_status;
+// 						tar_exe_status = result.targetTopicList[0].exe_status;
 						//상단연결도 setting
 						fn_dbmsConnect_digm("tar", result);
 					}
@@ -349,7 +349,7 @@ a:hover.tip span {
 		
 // 		var src_exe_status = $('#src_exe_status','#transMonConStartForm').val();
 // 		var tar_exe_status = $('#tar_exe_status', '#transMonConStartForm').val();
-		console.log(src_exe_status + " . " + tar_exe_status)	
+		console.log(src_exe_status + " . " + tar_exe_status);	
 		if ((src_connect != "" || tar_connector != "") && (src_exe_status == "TC001501" && tar_exe_status == "TC001501")) {
 // 		if ((src_connect != "" || tar_connector != "")) {
 			clearTimeout();
@@ -638,7 +638,7 @@ a:hover.tip span {
 												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="src_connect" id="src_connect" onChange="fn_srcConnectInfo('change')" onblur="this.value=this.value.trim()" tabindex=1>
 													<option value=""><spring:message code="eXperDB_CDC.source_connector"/></option>
 													<c:forEach var="srcConnectorList" items="${srcConnectorList}">
-														<option value="${srcConnectorList.trans_id}">${srcConnectorList.connect_nm}</option>							
+														<option value="<c:out value="${srcConnectorList.trans_id}"/>"><c:out value="${srcConnectorList.connect_nm}"/>
 													</c:forEach>
 												</select>
 											</td>
@@ -757,7 +757,7 @@ a:hover.tip span {
 												<select class="form-control form-control-xsm mb-2 mr-sm-2 col-sm-12" style="margin-right: 1rem;" name="tar_connector_list" id="tar_connector_list" onChange="fn_tarConnectInfo()" onblur="this.value=this.value.trim()"  tabindex=1>
 													<option value=""><spring:message code="eXperDB_CDC.sink_connect"/></option> <!--  타겟 connect -->
 													<c:forEach var="tarConnectorList" items="${targetConnectorList}">
-														<option value="${tarConnectorList.trans_id}">${tarConnectorList.connect_nm}</option>							
+														<option value="<c:out value="${tarConnectorList.trans_id}"/>"><c:out value="${tarConnectorList.connect_nm}"/>
 													</c:forEach>
 												</select>
 											</td>
