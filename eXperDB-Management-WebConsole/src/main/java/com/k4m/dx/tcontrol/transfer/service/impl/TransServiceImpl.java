@@ -937,6 +937,11 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 							}
 
 							jsonObj.put("topic_name", tables[i]);
+							System.out.println("======================================================================");
+							System.out.println("123123 : " + mappInfo.get(0).keySet().iterator().next().contains("regi_id"));
+							if(!"".equals(mappInfo.get(0).get("regi_id").toString()) || mappInfo.get(0).get("regi_id").toString() != null){
+								jsonObj.put("regi_nm", mappInfo.get(0).get("regi_nm"));
+							}
 							tableArray.add(jsonObj);
 						}
 					}

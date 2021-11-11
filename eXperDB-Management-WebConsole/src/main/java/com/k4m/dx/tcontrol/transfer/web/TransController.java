@@ -1021,7 +1021,6 @@ public class TransController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		String result = "fail";
-		
 		int trans_exrt_trg_tb_id =0;
 
 		try {
