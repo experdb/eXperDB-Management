@@ -54,7 +54,7 @@
 					fn_trans_dbmsModCallback(trans_sys_id,trans_sys_nm);
 				}
 				
-				console.log('123123 ' + datas.dbms_dscd.html())
+// 				console.log('123123 ' + datas.dbms_dscd.html())
 				$('#pop_layer_trans_dbmsInfo_reg').modal("hide");
 				
 			});			
