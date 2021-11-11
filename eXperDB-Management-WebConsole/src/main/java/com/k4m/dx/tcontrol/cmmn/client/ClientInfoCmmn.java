@@ -2095,8 +2095,16 @@ System.out.println("=====cmd" + cmd);
 			String con_portno = transInfo.get(0).get("portno").toString();
 			String con_dtb_nm = (String)transInfo.get(0).get("dtb_nm");
 			
-			String strConUrl = "jdbc:oracle:thin:@" + con_ipadr + ":" + con_portno + ":" + con_dtb_nm.toLowerCase();
+			String dbms_gbn = String.valueOf(transInfo.get(0).get("dbms_dscd"));
 			
+			String strConUrl = "";
+			
+			if ("TC002204".equals(dbms_gbn)) { //postgresql
+				strConUrl = "jdbc:postgresql://" + con_ipadr + ":" + con_portno + "/" + con_dtb_nm.toLowerCase();
+			} else {
+				strConUrl = "jdbc:oracle:thin:@" + con_ipadr + ":" + con_portno + ":" + con_dtb_nm.toLowerCase();
+			}
+
 			String con_pwd = (String)transInfo.get(0).get("pwd");
 			
 			if (con_pwd != null && !"".equals(con_pwd)) {
@@ -2121,9 +2129,10 @@ System.out.println("=====cmd" + cmd);
 			transObj.put(ClientProtocolID.CONNECTION_URL, strConUrl); 							//con_url
 			transObj.put(ClientProtocolID.SPR_USR_ID, transInfo.get(0).get("spr_usr_id"));		//spr_usr_id
 			transObj.put(ClientProtocolID.CONNECTION_PWD, con_pwd);								//pwd
-			
+
 			transObj.put(ClientProtocolID.CON_START_GBN, "target");
 			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
+			transObj.put(ClientProtocolID.DBMS_GBN, dbms_gbn);							//pwd
 			
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));
