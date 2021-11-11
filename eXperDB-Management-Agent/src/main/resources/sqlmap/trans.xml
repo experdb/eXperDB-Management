@@ -132,7 +132,6 @@
          <if test="regi_id == null or regi_id == '' or regi_id == 'null' ">
              null,
          </if>
-                           #{regi_id}::numeric,
                            #{login_id},
                            clock_timestamp(),
                            #{login_id},
@@ -145,9 +144,10 @@
 	 	* Description : trans id별 topic 조회
 	 	* Author : 
 	 	**/
-        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, A.KC_IP, A.KC_PORT
+        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, C.KC_IP, C.KC_PORT
           FROM T_TRANSCNG_I A
                JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.SRC_TRANS_ID
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
          WHERE A.TRANS_ID = #{trans_id}::numeric
          
          <if test="write_use_yn_val != null and write_use_yn_val != '' ">
@@ -328,28 +328,30 @@
 	 	* Author : 
 	 	**/
         SELECT 'SOURCE' as CON_GBN,
-               TRANS_ID, 
-               KC_IP, 
-               KC_PORT, 
-               CONNECT_NM, 
-               DB_SVR_ID, 
-               EXE_STATUS, 
-               TRANS_EXRT_TRG_TB_ID, 
-               KC_ID,
-               TRANS_COM_ID
-          FROM T_TRANSCNG_I
+               A.TRANS_ID, 
+               C.KC_IP, 
+               C.KC_PORT, 
+               A.CONNECT_NM, 
+               A.DB_SVR_ID, 
+               A.EXE_STATUS, 
+               A.TRANS_EXRT_TRG_TB_ID, 
+               A.KC_ID,
+               A.TRANS_COM_ID
+          FROM T_TRANSCNG_I A
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
         UNION ALL
         SELECT 'TARGET' as CON_GBN,
-               TRANS_ID, 
-               KC_IP, 
-               KC_PORT, 
-               CONNECT_NM, 
-               DB_SVR_ID, 
-               EXE_STATUS, 
-               TRANS_EXRT_TRG_TB_ID, 
-               KC_ID,
+               A.TRANS_ID, 
+               C.KC_IP, 
+               C.KC_PORT, 
+               A.CONNECT_NM, 
+               A.DB_SVR_ID, 
+               A.EXE_STATUS, 
+               A.TRANS_EXRT_TRG_TB_ID, 
+               A.KC_ID,
                0 AS TRANS_COM_ID
-          FROM T_TRANSCNG_TARGET_I
+          FROM T_TRANSCNG_TARGET_I A
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
          ORDER BY CON_GBN, TRANS_ID
 	</select>
  	
@@ -380,8 +382,9 @@
 	 	* Description : trans 리스트 조회
 	 	* Author : 
 	 	**/
-        SELECT A.TRANS_ID, A.KC_IP, A.KC_PORT
+        SELECT A.TRANS_ID, C.KC_IP, C.KC_PORT
           FROM T_TRANSCNG_I A
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
          WHERE A.TRANS_ID = #{trans_id}::numeric
 	</select>
 	
@@ -453,4 +456,17 @@
                            #{login_id},
                            clock_timestamp()
 	</insert>
+
+	<select id="selectTranTopicIdInsChk" parameterType="TransVO" resultType="int">
+		/**
+	 	* Query ID : selectTranTopicIdInsChk
+	 	* Description : trans id별 topic 조회
+	 	* Author : 
+	 	**/
+        SELECT COUNT(*) AS TOT_CNT
+          FROM T_TRANSCNG_I A
+               JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.SRC_TRANS_ID
+         WHERE A.TRANS_ID = #{trans_id}::numeric
+           AND B.TOPIC_NM = #{topic_nm}
+	</select>
 </mapper>

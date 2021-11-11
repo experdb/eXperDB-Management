@@ -141,15 +141,19 @@ public class DxT039 extends SocketCtl{
 						transVO.setWrite_use_yn("N");
 						transVO.setLogin_id(login_id);
 						
+						transVO.setLogin_id(login_id);
+						
 						//타겟 전송테이블 삭제
 						if ("4deps".equals(conectStopGbn)) {
 						//	updateTranExrtTrgList(transVO);
 						}
-
+socketLogger.info("transVOtransVOtransVOtransVOtransVOtransVOtransVOtransVO " + transVO.getTrans_id());
 						//topic 테이블 수정
 						transService.updateTransTopicTbl(transVO);
 							
 						if ("total".equals(conectStopGbn) || "4deps".equals(conectStopGbn)) {
+socketLogger.info("transVOtransVOtransVOtransVOtransVOtransVOtransVOtransVO222222222222222222 " + transVO.getTrans_id());
+							
 							//topic 삭제
 							transService.deleteRealTransTopic(transVO);
 						}

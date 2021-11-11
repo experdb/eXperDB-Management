@@ -128,7 +128,7 @@ public class TransDAO {
 	 * @throws Exception
 	 */
 	public int selectTranTopicIdInsChk(TransVO transVO) throws SQLException {
-		return (int) session.selectOne("scale.selectTranTopicIdInsChk", transVO);
+		return (int) session.selectOne("trans.selectTranTopicIdInsChk", transVO);
 	}
 
 }

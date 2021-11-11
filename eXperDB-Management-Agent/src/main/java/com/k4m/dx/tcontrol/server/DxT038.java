@@ -314,7 +314,8 @@ socketLogger.info("DxT038.regi_idregi_idregi_idregi_idregi_idregi_id : " + regi_
 						
 						//이전  topic 삭제
 						transVO.setWrite_use_yn("N");
-						
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.transVOtransVOtransVO111 : " + transVO.getKc_id());
+
 						//Write_use_yn가 N 인것만 삭제
 						//kafka topic 삭제
 						transService.deleteTransKakfkaTopic(transVO);
@@ -323,7 +324,8 @@ socketLogger.info("DxT038.regi_idregi_idregi_idregi_idregi_idregi_id : " + regi_
 						transService.deleteTransTopic(transVO);
 					} else { //전송대상 테이블이 없는 경우는 전체 삭제
 						transVO.setWrite_use_yn("");
-						
+						socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.transVOtransVOtransVO2222 : " + transVO.getKc_id());
+	
 						//kafka topic 삭제
 						transService.deleteTransKakfkaTopic(transVO);
 						
