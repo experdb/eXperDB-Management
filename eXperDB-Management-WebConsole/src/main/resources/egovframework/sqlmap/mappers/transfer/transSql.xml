@@ -330,17 +330,17 @@
         SELECT 
                (ROW_NUMBER() OVER()) AS ROWNUM
              , (ROW_NUMBER() OVER()) AS IDX
-             , TTEM.TRANS_EXRT_TRG_TB_ID
+             , TTEM.TRANS_EXRT_TRG_TB_ID AS TRANS_EXRT_TRG_TB_ID
              , COALESCE(TTEM.EXRT_TRG_TB_NM, '')  AS EXRT_TRG_TB_NM
              , COALESCE(TTEM.EXRT_TRG_SCM_NM, '') AS EXRT_TRG_SCM_NM
-             , TTEM.SCHEMA_TOTAL_CNT
-             , TTEM.TABLE_TOTAL_CNT
-             , TTEM.FRST_REGR_ID
-             , TTEM.FRST_REG_DTM
-             , TTRI.REGI_ID
-             , TTRI.REGI_NM 
-             , TTRI.REGI_IP 
-             , TTRI.REGI_PORT 
+             , TTEM.SCHEMA_TOTAL_CNT AS SCHEMA_TOTAL_CNT
+             , TTEM.TABLE_TOTAL_CNT AS TABLE_TOTAL_CNT
+             , TTEM.FRST_REGR_ID AS FRST_REGR_ID
+             , TTEM.FRST_REG_DTM AS FRST_REG_DTM
+             , COALESCE(TTRI.REGI_ID, 0) AS REGI_ID
+             , COALESCE(TTRI.REGI_NM, '') AS REGI_NM
+             , COALESCE(TTRI.REGI_IP, '') AS REGI_IP
+             , COALESCE(TTRI.REGI_PORT, 0) AS REGI_PORT
           FROM T_TRANS_EXRTTRG_MAPP TTEM
           LEFT OUTER JOIN T_TRANS_REGI_INF TTRI 
             ON TTEM.REGI_ID = TTRI.REGI_ID 
@@ -378,6 +378,7 @@
              , B.TRANS_SYS_NM
              , B.EXE_STATUS AS DB_EXE_STATUS
              , B.DBMS_DSCD
+             , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = B.DBMS_DSCD ) AS DBMS_DSCD_NM
              , A.TOPIC_TYPE
              , A.REGI_ID
              , D.REGI_NM

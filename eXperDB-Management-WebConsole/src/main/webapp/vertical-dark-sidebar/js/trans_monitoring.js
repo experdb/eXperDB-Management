@@ -1136,9 +1136,10 @@ function fn_dbmsConnect_digm(connectGbn, result) {
 					$('#tar_db_svr_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].db_svr_id, ''));
 					$('#tar_trans_exrt_trg_tb_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].trans_exrt_trg_tb_id, ''));
 					$('#tar_trans_id', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].trans_id, ''));
-					
 				}
-				
+				tar_exe_status = result.targetTopicList[0].exe_status;
+				console.log(tar_exe_status)
+				console.log(result.targetTopicList[0].exe_status)
 //				$('#tar_exe_status', '#transMonConStartForm').val(nvlPrmSet(result.targetTopicList[0].exe_status, ''));
 			} else {
 				html_slur_con += '&nbsp;\n';

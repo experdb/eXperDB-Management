@@ -50,11 +50,12 @@
 
 				if (cho_dbms_gbn == 'ins') {
 					fn_trans_dbmsAddCallback(trans_sys_id,trans_sys_nm);
+					$('#ins_tg_dbms_type').html('[ '+datas.dbms_dscd_nm+' ]');
 				} else {
 					fn_trans_dbmsModCallback(trans_sys_id,trans_sys_nm);
+					$('#mod_tg_dbms_type').html('[ '+datas.dbms_dscd_nm+' ]');
 				}
 				
-// 				console.log('123123 ' + datas.dbms_dscd.html())
 				$('#pop_layer_trans_dbmsInfo_reg').modal("hide");
 				
 			});			

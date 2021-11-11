@@ -955,7 +955,7 @@ function fn_update_setting(result, active_gbn) {
 		$("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
 		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_sys_id, ""));
 		$("#mod_tg_trans_trg_sys_nm","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_sys_nm, ""));
-		
+		$('#mod_tg_dbms_type').html('[ '+nvlPrmSet(result.transInfoMap.dbms_dscd_nm, "")+' ]');
 		mod_connector_tg_tableList.rows({selected: true}).deselect();
 		mod_connector_tg_tableList.clear().draw();
 		
@@ -964,9 +964,11 @@ function fn_update_setting(result, active_gbn) {
 		}
 		if(result.transInfoMap.topic_type == "TC004401"){
 			$("#mod_tg_normal_type").prop("checked", true);
+			$('input[name="mod_tg_topic_type"]').attr('disabled', true);
 			fn_mod_topic_type_cng('normal');
 		} else {
 			$("#mod_tg_avro_type").prop("checked", true);
+			$('input[name="mod_tg_topic_type"]').attr('disabled', true);
 			fn_mod_topic_type_cng('avro');
 		}
 		
@@ -1593,8 +1595,8 @@ function fn_tg_mod_init(){
 		],'select': {'style': 'multi'}
 	});
 
-	mod_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '350px');
-	mod_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '350px');
+	mod_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
+	mod_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
 		
 	mod_connector_tg_tableList = $('#mod_connector_tg_topicList').DataTable({
 		scrollY : "200px",
@@ -1609,8 +1611,8 @@ function fn_tg_mod_init(){
 		 ],'select': {'style': 'multi'}
 	});
 	
-	mod_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '350px');
-	mod_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '350px');
+	mod_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
+	mod_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
 
 	$(window).trigger('resize'); 
 }

@@ -622,17 +622,15 @@ public class TransController {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0152");
 			accessHistoryService.insertHistory(historyVO);
-			
+
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			int trans_exrt_trg_tb_id = Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id"));
 			int trans_id =  Integer.parseInt(request.getParameter("trans_id"));
 
 			transInfo = transService.selectTargetTransInfo(trans_id);
 			System.out.println("전송정보 : "+transInfo.get(0));
-			
 			mappInfo = transService.selectMappInfo(trans_exrt_trg_tb_id);
 			System.out.println("매핑정보 : "+mappInfo.get(0));
-			
 
 			tableResult = transService.selectTransMatchMappInfo(mappInfo, "target", "tar_single");
 			System.out.println("전송대상테이블정보 : "+ tableResult);

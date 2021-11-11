@@ -158,8 +158,11 @@
 									<div class="col-sm-6">
 										<input type="text" class="form-control form-control-sm" id="mod_tg_trans_trg_sys_nm" name="mod_tg_trans_trg_sys_nm" readonly="readonly" />
 									</div>
-									<div class="col-sm-4">
+									<div class="col-sm-2">
 										<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_mod_tg_dbmsInfo()"><spring:message code="button.create" /></button>
+									</div>
+									<div class="col-sm-2">
+										<h4 style="margin-top:15px; color: #787878; text-transform: capitalize; font-weight: 500;" id="mod_tg_dbms_type"></h4>
 									</div>
 								</div>
 								
