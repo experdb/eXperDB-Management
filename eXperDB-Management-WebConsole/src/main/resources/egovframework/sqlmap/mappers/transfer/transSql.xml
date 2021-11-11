@@ -330,14 +330,20 @@
         SELECT 
                (ROW_NUMBER() OVER()) AS ROWNUM
              , (ROW_NUMBER() OVER()) AS IDX
-             , TRANS_EXRT_TRG_TB_ID
-             , coalesce(EXRT_TRG_TB_NM, '')  as EXRT_TRG_TB_NM
-             , coalesce(EXRT_TRG_SCM_NM, '') as EXRT_TRG_SCM_NM
-             , SCHEMA_TOTAL_CNT
-             , TABLE_TOTAL_CNT
-             , FRST_REGR_ID
-             , FRST_REG_DTM
-          FROM T_TRANS_EXRTTRG_MAPP
+             , TTEM.TRANS_EXRT_TRG_TB_ID
+             , COALESCE(TTEM.EXRT_TRG_TB_NM, '')  AS EXRT_TRG_TB_NM
+             , COALESCE(TTEM.EXRT_TRG_SCM_NM, '') AS EXRT_TRG_SCM_NM
+             , TTEM.SCHEMA_TOTAL_CNT
+             , TTEM.TABLE_TOTAL_CNT
+             , TTEM.FRST_REGR_ID
+             , TTEM.FRST_REG_DTM
+             , TTRI.REGI_ID
+             , TTRI.REGI_NM 
+             , TTRI.REGI_IP 
+             , TTRI.REGI_PORT 
+          FROM T_TRANS_EXRTTRG_MAPP TTEM
+          LEFT OUTER JOIN T_TRANS_REGI_INF TTRI 
+            ON TTEM.REGI_ID = TTRI.REGI_ID 
          WHERE 1=1
            AND TRANS_EXRT_TRG_TB_ID = #{trans_exrt_trg_tb_id}
 	</select>

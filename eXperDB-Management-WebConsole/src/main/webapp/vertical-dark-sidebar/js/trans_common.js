@@ -962,12 +962,10 @@ function fn_update_setting(result, active_gbn) {
 		if (result.tables.data != null) {
 			mod_connector_tg_tableList.rows.add(result.tables.data).draw();	
 		}
-		
-		// TODO 토픽 type 가져오도록 쿼리 수정하고 값 불러오기
-		if(result.topic_type == "TC004401"){
+		if(result.transInfoMap.topic_type == "TC004401"){
 			$("#mod_tg_normal_type").prop("checked", true);
 			fn_mod_topic_type_cng('normal');
-		} else if(result.topic_type == "TC004402"){
+		} else {
 			$("#mod_tg_avro_type").prop("checked", true);
 			fn_mod_topic_type_cng('avro');
 		}
@@ -1355,7 +1353,7 @@ function fn_target_ins_insert() {
 				trans_trg_sys_id : nvlPrmSet($("#ins_tg_trans_trg_sys_id", "#insTargetRegForm").val(), ''),
 				schema_total_cnt : schema_total_cnt,
 				table_total_cnt : table_total_cnt,
-//				topic_type : topic_type
+				topic_type : topic_type
 			},
 			type : "post",
 			beforeSend: function(xhr) {

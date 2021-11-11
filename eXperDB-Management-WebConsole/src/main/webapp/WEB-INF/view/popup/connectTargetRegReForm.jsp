@@ -63,7 +63,6 @@
 	 * Topic 타입 변경
 	 ******************************************************** */
 	function fn_mod_topic_type_cng(topic_type){
-// 		var v_topic_type = document.getElementByName("mod_tg_topic_type").checked;
 		var v_topic_type = $("input[name='mod_tg_topic_type']:checked").val();
 		if(topic_type == 'normal'){
 			mod_connector_tg_tableList.columns(1).visible( false );
@@ -78,7 +77,7 @@
 
 <div class="modal fade" id="pop_layer_con_re_reg_two_target" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 350px;">
-		<div class="modal-content" style="width:1000px;">		 
+		<div class="modal-content" style="width:1000px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="migration.target_system"/> <spring:message code="menu.mod_transfer_set"/>
