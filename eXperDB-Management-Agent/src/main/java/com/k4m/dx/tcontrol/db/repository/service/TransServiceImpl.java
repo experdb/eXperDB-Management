@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.db.repository.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -689,4 +690,10 @@ public class TransServiceImpl implements TransService{
 	public void insertTransKafkaActstateCngInfo(TransVO transVO) throws Exception {
 		transDAO.insertTransKafkaActstateCngInfo(transVO);
 	}
+
+	/* topic 중복체크 */
+	public int selectTranTopicIdInsChk(TransVO transVO) throws Exception {
+		return transDAO.selectTranTopicIdInsChk(transVO);
+	}
+
 }

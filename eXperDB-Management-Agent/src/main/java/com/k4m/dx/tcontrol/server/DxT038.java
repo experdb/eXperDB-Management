@@ -279,14 +279,10 @@ socketLogger.info("DxT038.regi_idregi_idregi_idregi_idregi_idregi_id : " + regi_
 							transVO.setTopic_nm(topicNm); //topic명 param 등록
 						
 							if (topicTableList.size() > 0) {
-								for(int j=0;j < topicTableList.size();j++) { //전송대상 테이블
-									if (topicTableList.get(j).getTopic_nm().equals(topicNm)) {
-										overLabCnt = overLabCnt + 1;
-										
-										if (overLabCnt > 0) {
-											break;
-										}
-									}
+								//토픽명 중복체크
+								int topicCnt = transService.selectTranTopicIdInsChk(transVO);
+								if (topicCnt > 0) {
+									overLabCnt = 1;
 								}
 
 								//topic 추가 로 kafka 생성

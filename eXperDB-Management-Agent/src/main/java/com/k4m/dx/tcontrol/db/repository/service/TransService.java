@@ -154,4 +154,12 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public void insertTransKafkaActstateCngInfo(TransVO transVO) throws Exception;
+	
+	/**
+	 * topic 중복체크
+	 * @param  param
+	 * @return int
+	 * @throws Exception
+	 */
+	public int selectTranTopicIdInsChk(TransVO transVO) throws Exception;
 }

@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.db.repository.dao;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,4 +120,15 @@ public class TransDAO {
 	public void insertTransKafkaActstateCngInfo(TransVO vo) throws Exception  {
 		 session.insert("trans.insertTransKafkaActstateCngInfo", vo);
 	}
+
+	/**
+	 * topic 중복체크
+	 * 
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public int selectTranTopicIdInsChk(TransVO transVO) throws SQLException {
+		return (int) session.selectOne("scale.selectTranTopicIdInsChk", transVO);
+	}
+
 }
