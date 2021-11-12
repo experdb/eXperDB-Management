@@ -35,19 +35,21 @@ public class TransRunMultiCommandExec extends Thread {
 	public String retVal = null;
 	public String consoleTxt = null;
 	public String IP = null;
+	public String SEARCH_GBN = null;
 	
 	private String returnMessage = "";
 	
 	public TransRunMultiCommandExec(){}
 	
-	public TransRunMultiCommandExec(String cmd, String ip){
+	public TransRunMultiCommandExec(String cmd, String ip, String serch_gbn){
 		this.CMD = cmd;
 		this.IP = ip;
+		this.SEARCH_GBN = serch_gbn;
 	}
 	
 	@Override
 	public void run(){
-		runExecRtn2(CMD, IP);
+		runExecRtn2(CMD, IP, SEARCH_GBN);
 	}
 	
 	public String call(){
@@ -153,7 +155,7 @@ public class TransRunMultiCommandExec extends Thread {
 		}
 	}
 	
-	public void runExecRtn2(String cmd, String ip){
+	public void runExecRtn2(String cmd, String ip, String search_gbn){
 		Process proc = null;
 		String strResult = "";
 		String strScanner = "";
@@ -168,7 +170,12 @@ public class TransRunMultiCommandExec extends Thread {
 			
 			String path = "";
 			if (!"172.31.37.222".equals(ip)) {
-				path = FileUtil.getPropertyValue("context.properties", "agent.trans_path");
+				if (search_gbn != null && !"".equals(search_gbn) && !"TC004402".equals(search_gbn)) {
+					path = "/home/ec2-user/gits/cdc-test-dev/jmx/kafka";
+				} else {
+					path = FileUtil.getPropertyValue("context.properties", "agent.trans_path");
+				}
+				
 			} else {
 				path = "/home/ec2-user/gits/cdc-test-dev/jmx/kafka";
 			}

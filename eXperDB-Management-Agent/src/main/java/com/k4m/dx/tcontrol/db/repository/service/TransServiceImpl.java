@@ -12,7 +12,6 @@ import com.k4m.dx.tcontrol.db.repository.dao.TransDAO;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 import com.k4m.dx.tcontrol.util.TransRunCommandExec;
-import com.k4m.dx.tcontrol.util.TransRunMultiCommandExec;
 
 /**
 * @author 박태혁
@@ -467,8 +466,8 @@ public class TransServiceImpl implements TransService{
 socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888888kc_ip : " + kc_ip);
 socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888888stCmdSearch : " + stCmdSearch);
 
-					/*TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);*/
-					TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip);
+					TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
+/*					TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
 
 					//명령어 실행
 					searchR.run();
@@ -500,8 +499,8 @@ socketLogger.info("TransServiceImpl.deleteRealTransTopic.88888888888888888888888
 socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList7777777777777777777777777777777kc_ip : " + kc_ip);
 socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList7777777777777777777777777777777strCmd : " + strCmd);
 			
-						/*TransRunCommandExec r = new TransRunCommandExec(strCmd);*/
-						TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, kc_ip);
+						TransRunCommandExec r = new TransRunCommandExec(strCmd);
+/*						TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, kc_ip, "");*/
 
 						//명령어 실행
 						r.run();
@@ -557,8 +556,8 @@ socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList777777777
 					
 socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111111111111kc_ip : " + kc_ip);
 socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111111111111stCmdSearch : " + stCmdSearch);
-					/*TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);*/
-					TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip);
+					TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
+					/*TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
 
 					//명령어 실행
 					searchR.run();
@@ -591,8 +590,8 @@ socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111
 socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList22222222222222222222kc_ip : " + kc_ip);
 socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList22222222222222222222strCmd : " + strCmd);
 						
-						/*TransRunCommandExec r = new TransRunCommandExec(strCmd);*/
-						TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, kc_ip);
+						TransRunCommandExec r = new TransRunCommandExec(strCmd);
+/*						TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, kc_ip, "");*/
 
 						//명령어 실행
 						r.run();
@@ -643,8 +642,8 @@ socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList2222222
 socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList333333333333333333333333kc_ip : " + kc_ip);
 socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList333333333333333333333333stCmdSearch : " + stCmdSearch);
 						
-			//TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
-			TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip);
+			TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
+			/*TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
 
 			//명령어 실행
 			searchR.run();
@@ -676,12 +675,11 @@ socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.444444444444444444444
 					
 					socketLogger.info("##### strInsCmdstrInsCmdstrInsCmd : " + strInsCmd);
 
-
 socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444kc_ip : " + kc_ip);
 socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444strInsCmd : " + strInsCmd);
-				
 
-					TransRunMultiCommandExec r = new TransRunMultiCommandExec(strInsCmd, kc_ip);
+/*					TransRunMultiCommandExec r = new TransRunMultiCommandExec(strInsCmd, kc_ip, "");*/
+					TransRunCommandExec r = new TransRunCommandExec(strInsCmd);
 
 					//명령어 실행
 					r.run();
@@ -702,6 +700,9 @@ socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.444444444444444444444
 						
 					return result;
 				}
+			} else {
+				result = "failed";
+				return result;
 			}
 
 			result = "success";
