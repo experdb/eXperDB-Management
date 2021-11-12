@@ -1091,7 +1091,8 @@ public class TransController {
 		JSONObject result = new JSONObject();
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		String kc_ip = request.getParameter("kc_ip");
-
+		String topic_type = request.getParameter("topic_type");
+		
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
@@ -1118,6 +1119,8 @@ public class TransController {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+			serverObj.put(ClientProtocolID.SEARCH_GBN, topic_type);
+
 			serverObj.put(ClientProtocolID.REQ_CMD, strCmd);
 
 			result = cic.trans_topic_List(serverObj,IP,PORT);
