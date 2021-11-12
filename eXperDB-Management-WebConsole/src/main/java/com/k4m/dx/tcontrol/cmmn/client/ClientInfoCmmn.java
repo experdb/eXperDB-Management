@@ -2294,6 +2294,7 @@ System.out.println("=====cmd" + cmd);
 				for(int i=0; i<splitStrResultMessge.length; i++){
 					JSONObject jsonObj = new JSONObject();
 					String topicName = splitStrResultMessge[i];
+					String regi_nm = "";
 					boolean topicNmChk = false;
 
 					//target trans_id가 등록된 topic은 제외
@@ -2301,6 +2302,7 @@ System.out.println("=====cmd" + cmd);
 						for(int j=0; j<tarTopicList.size(); j++){
 							if (tarTopicList.get(j).getTopic_nm().equals(topicName)) {
 								topicNmChk = true;
+								regi_nm = tarTopicList.get(j).getRegi_nm();
 							}
 						}
 					}
@@ -2308,6 +2310,7 @@ System.out.println("=====cmd" + cmd);
 					//topic 테이블에 target이 등록되어있지 않은 내역만 출력
 					if (topicNmChk == true) {
 						jsonObj.put("topic_name", topicName);
+						jsonObj.put("regi_nm", regi_nm);
 
 						jsonObj.put("rownum_chk", i);
 						jsonArray.add(jsonObj);

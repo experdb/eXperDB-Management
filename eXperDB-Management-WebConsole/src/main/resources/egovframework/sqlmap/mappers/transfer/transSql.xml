@@ -1135,11 +1135,13 @@
 		* Author :
 		**/
         SELECT
-               TOPIC_ID,
-               TOPIC_NM
-          FROM T_TRANS_TOPIC_I
-         WHERE TAR_TRANS_ID IS NULL
-           AND ((REGI_ID IS NOT NULL AND 'TC004402' = #{topic_type}) OR (REGI_ID IS NULL AND 'TC004401' = #{topic_type}))
+               A.TOPIC_ID,
+               A.TOPIC_NM,
+               C.REGI_NM
+          FROM T_TRANS_TOPIC_I A
+               LEFT JOIN T_TRANS_REGI_INF C ON A.REGI_ID = C.REGI_ID
+         WHERE A.TAR_TRANS_ID IS NULL
+           AND ((A.REGI_ID IS NOT NULL AND 'TC004402' = #{topic_type}) OR (A.REGI_ID IS NULL AND 'TC004401' = #{topic_type}))
 	</select>
 	
     <delete id="deleteTransTopicSetting" parameterType="int">
