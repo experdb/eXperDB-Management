@@ -199,10 +199,10 @@
 										<input type="text" class="form-control form-control-sm" id="ins_tg_trans_trg_sys_nm" name="ins_tg_trans_trg_sys_nm" readonly="readonly" />
 									</div>
 									<div class="col-sm-2">
-										<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_ins_tg_dbmsInfo()"><spring:message code="button.create" /></button>
+										<input type="text" class="form-control form-control-sm" id="ins_tg_dbms_type" name="ins_tg_dbms_type" readonly="readonly" />
 									</div>
 									<div class="col-sm-2">
-										
+										<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_ins_tg_dbmsInfo()"><spring:message code="button.create" /></button>
 									</div>
 								</div>
 								
@@ -227,7 +227,7 @@
 												<spring:message code="eXperDB_CDC.topic_type"/>
 											</label>
 											<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
-												<input type="radio" id="ins_tg_normal_type" class="form-check-input" name="ins_tg_topic_type" onclick="" value="TC004401">
+												<input type="radio" id="ins_tg_normal_type" class="form-check-input" name="ins_tg_topic_type" onclick="" value="TC004401" checked>
 												<label class="form-check-label" for="ins_tg_normal_type" style="padding-right:30px;">normal</label>
 												<input type="radio" id="ins_tg_avro_type" class="form-check-input" name="ins_tg_topic_type" onclick="" value="TC004402">
 												<label class="form-check-label" for="ins_tg_avro_type">avro</label>

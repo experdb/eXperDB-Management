@@ -955,7 +955,7 @@ function fn_update_setting(result, active_gbn) {
 		$("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(nvlPrmSet(result.trans_exrt_trg_tb_id, ""));
 		$("#mod_tg_trans_trg_sys_id","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_sys_id, ""));
 		$("#mod_tg_trans_trg_sys_nm","#modTargetRegForm").val(nvlPrmSet(result.transInfoMap.trans_sys_nm, ""));
-		
+		$('#mod_tg_dbms_type').val(nvlPrmSet(result.transInfoMap.dbms_dscd_nm, ""));
 		mod_connector_tg_tableList.rows({selected: true}).deselect();
 		mod_connector_tg_tableList.clear().draw();
 		
@@ -964,9 +964,11 @@ function fn_update_setting(result, active_gbn) {
 		}
 		if(result.transInfoMap.topic_type == "TC004401"){
 			$("#mod_tg_normal_type").prop("checked", true);
+			$('input[name="mod_tg_topic_type"]').attr('disabled', true);
 			fn_mod_topic_type_cng('normal');
 		} else {
 			$("#mod_tg_avro_type").prop("checked", true);
+			$('input[name="mod_tg_topic_type"]').attr('disabled', true);
 			fn_mod_topic_type_cng('avro');
 		}
 		
@@ -1336,7 +1338,7 @@ function fn_target_ins_insert() {
 		
 		$("#ins_tg_topic_mapp_nm", "#insTargetRegForm").val(table_mapp);
 		var topic_type = $("input[name='ins_tg_topic_type']:checked").val(); // TODO 등록할 때 topic type도 가져가기
-		console.log(topic_type)
+
 		var schema_total_cnt= 0;
 		var table_total_cnt = 0;
 
@@ -1396,7 +1398,8 @@ function fn_target_ins_insert() {
 function fn_topic_search_tg_ins(){
 	var db_svr_id = $("#db_svr_id","#findList").val();
 	var kc_ip = $("#ins_tg_kc_ip", "#searchTargetRegForm").val();
-
+	var topic_type = $("input[name='ins_tg_topic_type']:checked").val();
+	
 	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
 	$('#loading').hide();
 	if (kc_ip != "") {
@@ -1416,7 +1419,8 @@ function fn_topic_search_tg_ins(){
 			url : "/selectTargetTopicMappList.do",
 			data : {
 				db_svr_id : db_svr_id,
-				kc_ip : kc_ip
+				kc_ip : kc_ip,
+				topic_type : topic_type
 			},
 			dataType : "json",
 			type : "post",
@@ -1593,8 +1597,8 @@ function fn_tg_mod_init(){
 		],'select': {'style': 'multi'}
 	});
 
-	mod_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '350px');
-	mod_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '350px');
+	mod_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
+	mod_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
 		
 	mod_connector_tg_tableList = $('#mod_connector_tg_topicList').DataTable({
 		scrollY : "200px",
@@ -1609,8 +1613,8 @@ function fn_tg_mod_init(){
 		 ],'select': {'style': 'multi'}
 	});
 	
-	mod_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '350px');
-	mod_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '350px');
+	mod_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
+	mod_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
 
 	$(window).trigger('resize'); 
 }
@@ -1719,6 +1723,7 @@ function fn_topic_search_tg_mod(){
 	
 	var db_svr_id = $("#db_svr_id","#findList").val();
 	var kc_ip = $("#mod_tg_kc_ip", "#searchTargetModForm").val();
+	var topic_type = $("input[name='mod_tg_topic_type']:checked").val();
 
 	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
 
@@ -1740,7 +1745,8 @@ function fn_topic_search_tg_mod(){
 			url : "/selectTargetTopicMappList.do",
 			data : {
 				db_svr_id : db_svr_id,
-				kc_ip : kc_ip
+				kc_ip : kc_ip,
+				topic_type : topic_type
 			},
 			dataType : "json",
 			type : "post",

@@ -622,17 +622,15 @@ public class TransController {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0152");
 			accessHistoryService.insertHistory(historyVO);
-			
+
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			int trans_exrt_trg_tb_id = Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id"));
 			int trans_id =  Integer.parseInt(request.getParameter("trans_id"));
 
 			transInfo = transService.selectTargetTransInfo(trans_id);
 			System.out.println("전송정보 : "+transInfo.get(0));
-			
 			mappInfo = transService.selectMappInfo(trans_exrt_trg_tb_id);
 			System.out.println("매핑정보 : "+mappInfo.get(0));
-			
 
 			tableResult = transService.selectTransMatchMappInfo(mappInfo, "target", "tar_single");
 			System.out.println("전송대상테이블정보 : "+ tableResult);
@@ -1093,7 +1091,8 @@ public class TransController {
 		JSONObject result = new JSONObject();
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		String kc_ip = request.getParameter("kc_ip");
-
+		String topic_type = request.getParameter("topic_type");
+		
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
@@ -1120,6 +1119,8 @@ public class TransController {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+			serverObj.put(ClientProtocolID.SEARCH_GBN, topic_type);
+
 			serverObj.put(ClientProtocolID.REQ_CMD, strCmd);
 
 			result = cic.trans_topic_List(serverObj,IP,PORT);
