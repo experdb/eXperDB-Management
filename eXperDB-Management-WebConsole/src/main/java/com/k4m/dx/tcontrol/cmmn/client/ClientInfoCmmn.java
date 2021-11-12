@@ -2447,4 +2447,39 @@ System.out.println("=====cmd" + cmd);
 		return result;
 	}
 	
+	public Map<String, Object> createConfluentProperties(String IP, int PORT, DbServerVO dbServerVO, JSONObject jObj){
+		Map<String, Object> result = new HashMap<>();
+		
+		JSONObject objResult;
+			
+		try {
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			
+			CA.open();
+			objResult = CA.dxT045(jObj);
+			CA.close();
+			
+			String strErrMsg = (String) objResult.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objResult.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objResult.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objResult.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String) objResult.get(ClientProtocolID.RESULT_DATA);
+
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+			System.out.println("RESULT_DATA : " + strResultData);
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strResultData);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
 }

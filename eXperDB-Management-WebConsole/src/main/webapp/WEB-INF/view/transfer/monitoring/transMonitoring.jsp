@@ -87,6 +87,9 @@ a:hover.tip span {
 	var confile_title = "";
 	var src_exe_status = "";
 	var tar_exe_status = "";
+	
+	var reloadTimeout;
+	
 	/* ********************************************************
 	* 화면 onload
 	******************************************************** */
@@ -347,18 +350,128 @@ a:hover.tip span {
 		var src_connect = $('#src_connect').val();
 		var tar_connector = $('#tar_connector_list').val();
 		
-// 		var src_exe_status = $('#src_exe_status','#transMonConStartForm').val();
-// 		var tar_exe_status = $('#tar_exe_status', '#transMonConStartForm').val();
-		console.log(src_exe_status + " . " + tar_exe_status);	
+		
+		setTimeout(function(){
+			if ((src_connect != "" || tar_connector != "") && (src_exe_status == "TC001501" && tar_exe_status == "TC001501")) {
+				if(reloadTimeout != null)	clearTimeout(reloadTimeout);
+				reloadTimeout = setTimeout(function(){
+					fn_reload_Src_ConnectInfo();	
+				},3000);
+			}
+		},1000);
+	}
+		
+	/* 주기적으로 Reload*/	
+	function 	fn_reload_Src_ConnectInfo(){
+    	var langSelect = document.getElementById("src_connect");
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		
+    	$.ajax({
+			url : "/transSrcConnectInfo.do",
+			dataType : "json",
+			type : "post",
+			data : {
+				trans_id : selectValue,
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				
+				//snapshot, streaming Chart reload
+				if($("#server-tab-1").attr('class').indexOf("active") > 0){
+					fn_snapshot_strem("snapshot");
+				}else{
+					fn_snapshot_strem("streaming");
+				}
+				
+				 //Connect 실시간 차트 
+				funcSsChartSetting(result);
+				 
+				funcSsListSetting(result);
+				
+				fn_reload_Tar_ConnectInfo();
+			}
+		});
+    	
+    }
+
+	
+	function fn_reload_Tar_ConnectInfo(){
+		console.log("fn_reload_Tar_ConnectInfo");
+		var langSelect = document.getElementById("tar_connector_list");
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		
+		fn_sink_chart_init(selectValue);
+		
+		if(selectValue != ""){
+			$.ajax({
+				url : "/transTarConnectInfo.do",
+				dataType : "json",
+				type : "post",
+				data : {
+					 trans_id : selectValue,
+				},
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					if (result != null) {
+						tarConnectTable.clear().draw();
+						if (nvlPrmSet(result.targetSinkInfo, '') != '') {
+							for(var i = 0; i < result.targetSinkInfo.length; i++){	
+								if(result.targetSinkInfo[i].rownum == 1){
+									if(i != result.targetSinkInfo.length-1 && result.targetSinkInfo[i+1].rownum == 2){
+										result.targetSinkInfo[i].sink_record_active_count_cng = result.targetSinkInfo[i].sink_record_active_count - result.targetSinkInfo[i+1].sink_record_active_count;
+										result.targetSinkInfo[i].put_batch_avg_time_ms_cng = result.targetSinkInfo[i].put_batch_avg_time_ms - result.targetSinkInfo[i+1].put_batch_avg_time_ms;
+										result.targetSinkInfo[i].offset_commit_completion_rate_cng = (result.targetSinkInfo[i].offset_commit_completion_rate - result.targetSinkInfo[i+1].offset_commit_completion_rate).toFixed(2);
+										result.targetSinkInfo[i].sink_record_send_total_cng = result.targetSinkInfo[i].sink_record_send_total - result.targetSinkInfo[i+1].sink_record_send_total;
+										result.targetSinkInfo[i].sink_record_active_count_avg_cng = result.targetSinkInfo[i].sink_record_active_count_avg - result.targetSinkInfo[i+1].sink_record_active_count_avg;
+										result.targetSinkInfo[i].offset_commit_completion_total_cng = result.targetSinkInfo[i].offset_commit_completion_total - result.targetSinkInfo[i+1].offset_commit_completion_total;
+										result.targetSinkInfo[i].offset_commit_skip_rate_cng = result.targetSinkInfo[i].offset_commit_skip_rate - result.targetSinkInfo[i+1].offset_commit_skip_rate;
+										result.targetSinkInfo[i].offset_commit_skip_total_cng = result.targetSinkInfo[i].offset_commit_skip_total - result.targetSinkInfo[i+1].offset_commit_skip_total;
+										result.targetSinkInfo[i].sink_record_read_total_cng = result.targetSinkInfo[i].sink_record_read_total - result.targetSinkInfo[i+1].sink_record_read_total;
+									}
+
+									if(nvlPrmSet(result.targetSinkInfo[0].time, '') != '') {
+										tarConnectTable.row.add(result.targetSinkInfo[i]).draw();
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+		}
+		var src_connect = $('#src_connect').val();
+		var tar_connector = $('#tar_connector_list').val();
+		
+	
 		if ((src_connect != "" || tar_connector != "") && (src_exe_status == "TC001501" && tar_exe_status == "TC001501")) {
-// 		if ((src_connect != "" || tar_connector != "")) {
-			clearTimeout();
-			setTimeout(function(){
-				fn_srcConnectInfo("restart");
+			if(reloadTimeout != null)	clearTimeout(reloadTimeout);
+			reloadTimeout = setTimeout(function(){
+				fn_reload_Src_ConnectInfo();	
 			},30000);
 		}
 	}
-
 	/* ********************************************************
 	 * kafka / connector 로그 보기 - 클릭
 	 ******************************************************** */
@@ -631,7 +744,7 @@ a:hover.tip span {
 					<div class="row" id="reg_trans_detail">
 						<div class="accordion_cdc accordion-multi-colored col-4" id="accordion" role="tablist" >
 							<div class="card" style="border:none;" >
-								<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
+								<div class="card-body" style="border:none;min-height: 289px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
 									<table class="table-borderless" style="width:100%;">
 										<tr>
 											<td style="width:80%;" class="text-center" ">
@@ -749,7 +862,7 @@ a:hover.tip span {
 
 						<div class="accordion_cdc accordion-multi-colored col-4" id="accordion" role="tablist" >
 							<div class="card" style="margin-bottom:10px;border:none;" >
-								<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
+								<div class="card-body" style="border:none;min-height: 289px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
 
 									<table class="table-borderless" style="width:100%;">
 										<tr>

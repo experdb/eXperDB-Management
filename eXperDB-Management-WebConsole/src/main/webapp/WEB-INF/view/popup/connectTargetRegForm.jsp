@@ -66,6 +66,17 @@
 				$(element).addClass('form-control-danger')
 			}
 		});
+		
+		$("#ins_tg_normal_type").prop("checked", true);
+
+		fn_ins_topic_type_cng('normal');
+		$('input[name="ins_tg_topic_type"]').change(function(){
+			if($('#ins_tg_normal_type').prop('checked')){
+				fn_ins_topic_type_cng('normal');
+			}else{
+				fn_ins_topic_type_cng('avro');
+			}
+		});
 	});
 
 	/* ********************************************************
@@ -109,6 +120,22 @@
 
 		return true;
 	}
+	
+	
+	/* ********************************************************
+	 * Topic 타입 변경
+	 ******************************************************** */
+	function fn_ins_topic_type_cng(topic_type){
+		var v_topic_type = $("input[name='ins_tg_topic_type']:checked").val();
+		if(topic_type == 'normal'){
+			ins_connector_tg_tableList.columns(1).visible( false );
+			ins_tg_topicList.columns(1).visible( false );
+		} else {
+			ins_connector_tg_tableList.columns(1).visible( true );
+			ins_tg_topicList.columns(1).visible( true );
+		}
+	}
+	
 </script>
 
 <div class="modal fade" id="pop_layer_con_reg_two_target" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -227,9 +254,9 @@
 												<spring:message code="eXperDB_CDC.topic_type"/>
 											</label>
 											<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
-												<input type="radio" id="ins_tg_normal_type" class="form-check-input" name="ins_tg_topic_type" onclick="" value="TC004401" checked>
+												<input type="radio" id="ins_tg_normal_type" class="form-check-input" name="ins_tg_topic_type" onclick="fn_ins_topic_type_cng('normal')" value="TC004401">
 												<label class="form-check-label" for="ins_tg_normal_type" style="padding-right:30px;">normal</label>
-												<input type="radio" id="ins_tg_avro_type" class="form-check-input" name="ins_tg_topic_type" onclick="" value="TC004402">
+												<input type="radio" id="ins_tg_avro_type" class="form-check-input" name="ins_tg_topic_type" onclick="fn_ins_topic_type_cng('avro')" value="TC004402">
 												<label class="form-check-label" for="ins_tg_avro_type">avro</label>
 											</div>
 										</div>
@@ -261,7 +288,8 @@
 									 			<table id="ins_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="336" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="60%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
 														</tr>
 													</thead>
 												</table>
@@ -316,7 +344,8 @@
 								 				<table id="ins_connector_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="336" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="60%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
 														</tr>
 													</thead>
 												</table>

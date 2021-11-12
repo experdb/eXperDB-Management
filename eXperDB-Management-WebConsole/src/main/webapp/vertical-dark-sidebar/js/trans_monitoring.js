@@ -966,6 +966,7 @@ function fn_sink_chart_init(trans_id){
 			},
 			success : function(result) {
 				if (result != null) {
+				$('#tar-chart-line-sink').empty();
 					var sinkChart = Morris.Line({
 						element: 'tar-chart-line-sink',
 						ineColors: ['#63CF72', '#FABA66',],
@@ -988,6 +989,7 @@ function fn_sink_chart_init(trans_id){
 						sinkChart.setData(result.targetSinkRecordChart);
 					}
 					
+					$('#tar-chart-line-complete').empty();
 					var sinkCompleteChart = Morris.Line({
 						element: 'tar-chart-line-complete',
 						lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
@@ -1010,6 +1012,7 @@ function fn_sink_chart_init(trans_id){
 						sinkCompleteChart.setData(result.targetSinkCompleteChart);
 					}
 					
+					$('#tar-chart-line-sink-error').empty();
 					var sinkErrorChart = Morris.Line({
 						element: 'tar-chart-line-sink-error',
 						lineColors: ['#63CF72', '#F36368', '#76C1FA', '#FABA66'],
@@ -1297,7 +1300,6 @@ function fn_snapshot_strem(strGbn) {
 	var selectValue = langSelect.options[langSelect.selectedIndex].value;
 	
 	if (strGbn == "snapshot") {
-		$('#src-chart-line-snapshot').empty();
 		
 		if(selectValue != ""){
 			$.ajax({
@@ -1321,6 +1323,7 @@ function fn_snapshot_strem(strGbn) {
 				},
 				success : function(result) {
 					if (result != null) {
+						$('#src-chart-line-snapshot').empty();
 						var snapshotChart = Morris.Line({
 								element: 'src-chart-line-snapshot',
 								lineColors: ['#63CF72', '#FABA66',],

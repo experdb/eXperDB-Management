@@ -820,6 +820,8 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			$('a[href="#insSettingTab"]').tab('show');
 
 			$("#ins_schema_registry_info").hide();
+			
+			$("input:checkbox[id='ins_tg_normal_type']").prop("checked", true);
 		} else {
 			
 			ins_tg_topicList.clear().draw();
@@ -831,6 +833,7 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			ins_tg_connect_status_Chk = "fail";
 			ins_tg_connect_nm_Chk = "fail";
 			
+			$("input:checkbox[id='ins_tg_normal_type']").prop("checked", true);
 		}
 
 	} else {
@@ -1182,10 +1185,12 @@ function fn_tg_ins_init(){
 			{
 				data : "topic_name", className : "dt-left", defaultContent : ""
 			},
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
 		],'select': {'style': 'multi'}
 	});
 
-	ins_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '350px');
+	ins_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
+	ins_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
 		
 		ins_connector_tg_tableList = $('#ins_connector_tg_topicList').DataTable({
 		scrollY : "200px",
@@ -1195,11 +1200,13 @@ function fn_tg_ins_init(){
 		paging : false,	
 		bSort: false,
 		columns : [
-			{data : "topic_name", className : "dt-left", defaultContent : ""},			
+			{data : "topic_name", className : "dt-left", defaultContent : ""},		
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
 		 ],'select': {'style': 'multi'}
 	});
 	
-		ins_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '350px');
+		ins_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
+		ins_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
 
 	$(window).trigger('resize'); 
 }
