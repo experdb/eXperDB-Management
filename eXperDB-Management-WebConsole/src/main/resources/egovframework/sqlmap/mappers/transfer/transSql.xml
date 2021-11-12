@@ -1138,7 +1138,8 @@
                TOPIC_ID,
                TOPIC_NM
           FROM T_TRANS_TOPIC_I
-         WHERE TAR_TRANS_ID IS NOT NULL
+         WHERE TAR_TRANS_ID IS NULL
+           AND ((REGI_ID IS NOT NULL AND 'TC004402' = #{topic_type}) OR (REGI_ID IS NULL AND 'TC004401' = #{topic_type}))
 	</select>
 	
     <delete id="deleteTransTopicSetting" parameterType="int">

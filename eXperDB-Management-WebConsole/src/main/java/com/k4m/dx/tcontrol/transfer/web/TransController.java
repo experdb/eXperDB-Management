@@ -1123,7 +1123,10 @@ public class TransController {
 
 			serverObj.put(ClientProtocolID.REQ_CMD, strCmd);
 
-			result = cic.trans_topic_List(serverObj,IP,PORT);
+			result = cic.trans_topic_List(serverObj,IP,PORT, topic_type);
+			
+			//여기에 추가
+			//토픽리스트 확인 해서 같은 토픽중 
 
 			System.out.println("result====" + result);
 		}catch (Exception e) {

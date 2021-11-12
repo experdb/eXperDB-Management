@@ -2250,7 +2250,7 @@ System.out.println("=====cmd" + cmd);
 	
 	// 41. trans topic list 조호
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT) {
+	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT, String topic_type) {
 		
 		String xml[] = {
 				"egovframework/spring/context-aspect.xml",
@@ -2284,6 +2284,9 @@ System.out.println("=====cmd" + cmd);
 				//등록된 topic 리스트 조회
 				TransService transService = (TransService) context.getBean("transServiceImpl");
 				TransVO transVO = new TransVO();
+				//토픽타입별
+				transVO.setTopic_type(topic_type);
+				
 				List<TransVO> tarTopicList = transService.selectTransTopicList(transVO);
 
 				String[] splitStrResultMessge = strStrReult_data.split(",");
@@ -2291,14 +2294,13 @@ System.out.println("=====cmd" + cmd);
 				for(int i=0; i<splitStrResultMessge.length; i++){
 					JSONObject jsonObj = new JSONObject();
 					String topicName = splitStrResultMessge[i];
-					boolean topicNmChk = true;
+					boolean topicNmChk = false;
 
 					//target trans_id가 등록된 topic은 제외
 					if (tarTopicList.size() > 0) {
 						for(int j=0; j<tarTopicList.size(); j++){
 							if (tarTopicList.get(j).getTopic_nm().equals(topicName)) {
-								topicNmChk = false;
-								break;
+								topicNmChk = true;
 							}
 						}
 					}
