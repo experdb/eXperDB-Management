@@ -773,18 +773,46 @@ function fn_info_setting(result, active_gbn) {
 
 		$("#d_tg_connect_nm", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.connect_nm, ""));
 
+		schemaRegistryInfoPopList.rows({selected: true}).deselect();
+		schemaRegistryInfoPopList.clear().draw();
+
+		info_target_connector_tableList.rows({selected: true}).deselect();
+		info_target_connector_tableList.clear().draw();
+		
+		info_target_connector_schema_tableList.rows({selected: true}).deselect();
+		info_target_connector_schema_tableList.clear().draw();
+
+		if (result.transInfoMap.topic_type == "TC004402") { //avro일 경우
+			$("#schemaRegistryTar_title").show();
+			$("#schemaRegistryTar_list").show();
+			$("#div_info_tg_connector_tableList").show();
+			$("#div_info_tg_connector_schema_tableList").hide();
+			
+			//schema registry 리스트 
+			if (result.transSchemaList != null) {
+				schemaRegistryInfoPopList.rows.add(result.transSchemaList).draw();
+			}
+
+			if (result.tables.data != null) {
+				info_target_connector_tableList.rows.add(result.tables.data).draw();
+			}
+		} else {
+			$("#schemaRegistryTar_title").hide();
+			$("#schemaRegistryTar_list").hide();
+			$("#div_info_tg_connector_schema_tableList").show();
+			$("#div_info_tg_connector_tableList").hide();
+
+			if (result.tables.data != null) {
+				info_target_connector_schema_tableList.rows.add(result.tables.data).draw();
+			}
+		}
+		////////////////////////////////////////////////////////
+
 		$("#d_tg_system_name", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.trans_sys_nm, ""));
 		$("#d_tg_system_ip", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.ipadr, ""));
 		$("#d_tg_system_port", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.portno, ""));
 		$("#d_tg_system_database", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.dtb_nm, ""));
 		$("#d_tg_system_account", "#infoTargetForm").html(nvlPrmSet(result.transInfoMap.spr_usr_id, ""));
-
-		info_target_connector_tableList.rows({selected: true}).deselect();
-		info_target_connector_tableList.clear().draw();
-
-		if (result.tables.data != null) {
-			info_target_connector_tableList.rows.add(result.tables.data).draw();
-		}
 	}
 }
 
@@ -1932,15 +1960,13 @@ function fn_tg_ins_init(){
 			{
 				data : "topic_name", className : "dt-left", defaultContent : ""
 			},
-			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false },
-			{data : "regi_id", className : "dt-left", defaultContent : "", visible: false }
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
 		],
 		'select': {'style': 'multi'}
 	});
 
 	ins_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
 	ins_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '0px');
-	ins_tg_topicList.tables().header().to$().find('th:eq(2)').css('min-width', '0px');
 		
 	ins_connector_tg_tableList = $('#ins_connector_tg_topicList').DataTable({
 		scrollY : "200px",
@@ -1951,14 +1977,12 @@ function fn_tg_ins_init(){
 		bSort: false,
 		columns : [
 			{data : "topic_name", className : "dt-left", defaultContent : ""},		
-			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false },
-			{data : "regi_id", className : "dt-left", defaultContent : "", visible: false }
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
 		 ],'select': {'style': 'multi'}
 	});
 	
 	ins_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
 	ins_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '0px');
-	ins_connector_tg_tableList.tables().header().to$().find('th:eq(2)').css('min-width', '0px');
 
 	$(window).trigger('resize'); 
 }
@@ -2022,14 +2046,12 @@ function fn_tg_mod_init(){
 			{
 				data : "topic_name", className : "dt-left", defaultContent : ""
 			},
-			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false },
-			{data : "regi_id", className : "dt-left", defaultContent : "", visible: false }
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
 		],'select': {'style': 'multi'}
 	});
 
 	mod_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
 	mod_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
-	mod_tg_topicList.tables().header().to$().find('th:eq(2)').css('min-width', '0px');
 		
 	mod_connector_tg_tableList = $('#mod_connector_tg_topicList').DataTable({
 		scrollY : "200px",
@@ -2040,14 +2062,12 @@ function fn_tg_mod_init(){
 		bSort: false,
 		columns : [
 			{data : "topic_name", className : "dt-left", defaultContent : ""},			
-			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false },
-			{data : "regi_id", className : "dt-left", defaultContent : "", visible: false }
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }		
 		 ],'select': {'style': 'multi'}
 	});
 	
 	mod_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
 	mod_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
-	mod_connector_tg_tableList.tables().header().to$().find('th:eq(2)').css('min-width', '0px');
 
 	$(window).trigger('resize'); 
 }
@@ -2427,8 +2447,7 @@ function fn_target_ins_insert() {
 			tableRowList.push( ins_connector_tg_tableList.rows().data()[i]);    
 			table_mapp.push(ins_connector_tg_tableList.rows().data()[i].topic_name);
 		}
-//		var regi_id = tableDatas[0].regi_id;
-		console.log(ins_connector_tg_tableList.rows().data()[0]);
+		
 		$("#ins_tg_topic_mapp_nm", "#insTargetRegForm").val(table_mapp);
 		var topic_type = $("input[name='ins_tg_topic_type']:checked").val(); // TODO 등록할 때 topic type도 가져가기
 
@@ -2448,7 +2467,7 @@ function fn_target_ins_insert() {
 				trans_trg_sys_id : nvlPrmSet($("#ins_tg_trans_trg_sys_id", "#insTargetRegForm").val(), ''),
 				schema_total_cnt : schema_total_cnt,
 				table_total_cnt : table_total_cnt,
-				topic_type : topic_type,
+				topic_type : topic_type
 			},
 			type : "post",
 			beforeSend: function(xhr) {

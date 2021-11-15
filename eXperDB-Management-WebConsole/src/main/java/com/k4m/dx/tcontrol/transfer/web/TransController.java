@@ -522,6 +522,8 @@ public class TransController {
 		List<Map<String, Object>> transInfo = null;
 		List<Map<String, Object>> mappInfo = null;
 		
+		List<TransRegiVO> resultSchema = null;
+		
 		Map<String, Object> transInfoMap = new HashMap<String, Object>();
 
 		try {
@@ -555,8 +557,13 @@ public class TransController {
 
 			if (transInfo != null) {
 				transInfoMap = transService.selectTransMatchInfo(transInfo, trans_active_gbn);
+				
+				if (!"source".equals(trans_active_gbn)) {
+					resultSchema = transConService.selectTargetTransRegiList(transInfo);
+				}
 			}
 
+			mv.addObject("transSchemaList", resultSchema); //use
 			mv.addObject("transInfoMap", transInfoMap); //use
 			mv.addObject("tables", tableResult); //use
 			mv.addObject("trans_exrt_trg_tb_id", trans_exrt_trg_tb_id);
@@ -1059,7 +1066,7 @@ public class TransController {
 				if (transVO.getRegi_id() == null || "".equals(transVO.getRegi_id())) {
 					transVO.setRegi_id(null);
 				}
-				System.out.println("123123123123132132123 : " + transVO.getRegi_id());
+
 				//전송대상 테이블 등록
 				result = transService.insertTargetConnectInfoTot(transMappVO, transVO);
 			} catch (Exception e) {

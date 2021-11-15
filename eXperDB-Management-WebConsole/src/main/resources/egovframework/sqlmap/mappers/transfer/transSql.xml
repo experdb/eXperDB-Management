@@ -1095,7 +1095,6 @@
            SET
                TAR_TRANS_EXRT_TRG_TB_ID = #{tar_trans_exrt_trg_tb_id}::numeric
              , TAR_TRANS_ID = #{tar_trans_id}::numeric
-             , REGI_ID = #{regi_id}::numeric
              , TABLE_TOTAL_CNT = 1
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
@@ -1121,7 +1120,6 @@
            SET
                TAR_TRANS_EXRT_TRG_TB_ID = null
              , TAR_TRANS_ID = null
-             , REGI_ID = null
              , TABLE_TOTAL_CNT = 0
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
@@ -1177,13 +1175,26 @@
 		* Description : trans topic 리스트 조회
 		* Author :
 		**/
-        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, C.KC_IP, C.KC_PORT
+        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, C.KC_IP, C.KC_PORT, B.REGI_ID
           FROM T_TRANSCNG_I A
                JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.SRC_TRANS_ID
                LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
          WHERE A.TRANS_ID = #{trans_id}::numeric
 	</select>
 
+	<select id="selectTranTargetIdTopicList" parameterType="transVO" resultType="transVO">
+		/**
+		*  Query ID : selectTranTargetIdTopicList
+		* Description : trans 타겟 topic 리스트 조회
+		* Author :
+		**/
+        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, C.KC_IP, C.KC_PORT, B.REGI_ID
+          FROM T_TRANSCNG_TARGET_I A
+               JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.TAR_TRANS_ID
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
+         WHERE A.TRANS_ID = #{trans_id}::numeric
+	</select>
+	
     <update id="updateTranExrtTrgInfo"  parameterType="TransVO">
     	/**
 	 	* Query ID : updateTransSrcTopic
@@ -1351,5 +1362,37 @@
                   FROM T_TRANSCOMCNG_I
                  WHERE 1 = 1
           ) A
+	</select>
+	
+	<select id="selectTargetTransRegiList" parameterType="hashmap"  resultType="transRegiVO">
+		/**
+		* Query ID : selectTargetTransRegiList
+		* Description : Schema Registry 조회(완료)
+		* Author : 
+		**/
+        SELECT 
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , A.*
+         FROM (
+               SELECT
+                      REGI_ID
+                    , REGI_NM
+                    , REGI_IP
+                    , REGI_PORT
+                    , EXE_STATUS
+                    , FRST_REGR_ID
+                    , TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+                    , LST_MDFR_ID
+                    , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
+                 FROM T_TRANS_REGI_INF
+                WHERE 1 = 1
+                 AND REGI_ID IN
+           <foreach item="item" index="index" collection="regi_id" open="(" separator="," close=")"> 
+               #{item}::numeric
+           </foreach>
+
+                ORDER BY LST_MDF_DTM DESC
+        ) A
 	</select>
 </mapper>
