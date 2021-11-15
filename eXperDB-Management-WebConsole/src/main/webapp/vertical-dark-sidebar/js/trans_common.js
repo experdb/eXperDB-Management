@@ -783,6 +783,9 @@ function fn_info_setting(result, active_gbn) {
 		info_target_connector_schema_tableList.clear().draw();
 
 		if (result.transInfoMap.topic_type == "TC004402") { //avro일 경우
+			$("#info_tg_avro_type").attr("checked", true); 
+			$("#info_tg_normal_type").attr("checked", false); 
+	
 			$("#schemaRegistryTar_title").show();
 			$("#schemaRegistryTar_list").show();
 			$("#div_info_tg_connector_tableList").show();
@@ -797,6 +800,9 @@ function fn_info_setting(result, active_gbn) {
 				info_target_connector_tableList.rows.add(result.tables.data).draw();
 			}
 		} else {
+			$("#info_tg_avro_type").attr("checked", false); 
+			$("#info_tg_normal_type").prop("checked", true); 
+			
 			$("#schemaRegistryTar_title").hide();
 			$("#schemaRegistryTar_list").hide();
 			$("#div_info_tg_connector_schema_tableList").show();

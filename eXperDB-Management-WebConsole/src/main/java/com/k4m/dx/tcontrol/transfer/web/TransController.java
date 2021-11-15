@@ -552,7 +552,7 @@ public class TransController {
 			mappInfo = transService.selectMappInfo(trans_exrt_trg_tb_id);
 			System.out.println("매핑정보 : "+mappInfo.get(0));
 
-			tableResult = transService.selectTransMatchMappInfo(mappInfo, trans_active_gbn, multi_gbn);
+			tableResult = transService.selectTransMatchMappInfo(trans_id, mappInfo, trans_active_gbn, multi_gbn);
 			System.out.println("전송대상테이블정보 : "+ tableResult);
 
 			if (transInfo != null) {
@@ -639,7 +639,7 @@ public class TransController {
 			mappInfo = transService.selectMappInfo(trans_exrt_trg_tb_id);
 			System.out.println("매핑정보 : "+mappInfo.get(0));
 
-			tableResult = transService.selectTransMatchMappInfo(mappInfo, "target", "tar_single");
+			tableResult = transService.selectTransMatchMappInfo(trans_id, mappInfo, "target", "tar_single");
 			System.out.println("전송대상테이블정보 : "+ tableResult);
 
 			if (transInfo != null) {
@@ -693,7 +693,7 @@ public class TransController {
 			System.out.println("매핑정보 : "+mappInfo.get(0));
 			
 
-			tableResult = transService.selectTransMatchMappInfo(mappInfo, "source", "sur_single");
+			tableResult = transService.selectTransMatchMappInfo(trans_id, mappInfo, "source", "sur_single");
 			System.out.println("전송대상테이블정보 : "+ tableResult);
 
 			if (transInfo != null) {
