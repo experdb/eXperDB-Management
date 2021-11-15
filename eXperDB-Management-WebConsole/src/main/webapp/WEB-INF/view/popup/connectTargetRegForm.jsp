@@ -120,29 +120,6 @@
 
 		return true;
 	}
-	
-	
-	/* ********************************************************
-	 * Topic 타입 변경
-	 ******************************************************** */
-	function fn_ins_topic_type_cng(topic_type){
-		var v_topic_type = $("input[name='ins_tg_topic_type']:checked").val();
-		if(topic_type == 'normal'){
-			ins_connector_tg_tableList.columns(1).visible( false );
-			ins_tg_topicList.columns(1).visible( false );
-		} else {
-			ins_connector_tg_tableList.columns(1).visible( true );
-			ins_tg_topicList.columns(1).visible( true );
-		}
-		ins_tg_topicList.rows({selected: true}).deselect();
-		ins_tg_topicList.clear().draw();
-		
-		ins_connector_tg_tableList.rows({selected: true}).deselect();
-		ins_connector_tg_tableList.clear().draw();
-		
-		fn_topic_search_tg_ins();
-	}
-	
 </script>
 
 <div class="modal fade" id="pop_layer_con_reg_two_target" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">

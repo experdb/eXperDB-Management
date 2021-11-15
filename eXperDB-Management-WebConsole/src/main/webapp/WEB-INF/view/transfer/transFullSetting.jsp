@@ -445,8 +445,8 @@ a:hover.tip span {
 <%@include file="./../popup/transConnectListForm.jsp"%>
 <%@include file="./../popup/transComConSetForm.jsp"%>
 <%@include file="./../popup/transComConChoForm.jsp"%>
-<%@include file="./../popup/transSchemRegiSelectForm.jsp"%>
-
+<%-- <%@include file="./../popup/transSchemRegiSelectForm.jsp"%>
+ --%>
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 	<input type="hidden" name="mod_prm_trans_id" id="mod_prm_trans_id" value=""/>

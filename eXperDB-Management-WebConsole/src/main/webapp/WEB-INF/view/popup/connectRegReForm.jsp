@@ -471,8 +471,8 @@
 											<div class="col-sm-4">
 												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_connect_type" id="mod_connect_type" tabindex=4 disabled>
 													<option value=""><spring:message code="common.choice" /></option>
-													<option value="TC004301"><spring:message code="dbms_information.unuse" /></option>
-													<option value="TC004302"><spring:message code="dbms_information.use" /></option>
+													<option value="TC004501"><spring:message code="dbms_information.unuse" /></option>
+													<option value="TC004502"><spring:message code="dbms_information.use" /></option>
 												</select>
 											</div>
 										</div>

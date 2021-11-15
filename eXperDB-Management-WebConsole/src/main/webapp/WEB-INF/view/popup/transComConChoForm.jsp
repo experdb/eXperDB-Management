@@ -7,8 +7,8 @@
 
 <%
 	/**
-	* @Class Name : transComConInfoForm.jsp
-	* @Description : trans 기본설정 선택
+	* @Class Name : transComConChoForm.jsp
+	* @Description : trans DBMS 시스템 등록 조회 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -61,41 +61,6 @@
 	});
 
 	/* ********************************************************
-	 * 추가 버튼 클릭
-	 ******************************************************** */
-	function fn_cho_trans_com_con_Add(){
-		var datas = cho_table_com_con.rows('.selected').data();
-
-		if (datas.length <= 0) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		}
-
-		var trans_com_id = datas[0].trans_com_id;		
-		var trans_com_cng_nm = datas[0].trans_com_cng_nm;
-
-		fn_trans_com_conAddCallback(trans_com_id,trans_com_cng_nm);
-		$('#pop_layer_trans_com_con_cho').modal("hide");
-	}
-
-	/* ********************************************************
-	 * 추가 수정시 등록
-	 ******************************************************** */
-	function fn_cho_trans_com_con_Mod(){
-		var datas = cho_table_com_con.rows('.selected').data();
-		if (datas.length <= 0) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		} 
-
-		var trans_com_id = datas[0].trans_com_id;		
-		var trans_com_cng_nm = datas[0].trans_com_cng_nm;
-
-		fn_trans_com_conModCallback(trans_com_id,trans_com_cng_nm);
-		$('#pop_layer_trans_com_con_cho').modal("hide");
-	}
-
-	/* ********************************************************
 	 * 테이블 초기화
 	 ******************************************************** */
 	function fn_init_cho_com_con() {
@@ -137,39 +102,6 @@
 		cho_table_com_con.tables().header().to$().find('th:eq(10)').css('min-width', '0px');  
 
 		$(window).trigger('resize');		
-	}
-
-	/* ********************************************************
-	 * 조회
-	 ******************************************************** */
-	function fn_cho_trans_search_com_con(){
-		$.ajax({
-			url : "/selectTransComConPopList.do",
-			data : {
-				trans_com_cng_nm : nvlPrmSet($("#cho_trans_com_cng_nm").val(), '')
-  			},
-	  		type : "post",
-	  		beforeSend: function(xhr) {
-	  	        xhr.setRequestHeader("AJAX", true);
-			},
-	  		error : function(xhr, status, error) {
-	  			if(xhr.status == 401) {
-	  				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-	  			} else if(xhr.status == 403) {
-	  				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-	  			} else {
-	  				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-	  			}
-	  		},
-	  		success : function(result) {
-	  			if(result.length > 0){
-	  				cho_table_com_con.clear().draw();
-	  				cho_table_com_con.rows.add(result).draw();
-	  			}else{
-	  				cho_table_com_con.clear().draw();
-	  			}
-	  		}
-		});
 	}
 </script>
 

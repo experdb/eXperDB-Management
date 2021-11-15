@@ -101,6 +101,7 @@ var common_failed = "<spring:message code='common.failed' />";
 
 var message_msg04 = "<spring:message code='message.msg04' />";
 var message_msg05 = "<spring:message code='message.msg05' />";
+var message_msg33 = "<spring:message code='message.msg33' />";
 var message_msg35 = "<spring:message code='message.msg35' />";
 var message_msg162 = "<spring:message code='message.msg162' />";
 

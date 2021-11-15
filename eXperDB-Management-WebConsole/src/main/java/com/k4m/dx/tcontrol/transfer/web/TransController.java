@@ -180,7 +180,7 @@ public class TransController {
 
 				// 공통코드 Connect타입  (use)
 				try {
-					pageVO.setGrp_cd("TC0043");
+					pageVO.setGrp_cd("TC0045");
 					pageVO.setSearchCondition("3");
 					cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
 					
