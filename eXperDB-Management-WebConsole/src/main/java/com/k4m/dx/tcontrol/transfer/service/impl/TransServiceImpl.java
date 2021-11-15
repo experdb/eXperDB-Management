@@ -143,7 +143,12 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			System.out.println("매핑정보 : "+mappInfo.get(0));
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
+			
+			if("".equals(mappInfo.get(0).get("regi_nm")) || mappInfo.get(0).get("regi_nm") == null){
+				connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
+			} else {
+				connStartResult = cic.createConfluentProperties(IP, PORT, dbServerVO, transInfo, mappInfo);
+			}
 			
 			if (connStartResult != null) {
 				result_code = connStartResult.get("RESULT_CODE").toString();
