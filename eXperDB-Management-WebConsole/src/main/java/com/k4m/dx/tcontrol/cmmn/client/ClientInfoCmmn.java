@@ -2454,7 +2454,7 @@ System.out.println("=====cmd" + cmd);
 	}
 	
 	// connetor가 confluent일 때 실행
-	public Map<String, Object> createConfluentProperties(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo, List<Map<String, Object>> mappInfo) {
+	public Map<String, Object> createConfluentProperties(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo, List<Map<String, Object>> mappInfo, List<TransVO> topicInfo) {
 		Map<String, Object> result = new HashMap<>();
 		
 		JSONObject objResult;
@@ -2478,9 +2478,9 @@ System.out.println("=====cmd" + cmd);
 			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));
 			transObj.put(ClientProtocolID.TRANS_ID, transInfo.get(0).get("trans_id").toString());
 			transObj.put(ClientProtocolID.CON_START_GBN, "target");
-			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
-			transObj.put(ClientProtocolID.REGI_IP, transInfo.get(0).get("regi_ip"));
-			transObj.put(ClientProtocolID.REGI_PORT, transInfo.get(0).get("regi_port"));
+			transObj.put(ClientProtocolID.REGI_ID, topicInfo.get(0).getRegi_id());
+			transObj.put(ClientProtocolID.REGI_IP, topicInfo.get(0).getRegi_ip());
+			transObj.put(ClientProtocolID.REGI_PORT, topicInfo.get(0).getRegi_port());
 			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));	
 			transObj.put(ClientProtocolID.FILE_NAME, properties_nm);
 			transObj.put(ClientProtocolID.FILE_DIRECTORY, "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/");
