@@ -3,13 +3,17 @@ package com.k4m.dx.tcontrol.db2pg.setting.web;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.regex.Matcher;
 
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 
 @Controller
 public class Db2pgConfigController {
@@ -126,6 +130,33 @@ public class Db2pgConfigController {
 				if((boolean) configObj.get("usrqry_tf")){
 					fileContent = fileContent.replaceAll("#SRC_FILE_QUERY_DIR_PATH=./queries.xml", "SRC_FILE_QUERY_DIR_PATH="+configObj.get("path").toString()+"/xml/"+configObj.get("wrk_nm").toString()+".xml");					
 				}
+				
+				//Monitoring 추가로 인한 config 값 추가 (2021-11-10 변승우 책임)
+				fileContent = fileContent.replaceAll("MGMT_MIG=FALSE", "MGMT_MIG=TRUE");
+				
+
+				StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
+				pbeEnc.setPassword("k4mda"); // PBE 값(XML PASSWORD설정)
+					
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));	
+	
+				String repo_url=	pbeEnc.decrypt(props.getProperty("database.url").substring(props.getProperty("database.url").lastIndexOf("(")+1).replaceFirst(".$",""));
+				String repo_user= 	pbeEnc.decrypt(props.getProperty("database.username").substring(props.getProperty("database.username").lastIndexOf("(")+1).replaceFirst(".$",""));
+				String repo_pw = pbeEnc.decrypt(props.getProperty("database.password").substring(props.getProperty("database.password").lastIndexOf("(")+1).replaceFirst(".$",""));
+				
+				String repo_host = repo_url.substring(repo_url.lastIndexOf("//")+2).substring(0, repo_url.substring(repo_url.lastIndexOf("//")+2).indexOf(":"));
+				String repo_port = repo_url.substring(repo_url.lastIndexOf(":")+1).substring(0,repo_url.substring(repo_url.lastIndexOf(":")+1).indexOf("/"));
+	
+				//Repository DB 등록 config 추가 (2021-11-10 변승우 책임)
+				fileContent = fileContent.replaceAll("REPO_HOST=", "REPO_HOST="+repo_host.toString());
+				fileContent = fileContent.replaceAll("REPO_USER=", "REPO_USER="+repo_user.toString());
+				fileContent = fileContent.replaceAll("REPO_PASSWORD=", "REPO_PASSWORD="+java.util.regex.Matcher.quoteReplacement(repo_pw.toString()));
+				fileContent = fileContent.replaceAll("REPO_DATABASE=", "REPO_DATABASE=experdb");
+				fileContent = fileContent.replaceAll("REPO_SCHEMA=", "REPO_SCHEMA=experdb_management");
+				fileContent = fileContent.replaceAll("REPO_PORT=5432", "REPO_PORT="+repo_port.toString());
+				
+				fileContent = fileContent.replaceAll("MIG_WORK=", "MIG_WORK="+configObj.get("wrk_nm").toString());
 				
 				bw.write(fileContent + "\r\n");
 				bw.flush();

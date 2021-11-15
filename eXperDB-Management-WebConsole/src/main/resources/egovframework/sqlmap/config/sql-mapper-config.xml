@@ -51,6 +51,7 @@
 		
 		<typeAlias alias="db2pgSysInfVO" type="com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO" /> 
 		<typeAlias alias="db2pgHistoryVO" type="com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO" /> 
+		<typeAlias alias="db2pgMonitoringVO" type="com.k4m.dx.tcontrol.db2pg.monitoring.service.Db2pgMonitoringVO" /> 
 		
 		<typeAlias alias="instanceScaleVO" type="com.k4m.dx.tcontrol.scale.service.InstanceScaleVO"/>
 		
@@ -129,6 +130,7 @@
 		<mapper resource="egovframework/sqlmap/mappers/db2pg/dbms/dbmsSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/db2pg/setting/db2pgSettingSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/db2pg/history/db2pgHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/db2pg/monitoring/db2pgMonitoringSql.xml" />
 			
 		<!-- scale -->
 		<mapper resource="egovframework/sqlmap/mappers/scale/instanceScaleSql.xml" />

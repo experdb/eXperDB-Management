@@ -454,10 +454,10 @@ function fnc_confirmMultiRst(gbn){
 		fn_ddl_work_delete2();
 	}else if(gbn == "data_del"){
 		fn_data_work_delete2();
-	}else if(gbn =="ddl_history"){
-		location.href='/db2pgHistory.do?gbn=ddl' ;
-	}else if(gbn =="data_history"){
-		location.href='/db2pgHistory.do?gbn=mig' ;
+	}else if(gbn =="ddl"){
+		fn_ImmediateStart("ddl");
+	}else if(gbn =="trans"){
+		fn_ImmediateStart("trans");
 	}else if(gbn == "usrqry_del"){
 		fn_delSql();
 	}
@@ -741,6 +741,37 @@ function fn_copy_save(){
 	}
 }
  
+ 
+ function fn_ImmediateExe(gbn){
+ 
+	 if(gbn=="ddl"){
+			var datas = tableDDL.rows('.selected').data();
+			var rowCnt = tableDDL.rows('.selected').data().length;
+			
+			if(rowCnt <= 0){
+				showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+				return false;
+			}
+			
+		 confile_title = 'DDL <spring:message code="migration.run_immediately" />';
+	 }else{
+		 var datas = tableData.rows('.selected').data();
+		var rowCnt = tableData.rows('.selected').data().length;
+		
+		if(rowCnt <= 0){
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}
+		 confile_title = 'MIGRATION <spring:message code="migration.run_immediately" />';
+	 }
+		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="migration_immediateExe" />');
+		$('#pop_confirm_multi_md').modal("show");
+ }
+ 
+ 
+ 
 /* ********************************************************
  * 즉시실행 DDL 
  ******************************************************** */
@@ -783,11 +814,12 @@ function fn_ImmediateStart(gbn){
 					}
 				},
 				success : function(result) {
-					confile_title = rowCnt + '<spring:message code="migration.msg11" />';
+					location.href='/db2pgHistory.do?gbn=ddl' 
+					/* confile_title = rowCnt + '<spring:message code="migration.msg11" />';
 					$('#con_multi_gbn', '#findConfirmMulti').val("ddl_history");
 					$('#confirm_multi_tlt').html(confile_title);
 					$('#confirm_multi_msg').html('<spring:message code="migration.msg12" />');
-					$('#pop_confirm_multi_md').modal("show");
+					$('#pop_confirm_multi_md').modal("show"); */
 				}
 			});			
 		}else {
@@ -836,11 +868,12 @@ function fn_ImmediateStart(gbn){
 						}
 					},
 					success : function(result) {
-						confile_title = rowCnt + '<spring:message code="migration.msg11"/>';
+						location.href='/db2pgMonitoring.do' 								
+						/* confile_title = rowCnt + '<spring:message code="migration.msg11"/>';
 						$('#con_multi_gbn', '#findConfirmMulti').val("data_history");
 						$('#confirm_multi_tlt').html(confile_title);
 						$('#confirm_multi_msg').html("<spring:message code='migration.msg12' />");
-						$('#pop_confirm_multi_md').modal("show");
+						$('#pop_confirm_multi_md').modal("show"); */
 					}
 				});	
 		} else {
@@ -999,7 +1032,7 @@ function fn_ImmediateStart(gbn){
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo" id="btnDDL">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateStart('ddl')" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateExe('ddl')" data-toggle="modal">
 									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately"/>
 								</button>
 								
@@ -1018,7 +1051,7 @@ function fn_ImmediateStart(gbn){
 							</div>
 							
 							<div class="template-demo" id="btnData" style="display:none;">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateStart('trans')" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateExe('trans')" data-toggle="modal">
 									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately"/>
 								</button>
 								
