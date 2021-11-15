@@ -240,6 +240,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 	
 		List<Map<String, Object>> transInfo = null;
 		List<Map<String, Object>> mappInfo = null;
+		List<TransVO> topicInfo = null;
 		
 		Map<String, Object> connStartResult = new  HashMap<String, Object>();
 
@@ -275,13 +276,16 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			mappInfo = transDAO.selectMappInfo(trans_exrt_trg_tb_id);
 			System.out.println("매핑정보 : "+mappInfo.get(0));
 			
+			//토픽 정보 조회
+			topicInfo = transDAO.selectTranTargetIdTopicList(transVO);
+			
 			if (transInfo != null && mappInfo != null) {
 				ClientInfoCmmn cic = new ClientInfoCmmn();
 				
 				if("TC004401".equals(transInfo.get(0).get("topic_type"))){
 					connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
 				} else {
-					connStartResult = cic.createConfluentProperties(IP, PORT, dbServerVO, transInfo, mappInfo);
+					connStartResult = cic.createConfluentProperties(IP, PORT, dbServerVO, transInfo, mappInfo, topicInfo);
 				}
 //				connStartResult = cic.connectTargetStart(IP, PORT, dbServerVO, transInfo, mappInfo);
 				

@@ -1188,7 +1188,7 @@
 		* Description : trans 타겟 topic 리스트 조회
 		* Author :
 		**/
-        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, C.KC_IP, C.KC_PORT, B.REGI_ID, D.REGI_NM
+        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, C.KC_IP, C.KC_PORT, B.REGI_ID, D.REGI_NM, D.REGI_IP, D.REGI_PORT
           FROM T_TRANSCNG_TARGET_I A
                JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.TAR_TRANS_ID
                LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
