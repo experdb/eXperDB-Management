@@ -5,6 +5,22 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<%
+	/**
+	* @Class Name : transConnectListForm.jsp
+	* @Description : trans KAFKA CONNECT 팝업
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2017.06.01     최초 생성
+	*
+	* author 
+	* since 2017.06.01
+	*
+	*/
+%>    
+
 <script>
 	var trans_kafka_con_pop_table = null;
 	var trans_regi_con_pop_table = null;

@@ -39,41 +39,6 @@
 		});
 
 	});
-
-	/* ********************************************************
-	 * Validation Check
-	 ******************************************************** */
-	function trans_target_mod_valCheck(){
-		var valideMsg = "";
-
-		if(nvlPrmSet($("#mod_tg_trans_trg_sys_nm", "#modTargetRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
-			return false;
-		}
-
-		//전성대상테이블 length 체크
-		if (mod_connector_tg_tableList.rows().data().length <= 0) {
-			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		}
-
-		return true;
-	}
-	
-	/* ********************************************************
-	 * Topic 타입 변경
-	 ******************************************************** */
-	function fn_mod_topic_type_cng(topic_type){
-		var v_topic_type = $("input[name='mod_tg_topic_type']:checked").val();
-		if(topic_type == 'normal'){
-			mod_connector_tg_tableList.columns(1).visible( false );
-			mod_tg_topicList.columns(1).visible( false );
-		} else {
-			mod_connector_tg_tableList.columns(1).visible( true );
-			mod_tg_topicList.columns(1).visible( true );
-		}
-	}
-
 </script>
 
 <div class="modal fade" id="pop_layer_con_re_reg_two_target" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
