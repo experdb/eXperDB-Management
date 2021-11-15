@@ -826,7 +826,6 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 
 			$("#ins_schema_registry_info").hide();
 			
-			$("input:checkbox[id='ins_tg_normal_type']").prop("checked", true);
 		} else {
 			
 			ins_tg_topicList.clear().draw();
@@ -837,8 +836,8 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			
 			ins_tg_connect_status_Chk = "fail";
 			ins_tg_connect_nm_Chk = "fail";
-			
-			$("input:checkbox[id='ins_tg_normal_type']").prop("checked", true);
+			$("#ins_tg_normal_type").prop("checked", true);
+//			$("input:checkbox[id='ins_tg_normal_type']").prop("checked", true);
 		}
 
 	} else {
@@ -871,6 +870,7 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 		} else {
 			
 			$("#mod_targer_trans_active_div").hide();
+			$("#ins_tg_normal_type").prop("checked", true);
 			
 			mod_connector_tg_tableList.clear().draw();
 			mod_tg_topicList.clear().draw();

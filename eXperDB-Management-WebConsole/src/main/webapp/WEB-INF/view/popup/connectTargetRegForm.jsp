@@ -67,6 +67,11 @@
 			}
 		});
 		
+		setTimeout(function(){
+			if(ins_tg_topicList != null) ins_tg_topicList.columns.adjust().draw();
+			if(ins_connector_tg_tableList != null) ins_connector_tg_tableList.columns.adjust().draw();
+		},200);
+		
 		$("#ins_tg_normal_type").prop("checked", true);
 
 		fn_ins_topic_type_cng('normal');

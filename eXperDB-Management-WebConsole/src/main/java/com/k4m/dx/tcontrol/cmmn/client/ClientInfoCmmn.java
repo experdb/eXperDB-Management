@@ -2139,7 +2139,7 @@ System.out.println("=====cmd" + cmd);
 
 			JSONObject jObj = new JSONObject();
 			
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
 			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
