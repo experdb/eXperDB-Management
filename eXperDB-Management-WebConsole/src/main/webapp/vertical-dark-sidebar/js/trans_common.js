@@ -2463,7 +2463,7 @@ function fn_target_ins_insert() {
 		}
 		
 		$("#ins_tg_topic_mapp_nm", "#insTargetRegForm").val(table_mapp);
-		var topic_type = $("input[name='ins_tg_topic_type']:checked").val(); // TODO 등록할 때 topic type도 가져가기
+		var topic_type = $("input[name='ins_tg_topic_type']:checked").val();
 
 		var schema_total_cnt= 0;
 		var table_total_cnt = 0;
