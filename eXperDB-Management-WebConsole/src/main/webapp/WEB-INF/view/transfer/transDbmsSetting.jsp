@@ -274,7 +274,7 @@
 			},
 			success : function(result) {
 				if (result.resultInfo != null) {
-					fn_tansDbmsModPopStart(result);
+					fn_transDbmsModPopStart(result);
 					
 					$('#pop_layer_trans_dbms_reg_re').modal("show");
 				} else {

@@ -96,7 +96,7 @@
 	/* ********************************************************
 	 * 팝업시작
 	 ******************************************************** */
-	function fn_tansKfkConRegPopStart(result) {
+	function fn_transKfkConRegPopStart(result) {
 		$("#ins_trans_kafka_con_nm", "#insTransKfkConRegForm").val("");
 		$("#ins_trans_kafka_con_ip", "#insTransKfkConRegForm").val(""); 
 		$("#ins_trans_kafka_con_port", "#insTransKfkConRegForm").val(""); 

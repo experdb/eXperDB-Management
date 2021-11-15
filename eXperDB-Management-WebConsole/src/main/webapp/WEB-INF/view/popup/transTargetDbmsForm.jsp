@@ -6,10 +6,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <script>
-	var tans_dbms_pop_table = null;
+	var trans_dbms_pop_table = null;
 
 	$(window.document).ready(function() {
-		fn_tans_dbms_pop_init();
+		fn_trans_dbms_pop_init();
 	});
 
 	/* ********************************************************
@@ -27,7 +27,7 @@
 	 * 삭제 로직 처리
 	 ******************************************************** */
 	function fn_trans_dbms_delete_logic(){
-		var trans_sys_id = tans_dbms_pop_table.row('.selected').data().trans_sys_id;
+		var trans_sys_id = trans_dbms_pop_table.row('.selected').data().trans_sys_id;
 		
 		$.ajax({
 			url : "/popup/deleteTransDBMS.do",
@@ -112,7 +112,7 @@
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i> DBMS LIST</p>
 						
-						<table id="tansDbmsPopList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+						<table id="transDbmsPopList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="30"><spring:message code="common.no" /></th>

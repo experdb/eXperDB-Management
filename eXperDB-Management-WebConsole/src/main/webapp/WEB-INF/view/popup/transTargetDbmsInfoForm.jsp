@@ -136,7 +136,7 @@
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<div class="form-inline row">
 							<div class="input-group mb-2 mr-sm-2 col-sm-4">
-								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="info_tg_tans_sys_nm" name="info_tg_tans_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
+								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="info_tg_trans_sys_nm" name="info_tg_trans_sys_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='migration.system_name'/>'  />
 							</div>
 
 							<div class="input-group mb-2 mr-sm-2 col-sm-3">

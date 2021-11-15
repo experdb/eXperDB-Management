@@ -1665,7 +1665,7 @@ function fn_kc_nm_chg(hw_gbn) {
 						
 						$("#ins_tg_kc_connect_td","#searchTargetRegForm").html(connectTd);
 					}
-					
+
 					//topic list 조회
 					if (hw_gbn == "target_ins") {
 						fn_topic_search_tg_ins();
@@ -2051,7 +2051,7 @@ function fn_mod_tg_dbmsInfo(){
 	$('#info_trans_targetSystem_mod').show();
 	$('#info_trans_targetSystem_add').hide();
 	
-	$('#info_tg_tans_sys_nm').val("");
+	$('#info_tg_trans_sys_nm').val("");
 	$('#info_tg_dbms_work').val("%");
 	
 	cho_dbms_gbn = "upd";
@@ -2382,7 +2382,7 @@ function fn_ins_tg_dbmsInfo(){
 	$('#info_trans_targetSystem_mod').hide();
 	$('#info_trans_targetSystem_add').show();
 	
-	$('#info_tg_tans_sys_nm').val("");
+	$('#info_tg_trans_sys_nm').val("");
 	$('#info_tg_dbms_work').val("%");
 
 	cho_dbms_gbn = "ins";
@@ -2484,7 +2484,7 @@ function fn_topic_search_tg_ins(){
 	var kc_id = $("#ins_target_kc_nm", "#searchTargetRegForm").val();
 
 	var topic_type = $("input[name='ins_tg_topic_type']:checked").val();
-	
+
 	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
 	$('#loading').hide();
 	if (kc_ip != "") {
@@ -2588,7 +2588,7 @@ function fn_ins_topic_type_cng(topic_type){
 	}
 //	ins_tg_topicList.rows({selected: true}).deselect();
 //	ins_tg_topicList.clear().draw();
-	fn_topic_search_tg_ins();
+//	fn_topic_search_tg_ins("1111");
 }
 
 
@@ -2873,7 +2873,7 @@ function fn_info_trans_search_dbmsInfo(){
 		$.ajax({
 			url : "/selectTransDBMS.do",
 			data : {
-				trans_sys_nm : $("#info_tg_tans_sys_nm").val(),
+				trans_sys_nm : $("#info_tg_trans_sys_nm").val(),
 				dbms_dscd : $("#info_tg_dbms_work").val(),
 				dbms_sch_gbn : "tar_ins"
   		},

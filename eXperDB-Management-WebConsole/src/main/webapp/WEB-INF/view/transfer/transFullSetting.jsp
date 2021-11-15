@@ -434,7 +434,7 @@ a:hover.tip span {
 	}
 </script>
 
-<%@include file="./tansSettingInfo.jsp"%>
+<%@include file="./transSettingInfo.jsp"%>
 <%@include file="./transTargetSettingInfo.jsp"%>
 <%@include file="./../popup/connectRegReForm.jsp"%>
 <%@include file="./../popup/connectRegForm2.jsp"%>

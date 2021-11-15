@@ -99,7 +99,7 @@
 	/* ********************************************************
 	 * 팝업시작
 	 ******************************************************** */
-	function fn_tansDbmsModPopStart(result) {
+	function fn_transDbmsModPopStart(result) {
 		$("#mod_trans_connectTest_check_alert", "#trasnDbmsInsertPop").html("");
 		$("#mod_trans_connectTest_check_alert", "#trasnDbmsInsertPop").hide();
 

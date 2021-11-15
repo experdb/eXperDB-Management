@@ -75,13 +75,14 @@
 		$("#ins_tg_normal_type").prop("checked", true);
 
 		fn_ins_topic_type_cng('normal');
+		
 		$('input[name="ins_tg_topic_type"]').change(function(){
 			if($('#ins_tg_normal_type').prop('checked')){
 				fn_ins_topic_type_cng('normal');
 			}else{
 				fn_ins_topic_type_cng('avro');
 			}
-			fn_topic_search_tg_ins();
+			fn_topic_search_tg_ins("123123");
 		});
 	});
 
@@ -244,9 +245,9 @@
 												<spring:message code="eXperDB_CDC.topic_type"/>
 											</label>
 											<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
-												<input type="radio" id="ins_tg_normal_type" class="form-check-input" name="ins_tg_topic_type" onclick="fn_ins_topic_type_cng('normal')" value="TC004401">
+												<input type="radio" id="ins_tg_normal_type" class="form-check-input" name="ins_tg_topic_type" value="TC004401">
 												<label class="form-check-label" for="ins_tg_normal_type" style="padding-right:30px;">normal</label>
-												<input type="radio" id="ins_tg_avro_type" class="form-check-input" name="ins_tg_topic_type" onclick="fn_ins_topic_type_cng('avro')" value="TC004402">
+												<input type="radio" id="ins_tg_avro_type" class="form-check-input" name="ins_tg_topic_type" value="TC004402">
 												<label class="form-check-label" for="ins_tg_avro_type">avro</label>
 											</div>
 										</div>
