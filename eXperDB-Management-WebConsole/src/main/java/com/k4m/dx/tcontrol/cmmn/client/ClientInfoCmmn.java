@@ -2296,6 +2296,7 @@ System.out.println("=====cmd" + cmd);
 					JSONObject jsonObj = new JSONObject();
 					String topicName = splitStrResultMessge[i];
 					String regi_nm = "";
+					String regi_id = "";
 					boolean topicNmChk = false;
 
 					//target trans_id가 등록된 topic은 제외
@@ -2304,6 +2305,7 @@ System.out.println("=====cmd" + cmd);
 							if (tarTopicList.get(j).getTopic_nm().equals(topicName)) {
 								topicNmChk = true;
 								regi_nm = tarTopicList.get(j).getRegi_nm();
+								regi_id = tarTopicList.get(j).getRegi_id();
 							}
 						}
 					}
@@ -2312,7 +2314,7 @@ System.out.println("=====cmd" + cmd);
 					if (topicNmChk == true) {
 						jsonObj.put("topic_name", topicName);
 						jsonObj.put("regi_nm", regi_nm);
-
+						jsonObj.put("regi_id", regi_id);
 						jsonObj.put("rownum_chk", i);
 						jsonArray.add(jsonObj);
 					}
@@ -2468,7 +2470,7 @@ System.out.println("=====cmd" + cmd);
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			
+			System.out.println(serverObj.toJSONString());
 			JSONObject transObj = new JSONObject();
 			
 			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
@@ -2482,10 +2484,10 @@ System.out.println("=====cmd" + cmd);
 			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));	
 			transObj.put(ClientProtocolID.FILE_NAME, properties_nm);
 			transObj.put(ClientProtocolID.FILE_DIRECTORY, "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/");
-			
+			System.out.println(transObj.toJSONString());
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));
-
+			System.out.println(mappObj.toJSONString());
 			JSONObject jObj = new JSONObject();
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);

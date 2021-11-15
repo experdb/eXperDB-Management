@@ -1932,13 +1932,15 @@ function fn_tg_ins_init(){
 			{
 				data : "topic_name", className : "dt-left", defaultContent : ""
 			},
-			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false },
+			{data : "regi_id", className : "dt-left", defaultContent : "", visible: false }
 		],
 		'select': {'style': 'multi'}
 	});
 
 	ins_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
 	ins_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '0px');
+	ins_tg_topicList.tables().header().to$().find('th:eq(2)').css('min-width', '0px');
 		
 	ins_connector_tg_tableList = $('#ins_connector_tg_topicList').DataTable({
 		scrollY : "200px",
@@ -1949,12 +1951,14 @@ function fn_tg_ins_init(){
 		bSort: false,
 		columns : [
 			{data : "topic_name", className : "dt-left", defaultContent : ""},		
-			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false },
+			{data : "regi_id", className : "dt-left", defaultContent : "", visible: false }
 		 ],'select': {'style': 'multi'}
 	});
 	
 	ins_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
 	ins_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '0px');
+	ins_connector_tg_tableList.tables().header().to$().find('th:eq(2)').css('min-width', '0px');
 
 	$(window).trigger('resize'); 
 }
@@ -2018,12 +2022,14 @@ function fn_tg_mod_init(){
 			{
 				data : "topic_name", className : "dt-left", defaultContent : ""
 			},
-			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false },
+			{data : "regi_id", className : "dt-left", defaultContent : "", visible: false }
 		],'select': {'style': 'multi'}
 	});
 
 	mod_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
 	mod_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+	mod_tg_topicList.tables().header().to$().find('th:eq(2)').css('min-width', '0px');
 		
 	mod_connector_tg_tableList = $('#mod_connector_tg_topicList').DataTable({
 		scrollY : "200px",
@@ -2034,12 +2040,14 @@ function fn_tg_mod_init(){
 		bSort: false,
 		columns : [
 			{data : "topic_name", className : "dt-left", defaultContent : ""},			
-			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }		
+			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false },
+			{data : "regi_id", className : "dt-left", defaultContent : "", visible: false }
 		 ],'select': {'style': 'multi'}
 	});
 	
 	mod_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
 	mod_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+	mod_connector_tg_tableList.tables().header().to$().find('th:eq(2)').css('min-width', '0px');
 
 	$(window).trigger('resize'); 
 }
@@ -2419,7 +2427,8 @@ function fn_target_ins_insert() {
 			tableRowList.push( ins_connector_tg_tableList.rows().data()[i]);    
 			table_mapp.push(ins_connector_tg_tableList.rows().data()[i].topic_name);
 		}
-		
+//		var regi_id = tableDatas[0].regi_id;
+		console.log(ins_connector_tg_tableList.rows().data()[0]);
 		$("#ins_tg_topic_mapp_nm", "#insTargetRegForm").val(table_mapp);
 		var topic_type = $("input[name='ins_tg_topic_type']:checked").val(); // TODO 등록할 때 topic type도 가져가기
 
@@ -2439,7 +2448,8 @@ function fn_target_ins_insert() {
 				trans_trg_sys_id : nvlPrmSet($("#ins_tg_trans_trg_sys_id", "#insTargetRegForm").val(), ''),
 				schema_total_cnt : schema_total_cnt,
 				table_total_cnt : table_total_cnt,
-				topic_type : topic_type
+				topic_type : topic_type,
+//				regi_id : regi_id
 			},
 			type : "post",
 			beforeSend: function(xhr) {

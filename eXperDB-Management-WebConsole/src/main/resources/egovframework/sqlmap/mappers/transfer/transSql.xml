@@ -1137,6 +1137,7 @@
         SELECT
                A.TOPIC_ID,
                A.TOPIC_NM,
+               A.REGI_ID,
                C.REGI_NM
           FROM T_TRANS_TOPIC_I A
                LEFT JOIN T_TRANS_REGI_INF C ON A.REGI_ID = C.REGI_ID
