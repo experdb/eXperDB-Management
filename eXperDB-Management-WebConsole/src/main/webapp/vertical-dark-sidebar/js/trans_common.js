@@ -2149,6 +2149,8 @@ function fn_topic_search_tg_mod(){
 	var kc_ip = $("#mod_tg_kc_ip", "#searchTargetModForm").val();
 	var topic_type = $("input[name='mod_tg_topic_type']:checked").val();
 
+	var kc_id = $("#mod_target_kc_nm", "#searchTargetModForm").val();
+
 	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
 
 	if (kc_ip != "") {
@@ -2170,6 +2172,7 @@ function fn_topic_search_tg_mod(){
 			data : {
 				db_svr_id : db_svr_id,
 				kc_ip : kc_ip,
+				kc_id : kc_id,
 				topic_type : topic_type
 			},
 			dataType : "json",
@@ -2477,6 +2480,8 @@ function fn_target_ins_insert() {
 function fn_topic_search_tg_ins(){
 	var db_svr_id = $("#db_svr_id","#findList").val();
 	var kc_ip = $("#ins_tg_kc_ip", "#searchTargetRegForm").val();
+	var kc_id = $("#ins_target_kc_nm", "#searchTargetRegForm").val();
+
 	var topic_type = $("input[name='ins_tg_topic_type']:checked").val();
 	
 	var htmlLoadPop = '<div id="loading_pop"><div class="flip-square-loader mx-auto" style="border: 0px !important;z-index:99999;"></div></div>';
@@ -2499,6 +2504,7 @@ function fn_topic_search_tg_ins(){
 			data : {
 				db_svr_id : db_svr_id,
 				kc_ip : kc_ip,
+				kc_id : kc_id,
 				topic_type : topic_type
 			},
 			dataType : "json",

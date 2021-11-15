@@ -1092,7 +1092,8 @@ public class TransController {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		String kc_ip = request.getParameter("kc_ip");
 		String topic_type = request.getParameter("topic_type");
-		
+		String kc_id = request.getParameter("kc_id");
+
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
@@ -1123,7 +1124,7 @@ public class TransController {
 
 			serverObj.put(ClientProtocolID.REQ_CMD, strCmd);
 
-			result = cic.trans_topic_List(serverObj,IP,PORT, topic_type);
+			result = cic.trans_topic_List(serverObj,IP,PORT, topic_type, kc_id);
 			
 			//여기에 추가
 			//토픽리스트 확인 해서 같은 토픽중 

@@ -2250,7 +2250,7 @@ System.out.println("=====cmd" + cmd);
 	
 	// 41. trans topic list 조호
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT, String topic_type) {
+	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT, String topic_type, String kc_id) {
 		
 		String xml[] = {
 				"egovframework/spring/context-aspect.xml",
@@ -2286,6 +2286,7 @@ System.out.println("=====cmd" + cmd);
 				TransVO transVO = new TransVO();
 				//토픽타입별
 				transVO.setTopic_type(topic_type);
+				transVO.setKc_id(kc_id);
 				
 				List<TransVO> tarTopicList = transService.selectTransTopicList(transVO);
 
