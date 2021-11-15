@@ -84,7 +84,8 @@ public class DxT045 extends SocketCtl {
 		String hdfs_port = String.valueOf(SERVERObj.get(ClientProtocolID.SERVER_PORT));
 		
 		String hdfs_url = "hdfs://" + hdfs_ip + ":" + hdfs_port;
-		String properties_dir= String.valueOf((CONNECTObj.get(ClientProtocolID.FILE_DIRECTORY)));
+//		String properties_dir= String.valueOf((CONNECTObj.get(ClientProtocolID.FILE_DIRECTORY)));
+		String properties_dir = "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/";
 		
 		socketLogger.info("hdfs_url : " + hdfs_url);
 		socketLogger.info("properties_dir : " + properties_dir);
