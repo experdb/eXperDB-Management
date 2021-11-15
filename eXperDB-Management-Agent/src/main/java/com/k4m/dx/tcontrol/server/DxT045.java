@@ -71,6 +71,8 @@ public class DxT045 extends SocketCtl {
 		
 		String strCmd = (String) jObj.get(ProtocolID.REQ_CMD);
 		
+		socketLogger.info("strCmd : " + strCmd);
+		
 		String kc_ip = String.valueOf(CONNECTObj.get(ClientProtocolID.KC_IP));
 		String regi_ip = String.valueOf(CONNECTObj.get(ClientProtocolID.REGI_IP));
 		String regi_port = String.valueOf(CONNECTObj.get(ClientProtocolID.REGI_PORT));
@@ -102,14 +104,14 @@ public class DxT045 extends SocketCtl {
 	
 			String kafkaPath = FileUtil.getPropertyValue("context.properties", "agent.trans_path");
 			String propertiesDirectory = "con_properties/";
-			
+			socketLogger.info("propertiesDirectory : " + propertiesDirectory);
 			// confluent properties 파일 디렉토리 생성
 			if (!new File(kafkaPath + "/" + propertiesDirectory).exists()) {
 				new File(kafkaPath + "/" + propertiesDirectory).mkdirs();
 			}
 			
 			String strFileName = String.valueOf(CONNECTObj.get(ClientProtocolID.FILE_NAME));
-			
+			socketLogger.info("strFileName : " + strFileName);
 			String FilePath = kafkaPath + "/" + propertiesDirectory + strFileName;
 			
 			try {
@@ -120,7 +122,7 @@ public class DxT045 extends SocketCtl {
 			}
 			
 			String fileCmd = "scp " + FilePath + " ec2-user@" + kc_ip +":"+ properties_dir;
-			
+			socketLogger.info("fileCmd : " + fileCmd);
 			RunCommandExec file_r = new RunCommandExec(fileCmd);
 			file_r.run();
 			String strProRetVal = file_r.call();
