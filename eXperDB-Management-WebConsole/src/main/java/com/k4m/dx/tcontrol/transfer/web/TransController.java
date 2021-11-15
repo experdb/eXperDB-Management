@@ -1059,7 +1059,7 @@ public class TransController {
 				if (transVO.getRegi_id() == null || "".equals(transVO.getRegi_id())) {
 					transVO.setRegi_id(null);
 				}
-
+				System.out.println("123123123123132132123 : " + transVO.getRegi_id());
 				//전송대상 테이블 등록
 				result = transService.insertTargetConnectInfoTot(transMappVO, transVO);
 			} catch (Exception e) {

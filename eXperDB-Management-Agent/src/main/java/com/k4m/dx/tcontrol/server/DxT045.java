@@ -69,7 +69,7 @@ public class DxT045 extends SocketCtl {
 
 		TransServiceImpl transService = (TransServiceImpl) context.getBean("TransService");
 		
-		String strCmd = (String) jObj.get(ProtocolID.REQ_CMD);
+		String strCmd = String.valueOf(jObj.get(ProtocolID.REQ_CMD));
 		
 		socketLogger.info("strCmd : " + strCmd);
 		

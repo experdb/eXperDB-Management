@@ -682,7 +682,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 					}						
 				}
 			}
-			
+			System.out.println("service : " + transVO.getRegi_id());
 			transDAO.insertTargetConnectInfo(transVO);
 
 			result = "success";

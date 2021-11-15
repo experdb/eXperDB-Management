@@ -2449,7 +2449,6 @@ function fn_target_ins_insert() {
 				schema_total_cnt : schema_total_cnt,
 				table_total_cnt : table_total_cnt,
 				topic_type : topic_type,
-//				regi_id : regi_id
 			},
 			type : "post",
 			beforeSend: function(xhr) {
