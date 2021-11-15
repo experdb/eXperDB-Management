@@ -134,6 +134,12 @@
 			ins_connector_tg_tableList.columns(1).visible( true );
 			ins_tg_topicList.columns(1).visible( true );
 		}
+		ins_tg_topicList.rows({selected: true}).deselect();
+		ins_tg_topicList.clear().draw();
+		
+		ins_connector_tg_tableList.rows({selected: true}).deselect();
+		ins_connector_tg_tableList.clear().draw();
+		
 		fn_topic_search_tg_ins();
 	}
 	
