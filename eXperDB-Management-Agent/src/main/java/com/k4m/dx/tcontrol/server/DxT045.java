@@ -17,10 +17,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import com.k4m.dx.tcontrol.db.repository.service.TransServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
+import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.socket.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.util.CustomProperties;
+import com.k4m.dx.tcontrol.util.FileUtil;
+import com.k4m.dx.tcontrol.util.RunCommandExec;
 import com.sun.xml.internal.fastinfoset.util.StringArray;
 
 /**
@@ -58,64 +62,149 @@ public class DxT045 extends SocketCtl {
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 		
-		String strCmd = (String) jObj.get(ProtocolID.REQ_CMD);
-		
 		JSONObject CONNECTObj = (JSONObject) jObj.get(ProtocolID.CONNECT_INFO);
 		JSONObject MAPPObj = (JSONObject) jObj.get(ProtocolID.MAPP_INFO);
-		
+		JSONObject SERVERObj = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
+		JSONObject outputObj = new JSONObject();
+
 		TransServiceImpl transService = (TransServiceImpl) context.getBean("TransService");
 		
-		/*
-		name=타겟커넥터네임
-				connector.class=io.confluent.connect.hdfs.HdfsSinkConnector
-				tasks.max=1
-				topics=토픽이름
-				hdfs.url=hdfs://localhost:9000
-				flush.size=3
-				key.converter=io.confluent.connect.json.JsonSchemaConverter
-				key.converter.schema.registry.url=http://localhost:8081
-				value.converter=io.confluent.connect.json.JsonSchemaConverter
-				value.converter.schema.registry.url=http://localhost:8081
+		String strCmd = (String) jObj.get(ProtocolID.REQ_CMD);
+		
+		String kc_ip = String.valueOf(CONNECTObj.get(ClientProtocolID.KC_IP));
+		String regi_ip = String.valueOf(CONNECTObj.get(ClientProtocolID.REGI_IP));
+		String regi_port = String.valueOf(CONNECTObj.get(ClientProtocolID.REGI_PORT));
+		
+		String regi_url = "http://" + regi_ip + ":" + regi_port;
+		socketLogger.info("regi_url : " + regi_url);
+		
+		String hdfs_ip = String.valueOf(SERVERObj.get(ClientProtocolID.SERVER_IP));
+		String hdfs_port = String.valueOf(SERVERObj.get(ClientProtocolID.SERVER_PORT));
+		
+		String hdfs_url = "hdfs://" + hdfs_ip + ":" + hdfs_port;
+		String properties_dir= String.valueOf((CONNECTObj.get(ClientProtocolID.FILE_DIRECTORY)));
+		
+		socketLogger.info("hdfs_url : " + hdfs_url);
+		socketLogger.info("properties_dir : " + properties_dir);
+		
+		try{
+			CustomProperties properties = new CustomProperties();
+			properties.setProperty("name", String.valueOf(CONNECTObj.get(ClientProtocolID.CONNECT_NM)));
+			properties.setProperty("connector.class", "io.confluent.connect.hdfs.HdfsSinkConnector");
+			properties.setProperty("tasks.max","1");
+			properties.setProperty("topics",String.valueOf(MAPPObj.get(ClientProtocolID.EXRT_TRG_TB_NM)));
+			properties.setProperty("hdfs.url", hdfs_url);
+			properties.setProperty("flush.size","3");
+			properties.setProperty("key.converter","io.confluent.connect.json.JsonSchemaConverter");
+			properties.setProperty("key.converter.schema.registry.url", regi_url);
+			properties.setProperty("value.converter","io.confluent.connect.json.JsonSchemaConverter");
+			properties.setProperty("value.converter.schema.registry.url", regi_url);
+	
+			String kafkaPath = FileUtil.getPropertyValue("context.properties", "agent.trans_path");
+			String propertiesDirectory = "con_properties/";
 			
-		*/
-		CustomProperties properties = new CustomProperties();
-		properties.setProperty("name", String.valueOf(CONNECTObj.get("connect_nm")));
-		properties.setProperty("connector.class", "io.confluent.connect.hdfs.HdfsSinkConnector");
-		properties.setProperty("tasks.max","1");
-		properties.setProperty("topics",String.valueOf(MAPPObj.get("exrt_trg_tb_nm")));
-		properties.setProperty("hdfs.url","hdfs://localhost:9000");
-		properties.setProperty("flush.size","3");
-		properties.setProperty("key.converter","io.confluent.connect.json.JsonSchemaConverter");
-		properties.setProperty("key.converter.schema.registry.url","http://localhost:8081");
-		properties.setProperty("value.converter","io.confluent.connect.json.JsonSchemaConverter");
-		properties.setProperty("value.converter.schema.registry.url","http://localhost:8081");
-		
-		String FilePath = "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/" + String.valueOf(CONNECTObj.get(ClientProtocolID.FILE_NAME));
-		try {
-			FileOutputStream fos = new FileOutputStream(FilePath);
-			properties.store(fos, FilePath);
-		} catch (IOException e) {
-			e.printStackTrace();
+			// confluent properties 파일 디렉토리 생성
+			if (!new File(kafkaPath + "/" + propertiesDirectory).exists()) {
+				new File(kafkaPath + "/" + propertiesDirectory).mkdirs();
+			}
+			
+			String strFileName = String.valueOf(CONNECTObj.get(ClientProtocolID.FILE_NAME));
+			
+			String FilePath = kafkaPath + "/" + propertiesDirectory + strFileName;
+			
+			try {
+				FileOutputStream fos = new FileOutputStream(FilePath);
+				properties.store(fos, FilePath);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			String fileCmd = "scp " + FilePath + " ec2-user@" + kc_ip +":"+ properties_dir;
+			
+			RunCommandExec file_r = new RunCommandExec(fileCmd);
+			file_r.run();
+			String strProRetVal = file_r.call();
+			String strProResultMessge = file_r.getMessage();
+			
+			RunCommandExec con_r = new RunCommandExec(strCmd);
+			con_r.run();
+			String strConRetVal = con_r.call();
+			String strConResultMessge = con_r.getMessage();
+			
+			//명령어 실행
+//			r.start();
+//			try {
+//				r.join();
+//			} catch (InterruptedException ie) {
+//				ie.printStackTrace();
+//			}
+			String retVal = "";
+			if("success".equals(strProRetVal) && "success".equals(strConRetVal)){
+				retVal = "success";
+			} else {
+				retVal = "fail";
+			}
+//			String strResultMessge = r.getMessage();
+			
+			socketLogger.info("[PROPERTIES RESULT] " + strProRetVal);
+			socketLogger.info("[PROPERTIES MSG] " + strProResultMessge);
+			socketLogger.info("##### 파일 전송 결과 : " + strProRetVal + " message : " +strProResultMessge);	
+
+			socketLogger.info("[CONFLUENT RESULT] " + strConRetVal);
+			socketLogger.info("[CONFLUENT MSG] " + strConResultMessge);
+			socketLogger.info("##### 파일 전송 결과 : " + strConRetVal + " message : " +strConResultMessge);	
+			
+			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			outputObj.put(ProtocolID.RESULT_DATA, retVal);
+	
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);	
+			
+		} catch (Exception e) {
+			errLogger.error("DxT045 {} ", e.toString());
+
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT045);
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT045);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT045 Error [" + e.toString() + "]");
+
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);
+
+		} finally {
+			outputObj = null;
+			sendBuff = null;
 		}
-		
-		// FILE 보내 ... - 키를 넣어서 보내야함... 넣어도...?
-		
-		// CMD 실행
 	}
 	
 	public static void main(String args[]){
 //		Properties properties = new Properties();
 		CustomProperties properties = new CustomProperties();
-		properties.setProperty("name", "target_test3");
+//		properties.setProperty("name", "hdfs-sink-dumb");
+//		properties.setProperty("connector.class", "io.confluent.connect.hdfs.HdfsSinkConnector");
+//		properties.setProperty("tasks.max","1");
+//		properties.setProperty("topics","ha_dumb_table");
+//		properties.setProperty("hdfs.url",String.valueOf("hdfs://localhost:9000"));
+//		properties.setProperty("flush.size","3");
+//		properties.setProperty("key.converter","io.confluent.connect.json.JsonSchemaConverter");
+//		properties.setProperty("key.converter.schema.registry.url","http://localhost:8081");
+//		properties.setProperty("value.converter","io.confluent.connect.json.JsonSchemaConverter");
+//		properties.setProperty("value.converter.schema.registry.url","http://localhost:8081");
+		
+		
+		properties.setProperty("name", "hdfs-sink-dumb");
 		properties.setProperty("connector.class", "io.confluent.connect.hdfs.HdfsSinkConnector");
 		properties.setProperty("tasks.max","1");
-		properties.setProperty("topics","trans_test");
-		properties.setProperty("hdfs.url",String.valueOf("hdfs://localhost:9000"));
+		properties.setProperty("topics","ha_dumb_table");
+		properties.setProperty("hdfs.url", "hdfs://localhost:9000");
 		properties.setProperty("flush.size","3");
 		properties.setProperty("key.converter","io.confluent.connect.json.JsonSchemaConverter");
-		properties.setProperty("key.converter.schema.registry.url","http://localhost:8081");
+		properties.setProperty("key.converter.schema.registry.url", "http://localhost:8081");
 		properties.setProperty("value.converter","io.confluent.connect.json.JsonSchemaConverter");
-		properties.setProperty("value.converter.schema.registry.url","http://localhost:8081");
+		properties.setProperty("value.converter.schema.registry.url", "http://localhost:8081");
 //		String FilePath = System.getProperty("/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs") + "/test3.properties";
 		String FilePath = "C:\\Users\\yj402\\git\\eXperDB-Management\\eXperDB-Management-Agent\\src\\main\\resources\\" + properties.getProperty("name") +".properties";
 //		if (!file.exists()){}
