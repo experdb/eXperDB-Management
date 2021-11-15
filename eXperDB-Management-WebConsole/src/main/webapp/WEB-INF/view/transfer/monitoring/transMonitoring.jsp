@@ -356,7 +356,7 @@ a:hover.tip span {
 				if(reloadTimeout != null)	clearTimeout(reloadTimeout);
 				reloadTimeout = setTimeout(function(){
 					fn_reload_Src_ConnectInfo();	
-				},3000);
+				},30000);
 			}
 		},1000);
 	}
@@ -374,6 +374,7 @@ a:hover.tip span {
 				trans_id : selectValue,
 			},
 			beforeSend: function(xhr) {
+				$("#loading").hide();
 				xhr.setRequestHeader("AJAX", true);
 			},
 			error : function(xhr, status, error) {
