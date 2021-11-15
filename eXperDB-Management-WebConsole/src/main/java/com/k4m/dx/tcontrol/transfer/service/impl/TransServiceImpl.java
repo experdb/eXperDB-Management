@@ -143,12 +143,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			System.out.println("매핑정보 : "+mappInfo.get(0));
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			
-			if("TC004501".equals(transInfo.get(0).get("CONNECT_TYPE"))){
-				connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
-			} else {
-				connStartResult = cic.createConfluentProperties(IP, PORT, dbServerVO, transInfo, mappInfo);
-			}
+			connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
 			
 			if (connStartResult != null) {
 				result_code = connStartResult.get("RESULT_CODE").toString();
@@ -282,7 +277,13 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			
 			if (transInfo != null && mappInfo != null) {
 				ClientInfoCmmn cic = new ClientInfoCmmn();
-				connStartResult = cic.connectTargetStart(IP, PORT, dbServerVO, transInfo, mappInfo);
+				
+				if("TC004401".equals(transInfo.get(0).get("TOPIC_TYPE"))){
+					connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
+				} else {
+					connStartResult = cic.createConfluentProperties(IP, PORT, dbServerVO, transInfo, mappInfo);
+				}
+//				connStartResult = cic.connectTargetStart(IP, PORT, dbServerVO, transInfo, mappInfo);
 				
 				if (connStartResult != null) {
 					result_code = connStartResult.get("RESULT_CODE").toString();
