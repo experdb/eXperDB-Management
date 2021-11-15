@@ -146,12 +146,22 @@
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="data_transfer.connect_name_set" />
 									</label>
-									<div class="col-sm-8">
+									<div class="col-sm-4">
 										<span class="form-control-xsm float-left text-muted" id="d_tg_connect_nm" ></span>
 									</div>
-									<div class="col-sm-2">
-										&nbsp;
+									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="eXperDB_CDC.topic_type"/>
+									</label>
+									<div class="col-sm-4">
+										<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
+											<input type="radio" id="info_tg_normal_type" class="form-check-input" name="info_tg_topic_type" value="TC004401" disabled>
+											<label class="form-check-label" for="ins_tg_normal_type" style="padding-right:30px;">normal</label>
+											<input type="radio" id="info_tg_avro_type" class="form-check-input" name="info_tg_topic_type" value="TC004402" disabled>
+											<label class="form-check-label" for="ins_tg_avro_type">avro</label>
+										</div>
 									</div>
+									
 								</div>
 
 								<div id="schemaRegistryTar_title" class="form-group row" style="margin-bottom:0px;">
