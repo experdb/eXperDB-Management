@@ -2461,7 +2461,7 @@ System.out.println("=====cmd" + cmd);
 //			String cmd = "curl -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
 			String properties_nm = mappInfo.get(0).get("exrt_trg_tb_nm") + ".properties";
 			String cmd = "confluent local services connect connector load " +  transInfo.get(0).get("connect_nm") + " --config /home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/" + properties_nm;
-			System.out.println("=====cmd" + cmd);
+			System.out.println("=====cmd   : " + cmd);
 
 			JSONObject serverObj = new JSONObject();
 			
@@ -2488,7 +2488,7 @@ System.out.println("=====cmd" + cmd);
 
 			JSONObject jObj = new JSONObject();
 			
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
 			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
