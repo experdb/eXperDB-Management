@@ -1933,13 +1933,14 @@ function fn_tg_ins_init(){
 				data : "topic_name", className : "dt-left", defaultContent : ""
 			},
 			{data : "regi_nm", className : "dt-left", defaultContent : "", visible: false }
-		],'select': {'style': 'multi'}
+		],
+		'select': {'style': 'multi'}
 	});
 
 	ins_tg_topicList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
-	ins_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+	ins_tg_topicList.tables().header().to$().find('th:eq(1)').css('min-width', '0px');
 		
-		ins_connector_tg_tableList = $('#ins_connector_tg_topicList').DataTable({
+	ins_connector_tg_tableList = $('#ins_connector_tg_topicList').DataTable({
 		scrollY : "200px",
 		scrollX: true,	
 		processing : true,
@@ -1952,8 +1953,8 @@ function fn_tg_ins_init(){
 		 ],'select': {'style': 'multi'}
 	});
 	
-		ins_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
-		ins_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+	ins_connector_tg_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
+	ins_connector_tg_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '0px');
 
 	$(window).trigger('resize'); 
 }
@@ -2575,6 +2576,9 @@ function fn_ins_target_trableListRemove(result){
  ******************************************************** */
 function fn_ins_topic_type_cng(topic_type){
 	var v_topic_type = $("input[name='ins_tg_topic_type']:checked").val();
+	ins_connector_tg_tableList.rows({selected: true}).deselect();
+	ins_connector_tg_tableList.clear().draw();
+	
 	if(topic_type == 'normal'){
 		ins_connector_tg_tableList.columns(1).visible( false );
 		ins_tg_topicList.columns(1).visible( false );
@@ -2582,12 +2586,8 @@ function fn_ins_topic_type_cng(topic_type){
 		ins_connector_tg_tableList.columns(1).visible( true );
 		ins_tg_topicList.columns(1).visible( true );
 	}
-	ins_tg_topicList.rows({selected: true}).deselect();
-	ins_tg_topicList.clear().draw();
-	
-	ins_connector_tg_tableList.rows({selected: true}).deselect();
-	ins_connector_tg_tableList.clear().draw();
-	
+//	ins_tg_topicList.rows({selected: true}).deselect();
+//	ins_tg_topicList.clear().draw();
 	fn_topic_search_tg_ins();
 }
 

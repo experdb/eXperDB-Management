@@ -76,6 +76,7 @@
 			}else{
 				fn_ins_topic_type_cng('avro');
 			}
+			fn_topic_search_tg_ins();
 		});
 	});
 
@@ -272,8 +273,8 @@
 									 			<table id="ins_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="60%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
-															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
+															<th width="100%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="0%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
 														</tr>
 													</thead>
 												</table>
@@ -328,8 +329,8 @@
 								 				<table id="ins_connector_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="60%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
-															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
+															<th width="100%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="0%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
 														</tr>
 													</thead>
 												</table>

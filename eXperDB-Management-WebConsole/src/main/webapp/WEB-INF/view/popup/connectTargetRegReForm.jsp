@@ -35,7 +35,7 @@
 			}else{
 				fn_mod_topic_type_cng('avro');
 			}
-			fn_topic_search_tg_ins();
+			fn_topic_search_tg_mod();
 		});
 
 	});
