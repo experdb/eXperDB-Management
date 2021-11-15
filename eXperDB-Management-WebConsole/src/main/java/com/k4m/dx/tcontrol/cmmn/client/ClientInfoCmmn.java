@@ -2470,7 +2470,7 @@ System.out.println("=====cmd" + cmd);
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			System.out.println(serverObj.toJSONString());
+			System.out.println("serverObj : " + serverObj.toJSONString());
 			JSONObject transObj = new JSONObject();
 			
 			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
@@ -2484,10 +2484,10 @@ System.out.println("=====cmd" + cmd);
 			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));	
 			transObj.put(ClientProtocolID.FILE_NAME, properties_nm);
 			transObj.put(ClientProtocolID.FILE_DIRECTORY, "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/");
-			System.out.println(transObj.toJSONString());
+			System.out.println("transObj : " + transObj.toJSONString());
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));
-			System.out.println(mappObj.toJSONString());
+			System.out.println("mappObj : " + mappObj.toJSONString());
 			JSONObject jObj = new JSONObject();
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);
@@ -2495,18 +2495,19 @@ System.out.println("=====cmd" + cmd);
 			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
 			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
 			jObj.put(ClientProtocolID.REQ_CMD, cmd);
-			
+			System.out.println("REQ_CMD : " + cmd);
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			System.out.println("IP : PORT - " + IP + ":" + PORT);
 			
 			CA.open();
 			objResult = CA.dxT045(jObj);
 			CA.close();
 			
-			String strErrMsg = (String) objResult.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String) objResult.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String) objResult.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String) objResult.get(ClientProtocolID.RESULT_CODE);
-			String strResultData = (String) objResult.get(ClientProtocolID.RESULT_DATA);
+			String strErrMsg = String.valueOf(objResult.get(ClientProtocolID.ERR_MSG));
+			String strErrCode = String.valueOf(objResult.get(ClientProtocolID.ERR_CODE));
+			String strDxExCode = String.valueOf(objResult.get(ClientProtocolID.DX_EX_CODE));
+			String strResultCode = String.valueOf(objResult.get(ClientProtocolID.RESULT_CODE));
+			String strResultData = String.valueOf(objResult.get(ClientProtocolID.RESULT_DATA));
 
 			System.out.println("RESULT_CODE : " + strResultCode);
 			System.out.println("ERR_CODE : " + strErrCode);
