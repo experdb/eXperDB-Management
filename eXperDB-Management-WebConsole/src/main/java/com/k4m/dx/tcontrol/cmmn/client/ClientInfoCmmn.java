@@ -2139,7 +2139,7 @@ System.out.println("=====cmd1123123123" + cmd);
 
 			JSONObject jObj = new JSONObject();
 			
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
 			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
@@ -2486,10 +2486,10 @@ System.out.println("=====cmd9999999999999999999999999999" + properties_nm);
 			transObj.put(ClientProtocolID.CON_START_GBN, "target");
 
 			//regi_id 추가
-			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
-			transObj.put(ClientProtocolID.REGI_NM, transInfo.get(0).get("regi_nm"));
-			transObj.put(ClientProtocolID.REGI_IP, transInfo.get(0).get("regi_ip"));
-			transObj.put(ClientProtocolID.REGI_PORT, transInfo.get(0).get("regi_port"));
+			transObj.put(ClientProtocolID.REGI_ID, topicInfo.get(0).getRegi_id());
+			transObj.put(ClientProtocolID.REGI_NM, topicInfo.get(0).getRegi_nm());
+			transObj.put(ClientProtocolID.REGI_IP, topicInfo.get(0).getRegi_ip());
+			transObj.put(ClientProtocolID.REGI_PORT, topicInfo.get(0).getRegi_port());
 			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));
 			transObj.put(ClientProtocolID.FILE_NAME, properties_nm);
 			transObj.put(ClientProtocolID.FILE_DIRECTORY, transInfo.get(0).get("file_path"));
