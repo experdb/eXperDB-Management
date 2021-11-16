@@ -374,6 +374,7 @@
              , A.TRANS_EXRT_TRG_TB_ID
              , A.TRANS_EXRT_EXCT_TB_ID
              , A.EXE_STATUS
+             , A.TOPIC_TYPE
              , B.IPADR
              , B.DTB_NM
              , B.SPR_USR_ID

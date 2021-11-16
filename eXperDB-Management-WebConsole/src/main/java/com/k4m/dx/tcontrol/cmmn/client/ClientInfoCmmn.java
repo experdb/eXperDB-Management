@@ -2090,7 +2090,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		
 		try{
 			String cmd = "curl -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
-System.out.println("=====cmd" + cmd);
+System.out.println("=====cmd1" + cmd);
 			String con_ipadr = (String)transInfo.get(0).get("ipadr");
 			String con_portno = transInfo.get(0).get("portno").toString();
 			String con_dtb_nm = (String)transInfo.get(0).get("dtb_nm");
