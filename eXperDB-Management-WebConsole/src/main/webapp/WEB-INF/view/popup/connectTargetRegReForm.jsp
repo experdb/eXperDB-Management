@@ -182,9 +182,9 @@
 									 			<table id="mod_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="336" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
-															<th width="336" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
-															<th width="0%" class="dt-center" >regi_id</th>
+															<th width="350" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="0" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
+															<th width="0" class="dt-center" >regi_id</th>
 														</tr>
 													</thead>
 												</table>
@@ -239,9 +239,9 @@
 								 				<table id="mod_connector_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="60%" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
-															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
-															<th width="0%" class="dt-center" >regi_id</th>
+															<th width="350px" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="0" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
+															<th width="0" class="dt-center" >regi_id</th>
 														</tr>
 													</thead>
 												</table>
