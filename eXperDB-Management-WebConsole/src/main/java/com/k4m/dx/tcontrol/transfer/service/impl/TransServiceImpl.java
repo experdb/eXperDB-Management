@@ -281,8 +281,10 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			
 			if (transInfo != null && mappInfo != null) {
 				ClientInfoCmmn cic = new ClientInfoCmmn();
-System.out.println("adasdasdad==========" + transInfo.get(0).get("topic_type"));
-				if("TC004401".equals(transInfo.get(0).get("topic_type"))){
+				String topic_type_chk = String.valueOf(transInfo.get(0).get("topic_type"));
+				
+System.out.println("adasdasdad==========" + topic_type_chk);
+				if("TC004401".equals(topic_type_chk)){
 					connStartResult = cic.connectTargetStart(IP, PORT, dbServerVO, transInfo, mappInfo);
 				} else {
 					connStartResult = cic.createConfluentProperties(IP, PORT, dbServerVO, transInfo, mappInfo, topicInfo);
