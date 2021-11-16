@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.transfer.service.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -210,4 +212,16 @@ public class TransConDAO extends EgovAbstractMapper{
 	public void updateTransSchemaConnectFaild(TransRegiVO transRegiVO) {
 		update("transSQL.updateTransSchemaConnectFaild", transRegiVO);
 	}
+
+	/**
+	 * Schema Registry 등록 정보 리스트 조회
+	 * 
+	 * @param transRegiVO
+	 * @return List<TransRegiVO>
+	 * @throws Exception
+	 */
+	public List<TransRegiVO> selectTargetTransRegiList(HashMap<String , Object> paramMap) {
+		return (List<TransRegiVO>) list("transSQL.selectTargetTransRegiList", paramMap);
+	}
+
 }

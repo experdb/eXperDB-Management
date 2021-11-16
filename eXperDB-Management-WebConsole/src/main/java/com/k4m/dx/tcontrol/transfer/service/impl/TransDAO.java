@@ -430,6 +430,19 @@ public class TransDAO extends EgovAbstractMapper{
 		sl = (List<TransVO>) list("transSQL.selectTranIdTopicList",transVO);
 		return sl;
 	}
+	
+	/**
+	 * trans target topic 리스트  조회
+	 * 
+	 * @param transVO
+	 * @return List<TransVO>
+	 * @throws 
+	 */
+	public List<TransVO> selectTranTargetIdTopicList(TransVO transVO) {
+		List<TransVO>  sl = null;
+		sl = (List<TransVO>) list("transSQL.selectTranTargetIdTopicList",transVO);
+		return sl;
+	}
 
 	/**
 	 * trans 타겟 전송관리 테이블 수정

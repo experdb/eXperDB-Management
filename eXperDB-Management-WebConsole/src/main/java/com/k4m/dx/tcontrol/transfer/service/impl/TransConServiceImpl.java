@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.transfer.service.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,10 @@ public class TransConServiceImpl extends EgovAbstractServiceImpl implements Tran
 
 	@Resource(name = "TransConDAO")
 	private TransConDAO transConDAO;
+
+	@Resource(name = "TransDAO")
+	private TransDAO transDAO;
+	
 
 	@Resource(name = "cmmnServerInfoDAO")
 	private CmmnServerInfoDAO cmmnServerInfoDAO;
@@ -653,4 +658,58 @@ public class TransConServiceImpl extends EgovAbstractServiceImpl implements Tran
 		
 		return result;		
 	}
+	
+	/**
+	 * Schema Registry list 등록 조회
+	 * 
+	 * @param transDbmsVO
+	 * @return List<TransRegiVO>
+	 * @throws Exception
+	 */
+	@Override
+	public List<TransRegiVO> selectTargetTransRegiList(List<Map<String, Object>> transRegiVOList) throws Exception {
+		TransVO searchTransVO = new TransVO();
+		String trans_id_val = "";
+		Integer trans_id = null;
+		List<TransVO> topicTableList = null;
+		
+		List<String> ids = new ArrayList<String>(); 
+		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+		System.out.println("transRegiVOList.size() ==== " + transRegiVOList.size());
+		if (transRegiVOList.size() > 0) {
+			trans_id_val = String.valueOf(transRegiVOList.get(0).get("trans_id"));
+			System.out.println("trans_id_val ==== " + trans_id_val);
+			if (!"".equals(trans_id_val)) {
+				trans_id = Integer.parseInt(trans_id_val);
+			}
+			searchTransVO.setTrans_id(trans_id);
+			topicTableList = transDAO.selectTranTargetIdTopicList(searchTransVO); // topic 테이블 조회
+		}
+		System.out.println("topicTableList.size() ==== " + topicTableList.size());
+		if (topicTableList.size() > 0) {
+			for(int i=0; i<topicTableList.size(); i++){
+				System.out.println("regi_id ==== " + topicTableList.get(i).getRegi_id());
+				
+				if (topicTableList.get(i).getRegi_id() != null) {
+					ids.add(String.valueOf(topicTableList.get(i).getRegi_id())); 
+				}
+			}
+		}
+		System.out.println("transRegiVOList.size() ==== " + transRegiVOList.size());
+
+		System.out.println("ids.size() ==== " + ids.size());
+
+		if(ids.size() != 0 ){
+			paramvalue.put("regi_id", ids);
+			
+			return transConDAO.selectTargetTransRegiList(paramvalue);
+		} else {
+			paramvalue.put("regi_id", null);
+			
+			return null;
+		}
+
+
+	}
+	
 }

@@ -143,12 +143,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			System.out.println("매핑정보 : "+mappInfo.get(0));
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			
-			if("".equals(mappInfo.get(0).get("regi_nm")) || mappInfo.get(0).get("regi_nm") == null){
-				connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
-			} else {
-				connStartResult = cic.createConfluentProperties(IP, PORT, dbServerVO, transInfo, mappInfo);
-			}
+			connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
 			
 			if (connStartResult != null) {
 				result_code = connStartResult.get("RESULT_CODE").toString();
@@ -245,6 +240,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 	
 		List<Map<String, Object>> transInfo = null;
 		List<Map<String, Object>> mappInfo = null;
+		List<TransVO> topicInfo = null;
 		
 		Map<String, Object> connStartResult = new  HashMap<String, Object>();
 
@@ -280,9 +276,20 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 			mappInfo = transDAO.selectMappInfo(trans_exrt_trg_tb_id);
 			System.out.println("매핑정보 : "+mappInfo.get(0));
 			
+			//토픽 정보 조회
+			topicInfo = transDAO.selectTranTargetIdTopicList(transVO);
+			
 			if (transInfo != null && mappInfo != null) {
 				ClientInfoCmmn cic = new ClientInfoCmmn();
-				connStartResult = cic.connectTargetStart(IP, PORT, dbServerVO, transInfo, mappInfo);
+				
+				if("TC004401".equals(transInfo.get(0).get("topic_type"))){
+					connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
+				} else {
+					IP = String.valueOf(transInfo.get(0).get("kc_ip"));
+					PORT = Integer.parseInt(String.valueOf(transInfo.get(0).get("kc_port")));
+					connStartResult = cic.createConfluentProperties(IP, PORT, dbServerVO, transInfo, mappInfo, topicInfo);
+				}
+//				connStartResult = cic.connectTargetStart(IP, PORT, dbServerVO, transInfo, mappInfo);
 				
 				if (connStartResult != null) {
 					result_code = connStartResult.get("RESULT_CODE").toString();
@@ -681,7 +688,7 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 					}						
 				}
 			}
-			
+			System.out.println("service : " + transVO.getRegi_id());
 			transDAO.insertTargetConnectInfo(transVO);
 
 			result = "success";
@@ -910,17 +917,24 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 	 * @throws Exception
 	 */
 	@Override
-	public JSONObject selectTransMatchMappInfo(List<Map<String, Object>> mappInfo, String trans_active_gbn, String multi_gbn) throws Exception {
+	public JSONObject selectTransMatchMappInfo(int trans_id, List<Map<String, Object>> mappInfo, String trans_active_gbn, String multi_gbn) throws Exception {
 
 		JSONObject tableResult = new JSONObject();
 		String[] tables = null;
 
 		JSONArray tableArray = new JSONArray();
+		List<TransVO> topicTableList = null;
+		TransVO searchTransVO = new TransVO();
 
 		try {
 			if (mappInfo != null) {
 				tables = mappInfo.get(0).get("exrt_trg_tb_nm").toString().split(",");
 			}
+			
+			if (!"source".equals(trans_active_gbn)) {
+				searchTransVO.setTrans_id(trans_id);
+				topicTableList = transDAO.selectTranTargetIdTopicList(searchTransVO);
+			} 
 
 			if(mappInfo.get(0).get("exrt_trg_tb_nm") != null) {
 				if (!"".equals(mappInfo.get(0).get("exrt_trg_tb_nm").toString())) {
@@ -940,12 +954,23 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 							if (!"tar_single".equals(multi_gbn)) {
 								jsonObj.put("idx", i + 1);
 							}
-
-							jsonObj.put("topic_name", tables[i]);
-							System.out.println(mappInfo.get(0).toString());
+							
+							String topic_name = String.valueOf(tables[i]);
+							jsonObj.put("topic_name", topic_name);
+							
+							if (topicTableList.size() > 0) {
+								for(int z=0; z<topicTableList.size(); z++){
+									if (topic_name.equals(topicTableList.get(z).getTopic_nm())) {
+										jsonObj.put("regi_nm", topicTableList.get(z).getRegi_nm());
+									}
+								}
+							}
+							
+							
+/*							System.out.println(mappInfo.get(0).toString());
 							if(!"".equals(mappInfo.get(0).get("regi_nm").toString()) || mappInfo.get(0).get("regi_nm").toString() != null){
 								jsonObj.put("regi_nm", mappInfo.get(0).get("regi_nm"));
-							}
+							}*/
 							tableArray.add(jsonObj);
 						}
 					}

@@ -63,45 +63,6 @@
 	});
 
 	/* ********************************************************
-	 * 추가 버튼 클릭
-	 ******************************************************** */
-	function fn_sel_trans_schem_Add(){
-		var datas = cho_schem_table.rows('.selected').data();
-
-		if (datas.length <= 0) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		}
-
-		var regi_id = datas[0].regi_id;		
-		var regi_nm = datas[0].regi_nm;
-		var regi_ip = datas[0].regi_ip;
-		var regi_port = datas[0].regi_port;
-
-		fn_trans_schema_AddCallback(regi_id,regi_nm,regi_ip,regi_port);
-		$('#pop_layer_trans_sel_schem').modal("hide");
-	}
-
-	/* ********************************************************
-	 * 추가 수정시 등록
-	 ******************************************************** */
-	function fn_sel_trans_schem_Mod(){
-		var datas = cho_schem_table.rows('.selected').data();
-		if (datas.length <= 0) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		} 
-
-		var regi_id = datas[0].regi_id;		
-		var regi_nm = datas[0].regi_nm;
-		var regi_ip = datas[0].regi_ip;
-		var regi_port = datas[0].regi_port;
-		
-		fn_trans_com_conModCallback(regi_id,regi_nm,regi_ip,regi_port);
-		$('#pop_layer_trans_sel_schem').modal("hide");
-	}
-
-	/* ********************************************************
 	 * 테이블 초기화
 	 ******************************************************** */
 	function fn_init_schem_regi() {
@@ -152,45 +113,6 @@
 		cho_schem_table.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
 		cho_schem_table.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
 		cho_schem_table.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
-
-
-	}
-
-	/* ********************************************************
-	 * 조회
-	 ******************************************************** */
-	function fn_cho_trans_search_schema(){
-		$.ajax({
-			url : "/selectTransRegiList.do",
-			data : {
-				regi_nm : nvlPrmSet($("#cho_regi_nm").val(), '')
-  			},
-	  		type : "post",
-	  		beforeSend: function(xhr) {
-	  	        xhr.setRequestHeader("AJAX", true);
-			},
-	  		error : function(xhr, status, error) {
-	  			if(xhr.status == 401) {
-	  				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-	  			} else if(xhr.status == 403) {
-	  				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-	  			} else {
-	  				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-	  			}
-	  		},
-	  		success : function(result) {
-	  			if(result.length > 0){
-	  				cho_schem_table.clear().draw();
-	  				cho_schem_table.rows.add(result).draw();
-	  			}else{
-	  				cho_schem_table.clear().draw();
-	  			}
-	  			setTimeout(function(){
-	  				cho_schem_table.columns.adjust().draw();
-	  			},300);
-	  			
-	  		}
-		});
 	}
 </script>
 
@@ -222,7 +144,7 @@
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="20" height="0"><spring:message code="common.no" /></th>
-									<th width="150">Schema Registry명</th>
+									<th width="150"><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
  									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="50"><spring:message code="data_transfer.port" /></th>
 									<th width="80"><spring:message code="data_transfer.connection_status" /></th>

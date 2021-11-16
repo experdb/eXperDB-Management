@@ -4,7 +4,7 @@
 
 <%
 	/**
-	* @Class Name : tansSettingInfo.jsp
+	* @Class Name : transSettingInfo.jsp
 	* @Description : 전송관리 상세 조회
 	* @Modification Information
 	*
@@ -43,8 +43,8 @@
 			 ]
 		});
 		
-		info_connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '397px');
-		info_connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '397px');
+		info_connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '495px');
+		info_connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '495px');
 
 		$(window).trigger('resize'); 
 	}
@@ -268,8 +268,8 @@
 								 				<table id="info_connector_tableList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="161" class="dt-center" ><spring:message code="migration.schema_Name" /></th>
-															<th width="162" class="dt-center" ><spring:message code="migration.table_name" /></th>	
+															<th width="495" class="dt-center" ><spring:message code="migration.schema_Name" /></th>
+															<th width="495" class="dt-center" ><spring:message code="migration.table_name" /></th>	
 														</tr>
 													</thead>
 												</table>

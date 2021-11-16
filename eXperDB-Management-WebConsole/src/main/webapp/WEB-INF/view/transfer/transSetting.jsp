@@ -1410,7 +1410,7 @@ a:hover.tip span {
 <%@include file="./../popup/connectRegForm2.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/transConnectListForm.jsp"%>
-<%@include file="./tansSettingInfo.jsp"%>
+<%@include file="./transSettingInfo.jsp"%>
 <%@include file="./../popup/transComConChoForm.jsp"%>
 
 <form name="findList" id="findList" method="post">

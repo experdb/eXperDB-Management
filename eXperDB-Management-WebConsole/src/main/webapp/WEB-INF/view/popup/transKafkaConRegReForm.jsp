@@ -114,7 +114,7 @@
 	/* ********************************************************
 	 * 팝업시작
 	 ******************************************************** */
-	function fn_tansKafkaConModPopStart(result) {
+	function fn_transKafkaConModPopStart(result) {
 		$("#mod_trans_kafka_con_nm", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_nm, ""));
 		$("#mod_trans_kafka_con_ip", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_ip, "")); 
 		$("#mod_trans_kafka_con_port", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_port, "")); 

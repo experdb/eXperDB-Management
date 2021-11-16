@@ -262,7 +262,7 @@ public interface TransService {
 	 * @return String
 	 * @throws Exception
 	 */
-	public JSONObject selectTransMatchMappInfo(List<Map<String, Object>> mappInfo, String trans_active_gbn, String multi_gbn) throws Exception;
+	public JSONObject selectTransMatchMappInfo(int trans_id, List<Map<String, Object>> mappInfo, String trans_active_gbn, String multi_gbn) throws Exception;
 
 	/**
 	 * 전송상세 전송설정정보 setting

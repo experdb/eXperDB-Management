@@ -97,7 +97,7 @@
 	/* ********************************************************
 	 * 팝업시작
 	 ******************************************************** */
-	function fn_tansScheRegiRegPopStart(result) {
+	function fn_transScheRegiRegPopStart(result) {
 		$("#ins_trans_sche_regi_nm", "#insTransSchRegiRegForm").val("");
 		$("#ins_trans_sche_regi_ip", "#insTransSchRegiRegForm").val(""); 
 		$("#ins_trans_sche_regi_port", "#insTransSchRegiRegForm").val(""); 

@@ -114,7 +114,7 @@
 	/* ********************************************************
 	 * 팝업시작
 	 ******************************************************** */
-	function fn_tansSchemRegiModPopStart(result) {
+	function fn_transSchemRegiModPopStart(result) {
 		$("#mod_trans_regi_nm", "#modTransScheRegiRegForm").val(nvlPrmSet(result.resultInfo[0].regi_nm, ""));
 		$("#mod_trans_regi_ip", "#modTransScheRegiRegForm").val(nvlPrmSet(result.resultInfo[0].regi_ip, "")); 
 		$("#mod_trans_regi_port", "#modTransScheRegiRegForm").val(nvlPrmSet(result.resultInfo[0].regi_port, "")); 

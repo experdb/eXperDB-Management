@@ -237,7 +237,7 @@
 				}
 			},
 			success : function(result) {
-				fn_tansKfkConRegPopStart(result);
+				fn_transKfkConRegPopStart(result);
 				
 				$('#pop_layer_trans_kfk_con_reg').modal("show");
 			}
@@ -269,7 +269,7 @@
 				}
 			},
 			success : function(result) {
-				fn_tansKfkConRegPopStart(result);
+				fn_transKfkConRegPopStart(result);
 				
 				$('#pop_layer_trans_sche_regi_reg').modal("show");
 			}
@@ -437,7 +437,7 @@
 			},
 			success : function(result) {
 				if (result.resultInfo != null) {
-					fn_tansKafkaConModPopStart(result);
+					fn_transKafkaConModPopStart(result);
 					
 					if (gbn == "O") {
 						$("#mod_trans_kafka_con_ip", "#modTransKfkConRegForm").prop("disabled", true); 
@@ -486,7 +486,7 @@
 			},
 			success : function(result) {
 				if (result.resultInfo != null) {
-					fn_tansSchemRegiModPopStart(result);
+					fn_transSchemRegiModPopStart(result);
 					
 					if (gbn == "O") {
 						$("#mod_trans_regi_ip", "#modTransScheRegiRegForm").prop("disabled", true); 

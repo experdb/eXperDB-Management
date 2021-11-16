@@ -2139,7 +2139,7 @@ System.out.println("=====cmd" + cmd);
 
 			JSONObject jObj = new JSONObject();
 			
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
 			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
@@ -2250,7 +2250,7 @@ System.out.println("=====cmd" + cmd);
 	
 	// 41. trans topic list 조호
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT, String topic_type) {
+	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT, String topic_type, String kc_id) {
 		
 		String xml[] = {
 				"egovframework/spring/context-aspect.xml",
@@ -2286,6 +2286,7 @@ System.out.println("=====cmd" + cmd);
 				TransVO transVO = new TransVO();
 				//토픽타입별
 				transVO.setTopic_type(topic_type);
+				transVO.setKc_id(kc_id);
 				
 				List<TransVO> tarTopicList = transService.selectTransTopicList(transVO);
 
@@ -2295,6 +2296,7 @@ System.out.println("=====cmd" + cmd);
 					JSONObject jsonObj = new JSONObject();
 					String topicName = splitStrResultMessge[i];
 					String regi_nm = "";
+					String regi_id = "";
 					boolean topicNmChk = false;
 
 					//target trans_id가 등록된 topic은 제외
@@ -2303,6 +2305,7 @@ System.out.println("=====cmd" + cmd);
 							if (tarTopicList.get(j).getTopic_nm().equals(topicName)) {
 								topicNmChk = true;
 								regi_nm = tarTopicList.get(j).getRegi_nm();
+								regi_id = tarTopicList.get(j).getRegi_id();
 							}
 						}
 					}
@@ -2311,7 +2314,7 @@ System.out.println("=====cmd" + cmd);
 					if (topicNmChk == true) {
 						jsonObj.put("topic_name", topicName);
 						jsonObj.put("regi_nm", regi_nm);
-
+						jsonObj.put("regi_id", regi_id);
 						jsonObj.put("rownum_chk", i);
 						jsonArray.add(jsonObj);
 					}
@@ -2449,44 +2452,9 @@ System.out.println("=====cmd" + cmd);
 		
 		return result;
 	}
-/*	
-	public Map<String, Object> createConfluentProperties(String IP, int PORT, DbServerVO dbServerVO, JSONObject jObj){
-		Map<String, Object> result = new HashMap<>();
-		
-		JSONObject objResult;
-			
-		try {
-			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			
-			CA.open();
-			objResult = CA.dxT045(jObj);
-			CA.close();
-			
-			String strErrMsg = (String) objResult.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String) objResult.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String) objResult.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String) objResult.get(ClientProtocolID.RESULT_CODE);
-			String strResultData = (String) objResult.get(ClientProtocolID.RESULT_DATA);
-
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
-			System.out.println("RESULT_DATA : " + strResultData);
-
-			result.put("RESULT_CODE", strResultCode);
-			result.put("ERR_CODE", strErrCode);
-			result.put("ERR_MSG", strErrMsg);
-			result.put("RESULT_DATA", strResultData);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-*/
+	
 	// connetor가 confluent일 때 실행
-	public Map<String, Object> createConfluentProperties(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo, List<Map<String, Object>> mappInfo) {
+	public Map<String, Object> createConfluentProperties(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo, List<Map<String, Object>> mappInfo, List<TransVO> topicInfo) {
 		Map<String, Object> result = new HashMap<>();
 		
 		JSONObject objResult;
@@ -2494,43 +2462,52 @@ System.out.println("=====cmd" + cmd);
 		try {
 //			String cmd = "curl -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
 			String properties_nm = mappInfo.get(0).get("exrt_trg_tb_nm") + ".properties";
-			String cmd = "confluent local services connect connector load" +  transInfo.get(0).get("connect_nm") + "--config /home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/" + properties_nm;
-			System.out.println("=====cmd" + cmd);
+			String cmd = "confluent local services connect connector load " +  transInfo.get(0).get("connect_nm") + " --config /home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/" + properties_nm;
+			System.out.println("=====cmd   : " + cmd);
 
-			JSONObject transObj = new JSONObject();
-			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
+			JSONObject serverObj = new JSONObject();
 			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			System.out.println("serverObj : " + serverObj.toJSONString());
+			JSONObject transObj = new JSONObject();
+			
+			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
 			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
 			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));
 			transObj.put(ClientProtocolID.TRANS_ID, transInfo.get(0).get("trans_id").toString());
-
 			transObj.put(ClientProtocolID.CON_START_GBN, "target");
-			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
+			transObj.put(ClientProtocolID.REGI_ID, topicInfo.get(0).getRegi_id());
+			transObj.put(ClientProtocolID.REGI_IP, topicInfo.get(0).getRegi_ip());
+			transObj.put(ClientProtocolID.REGI_PORT, topicInfo.get(0).getRegi_port());
 			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));	
 			transObj.put(ClientProtocolID.FILE_NAME, properties_nm);
-			
+			transObj.put(ClientProtocolID.FILE_DIRECTORY, "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/");
+			System.out.println("transObj : " + transObj.toJSONString());
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));
-
+			System.out.println("mappObj : " + mappObj.toJSONString());
 			JSONObject jObj = new JSONObject();
 			
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
-//			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
 			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
 			jObj.put(ClientProtocolID.REQ_CMD, cmd);
-			
+			System.out.println("REQ_CMD : " + cmd);
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			System.out.println("IP : PORT - " + IP + ":" + PORT);
 			
 			CA.open();
 			objResult = CA.dxT045(jObj);
 			CA.close();
 			
-			String strErrMsg = (String) objResult.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String) objResult.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String) objResult.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String) objResult.get(ClientProtocolID.RESULT_CODE);
-			String strResultData = (String) objResult.get(ClientProtocolID.RESULT_DATA);
+			String strErrMsg = String.valueOf(objResult.get(ClientProtocolID.ERR_MSG));
+			String strErrCode = String.valueOf(objResult.get(ClientProtocolID.ERR_CODE));
+			String strDxExCode = String.valueOf(objResult.get(ClientProtocolID.DX_EX_CODE));
+			String strResultCode = String.valueOf(objResult.get(ClientProtocolID.RESULT_CODE));
+			String strResultData = String.valueOf(objResult.get(ClientProtocolID.RESULT_DATA));
 
 			System.out.println("RESULT_CODE : " + strResultCode);
 			System.out.println("ERR_CODE : " + strErrCode);

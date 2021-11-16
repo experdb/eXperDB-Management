@@ -5,6 +5,22 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<%
+	/**
+	* @Class Name : transComConSetForm.jsp
+	* @Description : 기본설정 선택 팝업
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2020.04.07     최초 생성
+	*
+	* author 
+	* since 2020. 04. 07
+	*
+	*/
+%>
+
 <style>
 .null_red {
   color: red;
@@ -146,37 +162,6 @@
 		$(window).trigger('resize');
 	}
 
-
-	/* ********************************************************
-	 * trans common 삭제버튼 클릭시
-	 ******************************************************** */
-	function fn_transComConSetDelete(){
-		var totDatas = trans_com_con_pop_table.data();
-		var datas = trans_com_con_pop_table.rows('.selected').data();
-
-		if (datas.length <= 0) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return;
-		}
-		
-		if (totDatas.length <= datas.length) {
-			showSwalIcon('<spring:message code="eXperDB_CDC.msg33" />', '<spring:message code="common.close" />', '', 'error');
-			return;
-		}
-		
-		trans_com_id_List = [];
-
-		for (var i = 0; i < datas.length; i++) {
-			trans_com_id_List.push(datas[i].trans_com_id);   
-		}
-
-		confile_title = '<spring:message code="data_transfer.default_setting" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
-		$('#con_multi_gbn', '#findConfirmMulti').val("trans_com_con_del");
-		$('#confirm_multi_tlt').html(confile_title);
-		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
-		$('#pop_confirm_multi_md').modal("show");
-	}
-
 	/* ********************************************************
 	 * 삭제 로직 처리
 	 ******************************************************** */
@@ -212,8 +197,6 @@
 			}
 		});
 	}
-	
-	
 </script>
 
 <%@include file="../popup/transComConSetRegForm.jsp"%>

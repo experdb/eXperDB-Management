@@ -155,4 +155,13 @@ public interface TransConService {
 	 * @throws Exception
 	 */
 	public String updateTransSchemaConnectFaild(TransRegiVO transRegiVO) throws Exception;
+	
+	/**
+	 * Schema Registry list 등록 조회
+	 * 
+	 * @param transDbmsVO
+	 * @return List<TransRegiVO>
+	 * @throws Exception
+	 */
+	public List<TransRegiVO> selectTargetTransRegiList(List<Map<String, Object>> transRegiVOList) throws Exception;
 }
