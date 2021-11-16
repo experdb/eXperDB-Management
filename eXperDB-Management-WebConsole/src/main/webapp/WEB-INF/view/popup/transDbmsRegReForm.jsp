@@ -113,6 +113,7 @@
 		$("#mod_trans_pwd", "#trasnDbmsModifyPop").val(nvlPrmSet(result.pwd, "")); 
 
 		$("#mod_trans_exe_status", "#trasnDbmsModifyPop").val(nvlPrmSet(result.resultInfo[0].exe_status, "")); 
+		$("#mod_trans_file_path", "#trasnDbmsModifyPop").val(nvlPrmSet(result.resultInfo[0].file_path, "")); 
 
 		if (result.resultInfo[0].exe_status == "TC001501") {
 			$('#mod_trans_sys_connection', '#trasnDbmsModifyPop').val("success");
@@ -134,8 +135,10 @@
 		$("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val(result.resultInfo[0].dbms_dscd).prop("selected", true);
 		if($("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val() == "TC002210"){
 			$(".no-hd", "#trasnDbmsModifyPop").hide();
+			$(".hd", "#trasnDbmsModifyPop").show();
 		}else{
-			$(".no-hd", "#trasnDbmsModifyPop").show();	
+			$(".no-hd", "#trasnDbmsModifyPop").show();
+			$(".hd", "#trasnDbmsModifyPop").hide();
 		}
 	}
 	
@@ -237,7 +240,8 @@
 	  		   	spr_usr_id : nvlPrmSet($("#mod_trans_spr_usr_id", "#trasnDbmsModifyPop").val(), ''),
 	  		   	pwd : nvlPrmSet($("#mod_trans_pwd", "#trasnDbmsModifyPop").val(), ''),
 	  		  	dbms_dscd : nvlPrmSet($("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val(), ''),
-	  		  	exe_status : nvlPrmSet($("#mod_trans_exe_status", "#trasnDbmsModifyPop").val(), 'TC001502')
+	  		  	exe_status : nvlPrmSet($("#mod_trans_exe_status", "#trasnDbmsModifyPop").val(), 'TC001502'),
+	  		  	file_path : nvlPrmSet($("#mod_trans_file_path", "#trasnDbmsModifyPop").val(), '')
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -297,8 +301,10 @@
 		
 		if($("#mod_trans_dbms_dscd", "#trasnDbmsModifyPop").val() == "TC002210"){
 			$(".no-hd", "#trasnDbmsModifyPop").hide();
+			$(".hd", "#trasnDbmsModifyPop").show();
 		}else{
-			$(".no-hd", "#trasnDbmsModifyPop").show();	
+			$(".no-hd", "#trasnDbmsModifyPop").show();
+			$(".hd", "#trasnDbmsModifyPop").hide();
 		}
 	}
 </script>
@@ -399,6 +405,15 @@
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
 										<input type="password" class="form-control" style="width: 250px;" autocomplete="new-password"  maxlength="100" id="mod_trans_pwd" name="mod_trans_pwd" onkeyup="fn_checkWord(this, 100)" onblur="this.value=this.value.trim()" placeholder="100<spring:message code='message.msg188'/>" onchange="fn_mod_trans_dbms_connect_Cho();" />
+									</div>
+								</div>
+								<div class="form-group row hd">
+									<label for="mod_trans_file_path" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="properties.file_location" />(*)
+									</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" style="width: 733px;" autocomplete="false" maxlength="100" id="mod_trans_file_path" name="mod_trans_file_path" onkeyup="fn_checkWord(this,100)" onblur="this.value=this.value.trim()" placeholder="100<spring:message code='message.msg188'/>" onchange="fn_mod_trans_dbms_connect_Cho();" />
 									</div>
 								</div>
 								

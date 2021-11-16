@@ -75,6 +75,7 @@
              , A.LST_MDFR_ID
              , A.LST_MDF_DTM
              , A.EXE_STATUS
+             , A.FILE_PATH
           FROM (
                SELECT
                       TRANS_SYS_ID
@@ -92,6 +93,7 @@
                     , LST_MDFR_ID
                     , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
                     , EXE_STATUS
+                    , FILE_PATH
                  FROM T_TRANS_SYS_INF
                 WHERE 1 = 1
 
@@ -153,6 +155,7 @@
                    , LST_MDFR_ID
                    , LST_MDF_DTM
                    , EXE_STATUS
+                   , FILE_PATH
                     ) 
                     VALUES
                     (
@@ -170,6 +173,7 @@
                    , #{lst_mdfr_id}
                    , clock_timestamp()	
                    , #{exe_status}
+                   , #{file_path}
                     )
 	</insert>
 	
@@ -206,6 +210,7 @@
              , SCM_NM = #{scm_nm}
              , PWD = #{pwd}
              , EXE_STATUS = #{exe_status}
+             , FILE_PATH = #{file_path}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE TRANS_SYS_ID=#{trans_sys_id}::numeric

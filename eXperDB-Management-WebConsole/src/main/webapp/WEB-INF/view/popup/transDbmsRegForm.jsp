@@ -212,7 +212,10 @@
 		
 		$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").find('option').remove();
 		$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").append('<option value="">' + common_choice + '</option>');
-
+		
+		$(".hd", "#trasnDbmsInsertPop").hide();
+		$(".no-hd", "#trasnDbmsInsertPop").show();
+		
 		if (result.dbmsGrb_reg != null) {
 			for (var idx=0; idx < result.dbmsGrb_reg.length; idx++) {
 				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201" || result.dbmsGrb_reg[idx].sys_cd == "TC002210" || result.dbmsGrb_reg[idx].sys_cd == "TC002204") {
@@ -276,7 +279,9 @@
 		
 		if($("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val() == "TC002210"){
 			$(".no-hd", "#trasnDbmsInsertPop").hide();
+			$(".hd", "#trasnDbmsInsertPop").show();
 		}else{
+			$(".hd", "#trasnDbmsInsertPop").hide();
 			$(".no-hd", "#trasnDbmsInsertPop").show();
 		}
 		
@@ -324,7 +329,8 @@
 	  		   	spr_usr_id : nvlPrmSet($("#reg_trans_spr_usr_id", "#trasnDbmsInsertPop").val(), ''),
 	  		   	pwd : nvlPrmSet($("#reg_trans_pwd", "#trasnDbmsInsertPop").val(), ''),
 	  		  	dbms_dscd : nvlPrmSet($("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val(), ''),
-				exe_status : nvlPrmSet($("#reg_trans_exe_status", "#trasnDbmsInsertPop").val(), 'TC001502')
+				exe_status : nvlPrmSet($("#reg_trans_exe_status", "#trasnDbmsInsertPop").val(), 'TC001502'),
+				file_path : nvlPrmSet($("#reg_trans_file_path", "#trasnDbmsInsertPop").val(), '')
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -461,6 +467,15 @@
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
 										<input type="password" class="form-control" style="width: 250px;" autocomplete="new-password"  maxlength="100" id="reg_trans_pwd" name="reg_trans_pwd" onkeyup="fn_checkWord(this, 100)" onblur="this.value=this.value.trim()" placeholder="100<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
+									</div>
+								</div>
+								<div class="form-group row hd">
+									<label for="reg_trans_file_path" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="properties.file_location" />(*)
+									</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" style="width: 733px;" autocomplete="false" maxlength="100" id="reg_trans_file_path" name="reg_trans_file_path" onkeyup="fn_checkWord(this,100)" onblur="this.value=this.value.trim()" placeholder="100<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
 									</div>
 								</div>
 								

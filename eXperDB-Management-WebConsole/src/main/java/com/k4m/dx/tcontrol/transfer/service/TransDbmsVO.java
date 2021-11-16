@@ -14,6 +14,7 @@ public class TransDbmsVO {
 	private int portno;
 	private String scm_nm;
 	private String pwd;
+	private String file_path;
 	private String crts;
 	private String crts_nm;
 	private String frst_regr_id;
@@ -270,5 +271,11 @@ public class TransDbmsVO {
 	}
 	public void setTrans_regi_id_Rows(String trans_regi_id_Rows) {
 		this.trans_regi_id_Rows = trans_regi_id_Rows;
+	}
+	public String getFile_path() {
+		return file_path;
+	}
+	public void setFile_path(String file_path) {
+		this.file_path = file_path;
 	}
 }

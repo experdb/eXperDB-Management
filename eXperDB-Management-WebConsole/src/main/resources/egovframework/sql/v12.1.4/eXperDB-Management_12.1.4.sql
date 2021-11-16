@@ -12,6 +12,8 @@
 	CONSTRAINT pk_t_trans_regi_inf PRIMARY KEY (regi_id)
 );
 
+COMMENT ON TABLE experdb_management.t_trans_regi_inf IS 'trans_Schema_Registry_정보';
+
 create sequence q_trans_regi_inf_01;
 
 
@@ -130,3 +132,7 @@ CREATE TABLE t_db2pg_monitoring (
 alter table t_agtcndt_i alter column ipadr type varchar(100);
 alter table t_db2pg_sys_inf alter column ipadr type varchar(100);
 alter table t_dbsvripadr_i alter column ipadr type varchar(100);
+
+-- 타겟 dbms 설정 정보에 하둡용 FILE_PATH 컬럼 추가 
+ALTER TABLE experdb_management.t_trans_sys_inf ADD file_path varchar(100) NULL;
+COMMENT ON COLUMN experdb_management.t_trans_sys_inf.file_path IS '파일 경로';

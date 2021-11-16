@@ -83,7 +83,7 @@ public class DBCPPoolManager {
 		
 			Configuration conf = new Configuration();
 			conf.set("ipc.client.connect.max.retries.on.timeouts","1");
-			System.out.println("conf :: "+conf.get("ipc.client.connect.max.retries.on.timeouts"));
+			//System.out.println("conf :: "+conf.get("ipc.client.connect.max.retries.on.timeouts"));
 			String conUri = "hdfs://"+serverObj.get(ClientProtocolID.SERVER_IP)+":"+serverObj.get(ClientProtocolID.SERVER_PORT);
 			System.out.println(conUri);
 			FileSystem hdfs = FileSystem.get(new URI(conUri),conf);	
