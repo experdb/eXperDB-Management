@@ -124,3 +124,9 @@ CREATE TABLE t_db2pg_monitoring (
 	elapsed_time varchar(20) NULL DEFAULT NULL::character varying,
 	status varchar(30) NULL DEFAULT NULL::character varying
 );
+
+
+-- 아이피 컬럼 크기변경
+alter table t_agtcndt_i alter column ipadr type varchar(100);
+alter table t_db2pg_sys_inf alter column ipadr type varchar(100);
+alter table t_dbsvripadr_i alter column ipadr type varchar(100);
