@@ -282,4 +282,8 @@ public class ClientProtocolID {
 	public static final String REGI_PORT = "REGI_PORT";
 	public static final String CONNECT_TYPE = "CONNECT_TYPE";
 	public static final String DBMS_GBN = "DBMS_GBN";
+
+	public static final String DBMS_IP = "DBMS_IP";
+	public static final String DBMS_PORT = "DBMS_PORT";
+	
 }

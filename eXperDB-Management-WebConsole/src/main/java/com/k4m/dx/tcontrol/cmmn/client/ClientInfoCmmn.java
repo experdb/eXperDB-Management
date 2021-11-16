@@ -2493,7 +2493,9 @@ System.out.println("=====cmd" + cmd);
 			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));
 			transObj.put(ClientProtocolID.FILE_NAME, properties_nm);
 			transObj.put(ClientProtocolID.FILE_DIRECTORY, transInfo.get(0).get("file_path"));
-			
+			transObj.put(ClientProtocolID.DBMS_IP, String.valueOf(transInfo.get(0).get("ipadr")));
+			transObj.put(ClientProtocolID.DBMS_PORT, String.valueOf(transInfo.get(0).get("portno")));
+
 			System.out.println("transObj : " + transObj.toJSONString());
 
 			JSONObject mappObj = new JSONObject();
