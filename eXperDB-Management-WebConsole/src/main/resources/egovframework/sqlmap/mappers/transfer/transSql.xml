@@ -384,6 +384,7 @@
              , B.EXE_STATUS AS DB_EXE_STATUS
              , B.DBMS_DSCD
              , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = B.DBMS_DSCD ) AS DBMS_DSCD_NM
+             , B.FILE_PATH
              , A.TOPIC_TYPE
              , A.REGI_ID
              , D.REGI_NM

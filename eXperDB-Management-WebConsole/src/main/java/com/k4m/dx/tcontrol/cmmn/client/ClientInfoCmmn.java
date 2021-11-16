@@ -2452,78 +2452,92 @@ System.out.println("=====cmd" + cmd);
 		
 		return result;
 	}
+
 	
 	// connetor가 confluent일 때 실행
 	public Map<String, Object> createConfluentProperties(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo, List<Map<String, Object>> mappInfo, List<TransVO> topicInfo) {
 		Map<String, Object> result = new HashMap<>();
 		
-		JSONObject objResult;
-			
-		try {
-//			String cmd = "curl -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
+		try{
+			//properties name
 			String properties_nm = mappInfo.get(0).get("exrt_trg_tb_nm") + ".properties";
-			String cmd = "confluent local services connect connector load " +  transInfo.get(0).get("connect_nm") + " --config /home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/" + properties_nm;
-			System.out.println("=====cmd   : " + cmd);
-
+			
+			//String cmd = "curl -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
+			//String cmd = "confluent local services connect connector load " +  transInfo.get(0).get("connect_nm") + " --config /home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/" + properties_nm;
+			//String file_path = "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/";
+			
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			System.out.println("serverObj : " + serverObj.toJSONString());
-			JSONObject transObj = new JSONObject();
+			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.LOGIN_ID, dbServerVO.getUsr_id());
 			
+			System.out.println("serverObj : " + serverObj.toJSONString());
+
+			JSONObject transObj = new JSONObject();
 			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
 			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
-			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));
-			transObj.put(ClientProtocolID.TRANS_ID, transInfo.get(0).get("trans_id").toString());
+			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));			
+			transObj.put(ClientProtocolID.TRANS_ID, String.valueOf(transInfo.get(0).get("trans_id")));
 			transObj.put(ClientProtocolID.CON_START_GBN, "target");
-			transObj.put(ClientProtocolID.REGI_ID, topicInfo.get(0).getRegi_id());
-			transObj.put(ClientProtocolID.REGI_IP, topicInfo.get(0).getRegi_ip());
-			transObj.put(ClientProtocolID.REGI_PORT, topicInfo.get(0).getRegi_port());
-			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));	
+
+			//regi_id 추가
+			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
+			transObj.put(ClientProtocolID.REGI_NM, transInfo.get(0).get("regi_nm"));
+			transObj.put(ClientProtocolID.REGI_IP, transInfo.get(0).get("regi_ip"));
+			transObj.put(ClientProtocolID.REGI_PORT, transInfo.get(0).get("regi_port"));
+			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));
 			transObj.put(ClientProtocolID.FILE_NAME, properties_nm);
-			transObj.put(ClientProtocolID.FILE_DIRECTORY, "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/");
+			transObj.put(ClientProtocolID.FILE_DIRECTORY, transInfo.get(0).get("file_path"));
+			
 			System.out.println("transObj : " + transObj.toJSONString());
+
 			JSONObject mappObj = new JSONObject();
-			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));
-			System.out.println("mappObj : " + mappObj.toJSONString());
+			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));			
+
 			JSONObject jObj = new JSONObject();
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
 			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
-			jObj.put(ClientProtocolID.REQ_CMD, cmd);
-			System.out.println("REQ_CMD : " + cmd);
+			//jObj.put(ClientProtocolID.REQ_CMD, cmd);
+			
+			//System.out.println("REQ_CMD : " + cmd);
+			
+			JSONObject objList;
+
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			System.out.println("IP : PORT - " + IP + ":" + PORT);
-			
-			CA.open();
-			objResult = CA.dxT045(jObj);
-			CA.close();
-			
-			String strErrMsg = String.valueOf(objResult.get(ClientProtocolID.ERR_MSG));
-			String strErrCode = String.valueOf(objResult.get(ClientProtocolID.ERR_CODE));
-			String strDxExCode = String.valueOf(objResult.get(ClientProtocolID.DX_EX_CODE));
-			String strResultCode = String.valueOf(objResult.get(ClientProtocolID.RESULT_CODE));
-			String strResultData = String.valueOf(objResult.get(ClientProtocolID.RESULT_DATA));
 
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
-			System.out.println("RESULT_DATA : " + strResultData);
+			CA.open(); 
+			objList = CA.dxT045(jObj);
+			CA.close();
+
+			String strErrMsg = String.valueOf(objList.get(ClientProtocolID.ERR_MSG));
+			String strErrCode = String.valueOf(objList.get(ClientProtocolID.ERR_CODE));
+			String strDxExCode = String.valueOf(objList.get(ClientProtocolID.DX_EX_CODE));
+			String strResultCode = String.valueOf(objList.get(ClientProtocolID.RESULT_CODE));
+			String strResultData = String.valueOf(objList.get(ClientProtocolID.RESULT_DATA));
+
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("RESULT_DATA : " +  strResultData);
 
 			result.put("RESULT_CODE", strResultCode);
 			result.put("ERR_CODE", strErrCode);
 			result.put("ERR_MSG", strErrMsg);
 			result.put("RESULT_DATA", strResultData);
 			
-		} catch (Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 		return result;
 	}
-	
 }
