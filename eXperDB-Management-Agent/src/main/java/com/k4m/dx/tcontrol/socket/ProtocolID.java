@@ -285,6 +285,9 @@ public class ProtocolID {
 	public static final String DB_SVR_ID_VAL = "DB_SVR_ID_VAL";
 	
 	public static final String REGI_ID = "REGI_ID";
+	public static final String REGI_PORT = "REGI_PORT";
+	public static final String DBMS_IP = "DBMS_IP";
+	public static final String DBMS_PORT = "DBMS_PORT";
 /*	public static final String REGI_NM = "REGI_NM";
 	public static final String REGI_PORT = "REGI_PORT";
 	public static final String CONNECT_TYPE = "CONNECT_TYPE";*/

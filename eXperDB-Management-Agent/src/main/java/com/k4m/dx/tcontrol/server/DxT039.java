@@ -76,7 +76,7 @@ public class DxT039 extends SocketCtl{
 		
 		try {
 			socketLogger.info("[COMMAND] " + strCmd);
-			
+
 			if ("source".equals(con_start_gbn)) {
 				TransVO transSearchVO = new TransVO();
 				transSearchVO.setTrans_id(trans_id);
@@ -114,7 +114,7 @@ public class DxT039 extends SocketCtl{
 			socketLogger.info("##### 결과 : conectStopGbn ==" + conectStopGbn);	
 			
 			//conectStopGbn 이 total 일 경우 전체 삭제
-			if ("total".equals(conectStopGbn) || "2deps".equals(conectStopGbn) || "4deps".equals(conectStopGbn) || "no_deps".equals(conectStopGbn)) {
+			if ("total".equals(conectStopGbn) || "2deps".equals(conectStopGbn) || "4deps".equals(conectStopGbn)) {
 				RunCommandExec r = new RunCommandExec(strCmd);
 				
 				//명령어 실행
