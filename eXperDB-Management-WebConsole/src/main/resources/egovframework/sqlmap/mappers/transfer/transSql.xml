@@ -1106,6 +1106,7 @@
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE TOPIC_NM = #{topic_nm}
+           AND KC_ID = #{kc_id}::numeric
 	</update>
 	
 	<select id="selectTargetConnectSeq" resultType="int">

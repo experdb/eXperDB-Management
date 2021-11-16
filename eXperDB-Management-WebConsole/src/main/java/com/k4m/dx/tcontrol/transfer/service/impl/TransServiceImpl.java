@@ -935,13 +935,14 @@ System.out.println("adasdasdad==========" + topic_type_chk);
 				searchTransVO.setTrans_id(trans_id);
 				topicTableList = transDAO.selectTranTargetIdTopicList(searchTransVO);
 			} 
-
+			System.out.println("123123===trans_id" + trans_id);
+System.out.println("123123===topicTableList" + topicTableList.size());
 			if(mappInfo.get(0).get("exrt_trg_tb_nm") != null) {
 				if (!"".equals(mappInfo.get(0).get("exrt_trg_tb_nm").toString())) {
 					for (int i = 0; i < tables.length; i++) {
 						JSONObject jsonObj = new JSONObject();
 						String[] datas = null;
-	
+System.out.println("123123===trans_active_gbn" + trans_active_gbn);
 						if ("source".equals(trans_active_gbn)) {
 							datas = tables[i].toString().split("\\.");
 							

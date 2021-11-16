@@ -136,3 +136,9 @@ alter table t_dbsvripadr_i alter column ipadr type varchar(100);
 -- 타겟 dbms 설정 정보에 하둡용 FILE_PATH 컬럼 추가 
 ALTER TABLE experdb_management.t_trans_sys_inf ADD file_path varchar(100) NULL;
 COMMENT ON COLUMN experdb_management.t_trans_sys_inf.file_path IS '파일 경로';
+
+
+ALTER TABLE t_trans_topic_i ADD COLUMN kc_id numeric(18) NULL;
+COMMENT ON COLUMN experdb_management.t_trans_topic_i.kc_id IS 'kafka_커넥트_ID';
+
+CREATE INDEX IDX_TRANS_TOPIC_I_01 ON T_TRANS_TOPIC_I(KC_ID);

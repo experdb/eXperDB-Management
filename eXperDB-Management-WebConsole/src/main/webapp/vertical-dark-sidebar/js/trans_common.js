@@ -2138,6 +2138,8 @@ function fn_target_mod_update() {
 		var table_total_cnt = 0;
 		var topic_type = $("input[name='mod_tg_topic_type']:checked").val();
 		
+		var kc_id = $("#mod_target_kc_nm", "#searchTargetModForm").val();
+		
 		$.ajax({
 			async : false,
 			url : "/updateTargetConnectInfo.do",
@@ -2149,7 +2151,8 @@ function fn_target_mod_update() {
 				table_total_cnt : table_total_cnt,
 				trans_id : $("#mod_tg_trans_id","#modTargetRegForm").val(),
 				trans_exrt_trg_tb_id : $("#mod_tg_trans_exrt_trg_tb_id","#modTargetRegForm").val(),
-				topic_type : topic_type
+				topic_type : topic_type,
+				kc_id : kc_id
 			},
 			type : "post",
 			beforeSend: function(xhr) {
