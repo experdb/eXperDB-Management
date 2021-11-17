@@ -80,6 +80,12 @@ public class DxT039 extends SocketCtl{
 			if ("source".equals(con_start_gbn)) {
 				TransVO transSearchVO = new TransVO();
 				transSearchVO.setTrans_id(trans_id);
+				
+				List<TransVO> kcIpList = transService.selectTranscngKcList(transSearchVO); // topic 테이블 조회
+
+				if (kcIpList.size() > 0) {
+					transSearchVO.setKc_id(kcIpList.get(0).getKc_id());
+				}
 
 				List<TransVO> topicTableList = transService.selectTranIdTopicTotCnt(transSearchVO); // topic count 조회
 				socketLogger.info("DxT039.topicTableList : " + topicTableList.get(0));

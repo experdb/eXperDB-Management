@@ -77,8 +77,8 @@
         UPDATE T_TRANS_TOPIC_I
            SET SRC_TOPIC_USE_YN = #{src_topic_use_yn}
              , WRITE_USE_YN = #{write_use_yn}
-             , TAR_TRANS_ID = COALESCE(TAR_TRANS_ID, (SELECT MAX(B.TAR_TRANS_ID) FROM T_TRANS_TOPIC_I B WHERE B.TOPIC_NM = TOPIC_NM AND B.TOPIC_ID != TOPIC_ID))
-             , TAR_TRANS_EXRT_TRG_TB_ID = COALESCE(TAR_TRANS_EXRT_TRG_TB_ID, (SELECT MAX(B.TAR_TRANS_EXRT_TRG_TB_ID) FROM T_TRANS_TOPIC_I B WHERE B.TOPIC_NM = TOPIC_NM AND B.TOPIC_ID != TOPIC_ID))
+             , TAR_TRANS_ID = COALESCE(TAR_TRANS_ID, (SELECT MAX(B.TAR_TRANS_ID) FROM T_TRANS_TOPIC_I B WHERE B.TOPIC_NM = TOPIC_NM AND B.TOPIC_ID != TOPIC_ID AND B.KC_ID = KC_ID))
+             , TAR_TRANS_EXRT_TRG_TB_ID = COALESCE(TAR_TRANS_EXRT_TRG_TB_ID, (SELECT MAX(B.TAR_TRANS_EXRT_TRG_TB_ID) FROM T_TRANS_TOPIC_I B WHERE B.TOPIC_NM = TOPIC_NM AND B.TOPIC_ID != TOPIC_ID AND B.KC_ID = KC_ID))
          <if test="regi_id != null and regi_id != '' and regi_id != 'null' ">
              , REGI_ID = #{regi_id}::numeric
          </if>
@@ -111,7 +111,8 @@
                      FRST_REGR_ID, 
                      FRST_REG_DTM, 
                      LST_MDFR_ID, 
-                     LST_MDF_DTM
+                     LST_MDF_DTM,
+                     KC_ID
                     )
                     SELECT
                            nextval('q_t_trans_topic_i_01'),
@@ -124,8 +125,8 @@
                             LIMIT 1),
                            'Y',
                            'Y',
-                           (SELECT MAX(TAR_TRANS_ID) FROM T_TRANS_TOPIC_I WHERE TOPIC_NM = #{topic_nm}),
-                           (SELECT MAX(TAR_TRANS_EXRT_TRG_TB_ID) FROM T_TRANS_TOPIC_I WHERE TOPIC_NM = #{topic_nm}),
+                           (SELECT MAX(TAR_TRANS_ID) FROM T_TRANS_TOPIC_I WHERE TOPIC_NM = #{topic_nm} AND KC_ID = #{kc_id}::numeric),
+                           (SELECT MAX(TAR_TRANS_EXRT_TRG_TB_ID) FROM T_TRANS_TOPIC_I WHERE TOPIC_NM = #{topic_nm} AND KC_ID = #{kc_id}::numeric),
          <if test="regi_id != null and regi_id != '' and regi_id != 'null' ">
              #{regi_id}::numeric,
          </if>
@@ -135,7 +136,8 @@
                            #{login_id},
                            clock_timestamp(),
                            #{login_id},
-                           clock_timestamp()
+                           clock_timestamp(),
+                           #{kc_id}::numeric
     </insert>
 	
 	<select id="selectTranIdTopicList" parameterType="TransVO" resultType="TransVO">
@@ -211,6 +213,7 @@
                                                               FROM T_TRANS_TOPIC_I
                                                              WHERE SRC_TRANS_ID = #{trans_id}::numeric)
                                            AND SRC_TRANS_ID != #{trans_id}::numeric
+                                           AND KC_ID = #{kc_id}::numeric
                                          GROUP BY TOPIC_NM
                              ) B ON A.TOPIC_NM = B.TOPIC_NM
                              LEFT JOIN (SELECT TOPIC_NM, COUNT(TOPIC_NM) AS TOPIC_OVERLAP_SRC_ING_CNT
@@ -220,6 +223,7 @@
                                                              WHERE SRC_TRANS_ID = #{trans_id}::numeric)
                                            AND SRC_TRANS_ID != #{trans_id}::numeric
                                            AND SRC_TOPIC_USE_YN ='Y'
+                                           AND KC_ID = #{kc_id}::numeric
                                          GROUP BY TOPIC_NM
                              ) C ON A.TOPIC_NM = C.TOPIC_NM
                              LEFT JOIN (SELECT TOPIC_NM, COUNT(TOPIC_NM) AS TOPIC_OVERLAP_TAR_CNT 
@@ -228,6 +232,7 @@
                                                               FROM T_TRANS_TOPIC_I
                                                              WHERE SRC_TRANS_ID = #{trans_id}::numeric)
                                            AND SRC_TRANS_ID != #{trans_id}::numeric
+                                           AND KC_ID = #{kc_id}::numeric
                                            AND TAR_TRANS_ID IS NOT NULL
                                          GROUP BY TOPIC_NM
                              ) D ON A.TOPIC_NM = D.TOPIC_NM
@@ -243,6 +248,7 @@
                                                                              FROM T_TRANS_TOPIC_I
                                                                             WHERE SRC_TRANS_ID = #{trans_id}::numeric)
                                                           AND SRC_TRANS_ID != #{trans_id}::numeric
+                                                          AND KC_ID = #{kc_id}::numeric
                                                           AND TAR_TRANS_ID IS NOT NULL
                                                  ) A
                                                  LEFT JOIN T_TRANSCNG_I B ON A.SRC_TRANS_ID = B.TRANS_ID
@@ -250,6 +256,7 @@
                                           GROUP BY C.TOPIC_NM
                              ) E ON A.TOPIC_NM = E.TOPIC_NM
                        WHERE SRC_TRANS_ID = #{trans_id}::numeric
+                         AND KC_ID = #{kc_id}::numeric
                  ) F
                  LEFT JOIN T_TRANSCNG_TARGET_I G ON F.TAR_TRANS_ID = G.TRANS_ID
           ) G
@@ -285,7 +292,7 @@
 
     <update id="updateTranExrtTrgInfo"  parameterType="TransVO">
     	/**
-	 	* Query ID : updateTransSrcTopic
+	 	* Query ID : updateTranExrtTrgInfo
 	 	* Description : source connect 활성화 topic 수정
 	 	* Author : 
 	 	**/
@@ -362,6 +369,7 @@
 	 	* Author : 
 	 	**/
         SELECT A.TRANS_ID, 
+               A.KC_ID,
                B.TRANS_EXRT_TRG_TB_ID,
                B.EXRT_TRG_TB_NM
          FROM T_TRANSCNG_I A
@@ -369,6 +377,7 @@
         WHERE TRANS_ID = #{trans_id}
         UNION ALL
        SELECT A.TRANS_ID,
+              A.KC_ID,
               B.TRANS_EXRT_TRG_TB_ID,
               B.EXRT_TRG_TB_NM
          FROM T_TRANSCNG_TARGET_I A
@@ -382,7 +391,7 @@
 	 	* Description : trans 리스트 조회
 	 	* Author : 
 	 	**/
-        SELECT A.TRANS_ID, C.KC_IP, C.KC_PORT
+        SELECT A.TRANS_ID, C.KC_IP, C.KC_PORT, A.KC_ID
           FROM T_TRANSCNG_I A
                LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
          WHERE A.TRANS_ID = #{trans_id}::numeric
