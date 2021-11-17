@@ -290,7 +290,7 @@ public class TransController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0148_01");
+			historyVO.setExe_dtl_cd("DX-T0148_02");
 			accessHistoryService.insertHistory(historyVO);
 
 			result = transService.selectTargetTransSetting(transVO);
@@ -299,7 +299,7 @@ public class TransController {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * kafka-Connection 시작
 	 * @param response, request
@@ -367,7 +367,7 @@ public class TransController {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * kafka-Connection 중지
 	 * @param response, request
@@ -408,7 +408,7 @@ public class TransController {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * 전송설정 삭제한다.
 	 * 
@@ -439,7 +439,7 @@ public class TransController {
 
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0148_02");
+			historyVO.setExe_dtl_cd("DX-T0148_03");
 			accessHistoryService.insertHistory(historyVO);
 
 			TransVO transVOPrm = new TransVO();
@@ -505,7 +505,7 @@ public class TransController {
 	
 		return result;
 	}
-
+	
 	/**
 	 * 소스 전송대상상세 화면을 보여준다.
 	 * 
@@ -529,7 +529,7 @@ public class TransController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0148_03");
+			historyVO.setExe_dtl_cd("DX-T0148_04");
 			accessHistoryService.insertHistory(historyVO);
 			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
@@ -575,7 +575,7 @@ public class TransController {
 		}
 		return mv;
 	}
-
+	
 	/**
 	 * 전송설정등록 팝업 화면을 보여준다.
 	 * 
@@ -607,7 +607,7 @@ public class TransController {
 	}
 
 	/**
-	 * 타겟 전송대상상세 화면 조회
+	 * 타겟 전송설정 수정화면 출력
 	 * 
 	 * @param
 	 * @return ModelAndView mv
@@ -659,7 +659,7 @@ public class TransController {
 	}
 
 	/**
-	 * 소스 전송대상상세 화면 조회
+	 * 소스 전송설정 수정화면 출력
 	 * 
 	 * @param
 	 * @return ModelAndView mv
@@ -679,7 +679,7 @@ public class TransController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0152");
+			historyVO.setExe_dtl_cd("DX-T0175");
 			accessHistoryService.insertHistory(historyVO);
 			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
@@ -711,7 +711,7 @@ public class TransController {
 		}
 		return mv;
 	}
-
+	
 	/**
 	 * 커넥터명을 중복 체크한다.
 	 * 
@@ -733,7 +733,7 @@ public class TransController {
 		}
 		return "true";
 	}
-
+	
 	/**
 	 * 기본설절 목록을 조회한다.
 	 * 
@@ -779,7 +779,7 @@ public class TransController {
 		}
 		return mv;
 	}
-	
+
 	/**
 	 * 기본설정 수정 화면 조회
 	 * @param transVO, request, historyVO
@@ -805,12 +805,9 @@ public class TransController {
 		return result;	
 	}
 
-	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	
 	/**
-	 * 기본설정 등록
+	 * 전송관리 기본설정 등록
 	 * @param 
 	 * @return
 	 */
@@ -826,7 +823,7 @@ public class TransController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0156_1");
+			historyVO.setExe_dtl_cd("DX-T0156_01");
 			accessHistoryService.insertHistory(historyVO);
 			
 			transVO.setFrst_regr_id((String)loginVo.getUsr_id());
@@ -845,7 +842,7 @@ public class TransController {
 	}
 
 	/**
-	 * 기본설정 수정
+	 * 전송관리 기본설정 수정
 	 * @param 
 	 * @return
 	 */
@@ -861,7 +858,7 @@ public class TransController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0158_1");
+			historyVO.setExe_dtl_cd("DX-T0158_01");
 			accessHistoryService.insertHistory(historyVO);
 			
 			transVO.setFrst_regr_id((String)loginVo.getUsr_id());
@@ -880,7 +877,7 @@ public class TransController {
 	}
 
 	/**
-	 * 기본설정 삭제
+	 * 전송관리 기본설정 삭제
 	 * @param 
 	 * @return
 	 */
@@ -921,10 +918,6 @@ public class TransController {
 		return result;
 	}
 
-	
-	
-	
-	
 	/**
 	 * 전송설정 등록한다.       ---- 수정필요
 	 * 
@@ -1035,7 +1028,7 @@ public class TransController {
 			
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0151_01");
+			historyVO.setExe_dtl_cd("DX-T0151_03");
 			accessHistoryService.insertHistory(historyVO);
 
 			transVO.setFrst_regr_id(usr_id);
@@ -1292,7 +1285,6 @@ public class TransController {
 		return result;
 	}
 	
-
 	/**
 	 * 테이블 리스트 조회
 	 * 
@@ -1469,7 +1461,7 @@ public class TransController {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * 기본설정 화면 출력
 	 * 
@@ -1497,7 +1489,7 @@ public class TransController {
 		
 		return mv;
 	}
-	
+
 	/**
 	 * 전송관리 - kafka connect 설정 팝업 화면을 보여준다.
 	 * 
@@ -1515,7 +1507,7 @@ public class TransController {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
 			// 화면접근이력 이력 남기기
-			historyVO.setExe_dtl_cd("DX-T0153_02");
+			historyVO.setExe_dtl_cd("DX-T0148_05");
 			accessHistoryService.insertHistory(historyVO);
 
 			mv.addObject("db_svr_id", db_svr_id);
@@ -1524,7 +1516,6 @@ public class TransController {
 		}
 		return mv;
 	}
-
 
 	/**
 	 * 타켓 DBMS 설정 팝업 화면을 보여준다.
@@ -1543,7 +1534,7 @@ public class TransController {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
 			// 화면접근이력 이력 남기기
-			historyVO.setExe_dtl_cd("DX-T0147");
+			historyVO.setExe_dtl_cd("DX-T0148_06");
 			accessHistoryService.insertHistory(historyVO);
 
 			mv.addObject("db_svr_id", db_svr_id);
@@ -1552,5 +1543,4 @@ public class TransController {
 		}
 		return mv;
 	}
-	
 }

@@ -142,3 +142,68 @@ ALTER TABLE t_trans_topic_i ADD COLUMN kc_id numeric(18) NULL;
 COMMENT ON COLUMN experdb_management.t_trans_topic_i.kc_id IS 'kafka_커넥트_ID';
 
 CREATE INDEX IDX_TRANS_TOPIC_I_01 ON T_TRANS_TOPIC_I(KC_ID);
+
+-- CDC 화면 ID 변경
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '커넥터 서버 설정 화면', SYS_CD_NM_EN = 'Connector Server Settings Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0153';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Kafka 정보 조회', SYS_CD_NM_EN = 'Kafka Server Information Search' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0153_01';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Kafka Connect 등록 화면', SYS_CD_NM_EN = 'Kafka Connect Regist Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0154';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Kafka Connect 등록', SYS_CD_NM_EN = 'Kafka Connect Registration' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0154_01';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Kafka Connect 수정 화면', SYS_CD_NM_EN = 'Kafka Connect Modify Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0155';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Kafka Connect 수정', SYS_CD_NM_EN = 'Kafka Connect Modification' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0155_01';
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0153_02', 'Schema Registry 정보 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Schema Registry Information Search');
+
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Schema Registry 등록 화면', SYS_CD_NM_EN = 'Schema Registry Regist Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0168';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Schema Registry 등록', SYS_CD_NM_EN = 'Schema Registry Registration' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0168_01';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Schema Registry 수정 화면', SYS_CD_NM_EN = 'Schema Registry Modify Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0169';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Schema Registry 수정', SYS_CD_NM_EN = 'Schema Registry Modification' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0169_01';
+
+DELETE FROM T_SYSDTL_C WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0170'
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0153_04', 'Schema Registry 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Schema Registry Delete');
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0153_03', 'Kafka 정보 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Kafka Information Delete');
+
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 설정 화면', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Settings Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0147';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 설정 화면', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Settings Search' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0147_01';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 삭제', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Delete' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0147_02';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 수정 화면', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Modify Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0150';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 수정', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Modification' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0150_01';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 등록 화면', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Regist Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0149';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 등록', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Registration' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0149_01';
+
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 화면', SYS_CD_NM_EN = 'DataTransfer TransManagement Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0148';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 소스시스템 조회', SYS_CD_NM_EN = 'DataTransfer TransManagement SourceSystem Search' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0148_01';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 타겟시스템 조회', SYS_CD_NM_EN = 'DataTransfer TransManagement TargetSystem Search' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0148_02';
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0148_03', '데이터전송 전송관리 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Delete');
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0148_04', '데이터전송 전송관리 상세보기 팝업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Detail Popup');
+
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 등록 화면', SYS_CD_NM_EN = 'DataTransfer TransManagement Regist Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0151';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 소스시스템 전송관리 등록', SYS_CD_NM_EN = 'DataTransfer TransManagement SourceSystem Registration' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0151_01';
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0151_03', '데이터전송 전송관리 타겟시스템 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement TargetSystem Registration');
+
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 소스시스템 수정 화면', SYS_CD_NM_EN = 'DataTransfer TransManagement SourceSystem Modify Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0152';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 소스시스템 수정', SYS_CD_NM_EN = 'DataTransfer TransManagement SourceSystem Modification' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0152_01';
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0152_02', '데이터전송 전송관리 타겟시스템 수정', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement TargetSystem Modification');
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0175', '데이터전송 전송관리 타겟시스템 수정 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement TargetSystem Modify Page');
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0175_01', '데이터전송 전송관리 타겟시스템 수정', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement TargetSystem Modification');
+
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 기본설정 설정 화면', SYS_CD_NM_EN = 'DataTransfer TransManagement DefaultSettings Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0157';
+UPDATE T_SYSDTL_C SET sys_cd_nm = '데이터전송 전송관리 기본설정 설정 조회', SYS_CD_NM_EN = 'DataTransfer TransManagement DefualtSettings Search' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0157_01';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 기본설정 삭제', SYS_CD_NM_EN = 'DataTransfer TransManagement DefaultSetting Delete' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0157_02';
+
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 기본설정 등록 화면', SYS_CD_NM_EN = 'DataTransfer TransManagement DefaultSettings Regist Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0156';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 기본설정 등록', SYS_CD_NM_EN = 'DataTransfer TransManagement DefaultSetting Registration' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0156_01';
+
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 기본설정 수정 화면', SYS_CD_NM_EN = 'DataTransfer TransManagement DefaultSettings Modify Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0158';
+UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 전송관리 기본설정 수정', SYS_CD_NM_EN = 'DataTransfer TransManagement DefaultSetting Modification' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0158_01';
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0148_05', '데이터전송 전송관리 kafka 상세보기 팝업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Kafka Detail Popup');
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0148_06', '데이터전송 전송관리 DBMS 상세보기 팝업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement DBMS Detail Popup');
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0171', '데이터전송 모니터링 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Monitoring Page');
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0172', '데이터전송 모니터링 로그 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Log Page');
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0172_01', '데이터전송 모니터링 로그 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Log Search');
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0171_02', '데이터전송 모니터링 Kafka 재시작', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Kafka restart');
+

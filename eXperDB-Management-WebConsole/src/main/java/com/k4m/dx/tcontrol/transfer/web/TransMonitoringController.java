@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
@@ -47,6 +49,9 @@ public class TransMonitoringController {
 
 	@Autowired
 	private TransService transService;
+
+	@Autowired
+	private AccessHistoryService accessHistoryService;
 	
 	/**
 	 * trans 모니터링 view
@@ -60,7 +65,11 @@ public class TransMonitoringController {
 		int db_svr_id=Integer.parseInt(request.getParameter("db_svr_id"));
 		
 		try {
-
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0171");
+			accessHistoryService.insertHistory(historyVO);
+			
 			//db서버명 조회
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
@@ -107,6 +116,7 @@ public class TransMonitoringController {
 		
 		return mv;
 	}
+
 	/**
 	 * trans 모니터링 소스 connector info
 	 * 
@@ -255,20 +265,9 @@ public class TransMonitoringController {
 		// 타겟 전송대상 테이블 목록
 		//Map<String, Object> targetTopic = transMonitoringService.selectTargetTopicList(trans_id);
 		List<Map<String, Object>> targetTopicList = transMonitoringService.selectTargetTopicListNew(trans_id);
-		
-/*		String[] topicTemp = targetTopic.get("topic_name").toString().split(",");
-		List<Map<String, Object>> targetTopicList = new ArrayList<Map<String, Object>>(); 
-		for(int i = 0; i < topicTemp.length; i++){
-			Map<String, Object> temp = new HashMap<String, Object>();
-			temp.put("rownum", i+1);
-			temp.put("topic_name", topicTemp[i]);
-			targetTopicList.add(temp);
-		}*/
-		
+
 		Map<String, Object> targetTopic = new HashMap<String, Object>();
-		
-		
-		
+
 		// 타겟 record sink chart
 		List<Map<String, Object>> targetSinkRecordChart = transMonitoringService.selectTargetSinkRecordChart(trans_id);
 		// 타겟 complete sink chart
@@ -279,7 +278,6 @@ public class TransMonitoringController {
 		List<Map<String, Object>> targetErrorChart = transMonitoringService.selectTargetErrorChart(trans_id);
 		// 타겟 error info
 		List<Map<String, Object>> targetErrorInfo = transMonitoringService.selectTargetErrorInfo(trans_id);
-		
 
 		if (targetTopicList.size() > 0) {
 			for(int i = 0; i < targetTopicList.size(); i++){
@@ -350,10 +348,21 @@ public class TransMonitoringController {
 	@RequestMapping("/transLogView.do")
 	public ModelAndView transConnectorLogView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		ModelAndView mv = new ModelAndView();
-		
-		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-		mv.addObject("db_svr_id", db_svr_id);
-		mv.setViewName("transfer/popup/transLogView");
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0172");
+			accessHistoryService.insertHistory(historyVO);
+			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			mv.addObject("db_svr_id", db_svr_id);
+			mv.setViewName("transfer/popup/transLogView");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return mv;
 	}
 	
@@ -367,12 +376,18 @@ public class TransMonitoringController {
 	public ModelAndView transConnectorLogViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		String strBuffer = "";
+
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0172_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			String strTransId = request.getParameter("trans_id");
 			String type = request.getParameter("type");
 			int trans_id = Integer.parseInt(strTransId);
-         String strKcId = request.getParameter("kc_id");
+			String strKcId = request.getParameter("kc_id");
 			String strSeek = request.getParameter("seek");
 			String strReadLine = request.getParameter("readLine");
 			String dwLen = request.getParameter("dwLen");
@@ -382,7 +397,8 @@ public class TransMonitoringController {
 			TransVO transVO = new TransVO();
 			transVO.setDb_svr_id(db_svr_id);
 			transVO.setTrans_id(trans_id);
-         transVO.setKc_id(strKcId);
+			transVO.setKc_id(strKcId);
+			
 			Map<String, Object> param = new HashMap<>();
 			param.put("seek", strSeek);
 			param.put("readLine", strReadLine);
@@ -390,16 +406,18 @@ public class TransMonitoringController {
 			param.put("date", strDate);
 			param.put("todayYN", todayYN);
 			param.put("type", type);
+
 			Map<String, Object> result = transMonitoringService.getLogFile(transVO, param);
 			strBuffer = (String) result.get("RESULT_DATA"); 
 			if(strBuffer != null) {
 				mv.addObject("fSize", strBuffer.length());
 			}
+	
 			mv.addObject("data", strBuffer);
 			mv.addObject("dwLen", result.get("DW_LEN"));
 			mv.addObject("file_name", result.get("file_name"));
 			mv.addObject("status", result.get("status"));
-         mv.addObject("kc_nm", result.get("kc_nm"));
+			mv.addObject("kc_nm", result.get("kc_nm"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -419,15 +437,22 @@ public class TransMonitoringController {
 		HttpSession session = request.getSession();
 		
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0171_02");
+			accessHistoryService.insertHistory(historyVO);
+			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			int trans_id = Integer.parseInt(request.getParameter("trans_id"));
+			
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("lst_mdfr_id", loginVo.getUsr_id() == null ? "" : loginVo.getUsr_id().toString());
 
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-			int trans_id = Integer.parseInt(request.getParameter("trans_id"));
 			TransVO transVO = new TransVO();
 			transVO.setDb_svr_id(db_svr_id);
 			transVO.setTrans_id(trans_id);
+
 			Map<String, Object> resultObj = transMonitoringService.transKafkaConnectRestart(transVO, param);
 			mv.addObject("data", resultObj.get("RESULT_DATA"));
 		} catch (Exception e) {
