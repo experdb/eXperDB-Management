@@ -120,7 +120,7 @@ public class TransConController {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * kafka connect 사용중 또는 등록 되있는 경우 확인
 	 * @param response, request , transDbmsVO
@@ -146,7 +146,7 @@ public class TransConController {
 		}
 
 		return result;
-	}	
+	}
 
 	/**
 	 * Schema Registry 사용중 또는 등록 되있는 경우 확인
@@ -173,8 +173,8 @@ public class TransConController {
 		}
 
 		return result;
-	}	
-
+	}
+	
 	/**
 	 * TRANS Schema Registry 시스템을 수정한다.
 	 * 
@@ -209,7 +209,7 @@ public class TransConController {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Schema 수정 페이지 조회
 	 * @param historyVO, transRegiVO, request
@@ -287,7 +287,7 @@ public class TransConController {
 		
 		try{
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0170");
+			historyVO.setExe_dtl_cd("DX-T0153_04");
 			accessHistoryService.insertHistory(historyVO);
 
 			if (!"".equals(trans_regi_id_List)) {
@@ -310,7 +310,7 @@ public class TransConController {
 	}
 	
 	/**
-	 * kafka 커넥터 deleteTransKafkaConnect
+	 * kafka 커넥터 deleteTransKafkaConnect 삭제
 	 * @param transDbmsVO, response, request, historyVO
 	 * @return boolean
 	 * @throws IOException 
@@ -330,7 +330,7 @@ public class TransConController {
 		
 		try{
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0151_02");
+			historyVO.setExe_dtl_cd("DX-T0153_03");
 			accessHistoryService.insertHistory(historyVO);
 
 			if (!"".equals(trans_connect_id_Rows)) {
@@ -427,7 +427,7 @@ public class TransConController {
 		
 		return result;
 	}
-	
+
 	/**
 	 * Schema Registry 설정 등록 팝업 화면을 보여준다.
 	 * 
@@ -473,7 +473,7 @@ public class TransConController {
 		}
 		return mv;
 	}
-	
+
 	/**
 	 * kafka connenct를 조회한다.
 	 * 
@@ -512,43 +512,20 @@ public class TransConController {
 		List<TransRegiVO> resultSet = null;
 		
 		try {
-
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0153_02");
+			accessHistoryService.insertHistory(historyVO);
+			
 			resultSet = transConService.selectTransRegiList(transRegiVO);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return resultSet;
 	}
-	
+
 	/**
-	 * kafka connect 설정 팝업 화면을 보여준다.
-	 * 
-	 * @param
-	 * @return ModelAndView mv
-	 * @throws 
-	 */
-	@RequestMapping(value = "/popup/transConSettingForm.do")
-	public ModelAndView transConSettingForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
-		ModelAndView mv = new ModelAndView("jsonView");
-
-		try {
-			CmmnUtils.saveHistory(request, historyVO);
-
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-
-			// 화면접근이력 이력 남기기
-			historyVO.setExe_dtl_cd("DX-T0153");
-			accessHistoryService.insertHistory(historyVO);
-
-			mv.addObject("db_svr_id", db_svr_id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
-	/**
-	 * 타켓 DBMS 설정 화면 출력
+	 * 커넥터 서버 설정화면 출력
 	 * 
 	 * @param
 	 * @return ModelAndView mv
@@ -626,6 +603,7 @@ public class TransConController {
 		return result;
 	}
 
+
 	/**
 	 * select box kafka-Connection 연결 테스트
 	 * 
@@ -646,7 +624,6 @@ public class TransConController {
 		String id = loginVo.getUsr_id();
 
 		try {
-			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			//리스트 조회
 			resultSet = transConService.selectTransKafkaConList(transDbmsVO);
@@ -657,7 +634,6 @@ public class TransConController {
 		}
 		return result;
 	}
-
 
 	/**
 	 * select box kafka-Connection 연결 테스트
@@ -679,7 +655,6 @@ public class TransConController {
 		String id = loginVo.getUsr_id();
 
 		try {
-			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			//리스트 조회
 			resultSet = transConService.selectTransRegiList(transRegiVO);

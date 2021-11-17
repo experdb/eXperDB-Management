@@ -1497,4 +1497,60 @@ public class TransController {
 		
 		return mv;
 	}
+	
+	/**
+	 * 전송관리 - kafka connect 설정 팝업 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws 
+	 */
+	@RequestMapping(value = "/popup/transConSettingForm.do")
+	public ModelAndView transConSettingForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+
+			// 화면접근이력 이력 남기기
+			historyVO.setExe_dtl_cd("DX-T0153_02");
+			accessHistoryService.insertHistory(historyVO);
+
+			mv.addObject("db_svr_id", db_svr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+
+
+	/**
+	 * 타켓 DBMS 설정 팝업 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws 
+	 */
+	@RequestMapping(value = "/popup/transTargetDbmsSetting.do")
+	public ModelAndView transTargetDbmsSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+
+			// 화면접근이력 이력 남기기
+			historyVO.setExe_dtl_cd("DX-T0147");
+			accessHistoryService.insertHistory(historyVO);
+
+			mv.addObject("db_svr_id", db_svr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
 }

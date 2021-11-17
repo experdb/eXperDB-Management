@@ -88,8 +88,14 @@ public class TransDbmsServiceImpl extends EgovAbstractServiceImpl implements Tra
 				String pwd = aes.aesEncode(transDbmsVO.getPwd());
 				transDbmsVO.setPwd(pwd);
 
-				transDbmsVO.setScm_nm(transDbmsVO.getScm_nm().toUpperCase());
-				transDbmsVO.setDtb_nm(transDbmsVO.getDtb_nm().toUpperCase());
+				
+				if ("TC002204".equals(transDbmsVO.getDbms_dscd())) {
+					transDbmsVO.setScm_nm(transDbmsVO.getScm_nm());
+					transDbmsVO.setDtb_nm(transDbmsVO.getDtb_nm());
+				} else {
+					transDbmsVO.setScm_nm(transDbmsVO.getScm_nm().toUpperCase());
+					transDbmsVO.setDtb_nm(transDbmsVO.getDtb_nm().toUpperCase());
+				}
 
 				transDAO.insertTransDBMS(transDbmsVO);
 
@@ -186,8 +192,14 @@ public class TransDbmsServiceImpl extends EgovAbstractServiceImpl implements Tra
 			
 			String pwd = aes.aesEncode(transDbmsVO.getPwd());
 			transDbmsVO.setPwd(pwd);
-			transDbmsVO.setScm_nm(transDbmsVO.getScm_nm().toUpperCase());
-			transDbmsVO.setDtb_nm(transDbmsVO.getDtb_nm().toUpperCase());
+			
+			if ("TC002204".equals(transDbmsVO.getDbms_dscd())) {
+				transDbmsVO.setScm_nm(transDbmsVO.getScm_nm());
+				transDbmsVO.setDtb_nm(transDbmsVO.getDtb_nm());
+			} else {
+				transDbmsVO.setScm_nm(transDbmsVO.getScm_nm().toUpperCase());
+				transDbmsVO.setDtb_nm(transDbmsVO.getDtb_nm().toUpperCase());
+			}
 
 			transDAO.updateTransDBMS(transDbmsVO);
 		} catch (Exception e) {

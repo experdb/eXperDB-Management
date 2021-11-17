@@ -100,7 +100,7 @@ public class TransDbmsController {
 
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0148");
+				historyVO.setExe_dtl_cd("DX-T0147");
 				accessHistoryService.insertHistory(historyVO);
 				
 				//db서버명 조회
@@ -119,33 +119,6 @@ public class TransDbmsController {
 		return mv;
 	}
 
-	/**
-	 * 타켓 DBMS 설정 팝업 화면을 보여준다.
-	 * 
-	 * @param
-	 * @return ModelAndView mv
-	 * @throws 
-	 */
-	@RequestMapping(value = "/popup/transTargetDbmsSetting.do")
-	public ModelAndView transTargetDbmsSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
-		ModelAndView mv = new ModelAndView("jsonView");
-
-		try {
-			CmmnUtils.saveHistory(request, historyVO);
-
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-
-			// 화면접근이력 이력 남기기
-			historyVO.setExe_dtl_cd("DX-T0147");
-			accessHistoryService.insertHistory(historyVO);
-
-			mv.addObject("db_svr_id", db_svr_id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
 	/**
 	 * 타켓 DBMS 시스템을 조회한다.
 	 * 
@@ -198,7 +171,7 @@ public class TransDbmsController {
 		}
 		return mv;
 	}
-
+	
 	/**
 	 * 시스템명을 중복 체크한다.
 	 * 
@@ -283,7 +256,7 @@ public class TransDbmsController {
 	}
 	
 	/**
-	 * 타겟 dbms 수정
+	 * 타겟 dbms 수정 팝업 출력
 	 * @param historyVO, transDbmsVO, request
 	 * @return ModelAndView
 	 */
@@ -355,9 +328,9 @@ public class TransDbmsController {
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Work deleteTransDBMS
+	 * 데이터전송 타겟DBMS 삭제
 	 * @param transDbmsVO, response, request, historyVO
 	 * @return boolean
 	 * @throws IOException 
