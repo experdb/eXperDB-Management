@@ -44,7 +44,7 @@
 	 ******************************************************** */
 	function fn_trans_connect_init(){
 		trans_connect_table = $('#transKfkConnectList').DataTable({
-			scrollY : "390px",
+			scrollY : "300px",
 			deferRender : true,
 			scrollX: true,
 			searching : false,
@@ -76,7 +76,16 @@
  							className : "dt-left",
  							defaultContent : "" 	
  						},
- 						
+ 						{data : "conn_test_btn", className : "dt-center", defaultContent : "",
+ 							render: function (data, type, full){
+ 								var html =""; 
+ 								html +="<span onclick=\"fn_connect_con_test_btn('"+full.kc_ip+"','"+full.kc_port+"','kafka',"+full.rownum+")\" class=\"bold\">";
+ 								html +="	<i class='mdi mdi-lan-connect'></i> ";
+ 								html +="	<spring:message code='dbms_information.conn_Test' />";
+								html +="</span>";
+								return html;
+ 							}
+ 						},
  						{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
  						{data : "kc_id",  defaultContent : "", visible: false }
  			],'select': {'style': 'multi'}
@@ -86,15 +95,16 @@
 		trans_connect_table.tables().header().to$().find('th:eq(1)').css('min-width', '10px');
 		trans_connect_table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		trans_connect_table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		trans_connect_table.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
+		trans_connect_table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		trans_connect_table.tables().header().to$().find('th:eq(5)').css('min-width', '80px');
 		trans_connect_table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-		trans_connect_table.tables().header().to$().find('th:eq(7)').css('min-width', '0px');
+		trans_connect_table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		trans_connect_table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
 
 		
 		//transRegiConnectList
 		trans_regi_table = $('#transRegiConnectList').DataTable({
-			scrollY : "390px",
+			scrollY : "300px",
 			deferRender : true,
 			scrollX: true,
 			searching : false,
@@ -126,7 +136,16 @@
  							className : "dt-left",
  							defaultContent : "" 	
  						},
- 						
+ 						{data : "conn_test_btn", className : "dt-center", defaultContent : "",
+ 							render: function (data, type, full){
+ 								var html =""; 
+ 								html +="<span onclick=\"fn_connect_con_test_btn('"+full.regi_ip+"','"+full.regi_port+"','schema',"+full.rownum+")\" class=\"bold\">";
+ 								html +="	<i class='mdi mdi-lan-connect'></i> ";
+ 								html +="	<spring:message code='dbms_information.conn_Test' />";
+								html +="</span>";
+								return html;
+ 							}
+ 						},
  						{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
  						{data : "regi_id",  defaultContent : "", visible: false }
  			],'select': {'style': 'multi'}
@@ -136,15 +155,75 @@
 		trans_regi_table.tables().header().to$().find('th:eq(1)').css('min-width', '10px');
 		trans_regi_table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		trans_regi_table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		trans_regi_table.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
+		trans_regi_table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		trans_regi_table.tables().header().to$().find('th:eq(5)').css('min-width', '80px');
 		trans_regi_table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-		trans_regi_table.tables().header().to$().find('th:eq(7)').css('min-width', '0px');
+		trans_regi_table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		trans_regi_table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
 
 
 		$(window).trigger('resize');
 	}
 
+	/* ********************************************************
+	 * 연결테스트
+	 ******************************************************** */
+	function fn_connect_con_test_btn(ip,port,conn_gbn,r){
+
+		var kafkaIp;
+		var kafkaPort;
+		var regiIP;
+		var regiPort;
+		var messge;
+		
+		if(conn_gbn=='kafka'){
+			kafkaIp = ip;
+			kafkaPort = port;
+			messge = 'kafka-Connection ';
+		}else{
+			regiIP=ip;
+			regiPort=port;
+			messge = 'Schema Registry-Connection ';
+		}
+		
+		$.ajax({
+			url : '/kafkaConnectionTest.do',
+			type : 'post',
+			data : {
+				db_svr_id : $("#db_svr_id","#findList").val(),
+				kafkaIp : nvlPrmSet(kafkaIp,''),
+				kafkaPort : nvlPrmSet(kafkaPort,''),
+				regiIP : nvlPrmSet(regiIP,''),
+				regiPort : nvlPrmSet(regiPort,''),
+				connect_gbn : conn_gbn
+			},
+			success : function(result) {
+				var tempTable ;
+				if(conn_gbn=='kafka'){
+					tempTable =trans_connect_table;
+				}else{
+					tempTable=trans_regi_table;
+				}
+				if(result.RESULT_DATA =="success"){
+					tempTable.row(r-1).data().exe_status='TC001501';
+					showSwalIcon(messge + '<spring:message code="message.msg93"/>', '<spring:message code="common.close" />', '', 'success');
+				}else{
+					tempTable.row(r-1).data().exe_status='TC001502';
+					showSwalIcon(messge + '<spring:message code="message.msg92"/>', '<spring:message code="common.close" />', '', 'error');
+				}
+				var newData = tempTable.rows().data();
+				tempTable.clear().draw();
+				tempTable.rows.add(newData).draw();
+				tempTable.rows({selected: true}).deselect();
+				
+			},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			}
+		});
+		$('#loading').hide();
+	}
+	
 	/* ********************************************************
 	 * kafka connect 조회
 	 ******************************************************** */
@@ -803,6 +882,7 @@
 			 									<th width="100"><spring:message code="data_transfer.ip" /></th>
 												<th width="50"><spring:message code="data_transfer.port" /></th>
 												<th width="80"><spring:message code="data_transfer.connection_status" /></th>
+												<th width="100"><spring:message code="dbms_information.conn_Test" /></th>
 												<th width="100"><spring:message code="common.modify_datetime" /></th>
 												<th width="0"></th>
 											</tr>
@@ -863,6 +943,7 @@
 			 									<th width="100"><spring:message code="data_transfer.ip" /></th>
 												<th width="50"><spring:message code="data_transfer.port" /></th>
 												<th width="80"><spring:message code="data_transfer.connection_status" /></th>
+												<th width="100"><spring:message code="dbms_information.conn_Test" /></th>
 												<th width="100"><spring:message code="common.modify_datetime" /></th>
 												<th width="0"></th>
 											</tr>

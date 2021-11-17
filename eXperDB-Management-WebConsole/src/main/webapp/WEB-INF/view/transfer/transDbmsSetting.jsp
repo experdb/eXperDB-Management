@@ -52,9 +52,9 @@
  						{data : "trans_sys_nm", className : "dt-center", defaultContent : ""},
  						{data : "dbms_dscd_nm", className : "dt-center", defaultContent : ""},
  						{data : "ipadr", className : "dt-center", defaultContent : ""},
+ 						{data : "portno", className : "dt-center", defaultContent : ""},
  						{data : "dtb_nm", className : "dt-center", defaultContent : ""},
  						{data : "scm_nm", className : "dt-center", defaultContent : ""},
- 						{data : "portno", className : "dt-center", defaultContent : ""},
  					    {data : "spr_usr_id", className : "dt-center", defaultContent : ""},
  						{data : "exe_status", 
  							render: function (data, type, full){
@@ -76,6 +76,16 @@
  							className : "dt-left",
  							defaultContent : "" 	
  						},
+ 						{data : "conn_test_btn", className : "dt-center", defaultContent : "",
+ 							render: function (data, type, full){
+ 								var html =""; 
+ 								html +="<span onclick=\"fn_click_con_test_btn('"+full.ipadr+"',"+full.portno+",'"+full.dtb_nm+"','"+full.spr_usr_id+"','"+full.pwd+"','"+full.dbms_dscd+"',"+full.rownum+")\" class=\"bold\">";
+ 								html +="	<i class='mdi mdi-lan-connect'></i> ";
+ 								html +="	<spring:message code='dbms_information.conn_Test' />";
+								html +="</span>";
+								return html; 
+ 							}
+ 						},
  						{data : "trans_sys_id",  defaultContent : "", visible: false }
  			],'select': {'style': 'multi'}
 		});
@@ -85,12 +95,13 @@
 		trans_dbms_table.tables().header().to$().find('th:eq(2)').css('min-width', '170px');
 		trans_dbms_table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		trans_dbms_table.tables().header().to$().find('th:eq(4)').css('min-width', '150px');
-		trans_dbms_table.tables().header().to$().find('th:eq(5)').css('min-width', '120px');
-		trans_dbms_table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
-		trans_dbms_table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');		
+		trans_dbms_table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		trans_dbms_table.tables().header().to$().find('th:eq(6)').css('min-width', '120px');
+		trans_dbms_table.tables().header().to$().find('th:eq(7)').css('min-width', '150px');		
 		trans_dbms_table.tables().header().to$().find('th:eq(8)').css('min-width', '138px');
 		trans_dbms_table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
-		trans_dbms_table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
+		trans_dbms_table.tables().header().to$().find('th:eq(10)').css('min-width', '130px');
+		trans_dbms_table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
 
 		$(window).trigger('resize');
 	}
@@ -130,6 +141,49 @@
 		});
 	}
 
+	/* ********************************************************
+	 * 연결테스트 버튼 클릭 
+	 ******************************************************** */
+	function fn_click_con_test_btn(ip, port, db, usr, pw, db_cd, r){
+		$.ajax({
+	 		url : "/dbmsConnTestInRow.do",
+	 		data : {
+	 		 	ipadr : nvlPrmSet(ip, ''),
+	 		 	portno : nvlPrmSet(port, ''),
+	 		  	dtb_nm : nvlPrmSet(db, ''),
+	 		   	spr_usr_id : nvlPrmSet(usr, ''),
+	 		   	pwd : nvlPrmSet(pw, ''),
+	 		  	dbms_dscd : nvlPrmSet(db_cd, '')
+	 		},
+	 		type : "post",
+	 		beforeSend: function(xhr) {
+	 	        xhr.setRequestHeader("AJAX", true);
+			},
+	 		error : function(xhr, status, error) {
+	 			if(xhr.status == 401) {
+	 				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+	 			} else if(xhr.status == 403) {
+	 				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+	 			} else {
+	 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+	 			}
+	 		},
+	 		success : function(result) {
+	 			if(result.RESULT_CODE == 0){
+	 				trans_dbms_table.row(r-1).data().exe_status='TC001501';
+	 				showSwalIcon(result.RESULT_Conn, '<spring:message code="common.close" />', '', 'success');
+	 			}else{
+	 				trans_dbms_table.row(r-1).data().exe_status='TC001502';
+	 				showSwalIcon(result.ERR_MSG, '<spring:message code="common.close" />', '', 'error');
+	 			}
+	 			var newData = trans_dbms_table.rows().data();
+	 			trans_dbms_table.clear().draw();
+	 			trans_dbms_table.rows.add(newData).draw();
+	 			trans_dbms_table.rows({selected: true}).deselect();
+	 		}
+	 	});     
+	}
+	
 	/* ********************************************************
 	 * DBMS 등록 팝업페이지 호출
 	 ******************************************************** */
@@ -459,11 +513,12 @@
 												<th width="170"><spring:message code="migration.system_name"/></th>
 												<th width="100">DBMS<spring:message code="common.division" /></th>
 												<th width="150"><spring:message code="data_transfer.ip" /></th>
+												<th width="100"><spring:message code="data_transfer.port" /></th>
 												<th width="100">Database</th>
 												<th width="150">Schema</th>
-												<th width="100"><spring:message code="data_transfer.port" /></th>
 												<th width="130"><spring:message code="dbms_information.account" /></th>
 												<th width="130"><spring:message code="data_transfer.connection_status" /></th>
+												<th width="130"><spring:message code="dbms_information.conn_Test" /></th>
 												<th width="0"><spring:message code="common.modify_datetime" /></th>
 											</tr>
 										</thead>
