@@ -102,6 +102,11 @@ public class TransServiceImpl implements TransService{
 		}
 	}
 
+	/* topic 테이블 조회 - KC_ID */
+	public List<TransVO> selectTranscngKcList(TransVO transVO) throws Exception {
+		return transDAO.selectTranscngKcList(transVO);
+	}
+
 	/* trans 실시간  */
 	public String transRealTimeCheck(TransVO searChTransVO) throws Exception {
 		String transConListCmd = "";
@@ -274,8 +279,6 @@ public class TransServiceImpl implements TransService{
 									transVO.setTopic_nm(topicNm);
 	
 									if (topicTableList.size() > 0) {
-										transVO.setKc_ip(topicTableList.get(0).getKc_ip());
-
 										for(int j=0;j < topicTableList.size();j++) {
 											if (topicTableList.get(j).getTopic_nm().equals(topicNm)) {
 												overLabCnt = overLabCnt + 1;
@@ -290,6 +293,8 @@ public class TransServiceImpl implements TransService{
 											String insResult = insertKafkaRealTopic(transVO);
 											
 											if ("success".equals(insResult)) {
+												transVO.setKc_id(topicTableList.get(0).getKc_id());
+
 												//topic 테이블 수정
 												transDAO.updateTransTopic(transVO);
 											}
@@ -299,6 +304,8 @@ public class TransServiceImpl implements TransService{
 											String insResult = insertKafkaRealTopic(transVO);
 											
 											if ("success".equals(insResult)) {
+												transVO.setKc_id(topicTableList.get(0).getKc_id());
+												
 												//topic 테이블 등록
 												transDAO.insertTransTopic(transVO);
 											}
@@ -307,6 +314,7 @@ public class TransServiceImpl implements TransService{
 										List<TransVO> kcIpList = transDAO.selectTranscngKcList(transVO); // topic 테이블 조회
 										
 										transVO.setKc_ip(kcIpList.get(0).getKc_ip());
+										transVO.setKc_id(kcIpList.get(0).getKc_id());
 										
 										String insResult = insertKafkaRealTopic(transVO);
 										
@@ -344,9 +352,14 @@ public class TransServiceImpl implements TransService{
 				transDAO.insertTransActstateCngInfo(transVO);
 			} else {
 				if ("SOURCE".equals(con_start_gbn)) { //소스시스템
+					List<TransVO> kcIpList = transDAO.selectTranscngKcList(transVO); // topic 테이블 조회
+
+					if (kcIpList.size() > 0) {
+						transVO.setKc_id(kcIpList.get(0).getKc_id());
+					}
+					
 					List<TransVO> topicTableList = transDAO.selectTranIdTopicTotCnt(transVO); // topic count 조회
-					
-					
+
 					if (topicTableList != null) {
 						//target 이 연결되어있는 경우
 						if (topicTableList.get(0).getTar_trans_id_cnt() > 0) {

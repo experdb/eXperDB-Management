@@ -69,6 +69,14 @@ public interface TransService {
 	public List<TransVO> selectTranIdTopicList(TransVO vo) throws Exception;
 
 	/**
+	 * topic 테이블 조회 - KC_ID
+	 * @param TransVO
+	 * @return
+	 * @throws Exception
+	 */
+	public List<TransVO> selectTranscngKcList(TransVO transVO) throws Exception;
+
+	/**
 	 * topic list 삭제
 	 * @param  TransVO
 	 * @return 
