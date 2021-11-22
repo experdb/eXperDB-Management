@@ -182,7 +182,7 @@ a:hover.tip span {
 					fn_tot_select();
 					
 				} else {
-					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="eXperDB_CDC.msg30" />');
+					showDangerToast('top-right', '<spring:message code="eXperDB_CDC.msg29" />', '<spring:message code="eXperDB_CDC.msg30" />');
 					
 					$("#btnChoActive").prop("disabled", "disabled");
 					$("#btnChoDisabled").prop("disabled", "disabled");
@@ -337,13 +337,13 @@ a:hover.tip span {
 	function fn_transActivation_click(row){
 		if($("#transActivation"+row).is(":checked") == true){
 			$('#con_multi_gbn', '#findConfirmMulti').val("con_start");
-			$('#confirm_multi_msg').html('<spring:message code="data_transfer.msg8" />');
+			$('#confirm_multi_msg').html('<spring:message code="eXperDB_CDC.msg8" />');
 		} else {
 			$('#con_multi_gbn', '#findConfirmMulti').val("con_end");
-			$('#confirm_multi_msg').html('<spring:message code="data_transfer.msg9" />');
+			$('#confirm_multi_msg').html('<spring:message code="eXperDB_CDC.msg9" />');
 		}
 		
-		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="data_transfer.transfer_activity" />';
+		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="eXperDB_CDC.transfer_activity" />';
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#chk_act_row', '#findList').val(row);
 		
@@ -434,7 +434,7 @@ a:hover.tip span {
 		}
 		
 		if(table.row('.selected').data().exe_status == "TC001501"){
-			validateMsg = '<spring:message code="data_transfer.msg11"/>';
+			validateMsg = '<spring:message code="eXperDB_CDC.msg11"/>';
 			showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
@@ -513,15 +513,15 @@ a:hover.tip span {
 	
 		//스냅샷 모드 change
 		if(snapshot_mode_re == "TC003601"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg2" />'); //(초기스냅샷 1회만 수행)
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg2" />'); //(초기스냅샷 1회만 수행) 미사용
 		}else if(snapshot_mode_re == "TC003602"){
 			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg3" />'); //(스냅샷 항상 수행)
 		}else if (snapshot_mode_re == "TC003603"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />'); //(스냅샷 수행하지 않음)
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg1" />'); //(초기적재 미수행, 스트리밍 수행)
 		}else if (snapshot_mode_re == "TC003604"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg4" />'); //(스냅샷만 수행하고 종료)
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg4" />'); //(스냅샷만 수행하고 종료)
 		}else if (snapshot_mode_re == "TC003605"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg5" />'); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법)
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg5" />'); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법) 미사용
 		}
 		
 		mod_connector_tableList.rows({selected: true}).deselect();
@@ -538,12 +538,12 @@ a:hover.tip span {
 	function fn_insert_chogihwa(gbn) {
 		if (gbn == "reg") {
 			//스냅샷 모드 추가
-			$("#ins_snapshot_mode", "#insRegForm").val('TC003603').prop("selected", true); //값이 1인 option 선택
+			$("#ins_snapshot_mode", "#insRegForm").val('TC003604').prop("selected", true); //값이 1인 option 선택
 
 			//압축형태 추가
 			$("#ins_compression_type", "#insRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 
-			$("#ins_snapshotModeDetail", "#insRegForm").html('<spring:message code="data_transfer.msg1" />');
+			$("#ins_snapshotModeDetail", "#insRegForm").html('<spring:message code="eXperDB_CDC.msg4" />');
 
 			//메타데이타 설정
 			$("#ins_meta_data", "#insRegForm").val("OFF");
@@ -561,13 +561,13 @@ a:hover.tip span {
 		} else {
 			
 			//스냅샷 모드 추가
-			$("#mod_snapshot_mode", "#modRegForm").val('TC003603').prop("selected", true); //값이 1인 option 선택
+			$("#mod_snapshot_mode", "#modRegForm").val('TC003604').prop("selected", true); //값이 1인 option 선택
 
 			//압축형태 추가
 			$("#mod_compression_type", "#modRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 			
 			//입력관련 초기화
-			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />');
+			$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg4" />');
 
 			//메타데이타 설정
 			$("#mod_meta_data", "#modRegForm").val("OFF");
@@ -608,7 +608,7 @@ a:hover.tip span {
 		}
 
 		if (i_exe_status > 0) {
-			validateMsg = '<spring:message code="data_transfer.msg7"/>';
+			validateMsg = '<spring:message code="eXperDB_CDC.msg7"/>';
 			showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
@@ -728,7 +728,7 @@ a:hover.tip span {
 					checkId = 'transActivation' + ascRow;
 
 					if (result == null) {
-						validateMsg = '<spring:message code="data_transfer.msg10"/>';
+						validateMsg = '<spring:message code="eXperDB_CDC.msg10"/>';
 						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 						
 						$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
@@ -737,7 +737,7 @@ a:hover.tip span {
 						if (result == "success") {
 							fn_tot_select();
 						} else {
-							validateMsg = '<spring:message code="data_transfer.msg10"/>';
+							validateMsg = '<spring:message code="eXperDB_CDC.msg10"/>';
 							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 							
 							$("input:checkbox[id='" + checkId + "']").prop("checked", false);
@@ -775,7 +775,7 @@ a:hover.tip span {
 					checkId = 'transActivation' + ascRow;
 
 					if (result == null) {
-						validateMsg = '<spring:message code="data_transfer.msg10"/>';
+						validateMsg = '<spring:message code="eXperDB_CDC.msg10"/>';
 						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 						
 						$("input:checkbox[id='" + checkId + "']").prop("checked", true); 
@@ -784,7 +784,7 @@ a:hover.tip span {
 						if (result == "success") {
 							fn_tot_select();
 						} else {
-							validateMsg = '<spring:message code="data_transfer.msg10"/>';
+							validateMsg = '<spring:message code="eXperDB_CDC.msg10"/>';
 							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 							
 							$("input:checkbox[id='" + checkId + "']").prop("checked", true);
@@ -862,15 +862,15 @@ a:hover.tip span {
 
 		//스냅샷 모드 change
 		if(snapshot_mode_re == "TC003601"){
-			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg2" />';
+			snapshot_mode_nm += ' ' + '<spring:message code="eXperDB_CDC.msg2" />';
 		}else if(snapshot_mode_re == "TC003602"){
 			snapshot_mode_nm += ' ' + '<spring:message code="eXperDB_CDC.msg3" />';
 		}else if (snapshot_mode_re == "TC003603"){
-			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg1" />';
+			snapshot_mode_nm += ' ' + '<spring:message code="eXperDB_CDC.msg1" />';
 		}else if (snapshot_mode_re == "TC003604"){
-			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg4" />';
+			snapshot_mode_nm += ' ' + '<spring:message code="eXperDB_CDC.msg4" />';
 		}else if (snapshot_mode_re == "TC003605"){
-			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg5" />';
+			snapshot_mode_nm += ' ' + '<spring:message code="eXperDB_CDC.msg5" />';
 		}
 		$("#d_snapshot_mode_nm", "#infoRegForm").html(snapshot_mode_nm);
 		
@@ -957,14 +957,14 @@ a:hover.tip span {
 			
 			//실행 내역이 없는 경우
 			if (i_un_exe_status <= 0) {
-				showSwalIcon('<spring:message code="data_transfer.msg17" />', '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon('<spring:message code="eXperDB_CDC.msg17" />', '<spring:message code="common.close" />', '', 'error');
 				return;
 			}
 
 			if (i_exe_status > 0) {
-				validateMsg = '<spring:message code="data_transfer.msg13"/>';
+				validateMsg = '<spring:message code="eXperDB_CDC.msg13"/>';
 			} else {
-				validateMsg = '<spring:message code="data_transfer.msg12"/>';
+				validateMsg = '<spring:message code="eXperDB_CDC.msg12"/>';
 			}
 		} else {
 			for (var i = 0; i < datas.length; i++) {
@@ -984,18 +984,18 @@ a:hover.tip span {
 			
 			//실행 내역이 없는 경우
 			if (i_exe_status <= 0) {
-				showSwalIcon('<spring:message code="data_transfer.msg17" />', '<spring:message code="common.close" />', '', 'error');
+				showSwalIcon('<spring:message code="eXperDB_CDC.msg17" />', '<spring:message code="common.close" />', '', 'error');
 				return;
 			}
 
 			if (i_un_exe_status > 0) {
-				validateMsg = '<spring:message code="data_transfer.msg15"/>';
+				validateMsg = '<spring:message code="eXperDB_CDC.msg15"/>';
 			} else {
-				validateMsg = '<spring:message code="data_transfer.msg14"/>';
+				validateMsg = '<spring:message code="eXperDB_CDC.msg14"/>';
 			}
 		}
 
-		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="data_transfer.transfer_activity" />';
+		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="eXperDB_CDC.transfer_activity" />';
 
 		$('#con_multi_gbn', '#findConfirmMulti').val(tot_con_gbn);
 		$('#confirm_multi_tlt').html(confile_title);
@@ -1043,15 +1043,15 @@ a:hover.tip span {
 					fn_buttonExecuteAut("end", "");
 
 					if (result == null) {
-						validateMsg = '<spring:message code="data_transfer.msg10"/>';
+						validateMsg = '<spring:message code="eXperDB_CDC.msg10"/>';
 						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 						return;
 					} else {
 						if (result == "success") {
-							showSwalIcon('<spring:message code="data_transfer.msg16" />', '<spring:message code="common.close" />', '', 'success');
+							showSwalIcon('<spring:message code="eXperDB_CDC.msg16" />', '<spring:message code="common.close" />', '', 'success');
 							fn_tot_select();
 						} else {
-							validateMsg = '<spring:message code="data_transfer.msg10"/>';
+							validateMsg = '<spring:message code="eXperDB_CDC.msg10"/>';
 							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 							return;
 						}
@@ -1093,15 +1093,15 @@ a:hover.tip span {
 					fn_buttonExecuteAut("end", "");
 
 					if (result == null) {
-						validateMsg = '<spring:message code="data_transfer.msg10"/>';
+						validateMsg = '<spring:message code="eXperDB_CDC.msg10"/>';
 						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 						return;
 					} else {
 						if (result == "success") {
-							showSwalIcon('<spring:message code="data_transfer.msg16" />', '<spring:message code="common.close" />', '', 'success');
+							showSwalIcon('<spring:message code="eXperDB_CDC.msg16" />', '<spring:message code="common.close" />', '', 'success');
 							fn_tot_select();
 						} else {
-							validateMsg = '<spring:message code="data_transfer.msg10"/>';
+							validateMsg = '<spring:message code="eXperDB_CDC.msg10"/>';
 							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 							return;
 						}
@@ -1119,12 +1119,12 @@ a:hover.tip span {
  		if(autIngGbn == "start"){
  			if (exeIngGbn == "active") {
 				strMsg = "<i class='fa fa-spin fa-spinner btn-icon-prepend'></i>";
-				strMsg += '<spring:message code="data_transfer.save_select_active" />' + ' ' + '<spring:message code="restore.progress" />';
+				strMsg += '<spring:message code="eXperDB_CDC.save_select_active" />' + ' ' + '<spring:message code="restore.progress" />';
 
 				$("#btnChoActive").html(strMsg);
  			} else {
 				strMsg = "<i class='fa fa-spin fa-spinner btn-icon-prepend'></i>";
-				strMsg += '<spring:message code="data_transfer.save_select_disabled" />' + ' ' + '<spring:message code="restore.progress" />';
+				strMsg += '<spring:message code="eXperDB_CDC.save_select_disabled" />' + ' ' + '<spring:message code="restore.progress" />';
 
 				$("#btnChoDisabled").html(strMsg);
  			}
@@ -1141,8 +1141,8 @@ a:hover.tip span {
 			$("#btnCommonConSetInsert").prop("disabled", "disabled");
 		}else{
 			strMsg = '<i class="fa fa-spin fa-cog btn-icon-prepend"></i>';
-			$("#btnChoActive").html(strMsg + '<spring:message code="data_transfer.save_select_active" />');
-			$("#btnChoDisabled").html(strMsg + '<spring:message code="data_transfer.save_select_disabled" />');
+			$("#btnChoActive").html(strMsg + '<spring:message code="eXperDB_CDC.save_select_active" />');
+			$("#btnChoDisabled").html(strMsg + '<spring:message code="eXperDB_CDC.save_select_disabled" />');
 			
 			$("#btnChoActive").prop("disabled", "");
 			$("#btnChoDisabled").prop("disabled", "");
@@ -1204,14 +1204,14 @@ a:hover.tip span {
 			},
 			success : function(result) {
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
-					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+					validateMsg = "<spring:message code='eXperDB_CDC.msg10' />";
+					showSwalIcon(fn_strBrReplcae(validateMsg), "<spring:message code='common.close' />", '', 'error');
 					return;
 				} else {
 					if (result == "success") {
 					} else {
-						validateMsg = data_transfer_msg10;
-						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
+						validateMsg = "<spring:message code='eXperDB_CDC.msg10' />";
+						showSwalIcon(fn_strBrReplcae(validateMsg), "<spring:message code='common.close' />", '', 'error');
 						return;
 					}
 				}
@@ -1297,7 +1297,7 @@ a:hover.tip span {
 							
 							connectTd = "<div class='badge badge-pill badge-success'>";
 							connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
-							connectTd += "	<spring:message code='data_transfer.connecting' />";
+							connectTd += "	<spring:message code='eXperDB_CDC.connecting' />";
 							connectTd += "</div>";
 						} else {
 							ins_connect_status_Chk = "fail";
@@ -1371,7 +1371,7 @@ a:hover.tip span {
 					if (nvlPrmSet(result, '') != '') {
 						connectTd = "<div class='badge badge-pill badge-success'>";
 						connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
-						connectTd += "	<spring:message code='data_transfer.connecting' />";
+						connectTd += "	<spring:message code='eXperDB_CDC.connecting' />";
 						connectTd += "</div>";
 
 						if (result[0].kc_ip != "") {
@@ -1477,7 +1477,7 @@ a:hover.tip span {
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<form class="form-inline row" onsubmit="return false">
 								<div class="input-group mb-2 mr-sm-2 col-sm-4" style="padding-right:10px;">
-									<input type="text" class="form-control" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name_set" />'/>					
+									<input type="text" class="form-control" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="eXperDB_CDC.connect_name_set" />'/>					
 								</div>
 
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_tot_select();" >
@@ -1491,17 +1491,17 @@ a:hover.tip span {
 						<div class="col-12" style="margin-top:-10px;margin-bottom:-10px;">
 							<div class="template-demo">	
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnKafkaInsert" onClick="fn_common_kafka_ins();" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" /> <spring:message code="common.search" />
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_CDC.btn_title02" /> <spring:message code="common.search" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_pop();" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
 								</button>
 
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_CDC.save_select_disabled" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_active" />
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_CDC.save_select_active" />
 								</button>
 							</div>
 						</div>
@@ -1554,11 +1554,11 @@ a:hover.tip span {
 												<th width="100">Kafka-Connect <spring:message code="data_transfer.ip" /></th> <!-- Kafka-Connect 아이피 -->
 												<th width="100">Kafka-Connect <spring:message code="data_transfer.port" /></th> <!-- Kafka-Connect 포트 -->
 												<th width="100"><spring:message code="data_transfer.server_name" /></th> <!-- 서버명 -->
-												<th width="100"><spring:message code="data_transfer.connect_name_set" /></th> <!-- Connect 명 -->
-												<th width="100"><spring:message code="data_transfer.database" /></th> <!-- DBMS명 -->
-												<th width="100"><spring:message code="data_transfer.snapshot_mode" /></th> <!-- 스냅샷 모드 -->
-												<th width="100"><spring:message code="data_transfer.compression_type" /></th> <!-- 압축형태 -->
-												<th width="100"><spring:message code="data_transfer.metadata" /> 
+												<th width="100"><spring:message code="eXperDB_CDC.connect_name_set" /></th> <!-- Connect 명 -->
+												<th width="100"><spring:message code="eXperDB_CDC.database" /></th> <!-- DBMS명 -->
+												<th width="100"><spring:message code="eXperDB_CDC.snapshot_mode" /></th> <!-- 스냅샷 모드 -->
+												<th width="100"><spring:message code="eXperDB_CDC.compression_type" /></th> <!-- 압축형태 -->
+												<th width="100"><spring:message code="eXperDB_CDC.metadata" /> 
 												</th> <!-- 메타데이타 -->
 												<th width="0"></th>
 												<th width="0"></th>

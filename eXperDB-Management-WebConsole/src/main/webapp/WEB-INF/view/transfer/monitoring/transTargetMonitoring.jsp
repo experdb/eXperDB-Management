@@ -64,7 +64,7 @@
 								<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.connect_name_set" />
+										<spring:message code="eXperDB_CDC.connect_name_set" />
 									</label>
 									<div class="col-sm-8">
 										<span class="form-control-xsm float-left text-muted" id="d_tg_connect_nm" ></span>
@@ -151,7 +151,7 @@
 								<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.connect_name_set" />
+										<spring:message code="eXperDB_CDC.connect_name_set" />
 									</label>
 									<div class="col-sm-8">
 										<span class="form-control-xsm float-left text-muted" id="tar_connect_nm" ></span>
@@ -164,7 +164,7 @@
 								<div class="form-group row" style="margin-bottom:-20px;">
 									<label class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.transfer_topic" />
+										<spring:message code="eXperDB_CDC.transfer_topic" />
 									</label>
 									<div class="col-sm-9">
 									</div>
@@ -178,7 +178,7 @@
 													<thead>
 														<tr class="bg-info text-white">
 															<th width="100" class="dt-center" ><spring:message code="common.order" /></th>
-															<th width="500" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="500" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
 														</tr>
 													</thead>
 												</table>

@@ -991,7 +991,7 @@ a:hover.tip span {
 										<thead>
 											<tr class="bg-info text-white">
 												<th width="0px;"><spring:message code="common.order"/></th> <!-- 순번 -->
-												<th width="100px;"><spring:message code="data_transfer.connect_name_set" /></th> <!-- connect 명 -->
+												<th width="100px;"><spring:message code="eXperDB_CDC.connect_name_set" /></th> <!-- connect 명 -->
 												<th width="100px;"><spring:message code="eXperDB_proxy.act_result"/></th> <!-- 실행결과 -->
 												<th width="100px;"><spring:message code="history_management.time"/></th> <!-- 시간 -->
 											</tr>

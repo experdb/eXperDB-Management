@@ -62,7 +62,7 @@
  								if(full.exe_status == "TC001501"){
  									html += "<div class='badge badge-pill badge-success'>";
  									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
- 									html += "	<spring:message code='data_transfer.connecting' />";
+ 									html += "	<spring:message code='eXperDB_CDC.connecting' />";
  								} else {
  									html += "<div class='badge badge-pill badge-danger'>";
  									html += "	<i class='ti-close mr-2'></i>";
@@ -272,16 +272,16 @@
 							fn_dbms_del_confirm();
 						}
 					} else if (result == "O") {
-						msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg22" />');
+						msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg22" />');
 						showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 						return;
 					} else {
-						msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
+						msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg21" />');
 						showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 						return;
 					}
 				} else {
-					msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
+					msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg21" />');
 					showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -293,7 +293,7 @@
 	 * trans dbms 삭제버튼 클릭시
 	 ******************************************************** */
 	function fn_dbms_del_confirm(){
-		confile_title = '<spring:message code="data_transfer.btn_title01" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		confile_title = '<spring:message code="eXperDB_CDC.btn_title01" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 		$('#con_multi_gbn', '#findConfirmMulti').val("trans_dbms_del");
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
@@ -377,7 +377,7 @@
 					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
 					fn_dbms_select();
 				}else{
-					msgVale = "<spring:message code='data_transfer.btn_title01' />";
+					msgVale = "<spring:message code='eXperDB_CDC.btn_title01' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -409,7 +409,7 @@
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="fa fa-database"></i>
-												<span class="menu-title"><spring:message code="data_transfer.btn_title01"/></span>
+												<span class="menu-title"><spring:message code="eXperDB_CDC.btn_title01"/></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -420,7 +420,7 @@
 					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
 					 						</li>
 						 					<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_transfer" /></li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="data_transfer.btn_title01"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="eXperDB_CDC.btn_title01"/></li>
 										</ol>
 									</div>
 								</div>
@@ -429,7 +429,7 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0"><spring:message code="help.data_transfer_target_dbms_management_01"/></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_CDC_target_dbms_management_01"/></p>
 										</div>
 									</div>
 								</div>
@@ -517,7 +517,7 @@
 												<th width="100">Database</th>
 												<th width="150">Schema</th>
 												<th width="130"><spring:message code="dbms_information.account" /></th>
-												<th width="130"><spring:message code="data_transfer.connection_status" /></th>
+												<th width="130"><spring:message code="eXperDB_CDC.connection_status" /></th>
 												<th width="130"><spring:message code="dbms_information.conn_Test" /></th>
 												<th width="0"><spring:message code="common.modify_datetime" /></th>
 											</tr>

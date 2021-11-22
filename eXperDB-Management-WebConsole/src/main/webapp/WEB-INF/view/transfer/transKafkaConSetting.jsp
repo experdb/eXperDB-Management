@@ -62,7 +62,7 @@
  								if(full.exe_status == "TC001501"){
  									html += "<div class='badge badge-pill badge-success'>";
  									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
- 									html += "	<spring:message code='data_transfer.connecting' />";
+ 									html += "	<spring:message code='eXperDB_CDC.connecting' />";
  								} else {
  									html += "<div class='badge badge-pill badge-danger'>";
  									html += "	<i class='ti-close mr-2'></i>";
@@ -122,7 +122,7 @@
  								if(full.exe_status == "TC001501"){
  									html += "<div class='badge badge-pill badge-success'>";
  									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
- 									html += "	<spring:message code='data_transfer.connecting' />";
+ 									html += "	<spring:message code='eXperDB_CDC.connecting' />";
  								} else {
  									html += "<div class='badge badge-pill badge-danger'>";
  									html += "	<i class='ti-close mr-2'></i>";
@@ -432,7 +432,7 @@
 					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
 					fn_connect_select();
 				}else{
-					msgVale = "<spring:message code='data_transfer.btn_title02' />";
+					msgVale = "<spring:message code='eXperDB_CDC.btn_title02' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -468,7 +468,7 @@
 					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
 					fn_regi_select();
 				}else{
-					msgVale = "<spring:message code='data_transfer.btn_title02' />";
+					msgVale = "<spring:message code='eXperDB_CDC.btn_title02' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -657,12 +657,12 @@
 						}
 
 					} else {
-						msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
+						msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg21" />');
 						showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 						return;
 					}
 				} else {
-					msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
+					msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg21" />');
 					showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -743,12 +743,12 @@
 						}
 
 					} else {
-						msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
+						msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg21" />');
 						showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 						return;
 					}
 				} else {
-					msgResult = fn_strBrReplcae('<spring:message code="data_transfer.msg21" />');
+					msgResult = fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg21" />');
 					showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -802,7 +802,7 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0"><spring:message code="help.data_transfer_kafka_connect_01"/></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_CDC_kafka_connect_01"/></p>
 										</div>
 									</div>
 								</div>
@@ -881,7 +881,7 @@
 												<th width="150"><spring:message code="etc.etc04"/></th>
 			 									<th width="100"><spring:message code="data_transfer.ip" /></th>
 												<th width="50"><spring:message code="data_transfer.port" /></th>
-												<th width="80"><spring:message code="data_transfer.connection_status" /></th>
+												<th width="80"><spring:message code="eXperDB_CDC.connection_status" /></th>
 												<th width="100"><spring:message code="dbms_information.conn_Test" /></th>
 												<th width="100"><spring:message code="common.modify_datetime" /></th>
 												<th width="0"></th>
@@ -942,7 +942,7 @@
 												<th width="150">Schema Registry명</th>
 			 									<th width="100"><spring:message code="data_transfer.ip" /></th>
 												<th width="50"><spring:message code="data_transfer.port" /></th>
-												<th width="80"><spring:message code="data_transfer.connection_status" /></th>
+												<th width="80"><spring:message code="eXperDB_CDC.connection_status" /></th>
 												<th width="100"><spring:message code="dbms_information.conn_Test" /></th>
 												<th width="100"><spring:message code="common.modify_datetime" /></th>
 												<th width="0"></th>

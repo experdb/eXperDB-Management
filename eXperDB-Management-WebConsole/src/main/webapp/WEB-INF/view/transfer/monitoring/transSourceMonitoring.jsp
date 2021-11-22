@@ -158,7 +158,7 @@
 							<div class="form-group row" style="margin-bottom:-20px;">
 								<label class="col-sm-12 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 									<i class="item-icon fa fa-dot-circle-o"></i>
-									<spring:message code="data_transfer.transfer_table" />
+									<spring:message code="eXperDB_CDC.transfer_table" />
 								</label>
 							</div>
 							
