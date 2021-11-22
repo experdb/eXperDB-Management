@@ -228,3 +228,6 @@ INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0172_01', '데이터전송 모니터링 로그 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Log Search');
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0171_02', '데이터전송 모니터링 Kafka 재시작', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'DataTransfer TransManagement Kafka restart');
 
+-- 스냅샷 공통코드 변경
+update T_SYSDTL_C set USE_YN = (case when SYS_CD = 'TC003601' or SYS_CD = 'TC003605' then 'N' else 'Y' END) where GRP_CD ='TC0036';
+
