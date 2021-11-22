@@ -168,7 +168,7 @@ function fn_act_execute(act_gbn) {
 				checkId = 'source_transActivation' + ascRow;
 				
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 					$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
 					return;
@@ -176,7 +176,7 @@ function fn_act_execute(act_gbn) {
 					if (result == "success") {
 						fn_tot_select();
 					} else {
-						validateMsg = data_transfer_msg10;
+						validateMsg = eXperDB_CDC_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						
 						$("input:checkbox[id='" + checkId + "']").prop("checked", false);
@@ -211,7 +211,7 @@ function fn_act_execute(act_gbn) {
 				checkId = 'target_transActivation' + ascRow;
 				
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 					$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
 					return;
@@ -219,7 +219,7 @@ function fn_act_execute(act_gbn) {
 					if (result == "success") {
 						fn_tot_select();
 					} else {
-						validateMsg = data_transfer_msg10;
+						validateMsg = eXperDB_CDC_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						
 						$("input:checkbox[id='" + checkId + "']").prop("checked", false);
@@ -256,7 +256,7 @@ function fn_act_execute(act_gbn) {
 			success : function(result) {
 				checkId = 'source_transActivation' + ascRow;
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 
 					$("input:checkbox[id='" + checkId + "']").prop("checked", true); 
@@ -265,12 +265,12 @@ function fn_act_execute(act_gbn) {
 					if (result == "success") {
 						fn_tot_select();
 					} else if (result == "no_depth") {
-						validateMsg = data_transfer_msg34;
+						validateMsg = eXperDB_CDC_msg34;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						$("input:checkbox[id='" + checkId + "']").prop("checked", true);
 						return;
 					} else {
-						validateMsg = data_transfer_msg10;
+						validateMsg = eXperDB_CDC_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						$("input:checkbox[id='" + checkId + "']").prop("checked", true);
 						return;
@@ -306,7 +306,7 @@ function fn_act_execute(act_gbn) {
 			success : function(result) {
 				checkId = 'target_transActivation' + ascRow;
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 
 					$("input:checkbox[id='" + checkId + "']").prop("checked", true); 
@@ -315,7 +315,7 @@ function fn_act_execute(act_gbn) {
 					if (result == "success") {
 						fn_tot_select();
 					} else {
-						validateMsg = data_transfer_msg10;
+						validateMsg = eXperDB_CDC_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						$("input:checkbox[id='" + checkId + "']").prop("checked", true);
 						return;
@@ -367,7 +367,7 @@ function fn_del_confirm(active_gbn){
 	}
 
 	if (i_exe_status > 0) {
-		validateMsg = data_transfer_msg7;
+		validateMsg = eXperDB_CDC_msg7;
 		showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 		return;
 	}
@@ -411,7 +411,7 @@ function fn_activaExecute_click(tot_con_gbn){
 	}
 
 	if (sourceDatas.length > 0 && targetDatas.length > 0) {
-		showSwalIcon(fn_strBrReplcae(data_transfer_msg23), closeBtn, '', 'error');
+		showSwalIcon(fn_strBrReplcae(eXperDB_CDC_msg23), closeBtn, '', 'error');
 		return;
 	}
 
@@ -437,14 +437,14 @@ function fn_activaExecute_click(tot_con_gbn){
 
 		//실행 내역이 없는 경우
 		if (i_un_exe_status <= 0) {
-			showSwalIcon(data_transfer_msg17, closeBtn, '', 'error');
+			showSwalIcon(eXperDB_CDC_msg17, closeBtn, '', 'error');
 			return;
 		}
 
 		if (i_exe_status > 0) {
-			validateMsg = data_transfer_msg13;
+			validateMsg = eXperDB_CDC_msg13;
 		} else {
-			validateMsg = data_transfer_msg12;
+			validateMsg = eXperDB_CDC_msg12;
 		}
 	} else {
 		for (var i = 0; i < datas.length; i++) {
@@ -464,23 +464,23 @@ function fn_activaExecute_click(tot_con_gbn){
 
 		//실행 내역이 없는 경우
 		if (i_exe_status <= 0) {
-			showSwalIcon(data_transfer_msg17, closeBtn, '', 'error');
+			showSwalIcon(eXperDB_CDC_msg17, closeBtn, '', 'error');
 			return;
 		}
 
 		if (i_un_exe_status > 0) {
-			validateMsg = data_transfer_msg15;
+			validateMsg = eXperDB_CDC_msg15;
 		} else {
-			validateMsg = data_transfer_msg14;
+			validateMsg = eXperDB_CDC_msg14;
 		}
 	}
 
 	if (active_gbn == "source") {
-		confile_title = menu_trans_management + " " + migration_source_system + " " + data_transfer_transfer_activity;
+		confile_title = menu_trans_management + " " + migration_source_system + " " + eXperDB_CDC_transfer_activity;
 
 		tot_con_gbn = tot_con_gbn;
 	} else {
-		confile_title = menu_trans_management + " " + migration_target_system + " " + data_transfer_transfer_activity;
+		confile_title = menu_trans_management + " " + migration_target_system + " " + eXperDB_CDC_transfer_activity;
 
 		tot_con_gbn = "target_" + tot_con_gbn;
 	}
@@ -535,15 +535,15 @@ function fn_tot_act_execute(exeGbn){
 				fn_buttonExecuteAut("end", "");
 
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 					return;
 				} else {
 					if (result == "success") {
-						showSwalIcon(data_transfer_msg16, closeBtn, '', 'success');
+						showSwalIcon(eXperDB_CDC_msg16, closeBtn, '', 'success');
 						fn_tot_select();
 					} else {
-						validateMsg = data_transfer_msg10;
+						validateMsg = eXperDB_CDC_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						return;
 					}
@@ -582,19 +582,19 @@ function fn_tot_act_execute(exeGbn){
 				fn_buttonExecuteAut("end", "");
 
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 					return;
 				} else {
 					if (result == "success") {
-						showSwalIcon(data_transfer_msg16, closeBtn, '', 'success');
+						showSwalIcon(eXperDB_CDC_msg16, closeBtn, '', 'success');
 						fn_tot_select();
 					} else if (result == "no_depth") {
-						validateMsg = data_transfer_msg35;
+						validateMsg = eXperDB_CDC_msg35;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						fn_tot_select();
 					} else {
-						validateMsg = data_transfer_msg10;
+						validateMsg = eXperDB_CDC_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						return;
 					}
@@ -612,12 +612,12 @@ function fn_buttonExecuteAut(autIngGbn, exeIngGbn){
 	if(autIngGbn == "start"){
 		if (exeIngGbn == "active" || exeIngGbn == "target_active") {
 			strMsg = "<i class='fa fa-spin fa-spinner btn-icon-prepend'></i>";
-			strMsg += data_transfer_save_select_active + ' ' + restore_progress;
+			strMsg += eXperDB_CDC_save_select_active + ' ' + restore_progress;
 
 			$("#btnChoActive").html(strMsg);
 		} else {
 			strMsg = "<i class='fa fa-spin fa-spinner btn-icon-prepend'></i>";
-			strMsg += data_transfer_save_select_disabled + ' ' + restore_progress;
+			strMsg += eXperDB_CDC_save_select_disabled + ' ' + restore_progress;
 
 			$("#btnChoDisabled").html(strMsg);
 		}
@@ -637,8 +637,8 @@ function fn_buttonExecuteAut(autIngGbn, exeIngGbn){
 		$("#btnCommonConSetInsert").prop("disabled", "disabled");
 	}else{
 		strMsg = '<i class="fa fa-spin fa-cog btn-icon-prepend"></i>';
-		$("#btnChoActive").html(strMsg + data_transfer_save_select_active);
-		$("#btnChoDisabled").html(strMsg + data_transfer_save_select_disabled);
+		$("#btnChoActive").html(strMsg + eXperDB_CDC_save_select_active);
+		$("#btnChoDisabled").html(strMsg + eXperDB_CDC_save_select_disabled);
 		
 		$("#btnChoActive").prop("disabled", "");
 		$("#btnChoDisabled").prop("disabled", "");
@@ -680,15 +680,15 @@ function fn_info_setting(result, active_gbn) {
 
 		//스냅샷 모드 change
 		if(snapshot_mode_re == "TC003601"){
-			snapshot_mode_nm += ' ' + data_transfer_msg2;
+			snapshot_mode_nm += ' ' + eXperDB_CDC_msg2;
 		}else if(snapshot_mode_re == "TC003602"){
-			snapshot_mode_nm += ' ' + data_transfer_msg3;
+			snapshot_mode_nm += ' ' + eXperDB_CDC_msg3;
 		}else if (snapshot_mode_re == "TC003603"){
-			snapshot_mode_nm += ' ' + data_transfer_msg1;
+			snapshot_mode_nm += ' ' + eXperDB_CDC_msg1;
 		}else if (snapshot_mode_re == "TC003604"){
-			snapshot_mode_nm += ' ' + data_transfer_msg4;
+			snapshot_mode_nm += ' ' + eXperDB_CDC_msg4;
 		}else if (snapshot_mode_re == "TC003605"){
-			snapshot_mode_nm += ' ' + data_transfer_msg5;
+			snapshot_mode_nm += ' ' + eXperDB_CDC_msg5;
 		}
 		$("#d_snapshot_mode_nm", "#infoRegForm").html(snapshot_mode_nm);
 
@@ -830,7 +830,7 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 	if (gbn == "reg") {
 		if (active_gbn == "source") {
 			//스냅샷 모드 추가
-			$("#ins_snapshot_mode", "#insRegForm").val('TC003603').prop("selected", true); //값이 1인 option 선택
+			$("#ins_snapshot_mode", "#insRegForm").val('TC003604').prop("selected", true);
 
 			//connect type 추가
 			$("#ins_connect_type", "#insRegForm").val('TC004501').prop("selected", true);
@@ -841,7 +841,7 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			//압축형태 추가
 			$("#ins_compression_type", "#insRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 
-			$("#ins_snapshotModeDetail", "#insRegForm").html(data_transfer_msg1);
+			$("#ins_snapshotModeDetail", "#insRegForm").html(eXperDB_CDC_msg4);
 			//메타데이타 설정
 			$("#ins_meta_data", "#insRegForm").val("OFF");
 			$("input:checkbox[id='ins_meta_data_chk']").prop("checked", false); 
@@ -877,7 +877,7 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 	} else {
 		if (active_gbn == "source") {
 			//스냅샷 모드 추가
-			$("#mod_snapshot_mode", "#modRegForm").val('TC003603').prop("selected", true); //값이 1인 option 선택
+			$("#mod_snapshot_mode", "#modRegForm").val('TC003604').prop("selected", true); //INITIOL_ONRY
 
 			//connect type 추가
 			$("#mod_connect_type", "#insRegForm").val('TC004501').prop("selected", true);
@@ -889,7 +889,7 @@ function fn_insert_chogihwa(gbn, active_gbn) {
 			$("#mod_compression_type", "#modRegForm").val('TC003701').prop("selected", true); //값이 1인 option 선택
 			
 			//입력관련 초기화
-			$("#mod_snapshotModeDetail", "#modRegForm").html(data_transfer_msg1);
+			$("#mod_snapshotModeDetail", "#modRegForm").html(eXperDB_CDC_msg4);
 
 			//메타데이타 설정
 			$("#mod_meta_data", "#modRegForm").val("OFF");
@@ -948,18 +948,18 @@ function fn_update_setting(result, active_gbn) {
 		} else {
 			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", false); 
 		}
-	
+
 		//스냅샷 모드 change
 		if(snapshot_mode_re == "TC003601"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html(data_transfer_msg2); //(초기스냅샷 1회만 수행)
+			$("#mod_snapshotModeDetail", "#modRegForm").html(eXperDB_CDC_msg2); //(초기스냅샷 1회만 수행) INITIAL 미사용
 		}else if(snapshot_mode_re == "TC003602"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html(data_transfer_msg3); //(스냅샷 항상 수행)
+			$("#mod_snapshotModeDetail", "#modRegForm").html(eXperDB_CDC_msg3); //(초기적재, 스트리밍 모두수행) ALWAYS
 		}else if (snapshot_mode_re == "TC003603"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html(data_transfer_msg1); //(스냅샷 수행하지 않음)
+			$("#mod_snapshotModeDetail", "#modRegForm").html(eXperDB_CDC_msg1); //(초기적재 미수행, 스트리밍 수행) NEVER
 		}else if (snapshot_mode_re == "TC003604"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html(data_transfer_msg4); //(스냅샷만 수행하고 종료)
+			$("#mod_snapshotModeDetail", "#modRegForm").html(eXperDB_CDC_msg4); //(초기적재 수행, 스트리밍 미수행)INITIAL_ONLY
 		}else if (snapshot_mode_re == "TC003605"){
-			$("#mod_snapshotModeDetail", "#modRegForm").html(data_transfer_msg5); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법)
+			$("#mod_snapshotModeDetail", "#modRegForm").html(eXperDB_CDC_msg5); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법) EXPORTED
 		}
 
 		//connect_type
@@ -1125,7 +1125,7 @@ function fn_selectKafkaConnectChk() {
 				//heartbeat 체크
 				fn_selectHeartbeatChk();
 			} else {
-				showDangerToast('top-right', data_transfer_msg29, eXperDB_CDC_msg30);
+				showDangerToast('top-right', eXperDB_CDC_msg29, eXperDB_CDC_msg30);
 				
 				//설치안된경우 버튼 막아야함
 				$("#btnChoActive").prop("disabled", "disabled");
@@ -1155,25 +1155,25 @@ function fn_transActivation_click(row, activeGbn){
 	if (activeGbn  == "1") {
 		if($("#source_transActivation"+row).is(":checked") == true){
 			con_gbn = "con_start";
-			con_msg = 'source ' + data_transfer_msg8;
+			con_msg = 'source ' + eXperDB_CDC_msg8;
 		} else {
 			con_gbn = "con_end";
-			con_msg = 'source ' + data_transfer_msg9;
+			con_msg = 'source ' + eXperDB_CDC_msg9;
 		}
 	} else {
 		if($("#target_transActivation"+row).is(":checked") == true){
 			con_gbn = "target_con_start";
-			con_msg = 'target ' + data_transfer_msg8;
+			con_msg = 'target ' + eXperDB_CDC_msg8;
 		} else {
 			con_gbn = "target_con_end";
-			con_msg = 'target ' + data_transfer_msg9;
+			con_msg = 'target ' + eXperDB_CDC_msg9;
 		}
 	}
 
 	$('#con_multi_gbn', '#findConfirmMulti').val(con_gbn);
 	$('#confirm_multi_msg').html(con_msg);
 	
-	confile_title = menu_trans_management + " " + data_transfer_transfer_activity;
+	confile_title = menu_trans_management + " " + eXperDB_CDC_transfer_activity;
 	$('#confirm_multi_tlt').html(confile_title);
 	$('#chk_act_row', '#findList').val(row);
 	
@@ -1340,13 +1340,13 @@ function fn_auto_trans_active_start(pop_gbn, trans_exrt_trg_tb_id_val, trans_id_
 		},
 		success : function(result) {
 			if (result == null) {
-				validateMsg = data_transfer_msg10;
+				validateMsg = eXperDB_CDC_msg10;
 				showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 				return;
 			} else {
 				if (result == "success") {
 				} else {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 					return;
 				}
@@ -1383,7 +1383,7 @@ function fn_newUpdate(active_gbn){
 	}
 
 	if(datas[0].exe_status == "TC001501"){
-		validateMsg = data_transfer_msg11;
+		validateMsg = eXperDB_CDC_msg11;
 		showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 		return;
 	}
@@ -1539,7 +1539,7 @@ function fn_newUpdate(active_gbn){
 				if (nvlPrmSet(result, '') != '') {
 					connectTd = "<div class='badge badge-pill badge-success'>";
 					connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
-					connectTd += data_transfer_connecting;
+					connectTd += eXperDB_CDC_connecting;
 					connectTd += "</div>";
 					
 					if (result[0].kc_ip != "") {
@@ -1673,7 +1673,7 @@ function fn_kc_nm_chg(hw_gbn) {
 
 						connectTd = "<div class='badge badge-pill badge-success'>";
 						connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
-						connectTd += data_transfer_connecting;
+						connectTd += eXperDB_CDC_connecting;
 						connectTd += "</div>";
 					} else {
 						if (hw_gbn == "source_ins") {
@@ -1803,7 +1803,7 @@ function fn_sch_nm_chg(hw_gbn){
 
 						connectTd = "<div class='badge badge-pill badge-success'>";
 						connectTd += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
-						connectTd += data_transfer_connecting;
+						connectTd += eXperDB_CDC_connecting;
 						connectTd += "</div>";
 					} else {
 						if (hw_gbn == "source_ins") {
@@ -2387,7 +2387,7 @@ function fn_ins_target_ConNmCheck() {
 	var connect_nm_val = nvlPrmSet($("#ins_tg_connect_nm", "#insTargetRegForm").val(), '');
 
 	if (connect_nm_val == "") {
-		showSwalIcon(data_transfer_msg18, closeBtn, '', 'warning');
+		showSwalIcon(eXperDB_CDC_msg18, closeBtn, '', 'warning');
 		return;
 	}
 	
@@ -2401,10 +2401,10 @@ function fn_ins_target_ConNmCheck() {
 		success : function(result) {
 			if (result == "true") {
 				ins_tg_connect_nm_Chk = "success";
-				showSwalIcon(data_transfer_msg19, closeBtn, '', 'success');
+				showSwalIcon(eXperDB_CDC_msg19, closeBtn, '', 'success');
 			} else {
 				ins_tg_connect_nm_Chk = "fail";
-				showSwalIcon(data_transfer_msg20, closeBtn, '', 'error');
+				showSwalIcon(eXperDB_CDC_msg20, closeBtn, '', 'error');
 			}
 		},
 		beforeSend : function(xhr) {
@@ -2892,13 +2892,13 @@ function trans_target_mod_valCheck(){
 	var valideMsg = "";
 
 	if(nvlPrmSet($("#mod_tg_trans_trg_sys_nm", "#modTargetRegForm").val(), '') == "") {
-		showSwalIcon(data_transfer_msg6, closeBtn, '', 'warning');
+		showSwalIcon(eXperDB_CDC_msg6, closeBtn, '', 'warning');
 		return false;
 	}
 
 	//전성대상테이블 length 체크
 	if (mod_connector_tg_tableList.rows().data().length <= 0) {
-		showSwalIcon(data_transfer_msg24, closeBtn, '', 'error');
+		showSwalIcon(eXperDB_CDC_msg24, closeBtn, '', 'error');
 		return false;
 	}
 
@@ -3111,7 +3111,7 @@ function fn_transComConSetDelete(){
 		trans_com_id_List.push(datas[i].trans_com_id);   
 	}
 
-	confile_title = data_transfer_default_setting + " " + button_delete + " " + common_request;
+	confile_title = eXperDB_CDC_default_setting + " " + button_delete + " " + common_request;
 	$('#con_multi_gbn', '#findConfirmMulti').val("trans_com_con_del");
 	$('#confirm_multi_tlt').html(confile_title);
 	$('#confirm_multi_msg').html(message_msg162);

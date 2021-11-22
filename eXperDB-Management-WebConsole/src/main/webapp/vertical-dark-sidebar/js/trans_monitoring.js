@@ -1449,16 +1449,16 @@ function fn_transActivation_moni_click(connect_nm, activeGbn){
 
 	if (activeGbn  == "1") {
 		con_gbn = "con_start";
-		con_msg = message_connect_name + " : " + connect_nm + '<br/><br/>' + 'source ' + data_transfer_msg8;
+		con_msg = message_connect_name + " : " + connect_nm + '<br/><br/>' + 'source ' + eXperDB_CDC_msg8;
 	} else {
 		con_gbn = "target_con_start";
-		con_msg = message_connect_name + " : " + connect_nm + '<br/><br/>' + 'target ' + data_transfer_msg8;
+		con_msg = message_connect_name + " : " + connect_nm + '<br/><br/>' + 'target ' + eXperDB_CDC_msg8;
 	}
 
 	$('#con_multi_gbn', '#findConfirmMulti').val(con_gbn);
 	$('#confirm_multi_msg').html(con_msg);
 	
-	confile_title = menu_trans_management + " " + data_transfer_transfer_activity;
+	confile_title = menu_trans_management + " " + eXperDB_CDC_transfer_activity;
 	$('#confirm_multi_tlt').html(confile_title);
 
 	$('#pop_confirm_multi_md').modal("show");
@@ -1528,7 +1528,7 @@ function fn_act_mon_execute(act_gbn) {
 				checkId = 'source_transActivation' + ascRow;
 				fn_trans_loadbar("stop");
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 					$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
 					return;
@@ -1536,7 +1536,7 @@ function fn_act_mon_execute(act_gbn) {
 					if (result == "success") {
 						fn_srcConnectInfo("restart");
 					} else {
-						validateMsg = data_transfer_msg10;
+						validateMsg = eXperDB_CDC_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						return;
 					}
@@ -1570,7 +1570,7 @@ function fn_act_mon_execute(act_gbn) {
 				checkId = 'target_transActivation' + ascRow;
 				fn_trans_loadbar("stop");
 				if (result == null) {
-					validateMsg = data_transfer_msg10;
+					validateMsg = eXperDB_CDC_msg10;
 					showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 					$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
 					return;
@@ -1578,7 +1578,7 @@ function fn_act_mon_execute(act_gbn) {
 					if (result == "success") {
 						fn_tarConnectInfo();
 					} else {
-						validateMsg = data_transfer_msg10;
+						validateMsg = eXperDB_CDC_msg10;
 						showSwalIcon(fn_strBrReplcae(validateMsg), closeBtn, '', 'error');
 						return;
 					}

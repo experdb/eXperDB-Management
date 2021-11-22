@@ -229,7 +229,7 @@
 						
 						//2020.09.23
 						html1+='	<tr>';
-						html1+='		<td class="pl-5"><spring:message code="data_transfer.btn_title01" /></td>';
+						html1+='		<td class="pl-5"><spring:message code="eXperDB_CDC.btn_title01" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_dbms_aut" name="trans_dbms_aut" onClick="fn_userCheck();" />';

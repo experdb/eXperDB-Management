@@ -9,6 +9,7 @@
 <title>eXperDB for Management</title>
 </head>
 <script type="text/javascript">
+var message_msg01 = "<spring:message code='message.msg01' />";
 var message_msg02="<spring:message code='message.msg02' />";
 var message_msg03="<spring:message code='message.msg03' />";
 var schedule_our="<spring:message code='schedule.our' />";
@@ -123,6 +124,10 @@ var eXperDB_scale_msg9="<spring:message code='eXperDB_scale.msg9' />";
 var dbms_information_unuse ="<spring:message code='dbms_information.unuse' />";
 var dbms_information_use ="<spring:message code='dbms_information.use' />";
 
+var message_msg93 = "<spring:message code='message.msg93' />";
+var message_msg92 = "<spring:message code='message.msg92' />";
+var message_msg144 = "<spring:message code='message.msg144' />";
+var message_msg106 = "<spring:message code='message.msg106' />";
 
 </script>
 <body>
