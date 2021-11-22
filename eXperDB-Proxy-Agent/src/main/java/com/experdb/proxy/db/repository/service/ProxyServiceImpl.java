@@ -426,18 +426,18 @@ public class ProxyServiceImpl implements ProxyService{
 										String db_ipadr = serverInfoList.get(j).getIPADR();
 										String intl_db_ipadr = serverInfoList.get(j).getINTL_IPADR();
 										
-										socketLogger.info("proxy_set.intl_db_ipadrintl_db_ipadr : " + intl_db_ipadr);
-										socketLogger.info("proxy_set.db_ipadrdb_ipadrdb_ipadr : " + db_ipadr);
+										socketLogger.info("proxy_set.intl_db_ipadr : " + intl_db_ipadr);
+										socketLogger.info("proxy_set.db_ipadr : " + db_ipadr);
 										
 										socketLogger.info("proxy_set.temp : " + temp);
 										
-										socketLogger.info("proxy_set.temp.contains(intl_db_ipadr) : " + temp.contains(intl_db_ipadr));
+										//socketLogger.info("proxy_set.temp.contains(intl_db_ipadr) : " + temp.contains(intl_db_ipadr));
 										
 										if ((db_ipadr != null && temp.contains(db_ipadr)) || (intl_db_ipadr != null && temp.contains(intl_db_ipadr))) {
 											db_svr_nm = serverInfoList.get(j).getDB_SVR_NM();
 											db_svr_id = serverInfoList.get(j).getDB_SVR_ID();
 											
-											socketLogger.info("proxy_set.temp.db_svr_iddb_svr_iddb_svr_id : " + db_svr_id);
+											socketLogger.info("proxy_set.temp.db_svr_id : " + db_svr_id);
 										}
 									}
 								}

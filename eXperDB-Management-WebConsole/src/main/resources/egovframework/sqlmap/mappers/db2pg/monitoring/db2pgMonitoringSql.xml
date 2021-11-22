@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="db2pgMonitoringSql">
+
+	<select id="selectExeWork" resultType="HashMap" >
+		/**
+		* Query ID : selectExeWork
+		* Description : DB2PG
+		* Author : 변승우
+		**/
+		SELECT
+			(ROW_NUMBER() OVER()) AS ROWNUM
+         	, (ROW_NUMBER() OVER()) AS IDX	
+			, WRK_NM
+			, SRC_DBMS_DSCD
+			, SRC_IP
+			, SRC_DATABASE
+			, TAR_IP
+			, TAR_DATABASE
+			,'SOURCE (DBTYPE:'|| SRC_DBMS_DSCD || ' IP:' ||SRC_IP||' DB:'||SRC_DATABASE||') → TARGET (IP:'||TAR_IP||' DB:'||TAR_DATABASE||')' as MIG_INFO
+		FROM		
+			T_DB2PG_EXEWORK
+	</select>
+
+
+
+	<select id="selectDb2pgMonitoring" resultType="db2pgMonitoringVO" parameterType="db2pgMonitoringVO">
+		/**
+		* Query ID : selectDb2pgMonitoring
+		* Description : DB2PG
+		* Author : 변승우
+		**/
+		SELECT
+			 TABLE_NM
+			, TOTAL_CNT
+			, MIG_CNT
+			, START_TIME
+			, END_TIME
+			, to_char((ELAPSED_TIME||' second')::interval, 'HH24:MI:SS') as ELAPSED_TIME
+			, STATUS
+		FROM		
+			T_DB2PG_MONITORING
+		WHERE WRK_NM = #{wrk_nm} 
+		ORDER BY 
+			(CASE STATUS
+				WHEN 'RUNNING' THEN 1
+				WHEN 'SUCCESS' THEN 2
+				WHEN 'FAIL' THEN 3
+			end) , STATUS , TABLE_NM
+		
+	</select>
+	
+	
+	
+	
+	
+</mapper>

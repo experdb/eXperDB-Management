@@ -76,10 +76,16 @@ public class DxT039 extends SocketCtl{
 		
 		try {
 			socketLogger.info("[COMMAND] " + strCmd);
-			
+
 			if ("source".equals(con_start_gbn)) {
 				TransVO transSearchVO = new TransVO();
 				transSearchVO.setTrans_id(trans_id);
+				
+				List<TransVO> kcIpList = transService.selectTranscngKcList(transSearchVO); // topic 테이블 조회
+
+				if (kcIpList.size() > 0) {
+					transSearchVO.setKc_id(kcIpList.get(0).getKc_id());
+				}
 
 				List<TransVO> topicTableList = transService.selectTranIdTopicTotCnt(transSearchVO); // topic count 조회
 				socketLogger.info("DxT039.topicTableList : " + topicTableList.get(0));
@@ -114,7 +120,7 @@ public class DxT039 extends SocketCtl{
 			socketLogger.info("##### 결과 : conectStopGbn ==" + conectStopGbn);	
 			
 			//conectStopGbn 이 total 일 경우 전체 삭제
-			if ("total".equals(conectStopGbn) || "2deps".equals(conectStopGbn) || "4deps".equals(conectStopGbn) || "no_deps".equals(conectStopGbn)) {
+			if ("total".equals(conectStopGbn) || "2deps".equals(conectStopGbn) || "4deps".equals(conectStopGbn)) {
 				RunCommandExec r = new RunCommandExec(strCmd);
 				
 				//명령어 실행
@@ -141,15 +147,19 @@ public class DxT039 extends SocketCtl{
 						transVO.setWrite_use_yn("N");
 						transVO.setLogin_id(login_id);
 						
+						transVO.setLogin_id(login_id);
+						
 						//타겟 전송테이블 삭제
 						if ("4deps".equals(conectStopGbn)) {
 						//	updateTranExrtTrgList(transVO);
 						}
-
+socketLogger.info("transVOtransVOtransVOtransVOtransVOtransVOtransVOtransVO " + transVO.getTrans_id());
 						//topic 테이블 수정
 						transService.updateTransTopicTbl(transVO);
 							
 						if ("total".equals(conectStopGbn) || "4deps".equals(conectStopGbn)) {
+socketLogger.info("transVOtransVOtransVOtransVOtransVOtransVOtransVOtransVO222222222222222222 " + transVO.getTrans_id());
+							
 							//topic 삭제
 							transService.deleteRealTransTopic(transVO);
 						}

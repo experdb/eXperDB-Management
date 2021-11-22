@@ -523,6 +523,10 @@
 			}
 		});
 	}
+	
+	function fn_dumpRestoreLogCall() {
+		location.href='/restoreDumpHistory.do?db_svr_id='+$("#db_svr_id", "#findList").val()+'&tabGbn=dump';
+	}
 
 	/* ********************************************************
 	 * 로그조회

@@ -69,6 +69,14 @@ public interface TransService {
 	public List<TransVO> selectTranIdTopicList(TransVO vo) throws Exception;
 
 	/**
+	 * topic 테이블 조회 - KC_ID
+	 * @param TransVO
+	 * @return
+	 * @throws Exception
+	 */
+	public List<TransVO> selectTranscngKcList(TransVO transVO) throws Exception;
+
+	/**
 	 * topic list 삭제
 	 * @param  TransVO
 	 * @return 
@@ -147,4 +155,19 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public void insertTransActstateCngInfo(TransVO transVO) throws Exception;
+	
+	/**
+	 * kafka 재시작 이력 등록
+	 * @param transVO
+	 * @throws Exception
+	 */
+	public void insertTransKafkaActstateCngInfo(TransVO transVO) throws Exception;
+	
+	/**
+	 * topic 중복체크
+	 * @param  param
+	 * @return int
+	 * @throws Exception
+	 */
+	public int selectTranTopicIdInsChk(TransVO transVO) throws Exception;
 }

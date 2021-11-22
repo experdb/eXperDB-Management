@@ -9,6 +9,7 @@
 <title>eXperDB for Management</title>
 </head>
 <script type="text/javascript">
+var message_msg01 = "<spring:message code='message.msg01' />";
 var message_msg02="<spring:message code='message.msg02' />";
 var message_msg03="<spring:message code='message.msg03' />";
 var schedule_our="<spring:message code='schedule.our' />";
@@ -101,6 +102,7 @@ var common_failed = "<spring:message code='common.failed' />";
 
 var message_msg04 = "<spring:message code='message.msg04' />";
 var message_msg05 = "<spring:message code='message.msg05' />";
+var message_msg33 = "<spring:message code='message.msg33' />";
 var message_msg35 = "<spring:message code='message.msg35' />";
 var message_msg162 = "<spring:message code='message.msg162' />";
 
@@ -116,6 +118,16 @@ var proxy_msg39 = "<spring:message code='eXperDB_proxy.msg39'/>"
 var proxy_msg40 = "<spring:message code='eXperDB_proxy.msg40'/>"
 var proxy_msg41 = "<spring:message code='eXperDB_proxy.msg41'/>"
 
+var message_msg60="<spring:message code='message.msg60' />";
+var eXperDB_scale_msg9="<spring:message code='eXperDB_scale.msg9' />";
+
+var dbms_information_unuse ="<spring:message code='dbms_information.unuse' />";
+var dbms_information_use ="<spring:message code='dbms_information.use' />";
+
+var message_msg93 = "<spring:message code='message.msg93' />";
+var message_msg92 = "<spring:message code='message.msg92' />";
+var message_msg144 = "<spring:message code='message.msg144' />";
+var message_msg106 = "<spring:message code='message.msg106' />";
 
 </script>
 <body>

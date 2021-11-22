@@ -1071,7 +1071,7 @@ a:hover.tip span {
 					return;
 				} else {
 					if (result == "success") {
-						showSwalIcon('<spring:message code="data_transfer.msg16" />', '<spring:message code="common.close" />', '', 'success');
+						showSwalIcon('<spring:message code="eXperDB_CDC.msg16" />', '<spring:message code="common.close" />', '', 'success');
 						fn_search_list();
 					} else {
 						validateMsg = '<spring:message code="eXperDB_scale.msg24"/>';

@@ -5,7 +5,7 @@
 <%
 	/**
 	* @Class Name : transTargetSettingInfo.jsp
-	* @Description : 전송관리 상세 조회
+	* @Description : 타겟 전송관리 상세 조회
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -20,7 +20,9 @@
 
 <script type="text/javascript">
 	var info_target_connector_tableList = null;
-
+	var info_target_connector_schema_tableList = null;
+	var schemaRegistryInfoPopList = null;
+	
 	$(window.document).ready(function() {
 		//테이블셋팅
 		fn_info_target_init();
@@ -39,13 +41,55 @@
 			bSort: false,
 			columns : [
 				{data : "idx", className : "dt-center", defaultContent : ""}, 
-				{data : "topic_name", className : "dt-center", defaultContent : ""}	
+				{data : "topic_name", className : "dt-center", defaultContent : ""},
+				{data : "regi_nm", className : "dt-center", defaultContent : ""}
 			 ]
 		});
 
 		info_target_connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '150px');
-		info_target_connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '675px');
+		info_target_connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '325px');
+		info_target_connector_tableList.tables().header().to$().find('th:eq(2)').css('min-width', '315px');
+		
+		info_target_connector_schema_tableList = $('#info_tg_connector_schema_tableList').DataTable({
+			scrollY : "200px",
+			scrollX: true,	
+			processing : true,
+			searching : false,
+			paging : false,	
+			bSort: false,
+			columns : [
+				{data : "idx", className : "dt-center", defaultContent : ""}, 
+				{data : "topic_name", className : "dt-center", defaultContent : ""}
+			 ]
+		});
 
+		info_target_connector_schema_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '150px');
+		info_target_connector_schema_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '670px');
+		
+		schemaRegistryInfoPopList = $('#schemaRegistryInfoPopList').DataTable({
+			searching : false,
+			scrollY : true,
+			scrollX: true,	
+			paging : false,
+			deferRender : true,
+			info : false,
+			sort: false, 
+			"language" : {
+				"emptyTable" : '<spring:message code="message.msg01" />'
+			},
+			columns : [
+				{data : "idx", className : "dt-center", defaultContent : "", visible: false}, 
+				{data : "regi_nm", className : "dt-center", defaultContent : ""},
+				{data : "regi_ip", className : "dt-center", defaultContent : ""},
+				{data : "regi_port", className : "dt-center", defaultContent : ""},
+			 ]
+		});
+
+		schemaRegistryInfoPopList.tables().header().to$().find('th:eq(0)').css('min-width', '0px');
+		schemaRegistryInfoPopList.tables().header().to$().find('th:eq(1)').css('min-width', '358px');
+		schemaRegistryInfoPopList.tables().header().to$().find('th:eq(2)').css('min-width', '310px');
+		schemaRegistryInfoPopList.tables().header().to$().find('th:eq(3)').css('min-width', '290px');
+		
 		$(window).trigger('resize'); 
 	}
 </script>
@@ -100,13 +144,49 @@
 								<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.connect_name_set" />
+										<spring:message code="eXperDB_CDC.connect_name_set" />
 									</label>
-									<div class="col-sm-8">
+									<div class="col-sm-4">
 										<span class="form-control-xsm float-left text-muted" id="d_tg_connect_nm" ></span>
 									</div>
-									<div class="col-sm-2">
-										&nbsp;
+									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="eXperDB_CDC.topic_type"/>
+									</label>
+									<div class="col-sm-4">
+										<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
+											<input type="radio" id="info_tg_normal_type" class="form-check-input" name="info_tg_topic_type" value="TC004401" disabled>
+											<label class="form-check-label" for="ins_tg_normal_type" style="padding-right:30px;">normal</label>
+											<input type="radio" id="info_tg_avro_type" class="form-check-input" name="info_tg_topic_type" value="TC004402" disabled>
+											<label class="form-check-label" for="ins_tg_avro_type">avro</label>
+										</div>
+									</div>
+									
+								</div>
+
+								<div id="schemaRegistryTar_title" class="form-group row" style="margin-bottom:0px;">
+									<label class="col-sm-4 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Schema Registry <spring:message code="dashboard.server" />
+									</label>
+									<div class="col-sm-8">
+									</div>
+								</div>
+
+								<div id="schemaRegistryTar_list" class="form-group row" style="margin-bottom:30px;">
+									<div class="col-sm-12">
+										<div class="table-responsive" style="margin-top:-10px;margin-bottom:-10px;">
+											<table id="schemaRegistryInfoPopList" class="table system-tlb-scroll" style="width:100%;">
+												<thead>
+													<tr class="bg-info text-white">
+														<th width="0px;" >idx</th>
+														<th width="358px;"><spring:message code="eXperDB_CDC.schema_registr_nm"/></th>
+														<th width="310px;" ><spring:message code="data_transfer.ip" /></th>
+														<th width="290px;" ><spring:message code="data_transfer.port" /></th>
+													</tr>
+												</thead>
+											</table>
+										</div>
 									</div>
 								</div>
 
@@ -156,7 +236,7 @@
 								<div class="form-group row" style="margin-top:20px;margin-bottom:-20px;">
 									<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.transfer_topic" />
+										<spring:message code="eXperDB_CDC.transfer_topic" />
 									</label>
 									<div class="col-sm-10">
 									</div>
@@ -165,12 +245,33 @@
 								<div class="form-group row" style="margin-bottom:-10px;">
 									<div class="col-12 stretch-card div-form-margin-table" style="margin-top:-15px;">
 										<div class="card" style="border:0px;">
-											<div class="card-body" style="padding-left:0px;padding-right:0px;">	
+											<div id="div_info_tg_connector_tableList" class="card-body" style="padding-left:0px;padding-right:0px;">	
 								 				<table id="info_tg_connector_tableList" class="table table-hover system-tlb-scroll" style="width:100%;">
+								 					<colgroup>
+														<col style="width: 10%;" />
+														<col style="width: 45%;" />
+														<col style="width: 45%;" />
+													</colgroup>
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="100" class="dt-center" ><spring:message code="common.order" /></th>
-															<th width="500" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="10%" class="dt-center" ><spring:message code="common.order" /></th>
+															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
+															<th width="40%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
+														</tr>
+													</thead>
+												</table>
+											</div>
+											
+											<div id="div_info_tg_connector_schema_tableList" class="card-body" style="padding-left:0px;padding-right:0px;">
+								 				<table id="info_tg_connector_schema_tableList" class="table table-hover system-tlb-scroll" style="width:100%;">
+								 					<colgroup>
+														<col style="width: 10%;" />
+														<col style="width: 90%;" />
+													</colgroup>
+													<thead>
+														<tr class="bg-info text-white">
+															<th width="10%" class="dt-center" ><spring:message code="common.order" /></th>
+															<th width="90%" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
 														</tr>
 													</thead>
 												</table>

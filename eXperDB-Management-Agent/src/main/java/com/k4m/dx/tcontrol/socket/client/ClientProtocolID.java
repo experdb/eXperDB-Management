@@ -251,4 +251,8 @@ public class ClientProtocolID {
 	public static final String CONNECT_INFO = "CONNECT_INFO";
 	public static final String MAPP_INFO = "MAPP_INFO";
 	
+	public static final String REGI_IP = "REGI_IP";
+	public static final String REGI_PORT = "REGI_PORT";
+	public static final String DBMS_IP = "DBMS_IP";
+	public static final String DBMS_PORT = "DBMS_PORT";
 }

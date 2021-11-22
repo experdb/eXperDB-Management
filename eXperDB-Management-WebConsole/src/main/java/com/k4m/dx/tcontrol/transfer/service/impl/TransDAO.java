@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.transfer.service.TransDbmsVO;
 import com.k4m.dx.tcontrol.transfer.service.TransMappVO;
+import com.k4m.dx.tcontrol.transfer.service.TransRegiVO;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
@@ -264,32 +265,8 @@ public class TransDAO extends EgovAbstractMapper{
 		update("transSQL.updateTargetConnectInfo",transVO);	
 	}
 
-	/**
-	 * 스냅샷모드 목록 조회
-	 * @param TransVO
-	 * @return List<TransVO>
-	 * @throws Exception
-	 */
-	public List<TransVO> selectSnapshotModeList() {
-		List<TransVO> sl = null;
-		sl = (List<TransVO>) list("transSQL.selectSnapshotModeList",null);
-		return sl;
-	}
-
 	public void deleteTransExrttrgMapp(int trans_exrt_trg_tb_id) {
 		delete("transSQL.deleteTransExrttrgMapp",trans_exrt_trg_tb_id);	
-	}
-
-	/**
-	 * 압축형식
-	 * @param TransVO
-	 * @return List<TransVO>
-	 * @throws Exception
-	 */
-	public List<TransVO> selectCompressionTypeList() {
-		List<TransVO> sl = null;
-		sl = (List<TransVO>) list("transSQL.selectCompressionTypeList",null);
-		return sl;
 	}
 
 	/**
@@ -316,63 +293,6 @@ public class TransDAO extends EgovAbstractMapper{
 		List<Map<String, Object>>  sl = null;
 		sl = (List<Map<String, Object>>) list("transSQL.selectTargetTransInfoAuto",db_svr_id);
 		return sl;
-	}
-
-	/**
-	 * trans kafka connect 조회
-	 * 
-	 * @param transDbmsVO
-	 * @return List<TransDbmsVO>
-	 * @throws Exception
-	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<TransDbmsVO> selectTransKafkaConList(TransDbmsVO transDbmsVO) {
-		List<TransDbmsVO> sl = null;
-		sl = (List<TransDbmsVO>) list("transSQL.selectTransKafkaConList", transDbmsVO);
-		return sl;
-	}
-
-	/**
-	 * trans kafka conmnect 명 체크
-	 * 
-	 * @param trans_sys_nm
-	 * @return int
-	 * @throws Exception
-	 */
-	public int trans_connect_nmCheck(String kc_nm) {
-		int resultSet = 0;
-		resultSet = (int) getSqlSession().selectOne("transSQL.trans_connect_nmCheck", kc_nm);
-		return resultSet;
-	}
-
-	/**
-	 * trans kafka connecnt 등록
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public void insertTransKafkaConnect(TransDbmsVO transDbmsVO) {
-		insert("transSQL.insertTransKafkaConnect", transDbmsVO);
-	}
-
-	/**
-	 * trans kafka connect 설정 삭제
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public void deleteTransKafkaConnect(TransDbmsVO transDbmsVO) {
-		delete("transSQL.deleteTransKafkaConnect", transDbmsVO);
-	}
-	
-	/**
-	 * trans connect 수정
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public void updateTransKafkaConnect(TransDbmsVO transDbmsVO) {
-		update("transSQL.updateTransKafkaConnect", transDbmsVO);
 	}
 
 	/**
@@ -406,28 +326,7 @@ public class TransDAO extends EgovAbstractMapper{
 	public void updateTransCommonSetting(TransVO transVO) {
 		update("transSQL.updateTransCommonSetting", transVO);	
 	}
-	
-	/**
-	 * trans KAFKA CONNECT 사용여부 확인
-	 * 
-	 * @param transDbmsVO
-	 * @return Map<String, Object>
-	 * @throws Exception
-	 */
-	public Map<String, Object> selectTransKafkaConIngChk(TransDbmsVO transDbmsVO) throws SQLException {
-		return (Map<String, Object>) selectOne("transSQL.selectTransKafkaConIngChk", transDbmsVO);
-	}
-	
-	/**
-	 * trans connect faild 수정
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public void updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) {
-		update("transSQL.updateTransKafkaConnectFaild", transDbmsVO);
-	}
-	
+
 	/**
 	 * 기본설정 리스트 조회
 	 * 
@@ -531,6 +430,19 @@ public class TransDAO extends EgovAbstractMapper{
 		sl = (List<TransVO>) list("transSQL.selectTranIdTopicList",transVO);
 		return sl;
 	}
+	
+	/**
+	 * trans target topic 리스트  조회
+	 * 
+	 * @param transVO
+	 * @return List<TransVO>
+	 * @throws 
+	 */
+	public List<TransVO> selectTranTargetIdTopicList(TransVO transVO) {
+		List<TransVO>  sl = null;
+		sl = (List<TransVO>) list("transSQL.selectTranTargetIdTopicList",transVO);
+		return sl;
+	}
 
 	/**
 	 * trans 타겟 전송관리 테이블 수정
@@ -553,26 +465,6 @@ public class TransDAO extends EgovAbstractMapper{
 	}
 
 	/**
-	 * kafka connect log 등록
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public void insertTransKafkaConnectLog(TransDbmsVO transDbmsVO) {
-		insert("transSQL.insertTransKafkaConnectLog", transDbmsVO);
-	}
-
-	/**
-	 * kafka connect log 삭제
-	 * 
-	 * @param transVO
-	 * @throws Exception
-	 */
-	public void deleteTransKafkaConnectLog(TransDbmsVO transDbmsVO) {
-		delete("transSQL.deleteTransKafkaConnectLog", transDbmsVO);
-	}
-	
-	/**
 	 * trans heatbeat 체크
 	 * 
 	 * @param transVO
@@ -582,5 +474,4 @@ public class TransDAO extends EgovAbstractMapper{
 	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws SQLException {
 		return (Map<String, Object>) selectOne("transSQL.selectTransComCoIngChk", transVO);
 	}
-
 }

@@ -43,7 +43,7 @@
 			<div class="modal-body" style="margin-bottom:-30px;padding-top: 30px;">
 				<div class="row">
 					<h5 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel_Reg" style="padding-left:5px;">
-						비밀변호 확인
+						비밀번호 확인
 					</h5>
 				</div>
 				<div class="card" style="border:0px;padding-top: 10px;">

@@ -14,36 +14,76 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2021.07.23     최초 생성
+	*	2021.11.10     기능개발 	변승우 책임
 	*
 	* author 신예은 매니저
 	* since 2021.07.23
-	*
+	* 
 	*/
 %>
 
 <script>
 var table;
+var tableData;
 
 $(window.document).ready(function(){
 	fn_init();
-	fn_getStatus();
+	fn_selectExeWork();
+	//fn_getStatus();
 });
 
 function fn_init() {
+	
+	tableData = $('#dataDataTable').DataTable({
+		scrollY : "100px",
+		scrollX: true,	
+		searching : false,
+		processing : true,
+		paging : false,
+		deferRender : true,
+		info : false,
+		bSort : false,
+	columns : [
+		{data : "idx", className : "dt-center", defaultContent : ""}, 
+     	{data : "wrk_nm", className : "dt-left", defaultContent : ""},
+     	{data : "mig_info", className : "dt-left", defaultContent : ""},
+		/* {data : "src_dbms_dscd", className : "dt-center", defaultContent : ""}, 
+		{data : "src_ip", className : "dt-center", defaultContent : ""}, 
+		{data : "src_database", className : "dt-center", defaultContent : ""}, 
+		{data : "tar_ip", className : "dt-center", defaultContent : ""}, 
+		{data : "tar_database", className : "dt-center", defaultContent : ""}, */
+	]
+	});
+	
+	
+    tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+    tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(2)').css('min-width', '500px')
+    /* tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(6)').css('min-width', '100px'); */
+    
+	$(window).trigger('resize');
+	
+	
+	
 	table = $("#monitoring").DataTable({
 		scrollY : "330px",
 		searching : false,
 		deferRender : true,
+		paging : false,
 		scrollX: true,
 		bSort: false,
 		columns : [
-			{data : "tableName",  className : "dt-center", defaultContent : ""},
-			{data : "dataCount", className : "dt-center", defaultContent : ""},
-			{data : "migCount", className : "dt-center", defaultContent : ""},
-			{data : "startTime", className : "dt-center", defaultContent : ""},
-			{data : "endTime", className : "dt-center", defaultContent : ""},
-			{data : "runTime", className : "dt-center", defaultContent : ""},
-			{data : "result", className : "dt-center", defaultContent : ""}
+			{data : "table_nm",  defaultContent : ""},
+			{data : "total_cnt", className : "dt-right", defaultContent : "", render: $.fn.dataTable.render.number( ',' ) },
+			{data : "mig_cnt", className : "dt-right", defaultContent : "", render: $.fn.dataTable.render.number( ',' ) },
+			{data : "start_time", className : "dt-center", defaultContent : ""},
+			{data : "end_time", className : "dt-center", defaultContent : ""},
+			{data : "elapsed_time", className : "dt-center", defaultContent : ""},
+			{data : "status", className : "dt-center", defaultContent : ""}
 		]
 	});
 
@@ -55,25 +95,52 @@ function fn_init() {
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
 	
+	
+	//더블 클릭시
+	 $('#dataDataTable tbody').on('dblclick','tr',function() {
+		 var wrk_nm = tableData.row(this).data().wrk_nm;
+		 fn_getStatus(wrk_nm);
+	});		
+
+	
 }
 
-function fn_getStatus(){
-	console.log("fn_getStatus CALLED!!");
+function fn_getStatus(wrk_nm){
+	setInterval(function() {
 	$.ajax({
 		url : "/db2pg/monitoring/getData.do",
-		data : {
-			
+		data : {			
+			wrk_nm : wrk_nm
 		},
 		dataType : "json",
 		type : "post",
 		success : function(result){
-			console.log("getStatus end!");
+			table.clear().draw();
+			table.rows.add(result).draw();
 		}
-	})
+	});
+	$('#loading').hide();
+	}, 3000);	
+}
+
+
+function fn_selectExeWork(){
+	
+	$.ajax({
+		url : "/db2pg/monitoring/selectExeWork.do",
+		data : {			
+		},
+		dataType : "json",
+		type : "post",
+		success : function(result){
+			tableData.clear().draw();
+			tableData.rows.add(result).draw();
+		}
+	});
 }
 
 </script>
-<!-- <%@include file="./../../popup/confirmMultiForm.jsp"%> -->
+
 
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
@@ -121,13 +188,43 @@ function fn_getStatus(){
 				</div>
 			</div>
 		</div>
+		
 		<div class="col-12 div-form-margin-table stretch-card">
-			<div class="card">
-				<div class="card-body">
+				<div class="card my-sm-2" >
+					<div class="card-body" >
+						<div class="row">
+							<div class="col-12">			
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_selectExeWork()" style="float: right;">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>												
+									<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="30"   style="background-color: #778899;"><spring:message code="common.no" /></th>
+												<th width="100"  style="background-color: #778899;"><spring:message code="common.work_name" /></th>
+												<th width="100"  style="background-color: #778899;">MIGRATION</th>
+												<%-- <th width="100"  style="background-color: #778899;">DBMS <spring:message code="common.division" /></th>
+												<th width="100"  style="background-color: #778899;"><spring:message code="data_transfer.ip" /></th>
+												<th width="100"  style="background-color: #778899;">Database</th>												
+												<th width="100"  style="background-color: #778899;"><spring:message code="data_transfer.ip" /></th>
+												<th width="100"  style="background-color: #778899;">Database</th> --%>
+											</tr>
+										</thead>
+									</table>
+								 	</div>
+						 	</div>
+						</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
+		
+		<div class="col-12 div-form-margin-table stretch-card" style="margin-top: 20px;">
+			<div class="card">				
+				<div class="card-body">			
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">
-								<div class="col-12">
+								<div class="col-12">							
 									<table id="monitoring" class="table table-hover system-tlb-scroll" cellspacing="0" width="100%">
 										<thead>
 											<tr class="bg-info text-white">
@@ -136,8 +233,8 @@ function fn_getStatus(){
 												<th width="130">이행건수</th>
 												<th width="130">시작시간</th>
 												<th width="130">종료시간</th>
-												<th width="130">걸린시간</th>
-												<th width="80">완료여부</th>
+												<th width="130">소요시간</th>
+												<th width="80">상태</th>
 											</tr>
 										</thead>
 									</table>

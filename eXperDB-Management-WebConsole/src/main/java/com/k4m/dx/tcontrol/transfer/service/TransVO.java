@@ -59,6 +59,62 @@ public class TransVO {
 	private int tar_trans_id;
 	private int topic_id;
 	private String exrt_trg_tb_nm;
+	
+	private String regi_id;
+	private String connect_type;
+	private String topic_type;
+
+	private String regi_nm;
+	private String regi_ip;
+	private String regi_port;
+
+	public String getRegi_nm() {
+		return regi_nm;
+	}
+
+	public void setRegi_nm(String regi_nm) {
+		this.regi_nm = regi_nm;
+	}
+
+	public String getRegi_ip() {
+		return regi_ip;
+	}
+
+	public void setRegi_ip(String regi_ip) {
+		this.regi_ip = regi_ip;
+	}
+
+	public String getRegi_port() {
+		return regi_port;
+	}
+
+	public void setRegi_port(String regi_port) {
+		this.regi_port = regi_port;
+	}
+
+	public String getRegi_id() {
+		return regi_id;
+	}
+
+	public void setRegi_id(String regi_id) {
+		this.regi_id = regi_id;
+	}
+
+	public String getConnect_type() {
+		return connect_type;
+	}
+
+	public void setConnect_type(String connect_type) {
+		this.connect_type = connect_type;
+	}
+
+	public String getTopic_type() {
+		return topic_type;
+	}
+
+	public void setTopic_type(String topic_type) {
+		this.topic_type = topic_type;
+	}
 
 	public String getExrt_trg_tb_nm() {
 		return exrt_trg_tb_nm;

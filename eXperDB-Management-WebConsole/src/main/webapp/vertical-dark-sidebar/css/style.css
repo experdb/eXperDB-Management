@@ -9658,6 +9658,12 @@ pre code {
     flex: 0 0 25%;
     max-width: 25%;
   }
+  
+  .col-sm-2_26 {
+    flex: 0 0 26%;
+    max-width: 26%;
+  }
+  
   .col-sm-2_27 {
     flex: 0 0 27%;
     max-width: 27%;
@@ -19878,6 +19884,11 @@ code {
   .grid-margin-xl-0 {
     margin-bottom: 0;
   }
+}
+
+.img-b_lg {
+  width: 95px;
+  height: 95px;
 }
 
 .img-lg {

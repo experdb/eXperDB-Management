@@ -83,7 +83,8 @@
 			data : {
 				db_svr_id : $("#db_svr_id","#findList").val(),
 				kafkaIp : kafkaIp,
-				kafkaPort : kafkaPort
+				kafkaPort : kafkaPort,
+				connect_gbn : "kafka"
 			},
 			success : function(result) {
 				if(result.RESULT_DATA =="success"){
@@ -113,7 +114,7 @@
 	/* ********************************************************
 	 * 팝업시작
 	 ******************************************************** */
-	function fn_tansKafkaConModPopStart(result) {
+	function fn_transKafkaConModPopStart(result) {
 		$("#mod_trans_kafka_con_nm", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_nm, ""));
 		$("#mod_trans_kafka_con_ip", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_ip, "")); 
 		$("#mod_trans_kafka_con_port", "#modTransKfkConRegForm").val(nvlPrmSet(result.resultInfo[0].kc_port, "")); 
@@ -216,7 +217,7 @@
 
 								<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
 									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" value='<spring:message code="common.modify" />' />
-									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" type="button" onclick="fn_mod_trans_kcConnectTest();" value='<spring:message code="data_transfer.test_connection" />' />
+									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" type="button" onclick="fn_mod_trans_kcConnectTest();" value='<spring:message code="eXperDB_CDC.test_connection" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 								</div>
 							</fieldset>

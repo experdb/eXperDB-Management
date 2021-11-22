@@ -2033,6 +2033,13 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 
 			transObj.put(ClientProtocolID.TRANS_COM_ID, transInfo.get(0).get("trans_com_id"));
 
+			//regi_id 추가
+			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
+			transObj.put(ClientProtocolID.REGI_NM, transInfo.get(0).get("regi_nm"));
+			transObj.put(ClientProtocolID.REGI_IP, transInfo.get(0).get("regi_ip"));
+			transObj.put(ClientProtocolID.REGI_PORT, transInfo.get(0).get("regi_port"));
+			transObj.put(ClientProtocolID.CONNECT_TYPE, transInfo.get(0).get("connect_type"));
+
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_SCM_NM, mappInfo.get(0).get("exrt_trg_scm_nm"));
 			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));			
@@ -2083,13 +2090,21 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		
 		try{
 			String cmd = "curl -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
-System.out.println("=====cmd" + cmd);
+System.out.println("=====cmd1123123123" + cmd);
 			String con_ipadr = (String)transInfo.get(0).get("ipadr");
 			String con_portno = transInfo.get(0).get("portno").toString();
 			String con_dtb_nm = (String)transInfo.get(0).get("dtb_nm");
 			
-			String strConUrl = "jdbc:oracle:thin:@" + con_ipadr + ":" + con_portno + ":" + con_dtb_nm.toLowerCase();
+			String dbms_gbn = String.valueOf(transInfo.get(0).get("dbms_dscd"));
 			
+			String strConUrl = "";
+			
+			if ("TC002204".equals(dbms_gbn)) { //postgresql
+				strConUrl = "jdbc:postgresql://" + con_ipadr + ":" + con_portno + "/" + con_dtb_nm.toLowerCase();
+			} else {
+				strConUrl = "jdbc:oracle:thin:@" + con_ipadr + ":" + con_portno + ":" + con_dtb_nm.toLowerCase();
+			}
+
 			String con_pwd = (String)transInfo.get(0).get("pwd");
 			
 			if (con_pwd != null && !"".equals(con_pwd)) {
@@ -2114,9 +2129,11 @@ System.out.println("=====cmd" + cmd);
 			transObj.put(ClientProtocolID.CONNECTION_URL, strConUrl); 							//con_url
 			transObj.put(ClientProtocolID.SPR_USR_ID, transInfo.get(0).get("spr_usr_id"));		//spr_usr_id
 			transObj.put(ClientProtocolID.CONNECTION_PWD, con_pwd);								//pwd
-			
-			transObj.put(ClientProtocolID.CON_START_GBN, "target");
 
+			transObj.put(ClientProtocolID.CON_START_GBN, "target");
+			transObj.put(ClientProtocolID.REGI_ID, transInfo.get(0).get("regi_id"));
+			transObj.put(ClientProtocolID.DBMS_GBN, dbms_gbn);							//pwd
+			
 			JSONObject mappObj = new JSONObject();
 			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));
 
@@ -2233,7 +2250,7 @@ System.out.println("=====cmd" + cmd);
 	
 	// 41. trans topic list 조호
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT) {
+	public JSONObject trans_topic_List(JSONObject serverObj,String IP, int PORT, String topic_type, String kc_id) {
 		
 		String xml[] = {
 				"egovframework/spring/context-aspect.xml",
@@ -2267,6 +2284,10 @@ System.out.println("=====cmd" + cmd);
 				//등록된 topic 리스트 조회
 				TransService transService = (TransService) context.getBean("transServiceImpl");
 				TransVO transVO = new TransVO();
+				//토픽타입별
+				transVO.setTopic_type(topic_type);
+				transVO.setKc_id(kc_id);
+				
 				List<TransVO> tarTopicList = transService.selectTransTopicList(transVO);
 
 				String[] splitStrResultMessge = strStrReult_data.split(",");
@@ -2274,14 +2295,17 @@ System.out.println("=====cmd" + cmd);
 				for(int i=0; i<splitStrResultMessge.length; i++){
 					JSONObject jsonObj = new JSONObject();
 					String topicName = splitStrResultMessge[i];
-					boolean topicNmChk = true;
+					String regi_nm = "";
+					String regi_id = "";
+					boolean topicNmChk = false;
 
 					//target trans_id가 등록된 topic은 제외
 					if (tarTopicList.size() > 0) {
 						for(int j=0; j<tarTopicList.size(); j++){
 							if (tarTopicList.get(j).getTopic_nm().equals(topicName)) {
-								topicNmChk = false;
-								break;
+								topicNmChk = true;
+								regi_nm = tarTopicList.get(j).getRegi_nm();
+								regi_id = tarTopicList.get(j).getRegi_id();
 							}
 						}
 					}
@@ -2289,7 +2313,8 @@ System.out.println("=====cmd" + cmd);
 					//topic 테이블에 target이 등록되어있지 않은 내역만 출력
 					if (topicNmChk == true) {
 						jsonObj.put("topic_name", topicName);
-
+						jsonObj.put("regi_nm", regi_nm);
+						jsonObj.put("regi_id", regi_id);
 						jsonObj.put("rownum_chk", i);
 						jsonArray.add(jsonObj);
 					}
@@ -2427,5 +2452,94 @@ System.out.println("=====cmd" + cmd);
 		
 		return result;
 	}
+
 	
+	// connetor가 confluent일 때 실행
+	public Map<String, Object> createConfluentProperties(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo, List<Map<String, Object>> mappInfo, List<TransVO> topicInfo) {
+		Map<String, Object> result = new HashMap<>();
+		
+		try{
+			//properties name
+			String properties_nm = mappInfo.get(0).get("exrt_trg_tb_nm") + ".properties";
+System.out.println("=====cmd9999999999999999999999999999" + properties_nm);
+			//String cmd = "curl -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
+			//String cmd = "confluent local services connect connector load " +  transInfo.get(0).get("connect_nm") + " --config /home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/" + properties_nm;
+			//String file_path = "/home/ec2-user/programs/confluent-6.2.1/etc/kafka-connect-hdfs/";
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.LOGIN_ID, dbServerVO.getUsr_id());
+			
+			System.out.println("serverObj : " + serverObj.toJSONString());
+
+			JSONObject transObj = new JSONObject();
+			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
+			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
+			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));			
+			transObj.put(ClientProtocolID.TRANS_ID, String.valueOf(transInfo.get(0).get("trans_id")));
+			transObj.put(ClientProtocolID.CON_START_GBN, "target");
+
+			//regi_id 추가
+			transObj.put(ClientProtocolID.REGI_ID, topicInfo.get(0).getRegi_id());
+			transObj.put(ClientProtocolID.REGI_NM, topicInfo.get(0).getRegi_nm());
+			transObj.put(ClientProtocolID.REGI_IP, topicInfo.get(0).getRegi_ip());
+			transObj.put(ClientProtocolID.REGI_PORT, topicInfo.get(0).getRegi_port());
+			transObj.put(ClientProtocolID.DBMS_GBN, String.valueOf(transInfo.get(0).get("dbms_dscd")));
+			transObj.put(ClientProtocolID.FILE_NAME, properties_nm);
+			transObj.put(ClientProtocolID.FILE_DIRECTORY, transInfo.get(0).get("file_path"));
+			transObj.put(ClientProtocolID.DBMS_IP, String.valueOf(transInfo.get(0).get("ipadr")));
+			transObj.put(ClientProtocolID.DBMS_PORT, String.valueOf(transInfo.get(0).get("portno")));
+
+			System.out.println("transObj : " + transObj.toJSONString());
+
+			JSONObject mappObj = new JSONObject();
+			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));			
+
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT045);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
+			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
+			//jObj.put(ClientProtocolID.REQ_CMD, cmd);
+			
+			//System.out.println("REQ_CMD : " + cmd);
+			
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			System.out.println("IP : PORT - " + IP + ":" + PORT);
+
+			CA.open(); 
+			objList = CA.dxT045(jObj);
+			CA.close();
+
+			String strErrMsg = String.valueOf(objList.get(ClientProtocolID.ERR_MSG));
+			String strErrCode = String.valueOf(objList.get(ClientProtocolID.ERR_CODE));
+			String strDxExCode = String.valueOf(objList.get(ClientProtocolID.DX_EX_CODE));
+			String strResultCode = String.valueOf(objList.get(ClientProtocolID.RESULT_CODE));
+			String strResultData = String.valueOf(objList.get(ClientProtocolID.RESULT_DATA));
+
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("RESULT_DATA : " +  strResultData);
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strResultData);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }

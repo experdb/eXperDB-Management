@@ -252,13 +252,13 @@
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">
-			<c:if test="${act == 'i'}"><spring:message code="data_transfer.transfer_set_reg"/></c:if>
-			<c:if test="${act == 'u'}"><spring:message code="data_transfer.transfer_set_mod"/></c:if>
+			<c:if test="${act == 'i'}"><spring:message code="eXperDB_CDC.transfer_set_reg"/></c:if>
+			<c:if test="${act == 'u'}"><spring:message code="eXperDB_CDC.transfer_set_mod"/></c:if>
 		</p>
 		<table class="write">
 			<caption>
-				<c:if test="${act == 'i'}"><spring:message code="data_transfer.transfer_set_reg"/></c:if>
-				<c:if test="${act == 'u'}"><spring:message code="data_transfer.transfer_set_mod"/></c:if>
+				<c:if test="${act == 'i'}"><spring:message code="eXperDB_CDC.transfer_set_reg"/></c:if>
+				<c:if test="${act == 'u'}"><spring:message code="eXperDB_CDC.transfer_set_mod"/></c:if>
 			</caption>
 			<colgroup>
 				<col style="width:150px;" />

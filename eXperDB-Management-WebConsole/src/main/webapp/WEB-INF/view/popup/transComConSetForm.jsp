@@ -5,6 +5,22 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<%
+	/**
+	* @Class Name : transComConSetForm.jsp
+	* @Description : 기본설정 선택 팝업
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2020.04.07     최초 생성
+	*
+	* author 
+	* since 2020. 04. 07
+	*
+	*/
+%>
+
 <style>
 .null_red {
   color: red;
@@ -48,9 +64,9 @@
  								var color = 'red';
  								var html = "";
  								if(full.heartbeat_action_query == null || full.heartbeat_action_query == ""){
- 									html = '<span style="color:' + color + '">' + '<spring:message code="data_transfer.unregistered" />' + '</span>';
+ 									html = '<span style="color:' + color + '">' + '<spring:message code="eXperDB_CDC.unregistered" />' + '</span>';
  								} else {
- 									html = '<spring:message code="data_transfer.add_complet" />';
+ 									html = '<spring:message code="eXperDB_CDC.add_complet" />';
  								}
 
 								return html;
@@ -147,155 +163,6 @@
 	}
 
 	/* ********************************************************
-	 * 기본사항 팝업 시작
-	 ******************************************************** */
-	function fn_transCommonConSetPopStart(){
-		//조회
-		fn_trans_com_con_pop_search();
-	}
-
-	/* ********************************************************
-	 * 기본사항 조회
-	 ******************************************************** */
-	function fn_trans_com_con_pop_search(){
-
-		$.ajax({
-			url : "/selectTransComConPopList.do",
-			data : {
-			},
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				trans_com_con_pop_table.rows({selected: true}).deselect();
-				trans_com_con_pop_table.clear().draw();
-				if (nvlPrmSet(result, '') != '') {
-					trans_com_con_pop_table.rows.add(result).draw();
-				}
-			}
-		});
-	}
-
-	/* ********************************************************
-	 * 기본사항 등록 팝업페이지 호출
-	 ******************************************************** */
-	function fn_transComConSetIns_pop(){
-		$('#pop_layer_con_com_ins_cng').modal("hide");
-
- 		$.ajax({ 
-			url : "/transComSettingCngIns.do",
-			data : {
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				fn_transComConSetRegPopStart(result);
-				
-				$('#pop_layer_con_com_ins_cng').modal("show");
-			}
-		});
-	}
-
-	/* ********************************************************
-	 * 기본사항 수정팝업
-	 ******************************************************** */
-	function fn_transComConSetUpd_pop() {
-		var datas = trans_com_con_pop_table.rows('.selected').data();
-		
-		if (datas.length <= 0) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return;
-		}
-
-		if(datas.length > 1){
-			showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
-			return;
-		} 
-		
-		var mod_trans_com_id = trans_com_con_pop_table.row('.selected').data().trans_com_id;
-
-		$.ajax({
-			url : "/selectTransComSettingCngInfo.do",
-			data : {
-				trans_com_id : mod_trans_com_id
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				if(result != null){
-					fn_transComConSetModPopStart(result);
-				}
-
-				$('#pop_layer_con_com_mod_cng').modal('show');
-			}
-		});
-	}
-
-	/* ********************************************************
-	 * trans common 삭제버튼 클릭시
-	 ******************************************************** */
-	function fn_transComConSetDelete(){
-		var totDatas = trans_com_con_pop_table.data();
-		var datas = trans_com_con_pop_table.rows('.selected').data();
-
-		if (datas.length <= 0) {
-			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-			return;
-		}
-		
-		if (totDatas.length <= datas.length) {
-			showSwalIcon('<spring:message code="data_transfer.msg33" />', '<spring:message code="common.close" />', '', 'error');
-			return;
-		}
-		
-		trans_com_id_List = [];
-
-		for (var i = 0; i < datas.length; i++) {
-			trans_com_id_List.push(datas[i].trans_com_id);   
-		}
-
-		confile_title = '<spring:message code="data_transfer.default_setting" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
-		$('#con_multi_gbn', '#findConfirmMulti').val("trans_com_con_del");
-		$('#confirm_multi_tlt').html(confile_title);
-		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
-		$('#pop_confirm_multi_md').modal("show");
-	}
-
-	/* ********************************************************
 	 * 삭제 로직 처리
 	 ******************************************************** */
 	function fn_trans_com_con_delete_logic(){
@@ -323,15 +190,13 @@
 					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
 					fn_trans_com_con_pop_search();
 				}else{
-					msgVale = "<spring:message code='data_transfer.default_setting' />";
+					msgVale = "<spring:message code='eXperDB_CDC.default_setting' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
 			}
 		});
 	}
-	
-	
 </script>
 
 <%@include file="../popup/transComConSetRegForm.jsp"%>
@@ -342,7 +207,7 @@
 		<div class="modal-content" style="width:1300px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="data_transfer.default_setting"/>
+					<spring:message code="eXperDB_CDC.default_setting"/>
 				</h4>
 		
 				<div class="card" style="margin-top:10px;border:0px;">					
@@ -351,7 +216,7 @@
 							<div class="col-12">
 								<div class="template-demo">	
 									<button type="button" class="btn btn-outline-danger btn-icon-text mb-2 btn-search-disable" style="border:none;text-align:left;" id="btnPopCommonConChk" onClick="#">
-										<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="data_transfer.msg39" />
+										<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="eXperDB_CDC.msg39" />
 									</button>
 
 									<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnTransDmbsDelete" onClick="fn_transComConSetDelete();" >
@@ -369,14 +234,14 @@
 					</div>
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i><spring:message code="data_transfer.default_setting"/> LIST</p>
+						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i><spring:message code="eXperDB_CDC.default_setting"/> LIST</p>
 						
 						<table id="transComConSetPopList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="30"><spring:message code="common.no" /></th>
-									<th width="150"><spring:message code="data_transfer.default_setting_name" /></th>
-									<th width="150"><spring:message code="data_transfer.heartbeat_regist_yn" /></th>
+									<th width="150"><spring:message code="eXperDB_CDC.default_setting_name" /></th>
+									<th width="150"><spring:message code="eXperDB_CDC.heartbeat_regist_yn" /></th>
 									<th width="120">plugin.name</th>
  									<th width="100">heartbeat.interval.ms</th>
 									<th width="100">max.batch.size</th>

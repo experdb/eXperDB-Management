@@ -6,7 +6,7 @@
 	<select id="selectTransSetting" resultType="hashmap" >
 		/**
 		* Query ID : selectTransSetting
-		* Description : 소스시스템 전송설정 조회(완료)
+		* Description : 소스시스템 전송설정 조회 end
 		* Author :
 		**/
         SELECT 
@@ -14,8 +14,8 @@
              , (ROW_NUMBER() OVER()) AS IDX
              , A.TRANS_ID
              , A.KC_ID
-             , A.KC_IP
-             , A.KC_PORT
+             , B.KC_IP
+             , B.KC_PORT
              , A.CONNECT_NM
              , A.SNAPSHOT_MODE
              , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = A.SNAPSHOT_MODE ) AS SNAPSHOT_NM
@@ -33,7 +33,14 @@
              , A.COMPRESSION_TYPE
              , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = A.COMPRESSION_TYPE ) AS COMPRESSION_NM
              , A.META_DATA
+             , A.REGI_ID
+             , C.REGI_NM
+             , C.REGI_IP
+             , C.REGI_PORT
+             , A.CONNECT_TYPE
           FROM T_TRANSCNG_I A
+               LEFT JOIN T_TRANS_CON_INF B ON A.KC_ID = B.KC_ID
+               LEFT JOIN T_TRANS_REGI_INF C ON A.REGI_ID = C.REGI_ID
          WHERE 1=1
            AND A.DB_SVR_ID = #{db_svr_id}
 
@@ -48,7 +55,7 @@
 		/**
 		* Query ID : selectTransDBMS
 		* Description : 전송설정 조회
-		* Author : 변승우
+		* Author :
 		**/
         SELECT 
                (ROW_NUMBER() OVER()) AS ROWNUM
@@ -68,6 +75,7 @@
              , A.LST_MDFR_ID
              , A.LST_MDF_DTM
              , A.EXE_STATUS
+             , A.FILE_PATH
           FROM (
                SELECT
                       TRANS_SYS_ID
@@ -85,6 +93,7 @@
                     , LST_MDFR_ID
                     , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
                     , EXE_STATUS
+                    , FILE_PATH
                  FROM T_TRANS_SYS_INF
                 WHERE 1 = 1
 
@@ -116,7 +125,7 @@
 		/**
 		* Query ID : trans_sys_nmCheck
 		* Description : 시스템명 중복 체크
-		* Author : 변승우
+		* Author :
 		**/
         SELECT 
                COUNT(*)
@@ -146,6 +155,7 @@
                    , LST_MDFR_ID
                    , LST_MDF_DTM
                    , EXE_STATUS
+                   , FILE_PATH
                     ) 
                     VALUES
                     (
@@ -163,6 +173,7 @@
                    , #{lst_mdfr_id}
                    , clock_timestamp()	
                    , #{exe_status}
+                   , #{file_path}
                     )
 	</insert>
 	
@@ -199,6 +210,7 @@
              , SCM_NM = #{scm_nm}
              , PWD = #{pwd}
              , EXE_STATUS = #{exe_status}
+             , FILE_PATH = #{file_path}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE TRANS_SYS_ID=#{trans_sys_id}::numeric
@@ -216,16 +228,16 @@
 
 	<select id="selectTargetTransSetting" resultType="hashmap" >
 		/**
-		* Query ID : selectTargetTransSetting(완료)
+		* Query ID : selectTargetTransSetting end
 		* Description : 타겟시스템 전송설정 조회
 		* Author :
 		**/
-        SELECT 
+         SELECT 
                (ROW_NUMBER() OVER()) AS ROWNUM
              , (ROW_NUMBER() OVER()) AS IDX
              , A.TRANS_ID
-             , A.KC_IP
-             , A.KC_PORT
+             , C.KC_IP
+             , C.KC_PORT
              , A.KC_ID
              , A.CONNECT_NM
              , A.SNAPSHOT_MODE
@@ -242,8 +254,15 @@
              , A.TRANS_SYS_ID
              , B.TRANS_SYS_NM
              , B.EXE_STATUS AS DB_EXE_STATUS
+             , A.REGI_ID
+             , A.TOPIC_TYPE
+             , D.REGI_NM
+             , D.REGI_IP
+             , D.REGI_PORT
           FROM T_TRANSCNG_TARGET_I A
                LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_SYS_ID = B.TRANS_SYS_ID
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
+               LEFT JOIN T_TRANS_REGI_INF D ON A.REGI_ID = D.REGI_ID
          WHERE 1=1
            AND A.DB_SVR_ID = #{db_svr_id}
 
@@ -257,21 +276,20 @@
 	<select id="selectTransInfo" resultType="hashmap" >
 		/**
 		* Query ID : selectTransInfo
-		* Description : 전송설정 조회
-		* Author : 변승우
+		* Description : 전송설정 조회 end
+		* Author :
 		**/
-        SELECT 
+       SELECT 
                (ROW_NUMBER() OVER()) AS ROWNUM
              , (ROW_NUMBER() OVER()) AS IDX
              , A.TRANS_ID
-             , A.KC_IP
-             , A.KC_PORT
-             , A.KC_ID
+             , C.KC_IP
+             , C.KC_PORT
              , A.KC_ID
              , A.CONNECT_NM
              , A.SNAPSHOT_MODE
              , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = A.SNAPSHOT_MODE ) AS SNAPSHOT_NM
-             , (SELECT KC_NM FROM T_TRANS_CON_INF WHERE KC_ID = A.KC_ID ) AS KC_NM
+             , C.KC_NM AS KC_NM
              , A.DB_ID
              , (SELECT DB_NM FROM T_DB_I WHERE DB_ID =  A.DB_ID) AS DB_NM
              , A.DB_SVR_ID
@@ -294,8 +312,15 @@
              , B.MAX_QUEUE_SIZE
              , B.OFFSET_FLUSH_INTERVAL_MS
              , B.OFFSET_FLUSH_TIMEOUT_MS
+             , A.CONNECT_TYPE
+             , A.REGI_ID
+             , D.REGI_NM
+             , D.REGI_IP
+             , D.REGI_PORT
           FROM T_TRANSCNG_I A
                LEFT OUTER JOIN T_TRANSCOMCNG_I B ON A.TRANS_COM_ID = B.TRANS_COM_ID
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
+               LEFT JOIN T_TRANS_REGI_INF D ON A.REGI_ID = D.REGI_ID
          WHERE 1=1
            AND A.TRANS_ID = #{trans_id}
          ORDER BY A.LST_MDF_DTM DESC
@@ -304,20 +329,26 @@
 	<select id="selectMappInfo" resultType="hashmap" >
 		/**
 		* Query ID : selectMappInfo
-		* Description : 전송대상 조회
-		* Author : 변승우
+		* Description : 전송대상 조회 end
+		* Author :
 		**/
         SELECT 
                (ROW_NUMBER() OVER()) AS ROWNUM
              , (ROW_NUMBER() OVER()) AS IDX
-             , TRANS_EXRT_TRG_TB_ID
-             , coalesce(EXRT_TRG_TB_NM, '')  as EXRT_TRG_TB_NM
-             , coalesce(EXRT_TRG_SCM_NM, '') as EXRT_TRG_SCM_NM
-             , SCHEMA_TOTAL_CNT
-             , TABLE_TOTAL_CNT
-             , FRST_REGR_ID
-             , FRST_REG_DTM
-          FROM T_TRANS_EXRTTRG_MAPP
+             , TTEM.TRANS_EXRT_TRG_TB_ID AS TRANS_EXRT_TRG_TB_ID
+             , COALESCE(TTEM.EXRT_TRG_TB_NM, '')  AS EXRT_TRG_TB_NM
+             , COALESCE(TTEM.EXRT_TRG_SCM_NM, '') AS EXRT_TRG_SCM_NM
+             , TTEM.SCHEMA_TOTAL_CNT AS SCHEMA_TOTAL_CNT
+             , TTEM.TABLE_TOTAL_CNT AS TABLE_TOTAL_CNT
+             , TTEM.FRST_REGR_ID AS FRST_REGR_ID
+             , TTEM.FRST_REG_DTM AS FRST_REG_DTM
+             , COALESCE(TTRI.REGI_ID, 0) AS REGI_ID
+             , COALESCE(TTRI.REGI_NM, '') AS REGI_NM
+             , COALESCE(TTRI.REGI_IP, '') AS REGI_IP
+             , COALESCE(TTRI.REGI_PORT, 0) AS REGI_PORT
+          FROM T_TRANS_EXRTTRG_MAPP TTEM
+          LEFT OUTER JOIN T_TRANS_REGI_INF TTRI 
+            ON TTEM.REGI_ID = TTRI.REGI_ID 
          WHERE 1=1
            AND TRANS_EXRT_TRG_TB_ID = #{trans_exrt_trg_tb_id}
 	</select>
@@ -325,17 +356,17 @@
 	<select id="selectTargetTransInfo" resultType="hashmap" >
 		/**
 		* Query ID : selectTargetTransInfo
-		* Description : target 전송설정 조회
-		* Author : 변승우
+		* Description : target 전송설정 조회 end
+		* Author :
 		**/
         SELECT 
                (ROW_NUMBER() OVER()) AS ROWNUM
              , (ROW_NUMBER() OVER()) AS IDX
              , A.TRANS_ID
-             , A.KC_IP
-             , A.KC_PORT
+             , C.KC_IP
+             , C.KC_PORT
              , A.KC_ID
-             , (SELECT KC_NM FROM T_TRANS_CON_INF WHERE KC_ID = A.KC_ID ) AS KC_NM
+             , C.KC_NM
              , A.CONNECT_NM
              , A.DB_SVR_ID
              , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = A.DB_SVR_ID) AS DB_SVR_NM
@@ -343,6 +374,7 @@
              , A.TRANS_EXRT_TRG_TB_ID
              , A.TRANS_EXRT_EXCT_TB_ID
              , A.EXE_STATUS
+             , A.TOPIC_TYPE
              , B.IPADR
              , B.DTB_NM
              , B.SPR_USR_ID
@@ -351,8 +383,18 @@
              , B.SCM_NM
              , B.TRANS_SYS_NM
              , B.EXE_STATUS AS DB_EXE_STATUS
+             , B.DBMS_DSCD
+             , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = B.DBMS_DSCD ) AS DBMS_DSCD_NM
+             , B.FILE_PATH
+             , A.TOPIC_TYPE
+             , A.REGI_ID
+             , D.REGI_NM
+             , D.REGI_IP
+             , D.REGI_PORT
           FROM T_TRANSCNG_TARGET_I A
                LEFT OUTER JOIN T_TRANS_SYS_INF B ON A.TRANS_SYS_ID = B.TRANS_SYS_ID
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
+               LEFT JOIN T_TRANS_REGI_INF D ON A.REGI_ID = D.REGI_ID
          WHERE 1=1
            AND A.TRANS_ID = #{trans_id}
          LIMIT 1
@@ -361,8 +403,8 @@
     <delete id="deleteTransSetting" parameterType="int">
     	/**
 	 	* Query ID : deleteTransSetting
-	 	* Description : 데이터전송 설정 삭제
-	 	* Author : 변승우
+	 	* Description : 데이터전송 설정 삭제 end
+	 	* Author :
 	 	**/
         DELETE FROM T_TRANSCNG_I
          WHERE TRANS_ID = #{trans_id}
@@ -371,8 +413,8 @@
 	<delete id="deleteTransTargetSetting" parameterType="int">
     	/**
 	 	* Query ID : deleteTransSetting
-	 	* Description : 데이터전송 설정 삭제
-	 	* Author : 변승우
+	 	* Description : 데이터전송 설정 삭제 end
+	 	* Author :
 	 	**/
         DELETE FROM T_TRANSCNG_TARGET_I
          WHERE TRANS_ID = #{trans_id}
@@ -381,8 +423,8 @@
 	<select id="connect_nm_Check" resultType="int">
 		/**
 		* Query ID : connect_nm_Check
-		* Description : 커넥터 중복 체크
-		* Author : 변승우
+		* Description : 커넥터 중복 체크 end
+		* Author : 
 		**/
         SELECT 
                COUNT(CONNECT_NM)
@@ -405,8 +447,8 @@
 	<select id="selectTransExrttrgMappSeq" resultType="int">
 		/**
 	 	*  Query ID : selectTransExrttrgMappSeq
-	 	*  Description : 전송 포함대상 작업 ID SEQ 조회
-	 	*  Author : 변승우
+	 	*  Description : 전송 포함대상 작업 ID SEQ 조회 end
+	 	*  Author :
 	 	**/		
         SELECT setval('q_t_trans_exrttrg_mapp_01',nextval('q_t_trans_exrttrg_mapp_01'))
 	</select>
@@ -424,6 +466,7 @@
                   , EXRT_TRG_SCM_NM
                   , SCHEMA_TOTAL_CNT
                   , TABLE_TOTAL_CNT
+                  , REGI_ID
                   , FRST_REGR_ID
                   , FRST_REG_DTM
                    )
@@ -434,6 +477,7 @@
                   , #{exrt_trg_scm_nm}
                   , #{schema_total_cnt}::numeric
                   , #{table_total_cnt}::numeric
+                  , #{regi_id}::numeric
                   , #{frst_regr_id}
                   , clock_timestamp()
                    )
@@ -442,14 +486,12 @@
 	<insert id="insertConnectInfo"  parameterType="transVO">
 		/**
 		* Query ID : insertConnectInfo
-		* Description : 전송설정 정보 등록
+		* Description : 전송설정 정보 등록 end
 		* Author : 변승우
 		**/
         INSERT INTO T_TRANSCNG_I
                    (
                     TRANS_ID
-                  , KC_IP
-                  , KC_PORT
                   , CONNECT_NM
                   , SNAPSHOT_MODE
                   , DB_ID
@@ -463,12 +505,12 @@
                   , META_DATA
                   , KC_ID
                   , TRANS_COM_ID
+                  , REGI_ID
+                  , CONNECT_TYPE
                    ) 
             VALUES
                    (
                     nextval('q_t_transcng_i_01')
-                  , #{kc_ip}
-                  , #{kc_port}
                   , #{connect_nm}
                   , #{snapshot_mode}
                   , #{db_id}
@@ -482,20 +524,20 @@
                   , #{meta_data}
                   , #{kc_id}::numeric
                   , #{trans_com_id}::numeric
+                  , #{regi_id}::numeric
+                  , #{connect_type}
                    )
 	</insert>
 	
 	<insert id="insertTargetConnectInfo"  parameterType="transVO">
 		/**
-		* Query ID : insertTargetConnectInfo
-		* Description : target 전송설정 정보 등록
+		* Query ID : insertTargetConnectInfo 
+		* Description : target 전송설정 정보 등록 end
 		* Author : 
 		**/
         INSERT INTO T_TRANSCNG_TARGET_I
                    (
                     TRANS_ID
-                  , KC_IP
-                  , KC_PORT
                   , CONNECT_NM
                   , DB_SVR_ID
                   , TRANS_SYS_ID
@@ -505,12 +547,12 @@
                   , LST_MDFR_ID
                   , LST_MDF_DTM 
                   , KC_ID
+                  , REGI_ID
+                  , TOPIC_TYPE
                    ) 
             VALUES
                    (
                     #{trans_id}::numeric
-                  , #{kc_ip}
-                  , #{kc_port}
                   , #{connect_nm}
                   , #{db_svr_id}
                   , #{trans_trg_sys_id}::numeric
@@ -520,20 +562,23 @@
                   , #{frst_regr_id}
                   , clock_timestamp()
                   , #{kc_id}::numeric
+                  , #{regi_id}::numeric
+                  , #{topic_type}
                    )
 	</insert>
 	
 	<update id="updateTransExrttrgMapp" parameterType="transMappVO">
     	/**
 	 	* Query ID : transMappVO
-	 	* Description : 스키마,테이블 맵핑정보 수정
-	 	* Author : 변승우
+	 	* Description : 스키마,테이블 맵핑정보 수정 end
+	 	* Author : 
 	 	**/
 		UPDATE T_TRANS_EXRTTRG_MAPP SET
 			 	exrt_trg_tb_nm  = #{exrt_trg_tb_nm},
 				exrt_trg_scm_nm = #{exrt_trg_scm_nm},
 				schema_total_cnt = #{schema_total_cnt}::numeric,
 				table_total_cnt = #{table_total_cnt}::numeric,
+				regi_id = #{regi_id}::numeric,
 				frst_regr_id =  #{frst_regr_id}, 
 				frst_reg_dtm =  clock_timestamp()
 	 		WHERE trans_exrt_trg_tb_id = #{trans_exrt_trg_tb_id}		 		
@@ -551,7 +596,9 @@
 				meta_data = #{meta_data},
 				trans_com_id = #{trans_com_id}::numeric,
 				lst_mdfr_id =  #{frst_regr_id}, 
-				lst_mdf_dtm =  clock_timestamp()
+				lst_mdf_dtm =  clock_timestamp(),
+				regi_id = #{regi_id}::numeric,
+				connect_type = #{connect_type}
 	 		WHERE TRANS_ID = #{trans_id}	 		
     </update>
 	
@@ -565,32 +612,11 @@
 		   SET
 				TRANS_SYS_ID = #{trans_trg_sys_id}::numeric,
 				lst_mdfr_id =  #{frst_regr_id}, 
-				lst_mdf_dtm =  clock_timestamp()
+				lst_mdf_dtm =  clock_timestamp(),
+				regi_id = #{regi_id}::numeric,
+				topic_type =  #{topic_type}
 	 		WHERE TRANS_ID = #{trans_id}	 		
     </update>
-
-	<select id="selectSnapshotModeList" resultType="transVO">
-		/**
-		* Query ID : selectSnapshotModeList
-		* Description : 스냅샷 모드 조회
-		* Author : 변승우
-		**/
-			SELECT 
-				    (ROW_NUMBER() OVER()) AS ROWNUM
-				  , (ROW_NUMBER() OVER()) AS IDX
-		          , GRP_CD
-			      , SYS_CD
-			      , SYS_CD_NM
-			      , USE_YN
-			      , FRST_REGR_ID
-			      , FRST_REG_DTM
-			      , LST_MDFR_ID
-			      , LST_MDF_DTM 
-	      FROM T_SYSDTL_C
-	      WHERE 1=1
-	      AND GRP_CD = 'TC0036'
-	      AND USE_YN = 'Y'
-	</select>
 
 	<insert id="insertExrtexctMapp" parameterType="transMappVO">
 		/**
@@ -623,37 +649,13 @@
     <delete id="deleteTransExrttrgMapp" parameterType="int">
     	/**
 	 	* Query ID : deleteTransExrttrgMapp
-	 	* Description : 스키마,테이블 맵핑정보 삭제
-	 	* Author : 변승우
+	 	* Description : 스키마,테이블 맵핑정보 삭제 end
+	 	* Author :
 	 	**/
-    	 DELETE FROM T_TRANS_EXRTTRG_MAPP
+    	DELETE FROM T_TRANS_EXRTTRG_MAPP
     	 WHERE trans_exrt_trg_tb_id = #{trans_exrt_trg_tb_id} 
-    
     </delete>
 
-    <select id="selectCompressionTypeList" resultType="transVO">
-		/**
-		* Query ID : selectCompressionTypeList
-		* Description : 압축형태 조회
-		* Author : 변승우
-		**/
-			SELECT 
-				    (ROW_NUMBER() OVER()) AS ROWNUM
-				  , (ROW_NUMBER() OVER()) AS IDX
-		          , GRP_CD
-			      , SYS_CD
-			      , SYS_CD_NM
-			      , USE_YN
-			      , FRST_REGR_ID
-			      , FRST_REG_DTM
-			      , LST_MDFR_ID
-			      , LST_MDF_DTM 
-	      FROM T_SYSDTL_C
-	      WHERE 1=1
-	      AND GRP_CD = 'TC0037'
-	      AND USE_YN = 'Y'
-	</select>
-	
 	<select id="selectTransInfoAuto" resultType="hashmap" >
 		/**
 		* Query ID : selectTransInfoAuto
@@ -732,6 +734,41 @@
         ) A
 	</select>
 	
+	<select id="selectTransRegiList" parameterType="transRegiVO"  resultType="transRegiVO">
+		/**
+		* Query ID : selectTransRegiList
+		* Description : Schema Registry 조회(완료)
+		* Author : 
+		**/
+        SELECT 
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , A.*
+         FROM (
+               SELECT
+                      REGI_ID
+                    , REGI_NM
+                    , REGI_IP
+                    , REGI_PORT
+                    , EXE_STATUS
+                    , FRST_REGR_ID
+                    , TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+                    , LST_MDFR_ID
+                    , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
+                 FROM T_TRANS_REGI_INF
+                WHERE 1 = 1
+                  <if test="regi_id != null and regi_id != '' ">
+                      AND REGI_ID = #{regi_id}::numeric
+                  </if>
+
+                  <if test="regi_nm != null and regi_nm != '' ">
+                      AND REGI_NM LIKE '%' || #{regi_nm} || '%'
+                  </if>
+	
+                ORDER BY LST_MDF_DTM DESC
+        ) A
+	</select>
+	
 	<select id="trans_connect_nmCheck" resultType="int" parameterType="string"  >
 		/**
 		* Query ID : trans_connect_nmCheck
@@ -742,6 +779,18 @@
                COUNT(*)
           FROM T_TRANS_CON_INF
          WHERE KC_NM = #{kc_nm}
+	</select>
+	
+	<select id="trans_Registry_nmCheck" resultType="int" parameterType="string"  >
+		/**
+		* Query ID : trans_Registry_nmCheck
+		* Description : 커넥트명 중복 체크
+		* Author : 김민정
+		**/
+        SELECT 
+               COUNT(*)
+          FROM T_TRANS_REGI_INF
+         WHERE REGI_NM = #{regi_nm}
 	</select>
 
 	<insert id="insertTransKafkaConnect"  parameterType="transDbmsVO">
@@ -776,6 +825,39 @@
                     )
 	</insert>
 	
+	
+	<insert id="insertTransSchemaRegistry"  parameterType="transRegiVO">
+		/**
+		* Query ID : insertTransSchemaRegistry
+		* Description : TRANS Schema Registry
+		* Author : 
+		**/
+        INSERT INTO T_TRANS_REGI_INF
+                    (
+                     REGI_ID
+                   , REGI_NM
+                   , REGI_IP
+                   , REGI_PORT
+                   , EXE_STATUS
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                    ) 
+                    VALUES
+                    (
+                     nextval('q_trans_regi_inf_01')
+                   , #{regi_nm}
+                   , #{regi_ip}
+                   , #{regi_port}::numeric
+                   , 'TC001501'
+                   , #{frst_regr_id}
+                   , clock_timestamp()
+                   , #{lst_mdfr_id}
+                   , clock_timestamp()
+                    )
+	</insert>
+	
 	 <delete id="deleteTransKafkaConnect" parameterType="transDbmsVO">
 		/**
 	 	* Query ID : deleteTransKafkaConnect
@@ -784,6 +866,16 @@
 	 	**/	
         DELETE FROM T_TRANS_CON_INF
          WHERE KC_ID = #{kc_id}::numeric
+	</delete>
+
+	 <delete id="deleteTransSchemaRegistry" parameterType="transRegiVO">
+		/**
+	 	* Query ID : deleteTransSchemaRegistry
+	 	* Description : Schema Registry 삭제
+	 	* Author : 
+	 	**/	
+        DELETE FROM T_TRANS_REGI_INF
+         WHERE REGI_ID = #{regi_id}::numeric
 	</delete>
 
 	<update id="updateTransKafkaConnect"  parameterType="transDbmsVO">
@@ -801,10 +893,25 @@
          WHERE KC_ID=#{kc_id}::numeric
 	</update>
 	
+		<update id="updateTransShcemaRegistry"  parameterType="transRegiVO">
+		/**
+	 	* Query ID : updateTransShcemaRegistry
+	 	* Description : TRANS Schema Registry 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_REGI_INF
+           SET
+               REGI_IP = #{regi_ip}
+             , REGI_PORT = #{regi_port}::numeric
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE REGI_ID=#{regi_id}::numeric
+	</update>
+	
 	<select id="selectTransComSettingCngInfo" resultType="hashMap" parameterType="hashMap">
    		/**
 	 	* Query ID : selectTransComSettingCngInfo
-	 	* Description : TRANS 공통 설정
+	 	* Description : TRANS 공통 설정 end
 	 	* Author : 
 	 	**/
        SELECT A.TRANS_COM_ID,
@@ -866,7 +973,7 @@
 	<update id="updateTransCommonSetting" parameterType="transVO">
         /**
         * Query ID : "updateTransCommonSetting"
-        * Description : 기본설정 수정
+        * Description : 기본설정 수정 end
         * Author : 
         **/
         UPDATE T_TRANSCOMCNG_I
@@ -897,6 +1004,18 @@
          WHERE KC_ID = #{kc_id}::numeric
 	</select>
 	
+		<select id="selectTransSchemRegiIngChk" parameterType="transDbmsVO" resultType="hashMap">
+		/**
+		*  Query ID : selectTransSchemRegiIngChk
+		* Description : trans schema Registry 사용여부 체크
+		* Author :
+		**/
+        SELECT
+               COUNT(*) AS TOT_CNT
+          FROM T_TRANSCNG_TARGET_I
+         WHERE REGI_ID = #{regi_id}::numeric
+	</select>
+	
 	<update id="updateTransKafkaConnectFaild"  parameterType="transDbmsVO">
 		/**
 	 	* Query ID : updateTransKafkaConnect
@@ -911,11 +1030,25 @@
          WHERE KC_ID=#{kc_id}::numeric
 	</update>
 	
+	<update id="updateTransSchemaConnectFaild"  parameterType="transDbmsVO">
+		/**
+	 	* Query ID : updateTransSchemaConnectFaild
+	 	* Description : TRANS schema Registry 수정
+	 	* Author : 
+	 	**/
+        UPDATE T_TRANS_REGI_INF
+           SET
+               EXE_STATUS = #{exe_status}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE REGI_ID=#{regi_id}::numeric
+	</update>
+
 	<select id="selectTransComConPopList" parameterType="transVO"  resultType="hashmap">
 			/**
-			* Query ID : selectTransComConPopList
-			* Description : 기본사항 리스트 조회
-			* Author : 변승우
+			* Query ID : selectTransComConPopList 
+			* Description : 기본사항 리스트 조회 end
+			* Author : 
 			**/
 	        SELECT 
 	               (ROW_NUMBER() OVER()) AS ROWNUM
@@ -952,7 +1085,7 @@
 	 <delete id="deleteTransComConSet" parameterType="transVO">
 		/**
 	 	* Query ID : deleteTransComConSet
-	 	* Description : 기본설정 삭제
+	 	* Description : 기본설정 삭제 end
 	 	* Author : 
 	 	**/	
         DELETE FROM T_TRANSCOMCNG_I
@@ -962,7 +1095,7 @@
 	<update id="updateTransTarTopic"  parameterType="transVO">
 		/**
 	 	* Query ID : updateTransTarTopic
-	 	* Description : TRANS target topic update
+	 	* Description : TRANS target topic update end
 	 	* Author : 
 	 	**/
         UPDATE T_TRANS_TOPIC_I
@@ -973,6 +1106,7 @@
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE TOPIC_NM = #{topic_nm}
+           AND KC_ID = #{kc_id}::numeric
 	</update>
 	
 	<select id="selectTargetConnectSeq" resultType="int">
@@ -987,7 +1121,7 @@
 	<update id="updateTransTarTopicChogihwa"  parameterType="transVO">
 		/**
 	 	* Query ID : updateTransTarTopic
-	 	* Description : TRANS target topic update
+	 	* Description : TRANS target topic update end
 	 	* Author : 
 	 	**/
         UPDATE T_TRANS_TOPIC_I
@@ -1007,17 +1141,23 @@
 		* Author :
 		**/
         SELECT
-               TOPIC_ID,
-               TOPIC_NM
-          FROM T_TRANS_TOPIC_I
-         WHERE TAR_TRANS_ID IS NOT NULL
+               A.TOPIC_ID,
+               A.TOPIC_NM,
+               A.REGI_ID,
+               C.REGI_NM
+          FROM T_TRANS_TOPIC_I A
+               LEFT JOIN T_TRANS_REGI_INF C ON A.REGI_ID = C.REGI_ID
+               JOIN T_TRANSCNG_I B ON B.TRANS_ID = A.SRC_TRANS_ID
+         WHERE A.TAR_TRANS_ID IS NULL
+           AND ((A.REGI_ID IS NOT NULL AND 'TC004402' = #{topic_type}) OR (A.REGI_ID IS NULL AND 'TC004401' = #{topic_type}))
+           AND B.KC_ID = #{kc_id}::numeric
 	</select>
 	
     <delete id="deleteTransTopicSetting" parameterType="int">
     	/**
 	 	* Query ID : deleteTransTopicSetting
-	 	* Description : 데이터전송 topic 설정 삭제
-	 	* Author : 변승우
+	 	* Description : 데이터전송 topic 설정 삭제 end
+	 	* Author :
 	 	**/
         DELETE FROM T_TRANS_TOPIC_I
          WHERE SRC_TRANS_ID = #{trans_id}
@@ -1043,17 +1183,32 @@
 		* Description : trans topic 리스트 조회
 		* Author :
 		**/
-        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, A.KC_IP, A.KC_PORT
+        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, C.KC_IP, C.KC_PORT, B.REGI_ID
           FROM T_TRANSCNG_I A
                JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.SRC_TRANS_ID
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
          WHERE A.TRANS_ID = #{trans_id}::numeric
 	</select>
 
+	<select id="selectTranTargetIdTopicList" parameterType="transVO" resultType="transVO">
+		/**
+		*  Query ID : selectTranTargetIdTopicList
+		* Description : trans 타겟 topic 리스트 조회
+		* Author :
+		**/
+        SELECT A.TRANS_ID, B.TOPIC_ID, B.TOPIC_NM, C.KC_IP, C.KC_PORT, B.REGI_ID, D.REGI_NM, D.REGI_IP, D.REGI_PORT
+          FROM T_TRANSCNG_TARGET_I A
+               JOIN T_TRANS_TOPIC_I B ON A.TRANS_ID = B.TAR_TRANS_ID
+               LEFT JOIN T_TRANS_CON_INF C ON A.KC_ID = C.KC_ID
+               LEFT JOIN T_TRANS_REGI_INF D ON B.REGI_ID = D.REGI_ID
+         WHERE A.TRANS_ID = #{trans_id}::numeric
+	</select>
+	
     <update id="updateTranExrtTrgInfo"  parameterType="TransVO">
     	/**
 	 	* Query ID : updateTransSrcTopic
-	 	* Description : source connect 활성화 topic 수정
-	 	* Author : 
+	 	* Description : source connect 활성화 topic 수정 end
+	 	* Author :
 	 	**/
         UPDATE T_TRANS_EXRTTRG_MAPP
            SET EXRT_TRG_TB_NM = #{exrt_trg_tb_nm}
@@ -1063,7 +1218,7 @@
 	 <delete id="deleteTransConnectLog" parameterType="TransVO">
 		/**
 	 	* Query ID : deleteTransConnectLog
-	 	* Description : 소스 / 타겟 connect log 삭제
+	 	* Description : 소스 / 타겟 connect log 삭제 end
 	 	* Author : 
 	 	**/	
         DELETE FROM T_TRANS_ACTSTATE_CNG_G
@@ -1110,7 +1265,7 @@
 
 	<insert id="insertUpTransKafkaConnectLog"  parameterType="transDbmsVO">
 		/**
-		* Query ID : insertTransKafkaConnectLog
+		* Query ID : insertUpTransKafkaConnectLog
 		* Description : TRANS kafka connect 로그 등록
 		* Author : 
 		**/
@@ -1143,16 +1298,63 @@
                            clock_timestamp()
 	</insert>
 	
-	 <delete id="deleteTransKafkaConnectLog" parameterType="transDbmsVO">
+	<insert id="insertTransSchemaRegistryLog"  parameterType="transRegiVO">
+		/**
+		* Query ID : insertTransSchemaRegistryLog
+		* Description : TRANS Schema Registry 로그 등록
+		* Author : 
+		**/
+         INSERT INTO t_trans_schem_regi_actstate_cng_g
+                    (
+                     REGI_ACT_EXE_SN
+                   , REGI_ID
+                   , REGI_IP
+                   , REGI_PORT
+                   , ACT_TYPE
+                   , ACT_EXE_TYPE
+                   , WRK_DTM 
+                   , EXE_RSLT_CD
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                    ) 
+                     VALUES
+                    ( nextval('q_t_trans_schem_regi_actstate_cng_g_01'),
+                            (SELECT REGI_ID FROM T_TRANS_REGI_INF WHERE REGI_NM = #{regi_nm} LIMIT 1),
+                           #{regi_ip}, 
+                           #{regi_port}::numeric,
+                           #{act_type},
+                           #{act_exe_type},
+                           clock_timestamp(),
+                           #{exe_rslt_cd},
+                           #{frst_regr_id},
+                           clock_timestamp(),
+                           #{lst_mdfr_id},
+                           clock_timestamp()
+                           )
+	</insert>
+	
+	<delete id="deleteTransKafkaConnectLog" parameterType="transDbmsVO">
 		/**
 	 	* Query ID : deleteTransKafkaConnectLog
 	 	* Description : kafka connect log 삭제
 	 	* Author : 
 	 	**/	
         DELETE FROM T_TRANS_KAFKA_ACTSTATE_CNG_G
-         WHERE KC_ID = #{kc_id}::numeric
+        WHERE KC_ID = #{kc_id}::numeric
 	</delete>
-
+	
+	<delete id="deleteTransSchemaRegistryLog" parameterType="transDbmsVO">
+		/**
+	 	* Query ID : deleteTransSchemaRegistryLog
+	 	* Description : Schema Registry  log 삭제
+	 	* Author : 
+	 	**/	
+        DELETE FROM t_trans_schem_regi_actstate_cng_g
+        WHERE REGI_ID = #{regi_id}::numeric
+	</delete>
+		
 	<select id="selectTransComCoIngChk" parameterType="transVO" resultType="hashmap">
 		/**
 		*  Query ID : selectTransDbmsIngChk
@@ -1169,5 +1371,37 @@
                   FROM T_TRANSCOMCNG_I
                  WHERE 1 = 1
           ) A
+	</select>
+	
+	<select id="selectTargetTransRegiList" parameterType="hashmap"  resultType="transRegiVO">
+		/**
+		* Query ID : selectTargetTransRegiList
+		* Description : Schema Registry 조회(완료)
+		* Author : 
+		**/
+        SELECT 
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , A.*
+         FROM (
+               SELECT
+                      REGI_ID
+                    , REGI_NM
+                    , REGI_IP
+                    , REGI_PORT
+                    , EXE_STATUS
+                    , FRST_REGR_ID
+                    , TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+                    , LST_MDFR_ID
+                    , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
+                 FROM T_TRANS_REGI_INF
+                WHERE 1 = 1
+                 AND REGI_ID IN
+           <foreach item="item" index="index" collection="regi_id" open="(" separator="," close=")"> 
+               #{item}::numeric
+           </foreach>
+
+                ORDER BY LST_MDF_DTM DESC
+        ) A
 	</select>
 </mapper>

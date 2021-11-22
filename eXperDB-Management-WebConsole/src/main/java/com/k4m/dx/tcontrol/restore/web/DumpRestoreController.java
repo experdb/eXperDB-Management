@@ -321,11 +321,12 @@ public class DumpRestoreController {
 				}
 
 				String obj_cmd ="";
-
-/*				if (!"".equals(obj_nm_Rows) && !"".equals(scm_nm_Rows)) {
+				
+				if (!"".equals(obj_nm_Rows) && !"".equals(scm_nm_Rows)) {
 					obj_cmd = fn_objOption(obj_nm_Rows, scm_nm_Rows);
-				}*/
-System.out.println("===obj_cmd===" + obj_cmd);
+				}
+				
+				System.out.println("===obj_cmd=== : " + obj_cmd);
 				restoreDumpVO.setObj_cmd(obj_cmd);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -370,16 +371,16 @@ System.out.println("===obj_cmd===" + obj_cmd);
 				serverObj.put(ClientProtocolID.USER_ID, DbServerVO.getSvr_spr_usr_id());
 				serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(DbServerVO.getSvr_spr_scm_pwd()));
 							
-				System.out.println("===============서버정보================");
+				System.out.println("=============== Server Info ================");
 				System.out.println("SERVER_NAME = "+DbServerVO.getIpadr());
 				System.out.println("SERVER_IP = "+DbServerVO.getIpadr());
 				System.out.println("SERVER_PORT = "+DbServerVO.getPortno());
 				System.out.println("DATABASE_NAME = "+DbServerVO.getDft_db_nm());
 				System.out.println("USER_ID = "+DbServerVO.getSvr_spr_usr_id());
 				System.out.println("USER_PWD = "+aes.aesDecode(DbServerVO.getSvr_spr_scm_pwd()));				
-				System.out.println("=====================================");
+				System.out.println("===========================================");
 				
-				System.out.println("백업파일경로="+restoreDumpVO.getBck_file_pth());
+				System.out.println("backup file path="+restoreDumpVO.getBck_file_pth());
 
 				ClientInfoCmmn cic = new ClientInfoCmmn();
 				cic.dumpRestoreStart(serverObj, IP, PORT, restoreDumpVO);
@@ -439,13 +440,26 @@ System.out.println("===obj_cmd===" + obj_cmd);
 		JSONArray obj_nms = (JSONArray) new JSONParser().parse(obj_nm_Rows);
 		JSONArray scm_nms = (JSONArray) new JSONParser().parse(scm_nm_Rows);
 		
+		System.out.println("# === fn_objOption ===");
+		
+		System.out.println("# obj_nms : " + obj_nms);
+		System.out.println("# scm_nms : " + scm_nms);
+		
 		try {
+			String sn = " ";
 			for(int i=0; i<obj_nms.size(); i++){
-				if(obj_nms.get(i) == null || "".equals(obj_nms.get(i).toString())) {
-					strObj+=" -n "+ scm_nms.get(i).toString().toLowerCase();	
-				} else {
-					strObj+=" -t "+ scm_nms.get(i).toString().toLowerCase()+"."+ obj_nms.get(i).toString().toLowerCase();
-				} 
+//				if(obj_nms.get(i) == null || "".equals(obj_nms.get(i).toString())) {
+//					strObj+=" -n "+ scm_nms.get(i).toString().toLowerCase();	
+//				} else {
+//					strObj+=" -t "+ scm_nms.get(i).toString().toLowerCase()+"."+ obj_nms.get(i).toString().toLowerCase();
+//				} 
+				
+				if(!scm_nms.get(i).toString().equals(sn)){
+					strObj += " -n " + scm_nms.get(i).toString().toLowerCase();
+					sn = scm_nms.get(i).toString();
+				}
+				strObj += " -t " + obj_nms.get(i).toString().toLowerCase();
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

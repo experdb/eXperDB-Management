@@ -44,4 +44,12 @@ public interface ExperdbBackupHistoryService {
 	public List<BackupJobHistoryVO> selectRestoreJobHistoryList(Map<String, Object> param)  throws Exception ;
 
 
+	/**
+	 * RecoveryPoint 조회
+	 * @param param 
+	 * @throws Exception
+	 */
+	public List<BackupJobHistoryVO> selectRecoveryPoint(Map<String, Object> param) throws Exception ;
+
+
 }

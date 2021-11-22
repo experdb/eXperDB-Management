@@ -102,6 +102,11 @@ public class TransServiceImpl implements TransService{
 		}
 	}
 
+	/* topic 테이블 조회 - KC_ID */
+	public List<TransVO> selectTranscngKcList(TransVO transVO) throws Exception {
+		return transDAO.selectTranscngKcList(transVO);
+	}
+
 	/* trans 실시간  */
 	public String transRealTimeCheck(TransVO searChTransVO) throws Exception {
 		String transConListCmd = "";
@@ -164,7 +169,7 @@ public class TransServiceImpl implements TransService{
 					}
 
 					if (!strExeStatusIng.equals("TC001502")) { //실행 중일 경우 connect 목록 확인
-						transConListCmd = "curl -H 'Accept:application/json' "+strKcIp+":"+strKcPort+"/connectors/";
+/*						transConListCmd = "curl -H 'Accept:application/json' "+strKcIp+":"+strKcPort+"/connectors/";
 						
 						RunCommandExec rListMain = new RunCommandExec(transConListCmd);
 						
@@ -179,8 +184,9 @@ public class TransServiceImpl implements TransService{
 						
 						String retMainVal = rListMain.call();
 						String strResultMessgeMainList = rListMain.getMessage();
-						socketLogger.info("#####strResultMessgeMainstrResultMessgeMainstrResultMessgeMainstrResultMessgeMain : " + strResultMessgeMainList);
-						
+						socketLogger.info("#####retMainValretMainVal : " + retMainVal);
+						socketLogger.info("#####strResultMessgeMainstrResultMessgeMainstrResultMessgeMainstrResultMessgeMain : " + strResultMessgeMainList);*/
+						/*
 						if (retMainVal.equals("success")) {
 							if (strResultMessgeMainList != null && !"[]".equals(strResultMessgeMainList)) { //값이 있는 경우
 								List<TransVO> transCngTotList = transDAO.selectTransCngTotList(transVO); // 소스, 타겟 connect 전체 list
@@ -203,7 +209,7 @@ public class TransServiceImpl implements TransService{
 									}
 								}
 							}
-						}
+						}*/
 
 					}
 				}
@@ -273,8 +279,6 @@ public class TransServiceImpl implements TransService{
 									transVO.setTopic_nm(topicNm);
 	
 									if (topicTableList.size() > 0) {
-										transVO.setKc_ip(topicTableList.get(0).getKc_ip());
-
 										for(int j=0;j < topicTableList.size();j++) {
 											if (topicTableList.get(j).getTopic_nm().equals(topicNm)) {
 												overLabCnt = overLabCnt + 1;
@@ -289,6 +293,8 @@ public class TransServiceImpl implements TransService{
 											String insResult = insertKafkaRealTopic(transVO);
 											
 											if ("success".equals(insResult)) {
+												transVO.setKc_id(topicTableList.get(0).getKc_id());
+
 												//topic 테이블 수정
 												transDAO.updateTransTopic(transVO);
 											}
@@ -298,6 +304,8 @@ public class TransServiceImpl implements TransService{
 											String insResult = insertKafkaRealTopic(transVO);
 											
 											if ("success".equals(insResult)) {
+												transVO.setKc_id(topicTableList.get(0).getKc_id());
+												
 												//topic 테이블 등록
 												transDAO.insertTransTopic(transVO);
 											}
@@ -306,6 +314,7 @@ public class TransServiceImpl implements TransService{
 										List<TransVO> kcIpList = transDAO.selectTranscngKcList(transVO); // topic 테이블 조회
 										
 										transVO.setKc_ip(kcIpList.get(0).getKc_ip());
+										transVO.setKc_id(kcIpList.get(0).getKc_id());
 										
 										String insResult = insertKafkaRealTopic(transVO);
 										
@@ -343,9 +352,14 @@ public class TransServiceImpl implements TransService{
 				transDAO.insertTransActstateCngInfo(transVO);
 			} else {
 				if ("SOURCE".equals(con_start_gbn)) { //소스시스템
+					List<TransVO> kcIpList = transDAO.selectTranscngKcList(transVO); // topic 테이블 조회
+
+					if (kcIpList.size() > 0) {
+						transVO.setKc_id(kcIpList.get(0).getKc_id());
+					}
+					
 					List<TransVO> topicTableList = transDAO.selectTranIdTopicTotCnt(transVO); // topic count 조회
-					
-					
+
 					if (topicTableList != null) {
 						//target 이 연결되어있는 경우
 						if (topicTableList.get(0).getTar_trans_id_cnt() > 0) {
@@ -443,11 +457,13 @@ public class TransServiceImpl implements TransService{
 		socketLogger.info("TransServiceImpl.deleteRealTransTopic : ");
 
 		String result = "success";
-
+		socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888234234234234888kc_ip : " + transVO.getTrans_id());
 		try {
-			TransVO searchTransVO = new TransVO();
-			searchTransVO.setTrans_id(transVO.getTrans_id());
+			int iTrans_id = transVO.getTrans_id();
 			
+			TransVO searchTransVO = new TransVO();
+			searchTransVO.setTrans_id(iTrans_id);
+			socketLogger.info("searchTransVOsearchTransVOsearchTransVO : " + searchTransVO.getTrans_id());
 			List<TransVO> topicTableList = transDAO.selectTranIdTopicList(searchTransVO); // topic 테이블 조회
 			
 			if (topicTableList.size() > 0) {
@@ -455,11 +471,16 @@ public class TransServiceImpl implements TransService{
 					String kc_ip = topicTableList.get(i).getKc_ip();
 					String topic_nm = topicTableList.get(i).getTopic_nm();
 					String resultTopic = "N";
-					
+
 					//topic 존재 여부 확인
 					//////////////////////////////////////////////////////////////////////////////////////////////////////
 					String stCmdSearch ="bin/kafka-topics.sh --list --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
+					
+socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888888kc_ip : " + kc_ip);
+socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888888stCmdSearch : " + stCmdSearch);
+
 					TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
+/*					TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
 
 					//명령어 실행
 					searchR.run();
@@ -487,7 +508,12 @@ public class TransServiceImpl implements TransService{
 					
 					if ("Y".equals(resultTopic)) {
 						String strCmd = "bin/kafka-topics.sh --delete --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
+						
+socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList7777777777777777777777777777777kc_ip : " + kc_ip);
+socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList7777777777777777777777777777777strCmd : " + strCmd);
+			
 						TransRunCommandExec r = new TransRunCommandExec(strCmd);
+/*						TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, kc_ip, "");*/
 
 						//명령어 실행
 						r.run();
@@ -536,11 +562,15 @@ public class TransServiceImpl implements TransService{
 					String kc_ip = topicTableList.get(i).getKc_ip();
 					String topic_nm = topicTableList.get(i).getTopic_nm();
 					String resultTopic = "N";
-					
+
 					//topic 존재 여부 확인
 					//////////////////////////////////////////////////////////////////////////////////////////////////////
 					String stCmdSearch ="bin/kafka-topics.sh --list --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
+					
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111111111111kc_ip : " + kc_ip);
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111111111111stCmdSearch : " + stCmdSearch);
 					TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
+					/*TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
 
 					//명령어 실행
 					searchR.run();
@@ -569,7 +599,12 @@ public class TransServiceImpl implements TransService{
 					//topic이 있는 경우 삭제
 					if ("Y".equals(resultTopic)) {
 						String strCmd = "bin/kafka-topics.sh --delete --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
+
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList22222222222222222222kc_ip : " + kc_ip);
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList22222222222222222222strCmd : " + strCmd);
+						
 						TransRunCommandExec r = new TransRunCommandExec(strCmd);
+/*						TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, kc_ip, "");*/
 
 						//명령어 실행
 						r.run();
@@ -612,11 +647,16 @@ public class TransServiceImpl implements TransService{
 
 			String kc_ip = transVO.getKc_ip();
 			String topic_nm = transVO.getTopic_nm();			
-			
+
 			//topic 존재 여부 확인
 			//////////////////////////////////////////////////////////////////////////////////////////////////////
 			String stCmdSearch ="bin/kafka-topics.sh --list --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
+
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList333333333333333333333333kc_ip : " + kc_ip);
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList333333333333333333333333stCmdSearch : " + stCmdSearch);
+						
 			TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
+			/*TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
 
 			//명령어 실행
 			searchR.run();
@@ -630,7 +670,9 @@ public class TransServiceImpl implements TransService{
 			String retSearchVal = searchR.call();
 			String strResultSearchMessge = searchR.getMessage();
 			String resultTopic = "N";
-
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444retSearchValretSearchVal : " + retSearchVal);
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444strResultSearchMessgestrResultSearchMessge : " + strResultSearchMessge);
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444retSearchValretSearchVal : " + retSearchVal);
 			if (retSearchVal.equals("success")) {
 				if (!strResultSearchMessge.isEmpty()) {
 					resultTopic = "Y";
@@ -645,7 +687,11 @@ public class TransServiceImpl implements TransService{
 					String strInsCmd = "bin/kafka-topics.sh --create --zookeeper " + kc_ip + ":2181 --replication-factor 1 --partitions 1 --topic " + topic_nm;
 					
 					socketLogger.info("##### strInsCmdstrInsCmdstrInsCmd : " + strInsCmd);
-					
+
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444kc_ip : " + kc_ip);
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444strInsCmd : " + strInsCmd);
+
+/*					TransRunMultiCommandExec r = new TransRunMultiCommandExec(strInsCmd, kc_ip, "");*/
 					TransRunCommandExec r = new TransRunCommandExec(strInsCmd);
 
 					//명령어 실행
@@ -667,6 +713,9 @@ public class TransServiceImpl implements TransService{
 						
 					return result;
 				}
+			} else {
+				result = "failed";
+				return result;
 			}
 
 			result = "success";
@@ -683,4 +732,15 @@ public class TransServiceImpl implements TransService{
 	public void insertTransActstateCngInfo(TransVO transVO) throws Exception {
 		transDAO.insertTransActstateCngInfo(transVO);
 	}
+	
+	/* kafka connect 재시작시 이력 등록 */
+	public void insertTransKafkaActstateCngInfo(TransVO transVO) throws Exception {
+		transDAO.insertTransKafkaActstateCngInfo(transVO);
+	}
+
+	/* topic 중복체크 */
+	public int selectTranTopicIdInsChk(TransVO transVO) throws Exception {
+		return transDAO.selectTranTopicIdInsChk(transVO);
+	}
+
 }

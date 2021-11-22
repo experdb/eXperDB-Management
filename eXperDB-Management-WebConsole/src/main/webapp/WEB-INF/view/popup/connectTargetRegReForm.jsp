@@ -24,32 +24,26 @@
 
 	$(window.document).ready(function() {
 		fn_tg_mod_init();
+// 		$("input:radio[name='mod_tg_topic_type']:radio[id='mod_tg_normal_type']").prop('checked', true); 
+// 		$('#mod_tg_normal_type').checked = true;
+		$("#mod_tg_normal_type").prop("checked", true);
+		
+		
+		$('input[name="mod_tg_topic_type"]').change(function(){
+			if($('#mod_tg_normal_type').prop('checked')){
+				fn_mod_topic_type_cng('normal');
+			}else{
+				fn_mod_topic_type_cng('avro');
+			}
+			fn_topic_search_tg_mod();
+		});
+
 	});
-
-	/* ********************************************************
-	 * Validation Check
-	 ******************************************************** */
-	function trans_target_mod_valCheck(){
-		var valideMsg = "";
-
-		if(nvlPrmSet($("#mod_tg_trans_trg_sys_nm", "#modTargetRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
-			return false;
-		}
-
-		//전성대상테이블 length 체크
-		if (mod_connector_tg_tableList.rows().data().length <= 0) {
-			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		}
-
-		return true;
-	}
 </script>
 
 <div class="modal fade" id="pop_layer_con_re_reg_two_target" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 350px;">
-		<div class="modal-content" style="width:1000px;">		 
+		<div class="modal-content" style="width:1000px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="migration.target_system"/> <spring:message code="menu.mod_transfer_set"/>
@@ -112,7 +106,7 @@
 								<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 									<label for="mod_tg_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.connect_name_set" />
+										<spring:message code="eXperDB_CDC.connect_name_set" />
 									</label>
 									<div class="col-sm-8">
 										<input type="text" class="form-control form-control-xsm" id="mod_tg_connect_nm" name="mod_tg_connect_nm" maxlength="50" readonly />
@@ -130,17 +124,20 @@
 									<div class="col-sm-6">
 										<input type="text" class="form-control form-control-sm" id="mod_tg_trans_trg_sys_nm" name="mod_tg_trans_trg_sys_nm" readonly="readonly" />
 									</div>
-									<div class="col-sm-4">
+									<div class="col-sm-2">
+										<input type="text" class="form-control form-control-sm" id="mod_tg_dbms_type" name="mod_tg_dbms_type" readonly="readonly" />
+									</div>
+									<div class="col-sm-2">
 										<button type="button" class="btn btn-inverse-info btn-fw" style="width: 115px;" onclick="fn_mod_tg_dbmsInfo()"><spring:message code="button.create" /></button>
 									</div>
 								</div>
 								
 								<div class="form-group row" style="margin-bottom:0px;">
-									<label for="ins_tg_trans_trg_sys_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+									<label for="mod_tg_trans_trg_sys_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="access_control_management.activation" />
 									</label>
-									<div class="col-sm-6">
+									<div class="col-sm-4">
 										<div class="onoffswitch-pop-play">
 											<input type="checkbox" name="mod_target_transActive_act" class="onoffswitch-pop-play-checkbox" id="mod_target_transActive_act" onclick="fn_transActivation_msg_set('mod_target')" >
 											<label class="onoffswitch-pop-play-label" for="mod_target_transActive_act">
@@ -149,15 +146,26 @@
 											</label>
 										</div>
 									</div>
-									<div class="col-sm-4">
-										&nbsp;
+									<div class="col-sm-6">
+										<div class="row">
+											<label for="mod_tg_trans_trg_sys_nm" class="col-sm-3 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+												<spring:message code="eXperDB_CDC.topic_type"/>
+											</label>
+											<div class="col-sm-9 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);" >
+												<input type="radio" id="mod_tg_normal_type" class="form-check-input" name="mod_tg_topic_type" onclick="fn_mod_topic_type_cng('normal')" value="TC004401">
+												<label class="form-check-label" for="mod_tg_normal_type" style="padding-right:30px;">normal</label>
+												<input type="radio" id="mod_tg_avro_type" class="form-check-input" name="mod_tg_topic_type" onclick="fn_mod_topic_type_cng('avro')" value="TC004402">
+												<label class="form-check-label" for="mod_tg_avro_type">avro</label>
+											</div>
+										</div>
 									</div>
 								</div>
 								
 								<div class="form-group row div-form-margin-z" id="mod_target_trans_active_div" style="display:none;">
 									<div class="col-sm-12">
 										<div class="alert alert-info" style="margin-top:5px;margin-bottom:0px;" >
-											<spring:message code="data_transfer.msg27" />
+											<spring:message code="eXperDB_CDC.msg27" />
 										</div>
 									</div>
 								</div>	
@@ -168,13 +176,15 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title" style="margin-bottom:3px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.topicList" />
+													<spring:message code="eXperDB_CDC.topicList" />
 												</h4>
  	
 									 			<table id="mod_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="336" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="350" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
+															<th width="0" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
+															<th width="0" class="dt-center" >regi_id</th>
 														</tr>
 													</thead>
 												</table>
@@ -223,13 +233,15 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title" style="margin-bottom:3px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.transfer_topic" />
+													<spring:message code="eXperDB_CDC.transfer_topic" />
 												</h4>
 	
 								 				<table id="mod_connector_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="336" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="350px" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
+															<th width="0" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
+															<th width="0" class="dt-center" >regi_id</th>
 														</tr>
 													</thead>
 												</table>

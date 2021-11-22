@@ -19,7 +19,6 @@ import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
-import com.k4m.dx.tcontrol.util.TransRunCommandExec;
 
 /**
  * Connect 실행
@@ -78,7 +77,8 @@ public class DxT038 extends SocketCtl{
 
 		String trans_com_id = String.valueOf((Long)objCONNECT_INFO.get("TRANS_COM_ID"));
 		String trans_kc_ip = (String)objCONNECT_INFO.get("KC_IP");
-
+		String regi_id = String.valueOf(objCONNECT_INFO.get("REGI_ID"));
+socketLogger.info("DxT038.regi_idregi_id : " + regi_id);
 		JSONObject outputObj = new JSONObject();
 		
 	   	TransVO commonInfo = null;
@@ -88,13 +88,15 @@ public class DxT038 extends SocketCtl{
 			if (trans_com_id == null || "".equals(trans_com_id) || "null".equals(trans_com_id)) {
 				trans_com_id = "1";
 			}
-
+socketLogger.info("DxT038.trans_com_idtrans_com_id : " + trans_com_id);
 			searchTransVO.setTrans_com_id(trans_com_id);
 			commonInfo = transService.selectTransComSettingInfo(searchTransVO); //기본사항 조회
 			
 			JSONObject config = new JSONObject();
-			
+socketLogger.info("DxT038.con_start_gbncon_start_gbn : " + con_start_gbn);
 			if ("source".equals(con_start_gbn)) {
+				String connect_type = String.valueOf(objCONNECT_INFO.get("CONNECT_TYPE"));
+				
 				config.put("connector.class", "io.debezium.connector.postgresql.PostgresConnector");
 				config.put("tasks.max", "1");
 				config.put("database.hostname", objSERVER_INFO.get("SERVER_IP"));
@@ -105,7 +107,7 @@ public class DxT038 extends SocketCtl{
 				config.put("database.dbname", objCONNECT_INFO.get("DB_NM"));
 				config.put("table.whitelist", objMAPP_INFO.get("EXRT_TRG_TB_NM"));
 				config.put("slot.drop.on.stop", "true");
-				config.put("snapshot.mode", objCONNECT_INFO.get("SNAPSHOT_MODE"));
+				config.put("snapshot.mode", objCONNECT_INFO.get("SNAPSHOT_MODE").toString().toLowerCase());
 				config.put("slot.name", objCONNECT_INFO.get("CONNECT_NM"));
 				config.put("schema.whitelist", objMAPP_INFO.get("EXRT_TRG_SCM_NM"));
 				config.put("compression.type", objCONNECT_INFO.get("COMPRESSION_TYPE").toString().toLowerCase());
@@ -136,6 +138,17 @@ public class DxT038 extends SocketCtl{
 					config.put("max.queue.size", "65536");
 					config.put("offset.flush.interval.ms", "1000");
 					config.put("offset.flush.timeout.ms", "10000");
+				}
+socketLogger.info("DxT038.connect_typeconnect_type : " + connect_type);	
+				//schema registry 추가
+				if (connect_type != null && "TC004302".equals(connect_type)) {
+					String regi_url = "http://" + String.valueOf(objCONNECT_INFO.get("REGI_IP")) + ":" + String.valueOf(objCONNECT_INFO.get("REGI_PORT"));
+					config.put("key.converter", "io.confluent.connect.json.JsonSchemaConverter");
+					config.put("key.converter.schema.registry.url", regi_url);
+					config.put("value.converter", "io.confluent.connect.json.JsonSchemaConverter");
+					config.put("value.converter.schema.registry.url", regi_url);
+					config.put("key.converter.schemas.enable", "true");
+					config.put("value.converter.schemas.enable", "true");
 				}
 			} else {
 				if (objMAPP_INFO.get("EXRT_TRG_TB_NM") != null) {
@@ -243,6 +256,12 @@ public class DxT038 extends SocketCtl{
 					if (objMAPP_INFO.get("EXRT_TRG_TB_NM") != null) { //전송대상 테이블 param 추가
 						exrt_trg_tb_nm_array = objMAPP_INFO.get("EXRT_TRG_TB_NM").toString().split(",");
 					}
+socketLogger.info("DxT038.regi_idregi_idregi_idregi_idregi_idregi_id : " + regi_id);
+					if (regi_id != null && !"".equals(regi_id)) {
+						transVO.setRegi_id(regi_id);
+					} else {
+						transVO.setRegi_id(null);
+					}
 					
 					//기존 토픽리스트 조회 후 데이터 가 있는 경우
 					List<TransVO> topicTableList = transService.selectTranIdTopicList(transVO); // topic 테이블 조회
@@ -260,14 +279,10 @@ public class DxT038 extends SocketCtl{
 							transVO.setTopic_nm(topicNm); //topic명 param 등록
 						
 							if (topicTableList.size() > 0) {
-								for(int j=0;j < topicTableList.size();j++) { //전송대상 테이블
-									if (topicTableList.get(j).getTopic_nm().equals(topicNm)) {
-										overLabCnt = overLabCnt + 1;
-										
-										if (overLabCnt > 0) {
-											break;
-										}
-									}
+								//토픽명 중복체크
+								int topicCnt = transService.selectTranTopicIdInsChk(transVO);
+								if (topicCnt > 0) {
+									overLabCnt = 1;
 								}
 
 								//topic 추가 로 kafka 생성
@@ -299,7 +314,8 @@ public class DxT038 extends SocketCtl{
 						
 						//이전  topic 삭제
 						transVO.setWrite_use_yn("N");
-						
+socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.transVOtransVOtransVO111 : " + transVO.getKc_id());
+
 						//Write_use_yn가 N 인것만 삭제
 						//kafka topic 삭제
 						transService.deleteTransKakfkaTopic(transVO);
@@ -308,7 +324,8 @@ public class DxT038 extends SocketCtl{
 						transService.deleteTransTopic(transVO);
 					} else { //전송대상 테이블이 없는 경우는 전체 삭제
 						transVO.setWrite_use_yn("");
-						
+						socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.transVOtransVOtransVO2222 : " + transVO.getKc_id());
+	
 						//kafka topic 삭제
 						transService.deleteTransKakfkaTopic(transVO);
 						

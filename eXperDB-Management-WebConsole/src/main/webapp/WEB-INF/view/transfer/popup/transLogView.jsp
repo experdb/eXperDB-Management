@@ -28,6 +28,7 @@
 		var v_type = $("#type", "#transLogViewForm").val();
 		var v_date = $("#date", "#transLogViewForm").val();
 		var v_todayYN = $("#todayYN", "#transLogViewForm").val();
+		var v_kc_id = $("#kc_id", "#transLogViewForm").val();
 // 		var v_aut_id = $("#aut_id", "#transLogViewForm").val();
 		
 		if(v_endFlag > 0) {
@@ -47,6 +48,7 @@
  			data : {
  				db_svr_id : v_db_svr_id,
  				trans_id : v_trans_id,
+ 				kc_id : v_kc_id,
  				date : v_date,
 				seek : v_seek,
  				dwLen : v_dwLen,
@@ -69,24 +71,21 @@
 			success : function(result) {
 				if (result != null) {
 					var v_fileSize = Number($("#fSize", "#transLogViewForm").val());
-					
 					if (result.data != null) {
 						$("#connectorlog", "#transLogViewForm").html(result.data);
-						
 						v_fileSize = result.fSize;
 					}
-
+					if(result.kc_nm != null) {
+						$(".log_title").html(' [' + result.kc_nm + '] ' + v_type + ' <spring:message code="restore.log"/>');
+					}
 					$("#fSize", "#transLogViewForm").val(v_fileSize);
-					
 					$("#dwLen", "#transLogViewForm").val(result.dwLen);
 					$("#view_file_name", "#transLogViewForm").html(result.file_name);
 					$("#date", "#transLogViewForm").val(v_date);
 					$("#status", "#transLogViewForm").val(result.status);
 					
 					v_fileSize = byteConvertor(v_fileSize);
-					
 					$("#view_file_size", "#transLogViewForm").html(v_fileSize);
-					
 				}
 
 // 				if(v_aut_id != 1){
@@ -173,8 +172,8 @@
 	function fn_log_act_confirm_modal(act_status){
 		var gbn = "restart";
 		
-		confirm_title = 'kafka 재시작';
-		$('#confirm_msg').html(fn_strBrReplcae('kafka를 재시작하시겠습니까?'));
+		confirm_title = '<spring:message code="eXperDB_CDC.kafka_restart"/>';
+		$('#confirm_msg').html(fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg46"/>'));
 	
 		$('#con_only_gbn', '#findConfirmOnly').val(gbn);
 		$('#confirm_tlt').html(confirm_title);
@@ -191,7 +190,7 @@
 	function fn_actExeCng(){
 		var v_db_svr_id = $("#db_svr_id", "#transLogViewForm").val();
 		var v_trans_id = $("#trans_id", "#transLogViewForm").val();
-		$('#loading').show();
+		fn_trans_restart_loadbar("start");
 		$.ajax({
 			url : '/transKafkaConnectRestart.do',
 			type : 'post',
@@ -201,24 +200,22 @@
 				trans_id : v_trans_id
 			},
 			success : function(result) {
+//  				fn_trans_restart_loadbar("start");
  				if(result.data === "success"){
- 					fn_trans_loadbar("start");
 
  					setTimeout(function() {
- 						fn_trans_loadbar("stop");
- 		 				showSwalIconRst(result.errMsg, '<spring:message code="common.close" />', '', 'success');
+ 						fn_trans_restart_loadbar("stop");
+ 		 				showSwalIconRst('<spring:message code="eXperDB_CDC.msg47"/>', '<spring:message code="common.close" />', '', 'success');
  					}, 7000);
  				}else{
- 					showSwalIcon(result.errMsg, '<spring:message code="common.close" />', '', 'error');
+ 					showSwalIcon('<spring:message code="eXperDB_CDC.msg48"/>', '<spring:message code="common.close" />', '', 'error');
 	 			}
-
+ 				fn_trans_restart_loadbar("stop");
 			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);	
 			},
 			error : function(xhr, status, error) {
-				$("#ins_idCheck", "#insProxyListenForm").val("0");
-				
 				if(xhr.status == 401) {
 					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
@@ -226,22 +223,40 @@
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
+ 				fn_trans_restart_loadbar("stop");
 			}
-		});
-		$('#loading').hide();
+		}); 
+// 		fn_trans_restart_loadbar("stop");
+	}
+	
+	function fn_trans_restart_loadbar(gbn){
+		var htmlLoad_trans = '<div id="loading_trans"><div class="flip-square-loader mx-auto" data-backdrop="static" data-keyboard="false" style="border: 0px !important;z-index:99999;"></div></div>';
+		if($("#loading_trans").length == 0)	{
+			$("#pop_layer_log_view").append(htmlLoad_trans);
+		}
+		
+		if (gbn == "start") {
+			$('#loading_trans').css('position', 'absolute');
+			$('#loading_trans').css('left', '50%');
+			$('#loading_trans').css('top', '50%');
+			$('#loading_trans').css('transform', 'translate(-50%,-50%)');	  
+			$('#loading_trans').show();	
+		} else {
+			$('#loading_trans').hide();	
+		}
 	}
 	
 </script>
 
-<div class="modal fade" id="pop_layer_log_view" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+<div class="modal fade" id="pop_layer_log_view" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="ModalLabel" aria-hidden="true">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 20px 250px;">
 		<div class="modal-content" style="width:1200px;">		 
 			<div class="modal-body" style="margin-bottom:-10px;">
-			<div class="row">
-				<div class="col-sm-9">
-				<h4 class="modal-title mdi mdi-alert-circle text-info log_title" id="ModalLabel" style="padding-left:5px;">
-				</h4>
-				</div>
+				<div class="row">
+					<div class="col-sm-9">
+						<h4 class="modal-title mdi mdi-alert-circle text-info log_title" id="ModalLabel" style="padding-left:5px;">
+						</h4>
+					</div>
 <!-- 				<div class="col-sm-3"> -->
 					
 <!-- 					<button type="button" class="btn btn-outline-success btn-icon-text" id="download_btn" style="margin-left:50px;" onclick="fn_pry_log_download()"> -->
@@ -249,7 +264,7 @@
 <%-- 						&nbsp;<spring:message code='migration.download' /></i> --%>
 <!-- 					</button> -->
 <!-- 				</div> -->
-			</div>
+				</div>
 				
 				<form class="cmxform" id="transLogViewForm" name="transLogViewForm" >
 					<input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
@@ -265,6 +280,7 @@
 					<input type="hidden" id="todayYN" name="todayYN">
 					<input type="hidden" id="status" name="status">
 					<input type="hidden" id="agt_cndt_cd" name="agt_cndt_cd">
+					<input type="hidden" id="kc_id" name="kc_id" value="">
 					<fieldset>
 						<div class="card" style="margin-top:10px;border:0px;margin-bottom:-40px;">
 							<div class="card-body">
@@ -280,7 +296,7 @@
 									<div class="col-sm-8">
 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" type="button" onClick="fn_transLogViewAjax();" value='<spring:message code="auth_management.viewMore" />' />
 <!-- 										<input class="btn btn-inverse-info btn-icon-text mdi mdi-lan-connect" id="start_btn" type="button" onClick="fn_log_act_confirm_modal('TC001502')" value="중지" /> -->
-										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" id="restart_btn" type="button" onClick="fn_log_act_confirm_modal('TC001501')" value="재시작" />
+										<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" id="restart_btn" type="button" onClick="fn_log_act_confirm_modal('TC001501')" value='<spring:message code="eXperDB_CDC.restart"/>' />
 									</div>
 									<div class="col-sm-2" style="margin-left:-37px;">
 										<div id="wrk_strt_dtm_div" class="input-group align-items-center date datepicker totDatepicker">
@@ -328,7 +344,6 @@
 
 			<div class="top-modal-footer" style="text-align: center !important;" >
 				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
-			
 			</div>
 		</div>
 	</div>

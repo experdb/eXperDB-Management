@@ -4,7 +4,7 @@
 
 <%
 	/**
-	* @Class Name : tansSettingInfo.jsp
+	* @Class Name : transSettingInfo.jsp
 	* @Description : 전송관리 상세 조회
 	* @Modification Information
 	*
@@ -43,16 +43,16 @@
 			 ]
 		});
 		
-		info_connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '397px');
-		info_connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '397px');
+		info_connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '495px');
+		info_connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '495px');
 
 		$(window).trigger('resize'); 
 	}
 </script>
 
 <div class="modal fade" id="pop_layer_trans_info" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 350px;">
-		<div class="modal-content" style="width:1000px;">		 
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 30px 320px;">
+		<div class="modal-content" style="width:1200px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					<spring:message code="menu.trans_management"/> <spring:message code="data_transfer.detail_search"/>
@@ -97,12 +97,12 @@
 								<ul class="nav nav-pills nav-pills-setting nav-justified" style="border-bottom:0px;" id="server-tab" role="tablist">
 									<li class="nav-item">
 										<a class="nav-link active" id="info-tab-1" data-toggle="pill" href="#infoSettingTab" role="tab" aria-controls="infoSettingTab" aria-selected="true" >
-											<spring:message code="data_transfer.connect_set" />
+											<spring:message code="eXperDB_CDC.connect_set" />
 										</a>
 									</li>
 									<li class="nav-item">
 										<a class="nav-link" id="info-tab-2" data-toggle="pill" href="#infoTableTab" role="tab" aria-controls="infoTableTab" aria-selected="false">
-											<spring:message code="data_transfer.table_mapping" />
+											<spring:message code="eXperDB_CDC.table_mapping" />
 										</a>
 									</li>
 								</ul>
@@ -116,27 +116,62 @@
 										<div class="form-group row" style="margin-bottom:5px;">
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.connect_name_set" />
+												<spring:message code="eXperDB_CDC.connect_name_set" />
 											</label>
-											<div class="col-sm-8">
+											<div class="col-sm-4">
 												<span class="form-control-xsm float-left text-muted" id="d_connect_nm" ></span>
 											</div>
-											<div class="col-sm-2">
-												&nbsp;
+											<label for="d_connect_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Schema Registry<%-- <spring:message code="eXperDB_CDC.connect_name_set" /> --%>
+											</label>
+											<div class="col-sm-4">
+												<span class="form-control-xsm float-left text-muted" id="d_connect_type_nm" ></span>
 											</div>
 										</div>
-	
+
+										<div id="d_schema_registry_info" class="card-body" style="border: 1px solid #adb5bd; margin-bottom:20px;display: none;">
+											<div class="table-responsive">
+												<label for="d_connect_type" class="col-sm-12 col-form-label-sm pop-label-index" style="margin-top:-10px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													Schema Registry <spring:message code="dashboard.server"/>
+												</label>
+												
+												<table id="d_schemaPopList" class="table system-tlb-scroll" style="width:100%;">
+													<colgroup>
+														<col style="width: 44%;" />
+														<col style="width: 36%;" />
+														<col style="width: 20%;" />
+													</colgroup>
+													<thead>
+														<tr class="bg-info text-white">
+															<th class="table-text-align-c">Schema Registry <spring:message code="data_transfer.server_name" /></th>
+															<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
+															<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr style="border-bottom: 1px solid #adb5bd;">
+															<td class="table-text-align-c" id="d_source_sch_nm"></td>
+															<td class="table-text-align-c" id="d_sch_ip"></td>
+															<td class="table-text-align-c" id="d_sch_port"></td>					
+														</tr>					
+													</tbody>
+												</table>
+											</div>
+										</div>
+
 										<div class="form-group row" style="margin-bottom:5px;">
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.database" />
+												<spring:message code="eXperDB_CDC.database" />
 											</label>
 											<div class="col-sm-4">
 												<span class="form-control-xsm float-left text-muted" id="d_db_id" ></span>
 											</div>
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.metadata" />
+												<spring:message code="eXperDB_CDC.metadata" />
 											</label>
 											<div class="col-sm-4">
 												<div class="onoffswitch-pop">
@@ -148,7 +183,7 @@
 										<div class="form-group row" style="margin-bottom:5px;">
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.snapshot_mode" />
+												<spring:message code="eXperDB_CDC.snapshot_mode" />
 											</label>
 											<div class="col-sm-4">
 												<span class="form-control-xsm float-left text-muted" id="d_snapshot_mode_nm" ></span>
@@ -161,7 +196,7 @@
 										<div class="form-group row" style="margin-bottom:0px;">
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.default_setting"/>
+												<spring:message code="eXperDB_CDC.default_setting"/>
 											</label>
 											<div class="col-sm-10">
 											</div>
@@ -182,7 +217,7 @@
 														</colgroup>
 														<thead>
 															<tr class="bg-info text-white">
-																<th class="table-text-align-c"><spring:message code="data_transfer.default_setting_name" /></th>
+																<th class="table-text-align-c"><spring:message code="eXperDB_CDC.default_setting_name" /></th>
 																<th class="table-text-align-c">plugin.name</th>
 																<th class="table-text-align-c">heartbeat.interval.ms</th>
 																<th class="table-text-align-c">max.batch.size</th>
@@ -210,7 +245,7 @@
 										<div class="form-group row" style="margin-bottom:0px;">
 											<label class="col-sm-2_2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);margin-bottom:0px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.compression_type" />
+												<spring:message code="eXperDB_CDC.compression_type" />
 											</label>
 											<div class="col-sm-4">
 												<span class="form-control-xsm float-left text-muted" id="d_compression_type_nm" ></span>
@@ -227,14 +262,14 @@
 											<div class="card-body">
 												<h4 class="card-title">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.transfer_table" />
+													<spring:message code="eXperDB_CDC.transfer_table" />
 												</h4>
 	
 								 				<table id="info_connector_tableList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="161" class="dt-center" ><spring:message code="migration.schema_Name" /></th>
-															<th width="162" class="dt-center" ><spring:message code="migration.table_name" /></th>	
+															<th width="495" class="dt-center" ><spring:message code="migration.schema_Name" /></th>
+															<th width="495" class="dt-center" ><spring:message code="migration.table_name" /></th>	
 														</tr>
 													</thead>
 												</table>

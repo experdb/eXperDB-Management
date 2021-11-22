@@ -122,9 +122,25 @@ public class DXTcontrolTrans extends SocketCtl {
 		
 				
 				String[] arrData = null;
-				
+/*				
 				for(int i=0; i<selectList.size(); i++) {
 					arrData = selectList.get(0).toString().split("\n");
+				}
+				*/
+				if (selectList.size() > 0) {
+					String strData = selectList.get(0).toString();
+					arrData = strData.split("\n");
+					
+					if (!"".equals(strData)) {
+						strData = strData.replace("{pg_read_file=", "");
+
+						String lastCharacter = strData.substring(strData.length() - 1);
+						if ("}".equals(lastCharacter)) {
+							strData = strData.substring(0,strData.length() - 1);
+						}
+					}
+					
+					arrData = strData.split("\n");
 				}
 				
 				int localAll = 0;
@@ -230,6 +246,15 @@ public class DXTcontrolTrans extends SocketCtl {
 						
 						buffer += bufferNew;
 					}
+					
+					if (!"".equals(buffer)) {
+						buffer = buffer.replace("{pg_read_file=", "");
+
+						String lastCharacter = buffer.substring(buffer.length() - 1);
+						if ("}".equals(lastCharacter)) {
+							buffer = buffer.substring(0,buffer.length() - 1);
+						}
+					}
 
 					HashMap hp = new HashMap();
 					hp.put("hbadata", buffer);
@@ -298,10 +323,27 @@ public class DXTcontrolTrans extends SocketCtl {
 				connDB.close();
 
 				String[] arrData = null;
-				
+/*				
 				for(int i=0; i<selectList.size(); i++) {
 					arrData = selectList.get(0).toString().split("\n");
 				}
+				*/
+				if (selectList.size() > 0) {
+					String strData = selectList.get(0).toString();
+					arrData = strData.split("\n");
+					
+					if (!"".equals(strData)) {
+						strData = strData.replace("{pg_read_file=", "");
+
+						String lastCharacter = strData.substring(strData.length() - 1);
+						if ("}".equals(lastCharacter)) {
+							strData = strData.substring(0,strData.length() - 1);
+						}
+					}
+					
+					arrData = strData.split("\n");
+				}
+				
 				
 				if (arrData != null) {
 					sqlSessionFactory = SqlSessionManager.getInstance();
@@ -451,8 +493,24 @@ public class DXTcontrolTrans extends SocketCtl {
 
 				String[] arrData = null;
 				
-				for(int i=0; i<selectList.size(); i++) {
+/*				for(int i=0; i<selectList.size(); i++) {
 					arrData = selectList.get(0).toString().split("\n");
+				}*/
+				
+				if (selectList.size() > 0) {
+					String strData = selectList.get(0).toString();
+					arrData = strData.split("\n");
+					
+					if (!"".equals(strData)) {
+						strData = strData.replace("{pg_read_file=", "");
+
+						String lastCharacter = strData.substring(strData.length() - 1);
+						if ("}".equals(lastCharacter)) {
+							strData = strData.substring(0,strData.length() - 1);
+						}
+					}
+					
+					arrData = strData.split("\n");
 				}
 				
 				if (arrData != null) {

@@ -5,12 +5,18 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-
+import com.experdb.management.backup.cmmn.CmmnUtil;
+import com.experdb.management.backup.history.service.BackupJobHistoryVO;
+import com.experdb.management.backup.history.service.ExperdbBackupHistoryService;
 import com.experdb.management.recovery.service.ExperdbRecoveryService;
 
 @Controller
@@ -28,6 +36,8 @@ public class ExperdbRecoveryController {
 	@Autowired
 	private ExperdbRecoveryService experdbRecoveryService;
 	
+	@Autowired
+	private ExperdbBackupHistoryService experdbBackupHistoryService;
 	
 	/**
 	 * 완전 복구 View page
@@ -137,7 +147,7 @@ public class ExperdbRecoveryController {
 	@RequestMapping(value = "/experdb/recoveryTimeList.do")
 	public @ResponseBody JSONObject recoveryTimeList(HttpServletRequest request){
 		JSONObject result = new JSONObject();
-		
+
 		result = experdbRecoveryService.getRecoveryTimeListList(request);
 		
 		return result;
@@ -165,4 +175,59 @@ public class ExperdbRecoveryController {
 		return result;
 	}
 
+	
+	
+	@RequestMapping(value = "/experdb/getRecoveryPoint.do")
+	public @ResponseBody JSONObject getRecoveryPoint(HttpServletRequest request){
+		JSONArray jArr = new JSONArray();
+		JSONObject recoveryPoint = new JSONObject();
+		
+		List<BackupJobHistoryVO> resultSet = null;
+		
+		Map<String, Object> param = new HashMap<String, Object>();         
+		CmmnUtil cmmn = new CmmnUtil();
+		JSONObject result = new JSONObject();
+		
+		String storagePath = request.getParameter("storagePath");
+		String ipadr = request.getParameter("ipadr");
+
+		
+		try {
+			result = cmmn.getRecoveryPoint(storagePath, ipadr);
+			String[] strArr = result.get("RESULT_DATA").toString().split("\n", 0);
+
+			int limit_cnt = strArr.length;
+			
+			param.put("ipadr", ipadr);
+			param.put("storagePath", storagePath);
+			param.put("limit_cnt", limit_cnt);
+			
+			resultSet = experdbBackupHistoryService.selectRecoveryPoint(param);
+			
+
+			for(int i=0; i<resultSet.size(); i++){
+				for(int j=0; j<strArr.length; j++){
+					if(resultSet.get(i).getRpoint().equals(strArr[j].toString())){
+						JSONObject obj = new JSONObject();
+						
+						Date endDate = new Date(Long.parseLong(resultSet.get(i).getFinishtime())* 1000L);
+						
+						SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						String endTime = transFormat.format(endDate);	
+						
+						obj.put("recoveryTime", endTime);
+						obj.put("recoveryPoint", resultSet.get(i).getRpoint());
+						jArr.add(obj);
+					}
+				}
+			}
+			recoveryPoint.put("result", jArr);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return recoveryPoint;
+	}
+	
+	
+	
 }

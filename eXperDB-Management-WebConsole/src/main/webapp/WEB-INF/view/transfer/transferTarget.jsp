@@ -51,7 +51,7 @@
 				className : "dt-center",
 				orderable : false
 			}, 
-			{ data : "",  orderable : false, className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn' type='button'><spring:message code='data_transfer.table_mapping' /></button></span>"},
+			{ data : "",  orderable : false, className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn' type='button'><spring:message code='eXperDB_CDC.table_mapping' /></button></span>"},
 			],'select': {'style': 'multi'}
 		});
 		

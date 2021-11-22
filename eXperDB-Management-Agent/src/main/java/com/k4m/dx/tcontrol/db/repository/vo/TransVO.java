@@ -49,7 +49,17 @@ public class TransVO {
 	private String connector_type;
 	private String exe_rslt_cd;
 	private String login_id;
+
+	private String regi_id;
 	
+	public String getRegi_id() {
+		return regi_id;
+	}
+
+	public void setRegi_id(String regi_id) {
+		this.regi_id = regi_id;
+	}
+
 	public String getLogin_id() {
 		return login_id;
 	}

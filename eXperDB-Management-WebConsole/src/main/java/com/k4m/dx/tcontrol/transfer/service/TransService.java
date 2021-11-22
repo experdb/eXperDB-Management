@@ -3,6 +3,12 @@ package com.k4m.dx.tcontrol.transfer.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.json.simple.JSONObject;
+
+import com.k4m.dx.tcontrol.login.service.LoginVO;
+
 
 
 public interface TransService {
@@ -15,58 +21,6 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectTransSetting(TransVO transVO) throws Exception;
-
-	/**
-	 * trans DBMS시스템 리스트 조회
-	 * 
-	 * @param transDbmsVO
-	 * @return List<TransDbmsVO>
-	 * @throws Exception
-	 */
-	public List<TransDbmsVO> selectTransDBMS(TransDbmsVO transDbmsVO) throws Exception;
-
-	/**
-	 * trans DBMS시스템 명 체크
-	 * 
-	 * @param transDbmsVO
-	 * @return List<TransDbmsVO>
-	 * @throws Exception
-	 */
-	public String trans_sys_nmCheck(String db2pg_sys_nm) throws Exception;
-
-	/**
-	 * trans DBMS시스템 등록
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	public String insertTransDBMS(TransDbmsVO transDbmsVO) throws Exception;
-	
-	/**
-	 * trans DBMS시스템 사용여부 확인
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public String selectTransDbmsIngChk(TransDbmsVO transDbmsVO) throws Exception;
-
-	/**
-	 * trans DBMS시스템 수정
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	public String updateTransDBMS(TransDbmsVO transDbmsVO) throws Exception;
-	
-	/**
-	 * trans DBMS시스템 삭제
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public void deleteTransDBMS(TransDbmsVO transDbmsVO) throws Exception;
 
 	/**
 	 * 소스시스템 전송설정 조회
@@ -158,16 +112,8 @@ public interface TransService {
 	 * @return int
 	 * @throws Exception
 	 */
-	public int connect_nm_Check(String connect_nm) throws Exception;
+	public int connect_nm_Check(String connect_nm, String connect_gbn) throws Exception;
 
-	/**
-	 * 커넥터명 타겟시스템 중복검사
-	 * @param connect_nm
-	 * @return int
-	 * @throws Exception
-	 */
-	public int connect_target_nm_Check(String connect_nm) throws Exception;
-	
 	/**
 	 * 포함대상 스키마,테이블 시퀀스 조회
 	 * @param connect_nm
@@ -223,23 +169,6 @@ public interface TransService {
 	public void updateTargetConnectInfo(TransVO transVO) throws Exception;
 
 	/**
-	 * 스냅샷모드 목록 조회
-	 * @param TransVO
-	 * @return List<TransVO>
-	 * @throws Exception
-	 */
-	public List<TransVO> selectSnapshotModeList() throws Exception;
-
-	/**
-	 * 압축형식
-	 * @param TransVO
-	 * @return List<TransVO>
-	 * @throws Exception
-	 */
-	public List<TransVO> selectCompressionTypeList() throws Exception;
-	
-
-	/**
 	 * source auto 커넥트 정보 조회
 	 * @param trans_id
 	 * @return List<Map<String, Object>>
@@ -256,50 +185,6 @@ public interface TransService {
 	public List<Map<String, Object>> selectTargetTransInfoAuto(int db_svr_id) throws Exception;
 
 	/**
-	 * trans kafka connect 리스트 조회
-	 * 
-	 * @param transDbmsVO
-	 * @return List<TransDbmsVO>
-	 * @throws Exception
-	 */
-	public List<TransDbmsVO> selectTransKafkaConList(TransDbmsVO transDbmsVO) throws Exception;
-
-	/**
-	 * TRANS kafka connect 설정 등록
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	public String insertTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception;
-
-	/**
-	 * trans DBMS시스템 명 체크
-	 * 
-	 * @param transDbmsVO
-	 * @return List<TransDbmsVO>
-	 * @throws Exception
-	 */
-	public String trans_connect_nmCheck(String kc_nm) throws Exception;
-	
-	/**
-	 * trans kafka connect 설정 삭제
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public void deleteTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception;
-
-	/**
-	 * trans connect 수정
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	public String updateTransKafkaConnect(TransDbmsVO transDbmsVO) throws Exception;
-
-	/**
 	 * 기본설정 등록 상세조회
 	 * @param transVO, request, historyVO
 	 * @return Map<String, Object>
@@ -313,23 +198,6 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public String updateTransCommonSetting(TransVO transVO) throws Exception;
-	
-	/**
-	 * trans kafka connect 사용여부 확인
-	 * 
-	 * @param transDbmsVO
-	 * @throws Exception
-	 */
-	public String selectTransKafkaConIngChk(TransDbmsVO transDbmsVO) throws Exception;
-
-	/**
-	 * trans connect faild 수정
-	 * 
-	 * @param transDbmsVO
-	 * @return String
-	 * @throws Exception
-	 */
-	public String updateTransKafkaConnectFaild(TransDbmsVO transDbmsVO) throws Exception;
 
 	/**
 	 * 기본설정 리스트 조회
@@ -377,4 +245,31 @@ public interface TransService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws Exception;
+
+	/**
+	 * 다중 kafka-Connection 시작
+	 * 
+	 * @param request
+	 * @return String
+	 * @throws Exception
+	 */
+	public String transTotExecute(HttpServletRequest request, LoginVO loginVo) throws Exception;
+	
+	/**
+	 * 전송대상테이블정보 setting
+	 * 
+	 * @param mappInfo, trans_active_gbn
+	 * @return String
+	 * @throws Exception
+	 */
+	public JSONObject selectTransMatchMappInfo(int trans_id, List<Map<String, Object>> mappInfo, String trans_active_gbn, String multi_gbn) throws Exception;
+
+	/**
+	 * 전송상세 전송설정정보 setting
+	 * 
+	 * @param mappInfo, trans_active_gbn
+	 * @return String
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectTransMatchInfo(List<Map<String, Object>> transInfo, String trans_active_gbn) throws Exception;
 }

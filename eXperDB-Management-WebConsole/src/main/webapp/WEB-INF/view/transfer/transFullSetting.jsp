@@ -84,71 +84,14 @@ a:hover.tip span {
 			});
 	  	});
 	});
-	
-	/* ********************************************************
-	 * kafka 체크
-	 ******************************************************** */
-	function fn_selectKafkaConnectChk() {
-		var errorMsg = "";
-		var titleMsg = "";
 
-		$.ajax({
-			url : "/selectTransKafkaConList.do",
-			data : {
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				console.log("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			},
-			success : function(result) {
-				if (result != null) {
-					if (result.length > 0) {
-						connect_yn = "Y";
-					} else {
-						connect_yn = "N";
-					}
-				} else {
-					connect_yn = "N";
-				}
-
-				//kafa connect 존재여부
-				if (connect_yn == "Y") {
-					//화면 조회
-					fn_tot_select();
-					
-					//heartbeat 체크
-					fn_selectHeartbeatChk();
-				} else {
-					showDangerToast('top-right', '<spring:message code="data_transfer.msg29" />', '<spring:message code="data_transfer.msg30" />');
-					
-					//설치안된경우 버튼 막아야함
-					$("#btnChoActive").prop("disabled", "disabled");
-					$("#btnChoDisabled").prop("disabled", "disabled");
-
-					$("#btnScDelete").prop("disabled", "disabled");
-					$("#btnTgDelete").prop("disabled", "disabled");
-					$("#btnScModify").prop("disabled", "disabled");
-					$("#btnTgModify").prop("disabled", "disabled");
-					$("#btnScInsert").prop("disabled", "disabled");
-					$("#btnTgInsert").prop("disabled", "disabled");
-					$("#btnSearch").prop("disabled", "disabled");
-					$("#btnCommonConSetInsert").prop("disabled", "disabled");
-				}
-			}
-		});
-	}
-	
 	/* ********************************************************
 	 * heatbeat 체크
 	 ******************************************************** */
 	function fn_selectHeartbeatChk() {
 	  	//heartbeat 체크
 		if("${heartbeatchk.ing_cnt}" != "0"){
-			showDangerToast('top-right', '<spring:message code="data_transfer.msg38" />', '<spring:message code="data_transfer.msg30" />');
+			showDangerToast('top-right', '<spring:message code="eXperDB_CDC.msg38" />', '<spring:message code="eXperDB_CDC.msg30" />');
 			
 			//설치안된경우 버튼 막아야함
 			$("#btnChoActive").prop("disabled", "disabled");
@@ -181,9 +124,6 @@ a:hover.tip span {
 			$("#btnCommonConChk").hide();
 		}
 	}
-	
-  	
-
 
 	/* ********************************************************
 	 * table 초기화 및 설정
@@ -363,25 +303,25 @@ a:hover.tip span {
 		if (activeGbn  == "1") {
 			if($("#source_transActivation"+row).is(":checked") == true){
 				con_gbn = "con_start";
-				con_msg = 'source ' + '<spring:message code="data_transfer.msg8" />';
+				con_msg = 'source ' + '<spring:message code="eXperDB_CDC.msg8" />';
 			} else {
 				con_gbn = "con_end";
-				con_msg = 'source ' + '<spring:message code="data_transfer.msg9" />';
+				con_msg = 'source ' + '<spring:message code="eXperDB_CDC.msg9" />';
 			}
 		} else {
 			if($("#target_transActivation"+row).is(":checked") == true){
 				con_gbn = "target_con_start";
-				con_msg = 'target ' + '<spring:message code="data_transfer.msg8" />';
+				con_msg = 'target ' + '<spring:message code="eXperDB_CDC.msg8" />';
 			} else {
 				con_gbn = "target_con_end";
-				con_msg = 'target ' + '<spring:message code="data_transfer.msg9" />';
+				con_msg = 'target ' + '<spring:message code="eXperDB_CDC.msg9" />';
 			}
 		}
 
 		$('#con_multi_gbn', '#findConfirmMulti').val(con_gbn);
 		$('#confirm_multi_msg').html(con_msg);
 		
-		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="data_transfer.transfer_activity" />';
+		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="eXperDB_CDC.transfer_activity" />';
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#chk_act_row', '#findList').val(row);
 		
@@ -494,7 +434,7 @@ a:hover.tip span {
 	}
 </script>
 
-<%@include file="./tansSettingInfo.jsp"%>
+<%@include file="./transSettingInfo.jsp"%>
 <%@include file="./transTargetSettingInfo.jsp"%>
 <%@include file="./../popup/connectRegReForm.jsp"%>
 <%@include file="./../popup/connectRegForm2.jsp"%>
@@ -505,7 +445,8 @@ a:hover.tip span {
 <%@include file="./../popup/transConnectListForm.jsp"%>
 <%@include file="./../popup/transComConSetForm.jsp"%>
 <%@include file="./../popup/transComConChoForm.jsp"%>
-
+<%-- <%@include file="./../popup/transSchemRegiSelectForm.jsp"%>
+ --%>
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 	<input type="hidden" name="mod_prm_trans_id" id="mod_prm_trans_id" value=""/>
@@ -571,7 +512,7 @@ a:hover.tip span {
 						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<form class="form-inline row" onsubmit="return false">
 								<div class="input-group mb-2 mr-sm-2 col-sm-3_0" style="padding-right:10px;">
-									<input type="text" class="form-control" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name_set" />'/>					
+									<input type="text" class="form-control" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="eXperDB_CDC.connect_name_set" />'/>					
 								</div>
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_tot_select();" >
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
@@ -584,21 +525,21 @@ a:hover.tip span {
 						<div class="col-12" style="margin-top:-10px;margin-bottom:-10px;">
 							<div class="template-demo">	
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnKafkaInsert" onClick="fn_common_kafka_ins();" data-toggle="modal">
-									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.btn_title02" /> <spring:message code="common.search" />
+									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="eXperDB_CDC.connector_server_settings" /> <spring:message code="common.search" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable" id="btnCommonConSetInsert" onClick="fn_common_con_set_pop();" data-toggle="modal">
 									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
 								</button>
 								
 								<button type="button" class="btn btn-outline-danger btn-icon-text mb-2 btn-search-disable" style="border:none;text-align:left;" id="btnCommonConChk" onClick="fn_common_con_set_pop();" data-toggle="modal">
-									<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="data_transfer.msg37" />
+									<i class="fa fa-check-circle-o btn-icon-prepend "></i><spring:message code="eXperDB_CDC.msg37" />
 								</button>
 		
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
-									<i class="fa fa-stop btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
+									<i class="fa fa-stop btn-icon-prepend "></i><spring:message code="eXperDB_CDC.save_select_disabled" />
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text mb-2 btn-search-disable float-right" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
-									<i class="fa fa-play btn-icon-prepend "></i><spring:message code="data_transfer.save_select_active" />
+									<i class="fa fa-play btn-icon-prepend "></i><spring:message code="eXperDB_CDC.save_select_active" />
 								</button>
 
 							</div>
@@ -612,7 +553,7 @@ a:hover.tip span {
 			<div class="card">
 				<div class="card-body">
 					<h4 class="card-title">
-						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="data_transfer.sub_title01" />
+						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="eXperDB_CDC.sub_title01" />
 					</h4>
 
 					<div class="row" style="margin-top:-20px;" id="save_button">
@@ -639,8 +580,8 @@ a:hover.tip span {
 									<th width="50"><spring:message code="access_control_management.activation" /></th> <!-- 활성화 -->
 									<th width="100">Kafka-Connect <spring:message code="data_transfer.ip" /></th> <!-- Kafka-Connect 아이피 -->
 									<th width="100">Kafka-Connect <spring:message code="data_transfer.port" /></th> <!-- Kafka-Connect 포트 -->
-									<th width="100"><spring:message code="data_transfer.connect_name_set" /></th> <!-- Connect 명 -->
-									<th width="100"><spring:message code="data_transfer.database" /></th> <!-- DBMS명 -->
+									<th width="100"><spring:message code="eXperDB_CDC.connect_name_set" /></th> <!-- Connect 명 -->
+									<th width="100"><spring:message code="eXperDB_CDC.database" /></th> <!-- DBMS명 -->
 									<th width="0"></th>
 									<th width="0"></th>
 									<th width="0"></th>
@@ -659,7 +600,7 @@ a:hover.tip span {
 			<div class="card">
 				<div class="card-body">
 					<h4 class="card-title">
-						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="data_transfer.sub_title02" />
+						<i class="item-icon fa fa-dot-circle-o"></i> <spring:message code="eXperDB_CDC.sub_title02" />
 					</h4>
 
 					<div class="row" style="margin-top:-20px;" id="save_button">
@@ -687,7 +628,7 @@ a:hover.tip span {
 									<th width="50"><spring:message code="access_control_management.activation" /></th> <!-- 활성화 -->
 									<th width="100">Kafka-Connect <spring:message code="data_transfer.ip" /></th> <!-- Kafka-Connect 아이피 -->
 									<th width="100">Kafka-Connect <spring:message code="data_transfer.port" /></th> <!-- Kafka-Connect 포트 -->
-									<th width="100"><spring:message code="data_transfer.connect_name_set" /></th> <!-- Connect 명 -->
+									<th width="100"><spring:message code="eXperDB_CDC.connect_name_set" /></th> <!-- Connect 명 -->
 									<th width="100"><spring:message code="common.dbms_name" /></th> <!-- DBMS명 -->
 									<th width="0"></th>
 									<th width="0"></th>

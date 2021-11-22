@@ -494,6 +494,16 @@ public class JobXMLMake{
             Element throttle = doc.createElement("throttle");
             throttle.appendChild(doc.createTextNode("0"));
             backupConfiguration.appendChild(throttle);
+            
+            // backup 수행 전 Script
+            Element targetScriptBeforeJob = doc.createElement("targetScriptBeforeJob");
+            targetScriptBeforeJob.appendChild(doc.createTextNode("backup_before.sh"));
+            backupConfiguration.appendChild(targetScriptBeforeJob);
+            
+            // backup 수행 후 Script
+            Element targetScriptAfterJob = doc.createElement("targetScriptAfterJob");
+            targetScriptAfterJob.appendChild(doc.createTextNode("backup_after.sh"));
+            backupConfiguration.appendChild(targetScriptAfterJob);
 		}
 
 

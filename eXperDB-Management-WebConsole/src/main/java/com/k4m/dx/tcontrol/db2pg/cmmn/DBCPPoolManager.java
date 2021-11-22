@@ -12,6 +12,14 @@ import org.json.simple.JSONObject;
 
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FileUtil;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.net.ConnectTimeoutException;
+
+import java.net.URI;
 
 public class DBCPPoolManager {
 	
@@ -64,6 +72,55 @@ public class DBCPPoolManager {
 				return result;	
 	}
 	
+	
+	public static  Map<String, Object> conHadoop(JSONObject serverObj) throws Exception {
+		System.out.println( "/************************************************************/");
+		System.out.println( "Hadoop Connectioning . . . ");
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+		
+			Configuration conf = new Configuration();
+			conf.set("ipc.client.connect.max.retries.on.timeouts","1");
+			//System.out.println("conf :: "+conf.get("ipc.client.connect.max.retries.on.timeouts"));
+			String conUri = "hdfs://"+serverObj.get(ClientProtocolID.SERVER_IP)+":"+serverObj.get(ClientProtocolID.SERVER_PORT);
+			System.out.println(conUri);
+			FileSystem hdfs = FileSystem.get(new URI(conUri),conf);	
+			
+			FileStatus[] fileStatus = hdfs.listStatus(new Path(conUri+"/"));
+			 Path[] paths = FileUtil.stat2Paths(fileStatus);
+			System.out.println("***** Contents of the Directory *****");
+		    for(Path path : paths)
+		    {
+		      System.out.println(path);
+		    }
+		    
+		    System.out.println( "Hadoop Connection Success!");
+			System.out.println( "************************************************************");
+			
+			result.put("RESULT_CODE", 0);
+            result.put("RESULT_Conn", "Hadoop Connection Success!");
+			
+		}catch (ConnectTimeoutException ce){
+			System.out.println(ce.toString());
+			result.put("ERR_MSG", "Hadoop Connection fail!");
+			result.put("RESULT_CODE", 1);
+		
+		}catch (Exception e) {
+			System.out.println(e.toString());
+			result.put("ERR_MSG", "Hadoop Connection fail!");
+		
+			if (e.toString() != null) {
+				result.put("ERR_MSG", e.toString() );
+			} else {
+				result.put("ERR_MSG", "Database Connection fail!");
+			}
+			result.put("RESULT_CODE", 1);
+		}
+		
+		return result;	
+	}
 	
 	
 	
@@ -272,13 +329,13 @@ public class DBCPPoolManager {
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002206");*/
 					
 			//CUBRID
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.105");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "3306");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002209");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002209");*/
 			
 			//Tibero
 			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");
@@ -289,7 +346,13 @@ public class DBCPPoolManager {
 			serverObj.put(ClientProtocolID.USER_PWD, "test");
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002208");*/
 			
-			Map<String, Object> result = DBCPPoolManager.setupDriver(serverObj);
+			serverObj.put(ClientProtocolID.SERVER_NAME, "3.37.61.208");
+			serverObj.put(ClientProtocolID.SERVER_IP, "3.37.61.208");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "9000");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002210");
+			
+			
+			Map<String, Object> result = DBCPPoolManager.conHadoop(serverObj);
 			
 			System.out.println(result.get("RESULT_CODE"));
 			System.out.println(result.get("ERR_MSG"));

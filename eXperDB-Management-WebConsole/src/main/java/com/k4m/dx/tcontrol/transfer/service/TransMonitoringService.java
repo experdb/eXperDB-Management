@@ -3,8 +3,6 @@ package com.k4m.dx.tcontrol.transfer.service;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
-
 public interface TransMonitoringService {
 	
 	/**
@@ -182,10 +180,11 @@ public interface TransMonitoringService {
 	
 	/**
 	 * kafka Connect 전체 에러 조회
+	 * @param param
 	 * 
 	 * @return List<Map<String, Object>>
 	 */
-	public List<Map<String, Object>> selectAllErrorList();
+   public List<Map<String, Object>> selectAllErrorList(Map<String, Object> param);
 	
 	/**
 	 * trans log 파일 가져오기
@@ -202,5 +201,31 @@ public interface TransMonitoringService {
 	 * @return JSONObject
 	 */
 	public Map<String, Object> transKafkaConnectRestart(TransVO transVO, Map<String, Object> param);
+	
+	/**
+	 * trans kafka 기동 정지 이력 조회
+	 * 
+	 * @param trans_id
+	 * @return List<Map<String, Object>>
+	 */
+	public List<Map<String, Object>> selectKafkaActCngList(int trans_id);
+	
+	public List<Map<String, Object>> selectSourceConnectorTableListNew(int trans_id);
+	
+	public List<Map<String, Object>> selectTargetTopicListNew(int trans_id);
+	
+	
+	/**
+	 * kafka Connect 정보조회
+	 * 
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> selectKafkaConnectInfo(int trans_id);
 
+	/**
+	 * source DBMS 정보 조회
+	 * 
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> selectSourceDbmsInfo(int trans_id);
 }

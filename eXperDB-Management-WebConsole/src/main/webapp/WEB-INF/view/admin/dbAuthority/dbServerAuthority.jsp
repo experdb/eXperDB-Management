@@ -98,9 +98,16 @@
 					html1+='	</tr>';
 					
 					if (scale_yn_chk == "Y") {
+						
+						//2021.02.03 추가
+						html1+='	<tr>';
+						html1+='		<td class="pl-3" style="font-weight: bold;"><spring:message code="menu.eXperDB_scale" /></td>';
+						html1+='		<td></td>';
+						html1+='	</tr>';
+						
 						/* 2020.04.09 scale_cng 추가 start */
 						html1+='	<tr>';
-						html1+='		<td class="pl-4"><spring:message code="menu.eXperDB_scale_settings" /></td>';
+						html1+='		<td class="pl-5"><spring:message code="menu.eXperDB_scale_settings" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale_cng" name="eXperDB_scale_cng" onClick="fn_userCheck();"/>';
@@ -112,7 +119,7 @@
 
 						/* 2020.03.03 scale 추가 start */
 						html1+='	<tr>';
-						html1+='		<td class="pl-4"><spring:message code="menu.scale_manual" /></td>';
+						html1+='		<td class="pl-5"><spring:message code="menu.scale_manual" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale" name="eXperDB_scale" onClick="fn_userCheck();"/>';
@@ -124,7 +131,7 @@
 						
 						/* 2020.04.03 scale_hist 추가 start */
 						html1+='	<tr>';
-						html1+='		<td class="pl-4"><spring:message code="menu.eXperDB_scale_history" /></td>';
+						html1+='		<td class="pl-5"><spring:message code="menu.eXperDB_scale_history" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale_hist" name="eXperDB_scale_hist" onClick="fn_userCheck();"/>';
@@ -134,9 +141,15 @@
 						html1+='	</tr>';
 						/* 2020.04.03 scale_hist 추가 end */
 					}
-
+					
+					//2021.02.03 추가
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="menu.backup_settings" /></td>';
+					html1+='		<td class="pl-3" style="font-weight: bold;"><spring:message code="menu.backup_management" /></td>';
+					html1+='		<td></td>';
+					html1+='	</tr>';
+					
+					html1+='	<tr>';
+					html1+='		<td class="pl-5"><spring:message code="menu.backup_settings" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_bck_cng" name="bck_cng_aut" onClick="fn_userCheck();"/>';
@@ -145,7 +158,7 @@
 					html1+='		</td>';
 					html1+='	</tr>';
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="menu.backup_history" /></td>';
+					html1+='		<td class="pl-5"><spring:message code="menu.backup_history" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_bck_hist" name="bck_hist_aut" onClick="fn_userCheck();" />';
@@ -154,7 +167,7 @@
 					html1+='		</td>';
 					html1+='	</tr>';
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="menu.backup_scheduler" /></td>';
+					html1+='		<td class="pl-5"><spring:message code="menu.backup_scheduler" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_bck_scdr" name="bck_scdr_aut" onClick="fn_userCheck();" />';
@@ -162,8 +175,15 @@
 					html1+='			</div>';
 					html1+='		</td>';
 					html1+='	</tr>';
+					
+					//2021.02.03 추가
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="restore.Emergency_Recovery" /></td>';
+					html1+='		<td class="pl-3" style="font-weight: bold;"><spring:message code="restore.Recovery_Management" /></td>';
+					html1+='		<td></td>';
+					html1+='	</tr>';
+					
+					html1+='	<tr>';
+					html1+='		<td class="pl-5"><spring:message code="restore.Emergency_Recovery" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_emergency_restore" name="emergency_restore_aut" onClick="fn_userCheck();" />';
@@ -172,7 +192,7 @@
 					html1+='		</td>';
 					html1+='	</tr>';
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="restore.Point-in-Time_Recovery" /></td>';
+					html1+='		<td class="pl-5"><spring:message code="restore.Point-in-Time_Recovery" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_point_restore" name="point_restore_aut" onClick="fn_userCheck();" />';
@@ -181,7 +201,7 @@
 					html1+='		</td>';
 					html1+='	</tr>';
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="restore.Dump_Recovery" /></td>';
+					html1+='		<td class="pl-5"><spring:message code="restore.Dump_Recovery" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_dump_restore" name="dump_restore_aut" onClick="fn_userCheck();" />';
@@ -190,7 +210,7 @@
 					html1+='		</td>';
 					html1+='	</tr>';
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="restore.Recovery_history" /></td>';
+					html1+='		<td class="pl-5"><spring:message code="restore.Recovery_history" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_restore_hist" name="restore_hist_aut" onClick="fn_userCheck();" />';
@@ -201,10 +221,15 @@
 					
 					/* 전송관리 */
 					if("${sessionScope.session.transfer}" == "Y"){
+						//2021.02.03 추가
+						html1+='	<tr>';
+						html1+='		<td class="pl-3" style="font-weight: bold;"><spring:message code="menu.data_transfer" /></td>';
+						html1+='		<td></td>';
+						html1+='	</tr>';
 						
 						//2020.09.23
 						html1+='	<tr>';
-						html1+='		<td class="pl-4"><spring:message code="data_transfer.btn_title01" /></td>';
+						html1+='		<td class="pl-5"><spring:message code="eXperDB_CDC.btn_title01" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_dbms_aut" name="trans_dbms_aut" onClick="fn_userCheck();" />';
@@ -213,7 +238,7 @@
 						html1+='		</td>';
 						html1+='	</tr>';
 						html1+='	<tr>';
-						html1+='		<td class="pl-4"><spring:message code="data_transfer.btn_title02" /></td>';
+						html1+='		<td class="pl-5"><spring:message code="eXperDB_CDC.connector_server_settings" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_con_aut" name="trans_con_aut" onClick="fn_userCheck();" />';
@@ -223,7 +248,7 @@
 						html1+='	</tr>';
 
 						html1+='	<tr>';
-						html1+='		<td class="pl-4"><spring:message code="menu.trans_management" /></td>';
+						html1+='		<td class="pl-5"><spring:message code="menu.trans_management" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_transSetting" name="transSetting_aut" onClick="fn_userCheck();" />';
@@ -231,10 +256,26 @@
 						html1+='			</div>';
 						html1+='		</td>';
 						html1+='	</tr>';
+
+						html1+='	<tr>';
+						html1+='		<td class="pl-5"><spring:message code="menu.trans_monitoring" /></td>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_trans_mtr_aut" name="trans_mtr_aut" onClick="fn_userCheck();" />';
+						html1+='				<label for="'+item.db_svr_id+'_trans_mtr_aut"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
 					}
 					
+					//2021.02.03 추가
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="menu.access_control" /></td>';
+					html1+='		<td class="pl-3" style="font-weight: bold;"><spring:message code="menu.access_control_management" /></td>';
+					html1+='		<td></td>';
+					html1+='	</tr>';
+					
+					html1+='	<tr>';
+					html1+='		<td class="pl-5"><spring:message code="menu.access_control" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_acs_cntr" name="acs_cntr_aut" onClick="fn_userCheck();" />';
@@ -243,7 +284,7 @@
 					html1+='		</td>';
 					html1+='	</tr>';
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="menu.policy_changes_history" /></td>';
+					html1+='		<td class="pl-5"><spring:message code="menu.policy_changes_history" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_policy_change_his" name="policy_change_his_aut" onClick="fn_userCheck();" />';
@@ -253,8 +294,14 @@
 					html1+='	</tr>';
 					
 					if("${sessionScope.session.pg_audit}"== "Y"){
+						//2021.02.03 추가
+						html1+='	<tr>';
+						html1+='		<td class="pl-3" style="font-weight: bold;"><spring:message code="menu.audit_management" /></td>';
+						html1+='		<td></td>';
+						html1+='	</tr>';
+						
 						html1+='<tr>';
-						html1+='	<td class="pl-4"><spring:message code="menu.audit_settings" /></td>';
+						html1+='	<td class="pl-5"><spring:message code="menu.audit_settings" /></td>';
 						html1+='	<td>';
 						html1+='		<div class="inp_chk">';
 						html1+='			<input type="checkbox" id="'+item.db_svr_id+'_adt_cng" name="adt_cng_aut" onClick="fn_userCheck();"/>';
@@ -263,7 +310,7 @@
 						html1+='	</td>';
 						html1+='</tr>';
 						html1+='<tr>';
-						html1+='	<td class="pl-4"><spring:message code="menu.audit_history" /></td>';
+						html1+='	<td class="pl-5"><spring:message code="menu.audit_history" /></td>';
 						html1+='	<td>';
 						html1+='		<div class="inp_chk">';
 						html1+='			<input type="checkbox" id="'+item.db_svr_id+'_adt_hist" name="adt_hist_aut"  onClick="fn_userCheck();"/>';
@@ -272,9 +319,15 @@
 						html1+='	</td>';
 						html1+='</tr>	';			
 					}
+
+					//2021.02.03 추가
+					html1+='	<tr>';
+					html1+='		<td class="pl-3" style="font-weight: bold;"><spring:message code="menu.script_management" /></td>';
+					html1+='		<td></td>';
+					html1+='	</tr>';
 					
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="menu.script_settings" /></td>';
+					html1+='		<td class="pl-5"><spring:message code="menu.script_settings" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_script_cng" name="script_cng_aut"  onClick="fn_userCheck();"/>';
@@ -283,7 +336,7 @@
 					html1+='		</td>';
 					html1+='	</tr>	';
 					html1+='	<tr>';
-					html1+='		<td class="pl-4"><spring:message code="menu.script_history" /></td>';
+					html1+='		<td class="pl-5"><spring:message code="menu.script_history" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_script_his" name="script_his_aut"  onClick="fn_userCheck();"/>';
@@ -434,6 +487,13 @@
 								}else{
 									document.getElementById(result[i].db_svr_id+"_trans_con_aut").checked = false;
 								}
+								
+								//전송설정 모니터링(2020-08-31)
+								if(result.length != 0 && result[i].trans_mtr_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_trans_mtr_aut").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_trans_mtr_aut").checked = false;
+								}
 							}
 
 							//서버접근제어 권한
@@ -507,6 +567,7 @@
 							document.getElementById(svr_server[0].db_svr_id+"_transSetting").checked = false;
 							document.getElementById(svr_server[0].db_svr_id+"_trans_dbms_aut").checked = false;
 							document.getElementById(svr_server[0].db_svr_id+"_trans_con_aut").checked = false;
+							document.getElementById(svr_server[0].db_svr_id+"_trans_mtr_aut").checked = false;
 						}
 					}
 				}
@@ -566,13 +627,13 @@
 		if("${sessionScope.session.pg_audit}"== "Y"){
 			if (scale_yn_chk == "Y") {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}else{
 					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}		
 			} else {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}else{
 					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 				}
@@ -580,13 +641,13 @@
 		}else{
 			if (scale_yn_chk == "Y") {
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}else{
 					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}	
 			} else {				
 				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}else{
 					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 				}	
@@ -626,6 +687,7 @@
 			var transSetting_aut = null;
 			var trans_dbms_aut = null;
 			var trans_con_aut = null;
+			var trans_mtr_aut = null;
 			
 			/* 2020.03.03 scale 추가 */
 			var db_svr_id = $("input[name='db_svr_id']");
@@ -642,6 +704,7 @@
 				transSetting_aut = $("input[name='transSetting_aut']");
 				trans_dbms_aut = $("input[name='trans_dbms_aut']");
 				trans_con_aut = $("input[name='trans_con_aut']");
+				trans_mtr_aut = $("input[name='trans_mtr_aut']");
 			}
 			
 			var acs_cntr_aut = $("input[name='acs_cntr_aut']");
@@ -765,6 +828,13 @@
 						autCheck++;
 					}else{				
 						rows.trans_con_cng_aut_yn = "N";
+					}
+					
+					if(trans_mtr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함			
+						rows.trans_mtr_aut_yn = "Y"; 
+						autCheck++;
+					}else{				
+						rows.trans_mtr_aut_yn = "N";
 					}
 				}
 					

@@ -3,8 +3,6 @@ package com.k4m.dx.tcontrol.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 
 import org.json.simple.JSONObject;
@@ -60,7 +58,10 @@ public class DxT041 extends SocketCtl{
 		JSONObject objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		
 		try {
-			String strCmd = (String)objSERVER_INFO.get("REQ_CMD");
+			String strCmd = String.valueOf(objSERVER_INFO.get("REQ_CMD"));
+			String strGbn = String.valueOf(objSERVER_INFO.get("SEARCH_GBN"));
+
+			/*TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, "", strGbn);*/
 
 			TransRunCommandExec r = new TransRunCommandExec(strCmd);
 

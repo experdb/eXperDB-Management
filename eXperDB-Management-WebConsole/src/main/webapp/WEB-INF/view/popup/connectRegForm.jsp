@@ -76,7 +76,7 @@ var tableList = ${tables};
 		 }else if(this.value == "TC003602"){
 			 $("#snapshotModeDetail").html("(스냅샷 항상 수행)");
 		 }else if (this.value == "TC003603"){
-			 $("#snapshotModeDetail").html("(스냅샷 수행하지 않음)");
+			 $("#snapshotModeDetail").html("(초기적재 미수행, 스트리밍 수행)");
 		 }else if (this.value == "TC003604"){
 			 $("#snapshotModeDetail").html("(스냅샷만 수행하고 종료)");
 		 }else if (this.value == "TC003605"){

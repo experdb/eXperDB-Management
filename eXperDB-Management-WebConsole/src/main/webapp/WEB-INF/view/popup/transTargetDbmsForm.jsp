@@ -6,17 +6,17 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <script>
-	var tans_dbms_pop_table = null;
+	var trans_dbms_pop_table = null;
 
 	$(window.document).ready(function() {
-		fn_tans_dbms_pop_init();
+		fn_trans_dbms_pop_init();
 	});
 
 	/* ********************************************************
 	 * trans dbms 삭제버튼 클릭시
 	 ******************************************************** */
 	function fn_trans_dbms_del_confirm(){
-		confile_title = '<spring:message code="data_transfer.btn_title01" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		confile_title = '<spring:message code="eXperDB_CDC.btn_title01" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 		$('#con_multi_gbn', '#findConfirmMulti').val("trans_dbms_del");
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
@@ -27,7 +27,7 @@
 	 * 삭제 로직 처리
 	 ******************************************************** */
 	function fn_trans_dbms_delete_logic(){
-		var trans_sys_id = tans_dbms_pop_table.row('.selected').data().trans_sys_id;
+		var trans_sys_id = trans_dbms_pop_table.row('.selected').data().trans_sys_id;
 		
 		$.ajax({
 			url : "/popup/deleteTransDBMS.do",
@@ -53,7 +53,7 @@
 					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
 					fn_trans_dbms_pop_search();
 				}else{
-					msgVale = "<spring:message code='data_transfer.btn_title01' />";
+					msgVale = "<spring:message code='eXperDB_CDC.btn_title01' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -70,7 +70,7 @@
 		<div class="modal-content" style="width:1300px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="data_transfer.btn_title01"/>
+					<spring:message code="eXperDB_CDC.btn_title01"/>
 				</h4>
 		
 				<div class="card" style="margin-top:10px;border:0px;">
@@ -112,7 +112,7 @@
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i> DBMS LIST</p>
 						
-						<table id="tansDbmsPopList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+						<table id="transDbmsPopList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="30"><spring:message code="common.no" /></th>

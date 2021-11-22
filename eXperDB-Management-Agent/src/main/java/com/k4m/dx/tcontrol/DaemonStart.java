@@ -179,8 +179,8 @@ public class DaemonStart implements DxDaemon{
 				//	DXTcontrolTrans rSet = new DXTcontrolTrans();
 				//	rSet.start();
 					
-					transCheckListener = new TransCheckListener(context);
-					transCheckListener.start();
+				//	transCheckListener = new TransCheckListener(context);
+				//	transCheckListener.start();
 				}
 			} catch (Exception e) {
 				errLogger.error("CDC 시작시 에러가 발생하였습니다. {}", e.toString());

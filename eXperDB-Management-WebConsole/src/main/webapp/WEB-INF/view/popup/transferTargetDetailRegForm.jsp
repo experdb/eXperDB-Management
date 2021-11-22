@@ -45,7 +45,7 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="data_transfer.conn_name"/></th>
+							<th scope="row" class="ico_t1"><spring:message code="eXperDB_CDC.conn_name"/></th>
 							<td><input type="text" class="txt t4" name="" value="${trf_trg_cnn_nm}" readonly="readonly" /></td>
 							<th scope="row" class="ico_t1"><spring:message code="data_transfer.conn_type"/></th>
 							<td><input type="text" class="txt t5" name="" value="${connector_type}" readonly="readonly" /></td>

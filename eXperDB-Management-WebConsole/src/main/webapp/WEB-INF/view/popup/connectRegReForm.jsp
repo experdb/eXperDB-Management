@@ -21,25 +21,27 @@
 <script type="text/javascript">
 	var mod_tableList = null;
 	var mod_connector_tableList = null;
-	var mod_trans_com_cng_nm_val = '<spring:message code="data_transfer.default_setting" />';
+	var mod_trans_com_cng_nm_val = '<spring:message code="eXperDB_CDC.default_setting" />';
+	
+	var mod_schema_status_Chk = "fail";
 
 	$(window.document).ready(function() {
 		//테이블셋팅
 		fn_mod_init();
-		$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />');	
+		$("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg4" />');	
 
 		//스냅샷 모드 change
 		$("#mod_snapshot_mode", "#modRegForm").change(function(){ 
 			 if(this.value == "TC003601"){
-				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg2" />'); //(초기스냅샷 1회만 수행)
+				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg2" />'); //(초기스냅샷 1회만 수행) 미사용
 			 }else if(this.value == "TC003602"){
-				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg3" />'); //(스냅샷 항상 수행)
+				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg3" />'); //(스냅샷 항상 수행)
 			 }else if (this.value == "TC003603"){
-				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg1" />'); //(스냅샷 수행하지 않음)
+				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg1" />'); //(초기적재 미수행, 스트리밍 수행)
 			 }else if (this.value == "TC003604"){
-				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg4" />'); //(스냅샷만 수행하고 종료)
+				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg4" />'); //(스냅샷만 수행하고 종료)
 			 }else if (this.value == "TC003605"){
-				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="data_transfer.msg5" />'); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법)
+				 $("#mod_snapshotModeDetail", "#modRegForm").html('<spring:message code="eXperDB_CDC.msg5" />'); //(복제슬롯이 생성된 시접부터의 스냅샷 lock 없는 효율적방법) 미사용
 			 }
 		});
 
@@ -154,34 +156,6 @@
 		});
 	}
 
-	/* ********************************************************
-	 * 조회 데이터 중복 내역 방지
-	 ******************************************************** */
- 	function fn_trableListModRemove(result){
-		var connTableRows = mod_connector_tableList.rows().data();
-		var iChkCnt = 0;
-
-		if (connTableRows.length > 0 && result.length > 0) {
-			for(var i=0; i<result.length; i++){
-				for(var j=0; j<connTableRows.length; j++){
- 					if (result[i].table_name != null && connTableRows[j].table_name != null) {
-						if(result[i].table_name == connTableRows[j].table_name){
-							iChkCnt = iChkCnt + 1;
-						}
-						if (j == (connTableRows.length -1) && iChkCnt > 0 ) {
-							
-							result.splice(i, 1);
-							iChkCnt = 0;
-							i--; //row 삭제로 인해 추가로 -1 필요
-						}
-					}
-				}
-			}
-		}
-		
-		mod_tableList.rows.add(result).draw();
-	}
-	
 	/*================ 테이블 리스트 조정 ======================= */
 	/* ********************************************************
 	 * 선택 우측이동 (> 클릭)
@@ -278,7 +252,7 @@
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ mod_trans_com_cng_nm_val +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		} else if (mod_connector_tableList.rows().data().length <= 0) {
-			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_CDC.msg24"/>', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 		return true;
@@ -328,7 +302,9 @@
 				meta_data : nvlPrmSet($("#mod_meta_data", "#modRegForm").val(), 'OFF'),
 				trans_id : $("#mod_trans_id","#modRegForm").val(),
 				trans_exrt_trg_tb_id : $("#mod_trans_exrt_trg_tb_id","#modRegForm").val(),
-				trans_com_id : parseInt($("#mod_trans_com_id", "#modRegForm").val())
+				trans_com_id : parseInt($("#mod_trans_com_id", "#modRegForm").val()),
+				connect_type : nvlPrmSet($("#mod_connect_type", "#modRegForm").val(), ''),
+				regi_id : nvlPrmSet($("#mod_source_sch_nm", "#modRegForm").val(), '')
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -344,7 +320,6 @@
 				}
 			},
 			success : function(result) {
-				
 				if(result == true){
 					showSwalIcon('<spring:message code="message.msg84" />', '<spring:message code="common.close" />', '', 'success');
 					$('#pop_layer_con_re_reg_two').modal('hide');
@@ -458,12 +433,12 @@
 								<ul class="nav nav-pills nav-pills-setting nav-justified" style="border-bottom:0px;" id="server-tab" role="tablist">
 									<li class="nav-item">
 										<a class="nav-link active" id="mod-tab-1" data-toggle="pill" href="#modSettingTab" role="tab" aria-controls="modSettingTab" aria-selected="true" >
-											<spring:message code="data_transfer.connect_set" />
+											<spring:message code="eXperDB_CDC.connect_set" />
 										</a>
 									</li>
 									<li class="nav-item">
 										<a class="nav-link" id="mod-tab-2" data-toggle="pill" href="#modTableTab" role="tab" aria-controls="modTableTab" aria-selected="false">
-											<spring:message code="data_transfer.table_mapping" />
+											<spring:message code="eXperDB_CDC.table_mapping" />
 										</a>
 									</li>
 								</ul>
@@ -484,27 +459,76 @@
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="mod_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.connect_name_set" />
+												<spring:message code="eXperDB_CDC.connect_name_set" />
 											</label>
-											<div class="col-sm-8">
+											<div class="col-sm-4">
 												<input type="text" class="form-control form-control-xsm" id="mod_connect_nm" name="mod_connect_nm" maxlength="50" readonly />
 											</div>
-											<div class="col-sm-2">
-												&nbsp;
+											<label for="mod_connect_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												Schema Registry<%-- <spring:message code="eXperDB_CDC.connect_name_set" /> --%>
+											</label>
+											<div class="col-sm-4">
+												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_connect_type" id="mod_connect_type" tabindex=4 disabled>
+													<option value=""><spring:message code="common.choice" /></option>
+													<option value="TC004501"><spring:message code="dbms_information.unuse" /></option>
+													<option value="TC004502"><spring:message code="dbms_information.use" /></option>
+												</select>
 											</div>
 										</div>
-	
+										
+										<!-- Schema Registry -->
+										<div id="mod_schema_registry_info" class="card-body" style="border: 1px solid #adb5bd; margin-bottom:20px;display: none;">
+											<div class="table-responsive">
+												<label for="mod_connect_type" class="col-sm-12 col-form-label-sm pop-label-index" style="margin-top:-10px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													Schema Registry <spring:message code="dashboard.server"/>
+												</label>
+												<table id="connectRegPopList" class="table system-tlb-scroll" style="width:100%;">
+													<colgroup>
+														<col style="width: 44%;" />
+														<col style="width: 36%;" />
+														<col style="width: 20%;" />
+													</colgroup>
+													<thead>
+														<tr class="bg-info text-white">
+															<th class="table-text-align-c">Schema Registry <spring:message code="data_transfer.server_name" /></th>
+															<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
+															<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr style="border-bottom: 1px solid #adb5bd;">
+															<td class="table-text-align-c">
+																<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_source_sch_nm" id="mod_source_sch_nm" onChange="fn_sch_nm_chg('source_mod');" tabindex=1 disabled>
+																	<option value=""><spring:message code="common.choice" /></option>
+																	<c:forEach var="result" items="${schemaRegistryList}" varStatus="status">
+																		<option value="<c:out value="${result.regi_id}"/>"><c:out value="${result.regi_nm}"/></option>
+																	</c:forEach>
+																</select>
+															</td>				
+															<td class="table-text-align-c">
+																<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_sch_ip" name="mod_sch_ip" onblur="this.value=this.value.trim()" disabled tabindex=1 />
+															</td>												
+															<td class="table-text-align-c">
+																<input type="text" class="form-control form-control-xsm" maxlength="5" id="mod_sch_port" name="mod_sch_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" disabled tabindex=2 />						
+															</td>
+														</tr>					
+													</tbody>
+												</table>
+											</div>
+										</div>
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="mod_db_id" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.database" />
+												<spring:message code="eXperDB_CDC.database" />
 											</label>
 											<div class="col-sm-4">
 												<input type="text" class="form-control form-control-xsm" id="mod_db_id" name="mod_db_id" readonly />
 											</div>
 											<label for="mod_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.metadata" />
+												<spring:message code="eXperDB_CDC.metadata" />
 											</label>
 											<div class="col-sm-4">
 												<div class="onoffswitch-pop">
@@ -520,7 +544,7 @@
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="mod_snapshot_mode" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.snapshot_mode" />
+												<spring:message code="eXperDB_CDC.snapshot_mode" />
 											</label>
 											<div class="col-sm-4">
 											<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_snapshot_mode" id="mod_snapshot_mode" tabindex=5>
@@ -537,7 +561,7 @@
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="mod_trans_com_cng_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.default_setting"/>
+												<spring:message code="eXperDB_CDC.default_setting"/>
 											</label>
 											<div class="col-sm-8">
 												<input type="text" class="form-control form-control-xsm" id="mod_trans_com_cng_nm" name="mod_trans_com_cng_nm" readonly="readonly" />
@@ -550,7 +574,7 @@
 										<div class="form-group row" style="margin-bottom:1px;">
 											<label for="mod_compression_type" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.compression_type" />
+												<spring:message code="eXperDB_CDC.compression_type" />
 											</label>
 											<div class="col-sm-4">
 												<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_compression_type" id="mod_compression_type" tabindex=5>
@@ -577,7 +601,7 @@
 										<div class="form-group row div-form-margin-z" id="mod_source_trans_active_div" style="display:none;">
 											<div class="col-sm-12">
 												<div class="alert alert-info" style="margin-top:5px;margin-bottom:-15px;" >
-													<spring:message code="data_transfer.msg27" />
+													<spring:message code="eXperDB_CDC.msg27" />
 												</div>
 											</div>
 										</div>
@@ -624,7 +648,7 @@
 									<div class="col-1 stretch-card div-form-margin-table" style="max-width: 6%;" id="center_div">
 										<div class="card" style="background-color: transparent !important;border:0px;">
 											<div class="card-body">	
-												<div class="card my-sm-2 row" style="border:0px;background-color: transparent !important;">
+												<div class="card my-sm-2 row connectRegReForm" style="border:0px;background-color: transparent !important;">
 													<label for="com_auto_run_cycle" class="col-sm-12 col-form-label pop-label-index" style="margin-left:-30px;margin-top:15px;margin-bottom:-15px;">
 														<a href="#" class="tip" onclick="fn_mod_t_allRightMove();">
 															<i class="fa fa-angle-double-right" style="font-size: 35px;cursor:pointer;"></i>
@@ -668,7 +692,7 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.transfer_table" />
+													<spring:message code="eXperDB_CDC.transfer_table" />
 												</h4>
 	
 								 				<table id="mod_connector_tableList" class="table table-hover system-tlb-scroll" style="width:100%;">

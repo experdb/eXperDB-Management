@@ -117,7 +117,7 @@
 			return;
 		}
 
-		if (nvlPrmSet($("#reg_trans_dtb_nm", "#trasnDbmsInsertPop").val(), '') == "") {
+		if (nvlPrmSet($("#reg_trans_dtb_nm", "#trasnDbmsInsertPop").val(), '') == "" &&  $("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val() != "TC002210") {
 			showSwalIcon('<spring:message code="migration.msg16" />', '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
@@ -212,10 +212,13 @@
 		
 		$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").find('option').remove();
 		$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").append('<option value="">' + common_choice + '</option>');
-
+		
+		$(".hd", "#trasnDbmsInsertPop").hide();
+		$(".no-hd", "#trasnDbmsInsertPop").show();
+		
 		if (result.dbmsGrb_reg != null) {
 			for (var idx=0; idx < result.dbmsGrb_reg.length; idx++) {
-				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201") {
+				if (result.dbmsGrb_reg[idx].sys_cd == "TC002201" || result.dbmsGrb_reg[idx].sys_cd == "TC002210" || result.dbmsGrb_reg[idx].sys_cd == "TC002204") {
 					$("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").append("<option value='"+ result.dbmsGrb_reg[idx].sys_cd + "'>" + result.dbmsGrb_reg[idx].sys_cd_nm + "</option>");
 				}
 			}
@@ -273,6 +276,15 @@
 		
 		$("#reg_trans_connectTest_check_alert", "#trasnDbmsInsertPop").html('');
 		$("#reg_trans_connectTest_check_alert", "#trasnDbmsInsertPop").hide();
+		
+		if($("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val() == "TC002210"){
+			$(".no-hd", "#trasnDbmsInsertPop").hide();
+			$(".hd", "#trasnDbmsInsertPop").show();
+		}else{
+			$(".hd", "#trasnDbmsInsertPop").hide();
+			$(".no-hd", "#trasnDbmsInsertPop").show();
+		}
+		
 	}
 
 	/* ********************************************************
@@ -317,7 +329,8 @@
 	  		   	spr_usr_id : nvlPrmSet($("#reg_trans_spr_usr_id", "#trasnDbmsInsertPop").val(), ''),
 	  		   	pwd : nvlPrmSet($("#reg_trans_pwd", "#trasnDbmsInsertPop").val(), ''),
 	  		  	dbms_dscd : nvlPrmSet($("#reg_trans_dbms_dscd", "#trasnDbmsInsertPop").val(), ''),
-				exe_status : nvlPrmSet($("#reg_trans_exe_status", "#trasnDbmsInsertPop").val(), 'TC001502')
+				exe_status : nvlPrmSet($("#reg_trans_exe_status", "#trasnDbmsInsertPop").val(), 'TC001502'),
+				file_path : nvlPrmSet($("#reg_trans_file_path", "#trasnDbmsInsertPop").val(), '')
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -354,7 +367,7 @@
 		<div class="modal-content" style="width:1040px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="data_transfer.target_dbms_register"/>
+					<spring:message code="eXperDB_CDC.target_dbms_register"/>
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" name="trasnDbmsInsertPop" id="trasnDbmsInsertPop" method="post">
@@ -419,7 +432,7 @@
 										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="5" id="reg_trans_portno" name="reg_trans_portno" onKeyUp="fn_checkWord(this,5);chk_Number(this);" onblur="this.value=this.value.trim()" placeholder="5<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
 									</div>
 								</div>
-								<div class="form-group row">
+								<div class="form-group row no-hd">
 									<label for="reg_trans_dtb_nm" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										Database(*)
@@ -438,7 +451,7 @@
 							<!-- 			<select name="scm_nm" id="schema_pg_reg" class="form-control" style="margin-right: 1rem;width: 100% !important;"></select> -->
 									</div>
 								</div>
-								<div class="form-group row">
+								<div class="form-group row no-hd">
 									<label for="reg_trans_spr_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
 										<spring:message code="dbms_information.account"/>(*)
@@ -454,6 +467,15 @@
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
 										<input type="password" class="form-control" style="width: 250px;" autocomplete="new-password"  maxlength="100" id="reg_trans_pwd" name="reg_trans_pwd" onkeyup="fn_checkWord(this, 100)" onblur="this.value=this.value.trim()" placeholder="100<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
+									</div>
+								</div>
+								<div class="form-group row hd">
+									<label for="reg_trans_file_path" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="properties.file_location" />(*)
+									</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" style="width: 733px;" autocomplete="false" maxlength="100" id="reg_trans_file_path" name="reg_trans_file_path" onkeyup="fn_checkWord(this,100)" onblur="this.value=this.value.trim()" placeholder="100<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
 									</div>
 								</div>
 								

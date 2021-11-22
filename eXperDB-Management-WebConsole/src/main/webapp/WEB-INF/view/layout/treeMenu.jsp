@@ -343,7 +343,7 @@
 													if(aut.length != 0 && aut[index].trans_dbms_cng_aut_yn == "Y"){
 														menuJson +=	'{' +
 																		'"icon": "fa fa-database",' +
-																		'"text": "<spring:message code="data_transfer.btn_title01"/>",' +
+																		'"text": "<spring:message code="eXperDB_CDC.btn_title01"/>",' +
 																		'"url": "/transDbmsSetting.do?db_svr_id='+item.db_svr_id+'",' +
 																		'"id": "transDbmsSetting'+item.db_svr_id+'"' +
 																	'},';
@@ -353,7 +353,7 @@
 												if(aut.length != 0 && aut[index].trans_con_cng_aut_yn == "Y"){
 													menuJson +=	'{' +
 																	'"icon": "fa fa-history",' +
-																	'"text": "<spring:message code="data_transfer.btn_title02"/>",' +
+																	'"text": "<spring:message code="eXperDB_CDC.connector_server_settings"/>",' +
 																	'"url": "/transConnectSetting.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "transConnectSetting'+item.db_svr_id+'"' +
 																'},';

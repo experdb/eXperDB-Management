@@ -33,4 +33,9 @@ public class ExperdbBackupHistoryServiceImpl extends EgovAbstractServiceImpl imp
 		return experdbBackupHistoryDAO.selectRestoreJobHistoryList(param);
 	}
 
+	@Override
+	public List<BackupJobHistoryVO> selectRecoveryPoint(Map<String, Object> param) throws Exception {
+		return experdbBackupHistoryDAO.selectRecoveryPoint(param);
+	}
+
 }

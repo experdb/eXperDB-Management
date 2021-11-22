@@ -2,42 +2,42 @@
 <!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="transMonitoringSql">
-	
-	<select id="selectProcessCpuList" resultType="hashMap">
-		/**
-		* Query ID : selectProcessCpuList
-		* Description : kafka process cpu 목록 조회
-		* Author : 윤정
-		**/
-		SELECT 
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-			, TRUNC(PROCESS_CPU_LOAD, 2) AS  PROCESS_CPU_LOAD
-			, TRUNC(SYSTEM_CPU_LOAD, 2) AS SYSTEM_CPU_LOAD
-		FROM CDC_RS_CONNECTOR_CPU CRCC 
-		ORDER BY TIME DESC 
-		LIMIT 20;
-	</select>
-	
-	<select id="selectMemoryList" resultType="hashMap">
-		/**
-		* Query ID : selectMemoryList
-		* Description : kafka memory 목록 조회
-		* Author : 윤정
-		**/
-		SELECT 
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-			, USED 
-		FROM CDC_RS_CONNECTOR_MEM CRCM 
-		ORDER BY TIME DESC 
-		LIMIT 20;
-	</select>
-	
-	<select id="selectAllErrorList" resultType="hashMap">
-		/**
-		* Query ID : selectAllErrorList
-		* Description : 전체 오류 정보 조회
-		* Author : 
-		**/
+   
+   <select id="selectProcessCpuList" resultType="hashMap">
+      /**
+      * Query ID : selectProcessCpuList
+      * Description : kafka process cpu 목록 조회
+      * Author : 윤정
+      **/
+      SELECT 
+         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+         , TRUNC(PROCESS_CPU_LOAD, 2) AS  PROCESS_CPU_LOAD
+         , TRUNC(SYSTEM_CPU_LOAD, 2) AS SYSTEM_CPU_LOAD
+      FROM CDC_RS_CONNECTOR_CPU CRCC 
+      ORDER BY TIME DESC 
+      LIMIT 20
+   </select>
+   
+   <select id="selectMemoryList" resultType="hashMap">
+      /**
+      * Query ID : selectMemoryList
+      * Description : kafka memory 목록 조회
+      * Author : 윤정
+      **/
+      SELECT 
+         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+         , USED 
+      FROM CDC_RS_CONNECTOR_MEM CRCM 
+      ORDER BY TIME DESC 
+      LIMIT 20
+   </select>
+   
+   <select id="selectAllErrorList" resultType="hashMap">
+      /**
+      * Query ID : selectAllErrorList
+      * Description : 전체 오류 정보 조회
+      * Author : 
+      **/
         SELECT B.TIME, 
                SUM(B.SRC_TOTAL_RECORD_ERRORS) AS SRC_TOTAL_RECORD_ERRORS,
                SUM(B.TAR_TOTAL_RECORD_ERRORS) AS TAR_TOTAL_RECORD_ERRORS
@@ -49,6 +49,7 @@
                        SELECT TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME,
                               TOTAL_RECORD_ERRORS
                          FROM CDC_CONNECTOR_TASK_SRC
+                        WHERE CONNECTOR_NAME = #{src_con_nm}
                 ) A
                 GROUP BY A.TIME
                 UNION ALL
@@ -59,444 +60,814 @@
                        SELECT TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME,
                               TOTAL_RECORD_ERRORS
                          FROM CDC_CONNECTOR_TASK_SINK
+                        WHERE CONNECTOR_NAME = #{tar_con_nm}
                 ) A
                 GROUP BY A.TIME
           ) B
           GROUP BY B.TIME
           ORDER BY TIME DESC 
           LIMIT 20
-	</select>
+   </select>
 
-	<select id="selectSourceConnectorList" resultType="hashMap">
-		/**
-		* Query ID : selectSourceConnectorList
-		* Description : 소스 Connector 목록 조회
-		* Author : 윤정
-		**/
-		SELECT 
-			  TRANS_ID
-			, KC_IP
-			, KC_PORT
-			, CONNECT_NM
-			, SNAPSHOT_MODE
-			, DB_ID
-			, DB_SVR_ID
-			, TRANS_EXRT_TRG_TB_ID
-			, EXE_STATUS
-			, FRST_REGR_ID
-			, COMPRESSION_TYPE
-			, META_DATA
-			, KC_ID
-			, TRANS_COM_ID
-		FROM T_TRANSCNG_I TTI 
-	</select>
-	
-	<select id="selectSourceConnectorTableList" resultType="hashMap">
-		/**
-		* Query ID : selectSourceConnectorTableList
-		* Description : 소스 Connector 연결 테이블 조회
-		* Author : 윤정
-		**/
-		SELECT 
-			  TRANS_EXRT_TRG_TB_ID
-			, EXRT_TRG_TB_NM 
-		FROM T_TRANS_EXRTTRG_MAPP 
-		WHERE TRANS_EXRT_TRG_TB_ID = 
+   <select id="selectSourceConnectorList" resultType="hashMap">
+      /**
+      * Query ID : selectSourceConnectorList
+      * Description : 소스 Connector 목록 조회
+      * Author : 윤정
+      **/
+        SELECT 
+               A.TRANS_ID
+             , B.KC_IP
+             , B.KC_PORT
+             , A.CONNECT_NM
+             , A.SNAPSHOT_MODE
+             , A.DB_ID
+             , A.DB_SVR_ID
+             , A.TRANS_EXRT_TRG_TB_ID
+             , A.EXE_STATUS
+             , A.FRST_REGR_ID
+             , A.COMPRESSION_TYPE
+             , A.META_DATA
+             , A.KC_ID
+             , A.TRANS_COM_ID
+          FROM T_TRANSCNG_I A 
+               LEFT JOIN T_TRANS_CON_INF B ON A.KC_ID = B.KC_ID
+         ORDER BY A.TRANS_ID
+   </select>
+   
+   <select id="selectSourceConnectorTableList" resultType="hashMap">
+      /**
+      * Query ID : selectSourceConnectorTableList
+      * Description : 소스 Connector 연결 테이블 조회
+      * Author : 윤정
+      **/
+		<![CDATA[  
+      SELECT 
+             E.TRANS_EXRT_TRG_TB_ID,
+             E.EXRT_SCHEMA AS SCHEMA_NM, 
+             replace(string_agg(cast(E.EXRT_TRG_TB_NM AS VARCHAR),','),'<br/>,','<br/>') AS TABLE_NM,
+             COUNT(E.EXRT_TRG_TB_NM) AS TOT_CNT
+       FROM (
+             SELECT 
+                    D.TRANS_EXRT_TRG_TB_ID,
+                    D.EXRT_SCHEMA, 
+                    CASE WHEN MOD(R_ROWNUM, 3) = 0 THEN D.EXRT_TRG_TB_NM || '<br/>'
+                         ELSE D.EXRT_TRG_TB_NM 
+                     END AS EXRT_TRG_TB_NM
+               FROM (
+		]]>
+                     SELECT 
+                            RANK() OVER (PARTITION BY EXRT_SCHEMA ORDER BY EXRT_TRG_TB_NM) AS R_ROWNUM,
+                            TRANS_EXRT_TRG_TB_ID, 
+                            EXRT_SCHEMA,
+                            EXRT_TRG_TB_NM
+                       FROM (
+                            SELECT 
+                                   MAX(TRANS_EXRT_TRG_TB_ID) AS TRANS_EXRT_TRG_TB_ID, 
+                                   split_part(unnest(string_to_array(EXRT_TRG_TB_NM, ','))::varchar, '.', 1) AS EXRT_SCHEMA,
+                                   split_part(unnest(string_to_array(EXRT_TRG_TB_NM, ','))::varchar, '.', 2) AS EXRT_TRG_TB_NM
+                              FROM T_TRANS_EXRTTRG_MAPP 
+                             WHERE TRANS_EXRT_TRG_TB_ID = (
+                                                           SELECT TRANS_EXRT_TRG_TB_ID 
+                                                             FROM T_TRANSCNG_I TTI 
+                                                            WHERE TRANS_ID = #{trans_id}::numeric
+                                                           )
+                             GROUP BY EXRT_TRG_TB_NM
+                      ) C 
+              ) D
+       ) E
+       GROUP BY TRANS_EXRT_TRG_TB_ID, EXRT_SCHEMA
+   </select>
+   
+   <select id="selectSourceSnapshotChart" resultType="hashMap">
+      /**
+      * Query ID : selectSourceSnapshotChart
+      * Description : 소스 Connector snapshot 차트
+      * Author : 윤정
+      **/
+      SELECT 
+         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+         , NUMBER_OF_EVENTS_FILTERED
+         , NUMBER_OF_ERRONEOUS_EVENTS
+      FROM CDC_DBSERVER_SNAPSHOT
+      WHERE CONNECTOR_SRC_NAME = (
+                           SELECT 
+                              TTTI.CONNECT_NM 
+                           FROM T_TRANSCNG_I TTTI 
+                           WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           )
+      ORDER BY TIME DESC
+      LIMIT 5
+   </select>
+   
+   <select id="selectSourceSnapshotInfo" resultType="hashMap">
+      /**
+      * Query ID : selectSourceSnapshotInfo
+      * Description : 소스 Connector snapshot 정보 테이블
+      * Author : 윤정
+      **/
+      SELECT 
+	  		 C.ROWNUM
+     		 , MAX(CONNECTOR_SRC_NAME)
+     		 , MAX(TIME)
+     		 , SUM(NUMBER_OF_EVENTS_FILTERED) AS NUMBER_OF_EVENTS_FILTERED
+     		 , SUM(NUMBER_OF_ERRONEOUS_EVENTS) AS NUMBER_OF_ERRONEOUS_EVENTS
+     		 , SUM(QUEUE_TOTAL_CAPACITY) AS QUEUE_TOTAL_CAPACITY
+     		 , SUM(QUEUE_REMAINING_CAPACITY) AS QUEUE_REMAINING_CAPACITY
+    	 	 , SUM(REMAINING_TABLE_COUNT) AS REMAINING_TABLE_COUNT
+	    FROM 
+			  (     
+				  (
+				  SELECT 
+					     1 AS ROWNUM
+					     , '' AS CONNECTOR_SRC_NAME
+					     , '' AS  TIME
+					     , 0 AS NUMBER_OF_EVENTS_FILTERED
+					     , 0 AS NUMBER_OF_ERRONEOUS_EVENTS
+					     , 0 AS QUEUE_TOTAL_CAPACITY
+					     , 0 AS QUEUE_REMAINING_CAPACITY
+					     , 0 AS REMAINING_TABLE_COUNT
+			  	   UNION ALL
+				  SELECT 
+                         2 AS ROWNUM
+					     , '' AS CONNECTOR_SRC_NAME
+					     , '' AS TIME
+					     , 0 AS NUMBER_OF_EVENTS_FILTERED
+					     , 0 AS NUMBER_OF_ERRONEOUS_EVENTS
+					     , 0 AS QUEUE_TOTAL_CAPACITY
+					     , 0 AS QUEUE_REMAINING_CAPACITY
+					     , 0 AS REMAINING_TABLE_COUNT
+				  )
+			  UNION ALL
+			  (
+			  SELECT 
+				    (ROW_NUMBER() OVER(ORDER BY CDS.TIME DESC)) AS ROWNUM
+				     , CONNECTOR_SRC_NAME
+				     , TO_CHAR(CDS.TIME, 'YYYY-MM-DD HH24:MI') AS TIME
+				     , NUMBER_OF_EVENTS_FILTERED
+				     , NUMBER_OF_ERRONEOUS_EVENTS
+				     , QUEUE_TOTAL_CAPACITY
+				     , QUEUE_REMAINING_CAPACITY
+				     , REMAINING_TABLE_COUNT
+			    FROM CDC_DBSERVER_SNAPSHOT CDS
+			   WHERE CONNECTOR_SRC_NAME = (
+									  		SELECT 
+										   		  TTTI.CONNECT_NM 
+									  		 FROM T_TRANSCNG_I TTTI 
+									 		 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+											)
+			   ORDER BY TIME DESC
+			   LIMIT 2
+			  ) 
+		  )C
+       GROUP BY C.ROWNUM
+       ORDER BY C.ROWNUM
+   </select>
+   
+   <select id="selectStreamingChart" resultType="hashMap">
+      /**
+      * Query ID : selectStreamingChart
+      * Description : 소스 Connector streaming 차트
+      * Author : 윤정
+      **/
+      SELECT 
+         	 TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+        	 , TOTAL_NUMBER_OF_EVENTS_SEEN  
+        	 , NUMBER_OF_EVENTS_FILTERED  
+       		 , NUMBER_OF_ERRONEOUS_EVENTS  
+        FROM CDC_DBSERVER_STREAMING CDS 
+       WHERE CONNECTOR_SRC_NAME = (
+                          			SELECT 
+                             			   TTTI.CONNECT_NM 
+                           			  FROM T_TRANSCNG_I TTTI 
+                           			 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           			)
+       ORDER BY TIME DESC
+       LIMIT 5
+   </select>
+   
+   <select id="selectStreamingInfo" resultType="hashMap">
+      /**
+      * Query ID : selectStreamingInfo
+      * Description : 소스 Connector streaming 정보 테이블
+      * Author : 윤정
+      **/
+      SELECT 
+         (ROW_NUMBER() OVER(ORDER BY CDS.TIME DESC)) AS ROWNUM
+          , CONNECTOR_SRC_NAME  
+          , TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME  
+          , LAST_TRANSACTION_ID  
+          , NUMBER_OF_COMMITTED_TRANSACTIONS  
+          , TOTAL_NUMBER_OF_EVENTS_SEEN  
+          , NUMBER_OF_EVENTS_FILTERED  
+          , NUMBER_OF_ERRONEOUS_EVENTS  
+          , MILLI_SECONDS_SINCE_LAST_EVENT  
+      FROM CDC_DBSERVER_STREAMING CDS 
+      WHERE CONNECTOR_SRC_NAME = (
+                           SELECT 
+                              TTTI.CONNECT_NM 
+                           FROM T_TRANSCNG_I TTTI 
+                           WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           )
+      ORDER BY TIME DESC
+      LIMIT 2
+   </select>
+   
+   <select id="selectSourceConnectInfo_bck" resultType="hashMap">
+      /**
+      * Query ID : selectSourceConnectInfo
+      * Description : 소스 Connect 정보
+      * Author : 윤정
+      **/
+      SELECT 
+         TTI.CONNECT_NM
+         , TDI.DB_NM
+         , TTI.META_DATA 
+         , (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTI.SNAPSHOT_MODE) AS SNAPSHOT_MODE 
+         , (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTI.COMPRESSION_TYPE) AS COMPRESSION_TYPE 
+      FROM T_TRANSCNG_I TTI JOIN T_DB_I TDI ON TTI.DB_ID = TDI.DB_ID 
+      WHERE TTI.TRANS_ID = #{trans_id}::numeric
+   </select>
+   
+   <select id="selectSourceConnectInfo" resultType="hashMap">
+      /**
+      * Query ID : selectSourceConnectInfo
+      * Description : 소스 Connect 정보
+      * Author : 윤정
+      **/
+      SELECT 
+         TTI.CONNECT_NM
+         , TDI.DB_NM
+         , TTI.META_DATA 
+         , TTI.EXE_STATUS
+         , TTI.TRANS_EXRT_TRG_TB_ID
+         , TTI.DB_SVR_ID
+         , TTI.TRANS_ID
+         , (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTI.SNAPSHOT_MODE) AS SNAPSHOT_MODE 
+         , (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTI.COMPRESSION_TYPE) AS COMPRESSION_TYPE 
+         , coalesce(A.SOURCE_RECORD_POLL_TOTAL,0) AS SOURCE_RECORD_POLL_TOTAL
+         , coalesce(A.TOTAL_RECORD_ERRORS, 0) AS TOTAL_RECORD_ERRORS
+      FROM T_TRANSCNG_I TTI 
+         JOIN T_DB_I TDI ON TTI.DB_ID = TDI.DB_ID
+         LEFT JOIN (
+            SELECT 
+               SOURCE_RECORD_POLL_TOTAL
+               , TOTAL_RECORD_ERRORS
+               , CONNECTOR_NAME 
+            FROM CDC_CONNECTOR_TASK_SRC CCTS 
+            WHERE CCTS.CONNECTOR_NAME = (SELECT 
+                                    CONNECT_NM 
+                                  FROM T_TRANSCNG_I 
+                                  WHERE TRANS_ID = #{trans_id}::numeric
+                                  ) 
+            ORDER BY TIME DESC 
+            LIMIT 1
+         ) AS A
+         ON A.CONNECTOR_NAME = TTI.CONNECT_NM
+      WHERE TRANS_ID = #{trans_id}::numeric
+   </select>
+
+   <select id="selectSourceChart_1" resultType="hashMap">
+      /**
+      * Query ID : selectSourceChart_1
+      * Description : 소스 Connect 실시간 chart1
+      * Author : 윤정
+      **/
+      SELECT 
+        	 TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+         	 , SOURCE_RECORD_WRITE_TOTAL
+         	 , SOURCE_RECORD_POLL_TOTAL
+        	 , TRUNC(SOURCE_RECORD_ACTIVE_COUNT,2) AS SOURCE_RECORD_ACTIVE_COUNT
+        FROM CDC_CONNECTOR_TASK_SRC
+       WHERE CONNECTOR_NAME = (
+                       			 SELECT 
+                         			    TTTI.CONNECT_NM 
+                        		   FROM T_TRANSCNG_I TTTI 
+                       			  WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                       			 )
+       ORDER BY TIME DESC 
+       LIMIT 5
+   </select>
+   
+   <select id="selectSourceChart_2" resultType="hashMap">
+      /**
+      * Query ID : selectSourceChart_2
+      * Description : 소스 Connect 실시간 chart2
+      * Author : 윤정
+      **/
+      SELECT 
+         	 TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+        	 , TRUNC(SOURCE_RECORD_WRITE_RATE, 2) AS SOURCE_RECORD_WRITE_RATE
+       		 , TRUNC(SOURCE_RECORD_ACTIVE_COUNT_AVG, 2) AS SOURCE_RECORD_ACTIVE_COUNT_AVG
+        FROM CDC_CONNECTOR_TASK_SRC
+       WHERE CONNECTOR_NAME = (
+                        		SELECT 
+                           				TTTI.CONNECT_NM 
+                        		  FROM T_TRANSCNG_I TTTI 
+                        		 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                        		)
+       ORDER BY TIME DESC 
+       LIMIT 5
+   </select>
+   
+   <select id="selectSourceInfo" resultType="hashMap">
+      /**
+      * Query ID : selectSourceInfo
+      * Description : 소스 Connect 실시간 정보
+      * Author : 윤정
+      **/
+	  SELECT 
+		  	  C.ROWNUM
+			  , MAX(TIME) AS TIME
+			  , SUM(SOURCE_RECORD_ACTIVE_COUNT_MAX) AS SOURCE_RECORD_ACTIVE_COUNT_MAX
+			  , TRUNC(SUM(SOURCE_RECORD_WRITE_RATE),2) AS SOURCE_RECORD_WRITE_RATE
+			  , TRUNC(SUM(SOURCE_RECORD_ACTIVE_COUNT_AVG),2) AS SOURCE_RECORD_ACTIVE_COUNT_AVG
+			  , SUM(SOURCE_RECORD_WRITE_TOTAL) AS SOURCE_RECORD_WRITE_TOTAL
+			  , SUM(SOURCE_RECORD_POLL_TOTAL) AS SOURCE_RECORD_POLL_TOTAL
+			  , TRUNC(SUM(SOURCE_RECORD_ACTIVE_COUNT),2) AS SOURCE_RECORD_ACTIVE_COUNT
+	    FROM 
 			(
-			 SELECT TRANS_EXRT_TRG_TB_ID 
-			 FROM T_TRANSCNG_I TTI 
-			 WHERE TRANS_ID = #{trans_id}::numeric
-			)
-	</select>
-	
-	<select id="selectSourceSnapshotChart" resultType="hashMap">
-		/**
-		* Query ID : selectSourceSnapshotChart
-		* Description : 소스 Connector snapshot 차트
-		* Author : 윤정
-		**/
-		SELECT 
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-			, NUMBER_OF_EVENTS_FILTERED
-			, NUMBER_OF_ERRONEOUS_EVENTS
-		FROM CDC_DBSERVER_SNAPSHOT
-		WHERE CONNECTOR_SRC_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									)
-		ORDER BY TIME DESC
-		LIMIT 5
-	</select>
-	
-	<select id="selectSourceSnapshotInfo" resultType="hashMap">
-		/**
-		* Query ID : selectSourceSnapshotInfo
-		* Description : 소스 Connector snapshot 정보 테이블
-		* Author : 윤정
-		**/
-		SELECT 
-			(ROW_NUMBER() OVER(ORDER BY CDS.TIME DESC)) AS ROWNUM
-			, CONNECTOR_SRC_NAME
-			, TO_CHAR(CDS.TIME, 'YYYY-MM-DD HH24:MI') AS TIME
-			, NUMBER_OF_EVENTS_FILTERED
-			, NUMBER_OF_ERRONEOUS_EVENTS
-			, QUEUE_TOTAL_CAPACITY
-			, QUEUE_REMAINING_CAPACITY
-			, REMAINING_TABLE_COUNT
-		FROM CDC_DBSERVER_SNAPSHOT CDS
-		WHERE CONNECTOR_SRC_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									)
-		ORDER BY TIME DESC
-		LIMIT 2
-	</select>
-	
-	<select id="selectStreamingChart" resultType="hashMap">
-		/**
-		* Query ID : selectStreamingChart
-		* Description : 소스 Connector streaming 차트
-		* Author : 윤정
-		**/
-		SELECT 
- 			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
- 			, TOTAL_NUMBER_OF_EVENTS_SEEN  
- 			, NUMBER_OF_EVENTS_FILTERED  
- 			, NUMBER_OF_ERRONEOUS_EVENTS  
-		FROM CDC_DBSERVER_STREAMING CDS 
-		WHERE CONNECTOR_SRC_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									)
-		ORDER BY TIME DESC
-		LIMIT 5
-	</select>
-	
-	<select id="selectStreamingInfo" resultType="hashMap">
-		/**
-		* Query ID : selectStreamingInfo
-		* Description : 소스 Connector streaming 정보 테이블
-		* Author : 윤정
-		**/
-		SELECT 
-			(ROW_NUMBER() OVER(ORDER BY CDS.TIME DESC)) AS ROWNUM
- 			, CONNECTOR_SRC_NAME  
- 			, TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME  
- 			, LAST_TRANSACTION_ID  
- 			, NUMBER_OF_COMMITTED_TRANSACTIONS  
- 			, TOTAL_NUMBER_OF_EVENTS_SEEN  
- 			, NUMBER_OF_EVENTS_FILTERED  
- 			, NUMBER_OF_ERRONEOUS_EVENTS  
- 			, MILLI_SECONDS_SINCE_LAST_EVENT  
-		FROM CDC_DBSERVER_STREAMING CDS 
-		WHERE CONNECTOR_SRC_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									)
-		ORDER BY TIME DESC
-		LIMIT 2
-	</select>
-	
-	<select id="selectSourceConnectInfo" resultType="hashMap">
-		/**
-		* Query ID : selectSourceConnectInfo
-		* Description : 소스 Connect 정보
-		* Author : 윤정
-		**/
-		SELECT 
-			TTI.CONNECT_NM
-			, TDI.DB_NM
-			, TTI.META_DATA 
-			, (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTI.SNAPSHOT_MODE) AS SNAPSHOT_MODE 
-			, (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTI.COMPRESSION_TYPE) AS COMPRESSION_TYPE 
-		FROM T_TRANSCNG_I TTI JOIN T_DB_I TDI ON TTI.DB_ID = TDI.DB_ID 
-		WHERE TTI.TRANS_ID = #{trans_id}::numeric
-	</select>
+	     		(
+     				SELECT 
+                       	   1 AS ROWNUM
+                       	   , '' AS TIME
+                       	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT_MAX
+                       	   , 0 AS SOURCE_RECORD_WRITE_RATE
+                       	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT_AVG
+                       	   , 0 AS SOURCE_RECORD_WRITE_TOTAL
+                       	   , 0 AS SOURCE_RECORD_POLL_TOTAL
+                      	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT
+               		 UNION ALL
+					SELECT 
+                       	   2 AS ROWNUM
+                       	   , '' AS TIME
+                           , 0 AS SOURCE_RECORD_ACTIVE_COUNT_MAX
+                       	   , 0 AS SOURCE_RECORD_WRITE_RATE
+                       	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT_AVG
+                       	   , 0 AS SOURCE_RECORD_WRITE_TOTAL
+                       	   , 0 AS SOURCE_RECORD_POLL_TOTAL
+                       	   , 0 AS SOURCE_RECORD_ACTIVE_COUNT
+             	)
+      			UNION ALL
+      			(
+     			 SELECT
+        		  	    (ROW_NUMBER() OVER(ORDER BY CCTS.TIME DESC)) AS ROWNUM
+        		  	    , TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME
+        		 	    , SOURCE_RECORD_ACTIVE_COUNT_MAX
+        			    , SOURCE_RECORD_WRITE_RATE
+        		   	    , SOURCE_RECORD_ACTIVE_COUNT_AVG
+        			    , SOURCE_RECORD_WRITE_TOTAL
+        		  	    , SOURCE_RECORD_POLL_TOTAL
+        		  	    , SOURCE_RECORD_ACTIVE_COUNT
+     			   FROM CDC_CONNECTOR_TASK_SRC CCTS
+     			  WHERE CONNECTOR_NAME = (
+                        					SELECT 
+                           				   		   TTTI.CONNECT_NM 
+                        			  	   	  FROM T_TRANSCNG_I TTTI 
+                        			 		 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           				  )
+     			 ORDER BY TIME DESC 
+     			 LIMIT 2
+      			)
+			)C
+	   GROUP BY C.ROWNUM
+	   ORDER BY C.ROWNUM
+   </select>
+   
+   <select id="selectSourceErrorChart" resultType="hashMap">
+      /**
+      * Query ID : selectSourceErrorChart
+      * Description : 소스 Connect error 차트
+      * Author : 윤정
+      **/
+      SELECT 
+         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+         , TOTAL_RECORD_ERRORS
+         , TOTAL_RECORD_FAILURES
+         , TOTAL_RECORDS_SKIPPED
+         , TOTAL_RETRIES
+      FROM CDC_CONNECTOR_TASK_SRC
+      WHERE CONNECTOR_NAME = (
+                        SELECT 
+                           TTTI.CONNECT_NM 
+                        FROM T_TRANSCNG_I TTTI 
+                        WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                        )
+      ORDER BY TIME DESC 
+      LIMIT 5
+   </select>
+   
+   <select id="selectSourceErrorInfo" resultType="hashMap">
+      /**
+      * Query ID : selectSourceErrorInfo
+      * Description : 소스 Connect error Info
+      * Author : 윤정
+      **/
+      SELECT 
+         (ROW_NUMBER() OVER(ORDER BY CCTS.TIME DESC)) AS ROWNUM 
+         , TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME
+         , LAST_ERROR_TIMESTAMP
+         , TOTAL_ERRORS_LOGGED
+         , DEADLETTERQUEUE_PRODUCE_REQUESTS
+         , DEADLETTERQUEUE_PRODUCE_FAILURES
+         , TOTAL_RECORD_FAILURES
+         , TOTAL_RECORDS_SKIPPED
+         , TOTAL_RECORD_ERRORS
+         , TOTAL_RETRIES
+      FROM CDC_CONNECTOR_TASK_SRC CCTS
+      WHERE CONNECTOR_NAME = (
+                        SELECT 
+                           TTTI.CONNECT_NM 
+                        FROM T_TRANSCNG_I TTTI 
+                        WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                        )
+      ORDER BY TIME DESC 
+      LIMIT 2
+   </select>
+   
+   <select id="selectTargetConnectList" resultType="hashMap">
+      /**
+      * Query ID : selectTargetConnectList
+      * Description : 타겟 Connector 목록 조회
+      * Author : 윤정
+      **/
+      SELECT 
+         TTTI2.TRANS_ID 
+         , TTTI2.CONNECT_NM 
+      FROM T_TRANS_TOPIC_I TTTI 
+      JOIN T_TRANSCNG_TARGET_I TTTI2 ON TTTI.TAR_TRANS_ID = TTTI2.TRANS_ID 
+      WHERE TTTI.SRC_TRANS_ID = #{trans_id}::numeric 
+      GROUP BY TTTI2.TRANS_ID, TTTI2.CONNECT_NM
+   </select>
+   
+   <select id="selectTargetDBMSInfo" resultType="hashMap">
+      /**
+      * Query ID : selectTargetDBMSInfo
+      * Description : 타겟 DBMS 정보
+      * Author : 윤정
+      **/
+      SELECT 
+         TTSI.TRANS_SYS_ID
+         , TRANS_SYS_NM
+         , (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTSI.DBMS_DSCD) AS DBMS_TYPE 
+         , TTSI.DTB_NM
+         , TTSI.SCM_NM
+      FROM T_TRANS_SYS_INF TTSI 
+      WHERE TTSI.TRANS_SYS_ID = (
+                           SELECT 
+                              TTTI.TRANS_SYS_ID 
+                           FROM T_TRANSCNG_TARGET_I TTTI 
+                           WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           )
+   </select>
+  
+   <select id="selectTargetTopicList" resultType="hashMap">
+      /**
+      * Query ID : selectTargetTopicListNew
+      * Description : 타겟 전송대상 테이블 목록 조회
+      * Author : 윤정
+      **/
+		<![CDATA[  
+     SELECT 
+         (ROW_NUMBER() OVER()) AS ROWNUM 
+         , A.CONNECT_NM 
+         , A.EXE_STATUS
+         , A.DB_SVR_ID
+         , A.TRANS_EXRT_TRG_TB_ID
+         , A.TRANS_ID
+         , B.EXRT_TRG_TB_NM AS TOPIC_NAME
+         , B.TOT_CNT
+         , coalesce(C.SINK_RECORD_SEND_TOTAL,0) AS SINK_RECORD_SEND_TOTAL
+         , coalesce(C.TOTAL_RECORD_ERRORS,0) AS TOTAL_RECORD_ERRORS
+      FROM T_TRANSCNG_TARGET_I A 
+           LEFT JOIN (
+                      SELECT 
+                             CONNECTOR_NAME,
+                             trunc(SINK_RECORD_SEND_TOTAL) AS SINK_RECORD_SEND_TOTAL,
+                             trunc(TOTAL_RECORD_ERRORS) AS TOTAL_RECORD_ERRORS
+                        FROM CDC_CONNECTOR_TASK_SINK
+                       WHERE CONNECTOR_NAME = (
+                                               SELECT 
+                                                      CONNECT_NM 
+                                                 FROM T_TRANSCNG_TARGET_I 
+                                                WHERE TRANS_ID = #{trans_id}::numeric
+                                               )
+                       ORDER BY TIME DESC
+                       LIMIT 1
+           ) AS C ON A.CONNECT_NM = C.CONNECTOR_NAME
+           LEFT JOIN (
+                      SELECT 
+                             E.TRANS_EXRT_TRG_TB_ID,
+                             replace(string_agg(cast(E.EXRT_TRG_TB_NM AS VARCHAR),','),'<br/>,','<br/>') AS EXRT_TRG_TB_NM,
+                             COUNT(E.EXRT_TRG_TB_NM) as TOT_CNT
+                        FROM (
+                             SELECT 
+                                    D.TRANS_EXRT_TRG_TB_ID,
+                                    CASE WHEN MOD(R_ROWNUM, 3) = 0 THEN D.EXRT_TRG_TB_NM || '<br/>'
+                                         ELSE D.EXRT_TRG_TB_NM 
+                                     END AS EXRT_TRG_TB_NM
+                               FROM (
+                                    SELECT 
+                                           ROW_NUMBER() OVER(order by EXRT_TRG_TB_NM) AS R_ROWNUM,
+                                           TRANS_EXRT_TRG_TB_ID, 
+                                           EXRT_TRG_TB_NM
+                                      FROM (
+                                           SELECT 
+                                                  MAX(TRANS_EXRT_TRG_TB_ID) AS TRANS_EXRT_TRG_TB_ID, 
+                                                  unnest(string_to_array(EXRT_TRG_TB_NM, ','))::varchar AS EXRT_TRG_TB_NM
+                                             FROM T_TRANS_EXRTTRG_MAPP 
+                                            WHERE TRANS_EXRT_TRG_TB_ID = (
+                                                                          SELECT TRANS_EXRT_TRG_TB_ID 
+                                                                            FROM T_TRANSCNG_TARGET_I 
+                                                                           WHERE TRANS_ID = #{trans_id}::numeric
+                                                                          )
+                                            GROUP BY EXRT_TRG_TB_NM
+                                     ) C 
+                              ) D
+                       ) E
+                       GROUP BY TRANS_EXRT_TRG_TB_ID
+           ) B ON A.TRANS_EXRT_TRG_TB_ID = B.TRANS_EXRT_TRG_TB_ID 
+     WHERE A.TRANS_ID = #{trans_id}::numeric
+		]]>
+   </select>
 
-	<select id="selectSourceChart_1" resultType="hashMap">
-		/**
-		* Query ID : selectSourceChart_1
-		* Description : 소스 Connect 실시간 chart1
-		* Author : 윤정
-		**/
-		SELECT 
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-			, SOURCE_RECORD_WRITE_TOTAL
-			, SOURCE_RECORD_POLL_TOTAL
-			, SOURCE_RECORD_ACTIVE_COUNT
-		FROM CDC_CONNECTOR_TASK_SRC
-		WHERE CONNECTOR_NAME = (
-								SELECT 
-									TTTI.CONNECT_NM 
-								FROM T_TRANSCNG_I TTTI 
-								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-								)
-		ORDER BY TIME DESC LIMIT 5;
-	</select>
-	
-	<select id="selectSourceChart_2" resultType="hashMap">
-		/**
-		* Query ID : selectSourceChart_2
-		* Description : 소스 Connect 실시간 chart2
-		* Author : 윤정
-		**/
-		SELECT 
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-			, SOURCE_RECORD_WRITE_RATE
-			, SOURCE_RECORD_ACTIVE_COUNT_AVG
-		FROM CDC_CONNECTOR_TASK_SRC
-		WHERE CONNECTOR_NAME = (
-								SELECT 
-									TTTI.CONNECT_NM 
-								FROM T_TRANSCNG_I TTTI 
-								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-								)
-		ORDER BY TIME DESC LIMIT 5;
-	</select>
-	
-	<select id="selectSourceInfo" resultType="hashMap">
-		/**
-		* Query ID : selectSourceInfo
-		* Description : 소스 Connect 실시간 정보
-		* Author : 윤정
-		**/
-		SELECT
-			(ROW_NUMBER() OVER(ORDER BY CCTS.TIME DESC)) AS ROWNUM
-			, TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME
-			, SOURCE_RECORD_ACTIVE_COUNT_MAX
-			, SOURCE_RECORD_WRITE_RATE
-			, SOURCE_RECORD_ACTIVE_COUNT_AVG
-			, SOURCE_RECORD_WRITE_TOTAL
-			, SOURCE_RECORD_POLL_TOTAL
-			, SOURCE_RECORD_ACTIVE_COUNT
-		FROM CDC_CONNECTOR_TASK_SRC CCTS
-		WHERE CONNECTOR_NAME = (
-								SELECT 
-									TTTI.CONNECT_NM 
-								FROM T_TRANSCNG_I TTTI 
-								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-								)
-		ORDER BY TIME DESC LIMIT 2
-	</select>
-	
-	<select id="selectSourceErrorChart" resultType="hashMap">
-		/**
-		* Query ID : selectSourceErrorChart
-		* Description : 소스 Connect error 차트
-		* Author : 윤정
-		**/
-		SELECT 
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-			, TOTAL_RECORD_ERRORS
-			, TOTAL_RECORD_FAILURES
-			, TOTAL_RECORDS_SKIPPED
-			, TOTAL_RETRIES
-		FROM CDC_CONNECTOR_TASK_SRC
-		WHERE CONNECTOR_NAME = (
-								SELECT 
-									TTTI.CONNECT_NM 
-								FROM T_TRANSCNG_I TTTI 
-								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-								)
-		ORDER BY TIME DESC LIMIT 5;
-	</select>
-	
-	<select id="selectSourceErrorInfo" resultType="hashMap">
-		/**
-		* Query ID : selectSourceErrorInfo
-		* Description : 소스 Connect error Info
-		* Author : 윤정
-		**/
-		SELECT 
-			(ROW_NUMBER() OVER(ORDER BY CCTS.TIME DESC)) AS ROWNUM 
-			, TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME
-			, LAST_ERROR_TIMESTAMP
-			, TOTAL_ERRORS_LOGGED
-			, DEADLETTERQUEUE_PRODUCE_REQUESTS
-			, DEADLETTERQUEUE_PRODUCE_FAILURES
-			, TOTAL_RECORD_FAILURES
-			, TOTAL_RECORDS_SKIPPED
-			, TOTAL_RECORD_ERRORS
-			, TOTAL_RETRIES
-		FROM CDC_CONNECTOR_TASK_SRC CCTS
-		WHERE CONNECTOR_NAME = (
-								SELECT 
-									TTTI.CONNECT_NM 
-								FROM T_TRANSCNG_I TTTI 
-								WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-								)
-		ORDER BY TIME DESC LIMIT 2;
-	</select>
-	
-	<select id="selectTargetConnectList" resultType="hashMap">
-		/**
-		* Query ID : selectTargetConnectList
-		* Description : 타겟 Connector 목록 조회
-		* Author : 윤정
-		**/
-		SELECT 
-			TTTI2.TRANS_ID 
-			, TTTI2.CONNECT_NM 
-		FROM T_TRANS_TOPIC_I TTTI 
-		JOIN T_TRANSCNG_TARGET_I TTTI2 ON TTTI.TAR_TRANS_ID = TTTI2.TRANS_ID 
-		WHERE TTTI.SRC_TRANS_ID = #{trans_id}::numeric ;
-	</select>
-	
-	<select id="selectTargetDBMSInfo" resultType="hashMap">
-		/**
-		* Query ID : selectTargetDBMSInfo
-		* Description : 타겟 DBMS 정보
-		* Author : 윤정
-		**/
-		SELECT 
-			TTSI.TRANS_SYS_ID
-			, TRANS_SYS_NM
-			, (SELECT SYS_CD_NM FROM T_SYSDTL_C TSC WHERE SYS_CD = TTSI.DBMS_DSCD) AS DBMS_TYPE 
-			, TTSI.DTB_NM
-			, TTSI.SCM_NM
-		FROM T_TRANS_SYS_INF TTSI 
-		WHERE TTSI.TRANS_SYS_ID = (
-									SELECT 
-										TTTI.TRANS_SYS_ID 
-									FROM T_TRANSCNG_TARGET_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									);
-	</select>
-	
-	<select id="selectTargetTopicList" resultType="hashMap">
-		/**
-		* Query ID : selectTargetTopicList
-		* Description : 타겟 전송대상 테이블 목록 조회
-		* Author : 윤정
-		**/
-		SELECT 
-			(ROW_NUMBER() OVER()) AS ROWNUM 
-			, TTTI.CONNECT_NM 
-			, TTEM.EXRT_TRG_TB_NM AS TOPIC_NAME
-		FROM T_TRANSCNG_TARGET_I TTTI 
-		JOIN T_TRANS_EXRTTRG_MAPP TTEM ON TTEM.TRANS_EXRT_TRG_TB_ID = TTTI.TRANS_EXRT_TRG_TB_ID 
-		WHERE TTTI.TRANS_ID = #{trans_id}::numeric;
-	</select>
-	
-	<select id="selectTargetSinkRecordChart" resultType="hashMap">
-		/**
-		* Query ID : selectTargetSinkRecordChart
-		* Description : 타겟 싱크 중 chart
-		* Author : 윤정
-		**/
-		SELECT 
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME  
-			, SINK_RECORD_ACTIVE_COUNT
-			, SINK_RECORD_SEND_TOTAL
-		FROM CDC_CONNECTOR_TASK_SINK CCTS 
-		WHERE CCTS.CONNECTOR_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_TARGET_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									)
-		ORDER BY TIME DESC LIMIT 5;
-	</select>
-	
-	<select id="selectTargetSinkCompleteChart" resultType="hashMap">
-		/**
-		* Query ID : selectTargetSinkCompleteChart
-		* Description : 타겟 완료 chart
-		* Author : 윤정
-		**/
-		SELECT 
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-			, OFFSET_COMMIT_COMPLETION_TOTAL
-			, OFFSET_COMMIT_SKIP_TOTAL
-		FROM CDC_CONNECTOR_TASK_SINK CCTS 
-		WHERE CCTS.CONNECTOR_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_TARGET_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									)
-		ORDER BY TIME DESC LIMIT 5;
-	</select>
-	
-	<select id="selectTargetSinkInfo" resultType="hashMap">
-		/**
-		* Query ID : selectTargetSinkInfo
-		* Description : 타겟 sink 정보
-		* Author : 윤정
-		**/
-		SELECT 
-			(ROW_NUMBER() OVER(ORDER BY TIME DESC)) AS ROWNUM 
-			, TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME 
-			, SINK_RECORD_ACTIVE_COUNT
-			, PUT_BATCH_AVG_TIME_MS
-			, OFFSET_COMMIT_COMPLETION_RATE
-			, SINK_RECORD_SEND_TOTAL
-			, SINK_RECORD_ACTIVE_COUNT_AVG
-			, OFFSET_COMMIT_COMPLETION_TOTAL
-			, OFFSET_COMMIT_SKIP_RATE
-			, OFFSET_COMMIT_SKIP_TOTAL
-			, SINK_RECORD_READ_TOTAL
-		FROM CDC_CONNECTOR_TASK_SINK CCTS 
-		WHERE CCTS.CONNECTOR_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_TARGET_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}
-									)
-		ORDER BY TIME DESC LIMIT 2;
-	</select>
-	
-	<select id="selectTargetErrorChart" resultType="hashMap">
-		/**
-		* Query ID : selectTargetErrorChart
-		* Description : 타겟 error chart
-		* Author : 윤정
-		**/
-		SELECT
-			TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
-			, TOTAL_RECORD_ERRORS
-			, TOTAL_RECORD_FAILURES
-			, TOTAL_RECORDS_SKIPPED
-		FROM CDC_CONNECTOR_TASK_SINK CCTS 
-		WHERE CCTS.CONNECTOR_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_TARGET_I TTTI 
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									)
-		ORDER BY TIME DESC LIMIT 5;
-	</select>
-	
-	<select id="selectTargetErrorInfo" resultType="hashMap">
-		/**
-		* Query ID : selectTargetErrorInfo
-		* Description : 타겟 error 정보
-		* Author : 윤정
-		**/
-		SELECT
-			(ROW_NUMBER() OVER(ORDER BY TIME DESC)) AS ROWNUM 
-			, LAST_ERROR_TIMESTAMP
-			, TOTAL_ERRORS_LOGGED
-			, DEADLETTERQUEUE_PRODUCE_REQUESTS
-			, DEADLETTERQUEUE_PRODUCE_FAILURES
-			, TOTAL_RECORD_FAILURES
-			, TOTAL_RECORDS_SKIPPED
-			, TOTAL_RECORD_ERRORS
-		FROM CDC_CONNECTOR_TASK_SINK CCTS 
-		WHERE CCTS.CONNECTOR_NAME = (
-									SELECT 
-										TTTI.CONNECT_NM 
-									FROM T_TRANSCNG_TARGET_I TTTI
-									WHERE TTTI.TRANS_ID = #{trans_id}::numeric
-									)
-		ORDER BY TIME DESC LIMIT 2;
-	</select>
+   <select id="selectTargetSinkRecordChart" resultType="hashMap">
+      /**
+      * Query ID : selectTargetSinkRecordChart
+      * Description : 타겟 싱크 중 chart
+      * Author : 윤정
+      **/
+      SELECT 
+         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME  
+         , SINK_RECORD_ACTIVE_COUNT
+         , SINK_RECORD_SEND_TOTAL
+      FROM CDC_CONNECTOR_TASK_SINK CCTS 
+      WHERE CCTS.CONNECTOR_NAME = (
+                           SELECT 
+                              TTTI.CONNECT_NM 
+                           FROM T_TRANSCNG_TARGET_I TTTI 
+                           WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           )
+      ORDER BY TIME DESC 
+      LIMIT 5
+   </select>
+   
+   <select id="selectTargetSinkCompleteChart" resultType="hashMap">
+      /**
+      * Query ID : selectTargetSinkCompleteChart
+      * Description : 타겟 완료 chart
+      * Author : 윤정
+      **/
+      SELECT 
+         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+         , OFFSET_COMMIT_COMPLETION_TOTAL
+         , OFFSET_COMMIT_SKIP_TOTAL
+      FROM CDC_CONNECTOR_TASK_SINK CCTS 
+      WHERE CCTS.CONNECTOR_NAME = (
+                           SELECT 
+                              TTTI.CONNECT_NM 
+                           FROM T_TRANSCNG_TARGET_I TTTI 
+                           WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           )
+      ORDER BY TIME DESC 
+      LIMIT 5
+   </select>
+   
+   <select id="selectTargetSinkInfo" resultType="hashMap">
+      /**
+      * Query ID : selectTargetSinkInfo
+      * Description : 타겟 sink 정보
+      * Author : 윤정
+      **/
+      SELECT 
+    		 C.ROWNUM
+    		 , MAX(TIME) AS TIME
+    		 , SUM(SINK_RECORD_ACTIVE_COUNT) AS SINK_RECORD_ACTIVE_COUNT
+    		 , SUM(PUT_BATCH_AVG_TIME_MS) AS PUT_BATCH_AVG_TIME_MS
+    		 , TRUNC(SUM(OFFSET_COMMIT_COMPLETION_RATE),2) AS OFFSET_COMMIT_COMPLETION_RATE
+    		 , SUM(SINK_RECORD_SEND_TOTAL) AS SINK_RECORD_SEND_TOTAL
+    		 , SUM(SINK_RECORD_ACTIVE_COUNT_AVG) AS SINK_RECORD_ACTIVE_COUNT_AVG
+    		 , SUM(OFFSET_COMMIT_COMPLETION_TOTAL) AS OFFSET_COMMIT_COMPLETION_TOTAL
+    		 , SUM(OFFSET_COMMIT_SKIP_RATE) AS OFFSET_COMMIT_SKIP_RATE
+    		 , SUM(OFFSET_COMMIT_SKIP_TOTAL) AS OFFSET_COMMIT_SKIP_TOTAL
+    		 , SUM(SINK_RECORD_READ_TOTAL) AS SINK_RECORD_READ_TOTAL
+        FROM
+			(
+				(
+    		    SELECT 
+                         1 AS ROWNUM
+                       , '' AS  TIME
+                       , 0 AS SINK_RECORD_ACTIVE_COUNT
+                       , 0 AS PUT_BATCH_AVG_TIME_MS
+                       , 0 AS OFFSET_COMMIT_COMPLETION_RATE
+                       , 0 AS SINK_RECORD_SEND_TOTAL
+                       , 0 AS SINK_RECORD_ACTIVE_COUNT_AVG
+                       , 0 AS OFFSET_COMMIT_COMPLETION_TOTAL
+                       , 0 AS OFFSET_COMMIT_SKIP_RATE
+                       , 0 AS OFFSET_COMMIT_SKIP_TOTAL
+                       , 0 AS SINK_RECORD_READ_TOTAL
+                 UNION ALL
+				SELECT 
+                         2 AS ROWNUM
+                       , '' AS TIME
+                       , 0 AS SINK_RECORD_ACTIVE_COUNT
+                       , 0 AS PUT_BATCH_AVG_TIME_MS
+                       , 0 AS OFFSET_COMMIT_COMPLETION_RATE
+                       , 0 AS SINK_RECORD_SEND_TOTAL
+                       , 0 AS SINK_RECORD_ACTIVE_COUNT_AVG
+                       , 0 AS OFFSET_COMMIT_COMPLETION_TOTAL
+                       , 0 AS OFFSET_COMMIT_SKIP_RATE
+                       , 0 AS OFFSET_COMMIT_SKIP_TOTAL
+                       , 0 AS SINK_RECORD_READ_TOTAL
+				)
+				 UNION ALL
+				(
+				SELECT 
+					   (ROW_NUMBER() OVER(ORDER BY TIME DESC)) AS ROWNUM 
+					   , TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI') AS TIME 
+					   , SINK_RECORD_ACTIVE_COUNT
+					   , PUT_BATCH_AVG_TIME_MS
+				 	   , OFFSET_COMMIT_COMPLETION_RATE
+					   , SINK_RECORD_SEND_TOTAL
+					   , SINK_RECORD_ACTIVE_COUNT_AVG
+					   , OFFSET_COMMIT_COMPLETION_TOTAL
+					   , OFFSET_COMMIT_SKIP_RATE
+					   , OFFSET_COMMIT_SKIP_TOTAL
+				 	   , SINK_RECORD_READ_TOTAL
+				  FROM CDC_CONNECTOR_TASK_SINK CCTS 
+				 WHERE CCTS.CONNECTOR_NAME = (
+												SELECT 
+													   TTTI.CONNECT_NM 
+												  FROM T_TRANSCNG_TARGET_I TTTI 
+												 WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+											  ) 
+				 ORDER BY TIME DESC 
+				 LIMIT 2
+				)
+			)C
+      GROUP BY C.ROWNUM
+      ORDER BY C.ROWNUM
+   </select>
+   
+   <select id="selectTargetErrorChart" resultType="hashMap">
+      /**
+      * Query ID : selectTargetErrorChart
+      * Description : 타겟 error chart
+      * Author : 윤정
+      **/
+      SELECT
+         TO_CHAR(TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME 
+         , TOTAL_RECORD_ERRORS
+         , TOTAL_RECORD_FAILURES
+         , TOTAL_RECORDS_SKIPPED
+      FROM CDC_CONNECTOR_TASK_SINK CCTS 
+      WHERE CCTS.CONNECTOR_NAME = (
+                           SELECT 
+                              TTTI.CONNECT_NM 
+                           FROM T_TRANSCNG_TARGET_I TTTI 
+                           WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                           )
+      ORDER BY TIME DESC 
+      LIMIT 5
+   </select>
+   
+   <select id="selectTargetErrorInfo" resultType="hashMap">
+      /**
+      * Query ID : selectTargetErrorInfo
+      * Description : 타겟 error 정보
+      * Author : 윤정
+      **/
+      SELECT 
+              C.ROWNUM
+            , SUM(LAST_ERROR_TIMESTAMP) AS LAST_ERROR_TIMESTAMP
+            , SUM(TOTAL_ERRORS_LOGGED) AS TOTAL_ERRORS_LOGGED
+            , SUM(DEADLETTERQUEUE_PRODUCE_REQUESTS) AS DEADLETTERQUEUE_PRODUCE_REQUESTS
+            , SUM(DEADLETTERQUEUE_PRODUCE_FAILURES) AS DEADLETTERQUEUE_PRODUCE_FAILURES
+            , SUM(TOTAL_RECORD_FAILURES) AS TOTAL_RECORD_FAILURES
+            , SUM(TOTAL_RECORDS_SKIPPED) AS TOTAL_RECORDS_SKIPPED
+            , SUM(TOTAL_RECORD_ERRORS) AS TOTAL_RECORD_ERRORS
+        FROM ( 
+              SELECT 
+                     1 AS ROWNUM
+                   , 0 AS LAST_ERROR_TIMESTAMP
+                   , 0 AS TOTAL_ERRORS_LOGGED
+                   , 0 AS DEADLETTERQUEUE_PRODUCE_REQUESTS
+                   , 0 AS DEADLETTERQUEUE_PRODUCE_FAILURES
+                   , 0 AS TOTAL_RECORD_FAILURES
+                   , 0 AS TOTAL_RECORDS_SKIPPED
+                   , 0 AS TOTAL_RECORD_ERRORS
+               UNION ALL
+              SELECT 
+                     2 AS ROWNUM
+                   , 0 AS LAST_ERROR_TIMESTAMP
+                   , 0 AS TOTAL_ERRORS_LOGGED
+                   , 0 AS DEADLETTERQUEUE_PRODUCE_REQUESTS
+                   , 0 AS DEADLETTERQUEUE_PRODUCE_FAILURES
+                   , 0 AS TOTAL_RECORD_FAILURES
+                   , 0 AS TOTAL_RECORDS_SKIPPED
+                   , 0 AS TOTAL_RECORD_ERRORS
+               UNION ALL
+               (
+                SELECT
+                       (ROW_NUMBER() OVER(ORDER BY TIME DESC)) AS ROWNUM 
+                      , LAST_ERROR_TIMESTAMP
+                      , TOTAL_ERRORS_LOGGED
+                      , DEADLETTERQUEUE_PRODUCE_REQUESTS
+                      , DEADLETTERQUEUE_PRODUCE_FAILURES
+                      , TOTAL_RECORD_FAILURES
+                      , TOTAL_RECORDS_SKIPPED
+                      , TOTAL_RECORD_ERRORS
+                   FROM CDC_CONNECTOR_TASK_SINK CCTS 
+                  WHERE CCTS.CONNECTOR_NAME = (
+                                              SELECT 
+                                                     TTTI.CONNECT_NM 
+                                                FROM T_TRANSCNG_TARGET_I TTTI
+                                               WHERE TTTI.TRANS_ID = #{trans_id}::numeric
+                                               )
+                  LIMIT 2
+               )
+       ) C
+       GROUP BY C.ROWNUM
+       ORDER BY C.ROWNUM
+   </select>
+   
+   <select id="selectKafkaConnectInfo" resultType="hashMap">
+      /**
+      * Query ID : selectKafkaConnectInfo
+      * Description : kafka connect 정보
+      * Author : 윤정
+      **/
+      SELECT 
+             TTCI.KC_ID
+           , TTCI.KC_IP 
+           , TTCI.KC_NM
+           , TTCI.KC_PORT 
+           , TTCI.EXE_STATUS
+        FROM T_TRANS_CON_INF TTCI 
+             JOIN T_TRANSCNG_I TTI ON TTCI.KC_ID = TTI.KC_ID 
+       WHERE TTI.TRANS_ID = #{trans_id}::numeric
+   </select>
+   
+   <select id="selectKafkaActCngList" resultType="hashMap">
+      /**
+      * Query ID : selectKafkaActCngList
+      * Description : 카프카 Connect 기동 정지 이력 조회
+      * Author : 윤정
+      **/   
+      SELECT 
+            (ROW_NUMBER() OVER()) AS ROWNUM 
+           , TTCI.KC_NM AS CONNECTOR_NAME
+           , TTKACG.ACT_TYPE
+           , TO_CHAR(TTKACG.WRK_DTM, 'YYYY-MM-DD HH24:MI:SS') AS WRK_DTM
+        FROM T_TRANS_KAFKA_ACTSTATE_CNG_G TTKACG
+             JOIN T_TRANS_CON_INF TTCI ON TTKACG.KC_ID = TTCI.KC_ID 
+       WHERE TTKACG.KC_ID = #{kc_id}::numeric
+       ORDER BY TTKACG.WRK_DTM DESC
+       LIMIT 3
+   </select>
+   
+   <select id="selectSourceDbmsInfo" resultType="hashMap">
+      /**
+      * Query ID : selectSourceDbmsInfo
+      * Description : source dbms 정보조회 
+      * Author : 윤정
+      **/  
+       SELECT
+             A.MASTER_GBN , 
+             A.DB_SVR_ID,
+             A.IPADR , 
+             A.PORTNO , 
+             A.SVR_HOST_NM , 
+             COALESCE(B.CNT_SVR_ID,0) AS CNT_SVR_ID,
+             A.DB_CNDT
+        FROM (
+             SELECT
+                    TDI.MASTER_GBN , 
+                    TDI.DB_SVR_ID,
+                    TDI.IPADR , 
+                    TDI.PORTNO , 
+                    TDI.SVR_HOST_NM ,
+                    TDI.DB_CNDT
+               FROM T_DBSVRIPADR_I TDI
+              WHERE TDI.MASTER_GBN = 'M'
+                AND TDI.DB_SVR_ID = ( SELECT DB_SVR_ID FROM T_TRANSCNG_I TTI WHERE TRANS_ID = #{trans_id}::numeric)
+          ) A
+          LEFT JOIN
+          (
+          SELECT B.MASTER_GBN, 
+                 B.DB_SVR_ID,
+                 COUNT(B.DB_SVR_ID) AS CNT_SVR_ID
+            FROM (
+                 SELECT
+                        A.MASTER_GBN ,
+                        A.DB_SVR_ID
+                   FROM T_DBSVRIPADR_I A 
+                  WHERE A.DB_SVR_ID = ( SELECT DB_SVR_ID FROM T_TRANSCNG_I TTI WHERE TRANS_ID = #{trans_id}::numeric)
+                    AND A .MASTER_GBN = 'S'
+            ) B 
+            GROUP BY B.MASTER_GBN , B.DB_SVR_ID
+          ) B
+          ON A.DB_SVR_ID = B.DB_SVR_ID
+   </select>
+  
 </mapper>
