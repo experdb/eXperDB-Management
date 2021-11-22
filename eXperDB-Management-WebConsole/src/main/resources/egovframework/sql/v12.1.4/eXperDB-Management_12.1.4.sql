@@ -112,8 +112,19 @@ CREATE TABLE t_db2pg_exework (
 	src_ip varchar(100) NULL,
 	src_database varchar(50) NULL,
 	tar_ip varchar(100) NULL,
-	tar_database varchar(50) NULL
+	tar_database varchar(50) null,
+	total_table_cnt  numeric NULL,
+	rs_cnt numeric null default 0
 );
+
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.wrk_nm IS '작업명';
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.src_dbms_dscd IS '소스DBMS종류';
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.src_ip IS '소스아이피';
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.src_database IS '소스데이터베이스';
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.tar_ip IS '타겟아이피';
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.tar_database IS '타겟데이터베이스';
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.total_table_cnt IS '총테테이블건수';
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.rs_cnt IS '이관된테이블건수';
 
 
 CREATE TABLE t_db2pg_monitoring (
@@ -127,6 +138,16 @@ CREATE TABLE t_db2pg_monitoring (
 	status varchar(30) NULL DEFAULT NULL::character varying
 );
 
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.table_nm IS '이행테이블';
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.wrk_nm IS '작업명';
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.total_cnt IS '테이블데이터총건수';
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.mig_cnt IS '테이블이행건수';
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.start_time IS '시작시간';
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.end_time IS '종료시간';
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.elapsed_time IS '소요시간';
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.status IS '상태';
+
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0166', '백업 모니터링 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
 -- 아이피 컬럼 크기변경
 alter table t_agtcndt_i alter column ipadr type varchar(100);

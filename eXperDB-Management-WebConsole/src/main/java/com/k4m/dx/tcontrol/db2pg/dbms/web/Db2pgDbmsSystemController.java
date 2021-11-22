@@ -87,10 +87,20 @@ public class Db2pgDbmsSystemController {
 	}
 	
 	@RequestMapping(value = "/db2pgMonitoring.do")
-	public ModelAndView db2pgMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO){
+	public ModelAndView db2pgMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("db2pg/monitoring/db2pgMonitoring");
+		try{
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0166");
+			accessHistoryService.insertHistory(historyVO);
+		
+			mv.setViewName("db2pg/monitoring/db2pgMonitoring");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		return mv;
 	}

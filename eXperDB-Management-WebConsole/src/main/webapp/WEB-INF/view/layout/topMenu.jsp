@@ -703,7 +703,7 @@
 										</li>
 										<li class="nav-item" id="">
 											<a class="nav-link" href="/db2pgMonitoring.do" onClick="fn_cookie(null)" target="main">
-												모니터링
+												<spring:message code="menu.monitoring" />											
 											</a>
 										</li> 
 										<li class="nav-item" id="MN00017">
