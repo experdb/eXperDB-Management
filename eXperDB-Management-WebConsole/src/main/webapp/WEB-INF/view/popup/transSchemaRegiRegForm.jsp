@@ -79,7 +79,7 @@
 			},
 			success : function(result) {
 				if(result == "O"){ //중복 work명 일경우
-					showSwalIcon('<spring:message code="data_transfer.msg28" />', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="eXperDB_CDC.msg28" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				} else if(result == "S"){
 					showSwalIcon('<spring:message code="message.msg106" />', '<spring:message code="common.close" />', '', 'success');
@@ -214,7 +214,7 @@
 
 								<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
 									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" value='<spring:message code="common.registory" />' />
-									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" type="button" onclick="fn_ins_trans_regiConnectTest();" value='<spring:message code="data_transfer.test_connection" />' />
+									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" type="button" onclick="fn_ins_trans_regiConnectTest();" value='<spring:message code="eXperDB_CDC.test_connection" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 								</div>
 							</fieldset>

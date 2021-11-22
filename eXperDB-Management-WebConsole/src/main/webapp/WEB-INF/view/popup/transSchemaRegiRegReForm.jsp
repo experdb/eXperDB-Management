@@ -217,7 +217,7 @@
 
 								<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
 									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" value='<spring:message code="common.modify" />' />
-									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" type="button" onclick="fn_mod_trans_regiConnectTest();" value='<spring:message code="data_transfer.test_connection" />' />
+									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" type="button" onclick="fn_mod_trans_regiConnectTest();" value='<spring:message code="eXperDB_CDC.test_connection" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 								</div>
 							</fieldset>

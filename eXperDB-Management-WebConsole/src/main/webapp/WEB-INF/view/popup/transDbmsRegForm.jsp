@@ -367,7 +367,7 @@
 		<div class="modal-content" style="width:1040px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="data_transfer.target_dbms_register"/>
+					<spring:message code="eXperDB_CDC.target_dbms_register"/>
 				</h4>
 				<div class="card" style="margin-top:10px;border:0px;">
 					<form class="cmxform" name="trasnDbmsInsertPop" id="trasnDbmsInsertPop" method="post">

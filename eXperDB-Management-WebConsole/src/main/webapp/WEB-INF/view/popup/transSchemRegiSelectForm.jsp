@@ -87,7 +87,7 @@
  								if(full.exe_status == "TC001501"){
  									html += "<div class='badge badge-pill badge-success'>";
  									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
- 									html += "	<spring:message code='data_transfer.connecting' />";
+ 									html += "	<spring:message code='eXperDB_CDC.connecting' />";
  								} else {
  									html += "<div class='badge badge-pill badge-danger'>";
  									html += "	<i class='ti-close mr-2'></i>";
@@ -121,14 +121,14 @@
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;margin-bottom:10px;">
-					<spring:message code="data_transfer.default_setting"/> <spring:message code="common.choice"/>
+					<spring:message code="eXperDB_CDC.default_setting"/> <spring:message code="common.choice"/>
 				</h4>
 
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body" style="border: 1px solid #adb5bd;">
 						<div class="form-inline row">
 							<div class="input-group mb-2 mr-sm-2 col-sm-4">
-								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="cho_regi_nm" name="cho_regi_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='data_transfer.default_setting_name'/>'  />
+								<input type="text" class="form-control" style="margin-right: -0.7rem;" id="cho_regi_nm" name="cho_regi_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code='eXperDB_CDC.default_setting_name'/>'  />
 							</div>
 
 							<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_cho_trans_search_schema();" >
@@ -139,7 +139,7 @@
 					<br>
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i><spring:message code="data_transfer.default_setting"/> LIST</p>
+						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i><spring:message code="eXperDB_CDC.default_setting"/> LIST</p>
 						<table id="sel_trans_schem_List" class="table table-hover table-striped system-tlb-scroll" cellspacing="0" width="100%">
 							<thead>
 								<tr class="bg-info text-white">
@@ -147,7 +147,7 @@
 									<th width="150"><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
  									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="50"><spring:message code="data_transfer.port" /></th>
-									<th width="80"><spring:message code="data_transfer.connection_status" /></th>
+									<th width="80"><spring:message code="eXperDB_CDC.connection_status" /></th>
 									<th width="0"><spring:message code="common.modify_datetime" /></th>
 									<th width="0"></th>
 								</tr>

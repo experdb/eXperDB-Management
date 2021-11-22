@@ -27,7 +27,7 @@
 	
 	var ins_tg_kc_ip_msg = '<spring:message code="data_transfer.ip" />';
 	var ins_tg_kc_port_msg = '<spring:message code="data_transfer.port" />';
-	var ins_tg_connectNmMsg = '<spring:message code="data_transfer.connect_name_set" />';
+	var ins_tg_connectNmMsg = '<spring:message code="eXperDB_CDC.connect_name_set" />';
 	var ins_tg_conn_Test_msg = '<spring:message code="dbms_information.conn_Test" />';
 	var ins_tg_kafka_server_nm = '<spring:message code="data_transfer.server_name" />';
 	
@@ -112,16 +112,16 @@
 			showSwalIcon('<spring:message code="errors.required" arguments="'+ ins_tg_connectNmMsg +'" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else if(ins_tg_connect_nm_Chk == "fail"){
-			showSwalIcon('<spring:message code="data_transfer.msg6" />', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="eXperDB_CDC.msg6" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		} else if(nvlPrmSet($("#ins_tg_trans_trg_sys_nm", "#insTargetRegForm").val(), '') == "") {
-			showSwalIcon('<spring:message code="data_transfer.msg26" />', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="eXperDB_CDC.msg26" />', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}
 
 		//전송대상테이블 length 체크
 		if (ins_connector_tg_tableList.rows().data().length <= 0) {
-			showSwalIcon('<spring:message code="data_transfer.msg24"/>', '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon('<spring:message code="eXperDB_CDC.msg24"/>', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 
@@ -154,7 +154,7 @@
 												<th class="table-text-align-c">Kafka-Connect <spring:message code="data_transfer.server_name" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.ip" /></th>
 												<th class="table-text-align-c"><spring:message code="data_transfer.port" /></th>
-												<th class="table-text-align-c"><spring:message code="data_transfer.connection_status" /></th>
+												<th class="table-text-align-c"><spring:message code="eXperDB_CDC.connection_status" /></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -174,7 +174,7 @@
 													<input type="text" class="form-control form-control-xsm" maxlength="5" id="ins_tg_kc_port" name="ins_tg_kc_port" onblur="this.value=this.value.trim()" onKeyUp="chk_Number(this);" disabled tabindex=2 />						
 												</td>
 												<td class="table-text-align-c" id="ins_tg_kc_connect_td">
-													<%-- <input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="data_transfer.test_connection" />' />
+													<%-- <input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" type="submit" value='<spring:message code="eXperDB_CDC.test_connection" />' />
 												 --%>
 												</td>											
 											</tr>					
@@ -198,10 +198,10 @@
 								<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 									<label for="ins_tg_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.connect_name_set" />
+										<spring:message code="eXperDB_CDC.connect_name_set" />
 									</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control form-control-xsm" id="ins_tg_connect_nm" name="ins_tg_connect_nm" maxlength="50" placeholder='<spring:message code='data_transfer.msg18'/>' onblur="this.value=this.value.trim()" tabindex=3 />
+										<input type="text" class="form-control form-control-xsm" id="ins_tg_connect_nm" name="ins_tg_connect_nm" maxlength="50" placeholder='<spring:message code='eXperDB_CDC.msg18'/>' onblur="this.value=this.value.trim()" tabindex=3 />
 									</div>
 									<div class="col-sm-2">
 										<button type="button" class="btn btn-inverse-danger btn-sm btn-icon-text" onclick="fn_ins_target_ConNmCheck();"><spring:message code="common.overlap_check" /></button>
@@ -256,14 +256,14 @@
 								<div class="form-group row div-form-margin-z" id="ins_target_trans_active_div" style="display:none;">
 									<div class="col-sm-12">
 										<div class="alert alert-info" style="margin-top:5px;margin-bottom:0px;" >
-											<spring:message code="data_transfer.msg27" />
+											<spring:message code="eXperDB_CDC.msg27" />
 										</div>
 									</div>
 								</div>											
 <%-- 
 								<div class="form-group row" style="margin-bottom:-20px;">
 									<div class="col-sm-12">
-										<div class="alert alert-danger" style="margin-top:5px;" id="ins_trans_Check_alert-danger"><spring:message code="data_transfer.msg25" /></div>
+										<div class="alert alert-danger" style="margin-top:5px;" id="ins_trans_Check_alert-danger"><spring:message code="eXperDB_CDC.msg25" /></div>
 									</div>
 								</div>
   --%>
@@ -273,13 +273,13 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title" style="margin-bottom:3px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.topicList" />
+													<spring:message code="eXperDB_CDC.topicList" />
 												</h4>
  	
 									 			<table id="ins_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="350px" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="350px" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
 															<th width="0%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
 															<th width="0%" class="dt-center" >regi_id</th>
 														</tr>
@@ -330,13 +330,13 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title" style="margin-bottom:3px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.transfer_topic" />
+													<spring:message code="eXperDB_CDC.transfer_topic" />
 												</h4>
 	
 								 				<table id="ins_connector_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="350px" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="350px" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
 															<th width="0%" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
 															<th width="0%" class="dt-center" >regi_id</th>	
 														</tr>

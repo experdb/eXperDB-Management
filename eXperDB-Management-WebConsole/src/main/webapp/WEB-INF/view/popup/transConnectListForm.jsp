@@ -63,7 +63,7 @@
 						if(full.exe_status == "TC001501"){
 							html += "<div class='badge badge-pill badge-success'>";
 							html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
-							html += "	<spring:message code='data_transfer.connecting' />";
+							html += "	<spring:message code='eXperDB_CDC.connecting' />";
 						} else {
 							html += "<div class='badge badge-pill badge-danger'>";
 							html += "	<i class='ti-close mr-2'></i>";
@@ -111,7 +111,7 @@
 							if(full.exe_status == "TC001501"){
 								html += "<div class='badge badge-pill badge-success'>";
 								html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
-								html += "	<spring:message code='data_transfer.connecting' />";
+								html += "	<spring:message code='eXperDB_CDC.connecting' />";
 							} else {
 								html += "<div class='badge badge-pill badge-danger'>";
 								html += "	<i class='ti-close mr-2'></i>";
@@ -173,7 +173,7 @@
 											<th width="150"><spring:message code="etc.etc04"/></th>
 		 									<th width="93"><spring:message code="data_transfer.ip" /></th>
 											<th width="70"><spring:message code="data_transfer.port" /></th>
-											<th width="80"><spring:message code="data_transfer.connection_status" /></th>
+											<th width="80"><spring:message code="eXperDB_CDC.connection_status" /></th>
 											<th width="0"></th>
 										</tr>
 									</thead>
@@ -189,7 +189,7 @@
 											<th width="150"><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
 			 								<th width="90"><spring:message code="data_transfer.ip" /></th>
 											<th width="70"><spring:message code="data_transfer.port" /></th>
-											<th width="80"><spring:message code="data_transfer.connection_status" /></th>
+											<th width="80"><spring:message code="eXperDB_CDC.connection_status" /></th>
 											<th width="0"></th>
 										</tr>
 									</thead>

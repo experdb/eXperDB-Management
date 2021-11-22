@@ -447,7 +447,7 @@
 				</div>
 			</div>
 			<div class="mapping_rt">
-				<p class="tit"><spring:message code="data_transfer.transfer_table"/></p>
+				<p class="tit"><spring:message code="eXperDB_CDC.transfer_table"/></p>
 				<div class="overflow_area">
 					<table id="connectorTableList" class="display" cellspacing="0" width="100%">
 						<thead>

@@ -190,7 +190,7 @@
 					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
 					fn_trans_com_con_pop_search();
 				}else{
-					msgVale = "<spring:message code='data_transfer.default_setting' />";
+					msgVale = "<spring:message code='eXperDB_CDC.default_setting' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -207,7 +207,7 @@
 		<div class="modal-content" style="width:1300px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="data_transfer.default_setting"/>
+					<spring:message code="eXperDB_CDC.default_setting"/>
 				</h4>
 		
 				<div class="card" style="margin-top:10px;border:0px;">					
@@ -234,13 +234,13 @@
 					</div>
 					
 					<div class="card-body" style="border: 1px solid #adb5bd;">
-						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i><spring:message code="data_transfer.default_setting"/> LIST</p>
+						<p class="card-description"><i class="item-icon fa fa-dot-circle-o"></i><spring:message code="eXperDB_CDC.default_setting"/> LIST</p>
 						
 						<table id="transComConSetPopList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 							<thead>
 								<tr class="bg-info text-white">
 									<th width="30"><spring:message code="common.no" /></th>
-									<th width="150"><spring:message code="data_transfer.default_setting_name" /></th>
+									<th width="150"><spring:message code="eXperDB_CDC.default_setting_name" /></th>
 									<th width="150"><spring:message code="eXperDB_CDC.heartbeat_regist_yn" /></th>
 									<th width="120">plugin.name</th>
  									<th width="100">heartbeat.interval.ms</th>

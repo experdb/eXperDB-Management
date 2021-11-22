@@ -16,7 +16,7 @@
 	 * trans dbms 삭제버튼 클릭시
 	 ******************************************************** */
 	function fn_trans_dbms_del_confirm(){
-		confile_title = '<spring:message code="data_transfer.btn_title01" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		confile_title = '<spring:message code="eXperDB_CDC.btn_title01" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 		$('#con_multi_gbn', '#findConfirmMulti').val("trans_dbms_del");
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="message.msg162" />');
@@ -53,7 +53,7 @@
 					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
 					fn_trans_dbms_pop_search();
 				}else{
-					msgVale = "<spring:message code='data_transfer.btn_title01' />";
+					msgVale = "<spring:message code='eXperDB_CDC.btn_title01' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
@@ -70,7 +70,7 @@
 		<div class="modal-content" style="width:1300px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					<spring:message code="data_transfer.btn_title01"/>
+					<spring:message code="eXperDB_CDC.btn_title01"/>
 				</h4>
 		
 				<div class="card" style="margin-top:10px;border:0px;">

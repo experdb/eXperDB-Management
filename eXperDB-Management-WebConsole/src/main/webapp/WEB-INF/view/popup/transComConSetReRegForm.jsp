@@ -193,7 +193,7 @@
 										<div class="form-group row" style="margin-top:-20px;">										
 											<label for="mod_com_trans_cng_nm" class="col-sm-3 col-form-label pop-label-index">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.default_setting_name" />
+												<spring:message code="eXperDB_CDC.default_setting_name" />
 											</label>
 											<div class="col-sm-9">
 												<input hidden="hidden" />
@@ -206,7 +206,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													plugin.name
-													<span style="width: 600px;"><spring:message code="help.data_transfer_com_set_msg01" /></span>
+													<span style="width: 600px;"><spring:message code="help.eXperDB_CDC_com_set_msg01" /></span>
 												</a>
 											</label>
 											<div class="col-sm-9">
@@ -220,7 +220,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													heartbeat.interval.ms
-													<span style="width: 800px;"><spring:message code="help.data_transfer_com_set_msg02" /></span>
+													<span style="width: 800px;"><spring:message code="help.eXperDB_CDC_com_set_msg02" /></span>
 												</a>
 											</label>
 											<div class="col-sm-9">
@@ -234,7 +234,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													heartbeat.action.query
-													<span style="width: 800px;"><spring:message code="help.data_transfer_com_set_msg03" /></span>
+													<span style="width: 800px;"><spring:message code="help.eXperDB_CDC_com_set_msg03" /></span>
 												</a>
 		
 											</label>
@@ -249,7 +249,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													max.batch.size
-													<span style="width: 600px;"><spring:message code="help.data_transfer_com_set_msg04" /></span>
+													<span style="width: 600px;"><spring:message code="help.eXperDB_CDC_com_set_msg04" /></span>
 												</a>
 		
 											</label>
@@ -261,7 +261,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													max.queue.size
-													<span style="width: 400px;"><spring:message code="help.data_transfer_com_set_msg05" /></span>
+													<span style="width: 400px;"><spring:message code="help.eXperDB_CDC_com_set_msg05" /></span>
 												</a>
 		
 											</label>
@@ -276,7 +276,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													offset.flush.interval.ms
-													<span style="width: 600px;"><spring:message code="help.data_transfer_com_set_msg06" /></span>
+													<span style="width: 600px;"><spring:message code="help.eXperDB_CDC_com_set_msg06" /></span>
 												</a>
 											</label>
 											<div class="col-sm-3">
@@ -287,7 +287,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													offset.flush.timeout.ms
-													<span style="width: 550px;"><spring:message code="help.data_transfer_com_set_msg07" /></span>
+													<span style="width: 550px;"><spring:message code="help.eXperDB_CDC_com_set_msg07" /></span>
 												</a>
 											</label>
 											<div class="col-sm-3">
@@ -301,7 +301,7 @@
 												<a href="#" class="tip" onclick="return false;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
 													transform route <spring:message code="user_management.use_yn" />
-													<span style="width: 550px;"><spring:message code="help.data_transfer_com_set_msg08" /></span>
+													<span style="width: 550px;"><spring:message code="help.eXperDB_CDC_com_set_msg08" /></span>
 												</a>
 											</label>
 											<div class="col-sm-9">

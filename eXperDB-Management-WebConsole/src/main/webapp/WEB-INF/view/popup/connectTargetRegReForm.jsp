@@ -106,7 +106,7 @@
 								<div class="form-group row" style="margin-bottom:0px;margin-top:-10px;">
 									<label for="mod_tg_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="data_transfer.connect_name_set" />
+										<spring:message code="eXperDB_CDC.connect_name_set" />
 									</label>
 									<div class="col-sm-8">
 										<input type="text" class="form-control form-control-xsm" id="mod_tg_connect_nm" name="mod_tg_connect_nm" maxlength="50" readonly />
@@ -165,7 +165,7 @@
 								<div class="form-group row div-form-margin-z" id="mod_target_trans_active_div" style="display:none;">
 									<div class="col-sm-12">
 										<div class="alert alert-info" style="margin-top:5px;margin-bottom:0px;" >
-											<spring:message code="data_transfer.msg27" />
+											<spring:message code="eXperDB_CDC.msg27" />
 										</div>
 									</div>
 								</div>	
@@ -176,13 +176,13 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title" style="margin-bottom:3px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.topicList" />
+													<spring:message code="eXperDB_CDC.topicList" />
 												</h4>
  	
 									 			<table id="mod_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="350" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="350" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
 															<th width="0" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>
 															<th width="0" class="dt-center" >regi_id</th>
 														</tr>
@@ -233,13 +233,13 @@
 											<div class="card-body" style="padding-left:0px;padding-right:0px;">
 												<h4 class="card-title" style="margin-bottom:3px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													<spring:message code="data_transfer.transfer_topic" />
+													<spring:message code="eXperDB_CDC.transfer_topic" />
 												</h4>
 	
 								 				<table id="mod_connector_tg_topicList" class="table table-hover system-tlb-scroll" style="width:100%;">
 													<thead>
 														<tr class="bg-info text-white">
-															<th width="350px" class="dt-center" ><spring:message code="data_transfer.topic_nm" /></th>	
+															<th width="350px" class="dt-center" ><spring:message code="eXperDB_CDC.topic_nm" /></th>	
 															<th width="0" class="dt-center" ><spring:message code="eXperDB_CDC.schema_registr_nm" /></th>	
 															<th width="0" class="dt-center" >regi_id</th>
 														</tr>
