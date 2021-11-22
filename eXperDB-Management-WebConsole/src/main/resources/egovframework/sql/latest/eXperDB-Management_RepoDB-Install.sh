@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "****************************************************"
-echo "eXperDB-Management-12.1.4 Repository DB Install"
+echo "eXperDB-Management-13.0.0 Repository DB Install"
 echo "****************************************************"
 
 echo "**CREATE USER experdb**"
