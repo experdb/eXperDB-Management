@@ -216,9 +216,9 @@ public class DxT030 extends SocketCtl {
 
         if(!R_FILENAME.equals("")) sbRestoreCmd.append(SPACE).append(FILENAME);
         
-		sbRestoreCmd.append(SPACE).append(">>");
+		//sbRestoreCmd.append(SPACE).append(">>");
         //sbRestoreCmd.append(SPACE).append("| tee -a");
-		sbRestoreCmd.append(SPACE).append(logDir).append(strLogFileName);
+		//sbRestoreCmd.append(SPACE).append(logDir).append(strLogFileName);
 		
 		socketLogger.info("dump restore CMD : " + sbRestoreCmd);
 
