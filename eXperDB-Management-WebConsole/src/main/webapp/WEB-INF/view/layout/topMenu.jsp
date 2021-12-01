@@ -840,6 +840,25 @@
 												</li>
 											</ul>
 										</div>
+										<div class="col-group col-md-3" id="MN00022">
+											<p class="category-heading">
+												<b><spring:message code="encrypt_backupRestore.msg01"/></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0002201">
+													<a class="nav-link" href="/encryptBackup.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="encrypt_backupRestore.msg02"/>
+													</a>
+												</li>
+											</ul>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0002202">
+													<a class="nav-link" href="/encryptRestore.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="encrypt_backupRestore.msg03"/>
+													</a>
+												</li>
+											</ul>
+										</div>
 									</div>
 								</div>
 							</li>

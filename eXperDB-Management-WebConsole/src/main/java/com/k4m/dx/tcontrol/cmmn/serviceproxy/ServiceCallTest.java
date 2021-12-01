@@ -1,25 +1,51 @@
 package com.k4m.dx.tcontrol.cmmn.serviceproxy;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.k4m.dx.tcontrol.cmmn.crypto.Encrypter;
+import com.k4m.dx.tcontrol.cmmn.crypto.Generator;
+import com.k4m.dx.tcontrol.cmmn.rest.RequestResult;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSiteStatCondition;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuthCredentialToken;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupFileHeader;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKey;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
@@ -35,6 +61,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysMultiValueConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemStatus;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
+import com.thoughtworks.xstream.mapper.Mapper;
 
 
 /**
@@ -62,6 +89,8 @@ public class ServiceCallTest {
 		restPort = 9443;
 		
 		restIp = "192.168.56.112";
+		
+		restIp = "192.168.50.122";
 
 		
 		String loginId = "";
@@ -79,10 +108,22 @@ public class ServiceCallTest {
 
 
 		String strTocken = "vWSxujcVJbRz1L2o0sAQei3SAlCX9n4l1WT/EfhGrcI=";
+		
+		strTocken = "2XTiDEFQmhAMQhwjiivXdXXA0iVwpFYUwt0epARWCao=";
+		strTocken = "GRDh174XeuXFu5mVqsG7DqarBORbIlbSwlo6MF06TII=";
 
-
+		
 		ServiceCallTest test = new ServiceCallTest();
-	
+		
+		// encrypt backup
+		test.encryptBackup(restIp, restPort, strTocken, loginId, entityId);
+		
+		//encrypt restore
+//		test.encryptRestore(restIp, restPort, strTocken, loginId, entityId);
+		
+		// encrypt file check
+//		test.encryptRestoreFileCheck();
+		
 		//test.loginTest(restIp, restPort, loginId, password);
 		
 		//마스터키 로드
@@ -112,7 +153,7 @@ public class ServiceCallTest {
 		//test.selectEntityList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//에이전트 정보
-		//test.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);
+//		test.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);
 		
 		// 보호정책상세 > 암호화 키 리스트
 		//test.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
@@ -121,7 +162,7 @@ public class ServiceCallTest {
 		//test.selectProfileProtectionVersion(restIp, restPort, strTocken, loginId, entityId);
 		
 		//감사로그 > 암복호화로그
-		//test.selectAuditLogSiteList(restIp, restPort, strTocken, loginId, entityId);
+//		test.selectAuditLogSiteList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//감사로그 > 관리서버 감사로그
 		//test.selectAuditLogList(restIp, restPort, strTocken, loginId, entityId);
@@ -3058,6 +3099,236 @@ public class ServiceCallTest {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	/**
+	 * Encrypt Backup
+	 * @throws Exception 
+	 * 
+	 */
+	private JSONObject encryptBackup(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception{
+		JSONObject result = new JSONObject();
+//		RequestResult result = new RequestResult();
+//		String result = null;
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+		
+		String strService = SystemCode.ServiceName.BACKUP_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.BACKUPDATA;
+		
+		BackupFileHeader bfh = new BackupFileHeader();
+		
+		bfh.setPassword("experdb12#");
+		bfh.setBackupType("FULL");
+//		bfh.setBackupFilename("C:\\Users\\yeeun\\Desktop\\work\\eXperDB-Encrypt\\10.edk");
+		bfh.setBackupFilename("C:\\Users\\yeeun\\Desktop\\work\\eXperDB-Encrypt\10.edk");
+		
+		HashMap param = new HashMap();
+		
+		param.put("chkKey", true);
+		param.put("chkPolicy", true);
+		param.put("chkServer", true);
+		param.put("chkAdminUser", true);
+		param.put("chkConfig", true);
+		
+		if((boolean) param.get("chkKey")){
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_CRYPTO_KEY);
+		}
+		if((boolean) param.get("chkPolicy")){
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_POLICY);
+		}
+		if((boolean) param.get("chkServer")){
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_SERVER);
+		}
+		if((boolean) param.get("chkAdminUser")){			
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_ADMIN_USER);
+		}
+		if((boolean) param.get("chkConfig")){
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_CONFIG);
+		}
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(bfh.getClass()), bfh.toJSONString());
+		
+		System.out.println("before send body : " + body);
+		
+		String parameters;
+		try {
+			parameters = TypeUtility.makeRequestBody(body);
+
+			HashMap header = new HashMap();
+			header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+			header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+			header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+			
+			System.out.println("call header : " + header);
+			
+//			result = api.callService(strService, strCommand, header, parameters);
+			result = api.callEncryptBackupService(strService, strCommand, header, parameters);
+//			result = api.callEncryptBackupService3(strService, strCommand, header, parameters);
+		} catch (InvalidMediaTypeException e) {
+			System.out.println("invalid media type exception : " + e);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("result : " + result);
+		
+		return result;
+	}
+	
+	/**
+	 * Encrypt Restore
+	 * @throws Exception 
+	 * 
+	 */
+	public RequestResult encryptRestore(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception{
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+		
+		String strService = SystemCode.ServiceName.BACKUP_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.RESTOREDATA;
+		
+		BackupFileHeader bfh = new BackupFileHeader();
+		
+		HashMap param = new HashMap();
+		
+		param.put("chkKey", true);
+		param.put("chkPolicy", true);
+		param.put("chkServer", true);
+		param.put("chkAdminUser", true);
+		param.put("chkConfig", true);
+		param.put("password", "200");
+		
+		
+		bfh.setPassword((String) param.get("password"));
+		bfh.setBackupFilename("200.edk");
+		
+		// 테스트를 위한 file -> multipartfile 변환
+		File file = new File("C:\\Users\\yeeun\\Desktop\\work\\eXperDB-Encrypt\\200.edk");
+		FileItem fileItem = new DiskFileItem("mFile", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
+		InputStream input = new FileInputStream(file);
+		OutputStream os = fileItem.getOutputStream();
+		IOUtils.copy(input, os);
+		
+		MultipartFile mFile = new CommonsMultipartFile(fileItem);
+		
+//		File file = new File(mFile.getOriginalFilename());
+//		mFile.transferTo(file);
+		
+		if((boolean) param.get("chkKey")){
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_CRYPTO_KEY);
+		}
+		if((boolean) param.get("chkPolicy")){
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_POLICY);
+		}
+		if((boolean) param.get("chkServer")){
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_SERVER);
+		}
+		if((boolean) param.get("chkAdminUser")){			
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_ADMIN_USER);
+		}
+		if((boolean) param.get("chkConfig")){
+			int includeBit = bfh.getIncludedBits();
+			bfh.setIncludedBits(includeBit | SystemCode.BitMask.BACKUP_INCLUDE_CONFIG);
+		}
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(bfh.getClass()), bfh.toJSONString());
+		
+//		String parameters = TypeUtility.makeRequestBody(body);
+		
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+		
+		
+		RequestResult result = api.callEncryptRestoreService(strService, strCommand, header, body, mFile);
+		
+		System.out.println("** result code : " + result.getResultCode());
+		System.out.println("** result message : " + result.getResultMessage());
+		
+//		String resultCode = (String) resultJson.get("resultCode");
+//		String resultMessage = (String) resultJson.get("resultMessage");
+		
+		
+		return result;
+	}
+	
+	public void encryptRestoreFileCheck() throws Exception{
+		File file = new File("C:\\Users\\yeeun\\Desktop\\work\\eXperDB-Encrypt\\200.edk");
+		BackupFileHeader header = new BackupFileHeader();
+		
+		HashMap param = new HashMap();
+		
+		param.put("chkKey", true);
+		param.put("chkPolicy", true);
+		param.put("chkServer", true);
+		param.put("chkAdminUser", true);
+		param.put("chkConfig", true);
+		
+		String password = "200";
+		
+		BufferedReader inFile = new BufferedReader(new FileReader(file));
+		String headerString = inFile.readLine();
+		String headerHmac = inFile.readLine();
+		
+		String dataEncHmac = inFile.readLine();
+		String dataEnc = inFile.readLine();
+		
+		System.out.println("header1 : " + headerString);
+		System.out.println("headerHmac : " + headerHmac);
+		System.out.println("dataEncHmac : " + dataEncHmac);
+		System.out.println("dataEnc : " + dataEnc);
+		
+		GsonBuilder builder = new GsonBuilder();
+		builder.setPrettyPrinting();
+		Gson gson = builder.create();
+		header = gson.fromJson(headerString, BackupFileHeader.class);
+		
+		password = (password + header.getFileUid()).substring(0, 16);
+		
+		if(!headerHmac.equals(Encrypter.hmac(headerString, password)))	{
+			System.out.println("Header MAC integrity validation failed. Check the backup file password or the unauthorized change of backup file contents.");
+		}
+		
+		if(!dataEncHmac.equals(Encrypter.hmac(dataEnc, password))){
+			System.out.println("Data MAC integrity validation failed. Check the unauthorized change of backup file contents.");
+		}
+		
+		if(!header.ContainsAdminUser() && (boolean) param.get("chkAdminUser")){
+			System.out.println("not contains admin user info in file");	
+		}
+		
+		if(!header.ContainsCryptoKey() && (boolean) param.get("chkKey")){
+			System.out.println("not contains key in file");
+		}
+		
+		if(!header.ContainsPolicy() && (boolean) param.get("chkKey")){
+			System.out.println("not contains policy in file");
+		}
+		
+		if(!header.ContainsServer() && (boolean) param.get("chkServer")){
+			System.out.println("not contains server in file");
+		}
+		
+		if(!header.ContainsBackupLog() && (boolean) param.get("chkConfig")){
+			System.out.println("not contains config info in file");
+		}
+		
+		
+//		String headerHmacComputed = ComputeHmac(headerString, password);
+		
 	}
 	
 }
