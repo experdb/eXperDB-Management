@@ -61,12 +61,11 @@ public class BackupRestoreController {
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0002201");	
-			// 메뉴 권한 내용 아직 수정하지 않아 일단 풀어둠
-//			if(menuAut.get(0).get("read_aut_yn").equals("N")){
-//				mv.setViewName("error/autError");
-//			}else{
-//				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
-//				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
@@ -75,7 +74,7 @@ public class BackupRestoreController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.setViewName("encrypt/backupRestore/encryptBackup");
-//			}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,12 +112,11 @@ public class BackupRestoreController {
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0002202");	
-			// 메뉴 권한 내용 아직 수정하지 않아 일단 풀어둠
-//			if(menuAut.get(0).get("read_aut_yn").equals("N")){
-//				mv.setViewName("error/autError");
-//			}else{
-//				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
-//				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
@@ -127,7 +125,7 @@ public class BackupRestoreController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.setViewName("encrypt/backupRestore/encryptRestore");
-//			}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

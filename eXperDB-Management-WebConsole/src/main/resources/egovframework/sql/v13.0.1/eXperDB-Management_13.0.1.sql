@@ -11,13 +11,13 @@ INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN0002202', '관리 데이터 복원', 'MN00022', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
+--encrypt backup/restore 기본 사용자 권한 설정
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 select nextval('q_usrmnuaut_i_01'), 'admin',
        (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN00022' AND mnu_nm = '백업/복원'),
        'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
 
---encrypt backup/restore 기본 사용자 권한 설정
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 select nextval('q_usrmnuaut_i_01'), 'admin',

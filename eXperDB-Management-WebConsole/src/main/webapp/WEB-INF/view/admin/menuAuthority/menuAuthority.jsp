@@ -127,7 +127,7 @@ $(window.document).ready(function() {
     		},
     		success : function(result) {
   				for(var i = 0; i<result.length; i++){  
-  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020"){
+  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00022"){
   	     				//읽기권한
   						if(result[i].read_aut_yn == "Y"){	  									
   							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -201,7 +201,7 @@ $(function() {
 	    		},
 	    		success : function(result) {
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020"){
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00022"){
       						//읽기권한
 	  						if(result[i].read_aut_yn == "Y"){	  									
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -367,7 +367,7 @@ $(function() {
 		
 		//Encrypt 선택 전체 체크박스
 		$("#encrypt").click(function() { 
-			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001301","MN0001302","MN0001303","MN0001304","MN0001401");
+			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001301","MN0001302","MN0001303","MN0001304","MN0001401", "MN0002201", "MN0002202");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
@@ -381,6 +381,7 @@ $(function() {
 				document.getElementById("securitykey").checked = true;
 				document.getElementById("auditlog").checked = true;
 				document.getElementById("setting").checked = true;
+				document.getElementById("backupRestore").checked = true;
 			} else {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = false;
@@ -389,6 +390,7 @@ $(function() {
 				document.getElementById("securitykey").checked = false;
 				document.getElementById("auditlog").checked = false;
 				document.getElementById("setting").checked = false;
+				document.getElementById("backupRestore").checked = false;
 			}
 		});
 		
@@ -444,6 +446,27 @@ $(function() {
 				 return false;
 			 }
 			if ($("#setting").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+
+		//백업/복원 선택 전체 체크박스
+		$("#backupRestore").click(function() { 
+			var array = new Array("MN0002201","MN0002202");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
+				 return false;
+			 }
+			if ($("#backupRestore").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
 					document.getElementById("w_"+array[i]).checked = true;
@@ -1237,7 +1260,7 @@ function fn_search(){
 								<!-- Backup 권한 추가 끝 -->
 													
 								<tr class="encrypt">
-									<th scope="row" rowspan="10">
+									<th scope="row" rowspan="12">
 										<div class="inp_chk">
 											<input type="checkbox" id="encrypt" name="encrypt"/>
 											<label for="encrypt">Encrypt</label>
@@ -1424,7 +1447,43 @@ function fn_search(){
 											<label for="w_MN0001401"></label>
 										</div>
 									</td>
-								</tr>	
+								</tr>
+								<tr class="encrypt">
+									<td scope="row" rowspan="2">
+										<div class="inp_chk">
+											<input type="checkbox" id="backupRestore" name="backupRestore"/>
+											<label for="setting"><spring:message code="encrypt_backupRestore.msg01" /></label>
+										</div>
+									</td>
+									<td><spring:message code="encrypt_backupRestore.msg02" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0002201" name="r_mnu_nm" value="MN0002201"/>
+											<label for="r_MN0002201"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0002201" name="w_mnu_nm" />
+											<label for="w_MN0002201"></label>
+										</div>
+									</td>	
+								</tr>
+								<tr class="encrypt">
+									<td><spring:message code="encrypt_backupRestore.msg03" /></td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0002202" name="r_mnu_nm" value="MN0002202"/>
+											<label for="r_MN0002202"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0002202" name="w_mnu_nm" />
+											<label for="w_MN0002202"></label>
+										</div>
+									</td>	
+								</tr>		
 								<tr>
 									<th scope="row" rowspan="3">
 										<div class="inp_chk">

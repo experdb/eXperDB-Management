@@ -9,18 +9,12 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
@@ -33,12 +27,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.k4m.dx.tcontrol.cmmn.crypto.Encrypter;
-import com.k4m.dx.tcontrol.cmmn.crypto.Generator;
 import com.k4m.dx.tcontrol.cmmn.rest.RequestResult;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
@@ -61,7 +52,6 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysMultiValueConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemStatus;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
-import com.thoughtworks.xstream.mapper.Mapper;
 
 
 /**
@@ -74,6 +64,7 @@ import com.thoughtworks.xstream.mapper.Mapper;
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
 *  2018.04.23   박태혁 최초 생성
+*  2021.12.01	신예은  Encrypt backup/restore 기능을 위한  service call test code 작성
 *      </pre>
 */
 

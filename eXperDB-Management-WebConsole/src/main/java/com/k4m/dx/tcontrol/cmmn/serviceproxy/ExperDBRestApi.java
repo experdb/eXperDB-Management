@@ -289,8 +289,6 @@ public class ExperDBRestApi {
 		
 		String responseString = executeHttpPostReturnString(httpClient, post);
 		
-		System.out.println(">>> responseString : " + responseString);
-		
 		httpClient.close();
 		tempfile.deleteOnExit();
 		
