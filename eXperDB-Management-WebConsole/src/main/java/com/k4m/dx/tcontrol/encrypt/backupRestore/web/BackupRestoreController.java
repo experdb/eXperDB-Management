@@ -68,7 +68,7 @@ public class BackupRestoreController {
 				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0173");
+				historyVO.setExe_dtl_cd("DX-T0176");
 				historyVO.setMnu_id(60);
 				accessHistoryService.insertHistory(historyVO);
 				
@@ -119,7 +119,7 @@ public class BackupRestoreController {
 				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0174");
+				historyVO.setExe_dtl_cd("DX-T0177");
 				historyVO.setMnu_id(61);
 				accessHistoryService.insertHistory(historyVO);
 				
@@ -148,7 +148,7 @@ public class BackupRestoreController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0173_01");
+			historyVO.setExe_dtl_cd("DX-T0176_01");
 			historyVO.setMnu_id(60);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e1) {
@@ -259,7 +259,7 @@ public class BackupRestoreController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0174_01");
+			historyVO.setExe_dtl_cd("DX-T0177_01");
 			historyVO.setMnu_id(61);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e1) {
