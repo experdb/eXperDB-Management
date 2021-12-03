@@ -147,8 +147,6 @@ COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.end_time IS '종료시�
 COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.elapsed_time IS '소요시간';
 COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.status IS '상태';
 
-INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0166', '백업 모니터링 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
-
 -- 아이피 컬럼 크기변경
 alter table t_agtcndt_i alter column ipadr type varchar(100);
 alter table t_db2pg_sys_inf alter column ipadr type varchar(100);

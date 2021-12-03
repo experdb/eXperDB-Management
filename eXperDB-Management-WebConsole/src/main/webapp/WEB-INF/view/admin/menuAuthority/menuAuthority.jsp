@@ -127,7 +127,7 @@ $(window.document).ready(function() {
     		},
     		success : function(result) {
   				for(var i = 0; i<result.length; i++){  
-  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00022"){
+  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00021" && result[i].mnu_cd != "MN00022"){
   	     				//읽기권한
   						if(result[i].read_aut_yn == "Y"){	  									
   							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -201,7 +201,7 @@ $(function() {
 	    		},
 	    		success : function(result) {
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00022"){
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00021" && result[i].mnu_cd != "MN00022"){
       						//읽기권한
 	  						if(result[i].read_aut_yn == "Y"){	  									
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -502,7 +502,7 @@ $(function() {
 		
 		//Migration 선택 전체 체크박스
 		$("#migration").click(function() { 
-			var array = new Array("MN00015","MN00016","MN00017");
+			var array = new Array("MN00015","MN00016","MN00017","MN00023","MN00024");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
@@ -547,7 +547,7 @@ $(function() {
 		/* 백업메뉴 권한체크 추가 2021-04-13 변승우 */		
 		//BnR 선택 전체 체크박스 
 		$("#bnr").click(function() { 
-			var array = new Array("MN0001901","MN0001902","MN0001903","MN0002001","MN0002002");
+			var array = new Array("MN0001901","MN0001902","MN0001903","MN0002001","MN0002002","MN0002101","MN0002102");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
@@ -560,6 +560,7 @@ $(function() {
 				}
 				document.getElementById("bnrSetting").checked = true;
 				document.getElementById("backup").checked = true;
+				document.getElementById("recovery").checked = true;
 			} else {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = false;
@@ -567,6 +568,7 @@ $(function() {
 				}
 				document.getElementById("bnrSetting").checked = false;
 				document.getElementById("backup").checked = false;
+				document.getElementById("recovery").checked = false;
 			}
 		});	
 		
@@ -601,6 +603,27 @@ $(function() {
 				 return false;
 			 }
 			if ($("#backup").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});	
+		
+		//Recovery 선택 전체 체크박스
+		$("#recovery").click(function() { 
+			var array = new Array("MN0002101","MN0002102");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 showSwalIcon('<spring:message code="message.msg165" />', '<spring:message code="common.close" />', '', 'error');
+				 return false;
+			 }
+			if ($("#recovery").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
 					document.getElementById("w_"+array[i]).checked = true;
@@ -1165,18 +1188,19 @@ function fn_search(){
 																		
 								<!-- Backup 권한 추가 2021-04-13 변승우 -->
 								<tr class="bnr">
-									<th scope="row" rowspan="5">
+									<th scope="row" rowspan="8">
 										<div class="inp_chk">
 											<input type="checkbox" id="bnr" name="bnr"/>
 											<label for="bnr">BnR</label>
 										</div>
 									</th>
-									<td scope="row" rowspan="3">
+									<td scope="row" rowspan="4">
 										<div class="inp_chk">
 											<input type="checkbox" id="bnrSetting" name="bnrSetting"/>
 											<label for="bnrSetting">BnR 설정</label>
 										</div>
 									</td>
+									<tr class="bnr">
 									<td>모니터링</td>
 									<td>
 										<div class="inp_chk">
@@ -1256,7 +1280,46 @@ function fn_search(){
 											<label for="w_MN0002002"></label>
 										</div>
 									</td>											
-								</tr>								
+								</tr>			
+								
+								
+								<tr class="bnr">
+									<td scope="row" rowspan="2">
+										<div class="inp_chk">
+											<input type="checkbox" id="recovery" name="recovery"/>
+											<label for="backup">Recovery</label>
+										</div>
+									</td>
+									<td>완전복원</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0002101" name="r_mnu_nm" value="MN0002101"/>
+											<label for="r_MN0002101"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0002101" name="w_mnu_nm"  />
+											<label for="w_MN0002101"></label>
+										</div>
+									</td>										
+								</tr>
+								<tr class="bnr">
+									<td>시점복원</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN0002102" name="r_mnu_nm" value="MN0002102"/>
+											<label for="r_MN0002102"></label>
+										</div>
+									</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN0002102" name="w_mnu_nm"  />
+											<label for="w_MN0002102"></label>
+										</div>
+									</td>											
+								</tr>	
+													
 								<!-- Backup 권한 추가 끝 -->
 													
 								<tr class="encrypt">
@@ -1485,7 +1548,7 @@ function fn_search(){
 									</td>	
 								</tr>		
 								<tr>
-									<th scope="row" rowspan="3">
+									<th scope="row" rowspan="5">
 										<div class="inp_chk">
 											<input type="checkbox" id="migration" name="migration"/>
 											<label for="migration">MIGRATION</label>
@@ -1521,6 +1584,21 @@ function fn_search(){
 									</td>
 								</tr>	
 								<tr>
+									<td colspan="2">Monitoring</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN00023" name="r_mnu_nm" value="MN00023"/>
+											<label for="r_MN00023"></label>
+										</div>
+									</td>	
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN00023" name="w_mnu_nm" />
+											<label for="w_MN00023"></label>
+										</div>
+									</td>
+								</tr>
+								<tr>
 									<td colspan="2"><spring:message code="migration.performance_history"/></td>
 									<td>
 										<div class="inp_chk">
@@ -1532,6 +1610,21 @@ function fn_search(){
 										<div class="inp_chk">
 											<input type="checkbox" id="w_MN00017" name="w_mnu_nm" />
 											<label for="w_MN00017"></label>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">Migration 수행이력</td>
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="r_MN00024" name="r_mnu_nm" value="MN00024"/>
+											<label for="r_MN00024"></label>
+										</div>
+									</td>	
+									<td>
+										<div class="inp_chk">
+											<input type="checkbox" id="w_MN00024" name="w_mnu_nm" />
+											<label for="w_MN00024"></label>
 										</div>
 									</td>
 								</tr>
