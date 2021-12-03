@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.experdb.management.backup.cmmn.CmmnUtil;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -69,8 +68,8 @@ public class BackupRestoreController {
 				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0170");
-				historyVO.setMnu_id(57);
+				historyVO.setExe_dtl_cd("DX-T0173");
+				historyVO.setMnu_id(60);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.setViewName("encrypt/backupRestore/encryptBackup");
@@ -120,8 +119,8 @@ public class BackupRestoreController {
 				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0171");
-				historyVO.setMnu_id(58);
+				historyVO.setExe_dtl_cd("DX-T0174");
+				historyVO.setMnu_id(61);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.setViewName("encrypt/backupRestore/encryptRestore");
@@ -149,8 +148,8 @@ public class BackupRestoreController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0170_01");
-			historyVO.setMnu_id(57);
+			historyVO.setExe_dtl_cd("DX-T0173_01");
+			historyVO.setMnu_id(60);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -260,8 +259,8 @@ public class BackupRestoreController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0171_01");
-			historyVO.setMnu_id(58);
+			historyVO.setExe_dtl_cd("DX-T0174_01");
+			historyVO.setMnu_id(61);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

@@ -1,12 +1,13 @@
 --encrypt backup/restore 메뉴 추가
+--mnu_id 59
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN00022', '백업/복원', '', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
-
+--mnu_id 60
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN0002201', '관리 데이터 백업', 'MN00022', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
-
+--mnu_id 61
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
 VALUES(nextval('q_mnu_i_01'), 'MN0002202', '관리 데이터 복원', 'MN00022', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
@@ -33,16 +34,18 @@ select nextval('q_usrmnuaut_i_01'), 'admin',
 --encrypt backup/restore 시스템코드
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0170', '암호화 백업 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Backup');
+VALUES('TC0001', 'DX-T0173', '암호화 백업 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Backup');
 
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0171', '암호화 복원 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Restore');
+VALUES('TC0001', 'DX-T0174', '암호화 복원 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Restore');
 
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0170_01', '암호화 백업 실행', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Backup Run');
+VALUES('TC0001', 'DX-T0173_01', '암호화 백업 실행', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Backup Run');
 
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0171_01', '암호화 복원 실행', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Restore Run');
+VALUES('TC0001', 'DX-T0174_01', '암호화 복원 실행', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Restore Run');
+
+
