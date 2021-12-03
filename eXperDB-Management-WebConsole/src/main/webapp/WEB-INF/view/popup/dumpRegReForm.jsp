@@ -20,7 +20,6 @@
 	*/
 %>
 
-<script src="/vertical-dark-sidebar/js/dump_common.js"></script>
 
 <script type="text/javascript">
 	var haCnt = 0;

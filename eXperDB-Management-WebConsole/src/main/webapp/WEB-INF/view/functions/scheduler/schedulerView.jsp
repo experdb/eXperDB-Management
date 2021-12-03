@@ -1087,9 +1087,9 @@
 					<div class="row" style="margin-top:-20px;"  id="week_button">
 						<div class="col-12">
 							<div class="template-demo">
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScdViewInsert" data-toggle="modal">
+								<%-- <button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScdViewInsert" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="backup_management.weekly_schedule_registory" />
-								</button>
+								</button> --%>
 							</div>
 						</div>
 					</div>
