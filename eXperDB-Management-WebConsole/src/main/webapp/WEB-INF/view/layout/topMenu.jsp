@@ -296,7 +296,7 @@
 								}
 /* 							} */
 
-								// 암호화 암복호화
+								// 암호화 관리 데이터 백업/복원 Menu
 								if(result[i].mnu_cd == "MN0002201" || result[i].mnu_cd == "MN0002202") {
 									if((result[i].mnu_cd == "MN0002201" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0002202" && result[i].read_aut_yn == "N")){
 										$('#MN00022').hide();
