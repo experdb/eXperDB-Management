@@ -1,9 +1,11 @@
-package com.k4m.dx.tcontrol.db2pg.monitoring.service;
+package com.k4m.dx.tcontrol.db2pg.history.service;
 
-public class Db2pgMonitoringVO {
+public class Db2pgMigHistoryDetailVO {
 
-	private String wrk_nm;
+	private int rownum;
+	private int idx;
 	private String table_nm;
+	private String mig_nm;
 	private long total_cnt;
 	private long mig_cnt;
 	private String start_time;
@@ -11,16 +13,20 @@ public class Db2pgMonitoringVO {
 	private String elapsed_time;
 	private String status;
 
-	private long total_table_cnt;
-	private long rs_cnt;
-	private long progress;
-
-	public String getWrk_nm() {
-		return wrk_nm;
+	public int getRownum() {
+		return rownum;
 	}
 
-	public void setWrk_nm(String wrk_nm) {
-		this.wrk_nm = wrk_nm;
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
+
+	public int getIdx() {
+		return idx;
+	}
+
+	public void setIdx(int idx) {
+		this.idx = idx;
 	}
 
 	public String getTable_nm() {
@@ -29,6 +35,14 @@ public class Db2pgMonitoringVO {
 
 	public void setTable_nm(String table_nm) {
 		this.table_nm = table_nm;
+	}
+
+	public String getMig_nm() {
+		return mig_nm;
+	}
+
+	public void setMig_nm(String mig_nm) {
+		this.mig_nm = mig_nm;
 	}
 
 	public long getTotal_cnt() {
@@ -77,30 +91,6 @@ public class Db2pgMonitoringVO {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public long getTotal_table_cnt() {
-		return total_table_cnt;
-	}
-
-	public void setTotal_table_cnt(long total_table_cnt) {
-		this.total_table_cnt = total_table_cnt;
-	}
-
-	public long getRs_cnt() {
-		return rs_cnt;
-	}
-
-	public void setRs_cnt(long rs_cnt) {
-		this.rs_cnt = rs_cnt;
-	}
-
-	public long getProgress() {
-		return progress;
-	}
-
-	public void setProgress(long progress) {
-		this.progress = progress;
 	}
 
 }

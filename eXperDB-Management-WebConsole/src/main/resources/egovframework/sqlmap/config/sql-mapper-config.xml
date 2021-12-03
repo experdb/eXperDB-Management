@@ -53,6 +53,9 @@
 		<typeAlias alias="db2pgHistoryVO" type="com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO" /> 
 		<typeAlias alias="db2pgMonitoringVO" type="com.k4m.dx.tcontrol.db2pg.monitoring.service.Db2pgMonitoringVO" /> 
 		
+		<typeAlias alias="db2pgMigHistoryVO" type="com.k4m.dx.tcontrol.db2pg.history.service.Db2pgMigHistoryVO" /> 
+		<typeAlias alias="db2pgMigHistoryDetailVO" type="com.k4m.dx.tcontrol.db2pg.history.service.Db2pgMigHistoryDetailVO" /> 
+		
 		<typeAlias alias="instanceScaleVO" type="com.k4m.dx.tcontrol.scale.service.InstanceScaleVO"/>
 		
 		<!-- trans -->

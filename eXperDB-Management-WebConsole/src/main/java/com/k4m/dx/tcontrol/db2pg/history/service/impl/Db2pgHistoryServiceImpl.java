@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgMigHistoryDetailVO;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgMigHistoryVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -52,6 +54,37 @@ public class Db2pgHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	@Override
 	public Db2pgHistoryVO selectDb2pgMigHistoryDetail(int mig_exe_sn) throws Exception {
 		return db2pgHistoryDAO.selectDb2pgMigHistoryDetail(mig_exe_sn);
+	}
+
+	
+	
+	/**
+	 *  MIGRATION 수행이력 조회
+	 * 2021-11-30 (변승우 책임)
+	 **/
+	@Override
+	public List<Db2pgMigHistoryVO> selectMigHistory(Db2pgMigHistoryVO db2pgMigHistoryVO) throws Exception {
+		return db2pgHistoryDAO.selectMigHistory(db2pgMigHistoryVO);
+	}
+
+	/**
+	 *  MIGRATION 수행이력 디테일 조회
+	 * 2021-11-30 (변승우 책임)
+	 **/
+	@Override
+	public List<Db2pgMigHistoryDetailVO> selectMigHistoryDetail(Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO)
+			throws Exception {
+		return db2pgHistoryDAO.selectMigHistoryDetail(db2pgMigHistoryDetailVO);
+	}
+
+	/**
+	 *  MIGRATION 수행이력 디테일 조회 (조회조건 조회)
+	 * 2021-12-02 (변승우 책임)
+	 **/
+	@Override
+	public List<Db2pgMigHistoryDetailVO> selectMigTableInfo(Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO)
+			throws Exception {
+		return db2pgHistoryDAO.selectMigTableInfo(db2pgMigHistoryDetailVO);
 	}
 
 

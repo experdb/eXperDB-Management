@@ -69,5 +69,35 @@ public interface Db2pgHistoryService {
 	Db2pgHistoryVO selectDb2pgMigHistoryDetail(int mig_exe_sn) throws Exception;
 
 
+	/**
+	 *  MIGRATION 수행이력 조회
+	 * 2021-11-30 (변승우 책임)
+	 * 
+	 * @param List<Db2pgMigHistoryVO>
+	 * @throws Exception
+	 */
+	List<Db2pgMigHistoryVO> selectMigHistory(Db2pgMigHistoryVO db2pgMigHistoryVO)  throws Exception;
+
+
+	/**
+	 *  MIGRATION 수행이력 디테일 조회
+	 * 2021-11-30 (변승우 책임)
+	 * 
+	 * @param List<Db2pgMigHistoryVO>
+	 * @throws Exception
+	 */
+	List<Db2pgMigHistoryDetailVO> selectMigHistoryDetail(Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO) throws Exception;
+
+
+	/**
+	 *  MIGRATION 수행이력 디테일 조회 (조회조건 조회)
+	 * 2021-12-02 (변승우 책임)
+	 * 
+	 * @param List<Db2pgMigHistoryVO>
+	 * @throws Exception
+	 */
+	List<Db2pgMigHistoryDetailVO> selectMigTableInfo(Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO) throws Exception;
+
+
 
 }

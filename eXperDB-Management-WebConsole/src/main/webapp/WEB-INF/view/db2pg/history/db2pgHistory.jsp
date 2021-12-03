@@ -164,14 +164,14 @@ function fn_init(){
 					html += '<i class="fa fa-times">&nbsp;Fail</i>';
 //					html += '<spring:message code="common.failed" />';
 					html += "</button>";
-				} else {
-					html += "<div id='progress"+full.idx+"'></div>";
+				}// else {
+					//html += "<div id='progress"+full.idx+"'></div>";
 					/* html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
 					html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
 					html += '&nbsp;<spring:message code="etc.etc28" />';
 					html += "</div>"; */
-					getProgress(full.mig_exe_sn,full.save_pth,full.idx,full.wrk_nm);
-				}
+					//getProgress(full.mig_exe_sn,full.save_pth,full.idx,full.wrk_nm);
+				//}
 
 				return html;
 			},

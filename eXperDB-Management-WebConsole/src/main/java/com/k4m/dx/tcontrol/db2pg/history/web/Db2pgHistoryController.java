@@ -26,6 +26,8 @@ import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_LOG;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_STOP;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgMigHistoryDetailVO;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgMigHistoryVO;
 
 @Controller
 public class Db2pgHistoryController {
@@ -63,6 +65,34 @@ public class Db2pgHistoryController {
 		}
 		return mv;
 	}
+	
+	
+	/**
+	 * DB2PG MIGRATION 수행이력 화면을 보여준다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pgMigHistory.do")
+	public ModelAndView db2pgMigHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0177");
+			historyVO.setMnu_id(63);
+			accessHistoryService.insertHistory(historyVO);
+
+			mv.setViewName("db2pg/history/db2pgMigHistory");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
 	
 	
 	/**
@@ -338,5 +368,91 @@ public class Db2pgHistoryController {
 		result = db2pgStop.db2pgStop(wrkName);
 		
 		return result;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * DB2PG MIGRATION 수행이력 
+	 * 2021-11-30 (변승우 책임)
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	
+	@RequestMapping(value = "/db2pg/selectMigHistory.do")
+	public @ResponseBody List<Db2pgMigHistoryVO> selectMigHistory(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgMigHistoryVO") Db2pgMigHistoryVO db2pgMigHistoryVO, HttpServletRequest request, HttpServletResponse response) {
+		List<Db2pgMigHistoryVO> resultSet = null;
+		try {
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0143_02");
+			historyVO.setMnu_id(42);
+			accessHistoryService.insertHistory(historyVO);*/
+						
+			resultSet = db2pgHistoryService.selectMigHistory(db2pgMigHistoryVO);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	/**
+	 * DB2PG MIGRATION DETAIL 수행이력 디테일
+	 * 2021-11-30 (변승우 책임)
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	
+	@RequestMapping(value = "/db2pg/selectMigHistoryDetail.do")
+	public @ResponseBody List<Db2pgMigHistoryDetailVO> selectMigHistoryDetail(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgMigHistoryDetailVO") Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO, HttpServletRequest request, HttpServletResponse response) {
+		List<Db2pgMigHistoryDetailVO> resultSet = null;
+		try {
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0143_02");
+			historyVO.setMnu_id(42);
+			accessHistoryService.insertHistory(historyVO);*/
+			
+			resultSet = db2pgHistoryService.selectMigHistoryDetail(db2pgMigHistoryDetailVO);
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	/**
+	 * DB2PG MIGRATION DETAIL 수행이력 디테일 조회조건 조회
+	 * 2021-12-02 (변승우 책임)
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	
+	@RequestMapping(value = "/db2pg/selectMigTableInfo.do")
+	public @ResponseBody List<Db2pgMigHistoryDetailVO> selectMigTableInfo(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgMigHistoryDetailVO") Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO, HttpServletRequest request, HttpServletResponse response) {
+		List<Db2pgMigHistoryDetailVO> resultSet = null;
+		try {
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0143_02");
+			historyVO.setMnu_id(42);
+			accessHistoryService.insertHistory(historyVO);*/
+			
+			resultSet = db2pgHistoryService.selectMigTableInfo(db2pgMigHistoryDetailVO);
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
 	}
 }
