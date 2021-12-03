@@ -1,30 +1,13 @@
 package com.k4m.dx.tcontrol.cmmn.serviceproxy;
 
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.k4m.dx.tcontrol.cmmn.rest.RequestResult;
 
 
 /**
@@ -37,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
 *  2018.04.23   박태혁 최초 생성
+*  2021.12.01	신예은  Encrypt backup/restore 기능을 위한 restRequest, sendRestCmd 추가 생성
 *      </pre>
 */
 public class ExperDBRestApiHandler {
@@ -56,9 +40,29 @@ public class ExperDBRestApiHandler {
 		
 		ResponseEntity<String> responseEntity = api.restResponseEntity(strService, strCommand, header, parameters);
 
-
 		return responseEntity;
 
+	}
+	
+	private JSONObject sendRestCmdForEncryptBackupRestore(String strService, String strCommand, HashMap<String, String> header, String parameters) throws Exception {
+		ExperDBRestApi api = new ExperDBRestApi(restIp, restPort);
+		JSONObject result = api.restResponseEncryptBackupRestore(strService, strCommand, header, parameters);
+		
+		return result;
+	}
+	
+	private RequestResult sendRestCmdForEncryptBackupRestore(String strService, String strCommand, HashMap<String, String> header, HashMap<String, String> body, MultipartFile mFile) throws Exception {
+		ExperDBRestApi api = new ExperDBRestApi(restIp, restPort);
+		RequestResult requestResult = new RequestResult();
+		String responseString = api.restResponseEncryptBackupRestore(strService, strCommand, header, body, mFile);
+		
+		JSONParser parser = new JSONParser();
+		Object obj = parser.parse(responseString);
+		JSONObject resObject = (JSONObject) obj;
+		
+		requestResult.setResultCode((String) resObject.get("resultCode"), (String) resObject.get("resultMessage")); 
+		
+		return requestResult;
 	}
 	
 	
@@ -89,5 +93,15 @@ public class ExperDBRestApiHandler {
 	
 	public ResponseEntity<String> getResponseEntity(String strService, String strCommand, HashMap header, String parameters) throws Exception {
 		return sendRestCmd(strService, strCommand, header, parameters);
+	}
+	
+	public JSONObject getEncryptBackupRestRequest (String strService, String strCommand, HashMap<String, String> header, String parameters) throws Exception {
+		JSONObject result = sendRestCmdForEncryptBackupRestore(strService, strCommand, header, parameters);
+		return result;
+	}
+	
+	public RequestResult getEncryptRestoreRestRequest(String strService, String strCommand, HashMap<String, String> header, HashMap<String, String> body, MultipartFile mFile) throws Exception{
+		RequestResult requestResult = sendRestCmdForEncryptBackupRestore(strService, strCommand, header, body, mFile);
+		return requestResult;
 	}
 }

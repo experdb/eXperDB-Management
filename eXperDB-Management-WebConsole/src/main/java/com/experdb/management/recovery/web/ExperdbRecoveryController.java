@@ -20,6 +20,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -29,6 +30,10 @@ import com.experdb.management.backup.cmmn.CmmnUtil;
 import com.experdb.management.backup.history.service.BackupJobHistoryVO;
 import com.experdb.management.backup.history.service.ExperdbBackupHistoryService;
 import com.experdb.management.recovery.service.ExperdbRecoveryService;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 @Controller
 public class ExperdbRecoveryController {
@@ -39,6 +44,13 @@ public class ExperdbRecoveryController {
 	@Autowired
 	private ExperdbBackupHistoryService experdbBackupHistoryService;
 	
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
+	private List<Map<String, Object>> menuAut;
 	/**
 	 * 완전 복구 View page
 	 * @param historyVO, request
@@ -46,10 +58,28 @@ public class ExperdbRecoveryController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/experdb/completeRecovery.do")
-	public ModelAndView completeRecovery(){
+	public ModelAndView completeRecovery(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("/eXperDB_Recovery/completeRecovery");
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0002101");
+		
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			}else{			
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0178");
+				historyVO.setMnu_id(57);
+				accessHistoryService.insertHistory(historyVO);
+				mv.setViewName("/eXperDB_Recovery/completeRecovery");
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 		return mv;
 	}
 	
@@ -137,10 +167,28 @@ public class ExperdbRecoveryController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/experdb/timeRecovery.do")
-	public ModelAndView timeRecovery(){
+	public ModelAndView timeRecovery(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request){
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("/eXperDB_Recovery/timeRecovery");
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0002102");
+		
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			}else{			
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0179");
+				historyVO.setMnu_id(58);
+				accessHistoryService.insertHistory(historyVO);
+				mv.setViewName("/eXperDB_Recovery/timeRecovery");
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 		return mv;
 	}	
 	

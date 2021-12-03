@@ -219,6 +219,19 @@
 								}
 							}
 						}
+ 						
+ 						if(result[i].mnu_cd == "MN0002101" || result[i].mnu_cd == "MN0002102") {
+ 							if((result[i].mnu_cd == "MN0002101" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0002102" && result[i].read_aut_yn == "N")){
+								$('#MN00021').hide();
+							}else{
+								$('#MN00021').show();
+								if(result[i].read_aut_yn == "N"){
+									$('#' + result[i].mnu_cd).hide();
+								}else{
+									$('#' + result[i].mnu_cd).show();
+								}
+							}
+						}
  					}
 
 					if("${sessionScope.session.encp_use_yn}" == "Y"){
@@ -286,8 +299,8 @@
 					}
 
 					//migrationMenu
-					if (result[i].mnu_cd == "MN00015" || result[i].mnu_cd == "MN00016"  || result[i].mnu_cd == "MN00017") {
-						if((result[i].mnu_cd == "MN00015" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN00016" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN00017" && result[i].read_aut_yn == "N")){
+					if (result[i].mnu_cd == "MN00015" || result[i].mnu_cd == "MN00016"  || result[i].mnu_cd == "MN00017"  || result[i].mnu_cd == "MN00023"  || result[i].mnu_cd == "MN00024") {
+						if((result[i].mnu_cd == "MN00015" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN00016" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN00017" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN00023" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN00024" && result[i].read_aut_yn == "N")){
 							$('#migrationMenu').hide();
 						}else{
 							$('#migrationMenu').show();
@@ -701,7 +714,7 @@
 												<spring:message code="migration.setting_information_management" />
 											</a>
 										</li>
-										<li class="nav-item" id="">
+										<li class="nav-item" id="MN00023">
 											<a class="nav-link" href="/db2pgMonitoring.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="menu.monitoring" />											
 											</a>
@@ -709,6 +722,11 @@
 										<li class="nav-item" id="MN00017">
 											<a class="nav-link" href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="migration.performance_history" />
+											</a>
+										</li>
+										<li class="nav-item" id="MN00024">
+											<a class="nav-link" href="/db2pgMigHistory.do" onClick="fn_cookie(null)" target="main">
+												MIGRATION <spring:message code="migration.performance_history" />
 											</a>
 										</li>
 									</ul>
@@ -836,6 +854,25 @@
 												<li class="nav-item" id="MN0001401">
 													<a class="nav-link" href="/securityStatistics.do" onClick="fn_cookie('securityStatistics')" target="main">
 														<spring:message code="encrypt_Statistics.Encrypt_Statistics" />
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="col-group col-md-3" id="MN00022">
+											<p class="category-heading">
+												<b><spring:message code="encrypt_backupRestore.msg01"/></b>
+											</p>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0002201">
+													<a class="nav-link" href="/encryptBackup.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="encrypt_backupRestore.msg02"/>
+													</a>
+												</li>
+											</ul>
+											<ul class="submenu-item">
+												<li class="nav-item" id="MN0002202">
+													<a class="nav-link" href="/encryptRestore.do" onClick="fn_cookie(null)" target="main">
+														<spring:message code="encrypt_backupRestore.msg03"/>
 													</a>
 												</li>
 											</ul>

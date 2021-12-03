@@ -93,7 +93,8 @@ public class Db2pgDbmsSystemController {
 		try{
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0166");
+			historyVO.setExe_dtl_cd("DX-T0176");
+			historyVO.setMnu_id(62);
 			accessHistoryService.insertHistory(historyVO);
 		
 			mv.setViewName("db2pg/monitoring/db2pgMonitoring");

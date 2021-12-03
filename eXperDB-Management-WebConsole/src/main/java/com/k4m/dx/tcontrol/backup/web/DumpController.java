@@ -119,7 +119,7 @@ public class DumpController {
 			}
 
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
-			mv.setViewName("backup/dumpList");
+			mv.setViewName("dump/dumpList");
 		}
 		return mv;
 	}
@@ -174,7 +174,7 @@ public class DumpController {
 			}
 			
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
-			mv.setViewName("backup/dumpLogList");
+			mv.setViewName("dump/dumpLogList");
 		}
 		return mv;	
 	}

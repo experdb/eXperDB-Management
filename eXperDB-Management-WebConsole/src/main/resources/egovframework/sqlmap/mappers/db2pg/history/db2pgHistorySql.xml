@@ -280,4 +280,73 @@
 				COALESCE(MAX(MIG_EXE_SN),0) AS MIG_EXE_SN
 			FROM T_MIGEXE_G
 		</select>
+		
+		
+		
+		<select id="selectMigHistory" resultType="db2pgMigHistoryVO" parameterType="db2pgMigHistoryVO">			
+			SELECT 
+				(ROW_NUMBER() OVER()) AS ROWNUM
+				, (ROW_NUMBER() OVER()) AS IDX
+				, EXE_DATE
+				, WRK_NM
+				, MIG_NM
+				, TOTAL_TABLE_CNT
+				, MIG_TABLE_CNT
+				, START_TIME
+				, END_TIME
+				, ELAPSED_TIME
+			FROM T_DB2PG_MIG_HISTORY		
+			WHERE 1=1
+			<if test="wrk_nm != null and wrk_nm != '' ">
+	      		AND WRK_NM = #{wrk_nm}
+	      	</if>  	
+	      	<if test="migStartDate != null and migStartDate != '' ">
+      			<if test="migEndDate != null and migEndDate != '' ">
+      				AND  TO_DATE(EXE_DATE,'YYYY-MM-DD') BETWEEN TO_DATE(#{migStartDate},'YYYY-MM-DD') AND TO_DATE(#{migEndDate},'YYYY-MM-DD');     			
+	      		</if>
+	      	</if>	      	
+		</select>
+		
+		
+		<select id="selectMigHistoryDetail" resultType="db2pgMigHistoryDetailVO" parameterType="db2pgMigHistoryDetailVO">			
+			SELECT 
+				(ROW_NUMBER() OVER()) AS ROWNUM
+				, (ROW_NUMBER() OVER()) AS IDX
+				, TABLE_NM
+				, MIG_NM
+				, TOTAL_CNT
+				, MIG_CNT
+				, START_TIME
+				, END_TIME
+				, to_char((ELAPSED_TIME||' second')::interval, 'HH24:MI:SS') as ELAPSED_TIME
+				, STATUS
+			FROM T_DB2PG_MIG_HISTORY_DETAIL
+			WHERE 1 = 1
+			AND MIG_NM = #{mig_nm}	
+		</select>
+		
+		
+		<select id="selectMigTableInfo" resultType="db2pgMigHistoryDetailVO" parameterType="db2pgMigHistoryDetailVO">			
+			SELECT 
+				(ROW_NUMBER() OVER()) AS ROWNUM
+				, (ROW_NUMBER() OVER()) AS IDX
+				, TABLE_NM
+				, MIG_NM
+				, TOTAL_CNT
+				, MIG_CNT
+				, START_TIME
+				, END_TIME
+				, to_char((ELAPSED_TIME||' second')::interval, 'HH24:MI:SS') as ELAPSED_TIME
+				, STATUS
+			FROM T_DB2PG_MIG_HISTORY_DETAIL
+			WHERE 1 = 1
+			AND MIG_NM = #{mig_nm}	
+			<if test="table_nm != null and table_nm != '' ">
+	      		AND TABLE_NM = #{table_nm}
+	      	</if>  	
+	      	<if test="status != null and status != '' ">
+	      		AND STATUS = #{status}
+	      	</if>  	
+		</select>
+
 </mapper>

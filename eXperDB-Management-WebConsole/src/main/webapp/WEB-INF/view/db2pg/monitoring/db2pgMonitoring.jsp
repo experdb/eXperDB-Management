@@ -22,6 +22,7 @@
 	*/
 %>
 
+
 <script>
 var table;
 var tableData;
@@ -31,6 +32,9 @@ $(window.document).ready(function(){
 	fn_selectExeWork();
 	//fn_getStatus();
 });
+
+
+
 
 function fn_init() {
 	
@@ -47,6 +51,23 @@ function fn_init() {
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
      	{data : "wrk_nm", className : "dt-left", defaultContent : ""},
      	{data : "mig_info", className : "dt-left", defaultContent : ""},
+     	{
+			data : "progress",
+			render : function(data, type, full, meta) {	
+				var html = '';
+					html += '<div class="progress" style="width:270px; height:25px; margin-top: -6px;">';
+					html += '<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+full.progress+'%">';
+					html += full.progress+'%';
+					html += '</div>';
+					html += '</div>';
+					html += '<div class="info" align="right" style="margin-top: -20px;"> 전체테이블 : '+full.rs_cnt+'/'+full.total_table_cnt +'</div>';						
+				return html;
+			},
+			className : "dt-center",
+			defaultContent : ""
+		},
+     	{data : "total_table_cnt", className : "dt-left", defaultContent : "", visible: false},
+     	{data : "rs_cnt", className : "dt-left", defaultContent : "", visible: false},
 		/* {data : "src_dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "src_ip", className : "dt-center", defaultContent : ""}, 
 		{data : "src_database", className : "dt-center", defaultContent : ""}, 
@@ -58,7 +79,8 @@ function fn_init() {
 	
     tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
     tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
-    tableData.tables().header().to$().find('th:eq(2)').css('min-width', '500px')
+    tableData.tables().header().to$().find('th:eq(2)').css('min-width', '500px');
+    tableData.tables().header().to$().find('th:eq(3)').css('min-width', '300px')
     /* tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
@@ -125,7 +147,7 @@ function fn_getStatus(wrk_nm){
 
 
 function fn_selectExeWork(){
-	
+	setInterval(function() {
 	$.ajax({
 		url : "/db2pg/monitoring/selectExeWork.do",
 		data : {			
@@ -137,6 +159,8 @@ function fn_selectExeWork(){
 			tableData.rows.add(result).draw();
 		}
 	});
+	$('#loading').hide();
+	}, 5000);	
 }
 
 </script>
@@ -203,6 +227,7 @@ function fn_selectExeWork(){
 												<th width="30"   style="background-color: #778899;"><spring:message code="common.no" /></th>
 												<th width="100"  style="background-color: #778899;"><spring:message code="common.work_name" /></th>
 												<th width="100"  style="background-color: #778899;">MIGRATION</th>
+												<th width="100"  style="background-color: #778899;">Status</th>
 												<%-- <th width="100"  style="background-color: #778899;">DBMS <spring:message code="common.division" /></th>
 												<th width="100"  style="background-color: #778899;"><spring:message code="data_transfer.ip" /></th>
 												<th width="100"  style="background-color: #778899;">Database</th>												

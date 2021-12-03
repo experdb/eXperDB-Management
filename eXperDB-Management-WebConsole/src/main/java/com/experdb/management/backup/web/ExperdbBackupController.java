@@ -64,7 +64,7 @@ public class ExperdbBackupController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0163");
-				historyVO.setMnu_id(54);
+				historyVO.setMnu_id(55);
 				accessHistoryService.insertHistory(historyVO);
 				mv.setViewName("eXperDB_Backup/backupSetting");
 			}		
@@ -98,7 +98,7 @@ public class ExperdbBackupController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0162");
-				historyVO.setMnu_id(53);
+				historyVO.setMnu_id(54);
 				accessHistoryService.insertHistory(historyVO);
 				mv.setViewName("eXperDB_Backup/backupStorage");
 			}		
@@ -132,7 +132,7 @@ public class ExperdbBackupController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0164");
-				historyVO.setMnu_id(50);
+				historyVO.setMnu_id(51);
 				accessHistoryService.insertHistory(historyVO);
 				mv.setViewName("eXperDB_Backup/backupHistory");
 			}
@@ -165,7 +165,7 @@ public class ExperdbBackupController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0165");
-				historyVO.setMnu_id(51);
+				historyVO.setMnu_id(52);
 				accessHistoryService.insertHistory(historyVO);
 				mv.setViewName("eXperDB_Backup/restoreHistory");
 			}
@@ -201,7 +201,7 @@ public class ExperdbBackupController {
 					// 화면접근이력 이력 남기기
 					CmmnUtils.saveHistory(request, historyVO);
 					historyVO.setExe_dtl_cd("DX-T0166");
-					historyVO.setMnu_id(49);
+					historyVO.setMnu_id(50);
 					accessHistoryService.insertHistory(historyVO);
 					
 					mv.setViewName("eXperDB_Backup/backupMonitoring");

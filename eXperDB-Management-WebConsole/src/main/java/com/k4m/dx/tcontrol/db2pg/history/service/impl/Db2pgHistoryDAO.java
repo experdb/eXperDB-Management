@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgMigHistoryDetailVO;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgMigHistoryVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -46,5 +48,41 @@ public class Db2pgHistoryDAO extends EgovAbstractMapper{
 
 	public Db2pgHistoryVO selectDb2pgMigHistoryDetail(int mig_exe_sn) {
 		return (Db2pgHistoryVO) selectOne("db2pgHistorySql.selectDb2pgMigHistoryDetail", mig_exe_sn);
+	}
+
+	
+	/**
+	 *  MIGRATION 수행이력 조회
+	 * 2021-11-30 (변승우 책임)
+	 **/
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Db2pgMigHistoryVO> selectMigHistory(Db2pgMigHistoryVO db2pgMigHistoryVO) {
+		List<Db2pgMigHistoryVO> result = null;
+		result = (List<Db2pgMigHistoryVO>) list("db2pgHistorySql.selectMigHistory", db2pgMigHistoryVO);
+		return result;
+	}
+
+	
+	/**
+	 *  MIGRATION 수행이력 디테일 조회
+	 * 2021-11-30 (변승우 책임)
+	 **/
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Db2pgMigHistoryDetailVO> selectMigHistoryDetail(Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO) {
+		List<Db2pgMigHistoryDetailVO> result = null;
+		result = (List<Db2pgMigHistoryDetailVO>) list("db2pgHistorySql.selectMigHistoryDetail", db2pgMigHistoryDetailVO);
+		return result;
+	}
+
+	
+	/**
+	 *  MIGRATION 수행이력 디테일 조회 (조회조건 조회)
+	 * 2021-12-02 (변승우 책임)
+	 **/
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Db2pgMigHistoryDetailVO> selectMigTableInfo(Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO) {
+		List<Db2pgMigHistoryDetailVO> result = null;
+		result = (List<Db2pgMigHistoryDetailVO>) list("db2pgHistorySql.selectMigTableInfo", db2pgMigHistoryDetailVO);
+		return result;
 	}
 }

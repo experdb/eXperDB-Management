@@ -338,6 +338,7 @@ public class DbSvrAuthorityController {
 			String scale_yn_chk = "";
 			String transfer_ora_chk = "";
 			String transfer_mon_menu = "";
+			String bnr_yn_chk="";
 			
 			if (props.get("scale") != null) {
 				scale_yn_chk = props.get("scale").toString();
@@ -351,9 +352,14 @@ public class DbSvrAuthorityController {
 				transfer_mon_menu = props.get("transfer_mon_menu").toString();
 			}
 			
+			if (props.get("bnr.useyn") != null) {
+				bnr_yn_chk = props.get("bnr.useyn").toString();
+			}
+			
 			result.put("scale_yn_chk", scale_yn_chk);
 			result.put("transfer_ora_chk", transfer_ora_chk);
 			result.put("transfer_mon_menu", transfer_mon_menu);
+			result.put("bnr_yn_chk", bnr_yn_chk);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
