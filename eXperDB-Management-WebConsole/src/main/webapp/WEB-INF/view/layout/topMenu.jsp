@@ -236,7 +236,7 @@
 
 					if("${sessionScope.session.encp_use_yn}" == "Y"){
 	 					if(result[i].mnu_cd == "MN0001101" || result[i].mnu_cd == "MN0001102" || result[i].mnu_cd == "MN0001201" || result[i].mnu_cd == "MN0001202" || result[i].mnu_cd == "MN0001203" || result[i].mnu_cd == "MN0001204"
-							|| result[i].mnu_cd == "MN0001301" || result[i].mnu_cd == "MN0001302" || result[i].mnu_cd == "MN0001303" || result[i].mnu_cd == "MN0001304" || result[i].mnu_cd == "MN0001401") {
+							|| result[i].mnu_cd == "MN0001301" || result[i].mnu_cd == "MN0001302" || result[i].mnu_cd == "MN0001303" || result[i].mnu_cd == "MN0001304" || result[i].mnu_cd == "MN0001401" || result[i].mnu_cd == "MN0002201" || result[i].mnu_cd == "MN0002202") {
 
 	/* 						if((result[i].mnu_cd == "MN0001101" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001102" && result[i].read_aut_yn == "N") &&
 								(result[i].mnu_cd == "MN0001201" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001202" && result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001203" && result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0001204" && result[i].read_aut_yn == "N") &&
@@ -295,6 +295,21 @@
 									}
 								}
 /* 							} */
+
+								// 암호화 관리 데이터 백업/복원 Menu
+								if(result[i].mnu_cd == "MN0002201" || result[i].mnu_cd == "MN0002202") {
+									if((result[i].mnu_cd == "MN0002201" &&  result[i].read_aut_yn == "N") &&  (result[i].mnu_cd == "MN0002202" && result[i].read_aut_yn == "N")){
+										$('#MN00022').hide();
+									}else{
+										$('#MN00022').show();
+	
+										if(result[i].read_aut_yn == "N"){
+											$('#' + result[i].mnu_cd).hide();
+										}else{
+											$('#' + result[i].mnu_cd).show();
+										}
+									}
+								}
 						}
 					}
 
@@ -396,7 +411,7 @@
 
 					if($('#MN0001101').css('display') == 'none' && $('#MN0001102').css('display') == 'none' && $('#MN0001201').css('display') == 'none' && $('#MN0001202').css('display') == 'none' && $('#MN0001203').css('display') == 'none'
 						&& $('#MN0001301').css('display') == 'none' && $('#MN0001302').css('display') == 'none' && $('#MN0001303').css('display') == 'none' && $('#MN0001304').css('display') == 'none'
-						&& $('#MN00014').css('display') == 'none'
+						&& $('#MN00014').css('display') == 'none' && $('#MN0002201').css('display') == 'none' && $('#MN0002202').css('display') == 'none'
 					){		
 						$('#encryptMenu_Y').hide();
 						$('#encryptMenu_N').show();

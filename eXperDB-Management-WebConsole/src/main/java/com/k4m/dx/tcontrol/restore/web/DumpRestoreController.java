@@ -445,8 +445,10 @@ public class DumpRestoreController {
 		System.out.println("# obj_nms : " + obj_nms);
 		System.out.println("# scm_nms : " + scm_nms);
 		
+		HashMap<String, String> schemaList = new HashMap<String, String>();
+		
 		try {
-			String sn = " ";
+//			String sn = " ";
 			for(int i=0; i<obj_nms.size(); i++){
 //				if(obj_nms.get(i) == null || "".equals(obj_nms.get(i).toString())) {
 //					strObj+=" -n "+ scm_nms.get(i).toString().toLowerCase();	
@@ -454,11 +456,19 @@ public class DumpRestoreController {
 //					strObj+=" -t "+ scm_nms.get(i).toString().toLowerCase()+"."+ obj_nms.get(i).toString().toLowerCase();
 //				} 
 				
-				if(!scm_nms.get(i).toString().equals(sn)){
+				if(	!schemaList.containsKey(scm_nms.get(i)) && 
+						!scm_nms.get(i).toString().equals("") && 
+						!obj_nms.get(i).toString().equals("") && 
+						!obj_nms.get(i).toString().equals(" ")){
+					schemaList.put(scm_nms.get(i).toString(), "1");
 					strObj += " -n " + scm_nms.get(i).toString().toLowerCase();
-					sn = scm_nms.get(i).toString();
+					strObj += " -t " + obj_nms.get(i).toString().toLowerCase();
+				}else if(schemaList.containsKey(scm_nms.get(i)) &&
+						!obj_nms.get(i).toString().equals("") && 
+						!obj_nms.get(i).toString().equals(" ")
+						){					
+					strObj += " -t " + obj_nms.get(i).toString().toLowerCase();
 				}
-				strObj += " -t " + obj_nms.get(i).toString().toLowerCase();
 				
 			}
 		} catch (Exception e) {
