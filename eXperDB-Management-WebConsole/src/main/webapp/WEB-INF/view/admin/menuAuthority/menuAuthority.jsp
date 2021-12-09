@@ -1197,11 +1197,11 @@ function fn_search(){
 									<td scope="row" rowspan="4">
 										<div class="inp_chk">
 											<input type="checkbox" id="bnrSetting" name="bnrSetting"/>
-											<label for="bnrSetting">BnR 설정</label>
+											<label for="bnrSetting"><spring:message code="eXperDB_backup.msg24" /></label>
 										</div>
 									</td>
 									<tr class="bnr">
-									<td>모니터링</td>
+									<td><spring:message code="menu.monitoring" /></td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001901" name="r_mnu_nm" value="MN0001901"/>
@@ -1216,7 +1216,7 @@ function fn_search(){
 									</td>
 								</tr>
 								<tr class="bnr">
-									<td>백업이력 관리</td>
+									<td><spring:message code="eXperDB_backup.msg26" /></td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001902" name="r_mnu_nm" value="MN0001902"/>
@@ -1231,7 +1231,7 @@ function fn_search(){
 									</td>													
 								</tr>
 								<tr class="bnr">
-									<td>복구이력 관리</td>
+									<td><spring:message code="eXperDB_backup.msg33" /></td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001903" name="r_mnu_nm"  value="MN0001903"/>
@@ -1252,7 +1252,7 @@ function fn_search(){
 											<label for="backup">Backup</label>
 										</div>
 									</td>
-									<td>Storage 설정</td>
+									<td><spring:message code="eXperDB_backup.msg3" /></td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0002001" name="r_mnu_nm" value="MN0002001"/>
@@ -1267,7 +1267,7 @@ function fn_search(){
 									</td>										
 								</tr>
 								<tr class="bnr">
-									<td>정책설정</td>
+									<td><spring:message code="eXperDB_backup.msg13" /></td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0002002" name="r_mnu_nm" value="MN0002002"/>
@@ -1290,7 +1290,7 @@ function fn_search(){
 											<label for="backup">Recovery</label>
 										</div>
 									</td>
-									<td>완전복원</td>
+									<td>완전 복구</td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0002101" name="r_mnu_nm" value="MN0002101"/>
@@ -1305,7 +1305,7 @@ function fn_search(){
 									</td>										
 								</tr>
 								<tr class="bnr">
-									<td>시점복원</td>
+									<td>시점 복구</td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0002102" name="r_mnu_nm" value="MN0002102"/>
@@ -1614,7 +1614,7 @@ function fn_search(){
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2">Migration 수행이력</td>
+									<td colspan="2">Migration <spring:message code="migration.performance_history"/></td>
 									<td>
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN00024" name="r_mnu_nm" value="MN00024"/>
