@@ -58,13 +58,11 @@ var pwCheck = false;
 
 	if(pw !="" && pw != pw_r){
 		pwCheck = false;
-		console.log("false");
 		$("#backupPasswordAlert1").show();
 		$("#backupPasswordAlert2").hide();
 		$("#backupPasswordAlert3").hide();
 	}else if(pw != "" && pw == pw_r){
 		pwCheck = true;
-		console.log("true");
 		$("#backupPasswordAlert1").hide();
 		$("#backupPasswordAlert2").show();
 		$("#backupPasswordAlert3").hide();

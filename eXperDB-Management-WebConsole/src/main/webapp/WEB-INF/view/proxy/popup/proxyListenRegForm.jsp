@@ -756,7 +756,7 @@ function fn_serverListTable_init() {
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_bal_opt" id="lstnReg_bal_opt" tabindex=4 >
 											<option value=""><spring:message code="common.choice"/></option>
 											<c:forEach var="result" items="${BalOptList}">
-											<option value="<c:out value="${result.sys_cd_nm_en}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+											<option value="<c:out value="${result.sys_cd_nm}"/>"><c:out value="${result.sys_cd_nm_en}"/></option>
 											</c:forEach>
 										</select>
 									</div>
