@@ -133,6 +133,7 @@ public class DXTcontrolScale extends SocketCtl {
 		        		
 		        		//scale 기본사항 조회-스케줄러 시간 설정
 		        		param.put("db_svr_id", service.dbServerInfoSet());
+		        		param.put("db_svr_ipadr_id", service.dbServerIPadrInfoSet());
 		        		scaleCommon = service.selectAutoScaleComCngInfo(param);
 		        		
 		    			if (scaleCommon != null) {
