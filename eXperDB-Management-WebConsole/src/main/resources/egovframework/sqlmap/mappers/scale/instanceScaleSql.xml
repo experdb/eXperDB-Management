@@ -134,7 +134,12 @@
               A.MIN_CLUSTERS,
               A.MAX_CLUSTERS,
               B.IPADR,
-              C.DB_SVR_NM
+              C.DB_SVR_NM,
+              A.MON_IP,
+              A.MON_PORT,
+              A.MON_DATABASE,
+              A.MON_USER,
+              A.MON_PASSWORD
          FROM T_SCALEAWSSVR_I A
               JOIN T_DBSVR_I C ON A.DB_SVR_ID = C.DB_SVR_ID
               JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
@@ -183,8 +188,18 @@
         UPDATE T_SCALEAWSSVR_I
            SET MIN_CLUSTERS = #{min_clusters}::numeric
              , MAX_CLUSTERS = #{max_clusters}::numeric
+             , AUTO_RUN_CYCLE = #{auto_run_cycle}::numeric
              , LST_MDFR_ID = #{login_id}
              , LST_MDF_DTM = clock_timestamp()
+             , MON_IP = #{mon_ip}
+             , MON_PORT = #{mon_port}::numeric
+             , MON_DATABASE = #{mon_database}
+             , MON_USER = #{mon_user}
+             
+               <if test="mon_password != null and mon_password != '' ">
+                   , MON_PASSWORD = #{mon_password}
+               </if>
+
          WHERE DB_SVR_ID = #{db_svr_id}::numeric
 	</update>
 
@@ -576,6 +591,28 @@
                    , LST_MDFR_ID
                    , LST_MDF_DTM
                    , USEYN
+
+               <if test="mon_ip != null and mon_ip != '' ">
+                   , MON_IP
+               </if>
+               
+               <if test="mon_port != null and mon_port != '' ">
+                   , MON_PORT
+               </if>
+               
+               <if test="mon_database != null and mon_database != '' ">
+                   , MON_DATABASE
+               </if>
+
+               <if test="mon_user != null and mon_user != '' ">
+                   , MON_USER
+               </if>
+             
+               <if test="mon_password != null and mon_password != '' ">
+                   , MON_PASSWORD
+               </if>
+
+                   , AUTO_RUN_CYCLE
                     )
               SELECT A.DB_SVR_ID,
                      B.DB_SVR_IPADR_ID,
@@ -584,7 +621,29 @@
                      clock_timestamp(),
                      #{login_id},
                      clock_timestamp(),
-                     'Y'
+                     'Y',
+
+               <if test="mon_ip != null and mon_ip != '' ">
+                   #{mon_ip},
+               </if>
+               
+               <if test="mon_port != null and mon_port != '' ">
+                   #{mon_port}::numeric,
+               </if>
+               
+               <if test="mon_database != null and mon_database != '' ">
+                   #{mon_database},
+               </if>
+    
+               <if test="mon_user != null and mon_user != '' ">
+                   #{mon_user},
+               </if>
+             
+               <if test="mon_password != null and mon_password != '' ">
+                   #{mon_password},
+               </if>
+
+                     #{auto_run_cycle}::numeric
                 FROM T_DBSVR_I A
                      JOIN T_DBSVRIPADR_I B ON A.DB_SVR_ID = B.DB_SVR_ID 
                      --AND B.MASTER_GBN = 'M'
