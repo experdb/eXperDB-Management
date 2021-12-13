@@ -290,7 +290,7 @@
 										</a>
 									</label>
 									<div class="col-sm-3">
-										<input type="text" class="form-control" maxlength="200" id="com_mon_password" name="com_mon_password" />
+										<input type="password" class="form-control" maxlength="200" id="com_mon_password" name="com_mon_password" />
 									</div>
 								</div>
 
