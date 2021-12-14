@@ -181,7 +181,7 @@ function fn_selectExeWork(){
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
 												<i class="ti-server menu-icon"></i>
-												<span class="menu-title">모니터링</span>
+												<span class="menu-title"><spring:message code="menu.trans_monitoring" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -190,7 +190,7 @@ function fn_selectExeWork(){
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">MIGRATION</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_migration" /></li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">모니터링</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.trans_monitoring" /></li>
 										</ol>
 									</div>
 								</div>
@@ -200,7 +200,8 @@ function fn_selectExeWork(){
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0">모니터링 설명</p>
+											<p class="mb-0"><spring:message code="help.db2pg.monitoring_01" /></p>
+											<p class="mb-0"><spring:message code="help.db2pg.monitoring_02" /></p>
 										</div>
 									</div>
 								</div>
@@ -253,13 +254,13 @@ function fn_selectExeWork(){
 									<table id="monitoring" class="table table-hover system-tlb-scroll" cellspacing="0" width="100%">
 										<thead>
 											<tr class="bg-info text-white">
-												<th width="130">테이블명</th>
-												<th width="130">총건수</th>
-												<th width="130">이행건수</th>
-												<th width="130">시작시간</th>
-												<th width="130">종료시간</th>
-												<th width="130">소요시간</th>
-												<th width="80">상태</th>
+												<th width="130"><spring:message code="migration.table_name" /></th>
+												<th width="130"><spring:message code="migration.totalcnt" /></th>
+												<th width="130"><spring:message code="migration.migcnt" /></th>
+												<th width="130"><spring:message code="migration.starttime" /></th>
+												<th width="130"><spring:message code="migration.endtime" /></th>
+												<th width="130"><spring:message code="migration.elapsedtime" /></th>
+												<th width="80"><spring:message code="migration.status" /></th>
 											</tr>
 										</thead>
 									</table>

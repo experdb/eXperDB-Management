@@ -133,7 +133,7 @@ $(window.document).ready(function() {
 							</div>
 							<div class="input-group mb-2 mr-sm-2 col-sm-2_3">
 								<select class="form-control" name="status" id=status>
-									<option value="">전체</option>
+									<option value=""><spring:message code="backup_management.full_backup_title" /></option>
 									<option value="SUCCESS">SUCCESS</option>
 									<option value="FAIL">FAIL</option>
 								</select>
@@ -155,12 +155,12 @@ $(window.document).ready(function() {
 								<tr class="bg-info text-white">
  									<th width="10">No</th>
 									<th width="200" class="dt-center"><spring:message code="migration.table_name"/></th>
-									<th width="100" class="dt-center">총건수</th>
-									<th width="100" class="dt-center">이행건수</th>
-									<th width="150" class="dt-center">시작시간</th>  
-									<th width="150" class="dt-center">종료시간</th>  
-									<th width="100" class="dt-center">소요시간</th>  
-									<th width="100" class="dt-center">상태</th>  
+									<th width="100" class="dt-center"><spring:message code="migration.totalcnt"/></th>
+									<th width="100" class="dt-center"><spring:message code="migration.migcnt"/></th>
+									<th width="150" class="dt-center"><spring:message code="migration.starttime"/></th>  
+									<th width="150" class="dt-center"><spring:message code="migration.endtime"/></th>  
+									<th width="100" class="dt-center"><spring:message code="migration.elapsedtime"/></th>  
+									<th width="100" class="dt-center"><spring:message code="migration.status"/></th>  
 									
 								</tr>
 							</thead>
