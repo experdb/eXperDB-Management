@@ -484,7 +484,7 @@ function fn_serverListTable_init() {
 						if(!inner_inclu){
 				        	if(result[i].intl_ipadr != null && result[i].intl_ipadr!=""){
 				            	var intlTemp = result[i].intl_ipadr;
-				            	if(intlTemp.substring(0,intlTemp.indexOf(":")) != "")  $("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (?대?)</option>");
+				            	if(intlTemp.substring(0,intlTemp.indexOf(":")) != "")  $("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (<spring:message code='eXperDB_proxy.internal_ip' />)</option>");
 				            }	
 						}
 					}									
@@ -787,7 +787,7 @@ function fn_serverListTable_init() {
 													<tr class="bg-info text-white">
 														<th width="200"><spring:message code="eXperDB_proxy.dbms_con_adr" /></th>
 														<th width="100"><spring:message code="eXperDB_proxy.port" /></th>
-														<th width="100"><spring:message code="eXperDB_proxy.backup_yn" /></th>
+														<th width="100"><span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.backup_tooltip" />'><spring:message code="eXperDB_proxy.backup_yn" /></span></th>
 														<th width="0"></th>
 														<th width="0"></th>
 														<th width="0"></th>			
