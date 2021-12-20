@@ -82,7 +82,7 @@ public class EncryptSettingServiceCall {
 				
 				String strConfigKey = (String) jsonObj.get("configKey");
 				String strConfigValue = (String) jsonObj.get("configValue"); 
-				System.out.println("strConfigKey : " + strConfigKey + " - strConfigValue : " + strConfigValue);
+//				System.out.println("strConfigKey : " + strConfigKey + " - strConfigValue : " + strConfigValue);
 
 				result.put("list", jsonArray);
 			}
@@ -151,7 +151,7 @@ public class EncryptSettingServiceCall {
 				BigDecimal bdValueNumber2 = sysMultiValueConfig.getValueNumber2();
 				
 				
-				System.out.println("strConfigKey : " + strConfigKey);
+//				System.out.println("strConfigKey : " + strConfigKey);
 				if(strConfigKey.equals(SystemCode.SysConfigKey.BATCH_LOG_CONF)) {
 					
 					//1. 암복호화 로그를 지정되 시간에만 수집 체크박스 체크여부 = blnIsvalueTrueFalse
@@ -306,7 +306,7 @@ public class EncryptSettingServiceCall {
 		while (iter1.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter1.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 
 		String resultCode = (String) resultJson1.get("resultCode");
@@ -402,7 +402,7 @@ public class EncryptSettingServiceCall {
 		while (iter1.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter1.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 
 		String resultCode = (String) resultJson1.get("resultCode");
@@ -472,7 +472,7 @@ public class EncryptSettingServiceCall {
 				BigDecimal bdValueNumber = sysMultiValueConfig.getValueNumber();
 				BigDecimal bdValueNumber2 = sysMultiValueConfig.getValueNumber2();
 				
-				System.out.println("strConfigKey : " + strConfigKey);
+//				System.out.println("strConfigKey : " + strConfigKey);
 				if(strConfigKey.equals(SystemCode.SysConfigKey.MONITOR_POLLING_SERVER)) {					
 					System.out.println("관리서버 모니터링 주기 : " + bdValueNumber);
 					jObj.put("MONITOR_POLLING_SERVER", bdValueNumber);
@@ -599,7 +599,7 @@ public class EncryptSettingServiceCall {
 		while (iter1.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter1.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 
 		String resultCode = (String) resultJson1.get("resultCode");
@@ -709,7 +709,7 @@ public class EncryptSettingServiceCall {
 		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
-		System.out.println(parameters);
+//		System.out.println(parameters);
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
@@ -722,7 +722,7 @@ public class EncryptSettingServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		
@@ -769,11 +769,11 @@ public class EncryptSettingServiceCall {
 
 					jsonArray.add(jsonObj);
 					
-					result.put("list", jsonArray);
+//					result.put("list", jsonArray);
 					result.put("resultCode", resultCode);
 					result.put("resultMessage", resultMessage);
-					System.out.println("getEntityUid : " + entity.getEntityUid());
-					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
+//					System.out.println("getEntityUid : " + entity.getEntityUid());
+//					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
 			}
 		}
 			result.put("resultCode", resultCode);
@@ -808,7 +808,7 @@ public class EncryptSettingServiceCall {
 		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
-		System.out.println(parameters);
+//		System.out.println(parameters);
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
@@ -821,7 +821,7 @@ public class EncryptSettingServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 			
 		String resultCode = (String) resultJson.get("resultCode");
@@ -900,7 +900,7 @@ public class EncryptSettingServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		

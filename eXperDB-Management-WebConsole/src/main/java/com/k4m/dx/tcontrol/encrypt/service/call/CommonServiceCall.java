@@ -57,7 +57,7 @@ public class CommonServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 			
 		String resultCode = (String) resultJson.get("resultCode");
@@ -150,7 +150,7 @@ public class CommonServiceCall {
 		
 		
 		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
-		System.out.println("isServerKeyEmpty : " + isServerKeyEmpty + " isServerPasswordEmpty : " + isServerPasswordEmpty);
+//		System.out.println("isServerKeyEmpty : " + isServerKeyEmpty + " isServerPasswordEmpty : " + isServerPasswordEmpty);
 		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			jsonObj.put("resultCode", resultCode);
@@ -249,7 +249,7 @@ public class CommonServiceCall {
 			jsonObj.put("ectityUid", ectityUid);
 			jsonObj.put("tockenValue", tockenValue);
 			
-			System.out.println("ectityUid : " + ectityUid + " tockenValue : " + tockenValue);
+//			System.out.println("ectityUid : " + ectityUid + " tockenValue : " + tockenValue);
 
 			String jsonString = loginEntity.getBody();
 
@@ -296,7 +296,7 @@ public class CommonServiceCall {
 		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
-		System.out.println(parameters);
+//		System.out.println(parameters);
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
@@ -309,7 +309,7 @@ public class CommonServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		
@@ -339,7 +339,7 @@ public class CommonServiceCall {
 					jObj.put("resultMessage", resultMessage);
 					jObj.put("getEntityUid", entity.getEntityUid());
 					
-					System.out.println("getEntityUid : " + entity.getEntityUid());
+//					System.out.println("getEntityUid : " + entity.getEntityUid());
 					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
 					
 					jsonArray.add(jObj);					

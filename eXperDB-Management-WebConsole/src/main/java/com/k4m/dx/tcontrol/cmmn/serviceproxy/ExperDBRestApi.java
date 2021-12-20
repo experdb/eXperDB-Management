@@ -128,7 +128,7 @@ public class ExperDBRestApi {
 			requestHeaders.set(entry.getKey().toString(), entry.getValue().toString());
 		}
 
-		System.out.println("requestHeader : " + requestHeaders.toString());
+//		System.out.println("requestHeader : " + requestHeaders.toString());
 		
 		if ("".equals(params) || (params == null))
 			return new HttpEntity<Object>(requestHeaders);

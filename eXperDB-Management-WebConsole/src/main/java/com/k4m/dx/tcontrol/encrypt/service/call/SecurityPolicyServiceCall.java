@@ -302,16 +302,16 @@ public class SecurityPolicyServiceCall {
 					ProfileCipherSpec profileCipherSpec = new ProfileCipherSpec();
 					Gson gsonProfileCipherSpec = new Gson();
 					profileCipherSpec = gsonProfileCipherSpec.fromJson(json.toJSONString(), profileCipherSpec.getClass());
-					System.out.println(" specIndex : " + profileCipherSpec.getSpecIndex());
-					System.out.println(" profileUid : " + profileCipherSpec.getProfileUid());
-					System.out.println(" CipherAlgorithmCode : " + profileCipherSpec.getCipherAlgorithmCode());
-					System.out.println(" CipherAlgorithmName : " + profileCipherSpec.getCipherAlgorithmName());
-					System.out.println(" operationModeCode : " + profileCipherSpec.getOperationModeCode());
-					System.out.println(" paddingMethodCode : " + profileCipherSpec.getPaddingMethodCode());
-					System.out.println(" initialVectorTypeCode : " + profileCipherSpec.getInitialVectorTypeCode());
-					System.out.println(" offset : " + profileCipherSpec.getOffset());
-					System.out.println(" length : " + profileCipherSpec.getLength());
-					System.out.println(" binUid : " + profileCipherSpec.getBinUid());
+//					System.out.println(" specIndex : " + profileCipherSpec.getSpecIndex());
+//					System.out.println(" profileUid : " + profileCipherSpec.getProfileUid());
+//					System.out.println(" CipherAlgorithmCode : " + profileCipherSpec.getCipherAlgorithmCode());
+//					System.out.println(" CipherAlgorithmName : " + profileCipherSpec.getCipherAlgorithmName());
+//					System.out.println(" operationModeCode : " + profileCipherSpec.getOperationModeCode());
+//					System.out.println(" paddingMethodCode : " + profileCipherSpec.getPaddingMethodCode());
+//					System.out.println(" initialVectorTypeCode : " + profileCipherSpec.getInitialVectorTypeCode());
+//					System.out.println(" offset : " + profileCipherSpec.getOffset());
+//					System.out.println(" length : " + profileCipherSpec.getLength());
+//					System.out.println(" binUid : " + profileCipherSpec.getBinUid());
 					jsonObj.put("specIndex", profileCipherSpec.getSpecIndex());
 					jsonObj.put("profileUid", profileCipherSpec.getProfileUid());
 					jsonObj.put("CipherAlgorithmCode", profileCipherSpec.getCipherAlgorithmCode());
@@ -338,25 +338,25 @@ public class SecurityPolicyServiceCall {
 					Gson gsonProfileAclSpec = new Gson();
 					profileAclSpec = gsonProfileAclSpec.fromJson(json.toJSONString(), profileAclSpec.getClass());
 
-					System.out.println("specName : " + profileAclSpec.getSpecName());
-					System.out.println("serverInstanceId : " + profileAclSpec.getServerInstanceId());
-					System.out.println("serverLoginId : " + profileAclSpec.getServerLoginId());
-					System.out.println("adminLoginId : " + profileAclSpec.getAdminLoginId());
-					System.out.println("osLoginId : " + profileAclSpec.getOsLoginId());
-					System.out.println("applicationName : " + profileAclSpec.getApplicationName());
-					System.out.println("accessAddress : " + profileAclSpec.getAccessAddress());
-					System.out.println("accessAddressMask : " + profileAclSpec.getAccessAddressMask());
-					System.out.println("accessMacAddress : " + profileAclSpec.getAccessMacAddress());
-					System.out.println("startDateTime : " + profileAclSpec.getStartDateTime());
-					System.out.println("endDateTime : " + profileAclSpec.getEndDateTime());
-					System.out.println("startTime : " + profileAclSpec.getStartTime());
-					System.out.println("endTime : " + profileAclSpec.getEndTime());
-					System.out.println("workDay : " + profileAclSpec.getWorkDay());
-					System.out.println("massiveThreshold : " + profileAclSpec.getMassiveThreshold());
-					System.out.println("massiveTimeInterval : " + profileAclSpec.getMassiveTimeInterval());
-					System.out.println("extraName : " + profileAclSpec.getExtraName());
-					System.out.println("hostName : " + profileAclSpec.getHostName());
-					System.out.println("whitelistYesNo : " + profileAclSpec.getWhitelistYesNo());
+//					System.out.println("specName : " + profileAclSpec.getSpecName());
+//					System.out.println("serverInstanceId : " + profileAclSpec.getServerInstanceId());
+//					System.out.println("serverLoginId : " + profileAclSpec.getServerLoginId());
+//					System.out.println("adminLoginId : " + profileAclSpec.getAdminLoginId());
+//					System.out.println("osLoginId : " + profileAclSpec.getOsLoginId());
+//					System.out.println("applicationName : " + profileAclSpec.getApplicationName());
+//					System.out.println("accessAddress : " + profileAclSpec.getAccessAddress());
+//					System.out.println("accessAddressMask : " + profileAclSpec.getAccessAddressMask());
+//					System.out.println("accessMacAddress : " + profileAclSpec.getAccessMacAddress());
+//					System.out.println("startDateTime : " + profileAclSpec.getStartDateTime());
+//					System.out.println("endDateTime : " + profileAclSpec.getEndDateTime());
+//					System.out.println("startTime : " + profileAclSpec.getStartTime());
+//					System.out.println("endTime : " + profileAclSpec.getEndTime());
+//					System.out.println("workDay : " + profileAclSpec.getWorkDay());
+//					System.out.println("massiveThreshold : " + profileAclSpec.getMassiveThreshold());
+//					System.out.println("massiveTimeInterval : " + profileAclSpec.getMassiveTimeInterval());
+//					System.out.println("extraName : " + profileAclSpec.getExtraName());
+//					System.out.println("hostName : " + profileAclSpec.getHostName());
+//					System.out.println("whitelistYesNo : " + profileAclSpec.getWhitelistYesNo());
 					
 					SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMddhhmmss"); 
 					SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -560,7 +560,7 @@ public class SecurityPolicyServiceCall {
 		Iterator<?> iter = resultJson.entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		String resultCode = (String) resultJson.get("resultCode");
@@ -580,11 +580,11 @@ public class SecurityPolicyServiceCall {
 					CryptoKeySymmetric cryptoKeySymmetric = new CryptoKeySymmetric();
 					cryptoKeySymmetric = gson.fromJson(jsonData.toJSONString(), cryptoKeySymmetric.getClass());
 					
-					System.out.println("resourceName : " + cryptoKeySymmetric.getResourceName());
-					System.out.println("getBinUid : " + cryptoKeySymmetric.getBinUid());
-					System.out.println("cipherAlgorithmName : " + cryptoKeySymmetric.getCipherAlgorithmName());
-					System.out.println("resourceName : " + cryptoKeySymmetric.getResourceName());
-					System.out.println("validEndDate : " + cryptoKeySymmetric.getValidEndDate());
+//					System.out.println("resourceName : " + cryptoKeySymmetric.getResourceName());
+//					System.out.println("getBinUid : " + cryptoKeySymmetric.getBinUid());
+//					System.out.println("cipherAlgorithmName : " + cryptoKeySymmetric.getCipherAlgorithmName());
+//					System.out.println("resourceName : " + cryptoKeySymmetric.getResourceName());
+//					System.out.println("validEndDate : " + cryptoKeySymmetric.getValidEndDate());
 					
 					jsonObj.put("resourceName", cryptoKeySymmetric.getResourceName());
 					jsonObj.put("getBinUid", cryptoKeySymmetric.getBinUid());
@@ -631,7 +631,7 @@ public class SecurityPolicyServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
@@ -680,7 +680,7 @@ public class SecurityPolicyServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		String resultCode = (String) resultJson.get("resultCode");
@@ -741,7 +741,7 @@ public class SecurityPolicyServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		String resultCode = (String) resultJson.get("resultCode");
@@ -802,7 +802,7 @@ public class SecurityPolicyServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		String resultCode = (String) resultJson.get("resultCode");
@@ -864,7 +864,7 @@ public class SecurityPolicyServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		String resultCode = (String) resultJson.get("resultCode");
@@ -924,7 +924,7 @@ public class SecurityPolicyServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		String resultCode = (String) resultJson.get("resultCode");
