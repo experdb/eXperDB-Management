@@ -41,7 +41,44 @@ public class InstanceScaleVO {
 	private String title_gbn;
 	private String auto_run_cycle;
 	private String useyn;
+	
+	private String mon_ip;
+	private String mon_port;
+	private String mon_database;
+	private String mon_user;
+	private String mon_password;
+	
 
+	public String getMon_ip() {
+		return mon_ip;
+	}
+	public void setMon_ip(String mon_ip) {
+		this.mon_ip = mon_ip;
+	}
+	public String getMon_port() {
+		return mon_port;
+	}
+	public void setMon_port(String mon_port) {
+		this.mon_port = mon_port;
+	}
+	public String getMon_database() {
+		return mon_database;
+	}
+	public void setMon_database(String mon_database) {
+		this.mon_database = mon_database;
+	}
+	public String getMon_user() {
+		return mon_user;
+	}
+	public void setMon_user(String mon_user) {
+		this.mon_user = mon_user;
+	}
+	public String getMon_password() {
+		return mon_password;
+	}
+	public void setMon_password(String mon_password) {
+		this.mon_password = mon_password;
+	}
 	public String getUseyn() {
 		return useyn;
 	}

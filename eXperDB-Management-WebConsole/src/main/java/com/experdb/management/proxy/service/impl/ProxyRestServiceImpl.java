@@ -192,12 +192,8 @@ public class ProxyRestServiceImpl extends EgovAbstractServiceImpl implements Pro
 			ProxyAgentVO proxyAgentVO =(ProxyAgentVO) proxySettingDAO.selectProxyAgentInfo(agentParam);
 			Map<String, Object> agentConnectResult = new  HashMap<String, Object>();
 			ProxyClientInfoCmmn cic = new ProxyClientInfoCmmn();
-			try{
-				agentConnectResult = cic.setProxyConfScaleIn(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(), agentJobj);
-			}catch(ConnectException e){
-				throw e;
-			}
-		
+			agentConnectResult = cic.setProxyConfScaleIn(proxyAgentVO.getIpadr(), proxyAgentVO.getSocket_port(), agentJobj);
+			
 			//String result_code = "";
 			if (agentConnectResult != null) {
 				if ("0".equals(agentConnectResult.get("RESULT_CODE"))) {

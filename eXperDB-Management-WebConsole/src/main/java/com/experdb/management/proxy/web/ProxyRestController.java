@@ -1,6 +1,7 @@
 package com.experdb.management.proxy.web;
 
 import java.io.FileInputStream;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +41,9 @@ import com.k4m.dx.tcontrol.scale.service.InstanceScaleService;
  */
 @RestController
 public class ProxyRestController {
+	@Autowired
+	private MessageSource msg;
+	
 	@Autowired
 	private ProxyRestService proxyRestService;
 
@@ -77,7 +83,7 @@ public class ProxyRestController {
 	 * ScaleIn 발생 시 HAProxy.cfg 설정 중 db_svr_list 해당 항목 delete 후 agent에 cfg 파일 수정 후 reload 처리  
 	 * 
 	 * @param JSONObject
-	 				{"instance": [{"ip": "192.168.50.182","port": "5432"},{"ip": "192.168.50.183","port": "5432"}]}
+	 				{"instance": [{"ip": "192.168.50.182","port": "5432","master_ip":"192.168.50.181"},{"ip": "192.168.50.183","port": "5432","master_ip":"192.168.50.181"}]}
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -117,9 +123,11 @@ public class ProxyRestController {
 				param.put("scale_type", "1");
 	
 				//agent 서버 추가////////////////////////////////
-				instanceScaleService.setScaleResultProcess(param);
+				String resultDeleteData =instanceScaleService.setScaleResultProcess(param);
 				/////////////////////////////////////////////////
 	
+				System.out.println("setProxyScaleIn : Delete Agent-Info Result :: "+resultDeleteData);
+				
 				if("Y".equals(prop.getProperty("proxy.useyn"))){
 							
 					//어떤 Proxy 서버와, Agent를 수정해야되는지 List 추출
@@ -130,13 +138,19 @@ public class ProxyRestController {
 						
 					//Agent로 cfg 수정 후 반영 요청 
 					resultObj= proxyRestService.setProxyConfScaleIn(pryScaleList);
-					System.out.println(resultObj.toJSONString());
+					
 				}
 			}
-		} catch (Exception e) {
+		}catch(ConnectException ce){
+			resultObj.put("resultCd", -4);
+			resultObj.put("resultMsg", "Proxy Agent 연결 불가");
+		}catch (Exception e) {
 			System.out.println("setProxyScaleIn :: error : "+e.toString());
+			resultObj.put("resultCd", -1);
+			resultObj.put("resultMsg", msg.getMessage("eXperDB_proxy.msg48", null, LocaleContextHolder.getLocale()));
 			e.printStackTrace();
 		}
+		System.out.println("setProxyScaleIn Result :: "+resultObj.toJSONString());
 		return resultObj;
 	}
 	
@@ -145,7 +159,7 @@ public class ProxyRestController {
 	 * ScaleOut 발생 시 HAProxy.cfg 설정 중 db_svr_list 해당 항목 insert 후 agent에 cfg 파일 수정 후 reload 처리  
 	 * 
 	 * @param JSONObject
-	 				{"instance": [{"ip": "192.168.50.182","port": "5432"},{"ip": "192.168.50.183","port": "5432"}]}
+	 				{"instance": [{"ip": "192.168.50.182","port": "5432","master_ip":"192.168.50.181"},{"ip": "192.168.50.183","port": "5432","master_ip":"192.168.50.181"}]}
 	 * @return JSONObject
 	 * @throws Exception
 	 */
@@ -188,9 +202,16 @@ public class ProxyRestController {
 				param.put("scale_type", "2");
 
 				//agent 서버 추가////////////////////////////////
-				instanceScaleService.setScaleResultProcess(param);
+				String resultInsertData = instanceScaleService.setScaleResultProcess(param);
 				/////////////////////////////////////////////////
 
+				if(!resultInsertData.equals("success")){
+					resultObj.put("resultCd", -3);
+					resultObj.put("resultMsg", "등록된 DBMS 정보에 "+dbConMasterIp+" IP를 갖는 DB가 없습니다.");
+					System.out.println("setProxyScaleOut Result :: "+resultObj.toJSONString());
+					return resultObj;
+				}
+				
 				if("Y".equals(prop.getProperty("proxy.useyn"))){	
 					System.out.println("Param :: "+param.toString());
 					//어떤 Proxy 서버와, Agent를 수정해야되는지 List 추출
@@ -201,13 +222,17 @@ public class ProxyRestController {
 					
 					//Agent로 cfg 수정 후 반영 요청 
 					resultObj= proxyRestService.setProxyConfScaleIn(pryScaleList);
-					System.out.println(resultObj.toJSONString());
+				
 				}
 			}
+		}catch(ConnectException ce){
+			resultObj.put("resultCd", -4);
+			resultObj.put("resultMsg", "Proxy Agent 연결 불가");
 		}catch(Exception e){
-			System.out.println("setProxyScaleIn :: error : "+e.toString());
+			System.out.println("setProxyScaleOut :: error : "+e.toString());
 			e.printStackTrace();
 		}
+		System.out.println("setProxyScaleOut Result :: "+resultObj.toJSONString());
 		return resultObj;
 	}
 	

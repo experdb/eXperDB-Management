@@ -19,6 +19,7 @@ import java.util.TimeZone;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -167,7 +168,27 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	 */
 	@Override
 	public Map<String, Object> selectAutoScaleComCngInfo(InstanceScaleVO instanceScaleVO) throws Exception {
-		return instanceScaleDAO.selectAutoScaleComCngInfo(instanceScaleVO);
+		Map<String, Object> result = instanceScaleDAO.selectAutoScaleComCngInfo(instanceScaleVO);
+		
+		String mon_user = "";
+		if (result != null) {
+			mon_user = String.valueOf(result.get("mon_user"));
+			System.out.println("=====mon_user1===" + result.get("mon_user"));
+			System.out.println("=====mon_user2===" + mon_user);
+			if (mon_user != null && !"".equals(mon_user) && !"null".equals(mon_user) && !mon_user.isEmpty()) {
+				System.out.println("=====mon_user3===" + result.get("mon_user"));
+				System.out.println("=====mon_user4===" + mon_user);
+				StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
+				pbeEnc.setPassword("k4mda"); // PBE 값(XML PASSWORD설정)
+				mon_user = pbeEnc.decrypt(mon_user);
+			} else {
+				mon_user = "";
+			}
+			
+			result.put("mon_user", mon_user);
+		}
+
+		return result;
 	}
 
 	/**
@@ -288,6 +309,9 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		String result = "S";
 		List<Map<String, Object>> dbResult = null;
 		Map<String, Object> recultChk = null;
+
+		StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
+		pbeEnc.setPassword("k4mda"); // PBE 값(XML PASSWORD설정)
 		
 		try{
 			//데이터 있는지 확인
@@ -329,6 +353,29 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				if ("".equals(auto_run_cycle_val)) {
 					instanceScaleVO.setExpansion_clusters(null);
 				}
+				
+				
+				String mon_port = instanceScaleVO.getMon_port();
+				if ("".equals(mon_port)) {
+					instanceScaleVO.setMon_port(null);
+				}
+				
+				String mon_user = instanceScaleVO.getMon_user();
+				if (mon_user != null && !"".equals(mon_user)) {
+					mon_user = pbeEnc.encrypt(mon_user);
+					instanceScaleVO.setMon_user(mon_user);
+				} else {
+					mon_user = "";
+				}
+				instanceScaleVO.setMon_user(mon_user);
+				
+				String mon_password = instanceScaleVO.getMon_password();
+				if (mon_password != null && !"".equals(mon_password)) {
+					mon_password = pbeEnc.encrypt(mon_password);
+				} else {
+					mon_password = "";
+				}
+				instanceScaleVO.setMon_password(mon_password);
 				
 				instanceScaleDAO.updateAutoScaleCommonSetting(instanceScaleVO);
 				

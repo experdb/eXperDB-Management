@@ -484,7 +484,7 @@ function fn_serverListTable_init() {
 						if(!inner_inclu){
 				        	if(result[i].intl_ipadr != null && result[i].intl_ipadr!=""){
 				            	var intlTemp = result[i].intl_ipadr;
-				            	if(intlTemp.substring(0,intlTemp.indexOf(":")) != "")  $("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (?대?)</option>");
+				            	if(intlTemp.substring(0,intlTemp.indexOf(":")) != "")  $("#ipadr").append("<option value='"+result[i].intl_ipadr+"'>"+result[i].intl_ipadr+" (<spring:message code='eXperDB_proxy.internal_ip' />)</option>");
 				            }	
 						}
 					}									
@@ -756,7 +756,7 @@ function fn_serverListTable_init() {
 										<select class="form-control form-control-xsm" style="margin-right: -1.8rem; width:100%;" name="lstnReg_bal_opt" id="lstnReg_bal_opt" tabindex=4 >
 											<option value=""><spring:message code="common.choice"/></option>
 											<c:forEach var="result" items="${BalOptList}">
-											<option value="<c:out value="${result.sys_cd_nm_en}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+											<option value="<c:out value="${result.sys_cd_nm}"/>"><c:out value="${result.sys_cd_nm_en}"/></option>
 											</c:forEach>
 										</select>
 									</div>
@@ -787,7 +787,7 @@ function fn_serverListTable_init() {
 													<tr class="bg-info text-white">
 														<th width="200"><spring:message code="eXperDB_proxy.dbms_con_adr" /></th>
 														<th width="100"><spring:message code="eXperDB_proxy.port" /></th>
-														<th width="100"><spring:message code="eXperDB_proxy.backup_yn" /></th>
+														<th width="100"><span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.backup_tooltip" />'><spring:message code="eXperDB_proxy.backup_yn" /></span></th>
 														<th width="0"></th>
 														<th width="0"></th>
 														<th width="0"></th>			

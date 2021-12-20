@@ -689,8 +689,10 @@ a:hover.tip span {
 	* scale ing check
 	******************************************************** */
 	function fn_scaleChk(gbn) {
+		fn_common_reg_popup();
+		
 		//scale 이 실행되고 있는 지 체크
-		$.ajax({
+/* 		$.ajax({
 			url : "/scale/selectScaleLChk.do",
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val()
@@ -733,7 +735,7 @@ a:hover.tip span {
 					}
 				}
 			}
-		});
+		}); */
 	}
 
 	/* ********************************************************
@@ -784,6 +786,18 @@ a:hover.tip span {
 					
 					// auto scale 실행 주기
 					$("#com_auto_run_cycle_old").val(nvlPrmSet(result.auto_run_cycle, ""));
+					
+					//모니터링 ip
+					$("#com_mon_ip").val(nvlPrmSet(result.mon_ip, ""));
+					
+					//모니터링 port
+					$("#com_mon_port").val(nvlPrmSet(result.mon_port, ""));
+					
+					//모니터링 database
+					$("#com_mon_database").val(nvlPrmSet(result.mon_database, ""));
+					
+					//모니터링 user
+					$("#com_mon_user").val(nvlPrmSet(result.mon_user, ""));
 					
 					$('#pop_layer_com_ins_cng').modal("show");
 				}

@@ -353,9 +353,14 @@
                   SET DB_SVR_ID = #{db_svr_id}::numeric,
                       DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric,
                       IPADR = #{ipdar_set},
-                      AUTO_RUN_CYCLE = COALESCE((SELECT AUTO_RUN_CYCLE FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL),
+                      AUTO_RUN_CYCLE = COALESCE((SELECT AUTO_RUN_CYCLE FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1), 5),
                       MIN_CLUSTERS = COALESCE((SELECT MIN_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL),
-                      MAX_CLUSTERS = COALESCE((SELECT MAX_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL)
+                      MAX_CLUSTERS = COALESCE((SELECT MAX_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric LIMIT 1),NULL),
+                      MON_IP = #{mon_ip},
+                      MON_PORT = #{mon_port}::numeric,
+                      MON_DATABASE = #{mon_database},
+                      MON_USER = #{mon_user},
+                      MON_PASSWORD = #{mon_password}
                 WHERE DB_SVR_ID  = #{db_svr_id}::numeric
                   AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric
                 RETURNING *
@@ -371,7 +376,12 @@
                         FRST_REGR_ID,
                         FRST_REG_DTM,
                         LST_MDFR_ID,
-                        LST_MDF_DTM
+                        LST_MDF_DTM,
+                        MON_IP,
+                        MON_PORT,
+                        MON_DATABASE,
+                        MON_USER,
+                        MON_PASSWORD
                        )
                        SELECT #{db_svr_id}::numeric,
                               #{db_svr_ipadr_id}::numeric,
@@ -382,9 +392,25 @@
                               #{login_id},
                               clock_timestamp(),
                               #{login_id},
-                              clock_timestamp()
-                              
-         WHERE NOT EXISTS ( SELECT * FROM UPSERT )
+                              clock_timestamp(),
+                              #{mon_ip},
+                              #{mon_port}::numeric,
+                              #{mon_database},
+                              #{mon_user},
+                              #{mon_password}
+         WHERE NOT EXISTS ( SELECT * FROM UPSERT );
+
+         UPDATE T_SCALEAWSSVR_I
+            SET AUTO_RUN_CYCLE = COALESCE((SELECT AUTO_RUN_CYCLE FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric), 5),
+                MIN_CLUSTERS = COALESCE((SELECT MIN_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric),NULL),
+                MAX_CLUSTERS = COALESCE((SELECT MAX_CLUSTERS FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric),NULL),
+                MON_IP = COALESCE((SELECT MON_IP FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric),NULL),
+                MON_PORT = COALESCE((SELECT MON_PORT FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric),NULL),
+                MON_DATABASE = COALESCE((SELECT MON_DATABASE FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric),NULL),
+                MON_USER = COALESCE((SELECT MON_USER FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric),NULL),
+                MON_PASSWORD = COALESCE((SELECT MON_PASSWORD FROM T_SCALEAWSSVR_I WHERE DB_SVR_ID = #{db_svr_id}::numeric AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric),NULL)
+          WHERE DB_SVR_ID  = #{db_svr_id}::numeric
+            AND DB_SVR_IPADR_ID != #{db_svr_ipadr_id}::numeric;     
 	</insert>
 
 	<select id="selectAutoScaleComCngInfo" resultType="hashMap" parameterType="hashMap">
@@ -395,15 +421,21 @@
 	 	**/
        SELECT A.DB_SVR_ID,
               A.DB_SVR_IPADR_ID,
-              A.AUTO_RUN_CYCLE
+              A.AUTO_RUN_CYCLE,
+              A.MON_IP,
+              A.MON_PORT,
+              A.MON_DATABASE,
+              A.MON_USER,
+              A.MON_PASSWORD
          FROM T_SCALEAWSSVR_I A
         WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
+          AND A.DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric
         LIMIT 1
 	</select>
 
 	<select id="selectAutoScaleOverlabChk" resultType="hashMap" parameterType="hashMap">
    		/**
-	 	* Query ID : selectAutoScaleComCngInfo
+	 	* Query ID : selectAutoScaleOverlabChk
 	 	* Description : scale 설정 정보 상세 조회
 	 	* Author : 
 	 	**/

@@ -979,12 +979,12 @@
 												</li>
 												<li class="nav-item" id="MN0002101">
 													<a class="nav-link" href="/experdb/completeRecovery.do" onClick="fn_cookie('')" target="main">
-														완전복구
+														<spring:message code="eXperDB_backup.msg99" />
 													</a>
 												</li>
 												<li class="nav-item" id="MN0002102">
 													<a class="nav-link" href="/experdb/timeRecovery.do" onClick="fn_cookie('')" target="main">
-														시점복구
+														<spring:message code="eXperDB_backup.msg100" />
 													</a>
 												</li>
 												<!-- <li class="nav-item" id="MN0002103">

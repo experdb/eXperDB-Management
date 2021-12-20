@@ -58,7 +58,7 @@ public class KeyManageServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		
@@ -133,7 +133,7 @@ public class KeyManageServiceCall {
 					System.out.println(bf.toString());
 				}
 			}
-			result.put("list", jsonArray);
+//			result.put("list", jsonArray);
 		}
 			result.put("resultCode", resultCode);
 			result.put("resultMessage", resultMessage);
@@ -167,7 +167,7 @@ public class KeyManageServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		
@@ -208,7 +208,7 @@ public class KeyManageServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		
@@ -250,7 +250,7 @@ public class KeyManageServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 				
 		String resultCode = (String) resultJson.get("resultCode");
@@ -334,7 +334,7 @@ public class KeyManageServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		

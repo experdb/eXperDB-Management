@@ -15,7 +15,7 @@
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
 	*  2021-06-09	신예은 매니저		최초 생성
-	*
+	*  2021-11-30 변승우 책임 			기능 및 전체 메세지 적용
 	*
 	* author 신예은 매니저
 	* since 2021.06.09
@@ -195,7 +195,7 @@ function fn_setStorageList(data) {
 	
 	if(storageList.length == 0){
 		storageExist = "N";
-		showSwalIcon('백업된 데이터가 존재하지 않습니다.', '<spring:message code="common.close" />', '', 'error');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg101" />', '<spring:message code="common.close" />', '', 'error');
 		$("#backupDBList").val(0);
 		
 	}else if(storageList.length == 1){
@@ -255,16 +255,16 @@ function fn_targetListPopup(){
 			}
 		})
 	}else{
-		showSwalIcon('선택된 백업 DB가 없습니다', '<spring:message code="common.close" />', '', 'error');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg102" />', '<spring:message code="common.close" />', '', 'error');
 	}
 }
 
 function fn_runNowClick(){
 	if(fn_valCheck()){
-		confile_title = '복구 수행';
+		confile_title = '<spring:message code="eXperDB_backup.msg103" />';
 		$('#con_multi_gbn', '#findConfirmMulti').val("recovery_run");
 		$('#confirm_multi_tlt').html(confile_title);
-		$('#confirm_multi_msg').html('복구를 수행하시겠습니까?');
+		$('#confirm_multi_msg').html('<spring:message code="eXperDB_backup.msg104" />');
 		$('#pop_confirm_multi_md').modal("show");
 	}
 }
@@ -274,10 +274,10 @@ function fn_valCheck(){
 		showSwalIcon('Instance BMR을 선택해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
 		return false;
 	}else if($("#backupDBList").val() == 0){
-		showSwalIcon('백업 DB를 선택해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg105" />', '<spring:message code="common.close" />', '', 'error', 'top');
 		return false;
 	}else if($("#recMachineIP").val() == ""){
-		showSwalIcon('복구 DB를 선택해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg106" />', '<spring:message code="common.close" />', '', 'error', 'top');
 		return false;
 	}
 	return true;
@@ -336,10 +336,10 @@ function fn_recoveryRun(){
 		})
 		.done(function(data){
 			if(data.result_code == 5){
-				showSwalIcon('잘못된 비밀번호 입니다', '<spring:message code="common.close" />', '', 'error', 'top');
+				showSwalIcon('<spring:message code="eXperDB_backup.msg107" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				fn_pwCheckFormReset();
 			}else{
-				showSwalIcon('복원이 시작됩니다', '<spring:message code="common.close" />', '', 'success');
+				showSwalIcon('<spring:message code="eXperDB_backup.msg108" />', '<spring:message code="common.close" />', '', 'success');
 				// 생성된 jobName
 				var jobName = data.jobName;
 				// 실행된 Job의 id 조회
@@ -362,7 +362,7 @@ function fn_recoveryRun(){
 			}
 		})
 	}else{
-		showSwalIcon('비밀번호를 입력해주세요', '<spring:message code="common.close" />', '', 'error', 'top');
+		showSwalIcon('<spring:message code="eXperDB_backup.msg109" />', '<spring:message code="common.close" />', '', 'error', 'top');
 		$("#recoveryPW").focus();
 	}
 }
@@ -524,18 +524,16 @@ function fn_selectJobEnd(jobid,jobname){
 									</div>
 								</div>
 							</div>
-							<!-- ///////////////////////////////////////// 수정 필요 ////////////////////////////////////////// -->
 							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0"><spring:message code="help.eXperDB_backup_setting01" /></p>
-											<p class="mb-0"><spring:message code="help.eXperDB_backup_setting02" /></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_completeRecovery01" /></p>
+											<p class="mb-0"><spring:message code="help.eXperDB_backup_completeRecovery02" /></p>
 										</div>
 									</div>
 								</div>
 							</div>
-							<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->
 						</div>
 					</div>
 					<!-- title end -->
@@ -547,7 +545,7 @@ function fn_selectJobEnd(jobid,jobname){
 			<div class="card-body" style="padding-bottom:0px; padding-top: 0px;">
 				<div id="wrt_button" style="float: right;">
 					<button type="button" class="btn btn-success btn-icon-text mb-2" onclick="fn_runNowClick()">
-						<i class="ti-control-forward btn-icon-prepend "></i>복구
+						<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="eXperDB_backup.msg110" />
 					</button>
 				</div>
 			</div>
@@ -586,7 +584,7 @@ function fn_selectJobEnd(jobid,jobname){
 								<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="font-size: 9.0em;margin-left: -100px;"></i>
 								<h5 style="margin-top: 20px;width:100px; margin-left: -60px;">SOURCE DB</h5>
 								<select class="form-control form-control-xsm" id="backupDBList" style="width: 200px; height: 35px; margin-top: 20px; margin-left: -100px;" onchange="fn_backupDBChoice()">
-									<option value="0">선택</option>
+									<option value="0"><spring:message code="common.choice" /></option>
 								</select>
 							</div>
 							<div id="status_basic" ><i class="mdi mdi-arrow-right-bold icon-md mb-0 mb-md-3 mb-xl-0 text-info" style="padding-left: 20px;margin-right: 20p;font-size: 6.0em;margin-top: 20px;"></i></div>

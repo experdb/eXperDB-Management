@@ -27,6 +27,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.listener.DXTcontrolScaleAwsExecute;
+import com.k4m.dx.tcontrol.socket.listener.ScaleCheckListener;
 import com.k4m.dx.tcontrol.util.FileUtil;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 
@@ -52,7 +53,12 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	private static ApplicationContext context;
 	private String loginId = "admin";
+	private ScaleCheckListener scaleCheckListener;
 
+	public static ApplicationContext getContext() {
+		return context;
+	}
+	
 	/* scale log insert */
 	public void insertScaleLog_G(Map<String, Object> param)  throws Exception{
 		if (param != null) {
@@ -97,7 +103,27 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 
 	/* monitoring cpu_mem 사용량 조회록  */
 	public Map<String, Object> selectMonitorInfo(Map<String, Object> param)  throws Exception{
-		return  (Map<String, Object>)scaleDAO.selectMonitorInfo(param);
+		
+		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+		
+		Map<String, Object> result = new HashMap<>();
+		scaleCheckListener = new ScaleCheckListener(context);
+//		ScaleCheckListener scaleCheckListener = (ScaleCheckListener) context.getBean("scaleCheckListener");
+
+		String strRepoIp = String.valueOf(FileUtil.getPropertyValue("context.properties", "repoDB_ip"));
+		String strMonIp = String.valueOf(FileUtil.getPropertyValue("context.properties", "agent.scale_monitoring_ip"));
+		
+		// TODO repo ip랑 monitoring ip 다른경우 
+		if ((!"".equals(strRepoIp) && !"".equals(strMonIp)) && !strRepoIp.equals(strMonIp)) { 
+			socketLogger.info("ScaleServiceImpl.selectMonitorInfo.REPOIP_X_START");
+			result = scaleCheckListener.selectMonInfo(param);
+			socketLogger.info("ScaleServiceImpl.selectMonitorInfo.REPOIP_X_END");
+		} else {
+			result = (Map<String, Object>)scaleDAO.selectMonitorInfo(param);
+		}
+
+		socketLogger.info("ScaleServiceImpl.selectMonitorInfo : " + result.toString());
+		return result;
 	}
 
 	/* 에이전트 비정상 연결실패  */
@@ -659,6 +685,13 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 		try {
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 			
+			//모니터링 DBMS 추가
+			String strMonip = FileUtil.getPropertyValue("context.properties", "agent.scale_monitoring_ip");
+			String strMonPort = FileUtil.getPropertyValue("context.properties", "agent.scale_monitoring_port");
+			String strMonDatabase = FileUtil.getPropertyValue("context.properties", "agent.scale_monitoring_database");
+			String strMonUser = FileUtil.getPropertyValue("context.properties", "agent.scale_monitoring_user");
+			String strMonPassword = FileUtil.getPropertyValue("context.properties", "agent.scale_monitoring_passwd");
+
 			scaleparam.put("IPADR", strIpadr);
 
 			//서버정보 조회
@@ -669,10 +702,17 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 				scaleparam.put("db_svr_ipadr_id", scaleChkData.get("db_svr_ipadr_id"));
 				scaleparam.put("ipdar_set", strIpadr);
 				scaleparam.put("login_id", loginId);
-	
+				
+				scaleparam.put("mon_ip", strMonip);
+				scaleparam.put("mon_port", strMonPort);
+				scaleparam.put("mon_database", strMonDatabase);
+				scaleparam.put("mon_user", strMonUser);
+				scaleparam.put("mon_password", strMonPassword);
+				
 				socketLogger.info("insertScaleServer.db_svr_id : " + scaleChkData.get("db_svr_id"));
 				socketLogger.info("insertScaleServer.db_svr_ipadr_id : " + scaleChkData.get("db_svr_ipadr_id"));
 				socketLogger.info("insertScaleServer.strIpadr : " + strIpadr);
+				
 				scaleDAO.insertScaleServer(scaleparam);
 			} else {
 				socketLogger.info("insertScaleServer.db_svr_id1 : ");

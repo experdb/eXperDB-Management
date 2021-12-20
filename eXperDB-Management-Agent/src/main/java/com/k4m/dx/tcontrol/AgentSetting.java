@@ -64,7 +64,12 @@ public class AgentSetting {
 		String strScaleOutMultiCmd = "";
 		String strScaleJsonView = "";
 		String strScaleChkPrgress = "";
-
+		String strScaleMonIP = "";
+		String strScaleMonPort = "";
+		String strScaleMonDatabase = "";
+		String strScaleMonUser = "";
+		String strScaleMonPassword = "";
+		
 		Scanner scan = new Scanner(System.in);
 		
 		String localIp = NetworkUtil.getLocalServerIp();
@@ -313,6 +318,42 @@ public class AgentSetting {
 			if(strScaleChkPrgress.equals("")) {
 				strScaleChkPrgress = "ps -ef | grep -v grep | grep %s | wc -l";
 			}
+			
+			System.out.println("Please enter a Monitoring Repository database IP. ");
+			System.out.println("eXperDB-Scale monitoring_server_ip("+strDatabaseIp+") : ");
+			strScaleMonIP = scan.nextLine();
+			if(strScaleMonIP.equals("")) {
+				strScaleMonIP = strDatabaseIp;
+			}
+			
+			System.out.println("Please enter a Monitoring Repository database Port. ");
+			System.out.println("eXperDB-Scale monitoring_server_port("+strDatabasePort+") : ");
+			strScaleMonPort = scan.nextLine();
+			if(strScaleMonPort.equals("")) {
+				strScaleMonPort = strDatabasePort;
+			}
+			
+			if(!strScaleMonIP.equals(strDatabaseIp)){
+				System.out.println("eXperDB-Scale monitoring_server_database(experdb) : ");
+				strScaleMonDatabase = scan.nextLine();
+				if(strScaleMonDatabase.equals("")) {
+					strScaleMonDatabase = "experdb";
+				}
+				System.out.println("eXperDB-Scale monitoring_server_user(pgmon) : ");
+				strScaleMonUser = scan.nextLine();
+				if(strScaleMonUser.equals("")) {
+					strScaleMonUser = "pgmon";
+				}
+				System.out.println("eXperDB-Scale monitoring_server_password(pgmon) : ");
+				strScaleMonPassword = scan.nextLine();
+				if(strScaleMonPassword.equals("")) {
+					strScaleMonPassword = "pgmon";
+				}
+			} else {
+				strScaleMonDatabase = strDatabaseName;
+				strScaleMonUser = "pgmon";
+				strScaleMonPassword = "pgmon";
+			}
 		}
 		
 		
@@ -340,6 +381,11 @@ public class AgentSetting {
 		System.out.println("scale_out_multi_cmd : " + strScaleOutMultiCmd);
 		System.out.println("scale_json_view : " + strScaleJsonView);
 		System.out.println("scale_chk_prgress : " + strScaleChkPrgress);
+		System.out.println("scale_monitoring_ip : " + strScaleMonIP);
+		System.out.println("scale_monitoring_port : " + strScaleMonPort);
+		System.out.println("scale_monitoring_database : " + strScaleMonDatabase);
+		System.out.println("scale_monitoring_user : " + strScaleMonUser);
+		System.out.println("scale_monitoring_password : " + strScaleMonPassword);
 		
 		System.out.println("#####################################################");
 
@@ -355,6 +401,9 @@ public class AgentSetting {
 		    String url = pbeEnc.encrypt(strDatabaseUrl);
 		    String username = pbeEnc.encrypt(strDatabaseUsername);
 		    String password = pbeEnc.encrypt(strDatabasePassword);
+		    
+		    String mon_user = pbeEnc.encrypt(strScaleMonUser);
+		    String mon_passwd = pbeEnc.encrypt(strScaleMonPassword);
 		    
 		    Properties prop = new Properties();
 		    
@@ -423,7 +472,15 @@ public class AgentSetting {
 		    prop.setProperty("agent.scale_out_multi_cmd", strScaleOutMultiCmd);
 		    prop.setProperty("agent.scale_json_view", strScaleJsonView);
 		    prop.setProperty("agent.scale_chk_prgress", strScaleChkPrgress);
-
+		    prop.setProperty("agent.scale_monitoring_ip", strScaleMonIP);
+		    prop.setProperty("agent.scale_monitoring_port", strScaleMonPort);
+		    prop.setProperty("agent.scale_monitoring_database", strScaleMonDatabase);
+/*		    prop.setProperty("agent.scale_monitoring_user", "ENC(" + mon_user + ")");
+		    prop.setProperty("agent.scale_monitoring_passwd", "ENC(" + mon_passwd + ")");*/
+		    
+		    prop.setProperty("agent.scale_monitoring_user", mon_user);
+		    prop.setProperty("agent.scale_monitoring_passwd", mon_passwd);
+		    
 		    try {
 		    	prop.store(new FileOutputStream(path + "context.properties"), "");
 		    } catch(FileNotFoundException e) {

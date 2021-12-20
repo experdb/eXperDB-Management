@@ -77,18 +77,18 @@ public class AgentMonitoringServiceCall {
 					String resultLevel = systemStatus.getResultLevel();
 					String logMessage = systemStatus.getLogMessage();
 					
-					System.out.println("serverLogDateTime : " + serverLogDateTime);
-					System.out.println("siteLogDateTime : " + siteLogDateTime);
-					System.out.println("monitoredAddress : " + monitoredAddress);
-					System.out.println("siteAccessAddress : " + siteAccessAddress);
-					System.out.println("monitoredUid : " + monitoredUid);
-					System.out.println("monitoredName : " + monitoredName);
-					System.out.println("targetType : " + targetType);
-					System.out.println("targetUid : " + targetUid );
-					System.out.println("targetName : " + targetName );
-					System.out.println("monitorType : " + monitorType );
-					System.out.println("resultLevel : " + resultLevel );
-					System.out.println("logMessage : " + logMessage );
+//					System.out.println("serverLogDateTime : " + serverLogDateTime);
+//					System.out.println("siteLogDateTime : " + siteLogDateTime);
+//					System.out.println("monitoredAddress : " + monitoredAddress);
+//					System.out.println("siteAccessAddress : " + siteAccessAddress);
+//					System.out.println("monitoredUid : " + monitoredUid);
+//					System.out.println("monitoredName : " + monitoredName);
+//					System.out.println("targetType : " + targetType);
+//					System.out.println("targetUid : " + targetUid );
+//					System.out.println("targetName : " + targetName );
+//					System.out.println("monitorType : " + monitorType );
+//					System.out.println("resultLevel : " + resultLevel );
+//					System.out.println("logMessage : " + logMessage );
 					
 					
 

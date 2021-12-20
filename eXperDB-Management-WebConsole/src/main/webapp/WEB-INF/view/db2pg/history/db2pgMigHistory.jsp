@@ -231,8 +231,8 @@ var migtable = null;
 									<div class="col-5" style="padding-top:3px;">
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
-												<i class="ti-calendar menu-icon"></i>
-												<span class="menu-title">MIGRATION 수행이력</span>
+												<i class="ti-calendar menu-icon"></i>												
+												<span class="menu-title">MIGRATION <spring:message code="migration.performance_history" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -240,8 +240,8 @@ var migtable = null;
 									<div class="col-7">
 					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">MIGRATION</li>
-					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page">데이터이관</li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">MIGRATION 수행이력</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.data_migration" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">MIGRATION <spring:message code="migration.performance_history" /></li>
 										</ol>
 									</div>
 								</div>
@@ -250,7 +250,8 @@ var migtable = null;
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											설명
+											<p class="mb-0"><spring:message code="help.mig_history_01" /></p>
+											<p class="mb-0"><spring:message code="help.mig_history_02" /></p>
 										</div>
 									</div>
 								</div>
@@ -333,14 +334,14 @@ var migtable = null;
 										<thead>
 											<tr class="bg-info text-white">
 												<th scope="col"><spring:message code="common.no" /></th>
-												<th scope="col">수행일자</th>
-												<th scope="col">워크명</th>
-												<th scope="col">전체 테이블 수</th>
-												<th scope="col">이관 테이블 수</th>
-												<th scope="col">시작시간</th>
-												<th scope="col">종료시간</th>
-												<th scope="col">소요시간</th>
-												<th scope="col">비고</th>
+												<th scope="col"><spring:message code="migration.exeDate" /></th>
+												<th scope="col"><spring:message code="common.work_name" /></th>
+												<th scope="col"><spring:message code="migration.table_totalcnt" /></th>
+												<th scope="col"><spring:message code="migration.table_migcnt" /></th>
+												<th scope="col"><spring:message code="migration.starttime" /></th>
+												<th scope="col"><spring:message code="migration.endtime" /></th>
+												<th scope="col"><spring:message code="migration.elapsedtime" /></th>
+												<th scope="col"><spring:message code="migration.remark" /></th>
 											</tr>
 										</thead>
 									</table>
