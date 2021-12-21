@@ -89,10 +89,10 @@ public class StatisticsServiceCall {
 					String decryptFailCount = jsonObj.get("decryptfailcount").toString();
 					String sumCount = jsonObj.get("sumcount").toString();
 			
-//					System.out.println("encryptSuccessCount : " + encryptSuccessCount + " encryptFailCount : " + encryptFailCount);
-//					System.out.println("decryptSuccessCount : " + decryptSuccessCount + " decryptFailCount : " + decryptFailCount);
-//					System.out.println("sumCount : " + sumCount );	
-//					System.out.println("categoryColumn : " + category );	
+					System.out.println("encryptSuccessCount : " + encryptSuccessCount + " encryptFailCount : " + encryptFailCount);
+					System.out.println("decryptSuccessCount : " + decryptSuccessCount + " decryptFailCount : " + decryptFailCount);
+					System.out.println("sumCount : " + sumCount );	
+					System.out.println("categoryColumn : " + category );	
 					
 					
 					jsonArray.add(jObj);
