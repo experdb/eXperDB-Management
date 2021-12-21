@@ -24,6 +24,7 @@
 				, LST_MDF_DTM
 				, SVR_USE_YN
 				,AWS_YN
+				,INTL_IPADR
 			FROM  T_PRY_AGT_I
 			WHERE
 				IPADR = #{ipadr}
@@ -53,6 +54,7 @@
 			, LST_MDFR_ID
 			, LST_MDF_DTM
 			, AWS_YN
+			, INTL_IPADR
 	 	)
 	 	VALUES
 	 	(
@@ -70,6 +72,7 @@
 			, #{lst_mdfr_id}
 			, clock_timestamp()
 			, #{aws_yn}
+			, #{intl_ipadr}
 	 	)
 	</insert>
 
@@ -89,6 +92,7 @@
 			, DOMAIN_NM = #{domain_nm}
 	 		, LST_MDF_DTM = clock_timestamp()
 	 		, AWS_YN = #{aws_yn}
+	 		, INTL_IPADR= #{intl_ipadr}
 	 	WHERE
 	 		IPADR = #{ipadr}
 	</update>

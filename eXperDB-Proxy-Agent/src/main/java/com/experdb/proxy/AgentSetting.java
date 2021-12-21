@@ -44,6 +44,8 @@ public class AgentSetting {
 		String strDatabasePassword = "";
 		String strAgentIp = "";
 		String strAgentPort = "";
+		String strAgentInnerIPUseYn = "";
+		String strAgentInnerIP="";
 		
 		String strAgentPath = "";
 		String strConfBackupPath = "";
@@ -64,7 +66,26 @@ public class AgentSetting {
 		if(strAgentIp.equals("")) {
 			strAgentIp = localIp;
 		}
-
+		
+		System.out.println("Whether to Proxy use internal IP (Y/N) :");
+		strAgentInnerIPUseYn = scan.nextLine().toUpperCase();
+		if(strAgentInnerIPUseYn.equals("Y")){
+			System.out.println("Proxy Agent Inner IP : ");
+			strAgentInnerIP = scan.nextLine();
+			
+			while(true){
+				if(strAgentInnerIP.equals("")) {
+					System.out.println("Please enter Inner IP of the Proxy Agent!!! ");
+					System.out.println("Proxy Agent Inner IP : ");
+					strAgentInnerIP = scan.nextLine();
+				} else {
+					break;
+				}
+			}
+		}else{
+			strAgentInnerIPUseYn="N";
+		}
+		
 		System.out.println("agent port(9002) : ");
 		strAgentPort = scan.nextLine();
 		if(strAgentPort.equals("")) {
@@ -182,6 +203,7 @@ public class AgentSetting {
 		System.out.println("#####################################################");
 		System.out.println("agent ip :" + strAgentIp);
 		System.out.println("agent port :" + strAgentPort);
+		System.out.println("agent inner ip :"+strAgentInnerIP);
 		System.out.println("keepalived install :" + strKeepInstaillYn);
 		System.out.println("installed in AWS :" + strAWSUseYn);
 		System.out.println("database Connection Info :" + strDatabaseUrl);
@@ -249,11 +271,13 @@ public class AgentSetting {
 			
 			prop.setProperty("socket.server.port", strAgentPort);
 			prop.setProperty("agent.install.ip", strAgentIp);
+			prop.setProperty("agent.inner.ip.useyn", strAgentInnerIPUseYn);
+			prop.setProperty("agent.inner.ip", strAgentInnerIP);
 			prop.setProperty("agent.path", strAgentPath);
 			prop.setProperty("proxy.conf_backup_path", strConfBackupPath);
 			prop.setProperty("proxy.global.user", strProxyUser);
 			prop.setProperty("proxy.global.group", strProxyGroup);
-
+			
 			try {
 				prop.store(new FileOutputStream(path + "context.properties"), "");
 			} catch(FileNotFoundException e) {

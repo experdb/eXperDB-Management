@@ -3,6 +3,7 @@ package com.experdb.proxy.db.repository.vo;
 public class ProxyServerVO {
 	private int pry_svr_id;
 	private String ipadr;
+	private String intl_ipadr;
 	private int agt_sn;
 	private String pry_svr_nm;
 	private String pry_pth;
@@ -227,5 +228,11 @@ public class ProxyServerVO {
 	}
 	public void setMaster_svr_id_chk(String master_svr_id_chk) {
 		this.master_svr_id_chk = master_svr_id_chk;
+	}
+	public String getIntl_ipadr() {
+		return intl_ipadr;
+	}
+	public void setIntl_ipadr(String intl_ipadr) {
+		this.intl_ipadr = intl_ipadr;
 	}
 }

@@ -89,7 +89,7 @@ public class UserManagerServiceCall {
 		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
-//		System.out.println(parameters);
+		System.out.println(parameters);
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
@@ -102,7 +102,7 @@ public class UserManagerServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		String resultCode = (String) resultJson.get("resultCode");
@@ -152,7 +152,7 @@ public class UserManagerServiceCall {
 		while (iter1.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter1.next();
 
-//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 
 		String resultCode = (String) resultJson1.get("resultCode");
@@ -192,7 +192,7 @@ public class UserManagerServiceCall {
 	
 		String parameters = TypeUtility.makeRequestBody(body);
 		
-//		System.out.println(parameters);
+		System.out.println(parameters);
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
@@ -205,7 +205,7 @@ public class UserManagerServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		
@@ -251,7 +251,7 @@ public class UserManagerServiceCall {
 		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
-//		System.out.println(parameters);
+		System.out.println(parameters);
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
@@ -264,7 +264,7 @@ public class UserManagerServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		

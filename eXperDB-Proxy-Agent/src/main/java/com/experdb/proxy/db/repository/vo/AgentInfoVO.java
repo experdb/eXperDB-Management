@@ -28,6 +28,7 @@ public class AgentInfoVO {
 	private String lst_mdf_dtm;
 	private String kal_install_yn;
 	private String aws_yn;
+	private String intl_ipadr;
 	
 	public String TC001501 = "TC001501"; //실행
 	public String TC001502 = "TC001502"; //중지
@@ -121,5 +122,11 @@ public class AgentInfoVO {
 	}
 	public void setAws_yn(String aws_yn) {
 		this.aws_yn = aws_yn;
+	}
+	public String getIntl_ipadr() {
+		return intl_ipadr;
+	}
+	public void setIntl_ipadr(String intl_ipadr) {
+		this.intl_ipadr = intl_ipadr;
 	}
 }

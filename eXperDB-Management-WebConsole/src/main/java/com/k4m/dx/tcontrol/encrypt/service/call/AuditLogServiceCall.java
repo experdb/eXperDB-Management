@@ -336,7 +336,7 @@ public class AuditLogServiceCall {
 					jsonArray.add(jsonObj);
 				}
 				result.put("data", jsonArray);
-//				System.out.println(result);		
+				System.out.println(result);		
 			}
 		}
 		return result;
@@ -407,7 +407,7 @@ public class AuditLogServiceCall {
 					jsonArray.add(jsonObj);
 				}
 				result.put("data", jsonArray);
-//				System.out.println(result);			
+				System.out.println(result);			
 			}
 		}
 		return result;
@@ -484,7 +484,7 @@ public class AuditLogServiceCall {
 		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
-//		System.out.println(parameters);
+		System.out.println(parameters);
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
@@ -497,7 +497,7 @@ public class AuditLogServiceCall {
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
 
-//			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
 		
@@ -523,8 +523,8 @@ public class AuditLogServiceCall {
 					
 					jsonArray.add(jsonObj);
 					
-//					System.out.println("getEntityUid : " + entity.getEntityUid());
-//					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
+					System.out.println("getEntityUid : " + entity.getEntityUid());
+					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
 				}
 			}
 				
