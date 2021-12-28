@@ -171,6 +171,7 @@
  						},
  						{data : "agt_sn",  defaultContent : "", visible: false },
  						{data : "socket_port",  defaultContent : "", visible: false },
+ 						{data : "intl_ipadr", className : "dt-center", defaultContent : ""},
  						{data : "aws_yn", 
  							render: function (data, type, full){
  								var html = "";
@@ -207,6 +208,7 @@
 		proxyAgentTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
 		proxyAgentTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
 		proxyAgentTable.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
 
 		$(window).trigger('resize');
 	}
@@ -476,6 +478,7 @@
 												<th width="0"></th>
 												<th width="0"></th>
 												<%-- <th width="100"><spring:message code="eXperDB_proxy.vip_use" /></th> --%>
+												<th width="100"><spring:message code="eXperDB_proxy.agent_internal_ip" /></th>
 												<th width="100"><spring:message code="eXperDB_proxy.aws_yn" /></th>
 											</tr>
 										</thead>

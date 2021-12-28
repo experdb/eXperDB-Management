@@ -105,6 +105,13 @@
 					},
 					validatorIpFormat :true
 				},
+				glb_peer_server_ip_text: {
+					required: function(){
+						if(selVipUseYn == 'Y') return true;
+						else return false;
+					},
+					validatorIpFormat :true
+				},
 				glb_max_con_cnt: {
 					required: true
 				},
@@ -130,6 +137,10 @@
 					required: '<spring:message code="eXperDB_proxy.msg2" />'
 				},
 				glb_peer_server_ip: {
+					required: '<spring:message code="eXperDB_proxy.msg2" />',
+					validatorIpFormat : '<spring:message code="errors.format" arguments="'+ 'IP' +'" />'
+				},
+				glb_peer_server_ip_text: {
 					required: '<spring:message code="eXperDB_proxy.msg2" />',
 					validatorIpFormat : '<spring:message code="errors.format" arguments="'+ 'IP' +'" />'
 				},
@@ -165,6 +176,19 @@
 				$(element).parent().addClass('has-danger');
 				$(element).addClass('form-control-danger');
 			}
+		});
+		
+		//server ip의 경우, agent 정보에서 읽어와 자동으로 select 만드는 반면에... peer는 없으면 select 박스 생성 불가능하기 때문에
+		//기본 등록 값이 없을 경우 직접입력 가능한 text 박스 생성함. 
+		$("#glb_peer_server_ip_text", "#globalInfoForm").focusout(function(){ 
+			//glb_peer_server_ip_text 변경 이벤트 시 적용되도록 ... 설정 필요 
+			var tempPeerIP = $("#glb_peer_server_ip", "#globalInfoForm").val();
+			//if(tempPeerIP=="" || !$("#globalInfoForm").validate().form()){
+				tempPeerIP = $("#glb_peer_server_ip_text", "#globalInfoForm").val();
+				$("#glb_peer_server_ip > option", "#globalInfoForm" ).remove();
+				$("#glb_peer_server_ip", "#globalInfoForm").append('<option value="'+tempPeerIP+'">'+tempPeerIP+'</option>');
+				$("#glb_peer_server_ip", "#globalInfoForm").val(tempPeerIP);
+			//}
 		});
 	});
 	
@@ -629,7 +653,9 @@
 		//수정상테 관련 변수 초기화
 		$('#modYn').val("N");
 		$("#warning_init_detail_info").html('');
-			
+		
+		$("#glb_peer_server_ip_text", "#globalInfoForm").val("");
+		$("#glb_peer_server_ip_text", "#globalInfoForm").hide();
 		//전역변수 초기화
 		selConfInfo = null; //선택한 상세 정보 초기화
 		selListenerInfo = null; //선택한 Listener 목록
@@ -638,6 +664,7 @@
 		delListnerSvrRows = new Array();//삭제한 Listener Server List 목록 
 		selAgentInterfaceItems  = new Array();
 		selAgentInterface  = null;
+		
 		//runValid = true;
 	}
 
@@ -698,6 +725,12 @@
 		 				fn_create_if_select("#glb_if_nm","#globalInfoForm",result.interf, vipUseYn);
 		 				//popup interface select box setting
 		 				fn_create_if_select("#instReg_v_if_nm_sel","#insVipInstForm","", vipUseYn);
+		 				
+		 				//global ip/peer ip select box setting
+		 				fn_create_server_ip_select("#glb_obj_ip","#globalInfoForm",result.global_info.obj_ip,result.ip_sel_list,vipUseYn);
+		 				$("#glb_peer_server_ip_text", "#globalInfoForm").hide();
+		 				fn_create_server_ip_select("#glb_peer_server_ip","#globalInfoForm",result.global_info.peer_server_ip,result.peer_ip_sel_list,vipUseYn);
+		 				
 					}else if(result.errcd==1){ //연결실패
 						selAgentConnect = false;
 						setTimeout(function(){//load_global_info 에서 100이후에 INABLE하기 때문에 타임을 더 줌
@@ -942,6 +975,44 @@
 			$( objId, objForm ).val("");
 		}
 	}
+	
+	/* ********************************************************
+	 *  서버 /peer IP select 박스 생성
+	 ******************************************************** */
+	function fn_create_server_ip_select(objId, objForm, objVal, objSelList, vipUse){
+		//global ip select 생성/////////////////////////////////////////////////////////////
+		//select box 초기화 
+		$( objId+" > option", objForm ).remove();
+		if(vipUse == "Y" && objSelList.length > 0){
+			var tempHtml="";
+			var objSelListLen = objSelList.length;
+			var tempIpOptList = objSelList;
+			
+			//select box option 생성
+			for(var i=0; i<objSelListLen; i++){
+				var ip = tempIpOptList[i].ipadr;
+				tempHtml += '<option value='+ip+'>'+ip+'</option>';
+			}
+			$(objId, objForm).append(tempHtml);
+			$(objId, objForm).val(objVal);
+		
+		}else if(vipUse == "Y" && objSelList.length == 0){
+			if("#glb_peer_server_ip" == objId){
+				if(objVal!=""){
+					tempHtml += '<option value="'+objVal+'">'+objVal+'</option>';
+					$(objId, objForm).append(tempHtml);
+					$(objId, objForm).val(objVal);
+				}else{
+					tempHtml += '<option value=""><spring:message code="eXperDB_proxy.direct_input"/></option>';
+					$(objId, objForm).append(tempHtml);
+					$("#glb_peer_server_ip_text", objForm).show();
+				}
+			}
+		}else{
+			$( objId, objForm ).val("");
+		}
+	}
+	
 	/* ********************************************************
 	* 기동 상태 버튼 클릭 이벤트 
 	******************************************************** */
@@ -2363,8 +2434,10 @@
 										</span>
 									</label>
 									<div class="col-sm-2_27">
-										<input type="text" class="form-control form-control-sm glb_obj_ip" maxlength="15" id="glb_obj_ip" name="glb_obj_ip" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
-									</div>
+										<!-- <input type="text" class="form-control form-control-sm glb_obj_ip" maxlength="15" id="glb_obj_ip" name="glb_obj_ip" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" /> -->
+										<select class="form-control form-control-sm glb_obj_ip" id="glb_obj_ip" name="glb_obj_ip" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" >
+										</select> 
+									</div> 
 									<label for="glb_if_nm" class="col-sm-2_5 col-form-label pop-label-index">
 										<i class="item-icon fa fa-angle-double-right"></i>	
 										<span data-toggle="tooltip" data-html="true" data-placement="bottom" title='<spring:message code="eXperDB_proxy.interface_tooltip" />'>	
@@ -2386,9 +2459,12 @@
 										<%-- <spring:message code="eXperDB_proxy.peer_ip" />(*) --%>
 									</label> 
 									<div class="col-sm-2_27">
-										<input type="text" class="form-control form-control-sm glb_peer_server_ip" maxlength="15" id="glb_peer_server_ip" name="glb_peer_server_ip" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
+										<!-- <input type="text" class="form-control form-control-sm glb_peer_server_ip" maxlength="15" id="glb_peer_server_ip" name="glb_peer_server_ip" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" /> -->
+										<select class="form-control form-control-sm glb_peer_server_ip" id="glb_peer_server_ip" name="glb_peer_server_ip" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();">
+										</select>
 									</div>
 									<div class="col-sm-6">
+										<input type="text" class="form-control form-control-sm glb_peer_server_ip_text" maxlength="15" id="glb_peer_server_ip_text" name="glb_peer_server_ip_text" onkeyup="fn_checkWord(this,20);" onchange="fn_change_global_info();" onblur="this.value=this.value.trim()" placeholder="" />
 									</div>
 								</div>
 								<div class="form-group row">

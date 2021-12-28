@@ -123,6 +123,50 @@
 		ORDER BY B.IPADR
 	</select>
 
+<select id="selectPoxyServerIPList" resultType="hashMap" parameterType="hashMap">
+		/**
+		* Query ID : selectPoxyServerIPList
+		* Description : proxy 내/외부 IP 리스트 조회
+		* Author : 김민정
+		**/
+		SELECT  A.IPADR
+		FROM(
+		SELECT 	IPADR 	AS 	IPADR 
+		FROM 		T_PRY_SVR_I 
+		WHERE 	1=1
+		<choose>
+			<when test = "peer != null and (peer eq 'Y'.toString())">
+			AND PRY_SVR_ID = (	SELECT 	PEER_SVR.PRY_SVR_ID
+												FROM 		T_PRY_SVR_I PEER_SVR 	INNER JOIN T_PRY_AGT_I PEER_AGT 	ON PEER_SVR.AGT_SN = PEER_AGT.AGT_SN 
+																										INNER JOIN T_PRY_GLB_I SVR_GLB 		ON PEER_AGT.IPADR = SVR_GLB.PEER_SERVER_IP OR PEER_AGT.INTL_IPADR = SVR_GLB.PEER_SERVER_IP 
+												WHERE 	SVR_GLB.PRY_SVR_ID = #{pry_svr_id} )
+			</when>
+			<otherwise>
+			AND PRY_SVR_ID =#{pry_svr_id}
+			</otherwise>
+		</choose>
+		UNION
+		SELECT 	INTL_IPADR 	AS IPADR 
+		FROM 		T_PRY_AGT_I 
+		WHERE 	AGT_SN=(SELECT 	AGT_SN 
+										FROM 		T_PRY_SVR_I 
+										WHERE  	1=1
+										<choose>
+											<when test = "peer != null and (peer eq 'Y'.toString())">
+											AND PRY_SVR_ID =  (	SELECT 	PEER_SVR.PRY_SVR_ID
+																				FROM 		T_PRY_SVR_I PEER_SVR 	INNER JOIN T_PRY_AGT_I PEER_AGT 	ON PEER_SVR.AGT_SN = PEER_AGT.AGT_SN 
+																																		INNER JOIN T_PRY_GLB_I SVR_GLB 		ON PEER_AGT.IPADR = SVR_GLB.PEER_SERVER_IP 
+																																																	OR PEER_AGT.INTL_IPADR = SVR_GLB.PEER_SERVER_IP 
+																				WHERE 	SVR_GLB.PRY_SVR_ID = #{pry_svr_id} )
+											</when>
+											<otherwise>
+											AND PRY_SVR_ID =#{pry_svr_id}
+											</otherwise>
+										</choose>)
+		) A
+		WHERE A.IPADR IS NOT NULL
+	</select>
+
 	<select id="selectProxyGlobal" resultType="proxyGlobalVO" parameterType="hashMap">
         /**
 		* Query ID : selectProxyGlobal
@@ -176,14 +220,11 @@
 		
 		<choose>
 			<when test = "peer != null and (peer eq 'Y'.toString())">
-			AND PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID 
-								FROM 		T_PRY_GLB_I A 
-								INNER JOIN 	T_PRY_GLB_I B 
-								ON 			A.PEER_SERVER_IP = B.OBJ_IP
-											AND (A.PEER_SERVER_IP is not null and A.PEER_SERVER_IP !='' and B.OBJ_IP is not null and B.OBJ_IP !='')
-	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id}
-	      						LIMIT 1
-	      					)
+			AND PRY_SVR_ID = (	SELECT 	PEER_SVR.PRY_SVR_ID
+												FROM 		T_PRY_SVR_I PEER_SVR 	INNER JOIN T_PRY_AGT_I PEER_AGT 	ON PEER_SVR.AGT_SN = PEER_AGT.AGT_SN 
+																										INNER JOIN T_PRY_GLB_I SVR_GLB 		ON PEER_AGT.IPADR = SVR_GLB.PEER_SERVER_IP 
+																																									OR PEER_AGT.INTL_IPADR = SVR_GLB.PEER_SERVER_IP 
+												WHERE 	SVR_GLB.PRY_SVR_ID = #{pry_svr_id} )
 			</when>
 			<otherwise>
 			AND PRY_SVR_ID =#{pry_svr_id}
@@ -216,21 +257,17 @@
 		
 		<choose>
 			<when test = 'pry_svr_id != null and peer != null and (peer eq "Y".toString())'>
-			AND PRY_SVR_ID = (	SELECT 		B.PRY_SVR_ID AS PRY_SVR_ID
-								FROM 		T_PRY_GLB_I A 
-								INNER JOIN 	T_PRY_GLB_I B 
-								ON 			A.PEER_SERVER_IP = B.OBJ_IP
-											AND (A.PEER_SERVER_IP is not null and A.PEER_SERVER_IP !='' and B.OBJ_IP is not null and B.OBJ_IP !='')
-	      						WHERE 		A.PRY_SVR_ID  =#{pry_svr_id}
-	      						LIMIT 1
-	      					)
+			AND PRY_SVR_ID = (	SELECT 	PEER_SVR.PRY_SVR_ID
+												FROM 		T_PRY_SVR_I PEER_SVR 	INNER JOIN T_PRY_AGT_I PEER_AGT 	ON PEER_SVR.AGT_SN = PEER_AGT.AGT_SN 
+																										INNER JOIN T_PRY_GLB_I SVR_GLB 		ON PEER_AGT.IPADR = SVR_GLB.PEER_SERVER_IP 
+																																									OR PEER_AGT.INTL_IPADR = SVR_GLB.PEER_SERVER_IP 
+												WHERE 	SVR_GLB.PRY_SVR_ID = #{pry_svr_id} )
 			</when>
 			<when test = 'peer_server_ip != null and peer != null and !peer.equals("") and (peer eq "Y".toString())'>
 			AND PRY_SVR_ID = (	SELECT 		PRY_SVR_ID 
-								FROM 		T_PRY_GLB_I  
-								WHERE		OBJ_IP = #{peer_server_ip}
-								LIMIT 1
-							)
+												FROM 			T_PRY_GLB_I  
+												WHERE			OBJ_IP = #{peer_server_ip}
+												LIMIT 1)
 			</when>
 			<otherwise>
 			AND PRY_SVR_ID =#{pry_svr_id}
@@ -816,6 +853,7 @@
 		**/
     	SELECT 	AGT_SN,
        			IPADR,
+       			INTL_IPADR,
        			DOMAIN_NM,
        			SOCKET_PORT,
        			AGT_CNDT_CD,
