@@ -2293,13 +2293,13 @@
 												<div class="card" style="margin-bottom:10px;border:none;">
 													<div class="card-body" style="border:none;margin-top:-25px;margin-left:-25px;margin-right:-25px;">
 														<div class="row">
-															<div class="col-sm-8">
+															<div class="col-sm-7">
 																<h6 class="mb-0 alert">
 																	<span class="menu-title text-success"><i class="mdi mdi-chevron-double-right menu-icon" style="font-size:1.1rem; margin-right:5px;"></i><spring:message code="eXperDB_proxy.msg3"/></span>
 																</h6>
 															</div>
-															<div class="col-sm-4">
-																<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text" type="button" id="pry_mas_log_btn" onClick="fn_logView('', 'PROXY', 'today')">
+															<div class="col-sm-5">
+																<button class="btn btn-outline-primary btn-icon-text btn-sm btn-icon-text btn-right" type="button" id="pry_mas_log_btn" onClick="fn_logView('', 'PROXY', 'today')">
 																	<i class="mdi mdi-file-document"></i>
 																	<spring:message code='eXperDB_proxy.current'/> <spring:message code="eXperDB_proxy.master"/> <spring:message code='eXperDB_proxy.proxy_log' />
 																</button>
