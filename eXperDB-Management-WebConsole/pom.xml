@@ -233,43 +233,6 @@
       
       <!-- /excel 설정 -->
       
-        <!-- mysql이나 oracle 필요시 사용 -->
-        <!-- <dependency>
-            <groupId>com.googlecode.log4jdbc</groupId>
-            <artifactId>log4jdbc</artifactId>
-            <version>1.2</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.31</version>
-        </dependency>
-
-      <dependency>
-         <groupId>ojdbc</groupId>
-         <artifactId>ojdbc</artifactId>
-         <version>6</version>
-      </dependency> -->
-        
-     <!-- <dependency>
-       <groupId>org.postgresql</groupId>
-       <artifactId>postgresql</artifactId>
-       <version>9.4-1204-jdbc41</version>
-   </dependency> -->
-   
    <dependency>
        <groupId>org.postgresql</groupId>
        <artifactId>postgresql</artifactId>
@@ -328,6 +291,36 @@
        <artifactId>commons-csv</artifactId>
        <version>1.5</version>
    </dependency>
+   
+   
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	 <dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-core</artifactId>
+	    <version>2.16.0</version>
+	</dependency> 
+
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-api</artifactId>
+	    <version>2.16.0</version>
+	</dependency>
+
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	    <version>2.16.0</version>
+	    <type>pom</type>
+	</dependency> 
+	
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-slf4j-impl</artifactId>
+	    <version>2.16.0</version>
+	</dependency>
    
    
    <!-- PostgreSQL JDBC -->
@@ -473,6 +466,7 @@
           <groupId>org.apache.hadoop</groupId>
           <artifactId>hadoop-common</artifactId>
           <version>2.7.3</version>
+          
       </dependency>
          
       <dependency>
@@ -480,7 +474,7 @@
           <artifactId>hadoop-hdfs</artifactId>
           <version>2.7.3</version>
       </dependency>
-         
+      
       <!--  jdk.tools  -->
       <dependency>
          <groupId>jdk.tools</groupId>
@@ -491,7 +485,9 @@
       </dependency> 
       
    </dependencies>
-      
+   
+
+     
    <build>
         <defaultGoal>install</defaultGoal>
         <directory>${basedir}/target</directory>

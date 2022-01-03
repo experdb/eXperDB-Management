@@ -80,16 +80,30 @@
 	    <artifactId>jcl-over-slf4j</artifactId>
 	    <version>1.7.25</version>
 	</dependency>
-	<dependency>
+	
+	
+	<!-- <dependency>
 	    <groupId>log4j</groupId>
 	    <artifactId>log4j</artifactId>
 	    <version>1.2.17</version>
-	</dependency>
+	</dependency> -->
+	
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
 	<dependency>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-log4j12</artifactId>
-	    <version>1.7.25</version>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	    <version>2.16.0</version>
+	    <type>pom</type>
 	</dependency>
+	
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	<dependency>
+	   <groupId>org.apache.logging.log4j</groupId>
+	   <artifactId>log4j-slf4j-impl</artifactId>
+	   <version>2.16.0</version>
+	   <scope>test</scope>
+	</dependency>
+
     <dependency>
     	<groupId>com.googlecode.json-simple</groupId>
     	<artifactId>json-simple</artifactId>
