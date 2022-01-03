@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring-framework.version>5.2.13.RELEASE</spring-framework.version>
 		<slf4j.version>1.7.30</slf4j.version>
-		<log4j.version>1.2.17</log4j.version>
+		<log4j.version>2.17.1</log4j.version>
 		<spring-security.version>5.2.8.RELEASE</spring-security.version>
 		<spring-batch.version>4.2.5.RELEASE</spring-batch.version>
 	</properties>
@@ -111,12 +111,28 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 		
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
+		</dependency> -->
+		
+		<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>2.17.1</version>
+		    <type>pom</type>
 		</dependency>
-
+		
+		<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+		<dependency>
+		   <groupId>org.apache.logging.log4j</groupId>
+		   <artifactId>log4j-slf4j-impl</artifactId>
+		   <version>2.17.1</version>
+		   <scope>test</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
