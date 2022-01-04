@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+    	<Console name="sql" target="SYSTEM_OUT">
+        	<PatternLayout pattern="%d [%t] %-5p %c{1} - %m%n"/>
+        	<RegexFilter regex="Result" onMatch="DENY" onMismatch="ACCEPT" useRawMsg="true"/>
+    	</Console>
+
+	    <RollingFile name="consoleToFile">
+    	    <ThresholdFilter level="INFO"/>
+        	<FileName>../logs/console.log</FileName>
+        	<FilePattern>../logs/console.log.%d{yyyyMMdd}</FilePattern>
+        	<PatternLayout>
+            	<Pattern>[%d{yyyy-MM-dd HH:mm:ss}][%-5p]%m\n</Pattern>
+        	</PatternLayout>
+        	<Policies>
+         		<TimeBasedTriggeringPolicy />
+      		</Policies>
+    	</RollingFile>
+    	
+    	<RollingFile name="daemonStartToFile">
+    	    <ThresholdFilter level="INFO"/>
+        	<FileName>../logs/daemon.log</FileName>
+        	<FilePattern>../logs/daemon.log.%d{yyyyMMdd}</FilePattern>
+        	<PatternLayout>
+            	<Pattern>[%d{yyyy-MM-dd HH:mm:ss}][%-5p]%m\n</Pattern>
+        	</PatternLayout>
+        	<Policies>
+         		<TimeBasedTriggeringPolicy />
+      		</Policies>
+    	</RollingFile>
+    	
+    	<RollingFile name="socketToFile">
+    	    <ThresholdFilter level="INFO"/>
+        	<FileName>../logs/socket.log</FileName>
+        	<FilePattern>../logs/socket.log.%d{yyyyMMdd}</FilePattern>
+        	<PatternLayout>
+            	<Pattern>[%d{yyyy-MM-dd HH:mm:ss}][%-5p]%m\n</Pattern>
+        	</PatternLayout>
+        	<Policies>
+         		<TimeBasedTriggeringPolicy />
+      		</Policies>
+    	</RollingFile>
+    	
+    	<RollingFile name="errorToFile">
+    	    <ThresholdFilter level="ERROR"/>
+        	<FileName>../logs/error.log</FileName>
+        	<FilePattern>../logs/error.log.%d{yyyyMMdd}</FilePattern>
+        	<PatternLayout>
+            	<Pattern>[%d{yyyy-MM-dd HH:mm:ss}][%-5p]%m\n</Pattern>
+        	</PatternLayout>
+        	<Policies>
+         		<TimeBasedTriggeringPolicy />
+      		</Policies>
+    	</RollingFile>
+    	
+  	</Appenders>
+  	
+  
+  	<Loggers>
+		<Logger name="com.ibatis" level="debug"/>
+    	<Logger name="java.sql" level="debug">
+        	<AppenderRef ref="sql"/>
+    	</Logger>
+    	
+    	<!-- add -->
+    	<Logger name="com.experdb.proxy" level="info">
+    		<AppenderRef ref="consoleToFile"/>
+    	</Logger>
+		  <Logger name="DaemonStartLogger" level="info">
+			  <AppenderRef ref="daemonStartToFile"/>
+		  </Logger>
+		  <Logger name="socketLogger" level="info">
+			  <AppenderRef ref="socketToFile"/>
+		  </Logger>
+		
+	    <Root level="error">
+	    	<AppenderRef ref="consoleToFile"/>
+	      	<AppenderRef ref="errorToFile"/>
+	    </Root>
+  	</Loggers>
+  	
+</Configuration>
