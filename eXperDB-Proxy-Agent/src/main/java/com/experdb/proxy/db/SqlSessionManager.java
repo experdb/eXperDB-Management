@@ -5,12 +5,19 @@ import java.io.InputStream;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class SqlSessionManager {
-	private static Logger log = Logger.getLogger(SqlSessionManager.class);
+	//private static Logger log = Logger.getLogger(SqlSessionManager.class);
+	//private static Logger log = LoggerFactory.getLogger(SqlSessionManager.class);
+	private static Logger log = LogManager.getLogger(SqlSessionManager.class.getName());
 	
 	private static SqlSessionFactory sqlSession = null;
 	
