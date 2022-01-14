@@ -440,7 +440,7 @@ public class ProxyServiceImpl implements ProxyService{
 										
 										//socketLogger.info("proxy_set.temp.contains(intl_db_ipadr) : " + temp.contains(intl_db_ipadr));
 										
-										if ((db_ipadr != null && temp.contains(db_ipadr)) || (intl_db_ipadr != null && temp.contains(intl_db_ipadr))) {
+										if ((db_ipadr != null && temp.contains(db_ipadr)) || (intl_db_ipadr != null && !intl_db_ipadr.equals("") && temp.contains(intl_db_ipadr))) {
 											db_svr_nm = serverInfoList.get(j).getDB_SVR_NM();
 											db_svr_id = serverInfoList.get(j).getDB_SVR_ID();
 											

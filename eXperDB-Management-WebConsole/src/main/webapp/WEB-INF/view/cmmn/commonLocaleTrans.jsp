@@ -75,7 +75,9 @@ var message_number_of_erroneous_events = "<spring:message code='eXperDB_CDC.numb
 var message_total_number_of_events_seen = "<spring:message code='eXperDB_CDC.total_number_of_events_seen'/>";
 
 var eXperDB_CDC_msg30 = "<spring:message code='eXperDB_CDC.msg30' />";
+var eXperDB_CDC_msg33 = "<spring:message code='eXperDB_CDC.msg33' />";
 var eXperDB_CDC_msg38 = "<spring:message code='eXperDB_CDC.msg38' />";
+var eXperDB_CDC_msg49 ="<spring:message code='eXperDB_CDC.msg49'/>";
 
 var eXperDB_CDC_default_setting = "<spring:message code='eXperDB_CDC.default_setting'/>";
 

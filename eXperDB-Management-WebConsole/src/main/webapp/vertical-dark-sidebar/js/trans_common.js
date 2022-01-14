@@ -3033,7 +3033,14 @@ function fn_transComConSetIns_pop(){
 			}
 		},
 		success : function(result) {
-			fn_transComConSetRegPopStart(result);
+			var datas = trans_com_con_pop_table.data();
+			var defaultData;
+			for(var i=0; i<datas.length; i++){
+				if(datas[i].trans_com_id==1){
+					defaultData=datas[i];
+				}
+			}
+			fn_transComConSetRegPopStart(result,defaultData);
 			
 			$('#pop_layer_con_com_ins_cng').modal("show");
 		}
@@ -3101,14 +3108,21 @@ function fn_transComConSetDelete(){
 	}
 	
 	if (totDatas.length <= datas.length) {
-		showSwalIcon(message_msg33, closeBtn, '', 'error');
+		showSwalIcon(eXperDB_CDC_msg33, closeBtn, '', 'error');
 		return;
 	}
 	
 	trans_com_id_List = [];
 
 	for (var i = 0; i < datas.length; i++) {
-		trans_com_id_List.push(datas[i].trans_com_id);   
+		if(datas[i].trans_com_id == 1){
+			//default 설정은 삭제가 불가능합니다
+			showSwalIcon(eXperDB_CDC_msg49, closeBtn, '', 'warning');
+			trans_com_con_pop_table.row(i).deselect();
+			return;
+		}else{
+			trans_com_id_List.push(datas[i].trans_com_id);
+		}      
 	}
 
 	confile_title = eXperDB_CDC_default_setting + " " + button_delete + " " + common_request;
