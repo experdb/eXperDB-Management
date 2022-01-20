@@ -450,4 +450,9 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	public void upgradePrySvrOldMaster(int dbSvrId) {
 		update("proxySettingSql.upgradePrySvrOldMaster", dbSvrId);	
 	}
+
+	public List<Map<String, Object>> selectPoxyServerIPList(Map<String, Object> param) {
+		List<Map<String, Object>> result = (List<Map<String, Object>>) list("proxySettingSql.selectPoxyServerIPList", param);
+		return result;
+	}
 }

@@ -64,6 +64,9 @@ public class SystemServiceImpl implements SystemService{
 		vo.setFrst_regr_id("system");
 		vo.setLst_mdfr_id("system");
 		vo.setAws_yn(FileUtil.getPropertyValue("context.properties", "aws.yn"));
+		if("Y".equals(FileUtil.getPropertyValue("context.properties", "agent.inner.ip.useyn"))){
+			vo.setIntl_ipadr(FileUtil.getPropertyValue("context.properties", "agent.inner.ip"));
+		}
 		
 		if(agentInfo == null) {
 			vo.setDomain_nm("PROXY_" + strSocketIp);

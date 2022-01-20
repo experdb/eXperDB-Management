@@ -3,6 +3,7 @@ package com.experdb.management.proxy.service;
 public class ProxyAgentVO {
 	private int agt_sn; 
 	private String ipadr; 
+	private String intl_ipadr;
 	private String domain_nm; 
 	private int socket_port; 
 	private String agt_cndt_cd; 
@@ -148,6 +149,12 @@ public class ProxyAgentVO {
 	}
 	public void setAws_yn(String aws_yn) {
 		this.aws_yn = aws_yn;
+	}
+	public String getIntl_ipadr() {
+		return intl_ipadr;
+	}
+	public void setIntl_ipadr(String intl_ipadr) {
+		this.intl_ipadr = intl_ipadr;
 	}
 
 }

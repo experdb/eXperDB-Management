@@ -342,7 +342,8 @@ public class ProxyServiceImpl implements ProxyService{
 		String strObjIp = ""; 		//대상 ip
 		String strPeerServerIp = ""; //PEER_서버_IP
 		
-		String strInslIp = "";
+		//String strInslIp = "";
+		String strAgentIntlIpadr = "";
 
 		try {
 			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();
@@ -362,12 +363,18 @@ public class ProxyServiceImpl implements ProxyService{
 			
 			//내부 ip확인
 			if (serverIp != null) {
+				/*//dbms internal ip 
 				dbServerInfoVO.setIPADR(serverIp);
 				DbServerInfoVO serverInfoIntlList = systemDAO.selectDbsvripadrMstGbnIntlInfo(dbServerInfoVO);
-
 				if (serverInfoIntlList != null) {
 					strInslIp = serverInfoIntlList.getINTL_IPADR();
+				}*/
+								
+				//agent internal ip 
+				if("Y".equals(FileUtil.getPropertyValue("context.properties", "agent.inner.ip.useyn"))){
+					strAgentIntlIpadr = FileUtil.getPropertyValue("context.properties", "agent.inner.ip");
 				}
+				
 			}
 
 			String retVal = r.call();
@@ -433,7 +440,7 @@ public class ProxyServiceImpl implements ProxyService{
 										
 										//socketLogger.info("proxy_set.temp.contains(intl_db_ipadr) : " + temp.contains(intl_db_ipadr));
 										
-										if ((db_ipadr != null && temp.contains(db_ipadr)) || (intl_db_ipadr != null && temp.contains(intl_db_ipadr))) {
+										if ((db_ipadr != null && temp.contains(db_ipadr)) || (intl_db_ipadr != null && !intl_db_ipadr.equals("") && temp.contains(intl_db_ipadr))) {
 											db_svr_nm = serverInfoList.get(j).getDB_SVR_NM();
 											db_svr_id = serverInfoList.get(j).getDB_SVR_ID();
 											
@@ -687,10 +694,19 @@ public class ProxyServiceImpl implements ProxyService{
 										//대상_IP
 										strObjIp = serverIp;
 										peerServerIpChk = 1;
-									} else if (!strInslIp.equals("")) {
+									}/*** dbms inner Ip  
+										else if (!strInslIp.equals("")) {
 										if (temp.trim().contains(strInslIp)) { //내부일때는 내부ip setting
 											//대상_IP
 											strObjIp = strInslIp;
+											peerServerIpChk = 1;
+										}
+									}
+									*/
+									else if (!strAgentIntlIpadr.equals("")) {
+										if (temp.trim().contains(strAgentIntlIpadr)) { //내부일때는 내부ip setting
+											//대상_IP
+											strObjIp = strAgentIntlIpadr;
 											peerServerIpChk = 1;
 										}
 									}

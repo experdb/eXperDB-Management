@@ -13,8 +13,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring-framework.version>5.2.13.RELEASE</spring-framework.version>
-		<slf4j.version>1.7.30</slf4j.version>
-		<log4j.version>1.2.17</log4j.version>
+	    <slf4j.version>1.7.32</slf4j.version>
+		<log4j.version>2.17.1</log4j.version>
 		<spring-security.version>5.2.8.RELEASE</spring-security.version>
 		<spring-batch.version>4.2.5.RELEASE</spring-batch.version>
 	</properties>
@@ -92,7 +92,7 @@
 			<artifactId>org.apache.commons.lang</artifactId>
 			<version>2.6</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -104,19 +104,48 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-
-		<dependency>
+		
+		
+<!-- 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
-		</dependency>
+		</dependency> -->
 		
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
+		</dependency> -->
+		
+		<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>${log4j.version}</version>
+		    <type>pom</type>
 		</dependency>
-
+		
+		<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+		<dependency>
+		   <groupId>org.apache.logging.log4j</groupId>
+		   <artifactId>log4j-slf4j-impl</artifactId>
+		   <version>${log4j.version}</version>
+		   <exclusions>
+				<exclusion>
+					 <groupId>org.apache.logging.log4j</groupId>
+      				 <artifactId>log4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		   <scope>test</scope>
+		 </dependency>
+		
+		<dependency>
+    		<groupId>org.apache.logging.log4j</groupId>
+    		<artifactId>log4j-jcl</artifactId>
+    		<version>${log4j.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
@@ -299,12 +328,13 @@
 			<version>4.5.13</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.fusesource/sigar -->
+		<!-- https://mvnrepository.com/artifact/org.fusesource/sigar 
 		<dependency>
 			<groupId>org.fusesource</groupId>
 			<artifactId>sigar</artifactId>
 			<version>1.6.4</version>
 		</dependency>
+		-->
 		
 		<!-- https://mvnrepository.com/artifact/org.snmp4j/snmp4j -->
 		<dependency>

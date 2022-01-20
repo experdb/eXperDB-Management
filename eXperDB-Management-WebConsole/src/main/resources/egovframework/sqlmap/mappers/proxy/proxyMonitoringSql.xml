@@ -496,6 +496,7 @@
                (ROW_NUMBER() OVER(ORDER BY A.AGT_SN, A.LST_MDF_DTM DESC)) AS ROWNUM
               , A.AGT_SN
               , A.IPADR
+              , A.INTL_IPADR
               , A.DOMAIN_NM
               , A.SOCKET_PORT
               , A.AGT_CNDT_CD

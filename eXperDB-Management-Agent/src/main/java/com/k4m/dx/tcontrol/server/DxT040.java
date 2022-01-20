@@ -53,10 +53,10 @@ public class DxT040 extends SocketCtl{
 								, "echo $PGDATA/backup" //백업경로
 								, "df $PGDATA/backup -h" //백업 마운트 용량
 								, "du -sh $PGDATA/backup" //백업 용량					
-								, "echo $PGDATA/log"	//PG_LOG 경로				
-								, "du -s $PGDATA/log" //PG_LOG 용량	
+								, "echo $PGLOG"	//PG_LOG 경로				
+								, "du -s $PGLOG" //PG_LOG 용량	
 								, "ls $PGALOG | wc -l"
-								, "ls $PGDATA/log | wc -l"
+								, "ls $PGLOG | wc -l"
 							   };
 	
 	public DxT040(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {

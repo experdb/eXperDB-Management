@@ -45,6 +45,16 @@
             <enabled>false</enabled>
          </snapshots>
       </repository>
+      <repository>
+		<id>cubrid.release.repository</id>
+		<url>http://maven.cubrid.org</url>
+		<releases>
+		<enabled>true</enabled>
+		</releases>
+		<snapshots>
+		<enabled>false</enabled>
+		</snapshots>
+	</repository>
    </repositories>
 
    <dependencies>
@@ -233,43 +243,6 @@
       
       <!-- /excel 설정 -->
       
-        <!-- mysql이나 oracle 필요시 사용 -->
-        <!-- <dependency>
-            <groupId>com.googlecode.log4jdbc</groupId>
-            <artifactId>log4jdbc</artifactId>
-            <version>1.2</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.31</version>
-        </dependency>
-
-      <dependency>
-         <groupId>ojdbc</groupId>
-         <artifactId>ojdbc</artifactId>
-         <version>6</version>
-      </dependency> -->
-        
-     <!-- <dependency>
-       <groupId>org.postgresql</groupId>
-       <artifactId>postgresql</artifactId>
-       <version>9.4-1204-jdbc41</version>
-   </dependency> -->
-   
    <dependency>
        <groupId>org.postgresql</groupId>
        <artifactId>postgresql</artifactId>
@@ -330,24 +303,44 @@
    </dependency>
    
    
-   <!-- PostgreSQL JDBC -->
-      <!-- <dependency>
-         <groupId>org.postgresql</groupId>
-         <artifactId>postgresql</artifactId>
-         <version>42.2.5</version>
-         <scope>system</scope>
-         <systemPath>${project.basedir}/src/main/resources/jar/postgresql-42.2.5.jar</systemPath>
-      </dependency> -->
-      
-         <!-- Oracle SDO API -->
-      <dependency>
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	 <dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-core</artifactId>
+	    <version>2.17.1</version>
+	</dependency> 
+
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-api</artifactId>
+	    <version>2.17.1</version>
+	</dependency>
+
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	    <version>2.17.1</version>
+	    <type>pom</type>
+	</dependency> 
+	
+	<!-- log4j2 취약점 확인으로 인한 버전 업그레이드 -->
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-slf4j-impl</artifactId>
+	    <version>2.17.1</version>
+	</dependency>
+   
+      <!-- Oracle SDO API -->
+       <dependency>
          <groupId>oracle.spatial</groupId>
          <artifactId>geometry.sdoapi</artifactId>
          <version>11.2</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/geometry.sdoapi-11.2.jar</systemPath>
       </dependency>
-
+     
       <dependency>
          <groupId>oracle.spatial</groupId>
          <artifactId>type</artifactId>
@@ -355,7 +348,7 @@
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/type-11.2.jar</systemPath>
       </dependency>
-
+     
       <dependency>
          <groupId>oracle.spatial</groupId>
          <artifactId>util</artifactId>
@@ -366,20 +359,31 @@
       
       
       <!-- Oracle -->
-      <dependency>
+     <!--  <dependency>
          <groupId>ojdbc</groupId>
          <artifactId>ojdbc</artifactId>
          <version>6</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/ojdbc-6.jar</systemPath>
-      </dependency>
+      </dependency> -->
+      
+      <!-- Oracle -->
       <dependency>
+	    <groupId>com.oracle.database.jdbc</groupId>
+	    <artifactId>ojdbc6</artifactId>
+	    <version>11.2.0.4</version>
+	</dependency>
+      
+     
+       <dependency>
          <groupId>ojdbc</groupId>
          <artifactId>xdb</artifactId>
          <version>6</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/xdb-6.jar</systemPath>
       </dependency>
+      
+
       <dependency>
          <groupId>xmlparserv2</groupId>
          <artifactId>xmlparserv2</artifactId>
@@ -387,41 +391,59 @@
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/xmlparserv2-11.1.0.6.jar</systemPath>
       </dependency>
-      
-      <dependency>
+       
+     <dependency>
          <groupId>orai18n</groupId>
          <artifactId>orai18n</artifactId>
          <version>1</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/orai18n-1.jar</systemPath>
-      </dependency>
-            
+      </dependency> 
+                 
       <!-- PostGIS JDBC -->
-      <dependency>
+       <dependency>
          <groupId>org.postgis</groupId>
          <artifactId>postgis-jdbc</artifactId>
          <version>master.2017.07.18</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/postgis-jdbc-master.2017.07.18.jar</systemPath>
-      </dependency>
-
-      <!-- DB2 -->
-      <dependency>
+      </dependency> 
+      
+    
+      <!-- DB2 old-->
+      <!-- <dependency>
          <groupId>db2jcc4</groupId>
          <artifactId>db2jcc4</artifactId>
          <version>1</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/db2jcc4-1.jar</systemPath>
-      </dependency>
+      </dependency> -->
+      
+       <!-- DB2 -->
+		 <dependency>
+		    <groupId>com.ibm.db2.jcc</groupId>
+		    <artifactId>db2jcc</artifactId>
+		    <version>db2jcc4</version>
+		</dependency>
+      
+      
       
       <!-- MS-SQL -->
-      <dependency>
+      <!-- <dependency>
          <groupId>sqljdbc41</groupId>
          <artifactId>sqljdbc41</artifactId>
          <version>1</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/sqljdbc41-1.jar</systemPath>
-      </dependency>
+      </dependency> -->
+      
+        <!-- MS-SQL -->
+      <dependency>
+	    <groupId>com.microsoft.sqlserver</groupId>
+	    <artifactId>mssql-jdbc</artifactId>
+	    <version>9.4.0.jre8</version>
+	</dependency>
+      
       
       <!-- Tibero -->
       <dependency>
@@ -430,8 +452,8 @@
          <version>1</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/tibero5-jdbc-1.jar</systemPath>
-      </dependency>
-      
+      </dependency> 
+        
       <!-- MySQL -->
       <dependency>
          <groupId>mysql</groupId>
@@ -440,14 +462,22 @@
       </dependency>
    
       <!-- CUBRID -->   
-      <dependency>
+     <!-- <dependency>
          <groupId>cubrid</groupId>
          <artifactId>cubrid-jdbc</artifactId>
          <version>9.3.6.0002</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/cubrid-jdbc-9.3.6.0002.jar</systemPath>
-      </dependency>
+      </dependency> -->
       
+       <!-- CUBRID -->   
+	 <dependency>
+	    <groupId>cubrid</groupId>
+	    <artifactId>cubrid-jdbc</artifactId>
+	    <version>9.3.9.0002</version>
+	</dependency>
+		      
+		      
       <!-- MariaDB -->   
       <dependency>
           <groupId>org.mariadb.jdbc</groupId>
@@ -472,26 +502,44 @@
       <dependency>
           <groupId>org.apache.hadoop</groupId>
           <artifactId>hadoop-common</artifactId>
-          <version>2.7.3</version>
+          <version>3.3.1</version>         
+          <exclusions>
+             <exclusion>
+                <artifactId>log4j</artifactId>
+                <groupId>log4j</groupId>
+             </exclusion>
+             <exclusion>
+                <groupId>org.slf4j</groupId>
+      			<artifactId>slf4j-log4j12</artifactId>
+             </exclusion>             
+          </exclusions>
       </dependency>
          
       <dependency>
           <groupId>org.apache.hadoop</groupId>
           <artifactId>hadoop-hdfs</artifactId>
-          <version>2.7.3</version>
+          <version>3.3.1</version>
+          <exclusions>
+             <exclusion>
+                <artifactId>log4j</artifactId>
+                <groupId>log4j</groupId>
+             </exclusion>
+          </exclusions>
       </dependency>
-         
+      
       <!--  jdk.tools  -->
-      <dependency>
+   	 <dependency>
          <groupId>jdk.tools</groupId>
          <artifactId>jdk.tools</artifactId>
          <version>1.8</version>
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/tools.jar</systemPath>
-      </dependency> 
-      
+      </dependency>
+
    </dependencies>
-      
+   
+
+     
    <build>
         <defaultGoal>install</defaultGoal>
         <directory>${basedir}/target</directory>

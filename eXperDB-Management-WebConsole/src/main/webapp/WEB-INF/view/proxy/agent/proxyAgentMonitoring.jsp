@@ -52,6 +52,59 @@
  						{data : "rownum",  className : "dt-center", defaultContent : ""},
  						{data : "domain_nm", className : "dt-left", defaultContent : ""},
  						{data : "ipadr", className : "dt-center", defaultContent : ""},
+ 						{data : "agt_version", 
+ 							render: function (data, type, full){
+ 								var html = "";
+ 								if(full.agt_version != ""){
+ 									html += "<div class='badge badge-pill badge-outline-primary'>";
+ 									html += "	<i class='fa fa-check-square-o mr-2'></i>";
+ 									html += full.agt_version;
+ 									html += "</div>";	
+ 								}
+
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "" 	
+ 						},
+ 						{data : "agt_cndt_cd", 
+ 							render: function (data, type, full){
+ 								var html = "";
+  							/* if (aut_id == "1") {
+ 									if(full.agt_cndt_cd == "TC001501"){
+ 										html += '<div class="onoffswitch-scale">';
+ 										html += '<input type="checkbox" name="agtCndtCd" class="onoffswitch-scale-checkbox" id="agtCndtCd'+ full.rownum +'" onclick="fn_use_agentChk('+ full.rownum +')" checked>';
+ 										html += '<label class="onoffswitch-scale-label" for="agtCndtCd'+ full.rownum +'">';
+ 	 									html += '<span class="onoffswitch-scale-inner"></span>';
+ 	 									html += '<span class="onoffswitch-scale-switch"></span></label>';
+
+ 		  								html += '<input type="hidden" name="act_agt_sn" id="act_agt_sn'+ full.rownum +'" value="'+ full.agt_sn +'"/>';
+ 		  								html += '<input type="hidden" name="act_ipadr" id="act_ipadr'+ full.rownum +'" value="'+ full.ipadr +'"/>';
+ 		  								html += '<input type="hidden" name="act_socket_port" id="act_socket_port'+ full.rownum +'" value="'+ full.socket_port +'"/>';
+ 		  								html += '<input type="hidden" name="act_agt_cndt_cd" id="act_agt_cndt_cd'+ full.rownum +'" value="'+ full.agt_cndt_cd +'"/>';
+ 									}else {
+	 									html += "<div class='badge badge-pill badge-danger'>";
+ 	 									html += "	<i class='ti-close mr-2'></i>";
+ 	 									html += "	<spring:message code='schedule.stop' />";
+ 	 								}
+ 								} else { */
+ 	  								if(full.agt_cndt_cd == "TC001501"){
+ 	 									html += "<div class='badge badge-pill badge-success'>";
+ 	 									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+ 	 									html += "	<spring:message code='dashboard.running' />";
+ 	 								} else {
+ 	 									html += "<div class='badge badge-pill badge-danger'>";
+ 	 									html += "	<i class='ti-close mr-2'></i>";
+ 	 									html += "	<spring:message code='schedule.stop' />";
+ 	 								}
+/*  								} */
+								html += "</div>";
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "" 	
+ 						},
+ 						{data : "intl_ipadr", className : "dt-center", defaultContent : ""},
  						{data : "strt_dtm", className : "dt-center", defaultContent : ""},
  						{data : "svr_use_yn", 
  							render: function (data, type, full){
@@ -114,61 +167,8 @@
  							className : "dt-center",
  							defaultContent : "" 	
  						},
- 						{data : "agt_version", 
- 							render: function (data, type, full){
- 								var html = "";
- 								if(full.agt_version != ""){
- 									html += "<div class='badge badge-pill badge-outline-primary'>";
- 									html += "	<i class='fa fa-check-square-o mr-2'></i>";
- 									html += full.agt_version;
- 									html += "</div>";	
- 								}
-
- 								return html;
- 							},
- 							className : "dt-center",
- 							defaultContent : "" 	
- 						},
- 						{data : "agt_cndt_cd", 
- 							render: function (data, type, full){
- 								var html = "";
- 								
-/*  								if (aut_id == "1") {
- 									if(full.agt_cndt_cd == "TC001501"){
- 										html += '<div class="onoffswitch-scale">';
- 										html += '<input type="checkbox" name="agtCndtCd" class="onoffswitch-scale-checkbox" id="agtCndtCd'+ full.rownum +'" onclick="fn_use_agentChk('+ full.rownum +')" checked>';
- 										html += '<label class="onoffswitch-scale-label" for="agtCndtCd'+ full.rownum +'">';
- 	 									html += '<span class="onoffswitch-scale-inner"></span>';
- 	 									html += '<span class="onoffswitch-scale-switch"></span></label>';
-
- 		  								html += '<input type="hidden" name="act_agt_sn" id="act_agt_sn'+ full.rownum +'" value="'+ full.agt_sn +'"/>';
- 		  								html += '<input type="hidden" name="act_ipadr" id="act_ipadr'+ full.rownum +'" value="'+ full.ipadr +'"/>';
- 		  								html += '<input type="hidden" name="act_socket_port" id="act_socket_port'+ full.rownum +'" value="'+ full.socket_port +'"/>';
- 		  								html += '<input type="hidden" name="act_agt_cndt_cd" id="act_agt_cndt_cd'+ full.rownum +'" value="'+ full.agt_cndt_cd +'"/>';
- 									}else {
-	 									html += "<div class='badge badge-pill badge-danger'>";
- 	 									html += "	<i class='ti-close mr-2'></i>";
- 	 									html += "	<spring:message code='schedule.stop' />";
- 	 								}
- 								} else { */
- 	  								if(full.agt_cndt_cd == "TC001501"){
- 	 									html += "<div class='badge badge-pill badge-success'>";
- 	 									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
- 	 									html += "	<spring:message code='dashboard.running' />";
- 	 								} else {
- 	 									html += "<div class='badge badge-pill badge-danger'>";
- 	 									html += "	<i class='ti-close mr-2'></i>";
- 	 									html += "	<spring:message code='schedule.stop' />";
- 	 								}
-/*  								} */
-
-								html += "</div>";
-								
- 								return html;
- 							},
- 							className : "dt-center",
- 							defaultContent : "" 	
- 						},
+ 						
+ 						
  						{data : "agt_sn",  defaultContent : "", visible: false },
  						{data : "socket_port",  defaultContent : "", visible: false },
  						{data : "aws_yn", 
@@ -196,18 +196,23 @@
 
 		proxyAgentTable.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
 		proxyAgentTable.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
-		proxyAgentTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(2)').css('min-width', '125px');
+
 		proxyAgentTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		proxyAgentTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-		proxyAgentTable.tables().header().to$().find('th:eq(5)').css('min-width', '180px');
-		proxyAgentTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-		proxyAgentTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-		proxyAgentTable.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-		proxyAgentTable.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-		proxyAgentTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
-		proxyAgentTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
-		proxyAgentTable.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(5)').css('min-width', '125px');
 
+		proxyAgentTable.tables().header().to$().find('th:eq(6)').css('min-width', '200px');
+		
+		proxyAgentTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(8)').css('min-width', '180px');
+		proxyAgentTable.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+
+		proxyAgentTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+		proxyAgentTable.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+		proxyAgentTable.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+		
 		$(window).trigger('resize');
 	}
 
@@ -465,17 +470,17 @@
 	 										<tr class="bg-info text-white">
 												<th width="40" height="0"><spring:message code="common.no" /></th>
 												<th width="200"><spring:message code="eXperDB_proxy.agent_name" /></th>
-			 									<th width="100"><spring:message code="eXperDB_proxy.agent_ip" /></th>
-												<th width="100"><spring:message code="agent_monitoring.run_date" /> </th>
+			 									<th width="125"><spring:message code="eXperDB_proxy.agent_ip" /></th>
+												<th width="100"><spring:message code="agent_monitoring.agent_version" /></th>
+												<th width="100"><spring:message code="agent_monitoring.agent_status" /></th>
+												<th width="125"><spring:message code="eXperDB_proxy.agent_internal_ip" /></th>
+												<th width="200"><spring:message code="agent_monitoring.run_date" /> </th>
 												<th width="100"><spring:message code="eXperDB_proxy.proxy_use" /></th>
 												<th width="180"><spring:message code="eXperDB_proxy.server_name" /></th>
 												<th width="100"><spring:message code="eXperDB_proxy.master_div" /></th>
 												<th width="100"><spring:message code="eXperDB_proxy.vip_use" /></th>
-												<th width="100"><spring:message code="agent_monitoring.agent_version" /></th>
-												<th width="100"><spring:message code="agent_monitoring.agent_status" /></th>
 												<th width="0"></th>
 												<th width="0"></th>
-												<%-- <th width="100"><spring:message code="eXperDB_proxy.vip_use" /></th> --%>
 												<th width="100"><spring:message code="eXperDB_proxy.aws_yn" /></th>
 											</tr>
 										</thead>

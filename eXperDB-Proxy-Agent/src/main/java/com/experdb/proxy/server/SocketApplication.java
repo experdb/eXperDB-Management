@@ -1,6 +1,13 @@
 package com.experdb.proxy.server;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
+
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.json.simple.JSONObject;
 
 /**
@@ -16,7 +23,8 @@ import org.json.simple.JSONObject;
 *      </pre>
 */
 public interface SocketApplication {
-	public static Logger log = Logger.getLogger(SocketApplication.class);
-	
+	//public static Logger log = Logger.getLogger(SocketApplication.class);
+	//public static Logger log = LoggerFactory.getLogger(SocketApplication.class);
+	public static Logger log = LogManager.getLogger(SocketApplication.class.getName());
 	public JSONObject perform(String tran_cd, JSONObject dbInfoObj) throws Exception;
 }

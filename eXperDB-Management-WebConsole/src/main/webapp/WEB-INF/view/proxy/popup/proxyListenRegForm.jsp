@@ -599,7 +599,7 @@ function fn_serverListTable_init() {
 </script>
 
 <div class="modal fade" id="pop_layer_ip_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; z-index: 1060;">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 250px 300px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 250px 330px;">
 		<div class="modal-content" style="width:1000px;">			 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
@@ -643,7 +643,7 @@ function fn_serverListTable_init() {
 </div>
 
 <div class="modal fade" id="pop_layer_proxy_listen_reg" tabindex="-1" role="dialog" aria-labelledby="ModalProxyListen" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 80px 330px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 40px 330px;">
 	<form class="cmxform" id="insProxyListenForm">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">

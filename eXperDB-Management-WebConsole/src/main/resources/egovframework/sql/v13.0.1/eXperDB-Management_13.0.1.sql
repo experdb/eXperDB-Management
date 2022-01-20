@@ -146,7 +146,7 @@ select nextval('q_usrmnuaut_i_01'), 'admin',
        
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0176', 'Migration 모니터링', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Migration Monitoring);
+VALUES('TC0001', 'DX-T0176', 'Migration 모니터링', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Migration Monitoring');
 
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)

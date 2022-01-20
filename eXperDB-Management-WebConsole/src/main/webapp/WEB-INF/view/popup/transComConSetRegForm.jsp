@@ -21,10 +21,24 @@
 	 * scale setting 초기 실행
 	 ******************************************************** */
 	$(window.document).ready(function() {
+		
+		$.validator.addMethod("duplCheckCngNm", function (str, element, param) {
+		  	var cnt = 0;
+		    var listLen = trans_com_con_pop_table.rows().data().length;
+		    var tblData = trans_com_con_pop_table.rows().data();
+		    for(var i=0; i< listLen; i++){
+		    	if(str==tblData[i].trans_com_cng_nm){
+		    		return false;
+		    	}
+		    }
+		    return true;
+	  });
+		
 		$("#comConRegForm").validate({
 			rules: {
 				ins_com_trans_cng_nm: {
 					required: true
+					,duplCheckCngNm : true
 				},
 				ins_com_heartbeat_interval_ms: {
 					number: true
@@ -48,6 +62,7 @@
 			messages: {
 				ins_com_trans_cng_nm: {
 					required: '<spring:message code="eXperDB_CDC.msg32" />'
+					,duplCheckCngNm :'<spring:message code="eXperDB_CDC.msg50" />'
 				},
 				ins_com_heartbeat_interval_ms: {
 					number: '<spring:message code="eXperDB_scale.msg15" />'
@@ -85,9 +100,17 @@
 	/* ********************************************************
 	 * 팝업시작
 	 ******************************************************** */
-	function fn_transComConSetRegPopStart(result) {
+	function fn_transComConSetRegPopStart(result,defData) {
 		$("#ins_com_transforms_yn", "#comConRegForm").val("");
 		$("#ins_com_trans_com_id", "#comConRegForm").val("");
+		
+		$("#ins_com_plugin_name", "#comConRegForm").val(defData.plugin_name);
+		$("#ins_com_heartbeat_interval_ms", "#comConRegForm").val(defData.heartbeat_interval_ms);
+		$("#ins_com_heartbeat_action_query", "#comConRegForm").val(defData.heartbeat_action_query);
+		$("#ins_com_max_batch_size", "#comConRegForm").val(defData.max_batch_size);
+		$("#ins_com_max_queue_size", "#comConRegForm").val(defData.max_queue_size);
+		$("#ins_com_offset_flush_interval_ms", "#comConRegForm").val(defData.offset_flush_interval_ms);
+		$("#ins_com_offset_flush_timeout_ms", "#comConRegForm").val(defData.offset_flush_timeout_ms);
 	}
 	
 	/* ********************************************************

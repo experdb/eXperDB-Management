@@ -5,18 +5,21 @@ import java.sql.DriverManager;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDriver;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.apache.log4j.Logger;
+
 
 import com.k4m.dx.tcontrol.db.datastructure.ConfigInfo;
 
 public class DBCPPoolManager {
-	private Logger log = Logger.getLogger(DBCPPoolManager.class);
+	private Logger log = LogManager.getLogger(DBCPPoolManager.class);
 	
 	public ConcurrentHashMap<String, ConfigInfo> ConnInfoList = new ConcurrentHashMap<String, ConfigInfo>();
 	
