@@ -1404,4 +1404,17 @@
                 ORDER BY LST_MDF_DTM DESC
         ) A
 	</select>
+		
+	<select id="selectTransComUseCheck" resultType="int" parameterType="int">
+		/**
+		* Query ID : selectTransComUseCheck
+		* Description : 기본 설정 정보 사용 Connector가 있는지 확인 
+		* Author :
+		**/
+        SELECT 
+               COUNT(*)
+          FROM T_TRANSCNG_I
+         WHERE TRANS_COM_ID = #{trasn_com_id}
+	</select>
+	
 </mapper>

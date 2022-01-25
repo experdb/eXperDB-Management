@@ -186,9 +186,14 @@
 				}
 			},
 			success : function(result) {						
-				if(result == true){
-					showSwalIcon('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success');
-					fn_trans_com_con_pop_search();
+				if(result.result == true){
+					if(result.delCnt==0){ //삭제한 항목이 없을 경우 > 사용 중인 항목은 삭제 불가합니다라는 안내 매세지 
+						showSwalIcon(fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg52"/>'), '<spring:message code="common.close" />', '', 'warning');
+						fn_trans_com_con_pop_search();
+					}else{ //일부 또는 전체를 삭제했을 경우 > 선택한 항목 total개 중 delCnt 개 삭제가 완료되었습니다 라는 안내 메세지 출력 
+						showSwalIcon(fn_strBrReplcae('<spring:message code="eXperDB_CDC.msg51" arguments="'+result.total+','+result.delCnt+'"/>'), '<spring:message code="common.close" />', '', 'success');
+						fn_trans_com_con_pop_search();
+					}
 				}else{
 					msgVale = "<spring:message code='eXperDB_CDC.default_setting' />";
 					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');

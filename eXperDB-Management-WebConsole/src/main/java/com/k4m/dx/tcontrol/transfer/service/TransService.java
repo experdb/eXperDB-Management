@@ -214,7 +214,7 @@ public interface TransService {
 	 * @param transVO
 	 * @throws Exception
 	 */
-	public void deleteTransComConSet(TransVO transVO) throws Exception;
+	public JSONObject deleteTransComConSet(TransVO transVO) throws Exception;
 
 	/**
 	 * 타겟시스템 전송설정 total 등록
