@@ -69,7 +69,7 @@
           LIMIT 20
    </select>
 
-   <select id="selectSourceConnectorList" resultType="hashMap">
+   <select id="selectSourceConnectorList" resultType="hashMap"  parameterType="int">
       /**
       * Query ID : selectSourceConnectorList
       * Description : 소스 Connector 목록 조회
@@ -90,9 +90,10 @@
              , A.META_DATA
              , A.KC_ID
              , A.TRANS_COM_ID
-          FROM T_TRANSCNG_I A 
-               LEFT JOIN T_TRANS_CON_INF B ON A.KC_ID = B.KC_ID
-         ORDER BY A.TRANS_ID
+        FROM 					T_TRANSCNG_I A 
+         		LEFT JOIN 	T_TRANS_CON_INF B 	ON A.KC_ID = B.KC_ID
+		WHERE A.DB_SVR_ID = #{db_svr_id}::numeric
+		ORDER BY A.TRANS_ID
    </select>
    
    <select id="selectSourceConnectorTableList" resultType="hashMap">

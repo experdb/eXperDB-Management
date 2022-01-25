@@ -53,12 +53,13 @@ public class TransMonitoringServiceImpl  extends EgovAbstractServiceImpl impleme
 	
 	/**
 	 * 소스 Connector 목록 조회
-	 * 
+	 *
+	 * @param db_svr_id
 	 * @return List<Map<String, Object>>
 	 */
 	@Override
-	public List<Map<String, Object>> selectSrcConnectorList() {
-		return transMonitoringDAO.selectSrcConnectorList();
+	public List<Map<String, Object>> selectSrcConnectorList(int db_svr_id) {
+		return transMonitoringDAO.selectSrcConnectorList(db_svr_id);
 	}
 
 	/**

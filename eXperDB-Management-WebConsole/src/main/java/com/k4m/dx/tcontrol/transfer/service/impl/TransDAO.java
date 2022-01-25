@@ -474,4 +474,17 @@ public class TransDAO extends EgovAbstractMapper{
 	public Map<String, Object> selectTransComCoIngChk(TransVO transVO) throws SQLException {
 		return (Map<String, Object>) selectOne("transSQL.selectTransComCoIngChk", transVO);
 	}
+	
+
+	/**
+	 * trans 기본 설정 사용 소스 시스템 체크
+	 * 
+	 * @param transVO
+	 * @return Map<String, Object>
+	 * @throws Exception
+	 */
+	public int selectTransComUseCheck(String transComId) {
+		int comId = Integer.parseInt(transComId);
+		return (int) selectOne("transSQL.selectTransComUseCheck", comId);
+	}
 }

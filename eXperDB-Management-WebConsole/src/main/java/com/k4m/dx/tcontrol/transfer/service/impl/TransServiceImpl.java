@@ -634,21 +634,29 @@ System.out.println("adasdasdad==========" + topic_type_chk);
 	 * @throws Exception
 	 */
 	@Override
-	public void deleteTransComConSet(TransVO transVO) throws Exception {
-		try{
-			JSONArray trans_com_ids = (JSONArray) new JSONParser().parse(transVO.getTrans_com_id_Rows());
-
-			if (trans_com_ids != null && trans_com_ids.size() > 0) {
-				for(int i=0; i<trans_com_ids.size(); i++){
-					TransVO transPrmVO = new TransVO();	
-					transPrmVO.setTrans_com_id(trans_com_ids.get(i).toString());
-					
+	public JSONObject deleteTransComConSet(TransVO transVO) throws Exception {
+		JSONArray trans_com_ids = (JSONArray) new JSONParser().parse(transVO.getTrans_com_id_Rows());
+		JSONObject delResult = new JSONObject();
+		int transComTotal = trans_com_ids.size();
+		int transComDel = 0;
+		
+		if (trans_com_ids != null && transComTotal > 0) {
+			for(int i=0; i<transComTotal; i++){
+				TransVO transPrmVO = new TransVO();	
+				String transComId = trans_com_ids.get(i).toString();
+				transPrmVO.setTrans_com_id(transComId);	
+				//해당 기본설정을 사용 중인 소스시스템이 있으면 양수, 없으면 0  
+				if(transDAO.selectTransComUseCheck(trans_com_ids.get(i).toString()) == 0){
+					transComDel++;
 					transDAO.deleteTransComConSet(transPrmVO);
 				}
 			}
-		}catch(Exception e){
-			e.printStackTrace();
 		}
+		
+		delResult.put("total", transComTotal); //삭제 요청한 Item 갯수 
+		delResult.put("delCnt", transComDel); //삭제한 Item 갯수 
+		
+		return delResult;
 	}
 	
 	/**
