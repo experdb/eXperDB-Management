@@ -421,7 +421,7 @@
 									</label>
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
-										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="reg_trans_ipadr" name="reg_trans_ipadr" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off"  id="reg_trans_ipadr" name="reg_trans_ipadr"  onblur="this.value=this.value.trim()" onchange="fn_reg_trans_dbms_connect_Cho();" />
 									</div>
 									<label for="reg_trans_portno" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
@@ -429,7 +429,7 @@
 									</label>
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
-										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="5" id="reg_trans_portno" name="reg_trans_portno" onKeyUp="fn_checkWord(this,5);chk_Number(this);" onblur="this.value=this.value.trim()" placeholder="5<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="6" id="reg_trans_portno" name="reg_trans_portno" onKeyUp="fn_checkWord(this,6);chk_Number(this);" onblur="this.value=this.value.trim()" placeholder="5<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
 									</div>
 								</div>
 								<div class="form-group row no-hd">
@@ -458,7 +458,7 @@
 									</label>
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
-										<input type="text" class="form-control" style="width: 250px;" autocomplete="false" maxlength="30" id="reg_trans_spr_usr_id" name="reg_trans_spr_usr_id" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" onchange="fn_reg_trans_dbms_connect_Cho();" />
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="false" id="reg_trans_spr_usr_id" name="reg_trans_spr_usr_id"  onblur="this.value=this.value.trim()"  onchange="fn_reg_trans_dbms_connect_Cho();" />
 									</div>
 									<label for="reg_trans_pwd" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>
