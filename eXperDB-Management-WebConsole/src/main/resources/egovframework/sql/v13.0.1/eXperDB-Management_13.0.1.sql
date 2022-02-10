@@ -96,7 +96,7 @@ VALUES('TC0001', 'DX-T0174_01', '암호화 복원 실행', 'Y', 'ADMIN', clock_t
 
 
 -- migration history
-CREATE TABLE t_db2pg_mig_history (
+CREATE TABLE experdb_management.t_db2pg_mig_history (
 	exe_date varchar(50) NULL,
 	wrk_nm varchar(100) NULL,
 	mig_nm varchar(100) NULL,
@@ -108,7 +108,7 @@ CREATE TABLE t_db2pg_mig_history (
 );
 
 -- migration history detail
-CREATE TABLE t_db2pg_mig_history_detail (
+CREATE TABLE experdb_management.t_db2pg_mig_history_detail (
 	table_nm varchar(100) NULL,
 	mig_nm varchar(100) NULL,
 	total_cnt numeric NULL,
