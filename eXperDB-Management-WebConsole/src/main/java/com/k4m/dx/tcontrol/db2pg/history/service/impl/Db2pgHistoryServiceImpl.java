@@ -87,6 +87,11 @@ public class Db2pgHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 		return db2pgHistoryDAO.selectMigTableInfo(db2pgMigHistoryDetailVO);
 	}
 
+	@Override
+	public void db2pgStop(String mig_nm) throws Exception {
+		db2pgHistoryDAO.db2pgStop(mig_nm);
+	}
+
 
 
 }

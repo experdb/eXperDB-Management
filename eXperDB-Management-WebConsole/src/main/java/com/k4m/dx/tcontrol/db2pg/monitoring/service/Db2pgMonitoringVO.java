@@ -15,6 +15,16 @@ public class Db2pgMonitoringVO {
 	private long rs_cnt;
 	private long progress;
 
+	private String mig_nm;
+
+	public String getMig_nm() {
+		return mig_nm;
+	}
+
+	public void setMig_nm(String mig_nm) {
+		this.mig_nm = mig_nm;
+	}
+
 	public String getWrk_nm() {
 		return wrk_nm;
 	}

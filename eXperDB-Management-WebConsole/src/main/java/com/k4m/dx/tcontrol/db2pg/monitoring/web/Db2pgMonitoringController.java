@@ -71,8 +71,8 @@ public class Db2pgMonitoringController {
 			
 			Db2pgMonitoringVO mVo = new Db2pgMonitoringVO();
 			
-			String wrk_nm = request.getParameter("wrk_nm");
-			mVo.setWrk_nm(wrk_nm);
+			String mig_nm = request.getParameter("mig_nm");
+			mVo.setMig_nm(mig_nm);
 					
 			resultSet = db2pgMonitoringService.selectDb2pgMonitoring(mVo);
 		} catch (Exception e) {

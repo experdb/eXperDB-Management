@@ -347,6 +347,28 @@
 	      	<if test="status != null and status != '' ">
 	      		AND STATUS = #{status}
 	      	</if>  	
+	      	ORDER  BY START_TIME DESC
 		</select>
+		
+		<delete id="deleteMonitoring" parameterType="string">
+			DELETE 
+			FROM T_DB2PG_MONITORING
+			WHERE 1 = 1
+			AND MIG_NM = #{mig_nm}			
+		</delete>		
+				
+		<delete id="deleteExework" parameterType="string">
+			DELETE 
+			FROM T_DB2PG_EXEWORK
+			WHERE 1 = 1
+			AND MIG_NM = #{mig_nm}			
+		</delete>			
+					
+		<update id="updateMigHistory" parameterType="string">
+			UPDATE T_DB2PG_MIG_HISTORY_DETAIL SET
+			STATUS = 'CANCLE'
+			WHERE 1 = 1
+			AND MIG_NM = #{mig_nm}
+		</update>
 
 </mapper>

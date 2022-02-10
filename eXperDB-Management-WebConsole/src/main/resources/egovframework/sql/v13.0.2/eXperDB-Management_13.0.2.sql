@@ -18,3 +18,13 @@
 
 INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0046', 'CDC 기본설정 Plug.in', 'CDC PlugIn 타입', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0046', 'TC004601', 'wal2json', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+-- 컬럼크기 변경
+alter table t_db2pg_sys_inf alter column spr_usr_id type varchar(200);
+
+-- 컬럼추가 (DB2PG 모니터링 관련)
+ALTER TABLE t_db2pg_exework ADD COLUMN mig_nm varchar(100) NULL;
+COMMENT ON COLUMN experdb_management.t_db2pg_exework.mig_nm IS '이관명';
+
+ALTER TABLE t_db2pg_monitoring ADD COLUMN mig_nm varchar(100) NULL;
+COMMENT ON COLUMN experdb_management.t_db2pg_monitoring.mig_nm IS '이관명';
