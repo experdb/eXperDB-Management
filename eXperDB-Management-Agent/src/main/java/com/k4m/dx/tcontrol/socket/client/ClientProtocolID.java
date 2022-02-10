@@ -230,6 +230,10 @@ public class ClientProtocolID {
 	public static final String EXIT_ON_ERROR = "EXIT_ON_ERROR";
 	public static final String DUMP_OPTION = "DUMP_OPTION";
 	public static final String DB_NM = "DB_NM";
+	public static final String DB_TYPE = "DB_TYPE";
+	public static final String TABLE_NM = "TABLE_NM";
+	public static final String OBJECT_TYPE = "OBJECT_TYPE";	
+	public static final String BACKUP_JOB = "BACKUP_JOB";
 	
 	//복원관련 추가
 	public static final String BLOBS_ONLY_YN = "BLOBS_ONLY_YN";
