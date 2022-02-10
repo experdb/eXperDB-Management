@@ -1,5 +1,5 @@
 -- Schema Registry정보 테이블 생성    
-   CREATE TABLE t_trans_regi_inf (
+   CREATE TABLE experdb_management.t_trans_regi_inf (
 	regi_id numeric(18) NOT NULL,
 	regi_nm varchar(200) NOT NULL,
 	regi_ip varchar(50) NOT NULL,
@@ -106,7 +106,7 @@ COMMENT ON COLUMN experdb_management.t_trans_exrttrg_mapp.regi_id IS 'schema_reg
 
 -- DB2PG Monitoring Table Create
 
-CREATE TABLE t_db2pg_exework (
+CREATE TABLE experdb_management.t_db2pg_exework (
 	wrk_nm varchar(100) NULL,
 	src_dbms_dscd varchar(20) NULL,
 	src_ip varchar(100) NULL,
@@ -127,7 +127,7 @@ COMMENT ON COLUMN experdb_management.t_db2pg_exework.total_table_cnt IS '총테�
 COMMENT ON COLUMN experdb_management.t_db2pg_exework.rs_cnt IS '이관된테이블건수';
 
 
-CREATE TABLE t_db2pg_monitoring (
+CREATE TABLE experdb_management.t_db2pg_monitoring (
 	table_nm varchar(100) NULL,
 	wrk_nm varchar(100) NULL,
 	total_cnt numeric NULL,
