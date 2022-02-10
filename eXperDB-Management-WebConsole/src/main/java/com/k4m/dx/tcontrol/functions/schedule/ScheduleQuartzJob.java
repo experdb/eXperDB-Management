@@ -89,8 +89,8 @@ public class ScheduleQuartzJob implements Job{
 			
 			ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");			
 			
-			// 2.실행중인 스케줄 정보 조회
-			runSchedule = scheduleService.selectRunScheduleList();
+			// 2.실행중인 스케줄 정보 조회 
+			//runSchedule = scheduleService.selectRunScheduleList();
 					
 			// 3. scd_id에 대한 (Master)DB접속 정보 가지고옴
 			//resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
@@ -108,13 +108,11 @@ public class ScheduleQuartzJob implements Job{
 	        
 	        	ArrayList<String> BCK_NM = new ArrayList<String>();        	
 	        	ArrayList<String> CMD = new ArrayList<String>();
-	        	
-	        	
-	        	
+	        		        	
+	        	System.out.println("Schedule work cnt  : "+ resultWork.size());
 	        	
 		        //WORK 갯수만큼 루프
-				for(int i =0; i<resultWork.size(); i++){				
-					
+				for(int i =0; i<resultWork.size(); i++){
 					
 					//DSN_DSCD==TC001901 백업
 					if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001901")){			
@@ -130,6 +128,7 @@ public class ScheduleQuartzJob implements Job{
 													
 							// 백업 내용이 DUMP 백업일경우 
 							if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
+								
 								//파일포멧 별 파일명 지정
 								if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){							
 									if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
@@ -150,7 +149,7 @@ public class ScheduleQuartzJob implements Job{
 							// 백업 내용이 RMAN 백업일경우	
 							}else{
 								//실행중인 리스트와 해당스케줄정보 비교하여 현재 실행중이면서 RMAN 백업으로 디렉토리가 같으면, UPDATA(에러처리)
-								if(runSchedule.size() > 0){
+								/*if(runSchedule.size() > 0){
 									 // ArrayList 생성
 									ArrayList arr = new ArrayList();
 		
@@ -198,11 +197,12 @@ public class ScheduleQuartzJob implements Job{
 										rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
 										CMD.add(rmanCmd);
 									}				
-								}else{
+								}*/
+								//else{
 									String rmanCmd ="";
 									rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
 									CMD.add(rmanCmd);
-								}
+								//}
 								BCK_NM.add("OnlinBackup");
 							}		
 							
