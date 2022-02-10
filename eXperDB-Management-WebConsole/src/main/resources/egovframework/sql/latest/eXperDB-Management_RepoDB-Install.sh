@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "****************************************************"
-echo "eXperDB-Management-13.0.1 Repository DB Install"
+echo "eXperDB-Management-13.0.2 Repository DB Install"
 echo "****************************************************"
 
 echo "**CREATE USER experdb**"
@@ -72,6 +72,10 @@ echo "**12.1.4 END**"
 echo "**13.0.1**"
 psql -U experdb -d experdb -f eXperDB-Management_13.0.1.sql
 echo "**13.0.1 END**"
+
+echo "**13.0.2**"
+psql -U experdb -d experdb -f eXperDB-Management_13.0.2.sql
+echo "**13.0.2 END**"
 
 #항상 마지막에 backup sql 수행 (등록 DB가 다름)
 echo "**bnr backup**"
