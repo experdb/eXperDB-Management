@@ -202,6 +202,18 @@ public class TransController {
 					e1.printStackTrace();
 				}
 				
+				// 공통코드 plugin.name
+				try {
+					pageVO.setGrp_cd("TC0046");
+					pageVO.setSearchCondition("3");
+					cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+					
+					mv.addObject("pluginTypeList", cmmnCodeVO);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				//kafka 조회
 				try {
 					mv.addObject("kafkaConnectList", transConService.selectTransKafkaConList(transDbmsVO));
@@ -883,7 +895,8 @@ public class TransController {
 	 */
 	@RequestMapping(value = "/deleteTransComConSet.do")
 	@ResponseBody
-	public boolean deleteTransComConSet(@ModelAttribute("transDbmsVO") TransVO transVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
+	public JSONObject deleteTransComConSet(@ModelAttribute("transDbmsVO") TransVO transVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
+		JSONObject resultObj = new JSONObject();
 		boolean result = false;
 
 		// Transaction 
@@ -900,10 +913,10 @@ public class TransController {
 			
 			if (!"".equals(trans_com_id_Rows)) {
 				transVO.setTrans_com_id_Rows(trans_com_id_Rows);
-				
 				//scale log 확인
-				transService.deleteTransComConSet(transVO);	
-				
+				JSONObject delResult = transService.deleteTransComConSet(transVO);	
+				resultObj.put("total", delResult.get("total").toString());
+				resultObj.put("delCnt", delResult.get("delCnt").toString());
 				result = true;
 			} else {
 				result = false;
@@ -915,7 +928,8 @@ public class TransController {
 		}finally{
 			txManager.commit(status);
 		}
-		return result;
+		resultObj.put("result", result);
+		return resultObj;
 	}
 
 	/**

@@ -230,10 +230,18 @@
 													<span style="width: 600px;"><spring:message code="help.eXperDB_CDC_com_set_msg01" /></span>
 												</a>
 											</label>
-											<div class="col-sm-9">
-												<input hidden="hidden" />
-												<input type="text" class="form-control" maxlength="100" id="ins_com_plugin_name" name="ins_com_plugin_name" onKeyUp="fn_checkWord(this,100);" onblur="this.value=this.value.trim()" placeholder="100<spring:message code='message.msg188'/>" tabindex=2 />
+											<div class="col-sm-3">
+												<!-- <input hidden="hidden" /> -->
+												<%-- <input type="text" class="form-control" maxlength="100" id="ins_com_plugin_name" name="ins_com_plugin_name" onKeyUp="fn_checkWord(this,100);" onblur="this.value=this.value.trim()" placeholder="100<spring:message code='message.msg188'/>" tabindex=2 /> --%>
+												<select class="form-control" style="margin-right: 1rem;" name="ins_com_plugin_name" id="ins_com_plugin_name" tabindex=1>
+													<option value=""><spring:message code="common.choice" /></option>
+													<c:forEach var="result" items="${pluginTypeList}" varStatus="status">
+														<option value="<c:out value="${result.sys_cd_nm}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+													</c:forEach>
+												</select>
 											</div>
+											<div class="col-sm-auto">
+											 </div> 
 										</div>
 
 										<div class="form-group row" style="margin-top:-15px;">

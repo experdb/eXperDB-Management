@@ -85,4 +85,13 @@ public class Db2pgHistoryDAO extends EgovAbstractMapper{
 		result = (List<Db2pgMigHistoryDetailVO>) list("db2pgHistorySql.selectMigTableInfo", db2pgMigHistoryDetailVO);
 		return result;
 	}
+
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public void db2pgStop(String mig_nm) {
+		
+		delete("db2pgHistorySql.deleteMonitoring", mig_nm);
+		delete("db2pgHistorySql.deleteExework", mig_nm);
+		update("db2pgHistorySql.updateMigHistory", mig_nm);
+		
+	}
 }

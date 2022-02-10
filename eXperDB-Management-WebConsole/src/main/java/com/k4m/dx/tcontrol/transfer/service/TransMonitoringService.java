@@ -20,11 +20,11 @@ public interface TransMonitoringService {
 	public List<Map<String, Object>> selectMemoryList();
 	
 	/**
-	 * 소스 Connector 목록 조회
-	 * 
+	 * 소스 Connector 목록 조회	 
+	 * @param trans_id
 	 * @return List<Map<String, Object>>
 	 */
-	public List<Map<String, Object>> selectSrcConnectorList();
+	public List<Map<String, Object>> selectSrcConnectorList(int db_svr_id);
 
 	/**
 	 * 소스 Connector 연결 테이블 조회

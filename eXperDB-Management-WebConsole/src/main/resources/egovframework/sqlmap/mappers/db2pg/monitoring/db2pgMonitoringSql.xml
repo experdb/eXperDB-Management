@@ -13,6 +13,7 @@
 			(ROW_NUMBER() OVER()) AS ROWNUM
          	, (ROW_NUMBER() OVER()) AS IDX	
 			, WRK_NM
+			, MIG_NM
 			, SRC_DBMS_DSCD
 			, SRC_IP
 			, SRC_DATABASE
@@ -44,7 +45,7 @@
 			, STATUS
 		FROM		
 			T_DB2PG_MONITORING
-		WHERE WRK_NM = #{wrk_nm} 
+		WHERE MIG_NM = #{mig_nm} 
 		ORDER BY 
 			(CASE STATUS
 				WHEN 'RUNNING' THEN 1

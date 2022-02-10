@@ -33,10 +33,8 @@ public class TransMonitoringDAO extends EgovAbstractMapper{
 	 * 
 	 * @return List<Map<String, Object>>
 	 */
-	public List<Map<String, Object>> selectSrcConnectorList() {
-		List<Map<String, Object>> result = null;
-		result = selectList("transMonitoringSql.selectSourceConnectorList");
-		return result;
+	public List<Map<String, Object>> selectSrcConnectorList(int db_svr_id) {
+		return selectList("transMonitoringSql.selectSourceConnectorList", db_svr_id);
 	}
 
 	/**

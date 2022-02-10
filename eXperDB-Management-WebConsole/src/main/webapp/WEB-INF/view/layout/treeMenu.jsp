@@ -376,7 +376,7 @@
 													if(aut.length != 0 && aut[index].trans_mtr_aut_yn == "Y"){
                                                   		menuJson += '{' +
                                                                     	'"icon": "fa fa-send",' +
-                                                                    	'"text": "<spring:message code="menu.trans_monitoring"/>",' +
+                                                                    	'"text": "<spring:message code="menu.trans_status"/>",' +
                                                                     	'"url": "/transMonitoring.do?db_svr_id='+item.db_svr_id+'",' +
                                                                     	'"id": "transMonitoring'+item.db_svr_id+'"' +
                                                                  	'}';

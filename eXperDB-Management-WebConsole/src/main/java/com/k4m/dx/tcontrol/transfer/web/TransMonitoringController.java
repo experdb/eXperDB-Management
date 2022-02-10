@@ -79,7 +79,7 @@ public class TransMonitoringController {
 			mv.addObject("db_svr_id", db_svr_id);
 		
 			// 소스 connector list
-			List<Map<String, Object>> srcConnectorList = transMonitoringService.selectSrcConnectorList();
+			List<Map<String, Object>> srcConnectorList = transMonitoringService.selectSrcConnectorList(db_svr_id);
 			
 			mv.addObject("srcConnectorList", srcConnectorList);
 			

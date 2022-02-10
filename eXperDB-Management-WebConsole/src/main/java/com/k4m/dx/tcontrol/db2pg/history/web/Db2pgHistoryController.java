@@ -362,11 +362,20 @@ public class Db2pgHistoryController {
 	@RequestMapping(value = "/db2pg/cancel.do")
 	public @ResponseBody JSONObject db2pgCancel(HttpServletRequest request){
 		JSONObject result = new JSONObject();
+		
 		String wrkName = request.getParameter("wrk_nm");
+		String mig_nm = request.getParameter("mig_nm");
+		
 		DB2PG_STOP db2pgStop = new DB2PG_STOP();
 		
 		result = db2pgStop.db2pgStop(wrkName);
 		
+		try {
+			db2pgHistoryService.db2pgStop(mig_nm);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
 		return result;
 	}
 	

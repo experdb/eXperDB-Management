@@ -179,7 +179,7 @@ var connection = "fail";
 									</label>
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
-										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="dtb_nm_reg_re" name="dtb_nm_reg_re" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" />
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off"  id="dtb_nm_reg_re" name="dtb_nm_reg_re" onblur="this.value=this.value.trim()" />
 									</div>
 									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;" >
 										<i class="item-icon fa fa-dot-circle-o"></i>
@@ -197,7 +197,7 @@ var connection = "fail";
 									</label>
 									<div class="col-sm-4">
 										<input style="display:none" aria-hidden="true">
-										<input type="text" class="form-control" style="width: 250px;" autocomplete="off" maxlength="30" id="spr_usr_id_reg_re" name="spr_usr_id_reg_re" onkeyup="fn_checkWord(this,30)" onblur="this.value=this.value.trim()" placeholder="30<spring:message code='message.msg188'/>" />
+										<input type="text" class="form-control" style="width: 250px;" autocomplete="off"  id="spr_usr_id_reg_re" name="spr_usr_id_reg_re"  onblur="this.value=this.value.trim()"  />
 									</div>
 									<label for="ins_usr_id" class="col-sm-2 col-form-label pop-label-index" style="margin-right:0px;">
 										<i class="item-icon fa fa-dot-circle-o"></i>

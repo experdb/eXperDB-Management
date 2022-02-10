@@ -80,7 +80,7 @@ a:hover.tip span {
 	var cpuChart = "";
 	var memChart = "";
 // 	var allErrorChart = "";
-	var connectorActTable = "";
+//	var connectorActTable = "";
 	var sinkChart = "";
 	var sinkCompleteChart = "";
 	var sinkErrorChart = "";
@@ -104,7 +104,7 @@ a:hover.tip span {
 		fn_cpu_mem_err_chart();
 
 		// connector 기동정지 table init
-		fn_connector_act_init();
+		//fn_connector_act_init();
 
 		// 소스 connect setting info init - connect 설정정보
 		fn_src_setting_info_init();
@@ -213,10 +213,10 @@ a:hover.tip span {
 						src_exe_status = result.connectInfo[0].exe_status;
 						
 						//Kafka Connect 별 기동정지이력 setting
-						connectorActTable.clear().draw();
+						/* connectorActTable.clear().draw();
 						if (nvlPrmSet(result.kafkaActCngList, '') != '') {
 							connectorActTable.rows.add(result.kafkaActCngList).draw();
-						}
+						} */
 
 						//소스시스템 connect 설정정보  setting
 						srcConnectSettingInfoTable.clear().draw();
@@ -260,7 +260,7 @@ a:hover.tip span {
 			fn_tarConnectInfo();
 
 			$('#ssconDBResultTable').hide();
-			connectorActTable.clear().draw();
+			//connectorActTable.clear().draw();
 		}
 		$("#loading").hide();
 	}
@@ -660,7 +660,7 @@ a:hover.tip span {
 		<!-- 실시간 chart end -->
 		
 		<!-- 연결 상태 그림 start -->
-		<div class="col-8 div-form-margin-cts stretch-card">
+		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
 <!--					 <h4 class="card-title"> -->
@@ -945,7 +945,7 @@ a:hover.tip span {
 			</div>
 		</div>
 
-		<div class="col-4 div-form-margin-cts stretch-card">
+		<%-- <div class="col-4 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
 					<!-- title -->
@@ -1004,7 +1004,7 @@ a:hover.tip span {
 					<!-- connector 기동 정지 이력 리스트 end -->
 				</div>
 			</div>
-		</div>
+		</div> --%>
 		<!-- 연결 상태 그림 end -->
 		
 		<!-- 소스 시스템 start -->

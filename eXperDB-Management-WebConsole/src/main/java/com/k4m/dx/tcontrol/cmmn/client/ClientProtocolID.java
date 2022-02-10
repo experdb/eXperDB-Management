@@ -230,6 +230,7 @@ public class ClientProtocolID {
 	public static final String DB_TYPE = "DB_TYPE";
 	public static final String TABLE_NM = "TABLE_NM";
 	public static final String OBJECT_TYPE = "OBJECT_TYPE";	
+	public static final String BACKUP_JOB = "BACKUP_JOB";
 	
 	//복원관련 추가
 	public static final String BLOBS_ONLY_YN = "BLOBS_ONLY_YN";
@@ -285,5 +286,6 @@ public class ClientProtocolID {
 
 	public static final String DBMS_IP = "DBMS_IP";
 	public static final String DBMS_PORT = "DBMS_PORT";
+
 	
 }

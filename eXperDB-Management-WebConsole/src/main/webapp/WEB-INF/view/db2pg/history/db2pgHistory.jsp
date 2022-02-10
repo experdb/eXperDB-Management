@@ -101,7 +101,7 @@ function fn_init(){
 				className : "dt-center",
 				defaultContent : ""
 			},
-		   	{
+		   	/* {
 				data : "stop",
 				render : function(data, type, full, meta) {	 						
 					var html = '';
@@ -114,7 +114,7 @@ function fn_init(){
 				},
 				className : "dt-center",
 				defaultContent : ""
-			},
+			}, */
 			{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 			{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 			{data : "wrk_id", defaultContent : "", visible: false},
@@ -178,7 +178,7 @@ function fn_init(){
 			className : "dt-center",
 			defaultContent : ""
 		},
-		{
+		/* {
 			data : "stop",
 			render : function(data, type, full, meta) {	 						
 				var html = '';
@@ -191,7 +191,7 @@ function fn_init(){
 			},
 			className : "dt-center",
 			defaultContent : ""
-		},
+		}, */
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 		{data : "wrk_id", defaultContent : "", visible: false},
@@ -212,7 +212,6 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
 	
 	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
@@ -226,11 +225,10 @@ function fn_init(){
 	tableData.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(12)').css('min-width', '130px');
 	tableData.tables().header().to$().find('th:eq(13)').css('min-width', '130px');
-	tableData.tables().header().to$().find('th:eq(14)').css('min-width', '130px');
+	tableData.tables().header().to$().find('th:eq(14)').css('min-width', '95px');
 	tableData.tables().header().to$().find('th:eq(15)').css('min-width', '95px');
-	tableData.tables().header().to$().find('th:eq(16)').css('min-width', '95px');
 
     
 	$(window).trigger('resize'); 
@@ -668,7 +666,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 	}
 	
 	
-	function fn_db2pgCancel(wrk_nm){
+/* 	function fn_db2pgCancel(wrk_nm){
 		// console.log("fn_db2pgCancel function called!!! : " + wrk_nm);
 		stopWrkNm = wrk_nm;
 		confile_title = 'db2pg' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
@@ -677,9 +675,9 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 		$('#confirm_multi_msg').html('<spring:message code="migration.stop_question" />');
 		$('#pop_confirm_multi_md').modal("show");
 		
-	}
+	} */
 	
-	function fn_db2pgCancelRun(){
+/* 	function fn_db2pgCancelRun(){
 		$.ajax({
 			url : "/db2pg/cancel.do",
 			data : {
@@ -695,16 +693,16 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 				stopWrkNm = null;
 			}
 		})
-	}
+	} */
 	
 	/* ********************************************************
 	 * confirm result
 	 ******************************************************** */
-	function fnc_confirmMultiRst(gbn){
+	/* function fnc_confirmMultiRst(gbn){
 		if (gbn == "db2pg_cancel") {
 			fn_db2pgCancelRun();
 		}
-	}
+	} */
 	
 </script>
 
@@ -887,7 +885,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 													<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 													<th width="100"><spring:message code="schedule.jobTime"/></th>
 													<th width="100"><spring:message code="properties.status" /></th>
-													<th width="100">Stop</th>
+													<!-- <th width="100">Stop</th> -->
 													<th width="100"><spring:message code="migration.performer"/></th>
 													<th width="0"></th>
 													<th width="0"></th>
@@ -920,7 +918,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 												<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
 												<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
 												<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
-												<th width="95" rowspan="2">Stop</th>
+												<!-- <th width="95" rowspan="2">Stop</th> -->
 												<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
 											</tr>
 											<tr class="bg-info text-white">

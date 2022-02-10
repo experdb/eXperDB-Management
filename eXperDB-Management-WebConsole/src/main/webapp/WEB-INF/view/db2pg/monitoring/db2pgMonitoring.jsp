@@ -26,6 +26,8 @@
 <script>
 var table;
 var tableData;
+var stopWrkNm = null
+var stopMigNm = null
 
 $(window.document).ready(function(){
 	fn_init();
@@ -66,8 +68,19 @@ function fn_init() {
 			className : "dt-center",
 			defaultContent : ""
 		},
+
+		{
+			data : "",
+			render : function(data, type, full, meta) {
+				return '<button id="detail" class="btn btn-inverse-primary btn-fw" onClick=javascript:fn_getStatus("'+full.mig_nm+'");><spring:message code="data_transfer.detail_search" /> </button>';
+			},
+			className : "dt-center",
+			defaultContent : "",
+			orderable : false
+		},
      	{data : "total_table_cnt", className : "dt-left", defaultContent : "", visible: false},
      	{data : "rs_cnt", className : "dt-left", defaultContent : "", visible: false},
+     	{data : "mig_nm", className : "dt-left", defaultContent : "", visible: false}
 		/* {data : "src_dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "src_ip", className : "dt-center", defaultContent : ""}, 
 		{data : "src_database", className : "dt-center", defaultContent : ""}, 
@@ -119,20 +132,30 @@ function fn_init() {
 	
 	
 	//더블 클릭시
-	 $('#dataDataTable tbody').on('dblclick','tr',function() {
+/* 	 $('#dataDataTable tbody').on('dblclick','tr',function() {
 		 var wrk_nm = tableData.row(this).data().wrk_nm;
 		 fn_getStatus(wrk_nm);
-	});		
-
+	});		 */
 	
+	$('#dataDataTable tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+        }
+       else {	        	
+    	   tableData.$('tr.selected').removeClass('selected');	        	
+           $(this).addClass('selected');	         
+       } 
+   } );   
 }
 
-function fn_getStatus(wrk_nm){
+
+
+function fn_getStatus(mig_nm){
+	alert(mig_nm);
 	setInterval(function() {
 	$.ajax({
 		url : "/db2pg/monitoring/getData.do",
 		data : {			
-			wrk_nm : wrk_nm
+			mig_nm : mig_nm
 		},
 		dataType : "json",
 		type : "post",
@@ -146,8 +169,9 @@ function fn_getStatus(wrk_nm){
 }
 
 
+
 function fn_selectExeWork(){
-	setInterval(function() {
+	/* setInterval(function() { */
 	$.ajax({
 		url : "/db2pg/monitoring/selectExeWork.do",
 		data : {			
@@ -159,13 +183,71 @@ function fn_selectExeWork(){
 			tableData.rows.add(result).draw();
 		}
 	});
-	$('#loading').hide();
-	}, 5000);	
+	/* $('#loading').hide();
+	}, 5000);	 */
 }
+
+	/* ********************************************************
+	 * DB2PG 작업취소 버튼 클릭
+	 ******************************************************** */
+	function fn_db2pgCancel(){
+			
+		var datas = tableData.row('.selected').length;
+		
+		if(datas != 1){
+			showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
+			return false;
+		}
+		
+		var wrk_nm = tableData.row('.selected').data().wrk_nm;
+		var mig_nm = tableData.row('.selected').data().mig_nm;
+		
+		// console.log("fn_db2pgCancel function called!!! : " + wrk_nm);
+		stopWrkNm = wrk_nm;
+		stopMigNm = mig_nm;
+		confile_title = 'db2pg' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		$('#con_multi_gbn', '#findConfirmMulti').val("db2pg_cancel");
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html('<spring:message code="migration.stop_question" />');
+		$('#pop_confirm_multi_md').modal("show");
+		
+	}
+	
+	/* ********************************************************
+	 * DB2PG 작업 취소
+	 ******************************************************** */
+	function fn_db2pgCancelRun(){
+		$.ajax({
+			url : "/db2pg/cancel.do",
+			data : {
+				wrk_nm : stopWrkNm,
+				mig_nm : stopMigNm
+			},
+			type : "post",
+			success : function(result){
+				if(result.RESULT_CODE == '0'){					
+					showSwalIcon('<spring:message code="migration.stop_success" />', '<spring:message code="common.close" />', '', 'success');
+				}else{
+					showSwalIcon('<spring:message code="migration.stop_tail" />', '<spring:message code="common.close" />', '', 'error');
+				}
+				stopWrkNm = null;
+			}
+		})
+	}
+
+
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmMultiRst(gbn){
+		if (gbn == "db2pg_cancel") {
+			fn_db2pgCancelRun();
+		}
+	}
 
 </script>
 
-
+<%@include file="./../../popup/confirmMultiForm.jsp"%>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -218,10 +300,15 @@ function fn_selectExeWork(){
 				<div class="card my-sm-2" >
 					<div class="card-body" >
 						<div class="row">
-							<div class="col-12">			
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_selectExeWork()" style="float: right;">
+							<div class="col-12">		
+								<div id="wrt_button" style="float: right;">	
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_selectExeWork()" >
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>												
+									</button>	
+									<button type="button" class="btn btn-danger btn-icon-text mb-2" onclick="fn_db2pgCancel()">
+										<i class="mdi mdi-close "></i><spring:message code="common.cancel" />
+									</button>
+									</div>										
 									<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 										<thead>
 											<tr class="bg-info text-white">
@@ -229,6 +316,7 @@ function fn_selectExeWork(){
 												<th width="100"  style="background-color: #778899;"><spring:message code="common.work_name" /></th>
 												<th width="100"  style="background-color: #778899;">MIGRATION</th>
 												<th width="100"  style="background-color: #778899;">Status</th>
+												<th width="100"  style="background-color: #778899;">Detail</th>
 												<%-- <th width="100"  style="background-color: #778899;">DBMS <spring:message code="common.division" /></th>
 												<th width="100"  style="background-color: #778899;"><spring:message code="data_transfer.ip" /></th>
 												<th width="100"  style="background-color: #778899;">Database</th>												

@@ -129,6 +129,7 @@ public class ClientInfoCmmn implements Runnable{
 						
 			for (int i = 0; i < resultWork.size(); i++) {				
 								
+				//BACKUP (RMAN/DUMP)
 				if(resultWork.get(i).get("bsn_dscd").equals("TC001901")){
 
 					JSONArray arrCmd = new JSONArray();			
@@ -144,7 +145,7 @@ public class ClientInfoCmmn implements Runnable{
 						System.out.println("> CMD = "+CMD.get(i));
 						objJob.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
 						objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
-						objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
+						objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명					
 					} else {
 						System.out.println("> > > > > > > > > > > > > DUMP Backup START");
 						System.out.println("> CMD = "+CMD.get(i));
@@ -152,39 +153,40 @@ public class ClientInfoCmmn implements Runnable{
 						objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로					
 						objJob.put(ClientProtocolID.BCK_FILENM, BCKNM.get(i)); // 저장파일명					
 						objJob.put(ClientProtocolID.BCK_MTN_ECNT, resultWork.get(i).get("bck_mtn_ecnt"));//백업유지개수
-						objJob.put(ClientProtocolID.FILE_STG_DCNT, resultWork.get(i).get("file_stg_dcnt")); // 파일보관일수
+						objJob.put(ClientProtocolID.FILE_STG_DCNT, resultWork.get(i).get("file_stg_dcnt")); // 파일보관일
 					}
 					objJob.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(i).get("bck_bsn_dscd")); //백업종류(RMAN or DUMP)
 					objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
 					objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));// 명령어
 					objJob.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);// 명령어
 					objJob.put(ClientProtocolID.BSN_DSCD, resultWork.get(i).get("bsn_dscd"));
+					objJob.put(ClientProtocolID.BACKUP_JOB, "backup");
 					arrCmd.add(j, objJob);
-	
-					// 백업명령 실행후,
-					// [pg_rman validate -B 백업경로] 명령어 실행해줘여함
-					// [pg_rman validate -B 백업경로] 정합성 체크하는 명령어, 안할실 복구불가능
-					// rman은 두번 실행되기때문에 두번째 실행시, LOG_YN=N으로 해주면서, 업데이트 및 이력이 남지않도록한다 
+				
+					//BACKUP VALIDATE
 					if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
 						System.out.println("> RMAN Validataion START");
 						j++;
 						JSONObject objJob2 = new JSONObject();
-						objJob2.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
-						objJob2.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); // 작업ID
-						objJob2.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); // 실행순서
-						objJob2.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); // 다음실행여부
-						objJob2.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
-						objJob2.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); // db아이디
-						objJob2.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
-						objJob2.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
+						objJob2.put(ClientProtocolID.BACKUP_JOB, "validate"); // 백업 명령어 종류
 						objJob2.put(ClientProtocolID.LOG_YN, "N"); // 로그저장 유무
 						objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B " + resultWork.get(i).get("bck_pth"));// 명령어
 						System.out.println("> Validate CMD = "+objJob2.get(ClientProtocolID.REQ_CMD));
-						objJob2.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(i).get("bck_bsn_dscd"));
-						objJob2.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);
-						objJob2.put(ClientProtocolID.BSN_DSCD, resultWork.get(i).get("bsn_dscd"));
 						arrCmd.add(j, objJob2);
 					}
+					
+					//BACKUP PURGE
+					if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
+						System.out.println("> RMAN Purge START");
+						j++;
+						JSONObject objJob4 = new JSONObject();
+						objJob4.put(ClientProtocolID.BACKUP_JOB, "purge"); // 백업 명령어 종류
+						objJob4.put(ClientProtocolID.LOG_YN, "N"); // 로그저장 유무
+						objJob4.put(ClientProtocolID.REQ_CMD, "pg_rman purge -B " + resultWork.get(i).get("bck_pth"));// 명령어
+						System.out.println("> Purge CMD = "+objJob4.get(ClientProtocolID.REQ_CMD));
+						arrCmd.add(j, objJob4);
+					}
+					
 					
 					JSONObject serverObj = new JSONObject();
 
@@ -206,6 +208,7 @@ public class ClientInfoCmmn implements Runnable{
 					System.out.println(" ");
 					System.out.println(" ");
 				
+				//배치 실행
 				}else if(resultWork.get(i).get("bsn_dscd").equals("TC001902")){
 					System.out.println("> > > > > > > > > > > > > Script Batch START");
 					System.out.println("> CMD = "+CMD.get(i));
@@ -216,15 +219,10 @@ public class ClientInfoCmmn implements Runnable{
 					objJob3.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); // 작업ID
 					objJob3.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); // 실행순서
 					objJob3.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); // 다음실행여부
-					objJob3.put(ClientProtocolID.BCK_OPT_CD, "");
-					objJob3.put(ClientProtocolID.DB_ID, 0); // db아이디
-					objJob3.put(ClientProtocolID.BCK_FILE_PTH, ""); // 저장경로
-					objJob3.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
-					objJob3.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
 					objJob3.put(ClientProtocolID.REQ_CMD, CMD.get(i));// 명령어
-					objJob3.put(ClientProtocolID.BCK_BSN_DSCD, "");
 					objJob3.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);
 					objJob3.put(ClientProtocolID.BSN_DSCD, resultWork.get(i).get("bsn_dscd"));
+					objJob3.put(ClientProtocolID.BACKUP_JOB, "batch");
 					arrCmd.add(0, objJob3);
 					
 					//j++;

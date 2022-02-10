@@ -99,5 +99,14 @@ public interface Db2pgHistoryService {
 	List<Db2pgMigHistoryDetailVO> selectMigTableInfo(Db2pgMigHistoryDetailVO db2pgMigHistoryDetailVO) throws Exception;
 
 
+	/**
+	 *  MIGRATION 작업 취소
+	 * 
+	 * @param String
+	 * @throws Exception
+	 */
+	void db2pgStop(String mig_nm) throws Exception;
+
+
 
 }
