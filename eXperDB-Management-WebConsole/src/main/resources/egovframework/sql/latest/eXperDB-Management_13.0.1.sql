@@ -35,11 +35,11 @@ select nextval('q_usrmnuaut_i_01'), 'admin',
 
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0178', '완전복구', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Backup');
+VALUES('TC0001', 'DX-T0178', '완전복구', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Complete Recovery');
 
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0179', '시점복구', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Backup');
+VALUES('TC0001', 'DX-T0179', '시점복구', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'pointInTime Recovery');
 
 
 
@@ -96,7 +96,7 @@ VALUES('TC0001', 'DX-T0174_01', '암호화 복원 실행', 'Y', 'ADMIN', clock_t
 
 
 -- migration history
-CREATE TABLE t_db2pg_mig_history (
+CREATE TABLE experdb_management.t_db2pg_mig_history (
 	exe_date varchar(50) NULL,
 	wrk_nm varchar(100) NULL,
 	mig_nm varchar(100) NULL,
@@ -108,7 +108,7 @@ CREATE TABLE t_db2pg_mig_history (
 );
 
 -- migration history detail
-CREATE TABLE t_db2pg_mig_history_detail (
+CREATE TABLE experdb_management.t_db2pg_mig_history_detail (
 	table_nm varchar(100) NULL,
 	mig_nm varchar(100) NULL,
 	total_cnt numeric NULL,
@@ -146,11 +146,12 @@ select nextval('q_usrmnuaut_i_01'), 'admin',
        
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0176', 'Migration 모니터링', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Backup');
+VALUES('TC0001', 'DX-T0176', 'Migration 모니터링', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Migration Monitoring');
 
 INSERT INTO t_sysdtl_c
 (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm, sys_cd_nm_en)
-VALUES('TC0001', 'DX-T0177', 'Migration 수행이력', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Encrypt Restore');
+VALUES('TC0001', 'DX-T0177', 'Migration 수행이력', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Migration history');
+
 
 -- SCALE ---------------------------------------------------------------------------------------------
 -- scale AWS 서버설정 모니터링 서버 관련 컬럼 추가
@@ -168,3 +169,4 @@ COMMENT ON COLUMN experdb_management.t_scaleawssvr_i.mon_password IS '모니터�
 
 ALTER TABLE T_PRY_AGT_I ADD COLUMN INTL_IPADR varchar(30) NULL;
 COMMENT ON COLUMN experdb_management.T_PRY_AGT_I.INTL_IPADR IS '내부_IP주소';
+
