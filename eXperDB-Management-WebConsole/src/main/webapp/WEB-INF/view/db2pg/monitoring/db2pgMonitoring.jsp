@@ -150,7 +150,6 @@ function fn_init() {
 
 
 function fn_getStatus(mig_nm){
-	alert(mig_nm);
 	setInterval(function() {
 	$.ajax({
 		url : "/db2pg/monitoring/getData.do",
@@ -171,7 +170,7 @@ function fn_getStatus(mig_nm){
 
 
 function fn_selectExeWork(){
-	/* setInterval(function() { */
+	 setInterval(function() {
 	$.ajax({
 		url : "/db2pg/monitoring/selectExeWork.do",
 		data : {			
@@ -183,8 +182,8 @@ function fn_selectExeWork(){
 			tableData.rows.add(result).draw();
 		}
 	});
-	/* $('#loading').hide();
-	}, 5000);	 */
+	$('#loading').hide();
+	}, 5000);	
 }
 
 	/* ********************************************************
