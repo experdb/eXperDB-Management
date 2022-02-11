@@ -79,6 +79,9 @@ var eXperDB_CDC_msg33 = "<spring:message code='eXperDB_CDC.msg33' />";
 var eXperDB_CDC_msg38 = "<spring:message code='eXperDB_CDC.msg38' />";
 var eXperDB_CDC_msg49 ="<spring:message code='eXperDB_CDC.msg49'/>";
 
+var eXperDB_CDC_msg53 ="<spring:message code='eXperDB_CDC.msg53'/>";
+var eXperDB_CDC_msg54 ="<spring:message code='eXperDB_CDC.msg54'/>";
+
 var eXperDB_CDC_default_setting = "<spring:message code='eXperDB_CDC.default_setting'/>";
 
 

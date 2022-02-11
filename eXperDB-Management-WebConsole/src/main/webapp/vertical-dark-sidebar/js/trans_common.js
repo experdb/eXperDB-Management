@@ -2391,6 +2391,17 @@ function fn_ins_target_ConNmCheck() {
 		return;
 	}
 	
+	if(/\w$/g.test(connect_nm_val)) { //영어,_,숫자만 포함 문자열
+			if(/[A-Z]/g.test(connect_nm_val)){ //대문자 포함
+				showSwalIcon(eXperDB_CDC_msg54, closeBtn, '', 'warning');
+				connect_nm_val = connect_nm_val.toLowerCase();
+				$("#ins_tg_connect_nm", "#insTargetRegForm").val(connect_nm_val);
+			}
+		}else{
+			showSwalIcon(eXperDB_CDC_msg53, closeBtn, '', 'warning');
+			return;
+		}
+		
 	$.ajax({
 		url : '/connect_nm_Check.do',
 		type : 'post',

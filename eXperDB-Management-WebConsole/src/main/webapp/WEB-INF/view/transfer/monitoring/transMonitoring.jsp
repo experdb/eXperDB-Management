@@ -617,48 +617,6 @@ a:hover.tip span {
 				</div>
 			</div>
 		</div>
-
-		<!-- 실시간 chart start -->
-		<!-- cpu chart start -->
-		<div class="col-4 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<h4 class="card-title">
-						<i class="item-icon fa fa-dot-circle-o"></i> CPU
-					</h4>
-					<div id="chart-cpu" style="max-height:200px;"></div>
-				</div>
-			</div>
-		</div>
-		<!-- cpu chart end -->
-		
-		<!-- memory chart start -->
-		<div class="col-4 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<h4 class="card-title">
-						<i class="item-icon fa fa-dot-circle-o"></i> memory
-					</h4>
-					<div id="chart-memory" style="max-height:200px;"></div>
-				</div>
-			</div>
-		</div>
-		<!-- memory chart end -->
-		
-		<!-- error chart start -->
-		<div class="col-4 div-form-margin-cts stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<h4 class="card-title">
-						<i class="item-icon fa fa-dot-circle-o"></i> error
-					</h4>
-					<div id="chart-allError" style="max-height:200px;"></div>
-				</div>
-			</div>
-		</div>
-		<!-- error chart end -->
-		<!-- 실시간 chart end -->
-		
 		<!-- 연결 상태 그림 start -->
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
@@ -945,6 +903,46 @@ a:hover.tip span {
 			</div>
 		</div>
 
+		<!-- 실시간 chart start -->
+		<!-- cpu chart start -->
+		<div class="col-4 div-form-margin-cts stretch-card">
+			<div class="card col-4">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> CPU
+					</h4>
+					<div id="chart-cpu" style="max-height:200px;"></div>
+				</div>
+			</div>
+		</div>
+		<!-- cpu chart end -->
+		
+		<!-- memory chart start -->
+		<div class="col-4 div-form-margin-cts stretch-card">
+			<div class="card col-4">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> memory
+					</h4>
+					<div id="chart-memory" style="max-height:200px;"></div>
+				</div>
+			</div>
+		</div>
+		<!-- memory chart end -->
+		
+		<!-- error chart start -->
+		<div class="col-4 div-form-margin-cts stretch-card">
+			<div class="card col-4">
+				<div class="card-body">
+					<h4 class="card-title">
+						<i class="item-icon fa fa-dot-circle-o"></i> error
+					</h4>
+					<div id="chart-allError" style="max-height:200px;"></div>
+				</div>
+			</div>
+		</div>
+		<!-- error chart end -->
+		<!-- 실시간 chart end -->
 		<%-- <div class="col-4 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
