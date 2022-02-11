@@ -20,6 +20,8 @@ public class LoginVO {
 
 	private String proxy_use_yn;
 	private String proxy_menu_use_yn;
+	
+	private String monitoring_install_yn;
 
 	public String getProxy_menu_use_yn() {
 		return proxy_menu_use_yn;
@@ -147,5 +149,13 @@ public class LoginVO {
 
 	public void setLoginChkTime(String loginChkTime) {
 		this.loginChkTime = loginChkTime;
+	}
+
+	public String getMonitoring_install_yn() {
+		return monitoring_install_yn;
+	}
+
+	public void setMonitoring_install_yn(String monitoring_install_yn) {
+		this.monitoring_install_yn = monitoring_install_yn;
 	}
 }

@@ -373,6 +373,13 @@
 						}
 					}
 				}
+			
+				//Monitoring Client 설치 파일 다운로드 메뉴 사용 여부
+				if("${sessionScope.session.monitoring_install_yn}" == "Y"){
+					$('#mon_client').show();
+				}else{
+					$('#mon_client').remove();
+				}
 
 
 				//backup
@@ -1176,6 +1183,11 @@
 												<li class="nav-item">
 													<a class="nav-link" href="/manualDownload.do"  target="main">
 														Manual
+													</a>
+												</li>
+												<li class="nav-item" id="mon_client">
+													<a class="nav-link" href="/monitoringClientDownload.do"  target="main">
+														eXperDB-Monitoring Client
 													</a>
 												</li>
 												<li class="nav-item">

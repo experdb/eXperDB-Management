@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -1006,6 +1007,86 @@ public class CmmnController {
 		return result;
 	}
 
+	/**
+	 * Monitoring Client Download
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/monitoringClientDownload.do")
+	@ResponseBody
+	public void monitoringClientDownload(HttpServletRequest request, HttpServletResponse response) {
+		Properties props = new Properties();
+		
+		String fileName = ""; //파일명
+
+		FileInputStream fileInputStream = null;
+		ServletOutputStream servletOutputStream = null;
+
+		try {
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+			
+			String monClientFileDir = props.get("monitoring_path").toString()+"/eXperDB_Server/files/";
+			//			/home/experdb/app/eXperDB-Monitoring/eXperDB_Server/files/eXperDB.Monitoring_13_0_7_554.exe
+			
+			File folder = new File(monClientFileDir);
+			File[] files = folder.listFiles();
+			
+			for(int i=0; i<files.length; i++){
+				System.out.println(files[i]);
+				String tempFile = files[i].getName();
+				String extension = tempFile.substring(tempFile.lastIndexOf(".")+1);
+				 
+				if("exe".equals(extension)){
+					fileName =tempFile;
+				}
+			}
+			
+			String downName = null;
+			String browser = request.getHeader("User-Agent");
+			//파일 인코딩
+			if(browser.contains("MSIE") || browser.contains("Trident") || browser.contains("Chrome")){//브라우저 확인 파일명 encode  
+				downName = URLEncoder.encode(fileName,"UTF-8").replaceAll("\\+", "%20");
+			}else{
+				downName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+			}
+
+			response.setHeader("Content-Disposition","attachment;filename=\"" + downName+"\"");             
+			response.setContentType("application/octer-stream");
+			response.setHeader("Content-Transfer-Encoding", "binary;");
+
+			fileInputStream = new FileInputStream(monClientFileDir+fileName);
+			servletOutputStream = response.getOutputStream();
+
+			byte b [] = new byte[1024];
+			int data = 0;
+
+			while((data=(fileInputStream.read(b, 0, b.length))) != -1){
+				servletOutputStream.write(b, 0, data);
+			}
+
+			servletOutputStream.flush();//출력
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(servletOutputStream!=null){
+				try{
+					servletOutputStream.close();
+				}catch (IOException e){
+					e.printStackTrace();
+				}
+			}
+			if(fileInputStream!=null){
+				try{
+					fileInputStream.close();
+				}catch (IOException e){
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Manual Download
 	 * @param 
