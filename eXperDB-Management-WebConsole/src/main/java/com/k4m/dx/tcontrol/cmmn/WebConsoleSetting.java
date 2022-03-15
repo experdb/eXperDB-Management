@@ -367,6 +367,14 @@ public class WebConsoleSetting {
 			}
 		}
 
+		/* eXperDB-Monitoring */
+		System.out.println("What is the eXperDB-Monitoring installation path on this server? : ");
+		String strMonitoringPath = scan.nextLine();
+		String strMonitoringInstallYn="N";
+		if(!"".equals(strMonitoringPath)){
+			strMonitoringInstallYn="Y";
+		}
+		
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
 
 		//아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
@@ -388,12 +396,12 @@ public class WebConsoleSetting {
 			System.out.println("Whether data transfer monitoring Menu is enabled : " + strTransferMonMenuYN);
 		}
 		System.out.println("eXperDB-DB2PG installation path : " + strDb2pgPath);
+
+		System.out.println("eXperDB-Monitoring installed Y/N : " + strMonitoringInstallYn);
+		System.out.println("eXperDB-Monitoring installation path : " + strMonitoringPath);
+		
 		System.out.println("###################eXperDB-Scale##################");
 		System.out.println("Whether scale is enabled : " + strScaleYN);
-
-		System.out.println("Whether proxy menu is enabled : " + strProxyMenuYN);
-		System.out.println("Whether proxy-service is enabled : " + strProxyYN);
-
 		if(strScaleYN.equals("Y")){
 			System.out.println("eXperDB-Scale scale_path : " + strScalePath);
 			System.out.println("eXperDB-Scale scale_in_cmd : " + strScaleInCmd);
@@ -403,8 +411,9 @@ public class WebConsoleSetting {
 			System.out.println("eXperDB-Scale scale_json_view : " + strScaleJsonView);
 			System.out.println("eXperDB-Scale scale_chk_prgress : " + strScaleChkPrgress);
 		}
-		System.out.println("##################################################");
-
+		System.out.println("###################eXperDB-Proxy##################");
+		System.out.println("Whether proxy menu is enabled : " + strProxyMenuYN);
+		System.out.println("Whether proxy-service is enabled : " + strProxyYN);
 		System.out.println("###################eXperDB-Encrypt##################");
 		System.out.println("Whether eXperDB-Encrypt is enabled : " + strEnctyptYn);
 		if(strEnctyptYn.equals("Y")){
@@ -512,6 +521,10 @@ public class WebConsoleSetting {
 
 			prop.setProperty("db2pg_path", strDb2pgPath);
 
+			prop.setProperty("monitoring.installyn", strMonitoringInstallYn);
+			prop.setProperty("monitoring_path", strMonitoringPath);
+			
+			
 			if(strEnctyptYn.equals("Y")){
 				prop.setProperty("encrypt.useyn", strEnctyptYn);
 				prop.setProperty("encrypt.server.url", strEncryptServerUrl);

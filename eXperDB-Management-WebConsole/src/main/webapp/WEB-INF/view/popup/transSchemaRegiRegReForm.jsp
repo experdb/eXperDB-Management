@@ -126,7 +126,12 @@
 			$("#mod_trans_regi_Chk", "#modTransScheRegiRegForm").val("fail");
 		}
 	}
-
+	/* ********************************************************
+	 * IP/Port 정보 바뀌면 Connection Test 다시 
+	 ******************************************************** */
+	function fn_regi_change_IpPort_re(){
+		$("#mod_trans_regi_Chk", "#modTransScheRegiRegForm").val("fail");
+	}
 	/* ********************************************************
 	 * update 실행
 	 ******************************************************** */
@@ -201,7 +206,7 @@
 										<spring:message code="data_transfer.ip"/>
 									</label>
 									<div class="col-sm-9">
-										<input type="text" class="form-control" id="mod_trans_regi_ip" name="mod_trans_regi_ip" maxlength="50" placeholder='50<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()" tabindex=1 />	
+										<input type="text" class="form-control" id="mod_trans_regi_ip" name="mod_trans_regi_ip" maxlength="50" placeholder='50<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()"  onchange="fn_regi_change_IpPort_re();" tabindex=1 />	
 									</div>
 								</div>
 								
@@ -211,7 +216,7 @@
 										<spring:message code="data_transfer.port"/>
 									</label>
 									<div class="col-sm-9">
-										<input type="text" class="form-control"  id="mod_trans_regi_port" maxlength="5" name="mod_trans_regi_port" onblur="this.value=this.value.trim()" placeholder='<spring:message code="eXperDB_scale.msg15" />' onKeyUp="chk_Number(this);"  tabindex=2  />	
+										<input type="text" class="form-control"  id="mod_trans_regi_port" maxlength="5" name="mod_trans_regi_port" onblur="this.value=this.value.trim()" placeholder='<spring:message code="eXperDB_scale.msg15" />' onKeyUp="chk_Number(this);" onchange="fn_regi_change_IpPort_re();" tabindex=2  />	
 									</div>
 								</div>																	
 

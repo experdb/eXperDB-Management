@@ -208,6 +208,19 @@
 			showSwalIcon('<spring:message code="eXperDB_CDC.msg18" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}
+		console.log(connect_nm_val);
+		if(/\w$/g.test(connect_nm_val)) {//영어,_,숫자만 포함 문자열
+			if(/[A-Z]/g.test(connect_nm_val)){//대문자 포함
+				console.log(connect_nm_val);
+				connect_nm_val = connect_nm_val.toLowerCase();
+				console.log(connect_nm_val);
+				$("#ins_connect_nm", "#insRegForm").val(connect_nm_val);
+				showSwalIcon('<spring:message code="eXperDB_CDC.msg54"/>', '<spring:message code="common.close" />', '', 'warning');
+			}
+		}else{
+			showSwalIcon('<spring:message code="eXperDB_CDC.msg53"/>', '<spring:message code="common.close" />', '', 'warning');
+			return;
+		}
 		
 		$.ajax({
 			url : '/connect_nm_Check.do',

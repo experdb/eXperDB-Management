@@ -145,6 +145,13 @@ public class LoginController {
         					proxy_use_yn = props.get("proxy.useyn").toString(); 
         				}		
         				loginVoSs.setProxy_use_yn(proxy_use_yn);
+        				
+        				/* Monitoring Client 다운로드 가능 여부 */
+        				String mon_install_yn = "N";
+        				if(props.get("monitoring.installyn")!=null){
+        					mon_install_yn= props.get("monitoring.installyn").toString();
+        				}
+        				loginVoSs.setMonitoring_install_yn(mon_install_yn);
 
         				if(encp_use_yn.equals("Y")){
         					String restIp = props.get("encrypt.server.url").toString();
@@ -400,6 +407,13 @@ public class LoginController {
 					proxy_use_yn = props.get("proxy.useyn").toString(); 
 				}		
 				loginVo.setProxy_use_yn(proxy_use_yn);
+				
+				/* Monitoring Client 다운로드 가능 여부 */
+				String mon_install_yn = "N";
+				if(props.get("monitoring.installyn")!=null){
+					mon_install_yn= props.get("monitoring.installyn").toString();
+				}
+				loginVo.setMonitoring_install_yn(mon_install_yn);				
 				
 				if(encp_use_yn.equals("Y")){
 					String restIp = props.get("encrypt.server.url").toString();

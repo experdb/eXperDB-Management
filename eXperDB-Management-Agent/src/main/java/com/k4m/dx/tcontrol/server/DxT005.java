@@ -208,7 +208,7 @@ public class DxT005 extends SocketCtl {
 					
 				}
 				
-				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
+				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString()+" > /dev/null 2>&1";
 				
 				RunCommandExec r = new RunCommandExec(strCommand);
 				
@@ -236,6 +236,9 @@ public class DxT005 extends SocketCtl {
 				String retVal = r.call();
 				String strResultMessge = r.getMessage();
 
+				
+				socketLogger.info("[ Porcess Result ---> "+ retVal);	
+				
 				// 다음실행여부가 Y 이면 에러나도 다음 시행함.
 				if (retVal.equals("success")) {
 						
@@ -258,6 +261,8 @@ public class DxT005 extends SocketCtl {
 							}
 							
 							if(rman_status==3){
+								socketLogger.info(" " );
+								socketLogger.info(" " );
 								socketLogger.info(" " );
 								
 								WrkExeVO endVO = new WrkExeVO();

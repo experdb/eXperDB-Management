@@ -1,19 +1,32 @@
 #!/bin/bash
+
+declare PASSWD_AUTO="N"
+
+if [ $1 == "A" ]; then
+    PASSWD_AUTO="Y"
+fi
+
 echo "****************************************************"
-echo "eXperDB-Management-13.0.2 Repository DB Install"
+echo "eXperDB-Management-13.0.1 Repository DB Install"
 echo "****************************************************"
 
 echo "**CREATE USER experdb**"
-psql -c "CREATE USER experdb PASSWORD 'experdb' SUPERUSER";
+if [ $PASSWD_AUTO == "Y" ]; then
+  psql -c "CREATE USER experdb PASSWORD 'eXperdb12#' SUPERUSER";
+else
+  psql -c "CREATE USER experdb PASSWORD 'experdb' SUPERUSER";
+fi
 echo "**CREATE USER experdb END**"
 
 echo "**DATABASE experdb OWNER CHANGE**"
 psql -c "ALTER DATABASE experdb OWNER TO experdb"
 echo "**DATABASE experdb OWNER CHANGE END**"
 
-echo "**SETTING experdb PASSWORD**"
-psql -c "\password experdb"
-sleep 2
+if [ $PASSWD_AUTO != "Y" ]; then
+  echo "**SETTING experdb PASSWORD**"
+  psql -c "\password experdb"
+  sleep 2
+fi
 
 echo "**Schema, search_path add START**"
 psql -U experdb -d experdb -f eXperDB-Management_createSchema.sql
@@ -72,10 +85,6 @@ echo "**12.1.4 END**"
 echo "**13.0.1**"
 psql -U experdb -d experdb -f eXperDB-Management_13.0.1.sql
 echo "**13.0.1 END**"
-
-echo "**13.0.2**"
-psql -U experdb -d experdb -f eXperDB-Management_13.0.2.sql
-echo "**13.0.2 END**"
 
 #항상 마지막에 backup sql 수행 (등록 DB가 다름)
 echo "**bnr backup**"

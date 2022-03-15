@@ -43,6 +43,7 @@ public class RunCommandExec extends Thread {
 	@Override
 	public void run(){
 		runExecRtn2(CMD);
+		//runExec(CMD);
 	}
 	
 	public String call(){
@@ -61,6 +62,7 @@ public class RunCommandExec extends Thread {
 		Process proc = null;
 
 		try{
+			socketLogger.info("cmd --> " + cmd);
 			//proc = Runtime.getRuntime().exec(cmd);
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			try (InputStream psout = proc.getInputStream()) {
@@ -74,12 +76,15 @@ public class RunCommandExec extends Thread {
 			this.retVal = "success";
 		}catch(IOException e){
 			System.out.println(e);
+			socketLogger.info("err.IOException() --> " + e);
 			this.retVal = "IOException" + e.toString();
 		}catch(InterruptedException e){
 			System.out.println(e);
+			socketLogger.info("err.InterruptedException() --> " + e);
 			retVal = "InterruptedException" + e.toString();
 		}catch(Exception e){
 			System.out.println(e);
+			socketLogger.info("err.Exception() --> " + e);
 			this.retVal = "Exception" + e.toString();
 		} finally {
 			proc.destroy();
@@ -102,6 +107,7 @@ public class RunCommandExec extends Thread {
 		String strResult = "";
 		String strScanner = "";
 		try{
+			socketLogger.info("[ cmd  ] "+cmd);
 			//proc = Runtime.getRuntime().exec(cmd);
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			
@@ -122,15 +128,18 @@ public class RunCommandExec extends Thread {
 			this.returnMessage = strResult;
 			this.retVal = "success";
 		}catch(IOException e){
+			socketLogger.info("[ IOException ] " + e);
 			System.out.println(e);
 			this.retVal = "IOException" + e.toString();
 			this.returnMessage = "IOException" + e.toString();
 		}catch(Exception e){
+			socketLogger.info("[ Exception ] " + e);
 			System.out.println(e);
 			this.retVal = "Exception" + e.toString();
 			this.returnMessage = "Exception" + e.toString();
 		} finally {
 			proc.destroy();
+			socketLogger.info("[ Exec End ] ");
 			System.out.println("Exec End");
 		}
 	}
@@ -143,12 +152,27 @@ public class RunCommandExec extends Thread {
 		String strResultErrInfo = "";
 		try{
 			//proc = Runtime.getRuntime().exec(cmd);
-socketLogger.info("cmd --> " + cmd);
+			socketLogger.info("cmd --> " + cmd);
 			
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
+			
+			try (InputStream psout = proc.getInputStream()) {
+	            this.copy_old(psout, System.out);
+				//this.copy(psout);
+	        }
+			
+			ReadStream s1 = new ReadStream("stdin", proc.getInputStream ());
+			ReadStream s2 = new ReadStream("stderr", proc.getErrorStream ());
+			
+			//proc.getErrorStream().close();
+			//proc.getInputStream().close();
+			//proc.getOutputStream().close();
+			
+			s1.start ();
+			s2.start ();
 			proc.waitFor ();
 			
-		//	socketLogger.info("proc.exitValue() --> " + proc.exitValue());
+		 	socketLogger.info("proc.exitValue() --> " + proc.exitValue());
 			
 		//	socketLogger.info("@@@@@@@@@ scanner start" );
 			
@@ -165,7 +189,7 @@ socketLogger.info("cmd --> " + cmd);
 				}
 				
 				strResult += strResultErrInfo;
-				socketLogger.info("err.ready() --> " + strResult);
+				errLogger.info("err.ready() --> " + strResult);
 				err.close();
 				strReturnVal = "failed";
 			} else {
@@ -174,7 +198,7 @@ socketLogger.info("cmd --> " + cmd);
 				while ( out.ready() ) {
 					strResult += out.readLine();
 					
-				/*	socketLogger.info("out.ready() --> " + strResult);*/
+					socketLogger.info("out.ready() --> " + strResult);
 				}
 				out.close();
 				strReturnVal = "success";
@@ -184,16 +208,18 @@ socketLogger.info("cmd --> " + cmd);
 			this.returnMessage = strResult;
 			this.retVal = strReturnVal;
 		}catch(IOException e){
+			errLogger.info("IOException " + e );
 			System.out.println(e);
 			this.retVal = "IOException" + e.toString();
 			this.returnMessage = "IOException" + e.toString();
 		}catch(Exception e){
+			errLogger.info("Exception " + e );
 			System.out.println(e);
 			this.retVal = "Exception" + e.toString();
 			this.returnMessage = "Exception" + e.toString();
 		} finally {
 			proc.destroy();
-			System.out.println("Exec End");
+			socketLogger.info("Exec End ");
 		}
 	}
 	
