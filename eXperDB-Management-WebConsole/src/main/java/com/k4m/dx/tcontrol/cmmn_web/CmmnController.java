@@ -1027,7 +1027,11 @@ public class CmmnController {
 		try {
 			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
 			
-			String monClientFileDir = props.get("monitoring_path").toString()+"/eXperDB_Server/files/";
+			System.out.println("Monitoring Home path : " + System.getenv("PGMHOME"));
+			
+			//String monClientFileDir = props.get("monitoring_path").toString()+"/eXperDB_Server/files/";
+			String monClientFileDir = System.getenv("PGMHOME")+"/files/";
+			//String monClientFileDir = "/home/experdb/app/eXperDB-Monitoring/eXperDB_Server/files/";
 			//			/home/experdb/app/eXperDB-Monitoring/eXperDB_Server/files/eXperDB.Monitoring_13_0_7_554.exe
 			
 			File folder = new File(monClientFileDir);
