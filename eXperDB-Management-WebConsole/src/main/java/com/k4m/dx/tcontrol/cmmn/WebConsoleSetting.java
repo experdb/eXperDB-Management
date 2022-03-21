@@ -368,12 +368,13 @@ public class WebConsoleSetting {
 		}
 
 		/* eXperDB-Monitoring */
-		System.out.println("What is the eXperDB-Monitoring installation path on this server? : ");
-		String strMonitoringPath = scan.nextLine();
-		String strMonitoringInstallYn="N";
-		if(!"".equals(strMonitoringPath)){
-			strMonitoringInstallYn="Y";
-		}
+		/*
+		 * System.out.
+		 * println("What is the eXperDB-Monitoring installation path on this server? : "
+		 * ); String strMonitoringPath = scan.nextLine(); String
+		 * strMonitoringInstallYn="N"; if(!"".equals(strMonitoringPath)){
+		 * strMonitoringInstallYn="Y"; }
+		 */
 		
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
 
@@ -397,8 +398,8 @@ public class WebConsoleSetting {
 		}
 		System.out.println("eXperDB-DB2PG installation path : " + strDb2pgPath);
 
-		System.out.println("eXperDB-Monitoring installed Y/N : " + strMonitoringInstallYn);
-		System.out.println("eXperDB-Monitoring installation path : " + strMonitoringPath);
+		//System.out.println("eXperDB-Monitoring installed Y/N : " + strMonitoringInstallYn);
+		//System.out.println("eXperDB-Monitoring installation path : " + strMonitoringPath);
 		
 		System.out.println("###################eXperDB-Scale##################");
 		System.out.println("Whether scale is enabled : " + strScaleYN);
@@ -521,8 +522,9 @@ public class WebConsoleSetting {
 
 			prop.setProperty("db2pg_path", strDb2pgPath);
 
-			prop.setProperty("monitoring.installyn", strMonitoringInstallYn);
-			prop.setProperty("monitoring_path", strMonitoringPath);
+			//모니터링 사용여부 및 path 고정 (2022-03-21 변승우)
+			prop.setProperty("monitoring.installyn", "Y");
+			prop.setProperty("monitoring_path", "/$PGMHOME/files");
 			
 			
 			if(strEnctyptYn.equals("Y")){
