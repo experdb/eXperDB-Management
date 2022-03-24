@@ -1,0 +1,125 @@
+#!/bin/bash
+
+HOME_PATH=$EXPERDB_HOME/app
+MGMT_AGENT_HOME=$HOME_PATH/eXperDB-Management/eXperDB-Management-Agent/bin
+ENCRYPT_AGENT_HOME=$HOME_PATH/eXperDB-Management/eXperDB-Encrypt/agent/bin
+ENCRYPT_AGENT_PATH=$HOME_PATH/eXperDB-Management/eXperDB-Encrypt/agent
+REPO_PORT=25432
+REPO_USER=experdb
+REPO_DB=experdb
+REPO_PW=eXperdb12#
+MGMT_AGENT_PORT=9001
+ENCRYPT_PORT=9443
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+NC='\033[0m'
+
+
+
+SILENT() {
+        if [ "$DEBUG" == "y" ] ; then
+                "$@" >> /tmp/agent_install.log 2>&1
+        else
+                "$@" > /dev/null 2>&1
+        fi
+}
+
+dot_progress(){
+  BGPID=$1
+  local delay=1.25
+  while [ "$(ps a | awk '{print $1}' | grep $BGPID)" ]; do
+    echo -n "."
+    sleep $delay
+  done
+}
+
+ComplateMsg(){
+    if [ $2 -ne 0 ]; then
+        echo -e " ${RED}$1 Failure!"
+        echo -e " ${NC}  "
+        exit 2
+    else
+        echo -e " ${BLUE}$1 Complete!"
+        echo -e " ${NC}  "
+    fi
+}
+
+
+MGMT_AGENT_SETUP(){
+	cd $MGMT_AGENT_HOME
+	chmod 755 *.sh
+	printf "$AGENT_IP\n$MGMT_AGENT_PORT\n$REPO_IP\n$REPO_PORT\n$REPO_DB\n$REPO_USER\n$REPO_PW\nn\nn\nn\ny"|$MGMT_AGENT_HOME/agent_setup.sh > /dev/null 2>&1
+}
+
+
+
+MGMT_AGENT_START(){
+	cd $MGMT_AGENT_HOME
+	./startup.sh > /dev/null 2>&1
+}
+
+
+
+ENCRYPT_AGENT_SETUP(){
+	cd $ENCRYPT_AGENT_HOME 
+	chmod 755 *.sh
+	printf "$REPO_IP\n$ENCRYPT_PORT"|$ENCRYPT_AGENT_HOME/install-agent.sh > /dev/null 2>&1
+}
+
+
+
+ENCRYPT_AGENT_START(){
+	cd $ENCRYPT_AGENT_HOME
+	./start-agent.sh > /dev/null 2>&1
+}
+
+
+
+SQL_SET(){
+	cd $ENCRYPT_AGENT_PATH/lib/pgsql
+	sed -i 's/$PLUGIN_DIR/\/experdb\/app\/eXperDB-Management\/eXperDB-Encrypt\/agent\/lib\/pgsql/g' experdb-sql-install.sql > /dev/null 2>&1
+}
+
+
+echo -e " ${GREEN}  "
+echo "   **********************************"
+echo "   *    __  __                      *"
+echo "   *  __\ \/ /___ ___ _ _|  \|   \  *"
+echo "   * / _ \  /|- _/ _ ) '_| | | ' /  *"
+echo "   * \___/  \|_| \___|_| | | | ' \  *"
+echo "   *    /_/\_\           |__/|___/  *"
+echo "   **********************************"
+echo -e " ${NC}"
+echo "   "
+echo "   Install eXperDB-Enterprise AGENT"
+echo -e " ${NC}"
+echo "   "
+
+
+echo "===================== Installing eXperDB Platform Agent======================="
+echo "      "
+	read -p "Repository DB server IP(External access ip) : "
+        if [ "$REPLY"i != "" ]; then
+                REPO_IP=$REPLY
+        fi
+
+        read -p "Agent IP : "
+        if [ "$REPLY" != "" ]; then
+                AGENT_IP=$REPLY
+        fi
+
+
+  echo "      "
+  echo -n "   Installing eXperDB-Managem-Agent " & MGMT_AGENT_SETUP & MGMT_AGENT_START & dot_progress $!
+  ComplateMsg "" $?
+  echo -n "   Installing eXperDB-Encrypt-Agent " & ENCRYPT_AGENT_SETUP & ENCRYPT_AGENT_START & SQL_SET & dot_progress $!
+  ComplateMsg "" $?
+echo "      " 
+echo "========================= Installantion compliete! =========================="
+
+
+
+
