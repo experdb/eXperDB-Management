@@ -49,38 +49,34 @@ ComplateMsg(){
 
 
 MGMT_AGENT_SETUP(){
-	cd $MGMT_AGENT_HOME
-	chmod 755 *.sh
-	printf "$AGENT_IP\n$MGMT_AGENT_PORT\n$REPO_IP\n$REPO_PORT\n$REPO_DB\n$REPO_USER\n$REPO_PW\nn\nn\nn\ny"|$MGMT_AGENT_HOME/agent_setup.sh > /dev/null 2>&1
+        cd $MGMT_AGENT_HOME
+        chmod 755 *.sh
+        printf "$AGENT_IP\n$MGMT_AGENT_PORT\n$REPO_IP\n$REPO_PORT\n$REPO_DB\n$REPO_USER\n$REPO_PW\nn\nn\nn\ny"|$MGMT_AGENT_HOME/agent_setup.sh > /dev/null 2>&1
 }
 
 
 
 MGMT_AGENT_START(){
-	cd $MGMT_AGENT_HOME
-	./startup.sh > /dev/null 2>&1
+        sh $MGMT_AGENT_HOME/startup.sh > /dev/null 2>&1
 }
 
 
-
 ENCRYPT_AGENT_SETUP(){
-	cd $ENCRYPT_AGENT_HOME 
-	chmod 755 *.sh
-	printf "$REPO_IP\n$ENCRYPT_PORT"|$ENCRYPT_AGENT_HOME/install-agent.sh > /dev/null 2>&1
+        cd $ENCRYPT_AGENT_HOME
+        chmod 755 *.sh
+        printf "$REPO_IP\n$ENCRYPT_PORT"|$ENCRYPT_AGENT_HOME/install-agent.sh > /dev/null 2>&1
 }
 
 
 
 ENCRYPT_AGENT_START(){
-	cd $ENCRYPT_AGENT_HOME
-	./start-agent.sh > /dev/null 2>&1
+        sh $ENCRYPT_AGENT_HOME/start-agent.sh > /dev/null 2>&1
 }
 
 
 
 SQL_SET(){
-	cd $ENCRYPT_AGENT_PATH/lib/pgsql
-	sed -i 's/$PLUGIN_DIR/\/experdb\/app\/eXperDB-Management\/eXperDB-Encrypt\/agent\/lib\/pgsql/g' experdb-sql-install.sql > /dev/null 2>&1
+        sed -i 's/$PLUGIN_DIR/\/experdb\/app\/eXperDB-Management\/eXperDB-Encrypt\/agent\/lib\/pgsql/g' $ENCRYPT_AGENT_PATH/lib/pgsql/experdb-sql-install.sql > /dev/null 2>&1
 }
 
 
@@ -101,7 +97,7 @@ echo "   "
 
 echo "===================== Installing eXperDB Platform Agent======================="
 echo "      "
-	read -p "Repository DB server IP(External access ip) : "
+        read -p "Repository DB server IP(External access ip) : "
         if [ "$REPLY"i != "" ]; then
                 REPO_IP=$REPLY
         fi
@@ -111,15 +107,20 @@ echo "      "
                 AGENT_IP=$REPLY
         fi
 
-
   echo "      "
-  echo -n "   Installing eXperDB-Managem-Agent " & MGMT_AGENT_SETUP & MGMT_AGENT_START & dot_progress $!
+  echo -n "   Installing eXperDB-Managem-Agent "
+         MGMT_AGENT_SETUP
   ComplateMsg "" $?
-  echo -n "   Installing eXperDB-Encrypt-Agent " & ENCRYPT_AGENT_SETUP & ENCRYPT_AGENT_START & SQL_SET & dot_progress $!
+  echo -n "   Start eXperDB-Managem-Agent "
+         MGMT_AGENT_START
   ComplateMsg "" $?
-echo "      " 
+  echo -n "   Installing eXperDB-Encrypt-Agent "
+         ENCRYPT_AGENT_SETUP
+  #ComplateMsg "" $?
+  echo -n "   Start eXperDB-Encrypt-Agent "
+         ENCRYPT_AGENT_START
+  #ComplateMsg "" $?
+         SQL_SET
+echo "      "
+
 echo "========================= Installantion compliete! =========================="
-
-
-
-
