@@ -259,6 +259,7 @@ public class ClientProtocolID {
 	public static final String LAST_NODE_CNT = "LAST_NODE_CNT";
 	
 	/* 데이터전송 관련 */
+	public static final String KC_ID = "KC_ID";
 	public static final String KC_IP = "KC_IP";
 	public static final String KC_PORT = "KC_PORT";
 	public static final String SNAPSHOT_MODE = "SNAPSHOT_MODE";

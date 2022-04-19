@@ -24,6 +24,7 @@ import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
+import com.k4m.dx.tcontrol.util.TransRunCommandExec;
 
 /**
  * Connect 정지
@@ -121,7 +122,7 @@ public class DxT039 extends SocketCtl{
 			
 			//conectStopGbn 이 total 일 경우 전체 삭제
 			if ("total".equals(conectStopGbn) || "2deps".equals(conectStopGbn) || "4deps".equals(conectStopGbn)) {
-				RunCommandExec r = new RunCommandExec(strCmd);
+				TransRunCommandExec r = new TransRunCommandExec(strCmd);
 				
 				//명령어 실행
 				r.start();
