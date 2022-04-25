@@ -128,6 +128,7 @@ var message_msg93 = "<spring:message code='message.msg93' />";
 var message_msg92 = "<spring:message code='message.msg92' />";
 var message_msg144 = "<spring:message code='message.msg144' />";
 var message_msg106 = "<spring:message code='message.msg106' />";
+var message_msg229 = "<spring:message code='message.msg229' />";
 
 </script>
 <body>

@@ -297,6 +297,18 @@ function fn_checkWord(obj, maxlength) {
 }
 
 /* ********************************************************
+ * 글자수 체크
+ ******************************************************** */
+function fn_checkPort(obj) { 
+	var str = obj.value; 
+	var max_length = 65535;  
+	if (str > max_length) {
+		showSwalIcon(message_msg229, closeBtn, '', 'error');        
+	}    
+	obj.focus(); 
+}
+
+/* ********************************************************
  * 숫자 체크
  ******************************************************** */
 function chk_Number(object){
