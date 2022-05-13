@@ -246,16 +246,13 @@ public class ClientInfoCmmn implements Runnable{
 					System.out.println(" ");
 					System.out.println(" ");
 					
-				}else{
+				}else if(resultWork.get(i).get("bsn_dscd").equals("TC001903")){
 					
 					System.out.println("> > > > > > > > > > > > > > > > DB2PG START");
 					
 					int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());						
 					String oldSavePath = scheduleService.selectOldSavePath(wrk_id);
-							
-					System.out.println("wrk_id= " +  wrk_id);
-					System.out.println("DB2PG oldSavePath = "+ oldSavePath);
-											
+														
 					int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ();
 					int intGrpSeq = scheduleService.selectQ_WRKEXE_G_02_SEQ();
 					WrkExeVO vo = new WrkExeVO();
