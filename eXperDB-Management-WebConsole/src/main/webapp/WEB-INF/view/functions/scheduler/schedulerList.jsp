@@ -41,14 +41,14 @@ function fn_init(){
 			},
 		{data : "db_svr_nm",  defaultContent : ""},
 		{data : "wrk_cnt",  className : "dt-right", defaultContent : ""}, //work갯수
-		{data : "prev_exe_dtm",  defaultContent : ""
+		/* {data : "prev_exe_dtm",  defaultContent : ""
 			,render: function (data, type, full) {
 			if(full.prev_exe_dtm == null){
 				var html = '-';
 				return html;
 			}
 		  return data;
-		}}, 
+		}},  */
 		{data : "nxt_exe_dtm",  defaultContent : ""
 			,render: function (data, type, full) {
 				if(full.nxt_exe_dtm == null){
@@ -170,17 +170,17 @@ function fn_init(){
 	  table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 	  table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(5)').css('min-width', '50px');
+	 // table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(8)').css('min-width', '80px');  
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');  
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(12)').css('min-width', '100px'); 
 	  table.tables().header().to$().find('th:eq(13)').css('min-width', '100px'); 
-	  table.tables().header().to$().find('th:eq(14)').css('min-width', '100px'); 
+	  table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
 	  table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');
-	  table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
     $(window).trigger('resize'); 
 }
 
@@ -452,66 +452,14 @@ function fn_selectScheduleList(){
 
 
 /* ********************************************************
- * 스케줄 리스트 삭제
- ******************************************************** */
-function fn_deleteScheduleList(){
-	var datas = table.rows('.selected').data();
-	if (datas.length <= 0) {
-		showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
-		return false;
-	} 
-	
-	confile_title = 'SCHEDULE' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
-	$('#con_multi_gbn', '#findConfirmMulti').val("del");
-	$('#confirm_multi_tlt').html(confile_title);
-	$('#confirm_multi_msg').html('<spring:message code="message.msg134" />');
-	$('#pop_confirm_multi_md').modal("show");
-  
-}
-
-/* ********************************************************
- * 스케줄 리스트 삭제2
- ******************************************************** */
-function fn_deleteScheduleList2(){
-	var datas = table.rows('.selected').data();
-		var rowList = [];
-	    for (var i = 0; i < datas.length; i++) {
-	        rowList.push( table.rows('.selected').data()[i].scd_id);   
-	       if(table.rows('.selected').data()[i].status == "s"){
-	    	   showSwalIcon('<spring:message code="message.msg36" />', '<spring:message code="common.close" />', '', 'error');
-	    	   return false;
-	       }
-	  }	
-	  	$.ajax({
-			url : "/deleteScheduleList.do",
-			data : {
-				rowList : JSON.stringify(rowList)
-			},
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				showSwalIconRst('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success', "reload");
-			}
-		}); 		   
-}
-
-/* ********************************************************
  * 스케줄 리스트 등록
  ******************************************************** */
 function fn_insertScheduleListView(){
 	location.href="/insertScheduleView.do";
 }
+
+
+
 
 /* ********************************************************
  * 스케줄 리스트 수정
@@ -527,6 +475,14 @@ function fn_modifyScheduleListView(){
 		return false;
 	}
 	
+	//실행중인 스케줄이 존재 하는지 체크
+	for (var i = 0; i < datas.length; i++) {
+       if(table.rows('.selected').data()[i].status == "s"){
+    	   showSwalIcon('<spring:message code="message.msg36" />', '<spring:message code="common.close" />', '', 'error');
+    	   return false;
+       }      
+  }	
+	
 	var scd_id = table.row('.selected').data().scd_id;
 	
 	var form = document.modifyForm;
@@ -535,6 +491,72 @@ function fn_modifyScheduleListView(){
 	return;
 	
 }
+
+
+
+
+/* ********************************************************
+ * 스케줄 삭제 버튼 클릭시 
+ ******************************************************** */
+function fn_deleteScheduleList(){
+	var datas = table.rows('.selected').data();
+	if (datas.length <= 0) {
+		showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+		return false;
+	} 
+	
+	//실행중인 스케줄이 존재 하는지 체크
+	for (var i = 0; i < datas.length; i++) {
+       if(table.rows('.selected').data()[i].status == "s"){
+    	   showSwalIcon('<spring:message code="message.msg36" />', '<spring:message code="common.close" />', '', 'error');
+    	   return false;
+       }      
+  }	
+	
+	confile_title = 'SCHEDULE' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+	$('#confirm_tlt').html(confile_title);
+	$('#confirm_msg').html('<spring:message code="message.msg134" />');
+	$('#pop_confirm_md').modal("show");
+}
+
+
+
+/* ********************************************************
+ * 스케줄 리스트 삭제
+ ******************************************************** */
+function fnc_confirmRst(){
+	var datas = table.rows('.selected').data();
+	var rowList = [];
+    for (var i = 0; i < datas.length; i++) {
+        rowList.push( table.rows('.selected').data()[i].scd_id);   
+  }	
+	
+	$.ajax({
+		url : "/deleteScheduleList.do",
+		data : {
+			rows : rowList.join()
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			showSwalIconRst('<spring:message code="message.msg60" />', '<spring:message code="common.close" />', '', 'success', "reload");
+		}
+	}); 	
+	
+}
+
+
 
 
 /* ********************************************************
@@ -644,18 +666,22 @@ function fn_dateValidation(exe_dt){
 	 return true;
 } 
 
+
+
+
 /* ********************************************************
  * confirm result
  ******************************************************** */
 function fnc_confirmMultiRst(gbn){
-	if (gbn == "del") {
-		fn_deleteScheduleList2();
-	}else if(gbn == "stop"){
+	if(gbn == "stop"){
 		fn_scheduleStop2();
 	}else if(gbn == "start"){
 		fn_scheduleStart2();
 	}
 }
+
+
+
 /* ********************************************************
  * confirm cancel result
  ******************************************************** */
@@ -669,8 +695,13 @@ function fn_confirmCancelRst(gbn){
 		}
 	}
 }
+
+
+
+
 </script>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
+<%@include file="./../../popup/confirmForm.jsp"%>
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
 <%@include file="../../popup/scheduleWrkList.jsp"%>
 <%@include file="../../cmmn/workRmanInfo.jsp"%>
@@ -808,7 +839,7 @@ function fn_confirmCancelRst(gbn){
 												<th width="200"><spring:message code="schedule.scheduleExp"/></th>
 												<th width="100"><spring:message code="data_transfer.server_name" /></th>
 												<th width="50"><spring:message code="schedule.work_count" /></th>
-												<th width="100"><spring:message code="schedule.pre_run_time" /></th>
+												<%-- <th width="100"><spring:message code="schedule.pre_run_time" /></th> --%>
 												<th width="100"><spring:message code="schedule.next_run_time" /></th>
 												<th width="80"><spring:message code="common.run_status" /></th>
 												<th width="100"><spring:message code="etc.etc26"/></th>

@@ -34,14 +34,17 @@
 	var immediate_data = null;
 	var workJsonData = null;
 	var scheduleTable = null;
+	
+	
+	
 	$(window).ready(function(){
 		//검색조건 초기화
 		selectInitTab(selectChkTab);
-		
 		//스케줄 테이즐 setting
 		fn_init_schedule();
 
-			//조회
+		
+		//조회 (backup_common.js)
 		if(tabGbn != ""){
 			selectTab(tabGbn);
 		}else{
@@ -49,14 +52,12 @@
 		}
 			
 		$('#rmanDataTable tbody').on('click','tr',function() {
-			var wrk_id_up = tableRman.row(this).data().wrk_id;
-			
+			var wrk_id_up = tableRman.row(this).data().wrk_id;		
 			fn_schdule_pop_List(wrk_id_up);
 		});
 		
 		$('#dumpDataTable tbody').on('click','tr',function() {
-			var wrk_id_up = tableDump.row(this).data().wrk_id;
-			
+			var wrk_id_up = tableDump.row(this).data().wrk_id;			
 			fn_schdule_pop_List(wrk_id_up);
 		});
 	});
@@ -280,6 +281,9 @@
 		$(window).trigger('resize'); 
 	}
 
+	
+	
+	
 	/* ********************************************************
 	 * 삭제 confirm
 	 ******************************************************** */
@@ -354,6 +358,9 @@
 		});	
 	}
 
+	
+	
+	
 	/* ********************************************************
 	 * 삭제 로직 처리
 	 ******************************************************** */
@@ -396,6 +403,9 @@
 		});
 	}
 	
+	
+	
+	
 	/* ********************************************************
 	 * 즉시실행 백업
 	 ******************************************************** */
@@ -430,6 +440,9 @@
 		$('#confirm_multi_msg').html('<spring:message code="backup_management.msg01" />');
 		$('#pop_confirm_multi_md').modal("show");
 	}
+	
+	
+	
 	
 	/* ********************************************************
 	 * 즉시실행 DDL
@@ -467,6 +480,8 @@
 		});
 	}
 
+	
+	
 	/* ********************************************************
 	 * backup history 이동
 	 ******************************************************** */
@@ -476,6 +491,9 @@
 		parent.fn_GoLink(id);
 	}
 
+	
+	
+	
 	/* ********************************************************
 	 * 수정버튼 클릭시 
 	 ******************************************************** */

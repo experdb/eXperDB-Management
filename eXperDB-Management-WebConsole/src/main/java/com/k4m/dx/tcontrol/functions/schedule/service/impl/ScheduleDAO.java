@@ -119,12 +119,6 @@ public class ScheduleDAO extends EgovAbstractMapper{
 	}
 
 
-	public void deleteScheduleList(int scd_id) {
-		delete("scheduleSql.deleteDscheduleList",scd_id);
-		delete("scheduleSql.deleteMscheduleList",scd_id);
-	}
-
-
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectModifyScheduleList(int scd_id) {
 		List<Map<String, Object>> sl = null;
@@ -270,6 +264,12 @@ public class ScheduleDAO extends EgovAbstractMapper{
 
 	public void updateScheduler(WrkExeVO wrkExeVO) {
 		update("scheduleHistorySql.updateScheduler", wrkExeVO);
+	}
+
+
+	public void deleteSchedule(String scd_id) {
+		delete("scheduleSql.deleteschedule_d",scd_id);
+		delete("scheduleSql.deleteschedule_m",scd_id);
 	}
 
 
