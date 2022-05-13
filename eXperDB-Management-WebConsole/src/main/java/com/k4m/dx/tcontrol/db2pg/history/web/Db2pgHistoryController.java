@@ -113,6 +113,15 @@ public class Db2pgHistoryController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			resultSet = db2pgHistoryService.selectDb2pgDDLHistory(db2pgHistoryVO);
+			
+			/*
+			 * for(int i=0; i<resultSet.size(); i++) { int trans_time =
+			 * Integer.parseInt(resultSet.get(i).getWrk_dtm()); String trans =
+			 * trans_time/(60*60)+"시간"+ trans_time/60+"분"+ trans_time%60+"초";
+			 * 
+			 * resultSet.get(i).setWrk_dtm(trans); }
+			 */
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -138,6 +147,15 @@ public class Db2pgHistoryController {
 			accessHistoryService.insertHistory(historyVO);
 
 			resultSet = db2pgHistoryService.selectDb2pgMigHistory(db2pgHistoryVO);
+			
+			/*
+			 * for(int i=0; i<resultSet.size(); i++) { int trans_time =
+			 * Integer.parseInt(resultSet.get(i).getWrk_dtm()); String trans =
+			 * trans_time/(60*60)+"시간"+ trans_time/60+"분"+ trans_time%60+"초";
+			 * 
+			 * resultSet.get(i).setWrk_dtm(trans); }
+			 */
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

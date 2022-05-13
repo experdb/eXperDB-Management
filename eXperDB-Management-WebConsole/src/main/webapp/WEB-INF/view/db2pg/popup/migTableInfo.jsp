@@ -22,7 +22,7 @@ function fn_init_tableInfo() {
 		columns : [
 			{data : "idx", className : "dt-center", defaultContent : ""}, 
 			{data : "table_nm", className : "dt-center", defaultContent : ""}, 
-			{data : "total_cnt", className : "dt-right", defaultContent : "", render: $.fn.dataTable.render.number( ',' ) },
+			{data : "total_cnt", className : "dt-right", defaultContent : "", render: $.fn.dataTable.render.number( ',' ) }, 
 			{data : "mig_cnt", className : "dt-right", defaultContent : "", render: $.fn.dataTable.render.number( ',' ) },
 			{data : "start_time", className : "dt-center", defaultContent : ""}, 
 			{data : "end_time", className : "dt-center", defaultContent : ""},
@@ -34,11 +34,11 @@ function fn_init_tableInfo() {
 		migTableinfo.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 		migTableinfo.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
 		migTableinfo.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-		migTableinfo.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		migTableinfo.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 		migTableinfo.tables().header().to$().find('th:eq(4)').css('min-width', '150px');
 		migTableinfo.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
 		migTableinfo.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-		migTableinfo.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		migTableinfo.tables().header().to$().find('th:eq(7)').css('min-width', '150px');
 		$(window).trigger('resize'); 
 }
 
