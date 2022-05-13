@@ -703,7 +703,7 @@ function fn_ipadrDelForm(){
 										<spring:message code="data_transfer.port" />(*)
 									</label>
 									<div class="col-sm-4">
-										<input type="text" class="form-control" id="portno" name="portno"  maxlength="5" onkeyup="fn_checkWord(this,5)" placeholder="5<spring:message code='message.msg188'/>">
+										<input type="text" class="form-control" id="portno" name="portno"  maxlength="5" onkeyup="fn_checkPort(this)" placeholder="5<spring:message code='message.msg188'/>">
 									</div>
 									
 								</div>

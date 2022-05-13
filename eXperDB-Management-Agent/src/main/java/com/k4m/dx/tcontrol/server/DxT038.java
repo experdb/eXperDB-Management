@@ -19,6 +19,7 @@ import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
+import com.k4m.dx.tcontrol.util.TransRunCommandExec;
 
 /**
  * Connect 실행
@@ -77,8 +78,9 @@ public class DxT038 extends SocketCtl{
 
 		String trans_com_id = String.valueOf((Long)objCONNECT_INFO.get("TRANS_COM_ID"));
 		String trans_kc_ip = (String)objCONNECT_INFO.get("KC_IP");
+		int trans_kc_id = Integer.parseInt(String.valueOf(objCONNECT_INFO.get("KC_ID")));
 		String regi_id = String.valueOf(objCONNECT_INFO.get("REGI_ID"));
-socketLogger.info("DxT038.regi_idregi_id : " + regi_id);
+		socketLogger.info("DxT038.regi_idregi_id : " + regi_id);
 		JSONObject outputObj = new JSONObject();
 		
 	   	TransVO commonInfo = null;
@@ -88,12 +90,12 @@ socketLogger.info("DxT038.regi_idregi_id : " + regi_id);
 			if (trans_com_id == null || "".equals(trans_com_id) || "null".equals(trans_com_id)) {
 				trans_com_id = "1";
 			}
-socketLogger.info("DxT038.trans_com_idtrans_com_id : " + trans_com_id);
+			socketLogger.info("DxT038.trans_com_idtrans_com_id : " + trans_com_id);
 			searchTransVO.setTrans_com_id(trans_com_id);
 			commonInfo = transService.selectTransComSettingInfo(searchTransVO); //기본사항 조회
 			
 			JSONObject config = new JSONObject();
-socketLogger.info("DxT038.con_start_gbncon_start_gbn : " + con_start_gbn);
+			socketLogger.info("DxT038.con_start_gbncon_start_gbn : " + con_start_gbn);
 			if ("source".equals(con_start_gbn)) {
 				String connect_type = String.valueOf(objCONNECT_INFO.get("CONNECT_TYPE"));
 				
@@ -139,7 +141,7 @@ socketLogger.info("DxT038.con_start_gbncon_start_gbn : " + con_start_gbn);
 					config.put("offset.flush.interval.ms", "1000");
 					config.put("offset.flush.timeout.ms", "10000");
 				}
-socketLogger.info("DxT038.connect_typeconnect_type : " + connect_type);	
+				socketLogger.info("DxT038.connect_typeconnect_type : " + connect_type);	
 				//schema registry 추가
 				if (connect_type != null && "TC004302".equals(connect_type)) {
 					String regi_url = "http://" + String.valueOf(objCONNECT_INFO.get("REGI_IP")) + ":" + String.valueOf(objCONNECT_INFO.get("REGI_PORT"));
@@ -221,7 +223,7 @@ socketLogger.info("DxT038.connect_typeconnect_type : " + connect_type);
 			String strCmd = cmd + requestEntity.getBody()+"'";
 			socketLogger.info("[Connect실행 명령어12] =" + strCmd);
 			
-			RunCommandExec r = new RunCommandExec(strCmd);
+			TransRunCommandExec r = new TransRunCommandExec(strCmd);
 			
 			//명령어 실행
 			r.start();
@@ -245,6 +247,8 @@ socketLogger.info("DxT038.connect_typeconnect_type : " + connect_type);
 				transVO.setTrans_id(trans_id);
 				transVO.setExe_status("TC001501");
 				transVO.setKc_ip(trans_kc_ip);
+				transVO.setKc_id(trans_kc_id);
+				
 				transVO.setLogin_id(login_id);
 
 				String topicNm = "";
@@ -256,7 +260,7 @@ socketLogger.info("DxT038.connect_typeconnect_type : " + connect_type);
 					if (objMAPP_INFO.get("EXRT_TRG_TB_NM") != null) { //전송대상 테이블 param 추가
 						exrt_trg_tb_nm_array = objMAPP_INFO.get("EXRT_TRG_TB_NM").toString().split(",");
 					}
-socketLogger.info("DxT038.regi_idregi_idregi_idregi_idregi_idregi_id : " + regi_id);
+					socketLogger.info("DxT038.regi_idregi_idregi_idregi_idregi_idregi_id : " + regi_id);
 					if (regi_id != null && !"".equals(regi_id)) {
 						transVO.setRegi_id(regi_id);
 					} else {
@@ -314,7 +318,7 @@ socketLogger.info("DxT038.regi_idregi_idregi_idregi_idregi_idregi_id : " + regi_
 						
 						//이전  topic 삭제
 						transVO.setWrite_use_yn("N");
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.transVOtransVOtransVO111 : " + transVO.getKc_id());
+						socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.transVOtransVOtransVO111 : " + transVO.getKc_id());
 
 						//Write_use_yn가 N 인것만 삭제
 						//kafka topic 삭제

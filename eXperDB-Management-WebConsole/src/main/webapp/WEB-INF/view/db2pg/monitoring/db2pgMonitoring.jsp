@@ -29,10 +29,16 @@ var tableData;
 var stopWrkNm = null
 var stopMigNm = null
 
+var mon =""; 
+var activity = "";
+
 $(window.document).ready(function(){
 	fn_init();
 	fn_selectExeWork();
 	//fn_getStatus();
+	
+	activity = "";	
+	mon =""; 
 });
 
 
@@ -51,6 +57,15 @@ function fn_init() {
 		bSort : false,
 	columns : [
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
+		{
+			data : "",
+			render : function(data, type, full, meta) {
+				return '<button id="detail" class="btn btn-inverse-primary btn-fw" onClick=javascript:fn_getStatus("'+full.mig_nm+'");><spring:message code="data_transfer.detail_search" /> </button>';
+			},
+			className : "dt-center",
+			defaultContent : "",
+			orderable : false
+		},
      	{data : "wrk_nm", className : "dt-left", defaultContent : ""},
      	{data : "mig_info", className : "dt-left", defaultContent : ""},
      	{
@@ -67,17 +82,7 @@ function fn_init() {
 			},
 			className : "dt-center",
 			defaultContent : ""
-		},
-
-		{
-			data : "",
-			render : function(data, type, full, meta) {
-				return '<button id="detail" class="btn btn-inverse-primary btn-fw" onClick=javascript:fn_getStatus("'+full.mig_nm+'");><spring:message code="data_transfer.detail_search" /> </button>';
-			},
-			className : "dt-center",
-			defaultContent : "",
-			orderable : false
-		},
+		},		
      	{data : "total_table_cnt", className : "dt-left", defaultContent : "", visible: false},
      	{data : "rs_cnt", className : "dt-left", defaultContent : "", visible: false},
      	{data : "mig_nm", className : "dt-left", defaultContent : "", visible: false}
@@ -113,7 +118,7 @@ function fn_init() {
 		bSort: false,
 		columns : [
 			{data : "table_nm",  defaultContent : ""},
-			{data : "total_cnt", className : "dt-right", defaultContent : "", render: $.fn.dataTable.render.number( ',' ) },
+			 {data : "total_cnt", className : "dt-right", defaultContent : "", render: $.fn.dataTable.render.number( ',' ) }, 
 			{data : "mig_cnt", className : "dt-right", defaultContent : "", render: $.fn.dataTable.render.number( ',' ) },
 			{data : "start_time", className : "dt-center", defaultContent : ""},
 			{data : "end_time", className : "dt-center", defaultContent : ""},
@@ -150,21 +155,37 @@ function fn_init() {
 
 
 function fn_getStatus(mig_nm){
-	setInterval(function() {
-	$.ajax({
-		url : "/db2pg/monitoring/getData.do",
-		data : {			
-			mig_nm : mig_nm
-		},
-		dataType : "json",
-		type : "post",
-		success : function(result){
-			table.clear().draw();
-			table.rows.add(result).draw();
-		}
-	});
-	$('#loading').hide();
-	}, 3000);	
+
+	//처음
+	if(mon == ""){
+		mon = mig_nm;
+		fn_getMonitoring(mig_nm)
+	}else if(mon !=  mig_nm){
+		clearInterval(activity);			
+		activity = "";	
+		mon = mig_nm;
+		setTimeout(fn_getMonitoring, 1000, mig_nm);
+	}
+
+}
+
+function fn_getMonitoring(mig_nm){
+	
+	activity = setInterval(function() {
+		$.ajax({
+			url : "/db2pg/monitoring/getData.do",
+			data : {			
+				mig_nm : mig_nm
+			},
+			dataType : "json",
+			type : "post",
+			success : function(result){
+				table.clear().draw();
+				table.rows.add(result).draw();
+			}
+		});
+		$('#loading').hide();
+		}, 1500);	
 }
 
 
@@ -312,10 +333,10 @@ function fn_selectExeWork(){
 										<thead>
 											<tr class="bg-info text-white">
 												<th width="30"   style="background-color: #778899;"><spring:message code="common.no" /></th>
+												<th width="100"  style="background-color: #778899;">Detail</th>
 												<th width="100"  style="background-color: #778899;"><spring:message code="common.work_name" /></th>
 												<th width="100"  style="background-color: #778899;">MIGRATION</th>
-												<th width="100"  style="background-color: #778899;">Status</th>
-												<th width="100"  style="background-color: #778899;">Detail</th>
+												<th width="100"  style="background-color: #778899;">Status</th>											
 												<%-- <th width="100"  style="background-color: #778899;">DBMS <spring:message code="common.division" /></th>
 												<th width="100"  style="background-color: #778899;"><spring:message code="data_transfer.ip" /></th>
 												<th width="100"  style="background-color: #778899;">Database</th>												
@@ -342,7 +363,7 @@ function fn_selectExeWork(){
 										<thead>
 											<tr class="bg-info text-white">
 												<th width="130"><spring:message code="migration.table_name" /></th>
-												<th width="130"><spring:message code="migration.totalcnt" /></th>
+												 <th width="130"><spring:message code="migration.totalcnt" /></th>
 												<th width="130"><spring:message code="migration.migcnt" /></th>
 												<th width="130"><spring:message code="migration.starttime" /></th>
 												<th width="130"><spring:message code="migration.endtime" /></th>

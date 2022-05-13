@@ -10,6 +10,7 @@ REPO_DB=experdb
 REPO_PW=eXperdb12#
 MGMT_AGENT_PORT=9001
 ENCRYPT_PORT=9443
+ENCRYPT_USE="Y"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -61,12 +62,17 @@ MGMT_AGENT_START(){
 }
 
 
+
 ENCRYPT_AGENT_SETUP(){
         cd $ENCRYPT_AGENT_HOME
         chmod 755 *.sh
         printf "$REPO_IP\n$ENCRYPT_PORT"|$ENCRYPT_AGENT_HOME/install-agent.sh > /dev/null 2>&1
 }
 
+
+ENCRYPT_AGENT_STOP(){
+	sh $ENCRYPT_AGENT_HOME/stop-agent.sh > /dev/null 2>&1
+}
 
 
 ENCRYPT_AGENT_START(){
@@ -106,21 +112,35 @@ echo "      "
         if [ "$REPLY" != "" ]; then
                 AGENT_IP=$REPLY
         fi
-
+        
+        echo -en "eXperDB-Encrypt Use (Y/N) [ ${GREEN}$ENCRYPT_USE${NC} ] : "
+        read -p ""
+        if [ "$REPLY" != "" ]; then
+               ENCRYPT_USE=$REPLY
+        fi
+        
   echo "      "
   echo -n "   Installing eXperDB-Managem-Agent "
-         MGMT_AGENT_SETUP
+  MGMT_AGENT_SETUP
   ComplateMsg "" $?
+  
   echo -n "   Start eXperDB-Managem-Agent "
-         MGMT_AGENT_START
+  MGMT_AGENT_START
   ComplateMsg "" $?
-  echo -n "   Installing eXperDB-Encrypt-Agent "
-         ENCRYPT_AGENT_SETUP
-  #ComplateMsg "" $?
-  echo -n "   Start eXperDB-Encrypt-Agent "
-         ENCRYPT_AGENT_START
-  #ComplateMsg "" $?
-         SQL_SET
-echo "      "
+  
+  if [[ $ENCRYPT_USE == [Yy] ]]; then
+    echo -n "   Installing eXperDB-Encrypt-Agent "
+    ENCRYPT_AGENT_SETUP
+    ComplateMsg "" $?
 
+    ENCRYPT_AGENT_STOP
+    
+    echo -n "   Start eXperDB-Encrypt-Agent "
+    ENCRYPT_AGENT_START
+    ComplateMsg "" $?
+ 
+    SQL_SET
+  fi
+  echo "      "
+ 
 echo "========================= Installantion compliete! =========================="

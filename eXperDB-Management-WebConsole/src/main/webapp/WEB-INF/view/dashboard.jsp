@@ -11,7 +11,7 @@
 
 <script src="/vertical-dark-sidebar/js/dashboard_common.js"></script>
 
-<STYLE TYPE="text/css">
+<!-- <STYLE TYPE="text/css">
 
 .blinking{ 
  -webkit-animation:blink 5.0s ease-in-out infinite alternate; 
@@ -35,7 +35,7 @@
  0% {opacity:0;} 
  100% {opacity:1;} 
 }
-</STYLE>
+</STYLE> -->
 
 <script type="text/javascript">
 	var today = "";

@@ -19,6 +19,7 @@ import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
+import com.k4m.dx.tcontrol.util.TransRunCommandExec;
 
 /**
  * kafkaConnectionTest 카푸카커넥터 연결테스트
@@ -61,7 +62,7 @@ public class DxT037 extends SocketCtl{
 		try {
 			socketLogger.info("[COMMAND] " + strCmd);
 
-			RunCommandExec r = new RunCommandExec(strCmd);
+			TransRunCommandExec r = new TransRunCommandExec(strCmd);
 			
 			//명령어 실행
 			r.start();

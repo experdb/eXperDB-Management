@@ -563,7 +563,7 @@
 	 	**/
 	 	UPDATE T_SCD_M
 	 	SET
-		       NXT_EXE_DTM=#{nFireTime} 	
+		       NXT_EXE_DTM=#{nFireTime}::timestamp 	
 	 	WHERE SCD_ID=#{scd_id}::numeric	
 	</update>
 	
@@ -1188,4 +1188,28 @@
 			 FROM T_DB2PG_TRSF_WRK_INF
 			 WHERE WRK_ID = #{wrk_id}	
     </select>	
+    
+    
+    	<delete id="deleteschedule_d" parameterType="String">
+	   	/**
+	 	* Query ID : deleteschedule_d
+	 	* Description : 스케줄 DETAIL 삭제
+	 	* Author : 변승우
+	 	**/
+	 	DELETE
+	 	FROM  T_SCD_D
+	 	WHERE SCD_ID=#{scd_id}::numeric
+	</delete>
+	
+	
+		<delete id="deleteschedule_m" parameterType="String">
+	   	/**
+	 	* Query ID : deleteschedule_m
+	 	* Description : 스케줄 메인 삭제
+	 	* Author : 변승우
+	 	**/
+	 	DELETE
+	 	FROM  T_SCD_M
+	 	WHERE SCD_ID=#{scd_id}::numeric
+	</delete>
 </mapper>

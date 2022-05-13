@@ -167,16 +167,6 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	}
 
 
-	/**
-	 * 스케줄 리스트 삭제
-	 * @param 
-	 * @throws Exception
-	 */
-	@Override
-	public void deleteScheduleList(int scd_id) throws Exception {
-		scheduleDAO.deleteScheduleList(scd_id);	
-	}
-
 
 	/**
 	 * 스케줄리스트 수정 정보 조회
@@ -321,6 +311,12 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	@Override
 	public void updateScheduler(WrkExeVO wrkExeVO) throws Exception {
 		scheduleDAO.updateScheduler(wrkExeVO);
+	}
+
+
+	@Override
+	public void deleteSchedule(String scd_id) throws Exception {
+		scheduleDAO.deleteSchedule(scd_id);	
 	}
 	
 

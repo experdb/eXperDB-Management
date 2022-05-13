@@ -246,16 +246,13 @@ public class ClientInfoCmmn implements Runnable{
 					System.out.println(" ");
 					System.out.println(" ");
 					
-				}else{
+				}else if(resultWork.get(i).get("bsn_dscd").equals("TC001903")){
 					
 					System.out.println("> > > > > > > > > > > > > > > > DB2PG START");
 					
 					int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());						
 					String oldSavePath = scheduleService.selectOldSavePath(wrk_id);
-							
-					System.out.println("wrk_id= " +  wrk_id);
-					System.out.println("DB2PG oldSavePath = "+ oldSavePath);
-											
+														
 					int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ();
 					int intGrpSeq = scheduleService.selectQ_WRKEXE_G_02_SEQ();
 					WrkExeVO vo = new WrkExeVO();
@@ -2017,6 +2014,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			serverObj.put(ClientProtocolID.LOGIN_ID, dbServerVO.getUsr_id());
 
 			JSONObject transObj = new JSONObject();
+			transObj.put(ClientProtocolID.KC_ID, transInfo.get(0).get("kc_id"));
 			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
 			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));
 			transObj.put(ClientProtocolID.SNAPSHOT_MODE, transInfo.get(0).get("snapshot_nm"));
@@ -2120,6 +2118,7 @@ System.out.println("=====cmd1123123123" + cmd);
 
 			JSONObject transObj = new JSONObject();
 			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
+			transObj.put(ClientProtocolID.KC_ID, transInfo.get(0).get("kc_id"));
 			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
 			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));
 			transObj.put(ClientProtocolID.TRANS_ID, transInfo.get(0).get("trans_id").toString());
