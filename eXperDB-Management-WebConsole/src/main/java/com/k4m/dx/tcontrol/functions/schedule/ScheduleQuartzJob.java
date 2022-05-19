@@ -221,47 +221,43 @@ public class ScheduleQuartzJob implements Job{
 						
 					//DSN_DSCD==TC001903 DB2PG 데이터이관	
 					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001903")){
+						resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
+						CMD.add("DB2PG");						
 
-						CMD.add("");						
-						
-						int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());						
-						String oldSavePath = scheduleService.selectOldSavePath(wrk_id);
-								
-						System.out.println("wrk_id= " +  wrk_id);
-						System.out.println("DB2PG oldSavePath = "+ oldSavePath);
-												
-						int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ();
-						int intGrpSeq = scheduleService.selectQ_WRKEXE_G_02_SEQ();
-						WrkExeVO vo = new WrkExeVO();
-										
-						db2pg = resultWork.get(i).get("bsn_dscd").toString();
-						
-						Map<String, Object> result = null;
-						//Map<String, Object> param = new HashMap<String, Object>();
-						
-						JSONObject obj = new JSONObject();
-						obj.put("wrk_nm", resultWork.get(i).get("wrk_nm"));		
-						obj.put("oldSavePath", oldSavePath);
-						obj.put("wrk_id", resultWork.get(i).get("wrk_id"));
-						obj.put("lst_mdfr_id", resultWork.get(i).get("lst_mdfr_id"));
-										
-						vo.setExe_sn(intSeq);
-						vo.setScd_id(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
-						vo.setWrk_id(Integer.parseInt(resultWork.get(i).get("wrk_id").toString()));
-						vo.setExe_grp_sn(intGrpSeq);
-						
-						scheduleService.insertT_WRKEXE_G(vo);
-						
-						result  = DB2PG_START.db2pgStart(obj);
-						
-						if(result.get("RESULT").equals("SUCCESS")){
-							vo.setExe_rslt_cd("TC001701");
-						}else{
-							vo.setExe_rslt_cd("TC001702");
-						}
-						
-						scheduleService.updateScheduler(vo);
-									
+						/*
+						 * int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
+						 * String oldSavePath = scheduleService.selectOldSavePath(wrk_id);
+						 * 
+						 * System.out.println("wrk_id= " + wrk_id);
+						 * System.out.println("DB2PG oldSavePath = "+ oldSavePath);
+						 * 
+						 * int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ(); int intGrpSeq =
+						 * scheduleService.selectQ_WRKEXE_G_02_SEQ(); WrkExeVO vo = new WrkExeVO();
+						 * 
+						 * db2pg = resultWork.get(i).get("bsn_dscd").toString();
+						 * 
+						 * Map<String, Object> result = null; //Map<String, Object> param = new
+						 * HashMap<String, Object>();
+						 * 
+						 * JSONObject obj = new JSONObject(); obj.put("wrk_nm",
+						 * resultWork.get(i).get("wrk_nm")); obj.put("oldSavePath", oldSavePath);
+						 * obj.put("wrk_id", resultWork.get(i).get("wrk_id")); obj.put("lst_mdfr_id",
+						 * resultWork.get(i).get("lst_mdfr_id"));
+						 * 
+						 * vo.setExe_sn(intSeq);
+						 * vo.setScd_id(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
+						 * vo.setWrk_id(Integer.parseInt(resultWork.get(i).get("wrk_id").toString()));
+						 * vo.setExe_grp_sn(intGrpSeq);
+						 * 
+						 * scheduleService.insertT_WRKEXE_G(vo);
+						 * 
+						 * result = DB2PG_START.db2pgStart(obj);
+						 * 
+						 * if(result.get("RESULT").equals("SUCCESS")){ vo.setExe_rslt_cd("TC001701");
+						 * }else{ vo.setExe_rslt_cd("TC001702"); }
+						 * 
+						 * scheduleService.updateScheduler(vo);
+						 */
 					}				
 				}		
 							
@@ -513,11 +509,26 @@ public class ScheduleQuartzJob implements Job{
 	
 	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int db_svr_ipadr_id) {
 		try {
-				String IP = (String) resultDbconn.get(0).get("ipadr");
-				AgentInfoVO vo = new AgentInfoVO();
-				vo.setIPADR(IP);			
-				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);	
-				int PORT = agentInfo.getSOCKET_PORT();
+			String IP = "";
+			int PORT =0;
+
+				if(!CMD.get(0).equals("DB2PG")) {
+					 IP = (String) resultDbconn.get(0).get("ipadr");
+					
+					AgentInfoVO vo = new AgentInfoVO();
+					vo.setIPADR(IP);			
+					AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);	
+					 PORT = agentInfo.getSOCKET_PORT();
+				}else {
+				}
+			
+				/*
+				 * String IP = (String) resultDbconn.get(0).get("ipadr");
+				 * 
+				 * AgentInfoVO vo = new AgentInfoVO(); vo.setIPADR(IP); AgentInfoVO agentInfo =
+				 * (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo); int PORT =
+				 * agentInfo.getSOCKET_PORT();
+				 */
 						
 				ClientInfoCmmn clc = new ClientInfoCmmn();
 			

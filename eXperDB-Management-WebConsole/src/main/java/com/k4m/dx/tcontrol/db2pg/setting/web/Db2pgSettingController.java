@@ -915,8 +915,8 @@ public class Db2pgSettingController {
 			configObj.put("tar_port", targetDBMS.getPortno());
 			configObj.put("tar_db_charset", targetDBMS.getCrts_nm());
 			configObj.put("tar_truncate", sourceDataWork.getIns_opt_cd());
-			configObj.put("tar_constraint_rebuild", dataConfigVO.getTb_rbl_tf());
-			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
+			configObj.put("tar_constraint_rebuild", targetDataWork.getTb_rbl_tf());
+			configObj.put("tar_constraint_ddl", targetDataWork.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", sourceDataWork.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
 			configObj.put("src_classify_string", sourceDataWork.getDb2pg_uchr_lchr_val());

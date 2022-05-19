@@ -118,14 +118,6 @@ public interface ScheduleService {
 
 
 	/**
-	 * 스케줄 리스트 삭제
-	 * @param 
-	 * @throws Exception
-	 */
-	void deleteScheduleList(int scd_id) throws Exception;
-
-	
-	/**
 	 * 스케줄리스트 수정 정보 조회
 	 * @param 
 	 * @throws Exception
@@ -253,4 +245,7 @@ public interface ScheduleService {
 
 
 	void updateScheduler(WrkExeVO vo) throws Exception;
+
+
+	void deleteSchedule(String scd_id) throws Exception;
 }

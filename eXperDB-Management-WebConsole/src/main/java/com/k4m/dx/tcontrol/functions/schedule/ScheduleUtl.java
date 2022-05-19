@@ -4,9 +4,13 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.quartz.CronExpression;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
@@ -77,7 +81,6 @@ public class ScheduleUtl {
 			insertSchdul(result.get(i));
 		}
 		
-		
 		/*
 		 	STEP 5. Scheduler 시작
 		 */
@@ -118,7 +121,7 @@ public class ScheduleUtl {
 		
 		
 		//System.out.println(">>>>>>>>>>>>>> SehecduleUtl 새로운 잡생성");
-		LOGGER.debug("▶▶▶▶▶▶▶▶▶SehecduleUtl 새로운 잡생성");
+		LOGGER.debug("▶▶▶▶▶▶▶▶▶SehecduleUtl New JOB CREATE");
 		JobDetail job = newJob(ScheduleQuartzJob.class)
 			    .withIdentity("BackupSehedule_"+String.valueOf(scd_id),String.valueOf(scd_id))
 			    .build();
@@ -126,12 +129,12 @@ public class ScheduleUtl {
 		job.getJobDataMap().put("scd_id", String.valueOf(scd_id));
 		
 		//System.out.println(">>> cronTrigger 생성");
-		LOGGER.debug("▶▶▶▶▶▶▶▶▶cronTrigger 생성");
+		LOGGER.debug("▶▶▶▶▶▶▶▶▶cronTrigger Create");
 		System.out.println("=========== PRAMETER ==========");
-		System.out.println("실행주기 코드 : TC001601(매일), TC001602(매주), TC001603(매월), TC001604(매년), TC001605(1회실행) " );
-		System.out.println("실행주기 : " + exe_perd_cd );
-		System.out.println("실행일시 : " + exe_dt);
-		System.out.println("실행시분초 : " + exe_hms);
+		System.out.println("RunCycle Code : TC001601(Dayily), TC001602( Weekly), TC001603(Monthly), TC001604(Yearly), TC001605(1Time) " );
+		System.out.println("RunCycle : " + exe_perd_cd );
+		System.out.println("RunDay : " + exe_dt);
+		System.out.println("RunTime : " + exe_hms);
 		System.out.println("=============================");
 		System.out.println(sce.getCronExpression(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s, exe_month, exe_day));
 		
@@ -141,8 +144,20 @@ public class ScheduleUtl {
 		    .build();	
 		try
 		{
-			LOGGER.debug("▶▶▶▶▶▶▶▶▶스케줄 등록");
+			LOGGER.debug("▶▶▶▶▶▶▶▶▶Schedule Insert");
 			scheduler.scheduleJob(job, trigger);
+			
+			SimpleDateFormat sDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String  nextTime = sDate.format(trigger.getNextFireTime());
+			
+			System.out.println("@@@@@@@@@@@nextTime="+nextTime);
+			
+			
+			HashMap<String , Object> hp = new HashMap<String , Object>();
+			hp.put("nFireTime", nextTime);
+			hp.put("scd_id", scd_id);
+			scheduleService.updateNxtJobTime(hp);
+			
 		}
 		catch (Exception e)
 		{

@@ -341,21 +341,12 @@ public class ScheduleController {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		// Transaction 
-		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
-		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-		TransactionStatus status = txManager.getTransaction(def);
-		
+
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 		String usr_id = loginVo.getUsr_id();
 		
-		String mInsertResult = "S";
-		String dInsertResult = "S";
-			
-		// scd_nm(스케줄명) 중복체크 flag 값
-		String scdNmCk = "S";
+		String result_code="S";
 					
 		//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 		if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
@@ -369,202 +360,34 @@ public class ScheduleController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			//스케줄명 중복체크
-			try {
-				String scd_nm = request.getParameter("scd_nm");
-				int scdNmCheck = scheduleService.scd_nmCheck(scd_nm);
-				if (scdNmCheck > 0) {
-					// 중복값이 존재함.
-					scdNmCk = "F";
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			/*
+			 * try { String scd_nm = request.getParameter("scd_nm"); int scdNmCheck =
+			 * scheduleService.scd_nmCheck(scd_nm); if (scdNmCheck > 0) { // 중복값이 존재함.
+			 * scdNmCk = "F"; } } catch (Exception e) { e.printStackTrace(); }
+			 */
 						
-			if(scdNmCk == "S"){
+			
 				// 1. 스케줄ID 시퀀스 조회
 				try {							
 					int scd_id = scheduleService.selectScd_id();
-					System.out.println("스케줄ID 시퀀스 값 : " + scd_id );
 					scheduleVO.setScd_id(scd_id);
 					scheduleDtlVO.setScd_id(scd_id);
 				} catch (Exception e) {
+					result_code = "F";
 					e.printStackTrace();
 				}
 						
 				
-				// 1. 스케쥴 마스터 등록
+				// 2. 스케쥴 마스터 등록
 				try {			
-					SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");   
-					
-		            String exe_perd_cd =scheduleVO.getExe_perd_cd();
-		            
-		            // 매일
-		            if(exe_perd_cd.equals("TC001601")){
-		            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		                Calendar cal = Calendar.getInstance();
-		                String strToday = sdf.format(cal.getTime());
-	
-		                // 현재날짜 + 수행시간
-		                String nextDay = strToday+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
-  
-		                Date dt = transFormat.parse(nextDay);		                
-		                cal.setTime(dt);
-		                // 현재날짜+수행시간 + 1일
-		                cal.add(Calendar.DATE, 1);
-	            	
-		            	scheduleVO.setNxt_exe_dtm(cal.getTime());
-		            // 매주
-		            /* 1. 요일 정의 week = { "0", "1", "2", "3", "4", "5", "6" } == { "일", "월", "화", "수", "목", "금", "토" }
-		             * 2. 오늘 날짜에 해당하는 그 주 날짜 가져옴
-		             * 3. 오늘의 요일 가져옴
-		             * 4. 오늘 요일로부터 next ---------------> 검색
-		             *    4.1현재 오늘요일 체크(X)일때 날짜검색하여 업데이트
-		             *    4.2 현재 오늘요일 체크(0)일때 날짜검색하여 업데이트
-		             * 5. 오늘 요일로부터 Prev <--------------- 검색
-		             *    5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
-		             * 6. 현재오늘 요일만 체크되었을경우
-		             */
-		            }else if(exe_perd_cd.equals("TC001602")){
-		            	String detail = scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
-		            	
-		         	    int  intNextCnt = 0; //next match count
-		         	    int  intPrevCnt = 0; //prev match count
-			       	    String strFirstCheck = null;
-			    	    String strChecked = null;	
-			    	    boolean prevCheck = false;
-			    	    boolean finalCheck = false;	  	            	
-		            	
-		            	// 1. 요일 정의 week = { "0", "1", "2", "3", "4", "5", "6" } == { "일", "월", "화", "수", "목", "금", "토" }
-		            	final String[] week =      { "0", "1", "2", "3", "4", "5", "6" };
-		            	
-		        		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		                Calendar cal = Calendar.getInstance();
-		                String strToday = sdf.format(cal.getTime());
-		            		
-		                // 2. 오늘 날짜에 해당하는 그 주 날짜 가져옴
-		                final String[] weekDay = fn_weekDay(strToday);
-		            	
-		                // 3. 오늘의 요일 가져옴
-		         	    int toDay = Integer.parseInt(week[cal.get(Calendar.DAY_OF_WEEK) - 1]);
-          	
-		         	    
-		         	    //4. 오늘 요일로부터 next ---------------> 검색
-		        	    for(int i=toDay; i<scheduleVO.getExe_dt().length(); i++){
-		        	    	
-		        	    	//4.1현재 오늘요일 체크(X)일때 날짜검색하여 업데이트
-		        	    	if(String.valueOf(scheduleVO.getExe_dt().charAt(toDay)).equals("0")){
-		        	    		if(strChecked == null) {
-		        	    			if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
-		        		    			strChecked = week[i];	
-		        		    			System.out.println("오늘 날짜 체크가 안되있을때 오른쪽으로 = "+strChecked);
-		        		    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
-		        			    		Date dt = transFormat.parse(nextDay);		                
-		        		                cal.setTime(dt);
-		             
-		        		                scheduleVO.setNxt_exe_dtm(cal.getTime());
-		        		    			intNextCnt ++;
-		        		    		}	
-		        	    		}
-		        	    	//4.2 현재 오늘요일 체크(0)일때 날짜검색하여 업데이트
-		        	    	}else{	    		
-		            			if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    
-		            				strFirstCheck  = week[toDay];
-		            	    		if(intNextCnt == 1 && strFirstCheck != null) {
-		            	    			strChecked = week[i]; 	    
-		            	    			
-		            	    			System.out.println("오늘 날짜 체크 되있을때 오른쪽으로 = "+strChecked);
-		            	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
-		            		    		Date dt = transFormat.parse(nextDay);		                
-		            	                cal.setTime(dt);
-		            	                           
-		            	                scheduleVO.setNxt_exe_dtm(cal.getTime());
-		            	    		}	    			   	    		
-		        	    			intNextCnt ++;
-		        	    		}  	   			
-		        	    	}
-		            	}
-		        	    
-		        	    if(strChecked == null){
-		        			prevCheck = true;
-		        		}
-
-		        	    //5. 오늘 요일로부터 Prev <------------------------ 검색
-		        	    if(prevCheck == true) {
-		        	    	//5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
-		        	    	for(int i=toDay; i>=0; i--){
-		        	    		if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
-		        	    			strChecked = week[i];
-		        	    			intPrevCnt ++;
-		        	    			System.out.println("처음부터검색 ="+strChecked);
-		        	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
-		        		    		Date dt = transFormat.parse(nextDay);		                
-		        	                cal.setTime(dt);
-		        	                
-		        	                // 현재날짜+수행시간 + 7일
-		        	                cal.add(Calendar.DATE, 7);               
-		        	                scheduleVO.setNxt_exe_dtm(cal.getTime());
-		        	    		}
-		        	    	}	    
-		        	    } 
-		        	    
-		        	    if(strChecked == null){
-		        			finalCheck = true;
-		        		}
-		        	    
-		        	    //6. 현재오늘 요일만 체크되었을경우
-		        	    if(finalCheck == true){
-		        	    	if(intNextCnt==1 && intPrevCnt==0 && strFirstCheck != null) {
-		        	    		strChecked  = week[toDay];
-		        	    		System.out.println("오늘요일만 매주 ="+strChecked);
-		        	    		String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
-		        	    		Date dt = transFormat.parse(nextDay);		                
-		                        cal.setTime(dt);
-		                        
-		                        // 현재날짜+수행시간 + 7일
-		                        cal.add(Calendar.DATE, 7);               
-		                        scheduleVO.setNxt_exe_dtm(cal.getTime());
-		        	    	} 
-		        	    }
-			        // 매월
-		            }else if(exe_perd_cd.equals("TC001603")){
-		            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-		                Calendar cal = Calendar.getInstance();
-		                String strToday = sdf.format(cal.getTime());
-		                
-		                // 현재날짜 + 수행시간
-		                String nextDay = strToday+"-"+scheduleVO.getExe_day()+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
-		                
-		                Date dt = transFormat.parse(nextDay);		                
-		                cal.setTime(dt);
-		                // 현재날짜+수행시간 + 1월
-		            	cal.add(Calendar.MONTH, 1); 
-		            	scheduleVO.setNxt_exe_dtm(cal.getTime());
-		            	
-		            // 매년
-		            }else if(exe_perd_cd.equals("TC001604")){
-		            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-		                Calendar cal = Calendar.getInstance();
-		                String strToday = sdf.format(cal.getTime());
-		                
-		                // 현재날짜 + 수행시간
-		                String nextDay = strToday+"-"+scheduleVO.getExe_month()+"-"+scheduleVO.getExe_day()+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
-		                
-		                Date dt = transFormat.parse(nextDay);		                
-		                cal.setTime(dt);
-		                // 현재날짜+수행시간 + 1년
-		            	 cal.add(Calendar.YEAR, 1); 
-		            	 scheduleVO.setNxt_exe_dtm(cal.getTime());
-		            }
-		            
-					scheduleVO.setFrst_regr_id(usr_id);
+					    scheduleVO.setFrst_regr_id(usr_id);
 						scheduleService.insertSchedule(scheduleVO);
 				} catch (Exception e) {
+					result_code = "F";
 					e.printStackTrace();
-					mInsertResult = "F";
 				}
 								
 				// 3. 스케쥴 상세정보 등록
-				if(mInsertResult.equals("S")){
 					try {
 						String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
 						JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
@@ -578,25 +401,21 @@ public class ScheduleController {
 							scheduleService.insertScheduleDtl(scheduleDtlVO);			
 						}
 					} catch (Exception e) {
+						result_code = "F";
 						e.printStackTrace();
-						dInsertResult = "F";
+
 					}
+		
+			// 크론텝 등록
+			try{
+					scheduleUtl.insertSchdul(scheduleVO);			
+				} catch (Exception e) {
+					result_code = "F";
+					e.printStackTrace();
 				}
-				txManager.commit(status);
-				
-				if(dInsertResult.equals("S")){
-					try{
-						System.out.println(">>> Sehcdule Controller  - 스케줄 등록");
-						scheduleUtl.insertSchdul(scheduleVO);			
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}else{
-				return scdNmCk;
-			}
+
 		}
-		return scdNmCk;
+		return result_code;
 	}
 	
 	
@@ -863,12 +682,13 @@ public class ScheduleController {
 				historyVO.setMnu_id(23);
 				accessHistoryService.insertHistory(historyVO);
 				
-				String strRows = request.getParameter("rowList").toString().replaceAll("&quot;", "\"");
-				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);		
-				for(int i=0; i<rows.size(); i++){
-					int scd_id = Integer.parseInt(rows.get(i).toString());
-					scheduleService.deleteScheduleList(scd_id);
+				String scd_id = request.getParameter("rows");
+				String[] param = scd_id.split(",");
+				
+				for(int i=0; i<param.length; i++ ) {
+					scheduleService.deleteSchedule(param[i]);
 				}
+				
 			}				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -978,18 +798,11 @@ public class ScheduleController {
 			e.printStackTrace();
 		}
 		
-		// Transaction 
-		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
-		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-		TransactionStatus status = txManager.getTransaction(def);
-		
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 		String usr_id = loginVo.getUsr_id();
 		
-		String mUpdateResult = "S";
-		String dUpdateResult = "S";
-	
+
 		//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 		if(menuAut.get(0).get("wrt_aut_yn").equals("N")){	
 			response.sendRedirect("/autError.do");
@@ -1001,180 +814,14 @@ public class ScheduleController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			// 1. 스케줄 마스터 업데이트
-			try {		
-				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");   
-				
-	            String exe_perd_cd =scheduleVO.getExe_perd_cd();
-	            
-	            // 매일
-	            if(exe_perd_cd.equals("TC001601")){
-	            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	                Calendar cal = Calendar.getInstance();
-	                String strToday = sdf.format(cal.getTime());
-
-	                // 현재날짜 + 수행시간
-	                String nextDay = strToday+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
-
-	                Date dt = transFormat.parse(nextDay);		                
-	                cal.setTime(dt);
-	                // 현재날짜+수행시간 + 1일
-	                cal.add(Calendar.DATE, 1);
-            	
-	            	scheduleVO.setNxt_exe_dtm(cal.getTime());
-	            	
-            	// 매주
-	            /* 1. 요일 정의 week = { "0", "1", "2", "3", "4", "5", "6" } == { "일", "월", "화", "수", "목", "금", "토" }
-	             * 2. 오늘 날짜에 해당하는 그 주 날짜 가져옴
-	             * 3. 오늘의 요일 가져옴
-	             * 4. 오늘 요일로부터 next ---------------> 검색
-	             *    4.1현재 오늘요일 체크(X)일때 날짜검색하여 업데이트
-	             *    4.2 현재 오늘요일 체크(0)일때 날짜검색하여 업데이트
-	             * 5. 오늘 요일로부터 Prev <--------------- 검색
-	             *    5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
-	             * 6. 현재오늘 요일만 체크되었을경우
-	             */
-	            }else if(exe_perd_cd.equals("TC001602")){
-	            	String detail = scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
-	            	
-	         	    int  intNextCnt = 0; //next match count
-	         	    int  intPrevCnt = 0; //prev match count
-		       	    String strFirstCheck = null;
-		    	    String strChecked = null;	
-		    	    boolean prevCheck = false;
-		    	    boolean finalCheck = false;	  	            	
-	            	
-	            	// 1. 요일 정의 week = { "0", "1", "2", "3", "4", "5", "6" } == { "일", "월", "화", "수", "목", "금", "토" }
-	            	final String[] week =      { "0", "1", "2", "3", "4", "5", "6" };
-	            	
-	        		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-	                Calendar cal = Calendar.getInstance();
-	                String strToday = sdf.format(cal.getTime());
-	            		
-	                // 2. 오늘 날짜에 해당하는 그 주 날짜 가져옴
-	                final String[] weekDay = fn_weekDay(strToday);
-	            	
-	                // 3. 오늘의 요일 가져옴
-	         	    int toDay = Integer.parseInt(week[cal.get(Calendar.DAY_OF_WEEK) - 1]);
-      	
-	         	    
-	         	    //4. 오늘 요일로부터 next ---------------> 검색
-	        	    for(int i=toDay; i<scheduleVO.getExe_dt().length(); i++){
-	        	    	
-	        	    	//4.1현재 오늘요일 체크(X)일때 날짜검색하여 업데이트
-	        	    	if(String.valueOf(scheduleVO.getExe_dt().charAt(toDay)).equals("0")){
-	        	    		if(strChecked == null) {
-	        	    			if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
-	        		    			strChecked = week[i];	
-	        		    			System.out.println("오늘 날짜 체크가 안되있을때 오른쪽으로 = "+strChecked);
-	        		    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
-	        			    		Date dt = transFormat.parse(nextDay);		                
-	        		                cal.setTime(dt);
-	             
-	        		                scheduleVO.setNxt_exe_dtm(cal.getTime());
-	        		    			intNextCnt ++;
-	        		    		}	
-	        	    		}
-	        	    	//4.2 현재 오늘요일 체크(0)일때 날짜검색하여 업데이트
-	        	    	}else{	    		
-	            			if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    
-	            				strFirstCheck  = week[toDay];
-	            	    		if(intNextCnt == 1 && strFirstCheck != null) {
-	            	    			strChecked = week[i]; 	    
-	            	    			
-	            	    			System.out.println("오늘 날짜 체크 되있을때 오른쪽으로 = "+strChecked);
-	            	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
-	            		    		Date dt = transFormat.parse(nextDay);		                
-	            	                cal.setTime(dt);
-	            	                           
-	            	                scheduleVO.setNxt_exe_dtm(cal.getTime());
-	            	    		}	    			   	    		
-	        	    			intNextCnt ++;
-	        	    		}  	   			
-	        	    	}
-	            	}
-	        	    
-	        	    if(strChecked == null){
-	        			prevCheck = true;
-	        		}
-
-	        	    //5. 오늘 요일로부터 Prev <------------------------ 검색
-	        	    if(prevCheck == true) {
-	        	    	//5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
-	        	    	for(int i=toDay; i>=0; i--){
-	        	    		if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
-	        	    			strChecked = week[i];
-	        	    			intPrevCnt ++;
-	        	    			System.out.println("처음부터검색 ="+strChecked);
-	        	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
-	        	    			System.out.println(nextDay);
-	        		    		Date dt = transFormat.parse(nextDay);		                
-	        	                cal.setTime(dt);
-	        	                
-	        	                // 현재날짜+수행시간 + 7일
-	        	                cal.add(Calendar.DATE, 7);               
-	        	                scheduleVO.setNxt_exe_dtm(cal.getTime());
-	        	    		}
-	        	    	}	    
-	        	    } 
-	        	    
-	        	    if(strChecked == null){
-	        			finalCheck = true;
-	        		}
-	        	    
-	        	    //6. 현재오늘 요일만 체크되었을경우
-	        	    if(finalCheck == true){
-	        	    	if(intNextCnt==1 && intPrevCnt==0 && strFirstCheck != null) {
-	        	    		strChecked  = week[toDay];
-	        	    		System.out.println("오늘요일만 매주 ="+strChecked);
-	        	    		String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
-	        	    		Date dt = transFormat.parse(nextDay);		                
-	                        cal.setTime(dt);
-	                        
-	                        // 현재날짜+수행시간 + 7일
-	                        cal.add(Calendar.DATE, 7);               
-	                        scheduleVO.setNxt_exe_dtm(cal.getTime());
-	        	    	} 
-	        	    }
-		        // 매월
-	            }else if(exe_perd_cd.equals("TC001603")){
-	            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-	                Calendar cal = Calendar.getInstance();
-	                String strToday = sdf.format(cal.getTime());
-	                
-	                // 현재날짜 + 수행시간
-	                String nextDay = strToday+"-"+scheduleVO.getExe_day()+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
-	                
-	                Date dt = transFormat.parse(nextDay);		                
-	                cal.setTime(dt);
-	                // 현재날짜+수행시간 + 1월
-	            	cal.add(Calendar.MONTH, 1); 
-	            	scheduleVO.setNxt_exe_dtm(cal.getTime());
-	            	
-	            // 매년
-	            }else if(exe_perd_cd.equals("TC001604")){
-	            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-	                Calendar cal = Calendar.getInstance();
-	                String strToday = sdf.format(cal.getTime());
-	                
-	                // 현재날짜 + 수행시간
-	                String nextDay = strToday+"-"+scheduleVO.getExe_month()+"-"+scheduleVO.getExe_day()+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
-	                
-	                Date dt = transFormat.parse(nextDay);		                
-	                cal.setTime(dt);
-	                // 현재날짜+수행시간 + 1년
-	            	 cal.add(Calendar.YEAR, 1); 
-	            	 scheduleVO.setNxt_exe_dtm(cal.getTime());
-	            }
-								
+			try {					
 				scheduleVO.setFrst_regr_id(usr_id);
 				scheduleService.updateSchedule(scheduleVO);
 			} catch (Exception e) {
 				e.printStackTrace();
-				mUpdateResult = "F";
 			}
 						
 			// 3. 스케쥴 상세정보 등록
-			if(mUpdateResult.equals("S")){
 				try {
 					String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
 					JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
@@ -1191,10 +838,7 @@ public class ScheduleController {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					dUpdateResult = "F";
 				}
-			}
-			txManager.commit(status);
 		}
 	}
 	

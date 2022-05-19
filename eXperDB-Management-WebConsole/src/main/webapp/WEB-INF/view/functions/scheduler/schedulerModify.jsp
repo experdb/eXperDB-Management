@@ -8,6 +8,85 @@ var confirm_title = "";
 
 var scd_id = ${scd_id};
 
+
+/* ********************************************************
+ * 페이지 시작시 함수
+ ******************************************************** */
+$(window.document).ready(function() {
+	fn_init();
+	
+	$("#day").hide();
+	$("#month").hide();
+	$("#weekDay").hide();
+	$("#calendar").hide();
+
+	fn_makeMonth();
+	fn_makeDay();
+	fn_makeHour();
+	fn_makeMin();
+	fn_makeSec();
+	fn_upDateCalenderSetting();
+
+	
+ 	$.ajax({
+		url : "/selectModifyScheduleList.do",
+		data : {
+			scd_id : scd_id
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			}
+		},
+		success : function(result) {
+			if(result[0].exe_perd_cd == "TC001602"){
+				$("#weekDay").show();				
+				if(result[0].exe_dt.length ==7){
+					for(var i=0; i<result[0].exe_dt.length; i++){
+						if(result[0].exe_dt[i] == 1){
+							document.getElementById('chk'+i).checked = true;
+						}
+					}					
+				}				
+			}else if(result[0].exe_perd_cd == "TC001603"){
+				$("#day").show();
+			}else if(result[0].exe_perd_cd == "TC001604"){
+				$("#day").show();
+				$("#month").show();
+			}else if(result[0].exe_perd_cd == "TC001605"){
+				$("#calendar").show();
+			}
+			
+			document.getElementById('scd_id').value= result[0].scd_id;
+			document.getElementById('scd_nm').value= result[0].scd_nm;
+			document.getElementById('scd_exp').value= result[0].scd_exp;				
+			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
+			//document.getElementById('weekDay').value= result[0].exe_dt==null?'':result[0].exe_dt;
+			//document.getElementById('datepicker1').value= result[0].exe_dt==null?'':result[0].exe_dt;	
+			document.getElementById('exe_month').value= result[0].exe_month;
+			document.getElementById('exe_day').value= result[0].exe_day;
+ 			document.getElementById('exe_h').value= result[0].exe_hms.substring(4, 6);
+			document.getElementById('exe_m').value= result[0].exe_hms.substring(2, 4);
+			document.getElementById('exe_s').value= result[0].exe_hms.substring(0, 2);
+			
+			table.clear().draw();
+			table.rows.add(result).draw();
+
+		}
+	}); 
+});
+
+
+
 function fn_init(){
 	/* ********************************************************
 	 * work리스트
@@ -234,93 +313,13 @@ function fn_makeMin(){
 	$( "#sec" ).append(secHtml);
 }
 
-/* ********************************************************
- * 페이지 시작시 함수
- ******************************************************** */
-$(window.document).ready(function() {
-	fn_init();
-	
-	$("#day").hide();
-	$("#month").hide();
-	$("#weekDay").hide();
-	$("#calendar").hide();
 
-	fn_makeMonth();
-	fn_makeDay();
-	fn_makeHour();
-	fn_makeMin();
-	fn_makeSec();
-	fn_insDateCalenderSetting();
 
-	
- 	$.ajax({
-		url : "/selectModifyScheduleList.do",
-		data : {
-			scd_id : scd_id
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		},
-		success : function(result) {
-			if(result[0].exe_perd_cd == "TC001602"){
-				$("#weekDay").show();				
-				if(result[0].exe_dt.length ==7){
-					for(var i=0; i<result[0].exe_dt.length; i++){
-						if(result[0].exe_dt[i] == 1){
-							document.getElementById('chk'+i).checked = true;
-						}
-					}					
-				}				
-			}else if(result[0].exe_perd_cd == "TC001603"){
-				$("#day").show();
-			}else if(result[0].exe_perd_cd == "TC001604"){
-				$("#day").show();
-				$("#month").show();
-			}else if(result[0].exe_perd_cd == "TC001605"){
-				$("#calendar").show();
-			}
-			
-			document.getElementById('scd_id').value= result[0].scd_id;
-			document.getElementById('scd_nm').value= result[0].scd_nm;
-			document.getElementById('scd_exp').value= result[0].scd_exp;				
-			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
-			//document.getElementById('weekDay').value= result[0].exe_dt==null?'':result[0].exe_dt;
-			document.getElementById('datepicker1').value= result[0].exe_dt==null?'':result[0].exe_dt;	
-			document.getElementById('exe_month').value= result[0].exe_month;
-			document.getElementById('exe_day').value= result[0].exe_day;
- 			document.getElementById('exe_h').value= result[0].exe_hms.substring(4, 6);
-			document.getElementById('exe_m').value= result[0].exe_hms.substring(2, 4);
-			document.getElementById('exe_s').value= result[0].exe_hms.substring(0, 2);
-			
-			table.clear().draw();
-			table.rows.add(result).draw();
-			
-			/* var rowList = [];
-		    for (var i = 0; i <result.length; i++) {
-		        rowList.push(result[i].wrk_id);   
-		  	}		
-		    fn_exe_pred(result[0].exe_dt, result[0].exe_month, result[0].exe_day); 
-		    fn_workAddCallback(JSON.stringify(rowList)); */
-		}
-	}); 
-	
-});
 
 /* ********************************************************
  * 작업기간 calender 셋팅
  ******************************************************** */
-function fn_insDateCalenderSetting() {
+function fn_upDateCalenderSetting() {
 	var today = new Date();
 	var startDay = fn_dateParse("20180101");
 	var endDay = fn_dateParse("20991231");
@@ -329,8 +328,8 @@ function fn_insDateCalenderSetting() {
 	var day_start = startDay.toJSON().slice(0,10);
 	var day_end = endDay.toJSON().slice(0,10);
 
-	if ($("#ins_expr_dt_div").length) {
-		$("#ins_expr_dt_div").datepicker({
+	if ($("#up_expr_dt_div").length) {
+		$("#up_expr_dt_div").datepicker({
 		}).datepicker('setDate', day_today)
 		.datepicker('setStartDate', day_start)
 		.datepicker('setEndDate', day_end)
@@ -340,8 +339,12 @@ function fn_insDateCalenderSetting() {
 	}
 
 	$("#datepicker1").datepicker('setDate', day_today).datepicker('setStartDate', day_start).datepicker('setEndDate', day_end);
-	$("#ins_expr_dt_div").datepicker('updateDates');
+	$("#up_expr_dt_div").datepicker('updateDates');
 }
+
+
+
+
 
 function fn_db2pgWorkAddCallback(rowList){
 	
@@ -375,27 +378,16 @@ function fn_db2pgWorkAddCallback(rowList){
 	});
 }
 
+
+
 /* ********************************************************
  * DB2PG work등록 팝업창 호출
  ******************************************************** */
 function fn_db2pgAdd(){
 	var cnt=0;
-	
-	/* if(table.rows().data().length > 0){
-		for (var i = 0; i < table.rows().data().length; i++) {		
-			if(table.rows().data()[i].bsn_dscd_nm=="백업" || table.rows().data()[i].bsn_dscd_nm=="스크립트"){
-				cnt ++;
-			}	
-	  	}
-		
-		if(cnt >0){
-			showSwalIcon('스케줄에 백업 및 스크립트가 포함되어 있습니다.', '<spring:message code="common.close" />', '', 'error');
-			return false;
-		}
-	} */
-	
 	$('#pop_layer_db2pg_reg').modal("show");
 }	
+	
 	
 
 /* ********************************************************
@@ -507,13 +499,16 @@ function fn_workAddCallback(rowList){
 
 
 
+// 스케줄 수정화면에서 수정 버튼 클릭 시
 function fn_scheduleStop(){
 	confile_title = 'SCHEDULE' + " " + '<spring:message code="common.modify" />' + " " + '<spring:message code="common.request" />';
-	$('#con_multi_gbn', '#findConfirmMulti').val("stop");
+	//$('#con_multi_gbn', '#findConfirmMulti').val("stop");
+	$('#con_multi_gbn', '#findConfirmMulti').val("mod");
 	$('#confirm_multi_tlt').html(confile_title);
 	$('#confirm_multi_msg').html('<spring:message code="message.msg133" />');
 	$('#pop_confirm_multi_md').modal("show");
 }
+
 
 
 function fn_scheduleStop2(){
@@ -543,9 +538,11 @@ function fn_scheduleStop2(){
 }
 
 
+
+
 function fn_updateSchedule(){
 	var exe_perd_cd = $("#exe_perd_cd").val(); 
-		
+	
 	if(exe_perd_cd == "TC001602"){
 	    var dayWeek = new Array();
 	    var list = $("input[name='chk']");
@@ -610,21 +607,19 @@ function fn_updateSchedule(){
 				}
 			},
 			success : function(result) {
-				confile_title = '<spring:message code="menu.schedule" /> <spring:message code="schedule.run" />' + " " + '<spring:message code="common.request" />';
-				$('#con_multi_gbn', '#findConfirmMulti').val("mod");
-				$('#confirm_multi_tlt_01').html(confile_title);
-				$('#confirm_multi_msg_01').html('<spring:message code="message.msg135" />');
-				$('#pop_confirm_multi_md_01').modal("show");
+				fn_scheduleReStart();
 			}
 		}); 	
 }
+
+
 
 /* ********************************************************
  * confirm result
  ******************************************************** */
 function fnc_confirmMultiRst(gbn){
 	if (gbn == "mod") {
-		fn_scheduleReStart();
+		fn_updateSchedule();
 	}else if(gbn == "stop"){
 		fn_scheduleStop2();
 	}
@@ -679,13 +674,16 @@ function fn_scheduleReStart(){
 			}
 		},
 		success : function(result) {
-			location.href='/selectScheduleListView.do' ;
+			showSwalIconRst('<spring:message code="message.msg84"/>', '<spring:message code="common.close" />', '', 'success','insertScd');
 		}
 	});    
 }
 
+
+
 // 스케줄 등록시  현재 날짜 이전의 날짜를 등록할수 없도록 하는 함수
 function fn_dateValidation(exe_dt){
+
 	var day = new Date();
 	var dd = day.getDate();
 	var mm = day.getMonth()+1; //January is 0!
@@ -699,16 +697,17 @@ function fn_dateValidation(exe_dt){
 		dd = "0" + dd;
 	}
 	var today = yyyy +"" + mm + "" + dd;
-	
+
 	 if(today > exe_dt){
 		 showSwalIcon('<spring:message code="message.msg213" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	} 
 	 return true;
 } 
+
+
 </script>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
-
 <%@include file="./../../popup/scheduleRegForm.jsp"%>
 <%@include file="./../../popup/db2pgWorkRegForm.jsp"%>
 
@@ -848,7 +847,7 @@ function fn_dateValidation(exe_dt){
 		                          		</div>
 		                          	</div>
 									<div class="col-sm-3"  id="calendar" style="margin-top:-15px;">
-										<div id="ins_usr_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
+										<div id="up_expr_dt_div" class="input-group align-items-center date datepicker totDatepicker">
 											<input type="text" class="form-control totDatepicker" id="datepicker1" name="exe_dt"  tabindex=10 />
 											<span class="input-group-addon input-group-append border-left">
 												<span class="ti-calendar input-group-text" style="cursor:pointer"></span>
