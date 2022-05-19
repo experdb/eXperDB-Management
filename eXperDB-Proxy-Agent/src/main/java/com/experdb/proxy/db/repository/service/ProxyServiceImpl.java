@@ -1354,7 +1354,7 @@ public class ProxyServiceImpl implements ProxyService{
 
 		try {
 			if (searchGbn.equals("proxy_conf_which")) { //설치여부 체크
-				strCmd = "find /etc -name haproxy.cfg";
+				strCmd = "find /etc/haproxy -name haproxy.cfg";
 			} else if (searchGbn.equals("keep_conf_which")) { //설치여부 체크
 				strCmd = "find /etc/keepalived -name keepalived.conf";
 			} else if (searchGbn.equals("proxy_conf_read") || searchGbn.equals("keepalived_conf_read")) { //설치여부 체크
