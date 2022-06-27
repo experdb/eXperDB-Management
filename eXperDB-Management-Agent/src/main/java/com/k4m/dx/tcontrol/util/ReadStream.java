@@ -10,8 +10,7 @@ import org.slf4j.LoggerFactory;
 public class ReadStream implements Runnable {
 	
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
-	
+
     String name;
     InputStream is;
     Thread thread;      
@@ -28,15 +27,8 @@ public class ReadStream implements Runnable {
             InputStreamReader isr = new InputStreamReader (is);
             BufferedReader br = new BufferedReader (isr);   
             while (true) {
-            	socketLogger.info("!!!!!!!!!!!!!!!![" + name + "] ");
                 String s = br.readLine ();
-                
-                socketLogger.info("@@@@@@[" + name + "] " + s);
-                
                 if (s == null) break;
-
-                socketLogger.info("#######[" + name + "] " + s);
-                System.out.println ("[" + name + "] " + s);
             }
             is.close ();    
         } catch (Exception ex) {
