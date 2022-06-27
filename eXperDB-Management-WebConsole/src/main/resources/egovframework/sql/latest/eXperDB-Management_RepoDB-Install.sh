@@ -90,6 +90,10 @@ echo "**13.0.2**"
 psql -U experdb -d experdb -f eXperDB-Management_13.0.2.sql
 echo "**13.0.2 END**"
 
+echo "**13.0.6**"
+psql -U experdb -d experdb -f eXperDB-Management_13.0.6.sql
+echo "**13.0.6 END**"
+
 #항상 마지막에 backup sql 수행 (등록 DB가 다름)
 echo "**bnr backup**"
 psql -U experdb -d experdb -f create_new_backup.sql
