@@ -9,7 +9,7 @@
 var table_dbmsInfo = null;
 function fn_init_dbmsInfo() {
 		table_dbmsInfo = $('#dbmsList').DataTable({
-		scrollY : "150px",
+		scrollY : "300px",
 		scrollX: true,	
 		bSort: false,
 		processing : true,

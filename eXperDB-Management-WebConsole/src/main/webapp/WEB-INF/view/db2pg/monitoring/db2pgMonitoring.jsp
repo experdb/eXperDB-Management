@@ -110,7 +110,7 @@ function fn_init() {
 	
 	
 	table = $("#monitoring").DataTable({
-		scrollY : "330px",
+		scrollY : "750px",
 		searching : false,
 		deferRender : true,
 		paging : false,

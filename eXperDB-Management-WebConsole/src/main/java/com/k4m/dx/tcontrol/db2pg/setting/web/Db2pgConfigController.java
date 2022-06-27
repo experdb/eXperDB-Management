@@ -134,6 +134,9 @@ public class Db2pgConfigController {
 				//Monitoring 추가로 인한 config 값 추가 (2021-11-10 변승우 책임)
 				fileContent = fileContent.replaceAll("MGMT_MIG=FALSE", "MGMT_MIG=TRUE");
 				
+				//ORACLE 소스 병렬도  추가로 인한 config 값 추가 (2022-06-26 변승우 책임)
+				fileContent = fileContent.replaceAll("SRC_HINT_PARALLEL=-1", "SRC_HINT_PARALLEL="+configObj.get("src_parallel").toString());
+				
 
 				StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
 				pbeEnc.setPassword("k4mda"); // PBE 값(XML PASSWORD설정)

@@ -746,11 +746,11 @@
 												<spring:message code="migration.performance_history" />
 											</a>
 										</li>
-										<li class="nav-item" id="MN00024">
+										<%-- <li class="nav-item" id="MN00024">
 											<a class="nav-link" href="/db2pgMigHistory.do" onClick="fn_cookie(null)" target="main">
 												MIGRATION <spring:message code="migration.performance_history" />
 											</a>
-										</li>
+										</li> --%>
 									</ul>
 								</div>
 							</li>

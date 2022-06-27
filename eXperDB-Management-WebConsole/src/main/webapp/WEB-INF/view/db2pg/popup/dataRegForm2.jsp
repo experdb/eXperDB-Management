@@ -40,7 +40,7 @@ $(window.document).ready(function(){
 
 function fn_init_tables_mig(){
 	infoTableMig = $('#info_tableList_mig').DataTable({
-		scrollY : "220px",
+		scrollY : "500px",
 		scrollX: true,	
 		processing : true,
 		searching : false,
@@ -57,7 +57,7 @@ function fn_init_tables_mig(){
 	infoTableMig.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
 	
 	extTableMig = $('#ext_tableList_mig').DataTable({
-		scrollY : "220px",
+		scrollY : "500px",
 		scrollX: true,	
 		processing : true,
 		searching : false,
@@ -333,6 +333,7 @@ function fn_reset_mig_modi(result){
  * 등록 버튼 클릭시
  ******************************************************** */
 function fn_insert_trsf_work(){
+
 	if(valCheck_trsf()){
 		var rowList = [];
 		var infoLength = infoTableMig.rows().data().length;
@@ -387,6 +388,7 @@ function fn_insert_trsf_work(){
 								db2pg_usrqry_content : sqlContent,
 								db2pg_usrqry_table : sqlTable,  
 						  		db2pg_uchr_lchr_val : $("#dat_db2pg_uchr_lchr_val").val(),
+						  		src_parallel:$("#src_parallel").val()
 						  	},
 							type : "post",
 							traditional : true,
@@ -482,7 +484,8 @@ function fn_update_trsf_work(){
 		  		wrk_id : $("#wrk_id").val(),
 				db2pg_usrqry_content : sqlContent,
 				db2pg_usrqry_table : sqlTable,  
-		  		db2pg_uchr_lchr_val : $("#dat_db2pg_uchr_lchr_val").val()
+		  		db2pg_uchr_lchr_val : $("#dat_db2pg_uchr_lchr_val").val(),
+		  		src_parallel:$("#src_parallel").val()
 			  },
 			traditional : true,
 			type : "post",
@@ -1031,22 +1034,26 @@ function fn_search_tableInfo_mig(){
 												<ul class="nav nav-pills nav-pills-setting nav-justified" style="border-bottom:0px;" id="server-tab" role="tablist">
 													<li class="nav-item">
 														<a class="nav-link active" id="ins-dump-tab-1" data-toggle="pill" href="#insDumpOptionTab1" role="tab" aria-controls="insDumpOptionTab1" aria-selected="true" >
-															<spring:message code="migration.source_option"/> #1
+															<%-- <spring:message code="migration.source_option"/> #1 --%>
+															 대상 테이블 설정
 														</a>
 													</li>
 													<li class="nav-item">
 														<a class="nav-link" id="ins-dump-tab-2" data-toggle="pill" href="#insDumpOptionTab2" role="tab" aria-controls="insDumpOptionTab2" aria-selected="false" >
-															<spring:message code="migration.source_option"/> #2
+															<%-- <spring:message code="migration.source_option"/> #2 --%>
+															이관 옵션 설정
 														</a>
 													</li>
 													<li class="nav-item">
 														<a class="nav-link" id="ins-dump-tab-3" data-toggle="pill" href="#insDumpOptionTab3" role="tab" aria-controls="insDumpOptionTab3" aria-selected="false">
-															<spring:message code="migration.source_option"/> #3
+															<%-- <spring:message code="migration.source_option"/> #3 --%>
+															전체 테이블 조건문 설정
 														</a>
 													</li>
 													<li class="nav-item">
 														<a class="nav-link" id="ins-dump-tab-4" data-toggle="pill" href="#insDumpOptionTab4" role="tab" aria-controls="insDumpOptionTab4" aria-selected="false">
-															<spring:message code="migration.source_option"/> #4
+															<%-- <spring:message code="migration.source_option"/> #4 --%>
+															테이블 별 사용자SQL
 														</a>
 													</li>
 												</ul>
@@ -1286,6 +1293,14 @@ function fn_search_tableInfo_mig(){
 															</c:forEach>
 														</select>
 													</div>
+													
+													<label for="ins_dump_cprt" class="col-sm-2_3 col-form-label pop-label-index" style="padding-top:7px;">
+														소스병렬도 (Oracle Only)
+													</label>
+													<div class="col-sm-3">
+														<input type="number" style="width: 150px;" class="form-control form-control-sm" name="src_parallel" id="src_parallel" value="-1" min="-1"/>
+													</div>
+													
 												</div>
 											</div>
 											<!-- 소스옵션 #2 end -->

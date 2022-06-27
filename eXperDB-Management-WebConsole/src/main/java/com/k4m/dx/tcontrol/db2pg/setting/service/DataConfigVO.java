@@ -49,13 +49,22 @@ public class DataConfigVO {
 	private int exrt_trg_tb_total_cnt;
 	private int exrt_exct_tb_total_cnt;
 
-	
+	private int src_parallel;
+
 	@Override
 	public String toString() {
 		return "DataConfigVO [idx=" + idx + ", db2pg_trsf_wrk_id=" + db2pg_trsf_wrk_id + ", db2pg_trsf_wrk_nm="
 				+ db2pg_trsf_wrk_nm + ", db2pg_trsf_wrk_exp=" + db2pg_trsf_wrk_exp + ", frst_regr_id=" + frst_regr_id
 				+ ", frst_reg_dtm=" + frst_reg_dtm + ", lst_mdfr_id=" + lst_mdfr_id + ", lst_mdf_dtm=" + lst_mdf_dtm
-				+ ", trans_save_pth=" + trans_save_pth + ", wrk_id=" + wrk_id + "]";
+				+ ", trans_save_pth=" + trans_save_pth + ", wrk_id=" + wrk_id + ", src_parallel ="+ src_parallel+"]";
+	}
+
+	public int getSrc_parallel() {
+		return src_parallel;
+	}
+
+	public void setSrc_parallel(int src_parallel) {
+		this.src_parallel = src_parallel;
 	}
 
 	public int getExrt_trg_tb_total_cnt() {
@@ -393,6 +402,7 @@ public class DataConfigVO {
 	public void setSrc_cnd_qry(String src_cnd_qry) {
 		this.src_cnd_qry = src_cnd_qry;
 	}
+
 	public String getDb2pg_uchr_lchr_val() {
 		return db2pg_uchr_lchr_val;
 	}

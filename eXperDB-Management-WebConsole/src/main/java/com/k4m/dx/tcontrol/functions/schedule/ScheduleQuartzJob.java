@@ -461,8 +461,10 @@ public class ScheduleQuartzJob implements Job{
 			rmanCmd += " --backup-mode=full";
 		}else if(resultWork.get(i).get("bck_opt_cd").toString().equals("TC000302")){
 			rmanCmd += " --backup-mode=incremental";
+			rmanCmd += " --full-backup-on-error";
 		}else{
 			rmanCmd += " --backup-mode=archive";
+			rmanCmd += " --full-backup-on-error";
 		}
 		
 		rmanCmd += " -A $PGALOG";

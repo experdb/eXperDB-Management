@@ -30,7 +30,7 @@ function fn_init() {
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
 		table = $('#dbms').DataTable({	
-		scrollY : "330px",
+		scrollY : "750px",
 		searching : false,
 		deferRender : true,
 		scrollX: true,

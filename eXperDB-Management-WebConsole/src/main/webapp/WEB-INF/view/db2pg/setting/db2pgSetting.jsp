@@ -57,7 +57,7 @@ function selectTab(tab){
 
 function fn_init(){
 	tableDDL = $('#ddlDataTable').DataTable({
-	scrollY : "310px",
+	scrollY : "750px",
 	scrollX : true,
 	searching : false,	
 	deferRender : true,
@@ -86,7 +86,7 @@ function fn_init(){
 	});
 	
 	tableData = $('#dataDataTable').DataTable({
-		scrollY : "300px",
+		scrollY : "750px",
 		scrollX: true,	
 		bDestroy: true,
 		paging : true,
@@ -422,6 +422,8 @@ function fn_data_regre_popup(){
 				$("#wrk_id").val(nvlPrmSet(result.wrk_id, ""));
 				$("#db2pg_trsf_wrk_id").val(nvlPrmSet(result.db2pg_trsf_wrk_id, ""));
 				$("#db2pg_trg_sys_id").val(nvlPrmSet(result.db2pg_trg_sys_id, ""));
+
+				$("#src_parallel").val(nvlPrmSet(result.src_parallel, ""));
 				
 				$("#mod_button_data_work").show();
 				$("#inset_button_data_work").hide();

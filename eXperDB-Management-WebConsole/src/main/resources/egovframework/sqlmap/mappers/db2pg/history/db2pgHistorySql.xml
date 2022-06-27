@@ -295,6 +295,7 @@
 				, A.START_TIME
 				, A.END_TIME
 				, A.ELAPSED_TIME
+				, A.SAVE_PTH
 		FROM(				
 			SELECT 
 				 EXE_DATE
@@ -305,6 +306,7 @@
 				, START_TIME
 				, END_TIME
 				, ELAPSED_TIME
+				, SAVE_PTH
 			FROM T_DB2PG_MIG_HISTORY		
 			WHERE 1=1
 			<if test="wrk_nm != null and wrk_nm != '' ">

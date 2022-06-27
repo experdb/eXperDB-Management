@@ -189,9 +189,9 @@ public class DatabaseTableInfo {
 				case "TC002206" :
 						sql = "		SELECT name AS table_name "
 									+ "FROM sysobjects "
-									+ "WHERE user_name(uid)='" +serverObj.get("USER_ID").toString().toUpperCase() + "' "
+									+ "WHERE user_name(uid)='" +serverObj.get("SCHEMA").toString() + "' "
 									+ "AND type in ('U')"
-									+ "AND name LIKE '%" +serverObj.get("TABLE_NM").toString().toUpperCase()  + "%' "
+									+ "AND name LIKE '%" +serverObj.get("TABLE_NM").toString()  + "%' "
 									+ "ORDER BY 1";
 						
 						ResultSet syRs = stmt.executeQuery(sql);				

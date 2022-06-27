@@ -27,17 +27,18 @@
 <script type="text/javascript">
 
 var tableDDL = null;
-var tableData = null;
 var stopWrkNm = null;
+var migtable = null;
 
 /* ********************************************************
  * Tab Click
  ******************************************************** */
 function selectTab(tab){	
 	if(tab == "dataWork"){
-		getdataDataList();
-		$("#dataDataTable").show();
-		$("#dataDataTable_wrapper").show();
+
+		fn_selectMigHistory();
+		$("#migHistoryTable").show();
+		$("#migHistoryTable_wrapper").show();
 		$("#ddlDataTable").hide();
 		$("#ddlDataTable_wrapper").hide();
 		$("#searchDDL").hide();
@@ -48,8 +49,8 @@ function selectTab(tab){
 		getddlDataList();
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
-		$("#dataDataTable").hide();
-		$("#dataDataTable_wrapper").hide();
+		$("#migHistoryTable").hide();
+		$("#migHistoryTable_wrapper").hide();
 		$("#searchDDL").show();
 		$("#searchData").hide();
 		$("#btnDDL").show();
@@ -61,7 +62,7 @@ function selectTab(tab){
 
 function fn_init(){
 	tableDDL = $('#ddlDataTable').DataTable({
-		scrollY : "330px",
+		scrollY : "750px",
 		scrollX : true,
 		searching : false,	
 		deferRender : true,
@@ -123,81 +124,52 @@ function fn_init(){
 		]
 		});
 	
-	
-	tableData = $('#dataDataTable').DataTable({
-		scrollY : "330px",
-		scrollX: true,	
-		bDestroy: true,
-		paging : true,
+	migtable = $('#migHistoryTable').DataTable({
+		scrollY : "750px",
+		searching : false,
 		processing : true,
-		searching : false,	
+		paging : false,
 		deferRender : true,
-		bSort: false,
-	columns : [
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "wrk_nm", className : "dt-left", defaultContent : ""}, 
-		{data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
-		{data : "source_dbms_dscd_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "source_ipadr", className : "dt-center", defaultContent : ""},
-		{data : "source_dtb_nm", className : "dt-center", defaultContent : ""},		
-		{data : "target_ipadr", className : "dt-center", defaultContent : ""}, 
-		{data : "target_dtb_nm", className : "dt-center", defaultContent : ""},
-		{data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""},
-		{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""},
-		{data : "wrk_dtm", className : "dt-center", defaultContent : ""},
-	   	{
-			data : "exe_rslt_cd",
-			render : function(data, type, full, meta) {	 						
-				var html = '';
-				if (full.exe_rslt_cd == 'TC001701') {
-					html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_result(\''+full.mig_exe_sn+'\',\''+full.save_pth+'/\')">';
-					html += "	<i class='fa fa-check-circle text-primary' >";
-					html += '&nbsp;Complete</i>';
-					html += "</button>";
-					html += '<br/><button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_dn_report(\''+full.save_pth+'/result/\')" style="margin-top:4pt">';
-					html += "	<i class='fa fa-check-circle text-primary' >";
-					html += '&nbsp;Mig Report</i>';
-					html += "</button>";
-					
-				} else if(full.exe_rslt_cd == 'TC001702'){
-					html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_migFailLog('+full.mig_exe_sn+')">';
-					html += '<i class="fa fa-times">&nbsp;Fail</i>';
-//					html += '<spring:message code="common.failed" />';
-					html += "</button>";
-				}// else {
-					//html += "<div id='progress"+full.idx+"'></div>";
-					/* html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
-					html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
-					html += '&nbsp;<spring:message code="etc.etc28" />';
-					html += "</div>"; */
-					//getProgress(full.mig_exe_sn,full.save_pth,full.idx,full.wrk_nm);
-				//}
-
-				return html;
+		info : false,
+		bSort : false,
+		columns : [
+			{data : "idx", className : "dt-center", defaultContent : ""}, 
+			{data : "exe_date", className : "dt-center", defaultContent : ""}, 
+			{data : "wrk_nm", className : "dt-center", defaultContent : ""}, 
+			{data : "total_table_cnt", className : "dt-left", defaultContent : ""},
+			{data : "mig_table_cnt", className : "dt-left", defaultContent : ""}, 
+			{data : "start_time", className : "dt-center", defaultContent : ""},
+			{data : "end_time", className : "dt-center", defaultContent : ""},
+			{data : "elapsed_time", className : "dt-center", defaultContent : ""},			
+			{
+				data : "historyDetail",
+				render : function(data, type, full, meta) {
+					var html = '';	
+						html += '<button type="button" class="btn  btn-inverse-primary btn-fw" onclick="fn_mig_tableInfo_popup(\''+full.mig_nm+'\')">';
+						html += "	<i class='fa fa-check-circle text-primary' >";
+						html += '&nbsp;Table Info</i>';
+						html += "</button>";					
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			},					
+			{
+				data : "exe_rslt_cd",
+				render : function(data, type, full, meta) {	 						
+					var html = '';
+						html += '<button type="button" class="btn btn-inverse-primary btn-fw" onclick="fn_dn_report(\''+full.save_pth+'/result/\')">';
+						html += "	<i class='fa fa-check-circle text-primary' >";
+						html += '&nbsp;Mig Report</i>';
+						html += "</button>";
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
 			},
-			className : "dt-center",
-			defaultContent : ""
-		},
-		/* {
-			data : "stop",
-			render : function(data, type, full, meta) {	 						
-				var html = '';
-				if (full.exe_rslt_cd == 'TC001703') {
-					html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_db2pgCancel(\''+full.wrk_nm+'\')">';
-					html += 'Stop';
-					html += '</button>';
-				}
-				return html;
-			},
-			className : "dt-center",
-			defaultContent : ""
-		}, */
-		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
-		{data : "wrk_id", defaultContent : "", visible: false},
-		{data : "mig_exe_sn", defaultContent : "", visible: false}
-	]
-	});
+			{data : "mig_nm", className : "dt-center", defaultContent : "", visible: false}
+		]
+		});
 	
 	tableDDL.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableDDL.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
@@ -213,24 +185,18 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 	
-	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-	tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
-	tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(12)').css('min-width', '130px');
-	tableData.tables().header().to$().find('th:eq(13)').css('min-width', '130px');
-	tableData.tables().header().to$().find('th:eq(14)').css('min-width', '95px');
-	tableData.tables().header().to$().find('th:eq(15)').css('min-width', '95px');
-
-    
+	migtable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+	migtable.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+	migtable.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+	migtable.tables().header().to$().find('th:eq(3)').css('min-width', '50px');
+	migtable.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
+	migtable.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+	migtable.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	migtable.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	migtable.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+	migtable.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+	migtable.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+	
 	$(window).trigger('resize'); 
 }
 
@@ -247,24 +213,13 @@ $(window.document).ready(
 		ddlDateCalenderSetting();
 		migDateCalenderSetting();
 		
-		//getddlDataList();
-		//getdataDataList();			
-		
 		if(getUrlParam('gbn')=='mig'){
-			//$("#ddlDataTable").hide();
-			//$("#ddlDataTable_wrapper").hide();
-			//$("#dataDataTable").show();
-			//$("#dataDataTable_wrapper").show();
 			$('#server-tab-2 aria-selected').val(true);
 			$('#server-tab-1 aria-selected').val(false);
 			$('#server-tab-2').addClass('active');
 			$('#server-tab-1').removeClass('active');
 			selectTab('dataWork');
 		}else {
-			//$("#ddlDataTable").show();
-			//$("#ddlDataTable_wrapper").show();
-			//$("#dataDataTable").hide();
-			//$("#dataDataTable_wrapper").hide();	
 			$('#server-tab-2 aria-selected').val(false);
 			$('#server-tab-1 aria-selected').val(true);
 			$('#server-tab-1').addClass('active');
@@ -278,7 +233,6 @@ $(window.document).ready(
 function getUrlParam(paramName){
 	var url = location.href;
 	var result;
-	
 	var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
 	for (var i = 0; i < parameters.length; i++) { 
 		var varName = parameters[i].split('=')[0]; 
@@ -287,8 +241,8 @@ function getUrlParam(paramName){
 			return decodeURIComponent(result); 
 		} 
 	}
-
 };
+
 
 /* ********************************************************
  * DDL 수행이력 데이터 가져오기
@@ -328,10 +282,45 @@ function getddlDataList(){
 	});
 }
 
+
+/* ********************************************************
+ * Migration New 수행이력 데이터 가져오기
+ ******************************************************** */
+ function fn_selectMigHistory(){
+
+		$.ajax({
+			url : "/db2pg/selectMigHistory.do", 
+		  	data : {
+		  		wrk_nm :  $("#mig_wrk_nm").val(),
+		  		migStartDate :  $("#mig_wrk_strt_dtm").val(),
+		  		migEndDate : $("#mig_wrk_end_dtm").val()
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {
+				migtable.clear().draw();
+				migtable.rows.add(data).draw();
+			}
+		});
+	}
+
+
 /* ********************************************************
  * Migration 수행이력 데이터 가져오기
  ******************************************************** */
-function getdataDataList(){
+/* function getdataDataList(){
 	$.ajax({
 		url : "/db2pg/selectDb2pgMigHistory.do", 
 	  	data : {
@@ -364,60 +353,8 @@ function getdataDataList(){
 			}
 		}
 	});
-}
+} */
 
-/* ********************************************************
- * Migration 진행현황
- ******************************************************** */
-function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
-	var html;
-	var reCycle = true;
-	
-	$.ajax({
-		url : "/db2pg/db2pgProgress.do", 
-	  	data : {
-	  		mig_exe_sn : mig_exe_sn,
-	  		trans_save_pth :trans_save_pth
-	  	},
-		dataType : "json",
-		type : "post",
-		async: false,
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else if(xhr.status == 403) {
-				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-			} else {
-				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-			}
-		},
-		success : function(result) {
-			var perCent = 0;
-			if(result.totalcnt > 0)	perCent = Math.round((result.nowcnt / result.totalcnt)*100);
-			if(result.totalcnt != null && result.totalcnt != "" && result.totalcnt == result.nowcnt){
-				reCycle = false;
-				getdataDataList();
-
-			} else{
-				html = '<div id="outer" style="width: 100%; height: 22px; background: #fff;border:1px solid #5e50f9;">';
-				html += '  <div id="inner1" style="width: ' + perCent + '%; height: 20px;background: #68afff;color:red;font-size:14px;vertical-align:middle;"></div>';
-				html += '</div>';
-				html += '<div id="inner2" style="width: 100%; margin-top:4pt; height: 20px;color:red;font-size:14px;vertical-align:middle;align:center">' + result.nowcnt + " / " + result.totalcnt + ' ('+perCent+'%)</div>';
-			}
-			
-			eval("$('#progress"+idx+"')").html(html);
-
-			if(reCycle){
-				setTimeout(function() {
-					  getProgress(mig_exe_sn, trans_save_pth, idx);
-					}, 2000);
-			}
-		}
-	});
-}
 
 
  /* ********************************************************
@@ -459,13 +396,10 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 }
 
  
- 
-
   /* ********************************************************
    * DDL추출 로그 팝업
    ******************************************************** */
-  function fn_ddlResult(mig_exe_sn, ddl_save_pth){
- 	 
+  function fn_ddlResult(mig_exe_sn, ddl_save_pth){ 
  		$.ajax({
  			url : "/db2pg/popup/db2pgResultDDL.do", 
  		  	data : {
@@ -565,7 +499,6 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 				}
 			},
 			success : function(result) {		
-
 				$('#mig_result_wrk_nm').html(result.result.wrk_nm);
 				$('#mig_result_wrk_exp').html(result.result.wrk_exp);
 				$('#mig_result_wrk_strt_dtm').html(result.result.wrk_strt_dtm);
@@ -573,13 +506,11 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 				$('#mig_result_wrk_dtm').html(result.result.wrk_dtm);				
  				$('#mig_result_exe_rslt_cd').html('<i class="fa fa-check-circle text-primary" >&nbsp;Complete</i>');
  				$('#mig_result_exe_rslt_report').html("<a href=\"javascript:fn_dn_report('" + trans_save_pth + "result/')\" ><b>Migration Report Download</b></a>");
-
  				 if(result.db2pgResult.RESULT == null){
  					$('#mig_result_msg').html("파일이 삭제되어 작업로그정보를 출력할 수 없습니다.");	
  				}else{
  					$('#mig_result_msg').html(result.db2pgResult.RESULT);	
- 				} 
- 				
+ 				}  				
 				$('#pop_layer_db2pgResult').modal("show"); 
 			}
 		});
@@ -711,6 +642,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 <%@include file="../popup/db2pgResultDDL.jsp"%> 
 <%@include file="../popup/db2pgResult.jsp"%> 
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
+<%@include file="../popup/migTableInfo.jsp"%> 
 
 <form name="frmPopup">
 	<input type="hidden" name="mig_exe_sn"  id="mig_exe_sn">
@@ -791,7 +723,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 										</span>
 									</div>
 									<div class="input-group align-items-center col-sm-1">
-										<span style="border:none; padding: 0px 10px;"> ~ </span>
+										 ~ 
 									</div>
 									<div id="ddl_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
 										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="ddl_wrk_end_dtm" name="ddl_wrk_end_dtm" readonly>
@@ -825,7 +757,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 										</span>
 									</div>
 									<div class="input-group align-items-center col-sm-1">
-										<span style="border:none; padding: 0px 10px;"> ~ </span>
+										<span style="border:none; padding: 0px 5px;"> ~ </span>
 									</div>
 									<div id="mig_wrk_end_dtm_div" class="input-group align-items-center date datepicker totDatepicker col-sm-5_5">
 										<input type="text" class="form-control totDatepicker" style="width:150px;height:44px;" id="mig_wrk_end_dtm" name="mig_wrk_end_dtm" readonly>
@@ -837,14 +769,14 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-3">
 									<input type="text" class="form-control" style="margin-left: -1rem;margin-right: -0.7rem;" maxlength="25" name="mig_wrk_nm" id="mig_wrk_nm"  placeholder='<spring:message code="common.work_name" />'/>
 								</div>									
-								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" >
+								<%-- <div class="input-group mb-2 mr-sm-2 search_rman col-sm-2" >
 									<select class="form-control" style="width:150px;" name="mig_exe_rslt_cd" id="mig_exe_rslt_cd">
 										<option value="%"><spring:message code="schedule.total" /></option>
 										<option value="TC001701"><spring:message code="common.success" /></option>
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
-								</div>
-								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="getdataDataList()">
+								</div> --%>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_selectMigHistory()">
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 								</button>
 							</form>
@@ -906,7 +838,7 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 											</div>
 										</div>
 									</div>
-	 								<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+	 								<%-- <table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 										<thead>
 											<tr class="bg-info text-white">
 												<th width="30" rowspan="2">NO</th>
@@ -929,7 +861,37 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 												<th width="100">Database</th>
 											</tr>
 										</thead>
-									</table>	
+									</table> --%>	
+									
+									<table id="migHistoryTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<colgroup>
+											<col style="width: 2%;" />
+											<col style="width: 10%;" />
+											<col style="width: 10%;" />
+											<col style="width: 5%;" />
+											<col style="width: 5%;" />
+											<col style="width: 10%;" />
+											<col style="width: 10%;" />
+											<col style="width: 10%;" />
+											<col style="width: 10%;" />
+											<col style="width: 10%;" />
+										</colgroup>
+										<thead>
+											<tr class="bg-info text-white">
+												<th scope="col"><spring:message code="common.no" /></th>
+												<th scope="col"><spring:message code="migration.exeDate" /></th>
+												<th scope="col"><spring:message code="common.work_name" /></th>
+												<th scope="col"><spring:message code="migration.table_totalcnt" /></th>
+												<th scope="col"><spring:message code="migration.table_migcnt" /></th>
+												<th scope="col"><spring:message code="migration.starttime" /></th>
+												<th scope="col"><spring:message code="migration.endtime" /></th>
+												<th scope="col"><spring:message code="migration.elapsedtime" /></th>
+												<th scope="col">상세정보</th>
+												<th scope="col">레포트</th>
+											</tr>
+										</thead>
+									</table>
+									
 							 	</div>
 						 	</div>
 						</div>
@@ -938,13 +900,13 @@ function getProgress(mig_exe_sn, trans_save_pth, idx, wrk_nm){
 				<!-- content-wrapper ends -->
 			</div>
 		</div>
-		<div class="col-sm-0_5" style="display:none;" id="center_div" >
+<!-- 		<div class="col-sm-0_5" style="display:none;" id="center_div" >
 			<div class="card" style="background-color: transparent !important;border:0px;top:30%;position: inline-block;">
 				<div class="card-body" style="" onclick="fn_schedule_leftListSize();">	
 					<i class='fa fa-angle-double-right text-info' style="font-size: 35px;cursor:pointer;"></i>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </div>
 
