@@ -23,6 +23,7 @@ import com.k4m.dx.tcontrol.server.DxT015.CompareSeqDesc;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.util.BackupRunCommandExec;
 import com.k4m.dx.tcontrol.util.CommonUtil;
 import com.k4m.dx.tcontrol.util.FileEntry;
 import com.k4m.dx.tcontrol.util.FileListSearcher;
@@ -210,15 +211,20 @@ public class DxT005 extends SocketCtl {
 				
 				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString()+" > /dev/null 2>&1";
 				
-				RunCommandExec r = new RunCommandExec(strCommand);
+				BackupRunCommandExec r = new BackupRunCommandExec(strCommand);
 				
 				r.start();
 				
 				try {							
 					r.join();
 				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+					
 					errLogger.error("Backup FAIL!!! ]", ie.toString());
 					socketLogger.info("Backup FAIL!!! ]", ie.toString());
+					
+					ie.printStackTrace();
+					
 					
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD("TC001702");
@@ -237,6 +243,7 @@ public class DxT005 extends SocketCtl {
 				String strResultMessge = r.getMessage();
 
 				
+				socketLogger.info("[ strResultMessge ---> "+ strResultMessge);	
 				socketLogger.info("[ Porcess Result ---> "+ retVal);	
 				
 				// 다음실행여부가 Y 이면 에러나도 다음 시행함.
@@ -440,6 +447,8 @@ public class DxT005 extends SocketCtl {
 			sendBuff = null;
 			
 		} catch (Exception e) {
+			
+			e.printStackTrace();
 			
 			WrkExeVO endVO = new WrkExeVO();
 			endVO.setEXE_RSLT_CD("TC001702");
