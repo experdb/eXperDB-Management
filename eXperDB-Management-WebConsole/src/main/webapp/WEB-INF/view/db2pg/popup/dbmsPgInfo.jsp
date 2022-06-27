@@ -9,7 +9,7 @@
 var table_source_dbms_trsf_pg = null;
 function fn_init_dbms_trsf_pg() {
 		table_source_dbms_trsf_pg = $('#dbmsList_trsf_pg').DataTable({
-		scrollY : "150px",
+		scrollY : "300px",
 		scrollX: true,	
 		bSort: false,
 		processing : true,

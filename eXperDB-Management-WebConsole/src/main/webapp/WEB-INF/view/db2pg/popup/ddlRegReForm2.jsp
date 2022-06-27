@@ -34,7 +34,7 @@ $(window.document).ready(function(){
 // table init
 function fn_init_tables_re() {
 	infoTableRe = $('#info_tableList_re').DataTable({
-		scrollY : "220px",
+		scrollY : "500px",
 		scrollX: true,	
 		processing : true,
 		searching : false,
@@ -52,7 +52,7 @@ function fn_init_tables_re() {
 	infoTableRe.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
 	
 	extTableRe = $('#ext_tableList_re').DataTable({
-		scrollY : "220px",
+		scrollY : "500px",
 		scrollX: true,	
 		processing : true,
 		searching : false,

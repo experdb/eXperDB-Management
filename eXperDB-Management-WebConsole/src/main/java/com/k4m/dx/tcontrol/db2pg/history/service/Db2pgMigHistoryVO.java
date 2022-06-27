@@ -14,9 +14,18 @@ public class Db2pgMigHistoryVO {
 	private String elapsed_time;	
 	private String migStartDate;
 	private String migEndDate;
+	private String save_pth;
 
 
 	
+	public String getSave_pth() {
+		return save_pth;
+	}
+
+	public void setSave_pth(String save_pth) {
+		this.save_pth = save_pth;
+	}
+
 	public String getMigStartDate() {
 		return migStartDate;
 	}
