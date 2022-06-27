@@ -104,7 +104,8 @@ function fn_update_work(){
 		  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
 		  		src_table_total_cnt : src_table_total_cnt,
 		  		wrk_id : $("#wrk_id").val(),
-		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val()
+		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
+		  		src_parallel:$("#src_parallel").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {

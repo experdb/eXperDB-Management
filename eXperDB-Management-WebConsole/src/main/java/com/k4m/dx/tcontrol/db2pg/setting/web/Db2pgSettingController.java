@@ -645,6 +645,7 @@ public class Db2pgSettingController {
 			int src_table_total_cnt = Integer.parseInt(request.getParameter("src_table_total_cnt"));
 			String [] usrqry_content = request.getParameterValues("db2pg_usrqry_content");
 			String [] usrqry_table = request.getParameterValues("db2pg_usrqry_table");
+			int src_parallel= Integer.parseInt(request.getParameter("src_parallel"));
 			
 			//1. WORK 등록
 			String time = nowTime();
@@ -688,6 +689,7 @@ public class Db2pgSettingController {
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
+			dataConfigVO.setSrc_parallel(src_parallel);
 			
 			//src_cnd_qry where문절에 where, ; 문자 제거
 			if(!dataConfigVO.getSrc_cnd_qry().equals("")){
@@ -761,6 +763,8 @@ public class Db2pgSettingController {
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
 			configObj.put("src_classify_string", dataConfigVO.getDb2pg_uchr_lchr_val());
+			
+			configObj.put("src_parallel", dataConfigVO.getSrc_parallel());
 			
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
@@ -859,6 +863,7 @@ public class Db2pgSettingController {
 			targetDataWork.setTrans_save_pth(trans_path);
 			targetDataWork.setSrc_cnd_qry(sourceDataWork.getSrc_cnd_qry());
 			targetDataWork.setDb2pg_uchr_lchr_val(sourceDataWork.getDb2pg_uchr_lchr_val());
+			targetDataWork.setSrc_parallel(sourceDataWork.getSrc_parallel());
 			
 			int targetDataWorkId = db2pgSettingService.insertDataWork(targetDataWork);
 
@@ -920,7 +925,8 @@ public class Db2pgSettingController {
 			configObj.put("src_where_condition", sourceDataWork.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
 			configObj.put("src_classify_string", sourceDataWork.getDb2pg_uchr_lchr_val());
-			
+			configObj.put("src_parallel", sourceDataWork.getSrc_parallel());
+		
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -977,7 +983,8 @@ public class Db2pgSettingController {
 			mv.addObject("wrk_id",result.getWrk_id());
 			mv.addObject("exrt_trg_tb_total_cnt", result.getExrt_trg_tb_total_cnt());
 			mv.addObject("exrt_exct_tb_total_cnt", result.getExrt_exct_tb_total_cnt());
-			mv.addObject("db2pg_uchr_lchr_val",result.getDb2pg_uchr_lchr_val());
+			mv.addObject("db2pg_uchr_lchr_val",result.getDb2pg_uchr_lchr_val());			
+			mv.addObject("src_parallel",result.getSrc_parallel());
 
 			List<QueryVO> usrqry_result = db2pgSettingService.selectDetailUsrQry(result.getDb2pg_trsf_wrk_id());
 			mv.addObject("usr_qry", usrqry_result);
@@ -1030,6 +1037,8 @@ public class Db2pgSettingController {
 			String [] usrqry_content = request.getParameterValues("db2pg_usrqry_content");
 			String [] usrqry_table = request.getParameterValues("db2pg_usrqry_table");
 			
+			int src_parallel = Integer.parseInt(request.getParameter("src_parallel"));
+			
 			//1. WORK 등록
 			String time = nowTime();
 			Properties props = new Properties();
@@ -1074,7 +1083,8 @@ public class Db2pgSettingController {
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
-			dataConfigVO.setDb2pg_trsf_wrk_exp(toString(dataConfigVO.getDb2pg_trsf_wrk_exp()));
+			dataConfigVO.setDb2pg_trsf_wrk_exp(toString(dataConfigVO.getDb2pg_trsf_wrk_exp()));			
+			dataConfigVO.setSrc_parallel(src_parallel);
 			
 			db2pgSettingService.updateDataWork(dataConfigVO);
 			
@@ -1135,6 +1145,8 @@ public class Db2pgSettingController {
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
 			configObj.put("src_classify_string", dataConfigVO.getDb2pg_uchr_lchr_val());
+			
+			configObj.put("src_parallel", dataConfigVO.getSrc_parallel());
 
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
