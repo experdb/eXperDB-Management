@@ -17,7 +17,7 @@
    <repositories>
       <repository>
          <id>mvn2</id>
-         <url>http://repo1.maven.org/maven2/</url>
+         <url>https://repo1.maven.org/maven2/</url>
          <releases>
             <enabled>true</enabled>
          </releases>
@@ -27,7 +27,7 @@
       </repository>
       <repository>
          <id>egovframe</id>
-         <url>http://www.egovframe.go.kr/maven/</url>
+         <url>https://www.egovframe.go.kr/maven/</url>
          <releases>
             <enabled>true</enabled>
          </releases>
@@ -37,7 +37,7 @@
       </repository>
       <repository>
          <id>egovframe2</id>
-         <url>http://maven.egovframe.kr:8080/maven/</url>
+         <url>https://maven.egovframe.kr/maven/</url>
          <releases>
             <enabled>true</enabled>
          </releases>
@@ -47,7 +47,7 @@
       </repository>
       <repository>
 		<id>cubrid.release.repository</id>
-		<url>http://maven.cubrid.org</url>
+		<url>https://maven.cubrid.org</url>
 		<releases>
 		<enabled>true</enabled>
 		</releases>
