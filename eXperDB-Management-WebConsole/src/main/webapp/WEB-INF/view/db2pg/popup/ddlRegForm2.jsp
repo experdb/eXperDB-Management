@@ -245,6 +245,7 @@ function fn_insert_work_reg(){
 						  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
 						  		src_include_tables : $("#src_include_table_nm").val(),
 						  		src_exclude_tables : $("#src_exclude_table_nm").val(),
+						  		src_index_origin : $("#src_index_origin").val(),
 						  		src_table_total_cnt : src_table_total_cnt
 						  	},
 							type : "post",
@@ -594,10 +595,9 @@ function fn_search_tableInfo(){
 											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="migration.specify_case" />
-											</label>
-									
-											<div class="col-sm-4">
-												<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val"  class="form-control" style="margin-right: 1rem;width:130px;margin-top: 5px;">
+											</label>						
+											<div class="col-sm-2">
+												<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val"  class="form-control" style="margin-right: 1rem;width:115px;margin-top: 5px;">
 													<c:forEach var="codeLetter" items="${codeLetter}">
 														<option value="${codeLetter.sys_cd_nm}">${codeLetter.sys_cd_nm}</option>
 													</c:forEach>
@@ -609,13 +609,28 @@ function fn_search_tableInfo(){
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												<spring:message code="migration.view_table_exclusion" />
 											</label>
-											<div class="col-sm-4">
-												<select name="src_tb_ddl_exrt_tf" id="src_tb_ddl_exrt_tf"  class="form-control" style="margin-right: 1rem;width:130px;margin-top: 5px;">
+											<div class="col-sm-2">
+												<select name="src_tb_ddl_exrt_tf" id="src_tb_ddl_exrt_tf"  class="form-control" style="margin-right: 1rem;width:115px;margin-top: 5px;">
 													<c:forEach var="codeTF" items="${codeTF}">
 														<option value="${codeTF.sys_cd_nm}">${codeTF.sys_cd_nm}</option>
 													</c:forEach>
 												</select>
 											</div>
+											
+											
+											<label for="ins_dump_cprt" class="col-sm-2 col-form-label pop-label-index">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												인덱스명 ORIGIN
+											</label>
+											<div class="col-sm-2">
+												<select name="src_index_origin"  id="src_index_origin"  class="form-control" style="margin-right: 1rem;width:115px;margin-top: 5px;">
+													<c:forEach var="codeTF" items="${codeTF}">
+																<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
+															</c:forEach>
+												</select>
+											</div>
+											
+											
 										</div>
 									</div>
 									

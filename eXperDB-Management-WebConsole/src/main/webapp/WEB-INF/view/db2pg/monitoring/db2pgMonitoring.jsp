@@ -95,10 +95,11 @@ function fn_init() {
 	});
 	
 	
-    tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-    tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
-    tableData.tables().header().to$().find('th:eq(2)').css('min-width', '500px');
+    tableData.tables().header().to$().find('th:eq(0)').css('min-width', '15px');
+    tableData.tables().header().to$().find('th:eq(1)').css('min-width', '50px');
+    tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(3)').css('min-width', '300px')
+      tableData.tables().header().to$().find('th:eq(4)').css('min-width', '110px')
     /* tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
@@ -332,8 +333,8 @@ function fn_selectExeWork(){
 									<table id="dataDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 										<thead>
 											<tr class="bg-info text-white">
-												<th width="30"   style="background-color: #778899;"><spring:message code="common.no" /></th>
-												<th width="100"  style="background-color: #778899;">Detail</th>
+												<th width="15"   style="background-color: #778899;"><spring:message code="common.no" /></th>
+												<th width="50"  style="background-color: #778899;">Detail</th>
 												<th width="100"  style="background-color: #778899;"><spring:message code="common.work_name" /></th>
 												<th width="100"  style="background-color: #778899;">MIGRATION</th>
 												<th width="100"  style="background-color: #778899;">Status</th>											

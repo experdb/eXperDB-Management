@@ -333,6 +333,7 @@ function fn_ddl_regre_popup(){
 				$("#db2pg_ddl_wrk_exp_reg_re").val(nvlPrmSet(result.db2pg_ddl_wrk_exp, ""));
 				$("#db2pg_uchr_lchr_val_reg_re").val(result.db2pg_uchr_lchr_val).prop("selected", true);
 				$("#src_tb_ddl_exrt_tf_reg_re").val(result.src_tb_ddl_exrt_tf).prop("selected", true);
+				$("#src_index_origin_re").val(result.src_index_origin).prop("selected", true);
 				
 				$('#pop_layer_ddl_reg_re').modal("show");
 			}

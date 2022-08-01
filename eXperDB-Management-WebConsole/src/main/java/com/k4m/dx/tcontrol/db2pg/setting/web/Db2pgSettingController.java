@@ -305,6 +305,7 @@ public class Db2pgSettingController {
 			configObj.put("src_file_output_path", ddl_path);
 			configObj.put("src_include_tables", src_include_tables);
 			configObj.put("src_exclude_tables", src_exclude_tables);
+			configObj.put("src_index_origin", ddlConfigVO.getSrc_index_origin());
 			
 			result = Db2pgConfigController.createDDLConfig(configObj);
 		} catch (Exception e) {
@@ -366,6 +367,7 @@ public class Db2pgSettingController {
 			targetDDLWork.setDb2pg_exrt_exct_tb_wrk_id(sourceDDLWork.getDb2pg_exrt_exct_tb_wrk_id());
 			targetDDLWork.setFrst_regr_id(id);
 			targetDDLWork.setLst_mdfr_id(id);
+			targetDDLWork.setSrc_index_origin(sourceDDLWork.getSrc_index_origin());
 			db2pgSettingService.insertDDLWork(targetDDLWork);
 		
 			//5.config 생성
@@ -386,6 +388,7 @@ public class Db2pgSettingController {
 			configObj.put("src_file_output_path", ddl_path);
 			configObj.put("src_include_tables", sourceDDLWork.getExrt_trg_tb_nm()==null?"":sourceDDLWork.getExrt_trg_tb_nm());
 			configObj.put("src_exclude_tables", sourceDDLWork.getExrt_exct_tb_nm()==null?"":sourceDDLWork.getExrt_exct_tb_nm());
+			configObj.put("src_index_origin", sourceDDLWork.getSrc_index_origin());
 			
 			result = Db2pgConfigController.createDDLConfig(configObj);
 		} catch (Exception e) {
@@ -431,6 +434,8 @@ public class Db2pgSettingController {
 			mv.addObject("exrt_exct_tb_cnt", result.getExrt_exct_tb_cnt());
 			mv.addObject("exrt_trg_tb_total_cnt", result.getExrt_trg_tb_total_cnt());
 			mv.addObject("exrt_exct_tb_total_cnt", result.getExrt_exct_tb_total_cnt());
+			String getSrc_index_origin = String.valueOf(result.getSrc_index_origin()).toUpperCase();
+			mv.addObject("src_index_origin", getSrc_index_origin);
 			
 			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
 			mv.addObject("codeLetter", codeLetter);
@@ -525,6 +530,7 @@ public class Db2pgSettingController {
 			configObj.put("src_file_output_path", ddl_path);
 			configObj.put("src_include_tables", src_include_tables);
 			configObj.put("src_exclude_tables", src_exclude_tables);
+			configObj.put("src_index_origin", ddlConfigVO.getSrc_index_origin());
 			
 			result = Db2pgConfigController.createDDLConfig(configObj);
 		} catch (Exception e) {

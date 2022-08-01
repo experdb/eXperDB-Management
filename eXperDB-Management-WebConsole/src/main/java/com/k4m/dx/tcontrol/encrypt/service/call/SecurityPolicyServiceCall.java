@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.encrypt.service.call;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -290,8 +291,18 @@ public class SecurityPolicyServiceCall {
 			result.put("denyResultTypeCode", profileProtection.getDenyResultTypeCode());
 			System.out.println(profileProtection.getDataTypeCode()); //dataTypeCode	데이터 타입
 			result.put("dataTypeCode", profileProtection.getDataTypeCode());
-			System.out.println(profileProtection.getMaskingValue()); //대체 문자열
-			result.put("maskingValue", profileProtection.getMaskingValue());
+			
+			if(profileProtection.getMaskingValue() != null) {
+				System.out.println( new String(profileProtection.getMaskingValue().getBytes("iso-8859-1"), "utf-8")); //대체 문자열	
+				result.put("maskingValue", new String(profileProtection.getMaskingValue().getBytes("iso-8859-1"), "utf-8"));
+			}else {
+				System.out.println(profileProtection.getMaskingValue()); //대체 문자열	
+				result.put("maskingValue", profileProtection.getMaskingValue());
+			}
+			
+		
+	
+			
 			
 			JSONArray arrProfileCipherSpec = (JSONArray) map.get("ProfileCipherSpec");
 			System.out.println(" ################# ProfileCipherSpec ################### ");
