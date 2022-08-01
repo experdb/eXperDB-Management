@@ -52,6 +52,7 @@ public class Db2pgConfigController {
 				fileContent = fileContent.replaceAll("SRC_CLASSIFY_STRING=original", "SRC_CLASSIFY_STRING="+configObj.get("src_classify_string").toString());	
 				fileContent = fileContent.replaceAll("SRC_TABLE_DDL=TRUE", "SRC_TABLE_DDL="+configObj.get("src_table_ddl").toString());		
 				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+configObj.get("src_file_output_path").toString());
+				fileContent = fileContent.replaceAll("SRC_INDEX_ORIGIN=FALSE", "SRC_INDEX_ORIGIN="+configObj.get("src_index_origin").toString().toUpperCase());		
 				bw.write(fileContent + "\r\n");
 				bw.flush();
 			}

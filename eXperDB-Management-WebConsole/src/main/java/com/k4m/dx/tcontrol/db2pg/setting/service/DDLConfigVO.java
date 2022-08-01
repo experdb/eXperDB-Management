@@ -33,6 +33,16 @@ public class DDLConfigVO {
 	private int exrt_trg_tb_total_cnt;
 	private int exrt_exct_tb_total_cnt;
 
+	private boolean src_index_origin;
+
+	public boolean getSrc_index_origin() {
+		return src_index_origin;
+	}
+
+	public void setSrc_index_origin(boolean src_index_origin) {
+		this.src_index_origin = src_index_origin;
+	}
+
 	public int getExrt_trg_tb_total_cnt() {
 		return exrt_trg_tb_total_cnt;
 	}
