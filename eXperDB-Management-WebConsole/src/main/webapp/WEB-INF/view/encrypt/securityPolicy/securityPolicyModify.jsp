@@ -154,14 +154,14 @@
 		});
 		
 		
-		/* var denyResultTypeCode = "${result.denyResultTypeCode}";
+		 var denyResultTypeCode = "${result.denyResultTypeCode}";
 		if(denyResultTypeCode == "DRMS" || denyResultTypeCode == "DRRP"){
 			$("#masking").show();
 			$("#maskingValue").show();
 		}else{
 			$("#masking").hide();
 			$("#maskingValue").hide();
-		} */
+		} 
 		
 	});
 
@@ -171,7 +171,7 @@
 		var denyResultTypeCode = $("#denyResultTypeCode").val();
 		if(denyResultTypeCode == "DRMS" || denyResultTypeCode == "DRRP"){
 			$("#masking").show();
-			$("#maskingValue").show();
+			$("#maskingValue").show();		
 		}else{
 			$("#masking").hide();
 			$("#maskingValue").hide();
@@ -1003,12 +1003,12 @@
 										<form class="cmxform" id="insRegForm">
 											<fieldset>
 												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<label for="ins_connect_nm" class="col-sm-1.5 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px); margin-left: 15px;">
 														<i class="item-icon fa fa-dot-circle-o"></i>
 														<spring:message code="encrypt_policy_management.Grant_Access"/>
 													</label>
 
-													<div class="col-sm-1">
+													<div class="col-sm-1" style="margin-left: 25px;">
 														<div class="form-check">
 															<label class="form-check-label">
 															<input type="radio" class="form-check-input" name="defaultAccessAllowTrueFalse" id="rdo_2_1"  value="Y" ${result.defaultAccessAllowTrueFalse == 'true' ? 'checked="checked"' : ''} > 예																
@@ -1026,18 +1026,31 @@
 												</div>
 
 												<div class="form-group row" style="margin-bottom:10px;">
-													<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
+													<label for="ins_connect_nm" class="col-sm-1.5 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px); margin-left: 15px; margin-top: 6px;">
 														<i class="item-icon fa fa-dot-circle-o"></i>
 														<spring:message code="encrypt_policy_management.Action_when_Access_Denied"/>
 													</label>
-													<div class="col-sm-2">
+													<div class="col-sm-2" style="margin-top: 8px; margin-left: 10px;">
 														<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="denyResultTypeCode" id="denyResultTypeCode" onchange="fn_changeDenyResult()">
 															<c:forEach var="denyResultTypeCode" items="${denyResultTypeCode}">
 																<option value="<c:out value="${denyResultTypeCode.sysCode}"/>" ${result.denyResultTypeCode == denyResultTypeCode.sysCode ? 'selected="selected"' : ''}><c:out value="${denyResultTypeCode.sysCodeName}"/></option>
 															</c:forEach>
 														</select>
 													</div>
+													
+													<div  class="form-group row"  style="height: 20px; margin-left: 20px;" id="masking">	
+														<label for="ins_connect_nm" class="col-sm-1.5 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px); margin-left: 25px; margin-top: 6px;">
+															<i class="item-icon fa fa-dot-circle-o"></i>
+															대체문자열
+														</label>
+														<div class="col-sm-2">
+															<input type="text" class="form-control"  id="maskingValue" name="maskingValue"  value="${result.maskingValue}" onblur="this.value=this.value.trim()" style= "height: 33px; margin-top: 8px; width: 200px;" />													
+														</div>
+													</div>
+													
 												</div>
+												
+												
 
 												<div class="form-group row" style="margin-bottom:10px;">
 													<span class="form-check"  style="margin-left: 15px;">
