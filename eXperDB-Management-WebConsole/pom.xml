@@ -5,7 +5,7 @@
    <groupId>com.k4m</groupId> 
    <artifactId>eXperDB-Management-WebConsole</artifactId>
    <packaging>war</packaging>
-   <version>v14.0.1</version>
+   <version>v14.0.2</version>
    <name>eXperDB-Management-WebConsole</name>
    <url>http://www.egovframe.go.kr</url>
 
@@ -55,6 +55,20 @@
 		<enabled>false</enabled>
 		</snapshots>
 	</repository>
+	<repository>
+		<id>jumpmin_repository</id>
+		<url>http://maven.jumpmind.com/repo/</url>
+		<releases>
+		<enabled>true</enabled>
+		</releases>
+		<snapshots>
+		<enabled>false</enabled>
+		</snapshots>
+	</repository>
+	<repository>
+			<id>maven_default_repository</id>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
    </repositories>
 
    <dependencies>
@@ -244,10 +258,10 @@
       <!-- /excel 설정 -->
       
    <dependency>
-       <groupId>org.postgresql</groupId>
-       <artifactId>postgresql</artifactId>
-       <version>42.2.22</version>
-   </dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>42.3.3</version>
+		</dependency>
 
       <!-- mybatis -->
       <dependency>
@@ -357,24 +371,15 @@
          <systemPath>${project.basedir}/src/main/resources/jar/util-11.2.jar</systemPath>
       </dependency>
       
-      
-      <!-- Oracle -->
-     <!--  <dependency>
-         <groupId>ojdbc</groupId>
-         <artifactId>ojdbc</artifactId>
-         <version>6</version>
-         <scope>system</scope>
-         <systemPath>${project.basedir}/src/main/resources/jar/ojdbc-6.jar</systemPath>
-      </dependency> -->
-      
+
       <!-- Oracle -->
       <dependency>
 	    <groupId>com.oracle.database.jdbc</groupId>
 	    <artifactId>ojdbc6</artifactId>
 	    <version>11.2.0.4</version>
 	</dependency>
-      
-     
+         
+         
        <dependency>
          <groupId>ojdbc</groupId>
          <artifactId>xdb</artifactId>
@@ -383,7 +388,6 @@
          <systemPath>${project.basedir}/src/main/resources/jar/xdb-6.jar</systemPath>
       </dependency>
       
-
       <dependency>
          <groupId>xmlparserv2</groupId>
          <artifactId>xmlparserv2</artifactId>
@@ -391,7 +395,7 @@
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/xmlparserv2-11.1.0.6.jar</systemPath>
       </dependency>
-       
+             
      <dependency>
          <groupId>orai18n</groupId>
          <artifactId>orai18n</artifactId>
@@ -399,25 +403,13 @@
          <scope>system</scope>
          <systemPath>${project.basedir}/src/main/resources/jar/orai18n-1.jar</systemPath>
       </dependency> 
-                 
+                            
       <!-- PostGIS JDBC -->
-       <dependency>
-         <groupId>org.postgis</groupId>
-         <artifactId>postgis-jdbc</artifactId>
-         <version>master.2017.07.18</version>
-         <scope>system</scope>
-         <systemPath>${project.basedir}/src/main/resources/jar/postgis-jdbc-master.2017.07.18.jar</systemPath>
-      </dependency> 
-      
-    
-      <!-- DB2 old-->
-      <!-- <dependency>
-         <groupId>db2jcc4</groupId>
-         <artifactId>db2jcc4</artifactId>
-         <version>1</version>
-         <scope>system</scope>
-         <systemPath>${project.basedir}/src/main/resources/jar/db2jcc4-1.jar</systemPath>
-      </dependency> -->
+      <dependency>
+	    <groupId>net.postgis</groupId>
+	    <artifactId>postgis-jdbc</artifactId>
+	    <version>2021.1.0</version>
+	</dependency>
       
        <!-- DB2 -->
 		 <dependency>
@@ -426,33 +418,23 @@
 		    <version>db2jcc4</version>
 		</dependency>
       
-      
-      
-      <!-- MS-SQL -->
-      <!-- <dependency>
-         <groupId>sqljdbc41</groupId>
-         <artifactId>sqljdbc41</artifactId>
-         <version>1</version>
-         <scope>system</scope>
-         <systemPath>${project.basedir}/src/main/resources/jar/sqljdbc41-1.jar</systemPath>
-      </dependency> -->
-      
+    
         <!-- MS-SQL -->
       <dependency>
 	    <groupId>com.microsoft.sqlserver</groupId>
 	    <artifactId>mssql-jdbc</artifactId>
-	    <version>9.4.0.jre8</version>
+	    <version>9.4.1.jre8</version>
 	</dependency>
       
       
       <!-- Tibero -->
       <dependency>
-         <groupId>tibero5-jdbc</groupId>
-         <artifactId>tibero5-jdbc</artifactId>
-         <version>1</version>
-         <scope>system</scope>
-         <systemPath>${project.basedir}/src/main/resources/jar/tibero5-jdbc-1.jar</systemPath>
-      </dependency> 
+		    <groupId>jdbc.tibero</groupId>
+		    <artifactId>tibero</artifactId>
+		    <version>6</version>
+		    <scope>provided</scope>
+		</dependency>
+
         
       <!-- MySQL -->
       <dependency>
@@ -461,21 +443,13 @@
          <version>5.1.44</version>
       </dependency>
    
-      <!-- CUBRID -->   
-     <!-- <dependency>
-         <groupId>cubrid</groupId>
-         <artifactId>cubrid-jdbc</artifactId>
-         <version>9.3.6.0002</version>
-         <scope>system</scope>
-         <systemPath>${project.basedir}/src/main/resources/jar/cubrid-jdbc-9.3.6.0002.jar</systemPath>
-      </dependency> -->
       
        <!-- CUBRID -->   
 	 <dependency>
 	    <groupId>cubrid</groupId>
 	    <artifactId>cubrid-jdbc</artifactId>
-	    <version>9.3.9.0002</version>
-	</dependency>
+	    <version>11.0.8.0319</version>
+	</dependency>		
 		      
 		      
       <!-- MariaDB -->   
@@ -538,12 +512,10 @@
 	  
 	 <!-- Sybase -->   
 	 <dependency>
-         <groupId>xlib</groupId>
-    	<artifactId>sybase-jconn4</artifactId>
-         <version>4</version>
-         <scope>system</scope>
-         <systemPath>${project.basedir}/src/main/resources/jar/jconn4.jar</systemPath>
-      </dependency> 
+		    <groupId>jdbc.sybase</groupId>
+		    <artifactId>jconnect</artifactId>
+		    <version>7.7</version>
+		</dependency>
 
    </dependencies>
    
