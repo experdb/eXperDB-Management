@@ -283,10 +283,10 @@ public class WebConsoleSetting {
 
 		//proxy_log_path
 		if(strProxyYN.equals("Y")){
-			System.out.println("eXperDB-Proxy log_path(/home/experdb/app/eXperDB-Management/eXperDB-Proxy):");
+			System.out.println("eXperDB-Proxy log_path(/experdb/app/eXperDB-Management/eXperDB-Proxy):");
 			strProxyPath = scan.nextLine();
 			if(strProxyPath.equals("")) {
-				strProxyPath = "/home/experdb/app/eXperDB-Management/eXperDB-Proxy";
+				strProxyPath = "/experdb/app/eXperDB-Management/eXperDB-Proxy";
 			}
 		}
 
@@ -524,7 +524,7 @@ public class WebConsoleSetting {
 
 			//모니터링 사용여부 및 path 고정 (2022-03-21 변승우)
 			prop.setProperty("monitoring.installyn", "Y");
-			prop.setProperty("monitoring_path", "/$PGMHOME/files");
+			prop.setProperty("monitoring_path", "/experdb/app/eXperDB-Monitoring");
 			
 			
 			if(strEnctyptYn.equals("Y")){
