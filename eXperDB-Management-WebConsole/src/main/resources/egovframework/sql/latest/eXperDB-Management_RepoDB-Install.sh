@@ -7,7 +7,7 @@ if [ $1 == "A" ]; then
 fi
 
 echo "****************************************************"
-echo "eXperDB-Management-14.0.1 Repository DB Install"
+echo "eXperDB-Management-14.0.2 Repository DB Install"
 echo "****************************************************"
 
 echo "**CREATE USER experdb**"
