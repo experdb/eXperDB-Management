@@ -177,10 +177,10 @@ UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Schema Registry 등록', SYS_CD_NM_EN = 'Sche
 UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Schema Registry 수정 화면', SYS_CD_NM_EN = 'Schema Registry Modify Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0169';
 UPDATE T_SYSDTL_C SET SYS_CD_NM = 'Schema Registry 수정', SYS_CD_NM_EN = 'Schema Registry Modification' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0169_01';
 
-DELETE FROM T_SYSDTL_C WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0170'
+DELETE FROM T_SYSDTL_C WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0170';
 
-INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0153_04', 'Schema Registry 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Schema Registry Delete');
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0153_03', 'Kafka 정보 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Kafka Information Delete');
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN  ) VALUES('TC0001', 'DX-T0153_04', 'Schema Registry삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Schema Registry Delete');
 
 UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 설정 화면', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Settings Page' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0147';
 UPDATE T_SYSDTL_C SET SYS_CD_NM = '데이터전송 타켓DBMS 설정 화면', SYS_CD_NM_EN = 'DataTransfer TargetDBMS Settings Search' WHERE GRP_CD = 'TC0001' AND SYS_CD = 'DX-T0147_01';

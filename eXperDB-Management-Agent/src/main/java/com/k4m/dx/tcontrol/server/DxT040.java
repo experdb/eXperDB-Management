@@ -46,8 +46,9 @@ public class DxT040 extends SocketCtl{
 				                "df  $PGDATA -h" //pgdata마운트 용량
 								, "echo $PGDATA/pg_wal" //wal 경로
 			                    , "du -s $PGDATA/pg_wal" //wal로그 용량
-								, "ls $PGDATA/pg_wal | wc -l" //wal로그 갯수								
-								, " psql -t -c \"select setting from pg_settings where name = 'wal_keep_segments'\"" //wal_keep_segments 갯수															
+								, "ls $PGDATA/pg_wal | wc -l" //wal로그 갯수			
+								, " psql -t -c \"select setting from pg_settings where name = 'wal_keep_size'\"" 
+								//, " psql -t -c \"select setting from pg_settings where name = 'wal_keep_segments'\"" //wal_keep_segments 갯수															
 								, "echo $PGALOG" //아카이브 경로		
 								, "du -s $PGALOG" //아카이브로그 용량															
 								, "echo $PGDATA/backup" //백업경로
