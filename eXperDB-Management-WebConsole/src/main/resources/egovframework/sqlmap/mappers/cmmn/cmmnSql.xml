@@ -393,4 +393,14 @@
          WHERE SESSIONKEY = #{prmId} 
            AND SESSIONLIMIT > now()
 	</select>
+	
+	
+	<select id="getUserPassword" parameterType="String" resultType="String">
+		SELECT 
+		     trans_chk_key 
+		  FROM t_trans_encrypt 
+		 WHERE trans_id = #{usr_id}
+	</select>
+	
+	
 </mapper>

@@ -37,7 +37,17 @@
 <link rel="stylesheet" href="../login/css/common.css">
 
 <script type="text/javascript">
+	var init = false;
+	
+
 	$(window.document).ready(function() {
+		
+		if("${pwChange}" == "false"){
+			
+			$("#mod_usr_id", "#modUserForm").val("${userId}"); 
+			$('#pop_layer_user_pw_mod').modal("show");
+		}
+		
 		//error 체크
 		fn_errorChk('${error}');
 		
@@ -112,6 +122,9 @@
 		$("#loginForm").submit();
 	}
 </script>
+
+<%@include file="./popup/userPasswordChange.jsp"%>
+
 </head>
 <div id="wrap" class="login">
 	<!-- header -->

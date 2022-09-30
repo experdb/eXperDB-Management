@@ -39,4 +39,13 @@ public interface LoginService {
 	 * @throws Exception
 	 */
 	public UserVO checkUserWithSessionKey(UserVO userVo) throws Exception;
+
+	
+	/**
+	 * 로그인 체크
+	 * @param 
+	 * @return 
+	 * @throws Exception
+	 */
+	String getUserPassword(String usr_id) throws Exception;
 }

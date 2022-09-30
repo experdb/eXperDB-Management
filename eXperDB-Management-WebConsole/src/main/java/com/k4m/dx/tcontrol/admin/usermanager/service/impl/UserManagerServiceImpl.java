@@ -62,4 +62,10 @@ public class UserManagerServiceImpl extends EgovAbstractServiceImpl implements U
 		userManagerDAO.deleteUserManagerHd(string);
 	}
 
+	@Override
+	public void updateUserPw(UserVO userVo) throws Exception {
+		userManagerDAO.updateUserPw(userVo);
+		
+	}
+
 }
