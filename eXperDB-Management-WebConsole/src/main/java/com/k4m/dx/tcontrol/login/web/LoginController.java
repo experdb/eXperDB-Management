@@ -586,22 +586,22 @@ public class LoginController {
 								
 				/* 암호화 여부가 N */
 				if (encp_use_yn.toUpperCase().equals("N") && strTocken == null && entityId == null) {
-					System.out.println("암호화 미사용!!!!");	
+					System.out.println("Encrypt disable!!!!");	
 					userManagerService.updateUserPw(userVo);
 					//backup 저장
 					userManagerService.insertTransUser(userVo);
 					result.put("resultCode", "0000000000");
 					return result;
 				}else {
-				System.out.println("암호화 사용!!!!");	
+				System.out.println("Encrypt inable!!!!");	
 					
 				String restIp = loginVo.getRestIp();
 				int restPort = loginVo.getRestPort();
 
 				//암호화 사용유무가 Y-> Y, N-> N(management DB 업데이트)
-			    if (!userInfo.getPwd().equals(userVo.getPwd())) {
+			   //if (!userInfo.getPwd().equals(userVo.getPwd())) {
 		               result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, pwd_now);
-		            }
+		       //     }
 			    
 				userManagerService.updateUserPw(userVo);				
 				//backup 저장
