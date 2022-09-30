@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.http.Cookie;
@@ -453,13 +454,6 @@ public class LoginController {
 				//로그인 성공시 
 				if (loginVo != null) {
 
-					  if(userInfoHd.getPw_change().equals("false")) {
-						  mv.addObject("userId", userVo.getUsr_id());
-						  mv.addObject("pwChange", "false");
-						  mv.setViewName("login");
-					  return mv;
-					  }
-
 		            /*
 		             *  [   세션 추가되는 부분      ]
 		             */
@@ -492,6 +486,15 @@ public class LoginController {
 						}
 					}
 				}
+				
+				
+				  if(userInfoHd.getPw_change().equals("false")) {
+					  mv.addObject("userId", userVo.getUsr_id());
+					  mv.addObject("pwChange", "false");
+					  mv.setViewName("login");
+				  return mv;
+				  }
+				
 				/*중복로그인방지*/
 				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
 				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
@@ -565,6 +568,7 @@ public class LoginController {
 
 					userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
 				} else {
+					System.out.println("Password Change!");
 					pwd_now = userVo.getPwd();		
 					//salt 값
 					salt_value = SHA256.getSalt();
@@ -575,15 +579,12 @@ public class LoginController {
 					userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
 				}
 				 				
-				System.out.println("11111111111="+userVo.getPwd());
-				System.out.println("22222222222="+userVo.getPwd_edc());
-				System.out.println("33333333333="+userVo.getSalt_value());
-							
 				
 				String strTocken = loginVo.getTockenValue();
 				String loginId = loginVo.getUsr_id();
-				String entityId = loginVo.getEctityUid();				
-								
+				String entityId = loginVo.getEctityUid();
+
+				
 				/* 암호화 여부가 N */
 				if (encp_use_yn.toUpperCase().equals("N") && strTocken == null && entityId == null) {
 					System.out.println("Encrypt disable!!!!");	
@@ -593,16 +594,19 @@ public class LoginController {
 					result.put("resultCode", "0000000000");
 					return result;
 				}else {
-				System.out.println("Encrypt inable!!!!");	
 					
-				String restIp = loginVo.getRestIp();
-				int restPort = loginVo.getRestPort();
+					String restIp = loginVo.getRestIp();
+					int restPort = loginVo.getRestPort();
+					
+					System.out.println("Encrypt inable!!!!");	
+					System.out.println("PW = "+pwd_now);
+					System.out.println("strTocken = "+ strTocken);
+					
+		            result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, pwd_now);
 
-				//암호화 사용유무가 Y-> Y, N-> N(management DB 업데이트)
-			   //if (!userInfo.getPwd().equals(userVo.getPwd())) {
-		               result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, pwd_now);
-		       //     }
-			    
+		            System.out.println("ResultCode = "+result.get("resultCode"));
+		            System.out.println("ResultMessage = "+result.get("resultMessage"));
+		            
 				userManagerService.updateUserPw(userVo);				
 				//backup 저장
 				userManagerService.insertTransUser(userVo);
@@ -610,7 +614,7 @@ public class LoginController {
 				result.put("resultCode", "0000000000");
 				return result;
 				}
-
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
