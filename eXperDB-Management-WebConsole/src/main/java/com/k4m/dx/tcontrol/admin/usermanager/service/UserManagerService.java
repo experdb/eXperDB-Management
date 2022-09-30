@@ -89,6 +89,9 @@ public interface UserManagerService {
 	 * @throws Exception
 	 */
 	public void insertTransUser(UserVO userVo)throws Exception;
+
+
+	public void updateUserPw(UserVO userVo)throws Exception;
 	
 	
 }

@@ -39,4 +39,9 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		return loginDAO.checkUserWithSessionKey(userVo);
 	}
 
+	@Override
+	public String getUserPassword(String usr_id) throws Exception {
+		return loginDAO.getUserPassword(usr_id);
+	}
+
 }

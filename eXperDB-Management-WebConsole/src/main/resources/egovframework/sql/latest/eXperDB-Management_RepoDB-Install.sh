@@ -7,7 +7,7 @@ if [ $1 == "A" ]; then
 fi
 
 echo "****************************************************"
-echo "eXperDB-Management-14.0.2 Repository DB Install"
+echo "eXperDB-Management-14.0.3 Repository DB Install"
 echo "****************************************************"
 
 echo "**CREATE USER experdb**"
@@ -97,6 +97,10 @@ echo "**13.0.6 END**"
 echo "**14.0.1**"
 psql -U experdb -d experdb -f eXperDB-Management_14.0.1.sql
 echo "**14.0.1 END**"
+
+echo "**14.0.3**"
+psql -U experdb -d experdb -f eXperDB-Management_14.0.3.sql
+echo "**14.0.3 END**"
 
 #항상 마지막에 backup sql 수행 (등록 DB가 다름)
 echo "**bnr backup**"

@@ -40,4 +40,9 @@ public class LoginDAO extends EgovAbstractMapper{
 	public UserVO checkUserWithSessionKey(UserVO userVO) throws SQLException {
 		return (UserVO) selectOne("cmmnSql.checkUserWithSessionKey", userVO);
 	}
+
+	public String getUserPassword(String usr_id) throws SQLException {
+		String user_password = selectOne("cmmnSql.getUserPassword", usr_id);
+		return user_password;
+	}
 }

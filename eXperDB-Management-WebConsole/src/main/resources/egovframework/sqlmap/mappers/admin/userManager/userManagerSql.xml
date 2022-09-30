@@ -157,7 +157,8 @@
 		**/
         SELECT
                TRANS_CHK_KEY AS PWD_EDC,
-               SALT_KEY AS SALT_VALUE
+               SALT_KEY AS SALT_VALUE,
+               PW_CHANGE
           FROM T_TRANS_ENCRYPT
          WHERE TRANS_ID = #{usr_id}
 	</select>
@@ -255,6 +256,7 @@
                UPDATE T_TRANS_ENCRYPT
                   SET SALT_KEY = #{salt_value},
                       TRANS_CHK_KEY = #{pwd_edc},
+                      PW_CHANGE = 'true',
                       LST_MDFR_ID = #{lst_mdfr_id},
                       LST_MDF_DTM = clock_timestamp()
                 WHERE TRANS_ID  = #{usr_id}
@@ -265,15 +267,17 @@
                         TRANS_ID,
                         TRANS_CHK_KEY,
                         SALT_KEY,
+                         PW_CHANGE,
                         FRST_REGR_ID,
-                        FRST_REG_DTM,
+                        FRST_REG_DTM,                      
                         LST_MDFR_ID,
                         LST_MDF_DTM
                        )
                        SELECT #{usr_id},
                               #{pwd_edc},
                               #{salt_value},
-                              #{frst_regr_id},
+                               #{pw_change},
+                              #{frst_regr_id},                             
                               clock_timestamp(),
                               #{lst_mdfr_id},
                               clock_timestamp()
@@ -289,4 +293,17 @@
         DELETE FROM T_TRANS_ENCRYPT
          WHERE trans_id=#{usr_id}
 	</delete>
+	
+	
+		<update id="updateUserPw" parameterType="userVO">
+		/**
+		* Query ID : updateUserPw
+		* Description : 사용자 패스워드 변경
+		* Author : 변승우
+		**/
+        UPDATE T_USR_I
+           SET 
+              PWD=#{pwd}
+		 WHERE USR_ID = #{usr_id}
+	</update>
 </mapper>

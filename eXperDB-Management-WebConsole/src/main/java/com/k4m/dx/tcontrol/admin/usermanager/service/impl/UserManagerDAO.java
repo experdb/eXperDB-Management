@@ -140,4 +140,10 @@ public class UserManagerDAO extends EgovAbstractMapper{
 		delete("userManagerSql.deleteUserManagerHd", string);
 	}
 
+
+	public void updateUserPw(UserVO userVo) throws SQLException {
+		update("userManagerSql.updateUserPw", userVo);
+		
+	}
+
 }

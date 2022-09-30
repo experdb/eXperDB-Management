@@ -38,6 +38,7 @@ import com.k4m.dx.tcontrol.cmmn.EgovHttpSessionBindingListener;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
+import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
 import com.k4m.dx.tcontrol.functions.schedule.EgovBatchListnerUtl;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
@@ -451,6 +452,14 @@ public class LoginController {
 				
 				//로그인 성공시 
 				if (loginVo != null) {
+
+					  if(userInfoHd.getPw_change().equals("false")) {
+						  mv.addObject("userId", userVo.getUsr_id());
+						  mv.addObject("pwChange", "false");
+						  mv.setViewName("login");
+					  return mv;
+					  }
+
 		            /*
 		             *  [   세션 추가되는 부분      ]
 		             */
@@ -492,6 +501,7 @@ public class LoginController {
 				historyVO.setExe_dtl_cd("DX-T0003");
 				accessHistoryService.insertHistory(historyVO);
 
+				mv.addObject("userId", userList.get(0).getUsr_id());
 				mv.setViewName("redirect:/experdb.do");
 			}
 
@@ -501,6 +511,115 @@ public class LoginController {
 		return mv;
 	}
 
+	
+	
+	/**
+	 * 초기 사용자 패스워드 수정
+	 * 
+	 * @param userVo, response, historyVO, request
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/initPasswordUpdate.do")
+	public @ResponseBody JSONObject initPasswordUpdate(@ModelAttribute("userVo") UserVO userVo,
+			HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+				
+			CmmnUtils cu = new CmmnUtils();
+			UserManagerServiceCall uic = new UserManagerServiceCall();
+			JSONObject result = new JSONObject();
+			String salt_value = "";
+			String pwd_now = "";
+		
+			try {
+				
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+				String encp_use_yn = props.get("encrypt.useyn").toString();
+							
+				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+				
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
+				userVo.setLst_mdfr_id(usr_id);
+				userVo.setPw_change("true");
+				UserVO userInfo = (UserVO) userManagerService.selectDetailUserManager(userVo.getUsr_id());
+				UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(userVo.getUsr_id());
+
+				if (userInfo.getPwd().equals(userVo.getPwd())) {
+					userVo.setPwd(userVo.getPwd());
+					userVo.setPwd_edc(userInfoHd.getPwd_edc());
+					
+					pwd_now = userInfoHd.getPwd_edc();
+					
+					if (userInfoHd != null){
+						if (!"".equals(userInfoHd.getSalt_value())) {
+							salt_value = userInfoHd.getSalt_value();
+						} 
+					}
+
+					if (salt_value == null || "".equals(salt_value)) {
+						salt_value = SHA256.getSalt();
+					}
+
+					userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
+				} else {
+					pwd_now = userVo.getPwd();		
+					//salt 값
+					salt_value = SHA256.getSalt();
+
+					/*sha-256 암호화 변경 2020-11-26 */
+					userVo.setPwd(SHA256.setSHA256(pwd_now, salt_value)); // 패스워드 암호화
+					userVo.setPwd_edc(aes.aesEncode(pwd_now)); // 패스워드 암호화
+					userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
+				}
+				 				
+				System.out.println("11111111111="+userVo.getPwd());
+				System.out.println("22222222222="+userVo.getPwd_edc());
+				System.out.println("33333333333="+userVo.getSalt_value());
+							
+				
+				String strTocken = loginVo.getTockenValue();
+				String loginId = loginVo.getUsr_id();
+				String entityId = loginVo.getEctityUid();				
+								
+				/* 암호화 여부가 N */
+				if (encp_use_yn.toUpperCase().equals("N") && strTocken == null && entityId == null) {
+					System.out.println("암호화 미사용!!!!");	
+					userManagerService.updateUserPw(userVo);
+					//backup 저장
+					userManagerService.insertTransUser(userVo);
+					result.put("resultCode", "0000000000");
+					return result;
+				}else {
+				System.out.println("암호화 사용!!!!");	
+					
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
+
+				//암호화 사용유무가 Y-> Y, N-> N(management DB 업데이트)
+			    if (!userInfo.getPwd().equals(userVo.getPwd())) {
+		               result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, pwd_now);
+		            }
+			    
+				userManagerService.updateUserPw(userVo);				
+				//backup 저장
+				userManagerService.insertTransUser(userVo);
+				
+				result.put("resultCode", "0000000000");
+				return result;
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return result;
+
+	}
+	
+	
+	
 	/**
 	 * 로그아웃을 한다.
 	 * 
