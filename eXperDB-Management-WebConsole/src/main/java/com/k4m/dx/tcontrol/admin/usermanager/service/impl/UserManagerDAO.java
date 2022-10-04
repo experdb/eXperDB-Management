@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
@@ -145,5 +146,12 @@ public class UserManagerDAO extends EgovAbstractMapper{
 		update("userManagerSql.updateUserPw", userVo);
 		
 	}
+
+
+	public void updateEncUserPw(Map<String, Object> param) throws SQLException {
+		update("userManagerSql.updateEncUserPw", param);
+		
+	}
+
 
 }

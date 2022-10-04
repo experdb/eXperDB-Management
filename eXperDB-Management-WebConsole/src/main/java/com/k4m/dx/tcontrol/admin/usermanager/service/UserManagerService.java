@@ -3,6 +3,7 @@ package com.k4m.dx.tcontrol.admin.usermanager.service;
 import java.util.List;
 import java.util.Map;
 
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 public interface UserManagerService {
@@ -92,6 +93,8 @@ public interface UserManagerService {
 
 
 	public void updateUserPw(UserVO userVo)throws Exception;
-	
+
+
+	public void updateEncUserPw(Map<String, Object> param) throws Exception;
 	
 }
