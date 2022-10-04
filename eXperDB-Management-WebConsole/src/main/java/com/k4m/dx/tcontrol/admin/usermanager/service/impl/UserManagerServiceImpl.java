@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -67,5 +68,12 @@ public class UserManagerServiceImpl extends EgovAbstractServiceImpl implements U
 		userManagerDAO.updateUserPw(userVo);
 		
 	}
+
+	@Override
+	public void updateEncUserPw(Map<String, Object> param) throws Exception{
+		userManagerDAO.updateEncUserPw(param);
+	}
+
+
 
 }

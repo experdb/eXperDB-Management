@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -37,6 +38,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.EgovHttpSessionBindingListener;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
+import com.k4m.dx.tcontrol.cmmn.crypto.Encrypter;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
@@ -418,16 +420,22 @@ public class LoginController {
 				loginVo.setMonitoring_install_yn(mon_install_yn);				
 				
 				if(encp_use_yn.equals("Y")){
+
 					String restIp = props.get("encrypt.server.url").toString();
 					int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
 					try{
 						CommonServiceCall cic = new CommonServiceCall();
 						JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());
+						
+						System.out.println("tockenValue 1 = "+result.get("tockenValue"));
+
 						/*JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());*/
 						loginVo.setRestIp(restIp);
 						loginVo.setRestPort(restPort);
 						loginVo.setTockenValue((String) (result.get("tockenValue")==null?"":result.get("tockenValue")));
 						loginVo.setEctityUid((String) (result.get("ectityUid")==null?"":result.get("ectityUid")));
+						
+						System.out.println("tockenValue 2 = "+loginVo.getTockenValue());
 
 					}catch(Exception e){
 						loginVo.setRestIp(restIp);
@@ -498,7 +506,7 @@ public class LoginController {
 				/*중복로그인방지*/
 				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
 				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
-				
+
 				// 로그인 이력 남기기
 				CmmnUtils.saveHistoryLogin(loginVo, login_chk, id, request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0003");
@@ -568,7 +576,6 @@ public class LoginController {
 
 					userVo.setSalt_value(salt_value); // 패스워드 salt_value setting
 				} else {
-					System.out.println("Password Change!");
 					pwd_now = userVo.getPwd();		
 					//salt 값
 					salt_value = SHA256.getSalt();
@@ -581,10 +588,8 @@ public class LoginController {
 				 				
 				
 				String strTocken = loginVo.getTockenValue();
-				String loginId = loginVo.getUsr_id();
 				String entityId = loginVo.getEctityUid();
 
-				
 				/* 암호화 여부가 N */
 				if (encp_use_yn.toUpperCase().equals("N") && strTocken == null && entityId == null) {
 					System.out.println("Encrypt disable!!!!");	
@@ -594,24 +599,27 @@ public class LoginController {
 					result.put("resultCode", "0000000000");
 					return result;
 				}else {
+						
+					String enc_passwd = encryptPassword(entityId,pwd_now);
+									
+					Map<String, Object> param = new HashMap<>();
+					param.put("password", enc_passwd);
+					param.put("ectityUid",  loginVo.getEctityUid());
 					
-					String restIp = loginVo.getRestIp();
-					int restPort = loginVo.getRestPort();
+					userManagerService.updateEncUserPw(param);	
 					
-					System.out.println("Encrypt inable!!!!");	
-					System.out.println("PW = "+pwd_now);
-					System.out.println("strTocken = "+ strTocken);
-					
-		            result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, pwd_now);
-
-		            System.out.println("ResultCode = "+result.get("resultCode"));
-		            System.out.println("ResultMessage = "+result.get("resultMessage"));
+					/*
+					 * if (!userInfo.getPwd().equals(userVo.getPwd())) { result =
+					 * uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, pwd_now);
+					 * }
+					 */
 		            
 				userManagerService.updateUserPw(userVo);				
 				//backup 저장
 				userManagerService.insertTransUser(userVo);
 				
 				result.put("resultCode", "0000000000");
+							
 				return result;
 				}
 				
@@ -620,6 +628,10 @@ public class LoginController {
 			}
 			return result;
 
+	}
+	
+	public String encryptPassword(String entityUid, String password) {
+		return Encrypter.digestToBase64(entityUid + password);
 	}
 	
 	
