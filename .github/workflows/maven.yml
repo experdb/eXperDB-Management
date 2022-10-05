@@ -1,17 +1,50 @@
 name: Java CI
 
-on: [push]
+on: 
+  push:
+    paths:
+      - 'eXperDB-Management-WebConsole/**'
+      - 'eXperDB-Management-Agent/**'
+      - 'eXperDB-Proxy-Agent/**'
+  pull_request:
+    paths:
+      - 'eXperDB-Management-WebConsole/**'
+      - 'eXperDB-Management-Agent/**'
+      - 'eXperDB-Proxy-Agent/**'
+  workflow_dispatch:
 
 jobs:
-  build:
-
+  webconsole_build:
+    name: "WebConsole Build CI"
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
-        java-version: 1.8
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+        java-version: '8'
+        distribution: 'temurin'
+
+    - name: WebConsole Build with Maven
+      run: mvn -B package --file eXperDB-Management-WebConsole/pom.xml
+
+  agent_build:
+    name: "Agent Build CI"
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ['eXperDB-Management-Agent', 'eXperDB-Proxy-Agent']
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+
+    - name: Resolve Dependency with Maven
+      run: mvn -B package --file ${{ matrix.component }}/pom.xml
+
+    - name: Build with Ant
+      run: ant -noinput -buildfile ${{ matrix.component }}/ant_build/build.xml
