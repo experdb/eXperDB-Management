@@ -278,7 +278,7 @@
                        SELECT #{usr_id},
                               #{pwd_edc},
                               #{salt_value},
-                               #{pw_change},
+                               'true',
                               #{frst_regr_id},                             
                               clock_timestamp(),
                               #{lst_mdfr_id},
