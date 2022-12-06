@@ -57,7 +57,7 @@
 	</repository>
 	<repository>
 		<id>jumpmin_repository</id>
-		<url>http://maven.jumpmind.com/repo/</url>
+		<url>https://maven.jumpmind.com/repo/</url>
 		<releases>
 		<enabled>true</enabled>
 		</releases>
@@ -67,7 +67,7 @@
 	</repository>
 	<repository>
 			<id>maven_default_repository</id>
-			<url>http://repo.maven.apache.org/maven2</url>
+			<url>https://repo.maven.apache.org/maven2</url>
 		</repository>
    </repositories>
 
