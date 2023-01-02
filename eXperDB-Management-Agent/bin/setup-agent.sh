@@ -120,11 +120,11 @@ echo "      "
         fi
         
   echo "      "
-  echo -n "   Installing eXperDB-Managem-Agent "
+  echo -n "   Installing eXperDB-Management-Agent "
   MGMT_AGENT_SETUP
   ComplateMsg "" $?
   
-  echo -n "   Start eXperDB-Managem-Agent "
+  echo -n "   Start eXperDB-Management-Agent "
   MGMT_AGENT_START
   ComplateMsg "" $?
   
