@@ -108,6 +108,18 @@
 		<location>/WEB-INF/view/error/500Error.jsp</location>
 	</error-page>
 	<error-page>
+		<error-code>400</error-code>
+		<location>/WEB-INF/view/error/400Error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>401</error-code>
+		<location>/WEB-INF/view/error/401Error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/view/error/403Error.jsp</location>
+	</error-page>
+	<error-page>
 		<error-code>404</error-code>
 		<location>/WEB-INF/view/error/404Error.jsp</location>
 	</error-page>
