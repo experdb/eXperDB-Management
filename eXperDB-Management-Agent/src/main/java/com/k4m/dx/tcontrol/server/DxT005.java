@@ -107,6 +107,9 @@ public class DxT005 extends SocketCtl {
 				String strDB_SVR_IPADR_ID=null;
 				String strBSN_DSCD=null;
 				int intSeq=0;
+				
+				String strCommand = "";
+				
 		     
 			System.out.println("arrCmd cnt : "+arrCmd.size());	
 				
@@ -209,7 +212,12 @@ public class DxT005 extends SocketCtl {
 					
 				}
 				
-				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString()+" > /dev/null 2>&1";
+				if(strBACKUP_JOB.equals("batch")) {
+					 strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
+				}else {
+					 strCommand = objJob.get(ProtocolID.REQ_CMD).toString()+" > /dev/null 2>&1";
+				}
+
 				
 				BackupRunCommandExec r = new BackupRunCommandExec(strCommand);
 				
