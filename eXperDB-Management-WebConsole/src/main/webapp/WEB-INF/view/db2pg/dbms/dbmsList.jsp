@@ -78,6 +78,7 @@ function fn_init() {
  * 페이지 시작시, 서버 리스트 조회
  ******************************************************** */
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	fn_search();
   	$(function() {	
@@ -293,6 +294,23 @@ function fn_delete2(){
 		});
 	
 }
+
+function fn_buttonAut(){
+	var int_button = document.getElementById("int_button"); 
+	var mdf_button = document.getElementById("mdf_button"); 
+	var del_button = document.getElementById("del_button"); 
+
+	if("${wrt_aut_yn}" == "Y"){
+		int_button.style.display = '';
+		mdf_button.style.display = '';
+		del_button.style.display = '';
+	}else{
+		int_button.style.display = 'none';
+		mdf_button.style.display = 'none';
+		del_button.style.display = 'none';
+	}
+}
+
 
 </script>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>

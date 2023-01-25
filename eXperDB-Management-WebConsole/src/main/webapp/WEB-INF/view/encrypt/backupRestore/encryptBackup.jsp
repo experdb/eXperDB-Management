@@ -32,7 +32,8 @@ var pwCheck = false;
  * 암호화 백업 화면 초기화
  ******************************************************** */
  $(window.document).ready(function() {
-		fn_init();
+	fn_buttonAut();
+	fn_init();
  });
 
 /* ********************************************************
@@ -137,6 +138,16 @@ var pwCheck = false;
 	document.backupFileDownload.target="backupFileForm";
 	document.backupFileDownload.submit();
  }
+ 
+function fn_buttonAut(){
+	var btnRun = document.getElementById("btnRun"); 
+
+	if("${wrt_aut_yn}" == "Y"){
+		btnRun.style.display = '';
+	}else{
+		btnRun.style.display = 'none';
+	}
+}
  
 		
 </script>

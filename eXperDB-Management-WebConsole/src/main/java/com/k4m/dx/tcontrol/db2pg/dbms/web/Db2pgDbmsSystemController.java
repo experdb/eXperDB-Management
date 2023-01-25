@@ -23,6 +23,7 @@ import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -51,8 +52,12 @@ public class Db2pgDbmsSystemController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
 	private List<Map<String, Object>> dbmsGrb;
 	private List<Map<String, Object>> dbmsChar;
+	private List<Map<String, Object>> menuAut;
 	
 	/**
 	 * DBMS시스템 설정 화면을 보여준다.
@@ -65,21 +70,39 @@ public class Db2pgDbmsSystemController {
 	@RequestMapping(value = "/db2pgDBMS.do")
 	public ModelAndView db2pgDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0134");
-			historyVO.setMnu_id(40);
-			accessHistoryService.insertHistory(historyVO);
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN00015");	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		try {
 			
-			dbmsGrb = dbmsService.dbmsListDbmsGrb();
-			mv.addObject("result", dbmsGrb);
-			dbmsGrb = dbmsService.dbmsGrb();
-			mv.addObject("dbmsGrb_reg", dbmsGrb);
-			dbmsGrb = dbmsService.dbmsGrb();
-			mv.addObject("dbmsGrb_reg_re", dbmsGrb);
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else {
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0134");
+				historyVO.setMnu_id(40);
+				accessHistoryService.insertHistory(historyVO);
+				
+				dbmsGrb = dbmsService.dbmsListDbmsGrb();
+				mv.addObject("result", dbmsGrb);
+				dbmsGrb = dbmsService.dbmsGrb();
+				mv.addObject("dbmsGrb_reg", dbmsGrb);
+				dbmsGrb = dbmsService.dbmsGrb();
+				mv.addObject("dbmsGrb_reg_re", dbmsGrb);
+				
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 
-			mv.setViewName("db2pg/dbms/dbmsList");
+				mv.setViewName("db2pg/dbms/dbmsList");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

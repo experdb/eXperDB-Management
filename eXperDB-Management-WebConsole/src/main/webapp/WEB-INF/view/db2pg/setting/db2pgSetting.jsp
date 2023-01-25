@@ -30,7 +30,7 @@ var confirm_title = "";
 /* ********************************************************
  * Tab Click
  ******************************************************** */
-function selectTab(tab){	
+function selectTab(tab){
 	if(tab == "dataWork"){
 		getdataDataList();
 		$("#dataDataTable").show();
@@ -170,6 +170,7 @@ function fn_init(){
  ******************************************************** */
 $(window.document).ready(
 	function() {
+		fn_buttonAut();
 		fn_init();	
 		getddlDataList();
 		getdataDataList();		
@@ -886,6 +887,48 @@ function fn_ImmediateStart(gbn){
 	}
 }
 
+function fn_buttonAut(){
+	//DDL Button
+	var btnImmediately = document.getElementById("btnImmediately"); 
+	var btnDelete = document.getElementById("btnDelete"); 
+	var btnModify = document.getElementById("btnModify");
+	var btnInsert = document.getElementById("btnInsert");
+	var btnDDLStart = document.getElementById("btnDDLStart");
+	
+	//Migration Button
+	var btnDataImmediately = document.getElementById("btnDataImmediately"); 
+	var btnDataDelete = document.getElementById("btnDataDelete"); 
+	var btnDataModify = document.getElementById("btnDataModify");
+	var btnDataInsert = document.getElementById("btnDataInsert");
+	var btnDataStart = document.getElementById("btnDataStart");
+	
+	if("${wrt_aut_yn}" == "Y"){
+		btnImmediately.style.display = '';
+		btnDelete.style.display = '';
+		btnModify.style.display = '';
+		btnInsert.style.display = '';
+		btnDDLStart.style.display = '';
+		
+		btnDataImmediately.style.display = '';
+		btnDataDelete.style.display = '';
+		btnDataModify.style.display = '';
+		btnDataInsert.style.display = '';
+		btnDataStart.style.display = '';
+	}else{
+		btnImmediately.style.display = 'none';
+		btnDelete.style.display = 'none';
+		btnModify.style.display = 'none';
+		btnInsert.style.display = 'none';
+		btnDDLStart.style.display = 'none';
+		
+		btnDataImmediately.style.display = 'none';
+		btnDataDelete.style.display = 'none';
+		btnDataModify.style.display = 'none';
+		btnDataInsert.style.display = 'none';
+		btnDataStart.style.display = 'none';
+	}
+}
+
 
 </script>
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
@@ -1035,7 +1078,7 @@ function fn_ImmediateStart(gbn){
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo" id="btnDDL">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateExe('ddl')" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateExe('ddl')" id="btnDDLStart" data-toggle="modal">
 									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately"/>
 								</button>
 								
@@ -1054,20 +1097,20 @@ function fn_ImmediateStart(gbn){
 							</div>
 							
 							<div class="template-demo" id="btnData" style="display:none;">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateExe('trans')" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text" onclick="fn_ImmediateExe('trans')" id="btnDataStart" data-toggle="modal">
 									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately"/>
 								</button>
 								
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_copy()" id="btnImmediately">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_copy()" id="btnDataImmediately">
 									<i class="ti-layers btn-icon-prepend "></i><spring:message code="migration.create_replica" />
 								</button>				
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onclick="fn_data_work_delete()">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDataDelete" onclick="fn_data_work_delete()">
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onclick="fn_data_regre_popup()" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDataModify" onclick="fn_data_regre_popup()" data-toggle="modal">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onclick="fn_data_reg_popup()" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDataInsert" onclick="fn_data_reg_popup()" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
 								</button>
 							</div>
