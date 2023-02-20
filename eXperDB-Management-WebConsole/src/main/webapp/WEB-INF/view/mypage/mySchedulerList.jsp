@@ -279,6 +279,7 @@ function fn_init(){
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	fn_viewer();
 	fn_init();
 	fn_selectScheduleList();
 });
@@ -426,6 +427,24 @@ function fn_confirmCancelRst(gbn){
 		}else if("stop"){
 			$("input:checkbox[id=scheduleStop" + scd_id + "]").prop("checked", true);
 		}
+	}
+}
+
+function fn_viewer() {
+	var del_button = document.getElementById("del_button");
+	var mdf_button = document.getElementById("mdf_button");
+	var int_button = document.getElementById("int_button");
+	
+	console.log("${usr_id}")
+	
+	if("${usr_id}" == "viewer"){
+		del_button.style.display = 'none';
+		mdf_button.style.display = 'none';
+		int_button.style.display = 'none';
+	}else{
+		del_button.style.display = '';
+		mdf_button.style.display = '';
+		int_button.style.display = '';
 	}
 }
 </script>

@@ -21,8 +21,9 @@
 %>
 <script type="text/javascript">
 	$(window.document).ready(function() {
+		fn_viewer();
 		$("#cpn", "#myPageForm").mask("999-9999-9999");
-
+		
  		$("#myPageForm").validate({
 			rules: {
 				usr_nm: {
@@ -132,6 +133,19 @@
 			}
 		});
 	}
+	function fn_viewer() {
+		var btnSave = document.getElementById("btnSave");
+		var btnUpdatePassword = document.getElementById("btnUpdatePassword");
+		
+		if("${usr_id}" == "viewer"){
+			btnSave.style.display = 'none';
+			btnUpdatePassword.disabled = 'disabled';
+			
+		}else{
+			btnSave.style.display = '';
+			btnUpdatePassword.style.disabled = '';
+		}
+	}
 </script>
 
 <%@include file="./../popup/pwdRegForm.jsp"%>
@@ -216,11 +230,11 @@
 												</td>
 											</tr>
 											<tr>
-												<th class="py-1">
+												<th class="py-1" >
 													<spring:message code="user_management.password" /> <font color="red">*</font>
 												</th>
 												<td>
-													<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" style="margin-top:-5px;margin-bottom:-5px;" type="button" onclick="fn_pwdPopup();" value='<spring:message code="user_management.edit_password" />' />
+													<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" id="btnUpdatePassword" style="margin-top:-5px;margin-bottom:-5px;" type="button" onclick="fn_pwdPopup();"  value='<spring:message code="user_management.edit_password"  />' />
 												</td>
 											</tr>
 											<tr>
