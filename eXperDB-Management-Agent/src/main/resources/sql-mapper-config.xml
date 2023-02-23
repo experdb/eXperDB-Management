@@ -19,15 +19,29 @@
     	<typeAlias alias="TablespaceVO" type="com.k4m.dx.tcontrol.db.repository.vo.TablespaceVO" />
     	<typeAlias alias="RmanRestoreVO" type="com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO" />
     	<typeAlias alias="DumpRestoreVO" type="com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO" />
-    	
 		<typeAlias alias="TransVO" type="com.k4m.dx.tcontrol.db.repository.vo.TransVO" />	
+    	<typeAlias alias="PryAgentInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.PryAgentInfoVO" />
+		
+		<typeAlias alias="ProxyAgentInfoVO" type="com.experdb.proxy.db.repository.vo.AgentInfoVO" />
+    	<typeAlias alias="ProxyStatisticVO" type="com.experdb.proxy.db.repository.vo.ProxyStatisticVO" />
+    	<typeAlias alias="ProxyServerVO" type="com.experdb.proxy.db.repository.vo.ProxyServerVO" />
+   		<typeAlias alias="ProxyGlobalVO" type="com.experdb.proxy.db.repository.vo.ProxyGlobalVO" />
+   		<typeAlias alias="ProxyListenerServerListVO" type="com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO" />
+   		<typeAlias alias="ProxyListenerVO" type="com.experdb.proxy.db.repository.vo.ProxyListenerVO" />
+   		<typeAlias alias="ProxyVipConfigVO" type="com.experdb.proxy.db.repository.vo.ProxyVipConfigVO" />
+   		<typeAlias alias="ProxyConfChangeHistoryVO" type="com.experdb.proxy.db.repository.vo.ProxyConfChangeHistoryVO" />
+    	<typeAlias alias="PryDbServerInfoVO" type="com.experdb.proxy.db.repository.vo.DbServerInfoVO" />
+    	<typeAlias alias="PryConfigVO" type="com.experdb.proxy.db.repository.vo.PryConfigVO" />
+    	
+    	<typeAlias alias="TestVO" type="com.experdb.proxy.db.repository.vo.TestVO" />
+    	
     </typeAliases>
-    
+        
  	<mappers>
-
 		<mapper resource="sqlmap/system.xml" />
 		<mapper resource="sqlmap/app.xml" /> 
 		<mapper resource="sqlmap/scale.xml" />
 		<mapper resource="sqlmap/trans.xml" />
+		<mapper resource="sqlmap/proxy.xml" />
 	</mappers>
 </configuration>

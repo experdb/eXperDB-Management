@@ -11,6 +11,8 @@
     
     <context:component-scan base-package="com.k4m.dx.tcontrol.db.repository.dao"/>
     <context:component-scan base-package="com.k4m.dx.tcontrol.db.repository.service"/>
+	<context:component-scan base-package="com.experdb.proxy.db.repository.dao"/>
+    <context:component-scan base-package="com.experdb.proxy.db.repository.service"/>
 
     <!-- db 정보 파일을 로드한다. -->
 	<bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">  
