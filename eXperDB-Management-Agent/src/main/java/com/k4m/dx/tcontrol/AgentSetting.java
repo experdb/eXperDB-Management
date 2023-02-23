@@ -15,6 +15,8 @@ import com.k4m.dx.tcontrol.util.NetworkUtil;
 
 
 /**
+ * 매니지먼트 모드 세팅
+ * 
 * @author 박태혁
 * @see
 * 
@@ -23,13 +25,13 @@ import com.k4m.dx.tcontrol.util.NetworkUtil;
 *
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
-*  2018.04.23   박태혁 최초 생성
+*  2018.04.23   박태혁 		최초 생성
+*  2023.01.17	강병석		에이전트 통합 프록시 에이전트 코드 추가 및 수정
 *      </pre>
 */
 public class AgentSetting {
 	
 	public static void main(String[] args) throws Exception {
-		
 		/**
 		 * 1. database.url
 		 * 2. database.username
@@ -37,6 +39,8 @@ public class AgentSetting {
 		 * 4. socket.server.port
 		 * 5. agent.install.ip
 		 */
+		
+		//공통정보
 		String strDatabaseIp = "";
 		String strDatabasePort = "";
 		String strDatabaseName = "";
@@ -47,12 +51,13 @@ public class AgentSetting {
 		String strAgentIp = "";
 		String strAgentPort = "";
 		
+		//전송정보
 		String strTransPath = "";
 
+		//프록시 사용 정보
 		String strProxyYN = "";
 		String strProxyInterYN = "";
 		String strProxyInterIP = "";
-		
 		String strTransYN = "";
 		
 		//scale
@@ -70,16 +75,65 @@ public class AgentSetting {
 		String strScaleMonUser = "";
 		String strScaleMonPassword = "";
 		
-		Scanner scan = new Scanner(System.in);
+		//=====================================
+		//프록시 변수
+		//프록시 내부 IP 정보
+		String strAgentInnerIPUseYn = "";
+		String strAgentInnerIP="";
 		
+		//프록시 에이전트 설정 정보
+		String strAgentPath = "";
+		String strConfBackupPath = "";
+		String strKeepInstaillYn = "";
+		String strProxyUser = "";
+		String strProxyGroup = "";
+		String strAWSUseYn="";
+		String strProxyServerYn="N";
+		
+		//유틸리티
+		Scanner scan = new Scanner(System.in);
 		String localIp = NetworkUtil.getLocalServerIp();
 		
-		//System.out.println("agent ip : " + localIp);
-		System.out.println("agent ip : ");
+	    //에이전트 설정 파일 호출
+	    Properties prop = new Properties();
+	    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+	    File file = new File(loader.getResource("context.properties").getFile());
+	    String path = file.getParent() + File.separator;
+	    
+	    try {
+	    	prop.load(new FileInputStream(path + "context.properties"));
+	    } catch(FileNotFoundException e) {
+	    	System.out.println("Exit(0) File Not Found ");
+	    	System.exit(0);
+	    } catch(Exception e) {
+	    	System.out.println("Exit(0) Error : " + e.toString());
+	    	System.exit(0);
+	    }
+	
+		
+		
+		//=======공통정보=========
+		//IP 입력
+		System.out.println("==========================================");
+		System.out.println("agent ip(" + localIp + ") : ");
 		strAgentIp = scan.nextLine();
 		//strAgentIp = localIp;
 		
-		System.out.println("agent port :");
+		//IP 입력, 공백 확인 추가
+		while (true) {
+			if(strAgentIp.equals("")) {
+				System.out.println("Please enter the IP. ");
+				
+				System.out.println("agent ip(" + localIp + ") : ");
+				
+				strAgentIp = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
+		//포트 입력
+		System.out.println("agent port(9001) :");
 		
 		strAgentPort = scan.nextLine();
 		
@@ -87,7 +141,7 @@ public class AgentSetting {
 			if(strAgentPort.equals("")) {
 				System.out.println("Please enter the port. ");
 				
-				System.out.println("agent port :");
+				System.out.println("agent port(9001) :");
 				
 				strAgentPort = scan.nextLine();
 			} else {
@@ -95,6 +149,7 @@ public class AgentSetting {
 			}
 		}
 		
+		//RepoDB IP 입력
 		System.out.println("Repository database IP :");
 		
 		strDatabaseIp = scan.nextLine();
@@ -111,67 +166,56 @@ public class AgentSetting {
 			}
 		}
 		
-		
-		System.out.println("Repository database Port :");
-		
+		//RepoDB port 입력
+		System.out.println("Repository database Port(5432) :");
 		strDatabasePort = scan.nextLine();
 		
 		while (true) {
 			if(strDatabasePort.equals("")) {
 				System.out.println("Please enter a Repository database Port. ");
-				
-				System.out.println("Repository the database Port :");
-				
+				System.out.println("Repository the database Port(5432) :");
 				strDatabasePort = scan.nextLine();
 			} else {
 				break;
 			}
 		}
 		
-		System.out.println("Repository database Name :");
-		
+		//RepoDB DB명 
+		System.out.println("Repository database Name(experdb) :");
 		strDatabaseName = scan.nextLine();
 		
 		while (true) {
 			if(strDatabaseName.equals("")) {
 				System.out.println("Please enter a Repository database Name. ");
-				
-				System.out.println("Repository database Name :");
-				
+				System.out.println("Repository database Name(experdb) :");
 				strDatabaseName = scan.nextLine();
 			} else {
 				break;
 			}
 		}
 		
-		
-		System.out.println("Repository database.username :");
-		
+		//RepoDB 유저명
+		System.out.println("Repository database.username(experdb) :");
 		strDatabaseUsername = scan.nextLine();
 		
 		while (true) {
 			if(strDatabaseName.equals("")) {
 				System.out.println("Please enter your Repository database username. ");
-				
-				System.out.println("Repository database.username :");
-				
+				System.out.println("Repository database.username(experdb) :");
 				strDatabaseUsername = scan.nextLine();
 			} else {
 				break;
 			}
 		}
 		
-		
+		//RepoDB 유저 패스워드
 		System.out.println("Repository database.password :");
-		
 		strDatabasePassword = scan.nextLine();
 
 		while (true) {
 			if(strDatabaseName.equals("")) {
 				System.out.println("Please enter your Repository database password. ");
-				
 				System.out.println("Repository database.password :");
-				
 				strDatabasePassword = scan.nextLine();
 			} else {
 				break;
@@ -179,7 +223,14 @@ public class AgentSetting {
 		}
 
 		
-		////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		//=============================================================
+		//MGMT 내용
+		
+		System.out.println("====================================");
+		System.out.println("eXperDB-Agent Management Setting");
+		
 		/* CDC 사용여부 */
 		System.out.println("Whether CDC-Service is enabled (y, n) :");
 		strTransYN = scan.nextLine();
@@ -356,15 +407,114 @@ public class AgentSetting {
 			}
 		}
 		
+		//====================================================
+	
 		
+		//====================================================
+		//프록시 에이전트 추가
+		
+		if("Y".equals(strProxyYN)) {
+			System.out.println("====================================");
+			System.out.println("eXperDB-Agent Proxy Setting");
+			
+			//서버 분리 유무 입력
+			System.out.println("Server use Proxy Only(default : Y) : ");
+			strProxyServerYn = scan.nextLine();
+			if(strProxyServerYn.equals("")) {
+				strProxyServerYn = "Y";
+			}
+			
+			//사용자, 그룹 입력
+			System.out.println("proxy global user(exproxy) : ");
+			strProxyUser = scan.nextLine();
+			if(strProxyUser.equals("")) {
+				strProxyUser = "exproxy";
+			}
+			
+			System.out.println("proxy global group(exproxy) : ");
+			strProxyGroup = scan.nextLine();
+			if(strProxyGroup.equals("")) {
+				strProxyGroup = "exproxy";
+			}			
+			
+			
+			//내부 IP 사용 여부
+			System.out.println("Whether to Proxy use internal IP (Y/N) :");
+			strAgentInnerIPUseYn = scan.nextLine().toUpperCase();
+			if(strAgentInnerIPUseYn.equals("Y")){
+				System.out.println("Proxy Agent Inner IP : ");
+				strAgentInnerIP = scan.nextLine();
+				
+				while(true){
+					if(strAgentInnerIP.equals("")) {
+						System.out.println("Please enter Inner IP of the Proxy Agent!!! ");
+						System.out.println("Proxy Agent Inner IP : ");
+						strAgentInnerIP = scan.nextLine();
+					} else {
+						break;
+					}
+				}
+			}else{
+				strAgentInnerIPUseYn="N";
+			}
+		
+			//에이전트 설치 경로(고정)
+			strAgentPath = "/experdb/app/eXperDB-Agent/bin";
+			strConfBackupPath = "/experdb/app/eXperDB-Agent/backup";
+			
+			//keepalived 설치 여부
+			System.out.println("keepalived install Status (Y/N) :");
+			strKeepInstaillYn = scan.nextLine();
+			strKeepInstaillYn = strKeepInstaillYn.toUpperCase();
+			while (true) {
+				if(strKeepInstaillYn.equals("")) {
+					System.out.println("Please enter the keepalived install Status. ");
+					
+					System.out.println("keepalived install Status (Y/N) :");
+					
+					strKeepInstaillYn = scan.nextLine();
+					strKeepInstaillYn = strKeepInstaillYn.toUpperCase();
+				} else {
+					break;
+				}
+			}
+			
+			//AWS 사용 여부
+			System.out.println("Is installed the proxy in AWS (Y/N) :");
+			strAWSUseYn = scan.nextLine();
+			strAWSUseYn = strAWSUseYn.toUpperCase();
+			
+			while (true) {
+				if(strAWSUseYn.equals("")) {
+					System.out.println("Is installed the proxy in AWS (Y/N) :");
+					strAWSUseYn = scan.nextLine();
+				} else {
+					break;
+				}
+			}	
+		}		
+		
+		//====================================================
+		
+		//연결 DataBase 설정
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseName;
 		
+		
+		
+		//입력 내용 최종 확인
 		System.out.println("#####################################################");
 		System.out.println("agent ip :" + strAgentIp);
 		System.out.println("agent port :" + strAgentPort);
 		System.out.println("database Connection Info :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
+		
+		
+		
+		System.out.println("#####################################################");
+		
+		//입력 내용 최종확인(MGMT)
+		System.out.println("eXperDB-Agent Management");
 		
 		System.out.println("trans_yn :" + strTransYN);
 		System.out.println("trans_path :" + strTransPath);
@@ -386,17 +536,29 @@ public class AgentSetting {
 		System.out.println("scale_monitoring_database : " + strScaleMonDatabase);
 		System.out.println("scale_monitoring_user : " + strScaleMonUser);
 		System.out.println("scale_monitoring_password : " + strScaleMonPassword);
-		
 		System.out.println("#####################################################");
+	
+		
+		//입력 내용 최종 확인(Proxy)
+		if("Y".equals(strProxyYN)) {
+			System.out.println("eXperDB-Agent Proxy");
+			
+			System.out.println("agent inner ip :"+strAgentInnerIP);
+			System.out.println("keepalived install :" + strKeepInstaillYn);
+			System.out.println("installed in AWS :" + strAWSUseYn);
+			System.out.println("Server Proxy Only :" + strProxyServerYn);
+			System.out.println("#####################################################");
+		}
+		
 
 		System.out.println("Do you want to apply what you entered? (y, n)");
-		
 		String strApply = scan.nextLine();
-		
+
+		//설정 파일에 입력 내용 추가
 		if(strApply.equals("y")) {
-			
 		    StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
 		    pbeEnc.setPassword("k4mda"); // PBE 값(XML PASSWORD설정)
+		    
 			
 		    String url = pbeEnc.encrypt(strDatabaseUrl);
 		    String username = pbeEnc.encrypt(strDatabaseUsername);
@@ -404,25 +566,6 @@ public class AgentSetting {
 		    
 		    String mon_user = pbeEnc.encrypt(strScaleMonUser);
 		    String mon_passwd = pbeEnc.encrypt(strScaleMonPassword);
-		    
-		    Properties prop = new Properties();
-		    
-		    ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		    File file = new File(loader.getResource("context.properties").getFile());
-		    
-		    String path = file.getParent() + File.separator;
-		    
-		   // System.out.println(path);
-		    
-		    try {
-		    	prop.load(new FileInputStream(path + "context.properties"));
-		    } catch(FileNotFoundException e) {
-		    	System.out.println("Exit(0) File Not Found ");
-		    	System.exit(0);
-		    } catch(Exception e) {
-		    	System.out.println("Exit(0) Error : " + e.toString());
-		    	System.exit(0);
-		    }
 		    
 			Connection conn = null;
 			
@@ -438,7 +581,6 @@ public class AgentSetting {
 				conn = DriverManager.getConnection(strConnUrl, props);
 
 				System.out.println("Repository database Connection success !!");
-				
 			} catch (Exception e) {
 				System.out.println("Exit(0) Error : database Connection failed !! " + e.toString());
 				System.exit(0);
@@ -448,13 +590,14 @@ public class AgentSetting {
 			
 			prop.setProperty("repoDB_ip", strDatabaseIp);
 		    
+			//공통 설정
 		    prop.setProperty("database.url", "ENC(" + url + ")");
 		    prop.setProperty("database.username", "ENC(" + username + ")");
 		    prop.setProperty("database.password", "ENC(" + password + ")");
-		     
-		    prop.setProperty("socket.server.port", strAgentPort);
 		    prop.setProperty("agent.install.ip", strAgentIp);
+		    prop.setProperty("socket.server.port", strAgentPort);
 
+		    //MGMT 설정
 		    prop.setProperty("agent.trans_yn", strTransYN);
 		    prop.setProperty("agent.trans_path", strTransPath);
 		    
@@ -475,12 +618,29 @@ public class AgentSetting {
 		    prop.setProperty("agent.scale_monitoring_ip", strScaleMonIP);
 		    prop.setProperty("agent.scale_monitoring_port", strScaleMonPort);
 		    prop.setProperty("agent.scale_monitoring_database", strScaleMonDatabase);
-/*		    prop.setProperty("agent.scale_monitoring_user", "ENC(" + mon_user + ")");
-		    prop.setProperty("agent.scale_monitoring_passwd", "ENC(" + mon_passwd + ")");*/
-		    
 		    prop.setProperty("agent.scale_monitoring_user", mon_user);
 		    prop.setProperty("agent.scale_monitoring_passwd", mon_passwd);
 		    
+		    /* prop.setProperty("agent.scale_monitoring_user", "ENC(" + mon_user + ")");
+		    prop.setProperty("agent.scale_monitoring_passwd", "ENC(" + mon_passwd + ")"); */
+	    
+		    
+		    //Proxy 설정
+		    if("Y".equals(strProxyYN)){
+			    prop.setProperty("keepalived.install.yn", strKeepInstaillYn);
+				prop.setProperty("aws.yn", strAWSUseYn);
+				prop.setProperty("agent.inner.ip.useyn", strAgentInnerIPUseYn);
+				prop.setProperty("agent.inner.ip", strAgentInnerIP);
+				prop.setProperty("agent.path", strAgentPath);
+				prop.setProperty("proxy.conf_backup_path", strConfBackupPath);
+				prop.setProperty("proxy.global.user", strProxyUser);
+				prop.setProperty("proxy.global.group", strProxyGroup);
+		    }
+		    
+		    //프록시 서버 분리 유무
+			prop.setProperty("proxy.global.serveryn", strProxyServerYn);
+		    
+		    //설정 파일 저장
 		    try {
 		    	prop.store(new FileOutputStream(path + "context.properties"), "");
 		    } catch(FileNotFoundException e) {
@@ -490,8 +650,7 @@ public class AgentSetting {
 		    	System.out.println("Exit(0) Error : " + e.toString());
 		    	System.exit(0);
 		    }
-
-		    System.out.println("#### Agent Setting success !! #####");
+		    System.out.println("#### eXperDB-Agent Setting success !! #####");
 		} else {
 			System.out.println("#### Exit(0) Cancel Agent Setting #####");
 		}
