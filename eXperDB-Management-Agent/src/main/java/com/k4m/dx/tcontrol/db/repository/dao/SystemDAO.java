@@ -6,9 +6,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
+import com.k4m.dx.tcontrol.db.repository.vo.PryAgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
@@ -24,6 +26,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
 *  2018.04.23   박태혁 최초 생성
+*  2022.12.22	강병석		에이전트 통합, 프록시 에이전트 기능 추가
 *      </pre>
 */
 
@@ -122,4 +125,116 @@ public class SystemDAO {
 	public void insertWRKEXE_G(WrkExeVO vo) throws Exception  {
 		 session.insert("system.insertWRKEXE_G", vo);
 	}
+	
+	//=============================================
+	//프록시 기능 추가 22.12.22
+	
+	/**
+	 * Agent 설치정보 조회
+	 * 
+	 * @param AgentInfoVO
+	 * @return AgentInfoVO
+	 * @throws Exception
+	 */
+	public PryAgentInfoVO selectPryAgtInfo(PryAgentInfoVO vo) throws Exception  {
+		return (PryAgentInfoVO) session.selectOne("system.selectPryAgtInfo", vo);
+	}
+
+	/**
+	 * Agent 설치 정보 등록
+	 * 
+	 * @param AgentInfoVO
+	 * @throws Exception
+	 */
+	public void insertPryAgtInfo(PryAgentInfoVO vo) throws Exception  {
+		 session.insert("system.insertPryAgtInfo", vo);
+	}
+
+	/**
+	 * Agent 설치 정보 수정
+	 * 
+	 * @param AgentInfoVO
+	 * @throws Exception
+	 */
+	public void updatePryAgtInfo(PryAgentInfoVO vo) throws Exception {
+		session.update("system.updatePryAgtInfo", vo);
+	}
+	
+	/**
+	 * Agent 종료 정보 변경
+	 * 
+	 * @param AgentInfoVO
+	 * @throws Exception
+	 */
+	public void updatePryAgtStopInfo(PryAgentInfoVO vo) throws Exception {
+		session.update("system.updatePryAgtStopInfo", vo);
+	}
+	
+	/**
+	 * db리스트 조회
+	 * @param DbServerInfoVO
+	 * @return List<DbServerInfoVO>
+	 * @throws Exception
+	 */
+	public List<DbServerInfoVO> selectDbsvripadrMstGbnInfo(DbServerInfoVO vo) throws Exception {
+		List<DbServerInfoVO> selectList = session.selectList("system.selectDbsvripadrMstGbnInfo");
+		return selectList;
+	}
+	
+	/**
+	 * db리스트 내부ip 조회
+	 * @param DbServerInfoVO
+	 * @return List<DbServerInfoVO>
+	 * @throws Exception
+	 */
+	public DbServerInfoVO selectDbsvripadrMstGbnIntlInfo(DbServerInfoVO vo) throws Exception {
+		DbServerInfoVO selectList = session.selectOne("system.selectDbsvripadrMstGbnIntlInfo", vo);
+		return selectList;
+	}
+
+	/**
+	 * Proxy 최종 서버명 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectPrySvrMaxNmInfo(ProxyServerVO vo) throws Exception  {
+		return (ProxyServerVO) session.selectOne("system.selectPrySvrMaxNmInfo", vo);
+	}
+
+	/**
+	 * Proxy DBMS 별 최종 서버명 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectDBMSSvrMaxNmInfo(ProxyServerVO vo) throws Exception  {
+		return (ProxyServerVO) session.selectOne("system.selectDBMSSvrMaxNmInfo", vo);
+	}
+
+	/**
+	 * Proxy DBMS 별 마스터 별 최종 서버명 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectDBMSSvrEtcMaxNmInfo(ProxyServerVO vo) throws Exception  {
+		return (ProxyServerVO) session.selectOne("system.selectDBMSSvrEtcMaxNmInfo", vo);
+	}
+	
+	/**
+	 * Agent 사용여부 변경
+	 * 
+	 * @param AgentInfoVO
+	 * @return integer
+	 * @throws Exception
+	 */
+	public int updatePryAgtUseYnLInfo(PryAgentInfoVO vo) throws Exception  {
+		return session.update("system.updatePryAgtUseYnLInfo", vo);
+	}
 }
+
+
