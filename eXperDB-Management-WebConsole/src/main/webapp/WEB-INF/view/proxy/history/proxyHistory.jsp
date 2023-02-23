@@ -53,7 +53,7 @@
 			$('#statis_wlk_dtm_start').val(lgi_dtm_start);
 			$('#statis_wlk_dtm_end').val(lgi_dtm_end);
 		}		
-		selectTab("settingChange");
+		selectTab("ActStatus");
 	});
 	/* ********************************************************
 	 * rowspan
@@ -738,6 +738,7 @@
 			},
 			success : function(result) {
 				runStatusHistoryTable.rows({selected: true}).deselect();
+				console.log(result);
 				runStatusHistoryTable.clear().draw();
 	
 				if (nvlPrmSet(result, "") != '') {
@@ -1168,7 +1169,7 @@
 									<div class="row">
 										<div class="col-12">
 											<p class="mb-0"><spring:message code="eXperDB_proxy.msg55" /></p>
-											<p class="mb-0"><spring:message code="eXperDB_proxy.msg56" /></p>
+											<%-- <p class="mb-0"><spring:message code="eXperDB_proxy.msg56" /></p> --%>
 										</div>
 									</div>
 								</div>
@@ -1184,21 +1185,21 @@
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
-						<li class="nav-item">
+						<%-- <li class="nav-item">
 							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="javascript:selectTab('settingChange');" >
 								<spring:message code="eXperDB_proxy.conf_change_hist" />
 							</a>
-						</li>
-						<li class="nav-item">
+						</li> --%>
+						<%-- <li class="nav-item">
 							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="javascript:selectTab('ActStatus');">
 								<spring:message code="eXperDB_proxy.exe_change_hist" />
 							</a>
-						</li>
-						<li class="nav-item">
+						</li> --%>
+						<%-- <li class="nav-item">
 							<a class="nav-link" id="server-tab-3" data-toggle="pill" href="#subTab-3" role="tab" aria-controls="subTab-3" aria-selected="false" onclick="javascript:selectTab('pryStatistics');">
 								<spring:message code="menu.proxy_status_hist" />
 							</a>
-						</li>
+						</li> --%>
 					</ul>
 					<!-- search param start -->
 					<div class="card">
@@ -1368,7 +1369,7 @@
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">
-								<div class="col-12" id="settingChgHistoryTableDiv">
+								<%-- <div class="col-12" id="settingChgHistoryTableDiv">
  									<div class="table-responsive">
 										<div id="order-listing_wrapper"
 											class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -1399,7 +1400,7 @@
 											</tr>
 										</thead>
 									</table>
-							 	</div>
+							 	</div> --%>
 								<div class="col-12" id="runStatusHistoryTableDiv">
  									<div class="table-responsive">
 										<div id="order-listing_wrapper"
@@ -1433,7 +1434,7 @@
 										</thead>
 									</table>
 							 	</div>
-							 	<div class="col-12" id="statisTableDiv">
+							 	<%-- <div class="col-12" id="statisTableDiv">
  									<div class="table-responsive">
 										<div id="order-listing_wrapper"
 											class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -1496,7 +1497,7 @@
 											</tr>
 										</thead>
 									</table>
-							 	</div>
+							 	</div> --%>
 						 	</div>
 						</div>
 					</div>
