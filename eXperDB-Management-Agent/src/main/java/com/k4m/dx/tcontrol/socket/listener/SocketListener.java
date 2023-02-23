@@ -20,10 +20,10 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
 *  2018.04.23   박태혁 최초 생성
+*  2022.12.22	강병석		에이전트 통합, 프록시 에이전트 기능 추가
 *      </pre>
 */
 public class SocketListener implements Runnable {
-	
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
@@ -48,6 +48,7 @@ public class SocketListener implements Runnable {
 	private void createServerSocket() throws Exception {
 		try {
 			this.serverSocket	= new ServerSocket(listenPort);
+			socketLogger.info("서버 소켓 생성");
 			//this.serverSocket.setSoTimeout(1000);
 		} catch(Exception e) {
 			socketLogger.info("서버소켓을 생성하지 못했습니다. [" + e + "]");
@@ -57,8 +58,7 @@ public class SocketListener implements Runnable {
 	}
 	
 	public void startup() throws Exception {
-
-		socketLogger.info("SocketListener[" + listenerName + "]를 기동합니다.");
+		socketLogger.info("SocketListener[" + listenerName + "]를 기동합니다.MGMG");
 		socketLogger.info("ListenerPort : [" + listenPort + "]");
 		socketLogger.info("Timeout : [" + timeout + "]");
 		socketLogger.info("Backlog : [" + backlog + "]");
@@ -69,24 +69,20 @@ public class SocketListener implements Runnable {
 		mainThread = new Thread(this);
 		mainThread.start();
 		socketLogger.info("SocketListener[" + listenerName + "]가 메시지 수신을 대기하고 있습니다.");
-
 	}
 	
 	public void shutdown() throws Exception {
 		socketLogger.info("");
-		
 		this.toBeShutdown = true;
 		
 		try {			
 			//this.serverSocket.close();
 			//mainThread.join();
 			mainThread.interrupt();
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new Exception("A listener could not be shutdown. Exception [" + e + "]");
 		}
-		
 		socketLogger.info("SocketListener가 종료되었습니다.");	
 	}	
 	
@@ -98,16 +94,12 @@ public class SocketListener implements Runnable {
 		
 		while ( !toBeShutdown) {
 			try {
-				
-
 				Socket client = serverSocket.accept();
 
-					
 				if ( toBeShutdown ) break;
 				
-				if (client != null && !client.isClosed()){
+				if (client != null && !client.isClosed()){	
 					Thread thread = new Thread(new DXTcontrolSocketExecute(client));
-					
 					thread.start();
 					//socketLogger.info("Thread가 종료될때까지 기다립니다.");
 //		            try {
