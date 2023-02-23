@@ -1039,11 +1039,11 @@
 												<b><spring:message code="menu.proxy_mgmt"/></b>
 											</span>
 										</li>
-										<li class="nav-item" id="MN0001805">
+										<%-- <li class="nav-item" id="MN0001805">
 											<a class="nav-link" href="/proxyAgent/proxyAgent.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="menu.proxy_agent"/>
 											</a>
-										</li>
+										</li> --%>
 										<li class="nav-item" id="MN0001801">
 											<a class="nav-link" href="/proxyMonitoring/monitoring.do" onClick="fn_cookie(null)" target="main">
 												<spring:message code="menu.proxy_monitoring"/>
@@ -1140,6 +1140,7 @@
 												<spring:message code="menu.my_schedule_management"/>
 											</a>
 										</li>
+										
 <!-- 										<li class="nav-item" >
 											<a class="nav-link" href="/test.do" onClick="fn_cookie(null)" target="main">
 												test
