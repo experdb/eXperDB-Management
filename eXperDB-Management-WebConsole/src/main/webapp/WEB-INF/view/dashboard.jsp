@@ -1060,7 +1060,7 @@
 										</div>
 										
 										<!-- proxy -->
-										<c:if test="${proxy_menu_yn eq 'Y'}">
+										<%-- <c:if test="${proxy_menu_yn eq 'Y'}">
 											<div class="row">
 												<!-- proxy title -->
 		                    					<div class="accordion_main accordion-multi-colored col-12" id="accordion_proxy" role="tablist">
@@ -1248,7 +1248,8 @@
 												</c:choose>		
 											</div>
 											<!-- proxy end -->
-										</c:if>
+										</c:if>  --%>
+										
 
 										<div class="row">
 											<div class="col-md-12">
