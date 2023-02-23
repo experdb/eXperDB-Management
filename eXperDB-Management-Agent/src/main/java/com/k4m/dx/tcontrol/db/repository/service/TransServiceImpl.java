@@ -168,7 +168,8 @@ public class TransServiceImpl implements TransService{
 						transDAO.insertTransKafkaActstateCngInfo(kafkaTransVO);
 					}
 
-					if (!strExeStatusIng.equals("TC001502")) { //실행 중일 경우 connect 목록 확인
+					if (!strExeStatusIng.equals("TC001502")) { 
+						//실행 중일 경우 connect 목록 확인
 /*						transConListCmd = "curl -H 'Accept:application/json' "+strKcIp+":"+strKcPort+"/connectors/";
 						
 						RunCommandExec rListMain = new RunCommandExec(transConListCmd);
@@ -476,8 +477,8 @@ public class TransServiceImpl implements TransService{
 					//////////////////////////////////////////////////////////////////////////////////////////////////////
 					String stCmdSearch ="bin/kafka-topics.sh --list --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
 					
-socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888888kc_ip : " + kc_ip);
-socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888888stCmdSearch : " + stCmdSearch);
+					socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888888kc_ip : " + kc_ip);
+					socketLogger.info("TransServiceImpl.deleteRealTransTopic.888888888888888888888888888stCmdSearch : " + stCmdSearch);
 
 					TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
 /*					TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
@@ -508,10 +509,10 @@ socketLogger.info("TransServiceImpl.deleteRealTransTopic.88888888888888888888888
 					
 					if ("Y".equals(resultTopic)) {
 						String strCmd = "bin/kafka-topics.sh --delete --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
-						
-socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList7777777777777777777777777777777kc_ip : " + kc_ip);
-socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList7777777777777777777777777777777strCmd : " + strCmd);
-			
+							
+						socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList7777777777777777777777777777777kc_ip : " + kc_ip);
+						socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList7777777777777777777777777777777strCmd : " + strCmd);
+									
 						TransRunCommandExec r = new TransRunCommandExec(strCmd);
 /*						TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, kc_ip, "");*/
 
@@ -567,8 +568,8 @@ socketLogger.info("TransServiceImpl.deleteRealTransTopic.topicTableList777777777
 					//////////////////////////////////////////////////////////////////////////////////////////////////////
 					String stCmdSearch ="bin/kafka-topics.sh --list --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
 					
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111111111111kc_ip : " + kc_ip);
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111111111111stCmdSearch : " + stCmdSearch);
+					socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111111111111kc_ip : " + kc_ip);
+					socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111111111111stCmdSearch : " + stCmdSearch);
 					TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
 					/*TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
 
@@ -600,8 +601,8 @@ socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList1111111
 					if ("Y".equals(resultTopic)) {
 						String strCmd = "bin/kafka-topics.sh --delete --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
 
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList22222222222222222222kc_ip : " + kc_ip);
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList22222222222222222222strCmd : " + strCmd);
+						socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList22222222222222222222kc_ip : " + kc_ip);
+						socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList22222222222222222222strCmd : " + strCmd);
 						
 						TransRunCommandExec r = new TransRunCommandExec(strCmd);
 /*						TransRunMultiCommandExec r = new TransRunMultiCommandExec(strCmd, kc_ip, "");*/
@@ -651,10 +652,10 @@ socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList2222222
 			//topic 존재 여부 확인
 			//////////////////////////////////////////////////////////////////////////////////////////////////////
 			String stCmdSearch ="bin/kafka-topics.sh --list --zookeeper " + kc_ip + ":2181 --topic " + topic_nm;
-
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList333333333333333333333333kc_ip : " + kc_ip);
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList333333333333333333333333stCmdSearch : " + stCmdSearch);
-						
+			
+			socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList333333333333333333333333kc_ip : " + kc_ip);
+			socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList333333333333333333333333stCmdSearch : " + stCmdSearch);
+									
 			TransRunCommandExec searchR = new TransRunCommandExec(stCmdSearch);
 			/*TransRunMultiCommandExec searchR = new TransRunMultiCommandExec(stCmdSearch, kc_ip, "");*/
 
@@ -670,9 +671,9 @@ socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.topicTableList3333333
 			String retSearchVal = searchR.call();
 			String strResultSearchMessge = searchR.getMessage();
 			String resultTopic = "N";
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444retSearchValretSearchVal : " + retSearchVal);
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444strResultSearchMessgestrResultSearchMessge : " + strResultSearchMessge);
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444retSearchValretSearchVal : " + retSearchVal);
+			socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444retSearchValretSearchVal : " + retSearchVal);
+			socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444strResultSearchMessgestrResultSearchMessge : " + strResultSearchMessge);
+			socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444retSearchValretSearchVal : " + retSearchVal);
 			if (retSearchVal.equals("success")) {
 				if (!strResultSearchMessge.isEmpty()) {
 					resultTopic = "Y";
@@ -688,8 +689,8 @@ socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.444444444444444444444
 					
 					socketLogger.info("##### strInsCmdstrInsCmdstrInsCmd : " + strInsCmd);
 
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444kc_ip : " + kc_ip);
-socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444strInsCmd : " + strInsCmd);
+					socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444kc_ip : " + kc_ip);
+					socketLogger.info("TransServiceImpl.deleteTransKakfkaTopic.4444444444444444444444444444444444444444444444444444444444444strInsCmd : " + strInsCmd);
 
 /*					TransRunMultiCommandExec r = new TransRunMultiCommandExec(strInsCmd, kc_ip, "");*/
 					TransRunCommandExec r = new TransRunCommandExec(strInsCmd);

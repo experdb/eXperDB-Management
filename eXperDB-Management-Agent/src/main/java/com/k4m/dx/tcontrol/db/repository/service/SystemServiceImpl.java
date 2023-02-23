@@ -1,17 +1,21 @@
 package com.k4m.dx.tcontrol.db.repository.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.Resource;
-
 import org.springframework.stereotype.Service;
-
+import com.experdb.proxy.db.repository.vo.ProxyServerVO;
+import com.experdb.proxy.util.FileUtil;
 import com.k4m.dx.tcontrol.db.repository.dao.SystemDAO;
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
+import com.k4m.dx.tcontrol.db.repository.vo.PryAgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
-import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
@@ -25,15 +29,21 @@ import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
 *  2018.04.23   박태혁 최초 생성
+*  2022.12.22 	강병석		에이전트 통합, 프록시 에이전트 기능 추가
 *      </pre>
 */
 
 @Service("SystemService")
 public class SystemServiceImpl implements SystemService{
-
+	
 	@Resource(name = "SystemDAO")
 	private SystemDAO systemDAO;
 	
+	Properties prop = new Properties();
+	ClassLoader loader = Thread.currentThread().getContextClassLoader();
+	File file = new File(loader.getResource("context.properties").getFile());
+    String path = file.getParent() + File.separator;
+    
 	public List<DbServerInfoVO> selectDbServerInfoList() throws Exception {
 		return systemDAO.selectDbServerInfoList();
 	}
@@ -54,7 +64,6 @@ public class SystemServiceImpl implements SystemService{
 		systemDAO.updateAgentStopInfo(vo);
 	}
 	
-	
 	public AgentInfoVO selectAgentInfo(AgentInfoVO vo) throws Exception  {
 		return (AgentInfoVO) systemDAO.selectAgentInfo(vo);
 	}
@@ -68,33 +77,97 @@ public class SystemServiceImpl implements SystemService{
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
+	//매니지먼트 에이전트 실행
 	public void agentInfoStartMng(String strSocketIp, String strSocketPort, String strVersion, String strProxyInterIP) throws Exception  {
-		AgentInfoVO searchAgentInfoVO = new AgentInfoVO();
-		searchAgentInfoVO.setIPADR(strSocketIp);
+		//properties 호출
+		filesetting();
+		
+		if("N".equals(prop.getProperty("proxy.global.serveryn"))){
+			AgentInfoVO searchAgentInfoVO = new AgentInfoVO();
 			
-		AgentInfoVO agentInfo = this.selectAgentInfo(searchAgentInfoVO);
+			searchAgentInfoVO.setIPADR(strSocketIp);
+				
+			AgentInfoVO agentInfo = this.selectAgentInfo(searchAgentInfoVO);
+				
+			AgentInfoVO vo = new AgentInfoVO();
+				
+			vo.setIPADR(strSocketIp);
+			vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
+			vo.setINTL_IPADR(strProxyInterIP);
+				
+			vo.setAGT_VERSION(strVersion);
+			vo.setAGT_CNDT_CD(vo.TC001101); //실행
+			vo.setISTCNF_YN("Y");
+			vo.setFRST_REGR_ID("system");
+			vo.setLST_MDFR_ID("system");
+				
+			if(agentInfo == null) {
+				this.insertAgentInfo(vo);
+			} else {
+				this.updateAgentInfo(vo);
+			}
+		}
+		
+		if("Y".equals(prop.getProperty("agent.proxy_yn"))) {
+			PryAgentInfoVO pry_searchAgentInfoVO = new PryAgentInfoVO();
+			pry_searchAgentInfoVO.setIpadr(strSocketIp);
+			String domainNm = "";
+			String SvrUseNm = "";
+
+			//에이전트 조회
+			PryAgentInfoVO pry_agentInfo = this.selectPryAgtInfo(pry_searchAgentInfoVO);
+			PryAgentInfoVO pry_vo = new PryAgentInfoVO();
+				
+			pry_vo.setIpadr(strSocketIp);
+			pry_vo.setSocket_port(Integer.parseInt(strSocketPort));
+			pry_vo.setAgt_version(strVersion);
 			
-		AgentInfoVO vo = new AgentInfoVO();
-			
-		vo.setIPADR(strSocketIp);
-		vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
-		vo.setINTL_IPADR(strProxyInterIP);
-			
-		vo.setAGT_VERSION(strVersion);
-		vo.setAGT_CNDT_CD(vo.TC001101); //실행
-		vo.setISTCNF_YN("Y");
-		vo.setFRST_REGR_ID("system");
-		vo.setLST_MDFR_ID("system");
-		vo.setLST_MDFR_ID("system");
-			
-		if(agentInfo == null) {
-			this.insertAgentInfo(vo);
-		} else {
-			this.updateAgentInfo(vo);
+			pry_vo.setAgt_cndt_cd(pry_vo.TC001501); //실행
+			pry_vo.setIstcnf_yn("Y");
+			pry_vo.setFrst_regr_id("system");
+			pry_vo.setLst_mdfr_id("system");
+			pry_vo.setAws_yn(FileUtil.getPropertyValue("context.properties", "aws.yn"));
+			if("Y".equals(FileUtil.getPropertyValue("context.properties", "agent.inner.ip.useyn"))){
+				pry_vo.setIntl_ipadr(FileUtil.getPropertyValue("context.properties", "agent.inner.ip"));
+			}
+
+			if(pry_agentInfo == null) {
+				pry_vo.setDomain_nm("PROXY_" + strSocketIp);
+				pry_vo.setSvr_use_yn("N");
+				
+				this.insertPryAgtInfo(pry_vo);
+			} else {
+				if (pry_agentInfo.getDomain_nm() != null) {
+					domainNm = pry_agentInfo.getDomain_nm();
+				} else {
+					domainNm = "PROXY_" + strSocketIp;
+				}
+
+				if (pry_agentInfo.getSvr_use_yn() != null) {
+					SvrUseNm = pry_agentInfo.getSvr_use_yn();
+				} else {
+					SvrUseNm = "N";
+				}
+
+				pry_vo.setDomain_nm(domainNm);
+				pry_vo.setSvr_use_yn(SvrUseNm);
+					
+				
+				if(pry_agentInfo == null) {
+					this.insertPryAgtInfo(pry_vo);
+				} else {
+					this.updatePryAgtInfo(pry_vo);
+				}
+			}
 		}
 	}
 	
+	//에이전트 중지
 	public void agentInfoStopMng(String strSocketIp, String strSocketPort) throws Exception  {
+		//properties 호출
+		filesetting();
+		
+		//매니지먼트 기능
 		AgentInfoVO vo = new AgentInfoVO();
 		
 		vo.setIPADR(strSocketIp);
@@ -104,6 +177,19 @@ public class SystemServiceImpl implements SystemService{
 		vo.setLST_MDFR_ID("system");
 		
 		this.updateAgentStopInfo(vo);
+		
+		if("Y".equals(prop.getProperty("agent.proxy_yn"))) {
+			//프록시 기능
+			PryAgentInfoVO pryvo = new PryAgentInfoVO();
+	
+			pryvo.setIpadr(strSocketIp);
+			pryvo.setSocket_port(Integer.parseInt(strSocketPort));
+			pryvo.setAgt_cndt_cd(pryvo.TC001502); //종료
+			pryvo.setIstcnf_yn("Y");
+			pryvo.setLst_mdfr_id("system");
+	
+			this.updatePryAgtStopInfo(pryvo);
+		}
 	}
 
 	public int selectQ_WRKEXE_G_01_SEQ() throws Exception  {
@@ -164,5 +250,86 @@ public class SystemServiceImpl implements SystemService{
 
 	public void insertWRKEXE_G(WrkExeVO vo)  throws Exception{
 		systemDAO.insertWRKEXE_G(vo);
+	}
+	
+	//=======================================================================
+	//프록시 추가 2022.12.22
+	public PryAgentInfoVO selectPryAgtInfo(PryAgentInfoVO vo) throws Exception  {
+		return (PryAgentInfoVO) systemDAO.selectPryAgtInfo(vo);
+	}
+
+	/**
+	 * Agent 설치 정보 등록
+	 * 
+	 * @param PryAgentInfoVO
+	 * @throws Exception
+	 */
+	public void insertPryAgtInfo(PryAgentInfoVO vo) throws Exception {
+		systemDAO.insertPryAgtInfo(vo);
+	}
+
+	/**
+	 * Agent 설치 정보 수정
+	 * 
+	 * @param PryAgentInfoVO
+	 * @throws Exception
+	 */
+	public void updatePryAgtInfo(PryAgentInfoVO vo) throws Exception {
+		systemDAO.updatePryAgtInfo(vo);
+	}
+	
+	/**
+	 * Agent 종료 정보 변경
+	 * 
+	 * @param PryAgentInfoVO
+	 * @throws Exception
+	 */
+	public void updatePryAgtStopInfo(PryAgentInfoVO vo) throws Exception {
+		systemDAO.updatePryAgtStopInfo(vo);
+	}
+
+	/**
+	 * proxy max 이름 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectPrySvrMaxNmInfo(ProxyServerVO vo) throws Exception {
+		return (ProxyServerVO) systemDAO.selectPrySvrMaxNmInfo(vo);
+	}
+
+	/**
+	 * Proxy DBMS 별 최종 서버명 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectDBMSSvrMaxNmInfo(ProxyServerVO vo) throws Exception {
+		return (ProxyServerVO) systemDAO.selectDBMSSvrMaxNmInfo(vo);
+	}
+
+	/**
+	 * Proxy DBMS 별 마스터 중 최종 서버명 조회
+	 * 
+	 * @param ProxyServerVO
+	 * @return ProxyServerVO
+	 * @throws Exception
+	 */
+	public ProxyServerVO selectDBMSSvrEtcMaxNmInfo(ProxyServerVO vo) throws Exception {
+		return (ProxyServerVO) systemDAO.selectDBMSSvrEtcMaxNmInfo(vo);
+	}
+	
+	public void filesetting() {
+		try {
+	    	prop.load(new FileInputStream(path + "context.properties"));
+	    } catch(FileNotFoundException e) {
+	    	System.out.println("Exit(0) File Not Found ");
+	    	System.exit(0);
+	    } catch(Exception e) {
+	    	System.out.println("Exit(0) Error : " + e.toString());
+	    	System.exit(0);
+	    }
 	}
 }
