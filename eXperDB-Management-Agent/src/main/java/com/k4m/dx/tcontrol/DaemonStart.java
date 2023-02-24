@@ -108,7 +108,7 @@ public class DaemonStart implements DxDaemon{
 			context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 
 			//설정 파일 불러오기
-			prop.load(new FileInputStream(ResourceUtils.getFile("/experdb/app/eXperDB-Agent/classes/context.properties")));	
+			prop.load(new FileInputStream(ResourceUtils.getFile("/experdb/app/eXperDB-Management/eXperDB-Management-Agent/classes/context.properties")));	
 			
 			SystemServiceImpl service = null;
 			service = (SystemServiceImpl) context.getBean("SystemService");
