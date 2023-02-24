@@ -28,7 +28,6 @@ public class DXTcontrolAgentSocket implements DXTcontrolAgentSocketService{
 	}
 	
 	public void start() throws Exception{
-		
 		String ip = FileUtil.getPropertyValue("context.properties", "socket.server.ip");
 		int port = Integer.parseInt(FileUtil.getPropertyValue("context.properties", "socket.server.port").toString());
 		sc = new SocketListener(ip, port);

@@ -18,7 +18,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jettison.json.JSONException;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,7 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
 *  2018.04.23   박태혁 최초 생성
+*  2023.01.17	강병석		에이전트 통합 프록시 에이전트 코드 추가
 *      </pre>
 */
 public class SocketCtl {
@@ -387,6 +391,19 @@ public class SocketCtl {
 		
 		return outputObj;
 	}
-
-
+	
+	
+	//=====================================================
+	//프록시 에이전트 코드 추가
+	public org.codehaus.jettison.json.JSONObject fromSimpleToJettison(JSONObject jobj) throws JSONException{
+		org.codehaus.jettison.json.JSONObject result = new org.codehaus.jettison.json.JSONObject(jobj.toJSONString());
+		return result;
+	}
+	
+	public JSONObject fromJettisonToSimple(org.codehaus.jettison.json.JSONObject jobj) throws ParseException{
+		JSONParser parser = new JSONParser();
+		Object obj = parser.parse(jobj.toString());
+		JSONObject result = (JSONObject) obj;
+		return result;
+	}
 }
