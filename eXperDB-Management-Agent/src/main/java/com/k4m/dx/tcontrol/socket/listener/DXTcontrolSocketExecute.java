@@ -116,7 +116,7 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 
 				//프로퍼티 조회
 				Properties prop = new Properties();
-				prop.load(new FileInputStream(ResourceUtils.getFile("/experdb/app/eXperDB-Agent/classes/context.properties")));	
+				prop.load(new FileInputStream(ResourceUtils.getFile("/experdb/app/eXperDB-Management/eXperDB-Management-Agent/classes/context.properties")));	
 				
 				//MGMT, 하이브리드에서만 동작
 				if("N".equals(prop.getProperty("proxy.global.serveryn"))){
