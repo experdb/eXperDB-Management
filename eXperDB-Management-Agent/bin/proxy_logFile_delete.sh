@@ -10,7 +10,7 @@ PROXY_DIR=/var/log/haproxy
 KEEPALIVED_DIR=/var/log/keepalived
 PROXY_DIR_SS=/var/log/haproxy/detail
 
-PROXY_conf_DIR=/root/app/eXperDB-Proxy-Agent/backup
+PROXY_conf_DIR=/experdb/app/eXperDB-Management/eXperDB-Management-Agent/backup
 
 NOW_DATE=$(date "+%Y/%m/%d %T")
 
