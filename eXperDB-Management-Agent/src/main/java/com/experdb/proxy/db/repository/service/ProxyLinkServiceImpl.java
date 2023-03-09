@@ -1131,7 +1131,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 
 				confChgHistVo.setExe_rst_cd("TC001501");
 				//insert T_PRYCHG_G
-				proxyDAO.insertPrycngInfo(confChgHistVo);
+//				proxyDAO.insertPrycngInfo(confChgHistVo);
 			}
 			
 		  	newConfChgHistVo.setPry_svr_id(prySvrId);
@@ -1164,7 +1164,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			newConfChgHistVo.setPry_pth(newHaPath);
 			newConfChgHistVo.setKal_pth(newKePath);
 			newConfChgHistVo.setExe_rst_cd("TC001502");
-			proxyDAO.insertPrycngInfo(newConfChgHistVo);
+//			proxyDAO.insertPrycngInfo(newConfChgHistVo);
 			
 			errcd = "-1";
 			
