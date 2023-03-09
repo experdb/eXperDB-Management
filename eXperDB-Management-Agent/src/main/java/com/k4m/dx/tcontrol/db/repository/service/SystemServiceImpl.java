@@ -77,7 +77,7 @@ public class SystemServiceImpl implements SystemService{
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
-	//매니지먼트 에이전트 실행
+	//에이전트 실행
 	public void agentInfoStartMng(String strSocketIp, String strSocketPort, String strVersion, String strProxyInterIP) throws Exception  {
 		//properties 호출
 		filesetting();
