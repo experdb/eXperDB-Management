@@ -459,8 +459,8 @@ public class AgentSetting {
 			}
 		
 			//에이전트 설치 경로(고정)
-			strAgentPath = "/experdb/app/eXperDB-Management/eXperDB-Management-Agent/bin";
-			strConfBackupPath = "/experdb/app/eXperDB-Management/eXperDB-Management-Agent/backup";
+			strAgentPath = System.getProperty("user.dir");
+			strConfBackupPath = System.getProperty("user.dir")+"/../backup";
 			
 			//keepalived 설치 여부
 			System.out.println("keepalived install Status (Y/N) :");
