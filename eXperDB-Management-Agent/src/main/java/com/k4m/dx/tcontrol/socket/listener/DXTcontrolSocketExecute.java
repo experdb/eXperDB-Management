@@ -116,7 +116,7 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 
 				//프로퍼티 조회
 				Properties prop = new Properties();
-				prop.load(new FileInputStream(ResourceUtils.getFile("/experdb/app/eXperDB-Management/eXperDB-Management-Agent/classes/context.properties")));	
+				prop.load(new FileInputStream(ResourceUtils.getFile("../classes/context.properties")));	
 				
 				//MGMT, 하이브리드에서만 동작
 				if("N".equals(prop.getProperty("proxy.global.serveryn"))){
@@ -360,7 +360,7 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					}
 				}
 				
-				//프록시, 하이브리에서만 동작
+				//프록시, 통합
 				if("Y".equals(prop.getProperty("agent.proxy_yn"))) {
 					switch(strDX_EX_CODE) {
 						//proxy 에이전트 setting

@@ -58,7 +58,7 @@ public class ServerCheckListener extends Thread {
 		//에이전트 설정 파일
 		Properties prop = new Properties();
 		try {
-			prop.load(new FileInputStream(ResourceUtils.getFile("/experdb/app/eXperDB-Management/eXperDB-Management-Agent/classes/context.properties")));
+			prop.load(new FileInputStream(ResourceUtils.getFile("../classes/context.properties")));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
