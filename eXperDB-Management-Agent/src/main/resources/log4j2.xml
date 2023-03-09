@@ -15,7 +15,7 @@
 
                 <RollingFile name="consoleToFile"
                         fileName="../logs/console.log"
-                        filePattern="./logs/console-%d{yyyy-MM-dd}-%i.log">
+                        filePattern="../logs/console-%d{yyyy-MM-dd}-%i.log">
                         <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
                         <ThresholdFilter level="INFO" />
                         <Policies>
@@ -26,7 +26,7 @@
 
                 <RollingFile name="daemonStartToFile"
                         fileName="../logs/daemonStart.log"
-                        filePattern="./logs/daemonStart-%d{yyyy-MM-dd}-%i.log">
+                        filePattern="../logs/daemonStart-%d{yyyy-MM-dd}-%i.log">
                         <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
                         <ThresholdFilter level="DEBUG" />
                         <Policies>
@@ -37,7 +37,7 @@
 
                 <RollingFile name="errorToFile"
                         fileName="../logs/error.log"
-                        filePattern="./logs/error-%d{yyyy-MM-dd}-%i.log">
+                        filePattern="../logs/error-%d{yyyy-MM-dd}-%i.log">
                         <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
                         <ThresholdFilter level="ERROR" />
                         <Policies>
@@ -48,7 +48,7 @@
 
                 <RollingFile name="socketToFile"
                         fileName="../logs/socket.log"
-                        filePattern="./logs/socket-%d{yyyy-MM-dd}-%i.log">
+                        filePattern="../logs/socket-%d{yyyy-MM-dd}-%i.log">
                         <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
                         <ThresholdFilter level="DEBUG" />
                         <Policies>
