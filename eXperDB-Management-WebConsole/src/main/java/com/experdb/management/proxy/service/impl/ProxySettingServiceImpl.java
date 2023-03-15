@@ -459,8 +459,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
     global.setPry_svr_id(prySvrId);
     global.setPry_glb_id(CommonUtil.getIntOfJsonObj(confData, "pry_glb_id"));
     global.setLst_mdfr_id(lst_mdfr_id);
-    this.proxySettingDAO.updateProxyGlobalConf(global);
-    this.proxySettingDAO.updatePryAgentIp(global);
+//    this.proxySettingDAO.updateProxyGlobalConf(global);
+//    this.proxySettingDAO.updatePryAgentIp(global);
     JSONArray delVipcngJArray = (JSONArray)confData.get("delVipcng");
     int delVipcngSize = delVipcngJArray.size();
     if (delVipcngSize > 0) {
@@ -470,7 +470,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
         delVipConf[j] = new ProxyVipConfigVO();
         delVipConf[j].setPry_svr_id(prySvrId);
         delVipConf[j].setVip_cng_id(CommonUtil.getIntOfJsonObj(delVipcngJobj, "vip_cng_id"));
-        this.proxySettingDAO.deletePryVipConf(delVipConf[j]);
+//        this.proxySettingDAO.deletePryVipConf(delVipConf[j]);
       } 
     } 
     JSONArray vipcngJArray = (JSONArray)confData.get("vipcng");
@@ -490,7 +490,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
         System.out.println(vipConf[j].getPriority());
         vipConf[j].setState_nm(CommonUtil.getStringOfJsonObj(vipcngJobj, "state_nm"));
         vipConf[j].setLst_mdfr_id(lst_mdfr_id);
-        this.proxySettingDAO.insertUpdatePryVipConf(vipConf[j]);
+//        this.proxySettingDAO.insertUpdatePryVipConf(vipConf[j]);
       } 
     } 
     JSONArray delListnJArray = (JSONArray)confData.get("delListener");
@@ -510,7 +510,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
         Map<String, Object> delStatusParam = new HashMap<>();
         delStatusParam.put("pry_svr_id", Integer.valueOf(prySvrId));
         delStatusParam.put("lsn_id", Integer.valueOf(CommonUtil.getIntOfJsonObj(delListnObj, "lsn_id")));
-        this.proxySettingDAO.deletePrySvrStatusList(delStatusParam);
+//        this.proxySettingDAO.deletePrySvrStatusList(delStatusParam);
       } 
     } 
     JSONArray listenerJArray = (JSONArray)confData.get("listener");
@@ -549,7 +549,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
               delStatusParam.put("pry_svr_id", Integer.valueOf(prySvrId));
               delStatusParam.put("lsn_id", Integer.valueOf(CommonUtil.getIntOfJsonObj(delListnSvrObj, "lsn_id")));
               delStatusParam.put("lsn_svr_id", Integer.valueOf(CommonUtil.getIntOfJsonObj(delListnSvrObj, "lsn_svr_id")));
-              this.proxySettingDAO.deletePrySvrStatusList(delStatusParam);
+//              this.proxySettingDAO.deletePrySvrStatusList(delStatusParam);
             } 
           } 
         } 
@@ -574,7 +574,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
               listnSvr[k].setChk_portno(CommonUtil.getIntOfJsonObj(listnSvrObj, "chk_portno"));
               listnSvr[k].setBackup_yn(CommonUtil.getStringOfJsonObj(listnSvrObj, "backup_yn"));
               listnSvr[k].setLst_mdfr_id(lst_mdfr_id);
-              this.proxySettingDAO.insertUpdatePryListenerSvr(listnSvr[k]);
+//              this.proxySettingDAO.insertUpdatePryListenerSvr(listnSvr[k]);
             } 
           } 
         } 
