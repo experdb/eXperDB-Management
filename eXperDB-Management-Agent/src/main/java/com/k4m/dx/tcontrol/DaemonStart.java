@@ -125,11 +125,11 @@ public class DaemonStart implements DxDaemon{
 					String strProxyInterYN = "";
 					String strProxyInterIP = "";
 					
-					if (FileUtil.getPropertyValue("context.properties", "agent.proxy_yn") != null) {
+					if (FileUtil.getPropertyValue("context.properties", "agent.proxy_yn").equals("Y")) {
 						strProxyYN = FileUtil.getPropertyValue("context.properties", "agent.proxy_yn");	
 					}
 					
-					if (FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_yn") != null) {
+					if (FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_yn").equals("Y")) {
 						strProxyInterYN = FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_yn");
 					}
 	
@@ -250,7 +250,7 @@ public class DaemonStart implements DxDaemon{
 		}	
 		
 		//프록시 기능
-		if("Y".equals(prop.getProperty("agent.proxy_yn"))) {
+		if(prop.getProperty("agent.proxy_yn").equals("Y")) {
 			// SqlSessionManager 초기화
 			try {
 				//proxy 서버 데이터 생성
