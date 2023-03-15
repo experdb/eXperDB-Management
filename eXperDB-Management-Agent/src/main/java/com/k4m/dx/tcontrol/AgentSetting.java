@@ -115,7 +115,8 @@ public class AgentSetting {
 		//=======공통정보=========
 		//IP 입력
 		System.out.println("==========================================");
-		System.out.println("agent ip(" + localIp + ") : ");
+//		System.out.println("agent ip(" + localIp + ") : ");
+		System.out.println("agent ip : ");
 		strAgentIp = scan.nextLine();
 		//strAgentIp = localIp;
 		
@@ -124,7 +125,7 @@ public class AgentSetting {
 			if(strAgentIp.equals("")) {
 				System.out.println("Please enter the IP. ");
 				
-				System.out.println("agent ip(" + localIp + ") : ");
+				System.out.println("agent ip : ");
 				
 				strAgentIp = scan.nextLine();
 			} else {
@@ -137,16 +138,8 @@ public class AgentSetting {
 		
 		strAgentPort = scan.nextLine();
 		
-		while (true) {
-			if(strAgentPort.equals("")) {
-				System.out.println("Please enter the port. ");
-				
-				System.out.println("agent port(9001) :");
-				
-				strAgentPort = scan.nextLine();
-			} else {
-				break;
-			}
+		if(strAgentPort.equals("")) {
+			strAgentPort = "9001";
 		}
 		
 		//RepoDB IP 입력
@@ -170,42 +163,25 @@ public class AgentSetting {
 		System.out.println("Repository database Port(5432) :");
 		strDatabasePort = scan.nextLine();
 		
-		while (true) {
-			if(strDatabasePort.equals("")) {
-				System.out.println("Please enter a Repository database Port. ");
-				System.out.println("Repository the database Port(5432) :");
-				strDatabasePort = scan.nextLine();
-			} else {
-				break;
-			}
+		
+		if(strDatabasePort.equals("")) {
+			strDatabasePort = "5432";
 		}
 		
 		//RepoDB DB명 
 		System.out.println("Repository database Name(experdb) :");
 		strDatabaseName = scan.nextLine();
 		
-		while (true) {
-			if(strDatabaseName.equals("")) {
-				System.out.println("Please enter a Repository database Name. ");
-				System.out.println("Repository database Name(experdb) :");
-				strDatabaseName = scan.nextLine();
-			} else {
-				break;
-			}
+		if(strDatabaseName.equals("")) {
+			strDatabaseName = "experdb";
 		}
 		
 		//RepoDB 유저명
 		System.out.println("Repository database.username(experdb) :");
 		strDatabaseUsername = scan.nextLine();
 		
-		while (true) {
-			if(strDatabaseName.equals("")) {
-				System.out.println("Please enter your Repository database username. ");
-				System.out.println("Repository database.username(experdb) :");
-				strDatabaseUsername = scan.nextLine();
-			} else {
-				break;
-			}
+		if(strDatabaseUsername.equals("")) {
+			strDatabaseUsername = "experdb";
 		}
 		
 		//RepoDB 유저 패스워드
@@ -213,16 +189,14 @@ public class AgentSetting {
 		strDatabasePassword = scan.nextLine();
 
 		while (true) {
-			if(strDatabaseName.equals("")) {
+			if(strDatabasePassword.equals("")) {
 				System.out.println("Please enter your Repository database password. ");
 				System.out.println("Repository database.password :");
 				strDatabasePassword = scan.nextLine();
 			} else {
 				break;
 			}
-		}
-
-		
+		}		
 		
 		
 		//=============================================================
@@ -420,34 +394,52 @@ public class AgentSetting {
 			//서버 분리 유무 입력
 			System.out.println("Server use Proxy Only(default : Y) : ");
 			strProxyServerYn = scan.nextLine();
+			strProxyServerYn = strProxyServerYn.toUpperCase();
 			if(strProxyServerYn.equals("")) {
 				strProxyServerYn = "Y";
 			}
 			
 			//사용자, 그룹 입력
-			System.out.println("proxy global user(exproxy) : ");
+			System.out.println("proxy global user : ");
 			strProxyUser = scan.nextLine();
-			if(strProxyUser.equals("")) {
-				strProxyUser = "exproxy";
+			while (true) {
+				if(strProxyUser.equals("")) {
+					System.out.println("Please enter your Proxy global user. ");
+					System.out.println("proxy global user : ");
+					strProxyUser = scan.nextLine();
+				} else {
+					break;
+				}
 			}
 			
-			System.out.println("proxy global group(exproxy) : ");
+			System.out.println("proxy global group : ");
 			strProxyGroup = scan.nextLine();
-			if(strProxyGroup.equals("")) {
-				strProxyGroup = "exproxy";
+			while (true) {
+				if(strProxyGroup.equals("")) {
+					System.out.println("Please enter your Proxy global group. ");
+					System.out.println("proxy global group : ");
+					strProxyGroup = scan.nextLine();
+				} else {
+					break;
+				}
 			}			
 			
 			
 			//내부 IP 사용 여부
 			System.out.println("Whether to Proxy use internal IP (Y/N) :");
-			strAgentInnerIPUseYn = scan.nextLine().toUpperCase();
+			strAgentInnerIPUseYn = scan.nextLine();
+			strAgentInnerIPUseYn = strAgentInnerIPUseYn.toUpperCase();
+			if(strAgentInnerIPUseYn.equals("")) {
+				strAgentInnerIPUseYn = strProxyInterIP;
+			}
+			
 			if(strAgentInnerIPUseYn.equals("Y")){
 				System.out.println("Proxy Agent Inner IP : ");
 				strAgentInnerIP = scan.nextLine();
 				
 				while(true){
 					if(strAgentInnerIP.equals("")) {
-						System.out.println("Please enter Inner IP of the Proxy Agent!!! ");
+						System.out.println("Please enter Inner IP of the Proxy Agent. ");
 						System.out.println("Proxy Agent Inner IP : ");
 						strAgentInnerIP = scan.nextLine();
 					} else {
@@ -460,7 +452,8 @@ public class AgentSetting {
 		
 			//에이전트 설치 경로(고정)
 			strAgentPath = System.getProperty("user.dir");
-			strConfBackupPath = System.getProperty("user.dir")+"/../backup";
+			strConfBackupPath = System.getProperty("user.dir");
+			strConfBackupPath = strConfBackupPath.substring(0, strConfBackupPath.lastIndexOf('/')) + "/backup" ;
 			
 			//keepalived 설치 여부
 			System.out.println("keepalived install Status (Y/N) :");
@@ -483,15 +476,16 @@ public class AgentSetting {
 			System.out.println("Is installed the proxy in AWS (Y/N) :");
 			strAWSUseYn = scan.nextLine();
 			strAWSUseYn = strAWSUseYn.toUpperCase();
-			
 			while (true) {
 				if(strAWSUseYn.equals("")) {
+					System.out.println("Please enter the proxy in AWS. ");
 					System.out.println("Is installed the proxy in AWS (Y/N) :");
 					strAWSUseYn = scan.nextLine();
+					strAWSUseYn = strAWSUseYn.toUpperCase();
 				} else {
 					break;
 				}
-			}	
+			}
 		}		
 		
 		//====================================================
@@ -542,17 +536,31 @@ public class AgentSetting {
 		//입력 내용 최종 확인(Proxy)
 		if("Y".equals(strProxyYN)) {
 			System.out.println("eXperDB-Agent Proxy");
-			
+			System.out.println("Server Proxy Only :" + strProxyServerYn);
+			System.out.println("Proxy Global User :" + strProxyUser);
+			System.out.println("Proxy Global Group :" + strProxyGroup);
+			System.out.println("agent inner iP Use :"+strAgentInnerIPUseYn);
 			System.out.println("agent inner ip :"+strAgentInnerIP);
 			System.out.println("keepalived install :" + strKeepInstaillYn);
 			System.out.println("installed in AWS :" + strAWSUseYn);
-			System.out.println("Server Proxy Only :" + strProxyServerYn);
+			System.out.println("agent path :" + strAgentPath);
+			System.out.println("proxy backup path :" + strConfBackupPath);			
 			System.out.println("#####################################################");
 		}
 		
 
-		System.out.println("Do you want to apply what you entered? (y, n)");
+		System.out.println("Do you want to apply what you entered? (y, n) : ");
 		String strApply = scan.nextLine();
+		while (true) {
+			if(strApply.equals("")) {
+				System.out.println("Please enter the want to config apply. ");
+				System.out.println("Do you want to apply what you entered? (y, n) : ");
+				strApply = scan.nextLine();
+				strApply = strAWSUseYn.toLowerCase();
+			} else {
+				break;
+			}
+		}
 
 		//설정 파일에 입력 내용 추가
 		if(strApply.equals("y")) {
