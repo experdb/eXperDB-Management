@@ -578,21 +578,21 @@
 								if(full.bal_opt == 'roundrobin'){
 									html += '<select id="bal_opt' +full.lsn_id+ '" style="color:black">';
 									html += 	'<option value="" style="text-align:center"></option>';
-									html += 	'<option value="RoundRobin" style="text-align:center" selected>RoundRobin</option>';
-									html += 	'<option value="LeastConn" style="text-align:center">LeastConn</option>';
+									html += 	'<option value="roundrobin" style="text-align:center" selected>RoundRobin</option>';
+									html += 	'<option value="leastconn" style="text-align:center">LeastConn</option>';
 									html += '</select>';							
 								}else if(full.bal_opt == 'leastconn') {
 									html += '<select id="bal_opt' +full.lsn_id+ '" style="color:black">';
 									html += 	'<option value="" style="text-align:center"></option>';
-									html += 	'<option value="LeastConn" style="text-align:center" selected>LeastConn</option>';
-									html += 	'<option value="RoundRobin" style="text-align:center">RoundRobin</option>';
+									html += 	'<option value="leastconn" style="text-align:center" selected>LeastConn</option>';
+									html += 	'<option value="roundrobin" style="text-align:center">RoundRobin</option>';
 									html += '</select>';
 								}
 							}else 	{
 								html += '<select id="bal_opt' +full.lsn_id+ '" style="color:black" disabled >';
 								html += 	'<option value="" style="text-align:center" selected></option>';
-								html += 	'<option value="LeastConn" style="text-align:center">LeastConn</option>';
-								html += 	'<option value="RoundRobin" style="text-align:center">RoundRobin</option>';
+								html += 	'<option value="leastconn" style="text-align:center">LeastConn</option>';
+								html += 	'<option value="roundrobin" style="text-align:center">RoundRobin</option>';
 								html += '</select>';
 							}
 							return html;
