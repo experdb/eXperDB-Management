@@ -120,9 +120,9 @@ public class ProxyHistoryController {
 				param.put("svr_use_yn", "Y");
 				List<ProxyServerVO> prySvrList = proxySettingService.selectProxyServerList(param);
 			
-				List<Map<String, Object>> dbSvrList = proxyHistoryService.selectSvrStatusDBConAddrList();
+				//List<Map<String, Object>> dbSvrList = proxyHistoryService.selectSvrStatusDBConAddrList();
 				//select current_date as today, current_date-1 as yesterday, current_date-6 as before_6days
-				mv.addObject("dbSvrList", dbSvrList);
+				//mv.addObject("dbSvrList", dbSvrList);
 				mv.addObject("prySvrList", prySvrList);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));

@@ -1341,9 +1341,9 @@
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
 									<select class="form-control" style="margin-right: -0.7rem;" name="statis_db_con_addr" id="statis_db_con_addr">
 	 									<option value="">DB <spring:message code="common.total" /></option>	
-										<c:forEach var="dbSvrList" items="${dbSvrList}">
+										<%-- <c:forEach var="dbSvrList" items="${dbSvrList}">
 											<option value="${dbSvrList.db_con_addr}">${dbSvrList.svr_host_nm}</option>							
-										</c:forEach>
+										</c:forEach> --%>
 									</select>
 								</div>
 								<div class="input-group mb-2 mr-sm-2 col-sm-1_7">
