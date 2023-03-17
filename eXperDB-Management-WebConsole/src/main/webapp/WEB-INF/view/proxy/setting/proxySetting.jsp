@@ -28,7 +28,7 @@
 <%@include file="./../popup/proxyListenRegForm.jsp"%>
 
 <script>
-	var weightInit = 110; //가중치 기준값 
+	
 	
 	var tempUnregSvrList = null; //미등록 서버 체크
 	
@@ -427,7 +427,7 @@
 						render: function (data, type, full){
 							if(data != ''){
 								var html = "";
-								html +=	'<input type="number" id="priority" value="' + (weightInit - full.priority) + '" style="text-align:center" />'
+								html +=	'<input type="number" id="priority" value="' + full.priority + '" style="text-align:center" />'
 							}
 							return html;
 						},
@@ -490,24 +490,17 @@
 			bSort: false,
 			info: false,
 			columns : [ 
-					/* {data: "row_num",
-						render: function (data, type, full, meta){
-							var html = "";
-							html += '<input type="checkbox" value="' + full.row_num + '"</input>'
-							return html;
-						}
-					}, */
 					{data : "lsn_nm",
 						render: function (data, type, full, meta){
 							if(data != ''){
 								var html = "";
 								if(full.lsn_nm == 'pgReadOnly'){
-									html += '<select id="lsn_nm" style="color:black">';
+									html += '<select id="lsn_nm" style="color:black" disabled>';
 									html += 	'<option value="pgReadOnly" style="text-align:center" selected>pgReadOnly</option>';
 									html += 	'<option value="pgReadWrite" style="text-align:center">pgReadWrite</option>';
 									html += '</select>';
 								}else if (full.lsn_nm = 'pgReadWrite'){
-									html += '<select id="lsn_nm" style="color:black">';
+									html += '<select id="lsn_nm" style="color:black" disabled>';
 									html += 	'<option value="pgReadWrite" style="text-align:center" selected>pgReadWrite</option>';
 									html += 	'<option value="pgReadOnly" style="text-align:center">pgReadOnly</option>';
 									html += '</select>';
@@ -545,7 +538,11 @@
 						render: function (data, type, full, meta){
 							if(data != ''){
 								var html = "";
-								html +=	'<input type="text" id="con_sim_query" value="' + full.con_sim_query + '" style="text-align:center" />'
+								if(full.lsn_nm == 'pgReadOnly'){
+									html +=	'<input type="text" id="con_sim_query" value="' + full.con_sim_query + '" style="text-align:center" disabled/>'	
+								}else if (full.lsn_nm == 'pgReadWrite'){
+									html +=	'<input type="text" id="con_sim_query" value="' + full.con_sim_query + '" style="text-align:center" />'
+								}
 							}
 							return html;
 						},	
@@ -558,39 +555,41 @@
 							if(data != ''){
 								var html = "";
 								if(full.bal_yn == 'Y'){
-									html += '<select id="bal_yn" style="color:black">';
+									html += '<select id="bal_yn" style="color:black" onchange="changeBalYn(this,'+full.lsn_id+')">';
 									html += 	'<option value="Y" style="text-align:center">Y</option>';
 									html += 	'<option value="N" style="text-align:center">N</option>';
 									html += '</select>';
 								}else if (full.bal_yn = 'N'){
-									html += '<select id="bal_yn" style="color:black">';
+									html += '<select id="bal_yn" style="color:black" onchange="changeBalYn(this,'+full.lsn_id+')">';
 									html += 	'<option value="N" style="text-align:center">N</option>';
 									html += 	'<option value="Y" style="text-align:center">Y</option>';
 									html += '</select>';
 								}
 							}
 							return html;
-						},	
+						},
 						className : "dt-center",
 						defaultContent : ""
 					},//Balance 사용여부
 					{data : "bal_opt",
 						render: function (data, type, full, meta){
 							var html = "";
-							if(full.bal_opt == 'roundrobin'){
-								html += '<select id="bal_opt" style="color:black">';
-								html += 	'<option value="" style="text-align:center"></option>';
-								html += 	'<option value="RoundRobin" style="text-align:center" selected>RoundRobin</option>';
-								html += 	'<option value="LeastConn" style="text-align:center">LeastConn</option>';
-								html += '</select>';							
-							}else if(full.bal_opt == 'leastconn') {
-								html += '<select id="bal_opt" style="color:black">';
-								html += 	'<option value="" style="text-align:center"></option>';
-								html += 	'<option value="LeastConn" style="text-align:center" selected>LeastConn</option>';
-								html += 	'<option value="RoundRobin" style="text-align:center">RoundRobin</option>';
-								html += '</select>';
-							}else {
-								html += '<select id="bal_opt" style="color:black">';
+							if(full.bal_yn == "Y"){
+								if(full.bal_opt == 'roundrobin'){
+									html += '<select id="bal_opt' +full.lsn_id+ '" style="color:black">';
+									html += 	'<option value="" style="text-align:center"></option>';
+									html += 	'<option value="RoundRobin" style="text-align:center" selected>RoundRobin</option>';
+									html += 	'<option value="LeastConn" style="text-align:center">LeastConn</option>';
+									html += '</select>';							
+								}else if(full.bal_opt == 'leastconn') {
+									html += '<select id="bal_opt' +full.lsn_id+ '" style="color:black">';
+									html += 	'<option value="" style="text-align:center"></option>';
+									html += 	'<option value="LeastConn" style="text-align:center" selected>LeastConn</option>';
+									html += 	'<option value="RoundRobin" style="text-align:center">RoundRobin</option>';
+									html += '</select>';
+								}
+							}else 	{
+								html += '<select id="bal_opt' +full.lsn_id+ '" style="color:black" disabled >';
 								html += 	'<option value="" style="text-align:center" selected></option>';
 								html += 	'<option value="LeastConn" style="text-align:center">LeastConn</option>';
 								html += 	'<option value="RoundRobin" style="text-align:center">RoundRobin</option>';
@@ -615,13 +614,12 @@
 			]
 		});
 
-		proxyListenTable.tables().header().to$().find('th:eq(0)').css('min-width', '5%');//선택
-		proxyListenTable.tables().header().to$().find('th:eq(1)').css('min-width', '15%');//Listen
-		proxyListenTable.tables().header().to$().find('th:eq(2)').css('min-width', '25%');//bind
-		proxyListenTable.tables().header().to$().find('th:eq(3)').css('min-width', '25%');//db명
-		proxyListenTable.tables().header().to$().find('th:eq(4)').css('min-width', '25%');//check query
+		proxyListenTable.tables().header().to$().find('th:eq(1)').css('min-width', '5%');//Listen
+		proxyListenTable.tables().header().to$().find('th:eq(2)').css('min-width', '30%');//bind
+		proxyListenTable.tables().header().to$().find('th:eq(3)').css('min-width', '30%');//db명
+		proxyListenTable.tables().header().to$().find('th:eq(4)').css('min-width', '30%');//check query
 		proxyListenTable.tables().header().to$().find('th:eq(5)').css('min-width', '5%');//balance 사용여부
-		proxyListenTable.tables().header().to$().find('th:eq(6)').css('min-width', '10%');//balance 옵션
+		proxyListenTable.tables().header().to$().find('th:eq(6)').css('min-width', '5%');//balance 옵션
  		proxyListenTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px');//전송 쿼리
 		proxyListenTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');//필드 값
 		proxyListenTable.tables().header().to$().find('th:eq(9)').css('min-width', '0px');//필드 명
@@ -635,7 +633,7 @@
 		proxyListenTable.tables().header().to$().find('th:eq(17)').css('min-width', '0px');//Balance 옵션 
 		
 		$('#proxyListener tbody').on('click','tr',function() {		
-			if ( !$(this).hasClass('selected') ){	       			
+			if ( !$(this).hasClass('selected') ){
 				proxyListenTable.$('tr.selected').removeClass('selected');
 	            $(this).addClass('selected');	            
 	        } 
@@ -662,15 +660,22 @@
 			}
 		},500);
 	}
-
+	
+	function changeBalYn(balYn, lsn_id) {
+		var balYnText = balYn.value;
+		if(balYnText == 'Y'){
+			$('#bal_opt'+lsn_id).removeAttr('disabled');
+		}else if(balYnText == 'N'){
+			$('#bal_opt'+lsn_id).attr('disabled','disabled');
+			$('#bal_opt'+lsn_id+' option:eq(0)').prop("selected",true);
+		}
+	}
+	
 	/**********************************************************
      * 읽기 / 쓰기 권한 체크 
     **********************************************************/
 	function fnc_aut_yn_chk() {
 		
-		var insert_button = document.getElementById("btnInsert_svr");
-		var update_button = document.getElementById("btnUpdate_svr");
-		var delete_button = document.getElementById("btnDelete_svr");
 		var apply_button = document.getElementById("btnApply");
 		
 		if("${read_aut_yn}" == "Y"){
@@ -680,18 +685,12 @@
 		}
 		
 		if("${wrt_aut_yn}" == "Y"){
-			insert_button.style.display = '';
-			update_button.style.display = '';
-			delete_button.style.display = '';
 			apply_button.style.display = '';
 		}else{
-			insert_button.style.display = 'none';
-			update_button.style.display = 'none';
-			delete_button.style.display = 'none';
 			apply_button.style.display = 'none';
 		}
 	}
-	
+		
 	/**********************************************************
      * 버튼 제어
     **********************************************************/
@@ -759,8 +758,6 @@
 					//첫번째 로우 자동 선택 후 상세 정보 불러오기
 					proxyServerTable.row(0).select();
 					$("#proxyServer tbody tr:eq(0)").click();
-					
-					
 					
 				}
 			}
@@ -877,7 +874,6 @@
 			},
 			success : function(result) {
 				runValid = true;
- 				
  				if(result.errcd > -1){
  					var vipUseYn = selVipUseYn;
  					//전역변수로 저장
@@ -910,7 +906,7 @@
 		 				$("#glb_peer_server_ip_text", "#globalInfoForm").hide();
 		 				fn_create_server_ip_select("#glb_peer_server_ip","#globalInfoForm",result.global_info.peer_server_ip,result.peer_ip_sel_list,vipUseYn); */
 		 		
-		 		
+		 		 
 					} else if(result.errcd==1){ //연결실패
 						selAgentConnect = false;
 						setTimeout(function(){//load_global_info 에서 100이후에 INABLE하기 때문에 타임을 더 줌
@@ -1939,11 +1935,11 @@
 			if(vipDataLen == 0){
 				$("#instReg_state_nm", "#insVipInstForm").val("MASTER"); //State
 				$("#instReg_priority", "#insVipInstForm").val("109"); //priority
-				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - 109); //priority select 
+				$("#instReg_priority_sel", "#insVipInstForm").val(109); //priority select 
 			}else{
 				$("#instReg_state_nm", "#insVipInstForm").val("BACKUP"); //State
 				$("#instReg_priority", "#insVipInstForm").val(109-vipDataLen); //priority
-				$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - (109-vipDataLen)); //priority select 
+				$("#instReg_priority_sel", "#insVipInstForm").val(vipDataLen); //priority select 
 			}
 			
 			$("#instReg_chk_tm", "#insVipInstForm").val("1"); //체크간격
@@ -1976,7 +1972,7 @@
 			
 			$("#instReg_state_nm", "#insVipInstForm").val(selConfInfo.state_nm); //State
 			$("#instReg_priority", "#insVipInstForm").val(selConfInfo.priority); //priority
-			$("#instReg_priority_sel", "#insVipInstForm").val(weightInit - selConfInfo.priority); 
+			$("#instReg_priority_sel", "#insVipInstForm").val(selConfInfo.priority); 
 			$("#instReg_chk_tm", "#insVipInstForm").val(selConfInfo.chk_tm); //체크간격
 			$("#instReg_aws_if_id", "#insVipInstForm").val(selConfInfo.aws_if_id);
 			$("#instReg_peer_aws_if_id", "#insVipInstForm").val(selConfInfo.peer_aws_if_id);
@@ -2337,27 +2333,27 @@
 	function vip_val(){
 		
 		var equals = (a,b) => JSON.stringify(a) === JSON.stringify(b) // 값 비교
-		var test3 = []; //table에 있는 정보
-		var test4 = []; //전역변수에서 필요한 값만 뽑기
+		var currentVipVal = []; //table에 있는 정보
+		var vipTable = []; //전역변수에서 필요한 값만 뽑기
 		var vipLen = vipInstTable.rows().data().length;
 				
 		for (var i = 1; i <= vipLen; i++) {
 			var tr = $('#vipInstance').find('tr')[i].childNodes;
 			for (var j = 0; j < tr.length; j++) {
-				test3.push(tr[j].childNodes[0].value);
+				currentVipVal.push(tr[j].childNodes[0].value);
 			}
 		}
 		
 		for (var i = 0; i < selVipInstanceList.length; i++) {
-			test4.push(selVipInstanceList[i].state_nm);
-			test4.push(selVipInstanceList[i].v_ip);
-			test4.push(selVipInstanceList[i].v_rot_id);
-			test4.push(selVipInstanceList[i].v_if_nm);
-			test4.push(String(weightInit-selVipInstanceList[i].priority));
+			vipTable.push(selVipInstanceList[i].state_nm);
+			vipTable.push(selVipInstanceList[i].v_ip);
+			vipTable.push(selVipInstanceList[i].v_rot_id);
+			vipTable.push(selVipInstanceList[i].v_if_nm);
+			vipTable.push(String(selVipInstanceList[i].priority));
 		}
 		
 		
-		if(equals(test4, test3)){
+		if(equals(vipTable, currentVipVal)){
 			return true
 		}else {
 			return false
@@ -2367,8 +2363,8 @@
 	function listener_val(){
 		
 		var equals = (a,b) => JSON.stringify(a) === JSON.stringify(b) // 값 비교
-		var test3 = []; //table에 있는 정보
-		var test4 = []; //전역변수에서 필요한 값만 뽑기	
+		var currentLsnVal = []; //table에 있는 정보
+		var LsnVal = []; //전역변수에서 필요한 값만 뽑기	
 		
 		var proxyLen = proxyListenTable.rows().data().length;
 		
@@ -2376,21 +2372,19 @@
 		for (var i = 1; i <= proxyLen; i++) {
 			var tr = $('#proxyListener').find('tr')[i].childNodes;
 			for (var j = 0; j < tr.length; j++) {
-				test3.push(tr[j].childNodes[0].value);
+				currentLsnVal.push(tr[j].childNodes[0].value);
 			}
 		}
-		
 		for (var i = 0; i < selProxyListenerList.length; i++) {
-			test4.push(selProxyListenerList[i].row_num);	
-			test4.push(selProxyListenerList[i].lsn_nm);
-			test4.push(selProxyListenerList[i].con_bind_port);
-			test4.push(selProxyListenerList[i].db_nm);
-			test4.push(selProxyListenerList[i].con_sim_query);
-			test4.push(selProxyListenerList[i].bal_yn);
-			test4.push(selProxyListenerList[i].bal_opt);
+			LsnVal.push(selProxyListenerList[i].lsn_nm);
+			LsnVal.push(selProxyListenerList[i].con_bind_port);
+			LsnVal.push(selProxyListenerList[i].db_nm);
+			LsnVal.push(selProxyListenerList[i].con_sim_query);
+			LsnVal.push(selProxyListenerList[i].bal_yn);
+			LsnVal.push(selProxyListenerList[i].bal_opt);
 		}
 
-		if(equals(test4, test3)){
+		if(equals(LsnVal, currentLsnVal)){
 			return true
 		}else {
 			return false
@@ -2399,9 +2393,6 @@
 
 	function fn_change_listener_val(tempListener, changeLsnVal){
 		for (var k = 0; k < tempListener.length; k++) {			
-			
-			tempListener[k].row_num = changeLsnVal[0];
-		    changeLsnVal.shift();		    
 			tempListener[k].lsn_nm = changeLsnVal[0];
 		    changeLsnVal.shift();		    
 		    tempListener[k].con_bind_port = changeLsnVal[0];
@@ -2469,10 +2460,8 @@
 				changeVipVal.push(tr[j].childNodes[0].value);
 			}
 		}
-
 		fn_change_listener_val(tempListener, changeLsnVal);
 		fn_change_vip_val(tempVipInstance, changeVipVal);
-
 		var param = {
 			pry_svr_id : selPrySvrId,																											// pry 공통 id
 			pry_glb_id : parseInt($("#glb_pry_glb_id", "#globalInfoForm").val()),																// pry 서버 id
@@ -2490,7 +2479,6 @@
 			listener: tempListener,																												// 리스너 관련 data
 			delListener: delListenerRows,																										// 선택된 리스너 data (지울거)
 		};
-		console.log(param)
 	 	$.ajax({
  			url : "/applyProxyConf.do",
  			data : {confData : JSON.stringify(param)},
@@ -2709,7 +2697,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<%-- <div class="row">
 							<div class="col-12">
 								<div class="template-demo">
 									<button type="button"
@@ -2734,7 +2722,7 @@
 									</button>
 								</div>
 							</div>
-						</div>
+						</div> --%>
 						<br>
 						<table id="proxyServer" class="table table-hover table-striped"
 							style="width: 100%;">
@@ -3043,7 +3031,7 @@
 															</th>
 															<td
 																style="width: 80%; padding: 0.875rem 0.9375rem; word-break: break-all;">
-																<input type="text" class="form-control form-control-xsm"
+																<input type="text" class="form-control form-control-xsm" disabled
 																style="width: 500px; margin-top: -5px; margin-bottom: -5px;"
 																id="server_ip" maxlength="50"
 																placeholder='<spring:message code='eXperDB_proxy.svr_ip'/>'
@@ -3054,8 +3042,8 @@
 															<th class="py-1" style="width: 20%;"><spring:message
 																	code="eXperDB_proxy.interface" /> <font color="red">*</font>
 															</th>
-															<td style="width: 80%;"><input type="text"
-																class="form-control form-control-xsm"
+															<td style="width: 80%;"><input type="text" disabled
+																class="form-control form-control-xsm" 
 																style="width: 500px; margin-top: -5px; margin-bottom: -5px;"
 																id="interface" maxlength="50"
 																placeholder='<spring:message code='eXperDB_proxy.interface'/>'
@@ -3066,7 +3054,7 @@
 																	code="eXperDB_proxy.peer_ip" /> <font color="red">*</font>
 															</th>
 															<td><input type="text"
-																class="form-control form-control-xsm"
+																class="form-control form-control-xsm" disabled
 																style="width: 500px; margin-top: -5px; margin-bottom: -5px;"
 																id="peer_ip" maxlength="50"
 																placeholder='<spring:message code='eXperDB_proxy.peer_ip'/>'
