@@ -14,6 +14,7 @@ import com.experdb.proxy.db.repository.vo.ProxyActStateChangeHistoryVO;
 import com.experdb.proxy.db.repository.vo.ProxyConfChangeHistoryVO;
 import com.experdb.proxy.db.repository.vo.ProxyGlobalVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerServerListVO;
+import com.experdb.proxy.db.repository.vo.ProxyListenerServerVO;
 import com.experdb.proxy.db.repository.vo.ProxyListenerVO;
 import com.experdb.proxy.db.repository.vo.ProxyServerVO;
 import com.experdb.proxy.db.repository.vo.ProxyStatisticVO;
@@ -378,5 +379,47 @@ public class ProxyDAO {
 	 */
 	public int updatePrySvrKalPathInfo(ProxyServerVO vo) {
 		return session.update("proxy.updatePrySvrKalPathInfo", vo);
+	}
+	
+	//===========================================
+	//config 생성 후 table 업데이트 sql 추가
+	/**
+	 * T_PRY_SVR_I의 IPADR 업데이트
+	 * 
+	 * @param ProxyGlobalVO
+	 * @throws Exception
+	 */
+	public void updateIpAddress(ProxyGlobalVO globalVO) {
+		session.update("proxy.updateIpAddress", globalVO);
+	}
+	
+	/**
+	 * T_PRY_GLB_I 업데이트
+	 * 
+	 * @param ProxyGlobalVO
+	 * @throws Exception
+	 */
+	public void updateProxyGlobalConf(ProxyGlobalVO globalVO) {
+		session.update("proxy.updateProxyGlobalConf", globalVO);
+	}
+	
+	/**
+	 * T_PRY_VIPCNG_I VIP 업데이트
+	 * 
+	 * @param ProxyVipConfigVO
+	 * @throws Exception
+	 */
+	public void updatePryVipConf(ProxyVipConfigVO proxyVipConfigVO) {
+		session.update("proxy.insertPryVipCngInfo", proxyVipConfigVO);
+	}
+	
+	/**
+	 * T_PRY_LSN_SVR_I 리스너 업데이트
+	 * 
+	 * @param ProxyListenerServerVO
+	 * @throws Exception
+	 */
+	public void updatePryListenerSvr(ProxyListenerServerVO proxyListenerServerVO) {
+		session.update("proxy.updatePryListenerSvr", proxyListenerServerVO);
 	}
 }

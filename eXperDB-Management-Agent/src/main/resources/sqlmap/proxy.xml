@@ -366,7 +366,8 @@
 			, CON_BIND_PORT = #{con_bind_port}
 			, LSN_DESC = #{lsn_desc}
 			, DB_USR_ID = #{db_usr_id}
-			, DB_ID = (SELECT DB_ID FROM T_DB_I WHERE USEYN='Y' AND DB_SVR_ID = #{db_svr_id}::numeric AND DB_NM = #{db_nm})
+<!-- 			, DB_ID = (SELECT DB_ID FROM T_DB_I WHERE USEYN='Y' AND DB_SVR_ID = #{db_svr_id}::numeric AND DB_NM = #{db_nm}) -->
+			, DB_ID = #{db_id}
 			, DB_NM = #{db_nm}
 			, CON_SIM_QUERY = #{con_sim_query}
 			, FIELD_VAL = #{field_val}
@@ -1105,4 +1106,63 @@
     	where
     		no = #{no}
     </update>
+    
+    <update id="updateIpAddress" parameterType="ProxyGlobalVO">
+		UPDATE T_PRY_SVR_I
+		SET IPADR = #{obj_ip}
+		WHERE PRY_SVR_ID = #{pry_svr_id}
+	</update>
+	
+	<update id="updateProxyGlobalConf" parameterType="ProxyGlobalVO">
+        /**
+        * Query ID : updateProxyGlobalConf"
+        * Description : Proxy Global Config 
+        * Author : 
+        **/
+         UPDATE T_PRY_GLB_I
+           SET 
+           	   IF_NM = #{if_nm}
+     		 , CHK_TM = #{chk_tm}
+             , OBJ_IP = #{obj_ip}
+             , PEER_SERVER_IP = #{peer_server_ip}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	PRY_GLB_ID = #{pry_glb_id}::numeric 
+	</update>
+	
+	<update id="updatePryVipConf" parameterType="proxyVipConfigVO">
+        /**
+        * Query ID : updatePryVipConf
+        * Description : Proxy VIP Config 
+        * Author : 
+        **/         
+         UPDATE T_PRY_VIPCNG_I
+           SET V_IP = #{v_ip}
+             , V_ROT_ID = #{v_rot_id}::numeric
+             , V_IF_NM = #{v_if_nm}
+             , PRIORITY = #{priority}::numeric
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+             , STATE_NM = #{state_nm}
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	VIP_CNG_ID = #{vip_cng_id}::numeric 
+	</update>
+	
+	<update id="updatePryListenerSvr" parameterType="proxyListenerServerVO">
+        /**
+        * Query ID : updatePryListenerSvr
+        * Description : Proxy Listener Server 
+        * Author : 
+        **/
+        UPDATE 	T_PRY_LSN_SVR_I
+           SET 	CHK_PORTNO = #{chk_portno}::numeric
+             , 	BACKUP_YN = #{backup_yn}
+             , 	LST_MDFR_ID = #{lst_mdfr_id}
+             , 	LST_MDF_DTM = clock_timestamp()
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	LSN_ID = #{lsn_id}::numeric
+         AND 	LSN_SVR_ID = #{lsn_svr_id}::numeric
+         AND	DB_CON_ADDR = #{db_con_addr}
+	</update>
 </mapper>

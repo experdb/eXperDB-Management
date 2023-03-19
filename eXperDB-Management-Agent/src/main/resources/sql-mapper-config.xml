@@ -32,6 +32,7 @@
    		<typeAlias alias="ProxyConfChangeHistoryVO" type="com.experdb.proxy.db.repository.vo.ProxyConfChangeHistoryVO" />
     	<typeAlias alias="PryDbServerInfoVO" type="com.experdb.proxy.db.repository.vo.DbServerInfoVO" />
     	<typeAlias alias="PryConfigVO" type="com.experdb.proxy.db.repository.vo.PryConfigVO" />
+    	<typeAlias alias="ProxyListenerServerVO" type="com.experdb.proxy.db.repository.vo.ProxyListenerServerVO" />
     	
     	<typeAlias alias="TestVO" type="com.experdb.proxy.db.repository.vo.TestVO" />
     	
