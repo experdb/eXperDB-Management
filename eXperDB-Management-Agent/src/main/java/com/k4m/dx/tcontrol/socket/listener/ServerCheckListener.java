@@ -112,40 +112,37 @@ public class ServerCheckListener extends Thread {
 					try {
 						strMasterGbn = selectConnectInfo(serverObj);
 	
-						DbServerInfoVO masterGbnVo = new DbServerInfoVO();
-						masterGbnVo.setIPADR(strIpadr);
-						
-						//대상 DB가 마스터인지 판별
-						DbServerInfoVO resultMasterGbnVO = service.selectISMasterGbm(masterGbnVo);
-						strIsMasterGbn = resultMasterGbnVO.getMASTER_GBN();
-	
-						dbServerInfoVO.setMASTER_GBN(strMasterGbn);
-						dbServerInfoVO.setDB_CNDT("Y");
-	
-						if (resultMasterGbnVO.getDB_CNDT().equals("N")) {
-							service.updateDB_CNDT(dbServerInfoVO);
-						}
-	
-						//socketLogger.info("@@@@@@ before : " + strMasterGbn + " @@@@ after : " + strMasterGbn);
-						
-						//DB 판별, 상태 변경
-						if (!strIsMasterGbn.equals(strMasterGbn)) {
-							if (strMasterGbn.equals("M")) {
-								service.updateDBSlaveAll(dbServerInfoVO);
-							}
-	
-							service.updateDB_CNDT(dbServerInfoVO);
-						}
+						/*
+						 * DbServerInfoVO masterGbnVo = new DbServerInfoVO();
+						 * masterGbnVo.setIPADR(strIpadr);
+						 * 
+						 * //대상 DB가 마스터인지 판별 DbServerInfoVO resultMasterGbnVO =
+						 * service.selectISMasterGbm(masterGbnVo); strIsMasterGbn =
+						 * resultMasterGbnVO.getMASTER_GBN();
+						 * 
+						 * dbServerInfoVO.setMASTER_GBN(strMasterGbn); dbServerInfoVO.setDB_CNDT("Y");
+						 * 
+						 * if (resultMasterGbnVO.getDB_CNDT().equals("N")) {
+						 * service.updateDB_CNDT(dbServerInfoVO); }
+						 * 
+						 * //socketLogger.info("@@@@@@ before : " + strMasterGbn + " @@@@ after : " +
+						 * strMasterGbn);
+						 * 
+						 * //DB 판별, 상태 변경 if (!strIsMasterGbn.equals(strMasterGbn)) { if
+						 * (strMasterGbn.equals("M")) { service.updateDBSlaveAll(dbServerInfoVO); }
+						 * 
+						 * service.updateDB_CNDT(dbServerInfoVO); }
+						 */
 						
 	
 					} catch (Exception e) {
 						errLogger.error("Master/Slave Check Error {}", e.toString());
 						// socketLogger.info("@@@@@@ err : " + e.toString());
-						strMasterGbn = "S";
-						dbServerInfoVO.setMASTER_GBN(strMasterGbn);
-						dbServerInfoVO.setDB_CNDT("N");
+						//strMasterGbn = "S";
+						//dbServerInfoVO.setMASTER_GBN(strMasterGbn);
+						//dbServerInfoVO.setDB_CNDT("N");
 						
-						service.updateDB_CNDT(dbServerInfoVO);
+						//service.updateDB_CNDT(dbServerInfoVO);
 					}
 
 					serverObj = null;
@@ -256,7 +253,7 @@ public class ServerCheckListener extends Thread {
 			sessDB = sqlSessionFactory.openSession(connDB);
 			HashMap hp = (HashMap) sessDB.selectOne("app.selectMasterGbm");
 			strMasterGbn = (String) hp.get("master_gbn");
-			
+
 			sessDB.close();
 			connDB.close();
 		} catch (Exception e) {
