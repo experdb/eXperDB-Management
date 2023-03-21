@@ -323,36 +323,92 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			//설정 생성 후 RepoDB 테이블에 설정 update			
 			//ProxyGlobalVO 설정
 			ProxyGlobalVO globalVO = new ProxyGlobalVO();
-			globalVO.setChk_tm(global.getString("chk_tm"));
 			globalVO.setIf_nm(global.getString("if_nm"));
+			globalVO.setChk_tm(global.getString("chk_tm"));
 			globalVO.setObj_ip(global.getString("obj_ip"));
 			globalVO.setPeer_server_ip(global.getString("peer_server_ip"));
-			globalVO.setPry_glb_id(Integer.parseInt(global.getString("pry_glb_id")));
+			globalVO.setLst_mdfr_id(global.getString("lst_mdfr_id"));
 			globalVO.setPry_svr_id(Integer.parseInt(global.getString("pry_svr_id")));
-			globalVO.setLst_mdf_dtm(global.getString("lst_mdfr_id"));
+			globalVO.setPry_glb_id(Integer.parseInt(global.getString("pry_glb_id")));
+
+			socketLogger.info("global:"
+					+globalVO.getIf_nm()+"/"
+					+globalVO.getChk_tm()+"/"
+					+globalVO.getObj_ip()+"/"
+					+globalVO.getPeer_server_ip()+"/"
+					+globalVO.getLst_mdfr_id()+"/"
+					+globalVO.getPry_svr_id()+"/"
+					+globalVO.getPry_glb_id());
 
 			//global 업데이트
 			this.proxyDAO.updateProxyGlobalConf(globalVO);
 			this.proxyDAO.updateIpAddress(globalVO);
 			
-			//keepalived(vip) 설정
+			//keepalived(vip) 설정 업데이트
 			ProxyVipConfigVO proxyVipConfigVO = new ProxyVipConfigVO();
 			for(int i=0 ; i<vipConfSize ; i++){
 				JSONObject jsonObject = vipConfArry.getJSONObject(i);
-				proxyVipConfigVO.setPry_svr_id(Integer.parseInt(jsonObject.getString("pry_svr_id")));
 				proxyVipConfigVO.setV_ip(jsonObject.getString("v_ip"));
 				proxyVipConfigVO.setV_rot_id(jsonObject.getString("v_rot_id"));
 				proxyVipConfigVO.setV_if_nm(jsonObject.getString("v_if_nm"));
 				proxyVipConfigVO.setPriority(Integer.parseInt(jsonObject.getString("priority")));
+				proxyVipConfigVO.setLst_mdfr_id(jsonObject.getString("lst_mdfr_id"));
 				proxyVipConfigVO.setState_nm(jsonObject.getString("state_nm"));
-				proxyVipConfigVO.setLst_mdfr_id(jsonObject.getString("lst_mdf_dtm"));
-				proxyVipConfigVO.setVip_cng_id(Integer.parseInt(jsonObject.getString("vip_cng_id")));
-								
+				proxyVipConfigVO.setPry_svr_id(Integer.parseInt(jsonObject.getString("pry_svr_id")));
+				proxyVipConfigVO.setVip_cng_id(Integer.parseInt(jsonObject.getString("vip_cng_id"))+1);
+				
+				socketLogger.info("VIP["+i+"]:"
+						+proxyVipConfigVO.getV_ip()+"/"
+						+proxyVipConfigVO.getV_rot_id()+"/"
+						+proxyVipConfigVO.getV_if_nm()+"/"
+						+proxyVipConfigVO.getPriority()+"/"
+						+proxyVipConfigVO.getLst_mdfr_id()+"/"
+						+proxyVipConfigVO.getState_nm()+"/"
+						+proxyVipConfigVO.getPry_svr_id()+"/"
+						+proxyVipConfigVO.getVip_cng_id()+"}");
 				this.proxyDAO.updatePryVipConf(proxyVipConfigVO);
 			}
 			
-			ProxyListenerServerVO proxyListenerServerVO = new ProxyListenerServerVO();
+			//haproxy 리스너 업데이트
+			ProxyListenerVO proxyListenerVO = new ProxyListenerVO();
+			for(int i=0 ; i<listenerSize ; i++){
+				JSONObject proxyListener = listener.getJSONObject(i);
+				proxyListenerVO.setLsn_nm(proxyListener.getString("lsn_nm"));
+				proxyListenerVO.setCon_bind_port(proxyListener.getString("con_bind_port"));
+				proxyListenerVO.setLsn_desc(proxyListener.getString("lsn_desc"));
+				proxyListenerVO.setDb_usr_id(proxyListener.getString("db_usr_id"));
+				proxyListenerVO.setDb_id(Integer.parseInt(proxyListener.getString("db_id")));
+				proxyListenerVO.setDb_nm(proxyListener.getString("db_nm"));
+				proxyListenerVO.setCon_sim_query(proxyListener.getString("con_sim_query"));
+				proxyListenerVO.setField_val(proxyListener.getString("field_val"));
+				proxyListenerVO.setField_nm(proxyListener.getString("field_nm"));
+				proxyListenerVO.setLst_mdfr_id(proxyListener.getString("lst_mdfr_id"));
+				proxyListenerVO.setBal_yn(proxyListener.getString("bal_yn"));
+				proxyListenerVO.setBal_opt(proxyListener.getString("bal_opt"));
+				proxyListenerVO.setLsn_id(Integer.parseInt(proxyListener.getString("lsn_id")));
+				proxyListenerVO.setPry_svr_id(Integer.parseInt(proxyListener.getString("pry_svr_id")));
+				
+				socketLogger.info("listen["+i+"]:"
+						+proxyListenerVO.getLsn_nm()+"/"
+						+proxyListenerVO.getCon_bind_port()+"/"
+						+proxyListenerVO.getLsn_desc()+"/"
+						+proxyListenerVO.getDb_usr_id()+"/"
+						+proxyListenerVO.getDb_id()+"/"
+						+proxyListenerVO.getDb_nm()+"/"
+						+proxyListenerVO.getCon_sim_query()+"/"
+						+proxyListenerVO.getField_val()+"/"
+						+proxyListenerVO.getField_nm()+"/"
+						+proxyListenerVO.getLst_mdfr_id()+"/"
+						+proxyListenerVO.getBal_yn()+"/"
+						+proxyListenerVO.getBal_opt()+"/"
+						+proxyListenerVO.getLsn_id()+"/"
+						+proxyListenerVO.getPry_svr_id()
+						);
+				this.proxyDAO.updatePryChLsn(proxyListenerVO);
+			}			
 			
+			//haproxy 리스너 대상 DB 목록 업데이트
+			ProxyListenerServerVO proxyListenerServerVO = new ProxyListenerServerVO();
 			for(int i=0 ; i<listenerSize ; i++){
 				JSONArray listenerSvrList = listener.getJSONObject(i).getJSONArray("server_list");
 				int listenerSvrListSize = listenerSvrList.length();
@@ -366,35 +422,18 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 					proxyListenerServerVO.setLsn_id(Integer.parseInt(jsonObject.getString("lsn_id")));
 					proxyListenerServerVO.setLsn_svr_id(Integer.parseInt(jsonObject.getString("lsn_svr_id")));
 					proxyListenerServerVO.setDb_con_addr(jsonObject.getString("db_con_addr"));
-					
-					
+					socketLogger.info("listenDB["+(listenerSvrListSize*i+y)+"]:"
+							+proxyListenerServerVO.getChk_portno()+"/"
+							+proxyListenerServerVO.getBackup_yn()+"/"
+							+proxyListenerServerVO.getLst_mdfr_id()+"/"
+							+proxyListenerServerVO.getPry_svr_id()+"/"
+							+proxyListenerServerVO.getLsn_id()+"/"
+							+proxyListenerServerVO.getLsn_svr_id()+"/"
+							+proxyListenerServerVO.getDb_con_addr()
+							);
 					this.proxyDAO.updatePryListenerSvr(proxyListenerServerVO);
 				}
 			}	
-			socketLogger.info("====THE END===");
-			
-			ProxyListenerVO proxyListenerVO = new ProxyListenerVO();
-			for(int i=0 ; i<listenerSize ; i++){
-				JSONObject proxyListener = listener.getJSONObject(i);
-				proxyListenerVO.setLsn_id(Integer.parseInt(proxyListener.getString("lsn_id")));
-				proxyListenerVO.setPry_svr_id(Integer.parseInt(proxyListener.getString("pry_svr_id")));
-				proxyListenerVO.setLsn_nm(proxyListener.getString("lsn_nm"));
-				proxyListenerVO.setCon_bind_port(proxyListener.getString("con_bind_port"));
-				proxyListenerVO.setCon_sim_query(proxyListener.getString("con_sim_query"));
-				proxyListenerVO.setDb_usr_id(proxyListener.getString("db_usr_id"));
-				proxyListenerVO.setDb_id(Integer.parseInt(proxyListener.getString("db_id")));
-				proxyListenerVO.setDb_nm(proxyListener.getString("db_nm"));
-				proxyListenerVO.setField_val(proxyListener.getString("field_val"));
-				proxyListenerVO.setField_nm(proxyListener.getString("field_nm"));
-				proxyListenerVO.setBal_opt(proxyListener.getString("bal_opt"));
-				proxyListenerVO.setBal_yn(proxyListener.getString("bal_yn"));
-				proxyListenerVO.setLst_mdfr_id(proxyListener.getString("lst_mdfr_id"));
-				socketLogger.info("====THE END==="+proxyListenerVO.getDb_id());
-				socketLogger.info("====THE END==="+proxyListenerVO.getDb_usr_id());
-				this.proxyDAO.updatePryLsnInfo(proxyListenerVO);
-			}
-			
-			
 		}catch(Exception e){
 			
 			newConfChgHistVo.setPry_svr_id(prySvrId);

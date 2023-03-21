@@ -597,11 +597,6 @@ public class AgentSetting {
 //		System.out.println("database.password :" + strDatabasePassword);
 		
 		
-		//CDC 입력 확인
-		System.out.println(ANSI_CYAN+"CDC_use :" + ANSI_RESET + strTransYN);
-		if("Y".equals(strTransYN)) {
-			System.out.println("trans_path :" + strTransPath);
-		}
 
 		//Proxy 입력 확인
 		System.out.println(ANSI_CYAN+"Proxy_use :" + ANSI_RESET + strProxyYN);
@@ -638,12 +633,15 @@ public class AgentSetting {
 			System.out.println("scale_monitoring_password : " + strScaleMonPassword);		
 		}
 		
+		//CDC 입력 확인
+		System.out.println(ANSI_CYAN+"CDC_use :" + ANSI_RESET + strTransYN);
+		if("Y".equals(strTransYN)) {
+			System.out.println("trans_path :" + strTransPath);
+		}
+		
 		System.out.println("#####################################################");
-	
 		
-		
-		
-
+		//설정 사용 확인
 		System.out.println(ANSI_RED+"Do you want to apply what you entered? (y, n) : "+ANSI_RESET);
 		String strApply = scan.nextLine();
 		while (true) {
@@ -700,9 +698,22 @@ public class AgentSetting {
 		    prop.setProperty("agent.install.ip", strAgentIp);
 		    prop.setProperty("socket.server.port", strAgentPort);
 
-		    //cdc 설정
-		    prop.setProperty("agent.trans_yn", strTransYN);
-		    prop.setProperty("agent.trans_path", strTransPath);
+		    //Proxy 설정
+		    prop.setProperty("agent.proxy_yn", strProxyYN);
+		    //프록시 서버 분리 유무
+			prop.setProperty("proxy.global.serveryn", strProxyServerYn);
+		    if("Y".equals(strProxyYN)){
+			    prop.setProperty("keepalived.install.yn", strKeepInstaillYn);
+				prop.setProperty("aws.yn", strAWSUseYn);
+				prop.setProperty("agent.path", strAgentPath);
+				prop.setProperty("proxy.conf_backup_path", strConfBackupPath);
+				prop.setProperty("proxy.global.user", strProxyUser);
+				prop.setProperty("proxy.global.group", strProxyGroup);
+//				prop.setProperty("agent.inner.ip.useyn", strAgentInnerIPUseYn);
+//				prop.setProperty("agent.inner.ip", strAgentInnerIP);
+//			    prop.setProperty("agent.proxy_inter_yn", strAgentInnerIPUseYn);
+//			    prop.setProperty("agent.proxy_inter_ip", strAgentInnerIP);
+		    }
 		    
 		    //scale설정
 		    prop.setProperty("agent.scale_yn", strScaleYN);
@@ -724,25 +735,10 @@ public class AgentSetting {
 		    /* prop.setProperty("agent.scale_monitoring_user", "ENC(" + mon_user + ")");
 		    prop.setProperty("agent.scale_monitoring_passwd", "ENC(" + mon_passwd + ")"); */
 	    
-		    
-		    //Proxy 설정
-		    prop.setProperty("agent.proxy_yn", strProxyYN);
-		    //프록시 서버 분리 유무
-			prop.setProperty("proxy.global.serveryn", strProxyServerYn);
-		    if("Y".equals(strProxyYN)){
-			    prop.setProperty("keepalived.install.yn", strKeepInstaillYn);
-				prop.setProperty("aws.yn", strAWSUseYn);
-				prop.setProperty("agent.path", strAgentPath);
-				prop.setProperty("proxy.conf_backup_path", strConfBackupPath);
-				prop.setProperty("proxy.global.user", strProxyUser);
-				prop.setProperty("proxy.global.group", strProxyGroup);
-//				prop.setProperty("agent.inner.ip.useyn", strAgentInnerIPUseYn);
-//				prop.setProperty("agent.inner.ip", strAgentInnerIP);
-//			    prop.setProperty("agent.proxy_inter_yn", strAgentInnerIPUseYn);
-//			    prop.setProperty("agent.proxy_inter_ip", strAgentInnerIP);
-		    }
-		    
-		    
+		    //cdc 설정
+		    prop.setProperty("agent.trans_yn", strTransYN);
+		    prop.setProperty("agent.trans_path", strTransPath);
+
 		    //설정 파일 저장
 		    try {
 		    	prop.store(new FileOutputStream(path + "context.properties"), "");

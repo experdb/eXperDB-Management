@@ -410,11 +410,22 @@ public class ProxyDAO {
 	 * @throws Exception
 	 */
 	public void updatePryVipConf(ProxyVipConfigVO proxyVipConfigVO) {
-		session.update("proxy.insertPryVipCngInfo", proxyVipConfigVO);
+		session.update("proxy.updatePryVipConf", proxyVipConfigVO);
+	}
+	
+
+	/**
+	 * T_PRY_LSN_I 리스너 업데이트
+	 * 
+	 * @param ProxyListenerVO
+	 * @throws Exception
+	 */
+	public void updatePryChLsn(ProxyListenerVO proxyListenerVO) {
+		session.update("proxy.updatePryChLsn", proxyListenerVO);
 	}
 	
 	/**
-	 * T_PRY_LSN_SVR_I 리스너 업데이트
+	 * T_PRY_LSN_SVR_I 리스너 DB 업데이트
 	 * 
 	 * @param ProxyListenerServerVO
 	 * @throws Exception
