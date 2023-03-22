@@ -888,7 +888,6 @@
 				fn_proxy_loadbar("stop");
 			},
 			success : function(result) {
-				console.log('데이터 셋팅 : ',result);
 				runValid = true;
  				if(result.errcd > -1){
  					var vipUseYn = selVipUseYn;
@@ -2307,7 +2306,6 @@
 				}
 			}
 		} */
-		console.log(proxy_config_val(),'::', vip_val(), ':::', listener_val())
 		if(proxy_config_val() && vip_val() && listener_val()){
 			showSwalIcon('<spring:message code="eXperDB_proxy.msg6"/>', '<spring:message code="common.close" />', '', 'warning');
 			}else{
@@ -2364,7 +2362,6 @@
 				currentVipVal.push(tr[j].childNodes[0].value);
 			}
 		}
-		console.log('currentVipVal :: ',currentVipVal);
 		
 		for (var i = 0; i < selVipInstanceList.length; i++) {
 			vipTable.push(selVipInstanceList[i].state_nm);
@@ -2374,7 +2371,6 @@
 			vipTable.push(String(selVipInstanceList[i].priority));
 			vipTable.push(String(selVipInstanceList[i].chk_tm));
 		}
-		console.log('vipTable :: ',vipTable);
 		
 		
 		if(equals(vipTable, currentVipVal)){
@@ -2505,7 +2501,7 @@
 			listener: tempListener,																												// 리스너 관련 data
 			delListener: delListenerRows,																										// 선택된 리스너 data (지울거)
 		};
-	 	/* $.ajax({
+	 	$.ajax({
  			url : "/applyProxyConf.do",
  			data : {confData : JSON.stringify(param)},
  			dataType : "json",
@@ -2541,7 +2537,7 @@
  					fn_proxy_loadbar("stop");
 				},6000);
  			}
- 		});  */
+ 		});  
 	}
 	
 	/* ********************************************************
