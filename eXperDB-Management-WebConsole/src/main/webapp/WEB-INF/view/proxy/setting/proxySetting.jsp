@@ -3149,7 +3149,7 @@
 												<th width="20%"><spring:message
 														code="eXperDB_proxy.vip_priority" /></th>
 												<th width="20%"><spring:message
-														code="eXperDB_proxy.vip_check_tm" /></th>	
+														code="eXperDB_proxy.vip_check_tm" />(sec)</th>	
 												<%-- <th width="0"><spring:message code="eXperDB_proxy.vip_priority" /></th>
 										<th width="0"><spring:message code="eXperDB_proxy.vip_check_tm" /></th>
 										<th width="0">최종 수정자</th>
