@@ -267,8 +267,17 @@ public class AgentSetting {
 	            int exitCode = new ProcessBuilder("sudo", "-n", "-u", strProxyUser, "true").start().waitFor();
 	            if (exitCode != 0)  {
 	            	//sudo 권한이 없으면 프록시 설치 불가
-	                System.out.println(ANSI_RED + "This user does not have permission" + ANSI_RESET);
-	                strProxyYN="N";
+	            	while (true) {
+		            	if(!(strProxyYN.equals("N"))) {
+			                System.out.println(ANSI_RED + "This user does not have permission" + ANSI_RESET);
+		            		System.out.println("Please enter your Proxy-Service setting N. ");
+		    				System.out.println("Whether Proxy Service is enabled (n) :");
+		    				strProxyYN = scan.nextLine();
+		    				strProxyYN = strProxyYN.toUpperCase();
+		            	}else {
+		            		break;
+		            	}
+	            	}
 	            }
 	        } catch (IOException | InterruptedException e) {
 	            e.printStackTrace();
@@ -751,9 +760,9 @@ public class AgentSetting {
 		    	System.out.println("Exit(0) Error : " + e.toString());
 		    	System.exit(0);
 		    }
-		    System.out.println("#### eXperDB-Agent Setting success !! #####");
+		    System.out.println("eXperDB-Agent Setting success !!");
 		    if("Y".equals(strProxyYN)){
-		    	System.out.println(ANSI_YELLOW+"#### Before Start Proxy Register DataBase #####"+ANSI_RESET);
+		    	System.out.println(ANSI_YELLOW+"DBMS registration is required before executing the proxy"+ANSI_RESET);
 		    }
 		} else {
 			System.out.println("#### Exit(0) Cancel Agent Setting #####");
