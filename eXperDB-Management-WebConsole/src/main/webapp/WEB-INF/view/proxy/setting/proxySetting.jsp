@@ -1,8 +1,9 @@
 <style>
 .dataTables_wrapper select {
   width: 160px !important;
-  heigth: 16px !important;
+  height: 30px !important;
   text-align:center !important;
+  margin: 0 auto !important;
 }
 </style>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -386,7 +387,7 @@
 							if(data != ''){
 								var html = "";
 								if(full.state_nm == 'MASTER'){
-									html += '<select id="state_nm" style="color:black;">';
+									html += '<select id="state_nm" style="color:black; width:120px">';
 									html += 	'<option value="MASTER" style="text-align:center">MASTER</option>';
 									html += 	'<option value="BACKUP" style="text-align:center">BACKUP</option>';
 									html += '</select>';
@@ -460,12 +461,12 @@
 			]
 		});
 		
-		vipInstTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px');//State
-		vipInstTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px');//가상 IP
-		vipInstTable.tables().header().to$().find('th:eq(2)').css('min-width', '40px');//가상 라우터 id
-		vipInstTable.tables().header().to$().find('th:eq(3)').css('min-width', '50px');//가상 인터페이스 명
-		vipInstTable.tables().header().to$().find('th:eq(4)').css('min-width', '40px');//우선순위 render
- 		vipInstTable.tables().header().to$().find('th:eq(5)').css('min-width', '40px');//체크 시간
+		vipInstTable.tables().header().to$().find('th:eq(0)').css('min-width', '15%');//State
+		vipInstTable.tables().header().to$().find('th:eq(1)').css('min-width', '17%');//가상 IP
+		vipInstTable.tables().header().to$().find('th:eq(2)').css('min-width', '17%');//가상 라우터 id
+		vipInstTable.tables().header().to$().find('th:eq(3)').css('min-width', '17%');//가상 인터페이스 명
+		vipInstTable.tables().header().to$().find('th:eq(4)').css('min-width', '17%');//우선순위 render
+ 		vipInstTable.tables().header().to$().find('th:eq(5)').css('min-width', '17%');//체크 시간
 		vipInstTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');//우선순위
 		vipInstTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px');//최종 수정자
 		vipInstTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');//최종 수정일
@@ -636,16 +637,16 @@
 			]
 		});
 
-		proxyListenTable.tables().header().to$().find('th:eq(1)').css('min-width', '15%');//Listen
-		proxyListenTable.tables().header().to$().find('th:eq(2)').css('min-width', '15%');//bind
-		proxyListenTable.tables().header().to$().find('th:eq(3)').css('min-width', '15%');//db명
-		proxyListenTable.tables().header().to$().find('th:eq(4)').css('min-width', '20%');//check query
-		proxyListenTable.tables().header().to$().find('th:eq(5)').css('min-width', '15%');//balance 사용여부
-		proxyListenTable.tables().header().to$().find('th:eq(6)').css('min-width', '20%');//balance 옵션
+		proxyListenTable.tables().header().to$().find('th:eq(1)').css('min-width', '10%');//Listen
+		proxyListenTable.tables().header().to$().find('th:eq(2)').css('min-width', '20%');//bind
+		proxyListenTable.tables().header().to$().find('th:eq(3)').css('min-width', '25%');//db명
+		proxyListenTable.tables().header().to$().find('th:eq(4)').css('min-width', '25%');//check query
+		proxyListenTable.tables().header().to$().find('th:eq(5)').css('min-width', '10%');//balance 사용여부
+		proxyListenTable.tables().header().to$().find('th:eq(6)').css('min-width', '10%');//balance 옵션
  		proxyListenTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px');//전송 쿼리
 		proxyListenTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');//필드 값
 		proxyListenTable.tables().header().to$().find('th:eq(9)').css('min-width', '0px');//필드 명
-		proxyListenTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');//최종 수정자
+		proxyListenTable.tables().header().to$().find('th:eq(10)').css('min-width', '0px');//최종 수정자 
 		proxyListenTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');//최종 수정일
 		proxyListenTable.tables().header().to$().find('th:eq(12)').css('min-width', '0px');//proxy 서버 ip
 		proxyListenTable.tables().header().to$().find('th:eq(13)').css('min-width', '0px');//proxy 서버 id
