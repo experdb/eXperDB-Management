@@ -330,6 +330,7 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 			globalVO.setLst_mdfr_id(global.getString("lst_mdfr_id"));
 			globalVO.setPry_svr_id(Integer.parseInt(global.getString("pry_svr_id")));
 			globalVO.setPry_glb_id(Integer.parseInt(global.getString("pry_glb_id")));
+			globalVO.setMax_con_cnt(Integer.parseInt(global.getString("max_con_cnt")));
 
 			socketLogger.info("global:"
 					+globalVO.getIf_nm()+"/"
@@ -338,8 +339,9 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 					+globalVO.getPeer_server_ip()+"/"
 					+globalVO.getLst_mdfr_id()+"/"
 					+globalVO.getPry_svr_id()+"/"
-					+globalVO.getPry_glb_id());
-
+					+globalVO.getPry_glb_id()+"/"
+					+globalVO.getMax_con_cnt());
+			
 			//global 업데이트
 			this.proxyDAO.updateProxyGlobalConf(globalVO);
 			this.proxyDAO.updateIpAddress(globalVO);
@@ -355,7 +357,8 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 				proxyVipConfigVO.setLst_mdfr_id(jsonObject.getString("lst_mdfr_id"));
 				proxyVipConfigVO.setState_nm(jsonObject.getString("state_nm"));
 				proxyVipConfigVO.setPry_svr_id(Integer.parseInt(jsonObject.getString("pry_svr_id")));
-				proxyVipConfigVO.setVip_cng_id(Integer.parseInt(jsonObject.getString("vip_cng_id"))+1);
+				proxyVipConfigVO.setVip_cng_id(Integer.parseInt(jsonObject.getString("vip_cng_id")));
+				proxyVipConfigVO.setChk_tm(Integer.parseInt(jsonObject.getString("chk_tm")));
 				
 				socketLogger.info("VIP["+i+"]:"
 						+proxyVipConfigVO.getV_ip()+"/"
@@ -365,7 +368,9 @@ public class ProxyLinkServiceImpl implements ProxyLinkService{
 						+proxyVipConfigVO.getLst_mdfr_id()+"/"
 						+proxyVipConfigVO.getState_nm()+"/"
 						+proxyVipConfigVO.getPry_svr_id()+"/"
-						+proxyVipConfigVO.getVip_cng_id()+"}");
+						+proxyVipConfigVO.getVip_cng_id()+"/"
+						+proxyVipConfigVO.getChk_tm()
+						);
 				this.proxyDAO.updatePryVipConf(proxyVipConfigVO);
 			}
 			
