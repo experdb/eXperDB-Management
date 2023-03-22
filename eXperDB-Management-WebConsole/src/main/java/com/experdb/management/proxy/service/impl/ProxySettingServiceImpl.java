@@ -726,6 +726,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		global.setPeer_server_ip(CommonUtil.getStringOfJsonObj(confData, "peer_server_ip"));
 		global.setPry_svr_id(prySvrId);
 		global.setPry_glb_id(CommonUtil.getIntOfJsonObj(confData, "pry_glb_id"));
+		global.setMax_con_cnt(CommonUtil.getIntOfJsonObj(confData, "max_con_cnt"));
 		global.setLst_mdfr_id(lst_mdfr_id);
 //		// update global conf info
 //		proxySettingDAO.updateProxyGlobalConf(global);
@@ -769,6 +770,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 				vipConf[j].setV_if_nm(CommonUtil.getStringOfJsonObj(vipcngJobj, "v_if_nm"));
 				vipConf[j].setPriority(CommonUtil.getIntOfJsonObj(vipcngJobj, "priority"));
 				vipConf[j].setState_nm(CommonUtil.getStringOfJsonObj(vipcngJobj, "state_nm"));
+				vipConf[j].setChk_tm(CommonUtil.getIntOfJsonObj(vipcngJobj, "chk_tm"));
 				vipConf[j].setLst_mdfr_id(lst_mdfr_id);
 
 				// insert/update vip instance
@@ -909,7 +911,10 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		globalJObj.put("pry_svr_id", global.getPry_svr_id());
 		globalJObj.put("if_nm", global.getPry_glb_id());
 		globalJObj.put("if_nm", global.getLst_mdfr_id());
+		globalJObj.put("max_con_cnt", global.getMax_con_cnt());
+		
 		agentJobj.put("global_info", globalJObj);
+		
 		// LISTENER 정보
 		List<ProxyListenerVO> listenerList = proxySettingDAO.selectProxyListenerList(agentParam);
 		JSONArray listenerJArr = new JSONArray();
@@ -968,6 +973,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 			tempVip.put("priority", vipConf[i].getPriority());
 			tempVip.put("state_nm", vipConf[i].getState_nm());
 			tempVip.put("lst_mdfr_id",vipConf[i].getLst_mdfr_id());
+			tempVip.put("chk_tm",vipConf[i].getChk_tm());
 			vipConfgJArr.add(tempVip);
 		}
 		agentJobj.put("vipconfig_list", vipConfgJArr);
