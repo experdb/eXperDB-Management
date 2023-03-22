@@ -222,7 +222,7 @@ public class ServerCheckListener extends Thread {
 
 			//리스너 및  vip 상태 체크
 			returnMsg = service.proxyStatusChk(chkParam);
-			socketLogger.info("Job procyExecuteRealCheck [OK]");
+//			socketLogger.info("Job procyExecuteRealCheck [OK]");
 			
 			//db 실시간 등록
 			//returnMsg = service.proxyDbmsStatusChk(chkParam); 	

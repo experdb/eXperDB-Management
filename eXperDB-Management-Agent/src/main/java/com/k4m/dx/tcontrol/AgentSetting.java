@@ -130,7 +130,7 @@ public class AgentSetting {
 		//=======공통정보=========
 		//IP 입력
 		System.out.println("#####################################################");
-		System.out.println(ANSI_RED+"eXperDB-Management-Agent Common Setting"+ANSI_RESET);
+		System.out.println(ANSI_GREEN+"eXperDB-Management-Agent Common Setting"+ANSI_RESET);
 		System.out.println("#####################################################");
 //		System.out.println("agent ip(" + localIp + ") : ");
 		System.out.println("agent ip : ");
@@ -230,7 +230,7 @@ public class AgentSetting {
 		//MGMT 내용
 
 		System.out.println("#####################################################");
-		System.out.println(ANSI_RED+"eXperDB-Management-Agent Performance Setting"+ANSI_RESET);
+		System.out.println(ANSI_GREEN+"eXperDB-Management-Agent Performance Setting"+ANSI_RESET);
 		System.out.println("#####################################################");
 		
 		
@@ -351,6 +351,7 @@ public class AgentSetting {
 			String[] keep_command = { strAgentPath+"/keepalived_status.sh"};
         	ProcessBuilder keep_processBuilder = new ProcessBuilder(keep_command);
         	Process keep_process = keep_processBuilder.start();
+        	
         	BufferedReader keep_reader = new BufferedReader(new InputStreamReader(keep_process.getInputStream()));
 			if(!("not installed".equals(keep_reader.readLine()))) {
 				//keepalived 설치 시 설치 Y
@@ -587,9 +588,9 @@ public class AgentSetting {
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseName;
 		
 		//입력 내용 최종 확인
-		System.out.println("\n\n\n\n");
+		System.out.println("\n\n");
 		System.out.println("#####################################################");
-		System.out.println(ANSI_RED+"eXperDB-Management-Agent Setting Result"+ANSI_RESET);
+		System.out.println(ANSI_GREEN+"eXperDB-Management-Agent Setting Result"+ANSI_RESET);
 		System.out.println("#####################################################");
 		System.out.println("agent ip :" + strAgentIp);
 		System.out.println("agent port :" + strAgentPort);
@@ -605,10 +606,10 @@ public class AgentSetting {
 			System.out.println("Server Only Proxy :" + strProxyServerYn);
 			System.out.println("Proxy Global User :" + strProxyUser);
 			System.out.println("Proxy Global Group :" + strProxyGroup);
-			System.out.println("keepalived install :" + strKeepInstaillYn);
+			System.out.println("keepalived installed :" + strKeepInstaillYn);
 			System.out.println("installed in AWS :" + strAWSUseYn);
-			System.out.println("agent path :" + strAgentPath);
-			System.out.println("proxy  path :" + strConfBackupPath);
+//			System.out.println("agent path :" + strAgentPath);
+//			System.out.println("proxy  path :" + strConfBackupPath);
 //			System.out.println("Proxy InnerIP Use :"+strAgentInnerIPUseYn);	
 //			System.out.println("proxy_inter_yn :" + strAgentInnerIPUseYn);
 //			if("Y".equals(strAgentInnerIPUseYn)) {
@@ -643,7 +644,7 @@ public class AgentSetting {
 		System.out.println("#####################################################");
 		
 		//설정 사용 확인
-		System.out.println(ANSI_RED+"Do you want to apply what you entered? (y, n) : "+ANSI_RESET);
+		System.out.println("Do you want to apply what you entered? (y, n) : ");
 		String strApply = scan.nextLine();
 		while (true) {
 			if(strApply.equals("")) {
@@ -751,6 +752,9 @@ public class AgentSetting {
 		    	System.exit(0);
 		    }
 		    System.out.println("#### eXperDB-Agent Setting success !! #####");
+		    if("Y".equals(strProxyYN)){
+		    	System.out.println(ANSI_YELLOW+"#### Before Start Proxy Register DataBase #####"+ANSI_RESET);
+		    }
 		} else {
 			System.out.println("#### Exit(0) Cancel Agent Setting #####");
 		}
