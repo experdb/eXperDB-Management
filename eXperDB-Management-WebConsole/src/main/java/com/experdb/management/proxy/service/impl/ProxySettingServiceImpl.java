@@ -909,8 +909,8 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		globalJObj.put("obj_ip", global.getObj_ip());
 		globalJObj.put("peer_server_ip", global.getPeer_server_ip());
 		globalJObj.put("pry_svr_id", global.getPry_svr_id());
-		globalJObj.put("if_nm", global.getPry_glb_id());
-		globalJObj.put("if_nm", global.getLst_mdfr_id());
+		globalJObj.put("pry_glb_id", global.getPry_glb_id());
+		globalJObj.put("lst_mdfr_id", global.getLst_mdfr_id());
 		globalJObj.put("max_con_cnt", global.getMax_con_cnt());
 		
 		agentJobj.put("global_info", globalJObj);
