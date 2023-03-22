@@ -1126,6 +1126,7 @@
              , PEER_SERVER_IP = #{peer_server_ip}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
+             , MAX_CON_CNT = #{max_con_cnt}
          WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
          AND	PRY_GLB_ID = #{pry_glb_id}::numeric 
 	</update>
@@ -1144,6 +1145,7 @@
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
              , STATE_NM = #{state_nm}
+             , CHK_TM = #{chk_tm}
          WHERE 	
          PRY_SVR_ID = #{pry_svr_id}::numeric 
          AND	
