@@ -77,6 +77,8 @@
 		
 		//pghbak 조회
 		fn_pgrback_search();
+		
+		fn_buttonAut();
 	}
 
 	/* ********************************************************
@@ -134,6 +136,17 @@
 		}
 		secHtml += '</select> <font size="2em"><spring:message code="schedule.second" /></font>';
 		$("#sec", "#restoreTimeRegForm").append(secHtml);
+	}
+	
+	function fn_buttonAut(){
+		var usr_id = document.getElementById("usr_id"); 
+		
+		if("${usr_id}" == "viewer"){
+			btnScheduleRun.style.display = 'none';
+		}else{
+			btnScheduleRun.style.display = '';
+		}
+
 	}
 	
 	/* ********************************************************

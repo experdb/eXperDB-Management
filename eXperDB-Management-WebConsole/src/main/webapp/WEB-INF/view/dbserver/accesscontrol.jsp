@@ -52,8 +52,28 @@
 		});
 		$('.dataTables_filter').hide();
 		fn_select(); 	
+		
+		fn_buttonAut();
 	});
 
+	
+	function fn_buttonAut(){
+		var usr_id = document.getElementById("usr_id"); 
+		
+		if("${usr_id}" == "viewer"){
+			btnSave.style.display = 'none';
+			btnDelete.style.display = 'none';
+			btnModify.style.display = 'none';
+			btnInsert.style.display = 'none';
+		}else{
+			btnSave.style.display = '';
+			btnDelete.style.display = '';
+			btnModify.style.display = '';
+			btnInsert.style.display = '';
+		}
+
+	}
+	
 	/* ********************************************************
 	 * agent 상태 확인
 	 ******************************************************** */

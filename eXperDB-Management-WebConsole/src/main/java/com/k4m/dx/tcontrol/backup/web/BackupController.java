@@ -109,6 +109,7 @@ public class BackupController {
 				String usr_id = loginVo.getUsr_id();
 				workVO.setUsr_id(usr_id);
 				
+				mv.addObject("usr_id", usr_id);				
 				mv.addObject("dbList",backupService.selectDbList(workVO));
 				
 			} catch (Exception e1) {
@@ -139,6 +140,7 @@ public class BackupController {
 			}
 
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
+	
 			mv.setViewName("backup/workList");
 		}
 		return mv;

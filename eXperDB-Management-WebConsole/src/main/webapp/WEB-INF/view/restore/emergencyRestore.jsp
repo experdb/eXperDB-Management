@@ -59,6 +59,8 @@
 	          $(element).addClass('form-control-danger')
 	        }
 		});
+		
+	    fn_buttonAut();
 	});
 
 	/* ********************************************************
@@ -66,6 +68,18 @@
 	 ******************************************************** */
 	function fn_init() {
 		$("#storage_view", "#restoreEmergencyRegForm").hide();
+	}
+	
+	
+	function fn_buttonAut(){
+		var usr_id = document.getElementById("usr_id"); 
+		
+		if("${usr_id}" == "viewer"){
+			btnScheduleRun.style.display = 'none';
+		}else{
+			btnScheduleRun.style.display = '';
+		}
+
 	}
 
 	/* ********************************************************

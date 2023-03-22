@@ -90,6 +90,11 @@ public class ScriptController {
 			historyVO.setExe_dtl_cd("DX-T0125");
 			accessHistoryService.insertHistory(historyVO);
 			
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			
+			mv.addObject("usr_id", usr_id);
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());		
 			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
 			mv.setViewName("script/scriptList");
