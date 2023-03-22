@@ -139,7 +139,7 @@ public class DatabaseTableInfo {
 				case "TC002204" :
 					sql = "SELECT n.nspname, c.relname, obj_description(c.oid) "
 							+ "FROM pg_catalog.pg_class c inner join pg_catalog.pg_namespace n on c.relnamespace=n.oid "
-							+ "WHERE c.relkind = 'r' and nspname ='"+serverObj.get("SCHEMA") +"' and c.relname LIKE '%" + serverObj.get("TABLE_NM") + "%' ORDER BY c.relname";
+							+ "WHERE c.relkind in ('r','m','v') and nspname ='"+serverObj.get("SCHEMA") +"' and c.relname LIKE '%" + serverObj.get("TABLE_NM") + "%' ORDER BY c.relname";
 
 					ResultSet rs = stmt.executeQuery(sql);				
 					i = 0;
