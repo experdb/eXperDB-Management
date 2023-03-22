@@ -966,7 +966,7 @@ public class ProxySettingServiceImpl extends EgovAbstractServiceImpl implements 
 		for (int i = 0; i < vipConfigList.size(); i++) {
 			ProxyVipConfigVO vipVO = vipConfigList.get(i);
 			JSONObject tempVip = vipVO.toJSONObject();			
-			tempVip.put("vip_cng_id", vipConf[i].getChk_tm());
+			tempVip.put("vip_cng_id", vipConf[i].getVip_cng_id());
 			tempVip.put("v_ip", vipConf[i].getV_ip());
 			tempVip.put("v_rot_id", vipConf[i].getV_rot_id());
 			tempVip.put("v_if_nm", vipConf[i].getV_if_nm());

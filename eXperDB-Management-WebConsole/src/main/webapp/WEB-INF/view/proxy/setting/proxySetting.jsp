@@ -1,3 +1,10 @@
+<style>
+.dataTables_wrapper select {
+  width: 160px !important;
+  heigth: 16px !important;
+  text-align:center !important;
+}
+</style>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -503,12 +510,12 @@
 							if(data != ''){
 								var html = "";
 								if(full.lsn_nm == 'pgReadOnly'){
-									html += '<select id="lsn_nm" style="color:black padding-top:-10px; padding-bottom:-10px;" disabled >';
+									html += '<select id="lsn_nm" style="color:black width:3000px;" disabled >';
 									html += 	'<option value="pgReadOnly" style="text-align:center" selected>pgReadOnly</option>';
 									html += 	'<option value="pgReadWrite" style="text-align:center">pgReadWrite</option>';
 									html += '</select>';
 								}else if (full.lsn_nm == 'pgReadWrite'){
-									html += '<select id="lsn_nm" style="color:black margin-top:-10px; padding-bottom:-10px;" disabled >';
+									html += '<select id="lsn_nm" style="color:black width:3000px" disabled >';
 									html += 	'<option value="pgReadWrite" style="text-align:center" selected>pgReadWrite</option>';
 									html += 	'<option value="pgReadOnly" style="text-align:center">pgReadOnly</option>';
 									html += '</select>';
@@ -518,7 +525,7 @@
 							}
 							return html;
 						},
-						className : "dt-center lsn_nm",
+						className : "dt-center",
 						defaultContent : "" }, //Listen
 					{data : "con_bind_port",
 						render: function (data, type, full, meta){

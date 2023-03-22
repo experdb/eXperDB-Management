@@ -1570,7 +1570,13 @@ System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
 								sttHostName = "ip-" + strIpadrRe;
 
 								ipadrVO.setSvr_host_nm(sttHostName);
-									
+								System.out.println(ipadrVO.getPortno());
+								System.out.println(ipadrVO.getIpadr());
+								System.out.println(ipadrVO.getDb_svr_ip());
+								System.out.println(ipadrVO.getIpadr());
+								System.out.println(ipadrVO.getSvr_host_nm());
+								System.out.println(ipadrVO.getFrst_regr_id());
+								System.out.println(ipadrVO.getLst_mdfr_id());
 								dbServerManagerDAO.insertScaleIpadr(ipadrVO);
 							}
 							//T_DBSVRIPADR_I 등록 종료
