@@ -129,15 +129,15 @@ public class DaemonStart implements DxDaemon{
 						strProxyYN = FileUtil.getPropertyValue("context.properties", "agent.proxy_yn");	
 					}
 					
-					if (FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_yn").equals("Y")) {
-						strProxyInterYN = FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_yn");
-					}
-	
-					if (strProxyYN != null && "Y".equals(strProxyYN)) {
-						if (strProxyInterYN != null && "Y".equals(strProxyInterYN)) {
-							strProxyInterIP = FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_ip");
-						}
-					}
+//					if (FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_yn").equals("Y")) {
+//						strProxyInterYN = FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_yn");
+//					}
+//	
+//					if (strProxyYN != null && "Y".equals(strProxyYN)) {
+//						if (strProxyInterYN != null && "Y".equals(strProxyInterYN)) {
+//							strProxyInterIP = FileUtil.getPropertyValue("context.properties", "agent.proxy_inter_ip");
+//						}
+//					}
 					
 					//에이전트 실행
 					service.agentInfoStartMng(strIpadr, strPort, strVersion, strProxyInterIP);

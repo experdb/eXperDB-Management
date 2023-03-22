@@ -65,17 +65,17 @@ public class AgentSetting {
 		String strAgentIp = "";
 		String strAgentPort = "";
 		
-		//전송정보
+		//CDC
+		String strTransYN = "N";
 		String strTransPath = "";
 
 		//프록시 사용 정보
-		String strProxyYN = "";
-		String strProxyInterYN = "";
+		String strProxyYN = "N";
+		String strProxyInterYN = "N";
 		String strProxyInterIP = "";
-		String strTransYN = "";
 		
 		//scale
-		String strScaleYN = "";
+		String strScaleYN = "N";
 		String strScalePath = "";
 		String strScaleInCmd = "";
 		String strScaleOutCmd = "";
@@ -89,10 +89,11 @@ public class AgentSetting {
 		String strScaleMonUser = "";
 		String strScaleMonPassword = "";
 		
+		
 		//=====================================
 		//프록시 변수
 		//프록시 내부 IP 정보
-		String strAgentInnerIPUseYn = "";
+		String strAgentInnerIPUseYn = "N";
 		String strAgentInnerIP="";
 		
 		//프록시 에이전트 설정 정보
