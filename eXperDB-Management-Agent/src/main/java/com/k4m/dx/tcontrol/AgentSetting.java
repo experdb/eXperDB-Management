@@ -762,7 +762,7 @@ public class AgentSetting {
 		    }
 		    System.out.println("eXperDB-Agent Setting success !!");
 		    if("Y".equals(strProxyYN)){
-		    	System.out.println(ANSI_YELLOW+"DBMS registration is required before executing the proxy"+ANSI_RESET);
+		    	System.out.println(ANSI_YELLOW+"Management DBMS registration is required before executing the proxy"+ANSI_RESET);
 		    }
 		} else {
 			System.out.println("#### Exit(0) Cancel Agent Setting #####");
