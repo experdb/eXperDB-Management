@@ -188,6 +188,11 @@ public class DbServerManagerServiceImpl extends EgovAbstractServiceImpl implemen
 		return dbServerManagerDAO.selectIpadrCnt();
 	}
 
+	@Override
+	public void insertUsrdbsvraut(IpadrVO ipadrVO) throws Exception {
+		dbServerManagerDAO.insertUsrdbsvraut(ipadrVO);	
+	}
+
 
 
 }

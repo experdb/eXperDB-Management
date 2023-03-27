@@ -254,10 +254,10 @@ public class DbServerManagerController {
 			dbServerVO.setSvr_spr_scm_pwd(pw);
 			
 			System.out.println("=======parameter=======");
-			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
+			System.out.println("Server_nm : " + dbServerVO.getDb_svr_nm());
 			System.out.println("Database : " + dbServerVO.getDft_db_nm());
-			System.out.println("유저 : " + dbServerVO.getSvr_spr_usr_id());
-			System.out.println("패스워드 : " + dbServerVO.getSvr_spr_scm_pwd());
+			System.out.println("User : " + dbServerVO.getSvr_spr_usr_id());
+			System.out.println("PW : " + dbServerVO.getSvr_spr_scm_pwd());
 			System.out.println("=====================");
 			
 			dbServerManagerService.insertDbServer(dbServerVO);
@@ -275,6 +275,14 @@ public class DbServerManagerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		//DBMS등록 후 ADMIN 유저에대한 서버 권한 자동 부여
+		try {
+			dbServerManagerService.insertUsrdbsvraut(ipadrVO);			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		
 		// ip등록
 		if(insertResult.equals("S")){

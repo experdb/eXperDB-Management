@@ -389,4 +389,9 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		delete("dbserverManagerSql.deleteScaleIpadr", ipadrVO);	
 	}
 
+
+	public void insertUsrdbsvraut(IpadrVO ipadrVO) throws SQLException{
+		insert("dbserverManagerSql.insertUsrdbsvraut", ipadrVO);			
+	}
+
 }
