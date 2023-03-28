@@ -43,8 +43,21 @@
 
 			showDangerToast('top-right', '<spring:message code="access_control_management.msg4" />', '<spring:message code="access_control_management.msg5" />');
 		}
+		
+		fn_buttonAut();
 	});
 
+	function fn_buttonAut(){
+		var usr_id = document.getElementById("usr_id"); 
+		
+		if("${usr_id}" == "viewer"){
+			btnInsert.style.display = 'none';
+		}else{
+			btnInsert.style.display = '';
+		}
+
+	}
+	
 	/* ********************************************************
 	 * table 초기화 및 설정
 	 ******************************************************** */

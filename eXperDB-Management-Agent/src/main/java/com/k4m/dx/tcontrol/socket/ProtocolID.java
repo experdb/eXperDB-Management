@@ -10,6 +10,7 @@ package com.k4m.dx.tcontrol.socket;
 *   수정일       수정자           수정내용
 *  -------     --------    ---------------------------
 *  2018.04.23   박태혁 최초 생성
+*  2023.01.17	강병석		에이전트 통합 프록시 에이전트 코드 추가
 *      </pre>
 */
 public class ProtocolID {
@@ -295,5 +296,31 @@ public class ProtocolID {
 /*	public static final String REGI_NM = "REGI_NM";
 	public static final String REGI_PORT = "REGI_PORT";
 	public static final String CONNECT_TYPE = "CONNECT_TYPE";*/
+	
+	
+	
+	//==============================================================
+	//프록시 에이전트 코드 추가
+
+	public static final String AGT_CNDT_CD = "AGT_CNDT_CD";
+	
+	public static final String PRY_ACT_RESULT = "PRY_ACT_RESULT"; //haproxy 실행 결과
+	public static final String KAL_ACT_RESULT = "KAL_ACT_RESULT"; //keepalived 실행 결과
+	public static final String EXECUTE_RESULT = "EXECUTE_RESULT"; //실행 결과
+	public static final String PRY_PTH = "PRY_PTH"; //haproxy config 백업 경로
+	public static final String KAL_PTH = "KAL_PTH"; //keepalived config 백업 경로
+	public static final String INTERFACE_LIST = "INTERFACE_LIST";//Agent network Interface 목록 결과
+	public static final String INTERFACE = "INTERFACE";//Agent network Interface 목록 결과
+	
+	public static final String DB_CHK = "DB_CHK";
+	
+	public static final String BACKUP_CONF = "BACKUP_CONF";
+	public static final String PRESENT_CONF = "PRESENT_CONF";
+	public static final String KAL_INSTALL_YN = "KAL_INSTALL_YN"; //keepalived 설치 여부
+	
+	//통신테스트
+	public static final String tp1 = "eXperDB-Agent";
+	public static final String tp2 = "haproxy";
+	public static final String tp3 = "keepalived";
 	
 }

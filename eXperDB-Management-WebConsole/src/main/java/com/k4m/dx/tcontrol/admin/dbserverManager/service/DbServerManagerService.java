@@ -130,5 +130,9 @@ public interface DbServerManagerService {
 
 
 	int selectIpadrCnt() throws Exception;
+
+
+	void insertUsrdbsvraut(IpadrVO ipadrVO) throws Exception;
+
 	
 }

@@ -200,10 +200,12 @@ $(function() {
 	    			}
 	    		},
 	    		success : function(result) {
+	    			
       				for(var i = 0; i<result.length; i++){  
       					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00021" && result[i].mnu_cd != "MN00022"){
-      						//읽기권한
-	  						if(result[i].read_aut_yn == "Y"){	  									
+      						//읽기권한      					
+	  						if(result[i].read_aut_yn == "Y"){	
+	  							
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
 	  						}else{
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = false;
@@ -1614,14 +1616,14 @@ function fn_search(){
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2">Migration <spring:message code="migration.performance_history"/></td>
-									<td>
+									<td colspan="2" style="display:none;">Migration <spring:message code="migration.performance_history"/></td>
+									<td style="display:none;">
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN00024" name="r_mnu_nm" value="MN00024"/>
 											<label for="r_MN00024"></label>
 										</div>
 									</td>	
-									<td>
+									<td style="display:none;">
 										<div class="inp_chk">
 											<input type="checkbox" id="w_MN00024" name="w_mnu_nm" />
 											<label for="w_MN00024"></label>
@@ -1629,26 +1631,27 @@ function fn_search(){
 									</td>
 								</tr>
 								<!-- Proxy -->
-								<tr class="proxy_yn">
+								
+								<tr class="proxy_yn" >
 									<th scope="row" rowspan="4">
 										<div class="inp_chk">
 											<input type="checkbox" id="VirtualIP" name="VirtualIP"/>
 											<label for="functions">Proxy</label>
 										</div>
 									</th>
-									<td colspan="2"><spring:message code="menu.proxy_agent" /> </td>
-									<td>
+									<td colspan="2" style="display:none;"><spring:message code="menu.proxy_agent" /> </td> 
+									<td style="display:none;">
 										<div class="inp_chk">
 											<input type="checkbox" id="r_MN0001805" name="r_mnu_nm" value="MN0001805"/>
 											<label for="r_MN0001805"></label>
 										</div>
 									</td>
-									<td>
+									<td style="display:none;">
 										<div class="inp_chk">
 											<input type="checkbox" id="w_MN0001805" name="w_mnu_nm"/>
 											<label for="w_MN0001805"></label>
 										</div>
-									</td>
+									</td> 
 								</tr>
 								
 								<tr class="proxy_yn">

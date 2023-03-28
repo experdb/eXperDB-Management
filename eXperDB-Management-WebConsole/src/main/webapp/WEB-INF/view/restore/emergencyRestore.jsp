@@ -59,13 +59,27 @@
 	          $(element).addClass('form-control-danger')
 	        }
 		});
+		
+	    fn_buttonAut();
 	});
 
 	/* ********************************************************
 	 * 초기설정
 	 ******************************************************** */
 	function fn_init() {
-		$("#storage_view", "#restoreEmergencyRegForm").hide();
+		//$("#storage_view", "#restoreEmergencyRegForm").show();
+	}
+	
+	
+	function fn_buttonAut(){
+		var usr_id = document.getElementById("usr_id"); 
+		
+		if("${usr_id}" == "viewer"){
+			btnScheduleRun.style.display = 'none';
+		}else{
+			btnScheduleRun.style.display = '';
+		}
+
 	}
 
 	/* ********************************************************
@@ -262,13 +276,13 @@
 	 * RMAN Restore 정보 저장
 	 ******************************************************** */
 	function fn_execute() {
-		var asis_flag = $(":input:radio[name=asis_flag]:checked").val();
+		//var asis_flag = $(":input:radio[name=asis_flag]:checked").val();
 
 		$.ajax({
 			url : "/insertRmanRestore.do",
 			data : {
 				db_svr_id : $("#db_svr_id","#findList").val(),
-				asis_flag : asis_flag,
+				asis_flag : 1,
 				restore_dir : $("#restore_dir", "#restoreEmergencyRegForm").val(),
 				dtb_pth : $("#dtb_pth", "#restoreEmergencyRegForm").val(),
 				pgalog_pth : $("#pgalog_pth", "#restoreEmergencyRegForm").val(),
@@ -477,7 +491,7 @@
 							<div class="row" style="margin-top:10px;">
 								<div class="col-md-6 system-tlb-scroll" style="border:0px;max-height: 460px; overflow-x: hidden;  overflow-y: auto; ">
 									<div class="card-body" style="border: 1px solid #adb5bd;">
-										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
+										<%-- <div class="form-group row div-form-margin-z" style="margin-top:-10px;">
 											<label for="wrk_nm" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												Storage <spring:message code="common.path" />
@@ -502,7 +516,7 @@
 		                          			<div class="col-sm-3">
 		                          				&nbsp;
 		                          			</div>
-		                          		</div>
+		                          		</div> --%>
 
 										<div class="form-group row div-form-margin-z" style="margin-top:-5px;" id="storage_view">
 											<label for="ipadr" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">

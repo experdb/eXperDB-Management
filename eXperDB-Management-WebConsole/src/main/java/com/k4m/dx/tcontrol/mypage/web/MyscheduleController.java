@@ -64,6 +64,13 @@ public class MyscheduleController {
 			historyVO.setExe_dtl_cd("DX-T0050");
 			historyVO.setMnu_id(23);
 			accessHistoryService.insertHistory(historyVO);
+			
+			
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			
+			mv.addObject("usr_id", usr_id);
 			mv.setViewName("mypage/mySchedulerList");
 		} catch (Exception e) {
 			request.getRequestDispatcher("/");

@@ -76,6 +76,156 @@ public class LoginController {
 
 	private static final Logger logger = LoggerFactory.getLogger(EgovBatchListnerUtl.class);
 
+	
+	/* PlayTrial 아이디 인증 연동 */
+	@RequestMapping(value = "/playTrial")
+	public ModelAndView playTrial(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		try {			
+			String enc_key = "inzent-play-trial-key";
+			AES256 aes = new AES256(enc_key);
+			
+			AES256 originAes = new AES256("aes256-db-tcontrol-key");
+			
+			
+			String tokenEnc= request.getParameter("token");
+			String loginUser = aes.aesDecode(tokenEnc);
+			
+			UserVO userInfoHd = (UserVO) userManagerService.selectDetailUserManagerHd(loginUser);
+			
+			String originPw = originAes.aesDecode(userInfoHd.getPwd_edc());
+			
+			//인증 성공
+			if(loginUser.equals("viewer")) {
+				
+				UserVO userVo = new UserVO();
+								
+				userVo.setUsr_id(loginUser);
+				List<UserVO> userList = loginService.selectUserList(userVo);
+
+				// session 설정
+				HttpSession session = request.getSession();
+				LoginVO loginVo = new LoginVO();
+				loginVo.setUsr_id(userList.get(0).getUsr_id());
+				loginVo.setUsr_nm(userList.get(0).getUsr_nm());
+				loginVo.setAut_id(userList.get(0).getAut_id());
+				
+				//session 제거
+		        if ( session.getAttribute("session") !=null ){
+		            // 기존에 login이란 세션 값이 존재한다면
+		            session.removeAttribute("session");// 기존값을 제거해 준다.
+		        }
+
+				InetAddress local = InetAddress.getLocalHost();
+				String ip = getClientIP(request);
+
+				loginVo.setIp(ip);
+
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+				
+				String lang = props.get("lang").toString();				
+			    Locale locale = new Locale(lang);
+			    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+			    localeResolver.setLocale(request, response, locale);
+				
+			    /*백업 사용유무 추가 2021-04-14  변승우 */
+				String backup_use_yn = props.get("bnr.useyn").toString(); 
+				loginVo.setBackup_use_yn(backup_use_yn);
+			    			    
+				String encp_use_yn = props.get("encrypt.useyn").toString();
+				
+				loginVo.setEncp_use_yn(encp_use_yn);
+				
+				String version = props.get("version").toString();
+				loginVo.setVersion(version);
+				
+				String pg_audit = props.get("pg_audit").toString();
+				loginVo.setPg_audit(pg_audit);
+				
+				String transfer = props.get("transfer").toString();
+				loginVo.setTransfer(transfer);
+
+				/*proxy 메뉴사용유무 추가 2021-04-23 */
+				String proxy_menu_use_yn = "";
+				if (props.get("proxy.menu.useyn") != null) {
+					proxy_menu_use_yn = props.get("proxy.menu.useyn").toString(); 
+				}
+				loginVo.setProxy_menu_use_yn(proxy_menu_use_yn);
+				
+			    /*proxy 사용유무 추가 2021-04-23  */
+				String proxy_use_yn = "";
+				if (props.get("proxy.useyn") != null) {
+					proxy_use_yn = props.get("proxy.useyn").toString(); 
+				}		
+				loginVo.setProxy_use_yn(proxy_use_yn);
+				
+				/* Monitoring Client 다운로드 가능 여부 */
+				String mon_install_yn = "N";
+				if(props.get("monitoring.installyn")!=null){
+					mon_install_yn= props.get("monitoring.installyn").toString();
+				}
+				loginVo.setMonitoring_install_yn(mon_install_yn);				
+				
+				if(encp_use_yn.equals("Y")){
+					String restIp = props.get("encrypt.server.url").toString();
+					int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
+					try{
+						CommonServiceCall cic = new CommonServiceCall();
+
+						JSONObject result = cic.login(restIp,restPort,loginUser,originPw);
+						System.out.println("tockenValue 1 = "+result.get("tockenValue"));
+
+						/*JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());*/
+						loginVo.setRestIp(restIp);
+						loginVo.setRestPort(restPort);
+						loginVo.setTockenValue((String) (result.get("tockenValue")==null?"":result.get("tockenValue")));
+						loginVo.setEctityUid((String) (result.get("ectityUid")==null?"":result.get("ectityUid")));
+						
+						System.out.println("tockenValue 2 = "+loginVo.getTockenValue());
+
+					}catch(Exception e){
+						loginVo.setRestIp(restIp);
+						loginVo.setRestPort(restPort);
+						loginVo.setTockenValue("");
+						loginVo.setEctityUid("");
+					}
+				}
+				
+				//로그인 시간 추가
+				SimpleDateFormat loginSf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date loginTime = new Date();
+				loginVo.setLoginChkTime(loginSf.format(loginTime));
+
+				session.setAttribute("session", loginVo);
+
+				// 로그인 이력 남기기
+				CmmnUtils.saveHistoryLogin(loginVo, null, loginUser, request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0003");
+				accessHistoryService.insertHistory(historyVO);
+
+				mv.addObject("userId", loginUser);
+				mv.setViewName("redirect:/experdb.do");
+				
+			//인증 실패	
+			}else {
+				System.out.println("로그인실패");
+				  mv.addObject("userId", loginUser);
+				  mv.addObject("pwChange", "false");
+				  mv.setViewName("login");
+			  return mv;
+			}
+		}catch(Exception e) {
+			mv.setViewName("login");
+			e.printStackTrace();
+		}
+		return mv;	
+	}
+	
+	
+	
 	@RequestMapping(value = "/")
 	public ModelAndView loginCheck(HttpServletRequest request, HttpServletResponse response) {
 
@@ -502,10 +652,13 @@ public class LoginController {
 					  mv.setViewName("login");
 				  return mv;
 				  }
-				
-				/*중복로그인방지*/
-				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
-				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
+						  
+				//아이디가 viewer 일경우, 중복로그인 허용
+				if(!userVo.getUsr_id().equals("viewer")) {
+					/*중복로그인방지*/
+					EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
+					request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
+				}
 
 				// 로그인 이력 남기기
 				CmmnUtils.saveHistoryLogin(loginVo, login_chk, id, request, historyVO);

@@ -1,77 +1,96 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Configuration status="INFO">
-    <Properties>
-        <Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss}][%-5p]%m\n</Property>
-    </Properties>
+        <Properties>
+                <Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss}][%-5p]%m\n</Property>
+        </Properties>
 
-    <Appenders>
-        <Console name="ConsoleLog" target="SYSTEM_OUT">
-            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
-        </Console>
+        <Appenders>
+                <Console name="ConsoleLog" target="SYSTEM_OUT">
+                        <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+                </Console>
 
-	<Console name="sql" target="SYSTEM_OUT">
-    	    <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
-	</Console>
-       
-	<RollingFile name="consoleToFile" fileName="../logs/console.log" filePattern="./logs/console-%d{yyyy-MM-dd}-%i.log">
-		<PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
-   			<ThresholdFilter level="INFO"/>
-	   	<Policies>
-        	<TimeBasedTriggeringPolicy interval="1" />
-   		</Policies>
-  	</RollingFile>
+                <Console name="sql" target="SYSTEM_OUT">
+                        <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+                </Console>
 
-
-	<RollingFile name="daemonStartToFile" fileName="../logs/daemonStart.log" filePattern="./logs/daemonStart-%d{yyyy-MM-dd}-%i.log">
- 		<PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
-        	<ThresholdFilter level="DEBUG"/>
-	   	<Policies>
-       		<TimeBasedTriggeringPolicy interval="1" />
-        </Policies>
-	</RollingFile>
+                <RollingFile name="consoleToFile"
+                        fileName="../logs/console.log"
+                        filePattern="../logs/console-%d{yyyy-MM-dd}-%i.log">
+                        <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+                        <ThresholdFilter level="INFO" />
+                        <Policies>
+                                <TimeBasedTriggeringPolicy interval="1" />
+                        </Policies>
+                </RollingFile>
 
 
-	<RollingFile name="errorToFile"
-                    fileName="../logs/error.log"
-                    filePattern="./logs/error-%d{yyyy-MM-dd}-%i.log">
-           <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
-           <ThresholdFilter level="ERROR"/>
-	   <Policies>
-               <TimeBasedTriggeringPolicy interval="1" />
-           </Policies>
-       </RollingFile>
+                <RollingFile name="daemonStartToFile"
+                        fileName="../logs/daemonStart.log"
+                        filePattern="../logs/daemonStart-%d{yyyy-MM-dd}-%i.log">
+                        <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+                        <ThresholdFilter level="DEBUG" />
+                        <Policies>
+                                <TimeBasedTriggeringPolicy interval="1" />
+                        </Policies>
+                </RollingFile>
 
 
-	<RollingFile name="socketToFile"
-                    fileName="../logs/socket.log"
-                    filePattern="./logs/socket-%d{yyyy-MM-dd}-%i.log">
-           <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
-           <ThresholdFilter level="DEBUG"/>
-	   <Policies>
-               <TimeBasedTriggeringPolicy interval="1" />
-           </Policies>
-       </RollingFile>
-
-    </Appenders>
+                <RollingFile name="errorToFile"
+                        fileName="../logs/error.log"
+                        filePattern="../logs/error-%d{yyyy-MM-dd}-%i.log">
+                        <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+                        <ThresholdFilter level="ERROR" />
+                        <Policies>
+                                <TimeBasedTriggeringPolicy interval="1" />
+                        </Policies>
+                </RollingFile>
 
 
-	<Loggers>
-		<Root level="error">
-    		<AppenderRef ref="consoleToFile"/>
-	    	<AppenderRef ref="errorToFile"/>
-		</Root>
-		<Logger name="com.k4m.dx.tcontrol" level="DEBUG">
-			<AppenderRef ref="consoleToFile"/>
-		</Logger>
-		<Logger name="DaemonStartLogger" level="INFO">
-        	<AppenderRef ref="daemonStartToFile"/>
-        </Logger>
-		<Logger name="errorLogger" level="ERROR">
-        	<AppenderRef ref="errorToFile"/>
-        </Logger>
-		<Logger name="socketLogger" level="DEBUG">
-        	<AppenderRef ref="socketToFile"/>
-        </Logger>
-	</Loggers>
+                <RollingFile name="socketToFile"
+                        fileName="../logs/socket.log"
+                        filePattern="../logs/socket-%d{yyyy-MM-dd}-%i.log">
+                        <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+                        <ThresholdFilter level="DEBUG" />
+                        <Policies>
+                                <TimeBasedTriggeringPolicy interval="1" />
+                        </Policies>
+                </RollingFile>
+
+                <!-- add -->
+                <Console name="prysql" target="SYSTEM_OUT">
+                        <PatternLayout pattern="%d [%t] %-5p %c{1} - %m%n" />
+                        <RegexFilter regex="Result" onMatch="DENY"
+                                onMismatch="ACCEPT" useRawMsg="true" />
+                </Console>
+        </Appenders>
+
+
+        <Loggers>
+                <Root level="error">
+                        <AppenderRef ref="consoleToFile" />
+                        <AppenderRef ref="errorToFile" />
+                </Root>
+                <Logger name="com.k4m.dx.tcontrol" level="DEBUG">
+                        <AppenderRef ref="consoleToFile" />
+                </Logger>
+                <Logger name="DaemonStartLogger" level="INFO">
+                        <AppenderRef ref="daemonStartToFile" />
+                </Logger>
+                <Logger name="errorLogger" level="ERROR">
+                        <AppenderRef ref="errorToFile" />
+                </Logger>
+                <Logger name="socketLogger" level="DEBUG">
+                        <AppenderRef ref="socketToFile" />
+                </Logger>
+
+                <!-- add -->
+
+                <Logger name="com.ibatis" level="debug" />
+                <Logger name="java.sql" level="debug">
+                        <AppenderRef ref="prysql" />
+                </Logger>
+                
+
+        </Loggers>
 
 </Configuration>

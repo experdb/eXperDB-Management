@@ -112,15 +112,13 @@ public class DXTcontrolTrans extends SocketCtl {
 
 				//DB 컨넥션을 가져온다.
 				connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-				
 				sessDB = sqlSessionFactory.openSession(connDB);
-
+				
 				selectList = sessDB.selectList("app.selectAuthentication");
 
 				sessDB.close();
 				connDB.close();
 		
-				
 				String[] arrData = null;
 /*				
 				for(int i=0; i<selectList.size(); i++) {
@@ -133,13 +131,11 @@ public class DXTcontrolTrans extends SocketCtl {
 					
 					if (!"".equals(strData)) {
 						strData = strData.replace("{pg_read_file=", "");
-
 						String lastCharacter = strData.substring(strData.length() - 1);
 						if ("}".equals(lastCharacter)) {
 							strData = strData.substring(0,strData.length() - 1);
 						}
 					}
-					
 					arrData = strData.split("\n");
 				}
 				
@@ -149,7 +145,6 @@ public class DXTcontrolTrans extends SocketCtl {
 				int hostAllTot = 3;
 				
 				for(int i=0; i<arrData.length; i++) {
-					
 				    PgHbaConfigLine config = new PgHbaConfigLine(arrData[i]);
 
 					if(config.isValid() || (!config.isValid() && !config.isComment()) && !(config.getText()).isEmpty()){

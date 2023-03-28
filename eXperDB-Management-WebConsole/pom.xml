@@ -5,7 +5,7 @@
    <groupId>com.k4m</groupId> 
    <artifactId>eXperDB-Management-WebConsole</artifactId>
    <packaging>war</packaging>
-   <version>v14.0.3</version>
+   <version>v15.0.0</version>
    <name>eXperDB-Management-WebConsole</name>
    <url>http://www.egovframe.go.kr</url>
 
@@ -104,12 +104,13 @@
          <artifactId>egovframework.rte.bat.core</artifactId>
          <version>3.1.0</version>
       </dependency>
-        <dependency>
-          <groupId>javax.servlet</groupId>
-          <artifactId>servlet-api</artifactId>
-          <scope>provided</scope>
-          <version>2.5</version>
-        </dependency>
+      
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>javax.servlet-api</artifactId>
+	    <version>3.1.0</version>
+	    <scope>provided</scope>
+	</dependency>
 
         <dependency>
           <groupId>javax.servlet</groupId>
@@ -535,7 +536,7 @@
                        <port>80</port>
                        <path>/</path>
                        <systemProperties>
-                           <JAVA_OPTS>-Xms256m -Xmx768m -XX:MaxPermSize=256m</JAVA_OPTS>
+                           <JAVA_OPTS> -Xms1024m -Xmx1024m -XX:NewSize=512m -XX:MaxPermSize=256m</JAVA_OPTS>
                        </systemProperties>
                    </configuration>
                </plugin>

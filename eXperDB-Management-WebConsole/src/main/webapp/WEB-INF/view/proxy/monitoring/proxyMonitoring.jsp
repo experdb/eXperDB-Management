@@ -61,24 +61,26 @@
 	
 	var reload_nom = "0";
 	
+	var proxyAgentTable = null;
+	
 	/* ********************************************************
 	 * 화면 onload
 	 ******************************************************** */
 	$(window).ready(function(){
 		//금일 날짜 setting
-		fn_todaySetting();
+		/* fn_todaySetting(); */
 		
 		//서버정보 리스트 setting
 		fn_serverListSetting();
 
 		// 프록시 log 테이블
-		fn_proxy_log_init();
+		/* fn_proxy_log_init(); */
 
 		// config 파일 수정 이력 테이블
-		fn_config_cng_log_init();
+		/* fn_config_cng_log_init(); */
 		
 		// 프록시 리스너 통계 테이블
-		fn_proxy_stat_init();
+		/* fn_proxy_stat_init(); */
 		
 		// 권한 id 넣기
 		aut_id = "${aut_id}";
@@ -89,6 +91,12 @@
 				template: '<div class="tooltip tooltip-warning" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
 			});
 		},500);
+		
+		//테이블 셋팅
+		fn_proxy_agent_init();
+		
+		//화면 조회
+		fn_agent_select();
 		
 		// 1분에 한번씩 reload
 // 		setInterval(function() {
@@ -204,12 +212,12 @@
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}
 	 				html += '					' + result.proxyServerTotInfo[i].pry_svr_nm + '<br/></h5>\n';
-	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" >\n';
 	 				html += '					(' + result.proxyServerTotInfo[i].ipadr + ')</h6>\n';
 	 			}
 
 				if (master_gbn == "S") {
-	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-top:10px;">\n';
 					if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == '') {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				} else if (nvlPrmSet(result.proxyServerTotInfo[i].exe_status, '') == 'TC001501') {
@@ -220,7 +228,7 @@
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}
 	 				html += '					' + result.proxyServerTotInfo[i].pry_svr_nm + '<br/></h6>';
-	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" >';
 	 				html += '					(' + result.proxyServerTotInfo[i].ipadr + ')</h6>';
 	 			}
 
@@ -313,7 +321,7 @@
 		var prev_master_gbn = "";
 		
 		proxyServerTotInfo_cnt = "${fn:length(proxyServerTotInfo)}";
-
+		
 		if (proxyServerTotInfo_cnt == 0) {
 			html += "<div class='col-md-12 grid-margin stretch-card'>\n";
 			html += "	<div class='card'>\n";
@@ -326,6 +334,7 @@
 			html += "	</div>\n";
 			html += '</div>\n';
 		} else {
+			
 			<c:forEach items="${proxyServerTotInfo}" var="serverinfo" varStatus="status">
 				master_gbn = nvlPrmSet("${serverinfo.master_gbn}", "");
 				rowCount = rowCount + 1;
@@ -360,15 +369,16 @@
 	 				html += '					<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted">\n';
 	 				if (nvlPrmSet("${serverinfo.exe_status}", '') == '') {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
+	 	 				
 					} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001501') { // TC001501
-	 	 				html += '					<div class="badge badge-pill badge-success" title="">M</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-success" title=""></div>\n';
 	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001502') { // TC001502
-	 	 				html += '					<div class="badge badge-pill badge-danger">M</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-danger"></div>\n';
 	 				} else {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}
 	 				html += '					<c:out value="${serverinfo.pry_svr_nm}"/><br/></h5>\n';
-	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" >\n';
 	 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>\n';
 	 			}
 	 			
@@ -382,24 +392,24 @@
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}
 	 				html += '					<spring:message code="eXperDB_proxy.msg43"/><br/></h6>\n';
-	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;">\n';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" >\n';
 	 				html += '					</h6>\n';
 	 			}
 
 				if (master_gbn == "S") {
-	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:32px;padding-top:10px;">\n';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-top:10px;">\n';
 					
 	 				if (nvlPrmSet("${serverinfo.exe_status}", '') == '') {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001501') {
-	 	 				html += '					<div class="badge badge-pill badge-success">S</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-success"></div>\n' ;
 	 				} else if (nvlPrmSet("${serverinfo.exe_status}", '') == 'TC001502') {
-	 	 				html += '					<div class="badge badge-pill badge-danger">S</div>\n';
+	 	 				html += '					<div class="badge badge-pill badge-danger"></div>\n';
 	 				} else {
 	 	 				html += '					<div class="badge badge-pill badge-warning"><i class="fa fa-times text-white"></i></div>\n';
 	 				}
 	 				html += '					<c:out value="${serverinfo.pry_svr_nm}"/><br/></h6>';
-	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:64px;">';
+	 				html += '					<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" >';
 	 				html += '					(<c:out value="${serverinfo.ipadr}"/>)</h6>';
 	 			}
 
@@ -421,7 +431,7 @@
 				
 			</c:forEach>
 		}
-
+		
 		$("#serverTabList").html(html);
 		$("#serverSsCnt", "#proxyMonViewForm").val(proxyServerTotInfo_cnt);
 
@@ -540,26 +550,26 @@
 		fn_dbMonInfo(result);
 
 		//서버 기록 테이블 설정
-		proxyLogTable.clear().draw();
-		if (nvlPrmSet(result.proxyLogList, '') != '') {
+		/* proxyLogTable.clear().draw(); */
+		/* if (nvlPrmSet(result.proxyLogList, '') != '') {
 			proxyLogTable.rows.add(result.proxyLogList).draw();
 		}
-		$('#proxyLog').css('min-height','100px');
+		$('#proxyLog').css('min-height','100px'); */
 
 		// 프록시 리스너 통계 테이블
-		fn_lsnStat(pry_svr_id);
+		/* fn_lsnStat(pry_svr_id); */
 		
 		//통계리스트 html 설정
-		fn_proxyMonChartSet(result);
+		/* fn_proxyMonChartSet(result); */
 		
 		// 프록시 리스너 차트
-		fn_lsnStat_chart(pry_svr_id);
+		/* fn_lsnStat_chart(pry_svr_id); */
 		
 		// config 파일 변경 이력 테이블
-		proxyConfigCngLogTable.clear().draw();
+		/* proxyConfigCngLogTable.clear().draw();
 		if(nvlPrmSet(result.selectPryCngList, '') != '') {
 			proxyConfigCngLogTable.rows.add(result.selectPryCngList).draw();
-		}
+		} */
 		
 	}
 	
@@ -587,6 +597,7 @@
 		//ROW 만들기
 		for(var i = 0; i < proxyServerByMasId_cnt; i++){
 			var agent_status = result.proxyServerByMasId[i].conn_result;
+
  			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
  			
 			html_vip += '	<p class="card-title" style="margin-bottom:-25px;margin-left:10px;">\n';
@@ -646,7 +657,8 @@
  					
  					html_sebu = "";
  					html_vip_line = "";
-	 				html_sebu += '				<button type="button" class="btn btn-inverse-warning btn-xs" onclick="fn_configView('+result.proxyServerVipList[i].pry_svr_id+', \'K\')">';
+ 					/* html_sebu += '				<button type="button" class="btn btn-inverse-warning btn-xs" onclick="fn_configView('+result.proxyServerVipList[i].pry_svr_id+', \'K\')">'; */
+ 					html_sebu += '				<button type="button" class="btn" >';
 	 				html_sebu += '					<i class="ti-vimeo-alt icon-md mb-0 mb-md-3 mb-xl-0 '+kal_exe_status_chk+'" style="font-size: 5em;margin-top:10px;" ></i>\n';
 	 				html_sebu += '				</button>'
 	
@@ -664,10 +676,14 @@
 	 					}
 
 	 					var strVipSplit = strVip.split(',');
+	 					
 	 				    for ( var j in strVipSplit ) {
 	 				    	var strVipSplit_val = strVipSplit[j].substr(0, strVipSplit[j].indexOf('/'));
+	 				    	
 			 				html_sebu += '				<h5 class="text-info"><i class="fa '+kal_exe_status_css+' icon-md mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>'
-			 				html_sebu += '				' + strVipSplit_val + '</h5>\n';	
+			 				
+			 				html_sebu += '				' + strVipSplit_val + '</h5>\n';
+			 				
 	 				    }	
 	 				    
 		 				//line 생성
@@ -684,13 +700,13 @@
 		 					if (result.proxyServerVipList[i].pry_svr_nm != "") {
 		 						var vip_btn_html = "";
 		 						vip_btn_html += '<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerVipList[i].pry_svr_nm;
-		 						if(aut_id == 1){
-		 							if(result.proxyServerVipList[i].kal_exe_status == "TC001501") {
-		 								vip_btn_html += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />';
+		 						/* if(aut_id == 1){
+		 							if(result.proxyServerVipList[i].kal_exe_status == "TC001501") { 
+		 								// vip_btn_html += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="kal_stop_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001501\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />'; 
 		 							} else {
-		 								vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="kal_start_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001502\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />';
+		 								// vip_btn_html += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="kal_start_btn' + i + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerVipList[i].pry_svr_id + ', \'TC001502\', \'K\', \'' + result.proxyServerVipList[i].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />'; 
 		 							}
-		 						}
+		 						} */
 		 						vip_btn_html +=	'<br/>&nbsp;';
 			 					$("#vip_proxy_nm" + j).html(vip_btn_html);
 		 					}
@@ -705,7 +721,7 @@
 	 					} else if(count == 0 && j == result.proxyServerByMasId.length-1){
 	 						html_sebu = "";
 	 		 				var vip_btn_html = "";
-	 		 				vip_btn_html += '<br/>&nbsp;';
+// 	 		 				vip_btn_html += '<br/>&nbsp;';
 	 		 		 		html_sebu += '<h5 class="bg-inverse-muted" ><i class="mdi mdi-alert-circle-outline text-warning" style="font-size: 1.8em;"></i>&nbsp;<spring:message code="eXperDB_proxy.msg39"/> </h5>';
 	 						$("#vip_proxy_nm" + j).html(vip_btn_html);
 		 					$("#keepVipDiv"+ j).html(html_sebu);
@@ -831,15 +847,17 @@
 				html_pry_title = '<h5 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info">';
 				if(nvlPrmSet(result.proxyServerByMasId[j].exe_status, '') == 'TC001501'){
 					html_pry_title += '		<div class="badge badge-pill badge-success" title="">' + result.proxyServerByMasId[j].master_gbn + '</div>\n';
-					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
+					/* html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n'; */
+					html_pry_title += '			<span>'+result.proxyServerByMasId[j].pry_svr_nm+'</span>\n';
 					if(aut_id == 1) {
-						html_pry_title += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="proxy_stop_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001501\', \'P\', \'' + result.proxyServerByMasId[j].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n';
+						/* html_pry_title += '	<input class="btn btn-inverse-danger btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="proxy_stop_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001501\', \'P\', \'' + result.proxyServerByMasId[j].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_stop"/>" />\n'; */
 					}
 				} else {
 					html_pry_title += '		<div class="badge badge-pill badge-danger" title="">' +  result.proxyServerByMasId[j].master_gbn + '</div>\n';
-					html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n';
+					/* html_pry_title += '			<a href="#" onclick="fn_configView('+ result.proxyServerByMasId[j].pry_svr_id +', \'P\')">'+result.proxyServerByMasId[j].pry_svr_nm+'</a>\n'; */
+					html_pry_title += '			<span>'+result.proxyServerByMasId[j].pry_svr_nm+'</span>\n';
 					if(aut_id == 1) {
-						html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="proxy_start_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001502\', \'P\', \'' + result.proxyServerByMasId[j].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n';
+						/* html_pry_title += '	<input class="btn btn-inverse-info btn-sm btn-icon-text mdi mdi-lan-connect" style="float: right;" id="proxy_start_btn' + j + '" type="button" onClick="fn_exe_confirm(' + result.proxyServerByMasId[j].pry_svr_id + ', \'TC001502\', \'P\', \'' + result.proxyServerByMasId[j].agt_cndt_cd + '\')" value="<spring:message code="eXperDB_proxy.act_start"/>" />\n'; */
 					}
 				}
 				
@@ -885,7 +903,7 @@
 						} else {
 							html_listner_ss += '			<div class="badge badge-pill badge-danger" title="">L</div>\n';
 						}	
- 						html_listner_ss += '			<span data-toggle="tooltip" data-placement="bottom" data-html="true" title=\''+result.proxyServerLsnList[k].lsn_desc+'\'>';
+ 						html_listner_ss += '			<span data-toggle="tooltip" data-placement="bottom" data-html="true">';
 						html_listner_ss += '			'+result.proxyServerLsnList[k].lsn_nm+'\n';
 						html_listner_ss += '			</span>\n';
 						html_listner_ss += '	</h5>\n';
@@ -994,8 +1012,8 @@
 		//마스터만 있거나 스탠바이만 있는경우 빈칸만들기'
 		//proxy 서버별로 해야함
 		//값이 아예없는 경우
-		//서버 연결상태 지금은 agent 상태로 되어있는데 변경해야함
-	
+		//서버 연결상태 지금은 agent 상태로         되어있는데 변경해야함
+			
 		var rowCount = 0;
 		var dbNulkCnt = 0;
 		var html = "";
@@ -1013,28 +1031,38 @@
 		
 		//////////////////////////////////////
 		//db 연결 리스너
-		for(var i = 0; i < proxyServerByMasId_cnt; i++){
+		// 여기가  db 부분 테이블 만드는곳
+		/* for(var i = 0; i < proxyServerByMasId_cnt; i++){ */
  			//vip 한건일때 proxy가 한건이면 2번째 row높이를 줄임
  			
  			html_db += '	<p class="card-title" style="margin-bottom:-5px;margin-left:10px;">\n';
 
- 			html_db += '		<span id="db_proxy_nm' + i + '"></span>\n';
+ 			/* html_db += '		<span id="db_proxy_nm' + i + '"></span>\n'; */
+ 			html_db += '		<span id="db_proxy_nm"></span>\n';
  			html_db += '	</p>\n';
 			
- 			html_db += '	<table class="table-borderless" style="width:100%;">\n';
+ 			html_db += '	<table id="db_con_table" class="table" style="width:100%;" border="0" cellspacing="0" cellpadding="0">\n';
  			html_db += '		<tr>\n';
- 			html_db += '			<td style="width:100%;height:220px;" id="dbProxyDiv' + i + '">\n';
- 			html_db += '			&nbsp;</td>\n';
+ 			/* html_db += '			<td style="width:100%;height:220px;" id="dbProxyDiv' + i + '">\n'; */
+ 			
+ 			html_db += '			<td style="width:30%;" id="ms">M/S</td>\n '; 			
+ 			html_db += '			<td style="width:30%;;" id="ip_port">IP/Port</td>\n ';			
+ 			html_db += '			<td style="width:30%;" id="state">State</td>\n ';
+ 			html_db += '			<td style="width:30%;" id="rw">R/W</td>\n ';
+ 			
+  			/* html_db += '			<td style="width:100%;height:220px;" id="dbProxyDiv">\n';
+ 			html_db += '			&nbsp;</td>\n ';  */
 
  			html_db += '		</tr>\n';
+ 			/* html_db += '		<tr id="db_con_data"></tr>\n'; */
  			html_db += '	</table>\n';
 
- 			if (i != 1 && proxyServerByMasId_cnt > 1) {
+ 			/* if (i != 1 && proxyServerByMasId_cnt > 1) {
  				html_db += '<hr>\n';
  			}
-		}
+		} */
 
-		$("#dbListenerVipList").html(html_db);
+		$("#dbListenerVipList").html(html_db); 
 		//////////////////////////////////////
 		
 		
@@ -1042,103 +1070,51 @@
 		//Proxy 연결 db
 
 		//제목 및 agent 상태
+		// 여기가 db 부분 테이블 만드는곳
+		for(var l = 0; l < result.proxyServerByMasId.length; l++){
+			$("#db_con_table > tbody:last").append('<tr id="db_con'+l+'"></tr>')
+		}
+		
   		for(var j = 0; j < result.proxyServerByMasId.length; j++){
-  			html_db = "";
-  			//title
-			if (result.proxyServerByMasId[j].pry_svr_nm != "") {
-				$("#db_proxy_nm" + j).html('<i class="item-icon fa fa-toggle-right text-info"></i>&nbsp;&nbsp;' + result.proxyServerByMasId[j].pry_svr_nm + '<br/>&nbsp;');
-			}
 
  			if (result.dbServerConProxyList != null && result.dbServerConProxyList.length > 0) {
 				var standbyCnt = 0;
-				for(var k = 0; k < result.dbServerConProxyList.length; k++){
+				
+				//조건 좀 바꿔야함
+				for(var k = 0; k < result.dbServerConProxyList.length/2; k++){
+					html_db = "";
 					if(standbyCnt == 1){
 						standbyCnt = 0;
 						continue;
 					}
 					if (result.proxyServerByMasId[j].pry_svr_id == result.dbServerConProxyList[k].pry_svr_id) {
-						
-						html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
-						html_db += '	<tr>';
-						
-						html_db += '		<td colspan="2" style="width:85%;">';
 
 						if(result.dbServerConProxyList[k].master_gbn == 'M'){
-							html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-top:10px;">';
+							html_db += '<td><div class="badge badge-pill badge-success" title="">'+result.dbServerConProxyList[k].master_gbn+'</div></td>';
 						} else {
-							html_db += '		<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-info" style="padding-left:10px;padding-top:10px;">';
+							html_db += '<td><div class="badge badge-pill badge-success" title="">'+result.dbServerConProxyList[k].master_gbn+'</div></td>';
 							standbyCnt ++;
 						}
- 
+
+						
 						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
-							html_db += '		<div class="badge badge-pill badge-success" title="">'+result.dbServerConProxyList[k].master_gbn+'</div>';
 						} else {
-							html_db += '		<div class="badge badge-pill badge-danger" title="">'+result.dbServerConProxyList[k].master_gbn+'</div>';
+							html_db += '<td><div class="badge badge-pill badge-danger" title="">'+result.dbServerConProxyList[k].master_gbn+'</div></td>';
 						}
 						
-						if(result.dbServerConProxyList[k].svr_host_nm != null && result.dbServerConProxyList[k].svr_host_nm != ""){
-							if(result.dbServerConProxyList[k].master_gbn == 'M'){
-								html_db += '		Master(';
-							} else {
-								html_db += '		Standby(<a href="#" onclick="fn_standby_view(' + result.dbServerConProxyList[k].db_svr_id + ')">';
-							}
-							html_db += '			' + result.dbServerConProxyList[k].svr_host_nm;
-							if(result.dbServerConProxyList[k].master_gbn == 'M'){
-								html_db += '		)';
-							} else {
-								if(result.dbServerConProxyList[k].cnt_svr_id > 1){
-									html_db += '	<spring:message code="eXperDB_proxy.and"/> ' + (result.dbServerConProxyList[k].cnt_svr_id -1) + '<spring:message code="eXperDB_proxy.others"/></a>)';
-								} else {
-									html_db += '	</a>)';
-								}
-							}
-						} else {
-							if(result.dbServerConProxyList[k].master_gbn == 'M'){
-								html_db += '		Master';
-							} else {
-								html_db += '		Standby';
-							}
-						}
-						html_db += '			</h6>';
-						html_db += '		</td>';
-						
-						
-						html_db += '		<td rowspan="3" style="width:15%;">';
-						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
-							html_db += '		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-success" style="font-size: 3em;"></i>\n';
-						} else {
-							html_db += '		<i class="fa fa-database icon-md mb-0 mb-md-3 mb-xl-0 text-danger" style="font-size: 3em;"></i>';
-						}
-
-						html_db += '		</td>';
-						
-						html_db += '	</tr>';
-
-						html_db += '	<tr>';
-						html_db += '		<td colspan="2" style="padding-top:5px;">';
-
  						if(result.dbServerConProxyList[k].master_gbn == 'M'){
-							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
+							html_db += '			<td>' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</td>';
+							/* html_dbs += '			<td>' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</td>'; */
 						} else {
 							if(result.dbServerConProxyList[k].cnt_svr_id > 1){
-								html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;"><spring:message code="eXperDB_proxy.representative_ip"/> : ' + result.dbServerConProxyList[k].ipadr + '</h6>';
+								html_db += '			<td>' + result.dbServerConProxyList[k].ipadr + '</td>';
+								/* html_dbs += '			<td>' + result.dbServerConProxyList[k].ipadr + '</td>'; */
 							} else {
-								html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:20px;">IP/PORT : ' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</h6>';
+								html_db += '			<td>' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</td>';
+								/* html_dbs += '			<td>' + result.dbSe22rverConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</td>'; */
 							}
 						}
 						
-						html_db += '		</td>';
-						html_db += '	</tr>';
-						
-						//내부 ip setting
-						if(result.dbServerConProxyList[k].intl_ipadr != null && result.dbServerConProxyList[k].intl_ipadr != "") {
-							html_db += '	<tr>';
-							html_db += '		<td colspan="2" style="padding-top:5px;">';
-							html_db += '			<h6 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-muted" style="padding-left:70px;">(<spring:message code="eXperDB_proxy.internal_ip"/> : ' + result.dbServerConProxyList[k].intl_ipadr + ')</h6>';
-							html_db += '		</td>';
-							html_db += '	</tr>';
-						}
-
 						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
 							db_exe_status_chk = "text-success";
 							db_exe_status_css = "fa-refresh fa-spin text-success";
@@ -1149,29 +1125,31 @@
 							db_exe_status_val = 'stop';
 						}
 
-						html_db += '	<tr >\n';
-						html_db += '		<td colspan="2" class="text-center" style="vertical-align: middle;padding-top:5px;">\n';
-						html_db += '			<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + db_exe_status_val + '</h6>\n';			
+						html_db += '		<td>\n';
+						html_db += '			<h6 class="text-muted" style="padding-left:10px;"><i class="fa '+ db_exe_status_css+' icon-sm mb-0 mb-md-3 mb-xl-0" style="margin-right:5px;padding-top:3px;"></i>' + db_exe_status_val + '</h6>\n';			
 						html_db += '		</td>\n';
-						html_db += '	</tr>\n';
-						html_db += '	</table>\n';
 						
 						dbNulkCnt ++;
+						
+						if(result.proxyServerLsnList != ""){
+							html_db += '<td>'+result.proxyServerLsnList[k].lsn_nm+'</td>'
+						}else {
+							html_db += '<td>'+none+'</td>'
+						}
+						$("#db_con" + k).html(html_db);	
 					}
+					
 				}
-				 
+				
 				if (dbNulkCnt < 2 ) {
 					html_db += '<table class="table-borderless" style="width:100%;height:100px;">\n';
 					html_db += '	<tr>';
 					html_db += '		<td style="width:100%;padding-top:8px;padding-bottom:3px;">';
 					html_db += '		&nbsp;</td>\n';
-					html_db += '	</tr>\n';
 					html_db += '</table>\n';
 				}
-
 				dbNulkCnt = 0;
 				
-				$("#dbProxyDiv" + j).html(html_db);
 			}
   		}
 	}
@@ -1244,7 +1222,7 @@
 	/* ********************************************************
 	 * 프록시  상태 로그 셋팅	
 	 ******************************************************** */
-	function fn_proxy_log_init(){
+	/* function fn_proxy_log_init(){
 		proxyLogTable = $('#proxyLogTable').DataTable({
 			searching : false,
 			scrollY : true,
@@ -1334,7 +1312,7 @@
 		proxyLogTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px'); // proxy act exe serial number
 		
 		$(window).trigger('resize');
-	}
+	} */
 
 	/* ********************************************************
 	* config 파일 수정 이력 table
@@ -1509,7 +1487,7 @@
 							className : "dt-center", 
 							defaultContent : ""
 						},
-						{data : "session_limit", 
+						{data : "session_limit",
 							render : function(data, type, full, meta){
 								var html = "";
 								html += '<div>'+data;
@@ -1606,7 +1584,7 @@
 	/* ********************************************************
 	* 통계리스트 html 설정
 	******************************************************** */
-	function fn_proxyMonChartSet(result){
+	/* function fn_proxyMonChartSet(result){
 		var html = "";
 		var chartCnt = 0;
 
@@ -1653,12 +1631,12 @@
 
 		$("#chartCnt").val(chartCnt);
 		$("#listener_header_sub").html(html);
-	}
+	} */
 
 	/* ********************************************************
 	* 리스너 통계차트 생성
 	******************************************************** */
-	function fn_lsnStat_chart(pry_svr_id){
+	/* function fn_lsnStat_chart(pry_svr_id){
 		$.ajax({
 			url : '/proxyMonitoring/listenerStatisticsChart.do', 
 			data : {
@@ -1712,14 +1690,13 @@
 				  						statchart.setData(proxyStatChart);
 			  						}
 			  					}
-			  					
 			  				}
 			  			}
 		  			}
 		  		}
 			}
 		});
-	}
+	} */
 
 	/* ********************************************************
 	* 시스템  중지 / 시작
@@ -1849,12 +1826,12 @@
 			}
 		});
 		$('#loading').hide();
-	}
+	} 
 
 	/* ********************************************************
 	 * log 파일 view popup
 	 ******************************************************** */
-	function fn_logView(pry_svr_id, type, date, agt_cndt_cd){
+	/* function fn_logView(pry_svr_id, type, date, agt_cndt_cd){
 	
 		todayYN = 'N';
 		if(date == 'today'){
@@ -1902,13 +1879,13 @@
 				}
 			}
 		});
-	}
+	} */
 
 
 	/* ********************************************************
 	* -정지 실패 로그 popup
 	******************************************************** */
-	function fn_actExeFailLog(pry_act_exe_sn){
+	/* function fn_actExeFailLog(pry_act_exe_sn){
 		$.ajax({
 			url : "/proxyMonitoring/actExeFailLog.do",
 			data : {
@@ -1935,12 +1912,12 @@
 				$("#pop_layer_wrkLog").modal("show");						
 			}
 		});
-	}
+	} */
 	
 	/* ********************************************************
 	* confirm 창
 	******************************************************** */
-	function fn_exe_confirm(pry_svr_id, act_status, type, agt_cndt_cd){
+	/* function fn_exe_confirm(pry_svr_id, act_status, type, agt_cndt_cd){
 		cng_pry_svr_id = pry_svr_id;
 		act_sys_type = type;
 		var confirm_title = "";
@@ -1989,9 +1966,9 @@
 		$('#con_multi_gbn', '#findConfirmMulti').val(gbn);
 		$('#confirm_multi_tlt').html(confirm_title);
 		$('#pop_confirm_multi_md').modal("show");
-	}
+	} */
 	
-	function fnc_confirmMultiRst(gbn){
+/* 	function fnc_confirmMultiRst(gbn){
 		if (gbn == "exe_stop") {
 			//중지
 			fn_act_exe_cng(cng_pry_svr_id, act_sys_type,"TC001501");
@@ -1999,7 +1976,222 @@
 			//실행
 			fn_act_exe_cng(cng_pry_svr_id, act_sys_type,"TC001502");
 		} 
+	} */
+	
+/* ********************************************************
+ * table 초기화 및 설정
+ ******************************************************** */
+	function fn_proxy_agent_init(){
+		proxyAgentTable = $('#proxyAgentList').DataTable({
+			scrollY : "200px",
+			deferRender : true,
+			scrollX: "100%",
+			searching : false,
+			bSort: false,
+			paging: false,
+			columns : [
+ 						{data : "rownum",  className : "dt-center", defaultContent : ""},
+ 						{data : "domain_nm", className : "dt-left", defaultContent : ""},
+ 						{data : "ipadr", className : "dt-center", defaultContent : ""},
+ 						{data : "agt_version", 
+ 							render: function (data, type, full){
+ 								var html = "";
+ 								if(full.agt_version != ""){
+ 									html += "<div class='badge badge-pill badge-outline-primary'>";
+ 									html += "	<i class='fa fa-check-square-o mr-2'></i>";
+ 									html += full.agt_version;
+ 									html += "</div>";	
+ 								}
+
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "",
+ 							visible: false
+ 						},
+ 						{data : "agt_cndt_cd", 
+ 							render: function (data, type, full){
+ 								var html = "";
+  							/* if (aut_id == "1") {
+ 									if(full.agt_cndt_cd == "TC001501"){
+ 										html += '<div class="onoffswitch-scale">';
+ 										html += '<input type="checkbox" name="agtCndtCd" class="onoffswitch-scale-checkbox" id="agtCndtCd'+ full.rownum +'" onclick="fn_use_agentChk('+ full.rownum +')" checked>';
+ 										html += '<label class="onoffswitch-scale-label" for="agtCndtCd'+ full.rownum +'">';
+ 	 									html += '<span class="onoffswitch-scale-inner"></span>';
+ 	 									html += '<span class="onoffswitch-scale-switch"></span></label>';
+
+ 		  								html += '<input type="hidden" name="act_agt_sn" id="act_agt_sn'+ full.rownum +'" value="'+ full.agt_sn +'"/>';
+ 		  								html += '<input type="hidden" name="act_ipadr" id="act_ipadr'+ full.rownum +'" value="'+ full.ipadr +'"/>';
+ 		  								html += '<input type="hidden" name="act_socket_port" id="act_socket_port'+ full.rownum +'" value="'+ full.socket_port +'"/>';
+ 		  								html += '<input type="hidden" name="act_agt_cndt_cd" id="act_agt_cndt_cd'+ full.rownum +'" value="'+ full.agt_cndt_cd +'"/>';
+ 									}else {
+	 									html += "<div class='badge badge-pill badge-danger'>";
+ 	 									html += "	<i class='ti-close mr-2'></i>";
+ 	 									html += "	<spring:message code='schedule.stop' />";
+ 	 								}
+ 								} else { */
+ 	  								if(full.agt_cndt_cd == "TC001501"){
+ 	 									html += "<div class='badge badge-pill badge-success'>";
+ 	 									html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+ 	 									html += "	<spring:message code='dashboard.running' />";
+ 	 								} else {
+ 	 									html += "<div class='badge badge-pill badge-danger'>";
+ 	 									html += "	<i class='ti-close mr-2'></i>";
+ 	 									html += "	<spring:message code='schedule.stop' />";
+ 	 								}
+/*  								} */
+								html += "</div>";
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "" 	
+ 						},
+ 						{data : "intl_ipadr", className : "dt-center", defaultContent : "", visible:false},
+ 						{data : "strt_dtm", className : "dt-center", defaultContent : ""},
+ 						{data : "svr_use_yn", 
+ 							render: function (data, type, full){
+ 								var html = "";
+								if (data == "Y") {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-spin fa-spinner mr-2'></i>";
+									html += "<spring:message code='dbms_information.use' />";
+									html += "</div>";
+								} else {
+									html += "<div class='badge badge-pill badge-danger' style='margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-times-circle mr-2'></i>";
+									html += "<spring:message code='dbms_information.unuse' />";
+									html += "</div>";
+								}
+
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "" 	
+ 						},
+ 						{data : "pry_svr_nm", className : "dt-left", defaultContent : ""},
+ 						{data : "master_gbn", 
+ 							render: function (data, type, full){
+ 								var html = "";
+ 								if(full.master_gbn == "M"){
+ 									html += "<div class='badge badge-pill badge-outline-primary'>";
+ 									html += "	<i class='fa fa-database mr-2'></i>";
+ 									html += "master";
+ 									html += "</div>";
+ 								} else if(full.master_gbn == "S"){
+ 									html += "<div class='badge badge-pill badge-outline-warning'>";
+ 									html += "	<i class='fa fa-database mr-2'></i>";
+ 									html += "standby";
+ 									html += "</div>";
+ 								}
+
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "" 	
+ 						},
+ 						{data : "kal_install_yn", 
+ 							render: function (data, type, full){
+ 								var html = "";
+								if (data == "Y") {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-spin fa-spinner mr-2'></i>";
+									html += "<spring:message code='dbms_information.use' />";
+									html += "</div>";
+								} else {
+									html += "<div class='badge badge-pill badge-danger' style='margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-times-circle mr-2'></i>";
+									html += "<spring:message code='dbms_information.unuse' />";
+									html += "</div>";
+								}
+
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "" 	
+ 						},
+ 						
+ 						
+ 						{data : "agt_sn",  defaultContent : "", visible: false },
+ 						{data : "socket_port",  defaultContent : "", visible: false },
+ 						{data : "aws_yn", 
+ 							render: function (data, type, full){
+ 								var html = "";
+								if (data == "Y") {
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-spin fa-spinner mr-2'></i>";
+									html += "<spring:message code='dbms_information.use' />";
+									html += "</div>";
+								} else {
+									html += "<div class='badge badge-pill badge-danger' style='margin-top:-5px;margin-bottom:-5px;'>";
+									html += "<i class='fa fa-times-circle mr-2'></i>";
+									html += "<spring:message code='dbms_information.unuse' />";
+									html += "</div>";
+								}
+
+ 								return html;
+ 							},
+ 							className : "dt-center",
+ 							defaultContent : "",
+ 							visible: false
+ 						}
+ 			]
+		});
+
+		proxyAgentTable.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+		proxyAgentTable.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+		proxyAgentTable.tables().header().to$().find('th:eq(2)').css('min-width', '125px');
+
+		proxyAgentTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(5)').css('min-width', '125px');
+
+		proxyAgentTable.tables().header().to$().find('th:eq(6)').css('min-width', '200px');
+		
+		proxyAgentTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(8)').css('min-width', '180px');
+		proxyAgentTable.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		proxyAgentTable.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+
+		proxyAgentTable.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+		proxyAgentTable.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+		proxyAgentTable.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+		
+		$(window).trigger('resize');
 	}
+	
+	
+	function fn_agent_select(){
+		$.ajax({
+			url : "/proxyAgent/selectProxyAgentList.do",
+			data : {
+				sch_domain_nm : nvlPrmSet($("#sch_domain_nm").val(), ''),
+				sch_ipadr : nvlPrmSet($("#sch_ipadr").val(), ''),
+				sch_svr_use_yn : nvlPrmSet($("#sch_svr_use_yn").val(), '')
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				proxyAgentTable.rows({selected: true}).deselect();
+				proxyAgentTable.clear().draw();
+				
+
+				if (nvlPrmSet(result, '') != '') {
+					proxyAgentTable.rows.add(result).draw();
+				}
+			}
+		});
+	}	
 	
 	
 </script>
@@ -2069,6 +2261,55 @@
 			</div>
 		</div>
 
+		<!-- proxy agent -->
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+		 							<table id="proxyAgentList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+	 										<tr class="bg-info text-white">
+												<th width="40" height="0"><spring:message code="common.no" /></th>
+												<th width="200"><spring:message code="eXperDB_proxy.agent_name" /></th>
+			 									<th width="125"><spring:message code="eXperDB_proxy.agent_ip" /></th>
+												<th width="100"><spring:message code="agent_monitoring.agent_version" /></th>
+												<th width="100"><spring:message code="agent_monitoring.agent_status" /></th>
+												<th width="125"><spring:message code="eXperDB_proxy.agent_internal_ip" /></th>
+												<th width="200"><spring:message code="agent_monitoring.run_date" /> </th>
+												<th width="100"><spring:message code="eXperDB_proxy.proxy_use" /></th>
+												<th width="180"><spring:message code="eXperDB_proxy.server_name" /></th>
+												<th width="100"><spring:message code="eXperDB_proxy.master_div" /></th>
+												<th width="100"><spring:message code="eXperDB_proxy.vip_use" /></th>
+												<th width="0"></th>
+												<th width="0"></th>
+												<th width="100"><spring:message code="eXperDB_proxy.aws_yn" /></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
+
 		<!--  서버리스트 -->
 		<div class="col-md-12 grid-margin stretch-card">
 			<div class="card position-relative">
@@ -2106,11 +2347,11 @@
 									<div class="carousel-item active" id="v-pills-home_test1">
 									<!-- proxy 데이터 있는 경우 -->	
 										<div class="row" id="reg_pry_title">
-											<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_keep_vip" >
 														<div class="row" style="height: 15px;">
-															<div class="col-12">
+															<div class="col-10">
 																<h6 class="mb-0">
 																	<i class="item-icon fa fa-dot-circle-o"></i>
 																	<span class="menu-title"><spring:message code="eXperDB_proxy.vip"/></span>
@@ -2136,7 +2377,7 @@
 											</div>
  
 											<!-- 프록시 서버 -->
-											<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_proxy_server" >
 														<div class="row" style="height: 15px;">
@@ -2151,7 +2392,7 @@
 												</div>
 											</div>
 
-											<div class="accordion_main col-1" style="border:none;" id="accordion" role="tablist" >
+											<!-- <div class="accordion_main col-1" style="border:none;" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;border:none;box-shadow: 0 0 0px black;">
 													<div class="card-header" role="tab" id="page_connect_server" >
 														<div class="row" style="height: 15px;">
@@ -2163,9 +2404,9 @@
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> -->
 											
-											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:0px;">
 													<div class="card-header" role="tab" id="page_db_server" >
 														<div class="row" style="height: 15px;">
@@ -2202,7 +2443,7 @@
 										<!-- proxy 데이터 있는 경우 -->	
 										<div class="row" id="reg_pry_detail">
 											<!-- vip 출력 -->
-											<div class="accordion_main accordion-multi-colored col-3_2" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
 												<div class="card" style="border:none;" >
 													<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="proxyMonitoringList">
 													</div>
@@ -2211,28 +2452,28 @@
 											
 											<div class="accordion_main accordion-multi-colored col-0_5" id="accordion" role="tablist" >
 												<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
-													<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyVipConLineList">
-													</div>
+													<!-- <div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyVipConLineList">
+													</div> -->
 												</div>
 											</div>
 
-											<div class="accordion_main accordion-multi-colored col-3_7" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-3" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
 													<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="proxyListnerMornitoringList">
 													</div>
 												</div>
 											</div>
 																						
-											<div class="accordion_main accordion-multi-colored col-1" id="accordion" role="tablist" >
+											<!-- <div class="accordion_main accordion-multi-colored col-1" id="accordion" role="tablist" >
 												<div class="card" style="margin-left:-20px;margin-right:-20px;border:none;box-shadow: 0 0 0px black;" >
 													<div class="card-body" style="border:none;min-height: 220px;margin-left:-17px;" id="proxyListnerConLineList">
 													</div>
 												</div>
-											</div>
+											</div>  -->
 											
 											
 											<!-- DB 서버  출력-->
-											<div class="accordion_main accordion-multi-colored col-3_4" id="accordion" role="tablist" >
+											<div class="accordion_main accordion-multi-colored col-5" id="accordion" role="tablist" >
 												<div class="card" style="margin-bottom:10px;border:none;" >
 													<div class="card-body" style="border:none;min-height: 220px;margin: -20px -20px 0px -20px;" id="dbListenerVipList">
 													</div>
@@ -2253,7 +2494,7 @@
 											</div>
 										</div>
 										
-										<!-- Proxy 서버 기록 -->
+										<%-- <!-- Proxy 서버 기록 -->
 										<div class="row">
 											<!-- 서버기록 title -->
 											<div class="accordion_main accordion-multi-colored col-7" id="accordion" role="tablist" >
@@ -2418,7 +2659,7 @@
 											</div>
 	
 
-										</div>
+										</div> --%>
 									</div>
 			                    </div>
 							</div>

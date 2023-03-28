@@ -188,13 +188,17 @@ public class ProxyRestController {
 					JSONObject jObj = (JSONObject) instanceArray.get(i);
 					listnSvr[i] = new ProxyListenerServerVO();
 					listnSvr[i].setDb_con_addr(jObj.get("ip")+":"+jObj.get("port"));
-					listnSvr[i].setChk_portno(Integer.parseInt(jObj.get("port").toString()));
+					//listnSvr[i].setChk_portno(Integer.parseInt(jObj.get("port").toString()));
+					int portLen = jObj.get("port").toString().length();
+					listnSvr[i].setChk_portno(Integer.parseInt(jObj.get("port").toString().substring(0, portLen-2)));
 					listnSvr[i].setBackup_yn("N");
 					listnSvr[i].setLst_mdfr_id("system");
+					
 					dbConIp.add(jObj.get("ip").toString());
-					dbConPort.add(jObj.get("port").toString());
+					dbConPort.add(jObj.get("port").toString().substring(0, portLen-2));
 					dbConMasterIp.add(jObj.get("master_ip").toString());
 				}
+				
 				param.put("ipadr", dbConIp);
 				param.put("db_con_port", dbConPort);
 				param.put("db_con_ip", dbConIp);

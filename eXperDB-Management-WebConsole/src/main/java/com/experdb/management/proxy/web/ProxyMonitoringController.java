@@ -146,9 +146,9 @@ public class ProxyMonitoringController {
 			//리스너 목록 조회
 			List<Map<String, Object>> proxyServerLsnList = proxyMonitoringService.selectProxyListnerMainList(pry_svr_id);
 
-			List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
-			List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
-			List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
+			//List<ProxyLogVO> proxyLogList = proxyMonitoringService.selectProxyLogList(pry_svr_id);
+			//List<Map<String, Object>> proxyChartCntList = proxyMonitoringService.selectProxyChartCntList(pry_svr_id);
+			//List<Map<String, Object>> selectPryCngList = proxyMonitoringService.selectPryCngList(pry_svr_id);
 			
 			String proxy_agent_status = "Y";
 			
@@ -172,9 +172,9 @@ public class ProxyMonitoringController {
 
 			mv.addObject("dbServerConProxyList", dbServerConProxyList);
 
-			mv.addObject("proxyLogList",proxyLogList);
-			mv.addObject("proxyChartCntList",proxyChartCntList);
-			mv.addObject("selectPryCngList", selectPryCngList);
+			//mv.addObject("proxyLogList",proxyLogList);
+			//mv.addObject("proxyChartCntList",proxyChartCntList);
+			//mv.addObject("selectPryCngList", selectPryCngList);
 			mv.addObject("proxy_agent_status", proxy_agent_status);
 			
 		} catch (Exception e) {

@@ -45,7 +45,25 @@
 
 		//배치 내역 조회
 		fn_mainsearch();
+		
+		fn_buttonAut();
+		
 	});
+	
+	function fn_buttonAut(){
+		var usr_id = document.getElementById("usr_id"); 
+		
+		if("${usr_id}" == "viewer"){
+			btnDelete.style.display = 'none';
+			btnModify.style.display = 'none';
+			btnInsert.style.display = 'none';
+		}else{
+			btnDelete.style.display = '';
+			btnModify.style.display = '';
+			btnInsert.style.display = '';
+		}
+
+	}
 
 	/* ********************************************************
 	 * 배치설정 리스트

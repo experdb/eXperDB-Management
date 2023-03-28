@@ -641,4 +641,252 @@
 			, #{DB_SVR_IPADR_ID}
 	 	)	 	
     </insert>
+    
+    
+    <!-- 프록시 관련 추가 부분 -->
+    
+    <select id="selectPryAgtInfo" parameterType="PryAgentInfoVO" resultType="PryAgentInfoVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectPryAgtInfo
+	 	* Description : Agent 설치정보 조회
+	 	* Author : 최정환
+	 	**/
+			SELECT
+				AGT_SN
+				, IPADR
+				, DOMAIN_NM
+				, SOCKET_PORT
+				, AGT_CNDT_CD
+				, STRT_DTM
+				, ISTCNF_YN
+				, AGT_VERSION
+				, FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+				, SVR_USE_YN
+				,AWS_YN
+				,INTL_IPADR
+			FROM  T_PRY_AGT_I
+			WHERE
+				IPADR = #{ipadr}
+			LIMIT 1
+		]]>
+	</select>
+	
+	<insert id="insertPryAgtInfo"  parameterType="PryAgentInfoVO">
+		/**
+	 	* Query ID : insertPryAgtInfo
+	 	* Description : Agent 설치 등록
+	 	* Author : 최정환
+	 	**/
+	 	INSERT INTO T_PRY_AGT_I
+	 	(
+			AGT_SN
+			, IPADR
+			, SOCKET_PORT
+			, AGT_CNDT_CD
+			, AGT_VERSION
+			, STRT_DTM
+			, ISTCNF_YN
+			, SVR_USE_YN
+			, DOMAIN_NM
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+			, AWS_YN
+			, INTL_IPADR
+	 	)
+	 	VALUES
+	 	(
+			NEXTVAL('q_t_pry_agt_i_01')
+			, #{ipadr}
+			, #{socket_port}::numeric
+			, #{agt_cndt_cd}
+			, #{agt_version}
+			, now()
+			, #{istcnf_yn}
+			, #{svr_use_yn}::bpchar
+			, #{domain_nm}
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{lst_mdfr_id}
+			, clock_timestamp()
+			, #{aws_yn}
+			, #{intl_ipadr}
+	 	)
+	</insert>
+
+	<update id="updatePryAgtInfo"  parameterType="PryAgentInfoVO">
+		/**
+	 	* Query ID : updatePryAgtInfo
+	 	* Description : Agent 설치 정보 수정
+	 	* Author : 최정환
+	 	**/
+	 	UPDATE T_PRY_AGT_I
+	 	SET 
+	 		AGT_CNDT_CD = #{agt_cndt_cd}
+	 		, AGT_VERSION = #{agt_version}
+	 		, SOCKET_PORT = #{socket_port}::numeric
+	 		, ISTCNF_YN = #{istcnf_yn}
+			, SVR_USE_YN = #{svr_use_yn}::bpchar
+			, DOMAIN_NM = #{domain_nm}
+	 		, LST_MDF_DTM = clock_timestamp()
+	 		, AWS_YN = #{aws_yn}
+	 		, INTL_IPADR= #{intl_ipadr}
+	 	WHERE
+	 		IPADR = #{ipadr}
+	</update>
+	
+	<update id="updatePryAgtStopInfo"  parameterType="PryAgentInfoVO">
+	
+		/**
+	 	* Query ID : updatePryAgtStopInfo
+	 	* Description : Agent 정지 정보 변경(agent 종료)
+	 	* Author : 최정환
+	 	**/
+	 	UPDATE T_PRY_AGT_I
+	 	SET 
+	 		AGT_CNDT_CD = #{agt_cndt_cd}
+	 		, SOCKET_PORT = #{socket_port}
+	 		, ISTCNF_YN = #{istcnf_yn}
+	 		, LST_MDF_DTM = clock_timestamp()
+	 		, STRT_DTM = clock_timestamp()
+	 	WHERE
+	 		IPADR = #{ipadr}
+	</update>
+	
+    <select id="selectDbsvripadrMstGbnInfo" parameterType="PryDbServerInfoVO" resultType="PryDbServerInfoVO">
+		<![CDATA[
+   		/**
+	 	* Query ID : selectDbsvripadrMstGbnInfo
+	 	* Description : Database 접속정보 조회
+	 	* Author : 최정환
+	 	**/
+			SELECT 
+				A.IPADR
+				, A.DB_SVR_ID
+				, A.PORTNO
+				, B.DB_SVR_NM
+				, B.DFT_DB_NM
+				, B.SVR_SPR_USR_ID
+				, B.SVR_SPR_SCM_PWD
+				, A.MASTER_GBN
+				, C.INTL_IPADR
+			FROM T_DBSVRIPADR_I A, T_DBSVR_I B, T_AGTCNDT_I C
+			WHERE
+				A.DB_SVR_ID = B.DB_SVR_ID
+				and A.ipadr = C.ipadr
+				AND B.USEYN = 'Y'
+				AND A.MASTER_GBN = 'M'
+		]]>
+	</select>
+	
+    <select id="selectDbsvripadrMstGbnIntlInfo" parameterType="PryDbServerInfoVO" resultType="PryDbServerInfoVO">
+		<![CDATA[
+   		/**
+	 	* Query ID : selectDbsvripadrMstGbnIntlInfo
+	 	* Description : Database 내부ip 조회
+	 	* Author : 최정환
+	 	**/
+			SELECT 
+				A.IPADR
+				, C.INTL_IPADR
+			FROM T_DBSVRIPADR_I A, T_DBSVR_I B, T_AGTCNDT_I C
+			WHERE
+				A.DB_SVR_ID = B.DB_SVR_ID
+				and A.ipadr = C.ipadr
+				AND B.USEYN = 'Y'
+				AND A.IPADR = #{IPADR}
+				
+		]]>
+	</select>
+
+	<select id="selectPrySvrMaxNmInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectPrySvrMaxNmInfo
+	 	* Description : Proxy Server Max명 조회
+	 	* Author : 최정환
+	 	**/
+			SELECT MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
+			 FROM (
+				SELECT
+					PRY_SVR_NM
+				  FROM T_PRY_SVR_I
+				 WHERE IPADR = #{ipadr}
+				 UNION ALL 
+				SELECT
+					PRY_SVR_NM
+				  FROM T_PRY_SVR_I
+				 WHERE MASTER_SVR_ID = (SELECT
+								PRY_SVR_ID
+							  FROM T_PRY_SVR_I
+							 WHERE IPADR = #{ipadr})
+			) A
+		]]>
+	</select>
+	
+	<select id="selectDBMSSvrMaxNmInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectDBMSSvrMaxNmInfo
+	 	* Description : Proxy DBMS 별 Server Max명 조회
+	 	* Author : 최정환
+	 	**/
+		SELECT
+				MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
+		  FROM T_PRY_SVR_I A
+		  INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
+		 WHERE A.DB_SVR_ID = #{db_svr_id}
+		]]>
+	</select>
+	
+	<select id="selectDBMSSvrEtcMaxNmInfo" parameterType="ProxyServerVO" resultType="ProxyServerVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectDBMSSvrEtcMaxNmInfo
+	 	* Description : Proxy master max Server명 조회
+	 	* Author : 최정환
+	 	**/
+		SELECT
+				MAX(A.PRY_SVR_NM) AS PRY_SVR_NM
+		  FROM T_PRY_SVR_I A
+		  INNER JOIN T_PRY_AGT_I B ON A.AGT_SN = B.AGT_SN
+		 WHERE A.DB_SVR_ID = #{db_svr_id}
+		 AND A.MASTER_GBN = 'M'
+		 AND A.IPADR != #{ipadr}
+		]]>
+	</select>
+
+	<update id="updatePryAgtUseYnLInfo"  parameterType="PryAgentInfoVO">
+		/**
+	 	* Query ID : updatePryAgtUseYnLInfo
+	 	* Description : Agent 설치 정보 수정
+	 	* Author : 최정환
+	 	**/
+	 	UPDATE T_PRY_AGT_I
+	 	SET 
+	 		SVR_USE_YN = #{svr_use_yn}
+	 		, KAL_INSTALL_YN = #{kal_install_yn}
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = clock_timestamp()
+	 	WHERE
+	 		IPADR = #{ipadr}
+	</update>
+	
+	<select id="selectMasterGbm"  resultType="hashmap">
+		<![CDATA[
+			/**
+		 	* Query ID : selectMasterGbm
+		 	* Description : Master / Slave 구분
+		 	* Author : 최정환
+		 	**/
+			SELECT
+			CASE WHEN pg_is_in_recovery() is true THEN 'S' 
+			ELSE 'M' END MASTER_GBN 
+		]]>
+	</select>
 </mapper>

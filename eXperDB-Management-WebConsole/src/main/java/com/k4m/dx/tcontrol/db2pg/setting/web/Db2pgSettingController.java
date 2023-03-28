@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -75,7 +76,10 @@ public class Db2pgSettingController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
 	
+	private List<Map<String, Object>> menuAut;
 	
 	/**
 	 * DB2PG 설정 화면을 보여준다.
@@ -88,24 +92,40 @@ public class Db2pgSettingController {
 	@RequestMapping(value = "/db2pgSetting.do")
 	public ModelAndView db2pgSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		
+		try {
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN00016");	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		try {		
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0137");
-			historyVO.setMnu_id(41);
-			accessHistoryService.insertHistory(historyVO);
-			
-			List<Map<String, Object>> dbmsGrb = dbmsService.dbmsGrb();
-			mv.addObject("dbmsGrb", dbmsGrb);
-			
-			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
-			mv.addObject("codeLetter", codeLetter);
-			List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029");
-			mv.addObject("codeTF", codeTF);
-			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
-			mv.addObject("codeInputMode", codeInputMode);
-			
-			mv.setViewName("db2pg/setting/db2pgSetting");
+			if(menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			}else {
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0137");
+				historyVO.setMnu_id(41);
+				accessHistoryService.insertHistory(historyVO);
+				
+				List<Map<String, Object>> dbmsGrb = dbmsService.dbmsGrb();
+				mv.addObject("dbmsGrb", dbmsGrb);
+				
+				List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
+				mv.addObject("codeLetter", codeLetter);
+				List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029");
+				mv.addObject("codeTF", codeTF);
+				List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
+				mv.addObject("codeInputMode", codeInputMode);
+				
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				mv.setViewName("db2pg/setting/db2pgSetting");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -274,11 +274,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void insertUpdatePryVipConf(ProxyVipConfigVO proxyVipConfigVO) {
-		if(proxyVipConfigVO.getVip_cng_id() == 0){
-			insert("proxySettingSql.insertPryVipConf", proxyVipConfigVO);	
-		}else{
-			update("proxySettingSql.updatePryVipConf", proxyVipConfigVO);	
-		}	
+		update("proxySettingSql.updatePryVipConf", proxyVipConfigVO);	
 	}
 
 	/**
@@ -313,11 +309,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void insertUpdatePryListenerSvr(ProxyListenerServerVO proxyListenerServerVO) {
-		if(proxyListenerServerVO.getLsn_svr_id() == 0){
-			insert("proxySettingSql.insertPryListenerSvr", proxyListenerServerVO);	
-		}else{
-			update("proxySettingSql.updatePryListenerSvr", proxyListenerServerVO);	
-		}	
+		update("proxySettingSql.updatePryListenerSvr", proxyListenerServerVO);	
 	}
 
 	/**
@@ -352,11 +344,7 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void insertUpdatePryListener(ProxyListenerVO proxyListenerVO) {
-		if(proxyListenerVO.getLsn_id() == 0){
-			insert("proxySettingSql.insertPryListener", proxyListenerVO);	
-		}else{
-			update("proxySettingSql.updatePryListener", proxyListenerVO);	
-		}	
+		update("proxySettingSql.updatePryListener", proxyListenerVO);	
 	}
 
 	/**
@@ -454,5 +442,9 @@ public class ProxySettingDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectPoxyServerIPList(Map<String, Object> param) {
 		List<Map<String, Object>> result = (List<Map<String, Object>>) list("proxySettingSql.selectPoxyServerIPList", param);
 		return result;
+	}
+	
+	public void updatePryAgentIp(ProxyGlobalVO param) {
+		update("proxySettingSql.updateIpAddress", param);
 	}
 }

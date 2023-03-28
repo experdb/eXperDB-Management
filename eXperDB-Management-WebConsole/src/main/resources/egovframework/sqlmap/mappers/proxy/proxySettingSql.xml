@@ -49,7 +49,8 @@
 	        		AND A.PRY_SVR_ID != #{not_pry_svr_id}::numeric
 	        	</if>
 	        </if>
-        ORDER BY A.DB_SVR_ID, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN, A.LST_MDF_DTM
+        <!-- ORDER BY A.DB_SVR_ID, coalesce(A.MASTER_SVR_ID, A.PRY_SVR_ID), A.MASTER_GBN, A.LST_MDF_DTM -->
+        ORDER BY PRY_SVR_NM
 	</select>
 
 	<select id="selectProxyServerInfo" parameterType="int" resultType="proxyServerVO">
@@ -168,7 +169,7 @@
 	</select>
 
 	<select id="selectProxyGlobal" resultType="proxyGlobalVO" parameterType="hashMap">
-        /**
+         /**
 		* Query ID : selectProxyGlobal
 		* Description : Proxy Global 정보 조회
 		* Author : 김민정
@@ -198,7 +199,8 @@
 		* Description : Proxy Listener List 정보 조회
 		* Author : 김민정
 		**/
-		SELECT 	LSN_ID, 
+		SELECT
+				LSN_ID, 
 				PRY_SVR_ID, 
 				LSN_NM, 
 				CON_BIND_PORT, 
@@ -345,7 +347,7 @@
 	<update id="updateProxyAgentInfo" parameterType="proxyServerVO">
         /**
         * Query ID : updateProxyAgentInfo
-        * Description : Proxy Agent 정보 업데이트
+         * Description : Proxy Agent 정보 업데이트
         * Author : 김민정
         **/
         UPDATE T_PRY_AGT_I
@@ -365,8 +367,15 @@
         * Description : Proxy Agent svr_use_yn 정보 업데이트
         * Author : 김민정
         **/
-        UPDATE T_PRY_AGT_I
+       <!--  UPDATE T_PRY_AGT_I
            SET SVR_USE_YN = #{svr_use_yn}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE AGT_SN = (	SELECT	AGT_SN 
+         					FROM 	T_PRY_SVR_I 
+         					WHERE 	PRY_SVR_ID = #{pry_svr_id}) --> 
+		UPDATE T_PRY_AGT_I
+           SET IPADR = #{obj_ip}
              , LST_MDFR_ID = #{lst_mdfr_id}
              , LST_MDF_DTM = clock_timestamp()
          WHERE AGT_SN = (	SELECT	AGT_SN 
@@ -471,7 +480,7 @@
 	<insert id="insertProxyGlobalConf" parameterType="proxyGlobalVO">
         /**
         * Query ID : insertProxyGlobalConf"
-        * Description : Proxy global 정보 등록
+         * Description : Proxy global 정보 등록
         * Author : 김민정
         **/
 	        INSERT
@@ -539,7 +548,7 @@
 		/**
 		* Query ID : deletePryVipConfList
 		* Description : vip 설정 삭제
-		* Author : 김민정
+		* Author : 김민정 
 		**/
         DELETE FROM T_PRY_VIPCNG_I
 		WHERE PRY_SVR_ID=#{pry_svr_id}
@@ -578,13 +587,23 @@
         * Description : Proxy Global Config 정보 수정
         * Author : 김민정
         **/
-        UPDATE T_PRY_GLB_I
-           SET MAX_CON_CNT = #{max_con_cnt}
+        <!-- UPDATE T_PRY_GLB_I
+           SET 
              , CL_CON_MAX_TM = #{cl_con_max_tm}
              , CON_DEL_TM = #{con_del_tm}
              , SVR_CON_MAX_TM = #{svr_con_max_tm}
              , CHK_TM = #{chk_tm}
              , IF_NM = #{if_nm}
+             , OBJ_IP = #{obj_ip}
+             , PEER_SERVER_IP = #{peer_server_ip}
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	PRY_GLB_ID = #{pry_glb_id}::numeric  -->
+         UPDATE T_PRY_GLB_I
+           SET 
+           	   IF_NM = #{if_nm}
+     		 , CHK_TM = #{chk_tm}
              , OBJ_IP = #{obj_ip}
              , PEER_SERVER_IP = #{peer_server_ip}
              , LST_MDFR_ID = #{lst_mdfr_id}
@@ -599,7 +618,7 @@
         * Description : Proxy VIP Config 정보 수정
         * Author : 김민정
         **/
-        UPDATE T_PRY_VIPCNG_I
+        <!-- UPDATE T_PRY_VIPCNG_I
            SET V_IP = #{v_ip}
              , V_ROT_ID = #{v_rot_id}::numeric
              , V_IF_NM = #{v_if_nm}
@@ -610,6 +629,17 @@
              , STATE_NM = #{state_nm}
              , AWS_IF_ID = #{aws_if_id}
              , PEER_AWS_IF_ID = #{peer_aws_if_id}
+         WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
+         AND	VIP_CNG_ID = #{vip_cng_id}::numeric -->
+         
+         UPDATE T_PRY_VIPCNG_I
+           SET V_IP = #{v_ip}
+             , V_ROT_ID = #{v_rot_id}::numeric
+             , V_IF_NM = #{v_if_nm}
+             , PRIORITY = #{priority}::numeric
+             , LST_MDFR_ID = #{lst_mdfr_id}
+             , LST_MDF_DTM = clock_timestamp()
+             , STATE_NM = #{state_nm}
          WHERE 	PRY_SVR_ID = #{pry_svr_id}::numeric 
          AND	VIP_CNG_ID = #{vip_cng_id}::numeric 
 	</update>
@@ -667,7 +697,7 @@
 	<update id="updatePryListener" parameterType="proxyListenerVO">
         /**
         * Query ID : updatePryListener
-        * Description : Proxy Listener 정보 수정
+       	* Description : Proxy Listener 정보 수정
         * Author : 김민정
         **/
         UPDATE T_PRY_LSN_I
@@ -690,10 +720,10 @@
 	<insert id="insertPryListener" parameterType="proxyListenerVO">
     	/**
 	 	* Query ID : insertPryListener
-	 	* Description : Proxy Listener 정보  둥록
-	 	* Author : 김민정
+	 	* Description : Proxy Listener  
+	 	* Author : 
 	 	**/
-	 	INSERT INTO T_PRY_LSN_I
+	 	<!-- INSERT INTO T_PRY_LSN_I
 		(
       		LSN_ID, 
       		PRY_SVR_ID, 
@@ -724,6 +754,33 @@
 				#{con_sim_query} AS CON_SIM_QUERY,
 				#{field_val} AS FIELD_VAL,
 				#{field_nm} AS FIELD_NM,
+				#{lst_mdfr_id} AS FRST_REGR_ID,
+				clock_timestamp() AS FRST_REG_DTM,
+				#{lst_mdfr_id} AS LST_MDFR_ID,
+				clock_timestamp() AS LST_MDF_DTM,
+				#{bal_yn} AS BAL_YN,
+				#{bal_opt} AS BAL_OPT -->
+		INSERT INTO T_PRY_LSN_I
+		(
+      		LSN_ID, 
+      		PRY_SVR_ID, 
+      		LSN_NM, 
+      		CON_BIND_PORT, 
+      		DB_NM, 
+      		CON_SIM_QUERY, 
+      		FRST_REGR_ID, 
+      		FRST_REG_DTM, 
+      		LST_MDFR_ID, 
+      		LST_MDF_DTM,
+      		BAL_YN,
+      		BAL_OPT
+		) 
+		SELECT (SELECT COALESCE(MAX(LSN_ID+1),1) AS LSN_ID FROM T_PRY_LSN_I) AS LSN_ID, 
+				#{pry_svr_id} AS PRY_SVR_ID,
+				#{lsn_nm} AS LSN_NM,
+				#{con_bind_port} AS CON_BIND_PORT,
+				#{db_nm} AS DB_NM,
+				#{con_sim_query} AS CON_SIM_QUERY,
 				#{lst_mdfr_id} AS FRST_REGR_ID,
 				clock_timestamp() AS FRST_REG_DTM,
 				#{lst_mdfr_id} AS LST_MDFR_ID,
@@ -879,7 +936,7 @@
 	<update id="updatePrySvrKalInstYn" parameterType="proxyServerVO">
         /**
         * Query ID : updatePrySvrKalInstYn
-        * Description : Proxy 서버 KAL_INSTALL_YN 업데이트
+         * Description : Proxy 서버 KAL_INSTALL_YN 업데이트
         * Author : 김민정
         **/
         UPDATE T_PRY_SVR_I
@@ -942,5 +999,10 @@
   							ORDER BY PRY_SVR_NM DESC
   							LIMIT 1
         				  )
+	</update>
+	<update id="updateIpAddress" parameterType="hashMap">
+		UPDATE T_PRY_SVR_I
+		SET IPADR = #{obj_ip}
+		WHERE PRY_SVR_ID = #{pry_svr_id}
 	</update>
 </mapper>

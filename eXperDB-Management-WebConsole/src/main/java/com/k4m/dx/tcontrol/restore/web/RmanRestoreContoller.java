@@ -87,6 +87,13 @@ public class RmanRestoreContoller {
 		ModelAndView mv = new ModelAndView();
 
 		try {
+			
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			
+			mv.addObject("usr_id", usr_id);
+			
 			if (dbSvrAut.get(0).get("emergency_restore_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			}else{
@@ -155,6 +162,13 @@ public class RmanRestoreContoller {
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
 		try {
+			
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			
+			mv.addObject("usr_id", usr_id);
+			
 			if (dbSvrAut.get(0).get("point_restore_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			}else{

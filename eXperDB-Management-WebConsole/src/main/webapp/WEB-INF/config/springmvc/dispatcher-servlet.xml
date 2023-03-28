@@ -59,6 +59,7 @@
             	<mvc:exclude-mapping path="/loginAction.do" />
             	<mvc:exclude-mapping path="/logout.do" />
             	<mvc:exclude-mapping path="/experdb/rest/**/*.do" />
+            	<mvc:exclude-mapping path="/playTrial/**/" />
             <bean class="com.k4m.dx.tcontrol.cmmn.SessionCheckInterceptor" />
           </mvc:interceptor>
     </mvc:interceptors>

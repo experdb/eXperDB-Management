@@ -60,7 +60,30 @@
 			var wrk_id_up = tableDump.row(this).data().wrk_id;			
 			fn_schdule_pop_List(wrk_id_up);
 		});
+		
+		fn_buttonAut();
 	});
+	
+	
+	
+	function fn_buttonAut(){
+		var usr_id = document.getElementById("usr_id"); 
+		
+		if("${usr_id}" == "viewer"){
+			btnDelete.style.display = 'none';
+			btnModify.style.display = 'none';
+			btnInsert.style.display = 'none';
+			btnImmediately.style.display = 'none';
+		}else{
+			btnDelete.style.display = '';
+			btnModify.style.display = '';
+			btnInsert.style.display = '';
+			btnImmediately.style.display = '';
+		}
+
+	}
+	
+	
 
 	//스케줄 테이블
 	function fn_init_schedule(){
@@ -708,8 +731,7 @@
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
-								</button>
-								
+								</button>								
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnImmediately">
 									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
 								</button>

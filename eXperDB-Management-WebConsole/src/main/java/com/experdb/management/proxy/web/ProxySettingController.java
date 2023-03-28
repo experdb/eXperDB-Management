@@ -1,31 +1,9 @@
 package com.experdb.management.proxy.web;
 
-import java.net.ConnectException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.experdb.management.proxy.service.ProxyListenerServerVO;
 import com.experdb.management.proxy.service.ProxyServerVO;
 import com.experdb.management.proxy.service.ProxySettingService;
+import com.experdb.management.proxy.web.ProxySettingController;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -34,41 +12,47 @@ import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
+import java.net.ConnectException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
-/**
- *Proxy 설정관리
- *
- * @author 김민정
- * @see
- * 
- *      <pre>
- * == 개정이력(Modification Information) ==
- *
- *   수정일       수정자           수정내용
- *  -------     --------    ---------------------------
- *  2021.03.03   김민정 최초 생성
- *      </pre>
- */
 @Controller
 public class ProxySettingController {
-	
 	@Autowired
 	private MenuAuthorityService menuAuthorityService;
-	
+
 	@Autowired
 	private ProxySettingService proxySettingService;
-	
+
 	@Autowired
 	private AccessHistoryService accessHistoryService;
-	
+
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
-	
+
 	@Autowired
 	private MessageSource msg;
-	
+
 	private List<Map<String, Object>> menuAut;
-	
+
 	private String sohw_menu_id = "45";
 	
 	/**
@@ -97,9 +81,8 @@ public class ProxySettingController {
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
-			}else{
-				// 화면접근이력 이력 남기기 - Proxy 설정 관리 화면
-				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159", sohw_menu_id);
+			} else {
+				this.proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159", this.sohw_menu_id);
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				
@@ -131,7 +114,7 @@ public class ProxySettingController {
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));	
 
 				mv.setViewName("proxy/setting/proxySetting");
-			}	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,7 +148,7 @@ public class ProxySettingController {
 		}
 		return mv;
 	}
-	
+
 	/**
 	 * VIP Instance 수정 팝업
 	 * 
@@ -173,10 +156,9 @@ public class ProxySettingController {
 	 * @return ModelAndView mv
 	 * @throws
 	 */
-	@RequestMapping(value = "/popup/vipInstanceRegForm.do")
+	@RequestMapping({ "/popup/vipInstanceRegForm.do" })
 	public ModelAndView vipInstanceRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("jsonView");
-
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
@@ -187,7 +169,6 @@ public class ProxySettingController {
 				// 화면접근이력 이력 남기기 - Proxy 설정관리 - VIP Instance 관리 팝업
 				proxySettingService.accessSaveHistory(request, historyVO, "DX-T0159_02", sohw_menu_id);
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -257,7 +238,6 @@ public class ProxySettingController {
 			e.printStackTrace();
 		}
 		return resultSet;
-
 	}
 	
 	/**
@@ -304,7 +284,6 @@ public class ProxySettingController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return mv;
 	} 
 	
@@ -324,7 +303,7 @@ public class ProxySettingController {
 				
 		Map<String, Object> param = new HashMap<String, Object>();
 		JSONObject resultObj = new JSONObject();
-		try {	
+		try {
 			CmmnUtils.saveHistory(request, historyVO);
 
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
@@ -337,7 +316,7 @@ public class ProxySettingController {
 				
 				int prySvrId = Integer.parseInt(request.getParameter("pry_svr_id"));
 				param.put("pry_svr_id", prySvrId);
-					
+					 
 				//정보조회
 				resultObj = proxySettingService.getPoxyServerConf(param);
 				try{
@@ -560,7 +539,6 @@ public class ProxySettingController {
 			resultObj.put("errmsg",msg.getMessage("eXperDB_proxy.msg49", null, LocaleContextHolder.getLocale()));
 		}
 		return resultObj;
-
 	}
 	
 	/**
@@ -574,9 +552,8 @@ public class ProxySettingController {
 	public @ResponseBody JSONObject prySvrConnTest(HttpServletRequest request, HttpServletResponse response){
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001802");
-	
-		Map<String, Object> param = new HashMap<String, Object>();
+		this.menuAut = cu.selectMenuAut(this.menuAuthorityService, "MN0001802");
+		Map<String, Object> param = new HashMap<>();
 		JSONObject resultObj = new JSONObject();
 
 		try {
