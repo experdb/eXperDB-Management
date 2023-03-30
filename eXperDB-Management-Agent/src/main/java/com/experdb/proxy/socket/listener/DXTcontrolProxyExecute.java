@@ -87,25 +87,25 @@ public class DXTcontrolProxyExecute extends SocketCtl {
 			}
 
 			//proxy 설치되어 있는 경우 실행
-			if (!"".equals(proxySetStatus) && !"not installed".equals(proxySetStatus)) {
-				if ("true".equals(proxySetYn)) {
-					//스케줄러 실행(proxy 리스너 통계 저장) - 매일 5분에 1번씩 실행
-					strProxyJobTime = "0 0/5 * 1/1 * ? *";
-
-					JobDetail jobProxy = newJob(DXTcontrolProxyExecuteChk.class).withIdentity("jobName", "group1").build();
-    	        	CronTrigger triggerProxy = newTrigger().withIdentity("trggerName", "group1").withSchedule(cronSchedule(strProxyJobTime)).build(); //5분마다 설정
-
-    	        	scheduler.scheduleJob(jobProxy, triggerProxy);
-    	        	scheduler.start();
-
-    	        	//스케줄러 실행(proxy 리스너 통계 저장 및 데이터 삭제) - 매일 00시 삭제
-    	        	strProxyMonJobTime = "0 50 23 1/1 * ? *";
-    	        	JobDetail jobProxyDay = newJob(DXTcontrolProxyExecuteDayChk.class).withIdentity("jobName", "group2").build();
-    	        	CronTrigger triggerMons = newTrigger().withIdentity("trggerName", "group2").withSchedule(cronSchedule(strProxyMonJobTime)).build(); //매주 월요일 8시
-    	        	scheduler.scheduleJob(jobProxyDay, triggerMons);
-    	        	scheduler.start();
-				}
-			}        	
+//			if (!"".equals(proxySetStatus) && !"not installed".equals(proxySetStatus)) {
+//				if ("true".equals(proxySetYn)) {
+//					//스케줄러 실행(proxy 리스너 통계 저장) - 매일 5분에 1번씩 실행
+//					strProxyJobTime = "0 0/5 * 1/1 * ? *";
+//
+//					JobDetail jobProxy = newJob(DXTcontrolProxyExecuteChk.class).withIdentity("jobName", "group1").build();
+//    	        	CronTrigger triggerProxy = newTrigger().withIdentity("trggerName", "group1").withSchedule(cronSchedule(strProxyJobTime)).build(); //5분마다 설정
+//
+//    	        	scheduler.scheduleJob(jobProxy, triggerProxy);
+//    	        	scheduler.start();
+//
+//    	        	//스케줄러 실행(proxy 리스너 통계 저장 및 데이터 삭제) - 매일 00시 삭제
+//    	        	strProxyMonJobTime = "0 50 23 1/1 * ? *";
+//    	        	JobDetail jobProxyDay = newJob(DXTcontrolProxyExecuteDayChk.class).withIdentity("jobName", "group2").build();
+//    	        	CronTrigger triggerMons = newTrigger().withIdentity("trggerName", "group2").withSchedule(cronSchedule(strProxyMonJobTime)).build(); //매주 월요일 8시
+//    	        	scheduler.scheduleJob(jobProxyDay, triggerMons);
+//    	        	scheduler.start();
+//				}
+//			}        	
         } catch(Exception e) {
             e.printStackTrace();
         }  
