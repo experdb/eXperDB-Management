@@ -53,13 +53,24 @@ function selectInitTab(intab){
 		$(".searchRman").show();
 		$(".searchDump").hide();
 		$("#rmanDataTableDiv").show();
+		$("#backrestDataTableDiv").hide();
 		$("#dumpDataTableDiv").hide();
 
+		seachParamInit(intab);
+	}
+	else if(intab == "backrest"){
+		$(".searchRman").show();
+		$(".searchDump").hide();
+		$("#rmanDataTableDiv").hide();
+		$("#backrestDataTableDiv").show();
+		$("#dumpDataTableDiv").hide();
+		
 		seachParamInit(intab);
 	}else{				
 		$(".searchRman").hide();
 		$(".searchDump").show();
 		$("#rmanDataTableDiv").hide();
+		$("#backrestDataTableDiv").hide();
 		$("#dumpDataTableDiv").show();
 
 		seachParamInit(intab);
@@ -67,6 +78,7 @@ function selectInitTab(intab){
 
 	//테이블 setting
 	fn_rman_init();
+	fn_backrest_init();
 	fn_dump_init();
 }
 
@@ -100,15 +112,26 @@ function selectTab(intab){
 		$(".search_rman").show();
 		$(".search_dump").hide();
 		$("#rmanDataTableDiv").show();
+		$("#backrestDataTableDiv").hide();
 		$("#dumpDataTableDiv").hide();
 
 		seachParamInit(intab);
 
 		fn_get_rman_list();
+	}else if(intab == "backrest"){
+		$(".search_rman").show();
+		$(".search_dump").hide();
+		$("#rmanDataTableDiv").hide();
+		$("#backrestDataTableDiv").show();
+		$("#dumpDataTableDiv").hide();
+
+		seachParamInit(intab);
+
 	}else{				
 		$(".search_rman").hide();
 		$(".search_dump").show();
 		$("#rmanDataTableDiv").hide();
+		$("#backrestDataTableDiv").hide();
 		$("#dumpDataTableDiv").show();
 
 		seachParamInit(intab);
@@ -201,7 +224,9 @@ function fn_get_dump_list(){
 function fnc_confirmMultiRst(gbn){
 	if (gbn == "del_rman" || gbn == "del_dump") {
 		fn_deleteWork(gbn);
-	} else if (gbn =="run_immediately") {
+	}else if(gbn == "bckr_cst_del"){
+		fn_deleteCustom();
+	}else if (gbn =="run_immediately") {
 		fn_ImmediateStart();
 	}
 }
@@ -214,7 +239,9 @@ function fn_reg_popup(){
 
 	if (selectChkTab == "rman") {
 		regUrl = "/popup/rmanRegForm.do";
-	} else {
+	}else if(selectChkTab == "backrest"){
+		regUrl = "/popup/backrestRegForm.do";
+	}else {
 		regUrl = "/popup/dumpRegForm.do";
 	}
 
@@ -242,7 +269,9 @@ function fn_reg_popup(){
 
 			if (selectChkTab == "rman") {
 				$('#pop_layer_reg_rman').modal("show");
-			} else {
+			} else if(selectChkTab == "backrest"){
+				$('#pop_layer_reg_backrest').modal("show");
+			}else {
 				$('#pop_layer_reg_dump').modal("show");
 			}
 		}
@@ -309,7 +338,15 @@ function fn_insert_chogihwa(gbn, result) {
 		$("#ins_worknm_check_alert", "#workRegForm").hide();
 		
 		fn_insertWorkPopStart();
-	} else {
+	} else if (gbn == "backrest") {
+		document.getElementById("bck_srv_local_check").style.backgroundColor = "white"
+		document.getElementById("bck_srv_remote_check").style.backgroundColor = "#e7e7e7"
+		document.getElementById("bck_srv_cloud_check").style.backgroundColor = "#e7e7e7"
+
+		$("#remote_opt").hide();
+		$("#cloud_opt").hide();
+
+	}else {
 		//상단
 		$("#ins_dump_wrk_nm", "#workDumpRegForm").val(""); 									//work 명
 		$("#ins_dump_wrk_exp", "#workDumpRegForm").val("");									//work 설명
@@ -701,7 +738,7 @@ function fn_mod_changeFileFmtCd(){
  * Get Selected Database`s Object List
  ******************************************************** */
 function fn_mod_get_object_list(){
-		var db_nm = nvlPrmSet($("#mod_dump_db_id option:selected", "#workDumpModForm").text(), "");
+	var db_nm = nvlPrmSet($("#mod_dump_db_id option:selected", "#workDumpModForm").text(), "");
 	var db_id = nvlPrmSet($("#mod_dump_db_id option:selected", "#workDumpModForm").val(), "");
 	
 	if (db_nm == "" || db_id == "") {

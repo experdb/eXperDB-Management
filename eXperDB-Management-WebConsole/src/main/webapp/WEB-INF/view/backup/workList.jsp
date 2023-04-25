@@ -25,7 +25,8 @@
 <script type="text/javascript">
 	var tableRman = null;
 	var tableDump = null;
-	var selectChkTab = "rman";
+	var selectChkTab = "";
+	var check = "";
 	var searchInit = "";
 	var tabGbn = "${tabGbn}";
 	var bck_wrk_id_List = [];
@@ -38,17 +39,17 @@
 	
 	
 	$(window).ready(function(){
+		fn_pgbackrestAut();
 		//검색조건 초기화
 		selectInitTab(selectChkTab);
 		//스케줄 테이즐 setting
 		fn_init_schedule();
 
-		
 		//조회 (backup_common.js)
 		if(tabGbn != ""){
 			selectTab(tabGbn);
 		}else{
-			selectTab("rman");
+			selectTab(searchInit);
 		}
 			
 		$('#rmanDataTable tbody').on('click','tr',function() {
@@ -81,6 +82,20 @@
 			btnImmediately.style.display = '';
 		}
 
+	}
+	
+	function fn_pgbackrestAut(){
+		if("${pgbackerest_useyn}" == "Y"){
+			selectChkTab = "backrest";
+			check = "backrest";
+
+			$("#server-tab-1").text("PG Backret 백업");
+		}else{
+			selectChkTab = "rman";
+			check = "rman";
+
+			$("#server-tab-1").text("Online 백업");
+		}
 	}
 	
 	
@@ -315,7 +330,9 @@
 
 		if(selectChkTab == "rman"){
 			datas = tableRman.rows('.selected').data();
-		} else {
+		} else if(selectChkTab == "backrest"){
+
+		} else{
 			datas = tableDump.rows('.selected').data();
 		}
 
@@ -332,6 +349,8 @@
 				bck_wrk_id_List.push( tableRman.rows('.selected').data()[i].bck_wrk_id);   
 				wrk_id_List.push( tableRman.rows('.selected').data()[i].wrk_id);   
 			}
+		} else if(selectChkTab == "backrest"){
+
 		} else {
 			for (var i = 0; i < datas.length; i++) {
 				bck_wrk_id_List.push( tableDump.rows('.selected').data()[i].bck_wrk_id);   
@@ -370,7 +389,9 @@
 
 				if(selectChkTab == "rman"){
 					$('#con_multi_gbn', '#findConfirmMulti').val("del_rman");
-				} else {
+				} else if(selectChkTab == "backrest"){
+
+				}else {
 					$('#con_multi_gbn', '#findConfirmMulti').val("del_dump");
 				}
 
@@ -414,7 +435,7 @@
 					
 					if (gbn == "del_rman") {
 						fn_get_rman_list();
-					} else {
+					} else if(gbn == "del_dump"){
 						fn_get_dump_list();
 					}
 				}else{
@@ -594,6 +615,53 @@
 			}
 		});
 	}
+
+	/* ********************************************************
+	 * Backrest Data Table initialization
+	 ******************************************************** */
+	 function fn_backrest_init(){
+		tableBackrest = $('#backrestDataTable').DataTable({
+			scrollY: "300px",
+			scrollX: true,	
+			bDestroy: true,
+			paging : true,
+			processing : true,
+			searching : false,	
+			deferRender : true,
+			bSort: false,
+			columns : [
+						{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+						{data : "idx", className : "dt-center", defaultContent : ""},
+						{data : "wrk_nm", className : "dt-center", defaultContent : ""},
+						{data : "wrk_exp", defaultContent : ""},
+						{data: "bck_server", className: "dt-center", defaultContent: "" },
+						{data : "storage", className : "dt-center", defaultContent : ""},
+						{data : "bck_opt", className : "dt-center", defaultContent : ""},
+						{data : "bck_path", className : "dt-center", defaultContent : ""},
+						{data : "frst_regr_id", className: "dt-center", defaultContent : ""},
+						{data : "frst_reg_dtm", className: "dt-center", defaultContent : ""},
+						{data: "lst_mdfr_id", className: "dt-center", defaultContent: ""}, 
+						{data: "lst_mdf_dtm", className: "dt-center", defaultContent: ""}, 
+						{data : "bck_wrk_id", defaultContent : "", visible: false }
+			],'select': {'style': 'multi'}
+		});
+
+		tableBackrest.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		tableBackrest.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+		tableBackrest.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+		tableBackrest.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+		tableBackrest.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		tableBackrest.tables().header().to$().find('th:eq(5)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(6)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(7)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(8)').css('min-width', '223x');
+		tableBackrest.tables().header().to$().find('th:eq(9)').css('min-width', '110px');  
+		tableBackrest.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+		tableBackrest.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+		tableBackrest.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+
+		$(window).trigger('resize'); 
+	}
 </script>
 
 <%@include file="../cmmn/workRmanInfo.jsp"%>
@@ -601,6 +669,7 @@
 <%@include file="../popup/rmanShow.jsp"%>
 <%@include file="../popup/dumpShow.jsp"%>
 <%@include file="../popup/rmanRegForm.jsp"%>
+<%@include file="../popup/backrestRegForm.jsp"%>
 <%@include file="../popup/dumpRegForm.jsp"%>
 <%@include file="../popup/rmanRegReForm.jsp"%>
 <%@include file="../popup/dumpRegReForm.jsp"%>
@@ -667,8 +736,8 @@
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
-						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
+						<li class="nav-item active" id="nav_item_rman">
+							<a class="nav-link  active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab(check);" >
 								<spring:message code="backup_management.rman_backup" />
 							</a>
 						</li>
@@ -755,7 +824,7 @@
 										</div>
 									</div>
 
-	 								<table id="rmanDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+									<table id="rmanDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 										<thead>
 											<tr class="bg-info text-white">
 												<th width="10"></th>
@@ -775,6 +844,39 @@
 										</thead>
 									</table>
 							 	</div>
+
+								 <div class="col-12" id="backrestDataTableDiv" style="diplay:none;">
+									<div class="table-responsive">
+									   <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+										   <div class="row">
+											   <div class="col-sm-12 col-md-6">
+												   <div class="dataTables_length" id="order-listing_length">
+												   </div>
+											   </div>
+										   </div>
+									   </div>
+								   </div>
+
+								   <table id="backrestDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="10"></th>
+												<th width="30"><spring:message code="common.no" /></th>
+												<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
+												<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
+												<th width="100">백업서버</th>
+												<th width="100" class="dt-center">스토리지</th>
+												<th width="100" class="dt-center">백업구분</th>
+												<th width="200" class="dt-center">백업경로</th> 
+												<th width="100"><spring:message code="common.register" /></th>
+												<th width="110"><spring:message code="common.regist_datetime" /></th>
+												<th width="100"><spring:message code="common.modifier" /></th>
+												<th width="100"><spring:message code="common.modify_datetime" /></th>
+												<th width="0"></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
 							 	
 								<div class="col-12" id="dumpDataTableDiv" style="diplay:none;">
  									<div class="table-responsive">

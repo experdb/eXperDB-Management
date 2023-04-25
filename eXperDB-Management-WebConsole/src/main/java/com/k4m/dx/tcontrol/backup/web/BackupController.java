@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.backup.web;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -88,7 +91,17 @@ public class BackupController {
 	@RequestMapping(value = "/backup/workList.do")
 	public ModelAndView workList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
 		int db_svr_id=workVO.getDb_svr_id();
-
+		String pgbackerest_useyn = "";
+		
+		Properties props = new Properties();
+        try {
+           props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+           pgbackerest_useyn = props.getProperty("pgbackrest.useyn");
+        } catch (IOException e) {
+           // TODO Auto-generated catch block
+           e.printStackTrace();
+        }   
+		
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
@@ -109,7 +122,8 @@ public class BackupController {
 				String usr_id = loginVo.getUsr_id();
 				workVO.setUsr_id(usr_id);
 				
-				mv.addObject("usr_id", usr_id);				
+				mv.addObject("usr_id", usr_id);
+				mv.addObject("pgbackerest_useyn", pgbackerest_useyn);
 				mv.addObject("dbList",backupService.selectDbList(workVO));
 				
 			} catch (Exception e1) {
@@ -155,6 +169,7 @@ public class BackupController {
 	@ResponseBody
 	public List<WorkVO> rmanDataList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
 		List<WorkVO> resultSet = null;
+
 		
 		// 화면접근이력 이력 남기기
 		try {
@@ -277,6 +292,56 @@ public class BackupController {
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0022");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+				
+		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+
+		return mv;
+	}
+	
+	/**
+	 * Backrest Backup Registration View page
+	 * @param WorkVO, request, historyVO
+	 * @return ModelAndView
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(value = "/popup/backrestRegForm.do")
+	public ModelAndView backrestRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		// 화면접근이력 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0022");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+
+		return mv;
+	}
+	
+	/**
+	 * Backrest Backup Registration Custom View page
+	 * @param WorkVO, request, historyVO
+	 * @return ModelAndView
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(value = "/popup/backrestRegCustomForm.do")
+	public ModelAndView backrestRegCustomForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		// 화면접근이력 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0022");
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
