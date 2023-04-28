@@ -1,0 +1,55 @@
+-- 컬럼추가 초기 패스워드 설정
+ALTER TABLE T_TRANS_ENCRYPT ADD COLUMN PW_CHANGE varchar(20) DEFAULT 'false';
+
+
+-- view 계정 추가
+INSERT INTO T_USR_I( USR_ID, USR_NM, PWD, BLN_NM, DEPT_NM, RSP_BSN_NM, PST_NM, CPN, USR_EXPR_DT, USE_YN, ENCP_USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES('viewer', '뷰어', 'UP7x6XqHQsGUZoa5ZXphGQ==', 'INZENT', '데이터플랫폼팀', '뷰어', '뷰어', '', '20990101',  'Y', 'Y', 'admin', clock_timestamp(), 'admin', clock_timestamp());
+
+UPDATE T_USR_I SET PWD = '9f77637ab35a8f08650b5dcab525722418a3062d38949fba22d33d168978c1d2' WHERE USR_ID = 'viewer';
+
+WITH UPSERT AS(UPDATE T_TRANS_ENCRYPT SET SALT_KEY = '0fbb37635578fb1dd164', TRANS_CHK_KEY = 'UP7x6XqHQsGUZoa5ZXphGQ=='
+                WHERE TRANS_ID  = 'viewer' RETURNING *)
+               INSERT INTO T_TRANS_ENCRYPT (TRANS_ID, TRANS_CHK_KEY, SALT_KEY, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)
+               SELECT 'viewer', 'UP7x6XqHQsGUZoa5ZXphGQ==', '0fbb37635578fb1dd164', 'viewer', clock_timestamp(), 'viewer', clock_timestamp()
+         WHERE NOT EXISTS ( SELECT * FROM UPSERT );
+
+
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 1, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 2, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 3, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 4, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 5, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 6, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 7, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 8, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 9, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 10, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 11, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 12, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 13, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 14, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 15, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 16, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 17, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 18, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 19, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 20, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 21, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 22, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 23, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 24, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 25, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 26, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 27, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 28, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 29, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 30, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 31, 'N', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 32, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 33, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 34, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 35, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 36, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 37, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 38, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'viewer', 39, 'Y', 'N', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
