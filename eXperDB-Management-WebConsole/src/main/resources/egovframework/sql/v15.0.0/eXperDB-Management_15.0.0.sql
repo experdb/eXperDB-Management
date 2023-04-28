@@ -10,9 +10,9 @@ CREATE TABLE t_BACKREST_OPT_i (
 		,opt_exp varchar(100)
 		);
 		
-COMMENT ON COLUMN t_BACKREST_OPT_i.opt_id IS '옵션ID';
-COMMENT ON COLUMN t_BACKREST_OPT_i.opt_nm IS '옵션';
-COMMENT ON COLUMN t_BACKREST_OPT_i.opt_exp IS '옵션설명';	
+COMMENT ON COLUMN t_BACKREST_OPT_i.opt_id IS 'Backrest 옵션ID';
+COMMENT ON COLUMN t_BACKREST_OPT_i.opt_nm IS 'Backrest 옵션';
+COMMENT ON COLUMN t_BACKREST_OPT_i.opt_exp IS 'Backrest 옵션설명';	
 		
 		
 CREATE SEQUENCE Q_BACKREST_OPT_I_01 ;
