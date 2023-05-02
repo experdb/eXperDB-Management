@@ -45,7 +45,9 @@
 			A.BCK_PTH,
 			A.ACV_FILE_STGDT,
 			A.ACV_FILE_MTNCNT,
-			A.LOG_FILE_PTH
+			A.LOG_FILE_PTH,
+			A.BACKREST_GBN,
+			A.DB_SVR_IPADR
 	  FROM(	
       SELECT 
       		BCK_WRK_ID,
@@ -81,7 +83,9 @@
 			BCK_PTH,
 			ACV_FILE_STGDT,
 			ACV_FILE_MTNCNT,
-			LOG_FILE_PTH
+			LOG_FILE_PTH,
+			BACKREST_GBN,
+			(SELECT IPADR FROM T_DBSVRIPADR_I WHERE A.DB_SVR_IPADR_ID = DB_SVR_IPADR_ID ) AS DB_SVR_IPADR
       FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
       WHERE 1=1	
       	AND A.WRK_ID=B.WRK_ID
@@ -207,6 +211,53 @@
 			#{acv_file_stgdt},
 			#{acv_file_mtncnt},
 			#{log_file_pth}
+			)
+	</insert>
+	
+	<insert id="insertBackrestWork" parameterType="workVO">
+		/**
+	 	* Query ID : insertBackrestWork
+	 	* Description : Backrest백업 insert
+	 	**/
+		INSERT INTO T_BCK_WRKCNG_I
+			(
+			BCK_WRK_ID,
+			wrk_id,
+			db_svr_id,
+			bck_bsn_dscd,
+			bck_opt_cd,
+			bck_mtn_ecnt,
+			cps_yn,
+			file_stg_dcnt,
+			frst_regr_id,
+			frst_reg_dtm,
+			lst_mdfr_id,
+			lst_mdf_dtm,
+			bck_pth,
+			log_file_pth,
+			bck_filenm,
+			db_svr_ipadr_id,
+			backrest_gbn
+			)
+		VALUES
+			(
+			nextval('q_bck_wrkcng_i'),
+			#{wrk_id},
+			#{db_svr_id},
+			'TC000205',
+			#{bck_opt_cd},
+			#{bck_mtn_ecnt},
+			#{cps_yn},
+			#{file_stg_dcnt},
+			#{frst_regr_id},
+			now(),
+			#{frst_regr_id},
+			now(),
+			#{bck_pth},
+			#{log_file_pth},
+			#{bck_filenm},
+			#{db_svr_ipadr_id},
+			#{backrest_gbn}
 			)
 	</insert>
 	
@@ -469,6 +520,24 @@
            AND A.DB_SVR_ID = B.DB_SVR_ID
            AND B.MASTER_GBN = 'M'
            AND A.DB_SVR_ID = #{db_svr_id}
+    </select>
+    
+    <select id="selectAgentInfo" parameterType="dbServerVO" resultType="dbServerVO">
+          SELECT
+          	   (ROW_NUMBER() OVER()) AS ROWNUM,
+               A.pgdata_pth ,
+               B.ipadr,
+               B.portno,
+               B.master_gbn,
+               A.svr_spr_usr_id,
+               B.db_svr_ipadr_id
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         WHERE
+           A.DB_SVR_ID = B.DB_SVR_ID
+           <if test="ipadr != null and ipadr != '' ">
+      		   AND B.ipadr LIKE CONCAT('%',#{ipadr},'%')
+      	   </if>
+			
     </select>
     
     <select id="selectWorkLogList" parameterType="workLogVO" resultType="workLogVO">
@@ -873,4 +942,12 @@
 		WHERE A.WRK_ID = B.WRK_ID
 	 	AND A.WRK_ID = #{wrk_id}
 	</select>
+	
+	<select id="selectBackrestCstOpt" parameterType="dbServerVO" resultType="hashMap">
+          SELECT
+               opt_id,
+               opt_nm,
+               opt_exp
+          FROM t_BACKREST_OPT_i			
+    </select>
 </mapper>

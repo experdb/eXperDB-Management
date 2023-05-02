@@ -15,10 +15,10 @@
 
 <script type="text/javascript">
 	var svrBckCheck = 'local';
+	var agent_info_arr = [];
 
 	$(window.document).ready(function() {
-		fn_init_backrest_reg_form();
-
+		
 		$("#workRegFormBckr").validate({
 	        rules: {
 	        	ins_wrk_nm_bckr: {
@@ -37,7 +37,7 @@
 				}
 	        },
 			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 ★showError 와 함께 쓰면 실행하지않는다★
-				if (!ins_backrest_valCheck(svrBckCheck)) return false;
+				fn_backrest_insert_work();
 			},
 	        errorPlacement: function(label, element) {
 	          label.addClass('mt-2 text-danger');
@@ -52,21 +52,22 @@
 
 	function fn_init_backrest_reg_form() {
 		backrestServerTable = $('#backrestServerInfo').DataTable({
-			scrollY : "80px",
+			scrollY : "110px",
 			bSort: false,
-			scrollX: true,	
+			scrollX: false,	
 			searching : false,
 			paging : false,
 			deferRender : true,
+			destroy: true,
 			columns : [
-						{data : "idx", className : "dt-center", defaultContent : ""},
-						{data : "svr_type", className : "dt-center", defaultContent : ""},
-						{data : "ip_svr", defaultContent : ""},
-						{data: "db_port", defaultContent: "" },
-						{data : "db_user", defaultContent : ""},
-						{data : "data_path", defaultContent : ""},
+						{data : "rownum", defaultContent : "", className : "dt-center"}, 
+						{data : "master_gbn", className : "dt-center", defaultContent : ""},
+						{data : "ipadr", defaultContent : "" },
+						{data : "portno", defaultContent: "" },
+						{data : "svr_spr_usr_id", defaultContent : ""},
+						{data : "pgdata_pth", defaultContent : ""},
 						{data : "bck_svr_id", defaultContent : "", visible: false }
-			],'select': {'style': 'multi'}
+			],'select': {'style': 'single'}
 		});
 		
 		backrestServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
@@ -240,6 +241,7 @@
 		
 	}
 
+	//Custom popup
 	function fn_reg_custom_popup(){
 		$.ajax({
 			url : "/popup/backrestRegCustomForm.do",
@@ -262,6 +264,11 @@
 			},
 			success : function(result) {
 				fn_deleteCustom();
+
+				for(var i=0; i < result['backrest_cus_opt'].length; i++){
+					bckr_cst_opt.push(result['backrest_cus_opt'][i]);
+				}
+	
 				$('#pop_layer_reg_backrest_custom').modal("show");
 			}
 		});
@@ -272,6 +279,12 @@
 	 ******************************************************** */
 	function ins_backrest_valCheck(svrBckCheck){
 		var iChkCnt = 0;
+
+		if($('#backrestServerInfo').DataTable().rows('.selected').data()[0] == undefined){
+			showSwalIcon('IP를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
+
+			iChkCnt = iChkCnt + 1;
+		}
 
 		if(nvlPrmSet($("#ins_wrk_nmChk_bckr", "#workRegFormBckr").val(), "") == "" || nvlPrmSet($("#ins_wrk_nmChk_bckr", "#workRegFormBckr").val(), "") == "fail") {
 			$("#ins_wrk_nm_bckr_alert", "#workRegFormBckr").html('<spring:message code="backup_management.work_overlap_check"/>');
@@ -399,6 +412,7 @@
 		return true;
 	}
 
+	//압축여부에 따라 압축타입 활성화 비활성화
 	function ins_backrest_compress_chk(){
 		if($('#ins_bckr_cps_yn_chk').is(':checked')){
 			$("#ins_cps_opt_type", "#workRegFormBckr").attr("disabled",false);
@@ -407,12 +421,124 @@
 		}
 	}
 
+	//alert창 onchange
 	function fn_backrest_chg_alert(obj){
-		console.log(obj.id)
-
 		$("#"+obj.id+"_alert", "#workRegFormBckr").html("");
 		$("#"+obj.id+"_alert", "#workRegFormBckr").hide();
 	}
+
+	function fn_select_agent_info(){
+		$.ajax({
+			url : "/backup/backrestAgentList.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				ipadr : nvlPrmSet($('#ipadr', '#workRegFormBckr').val(), "")
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(data) {
+				backrestServerTable.rows({selected: true}).deselect();
+				backrestServerTable.clear().draw();
+
+				if (nvlPrmSet(data, "") != '') {
+					backrestServerTable.rows.add(data['agent_list']).draw();
+				}
+			}
+		});
+	}
+
+	//PG Backrest Work 등록
+	function fn_backrest_insert_work(){
+		if (!ins_backrest_valCheck()) return false;
+
+		if($("#ins_bckr_cps_yn_chk", "#workRegFormBckr").is(":checked") == true){
+			$("#ins_cps_brkr_yn", "#workRegFormBckr").val("Y");
+		} else {
+			$("#ins_cps_brkr_yn", "#workRegFormBckr").val("N");
+		}
+
+		var selectedAgent = $('#backrestServerInfo').DataTable().rows('.selected').data()[0]
+		
+		$.ajax({
+			async : false,
+			url : "/popup/workBackrestWrite.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				wrk_nm : nvlPrmSet($('#ins_wrk_nm_bckr', '#workRegFormBckr').val(), "").trim(),
+				wrk_exp : nvlPrmSet($('#ins_wrk_exp_bckr', '#workRegFormBckr').val(), ""),
+				cps_yn : $("#ins_cps_brkr_yn", "#workRegFormBckr").val(),
+				bck_opt_cd : $("#ins_bckr_opt_cd", '#workRegFormBckr').val(),
+				bck_mtn_ecnt : $("#ins_bckr_cnt", '#workRegFormBckr').val(),
+				db_id : 0,
+				bck_bsn_dscd : "TC000205",
+				bck_pth : $("#ins_bckr_pth", "#workRegFormBckr").val(),
+				log_file_pth : $("#ins_bckr_log_pth", "#workRegFormBckr").val(),
+				bck_filenm : ($('#ins_wrk_nm_bckr', '#workRegFormBckr').val()) + "_pgbackerest.conf",
+				prcs_cnt: $("#ins_cps_opt_prcs", "#workRegFormBckr").val(),
+				cps_type: $("#ins_cps_opt_type", "#workRegFormBckr").val(),
+				ipadr: selectedAgent.ipadr,
+				pgdata_pth: selectedAgent.pgdata_pth,
+				portno: selectedAgent.portno,
+				svr_spr_usr_id: selectedAgent.svr_spr_usr_id,
+				master_gbn: selectedAgent.master_gbn,
+				db_svr_ipadr_id: selectedAgent.db_svr_ipadr_id,
+				backrest_gbn: svrBckCheck
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(data) {
+				if(data == "F"){ //중복 work명 일경우
+					showSwalIcon('<spring:message code="message.msg191" />', '<spring:message code="common.close" />', '', 'error');
+					return;
+				} else if (data == "I") { 
+					showSwalIcon('<spring:message code="backup_management.bckPath_fail" />', '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_reg_backrest').modal('show');
+					return;
+				} else if(data == "S"){
+					showSwalIcon('<spring:message code="message.msg106" />', '<spring:message code="common.close" />', '', 'success');
+					$('#pop_layer_reg_backrest').modal('hide');
+					fn_get_backrest_list();
+				}else{
+					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_reg_backrest').modal('show');
+					return;
+				}
+			}
+		});
+	}
+
+	function fn_backrest_ip_select_check(){
+		var selectedIp = $('#backrestServerInfo').DataTable().rows('.selected').data()[0]
+
+		if(selectedIp == undefined){
+			showSwalIcon('IP를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
+		}
+	}
+
+
 
 
 </script>
@@ -428,13 +554,12 @@
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
 					PG Backrest 백업등록
 				</h4>
-
+				
 				<div class="card system-tlb-scroll" style="margin-top:10px;border:0px;height:910px;overflow-y:auto;">
 					<form class="cmxform" id="workRegFormBckr">
 						<input type="hidden" name="ins_check_path3" id="ins_check_path3" value="N"/>
 						<input type="hidden" name="ins_wrk_nmChk_bckr" id="ins_wrk_nmChk_bckr" value="fail" />
 						<input type="hidden" name="ins_cps_brkr_yn" id="ins_cps_brkr_yn" value="" />
-						<input type="hidden" name="ins_log_file_bckr_yn" id="ins_log_file_bckr_yn" value="" />
 
 						<br>
 							<div class="card-body" style="border: 1px solid #adb5bd;">
@@ -480,10 +605,10 @@
 								<div class="form-group row div-form-margin-z">
 									<div class="input-group mb-2 mr-sm-2 col-sm-2">
 										<input hidden="hidden" />
-										<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="ip_num" name="ip_num" onblur="this.value=this.value.trim()" placeholder='아이피를 입력해주세요' />
+										<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='아이피를 입력해주세요' />
 									</div>
 
-									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable">
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_select_agent_info()">
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 									</button>
 									
@@ -505,7 +630,7 @@
 													<th width="30" class="dt-center"><spring:message code="common.no" /></th>
 													<th width="150" class="dt-center">유형</th>
 													<th width="200">IP</th>
-													<th width="150" class="dt-center">PORT</th>
+													<th width="150">PORT</th>
 													<th width="170">USER</th>
 													<th width="480">DATA_PATH</th>
 													<th width="0"></th>
@@ -558,281 +683,282 @@
 									</div>
 								</div>
 
-								
-								<div id="remote_opt" style="display: none;">
-									<div style="border: 1px solid #adb5bd; margin: -10px 10px 10px 10px;">
-										<div style="padding-top:7px;">
-											<label for="ins_remt_opt_cd" class="col-sm-2_2 col-form-label pop-label-index" >
+								<div>
+									<div id="remote_opt" style="display: none;">
+										<div style="border: 1px solid #adb5bd; margin: -10px 10px 10px 10px;">
+											<div style="padding-top:7px;">
+												<label for="ins_remt_opt_cd" class="col-sm-2_2 col-form-label pop-label-index" >
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													스토리지 정보
+												</label>
+
+												<div class="d-flex" style="margin-bottom: 10px;">
+													<div class="col-sm-2_3">
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													</div>
+
+													<div class="col-sm-2" style="margin-left: 6px;">
+														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" onchange="fn_backrest_chg_alert(this)"/>
+													</div>
+
+													<div class="col-sm-2_3" style="margin-left: -30px;">
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="유저 명을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													</div>
+													
+													<div class="col-sm-2_3" style="margin-left: 6px;">
+														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													</div>
+
+													<div class="col-sm-2" style="height: 20px; margin-top: 3px;">
+														<button type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;">연결</button>
+													</div>
+												</div>
+
+												<!-- Remote 옵션 alert창 -->
+												<div class="form-group d-flex div-form-margin-z" style="width: 900px;">
+													<div class="col-sm-4">
+														<div class="alert alert-danger" style="display:none; width: 250px;" id="ins_remt_str_ip_alert"></div>
+													</div>
+													<div class="col-sm-2_5">
+														<div class="alert alert-danger" style="display:none; width: 180px; margin-left: -25px;" id="ins_remt_str_ssh_alert"></div>
+													</div>
+													<div class="col-sm-4">
+														<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -15px;" id="ins_remt_str_usr_alert"></div>
+													</div>
+													<div class="col-sm-4">
+														<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -40px;" id="ins_remt_str_pw_alert"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div id="cloud_opt" style="display: none;">
+										<div style="border: 1px solid #adb5bd; margin: -10px 10px 10px 10px;">
+											<div class="d-flex" style="padding-top:7px; ">
+												<label for="ins_cld_opt_cd" class="col-sm-1_5 col-form-label pop-label-index" >
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													클라우드 유형
+												</label>
+
+												<div class="col-sm-2_2" style="margin-top: 5px;">
+													<select class="form-control form-control-xsm" style="width:120px; color: black;" name="ins_bckr_cld_opt_cd" id="ins_bckr_cld_opt_cd" tabindex=3>
+														<option selected>S3</option>
+														<option>Azure</option>
+														<option>GCS</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="d-flex">
+												<label for="ins_cloud_opt_s3_buk" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													s3-bucket
+												</label>
+
+												<div class="col-sm-3">
+													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_buk" name="ins_cloud_bckr_s3_buk" style="width: 270px;" placeholder="S3 Bucket을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+												</div>
+
+												<label for="ins_cloud_opt_s3_rgn" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												스토리지 정보
-											</label>
+													s3-region
+												</label>
 
-											<div class="d-flex" style="margin-bottom: 10px;">
-												<div class="col-sm-2_3">
-													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+												<div class="col-sm-2_8">
+													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_rgn" name="ins_cloud_bckr_s3_rgn" style="width: 240px;" placeholder="S3 Region을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
-												<div class="col-sm-2" style="margin-left: 6px;">
-													<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" onchange="fn_backrest_chg_alert(this)"/>
-												</div>
+												<label for="ins_cloud_opt_s3_key" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px; ">
+														<i class="item-icon fa fa-dot-circle-o"></i>
+													s3-key
+												</label>
 
-												<div class="col-sm-2_3" style="margin-left: -30px;">
-													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="유저 명을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+												<div class="col-sm-2">
+													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_key" name="ins_cloud_bckr_s3_key" style="width: 220px;" placeholder="S3 key를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+												</div>
+											</div>
+
+											<!-- Cloud 옵션 alert창 -->
+											<div class="form-group d-flex div-form-margin-z" style="width: 1200px;">
+												<div class="col-sm-5">
+													<div class="alert alert-danger" style="display:none; width: 430px;" id="ins_cloud_bckr_s3_buk_alert"></div>
 												</div>
 												
-												<div class="col-sm-2_3" style="margin-left: 6px;">
-													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+												<div class="col-sm-5">
+													<div class="alert alert-danger" style="display:none; width: 355px; margin-left: 15px;" id="ins_cloud_bckr_s3_rgn_alert"></div>
 												</div>
 
-												<div class="col-sm-2" style="height: 20px; margin-top: 3px;">
-													<button type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;">연결</button>
+												<div class="col-sm-3_5">
+													<div class="alert alert-danger" style="display:none; width: 380px; margin-left: -15px;" id="ins_cloud_bckr_s3_key_alert"></div>
 												</div>
 											</div>
 
-											<!-- Remote 옵션 alert창 -->
-											<div class="form-group d-flex div-form-margin-z" style="width: 900px;">
-												<div class="col-sm-4">
-													<div class="alert alert-danger" style="display:none; width: 250px;" id="ins_remt_str_ip_alert"></div>
+											<div class="d-flex" style="margin-bottom: 10px;">
+												<label for="ins_cloud_opt_s3_npt" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													s3-endpoint
+												</label>
+
+												<div class="col-sm-3">
+													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_npt" name="ins_cloud_bckr_s3_npt" style="width: 270px;" placeholder="S3 Endpoint를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
-												<div class="col-sm-2_5">
-													<div class="alert alert-danger" style="display:none; width: 180px; margin-left: -25px;" id="ins_remt_str_ssh_alert"></div>
+
+												<label for="ins_cloud_opt_s3_pth" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													s3-path
+												</label>
+
+												<div class="col-sm-2_8">
+													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_pth" name="ins_cloud_bckr_s3_pth" style="width: 240px;" placeholder="S3 path를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
-												<div class="col-sm-4">
-													<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -15px;" id="ins_remt_str_usr_alert"></div>
+
+												<label for="ins_cloud_opt_s3_scrk" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													s3-key-secret
+												</label>
+
+												<div class="col-sm-2">
+													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_scrk" name="ins_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
-												<div class="col-sm-4">
-													<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -40px;" id="ins_remt_str_pw_alert"></div>
+											</div>
+
+											<!-- Cloud 옵션 alert창 -->
+											<div class="form-group d-flex div-form-margin-z" style="width: 1200px;">
+												<div class="col-sm-5">
+													<div class="alert alert-danger" style="display:none; width: 430px;" id="ins_cloud_bckr_s3_npt_alert"></div>
+												</div>
+
+												<div class="col-sm-5">
+													<div class="alert alert-danger" style="display:none; width: 355px; margin-left: 15px;" id="ins_cloud_bckr_s3_pth_alert"></div>
+												</div>
+
+												<div class="col-sm-3_5">
+													<div class="alert alert-danger" style="display:none; width: 380px; margin-left: -15px;" id="ins_cloud_bckr_s3_scrk_alert"></div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
 
-								<div id="cloud_opt" style="display: none;">
-									<div style="border: 1px solid #adb5bd; margin: -10px 10px 10px 10px;">
-										<div class="d-flex" style="padding-top:7px; ">
-											<label for="ins_cld_opt_cd" class="col-sm-1_5 col-form-label pop-label-index" >
+									<div class="d-flex">
+										<div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; width: 900px; margin-left: 10px;">
+											<p class="card-text text-xl-center">백업옵션</p>
+										</div>
+
+										<div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; width: 500px; margin: 0 10px 0 60px;">
+											<p class="card-text text-xl-center">압축옵션</p>
+										</div>
+									</div>
+
+									<div class="d-flex">
+										<div class="d-flex" style="width: 900px; margin: 20px 10px 0 10px;">
+											<!-- 왼쪽 메뉴 -->
+											<label for="ins_bckr_opt_cd" class="col-sm-2_3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												클라우드 유형
+												백업 유형
 											</label>
 
-											<div class="col-sm-2_2" style="margin-top: 5px;">
-												<select class="form-control form-control-xsm" style="width:120px; color: black;" name="ins_bckr_cld_opt_cd" id="ins_bckr_cld_opt_cd" tabindex=3>
-													<option selected>S3</option>
-													<option>Azure</option>
-													<option>GCS</option>
+											<div class="col-sm-2_2">
+												<select class="form-control form-control-xsm" style="width:120px; color: black;" name="ins_bckr_opt_cd" id="ins_bckr_opt_cd" tabindex=3 onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()">
+													<option value=""><spring:message code="common.choice" /></option>
+													<option value="TC000301">FULL</option>
+													<option value="TC000302">INCR</option>
+													<option value="TC000304">DIFF</option>
 												</select>
 											</div>
+
+											<label for="ins_bckr_opt_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												백업 경로
+											</label>
+
+											<div class="col-sm-4">
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 280px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+											</div>
+
+											<div class="col-sm-2" style="margin-top: -2px;">
+												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
+											</div>
 										</div>
 
-										<div class="d-flex">
-											<label for="ins_cloud_opt_s3_buk" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
+										<div class="d-flex" style="width: 500px; margin: 20px 0 0 30px;">
+											<!-- 오른쪽 메뉴 -->
+											<label for="ins_bckr_cps_yn" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												s3-bucket
+												압축 여부
+											</label>
+
+											<div class="col-sm-1_5">
+												<div class="onoffswitch-pop" >
+													<input type="checkbox" name="ins_bckr_cps_yn_chk" class="onoffswitch-pop-checkbox" id="ins_bckr_cps_yn_chk" checked onchange="ins_backrest_compress_chk()" onclick="fn_backrest_ip_select_check()"/>
+													<label class="onoffswitch-pop-label" for="ins_bckr_cps_yn_chk">
+														<span class="onoffswitch-pop-inner_YN"></span>
+														<span class="onoffswitch-pop-switch" ></span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- 기본옵션 alert창 -->
+									<div class="form-group d-flex div-form-margin-z" style="width: 900px; margin: 0px 10px 0px 10px;">
+										<div class="col-sm-4">
+											<div class="alert alert-danger" style="display:none;" id="ins_bckr_opt_cd_alert"></div>
+										</div>
+										<div class="col-sm-7" style="margin-left: 40px;">
+											<div class="alert alert-danger" style="display:none;" id="ins_bckr_pth_alert"></div>
+										</div>
+									</div>
+
+
+									<div class="d-flex">
+										<div class="d-flex" style="width: 900px; margin: 0px 10px 10px 10px;">
+											<!-- 왼쪽 메뉴 -->
+											<label for="ins_bckr_opt_cnt" class="col-sm-2_3 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												풀 백업 유지개수
+											</label>
+
+											<div class="col-sm-2_2">
+												<input type="number" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_cnt" name="ins_bckr_cnt" value="1" min="1" style="width: 120px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+											</div>
+
+											<label for="ins_bckr_opt_log_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												로그 경로
+											</label>
+
+											<div class="col-sm-4">
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_log_pth" name="ins_bckr_log_pth" style="width: 280px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+											</div>
+
+											<div class="col-sm-2" style="margin-top: -2px;">
+												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
+											</div>
+										</div>
+
+										<div class="d-flex" style="width: 500px; margin: 0px 0px 0 30px;">
+											<!-- 오른쪽 메뉴 -->
+											<label for="ins_bckr_cps_type" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												압축 타입
 											</label>
 
 											<div class="col-sm-3">
-												<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_buk" name="ins_cloud_bckr_s3_buk" style="width: 270px;" placeholder="S3 Bucket을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+												<select class="form-control form-control-xsm" style="width:80px; color: black;" name="ins_cps_opt_type" id="ins_cps_opt_type" tabindex=1 onclick="fn_backrest_ip_select_check()">
+													<option selected>gzip</option>
+													<option>lz4</option>>
+												</select>
 											</div>
 
-											<label for="ins_cloud_opt_s3_rgn" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-												s3-region
-											</label>
-
-											<div class="col-sm-2_8">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_rgn" name="ins_cloud_bckr_s3_rgn" style="width: 240px;" placeholder="S3 Region을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
-											</div>
-
-											<label for="ins_cloud_opt_s3_key" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px; ">
-													<i class="item-icon fa fa-dot-circle-o"></i>
-												s3-key
+											<label for="ins_bckr_prcs" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 22px;">
+												<i class="item-icon fa fa-dot-circle-o"></i>
+												병렬도
 											</label>
 
 											<div class="col-sm-2">
-												<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_key" name="ins_cloud_bckr_s3_key" style="width: 220px;" placeholder="S3 key를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+												<input type="number" class="form-control form-control-xsm" maxlength="3" id="ins_cps_opt_prcs" name="ins_cps_opt_prcs" value="1" min="1" style="width: 100px; margin-left: 10px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 											</div>
-										</div>
-
-										<!-- Cloud 옵션 alert창 -->
-										<div class="form-group d-flex div-form-margin-z" style="width: 1200px;">
-											<div class="col-sm-5">
-												<div class="alert alert-danger" style="display:none; width: 430px;" id="ins_cloud_bckr_s3_buk_alert"></div>
-											</div>
-											
-											<div class="col-sm-5">
-												<div class="alert alert-danger" style="display:none; width: 355px; margin-left: 15px;" id="ins_cloud_bckr_s3_rgn_alert"></div>
-											</div>
-
-											<div class="col-sm-3_5">
-												<div class="alert alert-danger" style="display:none; width: 380px; margin-left: -15px;" id="ins_cloud_bckr_s3_key_alert"></div>
-											</div>
-										</div>
-
-										<div class="d-flex" style="margin-bottom: 10px;">
-											<label for="ins_cloud_opt_s3_npt" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
-												<i class="item-icon fa fa-dot-circle-o"></i>
-												s3-endpoint
-											</label>
-
-											<div class="col-sm-3">
-												<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_npt" name="ins_cloud_bckr_s3_npt" style="width: 270px;" placeholder="S3 Endpoint를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
-											</div>
-
-											<label for="ins_cloud_opt_s3_pth" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
-												<i class="item-icon fa fa-dot-circle-o"></i>
-												s3-path
-											</label>
-
-											<div class="col-sm-2_8">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_pth" name="ins_cloud_bckr_s3_pth" style="width: 240px;" placeholder="S3 path를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
-											</div>
-
-											<label for="ins_cloud_opt_s3_scrk" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
-												<i class="item-icon fa fa-dot-circle-o"></i>
-												s3-key-secret
-											</label>
-
-											<div class="col-sm-2">
-												<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_scrk" name="ins_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
-											</div>
-										</div>
-
-										<!-- Cloud 옵션 alert창 -->
-										<div class="form-group d-flex div-form-margin-z" style="width: 1200px;">
-											<div class="col-sm-5">
-												<div class="alert alert-danger" style="display:none; width: 430px;" id="ins_cloud_bckr_s3_npt_alert"></div>
-											</div>
-
-											<div class="col-sm-5">
-												<div class="alert alert-danger" style="display:none; width: 355px; margin-left: 15px;" id="ins_cloud_bckr_s3_pth_alert"></div>
-											</div>
-
-											<div class="col-sm-3_5">
-												<div class="alert alert-danger" style="display:none; width: 380px; margin-left: -15px;" id="ins_cloud_bckr_s3_scrk_alert"></div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="d-flex">
-									<div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; width: 900px; margin-left: 10px;">
-										<p class="card-text text-xl-center">백업옵션</p>
-									</div>
-
-									<div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; width: 500px; margin: 0 10px 0 60px;">
-										<p class="card-text text-xl-center">압축옵션</p>
-									</div>
-								</div>
-
-								<div class="d-flex">
-									<div class="d-flex" style="width: 900px; margin: 20px 10px 0 10px;">
-										<!-- 왼쪽 메뉴 -->
-										<label for="ins_bckr_opt_cd" class="col-sm-2_2 col-form-label pop-label-index" style="padding-top:7px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											백업 유형
-										</label>
-
-										<div class="col-sm-2_2">
-											<select class="form-control form-control-xsm" style="width:120px; color: black;" name="ins_bckr_opt_cd" id="ins_bckr_opt_cd" tabindex=3 onchange="fn_backrest_chg_alert(this)">
-												<option value=""><spring:message code="common.choice" /></option>
-												<option><spring:message code="backup_management.full_backup" /></option>
-												<option><spring:message code="backup_management.incremental_backup" /></option>
-												<option>차등백업</option>
-											</select>
-										</div>
-
-										<label for="ins_bckr_opt_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											백업 경로
-										</label>
-
-										<div class="col-sm-4">
-											<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 280px;" onchange="fn_backrest_chg_alert(this)" />
-										</div>
-
-										<div class="col-sm-2" style="margin-top: -2px;">
-											<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
-										</div>
-									</div>
-
-									<div class="d-flex" style="width: 500px; margin: 20px 0 0 30px;">
-										<!-- 오른쪽 메뉴 -->
-										<label for="ins_bckr_cps_yn" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											압축 여부
-										</label>
-
-										<div class="col-sm-1_5">
-											<div class="onoffswitch-pop" >
-												<input type="checkbox" name="ins_bckr_cps_yn_chk" class="onoffswitch-pop-checkbox" id="ins_bckr_cps_yn_chk" checked onchange="ins_backrest_compress_chk()"/>
-												<label class="onoffswitch-pop-label" for="ins_bckr_cps_yn_chk">
-													<span class="onoffswitch-pop-inner_YN"></span>
-													<span class="onoffswitch-pop-switch" ></span>
-												</label>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- 기본옵션 alert창 -->
-								<div class="form-group d-flex div-form-margin-z" style="width: 900px; margin: 0px 10px 0px 10px;">
-									<div class="col-sm-4">
-										<div class="alert alert-danger" style="display:none;" id="ins_bckr_opt_cd_alert"></div>
-									</div>
-									<div class="col-sm-7" style="margin-left: 40px;">
-										<div class="alert alert-danger" style="display:none;" id="ins_bckr_pth_alert"></div>
-									</div>
-								</div>
-
-
-								<div class="d-flex">
-									<div class="d-flex" style="width: 900px; margin: 0px 10px 10px 10px;">
-										<!-- 왼쪽 메뉴 -->
-										<label for="ins_bckr_opt_cnt" class="col-sm-2_2 col-form-label pop-label-index" style="padding-top:7px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											풀 백업 보관일
-										</label>
-
-										<div class="col-sm-2_2">
-											<input type="number" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_cnt" name="ins_bckr_cnt" value="1" min="1" style="width: 120px;" onchange="fn_backrest_chg_alert(this)"/>
-										</div>
-
-										<label for="ins_bckr_opt_log_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											로그 경로
-										</label>
-
-										<div class="col-sm-4">
-											<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_log_pth" name="ins_bckr_log_pth" style="width: 280px;" onchange="fn_backrest_chg_alert(this)"/>
-										</div>
-
-										<div class="col-sm-2" style="margin-top: -2px;">
-											<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
-										</div>
-									</div>
-
-									<div class="d-flex" style="width: 500px; margin: 0px 0px 0 30px;">
-										<!-- 오른쪽 메뉴 -->
-										<label for="ins_bckr_cps_type" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											압축 타입
-										</label>
-
-										<div class="col-sm-3">
-											<select class="form-control form-control-xsm" style="width:80px; color: black;" name="ins_cps_opt_type" id="ins_cps_opt_type" tabindex=1>
-												<option selected>gzip</option>
-												<option>lz4</option>>
-											</select>
-										</div>
-
-										<label for="ins_bckr_prcs" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 22px;">
-											<i class="item-icon fa fa-dot-circle-o"></i>
-											병렬도
-										</label>
-
-										<div class="col-sm-2">
-											<input type="number" class="form-control form-control-xsm" maxlength="3" id="ins_cps_opt_prcs" name="ins_cps_opt_prcs" value="1" min="1" style="width: 100px; margin-left: 10px;" onchange="fn_backrest_chg_alert(this)"/>
 										</div>
 									</div>
 								</div>

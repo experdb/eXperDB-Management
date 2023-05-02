@@ -39,6 +39,10 @@ public class BackupDAO extends EgovAbstractMapper{
 		insert("backupSQL.insertRmanWork",workVO);
 	}
 	
+	public void insertBackrestWork(WorkVO workVO) throws Exception {
+		insert("backupSQL.insertBackrestWork",workVO);
+	}
+	
 	public void insertDumpWork(WorkVO workVO) throws Exception {
 		insert("backupSQL.insertDumpWork",workVO);
 	}
@@ -156,6 +160,18 @@ public class BackupDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectBckInfo(int wrk_id) {
 		List<Map<String, Object>> sl = null;
 		sl = (List<Map<String, Object>>) list("backupSQL.selectBckInfo", wrk_id);		
+		return sl;
+	}
+	
+	public List<DbServerVO> selectAgentInfo(DbServerVO dbServerVO) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("backupSQL.selectAgentInfo", dbServerVO);
+		return sl;
+	}
+	
+	public List<Map<String, Object>> selectBackrestCstOpt(DbServerVO dbServerVO) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("backupSQL.selectBackrestCstOpt", dbServerVO);
 		return sl;
 	}
 }

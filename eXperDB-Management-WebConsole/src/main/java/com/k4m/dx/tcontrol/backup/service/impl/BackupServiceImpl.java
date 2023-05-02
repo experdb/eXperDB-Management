@@ -39,6 +39,10 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 		 backupDAO.insertRmanWork(workVO);
 	}
 	
+	public void insertBackrestWork(WorkVO workVO) throws Exception {
+		backupDAO.insertBackrestWork(workVO);
+	}
+	
 	public void insertDumpWork(WorkVO workVO) throws Exception {
 		 backupDAO.insertDumpWork(workVO);
 	}
@@ -148,5 +152,15 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	@Override
 	public List<Map<String, Object>> selectBckInfo(int wrk_id) throws Exception{
 		return backupDAO.selectBckInfo(wrk_id);
+	}
+	
+	@Override
+	public List<DbServerVO> selectAgentInfo(DbServerVO dbServerVO) throws Exception {
+		return backupDAO.selectAgentInfo(dbServerVO);	
+	}
+	
+	@Override
+	public List<Map<String, Object>> selectBackrestCstOpt(DbServerVO dbServerVO) throws Exception {
+		return backupDAO.selectBackrestCstOpt(dbServerVO);
 	}
 }

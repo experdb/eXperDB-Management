@@ -34,6 +34,13 @@ public interface BackupService {
 	public void insertRmanWork(WorkVO workVO) throws Exception;
 	
 	/**
+	 * Backrest백업내역 insert
+	 * @param WorkVO
+	 * @throws Exception
+	 */
+	public void insertBackrestWork(WorkVO workVO) throws Exception;
+	
+	/**
 	 * Dump백업내역 insert
 	 * @param WorkVO
 	 * @throws Exception
@@ -184,5 +191,14 @@ public interface BackupService {
 	public int selectScheduleCheckCnt(HashMap<String, Object> paramvalue);
 
 	public List<Map<String, Object>> selectBckInfo(int wrk_id) throws Exception;
+	
+	public List<DbServerVO> selectAgentInfo(DbServerVO dbServerVO) throws Exception;
+	
+	/**
+	 * Backrest Custom Options Select 조회
+	 * @param BackrestCstOptVO
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectBackrestCstOpt(DbServerVO dbServerVO) throws Exception;
 	
 }

@@ -6,6 +6,8 @@ $(window).ready(function(){
 		fn_schedule_leftListSize();
 		if(selectChkTab == "rman"){
 			fn_get_rman_list();
+		}else if(selectChkTab == "backrest"){
+			fn_get_backrest_list();
 		}else{
 			fn_get_dump_list();
 		}
@@ -127,6 +129,7 @@ function selectTab(intab){
 
 		seachParamInit(intab);
 
+		fn_get_backrest_list();
 	}else{				
 		$(".search_rman").hide();
 		$(".search_dump").show();
@@ -177,6 +180,44 @@ function fn_get_rman_list(){
 		}
 	});
 }
+
+
+function fn_get_backrest_list(){
+	$.ajax({
+		url : "/backup/getWorkList.do", 
+		data : {
+		db_svr_id : $("#db_svr_id", "#findList").val(),
+		bck_bsn_dscd : "TC000205",
+		// bck_opt_cd : $("#bck_opt_cd", '#findSearch').val(),
+		// wrk_nm : nvlPrmSet($('#wrk_nm', '#findSearch').val(), "")
+	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(data) {
+			tableBackrest.rows({selected: true}).deselect();
+			tableBackrest.clear().draw();
+
+			if (nvlPrmSet(data, "") != '') {
+				console.log(data);
+
+				tableBackrest.rows.add(data).draw();
+			}
+		}
+	});
+}
+
 
 /* ********************************************************
  * Get Dump Log List
@@ -270,6 +311,9 @@ function fn_reg_popup(){
 			if (selectChkTab == "rman") {
 				$('#pop_layer_reg_rman').modal("show");
 			} else if(selectChkTab == "backrest"){
+				fn_init_backrest_reg_form();
+				//PG Backrest Agent Info Table Setting
+				fn_select_agent_info();
 				$('#pop_layer_reg_backrest').modal("show");
 			}else {
 				$('#pop_layer_reg_dump').modal("show");
@@ -342,6 +386,7 @@ function fn_insert_chogihwa(gbn, result) {
 		document.getElementById("bck_srv_local_check").style.backgroundColor = "white"
 		document.getElementById("bck_srv_remote_check").style.backgroundColor = "#e7e7e7"
 		document.getElementById("bck_srv_cloud_check").style.backgroundColor = "#e7e7e7"
+
 
 		$("#remote_opt").hide();
 		$("#cloud_opt").hide();

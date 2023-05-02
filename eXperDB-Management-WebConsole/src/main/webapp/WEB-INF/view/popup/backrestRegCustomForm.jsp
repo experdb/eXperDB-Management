@@ -16,7 +16,7 @@
 <script type="text/javascript">
     var bckr_cst_cnt = 0;
     var bckr_cst_check_array = [];
-    var bckr_cst_opt = ["buffer-size", "compress-level", "delta", "fast-start"]
+    var bckr_cst_opt = [];
 
 	$(window.document).ready(function() {
         bckr_cst_cnt = 0;
@@ -28,17 +28,17 @@
         html += '<div id="bckr_cus_row_0" class="d-flex" style="margin-bottom: 15px;">';
         html += '<div class="col-sm-2" style="margin-top: 3px;">';
         html += '<input id="bckr_cus_check_0" type="checkbox" class="form-control form-control-xsm" /></div>';
-        html += '<div class="col-sm-4" style="margin-left: -10px;">';
-        html += '<select class="form-control form-control-sm" style="width:150px; color: black;" name="ins_bckr_cst_opt" id="ins_bckr_cst_opt" tabindex=3 >';
+        html += '<div class="col-sm-6" style="margin-left: -10px;">';
+        html += '<select class="form-control form-control-sm" style="width:230px; color: black;" name="ins_bckr_cst_opt" id="ins_bckr_cst_opt" tabindex=3 >';
         html += '<option value=""><spring:message code="common.choice" /></option>';
 
         for(var i=0; i < bckr_cst_opt.length; i++){
-            html += '<option>' + bckr_cst_opt[i] + '</option>';
+            html += '<option>' + bckr_cst_opt[i].opt_nm + '</option>';
         }
 
         html += '</select></div>';
-        html += '<div class="col-sm-4">';
-        html += '<input type="text" class="form-control form-control-sm" maxlength="100" style="width: 240px;" placeholder="값을 입력해주세요"/></div>';
+        html += '<div class="col-sm-3">';
+        html += '<input type="text" class="form-control form-control-sm" maxlength="100" style="width: 150px;" placeholder="값을 입력해주세요"/></div>';
 
         $("#bckr_cus_check_0").attr('id', "bckr_cus_check_"+bckr_cst_cnt)
         $("#bckr_cus_row_0").attr('id', "bckr_cus_row_"+bckr_cst_cnt)
@@ -82,6 +82,7 @@
             $("#bckr_cus_row_"+i).remove();
         }
         bckr_cst_cnt = 0;
+        bckr_cst_opt = [];
     }
 </script>
 

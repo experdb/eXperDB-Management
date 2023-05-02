@@ -26,6 +26,7 @@ public class DbServerVO {
 	private String db_nm;
 	private String db_exp;
 	private String svr_spr_scm_pwd_old;
+	private int db_svr_ipadr_id;
 
 	public String getSvr_spr_scm_pwd_old() {
 		return svr_spr_scm_pwd_old;
@@ -177,6 +178,13 @@ public class DbServerVO {
 	public void setDb_cndt(String db_cndt) {
 		this.db_cndt = db_cndt;
 	}
-
+	public int getDb_svr_ipadr_id() {
+		return db_svr_ipadr_id;
+	}
+	public void setDb_svr_ipadr_id(int db_svr_ipadr_id) {
+		this.db_svr_ipadr_id = db_svr_ipadr_id;
+	}
+	
+	
 
 }

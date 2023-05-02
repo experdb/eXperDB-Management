@@ -68,8 +68,6 @@
 	
 	
 	function fn_buttonAut(){
-		var usr_id = document.getElementById("usr_id"); 
-		
 		if("${usr_id}" == "viewer"){
 			btnDelete.style.display = 'none';
 			btnModify.style.display = 'none';
@@ -632,12 +630,35 @@
 			columns : [
 						{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 						{data : "idx", className : "dt-center", defaultContent : ""},
-						{data : "wrk_nm", className : "dt-center", defaultContent : ""},
+						{data : "wrk_nm", defaultContent : ""},
 						{data : "wrk_exp", defaultContent : ""},
-						{data: "bck_server", className: "dt-center", defaultContent: "" },
-						{data : "storage", className : "dt-center", defaultContent : ""},
-						{data : "bck_opt", className : "dt-center", defaultContent : ""},
-						{data : "bck_path", className : "dt-center", defaultContent : ""},
+						{data : "db_svr_ipadr", className : "dt-center", defaultContent: "" },
+						{data : "backrest_gbn", className : "dt-center", defaultContent : ""},
+						{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : "",
+							render : function(data, type, full, meta) {
+									var html = '';
+
+									if (full.bck_opt_cd == 'TC000301') {
+										html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+										html += "	<i class='fa fa-paste mr-2 text-success'></i>";
+										html += '<spring:message code="backup_management.full_backup" />';
+										html += "</div>";									
+									} else if(full.bck_opt_cd == 'TC000302'){
+										html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+										html += "	<i class='fa fa-paste mr-2 text-warning'></i>";
+										html += '&nbsp;<spring:message code="backup_management.incremental_backup" />';
+										html += "</button>";
+									} else {
+										html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+										html += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
+										html += '차등백업';
+										html += "</div>";
+									}
+
+									return html;
+								},
+						},
+						{data : "bck_pth", defaultContent : ""},
 						{data : "frst_regr_id", className: "dt-center", defaultContent : ""},
 						{data : "frst_reg_dtm", className: "dt-center", defaultContent : ""},
 						{data: "lst_mdfr_id", className: "dt-center", defaultContent: ""}, 
@@ -648,7 +669,7 @@
 
 		tableBackrest.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 		tableBackrest.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-		tableBackrest.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+		tableBackrest.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
 		tableBackrest.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 		tableBackrest.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		tableBackrest.tables().header().to$().find('th:eq(5)').css('min-width', '115px');
@@ -862,12 +883,12 @@
 											<tr class="bg-info text-white">
 												<th width="10"></th>
 												<th width="30"><spring:message code="common.no" /></th>
-												<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
-												<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
-												<th width="100">백업서버</th>
+												<th width="150"><spring:message code="common.work_name" /></th>
+												<th width="200"><spring:message code="common.work_description" /></th>
+												<th width="100" class="dt-center">백업서버</th>
 												<th width="100" class="dt-center">스토리지</th>
 												<th width="100" class="dt-center">백업구분</th>
-												<th width="200" class="dt-center">백업경로</th> 
+												<th width="200">백업경로</th> 
 												<th width="100"><spring:message code="common.register" /></th>
 												<th width="110"><spring:message code="common.regist_datetime" /></th>
 												<th width="100"><spring:message code="common.modifier" /></th>
