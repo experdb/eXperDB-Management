@@ -247,6 +247,16 @@ public class BackupController {
 				mv.addObject("tabGbn",request.getParameter("tabGbn"));
 			}
 			
+			//pgbackrest 권한에 따른 object 추가
+			Properties props = new Properties();
+			try {
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+				mv.addObject("pgbackrest",props.getProperty("pgbackrest.useyn"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
 			mv.setViewName("backup/workLogList");
 		}
@@ -1706,5 +1716,91 @@ public class BackupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}		
+	}
+	
+	/**
+	 * pgbackrest info history
+	 * @param 
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/backrestHistory.do")
+	@ResponseBody
+	public JSONObject pgbackrestShow(HttpServletRequest request) throws Exception{
+		
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		
+		
+		String Ip = "192.168.10.151";
+		int port = 9001;
+		String backrest_opt = request.getParameter("backrest_opt");
+		
+		String wrk_nm = request.getParameter("wrk_nm");
+		
+		JSONObject jObj = new JSONObject();
+		
+		jObj.put(ClientProtocolID.STORAGE_OPT, backrest_opt);
+		
+		JSONObject result = new JSONObject();
+
+		result = cic.backrestinfo(Ip, port, jObj);
+		
+//		System.out.println(result.get("RESULT_CODE"));
+//		System.out.println(result.get("ERR_CODE"));
+//		System.out.println(result.get("ERR_MSG"));
+//		System.out.println(result.get("RESULT_DATA"));
+
+		return result;
+	}
+	
+	/**
+	 * pgbackrest info history
+	 * @param 
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/backrestLog.do")
+	@ResponseBody
+	public JSONObject pgbackrestLog(HttpServletRequest request) throws Exception{
+			
+		String Ip = "192.168.10.151";
+		int port = 9001;
+		//String backrest_opt = request.getParameter("backrest_opt");
+		
+		//String wrk_nm = request.getParameter("wrk_nm");
+		
+		JSONObject jObj = new JSONObject();
+		
+		jObj.put(ClientProtocolID.STORAGE_OPT, "local");
+		
+		JSONObject result = new JSONObject();
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		
+		result = cic.pgbackrestLog(Ip, port, jObj);
+		
+		return result;
+	}
+	
+	@RequestMapping(value = "/selectBackrestLog.do")
+	@ResponseBody
+	public JSONObject selectPgbackrestLog(HttpServletRequest request) {
+		
+		String Ip = "192.168.10.151";
+		int port = 9001;
+		
+//		String logPath = request.getParameter("log_path");
+		String logPath = "/experdb/app/postgres/etc/local/log";
+		String logDate = request.getParameter("start_date");
+		logDate.replaceAll("", "-");
+		
+//		backuplog 파일 명 정하기
+		
+		String pullPath = logPath + "/experdb-" + logDate;
+		
+		
+		JSONObject jObj = new JSONObject();
+		
+		jObj.put(ClientProtocolID.CMD_BACKUP_PATH, pullPath);
+		return null;
 	}
 }
