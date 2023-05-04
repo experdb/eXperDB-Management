@@ -60,6 +60,7 @@ public class TranCodeType {
 	public static final String DxT043 = "DxT043";
 	public static final String DxT044 = "DxT044";
 	public static final String DxT045 = "DxT045";
+	public static final String DxT048 = "DxT048";
 	
 	//proxy 추가
 	public static final String PsP001 = "PsP001"; // proxy 에이전트 setting
@@ -91,6 +92,7 @@ public class TranCodeType {
 	 */
 	public static final String WEB_DB_CONN_TEST = "WEB_DB_CONN_TEST";			  //DB커넥션 테스트
 	
+
 
 	
 

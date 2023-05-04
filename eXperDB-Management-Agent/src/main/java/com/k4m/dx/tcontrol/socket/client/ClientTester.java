@@ -79,15 +79,9 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "192.168.20.127";
-		//Ip = "192.168.56.108";
-		//Ip = "222.110.153.251";
-		 //	Ip = "127.0.0.1";
-		// Ip = "222.110.153.231";
-		
-		//Ip = "222.110.153.204";
+		String Ip = "192.168.10.102";
 		int port = 9001;
-		//port = 5869;
+
 		try {
 			
 			//clientTester.dxT001(Ip, port);
@@ -147,7 +141,8 @@ public class ClientTester {
 			//clientTester.dxT038(Ip, port);
 			//clientTester.dxT039(Ip, port);
 			//clientTester.dxT040(Ip, port);
-			clientTester.dxT042(Ip, port);
+//			/clientTester.dxT042(Ip, port);
+			clientTester.dxT048(Ip, port);
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -3098,4 +3093,52 @@ public class ClientTester {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	private void dxT048(String Ip, int port) {
+		try {
+			JSONObject jObj = new JSONObject();		
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT048);
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT048(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("strResultData : " +  strResultData);
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
