@@ -454,15 +454,23 @@
 	function fn_ImmediateStartConfirm(){
 		var datas = null;
 		var rowCnt = null;
-		
+
 		immediate_data = null;
 
 		if(selectChkTab == 'rman'){
 			datas = tableRman.rows('.selected').data();
 			rowCnt = tableRman.rows('.selected').data().length;
+			$('#con_multi_gbn', '#findConfirmMulti').val("rman_run_immediately");
+		}else if(selectChkTab == 'backrest'){
+			datas = tableBackrest.rows('.selected').data();
+			rowCnt = tableBackrest.rows('.selected').data().length;
+			$('#con_multi_gbn', '#findConfirmMulti').val("backrest_run_immediately");
+			confile_title = '<spring:message code="backup_management.backrestBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
 		}else{
 			datas = tableDump.rows('.selected').data();
 			rowCnt = tableDump.rows('.selected').data().length;
+			$('#con_multi_gbn', '#findConfirmMulti').val("dump_run_immediately");
+			confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
 		}
 
 		if(rowCnt <= 0){
@@ -475,9 +483,9 @@
 		
 		immediate_data = datas;
 
-		confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
-
-		$('#con_multi_gbn', '#findConfirmMulti').val("run_immediately");
+		
+		
+		
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="backup_management.msg01" />');
 		$('#pop_confirm_multi_md').modal("show");
@@ -521,7 +529,50 @@
 			}
 		});
 	}
-
+	
+	/* ********************************************************
+	 * PG backrest 즉시 실행
+	 ******************************************************** */
+	function fn_BackrestImmediateStart(){
+		console.log();
+		$.ajax({
+			url : "/backrestStart.do",
+			data : {
+				db_id : immediate_data[0].db_id,
+				bck_file_pth : immediate_data[0].bck_pth,
+				bck_filenm : immediate_data[0].bck_filenm,
+				wrk_nm : immediate_data[0].wrk_nm,
+				db_svr_ipadr : immediate_data[0].db_svr_ipadr,
+				db_svr_id : immediate_data[0].db_svr_id,
+				wrk_id : immediate_data[0].wrk_id,
+				log_file_pth : immediate_data[0].log_file_pth,
+				bck_opt_cd : immediate_data[0].bck_opt_cd,
+				bck_opt_cd_nm : immediate_data[0].bck_opt_cd_nm
+			},
+			type : "post",
+			async: true,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					if (xhr.responseText != null) {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+					}
+				}
+			},
+			success : function(result) {
+				//showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
+				
+			}
+		});
+	}
 	
 	
 	/* ********************************************************
@@ -564,13 +615,13 @@
 		}
 		
 		if (selectChkTab == "rman") {
-			bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
-			wrk_id = tableRman.row('.selected').data().wrk_id;
+			bck_wrk_id = tableBackrest.row('.selected').data().bck_wrk_id;
+			wrk_id = tableBackrest.row('.selected').data().wrk_id;
 		} else {
 			bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
 			wrk_id = tableDump.row('.selected').data().wrk_id;
 		}
-			
+
 		$.ajax({
 			url : reregUrl,
 			data : {

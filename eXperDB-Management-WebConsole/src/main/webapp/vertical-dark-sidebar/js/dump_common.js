@@ -116,7 +116,7 @@ function fn_get_dump_list(){
 function fnc_confirmMultiRst(gbn){
 	if (gbn == "del_dump") {
 		fn_deleteWork();
-	} else if (gbn =="run_immediately") {
+	} else if (gbn == "dump_run_immediately") {
 		fn_ImmediateStart();
 	}
 }

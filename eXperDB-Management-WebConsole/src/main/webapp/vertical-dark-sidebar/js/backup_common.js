@@ -263,12 +263,15 @@ function fn_get_dump_list(){
  * confirm result
  ******************************************************** */
 function fnc_confirmMultiRst(gbn){
+console.log(gbn);
 	if (gbn == "del_rman" || gbn == "del_dump") {
 		fn_deleteWork(gbn);
 	}else if(gbn == "bckr_cst_del"){
 		fn_deleteCustom();
-	}else if (gbn =="run_immediately") {
+	}else if (gbn == "rman_run_immediately") {
 		fn_ImmediateStart();
+	}else if (gbn == "backrest_run_immediately"){
+		fn_BackrestImmediateStart();
 	}
 }
 
