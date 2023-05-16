@@ -287,6 +287,10 @@ public class ClientProtocolID {
 
 	public static final String DBMS_IP = "DBMS_IP";
 	public static final String DBMS_PORT = "DBMS_PORT";
-	public static final String STORAGE_OPT = "STORAGE_OPT";
 	
+	public static final String STORAGE_OPT = "STORAGE_OPT";
+	public static final String LOG_PATH = "LOG_PATH";
+	public static final String WRK_NM = "WRK_NM";
+	public static final String WRK_ID = "WRK_ID";
+	public static final String BCK_TYPE = "BCK_TYPE";
 }
