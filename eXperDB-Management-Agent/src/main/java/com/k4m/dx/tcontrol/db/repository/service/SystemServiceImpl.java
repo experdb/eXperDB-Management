@@ -333,4 +333,15 @@ public class SystemServiceImpl implements SystemService{
 	    	System.exit(0);
 	    }
 	}
+	
+	@Override
+	public int selectDbSvrIpAdrId(String ipadr) throws Exception {
+		return systemDAO.selectDbSvrIpAdrId(ipadr);
+	}
+
+	@Override
+	public void insertPgbackrestBackup(WrkExeVO vo) throws Exception {
+		systemDAO.insertPgbackrestBackup(vo);
+	}
+
 }

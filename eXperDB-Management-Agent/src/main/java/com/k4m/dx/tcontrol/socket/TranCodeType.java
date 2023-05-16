@@ -60,6 +60,8 @@ public class TranCodeType {
 	public static final String DxT043 = "DxT043";
 	public static final String DxT044 = "DxT044";
 	public static final String DxT045 = "DxT045";
+	public static final String DxT046 = "DxT046";
+	public static final String DxT047 = "DxT047";
 	public static final String DxT048 = "DxT048";
 	
 	//proxy 추가

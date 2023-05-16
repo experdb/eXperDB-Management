@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.socket.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
 /**
@@ -47,24 +48,29 @@ public class DxT048 extends SocketCtl{
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 
-		String strLogFileName = "wrknm_20230503112233.log";
-		String logDir = "/data/experdata/data/pg_backrest/log/log/";
-		
+		String logFileNm = (String) jObj.get(ClientProtocolID.CMD_BACKUP_PATH);
+				
 		JSONObject outputObj = new JSONObject();
 
 		try {
-			File inFile = new File(logDir, strLogFileName);
+			File inFile = new File(logFileNm);
 			String strFileView = FileUtil.getFileView(inFile);
+			String[] lines = strFileView.split("\n");
+			String strFileResult = "";
+			
+			for (int i = lines.length -1; i >= 0; i--) {
+				String line = lines[i];
+				strFileResult += line+"\n";
+			}
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			outputObj.put(ProtocolID.RESULT_DATA, strFileView);
-
+			outputObj.put(ProtocolID.RESULT_DATA, strFileResult);
+			
 			inFile = null;
 			send(TotalLengthBit, outputObj.toString().getBytes());
-
 			
 		} catch (Exception e) {
 			errLogger.error("DxT048 {} ", e.toString());
