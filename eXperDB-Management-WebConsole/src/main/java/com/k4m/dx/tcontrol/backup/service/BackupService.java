@@ -55,6 +55,13 @@ public interface BackupService {
 	public void updateRmanWork(WorkVO workVO) throws Exception;
 	
 	/**
+	 * Backrest백업수정 내역 update
+	 * @param WorkVO
+	 * @throws Exception
+	 */
+	public void updateBackrestWork(WorkVO workVO) throws Exception;
+	
+	/**
 	 * Dump백업수정 내역 update
 	 * @param WorkVO
 	 * @throws Exception
@@ -200,5 +207,7 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectBackrestCstOpt(DbServerVO dbServerVO) throws Exception;
+	
+	public List<DbServerVO> selectBckServer(WorkVO workVO) throws Exception;
 	
 }

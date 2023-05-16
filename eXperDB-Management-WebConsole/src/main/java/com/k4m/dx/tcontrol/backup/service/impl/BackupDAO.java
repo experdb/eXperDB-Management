@@ -60,6 +60,11 @@ public class BackupDAO extends EgovAbstractMapper{
 		update("backupSQL.updateRmanWork",workVO);
 	}
 	
+	public void updateBackrestWork(WorkVO workVO) {
+		update("backupSQL.updateWork",workVO);
+		update("backupSQL.updateBackrestWork",workVO);
+	}
+	
 	public void updateDumpWork(WorkVO workVO) throws Exception{
 		update("backupSQL.updateWork",workVO);
 		update("backupSQL.updateDumpWork",workVO);
@@ -174,4 +179,11 @@ public class BackupDAO extends EgovAbstractMapper{
 		sl = (List<Map<String, Object>>) list("backupSQL.selectBackrestCstOpt", dbServerVO);
 		return sl;
 	}
+	
+	public List<DbServerVO> selectBckServer(WorkVO workVO) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("backupSQL.selectBckServer", workVO);
+		return sl;
+	}
+	
 }

@@ -15,8 +15,7 @@
 
 <script type="text/javascript">
 	var svrBckCheck = 'local';
-	var agent_info_arr = [];
-
+	
 	$(window.document).ready(function() {
 		
 		$("#workRegFormBckr").validate({
@@ -51,7 +50,7 @@
 	});
 
 	function fn_init_backrest_reg_form() {
-		backrestServerTable = $('#backrestServerInfo').DataTable({
+		backrestServerTable = $('#backrest_svr_info').DataTable({
 			scrollY : "110px",
 			bSort: false,
 			scrollX: false,	
@@ -179,7 +178,7 @@
 		//백업옵션 초기화
 		$("#ins_bckr_opt_cd", "#workRegFormBckr").val('').prop("selected", true);	//백업유형
 		$("#ins_bckr_pth", "#workRegFormBckr").val("");	//백업경로
-		$("#ins_bckr_cnt", "#workRegFormBckr").val(1); //풀백업보관일
+		$("#ins_bckr_cnt", "#workRegFormBckr").val(2); //풀백업보관일
 		$("#ins_bckr_log_pth", "#workRegFormBckr").val("");	//로그경로
 
 		//압축옵션 초기화
@@ -263,10 +262,33 @@
 				}
 			},
 			success : function(result) {
-				fn_deleteCustom();
-
+				
 				for(var i=0; i < result['backrest_cus_opt'].length; i++){
-					bckr_cst_opt.push(result['backrest_cus_opt'][i]);
+					if(result['backrest_cus_opt'][i].opt_gbn == 0 || result['backrest_cus_opt'][i].opt_gbn == 1 ){
+						bckr_cst_opt.push(result['backrest_cus_opt'][i]);
+					}
+				}
+
+				if(custom_map.size == 0){
+					fn_deleteCustom();
+        		}else{
+					if(custom_cancle == true){
+						fn_deleteCustom();
+
+						const customKeyList = custom_map.keys();
+						var custom_origin_keys = [];
+
+						for (let key of customKeyList) {
+							custom_origin_keys.push(key)
+						}
+
+						for(var i=0; i < custom_map.size; i++){
+							fn_backrest_custom_add(i);
+
+							$("#ins_bckr_cst_opt_" + i).val(custom_origin_keys[i]).attr("selected",true);
+							$("#ins_bckr_cst_val_" + i).val(custom_map.get(custom_origin_keys[i]));
+						}
+					}
 				}
 	
 				$('#pop_layer_reg_backrest_custom').modal("show");
@@ -277,10 +299,10 @@
 	/* ********************************************************
 	 * Validation Check
 	 ******************************************************** */
-	function ins_backrest_valCheck(svrBckCheck){
+	function ins_backrest_valCheck(){
 		var iChkCnt = 0;
 
-		if($('#backrestServerInfo').DataTable().rows('.selected').data()[0] == undefined){
+		if($('#backrest_svr_info').DataTable().rows('.selected').data()[0] == undefined){
 			showSwalIcon('IP를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
 
 			iChkCnt = iChkCnt + 1;
@@ -469,8 +491,9 @@
 			$("#ins_cps_brkr_yn", "#workRegFormBckr").val("N");
 		}
 
-		var selectedAgent = $('#backrestServerInfo').DataTable().rows('.selected').data()[0]
-		
+		var selectedAgent = $('#backrest_svr_info').DataTable().rows('.selected').data()[0];
+		var custom_data = JSON.stringify(Object.fromEntries(custom_map))
+
 		$.ajax({
 			async : false,
 			url : "/popup/workBackrestWrite.do",
@@ -485,7 +508,7 @@
 				bck_bsn_dscd : "TC000205",
 				bck_pth : $("#ins_bckr_pth", "#workRegFormBckr").val(),
 				log_file_pth : $("#ins_bckr_log_pth", "#workRegFormBckr").val(),
-				bck_filenm : ($('#ins_wrk_nm_bckr', '#workRegFormBckr').val()) + "_pgbackerest.conf",
+				bck_filenm : ($('#ins_wrk_nm_bckr', '#workRegFormBckr').val()) + "_pgbackrest.conf",
 				prcs_cnt: $("#ins_cps_opt_prcs", "#workRegFormBckr").val(),
 				cps_type: $("#ins_cps_opt_type", "#workRegFormBckr").val(),
 				ipadr: selectedAgent.ipadr,
@@ -494,7 +517,8 @@
 				svr_spr_usr_id: selectedAgent.svr_spr_usr_id,
 				master_gbn: selectedAgent.master_gbn,
 				db_svr_ipadr_id: selectedAgent.db_svr_ipadr_id,
-				backrest_gbn: svrBckCheck
+				backrest_gbn: svrBckCheck,
+				custom_map: custom_data
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -531,21 +555,20 @@
 	}
 
 	function fn_backrest_ip_select_check(){
-		var selectedIp = $('#backrestServerInfo').DataTable().rows('.selected').data()[0]
+		var selectedIp = $('#backrest_svr_info').DataTable().rows('.selected').data()[0]
 
 		if(selectedIp == undefined){
 			showSwalIcon('IP를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
 		}
 	}
 
-
-
-
 </script>
 
 <%@include file="../popup/backrestRegCustomForm.jsp"%>
 
-
+<form name="search_backrestRegForm" id="search_backrestReForm" method="post">
+	<input type="hidden" name="backrest_call_gbn"  id="backrest_call_gbn" value="" />
+</form>
 
 <div class="modal fade" id="pop_layer_reg_backrest" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 10px 110px;">
@@ -612,7 +635,7 @@
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 									</button>
 									
-									<div class="col-12" id="backrestServerInfoDiv" style="diplay:none;">
+									<div class="col-12" id="backrest_svr_info_div" style="diplay:none;">
 										<div class="table-responsive">
 									   		<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 										   		<div class="row">
@@ -623,8 +646,8 @@
 										   		</div>
 									   		</div>
 								   		</div>
-
-								   		<table id="backrestServerInfo" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										   
+								   		<table id="backrest_svr_info" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
 												<tr class="bg-info text-white">
 													<th width="30" class="dt-center"><spring:message code="common.no" /></th>
@@ -876,9 +899,9 @@
 												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 280px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 											</div>
 
-											<div class="col-sm-2" style="margin-top: -2px;">
+											<!-- <div class="col-sm-2" style="margin-top: -2px;">
 												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
-											</div>
+											</div> -->
 										</div>
 
 										<div class="d-flex" style="width: 500px; margin: 20px 0 0 30px;">
@@ -920,7 +943,7 @@
 											</label>
 
 											<div class="col-sm-2_2">
-												<input type="number" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_cnt" name="ins_bckr_cnt" value="1" min="1" style="width: 120px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+												<input type="number" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_cnt" name="ins_bckr_cnt" value="2" min="2" style="width: 120px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 											</div>
 
 											<label for="ins_bckr_opt_log_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">

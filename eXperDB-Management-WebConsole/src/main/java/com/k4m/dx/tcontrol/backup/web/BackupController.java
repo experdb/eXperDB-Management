@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -96,12 +97,12 @@ public class BackupController {
 	@RequestMapping(value = "/backup/workList.do")
 	public ModelAndView workList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
 		int db_svr_id=workVO.getDb_svr_id();
-		String pgbackerest_useyn = "";
+		String pgbackrest_useyn = "";
 		
 		Properties props = new Properties();
         try {
            props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
-           pgbackerest_useyn = props.getProperty("pgbackrest.useyn").toString().toUpperCase();
+           pgbackrest_useyn = props.getProperty("pgbackrest.useyn").toString().toUpperCase();
         } catch (IOException e) {
            // TODO Auto-generated catch block
            e.printStackTrace();
@@ -128,7 +129,7 @@ public class BackupController {
 				workVO.setUsr_id(usr_id);
 				
 				mv.addObject("usr_id", usr_id);
-				mv.addObject("pgbackerest_useyn", pgbackerest_useyn);
+				mv.addObject("pgbackrest_useyn", pgbackrest_useyn);
 				mv.addObject("dbList",backupService.selectDbList(workVO));
 				
 			} catch (Exception e1) {
@@ -566,14 +567,14 @@ public class BackupController {
 	
 	/**
 	 * Backrest Backup Work Insert
-	 * @param historyVO, dbServerVO, workVO, response, request
+	 * @param historyVO, dbServerVO, workVO, response, request, paramMap
 	 * @return String
 	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/workBackrestWrite.do")
 	@ResponseBody
-	public String workBackrestWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public String workBackrestWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws IOException {
 		String result = "S";
 		WorkVO resultSet = null;
 		
@@ -631,58 +632,21 @@ public class BackupController {
 					} 
 				}
 			}
-
+			
 			if(result.equals("S")){
-				String filePath = "C:\\backrest\\" + workVO.getBck_filenm();
-				String configPath = "C:\\backrest\\pgbackrest.conf";
-				BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
-				BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
-				
-				int prcs_cnt = Integer.parseInt(request.getParameter("prcs_cnt"));	//병렬도
-				String cps_type = request.getParameter("cps_type");	//압축타입
-				
-				try{
-			        String fileContent;
-					while((fileContent = br.readLine()) != null) {
-						fileContent = fileContent.replaceAll("#repo1-path=", "repo1-path=" + workVO.getBck_pth());
-						fileContent = fileContent.replaceAll("#repo1-retention-full=", "repo1-retention-full=" + workVO.getBck_mtn_ecnt());
-						fileContent = fileContent.replaceAll("#log-path=", "log-path=" + workVO.getLog_file_pth());
-						fileContent = fileContent.replaceAll("#log-level-console=detail", "log-level-console=detail");
-						fileContent = fileContent.replaceAll("#log-level-file=detail", "log-level-file=detail");
-						
-						fileContent = fileContent.replaceAll("#pg1-path=", "pg1-path=" + dbServerVO.getPgdata_pth());
-						fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + dbServerVO.getPortno());
-						fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + dbServerVO.getSvr_spr_usr_id());
-						fileContent = fileContent.replaceAll("#repo1-gbn=", "#repo1-gbn=" + workVO.getBackrest_gbn());
-						fileContent = fileContent.replaceAll("#process-max=", "process-max=" + prcs_cnt);
-						
-						if(workVO.getCps_yn().toString().equals("Y")) {
-							if(cps_type.toString().equals("gzip")) {
-								fileContent = fileContent.replaceAll("#compress-type=", "compress-type=gz");
-							}else {
-								fileContent = fileContent.replaceAll("#compress-type=", "compress-type=" + cps_type);
-							}
-						}else {
-							fileContent = fileContent.replaceAll("#compress=", "compress=" + workVO.getCps_yn().toString().toLowerCase());
-						}
-						
-						bw.write(fileContent + "\r\n");
-						bw.flush();
-					}
-					
-					bw.close();
-					br.close();
-					
-				} catch (Exception e) {
+				try {
+					createBackrestConfig(workVO, dbServerVO, request, paramMap);
+				}catch (Exception e) {
 					e.printStackTrace();
 				}
-			}	
+			}
 		}else{
 			return result;
 		}
-
+		
 		return result;
 	}
+
 
 	/**
 	 * Dump Backup Work Insert
@@ -838,6 +802,94 @@ public class BackupController {
 		return mv;	
 	}
 	
+	
+	/**
+	 * Backrest Backup Reregistration View page
+	 * @param WorkVO, request, historyVO
+	 * @return ModelAndView
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(value = "/popup/backrestRegReForm.do")
+	public ModelAndView backrestRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO)  {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		// 화면접근이력 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0023");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		// Get Backrest Backup Information
+		try {
+			workVO.setBck_bsn_dscd("TC000205");
+			
+			List<WorkVO> selectedWork = backupService.selectWorkList(workVO);
+			mv.addObject("workInfo", selectedWork);
+			mv.addObject("bckSvrInfo", backupService.selectBckServer(selectedWork.get(0)));
+			
+			String configPath = "C:\\backrest\\" + selectedWork.get(0).getBck_filenm();
+			BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
+			
+			boolean readFromCustomLine = false;
+			Map<String, Object> customMap = new HashMap<String, Object>();
+			
+			String fileContent;
+				while((fileContent = br.readLine()) != null) {
+					if(fileContent.contains("process-max")) {
+						String processMaxLine = fileContent;
+						String processMaxValue = processMaxLine.replaceAll("process-max=", "");
+						
+						mv.addObject("prcs_max_mod", processMaxValue);
+					}
+					
+					if(fileContent.contains("compress-type")) {
+						String compressTypeLine = fileContent;
+						String compressTypeValue = compressTypeLine.replaceAll("compress-type=", ""); 
+						
+						mv.addObject("cps_type_mod", compressTypeValue);
+					}
+					
+					if(readFromCustomLine) {
+						String customLine = fileContent;
+						String customSplit[] = customLine.split("=");
+						
+						customMap.put(customSplit[0], customSplit[1]);
+					}
+					
+					if(fileContent.startsWith("#[custom]")) {
+						readFromCustomLine = true;
+					}
+				}
+				
+				mv.addObject("custom_map", customMap);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		// Get Incoding Code List
+		try {
+			PageVO pageVO = new PageVO();
+			pageVO.setGrp_cd("TC0005");
+			pageVO.setSearchCondition("0");
+			List<CmmnCodeVO> cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+			mv.addObject("incodeList",cmmnCodeVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		mv.addObject("wrk_id",workVO.getWrk_id());
+		mv.addObject("bck_wrk_id",workVO.getBck_wrk_id());
+
+		return mv;	
+	}
+
 	/**
 	 * Dump백업 수정팝업 페이지를 반환한다.
 	 * @param WorkVO, request, historyVO
@@ -932,7 +984,7 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/popup/workRmanReWrite.do")
 	@ResponseBody
-	public String workRmanReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	public String workRmanReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request ) throws IOException{
 		String result = "S";
 
 		try {
@@ -987,6 +1039,53 @@ public class BackupController {
 
 		return result;
 	}
+	
+	/**
+	 * Backrest Backup Work Update
+	 * @param historyVO, workVO, dbServerVO, response, request, paramMap
+	 * @return String
+	 * @throws IOException 
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/popup/workBackrestReWrite.do")
+	@ResponseBody
+	public String workBackrestReWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws IOException{
+		String result = "S";
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0023_01");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//Backrest 업데이트
+		if(result.equals("S")){
+			try{
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
+
+				workVO.setLst_mdfr_id(usr_id);
+				backupService.updateBackrestWork(workVO);
+
+			}catch(Exception e){
+				e.printStackTrace();
+				result = "D";
+				return result;
+			}
+		}
+		
+		if(result.equals("S")){
+			deleteBackrestConfig(workVO);
+			createBackrestConfig(workVO, dbServerVO, request, paramMap);
+		}
+		
+		return result;
+	}
+	
 	
 	/**
 	 * Dump Backup Work Update
@@ -1802,5 +1901,151 @@ public class BackupController {
 		
 		jObj.put(ClientProtocolID.CMD_BACKUP_PATH, pullPath);
 		return null;
+	}
+	
+	/**
+	 * Backrest config 정보
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectBackrestConfigInfo.do")
+	public @ResponseBody String selectBackrestConfigInfo(HttpServletRequest request) {
+		String result = null;
+		List<Map<String, Object>> resultWork = null;
+		
+		try {
+			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
+			
+			resultWork = backupService.selectBckInfo(wrk_id);
+				
+			String backrest_path = "C:\\backrest\\";	
+			String filePath = backrest_path + resultWork.get(0).get("wrk_nm") + "_pgbackrest.conf";
+		    FileInputStream fileStream = null;
+		    try{
+		    	fileStream = new FileInputStream( filePath );// 파일 스트림 생성
+		    }catch (Exception e){
+				System.out.println("파일 입출력 에러 : " + e);
+				return result;
+			}
+		    //버퍼 선언
+		    byte[ ] readBuffer = new byte[fileStream.available()];
+		    while (fileStream.read( readBuffer ) != -1){}
+		    fileStream.close(); //스트림 닫기	
+		    result=new String(readBuffer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * Backrest config 생성
+	 * @param workVO, dbServerVO, request, paramMap
+	 * @return 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public void createBackrestConfig(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) {
+		try {
+			String filePath = "C:\\backrest\\" + workVO.getBck_filenm();
+			String configPath = "C:\\backrest\\pgbackrest.conf";
+			BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
+			
+			int prcs_cnt = Integer.parseInt(request.getParameter("prcs_cnt"));	//병렬도
+			String cps_type = request.getParameter("cps_type");	//압축타입
+			
+			ArrayList<String> customKeyList = new ArrayList<String>();
+			ArrayList<String> customValueList = new ArrayList<String>();
+			
+			if(!(paramMap.get("custom_map")).equals("") || (paramMap.get("custom_map")) != null ) {
+				try {
+					JSONParser parser = new JSONParser();
+					JSONObject jsonObject = (JSONObject) parser.parse((paramMap.get("custom_map")).toString());
+					Iterator<String> customKeys = jsonObject.keySet().iterator();
+					
+					while(customKeys.hasNext()){
+		                String key = customKeys.next().toString();
+		                customKeyList.add(key);
+		                customValueList.add((jsonObject.get(key)).toString());
+		            }
+					
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+			try{
+		        String fileContent;
+				while((fileContent = br.readLine()) != null) {
+					fileContent = fileContent.replaceAll("#repo1-path=", "repo1-path=" + workVO.getBck_pth());
+					fileContent = fileContent.replaceAll("#repo1-retention-full=", "repo1-retention-full=" + workVO.getBck_mtn_ecnt());
+					fileContent = fileContent.replaceAll("#log-path=", "log-path=" + workVO.getLog_file_pth());
+					fileContent = fileContent.replaceAll("#log-level-console=detail", "log-level-console=detail");
+					fileContent = fileContent.replaceAll("#log-level-file=detail", "log-level-file=detail");
+					
+					fileContent = fileContent.replaceAll("#pg1-path=", "pg1-path=" + dbServerVO.getPgdata_pth());
+					fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + dbServerVO.getPortno());
+					fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + dbServerVO.getSvr_spr_usr_id());
+					fileContent = fileContent.replaceAll("#repo1-gbn=", "#repo1-gbn=" + workVO.getBackrest_gbn());
+					fileContent = fileContent.replaceAll("#process-max=", "process-max=" + prcs_cnt);
+					
+					if(workVO.getCps_yn().toString().equals("Y")) {
+						if(cps_type.toString().equals("gzip")) {
+							fileContent = fileContent.replaceAll("#compress-type=", "compress-type=gz");
+						}else {
+							fileContent = fileContent.replaceAll("#compress-type=", "compress-type=" + cps_type);
+						}
+					}else {
+						fileContent = fileContent.replaceAll("#compress=", "compress=" + workVO.getCps_yn().toString().toLowerCase());
+					}
+					
+					bw.write(fileContent + "\r\n");
+					bw.flush();
+				}
+				
+				if(customKeyList.size() != 0) {
+					for(int i=0; i < customKeyList.size(); i++) {
+						fileContent = customKeyList.get(i) + "=" + customValueList.get(i);
+						
+						bw.write(fileContent + "\r\n");
+						bw.flush();
+					}
+					
+				}
+				
+				bw.close();
+				br.close();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Backrest config 삭제
+	 * @param workVO
+	 * @return 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public void deleteBackrestConfig(@ModelAttribute("workVO") WorkVO workVO) {
+		String filePath = "C:\\backrest\\" + workVO.getBck_filenm();
+		
+		try{
+			File file = new File(filePath);
+			if(file.exists()){
+				file.delete();
+	    	}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }

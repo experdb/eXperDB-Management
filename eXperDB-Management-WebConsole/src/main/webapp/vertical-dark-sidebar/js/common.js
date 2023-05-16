@@ -541,6 +541,41 @@ function fn_workLayer(wrk_id){
 }
 
 /* ********************************************************
+ * backrest config 결과 정보
+ ******************************************************** */
+function fn_backrestConfigLayer(wrk_id){
+	$.ajax({
+		url : "/selectBackrestConfigInfo.do",
+		data : {
+			wrk_id : wrk_id
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			if(result==null || result==""){
+				showSwalIcon(migration_msg21, closeBtn, '', 'error');
+			}else{
+				$("#config").html(result);
+
+				$("#pop_layer_backrestConfig").modal("show");
+			}
+	
+		}
+	});
+}
+
+/* ********************************************************
  * ScriptWORK정보
  ******************************************************** */
 function fn_scriptLayerWork(wrk_id){

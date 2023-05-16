@@ -51,6 +51,10 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 		backupDAO.updateRmanWork(workVO);
 	}
 	
+	public void updateBackrestWork(WorkVO workVO) throws Exception{
+		backupDAO.updateBackrestWork(workVO);
+	}
+	
 	public void updateDumpWork(WorkVO workVO) throws Exception{
 		backupDAO.updateDumpWork(workVO);
 	}
@@ -162,5 +166,10 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	@Override
 	public List<Map<String, Object>> selectBackrestCstOpt(DbServerVO dbServerVO) throws Exception {
 		return backupDAO.selectBackrestCstOpt(dbServerVO);
+	}
+	
+	@Override
+	public List<DbServerVO> selectBckServer(WorkVO workVO) throws Exception {
+		return backupDAO.selectBckServer(workVO);
 	}
 }

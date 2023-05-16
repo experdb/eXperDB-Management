@@ -95,7 +95,9 @@ function seachParamInit(tabGbn) {
 
 	if (tabGbn == "rman") {
 		$("#bck_opt_cd option:eq(0)").attr("selected","selected");
-	} else {
+	} else if(tabGbn == "backrest"){
+		$("#bck_opt_cd_bckr option:eq(0)").attr("selected","selected");
+	}else {
 		$("#db_id option:eq(0)").attr("selected","selected");
 	}
 
@@ -112,6 +114,7 @@ function selectTab(intab){
 
 	if(intab == "rman"){			
 		$(".search_rman").show();
+		$(".search_backrest").hide();
 		$(".search_dump").hide();
 		$("#rmanDataTableDiv").show();
 		$("#backrestDataTableDiv").hide();
@@ -121,7 +124,8 @@ function selectTab(intab){
 
 		fn_get_rman_list();
 	}else if(intab == "backrest"){
-		$(".search_rman").show();
+		$(".search_rman").hide();
+		$(".search_backrest").show();
 		$(".search_dump").hide();
 		$("#rmanDataTableDiv").hide();
 		$("#backrestDataTableDiv").show();
@@ -132,6 +136,7 @@ function selectTab(intab){
 		fn_get_backrest_list();
 	}else{				
 		$(".search_rman").hide();
+		$(".search_backrest").hide();
 		$(".search_dump").show();
 		$("#rmanDataTableDiv").hide();
 		$("#backrestDataTableDiv").hide();
@@ -188,8 +193,8 @@ function fn_get_backrest_list(){
 		data : {
 		db_svr_id : $("#db_svr_id", "#findList").val(),
 		bck_bsn_dscd : "TC000205",
-		// bck_opt_cd : $("#bck_opt_cd", '#findSearch').val(),
-		// wrk_nm : nvlPrmSet($('#wrk_nm', '#findSearch').val(), "")
+		bck_opt_cd : $("#bck_opt_cd_bckr", '#findSearch').val(),
+		wrk_nm : nvlPrmSet($('#wrk_nm', '#findSearch').val(), "")
 	},
 		dataType : "json",
 		type : "post",
@@ -210,8 +215,6 @@ function fn_get_backrest_list(){
 			tableBackrest.clear().draw();
 
 			if (nvlPrmSet(data, "") != '') {
-				console.log(data);
-
 				tableBackrest.rows.add(data).draw();
 			}
 		}
@@ -263,7 +266,6 @@ function fn_get_dump_list(){
  * confirm result
  ******************************************************** */
 function fnc_confirmMultiRst(gbn){
-console.log(gbn);
 	if (gbn == "del_rman" || gbn == "del_dump") {
 		fn_deleteWork(gbn);
 	}else if(gbn == "bckr_cst_del"){
@@ -394,6 +396,11 @@ function fn_insert_chogihwa(gbn, result) {
 		$("#remote_opt").hide();
 		$("#cloud_opt").hide();
 
+		fn_deleteCustom();
+		custom_map.clear();
+        custom_map_before.clear();
+		custom_save_chk = false;
+
 	}else {
 		//상단
 		$("#ins_dump_wrk_nm", "#workDumpRegForm").val(""); 									//work 명
@@ -515,6 +522,75 @@ function fn_update_chogihwa(gbn, result) {
 		$("#mod_log_file_mtn_ecnt_alert", "#workModForm").hide();	
 		
 		fn_modWorkPopStart();
+	} else if(gbn == "backrest"){
+		$("#mod_wrk_nm_bckr", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].wrk_nm, "")); 						//work 명
+		$("#mod_wrk_exp_bckr", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].wrk_exp, ""))						//work 설명
+
+		$("#mod_bck_wrk_id_bckr", "#workRegReFormBckr").val(nvlPrmSet(result.bck_wrk_id, "")); 							//백업작업id
+		$("#mod_wrk_id_bckr", "#workRegReFormBckr").val(nvlPrmSet(result.wrk_id, "")); 									//작업id
+
+		$("#mod_bckr_gbn", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].backrest_gbn, "")); 					//스토리지
+
+		var bckSrvLocalMod = document.getElementById("mod_bck_srv_local_check"); 
+		var bckSrvRemoteMod = document.getElementById("mod_bck_srv_remote_check"); 
+		var bckSrvCloudMod = document.getElementById("mod_bck_srv_cloud_check");
+
+		mod_restore_check = result.workInfo[0].backrest_gbn
+
+		if(nvlPrmSet(result.workInfo[0].backrest_gbn, "") == "local"){
+			$("input:radio[id='mod_local_radio']").prop("checked", true);
+			bckSrvLocalMod.style.backgroundColor = "white"
+			bckSrvRemoteMod.style.backgroundColor = "#e7e7e7"
+			bckSrvCloudMod.style.backgroundColor = "#e7e7e7"
+
+			$("#mod_remote_opt").hide();
+			$("#mod_cloud_opt").hide();
+		}else if(nvlPrmSet(result.workInfo[0].backrest_gbn, "") == "remote"){
+			$("input:radio[id='mod_remote_radio']").prop("checked", true);
+			bckSrvLocalMod.style.backgroundColor = "#e7e7e7"
+			bckSrvRemoteMod.style.backgroundColor = "white"
+			bckSrvCloudMod.style.backgroundColor = "#e7e7e7"
+
+			$("#mod_remote_opt").show();
+			$("#mod_cloud_opt").hide();
+		}else{
+			$("input:radio[id='mod_cloud_radio']").prop("checked", true);
+			bckSrvLocalMod.style.backgroundColor = "#e7e7e7"
+			bckSrvRemoteMod.style.backgroundColor = "#e7e7e7"
+			bckSrvCloudMod.style.backgroundColor = "white"
+
+			$("#mod_remote_opt").hide();
+			$("#mod_cloud_opt").show();
+		}
+
+		$("#mod_bckr_opt_cd", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_opt_cd, "")).prop("selected", true); //백업옵션
+		$("#mod_bckr_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_pth, ""));						//백업경로
+
+		$("#mod_bckr_cnt", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_mtn_ecnt, ""));					//풀백업 유지개수
+		$("#mod_bckr_log_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].log_file_pth, ""));				//로그경로
+		
+		if(result.cps_type_mod == "lz4"){
+			$("#mod_cps_opt_type", "#workRegReFormBckr").val("lz4").prop("selected", true);							//압축타입
+		}else{
+			$("#mod_cps_opt_type", "#workRegReFormBckr").val("gzip").prop("selected", true);								//압축타입
+		}
+
+		$("#mod_cps_opt_prcs", "#workRegReFormBckr").val(nvlPrmSet(result.prcs_max_mod, ""));							//병렬도
+		$("#mod_bckr_cps_yn_chk", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].cps_yn, ""));					//압축여부
+	
+		if (nvlPrmSet(result.workInfo[0].cps_yn, "") == "Y") {
+			$("input:checkbox[id='mod_bckr_cps_yn_chk']").prop("checked", true);
+			$("#mod_cps_opt_type", "#workRegReFormBckr").attr("disabled",false);
+		} else {
+			$("input:checkbox[id='mod_bckr_cps_yn_chk']").prop("checked", false);
+			$("#mod_cps_opt_type", "#workRegReFormBckr").attr("disabled",true);
+		}
+
+		fn_deleteCustom();
+		custom_map.clear();
+        custom_map_before.clear();
+		custom_save_chk = false;
+
 	} else {
 		//상단
 		$("#mod_dump_wrk_nm", "#workDumpModForm").val(nvlPrmSet(result.workInfo[0].wrk_nm, "")); 						//work 명

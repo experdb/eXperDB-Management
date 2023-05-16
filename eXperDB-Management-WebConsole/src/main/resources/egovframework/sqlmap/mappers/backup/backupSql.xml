@@ -349,6 +349,25 @@
 			bck_wrk_id = #{bck_wrk_id}
 	</update>
 	
+	
+	<update id="updateBackrestWork" parameterType="workVO">
+		/**
+	 	* Query ID : updateBackrestWork
+	 	* Description : Backrest백업 update
+	 	**/
+		UPDATE T_BCK_WRKCNG_I SET
+			bck_opt_cd = #{bck_opt_cd},
+			cps_yn = #{cps_yn},
+			bck_mtn_ecnt = #{bck_mtn_ecnt},
+			file_stg_dcnt = #{file_stg_dcnt},
+			lst_mdfr_id = #{lst_mdfr_id},
+			lst_mdf_dtm = now(),
+			log_file_pth = #{log_file_pth}
+		WHERE
+			bck_wrk_id = #{bck_wrk_id}
+	</update>
+	
+	
 	<update id="updateDumpWork" parameterType="workVO">
 		/**
 	 	* Query ID : updateDumpWork
@@ -946,8 +965,24 @@
 	<select id="selectBackrestCstOpt" parameterType="dbServerVO" resultType="hashMap">
           SELECT
                opt_id,
+               opt_gbn,
                opt_nm,
                opt_exp
           FROM t_BACKREST_OPT_i			
+    </select>
+    
+    <select id="selectBckServer" parameterType="workVO" resultType="dbServerVO">
+          SELECT
+          	   (ROW_NUMBER() OVER()) AS ROWNUM,
+               A.pgdata_pth ,
+               B.ipadr,
+               B.portno,
+               B.master_gbn,
+               A.svr_spr_usr_id,
+               B.db_svr_ipadr_id
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         WHERE
+           A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.IPADR = #{db_svr_ipadr}	
     </select>
 </mapper>

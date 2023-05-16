@@ -83,7 +83,7 @@
 	}
 	
 	function fn_pgbackrestAut(){
-		if("${pgbackerest_useyn}" == "Y"){
+		if("${pgbackrest_useyn}" == "Y"){
 			selectChkTab = "backrest";
 			check = "backrest";
 
@@ -483,9 +483,6 @@
 		
 		immediate_data = datas;
 
-		
-		
-		
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="backup_management.msg01" />');
 		$('#pop_confirm_multi_md').modal("show");
@@ -534,7 +531,6 @@
 	 * PG backrest 즉시 실행
 	 ******************************************************** */
 	function fn_BackrestImmediateStart(){
-		console.log();
 		$.ajax({
 			url : "/backrestStart.do",
 			data : {
@@ -568,8 +564,7 @@
 				}
 			},
 			success : function(result) {
-				//showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
-				
+				showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
 			}
 		});
 	}
@@ -600,6 +595,10 @@
 			datas = tableRman.rows('.selected').data();
 			
 			reregUrl = "/popup/rmanRegReForm.do";
+		} else if(selectChkTab == "backrest"){
+			datas = tableBackrest.rows('.selected').data();
+			
+			reregUrl = "/popup/backrestRegReForm.do";
 		} else {
 			datas = tableDump.rows('.selected').data();
 			
@@ -615,6 +614,9 @@
 		}
 		
 		if (selectChkTab == "rman") {
+			bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
+			wrk_id = tableRman.row('.selected').data().wrk_id;
+		} else if(selectChkTab == "backrest"){
 			bck_wrk_id = tableBackrest.row('.selected').data().bck_wrk_id;
 			wrk_id = tableBackrest.row('.selected').data().wrk_id;
 		} else {
@@ -652,7 +654,27 @@
 						$('#rman_call_gbn', '#search_rmanReForm').val("");
 
 						$('#pop_layer_mod_rman').modal("show");
-					} else {
+					} else if(selectChkTab == "backrest"){
+						$('#backrest_call_gbn', '#search_backrestRegForm').val("");
+
+						fn_init_backrest_mod_form();
+						
+						backrestBckServerTable.rows({selected: true}).deselect();
+						backrestBckServerTable.clear().draw();
+
+						if (nvlPrmSet(result.bckSvrInfo, "") != '') {
+							backrestBckServerTable.rows.add(result.bckSvrInfo).draw();
+						}
+
+						if(result.custom_map != null || result.custom_map != undefined){
+							for(key of Object.keys(result.custom_map)){
+          			      		custom_map.set(key, result.custom_map[key]);
+           					}
+						}
+						
+
+						$('#pop_layer_mod_backrest').modal("show");
+					} else{
 						$('#dump_call_gbn', '#search_dumpReForm').val("");
 						
 						$('#pop_layer_mod_dump').modal("show");
@@ -681,7 +703,10 @@
 			columns : [
 						{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 						{data : "idx", className : "dt-center", defaultContent : ""},
-						{data : "wrk_nm", defaultContent : ""},
+						{data : "wrk_nm", defaultContent : ""
+							,"render": function (data, type, full) {				
+								return '<span onClick=javascript:fn_backrestConfigLayer("'+full.wrk_id+'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+							}},
 						{data : "wrk_exp", defaultContent : ""},
 						{data : "db_svr_ipadr", className : "dt-center", defaultContent: "" },
 						{data : "backrest_gbn", className : "dt-center", defaultContent : ""},
@@ -742,8 +767,10 @@
 <%@include file="../popup/dumpShow.jsp"%>
 <%@include file="../popup/rmanRegForm.jsp"%>
 <%@include file="../popup/backrestRegForm.jsp"%>
+<%@include file="../popup/backrestConfigInfo.jsp"%>
 <%@include file="../popup/dumpRegForm.jsp"%>
 <%@include file="../popup/rmanRegReForm.jsp"%>
+<%@include file="../popup/backrestRegReForm.jsp"%>
 <%@include file="../popup/dumpRegReForm.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/scheduleWrkList.jsp"%>
@@ -836,6 +863,15 @@
 											<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
 											<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
 											<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
+										</select>
+									</div>
+
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_backrest">
+										<select class="form-control" name="bck_opt_cd_bckr" id="bck_opt_cd_bckr">
+											<option value=""><spring:message code="backup_management.backup_option" />&nbsp;<spring:message code="schedule.total" /></option>
+											<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
+											<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
+											<option value="TC000304">차등백업</option>
 										</select>
 									</div>
 		
