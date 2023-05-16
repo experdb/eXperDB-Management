@@ -235,6 +235,17 @@ public class SystemDAO {
 	public int updatePryAgtUseYnLInfo(PryAgentInfoVO vo) throws Exception  {
 		return session.update("system.updatePryAgtUseYnLInfo", vo);
 	}
+	
+	
+	public int selectDbSvrIpAdrId(String ipadr) {
+		int result;
+		result = session.selectOne("system.selectDbSvrIpAdrId", ipadr);
+		return result;
+	}
+	
+	public void insertPgbackrestBackup(WrkExeVO vo) {
+		session.insert("system.insertPgbackrestBackup", vo);
+	}
 }
 
 

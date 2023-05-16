@@ -297,7 +297,10 @@ public class ProtocolID {
 	public static final String REGI_PORT = "REGI_PORT";
 	public static final String CONNECT_TYPE = "CONNECT_TYPE";*/
 	
-	
+	//pgbackrest 코드 추가
+	public static final String STORAGE_OPT = "STORAGE_OPT";
+	public static final String WRK_NM = "WRK_NM";
+	public static final String BCK_TYPE = "BCK_TYPE";
 	
 	//==============================================================
 	//프록시 에이전트 코드 추가

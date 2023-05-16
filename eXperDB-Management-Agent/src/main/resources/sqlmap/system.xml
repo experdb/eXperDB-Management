@@ -889,4 +889,55 @@
 			ELSE 'M' END MASTER_GBN 
 		]]>
 	</select>
+	
+    <select id="selectDbSvrIpAdrId" parameterType="String" resultType="int">
+    	SELECT
+    		DB_SVR_IPADR_ID
+   		FROM T_DBSVRIPADR_I 
+   		WHERE '${value}' = IPADR
+    </select>
+    
+    <insert id="insertPgbackrestBackup" parameterType="WrkExeVO">
+    	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, BCK_FILENM
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+			, EXE_GRP_SN
+			, EXE_RSLT_CD
+			, WRK_NM
+			, DB_SVR_IPADR_ID
+	 	)
+	 	VALUES
+	 	(
+			#{EXE_SN}
+			, #{SCD_ID}
+			, #{WRK_ID}
+			, now()
+			, now()
+			, #{BCK_OPT_CD}
+			, 0
+			, 0
+			, #{DB_ID}
+			, #{BCK_FILE_PTH}
+			, #{BCK_FILENM}			
+			, #{FRST_REGR_ID}
+			, #{LST_MDFR_ID}
+			, #{EXE_GRP_SN}
+			, #{EXE_RSLT_CD}
+			, #{WRK_NM}
+			, #{DB_SVR_IPADR_ID}
+	 	)	 	
+    </insert>
+    
 </mapper>
