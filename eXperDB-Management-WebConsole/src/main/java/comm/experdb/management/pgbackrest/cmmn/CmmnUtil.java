@@ -65,9 +65,9 @@ public class CmmnUtil {
 
 		if(Math.round(size_tb) > 0) {
 			 realSize = Math.round(size_tb) + " TB";
-		  } else if(size_gb > 0){
+		  } else if(Math.round(size_gb) > 0){
 			   realSize = Math.round(size_gb) + " GB";
-	        }else if(size_mb > 0){
+	        }else if(Math.round(size_mb) > 0){
 	        	realSize = Math.round(size_mb) + " MB";
 	        }else{
 	        	realSize = Math.round(size_kb) + " KB";

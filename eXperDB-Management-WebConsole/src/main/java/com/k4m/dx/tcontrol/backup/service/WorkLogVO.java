@@ -35,6 +35,8 @@ public class WorkLogVO {
 	private String file_fmt_cd;
 	private String usr_role_nm;
 	private String bck_wrk_id;
+	private String log_filenm;
+	private String backrest_gbn;
 
 	public String getBck_wrk_id() {
 		return bck_wrk_id;
@@ -306,6 +308,22 @@ public class WorkLogVO {
 
 	public void setUsr_role_nm(String usr_role_nm) {
 		this.usr_role_nm = usr_role_nm;
+	}
+
+	public String getLog_filenm() {
+		return log_filenm;
+	}
+
+	public void setLog_filenm(String log_filenm) {
+		this.log_filenm = log_filenm;
+	}
+
+	public String getBackrest_gbn() {
+		return backrest_gbn;
+	}
+
+	public void setBackrest_gbn(String backrest_gbn) {
+		this.backrest_gbn = backrest_gbn;
 	}
 
 }

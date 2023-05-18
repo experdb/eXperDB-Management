@@ -1903,89 +1903,72 @@ public class BackupController {
 	}
 
 	/**
-	 * pgbackrest info history
-	 * 
-	 * @param
-	 * @return
+	 * pgbackrest immediate start
+	 * @param 
+	 * @return 
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/backrestHistory.do")
+	@RequestMapping(value = "/backrestStart.do")
 	@ResponseBody
-	public JSONObject pgbackrestShow(HttpServletRequest request) throws Exception {
+	public JSONObject pgbackrestLog(HttpServletRequest request) throws Exception{
+	
+		String IP = request.getParameter("db_svr_ipadr");
+		
+		AgentInfoVO vo = new AgentInfoVO();
+		vo.setIPADR(IP);
+		AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 
-		ClientInfoCmmn cic = new ClientInfoCmmn();
+		int PORT = agentInfo.getSOCKET_PORT();
 
-		String Ip = "192.168.10.121";
-		int port = 9001;
-		String backrest_opt = request.getParameter("backrest_opt");
-
-		String wrk_nm = request.getParameter("wrk_nm");
-
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
+		
 		JSONObject jObj = new JSONObject();
-
-		jObj.put(ClientProtocolID.STORAGE_OPT, backrest_opt);
-
-		JSONObject result = new JSONObject();
-
-		result = cic.backrestinfo(Ip, port, jObj);
-
-//		System.out.println(result.get("RESULT_CODE"));
-//		System.out.println(result.get("ERR_CODE"));
-//		System.out.println(result.get("ERR_MSG"));
-//		System.out.println(result.get("RESULT_DATA"));
-
-		return result;
-	}
-
-	/**
-	 * pgbackrest info history
-	 * 
-	 * @param
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/backrestLog.do")
-	@ResponseBody
-	public JSONObject pgbackrestLog(HttpServletRequest request) throws Exception {
-
-		String Ip = "192.168.10.121";
-		int port = 9001;
-		// String backrest_opt = request.getParameter("backrest_opt");
-
-		// String wrk_nm = request.getParameter("wrk_nm");
-
-		JSONObject jObj = new JSONObject();
-
-		jObj.put(ClientProtocolID.STORAGE_OPT, "local");
-
+		
+		jObj.put(ClientProtocolID.LOG_PATH, request.getParameter("log_file_pth"));
+		jObj.put(ClientProtocolID.BCK_FILENM, request.getParameter("bck_filenm"));
+		jObj.put(ClientProtocolID.BCK_FILE_PTH, request.getParameter("bck_file_pth"));
+		jObj.put(ClientProtocolID.WRK_NM, request.getParameter("wrk_nm"));
+		jObj.put(ClientProtocolID.WRK_ID, request.getParameter("wrk_id"));
+		jObj.put(ClientProtocolID.SERVER_IP, request.getParameter("db_svr_ipadr"));
+		jObj.put(ClientProtocolID.DB_SVR_ID, request.getParameter("db_svr_id"));
+		jObj.put(ClientProtocolID.BCK_OPT_CD, request.getParameter("bck_opt_cd"));
+		jObj.put(ClientProtocolID.BCK_TYPE, request.getParameter("bck_opt_cd_nm"));
+		jObj.put(ClientProtocolID.DB_ID, request.getParameter("db_id"));
+		jObj.put(ClientProtocolID.USER_ID, usr_id);
+		
 		JSONObject result = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
-
-		result = cic.pgbackrestLog(Ip, port, jObj);
-
+		
+		result = cic.pgbackrestImmediateStart(IP, PORT, jObj);
+		
 		return result;
 	}
-
+	
 	@RequestMapping(value = "/selectBackrestLog.do")
 	@ResponseBody
-	public JSONObject selectPgbackrestLog(HttpServletRequest request) {
+	public JSONObject selectPgbackrestLog(HttpServletRequest request) throws Exception {
+		
+		String IP = request.getParameter("ipadr");
+		
+		AgentInfoVO vo = new AgentInfoVO();
+		vo.setIPADR(IP);
+		AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 
-		String Ip = "192.168.10.151";
-		int port = 9001;
-
-//		String logPath = request.getParameter("log_path");
-		String logPath = "/experdb/app/postgres/etc/local/log";
-		String logDate = request.getParameter("start_date");
-		logDate.replaceAll("", "-");
-
-//		backuplog 파일 명 정하기
-
-		String pullPath = logPath + "/experdb-" + logDate;
-
+		int PORT = agentInfo.getSOCKET_PORT();
+				
 		JSONObject jObj = new JSONObject();
-
+		
+		String pullPath = request.getParameter("log_path");
+		
 		jObj.put(ClientProtocolID.CMD_BACKUP_PATH, pullPath);
-		return null;
+		
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject result = new JSONObject(); 
+		result = cic.getBackrestLog(IP, PORT, jObj);
+
+		return result;
 	}
 
 	/**

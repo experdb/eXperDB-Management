@@ -519,70 +519,80 @@
 				bSort: false,
 				columns : [
 					{data: "rownum", className: "dt-center", defaultContent: ""},
-					{data: "state", 
+					{data: "exe_rslt_cd", 
 						render : function(data, type, full, meta){
-							html = '';
-							if(full.error == false){
+							var html = '';
+							if (full.exe_rslt_cd == 'TC001701') {
 								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-								html += "<i class='fa fa-check-circle text-primary' >";
+								html += "	<i class='fa fa-check-circle text-primary' >";
 								html += '&nbsp;<spring:message code="common.success" /></i>';
 								html += "</div>";
-							}else {
- 								html += '<button type="button" class="btn btn-danger btn-icon-text" >';
- 								html += '<i class="fa fa-times btn-icon-prepend"></i>';
- 								html += '<spring:message code="common.failed"/>';
- 								html += "</button>";
+								
+							} else if(full.exe_rslt_cd == 'TC001702'){
+									html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
+								html += '<i class="fa fa-times"></i>';
+								html += '<spring:message code="common.failed" />';
+								html += "</button>";
+							} else {
+								html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+								html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+								html += '&nbsp;<spring:message code="etc.etc28" />';
+								html += "</div>";
 							}
 							return html;
 						},
 						className: "dt-center", defaultContent: ""},
-					{data: "progress", className: "dt-center", defaultContent: ""},
-					{data: "wrk_fin_tm", className: "dt-center", defaultContent: ""},
-					{data: "work_name", className: "dt-center", defaultContent: ""},
-					{data: "backup_server", className: "dt-center", defaultContent: ""},
-					{data: "storage", className: "dt-center", defaultContent: ""},
-					{data: "backup_type", 
-						render : function(data, type, full, meta){
-							html = ''; 
-							html += full.type;
-							return html;
+					{data: "wrk_nm", className: "dt-center", defaultContent: ""},
+					{data: "ipadr", className: "dt-center", defaultContent: ""},
+					{data: "storage", 
+						render : function(data, type, full, meta) {
+							var html = '';
+							if(full.backrest_gbn != null && full.backrest_gbn != ''){
+								html += full.backrest_gbn.toUpperCase();	
+								return html;
+							}
 						},
 						className: "dt-center", defaultContent: ""},
-					{data: "backup_path", className: "dt-center", defaultContent: ""},
-					{data: "backup_size", 
+					{data: "bck_opt_cd_nm",	className: "dt-center", defaultContent: ""},
+					{data: "bck_file_pth", className: "dt-center", defaultContent: ""},
+					{data: "file_sz",
 						render : function(data, type, full, meta){
-							html = ''; 
-							html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
-							html += "	<i class='ti-files text-primary' >";
-							html += '&nbsp;' + full.info.repository.convertSize; + '</i>';
-							html += "</div>";
+							var html = ''; 
 							
+							if(full.file_sz != 0){
+								var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+								var e = Math.floor(Math.log(full.file_sz) / Math.log(1024));
+
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='ti-files text-primary' >";
+								html += '&nbsp;' + (full.file_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e] + '</i>';
+								html += "</div>";
+							}
+							return html;							
+						},
+						className: "dt-center", defaultContent: ""},
+					{data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""},
+					{data: "wrk_end_dtm",
+						render : function(data, type, full, meta){
+							var html = '';
+							
+							if(full.wrk_strt_dtm != full.wrk_end_dtm){
+								html += full.wrk_end_dtm;
+							}
 							return html;
 						},
 						className: "dt-center", defaultContent: ""},
-					{data: "backup_start_tm", 
+					{data: "wrk_dtm",
 							render : function(data, type, full, meta){
-								html = ''; 
-								html += full.timestamp.convertStart;
+								html = '';
+								if(full.wrk_strt_dtm != full.wrk_end_dtm){
+									var html = "<div class='badge badge-pill badge-primary'>";
+									html += "	<i class='mdi mdi-timer mr-2'></i>";
+									html += full.wrk_dtm;
+									html += "</div>";	
+								}
 								return html;
-							},
-							className: "dt-center", defaultContent: ""},
-					{data: "backup_fin_tm", 
-							render : function(data, type, full, meta){
-								html = ''; 
-								html += full.timestamp.convertStop;
-								return html;
-							},
-							className: "dt-center", defaultContent: ""},
-					{data: "backup_total_tm",
-							render : function(data, type, full, meta){
-								html = ''; 
-								var html = "<div class='badge badge-pill badge-primary'>";
-								html += "	<i class='mdi mdi-timer mr-2'></i>";
-								html += full.timestamp.difference
-								html += "</div>";	
-								return html;
-							},
+							} , 
 							className: "dt-center", defaultContent: ""},
 				] 
 			});
@@ -634,7 +644,7 @@
 			$('#fix_rsltcd').parent().hide();
 			$('#wrk_nm').parent().removeClass('col-sm-2');
 			$('#wrk_nm').parent().addClass('col-sm-4');
-
+			
 			seachParamInit(intab);
 			fn_get_backrest_list();
 			
@@ -749,22 +759,27 @@
 			}
 		});
 	}
+	
 	/* ********************************************************
-	 * Get backrest Info List
+	 * Get Backrest Log List
 	 ******************************************************** */
 	function fn_get_backrest_list(){
+		if(!calenderValid()) {
+			return;
+		}
 		
-		
-		 $.ajax({
-			url : "/backrestHistory.do",
+		$.ajax({
+			url : "/backup/selectWorkLogList.do",
 			data : {
-				backrest_opt : $("#backrest_opt").val(),
+				hist_gbn : "backrest_hist",
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				bck_bsn_dscd : "TC000205",
 		  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
 		  		wrk_end_dtm : $("#wrk_end_dtm").val(),
 		  		exe_rslt_cd : $("#exe_rslt_cd").val(),
 				wrk_nm : nvlPrmSet($('#wrk_nm').val(), ""),
-				fix_rsltcd : $("#fix_rsltcd").val(),
-			}, 
+				backrest_gbn : $('#backrest_opt').val()
+			},
 			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
@@ -780,35 +795,16 @@
 				}
 			},
 			success : function(result) {
-				
-				if(result.RESULT_DATA == ""){
-					console.log("데이터 없다~");
-					
-					tableBackrest.rows({selected: true}).deselect();
-					tableBackrest.clear().draw();
-					
-				}else {
-					
-					console.log(result);
-						
-					tableBackrest.rows({selected: true}).deselect();
-					tableBackrest.clear().draw();
+ 				tableBackrest.rows({selected: true}).deselect();
+				tableBackrest.clear().draw();
 
-					var count = Object.keys(result.RESULT_DATA).length;
-					var backrestTable = [];
-					
-					for (var i = 0; i < count; i++) {
-						var index = String(i);
-						backrestTable.push(result['RESULT_DATA'][index]);
-					}
-					
-					if (nvlPrmSet(result, "") != '') {
-						tableBackrest.rows.add(backrestTable).draw();
-					}
-				}
+				if (nvlPrmSet(result, "") != '') {
+					tableBackrest.rows.add(result).draw();
+				}  
 			}
 		});
 	}
+	
 	/* ********************************************************
 	 * Get backrest Log
 	 ******************************************************** */
@@ -820,62 +816,77 @@
 				tableBackrest.$('tr.selected').removeClass('selected');
 				$(this).addClass('selected');
 			}
-			console.log('2', tableBackrest.row('.selected').data().timestamp.convertStart);
-			/* $.ajax({
-				url : "/selectBackrestLog.do",
-				data : {
-					
-				},
-				dataType : "json",
-				type : "post",
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader("AJAX", true);
-				},
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
-					} else if(xhr.status == 403) {
-						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
-					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+			var state = tableBackrest.row('.selected').data().exe_rslt_cd
+//			상태가 실행 중이면 ajax 여러번 실행 / 상태가 성공이면 한번만 실행
+			if(state == 'TC001701'){
+				$.ajax({
+					url : "/selectBackrestLog.do",
+					data : {
+						log_path : tableBackrest.row('.selected').data().bck_filenm,
+						ipadr : tableBackrest.row('.selected').data().ipadr
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+							top.location.href = "/";
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {
+						$('#backRestAcitveLog').text(result.RESULT_DATA);
 					}
-				},
-				success : function(result) {
-					console.log(result);
-				}
-			}) */
-		})
-	}) 
+				})
+			} else if(state == 'TC001802'){
+				var resultCode = -1;
 	
-	function tests(){
-		$.ajax({
-			url : "/backrestLog.do",
-			data : {
-				bck_bsn_dscd : 1,
-				config_path : 'local',
-				type : 'full'
-			}, 
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-				}
-			},
-			success : function(result) {
-				
+				var interval = setInterval(function() {
+					if(resultCode == -1){
+						$.ajax({
+							url : "/selectBackrestLog.do",
+							data : {
+								log_path : tableBackrest.row('.selected').data().bck_filenm,
+								ipadr : tableBackrest.row('.selected').data().ipadr
+							},
+							dataType : "json",
+							type : "post",
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader("AJAX", true);
+							},
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+									top.location.href = "/";
+								} else if(xhr.status == 403) {
+									showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+									top.location.href = "/";
+								} else {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+								}
+							},
+							success : function(result) {
+								resultCode = result.RESULT_DATA.indexOf('successfully');
+								$('#backRestAcitveLog').text(result.RESULT_DATA);
+							}
+						});
+						$('#loading').hide();
+					}else {
+						clearInterval(interval);
+						fn_get_backrest_list()
+					}
+				}, 5000);
 			}
-		});
-	}
+		})
+	});
+	
 	
 </script>
  
@@ -1132,8 +1143,6 @@
 											<tr class="bg-info text-white">
 												<th width="40"><spring:message code="common.no" /></th>
 												<th width="40"><spring:message code="etc.etc25" /></th>
-												<th width="50">진행율</th>
-												<th width="50">백업완료 예정시간</th>
 												<th width="40"><spring:message code="common.work_name" /></th>
 												<th width="60">백업 서버</th>
 												<th width="40">스토리지</th>
@@ -1151,19 +1160,18 @@
 						</div>
 					</div>
 					<br>
-					<div id="backRestActiveLogDiv">	
+					<div id="backRestActiveLogDiv" >	
 						<h4>※ Active Log</h4>
 						<div class="card my-sm-2" >	
 							<div class="col-12">
 								<div class="card-body">
 									<div class="row">
-										<button id="logTest" onclick="tests()">시작버튼</button>
 										<table id="backresLog" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<tr class="bg-info text-white">
 												<th>Log Message</th> 
 											</tr>
 										</table>
-										<textarea id="backRestAcitveLog" rows=10 style="width:100%"></textarea>
+										<textarea id="backRestAcitveLog" rows=10 style="width:100%" disabled onfocus="this.value = this.value;"></textarea>
 									</div> 
 								</div>
 							</div>

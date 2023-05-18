@@ -2558,139 +2558,70 @@ System.out.println("=====cmd9999999999999999999999999999" + properties_nm);
 		return result;
 	}
 	
-	public JSONObject backrestinfo(String ip, int port, JSONObject jObj) {
+public JSONObject pgbackrestImmediateStart(String ip, int port, JSONObject jObj) {
 		
+		JSONObject objList;
 		JSONObject result = new JSONObject();
-		
+
 		try {
-			
-			String storageOpt = String.valueOf(jObj.get(ClientProtocolID.STORAGE_OPT));
-				
-			JSONObject objList;
-			
-			JSONObject jsonObj = new JSONObject();
-			
-			jsonObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT046);
-			jsonObj.put(ClientProtocolID.STORAGE_OPT, storageOpt);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT047);
 			
 			ClientAdapter CA = new ClientAdapter(ip, port);
-
+			
 			CA.open();
-			objList = CA.dxT046(jsonObj);
+			objList = CA.dxT047(jObj);
+			CA.close();
+			
+			String strErrMsg = String.valueOf(objList.get(ClientProtocolID.ERR_MSG));
+			String strErrCode = String.valueOf(objList.get(ClientProtocolID.ERR_CODE));
+			String strDxExCode = String.valueOf(objList.get(ClientProtocolID.DX_EX_CODE));
+			String strResultCode = String.valueOf(objList.get(ClientProtocolID.RESULT_CODE));
+			String strResultData = String.valueOf(objList.get(ClientProtocolID.RESULT_DATA));
+			
+			result.put(ClientProtocolID.ERR_MSG, strErrMsg);
+			result.put(ClientProtocolID.ERR_CODE, strErrCode);
+			result.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+			result.put(ClientProtocolID.RESULT_CODE, strResultCode);
+			result.put(ClientProtocolID.RESULT_DATA, strResultData);
+			
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public JSONObject getBackrestLog(String IP, int PORT, JSONObject jObj) {
+		
+		JSONObject objList;
+		JSONObject result = new JSONObject();
+
+		try {
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT048);
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			
+			CA.open();
+			objList = CA.dxT048(jObj);
 			CA.close();
 
 			String strErrMsg = String.valueOf(objList.get(ClientProtocolID.ERR_MSG));
 			String strErrCode = String.valueOf(objList.get(ClientProtocolID.ERR_CODE));
 			String strDxExCode = String.valueOf(objList.get(ClientProtocolID.DX_EX_CODE));
 			String strResultCode = String.valueOf(objList.get(ClientProtocolID.RESULT_CODE));
-			JSONObject resultData = (JSONObject) objList.get(ClientProtocolID.RESULT_DATA);
-
-			JSONParser parser = new JSONParser();
+			String strResultData = String.valueOf(objList.get(ClientProtocolID.RESULT_DATA));
 			
-			String backrestinfo = (String) resultData.get("backrestinfo");
-			JSONArray jsonArray = (JSONArray) parser.parse(backrestinfo);
-			
-			Gson gson = new Gson();
-			JsonArray gsonArray = gson.fromJson(jsonArray.toString(), JsonArray.class);
-			JsonObject jsonObject = gsonArray.get(0).getAsJsonObject();
-			
-			JsonElement backup = jsonObject.getAsJsonObject().get("backup");
-						
-			if(backup.isJsonArray()) {
-				JsonArray array = backup.getAsJsonArray();
-				if(array.size() == 0 ) {
-					result.put(ClientProtocolID.RESULT_DATA, "");
-				}else {
-					
-					JSONObject resultObj = new JSONObject();
-					PgBackrestInfo back = null;
-					CmmnUtil cmmnUtil = new CmmnUtil();
-					JsonArray backupInfo = jsonObject.getAsJsonObject().getAsJsonArray("backup");
-					
-					for (int i = 0; i < backupInfo.size(); i++) {
-						JsonObject backupObject = backupInfo.get(i).getAsJsonObject();
-						
-						Gson gsonBuilder = new GsonBuilder().create();
-						back = gsonBuilder.fromJson(backupObject, PgBackrestInfo.class);
-						
-						int repoSize = back.getInfo().getRepository().getSize();
-						String DataSize = cmmnUtil.getDataSize(repoSize);
-						
-						int originStart = back.getTimestamp().getStart();
-						int originStop = back.getTimestamp().getStop();
-						String convertStart = cmmnUtil.getIntegertoDate(originStart);
-						String convertStop = cmmnUtil.getIntegertoDate(originStop);
-						
-						back.getInfo().getRepository().setConvertSize(DataSize);
-						back.getTimestamp().setConvertStart(convertStart);
-						back.getTimestamp().setConvertStop(convertStop);
-						
-						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-						LocalDateTime startDateTime = LocalDateTime.parse(convertStart, formatter);
-						LocalDateTime stopDateTime = LocalDateTime.parse(convertStop, formatter);
-						
-						int diffSeconds = (int) ChronoUnit.SECONDS.between(startDateTime, stopDateTime);
-						
-						String resultTime = "";
-						long remainHours, remainMinutes, remainSeconds;
-						
-						int days = diffSeconds / 86400;
-						int hours = diffSeconds / 3600;
-						int minutes = diffSeconds % 3600 /60;
-						int seconds = diffSeconds % 3600 % 60;
-						
-						if(days > 0) {
-							resultTime += days + ":" + hours + ":" + minutes + ":" + seconds;
-						}else if (hours > 0) {
-							resultTime += hours + ":" + minutes + ":" + seconds;							
-						}else if (minutes > 0) {
-							resultTime += minutes + ":" + seconds;
-						}else {
-							resultTime += seconds;
-						}
-						System.out.println(resultTime);
-						back.timestamp.setDifference(resultTime);
-						
-						resultObj.put(i, back);
-					}
-					result.put(ClientProtocolID.RESULT_DATA, resultObj); 
-					}
-			}else {
-				result.put(ClientProtocolID.RESULT_DATA, ""); 
-				}
-						
 			result.put(ClientProtocolID.ERR_MSG, strErrMsg);
 			result.put(ClientProtocolID.ERR_CODE, strErrCode);
 			result.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
 			result.put(ClientProtocolID.RESULT_CODE, strResultCode);
+			result.put(ClientProtocolID.RESULT_DATA, strResultData);
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	public JSONObject pgbackrestLog(String ip, int port, JSONObject jObj) {
-		String storageOpt = String.valueOf(jObj.get(ClientProtocolID.STORAGE_OPT));
-		
-		JSONObject objList;
-		
-		JSONObject jsonObj = new JSONObject();
-		
-		jsonObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT046);
-		jsonObj.put(ClientProtocolID.STORAGE_OPT, storageOpt);
-		
-		ClientAdapter CA = new ClientAdapter(ip, port);
-
-		try {
-			CA.open();
-			objList = CA.dxT047(jsonObj);
-			CA.close();
 		} catch (Exception e) {			
 			e.printStackTrace();
-		}
+		}		
 		
-		return null;
+		return result;
 	}
 	
 	public JSONObject createBackrestConf(String ip, int port, JSONObject jObj) {
