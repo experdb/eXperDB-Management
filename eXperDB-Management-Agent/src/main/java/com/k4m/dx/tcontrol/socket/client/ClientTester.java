@@ -14,6 +14,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 
+
+
 /**
 * @author 박태혁
 * @see
@@ -79,7 +81,7 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "192.168.10.102";
+		String Ip = "192.168.10.121";
 		int port = 9001;
 
 		try {
@@ -142,7 +144,9 @@ public class ClientTester {
 			//clientTester.dxT039(Ip, port);
 			//clientTester.dxT040(Ip, port);
 //			/clientTester.dxT042(Ip, port);
-			clientTester.dxT048(Ip, port);
+//			clientTester.dxT048(Ip, port);
+//			clientTester.dxT049(Ip, port);
+			clientTester.dxT051(Ip, port);
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -3131,8 +3135,106 @@ public class ClientTester {
 
 	}
 	
+	private void dxT049(String Ip, int port) {
+		try {
+			JSONObject jObj = new JSONObject();		
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT049);
+			jObj.put(ClientProtocolID.PGDATA, "/data/experdata/data");
+			jObj.put(ClientProtocolID.DBMS_PORT, "5432");
+			jObj.put(ClientProtocolID.SPR_USR_ID, "experdba");
+			jObj.put(ClientProtocolID.BCK_FILENM, "JJAJUNG2.conf");
+			jObj.put(ClientProtocolID.BCK_MTN_ECNT, "2");
+			jObj.put(ClientProtocolID.LOG_PATH, "/sw/app/postgres/etc/pgbackrest");
+			jObj.put(ClientProtocolID.STORAGE_OPT, "local");
+			jObj.put(ClientProtocolID.CPS_YN, "Y");
+			jObj.put(ClientProtocolID.PRCS_CNT, "1");
+			jObj.put(ClientProtocolID.CPS_TYPE, "gzip");
+			jObj.put(ClientProtocolID.CUSTOM_MAP, null);
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT049(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+//			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+//			System.out.println("strResultData : " +  strResultData);
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	
+	private void dxT050(String Ip, int port) {
+		try {
+			JSONObject jObj = new JSONObject();		
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT050);
+			jObj.put(ClientProtocolID.WRK_NM, "test4");
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT050(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("strResultData : " +  strResultData);
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT051(String Ip, int port) {
+		try {
+			JSONObject jObj = new JSONObject();		
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT051);
+			jObj.put(ClientProtocolID.BCK_FILENM, "saa");
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT051(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	
 	

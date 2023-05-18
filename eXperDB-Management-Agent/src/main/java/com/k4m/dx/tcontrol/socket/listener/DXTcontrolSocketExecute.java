@@ -70,6 +70,9 @@ import com.k4m.dx.tcontrol.server.DxT045;
 import com.k4m.dx.tcontrol.server.DxT046;
 import com.k4m.dx.tcontrol.server.DxT047;
 import com.k4m.dx.tcontrol.server.DxT048;
+import com.k4m.dx.tcontrol.server.DxT049;
+import com.k4m.dx.tcontrol.server.DxT050;
+import com.k4m.dx.tcontrol.server.DxT051;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -375,6 +378,21 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 								DxT048 dxT048 = new DxT048(client, is, os);
 								dxT048.execute(strDX_EX_CODE, jObj);
 								break;		
+							
+							case TranCodeType.DxT049 :
+								DxT049 dxT049 = new DxT049(client, is, os);
+								dxT049.execute(strDX_EX_CODE, jObj);
+								break;
+							
+							case TranCodeType.DxT050 :
+								DxT050 dxT050 = new DxT050(client, is, os);
+								dxT050.execute(strDX_EX_CODE, jObj);
+								break;
+								
+							case TranCodeType.DxT051 :
+								DxT051 dxT051 = new DxT051(client, is, os);
+								dxT051.execute(strDX_EX_CODE, jObj);
+								break;
 								
 								
 								
